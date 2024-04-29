@@ -37,7 +37,7 @@ const ReCaptchaAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'reCAPTCHA.'} isLoading={false} featuresText="">
+    <Accordion title={'reCAPTCHA'} isLoading={false} featuresText="">
       <DetectionMessage
         libraryName="reCAPTCHA"
         provider="reCAPTCHA"

@@ -37,7 +37,7 @@ const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Jetpack Comments.'} isLoading={false} featuresText="">
+    <Accordion title={'Jetpack Comments'} isLoading={false} featuresText="">
       <DetectionMessage
         libraryName="Jetpack comments widget"
         provider="Jetpack"

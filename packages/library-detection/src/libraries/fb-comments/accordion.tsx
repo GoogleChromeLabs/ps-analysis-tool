@@ -37,7 +37,7 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Facebook Comments.'} isLoading={false} featuresText="">
+    <Accordion title={'Facebook Comments'} isLoading={false} featuresText="">
       <DetectionMessage
         libraryName="Facebook comments plugin"
         provider="Facebook"

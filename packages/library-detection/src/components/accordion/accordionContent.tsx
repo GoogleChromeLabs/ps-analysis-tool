@@ -28,7 +28,7 @@ const AccordionContent = ({ children, isOpen }: AccordionContentProps) => {
     return null;
   }
 
-  return <div className="py-4 px-6 border-t border-hex-gray">{children}</div>;
+  return <div className="pb-4 mx-6">{children}</div>;
 };
 
 export default AccordionContent;

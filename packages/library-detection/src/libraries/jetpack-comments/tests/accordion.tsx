@@ -26,9 +26,9 @@ import '@testing-library/jest-dom';
 import JetpackCommentsAccordion from '../accordion';
 
 describe('Jetpack Comments Accordion', () => {
-  const accordionTitleText = 'Jetpack Comments.';
+  const accordionTitleText = 'Jetpack Comments';
   const accordionMessageText =
-    'Jetpack comments widget functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the Jetpack support forum.';
+    'Jetpack comments widget functionality may not work properly due to the phaseout of third-party cookies. To inquire further about the same, please visit the Jetpack support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];
