@@ -69,7 +69,7 @@ export const onUpdatedListener = async (
       } = await chrome.debugger.sendCommand({ tabId }, 'Target.getTargetInfo', {
         targetId: mainFrameId,
       });
-      synchnorousCookieStore.tabs[tabId].mainFrameId = targetId;
+
       synchnorousCookieStore.updateParentChildFrameAssociation(
         tabId,
         targetId,

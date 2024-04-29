@@ -134,33 +134,34 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         } else {
           const isFrameIdInPage = await doesFrameExist(frameId);
 
-          await Promise.all(
-            Object.keys(syncCookieStore?.tabs ?? {}).map(async (key) => {
-              const currentTabFrameIdSet = syncCookieStore?.getFrameIDSet(
-                Number(key)
-              );
-              if (
-                source.targetId &&
-                currentTabFrameIdSet &&
-                currentTabFrameIdSet.has(source.targetId)
-              ) {
-                syncCookieStore?.updateParentChildFrameAssociation(
-                  Number(key),
-                  frameId,
-                  parentFrameId
+          if (isFrameIdInPage) {
+            await Promise.all(
+              Object.keys(syncCookieStore?.tabs ?? {}).map(async (key) => {
+                const currentTabFrameIdSet = syncCookieStore?.getFrameIDSet(
+                  Number(key)
                 );
-                if (isFrameIdInPage) {
+                if (
+                  source.targetId &&
+                  currentTabFrameIdSet &&
+                  currentTabFrameIdSet.has(source.targetId)
+                ) {
+                  syncCookieStore?.updateParentChildFrameAssociation(
+                    Number(key),
+                    frameId,
+                    parentFrameId
+                  );
+
                   await syncCookieStore?.updateFrameIdURLSet(
                     Number(key),
                     frameId
                   );
+                  return key;
                 }
-                return key;
-              }
 
-              return key;
-            })
-          );
+                return key;
+              })
+            );
+          }
         }
         return;
       }
@@ -181,7 +182,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             id,
             parentId
           );
-          await syncCookieStore?.updateFrameIdURLSet(source.tabId, id);
+          syncCookieStore?.updateFrameIdURLSet(source.tabId, id, frameUrl);
         } else {
           const isFrameIdInPage = await doesFrameExist(id);
 

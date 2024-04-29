@@ -92,7 +92,6 @@ class SynchnorousCookieStore {
       newUpdates: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
-      mainFrameId: string;
     };
   } = {};
 
@@ -493,7 +492,6 @@ class SynchnorousCookieStore {
       newUpdates: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
-      mainFrameId: '',
     };
   }
 
