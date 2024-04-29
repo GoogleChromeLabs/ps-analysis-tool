@@ -233,7 +233,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           frameId = '',
         } = params as Protocol.Network.RequestWillBeSentEvent;
 
-        if (!frameId) {
+        let finalFrameId = frameId;
+
+        if (!finalFrameId) {
           return;
         }
 
@@ -244,27 +246,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return id;
         });
 
-        if (
-          setTargets.has(frameId) &&
-          !syncCookieStore.frameIdToResourceMap[tabId][frameId]
-        ) {
-          syncCookieStore.frameIdToResourceMap[tabId][frameId] = new Set();
-        }
-
-        if (setTargets.has(frameId)) {
-          syncCookieStore.frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
+        if (setTargets.has(finalFrameId)) {
+          syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
+            requestUrl
+          );
         } else {
-          const isFrameIdInPage = await doesFrameExist(frameId);
-          if (isFrameIdInPage) {
-            syncCookieStore.frameIdToResourceMap[tabId][frameId]?.add(
+          const ancestorFrameId = syncCookieStore.findFirstAncestorFrameId(
+            tabId,
+            finalFrameId,
+            setTargets
+          );
+
+          if (ancestorFrameId) {
+            syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
               requestUrl
             );
+            finalFrameId = ancestorFrameId;
           }
         }
 
         if (!syncCookieStore.requestIdToCDPURLMapping[tabId]) {
           syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
+              finalFrameId,
               frameId,
               url: requestUrl,
             },
@@ -273,6 +277,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             ...syncCookieStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
+              finalFrameId,
               frameId,
               url: requestUrl,
             },
@@ -286,7 +291,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             cookieDB ?? {},
             requestUrl,
             url ?? '',
-            [frameId],
+            Array.from(new Set([finalFrameId, frameId])),
             requestId
           );
 
@@ -315,10 +320,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url ??
               '',
             url ?? '',
-            [
-              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                ?.frameId,
-            ],
+            Array.from(
+              new Set([
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.finalFrameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.frameId,
+              ])
+            ),
             requestId
           );
 
@@ -344,7 +353,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           response: { url: requestUrl },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
-        if (!frameId) {
+        let finalFrameId = frameId;
+
+        if (!finalFrameId) {
           return;
         }
 
@@ -355,30 +366,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return id;
         });
 
-        if (
-          setTargets.has(frameId) &&
-          !syncCookieStore.frameIdToResourceMap[tabId][frameId]
-        ) {
-          syncCookieStore.frameIdToResourceMap[tabId][frameId] = new Set();
-        }
-
-        if (setTargets.has(frameId)) {
-          syncCookieStore.frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
+        if (setTargets.has(finalFrameId)) {
+          syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
+            requestUrl
+          );
         } else {
-          const isFrameIdInPage = await doesFrameExist(frameId);
-          if (isFrameIdInPage) {
-            syncCookieStore.frameIdToResourceMap[tabId][frameId]?.add(
+          const ancestorFrameId = syncCookieStore.findFirstAncestorFrameId(
+            tabId,
+            finalFrameId,
+            setTargets
+          );
+
+          if (ancestorFrameId) {
+            syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
               requestUrl
             );
-          } else {
-            return;
+            finalFrameId = ancestorFrameId;
           }
         }
 
         if (!syncCookieStore.requestIdToCDPURLMapping[tabId]) {
           syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
-              ...syncCookieStore.requestIdToCDPURLMapping[tabId][requestId],
+              finalFrameId,
               frameId,
               url: requestUrl,
             },
@@ -387,7 +397,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             ...syncCookieStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
-              ...syncCookieStore.requestIdToCDPURLMapping[tabId][requestId],
+              finalFrameId,
               frameId,
               url: requestUrl,
             },
@@ -410,7 +420,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               '',
             url ?? '',
             cookieDB ?? {},
-            [frameId],
+            Array.from(new Set([finalFrameId, frameId])),
             requestId
           );
           syncCookieStore?.update(Number(tabId), cookies);
@@ -425,7 +435,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             cookieDB ?? {},
             requestUrl,
             url ?? '',
-            [frameId],
+            Array.from(new Set([finalFrameId, frameId])),
             requestId
           );
 
@@ -464,10 +474,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
             url ?? '',
             cookieDB ?? {},
-            [
-              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                ?.frameId,
-            ],
+            Array.from(
+              new Set([
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.finalFrameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.frameId,
+              ])
+            ),
             requestId
           );
 
@@ -481,10 +495,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               cookieDB ?? {},
               syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
               url ?? '',
-              [
-                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                  ?.frameId,
-              ],
+              Array.from(
+                new Set([
+                  syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                    ?.finalFrameId,
+                  syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                    ?.frameId,
+                ])
+              ),
               requestId
             );
 
