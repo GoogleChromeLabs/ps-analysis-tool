@@ -81,7 +81,9 @@ const Layout = ({
   const cookiesWithIssues = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(reshapedCookies).filter(([, cookie]) => cookie.isBlocked)
+        Object.entries(reshapedCookies).filter(
+          ([, cookie]) => cookie.isBlocked || cookie.blockedReasons?.length
+        )
       ),
     [reshapedCookies]
   );
@@ -172,7 +174,7 @@ const Layout = ({
         Element: SiteMapCookiesWithIssues,
         props: {
           cookies: Object.values(reshapedCookies).filter(
-            (cookie) => cookie.isBlocked
+            (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
           ),
         },
       };
