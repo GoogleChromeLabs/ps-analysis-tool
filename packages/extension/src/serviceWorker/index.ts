@@ -149,7 +149,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           frameId = '',
         } = params as Protocol.Network.RequestWillBeSentEvent;
 
-        let finalFrameId = frameId;
+        let finalFrameId: string | null = frameId;
 
         if (!finalFrameId) {
           return;
@@ -195,7 +195,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestId,
             tabId,
             cookieDB,
-            Array.from(new Set([finalFrameId, frameId]))
+            Array.from(new Set([finalFrameId ?? '', frameId]))
           );
         }
         return;
@@ -214,7 +214,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             Array.from(
               new Set([
                 syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                  ?.finalFrameId,
+                  ?.finalFrameId ?? '',
                 syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
                   ?.frameId,
               ])
@@ -237,7 +237,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           response: { url: requestUrl },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
-        let finalFrameId = frameId;
+        let finalFrameId: string | null = frameId;
 
         if (!finalFrameId) {
           return;
@@ -283,7 +283,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestId,
             tabId,
             cookieDB,
-            Array.from(new Set([finalFrameId, frameId]))
+            Array.from(new Set([finalFrameId ?? '', frameId]))
           );
         }
 
@@ -293,7 +293,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestId,
             tabId,
             cookieDB,
-            Array.from(new Set([finalFrameId, frameId]))
+            Array.from(new Set([finalFrameId ?? '', frameId]))
           );
         }
 
@@ -314,7 +314,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           const frameIds = Array.from(
             new Set([
               syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                ?.finalFrameId,
+                ?.finalFrameId ?? '',
               syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
                 ?.frameId,
             ])

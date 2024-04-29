@@ -60,7 +60,7 @@ class SynchnorousCookieStore {
       [requestId: string]: {
         frameId: string;
         url: string;
-        finalFrameId: string;
+        finalFrameId: string | null;
       };
     };
   } = {};
@@ -105,7 +105,7 @@ class SynchnorousCookieStore {
    * @param {string} frameId The frameId of the frame to determine which the requestUrl is for.
    * @param {Set<string>} setTargets Set of targets available in the tab.
    * @param {string} requestUrl The request url to be added to the frameResouceMap.
-   * @returns {string} An alternate frameId if available.
+   * @returns {string | null} An alternate frameId if available.
    */
   addFrameIdAndRequestUrlToResourceMap(
     tabId: string,
@@ -130,7 +130,7 @@ class SynchnorousCookieStore {
         this.frameIdToResourceMap[tabId][frameId].add(requestUrl);
         return ancestorFrameId;
       }
-      return '';
+      return null;
     }
   }
 
