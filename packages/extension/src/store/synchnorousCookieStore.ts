@@ -34,6 +34,7 @@ import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
+import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
 class SynchnorousCookieStore {
   /**
@@ -49,6 +50,11 @@ class SynchnorousCookieStore {
    * The cookie data of the tabs.
    */
   tabMode: 'single' | 'unlimited' = 'single';
+
+  /**
+   * CookieDatabase to run analytics match on.
+   */
+  cookieDB: CookieDatabase | null = null;
 
   /**
    * The cookie data of the tabs.
@@ -99,6 +105,12 @@ class SynchnorousCookieStore {
     };
   } = {};
 
+  constructor() {
+    (async () => {
+      this.cookieDB = await fetchDictionary();
+    })();
+  }
+
   /**
    * This function adds frame to the appropriate tab.
    * @param {number} tabId The tabId of the event to which the event is pointing to.
@@ -139,14 +151,12 @@ class SynchnorousCookieStore {
    * @param {Protocol.Network.ResponseReceivedExtraInfoEvent} response The response to be parsed.
    * @param {string} requestId This is used to get the related data for parsing the response.
    * @param {string} tabId The tabId this request is associated to.
-   * @param {CookieDatabase} cookieDB This is used to fetch an analytics match from the cookie database.
    * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
    */
   parseResponseHeaders(
     response: Protocol.Network.ResponseReceivedExtraInfoEvent,
     requestId: string,
     tabId: string,
-    cookieDB: CookieDatabase,
     frameIds: string[]
   ) {
     const {
@@ -163,7 +173,7 @@ class SynchnorousCookieStore {
       cookiePartitionKey,
       this.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
       this.tabs[Number(tabId)].url ?? '',
-      cookieDB ?? {},
+      this.cookieDB ?? {},
       frameIds,
       requestId
     );
@@ -177,21 +187,19 @@ class SynchnorousCookieStore {
    * @param {Protocol.Network.RequestWillBeSentExtraInfoEvent} request The response to be parsed.
    * @param {string} requestId This is used to get the related data for parsing the response.
    * @param {string} tabId The tabId this request is associated to.
-   * @param {CookieDatabase} cookieDB This is used to fetch an analytics match from the cookie database.
    * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
    */
   parseRequestHeaders(
     request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
     requestId: string,
     tabId: string,
-    cookieDB: CookieDatabase,
     frameIds: string[]
   ) {
     const { associatedCookies } = request;
 
     const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
       associatedCookies,
-      cookieDB ?? {},
+      this.cookieDB ?? {},
       this.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
       this.tabs[Number(tabId)].url ?? '',
       frameIds,
@@ -599,11 +607,9 @@ class SynchnorousCookieStore {
               ...(cookie.networkEvents?.responseEvents || []),
             ],
           };
-
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
             ...cookie,
-            // Insert data receieved from CDP or new data recieved through webRequest API.
             parsedCookie,
             isBlocked: blockedReasons.length > 0,
             blockedReasons,

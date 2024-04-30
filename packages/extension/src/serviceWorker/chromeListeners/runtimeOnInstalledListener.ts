@@ -53,7 +53,6 @@ export const runtimeOnInstalledListener = async (
     }
 
     Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
-      // getAndParseNetworkCookies(key, {});
       synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
   }, 1200);

@@ -18,18 +18,14 @@
  * External dependencies.
  */
 import { Protocol } from 'devtools-protocol';
-import { type CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import syncCookieStore from '../store/synchnorousCookieStore';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import attachCDP from './attachCDP';
 import './chromeListeners';
-
-let cookieDB: CookieDatabase | null = null;
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -145,10 +141,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
-      if (!cookieDB) {
-        cookieDB = await fetchDictionary();
-      }
-
       //If we get requestWillBeSent before requestWillBeSentExtraInfo then we add the frame if to the object.
       // If we get requestWillBeSent afterwards then we will remove the add the frameId and then process the requestWillBeSentExtraInfo.
       if (method === 'Network.requestWillBeSent' && params) {
@@ -203,7 +195,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             syncCookieStore.unParsedRequestHeaders[tabId][requestId],
             requestId,
             tabId,
-            cookieDB,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
@@ -219,7 +210,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
             requestId,
             tabId,
-            cookieDB,
             Array.from(
               new Set([
                 syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
@@ -291,7 +281,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             syncCookieStore.unParsedResponseHeaders[tabId][requestId],
             requestId,
             tabId,
-            cookieDB,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
@@ -301,7 +290,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             syncCookieStore.unParsedRequestHeaders[tabId][requestId],
             requestId,
             tabId,
-            cookieDB,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
@@ -333,7 +321,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             params as Protocol.Network.ResponseReceivedExtraInfoEvent,
             requestId,
             tabId,
-            cookieDB,
             frameIds
           );
 
@@ -342,7 +329,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               syncCookieStore.unParsedRequestHeaders[tabId][requestId],
               requestId,
               tabId,
-              cookieDB,
               frameIds
             );
           }
@@ -385,7 +371,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
           [],
           syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
-          cookieDB ?? {}
+          syncCookieStore.cookieDB ?? {}
         );
 
         if (cookieObjectToUpdate) {

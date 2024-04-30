@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies
- */
-import type { CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -36,19 +32,13 @@ import {
 import listenToNewTab from '../../utils/listenToNewTab';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
-import { fetchDictionary } from '../../utils/fetchCookieDictionary';
 import { getTab } from '../../utils/getTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (request: any) => {
-  let cookieDB: CookieDatabase | null = null;
   if (!request.type) {
     return;
-  }
-
-  if (!cookieDB) {
-    cookieDB = await fetchDictionary();
   }
 
   const incomingMessageType = request.type;

@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 /**
- * External dependencies
- */
-import type { CookieDatabase } from '@ps-analysis-tool/common';
-
-/**
  * Internal dependencies
  */
-import { fetchDictionary } from '../../utils/fetchCookieDictionary';
 import parseHeaders from '../../utils/parseHeaders';
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 import { getTab } from '../../utils/getTab';
-
-let cookieDB: CookieDatabase | null = null;
 
 export const onResponseStartedListener = ({
   tabId,
@@ -47,10 +39,6 @@ export const onResponseStartedListener = ({
       tabUrl = tab.pendingUrl;
     }
 
-    if (!cookieDB) {
-      cookieDB = await fetchDictionary();
-    }
-
     const cookies = await parseHeaders(
       synchnorousCookieStore.globalIsUsingCDP,
       'response',
@@ -58,7 +46,7 @@ export const onResponseStartedListener = ({
       synchnorousCookieStore.tabMode,
       tabId,
       url,
-      cookieDB,
+      synchnorousCookieStore.cookieDB ?? {},
       tabUrl,
       frameId,
       requestId,

@@ -17,10 +17,7 @@
 /**
  * Internal dependencies.
  */
-import type {
-  CookieAnalytics,
-  CookieDatabase,
-} from '../utils/fetchCookieDictionary';
+import type { CookieAnalytics, CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
  *

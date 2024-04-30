@@ -16,17 +16,14 @@
 /**
  * External dependencies
  */
-import type { CookieData, CookieDatabase } from '@ps-analysis-tool/common';
+import type { CookieData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
 import synchnorousCookieStore from '../store/synchnorousCookieStore';
 import parseNetworkCookies from './parseNetworkCookies';
 
-export const getAndParseNetworkCookies = async (
-  tabId: string,
-  cookieDB: CookieDatabase | null
-) => {
+export const getAndParseNetworkCookies = async (tabId: string) => {
   if (!synchnorousCookieStore.globalIsUsingCDP) {
     return;
   }
@@ -48,7 +45,7 @@ export const getAndParseNetworkCookies = async (
         const parsedCookies = parseNetworkCookies(
           cookies,
           synchnorousCookieStore?.getTabUrl(Number(tabId)) ?? '',
-          cookieDB ?? {},
+          synchnorousCookieStore.cookieDB ?? {},
           key
         );
         if (parsedCookies.length > 0) {
