@@ -267,7 +267,7 @@ class WebpageContentScript {
           analytics: findAnalyticsMatch(cookie?.name, this.cookieDB),
           url: window.location.href,
           headerType: 'javascript',
-          frameIdList: [0],
+          frameIdList: [this.frameId ?? '0'],
           blockedReasons: [],
           warningReasons: [],
           isBlocked: false,

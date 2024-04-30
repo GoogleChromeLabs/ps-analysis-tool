@@ -29,10 +29,10 @@ export const onUpdatedListener = async (
   if (!tab.url) {
     return;
   }
+
+  const targets = await chrome.debugger.getTargets();
   const mainFrameId = synchnorousCookieStore?.globalIsUsingCDP
-    ? (await chrome.debugger.getTargets()).filter(
-        (target) => target.tabId && target.tabId === tabId
-      )[0].id
+    ? targets.filter((target) => target.tabId && target.tabId === tabId)[0].id
     : 0;
 
   const queryParams = getQueryParams(tab.url);

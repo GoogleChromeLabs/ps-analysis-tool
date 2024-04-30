@@ -69,6 +69,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
         })
       );
+
       // This is to get a list of all targets being attached to the main frame.
       if (method === 'Target.attachedToTarget' && params) {
         const {
@@ -108,7 +109,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Page.frameAttached' && params) {
         const { frameId, parentFrameId } =
           params as Protocol.Page.FrameAttachedEvent;
-        await attachCDP({ targetId: frameId });
+
         await syncCookieStore?.addFrameToTabAndUpdateMetadata(
           source.tabId ?? null,
           source.targetId ?? null,
