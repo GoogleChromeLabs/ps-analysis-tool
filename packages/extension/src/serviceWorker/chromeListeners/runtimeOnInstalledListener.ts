@@ -64,7 +64,7 @@ export const runtimeOnInstalledListener = async (
     }
 
     Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
-      getAndParseNetworkCookies(key, {});
+      getAndParseNetworkCookies(key);
     });
   }, 5000);
 
