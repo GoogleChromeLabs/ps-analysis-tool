@@ -67,5 +67,3 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
     }
   }
 };
-
-chrome.tabs.onCreated.addListener(onTabCreatedListener);

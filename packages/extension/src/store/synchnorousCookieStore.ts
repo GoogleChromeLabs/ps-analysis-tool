@@ -105,12 +105,6 @@ class SynchnorousCookieStore {
     };
   } = {};
 
-  constructor() {
-    (async () => {
-      this.cookieDB = await fetchDictionary();
-    })();
-  }
-
   /**
    * This function adds frame to the appropriate tab.
    * @param {number} tabId The tabId of the event to which the event is pointing to.
@@ -350,6 +344,11 @@ class SynchnorousCookieStore {
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
     };
+    (async () => {
+      if (!this.cookieDB) {
+        this.cookieDB = await fetchDictionary();
+      }
+    })();
   }
 
   /**

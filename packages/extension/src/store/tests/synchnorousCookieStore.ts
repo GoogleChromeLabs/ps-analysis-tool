@@ -16,6 +16,9 @@
 /**
  * Internal dependencies
  */
+//@ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
 import SinonChrome from 'sinon-chrome';
 import data from '../../utils/test-data/cookieMockData';
 import synchnorousCookieStore from '../synchnorousCookieStore';
@@ -23,6 +26,15 @@ import synchnorousCookieStore from '../synchnorousCookieStore';
 describe('SynchnorousCookieStore:', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.fetch = function () {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ...OpenCookieDatabase,
+          }),
+        text: () => Promise.resolve({}),
+      });
+    } as unknown as typeof fetch;
   });
 
   beforeEach(() => {

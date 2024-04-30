@@ -61,9 +61,3 @@ export const onBeforeSendHeadersListener = ({
     synchnorousCookieStore?.update(tabId, cookies);
   })();
 };
-
-chrome.webRequest.onBeforeSendHeaders.addListener(
-  onBeforeSendHeadersListener,
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'requestHeaders']
-);

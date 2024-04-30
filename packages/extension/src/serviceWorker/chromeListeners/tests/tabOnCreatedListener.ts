@@ -21,11 +21,12 @@ import SinonChrome from 'sinon-chrome';
 /**
  * Internal dependencies
  */
-import { onTabCreatedListener } from '../tabOnCreatedListener';
-import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
+import { onTabCreatedListener } from '../tabOnCreatedListener';
+import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
+
 describe('chrome.tabs.onCreated.addListener', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
@@ -166,61 +167,3 @@ describe('chrome.tabs.onCreated.addListener', () => {
     );
   });
 });
-
-// afterEach(() => {
-//     synchnorousCookieStore.removeTabData(1141143618);
-//   });
-
-//   test('Should parse response Cookies', async () => {
-//     SinonChrome.webRequest.onResponseStarted.dispatch({
-//       url: 'https://bbc.com',
-//       frameId: 0,
-//       responseHeaders,
-//       tabId: 1141143618,
-//       requestId: 457,
-//     });
-
-//     await new Promise((r) => setTimeout(r, 2000));
-
-//     expect(
-//       Object.keys(synchnorousCookieStore.tabsData[1141143618]).length
-//     ).toEqual(24);
-//   });
-
-//   test('Should not parse cookies if no cookie header is found in response header', async () => {
-//     SinonChrome.webRequest.onResponseStarted.dispatch({
-//       url: 'https://bbc.com',
-//       frameId: 0,
-//       requestHeaders: responseHeaders.filter(
-//         ({ name }) => name !== 'set-cookie'
-//       ),
-//       tabId: 1141143618,
-//       requestId: 457,
-//     });
-
-//     await new Promise((r) => setTimeout(r, 2000));
-
-//     expect(
-//       Object.keys(synchnorousCookieStore.tabsData[1141143618]).length
-//     ).toEqual(0);
-//   });
-
-//   test('Should not parse cookies if cdp is on', async () => {
-//     synchnorousCookieStore.globalIsUsingCDP = true;
-//     SinonChrome.webRequest.onResponseStarted.dispatch({
-//       url: 'https://bbc.com',
-//       frameId: 0,
-//       requestHeaders: responseHeaders.filter(
-//         ({ name }) => name !== 'set-cookie'
-//       ),
-//       tabId: 1141143618,
-//       requestId: 457,
-//     });
-
-//     await new Promise((r) => setTimeout(r, 2000));
-
-//     expect(
-//       Object.keys(synchnorousCookieStore.tabsData[1141143618]).length
-//     ).toEqual(0);
-//     synchnorousCookieStore.globalIsUsingCDP = false;
-//   });

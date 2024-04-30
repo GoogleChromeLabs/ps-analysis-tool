@@ -21,12 +21,13 @@ import SinonChrome from 'sinon-chrome';
 /**
  * Internal dependencies
  */
-import { onBeforeSendHeadersListener } from '../beforeSendHeadersListener';
-import { requestHeaders } from '../test-utils/requestHeaders';
-import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
+import { onBeforeSendHeadersListener } from '../beforeSendHeadersListener';
+import { requestHeaders } from '../test-utils/requestHeaders';
+import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
+
 describe('chrome.webRequest.onBeforeSendHeaders.addListener', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;

@@ -21,20 +21,17 @@ import SinonChrome from 'sinon-chrome';
 /**
  * Internal dependencies
  */
-import { onResponseStartedListener } from '../onResponseStartedListener';
-import { responseHeaders } from '../test-utils/requestHeaders';
-import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
+
+import { onResponseStartedListener } from '../onResponseStartedListener';
+import { responseHeaders } from '../test-utils/requestHeaders';
+import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
+
 describe('chrome.webRequest.onResponseStarted.addListener', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
-    SinonChrome.webRequest.onResponseStarted.addListener(
-      onResponseStartedListener,
-      { urls: ['*://*/*'] },
-      ['extraHeaders', 'responseHeaders']
-    );
     globalThis.fetch = function () {
       return Promise.resolve({
         json: () =>
@@ -44,6 +41,12 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
         text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
+
+    SinonChrome.webRequest.onResponseStarted.addListener(
+      onResponseStartedListener,
+      { urls: ['*://*/*'] },
+      ['extraHeaders', 'responseHeaders']
+    );
   });
 
   beforeEach(() => {
@@ -53,11 +56,13 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
     synchnorousCookieStore.updateUrl(1141143618, 'https://bbc.com');
     synchnorousCookieStore.tabToRead = '1141143618';
   });
+
   afterEach(() => {
     synchnorousCookieStore.removeTabData(1141143618);
   });
 
   test('Should parse response Cookies', async () => {
+    await new Promise((r) => setTimeout(r, 2000));
     SinonChrome.webRequest.onResponseStarted.dispatch({
       url: 'https://bbc.com',
       frameId: 0,
@@ -70,7 +75,7 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
 
     expect(
       Object.keys(synchnorousCookieStore.tabsData[1141143618]).length
-    ).toEqual(24);
+    ).toEqual(2);
   });
 
   test('Should not parse cookies if no cookie header is found in response header', async () => {

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import './beforeSendHeadersListener';
-import './onResponseStartedListener';
+import { onBeforeSendHeadersListener } from './beforeSendHeadersListener';
+import { onResponseStartedListener } from './onResponseStartedListener';
 
 import './runtimeStartUpListener';
 import './runtimeOnInstalledListener';
@@ -22,9 +22,23 @@ import './runtimeOnMessageListener';
 
 import './syncStorageOnChangedListener';
 
-import './tabOnCreatedListener';
+import { onTabCreatedListener } from './tabOnCreatedListener';
 import './tabOnRemovedListener';
 import './tabsOnUpdatedListener';
 
 import './windowsOnRemovedListener';
 import './windowsOnCreatedListener';
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  onBeforeSendHeadersListener,
+  { urls: ['*://*/*'] },
+  ['extraHeaders', 'requestHeaders']
+);
+
+chrome?.webRequest?.onResponseStarted?.addListener(
+  onResponseStartedListener,
+  { urls: ['*://*/*'] },
+  ['extraHeaders', 'responseHeaders']
+);
+
+chrome.tabs.onCreated.addListener(onTabCreatedListener);

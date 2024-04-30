@@ -61,9 +61,3 @@ export const onResponseStartedListener = ({
     synchnorousCookieStore?.update(tabId, cookies);
   })();
 };
-
-chrome.webRequest.onResponseStarted.addListener(
-  onResponseStartedListener,
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'responseHeaders']
-);
