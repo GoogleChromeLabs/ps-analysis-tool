@@ -70,8 +70,10 @@ const formatCookieData = (
         ...cookie,
         isBlocked: store[frame][key]?.isBlocked || cookie.isBlocked,
         blockedReasons: [
-          ...(store[frame][key]?.blockedReasons || []),
-          ...(cookie.blockedReasons || []),
+          ...new Set([
+            ...(store[frame][key]?.blockedReasons || []),
+            ...(cookie.blockedReasons || []),
+          ]),
         ],
       };
     });
