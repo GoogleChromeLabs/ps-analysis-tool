@@ -294,6 +294,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           );
         }
 
+        delete syncCookieStore.requestIdToCDPURLMapping[tabId][requestId];
         return;
       }
 
