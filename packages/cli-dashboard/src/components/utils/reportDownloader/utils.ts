@@ -61,6 +61,7 @@ const generateCSVFiles = (data: CompleteJson) => {
 /**
  *
  * @param analysisData
+ * @returns Object Report object required to make HTML report
  */
 function generateReportObject(analysisData: CompleteJson) {
   const tabCookies = reshapeCookies(
@@ -132,6 +133,7 @@ function generateReportObject(analysisData: CompleteJson) {
 /**
  *
  * @param analysisData
+ * @returns Object Report object required to make HTML report
  */
 function generateSitemapReportObject(analysisData: CompleteJson[]) {
   const tabCookies = reshapeCookies(
