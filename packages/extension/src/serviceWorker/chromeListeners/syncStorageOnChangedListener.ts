@@ -79,17 +79,20 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
   synchnorousCookieStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
 
   const tabs = await chrome.tabs.query({});
+  const debuggerTargets = await chrome.debugger.getTargets();
 
   if (!changes?.isUsingCDP?.newValue) {
     await Promise.all(
-      tabs.map(async ({ id }) => {
+      debuggerTargets.map(async ({ id, tabId }) => {
         if (!id) {
           return;
         }
 
         try {
-          await chrome.debugger.detach({ tabId: id });
-          synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
+          await chrome.debugger.detach({ targetId: id });
+          if (tabId) {
+            synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(tabId);
+          }
         } catch (error) {
           // eslint-disable-next-line no-console
           console.warn(error);
