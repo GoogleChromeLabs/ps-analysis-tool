@@ -21,7 +21,7 @@ import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import { spawn } from 'child_process';
+import { exec } from 'child_process';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
 
@@ -86,8 +86,7 @@ const saveResults = async (
 };
 
 const startDashboardServer = async (dir: string, port: number) => {
-  spawn('npm', ['run', 'cli-dashboard:dev', '--', '--port', port.toString()]);
-
+  exec(`npm run cli-dashboard:dev -- --port ${port.toString()}`);
   await delay(2000);
 
   console.log(`Report: http://localhost:${port}?dir=${dir}`);
