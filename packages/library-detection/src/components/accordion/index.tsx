@@ -41,8 +41,7 @@ const Accordion = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const parentClass = classNames({
-    'border-t border-hex-gray last:border-b relative': true,
-    'border border-slate-400': isOpen,
+    relative: true,
   });
 
   return (
