@@ -72,7 +72,7 @@ export const runtimeOnInstalledListener = async (
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
-      isUsingCDP: true,
+      isUsingCDP: false,
     });
   }
 
@@ -125,7 +125,7 @@ export const runtimeOnInstalledListener = async (
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
-      isUsingCDP: true,
+      isUsingCDP: false,
     });
   }
 };

@@ -89,7 +89,7 @@ class SynchnorousCookieStore {
     };
   } = {};
 
-  globalIsUsingCDP = true;
+  globalIsUsingCDP = false;
 
   /**
    * Required data of the tabs and PSAT panel of the tab.
