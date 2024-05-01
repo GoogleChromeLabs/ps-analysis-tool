@@ -37,6 +37,7 @@ import {
   INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
+  SERVICE_WORKER_PORT_NAME,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
@@ -207,9 +208,6 @@ chrome.runtime.onStartup.addListener(async () => {
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
   // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
@@ -306,9 +304,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
   // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
@@ -623,6 +618,36 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
   const incomingMessageTabId = request.payload.tabId;
 
+  if ('PING' === request?.type) {
+    if (
+      syncCookieStore &&
+      !syncCookieStore?.tabs[incomingMessageTabId]?.portRef
+    ) {
+      syncCookieStore.tabs[incomingMessageTabId].portRef = chrome.tabs.connect(
+        Number(incomingMessageTabId),
+        {
+          name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
+        }
+      );
+
+      if (syncCookieStore.tabs[incomingMessageTabId].portRef) {
+        setInterval(() => {
+          syncCookieStore?.tabs[incomingMessageTabId].portRef?.postMessage({
+            status: 'ping',
+          });
+        }, 10000);
+      }
+
+      syncCookieStore.tabs[
+        incomingMessageTabId
+      ].portRef.onDisconnect.addListener(() => {
+        //@ts-ignore
+        syncCookieStore.tabs[incomingMessageTabId].portRef = null;
+        clearInterval(10000);
+      });
+    }
+  }
+
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
     dataToSend['tabMode'] = tabMode;
@@ -703,9 +728,6 @@ chrome.windows.onCreated.addListener(async () => {
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
   // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
 
   // We do not want to clear content settings if a user has create one more window.
   if (totalWindows.length < 2) {
