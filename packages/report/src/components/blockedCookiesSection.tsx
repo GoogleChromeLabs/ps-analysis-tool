@@ -20,12 +20,17 @@
 import React from 'react';
 import {
   CookiesLandingWrapper,
-  CookiesMatrix,
+  LEGEND_DESCRIPTION,
+  MatrixContainer,
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+  type MatrixComponentProps,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
+import type { DataMapping } from '@ps-analysis-tool/common';
 
 const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
@@ -34,20 +39,65 @@ const CookiesSection = () => {
     return <></>;
   }
 
+  const cookieStats = prepareCookiesCount(data.tabCookies);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+  const blockedCookieDataMapping: DataMapping[] = [
+    {
+      title: 'Blocked cookies',
+      count: cookieStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
+    },
+  ];
+  const dataComponents: MatrixComponentProps[] =
+    cookiesStatsComponents.blockedCookiesLegend.map((component: any) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+      };
+    });
+
+  const blockedCookiesStats = prepareCookiesCount(
+    Object.fromEntries(
+      Object.entries(data.tabCookies).filter(([, cookie]) => cookie.isBlocked)
+    )
+  );
+  const blockedCookiesStatsComponents =
+    prepareCookieStatsComponents(blockedCookiesStats);
+  const blockedDataComponents: MatrixComponentProps[] =
+    blockedCookiesStatsComponents.legend.map((component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+      };
+    });
+
   return (
     <CookiesLandingWrapper
-      dataMapping={data.blockedCookieDataMapping}
+      dataMapping={blockedCookieDataMapping}
       testId="blocked-cookies-insights"
     >
-      {data.cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
-        <CookiesMatrix
-          title="Blocked Reasons"
-          tabCookies={data.tabCookies}
-          componentData={data.cookiesStatsComponents.blockedCookiesLegend}
-          tabFrames={data.tabFrames}
-          showHorizontalMatrix={false}
-          infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
-        />
+      {dataComponents.length > 0 && (
+        <>
+          <MatrixContainer
+            title="Blocked Reasons"
+            matrixData={dataComponents}
+            infoIconTitle="Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+          />
+          <div className="flex flex-col mt-8">
+            <div className="pt-4">
+              <MatrixContainer
+                matrixData={blockedDataComponents}
+                allowExpand={false}
+              />
+            </div>
+          </div>
+        </>
       )}
     </CookiesLandingWrapper>
   );
