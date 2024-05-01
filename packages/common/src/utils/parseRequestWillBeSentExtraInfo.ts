@@ -83,7 +83,7 @@ export default function parseRequestWillBeSentExtraInfo(
         responseEvents: [],
       },
       blockedReasons,
-      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
+      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
       url: requestUrl,
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),

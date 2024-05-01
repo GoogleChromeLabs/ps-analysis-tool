@@ -22,6 +22,7 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieDatabase,
+  RESPONSE_EVENT,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
 import { type Cookie, parse } from 'simple-cookie';
@@ -48,6 +49,7 @@ export default function createCookieFromAuditsIssue(
     cookieWarningReasons,
     rawCookieLine,
     request,
+    operation,
   } = issue;
 
   if (!request) {
@@ -55,19 +57,51 @@ export default function createCookieFromAuditsIssue(
   }
   const { requestId, url = '' } = request;
 
-  if (!cookie || !rawCookieLine) {
+  if (!cookie && !rawCookieLine) {
     return null;
   }
 
   let generatedCookie: Protocol.Audits.AffectedCookie | Cookie | undefined =
     cookie;
 
-  if (!cookie) {
+  if (cookie) {
     generatedCookie = cookie;
   }
   if (!cookie && rawCookieLine) {
     generatedCookie = parse(rawCookieLine);
   }
+
+  const requestEvents = [];
+  const responseEvents = [];
+
+  if (operation === 'ReadCookie') {
+    requestEvents.push({
+      type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
+      requestId,
+      url,
+      blocked: Boolean(cookieExclusionReasons.length),
+      timeStamp: Date.now(),
+    });
+  }
+
+  if (operation === 'SetCookie') {
+    responseEvents.push({
+      type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
+      requestId,
+      url,
+      blocked: Boolean(cookieExclusionReasons.length),
+      timeStamp: Date.now(),
+    });
+  }
+  const modifiedCookieExclusionReasons = cookieExclusionReasons.map(
+    (reason) => {
+      if (reason.toLowerCase().startsWith('exclude')) {
+        return reason.substring(7) as Protocol.Network.CookieBlockedReason;
+      }
+      return reason as Protocol.Network.CookieBlockedReason;
+    }
+  );
+
   const cookieObjectToUpdate: CookieData = {
     parsedCookie: {
       ...generatedCookie,
@@ -76,18 +110,10 @@ export default function createCookieFromAuditsIssue(
       value: '',
     },
     warningReasons: cookieWarningReasons,
-    blockedReasons: cookieExclusionReasons,
+    blockedReasons: modifiedCookieExclusionReasons,
     networkEvents: {
-      requestEvents: [
-        {
-          type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
-          requestId,
-          url,
-          blocked: Boolean(cookieExclusionReasons.length),
-          timeStamp: Date.now(),
-        },
-      ],
-      responseEvents: [],
+      requestEvents,
+      responseEvents,
     },
     headerType: 'request',
     isFirstParty: isFirstParty(cookie?.domain, tabUrl ?? ''),

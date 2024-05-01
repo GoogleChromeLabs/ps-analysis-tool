@@ -64,8 +64,7 @@ export type CookieDatabase = {
 
 export type BlockedReason =
   | Protocol.Network.SetCookieBlockedReason
-  | Protocol.Network.CookieBlockedReason
-  | Protocol.Audits.CookieExclusionReason;
+  | Protocol.Network.CookieBlockedReason;
 
 export enum RESPONSE_EVENT {
   CHROME_WEBREQUEST_ON_RESPONSE_STARTED = 'CHROME_WEBREQUEST_ON_RESPONSE_STARTED',
