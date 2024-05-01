@@ -56,7 +56,8 @@ describe('getFramesForCurrentTab : ', () => {
         {},
         tabFrames as chrome.webNavigation.GetAllFrameResultDetails[],
         targetInfo,
-        {}
+        {},
+        true
       )
     ).toStrictEqual({
       'https://edition.cnn.com': {
