@@ -92,5 +92,6 @@ export default function generateReportObject(
     frameStateCreator,
     libraryMatches,
     exemptedCookiesDataMapping,
+    showFramesSection: true,
   };
 }

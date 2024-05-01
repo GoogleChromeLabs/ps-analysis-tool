@@ -199,6 +199,7 @@ function generateSitemapReportObject(analysisData: CompleteJson[]) {
     showBlockedInfoIcon: true,
     frameStateCreator,
     exemptedCookiesDataMapping,
+    showFramesSection: false,
   };
 }
 

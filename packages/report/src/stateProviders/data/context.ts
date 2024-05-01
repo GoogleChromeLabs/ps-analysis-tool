@@ -41,6 +41,7 @@ export interface DataStoreContext {
       frameStateCreator: FrameStateCreator;
       libraryMatches: LibraryData;
       exemptedCookiesDataMapping: DataMapping[];
+      showFramesSection: boolean;
     } | null;
   };
 }

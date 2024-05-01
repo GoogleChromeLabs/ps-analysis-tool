@@ -45,7 +45,7 @@ const App = () => {
           <LibraryDetection />
         </div>
       )}
-      <FramesSection />
+      {data?.showFramesSection && <FramesSection />}
     </div>
   );
 };
