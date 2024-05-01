@@ -72,10 +72,11 @@ const Provider = ({ children }: PropsWithChildren) => {
   // This was converted to useRef because setting state was creating a race condition in rerendering the provider.
   const isCurrentTabBeingListenedToRef = useRef(false);
 
-  const { allowedNumberOfTabs, setSettingsChanged } = useSettings(
+  const { allowedNumberOfTabs, setSettingsChanged, isUsingCDP } = useSettings(
     ({ state, actions }) => ({
       allowedNumberOfTabs: state.allowedNumberOfTabs,
       setSettingsChanged: actions.setSettingsChanged,
+      isUsingCDP: state.isUsingCDP,
     })
   );
 
@@ -95,22 +96,13 @@ const Provider = ({ children }: PropsWithChildren) => {
           prevState,
           currentTabFrames,
           currentTargets,
-          extraFrameData ?? {}
+          extraFrameData ?? {},
+          isUsingCDP
         )
       );
     },
-    []
+    [isUsingCDP]
   );
-
-  useEffect(() => {
-    if (!tabFrames) {
-      return;
-    }
-    globalThis.TabFrames = {
-      ...globalThis.TabFrames,
-      [chrome.devtools.inspectedWindow.tabId]: tabFrames,
-    };
-  }, [tabFrames]);
 
   /**
    * Stores object with frame URLs as keys and boolean values indicating if the frame contains cookies.

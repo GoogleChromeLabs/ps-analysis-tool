@@ -48,7 +48,7 @@ export const onBeforeSendHeadersListener = ({
       url,
       synchnorousCookieStore.cookieDB ?? {},
       tabUrl,
-      frameId,
+      frameId.toString(),
       requestId,
       requestHeaders
     );

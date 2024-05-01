@@ -48,7 +48,7 @@ export const onResponseStartedListener = ({
       url,
       synchnorousCookieStore.cookieDB ?? {},
       tabUrl,
-      frameId,
+      frameId.toString(),
       requestId,
       responseHeaders
     );

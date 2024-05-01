@@ -24,17 +24,19 @@ import { type TabFrames } from '@ps-analysis-tool/common';
  * @param currentTabFrames Current frames in the tab.
  * @param currentTargets Current debugger targets in the browser.
  * @param extraFrameData Extra frames data that has been provided by the serivce worker.
+ * @param isUsingCDP Determines if cdp is being used.
  * @returns {TabFrames|null} Tabframes and related details if available else null.
  */
 export default function getFramesForCurrentTab(
   prevState: TabFrames | null,
   currentTabFrames: chrome.webNavigation.GetAllFrameResultDetails[] | null,
   currentTargets: chrome.debugger.TargetInfo[],
-  extraFrameData: Record<string, string[]>
+  extraFrameData: Record<string, string[]>,
+  isUsingCDP: boolean
 ) {
   const modifiedTabFrames: TabFrames = {};
 
-  currentTabFrames?.forEach(({ url, frameType }) => {
+  currentTabFrames?.forEach(({ url, frameType, frameId }) => {
     if (url && url.includes('http')) {
       const parsedUrl = new URL(url).origin;
       if (!parsedUrl) {
@@ -42,11 +44,16 @@ export default function getFramesForCurrentTab(
       }
 
       const frameIdsFromCDP: string[] = [];
+
       currentTargets.forEach(({ url: targetUrl, type, id }) => {
         if (url === targetUrl && (type === 'page' || type === 'other')) {
           frameIdsFromCDP.push(id);
         }
       });
+
+      const currentFrameIds = isUsingCDP
+        ? frameIdsFromCDP
+        : [frameId.toString()];
 
       if (frameIdsFromCDP.length) {
         if (modifiedTabFrames[parsedUrl]) {
@@ -54,14 +61,14 @@ export default function getFramesForCurrentTab(
             new Set([
               ...(modifiedTabFrames[parsedUrl].frameIds ?? []),
               ...(prevState?.[parsedUrl]?.frameIds ?? []),
-              ...(frameIdsFromCDP ?? []),
+              ...(currentFrameIds ?? []),
             ])
           );
         } else {
           modifiedTabFrames[parsedUrl] = {
             frameIds: Array.from(
               new Set([
-                ...(frameIdsFromCDP ?? []),
+                ...(currentFrameIds ?? []),
                 ...(prevState?.[parsedUrl]?.frameIds ?? []),
               ])
             ),
@@ -72,25 +79,27 @@ export default function getFramesForCurrentTab(
     }
   });
 
-  Object.keys(extraFrameData).forEach((key) => {
-    if (key === 'null') {
-      return;
-    }
+  if (isUsingCDP) {
+    Object.keys(extraFrameData).forEach((key) => {
+      if (key === 'null') {
+        return;
+      }
 
-    if (modifiedTabFrames[key]) {
-      modifiedTabFrames[key].frameIds = Array.from(
-        new Set([
-          ...(modifiedTabFrames[key].frameIds ?? []),
-          ...(extraFrameData[key] ?? []),
-        ])
-      );
-    } else {
-      modifiedTabFrames[key] = {
-        frameIds: extraFrameData[key] ?? [],
-        frameType: 'sub_frame',
-      };
-    }
-  });
+      if (modifiedTabFrames[key]) {
+        modifiedTabFrames[key].frameIds = Array.from(
+          new Set([
+            ...(modifiedTabFrames[key].frameIds ?? []),
+            ...(extraFrameData[key] ?? []),
+          ])
+        );
+      } else {
+        modifiedTabFrames[key] = {
+          frameIds: extraFrameData[key] ?? [],
+          frameType: 'sub_frame',
+        };
+      }
+    });
+  }
 
   return modifiedTabFrames;
 }
