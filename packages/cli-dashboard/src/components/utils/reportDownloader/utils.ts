@@ -39,6 +39,7 @@ import {
  */
 import reshapeCookies from '../reshapeCookies';
 import extractCookies from '../extractCookies';
+import extractReportData from '../extractReportData';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);
@@ -128,6 +129,77 @@ function generateReportObject(analysisData: CompleteJson) {
   };
 }
 
+/**
+ *
+ * @param analysisData
+ */
+function generateSitemapReportObject(analysisData: CompleteJson[]) {
+  const tabCookies = reshapeCookies(
+    extractReportData(analysisData).landingPageCookies
+  );
+
+  const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
+    (cookie.frameUrls as string[]).forEach((url) => {
+      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+        acc[url] = {} as TabFrames[string];
+      }
+    });
+    return acc;
+  }, {} as TabFrames);
+
+  const cookieStats = prepareCookiesCount(tabCookies);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
+
+  const cookieClassificationDataMapping: DataMapping[] = [
+    {
+      title: 'Total cookies',
+      count: cookieStats.total,
+      data: cookiesStatsComponents.legend,
+    },
+    {
+      title: '1st party cookies',
+      count: cookieStats.firstParty.total,
+      data: cookiesStatsComponents.firstParty,
+    },
+    {
+      title: '3rd party cookies',
+      count: cookieStats.thirdParty.total,
+      data: cookiesStatsComponents.thirdParty,
+    },
+  ];
+
+  const blockedCookieDataMapping: DataMapping[] = [
+    {
+      title: 'Blocked cookies',
+      count: cookieStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
+    },
+  ];
+
+  const exemptedCookiesDataMapping: DataMapping[] = [
+    {
+      title: 'Exempted cookies',
+      count: cookieStats.exemptedCookies.total,
+      data: cookiesStatsComponents.exempted,
+    },
+  ];
+
+  return {
+    cookieClassificationDataMapping,
+    tabCookies,
+    cookiesStatsComponents,
+    libraryDetection: {},
+    tabFrames,
+    showInfoIcon: true,
+    showHorizontalMatrix: false,
+    blockedCookieDataMapping,
+    showBlockedInfoIcon: true,
+    frameStateCreator,
+    exemptedCookiesDataMapping,
+  };
+}
+
 const generateHTMLFile = async (analysisData: CompleteJson) => {
   const htmlText = await (await fetch('./report/index.html')).text();
   const parser = new DOMParser();
@@ -137,6 +209,27 @@ const generateHTMLFile = async (analysisData: CompleteJson) => {
   const script = reportDom.createElement('script');
 
   const reportData = generateReportObject(analysisData);
+
+  const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
+
+  script.text = code;
+  reportDom.head.appendChild(script);
+
+  const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
+  const html = new Blob([injectedHtmlText]);
+
+  return html;
+};
+
+export const generateSiemapHTMLFile = async (analysisData: CompleteJson[]) => {
+  const htmlText = await (await fetch('./report/index.html')).text();
+  const parser = new DOMParser();
+  const reportDom = parser.parseFromString(htmlText, 'text/html');
+
+  // Injections
+  const script = reportDom.createElement('script');
+
+  const reportData = generateSitemapReportObject(analysisData);
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 

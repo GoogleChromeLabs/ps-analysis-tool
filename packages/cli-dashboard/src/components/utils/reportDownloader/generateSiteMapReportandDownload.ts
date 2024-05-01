@@ -24,7 +24,7 @@ import type { CompleteJson } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import { createZip, getFolderName } from './utils';
+import { createZip, getFolderName, generateSiemapHTMLFile } from './utils';
 
 const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
   if (!JSONReport.length) {
@@ -50,6 +50,10 @@ const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
 
     createZip(data, zipFolder);
   });
+
+  const report = generateSiemapHTMLFile(JSONReport);
+
+  zip.file('report.html', report);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
