@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -79,6 +78,8 @@ chrome.webRequest.onResponseStarted.addListener(
       const tab = await getTab(tabId);
       let tabUrl = syncCookieStore?.getTabUrl(tabId);
 
+      // Sometimes, a site may send out requests while it is still in the preloading state. Any cookie set from these requests are classified as third-party cookies.
+      // For example nikkei.com. The cookie domain may be nikkei.com however the tab URL would be xyz.com so it becomes third-party
       if (tab && tab.pendingUrl) {
         tabUrl = tab.pendingUrl;
       }

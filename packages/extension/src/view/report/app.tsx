@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
 import React from 'react';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+
 /**
  * Internal dependencies
  */
@@ -33,6 +33,7 @@ import { useData } from './stateProviders/data';
 
 const App = () => {
   const data = useData(({ state }) => state.data);
+
   return (
     <div className="h-full w-full flex flex-col">
       <CookiesSection />
