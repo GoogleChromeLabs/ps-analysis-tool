@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import FiltersSidebar from '..';
 import '@testing-library/jest-dom';
-import { act } from 'react-dom/test-utils';
 import { TableFilter } from '../../../useTable/types';
 import * as table from '../../../useTable/useTable';
 
