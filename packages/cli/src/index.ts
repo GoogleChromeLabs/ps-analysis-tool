@@ -113,7 +113,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
-  validateArgs(
+  await validateArgs(
     url,
     sitemapUrl,
     csvPath,
@@ -141,7 +141,15 @@ const startDashboardServer = async (dir: string, port: number) => {
       ? Utility.generatePrefix(url || sitemapUrl)
       : path.parse(csvPath || sitemapPath).name;
 
-  const outputDir = outDir ? outDir : `./out/${prefix}`;
+  let outputDir;
+
+  if (outDir && path.isAbsolute(outDir)) {
+    outputDir = outDir;
+  } else if (outDir && !path.isAbsolute(outDir)) {
+    outputDir = path.join('./out', outDir);
+  } else {
+    outputDir = `./out/${prefix}`;
+  }
 
   const spinnies = new Spinnies();
 

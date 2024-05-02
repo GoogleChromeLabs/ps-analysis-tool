@@ -22,7 +22,7 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { Accordion, FeatureList } from '../../components';
+import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
 const GSIAccordion = ({ matches }: AccordionProps) => {
@@ -37,14 +37,11 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion
-      title={'Avoid use of deprecated Google Sign-In functionality.'}
-      isLoading={false}
-      featuresText={`${featuresCount} features`}
-    >
-      <p className="dark:text-bright-gray">
+    <Accordion title={'Deprecated Google Sign-In'} isLoading={false}>
+      <p className="text-darkest-gray dark:text-bright-gray">
         The Google Sign-In JavaScript library is deprecated and is no longer
-        supported. Review the following features and consider{' '}
+        supported. Some features of Google Identity Services are in use. Please
+        review the following documentation and{' '}
         <a
           className="text-bright-navy-blue dark:text-jordy-blue"
           href={addUTMParams(
@@ -53,11 +50,10 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
           target="_blank"
           rel="noreferrer"
         >
-          migrating
+          migrate
         </a>{' '}
-        to a newer library if necessary.
+        if necessary.
       </p>
-      <FeatureList matches={matches} />
     </Accordion>
   );
 };

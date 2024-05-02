@@ -26,9 +26,9 @@ import '@testing-library/jest-dom';
 import DisqusCommentsAccordion from '../accordion';
 
 describe('Disqus Comments Accordion', () => {
-  const accordionTitleText = 'Disqus Comments.';
+  const accordionTitleText = 'Disqus Comments';
   const accordionMessageText =
-    'Disqus comments functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the Disqus support forum.';
+    'Disqus comments functionality may not work properly due to the phaseout of third-party cookies. To inquire further about the same, please visit the Disqus support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];
