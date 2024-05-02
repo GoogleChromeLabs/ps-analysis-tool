@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -80,6 +79,8 @@ chrome.webRequest.onResponseStarted.addListener(
       const tab = await getTab(tabId);
       let tabUrl = syncCookieStore?.getTabUrl(tabId);
 
+      // Sometimes, a site may send out requests while it is still in the preloading state. Any cookie set from these requests are classified as third-party cookies.
+      // For example nikkei.com. The cookie domain may be nikkei.com however the tab URL would be xyz.com so it becomes third-party
       if (tab && tab.pendingUrl) {
         tabUrl = tab.pendingUrl;
       }
@@ -159,6 +160,46 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 );
 
 /**
+ * Fires when a profile with extension is started.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onStartup
+ */
+chrome.runtime.onStartup.addListener(async () => {
+  const storage = await chrome.storage.sync.get();
+
+  if (!syncCookieStore) {
+    syncCookieStore = new SynchnorousCookieStore();
+  }
+
+  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
+  // We're doing this to keep the service worker active, preventing data loss.
+  setInterval(() => {
+    chrome.storage.local.get();
+  }, 28000);
+
+  // Sync cookie data between popup and Devtool.
+  // @todo Only send the data from the active tab and the differences.
+  setInterval(() => {
+    const data = syncCookieStore?.tabsData ?? {};
+
+    if (Object.keys(data).length === 0) {
+      return;
+    }
+
+    Object.keys(data).forEach((key) => {
+      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
+    });
+  }, 1200);
+
+  if (Object.keys(storage).includes('allowedNumberOfTabs')) {
+    tabMode = storage.allowedNumberOfTabs;
+  }
+
+  if (Object.keys(storage).includes('isUsingCDP')) {
+    globalIsUsingCDP = storage.isUsingCDP;
+  }
+});
+
+/**
  * Fires when a tab is created.
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onCreated
  */
@@ -172,14 +213,13 @@ chrome.tabs.onCreated.addListener((tab) => {
   }
 
   if (tabMode && tabMode !== 'unlimited') {
-    const doesTabExist = tabToRead;
-    if (
-      Object.keys(syncCookieStore?.tabsData ?? {}).length >=
-        ALLOWED_NUMBER_OF_TABS &&
-      doesTabExist
-    ) {
+    const tabExists = tabToRead;
+    const data = syncCookieStore?.tabsData ?? {};
+
+    if (Object.keys(data).length >= ALLOWED_NUMBER_OF_TABS && tabExists) {
       return;
     }
+
     tabToRead = tab.id.toString();
     syncCookieStore?.addTabData(tab.id);
   } else {
@@ -193,40 +233,6 @@ chrome.tabs.onCreated.addListener((tab) => {
  */
 chrome.tabs.onRemoved.addListener((tabId) => {
   syncCookieStore?.removeTabData(tabId);
-});
-
-/**
- * Fires when a profile with extension is started.
- * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onStartup
- */
-chrome.runtime.onStartup.addListener(async () => {
-  const storage = await chrome.storage.sync.get();
-
-  if (!syncCookieStore) {
-    syncCookieStore = new SynchnorousCookieStore();
-  }
-
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-
-  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
-  setInterval(() => {
-    if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
-      return;
-    }
-
-    Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
-      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
-    });
-  }, 1200);
-
-  if (Object.keys(storage).includes('allowedNumberOfTabs')) {
-    tabMode = storage.allowedNumberOfTabs;
-  }
-
-  if (Object.keys(storage).includes('isUsingCDP')) {
-    globalIsUsingCDP = storage.isUsingCDP;
-  }
 });
 
 /**
