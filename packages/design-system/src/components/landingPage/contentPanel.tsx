@@ -55,7 +55,9 @@ const ContentPanel = ({
                 </span>
               </div>
             </div>
-            <h3 className={`text-xl mb-5 ${titleStyles}`}>{item.title}</h3>
+            <h3 className={`text-lg font-medium mb-5 ${titleStyles}`}>
+              {item.title}
+            </h3>
             <p className="text-base text-raisin-black dark:text-bright-gray">
               {item.description}
             </p>
