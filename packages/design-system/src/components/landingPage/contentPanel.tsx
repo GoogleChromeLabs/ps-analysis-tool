@@ -34,7 +34,7 @@ const ContentPanel = ({
 }: ContentPanelProps) => {
   return (
     <div className="px-2">
-      <h3 className="text-lg text-raisin-black dark:text-bright-gray mb-7">
+      <h3 className="text-base text-raisin-black dark:text-bright-gray mb-7">
         {title}
       </h3>
       <div className="flex gap-5 flex-wrap">
