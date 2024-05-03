@@ -24,20 +24,24 @@ const content = [
     title: 'CHIPS',
     description:
       'The new cookie attribute, Partitioned, allows developers to opt a cookie into partitioned storage, with separate cookie jars per top-level site.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
   },
   {
     title: 'Storage Access API',
     description:
       'Storage Access API allows iframes to request storage access permissions when access would otherwise be denied by browser settings.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
   },
   {
     title: 'Related Website Sets',
     description:
       'Related Website Sets (RWS) is a way for a company to declare relationships among sites, so that browsers allow limited third-party cookie access for specific purposes.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
   },
   {
     title: 'Federated Credential Management API',
     description: 'A web API for privacy-preserving identity federation.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
   },
 ];
 

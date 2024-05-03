@@ -21,7 +21,7 @@ import React from 'react';
 
 interface ContentPanelProps {
   title: string;
-  content: { title: string; description: string }[];
+  content: { title: string; description: string; url: string }[];
   titleStyles?: string;
   counterStyles?: string;
 }
@@ -41,8 +41,10 @@ const ContentPanel = ({
         {content.map((item, index) => (
           <a
             key={index}
-            href="#"
-            className="w-80 h-80 bg-[#FDFDFD] hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out "
+            href={item.url}
+            target="_blank"
+            rel="noreferrer"
+            className="w-72 h-80 bg-[#FDFDFD] hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out "
           >
             <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
               <div

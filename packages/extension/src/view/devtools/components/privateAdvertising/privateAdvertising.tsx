@@ -25,21 +25,25 @@ const content = [
     title: 'Protected Audience',
     description:
       'The Protected Audience API serves remarketing and custom audience use cases without third party cross-site tracking.',
+    url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
   },
   {
     title: 'Attribution Reporting',
     description:
       'The Attribution Reporting API enables measurement of ad performance without third party cross-site tracking.',
+    url: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
   },
   {
     title: 'Private Aggregation',
     description:
       'The Private Aggregation API has been built for aggregating and reporting on cross-site data in a privacy-preserving manner.',
+    url: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
   },
   {
     title: 'Topics',
     description:
       'The Topics API enables interest-based advertising while preserving user privacy.',
+    url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
   },
 ];
 

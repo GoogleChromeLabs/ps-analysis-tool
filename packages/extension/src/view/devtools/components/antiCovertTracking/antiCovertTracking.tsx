@@ -25,26 +25,31 @@ const content = [
     title: 'IP Protection',
     description:
       "IP Protection is a proposal to avoid sharing a user's real IP address with third parties.",
+    url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
   },
   {
     title: 'Bounce Tracking Mitigations',
     description:
       'Reduce or eliminate the ability of bounce tracking to recognize people across contexts.',
+    url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
   },
   {
     title: 'Privacy Budget',
     description:
       'This proposal suggests a limit to the amount of individual user data that can be exposed to sites, so that in total it is insufficient to track and identify individuals.',
+    url: 'https://developers.google.com/privacy-sandbox/protections/privacy-budget',
   },
   {
     title: 'User-Agent Reduction',
     description:
       'Minimize the identifying information shared in the User-Agent string, which may be used for passive fingerprinting.',
+    url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
   },
   {
     title: 'Private State Tokens',
     description:
       "Enable trust in a user's authenticity to be conveyed from one context to another, to help sites combat fraud and distinguish bots from real humans—without passive tracking.",
+    url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
   },
 ];
 
