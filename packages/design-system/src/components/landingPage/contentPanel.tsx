@@ -44,7 +44,7 @@ const ContentPanel = ({
             href={item.url}
             target="_blank"
             rel="noreferrer"
-            className="w-72 h-80 bg-[#FDFDFD] hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out "
+            className="w-72 h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out "
           >
             <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
               <div
