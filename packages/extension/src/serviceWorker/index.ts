@@ -170,12 +170,6 @@ chrome.runtime.onStartup.addListener(async () => {
     syncCookieStore = new SynchnorousCookieStore();
   }
 
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // We're doing this to keep the service worker active, preventing data loss.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
-
   // Sync cookie data between popup and Devtool.
   // @todo Only send the data from the active tab and the differences.
   setInterval(() => {
