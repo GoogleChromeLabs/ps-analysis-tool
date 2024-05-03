@@ -641,8 +641,18 @@ chrome.runtime.onMessage.addListener(async (request) => {
       syncCookieStore.tabs[
         incomingMessageTabId
       ].portRef.onDisconnect.addListener(() => {
-        //@ts-ignore
-        syncCookieStore.tabs[incomingMessageTabId].portRef = null;
+        if (!syncCookieStore) {
+          chrome.runtime.sendMessage({
+            type: 'SERVICE_WORKER_SLEPT',
+          });
+          syncCookieStore = new SynchnorousCookieStore();
+          return;
+        }
+
+        if (syncCookieStore.tabs[incomingMessageTabId].portRef) {
+          syncCookieStore.tabs[incomingMessageTabId].portRef = null;
+        }
+
         clearInterval(10000);
       });
     }
