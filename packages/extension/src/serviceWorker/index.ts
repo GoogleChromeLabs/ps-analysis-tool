@@ -646,6 +646,11 @@ chrome.runtime.onMessage.addListener(async (request) => {
             type: 'SERVICE_WORKER_SLEPT',
           });
           syncCookieStore = new SynchnorousCookieStore();
+          (async () => {
+            const settings = await chrome.storage.sync.get();
+            globalIsUsingCDP = settings.isUsingCDP ?? false;
+            tabMode = settings.allowedNumberOfTabs;
+          })();
           return;
         }
 
