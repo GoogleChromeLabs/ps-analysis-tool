@@ -18,18 +18,49 @@
  * External Dependencies
  */
 import React from 'react';
+import { ContentPanel, LandingPage } from '@ps-analysis-tool/design-system';
 
-/**
- * Internal Dependencies
- */
-import { LandingPage } from '@ps-analysis-tool/design-system';
+const content = [
+  {
+    title: 'IP Protection',
+    description:
+      "IP Protection is a proposal to avoid sharing a user's real IP address with third parties.",
+  },
+  {
+    title: 'Bounce Tracking Mitigations',
+    description:
+      'Reduce or eliminate the ability of bounce tracking to recognize people across contexts.',
+  },
+  {
+    title: 'Privacy Budget',
+    description:
+      'This proposal suggests a limit to the amount of individual user data that can be exposed to sites, so that in total it is insufficient to track and identify individuals.',
+  },
+  {
+    title: 'User-Agent Reduction',
+    description:
+      'Minimize the identifying information shared in the User-Agent string, which may be used for passive fingerprinting.',
+  },
+  {
+    title: 'Private State Tokens',
+    description:
+      "Enable trust in a user's authenticity to be conveyed from one context to another, to help sites combat fraud and distinguish bots from real humans—without passive tracking.",
+  },
+];
 
 const AntiCovertTracking = () => {
   return (
     <LandingPage
       title="Tracking Protection"
-      iframeSrc="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
-      extraClasses="h-[78vh] w-full"
+      extraClasses="min-h-[78vh] w-full"
+      contentPanel={
+        <ContentPanel
+          title="The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking."
+          content={content}
+          counterStyles="bg-yellow-500"
+          titleStyles="text-yellow-500"
+        />
+      }
     />
   );
 };
