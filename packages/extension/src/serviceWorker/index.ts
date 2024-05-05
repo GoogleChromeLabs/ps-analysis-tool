@@ -472,9 +472,18 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       return;
     }
     try {
+      const modifiedCookieExclusionReasons = cookieExclusionReasons.map(
+        (reason) => {
+          if (reason.toLowerCase().startsWith('exclude')) {
+            return reason.substring(7) as Protocol.Network.CookieBlockedReason;
+          }
+          return reason as Protocol.Network.CookieBlockedReason;
+        }
+      );
+
       syncCookieStore?.addCookieExclusionWarningReason(
         cookie?.name + domainToUse + cookie?.path,
-        cookieExclusionReasons,
+        modifiedCookieExclusionReasons,
         cookieWarningReasons,
         source.tabId
       );
