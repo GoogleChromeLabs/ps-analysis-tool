@@ -49,6 +49,7 @@ class SynchnorousCookieStore {
       devToolsOpenState: boolean;
       popupOpenState: boolean;
       newUpdates: number;
+      portRef: any;
     };
   } = {};
 
@@ -306,6 +307,7 @@ class SynchnorousCookieStore {
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdates: 0,
+      portRef: null,
     };
   }
 
