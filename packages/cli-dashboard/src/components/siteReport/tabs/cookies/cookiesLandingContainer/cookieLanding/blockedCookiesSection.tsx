@@ -40,7 +40,9 @@ const BlockedCookiesSection = ({
   cookiesWithIssues,
   tabFrames,
 }: BlockedCookiesSectionProps) => {
-  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+  const { selectedItemUpdater, multiSelectItemUpdater } = useFiltersMapping(
+    tabFrames || {}
+  );
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
@@ -75,6 +77,12 @@ const BlockedCookiesSection = ({
         description: legendDescription,
         title: component.label,
         containerClasses: '',
+        onClick: (title: string) => {
+          multiSelectItemUpdater({
+            blockedReasons: ['All'],
+            'analytics.category': [title],
+          });
+        },
       };
     });
 
