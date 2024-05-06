@@ -630,7 +630,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if ('PING' === request?.type) {
     if (
       syncCookieStore &&
-      !syncCookieStore?.tabs[incomingMessageTabId]?.portRef
+      syncCookieStore.tabs[incomingMessageTabId]?.portRef
     ) {
       syncCookieStore.tabs[incomingMessageTabId].portRef = chrome.tabs.connect(
         Number(incomingMessageTabId),
@@ -650,20 +650,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
       syncCookieStore.tabs[
         incomingMessageTabId
       ].portRef.onDisconnect.addListener(() => {
-        if (!syncCookieStore) {
-          chrome.runtime.sendMessage({
-            type: 'SERVICE_WORKER_SLEPT',
-          });
-          syncCookieStore = new SynchnorousCookieStore();
-          (async () => {
-            const settings = await chrome.storage.sync.get();
-            globalIsUsingCDP = settings.isUsingCDP ?? false;
-            tabMode = settings.allowedNumberOfTabs;
-          })();
-          return;
-        }
-
-        if (syncCookieStore.tabs[incomingMessageTabId].portRef) {
+        if (
+          syncCookieStore &&
+          syncCookieStore.tabs[incomingMessageTabId].portRef
+        ) {
           syncCookieStore.tabs[incomingMessageTabId].portRef = null;
         }
 
