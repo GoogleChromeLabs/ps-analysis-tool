@@ -628,31 +628,28 @@ chrome.runtime.onMessage.addListener(async (request) => {
   const incomingMessageTabId = request.payload.tabId;
 
   if ('PING' === request?.type) {
-    if (syncCookieStore) {
-      if (
-        syncCookieStore.tabs[incomingMessageTabId] &&
-        !syncCookieStore.tabs[incomingMessageTabId]?.portRef
-      ) {
+    if (syncCookieStore && syncCookieStore?.tabs[incomingMessageTabId]) {
+      if (!syncCookieStore?.tabs[incomingMessageTabId]?.portRef) {
         syncCookieStore.tabs[incomingMessageTabId].portRef =
           chrome.tabs.connect(Number(incomingMessageTabId), {
             name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
           });
       }
 
-      if (syncCookieStore.tabs[incomingMessageTabId].portRef) {
+      if (syncCookieStore?.tabs[incomingMessageTabId]?.portRef) {
         setInterval(() => {
-          syncCookieStore?.tabs[incomingMessageTabId].portRef?.postMessage({
+          syncCookieStore?.tabs[incomingMessageTabId]?.portRef?.postMessage({
             status: 'ping',
           });
         }, 10000);
       }
 
-      syncCookieStore.tabs[
+      syncCookieStore?.tabs[
         incomingMessageTabId
-      ].portRef.onDisconnect.addListener(() => {
+      ]?.portRef.onDisconnect.addListener(() => {
         if (
           syncCookieStore &&
-          syncCookieStore.tabs[incomingMessageTabId].portRef
+          syncCookieStore?.tabs[incomingMessageTabId]?.portRef
         ) {
           syncCookieStore.tabs[incomingMessageTabId].portRef = null;
         }
