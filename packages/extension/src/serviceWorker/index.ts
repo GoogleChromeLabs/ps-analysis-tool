@@ -629,7 +629,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
   if ('PING' === request?.type) {
     if (syncCookieStore) {
-      if (!syncCookieStore.tabs[incomingMessageTabId]?.portRef) {
+      if (
+        syncCookieStore.tabs[incomingMessageTabId] &&
+        !syncCookieStore.tabs[incomingMessageTabId]?.portRef
+      ) {
         syncCookieStore.tabs[incomingMessageTabId].portRef =
           chrome.tabs.connect(Number(incomingMessageTabId), {
             name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
