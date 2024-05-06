@@ -628,16 +628,13 @@ chrome.runtime.onMessage.addListener(async (request) => {
   const incomingMessageTabId = request.payload.tabId;
 
   if ('PING' === request?.type) {
-    if (
-      syncCookieStore &&
-      syncCookieStore.tabs[incomingMessageTabId]?.portRef
-    ) {
-      syncCookieStore.tabs[incomingMessageTabId].portRef = chrome.tabs.connect(
-        Number(incomingMessageTabId),
-        {
-          name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
-        }
-      );
+    if (syncCookieStore) {
+      if (!syncCookieStore.tabs[incomingMessageTabId]?.portRef) {
+        syncCookieStore.tabs[incomingMessageTabId].portRef =
+          chrome.tabs.connect(Number(incomingMessageTabId), {
+            name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
+          });
+      }
 
       if (syncCookieStore.tabs[incomingMessageTabId].portRef) {
         setInterval(() => {
