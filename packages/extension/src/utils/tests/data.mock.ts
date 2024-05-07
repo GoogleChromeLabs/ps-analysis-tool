@@ -7452,4 +7452,5 @@ export const data = {
       title: 'Exempted cookies',
     },
   ],
+  showFramesSection: true,
 };

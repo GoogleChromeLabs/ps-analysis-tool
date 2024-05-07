@@ -24,7 +24,22 @@ import {
   generateSummaryDataCSV,
   generateTechnologyCSV,
   type CompleteJson,
+  type DataMapping,
+  UNKNOWN_FRAME_KEY,
+  type TabFrames,
 } from '@ps-analysis-tool/common';
+import {
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+  prepareFrameStatsComponent,
+} from '@ps-analysis-tool/design-system';
+
+/**
+ * Internal dependencies
+ */
+import reshapeCookies from '../reshapeCookies';
+import extractCookies from '../extractCookies';
+import extractReportData from '../extractReportData';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);
@@ -43,6 +58,193 @@ const generateCSVFiles = (data: CompleteJson) => {
   };
 };
 
+/**
+ *
+ * @param analysisData
+ * @returns Object Report object required to make HTML report
+ */
+function generateReportObject(analysisData: CompleteJson) {
+  const tabCookies = reshapeCookies(
+    extractCookies(analysisData.cookieData, analysisData.pageUrl)
+  );
+
+  const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
+    (cookie.frameUrls as string[]).forEach((url) => {
+      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+        acc[url] = {} as TabFrames[string];
+      }
+    });
+    return acc;
+  }, {} as TabFrames);
+
+  const cookieStats = prepareCookiesCount(tabCookies);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
+
+  const cookieClassificationDataMapping: DataMapping[] = [
+    {
+      title: 'Total cookies',
+      count: cookieStats.total,
+      data: cookiesStatsComponents.legend,
+    },
+    {
+      title: '1st party cookies',
+      count: cookieStats.firstParty.total,
+      data: cookiesStatsComponents.firstParty,
+    },
+    {
+      title: '3rd party cookies',
+      count: cookieStats.thirdParty.total,
+      data: cookiesStatsComponents.thirdParty,
+    },
+  ];
+
+  const blockedCookieDataMapping: DataMapping[] = [
+    {
+      title: 'Blocked cookies',
+      count: cookieStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
+    },
+  ];
+
+  const exemptedCookiesDataMapping: DataMapping[] = [
+    {
+      title: 'Exempted cookies',
+      count: cookieStats.exemptedCookies.total,
+      data: cookiesStatsComponents.exempted,
+    },
+  ];
+
+  return {
+    cookieClassificationDataMapping,
+    tabCookies,
+    cookiesStatsComponents,
+    libraryDetection: {},
+    tabFrames,
+    showInfoIcon: true,
+    showHorizontalMatrix: false,
+    blockedCookieDataMapping,
+    showBlockedInfoIcon: true,
+    frameStateCreator,
+    exemptedCookiesDataMapping,
+  };
+}
+
+/**
+ *
+ * @param analysisData
+ * @returns Object Report object required to make HTML report
+ */
+function generateSitemapReportObject(analysisData: CompleteJson[]) {
+  const tabCookies = reshapeCookies(
+    extractReportData(analysisData).landingPageCookies
+  );
+
+  const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
+    (cookie.frameUrls as string[]).forEach((url) => {
+      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+        acc[url] = {} as TabFrames[string];
+      }
+    });
+    return acc;
+  }, {} as TabFrames);
+
+  const cookieStats = prepareCookiesCount(tabCookies);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
+
+  const cookieClassificationDataMapping: DataMapping[] = [
+    {
+      title: 'Total cookies',
+      count: cookieStats.total,
+      data: cookiesStatsComponents.legend,
+    },
+    {
+      title: '1st party cookies',
+      count: cookieStats.firstParty.total,
+      data: cookiesStatsComponents.firstParty,
+    },
+    {
+      title: '3rd party cookies',
+      count: cookieStats.thirdParty.total,
+      data: cookiesStatsComponents.thirdParty,
+    },
+  ];
+
+  const blockedCookieDataMapping: DataMapping[] = [
+    {
+      title: 'Blocked cookies',
+      count: cookieStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
+    },
+  ];
+
+  const exemptedCookiesDataMapping: DataMapping[] = [
+    {
+      title: 'Exempted cookies',
+      count: cookieStats.exemptedCookies.total,
+      data: cookiesStatsComponents.exempted,
+    },
+  ];
+
+  return {
+    cookieClassificationDataMapping,
+    tabCookies,
+    cookiesStatsComponents,
+    libraryDetection: {},
+    tabFrames,
+    showInfoIcon: true,
+    showHorizontalMatrix: false,
+    blockedCookieDataMapping,
+    showBlockedInfoIcon: true,
+    frameStateCreator,
+    exemptedCookiesDataMapping,
+    showFramesSection: false,
+  };
+}
+
+const generateHTMLFile = async (analysisData: CompleteJson) => {
+  const htmlText = await (await fetch('./report/index.html')).text();
+  const parser = new DOMParser();
+  const reportDom = parser.parseFromString(htmlText, 'text/html');
+
+  // Injections
+  const script = reportDom.createElement('script');
+
+  const reportData = generateReportObject(analysisData);
+
+  const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
+
+  script.text = code;
+  reportDom.head.appendChild(script);
+
+  const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
+  const html = new Blob([injectedHtmlText]);
+
+  return html;
+};
+
+export const generateSiemapHTMLFile = async (analysisData: CompleteJson[]) => {
+  const htmlText = await (await fetch('./report/index.html')).text();
+  const parser = new DOMParser();
+  const reportDom = parser.parseFromString(htmlText, 'text/html');
+
+  // Injections
+  const script = reportDom.createElement('script');
+
+  const reportData = generateSitemapReportObject(analysisData);
+
+  const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
+
+  script.text = code;
+  reportDom.head.appendChild(script);
+
+  const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
+  const html = new Blob([injectedHtmlText]);
+
+  return html;
+};
+
 export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
   const {
     allCookiesCSV,
@@ -51,6 +253,8 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
+  const file = generateHTMLFile(analysisData);
+
   zipObject.file('cookies.csv', allCookiesCSV);
   if (technologyDataCSV) {
     zipObject.file('technologies.csv', technologyDataCSV);
@@ -58,6 +262,7 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
   zipObject.file('cookie-issues.csv', cookiesWithIssuesDataCSV);
   zipObject.file('report.csv', summaryDataCSV);
   zipObject.file('report.json', JSON.stringify(analysisData, null, 4));
+  zipObject.file('report.html', file);
 };
 
 export const getFolderName = (pageUrl: string) => {

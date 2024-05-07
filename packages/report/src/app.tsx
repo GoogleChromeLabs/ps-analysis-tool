@@ -41,10 +41,12 @@ const App = () => {
       {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
         <ExemptedCookiesSection />
       )}
-      <div className="text-xs">
-        <LibraryDetection />
-      </div>
-      <FramesSection />
+      {data?.libraryMatches && (
+        <div className="text-xs">
+          <LibraryDetection />
+        </div>
+      )}
+      {data?.showFramesSection && <FramesSection />}
     </div>
   );
 };
