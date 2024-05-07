@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 interface ContentPanelProps {
   title: string;
@@ -41,7 +42,7 @@ const ContentPanel = ({
         {content.map((item, index) => (
           <a
             key={index}
-            href={item.url}
+            href={addUTMParams(item.url)}
             target="_blank"
             rel="noreferrer"
             className="w-72 h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out "
