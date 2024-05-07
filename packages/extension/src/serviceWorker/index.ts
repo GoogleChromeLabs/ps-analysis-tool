@@ -628,42 +628,29 @@ chrome.runtime.onMessage.addListener(async (request) => {
   const incomingMessageTabId = request.payload.tabId;
 
   if ('PING' === request?.type) {
-    if (
-      syncCookieStore &&
-      !syncCookieStore?.tabs[incomingMessageTabId]?.portRef
-    ) {
-      syncCookieStore.tabs[incomingMessageTabId].portRef = chrome.tabs.connect(
-        Number(incomingMessageTabId),
-        {
-          name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
-        }
-      );
+    if (syncCookieStore && syncCookieStore?.tabs[incomingMessageTabId]) {
+      if (!syncCookieStore?.tabs[incomingMessageTabId]?.portRef) {
+        syncCookieStore.tabs[incomingMessageTabId].portRef =
+          chrome.tabs.connect(Number(incomingMessageTabId), {
+            name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
+          });
+      }
 
-      if (syncCookieStore.tabs[incomingMessageTabId].portRef) {
+      if (syncCookieStore?.tabs[incomingMessageTabId]?.portRef) {
         setInterval(() => {
-          syncCookieStore?.tabs[incomingMessageTabId].portRef?.postMessage({
+          syncCookieStore?.tabs[incomingMessageTabId]?.portRef?.postMessage({
             status: 'ping',
           });
         }, 10000);
       }
 
-      syncCookieStore.tabs[
+      syncCookieStore?.tabs[
         incomingMessageTabId
-      ].portRef.onDisconnect.addListener(() => {
-        if (!syncCookieStore) {
-          chrome.runtime.sendMessage({
-            type: 'SERVICE_WORKER_SLEPT',
-          });
-          syncCookieStore = new SynchnorousCookieStore();
-          (async () => {
-            const settings = await chrome.storage.sync.get();
-            globalIsUsingCDP = settings.isUsingCDP ?? false;
-            tabMode = settings.allowedNumberOfTabs;
-          })();
-          return;
-        }
-
-        if (syncCookieStore.tabs[incomingMessageTabId].portRef) {
+      ]?.portRef.onDisconnect.addListener(() => {
+        if (
+          syncCookieStore &&
+          syncCookieStore?.tabs[incomingMessageTabId]?.portRef
+        ) {
           syncCookieStore.tabs[incomingMessageTabId].portRef = null;
         }
 

@@ -178,8 +178,10 @@ class WebpageContentScript {
       }
       if (port.name.startsWith(SERVICE_WORKER_PORT_NAME)) {
         this.serviceWorkerPort = port;
-        port.onMessage.addListener(this.onMessage);
-        port.onDisconnect.addListener(this.onDisconnect);
+        this.serviceWorkerPort.onMessage.addListener(noop);
+        this.serviceWorkerPort.onDisconnect.addListener(() => {
+          this.serviceWorkerPort = null;
+        });
       }
     });
   }
