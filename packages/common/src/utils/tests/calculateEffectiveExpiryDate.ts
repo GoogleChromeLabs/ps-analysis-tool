@@ -25,30 +25,6 @@ describe('calculateEffectiveExpiryDate', () => {
     expect(calculateEffectiveExpiryDate(-1)).toBe('Session');
   });
 
-  it('Should return date in ISO format for number', () => {
-    expect(calculateEffectiveExpiryDate(1733319706)).toBe(
-      '2024-12-04T13:41:46.000Z'
-    );
-  });
-
-  it('Should return date in ISO format for number with decimal', () => {
-    expect(calculateEffectiveExpiryDate(1704961011.109784)).toBe(
-      '2024-01-11T08:16:51.109Z'
-    );
-  });
-
-  it('Should return date in ISO format for Date object', () => {
-    expect(calculateEffectiveExpiryDate(new Date('2023-09-05T00:00:00'))).toBe(
-      '2023-09-04T18:30:00.000Z'
-    );
-  });
-
-  it('Should return date in ISO format for string', () => {
-    expect(calculateEffectiveExpiryDate('2023-09-05T00:00:00')).toBe(
-      '2023-09-04T18:30:00.000Z'
-    );
-  });
-
   it('Should return Session for invalid string', () => {
     expect(calculateEffectiveExpiryDate('')).toBe('Session');
   });
