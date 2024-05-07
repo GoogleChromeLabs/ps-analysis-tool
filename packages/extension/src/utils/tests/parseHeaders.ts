@@ -175,7 +175,7 @@ describe('parseHeaders: ', () => {
         },
         parsedCookie: {
           domain: '.cnn.com',
-          expires: 0,
+          expires: 'Session',
           httponly: false,
           name: 'cc_cookie',
           partitionKey: '',
@@ -218,7 +218,7 @@ describe('parseHeaders: ', () => {
         },
         parsedCookie: {
           domain: '.cnn.com',
-          expires: 0,
+          expires: 'Session',
           httponly: false,
           name: '_ga',
           partitionKey: '',
@@ -260,7 +260,7 @@ describe('parseHeaders: ', () => {
         },
         parsedCookie: {
           domain: '.cnn.com',
-          expires: 0,
+          expires: 'Session',
           httponly: false,
           name: '_ga_FJBF08S8GG',
           partitionKey: '',
