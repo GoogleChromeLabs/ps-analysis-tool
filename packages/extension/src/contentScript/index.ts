@@ -141,7 +141,7 @@ class WebpageContentScript {
 
       if (message.PSATDevToolsHidden) {
         //@ts-ignore
-        if (cookieStore) {
+        if (typeof cookieStore !== 'undefined') {
           //@ts-ignore
           cookieStore.onchange = null;
         }
@@ -149,7 +149,7 @@ class WebpageContentScript {
 
       if (!message.PSATDevToolsHidden) {
         //@ts-ignore
-        if (cookieStore) {
+        if (typeof cookieStore !== 'undefined') {
           //@ts-ignore
           cookieStore.onchange = this.handleCookieChange;
           await this.getAndProcessJSCookies(message.tabId);
