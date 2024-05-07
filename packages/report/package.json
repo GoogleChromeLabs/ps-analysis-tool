@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/report",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Static HTML analysis report",
   "repository": {
     "type": "git",
