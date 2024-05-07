@@ -217,6 +217,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [allowedNumberOfTabs, tabFrames]);
 
   const messagePassingListener = useCallback(
+    // eslint-disable-next-line complexity
     async (message: {
       type: string;
       payload: {
@@ -230,8 +231,14 @@ const Provider = ({ children }: PropsWithChildren) => {
       if (!message.type) {
         return;
       }
+
       const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
+
+      if (incomingMessageType === 'SERVICE_WORKER_SLEPT') {
+        setContextInvalidated(true);
+        localStorage.setItem('contextInvalidated', 'true');
+      }
 
       if (SET_TAB_TO_READ === incomingMessageType) {
         const tab = await getTab(tabId?.toString() || '');

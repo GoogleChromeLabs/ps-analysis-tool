@@ -66,7 +66,16 @@ const formatCookieData = (
     }
 
     Object.entries(_cData).forEach(([key, cookie]) => {
-      store[frame][key] = cookie;
+      store[frame][key] = {
+        ...cookie,
+        isBlocked: store[frame][key]?.isBlocked || cookie.isBlocked,
+        blockedReasons: [
+          ...new Set([
+            ...(store[frame][key]?.blockedReasons || []),
+            ...(cookie.blockedReasons || []),
+          ]),
+        ],
+      };
     });
   });
 };

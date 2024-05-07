@@ -99,8 +99,11 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const onErrorOccuredListener = useCallback(
-    ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameId === 0) {
+    ({
+      frameId,
+      tabId: _tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameId === 0 && _tabId === chrome.devtools.inspectedWindow.tabId) {
         setErrorOccured(true);
       }
     },
