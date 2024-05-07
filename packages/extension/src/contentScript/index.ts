@@ -141,13 +141,19 @@ class WebpageContentScript {
 
       if (message.PSATDevToolsHidden) {
         //@ts-ignore
-        cookieStore.onchange = null;
+        if (cookieStore) {
+          //@ts-ignore
+          cookieStore.onchange = null;
+        }
       }
 
       if (!message.PSATDevToolsHidden) {
         //@ts-ignore
-        cookieStore.onchange = this.handleCookieChange;
-        await this.getAndProcessJSCookies(message.tabId);
+        if (cookieStore) {
+          //@ts-ignore
+          cookieStore.onchange = this.handleCookieChange;
+          await this.getAndProcessJSCookies(message.tabId);
+        }
       }
 
       if (message?.payload?.type === TABID_STORAGE) {
@@ -193,7 +199,7 @@ class WebpageContentScript {
   async getAndProcessJSCookies(tabId: string) {
     try {
       //@ts-ignore
-      const jsCookies = await cookieStore.getAll();
+      const jsCookies = await cookieStore?.getAll();
       await processAndStoreDocumentCookies({
         tabUrl: window.location.href,
         tabId,
