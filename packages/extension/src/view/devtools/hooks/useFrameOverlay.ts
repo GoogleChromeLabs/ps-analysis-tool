@@ -79,8 +79,8 @@ const useFrameOverlay = (
 
   const [connectedToPort, setConnectedToPort] = useState(false);
 
-  const connectToPort = useCallback(async () => {
-    const tabId = await getCurrentTabId();
+  const connectToPort = useCallback(() => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
 
     if (!tabId) {
       return;
@@ -207,29 +207,27 @@ const useFrameOverlay = (
 
   // When inspect button is clicked.
   useEffect(() => {
-    (async () => {
-      try {
-        // Indicates that the context was invalidated.
-        if (!chrome.runtime?.id && setContextInvalidated) {
-          setContextInvalidated(true);
-          return;
-        }
-
-        if (!isInspecting) {
-          if (portRef.current) {
-            portRef.current.disconnect();
-            portRef.current = null;
-            setConnectedToPort(false);
-          }
-
-          return;
-        }
-
-        await connectToPort();
-      } catch (error) {
-        // fail silently
+    try {
+      // Indicates that the context was invalidated.
+      if (!chrome.runtime?.id && setContextInvalidated) {
+        setContextInvalidated(true);
+        return;
       }
-    })();
+
+      if (!isInspecting) {
+        if (portRef.current) {
+          portRef.current.disconnect();
+          portRef.current = null;
+          setConnectedToPort(false);
+        }
+
+        return;
+      }
+
+      connectToPort();
+    } catch (error) {
+      // fail silently
+    }
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
@@ -260,73 +258,71 @@ const useFrameOverlay = (
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (!connectedToPort && !canStartInspecting) {
-          await connectToPort();
-        }
-
-        if (!isInspecting && portRef.current && canStartInspecting) {
-          portRef.current.postMessage({
-            isInspecting: false,
-          });
-
-          return;
-        }
-
-        if (
-          chrome.runtime?.id &&
-          portRef.current &&
-          tabFrames &&
-          canStartInspecting
-        ) {
-          const thirdPartyCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
-            : [];
-          const firstPartyCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => cookie.isFirstParty)
-            : [];
-          const blockedCookies = filteredCookies
-            ? filteredCookies.filter(
-                (cookie) =>
-                  cookie.isBlocked ||
-                  (cookie.blockedReasons?.length !== undefined &&
-                    cookie.blockedReasons?.length > 0)
-              )
-            : [];
-          const blockedReasons = filteredCookies
-            ? filteredCookies
-                .filter((cookie) => cookie.isBlocked)
-                .reduce((previousReasons: string[], cookie) => {
-                  if (
-                    cookie.blockedReasons?.length !== undefined &&
-                    cookie.blockedReasons?.length > 0
-                  ) {
-                    return [
-                      ...new Set([
-                        ...previousReasons,
-                        ...(cookie.blockedReasons || []),
-                      ]),
-                    ];
-                  }
-                  return [...new Set([...previousReasons])];
-                }, [])
-            : [];
-          portRef.current?.postMessage({
-            selectedFrame,
-            removeAllFramePopovers: isFrameSelectedFromDevTool,
-            thirdPartyCookies: thirdPartyCookies.length,
-            firstPartyCookies: firstPartyCookies.length,
-            blockedCookies: blockedCookies.length,
-            blockedReasons: blockedReasons.join(', '),
-            isInspecting,
-            isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
-          });
-        }
-      } catch (error) {
-        // Silently fail.
+    try {
+      if (!connectedToPort && !canStartInspecting) {
+        connectToPort();
       }
-    })();
+
+      if (!isInspecting && portRef.current && canStartInspecting) {
+        portRef.current.postMessage({
+          isInspecting: false,
+        });
+
+        return;
+      }
+
+      if (
+        chrome.runtime?.id &&
+        portRef.current &&
+        tabFrames &&
+        canStartInspecting
+      ) {
+        const thirdPartyCookies = filteredCookies
+          ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
+          : [];
+        const firstPartyCookies = filteredCookies
+          ? filteredCookies.filter((cookie) => cookie.isFirstParty)
+          : [];
+        const blockedCookies = filteredCookies
+          ? filteredCookies.filter(
+              (cookie) =>
+                cookie.isBlocked ||
+                (cookie.blockedReasons?.length !== undefined &&
+                  cookie.blockedReasons?.length > 0)
+            )
+          : [];
+        const blockedReasons = filteredCookies
+          ? filteredCookies
+              .filter((cookie) => cookie.isBlocked)
+              .reduce((previousReasons: string[], cookie) => {
+                if (
+                  cookie.blockedReasons?.length !== undefined &&
+                  cookie.blockedReasons?.length > 0
+                ) {
+                  return [
+                    ...new Set([
+                      ...previousReasons,
+                      ...(cookie.blockedReasons || []),
+                    ]),
+                  ];
+                }
+                return [...new Set([...previousReasons])];
+              }, [])
+          : [];
+        portRef.current?.postMessage({
+          selectedFrame,
+          removeAllFramePopovers: isFrameSelectedFromDevTool,
+          thirdPartyCookies: thirdPartyCookies.length,
+          firstPartyCookies: firstPartyCookies.length,
+          blockedCookies: blockedCookies.length,
+          blockedReasons: blockedReasons.join(', '),
+          isInspecting,
+          isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
+        });
+      }
+    } catch (error) {
+      // Silently fail.
+    }
   }, [
     canStartInspecting,
     connectToPort,
