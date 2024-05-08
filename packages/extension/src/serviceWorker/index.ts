@@ -225,6 +225,10 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     return;
   }
 
+  if (!syncCookieStore) {
+    syncCookieStore = new SynchnorousCookieStore();
+  }
+
   const queryParams = getQueryParams(tab.url);
 
   if (queryParams.psat_cdp || queryParams.psat_multitab) {
