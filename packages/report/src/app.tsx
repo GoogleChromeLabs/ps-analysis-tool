@@ -30,12 +30,19 @@ import {
   ExemptedCookiesSection,
 } from './components';
 import { useData } from './stateProviders/data';
+import { PrivacySandboxIcon } from '@ps-analysis-tool/design-system';
 
 const App = () => {
   const data = useData(({ state }) => state.data);
 
   return (
     <div className="h-full w-full flex flex-col">
+      <div className="flex gap-4 items-center px-4 py-2">
+        <p className="scale-125">
+          <PrivacySandboxIcon />
+        </p>
+        <p className="text-sm">{data?.url}</p>
+      </div>
       <CookiesSection />
       <BlockedCookiesSection />
       {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (

@@ -51,7 +51,8 @@ export default async function downloadReport(
   const reportData = generateReportObject(
     tabCookies,
     tabFrames,
-    libraryMatches
+    libraryMatches,
+    url
   );
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;

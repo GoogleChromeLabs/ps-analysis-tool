@@ -33,12 +33,14 @@ import {
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
  * @param libraryMatches Library matches
+ * @param url Top level URL.
  * @returns Report Object
  */
 export default function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData
+  libraryMatches: LibraryData,
+  url: string
 ) {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -92,5 +94,6 @@ export default function generateReportObject(
     exemptedCookiesDataMapping,
     showFramesSection: true,
     showBlockedCategory: false,
+    url,
   };
 }

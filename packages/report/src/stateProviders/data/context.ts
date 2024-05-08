@@ -43,6 +43,7 @@ export interface DataStoreContext {
       exemptedCookiesDataMapping: DataMapping[];
       showFramesSection: boolean;
       showBlockedCategory: boolean;
+      url: string;
     } | null;
   };
 }
@@ -74,6 +75,7 @@ const initialState: DataStoreContext = {
       exemptedCookiesDataMapping: [],
       showBlockedCategory: false,
       showFramesSection: false,
+      url: '',
     },
     isDataLoaded: false,
   },
