@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+import { PrivacySandboxColoredIcon } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies
@@ -30,17 +31,14 @@ import {
   ExemptedCookiesSection,
 } from './components';
 import { useData } from './stateProviders/data';
-import { PrivacySandboxIcon } from '@ps-analysis-tool/design-system';
 
 const App = () => {
   const data = useData(({ state }) => state.data);
 
   return (
     <div className="h-full w-full flex flex-col">
-      <div className="flex gap-4 items-center px-4 py-2">
-        <p className="scale-125">
-          <PrivacySandboxIcon />
-        </p>
+      <div className="flex gap-2 items-center px-4 py-2">
+        <PrivacySandboxColoredIcon className="w-6 h-6" />
         <p className="text-sm">{data?.url}</p>
       </div>
       <CookiesSection />
