@@ -7453,4 +7453,6 @@ export const data = {
     },
   ],
   showFramesSection: true,
+  url: 'http://example.com',
+  showBlockedCategory: false,
 };

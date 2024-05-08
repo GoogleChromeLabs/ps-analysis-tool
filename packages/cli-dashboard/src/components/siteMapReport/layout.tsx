@@ -138,7 +138,7 @@ const Layout = ({
               return;
             }
 
-            generateSiteMapReportandDownload(completeJson);
+            generateSiteMapReportandDownload(completeJson, '');
           },
         },
       };

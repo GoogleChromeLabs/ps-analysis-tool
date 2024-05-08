@@ -41,7 +41,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     const _data = window.PSAT_DATA;
 
     setData(_data);
-    if (data?.libraryMatches) {
+    if (_data?.libraryMatches) {
       setLibraryMatches(_data.libraryMatches);
     }
     setShowLoader(false);
