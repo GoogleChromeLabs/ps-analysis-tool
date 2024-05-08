@@ -22,6 +22,7 @@ import {
   type CookieData,
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
+  auditsToNetworkMap,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -222,6 +223,10 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (!tab.url) {
     return;
+  }
+
+  if (!syncCookieStore) {
+    syncCookieStore = new SynchnorousCookieStore();
   }
 
   const queryParams = getQueryParams(tab.url);
@@ -439,7 +444,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       const modifiedCookieExclusionReasons = cookieExclusionReasons.map(
         (reason) => {
           if (reason.toLowerCase().startsWith('exclude')) {
-            return reason.substring(7) as Protocol.Network.CookieBlockedReason;
+            return auditsToNetworkMap[
+              reason
+            ] as Protocol.Network.CookieBlockedReason;
           }
           return reason as Protocol.Network.CookieBlockedReason;
         }
