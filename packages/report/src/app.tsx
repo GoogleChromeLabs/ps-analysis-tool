@@ -37,10 +37,12 @@ const App = () => {
 
   return (
     <div className="h-full w-full flex flex-col">
-      <div className="flex gap-2 items-center px-4 py-2">
-        <PrivacySandboxColoredIcon className="w-6 h-6" />
-        <p className="text-sm">{data?.url}</p>
-      </div>
+      {data?.url && (
+        <div className="flex gap-2 items-center px-4 py-2">
+          <PrivacySandboxColoredIcon className="w-6 h-6" />
+          <p className="text-sm">{data.url}</p>
+        </div>
+      )}
       <CookiesSection />
       <BlockedCookiesSection />
       {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
