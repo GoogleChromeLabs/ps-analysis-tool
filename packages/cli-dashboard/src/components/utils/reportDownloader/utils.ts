@@ -127,6 +127,7 @@ function generateReportObject(analysisData: CompleteJson) {
     showBlockedInfoIcon: true,
     frameStateCreator,
     exemptedCookiesDataMapping,
+    showBlockedCategory: true,
   };
 }
 
@@ -200,6 +201,7 @@ function generateSitemapReportObject(analysisData: CompleteJson[]) {
     frameStateCreator,
     exemptedCookiesDataMapping,
     showFramesSection: false,
+    showBlockedCategory: true,
   };
 }
 

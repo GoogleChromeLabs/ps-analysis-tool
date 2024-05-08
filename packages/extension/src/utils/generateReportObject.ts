@@ -91,5 +91,6 @@ export default function generateReportObject(
     libraryMatches,
     exemptedCookiesDataMapping,
     showFramesSection: true,
+    showBlockedCategory: false,
   };
 }

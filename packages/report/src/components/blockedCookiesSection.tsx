@@ -89,14 +89,16 @@ const CookiesSection = () => {
             matrixData={dataComponents}
             infoIconTitle="Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
           />
-          <div className="flex flex-col mt-8">
-            <div className="pt-4">
-              <MatrixContainer
-                matrixData={blockedDataComponents}
-                allowExpand={false}
-              />
+          {data.showBlockedCategory && (
+            <div className="flex flex-col mt-8">
+              <div className="pt-4">
+                <MatrixContainer
+                  matrixData={blockedDataComponents}
+                  allowExpand={false}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </CookiesLandingWrapper>

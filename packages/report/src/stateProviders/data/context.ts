@@ -42,6 +42,7 @@ export interface DataStoreContext {
       libraryMatches: LibraryData;
       exemptedCookiesDataMapping: DataMapping[];
       showFramesSection: boolean;
+      showBlockedCategory: boolean;
     } | null;
   };
 }
@@ -71,6 +72,8 @@ const initialState: DataStoreContext = {
       },
       libraryMatches: {},
       exemptedCookiesDataMapping: [],
+      showBlockedCategory: false,
+      showFramesSection: false,
     },
     isDataLoaded: false,
   },
