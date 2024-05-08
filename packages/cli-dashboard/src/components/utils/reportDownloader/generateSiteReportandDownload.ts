@@ -61,7 +61,7 @@ const generateSiteReportandDownload = async (
     return;
   }
 
-  createZip(siteAnalysisData, zipFolder);
+  createZip(siteAnalysisData, zipFolder, selectedPageUrl || '');
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(

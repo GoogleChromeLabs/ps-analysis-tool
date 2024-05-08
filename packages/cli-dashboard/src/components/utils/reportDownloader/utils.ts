@@ -60,10 +60,12 @@ const generateCSVFiles = (data: CompleteJson) => {
 
 /**
  *
- * @param analysisData
+ * @param analysisData Anaylsis Data
+ * @param url URL
+ * @param siteURL
  * @returns Object Report object required to make HTML report
  */
-function generateReportObject(analysisData: CompleteJson) {
+function generateReportObject(analysisData: CompleteJson, siteURL: string) {
   const tabCookies = reshapeCookies(
     extractCookies(analysisData.cookieData, analysisData.pageUrl)
   );
@@ -128,15 +130,20 @@ function generateReportObject(analysisData: CompleteJson) {
     frameStateCreator,
     exemptedCookiesDataMapping,
     showBlockedCategory: true,
+    url: siteURL,
   };
 }
 
 /**
  *
- * @param analysisData
+ * @param analysisData Analysis Data
+ * @param sitemapURL URL for the sitemap
  * @returns Object Report object required to make HTML report
  */
-function generateSitemapReportObject(analysisData: CompleteJson[]) {
+function generateSitemapReportObject(
+  analysisData: CompleteJson[],
+  sitemapURL: string
+) {
   const tabCookies = reshapeCookies(
     extractReportData(analysisData).landingPageCookies
   );
@@ -202,10 +209,11 @@ function generateSitemapReportObject(analysisData: CompleteJson[]) {
     exemptedCookiesDataMapping,
     showFramesSection: false,
     showBlockedCategory: true,
+    url: sitemapURL,
   };
 }
 
-const generateHTMLFile = async (analysisData: CompleteJson) => {
+const generateHTMLFile = async (analysisData: CompleteJson, url: string) => {
   const htmlText = await (await fetch('./report/index.html')).text();
   const parser = new DOMParser();
   const reportDom = parser.parseFromString(htmlText, 'text/html');
@@ -213,7 +221,7 @@ const generateHTMLFile = async (analysisData: CompleteJson) => {
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateReportObject(analysisData);
+  const reportData = generateReportObject(analysisData, url);
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 
@@ -226,7 +234,10 @@ const generateHTMLFile = async (analysisData: CompleteJson) => {
   return html;
 };
 
-export const generateSiemapHTMLFile = async (analysisData: CompleteJson[]) => {
+export const generateSiemapHTMLFile = async (
+  analysisData: CompleteJson[],
+  sitemapURL: string
+) => {
   const htmlText = await (await fetch('./report/index.html')).text();
   const parser = new DOMParser();
   const reportDom = parser.parseFromString(htmlText, 'text/html');
@@ -234,7 +245,7 @@ export const generateSiemapHTMLFile = async (analysisData: CompleteJson[]) => {
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateSitemapReportObject(analysisData);
+  const reportData = generateSitemapReportObject(analysisData, sitemapURL);
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 
@@ -247,7 +258,11 @@ export const generateSiemapHTMLFile = async (analysisData: CompleteJson[]) => {
   return html;
 };
 
-export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
+export const createZip = (
+  analysisData: CompleteJson,
+  zipObject: JSZip,
+  url: string
+) => {
   const {
     allCookiesCSV,
     technologyDataCSV,
@@ -255,7 +270,7 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
-  const file = generateHTMLFile(analysisData);
+  const file = generateHTMLFile(analysisData, url);
 
   zipObject.file('cookies.csv', allCookiesCSV);
   if (technologyDataCSV) {
