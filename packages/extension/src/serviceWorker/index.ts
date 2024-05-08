@@ -22,6 +22,7 @@ import {
   type CookieData,
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
+  auditsToNetworkMap,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -439,7 +440,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       const modifiedCookieExclusionReasons = cookieExclusionReasons.map(
         (reason) => {
           if (reason.toLowerCase().startsWith('exclude')) {
-            return reason.substring(7) as Protocol.Network.CookieBlockedReason;
+            return auditsToNetworkMap[
+              reason
+            ] as Protocol.Network.CookieBlockedReason;
           }
           return reason as Protocol.Network.CookieBlockedReason;
         }
