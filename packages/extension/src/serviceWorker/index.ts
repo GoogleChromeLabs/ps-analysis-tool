@@ -170,20 +170,6 @@ chrome.runtime.onStartup.addListener(async () => {
     syncCookieStore = new SynchnorousCookieStore();
   }
 
-  // Sync cookie data between popup and Devtool.
-  // @todo Only send the data from the active tab and the differences.
-  setInterval(() => {
-    const data = syncCookieStore?.tabsData ?? {};
-
-    if (Object.keys(data).length === 0) {
-      return;
-    }
-
-    Object.keys(data).forEach((key) => {
-      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
-    });
-  }, 1200);
-
   if (Object.keys(storage).includes('allowedNumberOfTabs')) {
     tabMode = storage.allowedNumberOfTabs;
   }
@@ -301,20 +287,6 @@ chrome.windows.onRemoved.addListener((windowId) => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
-
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-
-  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
-  setInterval(() => {
-    if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
-      return;
-    }
-
-    Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
-      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
-    });
-  }, 1200);
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
