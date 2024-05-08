@@ -21,7 +21,12 @@ describe('generateReport', () => {
   it('should generate report object', () => {
     expect(
       //@ts-ignore
-      generateReportObject(tabCookies, tabFrames, libraryMatches)
+      generateReportObject(
+        tabCookies,
+        tabFrames,
+        libraryMatches,
+        'http://example.com'
+      )
     ).toEqual(data);
   });
 });
