@@ -41,7 +41,6 @@ import { TOOLTIP_CLASS } from './constants';
 import {
   DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
   GET_JS_COOKIES,
-  SERVICE_WORKER_PORT_NAME,
   TABID_STORAGE,
   WEBPAGE_PORT_NAME,
 } from '../constants';
@@ -62,11 +61,6 @@ class WebpageContentScript {
    * Connection port
    */
   port: chrome.runtime.Port | null = null;
-
-  /**
-   * Serviceeworker Connection port
-   */
-  serviceWorkerPort: chrome.runtime.Port | null = null;
 
   /**
    * TabId of the current Tab
@@ -158,13 +152,6 @@ class WebpageContentScript {
 
       if (message?.payload?.type === TABID_STORAGE) {
         this.tabId = message.payload.tabId;
-        chrome.runtime.sendMessage({
-          setInPage: true,
-          type: 'PING',
-          payload: {
-            tabId: this.tabId,
-          },
-        });
       }
 
       if (message?.payload?.type === GET_JS_COOKIES) {
@@ -182,13 +169,6 @@ class WebpageContentScript {
         port.onMessage.addListener(this.onMessage);
         port.onDisconnect.addListener(this.onDisconnect);
       }
-      if (port.name.startsWith(SERVICE_WORKER_PORT_NAME)) {
-        this.serviceWorkerPort = port;
-        this.serviceWorkerPort.onMessage.addListener(noop);
-        this.serviceWorkerPort.onDisconnect.addListener(() => {
-          this.serviceWorkerPort = null;
-        });
-      }
     });
   }
 
@@ -204,6 +184,7 @@ class WebpageContentScript {
         tabUrl: window.location.href,
         tabId,
         documentCookies: jsCookies,
+        cookieDB: this.cookieDB ?? {},
       });
     } catch (error) {
       //Fail silently. No logging because sometimes cookieStore.getAll fails to run in some context.
@@ -319,8 +300,6 @@ class WebpageContentScript {
         setInPage: false,
       });
     }
-    this.serviceWorkerPort?.disconnect();
-    this.serviceWorkerPort = null;
   }
 
   /**

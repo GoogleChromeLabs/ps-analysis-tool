@@ -37,7 +37,6 @@ import {
   INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
-  SERVICE_WORKER_PORT_NAME,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
@@ -165,6 +164,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
  * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onStartup
  */
 chrome.runtime.onStartup.addListener(async () => {
+  setInterval(async () => {
+    await chrome.storage.session.get();
+  }, 20000);
+
   const storage = await chrome.storage.sync.get();
 
   if (!syncCookieStore) {
@@ -292,6 +295,10 @@ chrome.windows.onRemoved.addListener((windowId) => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
+
+  setInterval(async () => {
+    await chrome.storage.session.get();
+  }, 20000);
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
@@ -605,38 +612,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   const incomingMessageTabId = request.payload.tabId;
-
-  if ('PING' === request?.type) {
-    if (syncCookieStore && syncCookieStore?.tabs[incomingMessageTabId]) {
-      if (!syncCookieStore?.tabs[incomingMessageTabId]?.portRef) {
-        syncCookieStore.tabs[incomingMessageTabId].portRef =
-          chrome.tabs.connect(Number(incomingMessageTabId), {
-            name: `${SERVICE_WORKER_PORT_NAME}-${incomingMessageTabId}`,
-          });
-      }
-
-      if (syncCookieStore?.tabs[incomingMessageTabId]?.portRef) {
-        setInterval(() => {
-          syncCookieStore?.tabs[incomingMessageTabId]?.portRef?.postMessage({
-            status: 'ping',
-          });
-        }, 10000);
-      }
-
-      syncCookieStore?.tabs[
-        incomingMessageTabId
-      ]?.portRef.onDisconnect.addListener(() => {
-        if (
-          syncCookieStore &&
-          syncCookieStore?.tabs[incomingMessageTabId]?.portRef
-        ) {
-          syncCookieStore.tabs[incomingMessageTabId].portRef = null;
-        }
-
-        clearInterval(10000);
-      });
-    }
-  }
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
