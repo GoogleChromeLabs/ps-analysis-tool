@@ -49,8 +49,25 @@ class SynchnorousCookieStore {
       devToolsOpenState: boolean;
       popupOpenState: boolean;
       newUpdates: number;
+      portRef: any;
     };
   } = {};
+
+  constructor() {
+    // Sync cookie data between popup and Devtool.
+    // @todo Only send the data from the active tab and the differences.
+    setInterval(() => {
+      const data = this?.tabsData ?? {};
+
+      if (Object.keys(data).length === 0) {
+        return;
+      }
+
+      Object.keys(data).forEach((key) => {
+        this?.sendUpdatedDataToPopupAndDevTools(Number(key));
+      });
+    }, 1200);
+  }
 
   /**
    * Update cookie store.
@@ -306,6 +323,7 @@ class SynchnorousCookieStore {
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdates: 0,
+      portRef: null,
     };
   }
 
@@ -349,9 +367,10 @@ class SynchnorousCookieStore {
 
     try {
       if (
-        this.tabs[tabId].devToolsOpenState ||
-        (this.tabs[tabId].popupOpenState &&
-          (overrideForInitialSync || this.tabs[tabId].newUpdates > 0))
+        ((this.tabs[tabId].devToolsOpenState ||
+          this.tabs[tabId].popupOpenState) &&
+          this.tabs[tabId].newUpdates > 0) ||
+        overrideForInitialSync
       ) {
         sentMessageAnyWhere = true;
 

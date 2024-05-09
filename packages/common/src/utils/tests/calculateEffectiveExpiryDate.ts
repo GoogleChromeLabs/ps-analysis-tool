@@ -14,4 +14,18 @@
  * limitations under the License.
  */
 
-export const RECAPTCHA_HELP_URL = 'https://support.google.com/recaptcha/';
+import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
+
+describe('calculateEffectiveExpiryDate', () => {
+  it('Should return Session for undefined', () => {
+    expect(calculateEffectiveExpiryDate(undefined)).toBe('Session');
+  });
+
+  it('Should return Session for -1', () => {
+    expect(calculateEffectiveExpiryDate(-1)).toBe('Session');
+  });
+
+  it('Should return Session for invalid string', () => {
+    expect(calculateEffectiveExpiryDate('')).toBe('Session');
+  });
+});

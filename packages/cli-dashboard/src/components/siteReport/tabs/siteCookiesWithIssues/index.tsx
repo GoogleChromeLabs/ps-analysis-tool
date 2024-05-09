@@ -34,7 +34,7 @@ const SiteCookiesWithIssues = ({
 }: SiteCookiesWithIssuesProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
-      (cookie) => cookie.isBlocked
+      (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
     ),
   }));
 

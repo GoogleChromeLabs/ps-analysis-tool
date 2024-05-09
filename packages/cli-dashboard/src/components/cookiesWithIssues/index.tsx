@@ -66,7 +66,7 @@ const CookiesWithIssues = ({
         className="h-full flex"
       >
         <CookieTable
-          data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))} // Hot Fix: To unhighlight cookies in the Cookies with issues table.
+          data={cookies}
           tableColumns={tableColumns}
           tableFilters={filters}
           tableSearchKeys={searchKeys}

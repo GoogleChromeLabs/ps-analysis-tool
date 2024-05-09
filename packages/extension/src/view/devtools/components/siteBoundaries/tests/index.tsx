@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
@@ -28,7 +28,6 @@ import RelatedWebsiteSets from '../relatedWebsiteSets';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
-import { act } from 'react-dom/test-utils';
 
 describe('Private advertising Landing Pages', () => {
   beforeAll(() => {

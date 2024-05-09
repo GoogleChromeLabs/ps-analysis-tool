@@ -22,7 +22,7 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { Accordion, FeatureList } from '../../components';
+import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
 const GISAccordion = ({ matches }: AccordionProps) => {
@@ -37,15 +37,11 @@ const GISAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion
-      title={'Avoid use of unsupported Google Identity Services features.'}
-      featuresText={`${featuresCount} features`}
-    >
-      <p className="dark:text-bright-gray">
+    <Accordion title={'Unsupported Google Identity Services'}>
+      <p className="text-darkest-gray dark:text-bright-gray">
         Due to Privacy Sandbox enforcements some features are backward
-        incompatible or deprecated. This report performs a page scan for script
-        src elements and affected JavaScript objects and methods. Review the
-        following features and{' '}
+        incompatible or deprecated. Some features of Google Identity Services
+        are in use. Please review the following documentation and{' '}
         <a
           className="text-bright-navy-blue dark:text-jordy-blue"
           target="_blank"
@@ -58,7 +54,6 @@ const GISAccordion = ({ matches }: AccordionProps) => {
         </a>{' '}
         if necessary.
       </p>
-      <FeatureList matches={matches} />
     </Accordion>
   );
 };

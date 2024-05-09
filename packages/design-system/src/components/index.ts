@@ -35,6 +35,7 @@ export { default as Details } from './cookieDetails/details';
 export { default as CookieTable } from './cookieTable';
 export { default as LandingPage } from './landingPage';
 export { default as InfoCard } from './landingPage/infoCard';
+export { default as ContentPanel } from './landingPage/contentPanel';
 export * from './landingPage/infoCard/fetchPSInfo';
 export { default as ErrorFallback } from './errorFallback';
 export { default as ExtensionReloadNotification } from './errorFallback/extensionReloadNotification';

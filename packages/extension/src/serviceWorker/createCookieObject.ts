@@ -173,9 +173,7 @@ function parseAttributeValues(
       }
       break;
     case 'expires':
-      if (value !== 0) {
-        value = calculateEffectiveExpiryDate(value as string) || 0;
-      }
+      value = calculateEffectiveExpiryDate(value as string);
       break;
     case 'priority':
       value = value || 'Medium';

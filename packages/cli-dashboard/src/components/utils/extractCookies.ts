@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import type {
-  CompleteJson,
-  CookieFrameStorageType,
+import {
+  calculateEffectiveExpiryDate,
+  type CompleteJson,
+  type CookieFrameStorageType,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -33,7 +34,16 @@ const extractCookies = (
       acc[frame] = Object.fromEntries(
         Object.entries(_data.frameCookies).map(([key, cookie]) => [
           key + (shouldAddUrlToKey ? '' : pageUrl),
-          { ...cookie, pageUrl },
+          {
+            ...cookie,
+            pageUrl,
+            parsedCookie: {
+              ...cookie.parsedCookie,
+              expires: calculateEffectiveExpiryDate(
+                cookie.parsedCookie.expires
+              ),
+            },
+          },
         ])
       );
 

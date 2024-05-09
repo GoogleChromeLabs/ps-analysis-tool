@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
 import React from 'react';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+import { PrivacySandboxColoredIcon } from '@ps-analysis-tool/design-system';
+
 /**
  * Internal dependencies
  */
@@ -33,17 +34,26 @@ import { useData } from './stateProviders/data';
 
 const App = () => {
   const data = useData(({ state }) => state.data);
+
   return (
     <div className="h-full w-full flex flex-col">
+      {data?.url && (
+        <div className="flex gap-2 items-center px-4 py-2">
+          <PrivacySandboxColoredIcon className="w-6 h-6" />
+          <p className="text-sm">{data.url}</p>
+        </div>
+      )}
       <CookiesSection />
       <BlockedCookiesSection />
       {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
         <ExemptedCookiesSection />
       )}
-      <div className="text-xs">
-        <LibraryDetection />
-      </div>
-      <FramesSection />
+      {data?.libraryMatches && (
+        <div className="text-xs">
+          <LibraryDetection />
+        </div>
+      )}
+      {data?.showFramesSection && <FramesSection />}
     </div>
   );
 };

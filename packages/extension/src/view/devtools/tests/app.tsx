@@ -16,10 +16,9 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { act } from 'react-dom/test-utils';
 import SinonChrome from 'sinon-chrome';
 import { noop } from '@ps-analysis-tool/common';
 import { useTablePersistentSettingsStore } from '@ps-analysis-tool/design-system';

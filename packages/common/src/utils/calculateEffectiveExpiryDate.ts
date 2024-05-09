@@ -37,7 +37,7 @@ function calculateEffectiveExpiryDate(
   } else if (typeof date === 'object') {
     return date.toJSON();
   } else {
-    return new Date(date).toJSON();
+    return new Date(date).toJSON() || 'Session';
   }
 }
 
