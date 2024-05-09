@@ -21,7 +21,7 @@ import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
 
@@ -46,7 +46,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.7.0')
+  .version('0.8.0')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
@@ -86,7 +86,13 @@ const saveResults = async (
 };
 
 const startDashboardServer = async (dir: string, port: number) => {
-  exec(`npm run cli-dashboard:dev -- -- --port ${port}`);
+  spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', [
+    'run',
+    'cli-dashboard:dev',
+    '--',
+    '--port',
+    port.toString(),
+  ]);
 
   await delay(2000);
 
@@ -107,7 +113,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
-  validateArgs(
+  await validateArgs(
     url,
     sitemapUrl,
     csvPath,
@@ -135,7 +141,15 @@ const startDashboardServer = async (dir: string, port: number) => {
       ? Utility.generatePrefix(url || sitemapUrl)
       : path.parse(csvPath || sitemapPath).name;
 
-  const outputDir = outDir ? outDir : `./out/${prefix}`;
+  let outputDir;
+
+  if (outDir && path.isAbsolute(outDir)) {
+    outputDir = outDir;
+  } else if (outDir && !path.isAbsolute(outDir)) {
+    outputDir = path.join('./out', outDir);
+  } else {
+    outputDir = `./out/${prefix}`;
+  }
 
   const spinnies = new Spinnies();
 

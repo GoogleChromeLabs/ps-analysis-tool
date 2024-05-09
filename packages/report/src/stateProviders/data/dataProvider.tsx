@@ -18,6 +18,7 @@
  */
 import React, { useEffect, useState, type PropsWithChildren } from 'react';
 import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection';
+
 /**
  * Internal dependencies.
  */
@@ -40,7 +41,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     const _data = window.PSAT_DATA;
 
     setData(_data);
-    setLibraryMatches(_data.libraryMatches);
+    if (_data?.libraryMatches) {
+      setLibraryMatches(_data.libraryMatches);
+    }
     setShowLoader(false);
     setIsDataLoaded(true);
   }, []);

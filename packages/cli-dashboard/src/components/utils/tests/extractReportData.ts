@@ -57,6 +57,7 @@ describe('extractReportData', () => {
             url: '',
             pageUrl: 'https://www.cnn.com/index.html',
             isBlocked: false,
+            blockedReasons: ['ThirdPartyPhaseout'],
             isFirstParty: true,
           },
           ['countryCode:.cnn.com:/https://edition.cnn.com/index.html']: {
@@ -80,6 +81,7 @@ describe('extractReportData', () => {
             pageUrl: 'https://edition.cnn.com/index.html',
             isBlocked: false,
             isFirstParty: true,
+            blockedReasons: ['ExcludeDomainNonASCII'],
           },
         },
         [UNKNOWN_FRAME_KEY]: {},
@@ -144,6 +146,7 @@ describe('extractReportData', () => {
             url: '',
             pageUrl: 'https://edition.cnn.com/index.html',
             isBlocked: false,
+            blockedReasons: ['ThirdPartyPhaseout', 'ExcludeDomainNonASCII'],
             isFirstParty: true,
           },
         },

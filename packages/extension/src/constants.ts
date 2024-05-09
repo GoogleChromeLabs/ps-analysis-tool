@@ -15,7 +15,7 @@
  */
 export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
-export const DEVTOOL_PORT_NAME = 'psat-devtool';
+export const SERVICE_WORKER_PORT_NAME = 'psat-serviceworker';
 
 export const SETTING_PAGE_CONTROLS = [
   {

@@ -24,6 +24,11 @@ const EXPERIMENT_GROUP = 'Membership in Experiment Group';
 
 const INFO_CARDS_DATA = [
   {
+    heading: 'Third-Party Cookie Depreciation Readiness',
+    content:
+      'Discover how companies across the web are gearing up for third-party cookie deprecation. This <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/privacysandbox/privacy-sandbox-dev-support/blob/main/3pcd-readiness.md" target="_blank">comprehensive list</a> is compiled with insights from participants who have voluntarily shared their preparations.',
+  },
+  {
     heading: EXPERIMENT_GROUP,
     content: `To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies. Check <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" 
     href="${addUTMParams(

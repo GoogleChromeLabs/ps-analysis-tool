@@ -113,7 +113,7 @@ const MenuBar = ({
           <button
             disabled={disableReportDownload}
             className={classnames(
-              'flex items-center relative justify-center w-5 h-5 p-1 rounded-full cursor-pointer transition-all ease-in-out group',
+              'flex items-center relative justify-center w-6 h-6 rounded-full cursor-pointer transition-all ease-in-out group',
               {
                 'bg-baby-blue-eyes': disableReportDownload,
                 'bg-ultramarine-blue': !disableReportDownload,
@@ -129,7 +129,7 @@ const MenuBar = ({
                 : 'Download Report'}
               <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
             </div>
-            <Export className="text-white scale-75" />
+            <Export className="text-white" />
           </button>
           <div className="absolute top-7 -left-2 border-b border-bright-gray dark:border-quartz w-9" />
         </div>
