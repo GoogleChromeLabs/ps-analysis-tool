@@ -108,7 +108,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
       frameId,
       error,
       tabId: _tabId,
-    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+    }: chrome.webNavigation.WebNavigationFramedErrorCallbackDetails) => {
       if (
         frameId === 0 &&
         _tabId === chrome.devtools.inspectedWindow.tabId &&
