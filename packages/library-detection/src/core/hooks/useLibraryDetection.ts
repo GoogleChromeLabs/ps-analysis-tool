@@ -124,19 +124,26 @@ const useLibraryDetection = () => {
     //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
     const domQueryMatches: LibraryData = {};
+    await Promise.all(
+      LIBRARIES.map(async ({ name, domQueryFunction }) => {
+        if (domQueryFunction) {
+          try {
+            const [queryResult] = await chrome.scripting.executeScript({
+              target: { tabId: tabId },
+              func: domQueryFunction,
+            });
 
-    LIBRARIES.forEach(async ({ name, domQueryFunction }) => {
-      if (domQueryFunction) {
-        const [queryResult] = await chrome.scripting.executeScript({
-          target: { tabId: tabId, allFrames: false },
-          func: domQueryFunction,
-        });
-
-        domQueryMatches[name] = {
-          domQuerymatches: queryResult?.result as [string],
-        };
-      }
-    });
+            domQueryMatches[name] = {
+              domQuerymatches: queryResult?.result as [string],
+            };
+          } catch (error) {
+            // Fail silently
+            // eslint-disable-next-line no-console
+            console.log(error);
+          }
+        }
+      })
+    );
 
     executeTaskInDevToolWorker(
       LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
