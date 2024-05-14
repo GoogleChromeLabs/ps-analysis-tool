@@ -96,6 +96,11 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     setTabId(chrome.devtools.inspectedWindow.tabId);
+    chrome.tabs.get(chrome.devtools.inspectedWindow.tabId, (tab) => {
+      if (tab.status) {
+        setIsCurrentTabLoading(tab.status === 'loading');
+      }
+    });
   }, []);
 
   const onErrorOccuredListener = useCallback(
