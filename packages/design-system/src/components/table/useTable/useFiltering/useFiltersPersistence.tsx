@@ -65,6 +65,8 @@ const useFiltersPersistence = (
         'selectedFilters'
       );
 
+      console.log(data);
+
       if (data) {
         computeAndUpdateOptions(
           data as PersistentStorageData['selectedFilters']
@@ -89,11 +91,14 @@ const useFiltersPersistence = (
 
   useEffect(() => {
     setIsDataLoading(true);
+    console.log('here');
     if (genericTablePersistentSettingsKey) {
       const data = getPreferences(
         genericTablePersistentSettingsKey,
         'selectedFilters'
       );
+
+      console.log(data);
 
       if (data) {
         genericFilterOptionsRef.current =

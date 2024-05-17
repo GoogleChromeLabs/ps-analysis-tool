@@ -168,7 +168,9 @@ const useFiltering = (
           }
         );
 
-        filter.filterValues = filterValues;
+        filter.filterValues = Object.keys(filterValues).length
+          ? filterValues
+          : filter.filterValues;
       });
 
       return newFilters;
