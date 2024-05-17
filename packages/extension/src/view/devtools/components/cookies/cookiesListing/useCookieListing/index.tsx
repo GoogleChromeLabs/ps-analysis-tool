@@ -232,7 +232,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
                 className="flex"
                 title="Please take a look at the network tab to get this cookie's blocking information."
               >
-                <InfoIcon className="fill-granite-gray" />
+                <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
                 Undetermined
               </span>
             );

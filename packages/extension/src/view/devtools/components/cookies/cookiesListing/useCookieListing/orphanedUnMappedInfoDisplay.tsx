@@ -44,7 +44,7 @@ const OrphanedUnMappedInfoDisplay = ({
         className="flex"
         title="Cookies that could not be mapped to any frame."
       >
-        <InfoIcon className="fill-granite-gray" />
+        <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
         <span className="ml-[2px] block">Unmapped</span>
       </span>
     );
@@ -76,7 +76,7 @@ const OrphanedUnMappedInfoDisplay = ({
         className="flex"
         title="Frames that set these cookies were removed from the DOM, leaving these cookies orphaned."
       >
-        <InfoIcon className="fill-granite-gray" />
+        <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
         <span className="ml-[2px] block">Orphaned</span>
       </span>
     );
