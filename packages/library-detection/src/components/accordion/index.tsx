@@ -40,12 +40,9 @@ const Accordion = ({
 }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const parentClass = classNames(
-    {
-      relative: true,
-    },
-    'hover:opacity-90 hover:bg-[#f5f5f5] hover:dark:bg-[#1d1d1d]'
-  );
+  const parentClass = classNames({
+    relative: true,
+  });
 
   return (
     <div className={parentClass} data-testid="library-detection-accordion">
