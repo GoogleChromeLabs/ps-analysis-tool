@@ -15,21 +15,47 @@
  */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
-const commonConfig = require('../../webpack.shared.cjs');
+const commonConfig = require('./webpack.shared.cjs');
+
+const report = {
+  entry: {
+    index: './packages/report/src/index.tsx',
+  },
+  output: {
+    path: path.resolve(__dirname, './dist/cli-dashboard/report'),
+    filename: '[name].js',
+    publicPath: '/',
+  },
+  plugins: [
+    new WebpackBar({
+      name: 'Report',
+      color: '#357B66',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Report',
+      template: './packages/report/public/index.html',
+      filename: 'index.html',
+      inject: true,
+    }),
+    new HtmlInlineScriptPlugin(),
+  ],
+  ...commonConfig,
+};
 
 const dashboard = {
   entry: {
-    index: './src/index.tsx',
+    index: './packages/cli-dashboard/src/index.tsx',
   },
   output: {
-    path: path.resolve(__dirname, './dist/'),
+    path: path.resolve(__dirname, './dist/cli-dashboard'),
     filename: '[name].js',
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, './dist'),
+      directory: path.join(__dirname, './dist/cli-dashboard'),
     },
     compress: true,
     port: 9000,
@@ -41,15 +67,15 @@ const dashboard = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './public/index.html',
+      template: './packages/cli-dashboard/public/index.html',
       filename: 'index.html',
       inject: false,
     }),
     new CopyPlugin({
-      patterns: [{ from: '../../out', to: 'out' }],
+      patterns: [{ from: './out', to: 'out' }],
     }),
   ],
   ...commonConfig,
 };
 
-module.exports = dashboard;
+module.exports = [dashboard, report];

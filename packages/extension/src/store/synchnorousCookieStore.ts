@@ -105,6 +105,22 @@ class SynchnorousCookieStore {
     };
   } = {};
 
+  constructor() {
+    // Sync cookie data between popup and Devtool.
+    // @todo Only send the data from the active tab and the differences.
+    setInterval(() => {
+      const data = this?.tabsData ?? {};
+
+      if (Object.keys(data).length === 0) {
+        return;
+      }
+
+      Object.keys(data).forEach((key) => {
+        this?.sendUpdatedDataToPopupAndDevTools(Number(key));
+      });
+    }, 1200);
+  }
+
   /**
    * This function adds frame to the appropriate tab.
    * @param {number} tabId The tabId of the event to which the event is pointing to.

@@ -86,7 +86,10 @@ const parseResponseCookieHeader = (
   let isExpired = false;
 
   if (parsedCookie.expires) {
-    isExpired = new Date(parsedCookie.expires) < new Date();
+    isExpired =
+      parsedCookie.expires === 'Session'
+        ? false
+        : new Date(parsedCookie.expires) < new Date();
   }
 
   return {

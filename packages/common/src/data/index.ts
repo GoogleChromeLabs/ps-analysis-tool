@@ -15,3 +15,15 @@
  */
 export { default as cookieIssueDetails } from './cookieExclusionAndWarningReasons';
 export { cookieExemptionReason } from './cookieExemptionReason';
+export const auditsToNetworkMap = {
+  ExcludeSameSiteUnspecifiedTreatedAsLax: 'SameSiteUnspecifiedTreatedAsLax',
+  ExcludeSameSiteNoneInsecure: 'SameSiteNoneInsecure',
+  ExcludeSameSiteLax: 'SameSiteLax',
+  ExcludeSameSiteStrict: 'SameSiteStrict',
+  ExcludeInvalidSameParty: 'InvalidSameParty',
+  ExcludeSamePartyCrossPartyContext: 'SamePartyCrossPartyContext',
+  ExcludeDomainNonASCII: 'DomainNonASCII',
+  ExcludeThirdPartyCookieBlockedInFirstPartySet:
+    'ThirdPartyBlockedInFirstPartySet',
+  ExcludeThirdPartyPhaseout: 'ThirdPartyPhaseout',
+};

@@ -80,8 +80,8 @@ const useFrameOverlay = (
 
   const [connectedToPort, setConnectedToPort] = useState(false);
 
-  const connectToPort = useCallback(async () => {
-    const tabId = await getCurrentTabId();
+  const connectToPort = useCallback(() => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
 
     if (!tabId) {
       return;
@@ -208,29 +208,27 @@ const useFrameOverlay = (
 
   // When inspect button is clicked.
   useEffect(() => {
-    (async () => {
-      try {
-        // Indicates that the context was invalidated.
-        if (!chrome.runtime?.id && setContextInvalidated) {
-          setContextInvalidated(true);
-          return;
-        }
-
-        if (!isInspecting) {
-          if (portRef.current) {
-            portRef.current.disconnect();
-            portRef.current = null;
-            setConnectedToPort(false);
-          }
-
-          return;
-        }
-
-        await connectToPort();
-      } catch (error) {
-        // fail silently
+    try {
+      // Indicates that the context was invalidated.
+      if (!chrome.runtime?.id && setContextInvalidated) {
+        setContextInvalidated(true);
+        return;
       }
-    })();
+
+      if (!isInspecting) {
+        if (portRef.current) {
+          portRef.current.disconnect();
+          portRef.current = null;
+          setConnectedToPort(false);
+        }
+
+        return;
+      }
+
+      connectToPort();
+    } catch (error) {
+      // fail silently
+    }
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
@@ -264,7 +262,7 @@ const useFrameOverlay = (
     (async () => {
       try {
         if (!connectedToPort && !canStartInspecting) {
-          await connectToPort();
+          connectToPort();
         }
 
         if (!isInspecting && portRef.current && canStartInspecting) {

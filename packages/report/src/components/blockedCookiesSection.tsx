@@ -13,60 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies
  */
 import React from 'react';
 import {
   CookiesLandingWrapper,
-  type DataMapping,
+  LEGEND_DESCRIPTION,
+  MatrixContainer,
   prepareCookieStatsComponents,
   prepareCookiesCount,
-  MatrixContainer,
   type MatrixComponentProps,
-  LEGEND_DESCRIPTION,
-  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import { useData } from '../stateProviders/data';
+import type { DataMapping } from '@ps-analysis-tool/common';
 
-interface BlockedCookiesSectionProps {
-  tabCookies: TabCookies | null;
-  cookiesWithIssues: TabCookies | null;
-  tabFrames: TabFrames | null;
-}
+const CookiesSection = () => {
+  const data = useData(({ state }) => state.data);
 
-const BlockedCookiesSection = ({
-  tabCookies,
-  cookiesWithIssues,
-  tabFrames,
-}: BlockedCookiesSectionProps) => {
-  const { selectedItemUpdater, multiSelectItemUpdater } = useFiltersMapping(
-    tabFrames || {}
-  );
-  const cookieStats = prepareCookiesCount(tabCookies);
+  if (!data) {
+    return <></>;
+  }
+
+  const cookieStats = prepareCookiesCount(data.tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
       title: 'Blocked cookies',
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
-      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
     },
   ];
   const dataComponents: MatrixComponentProps[] =
-    cookiesStatsComponents.blockedCookiesLegend.map((component) => {
+    cookiesStatsComponents.blockedCookiesLegend.map((component: any) => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
         description: legendDescription,
         title: component.label,
         containerClasses: '',
-        onClick: (title: string) =>
-          selectedItemUpdater(title, 'blockedReasons'),
       };
     });
 
-  const blockedCookiesStats = prepareCookiesCount(cookiesWithIssues);
+  const blockedCookiesStats = prepareCookiesCount(
+    Object.fromEntries(
+      Object.entries(data.tabCookies).filter(([, cookie]) => cookie.isBlocked)
+    )
+  );
   const blockedCookiesStatsComponents =
     prepareCookieStatsComponents(blockedCookiesStats);
   const blockedDataComponents: MatrixComponentProps[] =
@@ -77,12 +74,6 @@ const BlockedCookiesSection = ({
         description: legendDescription,
         title: component.label,
         containerClasses: '',
-        onClick: (title: string) => {
-          multiSelectItemUpdater({
-            blockedReasons: ['All'],
-            'analytics.category': [title],
-          });
-        },
       };
     });
 
@@ -98,17 +89,20 @@ const BlockedCookiesSection = ({
             matrixData={dataComponents}
             infoIconTitle="Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
           />
-          <div className="flex flex-col mt-8">
-            <div className="pt-4">
-              <MatrixContainer
-                matrixData={blockedDataComponents}
-                allowExpand={false}
-              />
+          {data.showBlockedCategory && (
+            <div className="flex flex-col mt-8">
+              <div className="pt-4">
+                <MatrixContainer
+                  matrixData={blockedDataComponents}
+                  allowExpand={false}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </CookiesLandingWrapper>
   );
 };
-export default BlockedCookiesSection;
+
+export default CookiesSection;

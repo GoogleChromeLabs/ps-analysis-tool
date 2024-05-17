@@ -20,6 +20,7 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
+  type CookieDatabase,
 } from '@ps-analysis-tool/common';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
@@ -27,7 +28,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
-import { fetchDictionary } from './fetchCookieDictionary';
+
 import { GET_JS_COOKIES } from '../constants';
 
 interface ProcessAndStoreDucmentCookies {
@@ -35,6 +36,7 @@ interface ProcessAndStoreDucmentCookies {
   tabId: string;
   frameId: string;
   documentCookies: ParsedCookie[];
+  cookieDB: CookieDatabase;
 }
 
 const processAndStoreDocumentCookies = async ({
@@ -42,10 +44,9 @@ const processAndStoreDocumentCookies = async ({
   tabId,
   frameId,
   documentCookies,
+  cookieDB,
 }: ProcessAndStoreDucmentCookies) => {
   try {
-    const cookieDB = await fetchDictionary();
-
     const parsedCookieData: CookieData[] = documentCookies.map(
       (singleCookie: ParsedCookie) => {
         let parsedCookie = {

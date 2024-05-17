@@ -681,12 +681,106 @@
       "contact": "ewelina.salamonik@wbd.com",
       "primary": "https://tvn.pl",
       "associatedSites": [
+        "https://player.pl",
         "https://tvn24.pl",
         "https://zdrowietvn.pl"
       ],
       "rationaleBySite": {
+        "https://player.pl": "Streaming service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website",
         "https://zdrowietvn.pl": "Educational service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website",
         "https://tvn24.pl": "News service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website"
+      }
+    },
+    {
+      "primary": "https://zalo.me",
+      "contact": "zalo.platform.operation@vng.com.vn",
+      "associatedSites": [
+        "https://zingmp3.vn",
+        "https://baomoi.com",
+        "https://smoney.vn"
+      ],
+      "rationaleBySite": {
+        "https://zingmp3.vn": "Music Website owned by Zalo Group, VNG",
+        "https://baomoi.com": "News Website owned by Zalo Group, VNG",
+        "https://smoney.vn": "News Website owned by Zalo Group, VNG"
+      }
+    },
+    {
+      "primary": "https://finn.no",
+      "contact": "rws-admin@schibsted.com",
+      "associatedSites": [
+        "https://prisjakt.no",
+        "https://mittanbud.no"
+      ],
+      "serviceSites": [
+        "https://pdmp-apis.no"
+      ],
+      "rationaleBySite": {
+        "https://prisjakt.no": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites.",
+        "https://mittanbud.no": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites.",
+        "https://pdmp-apis.no": "Site owned by Schibsted that provides APIs for users across Schibsted's sites."
+      }
+    },
+    {
+      "contact": "asagrera@grupolpg.sv",
+      "primary": "https://laprensagrafica.com",
+      "associatedSites": [
+        "https://elgrafico.com",
+        "https://eleconomista.net",
+        "https://ella.sv",
+        "https://grupolpg.sv"
+      ],
+      "rationaleBySite": {
+        "https://elgrafico.com": "News portal owned by La Prensa Grafica Group",
+        "https://eleconomista.net": "News portal owned by La Prensa Grafica Group",
+        "https://ella.sv": "News portal owned by La Prensa Grafica Group",
+        "https://grupolpg.sv": "Domain owned by La Prensa Grafica Group"
+      }
+    },
+    {
+      "primary": "https://kaksya.in",
+      "contact": "kaksya.org@gmail.com",
+      "associatedSites": [
+        "https://nidhiacademyonline.com"
+      ],
+      "serviceSites": [],
+      "rationaleBySite": {
+        "https://nidhiacademyonline.com": "This website is a subpart of kaksya.in and is used to host Nidhi Academy educational content videos/notes and more."
+      }
+    },
+    {
+      "contact": "jsteam@intra.sapo.pt",
+      "primary": "https://sapo.pt",
+      "associatedSites": [
+        "https://sapo.pt",
+        "https://meo.pt"
+      ],
+      "rationaleBySite": {
+        "https://sapo.pt": "SAPO is Portugal's leading online platform offering a diverse range of news, information, and services catering to various interests including news, entertainment, sports, technology, and lifestyle.",
+        "https://meo.pt": "MEO is a prominent telecommunications and entertainment provider in Portugal, offering a wide range of services including television, internet, phone, and mobile."
+      },
+      "ccTLDs": {
+        "https://sapo.pt": [
+          "https://sapo.io"
+        ]
+      }
+    },
+    {
+      "contact": "profiel@vrt.be",
+      "primary": "https://vrt.be",
+      "associatedSites": [
+        "https://dewarmsteweek.be",
+        "https://sporza.be",
+        "https://een.be",
+        "https://radio2.be",
+        "https://radio1.be"
+      ],
+      "rationaleBySite": {
+        "https://dewarmsteweek.be": "domain for a yearly campaign",
+        "https://sporza.be": "sub brand for sports news",
+        "https://een.be": "sub brand site",
+        "https://radio2.be": "sub brand site",
+        "https://radio1.be": "sub brand site"
       }
     }
   ]
