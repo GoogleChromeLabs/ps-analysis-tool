@@ -65,8 +65,6 @@ const useFiltersPersistence = (
         'selectedFilters'
       );
 
-      console.log(data);
-
       if (data) {
         computeAndUpdateOptions(
           data as PersistentStorageData['selectedFilters']
