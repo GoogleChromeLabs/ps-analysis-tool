@@ -23,10 +23,15 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
+  prepareCookiesCount,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies.
+ */
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
+import ExemptedCookiesSection from './cookieLanding/exemptedCookiesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -41,8 +46,9 @@ const CookiesLandingContainer = ({
   cookiesWithIssues,
   downloadReport,
 }: CookiesLandingContainerProps) => {
-  const sections: Array<CookiesLandingSection> = useMemo(
-    () => [
+  const sections: Array<CookiesLandingSection> = useMemo(() => {
+    const cookieStats = prepareCookiesCount(tabCookies);
+    return [
       {
         name: 'Cookies',
         link: 'cookies',
@@ -66,9 +72,19 @@ const CookiesLandingContainer = ({
           },
         },
       },
-    ],
-    [tabCookies, tabFrames, cookiesWithIssues]
-  );
+      {
+        name: 'Exempted Cookies',
+        link: 'exempted-cookies',
+        panel: {
+          Element: ExemptedCookiesSection,
+          props: {
+            cookieStats,
+            tabFrames,
+          },
+        },
+      },
+    ];
+  }, [tabCookies, tabFrames, cookiesWithIssues]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),

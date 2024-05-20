@@ -17,7 +17,8 @@
 /**
  * External dependencies.
  */
-import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
+import { Protocol } from 'devtools-protocol';
 import { parse } from 'simple-cookie';
 
 /**
@@ -192,16 +193,13 @@ export class BrowserManagement {
     const responseMap: Map<string, ResponseData> = new Map();
     this.pageResponseMaps.set(pageId, responseMap);
 
-    cdpSession.on(
-      'Network.responseReceived',
-      (response: Protocol.Network.ResponseReceivedEvent) => {
-        responseMap.set(response.requestId, {
-          frameId: response.frameId || mainFrameId,
-          serverUrl: response.response.url,
-          cookies: responseMap.get(response.requestId)?.cookies || [],
-        });
-      }
-    );
+    cdpSession.on('Network.responseReceived', (response) => {
+      responseMap.set(response.requestId, {
+        frameId: response.frameId || mainFrameId,
+        serverUrl: response.response.url,
+        cookies: responseMap.get(response.requestId)?.cookies || [],
+      });
+    });
 
     cdpSession.on(
       'Network.responseReceivedExtraInfo',
@@ -217,8 +215,12 @@ export class BrowserManagement {
               ? event.cookiePartitionKey
               : undefined;
 
-            const blockedEntry = event.blockedCookies.find((c) => {
-              return c.cookie?.name === parsedCookie.name;
+            const blockedEntry = event.blockedCookies.find(({ cookie }) => {
+              return cookie?.name === parsedCookie.name;
+            });
+
+            const exemptedEntry = event.exemptedCookies?.find(({ cookie }) => {
+              return cookie?.name === parsedCookie.name;
             });
 
             return {
@@ -234,6 +236,7 @@ export class BrowserManagement {
                 partitionKey,
               },
               isBlocked: Boolean(blockedEntry),
+              exemptedEntry,
               blockedReasons: blockedEntry?.blockedReasons,
             };
           });
