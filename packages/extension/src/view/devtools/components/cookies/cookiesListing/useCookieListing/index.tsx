@@ -103,11 +103,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Scope',
         accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
+        cell: (info: InfoType) => <>{!info ? 'Third Party' : 'First Party'}</>,
         widthWeightagePercentage: 6,
       },
       {
