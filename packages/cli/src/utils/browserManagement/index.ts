@@ -233,7 +233,7 @@ export class BrowserManagement {
                 secure: parsedCookie.secure || false,
                 partitionKey,
               },
-              isBlocked: (blockedEntry?.blockedReasons || []).length > 0,
+              isBlocked: Boolean(blockedEntry),
               blockedReasons: blockedEntry?.blockedReasons,
             };
           });
