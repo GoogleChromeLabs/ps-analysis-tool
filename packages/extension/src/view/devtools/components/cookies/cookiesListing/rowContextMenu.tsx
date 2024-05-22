@@ -113,7 +113,7 @@ const RowContextMenu = forwardRef<
     const filter = `cookie-domain:${domain} cookie-name:${name}`;
 
     // @ts-ignore
-    if (chrome.devtools.panels.network.show) {
+    if (chrome.devtools.panels?.network?.show) {
       // @ts-ignore
       chrome.devtools.panels.network.show({ filter });
       return;
@@ -208,7 +208,7 @@ const RowContextMenu = forwardRef<
                 <span>
                   {
                     // @ts-ignore
-                    chrome.devtools.panels.network.show
+                    chrome.devtools.panels?.network?.show
                       ? 'Filter in Network Panel'
                       : 'Copy Network Filter String'
                   }
