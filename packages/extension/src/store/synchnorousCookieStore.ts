@@ -61,6 +61,9 @@ class SynchnorousCookieStore {
    */
   tabToRead = '';
 
+  /**
+   * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
+   */
   requestIdToCDPURLMapping: {
     [tabId: string]: {
       [requestId: string]: {
@@ -71,18 +74,30 @@ class SynchnorousCookieStore {
     };
   } = {};
 
+  /**
+   * This variable stores the unParsedRequest headers received from Network.requestWillBeSentExtraInfo.
+   * These are the requests whose Network.requestWillBeSent counter part havent yet been fired.
+   */
   unParsedRequestHeaders: {
     [tabId: string]: {
       [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
     };
   } = {};
 
+  /**
+   * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
+   * These are the responses whose Network.responseReceived counter part havent yet been fired.
+   */
   unParsedResponseHeaders: {
     [tabId: string]: {
       [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
     };
   } = {};
 
+  /**
+   * This variable stores requestUrl related to a particular frameId of a particular tab.
+   * These urls are used as arguments to call Network.getCookies on the frameId.
+   */
   frameIdToResourceMap: {
     [tabId: string]: {
       [frameId: string]: Set<string>;
@@ -393,10 +408,10 @@ class SynchnorousCookieStore {
   }
 
   /**
-   * This function will deinitialise variables for given tab.
-   * @param {string} tabId The tab whose data has to be deinitialised.
-   * @param frameId The tab whose data has to be deinitialised.
-   * @param targetSet The tab whose data has to be deinitialised.
+   * This function will find the first ancestor frameId
+   * @param {string} tabId The tab where the operation has to be performed.
+   * @param {string} frameId The frameId whose ancestor has to be searched.
+   * @param {Set<string>} targetSet The current set of targets.
    * @returns {string | null} The first ancestor frameId.
    */
   findFirstAncestorFrameId(

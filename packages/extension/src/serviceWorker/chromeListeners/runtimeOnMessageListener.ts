@@ -60,7 +60,7 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (SERVICE_WORKER_TABS_RELOAD_COMMAND === incomingMessageType) {
     const sessionStorage = await chrome.storage.session.get();
-    if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
+    if (sessionStorage?.allowedNumberOfTabs) {
       synchnorousCookieStore.tabMode = sessionStorage.allowedNumberOfTabs;
     }
 
