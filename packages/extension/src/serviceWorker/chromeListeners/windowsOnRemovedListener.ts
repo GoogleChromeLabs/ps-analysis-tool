@@ -17,7 +17,8 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-chrome.windows.onRemoved.addListener((windowId) => {
+
+export const windowsOnRemovedListener = (windowId: number) => {
   chrome.tabs.query({ windowId }, (tabs) => {
     tabs.map((tab) => {
       if (tab.id) {
@@ -28,4 +29,4 @@ chrome.windows.onRemoved.addListener((windowId) => {
   });
 
   synchnorousCookieStore?.removeWindowData(windowId);
-});
+};

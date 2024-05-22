@@ -192,9 +192,3 @@ export const runtimeOnMessageListener = async (request: any) => {
     );
   }
 };
-
-/**
- * Fires when a message is sent from either an extension process (by runtime.sendMessage) or a content script (by tabs.sendMessage).
- * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
- */
-chrome.runtime.onMessage.addListener(runtimeOnMessageListener);

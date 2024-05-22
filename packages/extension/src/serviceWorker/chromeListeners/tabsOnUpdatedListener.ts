@@ -21,7 +21,7 @@ import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 import getQueryParams from '../../utils/getQueryParams';
 import attachCDP from '../attachCDP';
 
-export const onUpdatedListener = async (
+export const onTabUpdatedListener = async (
   tabId: number,
   changeInfo: chrome.tabs.TabChangeInfo,
   tab: chrome.tabs.Tab
@@ -92,5 +92,3 @@ export const onUpdatedListener = async (
     console.warn(error);
   }
 };
-
-chrome.tabs.onUpdated.addListener(onUpdatedListener);

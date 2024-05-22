@@ -18,8 +18,8 @@
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 
-chrome.tabs.onRemoved.addListener((tabId) => {
+export const onTabRemovedListener = (tabId: number) => {
   synchnorousCookieStore.deinitialiseVariablesForTab(tabId.toString());
 
   synchnorousCookieStore?.removeTabData(tabId);
-});
+};

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-chrome.windows.onCreated.addListener(async () => {
+export const windowsOnCreatedListener = async () => {
   const totalWindows = await chrome.windows.getAll();
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
@@ -26,4 +26,4 @@ chrome.windows.onCreated.addListener(async () => {
   if (totalWindows.length < 2) {
     chrome.contentSettings.cookies.clear({});
   }
-});
+};

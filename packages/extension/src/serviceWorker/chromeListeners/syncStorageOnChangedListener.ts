@@ -109,8 +109,3 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
     });
   }
 };
-
-chrome.storage.sync.onChanged.addListener(onSyncStorageChangedListenerForCDP);
-chrome.storage.sync.onChanged.addListener(
-  onSyncStorageChangedListenerForMultiTab
-);

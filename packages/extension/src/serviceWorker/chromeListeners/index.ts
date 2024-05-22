@@ -16,25 +16,36 @@
 import { onBeforeSendHeadersListener } from './beforeSendHeadersListener';
 import { onResponseStartedListener } from './onResponseStartedListener';
 
-import './runtimeStartUpListener';
-import './runtimeOnInstalledListener';
-import './runtimeOnMessageListener';
+import { onStartUpListener } from './runtimeStartUpListener';
+import { runtimeOnInstalledListener } from './runtimeOnInstalledListener';
+import { runtimeOnMessageListener } from './runtimeOnMessageListener';
 
-import './syncStorageOnChangedListener';
+import {
+  onSyncStorageChangedListenerForMultiTab,
+  onSyncStorageChangedListenerForCDP,
+} from './syncStorageOnChangedListener';
 
 import { onTabCreatedListener } from './tabOnCreatedListener';
-import './tabOnRemovedListener';
-import './tabsOnUpdatedListener';
+import { onTabRemovedListener } from './tabOnRemovedListener';
+import { onTabUpdatedListener } from './tabsOnUpdatedListener';
 
-import './windowsOnRemovedListener';
-import './windowsOnCreatedListener';
+import { windowsOnRemovedListener } from './windowsOnRemovedListener';
+import { windowsOnCreatedListener } from './windowsOnCreatedListener';
 
+/**
+ * Fires before sending an HTTP request, once the request headers are available.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest#event-onBeforeSendHeaders
+ */
 chrome.webRequest.onBeforeSendHeaders.addListener(
   onBeforeSendHeadersListener,
   { urls: ['*://*/*'] },
   ['extraHeaders', 'requestHeaders']
 );
 
+/**
+ * Fires when the browser receives a response from a web server.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
+ */
 chrome?.webRequest?.onResponseStarted?.addListener(
   onResponseStartedListener,
   { urls: ['*://*/*'] },
@@ -42,3 +53,53 @@ chrome?.webRequest?.onResponseStarted?.addListener(
 );
 
 chrome.tabs.onCreated.addListener(onTabCreatedListener);
+
+/**
+ * Fires when a profile with extension is started.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onStartup
+ */
+chrome.runtime.onStartup.addListener(onStartUpListener);
+
+/**
+ * Fires when the extension is first installed,
+ * when clicked on the extension refresh button from chrome://extensions/
+ * when the extension is updated to a new version,
+ * when Chrome is updated to a new version.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onInstalled
+ */
+chrome.runtime.onInstalled.addListener(runtimeOnInstalledListener);
+
+/**
+ * Fires when a message is sent from either an extension process (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
+ */
+chrome.runtime.onMessage.addListener(runtimeOnMessageListener);
+
+/**
+ * Fires when a tab is closed.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onRemoved
+ */
+chrome.tabs.onRemoved.addListener(onTabRemovedListener);
+
+/**
+ * Fires when a tab is updated.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
+ */
+chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
+
+/**
+ * Fires when a window is removed (closed).
+ * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onRemoved
+ */
+chrome.windows.onRemoved.addListener(windowsOnRemovedListener);
+
+/**
+ * Fires when the browser window is opened.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onCreated
+ */
+chrome.windows.onCreated.addListener(windowsOnCreatedListener);
+
+chrome.storage.sync.onChanged.addListener(onSyncStorageChangedListenerForCDP);
+chrome.storage.sync.onChanged.addListener(
+  onSyncStorageChangedListenerForMultiTab
+);
