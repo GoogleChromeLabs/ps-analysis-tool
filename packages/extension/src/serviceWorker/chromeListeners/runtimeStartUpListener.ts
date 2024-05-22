@@ -50,7 +50,7 @@ const onStartUpListener = async () => {
     });
   }, 5000);
 
-  if (Object.keys(storage).includes('allowedNumberOfTabs')) {
+  if (storage?.allowedNumberOfTabs) {
     synchnorousCookieStore.tabMode = storage.allowedNumberOfTabs;
   }
 
