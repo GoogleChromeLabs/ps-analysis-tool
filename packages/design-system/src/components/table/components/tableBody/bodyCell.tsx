@@ -49,6 +49,7 @@ const BodyCell = ({
   isHighlighted = false,
 }: BodyCellProps) => {
   const IconElement = icon?.Element;
+  const cellValue = cell?.() ?? '';
 
   return (
     <div
@@ -86,7 +87,12 @@ const BodyCell = ({
           )}
         </div>
       )}
-      <p className="truncate">{cell?.() ?? ''}</p>
+      <p
+        className="truncate"
+        title={typeof cellValue === 'string' ? cellValue : ''}
+      >
+        {cellValue}
+      </p>
     </div>
   );
 };

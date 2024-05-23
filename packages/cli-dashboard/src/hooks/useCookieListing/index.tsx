@@ -60,7 +60,7 @@ const useCookieListing = (
       {
         header: 'Scope',
         accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => <>{!info ? 'Third Party' : 'First Party'}</>,
+        cell: (info: InfoType) => (!info ? 'Third Party' : 'First Party'),
         widthWeightagePercentage: 8,
       },
       {

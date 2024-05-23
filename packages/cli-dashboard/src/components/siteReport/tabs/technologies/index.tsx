@@ -54,7 +54,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
       {
         header: 'Description',
         accessorKey: 'description',
-        cell: (info: InfoType) => <span title={info as string}>{info}</span>,
+        cell: (info: InfoType) => info,
       },
       {
         header: 'Confidence',

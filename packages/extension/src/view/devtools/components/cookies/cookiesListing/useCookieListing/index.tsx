@@ -103,7 +103,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Scope',
         accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => <>{!info ? 'Third Party' : 'First Party'}</>,
+        cell: (info: InfoType) => (!info ? 'Third Party' : 'First Party'),
         widthWeightagePercentage: 6,
       },
       {
@@ -133,7 +133,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
+        cell: (info: InfoType) => (info ? info : 'Unknown'),
         widthWeightagePercentage: 7.5,
       },
       {
@@ -228,8 +228,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
                 className="flex"
                 title="Please take a look at the network tab to get this cookie's blocking information."
               >
-                <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
-                Undetermined
+                <span>
+                  <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
+                </span>
+                <span className="ml-[2px] truncate">Undetermined</span>
               </span>
             );
           } else {
