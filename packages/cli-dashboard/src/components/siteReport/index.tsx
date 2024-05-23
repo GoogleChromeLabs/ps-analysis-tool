@@ -44,6 +44,7 @@ interface SiteReportProps {
   technologies: TechnologyData[];
   completeJson: CompleteJson[] | null;
   selectedSite: string | null;
+  libraryDetectionData: string[];
 }
 
 const SiteReport = ({
@@ -51,6 +52,7 @@ const SiteReport = ({
   technologies,
   completeJson,
   selectedSite,
+  libraryDetectionData,
 }: SiteReportProps) => {
   const [data, setData] = useState<SidebarItems>(Tabs);
 
@@ -59,6 +61,7 @@ const SiteReport = ({
       cookies={cookies}
       technologies={technologies}
       completeJson={completeJson}
+      libraryDetectionData={libraryDetectionData}
     >
       <SidebarProvider data={data}>
         <Layout selectedSite={selectedSite} setSidebarData={setData} />

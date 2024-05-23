@@ -30,10 +30,13 @@ interface CookiesTabProps {
 }
 
 const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
-  const { tabCookies, completeJson } = useContentStore(({ state }) => ({
-    tabCookies: state.tabCookies,
-    completeJson: state.completeJson,
-  }));
+  const { tabCookies, completeJson, libraryDetectionData } = useContentStore(
+    ({ state }) => ({
+      tabCookies: state.tabCookies,
+      completeJson: state.completeJson,
+      libraryDetectionData: state.libraryDetectionData,
+    })
+  );
 
   const tabFrames = useMemo<TabFrames>(
     () =>
@@ -80,6 +83,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
             tabCookies={tabCookies}
             cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
+            libraryDetectionData={libraryDetectionData}
           />
         </div>
       )}

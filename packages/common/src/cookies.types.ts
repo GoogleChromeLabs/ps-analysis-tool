@@ -243,6 +243,7 @@ export type CompleteJson = {
     };
   };
   technologyData: TechnologyData[];
+  libraryDetectionData: string[];
 };
 
 export interface DataMapping {

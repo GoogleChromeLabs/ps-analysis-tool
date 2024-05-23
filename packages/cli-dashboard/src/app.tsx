@@ -43,6 +43,9 @@ const App = () => {
   const [landingPageCookies, setLandingPageCookies] =
     useState<CookieFrameStorageType>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
+  const [libraryDetectionData, setLibraryDetectionData] = useState<string[]>(
+    []
+  );
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
@@ -66,10 +69,15 @@ const App = () => {
       setCompleteJsonReport(data);
 
       let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [];
+        _technologies: TechnologyData[] = [],
+        _libraryDetectionData: string[] = [];
 
       if (type === DisplayType.SITEMAP) {
         const extractedData = extractReportData(data);
+        const libraryDetectionDataSet = new Set([
+          ...data.flatMap((pageData) => pageData.libraryDetectionData || []),
+        ]);
+        _libraryDetectionData = Array.from(libraryDetectionDataSet) as string[];
 
         _cookies = extractedData.cookies;
         _technologies = extractedData.technologies;
@@ -77,10 +85,12 @@ const App = () => {
       } else {
         _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
         _technologies = data[0].technologyData;
+        _libraryDetectionData = data[0].libraryDetectionData || [];
       }
 
       setCookies(_cookies);
       setTechnologies(_technologies);
+      setLibraryDetectionData(_libraryDetectionData);
     })();
   }, [path, type]);
 
@@ -99,6 +109,7 @@ const App = () => {
         cookies={cookies}
         technologies={technologies}
         completeJson={completeJsonReport}
+        libraryDetectionData={libraryDetectionData}
       />
     );
   }
@@ -110,6 +121,7 @@ const App = () => {
         cookies={cookies}
         technologies={technologies}
         selectedSite={path.slice(5, -9)}
+        libraryDetectionData={libraryDetectionData}
       />
     </div>
   );

@@ -50,6 +50,7 @@ interface LayoutProps {
   completeJson: CompleteJson[] | null;
   sidebarData: SidebarItems;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
+  libraryDetectionData: string[];
 }
 
 const Layout = ({
