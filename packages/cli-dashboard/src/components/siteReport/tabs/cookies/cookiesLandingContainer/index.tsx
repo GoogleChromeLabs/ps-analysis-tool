@@ -25,14 +25,20 @@ import {
   type MenuData,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
+import { KnownBreakagesSection } from './cookieLanding';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
+  libraryDetectionData: string[];
 }
 
 const CookiesLandingContainer = ({
@@ -40,6 +46,7 @@ const CookiesLandingContainer = ({
   tabCookies,
   cookiesWithIssues,
   downloadReport,
+  libraryDetectionData,
 }: CookiesLandingContainerProps) => {
   const sections: Array<CookiesLandingSection> = useMemo(
     () => [
@@ -66,8 +73,18 @@ const CookiesLandingContainer = ({
           },
         },
       },
+      {
+        name: 'Known Breakages',
+        link: 'known-breakages',
+        panel: {
+          Element: KnownBreakagesSection,
+          props: {
+            libraryDetectionData,
+          },
+        },
+      },
     ],
-    [tabCookies, tabFrames, cookiesWithIssues]
+    [tabCookies, tabFrames, cookiesWithIssues, libraryDetectionData]
   );
 
   const menuData: MenuData = useMemo(
