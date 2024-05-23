@@ -26,8 +26,13 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "@ps-analysis-tool/common": "*",
+    "puppeteer": "^21.0.3",
+    "simple-cookie": "^1.0.15",
+    "tldts": "^6.0.14",
     "wappalyzer": "^6.10.66"
   },
   "devDependencies": {
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.0.4"
   }
 }

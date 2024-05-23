@@ -18,10 +18,10 @@
  */
 import { readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
-import getUrlsFromSitemap from './getUrlsfromSitemap';
 /**
  * Internal dependencies.
  */
+import getUrlsFromSitemap from './getUrlsfromSitemap';
 
 const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   spinnies?.add('sitemap-spinner', {
