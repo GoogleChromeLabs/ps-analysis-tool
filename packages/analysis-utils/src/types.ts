@@ -106,30 +106,6 @@ export type UniqueCookiesLogDetail = {
   [key: string]: CookieLogDetails;
 };
 
-export type CookieAnalytics = {
-  platform: string;
-  category: string;
-  name: string;
-  domain: string;
-  description: string;
-  retention: string;
-  dataController: string;
-  gdprUrl: string;
-  wildcard: string;
-};
-
-export type CookieDatabase = {
-  [name: string]: Array<CookieAnalytics>;
-};
-
-export type CookieData = {
-  parsedCookie: ParsedCookie;
-  analytics: CookieAnalytics | null;
-  url: string;
-  headerType: 'response' | 'request';
-  isFirstParty: boolean | null;
-};
-
 export interface Job {
   data: any;
   status: string;

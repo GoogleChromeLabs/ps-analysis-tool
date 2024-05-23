@@ -20,6 +20,7 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "@ps-analysis-tool/common": "*",
+    "@ps-analysis-tool/analysis-utils": "*",
     "cli-color": "^2.0.3",
     "cli-table": "^0.3.11",
     "commander": "^10.0.1",
@@ -30,8 +31,7 @@
     "simple-cookie": "^1.0.15",
     "sitemapper": "^3.1.8",
     "spinnies": "^0.5.1",
-    "tldts": "^6.0.14",
-    "wappalyzer": "^6.10.66",
+    "tldts": "^6.0.14", 
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

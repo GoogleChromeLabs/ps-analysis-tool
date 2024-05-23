@@ -17,24 +17,20 @@
 /**
  * External dependencies.
  */
-import fs from 'fs/promises';
-import path from 'path';
-import { CookieDatabase } from '@ps-analysis-tool/common';
+import promptly from 'promptly';
 
 /**
- * Internal dependencies.
+ * Ask user input.
+ * @param {string} message Message to user.
+ * @param {object} options Options.
+ * @returns {Promise<any>} User's input.
  */
-
-/**
- * Fetch dictionary from local data folder.
- * @returns {Promise<CookieDatabase>} Open Cookie Data base
- */
-export async function fetchDictionary(): Promise<CookieDatabase> {
-  const data = JSON.parse(
-    await fs.readFile(path.resolve('./assets/data/open-cookie-database.json'), {
-      encoding: 'utf8',
-    })
-  );
-
-  return data;
+async function askUserInput(
+  message: string,
+  options: object = {}
+): Promise<string> {
+  const userInput: string = await promptly.prompt(message, options);
+  return userInput;
 }
+
+export default askUserInput;
