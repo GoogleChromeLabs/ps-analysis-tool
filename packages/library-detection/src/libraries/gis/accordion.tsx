@@ -17,13 +17,12 @@
  * External dependencies.
  */
 import React from 'react';
-import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import GISAccordionContent from './accordionContent';
 
 const GISAccordion = ({ matches }: AccordionProps) => {
   if (!matches) {
@@ -36,26 +35,7 @@ const GISAccordion = ({ matches }: AccordionProps) => {
     return null;
   }
 
-  return (
-    <Accordion title={'Unsupported Google Identity Services'}>
-      <p className="text-darkest-gray dark:text-bright-gray">
-        Due to Privacy Sandbox enforcements some features are backward
-        incompatible or deprecated. Some features of Google Identity Services
-        are in use. Please review the following documentation and{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          target="_blank"
-          href={addUTMParams(
-            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
-          )}
-          rel="noreferrer"
-        >
-          migrate
-        </a>{' '}
-        if necessary.
-      </p>
-    </Accordion>
-  );
+  return <GISAccordionContent />;
 };
 
 export default GISAccordion;

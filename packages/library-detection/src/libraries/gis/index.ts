@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { default as GISAccordion } from './accordion';
+export { default as GISAccordionContent } from './accordionContent';
 export { default as getGISMatches } from './getGISMatches';
 export * from './constants';

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
@@ -21,21 +22,19 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { AccordionProps } from '../../types';
-import FBLikesAccordionContent from './accordionContent';
+import { Accordion, DetectionMessage } from '../../components';
+import { FB_COMMENTS_HELP_URL } from './constants';
 
-const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
-  if (!domQueryMatches) {
-    return null;
-  }
-
-  const featuresCount = domQueryMatches.length;
-
-  if (!featuresCount) {
-    return null;
-  }
-
-  return <FBLikesAccordionContent />;
+const FBCommentsAccordionContent = () => {
+  return (
+    <Accordion title={'Facebook Comments'} isLoading={false} featuresText="">
+      <DetectionMessage
+        libraryName="Facebook comments plugin"
+        provider="Facebook"
+        supportURL={FB_COMMENTS_HELP_URL}
+      />
+    </Accordion>
+  );
 };
 
-export default FBLikesAccordion;
+export default FBCommentsAccordionContent;

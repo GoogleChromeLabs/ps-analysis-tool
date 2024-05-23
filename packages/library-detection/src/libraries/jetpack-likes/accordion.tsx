@@ -21,9 +21,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
-import { JETPACK_LIKES_HELP_URL } from './constants';
+import JetpackLikesAccordionContent from './accordionContent';
 
 const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -36,15 +35,7 @@ const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
     return null;
   }
 
-  return (
-    <Accordion title={'Jetpack Like Button'} isLoading={false} featuresText="">
-      <DetectionMessage
-        libraryName="Jetpack like button"
-        provider="Jetpack"
-        supportURL={JETPACK_LIKES_HELP_URL}
-      />
-    </Accordion>
-  );
+  return <JetpackLikesAccordionContent />;
 };
 
 export default JetpackLikesAccordion;

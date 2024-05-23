@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { default as FBCommentsAccordion } from './accordion';
+export { default as FBCommentsAccordionContent } from './accordionContent';
 export { default as fbCommentsDOMQuery } from './fbCommentsDOMQuery';
 export * from './constants';

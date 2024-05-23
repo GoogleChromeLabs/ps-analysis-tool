@@ -21,21 +21,19 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { AccordionProps } from '../../types';
-import FBLikesAccordionContent from './accordionContent';
+import { Accordion, DetectionMessage } from '../../components';
+import { JETPACK_COMMENTS_HELP_URL } from './constants';
 
-const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
-  if (!domQueryMatches) {
-    return null;
-  }
-
-  const featuresCount = domQueryMatches.length;
-
-  if (!featuresCount) {
-    return null;
-  }
-
-  return <FBLikesAccordionContent />;
+const JetpackCommentsAccordionContent = () => {
+  return (
+    <Accordion title={'Jetpack Comments'} isLoading={false} featuresText="">
+      <DetectionMessage
+        libraryName="Jetpack comments widget"
+        provider="Jetpack"
+        supportURL={JETPACK_COMMENTS_HELP_URL}
+      />
+    </Accordion>
+  );
 };
 
-export default FBLikesAccordion;
+export default JetpackCommentsAccordionContent;

@@ -21,9 +21,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
-import { FB_COMMENTS_HELP_URL } from './constants';
+import FBCommentsAccordionContent from './accordionContent';
 
 const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -36,15 +35,7 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
     return null;
   }
 
-  return (
-    <Accordion title={'Facebook Comments'} isLoading={false} featuresText="">
-      <DetectionMessage
-        libraryName="Facebook comments plugin"
-        provider="Facebook"
-        supportURL={FB_COMMENTS_HELP_URL}
-      />
-    </Accordion>
-  );
+  return <FBCommentsAccordionContent />;
 };
 
 export default FBCommentsAccordion;

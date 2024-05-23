@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { default as JetpackCommentsAccordion } from './accordion';
+export { default as JetpackCommentsAccordionContent } from './accordionContent';
 export { default as jetpackCommentsDOMQuery } from './jetpackCommentsDOMQuery';
 export * from './constants';

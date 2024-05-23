@@ -15,4 +15,5 @@
  */
 export { default as DisqusCommentsAccordion } from './accordion';
 export { default as disqusCommentsDOMQuery } from './disqusCommentsDOMQuery';
+export { default as DisqusCommentsAccordionContent } from './accordionContent';
 export * from './constants';

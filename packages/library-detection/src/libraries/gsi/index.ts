@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { default as GSIAccordion } from './accordion';
+export { default as GSIAccordionContent } from './accordionContent';
 export { default as getGSIV2Matches } from './getGSIV2Matches';
 export * from './constants';

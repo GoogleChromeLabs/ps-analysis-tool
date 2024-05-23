@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { default as FBLikesAccordion } from './accordion';
+export { default as FBLikesAccordionContent } from './accordionContent';
 export { default as fbLikesDOMQuery } from './fbLikesDOMQuery';
 export * from './constants';

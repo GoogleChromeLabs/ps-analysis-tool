@@ -21,9 +21,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
-import { DISQUS_COMMENTS_HELP_URL } from './constants';
+import DisqusCommentsAccordionContent from './accordionContent';
 
 const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -36,15 +35,7 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
     return null;
   }
 
-  return (
-    <Accordion title={'Disqus Comments'} isLoading={false} featuresText="">
-      <DetectionMessage
-        libraryName="Disqus comments"
-        provider="Disqus"
-        supportURL={DISQUS_COMMENTS_HELP_URL}
-      />
-    </Accordion>
-  );
+  return <DisqusCommentsAccordionContent />;
 };
 
 export default DisqusCommentsAccordion;

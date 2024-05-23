@@ -21,9 +21,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
-import { JETPACK_COMMENTS_HELP_URL } from './constants';
+import JetpackCommentsAccordionContent from './accordionContent';
 
 const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -36,15 +35,7 @@ const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
     return null;
   }
 
-  return (
-    <Accordion title={'Jetpack Comments'} isLoading={false} featuresText="">
-      <DetectionMessage
-        libraryName="Jetpack comments widget"
-        provider="Jetpack"
-        supportURL={JETPACK_COMMENTS_HELP_URL}
-      />
-    </Accordion>
-  );
+  return <JetpackCommentsAccordionContent />;
 };
 
 export default JetpackCommentsAccordion;
