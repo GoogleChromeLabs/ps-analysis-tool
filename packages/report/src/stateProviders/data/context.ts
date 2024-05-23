@@ -39,11 +39,12 @@ export interface DataStoreContext {
       blockedCookieDataMapping: DataMapping[];
       showBlockedInfoIcon: boolean;
       frameStateCreator: FrameStateCreator;
-      libraryMatches: LibraryData;
+      libraryMatches: LibraryData | string[];
       exemptedCookiesDataMapping: DataMapping[];
       showFramesSection: boolean;
       showBlockedCategory: boolean;
       url: string;
+      isDashboard: boolean;
     } | null;
   };
 }
@@ -76,6 +77,7 @@ const initialState: DataStoreContext = {
       showBlockedCategory: false,
       showFramesSection: false,
       url: '',
+      isDashboard: false,
     },
     isDataLoaded: false,
   },

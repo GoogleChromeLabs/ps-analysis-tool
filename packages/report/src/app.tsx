@@ -29,6 +29,7 @@ import {
   BlockedCookiesSection,
   FramesSection,
   ExemptedCookiesSection,
+  KnownBreakagesSection,
 } from './components';
 import { useData } from './stateProviders/data';
 
@@ -48,11 +49,14 @@ const App = () => {
       {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
         <ExemptedCookiesSection />
       )}
-      {data?.libraryMatches && (
-        <div className="text-xs">
-          <LibraryDetection />
-        </div>
-      )}
+      {data?.libraryMatches &&
+        (!data.isDashboard ? (
+          <div className="text-xs">
+            <LibraryDetection />
+          </div>
+        ) : (
+          <KnownBreakagesSection />
+        ))}
       {data?.showFramesSection && <FramesSection />}
     </div>
   );

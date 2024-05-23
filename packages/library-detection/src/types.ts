@@ -95,3 +95,5 @@ export type DetectionAuditFunctions = {
 };
 
 export type TabLoadingStatus = 'loading' | 'complete';
+
+export type AccordionContentComponent = () => JSX.Element;
