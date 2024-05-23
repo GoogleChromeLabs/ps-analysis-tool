@@ -209,7 +209,7 @@ const RowContextMenu = forwardRef<
                   {
                     // @ts-ignore
                     chrome.devtools.panels?.network?.show
-                      ? 'Filter in Network Panel'
+                      ? 'Show Requests With This Cookie'
                       : 'Copy Network Filter String'
                   }
                 </span>
