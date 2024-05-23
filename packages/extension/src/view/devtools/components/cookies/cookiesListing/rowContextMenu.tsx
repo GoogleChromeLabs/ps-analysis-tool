@@ -109,11 +109,20 @@ const RowContextMenu = forwardRef<
     domainsInAllowList
   );
 
-  const handleCopy = useCallback(() => {
+  const handleFilterClick = useCallback(() => {
+    const filter = `cookie-domain:${domain} cookie-name:${name}`;
+
+    // @ts-ignore
+    if (chrome.devtools.panels?.network?.show) {
+      // @ts-ignore
+      chrome.devtools.panels.network.show({ filter });
+      return;
+    }
+
     try {
       // Need to do this since chrome doesnt allow the clipboard access in extension.
       const copyFrom = document.createElement('textarea');
-      copyFrom.textContent = `cookie-domain:${domain} cookie-name:${name}`;
+      copyFrom.textContent = filter;
       document.body.appendChild(copyFrom);
       copyFrom.select();
       document.execCommand('copy');
@@ -193,10 +202,17 @@ const RowContextMenu = forwardRef<
               }}
             >
               <button
-                onClick={handleCopy}
+                onClick={handleFilterClick}
                 className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
               >
-                <span>Copy Network Filter String</span>
+                <span>
+                  {
+                    // @ts-ignore
+                    chrome.devtools.panels?.network?.show
+                      ? 'Show Requests With This Cookie'
+                      : 'Copy Network Filter String'
+                  }
+                </span>
               </button>
 
               {isDomainInAllowList && parentDomain ? (
