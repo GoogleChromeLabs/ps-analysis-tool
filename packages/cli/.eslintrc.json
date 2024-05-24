@@ -2,5 +2,6 @@
   "rules": {
     "no-console": "off",
     "no-await-in-loop": "off"
-  }
+  },
+  "ignorePatterns": ["dist/**", "dist-types/**"]
 }
