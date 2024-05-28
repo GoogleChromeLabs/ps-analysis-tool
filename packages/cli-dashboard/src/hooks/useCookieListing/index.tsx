@@ -339,6 +339,7 @@ const useCookieListing = (
           const val = value as string;
           return val === filterValue;
         },
+        useGenericPersistenceKey: true,
       },
     }),
     [clearActivePanelQuery, parsedQuery, tabCookies]
