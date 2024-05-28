@@ -98,7 +98,11 @@ const SidebarChild = ({
           setIsSidebarFocused(true);
         }}
         onKeyDown={(event) => {
-          onKeyNavigation(event, itemKey);
+          if (event.key === 'Enter' || event.key === ' ') {
+            toggleDropdown(!sidebarItem.dropdownOpen, itemKey);
+          } else {
+            onKeyNavigation(event, itemKey);
+          }
           setIsSidebarFocused(true);
         }}
         className={`relative w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
