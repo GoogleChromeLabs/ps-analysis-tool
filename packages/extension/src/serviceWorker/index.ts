@@ -37,7 +37,7 @@ const ALLOWED_EVENTS = [
   'Target.attachedToTarget',
 ];
 
-let targets = await chrome.debugger.getTargets();
+let targets: chrome.debugger.TargetInfo[] = [];
 
 /**
  * Fires whenever debugging target issues instrumentation event.
