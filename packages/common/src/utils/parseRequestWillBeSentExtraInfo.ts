@@ -91,7 +91,10 @@ export default function parseRequestWillBeSentExtraInfo(
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
-      exemptionReason: exemptionReason ? exemptionReason : undefined,
+      exemptionReason:
+        exemptionReason && exemptionReason !== 'None'
+          ? exemptionReason
+          : undefined,
     };
 
     cookies.push(singleCookie);

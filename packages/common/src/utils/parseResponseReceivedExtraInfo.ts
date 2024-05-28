@@ -127,7 +127,11 @@ export default function parseResponseReceivedExtraInfo(
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
-      exemptionReason: exemptedCookie?.exemptionReason,
+      exemptionReason:
+        exemptedCookie?.exemptionReason &&
+        exemptedCookie?.exemptionReason !== 'None'
+          ? exemptedCookie?.exemptionReason
+          : undefined,
     };
 
     cookies.push(singleCookie);
