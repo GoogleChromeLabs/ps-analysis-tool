@@ -17,14 +17,18 @@
 /**
  * External dependencies.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getValueByKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type { TableData, TableFilter } from '../types';
-import useFiltersPersistence from './useFiltersPersistence';
+import type { PersistentStorageData, TableData, TableFilter } from '../types';
+import {
+  useFiltersExtraction,
+  useFiltersOptions,
+  useFiltersPersistence,
+} from './hooks';
 
 export type TableFilteringOutput = {
   filters: TableFilter;
@@ -53,168 +57,40 @@ const useFiltering = (
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
   });
+  const options = useRef<PersistentStorageData['selectedFilters']>({});
   const [selectAllFilterSelection, setSelectAllFilterSelection] = useState<{
-    [accessorKey: string]: { selected: boolean };
-  }>({});
-  const [options, setOptions] = useState<{
-    [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
+    [accessorKey: string]: { selected: boolean | null };
   }>({});
   const [isDataLoading, setIsDataLoading] = useState(true);
 
-  useEffect(() => {
-    setIsDataLoading(true);
-  }, [specificTablePersistentSettingsKey]);
+  useFiltersPersistence(
+    filters,
+    options,
+    selectAllFilterSelection,
+    setIsDataLoading,
+    specificTablePersistentSettingsKey,
+    genericTablePersistentSettingsKey
+  );
 
-  // extract filters from data
-  useEffect(() => {
-    setFilters((prevFilters) =>
-      Object.fromEntries(
-        Object.entries(prevFilters).map(([filterKey, filter]) => {
-          let filterValues = { ...(filter.filterValues || {}) };
+  useFiltersOptions(
+    setSelectAllFilterSelection,
+    setFilters,
+    options,
+    isDataLoading
+  );
 
-          if (filter.hasStaticFilterValues) {
-            return [filterKey, { ...filter, filterValues }];
-          }
-
-          filterValues = data
-            .map((row) => {
-              let value = getValueByKey(filterKey, row);
-
-              if (filter.calculateFilterValues) {
-                value = filter.calculateFilterValues(value);
-              }
-
-              return value;
-            })
-            .filter((value) => value && value.toString().trim())
-            .reduce((acc, value) => {
-              const val = value.toString().trim();
-
-              // if selectAll is selected, then select all filter values
-              if (val && !acc[val]) {
-                const isSelectAllFilterSelected =
-                  selectAllFilterSelection?.[filterKey]?.selected;
-
-                if (filterValues[val]) {
-                  acc[val] = {
-                    ...filterValues[val],
-                    selected:
-                      isSelectAllFilterSelected || filterValues[val].selected,
-                  };
-                } else {
-                  acc[val] = {
-                    selected: isSelectAllFilterSelected || false,
-                  };
-                }
-              }
-
-              return acc;
-            }, {});
-
-          return [filterKey, { ...filter, filterValues }];
-        })
-      )
-    );
-  }, [data, selectAllFilterSelection]);
-
-  // extract filters from precalculated filter values
-  useEffect(() => {
-    const filtersByKey = Object.fromEntries(
-      Object.entries(tableFilterData || {})
-        .filter(([, filter]) => filter.hasPrecalculatedFilterValues)
-        .map(([key, filter]) => {
-          return [key, filter.filterValues];
-        })
-    );
-
-    setFilters((prevFilters) => {
-      const newFilters = { ...prevFilters };
-
-      Object.entries(newFilters).forEach(([key, filter]) => {
-        if (!filtersByKey[key]) {
-          return;
-        }
-
-        const filterValues: TableFilter[keyof TableFilter]['filterValues'] = {};
-
-        Object.entries(filtersByKey[key] || {}).forEach(
-          ([filterValue, filterValueData]) => {
-            const _filterValue = filterValue.trim();
-            const isSelectAllFilterSelected =
-              selectAllFilterSelection?.[key]?.selected;
-
-            if (!filter.filterValues) {
-              filter.filterValues = {};
-            }
-
-            if (!filter.filterValues?.[_filterValue]) {
-              filterValues[_filterValue] = {
-                ...filterValueData,
-                selected:
-                  isSelectAllFilterSelected ||
-                  filterValueData.selected ||
-                  false,
-              };
-            } else {
-              filterValues[_filterValue] = {
-                ...filterValueData,
-                selected:
-                  isSelectAllFilterSelected ||
-                  filter.filterValues[_filterValue].selected ||
-                  filterValueData.selected ||
-                  false,
-              };
-            }
-          }
-        );
-
-        filter.filterValues = filterValues;
-      });
-
-      return newFilters;
-    });
-  }, [selectAllFilterSelection, tableFilterData]);
-
-  // extract filterKeys with selectAllFilter enabled
-  useEffect(() => {
-    const filtersWithSelectAllFilterEnabled = Object.entries(
-      tableFilterData || {}
-    )
-      .filter(([, filter]) => filter.enableSelectAllOption)
-      .reduce<Record<string, { selected: boolean }>>(
-        (acc, [filterKey, filterValueData]) => {
-          acc[filterKey] = {
-            selected: filterValueData.isSelectAllOptionSelected || false,
-          };
-
-          return acc;
-        },
-        {}
-      );
-
-    setSelectAllFilterSelection((prev) => {
-      const newSelectAllFilterSelection = { ...prev };
-
-      Object.entries(filtersWithSelectAllFilterEnabled).forEach(
-        ([filterKey, filterValueData]) => {
-          if (!newSelectAllFilterSelection[filterKey]) {
-            newSelectAllFilterSelection[filterKey] = {
-              selected:
-                newSelectAllFilterSelection[filterKey]?.selected ||
-                filterValueData.selected ||
-                false,
-            };
-          }
-        }
-      );
-
-      return newSelectAllFilterSelection;
-    });
-  }, [tableFilterData]);
+  useFiltersExtraction(
+    data,
+    tableFilterData,
+    options,
+    selectAllFilterSelection,
+    setFilters,
+    setSelectAllFilterSelection
+  );
 
   const isSelectAllFilterSelected = useCallback(
     (filterKey: string) => {
-      return selectAllFilterSelection?.[filterKey]?.selected;
+      return Boolean(selectAllFilterSelection?.[filterKey]?.selected);
     },
     [selectAllFilterSelection]
   );
@@ -229,7 +105,7 @@ const useFiltering = (
           selected: !newSelectAllFilterSelection[filterKey].selected,
         };
 
-        valueToSet = newSelectAllFilterSelection[filterKey].selected;
+        valueToSet = Boolean(newSelectAllFilterSelection[filterKey].selected);
 
         return newSelectAllFilterSelection;
       });
@@ -357,67 +233,6 @@ const useFiltering = (
     });
   }, [data, isDataLoading, selectedFilters]);
 
-  useEffect(() => {
-    setSelectAllFilterSelection((prev) => {
-      const newSelectAllFilterSelection = { ...prev };
-
-      Object.keys(newSelectAllFilterSelection).forEach((filterKey) => {
-        const savedFilters = options?.[filterKey];
-        const isSelectAllSelected = savedFilters?.All?.selected;
-
-        if (!isSelectAllSelected) {
-          return;
-        }
-
-        newSelectAllFilterSelection[filterKey].selected = true;
-      });
-
-      return newSelectAllFilterSelection;
-    });
-
-    setFilters((prevFilters) =>
-      Object.fromEntries(
-        Object.entries(prevFilters).map(([filterKey, filter]) => {
-          const savedFilterValues = options?.[filterKey];
-          const filterValues = filter.filterValues || {};
-
-          Object.entries(filterValues).forEach(
-            ([filterValue, filterValueData]) => {
-              filterValues[filterValue] = {
-                ...filterValueData,
-                selected: false,
-              };
-            }
-          );
-
-          if (!Object.keys(savedFilterValues || {}).length) {
-            return [filterKey, { ...filter, filterValues }];
-          }
-
-          Object.entries(savedFilterValues || {}).forEach(
-            ([filterValue, filterValueData]) => {
-              if (filterValue === 'All') {
-                return;
-              }
-
-              if (!filterValues?.[filterValue]) {
-                filterValues[filterValue] = {
-                  selected: false,
-                };
-              }
-
-              filterValues[filterValue] = {
-                ...filterValueData,
-              };
-            }
-          );
-
-          return [filterKey, { ...filter, filterValues }];
-        })
-      )
-    );
-  }, [options]);
-
   const isFiltering = useMemo(
     () =>
       Object.values(selectedFilters).some((filter) =>
@@ -428,14 +243,86 @@ const useFiltering = (
     [selectedFilters]
   );
 
-  useFiltersPersistence(
-    filters,
-    selectAllFilterSelection,
-    setOptions,
-    setIsDataLoading,
-    specificTablePersistentSettingsKey,
-    genericTablePersistentSettingsKey
-  );
+  useEffect(() => {
+    if (isDataLoading) {
+      return;
+    }
+
+    // loop options to check if any filter value has changed since last time
+    options.current = Object.entries(options.current || {}).reduce<
+      PersistentStorageData['selectedFilters']
+    >((acc, [filterKey, filterValues]) => {
+      if (!acc) {
+        acc = {};
+      }
+
+      acc[filterKey] = Object.fromEntries(
+        Object.entries(filterValues || {}).map(
+          ([filterValue, filterValueData]) => {
+            const isSelected =
+              filters[filterKey]?.filterValues?.[filterValue]?.selected;
+
+            if (isSelected === undefined) {
+              return [filterValue, filterValueData];
+            }
+
+            return [
+              filterValue,
+              {
+                ...filterValueData,
+                selected: isSelected || null,
+              },
+            ];
+          }
+        )
+      );
+
+      return acc;
+    }, {});
+
+    // add new filters to options if they are not present
+    Object.entries(filters).forEach(([filterKey, filter]) => {
+      Object.entries(filter.filterValues || {}).forEach(
+        ([filterValue, filterData]) => {
+          if (!options.current) {
+            options.current = {};
+          }
+
+          if (!options.current?.[filterKey]) {
+            options.current[filterKey] = {};
+          }
+
+          if (
+            !options.current?.[filterKey]?.[filterValue] &&
+            filterData.selected !== null
+          ) {
+            // @ts-ignore
+            options.current[filterKey][filterValue] = {
+              ...filterData,
+            };
+          }
+        }
+      );
+    });
+
+    // add selectAll filter values to options if they are not present
+    Object.entries(selectAllFilterSelection).forEach(
+      ([filterKey, filterValueData]) => {
+        if (!options.current) {
+          options.current = {};
+        }
+
+        if (!options.current?.[filterKey]) {
+          options.current[filterKey] = {};
+        }
+
+        // @ts-ignore
+        options.current[filterKey].All = {
+          ...filterValueData,
+        };
+      }
+    );
+  }, [filters, isDataLoading, selectAllFilterSelection]);
 
   return {
     filters,
