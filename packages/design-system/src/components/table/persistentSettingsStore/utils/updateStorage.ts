@@ -22,6 +22,7 @@ import {
   TABLE_PERSISTENT_SETTINGS_STORE_KEY,
   TablePersistentSettingsStoreContext,
 } from '..';
+import { mergeDeep } from '@ps-analysis-tool/common';
 
 const updateStorage = async (
   persistenceKey: string,
@@ -100,10 +101,7 @@ const updateChromeStorage = async (
   let requiredData = tableData?.[persistenceKey];
 
   if (requiredData) {
-    requiredData = {
-      ...requiredData,
-      ...storageData,
-    };
+    requiredData = mergeDeep(requiredData, storageData);
   } else {
     requiredData = storageData;
   }
