@@ -87,12 +87,12 @@ const BodyCell = ({
           )}
         </div>
       )}
-      <p
+      <div
         className="truncate"
         title={typeof cellValue === 'string' ? cellValue : ''}
       >
         {cellValue}
-      </p>
+      </div>
     </div>
   );
 };
