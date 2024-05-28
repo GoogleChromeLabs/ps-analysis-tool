@@ -55,6 +55,7 @@ export default function createCookieFromAuditsIssue(
   if (!request) {
     return null;
   }
+
   const { requestId, url = '' } = request;
 
   if (!cookie && !rawCookieLine) {
@@ -67,6 +68,7 @@ export default function createCookieFromAuditsIssue(
   if (cookie) {
     generatedCookie = cookie;
   }
+
   if (!cookie && rawCookieLine) {
     generatedCookie = parse(rawCookieLine);
   }
@@ -93,6 +95,7 @@ export default function createCookieFromAuditsIssue(
       timeStamp: Date.now(),
     });
   }
+
   const modifiedCookieExclusionReasons = cookieExclusionReasons.map(
     (reason) => {
       if (reason.toLowerCase().startsWith('exclude')) {

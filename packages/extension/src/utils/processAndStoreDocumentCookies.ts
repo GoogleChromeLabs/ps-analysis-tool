@@ -28,7 +28,6 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
-
 import { GET_JS_COOKIES } from '../constants';
 
 interface ProcessAndStoreDucmentCookies {

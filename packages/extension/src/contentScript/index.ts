@@ -25,6 +25,7 @@ import {
 } from '@ps-analysis-tool/common';
 import { computePosition, flip, shift } from '@floating-ui/core';
 import { autoUpdate, platform, arrow } from '@floating-ui/dom';
+
 /**
  * Internal dependencies.
  */
@@ -187,6 +188,7 @@ class WebpageContentScript {
       if (!this.frameId) {
         return;
       }
+
       //@ts-ignore
       const jsCookies = await cookieStore?.getAll();
       await processAndStoreDocumentCookies({

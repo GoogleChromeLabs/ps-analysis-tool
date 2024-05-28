@@ -17,6 +17,7 @@
  * External dependencies
  */
 import type { CookieData } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies
  */

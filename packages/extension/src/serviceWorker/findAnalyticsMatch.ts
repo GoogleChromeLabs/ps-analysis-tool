@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Internal dependencies.
+ * External dependencies.
  */
 import type { CookieAnalytics, CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
- *
  * Matches wildcard string to a provided string. For eg Foo_* matches Foo_123.
  * @param {string} wildcard  Wildcard cookie name.
  * @param {string} str cookie name to be matched.
@@ -32,6 +30,7 @@ const wildTest = (wildcard: string, str: string): boolean => {
     `^${regExp.replace(/\*/g, '.*').replace(/\?/g, '.')}$`,
     'i'
   );
+
   return result.test(str); // remove last 'i' above to have case sensitive
 };
 
@@ -76,4 +75,5 @@ const findAnalyticsMatch = (
 
   return analytics;
 };
+
 export default findAnalyticsMatch;

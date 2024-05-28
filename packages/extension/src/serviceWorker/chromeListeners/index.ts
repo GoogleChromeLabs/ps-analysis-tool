@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
 import { onBeforeSendHeadersListener } from './beforeSendHeadersListener';
 import { onResponseStartedListener } from './onResponseStartedListener';
-
 import { onStartUpListener } from './runtimeStartUpListener';
 import { runtimeOnInstalledListener } from './runtimeOnInstalledListener';
 import { runtimeOnMessageListener } from './runtimeOnMessageListener';
-
 import {
   onSyncStorageChangedListenerForMultiTab,
   onSyncStorageChangedListenerForCDP,
 } from './syncStorageOnChangedListener';
-
 import { onTabCreatedListener } from './tabOnCreatedListener';
 import { onTabRemovedListener } from './tabOnRemovedListener';
 import { onTabUpdatedListener } from './tabsOnUpdatedListener';
-
 import { windowsOnRemovedListener } from './windowsOnRemovedListener';
 import { windowsOnCreatedListener } from './windowsOnCreatedListener';
 

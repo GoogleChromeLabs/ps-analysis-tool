@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import SinonChrome from 'sinon-chrome';
+
+/**
  * Internal dependencies
  */
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
-import SinonChrome from 'sinon-chrome';
 import data from '../../utils/test-data/cookieMockData';
 import synchnorousCookieStore from '../synchnorousCookieStore';
 

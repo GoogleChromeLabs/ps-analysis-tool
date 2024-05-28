@@ -56,7 +56,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       let tabId = '';
+
       targets = await chrome.debugger.getTargets();
+
       await Promise.all(
         targets.map(async ({ id, url }) => {
           if (url.startsWith('http')) {

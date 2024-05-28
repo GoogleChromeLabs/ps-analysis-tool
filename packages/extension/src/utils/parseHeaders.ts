@@ -18,11 +18,16 @@
  */
 import { Protocol } from 'devtools-protocol';
 import { type CookieData, type CookieDatabase } from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
 import parseResponseCookieHeader from '../serviceWorker/parseResponseCookieHeader';
 import canProcessCookies from './canProcessCookies';
 import parseRequestCookieHeader from '../serviceWorker/parseRequestCookieHeader';
 
 type CDPCookiesType = { [cookies: string]: Protocol.Network.Cookie[] };
+
 /**
  * Common utility function that can parse both request and response headers.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie

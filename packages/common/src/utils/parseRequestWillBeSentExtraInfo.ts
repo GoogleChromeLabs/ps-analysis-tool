@@ -17,6 +17,7 @@
  * External dependencies
  */
 import type { Protocol } from 'devtools-protocol';
+
 /**
  * Internal dependencies.
  */
