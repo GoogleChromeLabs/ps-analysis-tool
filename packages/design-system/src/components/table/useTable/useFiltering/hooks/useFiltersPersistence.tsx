@@ -22,17 +22,13 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 /**
  * Internal dependencies.
  */
-import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
-import { PersistentStorageData, TableFilter } from '../types';
+import { useTablePersistentSettingsStore } from '../../../persistentSettingsStore';
+import { PersistentStorageData, TableFilter } from '../../types';
 
 const useFiltersPersistence = (
   filters: TableFilter | undefined,
-  selectAllFilters: { [filterKey: string]: { selected: boolean } },
-  setOptions: React.Dispatch<
-    React.SetStateAction<{
-      [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
-    }>
-  >,
+  options: React.MutableRefObject<PersistentStorageData['selectedFilters']>,
+  selectAllFilters: { [filterKey: string]: { selected: boolean | null } },
   setIsDataLoading: React.Dispatch<React.SetStateAction<boolean>>,
   specificTablePersistentSettingsKey?: string,
   genericTablePersistentSettingsKey?: string
@@ -45,13 +41,13 @@ const useFiltersPersistence = (
   );
 
   const computeAndUpdateOptions = useCallback(
-    (options: PersistentStorageData['selectedFilters']) => {
-      setOptions((prevOptions) => ({
-        ...prevOptions,
-        ...(options || {}),
-      }));
+    (newOptions: PersistentStorageData['selectedFilters']) => {
+      options.current = {
+        ...options.current,
+        ...newOptions,
+      };
     },
-    [setOptions]
+    [options]
   );
 
   const genericFilterOptionsRef = useRef<
@@ -59,6 +55,8 @@ const useFiltersPersistence = (
   >({});
 
   useEffect(() => {
+    setIsDataLoading(true);
+
     if (specificTablePersistentSettingsKey) {
       const data = getPreferences(
         specificTablePersistentSettingsKey,
@@ -75,20 +73,21 @@ const useFiltersPersistence = (
     setIsDataLoading(false);
 
     return () => {
-      setOptions(() => ({
+      options.current = {
         ...genericFilterOptionsRef.current,
-      }));
+      };
     };
   }, [
     computeAndUpdateOptions,
     getPreferences,
+    options,
     setIsDataLoading,
-    setOptions,
     specificTablePersistentSettingsKey,
   ]);
 
   useEffect(() => {
     setIsDataLoading(true);
+
     if (genericTablePersistentSettingsKey) {
       const data = getPreferences(
         genericTablePersistentSettingsKey,
@@ -105,14 +104,14 @@ const useFiltersPersistence = (
     setIsDataLoading(false);
 
     return () => {
-      setOptions(() => ({}));
+      options.current = {};
     };
   }, [
     computeAndUpdateOptions,
     genericTablePersistentSettingsKey,
     getPreferences,
+    options,
     setIsDataLoading,
-    setOptions,
   ]);
 
   const saveFilters = useCallback(
@@ -154,27 +153,23 @@ const useFiltersPersistence = (
           ...filter.filterValues,
         };
 
-        if (selected) {
-          accumulator.genericSelectedFilters[filterKey] = {
-            ...accumulator.genericSelectedFilters[filterKey],
-            All: {
-              selected: true,
-            },
-          };
-        }
+        accumulator.genericSelectedFilters[filterKey] = {
+          ...accumulator.genericSelectedFilters[filterKey],
+          All: {
+            selected,
+          },
+        };
       } else {
         accumulator.specificSelectedFilters[filterKey] = {
           ...filter.filterValues,
         };
 
-        if (selected) {
-          accumulator.specificSelectedFilters[filterKey] = {
-            ...accumulator.specificSelectedFilters[filterKey],
-            All: {
-              selected: true,
-            },
-          };
-        }
+        accumulator.specificSelectedFilters[filterKey] = {
+          ...accumulator.specificSelectedFilters[filterKey],
+          All: {
+            selected,
+          },
+        };
       }
     });
 
