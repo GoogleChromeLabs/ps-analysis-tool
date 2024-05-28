@@ -57,7 +57,7 @@ export type TableFilter = {
     isSelectAllOptionSelected?: boolean;
     filterValues?: {
       [filterValue: string]: {
-        selected: boolean;
+        selected: boolean | null;
         description?: string;
       };
     };
