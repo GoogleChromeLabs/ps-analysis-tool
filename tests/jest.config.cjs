@@ -17,6 +17,7 @@
  * External dependencies.
  */
 const { join } = require('path');
+const chrome = require('sinon-chrome/extensions');
 
 /** @type {import('jest').Config} */
 module.exports = {
@@ -30,8 +31,10 @@ module.exports = {
   },
   testEnvironment: 'jsdom',
   testMatch: ['**/tests/**/*.{js,jsx,ts,tsx}'],
-  globals: {},
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.cjs'],
+  globals: {
+    chrome,
+  },
   testPathIgnorePatterns: [
     '<rootDir>/.git',
     '<rootDir>/dist',

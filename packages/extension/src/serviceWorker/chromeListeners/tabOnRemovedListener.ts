@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * Internal dependencies
  */
-import type { CookieData } from '@ps-analysis-tool/common';
+import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 
-/**
- * Find previous cookie object from local storage for given tabId and cookieName.
- * @param tabId Tab id for which cookie object is to be found.
- * @param cookieName Cookie name.
- * @returns {Promise<CookieData | null>} Cookie object.
- */
-export async function findPreviousCookieDataObject(
-  tabId: string,
-  cookieName: string
-) {
-  try {
-    return (await chrome.storage.local.get())?.[tabId]?.cookies?.[
-      cookieName
-    ] as CookieData | null;
-  } catch (error) {
-    return null;
-  }
-}
+export const onTabRemovedListener = (tabId: number) => {
+  synchnorousCookieStore.deinitialiseVariablesForTab(tabId.toString());
+
+  synchnorousCookieStore?.removeTabData(tabId);
+};

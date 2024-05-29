@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * This function will return true if the frame exists.
+ * @param {string} targetId The targetId for the frame which needs to be checked if it exists.
+ * @returns {boolean} True if frame exists else false.
  */
-import type { CookieData } from '@ps-analysis-tool/common';
-
-/**
- * Find previous cookie object from local storage for given tabId and cookieName.
- * @param tabId Tab id for which cookie object is to be found.
- * @param cookieName Cookie name.
- * @returns {Promise<CookieData | null>} Cookie object.
- */
-export async function findPreviousCookieDataObject(
-  tabId: string,
-  cookieName: string
-) {
-  try {
-    return (await chrome.storage.local.get())?.[tabId]?.cookies?.[
-      cookieName
-    ] as CookieData | null;
-  } catch (error) {
-    return null;
+export const doesFrameExist = async (targetId: string | null) => {
+  if (!targetId) {
+    return false;
   }
-}
+  try {
+    const { targetInfo: { browserContextId = '' } = {} } =
+      await chrome.debugger.sendCommand({ targetId }, 'Target.getTargetInfo', {
+        targetId,
+      });
+    return browserContextId ? true : false;
+  } catch (error) {
+    return false;
+  }
+};

@@ -18,11 +18,16 @@
  */
 import { Protocol } from 'devtools-protocol';
 import { type CookieData, type CookieDatabase } from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
 import parseResponseCookieHeader from '../serviceWorker/parseResponseCookieHeader';
 import canProcessCookies from './canProcessCookies';
 import parseRequestCookieHeader from '../serviceWorker/parseRequestCookieHeader';
 
 type CDPCookiesType = { [cookies: string]: Protocol.Network.Cookie[] };
+
 /**
  * Common utility function that can parse both request and response headers.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
@@ -34,7 +39,7 @@ type CDPCookiesType = { [cookies: string]: Protocol.Network.Cookie[] };
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {CookieDatabase} cookieDB Dictionary from open cookie database
  * @param {string | null | undefined} tabUrl top url of the tab from which the request originated.
- * @param {number} frameId Id of the frame the cookie is used in.
+ * @param {string} frameId Id of the frame the cookie is used in.
  * @param {string} requestId Request id.
  * @param {chrome.webRequest.HttpHeader} headers The headers that need to be parsed to get cookies.
  * @returns {CookieData[] | null} returns set of cookies from the header.
@@ -48,7 +53,7 @@ export default async function parseHeaders(
   url: string,
   cookieDB: CookieDatabase,
   tabUrl: string | null | undefined,
-  frameId: number,
+  frameId: string,
   requestId: string,
   headers?: chrome.webRequest.HttpHeader[]
 ) {
