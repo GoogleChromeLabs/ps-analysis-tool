@@ -40,7 +40,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
- * @param {number} frameId Id of a frame in which this cookie is used.
+ * @param {string} frameId Id of a frame in which this cookie is used.
  * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
  * @param {string} requestId Request id.
  * @param {boolean} globalIsUsingCDP Boolean to determie whether or not CDP is being used.
@@ -51,7 +51,7 @@ const parseResponseCookieHeader = (
   value: string,
   dictionary: CookieDatabase,
   tabUrl: string,
-  frameId: number,
+  frameId: string,
   cdpCookiesList: Protocol.Network.Cookie[],
   requestId: string,
   globalIsUsingCDP: boolean

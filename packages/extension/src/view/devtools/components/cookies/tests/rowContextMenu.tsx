@@ -123,4 +123,57 @@ describe('RowContextMenu', () => {
 
     expect(rowContextMenu).toBeVisible();
   });
+
+  it('should call chrome.devtools.panels.network.show with filter when filter button is clicked', async () => {
+    globalThis.chrome.devtools.panels = {
+      ...globalThis.chrome.devtools.panels,
+      network: {
+        show: jest.fn(),
+      },
+    };
+
+    const ref = React.createRef<{
+      onRowContextMenu: (
+        e: React.MouseEvent<HTMLElement, MouseEvent>,
+        row: TableRow
+      ) => void;
+    }>();
+
+    render(<RowContextMenu {...rowContextMenuProp} ref={ref} />);
+
+    act(() => {
+      ref.current?.onRowContextMenu(
+        // @ts-ignore
+        {
+          clientX: 0,
+          clientY: 0,
+          preventDefault: jest.fn(),
+        } as React.MouseEvent<HTMLElement, MouseEvent>,
+        // @ts-ignore
+        {
+          originalData: {
+            // @ts-ignore
+            parsedCookie: {
+              name: 'AWSALB',
+              domain: 'bbc.com',
+            },
+          },
+        }
+      );
+    });
+
+    const filterButton = await screen.findByText(
+      'Show Requests With This Cookie'
+    );
+
+    act(() => {
+      filterButton.click();
+    });
+
+    expect(globalThis.chrome.devtools.panels.network.show).toHaveBeenCalledWith(
+      {
+        filter: 'cookie-domain:bbc.com cookie-name:AWSALB',
+      }
+    );
+  });
 });

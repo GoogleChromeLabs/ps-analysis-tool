@@ -37,9 +37,10 @@ import isFirstParty from './isFirstParty';
  * @param {object} blockedCookies Blocked Cookies associated with the response being parsed.
  * @param {object} exemptedCookies Blocked Cookies associated with the response being parsed.
  * @param {string|undefined} cookiePartitionKey Partittion key for the response.
- * @param {object} requestMap An object for requestId to url.
+ * @param {string} requestUrl The associated request URL.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
  * @param {object} cookieDB Cookie database to find analytics from.
+ * @param {string[]} frameIds - The frameId the following cookies are associated to.
  * @param {string} requestId - The requestId of the request being processed
  * @returns {object} parsed cookies.
  */
@@ -48,9 +49,10 @@ export default function parseResponseReceivedExtraInfo(
   blockedCookies: Protocol.Network.ResponseReceivedExtraInfoEvent['blockedCookies'],
   exemptedCookies: Protocol.Network.ResponseReceivedExtraInfoEvent['exemptedCookies'],
   cookiePartitionKey: Protocol.Network.ResponseReceivedExtraInfoEvent['cookiePartitionKey'],
-  requestMap: { [requestId: string]: string },
+  requestUrl: string,
   tabUrl: string,
   cookieDB: CookieDatabase,
+  frameIds: string[],
   requestId: string
 ) {
   const cookies: CookieData[] = [];
@@ -86,17 +88,12 @@ export default function parseResponseReceivedExtraInfo(
       };
     }
 
-    let domain,
-      url = '';
-
-    if (requestMap && requestMap[requestId]) {
-      url = requestMap[requestId] ?? '';
-    }
+    let domain;
 
     if (parsedCookie?.domain) {
       domain = parsedCookie?.domain;
-    } else if (!parsedCookie?.domain && url) {
-      domain = new URL(url).hostname;
+    } else if (!parsedCookie?.domain && requestUrl) {
+      domain = new URL(requestUrl).hostname;
     }
 
     const singleCookie: CookieData = {
@@ -113,8 +110,8 @@ export default function parseResponseReceivedExtraInfo(
         responseEvents: [
           {
             type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
-            requestId,
-            url: url,
+            requestId: requestId,
+            url: requestUrl,
             blocked: blockedCookie ? true : false,
             timeStamp: Date.now(),
           },
@@ -123,12 +120,17 @@ export default function parseResponseReceivedExtraInfo(
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
         : null,
-      url,
+      url: requestUrl,
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
       exemptionReason: exemptedCookie?.exemptionReason,
     };
+
+    //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
+    if (frameIds.length > 0) {
+      singleCookie.frameIdList = [...frameIds];
+    }
 
     cookies.push(singleCookie);
   });

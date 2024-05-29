@@ -49,6 +49,7 @@ const BodyCell = ({
   isHighlighted = false,
 }: BodyCellProps) => {
   const IconElement = icon?.Element;
+  const cellValue = cell?.() ?? '';
 
   return (
     <div
@@ -67,7 +68,7 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`flex box-border outline-0 px-1 py-px truncate h-5 text-xs ${
+      className={`flex box-border outline-0 px-1 py-px h-5 text-xs ${
         isHighlighted
           ? `${
               isRowFocused ? 'text-white' : 'dark:text-dirty-red text-dirty-red'
@@ -86,7 +87,12 @@ const BodyCell = ({
           )}
         </div>
       )}
-      {cell?.() ?? ''}
+      <p
+        className="truncate"
+        title={typeof cellValue === 'string' ? cellValue : ''}
+      >
+        {cellValue}
+      </p>
     </div>
   );
 };
