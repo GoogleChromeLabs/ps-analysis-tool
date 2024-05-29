@@ -51,6 +51,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
+      // This is done because sometimes we get tabId for which the event is emitted for.
+      // In some cases we get only the targetId from which we have to ascertain the tabId from the frameTree.
+      // In cases where we dont get any targetId or tabId we dont process it because these events are mostly from an extension.
       if (!source.tabId && !source.targetId) {
         return;
       }
