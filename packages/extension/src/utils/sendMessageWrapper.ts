@@ -13,26 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import type { CookieData } from '@ps-analysis-tool/common';
-
-/**
- * Find previous cookie object from local storage for given tabId and cookieName.
- * @param tabId Tab id for which cookie object is to be found.
- * @param cookieName Cookie name.
- * @returns {Promise<CookieData | null>} Cookie object.
- */
-export async function findPreviousCookieDataObject(
-  tabId: string,
-  cookieName: string
-) {
+const sendMessageWrapper = async (
+  type: string,
+  payload?: Record<string, any>
+) => {
   try {
-    return (await chrome.storage.local.get())?.[tabId]?.cookies?.[
-      cookieName
-    ] as CookieData | null;
+    await chrome.runtime.sendMessage({
+      type,
+      payload,
+    });
   } catch (error) {
-    return null;
+    // Fail silently. The only error which will be thrown is receiving end does not exist.
   }
-}
+};
+
+export default sendMessageWrapper;
