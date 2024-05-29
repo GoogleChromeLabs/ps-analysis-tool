@@ -63,6 +63,7 @@ const useFiltering = (
   }>({});
   const [isDataLoading, setIsDataLoading] = useState(true);
 
+  // extract saved filters from persistent storage
   useFiltersPersistence(
     filters,
     options,
@@ -72,6 +73,7 @@ const useFiltering = (
     genericTablePersistentSettingsKey
   );
 
+  // run options on filters to update filter values
   useFiltersOptions(
     setSelectAllFilterSelection,
     setFilters,
@@ -79,6 +81,7 @@ const useFiltering = (
     isDataLoading
   );
 
+  // extract filters from data
   useFiltersExtraction(
     data,
     tableFilterData,
