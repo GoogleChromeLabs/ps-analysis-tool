@@ -21,7 +21,7 @@ import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import { spawn } from 'child_process';
+import fs from 'fs';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
 
@@ -33,7 +33,6 @@ import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBat
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 import {
   fetchDictionary,
-  delay,
   getUrlListFromArgs,
   validateArgs,
   saveCSVReports,
@@ -77,7 +76,7 @@ program
 
 program.parse();
 
-const saveResults = async (
+const saveResultsAsJSON = async (
   outDir: string,
   result: CompleteJson | CompleteJson[]
 ) => {
@@ -85,18 +84,42 @@ const saveResults = async (
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
-const startDashboardServer = async (dir: string, port: number) => {
-  spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', [
-    'run',
-    'cli-dashboard:dev',
-    '--',
-    '--port',
-    port.toString(),
-  ]);
+const saveResultsAsHTML = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[],
+  isSiteMap: boolean,
+  prefix: string
+) => {
+  const htmlText = fs.readFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
+    'utf-8'
+  );
+  const reportText = fs.readFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
+    'base64'
+  );
 
-  await delay(2000);
+  const html =
+    htmlText.substring(0, htmlText.indexOf('</head>')) +
+    `<script>
+    window.PSAT_REPORT = ${reportText}
+    window.PSAT_DATA = ${JSON.stringify({
+      json: result,
+      type: isSiteMap ? 'sitemap' : 'url',
+      selectedSite: prefix.trim().slice(4),
+    })}</script>` +
+    htmlText.substring(htmlText.indexOf('</head>'));
+  fs.copyFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+    outDir + '/index.js'
+  );
+  const outFileFullDir = path.resolve(outDir + '/index.html');
+  const htmlBlob = new Blob([html]);
+  const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
-  console.log(`Report: http://localhost:${port}?dir=${dir}`);
+  fs.writeFile(outDir + '/index.html', buffer, () =>
+    console.log(`Report created successfully: ${outFileFullDir}`)
+  );
 };
 
 // eslint-disable-next-line complexity
@@ -238,17 +261,13 @@ const startDashboardServer = async (dir: string, port: number) => {
       cookieData: cookieAnalysisData[ind].cookieData,
     } as CompleteJson;
   });
+  const isSiteMap = sitemapPath ? true : false;
 
-  await saveResults(outputDir, result);
+  await saveResultsAsJSON(outputDir, result);
+  await saveResultsAsHTML(outputDir, result, isSiteMap, prefix);
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
     process.exit(0);
   }
-
-  startDashboardServer(
-    encodeURIComponent(prefix) +
-      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''),
-    port
-  );
 })();
