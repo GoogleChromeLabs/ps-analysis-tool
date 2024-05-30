@@ -193,7 +193,7 @@ const useCookieListing = (
           return val === (filterValue === 'True');
         },
       },
-      'parsedCookie.samesite': {
+      'parsedCookie.sameSite': {
         title: 'SameSite',
         hasStaticFilterValues: true,
         filterValues: {
