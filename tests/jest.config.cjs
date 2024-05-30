@@ -30,7 +30,11 @@ module.exports = {
     '\\.png': join(__dirname, '/imageMock.cjs'),
   },
   testEnvironment: 'jsdom',
-  testMatch: ['**/tests/**/*.{js,jsx,ts,tsx}'],
+  testMatch: [
+    '**/tests/**/*.{js,jsx,ts,tsx}',
+    '!**/dist/**/*.{js,jsx,ts,tsx}',
+    '!**/dist-types/**/*.{js,jsx,ts,tsx}',
+  ],
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.cjs'],
   globals: {
     chrome,

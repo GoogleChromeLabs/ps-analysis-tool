@@ -51,7 +51,7 @@ const MenuBar = ({
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    const element = document.getElementById(selectedItem);
+    const element = globalThis?.document?.getElementById(selectedItem);
     if (element) {
       element.scrollIntoView?.({ behavior: 'smooth' });
       timeout = setTimeout(() => {
@@ -66,7 +66,8 @@ const MenuBar = ({
   }, [selectedItem]);
 
   useEffect(() => {
-    const scrollContainer = document.getElementById(scrollContainerId);
+    const scrollContainer =
+      globalThis?.document?.getElementById(scrollContainerId);
     const firstItemLink = menuData[0].link;
     const lastItemLink = menuData[menuData.length - 1].link;
 
@@ -80,7 +81,7 @@ const MenuBar = ({
         scrollContainer.scrollHeight - scrollContainer.clientHeight;
 
       menuData.forEach(({ link: id }) => {
-        const section = document.getElementById(id);
+        const section = globalThis?.document?.getElementById(id);
         setSelectedItem((prev) => {
           if (scrollContainer?.scrollTop === 0) {
             return firstItemLink;

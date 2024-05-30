@@ -11,5 +11,6 @@
     "declarationDir": "dist-types",
     "composite": true
   },
+  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
   "references": [{ "path": "../common" }, { "path": "../i18n" }]
 }

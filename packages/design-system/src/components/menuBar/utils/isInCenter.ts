@@ -22,7 +22,8 @@
 const isInCenter = (element: HTMLElement) => {
   const rect = element.getBoundingClientRect();
   const viewportHeight =
-    window.innerHeight || document.documentElement.clientHeight;
+    globalThis?.innerHeight ||
+    globalThis?.document.documentElement.clientHeight;
 
   const elementTop = rect.top;
   const elementBottom = rect.bottom;

@@ -67,7 +67,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const PROMISE_QUEUE = useMemo(() => new PQueue({ concurrency: 1 }), []);
 
   const isChromeExtension = useMemo(() => {
-    return window.location.protocol === 'chrome-extension:';
+    return globalThis?.location.protocol === 'chrome-extension:';
   }, []);
 
   const preferences = useRef<TablePersistentSettingsStoreContext['state']>(
