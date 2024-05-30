@@ -96,14 +96,24 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     setTabId(chrome.devtools.inspectedWindow.tabId);
+    chrome.tabs.get(chrome.devtools.inspectedWindow.tabId, (tab) => {
+      if (tab.status) {
+        setIsCurrentTabLoading(tab.status === 'loading');
+      }
+    });
   }, []);
 
   const onErrorOccuredListener = useCallback(
     ({
       frameId,
+      error,
       tabId: _tabId,
-    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameId === 0 && _tabId === chrome.devtools.inspectedWindow.tabId) {
+    }: chrome.webNavigation.WebNavigationFramedErrorCallbackDetails) => {
+      if (
+        frameId === 0 &&
+        _tabId === chrome.devtools.inspectedWindow.tabId &&
+        error !== 'net::ERR_ABORTED'
+      ) {
         setErrorOccured(true);
       }
     },
