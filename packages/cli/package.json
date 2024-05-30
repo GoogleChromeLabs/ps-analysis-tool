@@ -2,10 +2,20 @@
   "name": "@ps-analysis-tool/cli",
   "version": "0.8.0",
   "description": "CLI tool for analysis",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist-types/index.d.ts",
+  "files": [
+    "assets",
+    "dist",
+    "dist-types"
+  ],
   "scripts": {
     "build": "tsc --build",
-    "dev": "tsc-watch --build"
+    "dev": "tsc-watch --build",
+    "build:remove": "rm -rf dist dist-types tsconfig.tsbuildinfo"
+  },
+  "bin": {
+    "psat": "./dist/index.js"
   },
   "type": "module",
   "repository": {
@@ -42,5 +52,8 @@
     "@types/xml2js": "^0.4.14",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.0.4"
+  },
+  "peerDependencies": {
+    "@ps-analysis-tool/cli-dashboard": "*"
   }
 }

@@ -6,15 +6,20 @@
     "type": "git",
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
   },
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "public"
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.cjs",
-    "build": "webpack --config webpack.config.cjs",
-    "dev": "webpack-dev-server --config webpack.config.cjs"
+    "start": "webpack-dev-server --config ../../dashboard.webpack.config.cjs",
+    "build": "webpack --config ../../dashboard.webpack.config.cjs",
+    "build:remove": "rm -rf dist"
   },
   "dependencies": {
     "@ps-analysis-tool/common": "*",

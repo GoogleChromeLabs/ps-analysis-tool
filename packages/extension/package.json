@@ -7,7 +7,9 @@
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
   },
   "license": "Apache-2.0",
-  "scripts": {},
+  "scripts": {
+    "dev": "webpack --config ../../extension.webpack.config.cjs --watch"
+  },
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },

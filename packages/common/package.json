@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc-watch"
+    "dev": "tsc-watch",
+    "build:remove": "rm -rf dist dist-types tsconfig.tsbuildinfo"
   },
   "repository": {
     "type": "git",

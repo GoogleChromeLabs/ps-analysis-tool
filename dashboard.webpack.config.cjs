@@ -16,13 +16,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const commonConfig = require('./webpack.shared.cjs');
 
 const report = {
   entry: {
-    index: './packages/report/src/index.tsx',
+    index: '../report/src/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, './dist/cli-dashboard/report'),
@@ -36,7 +35,7 @@ const report = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './packages/report/public/index.html',
+      template: '../report/public/index.html',
       filename: 'index.html',
       inject: true,
     }),
@@ -47,7 +46,7 @@ const report = {
 
 const dashboard = {
   entry: {
-    index: './packages/cli-dashboard/src/index.tsx',
+    index: './src/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, './dist/cli-dashboard'),
@@ -67,12 +66,9 @@ const dashboard = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './packages/cli-dashboard/public/index.html',
+      template: '../cli-dashboard/public/index.html',
       filename: 'index.html',
       inject: false,
-    }),
-    new CopyPlugin({
-      patterns: [{ from: './out', to: 'out' }],
     }),
   ],
   ...commonConfig,
