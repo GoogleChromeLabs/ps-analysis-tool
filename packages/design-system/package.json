@@ -11,7 +11,11 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc-watch"
+    "dev": "tsc-watch",
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
