@@ -124,7 +124,11 @@ export default function parseResponseReceivedExtraInfo(
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
-      exemptionReason: exemptedCookie?.exemptionReason,
+      exemptionReason:
+        exemptedCookie?.exemptionReason &&
+        exemptedCookie?.exemptionReason !== 'None'
+          ? exemptedCookie?.exemptionReason
+          : undefined,
     };
 
     //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
