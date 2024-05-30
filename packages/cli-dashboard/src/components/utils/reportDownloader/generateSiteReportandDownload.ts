@@ -27,6 +27,7 @@ import { createZip, getFolderName } from './utils';
 
 const generateSiteReportandDownload = async (
   JSONReport: CompleteJson[],
+  reportText: string,
   selectedPageUrl?: string | null
 ) => {
   if (!JSONReport.length) {
@@ -61,7 +62,7 @@ const generateSiteReportandDownload = async (
     return;
   }
 
-  createZip(siteAnalysisData, zipFolder, JSONReport[0].pageUrl);
+  createZip(siteAnalysisData, zipFolder, JSONReport[0].pageUrl, reportText);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
