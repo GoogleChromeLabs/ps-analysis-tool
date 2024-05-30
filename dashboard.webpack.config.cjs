@@ -24,7 +24,7 @@ const report = {
     index: '../report/src/index.tsx',
   },
   output: {
-    path: path.resolve(__dirname, './dist/cli-dashboard/report'),
+    path: path.resolve(__dirname, './packages/cli-dashboard/dist/report'),
     filename: '[name].js',
     publicPath: '/',
   },
@@ -49,12 +49,12 @@ const dashboard = {
     index: './src/index.tsx',
   },
   output: {
-    path: path.resolve(__dirname, './dist/cli-dashboard'),
+    path: path.resolve(__dirname, './packages/cli-dashboard/dist'),
     filename: '[name].js',
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, './dist/cli-dashboard'),
+      directory: path.join(__dirname, './packages/cli-dashboard/dist'),
     },
     compress: true,
     port: 9000,

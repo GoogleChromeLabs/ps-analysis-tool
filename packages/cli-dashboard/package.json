@@ -18,8 +18,8 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "scripts": {
     "start": "webpack-dev-server --config ../../dashboard.webpack.config.cjs",
-    "build": "webpack --config ../../dashboard.webpack.config.cjs",
-    "build:remove": "rm -rf dist",
+    "build": "npm run build:remove && webpack --config ../../dashboard.webpack.config.cjs",
+    "build:remove": "rm -rf ../../dist/cli-dashboard",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",

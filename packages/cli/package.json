@@ -10,7 +10,7 @@
     "dist-types"
   ],
   "scripts": {
-    "build": "tsc --build",
+    "build": "npm run build:remove && tsc --build",
     "dev": "tsc-watch --build",
     "build:remove": "rm -rf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",

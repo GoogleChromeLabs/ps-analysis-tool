@@ -8,7 +8,9 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "webpack --config ../../extension.webpack.config.cjs --watch"
+    "dev": "webpack --config ../../extension.webpack.config.cjs --watch",
+    "build": "npm run build:remove && webpack --config ../../extension.webpack.config.cjs",
+    "build:remove": "rm -rf ../../dist/extension"
   },
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
