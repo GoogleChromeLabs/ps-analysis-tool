@@ -3,11 +3,13 @@
     "rootDir": "src",
     "target": "es6",
     "module": "commonjs",
-    "outDir": "../../dist/cli",
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "declarationDir": "dist-types",
+    "composite": true
   },
   "references": [{ "path": "../common" }, { "path": "../i18n" }]
 }
