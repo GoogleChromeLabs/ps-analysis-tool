@@ -5,8 +5,8 @@
 	"scripts": {
 		"build-storybook": "storybook build",
 		"build:all": "npm-run-all **:build ",
-		"publish:all:local": "npm-run-all **:publish:local",
-		"unpublish:all:local": "npm run build:all && npm-run-all **:unpublish:local",
+		"publish:all:local": "npm run build:all && npm-run-all **:publish:local",
+		"unpublish:all:local": "npm-run-all **:unpublish:local",
 		"publish:all:remote": "npm run build:all && npm-run-all **:publish:remote",
 		"unpublish:all:remote": "npm-run-all **:unpublish:remote",
 		"cli:prebuild": "npm run build:remove -w @ps-analysis-tool/common -w @ps-analysis-tool/i18n -w @ps-analysis-tool/cli",
@@ -62,7 +62,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+		"url": "https://github.com/GoogleChromeLabs/ps-analysis-tool"
 	},
 	"license": "Apache-2.0",
 	"bugs": {
