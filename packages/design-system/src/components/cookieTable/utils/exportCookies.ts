@@ -26,11 +26,11 @@ import { saveAs } from 'file-saver';
 import { TableRow } from '../../table';
 import { generateCookieTableCSV } from '../../table/utils';
 
-const exportCookies = (rows: TableRow[]) => {
+const exportCookies = (rows: TableRow[], hostname: string) => {
   const _cookies = rows.map(({ originalData }) => originalData);
   if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
     const csvTextBlob = generateCookieTableCSV(_cookies as CookieTableData[]);
-    saveAs(csvTextBlob, 'Cookies Report.csv');
+    saveAs(csvTextBlob, `${hostname.replace('.', '-')}-report.csv`);
   }
 };
 
