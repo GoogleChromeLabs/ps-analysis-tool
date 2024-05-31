@@ -30,7 +30,8 @@ const exportCookies = (rows: TableRow[], hostname: string) => {
   const _cookies = rows.map(({ originalData }) => originalData);
   if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
     const csvTextBlob = generateCookieTableCSV(_cookies as CookieTableData[]);
-    saveAs(csvTextBlob, `${hostname.replace('.', '-')}-report.csv`);
+    const fileName = hostname.split('.').join('-');
+    saveAs(csvTextBlob, `${fileName}-report.csv`);
   }
 };
 
