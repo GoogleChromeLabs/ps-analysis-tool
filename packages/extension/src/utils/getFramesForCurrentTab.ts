@@ -16,51 +16,90 @@
 /**
  * External dependencies
  */
-import type { TabFrames } from '@ps-analysis-tool/common';
-/**
- * Internal dependencies
- */
-import { isOnRWS } from '../contentScript/utils';
+import { type TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * This function returns tab frames state for frame ids and frame URLs along with rws information from using chrome.webNavigation.getAllFrames.
+ * @param prevState Previous state to which data will be appended.
+ * @param currentTabFrames Current frames in the tab.
+ * @param currentTargets Current debugger targets in the browser.
+ * @param extraFrameData Extra frames data that has been provided by the serivce worker.
+ * @param isUsingCDP Determines if cdp is being used.
  * @returns {TabFrames|null} Tabframes and related details if available else null.
  */
-export default async function getFramesForCurrentTab() {
-  const tabId = chrome.devtools.inspectedWindow.tabId;
-  if (!tabId) {
-    return null;
-  }
-
-  const regexForFrameUrl =
-    /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
-
-  const currentTabFrames = await chrome.webNavigation.getAllFrames({
-    tabId,
-  });
+export default function getFramesForCurrentTab(
+  prevState: TabFrames | null,
+  currentTabFrames: chrome.webNavigation.GetAllFrameResultDetails[] | null,
+  currentTargets: chrome.debugger.TargetInfo[],
+  extraFrameData: Record<string, string[]>,
+  isUsingCDP: boolean
+) {
   const modifiedTabFrames: TabFrames = {};
 
-  currentTabFrames?.forEach(({ url, frameId, frameType }) => {
+  currentTabFrames?.forEach(({ url, frameType, frameId }) => {
     if (url && url.includes('http')) {
-      const parsedUrl = regexForFrameUrl.exec(url);
-      if (parsedUrl && parsedUrl[0]) {
-        if (modifiedTabFrames[parsedUrl[0]]) {
-          modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
+      const parsedUrl = new URL(url).origin;
+      if (!parsedUrl) {
+        return;
+      }
+
+      const frameIdsFromCDP: string[] = [];
+
+      currentTargets.forEach(({ url: targetUrl, type, id }) => {
+        if (url === targetUrl && (type === 'page' || type === 'other')) {
+          frameIdsFromCDP.push(id);
+        }
+      });
+
+      const currentFrameIds = isUsingCDP
+        ? frameIdsFromCDP
+        : [frameId.toString()];
+
+      if (frameIdsFromCDP.length) {
+        if (modifiedTabFrames[parsedUrl]) {
+          modifiedTabFrames[parsedUrl].frameIds = Array.from(
+            new Set([
+              ...(modifiedTabFrames[parsedUrl].frameIds ?? []),
+              ...(prevState?.[parsedUrl]?.frameIds ?? []),
+              ...(currentFrameIds ?? []),
+            ])
+          );
         } else {
-          modifiedTabFrames[parsedUrl[0]] = {
-            frameIds: [frameId],
+          modifiedTabFrames[parsedUrl] = {
+            frameIds: Array.from(
+              new Set([
+                ...(currentFrameIds ?? []),
+                ...(prevState?.[parsedUrl]?.frameIds ?? []),
+              ])
+            ),
             frameType,
           };
         }
       }
     }
   });
-  await Promise.all(
-    Object.keys(modifiedTabFrames).map(async (tabFrame) => {
-      modifiedTabFrames[tabFrame].isOnRWS = await isOnRWS(tabFrame);
-      return tabFrame;
-    })
-  );
+
+  if (isUsingCDP) {
+    Object.keys(extraFrameData).forEach((key) => {
+      if (key === 'null') {
+        return;
+      }
+
+      if (modifiedTabFrames[key]) {
+        modifiedTabFrames[key].frameIds = Array.from(
+          new Set([
+            ...(modifiedTabFrames[key].frameIds ?? []),
+            ...(extraFrameData[key] ?? []),
+          ])
+        );
+      } else {
+        modifiedTabFrames[key] = {
+          frameIds: extraFrameData[key] ?? [],
+          frameType: 'sub_frame',
+        };
+      }
+    });
+  }
 
   return modifiedTabFrames;
 }

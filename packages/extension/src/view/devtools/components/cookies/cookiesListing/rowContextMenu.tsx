@@ -116,6 +116,7 @@ const RowContextMenu = forwardRef<
     if (chrome.devtools.panels?.network?.show) {
       // @ts-ignore
       chrome.devtools.panels.network.show({ filter });
+      setContextMenuOpen(false);
       return;
     }
 

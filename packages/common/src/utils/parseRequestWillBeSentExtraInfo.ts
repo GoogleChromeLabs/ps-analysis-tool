@@ -17,6 +17,7 @@
  * External dependencies
  */
 import type { Protocol } from 'devtools-protocol';
+
 /**
  * Internal dependencies.
  */
@@ -33,16 +34,18 @@ import isFirstParty from './isFirstParty';
  * Parses Network.requestWillBeSentExtraInfo to get extra information about a cookie.
  * @param {object} associatedCookies Cookies associated with the request being parsed.
  * @param {object} cookieDB Cookie database to find analytics from.
- * @param {object} requestMap An object for requestId to url.
+ * @param {string} requestUrl The request url.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
+ * @param {string[]} frameIds The request to which the frame is associated to.
  * @param {string} requestId - The requestId of the request being processed
  * @returns {object} parsed cookies.
  */
 export default function parseRequestWillBeSentExtraInfo(
   associatedCookies: Protocol.Network.RequestWillBeSentExtraInfoEvent['associatedCookies'],
   cookieDB: CookieDatabase,
-  requestMap: { [requestId: string]: string },
+  requestUrl: string,
   tabUrl: string,
+  frameIds: string[],
   requestId: string
 ) {
   const cookies: CookieData[] = [];
@@ -52,17 +55,12 @@ export default function parseRequestWillBeSentExtraInfo(
       cookie.expires
     );
 
-    let domain,
-      url = '';
-
-    if (requestMap && requestMap[requestId]) {
-      url = requestMap[requestId] ?? '';
-    }
+    let domain;
 
     if (cookie?.domain) {
       domain = cookie?.domain;
-    } else if (!cookie?.domain && url) {
-      domain = new URL(url).hostname;
+    } else if (!cookie?.domain && requestUrl) {
+      domain = new URL(requestUrl).hostname;
     }
 
     const singleCookie: CookieData = {
@@ -78,7 +76,7 @@ export default function parseRequestWillBeSentExtraInfo(
           {
             type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
             requestId,
-            url: url,
+            url: requestUrl,
             blocked: blockedReasons.length !== 0,
             timeStamp: Date.now(),
           },
@@ -86,13 +84,21 @@ export default function parseRequestWillBeSentExtraInfo(
         responseEvents: [],
       },
       blockedReasons,
-      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
-      url,
+      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
+      url: requestUrl,
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
-      exemptionReason: exemptionReason ? exemptionReason : undefined,
+      exemptionReason:
+        exemptionReason && exemptionReason !== 'None'
+          ? exemptionReason
+          : undefined,
     };
+
+    //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
+    if (frameIds.length > 0) {
+      singleCookie.frameIdList = [...frameIds];
+    }
 
     cookies.push(singleCookie);
   });

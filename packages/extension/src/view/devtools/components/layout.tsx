@@ -187,7 +187,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const lastUrl = useRef(tabUrl);
 
   useEffect(() => {
-    if (lastUrl.current === tabUrl || lastUrl.current === null) {
+    if (
+      lastUrl.current === null ||
+      new URL(lastUrl.current).hostname === new URL(tabUrl || '').hostname
+    ) {
       lastUrl.current = tabUrl;
       return;
     }

@@ -112,6 +112,7 @@ export const parseNetworkDataToCookieData = (
           ...cookie,
           url: response.serverUrl,
           blockedReasons: Array.from(blockedReasonsSet),
+          isBlocked: Array.from(blockedReasonsSet).length > 0,
           parsedCookie: {
             ...cookie.parsedCookie,
             domain: parsedDomain || '',
@@ -150,6 +151,7 @@ export const parseNetworkDataToCookieData = (
           ...cookie,
           url: request.serverUrl,
           blockedReasons: Array.from(blockedReasonsSet),
+          isBlocked: Array.from(blockedReasonsSet).length > 0,
           parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
         });
       });
