@@ -15,7 +15,7 @@
  */
 
 /**
- * Determines if an HTMLElement hasn't been scrolled more than a quarter of its height out of viewport's 1/4th quarter.
+ * Determines if an HTMLElement hasn't been scrolled more than a 3/4th of its height out of viewport's 1/4th quarter.
  * @param element - The HTMLElement to check for vertical centering.
  * @returns True if the element is in view, false otherwise.
  */
