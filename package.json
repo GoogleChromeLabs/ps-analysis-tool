@@ -17,7 +17,7 @@
 		"cli:publish:remote": "npm publish --registry=https://registry.npmjs.org -w @ps-analysis-tool/cli",
 		"cli:unpublish:local": "npm unpublish --registry=http://localhost:4873 --force -w @ps-analysis-tool/cli",
 		"cli:unpublish:remote": "npm publish --registry=https://registry.npmjs.org -w @ps-analysis-tool/cli",
-		"cli": "node dist/cli/index.js",
+		"cli": "node packages/cli/dist/index.js",
 		"cli-dashboard:dev": "npm run start -w @ps-analysis-tool/cli-dashboard",
 		"cli-dashboard:prebuild": "npm run build:remove -w @ps-analysis-tool/cli-dashboard",
 		"cli-dashboard:build": "npm run cli-dashboard:prebuild && cross-env NODE_ENV=production npm run build -w @ps-analysis-tool/cli-dashboard",

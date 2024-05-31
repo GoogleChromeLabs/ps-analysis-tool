@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Copyright 2023 Google LLC
  *
@@ -259,7 +260,7 @@ const saveResultsAsHTML = async (
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisData[ind].cookieData,
-    } as CompleteJson;
+    } as unknown as CompleteJson;
   });
   const isSiteMap = sitemapPath ? true : false;
 
