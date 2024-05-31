@@ -56,6 +56,7 @@ interface CookieTableProps {
     row: TableRow
   ) => void;
   hideExport?: boolean;
+  hostname: string;
 }
 
 const CookieTable = forwardRef<
@@ -78,6 +79,7 @@ const CookieTable = forwardRef<
     extraInterfaceToTopBar,
     onRowContextMenu,
     hideExport,
+    hostname,
   }: CookieTableProps,
   ref
 ) {
@@ -189,7 +191,11 @@ const CookieTable = forwardRef<
         onRowContextMenu={onRowContextMenuHandler}
         getRowObjectKey={getRowObjectKey}
         conditionalTableRowClassesHandler={_conditionalTableRowClassesHandler}
-        exportTableData={!hideExport ? exportCookies : undefined}
+        exportTableData={
+          !hideExport
+            ? (rows: TableRow[]) => exportCookies(rows, hostname)
+            : undefined
+        }
         hasVerticalBar={hasVerticalBar}
         isRowSelected={isRowSelected}
       >
