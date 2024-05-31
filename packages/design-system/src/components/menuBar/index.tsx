@@ -86,7 +86,7 @@ const MenuBar = ({
         setSelectedItem((prev) => {
           if (scrollContainer?.scrollTop === 0) {
             return firstItemLink;
-          } else if (isAlmostBottom <= 3 && isAlmostBottom >= 0) {
+          } else if (isAlmostBottom <= 1 && isAlmostBottom >= 0) {
             return lastItemLink;
           } else if (section && isElementInView(section)) {
             return id;
