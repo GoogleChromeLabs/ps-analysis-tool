@@ -1,0 +1,1069 @@
+{
+    "https://bbc.com": {
+        "9408745EB0FC336CCD8549955442CDDC": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/",
+            "cookies": []
+        },
+        "70964.3": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/css/2ca6241c47b04a76.css",
+            "cookies": []
+        },
+        "70964.2": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/",
+            "cookies": []
+        },
+        "70964.9": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/webpack-d6e6bc4326467b94.js",
+            "cookies": []
+        },
+        "70964.10": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/framework-98e6f5bc52a2e411.js",
+            "cookies": []
+        },
+        "70964.33": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/grey-placeholder.png",
+            "cookies": []
+        },
+        "70964.16": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/Rlucg5Yz3vMcebOtPGxdD/_buildManifest.js",
+            "cookies": []
+        },
+        "70964.15": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/pages/%5B%5B...slug%5D%5D-480fba8530106348.js",
+            "cookies": []
+        },
+        "70964.17": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/Rlucg5Yz3vMcebOtPGxdD/_ssgManifest.js",
+            "cookies": []
+        },
+        "70964.14": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/947-5fd086daaa120cb7.js",
+            "cookies": []
+        },
+        "70964.11": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/main-3838744298e667de.js",
+            "cookies": []
+        },
+        "70964.12": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/pages/_app-ed147be6b8e07a1a.js",
+            "cookies": []
+        },
+        "70964.13": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/766-8d99a17d72279cb7.js",
+            "cookies": []
+        },
+        "70964.7": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://gn-web-assets.api.bbc.com/ngas/latest/dotcom-bootstrap.js",
+            "cookies": []
+        },
+        "70964.196": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/418.94502ce971d29e1a.js",
+            "cookies": []
+        },
+        "70964.197": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/chunks/376.5e06ebf2e3a1441b.js",
+            "cookies": []
+        },
+        "70964.201": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/_next/static/css/2ca6241c47b04a76.css",
+            "cookies": []
+        },
+        "70964.200": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/userinfo",
+            "cookies": []
+        },
+        "70964.5": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.bbci.co.uk/frameworks/requirejs/0.13.0/sharedmodules/require.js",
+            "cookies": []
+        },
+        "70964.38": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/433b/live/4de203d0-2176-11ef-80aa-699d54c46324.jpg.webp",
+            "cookies": []
+        },
+        "70964.170": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.files.bbci.co.uk/fonts/reith/2.512/BBCReithSans_W_Bd.woff2",
+            "cookies": []
+        },
+        "70964.169": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.files.bbci.co.uk/fonts/reith/2.512/BBCReithSans_W_Md.woff2",
+            "cookies": []
+        },
+        "70964.8": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://emp.bbci.co.uk/emp/bump-4/bump-4.js",
+            "cookies": []
+        },
+        "70964.6": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.optimizely.com/public/4621041136/s/bbcx_prod.js",
+            "cookies": []
+        },
+        "70964.47": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/aeb1/live/83273320-1e61-11ef-a13a-0b8c563da930.jpg.webp",
+            "cookies": []
+        },
+        "70964.198": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.chartbeat.com/js/chartbeat.js",
+            "cookies": []
+        },
+        "70964.48": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/5d04/live/c5690dd0-2163-11ef-86dd-17eccd570928.jpg.webp",
+            "cookies": []
+        },
+        "70964.101": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0j1h2ky.jpg.webp",
+            "cookies": []
+        },
+        "70964.100": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/275e/live/1ec77880-1de5-11ef-a13a-0b8c563da930.jpg.webp",
+            "cookies": []
+        },
+        "70964.168": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.files.bbci.co.uk/fonts/reith/2.512/BBCReithSans_W_Rg.woff2",
+            "cookies": []
+        },
+        "70964.203": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://bbc.gscontxt.net/?url=https%3A%2F%2Fwww.bbc.com%2F",
+            "cookies": []
+        },
+        "70964.102": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/800/cpsprodpb/88be/live/570f9bc0-216c-11ef-91b2-41bfe5190ad1.jpg.webp",
+            "cookies": []
+        },
+        "70964.104": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/480/cpsprodpb/969b/live/895d6ef0-1e55-11ef-986e-85bf00bd2d82.jpg.webp",
+            "cookies": []
+        },
+        "70964.105": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/480/cpsprodpb/50d3/live/9702cf60-20e8-11ef-a3ab-e73c00cc3104.jpg.webp",
+            "cookies": []
+        },
+        "70964.103": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/480/cpsprodpb/7dc7/live/c2a17e40-20f3-11ef-80aa-699d54c46324.jpg.webp",
+            "cookies": []
+        },
+        "70964.173": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.files.bbci.co.uk/fonts/reith/2.512/BBCReithSans_W_It.woff2",
+            "cookies": []
+        },
+        "70964.205": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/unified/wrapperMessagingWithoutDetection.js",
+            "cookies": []
+        },
+        "70964.106": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/480/cpsprodpb/c0a7/live/43110340-210b-11ef-a13a-0b8c563da930.jpg.webp",
+            "cookies": []
+        },
+        "70964.204": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://securepubads.g.doubleclick.net/tag/js/gpt.js",
+            "cookies": []
+        },
+        "70964.199": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://uk-script.dotmetrics.net/door.js?d=www.bbc.com&t=homestudio",
+            "cookies": []
+        },
+        "70964.180": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.files.bbci.co.uk/fonts/reith/2.512/BBCReithSerif_W_Bd.woff2",
+            "cookies": []
+        },
+        "70964.178": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.files.bbci.co.uk/fonts/reith/2.512/BBCReithSerif_W_Rg.woff2",
+            "cookies": []
+        },
+        "70964.210": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/unified/4.23.0/gdpr-tcf.da52e36b5e2f05c6aae3.bundle.js",
+            "cookies": []
+        },
+        "70964.211": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/unified/4.23.0/ccpa-gpp.65d1b35ff487d360208c.bundle.js",
+            "cookies": []
+        },
+        "70964.179": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://static.files.bbci.co.uk/fonts/reith/2.512/BBCReithSerif_W_Md.woff2",
+            "cookies": []
+        },
+        "5436C800218410C6E54DC455ABD99637": {
+            "frameId": "BABDB31217496DC00E110050FC487860",
+            "serverUrl": "https://a4621041136.cdn.optimizely.com/client_storage/a4621041136.html",
+            "cookies": []
+        },
+        "70964.206": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://idcta.api.bbc.com/idcta/config?userOrigin=BBCS_BBC&ptrt=https%3A%2F%2Fwww.bbc.com%2F%3Fzephr-REPLACETYPE",
+            "cookies": []
+        },
+        "EAB4B21C390F345D39437A18E7E492C8": {
+            "frameId": "",
+            "serverUrl": "https://federated-id.live.api.bbc.co.uk/getdeviceid",
+            "cookies": []
+        },
+        "70964.212": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/mms/v2/get_site_data?hasCsp=true&href=https%3A%2F%2Fwww.bbc.com%2F&account_id=1786",
+            "cookies": []
+        },
+        "70964.213": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202405230101/pubads_impl.js",
+            "cookies": []
+        },
+        "70964.215": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/wrapper/v2/meta-data?hasCsp=true&accountId=1786&env=prod&metadata=%7B%22gdpr%22%3A%7B%7D%2C%22ccpa%22%3A%7B%7D%7D&propertyId=26225&scriptVersion=4.23.0&scriptType=unified",
+            "cookies": []
+        },
+        "70964.214": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/site.webmanifest",
+            "cookies": []
+        },
+        "70964.217": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/wrapper/v2/messages?hasCsp=true&env=prod&body=%7B%22accountId%22%3A1786%2C%22campaignEnv%22%3A%22prod%22%2C%22campaigns%22%3A%7B%22ccpa%22%3A%7B%22alwaysDisplayDNS%22%3Afalse%2C%22hasLocalData%22%3Afalse%2C%22targetingParams%22%3A%7B%7D%7D%2C%22gdpr%22%3A%7B%22consentStatus%22%3A%7B%7D%2C%22targetingParams%22%3A%7B%7D%7D%7D%2C%22clientMMSOrigin%22%3A%22https%3A%2F%2Fcdn.privacy-mgmt.com%22%2C%22hasCSP%22%3Atrue%2C%22includeData%22%3A%7B%22localState%22%3A%7B%22type%22%3A%22string%22%7D%2C%22actions%22%3A%7B%22type%22%3A%22RecordString%22%7D%2C%22cookies%22%3A%7B%22type%22%3A%22RecordString%22%7D%7D%2C%22propertyHref%22%3A%22https%3A%2F%2Fwww.bbc.com%2F%22%7D&localState=null&metadata=%7B%22ccpa%22%3A%7B%22applies%22%3Atrue%7D%2C%22gdpr%22%3A%7B%22applies%22%3Afalse%7D%7D&nonKeyedLocalState=null&ch=444485936444485936ef18&scriptVersion=4.23.0&scriptType=unified",
+            "cookies": []
+        },
+        "70964.202": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://federated-id.live.api.bbc.co.uk/getdeviceid",
+            "cookies": []
+        },
+        "70964.223": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://gn-web-assets.api.bbc.com/ngas/latest/dotcom-ads.js",
+            "cookies": []
+        },
+        "70964.216": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pagead2.googlesyndication.com/pagead/js/rum.js",
+            "cookies": []
+        },
+        "70964.208": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://mybbc-analytics.files.bbci.co.uk/echo-client-js/echo-2.4.0-avi.min.js",
+            "cookies": []
+        },
+        "70964.209": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ping.chartbeat.net/ping?h=bbc.com&p=%2F&u=Bh6rZsDAgzDvrq8o&d=bbc.com&g=50924&g0=home&g1=NewsMediaOrganization&g4=indexPage&n=1&f=00001&c=0&x=0&m=0&y=8675&o=1440&w=790&j=45&R=1&W=0&I=0&E=0&e=0&r=&PA=https%3A%2F%2Fwww.bbc.com%2F&b=1341&_s=%7B%7D&t=Bg3G3-Cd1pNG_bwmiCdHcKYCDOyG0&V=146&i=BBC%20Home%20-%20Breaking%20News%2C%20World%20News%2C%20US%20News%2C%20Sports%2C%20Business%2C%20Innovation%2C%20Climate%2C%20Culture%2C%20Travel%2C%20Video%20%26%20Audio&tz=-330&_=a&sn=1&sv=g3xgeRKBOoDfqC6iBidXHvDb3R_f&sr=external&sd=1&im=062b2f3f&_",
+            "cookies": []
+        },
+        "70964.224": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://gn-web-assets.api.bbc.com/ngas/latest/dotcom-preroll.js",
+            "cookies": []
+        },
+        "70964.218": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://uk-script.dotmetrics.net/hit.gif?id=13934&url=https%3A%2F%2Fwww.bbc.com%2F&dom=www.bbc.com&r=1717402595005&pvs=1&ecid=1c0bdd53-f122-4086-bf17-14ac2da94d46&c=true&tzOffset=-330&doorUrl=http%3a%2f%2fuk-script.dotmetrics.net%2fdoor.js%3fd%3dwww.bbc.com%26t%3dhomestudio&dfph=",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "DotMetrics.DeviceKey",
+                        "domain": ".dotmetrics.net",
+                        "path": "/",
+                        "value": "DeviceID=",
+                        "sameSite": "None",
+                        "expires": "2025-06-03T08:16:35.000Z",
+                        "httpOnly": false,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                },
+                {
+                    "parsedCookie": {
+                        "name": "DotMetrics.UniqueUserIdentityCookie",
+                        "domain": ".dotmetrics.net",
+                        "path": "/",
+                        "value": "UserID=557bd37c-5f6c-43f8-ba83-26ba19bc473a&Created=06/03/2024 08:16:35&UserMode=0&guid=ec6dfafa-976b-4444-9a24-85fb083aff4d&ver=1",
+                        "sameSite": "None",
+                        "expires": "2025-06-03T08:16:35.000Z",
+                        "httpOnly": false,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "B622D26A83CDE85A83A5D4AC69C2DD4D": {
+            "frameId": "",
+            "serverUrl": "https://cdn.privacy-mgmt.com/wrapper/v2/pv-data?hasCsp=true&env=prod&ch=444485936444485936ef18&scriptVersion=4.23.0&scriptType=unified",
+            "cookies": []
+        },
+        "A45CBE70E83B38915986EE57006D94F0": {
+            "frameId": "",
+            "serverUrl": "https://cdn.privacy-mgmt.com/wrapper/v2/pv-data?hasCsp=true&env=prod&ch=444485936444485936ef18&scriptVersion=4.23.0&scriptType=unified",
+            "cookies": []
+        },
+        "70964.229": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://gn-web-assets.api.bbc.com/ngas/latest/dotcom-analytics.js",
+            "cookies": []
+        },
+        "70964.221": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.adsafeprotected.com/iasPET.1.js",
+            "cookies": []
+        },
+        "D75264D2705E1F350A26AFE5D7E37765": {
+            "frameId": "",
+            "serverUrl": "https://federated-id.live.api.bbc.co.uk/encryptdeviceid",
+            "cookies": []
+        },
+        "70964.233": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
+            "cookies": []
+        },
+        "70964.219": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://rm-script.dotmetrics.net/hit.gif?id=13934&url=https%3A%2F%2Fwww.bbc.com%2F&dom=www.bbc.com&r=1717402595005&pvs=1&pvid=1c0bdd53-f122-4086-bf17-14ac2da94d46&c=true&tzOffset=-330",
+            "cookies": []
+        },
+        "70964.230": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://uk-script.dotmetrics.net/Scripts/script.js?v=285",
+            "cookies": []
+        },
+        "70964.227": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://federated-id.live.api.bbc.co.uk/encryptdeviceid",
+            "cookies": []
+        },
+        "70964.225": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/wrapper/v2/pv-data?hasCsp=true&env=prod&ch=444485936444485936ef18&scriptVersion=4.23.0&scriptType=unified",
+            "cookies": []
+        },
+        "70964.222": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pub.doubleverify.com/dvtag/29028254/DV1298722/pub.js",
+            "cookies": []
+        },
+        "70964.226": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.privacy-mgmt.com/wrapper/v2/pv-data?hasCsp=true&env=prod&ch=444485936444485936ef18&scriptVersion=4.23.0&scriptType=unified",
+            "cookies": []
+        },
+        "70964.220": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://cdn.permutive.com/e488cdb0-e7cb-4d91-9648-60d437d8e491-web.js",
+            "cookies": []
+        },
+        "70964.228": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://logx.optimizely.com/v1/events",
+            "cookies": []
+        },
+        "70964.242": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://gn-web-assets.api.bbc.com/ngas/vendor/edr/edr.min.js",
+            "cookies": []
+        },
+        "70964.234": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.236": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.241": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.246": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pub.doubleverify.com/dvtag/signals/bsc/pub.json?ctx=29028254&cmp=DV1298722&url=https%3A%2F%2Fbbc.com&bsc=1&abs=1&token=Y8KfC94q7cTFkrIOOC6vA1awp%2BdKgBupgxluJbI3Etaf%2Bm32JFnaWixgTmR2yinrJt6OdKY%2Bz5oD4NLtVmf7g0X1oPaRrei6JJmMDYqXLn%2B26GMTnPYeswY3UvZy%2FVlTci5Xu9n8zXn%2FdozTFkLb8J8KnThGCKA%3D",
+            "cookies": []
+        },
+        "70964.238": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.239": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.240": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.237": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.243": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://sb.scorecardresearch.com/internal-cs/default/beacon.js",
+            "cookies": []
+        },
+        "70964.231": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://mybbc-analytics.files.bbci.co.uk/analytics-remote-config/producers.json",
+            "cookies": []
+        },
+        "70964.232": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://mybbc-analytics.files.bbci.co.uk/analytics-remote-config/masterbrands.json",
+            "cookies": []
+        },
+        "70964.245": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pub.doubleverify.com/dvtag/signals/ids/pub.json?ctx=29028254&cmp=DV1298722&url=https%3A%2F%2Fbbc.com&ids=1&token=Y8KfC94q7cTFkrIOOC6vA1awp%2BdKgBupgxluJbI3Etaf%2Bm32JFnaWixgTmR2yinrJt6OdKY%2Bz5oD4NLtVmf7g0X1oPaRrei6JJmMDYqXLn%2B26GMTnPYeswY3UvZy%2FVlTci5Xu9n8zXn%2FdozTFkLb8J8KnThGCKA%3D",
+            "cookies": []
+        },
+        "70964.249": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pub.doubleverify.com/dvtag/signals/vlp/pub.json?ctx=29028254&cmp=DV1298722&url=https%3A%2F%2Fbbc.com&vlp=1&tvp=1&slot-0-%2F4817%2Fbbccom%2Fhome%2Fhome%2Findex%2Finterstitial=1x1&slot-1-%2F4817%2Fbbccom%2Fhome%2Fhome%2Findex%2Ftop=728x90%2C970x90%2C970x250%2C990x1&token=Y8KfC94q7cTFkrIOOC6vA1awp%2BdKgBupgxluJbI3Etaf%2Bm32JFnaWixgTmR2yinrJt6OdKY%2Bz5oD4NLtVmf7g0X1oPaRrei6JJmMDYqXLn%2B26GMTnPYeswY3UvZy%2FVlTci5Xu9n8zXn%2FdozTFkLb8J8KnThGCKA%3D",
+            "cookies": []
+        },
+        "70964.235": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.244": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://federated-id.live.api.bbc.co.uk/encryptdeviceid",
+            "cookies": []
+        },
+        "70964.259": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pub.doubleverify.com/dvtag/metrics/event.png?b11=no-callback&d6=0&d7=750&b12=modern&b2=801c291&b3=&b7=c4950126-2023-40d2-afed-4d5a9833a7e5&b9=modern&b8=&b5=29028254&b6=DV1298722&b4=www.bbc.com&b1=ad-request&d1=1&d2=1",
+            "cookies": []
+        },
+        "70964.250": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://uk-script.dotmetrics.net/SiteEvent.dotmetrics?v=eyJpZCI6MTM5MzQsImZsIjp0cnVlLCJkb20iOiJ3d3cuYmJjLmNvbSIsImxzbyI6bnVsbCwidXJsIjoiaHR0cHM6Ly93d3cuYmJjLmNvbS8iLCJydXJsIjoiIiwiZWNpZCI6IjFjMGJkZDUzLWYxMjItNDA4Ni1iZjE3LTE0YWMyZGE5NGQ0NiIsImRjIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIiwiZGZwaCI6IiIsInR6T2Zmc2V0IjotMzMwLCJvc3MiOnRydWUsIm9zZXMiOnRydWV9&r=1717402595644",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "DotMetrics.DeviceKey",
+                        "domain": ".dotmetrics.net",
+                        "path": "/",
+                        "value": "DeviceID=",
+                        "sameSite": "None",
+                        "expires": "2025-06-03T08:16:35.000Z",
+                        "httpOnly": false,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                },
+                {
+                    "parsedCookie": {
+                        "name": "DotMetrics.UniqueUserIdentityCookie",
+                        "domain": ".dotmetrics.net",
+                        "path": "/",
+                        "value": "UserID=3d1ccfeb-c10c-43cc-90e5-6e9c8a05d1f5&Created=06/03/2024 08:16:35&UserMode=0&guid=c6e3e1b4-1f8c-4ca8-ba06-35dffdb76740&ver=1",
+                        "sameSite": "None",
+                        "expires": "2025-06-03T08:16:35.000Z",
+                        "httpOnly": false,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "70964.258": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://sb.scorecardresearch.com/b2?c1=2&c2=19293874&cs_it=b8&cv=4.0.0%2B2301240627&ns__t=1717402595735&ns_c=UTF-8&cs_ucfr=1&gdpr=0&gdpr_p1t=&gdpr_li=&gdpr_purps=&gdpr_pcc=&cs_cmp_nc=0&cs_cmp_id=6&cs_cmp_sv=1&cs_cmp_rt=0&c7=https%3A%2F%2Fwww.bbc.com%2F&c8=BBC%20Home%20-%20Breaking%20News%2C%20World%20News%2C%20US%20News%2C%20Sports%2C%20Business%2C%20Innovation%2C%20Climate%2C%20Culture%2C%20Travel%2C%20Video%20%26%20Audio&c9=",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "UID",
+                        "domain": ".scorecardresearch.com",
+                        "path": "/",
+                        "value": "1DFb3b6232b26ff48404ef01717402595",
+                        "sameSite": "None",
+                        "expires": "2025-06-28T08:16:35.950Z",
+                        "httpOnly": false,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                },
+                {
+                    "parsedCookie": {
+                        "name": "PID",
+                        "domain": ".scorecardresearch.com",
+                        "path": "/",
+                        "value": "1D1b3b6232cd9ff484050a31717402595",
+                        "sameSite": "None",
+                        "expires": "2024-09-01T08:16:35.950Z",
+                        "httpOnly": false,
+                        "secure": true,
+                        "partitionKey": "https://bbc.com"
+                    },
+                    "isBlocked": false
+                },
+                {
+                    "parsedCookie": {
+                        "name": "XID",
+                        "domain": ".scorecardresearch.com",
+                        "path": "/",
+                        "value": "1DFb3b6232b26ff48404ef01717402595",
+                        "sameSite": "None",
+                        "expires": "2025-06-28T08:16:35.950Z",
+                        "httpOnly": false,
+                        "secure": true,
+                        "partitionKey": "https://bbc.com"
+                    },
+                    "isBlocked": false
+                }
+            ]
+        },
+        "59CC96738DE4B12F204D48395817B750": {
+            "frameId": "DF8141F14684E9DCE460E5F9A68FA117",
+            "serverUrl": "https://securepubads.g.doubleclick.net/static/topics/topics_frame.html",
+            "cookies": []
+        },
+        "70964.260": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://federated-id.live.api.bbc.co.uk/encryptdeviceid",
+            "cookies": []
+        },
+        "70964.253": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ib.adnxs.com/getuidj",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "receive-cookie-deprecation",
+                        "domain": ".adnxs.com",
+                        "path": "/",
+                        "value": "1",
+                        "sameSite": "None",
+                        "expires": "2034-05-22T08:16:36.000Z",
+                        "httpOnly": true,
+                        "secure": true,
+                        "partitionKey": "https://bbc.com"
+                    },
+                    "isBlocked": false
+                }
+            ]
+        },
+        "70964.248": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pixel.adsafeprotected.com/services/pub?anId=9708&slot=%7Bid:dotcom-slot-interstitial,ss:%5B1.1%5D,p:/4817/bbccom/home/home/index/interstitial,t:display%7D&wr=1440.790&sr=1680.1050&sessionId=7b9107e1-7f52-eff8-0a70-39f5dc821aa5&url=https%253A%252F%252Fwww.bbc.com%252F",
+            "cookies": []
+        },
+        "B301C794B62B24F140F9CD1C726B698B": {
+            "frameId": "",
+            "serverUrl": "https://api.permutive.com/ctx/v1/segment?k=1bb84885-9325-4fef-adda-a208032b2715",
+            "cookies": []
+        },
+        "70964.252": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://e488cdb0-e7cb-4d91-9648-60d437d8e491.prmutv.co/v2.0/pxid?k=1bb84885-9325-4fef-adda-a208032b2715",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "pxid",
+                        "domain": "e488cdb0-e7cb-4d91-9648-60d437d8e491.prmutv.co",
+                        "path": "/",
+                        "value": "a7d7d9ff-7eab-4ab7-b331-5e1860e44127",
+                        "sameSite": "None",
+                        "expires": "2024-09-03T08:16:36.000Z",
+                        "httpOnly": true,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "70964.261": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://securepubads.g.doubleclick.net/gampad/ads?pvsid=1889935698304018&correlator=604042547689613&eid=31079957%2C31083343%2C31084062%2C95331673%2C31079527%2C31061691%2C31061693%2C31078663%2C31078665%2C31078668%2C31078670&output=ldjh&gdfp_req=1&vrg=202405230101&ptt=17&impl=fifs&gdpr=0&us_privacy=1YNN&gpp=DBABLA~BVQqAAAAAgA.QA&gpp_sid=7&iu_parts=4817%2Cbbccom%2Chome%2Cindex%2Cinterstitial%2Ctop&enc_prev_ius=%2F0%2F1%2F2%2F2%2F3%2F4%2C%2F0%2F1%2F2%2F2%2F3%2F5&prev_iu_szs=1x1%2C728x90%7C970x90%7C970x250%7C990x1&ifi=1&sfv=1-0-40&ists=2&eri=1&sc=1&cookie_enabled=1&abxe=1&dt=1717402596095&lmt=1717402596&adxs=-12245933%2C-12245933&adys=-12245933%2C-12245933&biw=1440&bih=790&scr_x=0&scr_y=0&btvi=-1%7C-1&ucis=1%7C2&oid=2&u_his=2&u_h=1050&u_w=1680&u_ah=1050&u_aw=1680&u_cd=30&u_sd=1&u_tz=330&dmc=8&bc=31&nvt=1&uach=WyIiLCIiLCIiLCIiLCIiLG51bGwsMCxudWxsLCIiLG51bGwsMF0.&url=https%3A%2F%2Fwww.bbc.com%2F&rumc=1889935698304018&rume=1&vis=1&psz=0x0%7C0x0&msz=0x0%7C0x0&fws=128%2C128&ohw=0%2C0&ga_vid=398561865.1717402596&ga_sid=1717402596&ga_hid=1486593298&ga_fc=false&td=1&topics=1&tps=1&htps=10&nt=1&psd=WzE1LFtdLG51bGwsMV0.&dlt=1717402593364&idt=1499&ppid=cba99f141fe94a76b66789200a17d7f7&prev_scp=slot%3Dinterstitial%26pos%3Dinterstitial%26pts_pid%3Dc4950126-2023-40d2-afed-4d5a9833a7e5%26pts_sid%3D8e77440d-e64c-48c0-8c90-025c7a5f963a%26BSC%3D84121001%26qt_loaded%3Dvlp%2Ctvp%2Cabs%2Cbsc%2Cids%26IDS%3D0%26VLP%3D0%26TVP%3D0-1%26id%3D9845e61a-2181-11ef-8056-0a9f4f14bcb3%26vw%3D40%2C50%2C60%26grm%3D40%2C50%2C60%26pub%3D40%7Cslot%3Dtop%26pos%3Dtop%26pts_pid%3Dc4950126-2023-40d2-afed-4d5a9833a7e5%26pts_sid%3Dfe3c79e3-4375-4f09-9846-6e16e7525bb1%26BSC%3D84121001%26qt_loaded%3Dvlp%2Ctvp%2Cabs%2Cbsc%2Cids%26IDS%3D0%26VLP%3D4%2C300x50_2%2C728x90_6%2C970x250_5%2C990x1_3%26TVP%3D13-21%2C300x50_8-13%2C728x90_13-21%2C970x250_13-21%2C990x1_8-13&cust_params=page_id%3D%26grp%3D5%26pas_tags%3D%26top_tags%3D%26fran_tags%3D%26prod%3Dbbccom%26ref_pillar%3D%26coll%3D%26destination%3D%26pillar%3Dhome%26sect%3Dhome%26page_type%3Dindex%26leg_v_col%3D%26leg_t_dest%3D%26leg_n_keyword%3D%26leg_n_topic%3D%26leg_adunit2%3D%252F4817%252Fbbccom.test.site.flash%252Fbbc_homepage_int%26domain%3Dwww.bbc.com%26referrer%3Dnonbbc%26group%3D5%26gs_cat%3Dgv_safe%252Cgb_safe%252Cgb_safe_from_high%252Cgb_safe_from_high_med%252Cgv_safe_adult%252Cgv_safe_arms%252Cgv_safe_crime%252Cgv_safe_death_injury%252Cgv_safe_download%252Cgv_safe_drugs%252Cgv_safe_hatespeech%252Cgv_safe_military%252Cgv_safe_obscenity%252Cgv_safe_terrorism%252Cgv_safe_tobacco%252Cpos_apac_shaanxi2020_china%252Cpos_bbc_apac_macquariebank_brandsafety_au%252Cpos_bbc_apac_qantas22_v2%252Cpos_bbc_apac_qantas_2022%252Cpos_bbc_ceema_cisco_jul21%252Cpos_bbc_emea_ubs_jan24%252Cpos_bbc_jpm_list2_2024%252Cpos_bbc_lexus_11394_brandsafety_au_1%252Cpos_bbc_lexus_11394_brandsafety_au_2%252Cpos_bbc_lexus_11394_brandsafety_au_3%252Cpos_bbc_london_chaumet_aug21%252Cpos_bbc_london_creditsuisse_q1q4_22%252Cpos_bbc_london_samsung-pr_jun22%252Cpos_bbc_nam_citi_1_sep23%252Cpos_bbc_nam_delta_aug22%252Cpos_bbc_nam_delta_list2_aug22%252Cpos_bbc_nam_jpmorgan_queen_sept22%252Cpos_bbc_test_lois_2022%252Cpos_bbc_ukrainewar%252Cpos_huawei2020_china%252Cpos_huawei2020_negative%252Cpos_isreal_conflict%252Cpos_princess_latifa_feb_2021%252Cgs_politics%252Cgs_predicts_rugby_world_cup%252Cgs_health%252Cgs_predicts_supersilvers_srinterests%252Cgs_predicts_supersilvers%252Cgs_predicts_worldcup%252Cgs_entertain%252Cgs_genres%252Cgs_sport%252Cgt_negative%252Cgs_health_misc%252Cpr_bbc_womenshistory%252Cgs_predicts_mlb%252Cgs_entertain_tv%252Cgs_popculture%252Cmh_brexit_blacklist%252Cshadow9hu7_pos_brexit%252Cgs_busfin%252Cshadow9hu7_pos_bbc_jpm_2024%252Cgs_entertain_radio%252Cgs_shopping%252Cpr_fathers_day%252Cgs_science%252Cgs_politics_british%252Cgs_popculture_celeb%252Cgs_society%252Cgs_genres_talkradio%252Cgs_sport_soccer%252Cpr_bbc_womensworldcup%252Cshadow9hu7_pos_turkyie_tourism_brand_safety_turkish_election%252Cgs_entertain_celeb%252Cmh_apple2019au_blacklist_3%252Cshadow9hu7_pos_bbc_london_facebook_july21%252Cpr_royals%252Cgs_auto%252Ctoyota-contextual-targeting-segment-2023%252Cgs_politics_issues_policy%252Cgs_politics_misc%252Cneg_toyotablacklist%252Cshadow9hu7_pos_bbc_israelconflict%252Cneg_sianegativelist%252Cgs_fooddrink%252Cgs_shopping_lottery%252Cneg_sianegativelist_5%252Cmh_mobkoi2019_blacklist%252Cgs_science_geography%252Cgs_travel%252Cpr_easter_holidays%252Cgt_negative_dislike%252Cgs_food%252Cshadow9hu7_pos_huawei2020_ustrump%252Cpr_basf_pollution_segment%252Cshadow9hu7_pos_bbc_nam_citi_2_sep23%252Cmh_sabic_blacklist%252Cgs_politics_elections%252Cgs_busfin_indus%26fed_id%3D3c0a2568e291c7b43175b08216c3de99ec669bdce88eb294ef161ee16a8a50b2c7323efe1bff249694948996e4507776%26permutive%3D%26fr%3Dfalse%26adt%3DveryLow%26alc%3DveryLow%26dlm%3DveryLow%26drg%3DveryLow%26hat%3DveryLow%26off%3DveryLow%26vio%3Dlow&adks=3127563391%2C1617736379&frm=20&eoidce=1",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "test_cookie",
+                        "domain": ".doubleclick.net",
+                        "path": "/",
+                        "value": "CheckForPermission",
+                        "sameSite": "none",
+                        "expires": "2024-06-03T08:31:36.000Z",
+                        "httpOnly": true,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "70964.247": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://api.permutive.com/ctx/v1/segment?k=1bb84885-9325-4fef-adda-a208032b2715",
+            "cookies": []
+        },
+        "930634015997322860FCBA04D8BDC459": {
+            "frameId": "25039EBD08F190B1EAB2DE3780F606C2",
+            "serverUrl": "https://3851d7ec48a0dd8b16e3cb6c4df17969.safeframe.googlesyndication.com/safeframe/1-0-40/html/container.html",
+            "cookies": []
+        },
+        "70964.263": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://prebid.the-ozone-project.com/hw2/OZONEBBC4784/1500000107/current/ozpb.min.js",
+            "cookies": []
+        },
+        "70964.262": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://api.permutive.com/v2.0/identify?k=1bb84885-9325-4fef-adda-a208032b2715",
+            "cookies": []
+        },
+        "70964.265": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://prebid.the-ozone-project.com/hw2/OZONEBBC4784/1500000107/current/adUnits.min.js",
+            "cookies": []
+        },
+        "70964.266": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://prebid.the-ozone-project.com/hw2/OZONEBBC4784/1500000107/current/customized_plugin.js",
+            "cookies": []
+        },
+        "70964.267": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://prebid.the-ozone-project.com/hw2/builds/ozwrap_pbjs.js",
+            "cookies": []
+        },
+        "70964.264": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://scripts.webcontentassessor.com/scripts/64ca3dfd44dd68a629e2e51a27e7ccd960974b5961e4ca2897139d14bf10be8b",
+            "cookies": []
+        },
+        "70964.272": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://www.bbc.com/bbcx/favicon.ico",
+            "cookies": []
+        },
+        "70964.270": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pagead2.googlesyndication.com/getconfig/sodar?sv=200&tid=gpt&tv=m202405230101&st=env",
+            "cookies": []
+        },
+        "70964.154": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/7818/live/e41faa60-1fef-11ef-aba2-bd3bf3c803fc.jpg.webp",
+            "cookies": []
+        },
+        "70964.162": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/2b1e/live/f690d340-1fdb-11ef-ad22-291dce586b50.jpg.webp",
+            "cookies": []
+        },
+        "70964.284": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pub.doubleverify.com/dvtag/signals/vlp/pub.json?ctx=29028254&cmp=DV1298722&url=https%3A%2F%2Fbbc.com&vlp=1&tvp=1&slot-0-%2F4817%2Fbbccom%2Fhome%2Fhome%2Findex%2Fmid=970x250%2C970x90%2C728x90%2C300x250%2C300x253%2C10x10&token=Y8KfC94q7cTFkrIOOC6vA1awp%2BdKgBupgxluJbI3Etaf%2Bm32JFnaWixgTmR2yinrJt6OdKY%2Bz5oD4NLtVmf7g0X1oPaRrei6JJmMDYqXLn%2B26GMTnPYeswY3UvZy%2FVlTci5Xu9n8zXn%2FdozTFkLb8J8KnThGCKA%3D",
+            "cookies": []
+        },
+        "70964.161": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0j0smvf.jpg.webp",
+            "cookies": []
+        },
+        "70964.271": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pagead2.googlesyndication.com/pagead/gen_204?id=ama_stats&su=www.bbc.com&doc=complete&pg_h=8755&pg_w=1440&pg_hs=8755&c=0&aa_c=0&d=0&all_d=0&ard=0&all_ard=0&dt=d",
+            "cookies": []
+        },
+        "70964.285": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.286": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.287": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.288": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.164": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0j10hv0.jpg.webp",
+            "cookies": []
+        },
+        "70964.289": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://a1.api.bbc.co.uk/event?s=637014&idclient=lwyp5vg7ktfih2dq",
+            "cookies": []
+        },
+        "70964.163": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0hxx46p.jpg.webp",
+            "cookies": []
+        },
+        "70964.293": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pixel.adsafeprotected.com/services/pub?anId=9708&slot=%7Bid:dotcom-slot-mid_5,ss:%5B970.250,970.90,728.90,300.250,300.253,10.10%5D,p:/4817/bbccom/home/home/index/mid,t:display%7D&wr=1440.790&sr=1680.1050&sessionId=7b9107e1-7f52-eff8-0a70-39f5dc821aa5&url=https%253A%252F%252Fwww.bbc.com%252F",
+            "cookies": []
+        },
+        "70964.155": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/a202/live/d4364830-1fdf-11ef-baa7-25d483663b8e.png.webp",
+            "cookies": []
+        },
+        "70964.156": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0j1j59m.jpg.webp",
+            "cookies": []
+        },
+        "70964.157": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/news/1536/cpsprodpb/baa3/live/292ee320-1ce2-11ef-a36a-771f5fdb8b8a.jpg.webp",
+            "cookies": []
+        },
+        "70964.158": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0h74xp9.jpg.webp",
+            "cookies": []
+        },
+        "AEAA979C0B72DB4805740DE2F0D43FDA": {
+            "frameId": "CC14497699378A953A9E278B014FFB51",
+            "serverUrl": "https://edigitalsurvey.com/l.php?id=INS-vt29-666188954&v=7291&x=1680&y=1050&d=30&c=null&ck=1&p=%2F&fu=https%3A%2F%2Fwww.bbc.com%2F&xdm=edr&xdm_o=https%3A%2F%2Fwww.bbc.com&xdm_c=edr0",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "AWSALB",
+                        "domain": "",
+                        "path": "/",
+                        "value": "iXGpVhzGCvzRYbelHMIUd8NeWTzfAzk0EC/Tepu5wTjOCWfmvlQzFNCn4WJ5sPXa7kttJekeuBmIq/gY+WJn0PAkrdrs4dmZtkjUEvweoHjJMdnH1vO53ohFy9AM",
+                        "sameSite": "Lax",
+                        "expires": "2024-06-10T08:16:37.000Z",
+                        "httpOnly": false,
+                        "secure": false
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "UserPreferences"
+                    ]
+                },
+                {
+                    "parsedCookie": {
+                        "name": "AWSALBCORS",
+                        "domain": "",
+                        "path": "/",
+                        "value": "iXGpVhzGCvzRYbelHMIUd8NeWTzfAzk0EC/Tepu5wTjOCWfmvlQzFNCn4WJ5sPXa7kttJekeuBmIq/gY+WJn0PAkrdrs4dmZtkjUEvweoHjJMdnH1vO53ohFy9AM",
+                        "sameSite": "None",
+                        "expires": "2024-06-10T08:16:37.000Z",
+                        "httpOnly": false,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "70964.159": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0h74xqg.jpg.webp",
+            "cookies": []
+        },
+        "70964.294": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://api.permutive.com/v2.0/batch/events?enrich=false&sdkp=true&k=1bb84885-9325-4fef-adda-a208032b2715",
+            "cookies": []
+        },
+        "70964.290": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://tpc.googlesyndication.com/sodar/sodar2.js",
+            "cookies": []
+        },
+        "70964.160": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://ichef.bbci.co.uk/images/ic/1920x1080/p0hh6r6r.jpg.webp",
+            "cookies": []
+        },
+        "70964.296": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://csi.gstatic.com/csi?v=2&s=pagead&action=csi_pagead&dmc=8&top=1&puid=2~lwyp5x0v&c=1889935698304018&e=31079957%2C31083343%2C31084062%2C95331673%2C31061691%2C31061693%2C31078663%2C31078665%2C31078668%2C31078670&ctx=1&met.7=CBsQBiDMITizAcAB1LuSpgw~~CBwQBhgBILohKLohMPojOL8CaLshcNwjeKwCsAEBuAEDwAGUhOK1Dg~CBsQDSDhITjCAsAB5NDH2gY~CBsQDSDuITi5AsAB5NDH2gY~CBsQDSDvITjLAsAB5NDH2gY~CBsQDSDwITjPAsAB5NDH2gY~CBsQBiDMITiRA8ABqd2B3wU~CBsQDSCwIjjNAsAB5NDH2gY~CBsQBiDMITj8BcAB5cOXqQ0~CBsQDSDKJTikAsAB__Hq5go~CBsQBiDMITjFBsABgNmHjQk~CBsQBiDMITjiBsAB8PC5kww~CBsQBSC2ITiqCMAB7textwU~CBsQBiDMITijCMAB64W1tAI&met.3=49.3h2~49.3h2~49.3h2~947.3hp~86.3hp~947.3hp~38.3hp~1.3hp~76.3hp~581.3pm~598.3pm~54.3pm~76.3pm_1~947.3pm~573.3pm~598.3pm~598.3pm~598.3pm~947.3pm~38.3pm~51.3pm~947.3pm~38.3pm~51.3pm~947.3pm~38.3pm~51.3pm~49.3pn~947.3xr~1.3xr~1.3xr~1.3xr~1.3xr~1.3xr~1.3xr~1.3xr~1.3xr~947.3xr~573.3xr~598.3xr~49.3xr~49.3xr~49.3xr~49.3xr~598.3xr~598.3xr~49.3xr~49.3xr~49.3xr~947.3xr~76.3xr~598.3xr~947.3xr~573.3xr~598.3xr~598.3xr~598.3xr~598.3xr~598.3xr~598.3xr~947.3xr~573.3xr~598.3xr~598.3xr~598.3xr~583.3xr~598.3xs~947.3xs~39.3xs~947.3xs~39.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xs~38.3xs~947.3xt~39.3xt~947.3xt~39.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt~947.3xt~38.3xt",
+            "cookies": []
+        },
+        "70964.291": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://csi.gstatic.com/csi?v=2&s=pagead&action=csi_pagead&dmc=8&top=1&puid=1~lwyp5vec&c=1889935698304018&e=31079957%2C31083343%2C31084062%2C95331673%2C31061691%2C31061693%2C31078663%2C31078665%2C31078668%2C31078670&ctx=1&met.9=1.1c4~2.1lg~9.0~3_5.2js~7_5.0~7_6.0~4_5.2sl~5_5.2sq~5_6.2sr&met.3=947.1lo~904.1lo~947.1lo~904.1lo~76.1lo~77.1lo~1063.1lq~947.1s9~6.1s9~14.1s9~5.1s9~76.1s9~947.1s9~86.1s9~947.1s9~86.1s9~947.1s9~86.1s9~947.1s9~86.1s9~76.1s9~947.1s9~20.1s9~76.1s9~947.1s9~4.1s9~76.1s9~112.1sp_1~947.1ut~86.1ut~947.1ut~86.1ut~76.1ut~947.25p~86.25q~86.25q~86.25q~86.25q~86.25q~86.25q~86.25q~86.25q~86.25q~573.25q~947.263~1.263~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~947.264~1.264~76.263_1~947.264~1.264~947.264~1.264~76.264~947.265~1.265~76.265~947.265~1.265~76.265~947.265~38.265~947.266~1.266~76.265~73.267_2~947.268~43.268~49.269~49.269~76.267_3~947.269~573.269~598.269~54.26a~581.26a~51.26a~49.26a~49.26a~947.26a~38.26a~51.26a~74.26a~947.26b~43.26b~49.26b~49.26b~76.26a~947.26b~573.26b~598.26b~598.26b~54.26b~581.26b~51.26b~49.26b~49.26b~947.26b~38.26b~51.26b~947.26b~38.26b~51.26b~947.26b~86.26b~76.26b~91.26c~76.26c~581.26d~598.26d~54.26d~76.26c_1~947.26e~573.26e~598.26e~598.26e~947.26e~38.26e~51.26e~947.26e~38.26e~51.26e~724.26e~724.26e_1~724.26f~724.26f~1187.26f~660.26f~1173.26h_1~947.273~573.273~355.273~355.273~86.273~76.273~947.27z~38.27z~1.27z~76.27z~947.27z~573.27z~355.27z~355.27z~947.27z~86.27z~947.27z~86.27z~76.27z~76.27z~49.29c~49.29c~49.29c~49.29c~49.2a9~49.2a9~49.2a9~49.2a9~49.2ac~49.2ac~49.2ac~49.2ac~49.2ac~49.2ac~947.2je~1.2je~1.2je~1.2je~1.2je~1.2je~1.2je~1.2je~1.2je~947.2je~573.2je~598.2je~49.2je~49.2je~49.2je~49.2je~598.2je~947.2je~76.2je~598.2je~95.2je_1~76.2je_1~598.2jf~95.2jf~76.2jf~947.2jf~11.2jf_1~76.2jf_1~725.2jg~725.2jg~1187.2jh~660.2jh~1232.2jp~1132.2jn_5~808.2jt~808.2jt~598.2jt~705.2jt~598.2jt~705.2jt~38.2jt~705.2jt~808.2jt~808.2jt~598.2jt~705.2jt~598.2jt~705.2jt~38.2jt~705.2jt~646.2sl_1~646.2sm_1~800.2sn~800.2sn~800.2sn~800.2sn~800.2sn~800.2so~800.2so~800.2so~800.2so~800.2so~598.2so~709.2so_1~598.2sp~709.2sp~598.2sp~709.2sp~598.2sp~709.2sp~801.2sr~801.2sr~825.2sr~355.2sr~825.2sr~801.2sr~801.2sr~825.2sr~355.2sr~825.2sr~598.2sr~708.2sr~708.2ss~598.2ss~708.2ss~708.2ss~54.2ss~598.2ss~598.2ss~708.2ss~598.2ss~708.2ss~708.2ss~598.2ss~708.2ss~708.2ss~54.2ss~598.2ss~598.2ss~708.2ss~647.2t2~965.2t2~947.2xo~38.2xo~947.2xo~1.2xo~76.2xo~76.30c~947.30x~1.30x~76.30x~947.30y~86.30y~947.30y~38.30y~1.30y~76.30y~947.30y~1.30y~947.30y~1.30y~947.30y~1.30y~947.30y~1.30y~76.30y~947.31o~86.31o~947.31o~38.31o~1.31o~76.31o~947.337~573.337~355.337~355.337~947.337~86.337~947.337~38.337~1.338~76.337~947.3am~86.3am~947.3am~86.3am~94.3ao~947.3ax~573.3ax~598.3ax~598.3ax~113.3aw_3~74.3bi~947.3bi~43.3bi~49.3bi~49.3bi~49.3bi~76.3bi~947.3bj~573.3bj~598.3bj~598.3bj~598.3bj~54.3bj~581.3bj~51.3bj~49.3bj~49.3bj~49.3bj~49.3bj~49.3bj~947.3bj~38.3bj~51.3bj~947.3bj~38.3bj~51.3bj~947.3bj~38.3bj~51.3bj~724.3bj~49.3bk~49.3bk&met.7=CBsQCMABiIex4w4~CBsQByDABDhBwAG93NHTDA~CBsQCiDABDi5BMABwtyL4A0~CBsQCiDABDjKAsABic-B5QM~CBsQCiDABDizBcAB2a6T7Ag~CBsQCiDABDivBcABq5a7rQg~CBsQCiDABDhhwAHnmdGLCg~CBsQCiDABDhxwAH9guzBBg~CBsQCiDABDjgAcAB-YyogQw~CBsQCiDABDiIAsAB48yc2A4~CBsQCiDABDiSAsABwq_O2Qs~CBsQCiDBBDjYAcABkviK3Qs~CBsQCiDBBDjYAcAB1_eMsws~CBsQCiDBBDjYAcAByYn9mQ4~CBsQCiDBBDjYAcABnbLHvg0~CBsQBiDSBDiSAcABwKKfrQg~CBsQBiDTBDikBcABn43O7g0~CBsQAiCGBTibBsAB-OTZtAQ~CBsQAiCHBTinB8ABstzt7Ak~CBsQAiCHBTiMCMABpeWBqAQ~CBsQAiCHBTjgCsABwJPkugM~CBsQAiCHBTikCcABzeDnvwY~CBsQAiCHBTiNCsABoI3gkwo~CBsQAiCIBTjlCMAB5cbxGg~CBsQBiCZBTi0BcABm5C14QE~CBsQBiCZBTjYBcABssvC5wc~CBsQBiCZBTjHB8AB_-Lfgw8~CBsQBiCaBTiPB8AB9_Tl0QU~CBsQBiCaBTjqB8ABoNXIiwU~CBsQBiCaBTjrB8ABytqB5g4~CBsQBiCaBTjzB8ABmZeU4Q4~CBsQBiCaBTiKCMABxtaf1wc~CBsQBiCaBTigCMABy_yhoAU~CBsQCiCuBzhVwAHbr4q-DA~CBsQCiCvBzhjwAHQ4e6eCQ~CBsQCiDOBzjmAsABl4__vAY~CBsQCiDWBzjqBcABqcDR7QY~CBsQCiC_CDjzA8ABvNWopwQ~CDsQChgBIL8IKL8IMLMNOPQEQMEISNUJUNUJWIgLYNUJaIgLcMsMeLLtAYABhusBiAHa5wWwAQG4AQPAAeLN6pYJ~CBsQCiDFCDjtBMAButyYuwI~CBsQBSCHCjizBcAB4JqHvwQ~CBsQCiC8DTh-wAHm67KbAw~CBsQCiC8DTinAcABsuO-hAM~CBsQDSC8DTjMAsABi9v8-wQ~CEMQChgBIMQNKMQNMIkQOMQCaMUNcJkOeMjrCIABnOkIiAH2oxywAQG4AQPAAZrggfoL~CBsQByC7DzijAcABvsy_IQ~CBsQDSCJEDhOwAHYlMyiCA~CBkQChgBIJ0QKJ0QMJYSOPkBUJ4QWKARYJ4QaKARcOYReO-_AYABw70BiAH6_gOwAQG4AQPAAZTdwNgF~CBsQDSDYEDhHwAGhwMyoDw~CBsQCiCmEThdwAGF1b3fDw~CBsQCiDjCTjTCMAB2fPtqQI~CBsQBiC-CjikCMABvqvK5gU~CBsQCiCmETi6AcAB8bm_rQ8~CBsQBiCjETjbAcAB1L6f5wc~CBsQCiCKEjh3wAH0o-jQBw~CBsQCiClETjlAcAB1P-_mAs~CBsQBiCjETjIAsABjYmWeg~CAEQBBgBIOYSKOYSMJUVOK8CaOYScNMTePqXA4ABzpUDiAHp2gmwAQG4AQPAAd6Ov5sB~CBsQCiCMEjilA8ABzbfC1ws~~CBsQDSCoETicBMAB3N_41QI~CBsQCiClETjABMABrN6u-ww~CBsQDSCpETi-BMAB3N_41QI~CBsQCiClETjABMABq4HG2gY~CBsQDSDxETikBMABgtujTA~~CBsQCiCDEzi2A8AB_ev2nAE~CBsQDSDnEjj9A8AB5NDH2gY~CBsQDSDqEjj7A8AB5NDH2gY~CBsQDSDyEjj9A8AB5NDH2gY~~CBsQDSDvEjiKBMAB5NDH2gY~CBsQDSDwEjiJBMAB5NDH2gY~CBsQDSDrEjiPBMAB5NDH2gY~CBsQDSDsEjiNBMAB5NDH2gY~CBsQCiCDEzj5A8ABmJWFkQI~CBsQDSDgEjimBMAB84CouQg~~CBsQDSDhEjiyBMABv4iUpwI~~CBsQDSDpEji5BMAB5NDH2gY~~~CBsQCiChFjjrAcAB7cu-yg4~~CCgQBRgBIIoWKIoWMK4ZOKQDwAGktPXBDA~CBsQDSCtFjilA8ABsYWOlwE~CBsQDSCFFjjUA8AB__Hq5go~CBsQBiD9FjipA8AB1di0_Q8~CBsQDSCsFjiDBcABtNOgwQQ~CA8QBBgBIOkZKOkZMLYcOM0CaOkZcKMceNYFgAGqA4gBqAywAQG4AQPAAb_emusG~~CBsQCiCoHDiRAsAB8ounog8~CBsQBRgBIOsZKOsZMLoeOM8EUI8cWMEdYMAcaMIdcJ8eeIkXgAHdFIgBkjCwAQG4AQPAAZHtu5sP~CBsQDSCxGziaA8ABvLmmvA0~CBsQCiC8Hjg_wAH0l8WtBw~CBsQCiC8HjhAwAHQ0JKzAg~CBsQCiC9Hji4AsABo-bK3w4~CBsQCiCpHDjqBMABn8vo7QQ~CBsQCDixIcABiIex4w4~CBsgviE4Q8ABmYv8nQk~CCcQDRgBILEhKLEhMMgiOJgBaLEhcK4ieKVmgAH5Y4gBvoQBsAEBuAEDwAHz8suuCw~CBsQBiDMITiHAcABrr3f6Ao&met.10=1_2.CAAQABjAt0UgjBYoAA~1_1.CAAQABjAt0UgjBYoAA~1_1.CAAQABgAINwZKAA~1_2.CAAQABgAINwZKAA~1_5.CAAQABjAt0Ug7BkoAA~1_6.CAAQABjAt0Ug7BkoAA~1_7.CAAQABjAt0Ug7SEoAA&met.1=1.lwyp5tln~6.7g~7.ao~8.ao~9.ao~10.e3~11.c6~12.e4~13.fq~14.hs~15.ft~16.hv~17.ot~18.ot~19.3an~20.3ao~21.3ap~22.jk~23.jk&qqid.1=CK2PwJ3_voYDFSKUrAIdC1oLfg&qqid.2=CK6PwJ3_voYDFSKUrAIdC1oLfg",
+            "cookies": []
+        },
+        "70964.295": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://elb.the-ozone-project.com/openrtb2/auction",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "__cf_bm",
+                        "domain": ".the-ozone-project.com",
+                        "path": "/",
+                        "value": "ZeYu2qCYh7sy4jpuuteFkZD8ItFrFuiqYBIKBxn.uRA-1717402598-1.0.1.1-FU3nTYHQFzNZdKULytuMh8ga21OTw.viPJxC8MzJgFaxQprVem7aB0meYuqZfdNnB1d9apP.AXc6fUzkPOrKQA",
+                        "sameSite": "None",
+                        "expires": "2024-06-03T08:46:38.000Z",
+                        "httpOnly": true,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "84B38BDBEF366B9E9BD3CC6165C7488C": {
+            "frameId": "6B1F9DB58C87A1F34714C85623B8D308",
+            "serverUrl": "https://www.google.com/recaptcha/api2/aframe",
+            "cookies": []
+        },
+        "78D37FC68AEE8EF68C1A91D1DA7F455E": {
+            "frameId": "55E8438A5FEE149006F316B5522E99EC",
+            "serverUrl": "https://tpc.googlesyndication.com/sodar/sodar2/225/runner.html",
+            "cookies": []
+        },
+        "70964.297": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://securepubads.g.doubleclick.net/gampad/ads?pvsid=1889935698304018&correlator=4071537154268255&eid=31079957%2C31083343%2C31084062%2C95331673%2C31079527%2C31061691%2C31061693%2C31078663%2C31078665%2C31078668%2C31078670&output=ldjh&gdfp_req=1&vrg=202405230101&ptt=17&impl=fifs&gdpr=0&us_privacy=1YNN&gpp=DBABLA~BVQqAAAAAgA.QA&gpp_sid=7&iu_parts=4817%2Cbbccom%2Chome%2Cindex%2Cmid&enc_prev_ius=%2F0%2F1%2F2%2F2%2F3%2F4&prev_iu_szs=970x250%7C970x90%7C728x90%7C300x250%7C300x253%7C10x10&ifi=3&sfv=1-0-40&eri=1&sc=1&cookie=ID%3D67214edb2b180186%3AT%3D1717402596%3ART%3D1717402596%3AS%3DALNI_Ma24fxe47VWSRRJuI9Nn3fMfwGmBQ&gpic=UID%3D00000e4001612e9a%3AT%3D1717402596%3ART%3D1717402596%3AS%3DALNI_MaM-J2IttvfWq9aEalRAjn8ch-6Uw&abxe=1&dt=1717402598584&lmt=1717402598&adxs=-12245933&adys=-12245933&biw=1440&bih=790&scr_x=0&scr_y=7965&btvi=-1&ucis=3&oid=2&u_his=2&u_h=1050&u_w=1680&u_ah=1050&u_aw=1680&u_cd=30&u_sd=1&u_tz=330&dmc=8&bc=31&nvt=1&uach=WyIiLCIiLCIiLCIiLCIiLG51bGwsMCxudWxsLCIiLG51bGwsMF0.&uas=3&url=https%3A%2F%2Fwww.bbc.com%2F&rumc=1889935698304018&rume=1&vis=1&psz=0x0&msz=0x0&fws=128&ohw=0&psts=AOrYGslXqzWxZnMwa10HhsoG5C0a%2CAOrYGslXqzWxZnMwa10HhsoG5C0a&ga_vid=398561865.1717402596&ga_sid=1717402596&ga_hid=1486593298&ga_fc=false&td=1&topics=3&tps=3&htps=10&nt=1&psd=WzE1LFtdLG51bGwsMV0.&dlt=1717402593364&idt=1499&ppid=cba99f141fe94a76b66789200a17d7f7&prev_scp=slot%3Dmid_5%26pos%3Dmid%26rec_ord%3D5%26pts_pid%3Dc4950126-2023-40d2-afed-4d5a9833a7e5%26BSC%3D84121001%26qt_loaded%3Dvlp%2Ctvp%2Cabs%2Cbsc%2Cids%26IDS%3D0%26pts_sid%3De8a413ec-954c-4673-881b-c6e8d13b1f21%26VLP%3D3%2C10x10_1%2C300x250_3%2C300x251_2%2C300x253_4%2C300x600_3%2C301x250_2%2C301x251_3%2C301x600_2%2C302x252_2%2C302x602_2%2C320x600_1%2C600x155_3%2C728x87_3%2C728x90_4%2C728x91_3%2C728x92_3%2C729x90_3%2C730x92_3%2C970x250_3%2C971x250_3%2C972x252_3%26TVP%3D8-13%2C10x10_5-8%2C300x250_5-8%2C300x251_5-8%2C300x253_5-8%2C300x600_3-5%2C301x250_8-13%2C301x251_5-8%2C301x600_3-5%2C302x252_5-8%2C302x602_3-5%2C320x600_1-2%2C600x155_8-13%2C728x87_8-13%2C728x90_8-13%2C728x91_8-13%2C728x92_8-13%2C729x90_8-13%2C730x92_8-13%2C970x250_8-13%2C971x250_8-13%2C972x252_8-13%26id%3D99457afa-2181-11ef-b677-062f4b44bbed%26vw%3D40%2C50%2C60%26grm%3D40%2C50%2C60%26testgroup%3D55&cust_params=page_id%3D%26grp%3D5%26pas_tags%3D%26top_tags%3D%26fran_tags%3D%26prod%3Dbbccom%26ref_pillar%3D%26coll%3D%26destination%3D%26pillar%3Dhome%26sect%3Dhome%26page_type%3Dindex%26leg_v_col%3D%26leg_t_dest%3D%26leg_n_keyword%3D%26leg_n_topic%3D%26leg_adunit2%3D%252F4817%252Fbbccom.test.site.flash%252Fbbc_homepage_int%26domain%3Dwww.bbc.com%26referrer%3Dnonbbc%26group%3D5%26gs_cat%3Dgv_safe%252Cgb_safe%252Cgb_safe_from_high%252Cgb_safe_from_high_med%252Cgv_safe_adult%252Cgv_safe_arms%252Cgv_safe_crime%252Cgv_safe_death_injury%252Cgv_safe_download%252Cgv_safe_drugs%252Cgv_safe_hatespeech%252Cgv_safe_military%252Cgv_safe_obscenity%252Cgv_safe_terrorism%252Cgv_safe_tobacco%252Cpos_apac_shaanxi2020_china%252Cpos_bbc_apac_macquariebank_brandsafety_au%252Cpos_bbc_apac_qantas22_v2%252Cpos_bbc_apac_qantas_2022%252Cpos_bbc_ceema_cisco_jul21%252Cpos_bbc_emea_ubs_jan24%252Cpos_bbc_jpm_list2_2024%252Cpos_bbc_lexus_11394_brandsafety_au_1%252Cpos_bbc_lexus_11394_brandsafety_au_2%252Cpos_bbc_lexus_11394_brandsafety_au_3%252Cpos_bbc_london_chaumet_aug21%252Cpos_bbc_london_creditsuisse_q1q4_22%252Cpos_bbc_london_samsung-pr_jun22%252Cpos_bbc_nam_citi_1_sep23%252Cpos_bbc_nam_delta_aug22%252Cpos_bbc_nam_delta_list2_aug22%252Cpos_bbc_nam_jpmorgan_queen_sept22%252Cpos_bbc_test_lois_2022%252Cpos_bbc_ukrainewar%252Cpos_huawei2020_china%252Cpos_huawei2020_negative%252Cpos_isreal_conflict%252Cpos_princess_latifa_feb_2021%252Cgs_politics%252Cgs_predicts_rugby_world_cup%252Cgs_health%252Cgs_predicts_supersilvers_srinterests%252Cgs_predicts_supersilvers%252Cgs_predicts_worldcup%252Cgs_entertain%252Cgs_genres%252Cgs_sport%252Cgt_negative%252Cgs_health_misc%252Cpr_bbc_womenshistory%252Cgs_predicts_mlb%252Cgs_entertain_tv%252Cgs_popculture%252Cmh_brexit_blacklist%252Cshadow9hu7_pos_brexit%252Cgs_busfin%252Cshadow9hu7_pos_bbc_jpm_2024%252Cgs_entertain_radio%252Cgs_shopping%252Cpr_fathers_day%252Cgs_science%252Cgs_politics_british%252Cgs_popculture_celeb%252Cgs_society%252Cgs_genres_talkradio%252Cgs_sport_soccer%252Cpr_bbc_womensworldcup%252Cshadow9hu7_pos_turkyie_tourism_brand_safety_turkish_election%252Cgs_entertain_celeb%252Cmh_apple2019au_blacklist_3%252Cshadow9hu7_pos_bbc_london_facebook_july21%252Cpr_royals%252Cgs_auto%252Ctoyota-contextual-targeting-segment-2023%252Cgs_politics_issues_policy%252Cgs_politics_misc%252Cneg_toyotablacklist%252Cshadow9hu7_pos_bbc_israelconflict%252Cneg_sianegativelist%252Cgs_fooddrink%252Cgs_shopping_lottery%252Cneg_sianegativelist_5%252Cmh_mobkoi2019_blacklist%252Cgs_science_geography%252Cgs_travel%252Cpr_easter_holidays%252Cgt_negative_dislike%252Cgs_food%252Cshadow9hu7_pos_huawei2020_ustrump%252Cpr_basf_pollution_segment%252Cshadow9hu7_pos_bbc_nam_citi_2_sep23%252Cmh_sabic_blacklist%252Cgs_politics_elections%252Cgs_busfin_indus%26fed_id%3D3c0a2568e291c7b43175b08216c3de99ec669bdce88eb294ef161ee16a8a50b2c7323efe1bff249694948996e4507776%26permutive%3D100580%252C39204%252C68016%252C85882%252Cadv%252Crts%26fr%3Dfalse%26adt%3DveryLow%26alc%3DveryLow%26dlm%3DveryLow%26drg%3DveryLow%26hat%3DveryLow%26off%3DveryLow%26vio%3Dlow%26prmtvctx%3Dbkoj%252Crts%26prmtvsdk%3Dweb%26puid%3D540f9c47-60eb-4a1c-a659-d2dcd94ff688%26prmtvvid%3D8e3ab6aa-9dc2-4f7a-8940-69d532000708%26prmtvsid%3D6c59236a-38c5-4db7-a42d-1a37d2bd8427%26prmtvwid%3De488cdb0-e7cb-4d91-9648-60d437d8e491&adks=3834899393&frm=20&eo_id_str=ID%3Dc278cfde72d63df8%3AT%3D1717402596%3ART%3D1717402596%3AS%3DAA-AfjbArlpz4Gc3W4hKZjHow838",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "test_cookie",
+                        "domain": ".doubleclick.net",
+                        "path": "/",
+                        "value": "CheckForPermission",
+                        "sameSite": "none",
+                        "expires": "2024-06-03T08:31:38.000Z",
+                        "httpOnly": true,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "70964.301": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://pagead2.googlesyndication.com/pagead/managed/js/activeview/current/ufs_web_display.js",
+            "cookies": []
+        },
+        "70964.300": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://tpc.googlesyndication.com/pagead/js/r20240529/r20110914/client/window_focus_fy2021.js",
+            "cookies": []
+        },
+        "70964.298": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://scripts.webcontentassessor.com/scripts/727d9b43a076aa925788e8b215b1d39a710cbe7ace5268ab65490af6db50168b",
+            "cookies": []
+        },
+        "70964.299": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://tpc.googlesyndication.com/simgad/11091305278669055198",
+            "cookies": []
+        },
+        "70964.315": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAWBAMAAACrl3iAAAAABlBMVEUAAAD+AciWmZzWAAAAAnRSTlMAApidrBQAAAB/SURBVBjTbZELDsAgCEPrDbj/aae05ZPMbHxihScC/+twpe8MiNy1tU8dJOzsKYKq6yrrff6t7tqdFQlUWSRe8YoObpgErArZbE2jgCQkyEAso38hhUhghSg2idu8b5IeN1i3pJ5yT2EcWBNM7yuMebsP1usEj3E6Y4LwZW/wAckwBYC6YKzwAAAAAElFTkSuQmCC",
+            "cookies": []
+        },
+        "70964.308": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://securepubads.g.doubleclick.net/pcs/view?xai=AKAOjsuvNFsanuRsVyb3Iszy3A5OA3n05518Me-vVqLBZwsWY1AaSESCT6mYShQHZsabOpGyA4oZ1_Wm-o8ZSYWZ0f90MUbx9noztRdjYJ0iXzk9gp_pCJCaLzK2stQe7GkarGjnR7PZTvsrMICa3EhvqQFRyEC4HynHma7irzKXrR1wVfUCZCWPTjHO_7G8Q4TqR27GrhTX8k34D21ciwzJMyMrAzwMnIWUQmYfENvKk-rXqxlCIQSFvHtDbVgWFTWADBBk7zg-lqDxZBDm3WF2OZRitcGJQGuQMpdDbZD5TlWFt5G5jVOpfP6vy3zEKtGYyPKjUEhKgwQ-C7L5p08WiR-9SU6642y6F-QFQcaR0r1zJTBz0y7bQIE9ww8kLqOhoXvqIb59ized&sai=AMfl-YSvc_5Ea4kJOo53vbc9LsEYNrtdeYD8_CI9Geo0-Z52llsbL8I8fXesVyT8BUl_Tc5gbtLwcJLH30pnEKAXDm4i2a4uHvPyY-3vo0kN3YUmTYvSULY5t-JgL49ss7AGK-dyhJVYET1KShAD8_rNWMePT2lXBO6hxePDKfscMoYdW9z9ZZlglhHz4fLcIyTVEB5UwUWRfb8zxdtpaicoqbFmtzc6vTyP1nQF5aaxjaxr&sig=Cg0ArKJSzE47ehwKLjWLEAE&uach_m=%5BUACH%5D&adurl=",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "test_cookie",
+                        "domain": ".doubleclick.net",
+                        "path": "/",
+                        "value": "CheckForPermission",
+                        "sameSite": "none",
+                        "expires": "2024-06-03T08:31:39.000Z",
+                        "httpOnly": true,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "70964.302": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://cdn.doubleverify.com/dvtp_src.js",
+            "cookies": []
+        },
+        "70964.312": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://pagead2.googlesyndication.com/pagead/gen_204?id=av-js&type=fle-fetch-start",
+            "cookies": []
+        },
+        "70964.316": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://pagead2.googlesyndication.com/pagead/gen_204?id=av-js&type=reach&proto=CAlgAWACaAM%3D",
+            "cookies": []
+        },
+        "70964.318": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://securepubads.g.doubleclick.net/pcs/view?xai=AKAOjssyvfalTpVvoyCf0PayKjGm51Dj4PaaSiZb1ZmVb4zzrLeoJrqzz6uaZGwLd_B_DTi4gsG34tPh7vH_T4pIMN2AIKTP9PylE7oo2WtiicrUqFdsO-75UX_JWxvqPdGf5W-mnyvJtaW3zGY2ZEVnvQdikFYkes7rfWyCpiVoRKkz4APFlma_q_xjp7JY2zgKpq_Wf0TpMizm4gYbb-zssEgVse5cZ_u4XfN21DOk0vbLLtfYWw0uRjgdNCKrJIOiayAOLyRpl-1uiSB66FDLge4BF3RLP7HzHI5ldxFolRjriSe0bGknhD-uHKyli9kibcD_Olr055RWc1tJ9kd73VkHeAKSkQWcVNTZZY7r5OympytP1pBgll33g-dZNvf0oGV-f3h9KD7DVkI&sai=AMfl-YTJ76Pmvw5aeJVbU3nznFgnArAJWFbArfn9MId2dDnepa6-b-gizFj9qpucBZdHO_5jLy8ZX3nTLKtu3dWrQwc_rzGnhonXMW0rtfWSs7wQWUEXKKVTLEa6jOkuhNBAvOluCBdAw-4O-5dv4fmqVIGDnYNe8UowIilf1-zpRQOEL-fDaimp2DFa1yXcM3kAhJTg6dQmUflf3E4DTLNze1prv9jzXyqvlr4a1b7brph_&sig=Cg0ArKJSzMKLz4187c6_EAE&uach_m=%5BUACH%5D&uach=WyIiLCIiLCIiLCIiLCIiLG51bGwsMCxudWxsLCIiLG51bGwsMF0%3D&adurl=",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "test_cookie",
+                        "domain": ".doubleclick.net",
+                        "path": "/",
+                        "value": "CheckForPermission",
+                        "sameSite": "none",
+                        "expires": "2024-06-03T08:31:40.000Z",
+                        "httpOnly": true,
+                        "secure": true
+                    },
+                    "isBlocked": false
+                }
+            ]
+        },
+        "70964.317": {
+            "frameId": "D3330CC2BDEF3D7D84D2C829BC29B400",
+            "serverUrl": "https://cdn.doubleverify.com/dv-measurements6174.js",
+            "cookies": []
+        },
+        "70964.313": {
+            "frameId": "F00030362027F8365A78C15AC439E6E1",
+            "serverUrl": "https://pixel.adsafeprotected.com/jload?anId=9708&campId=300x250&pubId=85043658&chanId=22958123766&placementId=6654004040&pubCreative=138465553594&pubOrder=3379061201&cb=369485822&custom=&custom2=home&custom3=mid&adsafe_par&impId=99457afa-2181-11ef-b677-062f4b44bbed",
+            "cookies": []
+        },
+        "70964.320": {
+            "frameId": "D3330CC2BDEF3D7D84D2C829BC29B400",
+            "serverUrl": "https://tps.doubleverify.com/visit.js?gdpr_consent=&flvr=0&ttmms=251&ttfrms=16&brid=97&bridua=3&bds=1&tstype=2&eparams=DC4FC%3Dl9EEADTbpTauTauHHH%5D334%5D4%40%3ETauU2%3F4r92%3A%3Fl9EEADTbpTauTauHHH%5D334%5D4%40%3ETar9EEADTbpTauTauHHH%5D334%5D4%40%3EU42%3FFC%3Dl9EEADTbpTauTauHHH%5D334%5D4%40%3ETau&srcurlD=0&aUrlD=0&ssl=https:&dfs=116&ddur=619&uid=1717402600162767&jsCallback=dvCallback_1717402600162733&dvtagver=6.1.src&navUa=Mozilla%2F5.0%20(Macintosh%3B%20Intel%20Mac%20OS%20X%2010_15_7)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F121.0.0.0%20Safari%2F537.36&htmlmsging=1&chro=1&hist=2&winh=790&winw=1440&wouh=981&wouw=1200&scah=1050&scaw=1680&jsver=6174&tgjsver=6174&lvvn=28&m1=15&refD=1&referrer=https%3A%2F%2Fwww.bbc.com%2F&fwc=0&fcl=1028&flt=0&fec=1822&fcifrms=8&brh=2&dvp_epl=178&noc=8&nav_pltfrm=MacIntel&ctx=29028254&cmp=DV1071260&btreg=6654004040138465553594&btadsrv=6654004040138465553594&adsrv=104&unit=300x250&seltag=1&sadv=85043658&ord=3379061201&litm=6654004040&scrt=138465553594&splc=/4817/bbccom/home/home/index/mid&adu=22958123766&spos=mid&c1=100580,39204,68016,85882,adv,rts&c3=5&c4=index&c6=5&gdpr=0&errorURL=https://tps.doubleverify.com/visit.jpg&mib=0&dvp_scripthash=1&t2te=0&dvp_qtpid=c4950126-2023-40d2-afed-4d5a9833a7e5&dvp_qtsid=e8a413ec-954c-4673-881b-c6e8d13b1f21&dvp_rcp=2&dvp_htec=1&dvp_seem=2&dvp_tuk=1&dvp_sukv=7198898805.772676&ee_dp_sukv=7198898805.772676&dvp_tukv=1920467983.9999738&ee_dp_tukv=1920467983.9999738&dvp_tuid=1672550589116&jurtd=1701948668",
+            "cookies": []
+        },
+        "70964.323": {
+            "frameId": "D3330CC2BDEF3D7D84D2C829BC29B400",
+            "serverUrl": "https://tps-dn-ae1.doubleverify.com/event.jpg?impid=09787c3cfe3d44569a7a3948b8b48a25&consid=&api=1&rc=true",
+            "cookies": []
+        },
+        "70964.324": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://securepubads.g.doubleclick.net/pagead/js/rum.js",
+            "cookies": []
+        },
+        "70964.322": {
+            "frameId": "D3330CC2BDEF3D7D84D2C829BC29B400",
+            "serverUrl": "https://tpsc-ae1.doubleverify.com/event.png?impid=09787c3cfe3d44569a7a3948b8b48a25&flavor=0&gdpr=0&gdpr_consent=&dvpx_gfbc=1&tagsrv=1&google_error=3",
+            "cookies": [
+                {
+                    "parsedCookie": {
+                        "name": "test_cookie",
+                        "domain": ".doubleclick.net",
+                        "path": "/",
+                        "value": "CheckForPermission",
+                        "sameSite": "none",
+                        "expires": "2024-06-03T08:31:41.000Z",
+                        "httpOnly": true,
+                        "secure": true
+                    },
+                    "isBlocked": true,
+                    "blockedReasons": [
+                        "ThirdPartyPhaseout"
+                    ]
+                }
+            ]
+        },
+        "70964.321": {
+            "frameId": "F00030362027F8365A78C15AC439E6E1",
+            "serverUrl": "https://static.adsafeprotected.com/main.19.8.508.js",
+            "cookies": []
+        },
+        "70964.327": {
+            "frameId": "68741DAF95C3CAEFD963C3D50231C715",
+            "serverUrl": "https://pixel.adsafeprotected.com/mon?anId=9708&campId=300x250&pubId=85043658&chanId=22958123766&placementId=6654004040&pubCreative=138465553594&pubOrder=3379061201&cb=369485822&custom=&custom2=home&custom3=mid&adsafe_par&impId=99457afa-2181-11ef-b677-062f4b44bbed&adsafe_url=https%3A%2F%2Fwww.bbc.com%2F&adsafe_type=abcedfq&adsafe_jsinfo=,id:29614c16-7ada-5fca-9215-57d4b68872a2,c:ezP3YE,sl:outOfView,em:true,fr:true,thd:1,mn:jsserver-primary-868ccc5759-7xnnz,rg:sg,pt:1-5-15,wc:22.47.1440.790,ac:592.-550.300.250,am:i,cc:592.-550.300.250,piv:0,obst:0,th:0,reas:l,mu:10000,br:c,bru:c,an:n,oam:0,scm:publ1.grpm1,mtim:1137,mot:0,app:0,maw:0,tdt:s,fm:ueCyhZV+11%7C12%7C13%7C14%7C15%7C16%7C17%7C18*.9708%7C181%7C182,idMap:18*,pl:CV8L.CV8L.CV8L.CV8L.CV8L,rmeas:1,rend:1,renddet:IMG.qs,es:0,sc:1,ha:1,fgad:1,fif:1,gmnp:0,for:1,b11:0,cnod:1,gm:1,tt:jload,et:1153,oid:9ab5d4ae-2181-11ef-8d52-566323b45966,v:19.8.508,sp:1,st:0,fwm:0,wr:1440.790,sr:1680.1050,ov:0",
+            "cookies": []
+        },
+        "70964.326": {
+            "frameId": "58EF46C61DB91317AECF6F76D614063B",
+            "serverUrl": "https://static.adsafeprotected.com/sca.17.6.4.js",
+            "cookies": []
+        },
+        "70964.325": {
+            "frameId": "9A15CEF45722E21A3BF124D9D243B029",
+            "serverUrl": "https://csi.gstatic.com/csi?v=2&s=pagead&action=csi_pagead&dmc=8&puid=1~lwyp607n&chm=1&c=1889935698304018&ctx=2&qqid=CMLS1p7_voYDFU-JrAIdIP0DLw&met.4=fb.33~lb.ev~ol.1m3~idt.pj~dt.-g4&met.1=1.lwyp5yik~14.1~15.0~16.1~17.1~18.1~19.1~20.1~21.1~22.fv~23.fv&met.7=CBsQCDgC~CBsQCiByOOcC~CBcQBhgBIHMoczD0BTiCBWizAnDZA3jCrwmAAZatCYgBlq0JsAEBuAED~CB4QChgBIHMoczDYAzjlAmizAnC1A3iADIAB1AmIAYEVsAEBuAED~CBwQChgBIHMoczCxAji9AWh0cJwCeMCKBIABlIgEiAG2tg2wAQG4AQM~CBsQCiB0OOsE~CCIQBBgBIJcEKJcEMLkFOKIBaJcEcK4FeKwCsAEBuAED~CBwQBBgBIJ0EKJ0EMO8FONIBaJ4EcOAFeKwCsAEBuAED~CBwQBBgBIL4EKL4EMPUFOLgBaL8EcPUFeKwCsAEBuAED~CCIQBBgBIPgFKPgFMJIHOJoBaPgFcI4HeKwCsAEBuAED~CCgQChgBIK4QKK4QMJMROGVorhBw7hB4778BgAHDvQGIAfr-A7ABAbgBAw&met.3=113.1p5_3~112.1p3_4",
+            "cookies": []
+        }
+    }
+}

@@ -18,17 +18,16 @@
  */
 import { getDomain } from 'tldts';
 import { CookieData } from '@ps-analysis-tool/common';
+import type { Page } from 'puppeteer';
 /**
  * Internal dependencies.
  */
 import { RequestData, ResponseData } from './types';
 
 export const parseNetworkDataToCookieData = (
-  responseMap: Map<string, ResponseData>,
-  requestMap: Map<string, RequestData>,
-  frameIdUrlMap: Map<string, string>,
-  mainFrameId: string,
-  pageUrl: string
+  responses: Record<string, ResponseData>,
+  requests: Record<string, RequestData>,
+  page:Page
 ): {
   [frameUrl: string]: {
     cookiesCount: number;
@@ -37,50 +36,54 @@ export const parseNetworkDataToCookieData = (
     };
   };
 } => {
-  const frameIdNetworkDataMap = new Map<
-    string,
-    { responses: ResponseData[]; requests: RequestData[] }
-  >();
 
-  for (const [, response] of responseMap) {
+
+  // const mainFrameId = page.mainFrame().__id;
+  const mainFrameId = "0";
+
+  const frameIdNetworkDataMap: Record<
+    string,
+    {
+      responses: ResponseData[];
+      requests: RequestData[];
+    }
+  > = {};
+
+  for (const response of Object.values(responses)) {
     if (!response.cookies || response.cookies.length === 0) {
       continue;
     }
-    const frameId = response.frameId || mainFrameId;
-    const prevResponses = frameIdNetworkDataMap.get(frameId)?.responses || [];
-    const prevRequests = frameIdNetworkDataMap.get(frameId)?.responses || [];
 
-    frameIdNetworkDataMap.set(frameId, {
-      responses: [...prevResponses, response],
-      requests: prevRequests,
-    });
+    const frameId = response.frameId || mainFrameId;
+    const prevResponses = frameIdNetworkDataMap[frameId]?.responses || [];
+
+    frameIdNetworkDataMap[frameId].requests = [...prevResponses, response];
   }
-  for (const [, request] of requestMap) {
+
+  for (const request of Object.values(requests)) {
+
     if (!request.cookies || request.cookies.length === 0) {
       continue;
     }
-    const frameId = request.frameId || mainFrameId;
-    const prevResponses = frameIdNetworkDataMap.get(frameId)?.responses || [];
-    const prevRequests = frameIdNetworkDataMap.get(frameId)?.responses || [];
 
-    frameIdNetworkDataMap.set(frameId, {
-      responses: prevResponses,
-      requests: [...prevRequests, request],
-    });
+    const frameId = request.frameId || mainFrameId;
+    const prevRequests = frameIdNetworkDataMap[frameId]?.requests || [];
+
+    frameIdNetworkDataMap[frameId].requests = [...prevRequests, request];
+    
   }
 
-  const frameIdCookiesMap = new Map<
+  const frameIdCookiesMap: Record<
     string,
     {
-      frameUrl: string;
       frameCookies: {
         [key: string]: CookieData;
       };
     }
-  >();
+  > = {};
 
-  for (const [frameId, data] of frameIdNetworkDataMap) {
-    const _frameCookies = new Map<string, CookieData>();
+  for (const [frameId, data] of Object.entries(frameIdNetworkDataMap)) {
+    const _frameCookies: Record<string, CookieData> = {};
 
     data.responses?.forEach((response: ResponseData) => {
       response.cookies.forEach((cookie) => {
@@ -101,14 +104,14 @@ export const parseNetworkDataToCookieData = (
           ':' +
           cookie.parsedCookie.path;
 
-        const prevEntry = _frameCookies.get(key);
+        const prevEntry = _frameCookies[key];
 
         const blockedReasonsSet = new Set([
           ...(cookie?.blockedReasons || []),
           ...(prevEntry?.blockedReasons || []),
         ]);
 
-        _frameCookies.set(key, {
+        _frameCookies[key] = {
           ...cookie,
           url: response.serverUrl,
           blockedReasons: Array.from(blockedReasonsSet),
@@ -117,7 +120,7 @@ export const parseNetworkDataToCookieData = (
             ...cookie.parsedCookie,
             domain: parsedDomain || '',
           },
-        });
+        };
       });
     });
 
@@ -140,57 +143,60 @@ export const parseNetworkDataToCookieData = (
           ':' +
           cookie.parsedCookie.path;
 
-        const prevEntry = _frameCookies.get(key);
+        const prevEntry = _frameCookies[key];
 
         const blockedReasonsSet = new Set([
           ...(cookie?.blockedReasons || []),
           ...(prevEntry?.blockedReasons || []),
         ]);
 
-        _frameCookies.set(key, {
+        _frameCookies[key] = {
           ...cookie,
           url: request.serverUrl,
           blockedReasons: Array.from(blockedReasonsSet),
           isBlocked: Array.from(blockedReasonsSet).length > 0,
           parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
-        });
+        };
       });
     });
 
-    frameIdCookiesMap.set(frameId, {
-      frameUrl: frameIdUrlMap.get(frameId) || new URL(pageUrl).origin,
-      frameCookies: Object.fromEntries(_frameCookies),
-    });
-  }
-  const frameUrlCookies = new Map<
-    string,
-    {
-      cookiesCount: number;
-      frameCookies: {
-        [key: string]: CookieData;
-      };
-    }
-  >();
-
-  for (const [, data] of frameIdCookiesMap) {
-    if (!data.frameUrl.includes('http')) {
-      continue;
-    }
-
-    const _url = new URL(data.frameUrl);
-
-    const newFrameCookies = {
-      ...data.frameCookies,
-      ...(frameUrlCookies.get(_url.origin)?.frameCookies || {}),
+    frameIdCookiesMap[frameId] = {
+      frameCookies: _frameCookies,
     };
-
-    frameUrlCookies.set(_url.origin, {
-      cookiesCount: Object.keys(newFrameCookies)?.length || 0,
-      frameCookies: {
-        ...newFrameCookies,
-      },
-    });
   }
 
-  return Object.fromEntries(frameUrlCookies);
+  // }
+  // const frameUrlCookies = new Map<
+  //   string,
+  //   {
+  //     cookiesCount: number;
+  //     frameCookies: {
+  //       [key: string]: CookieData;
+  //     };
+  //   }
+  // >();
+
+  // for (const [, data] of frameIdCookiesMap) {
+  //   if (!data.frameUrl.includes('http')) {
+  //     continue;
+  //   }
+
+  //   const _url = new URL(data.frameUrl);
+
+  //   const newFrameCookies = {
+  //     ...data.frameCookies,
+  //     ...(frameUrlCookies.get(_url.origin)?.frameCookies || {}),
+  //   };
+
+  //   frameUrlCookies.set(_url.origin, {
+  //     cookiesCount: Object.keys(newFrameCookies)?.length || 0,
+  //     frameCookies: {
+  //       ...newFrameCookies,
+  //     },
+  //   });
+  // }
+
+  // return Object.fromEntries(frameUrlCookies);
+
+  return {};
 };

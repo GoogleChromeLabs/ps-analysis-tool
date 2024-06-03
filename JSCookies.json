@@ -1,0 +1,227 @@
+[
+    {
+        "url": "https://bbc.com",
+        "cookies": [
+            {
+                "domain": "bbc.com",
+                "expires": 1748938593000,
+                "name": "ckns_policy",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": false,
+                "value": "111"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1732954594000,
+                "name": "optimizelyEndUserId",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": false,
+                "value": "oeu1717402594075r0.18233986827523707"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1751530594000,
+                "name": "_cb",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": "Bh6rZsDAgzDvrq8o"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1751530594000,
+                "name": "_chartbeat2",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": ".1717402594131.1717402594131.1.g3xgeRKBOoDfqC6iBidXHvDb3R_f.1"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1717404394000,
+                "name": "_cb_svref",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": "external"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1748938595005.011,
+                "name": "dnsDisplayed",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "none",
+                "secure": true,
+                "value": "undefined"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1748938595005.138,
+                "name": "ccpaApplies",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "none",
+                "secure": true,
+                "value": "true"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1748938595005.195,
+                "name": "signedLspa",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "none",
+                "secure": true,
+                "value": "undefined"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1748938595011.064,
+                "name": "_sp_su",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "none",
+                "secure": true,
+                "value": "true"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1748938595000,
+                "name": "ckpf_ppid",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": false,
+                "value": "cba99f141fe94a76b66789200a17d7f7"
+            },
+            {
+                "domain": null,
+                "expires": 1751530595000,
+                "name": "pa_privacy",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": "%22optin%22"
+            },
+            {
+                "domain": null,
+                "expires": 1751530595000,
+                "name": "_pcid",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": "%7B%22browserId%22%3A%22lwyp5vg7ktfih2dq%22%2C%22_t%22%3A%22mcn43cse%7Clwyp5vge%22%7D"
+            },
+            {
+                "domain": null,
+                "expires": 1751530595000,
+                "name": "_pctx",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": "%7Bu%7DN4IgrgzgpgThIC4B2YA2qA05owMoBcBDfSREQpAeyRCwgEt8oBJAE0RXSwH18yBbAMZIALAGZBEAGYAfVAHcAngAcArADcA5lJABfIA"
+            },
+            {
+                "domain": null,
+                "expires": 1748938595551.556,
+                "name": "consentUUID",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "none",
+                "secure": true,
+                "value": "383c0980-99d8-47c7-bcf2-0411d20eff6f"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1748938595586.599,
+                "name": "ccpaUUID",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "none",
+                "secure": true,
+                "value": "041ef6e5-237d-4715-a813-7d21d3101d8c"
+            },
+            {
+                "domain": null,
+                "expires": null,
+                "name": "DM_SitId1778",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": "1"
+            },
+            {
+                "domain": null,
+                "expires": null,
+                "name": "DM_SitId1778SecId13934",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": true,
+                "value": "1"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1733213795000,
+                "name": "permutive-id",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "none",
+                "secure": true,
+                "value": "540f9c47-60eb-4a1c-a659-d2dcd94ff688"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1751098596000,
+                "name": "__gads",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": false,
+                "value": "ID=67214edb2b180186:T=1717402596:RT=1717402596:S=ALNI_Ma24fxe47VWSRRJuI9Nn3fMfwGmBQ"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1751098596000,
+                "name": "__gpi",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": false,
+                "value": "UID=00000e4001612e9a:T=1717402596:RT=1717402596:S=ALNI_MaM-J2IttvfWq9aEalRAjn8ch-6Uw"
+            },
+            {
+                "domain": "bbc.com",
+                "expires": 1732954596000,
+                "name": "__eoi",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": false,
+                "value": "ID=c278cfde72d63df8:T=1717402596:RT=1717402596:S=AA-AfjbArlpz4Gc3W4hKZjHow838"
+            },
+            {
+                "domain": "www.bbc.com",
+                "expires": null,
+                "name": "ecos.dt",
+                "partitioned": false,
+                "path": "/",
+                "sameSite": "lax",
+                "secure": false,
+                "value": "1717402601681"
+            }
+        ]
+    }
+]

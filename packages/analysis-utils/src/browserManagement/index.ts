@@ -17,14 +17,15 @@
 /**
  * External dependencies.
  */
-import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
+import puppeteer, { Browser, Page, Protocol, Frame } from 'puppeteer';
+import { writeFile } from 'fs-extra';
 import { parse } from 'simple-cookie';
 import { CookieData, UNKNOWN_FRAME_KEY, delay } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { ResponseData, RequestData, ViewportConfig } from './types';
+import { ResponseData, RequestData, ViewportConfig, CookieStoreCookie } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 
 export class BrowserManagement {
@@ -32,9 +33,9 @@ export class BrowserManagement {
   browser: Browser | null;
   isHeadless: boolean;
   pageWaitTime: number;
-  pageMap: Map<string, Page>;
-  pageResponseMaps: Map<string, Map<string, ResponseData>>;
-  pageRequestMaps: Map<string, Map<string, RequestData>>;
+  pages: Record<string, Page>;
+  pageResponses: Record<string, Record<string, ResponseData>>;
+  pageRequests: Record<string, Record<string, RequestData>>;
   shouldLogDebug: boolean;
 
   constructor(
@@ -47,9 +48,9 @@ export class BrowserManagement {
     this.browser = null;
     this.isHeadless = isHeadless;
     this.pageWaitTime = pageWaitTime;
-    this.pageMap = new Map();
-    this.pageResponseMaps = new Map();
-    this.pageRequestMaps = new Map();
+    this.pages = {};
+    this.pageResponses = {};
+    this.pageRequests = {};
     this.shouldLogDebug = shouldLogDebug;
   }
 
@@ -68,14 +69,14 @@ export class BrowserManagement {
 
     this.browser = await puppeteer.launch({
       devtools: true,
-      headless: this.isHeadless ? 'new' : false,
+      headless: this.isHeadless,
       args,
     });
     this.debugLog('browser intialized');
   }
 
   async clickOnAcceptBanner(url: string) {
-    const page = this.pageMap.get(url);
+    const page = this.pages[url];
 
     if (!page) {
       throw new Error('no page with the provided id was found');
@@ -138,7 +139,7 @@ export class BrowserManagement {
   }
 
   async navigateToPage(url: string) {
-    const page = this.pageMap.get(url);
+    const page = this.pages[url];
 
     if (!page) {
       throw new Error('no page with the provided id was found');
@@ -158,7 +159,7 @@ export class BrowserManagement {
   }
 
   async pageScroll(url: string) {
-    const page = this.pageMap.get(url);
+    const page = this.pages[url];
 
     if (!page) {
       throw new Error('no page with the provided id was found');
@@ -173,98 +174,126 @@ export class BrowserManagement {
       //ignore
     }
 
-    await delay(this.pageWaitTime / 2);
-
     this.debugLog(`scrolling on url:${url}`);
   }
 
   async attachNetworkListenersToPage(pageId: string) {
-    const page = this.pageMap.get(pageId);
+    const page = this.pages[pageId];
+
     if (!page) {
       throw new Error(`no page with the provided id was found:${pageId}`);
     }
-    const cdpSession = await page.createCDPSession();
-    await cdpSession.send('Network.enable');
-    //@ts-ignore
-    const mainFrameId: string = page.mainFrame()._id;
 
-    const responseMap: Map<string, ResponseData> = new Map();
-    this.pageResponseMaps.set(pageId, responseMap);
+    const cdpSession = await page.createCDPSession();
+
+    await cdpSession.send('Target.setAutoAttach', {
+      // If this is set to true, debugger will be attached to every new target that is added to the current target.
+      autoAttach: true,
+      waitForDebuggerOnStart: false,
+      //Enables "flat" access to the session via specifying sessionId attribute in the commands.
+      // If this is set to true the debugger is also attached to the child targets of that the target it has been attached to.
+      flatten: true,
+    });
+    
+    await cdpSession.send('Network.enable');
+    await cdpSession.send('Page.enable');
+    await cdpSession.send('Runtime.enable');
+
+
+    const _responses: Record<string, ResponseData> = {};
+    this.pageResponses[pageId]= _responses;
 
     cdpSession.on(
       'Network.responseReceived',
-      (response: Protocol.Network.ResponseReceivedEvent) => {
-        responseMap.set(response.requestId, {
-          frameId: response.frameId || mainFrameId,
-          serverUrl: response.response.url,
-          cookies: responseMap.get(response.requestId)?.cookies || [],
-        });
+      ({
+        requestId,
+        frameId,
+        response,
+      }: Protocol.Network.ResponseReceivedEvent) => {
+        _responses[requestId] = {
+          frameId: frameId || "",
+          serverUrl: response.url,
+          cookies: _responses[requestId]?.cookies || [],
+        };
       }
     );
 
     cdpSession.on(
       'Network.responseReceivedExtraInfo',
-      (event: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
-        if (!event.headers['set-cookie']) {
+      ({
+        headers,
+        cookiePartitionKey,
+        blockedCookies,
+        requestId,
+      }: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
+        if (!headers['set-cookie']) {
           return;
         }
-        const cookies = event.headers['set-cookie']
-          .split('\n')
-          .map((headerLine) => {
-            const parsedCookie = parse(headerLine);
-            const partitionKey = headerLine.includes('Partitioned')
-              ? event.cookiePartitionKey
-              : undefined;
+        const cookies = headers['set-cookie'].split('\n').map((headerLine) => {
+          const parsedCookie = parse(headerLine);
+          const partitionKey = headerLine.includes('Partitioned')
+            ? cookiePartitionKey
+            : undefined;
 
-            const blockedEntry = event.blockedCookies.find((c) => {
-              return c.cookie?.name === parsedCookie.name;
-            });
-
-            return {
-              parsedCookie: {
-                name: parsedCookie.name,
-                domain: parsedCookie.domain,
-                path: parsedCookie.path || '/',
-                value: parsedCookie.value,
-                sameSite: parsedCookie.samesite || 'Lax',
-                expires: parsedCookie.expires || 'Session',
-                httpOnly: parsedCookie.httponly || false,
-                secure: parsedCookie.secure || false,
-                partitionKey,
-              },
-              isBlocked: Boolean(blockedEntry),
-              blockedReasons: blockedEntry?.blockedReasons,
-            };
+          const blockedEntry = blockedCookies.find((c) => {
+            return c.cookie?.name === parsedCookie.name;
           });
 
-        const prevCookies = responseMap.get(event.requestId)?.cookies || [];
+          return {
+            parsedCookie: {
+              name: parsedCookie.name,
+              domain: parsedCookie.domain,
+              path: parsedCookie.path || '/',
+              value: parsedCookie.value,
+              sameSite: parsedCookie.samesite || 'Lax',
+              expires: parsedCookie.expires || 'Session',
+              httpOnly: parsedCookie.httponly || false,
+              secure: parsedCookie.secure || false,
+              partitionKey,
+            },
+            isBlocked: Boolean(blockedEntry),
+            blockedReasons: blockedEntry?.blockedReasons,
+          };
+        });
+
+        const prevCookies = _responses[requestId]?.cookies || [];
         const mergedCookies = [...prevCookies, ...(cookies || [])];
 
-        responseMap.set(event.requestId, {
-          frameId: responseMap.get(event.requestId)?.frameId || '',
-          serverUrl: responseMap.get(event.requestId)?.serverUrl || '',
+        _responses[requestId] = {
+          frameId: _responses[requestId]?.frameId || '',
+          serverUrl: _responses[requestId]?.serverUrl || '',
           // @ts-ignore TODO: fix expires type mismatch
           cookies: mergedCookies,
-        });
+        };
       }
     );
 
-    const requestMap = new Map();
-    this.pageRequestMaps.set(pageId, requestMap);
+    const _requests: Record<string, RequestData> = {};
+    this.pageRequests[pageId] = _requests;
 
-    cdpSession.on('Network.requestWillBeSent', (request) => {
-      requestMap.set(request.requestId, {
-        ...(requestMap.get(request.requestId) || {}),
-        frameId: request.frameId,
-        serverUrl: request.request.url,
-      });
-    });
+    cdpSession.on(
+      'Network.requestWillBeSent',
+      ({
+        requestId,
+        frameId,
+        request,
+      }: Protocol.Network.RequestWillBeSentEvent) => {
+        _requests[requestId] = {
+          ...(_requests[requestId] || {}),
+          frameId: frameId,
+          serverUrl: request.url,
+        };
+      }
+    );
 
     cdpSession.on(
       'Network.requestWillBeSentExtraInfo',
-      (event: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
-        if (event.associatedCookies && event.associatedCookies.length !== 0) {
-          const cookies = event.associatedCookies.map((associatedCookie) => {
+      ({
+        associatedCookies,
+        requestId,
+      }: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
+        if (associatedCookies && associatedCookies.length !== 0) {
+          const cookies = associatedCookies.map((associatedCookie) => {
             return {
               parsedCookie: {
                 name: associatedCookie.cookie.name,
@@ -279,12 +308,13 @@ export class BrowserManagement {
               },
               isBlocked: associatedCookie.blockedReasons.length > 0,
               blockedReasons: associatedCookie.blockedReasons,
+              url: _requests[requestId]?.serverUrl || '',
             };
           });
-          requestMap.set(event.requestId, {
-            ...(requestMap.get(event.requestId) || {}),
+          _requests[requestId] = {
+            ...(_requests[requestId] || {}),
             cookies,
-          });
+          };
         }
       }
     );
@@ -292,64 +322,88 @@ export class BrowserManagement {
     this.debugLog('done attaching network event listeners');
   }
 
-  getPageFrameIdToUrlMap(id: string) {
-    const page = this.pageMap.get(id);
+  async getJSCookies(pageId:string){
+    const page = this.pages[pageId];
+
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error(`no page with the provided id was found:${pageId}`);
     }
-    const frameIdMapFromTree = new Map();
+
     const frames = page.frames();
-    const frameCallback = (frame: any) => {
-      const frameId = frame._id;
-      const _url = frame.url();
-      frameIdMapFromTree.set(frameId, _url);
 
-      if (frame.childFrames()) {
-        frame.childFrames().forEach(frameCallback);
-      }
-    };
+    const cookies: CookieStoreCookie[] = [];
 
-    frames.forEach(frameCallback);
-    return frameIdMapFromTree;
+    await Promise.all(
+      frames.map(async (frame) => {
+        if (!frame.url().includes("http")){
+          return
+        }
+
+        const _JSCookies: CookieStoreCookie[] = await frame.evaluate(() => {
+          // @ts-ignore
+          return cookieStore.getAll();
+        });
+
+        cookies.push(..._JSCookies);
+      })
+    );
+
+    return cookies;
   }
 
-  async analyzeCookieUrls(urls: string[], shouldSkipAcceptBanner: boolean) {
+  async analyzeCookies(urls: string[], shouldSkipAcceptBanner: boolean) {
+
+    // Open tabs and attach network listeners
     await Promise.all(
       urls.map(async (url) => {
         const sitePage = await this.openPage();
-        this.pageMap.set(url, sitePage);
+        this.pages[url] = sitePage;
         await this.attachNetworkListenersToPage(url);
       })
     );
 
-    // start navigation in parallel
+    // Navigate to URLs
     await Promise.all(
       urls.map(async (url) => {
         await this.navigateToPage(url);
-        if (shouldSkipAcceptBanner) {
+      })
+    );
+
+    // Delay for page to load resources
+    await delay(this.pageWaitTime / 2);
+
+    // Accept Banners
+    if (shouldSkipAcceptBanner) {
+      // delay
+
+      await Promise.all(
+        urls.map(async (url) => {
           await this.clickOnAcceptBanner(url);
-        }
+        })
+      );
+    } 
+    
+
+    // Scroll to bottom of the page
+    await Promise.all(
+      urls.map(async (url) => {
         await this.pageScroll(url);
       })
     );
 
-    //parse cookie data in parallel
+    // Delay for page to load more resources
+    await delay(this.pageWaitTime/2)
+
     const result = await Promise.all(
       urls.map(async (url) => {
-        const responseMap = this.pageResponseMaps.get(url);
-        const requestMap = this.pageRequestMaps.get(url);
-        const page = this.pageMap.get(url);
-
-        const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
-        // @ts-ignore
-        const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
+        const _responses = this.pageResponses[url];
+        const _requests = this.pageRequests[url];
+        const _page = this.pages[url];
 
         if (
-          !responseMap ||
-          !requestMap ||
-          !frameIdUrlMap ||
-          !mainFrameId ||
-          !page
+          !_responses ||
+          !_requests ||
+          !_page
         ) {
           return {
             pageUrl: url,
@@ -358,58 +412,24 @@ export class BrowserManagement {
         }
 
         const cookieDataFromNetwork = parseNetworkDataToCookieData(
-          responseMap,
-          requestMap,
-          frameIdUrlMap,
-          mainFrameId,
-          page.url()
+          _responses,
+          _requests,
+          _page,
         );
 
-        const networkCookieKeySet = new Set();
+        const cookieDataFromJS = await this.getJSCookies(url);
 
-        Object.values(cookieDataFromNetwork).forEach(({ frameCookies }) => {
-          Object.keys(frameCookies).forEach((key) => {
-            networkCookieKeySet.add(key);
-          });
-        });
-
-        //Get cookies from another API
-        const session = await page.createCDPSession();
-
-        const applicationCookies = (await session.send('Page.getCookies'))
-          .cookies;
-
-        const filteredApplicationCookies = applicationCookies.filter(
-          (cookie) =>
-            !networkCookieKeySet.has(
-              `${cookie.name}:${cookie.domain}:${cookie.path}`
-            )
+        const cookieData = collateCookieData(
+          cookieDataFromJS,
+          cookieDataFromNetwork
         );
-
-        const reshapedApplicationCookies = filteredApplicationCookies.reduce<{
-          [key: string]: CookieData;
-        }>((acc, cookie) => {
-          const key = `${cookie.name}:${cookie.domain}:${cookie.path}`;
-          acc[key] = {
-            parsedCookie: cookie,
-            url: '',
-          };
-          return acc;
-        }, {});
-
-        // handles redirection
-        const pageUrl = page.url();
 
         return {
-          pageUrl,
-          cookieData: {
-            ...cookieDataFromNetwork,
-            [UNKNOWN_FRAME_KEY]: {
-              frameCookies: reshapedApplicationCookies,
-              cookiesCount: Object.keys(reshapedApplicationCookies).length,
-            },
-          },
+          // Page may redirect. page.url() gives the redirected URL
+          url: _page.url(),
+          cookieData: cookieData,
         };
+        
       })
     );
 
