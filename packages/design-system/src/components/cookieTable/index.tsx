@@ -193,7 +193,9 @@ const CookieTable = forwardRef<
         conditionalTableRowClassesHandler={_conditionalTableRowClassesHandler}
         exportTableData={
           !hideExport
-            ? (rows: TableRow[]) => exportCookies(rows, hostname)
+            ? (rows: TableRow[]) => {
+                exportCookies(rows, hostname);
+              }
             : undefined
         }
         hasVerticalBar={hasVerticalBar}

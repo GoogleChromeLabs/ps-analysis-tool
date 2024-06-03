@@ -36,6 +36,7 @@ export interface ContentStore {
     tabCookies: { [key: string]: CookieTableData };
     technologies: TechnologyData[] | undefined;
     completeJson: CompleteJson[] | null;
+    path: string;
   };
 }
 
@@ -44,6 +45,7 @@ const initialState: ContentStore = {
     tabCookies: {},
     technologies: [],
     completeJson: null,
+    path: '',
   },
 };
 
@@ -57,6 +59,7 @@ interface ContentStoreProviderProps {
   };
   technologies?: TechnologyData[];
   completeJson: CompleteJson[] | null;
+  path: string;
 }
 
 export const Provider = ({
@@ -64,6 +67,7 @@ export const Provider = ({
   technologies,
   completeJson,
   children,
+  path,
 }: PropsWithChildren<ContentStoreProviderProps>) => {
   const tabCookies = useMemo(() => reshapeCookies(cookies), [cookies]);
 
@@ -74,6 +78,7 @@ export const Provider = ({
           tabCookies,
           technologies,
           completeJson,
+          path,
         },
       }}
     >

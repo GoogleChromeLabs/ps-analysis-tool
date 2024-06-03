@@ -39,6 +39,7 @@ interface SiteMapReportProps {
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
   completeJson: CompleteJson[] | null;
+  path: string;
 }
 
 const SiteMapReport = ({
@@ -46,6 +47,7 @@ const SiteMapReport = ({
   technologies,
   landingPageCookies,
   completeJson,
+  path,
 }: SiteMapReportProps) => {
   const [data, setData] = useState<SidebarItems>(sidebarData);
 
@@ -58,6 +60,7 @@ const SiteMapReport = ({
         completeJson={completeJson}
         sidebarData={data}
         setSidebarData={setData}
+        path={path}
       />
     </SidebarProvider>
   );
