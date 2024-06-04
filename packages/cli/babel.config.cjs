@@ -13,31 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+module.exports = function (api) {
+  const isProduction = api.env('production');
 
-/**
- * External dependencies.
- */
-import fs from 'fs/promises';
-import path from 'path';
-
-/**
- * Internal dependencies.
- */
-import { CookieDatabase } from '../types';
-
-/**
- * Fetch dictionary from local data folder.
- * @returns {Promise<CookieDatabase>} Open Cookie Data base
- */
-export async function fetchDictionary(): Promise<CookieDatabase> {
-  const data = JSON.parse(
-    await fs.readFile(
-      path.resolve(__dirname, './assets/data/open-cookie-database.json'),
-      {
-        encoding: 'utf8',
-      }
-    )
-  );
-
-  return data;
-}
+  return {
+    presets: [
+      ['@babel/preset-env'],
+      [
+        '@babel/preset-react',
+        {
+          development: !isProduction,
+        },
+      ],
+      '@babel/preset-typescript',
+    ],
+    plugins: [
+      ['@babel/plugin-transform-react-jsx'],
+      ['babel-plugin-styled-components'],
+    ],
+    sourceMaps: true,
+  };
+};

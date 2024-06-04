@@ -19,6 +19,7 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
+import { CookieData, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -26,7 +27,6 @@ import { parse } from 'simple-cookie';
 import { ResponseData, RequestData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import delay from '../delay';
-import { CookieData, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;

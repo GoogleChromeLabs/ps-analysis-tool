@@ -52,13 +52,6 @@ const dashboard = {
     path: path.resolve(__dirname, './packages/cli-dashboard/dist'),
     filename: '[name].js',
   },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, './packages/cli-dashboard/dist'),
-    },
-    compress: true,
-    port: 9000,
-  },
   plugins: [
     new WebpackBar({
       name: 'Dashboard',

@@ -25,7 +25,6 @@ import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
-
 /**
  * Internal dependencies.
  */
@@ -103,7 +102,7 @@ const saveResultsAsHTML = async (
   const html =
     htmlText.substring(0, htmlText.indexOf('</head>')) +
     `<script>
-    window.PSAT_REPORT = ${reportText}
+    window.PSAT_REPORT = '${reportText}'
     window.PSAT_DATA = ${JSON.stringify({
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',
