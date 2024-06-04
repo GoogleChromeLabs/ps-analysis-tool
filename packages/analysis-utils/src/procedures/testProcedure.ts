@@ -46,7 +46,10 @@ export const testProcedure = async() => {
   //Init browser
   await browser.initializeBrowser(true);
 
-  await browser.analyzeCookies(['https://bbc.com'], false);
+  await browser.analyzeCookies(
+    ['https://bbc.com/', 'https://livemint.com/', "https://edition.cnn.com/"],
+    false
+  );
 
   // await browser.deinitialize();
 }

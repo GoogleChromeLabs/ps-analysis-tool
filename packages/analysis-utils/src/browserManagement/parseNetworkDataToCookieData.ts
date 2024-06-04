@@ -18,28 +18,26 @@
  */
 import { getDomain } from 'tldts';
 import { CookieData } from '@ps-analysis-tool/common';
-import type { Page } from 'puppeteer';
+import type { Page,Frame, Protocol } from 'puppeteer';
 /**
  * Internal dependencies.
  */
 import { RequestData, ResponseData } from './types';
 
-export const parseNetworkDataToCookieData = (
+export const parseNetworkDataToCookieData = async(
   responses: Record<string, ResponseData>,
   requests: Record<string, RequestData>,
-  page:Page
-): {
+  page: Page
+): Promise<{
   [frameUrl: string]: {
     cookiesCount: number;
     frameCookies: {
       [key: string]: CookieData;
     };
   };
-} => {
+}> => {
 
-
-  // const mainFrameId = page.mainFrame().__id;
-  const mainFrameId = "0";
+  const mainFrameId = "";
 
   const frameIdNetworkDataMap: Record<
     string,
@@ -55,9 +53,15 @@ export const parseNetworkDataToCookieData = (
     }
 
     const frameId = response.frameId || mainFrameId;
-    const prevResponses = frameIdNetworkDataMap[frameId]?.responses || [];
 
-    frameIdNetworkDataMap[frameId].requests = [...prevResponses, response];
+    if (!frameIdNetworkDataMap[frameId]){
+      frameIdNetworkDataMap[frameId] = {
+        requests:[],
+        responses:[]
+      }
+    }
+
+    frameIdNetworkDataMap[frameId].responses.push(response);
   }
 
   for (const request of Object.values(requests)) {
@@ -67,9 +71,15 @@ export const parseNetworkDataToCookieData = (
     }
 
     const frameId = request.frameId || mainFrameId;
-    const prevRequests = frameIdNetworkDataMap[frameId]?.requests || [];
 
-    frameIdNetworkDataMap[frameId].requests = [...prevRequests, request];
+    if (!frameIdNetworkDataMap[frameId]){
+      frameIdNetworkDataMap[frameId] = {
+        requests:[],
+        responses:[]
+      }
+    }
+
+    frameIdNetworkDataMap[frameId].requests.push(request);
     
   }
 
@@ -90,7 +100,7 @@ export const parseNetworkDataToCookieData = (
         // domain update required. Domain based on the server url
         let parsedDomain =
           cookie.parsedCookie.domain === ''
-            ? getDomain(response.serverUrl)
+            ? getDomain(response.url)
             : cookie.parsedCookie.domain;
 
         if (parsedDomain && parsedDomain[0] !== '.') {
@@ -113,7 +123,7 @@ export const parseNetworkDataToCookieData = (
 
         _frameCookies[key] = {
           ...cookie,
-          url: response.serverUrl,
+          url: response.url,
           blockedReasons: Array.from(blockedReasonsSet),
           isBlocked: Array.from(blockedReasonsSet).length > 0,
           parsedCookie: {
@@ -129,7 +139,7 @@ export const parseNetworkDataToCookieData = (
         // domain update required. Domain based on the server url
         let parsedDomain =
           cookie.parsedCookie.domain === ''
-            ? getDomain(request.serverUrl)
+            ? getDomain(request.url)
             : cookie.parsedCookie.domain;
 
         if (parsedDomain && parsedDomain[0] !== '.') {
@@ -152,7 +162,7 @@ export const parseNetworkDataToCookieData = (
 
         _frameCookies[key] = {
           ...cookie,
-          url: request.serverUrl,
+          url: request.url,
           blockedReasons: Array.from(blockedReasonsSet),
           isBlocked: Array.from(blockedReasonsSet).length > 0,
           parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
@@ -165,18 +175,28 @@ export const parseNetworkDataToCookieData = (
     };
   }
 
-  // }
-  // const frameUrlCookies = new Map<
-  //   string,
-  //   {
-  //     cookiesCount: number;
-  //     frameCookies: {
-  //       [key: string]: CookieData;
-  //     };
-  //   }
-  // >();
+  const frameUrlCookies: Record<
+    string,
+    {
+      frameCookies: {
+        [key: string]: CookieData;
+      };
+    }
+  > = {};
 
-  // for (const [, data] of frameIdCookiesMap) {
+  // const { frameTree } = await cdpSession.send('Page.getFrameTree');
+
+  // const logFrame = ({frame,childFrames}:Protocol.Page.FrameTree) =>{
+  //   console.log(frame.id);
+  //   console.log(frame.url);
+
+  //   childFrames?.forEach(logFrame);
+  // }
+ 
+  // logFrame(frameTree);
+
+  // for (const data of Object.values(frameIdCookiesMap)) {
+    
   //   if (!data.frameUrl.includes('http')) {
   //     continue;
   //   }

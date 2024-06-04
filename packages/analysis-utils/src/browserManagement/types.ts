@@ -24,13 +24,13 @@ export type ViewportConfig = {
 
 export type ResponseData = {
   frameId?: string;
-  serverUrl: string;
+  url: string;
   cookies: CookieData[];
 };
 
 export type RequestData = {
   frameId?: string;
-  serverUrl: string;
+  url: string;
   cookies: CookieData[];
 };
 
