@@ -19,14 +19,13 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
+import { CookieData, UNKNOWN_FRAME_KEY, delay } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { ResponseData, RequestData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
-import delay from '../delay';
-import { CookieData, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -61,7 +60,7 @@ export class BrowserManagement {
   }
 
   async initializeBrowser(enable3pCookiePhaseout: boolean) {
-    const args = [];
+    const args: string[] = [];
 
     if (enable3pCookiePhaseout) {
       args.push('--test-third-party-cookie-phaseout');
@@ -315,11 +314,13 @@ export class BrowserManagement {
   }
 
   async analyzeCookieUrls(urls: string[], shouldSkipAcceptBanner: boolean) {
-    for (const url of urls) {
-      const sitePage = await this.openPage();
-      this.pageMap.set(url, sitePage);
-      await this.attachNetworkListenersToPage(url);
-    }
+    await Promise.all(
+      urls.map(async (url) => {
+        const sitePage = await this.openPage();
+        this.pageMap.set(url, sitePage);
+        await this.attachNetworkListenersToPage(url);
+      })
+    );
 
     // start navigation in parallel
     await Promise.all(
