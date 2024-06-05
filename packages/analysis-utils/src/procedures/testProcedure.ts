@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-import { Protocol } from "puppeteer";
-import { BrowserManagement } from "../browserManagement";
-import { RequestData, ResponseData } from "../browserManagement/types";
-import { parse } from "simple-cookie";
-import { writeFile } from "fs-extra";
-
+import { BrowserManagement } from '../browserManagement';
+import { writeFile } from 'fs-extra';
 
 /**
  * Internal dependencies.
  */
 
-export const testProcedure = async() => {
-
+export const testProcedure = async () => {
   // Create browser instance
   const browser = new BrowserManagement(
     {
@@ -34,7 +29,7 @@ export const testProcedure = async() => {
       height: 790,
       deviceScaleFactor: 1,
     },
-    false,
+    true,
     10000,
     false
   );
@@ -42,10 +37,12 @@ export const testProcedure = async() => {
   //Init browser
   await browser.initializeBrowser(true);
 
-  await browser.analyzeCookies(
-    ['https://bbc.com/'],
+  const cookies = await browser.analyzeCookies(
+    ['https://edition.cnn.com', 'https://bbc.com', 'https://livemint.com'],
     false
   );
 
-  // await browser.deinitialize();
-}
+  await writeFile('data.json', JSON.stringify(cookies, null, 4));
+
+  await browser.deinitialize();
+};

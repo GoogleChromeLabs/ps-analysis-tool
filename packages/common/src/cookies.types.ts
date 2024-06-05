@@ -110,7 +110,7 @@ export type CookieData = {
     responseEvents: responsEvent[];
   };
   analytics?: CookieAnalytics | null;
-  url: string;
+  url?: string;
   headerType?: 'response' | 'request' | 'javascript';
   isFirstParty?: boolean | null;
   frameIdList?: Array<number | string>;

@@ -18,24 +18,18 @@
  */
 import { getDomain } from 'tldts';
 import { CookieData } from '@ps-analysis-tool/common';
-import type { Page,Frame, Protocol } from 'puppeteer';
+import type { Page } from 'puppeteer';
 /**
  * Internal dependencies.
  */
-import { RequestData, ResponseData } from './types';
+import { CookieDataFromNetwork, RequestData, ResponseData } from './types';
 
 export const parseNetworkDataToCookieData = async (
   responses: Record<string, ResponseData>,
   requests: Record<string, RequestData>,
   page: Page,
   pageFrames: Record<string, string>
-): Promise<{
-  [frameUrl: string]: {
-    frameCookies: {
-      [key: string]: CookieData;
-    };
-  };
-}> => {
+): Promise<CookieDataFromNetwork> => {
   const mainFrameId = '';
 
   const frameIdNetworkDataMap: Record<
@@ -183,22 +177,20 @@ export const parseNetworkDataToCookieData = async (
     allTargets[targetId] = url;
   });
 
-  for (const frameId of Object.keys(frameIdCookiesMap)){
-
-    let url = "";
+  for (const frameId of Object.keys(frameIdCookiesMap)) {
+    let url = '';
     let _frameId = frameId;
 
-    while(url === ""){
-      if (_frameId === "0"){
+    while (url === '') {
+      if (_frameId === '0') {
         url = page.url();
       }
 
-      if(allTargets[frameId]){
-        url = allTargets[frameId]
-      }
-      else {
+      if (allTargets[frameId]) {
+        url = allTargets[frameId];
+      } else {
         // Seek parent
-        _frameId = pageFrames[_frameId];
+        _frameId = pageFrames[_frameId] || '0';
       }
     }
     pageTargets[frameId] = url;
@@ -214,17 +206,15 @@ export const parseNetworkDataToCookieData = async (
   > = {};
 
   for (const [frameId, data] of Object.entries(frameIdCookiesMap)) {
-
-    const key = new URL(pageTargets[frameId]).hostname;
+    const key = new URL(pageTargets[frameId]).origin;
 
     frameUrlCookiesMap[key] = {
       frameCookies: {
-      ...data.frameCookies,
-      ...(frameUrlCookiesMap[key]?.frameCookies || {}),
+        ...data.frameCookies,
+        ...(frameUrlCookiesMap[key]?.frameCookies || {}),
       },
     };
   }
 
   return frameUrlCookiesMap;
-
 };

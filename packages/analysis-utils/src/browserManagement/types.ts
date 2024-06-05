@@ -45,3 +45,16 @@ export type CookieStoreCookie = {
   secure: boolean;
   value: string;
 };
+
+export type CookieDataFromNetwork = {
+  [frameUrl: string]: {
+    frameCookies: {
+      [key: string]: CookieData;
+    };
+  };
+};
+
+export type PageCookieData = {
+  url: string;
+  cookieData: CookieDataFromNetwork;
+};

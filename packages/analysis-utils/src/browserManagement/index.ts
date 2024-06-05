@@ -17,16 +17,21 @@
 /**
  * External dependencies.
  */
-import puppeteer, { Browser, Page, Protocol, Frame } from 'puppeteer';
-import { writeFile } from 'fs-extra';
+import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
-import { CookieData, UNKNOWN_FRAME_KEY, delay } from '@ps-analysis-tool/common';
+import { delay, type CookieData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { ResponseData, RequestData, ViewportConfig, CookieStoreCookie } from './types';
+import {
+  ResponseData,
+  RequestData,
+  ViewportConfig,
+  CookieStoreCookie,
+} from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
+import collateMainframeCookieData from './collateMainframeCookieData';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -183,7 +188,6 @@ export class BrowserManagement {
     pageId: string,
     { requestId, frameId, response }: Protocol.Network.ResponseReceivedEvent
   ) {
-
     if (!this.pageResponses[pageId][requestId]) {
       this.pageResponses[pageId][requestId] = {
         frameId,
@@ -191,26 +195,25 @@ export class BrowserManagement {
         cookies: [],
       };
     } else {
+      const parsedCookies = this.pageResponses[pageId][requestId]?.cookies.map(
+        (cookie) => {
+          if (!cookie.url) {
+            cookie.url = response.url;
+          }
 
-      const parsedCookies = this.pageResponses[pageId][requestId]?.cookies.map((cookie)=>{
-        if (!cookie.url){
-          cookie.url = response.url;
+          if (!cookie.parsedCookie.domain) {
+            cookie.parsedCookie.domain = new URL(response.url).hostname;
+          }
+          return cookie;
         }
-
-        if (!cookie.parsedCookie.domain){
-          cookie.parsedCookie.domain = new URL(response.url).hostname;
-        }
-        return cookie;
-      })
+      );
 
       this.pageResponses[pageId][requestId] = {
         frameId,
         url: response.url,
         cookies: parsedCookies,
       };
-
     }
-
   }
 
   responseReceivedExtraInfoListener(
@@ -235,15 +238,12 @@ export class BrowserManagement {
         return c.cookie?.name === parsedCookie.name;
       });
 
-
-      const url = this.pageResponses[pageId][requestId]?.url
+      const url = this.pageResponses[pageId][requestId]?.url;
 
       return {
         parsedCookie: {
           name: parsedCookie.name,
-          domain:
-            parsedCookie.domain ||
-            url && new URL(url).hostname,
+          domain: parsedCookie.domain || (url && new URL(url).hostname),
           path: parsedCookie.path || '/',
           value: parsedCookie.value,
           sameSite: parsedCookie.samesite || 'Lax',
@@ -254,7 +254,8 @@ export class BrowserManagement {
         },
         isBlocked: Boolean(blockedEntry),
         blockedReasons: blockedEntry?.blockedReasons,
-        url 
+        url,
+        headerType: 'response',
       };
     });
 
@@ -291,7 +292,7 @@ export class BrowserManagement {
       return;
     }
 
-    const cookies = associatedCookies.map((associatedCookie) => {
+    const cookies = associatedCookies.map<CookieData>((associatedCookie) => {
       return {
         parsedCookie: {
           name: associatedCookie.cookie.name,
@@ -307,6 +308,7 @@ export class BrowserManagement {
         isBlocked: associatedCookie.blockedReasons.length > 0,
         blockedReasons: associatedCookie.blockedReasons,
         url: this.pageRequests[pageId][requestId]?.url || '',
+        headerType: 'request',
       };
     });
 
@@ -317,7 +319,7 @@ export class BrowserManagement {
   }
 
   pageFrameAttachedListener(
-    pageId:string,
+    pageId: string,
     { frameId, parentFrameId }: Protocol.Page.FrameAttachedEvent
   ) {
     if (!this.pageFrames[pageId]) {
@@ -337,11 +339,10 @@ export class BrowserManagement {
       const constructedUrl = page.url();
 
       const mainFrameTargetId = res.targetInfos.find(
-        ({ url, type }) => constructedUrl === url && type == 'page'
+        ({ url, type }) => constructedUrl === url && type === 'page'
       )?.targetId;
 
       pageTargetIds[_url] = mainFrameTargetId || '';
-
     }
     return pageTargetIds;
   }
@@ -393,13 +394,7 @@ export class BrowserManagement {
     this.debugLog('done attaching network event listeners');
   }
 
-  async getJSCookies(pageId: string) {
-    const page = this.pages[pageId];
-
-    if (!page) {
-      throw new Error(`no page with the provided id was found:${pageId}`);
-    }
-
+  async getJSCookies(page: Page) {
     const frames = page.frames();
 
     const cookies: CookieStoreCookie[] = [];
@@ -422,10 +417,13 @@ export class BrowserManagement {
     return cookies;
   }
 
-  async analyzeCookies(urls: string[], shouldSkipAcceptBanner: boolean) {
+  async analyzeCookies(
+    userProvidedUrls: string[],
+    shouldSkipAcceptBanner: boolean
+  ) {
     // Open tabs and attach network listeners
     await Promise.all(
-      urls.map(async (url) => {
+      userProvidedUrls.map(async (url) => {
         const sitePage = await this.openPage();
         this.pages[url] = sitePage;
         await this.attachListenersToPage(url);
@@ -434,7 +432,7 @@ export class BrowserManagement {
 
     // Navigate to URLs
     await Promise.all(
-      urls.map(async (url) => {
+      userProvidedUrls.map(async (url) => {
         await this.navigateToPage(url);
       })
     );
@@ -447,7 +445,7 @@ export class BrowserManagement {
       // delay
 
       await Promise.all(
-        urls.map(async (url) => {
+        userProvidedUrls.map(async (url) => {
           await this.clickOnAcceptBanner(url);
         })
       );
@@ -455,7 +453,7 @@ export class BrowserManagement {
 
     // Scroll to bottom of the page
     await Promise.all(
-      urls.map(async (url) => {
+      userProvidedUrls.map(async (url) => {
         await this.pageScroll(url);
       })
     );
@@ -470,15 +468,15 @@ export class BrowserManagement {
     });
 
     const result = await Promise.all(
-      urls.map(async (url) => {
-        const _responses = this.pageResponses[url];
-        const _requests = this.pageRequests[url];
-        const _page = this.pages[url];
-        const _pageFrames = this.pageFrames[url];
+      userProvidedUrls.map(async (userProvidedUrl) => {
+        const _responses = this.pageResponses[userProvidedUrl];
+        const _requests = this.pageRequests[userProvidedUrl];
+        const _page = this.pages[userProvidedUrl];
+        const _pageFrames = this.pageFrames[userProvidedUrl];
 
         if (!_responses || !_requests || !_page) {
           return {
-            pageUrl: url,
+            pageUrl: userProvidedUrl,
             cookieData: {},
           };
         }
@@ -487,20 +485,30 @@ export class BrowserManagement {
           _responses,
           _requests,
           _page,
-          _pageFrames,
+          _pageFrames
         );
 
-        const cookieDataFromJS = await this.getJSCookies(url);
+        const cookieDataFromJS = await this.getJSCookies(_page);
 
-        // const cookieData = collateCookieData(
-        //   cookieDataFromJS,
-        //   cookieDataFromNetwork
-        // );
+        const mainFrameUrl = new URL(_page.url()).origin;
+
+        const mainframeCookieData = collateMainframeCookieData(
+          cookieDataFromNetwork[mainFrameUrl].frameCookies,
+          cookieDataFromJS
+        );
 
         return {
           // Page may redirect. page.url() gives the redirected URL
-          url: _page.url(),
-          cookieData: cookieDataFromNetwork,
+          url: mainFrameUrl,
+          cookieData: {
+            [mainFrameUrl]: {
+              frameCookies: {
+                ...mainframeCookieData,
+                ...cookieDataFromNetwork[mainFrameUrl].frameCookies,
+              },
+            },
+            ...cookieDataFromNetwork,
+          },
         };
       })
     );
