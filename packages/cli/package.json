@@ -19,7 +19,7 @@
     "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
   },
   "bin": {
-    "psat": "./dist/index.js"
+    "psat": "./dist/main.js"
   },
   "type": "commonjs",
   "repository": {
