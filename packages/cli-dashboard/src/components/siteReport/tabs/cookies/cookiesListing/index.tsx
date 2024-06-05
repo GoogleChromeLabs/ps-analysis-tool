@@ -45,8 +45,9 @@ const CookiesListing = ({
     [frame: string]: CookieTableData | null;
   } | null>(null);
 
-  const { tabCookies } = useContentStore(({ state }) => ({
+  const { tabCookies, path } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
+    path: state.path,
   }));
 
   const cookies = useMemo(
@@ -94,6 +95,7 @@ const CookiesListing = ({
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           isFiltersSidebarOpen={isSidebarOpen}
+          hostname={path}
         />
       </Resizable>
       <CookieDetails
