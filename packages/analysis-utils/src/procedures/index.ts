@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-export { testProcedure } from './testProcedure';
-// export { analyzeCookiesUrls } from './analyzeCookieUrls';
-// export { analyzeCookiesUrlsInBatches } from './analyzeCookieUrlsInBatches';
-// export { analyzeTechnologiesUrlsInBatches } from './analyzeTechnologiesUrlsInBatches';
+export { analyzeCookiesUrls } from './analyzeCookieUrls';
+export { analyzeCookiesUrlsInBatches } from './analyzeCookieUrlsInBatches';
+export { analyzeTechnologiesUrlsInBatches } from './analyzeTechnologiesUrlsInBatches';

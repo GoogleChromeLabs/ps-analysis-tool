@@ -476,7 +476,7 @@ export class BrowserManagement {
 
         if (!_responses || !_requests || !_page) {
           return {
-            pageUrl: userProvidedUrl,
+            url: userProvidedUrl,
             cookieData: {},
           };
         }
