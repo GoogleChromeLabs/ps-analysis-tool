@@ -22,10 +22,6 @@ import { writeFile } from "fs-extra";
 
 
 /**
- * External dependencies.
- */
-
-/**
  * Internal dependencies.
  */
 
@@ -38,7 +34,7 @@ export const testProcedure = async() => {
       height: 790,
       deviceScaleFactor: 1,
     },
-    true,
+    false,
     10000,
     false
   );
@@ -47,7 +43,7 @@ export const testProcedure = async() => {
   await browser.initializeBrowser(true);
 
   await browser.analyzeCookies(
-    ['https://bbc.com/', 'https://livemint.com/', "https://edition.cnn.com/"],
+    ['https://bbc.com/'],
     false
   );
 

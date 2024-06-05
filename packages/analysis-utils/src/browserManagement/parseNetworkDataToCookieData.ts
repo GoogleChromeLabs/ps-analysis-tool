@@ -24,20 +24,19 @@ import type { Page,Frame, Protocol } from 'puppeteer';
  */
 import { RequestData, ResponseData } from './types';
 
-export const parseNetworkDataToCookieData = async(
+export const parseNetworkDataToCookieData = async (
   responses: Record<string, ResponseData>,
   requests: Record<string, RequestData>,
-  page: Page
+  page: Page,
+  pageFrames: Record<string, string>
 ): Promise<{
   [frameUrl: string]: {
-    cookiesCount: number;
     frameCookies: {
       [key: string]: CookieData;
     };
   };
 }> => {
-
-  const mainFrameId = "";
+  const mainFrameId = '';
 
   const frameIdNetworkDataMap: Record<
     string,
@@ -54,33 +53,31 @@ export const parseNetworkDataToCookieData = async(
 
     const frameId = response.frameId || mainFrameId;
 
-    if (!frameIdNetworkDataMap[frameId]){
+    if (!frameIdNetworkDataMap[frameId]) {
       frameIdNetworkDataMap[frameId] = {
-        requests:[],
-        responses:[]
-      }
+        requests: [],
+        responses: [],
+      };
     }
 
     frameIdNetworkDataMap[frameId].responses.push(response);
   }
 
   for (const request of Object.values(requests)) {
-
     if (!request.cookies || request.cookies.length === 0) {
       continue;
     }
 
     const frameId = request.frameId || mainFrameId;
 
-    if (!frameIdNetworkDataMap[frameId]){
+    if (!frameIdNetworkDataMap[frameId]) {
       frameIdNetworkDataMap[frameId] = {
-        requests:[],
-        responses:[]
-      }
+        requests: [],
+        responses: [],
+      };
     }
 
     frameIdNetworkDataMap[frameId].requests.push(request);
-    
   }
 
   const frameIdCookiesMap: Record<
@@ -175,7 +172,39 @@ export const parseNetworkDataToCookieData = async(
     };
   }
 
-  const frameUrlCookies: Record<
+  const cdpSession = await page.createCDPSession();
+
+  const { targetInfos } = await cdpSession.send('Target.getTargets');
+
+  const allTargets: Record<string, string> = {};
+  const pageTargets: Record<string, string> = {};
+
+  targetInfos.forEach(({ targetId, url }) => {
+    allTargets[targetId] = url;
+  });
+
+  for (const frameId of Object.keys(frameIdCookiesMap)){
+
+    let url = "";
+    let _frameId = frameId;
+
+    while(url === ""){
+      if (_frameId === "0"){
+        url = page.url();
+      }
+
+      if(allTargets[frameId]){
+        url = allTargets[frameId]
+      }
+      else {
+        // Seek parent
+        _frameId = pageFrames[_frameId];
+      }
+    }
+    pageTargets[frameId] = url;
+  }
+
+  const frameUrlCookiesMap: Record<
     string,
     {
       frameCookies: {
@@ -184,39 +213,18 @@ export const parseNetworkDataToCookieData = async(
     }
   > = {};
 
-  // const { frameTree } = await cdpSession.send('Page.getFrameTree');
+  for (const [frameId, data] of Object.entries(frameIdCookiesMap)) {
 
-  // const logFrame = ({frame,childFrames}:Protocol.Page.FrameTree) =>{
-  //   console.log(frame.id);
-  //   console.log(frame.url);
+    const key = new URL(pageTargets[frameId]).hostname;
 
-  //   childFrames?.forEach(logFrame);
-  // }
- 
-  // logFrame(frameTree);
+    frameUrlCookiesMap[key] = {
+      frameCookies: {
+      ...data.frameCookies,
+      ...(frameUrlCookiesMap[key]?.frameCookies || {}),
+      },
+    };
+  }
 
-  // for (const data of Object.values(frameIdCookiesMap)) {
-    
-  //   if (!data.frameUrl.includes('http')) {
-  //     continue;
-  //   }
+  return frameUrlCookiesMap;
 
-  //   const _url = new URL(data.frameUrl);
-
-  //   const newFrameCookies = {
-  //     ...data.frameCookies,
-  //     ...(frameUrlCookies.get(_url.origin)?.frameCookies || {}),
-  //   };
-
-  //   frameUrlCookies.set(_url.origin, {
-  //     cookiesCount: Object.keys(newFrameCookies)?.length || 0,
-  //     frameCookies: {
-  //       ...newFrameCookies,
-  //     },
-  //   });
-  // }
-
-  // return Object.fromEntries(frameUrlCookies);
-
-  return {};
 };

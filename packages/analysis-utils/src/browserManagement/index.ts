@@ -183,11 +183,34 @@ export class BrowserManagement {
     pageId: string,
     { requestId, frameId, response }: Protocol.Network.ResponseReceivedEvent
   ) {
-    this.pageResponses[pageId][requestId] = {
-      frameId,
-      url: response.url,
-      cookies: this.pageResponses[pageId][requestId]?.cookies || [],
-    };
+
+    if (!this.pageResponses[pageId][requestId]) {
+      this.pageResponses[pageId][requestId] = {
+        frameId,
+        url: response.url,
+        cookies: [],
+      };
+    } else {
+
+      const parsedCookies = this.pageResponses[pageId][requestId]?.cookies.map((cookie)=>{
+        if (!cookie.url){
+          cookie.url = response.url;
+        }
+
+        if (!cookie.parsedCookie.domain){
+          cookie.parsedCookie.domain = new URL(response.url).hostname;
+        }
+        return cookie;
+      })
+
+      this.pageResponses[pageId][requestId] = {
+        frameId,
+        url: response.url,
+        cookies: parsedCookies,
+      };
+
+    }
+
   }
 
   responseReceivedExtraInfoListener(
@@ -212,10 +235,15 @@ export class BrowserManagement {
         return c.cookie?.name === parsedCookie.name;
       });
 
+
+      const url = this.pageResponses[pageId][requestId]?.url
+
       return {
         parsedCookie: {
           name: parsedCookie.name,
-          domain: parsedCookie.domain,
+          domain:
+            parsedCookie.domain ||
+            url && new URL(url).hostname,
           path: parsedCookie.path || '/',
           value: parsedCookie.value,
           sameSite: parsedCookie.samesite || 'Lax',
@@ -226,6 +254,7 @@ export class BrowserManagement {
         },
         isBlocked: Boolean(blockedEntry),
         blockedReasons: blockedEntry?.blockedReasons,
+        url 
       };
     });
 
@@ -234,7 +263,7 @@ export class BrowserManagement {
 
     this.pageResponses[pageId][requestId] = {
       frameId: this.pageResponses[pageId][requestId]?.frameId || '',
-      serverUrl: this.pageResponses[pageId][requestId]?.url || '',
+      url: this.pageResponses[pageId][requestId]?.url || '',
       // @ts-ignore TODO: fix expires type mismatch
       cookies: mergedCookies,
     };
@@ -445,6 +474,7 @@ export class BrowserManagement {
         const _responses = this.pageResponses[url];
         const _requests = this.pageRequests[url];
         const _page = this.pages[url];
+        const _pageFrames = this.pageFrames[url];
 
         if (!_responses || !_requests || !_page) {
           return {
@@ -456,7 +486,8 @@ export class BrowserManagement {
         const cookieDataFromNetwork = await parseNetworkDataToCookieData(
           _responses,
           _requests,
-          _page
+          _page,
+          _pageFrames,
         );
 
         const cookieDataFromJS = await this.getJSCookies(url);
