@@ -8,6 +8,15 @@
     "type": "git",
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc-watch",
+    "build:remove": "rm -rf dist dist-types tsconfig.tsbuildinfo",
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
+  },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
