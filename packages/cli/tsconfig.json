@@ -12,5 +12,9 @@
     "composite": true
   },
   "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
-  "references": [{ "path": "../common" }, { "path": "../i18n" }]
+  "references": [
+    { "path": "../common" },
+    { "path": "../i18n" },
+    { "path": "../analysis-utils" }
+  ]
 }

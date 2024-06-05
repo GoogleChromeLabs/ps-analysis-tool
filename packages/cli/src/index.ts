@@ -25,19 +25,23 @@ import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
+import {
+  analyzeCookiesUrlsInBatches,
+  analyzeTechnologiesUrlsInBatches,
+} from '@ps-analysis-tool/analysis-utils';
+
 /**
  * Internal dependencies.
  */
-import Utility from './utils/utility';
-import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
-import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 import {
   fetchDictionary,
   getUrlListFromArgs,
   validateArgs,
   saveCSVReports,
+  askUserInput,
+  checkPortInUse,
+  generatePrefix,
 } from './utils';
-import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -161,7 +165,7 @@ const saveResultsAsHTML = async (
 
   const prefix =
     url || sitemapUrl
-      ? Utility.generatePrefix(url || sitemapUrl)
+      ? generatePrefix(url || sitemapUrl)
       : path.parse(csvPath || sitemapPath).name;
 
   let outputDir;
@@ -191,7 +195,7 @@ const saveResultsAsHTML = async (
     let userInput: string | null = null;
 
     if (!shouldSkipPrompts && !numberOfUrlsInput) {
-      userInput = await Utility.askUserInput(
+      userInput = await askUserInput(
         `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
           urls.length
         } pages. Please enter the number of pages you want to analyze (Default ${
@@ -202,7 +206,7 @@ const saveResultsAsHTML = async (
       numberOfUrls =
         userInput && isNaN(parseInt(userInput))
           ? urls.length
-          : parseInt(userInput);
+          : parseInt(userInput as string);
     } else if (numberOfUrlsInput) {
       console.log(`Analysing ${numberOfUrlsInput} urls.`);
       numberOfUrls = parseInt(numberOfUrlsInput);
