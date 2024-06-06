@@ -19,7 +19,11 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
-import { delay, type CookieData } from '@ps-analysis-tool/common';
+import {
+  delay,
+  resolveWithTimeout,
+  type CookieData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -332,10 +336,11 @@ export class BrowserManagement {
   async getMainframeIds() {
     const pageTargetIds: Record<string, string> = {};
 
-    for (const [_url, page] of Object.entries(this.pages)) {
-      const cdpSession = await page.createCDPSession();
-      const res = await cdpSession.send('Target.getTargets');
+    // This gets targets for all pages.
+    const cdpSession = await Object.values(this.pages)[0].createCDPSession();
+    const res = await cdpSession.send('Target.getTargets');
 
+    for (const [_url, page] of Object.entries(this.pages)) {
       const constructedUrl = page.url();
 
       const mainFrameTargetId = res.targetInfos.find(
@@ -405,10 +410,13 @@ export class BrowserManagement {
           return;
         }
 
-        const _JSCookies: CookieStoreCookie[] = await frame.evaluate(() => {
-          // @ts-ignore
-          return cookieStore.getAll();
-        });
+        const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
+          frame.evaluate(() => {
+            // @ts-ignore
+            return cookieStore.getAll();
+          }),
+          200
+        );
 
         cookies.push(..._JSCookies);
       })
@@ -461,9 +469,9 @@ export class BrowserManagement {
     // Delay for page to load more resources
     await delay(this.pageWaitTime / 2);
 
-    const mainframeIds = await this.getMainframeIds();
+    const mainFrameUrlIdMap = await this.getMainframeIds();
 
-    Object.entries(mainframeIds).forEach(([_url, id]) => {
+    Object.entries(mainFrameUrlIdMap).forEach(([_url, id]) => {
       this.pageFrames[_url][id] = '0';
     });
 

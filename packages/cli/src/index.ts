@@ -197,9 +197,9 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   const cookieDictionary = await fetchDictionary();
 
-  spinnies.add('cookie-spinner', {
-    text: 'Analysing cookies on first site visit',
-  });
+  // spinnies.add('cookie-spinner', {
+  //   text: 'Analysing cookies on first site visit',
+  // });
 
   const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
     urlsToProcess,
@@ -211,9 +211,9 @@ const startDashboardServer = async (dir: string, port: number) => {
     shouldSkipAcceptBanner
   );
 
-  spinnies.succeed('cookie-spinner', {
-    text: 'Done analyzing cookies.',
-  });
+  // spinnies.succeed('cookie-spinner', {
+  //   text: 'Done analyzing cookies.',
+  // });
 
   let technologyAnalysisData: any = null;
 
