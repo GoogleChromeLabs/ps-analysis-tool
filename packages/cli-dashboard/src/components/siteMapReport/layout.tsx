@@ -50,6 +50,7 @@ interface LayoutProps {
   completeJson: CompleteJson[] | null;
   sidebarData: SidebarItems;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
+  path: string;
 }
 
 const Layout = ({
@@ -59,6 +60,7 @@ const Layout = ({
   completeJson,
   sidebarData,
   setSidebarData,
+  path,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
 
@@ -154,6 +156,7 @@ const Layout = ({
                 technologies: siteFilteredTechnologies,
                 completeJson,
                 selectedSite: site,
+                path,
               },
             },
             children: {},
@@ -185,6 +188,7 @@ const Layout = ({
     completeJson,
     cookiesWithIssues,
     isKeySelected,
+    path,
     reshapedCookies,
     setSidebarData,
     siteFilteredCookies,

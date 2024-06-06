@@ -83,6 +83,8 @@ const App = () => {
         cookies={cookies}
         technologies={technologies}
         completeJson={completeJsonReport}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
       />
     );
   }
@@ -95,6 +97,8 @@ const App = () => {
         technologies={technologies}
         // @ts-ignore
         selectedSite={globalThis?.PSAT_DATA?.selectedSite}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
       />
     </div>
   );
