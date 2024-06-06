@@ -17,13 +17,16 @@
 /**
  * External dependencies.
  */
-import { isFirstParty, findAnalyticsMatch } from '@ps-analysis-tool/common';
+import {
+  isFirstParty,
+  findAnalyticsMatch,
+  CookieDatabase,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { CookieDatabase } from '../types';
-import { BrowserManagement } from '../utils/browserManagement';
+import { BrowserManagement } from '../browserManagement';
 
 export const analyzeCookiesUrls = async (
   urls: string[],

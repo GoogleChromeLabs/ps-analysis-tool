@@ -15,10 +15,13 @@
  */
 
 /**
+ * External dependencies.
+ */
+import { CookieData, CookieDatabase } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies.
  */
-import { CookieData } from '@ps-analysis-tool/common';
-import { CookieDatabase } from '../types';
 import { analyzeCookiesUrls } from './analyzeCookieUrls';
 
 export const analyzeCookiesUrlsInBatches = async (

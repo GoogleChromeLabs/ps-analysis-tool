@@ -13,22 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Generate prefix
- * @param {string} url Url in a string format.
- * @returns {string} string with protocol removed and special characters replaces with -
- */
-export default function generatePrefix(url: string): string {
-  const urlObject = new URL(url);
 
-  const path = (urlObject.hostname + urlObject.pathname).replace(
-    /[^a-zA-Z0-9 ]/g,
-    '-'
-  );
-
-  if (path.endsWith('-')) {
-    return path.slice(0, -1);
-  }
-
-  return path;
-}
+export { analyzeCookiesUrls } from './analyzeCookieUrls';
+export { analyzeCookiesUrlsInBatches } from './analyzeCookieUrlsInBatches';
+export { analyzeTechnologiesUrlsInBatches } from './analyzeTechnologiesUrlsInBatches';

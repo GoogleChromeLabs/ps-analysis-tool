@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
- * Generate prefix
- * @param {string} url Url in a string format.
- * @returns {string} string with protocol removed and special characters replaces with -
+ * External dependencies.
  */
-export default function generatePrefix(url: string): string {
-  const urlObject = new URL(url);
+import promptly from 'promptly';
 
-  const path = (urlObject.hostname + urlObject.pathname).replace(
-    /[^a-zA-Z0-9 ]/g,
-    '-'
-  );
-
-  if (path.endsWith('-')) {
-    return path.slice(0, -1);
-  }
-
-  return path;
+/**
+ * Ask user input.
+ * @param {string} message Message to user.
+ * @param {object} options Options.
+ * @returns {Promise<any>} User's input.
+ */
+async function askUserInput(
+  message: string,
+  options: object = {}
+): Promise<string> {
+  const userInput: string = await promptly.prompt(message, options);
+  return userInput;
 }
+
+export default askUserInput;

@@ -113,6 +113,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           extraInterfaceToTopBar={extraInterfaceToTopBar}
           onRowContextMenu={rowContextMenuRef.current?.onRowContextMenu}
           ref={cookieTableRef}
+          hostname={tabUrl ? new URL(tabUrl).hostname : ''}
         />
       </Resizable>
       <CookieDetails
