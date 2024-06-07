@@ -265,10 +265,10 @@ const saveResultsAsHTML = async (
       cookieData: cookieAnalysisData[ind].cookieData,
     } as unknown as CompleteJson;
   });
-  const isSiteMap = sitemapPath ? true : false;
+  const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   await saveResultsAsJSON(outputDir, result);
-  await saveResultsAsHTML(outputDir, result, isSiteMap, prefix);
+  await saveResultsAsHTML(outputDir, result, isSiteMap, urlsToProcess[0]);
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
