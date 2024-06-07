@@ -5,6 +5,9 @@
   "main": "./dist/index.js",
   "types": "./dist-types/index.d.ts",
   "source": "./src/index.ts",
+  "author": {
+    "name": "Google"
+  },
   "customExports": {
     ".": {
       "default": "./src/index.ts"
@@ -23,7 +26,6 @@
     "type": "git",
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
-  "author": "",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

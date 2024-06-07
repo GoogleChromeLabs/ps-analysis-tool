@@ -10,6 +10,9 @@
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
+  "author": {
+    "name": "Google"
+  },
   "scripts": {
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --registry=https://registry.npmjs.org",

@@ -2,6 +2,9 @@
   "name": "@ps-analysis-tool/cli-dashboard",
   "version": "0.8.0",
   "description": "Dashboard for visualizing cli analysis output",
+  "author": {
+    "name": "Google"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
