@@ -33,9 +33,10 @@ import {
   RequestData,
   ViewportConfig,
   CookieStoreCookie,
+  CookieDataFromNetwork,
 } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
-import collateMainframeCookieData from './collateMainframeCookieData';
+import collateCookieData from './collateCookieData';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -208,6 +209,9 @@ export class BrowserManagement {
           if (!cookie.parsedCookie.domain) {
             cookie.parsedCookie.domain = new URL(response.url).hostname;
           }
+          if (cookie.parsedCookie.domain[0] !== '.') {
+            cookie.parsedCookie.domain = '.' + cookie.parsedCookie.domain;
+          }
           return cookie;
         }
       );
@@ -244,10 +248,17 @@ export class BrowserManagement {
 
       const url = this.pageResponses[pageId][requestId]?.url;
 
+      if (!parsedCookie.domain && url) {
+        parsedCookie.domain = new URL(url).hostname;
+      }
+      if (parsedCookie.domain && parsedCookie.domain[0] !== '.') {
+        parsedCookie.domain = '.' + parsedCookie.domain;
+      }
+
       return {
         parsedCookie: {
           name: parsedCookie.name,
-          domain: parsedCookie.domain || (url && new URL(url).hostname),
+          domain: parsedCookie.domain,
           path: parsedCookie.path || '/',
           value: parsedCookie.value,
           sameSite: parsedCookie.samesite || 'Lax',
@@ -402,7 +413,7 @@ export class BrowserManagement {
   async getJSCookies(page: Page) {
     const frames = page.frames();
 
-    const cookies: CookieStoreCookie[] = [];
+    const cookies: CookieDataFromNetwork = {};
 
     await Promise.all(
       frames.map(async (frame) => {
@@ -418,7 +429,23 @@ export class BrowserManagement {
           200
         );
 
-        cookies.push(..._JSCookies);
+        const frameCookies: {
+          [key: string]: CookieData;
+        } = {};
+
+        _JSCookies.forEach((cookie) => {
+          if (!cookie.domain) {
+            cookie.domain = new URL(frame.url()).hostname;
+          }
+          if (cookie.domain[0] !== '.') {
+            cookie.domain = '.' + cookie.domain;
+          }
+          const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
+          frameCookies[key] = { parsedCookie: cookie };
+        });
+
+        const frameUrl = new URL(frame.url()).origin;
+        cookies[frameUrl] = { frameCookies };
       })
     );
 
@@ -500,23 +527,15 @@ export class BrowserManagement {
 
         const mainFrameUrl = new URL(_page.url()).origin;
 
-        const mainframeCookieData = collateMainframeCookieData(
-          cookieDataFromNetwork[mainFrameUrl].frameCookies,
+        const collatedCookieData = collateCookieData(
+          cookieDataFromNetwork,
           cookieDataFromJS
         );
 
         return {
           // Page may redirect. page.url() gives the redirected URL
           url: mainFrameUrl,
-          cookieData: {
-            [mainFrameUrl]: {
-              frameCookies: {
-                ...mainframeCookieData,
-                ...cookieDataFromNetwork[mainFrameUrl].frameCookies,
-              },
-            },
-            ...cookieDataFromNetwork,
-          },
+          cookieData: collatedCookieData,
         };
       })
     );
