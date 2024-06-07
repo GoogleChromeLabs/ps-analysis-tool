@@ -110,7 +110,7 @@ const saveResultsAsHTML = async (
     window.PSAT_DATA = ${JSON.stringify({
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',
-      selectedSite: prefix.trim().slice(4),
+      selectedSite: prefix?.trim()?.slice(4) ?? '',
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
   fs.copyFileSync(
