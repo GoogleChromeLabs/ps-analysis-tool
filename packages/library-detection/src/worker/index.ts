@@ -24,7 +24,7 @@ import { LIBRARY_DETECTION_WORKER_TASK } from '@ps-analysis-tool/common';
 import detectMatchingSignatures from '../core/detectMatchingSignatures';
 import { type PreDefinedLibraryWorkerTaskPayload } from './constants';
 import LIBRARIES from '../config';
-import type { DetectionFunctions, LibraryData } from '../types';
+import type { DetectionFunctions } from '../types';
 
 /**
  * Library Detection worker function that handles tasks related to library detection.
@@ -50,33 +50,5 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
     }
     default:
       postMessage('Task not defined');
-  }
-};
-
-/**
- * Library Detection worker function that handles tasks related to library detection.
- * @param {MessageEvent} event - The MessageEvent containing task and payload data.
- */
-export const ldWorkerOnMessageCallbackForCLI = (
-  event: MessageEvent
-): LibraryData | null => {
-  const task: LIBRARY_DETECTION_WORKER_TASK = event.data.task;
-  const scripts: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
-    event.data.payload;
-
-  const detectionFunctions = Object.fromEntries(
-    LIBRARIES.map((library) => [library.name, library.detectionFunction])
-  );
-
-  switch (task) {
-    case LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING: {
-      const detectedMatchingSignatures = detectMatchingSignatures(
-        scripts,
-        detectionFunctions as DetectionFunctions
-      );
-      return detectedMatchingSignatures;
-    }
-    default:
-      return null;
   }
 };

@@ -22,9 +22,9 @@ import { CookieData, CookieDatabase } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { analyzeCookiesUrls } from './analyzeCookieUrls';
+import { analyzeCookiesUrlsAndFetchResources } from './analyzeCookiesUrlsAndFetchResources';
 
-export const analyzeCookiesUrlsInBatches = async (
+export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   urls: string[],
   isHeadless: boolean,
   delayTime: number,
@@ -52,6 +52,11 @@ export const analyzeCookiesUrlsInBatches = async (
         };
       };
     };
+    resources: {
+      origin: string | null;
+      content: string;
+      type?: string;
+    }[];
   }[] = [];
 
   for (let i = 0; i < urls.length; i += batchSize) {
@@ -66,15 +71,16 @@ export const analyzeCookiesUrlsInBatches = async (
 
     const urlsWindow = urls.slice(start, end + 1);
 
-    const cookieAnalysis = await analyzeCookiesUrls(
-      urlsWindow,
-      isHeadless,
-      delayTime,
-      cookieDictionary,
-      shouldSkipAcceptBanner
-    );
+    const cookieAnalysisAndFetchedResources =
+      await analyzeCookiesUrlsAndFetchResources(
+        urlsWindow,
+        isHeadless,
+        delayTime,
+        cookieDictionary,
+        shouldSkipAcceptBanner
+      );
 
-    report = [...report, ...cookieAnalysis];
+    report = [...report, ...cookieAnalysisAndFetchedResources];
 
     spinnies &&
       spinnies.succeed(`cookie-batch-spinner`, {

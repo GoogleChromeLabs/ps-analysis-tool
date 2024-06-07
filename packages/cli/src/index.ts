@@ -26,10 +26,14 @@ import fs from 'fs';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
 import {
-  analyzeCookiesUrlsInBatches,
+  analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
 } from '@ps-analysis-tool/analysis-utils';
-import { ldWorkerOnMessageCallbackForCLI } from '@ps-analysis-tool/library-detection';
+import {
+  DetectionFunctions,
+  Libraries,
+  detectMatchingSignatures,
+} from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -227,15 +231,16 @@ const saveResultsAsHTML = async (
     text: 'Analysing cookies on first site visit',
   });
 
-  const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
-    urlsToProcess,
-    isHeadless,
-    DELAY_TIME,
-    cookieDictionary,
-    3,
-    urlsToProcess.length !== 1 ? spinnies : undefined,
-    shouldSkipAcceptBanner
-  );
+  const cookieAnalysisAndFetchedResourceData =
+    await analyzeCookiesUrlsInBatchesAndFetchResources(
+      urlsToProcess,
+      isHeadless,
+      DELAY_TIME,
+      cookieDictionary,
+      3,
+      urlsToProcess.length !== 1 ? spinnies : undefined,
+      shouldSkipAcceptBanner
+    );
 
   spinnies.succeed('cookie-spinner', {
     text: 'Done analyzing cookies.',
@@ -258,19 +263,18 @@ const saveResultsAsHTML = async (
       text: 'Done analyzing technologies.',
     });
   }
-
   const result = urlsToProcess.map((_url, ind) => {
-    const matches = ldWorkerOnMessageCallbackForCLI({
-      data: {
-        task: 'DetectSignatureMatching',
-        payload: cookieAnalysisData[ind]?.libraryMatches,
-      },
-    } as MessageEvent);
+    const detectedMatchingSignatures = detectMatchingSignatures(
+      cookieAnalysisAndFetchedResourceData[ind].resources,
+      Object.fromEntries(
+        Libraries.map((library) => [library.name, library.detectionFunction])
+      ) as DetectionFunctions
+    );
     return {
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
-      cookieData: cookieAnalysisData[ind].cookieData,
-      libraryMatches: matches ?? {},
+      cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
+      libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;
   });
 

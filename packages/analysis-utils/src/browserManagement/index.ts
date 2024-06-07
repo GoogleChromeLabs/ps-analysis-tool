@@ -26,7 +26,6 @@ import { CookieData, UNKNOWN_FRAME_KEY, delay } from '@ps-analysis-tool/common';
  */
 import { ResponseData, RequestData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
-import { getResources } from './getResources';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -314,6 +313,56 @@ export class BrowserManagement {
     return frameIdMapFromTree;
   }
 
+  async getResources(urls: string[]) {
+    const allFetchedResources: { [key: string]: any } = {};
+    await Promise.all(
+      urls.map(async (url) => {
+        const page = this.pageMap.get(url);
+
+        if (!page) {
+          allFetchedResources[url] = {};
+          return;
+        }
+
+        const session = await page.createCDPSession();
+        await session.send('Page.enable');
+
+        const {
+          frameTree: { frame, resources },
+        } = await session.send('Page.getResourceTree');
+
+        const resourcesContent = await Promise.all(
+          resources.map(async (resource) => {
+            if (resource.type !== 'Script') {
+              return {};
+            }
+            const { content, base64Encoded } = await session.send(
+              'Page.getResourceContent',
+              {
+                frameId: frame.id,
+                url: resource.url,
+              }
+            );
+            if (base64Encoded) {
+              return {
+                origin: resource.url,
+                content: Buffer.from(content, 'base64'),
+                type: resource.type,
+              };
+            }
+            return {
+              origin: resource.url,
+              content,
+              type: resource.type,
+            };
+          })
+        );
+        allFetchedResources[url] = resourcesContent;
+      })
+    );
+    return allFetchedResources;
+  }
+
   async analyzeCookieUrls(urls: string[], shouldSkipAcceptBanner: boolean) {
     await Promise.all(
       urls.map(async (url) => {
@@ -380,8 +429,6 @@ export class BrowserManagement {
         const applicationCookies = (await session.send('Page.getCookies'))
           .cookies;
 
-        const libraryMatches = await getResources(session);
-
         const filteredApplicationCookies = applicationCookies.filter(
           (cookie) =>
             !networkCookieKeySet.has(
@@ -406,7 +453,6 @@ export class BrowserManagement {
 
         return {
           pageUrl,
-          libraryMatches,
           cookieData: {
             ...cookieDataFromNetwork,
             [UNKNOWN_FRAME_KEY]: {

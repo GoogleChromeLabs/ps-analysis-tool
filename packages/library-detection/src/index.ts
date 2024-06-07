@@ -32,3 +32,6 @@ export * from './components';
 export * from './worker';
 export * from './worker/constants';
 export * from './core/stateProvider';
+export { default as detectMatchingSignatures } from './core/detectMatchingSignatures';
+export { default as Libraries } from './config';
+export * from './types';
