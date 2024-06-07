@@ -320,7 +320,7 @@ export class BrowserManagement {
         const page = this.pageMap.get(url);
 
         if (!page) {
-          allFetchedResources[url] = {};
+          allFetchedResources[url] = [];
           return;
         }
 
@@ -357,7 +357,7 @@ export class BrowserManagement {
             };
           })
         );
-        allFetchedResources[url] = resourcesContent;
+        allFetchedResources[page.url()] = resourcesContent;
       })
     );
     return allFetchedResources;

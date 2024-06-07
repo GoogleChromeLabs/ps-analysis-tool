@@ -265,7 +265,7 @@ const saveResultsAsHTML = async (
   }
   const result = urlsToProcess.map((_url, ind) => {
     const detectedMatchingSignatures = detectMatchingSignatures(
-      cookieAnalysisAndFetchedResourceData[ind].resources,
+      cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
       Object.fromEntries(
         Libraries.map((library) => [library.name, library.detectionFunction])
       ) as DetectionFunctions
