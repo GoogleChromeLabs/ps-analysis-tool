@@ -52,33 +52,36 @@ export const analyzeCookiesUrls = async (
     shouldSkipAcceptBanner
   );
 
-  const res = analysisCookieData.map(({ pageUrl, cookieData }) => {
-    Object.entries(cookieData).forEach(([, frameData]) => {
-      const frameCookies = frameData.frameCookies;
-      Object.entries(frameCookies).forEach(([key, cookie]) => {
-        const analytics = findAnalyticsMatch(
-          cookie.parsedCookie.name,
-          cookieDictionary
-        );
+  const res = analysisCookieData.map(
+    ({ pageUrl, cookieData, libraryMatches }) => {
+      Object.entries(cookieData).forEach(([, frameData]) => {
+        const frameCookies = frameData.frameCookies;
+        Object.entries(frameCookies).forEach(([key, cookie]) => {
+          const analytics = findAnalyticsMatch(
+            cookie.parsedCookie.name,
+            cookieDictionary
+          );
 
-        frameCookies[key].analytics = {
-          platform: analytics?.platform || 'Unknown',
-          category: analytics?.category || 'Uncategorized',
-          gdprUrl: analytics?.gdprUrl || '',
-          description: analytics?.description,
-        };
-        frameCookies[key].isFirstParty = isFirstParty(
-          cookie.parsedCookie.domain,
-          pageUrl
-        );
+          frameCookies[key].analytics = {
+            platform: analytics?.platform || 'Unknown',
+            category: analytics?.category || 'Uncategorized',
+            gdprUrl: analytics?.gdprUrl || '',
+            description: analytics?.description,
+          };
+          frameCookies[key].isFirstParty = isFirstParty(
+            cookie.parsedCookie.domain,
+            pageUrl
+          );
+        });
       });
-    });
 
-    return {
-      pageUrl,
-      cookieData,
-    };
-  });
+      return {
+        pageUrl,
+        cookieData,
+        libraryMatches,
+      };
+    }
+  );
 
   await browser.deinitialize();
   return res;

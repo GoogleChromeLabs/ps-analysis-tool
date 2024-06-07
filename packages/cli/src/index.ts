@@ -29,6 +29,7 @@ import {
   analyzeCookiesUrlsInBatches,
   analyzeTechnologiesUrlsInBatches,
 } from '@ps-analysis-tool/analysis-utils';
+import { ldWorkerOnMessageCallbackForCLI } from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -259,12 +260,20 @@ const saveResultsAsHTML = async (
   }
 
   const result = urlsToProcess.map((_url, ind) => {
+    const matches = ldWorkerOnMessageCallbackForCLI({
+      data: {
+        task: 'DetectSignatureMatching',
+        payload: cookieAnalysisData[ind]?.libraryMatches,
+      },
+    } as MessageEvent);
     return {
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisData[ind].cookieData,
+      libraryMatches: matches ?? {},
     } as unknown as CompleteJson;
   });
+
   const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   await saveResultsAsJSON(outputDir, result);

@@ -26,6 +26,7 @@ import { CookieData, UNKNOWN_FRAME_KEY, delay } from '@ps-analysis-tool/common';
  */
 import { ResponseData, RequestData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
+import { getResources } from '../procedures/getResources';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -379,6 +380,8 @@ export class BrowserManagement {
         const applicationCookies = (await session.send('Page.getCookies'))
           .cookies;
 
+        const libraryMatches = await getResources(session);
+
         const filteredApplicationCookies = applicationCookies.filter(
           (cookie) =>
             !networkCookieKeySet.has(
@@ -403,6 +406,7 @@ export class BrowserManagement {
 
         return {
           pageUrl,
+          libraryMatches,
           cookieData: {
             ...cookieDataFromNetwork,
             [UNKNOWN_FRAME_KEY]: {
