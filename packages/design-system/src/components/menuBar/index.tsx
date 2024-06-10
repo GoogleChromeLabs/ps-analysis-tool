@@ -148,8 +148,10 @@ const MenuBar = ({
               : 'bg-bright-gray'
           )}
           onClick={() => {
-            setIsListenerDisabled(true);
-            setSelectedItem(item.link);
+            if (item.link !== selectedItem) {
+              setIsListenerDisabled(true);
+              setSelectedItem(item.link);
+            }
           }}
         >
           <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
