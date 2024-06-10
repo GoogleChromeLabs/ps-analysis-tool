@@ -385,12 +385,18 @@ export class BrowserManagement {
       Libraries.map(async ({ domQueryFunction, name }) => {
         if (domQueryFunction && name) {
           await page.addScriptTag({
-            content: `window.${name.replaceAll('-', '')}= ${domQueryFunction}`,
+            content: `window.${name.replaceAll('-', '')} = ${domQueryFunction}`,
           });
 
-          const queryResult = await page.evaluate((funcToBeCalled: string) => {
+          const queryResult = await page.evaluate((library: string) => {
             //@ts-ignore
-            return window[`${funcToBeCalled}`]();
+            const functionDOMQuery = window[`${library}`];
+
+            if (!functionDOMQuery) {
+              return [];
+            }
+
+            return functionDOMQuery();
           }, name.replaceAll('-', ''));
 
           domQueryMatches[name] = {
@@ -514,6 +520,6 @@ export class BrowserManagement {
   }
 
   async deinitialize() {
-    await this.browser?.close();
+    //await this.browser?.close();
   }
 }
