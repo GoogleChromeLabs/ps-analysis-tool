@@ -24,7 +24,7 @@ import { ensureFile, writeFile } from 'fs-extra';
 import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
-import { CompleteJson } from '@ps-analysis-tool/common';
+import { CompleteJson, LibraryData } from '@ps-analysis-tool/common';
 import {
   analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
@@ -234,6 +234,8 @@ const saveResultsAsHTML = async (
   const cookieAnalysisAndFetchedResourceData =
     await analyzeCookiesUrlsInBatchesAndFetchResources(
       urlsToProcess,
+      //@ts-ignore Fix type.
+      Libraries,
       isHeadless,
       DELAY_TIME,
       cookieDictionary,
@@ -264,12 +266,15 @@ const saveResultsAsHTML = async (
     });
   }
   const result = urlsToProcess.map((_url, ind) => {
-    const detectedMatchingSignatures = detectMatchingSignatures(
-      cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
-      Object.fromEntries(
-        Libraries.map((library) => [library.name, library.detectionFunction])
-      ) as DetectionFunctions
-    );
+    const detectedMatchingSignatures: LibraryData = {
+      ...detectMatchingSignatures(
+        cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
+        Object.fromEntries(
+          Libraries.map((library) => [library.name, library.detectionFunction])
+        ) as DetectionFunctions
+      ),
+      ...(cookieAnalysisAndFetchedResourceData[ind]?.domQueryMatches ?? {}),
+    };
     return {
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],

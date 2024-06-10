@@ -17,7 +17,12 @@
 /**
  * External dependencies.
  */
-import { CookieData, CookieDatabase } from '@ps-analysis-tool/common';
+import {
+  CookieData,
+  CookieDatabase,
+  LibraryData,
+  LibraryMatchers,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -26,6 +31,7 @@ import { analyzeCookiesUrlsAndFetchResources } from './analyzeCookiesUrlsAndFetc
 
 export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   urls: string[],
+  Libraries: LibraryMatchers[],
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
@@ -57,6 +63,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
       content: string;
       type?: string;
     }[];
+    domQueryMatches: LibraryData;
   }[] = [];
 
   for (let i = 0; i < urls.length; i += batchSize) {
@@ -74,6 +81,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
     const cookieAnalysisAndFetchedResources =
       await analyzeCookiesUrlsAndFetchResources(
         urlsWindow,
+        Libraries,
         isHeadless,
         delayTime,
         cookieDictionary,

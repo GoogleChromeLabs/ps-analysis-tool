@@ -19,7 +19,13 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
-import { CookieData, UNKNOWN_FRAME_KEY, delay } from '@ps-analysis-tool/common';
+import {
+  CookieData,
+  LibraryData,
+  LibraryMatchers,
+  UNKNOWN_FRAME_KEY,
+  delay,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -63,7 +69,12 @@ export class BrowserManagement {
     const args: string[] = [];
 
     if (enable3pCookiePhaseout) {
-      args.push('--test-third-party-cookie-phaseout');
+      args.push(
+        '--test-third-party-cookie-phaseout',
+        '--disable-site-isolation-trials',
+        '--disable-web-security',
+        '--no-sandbox'
+      );
     }
 
     this.browser = await puppeteer.launch({
@@ -363,7 +374,44 @@ export class BrowserManagement {
     return allFetchedResources;
   }
 
-  async analyzeCookieUrls(urls: string[], shouldSkipAcceptBanner: boolean) {
+  async insertAndRunDOMQueryFunctions(
+    url: string,
+    Libraries: LibraryMatchers[]
+  ) {
+    const page = this.pageMap.get(url);
+
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+
+    const domQueryMatches: LibraryData = {};
+
+    await Promise.all(
+      Libraries.map(async ({ domQueryFunction, name }) => {
+        if (domQueryFunction && name) {
+          await page.addScriptTag({
+            content: `window.${name.replaceAll('-', '')}= ${domQueryFunction}`,
+          });
+
+          const queryResult = await page.evaluate((funcToBeCalled: string) => {
+            return window[`${funcToBeCalled}`]();
+          }, name.replaceAll('-', ''));
+
+          domQueryMatches[name] = {
+            domQuerymatches: queryResult as [string],
+          };
+        }
+      })
+    );
+
+    return domQueryMatches;
+  }
+
+  async analyzeCookieUrls(
+    urls: string[],
+    shouldSkipAcceptBanner: boolean,
+    Libraries: LibraryMatchers[]
+  ) {
     await Promise.all(
       urls.map(async (url) => {
         const sitePage = await this.openPage();
@@ -371,7 +419,7 @@ export class BrowserManagement {
         await this.attachNetworkListenersToPage(url);
       })
     );
-
+    const consolidatedDOMQueryMatches: { [key: string]: LibraryData } = {};
     // start navigation in parallel
     await Promise.all(
       urls.map(async (url) => {
@@ -379,6 +427,8 @@ export class BrowserManagement {
         if (shouldSkipAcceptBanner) {
           await this.clickOnAcceptBanner(url);
         }
+        consolidatedDOMQueryMatches[url] =
+          await this.insertAndRunDOMQueryFunctions(url, Libraries);
         await this.pageScroll(url);
       })
     );
@@ -464,7 +514,7 @@ export class BrowserManagement {
       })
     );
 
-    return result;
+    return { result, consolidatedDOMQueryMatches };
   }
 
   async deinitialize() {

@@ -9,7 +9,7 @@
 		"unpublish:all:local": "npm run unpublish:local --workspaces",
 		"publish:all:remote": "npm run build:all && npm run publish:local --workspaces",
 		"unpublish:all:remote": "npm run unpublish:remote --workspaces",
-		"common:prebuild": "npm run cli:prebuild",
+		"common:prebuild": "npm run build:remove -w @ps-analysis-tool/common",
 		"common:build": "npm run common:prebuild && npm run build -w @ps-analysis-tool/common",
 		"analysis-utils:prebuild": "npm run build:remove -w @ps-analysis-tool/analysis-utils",
 		"analysis-utils:dev": "npm run dev -w @ps-analysis-tool/analysis-utils",

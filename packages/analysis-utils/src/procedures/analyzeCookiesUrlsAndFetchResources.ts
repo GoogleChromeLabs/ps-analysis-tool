@@ -21,6 +21,7 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   CookieDatabase,
+  LibraryMatchers,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -30,6 +31,7 @@ import { BrowserManagement } from '../browserManagement';
 
 export const analyzeCookiesUrlsAndFetchResources = async (
   urls: string[],
+  Libraries: LibraryMatchers[],
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
@@ -47,10 +49,8 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   );
 
   await browser.initializeBrowser(true);
-  const analysisCookieData = await browser.analyzeCookieUrls(
-    urls,
-    shouldSkipAcceptBanner
-  );
+  const { result: analysisCookieData, consolidatedDOMQueryMatches } =
+    await browser.analyzeCookieUrls(urls, shouldSkipAcceptBanner, Libraries);
 
   const resources = await browser.getResources(urls);
 
@@ -80,6 +80,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
       pageUrl,
       cookieData,
       resources: resources[pageUrl],
+      domQueryMatches: consolidatedDOMQueryMatches[pageUrl],
     };
   });
 
