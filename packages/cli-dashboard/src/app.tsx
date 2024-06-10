@@ -58,6 +58,16 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const bodyTag = document.querySelector('body');
+
+    if (!bodyTag) {
+      return;
+    }
+
+    bodyTag.style.fontSize = '75%';
+  }, []);
+
+  useEffect(() => {
     // @ts-ignore
     const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);
