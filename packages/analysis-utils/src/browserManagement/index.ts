@@ -406,7 +406,7 @@ export class BrowserManagement {
       })
     );
 
-    return domQueryMatches;
+    return { [page.url()]: domQueryMatches };
   }
 
   async analyzeCookieUrls(
@@ -421,7 +421,8 @@ export class BrowserManagement {
         await this.attachNetworkListenersToPage(url);
       })
     );
-    const consolidatedDOMQueryMatches: { [key: string]: LibraryData } = {};
+
+    let consolidatedDOMQueryMatches: { [key: string]: LibraryData } = {};
     // start navigation in parallel
     await Promise.all(
       urls.map(async (url) => {
@@ -429,8 +430,10 @@ export class BrowserManagement {
         if (shouldSkipAcceptBanner) {
           await this.clickOnAcceptBanner(url);
         }
-        consolidatedDOMQueryMatches[url] =
-          await this.insertAndRunDOMQueryFunctions(url, Libraries);
+        consolidatedDOMQueryMatches = {
+          ...consolidatedDOMQueryMatches,
+          ...(await this.insertAndRunDOMQueryFunctions(url, Libraries)),
+        };
         await this.pageScroll(url);
       })
     );
@@ -520,6 +523,6 @@ export class BrowserManagement {
   }
 
   async deinitialize() {
-    await this.browser?.close();
+    //await this.browser?.close();
   }
 }
