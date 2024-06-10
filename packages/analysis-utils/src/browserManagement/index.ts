@@ -69,12 +69,7 @@ export class BrowserManagement {
     const args: string[] = [];
 
     if (enable3pCookiePhaseout) {
-      args.push(
-        '--test-third-party-cookie-phaseout',
-        '--disable-site-isolation-trials',
-        '--disable-web-security',
-        '--no-sandbox'
-      );
+      args.push('--test-third-party-cookie-phaseout');
     }
 
     this.browser = await puppeteer.launch({
@@ -394,6 +389,7 @@ export class BrowserManagement {
           });
 
           const queryResult = await page.evaluate((funcToBeCalled: string) => {
+            //@ts-ignore
             return window[`${funcToBeCalled}`]();
           }, name.replaceAll('-', ''));
 
