@@ -523,6 +523,6 @@ export class BrowserManagement {
   }
 
   async deinitialize() {
-    //await this.browser?.close();
+    await this.browser?.close();
   }
 }
