@@ -47,16 +47,12 @@ const MenuBar = ({
   scrollContainerId,
 }: MenuBarProps) => {
   const [selectedItem, setSelectedItem] = useState<string>(menuData[0].link);
-  const [isListenerDisabled, setIsListenerDisabled] = useState<boolean>(false);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     const element = document.getElementById(selectedItem);
     if (element) {
       element.scrollIntoView?.({ behavior: 'smooth' });
-      timeout = setTimeout(() => {
-        setIsListenerDisabled(false);
-      }, 700);
     }
     return () => {
       if (timeout) {
@@ -72,7 +68,7 @@ const MenuBar = ({
       const firstItemLink = menuData[0].link;
       const lastItemLink = menuData[menuData.length - 1].link;
 
-      if (isListenerDisabled || !scrollContainer) {
+      if (!scrollContainer) {
         return;
       }
 
@@ -101,7 +97,7 @@ const MenuBar = ({
     return () => {
       scrollContainer?.removeEventListener('scroll', handleScroll);
     };
-  }, [menuData, isListenerDisabled, scrollContainerId]);
+  }, [menuData, scrollContainerId]);
 
   return (
     <nav
@@ -148,7 +144,6 @@ const MenuBar = ({
               : 'bg-bright-gray'
           )}
           onClick={() => {
-            setIsListenerDisabled(true);
             setSelectedItem(item.link);
           }}
         >
