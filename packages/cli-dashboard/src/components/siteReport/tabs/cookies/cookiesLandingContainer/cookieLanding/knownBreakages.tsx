@@ -78,6 +78,7 @@ export const KnownBreakages = ({ libraryMatches }: KnownBreakagesProps) => {
         No libraries with known breakages found!
       </p>
     );
+
   return (
     <CookiesLandingWrapper
       dataMapping={dataMapping}

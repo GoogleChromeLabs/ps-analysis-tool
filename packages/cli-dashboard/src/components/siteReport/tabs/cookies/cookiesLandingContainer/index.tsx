@@ -29,6 +29,7 @@ import type {
   TabCookies,
   TabFrames,
 } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */

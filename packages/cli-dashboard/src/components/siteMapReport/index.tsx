@@ -22,11 +22,11 @@ import {
   SidebarProvider,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
-import {
-  type TechnologyData,
-  type CookieFrameStorageType,
-  type CompleteJson,
-  type LibraryData,
+import type {
+  TechnologyData,
+  CookieFrameStorageType,
+  CompleteJson,
+  LibraryData,
 } from '@ps-analysis-tool/common';
 
 /**
