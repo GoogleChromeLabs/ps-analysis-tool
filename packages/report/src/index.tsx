@@ -35,6 +35,7 @@ chrome = {
       addListener: noop,
       removeListener: noop,
     },
+    get: noop,
   },
   devtools: {
     inspectedWindow: {
