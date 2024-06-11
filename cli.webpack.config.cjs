@@ -17,6 +17,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const commonConfig = require('./webpack.shared.cjs');
 const webpack = require('webpack');
+const WebpackBar = require('webpackbar');
 
 module.exports = {
   entry: './src/index.ts',
@@ -27,6 +28,10 @@ module.exports = {
     filename: '[name].js',
   },
   plugins: [
+    new WebpackBar({
+      name: 'CLI',
+      color: '#FF9B71',
+    }),
     new webpack.BannerPlugin({ banner: '#!/usr/bin/env node', raw: true }),
     new CopyPlugin({
       patterns: [
