@@ -349,20 +349,15 @@ export class BrowserManagement {
                 url: resource.url,
               }
             );
-            if (base64Encoded) {
-              return {
-                origin: resource.url,
-                content: Buffer.from(content, 'base64'),
-                type: resource.type,
-              };
-            }
+
             return {
               origin: resource.url,
-              content,
+              content: base64Encoded ? Buffer.from(content, 'base64') : content,
               type: resource.type,
             };
           })
         );
+
         allFetchedResources[page.url()] = resourcesContent;
       })
     );
