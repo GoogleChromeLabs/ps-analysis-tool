@@ -91,8 +91,7 @@ const saveResultsAsJSON = async (
 const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson | CompleteJson[],
-  isSiteMap: boolean,
-  prefix: string
+  isSiteMap: boolean
 ) => {
   const htmlText = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -110,7 +109,7 @@ const saveResultsAsHTML = async (
     window.PSAT_DATA = ${JSON.stringify({
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',
-      selectedSite: prefix?.trim()?.slice(4) ?? '',
+      selectedSite: !isSiteMap ? outDir?.trim()?.slice(6) : '',
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
   fs.copyFileSync(
@@ -268,7 +267,7 @@ const saveResultsAsHTML = async (
   const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   await saveResultsAsJSON(outputDir, result);
-  await saveResultsAsHTML(outputDir, result, isSiteMap, urlsToProcess[0]);
+  await saveResultsAsHTML(outputDir, result, isSiteMap);
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);

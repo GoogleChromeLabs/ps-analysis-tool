@@ -237,13 +237,13 @@ const generateHTMLFile = (
   return html;
 };
 
-export const generateSiemapHTMLFile = async (
+export const generateSiemapHTMLFile = (
   analysisData: CompleteJson[],
-  sitemapURL: string
+  sitemapURL: string,
+  reportText: string
 ) => {
-  const htmlText = await (await fetch('./report/index.html')).text();
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(reportText, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
