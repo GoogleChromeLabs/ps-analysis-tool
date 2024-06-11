@@ -22,7 +22,7 @@
   "scripts": {
     "start": "webpack-dev-server --config ../../dashboard.webpack.config.cjs",
     "build": "webpack --config ../../dashboard.webpack.config.cjs",
-    "build:remove": "rm -rf dist",
+    "build:remove": "rimraf dist",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
