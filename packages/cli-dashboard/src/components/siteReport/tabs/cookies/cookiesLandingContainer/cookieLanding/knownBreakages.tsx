@@ -31,7 +31,7 @@ interface KnownBreakagesProps {
   libraryMatches: LibraryData;
 }
 
-export const KnownBreakages = ({ libraryMatches }: KnownBreakagesProps) => {
+const KnownBreakages = ({ libraryMatches }: KnownBreakagesProps) => {
   const names = Object.keys(libraryMatches);
 
   const detectedLibraryNames = names.filter(
@@ -89,3 +89,5 @@ export const KnownBreakages = ({ libraryMatches }: KnownBreakagesProps) => {
     </CookiesLandingWrapper>
   );
 };
+
+export default KnownBreakages;

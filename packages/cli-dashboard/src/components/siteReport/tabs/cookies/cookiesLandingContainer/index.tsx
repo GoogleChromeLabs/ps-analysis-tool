@@ -35,7 +35,7 @@ import type {
  */
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
-import { KnownBreakages } from './cookieLanding/knownBreakages';
+import KnownBreakages from './cookieLanding/knownBreakages';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -43,6 +43,7 @@ interface CookiesLandingContainerProps {
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
+  isSiteMapLandingContainer?: boolean;
 }
 
 const CookiesLandingContainer = ({
@@ -51,9 +52,10 @@ const CookiesLandingContainer = ({
   cookiesWithIssues,
   downloadReport,
   libraryMatches,
+  isSiteMapLandingContainer = false,
 }: CookiesLandingContainerProps) => {
-  const sections: Array<CookiesLandingSection> = useMemo(
-    () => [
+  const sections: Array<CookiesLandingSection> = useMemo(() => {
+    const baseSections: Array<CookiesLandingSection> = [
       {
         name: 'Cookies',
         link: 'cookies',
@@ -77,7 +79,10 @@ const CookiesLandingContainer = ({
           },
         },
       },
-      {
+    ];
+
+    if (!isSiteMapLandingContainer) {
+      baseSections.push({
         name: 'Known Breakages',
         link: 'known-breakages',
         panel: {
@@ -86,10 +91,17 @@ const CookiesLandingContainer = ({
             libraryMatches: libraryMatches ?? {},
           },
         },
-      },
-    ],
-    [tabCookies, tabFrames, cookiesWithIssues, libraryMatches]
-  );
+      });
+    }
+
+    return baseSections;
+  }, [
+    tabCookies,
+    tabFrames,
+    cookiesWithIssues,
+    isSiteMapLandingContainer,
+    libraryMatches,
+  ]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),

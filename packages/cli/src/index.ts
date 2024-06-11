@@ -50,7 +50,7 @@ import {
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-const DELAY_TIME = 20000;
+const DELAY_TIME = 40000;
 const program = new Command();
 
 program
@@ -266,6 +266,7 @@ const saveResultsAsHTML = async (
     });
   }
   const result = urlsToProcess.map((_url, ind) => {
+    console.log(cookieAnalysisAndFetchedResourceData[ind].resources);
     const detectedMatchingSignatures: LibraryData = {
       ...detectMatchingSignatures(
         cookieAnalysisAndFetchedResourceData[ind].resources ?? [],

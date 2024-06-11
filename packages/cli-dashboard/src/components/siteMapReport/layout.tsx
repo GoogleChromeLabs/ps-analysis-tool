@@ -132,6 +132,7 @@ const Layout = ({
         Element: CookiesLandingContainer,
         props: {
           tabCookies: reshapedCookies,
+          isSiteMapLandingContainer: true,
           tabFrames: sites.reduce<TabFrames>((acc, site) => {
             acc[site] = {} as TabFrames[string];
 
