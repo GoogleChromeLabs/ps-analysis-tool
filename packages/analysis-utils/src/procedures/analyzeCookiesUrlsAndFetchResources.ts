@@ -52,7 +52,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   const { result: analysisCookieData, consolidatedDOMQueryMatches } =
     await browser.analyzeCookieUrls(urls, shouldSkipAcceptBanner, Libraries);
 
-  const resources = await browser.getResources(urls);
+  const resources = browser.getResources(urls);
 
   const res = analysisCookieData.map(({ pageUrl, cookieData }) => {
     Object.entries(cookieData).forEach(([, frameData]) => {

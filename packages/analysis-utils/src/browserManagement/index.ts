@@ -21,6 +21,7 @@ import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
 import {
   CookieData,
+  ScriptTagUnderCheck,
   LibraryData,
   LibraryMatchers,
   UNKNOWN_FRAME_KEY,
@@ -40,6 +41,7 @@ export class BrowserManagement {
   pageWaitTime: number;
   pageMap: Map<string, Page>;
   pageResponseMaps: Map<string, Map<string, ResponseData>>;
+  pageResourcesMaps: Map<string, Map<string, ScriptTagUnderCheck>>;
   pageRequestMaps: Map<string, Map<string, RequestData>>;
   shouldLogDebug: boolean;
 
@@ -57,6 +59,7 @@ export class BrowserManagement {
     this.pageResponseMaps = new Map();
     this.pageRequestMaps = new Map();
     this.shouldLogDebug = shouldLogDebug;
+    this.pageResourcesMaps = new Map();
   }
 
   debugLog(msg: any) {
@@ -195,7 +198,10 @@ export class BrowserManagement {
     const mainFrameId: string = page.mainFrame()._id;
 
     const responseMap: Map<string, ResponseData> = new Map();
+    const resourcesMap: Map<string, ScriptTagUnderCheck> = new Map();
+
     this.pageResponseMaps.set(pageId, responseMap);
+    this.pageResourcesMaps.set(pageId, resourcesMap);
 
     cdpSession.on(
       'Network.responseReceived',
@@ -207,6 +213,21 @@ export class BrowserManagement {
         });
       }
     );
+
+    page.on('response', async (response) => {
+      if (response?.headers()?.['content-type']?.includes('text/javascript')) {
+        try {
+          const content = await response.text();
+          resourcesMap.set(response.url(), {
+            origin: response.url(),
+            type: 'Script',
+            content,
+          });
+        } catch (error) {
+          // CDP might fail here.
+        }
+      }
+    });
 
     cdpSession.on(
       'Network.responseReceivedExtraInfo',
@@ -319,48 +340,21 @@ export class BrowserManagement {
     return frameIdMapFromTree;
   }
 
-  async getResources(urls: string[]) {
+  getResources(urls: string[]) {
     const allFetchedResources: { [key: string]: any } = {};
-    await Promise.all(
-      urls.map(async (url) => {
-        const page = this.pageMap.get(url);
 
-        if (!page) {
-          allFetchedResources[url] = [];
-          return;
-        }
+    urls.forEach((url) => {
+      const page = this.pageMap.get(url);
+      const resources = this.pageResourcesMaps.get(url);
 
-        const session = await page.createCDPSession();
-        await session.send('Page.enable');
+      if (!page || !resources) {
+        allFetchedResources[url] = [];
+        return;
+      }
 
-        const {
-          frameTree: { frame, resources },
-        } = await session.send('Page.getResourceTree');
+      allFetchedResources[page.url()] = Array.from(resources?.values() ?? []);
+    });
 
-        const resourcesContent = await Promise.all(
-          resources.map(async (resource) => {
-            if (resource.type !== 'Script') {
-              return {};
-            }
-            const { content, base64Encoded } = await session.send(
-              'Page.getResourceContent',
-              {
-                frameId: frame.id,
-                url: resource.url,
-              }
-            );
-
-            return {
-              origin: resource.url,
-              content: base64Encoded ? Buffer.from(content, 'base64') : content,
-              type: resource.type,
-            };
-          })
-        );
-
-        allFetchedResources[page.url()] = resourcesContent;
-      })
-    );
     return allFetchedResources;
   }
 
@@ -438,6 +432,7 @@ export class BrowserManagement {
       urls.map(async (url) => {
         const responseMap = this.pageResponseMaps.get(url);
         const requestMap = this.pageRequestMaps.get(url);
+
         const page = this.pageMap.get(url);
 
         const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
