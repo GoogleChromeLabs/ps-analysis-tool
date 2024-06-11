@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc-watch --build",
-    "build:remove": "rm -rf dist dist-types tsconfig.tsbuildinfo",
+    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
