@@ -24,7 +24,7 @@ import { Export } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import { isInCenter } from './utils';
+import { isElementInView } from './utils';
 
 export type MenuData = Array<{
   name: string;
@@ -67,29 +67,32 @@ const MenuBar = ({
 
   useEffect(() => {
     const scrollContainer =
-      globalThis?.document?.getElementById(scrollContainerId);
-    const firstItemLink = menuData[0].link;
-    const lastItemLink = menuData[menuData.length - 1].link;
+      globalThis?.document.getElementById(scrollContainerId);
 
     const handleScroll = () => {
+      const firstItemLink = menuData[0].link;
+      const lastItemLink = menuData[menuData.length - 1].link;
+
       if (isListenerDisabled || !scrollContainer) {
         return;
       }
 
-      const distanceScrolled = scrollContainer.scrollTop;
-      const maxScrollDistance =
-        scrollContainer.scrollHeight - scrollContainer.clientHeight;
-
       menuData.forEach(({ link: id }) => {
-        const section = globalThis?.document?.getElementById(id);
+        const section = globalThis?.document.getElementById(id);
+        const isAlmostBottom =
+          scrollContainer.scrollHeight -
+          scrollContainer.scrollTop -
+          scrollContainer.clientHeight;
+
         setSelectedItem((prev) => {
           if (scrollContainer?.scrollTop === 0) {
             return firstItemLink;
-          } else if (section && isInCenter(section) && prev !== id) {
-            return id;
-          } else if (maxScrollDistance - distanceScrolled < 5) {
+          } else if (isAlmostBottom <= 1 && isAlmostBottom >= 0) {
             return lastItemLink;
+          } else if (section && isElementInView(section)) {
+            return id;
           }
+
           return prev;
         });
       });
@@ -146,8 +149,10 @@ const MenuBar = ({
               : 'bg-bright-gray'
           )}
           onClick={() => {
-            setIsListenerDisabled(true);
-            setSelectedItem(item.link);
+            if (item.link !== selectedItem) {
+              setIsListenerDisabled(true);
+              setSelectedItem(item.link);
+            }
           }}
         >
           <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
