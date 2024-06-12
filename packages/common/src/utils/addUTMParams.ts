@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-type MediumType = 'extension' | 'cli';
+export type MediumType = 'extension' | 'cli';
 
 const addUTMParams = (
   url: string,
@@ -24,12 +24,19 @@ const addUTMParams = (
     return url;
   }
 
+  let calculatedMedium = medium;
+  //@ts-ignore
+  if (!globalThis?.WorkerNavigator && !globalThis?.chrome?.devtools) {
+    //@ts-ignore
+    calculatedMedium = globalThis?.PSAT_DATA?.source ?? 'cli';
+  }
+
   const urlParts = url.split('#');
   const base = urlParts[0];
   const hash = urlParts[1] ? `#${urlParts[1]}` : '';
   const separator = base.includes('?') ? '&' : '?';
 
-  return `${base}${separator}utm_source=psat&utm_medium=${medium}${hash}`;
+  return `${base}${separator}utm_source=psat&utm_medium=${calculatedMedium}${hash}`;
 };
 
 export default addUTMParams;

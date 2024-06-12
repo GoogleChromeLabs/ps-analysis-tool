@@ -46,7 +46,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
     setShowLoader(false);
     setIsDataLoaded(true);
-  }, []);
+  }, [setLibraryMatches, setShowLoader]);
 
   return (
     <Context.Provider

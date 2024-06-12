@@ -121,7 +121,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     cookieClassificationDataMapping,
     tabCookies,
     cookiesStatsComponents,
-    libraryDetection: {},
+    libraryMatches: analysisData.libraryMatches,
     tabFrames,
     showInfoIcon: true,
     showHorizontalMatrix: false,
@@ -131,6 +131,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     exemptedCookiesDataMapping,
     showBlockedCategory: true,
     url: siteURL,
+    source: 'cli',
   };
 }
 

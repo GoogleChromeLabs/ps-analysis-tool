@@ -36,7 +36,7 @@ export { default as getDevToolWorker } from './worker/devToolWorker';
 export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDevToolWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/contextSelector';
-export { default as addUTMParams } from './utils/addUTMParams';
+export { default as addUTMParams, type MediumType } from './utils/addUTMParams';
 export { default as delay } from './utils/delay';
 export { default as mergeDeep } from './utils/mergeDeep';
 export * from './worker/enums';
