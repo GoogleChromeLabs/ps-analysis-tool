@@ -255,7 +255,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
 
       {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
-          <>
+          <div className="mb-4">
             <p className="font-bold text-raising-black dark:text-bright-gray">
               {I18n.getMessage('warnings')}
             </p>
@@ -263,7 +263,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
               className="text-outer-space-crayola dark:text-bright-gray"
               dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
             />
-          </>
+          </div>
         )}
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>{I18n.getMessage('cookieValue')}</span>
