@@ -17,18 +17,20 @@
 /**
  * Time a promise.
  * @param {Promise<T>} promise - A promise that need to be timed.
+ * @param resolveInto
  * @param {number} timeout - Time for the timeout in milliseconds.
  * @returns {Promose<T|string>} - The parsed URL object or null if the URL is invalid.
  */
 export default function resolveWithTimeout<T>(
   promise: Promise<T>,
+  resolveInto: T,
   timeout: number
 ): Promise<T | string> {
   return new Promise((resolve, reject) => {
     // Create a timeout promise that resolves after the specified time
-    const timeoutPromise = new Promise<string>((resolveTimeout) => {
+    const timeoutPromise = new Promise<T>((resolveTimeout) => {
       setTimeout(() => {
-        resolveTimeout('Resolved due to timeout');
+        resolveTimeout(resolveInto);
       }, timeout);
     });
 

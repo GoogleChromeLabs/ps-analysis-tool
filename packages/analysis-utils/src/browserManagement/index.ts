@@ -426,6 +426,7 @@ export class BrowserManagement {
             // @ts-ignore
             return cookieStore.getAll();
           }),
+          [],
           200
         );
 

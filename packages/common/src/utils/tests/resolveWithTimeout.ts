@@ -29,7 +29,7 @@ describe('resolveWithTimeout', () => {
       }, PROMISE_RESOLVE_TIME);
     });
 
-    const result = await resolveWithTimeout(myPromise, TIMEOUT);
+    const result = await resolveWithTimeout(myPromise, null, TIMEOUT);
 
     expect(result).toBe('Promise Resolved');
   });
@@ -44,7 +44,7 @@ describe('resolveWithTimeout', () => {
       }, PROMISE_RESOLVE_TIME);
     });
 
-    const result = await resolveWithTimeout(myPromise, TIMEOUT);
+    const result = await resolveWithTimeout(myPromise, null, TIMEOUT);
 
     expect(result).not.toBe('Promise Resolved');
   });
