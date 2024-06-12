@@ -26,7 +26,6 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "@ps-analysis-tool/common": "*",
-    "@types/puppeteer": "^7.0.4",
     "puppeteer": "^22.10.0",
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.14",
