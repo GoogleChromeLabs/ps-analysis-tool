@@ -37,7 +37,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
  * @param url Top level URL.
  * @returns Report Object
  */
-export default function generateReportObject(
+export default async function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData,
@@ -81,6 +81,10 @@ export default function generateReportObject(
     },
   ];
 
+  const locale = I18n.getLocale();
+  const translations = await fetch(`/_locales/${locale}/messages.json`);
+  const data = await translations.json();
+
   return {
     cookieClassificationDataMapping,
     tabCookies,
@@ -96,5 +100,6 @@ export default function generateReportObject(
     showFramesSection: true,
     showBlockedCategory: false,
     url,
+    translations: data,
   };
 }

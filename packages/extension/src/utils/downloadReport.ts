@@ -48,7 +48,7 @@ export default async function downloadReport(
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateReportObject(
+  const reportData = await generateReportObject(
     tabCookies,
     tabFrames,
     libraryMatches,

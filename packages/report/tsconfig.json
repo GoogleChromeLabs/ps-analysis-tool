@@ -8,5 +8,5 @@
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
   ],
-  "references": []
+  "references": [{ "path": "../i18n" }]
 }

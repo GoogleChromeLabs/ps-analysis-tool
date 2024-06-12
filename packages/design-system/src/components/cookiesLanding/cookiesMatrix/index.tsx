@@ -69,7 +69,7 @@ const CookiesMatrix = ({
 
   componentData.forEach((component) => {
     const legendDescription =
-      LEGEND_DESCRIPTION[component.descriptionKey || ''];
+      LEGEND_DESCRIPTION[component.descriptionKey || component.label] || '';
     dataComponents.push({
       ...component,
       description:

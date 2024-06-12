@@ -17,7 +17,8 @@
     "react-dom": "^18.2.0",
     "@ps-analysis-tool/common": "*",
     "@ps-analysis-tool/design-system": "*",
-    "@ps-analysis-tool/library-detection": "*"
+    "@ps-analysis-tool/library-detection": "*",
+		"@ps-analysis-tool/i18n": "*"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",

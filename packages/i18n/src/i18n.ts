@@ -36,12 +36,26 @@ class I18n {
     };
   } = {};
 
+  private locale = 'en';
+
   /**
    * Initializes the messages object with the provided messages.
    * @param {object} messages - The messages object containing translations.
    */
   initMessages(messages = {}) {
     this.messages = messages;
+  }
+
+  /**
+   *	Returns the locale string.
+   * @returns {string} The locale string.
+   */
+  getLocale() {
+    if (typeof chrome !== 'undefined' && chrome?.i18n?.getUILanguage) {
+      return chrome.i18n.getUILanguage();
+    }
+
+    return this.locale;
   }
 
   /**
@@ -82,6 +96,7 @@ class I18n {
         const data = await response.json();
 
         this.initMessages(data);
+        this.locale = localeArray[idx];
       } catch (error) {
         idx++;
         await fetchWithRetry();
@@ -112,6 +127,7 @@ class I18n {
         );
 
         this.initMessages(messages);
+        this.locale = _locale;
         break;
       }
     }
@@ -126,10 +142,16 @@ class I18n {
    */
   getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
     if (typeof chrome !== 'undefined' && chrome?.i18n?.getMessage) {
-      // @ts-ignore - Outdated definition.
-      return chrome.i18n.getMessage(key, substitutions, {
-        escapeLt: Boolean(escapeLt),
-      });
+      try {
+        // @ts-ignore - Outdated definition.
+        const text = chrome.i18n.getMessage(key, substitutions, {
+          escapeLt: Boolean(escapeLt),
+        });
+
+        return text;
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     return this._parseMessage(key, substitutions, escapeLt);

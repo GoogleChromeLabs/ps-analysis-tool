@@ -23,11 +23,11 @@ import {
   LEGEND_DESCRIPTION,
   MatrixContainer,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
@@ -37,10 +37,15 @@ const CookiesSection = () => {
   }
 
   const _data = data.frameStateCreator.legend.map((component) => {
-    const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+    const legendDescription =
+      LEGEND_DESCRIPTION[component.descriptionKey || ''];
+
     return {
       ...component,
-      description: legendDescription,
+      description:
+        typeof legendDescription === 'string'
+          ? I18n.getMessage(legendDescription)
+          : I18n.getFormattedMessages(legendDescription),
       title: component.label,
       containerClasses: '',
     };
