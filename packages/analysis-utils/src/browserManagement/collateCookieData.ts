@@ -31,6 +31,17 @@ export default function collateCookieData(
 ): CookieDataFromNetwork {
   Object.entries(cookieDataFromJS).forEach(([frameUrl, { frameCookies }]) => {
     Object.entries(frameCookies).forEach(([key, cookie]) => {
+      if (!cookieDataFromNetwork[frameUrl]) {
+        cookieDataFromNetwork[frameUrl] = {
+          frameCookies: {
+            [key]: {
+              parsedCookie: cookie.parsedCookie,
+              headerType: 'javascript',
+            },
+          },
+        };
+      }
+
       if (!cookieDataFromNetwork[frameUrl].frameCookies[key]) {
         cookieDataFromNetwork[frameUrl].frameCookies[key] = {
           parsedCookie: cookie.parsedCookie,
