@@ -25,8 +25,11 @@ const addUTMParams = (
   }
 
   let calculatedMedium = medium;
-  //@ts-ignore
-  if (!globalThis?.WorkerNavigator && !globalThis?.chrome?.devtools) {
+  if (
+    //@ts-ignore
+    !globalThis?.WorkerNavigator &&
+    !globalThis?.chrome?.devtools?.inspectedWindow?.tabId
+  ) {
     //@ts-ignore
     calculatedMedium = globalThis?.PSAT_DATA?.source ?? 'cli';
   }
