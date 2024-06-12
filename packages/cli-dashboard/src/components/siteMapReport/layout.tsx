@@ -225,7 +225,10 @@ const Layout = ({
       >
         <Sidebar />
       </Resizable>
-      <div className="flex-1 max-h-screen overflow-auto">
+      <div
+        className="flex-1 max-h-screen overflow-auto"
+        id="dashboard-layout-container"
+      >
         {PanelElement && <PanelElement {...props} />}
       </div>
     </div>
