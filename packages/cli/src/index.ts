@@ -39,7 +39,6 @@ import {
   validateArgs,
   saveCSVReports,
   askUserInput,
-  checkPortInUse,
   generatePrefix,
 } from './utils';
 
@@ -58,7 +57,6 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
-  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -131,7 +129,6 @@ const saveResultsAsHTML = async (
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
-  const port = parseInt(program.opts().port || '9000');
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
@@ -145,22 +142,8 @@ const saveResultsAsHTML = async (
     csvPath,
     sitemapPath,
     numberOfUrlsInput,
-    outDir,
-    port
+    outDir
   );
-
-  //check if devserver port in already in use only if the dashboard is goint to be used
-
-  if (!outDir) {
-    const isPortInUse = await checkPortInUse(port);
-
-    if (isPortInUse) {
-      console.error(
-        `Error: Report server port ${port} already in use. You might be already running CLI`
-      );
-      process.exit(1);
-    }
-  }
 
   const prefix =
     url || sitemapUrl
