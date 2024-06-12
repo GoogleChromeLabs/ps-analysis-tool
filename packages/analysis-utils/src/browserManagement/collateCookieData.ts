@@ -31,6 +31,7 @@ export default function collateCookieData(
 ): CookieDataFromNetwork {
   Object.entries(cookieDataFromJS).forEach(([frameUrl, { frameCookies }]) => {
     Object.entries(frameCookies).forEach(([key, cookie]) => {
+      // Check if the frame's data exists.  if not create frame data object
       if (!cookieDataFromNetwork[frameUrl]) {
         cookieDataFromNetwork[frameUrl] = {
           frameCookies: {
@@ -41,8 +42,8 @@ export default function collateCookieData(
           },
         };
       }
-
-      if (!cookieDataFromNetwork[frameUrl].frameCookies[key]) {
+      // Check if the cookie's data exists. if not add cookie data object to frame cookies. Otherwise cookie data from network stream will be used.
+      else if (!cookieDataFromNetwork[frameUrl].frameCookies[key]) {
         cookieDataFromNetwork[frameUrl].frameCookies[key] = {
           parsedCookie: cookie.parsedCookie,
           headerType: 'javascript',
