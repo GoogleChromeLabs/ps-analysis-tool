@@ -215,12 +215,17 @@ export class BrowserManagement {
     );
 
     page.on('response', async (response) => {
-      if (response?.headers()?.['content-type']?.includes('text/javascript')) {
+      if (
+        response?.headers()?.['content-type']?.includes('javascript') ||
+        response?.headers()?.['content-type']?.includes('html')
+      ) {
         try {
           const content = await response.text();
           resourcesMap.set(response.url(), {
             origin: response.url(),
-            type: 'Script',
+            type: response?.headers()?.['content-type']?.includes('javascript')
+              ? 'Script'
+              : 'Document',
             content,
           });
         } catch (error) {

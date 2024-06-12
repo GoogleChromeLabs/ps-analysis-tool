@@ -102,6 +102,7 @@ const saveResultsAsHTML = async (
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
     'utf-8'
   );
+
   const reportText = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
     'base64'
@@ -117,10 +118,12 @@ const saveResultsAsHTML = async (
       selectedSite: outDir?.trim()?.slice(6) ?? '',
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
+
   fs.copyFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
     outDir + '/index.js'
   );
+
   const outFileFullDir = path.resolve(outDir + '/index.html');
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
@@ -279,7 +282,6 @@ const saveResultsAsHTML = async (
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
-      libs: cookieAnalysisAndFetchedResourceData[ind].resources,
     } as unknown as CompleteJson;
   });
 
