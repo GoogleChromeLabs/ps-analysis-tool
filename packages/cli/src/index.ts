@@ -266,11 +266,11 @@ const saveResultsAsHTML = async (
   });
   const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
-  await saveResultsAsJSON(outputDir, result);
-  await saveResultsAsHTML(outputDir, result, isSiteMap);
-
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
     process.exit(0);
   }
+
+  await saveResultsAsJSON(outputDir, result);
+  await saveResultsAsHTML(outputDir, result, isSiteMap);
 })();
