@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
 import { CookieDataFromNetwork } from './types';
 
 /**
- *
- * @param cookieDataFromNetwork
- * @param cookieDataFromJS
- * @returns cookieDataFromNetwork
+ * Collate network and JS cookie data.
+ * @param cookieDataFromNetwork Cookie data from network.
+ * @param cookieDataFromJS cookie data from JS.
+ * @returns cookieDataFromNetwork Cookie data from network and JS if it exits.
  */
 export default function collateCookieData(
   cookieDataFromNetwork: CookieDataFromNetwork,
@@ -51,5 +50,6 @@ export default function collateCookieData(
       }
     });
   });
+
   return cookieDataFromNetwork;
 }
