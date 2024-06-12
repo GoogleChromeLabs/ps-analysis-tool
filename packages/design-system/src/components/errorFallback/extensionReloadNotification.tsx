@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React from 'react';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -33,7 +32,7 @@ const ExtensionReloadNotification = ({
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
       <p className="text-xl text-center px-4">
-        {I18n.getMessage('extensionUpdated')}
+        Looks like extension has been updated since devtool was open.
       </p>
       <div className="ml-2 mt-4">
         <Button
@@ -48,7 +47,7 @@ const ExtensionReloadNotification = ({
               }
             }
           }}
-          text={I18n.getMessage('refreshPanel')}
+          text="Refresh Panel"
         />
       </div>
     </div>

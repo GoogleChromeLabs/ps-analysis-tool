@@ -38,11 +38,7 @@ const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion
-      title={I18n.getMessage('jetpackLikeButton')}
-      isLoading={false}
-      featuresText=""
-    >
+    <Accordion title={'Jetpack Like Button'} isLoading={false} featuresText="">
       <DetectionMessage
         libraryName={I18n.getMessage('jetpackLikeButton')}
         provider={I18n.getMessage('jetpack')}

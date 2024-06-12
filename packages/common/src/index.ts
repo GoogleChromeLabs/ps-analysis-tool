@@ -37,6 +37,8 @@ export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDev
 export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/contextSelector';
 export { default as addUTMParams } from './utils/addUTMParams';
+export { default as delay } from './utils/delay';
+export { default as mergeDeep } from './utils/mergeDeep';
 export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';

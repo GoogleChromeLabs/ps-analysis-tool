@@ -19,11 +19,11 @@
  */
 import fs from 'fs/promises';
 import path from 'path';
+import { CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { CookieDatabase } from '../types';
 
 /**
  * Fetch dictionary from local data folder.

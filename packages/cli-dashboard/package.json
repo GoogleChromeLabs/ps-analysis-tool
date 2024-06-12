@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/cli-dashboard",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Dashboard for visualizing cli analysis output",
   "repository": {
     "type": "git",

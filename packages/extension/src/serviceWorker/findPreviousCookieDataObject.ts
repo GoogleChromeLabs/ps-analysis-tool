@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import type { CookieData } from '../store';
+import type { CookieData } from '@ps-analysis-tool/common';
 
 /**
  * Find previous cookie object from local storage for given tabId and cookieName.

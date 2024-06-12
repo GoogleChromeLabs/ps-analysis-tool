@@ -294,8 +294,9 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         {I18n.getMessage('description')}
       </p>
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
-        {selectedCookie.analytics?.description ||
-          I18n.getMessage('noDescription')}
+        {I18n.getMessage(
+          selectedCookie.analytics?.description || 'noDescription'
+        )}
       </p>
     </div>
   );

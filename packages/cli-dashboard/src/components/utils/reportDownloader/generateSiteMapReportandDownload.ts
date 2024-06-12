@@ -24,9 +24,12 @@ import type { CompleteJson } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import { createZip, getFolderName } from './utils';
+import { createZip, getFolderName, generateSiemapHTMLFile } from './utils';
 
-const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
+const generateSiteMapReportandDownload = async (
+  JSONReport: CompleteJson[],
+  sitemapUrl: string
+) => {
   if (!JSONReport.length) {
     return;
   }
@@ -48,8 +51,12 @@ const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
       return;
     }
 
-    createZip(data, zipFolder);
+    createZip(data, zipFolder, data.pageUrl);
   });
+
+  const report = generateSiemapHTMLFile(JSONReport, sitemapUrl);
+
+  zip.file('report.html', report);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(

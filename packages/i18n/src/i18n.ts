@@ -181,7 +181,7 @@ class I18n {
    */
   getFormattedMessages(keys: string[]) {
     return keys
-      .map((key) => {
+      ?.map((key) => {
         const [type] = key.split('_');
 
         const message = this.getMessage(key);

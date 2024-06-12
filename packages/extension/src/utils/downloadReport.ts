@@ -22,6 +22,7 @@ import type {
   TabFrames,
 } from '@ps-analysis-tool/common';
 import { saveAs } from 'file-saver';
+
 /**
  * Internal dependencies.
  */
@@ -32,7 +33,7 @@ import generateReportObject from './generateReportObject';
  * @param url Top level URL.
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
- * @param libraryMatches
+ * @param libraryMatches Libary matches
  */
 export default async function downloadReport(
   url: string,
@@ -50,7 +51,8 @@ export default async function downloadReport(
   const reportData = generateReportObject(
     tabCookies,
     tabFrames,
-    libraryMatches
+    libraryMatches,
+    url
   );
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;

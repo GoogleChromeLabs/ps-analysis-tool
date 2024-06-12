@@ -42,8 +42,8 @@ const LABELS = [
     linkLabel: 'publicDiscussionNote',
   },
   {
-    label: 'VideoOverview',
-    linkLabel: 'VideoOverviewNote',
+    label: 'videoOverview',
+    linkLabel: 'videoOverviewNote',
   },
   {
     label: 'devDocumentation',

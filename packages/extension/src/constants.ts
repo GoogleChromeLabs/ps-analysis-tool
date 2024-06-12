@@ -17,24 +17,26 @@ import { I18n } from '@ps-analysis-tool/i18n';
 
 export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
-export const DEVTOOL_PORT_NAME = 'psat-devtool';
+export const SERVICE_WORKER_PORT_NAME = 'psat-serviceworker';
 
 export const SETTING_PAGE_CONTROLS = [
   {
     id: 'enableCDP',
-    heading: I18n.getMessage('enableCDP'),
-    description: I18n.getMessage('enableCDPNote', [
-      `<a class="text-bright-navy-blue dark:text-jordy-blue" href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat" target="_blank">`,
-      '</a>',
-    ]),
+    heading: () => I18n.getMessage('enableCDP'),
+    description: () =>
+      I18n.getMessage('enableCDPNote', [
+        `<a class="text-bright-navy-blue dark:text-jordy-blue" href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat" target="_blank">`,
+        '</a>',
+      ]),
   },
   {
     id: 'multitabDebugging',
-    heading: I18n.getMessage('multitabDebugging'),
-    description: I18n.getMessage('multitabDebuggingNote', [
-      `<a class='text-bright-navy-blue dark:text-jordy-blue' href='https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging' target='_blank'>`,
-      '</a>',
-    ]),
+    heading: () => I18n.getMessage('multitabDebugging'),
+    description: () =>
+      I18n.getMessage('multitabDebuggingNote', [
+        `<a class='text-bright-navy-blue dark:text-jordy-blue' href='https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging' target='_blank'>`,
+        '</a>',
+      ]),
   },
 ];
 

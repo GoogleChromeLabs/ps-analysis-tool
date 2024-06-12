@@ -17,15 +17,47 @@
  * External Dependencies
  */
 import React from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { ContentPanel, LandingPage } from '@ps-analysis-tool/design-system';
+
+const content = [
+  {
+    title: 'CHIPS',
+    description:
+      'The new cookie attribute, Partitioned, allows developers to opt a cookie into partitioned storage, with separate cookie jars per top-level site.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
+  },
+  {
+    title: 'Storage Access API',
+    description:
+      'Storage Access API allows iframes to request storage access permissions when access would otherwise be denied by browser settings.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
+  },
+  {
+    title: 'Related Website Sets',
+    description:
+      'Related Website Sets (RWS) is a way for a company to declare relationships among sites, so that browsers allow limited third-party cookie access for specific purposes.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
+  },
+  {
+    title: 'Federated Credential Management API',
+    description: 'A web API for privacy-preserving identity federation.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
+  },
+];
 
 const SiteBoundaries = () => {
   return (
     <LandingPage
-      title={I18n.getMessage('siteBoundaries')}
-      iframeSrc="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
-      extraClasses="h-[78vh] w-full"
+      title="Site Boundaries"
+      contentPanel={
+        <ContentPanel
+          title="Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents."
+          content={content}
+          counterStyles="bg-green-700"
+          titleStyles="text-green-700"
+        />
+      }
+      extraClasses="min-h-[78vh] w-full"
     />
   );
 };

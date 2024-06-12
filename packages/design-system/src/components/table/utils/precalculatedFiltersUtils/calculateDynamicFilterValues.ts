@@ -22,6 +22,7 @@ import { getValueByKey, type CookieTableData } from '@ps-analysis-tool/common';
  * Internal dependencies
  */
 import { TableFilter } from '../../useTable';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Calculate the filter values for the provider key.
@@ -30,18 +31,26 @@ import { TableFilter } from '../../useTable';
  * @param tabCookies Cookies to calculate the filter values from.
  * @param options Options to preselect the filter values.
  * @param clearQuery Function to clear the query(when options are provided) to avoid conflicts.
+ * @param runTranslation Boolean to check if the translation should be run.
  * @returns	Filters for the provider key.
  */
 const calculateDynamicFilterValues = (
   key: string,
   tabCookies: CookieTableData[],
   options: string[],
-  clearQuery?: () => void
+  clearQuery?: () => void,
+  runTranslation?: boolean
 ): TableFilter[keyof TableFilter]['filterValues'] => {
   const filters = tabCookies.reduce<
     TableFilter[keyof TableFilter]['filterValues']
   >((acc, cookie) => {
-    const value = getValueByKey(key, cookie);
+    let value = getValueByKey(key, cookie);
+    console.log(cookie);
+    if (runTranslation) {
+      value = I18n.getMessage(
+        (value as string).toLowerCase() || 'uncategorized'
+      );
+    }
 
     if (!acc) {
       acc = {};

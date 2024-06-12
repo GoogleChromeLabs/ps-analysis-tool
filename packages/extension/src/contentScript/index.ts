@@ -25,6 +25,7 @@ import {
 } from '@ps-analysis-tool/common';
 import { computePosition, flip, shift } from '@floating-ui/core';
 import { autoUpdate, platform, arrow } from '@floating-ui/dom';
+
 /**
  * Internal dependencies.
  */
@@ -66,6 +67,11 @@ class WebpageContentScript {
    * TabId of the current Tab
    */
   tabId: number | null = null;
+
+  /**
+   * Main frame id.
+   */
+  frameId: string | null = null;
 
   /**
    * TabId of the current Tab
@@ -135,17 +141,24 @@ class WebpageContentScript {
 
       if (message.PSATDevToolsHidden) {
         //@ts-ignore
-        cookieStore.onchange = null;
+        if (typeof cookieStore !== 'undefined') {
+          //@ts-ignore
+          cookieStore.onchange = null;
+        }
       }
 
       if (!message.PSATDevToolsHidden) {
         //@ts-ignore
-        cookieStore.onchange = this.handleCookieChange;
-        await this.getAndProcessJSCookies(message.tabId);
+        if (typeof cookieStore !== 'undefined') {
+          //@ts-ignore
+          cookieStore.onchange = this.handleCookieChange;
+          await this.getAndProcessJSCookies(message.tabId);
+        }
       }
 
       if (message?.payload?.type === TABID_STORAGE) {
         this.tabId = message.payload.tabId;
+        this.frameId = message.payload.frameId;
       }
 
       if (message?.payload?.type === GET_JS_COOKIES) {
@@ -172,12 +185,18 @@ class WebpageContentScript {
    */
   async getAndProcessJSCookies(tabId: string) {
     try {
+      if (!this.frameId) {
+        return;
+      }
+
       //@ts-ignore
-      const jsCookies = await cookieStore.getAll();
+      const jsCookies = await cookieStore?.getAll();
       await processAndStoreDocumentCookies({
         tabUrl: window.location.href,
         tabId,
+        frameId: this.frameId,
         documentCookies: jsCookies,
+        cookieDB: this.cookieDB ?? {},
       });
     } catch (error) {
       //Fail silently. No logging because sometimes cookieStore.getAll fails to run in some context.
@@ -257,7 +276,7 @@ class WebpageContentScript {
           analytics: findAnalyticsMatch(cookie?.name, this.cookieDB),
           url: window.location.href,
           headerType: 'javascript',
-          frameIdList: [0],
+          frameIdList: [this.frameId ?? '0'],
           blockedReasons: [],
           warningReasons: [],
           isBlocked: false,

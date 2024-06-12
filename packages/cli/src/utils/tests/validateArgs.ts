@@ -27,10 +27,10 @@ describe('validateArgs', () => {
   let mockExit: jest.SpyInstance;
 
   beforeAll(() => {
-    mockExit = jest
-      .spyOn(process, 'exit')
+    mockExit = jest.spyOn(process, 'exit').mockImplementation(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .mockImplementation((code?: number) => undefined as never);
+      (code?: string | number | null | undefined) => undefined as never
+    );
   });
 
   it('works with one arg', () => {

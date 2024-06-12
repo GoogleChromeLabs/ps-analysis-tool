@@ -14,17 +14,31 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
-import data from '../../utils/test-data/cookieMockData';
-import SynchnorousCookieStore from '../synchnorousCookieStore';
 
-let synchnorousCookieStore: SynchnorousCookieStore;
+/**
+ * Internal dependencies
+ */
+//@ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
+import data from '../../utils/test-data/cookieMockData';
+import synchnorousCookieStore from '../synchnorousCookieStore';
+
 describe('SynchnorousCookieStore:', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
-    synchnorousCookieStore = new SynchnorousCookieStore();
+    globalThis.fetch = function () {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ...OpenCookieDatabase,
+          }),
+        text: () => Promise.resolve({}),
+      });
+    } as unknown as typeof fetch;
   });
 
   beforeEach(() => {

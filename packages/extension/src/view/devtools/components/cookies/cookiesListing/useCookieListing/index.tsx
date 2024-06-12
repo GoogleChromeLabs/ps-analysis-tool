@@ -104,11 +104,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: I18n.getMessage('scope'),
         accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
+        cell: (info: InfoType) =>
+          I18n.getMessage(!info ? 'thirdParty' : 'firstParty'),
         widthWeightagePercentage: 6,
       },
       {
@@ -132,15 +129,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: I18n.getMessage('category'),
         accessorKey: 'analytics.category',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) =>
+          I18n.getMessage((info as string).toLowerCase() || 'uncategorized'),
         widthWeightagePercentage: 7.5,
       },
       {
         header: I18n.getMessage('platform'),
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => (
-          <span>{info ? info : I18n.getMessage('unknown')}</span>
-        ),
+        cell: (info: InfoType) => (info ? info : I18n.getMessage('unknown')),
         widthWeightagePercentage: 7.5,
       },
       {
@@ -178,7 +174,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: I18n.getMessage('expires'),
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => (info ? info : I18n.getMessage('session')),
+        cell: (info: InfoType) =>
+          info === 'Session' || !info ? I18n.getMessage('session') : info,
         widthWeightagePercentage: 6,
       },
       {
@@ -235,8 +232,12 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
                 className="flex"
                 title={I18n.getMessage('lookAtNetworkTab')}
               >
-                <InfoIcon className="fill-granite-gray" />
-                {I18n.getMessage('undetermined')}
+                <span>
+                  <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
+                </span>
+                <span className="ml-[2px] truncate">
+                  {I18n.getMessage('undetermined')}
+                </span>
               </span>
             );
           } else {
@@ -258,10 +259,18 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           'analytics.category',
           Object.values(cookies),
           parsedQuery?.filter?.['analytics.category'],
-          clearActivePanelQuery
+          clearActivePanelQuery,
+          true
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return (
+            I18n.getMessage(val?.toLowerCase() || 'uncategorized') ===
+            filterValue.toLowerCase()
+          );
+        },
       },
       isFirstParty: {
         title: I18n.getMessage('scope'),
@@ -372,7 +381,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const val = value as string;
           switch (filterValue) {
             case I18n.getMessage('session'):
-              return val === I18n.getMessage('session');
+              return val === 'Session';
 
             case I18n.getMessage('shortTerm'):
               diff = Date.parse(val) - Date.now();

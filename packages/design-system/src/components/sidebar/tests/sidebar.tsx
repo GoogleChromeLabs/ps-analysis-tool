@@ -136,5 +136,19 @@ describe('Sidebar', () => {
       expect.any(Object),
       'item1'
     );
+
+    // Act
+    fireEvent.keyDown(sidebar, { key: 'Enter' });
+
+    // Assert
+    expect(initialState.toggleDropdown).toHaveBeenCalled();
+    expect(initialState.toggleDropdown).toHaveBeenCalledWith(true, 'item1');
+
+    // Act
+    fireEvent.keyDown(sidebar, { key: ' ' });
+
+    // Assert
+    expect(initialState.toggleDropdown).toHaveBeenCalled();
+    expect(initialState.toggleDropdown).toHaveBeenCalledWith(true, 'item1');
   });
 });

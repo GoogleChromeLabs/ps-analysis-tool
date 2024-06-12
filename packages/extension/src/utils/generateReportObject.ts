@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -22,7 +21,6 @@ import type {
   TabCookies,
   TabFrames,
 } from '@ps-analysis-tool/common';
-
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -33,15 +31,17 @@ import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Utility function to generate report object.
- * @param url Top level URL.
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
- * @param libraryMatches
+ * @param libraryMatches Library matches
+ * @param url Top level URL.
+ * @returns Report Object
  */
 export default function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData
+  libraryMatches: LibraryData,
+  url: string
 ) {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -93,5 +93,8 @@ export default function generateReportObject(
     frameStateCreator,
     libraryMatches,
     exemptedCookiesDataMapping,
+    showFramesSection: true,
+    showBlockedCategory: false,
+    url,
   };
 }

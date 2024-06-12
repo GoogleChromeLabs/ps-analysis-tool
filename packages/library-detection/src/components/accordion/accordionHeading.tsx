@@ -19,10 +19,10 @@
 import React from 'react';
 import {
   Ellipse,
-  ArrowDown,
-  ArrowUp,
   BorderProgressBar,
+  ChevronDown,
 } from '@ps-analysis-tool/design-system';
+import classNames from 'classnames';
 
 interface AccodionHeadingProps {
   setIsOpen: (isOpen: boolean) => void;
@@ -42,12 +42,12 @@ const AccordionHeading = ({
   return (
     <div
       onClick={() => setIsOpen(!isOpen)}
-      className="transition-colors flex py-3 cursor-pointer"
+      className="transition-colors flex py-3 cursor-pointer hover:opacity-90 active:opacity-60 hover:bg-[#f5f5f5] hover:dark:bg-[#1d1d1d] rounded-md"
     >
       <span className="flex items-center px-2">
         <Ellipse />
       </span>
-      <p className="flex-1 dark:text-bright-gray">
+      <p className="flex-1 dark:text-bright-gray font-medium">
         {title}
         {featuresText && (
           <span className="text-gray ml-2 dark:text-bright-gray">
@@ -55,8 +55,12 @@ const AccordionHeading = ({
           </span>
         )}
       </p>
-      <span className="flex items-center px-2 dark:text-bright-gray">
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
+      <span className="flex items-center px-2 text-granite-gray dark:text-bright-gray">
+        <ChevronDown
+          className={classNames({
+            'rotate-180': isOpen,
+          })}
+        />
       </span>
       {loading && (
         <div className="absolute top-0 left-0 w-full">

@@ -39,8 +39,8 @@ const RestrictionInfoContainer = () => (
         ]),
       }}
     />
-    <div className="w-full grid place-items-center mb-2">
-      <PSTimelineIcon />
+    <div className="w-full grid place-items-center mb-6">
+      <PSTimelineIcon className="scale-125" />
     </div>
     <p
       dangerouslySetInnerHTML={{

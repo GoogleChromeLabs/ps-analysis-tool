@@ -18,12 +18,11 @@
  */
 import React from 'react';
 import { addUTMParams } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
-import { Accordion, FeatureList } from '../../components';
+import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
 const GISAccordion = ({ matches }: AccordionProps) => {
@@ -38,22 +37,23 @@ const GISAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion
-      title={I18n.getMessage('gISTitle')}
-      featuresText={I18n.getMessage('featureCount', [featuresCount.toString()])}
-    >
-      <p
-        className="dark:text-bright-gray"
-        dangerouslySetInnerHTML={{
-          __html: I18n.getMessage('gISNote', [
-            `<a className="text-bright-navy-blue dark:text-jordy-blue" target="_blank" href="${addUTMParams(
-              'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
-            )}" rel="noreferrer">`,
-            '</a>',
-          ]),
-        }}
-      />
-      <FeatureList matches={matches} />
+    <Accordion title={'Unsupported Google Identity Services'}>
+      <p className="text-darkest-gray dark:text-bright-gray">
+        Due to Privacy Sandbox enforcements some features are backward
+        incompatible or deprecated. Some features of Google Identity Services
+        are in use. Please review the following documentation and{' '}
+        <a
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          target="_blank"
+          href={addUTMParams(
+            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
+          )}
+          rel="noreferrer"
+        >
+          migrate
+        </a>{' '}
+        if necessary.
+      </p>
     </Accordion>
   );
 };

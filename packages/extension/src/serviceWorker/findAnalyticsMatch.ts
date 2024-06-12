@@ -16,17 +16,9 @@
 /**
  * External dependencies.
  */
-import { I18n } from '@ps-analysis-tool/i18n';
-/**
- * Internal dependencies.
- */
-import type {
-  CookieAnalytics,
-  CookieDatabase,
-} from '../utils/fetchCookieDictionary';
+import type { CookieAnalytics, CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
- *
  * Matches wildcard string to a provided string. For eg Foo_* matches Foo_123.
  * @param {string} wildcard  Wildcard cookie name.
  * @param {string} str cookie name to be matched.
@@ -38,12 +30,13 @@ const wildTest = (wildcard: string, str: string): boolean => {
     `^${regExp.replace(/\*/g, '.*').replace(/\?/g, '.')}$`,
     'i'
   );
+
   return result.test(str); // remove last 'i' above to have case sensitive
 };
 
 export const emptyAnalytics = {
   platform: '',
-  category: I18n.getMessage('uncategorized'),
+  category: 'Uncategorized',
   name: '',
   domain: '',
   description: '',
@@ -78,8 +71,9 @@ const findAnalyticsMatch = (
     }
   });
 
-  analytics.category = analytics.category || I18n.getMessage('uncategorized');
+  analytics.category = analytics.category || 'Uncategorized';
 
   return analytics;
 };
+
 export default findAnalyticsMatch;

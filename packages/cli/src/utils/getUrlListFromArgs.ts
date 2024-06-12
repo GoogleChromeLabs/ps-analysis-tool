@@ -22,7 +22,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies.
  */
-import Utility from './utility';
+import getUrlsFromSitemap from './getUrlsfromSitemap';
 
 const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   spinnies?.add('sitemap-spinner', {
@@ -30,7 +30,7 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   });
 
   try {
-    const _urls = await Utility.getUrlsFromSitemap(sitemapUrl);
+    const _urls = await getUrlsFromSitemap(sitemapUrl);
     spinnies?.succeed('sitemap-spinner', {
       text: I18n.getMessage('doneParsingSitemap'),
     });

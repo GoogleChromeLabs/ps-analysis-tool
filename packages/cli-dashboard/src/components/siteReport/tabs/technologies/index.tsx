@@ -55,11 +55,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
       {
         header: I18n.getMessage('description'),
         accessorKey: 'description',
-        cell: (info: InfoType) => (
-          <p title={info as string} className="truncate">
-            {info}
-          </p>
-        ),
+        cell: (info: InfoType) => info,
       },
       {
         header: I18n.getMessage('confidence'),

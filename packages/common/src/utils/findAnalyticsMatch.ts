@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import { I18n } from '@ps-analysis-tool/i18n';
-/**
  * Internal dependencies.
  */
 import { CookieAnalytics, CookieDatabase } from '../cookies.types';
@@ -39,7 +35,7 @@ const wildTest = (wildcard: string, str: string): boolean => {
 
 export const emptyAnalytics = {
   platform: '',
-  category: I18n.getMessage('uncategorized'),
+  category: 'Uncategorized',
   name: '',
   domain: '',
   description: '',
@@ -74,7 +70,7 @@ const findAnalyticsMatch = (
     }
   });
 
-  analytics.category = analytics.category || I18n.getMessage('uncategorized');
+  analytics.category = analytics.category || 'Uncategorized';
 
   return analytics;
 };

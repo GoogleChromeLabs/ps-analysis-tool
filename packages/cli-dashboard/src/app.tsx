@@ -48,15 +48,16 @@ const App = () => {
     CompleteJson[] | null
   >(null);
 
-  const [type, path] = useMemo(() => {
+  const [type, dirPath, dir] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const dir = urlParams.get('dir');
+    const _dir = urlParams.get('dir') || '';
 
     return [
       urlParams.get('type') === 'sitemap'
         ? DisplayType.SITEMAP
         : DisplayType.SITE,
-      `/out/${dir}/out.json`,
+      `/out/${_dir}/out.json`,
+      _dir,
     ];
   }, []);
 
@@ -65,7 +66,7 @@ const App = () => {
       const locale = navigator.language || 'en';
       await I18n.loadDashboardMessagesData(locale);
 
-      const response = await fetch(path);
+      const response = await fetch(dirPath);
       const data: CompleteJson[] = await response.json();
       setCompleteJsonReport(data);
 
@@ -86,9 +87,9 @@ const App = () => {
       setCookies(_cookies);
       setTechnologies(_technologies);
     })();
-  }, [path, type]);
+  }, [dirPath, type]);
 
-  if (!path) {
+  if (!dirPath) {
     return (
       <div className="flex justify-center items-center">
         <div className="text-2xl">{I18n.getMessage('noPathProvided')}</div>
@@ -103,6 +104,7 @@ const App = () => {
         cookies={cookies}
         technologies={technologies}
         completeJson={completeJsonReport}
+        path={dir}
       />
     );
   }
@@ -113,7 +115,8 @@ const App = () => {
         completeJson={completeJsonReport}
         cookies={cookies}
         technologies={technologies}
-        selectedSite={path.slice(5, -9)}
+        selectedSite={dirPath.slice(5, -9)}
+        path={dir}
       />
     </div>
   );

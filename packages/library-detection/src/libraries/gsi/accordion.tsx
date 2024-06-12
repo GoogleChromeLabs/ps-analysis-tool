@@ -22,9 +22,8 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { Accordion, FeatureList } from '../../components';
+import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const GSIAccordion = ({ matches }: AccordionProps) => {
   if (!matches) {
@@ -38,25 +37,23 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion
-      title={'Avoid use of deprecated Google Sign-In functionality.'}
-      isLoading={false}
-      featuresText={`${featuresCount} features`}
-    >
-      <p
-        className="dark:text-bright-gray"
-        dangerouslySetInnerHTML={{
-          __html: I18n.getMessage('gSInote', [
-            `<a className="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
-              'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
-            )}
-						target="_blank"
-						rel="noreferrer">`,
-            '</a>',
-          ]),
-        }}
-      />
-      <FeatureList matches={matches} />
+    <Accordion title={'Deprecated Google Sign-In'} isLoading={false}>
+      <p className="text-darkest-gray dark:text-bright-gray">
+        The Google Sign-In JavaScript library is deprecated and is no longer
+        supported. Some features of Google Identity Services are in use. Please
+        review the following documentation and{' '}
+        <a
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          href={addUTMParams(
+            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
+          )}
+          target="_blank"
+          rel="noreferrer"
+        >
+          migrate
+        </a>{' '}
+        if necessary.
+      </p>
     </Accordion>
   );
 };

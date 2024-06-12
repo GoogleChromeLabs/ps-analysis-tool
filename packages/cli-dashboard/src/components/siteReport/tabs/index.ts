@@ -34,6 +34,7 @@ const Tabs: SidebarItems = {
     selectedIcon: {
       Element: CookieIconWhite,
     },
+    dropdownOpen: true,
   },
   [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
     title: 'cookieIssues',

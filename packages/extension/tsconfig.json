@@ -13,6 +13,7 @@
     { "path": "../common" },
     {
       "path": "../design-system"
-    }
+    },
+    { "path": "../i18n" }
   ]
 }

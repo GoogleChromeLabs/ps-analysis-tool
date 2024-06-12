@@ -21,25 +21,27 @@ import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import path from 'path';
-import { CompleteJson } from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
+import { CompleteJson, delay } from '@ps-analysis-tool/common';
+import {
+  analyzeCookiesUrlsInBatches,
+  analyzeTechnologiesUrlsInBatches,
+} from '@ps-analysis-tool/analysis-utils';
 
 /**
  * Internal dependencies.
  */
-import Utility from './utils/utility';
-import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
-import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 import {
   fetchDictionary,
-  delay,
   getUrlListFromArgs,
   validateArgs,
   saveCSVReports,
+  askUserInput,
+  checkPortInUse,
+  generatePrefix,
 } from './utils';
-import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -50,19 +52,34 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.7.0')
-  .description(I18n.getMessage('toTest3PCookies'))
-  .option('-u, --url <value>', I18n.getMessage('urlOfSite'))
-  .option('-s, --sitemap-url <value>', I18n.getMessage('urlOfSitemap'))
-  .option('-c, --csv-path <value>', I18n.getMessage('pathToCSV'))
-  .option('-p, --sitemap-path <value>', I18n.getMessage('pathToSitemap'))
-  .option('-po, --port <value>', I18n.getMessage('portForServer'))
-  .option('-ul, --url-limit <value>', I18n.getMessage('urlLimit'))
-  .option('-nh, --no-headless ', I18n.getMessage('nonHeadless'))
-  .option('-np, --no-prompts', I18n.getMessage('noPrompts'))
-  .option('-nt, --no-technology', I18n.getMessage('noTechnology'))
-  .option('-d, --out-dir <value>', I18n.getMessage('outDir'))
-  .option('-ab, --accept-banner', I18n.getMessage('acceptBanner'));
+  .version('0.8.0')
+  .description('CLI to test a URL for 3p cookies')
+  .option('-u, --url <value>', 'URL of a site')
+  .option('-s, --sitemap-url <value>', 'URL of a sitemap')
+  .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
+  .option(
+    '-p, --sitemap-path <value>',
+    'Path to a sitemap saved in the file system'
+  )
+  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
+  .option('-ul, --url-limit <value>', 'No of URLs to analyze')
+  .option(
+    '-nh, --no-headless ',
+    'Flag for running puppeteer in non-headless mode'
+  )
+  .option(
+    '-np, --no-prompts',
+    'Flags for skipping all prompts. Default options will be used'
+  )
+  .option('-nt, --no-technology', 'Flags for skipping technology analysis.')
+  .option(
+    '-d, --out-dir <value>',
+    'Directory path where the analysis data will be stored'
+  )
+  .option(
+    '-ab, --accept-banner',
+    'This will accept the GDPR banner if present.'
+  );
 
 program.parse();
 
@@ -75,7 +92,13 @@ const saveResults = async (
 };
 
 const startDashboardServer = async (dir: string, port: number) => {
-  exec(`npm run cli-dashboard:dev -- -- --port ${port}`);
+  spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', [
+    'run',
+    'cli-dashboard:dev',
+    '--',
+    '--port',
+    port.toString(),
+  ]);
 
   await delay(2000);
 
@@ -98,7 +121,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
-  validateArgs(
+  await validateArgs(
     url,
     sitemapUrl,
     csvPath,
@@ -121,10 +144,18 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   const prefix =
     url || sitemapUrl
-      ? Utility.generatePrefix(url || sitemapUrl)
+      ? generatePrefix(url || sitemapUrl)
       : path.parse(csvPath || sitemapPath).name;
 
-  const outputDir = outDir ? outDir : `./out/${prefix}`;
+  let outputDir;
+
+  if (outDir && path.isAbsolute(outDir)) {
+    outputDir = outDir;
+  } else if (outDir && !path.isAbsolute(outDir)) {
+    outputDir = path.join('./out', outDir);
+  } else {
+    outputDir = `./out/${prefix}`;
+  }
 
   const spinnies = new Spinnies();
 
@@ -143,17 +174,17 @@ const startDashboardServer = async (dir: string, port: number) => {
     let userInput: string | null = null;
 
     if (!shouldSkipPrompts && !numberOfUrlsInput) {
-      userInput = await Utility.askUserInput(
+      userInput = await askUserInput(
         I18n.getMessage('urlCountPrompt', [
           sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file',
           urls.length.toString(),
-        ]),
-        { default: urls.length.toString() }
+        ])
       );
+
       numberOfUrls =
         userInput && isNaN(parseInt(userInput))
           ? urls.length
-          : parseInt(userInput);
+          : parseInt(userInput as string);
     } else if (numberOfUrlsInput) {
       console.log(I18n.getMessage('analyzingUrls', [numberOfUrlsInput]));
       numberOfUrls = parseInt(numberOfUrlsInput);

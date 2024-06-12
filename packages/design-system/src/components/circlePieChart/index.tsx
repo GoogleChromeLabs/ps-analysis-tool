@@ -19,8 +19,6 @@
 import React from 'react';
 import { VictoryPie } from 'victory';
 import classNames from 'classnames';
-import { InfoIcon } from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -43,7 +41,6 @@ const CirclePieChart = ({
   centerCount,
   data,
   title,
-  infoIconClassName = '',
   centerTitleExtraClasses = '',
   pieChartExtraClasses = '',
 }: CirclePieChartProps) => {
@@ -81,14 +78,6 @@ const CirclePieChart = ({
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
-          {title === I18n.getMessage('thirdPartyCookies') && (
-            <p
-              className={infoIconClassName}
-              title={I18n.getMessage('newChromeProfile')}
-            >
-              <InfoIcon className="fill-granite-gray" />
-            </p>
-          )}
         </div>
       )}
     </div>

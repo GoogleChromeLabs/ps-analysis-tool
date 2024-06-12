@@ -62,7 +62,11 @@ const BlockedCookiesSection = () => {
       data: cookiesStatsComponents.blocked,
       onClick:
         cookieStats.blockedCookies.total > 0
-          ? () => selectedItemUpdater('All', 'blockedReasons')
+          ? () =>
+              selectedItemUpdater(
+                I18n.getMessage('selectAll'),
+                'blockedReasons'
+              )
           : null,
     },
   ];

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -64,8 +63,7 @@ export type CookieDatabase = {
 
 export type BlockedReason =
   | Protocol.Network.SetCookieBlockedReason
-  | Protocol.Network.CookieBlockedReason
-  | Protocol.Audits.CookieExclusionReason;
+  | Protocol.Network.CookieBlockedReason;
 
 export enum RESPONSE_EVENT {
   CHROME_WEBREQUEST_ON_RESPONSE_STARTED = 'CHROME_WEBREQUEST_ON_RESPONSE_STARTED',
@@ -155,8 +153,7 @@ export interface TabCookies {
 
 export interface TabFrames {
   [key: string]: {
-    frameIds: number[];
-    isOnRWS?: boolean;
+    frameIds: string[];
     frameType?: 'outermost_frame' | 'fenced_frame' | 'sub_frame';
   };
 }
@@ -193,7 +190,7 @@ export interface CookieStatsComponents {
 }
 
 export interface FramesWithCookies {
-  [key: string]: { frameIds: number[] };
+  [key: string]: { frameIds: number[] | string[] };
 }
 
 export type CookieJsonDataType = {

@@ -51,6 +51,7 @@ interface LayoutProps {
   completeJson: CompleteJson[] | null;
   sidebarData: SidebarItems;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
+  path: string;
 }
 
 const Layout = ({
@@ -60,6 +61,7 @@ const Layout = ({
   completeJson,
   sidebarData,
   setSidebarData,
+  path,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
 
@@ -82,7 +84,9 @@ const Layout = ({
   const cookiesWithIssues = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(reshapedCookies).filter(([, cookie]) => cookie.isBlocked)
+        Object.entries(reshapedCookies).filter(
+          ([, cookie]) => cookie.isBlocked || cookie.blockedReasons?.length
+        )
       ),
     [reshapedCookies]
   );
@@ -139,7 +143,7 @@ const Layout = ({
               return;
             }
 
-            generateSiteMapReportandDownload(completeJson);
+            generateSiteMapReportandDownload(completeJson, '');
           },
         },
       };
@@ -155,6 +159,7 @@ const Layout = ({
                 technologies: siteFilteredTechnologies,
                 completeJson,
                 selectedSite: site,
+                path,
               },
             },
             children: {},
@@ -177,7 +182,7 @@ const Layout = ({
         Element: SiteMapCookiesWithIssues,
         props: {
           cookies: Object.values(reshapedCookies).filter(
-            (cookie) => cookie.isBlocked
+            (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
           ),
         },
       };
@@ -188,6 +193,7 @@ const Layout = ({
     completeJson,
     cookiesWithIssues,
     isKeySelected,
+    path,
     reshapedCookies,
     setSidebarData,
     siteFilteredCookies,

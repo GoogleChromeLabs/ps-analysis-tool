@@ -9,5 +9,9 @@
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "references": [{ "path": "../common" }, { "path": "../i18n" }]
+  "references": [
+    { "path": "../common" },
+    { "path": "../analysis-utils" },
+    { "path": "../i18n" }
+  ]
 }

@@ -53,6 +53,8 @@ const SettingsContainer = () => {
         case 'enableCDP':
           settingsToReturn.push({
             ...setting,
+            heading: setting.heading(),
+            description: setting.description(),
             changeSwitchState: setIsUsingCDP,
             switchState: isUsingCDP,
           });
@@ -60,6 +62,8 @@ const SettingsContainer = () => {
         case 'multitabDebugging':
           settingsToReturn.push({
             ...setting,
+            heading: setting.heading(),
+            description: setting.description(),
             changeSwitchState: setProcessingMode,
             switchState: allowedNumberOfTabs === 'unlimited',
           });

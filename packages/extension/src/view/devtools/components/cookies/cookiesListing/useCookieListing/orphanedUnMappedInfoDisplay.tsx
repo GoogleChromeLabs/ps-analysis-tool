@@ -41,9 +41,14 @@ const OrphanedUnMappedInfoDisplay = ({
 
   if (frameIdList.length === 0) {
     return (
-      <span className="flex" title={I18n.getMessage('couldNotMapCookies')}>
-        <InfoIcon className="fill-granite-gray" />
-        <span className="ml-[2px] block">{I18n.getMessage('unmapped')}</span>
+      <span
+        className="flex truncate"
+        title={I18n.getMessage('couldNotMapCookies')}
+      >
+        <span>
+          <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
+        </span>
+        <span className="ml-[2px] truncate">{I18n.getMessage('unmapped')}</span>
       </span>
     );
   }
@@ -70,9 +75,14 @@ const OrphanedUnMappedInfoDisplay = ({
 
   if (!hasFrame) {
     return (
-      <span className="flex" title={I18n.getMessage('orphanedCookies')}>
-        <InfoIcon className="fill-granite-gray" />
-        <span className="ml-[2px] block">{I18n.getMessage('orphaned')}</span>
+      <span
+        className="flex truncate"
+        title={I18n.getMessage('orphanedCookies')}
+      >
+        <span>
+          <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
+        </span>
+        <span className="ml-[2px] truncate">{I18n.getMessage('orphaned')}</span>
       </span>
     );
   }

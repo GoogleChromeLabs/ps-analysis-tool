@@ -188,7 +188,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const lastUrl = useRef(tabUrl);
 
   useEffect(() => {
-    if (lastUrl.current === tabUrl || lastUrl.current === null) {
+    if (
+      lastUrl.current === null ||
+      new URL(lastUrl.current).hostname === new URL(tabUrl || '').hostname
+    ) {
       lastUrl.current = tabUrl;
       return;
     }
@@ -234,7 +237,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           className="w-full h-full overflow-auto"
           id="cookies-landing-scroll-container"
         >
-          <div className="min-w-[40rem] h-full z-1">
+          <div className="min-w-[45rem] h-full z-1">
             {PanelElement && <PanelElement {...props} />}
           </div>
         </div>

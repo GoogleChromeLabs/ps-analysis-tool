@@ -28,11 +28,8 @@ import {
   evaluateSelectAllOption,
   evaluateStaticFilterValues,
 } from '@ps-analysis-tool/design-system';
-import {
-  calculateEffectiveExpiryDate,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 const useCookieListing = (
   tabCookies: CookieTableData[],
@@ -64,13 +61,8 @@ const useCookieListing = (
       {
         header: I18n.getMessage('scope'),
         accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info
-              ? I18n.getMessage('thirdParty')
-              : I18n.getMessage('firstParty')}
-          </p>
-        ),
+        cell: (info: InfoType) =>
+          !info ? I18n.getMessage('thirdParty') : I18n.getMessage('firstParty'),
         widthWeightagePercentage: 8,
       },
       {
@@ -138,10 +130,7 @@ const useCookieListing = (
       {
         header: I18n.getMessage('expires'),
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) =>
-          info
-            ? calculateEffectiveExpiryDate(info as string)
-            : I18n.getMessage('session'),
+        cell: (info: InfoType) => info,
         widthWeightagePercentage: 7,
       },
     ],
