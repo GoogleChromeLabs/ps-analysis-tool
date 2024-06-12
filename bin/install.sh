@@ -39,6 +39,8 @@ echo -e "\tchrome-default     : Opens a Chrome instance with default settings."
 echo -e "\tchrome-3pcd        : Opens a Chrome instance with Third-Party Cookie Deprecation (3PCD) enabled."
 echo -e "\tchrome-default-ps  : Opens a Chrome instance with default settings and the Privacy Sandbox extension installed."
 echo -e "\tchrome-3pcd-ps     : Opens a Chrome instance with 3PCD enabled and the Privacy Sandbox extension installed."
+echo -e "\tchrome-pat         : Opens a Chrome instance with Private Advertising Testing enabled."
+echo -e "\tchrome-pat-ps      : Opens a Chrome instance with Private Advertising Testing enabled and the Privacy Analysis Tool extension installed."
 
 # Source into current terminal session as well
 source ~/bin/chrome_launcher.sh

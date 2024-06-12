@@ -15,23 +15,28 @@
  */
 
 /**
- * Determines if an HTMLElement is vertically centered within the viewport.
- * @param {HTMLElement} element - The HTMLElement to check for vertical centering.
- * @returns {boolean} True if the element is vertically centered within the viewport, false otherwise.
+ * Determines if an HTMLElement hasn't been scrolled more than a 3/4th of its height out of viewport's 1/4th quarter.
+ * @param element - The HTMLElement to check for vertical centering.
+ * @returns True if the element is in view, false otherwise.
  */
-const isInCenter = (element: HTMLElement) => {
+export default function isElementInView(element: HTMLElement) {
+  const quarterViewPortHeight =
+    (window.innerHeight || document.documentElement.offsetHeight) / 4;
+  const quarterElementHeight = element.offsetHeight / 4;
   const rect = element.getBoundingClientRect();
-  const viewportHeight =
-    window.innerHeight || document.documentElement.clientHeight;
 
   const elementTop = rect.top;
   const elementBottom = rect.bottom;
-  const elementHeight = elementBottom - elementTop;
 
-  const elementCenterY = elementTop + elementHeight / 2;
-  const viewportCenterY = viewportHeight / 2;
+  if (elementTop > quarterViewPortHeight || elementBottom < 0) {
+    return false;
+  }
 
-  return Math.abs(elementCenterY - viewportCenterY) <= elementHeight / 2;
-};
+  const cutoffLine = elementBottom - quarterElementHeight;
 
-export default isInCenter;
+  if (cutoffLine < 0) {
+    return false;
+  }
+
+  return true;
+}
