@@ -15,7 +15,7 @@
 		"analysis-utils:prebuild": "npm run build:remove -w @ps-analysis-tool/analysis-utils",
 		"analysis-utils:dev": "npm run dev -w @ps-analysis-tool/analysis-utils",
 		"analysis-utils:build": "npm run analysis-utils:prebuild && npm run build -w @ps-analysis-tool/analysis-utils",
-		"cli:prebuild": "npm run build:remove-w @ps-analysis-tool/cli",
+		"cli:prebuild": "npm run build:remove -w @ps-analysis-tool/cli",
 		"cli:dev": "npm run dev -w @ps-analysis-tool/cli",
 		"cli:build": "cross-env NODE_ENV=production npm run build -w @ps-analysis-tool/cli",
 		"cli": "node packages/cli/dist/main.js",
