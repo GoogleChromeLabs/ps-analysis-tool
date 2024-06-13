@@ -49,7 +49,7 @@ const validateArgs = async (
   if (numArgs !== 1) {
     console.log(
       `Please provide one and only one of the following
-        a) URL of a site (-u or --url)
+        a) URL of a site (-u or --url or default argument)
         b) URL of a sitemap (-s or --sitemap-url)
         c) Path to a CSV file (-c or --csv-path)
         d) Path to an XML file (-p or --sitemap-path)`
