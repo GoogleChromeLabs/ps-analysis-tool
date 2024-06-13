@@ -55,6 +55,7 @@ const program = new Command();
 program
   .version('0.8.0')
   .description('CLI to test a URL for 3p cookies')
+  .argument('[website-url]', 'The URL of website you want to analyse')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
   .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
@@ -133,7 +134,7 @@ const saveResultsAsHTML = async (
 
 // eslint-disable-next-line complexity
 (async () => {
-  const url = program.opts().url;
+  const url = program.args?.[0] ?? program.opts().url;
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;

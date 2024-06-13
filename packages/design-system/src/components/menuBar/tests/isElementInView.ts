@@ -27,7 +27,7 @@ describe('isElementInView', () => {
       }),
     };
 
-    expect(isElementInView(element)).toBe(true);
+    expect(isElementInView(element as HTMLElement)).toBe(true);
   });
 
   it('should return false if the element is not in view', () => {
@@ -40,20 +40,20 @@ describe('isElementInView', () => {
       }),
     };
 
-    expect(isElementInView(element)).toBe(false);
+    expect(isElementInView(element as HTMLElement)).toBe(false);
 
     element.getBoundingClientRect = () => ({
       top: 0,
       bottom: -100,
     });
 
-    expect(isElementInView(element)).toBe(false);
+    expect(isElementInView(element as HTMLElement)).toBe(false);
 
     element.getBoundingClientRect = () => ({
       top: 0,
       bottom: 24,
     });
 
-    expect(isElementInView(element)).toBe(false);
+    expect(isElementInView(element as HTMLElement)).toBe(false);
   });
 });
