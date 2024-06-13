@@ -35,18 +35,19 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     completeJson: state.completeJson,
   }));
 
-  const tabFrames = useMemo<TabFrames>(
-    () =>
-      Object.values(tabCookies).reduce((acc, cookie) => {
-        (cookie.frameUrls as string[]).forEach((url) => {
-          if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
-            acc[url] = {} as TabFrames[string];
-          }
-        });
-        return acc;
-      }, {} as TabFrames),
-    [tabCookies]
-  );
+  const tabFrames = useMemo(() => {
+    const frames = Object.keys(
+      completeJson?.[0].cookieData ?? {}
+    ).reduce<TabFrames>((acc, url) => {
+      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+        acc[url] = {} as TabFrames[string];
+      }
+
+      return acc;
+    }, {});
+
+    return frames;
+  }, [completeJson]);
 
   const cookiesWithIssues = useMemo(
     () =>

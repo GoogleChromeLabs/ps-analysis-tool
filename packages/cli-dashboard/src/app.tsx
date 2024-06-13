@@ -72,8 +72,6 @@ const App = () => {
       if (type === DisplayType.SITEMAP) {
         const extractedData = extractReportData(data);
 
-        _cookies = extractedData.cookies;
-        _technologies = extractedData.technologies;
         setLandingPageCookies(extractedData.landingPageCookies);
       } else {
         _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
@@ -97,8 +95,6 @@ const App = () => {
     return (
       <SiteMapReport
         landingPageCookies={landingPageCookies}
-        cookies={cookies}
-        technologies={technologies}
         completeJson={completeJsonReport}
         path={dir}
       />
