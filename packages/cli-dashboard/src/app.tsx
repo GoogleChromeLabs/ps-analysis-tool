@@ -20,6 +20,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
+  LibraryData,
   TechnologyData,
 } from '@ps-analysis-tool/common';
 
@@ -45,6 +46,9 @@ const App = () => {
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
+  const [libraryMatches, setLibraryMatches] = useState<{
+    [key: string]: LibraryData;
+  } | null>(null);
 
   const type = useMemo(() => {
     // @ts-ignore
@@ -54,26 +58,42 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const bodyTag = document.querySelector('body');
+
+    if (!bodyTag) {
+      return;
+    }
+
+    bodyTag.style.fontSize = '75%';
+  }, []);
+
+  useEffect(() => {
     // @ts-ignore
     const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);
 
     let _cookies: CookieFrameStorageType = {},
-      _technologies: TechnologyData[] = [];
+      _technologies: TechnologyData[] = [],
+      _libraryMatches: {
+        [key: string]: LibraryData;
+      } = {};
 
     if (type === DisplayType.SITEMAP) {
       const extractedData = extractReportData(data);
 
       _cookies = extractedData.cookies;
       _technologies = extractedData.technologies;
+      _libraryMatches = extractedData.consolidatedLibraryMatches;
       setLandingPageCookies(extractedData.landingPageCookies);
     } else {
       _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
       _technologies = data[0].technologyData;
+      _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
     }
 
     setCookies(_cookies);
     setTechnologies(_technologies);
+    setLibraryMatches(_libraryMatches);
   }, [type]);
 
   if (type === DisplayType.SITEMAP) {
@@ -85,6 +105,7 @@ const App = () => {
         completeJson={completeJsonReport}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
+        libraryMatches={libraryMatches}
       />
     );
   }
@@ -99,6 +120,11 @@ const App = () => {
         selectedSite={globalThis?.PSAT_DATA?.selectedSite}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
+        libraryMatches={
+          libraryMatches
+            ? libraryMatches[Object.keys(libraryMatches ?? {})[0]]
+            : null
+        }
       />
     </div>
   );

@@ -24,11 +24,16 @@ import { ensureFile, writeFile } from 'fs-extra';
 import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
-import { CompleteJson } from '@ps-analysis-tool/common';
+import { CompleteJson, LibraryData } from '@ps-analysis-tool/common';
 import {
-  analyzeCookiesUrlsInBatches,
+  analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
 } from '@ps-analysis-tool/analysis-utils';
+import {
+  DetectionFunctions,
+  Libraries,
+  detectMatchingSignatures,
+} from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -95,7 +100,8 @@ const saveResultsAsHTML = async (
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
     'utf-8'
   );
-  const reportText = fs.readFileSync(
+
+  const reportHTML = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
     'base64'
   );
@@ -103,17 +109,19 @@ const saveResultsAsHTML = async (
   const html =
     htmlText.substring(0, htmlText.indexOf('</head>')) +
     `<script>
-    window.PSAT_REPORT = '${reportText}'
+    window.PSAT_REPORT_HTML = '${reportHTML}'
     window.PSAT_DATA = ${JSON.stringify({
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',
       selectedSite: outDir?.trim()?.slice(6) ?? '',
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
+
   fs.copyFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
     outDir + '/index.js'
   );
+
   const outFileFullDir = path.resolve(outDir + '/index.html');
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
@@ -208,15 +216,18 @@ const saveResultsAsHTML = async (
     text: 'Analysing cookies on first site visit',
   });
 
-  const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
-    urlsToProcess,
-    isHeadless,
-    DELAY_TIME,
-    cookieDictionary,
-    3,
-    urlsToProcess.length !== 1 ? spinnies : undefined,
-    shouldSkipAcceptBanner
-  );
+  const cookieAnalysisAndFetchedResourceData =
+    await analyzeCookiesUrlsInBatchesAndFetchResources(
+      urlsToProcess,
+      //@ts-ignore Fix type.
+      Libraries,
+      isHeadless,
+      DELAY_TIME,
+      cookieDictionary,
+      3,
+      urlsToProcess.length !== 1 ? spinnies : undefined,
+      shouldSkipAcceptBanner
+    );
 
   spinnies.succeed('cookie-spinner', {
     text: 'Done analyzing cookies.',
@@ -239,14 +250,24 @@ const saveResultsAsHTML = async (
       text: 'Done analyzing technologies.',
     });
   }
-
   const result = urlsToProcess.map((_url, ind) => {
+    const detectedMatchingSignatures: LibraryData = {
+      ...detectMatchingSignatures(
+        cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
+        Object.fromEntries(
+          Libraries.map((library) => [library.name, library.detectionFunction])
+        ) as DetectionFunctions
+      ),
+      ...(cookieAnalysisAndFetchedResourceData[ind]?.domQueryMatches ?? {}),
+    };
     return {
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
-      cookieData: cookieAnalysisData[ind].cookieData,
+      cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
+      libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;
   });
+
   const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   if (outDir) {

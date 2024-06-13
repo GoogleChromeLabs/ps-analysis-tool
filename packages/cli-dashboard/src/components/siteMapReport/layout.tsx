@@ -32,6 +32,7 @@ import {
   type TechnologyData,
   type CookieFrameStorageType,
   type CompleteJson,
+  type LibraryData,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -51,6 +52,7 @@ interface LayoutProps {
   sidebarData: SidebarItems;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
   path: string;
+  libraryMatches: { [url: string]: LibraryData } | null;
 }
 
 const Layout = ({
@@ -61,6 +63,7 @@ const Layout = ({
   sidebarData,
   setSidebarData,
   path,
+  libraryMatches,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
 
@@ -129,6 +132,7 @@ const Layout = ({
         Element: CookiesLandingContainer,
         props: {
           tabCookies: reshapedCookies,
+          isSiteMapLandingContainer: true,
           tabFrames: sites.reduce<TabFrames>((acc, site) => {
             acc[site] = {} as TabFrames[string];
 
@@ -143,7 +147,7 @@ const Layout = ({
             generateSiteMapReportandDownload(
               completeJson,
               //@ts-ignore
-              atob(globalThis.PSAT_REPORT),
+              atob(globalThis.PSAT_REPORT_HTML),
               ''
             );
           },
@@ -162,6 +166,7 @@ const Layout = ({
                 completeJson,
                 selectedSite: site,
                 path,
+                libraryMatches: libraryMatches ? libraryMatches[site] : {},
               },
             },
             children: {},
@@ -190,6 +195,7 @@ const Layout = ({
       return _data;
     });
   }, [
+    libraryMatches,
     completeJson,
     cookiesWithIssues,
     isKeySelected,

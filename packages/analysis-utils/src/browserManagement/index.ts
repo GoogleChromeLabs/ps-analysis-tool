@@ -19,7 +19,14 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
-import { CookieData, UNKNOWN_FRAME_KEY, delay } from '@ps-analysis-tool/common';
+import {
+  CookieData,
+  ScriptTagUnderCheck,
+  LibraryData,
+  LibraryMatchers,
+  UNKNOWN_FRAME_KEY,
+  delay,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -34,6 +41,7 @@ export class BrowserManagement {
   pageWaitTime: number;
   pageMap: Map<string, Page>;
   pageResponseMaps: Map<string, Map<string, ResponseData>>;
+  pageResourcesMaps: Map<string, Map<string, ScriptTagUnderCheck>>;
   pageRequestMaps: Map<string, Map<string, RequestData>>;
   shouldLogDebug: boolean;
 
@@ -51,6 +59,7 @@ export class BrowserManagement {
     this.pageResponseMaps = new Map();
     this.pageRequestMaps = new Map();
     this.shouldLogDebug = shouldLogDebug;
+    this.pageResourcesMaps = new Map();
   }
 
   debugLog(msg: any) {
@@ -189,7 +198,10 @@ export class BrowserManagement {
     const mainFrameId: string = page.mainFrame()._id;
 
     const responseMap: Map<string, ResponseData> = new Map();
+    const resourcesMap: Map<string, ScriptTagUnderCheck> = new Map();
+
     this.pageResponseMaps.set(pageId, responseMap);
+    this.pageResourcesMaps.set(pageId, resourcesMap);
 
     cdpSession.on(
       'Network.responseReceived',
@@ -201,6 +213,26 @@ export class BrowserManagement {
         });
       }
     );
+
+    page.on('response', async (response) => {
+      if (
+        response?.headers()?.['content-type']?.includes('javascript') ||
+        response?.headers()?.['content-type']?.includes('html')
+      ) {
+        try {
+          const content = await response.text();
+          resourcesMap.set(response.url(), {
+            origin: response.url(),
+            type: response?.headers()?.['content-type']?.includes('javascript')
+              ? 'Script'
+              : 'Document',
+            content,
+          });
+        } catch (error) {
+          // CDP might fail here.
+        }
+      }
+    });
 
     cdpSession.on(
       'Network.responseReceivedExtraInfo',
@@ -313,7 +345,69 @@ export class BrowserManagement {
     return frameIdMapFromTree;
   }
 
-  async analyzeCookieUrls(urls: string[], shouldSkipAcceptBanner: boolean) {
+  getResources(urls: string[]) {
+    const allFetchedResources: { [key: string]: any } = {};
+
+    urls.forEach((url) => {
+      const page = this.pageMap.get(url);
+      const resources = this.pageResourcesMaps.get(url);
+
+      if (!page || !resources) {
+        allFetchedResources[url] = [];
+        return;
+      }
+
+      allFetchedResources[page.url()] = Array.from(resources?.values() ?? []);
+    });
+
+    return allFetchedResources;
+  }
+
+  async insertAndRunDOMQueryFunctions(
+    url: string,
+    Libraries: LibraryMatchers[]
+  ) {
+    const page = this.pageMap.get(url);
+
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+
+    const domQueryMatches: LibraryData = {};
+
+    await Promise.all(
+      Libraries.map(async ({ domQueryFunction, name }) => {
+        if (domQueryFunction && name) {
+          await page.addScriptTag({
+            content: `window.${name.replaceAll('-', '')} = ${domQueryFunction}`,
+          });
+
+          const queryResult = await page.evaluate((library: string) => {
+            //@ts-ignore
+            const functionDOMQuery = window[`${library}`];
+
+            if (!functionDOMQuery) {
+              return [];
+            }
+
+            return functionDOMQuery();
+          }, name.replaceAll('-', ''));
+
+          domQueryMatches[name] = {
+            domQuerymatches: queryResult as [string],
+          };
+        }
+      })
+    );
+
+    return { [page.url()]: domQueryMatches };
+  }
+
+  async analyzeCookieUrls(
+    urls: string[],
+    shouldSkipAcceptBanner: boolean,
+    Libraries: LibraryMatchers[]
+  ) {
     await Promise.all(
       urls.map(async (url) => {
         const sitePage = await this.openPage();
@@ -322,6 +416,7 @@ export class BrowserManagement {
       })
     );
 
+    let consolidatedDOMQueryMatches: { [key: string]: LibraryData } = {};
     // start navigation in parallel
     await Promise.all(
       urls.map(async (url) => {
@@ -329,6 +424,10 @@ export class BrowserManagement {
         if (shouldSkipAcceptBanner) {
           await this.clickOnAcceptBanner(url);
         }
+        consolidatedDOMQueryMatches = {
+          ...consolidatedDOMQueryMatches,
+          ...(await this.insertAndRunDOMQueryFunctions(url, Libraries)),
+        };
         await this.pageScroll(url);
       })
     );
@@ -338,6 +437,7 @@ export class BrowserManagement {
       urls.map(async (url) => {
         const responseMap = this.pageResponseMaps.get(url);
         const requestMap = this.pageRequestMaps.get(url);
+
         const page = this.pageMap.get(url);
 
         const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
@@ -414,7 +514,7 @@ export class BrowserManagement {
       })
     );
 
-    return result;
+    return { result, consolidatedDOMQueryMatches };
   }
 
   async deinitialize() {

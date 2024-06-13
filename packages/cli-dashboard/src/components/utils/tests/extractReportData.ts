@@ -30,6 +30,7 @@ describe('extractReportData', () => {
       cookies: {},
       technologies: [],
       landingPageCookies: {},
+      consolidatedLibraryMatches: {},
     });
   });
 
@@ -151,6 +152,10 @@ describe('extractReportData', () => {
           },
         },
         [UNKNOWN_FRAME_KEY]: {},
+      },
+      consolidatedLibraryMatches: {
+        'https://edition.cnn.com/index.html': undefined,
+        'https://www.cnn.com/index.html': undefined,
       },
     });
   });

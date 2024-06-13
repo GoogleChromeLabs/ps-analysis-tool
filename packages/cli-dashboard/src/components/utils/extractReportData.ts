@@ -20,6 +20,7 @@
 import type {
   CompleteJson,
   CookieFrameStorageType,
+  LibraryData,
   TechnologyData,
 } from '@ps-analysis-tool/common';
 
@@ -32,8 +33,9 @@ const extractReportData = (data: CompleteJson[]) => {
   const cookies = {};
   const technologies: TechnologyData[] = [];
   const landingPageCookies = {};
+  const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
 
-  data.forEach(({ cookieData, technologyData, pageUrl }) => {
+  data.forEach(({ cookieData, technologyData, pageUrl, libraryMatches }) => {
     formatCookieData(extractCookies(cookieData, pageUrl), cookies);
 
     formatCookieData(
@@ -47,12 +49,14 @@ const extractReportData = (data: CompleteJson[]) => {
         pageUrl,
       }))
     );
+    consolidatedLibraryMatches[pageUrl] = libraryMatches;
   });
 
   return {
     cookies,
     technologies,
     landingPageCookies,
+    consolidatedLibraryMatches,
   };
 };
 
