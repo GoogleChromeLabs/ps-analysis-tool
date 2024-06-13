@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Copyright 2023 Google LLC
  *
@@ -21,9 +22,9 @@ import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import { spawn } from 'child_process';
+import fs from 'fs';
 import path from 'path';
-import { CompleteJson, delay } from '@ps-analysis-tool/common';
+import { CompleteJson } from '@ps-analysis-tool/common';
 import {
   analyzeCookiesUrlsInBatches,
   analyzeTechnologiesUrlsInBatches,
@@ -38,7 +39,6 @@ import {
   validateArgs,
   saveCSVReports,
   askUserInput,
-  checkPortInUse,
   generatePrefix,
 } from './utils';
 
@@ -57,7 +57,6 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
-  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -79,7 +78,7 @@ program
 
 program.parse();
 
-const saveResults = async (
+const saveResultsAsJSON = async (
   outDir: string,
   result: CompleteJson | CompleteJson[]
 ) => {
@@ -87,18 +86,41 @@ const saveResults = async (
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
-const startDashboardServer = async (dir: string, port: number) => {
-  spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', [
-    'run',
-    'cli-dashboard:dev',
-    '--',
-    '--port',
-    port.toString(),
-  ]);
+const saveResultsAsHTML = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[],
+  isSiteMap: boolean
+) => {
+  const htmlText = fs.readFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
+    'utf-8'
+  );
+  const reportText = fs.readFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
+    'base64'
+  );
 
-  await delay(2000);
+  const html =
+    htmlText.substring(0, htmlText.indexOf('</head>')) +
+    `<script>
+    window.PSAT_REPORT = '${reportText}'
+    window.PSAT_DATA = ${JSON.stringify({
+      json: result,
+      type: isSiteMap ? 'sitemap' : 'url',
+      selectedSite: outDir?.trim()?.slice(6) ?? '',
+    })}</script>` +
+    htmlText.substring(htmlText.indexOf('</head>'));
+  fs.copyFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+    outDir + '/index.js'
+  );
+  const outFileFullDir = path.resolve(outDir + '/index.html');
+  const htmlBlob = new Blob([html]);
+  const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
-  console.log(`Report: http://localhost:${port}?dir=${dir}`);
+  fs.writeFile(outDir + '/index.html', buffer, () =>
+    console.log(`Report created successfully: ${outFileFullDir}`)
+  );
 };
 
 // eslint-disable-next-line complexity
@@ -107,7 +129,6 @@ const startDashboardServer = async (dir: string, port: number) => {
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
-  const port = parseInt(program.opts().port || '9000');
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
@@ -121,22 +142,8 @@ const startDashboardServer = async (dir: string, port: number) => {
     csvPath,
     sitemapPath,
     numberOfUrlsInput,
-    outDir,
-    port
+    outDir
   );
-
-  //check if devserver port in already in use only if the dashboard is goint to be used
-
-  if (!outDir) {
-    const isPortInUse = await checkPortInUse(port);
-
-    if (isPortInUse) {
-      console.error(
-        `Error: Report server port ${port} already in use. You might be already running CLI`
-      );
-      process.exit(1);
-    }
-  }
 
   const prefix =
     url || sitemapUrl
@@ -238,19 +245,15 @@ const startDashboardServer = async (dir: string, port: number) => {
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisData[ind].cookieData,
-    } as CompleteJson;
+    } as unknown as CompleteJson;
   });
-
-  await saveResults(outputDir, result);
+  const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
     process.exit(0);
   }
 
-  startDashboardServer(
-    encodeURIComponent(prefix) +
-      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''),
-    port
-  );
+  await saveResultsAsJSON(outputDir, result);
+  await saveResultsAsHTML(outputDir, result, isSiteMap);
 })();

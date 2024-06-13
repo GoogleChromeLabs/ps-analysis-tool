@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
@@ -47,51 +46,35 @@ const App = () => {
     CompleteJson[] | null
   >(null);
 
-  const [type, dirPath, dir] = useMemo(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const _dir = urlParams.get('dir') || '';
-
-    return [
-      urlParams.get('type') === 'sitemap'
-        ? DisplayType.SITEMAP
-        : DisplayType.SITE,
-      `/out/${_dir}/out.json`,
-      _dir,
-    ];
+  const type = useMemo(() => {
+    // @ts-ignore
+    return globalThis?.PSAT_DATA?.type === 'sitemap'
+      ? DisplayType.SITEMAP
+      : DisplayType.SITE;
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const response = await fetch(dirPath);
-      const data: CompleteJson[] = await response.json();
-      setCompleteJsonReport(data);
+    // @ts-ignore
+    const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
+    setCompleteJsonReport(data);
 
-      let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [];
+    let _cookies: CookieFrameStorageType = {},
+      _technologies: TechnologyData[] = [];
 
-      if (type === DisplayType.SITEMAP) {
-        const extractedData = extractReportData(data);
+    if (type === DisplayType.SITEMAP) {
+      const extractedData = extractReportData(data);
 
-        _cookies = extractedData.cookies;
-        _technologies = extractedData.technologies;
-        setLandingPageCookies(extractedData.landingPageCookies);
-      } else {
-        _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
-        _technologies = data[0].technologyData;
-      }
+      _cookies = extractedData.cookies;
+      _technologies = extractedData.technologies;
+      setLandingPageCookies(extractedData.landingPageCookies);
+    } else {
+      _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+      _technologies = data[0].technologyData;
+    }
 
-      setCookies(_cookies);
-      setTechnologies(_technologies);
-    })();
-  }, [dirPath, type]);
-
-  if (!dirPath) {
-    return (
-      <div className="flex justify-center items-center">
-        <div className="text-2xl">No path provided</div>
-      </div>
-    );
-  }
+    setCookies(_cookies);
+    setTechnologies(_technologies);
+  }, [type]);
 
   if (type === DisplayType.SITEMAP) {
     return (
@@ -100,7 +83,8 @@ const App = () => {
         cookies={cookies}
         technologies={technologies}
         completeJson={completeJsonReport}
-        path={dir}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
       />
     );
   }
@@ -111,8 +95,10 @@ const App = () => {
         completeJson={completeJsonReport}
         cookies={cookies}
         technologies={technologies}
-        selectedSite={dirPath.slice(5, -9)}
-        path={dir}
+        // @ts-ignore
+        selectedSite={globalThis?.PSAT_DATA?.selectedSite}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
       />
     </div>
   );

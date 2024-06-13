@@ -19,12 +19,8 @@
 import type {
   CookieStatsComponents,
   CookiesCount,
+  DataMapping,
 } from '@ps-analysis-tool/common';
-
-/**
- * Internal dependencies
- */
-import { DataMapping } from '../components/cookiesLanding/landingHeader';
 
 /**
  * Calcualte insights about frames to be shown on cookies landing page.

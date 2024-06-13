@@ -393,6 +393,7 @@ export class BrowserManagement {
           acc[key] = {
             parsedCookie: cookie,
             url: '',
+            frameIdList: [],
           };
           return acc;
         }, {});

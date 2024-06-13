@@ -172,9 +172,9 @@ const CookieTable = forwardRef<
   );
 
   useEffect(() => {
-    window.addEventListener('resize', () => forceUpdate());
+    globalThis?.addEventListener('resize', () => forceUpdate());
     return () => {
-      window.removeEventListener('resize', () => forceUpdate());
+      globalThis?.removeEventListener('resize', () => forceUpdate());
     };
   }, []);
 

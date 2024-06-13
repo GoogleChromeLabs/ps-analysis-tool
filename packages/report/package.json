@@ -4,14 +4,22 @@
   "description": "Static HTML analysis report",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
   },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
+  "author": {
+    "name": "Google"
+  },
+  "scripts": {
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
+  },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
-  "scripts": {},
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

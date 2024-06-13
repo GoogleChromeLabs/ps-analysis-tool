@@ -13,31 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import LIBRARIES from '../config';
-import type { LibraryData } from '../types';
+module.exports = function (api) {
+  const isProduction = api.env('production');
 
-const getInitialLibraryData = (): LibraryData => {
-  return Object.fromEntries(
-    LIBRARIES.map(({ name, domQueryFunction }) => {
-      let initialData = {
-        signatureMatches: 0,
-        matches: [],
-        moduleMatch: 0,
-      };
-
-      if (domQueryFunction) {
-        initialData = {
-          //@ts-ignore
-          domQueryMatches: null,
-        };
-      }
-
-      return [name, initialData];
-    })
-  );
+  return {
+    presets: [
+      ['@babel/preset-env'],
+      [
+        '@babel/preset-react',
+        {
+          development: !isProduction,
+        },
+      ],
+      '@babel/preset-typescript',
+    ],
+    plugins: [
+      ['@babel/plugin-transform-react-jsx'],
+      ['babel-plugin-styled-components'],
+    ],
+    sourceMaps: true,
+  };
 };
-
-export default getInitialLibraryData;

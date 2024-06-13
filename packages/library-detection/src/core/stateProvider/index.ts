@@ -13,31 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import LIBRARIES from '../config';
-import type { LibraryData } from '../types';
-
-const getInitialLibraryData = (): LibraryData => {
-  return Object.fromEntries(
-    LIBRARIES.map(({ name, domQueryFunction }) => {
-      let initialData = {
-        signatureMatches: 0,
-        matches: [],
-        moduleMatch: 0,
-      };
-
-      if (domQueryFunction) {
-        initialData = {
-          //@ts-ignore
-          domQueryMatches: null,
-        };
-      }
-
-      return [name, initialData];
-    })
-  );
-};
-
-export default getInitialLibraryData;
+export { default as LibraryDetectionProvider } from './libraryDetectionProvider';
+export { default as LibraryDetectionContext } from './context';
+export { default as useLibraryDetectionContext } from './useLibraryDetectionContext';

@@ -140,7 +140,12 @@ const Layout = ({
               return;
             }
 
-            generateSiteMapReportandDownload(completeJson, '');
+            generateSiteMapReportandDownload(
+              completeJson,
+              //@ts-ignore
+              atob(globalThis.PSAT_REPORT),
+              ''
+            );
           },
         },
       };

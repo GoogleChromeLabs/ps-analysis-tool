@@ -213,10 +213,13 @@ function generateSitemapReportObject(
   };
 }
 
-const generateHTMLFile = async (analysisData: CompleteJson, url: string) => {
-  const htmlText = await (await fetch('./report/index.html')).text();
+const generateHTMLFile = (
+  analysisData: CompleteJson,
+  url: string,
+  reportText: string
+) => {
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(reportText, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
@@ -234,13 +237,13 @@ const generateHTMLFile = async (analysisData: CompleteJson, url: string) => {
   return html;
 };
 
-export const generateSiemapHTMLFile = async (
+export const generateSiemapHTMLFile = (
   analysisData: CompleteJson[],
-  sitemapURL: string
+  sitemapURL: string,
+  reportText: string
 ) => {
-  const htmlText = await (await fetch('./report/index.html')).text();
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(reportText, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
@@ -261,7 +264,8 @@ export const generateSiemapHTMLFile = async (
 export const createZip = (
   analysisData: CompleteJson,
   zipObject: JSZip,
-  url: string
+  url: string,
+  reportText: string
 ) => {
   const {
     allCookiesCSV,
@@ -270,7 +274,7 @@ export const createZip = (
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
-  const file = generateHTMLFile(analysisData, url);
+  const file = generateHTMLFile(analysisData, url, reportText);
 
   zipObject.file('cookies.csv', allCookiesCSV);
   if (technologyDataCSV) {

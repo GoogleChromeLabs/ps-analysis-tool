@@ -60,9 +60,15 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       return;
     }
     if (completeJson.length > 1) {
-      generateSiteReportandDownload(completeJson, selectedSite);
+      generateSiteReportandDownload(
+        completeJson,
+        //@ts-ignore
+        atob(globalThis.PSAT_REPORT),
+        selectedSite
+      );
     } else {
-      generateSiteReportandDownload(completeJson);
+      //@ts-ignore
+      generateSiteReportandDownload(completeJson, atob(globalThis.PSAT_REPORT));
     }
   }, [completeJson, selectedSite]);
 
