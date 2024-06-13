@@ -17,7 +17,6 @@
 /**
  * External dependencies.
  */
-
 // @ts-ignore Package does not support typescript.
 import Wapplalyzer from 'wappalyzer';
 

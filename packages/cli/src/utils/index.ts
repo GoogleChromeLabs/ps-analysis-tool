@@ -20,5 +20,4 @@ export { default as generateCSVFiles } from './generateCSVfiles';
 export { default as saveCSVReports } from './saveCSVReports';
 export { default as getUrlsFromSitemap } from './getUrlListFromArgs';
 export { default as askUserInput } from './askUserInput';
-export { checkPortInUse } from './checkPortInUse';
 export { default as generatePrefix } from './generatePrefix';

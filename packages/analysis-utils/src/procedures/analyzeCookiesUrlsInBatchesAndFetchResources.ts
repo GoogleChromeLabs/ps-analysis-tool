@@ -17,15 +17,21 @@
 /**
  * External dependencies.
  */
-import { CookieData, CookieDatabase } from '@ps-analysis-tool/common';
+import {
+  CookieData,
+  CookieDatabase,
+  LibraryData,
+  LibraryMatchers,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { analyzeCookiesUrls } from './analyzeCookieUrls';
+import { analyzeCookiesUrlsAndFetchResources } from './analyzeCookiesUrlsAndFetchResources';
 
-export const analyzeCookiesUrlsInBatches = async (
+export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   urls: string[],
+  Libraries: LibraryMatchers[],
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
@@ -51,6 +57,12 @@ export const analyzeCookiesUrlsInBatches = async (
         };
       };
     };
+    resources: {
+      origin: string | null;
+      content: string;
+      type?: string;
+    }[];
+    domQueryMatches: LibraryData;
   }[] = [];
 
   for (let i = 0; i < urls.length; i += batchSize) {
@@ -65,15 +77,17 @@ export const analyzeCookiesUrlsInBatches = async (
 
     const urlsWindow = urls.slice(start, end + 1);
 
-    const cookieAnalysis = await analyzeCookiesUrls(
-      urlsWindow,
-      isHeadless,
-      delayTime,
-      cookieDictionary,
-      shouldSkipAcceptBanner
-    );
+    const cookieAnalysisAndFetchedResources =
+      await analyzeCookiesUrlsAndFetchResources(
+        urlsWindow,
+        Libraries,
+        isHeadless,
+        delayTime,
+        cookieDictionary,
+        shouldSkipAcceptBanner
+      );
 
-    report = [...report, ...cookieAnalysis];
+    report = [...report, ...cookieAnalysisAndFetchedResources];
 
     spinnies &&
       spinnies.succeed(`cookie-batch-spinner`, {

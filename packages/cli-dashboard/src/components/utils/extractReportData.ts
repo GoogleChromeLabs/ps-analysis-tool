@@ -20,6 +20,7 @@
 import type {
   CompleteJson,
   CookieFrameStorageType,
+  LibraryData,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -29,6 +30,7 @@ import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
   const landingPageCookies = {};
+  const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
 
   data.forEach(({ cookieData, pageUrl }) => {
     formatCookieData(
@@ -39,6 +41,7 @@ const extractReportData = (data: CompleteJson[]) => {
 
   return {
     landingPageCookies,
+    consolidatedLibraryMatches,
   };
 };
 

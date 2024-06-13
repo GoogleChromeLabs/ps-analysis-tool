@@ -78,6 +78,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         props: {
           selectedFrameUrl: null,
           selectedSite,
+          isSiteMapLandingContainer: false,
         },
       };
 

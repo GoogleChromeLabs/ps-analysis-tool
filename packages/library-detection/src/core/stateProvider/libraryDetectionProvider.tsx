@@ -22,66 +22,14 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import {
-  noop,
-  useContextSelector,
-  createContext,
-} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import type { LibraryData } from '../../types';
-import getInitialLibraryData from '../getInitialLibraryData';
+import Context, { initialLibraryMatches } from './context';
 
-/**
- * Represents the context for library detection state.
- */
-export interface LibraryDetectionContext {
-  state: {
-    libraryMatches: LibraryData;
-    isCurrentTabLoading: boolean;
-    isInitialDataUpdated: boolean;
-    loadedBefore: boolean;
-    showLoader: boolean;
-    tabId: number;
-    errorOccured: boolean;
-  };
-  actions: {
-    setLibraryMatches: React.Dispatch<React.SetStateAction<LibraryData>>;
-    setIsCurrentTabLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsInitialDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
-    setLoadedBeforeState: React.Dispatch<React.SetStateAction<boolean>>;
-    setShowLoader: React.Dispatch<React.SetStateAction<boolean>>;
-    setErrorOccured: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-}
-
-const initialLibraryMatches: LibraryData = getInitialLibraryData();
-
-const initialState: LibraryDetectionContext = {
-  state: {
-    libraryMatches: initialLibraryMatches,
-    isCurrentTabLoading: false,
-    isInitialDataUpdated: false,
-    loadedBefore: false,
-    showLoader: true,
-    tabId: -1,
-    errorOccured: false,
-  },
-  actions: {
-    setLibraryMatches: noop,
-    setIsCurrentTabLoading: noop,
-    setIsInitialDataUpdated: noop,
-    setLoadedBeforeState: noop,
-    setShowLoader: noop,
-    setErrorOccured: noop,
-  },
-};
-
-export const Context = createContext<LibraryDetectionContext>(initialState);
-
-export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
+const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   const [libraryMatches, setLibraryMatches] = useState<LibraryData>(
     initialLibraryMatches
   );
@@ -204,20 +152,4 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export function useLibraryDetectionContext(): LibraryDetectionContext;
-export function useLibraryDetectionContext<T>(
-  selector: (state: LibraryDetectionContext) => T
-): T;
-
-/**
- * Library detection hook.
- * @param selector Selector function to partially select state.
- * @returns selected part of the state
- */
-export function useLibraryDetectionContext<T>(
-  selector: (state: LibraryDetectionContext) => T | LibraryDetectionContext = (
-    state
-  ) => state
-) {
-  return useContextSelector(Context, selector);
-}
+export default LibraryDetectionProvider;

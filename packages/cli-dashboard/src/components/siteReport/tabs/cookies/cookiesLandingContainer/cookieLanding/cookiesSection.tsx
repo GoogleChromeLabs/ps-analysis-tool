@@ -27,9 +27,6 @@ import {
   useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
-/**
- * Internal dependencies
- */
 
 interface CookiesSectionProps {
   tabCookies: TabCookies | null;

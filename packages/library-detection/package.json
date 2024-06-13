@@ -6,9 +6,20 @@
   "source": "./src/index.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
-  "author": "",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc-watch",
+    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
+  },
+  "author": {
+    "name": "Google"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

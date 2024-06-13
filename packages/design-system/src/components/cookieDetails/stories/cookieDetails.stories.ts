@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import type { Meta, StoryObj } from '@storybook/react';
+import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -34,5 +35,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: {},
+  args: {
+    selectedFrameCookie: {
+      testFrame: {
+        parsedCookie: {
+          name: 'test',
+          value: 'testVal',
+        },
+      } as CookieTableData,
+    },
+    isUsingCDP: false,
+  },
 };

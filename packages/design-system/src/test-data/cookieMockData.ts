@@ -166,7 +166,7 @@ const data: {
   tabUrl: 'https://edition.cnn.com/',
   tabFrames: {
     'https://edition.cnn.com/': {
-      frameIds: [1],
+      frameIds: ['1'],
     },
   },
   selectedFrame: 'https://edition.cnn.com/',

@@ -121,7 +121,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     cookieClassificationDataMapping,
     tabCookies,
     cookiesStatsComponents,
-    libraryDetection: {},
+    libraryMatches: analysisData.libraryMatches,
     tabFrames,
     showInfoIcon: true,
     showHorizontalMatrix: false,
@@ -131,6 +131,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     exemptedCookiesDataMapping,
     showBlockedCategory: true,
     url: siteURL,
+    source: 'cli',
   };
 }
 
@@ -213,10 +214,13 @@ function generateSitemapReportObject(
   };
 }
 
-const generateHTMLFile = async (analysisData: CompleteJson, url: string) => {
-  const htmlText = await (await fetch('./report/index.html')).text();
+const generateHTMLFile = (
+  analysisData: CompleteJson,
+  url: string,
+  reportHTML: string
+) => {
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(reportHTML, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
@@ -234,13 +238,13 @@ const generateHTMLFile = async (analysisData: CompleteJson, url: string) => {
   return html;
 };
 
-export const generateSiemapHTMLFile = async (
+export const generateSiemapHTMLFile = (
   analysisData: CompleteJson[],
-  sitemapURL: string
+  sitemapURL: string,
+  reportHTML: string
 ) => {
-  const htmlText = await (await fetch('./report/index.html')).text();
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(reportHTML, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
@@ -261,7 +265,8 @@ export const generateSiemapHTMLFile = async (
 export const createZip = (
   analysisData: CompleteJson,
   zipObject: JSZip,
-  url: string
+  url: string,
+  reportHTML: string
 ) => {
   const {
     allCookiesCSV,
@@ -270,7 +275,7 @@ export const createZip = (
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
-  const file = generateHTMLFile(analysisData, url);
+  const file = generateHTMLFile(analysisData, url, reportHTML);
 
   zipObject.file('cookies.csv', allCookiesCSV);
   if (technologyDataCSV) {

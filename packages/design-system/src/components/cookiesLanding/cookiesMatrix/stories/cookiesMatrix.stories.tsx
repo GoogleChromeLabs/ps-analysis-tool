@@ -65,10 +65,10 @@ export const Primary: StoryObj<typeof meta> = {
     cookiesStatsComponents: cookiesStatsComponents,
     tabFrames: {
       'https://example.com': {
-        frameIds: [0, 0],
+        frameIds: ['0', '0'],
       },
       'https://www.google.com': {
-        frameIds: [6169, 6172, 6169, 6172],
+        frameIds: ['6169', '6172', '6169', '6172'],
       },
     },
   },

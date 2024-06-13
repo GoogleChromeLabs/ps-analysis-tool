@@ -24,15 +24,26 @@ import {
   type CookiesLandingSection,
   type MenuData,
 } from '@ps-analysis-tool/design-system';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import type {
+  LibraryData,
+  TabCookies,
+  TabFrames,
+} from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
+import KnownBreakages from './cookieLanding/knownBreakages';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
+  libraryMatches: LibraryData | null;
+  isSiteMapLandingContainer?: boolean;
 }
 
 const CookiesLandingContainer = ({
@@ -40,9 +51,11 @@ const CookiesLandingContainer = ({
   tabCookies,
   cookiesWithIssues,
   downloadReport,
+  libraryMatches,
+  isSiteMapLandingContainer = false,
 }: CookiesLandingContainerProps) => {
-  const sections: Array<CookiesLandingSection> = useMemo(
-    () => [
+  const sections: Array<CookiesLandingSection> = useMemo(() => {
+    const baseSections: Array<CookiesLandingSection> = [
       {
         name: 'Cookies',
         link: 'cookies',
@@ -66,9 +79,29 @@ const CookiesLandingContainer = ({
           },
         },
       },
-    ],
-    [tabCookies, tabFrames, cookiesWithIssues]
-  );
+    ];
+
+    if (!isSiteMapLandingContainer) {
+      baseSections.push({
+        name: 'Known Breakages',
+        link: 'known-breakages',
+        panel: {
+          Element: KnownBreakages,
+          props: {
+            libraryMatches: libraryMatches ?? {},
+          },
+        },
+      });
+    }
+
+    return baseSections;
+  }, [
+    tabCookies,
+    tabFrames,
+    cookiesWithIssues,
+    isSiteMapLandingContainer,
+    libraryMatches,
+  ]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),

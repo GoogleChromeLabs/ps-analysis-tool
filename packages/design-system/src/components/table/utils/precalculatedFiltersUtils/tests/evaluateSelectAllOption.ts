@@ -29,7 +29,7 @@ describe('evaluateSelectAllOption', () => {
 
     const result = evaluateSelectAllOption(
       filterKey,
-      undefined,
+      {},
       clearActivePanelQuery
     );
 

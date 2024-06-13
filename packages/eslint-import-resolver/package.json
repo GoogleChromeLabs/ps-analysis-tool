@@ -9,7 +9,9 @@
     "type": "git",
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
-  "author": "",
+  "author": {
+    "name": "Google"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

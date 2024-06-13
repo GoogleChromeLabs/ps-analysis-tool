@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+module.exports = function (api) {
+  const isProduction = api.env('production');
 
-import http from 'http';
-
-/**
- * @param port number Port number to test
- * @returns Promise which will resolve in a boolean value
- */
-export function checkPortInUse(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    const server = http
-      .createServer()
-      .listen(port, () => {
-        server.close();
-        resolve(false);
-      })
-      .on('error', () => {
-        resolve(true);
-      });
-  });
-}
+  return {
+    presets: [
+      ['@babel/preset-env'],
+      [
+        '@babel/preset-react',
+        {
+          development: !isProduction,
+        },
+      ],
+      '@babel/preset-typescript',
+    ],
+    plugins: [
+      ['@babel/plugin-transform-react-jsx'],
+      ['babel-plugin-styled-components'],
+    ],
+    sourceMaps: true,
+  };
+};

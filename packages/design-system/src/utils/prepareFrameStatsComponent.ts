@@ -49,7 +49,7 @@ export default function prepareFrameStatsComponent(
     let hasUnblockedCookie = false;
     let hasCookie = false;
 
-    tabFrames[frame]?.frameIds?.forEach((frameId: number) => {
+    tabFrames[frame]?.frameIds?.forEach((frameId: string) => {
       Object.values(tabCookies || {}).forEach((cookie) => {
         if (
           cookie?.parsedCookie &&
