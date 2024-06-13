@@ -101,7 +101,7 @@ const saveResultsAsHTML = async (
     'utf-8'
   );
 
-  const reportText = fs.readFileSync(
+  const reportHTML = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
     'base64'
   );
@@ -109,7 +109,7 @@ const saveResultsAsHTML = async (
   const html =
     htmlText.substring(0, htmlText.indexOf('</head>')) +
     `<script>
-    window.PSAT_REPORT = '${reportText}'
+    window.PSAT_REPORT_HTML = '${reportHTML}'
     window.PSAT_DATA = ${JSON.stringify({
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',

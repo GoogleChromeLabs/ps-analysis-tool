@@ -147,7 +147,7 @@ const Layout = ({
             generateSiteMapReportandDownload(
               completeJson,
               //@ts-ignore
-              atob(globalThis.PSAT_REPORT),
+              atob(globalThis.PSAT_REPORT_HTML),
               ''
             );
           },

@@ -66,12 +66,15 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       generateSiteReportandDownload(
         completeJson,
         //@ts-ignore
-        atob(globalThis.PSAT_REPORT),
+        atob(globalThis.PSAT_REPORT_HTML),
         selectedSite
       );
     } else {
-      //@ts-ignore
-      generateSiteReportandDownload(completeJson, atob(globalThis.PSAT_REPORT));
+      generateSiteReportandDownload(
+        completeJson,
+        //@ts-ignore
+        atob(globalThis.PSAT_REPORT_HTML)
+      );
     }
   }, [completeJson, selectedSite]);
 
