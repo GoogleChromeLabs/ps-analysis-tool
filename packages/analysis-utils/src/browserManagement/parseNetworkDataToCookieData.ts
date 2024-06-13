@@ -24,6 +24,7 @@ import type { Page } from 'puppeteer';
  */
 import { CookieDataFromNetwork, RequestData, ResponseData } from './types';
 
+// eslint-disable-next-line complexity
 export const parseNetworkDataToCookieData = async (
   responses: Record<string, ResponseData>,
   requests: Record<string, RequestData>,
@@ -171,7 +172,7 @@ export const parseNetworkDataToCookieData = async (
   const { targetInfos } = await cdpSession.send('Target.getTargets');
 
   const allTargets: Record<string, string> = {};
-  const pageTargets: Record<string, string> = {};
+  const pageTargetsFromNetwork: Record<string, string> = {};
 
   targetInfos.forEach(({ targetId, url }) => {
     allTargets[targetId] = url;
@@ -193,7 +194,7 @@ export const parseNetworkDataToCookieData = async (
         _frameId = pageFrames[_frameId] || '0';
       }
     }
-    pageTargets[frameId] = url;
+    pageTargetsFromNetwork[frameId] = url;
   }
 
   const frameUrlCookiesMap: Record<
@@ -206,7 +207,7 @@ export const parseNetworkDataToCookieData = async (
   > = {};
 
   for (const [frameId, data] of Object.entries(frameIdCookiesMap)) {
-    const key = new URL(pageTargets[frameId]).origin;
+    const key = new URL(pageTargetsFromNetwork[frameId]).origin;
 
     frameUrlCookiesMap[key] = {
       frameCookies: {
@@ -214,6 +215,33 @@ export const parseNetworkDataToCookieData = async (
         ...(frameUrlCookiesMap[key]?.frameCookies || {}),
       },
     };
+  }
+
+  // Loop over pageFrames and add empty entry for any frame which was not found in frameUrlCookiesMap.
+  for (const frameId of Object.keys(pageFrames)) {
+    let url = '';
+    let _frameId = frameId;
+
+    while (url === '') {
+      if (_frameId === '0') {
+        url = page.url();
+      }
+
+      if (allTargets[frameId]) {
+        url = allTargets[frameId];
+      } else {
+        // Seek parent
+        _frameId = pageFrames[_frameId] || '0';
+      }
+    }
+
+    const key = new URL(url).origin;
+
+    if (!frameUrlCookiesMap[key]) {
+      frameUrlCookiesMap[key] = {
+        frameCookies: {},
+      };
+    }
   }
 
   return frameUrlCookiesMap;
