@@ -20,7 +20,7 @@
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -45,18 +45,30 @@ const CookiesListing = ({
     [frame: string]: CookieTableData | null;
   } | null>(null);
 
-  const { tabCookies, path } = useContentStore(({ state }) => ({
+  const { tabCookies, path, completeJson } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
     path: state.path,
+    completeJson: state.completeJson,
   }));
 
-  const cookies = useMemo(
-    () =>
-      Object.values(tabCookies).filter((cookie) =>
-        (cookie.frameUrls as string[]).includes(selectedFrameUrl)
-      ),
-    [tabCookies, selectedFrameUrl]
-  );
+  const selectedSiteJson = completeJson?.[0];
+
+  const cookies = useMemo(() => {
+    return Object.keys(tabCookies)
+      .filter((key) =>
+        (tabCookies[key].frameUrls as string[]).includes(selectedFrameUrl)
+      )
+      .map((key) => {
+        if (!tabCookies[key] || !selectedSiteJson) {
+          return tabCookies[key];
+        }
+        return (
+          selectedSiteJson?.cookieData[selectedFrameUrl]?.frameCookies[
+            key.trim()
+          ] ?? tabCookies[key]
+        );
+      });
+  }, [tabCookies, selectedFrameUrl, selectedSiteJson]);
 
   const {
     tableColumns,
@@ -86,6 +98,7 @@ const CookiesListing = ({
         className="h-full flex"
       >
         <CookieTable
+          //@ts-ignore
           data={cookies}
           tableColumns={tableColumns}
           tableFilters={filters}

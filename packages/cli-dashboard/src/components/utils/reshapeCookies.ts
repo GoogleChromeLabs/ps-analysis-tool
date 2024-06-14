@@ -56,7 +56,9 @@ const createCookieObj = (
   Object.fromEntries(
     Object.values(cookies).map((cookie) => [
       cookie.parsedCookie.name +
+        ':' +
         cookie.parsedCookie.domain +
+        ':' +
         cookie.parsedCookie.path,
       {
         parsedCookie: cookie.parsedCookie,
@@ -67,6 +69,8 @@ const createCookieObj = (
               ? 'Uncategorized'
               : cookie.analytics?.category,
         } as CookieTableData['analytics'],
+        networkEvents: cookie.networkEvents,
+        blockingStatus: cookie.blockingStatus,
         url: cookie.url,
         headerType: 'response',
         blockedReasons: cookie.blockedReasons,

@@ -28,6 +28,7 @@ import {
  * Internal dependencies.
  */
 import { BrowserManagement } from '../browserManagement';
+import { deriveBlockingStatus } from '../browserManagement/deriveBlockingStatus';
 
 export const analyzeCookiesUrlsAndFetchResources = async (
   urls: string[],
@@ -63,15 +64,20 @@ export const analyzeCookiesUrlsAndFetchResources = async (
           cookieDictionary
         );
 
-        frameCookies[key].analytics = {
+        frameCookies[key.trim()].analytics = {
           platform: analytics?.platform || 'Unknown',
           category: analytics?.category || 'Uncategorized',
           gdprUrl: analytics?.gdprUrl || '',
           description: analytics?.description,
         };
-        frameCookies[key].isFirstParty = isFirstParty(
+
+        frameCookies[key.trim()].isFirstParty = isFirstParty(
           cookie.parsedCookie.domain,
           pageUrl
+        );
+
+        frameCookies[key.trim()].blockingStatus = deriveBlockingStatus(
+          cookie.networkEvents
         );
       });
     });
