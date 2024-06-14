@@ -290,12 +290,25 @@ export class BrowserManagement {
         if (parsedCookie.domain && parsedCookie.domain[0] !== '.') {
           parsedCookie.domain = '.' + parsedCookie.domain;
         }
+
         const blockedEntry = blockedCookies.find((c) => {
-          return (
-            c.cookie?.name === parsedCookie.name &&
-            c.cookie.domain === parsedCookie.domain &&
-            c.cookie.path === parsedCookie.path
-          );
+          if (c.cookie) {
+            return (
+              c.cookie?.name?.trim() === parsedCookie.name?.trim() &&
+              c.cookie.domain?.trim() === parsedCookie.domain?.trim() &&
+              c.cookie.path?.trim() === parsedCookie.path?.trim()
+            );
+          } else {
+            const temporaryParsedCookie = parse(c.cookieLine);
+
+            return (
+              temporaryParsedCookie.name?.trim() ===
+                parsedCookie.name?.trim() &&
+              temporaryParsedCookie.domain?.trim() ===
+                parsedCookie.domain?.trim() &&
+              temporaryParsedCookie.path?.trim() === parsedCookie.path?.trim()
+            );
+          }
         });
 
         return {
