@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import type { Protocol } from 'devtools-protocol';
+import { LibraryData } from './libraryDetection.types';
 
 export type CookiesCount = {
   total: number;
@@ -64,8 +64,7 @@ export type CookieDatabase = {
 
 export type BlockedReason =
   | Protocol.Network.SetCookieBlockedReason
-  | Protocol.Network.CookieBlockedReason
-  | Protocol.Audits.CookieExclusionReason;
+  | Protocol.Network.CookieBlockedReason;
 
 export enum RESPONSE_EVENT {
   CHROME_WEBREQUEST_ON_RESPONSE_STARTED = 'CHROME_WEBREQUEST_ON_RESPONSE_STARTED',
@@ -112,7 +111,7 @@ export type CookieData = {
     responseEvents: responsEvent[];
   };
   analytics?: CookieAnalytics | null;
-  url: string;
+  url?: string;
   headerType?: 'response' | 'request' | 'javascript';
   isFirstParty?: boolean | null;
   frameIdList?: Array<number | string>;
@@ -155,8 +154,7 @@ export interface TabCookies {
 
 export interface TabFrames {
   [key: string]: {
-    frameIds: number[];
-    isOnRWS?: boolean;
+    frameIds: string[];
     frameType?: 'outermost_frame' | 'fenced_frame' | 'sub_frame';
   };
 }
@@ -192,7 +190,7 @@ export interface CookieStatsComponents {
 }
 
 export interface FramesWithCookies {
-  [key: string]: { frameIds: number[] };
+  [key: string]: { frameIds: number[] | string[] };
 }
 
 export type CookieJsonDataType = {
@@ -236,12 +234,12 @@ export type CompleteJson = {
   pageUrl: string;
   cookieData: {
     [frame: string]: {
-      cookiesCount: number;
       frameCookies: {
         [cookieKey: string]: CookieJsonDataType;
       };
     };
   };
+  libraryMatches: { [key: string]: LibraryData };
   technologyData: TechnologyData[];
 };
 

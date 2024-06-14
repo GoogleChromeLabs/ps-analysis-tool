@@ -28,13 +28,13 @@ export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/m
 export type { MatrixComponentProps } from './matrix/matrixComponent';
 export { default as CookiesLanding } from './cookiesLanding';
 export * from './cookiesLanding';
-export type { DataMapping } from './cookiesLanding/landingHeader';
 export { default as CookiesMatrix } from './cookiesLanding/cookiesMatrix';
 export { default as CookieDetails } from './cookieDetails';
 export { default as Details } from './cookieDetails/details';
 export { default as CookieTable } from './cookieTable';
 export { default as LandingPage } from './landingPage';
 export { default as InfoCard } from './landingPage/infoCard';
+export { default as ContentPanel } from './landingPage/contentPanel';
 export * from './landingPage/infoCard/fetchPSInfo';
 export { default as ErrorFallback } from './errorFallback';
 export { default as ExtensionReloadNotification } from './errorFallback/extensionReloadNotification';

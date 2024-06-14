@@ -44,26 +44,18 @@ interface LayoutProps {
 }
 
 const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
-  const { tabCookies, technologies } = useContentStore(({ state }) => ({
-    tabCookies: state.tabCookies,
+  const { technologies, completeJson } = useContentStore(({ state }) => ({
     technologies: state.technologies,
+    completeJson: state.completeJson,
   }));
 
-  const frameUrls = useMemo(
-    () => [
-      ...new Set(
-        Object.values(tabCookies)
-          .reduce((acc, cookie) => {
-            acc.push(...(cookie.frameUrls as string[]));
-            return acc;
-          }, [] as string[])
-          .filter(
-            (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
-          ) as string[]
-      ),
-    ],
-    [tabCookies]
-  );
+  const frameUrls = useMemo(() => {
+    const frames = Object.keys(completeJson?.[0].cookieData ?? {});
+
+    return frames.filter(
+      (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
+    );
+  }, [completeJson]);
 
   const { activePanel, selectedItemKey, updateSelectedItemKey } = useSidebar(
     ({ state, actions }) => ({
@@ -86,6 +78,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         props: {
           selectedFrameUrl: null,
           selectedSite,
+          isSiteMapLandingContainer: false,
         },
       };
 
@@ -111,6 +104,10 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
             selectedIcon: {
               Element: CookieIconWhite,
             },
+            isBlurred:
+              Object.keys(
+                completeJson?.[0].cookieData?.[url]?.frameCookies || {}
+              ).length === 0,
           };
 
           return acc;
@@ -148,7 +145,14 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey, selectedSite, setSidebarData, technologies]);
+  }, [
+    completeJson,
+    frameUrls,
+    selectedItemKey,
+    selectedSite,
+    setSidebarData,
+    technologies,
+  ]);
 
   useEffect(() => {
     if (selectedItemKey === null) {

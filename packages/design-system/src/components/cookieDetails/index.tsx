@@ -18,14 +18,13 @@
  * External dependencies.
  */
 import React from 'react';
-
+import type { CookieTableData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '@ps-analysis-tool/common';
 import Details from './details';
 
-interface CookieDetailsProps {
+export interface CookieDetailsProps {
   isUsingCDP: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;

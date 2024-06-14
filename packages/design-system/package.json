@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/design-system",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "./src/index.ts",
   "source":"./src/index.ts",
@@ -11,13 +11,20 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc-watch"
+    "dev": "tsc-watch",
+    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
-  "author": "",
+  "author": {
+    "name": "Google"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

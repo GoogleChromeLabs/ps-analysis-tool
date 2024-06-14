@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export { default as isInCenter } from './isInCenter';
+export { default as isElementInView } from './isElementInView';

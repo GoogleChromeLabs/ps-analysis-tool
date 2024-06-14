@@ -28,10 +28,7 @@ import {
   evaluateSelectAllOption,
   evaluateStaticFilterValues,
 } from '@ps-analysis-tool/design-system';
-import {
-  calculateEffectiveExpiryDate,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 const useCookieListing = (
   tabCookies: CookieTableData[],
@@ -63,11 +60,7 @@ const useCookieListing = (
       {
         header: 'Scope',
         accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
+        cell: (info: InfoType) => (!info ? 'Third Party' : 'First Party'),
         widthWeightagePercentage: 8,
       },
       {
@@ -135,8 +128,7 @@ const useCookieListing = (
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) =>
-          info ? calculateEffectiveExpiryDate(info as string) : 'Session',
+        cell: (info: InfoType) => info,
         widthWeightagePercentage: 7,
       },
     ],
@@ -201,7 +193,7 @@ const useCookieListing = (
           return val === (filterValue === 'True');
         },
       },
-      'parsedCookie.samesite': {
+      'parsedCookie.sameSite': {
         title: 'SameSite',
         hasStaticFilterValues: true,
         filterValues: {

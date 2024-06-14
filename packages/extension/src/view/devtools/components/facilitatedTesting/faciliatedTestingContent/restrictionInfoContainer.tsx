@@ -37,8 +37,8 @@ const RestrictionInfoContainer = () => (
         title="Chrome has restricted third-party cookies by default for 1% of users."
       />
     </p>
-    <div className="w-full grid place-items-center mb-2">
-      <PSTimelineIcon />
+    <div className="w-full grid place-items-center mb-6">
+      <PSTimelineIcon className="scale-125" />
     </div>
     <p>
       During this testing period, it is important for sites and services to{' '}

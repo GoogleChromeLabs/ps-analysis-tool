@@ -45,8 +45,9 @@ const CookiesListing = ({
     [frame: string]: CookieTableData | null;
   } | null>(null);
 
-  const { tabCookies } = useContentStore(({ state }) => ({
+  const { tabCookies, path } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
+    path: state.path,
   }));
 
   const cookies = useMemo(
@@ -95,10 +96,11 @@ const CookiesListing = ({
           setSelectedFrameCookie={setSelectedFrameCookie}
           isFiltersSidebarOpen={isSidebarOpen}
           isCLI
+          hostname={path}
         />
       </Resizable>
       <CookieDetails
-        isUsingCDP={false}
+        isUsingCDP={true}
         selectedFrameCookie={selectedFrameCookie}
       />
     </div>

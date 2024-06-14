@@ -33,6 +33,9 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+            },
           },
         ],
       },
@@ -81,7 +84,7 @@ module.exports = {
   resolve: {
     // Fixes resolving packages in the monorepo so we use the "src" folder, not "dist".
     exportsFields: ['customExports', 'exports'],
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
   performance: {
     maxEntrypointSize: 2048000,

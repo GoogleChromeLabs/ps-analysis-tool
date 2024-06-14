@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/extension",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
@@ -8,11 +8,15 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "webpack --config webpack.config.cjs --watch",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs"
+    "dev": "webpack --config ../../extension.webpack.config.cjs --watch",
+    "build": "npm run build:remove && webpack --config ../../extension.webpack.config.cjs",
+    "build:remove": "rimraf ../../dist/extension"
   },
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "author": {
+    "name": "Google"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "dependencies": {

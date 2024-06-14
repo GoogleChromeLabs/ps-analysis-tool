@@ -22,7 +22,6 @@ import {
   type CookieTableData,
   type TabCookies,
   BLOCK_STATUS,
-  filterCookiesByFrame,
 } from '@ps-analysis-tool/common';
 import {
   RefreshButton,
@@ -49,24 +48,19 @@ import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript, tabFrames } =
-    useCookie(({ state, actions }) => ({
+  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
+    ({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
       cookies: state.tabCookies || {},
-      tabFrames: state.tabFrames,
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    }));
+    })
+  );
 
   const { activePanelQuery, clearActivePanelQuery } = useSidebar(
     ({ state }) => ({
       activePanelQuery: state.activePanel.query,
       clearActivePanelQuery: state.activePanel.clearQuery,
     })
-  );
-
-  const frameFilteredCookies = useMemo(
-    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
-    [cookies, selectedFrame, tabFrames]
   );
 
   const parsedQuery = useMemo(
@@ -109,11 +103,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Scope',
         accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
+        cell: (info: InfoType) => (!info ? 'Third Party' : 'First Party'),
         widthWeightagePercentage: 6,
       },
       {
@@ -143,7 +133,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
+        cell: (info: InfoType) => (info ? info : 'Unknown'),
         widthWeightagePercentage: 7.5,
       },
       {
@@ -238,8 +228,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
                 className="flex"
                 title="Please take a look at the network tab to get this cookie's blocking information."
               >
-                <InfoIcon className="fill-granite-gray" />
-                Undetermined
+                <span>
+                  <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
+                </span>
+                <span className="ml-[2px] truncate">Undetermined</span>
               </span>
             );
           } else {
@@ -498,7 +490,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           parsedQuery
         ),
         filterValues: calculateExemptionReason(
-          frameFilteredCookies,
+          Object.values(cookies),
           clearActivePanelQuery,
           parsedQuery?.filter?.exemptionReason
         ),
@@ -506,9 +498,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const val = value as string;
           return val === filterValue;
         },
+        useGenericPersistenceKey: true,
       },
     }),
-    [clearActivePanelQuery, cookies, frameFilteredCookies, parsedQuery]
+    [clearActivePanelQuery, cookies, parsedQuery]
   );
 
   const searchKeys = useMemo<string[]>(

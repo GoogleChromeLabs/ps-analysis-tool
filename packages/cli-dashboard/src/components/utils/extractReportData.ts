@@ -20,7 +20,7 @@
 import type {
   CompleteJson,
   CookieFrameStorageType,
-  TechnologyData,
+  LibraryData,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -29,30 +29,19 @@ import type {
 import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
-  const cookies = {};
-  const technologies: TechnologyData[] = [];
   const landingPageCookies = {};
+  const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
 
-  data.forEach(({ cookieData, technologyData, pageUrl }) => {
-    formatCookieData(extractCookies(cookieData, pageUrl), cookies);
-
+  data.forEach(({ cookieData, pageUrl }) => {
     formatCookieData(
       extractCookies(cookieData, pageUrl, true),
       landingPageCookies
     );
-
-    technologies.push(
-      ...technologyData.map((technology) => ({
-        ...technology,
-        pageUrl,
-      }))
-    );
   });
 
   return {
-    cookies,
-    technologies,
     landingPageCookies,
+    consolidatedLibraryMatches,
   };
 };
 
@@ -66,7 +55,16 @@ const formatCookieData = (
     }
 
     Object.entries(_cData).forEach(([key, cookie]) => {
-      store[frame][key] = cookie;
+      store[frame][key] = {
+        ...cookie,
+        isBlocked: store[frame][key]?.isBlocked || cookie.isBlocked,
+        blockedReasons: [
+          ...new Set([
+            ...(store[frame][key]?.blockedReasons || []),
+            ...(cookie.blockedReasons || []),
+          ]),
+        ],
+      };
     });
   });
 };

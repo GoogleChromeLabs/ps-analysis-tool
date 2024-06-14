@@ -29,22 +29,18 @@ import {
   generateExtensionCookieTableCSV,
 } from '../../table/utils';
 
-const exportCookies =
-  (isCLI = false) =>
-  (rows: TableRow[]) => {
-    const _cookies = rows.map(({ originalData }) => originalData);
-    if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
-      let csvTextBlob: Blob;
+const exportCookies = (isCLI = false, rows: TableRow[], hostname: string) => {
+  const _cookies = rows.map(({ originalData }) => originalData);
 
-      if (isCLI) {
-        csvTextBlob = generateCLICookieTableCSV(_cookies as CookieTableData[]);
-      } else {
-        csvTextBlob = generateExtensionCookieTableCSV(
-          _cookies as CookieTableData[]
-        );
-      }
-      saveAs(csvTextBlob, 'Cookies Report.csv');
-    }
-  };
+  const generateCookieTableCSV = isCLI
+    ? generateCLICookieTableCSV
+    : generateExtensionCookieTableCSV;
+
+  if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
+    const csvTextBlob = generateCookieTableCSV(_cookies as CookieTableData[]);
+    const fileName = hostname.split('.').join('-');
+    saveAs(csvTextBlob, `${fileName}-report.csv`);
+  }
+};
 
 export default exportCookies;

@@ -24,6 +24,7 @@ import {
   type TechnologyData,
   useContextSelector,
   createContext,
+  type LibraryData,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -36,6 +37,8 @@ export interface ContentStore {
     tabCookies: { [key: string]: CookieTableData };
     technologies: TechnologyData[] | undefined;
     completeJson: CompleteJson[] | null;
+    path: string;
+    libraryMatches: LibraryData | null;
   };
 }
 
@@ -44,6 +47,8 @@ const initialState: ContentStore = {
     tabCookies: {},
     technologies: [],
     completeJson: null,
+    path: '',
+    libraryMatches: null,
   },
 };
 
@@ -57,6 +62,8 @@ interface ContentStoreProviderProps {
   };
   technologies?: TechnologyData[];
   completeJson: CompleteJson[] | null;
+  path: string;
+  libraryMatches: LibraryData | null;
 }
 
 export const Provider = ({
@@ -64,6 +71,8 @@ export const Provider = ({
   technologies,
   completeJson,
   children,
+  path,
+  libraryMatches,
 }: PropsWithChildren<ContentStoreProviderProps>) => {
   const tabCookies = useMemo(() => reshapeCookies(cookies), [cookies]);
 
@@ -74,6 +83,8 @@ export const Provider = ({
           tabCookies,
           technologies,
           completeJson,
+          path,
+          libraryMatches,
         },
       }}
     >

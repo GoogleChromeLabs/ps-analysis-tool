@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/eslint-import-resolver",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "",
   "main": "src/index.cjs",
   "scripts": {
@@ -9,7 +9,9 @@
     "type": "git",
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
-  "author": "",
+  "author": {
+    "name": "Google"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

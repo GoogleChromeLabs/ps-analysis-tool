@@ -7452,4 +7452,8 @@ export const data = {
       title: 'Exempted cookies',
     },
   ],
+  showFramesSection: true,
+  url: 'http://example.com',
+  source: 'extension',
+  showBlockedCategory: false,
 };

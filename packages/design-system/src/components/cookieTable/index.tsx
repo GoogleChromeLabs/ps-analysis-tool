@@ -57,6 +57,7 @@ interface CookieTableProps {
   ) => void;
   hideExport?: boolean;
   isCLI?: boolean;
+  hostname: string;
 }
 
 const CookieTable = forwardRef<
@@ -80,6 +81,7 @@ const CookieTable = forwardRef<
     onRowContextMenu,
     hideExport,
     isCLI = false,
+    hostname,
   }: CookieTableProps,
   ref
 ) {
@@ -172,9 +174,9 @@ const CookieTable = forwardRef<
   );
 
   useEffect(() => {
-    window.addEventListener('resize', () => forceUpdate());
+    globalThis?.addEventListener('resize', () => forceUpdate());
     return () => {
-      window.removeEventListener('resize', () => forceUpdate());
+      globalThis?.removeEventListener('resize', () => forceUpdate());
     };
   }, []);
 
@@ -191,7 +193,13 @@ const CookieTable = forwardRef<
         onRowContextMenu={onRowContextMenuHandler}
         getRowObjectKey={getRowObjectKey}
         conditionalTableRowClassesHandler={_conditionalTableRowClassesHandler}
-        exportTableData={!hideExport ? exportCookies(isCLI) : undefined}
+        exportTableData={
+          !hideExport
+            ? (rows: TableRow[]) => {
+                exportCookies(isCLI, rows, hostname);
+              }
+            : undefined
+        }
         hasVerticalBar={hasVerticalBar}
         isRowSelected={isRowSelected}
       >

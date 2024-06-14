@@ -320,6 +320,8 @@
 * Miscellaneous UI updates https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/599
 * Enhancement: Navigate to `Settings` page from `Blocked Cookies` section https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/603
 * Enhancement: Use the warning icon on the cookie issues panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/604
+* Refactor: Update cookies section on the landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/615
+* Fix: Context invalidated for sites which do not send request after the site is loaded. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/611
 
 ## CLI
 * Feature: Add option to pass a port for development server https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/579
@@ -327,6 +329,31 @@
 * Enhancement: CLI, replace "Cookies with issues" with "Cookie issues" in the sidebar. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/596
 * Enhancement: CLI updates https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/602
 * Fix: CLI dashboard showing multiple cookie entries for same cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/597
+* Fix: CLI dashboard blocking reason. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/618
 
 ## Others
 * Add demo RWS for command line launcher https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/578
+
+
+#v0.8.0
+## Extension
+* Improve “Known Breakages” component UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/643
+* Update “Clear All” button render condition for filter chips https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/637
+* Add readiness content under “Facilitated Testing” section https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/663
+* Fix: Broken download button icon UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/636
+* Fix: Known breakages section throwing error when a link is quickly opened and closed https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/654
+* Update “Privacy Sandbox” timeline SVG https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/649
+* Update landing pages UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/659
+* Fix: Normalize blocking reason https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/658
+* Fix: Revise method to keep service worker alive https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/655
+
+
+## CLI
+* Feature: Add HTML report generation to CLI dashboard and CLI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/646
+* Fix: Remove debug log statement https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/633
+* Fix: Merge blocked reasons data in dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/650
+* Enhancement: CLI output path relative to “out” directory. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/638
+* Miscellaneous CLI dashboard improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/660
+
+## Others
+* Feature: Update babel-loader webpack config to have caching support for faster builds https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/452

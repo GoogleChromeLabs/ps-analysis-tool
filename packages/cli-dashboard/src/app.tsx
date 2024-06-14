@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
@@ -21,6 +20,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
+  LibraryData,
   TechnologyData,
 } from '@ps-analysis-tool/common';
 
@@ -46,59 +46,62 @@ const App = () => {
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
+  const [libraryMatches, setLibraryMatches] = useState<{
+    [key: string]: LibraryData;
+  } | null>(null);
 
-  const [type, path] = useMemo(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const dir = urlParams.get('dir');
-
-    return [
-      urlParams.get('type') === 'sitemap'
-        ? DisplayType.SITEMAP
-        : DisplayType.SITE,
-      `/out/${dir}/out.json`,
-    ];
+  const type = useMemo(() => {
+    // @ts-ignore
+    return globalThis?.PSAT_DATA?.type === 'sitemap'
+      ? DisplayType.SITEMAP
+      : DisplayType.SITE;
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const response = await fetch(path);
-      const data: CompleteJson[] = await response.json();
-      setCompleteJsonReport(data);
+    const bodyTag = document.querySelector('body');
 
-      let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [];
+    if (!bodyTag) {
+      return;
+    }
 
-      if (type === DisplayType.SITEMAP) {
-        const extractedData = extractReportData(data);
+    bodyTag.style.fontSize = '75%';
+  }, []);
 
-        _cookies = extractedData.cookies;
-        _technologies = extractedData.technologies;
-        setLandingPageCookies(extractedData.landingPageCookies);
-      } else {
-        _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
-        _technologies = data[0].technologyData;
-      }
+  useEffect(() => {
+    // @ts-ignore
+    const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
+    setCompleteJsonReport(data);
 
-      setCookies(_cookies);
-      setTechnologies(_technologies);
-    })();
-  }, [path, type]);
+    let _cookies: CookieFrameStorageType = {},
+      _technologies: TechnologyData[] = [],
+      _libraryMatches: {
+        [key: string]: LibraryData;
+      } = {};
 
-  if (!path) {
-    return (
-      <div className="flex justify-center items-center">
-        <div className="text-2xl">No path provided</div>
-      </div>
-    );
-  }
+    if (type === DisplayType.SITEMAP) {
+      const extractedData = extractReportData(data);
+
+      _libraryMatches = extractedData.consolidatedLibraryMatches;
+      setLandingPageCookies(extractedData.landingPageCookies);
+    } else {
+      _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+      _technologies = data[0].technologyData;
+      _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
+    }
+
+    setCookies(_cookies);
+    setTechnologies(_technologies);
+    setLibraryMatches(_libraryMatches);
+  }, [type]);
 
   if (type === DisplayType.SITEMAP) {
     return (
       <SiteMapReport
         landingPageCookies={landingPageCookies}
-        cookies={cookies}
-        technologies={technologies}
         completeJson={completeJsonReport}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
+        libraryMatches={libraryMatches}
       />
     );
   }
@@ -109,7 +112,15 @@ const App = () => {
         completeJson={completeJsonReport}
         cookies={cookies}
         technologies={technologies}
-        selectedSite={path.slice(5, -9)}
+        // @ts-ignore
+        selectedSite={globalThis?.PSAT_DATA?.selectedSite}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
+        libraryMatches={
+          libraryMatches
+            ? libraryMatches[Object.keys(libraryMatches ?? {})[0]]
+            : null
+        }
       />
     </div>
   );

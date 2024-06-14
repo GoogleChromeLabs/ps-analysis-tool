@@ -52,6 +52,7 @@ export { default as InspectActiveIcon } from './inspect-active.svg';
 export { default as InspectWhiteIcon } from './inspect-white.svg';
 export { default as PrivacySandboxIcon } from './privacy-sandbox.svg';
 export { default as PrivacySandboxIconWhite } from './privacy-sandbox-white.svg';
+export { default as PrivacySandboxColoredIcon } from './privacy-sandbox-colored.svg';
 export { default as Add } from './add.svg';
 export { default as Cross } from './cross.svg';
 export { default as Refresh } from './refresh-icon.svg';

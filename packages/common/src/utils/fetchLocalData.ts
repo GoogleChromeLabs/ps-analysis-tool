@@ -26,10 +26,7 @@ const fetchLocalData = async (path: string) => {
     return await response.json();
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn(
-      `Failed to fetch local data from path: ${path}. Error:`,
-      error
-    );
+    console.log(`Failed to fetch local data from path: ${path}. Error:`, error);
 
     return [];
   }

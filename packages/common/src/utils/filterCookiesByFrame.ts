@@ -18,7 +18,7 @@
  */
 import { TabCookies } from '../cookies.types';
 interface TabFrames {
-  [key: string]: { frameIds: number[] };
+  [key: string]: { frameIds: string[] };
 }
 
 const filterCookiesByFrame = (
@@ -31,64 +31,10 @@ const filterCookiesByFrame = (
     return Object.values(frameFilteredCookies);
   }
 
-  let tabFramesIDMap: number[] = [];
-
-  Object.keys(tabFrames)?.forEach((url) => {
-    const frameIds = tabFrames[url].frameIds;
-
-    if (frameIds) {
-      tabFramesIDMap = [...new Set<number>([...frameIds, ...tabFramesIDMap])];
-    }
-  });
-
   Object.entries(cookies).forEach(([key, cookie]) => {
     tabFrames[frameUrl].frameIds?.forEach((frameId) => {
-      if (cookie.frameIdList?.includes(frameId)) {
+      if (frameId && cookie.frameIdList?.includes(frameId)) {
         frameFilteredCookies[key] = cookie;
-      }
-
-      //For orphaned/unmapped cookies
-      let hasFrame = false;
-      cookie.frameIdList?.forEach((cookieFrameId) => {
-        if (tabFramesIDMap.includes(cookieFrameId as number)) {
-          hasFrame = true;
-        }
-      });
-
-      if (!hasFrame && cookie?.frameIdList) {
-        //For UnMapped Cookies
-        if (
-          cookie.frameIdList &&
-          cookie.frameIdList.length === 0 &&
-          cookie.parsedCookie.domain
-        ) {
-          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
-            ? cookie.parsedCookie.domain.slice(1)
-            : cookie.parsedCookie.domain;
-
-          if (frameUrl.includes(domainToCheck)) {
-            frameFilteredCookies[key] = cookie;
-          }
-          if (
-            Object.keys(tabFrames).filter((frameKey) =>
-              frameKey.includes(domainToCheck)
-            ).length === 0 &&
-            tabFrames[frameUrl].frameIds.includes(0)
-          ) {
-            frameFilteredCookies[key] = cookie;
-          }
-        }
-
-        //For Orphaned Cookies
-        if (
-          cookie.frameIdList &&
-          cookie.frameIdList.length > 0 &&
-          cookie.parsedCookie.domain
-        ) {
-          if (tabFrames[frameUrl].frameIds.includes(0)) {
-            frameFilteredCookies[key] = cookie;
-          }
-        }
       }
     });
   });

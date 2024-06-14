@@ -29,7 +29,7 @@ const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
   return (
     <div
       className={
-        'flex justify-center border-hex-gray pt-5 pb-5 dark:border-quartz border-t'
+        'flex justify-center border-hex-gray pt-5 dark:border-quartz border-t'
       }
       data-testid="cookies-landing-header"
     >

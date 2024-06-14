@@ -25,6 +25,7 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
   attributes: { iframeOrigin: string | null; setInPage?: boolean };
@@ -79,8 +80,8 @@ const useFrameOverlay = (
 
   const [connectedToPort, setConnectedToPort] = useState(false);
 
-  const connectToPort = useCallback(async () => {
-    const tabId = await getCurrentTabId();
+  const connectToPort = useCallback(() => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
 
     if (!tabId) {
       return;
@@ -207,29 +208,27 @@ const useFrameOverlay = (
 
   // When inspect button is clicked.
   useEffect(() => {
-    (async () => {
-      try {
-        // Indicates that the context was invalidated.
-        if (!chrome.runtime?.id && setContextInvalidated) {
-          setContextInvalidated(true);
-          return;
-        }
-
-        if (!isInspecting) {
-          if (portRef.current) {
-            portRef.current.disconnect();
-            portRef.current = null;
-            setConnectedToPort(false);
-          }
-
-          return;
-        }
-
-        await connectToPort();
-      } catch (error) {
-        // fail silently
+    try {
+      // Indicates that the context was invalidated.
+      if (!chrome.runtime?.id && setContextInvalidated) {
+        setContextInvalidated(true);
+        return;
       }
-    })();
+
+      if (!isInspecting) {
+        if (portRef.current) {
+          portRef.current.disconnect();
+          portRef.current = null;
+          setConnectedToPort(false);
+        }
+
+        return;
+      }
+
+      connectToPort();
+    } catch (error) {
+      // fail silently
+    }
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
@@ -263,7 +262,7 @@ const useFrameOverlay = (
     (async () => {
       try {
         if (!connectedToPort && !canStartInspecting) {
-          await connectToPort();
+          connectToPort();
         }
 
         if (!isInspecting && portRef.current && canStartInspecting) {
@@ -312,6 +311,11 @@ const useFrameOverlay = (
                   return [...new Set([...previousReasons])];
                 }, [])
             : [];
+
+          const isFrameOnRWS = selectedFrame
+            ? await isOnRWS(selectedFrame)
+            : false;
+
           portRef.current?.postMessage({
             selectedFrame,
             removeAllFramePopovers: isFrameSelectedFromDevTool,
@@ -320,7 +324,7 @@ const useFrameOverlay = (
             blockedCookies: blockedCookies.length,
             blockedReasons: blockedReasons.join(', '),
             isInspecting,
-            isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
+            isOnRWS: isFrameOnRWS,
           });
         }
       } catch (error) {

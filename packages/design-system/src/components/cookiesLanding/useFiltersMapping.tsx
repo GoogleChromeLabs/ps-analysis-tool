@@ -56,7 +56,20 @@ const useFiltersMapping = (tabFrames: TabFrames) => {
     [firstFrame, updateSelectedItemKey]
   );
 
-  return { selectedItemUpdater };
+  const multiSelectItemUpdater = useCallback(
+    (queryObject: Record<string, string[]>) => {
+      const modifiedQuery = {
+        filter: {
+          ...queryObject,
+        },
+      };
+
+      updateSelectedItemKey(firstFrame, JSON.stringify(modifiedQuery));
+    },
+    [firstFrame, updateSelectedItemKey]
+  );
+
+  return { selectedItemUpdater, multiSelectItemUpdater };
 };
 
 export default useFiltersMapping;

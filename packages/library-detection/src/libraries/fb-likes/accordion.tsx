@@ -37,11 +37,7 @@ const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion
-      title={'Facebook Like Button.'}
-      isLoading={false}
-      featuresText=""
-    >
+    <Accordion title={'Facebook Like Button'} isLoading={false} featuresText="">
       <DetectionMessage
         libraryName="Facebook like button"
         provider="Facebook"

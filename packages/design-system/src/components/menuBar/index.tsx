@@ -24,7 +24,7 @@ import { Export } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import { isInCenter } from './utils';
+import { isElementInView } from './utils';
 
 export type MenuData = Array<{
   name: string;
@@ -51,7 +51,7 @@ const MenuBar = ({
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    const element = document.getElementById(selectedItem);
+    const element = globalThis?.document?.getElementById(selectedItem);
     if (element) {
       element.scrollIntoView?.({ behavior: 'smooth' });
       timeout = setTimeout(() => {
@@ -66,29 +66,33 @@ const MenuBar = ({
   }, [selectedItem]);
 
   useEffect(() => {
-    const scrollContainer = document.getElementById(scrollContainerId);
-    const firstItemLink = menuData[0].link;
-    const lastItemLink = menuData[menuData.length - 1].link;
+    const scrollContainer =
+      globalThis?.document.getElementById(scrollContainerId);
 
     const handleScroll = () => {
+      const firstItemLink = menuData[0].link;
+      const lastItemLink = menuData[menuData.length - 1].link;
+
       if (isListenerDisabled || !scrollContainer) {
         return;
       }
 
-      const distanceScrolled = scrollContainer.scrollTop;
-      const maxScrollDistance =
-        scrollContainer.scrollHeight - scrollContainer.clientHeight;
-
       menuData.forEach(({ link: id }) => {
-        const section = document.getElementById(id);
+        const section = globalThis?.document.getElementById(id);
+        const isAlmostBottom =
+          scrollContainer.scrollHeight -
+          scrollContainer.scrollTop -
+          scrollContainer.clientHeight;
+
         setSelectedItem((prev) => {
           if (scrollContainer?.scrollTop === 0) {
             return firstItemLink;
-          } else if (section && isInCenter(section) && prev !== id) {
-            return id;
-          } else if (maxScrollDistance - distanceScrolled < 5) {
+          } else if (isAlmostBottom <= 1 && isAlmostBottom >= 0) {
             return lastItemLink;
+          } else if (section && isElementInView(section)) {
+            return id;
           }
+
           return prev;
         });
       });
@@ -104,7 +108,7 @@ const MenuBar = ({
     <nav
       data-testid="menu-bar"
       className={classnames(
-        'fixed right-0 flex flex-col gap-4 justify-center items-center z-10 w-9 p-2 bg-dynamic-grey dark:bg-charleston-green rounded-l-lg border border-bright-gray dark:border-quartz',
+        'fixed right-0 flex flex-col gap-4 justify-center items-center z-10 w-10 p-2 bg-dynamic-grey dark:bg-charleston-green rounded-l-lg border border-bright-gray dark:border-quartz',
         extraClasses ? extraClasses : 'top-4'
       )}
     >
@@ -113,7 +117,7 @@ const MenuBar = ({
           <button
             disabled={disableReportDownload}
             className={classnames(
-              'flex items-center relative justify-center w-5 h-5 p-1 rounded-full cursor-pointer transition-all ease-in-out group',
+              'flex items-center relative justify-center w-6 h-6 rounded-full cursor-pointer transition-all ease-in-out group',
               {
                 'bg-baby-blue-eyes': disableReportDownload,
                 'bg-ultramarine-blue': !disableReportDownload,
@@ -129,7 +133,7 @@ const MenuBar = ({
                 : 'Download Report'}
               <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
             </div>
-            <Export className="text-white scale-75" />
+            <Export className="text-white" />
           </button>
           <div className="absolute top-7 -left-2 border-b border-bright-gray dark:border-quartz w-9" />
         </div>
@@ -145,8 +149,10 @@ const MenuBar = ({
               : 'bg-bright-gray'
           )}
           onClick={() => {
-            setIsListenerDisabled(true);
-            setSelectedItem(item.link);
+            if (item.link !== selectedItem) {
+              setIsListenerDisabled(true);
+              setSelectedItem(item.link);
+            }
           }}
         >
           <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">

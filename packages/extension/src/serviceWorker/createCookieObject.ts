@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -23,6 +22,7 @@ import {
   getDomainFromUrl,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
+
 /**
  * Internal dependencies
  */
@@ -173,9 +173,7 @@ function parseAttributeValues(
       }
       break;
     case 'expires':
-      if (value !== 0) {
-        value = calculateEffectiveExpiryDate(value as string) || 0;
-      }
+      value = calculateEffectiveExpiryDate(value as string);
       break;
     case 'priority':
       value = value || 'Medium';
@@ -186,5 +184,6 @@ function parseAttributeValues(
     default:
       return value;
   }
+
   return value;
 }

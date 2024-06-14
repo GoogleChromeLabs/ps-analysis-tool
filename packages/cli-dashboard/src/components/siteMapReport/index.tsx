@@ -22,10 +22,10 @@ import {
   SidebarProvider,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
-import {
-  type TechnologyData,
-  type CookieFrameStorageType,
-  type CompleteJson,
+import type {
+  CookieFrameStorageType,
+  CompleteJson,
+  LibraryData,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -36,16 +36,16 @@ import Layout from './layout';
 
 interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
-  cookies: CookieFrameStorageType;
-  technologies: TechnologyData[];
   completeJson: CompleteJson[] | null;
+  path: string;
+  libraryMatches: { [url: string]: LibraryData } | null;
 }
 
 const SiteMapReport = ({
-  cookies,
-  technologies,
   landingPageCookies,
   completeJson,
+  path,
+  libraryMatches,
 }: SiteMapReportProps) => {
   const [data, setData] = useState<SidebarItems>(sidebarData);
 
@@ -53,11 +53,11 @@ const SiteMapReport = ({
     <SidebarProvider data={data}>
       <Layout
         landingPageCookies={landingPageCookies}
-        cookies={cookies}
-        technologies={technologies}
         completeJson={completeJson}
         sidebarData={data}
         setSidebarData={setData}
+        path={path}
+        libraryMatches={libraryMatches}
       />
     </SidebarProvider>
   );

@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { act } from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { CookieTableData } from '@ps-analysis-tool/common';
@@ -27,7 +27,6 @@ import { CookieTableData } from '@ps-analysis-tool/common';
  */
 import CookieTable from '..';
 import { InfoType } from '../../table';
-import { act } from 'react-dom/test-utils';
 
 describe('CookieTable', () => {
   global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -121,6 +120,7 @@ describe('CookieTable', () => {
         },
       } as CookieTableData,
     },
+    hostname: '',
     setSelectedFrameCookie: jest.fn(),
   };
 

@@ -54,13 +54,17 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
   }
 
   const cookieList = Object.values(cookies).filter(
-    (cookie) => cookie.parsedCookie && cookie.frameIdList?.length >= 0
+    (cookie) =>
+      cookie.parsedCookie &&
+      cookie.frameIdList &&
+      cookie.frameIdList?.length >= 0
   );
 
   cookiesCount.total = Object.keys(cookies).filter(
     (cookieKey) =>
       cookies[cookieKey].parsedCookie &&
-      cookies[cookieKey].frameIdList?.length >= 0
+      //@ts-ignore
+      cookies[cookieKey].frameIdList.length >= 0
   ).length;
 
   cookiesCount.blockedCookies.total = cookieList.filter(
