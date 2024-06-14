@@ -256,6 +256,7 @@ export class BrowserManagement {
       cookiePartitionKey,
       blockedCookies,
       requestId,
+      exemptedCookies,
     }: Protocol.Network.ResponseReceivedExtraInfoEvent
   ) {
     if (!headers['set-cookie']) {
@@ -269,6 +270,10 @@ export class BrowserManagement {
 
       const blockedEntry = blockedCookies.find((c) => {
         return c.cookie?.name === parsedCookie.name;
+      });
+
+      const exemptedEntry = exemptedCookies?.find(({ cookie }) => {
+        return cookie?.name === parsedCookie.name;
       });
 
       const url = this.pageResponses[pageId][requestId]?.url;
@@ -294,6 +299,7 @@ export class BrowserManagement {
         },
         isBlocked: Boolean(blockedEntry),
         blockedReasons: blockedEntry?.blockedReasons,
+        exemptionReasons: exemptedEntry?.exemptionReason,
         url,
         headerType: 'response',
       };
