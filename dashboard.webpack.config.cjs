@@ -47,7 +47,7 @@ const report = {
 
 const dashboard = {
   entry: {
-    index: './packages/cli-dashboard/src/index.tsx',
+    index: './src/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, './packages/cli-dashboard/dist'),
@@ -66,9 +66,8 @@ const dashboard = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: './out', to: 'out' },
         {
-          from: './packages/i18n/_locales/messages',
+          from: '../i18n/_locales/messages',
           to: './_locales/',
         },
       ],

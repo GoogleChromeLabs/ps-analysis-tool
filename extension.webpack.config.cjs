@@ -22,8 +22,8 @@ const commonConfig = require('./webpack.shared.cjs');
 
 const root = {
   entry: {
-    'service-worker': './packages/extension/src/serviceWorker/index.ts',
-    'content-script': './packages/extension/src/contentScript/index.ts',
+    'service-worker': './src/serviceWorker/index.ts',
+    'content-script': './src/contentScript/index.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension'),
@@ -37,7 +37,7 @@ const root = {
         { from: '../../assets', to: 'assets' },
         { from: '../../data', to: 'data' },
         {
-          from: './packages/i18n/_locales/messages',
+          from: '../i18n/_locales/messages',
           to: './_locales/',
         },
       ],
@@ -52,9 +52,9 @@ const root = {
 
 const devTools = {
   entry: {
-    index: './packages/extension/src/view/devtools/index.tsx',
-    devtools: './packages/extension/src/view/devtools/devtools.ts',
-    worker: './packages/extension/src/worker/index.ts',
+    index: './src/view/devtools/index.tsx',
+    devtools: './src/view/devtools/devtools.ts',
+    worker: './src/worker/index.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension/devtools'),
@@ -67,13 +67,13 @@ const devTools = {
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT Devtool',
-      template: './packages/extension/src/view/devtools/index.html',
+      template: './src/view/devtools/index.html',
       filename: 'index.html',
       inject: false,
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT',
-      template: './packages/extension/src/view/devtools/devtools.html',
+      template: './src/view/devtools/devtools.html',
       filename: 'devtools.html',
       inject: true,
     }),
@@ -83,7 +83,7 @@ const devTools = {
 
 const popup = {
   entry: {
-    index: './packages/extension/src/view/popup/index.tsx',
+    index: './src/view/popup/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension/popup'),
@@ -96,7 +96,7 @@ const popup = {
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT Popup',
-      template: './packages/extension/src/view/popup/index.html',
+      template: './src/view/popup/index.html',
       inject: false,
     }),
   ],
