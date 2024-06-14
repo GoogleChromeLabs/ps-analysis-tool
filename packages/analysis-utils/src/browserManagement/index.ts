@@ -82,6 +82,9 @@ export class BrowserManagement {
 
     if (enable3pCookiePhaseout) {
       args.push('--test-third-party-cookie-phaseout');
+      args.push(
+        '--enable-features="FirstPartySets,StorageAccessAPI,StorageAccessAPIForOriginExtension,PageInfoCookiesSubpage,PrivacySandboxFirstPartySetsUI,TpcdMetadataGrants"'
+      );
     }
 
     this.browser = await puppeteer.launch({
@@ -271,6 +274,8 @@ export class BrowserManagement {
       const blockedEntry = blockedCookies.find((c) => {
         return c.cookie?.name === parsedCookie.name;
       });
+
+      console.log(exemptedCookies);
 
       const exemptedEntry = exemptedCookies?.find(({ cookie }) => {
         return cookie?.name === parsedCookie.name;
