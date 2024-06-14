@@ -45,7 +45,7 @@ const calculateDynamicFilterValues = (
     TableFilter[keyof TableFilter]['filterValues']
   >((acc, cookie) => {
     let value = getValueByKey(key, cookie);
-    console.log(cookie);
+
     if (runTranslation) {
       value = I18n.getMessage(
         (value as string).toLowerCase() || 'uncategorized'
