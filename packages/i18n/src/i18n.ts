@@ -64,7 +64,14 @@ class I18n {
    * @returns {string[]} An array of locale strings.
    */
   private createLocaleArray(locale: string) {
-    return [locale, locale.split('-')[0], locale.split('_')[0], 'en'];
+    return [
+      locale,
+      locale.replace(/_/g, '-'),
+      locale.replace(/-/g, '_'),
+      locale.split('-')[0],
+      locale.split('_')[0],
+      'en',
+    ];
   }
 
   /**
