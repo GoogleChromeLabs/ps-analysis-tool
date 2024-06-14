@@ -50,11 +50,11 @@ export const analyzeCookiesUrlsAndFetchResources = async (
 
   await browser.initializeBrowser(true);
   const { result: analysisCookieData, consolidatedDOMQueryMatches } =
-    await browser.analyzeCookieUrls(urls, shouldSkipAcceptBanner, Libraries);
+    await browser.analyzeCookies(urls, shouldSkipAcceptBanner, Libraries);
 
   const resources = browser.getResources(urls);
 
-  const res = analysisCookieData.map(({ pageUrl, cookieData }) => {
+  const res = analysisCookieData.map(({ url: pageUrl, cookieData }) => {
     Object.entries(cookieData).forEach(([, frameData]) => {
       const frameCookies = frameData.frameCookies;
       Object.entries(frameCookies).forEach(([key, cookie]) => {
@@ -77,7 +77,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
     });
 
     return {
-      pageUrl,
+      url: pageUrl,
       cookieData,
       resources: resources[pageUrl],
       domQueryMatches: consolidatedDOMQueryMatches[pageUrl],

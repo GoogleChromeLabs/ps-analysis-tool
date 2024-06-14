@@ -111,10 +111,10 @@ export type CookieData = {
     responseEvents: responsEvent[];
   };
   analytics?: CookieAnalytics | null;
-  url: string;
+  url?: string;
   headerType?: 'response' | 'request' | 'javascript';
   isFirstParty?: boolean | null;
-  frameIdList: Array<number | string>;
+  frameIdList?: Array<number | string>;
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
@@ -234,7 +234,6 @@ export type CompleteJson = {
   pageUrl: string;
   cookieData: {
     [frame: string]: {
-      cookiesCount: number;
       frameCookies: {
         [cookieKey: string]: CookieJsonDataType;
       };

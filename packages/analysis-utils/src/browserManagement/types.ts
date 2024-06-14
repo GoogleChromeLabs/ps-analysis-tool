@@ -23,13 +23,38 @@ export type ViewportConfig = {
 };
 
 export type ResponseData = {
-  frameId: string;
-  serverUrl: string;
+  frameId?: string;
+  url: string;
   cookies: CookieData[];
 };
 
 export type RequestData = {
-  frameId: string;
-  serverUrl: string;
+  frameId?: string;
+  url: string;
   cookies: CookieData[];
+};
+
+// @see https://developer.mozilla.org/en-US/docs/Web/API/CookieStore/getAll
+export type CookieStoreCookie = {
+  name: string;
+  domain: string;
+  expires: number; // UNIX time in miliseconds
+  partitioned: boolean;
+  path: string;
+  sameSite: 'strict' | 'lax' | 'none';
+  secure: boolean;
+  value: string;
+};
+
+export type CookieDataFromNetwork = {
+  [frameUrl: string]: {
+    frameCookies: {
+      [key: string]: CookieData;
+    };
+  };
+};
+
+export type PageCookieData = {
+  url: string;
+  cookieData: CookieDataFromNetwork;
 };
