@@ -74,6 +74,7 @@ const createCookieObj = (
         frameIdList: [frame], // Hot fix: For Displaying cookies in CLI Dashboard.
         isBlocked: cookie.isBlocked,
         frameUrls: [frame],
+        exemptionReason: cookie.exemptionReason,
       } as CookieTableData,
     ])
   );
