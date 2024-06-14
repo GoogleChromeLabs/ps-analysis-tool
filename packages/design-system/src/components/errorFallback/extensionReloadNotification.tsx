@@ -37,7 +37,7 @@ const ExtensionReloadNotification = ({
       <div className="ml-2 mt-4">
         <Button
           onClick={() => {
-            window.location.reload();
+            globalThis?.location?.reload();
             if (localStorage.getItem('psatOpenedAfterPageLoad') && tabId) {
               try {
                 chrome.tabs.reload(tabId);

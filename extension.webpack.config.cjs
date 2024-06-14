@@ -32,10 +32,10 @@ const root = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: './packages/extension/src/manifest.json', to: '' },
-        { from: './packages/extension/icons', to: 'icons' },
-        { from: './assets', to: 'assets' },
-        { from: './data', to: 'data' },
+        { from: './src/manifest.json', to: '' },
+        { from: './icons', to: 'icons' },
+        { from: '../../assets', to: 'assets' },
+        { from: '../../data', to: 'data' },
         {
           from: './packages/i18n/_locales/messages',
           to: './_locales/',
@@ -105,7 +105,7 @@ const popup = {
 
 const report = {
   entry: {
-    index: './packages/report/src/index.tsx',
+    index: '../report/src/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension/report'),
@@ -118,7 +118,7 @@ const report = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './packages/report/public/index.html',
+      template: '../report/public/index.html',
       filename: 'index.html',
       inject: true,
     }),

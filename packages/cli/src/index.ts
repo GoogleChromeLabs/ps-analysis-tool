@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Copyright 2023 Google LLC
  *
@@ -21,14 +22,19 @@ import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import { spawn } from 'child_process';
+import fs from 'fs';
 import path from 'path';
 import { I18n } from '@ps-analysis-tool/i18n';
-import { CompleteJson, delay } from '@ps-analysis-tool/common';
+import { CompleteJson, LibraryData } from '@ps-analysis-tool/common';
 import {
-  analyzeCookiesUrlsInBatches,
+  analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
 } from '@ps-analysis-tool/analysis-utils';
+import {
+  DetectionFunctions,
+  Libraries,
+  detectMatchingSignatures,
+} from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -39,7 +45,6 @@ import {
   validateArgs,
   saveCSVReports,
   askUserInput,
-  checkPortInUse,
   generatePrefix,
 } from './utils';
 
@@ -54,6 +59,7 @@ const program = new Command();
 program
   .version('0.8.0')
   .description('CLI to test a URL for 3p cookies')
+  .argument('[website-url]', 'The URL of website you want to analyse')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
   .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
@@ -61,7 +67,6 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
-  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -83,7 +88,7 @@ program
 
 program.parse();
 
-const saveResults = async (
+const saveResultsAsJSON = async (
   outDir: string,
   result: CompleteJson | CompleteJson[]
 ) => {
@@ -91,29 +96,52 @@ const saveResults = async (
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
-const startDashboardServer = async (dir: string, port: number) => {
-  spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', [
-    'run',
-    'cli-dashboard:dev',
-    '--',
-    '--port',
-    port.toString(),
-  ]);
+const saveResultsAsHTML = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[],
+  isSiteMap: boolean
+) => {
+  const htmlText = fs.readFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
+    'utf-8'
+  );
 
-  await delay(2000);
+  const reportHTML = fs.readFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
+    'base64'
+  );
 
-  console.log(
-    I18n.getMessage('reportServedAt', [`http://localhost:${port}/?dir=${dir}`])
+  const html =
+    htmlText.substring(0, htmlText.indexOf('</head>')) +
+    `<script>
+    window.PSAT_REPORT_HTML = '${reportHTML}'
+    window.PSAT_DATA = ${JSON.stringify({
+      json: result,
+      type: isSiteMap ? 'sitemap' : 'url',
+      selectedSite: outDir?.trim()?.slice(6) ?? '',
+    })}</script>` +
+    htmlText.substring(htmlText.indexOf('</head>'));
+
+  fs.copyFileSync(
+    path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+    outDir + '/index.js'
+  );
+
+  const outFileFullDir = path.resolve(outDir + '/index.html');
+  const htmlBlob = new Blob([html]);
+  const buffer = Buffer.from(await htmlBlob.arrayBuffer());
+
+  fs.writeFile(outDir + '/index.html', buffer, () =>
+    console.log(`Report created successfully: ${outFileFullDir}`)
   );
 };
 
 // eslint-disable-next-line complexity
 (async () => {
-  const url = program.opts().url;
+  const url = program.args?.[0] ?? program.opts().url;
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
-  const port = parseInt(program.opts().port || '9000');
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
@@ -127,20 +155,8 @@ const startDashboardServer = async (dir: string, port: number) => {
     csvPath,
     sitemapPath,
     numberOfUrlsInput,
-    outDir,
-    port
+    outDir
   );
-
-  //check if devserver port in already in use only if the dashboard is goint to be used
-
-  if (!outDir) {
-    const isPortInUse = await checkPortInUse(port);
-
-    if (isPortInUse) {
-      console.error(I18n.getMessage('errorInPort', [port.toString()]));
-      process.exit(1);
-    }
-  }
 
   const prefix =
     url || sitemapUrl
@@ -206,15 +222,18 @@ const startDashboardServer = async (dir: string, port: number) => {
     text: I18n.getMessage('analyzingCookies'),
   });
 
-  const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
-    urlsToProcess,
-    isHeadless,
-    DELAY_TIME,
-    cookieDictionary,
-    3,
-    urlsToProcess.length !== 1 ? spinnies : undefined,
-    shouldSkipAcceptBanner
-  );
+  const cookieAnalysisAndFetchedResourceData =
+    await analyzeCookiesUrlsInBatchesAndFetchResources(
+      urlsToProcess,
+      //@ts-ignore Fix type.
+      Libraries,
+      isHeadless,
+      DELAY_TIME,
+      cookieDictionary,
+      3,
+      urlsToProcess.length !== 1 ? spinnies : undefined,
+      shouldSkipAcceptBanner
+    );
 
   spinnies.succeed('cookie-spinner', {
     text: I18n.getMessage('doneAnalyzingCookies'),
@@ -237,25 +256,31 @@ const startDashboardServer = async (dir: string, port: number) => {
       text: I18n.getMessage('doneAnalyzingTechonlogies'),
     });
   }
-
   const result = urlsToProcess.map((_url, ind) => {
+    const detectedMatchingSignatures: LibraryData = {
+      ...detectMatchingSignatures(
+        cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
+        Object.fromEntries(
+          Libraries.map((library) => [library.name, library.detectionFunction])
+        ) as DetectionFunctions
+      ),
+      ...(cookieAnalysisAndFetchedResourceData[ind]?.domQueryMatches ?? {}),
+    };
     return {
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
-      cookieData: cookieAnalysisData[ind].cookieData,
-    } as CompleteJson;
+      cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
+      libraryMatches: detectedMatchingSignatures ?? [],
+    } as unknown as CompleteJson;
   });
 
-  await saveResults(outputDir, result);
+  const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
     process.exit(0);
   }
 
-  startDashboardServer(
-    encodeURIComponent(prefix) +
-      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''),
-    port
-  );
+  await saveResultsAsJSON(outputDir, result);
+  await saveResultsAsHTML(outputDir, result, isSiteMap);
 })();

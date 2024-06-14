@@ -2,24 +2,37 @@
   "name": "@ps-analysis-tool/cli-dashboard",
   "version": "0.8.0",
   "description": "Dashboard for visualizing cli analysis output",
+  "author": {
+    "name": "Google"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
   },
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "public"
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.cjs",
-    "build": "webpack --config webpack.config.cjs",
-    "dev": "webpack-dev-server --config webpack.config.cjs"
+    "start": "webpack-dev-server --config ../../dashboard.webpack.config.cjs",
+    "build": "webpack --config ../../dashboard.webpack.config.cjs",
+    "build:remove": "rimraf dist",
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
   },
   "dependencies": {
     "@ps-analysis-tool/common": "*",
     "@ps-analysis-tool/design-system": "*",
     "@ps-analysis-tool/i18n": "*",
+    "@ps-analysis-tool/library-detection": "*",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",

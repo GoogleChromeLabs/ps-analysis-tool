@@ -21,6 +21,7 @@ import React, { useState } from 'react';
 import type {
   CompleteJson,
   CookieJsonDataType,
+  LibraryData,
   TechnologyData,
 } from '@ps-analysis-tool/common';
 import {
@@ -45,6 +46,7 @@ interface SiteReportProps {
   completeJson: CompleteJson[] | null;
   selectedSite: string | null;
   path: string;
+  libraryMatches: LibraryData | null;
 }
 
 const SiteReport = ({
@@ -53,14 +55,15 @@ const SiteReport = ({
   completeJson,
   selectedSite,
   path,
+  libraryMatches,
 }: SiteReportProps) => {
   const [data, setData] = useState<SidebarItems>(Tabs);
-
   return (
     <ContentStoreProvider
       cookies={cookies}
       technologies={technologies}
       completeJson={completeJson}
+      libraryMatches={libraryMatches}
       path={path}
     >
       <SidebarProvider data={data}>

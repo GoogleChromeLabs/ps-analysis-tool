@@ -120,6 +120,7 @@ describe('CookieTable', () => {
         },
       } as CookieTableData,
     },
+    hostname: '',
     setSelectedFrameCookie: jest.fn(),
   };
 

@@ -28,6 +28,7 @@ import { createZip, getFolderName, generateSiemapHTMLFile } from './utils';
 
 const generateSiteMapReportandDownload = async (
   JSONReport: CompleteJson[],
+  reportHTML: string,
   sitemapUrl: string
 ) => {
   if (!JSONReport.length) {
@@ -51,10 +52,10 @@ const generateSiteMapReportandDownload = async (
       return;
     }
 
-    createZip(data, zipFolder, data.pageUrl);
+    createZip(data, zipFolder, data.pageUrl, reportHTML);
   });
 
-  const report = generateSiemapHTMLFile(JSONReport, sitemapUrl);
+  const report = generateSiemapHTMLFile(JSONReport, sitemapUrl, reportHTML);
 
   zip.file('report.html', report);
 

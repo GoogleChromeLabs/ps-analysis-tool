@@ -2,6 +2,10 @@
   "extends": "../../tsconfig.shared.json",
   "compilerOptions": {
     "rootDir": "src",
+    "noEmit": false,
+    "target": "es6",
+    "outDir": "dist",
+    "declarationDir": "dist-types",
     "types": ["chrome"]
   },
   "include": [

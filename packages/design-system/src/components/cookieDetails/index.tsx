@@ -26,7 +26,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
  */
 import Details from './details';
 
-interface CookieDetailsProps {
+export interface CookieDetailsProps {
   isUsingCDP: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;

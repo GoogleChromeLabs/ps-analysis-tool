@@ -22,10 +22,10 @@ const commonConfig = require('./webpack.shared.cjs');
 
 const report = {
   entry: {
-    index: './packages/report/src/index.tsx',
+    index: '../report/src/index.tsx',
   },
   output: {
-    path: path.resolve(__dirname, './dist/cli-dashboard/report'),
+    path: path.resolve(__dirname, './packages/cli-dashboard/dist/report'),
     filename: '[name].js',
     publicPath: '/',
   },
@@ -36,7 +36,7 @@ const report = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './packages/report/public/index.html',
+      template: '../report/public/index.html',
       filename: 'index.html',
       inject: true,
     }),
@@ -50,15 +50,8 @@ const dashboard = {
     index: './packages/cli-dashboard/src/index.tsx',
   },
   output: {
-    path: path.resolve(__dirname, './dist/cli-dashboard'),
+    path: path.resolve(__dirname, './packages/cli-dashboard/dist'),
     filename: '[name].js',
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, './dist/cli-dashboard'),
-    },
-    compress: true,
-    port: 9000,
   },
   plugins: [
     new WebpackBar({
@@ -67,7 +60,7 @@ const dashboard = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './packages/cli-dashboard/public/index.html',
+      template: '../cli-dashboard/public/index.html',
       filename: 'index.html',
       inject: false,
     }),

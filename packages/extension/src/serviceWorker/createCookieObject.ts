@@ -22,7 +22,7 @@ import {
   getDomainFromUrl,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
-import { I18n } from '@ps-analysis-tool/i18n';
+
 /**
  * Internal dependencies
  */
@@ -176,7 +176,7 @@ function parseAttributeValues(
       value = calculateEffectiveExpiryDate(value as string);
       break;
     case 'priority':
-      value = value || I18n.getMessage('medium');
+      value = value || 'Medium';
       break;
     case 'partitionKey':
       value = value || '';

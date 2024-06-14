@@ -46,7 +46,7 @@ const GISAccordion = ({ matches }: AccordionProps) => {
           className="text-bright-navy-blue dark:text-jordy-blue"
           target="_blank"
           href={addUTMParams(
-            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
+            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration'
           )}
           rel="noreferrer"
         >

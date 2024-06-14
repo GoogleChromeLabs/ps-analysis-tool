@@ -56,8 +56,12 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
   const hasValidBlockedReason =
     selectedCookie.blockedReasons && selectedCookie.blockedReasons.length !== 0;
 
+  const selectedCookieExemptionReason =
+    selectedCookie?.exemptionReason ?? 'None';
+
   selectedCookie?.blockedReasons?.forEach((reason) => {
     const cookieExclusionReason =
+      // @ts-ignore
       cookieIssueDetails.CookieExclusionReason[reason];
     const cookieBlockedReason = I18n.getFormattedMessages(
       cookieIssueDetails.CookieBlockedReason[reason]
@@ -92,8 +96,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
 
   return (
     <div className="text-xs py-1 px-1.5">
-      {selectedCookie.exemptionReason &&
-        selectedCookie.exemptionReason.toLowerCase() !== 'none' && (
+      {selectedCookieExemptionReason &&
+        selectedCookieExemptionReason.toLowerCase() !== 'none' && (
           <div className="mb-4">
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
               {I18n.getMessage('exemptionReason')}
@@ -101,7 +105,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {
                 cookieExemptionReason[
-                  selectedCookie.exemptionReason as CookieData['exemptionReason']
+                  //@ts-ignore
+                  selectedCookieExemptionReason as CookieData['exemptionReason']
                 ]
               }
             </p>

@@ -25,7 +25,6 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
-  prepareCookiesCount,
 } from '@ps-analysis-tool/design-system';
 import { I18n } from '@ps-analysis-tool/i18n';
 /**
@@ -34,7 +33,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
-import { useCookie } from '../../../stateProviders';
+import { useCookie, useSettings } from '../../../stateProviders';
 import downloadReport from '../../../../../utils/downloadReport';
 import ExemptedCookiesSection from './exemptedCookiesSection';
 
@@ -45,6 +44,8 @@ const AssembledCookiesLanding = () => {
     url: state.tabUrl,
   }));
 
+  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
+
   const { libraryMatches, showLoader } = useLibraryDetectionContext(
     ({ state }) => ({
       libraryMatches: state.libraryMatches,
@@ -52,7 +53,6 @@ const AssembledCookiesLanding = () => {
     })
   );
 
-  const cookieStats = prepareCookiesCount(tabCookies);
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const defaultSections = [
       {
@@ -85,7 +85,7 @@ const AssembledCookiesLanding = () => {
       },
     ];
 
-    if (cookieStats.exemptedCookies.total > 0) {
+    if (isUsingCDP) {
       defaultSections.splice(2, 0, {
         name: I18n.getMessage('exemptionReasons'),
         link: 'exemption-reasons',
@@ -96,7 +96,7 @@ const AssembledCookiesLanding = () => {
     }
 
     return defaultSections;
-  }, [cookieStats.exemptedCookies.total]);
+  }, [isUsingCDP]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),

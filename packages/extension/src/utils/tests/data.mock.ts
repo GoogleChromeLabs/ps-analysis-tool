@@ -7454,5 +7454,6 @@ export const data = {
   ],
   showFramesSection: true,
   url: 'http://example.com',
+  source: 'extension',
   showBlockedCategory: false,
 };

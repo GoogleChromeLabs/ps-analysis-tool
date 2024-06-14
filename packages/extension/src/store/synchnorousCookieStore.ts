@@ -25,7 +25,6 @@ import {
   parseRequestWillBeSentExtraInfo,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -620,7 +619,7 @@ class SynchnorousCookieStore {
             priority:
               cookie.parsedCookie?.priority ??
               this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
-              I18n.getMessage('medium'),
+              'Medium',
             partitionKey:
               cookie.parsedCookie?.partitionKey ??
               this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,

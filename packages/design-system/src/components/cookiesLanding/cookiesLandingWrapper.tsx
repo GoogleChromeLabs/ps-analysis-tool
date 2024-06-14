@@ -17,11 +17,11 @@
  * External dependencies.
  */
 import React from 'react';
-
+import { type DataMapping } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import LandingHeader, { type DataMapping } from './landingHeader';
+import LandingHeader from './landingHeader';
 import { InfoIcon } from '../../icons';
 
 export interface CookiesLandingWrapperProps {

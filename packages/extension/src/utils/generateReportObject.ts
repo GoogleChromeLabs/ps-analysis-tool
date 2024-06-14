@@ -20,12 +20,12 @@ import type {
   LibraryData,
   TabCookies,
   TabFrames,
+  DataMapping,
 } from '@ps-analysis-tool/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
-  type DataMapping,
 } from '@ps-analysis-tool/design-system';
 import { I18n } from '@ps-analysis-tool/i18n';
 
@@ -101,5 +101,6 @@ export default async function generateReportObject(
     showBlockedCategory: false,
     url,
     translations: data,
+    source: 'extension',
   };
 }

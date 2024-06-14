@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
@@ -21,6 +20,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
+  LibraryData,
   TechnologyData,
 } from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
@@ -47,18 +47,25 @@ const App = () => {
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
+  const [libraryMatches, setLibraryMatches] = useState<{
+    [key: string]: LibraryData;
+  } | null>(null);
 
-  const [type, dirPath, dir] = useMemo(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const _dir = urlParams.get('dir') || '';
+  const type = useMemo(() => {
+    // @ts-ignore
+    return globalThis?.PSAT_DATA?.type === 'sitemap'
+      ? DisplayType.SITEMAP
+      : DisplayType.SITE;
+  }, []);
 
-    return [
-      urlParams.get('type') === 'sitemap'
-        ? DisplayType.SITEMAP
-        : DisplayType.SITE,
-      `/out/${_dir}/out.json`,
-      _dir,
-    ];
+  useEffect(() => {
+    const bodyTag = document.querySelector('body');
+
+    if (!bodyTag) {
+      return;
+    }
+
+    bodyTag.style.fontSize = '75%';
   }, []);
 
   useEffect(() => {
@@ -66,36 +73,34 @@ const App = () => {
       const locale = navigator.language || 'en';
       await I18n.loadDashboardMessagesData(locale);
 
-      const response = await fetch(dirPath);
-      const data: CompleteJson[] = await response.json();
+      // @ts-ignore
+      const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
       setCompleteJsonReport(data);
 
       let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [];
+        _technologies: TechnologyData[] = [],
+        _libraryMatches: {
+          [key: string]: LibraryData;
+        } = {};
 
       if (type === DisplayType.SITEMAP) {
         const extractedData = extractReportData(data);
 
         _cookies = extractedData.cookies;
         _technologies = extractedData.technologies;
+        _libraryMatches = extractedData.consolidatedLibraryMatches;
         setLandingPageCookies(extractedData.landingPageCookies);
       } else {
         _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
         _technologies = data[0].technologyData;
+        _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
       }
 
       setCookies(_cookies);
       setTechnologies(_technologies);
+      setLibraryMatches(_libraryMatches);
     })();
-  }, [dirPath, type]);
-
-  if (!dirPath) {
-    return (
-      <div className="flex justify-center items-center">
-        <div className="text-2xl">{I18n.getMessage('noPathProvided')}</div>
-      </div>
-    );
-  }
+  }, [type]);
 
   if (type === DisplayType.SITEMAP) {
     return (
@@ -104,7 +109,9 @@ const App = () => {
         cookies={cookies}
         technologies={technologies}
         completeJson={completeJsonReport}
-        path={dir}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
+        libraryMatches={libraryMatches}
       />
     );
   }
@@ -115,8 +122,15 @@ const App = () => {
         completeJson={completeJsonReport}
         cookies={cookies}
         technologies={technologies}
-        selectedSite={dirPath.slice(5, -9)}
-        path={dir}
+        // @ts-ignore
+        selectedSite={globalThis?.PSAT_DATA?.selectedSite}
+        // @ts-ignore
+        path={globalThis?.PSAT_DATA?.selectedSite}
+        libraryMatches={
+          libraryMatches
+            ? libraryMatches[Object.keys(libraryMatches ?? {})[0]]
+            : null
+        }
       />
     </div>
   );

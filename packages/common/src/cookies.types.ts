@@ -18,6 +18,7 @@
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import type { Protocol } from 'devtools-protocol';
+import { LibraryData } from './libraryDetection.types';
 
 export type CookiesCount = {
   total: number;
@@ -113,7 +114,7 @@ export type CookieData = {
   url: string;
   headerType?: 'response' | 'request' | 'javascript';
   isFirstParty?: boolean | null;
-  frameIdList?: Array<number | string>;
+  frameIdList: Array<number | string>;
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
@@ -240,6 +241,7 @@ export type CompleteJson = {
       };
     };
   };
+  libraryMatches: { [key: string]: LibraryData };
   technologyData: TechnologyData[];
 };
 

@@ -13,24 +13,76 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies
+ */
+import { BlockedReason, CookieData } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
 import calculateExemptionReason from '../calculateExemptionReasons';
 
 describe('calculateExemptionReason', () => {
   it('should no exemption reasons', () => {
     const tabCookies = [
       {
-        exemptionReason: 'None',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: 'cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['DomainMismatch'] as BlockedReason[],
+        frameIdList: [1, 2, 3],
+        exemptionReason: 'None' as CookieData['exemptionReason'],
       },
       {
-        exemptionReason: 'None',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['SameSiteUnspecifiedTreatedAsLax'] as BlockedReason[],
+        frameIdList: [1, 2, 3],
+        exemptionReason: 'TPCDHeuristics' as CookieData['exemptionReason'],
       },
       {
-        exemptionReason: 'None',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['DomainMismatch'] as BlockedReason[],
+        frameIdList: [],
+        exemptionReason: 'UserSettings' as CookieData['exemptionReason'],
       },
     ];
 
-    const expected = {};
+    const expected = {
+      UserSettings: {
+        selected: false,
+      },
+      TPCDHeuristics: {
+        selected: false,
+      },
+    };
 
     const clearActivePanelQuery = jest.fn();
 
@@ -44,13 +96,52 @@ describe('calculateExemptionReason', () => {
   it('should return unique set of exemption reason.', () => {
     const tabCookies = [
       {
-        exemptionReason: 'UserSettings',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: 'cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['DomainMismatch'] as BlockedReason[],
+        frameIdList: [1, 2, 3],
+        exemptionReason: 'None' as CookieData['exemptionReason'],
       },
       {
-        exemptionReason: 'TPCDHeuristics',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['SameSiteUnspecifiedTreatedAsLax'] as BlockedReason[],
+        frameIdList: [1, 2, 3],
+        exemptionReason: 'TPCDHeuristics' as CookieData['exemptionReason'],
       },
       {
-        exemptionReason: 'None',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['DomainMismatch'] as BlockedReason[],
+        frameIdList: [],
+        exemptionReason: 'UserSettings' as CookieData['exemptionReason'],
       },
     ];
 

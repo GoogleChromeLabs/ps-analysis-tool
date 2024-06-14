@@ -52,10 +52,10 @@ const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
       }
     };
 
-    document.addEventListener('click', handleClick);
+    globalThis?.document?.addEventListener('click', handleClick);
 
     return () => {
-      document.removeEventListener('click', handleClick);
+      globalThis?.document?.removeEventListener('click', handleClick);
     };
   }, []);
 
