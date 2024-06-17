@@ -18,7 +18,6 @@
  */
 import { readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
-import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies.
  */
@@ -26,13 +25,13 @@ import getUrlsFromSitemap from './getUrlsfromSitemap';
 
 const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   spinnies?.add('sitemap-spinner', {
-    text: I18n.getMessage('parsingSitemap'),
+    text: 'Parsing Sitemap',
   });
 
   try {
     const _urls = await getUrlsFromSitemap(sitemapUrl);
     spinnies?.succeed('sitemap-spinner', {
-      text: I18n.getMessage('doneParsingSitemap'),
+      text: 'Done parsing Sitemap',
     });
     return _urls;
   } catch (error) {
@@ -42,7 +41,7 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
 
 const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
   spinnies?.add('csv-spinner', {
-    text: I18n.getMessage('parsingCSV'),
+    text: 'Parsing CSV File',
   });
 
   try {
@@ -59,17 +58,17 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
     }, [] as string[]);
 
     if (_urls.length === 0) {
-      console.log(I18n.getMessage('cSVHasNoUrls'));
+      console.log('Provided CSV files has no urls');
       process.exit(1);
     }
     _urls.forEach((_url) => {
       if (!_url.includes('http')) {
-        console.log(I18n.getMessage('notValidUrl', [_url]));
+        console.log(`${_url} is not a valid URL`);
         process.exit(1);
       }
     });
     spinnies?.succeed('csv-spinner', {
-      text: I18n.getMessage('doneParsingCSV'),
+      text: 'Done parsing CSV file',
     });
     return _urls;
   } catch (error) {
@@ -82,7 +81,7 @@ const parseUrlsFromLocalSitemap = async (
   spinnies: any
 ) => {
   spinnies?.add('sitemap-spinner', {
-    text: I18n.getMessage('parsingXML'),
+    text: 'Parsing XML File',
   });
 
   const xmlString = await readFile(sitemapPath, 'utf-8');
@@ -92,11 +91,15 @@ const parseUrlsFromLocalSitemap = async (
   const isSiteMap = Boolean(data['urlset']);
 
   if (isSiteIndex) {
-    throw new Error(I18n.getMessage('xMLSchemaNotSupported'));
+    throw new Error(
+      'Sorry, XML Schema for Sitemap index files is not supported by the tool'
+    );
   }
 
   if (!isSiteMap) {
-    throw new Error(I18n.getMessage('xMLSchemaNotSupported'));
+    throw new Error(
+      'Sorry, XML Schema for Sitemap index files is not supported by the tool'
+    );
   }
 
   let _urls: string[] = [];
@@ -108,19 +111,19 @@ const parseUrlsFromLocalSitemap = async (
       []
     );
   } catch (error) {
-    throw new Error(I18n.getMessage('noUrlsInXMLUrlset'));
+    throw new Error('Provided XML files has no urls in its urlset');
   }
 
   if (_urls.length === 0) {
-    throw new Error(I18n.getMessage('noUrlsInXML'));
+    throw new Error('Provided XML files has no urls ');
   }
   _urls.forEach((_url) => {
     if (!_url.includes('http')) {
-      throw new Error(I18n.getMessage('notValidUrl'));
+      throw new Error(`${_url} is not a valid URL`);
     }
   });
   spinnies?.succeed('sitemap-spinner', {
-    text: I18n.getMessage('doneParsingXML'),
+    text: 'Done parsing XML file',
   });
 
   return _urls;
@@ -152,7 +155,7 @@ const getUrlListFromArgs = async (
       const _urls = await parseUrlsFromSitemap(sitemapUrl, spinnies);
       urls = urls.concat(_urls);
     } catch (error) {
-      console.log(I18n.getMessage('errorParsingSitemap'));
+      console.log('Error parsing sitemap');
       process.exit(1);
     }
   } else if (csvPath) {
@@ -160,7 +163,7 @@ const getUrlListFromArgs = async (
       const _urls = await parseUrlsFromCSV(csvPath, spinnies);
       urls = urls.concat(_urls);
     } catch (error) {
-      console.log(I18n.getMessage('errorParsingCSV'));
+      console.log('Error parsing CSV file');
       process.exit(1);
     }
   } else if (sitemapPath) {

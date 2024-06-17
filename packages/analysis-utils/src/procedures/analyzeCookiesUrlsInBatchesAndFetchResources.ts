@@ -23,7 +23,6 @@ import {
   LibraryData,
   LibraryMatchers,
 } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -72,10 +71,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
 
     spinnies &&
       spinnies.add(`cookie-batch-spinner`, {
-        text: I18n.getMessage('analyzing', [
-          'cookies',
-          ...[start + 1, end + 1].map(String),
-        ]),
+        text: `Analyzing cookies in urls ${start + 1} - ${end + 1} `,
         indent: 2,
       });
 
@@ -95,10 +91,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
 
     spinnies &&
       spinnies.succeed(`cookie-batch-spinner`, {
-        text: I18n.getMessage('doneAnalyzing', [
-          'cookies',
-          ...[start + 1, end + 1].map(String),
-        ]),
+        text: `Done analyzing cookies in urls ${start + 1} - ${end + 1} `,
         indent: 2,
       });
   }

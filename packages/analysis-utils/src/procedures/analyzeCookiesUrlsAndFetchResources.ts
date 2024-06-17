@@ -28,7 +28,6 @@ import {
  * Internal dependencies.
  */
 import { BrowserManagement } from '../browserManagement';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 export const analyzeCookiesUrlsAndFetchResources = async (
   urls: string[],
@@ -65,8 +64,8 @@ export const analyzeCookiesUrlsAndFetchResources = async (
         );
 
         frameCookies[key].analytics = {
-          platform: analytics?.platform || I18n.getMessage('unknown'),
-          category: analytics?.category || I18n.getMessage('uncategorized'),
+          platform: analytics?.platform || 'Unknown',
+          category: analytics?.category || 'Uncategorized',
           gdprUrl: analytics?.gdprUrl || '',
           description: analytics?.description,
         };

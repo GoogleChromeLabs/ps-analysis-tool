@@ -19,7 +19,6 @@
  */
 // @ts-ignore Package does not support typescript.
 import Wapplalyzer from 'wappalyzer';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -51,10 +50,7 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.add(`tech-batch-spinner`, {
-        text: I18n.getMessage('analyzing', [
-          'technology',
-          ...[`${start + 1}`, `${end + 1}`],
-        ]),
+        text: `Analyzing technologies in urls ${start + 1} - ${end + 1} `,
         indent: 2,
       });
 
@@ -71,10 +67,7 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.succeed(`tech-batch-spinner`, {
-        text: I18n.getMessage('doneAnalyzing', [
-          'technology',
-          ...[`${start + 1}`, `${end + 1}`],
-        ]),
+        text: `Done analyzing technology in urls ${start + 1} - ${end + 1} `,
         indent: 2,
       });
     await wappalyzer.destroy();

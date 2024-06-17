@@ -50,9 +50,6 @@ import {
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-I18n.loadCLIMessagesData(locale);
-
 const DELAY_TIME = 20000;
 const program = new Command();
 
@@ -104,7 +101,7 @@ const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson | CompleteJson[],
   isSiteMap: boolean,
-  _locale: string
+  locale: string
 ) => {
   const htmlText = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -116,7 +113,7 @@ const saveResultsAsHTML = async (
     'base64'
   );
 
-  I18n.loadCLIMessagesData(_locale);
+  I18n.loadCLIMessagesData(locale);
   const messages = I18n.getMessages();
 
   const html =
@@ -151,13 +148,13 @@ const saveResultsAsHTML = async (
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
+  const locale = program.opts().locale;
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
-  const _locale = program.opts().locale;
 
   await validateArgs(
     url,
@@ -201,23 +198,22 @@ const saveResultsAsHTML = async (
 
     if (!shouldSkipPrompts && !numberOfUrlsInput) {
       userInput = await askUserInput(
-        I18n.getMessage('urlCountPrompt', [
-          sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file',
-          urls.length.toString(),
-        ])
+        `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
+          urls.length
+        } pages. Please enter the number of pages you want to analyze (Default ${
+          urls.length
+        }):`,
+        { default: urls.length.toString() }
       );
-
       numberOfUrls =
         userInput && isNaN(parseInt(userInput))
           ? urls.length
           : parseInt(userInput as string);
     } else if (numberOfUrlsInput) {
-      console.log(I18n.getMessage('analyzingUrls', [numberOfUrlsInput]));
+      console.log(`Analysing ${numberOfUrlsInput} urls.`);
       numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
-      console.log(
-        I18n.getMessage('analyzingAllUrls', [urls.length.toString()])
-      );
+      console.log(`Analysing all ${urls.length} urls.`);
       numberOfUrls = urls.length;
     }
 
@@ -229,7 +225,7 @@ const saveResultsAsHTML = async (
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: I18n.getMessage('analyzingCookies'),
+    text: 'Analysing cookies on first site visit',
   });
 
   const cookieAnalysisAndFetchedResourceData =
@@ -246,14 +242,14 @@ const saveResultsAsHTML = async (
     );
 
   spinnies.succeed('cookie-spinner', {
-    text: I18n.getMessage('doneAnalyzingCookies'),
+    text: 'Done analyzing cookies.',
   });
 
   let technologyAnalysisData: any = null;
 
   if (!shouldSkipTechnologyAnalysis) {
     spinnies.add('technology-spinner', {
-      text: I18n.getMessage('analyzingTechnologies'),
+      text: 'Analysing technologies',
     });
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
@@ -263,7 +259,7 @@ const saveResultsAsHTML = async (
     );
 
     spinnies.succeed('technology-spinner', {
-      text: I18n.getMessage('doneAnalyzingTechonlogies'),
+      text: 'Done analyzing technologies.',
     });
   }
   const result = urlsToProcess.map((_url, ind) => {
@@ -292,5 +288,5 @@ const saveResultsAsHTML = async (
   }
 
   await saveResultsAsJSON(outputDir, result);
-  await saveResultsAsHTML(outputDir, result, isSiteMap, _locale);
+  await saveResultsAsHTML(outputDir, result, isSiteMap, locale);
 })();

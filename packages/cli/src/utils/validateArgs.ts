@@ -15,7 +15,6 @@
  */
 
 import { parseUrl } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
 import { exists, mkdir } from 'fs-extra';
 import path from 'path';
 
@@ -61,7 +60,7 @@ const validateArgs = async (
   if (csvPath) {
     const csvFileExists = await exists(csvPath);
     if (!csvFileExists) {
-      console.log(I18n.getMessage('noFileFound', [csvPath]));
+      console.log(`No file at ${csvPath}`);
       process.exit(1);
     }
   }
@@ -69,7 +68,7 @@ const validateArgs = async (
   if (sitemapPath) {
     const sitemapFileExists = await exists(sitemapPath);
     if (!sitemapFileExists) {
-      console.log(I18n.getMessage('noFileFound', [sitemapPath]));
+      console.log(`No file at ${sitemapPath}`);
       process.exit(1);
     }
   }
@@ -80,14 +79,14 @@ const validateArgs = async (
     const parsedUrl = parseUrl(_url);
 
     if (parsedUrl === null) {
-      console.log(I18n.getMessage('cliUrlInvalid', [_url]));
+      console.log(`Provided Url ${parsedUrl} is not valid`);
       process.exit(1);
     }
   }
 
   if (numberOfUrls) {
     if (isNaN(parseInt(numberOfUrls))) {
-      console.log(I18n.getMessage('notValidNumber'));
+      console.log(`${numberOfUrls} is not valid numeric value`);
       process.exit(1);
     }
   }
