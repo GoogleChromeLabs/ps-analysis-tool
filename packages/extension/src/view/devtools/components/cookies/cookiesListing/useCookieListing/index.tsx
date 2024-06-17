@@ -123,7 +123,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: I18n.getMessage('sameSite'),
         accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        cell: (info: InfoType) =>
+          I18n.getMessage((info?.toString() || '').toLowerCase()),
         widthWeightagePercentage: 6,
       },
       {
@@ -268,7 +269,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const val = value as string;
           return (
             I18n.getMessage(val?.toLowerCase() || 'uncategorized') ===
-            filterValue.toLowerCase()
+            filterValue
           );
         },
       },
