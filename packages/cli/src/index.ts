@@ -67,6 +67,10 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
+  .option(
+    '-l, --locale <value>',
+    'Locale to use for the CLI, supported: en, hi, ja, ko, pt-BR'
+  )
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -99,7 +103,8 @@ const saveResultsAsJSON = async (
 const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson | CompleteJson[],
-  isSiteMap: boolean
+  isSiteMap: boolean,
+  _locale: string
 ) => {
   const htmlText = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -111,6 +116,9 @@ const saveResultsAsHTML = async (
     'base64'
   );
 
+  I18n.loadCLIMessagesData(_locale);
+  const messages = I18n.getMessages();
+
   const html =
     htmlText.substring(0, htmlText.indexOf('</head>')) +
     `<script>
@@ -119,6 +127,7 @@ const saveResultsAsHTML = async (
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',
       selectedSite: outDir?.trim()?.slice(6) ?? '',
+      translations: messages,
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
 
@@ -148,6 +157,7 @@ const saveResultsAsHTML = async (
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
+  const _locale = program.opts().locale;
 
   await validateArgs(
     url,
@@ -282,5 +292,5 @@ const saveResultsAsHTML = async (
   }
 
   await saveResultsAsJSON(outputDir, result);
-  await saveResultsAsHTML(outputDir, result, isSiteMap);
+  await saveResultsAsHTML(outputDir, result, isSiteMap, _locale);
 })();
