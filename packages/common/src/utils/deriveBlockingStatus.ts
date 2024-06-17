@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import {
-  type CookieData,
-  type requestEvent,
-  type responsEvent,
   BLOCK_STATUS,
-} from '@ps-analysis-tool/common';
+  CookieData,
+  responsEvent,
+  requestEvent,
+} from '../cookies.types';
 
 /**
  * Derives if a cookie was blocked in response header.
@@ -83,11 +82,10 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): BLOCK_STATUS {
 }
 
 /**
- *
  * @param networkEvents Cookie network events
  * @returns blocking status object
  */
-export function deriveBlockingStatus(
+export default function deriveBlockingStatus(
   networkEvents: CookieData['networkEvents']
 ): CookieData['blockingStatus'] {
   if (!networkEvents) {

@@ -23,6 +23,7 @@ import {
   parseResponseReceivedExtraInfo,
   type CookieDatabase,
   parseRequestWillBeSentExtraInfo,
+  deriveBlockingStatus,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -30,7 +31,6 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies.
  */
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
-import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';

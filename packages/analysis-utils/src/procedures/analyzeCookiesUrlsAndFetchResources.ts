@@ -22,13 +22,13 @@ import {
   findAnalyticsMatch,
   CookieDatabase,
   LibraryMatchers,
+  deriveBlockingStatus,
 } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { BrowserManagement } from '../browserManagement';
-import { deriveBlockingStatus } from '../browserManagement/deriveBlockingStatus';
 
 export const analyzeCookiesUrlsAndFetchResources = async (
   urls: string[],

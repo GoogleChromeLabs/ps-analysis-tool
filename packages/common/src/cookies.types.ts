@@ -93,7 +93,7 @@ export type requestEvent = {
 };
 
 export type responsEvent = {
-  type: REQUEST_EVENT;
+  type: RESPONSE_EVENT;
   requestId: string;
   url: string;
   blocked: boolean;
