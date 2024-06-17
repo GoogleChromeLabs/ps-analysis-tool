@@ -42,6 +42,7 @@ import {
   type SidebarItems,
   InfoIcon,
   SIDEBAR_ITEMS_KEYS,
+  CrossedEye,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -67,6 +68,7 @@ import {
   Settings,
   FacilitatedTesting,
 } from './components';
+import ProtectedAudience from './components/privateAdvertising/protectedAudience';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -168,6 +170,19 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: AttributionIconWhite,
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE]: {
+            title: 'Protected Audience',
+            panel: {
+              Element: ProtectedAudience,
+            },
+            icon: {
+              Element: CrossedEye,
+            },
+            selectedIcon: {
+              Element: CrossedEye,
             },
             children: {},
           },
