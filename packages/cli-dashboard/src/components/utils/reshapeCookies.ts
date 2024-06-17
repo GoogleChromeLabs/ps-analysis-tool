@@ -72,8 +72,6 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
             ...acc[key],
             blockedReasons,
             frameIdList,
-            exemptionReason:
-              acc[key]?.exemptionReason || cookieObj[key]?.exemptionReason,
             frameUrls,
             networkEvents,
             blockingStatus: deriveBlockingStatus(networkEvents),
@@ -96,7 +94,9 @@ const createCookieObj = (
   Object.fromEntries(
     Object.values(cookies).map((cookie) => [
       cookie.parsedCookie.name +
+        ':' +
         cookie.parsedCookie.domain +
+        ':' +
         cookie.parsedCookie.path,
       {
         parsedCookie: cookie.parsedCookie,
@@ -114,7 +114,6 @@ const createCookieObj = (
         frameIdList: [frame], // Hot fix: For Displaying cookies in CLI Dashboard.
         isBlocked: cookie.isBlocked,
         frameUrls: [frame],
-        exemptionReason: cookie.exemptionReason,
       } as CookieTableData,
     ])
   );
