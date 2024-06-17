@@ -113,6 +113,8 @@ const createCookieObj = (
         isFirstParty: cookie.isFirstParty,
         frameIdList: [frame], // Hot fix: For Displaying cookies in CLI Dashboard.
         isBlocked: cookie.isBlocked,
+        networkEvents: cookie.networkEvents,
+        blockingStatus: cookie.blockingStatus,
         frameUrls: [frame],
       } as CookieTableData,
     ])
