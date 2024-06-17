@@ -64,6 +64,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       // @ts-ignore
       cookieIssueDetails.CookieExclusionReason[reason];
     const cookieBlockedReason = I18n.getFormattedMessages(
+      // @ts-ignore
       cookieIssueDetails.CookieBlockedReason[reason]
     );
 

@@ -86,8 +86,6 @@ const App = () => {
       if (type === DisplayType.SITEMAP) {
         const extractedData = extractReportData(data);
 
-        _cookies = extractedData.cookies;
-        _technologies = extractedData.technologies;
         _libraryMatches = extractedData.consolidatedLibraryMatches;
         setLandingPageCookies(extractedData.landingPageCookies);
       } else {
@@ -106,8 +104,6 @@ const App = () => {
     return (
       <SiteMapReport
         landingPageCookies={landingPageCookies}
-        cookies={cookies}
-        technologies={technologies}
         completeJson={completeJsonReport}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}

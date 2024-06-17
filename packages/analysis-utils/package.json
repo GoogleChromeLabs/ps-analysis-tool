@@ -33,7 +33,7 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "@ps-analysis-tool/common": "*",
-    "puppeteer": "21.0.2",
+    "puppeteer": "^22.10.0",
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.14",
     "wappalyzer": "^6.10.66"

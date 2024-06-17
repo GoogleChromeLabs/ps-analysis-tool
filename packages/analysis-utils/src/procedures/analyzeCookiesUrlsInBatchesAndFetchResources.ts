@@ -50,10 +50,9 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   shouldSkipAcceptBanner = false
 ) => {
   let report: {
-    pageUrl: string;
+    url: string;
     cookieData: {
       [frameUrl: string]: {
-        cookiesCount: number;
         frameCookies: {
           [key: string]: CookieData;
         };
