@@ -21,11 +21,11 @@ import {
   CookiesLandingWrapper,
   CookiesMatrix,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const ExemptedCookiesSection = () => {
   const data = useData(({ state }) => state.data);

@@ -46,7 +46,7 @@ interface MatrixContainerProps {
 const MatrixContainer = ({
   matrixData = [],
   horizontalMatrixData = [],
-  title = 'Categories',
+  title = I18n.getMessage('categories'),
   description = '',
   showMatrix = true,
   count = null,
