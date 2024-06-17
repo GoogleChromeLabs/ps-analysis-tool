@@ -83,7 +83,7 @@ export class BrowserManagement {
     if (enable3pCookiePhaseout) {
       args.push('--test-third-party-cookie-phaseout');
       args.push(
-        '--enable-features="FirstPartySets,StorageAccessAPI,StorageAccessAPIForOriginExtension,PageInfoCookiesSubpage,PrivacySandboxFirstPartySetsUI,TpcdMetadataGrants"'
+        '--enable-features="FirstPartySets,StorageAccessAPI,StorageAccessAPIForOriginExtension,PageInfoCookiesSubpage,PrivacySandboxFirstPartySetsUI,TpcdMetadataGrants,TpcdSupportSettings,TpcdHeuristicsGrants:TpcdReadHeuristicsGrants/true/TpcdWritePopupCurrentInteractionHeuristicsGrants/30d/TpcdBackfillPopupHeuristicsGrants/30d/TpcdPopupHeuristicEnableForIframeInitiator/all/TpcdWriteRedirectHeuristicGrants/15m/TpcdRedirectHeuristicRequireABAFlow/true/TpcdRedirectHeuristicRequireCurrentInteraction/true"'
       );
     }
 
@@ -275,8 +275,6 @@ export class BrowserManagement {
         return c.cookie?.name === parsedCookie.name;
       });
 
-      console.log(exemptedCookies);
-
       const exemptedEntry = exemptedCookies?.find(({ cookie }) => {
         return cookie?.name === parsedCookie.name;
       });
@@ -304,7 +302,7 @@ export class BrowserManagement {
         },
         isBlocked: Boolean(blockedEntry),
         blockedReasons: blockedEntry?.blockedReasons,
-        exemptionReasons: exemptedEntry?.exemptionReason,
+        exemptionReason: exemptedEntry?.exemptionReason,
         url,
         headerType: 'response',
       };
@@ -358,6 +356,7 @@ export class BrowserManagement {
         },
         isBlocked: associatedCookie.blockedReasons.length > 0,
         blockedReasons: associatedCookie.blockedReasons,
+        exemptionReason: associatedCookie?.exemptionReason,
         url: this.pageRequests[pageId][requestId]?.url || '',
         headerType: 'request',
       };
