@@ -26,6 +26,7 @@ import {
   Libraries,
   type AccordionProps,
 } from '@ps-analysis-tool/library-detection';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface KnownBreakagesProps {
   libraryMatches: LibraryData;
@@ -42,7 +43,7 @@ const KnownBreakages = ({ libraryMatches }: KnownBreakagesProps) => {
 
   const dataMapping = [
     {
-      title: 'Known Breakages',
+      title: I18n.getMessage('knownBreakages'),
       count: Number(detectedLibraryNames.length),
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },
@@ -75,7 +76,7 @@ const KnownBreakages = ({ libraryMatches }: KnownBreakagesProps) => {
       </>
     ) : (
       <p className="text-center dark:text-bright-gray">
-        No libraries with known breakages found!
+        {I18n.getMessage('noLibraries')}
       </p>
     );
 

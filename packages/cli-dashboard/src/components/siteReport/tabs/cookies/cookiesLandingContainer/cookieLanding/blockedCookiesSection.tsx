@@ -88,7 +88,7 @@ const BlockedCookiesSection = ({
         containerClasses: '',
         onClick: (title: string) => {
           multiSelectItemUpdater({
-            blockedReasons: ['All'],
+            blockedReasons: [I18n.getMessage('selectAll')],
             'analytics.category': [title],
           });
         },

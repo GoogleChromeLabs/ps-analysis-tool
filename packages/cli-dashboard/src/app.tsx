@@ -69,35 +69,34 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const locale = navigator.language || 'en';
-      await I18n.loadDashboardMessagesData(locale);
+    //@ts-ignore
+    const messages = globalThis?.PSAT_DATA?.translations;
+    I18n.initMessages(messages);
 
-      // @ts-ignore
-      const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
-      setCompleteJsonReport(data);
+    // @ts-ignore
+    const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
+    setCompleteJsonReport(data);
 
-      let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [],
-        _libraryMatches: {
-          [key: string]: LibraryData;
-        } = {};
+    let _cookies: CookieFrameStorageType = {},
+      _technologies: TechnologyData[] = [],
+      _libraryMatches: {
+        [key: string]: LibraryData;
+      } = {};
 
-      if (type === DisplayType.SITEMAP) {
-        const extractedData = extractReportData(data);
+    if (type === DisplayType.SITEMAP) {
+      const extractedData = extractReportData(data);
 
-        _libraryMatches = extractedData.consolidatedLibraryMatches;
-        setLandingPageCookies(extractedData.landingPageCookies);
-      } else {
-        _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
-        _technologies = data[0].technologyData;
-        _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
-      }
+      _libraryMatches = extractedData.consolidatedLibraryMatches;
+      setLandingPageCookies(extractedData.landingPageCookies);
+    } else {
+      _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+      _technologies = data[0].technologyData;
+      _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
+    }
 
-      setCookies(_cookies);
-      setTechnologies(_technologies);
-      setLibraryMatches(_libraryMatches);
-    })();
+    setCookies(_cookies);
+    setTechnologies(_technologies);
+    setLibraryMatches(_libraryMatches);
   }, [type]);
 
   if (type === DisplayType.SITEMAP) {

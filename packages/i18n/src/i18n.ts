@@ -59,6 +59,14 @@ class I18n {
   }
 
   /**
+   * Returns the messages object.
+   * @returns {object} The messages object.
+   */
+  getMessages() {
+    return this.messages;
+  }
+
+  /**
    * Creates an array of possible locale strings based on the provided locale.
    * @param {string} locale - The locale string.
    * @returns {string[]} An array of locale strings.

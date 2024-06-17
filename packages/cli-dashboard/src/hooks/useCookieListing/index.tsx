@@ -80,19 +80,21 @@ const useCookieListing = (
       {
         header: I18n.getMessage('sameSite'),
         accessorKey: 'parsedCookie.sameSite',
-        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        cell: (info: InfoType) =>
+          I18n.getMessage((info?.toString() || '').toLowerCase()),
         widthWeightagePercentage: 8,
       },
       {
         header: I18n.getMessage('category'),
         accessorKey: 'analytics.category',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) =>
+          I18n.getMessage((info as string).toLowerCase() || 'uncategorized'),
         widthWeightagePercentage: 10,
       },
       {
         header: I18n.getMessage('platform'),
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) => (info ? info : I18n.getMessage('unknown')),
         widthWeightagePercentage: 10,
       },
       {
@@ -130,7 +132,8 @@ const useCookieListing = (
       {
         header: I18n.getMessage('expires'),
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) =>
+          info === 'Session' || !info ? I18n.getMessage('session') : info,
         widthWeightagePercentage: 7,
       },
     ],
@@ -147,10 +150,18 @@ const useCookieListing = (
           'analytics.category',
           tabCookies,
           parsedQuery?.filter?.['analytics.category'],
-          clearActivePanelQuery
+          clearActivePanelQuery,
+          true
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return (
+            I18n.getMessage(val?.toLowerCase() || 'uncategorized') ===
+            filterValue
+          );
+        },
       },
       isFirstParty: {
         title: I18n.getMessage('scope'),
@@ -195,7 +206,7 @@ const useCookieListing = (
           return val === (filterValue === I18n.getMessage('true'));
         },
       },
-      'parsedCookie.samesite': {
+      'parsedCookie.sameSite': {
         title: I18n.getMessage('sameSite'),
         hasStaticFilterValues: true,
         filterValues: {
@@ -261,7 +272,7 @@ const useCookieListing = (
           const val = value as string;
           switch (filterValue) {
             case I18n.getMessage('session'):
-              return val === I18n.getMessage('session');
+              return val === 'Session';
 
             case I18n.getMessage('shortTerm'):
               diff = Date.parse(val) - Date.now();
