@@ -21,7 +21,6 @@
     "proposal": "https://github.com/WICG/turtledove",
     "publicDiscussion": "https://github.com/WICG/turtledove/issues",
 		"publicExplainer": "https://github.com/WICG/turtledove/blob/main/FLEDGE.md",
-    "videoOverview": "https://www.youtube.com/watch?v=HB0ALd1K2Uc",
     "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/protected-audience"
   },
   "attribution-reporting": {
