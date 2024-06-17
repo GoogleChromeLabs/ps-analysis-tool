@@ -22,6 +22,7 @@ import {
   type CookieTableData,
   type CookieData,
   type CookieFrameStorageType,
+  type BlockedReason,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -35,9 +36,34 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
     .reduce((acc, cookieObj) => {
       Object.keys(cookieObj).forEach((key) => {
         if (acc[key]) {
-          (acc[key].frameUrls as string[]).push(
-            ...(cookieObj[key].frameUrls as string[])
+          const frameUrls: string[] = [
+            ...(acc[key]?.frameUrls ?? []),
+            ...(cookieObj[key]?.frameUrls ?? []),
+          ];
+
+          const blockedReasons: BlockedReason[] = [
+            ...new Set<BlockedReason>([
+              ...(acc[key]?.blockedReasons ?? []),
+              ...(cookieObj[key]?.blockedReasons ?? []),
+            ]),
+          ];
+
+          const frameIdList = Array.from(
+            new Set<number>([
+              ...((acc[key]?.frameIdList ?? []) as number[]),
+              ...((cookieObj[key]?.frameIdList ?? []) as number[]),
+            ])
           );
+
+          acc[key] = {
+            ...cookieObj[key],
+            ...acc[key],
+            blockedReasons,
+            frameIdList,
+            exemptionReason:
+              acc[key]?.exemptionReason || cookieObj[key]?.exemptionReason,
+            frameUrls,
+          };
         } else {
           acc[key] = cookieObj[key];
         }
