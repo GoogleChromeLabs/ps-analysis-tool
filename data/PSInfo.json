@@ -16,11 +16,12 @@
     "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/topics"
   },
   "protected-audience": {
-    "name": "Protected Audience (FLEDGE)",
-    "description": "A proposal to serve remarketing and custom audience use cases by allowing custom defined interested groups to be stored on-device and allowing an on-device auction that then matches appropriate ads with people in a desired interest group.",
+    "name": "Protected Audience",
+    "description": "The Protected Audience API is a Privacy Sandbox technology to serve remarketing and custom audience use cases, designed so third parties cannot track user browsing behavior across sites.",
     "proposal": "https://github.com/WICG/turtledove",
     "publicDiscussion": "https://github.com/WICG/turtledove/issues",
-    "videoOverview": "https://www.youtube.com/watch?v=HkvmYKqnytw",
+		"publicExplainer": "https://github.com/WICG/turtledove/blob/main/FLEDGE.md",
+    "videoOverview": "https://www.youtube.com/watch?v=HB0ALd1K2Uc",
     "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/protected-audience"
   },
   "attribution-reporting": {
