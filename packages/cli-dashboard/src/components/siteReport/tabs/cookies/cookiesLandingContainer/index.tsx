@@ -84,7 +84,7 @@ const CookiesLandingContainer = ({
 
     if (!isSiteMapLandingContainer) {
       baseSections.push({
-        name: 'Known Breakages',
+        name: I18n.getMessage('knownBreakages'),
         link: 'known-breakages',
         panel: {
           Element: KnownBreakages,
