@@ -21,12 +21,12 @@ import {
   BLOCK_STATUS,
   RESPONSE_EVENT,
   REQUEST_EVENT,
-  responsEvent,
+  responseEvent,
   requestEvent,
 } from '../../cookies.types';
 import deriveBlockingStatus from '../deriveBlockingStatus';
 
-const mockRespArray: responsEvent[] = [
+const mockRespArray: responseEvent[] = [
   {
     type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
     blocked: false,
