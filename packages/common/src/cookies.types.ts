@@ -92,7 +92,7 @@ export type requestEvent = {
   timeStamp: number;
 };
 
-export type responsEvent = {
+export type responseEvent = {
   type: RESPONSE_EVENT;
   requestId: string;
   url: string;
@@ -108,7 +108,7 @@ export type CookieData = {
   };
   networkEvents?: {
     requestEvents: requestEvent[];
-    responseEvents: responsEvent[];
+    responseEvents: responseEvent[];
   };
   analytics?: CookieAnalytics | null;
   url?: string;

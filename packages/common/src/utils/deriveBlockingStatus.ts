@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import {
-  type CookieData,
-  type requestEvent,
-  type responsEvent,
   BLOCK_STATUS,
-} from '@ps-analysis-tool/common';
+  CookieData,
+  responseEvent,
+  requestEvent,
+} from '../cookies.types';
 
 /**
  * Derives if a cookie was blocked in response header.
@@ -32,7 +31,7 @@ import {
  * 'null' - The cookie wa blocked in atleast one or all of the response headers
  * 'true' - The cookie was blocked in all of the response headers.
  */
-function deriveInboundBlocking(respEvents: responsEvent[]): BLOCK_STATUS {
+function deriveInboundBlocking(respEvents: responseEvent[]): BLOCK_STATUS {
   // if there are not response events the cookie must be stored in a previous visit
   // Or there is a javascript not used in the request header.
   if (respEvents.length === 0) {
@@ -83,11 +82,10 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): BLOCK_STATUS {
 }
 
 /**
- *
  * @param networkEvents Cookie network events
  * @returns blocking status object
  */
-export function deriveBlockingStatus(
+export default function deriveBlockingStatus(
   networkEvents: CookieData['networkEvents']
 ): CookieData['blockingStatus'] {
   if (!networkEvents) {
