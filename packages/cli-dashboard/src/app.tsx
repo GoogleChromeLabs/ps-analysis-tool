@@ -69,6 +69,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    sessionStorage.clear();
     //@ts-ignore
     const messages = globalThis?.PSAT_DATA?.translations;
     I18n.initMessages(messages);
