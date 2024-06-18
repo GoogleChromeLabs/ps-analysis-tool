@@ -70,6 +70,11 @@ export default function parseRequestWillBeSentExtraInfo(
         expires: effectiveExpirationDate,
         samesite: cookie.sameSite?.toLowerCase() ?? '',
         domain,
+        partitionKey:
+          cookie?.partitionKey && typeof cookie?.partitionKey === 'string'
+            ? cookie?.partitionKey
+            : //@ts-ignore This is to handle both stable and canary version of Chrome.
+              cookie?.partitionKey?.topLevelSite,
       },
       networkEvents: {
         requestEvents: [
