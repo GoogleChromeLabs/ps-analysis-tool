@@ -27,6 +27,7 @@ import {
   calculateDynamicFilterValues,
   evaluateSelectAllOption,
   evaluateStaticFilterValues,
+  calculateExemptionReason,
 } from '@ps-analysis-tool/design-system';
 import { type CookieTableData } from '@ps-analysis-tool/common';
 
@@ -315,6 +316,26 @@ const useCookieListing = (
         comparator: (value: InfoType, filterValue: string) => {
           return (value as string[])?.includes(filterValue);
         },
+      },
+      exemptionReason: {
+        title: 'Exemption Reason',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'exemptionReason',
+          parsedQuery
+        ),
+        filterValues: calculateExemptionReason(
+          tabCookies,
+          clearActivePanelQuery,
+          parsedQuery?.filter?.exemptionReason
+        ),
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val === filterValue;
+        },
+        useGenericPersistenceKey: true,
       },
     }),
     [clearActivePanelQuery, parsedQuery, tabCookies]
