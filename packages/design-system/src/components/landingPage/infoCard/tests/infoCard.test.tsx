@@ -31,6 +31,7 @@ import { PSInfoKey } from '../fetchPSInfo';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('should match the json file data with the component', () => {
   const tests = Object.values(PSInfoKey).map((infoKey) => {
@@ -42,6 +43,23 @@ describe('should match the json file data with the component', () => {
 
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      proposal: {
+        message: 'Proposal',
+      },
+      publicDiscussion: {
+        message: 'Public Discussion',
+      },
+      videoOverview: {
+        message: 'Video Overview',
+      },
+      devDocumentation: {
+        message: 'Dev Documentation',
+      },
+    });
+
     jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.fetch = function () {
       return Promise.resolve({

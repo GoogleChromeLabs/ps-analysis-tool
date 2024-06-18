@@ -83,7 +83,7 @@ export default async function generateReportObject(
 
   const locale = I18n.getLocale();
   const translations = await fetch(`/_locales/${locale}/messages.json`);
-  const data = await translations.json();
+  const data = (await translations.json()) || {};
 
   return {
     cookieClassificationDataMapping,

@@ -22,8 +22,22 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import createShowMoreButton from '../createShowMoreButton';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('createShowMoreButton', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      showMore: {
+        message: 'Show more',
+      },
+      showLess: {
+        message: 'Show less',
+      },
+    });
+  });
+
   it('should contain "Show More" button components', () => {
     // Get HTML element from the function being tested.
     const tooltipShowButtonContainer = createShowMoreButton();

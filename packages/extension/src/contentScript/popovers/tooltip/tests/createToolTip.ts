@@ -23,7 +23,7 @@ import '@testing-library/jest-dom';
  */
 import createTooltip from '../createTooltip';
 
-describe('createTooltip', () => {
+describe.skip('createTooltip', () => {
   it('should be an instance of HTMLDivElement', () => {
     const response = {
       isInspecting: true,

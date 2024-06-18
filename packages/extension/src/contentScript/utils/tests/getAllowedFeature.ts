@@ -22,6 +22,7 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import getAllowedFeatures from '../getAllowedFeatures';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 let frameAllowedFeatures: string[];
 let supportsFeaturePolicy: boolean;
@@ -42,6 +43,14 @@ describe('getAllowedFeatures', () => {
       }
 
       return {};
+    });
+
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      unknown: {
+        message: 'Unknown',
+      },
     });
   });
 

@@ -1616,7 +1616,7 @@
     "message": "Related Website Sets JSON Generator"
   },
   "rwsJsonGeneratorNote": {
-    "message": "This tool generates the JSON resources needed to make a Related Website Sets(RWS) submission. It 'does not' perform all the required technical validations (see full requirements $a_tag_start$here$a_tag_end$.",
+    "message": "This tool generates the JSON resources needed to make a Related Website Sets(RWS) submission. It 'does not' perform all the required technical validations (see full requirements $a_tag_start$here$a_tag_end$.)",
     "placeholders": {
       "a_tag_start": {
         "content": "$1",

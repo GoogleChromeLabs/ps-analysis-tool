@@ -42,6 +42,7 @@ import mockResponse, {
   known3pCookieWithValue,
 } from '../../../../../utils/test-data/cookieMockData';
 import { useCookie, useSettings } from '../../../stateProviders';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 jest.mock('../../../stateProviders', () => ({
   useCookie: jest.fn(),
@@ -118,6 +119,35 @@ describe('CookieTab', () => {
     };
     globalThis.location.protocol = 'chrome-extension://absda';
     globalThis.Promise = Promise;
+
+    I18n.initMessages({
+      noDescription: {
+        message: 'No description available.',
+      },
+      description: {
+        message: 'Description',
+      },
+      known1pCookie_description: {
+        message:
+          'This cookie is set by Quantcast, who present targeted advertising. Stores browser and HTTP request information.',
+      },
+      selectCookie: {
+        message: 'Select cookies to preview its value',
+      },
+      value: {
+        message: 'Value',
+      },
+      toggleAll: {
+        message: 'Toggle All',
+      },
+      uncategorized: {
+        message: 'Uncategorized',
+      },
+      marketing: {
+        message: 'Marketing',
+      },
+    });
+    globalThis.chrome.i18n = null;
   });
 
   it('should render a list of cookies with analytics', async () => {
@@ -310,8 +340,7 @@ describe('CookieTab', () => {
     const card = await screen.findByTestId('cookie-card');
 
     const description =
-      mockResponse.tabCookies?.[known1pCookie.name]?.analytics?.description ||
-      'No description available.';
+      'This cookie is set by Quantcast, who present targeted advertising. Stores browser and HTTP request information.';
 
     expect(await within(card).findByText(description)).toBeInTheDocument();
   });

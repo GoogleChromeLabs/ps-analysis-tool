@@ -22,8 +22,28 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import getFrameType from '../getFrameType';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('getFrameType', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      hiddenIframe: {
+        message: 'Hidden iframe',
+      },
+      nestedIframe: {
+        message: 'Nested iframe',
+      },
+      mainFrame: {
+        message: 'Main frame',
+      },
+      iframe: {
+        message: 'iframe',
+      },
+    });
+  });
+
   it('should return frame type (Hidden iframe)', () => {
     const iframe = document.createElement('iframe');
 

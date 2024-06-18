@@ -24,6 +24,7 @@ import '@testing-library/jest-dom';
  */
 import { useSettings } from '../../../../stateProviders/settings';
 import InformationContainer from '../informationContainer';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 jest.mock('../../../../stateProviders/settings', () => ({
   useSettings: jest.fn(),
@@ -32,6 +33,34 @@ jest.mock('../../../../stateProviders/settings', () => ({
 const mockUseSettingsStore = useSettings as jest.Mock;
 
 describe('InformationContainer', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      openTabs: {
+        message: 'Open Tabs',
+      },
+      activeExtensions: {
+        message: 'Active Extensions',
+      },
+      chromeVersion: {
+        message: 'Chrome Version',
+      },
+      pSATVersion: {
+        message: 'PSAT Version',
+      },
+      systemArchitecture: {
+        message: 'OS - System Architecture',
+      },
+      systemInformation: {
+        message: 'System Information',
+      },
+      copyToClipboard: {
+        message: 'Copy to clipboard',
+      },
+    });
+  });
+
   it('should render the component', () => {
     mockUseSettingsStore.mockReturnValue({
       currentTabs: 0,

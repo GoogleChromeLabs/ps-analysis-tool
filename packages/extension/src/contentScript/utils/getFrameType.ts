@@ -22,7 +22,7 @@ const getFrameType = (
   tagName: string
 ): string => {
   if (isHidden) {
-    return I18n.getMessage('hiddenFrame');
+    return I18n.getMessage('hiddenIframe');
   }
 
   if (insideFrame) {

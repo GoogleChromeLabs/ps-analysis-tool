@@ -32,6 +32,7 @@ import { useCookie, useSettings } from '../stateProviders';
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import data from '../../../utils/test-data/cookieMockData';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 jest.mock('../stateProviders', () => ({
   useCookie: jest.fn(),
@@ -165,6 +166,13 @@ describe('App', () => {
           }),
       });
     } as unknown as typeof fetch;
+
+    I18n.initMessages({
+      refreshPanel: {
+        message: 'Refresh Panel',
+      },
+    });
+    globalThis.chrome.i18n = null;
   });
 
   it('Should show cookie table if frame is selected', async () => {
@@ -225,7 +233,7 @@ describe('App', () => {
       render(<App />);
     });
 
-    expect(await screen.findByText('Refresh panel')).toBeInTheDocument();
+    expect(await screen.findByText('Refresh Panel')).toBeInTheDocument();
   });
 
   afterAll(() => {

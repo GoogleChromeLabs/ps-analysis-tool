@@ -27,6 +27,7 @@ import { CookieTableData } from '@ps-analysis-tool/common';
  */
 import CookieTable from '..';
 import { InfoType } from '../../table';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('CookieTable', () => {
   global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -123,6 +124,28 @@ describe('CookieTable', () => {
     hostname: '',
     setSelectedFrameCookie: jest.fn(),
   };
+
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      openFilterOptions: {
+        message: 'Open filter options',
+      },
+      clearAll: {
+        message: 'Clear all',
+      },
+      search: {
+        message: 'Search',
+      },
+      toggleAll: {
+        message: 'Toggle All',
+      },
+      clearSearch: {
+        message: 'Clear Search',
+      },
+    });
+  });
 
   it('should render the table', async () => {
     render(<CookieTable {...initialProps} />);

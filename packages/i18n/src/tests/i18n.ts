@@ -90,10 +90,10 @@ describe('I18n', () => {
     expect(existsSyncMock).toHaveBeenCalledWith(
       'packages/i18n/_locales/messages/hi/messages.json'
     );
-    expect(existsSyncMock).toHaveBeenCalledTimes(4);
+    expect(existsSyncMock).toHaveBeenCalledTimes(1);
 
     expect(readFileSyncMock).toHaveBeenCalledWith(
-      'packages/i18n/_locales/messages/en/messages.json',
+      'packages/i18n/_locales/messages/hi/messages.json',
       {
         encoding: 'utf-8',
       }
