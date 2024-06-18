@@ -28,8 +28,13 @@ import {
   evaluateSelectAllOption,
   evaluateStaticFilterValues,
   calculateExemptionReason,
+  type TableRow,
 } from '@ps-analysis-tool/design-system';
-import { type CookieTableData } from '@ps-analysis-tool/common';
+import { BLOCK_STATUS, type CookieTableData } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import NamePrefixIconSelector from '../../components/utils/NamePrefixIconSelector';
 
 const useCookieListing = (
   tabCookies: CookieTableData[],
@@ -56,7 +61,25 @@ const useCookieListing = (
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        widthWeightagePercentage: 15,
+        widthWeightagePercentage: 13,
+        enableBodyCellPrefixIcon: true,
+        bodyCellPrefixIcon: {
+          Element: NamePrefixIconSelector,
+        },
+        showBodyCellPrefixIcon: (row: TableRow) => {
+          const isBlocked = Boolean(
+            (row.originalData as CookieTableData)?.blockingStatus
+              ?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED ||
+              (row.originalData as CookieTableData)?.blockingStatus
+                ?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED
+          );
+
+          const isDomainInAllowList = Boolean(
+            (row.originalData as CookieTableData)?.isDomainInAllowList
+          );
+
+          return isBlocked || isDomainInAllowList;
+        },
       },
       {
         header: 'Scope',

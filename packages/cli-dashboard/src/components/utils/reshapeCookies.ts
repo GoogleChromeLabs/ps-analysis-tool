@@ -23,6 +23,7 @@ import {
   type CookieData,
   type CookieFrameStorageType,
   type BlockedReason,
+  deriveBlockingStatus,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -55,6 +56,17 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
             ])
           );
 
+          const networkEvents: CookieData['networkEvents'] = {
+            requestEvents: [
+              ...(cookieObj[key]?.networkEvents?.requestEvents || []),
+              ...(acc[key].networkEvents?.requestEvents || []),
+            ],
+            responseEvents: [
+              ...(cookieObj[key]?.networkEvents?.responseEvents || []),
+              ...(acc[key].networkEvents?.responseEvents || []),
+            ],
+          };
+
           acc[key] = {
             ...cookieObj[key],
             ...acc[key],
@@ -63,6 +75,8 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
             exemptionReason:
               acc[key]?.exemptionReason || cookieObj[key]?.exemptionReason,
             frameUrls,
+            networkEvents,
+            blockingStatus: deriveBlockingStatus(networkEvents),
           };
         } else {
           acc[key] = cookieObj[key];
@@ -82,7 +96,9 @@ const createCookieObj = (
   Object.fromEntries(
     Object.values(cookies).map((cookie) => [
       cookie.parsedCookie.name +
+        ':' +
         cookie.parsedCookie.domain +
+        ':' +
         cookie.parsedCookie.path,
       {
         parsedCookie: cookie.parsedCookie,
@@ -99,6 +115,8 @@ const createCookieObj = (
         isFirstParty: cookie.isFirstParty,
         frameIdList: [frame], // Hot fix: For Displaying cookies in CLI Dashboard.
         isBlocked: cookie.isBlocked,
+        networkEvents: cookie.networkEvents,
+        blockingStatus: cookie.blockingStatus,
         frameUrls: [frame],
         exemptionReason: cookie.exemptionReason,
       } as CookieTableData,
