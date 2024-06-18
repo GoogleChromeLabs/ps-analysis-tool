@@ -278,4 +278,6 @@ const saveResultsAsHTML = async (
 
   await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
-})();
+})().catch(() => {
+  process.exit(process?.exitCode ?? 0);
+});
