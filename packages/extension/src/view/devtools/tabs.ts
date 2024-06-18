@@ -71,7 +71,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
-    title: () => I18n.getMessage('privacySandbox'),
+    title: () => 'Privacy Sandbox',
     panel: {
       Element: PrivacySandbox,
     },
