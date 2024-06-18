@@ -31,7 +31,7 @@ describe('reshapeCookies', () => {
   it('should return an object with the cookies', () => {
     const cookies = {
       'https://edition.cnn.com': {
-        'countryCode.cnn.com:/': {
+        'countryCode:.cnn.com:/': {
           parsedCookie: {
             name: 'countryCode',
             domain: '.cnn.com',
