@@ -86,7 +86,6 @@ const CookiesListing = ({
         className="h-full flex"
       >
         <CookieTable
-          //@ts-ignore
           data={cookies}
           tableColumns={tableColumns}
           tableFilters={filters}
