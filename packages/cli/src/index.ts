@@ -278,6 +278,9 @@ const saveResultsAsHTML = async (
 
   await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
-})().catch(() => {
+})().catch((error) => {
+  console.log('Some error occured while analysing the website.');
+  console.log('For more information check the stack trace below:\n');
+  console.log(error);
   process.exit(process?.exitCode ?? 0);
 });
