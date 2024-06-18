@@ -156,6 +156,17 @@ const saveResultsAsHTML = async (
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
+  const availableLocales = ['en', 'hi', 'ja', 'ko', 'pt-BR'];
+
+  if (locale && !availableLocales.includes(locale)) {
+    console.error(
+      `Locale '${locale}' is not supported. Supported locales are ${availableLocales.join(
+        ', '
+      )}. Please provide a valid locale.`
+    );
+    process.exit(1);
+  }
+
   await validateArgs(
     url,
     sitemapUrl,
