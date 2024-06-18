@@ -137,7 +137,7 @@ const SidebarChild = ({
           </button>
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
-          <div className="mr-1 pointer-events-none">
+          <div className="mr-1 pointer-events-none w-4 h-4">
             {isKeySelected(itemKey) && isSidebarFocused
               ? SelectedIcon && (
                   <SelectedIcon {...sidebarItem.selectedIcon.props} />
