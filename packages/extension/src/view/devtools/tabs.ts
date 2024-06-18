@@ -42,7 +42,7 @@ import {
   type SidebarItems,
   InfoIcon,
   SIDEBAR_ITEMS_KEYS,
-  CrossedEye,
+  GroupsIcon,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -179,10 +179,16 @@ const TABS: SidebarItems = {
               Element: ProtectedAudience,
             },
             icon: {
-              Element: CrossedEye,
+              Element: GroupsIcon,
+              props: {
+                className: 'fill-gray',
+              },
             },
             selectedIcon: {
-              Element: CrossedEye,
+              Element: GroupsIcon,
+              props: {
+                className: 'fill-white',
+              },
             },
             children: {},
           },
