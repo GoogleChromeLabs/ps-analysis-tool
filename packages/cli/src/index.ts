@@ -251,6 +251,7 @@ const saveResultsAsHTML = async (
       text: 'Done analyzing technologies.',
     });
   }
+
   const result = urlsToProcess.map((_url, ind) => {
     const detectedMatchingSignatures: LibraryData = {
       ...detectMatchingSignatures(
