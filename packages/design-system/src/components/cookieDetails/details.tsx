@@ -126,7 +126,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         </div>
       )}
       {hasValidBlockedReason && isUsingCDP && (
-        <>
+        <div className="mb-4">
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
             {I18n.getMessage('blockedReason')}
           </p>
@@ -134,7 +134,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             className="text-outer-space-crayola dark:text-bright-gray"
             dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
           />
-        </>
+        </div>
       )}
 
       {selectedCookie?.blockingStatus?.inboundBlock ===
@@ -271,6 +271,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             />
           </div>
         )}
+
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>{I18n.getMessage('cookieValue')}</span>
         <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
