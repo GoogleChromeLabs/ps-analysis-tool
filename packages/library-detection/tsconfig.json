@@ -13,7 +13,12 @@
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
   ],
-  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
+  "exclude": [
+    "**/tests/**/*.ts",
+    "**/tests/**/*.tsx",
+    "dist/**",
+    "dist-types/**"
+  ],
   "references": [
     { "path": "../common" },
     {
