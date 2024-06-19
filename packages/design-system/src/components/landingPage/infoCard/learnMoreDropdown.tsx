@@ -38,6 +38,10 @@ const LABELS = [
     linkLabel: 'proposalNote',
   },
   {
+    label: 'Public Explainer',
+    linkLabel: 'Implementation explainer',
+  },
+  {
     label: 'publicDiscussion',
     linkLabel: 'publicDiscussionNote',
   },
@@ -57,7 +61,13 @@ interface LearnMoreDropdownProps {
 }
 
 const LearnMoreDropdown = ({
-  PSInfo: { proposal, publicDiscussion, videoOverview, devDocumentation },
+  PSInfo: {
+    proposal,
+    publicExplainer,
+    publicDiscussion,
+    videoOverview,
+    devDocumentation,
+  },
 }: LearnMoreDropdownProps) => {
   return (
     <>
@@ -66,8 +76,18 @@ const LearnMoreDropdown = ({
           role="list"
           className="divide-y divide-gray-200 dark:divide-gray-500"
         >
-          {[proposal, publicDiscussion, videoOverview, devDocumentation].map(
-            (value, index) => (
+          {[
+            proposal,
+            publicExplainer,
+            publicDiscussion,
+            videoOverview,
+            devDocumentation,
+          ].map((value, index) => {
+            if (!value) {
+              return null;
+            }
+
+            return (
               <RenderLink
                 key={index}
                 link={
@@ -80,8 +100,8 @@ const LearnMoreDropdown = ({
                 label={I18n.getMessage(LABELS[index].label)}
                 linkLabel={I18n.getMessage(LABELS[index].linkLabel)}
               />
-            )
-          )}
+            );
+          })}
         </ul>
       </div>
     </>

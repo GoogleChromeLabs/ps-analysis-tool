@@ -21,6 +21,7 @@ import { fetchLocalData } from '@ps-analysis-tool/common';
 export enum PSInfoKey {
   'Topics' = 'topics',
   'AttributionReporting' = 'attribution-reporting',
+  'ProtectedAudience' = 'protected-audience',
   'BounceTracking' = 'bounce-tracking',
   'UserAgentReduction' = 'user-agent-reduction',
   'RelatedWebsiteSets' = 'related-website-sets',
@@ -33,6 +34,7 @@ export type PSInfo = {
   name: string;
   description: string;
   proposal: string;
+  publicExplainer: string;
   publicDiscussion: string;
   videoOverview: string;
   devDocumentation: string;

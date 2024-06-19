@@ -26,6 +26,8 @@ import {
   type LibraryMatchers,
   resolveWithTimeout,
   delay,
+  RESPONSE_EVENT,
+  REQUEST_EVENT,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -241,6 +243,15 @@ export class BrowserManagement {
         }
       );
 
+      this.pageResponses[pageId][requestId]?.cookies.forEach((cookie) => {
+        cookie.networkEvents?.responseEvents.map((event) => {
+          if (event.requestId === requestId) {
+            event.url = response.url;
+          }
+          return event;
+        });
+      });
+
       this.pageResponses[pageId][requestId] = {
         frameId,
         url: response.url,
@@ -258,46 +269,78 @@ export class BrowserManagement {
       requestId,
     }: Protocol.Network.ResponseReceivedExtraInfoEvent
   ) {
-    if (!headers['set-cookie']) {
+    const headersToBeParsed = headers['set-cookie'] ?? headers['Set-Cookie'];
+    if (!headersToBeParsed) {
       return;
     }
-    const cookies = headers['set-cookie'].split('\n').map((headerLine) => {
-      const parsedCookie = parse(headerLine);
-      const partitionKey = headerLine.includes('Partitioned')
-        ? cookiePartitionKey
-        : undefined;
 
-      const blockedEntry = blockedCookies.find((c) => {
-        return c.cookie?.name === parsedCookie.name;
+    const cookies: CookieData[] = headersToBeParsed
+      .split('\n')
+      .map((headerLine) => {
+        const parsedCookie = parse(headerLine);
+        const partitionKey = headerLine.includes('Partitioned')
+          ? cookiePartitionKey
+          : undefined;
+
+        const url = this.pageResponses[pageId][requestId]?.url;
+
+        if (!parsedCookie.domain && url) {
+          parsedCookie.domain = new URL(url).hostname;
+        }
+        if (parsedCookie.domain && parsedCookie.domain[0] !== '.') {
+          parsedCookie.domain = '.' + parsedCookie.domain;
+        }
+
+        const blockedEntry = blockedCookies.find((c) => {
+          if (c.cookie) {
+            return (
+              c.cookie?.name?.trim() === parsedCookie.name?.trim() &&
+              c.cookie.domain?.trim() === parsedCookie.domain?.trim() &&
+              c.cookie.path?.trim() === parsedCookie.path?.trim()
+            );
+          } else {
+            const temporaryParsedCookie = parse(c.cookieLine);
+
+            return (
+              temporaryParsedCookie.name?.trim() ===
+                parsedCookie.name?.trim() &&
+              temporaryParsedCookie.domain?.trim() ===
+                parsedCookie.domain?.trim() &&
+              temporaryParsedCookie.path?.trim() === parsedCookie.path?.trim()
+            );
+          }
+        });
+
+        return {
+          parsedCookie: {
+            name: parsedCookie.name,
+            domain: parsedCookie.domain,
+            path: parsedCookie.path || '/',
+            value: parsedCookie.value,
+            sameSite: parsedCookie.samesite || 'Lax',
+            expires: parsedCookie.expires || 'Session',
+            httpOnly: parsedCookie.httponly || false,
+            secure: parsedCookie.secure || false,
+            partitionKey,
+          },
+          networkEvents: {
+            responseEvents: [
+              {
+                type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
+                requestId,
+                url,
+                blocked: Boolean(blockedEntry),
+                timeStamp: Date.now(),
+              },
+            ],
+            requestEvents: [],
+          },
+          isBlocked: Boolean(blockedEntry),
+          blockedReasons: blockedEntry?.blockedReasons,
+          url,
+          headerType: 'response',
+        };
       });
-
-      const url = this.pageResponses[pageId][requestId]?.url;
-
-      if (!parsedCookie.domain && url) {
-        parsedCookie.domain = new URL(url).hostname;
-      }
-      if (parsedCookie.domain && parsedCookie.domain[0] !== '.') {
-        parsedCookie.domain = '.' + parsedCookie.domain;
-      }
-
-      return {
-        parsedCookie: {
-          name: parsedCookie.name,
-          domain: parsedCookie.domain,
-          path: parsedCookie.path || '/',
-          value: parsedCookie.value,
-          sameSite: parsedCookie.samesite || 'Lax',
-          expires: parsedCookie.expires || 'Session',
-          httpOnly: parsedCookie.httponly || false,
-          secure: parsedCookie.secure || false,
-          partitionKey,
-        },
-        isBlocked: Boolean(blockedEntry),
-        blockedReasons: blockedEntry?.blockedReasons,
-        url,
-        headerType: 'response',
-      };
-    });
 
     const prevCookies = this.pageResponses[pageId][requestId]?.cookies || [];
     const mergedCookies = [...prevCookies, ...(cookies || [])];
@@ -344,6 +387,18 @@ export class BrowserManagement {
           httpOnly: associatedCookie.cookie.httpOnly || false,
           secure: associatedCookie.cookie.secure || false,
           partitionKey: associatedCookie.cookie.partitionKey,
+        },
+        networkEvents: {
+          requestEvents: [
+            {
+              type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
+              requestId,
+              url: this.pageRequests[pageId][requestId]?.url || '',
+              blocked: associatedCookie.blockedReasons.length > 0,
+              timeStamp: Date.now(),
+            },
+          ],
+          responseEvents: [],
         },
         isBlocked: associatedCookie.blockedReasons.length > 0,
         blockedReasons: associatedCookie.blockedReasons,

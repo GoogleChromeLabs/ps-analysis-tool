@@ -106,18 +106,27 @@ export const parseNetworkDataToCookieData = async (
           ':' +
           cookie.parsedCookie.path;
 
-        const prevEntry = _frameCookies[key];
+        const prevEntry = _frameCookies[key.trim()];
 
         const blockedReasonsSet = new Set([
           ...(cookie?.blockedReasons || []),
           ...(prevEntry?.blockedReasons || []),
         ]);
 
-        _frameCookies[key] = {
+        const networkEvents = {
+          requestEvents: prevEntry?.networkEvents?.requestEvents || [],
+          responseEvents: [
+            ...(cookie?.networkEvents?.responseEvents || []),
+            ...(prevEntry?.networkEvents?.responseEvents || []),
+          ],
+        };
+
+        _frameCookies[key.trim()] = {
           ...cookie,
           url: response.url,
           blockedReasons: Array.from(blockedReasonsSet),
           isBlocked: Array.from(blockedReasonsSet).length > 0,
+          networkEvents,
           parsedCookie: {
             ...cookie.parsedCookie,
             domain: parsedDomain || '',
@@ -145,17 +154,26 @@ export const parseNetworkDataToCookieData = async (
           ':' +
           cookie.parsedCookie.path;
 
-        const prevEntry = _frameCookies[key];
+        const prevEntry = _frameCookies[key.trim()];
 
         const blockedReasonsSet = new Set([
           ...(cookie?.blockedReasons || []),
           ...(prevEntry?.blockedReasons || []),
         ]);
 
-        _frameCookies[key] = {
+        const networkEvents = {
+          requestEvents: [
+            ...(cookie?.networkEvents?.requestEvents || []),
+            ...(prevEntry?.networkEvents?.requestEvents || []),
+          ],
+          responseEvents: prevEntry?.networkEvents?.responseEvents || [],
+        };
+
+        _frameCookies[key.trim()] = {
           ...cookie,
           url: request.url,
           blockedReasons: Array.from(blockedReasonsSet),
+          networkEvents,
           isBlocked: Array.from(blockedReasonsSet).length > 0,
           parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
         };

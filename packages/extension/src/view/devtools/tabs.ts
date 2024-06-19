@@ -42,6 +42,7 @@ import {
   type SidebarItems,
   InfoIcon,
   SIDEBAR_ITEMS_KEYS,
+  GroupsIcon,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -68,6 +69,7 @@ import {
   FacilitatedTesting,
 } from './components';
 import { I18n } from '@ps-analysis-tool/i18n';
+import ProtectedAudience from './components/privateAdvertising/protectedAudience';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -169,6 +171,25 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: AttributionIconWhite,
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE]: {
+            title: 'Protected Audience',
+            panel: {
+              Element: ProtectedAudience,
+            },
+            icon: {
+              Element: GroupsIcon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: GroupsIcon,
+              props: {
+                className: 'fill-white',
+              },
             },
             children: {},
           },
