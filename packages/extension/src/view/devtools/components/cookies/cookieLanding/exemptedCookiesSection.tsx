@@ -62,7 +62,10 @@ const ExemptedCookiesSection = () => {
       title: 'Exempted cookies',
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
-      onClick: () => selectedItemUpdater('All', 'exemptionReason'),
+      onClick:
+        cookieStats.exemptedCookies.total > 0
+          ? () => selectedItemUpdater('All', 'exemptionReason')
+          : null,
     },
   ];
 
