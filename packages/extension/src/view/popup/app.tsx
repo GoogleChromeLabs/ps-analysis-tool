@@ -79,7 +79,7 @@ const App: React.FC = () => {
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg mb-2">
+        <p className="font-bold text-lg mb-2 text-center">
           {I18n.getMessage('noMoreAnalysis')}
         </p>
         <p className="text-chart-label text-xs">
