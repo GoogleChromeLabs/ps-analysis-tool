@@ -52,7 +52,7 @@ describe('extractReportData', () => {
             url: '',
             pageUrl: 'https://edition.cnn.com/index.html',
             isBlocked: false,
-            blockedReasons: ['ThirdPartyPhaseout', 'ExcludeDomainNonASCII'],
+            blockedReasons: ['ThirdPartyPhaseout'],
             isFirstParty: true,
           },
         },
