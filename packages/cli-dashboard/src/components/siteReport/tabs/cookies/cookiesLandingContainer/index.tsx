@@ -44,6 +44,7 @@ interface CookiesLandingContainerProps {
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
   isSiteMapLandingContainer?: boolean;
+  menuBarScrollContainerId?: string;
 }
 
 const CookiesLandingContainer = ({
@@ -53,6 +54,7 @@ const CookiesLandingContainer = ({
   downloadReport,
   libraryMatches,
   isSiteMapLandingContainer = false,
+  menuBarScrollContainerId = 'dashboard-layout-container',
 }: CookiesLandingContainerProps) => {
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const baseSections: Array<CookiesLandingSection> = [
@@ -115,7 +117,7 @@ const CookiesLandingContainer = ({
           disableReportDownload={false}
           downloadReport={downloadReport}
           menuData={menuData}
-          scrollContainerId="dashboard-layout-container"
+          scrollContainerId={menuBarScrollContainerId}
         />
         {sections.map(({ link, panel: { Element, props } }) => (
           <div id={link} key={link} className="cookie-landing-section">
