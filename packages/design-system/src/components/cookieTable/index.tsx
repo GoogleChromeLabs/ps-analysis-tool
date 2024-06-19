@@ -56,6 +56,7 @@ interface CookieTableProps {
     row: TableRow
   ) => void;
   hideExport?: boolean;
+  isCLI?: boolean;
   hostname: string;
 }
 
@@ -79,6 +80,7 @@ const CookieTable = forwardRef<
     extraInterfaceToTopBar,
     onRowContextMenu,
     hideExport,
+    isCLI = false,
     hostname,
   }: CookieTableProps,
   ref
@@ -194,7 +196,7 @@ const CookieTable = forwardRef<
         exportTableData={
           !hideExport
             ? (rows: TableRow[]) => {
-                exportCookies(rows, hostname);
+                exportCookies(isCLI, rows, hostname);
               }
             : undefined
         }

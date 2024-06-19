@@ -75,6 +75,7 @@ const CookiesWithIssues = ({
           selectedFrameCookie={selectedFrameCookie}
           hideExport={true}
           setSelectedFrameCookie={setSelectedFrameCookie}
+          isCLI
         />
       </Resizable>
       <CookieDetails

@@ -15,22 +15,18 @@
  */
 
 /**
- * External dependencies.
- */
-import {
-  RESPONSE_EVENT,
-  REQUEST_EVENT,
-  type responsEvent,
-  type requestEvent,
-  BLOCK_STATUS,
-} from '@ps-analysis-tool/common';
-
-/**
  * Internal dependencies.
  */
-import { deriveBlockingStatus } from '../utils/deriveBlockingStatus';
+import {
+  BLOCK_STATUS,
+  RESPONSE_EVENT,
+  REQUEST_EVENT,
+  responseEvent,
+  requestEvent,
+} from '../../cookies.types';
+import deriveBlockingStatus from '../deriveBlockingStatus';
 
-const mockRespArray: responsEvent[] = [
+const mockRespArray: responseEvent[] = [
   {
     type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
     blocked: false,

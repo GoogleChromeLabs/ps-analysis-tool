@@ -20,7 +20,7 @@
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -95,6 +95,7 @@ const CookiesListing = ({
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           isFiltersSidebarOpen={isSidebarOpen}
+          isCLI
           hostname={path}
         />
       </Resizable>

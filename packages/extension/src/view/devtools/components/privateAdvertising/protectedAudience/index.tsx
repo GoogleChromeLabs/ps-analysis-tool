@@ -14,6 +14,22 @@
  * limitations under the License.
  */
 
-export { default as generateCLICookieTableCSV } from './generateCLICookieTableCSV';
-export { default as generateExtensionCookieTableCSV } from './generatExtensionCookietableCSV';
-export * from './precalculatedFiltersUtils';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+
+const ProtectedAudience = () => {
+  return (
+    <div data-testid="protected-audience-content" className="h-full w-full">
+      <LandingPage
+        title="Protected Audience"
+        psInfoKey={PSInfoKey.ProtectedAudience}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
+  );
+};
+
+export default ProtectedAudience;
