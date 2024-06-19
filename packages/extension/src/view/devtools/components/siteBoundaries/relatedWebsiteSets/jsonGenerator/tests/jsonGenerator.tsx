@@ -36,7 +36,7 @@ import type {
 import JsonOutput from '../jsonOutput';
 import { I18n } from '@ps-analysis-tool/i18n';
 
-describe.skip('RWSJsonGenerator', () => {
+describe('RWSJsonGenerator', () => {
   beforeAll(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
     globalThis.chrome.i18n = null;
@@ -45,7 +45,13 @@ describe.skip('RWSJsonGenerator', () => {
         message: 'Email address or group alias if available',
       },
       shouldMatchFormat: {
-        message: 'should be matching the format https://<example.com>',
+        message: 'should be matching the format https://example.com',
+      },
+      affiliationHeading: {
+        message: 'Affiliation to primary domain',
+      },
+      rwsJsonGenerator: {
+        message: 'Related Website Sets JSON Generator',
       },
     });
   });
@@ -83,7 +89,7 @@ describe.skip('RWSJsonGenerator', () => {
 
     expect(
       await screen.findByText(
-        'Url should be matching the format https://<example.com>'
+        'Url should be matching the format https://example.com'
       )
     ).toBeInTheDocument();
 
@@ -114,7 +120,7 @@ describe.skip('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[0]
     ).toBeInTheDocument();
@@ -167,7 +173,7 @@ describe.skip('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[1]
     ).toBeInTheDocument();
@@ -216,7 +222,7 @@ describe.skip('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[1]
     ).toBeInTheDocument();
@@ -224,7 +230,7 @@ describe.skip('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[2]
     ).toBeInTheDocument();

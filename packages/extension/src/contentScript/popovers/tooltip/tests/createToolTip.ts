@@ -22,8 +22,28 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import createTooltip from '../createTooltip';
+import { I18n } from '@ps-analysis-tool/i18n';
 
-describe.skip('createTooltip', () => {
+describe('createTooltip', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      hiddenIframe: {
+        message: 'Hidden iframe',
+      },
+      nestedIframe: {
+        message: 'Nested iframe',
+      },
+      mainFrame: {
+        message: 'Main frame',
+      },
+      unknown: {
+        message: 'Unknown',
+      },
+    });
+  });
+
   it('should be an instance of HTMLDivElement', () => {
     const response = {
       isInspecting: true,
