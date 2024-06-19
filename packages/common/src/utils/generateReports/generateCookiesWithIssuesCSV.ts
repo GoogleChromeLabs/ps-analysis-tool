@@ -25,19 +25,19 @@ import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 import sanitizeCsvRecord from '../sanitizeCsvRecord';
 
 export const COOKIES_WITH_ISSUES_DATA_HEADERS = [
-  I18n.getMessage('name'),
-  I18n.getMessage('scope'),
-  I18n.getMessage('domain'),
-  I18n.getMessage('partitionKey'),
-  I18n.getMessage('sameSite'),
-  I18n.getMessage('category'),
-  I18n.getMessage('platform'),
-  I18n.getMessage('httpOnly'),
-  I18n.getMessage('secure'),
-  I18n.getMessage('value'),
-  I18n.getMessage('path'),
-  I18n.getMessage('expires'),
-  I18n.getMessage('gDPR'),
+  () => I18n.getMessage('name'),
+  () => I18n.getMessage('scope'),
+  () => I18n.getMessage('domain'),
+  () => I18n.getMessage('partitionKey'),
+  () => I18n.getMessage('sameSite'),
+  () => I18n.getMessage('category'),
+  () => I18n.getMessage('platform'),
+  () => I18n.getMessage('httpOnly'),
+  () => I18n.getMessage('secure'),
+  () => I18n.getMessage('value'),
+  () => I18n.getMessage('path'),
+  () => I18n.getMessage('expires'),
+  () => I18n.getMessage('gDPR'),
 ];
 
 const generateCookiesWithIssuesCSV = (
@@ -85,7 +85,11 @@ const generateCookiesWithIssuesCSV = (
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return COOKIES_WITH_ISSUES_DATA_HEADERS.join(',') + '\r\n' + cookieRecords;
+  return (
+    COOKIES_WITH_ISSUES_DATA_HEADERS.map((header) => header()).join(',') +
+    '\r\n' +
+    cookieRecords
+  );
 };
 
 export default generateCookiesWithIssuesCSV;

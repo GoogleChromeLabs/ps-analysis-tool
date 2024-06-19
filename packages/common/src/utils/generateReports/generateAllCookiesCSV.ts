@@ -29,20 +29,20 @@ import {
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 
 export const COOKIES_DATA_HEADER = [
-  I18n.getMessage('name'),
-  I18n.getMessage('scope'),
-  I18n.getMessage('domain'),
-  I18n.getMessage('partitionKey'),
-  I18n.getMessage('sameSite'),
-  I18n.getMessage('category'),
-  I18n.getMessage('platform'),
-  I18n.getMessage('httpOnly'),
-  I18n.getMessage('secure'),
-  I18n.getMessage('value'),
-  I18n.getMessage('path'),
-  I18n.getMessage('expires'),
-  I18n.getMessage('issues'),
-  I18n.getMessage('gDPR'),
+  () => I18n.getMessage('name'),
+  () => I18n.getMessage('scope'),
+  () => I18n.getMessage('domain'),
+  () => I18n.getMessage('partitionKey'),
+  () => I18n.getMessage('sameSite'),
+  () => I18n.getMessage('category'),
+  () => I18n.getMessage('platform'),
+  () => I18n.getMessage('httpOnly'),
+  () => I18n.getMessage('secure'),
+  () => I18n.getMessage('value'),
+  () => I18n.getMessage('path'),
+  () => I18n.getMessage('expires'),
+  () => I18n.getMessage('issues'),
+  () => I18n.getMessage('gDPR'),
 ];
 
 const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
@@ -87,7 +87,11 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return COOKIES_DATA_HEADER.join(',') + '\r\n' + cookieRecords;
+  return (
+    COOKIES_DATA_HEADER.map((header) => header()).join(',') +
+    '\r\n' +
+    cookieRecords
+  );
 };
 
 export default generateAllCookiesCSV;

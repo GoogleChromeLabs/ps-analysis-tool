@@ -24,11 +24,11 @@ import sanitizeCsvRecord from '../sanitizeCsvRecord';
 import { CompleteJson } from '../../cookies.types';
 
 const TECHNOLOGIES_DATA_HEADER = [
-  I18n.getMessage('name'),
-  I18n.getMessage('description'),
-  I18n.getMessage('confidence'),
-  I18n.getMessage('website'),
-  I18n.getMessage('categories'),
+  () => I18n.getMessage('name'),
+  () => I18n.getMessage('description'),
+  () => I18n.getMessage('confidence'),
+  () => I18n.getMessage('website'),
+  () => I18n.getMessage('categories'),
 ];
 
 const generateTechnologyCSV = (siteAnalysisData: CompleteJson): string => {
@@ -55,7 +55,11 @@ const generateTechnologyCSV = (siteAnalysisData: CompleteJson): string => {
     technologyRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return TECHNOLOGIES_DATA_HEADER.join(',') + '\r\n' + technologyRecords;
+  return (
+    TECHNOLOGIES_DATA_HEADER.map((header) => header()).join(',') +
+    '\r\n' +
+    technologyRecords
+  );
 };
 
 export default generateTechnologyCSV;
