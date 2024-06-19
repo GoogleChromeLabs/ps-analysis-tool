@@ -84,6 +84,9 @@ export class BrowserManagement {
 
     if (enable3pCookiePhaseout) {
       args.push('--test-third-party-cookie-phaseout');
+      args.push(
+        '--enable-features="FirstPartySets,StorageAccessAPI,StorageAccessAPIForOriginExtension,PageInfoCookiesSubpage,PrivacySandboxFirstPartySetsUI,TpcdMetadataGrants,TpcdSupportSettings,TpcdHeuristicsGrants:TpcdReadHeuristicsGrants/true/TpcdWritePopupCurrentInteractionHeuristicsGrants/30d/TpcdBackfillPopupHeuristicsGrants/30d/TpcdPopupHeuristicEnableForIframeInitiator/all/TpcdWriteRedirectHeuristicGrants/15m/TpcdRedirectHeuristicRequireABAFlow/true/TpcdRedirectHeuristicRequireCurrentInteraction/true"'
+      );
     }
 
     this.browser = await puppeteer.launch({
@@ -267,6 +270,7 @@ export class BrowserManagement {
       cookiePartitionKey,
       blockedCookies,
       requestId,
+      exemptedCookies,
     }: Protocol.Network.ResponseReceivedExtraInfoEvent
   ) {
     const headersToBeParsed = headers['set-cookie'] ?? headers['Set-Cookie'];
@@ -287,9 +291,14 @@ export class BrowserManagement {
         if (!parsedCookie.domain && url) {
           parsedCookie.domain = new URL(url).hostname;
         }
+
         if (parsedCookie.domain && parsedCookie.domain[0] !== '.') {
           parsedCookie.domain = '.' + parsedCookie.domain;
         }
+
+        const exemptedEntry = exemptedCookies?.find(({ cookie }) => {
+          return cookie?.name === parsedCookie.name;
+        });
 
         const blockedEntry = blockedCookies.find((c) => {
           if (c.cookie) {
@@ -337,6 +346,7 @@ export class BrowserManagement {
           },
           isBlocked: Boolean(blockedEntry),
           blockedReasons: blockedEntry?.blockedReasons,
+          exemptionReason: exemptedEntry?.exemptionReason,
           url,
           headerType: 'response',
         };
@@ -402,6 +412,7 @@ export class BrowserManagement {
         },
         isBlocked: associatedCookie.blockedReasons.length > 0,
         blockedReasons: associatedCookie.blockedReasons,
+        exemptionReason: associatedCookie?.exemptionReason,
         url: this.pageRequests[pageId][requestId]?.url || '',
         headerType: 'request',
       };
