@@ -23,6 +23,7 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
+  prepareCookiesCount,
 } from '@ps-analysis-tool/design-system';
 import type {
   LibraryData,
@@ -37,6 +38,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
 import KnownBreakages from './cookieLanding/knownBreakages';
+import ExemptedCookiesSection from './cookieLanding/exemptedCookiesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -55,6 +57,8 @@ const CookiesLandingContainer = ({
   libraryMatches,
   isSiteMapLandingContainer = false,
 }: CookiesLandingContainerProps) => {
+  const cookieStats = prepareCookiesCount(tabCookies);
+
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const baseSections: Array<CookiesLandingSection> = [
       {
@@ -90,6 +94,20 @@ const CookiesLandingContainer = ({
           Element: KnownBreakages,
           props: {
             libraryMatches: libraryMatches ?? {},
+          },
+        },
+      });
+    }
+
+    if (cookieStats.exemptedCookies.total > 0) {
+      baseSections.push({
+        name: 'Exempted Cookies',
+        link: 'exempted-cookies',
+        panel: {
+          Element: ExemptedCookiesSection,
+          props: {
+            cookieStats,
+            tabFrames,
           },
         },
       });

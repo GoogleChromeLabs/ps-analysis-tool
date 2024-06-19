@@ -23,7 +23,7 @@ import {
 } from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
 
-const COOKIES_TABLE_DATA_HEADER = [
+const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('name'),
   () => I18n.getMessage('scope'),
   () => I18n.getMessage('domain'),
@@ -43,7 +43,7 @@ const COOKIES_TABLE_DATA_HEADER = [
   () => I18n.getMessage('blockingStatus'),
 ];
 
-const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
+const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
@@ -91,10 +91,10 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
   }
 
   return new Blob([
-    COOKIES_TABLE_DATA_HEADER.map((header) => header()).join(',') +
+    COOKIES_TABLE_DATA_HEADER_EXTENSION.map((header) => header()).join(',') +
       '\r\n' +
       cookieRecords,
   ]);
 };
 
-export default generateCookieTableCSV;
+export default generateExtensionCookieTableCSV;

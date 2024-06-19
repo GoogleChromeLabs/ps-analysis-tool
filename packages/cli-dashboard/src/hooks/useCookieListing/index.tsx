@@ -27,6 +27,7 @@ import {
   calculateDynamicFilterValues,
   evaluateSelectAllOption,
   evaluateStaticFilterValues,
+  calculateExemptionReason,
   type TableRow,
 } from '@ps-analysis-tool/design-system';
 import { I18n } from '@ps-analysis-tool/i18n';
@@ -351,6 +352,26 @@ const useCookieListing = (
         comparator: (value: InfoType, filterValue: string) => {
           return (value as string[])?.includes(filterValue);
         },
+      },
+      exemptionReason: {
+        title: 'Exemption Reason',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'exemptionReason',
+          parsedQuery
+        ),
+        filterValues: calculateExemptionReason(
+          tabCookies,
+          clearActivePanelQuery,
+          parsedQuery?.filter?.exemptionReason
+        ),
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val === filterValue;
+        },
+        useGenericPersistenceKey: true,
       },
     }),
     [clearActivePanelQuery, parsedQuery, tabCookies]

@@ -73,6 +73,8 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
             ...acc[key],
             blockedReasons,
             frameIdList,
+            exemptionReason:
+              acc[key]?.exemptionReason || cookieObj[key]?.exemptionReason,
             frameUrls,
             networkEvents,
             blockingStatus: deriveBlockingStatus(networkEvents),
@@ -117,6 +119,7 @@ const createCookieObj = (
         networkEvents: cookie.networkEvents,
         blockingStatus: cookie.blockingStatus,
         frameUrls: [frame],
+        exemptionReason: cookie.exemptionReason,
       } as CookieTableData,
     ])
   );

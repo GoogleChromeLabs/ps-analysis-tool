@@ -123,6 +123,8 @@ export const parseNetworkDataToCookieData = async (
 
         _frameCookies[key.trim()] = {
           ...cookie,
+          exemptionReason:
+            prevEntry?.exemptionReason ?? cookie?.exemptionReason,
           url: response.url,
           blockedReasons: Array.from(blockedReasonsSet),
           isBlocked: Array.from(blockedReasonsSet).length > 0,
@@ -171,6 +173,8 @@ export const parseNetworkDataToCookieData = async (
 
         _frameCookies[key.trim()] = {
           ...cookie,
+          exemptionReason:
+            prevEntry?.exemptionReason ?? cookie?.exemptionReason,
           url: request.url,
           blockedReasons: Array.from(blockedReasonsSet),
           networkEvents,
