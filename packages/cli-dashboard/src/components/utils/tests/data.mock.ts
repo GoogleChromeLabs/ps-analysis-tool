@@ -17,13 +17,13 @@
 /**
  * External dependencies
  */
-import { UNKNOWN_FRAME_KEY, type CompleteJson } from '@ps-analysis-tool/common';
+import { type CompleteJson } from '@ps-analysis-tool/common';
 
 export const tempSinglePageData: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
+  libraryMatches: {},
   cookieData: {
     'https://edition.cnn.com': {
-      cookiesCount: 1,
       frameCookies: {
         'countryCode:.cnn.com:/': {
           parsedCookie: {
@@ -47,10 +47,6 @@ export const tempSinglePageData: CompleteJson = {
           isFirstParty: true,
         },
       },
-    },
-    [UNKNOWN_FRAME_KEY]: {
-      frameCookies: {},
-      cookiesCount: 0,
     },
   },
   technologyData: [
@@ -76,6 +72,7 @@ export const tempSinglePageData: CompleteJson = {
 
 export const tempMultiPageData: CompleteJson[] = [
   {
+    libraryMatches: {},
     pageUrl: 'https://www.cnn.com/index.html',
     technologyData: [
       {
@@ -98,7 +95,6 @@ export const tempMultiPageData: CompleteJson[] = [
     ],
     cookieData: {
       'https://edition.cnn.com': {
-        cookiesCount: 1,
         frameCookies: {
           'countryCode:.cnn.com:/': {
             parsedCookie: {
@@ -123,10 +119,6 @@ export const tempMultiPageData: CompleteJson[] = [
             isFirstParty: true,
           },
         },
-      },
-      [UNKNOWN_FRAME_KEY]: {
-        frameCookies: {},
-        cookiesCount: 1,
       },
     },
   },
@@ -174,14 +166,10 @@ export const tempMultiPageData: CompleteJson[] = [
             },
             url: '',
             isBlocked: false,
-            blockedReasons: ['ExcludeDomainNonASCII'],
+            blockedReasons: ['ThirdPartyPhaseout'],
             isFirstParty: true,
           },
         },
-      },
-      [UNKNOWN_FRAME_KEY]: {
-        frameCookies: {},
-        cookiesCount: 1,
       },
     },
   },

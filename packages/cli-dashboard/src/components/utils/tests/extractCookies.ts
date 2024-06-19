@@ -16,7 +16,6 @@
 /**
  * Internal dependencies
  */
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import extractCookies from '../extractCookies';
 import { tempSinglePageData } from './data.mock';
 
@@ -56,7 +55,6 @@ describe('extractCookies', () => {
           isFirstParty: true,
         },
       },
-      [UNKNOWN_FRAME_KEY]: {},
     });
 
     isLandingPage = false;
@@ -88,7 +86,6 @@ describe('extractCookies', () => {
           isFirstParty: true,
         },
       },
-      [UNKNOWN_FRAME_KEY]: {},
     });
   });
 });

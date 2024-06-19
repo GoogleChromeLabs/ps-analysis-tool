@@ -25,7 +25,6 @@ import {
   generateTechnologyCSV,
   type CompleteJson,
   type DataMapping,
-  UNKNOWN_FRAME_KEY,
   type TabFrames,
 } from '@ps-analysis-tool/common';
 import {
@@ -72,7 +71,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
     (cookie.frameUrls as string[]).forEach((url) => {
-      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+      if (url?.includes('http')) {
         acc[url] = {} as TabFrames[string];
       }
     });
@@ -151,7 +150,7 @@ function generateSitemapReportObject(
 
   const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
     (cookie.frameUrls as string[]).forEach((url) => {
-      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+      if (url?.includes('http')) {
         acc[url] = {} as TabFrames[string];
       }
     });

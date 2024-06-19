@@ -15,10 +15,6 @@
  */
 
 /**
- * External dependencies
- */
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
-/**
  * Internal dependencies
  */
 import extractReportData from '../extractReportData';
@@ -60,7 +56,6 @@ describe('extractReportData', () => {
             isFirstParty: true,
           },
         },
-        [UNKNOWN_FRAME_KEY]: {},
       },
       consolidatedLibraryMatches: {
         'https://edition.cnn.com/index.html': undefined,
