@@ -24,23 +24,23 @@ import {
 import { I18n } from '@ps-analysis-tool/i18n';
 
 const COOKIES_TABLE_DATA_HEADER = [
-  I18n.getMessage('name'),
-  I18n.getMessage('scope'),
-  I18n.getMessage('domain'),
-  I18n.getMessage('partitionKey'),
-  I18n.getMessage('sameSite'),
-  I18n.getMessage('category'),
-  I18n.getMessage('platform'),
-  I18n.getMessage('httpOnly'),
-  I18n.getMessage('secure'),
-  I18n.getMessage('value'),
-  I18n.getMessage('path'),
-  I18n.getMessage('expires'),
-  I18n.getMessage('issues'),
-  I18n.getMessage('gDPRUrl'),
-  I18n.getMessage('priority'),
-  I18n.getMessage('size'),
-  I18n.getMessage('blockingStatus'),
+  () => I18n.getMessage('name'),
+  () => I18n.getMessage('scope'),
+  () => I18n.getMessage('domain'),
+  () => I18n.getMessage('partitionKey'),
+  () => I18n.getMessage('sameSite'),
+  () => I18n.getMessage('category'),
+  () => I18n.getMessage('platform'),
+  () => I18n.getMessage('httpOnly'),
+  () => I18n.getMessage('secure'),
+  () => I18n.getMessage('value'),
+  () => I18n.getMessage('path'),
+  () => I18n.getMessage('expires'),
+  () => I18n.getMessage('issues'),
+  () => I18n.getMessage('gDPRUrl'),
+  () => I18n.getMessage('priority'),
+  () => I18n.getMessage('size'),
+  () => I18n.getMessage('blockingStatus'),
 ];
 
 const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
@@ -91,7 +91,9 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
   }
 
   return new Blob([
-    COOKIES_TABLE_DATA_HEADER.join(',') + '\r\n' + cookieRecords,
+    COOKIES_TABLE_DATA_HEADER.map((header) => header()).join(',') +
+      '\r\n' +
+      cookieRecords,
   ]);
 };
 
