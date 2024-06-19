@@ -162,6 +162,7 @@ const Layout = ({
               ''
             );
           },
+          menuBarScrollContainerId: 'dashboard-sitemap-layout-container',
         },
       };
 
@@ -240,7 +241,7 @@ const Layout = ({
       </Resizable>
       <div
         className="flex-1 max-h-screen overflow-auto"
-        id="dashboard-layout-container"
+        id="dashboard-sitemap-layout-container"
       >
         {PanelElement && <PanelElement {...props} />}
       </div>
