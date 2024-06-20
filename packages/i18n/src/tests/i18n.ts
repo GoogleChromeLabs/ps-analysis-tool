@@ -57,14 +57,12 @@ describe('I18n', () => {
       ok: true,
     });
 
-    await I18n.loadDashboardMessagesData(locale);
+    const result = await I18n.fetchMessages(locale);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith('/_locales/en/messages.json');
 
-    expect(I18n.getMessage('test.message', ['Sam'])).toEqual(
-      'Test message for Sam'
-    );
+    expect(result).toEqual(messages);
   });
 
   it('should load CLI messages data', async () => {
