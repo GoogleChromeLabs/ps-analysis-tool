@@ -608,7 +608,7 @@ class SynchnorousCookieStore {
             ...((this.tabsData[tabId]?.[cookieKey]?.frameIdList ??
               []) as number[]),
           ])
-        );
+        ).map((frameId) => frameId.toString());
 
         if (this.tabsData[tabId]?.[cookieKey]) {
           this.tabs[tabId].newUpdates++;
