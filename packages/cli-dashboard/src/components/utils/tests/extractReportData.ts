@@ -58,8 +58,8 @@ describe('extractReportData', () => {
         },
       },
       consolidatedLibraryMatches: {
-        'https://edition.cnn.com/index.html': undefined,
-        'https://www.cnn.com/index.html': undefined,
+        'https://edition.cnn.com/index.html': {},
+        'https://www.cnn.com/index.html': {},
       },
     });
   });

@@ -123,6 +123,7 @@ export const tempMultiPageData: CompleteJson[] = [
     },
   },
   {
+    libraryMatches: {},
     pageUrl: 'https://edition.cnn.com/index.html',
     technologyData: [
       {
