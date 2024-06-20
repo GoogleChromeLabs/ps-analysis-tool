@@ -82,8 +82,7 @@ export default async function generateReportObject(
   ];
 
   const locale = I18n.getLocale();
-  const translations = await fetch(`/_locales/${locale}/messages.json`);
-  const data = (await translations.json()) || {};
+  const translations = await I18n.fetchMessages(locale);
 
   return {
     cookieClassificationDataMapping,
@@ -100,7 +99,7 @@ export default async function generateReportObject(
     showFramesSection: true,
     showBlockedCategory: false,
     url,
-    translations: data,
+    translations,
     source: 'extension',
   };
 }

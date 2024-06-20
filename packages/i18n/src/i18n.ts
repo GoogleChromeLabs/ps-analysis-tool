@@ -87,18 +87,20 @@ class I18n {
   }
 
   /**
-   * Asynchronously loads messages data for the dashboard.
+   * Asynchronously loads messages data using the provided locale.
    * @param {string} locale - The locale string.
    * @returns {Promise<void>} A promise that resolves when messages are loaded.
    */
-  async loadDashboardMessagesData(locale: string) {
+  async fetchMessages(locale: string) {
     const localeArray = this.createLocaleArray(locale);
 
     let idx = 0;
 
     const fetchWithRetry = async () => {
+      let res = {};
+
       if (idx >= localeArray.length) {
-        return;
+        return res;
       }
 
       try {
@@ -113,16 +115,19 @@ class I18n {
         }
 
         const data = await response.json();
+        res = data;
 
-        this.initMessages(data);
         this.locale = localeArray[idx];
       } catch (error) {
         idx++;
-        await fetchWithRetry();
+        res = await fetchWithRetry();
       }
+
+      return res;
     };
 
-    await fetchWithRetry();
+    const result = await fetchWithRetry();
+    return result;
   }
 
   /**
