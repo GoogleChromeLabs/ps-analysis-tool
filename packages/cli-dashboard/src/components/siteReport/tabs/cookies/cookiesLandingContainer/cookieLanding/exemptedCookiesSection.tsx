@@ -19,14 +19,17 @@
 import React from 'react';
 import {
   prepareCookieStatsComponents,
-  type DataMapping,
   useFiltersMapping,
   MatrixContainer,
   CookiesLandingWrapper,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
 } from '@ps-analysis-tool/design-system';
-import type { CookiesCount, TabFrames } from '@ps-analysis-tool/common';
+import type {
+  CookiesCount,
+  TabFrames,
+  DataMapping,
+} from '@ps-analysis-tool/common';
 
 interface ExemptedCookiesSectionProps {
   cookieStats: CookiesCount;
@@ -58,7 +61,10 @@ const ExemptedCookiesSection = ({
       title: 'Exempted cookies',
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
-      onClick: () => selectedItemUpdater('All', 'exemptionReason'),
+      onClick:
+        cookieStats.exemptedCookies.total > 0
+          ? () => selectedItemUpdater('All', 'exemptionReason')
+          : null,
     },
   ];
 

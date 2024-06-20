@@ -50,9 +50,7 @@ const App = () => {
           <LibraryDetection />
         </div>
       )}
-      {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
-        <ExemptedCookiesSection />
-      )}
+      <ExemptedCookiesSection />
       {data?.showFramesSection && <FramesSection />}
     </div>
   );
