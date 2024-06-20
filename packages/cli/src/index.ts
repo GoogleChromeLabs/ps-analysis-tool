@@ -66,7 +66,7 @@ program
   )
   .option(
     '-l, --locale <value>',
-    'Locale to use for the CLI, supported: en, hi, ja, ko, pt-BR'
+    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR'
   )
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
@@ -156,13 +156,13 @@ const saveResultsAsHTML = async (
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
-  const availableLocales = ['en', 'hi', 'ja', 'ko', 'pt-BR'];
+  const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
 
   if (locale && !availableLocales.includes(locale)) {
     console.error(
-      `Locale '${locale}' is not supported. Supported locales are ${availableLocales.join(
+      `Locale '${locale}' is not supported, please use ${availableLocales.join(
         ', '
-      )}. Please provide a valid locale.`
+      )}.`
     );
     process.exit(1);
   }
