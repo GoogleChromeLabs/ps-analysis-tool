@@ -85,6 +85,17 @@ const CookiesLandingContainer = ({
           },
         },
       },
+      {
+        name: 'Exempted Cookies',
+        link: 'exempted-cookies',
+        panel: {
+          Element: ExemptedCookiesSection,
+          props: {
+            cookieStats,
+            tabFrames,
+          },
+        },
+      },
     ];
 
     if (!isSiteMapLandingContainer) {
@@ -95,20 +106,6 @@ const CookiesLandingContainer = ({
           Element: KnownBreakages,
           props: {
             libraryMatches: libraryMatches ?? {},
-          },
-        },
-      });
-    }
-
-    if (cookieStats.exemptedCookies.total > 0) {
-      baseSections.push({
-        name: 'Exempted Cookies',
-        link: 'exempted-cookies',
-        panel: {
-          Element: ExemptedCookiesSection,
-          props: {
-            cookieStats,
-            tabFrames,
           },
         },
       });
