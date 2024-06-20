@@ -84,7 +84,11 @@ export default function parseResponseReceivedExtraInfo(
     if (headerLine.toLowerCase().includes('partitioned')) {
       parsedCookie = {
         ...parsedCookie,
-        partitionKey: cookiePartitionKey,
+        partitionKey:
+          cookiePartitionKey && typeof cookiePartitionKey === 'string'
+            ? cookiePartitionKey
+            : //@ts-ignore This is to handle both stable and canary version of Chrome.
+              cookiePartitionKey?.topLevelSite,
       };
     }
 

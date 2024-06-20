@@ -135,8 +135,7 @@ const Insights = () => {
                         )
                         .map(([domain, value]) => (
                           <p key={domain} className="text-sm">
-                            Rationale:{' '}
-                            <span className="underline">{value as string}</span>
+                            Rationale: {value as string}
                           </p>
                         ))}
                     </>

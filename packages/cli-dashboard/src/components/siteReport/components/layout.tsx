@@ -28,7 +28,6 @@ import {
   SiteBoundariesIconWhite,
   SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -52,9 +51,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
   const frameUrls = useMemo(() => {
     const frames = Object.keys(completeJson?.[0].cookieData ?? {});
 
-    return frames.filter(
-      (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
-    );
+    return frames.filter((url) => url?.includes('http'));
   }, [completeJson]);
 
   const { activePanel, selectedItemKey, updateSelectedItemKey } = useSidebar(

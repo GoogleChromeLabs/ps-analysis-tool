@@ -21,6 +21,7 @@ import type {
   CompleteJson,
   CookieFrameStorageType,
   LibraryData,
+  TechnologyData,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -30,13 +31,23 @@ import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
   const landingPageCookies = {};
+  const technologies: TechnologyData[] = [];
   const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
 
-  data.forEach(({ cookieData, pageUrl }) => {
+  data.forEach(({ cookieData, pageUrl, libraryMatches, technologyData }) => {
     formatCookieData(
       extractCookies(cookieData, pageUrl, true),
       landingPageCookies
     );
+
+    technologies.push(
+      ...technologyData.map((technology) => ({
+        ...technology,
+        pageUrl,
+      }))
+    );
+
+    consolidatedLibraryMatches[pageUrl] = libraryMatches;
   });
 
   return {
