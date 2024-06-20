@@ -104,12 +104,10 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
               {I18n.getMessage('exemptionReason')}
             </p>
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              {
-                cookieExemptionReason[
-                  //@ts-ignore
-                  selectedCookieExemptionReason as CookieData['exemptionReason']
-                ]
-              }
+              {cookieExemptionReason[
+                //@ts-ignore
+                selectedCookieExemptionReason as CookieData['exemptionReason']
+              ]()}
             </p>
           </div>
         )}
