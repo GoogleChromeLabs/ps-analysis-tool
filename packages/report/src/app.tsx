@@ -45,12 +45,12 @@ const App = () => {
       )}
       <CookiesSection />
       <BlockedCookiesSection />
+      <ExemptedCookiesSection />
       {data?.libraryMatches && (
         <div className="text-xs">
           <LibraryDetection />
         </div>
       )}
-      <ExemptedCookiesSection />
       {data?.showFramesSection && <FramesSection />}
     </div>
   );
