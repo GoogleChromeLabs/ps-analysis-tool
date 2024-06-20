@@ -72,14 +72,14 @@ const App: React.FC = () => {
 
   if (onChromeUrl) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
+      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg mb-2 text-center">
+        <p className="font-bold text-lg mb-2">
           {I18n.getMessage('noMoreAnalysis')}
         </p>
         <p className="text-chart-label text-xs">
@@ -116,7 +116,7 @@ const App: React.FC = () => {
     allowedNumberOfTabs !== 'unlimited'
   ) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
+      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -146,7 +146,7 @@ const App: React.FC = () => {
     (cookieStats?.firstParty.total === 0 && cookieStats?.thirdParty.total === 0)
   ) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
+      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -173,7 +173,7 @@ const App: React.FC = () => {
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-full h-full flex justify-center items-center flex-col z-1">
+    <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
       <ToggleSwitch
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
