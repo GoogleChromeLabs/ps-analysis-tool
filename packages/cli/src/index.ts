@@ -34,6 +34,7 @@ import {
   Libraries,
   detectMatchingSignatures,
 } from '@ps-analysis-tool/library-detection';
+import URL from 'node:url';
 
 /**
  * Internal dependencies.
@@ -128,7 +129,9 @@ const saveResultsAsHTML = async (
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
   fs.writeFile(outDir + '/index.html', buffer, () =>
-    console.log(`Report created successfully: file://${outFileFullDir}`)
+    console.log(
+      `Report created successfully:\n${URL.pathToFileURL(outFileFullDir)}`
+    )
   );
 };
 
