@@ -22,6 +22,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -30,6 +31,7 @@ import TABS from './tabs';
 import './app.css';
 import { Layout } from './components';
 import useContextInvalidated from './hooks/useContextInvalidated';
+
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
@@ -41,6 +43,11 @@ const App: React.FC = () => {
   const [defaultSelectedItemKey, setDefaultSelectedItemKey] = useState(
     SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX
   );
+
+  const reloadTexts = useRef({
+    displayText: I18n.getMessage('extensionUpdated'),
+    buttonText: I18n.getMessage('refreshPanel'),
+  });
 
   useEffect(() => {
     (async () => {
@@ -71,7 +78,10 @@ const App: React.FC = () => {
           <Layout setSidebarData={setSidebarData} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">
-            <ExtensionReloadNotification tabId={tabIdRef.current} />
+            <ExtensionReloadNotification
+              tabId={tabIdRef.current}
+              texts={reloadTexts.current}
+            />
           </div>
         )}
       </div>
