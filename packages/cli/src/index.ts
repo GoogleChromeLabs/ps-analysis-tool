@@ -159,24 +159,14 @@ const saveResultsAsHTML = async (
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
-  const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
-
-  if (locale && !availableLocales.includes(locale)) {
-    console.error(
-      `Locale '${locale}' is not supported, please use ${availableLocales.join(
-        ', '
-      )}.`
-    );
-    process.exit(1);
-  }
-
   await validateArgs(
     url,
     sitemapUrl,
     csvPath,
     sitemapPath,
     numberOfUrlsInput,
-    outDir
+    outDir,
+    locale
   );
 
   const prefix =
