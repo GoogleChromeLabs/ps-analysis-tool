@@ -37,7 +37,7 @@ const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('path'),
   () => I18n.getMessage('expires'),
   () => I18n.getMessage('issues'),
-  () => I18n.getMessage('gDPRUrl'),
+  () => I18n.getMessage('gdpr'),
   () => I18n.getMessage('priority'),
   () => I18n.getMessage('size'),
   () => I18n.getMessage('blockingStatus'),
@@ -69,7 +69,9 @@ const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.samesite,
-      cookie.analytics?.category,
+      I18n.getMessage(
+        cookie.analytics?.category?.toLowerCase() || 'uncategorized'
+      ),
       cookie.analytics?.platform,
       cookie.parsedCookie.httponly
         ? I18n.getMessage('yes')
