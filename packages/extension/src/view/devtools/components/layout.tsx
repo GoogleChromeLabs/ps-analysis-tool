@@ -38,6 +38,7 @@ import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import TransitionBanner from './transitionBanner';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -47,12 +48,12 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const mainRef = useRef<HTMLElement>(null);
 
-  const { settingsChanged, handleSettingsChange } = useSettings(
-    ({ state, actions }) => ({
+  const { settingsChanged, handleSettingsChange, currentExtensions } =
+    useSettings(({ state, actions }) => ({
       settingsChanged: state.settingsChanged,
       handleSettingsChange: actions.handleSettingsChange,
-    })
-  );
+      currentExtensions: state.currentExtensions,
+    }));
 
   const {
     tabFrames,
@@ -211,6 +212,20 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
+  const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    const _showBanner = Boolean(
+      currentExtensions?.some(
+        (extension) =>
+          extension.extensionName === 'Privacy Sandbox Analysis Tool' &&
+          extension.extensionId === 'ehbnpceebmgpanbbfckhoefhdibijkef'
+      )
+    );
+
+    setShowBanner(_showBanner);
+  }, [currentExtensions]);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -232,6 +247,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         ref={mainRef}
         className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
+        {showBanner && (
+          <TransitionBanner
+            closeBanner={() => {
+              setShowBanner(false);
+            }}
+          />
+        )}
         <div
           className="w-full h-full overflow-auto"
           id="cookies-landing-scroll-container"

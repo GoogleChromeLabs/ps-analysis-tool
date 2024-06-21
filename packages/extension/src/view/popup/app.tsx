@@ -17,13 +17,12 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   CirclePieChart,
   ProgressBar,
   ToastMessage,
-  ToggleSwitch,
   prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
 
@@ -31,7 +30,7 @@ import {
  * Internal dependencies.
  */
 import './app.css';
-import { Legend } from './components';
+import { Legend, CookieLanding, TransitionBanner } from './components';
 import { useCookie, useSettings } from './stateProviders';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
@@ -51,31 +50,45 @@ const App: React.FC = () => {
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
-  const {
-    allowedNumberOfTabs,
-    isUsingCDP,
-    settingsChanged,
-    setUsingCDP,
-    handleSettingsChange,
-  } = useSettings(({ state, actions }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-    isUsingCDP: state.isUsingCDPForSettingsDisplay,
-    settingsChanged: state.settingsChanged,
-    setUsingCDP: actions.setUsingCDP,
-    handleSettingsChange: actions.handleSettingsChange,
-  }));
+  const { allowedNumberOfTabs, settingsChanged, handleSettingsChange } =
+    useSettings(({ state, actions }) => ({
+      allowedNumberOfTabs: state.allowedNumberOfTabs,
+      settingsChanged: state.settingsChanged,
+      handleSettingsChange: actions.handleSettingsChange,
+    }));
 
-  const cdpLabel = isUsingCDP ? 'Disable CDP' : 'Enable CDP';
+  const [showBanner, setShowBanner] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const extensions = await chrome.management.getAll();
+
+      const _showBanner = extensions?.some((extension) => {
+        return (
+          extension.name === 'Privacy Sandbox Analysis Tool' &&
+          extension.id === 'ehbnpceebmgpanbbfckhoefhdibijkef'
+        );
+      });
+
+      setShowBanner(_showBanner);
+    })();
+  }, []);
+
+  if (showBanner) {
+    return (
+      <CookieLanding>
+        <TransitionBanner
+          closeBanner={() => {
+            setShowBanner(false);
+          }}
+        />
+      </CookieLanding>
+    );
+  }
 
   if (onChromeUrl) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
-        <ToggleSwitch
-          onLabel={cdpLabel}
-          additionalStyles="top-2 left-2 absolute"
-          setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
-        />
+      <CookieLanding>
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
           Its emptier than a cookie jar after a midnight snack!
@@ -90,7 +103,7 @@ const App: React.FC = () => {
             />
           )}
         </div>
-      </div>
+      </CookieLanding>
     );
   }
 
@@ -111,13 +124,7 @@ const App: React.FC = () => {
     allowedNumberOfTabs !== 'unlimited'
   ) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
-        <ToggleSwitch
-          onLabel={cdpLabel}
-          additionalStyles="top-2 left-2 absolute"
-          setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
-        />
+      <CookieLanding>
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
@@ -129,7 +136,7 @@ const App: React.FC = () => {
             />
           )}
         </div>
-      </div>
+      </CookieLanding>
     );
   }
 
@@ -138,13 +145,7 @@ const App: React.FC = () => {
     (cookieStats?.firstParty.total === 0 && cookieStats?.thirdParty.total === 0)
   ) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
-        <ToggleSwitch
-          onLabel={cdpLabel}
-          additionalStyles="top-2 left-2 absolute"
-          setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
-        />
+      <CookieLanding>
         <p className="font-bold text-lg">No cookies found on this page</p>
         <p className="text-chart-label text-xs">
           Please try reloading the page
@@ -159,19 +160,13 @@ const App: React.FC = () => {
             />
           )}
         </div>
-      </div>
+      </CookieLanding>
     );
   }
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-full h-full flex justify-center items-center flex-col z-1">
-      <ToggleSwitch
-        onLabel={cdpLabel}
-        additionalStyles="top-2 left-2 absolute"
-        setEnabled={setUsingCDP}
-        enabled={isUsingCDP}
-      />
+    <CookieLanding>
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
           <CirclePieChart
@@ -206,7 +201,7 @@ const App: React.FC = () => {
           />
         )}
       </div>
-    </div>
+    </CookieLanding>
   );
 };
 
