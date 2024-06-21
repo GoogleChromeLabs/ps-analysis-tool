@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useMemo, useCallback } from 'react';
-import { UNKNOWN_FRAME_KEY, type TabFrames } from '@ps-analysis-tool/common';
+import { type TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -42,7 +42,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     const frames = Object.keys(
       completeJson?.[0].cookieData ?? {}
     ).reduce<TabFrames>((acc, url) => {
-      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+      if (url?.includes('http')) {
         acc[url] = {} as TabFrames[string];
       }
 

@@ -15,10 +15,6 @@
  */
 
 /**
- * External dependencies
- */
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
-/**
  * Internal dependencies
  */
 import extractReportData from '../extractReportData';
@@ -56,15 +52,14 @@ describe('extractReportData', () => {
             url: '',
             pageUrl: 'https://edition.cnn.com/index.html',
             isBlocked: false,
-            blockedReasons: ['ThirdPartyPhaseout', 'ExcludeDomainNonASCII'],
+            blockedReasons: ['ThirdPartyPhaseout'],
             isFirstParty: true,
           },
         },
-        [UNKNOWN_FRAME_KEY]: {},
       },
       consolidatedLibraryMatches: {
-        'https://edition.cnn.com/index.html': undefined,
-        'https://www.cnn.com/index.html': undefined,
+        'https://edition.cnn.com/index.html': {},
+        'https://www.cnn.com/index.html': {},
       },
     });
   });

@@ -18,7 +18,6 @@
  * External dependencies
  */
 import {
-  UNKNOWN_FRAME_KEY,
   type CookieTableData,
   type CookieData,
   type CookieFrameStorageType,
@@ -33,7 +32,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 
 const reshapeCookies = (cookies: CookieFrameStorageType) => {
   return Object.entries(cookies)
-    .filter(([frame]) => frame.includes('http') || frame === UNKNOWN_FRAME_KEY)
+    .filter(([frame]) => frame.includes('http'))
     .map(([frame, _cookies]) => createCookieObj(frame, _cookies))
     .reduce((acc, cookieObj) => {
       Object.keys(cookieObj).forEach((key) => {

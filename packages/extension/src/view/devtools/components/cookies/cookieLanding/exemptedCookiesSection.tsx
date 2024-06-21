@@ -66,8 +66,14 @@ const ExemptedCookiesSection = () => {
       title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
-      onClick: () =>
-        selectedItemUpdater(I18n.getMessage('selectAll'), 'exemptionReason'),
+      onClick:
+        cookieStats.exemptedCookies.total > 0
+          ? () =>
+              selectedItemUpdater(
+                I18n.getMessage('selectAll'),
+                'exemptionReason'
+              )
+          : null,
     },
   ];
 

@@ -199,23 +199,23 @@ export class BrowserManagement {
     this.debugLog(`scrolling on url:${url}`);
   }
 
-  async responseEventListener(pageId: string, response: HTTPResponse) {
+  responseEventListener(pageId: string, response: HTTPResponse) {
     if (
       response?.headers()?.['content-type']?.includes('javascript') ||
       response?.headers()?.['content-type']?.includes('html')
     ) {
-      try {
-        const content = await response.text();
-        this.pageResourcesMaps[pageId][response.url()] = {
-          origin: response.url(),
-          type: response?.headers()?.['content-type']?.includes('javascript')
-            ? 'Script'
-            : 'Document',
-          content,
-        };
-      } catch (error) {
-        // CDP might fail here.
-      }
+      response
+        .text()
+        .then((content) => {
+          this.pageResourcesMaps[pageId][response.url()] = {
+            origin: response.url(),
+            type: response?.headers()?.['content-type']?.includes('javascript')
+              ? 'Script'
+              : 'Document',
+            content,
+          };
+        })
+        .catch(() => undefined);
     }
   }
 
@@ -479,9 +479,7 @@ export class BrowserManagement {
     this.pageResponses[pageId] = {};
     this.pageResourcesMaps[pageId] = {};
 
-    page.on('response', async (ev) => {
-      await this.responseEventListener(pageId, ev);
-    });
+    page.on('response', (ev) => this.responseEventListener(pageId, ev));
 
     cdpSession.on('Network.responseReceived', (ev) =>
       this.responseReceivedListener(pageId, ev)
@@ -561,7 +559,9 @@ export class BrowserManagement {
         return;
       }
 
-      allFetchedResources[page.url()] = Array.from(
+      const mainFrameUrl = new URL(page.url()).origin;
+
+      allFetchedResources[mainFrameUrl] = Array.from(
         Object.values(resources) ?? []
       );
     });

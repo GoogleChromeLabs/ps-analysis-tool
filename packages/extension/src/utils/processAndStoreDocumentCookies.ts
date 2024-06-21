@@ -85,7 +85,7 @@ const processAndStoreDocumentCookies = async ({
           url: tabUrl,
           headerType: 'javascript', // @todo Update headerType name.
           isFirstParty: isFirstPartyCookie || null,
-          frameIdList: [frameId],
+          frameIdList: [frameId.toString()],
         };
       }
     );

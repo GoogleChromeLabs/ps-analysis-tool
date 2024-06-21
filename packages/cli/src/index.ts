@@ -35,6 +35,7 @@ import {
   Libraries,
   detectMatchingSignatures,
 } from '@ps-analysis-tool/library-detection';
+import URL from 'node:url';
 
 /**
  * Internal dependencies.
@@ -138,7 +139,9 @@ const saveResultsAsHTML = async (
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
   fs.writeFile(outDir + '/index.html', buffer, () =>
-    console.log(`Report created successfully: ${outFileFullDir}`)
+    console.log(
+      `Report created successfully:\n${URL.pathToFileURL(outFileFullDir)}`
+    )
   );
 };
 
@@ -273,6 +276,7 @@ const saveResultsAsHTML = async (
       text: 'Done analyzing technologies.',
     });
   }
+
   const result = urlsToProcess.map((_url, ind) => {
     const detectedMatchingSignatures: LibraryData = {
       ...detectMatchingSignatures(
@@ -300,4 +304,9 @@ const saveResultsAsHTML = async (
 
   await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap, locale);
-})();
+})().catch((error) => {
+  console.log('Some error occured while analysing the website.');
+  console.log('For more information check the stack trace below:\n');
+  console.log(error);
+  process.exit(process?.exitCode ?? 0);
+});

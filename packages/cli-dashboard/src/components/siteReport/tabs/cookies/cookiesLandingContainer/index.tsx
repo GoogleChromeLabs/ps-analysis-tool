@@ -47,6 +47,7 @@ interface CookiesLandingContainerProps {
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
   isSiteMapLandingContainer?: boolean;
+  menuBarScrollContainerId?: string;
 }
 
 const CookiesLandingContainer = ({
@@ -56,6 +57,7 @@ const CookiesLandingContainer = ({
   downloadReport,
   libraryMatches,
   isSiteMapLandingContainer = false,
+  menuBarScrollContainerId = 'dashboard-layout-container',
 }: CookiesLandingContainerProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
 
@@ -84,6 +86,17 @@ const CookiesLandingContainer = ({
           },
         },
       },
+      {
+        name: 'Exempted Cookies',
+        link: 'exempted-cookies',
+        panel: {
+          Element: ExemptedCookiesSection,
+          props: {
+            cookieStats,
+            tabFrames,
+          },
+        },
+      },
     ];
 
     if (!isSiteMapLandingContainer) {
@@ -94,20 +107,6 @@ const CookiesLandingContainer = ({
           Element: KnownBreakages,
           props: {
             libraryMatches: libraryMatches ?? {},
-          },
-        },
-      });
-    }
-
-    if (cookieStats.exemptedCookies.total > 0) {
-      baseSections.push({
-        name: 'Exempted Cookies',
-        link: 'exempted-cookies',
-        panel: {
-          Element: ExemptedCookiesSection,
-          props: {
-            cookieStats,
-            tabFrames,
           },
         },
       });
@@ -134,7 +133,7 @@ const CookiesLandingContainer = ({
           disableReportDownload={false}
           downloadReport={downloadReport}
           menuData={menuData}
-          scrollContainerId="dashboard-layout-container"
+          scrollContainerId={menuBarScrollContainerId}
         />
         {sections.map(({ link, panel: { Element, props } }) => (
           <div id={link} key={link} className="cookie-landing-section">
