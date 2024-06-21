@@ -2,7 +2,7 @@
 
 # Download Extension
 extension_setup() {
-  ps_analysis_tool_version=v0.8.0
+  ps_analysis_tool_version=v1.0.0
   extension_dir="/var/tmp"
   cd $extension_dir
   if [ ! -d $extension_dir/ps-analysis-tool-$ps_analysis_tool_version ]; then
