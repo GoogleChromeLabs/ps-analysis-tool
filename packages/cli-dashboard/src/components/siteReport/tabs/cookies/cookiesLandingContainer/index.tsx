@@ -117,6 +117,7 @@ const CookiesLandingContainer = ({
     tabCookies,
     tabFrames,
     cookiesWithIssues,
+    cookieStats,
     isSiteMapLandingContainer,
     libraryMatches,
   ]);

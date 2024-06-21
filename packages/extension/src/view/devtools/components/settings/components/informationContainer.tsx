@@ -65,19 +65,15 @@ const InformationContainer = () => {
   const handleCopy = useCallback(() => {
     setCopying(true);
 
-    let clipboardText = `**${I18n.getMessage('openTabs')}:** ${currentTabs}\n`;
+    let clipboardText = `**Open Tabs:** ${currentTabs}\n`;
 
-    clipboardText += `**${I18n.getMessage('activeExtensions')}:**\n`;
+    clipboardText += `**Active Extensions:**\n`;
     currentExtensions?.forEach((extension) => {
       clipboardText += `${extension.extensionName}: ${extension.extensionId}\n`;
     });
-    clipboardText += `**${I18n.getMessage(
-      'chromeVersion'
-    )}:** ${browserInformation}\n`;
-    clipboardText += `**${I18n.getMessage('pSATVersion')}:** ${PSATVersion}\n`;
-    clipboardText += `**${I18n.getMessage(
-      'systemArchitecture'
-    )}:** ${OSInformation}`;
+    clipboardText += `**Chrome Version:** ${browserInformation}\n`;
+    clipboardText += `**PSAT Version:** ${PSATVersion}\n`;
+    clipboardText += `**OS - System Architecture:** ${OSInformation}`;
 
     try {
       // Need to do this since chrome doesnt allow the clipboard access in extension.

@@ -129,9 +129,7 @@ const ListItem = ({
               className="text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
               href="#"
             >
-              {isExpanded
-                ? I18n.getMessage('showLess')
-                : I18n.getMessage('showMore')}
+              {I18n.getMessage(isExpanded ? 'showLess' : 'showMore')}
             </a>
           )}
         </>

@@ -146,9 +146,9 @@ const SidebarChild = ({
           </div>
         )}
         <p className="flex flex-row items-center justify-center whitespace-nowrap gap-x-1 pr-1">
-          {typeof sidebarItem.title === 'string'
-            ? sidebarItem.title
-            : sidebarItem.title?.()}
+          {typeof sidebarItem.title === 'function'
+            ? sidebarItem.title()
+            : sidebarItem.title}
 
           {sidebarItem.infoIconDescription ? (
             <span title={sidebarItem.infoIconDescription}>
