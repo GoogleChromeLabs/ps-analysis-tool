@@ -19,12 +19,12 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
 import { useSettings } from '../../../../stateProviders/settings';
 import InformationContainer from '../informationContainer';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 jest.mock('../../../../stateProviders/settings', () => ({
   useSettings: jest.fn(),

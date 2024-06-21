@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
 import { I18n } from '@ps-analysis-tool/i18n';
+/**
+ * Internal dependencies.
+ */
 import * as CookieWarningReasonHTMLContent from './cookieWarningReasonHTMLContent';
 
 const isURLSecure = (cookieUrl: string): boolean => {

@@ -19,6 +19,7 @@
 import React from 'react';
 import SinonChrome from 'sinon-chrome';
 import { renderHook } from '@testing-library/react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -26,7 +27,6 @@ import { renderHook } from '@testing-library/react';
 import useCookieListing from '..';
 import * as mock from '../../../../../../../utils/test-data/cookieMockData';
 import { useCookie } from '../../../../../stateProviders/cookie';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 jest.mock('../../../../../stateProviders/cookie', () => ({
   useCookie: jest.fn(),
@@ -156,13 +156,13 @@ describe('useCookieListing', () => {
         'Long Term (1 week - 1 month)'
       )
     ).toBe(true);
-    // expect(
-    //   result.current.filters['parsedCookie.expires'].comparator(
-    //     // 2 months ahead
-    //     new Date(new Date().getTime() + 5184000000).toUTCString(),
-    //     'Extended Term (>1 month)'
-    //   )
-    // ).toBe(true);
+    expect(
+      result.current.filters['parsedCookie.expires'].comparator(
+        // 2 months ahead
+        new Date(new Date().getTime() + 5184000000).toUTCString(),
+        'Extended Term (>1 month)'
+      )
+    ).toBe(true);
 
     expect(
       result.current.filters['headerType'].comparator('javascript', 'JS')

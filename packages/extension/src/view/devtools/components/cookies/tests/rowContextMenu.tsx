@@ -19,6 +19,7 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -26,7 +27,6 @@ import '@testing-library/jest-dom';
 import RowContextMenu from '../cookiesListing/rowContextMenu';
 import type { TableRow } from '@ps-analysis-tool/design-system';
 import SinonChrome from 'sinon-chrome';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const rowContextMenuProp = {
   domainsInAllowList: new Set<string>(),

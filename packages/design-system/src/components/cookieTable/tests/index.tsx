@@ -21,13 +21,13 @@ import React, { act } from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { CookieTableData } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import CookieTable from '..';
 import { InfoType } from '../../table';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('CookieTable', () => {
   global.ResizeObserver = jest.fn().mockImplementation(() => ({

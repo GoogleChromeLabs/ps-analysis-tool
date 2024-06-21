@@ -22,6 +22,7 @@ import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 import { render, screen } from '@testing-library/react';
 import { addUTMParams } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -31,7 +32,6 @@ import { PSInfoKey } from '../fetchPSInfo';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('should match the json file data with the component', () => {
   const tests = Object.values(PSInfoKey).map((infoKey) => {

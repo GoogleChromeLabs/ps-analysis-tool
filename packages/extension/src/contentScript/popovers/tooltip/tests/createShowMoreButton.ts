@@ -16,13 +16,13 @@
 /**
  * External dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import '@testing-library/jest-dom';
 
 /**
  * Internal dependencies.
  */
 import createShowMoreButton from '../createShowMoreButton';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('createShowMoreButton', () => {
   beforeAll(() => {

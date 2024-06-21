@@ -28,9 +28,6 @@ import {
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
-/**
- * Internal dependencies
- */
 
 interface CookiesSectionProps {
   tabCookies: TabCookies | null;

@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 import { LandingPage } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import FacilitatedTestingContent from './faciliatedTestingContent';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const FacilitatedTesting = () => (
   <div data-testid="facilitated-testing-content" className="h-full w-full">

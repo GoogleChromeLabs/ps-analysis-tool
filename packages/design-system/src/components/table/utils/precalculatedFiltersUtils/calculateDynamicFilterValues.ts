@@ -17,12 +17,12 @@
  * External dependencies
  */
 import { getValueByKey, type CookieTableData } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
  */
 import { TableFilter } from '../../useTable';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Calculate the filter values for the provider key.

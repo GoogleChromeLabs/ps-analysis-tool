@@ -18,13 +18,13 @@
  */
 import React from 'react';
 import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const RelatedWebsiteSets = () => {
   return (

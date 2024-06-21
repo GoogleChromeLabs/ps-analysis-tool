@@ -22,12 +22,12 @@ import React, {
   useState,
   useCallback,
 } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies.
  */
 import Context, { type SettingsStoreContext } from './context';
 import { SERVICE_WORKER_TABS_RELOAD_COMMAND } from '../../../../constants';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',

@@ -19,6 +19,7 @@
  */
 import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -27,7 +28,6 @@ import type {
   OtherWellKnownOutputType,
   PrimaryWellKnownOutputType,
 } from '../types';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface OutputProps {
   data: PrimaryWellKnownOutputType | OtherWellKnownOutputType | null;

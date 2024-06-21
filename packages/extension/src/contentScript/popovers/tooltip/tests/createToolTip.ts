@@ -17,12 +17,12 @@
  * External dependencies.
  */
 import '@testing-library/jest-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import createTooltip from '../createTooltip';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('createTooltip', () => {
   beforeAll(() => {

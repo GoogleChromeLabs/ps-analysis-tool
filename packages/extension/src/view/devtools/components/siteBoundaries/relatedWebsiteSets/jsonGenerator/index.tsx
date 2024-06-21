@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { Button } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,6 @@ import ServiceSites from './serviceSites';
 import CountrySites from './countrySites';
 import JsonOutput from './jsonOutput';
 import useGeneratorForm from './useGeneratorForm';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const RWSJsonGenerator = () => {
   const {

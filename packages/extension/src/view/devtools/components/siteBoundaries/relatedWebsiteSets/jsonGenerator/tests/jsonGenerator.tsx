@@ -22,6 +22,7 @@ import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import '@testing-library/user-event';
 import { noop } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -34,7 +35,6 @@ import type {
   ServiceSiteType,
 } from '../types';
 import JsonOutput from '../jsonOutput';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 describe('RWSJsonGenerator', () => {
   beforeAll(() => {

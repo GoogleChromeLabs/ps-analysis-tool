@@ -22,6 +22,7 @@ import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 import { noop } from '@ps-analysis-tool/common';
 import { useTablePersistentSettingsStore } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -32,7 +33,6 @@ import { useCookie, useSettings } from '../stateProviders';
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import data from '../../../utils/test-data/cookieMockData';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 jest.mock('../stateProviders', () => ({
   useCookie: jest.fn(),

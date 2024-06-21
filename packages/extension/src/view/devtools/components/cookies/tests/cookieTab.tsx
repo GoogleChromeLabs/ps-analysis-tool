@@ -32,6 +32,7 @@ import {
   useTablePersistentSettingsStore,
 } from '@ps-analysis-tool/design-system';
 import { noop } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies.
  */
@@ -42,7 +43,6 @@ import mockResponse, {
   known3pCookieWithValue,
 } from '../../../../../utils/test-data/cookieMockData';
 import { useCookie, useSettings } from '../../../stateProviders';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 jest.mock('../../../stateProviders', () => ({
   useCookie: jest.fn(),

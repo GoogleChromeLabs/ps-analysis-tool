@@ -213,7 +213,7 @@ function generateSitemapReportObject(
     showFramesSection: false,
     showBlockedCategory: true,
     url: sitemapURL,
-    // @ts-ignore
+    // @ts-ignore - 'typeof globalThis' has no index signature
     translations: globalThis?.PSAT_DATA?.translations,
   };
 }
