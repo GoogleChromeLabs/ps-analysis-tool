@@ -23,6 +23,7 @@ import {
   findAnalyticsMatch,
   type CookieDatabase,
   RESPONSE_EVENT,
+  auditsToNetworkMap,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
 import { type Cookie, parse } from 'simple-cookie';
@@ -99,8 +100,11 @@ export default function createCookieFromAuditsIssue(
   const modifiedCookieExclusionReasons = cookieExclusionReasons.map(
     (reason) => {
       if (reason.toLowerCase().startsWith('exclude')) {
-        return reason.substring(7) as Protocol.Network.CookieBlockedReason;
+        return auditsToNetworkMap[
+          reason
+        ] as Protocol.Network.CookieBlockedReason;
       }
+
       return reason as Protocol.Network.CookieBlockedReason;
     }
   );
