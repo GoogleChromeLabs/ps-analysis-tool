@@ -1,7 +1,7 @@
 {
   "name": "@ps-analysis-tool/analysis-utils",
   "version": "0.8.0",
-  "description": "A package for common utilities that are being used in multiple packages",
+  "description": "A package for CLI analysis",
   "main": "./dist/index.js",
   "types": "./dist-types/index.d.ts",
   "source": "./src/index.ts",
