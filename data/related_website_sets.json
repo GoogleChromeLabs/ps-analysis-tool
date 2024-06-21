@@ -1,6 +1,16 @@
 {
   "sets": [
     {
+      "contact": "oterrell28@gmail.com",
+      "primary": "https://sackrace.ai",
+      "serviceSites": [
+        "https://socket-to-me.vip"
+      ],
+      "rationaleBySite": {
+        "https://socket-to-me.vip": "RWS_rationale_https___socket_to_me_vip"
+      }
+    },
+    {
       "contact": "il.mrbit@gmail.com",
       "primary": "https://poalim.xyz",
       "associatedSites": [
@@ -383,6 +393,16 @@
       }
     },
     {
+      "contact": "bergmanpatrickr@johndeere.com",
+      "primary": "https://johndeere.com",
+      "associatedSites": [
+        "https://deere.com"
+      ],
+      "rationaleBySite": {
+        "https://deere.com": "RWS_rationale_https___deere_com"
+      }
+    },
+    {
       "contact": "jquintana@lanacion.com.ar",
       "primary": "https://lanacion.com.ar",
       "associatedSites": [
@@ -686,9 +706,9 @@
         "https://zdrowietvn.pl"
       ],
       "rationaleBySite": {
-        "https://player.pl": "Streaming service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website",
-        "https://zdrowietvn.pl": "Educational service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website",
-        "https://tvn24.pl": "News service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website"
+        "https://player.pl": "RWS_rationale_https___player_pl",
+        "https://zdrowietvn.pl": "RWS_rationale_https___zdrowietvn_pl",
+        "https://tvn24.pl": "RWS_rationale_https___tvn24_pl"
       }
     },
     {
@@ -700,9 +720,9 @@
         "https://smoney.vn"
       ],
       "rationaleBySite": {
-        "https://zingmp3.vn": "Music Website owned by Zalo Group, VNG",
-        "https://baomoi.com": "News Website owned by Zalo Group, VNG",
-        "https://smoney.vn": "News Website owned by Zalo Group, VNG"
+        "https://zingmp3.vn": "RWS_rationale_https___zingmp3_vn",
+        "https://baomoi.com": "RWS_rationale_https___baomoi_com",
+        "https://smoney.vn": "RWS_rationale_https___smoney_vn"
       }
     },
     {
@@ -716,9 +736,9 @@
         "https://pdmp-apis.no"
       ],
       "rationaleBySite": {
-        "https://prisjakt.no": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites.",
-        "https://mittanbud.no": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites.",
-        "https://pdmp-apis.no": "Site owned by Schibsted that provides APIs for users across Schibsted's sites."
+        "https://prisjakt.no": "RWS_rationale_https___prisjakt_no",
+        "https://mittanbud.no": "RWS_rationale_https___mittanbud_no",
+        "https://pdmp-apis.no": "RWS_rationale_https___pdmp_apis_no"
       }
     },
     {
@@ -731,10 +751,10 @@
         "https://grupolpg.sv"
       ],
       "rationaleBySite": {
-        "https://elgrafico.com": "News portal owned by La Prensa Grafica Group",
-        "https://eleconomista.net": "News portal owned by La Prensa Grafica Group",
-        "https://ella.sv": "News portal owned by La Prensa Grafica Group",
-        "https://grupolpg.sv": "Domain owned by La Prensa Grafica Group"
+        "https://elgrafico.com": "RWS_rationale_https___elgrafico_com",
+        "https://eleconomista.net": "RWS_rationale_https___eleconomista_net",
+        "https://ella.sv": "RWS_rationale_https___ella_sv",
+        "https://grupolpg.sv": "RWS_rationale_https___grupolpg_sv"
       }
     },
     {
@@ -745,24 +765,7 @@
       ],
       "serviceSites": [],
       "rationaleBySite": {
-        "https://nidhiacademyonline.com": "This website is a subpart of kaksya.in and is used to host Nidhi Academy educational content videos/notes and more."
-      }
-    },
-    {
-      "contact": "jsteam@intra.sapo.pt",
-      "primary": "https://sapo.pt",
-      "associatedSites": [
-        "https://sapo.pt",
-        "https://meo.pt"
-      ],
-      "rationaleBySite": {
-        "https://sapo.pt": "SAPO is Portugal's leading online platform offering a diverse range of news, information, and services catering to various interests including news, entertainment, sports, technology, and lifestyle.",
-        "https://meo.pt": "MEO is a prominent telecommunications and entertainment provider in Portugal, offering a wide range of services including television, internet, phone, and mobile."
-      },
-      "ccTLDs": {
-        "https://sapo.pt": [
-          "https://sapo.io"
-        ]
+        "https://nidhiacademyonline.com": "RWS_rationale_https___nidhiacademyonline_com"
       }
     },
     {
@@ -776,11 +779,126 @@
         "https://radio1.be"
       ],
       "rationaleBySite": {
-        "https://dewarmsteweek.be": "domain for a yearly campaign",
-        "https://sporza.be": "sub brand for sports news",
-        "https://een.be": "sub brand site",
-        "https://radio2.be": "sub brand site",
-        "https://radio1.be": "sub brand site"
+        "https://dewarmsteweek.be": "RWS_rationale_https___dewarmsteweek_be",
+        "https://sporza.be": "RWS_rationale_https___sporza_be",
+        "https://een.be": "RWS_rationale_https___een_be",
+        "https://radio2.be": "RWS_rationale_https___radio2_be",
+        "https://radio1.be": "RWS_rationale_https___radio1_be"
+      }
+    },
+    {
+      "contact": "abatahi@nvidia.com",
+      "primary": "https://nvidia.com",
+      "associatedSites": [
+        "https://geforcenow.com"
+      ],
+      "rationaleBySite": {
+        "https://geforcenow.com": "RWS_rationale_https___geforcenow_com"
+      }
+    },
+    {
+      "contact": "jsteam@intra.sapo.pt",
+      "primary": "https://sapo.pt",
+      "associatedSites": [
+        "https://meo.pt"
+      ],
+      "rationaleBySite": {
+        "https://meo.pt": "RWS_rationale_https___meo_pt"
+      },
+      "ccTLDs": {
+        "https://sapo.pt": [
+          "https://sapo.io"
+        ]
+      }
+    },
+    {
+      "contact": "support@tolteck.com",
+      "primary": "https://tolteck.com",
+      "associatedSites": [
+        "https://tolteck.app"
+      ],
+      "rationaleBySite": {
+        "https://tolteck.app": "RWS_rationale_https___tolteck_app"
+      }
+    },
+    {
+      "contact": "datateam@centralmediacsoport.hu",
+      "primary": "https://p24.hu",
+      "associatedSites": [
+        "https://24.hu",
+        "https://startlap.hu",
+        "https://nlc.hu",
+        "https://hazipatika.com",
+        "https://nosalty.hu"
+      ],
+      "rationaleBySite": {
+        "https://24.hu": "RWS_rationale_https___24_hu",
+        "https://startlap.hu": "RWS_rationale_https___startlap_hu",
+        "https://nlc.hu": "RWS_rationale_https___nlc_hu",
+        "https://hazipatika.com": "RWS_rationale_https___hazipatika_com",
+        "https://nosalty.hu": "RWS_rationale_https___nosalty_hu"
+      }
+    },
+    {
+      "contact": "info@cognitiveai.ru",
+      "primary": "https://cognitiveai.ru",
+      "associatedSites": [
+        "https://cognitive-ai.ru"
+      ],
+      "rationaleBySite": {
+        "https://cognitive-ai.ru": "RWS_rationale_https___cognitive_ai_ru"
+      }
+    },
+    {
+      "contact": "technical@citybibleforum.org",
+      "primary": "https://citybibleforum.org",
+      "associatedSites": [
+        "https://thirdspace.org.au"
+      ],
+      "rationaleBySite": {
+        "https://thirdspace.org.au": "RWS_rationale_https___thirdspace_org_au"
+      }
+    },
+    {
+      "contact": "admin@smpn106jkt.sch.id",
+      "primary": "https://p106.net",
+      "associatedSites": [
+        "https://smpn106jkt.sch.id"
+      ],
+      "rationaleBySite": {
+        "https://p106.net": "RWS_rationale_https___p106_net",
+        "https://smpn106jkt.sch.id": "RWS_rationale_https___smpn106jkt_sch_id"
+      }
+    },
+    {
+      "contact": "sanjay.nagpal@aajtak.com",
+      "primary": "https://indiatoday.in",
+      "associatedSites": [
+        "https://aajtak.in",
+        "https://businesstoday.in",
+        "https://intoday.in",
+        "https://gnttv.com",
+        "https://indiatodayne.in"
+      ],
+      "rationaleBySite": {
+        "https://intoday.in": "RWS_rationale_https___intoday_in",
+        "https://aajtak.in": "RWS_rationale_https___aajtak_in",
+        "https://businesstoday.in": "RWS_rationale_https___businesstoday_in",
+        "https://indiatoday.in": "RWS_rationale_https___indiatoday_in",
+        "https://gnttv.com": "RWS_rationale_https___gnttv_com",
+        "https://indiatodayne.in": "RWS_rationale_https___indiatodayne_in"
+      }
+    },
+    {
+      "contact": "naukri.comapp@gmail.com",
+      "primary": "https://naukri.com",
+      "associatedSites": [
+        "https://ambitionbox.com",
+        "https://infoedgeindia.com"
+      ],
+      "rationaleBySite": {
+        "https://ambitionbox.com": "RWS_rationale_https___ambitionbox_com",
+        "https://infoedgeindia.com": "RWS_rationale_https___infoedgeindia_com"
       }
     }
   ]

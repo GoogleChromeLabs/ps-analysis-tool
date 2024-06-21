@@ -1922,7 +1922,7 @@
     "message": "6 months after last activity"
   },
   "OCD___utmv_description": {
-    "message": "Bevat custom informatie die door de webdeveloper is ingesteld via de _setCustomVar methode in Google Analytics. Deze cookie wordt iedere keer geupdate als er nieuwe gegevens naar de Google Analytics server worden gestuurd."
+    "message": "Contains custom information set by the web developer via the _setCustomVar method in Google Analytics. This cookie is updated every time new data is sent to the Google Analytics server."
   },
   "OCD___utmx_description": {
     "message": "Used to determine whether a user is included in an A / B or Multivariate test."
@@ -1973,7 +1973,7 @@
     "message": "5 minutes"
   },
   "OCD_AEC_description": {
-    "message": "AEC cookies ensure that requests within a browsing session are made by the user, and not by other sites. These cookies prevent malicious sites from acting on behalf of a user without that user’s knowledge."
+    "message": "AEC cookies ensure that requests within a browsing session are made by the user, and not by other sites. These cookies prevent malicious sites from acting on behalf of a user without that user's knowledge."
   },
   "OCD_retention_6_months": {
     "message": "6 months"
@@ -2093,7 +2093,7 @@
     "message": "This cookies is used to collect website statistics and track conversion rates and Google ad personalisation"
   },
   "OCD_TAID_description": {
-    "message": "This cookie is used to link your activity across devices if you’ve previously signed in to your Google Account on another device. We do this to coordinate that the ads you see across devices and measure conversion events."
+    "message": "This cookie is used to link your activity across devices if you've previously signed in to your Google Account on another device. We do this to coordinate that the ads you see across devices and measure conversion events."
   },
   "OCD_retention_14_days": {
     "message": "14 days"
@@ -2678,7 +2678,7 @@
     "message": "These cookies enable us to track visitor activity from our X ads on our website, and also to allow users to share content from our websites. They cookies do not provide us with any confidential information relating to your account."
   },
   "OCD_auth_token_description": {
-    "message": "These cookies enable us to track visitor activity from our X ads on our website, and also to allow users to share content from our websites. They cookies do not provide us with any confidential information relating to your account."
+    "message": "This cookie is used for authentication & authorization"
   },
   "OCD_csrf_same_site_description": {
     "message": "These cookies enable us to track visitor activity from our X ads on our website, and also to allow users to share content from our websites. They cookies do not provide us with any confidential information relating to your account."
@@ -2738,7 +2738,7 @@
     "message": "Registers statistical data on visitors' behaviour on the website. Used for internal analytics by the website operator."
   },
   "OCD_CTK_description": {
-    "message": "Contains information related to registering (counting) a job application via a job listing on indeed.com."
+    "message": "This cookie is used to provide a more consistent user experience across sessions by providing improved job recommendations and other services we offer on Indeed. This also helps Indeed analyze in aggregate the best way to help people get jobs. This cookie does not use 3rd party data and is not used for targeting."
   },
   "OCD_retention_17_years": {
     "message": "17 years"
@@ -2747,7 +2747,7 @@
     "message": "Contains information related to registering (counting) a job application via a job listing on indeed.com."
   },
   "OCD_INDEED_CSRF_TOKEN_description": {
-    "message": "Contains information related to registering (counting) a job application via a job listing on indeed.com."
+    "message": "This cookie is used by Cloudflare to identify trusted web traffic."
   },
   "OCD_jasx_pool_id_description": {
     "message": "Contains information related to registering (counting) a job application via a job listing on indeed.com."
@@ -6800,19 +6800,19 @@
     "message": "Wildix PBX's domain"
   },
   "RWS_rationale_https___indiatimes_com": {
-    "message": "Indiatimes.com is primary domain for Times Internet which publish stories on Indian Lifestyle, Culture, Relationships, Food, Travel, Entertainment, News and New Technology News"
+    "message": "Indiatimes.com is primary domain for Times Internet which publish stories on Indian Lifestyle, Culture, Relationships, Food, Travel, Entertainment, News and New Technology News. The connection to Times Internet Limited is reflected in the About Us Section and the footer of the website."
   },
   "RWS_rationale_https___timesofindia_com": {
-    "message": "Times of India (TOI) is Indias largest and most influential news publisher in English. Its digital platform timesofindia.com is powered by Times Internet Limited"
+    "message": "Times of India (TOI) is Indias largest and most influential news publisher in English. Its digital platform timesofindia.com is powered by Times Internet Limited, aptly represented in the About Us section and footer of the website."
   },
   "RWS_rationale_https___economictimes_com": {
-    "message": "Economic Times is India's top business news platform, providing comprehensive coverage of the economy, stock markets, and personal finance to inspire and empower business leaders and entrepreneurs. This digital platform is powered by Times Internet Limited"
+    "message": "Economic Times is India's top business news platform, providing comprehensive coverage of the economy, stock markets, and personal finance to inspire and empower business leaders and entrepreneurs. This digital platform is powered by Times Internet Limited as is clear from the About Us section of the website."
   },
   "RWS_rationale_https___samayam_com": {
-    "message": "Samayam is a Regional News publisher powered by Times Internet Limited"
+    "message": "Samayam is a Regional News publisher powered by Times Internet Limited. Its relationship to Times Internet is reflected in the footer of the website."
   },
   "RWS_rationale_https___cricbuzz_com": {
-    "message": "Cricbuzz is an Indian cricket news & live score platform owned by Times Internet Limited"
+    "message": "Cricbuzz is an Indian cricket news & live score platform owned by Times Internet Limited which is aptly reflected in the footer on the website."
   },
   "RWS_rationale_https___growthrx_in": {
     "message": "GrowthRx is a customer engagement platform powered by Times Internet"
@@ -7041,5 +7041,1103 @@
   },
   "RWS_rationale_https___smoney_vn": {
     "message": "News Website owned by Zalo Group, VNG"
+  },
+  "OCD___eoi_description": {
+    "message": "This cookie is used for security authenticate users, prevent fraud, and protect users as they interact with a service."
+  },
+  "OCD_retention_3_Months": {
+    "message": "3 Months"
+  },
+  "OCD_pm_sess_description": {
+    "message": "This cookie is used for functionality allow users to interact with a service or site to access features that are fundamental to that service. Things considered fundamental to the service include preferences like the user's choice of language, product optimizations that help maintain and improve a service, and maintaining information relating to a user's session, such as the content of a shopping cart."
+  },
+  "OCD_pm_sess_NNN_description": {
+    "message": "This cookie is used for functionality allow users to interact with a service or site to access features that are fundamental to that service. Things considered fundamental to the service include preferences like the user's choice of language, product optimizations that help maintain and improve a service, and maintaining information relating to a user's session, such as the content of a shopping cart."
+  },
+  "OCD_aboutads_sessNNN_description": {
+    "message": "This cookie is used for security authenticate users, prevent fraud, and protect users as they interact with a service."
+  },
+  "OCD_ANID_description": {
+    "message": "Cookies used for functionality allow users to interact with a service or site to access features that are fundamental to that service. Things considered fundamental to the service include preferences like the user's choice of language, product optimizations that help maintain and improve a service, and maintaining information relating to a user's session, such as the content of a shopping cart."
+  },
+  "OCD_GA_OPT_OUT_description": {
+    "message": "Cookies used for functionality allow users to interact with a service or site to access features that are fundamental to that service. Things considered fundamental to the service include preferences like the user's choice of language, product optimizations that help maintain and improve a service, and maintaining information relating to a user's session, such as the content of a shopping cart."
+  },
+  "OCD_retention_10_Nov_2030": {
+    "message": "10 Nov 2030"
+  },
+  "OCD_Conversion_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD__opt_awkid_description": {
+    "message": "Cookies used for analytics help collect data that allows services to understand how users interact with a particular service. These insights allow services both to improve content and to build better features that improve the user's experience."
+  },
+  "OCD__opt_awgid_description": {
+    "message": "Cookies used for analytics help collect data that allows services to understand how users interact with a particular service. These insights allow services both to improve content and to build better features that improve the user's experience."
+  },
+  "OCD__opt_awmid_description": {
+    "message": "Cookies used for analytics help collect data that allows services to understand how users interact with a particular service. These insights allow services both to improve content and to build better features that improve the user's experience."
+  },
+  "OCD__gaexp_rc_description": {
+    "message": "Cookies used for analytics help collect data that allows services to understand how users interact with a particular service. These insights allow services both to improve content and to build better features that improve the user's experience."
+  },
+  "OCD__opt_awcid_description": {
+    "message": "Cookies used for analytics help collect data that allows services to understand how users interact with a particular service. These insights allow services both to improve content and to build better features that improve the user's experience."
+  },
+  "OCD_PAIDCONTENT_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD_retention_30_Days": {
+    "message": "30 Days"
+  },
+  "OCD__opt_expid_description": {
+    "message": "Cookies used for analytics help collect data that allows services to understand how users interact with a particular service. These insights allow services both to improve content and to build better features that improve the user's experience."
+  },
+  "OCD__gcl_ha_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD_retention_90_Days": {
+    "message": "90 Days"
+  },
+  "OCD__gcl_gf_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD__gcl_aw_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD__gcl_gb_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD__gac_gb___description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD_FPGCLGB_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD_FPGCLAW_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD_SNID_description": {
+    "message": "This cookie is used to collect website statistics and track conversion rates and Google ad personalisation"
+  },
+  "OCD_cookies_accepted_description": {
+    "message": "This functionality cookie is simply to verify that you have allowed us to set cookies on your machine"
+  },
+  "OCD_django_language_description": {
+    "message": "Cookie necessary for the use of the options and services of the website."
+  },
+  "OCD_retention_3_month": {
+    "message": "3 month"
+  },
+  "OCD_GN_PREF_description": {
+    "message": "This cookie is used to collect website statistics and track conversion rates and Google ad personalisation"
+  },
+  "OCD_OSID_description": {
+    "message": "This cookie is used to collect website statistics and track conversion rates and Google ad personalisation"
+  },
+  "OCD___Secure_OSID_description": {
+    "message": "This cookie is used to collect website statistics and track conversion rates and Google ad personalisation"
+  },
+  "OCD_LSID_description": {
+    "message": "This cookie is used to collect website statistics and track conversion rates and Google ad personalisation"
+  },
+  "OCD_COMPASS_description": {
+    "message": "This cookie is used to collect website statistics and track conversion rates and Google ad personalisation"
+  },
+  "OCD_UULE_description": {
+    "message": "sends precise location information from your browser to Googles servers so that Google can show you results that are relevant to your location. The use of this cookie depends on your browser settings and whether you have chosen to have location turned on for your browser."
+  },
+  "OCD_retention_1825_days": {
+    "message": "1825 days"
+  },
+  "OCD_hjViewportId_description": {
+    "message": "This cookie stores user viewport details such as size and dimensions."
+  },
+  "OCD__hjSessionStorageTest_description": {
+    "message": "This cookie checks if the Hotjar Tracking Code can use Session Storage. If it can, a value of 1 is set."
+  },
+  "OCD__hjCookieTest_description": {
+    "message": "This cookie checks to see if the Hotjar Tracking Code can use cookies. If it can, a value of 1 is set."
+  },
+  "OCD_taboola_select_description": {
+    "message": "Maintains a record of whether the user performed an action in the “Taboola Select” feature."
+  },
+  "OCD_taboola_fp_td_user_id_description": {
+    "message": "Indicates that the user clicked on an item that was recommended by Taboola’s Services. This is used for reporting and analytics purposes."
+  },
+  "OCD_trc_cookie_storage_description": {
+    "message": "Assigns a unique User ID that is used for attribution and reporting purposes."
+  },
+  "OCD__tb_sess_r_description": {
+    "message": "Used on websites of our publisher Customers that utilize the Taboola Newsroom services. It maintains a session reference about the user’s visit to this particular website."
+  },
+  "OCD__tb_t_ppg_description": {
+    "message": "Used on websites of our publisher Customers that utilize the Taboola Newsroom services. This cookie is used to identify the referring website (i.e. the website that the user visited prior to arriving at this publisher’s website)."
+  },
+  "OCD_abLdr_description": {
+    "message": "Supports routine technical and performance improvements for Taboola’s browser-based Services."
+  },
+  "OCD_abMbl_description": {
+    "message": "\tSupports routine technical and performance improvements for Taboola’s mobile SDK Services."
+  },
+  "OCD_tb_click_param_description": {
+    "message": "Used on websites of our publisher Customers that utilize the Taboola Newsroom services. It measures performance of the publisher’s homepage articles that are clicked."
+  },
+  "OCD_retention_50_seconds": {
+    "message": "50 seconds"
+  },
+  "OCD_OneTrustWPCCPAGoogleOptOut_description": {
+    "message": "This cookie is set by OneTrust. It is used to honor IAB CCPA laws for consent."
+  },
+  "OCD_FunctionalCookie_description": {
+    "message": "This cookie works with the OneTrust Cookie Management Platform to activate scripts and cookies associated with the Functional Cookies category, when the user gives appropriate consent."
+  },
+  "OCD_retention_0_days": {
+    "message": "0 days"
+  },
+  "OCD_adaptv_unique_user_cookie_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_cmp_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_adsrcvw1_description": {
+    "message": "These cookies are only used with your consent. You can give or withdraw your consent on the third party's site or app."
+  },
+  "OCD_migrated2y_description": {
+    "message": "These cookies are only used as migration indication for old cookies"
+  },
+  "OCD_OTH_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_rtbData0_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_rxx_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_tearsheet_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_unique_ad_source_impression_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_axids_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_GUC_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_tbla_id_description": {
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
+  },
+  "OCD_mics_vid_description": {
+    "message": "This Cookie is required by mediarithmics third-party cookie identifier"
+  },
+  "OCD_mics_uaid_description": {
+    "message": "This cookie is an Legacy cookie added by mediarithmics that will be deprecated"
+  },
+  "OCD_mics_lts_description": {
+    "message": "This cookie is added by mediarithmics which determines the last time the browser has been seen"
+  },
+  "OCD_n360_thirtythreeacross_description": {
+    "message": "This cookie is used to pre-bid on 33Across by Nexx360 Header Bidding."
+  },
+  "OCD_n360_appnexus_description": {
+    "message": "This cookie is used to pre-bid on Xandr by Nexx360 Header Bidding."
+  },
+  "OCD_n360_bliink_description": {
+    "message": "This cookie is used to pre-bid on Bliink by Nexx360 Header Bidding."
+  },
+  "OCD_n360_amx_description": {
+    "message": "This cookie is used to pre-bid on AdaptMX by Nexx360 Header Bidding."
+  },
+  "OCD_n360_adform_description": {
+    "message": "This cookie is used to pre-bid on Adform by Nexx360 Header Bidding."
+  },
+  "OCD_n360_adnuntius_description": {
+    "message": "This cookie is used to pre-bid on Adnuntius by Nexx360 Header Bidding."
+  },
+  "OCD_n360_adot_description": {
+    "message": "This cookie is used to pre-bid on Adot by Nexx360 Header Bidding."
+  },
+  "OCD_n360_adyoulike_description": {
+    "message": "This cookie is used to pre-bid on Adyoulike by Nexx360 Header Bidding."
+  },
+  "OCD_n360_connectad_description": {
+    "message": "This cookie is used to pre-bid on ConnectAd by Nexx360 Header Bidding."
+  },
+  "OCD_n360_conversant_description": {
+    "message": "This cookie is used to pre-bid on Conversant by Nexx360 Header Bidding."
+  },
+  "OCD_n360_cwire_description": {
+    "message": "This cookie is used to pre-bid on Cwire by Nexx360 Header Bidding."
+  },
+  "OCD_n360_firstid_description": {
+    "message": "This cookie is used to pre-bid on First ID by Nexx360 Header Bidding."
+  },
+  "OCD_n360_freewheel_description": {
+    "message": "This cookie is used to pre-bid on Freewheel by Nexx360 Header Bidding."
+  },
+  "OCD_n360_fueldigitalmedia_description": {
+    "message": "This cookie is used to pre-bid on Fuel Digital Media by Nexx360 Header Bidding."
+  },
+  "OCD_n360_fueldigitalix_description": {
+    "message": "This cookie is used to pre-bid on Fuel Digital (IX) by Nexx360 Header Bidding."
+  },
+  "OCD_n360_fueldigital_description": {
+    "message": "This cookie is used to pre-bid on Fuel Digital (Smart)by Nexx360 Header Bidding."
+  },
+  "OCD_n360_gingerad_description": {
+    "message": "This cookie is used to pre-bid on GingerAd by Nexx360 Header Bidding."
+  },
+  "OCD_n360_goodad_description": {
+    "message": "This cookie is used to pre-bid on GoodAd by Nexx360 Header Bidding."
+  },
+  "OCD_n360_gravity_description": {
+    "message": "This cookie is used to pre-bid on Gravity by Nexx360 Header Bidding."
+  },
+  "OCD_n360_groupm_description": {
+    "message": "This cookie is used to pre-bid on GroupM by Nexx360 Header Bidding."
+  },
+  "OCD_n360_improve_description": {
+    "message": "This cookie is used to pre-bid on Improve by Nexx360 Header Bidding."
+  },
+  "OCD_n360_ix_description": {
+    "message": "This cookie is used to pre-bid on Index by Nexx360 Header Bidding."
+  },
+  "OCD_n360_medianet_description": {
+    "message": "This cookie is used to pre-bid on Media.net by Nexx360 Header Bidding."
+  },
+  "OCD_n360_moneytag_description": {
+    "message": "This cookie is used to pre-bid on Moneytag by Nexx360 Header Bidding."
+  },
+  "OCD_n360_nextmillennium_description": {
+    "message": "This cookie is used to pre-bid on NextMillennium by Nexx360 Header Bidding."
+  },
+  "OCD_n360_onetag_description": {
+    "message": "This cookie is used to pre-bid on OneTag by Nexx360 Header Bidding."
+  },
+  "OCD_n360_openx_description": {
+    "message": "This cookie is used to pre-bid on OpenX by Nexx360 Header Bidding."
+  },
+  "OCD_n360_outbrain_description": {
+    "message": "This cookie is used to pre-bid on Outbrain by Nexx360 Header Bidding."
+  },
+  "OCD_n360_plista_description": {
+    "message": "This cookie is used to pre-bid on Plista by Nexx360 Header Bidding."
+  },
+  "OCD_n360_pubmatic_description": {
+    "message": "This cookie is used to pre-bid on Pubmatic by Nexx360 Header Bidding."
+  },
+  "OCD_n360_pulsepoint_description": {
+    "message": "This cookie is used to pre-bid on PulsePoint by Nexx360 Header Bidding."
+  },
+  "OCD_n360_quantum_description": {
+    "message": "This cookie is used to pre-bid on Quantum by Nexx360 Header Bidding."
+  },
+  "OCD_n360_richaudience_description": {
+    "message": "This cookie is used to pre-bid on RichAudience by Nexx360 Header Bidding."
+  },
+  "OCD_n360_rtbhouse_description": {
+    "message": "This cookie is used to pre-bid on RTB House by Nexx360 Header Bidding."
+  },
+  "OCD_n360_rubicon_description": {
+    "message": "This cookie is used to pre-bid on Rubicon (Magnite) by Nexx360 Header Bidding."
+  },
+  "OCD_n360_sharethrough_description": {
+    "message": "This cookie is used to pre-bid on Sharethrough by Nexx360 Header Bidding."
+  },
+  "OCD_n360_smaato_description": {
+    "message": "This cookie is used to pre-bid on Smaato by Nexx360 Header Bidding."
+  },
+  "OCD_n360_smartadserver_description": {
+    "message": "This cookie is used to pre-bid on Smart (Equativ) by Nexx360 Header Bidding."
+  },
+  "OCD_n360_smartyads_description": {
+    "message": "This cookie is used to pre-bid on SmartyAds by Nexx360 Header Bidding."
+  },
+  "OCD_n360_smilewanted_description": {
+    "message": "This cookie is used to pre-bid on Smilewanted by Nexx360 Header Bidding."
+  },
+  "OCD_n360_staila_description": {
+    "message": "This cookie is used to pre-bid on Staila by Nexx360 Header Bidding."
+  },
+  "OCD_n360_tappx_description": {
+    "message": "This cookie is used to pre-bid on TappX by Nexx360 Header Bidding."
+  },
+  "OCD_n360_mediagrid_description": {
+    "message": "This cookie is used to pre-bid on The MediaGrid by Nexx360 Header Bidding."
+  },
+  "OCD_n360_ttd_description": {
+    "message": "This cookie is used to pre-bid on The Trade Desk by Nexx360 Header Bidding."
+  },
+  "OCD_n360_traffective_description": {
+    "message": "This cookie is used to pre-bid on Traffective by Nexx360 Header Bidding."
+  },
+  "OCD_n360_triplelift_description": {
+    "message": "This cookie is used to pre-bid on Triplelift by Nexx360 Header Bidding."
+  },
+  "OCD_n360_yahoo_description": {
+    "message": "This cookie is used to pre-bid on Verizon (Yahoo) by Nexx360 Header Bidding."
+  },
+  "OCD_n360_vidoomy_description": {
+    "message": "This cookie is used to pre-bid on Vidoomy by Nexx360 Header Bidding."
+  },
+  "OCD_n360_yieldlab_description": {
+    "message": "This cookie is used to pre-bid on Yieldlab by Nexx360 Header Bidding."
+  },
+  "OCD_mv_tokens_description": {
+    "message": "Sets a unique ID for the visitor that allows third party advertisers to target the visitor with relevant advertisement. This pairing service is provided by third party advertisement hubs which facilitates real-time bidding for advertisers."
+  },
+  "OCD_mv_tokens_invalidate_verizon_pushes_description": {
+    "message": "Sets a unique ID for the visitor that allows third party advertisers to target the visitor with relevant advertisement. This pairing service is provided by third party advertisement hubs which facilitates real-time bidding for advertisers."
+  },
+  "OCD_am_tokens_description": {
+    "message": "Presents the user with relevant content and advertisement. The service is provided by third-party advertisement hubs which facilitate real-time bidding for advertisers."
+  },
+  "OCD_am_tokens_invalidate_verizon_pushes_description": {
+    "message": "Presents the user with relevant content and advertisement. The service is provided by third-party advertisement hubs which facilitate real-time bidding for advertisers."
+  },
+  "OCD__bit_description": {
+    "message": "This cookie is a unique identifier assigned to the user to track your use of bit.ly. Information collected includes your IP address."
+  },
+  "OCD_ptrcriteo_description": {
+    "message": "This cookie is used to establishes a unique identifier for the visitor that allows external advertisers (third parties) to target the visitor with relevant advertising. This combined service is provided by advertising hubs, which provide real-time offers to advertisers."
+  },
+  "OCD_ptrrhs_description": {
+    "message": "This cookie is used to identify, session length, IP address, location, time of usage, viewed pages and files, your advertising campaign selections, and other information regarding your use of the Website."
+  },
+  "OCD_yieldmo_id_description": {
+    "message": "Yieldmo only tracks using device identifiers and so all requests must include your device's Advertising ID or the 'yieldmo_id' cookie of the device related to the request. Requests submitted without a device identifier cannot be processed."
+  },
+  "OCD_ssid_description": {
+    "message": "This cookie is associated with SpringServe. It is used for serving video ads."
+  },
+  "OCD_sst_description": {
+    "message": "This cookie is associated with SpringServe. It is used for serving video ads."
+  },
+  "OCD_dgzsdl08v4_description": {
+    "message": "This cookie provides enhanced functionality and ads personalisation"
+  },
+  "OCD_bounceClientVisit_description": {
+    "message": "This cookie is used to remember user web browsing activity and may be used to understand about your demographics, such as age and gender"
+  },
+  "OCD__vfa_description": {
+    "message": "This cookie is used to stores user and session identifiers for analytics."
+  },
+  "OCD__vfb_description": {
+    "message": "This cookie is used to stores recirculation data for analytics."
+  },
+  "OCD__vfz_description": {
+    "message": "This cookie is used to stores referral data for analytics"
+  },
+  "OCD_retention_6_minutes": {
+    "message": "6 minutes"
+  },
+  "OCD__vf_rd_test__description": {
+    "message": "This cookie is used to test best domain name (SLD+TLD) to set cookies at."
+  },
+  "OCD_retention_1_second": {
+    "message": "1 second"
+  },
+  "OCD_VfSess_description": {
+    "message": "This cookie is used to session identifier for authentication"
+  },
+  "OCD_VfRefresh_description": {
+    "message": "This cookie is used to refresh identifier for authentication"
+  },
+  "OCD_VfAccess__description": {
+    "message": "This cookie is used to access identifier for authentication"
+  },
+  "OCD_vfThirdpartyCookiesEnabled_description": {
+    "message": "This cookie is used to testing if 3rd party cookies are supported"
+  },
+  "OCD_ttbprf_description": {
+    "message": "This cookie is used for user segmentation"
+  },
+  "OCD_ttc_description": {
+    "message": "This cookie is used for user segmentation with user´s cache expiration"
+  },
+  "OCD_ttnprf_description": {
+    "message": "This cookie is used for user segmentation"
+  },
+  "OCD_n_description": {
+    "message": "This cookie is used for user segmentation with timestamp from the latest access"
+  },
+  "OCD_trk_description": {
+    "message": "This cookie is used for deliver ads"
+  },
+  "OCD_ttca_description": {
+    "message": "This cookie is used for deliver ads with users'conversion data"
+  },
+  "OCD_tp__description": {
+    "message": "This cookie is used for deliver ads, using synchronous id for DSP"
+  },
+  "OCD_ttgcm_description": {
+    "message": "This cookie is used for sync with Google services"
+  },
+  "OCD__ut__description": {
+    "message": "This cookie is used to uniquely identify the same user on the different domains"
+  },
+  "OCD__u__description": {
+    "message": "This cookie is used to uniquely identify the same user on the different domains"
+  },
+  "OCD__s__description": {
+    "message": "This cookie is used to store for temporary session"
+  },
+  "OCD__lv__description": {
+    "message": "This cookie is used to store for last visit"
+  },
+  "OCD__nrbi_description": {
+    "message": "This cookie is used to store user data for the Cookie Management Platform"
+  },
+  "OCD_compass_sid_description": {
+    "message": "This cookie is used to store Marfeel session id."
+  },
+  "OCD_compass_uid_description": {
+    "message": "This cookie is used to store Marfeel user id"
+  },
+  "OCD____m_rec_description": {
+    "message": "This cookie is used to store data about recirculation module"
+  },
+  "OCD_GRV_BHV_UID__description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_GRV_BHV_IDCC__description": {
+    "message": "This cookie is used to store the user's geographical location"
+  },
+  "OCD_GRV_BHV_SKU__description": {
+    "message": "This cookie is used to store SKU of user"
+  },
+  "OCD_GRV_BHV_IDCAT__description": {
+    "message": "This cookie is used to uniqiue identifier."
+  },
+  "OCD_GRV_BHV_DATE__description": {
+    "message": "This cookie is used to store Date for user perfernces."
+  },
+  "OCD_GRV_IDU_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_retention_296_days": {
+    "message": "296 days"
+  },
+  "OCD_NPA__description": {
+    "message": "This cookie is used to store the user's browsing history"
+  },
+  "OCD_GRV_BHV_BRND___description": {
+    "message": "This cookie is used to brand of user's perfernces"
+  },
+  "OCD_GRV_google_description": {
+    "message": "This cookie is used to store user's google search history"
+  },
+  "OCD_duid_update_time_description": {
+    "message": "Registers a unique ID that identifies the user's device during return visits. Used for conversion tracking and to measure the efficacy of online ads."
+  },
+  "OCD__ssp_update_time__description": {
+    "message": "This cookie is used to store unique identifiers timestamp"
+  },
+  "OCD__dsp_uid__description": {
+    "message": "This cookie is used to store unique identifiers"
+  },
+  "OCD_connect_sid_description": {
+    "message": "This is used for user sessions and is strictly necessary for the Community. Session cookies allow websites to remember users within a website when they move between web pages. These cookies tell the server what pages to show the user so the user doesn’t have to remember where they left off or start navigating the site all over again."
+  },
+  "OCD__zendesk_cookie_description": {
+    "message": "This cookie saves arbitrary preference settings. Two factor authentication features and device tracking will not work without it."
+  },
+  "OCD_zte2095_description": {
+    "message": "This cookie is used to identify the domain/subdomain the Chat Widget is located on."
+  },
+  "OCD___zlcprivacy_description": {
+    "message": "This cookie store visitor's decision on CookieLaw"
+  },
+  "OCD__answer_bot_service_session_description": {
+    "message": "This cookie stores unique session key for Answer Bot product. Used to uniquely identify a user session when using Answer Bot Article Recommendations."
+  },
+  "OCD_ZD_zE_oauth_description": {
+    "message": "This cookie stores the authentication token once the user has been authenticated.Web Widget (Classic) offers pre-built API functionality for cookie consent; see here: Web Widget (Classic) Cookie Permission in Developer Center. Alternatively, these Cookies respect external cookie bot functionality as well."
+  },
+  "OCD__zendesk_session_description": {
+    "message": "This cookie stores account ID, route for internal service calls and the cross-site request forgery token."
+  },
+  "OCD_retention_8_hours": {
+    "message": "8 hours"
+  },
+  "OCD_zendesk_thirdparty_test_description": {
+    "message": "This cookie stores account ID, route for internal service calls and the cross-site request forgery token."
+  },
+  "OCD__zendesk_shared_session_description": {
+    "message": "This cookie is used for authentication and set to be anonymous"
+  },
+  "OCD__zendesk_authenticated_description": {
+    "message": "This is a flag set when a user is authenticated to display the most up to date content."
+  },
+  "OCD__help_center_session_description": {
+    "message": "This cookie stores unique session key for Help Center Functionality."
+  },
+  "OCD_help_center_data_description": {
+    "message": "This cookie stores the text string of an end-user’s search term in the Help Center Functionality. It stores this so that it can check whether a ticket was created after that term was searched. A user identifier is not stored so it is not possible to specify which user completed the search at the time of reporting."
+  },
+  "OCD_retention_48_hours": {
+    "message": "48 hours"
+  },
+  "OCD__zdshared_user_session_analytics_description": {
+    "message": "This cookie is Used to track information about visits for analytics purposes."
+  },
+  "OCD__zendesk_nps_session_description": {
+    "message": "This cookie stores a unique key for a session, for landing page after responding to an NPS survey (if enabled)"
+  },
+  "OCD_ZD_settings_description": {
+    "message": "This cookie stores a hash of settings so that we don't keep sending requests to our backend."
+  },
+  "OCD_ZD_suid_description": {
+    "message": "This cookie is used to create a sessionId and track analytics events for pages that load a Web Widget on them."
+  },
+  "OCD_ZD_buid_description": {
+    "message": "This cookie is used to create a deviceId and track analytics events for pages that load a Web Widget on them."
+  },
+  "OCD_ZD_store_description": {
+    "message": "This cookie ensures consistent presentation of the Web Widget (Classic) when an End-User navigates to a new web page."
+  },
+  "OCD_ZD_widgetOpen_description": {
+    "message": "This cookie maintains the open/closed state of the Web Widget across page visits."
+  },
+  "OCD_ZD_launcherLabelRemoved_description": {
+    "message": "If the end user chooses to dismiss the launcher label, then we store this value to ensure that the message is not displayed again on other pages."
+  },
+  "OCD__zdsession_talk_embeddables_service_description": {
+    "message": "This cookie is used for load balancing."
+  },
+  "OCD_RT_description": {
+    "message": "This cookie is used to identify the visitor through an application. This allows the visitor to login to a website through their LinkedIn application for example."
+  },
+  "OCD_retention_399_days": {
+    "message": "399 days"
+  },
+  "OCD_TADCID_description": {
+    "message": "This cookie is used for viewing embedded content from TripAdvisor, including payment of referral commission fees and user tracking across websites."
+  },
+  "OCD_ServerPool_description": {
+    "message": "This cookie is generally provided by TripAdvisor and is used for advertising purposes."
+  },
+  "OCD_TATravelInfo_description": {
+    "message": "This cookie is used to track visitors across websites to build a profile of search and browsing history."
+  },
+  "OCD_TAUnique_description": {
+    "message": "This cookie is used to track visitors across websites to build a profile of search and browsing history."
+  },
+  "OCD_TAReturnTo_description": {
+    "message": "This cookies is used by TripAdvisor to track the return-to URL after authentication"
+  },
+  "OCD_dt_description": {
+    "message": "This cookie is set by AddThis to allow website visitors to share content on various social networks."
+  },
+  "OCD_rtbh_description": {
+    "message": "This cookie is used to  place digital advertising from their Marketing partners on their Publishers' websites via ad placements"
+  },
+  "OCD_udmts_description": {
+    "message": "This cookie is used to  place digital advertising from their Marketing partners on their Publishers' websites via ad placements"
+  },
+  "OCD_retention_89_days": {
+    "message": "89 days"
+  },
+  "OCD_api_token_description": {
+    "message": "This cookies is necessary for the implementation of video-content on the website."
+  },
+  "OCD_retention_3652_days": {
+    "message": "3652 days"
+  },
+  "OCD_unique_id_description": {
+    "message": "This cookie is associated with twitch.com. It preserves the user state across page requests."
+  },
+  "OCD_unique_id_durable_description": {
+    "message": "This cookie is associated with twitch.com. It allows the host domain to remember the choices you make on the Twitch Services and to provide enhanced and more personalized features, such as customising a webpage, remembering if the host domain has asked you to participate in a promotion and for other services you request, like watching a video or commenting on a blog."
+  },
+  "OCD_session_unique_id_description": {
+    "message": "This cookie is use for Twitch.tv which is an online service used for watching or broadcasting live or prerecorded videos across topics such as cooking, travel, art, sports, and video games."
+  },
+  "OCD_server_session_id_description": {
+    "message": "This cookie is associated with twitch.com. It allows the host domain to remember the choices you make on the Twitch Services and to provide enhanced and more personalized features, such as customising a webpage, remembering if the host domain has asked you to participate in a promotion and for other services you request, like watching a video or commenting on a blog."
+  },
+  "OCD_twitch_lohp_countryCode_description": {
+    "message": "This cookie is used for country determination"
+  },
+  "OCD_retention_3650_days": {
+    "message": "3650 days"
+  },
+  "OCD_enable_compact_scene_listing_description": {
+    "message": "This cookie is used to store user preference"
+  },
+  "OCD_videoChat_notice_dismissed_description": {
+    "message": "This cookie is used to store user preference"
+  },
+  "OCD_chat_rules_shown_description": {
+    "message": "This cookie is used to store user preference"
+  },
+  "OCD_algoliasearch_client_js_description": {
+    "message": "This cookie is used for search optimization"
+  },
+  "OCD_device_id_description": {
+    "message": "This cookie is An ID that uniquely identifies the device the user is using."
+  },
+  "OCD_referrer_url_description": {
+    "message": "This cookie detects how the user reached the website by registering their last URL-address."
+  },
+  "OCD_sentry_device_id_description": {
+    "message": "This cookie Preserves users states across page requests."
+  },
+  "OCD_session_storage_last_visited_twitch_url_description": {
+    "message": "This cookie stores the user's video player preferences using embedded Twitch video"
+  },
+  "OCD_local_storage_app_session_id_description": {
+    "message": "This cookie preserves users states across page requests."
+  },
+  "OCD__ceir_description": {
+    "message": "This cookie tracks whether a visitor has visited the site before"
+  },
+  "OCD__CEFT_description": {
+    "message": "This cookie stores page variants assigned to visitors for A/B performance testing"
+  },
+  "OCD__cer_v_description": {
+    "message": "(Old tracking script) Track whether a visitor has visited the site before"
+  },
+  "OCD__ce_s_description": {
+    "message": "This cookie tracks a recording visitor session unique ID, tracking host and start time"
+  },
+  "OCD__ce_cch_description": {
+    "message": "This cookie is used to check if cookies can be added."
+  },
+  "OCD__ce_gtld_description": {
+    "message": "This cookie is used to identify the top level domain."
+  },
+  "OCD_ce_need_secure_cookie_description": {
+    "message": "This cookie is used to determine cookie security parameters."
+  },
+  "OCD_ce_successful_csp_check_description": {
+    "message": "This cookie is used to determine if the page has a Content Security Policy rule that would prevent tracking."
+  },
+  "OCD_cebs_description": {
+    "message": "This cookie is used to track the current user session internally."
+  },
+  "OCD_cebsp__description": {
+    "message": "This cookie is used to track the current user session internally."
+  },
+  "OCD__ce_clock_event_description": {
+    "message": "This cookie prevents repeated requests to the Clock API."
+  },
+  "OCD_retention_1_Day": {
+    "message": "1 Day"
+  },
+  "OCD__ce_clock_data_description": {
+    "message": "This cookie stores the difference in time from the server's time and the current browser."
+  },
+  "OCD__ce_irv_description": {
+    "message": "This cookie used to store isReturning value during the session"
+  },
+  "OCD_ceft_variant_override_description": {
+    "message": "This cookie stores forced variant id"
+  },
+  "OCD__crazyegg_description": {
+    "message": "This cookie remembers information related to marketing page features."
+  },
+  "OCD_ce_login_description": {
+    "message": "This cookie remembers the last email address you used to login"
+  },
+  "OCD_ce_signup_flow_description": {
+    "message": "This cookie remembers the signup flow you saw"
+  },
+  "OCD_ce_signup_partner_description": {
+    "message": "This cookie remembers the signup partner you were referred from"
+  },
+  "OCD_ceac_description": {
+    "message": "This cookie stores the Account ID number"
+  },
+  "OCD_cean_description": {
+    "message": "This cookie stores the Anonymous ID number"
+  },
+  "OCD_cehc_description": {
+    "message": "This cookie shares user information with CrazyEgg's Help Center"
+  },
+  "OCD_celi_description": {
+    "message": "This cookie stores the logged-in Status"
+  },
+  "OCD_cean_assoc_description": {
+    "message": "This cookie stores the associates Anonymous ID with logged-in user"
+  },
+  "OCD_first_snapshot_url_description": {
+    "message": "This cookie stores the website URL used to create first Snapshot"
+  },
+  "OCD_sharing___description": {
+    "message": "This cookie stores the shared item code"
+  },
+  "OCD_ce_sid_description": {
+    "message": "This cookie stores the identify logged-in users"
+  },
+  "OCD_cecu_description": {
+    "message": "This cookie stores the identify logged-in users"
+  },
+  "OCD_TiPMix_description": {
+    "message": "Registers which server-cluster is serving the visitor. This is used in context with load balancing, in order to optimize user experience."
+  },
+  "OCD_retention_0_day": {
+    "message": "0 day"
+  },
+  "OCD_x_ms_routing_name_description": {
+    "message": "Registers which server-cluster is serving the visitor. This is used in context with load balancing, in order to optimize user experience."
+  },
+  "OCD__distillery_description": {
+    "message": "This cookie is used by the Wistia video player to remember where you are in a video so that if playback is interrupted (for example, by losing your internet connection) then you can get right back to where you left off."
+  },
+  "OCD_muxData_description": {
+    "message": "This cookie is used by the Wistia video player to remember where you are in a video so that if playback is interrupted (for example, by losing your internet connection) then you can get right back to where you left off."
+  },
+  "OCD_wistia_http2_push_disabled_description": {
+    "message": "This cookie supports performance tracking by Wistia for their Analytics, so we can see how often videos were watched and how users interacted with video functionality."
+  },
+  "OCD_retention_2_Weeks": {
+    "message": "2 Weeks"
+  },
+  "OCD__simplex_description": {
+    "message": "Cookie by Wistia for storing user’s referrer and landing paged details."
+  },
+  "OCD_wistia_description": {
+    "message": "This is a cookie required for the video player to work."
+  },
+  "OCD_wistia_video_progress___description": {
+    "message": "This is a cookie required for the video player to work."
+  },
+  "OCD___uin_rh_description": {
+    "message": "This domain is owned by Sonobi, an automated online advertising buying and selling platform."
+  },
+  "OCD_retention_364_Days": {
+    "message": "364 Days"
+  },
+  "OCD___uir_rh_description": {
+    "message": "This domain is owned by Sonobi, an automated online advertising buying and selling platform."
+  },
+  "OCD_retention_32_Days": {
+    "message": "32 Days"
+  },
+  "OCD_HAPLB3A_description": {
+    "message": "This domain is owned by Sonobi, an automated online advertising buying and selling platform."
+  },
+  "OCD_SSPR___description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SSPZ_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_DSP2F___description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_ADKUID_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SCM_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SCMaps_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SCMsovrn_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SCMinf_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SCMo_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SCMg_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_SCM__description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_UID_EXT___description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_UTID_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_UTID_ENC_description": {
+    "message": "This cookie is used to store the user's unique identifier"
+  },
+  "OCD_DYID_description": {
+    "message": "A Dynamic Yield unique identifier that operates as a key for personalization."
+  },
+  "OCD__dyid_description": {
+    "message": "A Dynamic Yield unique identifier that operates as a key for personalization."
+  },
+  "OCD__dyid_server_description": {
+    "message": "A Dynamic Yield unique identifier that operates as a key for personalization."
+  },
+  "OCD_DYSES_description": {
+    "message": "A Dynamic Yield unique identifier that operates as a key for personalization."
+  },
+  "OCD__dyjsession_description": {
+    "message": "A Dynamic Yield unique identifier that operates as a key for personalization."
+  },
+  "OCD__dy_csc_ses_description": {
+    "message": "This cookie tracks when a user closes their browser."
+  },
+  "OCD__dycmc_description": {
+    "message": "This cookie maintains a simple heuristic that detects users who actively delete cookies (cookie deleters). The 'cookie deleter' markup is collected within the reported page visit data."
+  },
+  "OCD__dycnst_description": {
+    "message": "This cookie is used to remember user cookie consent preferences."
+  },
+  "OCD__dy_lu_ses_description": {
+    "message": "This cookie determines the first page URL a user comes from, and its validity."
+  },
+  "OCD__dy_df_geo_description": {
+    "message": "This cookie is used for audience creation purposes to store geographical location data (country, state, city)."
+  },
+  "OCD__dy_geo_description": {
+    "message": "This cookie is for audience creation purposes to store geographical location data (country, continent, area, city)."
+  },
+  "OCD__dycst_description": {
+    "message": "This cookie is used for audience creation purposes to collect data about the user-agent and associated window size."
+  },
+  "OCD__dy_ses_load_seq_description": {
+    "message": "This cookie is used for experimentation and A/B testing purposes, to detect browser sessions."
+  },
+  "OCD__dy_soct_description": {
+    "message": "This cookie controls the frequency of periodically-activated campaigns. Without this cookie, periodically-activated campaigns would be either disabled or executed upon every page load."
+  },
+  "OCD__dy_toffset_description": {
+    "message": "This cookie validates the user's clock drift (for computers that don't sync their clock with the internet)."
+  },
+  "OCD_dy_fs_page_description": {
+    "message": "This cookie indicates the URL of the first page a user visits when they start a session on a website, and targets a user by the first page of their session."
+  },
+  "OCD__dy_cs_storage_items_description": {
+    "message": "This cookie is used for proprietary custom implementation on your website, for Dynamic Yield campaigns to operate correctly."
+  },
+  "OCD__dy_cs_cookie_items_description": {
+    "message": "This cookie is used for proprietary custom implementation on your website, for Dynamic Yield campaigns to operate correctly."
+  },
+  "OCD_ckid_description": {
+    "message": "‍This cookie is an identifier (ID) provided by the user's internet browser and is used to match the user with relevant products in marketing campaigns."
+  },
+  "OCD_hash_description": {
+    "message": "‍Is a randomly generated identifier (ID) that ensures the impossibility of identifying a user, precisely to maintain their anonymity. The ID is generated from the ckid."
+  },
+  "OCD_BLUEID_description": {
+    "message": "‍Identifier (ID) generated by Blue to ensure that a user is not identified more than once and generates duplication in the system, even if he/she leaves the internet browser and generates another browsing session."
+  },
+  "OCD_ig_did_description": {
+    "message": "This is a targeting cookie used to track Instagram user visits."
+  },
+  "OCD_retention_9_years": {
+    "message": "9 years"
+  },
+  "OCD_ig_cb_description": {
+    "message": "This cookie enables the correct functionality of the Instagram plugins, such as embedded Instagram posts"
+  },
+  "OCD_ds_user_id_description": {
+    "message": "This is a targeting cookie used to optimize advertising on Instagram."
+  },
+  "OCD_mid_description": {
+    "message": "This is a functionality cookie used to optimize the use of Instagram on the website"
+  },
+  "OCD_fbm___description": {
+    "message": "This is a targeting cookie used to track Instagram user visits."
+  },
+  "OCD_shbid_description": {
+    "message": "This is a targeting cookie used to optimize advertising on Instagram."
+  },
+  "OCD_shbts_description": {
+    "message": "This is a targeting cookie used to optimize advertising on Instagram."
+  },
+  "OCD_sessionid_description": {
+    "message": "This is a performance cookie used to collect data about people logging in and out of the website."
+  },
+  "OCD__parsely_visitor_description": {
+    "message": "JSON document uniquely identifying a browser and counting its sessions"
+  },
+  "OCD__parsely_tpa_blocked_description": {
+    "message": "JSON document storing a flag indicating whether pixel.parsely.com is not accessible by the tracker"
+  },
+  "OCD__parsely_slot_click_description": {
+    "message": "explicitly cleared on some tracker loads, JSON document storing positional information about a clicked internal link"
+  },
+  "OCD__parsely_session_description": {
+    "message": "JSON document storing information identifying a browsing session according to Parsely’s proprietary definition"
+  },
+  "OCD_test_description": {
+    "message": "This cookie is used to discover cookie support, value undefined"
+  },
+  "OCD___editor_layout_description": {
+    "message": "Used for Codepen, which in turn is used for some blog articles and documentation"
+  },
+  "OCD_codepen_session_description": {
+    "message": "Used by CodePen when embedding CodePen snippets."
+  },
+  "OCD_codepen_signup_referrer_description": {
+    "message": "Used by Codepen to store the signup referral platform"
+  },
+  "OCD_codepen_signup_referrer_date_description": {
+    "message": "Used by Codepen to store the latest date of signup referral platform"
+  },
+  "OCD_rl_user_id_description": {
+    "message": "Stores the user ID set via the identify API. All the subsequent event payloads will contain this data unless cleared from the storage."
+  },
+  "OCD_rl_trait_description": {
+    "message": "Stores the user traits object set via the identify API. All the subsequent event payloads will contain this data unless cleared from the storage."
+  },
+  "OCD_rl_anonymous_id_description": {
+    "message": "Stores the anonymous ID. By default, it would be the auto-generated unique ID by SDK for each visitor unless overridden via setAnonymousId API. All the subsequent event payloads will contain this data unless cleared from the storage."
+  },
+  "OCD_rl_group_id_description": {
+    "message": "Stores the user group ID set via the group API. All the subsequent group event payloads will contain this data unless cleared from the storage."
+  },
+  "OCD_rl_group_trait_description": {
+    "message": "Stores the user group traits object set via the group API. All the subsequent group event payloads will contain this data unless cleared from the storage."
+  },
+  "OCD_rl_page_init_referrer_description": {
+    "message": "Stores the initial referrer of the page when a user visits a site for the first time. All the subsequent event payloads will contain this data."
+  },
+  "OCD_rl_page_init_referring_domain_description": {
+    "message": "Stores the initial referring domain of the page when a user visits a site for the first time. All the subsequent event payloads will contain this data."
+  },
+  "OCD_test_rudder_cookie_description": {
+    "message": "Checks whether the cookie storage of a browser is accessible or not. Once checked, the SDK removes the cookie immediately."
+  },
+  "OCD_rl_session_description": {
+    "message": "Stores the session-related information including sessionId if session tracking is enabled."
+  },
+  "OCD_rl_auth_token_description": {
+    "message": "Stores the authentication token passed by the user."
+  },
+  "OCD__biz_uid_description": {
+    "message": "Uniquely identify a user on the current domain."
+  },
+  "OCD__biz_nA_description": {
+    "message": "A sequence number that Marketo Measure includes for all requests for internal diagnostics purposes."
+  },
+  "OCD__biz_flagsA_description": {
+    "message": "A cookie that stores various user information, such as form submission, cross-domain migration, view-through pixel, tracking opt-out status, etc."
+  },
+  "OCD__biz_pendingA_description": {
+    "message": "Temporarily stores analytics data until successfully sent to Marketo Measure server."
+  },
+  "OCD__biz_ABTestA_description": {
+    "message": "List of checksums from Optimizely and Visual Web Optimizer ABTests data that have already been reported, preventing bizible.js from resending collected data."
+  },
+  "OCD__biz_su_description": {
+    "message": "Universal user ID to identify a user across multiple domains, only applicable to tenants with integration bypassing ITP limitations."
+  },
+  "OCD__biz_EventA_description": {
+    "message": "Universal user ID to identify a user across multiple domains, only applicable to tenants with integration bypassing ITP limitations."
+  },
+  "RWS_rationale_https___socket_to_me_vip": {
+    "message": "A headless server to augment application that has a primary serverless architecture."
+  },
+  "RWS_rationale_https___deere_com": {
+    "message": "Both johndeere.com and deere.com share branding, logos, and terms and conditions. They are used interchangeably. The names themselves are associated to Deere & Company in the marketplace."
+  },
+  "RWS_rationale_https___player_pl": {
+    "message": "Streaming service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website"
+  },
+  "RWS_rationale_https___prisjakt_no": {
+    "message": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites."
+  },
+  "RWS_rationale_https___mittanbud_no": {
+    "message": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites."
+  },
+  "RWS_rationale_https___pdmp_apis_no": {
+    "message": "Site owned by Schibsted that provides APIs for users across Schibsted's sites."
+  },
+  "RWS_rationale_https___elgrafico_com": {
+    "message": "News portal owned by La Prensa Grafica Group"
+  },
+  "RWS_rationale_https___eleconomista_net": {
+    "message": "News portal owned by La Prensa Grafica Group"
+  },
+  "RWS_rationale_https___ella_sv": {
+    "message": "News portal owned by La Prensa Grafica Group"
+  },
+  "RWS_rationale_https___grupolpg_sv": {
+    "message": "Domain owned by La Prensa Grafica Group"
+  },
+  "RWS_rationale_https___nidhiacademyonline_com": {
+    "message": "This website is a subpart of kaksya.in and is used to host Nidhi Academy educational content videos/notes and more."
+  },
+  "RWS_rationale_https___dewarmsteweek_be": {
+    "message": "domain for a yearly campaign"
+  },
+  "RWS_rationale_https___sporza_be": {
+    "message": "sub brand for sports news"
+  },
+  "RWS_rationale_https___een_be": {
+    "message": "sub brand site"
+  },
+  "RWS_rationale_https___radio2_be": {
+    "message": "sub brand site"
+  },
+  "RWS_rationale_https___radio1_be": {
+    "message": "sub brand site"
+  },
+  "RWS_rationale_https___geforcenow_com": {
+    "message": "A site that represents the WEB client for NVIDIA GEFORCE NOW service. Players are able to instantly stream their PC game library. NVIDIA branding is clearly visible on this site."
+  },
+  "RWS_rationale_https___meo_pt": {
+    "message": "MEO is a prominent telecommunications and entertainment provider in Portugal, offering a wide range of services including television, internet, phone, and mobile."
+  },
+  "RWS_rationale_https___tolteck_app": {
+    "message": "Tolteck application"
+  },
+  "RWS_rationale_https___24_hu": {
+    "message": "Hungarian news portal"
+  },
+  "RWS_rationale_https___startlap_hu": {
+    "message": "Hungarian news aggregator site and link collection"
+  },
+  "RWS_rationale_https___nlc_hu": {
+    "message": "Hungarian women's online magazine"
+  },
+  "RWS_rationale_https___hazipatika_com": {
+    "message": "Hungarian health portal"
+  },
+  "RWS_rationale_https___nosalty_hu": {
+    "message": "Hungarian recipe portal"
+  },
+  "RWS_rationale_https___cognitive_ai_ru": {
+    "message": "This domain is our backend service that needs to share cookies with the main user-facing domain for authentication and session management."
+  },
+  "RWS_rationale_https___thirdspace_org_au": {
+    "message": "Similar content served in slightly different formats to different audiences"
+  },
+  "RWS_rationale_https___p106_net": {
+    "message": "Indonesia Junior High School"
+  },
+  "RWS_rationale_https___smpn106jkt_sch_id": {
+    "message": "Indonesia Junior High School"
+  },
+  "RWS_rationale_https___intoday_in": {
+    "message": "The one-stop destination for all of India Today Group's digital properties."
+  },
+  "RWS_rationale_https___aajtak_in": {
+    "message": "aajtak.in is the fastest, most reliable, and most popular website of news in Hindi. It provides readers with the news of India and worldwide along with every significant information related to everyday life with complete authenticity"
+  },
+  "RWS_rationale_https___businesstoday_in": {
+    "message": "Top destination for business news, markets,  economy and more"
+  },
+  "RWS_rationale_https___indiatoday_in": {
+    "message": "IndiaToday.in brings you news, analysis, explainers and opinion on a variety of subjects including politics, crime, civic issues, business, sports, technology, science, heatlh, lifestyle, and much more"
+  },
+  "RWS_rationale_https___gnttv_com": {
+    "message": " Good News Today is a website that focuses on the bright side of life and showcases stories of triumphs and positivity."
+  },
+  "RWS_rationale_https___indiatodayne_in": {
+    "message": "India Today NE is dedicated to covering news and views of India’s north-eastern region which includes eight states—Assam, Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura, Meghalaya and Sikkim"
+  },
+  "RWS_rationale_https___ambitionbox_com": {
+    "message": "Ambition box associated url"
+  },
+  "RWS_rationale_https___infoedgeindia_com": {
+    "message": "InfoEdge India website"
   }
 }

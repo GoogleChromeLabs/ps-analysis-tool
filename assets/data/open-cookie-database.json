@@ -8,7 +8,7 @@
       "description": "OCD_cookiePreferences_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -21,7 +21,7 @@
       "description": "OCD_td_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -147,11 +147,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "_ga",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD__ga_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -160,11 +160,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "_ga_*",
-      "domain": "google-analytics.com (3rd party) or ",
+      "domain": "",
       "description": "OCD__ga___description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "1"
     }
   ],
@@ -173,11 +173,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "_gid",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD__gid_description",
       "retention": "OCD_retention_24_hours",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -186,11 +186,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "_gat*",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD__gat__description",
       "retention": "OCD_retention_1_minute",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "1"
     }
   ],
@@ -199,11 +199,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "_dc_gtm_*",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD__dc_gtm___description",
       "retention": "OCD_retention_1_minute",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "1"
     }
   ],
@@ -212,11 +212,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "AMP_TOKEN",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD_AMP_TOKEN_description",
       "retention": "OCD_retention_30_seconds_till_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -225,11 +225,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "_gat_gtag_*",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD__gat_gtag___description",
       "retention": "OCD_retention_1_hour",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "1"
     }
   ],
@@ -238,11 +238,11 @@
       "platform": "Google Analytics",
       "category": "Marketing",
       "name": "_gac_*",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD__gac___description",
       "retention": "OCD_retention_90_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "1"
     }
   ],
@@ -251,11 +251,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "__utma",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD___utma_description",
       "retention": "OCD_retention_2_years_after_last_activity",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -264,11 +264,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "__utmt",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD___utmt_description",
       "retention": "OCD_retention_10_minutes",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -277,11 +277,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "__utmb",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD___utmb_description",
       "retention": "OCD_retention_30_minutes_after_last_activity",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -290,11 +290,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "__utmc",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD___utmc_description",
       "retention": "OCD_retention_End_of_session__browser_",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -303,11 +303,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "__utmz",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD___utmz_description",
       "retention": "OCD_retention_6_months_after_last_activity",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -329,11 +329,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "__utmx",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD___utmx_description",
       "retention": "OCD_retention_18_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -342,11 +342,11 @@
       "platform": "Google Analytics",
       "category": "Analytics",
       "name": "__utmxx",
-      "domain": "google-analytics.com (3rd party) or",
+      "domain": "",
       "description": "OCD___utmxx_description",
       "retention": "OCD_retention_18_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -359,7 +359,7 @@
       "description": "OCD_FPAU_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -372,7 +372,7 @@
       "description": "OCD_FPID_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -385,7 +385,7 @@
       "description": "OCD_FPLC_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -398,72 +398,345 @@
       "description": "OCD__GRECAPTCHA_description",
       "retention": "OCD_retention_179_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "__eoi": [
+    {
+      "platform": "Google AdSense",
+      "category": "Functional",
+      "name": "__eoi",
+      "domain": "",
+      "description": "OCD___eoi_description",
+      "retention": "OCD_retention_3_Months",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "pm_sess": [
+    {
+      "platform": "Google AdSense",
+      "category": "Functional",
+      "name": "pm_sess",
+      "domain": "",
+      "description": "OCD_pm_sess_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "pm_sess_NNN": [
+    {
+      "platform": "Google AdSense",
+      "category": "Functional",
+      "name": "pm_sess_NNN",
+      "domain": "",
+      "description": "OCD_pm_sess_NNN_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "aboutads_sessNNN": [
+    {
+      "platform": "Google AdSense",
+      "category": "Functional",
+      "name": "aboutads_sessNNN",
+      "domain": "",
+      "description": "OCD_aboutads_sessNNN_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "ANID": [
+    {
+      "platform": "Google AdSense",
+      "category": "Functional",
+      "name": "ANID",
+      "domain": "",
+      "description": "OCD_ANID_description",
+      "retention": "OCD_retention_13_months",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "GA_OPT_OUT": [
+    {
+      "platform": "Google Analytics",
+      "category": "Functional",
+      "name": "GA_OPT_OUT",
+      "domain": "google-analytics.com",
+      "description": "OCD_GA_OPT_OUT_description",
+      "retention": "OCD_retention_10_Nov_2030",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "Conversion": [
+    {
+      "platform": "Google Ads",
+      "category": "Marketing",
+      "name": "Conversion",
+      "domain": "www.googleadservices.com",
+      "description": "OCD_Conversion_description",
+      "retention": "OCD_retention_90_days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_opt_awkid": [
+    {
+      "platform": "Google Optimize",
+      "category": "Analytics",
+      "name": "_opt_awkid",
+      "domain": "",
+      "description": "OCD__opt_awkid_description",
+      "retention": "OCD_retention_24_hours",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_opt_awgid": [
+    {
+      "platform": "Google Optimize",
+      "category": "Analytics",
+      "name": "_opt_awgid",
+      "domain": "",
+      "description": "OCD__opt_awgid_description",
+      "retention": "OCD_retention_24_hours",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_opt_awmid": [
+    {
+      "platform": "Google Optimize",
+      "category": "Analytics",
+      "name": "_opt_awmid",
+      "domain": "",
+      "description": "OCD__opt_awmid_description",
+      "retention": "OCD_retention_24_hours",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_gaexp_rc": [
+    {
+      "platform": "Google Optimize",
+      "category": "Analytics",
+      "name": "_gaexp_rc",
+      "domain": "",
+      "description": "OCD__gaexp_rc_description",
+      "retention": "OCD_retention_24_hours",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_opt_awcid": [
+    {
+      "platform": "Google Optimize",
+      "category": "Analytics",
+      "name": "_opt_awcid",
+      "domain": "",
+      "description": "OCD__opt_awcid_description",
+      "retention": "OCD_retention_24_hours",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "PAIDCONTENT": [
+    {
+      "platform": "Google Surveys",
+      "category": "Marketing",
+      "name": "PAIDCONTENT",
+      "domain": "doubleclick.net",
+      "description": "OCD_PAIDCONTENT_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_opt_expid": [
+    {
+      "platform": "Google Optimize",
+      "category": "Analytics",
+      "name": "_opt_expid",
+      "domain": "",
+      "description": "OCD__opt_expid_description",
+      "retention": "OCD_retention_10_seconds",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_gcl_ha": [
+    {
+      "platform": "Google Hotel Ads",
+      "category": "Marketing",
+      "name": "_gcl_ha",
+      "domain": "",
+      "description": "OCD__gcl_ha_description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_gcl_gf": [
+    {
+      "platform": "Google Flights",
+      "category": "Marketing",
+      "name": "_gcl_gf",
+      "domain": "",
+      "description": "OCD__gcl_gf_description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_gcl_aw": [
+    {
+      "platform": "Google Ads",
+      "category": "Marketing",
+      "name": "_gcl_aw",
+      "domain": "",
+      "description": "OCD__gcl_aw_description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_gcl_gb": [
+    {
+      "platform": "Google Ads",
+      "category": "Marketing",
+      "name": "_gcl_gb",
+      "domain": "",
+      "description": "OCD__gcl_gb_description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_gac_gb_*": [
+    {
+      "platform": "Google Ads",
+      "category": "Marketing",
+      "name": "_gac_gb_*",
+      "domain": "",
+      "description": "OCD__gac_gb___description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "FPGCLGB": [
+    {
+      "platform": "Google Ads",
+      "category": "Marketing",
+      "name": "FPGCLGB",
+      "domain": "",
+      "description": "OCD_FPGCLGB_description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "FPGCLAW": [
+    {
+      "platform": "Google Ads",
+      "category": "Marketing",
+      "name": "FPGCLAW",
+      "domain": "",
+      "description": "OCD_FPGCLAW_description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
   "__gsas": [
     {
-      "platform": "Google Adsense",
+      "platform": "Google AdSense",
       "category": "Marketing",
       "name": "__gsas",
       "domain": "",
       "description": "OCD___gsas_description",
       "retention": "OCD_retention_3_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
   "__gpi": [
     {
-      "platform": "Google Adsense",
+      "platform": "Google AdSense",
       "category": "Marketing",
       "name": "__gpi",
       "domain": "",
       "description": "OCD___gpi_description",
       "retention": "OCD_retention_13_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
   "__gpi_optout": [
     {
-      "platform": "Google Adsense",
+      "platform": "Google AdSense",
       "category": "Marketing",
       "name": "__gpi_optout",
       "domain": "",
       "description": "OCD___gpi_optout_description",
       "retention": "OCD_retention_13_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
   "GED_PLAYLIST_ACTIVITY": [
     {
-      "platform": "Google Adsense",
+      "platform": "Google AdSense",
       "category": "Marketing",
       "name": "GED_PLAYLIST_ACTIVITY",
       "domain": "",
       "description": "OCD_GED_PLAYLIST_ACTIVITY_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
   "ACLK_DATA": [
     {
-      "platform": "Google Adsense",
+      "platform": "Google AdSense",
       "category": "Marketing",
       "name": "ACLK_DATA",
       "domain": "",
       "description": "OCD_ACLK_DATA_description",
       "retention": "OCD_retention_5_minutes",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -476,7 +749,7 @@
       "description": "OCD_AEC_description",
       "retention": "OCD_retention_6_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -489,7 +762,7 @@
       "description": "OCD_ADS_VISITOR_ID_description",
       "retention": "OCD_retention_2_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -502,7 +775,7 @@
       "description": "OCD___Secure_3PSIDCC_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -515,7 +788,7 @@
       "description": "OCD___Secure_3PSIDTS_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -528,7 +801,7 @@
       "description": "OCD___Secure_1PSIDTS_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -541,7 +814,7 @@
       "description": "OCD___Secure_1PAPISID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -554,7 +827,7 @@
       "description": "OCD___Secure_3PSID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -567,7 +840,7 @@
       "description": "OCD___Secure_1PSID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -580,7 +853,7 @@
       "description": "OCD___Secure_1PSIDCC_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -593,7 +866,7 @@
       "description": "OCD___Secure_3PAPISID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -606,7 +879,7 @@
       "description": "OCD_OGPC_description",
       "retention": "OCD_retention_1_month",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -619,7 +892,7 @@
       "description": "OCD_OGP_description",
       "retention": "OCD_retention_2_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -632,7 +905,7 @@
       "description": "OCD_1P_JAR_description",
       "retention": "OCD_retention_1_month",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -645,7 +918,7 @@
       "description": "OCD_CONSENT_description",
       "retention": "OCD_retention_20_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -658,7 +931,7 @@
       "description": "OCD_SOCS_description",
       "retention": "OCD_retention_13_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -671,7 +944,7 @@
       "description": "OCD_ACCOUNT_CHOOSER_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -684,7 +957,7 @@
       "description": "OCD_SMSV_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -697,7 +970,7 @@
       "description": "OCD___Host_1PLSID_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -710,7 +983,7 @@
       "description": "OCD___Host_3PLSID_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -723,7 +996,7 @@
       "description": "OCD___Host_GAPS_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -736,7 +1009,7 @@
       "description": "OCD_LSOLH_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -749,7 +1022,7 @@
       "description": "OCD_g_enabled_idps_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -762,7 +1035,7 @@
       "description": "OCD_G_AUTHUSER_H_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -775,7 +1048,7 @@
       "description": "OCD_SEARCH_SAMESITE_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -788,7 +1061,7 @@
       "description": "OCD_AID_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -801,7 +1074,7 @@
       "description": "OCD_SID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -814,7 +1087,7 @@
       "description": "OCD_HSID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -827,7 +1100,7 @@
       "description": "OCD_APISID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -840,7 +1113,7 @@
       "description": "OCD_SAPISID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -853,7 +1126,7 @@
       "description": "OCD_SSID_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -866,7 +1139,7 @@
       "description": "OCD_SIDCC_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -879,7 +1152,7 @@
       "description": "OCD_OTZ_description",
       "retention": "OCD_retention_17_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -892,7 +1165,7 @@
       "description": "OCD_A_description",
       "retention": "OCD_retention_17_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -905,7 +1178,7 @@
       "description": "OCD_DV_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -918,7 +1191,7 @@
       "description": "OCD_NID_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -931,7 +1204,7 @@
       "description": "OCD_TAID_description",
       "retention": "OCD_retention_14_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -944,7 +1217,7 @@
       "description": "OCD_FPGCLDC_description",
       "retention": "OCD_retention_90_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -957,7 +1230,7 @@
       "description": "OCD__gcl_au_description",
       "retention": "OCD_retention_3_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -970,7 +1243,7 @@
       "description": "OCD__gcl_dc_description",
       "retention": "OCD_retention_3_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -996,7 +1269,7 @@
       "description": "OCD_GCLB_description",
       "retention": "OCD_retention_Session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1009,7 +1282,7 @@
       "description": "OCD_FCCDCF_description",
       "retention": "OCD_retention_13_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1022,7 +1295,7 @@
       "description": "OCD_FCNEC_description",
       "retention": "OCD_retention_13_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1035,7 +1308,7 @@
       "description": "OCD_receive_cookie_deprecation_description",
       "retention": "OCD_retention_180_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1048,7 +1321,124 @@
       "description": "OCD__dcid_description",
       "retention": "OCD_retention_400_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "SNID": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "SNID",
+      "domain": ".google.com",
+      "description": "OCD_SNID_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "cookies_accepted": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "cookies_accepted",
+      "domain": ".developers.google.com",
+      "description": "OCD_cookies_accepted_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "django_language": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "django_language",
+      "domain": "developers.google.com",
+      "description": "OCD_django_language_description",
+      "retention": "OCD_retention_3_month",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "GN_PREF": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "GN_PREF",
+      "domain": "news.google.com",
+      "description": "OCD_GN_PREF_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "OSID": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "OSID",
+      "domain": ".google.com",
+      "description": "OCD_OSID_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "__Secure-OSID": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "__Secure-OSID",
+      "domain": ".google.com",
+      "description": "OCD___Secure_OSID_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "LSID": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "LSID",
+      "domain": ".google.com",
+      "description": "OCD_LSID_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "COMPASS": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "COMPASS",
+      "domain": ".google.com",
+      "description": "OCD_COMPASS_description",
+      "retention": "OCD_retention_2_days",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "UULE": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "UULE",
+      "domain": ".google.com",
+      "description": "OCD_UULE_description",
+      "retention": "OCD_retention_6_hours",
+      "dataController": "Google",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1061,7 +1451,7 @@
       "description": "OCD_IDE_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1074,7 +1464,7 @@
       "description": "OCD_DSID_description",
       "retention": "OCD_retention_2_weeks",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1087,7 +1477,7 @@
       "description": "OCD_ID_description",
       "retention": "OCD_retention_2_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1100,7 +1490,7 @@
       "description": "OCD_RUL_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1113,7 +1503,7 @@
       "description": "OCD_FLC_description",
       "retention": "OCD_retention_10_seconds",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1126,7 +1516,7 @@
       "description": "OCD___gads_description",
       "retention": "OCD_retention_various",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1139,7 +1529,7 @@
       "description": "OCD_GoogleAdServingTest_description",
       "retention": "OCD_retention_session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1152,7 +1542,7 @@
       "description": "OCD_ar_debug_description",
       "retention": "OCD_retention_Persistent",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1165,7 +1555,7 @@
       "description": "OCD_test_cookie_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1178,7 +1568,7 @@
       "description": "OCD_APC_description",
       "retention": "OCD_retention_6_months",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3063,6 +3453,17 @@
       "dataController": "X",
       "gdprUrl": "https://help.twitter.com/nl/safety-and-security#ads-and-data-privacy",
       "wildcard": "0"
+    },
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "personalization_id",
+      "domain": "",
+      "description": "This cookie is used by the Wistia video player to remember where you are in a video so that if playback is interrupted (for example, by losing your internet connection) then you can get right back to where you left off.",
+      "retention": "1 Year",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
+      "wildcard": "0"
     }
   ],
   "ct0": [
@@ -3421,11 +3822,11 @@
       "platform": "Indeed",
       "category": "Analytics",
       "name": "CTK",
-      "domain": "conv.indeed.com (3rd party)",
+      "domain": "indeed.com",
       "description": "OCD_CTK_description",
-      "retention": "OCD_retention_17_years",
+      "retention": "OCD_retention_1825_days",
       "dataController": "Indeed",
-      "gdprUrl": "https://www.indeed.nl/legal",
+      "gdprUrl": "https://www.indeed.com/legal",
       "wildcard": "0"
     }
   ],
@@ -3434,24 +3835,24 @@
       "platform": "Indeed",
       "category": "Analytics",
       "name": "ctkgen",
-      "domain": "conv.indeed.com (3rd party)",
+      "domain": "",
       "description": "OCD_ctkgen_description",
       "retention": "OCD_retention_1_day",
       "dataController": "Indeed",
-      "gdprUrl": "https://www.indeed.nl/legal",
+      "gdprUrl": "https://www.indeed.com/legal",
       "wildcard": "0"
     }
   ],
   "INDEED_CSRF_TOKEN": [
     {
       "platform": "Indeed",
-      "category": "Analytics",
+      "category": "Functional",
       "name": "INDEED_CSRF_TOKEN",
-      "domain": "conv.indeed.com (3rd party)",
+      "domain": "",
       "description": "OCD_INDEED_CSRF_TOKEN_description",
-      "retention": "OCD_retention_End_of_session__browser_",
+      "retention": "OCD_retention_Session",
       "dataController": "Indeed",
-      "gdprUrl": "https://www.indeed.nl/legal",
+      "gdprUrl": "https://www.indeed.com/legal",
       "wildcard": "0"
     }
   ],
@@ -3460,11 +3861,11 @@
       "platform": "Indeed",
       "category": "Analytics",
       "name": "jasx_pool_id",
-      "domain": "conv.indeed.com (3rd party)",
+      "domain": "",
       "description": "OCD_jasx_pool_id_description",
-      "retention": "OCD_retention_End_of_session__browser_",
+      "retention": "OCD_retention_Session",
       "dataController": "Indeed",
-      "gdprUrl": "https://www.indeed.nl/legal",
+      "gdprUrl": "https://www.indeed.com/legal",
       "wildcard": "0"
     }
   ],
@@ -3473,11 +3874,11 @@
       "platform": "Indeed",
       "category": "Analytics",
       "name": "pagead/conv/%INTEGER%",
-      "domain": "conv.indeed.com (3rd party)",
+      "domain": "",
       "description": "OCD_pagead_conv__INTEGER__description",
-      "retention": "OCD_retention_End_of_session__browser_",
+      "retention": "OCD_retention_Session",
       "dataController": "Indeed",
-      "gdprUrl": "https://www.indeed.nl/legal",
+      "gdprUrl": "https://www.indeed.com/legal",
       "wildcard": "0"
     }
   ],
@@ -3555,7 +3956,7 @@
       "description": "OCD_GPS_description",
       "retention": "OCD_retention_1_day",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3568,7 +3969,7 @@
       "description": "OCD_VISITOR_INFO1_LIVE_description",
       "retention": "OCD_retention_179_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3581,7 +3982,7 @@
       "description": "OCD_PREF_description",
       "retention": "OCD_retention_10_years_from_set__update",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3594,7 +3995,7 @@
       "description": "OCD_YSC_description",
       "retention": "OCD_retention_Session",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3607,7 +4008,7 @@
       "description": "OCD_DEVICE_INFO_description",
       "retention": "OCD_retention_179_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3620,7 +4021,7 @@
       "description": "OCD_LOGIN_INFO_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3633,7 +4034,7 @@
       "description": "OCD_VISITOR_PRIVACY_METADATA_description",
       "retention": "OCD_retention_180_days",
       "dataController": "Google",
-      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "gdprUrl": "https://policies.google.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -3825,6 +4226,17 @@
       "domain": ".go.sonobi.com (3rd party)",
       "description": "OCD___uis_description",
       "retention": "OCD_retention_29_days",
+      "dataController": "Sonobi",
+      "gdprUrl": "https://sonobi.com/privacy-policy/",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Sonobi",
+      "category": "Marketing",
+      "name": "__uis",
+      "domain": "go.sonobi.com",
+      "description": "This domain is owned by Sonobi, an automated online advertising buying and selling platform.",
+      "retention": "29 Days",
       "dataController": "Sonobi",
       "gdprUrl": "https://sonobi.com/privacy-policy/",
       "wildcard": "0"
@@ -4137,6 +4549,45 @@
       "domain": "",
       "description": "OCD__hjSessionResumed_description",
       "retention": "OCD_retention_session",
+      "dataController": "Hotjar",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "hjViewportId": [
+    {
+      "platform": "Hotjar",
+      "category": "Functional",
+      "name": "hjViewportId",
+      "domain": "",
+      "description": "OCD_hjViewportId_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Hotjar",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_hjSessionStorageTest": [
+    {
+      "platform": "Hotjar",
+      "category": "Functional",
+      "name": "_hjSessionStorageTest",
+      "domain": "",
+      "description": "OCD__hjSessionStorageTest_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Hotjar",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_hjCookieTest": [
+    {
+      "platform": "Hotjar",
+      "category": "Functional",
+      "name": "_hjCookieTest",
+      "domain": "",
+      "description": "OCD__hjCookieTest_description",
+      "retention": "OCD_retention_Session",
       "dataController": "Hotjar",
       "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
@@ -5401,6 +5852,17 @@
       "dataController": "Pubmatic",
       "gdprUrl": "https://pubmatic.com/legal/privacy/",
       "wildcard": "0"
+    },
+    {
+      "platform": "Mediarithmics",
+      "category": "Marketing",
+      "name": "chk",
+      "domain": ".mediarithmics.com",
+      "description": "This cookie is added by mediarithmics In the case of a call on events.mediarithmics.com without a cookie mics_vid, this cookie is written to check that the user browser supports third party cookies. It contains a randomly generated UUID.",
+      "retention": "1 hour",
+      "dataController": "Mediarithmics",
+      "gdprUrl": "https://developer.mediarithmics.io/advanced-usages/data-privacy-compliance/cookies",
+      "wildcard": "0"
     }
   ],
   "chkSecSet": [
@@ -6385,6 +6847,17 @@
       "dataController": "TripleLift",
       "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
       "wildcard": "0"
+    },
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "optout",
+      "domain": ".yahoo.com",
+      "description": "This cookie collect and store data of ads from user opted out",
+      "retention": "2 years",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
     }
   ],
   "sync": [
@@ -6439,6 +6912,121 @@
       "wildcard": "0"
     }
   ],
+  "taboola_select": [
+    {
+      "platform": "Taboola",
+      "category": "Functional",
+      "name": "taboola_select",
+      "domain": ".taboola.com",
+      "description": "OCD_taboola_select_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "taboola_fp_td_user_id": [
+    {
+      "platform": "Taboola",
+      "category": "Functional",
+      "name": "taboola_fp_td_user_id",
+      "domain": ".taboola.com",
+      "description": "OCD_taboola_fp_td_user_id_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "trc_cookie_storage": [
+    {
+      "platform": "Taboola",
+      "category": "Functional",
+      "name": "trc_cookie_storage",
+      "domain": ".taboola.com",
+      "description": "OCD_trc_cookie_storage_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "trc_cookie_storage",
+      "domain": ".yahoo.com",
+      "description": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges.",
+      "retention": "1 year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "_tb_sess_r": [
+    {
+      "platform": "Taboola",
+      "category": "Functional",
+      "name": "_tb_sess_r",
+      "domain": ".taboola.com",
+      "description": "OCD__tb_sess_r_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "_tb_t_ppg": [
+    {
+      "platform": "Taboola",
+      "category": "Marketing",
+      "name": "_tb_t_ppg",
+      "domain": ".taboola.com",
+      "description": "OCD__tb_t_ppg_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "abLdr": [
+    {
+      "platform": "Taboola",
+      "category": "Analytics",
+      "name": "abLdr",
+      "domain": ".taboola.com",
+      "description": "OCD_abLdr_description",
+      "retention": "OCD_retention_3_hours",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "abMbl": [
+    {
+      "platform": "Taboola",
+      "category": "Analytics",
+      "name": "abMbl",
+      "domain": ".taboola.com",
+      "description": "OCD_abMbl_description",
+      "retention": "OCD_retention_3_hours",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "tb_click_param": [
+    {
+      "platform": "Taboola",
+      "category": "Analytics",
+      "name": "tb_click_param",
+      "domain": ".taboola.com",
+      "description": "OCD_tb_click_param_description",
+      "retention": "OCD_retention_50_seconds",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
   "__zlcmid": [
     {
       "platform": "Zopim",
@@ -6449,6 +7037,17 @@
       "retention": "OCD_retention_1_year",
       "dataController": "Zendesk",
       "gdprUrl": "https://www.zendesk.com/company/customers-partners/#cookie-policy",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "__zlcmid",
+      "domain": ".zendesk.com",
+      "description": "This cookie Chat Widget offers out-of-the-box cookie consent management, see here: Enabling cookie consent for the Chat widget & Web Widget. Alternatively, these Chat Cookies respect external cookie bot functionality as well.",
+      "retention": "1 year",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
       "wildcard": "0"
     }
   ],
@@ -8701,6 +9300,32 @@
       "wildcard": "0"
     }
   ],
+  "OneTrustWPCCPAGoogleOptOut": [
+    {
+      "platform": "OneTrust",
+      "category": "Functional",
+      "name": "OneTrustWPCCPAGoogleOptOut",
+      "domain": "",
+      "description": "OCD_OneTrustWPCCPAGoogleOptOut_description",
+      "retention": "OCD_retention_365_days",
+      "dataController": "OneTrust",
+      "gdprUrl": "https://www.onetrust.com/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "FunctionalCookie": [
+    {
+      "platform": "OneTrust",
+      "category": "Functional",
+      "name": "FunctionalCookie",
+      "domain": "",
+      "description": "OCD_FunctionalCookie_description",
+      "retention": "OCD_retention_0_days",
+      "dataController": "OneTrust",
+      "gdprUrl": "https://www.onetrust.com/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
   "optimizelyEndUserId": [
     {
       "platform": "Optimizely",
@@ -8711,6 +9336,17 @@
       "retention": "OCD_retention_6_months",
       "dataController": "Optimizely",
       "gdprUrl": "https://www.optimizely.com/privacy/",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "optimizelyEndUserId",
+      "domain": "",
+      "description": "Set by Wistia. Stores a visitor’s unique Optimizely identifier. It’s a combination of a timestamp and random number. No other information about you or your visitors is stored inside.",
+      "retention": "10 Years",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -10912,7 +11548,7 @@
       "platform": "Yahoo",
       "category": "Marketing",
       "name": "A3",
-      "domain": "yahoo.com",
+      "domain": ".yahoo.com",
       "description": "OCD_A3_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Yahoo",
@@ -10938,7 +11574,7 @@
       "platform": "Yahoo",
       "category": "Marketing",
       "name": "APIDTS",
-      "domain": "yahoo.com",
+      "domain": ".yahoo.com",
       "description": "OCD_APIDTS_description",
       "retention": "OCD_retention_1_day",
       "dataController": "Yahoo",
@@ -10951,7 +11587,7 @@
       "platform": "Yahoo",
       "category": "Marketing",
       "name": "IDSYNC",
-      "domain": "yahoo.com",
+      "domain": ".yahoo.com",
       "description": "OCD_IDSYNC_description",
       "retention": "OCD_retention_1_year",
       "dataController": "Yahoo",
@@ -10982,6 +11618,162 @@
       "retention": "OCD_retention_1_year",
       "dataController": "Yahoo",
       "gdprUrl": "https://yahoo.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "adaptv_unique_user_cookie": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "adaptv_unique_user_cookie",
+      "domain": ".yahoo.com",
+      "description": "OCD_adaptv_unique_user_cookie_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "cmp": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "cmp",
+      "domain": ".yahoo.com",
+      "description": "OCD_cmp_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "adsrcvw1": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "adsrcvw1",
+      "domain": ".yahoo.com",
+      "description": "OCD_adsrcvw1_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "migrated2y": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "migrated2y",
+      "domain": ".yahoo.com",
+      "description": "OCD_migrated2y_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "OTH": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "OTH",
+      "domain": ".yahoo.com",
+      "description": "OCD_OTH_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "rtbData0": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "rtbData0",
+      "domain": ".yahoo.com",
+      "description": "OCD_rtbData0_description",
+      "retention": "OCD_retention_2_years",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "rxx": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "rxx",
+      "domain": ".yahoo.com",
+      "description": "OCD_rxx_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "tearsheet": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "tearsheet",
+      "domain": ".yahoo.com",
+      "description": "OCD_tearsheet_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "unique_ad_source_impression": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "unique_ad_source_impression",
+      "domain": ".yahoo.com",
+      "description": "OCD_unique_ad_source_impression_description",
+      "retention": "OCD_retention_30_days",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "axids": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "axids",
+      "domain": ".yahoo.com",
+      "description": "OCD_axids_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "GUC": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "GUC",
+      "domain": ".yahoo.com",
+      "description": "OCD_GUC_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
+      "wildcard": "0"
+    }
+  ],
+  "tbla_id": [
+    {
+      "platform": "Yahoo",
+      "category": "Marketing",
+      "name": "tbla_id",
+      "domain": ".yahoo.com",
+      "description": "OCD_tbla_id_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Yahoo",
+      "gdprUrl": "https://legal.yahoo.com/ie/en/yahoo/privacy/cookies/index.html",
       "wildcard": "0"
     }
   ],
@@ -11359,6 +12151,17 @@
       "retention": "OCD_retention_2_years",
       "dataController": "Snowplow",
       "gdprUrl": "https://snowplowanalytics.com/privacy-policy/",
+      "wildcard": "1"
+    },
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "_sp_id.*",
+      "domain": "",
+      "description": "This cookie is used by the Wistia video player to remember where you are in a video so that if playback is interrupted (for example, by losing your internet connection) then you can get right back to where you left off.",
+      "retention": "1 Year",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
       "wildcard": "1"
     }
   ],
@@ -11983,6 +12786,17 @@
       "retention": "OCD_retention_10_years",
       "dataController": "BetweenDigital",
       "gdprUrl": "",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Tailtarget",
+      "category": "Functional",
+      "name": "dc",
+      "domain": ".t.tailtarget.com",
+      "description": "This cookie is used for sync with Google services",
+      "retention": "30 days",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
       "wildcard": "0"
     }
   ],
@@ -19212,6 +20026,17 @@
       "dataController": "Totvs",
       "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
       "wildcard": "0"
+    },
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "u",
+      "domain": ".t.tailtarget.com",
+      "description": "This cookie is used for user segmentation identifying the user uniquely",
+      "retention": "1 year",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
     }
   ],
   "_ssc": [
@@ -19222,6 +20047,17 @@
       "domain": "t.tailtarget.com",
       "description": "OCD__ssc_description",
       "retention": "OCD_retention_1_day",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "_ssc",
+      "domain": ".t.tailtarget.com",
+      "description": "This cookie is used for indicate user access to the same site",
+      "retention": "2 days",
       "dataController": "Totvs",
       "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
       "wildcard": "0"
@@ -19476,7 +20312,7 @@
   ],
   "version": [
     {
-      "platform": "Anivew",
+      "platform": "Aniview",
       "category": "Marketing",
       "name": "version",
       "domain": "track1.aniview.com",
@@ -19484,6 +20320,3932 @@
       "retention": "OCD_retention_Session",
       "dataController": "Aniview",
       "gdprUrl": "https://www.aniview.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "mics_vid": [
+    {
+      "platform": "Mediarithmics",
+      "category": "Marketing",
+      "name": "mics_vid",
+      "domain": ".mediarithmics.com",
+      "description": "OCD_mics_vid_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Mediarithmics",
+      "gdprUrl": "https://developer.mediarithmics.io/advanced-usages/data-privacy-compliance/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "mics_uaid": [
+    {
+      "platform": "Mediarithmics",
+      "category": "Marketing",
+      "name": "mics_uaid",
+      "domain": ".mediarithmics.com",
+      "description": "OCD_mics_uaid_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Mediarithmics",
+      "gdprUrl": "https://developer.mediarithmics.io/advanced-usages/data-privacy-compliance/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "mics_lts": [
+    {
+      "platform": "Mediarithmics",
+      "category": "Marketing",
+      "name": "mics_lts",
+      "domain": ".mediarithmics.com",
+      "description": "OCD_mics_lts_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Mediarithmics",
+      "gdprUrl": "https://developer.mediarithmics.io/advanced-usages/data-privacy-compliance/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "n360_thirtythreeacross": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_thirtythreeacross",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_thirtythreeacross_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-thirtythreeacross": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-thirtythreeacross",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_thirtythreeacross_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_appnexus": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_appnexus",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_appnexus_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-appnexus": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-appnexus",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_appnexus_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_bliink": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_bliink",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_bliink_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-bliink": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-bliink",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_bliink_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_amx": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_amx",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_amx_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-amx": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-amx",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_amx_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_adform": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_adform",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adform_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-adform": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-adform",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adform_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_adnuntius": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_adnuntius",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adnuntius_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-adnuntius": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-adnuntius",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adnuntius_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_adot": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_adot",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adot_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-adot": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-adot",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adot_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_adyoulike": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_adyoulike",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adyoulike_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-adyoulike": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-adyoulike",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_adyoulike_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_connectad": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_connectad",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_connectad_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-connectad": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-connectad",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_connectad_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_conversant": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_conversant",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_conversant_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-conversant": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-conversant",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_conversant_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_cwire": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_cwire",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_cwire_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-cwire": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-cwire",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_cwire_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_firstid": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_firstid",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_firstid_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-firstid": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-firstid",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_firstid_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_freewheel": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_freewheel",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_freewheel_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-freewheel": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-freewheel",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_freewheel_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_fueldigitalmedia": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_fueldigitalmedia",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_fueldigitalmedia_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-fueldigitalmedia": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-fueldigitalmedia",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_fueldigitalmedia_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_fueldigitalix": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_fueldigitalix",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_fueldigitalix_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-fueldigitalix": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-fueldigitalix",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_fueldigitalix_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_fueldigital": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_fueldigital",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_fueldigital_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-fueldigital": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-fueldigital",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_fueldigital_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_gingerad": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_gingerad",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_gingerad_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-gingerad": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-gingerad",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_gingerad_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_goodad": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_goodad",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_goodad_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-goodad": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-goodad",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_goodad_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_gravity": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_gravity",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_gravity_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-gravity": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-gravity",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_gravity_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_groupm": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_groupm",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_groupm_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-groupm": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-groupm",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_groupm_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_improve": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_improve",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_improve_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-improve": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-improve",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_improve_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_ix": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_ix",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_ix_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-ix": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-ix",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_ix_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_medianet": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_medianet",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_medianet_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-medianet": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-medianet",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_medianet_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_moneytag": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_moneytag",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_moneytag_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-moneytag": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-moneytag",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_moneytag_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_nextmillennium": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_nextmillennium",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_nextmillennium_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-nextmillennium": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-nextmillennium",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_nextmillennium_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_onetag": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_onetag",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_onetag_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-onetag": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-onetag",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_onetag_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_openx": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_openx",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_openx_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-openx": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-openx",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_openx_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_outbrain": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_outbrain",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_outbrain_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-outbrain": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-outbrain",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_outbrain_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_plista": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_plista",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_plista_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-plista": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-plista",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_plista_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_pubmatic": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_pubmatic",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_pubmatic_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-pubmatic": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-pubmatic",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_pubmatic_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_pulsepoint": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_pulsepoint",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_pulsepoint_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-pulsepoint": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-pulsepoint",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_pulsepoint_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_quantum": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_quantum",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_quantum_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-quantum": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-quantum",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_quantum_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_richaudience": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_richaudience",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_richaudience_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-richaudience": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-richaudience",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_richaudience_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_rtbhouse": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_rtbhouse",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_rtbhouse_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-rtbhouse": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-rtbhouse",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_rtbhouse_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_rubicon": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_rubicon",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_rubicon_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-rubicon": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-rubicon",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_rubicon_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_sharethrough": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_sharethrough",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_sharethrough_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-sharethrough": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-sharethrough",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_sharethrough_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_smaato": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_smaato",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smaato_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-smaato": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-smaato",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smaato_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_smartadserver": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_smartadserver",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smartadserver_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-smartadserver": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-smartadserver",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smartadserver_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_smartyads": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_smartyads",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smartyads_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-smartyads": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-smartyads",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smartyads_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_smilewanted": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_smilewanted",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smilewanted_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-smilewanted": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-smilewanted",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_smilewanted_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_staila": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_staila",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_staila_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-staila": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-staila",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_staila_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_tappx": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_tappx",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_tappx_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-tappx": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-tappx",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_tappx_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_mediagrid": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_mediagrid",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_mediagrid_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-mediagrid": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-mediagrid",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_mediagrid_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_ttd": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_ttd",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_ttd_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-ttd": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-ttd",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_ttd_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_traffective": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_traffective",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_traffective_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-traffective": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-traffective",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_traffective_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_triplelift": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_triplelift",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_triplelift_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-triplelift": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-triplelift",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_triplelift_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_yahoo": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_yahoo",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_yahoo_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-yahoo": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-yahoo",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_yahoo_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_vidoomy": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_vidoomy",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_vidoomy_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-vidoomy": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-vidoomy",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_vidoomy_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360_yieldlab": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360_yieldlab",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_yieldlab_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "n360-yieldlab": [
+    {
+      "platform": "Nexx360",
+      "category": "Marketing",
+      "name": "n360-yieldlab",
+      "domain": ".nexx360.io",
+      "description": "OCD_n360_yieldlab_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Nexx360",
+      "gdprUrl": "https://nexx360.io/en/privacy-policy-and-cookies/",
+      "wildcard": "0"
+    }
+  ],
+  "mv_tokens": [
+    {
+      "platform": "MediaVine",
+      "category": "Marketing",
+      "name": "mv_tokens",
+      "domain": "exchange.mediavine.com",
+      "description": "OCD_mv_tokens_description",
+      "retention": "OCD_retention_14_days",
+      "dataController": "MediaVine",
+      "gdprUrl": "https://www.mediavine.com/privacy-policy/#cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "mv_tokens_invalidate-verizon-pushes": [
+    {
+      "platform": "MediaVine",
+      "category": "Marketing",
+      "name": "mv_tokens_invalidate-verizon-pushes",
+      "domain": "exchange.mediavine.com",
+      "description": "OCD_mv_tokens_invalidate_verizon_pushes_description",
+      "retention": "OCD_retention_14_days",
+      "dataController": "MediaVine",
+      "gdprUrl": "https://www.mediavine.com/privacy-policy/#cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "am_tokens": [
+    {
+      "platform": "MediaVine",
+      "category": "Marketing",
+      "name": "am_tokens",
+      "domain": "exchange.mediavine.com",
+      "description": "OCD_am_tokens_description",
+      "retention": "OCD_retention_14_days",
+      "dataController": "MediaVine",
+      "gdprUrl": "https://www.mediavine.com/privacy-policy/#cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "am_tokens_invalidate-verizon-pushes": [
+    {
+      "platform": "MediaVine",
+      "category": "Marketing",
+      "name": "am_tokens_invalidate-verizon-pushes",
+      "domain": "exchange.mediavine.com",
+      "description": "OCD_am_tokens_invalidate_verizon_pushes_description",
+      "retention": "OCD_retention_14_days",
+      "dataController": "MediaVine",
+      "gdprUrl": "https://www.mediavine.com/privacy-policy/#cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "_bit": [
+    {
+      "platform": "Bit.ly",
+      "category": "Analytics",
+      "name": "_bit",
+      "domain": ".bit.ly",
+      "description": "OCD__bit_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "Bit.ly",
+      "gdprUrl": "https://bitly.com/pages/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "ptrcriteo": [
+    {
+      "platform": "Yieldmo",
+      "category": "Marketing",
+      "name": "ptrcriteo",
+      "domain": "ads.yieldmo.com",
+      "description": "OCD_ptrcriteo_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Yieldmo",
+      "gdprUrl": "https://yieldmo.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "ptrrhs": [
+    {
+      "platform": "Yieldmo",
+      "category": "Marketing",
+      "name": "ptrrhs",
+      "domain": "ads.yieldmo.com",
+      "description": "OCD_ptrrhs_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Yieldmo",
+      "gdprUrl": "https://yieldmo.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "yieldmo_id": [
+    {
+      "platform": "Yieldmo",
+      "category": "Analytics",
+      "name": "yieldmo_id",
+      "domain": ".yieldmo.com",
+      "description": "OCD_yieldmo_id_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Yieldmo",
+      "gdprUrl": "https://yieldmo.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "ssid": [
+    {
+      "platform": "Springserve",
+      "category": "Marketing",
+      "name": "ssid",
+      "domain": ".springserve.com",
+      "description": "OCD_ssid_description",
+      "retention": "OCD_retention_365_days",
+      "dataController": "Magnite",
+      "gdprUrl": "https://www.magnite.com/legal/platform-cookie-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "sst": [
+    {
+      "platform": "Springserve",
+      "category": "Marketing",
+      "name": "sst",
+      "domain": ".springserve.com",
+      "description": "OCD_sst_description",
+      "retention": "OCD_retention_365_days",
+      "dataController": "Magnite",
+      "gdprUrl": "https://www.magnite.com/legal/platform-cookie-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "dgzsdl08v4": [
+    {
+      "platform": "Bouncex",
+      "category": "Marketing",
+      "name": "dgzsdl08v4",
+      "domain": ".bounceexchange.com",
+      "description": "OCD_dgzsdl08v4_description",
+      "retention": "OCD_retention_0_days",
+      "dataController": "Wunderkind",
+      "gdprUrl": "https://www.wunderkind.co/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "bounceClientVisit": [
+    {
+      "platform": "Bouncex",
+      "category": "Marketing",
+      "name": "bounceClientVisit",
+      "domain": ".bounceexchange.com",
+      "description": "OCD_bounceClientVisit_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Wunderkind",
+      "gdprUrl": "https://www.wunderkind.co/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_vfa": [
+    {
+      "platform": "Viafoura",
+      "category": "Analytics",
+      "name": "_vfa",
+      "domain": "",
+      "description": "OCD__vfa_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_vfb": [
+    {
+      "platform": "Viafoura",
+      "category": "Analytics",
+      "name": "_vfb",
+      "domain": "",
+      "description": "OCD__vfb_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_vfz": [
+    {
+      "platform": "Viafoura",
+      "category": "Analytics",
+      "name": "_vfz",
+      "domain": "",
+      "description": "OCD__vfz_description",
+      "retention": "OCD_retention_6_minutes",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_vf_rd_test*": [
+    {
+      "platform": "Viafoura",
+      "category": "Functional",
+      "name": "_vf_rd_test*",
+      "domain": "",
+      "description": "OCD__vf_rd_test__description",
+      "retention": "OCD_retention_1_second",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "1"
+    }
+  ],
+  "VfSess": [
+    {
+      "platform": "Viafoura",
+      "category": "Functional",
+      "name": "VfSess",
+      "domain": ".viafoura.co",
+      "description": "OCD_VfSess_description",
+      "retention": "OCD_retention_30_days",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "VfRefresh": [
+    {
+      "platform": "Viafoura",
+      "category": "Functional",
+      "name": "VfRefresh",
+      "domain": ".viafoura.co",
+      "description": "OCD_VfRefresh_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "VfAccess*": [
+    {
+      "platform": "Viafoura",
+      "category": "Functional",
+      "name": "VfAccess*",
+      "domain": ".viafoura.co",
+      "description": "OCD_VfAccess__description",
+      "retention": "OCD_retention_5_minutes",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "1"
+    }
+  ],
+  "vfThirdpartyCookiesEnabled": [
+    {
+      "platform": "Viafoura",
+      "category": "Functional",
+      "name": "vfThirdpartyCookiesEnabled",
+      "domain": ".viafoura.co",
+      "description": "OCD_vfThirdpartyCookiesEnabled_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Viafoura",
+      "gdprUrl": "https://viafoura.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "ttbprf": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "ttbprf",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_ttbprf_description",
+      "retention": "OCD_retention_1_month",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "ttc": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "ttc",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_ttc_description",
+      "retention": "OCD_retention_1_day",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "ttnprf": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "ttnprf",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_ttnprf_description",
+      "retention": "OCD_retention_1_month",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "n": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "n",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_n_description",
+      "retention": "OCD_retention_1_month",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "trk": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "trk",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_trk_description",
+      "retention": "OCD_retention_1_month",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "ttca": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "ttca",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_ttca_description",
+      "retention": "OCD_retention_30_days",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "tp*": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "tp*",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_tp__description",
+      "retention": "OCD_retention_30_days",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "1"
+    }
+  ],
+  "ttgcm": [
+    {
+      "platform": "Tailtarget",
+      "category": "Marketing",
+      "name": "ttgcm",
+      "domain": ".t.tailtarget.com",
+      "description": "OCD_ttgcm_description",
+      "retention": "OCD_retention_14_days",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "_ut*": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "_ut*",
+      "domain": "events.newsroom.bi",
+      "description": "OCD__ut__description",
+      "retention": "OCD_retention_30_days",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "1"
+    }
+  ],
+  "_u*": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "_u*",
+      "domain": "events.newsroom.bi",
+      "description": "OCD__u__description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "1"
+    }
+  ],
+  "_s*": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "_s*",
+      "domain": "events.newsroom.bi",
+      "description": "OCD__s__description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "1"
+    }
+  ],
+  "_lv*": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "_lv*",
+      "domain": "events.newsroom.bi",
+      "description": "OCD__lv__description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "1"
+    }
+  ],
+  "_nrbi": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "_nrbi",
+      "domain": "events.newsroom.bi",
+      "description": "OCD__nrbi_description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "0"
+    }
+  ],
+  "compass_sid": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "compass_sid",
+      "domain": "events.newsroom.bi",
+      "description": "OCD_compass_sid_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "0"
+    }
+  ],
+  "compass_uid": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "compass_uid",
+      "domain": "events.newsroom.bi",
+      "description": "OCD_compass_uid_description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "0"
+    }
+  ],
+  "___m_rec": [
+    {
+      "platform": "Marfeel",
+      "category": "Analytics",
+      "name": "___m_rec",
+      "domain": "events.newsroom.bi",
+      "description": "OCD____m_rec_description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "Marfeel",
+      "gdprUrl": "https://community.marfeel.com/t/marfeel-com-privacy-policy/10383",
+      "wildcard": "0"
+    }
+  ],
+  "GRV_BHV_UID*": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_BHV_UID*",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_BHV_UID__description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "GRV_BHV_IDCC*": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_BHV_IDCC*",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_BHV_IDCC__description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "GRV_BHV_SKU*": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_BHV_SKU*",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_BHV_SKU__description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "GRV_BHV_IDCAT*": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_BHV_IDCAT*",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_BHV_IDCAT__description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "GRV_BHV_DATE*": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_BHV_DATE*",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_BHV_DATE__description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "GRV_IDU": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_IDU",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_IDU_description",
+      "retention": "OCD_retention_296_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "NPA*": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "NPA*",
+      "domain": ".groovinads.com",
+      "description": "OCD_NPA__description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "GRV_BHV_BRND_*": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_BHV_BRND_*",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_BHV_BRND___description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "GRV_google": [
+    {
+      "platform": "Groovinads",
+      "category": "Marketing",
+      "name": "GRV_google",
+      "domain": ".groovinads.com",
+      "description": "OCD_GRV_google_description",
+      "retention": "OCD_retention_45_days",
+      "dataController": "Groovinads",
+      "gdprUrl": "https://shopping.groovinads.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "duid_update_time": [
+    {
+      "platform": "Bidence",
+      "category": "Marketing",
+      "name": "duid_update_time",
+      "domain": ".bidence.net",
+      "description": "OCD_duid_update_time_description",
+      "retention": "OCD_retention_2_years",
+      "dataController": "Bidence",
+      "gdprUrl": "https://bidence.com/page/pp.html",
+      "wildcard": "0"
+    }
+  ],
+  "_ssp_update_time*": [
+    {
+      "platform": "Bidence",
+      "category": "Marketing",
+      "name": "_ssp_update_time*",
+      "domain": ".bidence.net",
+      "description": "OCD__ssp_update_time__description",
+      "retention": "OCD_retention_2_years",
+      "dataController": "Bidence",
+      "gdprUrl": "https://bidence.com/page/pp.html",
+      "wildcard": "1"
+    }
+  ],
+  "_dsp_uid*": [
+    {
+      "platform": "Bidence",
+      "category": "Marketing",
+      "name": "_dsp_uid*",
+      "domain": ".bidence.net",
+      "description": "OCD__dsp_uid__description",
+      "retention": "OCD_retention_2_years",
+      "dataController": "Bidence",
+      "gdprUrl": "https://bidence.com/page/pp.html",
+      "wildcard": "1"
+    }
+  ],
+  "connect.sid": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "connect.sid",
+      "domain": ".zendesk.com",
+      "description": "OCD_connect_sid_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_zendesk_cookie": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_zendesk_cookie",
+      "domain": "",
+      "description": "OCD__zendesk_cookie_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "zte2095": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "zte2095",
+      "domain": ".zendesk.com",
+      "description": "OCD_zte2095_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "__zlcprivacy": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "__zlcprivacy",
+      "domain": ".zendesk.com",
+      "description": "OCD___zlcprivacy_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_answer_bot_service_session": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_answer_bot_service_session",
+      "domain": ".zendesk.com",
+      "description": "OCD__answer_bot_service_session_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "ZD-zE_oauth": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "ZD-zE_oauth",
+      "domain": ".zendesk.com",
+      "description": "OCD_ZD_zE_oauth_description",
+      "retention": "OCD_retention_2_hours",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_zendesk_session": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_zendesk_session",
+      "domain": "",
+      "description": "OCD__zendesk_session_description",
+      "retention": "OCD_retention_8_hours",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "zendesk_thirdparty_test": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "zendesk_thirdparty_test",
+      "domain": "",
+      "description": "OCD_zendesk_thirdparty_test_description",
+      "retention": "OCD_retention_8_hours",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_zendesk_shared_session": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_zendesk_shared_session",
+      "domain": "",
+      "description": "OCD__zendesk_shared_session_description",
+      "retention": "OCD_retention_8_hours",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_zendesk_authenticated": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_zendesk_authenticated",
+      "domain": "",
+      "description": "OCD__zendesk_authenticated_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_help_center_session": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_help_center_session",
+      "domain": "",
+      "description": "OCD__help_center_session_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "help_center_data": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "help_center_data",
+      "domain": "",
+      "description": "OCD_help_center_data_description",
+      "retention": "OCD_retention_48_hours",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_zdshared_user_session_analytics": [
+    {
+      "platform": "Zendesk",
+      "category": "Analytics",
+      "name": "_zdshared_user_session_analytics",
+      "domain": "",
+      "description": "OCD__zdshared_user_session_analytics_description",
+      "retention": "OCD_retention_90_days",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_zendesk_nps_session": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_zendesk_nps_session",
+      "domain": "",
+      "description": "OCD__zendesk_nps_session_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "ZD-settings": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "ZD-settings",
+      "domain": "",
+      "description": "OCD_ZD_settings_description",
+      "retention": "OCD_retention_forever",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "ZD-suid": [
+    {
+      "platform": "Zendesk",
+      "category": "Analytics",
+      "name": "ZD-suid",
+      "domain": "",
+      "description": "OCD_ZD_suid_description",
+      "retention": "OCD_retention_20_minutes",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "ZD-buid": [
+    {
+      "platform": "Zendesk",
+      "category": "Analytics",
+      "name": "ZD-buid",
+      "domain": "",
+      "description": "OCD_ZD_buid_description",
+      "retention": "OCD_retention_forever",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "ZD-store": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "ZD-store",
+      "domain": "",
+      "description": "OCD_ZD_store_description",
+      "retention": "OCD_retention_forever",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "ZD-widgetOpen": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "ZD-widgetOpen",
+      "domain": "",
+      "description": "OCD_ZD_widgetOpen_description",
+      "retention": "OCD_retention_forever",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "ZD-launcherLabelRemoved": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "ZD-launcherLabelRemoved",
+      "domain": "",
+      "description": "OCD_ZD_launcherLabelRemoved_description",
+      "retention": "OCD_retention_forever",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_zdsession_talk_embeddables_service": [
+    {
+      "platform": "Zendesk",
+      "category": "Functional",
+      "name": "_zdsession_talk_embeddables_service",
+      "domain": "",
+      "description": "OCD__zdsession_talk_embeddables_service_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Zendesk",
+      "gdprUrl": "https://www.zendesk.com/company/agreements-and-terms/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "RT": [
+    {
+      "platform": "Tripadvisor",
+      "category": "Functional",
+      "name": "RT",
+      "domain": "www.tamgrt.com",
+      "description": "OCD_RT_description",
+      "retention": "OCD_retention_399_days",
+      "dataController": "Tripadvisor",
+      "gdprUrl": "https://tripadvisor.mediaroom.com/us-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "TADCID": [
+    {
+      "platform": "Tripadvisor",
+      "category": "Marketing",
+      "name": "TADCID",
+      "domain": "www.tamgrt.com",
+      "description": "OCD_TADCID_description",
+      "retention": "OCD_retention_10_years",
+      "dataController": "Tripadvisor",
+      "gdprUrl": "https://tripadvisor.mediaroom.com/us-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "ServerPool": [
+    {
+      "platform": "Tripadvisor",
+      "category": "Marketing",
+      "name": "ServerPool",
+      "domain": "www.tamgrt.com",
+      "description": "OCD_ServerPool_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Tripadvisor",
+      "gdprUrl": "https://tripadvisor.mediaroom.com/us-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "TATravelInfo": [
+    {
+      "platform": "Tripadvisor",
+      "category": "Analytics",
+      "name": "TATravelInfo",
+      "domain": "",
+      "description": "OCD_TATravelInfo_description",
+      "retention": "OCD_retention_2_years",
+      "dataController": "Tripadvisor",
+      "gdprUrl": "https://tripadvisor.mediaroom.com/us-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "TAUnique": [
+    {
+      "platform": "Tripadvisor",
+      "category": "Analytics",
+      "name": "TAUnique",
+      "domain": "",
+      "description": "OCD_TAUnique_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Tripadvisor",
+      "gdprUrl": "https://tripadvisor.mediaroom.com/us-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "TAReturnTo": [
+    {
+      "platform": "Tripadvisor",
+      "category": "Analytics",
+      "name": "TAReturnTo",
+      "domain": "",
+      "description": "OCD_TAReturnTo_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Tripadvisor",
+      "gdprUrl": "https://tripadvisor.mediaroom.com/us-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "dt": [
+    {
+      "platform": "Underdog Media",
+      "category": "Marketing",
+      "name": "dt",
+      "domain": "udmserve.net",
+      "description": "OCD_dt_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Underdog Media",
+      "gdprUrl": "https://underdogmedia.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "rtbh": [
+    {
+      "platform": "Underdog Media",
+      "category": "Marketing",
+      "name": "rtbh",
+      "domain": "udmserve.net",
+      "description": "OCD_rtbh_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Underdog Media",
+      "gdprUrl": "https://underdogmedia.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "udmts": [
+    {
+      "platform": "Underdog Media",
+      "category": "Marketing",
+      "name": "udmts",
+      "domain": "udmserve.net",
+      "description": "OCD_udmts_description",
+      "retention": "OCD_retention_89_days",
+      "dataController": "Underdog Media",
+      "gdprUrl": "https://underdogmedia.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "api_token": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "api_token",
+      "domain": ".twitch.tv",
+      "description": "OCD_api_token_description",
+      "retention": "OCD_retention_3652_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "unique_id": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "unique_id",
+      "domain": ".twitch.tv",
+      "description": "OCD_unique_id_description",
+      "retention": "OCD_retention_3652_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "unique_id_durable": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "unique_id_durable",
+      "domain": ".twitch.tv",
+      "description": "OCD_unique_id_durable_description",
+      "retention": "OCD_retention_3652_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "session_unique_id": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "session_unique_id",
+      "domain": ".twitch.tv",
+      "description": "OCD_session_unique_id_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "server_session_id": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "server_session_id",
+      "domain": ".twitch.tv",
+      "description": "OCD_server_session_id_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "twitch.lohp.countryCode": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "twitch.lohp.countryCode",
+      "domain": ".twitch.tv",
+      "description": "OCD_twitch_lohp_countryCode_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "auth-token": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "auth-token",
+      "domain": ".twitch.tv",
+      "description": "OCD_auth_token_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "enable-compact-scene-listing": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "enable-compact-scene-listing",
+      "domain": ".twitch.tv",
+      "description": "OCD_enable_compact_scene_listing_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "videoChat.notice_dismissed": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "videoChat.notice_dismissed",
+      "domain": ".twitch.tv",
+      "description": "OCD_videoChat_notice_dismissed_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "chat_rules_shown": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "chat_rules_shown",
+      "domain": ".twitch.tv",
+      "description": "OCD_chat_rules_shown_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "algoliasearch-client-js": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "algoliasearch-client-js",
+      "domain": ".twitch.tv",
+      "description": "OCD_algoliasearch_client_js_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "device_id": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "device_id",
+      "domain": "embed.twitch.tv",
+      "description": "OCD_device_id_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "referrer_url": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "referrer_url",
+      "domain": ".twitch.tv",
+      "description": "OCD_referrer_url_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "sentry_device_id": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "sentry_device_id",
+      "domain": "player.twitch.tv",
+      "description": "OCD_sentry_device_id_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "session_storage_last_visited_twitch_url": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "session_storage_last_visited_twitch_url",
+      "domain": "player.twitch.tv",
+      "description": "OCD_session_storage_last_visited_twitch_url_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "local_storage_app_session_id": [
+    {
+      "platform": "Twitch",
+      "category": "Functional",
+      "name": "local_storage_app_session_id",
+      "domain": "player.twitch.tv",
+      "description": "OCD_local_storage_app_session_id_description",
+      "retention": "OCD_retention_3650_days",
+      "dataController": "Twitch",
+      "gdprUrl": "https://www.twitch.tv/p/en/legal/privacy-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "_ceir": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_ceir",
+      "domain": "",
+      "description": "OCD__ceir_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_CEFT": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_CEFT",
+      "domain": "",
+      "description": "OCD__CEFT_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_cer.v": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_cer.v",
+      "domain": "",
+      "description": "OCD__cer_v_description",
+      "retention": "OCD_retention_31_days",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_ce.s": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_ce.s",
+      "domain": "",
+      "description": "OCD__ce_s_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_ce.cch": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_ce.cch",
+      "domain": "",
+      "description": "OCD__ce_cch_description",
+      "retention": "OCD_retention_1_second",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_ce.gtld": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_ce.gtld",
+      "domain": "",
+      "description": "OCD__ce_gtld_description",
+      "retention": "OCD_retention_1_second",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ce_need_secure_cookie": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "ce_need_secure_cookie",
+      "domain": "",
+      "description": "OCD_ce_need_secure_cookie_description",
+      "retention": "OCD_retention_1_second",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ce_successful_csp_check": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "ce_successful_csp_check",
+      "domain": "",
+      "description": "OCD_ce_successful_csp_check_description",
+      "retention": "OCD_retention_24_hours",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "cebs": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "cebs",
+      "domain": "crazyegg.com",
+      "description": "OCD_cebs_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "cebsp_": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "cebsp_",
+      "domain": "crazyegg.com",
+      "description": "OCD_cebsp__description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_ce.clock_event": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_ce.clock_event",
+      "domain": "",
+      "description": "OCD__ce_clock_event_description",
+      "retention": "OCD_retention_1_Day",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_ce.clock_data": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_ce.clock_data",
+      "domain": "",
+      "description": "OCD__ce_clock_data_description",
+      "retention": "OCD_retention_1_Day",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_ce.irv": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "_ce.irv",
+      "domain": "",
+      "description": "OCD__ce_irv_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ceft_variant_override": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Analytics",
+      "name": "ceft_variant_override",
+      "domain": "",
+      "description": "OCD_ceft_variant_override_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_crazyegg": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Marketing",
+      "name": "_crazyegg",
+      "domain": "",
+      "description": "OCD__crazyegg_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ce_login": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "ce_login",
+      "domain": "crazyegg.com",
+      "description": "OCD_ce_login_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ce_signup_flow": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "ce_signup_flow",
+      "domain": "crazyegg.com",
+      "description": "OCD_ce_signup_flow_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ce_signup_partner": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Marketing",
+      "name": "ce_signup_partner",
+      "domain": "crazyegg.com",
+      "description": "OCD_ce_signup_partner_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ceac": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "ceac",
+      "domain": "crazyegg.com",
+      "description": "OCD_ceac_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "cean": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "cean",
+      "domain": "crazyegg.com",
+      "description": "OCD_cean_description",
+      "retention": "OCD_retention_1_month",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "cehc": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "cehc",
+      "domain": "crazyegg.com",
+      "description": "OCD_cehc_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "celi": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "celi",
+      "domain": "crazyegg.com",
+      "description": "OCD_celi_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "cean_assoc": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "cean_assoc",
+      "domain": "crazyegg.com",
+      "description": "OCD_cean_assoc_description",
+      "retention": "OCD_retention_1_month",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "first_snapshot_url": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "first_snapshot_url",
+      "domain": "crazyegg.com",
+      "description": "OCD_first_snapshot_url_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "sharing_*": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "sharing_*",
+      "domain": "crazyegg.com",
+      "description": "OCD_sharing___description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "1"
+    }
+  ],
+  "ce_sid": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "ce_sid",
+      "domain": "crazyegg.com",
+      "description": "OCD_ce_sid_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "cecu": [
+    {
+      "platform": "Crazy Egg",
+      "category": "Functional",
+      "name": "cecu",
+      "domain": "crazyegg.com",
+      "description": "OCD_cecu_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Crazy Egg",
+      "gdprUrl": "https://www.crazyegg.com/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "TiPMix": [
+    {
+      "platform": "Lightbox CDN",
+      "category": "Functional",
+      "name": "TiPMix",
+      "domain": "api.lightboxcdn.com",
+      "description": "OCD_TiPMix_description",
+      "retention": "OCD_retention_0_day",
+      "dataController": "Lightbox",
+      "gdprUrl": "https://www.lightboxcdn.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-routing-name": [
+    {
+      "platform": "Lightbox CDN",
+      "category": "Functional",
+      "name": "x-ms-routing-name",
+      "domain": "api.lightboxcdn.com",
+      "description": "OCD_x_ms_routing_name_description",
+      "retention": "OCD_retention_0_day",
+      "dataController": "Lightbox",
+      "gdprUrl": "https://www.lightboxcdn.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_distillery": [
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "_distillery",
+      "domain": "",
+      "description": "OCD__distillery_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "muxData": [
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "muxData",
+      "domain": "",
+      "description": "OCD_muxData_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "wistia-http2-push-disabled": [
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "wistia-http2-push-disabled",
+      "domain": "",
+      "description": "OCD_wistia_http2_push_disabled_description",
+      "retention": "OCD_retention_2_Weeks",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_simplex": [
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "_simplex",
+      "domain": "",
+      "description": "OCD__simplex_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "wistia": [
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "wistia",
+      "domain": "",
+      "description": "OCD_wistia_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "wistia-video-progress-*": [
+    {
+      "platform": "Wistia",
+      "category": "Functional",
+      "name": "wistia-video-progress-*",
+      "domain": "",
+      "description": "OCD_wistia_video_progress___description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Wistia",
+      "gdprUrl": "https://wistia.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "__uin_rh": [
+    {
+      "platform": "Sonobi",
+      "category": "Marketing",
+      "name": "__uin_rh",
+      "domain": "go.sonobi.com",
+      "description": "OCD___uin_rh_description",
+      "retention": "OCD_retention_364_Days",
+      "dataController": "Sonobi",
+      "gdprUrl": "https://sonobi.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__uir_rh": [
+    {
+      "platform": "Sonobi",
+      "category": "Marketing",
+      "name": "__uir_rh",
+      "domain": "go.sonobi.com",
+      "description": "OCD___uir_rh_description",
+      "retention": "OCD_retention_32_Days",
+      "dataController": "Sonobi",
+      "gdprUrl": "https://sonobi.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "HAPLB3A": [
+    {
+      "platform": "Sonobi",
+      "category": "Marketing",
+      "name": "HAPLB3A",
+      "domain": "go.sonobi.com",
+      "description": "OCD_HAPLB3A_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Sonobi",
+      "gdprUrl": "https://sonobi.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "SSPR_*": [
+    {
+      "platform": "Adkernel",
+      "category": "Marketing",
+      "name": "SSPR_*",
+      "domain": ".adkernel.com",
+      "description": "OCD_SSPR___description",
+      "retention": "OCD_retention_Session",
+      "dataController": "AdKernel",
+      "gdprUrl": "https://adkernel.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "SSPZ": [
+    {
+      "platform": "Adkernel",
+      "category": "Marketing",
+      "name": "SSPZ",
+      "domain": ".adkernel.com",
+      "description": "OCD_SSPZ_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "AdKernel",
+      "gdprUrl": "https://adkernel.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "DSP2F_*": [
+    {
+      "platform": "Adkernel",
+      "category": "Marketing",
+      "name": "DSP2F_*",
+      "domain": ".adkernel.com",
+      "description": "OCD_DSP2F___description",
+      "retention": "OCD_retention_Session",
+      "dataController": "AdKernel",
+      "gdprUrl": "https://adkernel.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "ADKUID": [
+    {
+      "platform": "Adkernel",
+      "category": "Marketing",
+      "name": "ADKUID",
+      "domain": ".adkernel.com",
+      "description": "OCD_ADKUID_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "AdKernel",
+      "gdprUrl": "https://adkernel.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "SCM": [
+    {
+      "platform": "Smaato",
+      "category": "Marketing",
+      "name": "SCM",
+      "domain": ".smaato.net",
+      "description": "OCD_SCM_description",
+      "retention": "OCD_retention_3_weeks",
+      "dataController": "Smaato",
+      "gdprUrl": "https://www.smaato.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "SCMaps": [
+    {
+      "platform": "Smaato",
+      "category": "Marketing",
+      "name": "SCMaps",
+      "domain": ".smaato.net",
+      "description": "OCD_SCMaps_description",
+      "retention": "OCD_retention_3_weeks",
+      "dataController": "Smaato",
+      "gdprUrl": "https://www.smaato.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "SCMsovrn": [
+    {
+      "platform": "Smaato",
+      "category": "Marketing",
+      "name": "SCMsovrn",
+      "domain": ".smaato.net",
+      "description": "OCD_SCMsovrn_description",
+      "retention": "OCD_retention_3_weeks",
+      "dataController": "Smaato",
+      "gdprUrl": "https://www.smaato.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "SCMinf": [
+    {
+      "platform": "Smaato",
+      "category": "Marketing",
+      "name": "SCMinf",
+      "domain": ".smaato.net",
+      "description": "OCD_SCMinf_description",
+      "retention": "OCD_retention_3_weeks",
+      "dataController": "Smaato",
+      "gdprUrl": "https://www.smaato.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "SCMo": [
+    {
+      "platform": "Smaato",
+      "category": "Marketing",
+      "name": "SCMo",
+      "domain": ".smaato.net",
+      "description": "OCD_SCMo_description",
+      "retention": "OCD_retention_3_weeks",
+      "dataController": "Smaato",
+      "gdprUrl": "https://www.smaato.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "SCMg": [
+    {
+      "platform": "Smaato",
+      "category": "Marketing",
+      "name": "SCMg",
+      "domain": ".smaato.net",
+      "description": "OCD_SCMg_description",
+      "retention": "OCD_retention_3_weeks",
+      "dataController": "Smaato",
+      "gdprUrl": "https://www.smaato.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "SCM*": [
+    {
+      "platform": "Smaato",
+      "category": "Marketing",
+      "name": "SCM*",
+      "domain": ".smaato.net",
+      "description": "OCD_SCM__description",
+      "retention": "OCD_retention_3_weeks",
+      "dataController": "Smaato",
+      "gdprUrl": "https://www.smaato.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "UID_EXT_*": [
+    {
+      "platform": "Undertone",
+      "category": "Marketing",
+      "name": "UID_EXT_*",
+      "domain": ".undertone.com",
+      "description": "OCD_UID_EXT___description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Undertone",
+      "gdprUrl": "https://www.undertone.com/cookies-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "UTID": [
+    {
+      "platform": "Undertone",
+      "category": "Marketing",
+      "name": "UTID",
+      "domain": ".undertone.com",
+      "description": "OCD_UTID_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Undertone",
+      "gdprUrl": "https://www.undertone.com/cookies-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "UTID_ENC": [
+    {
+      "platform": "Undertone",
+      "category": "Marketing",
+      "name": "UTID_ENC",
+      "domain": ".undertone.com",
+      "description": "OCD_UTID_ENC_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Undertone",
+      "gdprUrl": "https://www.undertone.com/cookies-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "DYID": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "DYID",
+      "domain": "dynamicyield.com",
+      "description": "OCD_DYID_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dyid": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dyid",
+      "domain": "",
+      "description": "OCD__dyid_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dyid_server": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dyid_server",
+      "domain": "",
+      "description": "OCD__dyid_server_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "DYSES": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "DYSES",
+      "domain": "dynamicyield.com",
+      "description": "OCD_DYSES_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dyjsession": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dyjsession",
+      "domain": "",
+      "description": "OCD__dyjsession_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_csc_ses": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Analytics",
+      "name": "_dy_csc_ses",
+      "domain": "",
+      "description": "OCD__dy_csc_ses_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dycmc": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Analytics",
+      "name": "_dycmc",
+      "domain": "",
+      "description": "OCD__dycmc_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dycnst": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dycnst",
+      "domain": "",
+      "description": "OCD__dycnst_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_lu_ses": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dy_lu_ses",
+      "domain": "",
+      "description": "OCD__dy_lu_ses_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_df_geo": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Analytics",
+      "name": "_dy_df_geo",
+      "domain": "",
+      "description": "OCD__dy_df_geo_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_geo": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Analytics",
+      "name": "_dy_geo",
+      "domain": "",
+      "description": "OCD__dy_geo_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dycst": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Analytics",
+      "name": "_dycst",
+      "domain": "",
+      "description": "OCD__dycst_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_ses_load_seq": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dy_ses_load_seq",
+      "domain": "",
+      "description": "OCD__dy_ses_load_seq_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_soct": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dy_soct",
+      "domain": "",
+      "description": "OCD__dy_soct_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_toffset": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "_dy_toffset",
+      "domain": "",
+      "description": "OCD__dy_toffset_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "dy_fs_page": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Functional",
+      "name": "dy_fs_page",
+      "domain": "",
+      "description": "OCD_dy_fs_page_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_cs_storage_items": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Marketing",
+      "name": "_dy_cs_storage_items",
+      "domain": "",
+      "description": "OCD__dy_cs_storage_items_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_dy_cs_cookie_items": [
+    {
+      "platform": "Dynamic Yield",
+      "category": "Marketing",
+      "name": "_dy_cs_cookie_items",
+      "domain": "",
+      "description": "OCD__dy_cs_cookie_items_description",
+      "retention": "OCD_retention_30_Days",
+      "dataController": "Dynamic Yield",
+      "gdprUrl": "https://www.dynamicyield.com/gdpr-and-privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "ckid": [
+    {
+      "platform": "Blue",
+      "category": "Marketing",
+      "name": "ckid",
+      "domain": ".getblue.io",
+      "description": "OCD_ckid_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Blue",
+      "gdprUrl": "https://getblue.io/privacy/en/",
+      "wildcard": "0"
+    }
+  ],
+  "hash": [
+    {
+      "platform": "Blue",
+      "category": "Marketing",
+      "name": "hash",
+      "domain": ".getblue.io",
+      "description": "OCD_hash_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Blue",
+      "gdprUrl": "https://getblue.io/privacy/en/",
+      "wildcard": "0"
+    }
+  ],
+  "BLUEID": [
+    {
+      "platform": "Blue",
+      "category": "Marketing",
+      "name": "BLUEID",
+      "domain": ".getblue.io",
+      "description": "OCD_BLUEID_description",
+      "retention": "OCD_retention_1_Year",
+      "dataController": "Blue",
+      "gdprUrl": "https://getblue.io/privacy/en/",
+      "wildcard": "0"
+    }
+  ],
+  "ig_did": [
+    {
+      "platform": "Instagram",
+      "category": "Marketing",
+      "name": "ig_did",
+      "domain": "instagram.com",
+      "description": "OCD_ig_did_description",
+      "retention": "OCD_retention_9_years",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ig_cb": [
+    {
+      "platform": "Instagram",
+      "category": "Marketing",
+      "name": "ig_cb",
+      "domain": "instagram.com",
+      "description": "OCD_ig_cb_description",
+      "retention": "OCD_retention_9_years",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "ds_user_id": [
+    {
+      "platform": "Instagram",
+      "category": "Marketing",
+      "name": "ds_user_id",
+      "domain": "instagram.com",
+      "description": "OCD_ds_user_id_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "mid": [
+    {
+      "platform": "Instagram",
+      "category": "Functional",
+      "name": "mid",
+      "domain": "instagram.com",
+      "description": "OCD_mid_description",
+      "retention": "OCD_retention_9_years",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "fbm_*": [
+    {
+      "platform": "Instagram",
+      "category": "Marketing",
+      "name": "fbm_*",
+      "domain": "instagram.com",
+      "description": "OCD_fbm___description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "1"
+    }
+  ],
+  "shbid": [
+    {
+      "platform": "Instagram",
+      "category": "Marketing",
+      "name": "shbid",
+      "domain": "instagram.com",
+      "description": "OCD_shbid_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "shbts": [
+    {
+      "platform": "Instagram",
+      "category": "Marketing",
+      "name": "shbts",
+      "domain": "instagram.com",
+      "description": "OCD_shbts_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "sessionid": [
+    {
+      "platform": "Instagram",
+      "category": "Marketing",
+      "name": "sessionid",
+      "domain": "instagram.com",
+      "description": "OCD_sessionid_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Meta",
+      "gdprUrl": "https://www.facebook.com/privacy/policies/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_parsely_visitor": [
+    {
+      "platform": "Parse.ly",
+      "category": "Functional",
+      "name": "_parsely_visitor",
+      "domain": "",
+      "description": "OCD__parsely_visitor_description",
+      "retention": "OCD_retention_13_months",
+      "dataController": "Parse.ly",
+      "gdprUrl": "https://docs.parse.ly/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_parsely_tpa_blocked": [
+    {
+      "platform": "Parse.ly",
+      "category": "Functional",
+      "name": "_parsely_tpa_blocked",
+      "domain": "",
+      "description": "OCD__parsely_tpa_blocked_description",
+      "retention": "OCD_retention_12_hours",
+      "dataController": "Parse.ly",
+      "gdprUrl": "https://docs.parse.ly/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_parsely_slot_click": [
+    {
+      "platform": "Parse.ly",
+      "category": "Functional",
+      "name": "_parsely_slot_click",
+      "domain": "",
+      "description": "OCD__parsely_slot_click_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Parse.ly",
+      "gdprUrl": "https://docs.parse.ly/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_parsely_session": [
+    {
+      "platform": "Parse.ly",
+      "category": "Functional",
+      "name": "_parsely_session",
+      "domain": "",
+      "description": "OCD__parsely_session_description",
+      "retention": "OCD_retention_30_minutes",
+      "dataController": "Parse.ly",
+      "gdprUrl": "https://docs.parse.ly/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "test": [
+    {
+      "platform": "Parse.ly",
+      "category": "Functional",
+      "name": "test",
+      "domain": "",
+      "description": "OCD_test_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Parse.ly",
+      "gdprUrl": "https://docs.parse.ly/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "__editor_layout": [
+    {
+      "platform": "Codepen",
+      "category": "Functional",
+      "name": "__editor_layout",
+      "domain": "codepen.io",
+      "description": "OCD___editor_layout_description",
+      "retention": "OCD_retention_29_days",
+      "dataController": "Codepen",
+      "gdprUrl": "https://blog.codepen.io/documentation/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "codepen_session": [
+    {
+      "platform": "Codepen",
+      "category": "Functional",
+      "name": "codepen_session",
+      "domain": "codepen.io",
+      "description": "OCD_codepen_session_description",
+      "retention": "OCD_retention_29_days",
+      "dataController": "Codepen",
+      "gdprUrl": "https://blog.codepen.io/documentation/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "codepen_signup_referrer": [
+    {
+      "platform": "Codepen",
+      "category": "Functional",
+      "name": "codepen_signup_referrer",
+      "domain": "codepen.io",
+      "description": "OCD_codepen_signup_referrer_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Codepen",
+      "gdprUrl": "https://blog.codepen.io/documentation/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "codepen_signup_referrer_date": [
+    {
+      "platform": "Codepen",
+      "category": "Functional",
+      "name": "codepen_signup_referrer_date",
+      "domain": "codepen.io",
+      "description": "OCD_codepen_signup_referrer_date_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Codepen",
+      "gdprUrl": "https://blog.codepen.io/documentation/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_user_id": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_user_id",
+      "domain": "",
+      "description": "OCD_rl_user_id_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_trait": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_trait",
+      "domain": "",
+      "description": "OCD_rl_trait_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_anonymous_id": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_anonymous_id",
+      "domain": "",
+      "description": "OCD_rl_anonymous_id_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_group_id": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_group_id",
+      "domain": "",
+      "description": "OCD_rl_group_id_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_group_trait": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_group_trait",
+      "domain": "",
+      "description": "OCD_rl_group_trait_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_page_init_referrer": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_page_init_referrer",
+      "domain": "",
+      "description": "OCD_rl_page_init_referrer_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_page_init_referring_domain": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_page_init_referring_domain",
+      "domain": "",
+      "description": "OCD_rl_page_init_referring_domain_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "test_rudder_cookie": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "test_rudder_cookie",
+      "domain": "",
+      "description": "OCD_test_rudder_cookie_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_session": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_session",
+      "domain": "",
+      "description": "OCD_rl_session_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "rl_auth_token": [
+    {
+      "platform": "Rudderstack",
+      "category": "Analytics",
+      "name": "rl_auth_token",
+      "domain": "",
+      "description": "OCD_rl_auth_token_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Rudderstack",
+      "gdprUrl": "https://www.rudderstack.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_biz_uid": [
+    {
+      "platform": "Marketo",
+      "category": "Analytics",
+      "name": "_biz_uid",
+      "domain": "",
+      "description": "OCD__biz_uid_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_biz_nA": [
+    {
+      "platform": "Marketo",
+      "category": "Analytics",
+      "name": "_biz_nA",
+      "domain": "",
+      "description": "OCD__biz_nA_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_biz_flagsA": [
+    {
+      "platform": "Marketo",
+      "category": "Analytics",
+      "name": "_biz_flagsA",
+      "domain": "",
+      "description": "OCD__biz_flagsA_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_biz_pendingA": [
+    {
+      "platform": "Marketo",
+      "category": "Analytics",
+      "name": "_biz_pendingA",
+      "domain": "",
+      "description": "OCD__biz_pendingA_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_biz_ABTestA": [
+    {
+      "platform": "Marketo",
+      "category": "Analytics",
+      "name": "_biz_ABTestA",
+      "domain": "",
+      "description": "OCD__biz_ABTestA_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_biz_su": [
+    {
+      "platform": "Marketo",
+      "category": "Analytics",
+      "name": "_biz_su",
+      "domain": "",
+      "description": "OCD__biz_su_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_biz_EventA": [
+    {
+      "platform": "Marketo",
+      "category": "Analytics",
+      "name": "_biz_EventA",
+      "domain": "",
+      "description": "OCD__biz_EventA_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
       "wildcard": "0"
     }
   ]
