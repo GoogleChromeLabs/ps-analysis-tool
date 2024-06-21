@@ -34,7 +34,7 @@ export default function getFramesForCurrentTab(
   extraFrameData: Record<string, string[]>,
   isUsingCDP: boolean
 ) {
-  const modifiedTabFrames: TabFrames = prevState ?? {};
+  const modifiedTabFrames: TabFrames = isUsingCDP ? {} : prevState ?? {};
 
   currentTabFrames?.forEach(({ url, frameType, frameId }) => {
     if (url && url.includes('http')) {
