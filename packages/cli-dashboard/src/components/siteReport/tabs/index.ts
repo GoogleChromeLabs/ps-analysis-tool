@@ -23,10 +23,11 @@ import {
   WarningBare,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const Tabs: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-    title: 'cookies',
+    title: () => I18n.getMessage('cookies'),
     children: {},
     icon: {
       Element: CookieIcon,
@@ -37,7 +38,7 @@ const Tabs: SidebarItems = {
     dropdownOpen: true,
   },
   [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
-    title: 'cookieIssues',
+    title: () => I18n.getMessage('cookieIssues'),
     children: {},
     icon: {
       Element: WarningBare,

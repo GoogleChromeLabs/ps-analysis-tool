@@ -71,7 +71,6 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data[SIDEBAR_ITEMS_KEYS.COOKIES].title = I18n.getMessage('cookies');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesTab,
         props: {
@@ -114,8 +113,6 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         {}
       );
 
-      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title =
-        I18n.getMessage('cookieIssues');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteCookiesWithIssues,
         props: {

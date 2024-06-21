@@ -33,7 +33,6 @@ import {
   type CompleteJson,
   type LibraryData,
 } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -140,8 +139,6 @@ const Layout = ({
     setSidebarData((prev) => {
       const _data = { ...prev };
 
-      _data[SIDEBAR_ITEMS_KEYS.COOKIES].title =
-        I18n.getMessage('sitemapReport');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesLandingContainer,
         props: {
@@ -199,8 +196,6 @@ const Layout = ({
         {}
       );
 
-      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title =
-        I18n.getMessage('cookieIssues');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {
