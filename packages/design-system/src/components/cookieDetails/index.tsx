@@ -19,6 +19,8 @@
  */
 import React from 'react';
 import type { CookieTableData } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
+
 /**
  * Internal dependencies.
  */
@@ -47,7 +49,7 @@ const CookieDetails = ({
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-            Select cookies to preview its value
+            {I18n.getMessage('selectCookie')}
           </p>
         </div>
       )}

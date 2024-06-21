@@ -28,6 +28,7 @@ import {
   type PSInfo as PSInfoType,
   type PSInfoKeyType,
 } from './fetchPSInfo';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
@@ -51,7 +52,9 @@ const InfoCard = ({ infoKey, className }: InfoCardProps) => {
         <div className={className}>
           <p
             className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
-            dangerouslySetInnerHTML={{ __html: PSInfo.description }}
+            dangerouslySetInnerHTML={{
+              __html: I18n.getMessage(PSInfo.description),
+            }}
           />
           <LearnMoreDropdown PSInfo={PSInfo} />
         </div>

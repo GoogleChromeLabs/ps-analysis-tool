@@ -36,6 +36,8 @@ class I18n {
     };
   } = {};
 
+  private locale = 'en';
+
   /**
    * Initializes the messages object with the provided messages.
    * @param {object} messages - The messages object containing translations.
@@ -45,27 +47,60 @@ class I18n {
   }
 
   /**
+   *	Returns the locale string.
+   * @returns {string} The locale string.
+   */
+  getLocale() {
+    if (typeof chrome !== 'undefined' && chrome?.i18n?.getUILanguage) {
+      return chrome.i18n.getUILanguage();
+    }
+
+    return this.locale;
+  }
+
+  /**
+   * Returns the messages object.
+   * @returns {object} The messages object.
+   */
+  getMessages() {
+    return this.messages;
+  }
+
+  /**
    * Creates an array of possible locale strings based on the provided locale.
    * @param {string} locale - The locale string.
    * @returns {string[]} An array of locale strings.
    */
   private createLocaleArray(locale: string) {
-    return [locale, locale.split('-')[0], locale.split('_')[0], 'en'];
+    if (!locale) {
+      return ['en'];
+    }
+
+    return [
+      locale,
+      locale.replace(/_/g, '-'),
+      locale.replace(/-/g, '_'),
+      locale.split('-')[0],
+      locale.split('_')[0],
+      'en',
+    ];
   }
 
   /**
-   * Asynchronously loads messages data for the dashboard.
+   * Asynchronously loads messages data using the provided locale.
    * @param {string} locale - The locale string.
    * @returns {Promise<void>} A promise that resolves when messages are loaded.
    */
-  async loadDashboardMessagesData(locale: string) {
+  async fetchMessages(locale: string) {
     const localeArray = this.createLocaleArray(locale);
 
     let idx = 0;
 
     const fetchWithRetry = async () => {
+      let res = {};
+
       if (idx >= localeArray.length) {
-        return;
+        return res;
       }
 
       try {
@@ -80,15 +115,19 @@ class I18n {
         }
 
         const data = await response.json();
+        res = data;
 
-        this.initMessages(data);
+        this.locale = localeArray[idx];
       } catch (error) {
         idx++;
-        await fetchWithRetry();
+        res = await fetchWithRetry();
       }
+
+      return res;
     };
 
-    await fetchWithRetry();
+    const result = await fetchWithRetry();
+    return result;
   }
 
   /**
@@ -112,6 +151,7 @@ class I18n {
         );
 
         this.initMessages(messages);
+        this.locale = _locale;
         break;
       }
     }
@@ -126,10 +166,16 @@ class I18n {
    */
   getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
     if (typeof chrome !== 'undefined' && chrome?.i18n?.getMessage) {
-      // @ts-ignore - Outdated definition.
-      return chrome.i18n.getMessage(key, substitutions, {
-        escapeLt: Boolean(escapeLt),
-      });
+      try {
+        // @ts-ignore - Outdated definition.
+        const text = chrome.i18n.getMessage(key, substitutions, {
+          escapeLt: Boolean(escapeLt),
+        });
+
+        return text;
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     return this._parseMessage(key, substitutions, escapeLt);
@@ -171,6 +217,31 @@ class I18n {
     return new IntlMessageFormat(message, 'en', undefined, {
       ignoreTag: escapeLt,
     }).format(placeholders) as string;
+  }
+
+  /**
+   * Returns messages wrapped with HTML tags.
+   * Prefix keys with 'header_{key}', 'body_{count}_{key}' to wrap with appropriate tags.
+   * @param keys - The keys of the messages to retrieve.
+   * @returns {string} The formatted messages.
+   */
+  getFormattedMessages(keys: string[]) {
+    return keys
+      ?.map((key) => {
+        const [type] = key.split('_');
+
+        const message = this.getMessage(key);
+
+        switch (type) {
+          case 'header':
+            return `<h1 className='font-semibold'>${message}</h1>`;
+          case 'body':
+            return `<p>${message}</p>`;
+          default:
+            return message;
+        }
+      })
+      .join('');
   }
 }
 

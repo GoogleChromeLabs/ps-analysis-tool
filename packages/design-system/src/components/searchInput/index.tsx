@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect, useRef, useState } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -71,7 +72,7 @@ const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
         ref={inputRef}
         type="text"
         className="h-[14px] w-full outline-none bg-transparent"
-        placeholder="Search"
+        placeholder={I18n.getMessage('search')}
         value={value}
         onChange={onChange}
         onFocus={() => setIsFocused(true)}
@@ -82,7 +83,7 @@ const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
         className={`w-fit h-3 px-px scale-[1.6] hover:opacity-70 active:opacity-50 flex justify-center items-center ${
           value ? 'visible' : 'invisible'
         }`}
-        title="Clear Search"
+        title={I18n.getMessage('clearSearch')}
       >
         <PaddedCross />
       </button>

@@ -18,6 +18,7 @@
  */
 import React, { useState } from 'react';
 import classname from 'classnames';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -45,7 +46,7 @@ interface MatrixContainerProps {
 const MatrixContainer = ({
   matrixData = [],
   horizontalMatrixData = [],
-  title = 'Categories',
+  title = I18n.getMessage('categories'),
   description = '',
   showMatrix = true,
   count = null,
@@ -65,7 +66,11 @@ const MatrixContainer = ({
               <button
                 onClick={() => setIsExpanded((state) => !state)}
                 data-testid="expand-button"
-                title={isExpanded ? 'Collapse View' : 'Expand View'}
+                title={
+                  isExpanded
+                    ? I18n.getMessage('collapseView')
+                    : I18n.getMessage('expandView')
+                }
               >
                 <ChevronDown
                   className={classname('fill-granite-gray', {

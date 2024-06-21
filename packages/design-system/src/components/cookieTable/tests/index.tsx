@@ -21,6 +21,7 @@ import React, { act } from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { CookieTableData } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -123,6 +124,28 @@ describe('CookieTable', () => {
     hostname: '',
     setSelectedFrameCookie: jest.fn(),
   };
+
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      openFilterOptions: {
+        message: 'Open filter options',
+      },
+      clearAll: {
+        message: 'Clear all',
+      },
+      search: {
+        message: 'Search',
+      },
+      toggleAll: {
+        message: 'Toggle All',
+      },
+      clearSearch: {
+        message: 'Clear Search',
+      },
+    });
+  });
 
   it('should render the table', async () => {
     render(<CookieTable {...initialProps} />);

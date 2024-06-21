@@ -37,6 +37,7 @@
   "dependencies": {
     "@ps-analysis-tool/analysis-utils": "*",
     "@ps-analysis-tool/common": "*",
+    "@ps-analysis-tool/i18n": "*",
     "@ps-analysis-tool/library-detection": "*",
     "commander": "^10.0.1", 
     "fs-extra": "^11.1.1",

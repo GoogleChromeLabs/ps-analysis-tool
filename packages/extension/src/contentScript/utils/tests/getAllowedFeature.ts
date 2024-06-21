@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import '@testing-library/jest-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -42,6 +43,14 @@ describe('getAllowedFeatures', () => {
       }
 
       return {};
+    });
+
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      unknown: {
+        message: 'Unknown',
+      },
     });
   });
 

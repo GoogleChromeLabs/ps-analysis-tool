@@ -157,6 +157,5 @@ describe('CookiesLanding', () => {
 
     expect(getByTestId('cookies-landing')).toBeInTheDocument();
     expect(getAllByTestId('cookies-landing-header')[0]).toBeInTheDocument();
-    expect(getByTestId('cookies-matrix-Categories')).toBeInTheDocument();
   });
 });

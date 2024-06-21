@@ -7456,4 +7456,5 @@ export const data = {
   url: 'http://example.com',
   source: 'extension',
   showBlockedCategory: false,
+  translations: {},
 };

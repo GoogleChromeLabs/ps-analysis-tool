@@ -21,15 +21,16 @@ import {
   WarningBare,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const sidebarData: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-    title: 'Sitemap Report',
+    title: () => I18n.getMessage('sitemapReport'),
     children: {},
     dropdownOpen: true,
   },
   [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
-    title: 'Cookie Issues',
+    title: () => I18n.getMessage('cookieIssues'),
     children: {},
     icon: {
       Element: WarningBare,

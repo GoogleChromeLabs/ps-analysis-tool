@@ -29,6 +29,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
@@ -56,12 +57,16 @@ const BlockedCookiesSection = () => {
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
       onClick:
         cookieStats.blockedCookies.total > 0
-          ? () => selectedItemUpdater('All', 'blockedReasons')
+          ? () =>
+              selectedItemUpdater(
+                I18n.getMessage('selectAll'),
+                'blockedReasons'
+              )
           : null,
     },
   ];
@@ -70,7 +75,10 @@ const BlockedCookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description: legendDescription,
+        description:
+          typeof legendDescription === 'string'
+            ? I18n.getMessage(legendDescription)
+            : I18n.getFormattedMessages(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) =>
@@ -80,7 +88,7 @@ const BlockedCookiesSection = () => {
 
   const description = !isUsingCDP ? (
     <>
-      Enable PSAT to use CDP via the{' '}
+      {I18n.getMessage('notUsingCDP')}&nbsp;
       <button
         className="text-bright-navy-blue dark:text-jordy-blue"
         onClick={() => {
@@ -90,17 +98,17 @@ const BlockedCookiesSection = () => {
           updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
         }}
       >
-        Settings page
+        {I18n.getMessage('settingsPage')}
       </button>
       . <br />
-      For more information, visit the PSAT&nbsp;
+      {I18n.getMessage('visitPSAT')}&nbsp;
       <a
         target="_blank"
         rel="noreferrer"
         className="text-bright-navy-blue dark:text-jordy-blue"
         href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
       >
-        Wiki
+        {I18n.getMessage('wiki')}
       </a>
       .
     </>
@@ -116,9 +124,9 @@ const BlockedCookiesSection = () => {
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title="Blocked Reasons"
+          title={I18n.getMessage('blockedReasons')}
           matrixData={dataComponents}
-          infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+          infoIconTitle={I18n.getMessage('cookiesBlockedNote')}
         />
       )}
     </CookiesLandingWrapper>

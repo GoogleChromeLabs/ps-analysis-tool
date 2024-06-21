@@ -57,14 +57,12 @@ describe('I18n', () => {
       ok: true,
     });
 
-    await I18n.loadDashboardMessagesData(locale);
+    const result = await I18n.fetchMessages(locale);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith('/_locales/en/messages.json');
 
-    expect(I18n.getMessage('test.message', ['Sam'])).toEqual(
-      'Test message for Sam'
-    );
+    expect(result).toEqual(messages);
   });
 
   it('should load CLI messages data', async () => {
@@ -90,10 +88,10 @@ describe('I18n', () => {
     expect(existsSyncMock).toHaveBeenCalledWith(
       'packages/i18n/_locales/messages/hi/messages.json'
     );
-    expect(existsSyncMock).toHaveBeenCalledTimes(4);
+    expect(existsSyncMock).toHaveBeenCalledTimes(1);
 
     expect(readFileSyncMock).toHaveBeenCalledWith(
-      'packages/i18n/_locales/messages/en/messages.json',
+      'packages/i18n/_locales/messages/hi/messages.json',
       {
         encoding: 'utf-8',
       }

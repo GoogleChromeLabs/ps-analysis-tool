@@ -19,6 +19,7 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -44,6 +45,15 @@ globalThis.chrome = {
     },
   },
 };
+globalThis.chrome.i18n = null;
+I18n.initMessages({
+  removeDomainFromAllowList: {
+    message: 'Remove Domain from Allow List',
+  },
+  allowDomin: {
+    message: 'Allow Domain During Session',
+  },
+});
 
 describe('RowContextMenu', () => {
   it('should render Row Context Menu component', async () => {

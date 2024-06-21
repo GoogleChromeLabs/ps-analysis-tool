@@ -26,6 +26,7 @@ import {
   type CookiesLandingSection,
   type MenuData,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
@@ -55,28 +56,28 @@ const AssembledCookiesLanding = () => {
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const defaultSections = [
       {
-        name: 'Cookies',
+        name: I18n.getMessage('cookies'),
         link: 'cookies',
         panel: {
           Element: CookiesSection,
         },
       },
       {
-        name: 'Blocked Cookies',
+        name: I18n.getMessage('blockedCookies'),
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
         },
       },
       {
-        name: 'Library Detection',
+        name: I18n.getMessage('libraryDetection'),
         link: 'library-detection',
         panel: {
           Element: LibraryDetection,
         },
       },
       {
-        name: 'Frames',
+        name: I18n.getMessage('frames'),
         link: 'frames',
         panel: {
           Element: FramesSection,
@@ -86,7 +87,7 @@ const AssembledCookiesLanding = () => {
 
     if (isUsingCDP) {
       defaultSections.splice(2, 0, {
-        name: 'Exemption Reason',
+        name: I18n.getMessage('exemptionReasons'),
         link: 'exemption-reasons',
         panel: {
           Element: ExemptedCookiesSection,

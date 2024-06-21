@@ -22,6 +22,7 @@ import {
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -51,7 +52,7 @@ const LibraryDetection = memo(function LibraryDetection() {
 
   const dataMapping = [
     {
-      title: 'Known Breakages',
+      title: I18n.getMessage('knownBreakages'),
       count: Number(detectedLibraryNames.length),
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },
@@ -84,12 +85,11 @@ const LibraryDetection = memo(function LibraryDetection() {
       </>
     ) : !errorOccured ? (
       <p className="text-center dark:text-bright-gray">
-        No libraries with known breakages found yet!
+        {I18n.getMessage('noLibraries')}
       </p>
     ) : (
       <p className="text-center dark:text-bright-gray">
-        A library detection error occurred. Please reopen the DevTool on a valid
-        URL.
+        {I18n.getMessage('errorOccured')}
       </p>
     );
 
@@ -104,8 +104,8 @@ const LibraryDetection = memo(function LibraryDetection() {
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
           <p className="text-center dark:text-bright-gray">
             {isCurrentTabLoading
-              ? 'Waiting for the page to load..'
-              : 'Checking libraries for any known breakages on the page..'}
+              ? I18n.getMessage('waitingPageLoad')
+              : I18n.getMessage('checkingLibraries')}
           </p>
         </>
       ) : (

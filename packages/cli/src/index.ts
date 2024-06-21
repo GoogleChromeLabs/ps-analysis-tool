@@ -24,6 +24,7 @@ import { ensureFile, writeFile } from 'fs-extra';
 import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
+import { I18n } from '@ps-analysis-tool/i18n';
 import { CompleteJson, LibraryData } from '@ps-analysis-tool/common';
 import {
   analyzeCookiesUrlsInBatchesAndFetchResources,
@@ -64,6 +65,10 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
+  .option(
+    '-l, --locale <value>',
+    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR'
+  )
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -96,7 +101,8 @@ const saveResultsAsJSON = async (
 const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson | CompleteJson[],
-  isSiteMap: boolean
+  isSiteMap: boolean,
+  locale: string
 ) => {
   const htmlText = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -108,6 +114,9 @@ const saveResultsAsHTML = async (
     'base64'
   );
 
+  I18n.loadCLIMessagesData(locale);
+  const messages = I18n.getMessages();
+
   const html =
     htmlText.substring(0, htmlText.indexOf('</head>')) +
     `<script>
@@ -116,6 +125,7 @@ const saveResultsAsHTML = async (
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',
       selectedSite: outDir?.trim()?.slice(6) ?? '',
+      translations: messages,
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
 
@@ -141,6 +151,7 @@ const saveResultsAsHTML = async (
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
+  const locale = program.opts().locale;
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
@@ -154,7 +165,8 @@ const saveResultsAsHTML = async (
     csvPath,
     sitemapPath,
     numberOfUrlsInput,
-    outDir
+    outDir,
+    locale
   );
 
   const prefix =
@@ -281,7 +293,7 @@ const saveResultsAsHTML = async (
   }
 
   await saveResultsAsJSON(outputDir, result);
-  await saveResultsAsHTML(outputDir, result, isSiteMap);
+  await saveResultsAsHTML(outputDir, result, isSiteMap, locale);
 })().catch((error) => {
   console.log('Some error occured while analysing the website.');
   console.log('For more information check the stack trace below:\n');

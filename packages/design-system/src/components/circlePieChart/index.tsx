@@ -24,7 +24,6 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import EmptyCirclePieChart from './emptyCirclePieChart';
-import { InfoIcon } from '@ps-analysis-tool/design-system';
 
 interface CirclePieChartProps {
   centerCount: number;
@@ -42,7 +41,6 @@ const CirclePieChart = ({
   centerCount,
   data,
   title,
-  infoIconClassName = '',
   centerTitleExtraClasses = '',
   pieChartExtraClasses = '',
 }: CirclePieChartProps) => {
@@ -80,14 +78,6 @@ const CirclePieChart = ({
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
-          {title === '3rd Party Cookies' && (
-            <p
-              className={infoIconClassName}
-              title="Cookies must be analyzed on a new, clean Chrome profile for an accurate report"
-            >
-              <InfoIcon className="fill-granite-gray" />
-            </p>
-          )}
         </div>
       )}
     </div>

@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -37,7 +38,7 @@ const ToastMessage = ({
   additionalStyles = '',
   textAdditionalStyles = '',
   variant = 'large',
-  buttonText = 'Reload',
+  buttonText = I18n.getMessage('reload'),
 }: ToastMessageProps) => {
   return (
     <div

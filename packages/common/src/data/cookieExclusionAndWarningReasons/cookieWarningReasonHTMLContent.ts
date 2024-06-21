@@ -13,256 +13,197 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const WarnSameSiteUnspecifiedCrossSiteContextReadCookie = `
-    <p class="font-semibold">Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute</p>
-    <p>Because a cookie's <code>SameSite</code> attribute was not set or is invalid, it defaults to <code>SameSite=Lax</code>, which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.</p>
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
-    <ul>
-        <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie should be sent in cross-site requests. This enables third-party use.</li>
-        <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be sent in cross-site requests.</li>
-    </ul>
-    <br />
-`;
+export const WarnSameSiteUnspecifiedCrossSiteContextReadCookie = [
+  'header_WarnSameSiteUnspecifiedCrossSiteContextReadCookie',
+  'body_WarnSameSiteUnspecifiedCrossSiteContextReadCookie',
+];
 
 // Filename: SameSiteUnspecifiedLaxAllowUnsafeSet.md
-export const WarnSameSiteUnspecifiedCrossSiteContextSetCookie = `
-    <p class="font-semibold">Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute</p>
-    <p>Because a cookie's <code>SameSite</code> attribute was not set or is invalid, it defaults to <code>SameSite=Lax</code>, which will prevent the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.</p>
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
-    <ul>
-        <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie is intended to be set in cross-site contexts. Note that only cookies sent over HTTPS may use the <code>Secure</code> attribute.</li>
-        <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be set by cross-site requests.</li>
-    </ul>
-    <br />
-`;
+export const WarnSameSiteUnspecifiedCrossSiteContextSetCookie = [
+  'header_WarnSameSiteUnspecifiedCrossSiteContextSetCookie',
+  'body_WarnSameSiteUnspecifiedCrossSiteContextSetCookie',
+];
 
 // Filename: SameSiteNoneInsecureWarnRead.md
-export const WarnSameSiteNoneInsecureReadCookie = `
-    <p class="font-semibold">Mark cross-site cookies as Secure to allow them to be sent in cross-site requests</p>
-    <p>In a future version of the browser, cookies marked with <code>SameSite=None</code> must also be marked with <code>Secure</code> to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection.</p>
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
-    <ul>
-        <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie should be sent in cross-site requests. This enables third-party use.</li>
-        <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be sent in cross-site requests.</li>
-    </ul>
-    <br />
-`;
+export const WarnSameSiteNoneInsecureReadCookie = [
+  'header_WarnSameSiteNoneInsecureReadCookie',
+  'body_WarnSameSiteNoneInsecureReadCookie',
+];
 
 // Filename: SameSiteNoneInsecureWarnSet.md
-export const WarnSameSiteNoneInsecureSetCookie = `
-    <p class="font-semibold">Mark cross-site cookies as Secure to allow setting them in cross-site contexts</p>
-    <p>In a future version of the browser, cookies marked with <code>SameSite=None</code> must also be marked with <code>Secure</code> to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection.</p>
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
-    <ul>
-        <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie is intended to be set in cross-site contexts. Note that only cookies sent over HTTPS may use the <code>Secure</code> attribute.</li>
-        <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be set by cross-site requests.</li>
-    </ul>
-    <br />
-`;
+export const WarnSameSiteNoneInsecureSetCookie = [
+  'header_WarnSameSiteNoneInsecureSetCookie',
+  'body_WarnSameSiteNoneInsecureSetCookie',
+];
 
 // Filename: SameSiteUnspecifiedLaxAllowUnsafeRead.md
-export const WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie = `
-    <p class="font-semibold">Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute</p>
-    <p>Because a cookie's <code>SameSite</code> attribute was not set or is invalid, it defaults to <code>SameSite=Lax</code>, which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.</p>
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
-    <ul>
-        <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie should be sent in cross-site requests. This enables third-party use.</li>
-        <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be sent in cross-site requests.</li>
-    </ul>
-    <br />
-`;
+export const WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie = [
+  'header_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie',
+  'body_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie',
+];
 
 // Filename: SameSiteUnspecifiedLaxAllowUnsafeSet.md
-export const WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie = `
-    <p class="font-semibold">Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute</p>
-    <p>Because a cookie's <code>SameSite</code> attribute was not set or is invalid, it defaults to <code>SameSite=Lax</code>, which will prevents the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.</p>
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
-    <ul>
-        <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie is intended to be set in cross-site contexts. Note that only cookies sent over HTTPS may use the <code>Secure</code> attribute.</li>
-        <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be set by cross-site requests.</li>
-    </ul>
-    <br />
-`;
+export const WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie = [
+  'header_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie',
+  'body_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie',
+];
 
 // Filename: SameSiteWarnStrictLaxDowngradeStrict.md
-export const WarnSameSiteStrictLaxDowngradeStrictSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent on same-site requests</p>
-    <p>A cookie is being sent to a secure origin from an insecure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictLaxDowngradeStrictSecure = [
+  'header_WarnSameSiteStrictLaxDowngradeStrictSecure',
+  'body_1_WarnSameSiteStrictLaxDowngradeStrictSecure',
+  'body_2_WarnSameSiteStrictLaxDowngradeStrictSecure',
+];
 
 // Filename: SameSiteWarnStrictLaxDowngradeStrict.md
-export const WarnSameSiteStrictLaxDowngradeStrictInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent on same-site requests</p>
-    <p>A cookie is being sent to an insecure origin from a secure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictLaxDowngradeStrictInsecure = [
+  'header_WarnSameSiteStrictLaxDowngradeStrictInsecure',
+  'body_1_WarnSameSiteStrictLaxDowngradeStrictInsecure',
+  'body_2_WarnSameSiteStrictLaxDowngradeStrictInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure = [
+  'header_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure = [
+  'header_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure = [
+  'header_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure = [
+  'header_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure = [
+  'header_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure = [
+  'header_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure = [
+  'header_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure = [
+  'header_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure',
+  'body_1_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure',
+  'body_2_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure = [
+  'header_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure = [
+  'header_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure = [
+  'header_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure = [
+  'header_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure = [
+  'header_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeRead.md
-export const WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue having cookies sent to same-site subresources</p>
-    <p>A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure = [
+  'header_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure = [
+  'header_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure',
+];
 
 // Filename: SameSiteWarnCrossDowngradeSet.md
-export const WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure = `
-    <p class="font-semibold">Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources</p>
-    <p>A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
-    <br />
-`;
+export const WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure = [
+  'header_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure',
+  'body_1_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure',
+  'body_2_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure',
+];
 
 // Filename: CookieAttributeValueExceedsMaxSize.md
-export const WarnAttributeValueExceedsMaxSize = `
-    <p class="font-semibold">Ensure cookie attribute values don't exceed 1024 characters</p>
-    <p>Cookie attribute values exceeding 1024 characters in size will result in the attribute being ignored. This could lead to unexpected behavior since the cookie will be processed as if the offending attribute / attribute value pair were not present.</p>
-    <p>Resolve this issue by ensuring that cookie attribute values don't exceed 1024 characters.</p>
-    <br />
-`;
+export const WarnAttributeValueExceedsMaxSize = [
+  'header_WarnAttributeValueExceedsMaxSize',
+  'body_1_WarnAttributeValueExceedsMaxSize',
+  'body_2_WarnAttributeValueExceedsMaxSize',
+];
 
 // Filename: cookieWarnDomainNonAscii.md
-export const WarnDomainNonASCII = `
-    <p class="font-semibold">Ensure cookie <code>Domain</code> attribute values only contain ASCII characters</p>
-    <p><code>Domain</code> attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their <code>Domain</code> attribute will be ignored in the future.</p>
-    <p>To resolve this issue, you need to remove all non-ASCII characters from the <code>Domain</code> attribute of the affected cookies.</p>
-    <p>If your site has an internationalized domain name (IDN), you should use <a href="punycodeReference">punycode</a> representation for the <code>Domain</code> attribute instead.</p>
-    <br />
-`;
+export const WarnDomainNonASCII = [
+  'header_WarnDomainNonASCII',
+  'body_1_WarnDomainNonASCII',
+  'body_2_WarnDomainNonASCII',
+  'body_3_WarnDomainNonASCII',
+];
 
 // Filename: cookieWarnThirdPartyPhaseoutRead.md
-export const WarnThirdPartyPhaseoutReadCookie = `
-    <p class="font-semibold">Cookie sent in cross-site context will be blocked in future Chrome versions</p>
-    <p>In a future version of the browser, cookies marked with <code>SameSite=None; Secure</code> and not <code>Partitioned</code> will be blocked in cross-site requests. This behavior protects user data from cross-site tracking.</p>
-    <br />
-`;
+export const WarnThirdPartyPhaseoutReadCookie = [
+  'header_WarnThirdPartyPhaseoutReadCookie',
+  'body_WarnThirdPartyPhaseoutReadCookie',
+];
 
 // Filename: cookieWarnThirdPartyPhaseoutSet.md
-export const WarnThirdPartyPhaseoutSetCookie = `
-    <p class="font-semibold">Cookie set in cross-site context will be blocked in future Chrome versions</p>
-    <p>In a future version of the browser, cookies marked with <code>SameSite=None; Secure</code> and not <code>Partitioned</code> will be blocked in cross-site context. This behavior protects user data from cross-site tracking.</p>
-    <br />
-`;
+export const WarnThirdPartyPhaseoutSetCookie = [
+  'header_WarnThirdPartyPhaseoutSetCookie',
+  'body_WarnThirdPartyPhaseoutSetCookie',
+];
 
 // Filename: cookieCrossSiteRedirectDowngrade.md
-export const WarnCrossSiteRedirectDowngradeChangesInclusion = `
-    <p class="font-semibold">Cookie is blocked due to a cross-site redirect chain</p>
-    <p>The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with <code>SameSite=Lax</code> or <code>SameSite=Strict</code>.</p>
-    <p>For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request.</p>
-    <br />
-`;
+export const WarnCrossSiteRedirectDowngradeChangesInclusion = [
+  'header_WarnCrossSiteRedirectDowngradeChangesInclusion',
+  'body_1_WarnCrossSiteRedirectDowngradeChangesInclusion',
+  'body_2_WarnCrossSiteRedirectDowngradeChangesInclusion',
+];

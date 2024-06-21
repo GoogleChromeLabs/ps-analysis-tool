@@ -19,6 +19,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getDomain } from 'tldts';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -82,22 +83,22 @@ const Insights = () => {
     <div className="text-raisin-black dark:text-bright-gray">
       {loading ? (
         <div className="flex gap-2 items-center justify-start">
-          <p className="text-sm">Loading...</p>
+          <p className="text-sm">{I18n.getMessage('loading')}...</p>
           <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
         </div>
       ) : (
         <div className="space-y-3">
           <h3 className="text-xl font-semibold">
-            Related Website Sets Membership
+            {I18n.getMessage('membership')}
           </h3>
           {insightsData?.isURLInRWS ? (
             <>
               <p className="text-lg font-medium">
-                <span className="font-serif text-green-700">✓</span> This site
-                belongs to a &quot;Related Website Set&quot;
+                <span className="font-serif text-green-700">✓</span>{' '}
+                {I18n.getMessage('belongsToRWS')}
               </p>
               <p className="text-sm">
-                Primary Domain:{' '}
+                {I18n.getMessage('primaryDomain')}:{' '}
                 <a
                   href={insightsData.relatedWebsiteSet?.primary}
                   target="_blank"
@@ -112,7 +113,7 @@ const Insights = () => {
                 <>
                   {insightsData.isccTLD ? (
                     <p className="text-sm">
-                      This site is a ccTLD of{' '}
+                      {I18n.getMessage('siteccTldOf')}
                       <a
                         href={insightsData.relatedWebsiteSet?.ccTLDParent}
                         target="_blank"
@@ -122,7 +123,6 @@ const Insights = () => {
                       >
                         {insightsData.relatedWebsiteSet?.ccTLDParent}
                       </a>
-                      .
                     </p>
                   ) : (
                     <>
@@ -135,25 +135,24 @@ const Insights = () => {
                         )
                         .map(([domain, value]) => (
                           <p key={domain} className="text-sm">
-                            Rationale: {value as string}
+                            {I18n.getMessage('rationale')}:
+                            {I18n.getMessage(value)}
                           </p>
                         ))}
                     </>
                   )}
                 </>
               ) : (
-                <p>
-                  This site is the primary domain of the Related Website Set.
-                </p>
+                <p>{I18n.getMessage('rWSPrimaryDomain')}</p>
               )}
 
               <div className="flex flex-row gap-4 overflow-auto">
                 <SitesList
-                  title="Associated Sites"
+                  title={I18n.getMessage('associatedSites')}
                   sites={insightsData.relatedWebsiteSet?.associatedSites || []}
                 />
                 <SitesList
-                  title="Service Sites"
+                  title={I18n.getMessage('serviceSites')}
                   sites={insightsData.relatedWebsiteSet?.serviceSites || []}
                 />
                 <SitesList title="ccTLDs" sites={cctlds} />
@@ -162,7 +161,7 @@ const Insights = () => {
           ) : (
             <p className="text-lg font-medium flex items-center gap-2">
               <span className="text-red-500">✗</span>
-              This site does not belong to a &quot;Related Website Set&quot;
+              {I18n.getMessage('notBelongToRWS')}
             </p>
           )}
         </div>

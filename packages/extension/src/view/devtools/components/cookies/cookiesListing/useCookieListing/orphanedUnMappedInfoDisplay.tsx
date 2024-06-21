@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -41,13 +42,13 @@ const OrphanedUnMappedInfoDisplay = ({
   if (frameIdList.length === 0) {
     return (
       <span
-        className="flex"
-        title="Cookies that could not be mapped to any frame."
+        className="flex truncate"
+        title={I18n.getMessage('couldNotMapCookies')}
       >
         <span>
           <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
         </span>
-        <span className="ml-[2px] truncate">Unmapped</span>
+        <span className="ml-[2px] truncate">{I18n.getMessage('unmapped')}</span>
       </span>
     );
   }
@@ -76,12 +77,12 @@ const OrphanedUnMappedInfoDisplay = ({
     return (
       <span
         className="flex truncate"
-        title="Frames that set these cookies were removed from the DOM, leaving these cookies orphaned."
+        title={I18n.getMessage('orphanedCookies')}
       >
         <span>
           <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
         </span>
-        <span className="ml-[2px] truncate">Orphaned</span>
+        <span className="ml-[2px] truncate">{I18n.getMessage('orphaned')}</span>
       </span>
     );
   }

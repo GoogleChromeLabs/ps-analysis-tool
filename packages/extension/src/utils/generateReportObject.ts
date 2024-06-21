@@ -27,6 +27,7 @@ import {
   prepareCookiesCount,
   prepareFrameStatsComponent,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Utility function to generate report object.
@@ -36,7 +37,7 @@ import {
  * @param url Top level URL.
  * @returns Report Object
  */
-export default function generateReportObject(
+export default async function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData,
@@ -48,17 +49,17 @@ export default function generateReportObject(
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
-      title: 'Total cookies',
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
     },
     {
-      title: '1st party cookies',
+      title: I18n.getMessage('1stPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
     },
     {
-      title: '3rd party cookies',
+      title: I18n.getMessage('3rdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
@@ -66,7 +67,7 @@ export default function generateReportObject(
 
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -74,11 +75,14 @@ export default function generateReportObject(
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
     },
   ];
+
+  const locale = I18n.getLocale();
+  const translations = await I18n.fetchMessages(locale);
 
   return {
     cookieClassificationDataMapping,
@@ -95,6 +99,7 @@ export default function generateReportObject(
     showFramesSection: true,
     showBlockedCategory: false,
     url,
+    translations,
     source: 'extension',
   };
 }

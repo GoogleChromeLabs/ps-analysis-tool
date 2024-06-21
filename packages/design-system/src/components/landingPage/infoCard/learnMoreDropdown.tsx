@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { addUTMParams } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -33,24 +34,24 @@ import RenderLink from './renderLink';
  */
 const LABELS = [
   {
-    label: 'Proposal',
-    linkLabel: 'Public explanation for the proposed solution (Chrome)',
+    label: 'proposal',
+    linkLabel: 'proposalNote',
   },
   {
     label: 'Public Explainer',
     linkLabel: 'Implementation explainer',
   },
   {
-    label: 'Public Discussion',
-    linkLabel: 'Public questions and feedback about the proposal',
+    label: 'publicDiscussion',
+    linkLabel: 'publicDiscussionNote',
   },
   {
-    label: 'Video Overview',
-    linkLabel: 'Short summary video',
+    label: 'videoOverview',
+    linkLabel: 'videoOverviewNote',
   },
   {
-    label: 'Dev Documentation',
-    linkLabel: 'Developer documentation',
+    label: 'devDocumentation',
+    linkLabel: 'devDocumentationNote',
   },
 ];
 
@@ -90,14 +91,14 @@ const LearnMoreDropdown = ({
               <RenderLink
                 key={index}
                 link={
-                  value.startsWith('https://developers.google.com') ||
-                  value.startsWith('https://www.youtube.com') ||
-                  value.startsWith('https://youtu.be/')
+                  value?.startsWith('https://developers.google.com') ||
+                  value?.startsWith('https://www.youtube.com') ||
+                  value?.startsWith('https://youtu.be/')
                     ? addUTMParams(value)
                     : value
                 }
-                label={LABELS[index].label}
-                linkLabel={LABELS[index].linkLabel}
+                label={I18n.getMessage(LABELS[index].label)}
+                linkLabel={I18n.getMessage(LABELS[index].linkLabel)}
               />
             );
           })}

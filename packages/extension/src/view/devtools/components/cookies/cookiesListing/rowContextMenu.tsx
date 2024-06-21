@@ -27,6 +27,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { noop, type CookieTableData } from '@ps-analysis-tool/common';
 import type { TableRow } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -211,7 +212,7 @@ const RowContextMenu = forwardRef<
                     // @ts-ignore
                     chrome.devtools.panels?.network?.show
                       ? 'Show Requests With This Cookie'
-                      : 'Copy Network Filter String'
+                      : I18n.getMessage('copyNetworkFilter')
                   }
                 </span>
               </button>
@@ -221,7 +222,11 @@ const RowContextMenu = forwardRef<
                   onClick={handleAllowListWithParentDomainClick}
                   className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 >
-                  <span>Remove `{parentDomain}` From Allow List</span>
+                  <span>
+                    {I18n.getMessage('removeParentDomainFromAllowList', [
+                      parentDomain,
+                    ])}
+                  </span>
                 </button>
               ) : (
                 <button
@@ -230,8 +235,8 @@ const RowContextMenu = forwardRef<
                 >
                   <span id="allow-list-option">
                     {isDomainInAllowList
-                      ? 'Remove Domain from Allow List'
-                      : 'Allow Domain During Session'}
+                      ? I18n.getMessage('removeDomainFromAllowList')
+                      : I18n.getMessage('allowDomin')}
                   </span>
                 </button>
               )}

@@ -31,6 +31,7 @@ import { DataProvider } from './stateProviders/data';
 //@ts-ignore this global mock is needed for the provider LibraryDetectionProvider and the component LibraryDetection to work
 chrome = {
   tabs: {
+    get: noop,
     onUpdated: {
       addListener: noop,
       removeListener: noop,

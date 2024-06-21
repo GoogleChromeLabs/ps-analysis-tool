@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import '@testing-library/jest-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -24,6 +25,25 @@ import '@testing-library/jest-dom';
 import getFrameType from '../getFrameType';
 
 describe('getFrameType', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      hiddenIframe: {
+        message: 'Hidden iframe',
+      },
+      nestedIframe: {
+        message: 'Nested iframe',
+      },
+      mainFrame: {
+        message: 'Main frame',
+      },
+      iframe: {
+        message: 'iframe',
+      },
+    });
+  });
+
   it('should return frame type (Hidden iframe)', () => {
     const iframe = document.createElement('iframe');
 

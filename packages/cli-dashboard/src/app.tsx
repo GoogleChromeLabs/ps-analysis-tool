@@ -23,6 +23,7 @@ import type {
   LibraryData,
   TechnologyData,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -68,6 +69,11 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    sessionStorage.clear();
+    //@ts-ignore
+    const messages = globalThis?.PSAT_DATA?.translations;
+    I18n.initMessages(messages);
+
     // @ts-ignore
     const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);

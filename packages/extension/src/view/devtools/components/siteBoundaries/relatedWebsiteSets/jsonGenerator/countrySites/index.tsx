@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -64,9 +65,7 @@ const CountrySites = ({
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <p className="text-base">
-          Country Code Top-level Domains <span>(ccTLDs)</span>
-        </p>
+        <p className="text-base">{I18n.getMessage('countryCodeHeading')}</p>
         <AddButton onClick={addCountrySite} />
       </div>
       <div id="countryDomains">
@@ -74,12 +73,12 @@ const CountrySites = ({
           <div key={idx} className="flex gap-10 my-5">
             <div className="flex-1">
               <RWSSelect
-                selectLabel="For which site is this ccTLD?"
+                selectLabel={I18n.getMessage('whichSiteccTLD')}
                 selectValue={site}
                 selectChangeHandler={(e) => {
                   setCountrySites({ idx, key: 'site', value: e.target.value });
                 }}
-                defaultOption="Select a site"
+                defaultOption={I18n.getMessage('selectSite')}
                 options={availableSites}
                 error={siteError}
                 formValidationFailed={formValidationFailed}
@@ -87,7 +86,9 @@ const CountrySites = ({
             </div>
             <div className="flex-1">
               <RWSInput
-                inputLabel={`ccTLD #${idx + 1}`}
+                inputLabel={I18n.getMessage('extccTLDIdx', [
+                  (idx + 1).toString(),
+                ])}
                 inputValue={cctld}
                 inputPlaceholder="https://cctld.com"
                 inputChangeHandler={(e) => {
@@ -96,7 +97,7 @@ const CountrySites = ({
                 error={cctldError}
                 formValidationFailed={formValidationFailed}
               />
-              <span>Country code top-level domain related to the site</span>
+              <span>{I18n.getMessage('countryCodeNote')}</span>
             </div>
             <div className="flex items-center">
               <RemoveButton onClick={() => removeCountrySite(idx)} />

@@ -20,6 +20,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -102,7 +103,7 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
                 >
                   ✓
                 </span>
-                <span>Toggle All</span>
+                <span>{I18n.getMessage('toggleAll')}</span>
               </button>
               <div>
                 <ColumnList

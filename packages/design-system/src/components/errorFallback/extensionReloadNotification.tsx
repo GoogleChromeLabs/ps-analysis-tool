@@ -24,16 +24,19 @@ import React from 'react';
 import Button from '../button';
 interface ExtensionReloadNotificationProps {
   tabId?: number;
+  texts: {
+    displayText: string;
+    buttonText: string;
+  };
 }
 
 const ExtensionReloadNotification = ({
   tabId,
+  texts,
 }: ExtensionReloadNotificationProps) => {
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
-      <p className="text-xl text-center px-4">
-        Looks like extension has been updated since devtool was open.
-      </p>
+      <p className="text-xl text-center px-4">{texts.displayText}</p>
       <div className="ml-2 mt-4">
         <Button
           onClick={() => {
@@ -47,7 +50,7 @@ const ExtensionReloadNotification = ({
               }
             }
           }}
-          text="Refresh panel"
+          text={texts.buttonText}
         />
       </div>
     </div>

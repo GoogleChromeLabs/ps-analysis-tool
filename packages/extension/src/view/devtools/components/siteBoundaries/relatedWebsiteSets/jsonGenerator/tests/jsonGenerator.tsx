@@ -22,6 +22,7 @@ import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import '@testing-library/user-event';
 import { noop } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -38,6 +39,21 @@ import JsonOutput from '../jsonOutput';
 describe('RWSJsonGenerator', () => {
   beforeAll(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    globalThis.chrome.i18n = null;
+    I18n.initMessages({
+      contactNote: {
+        message: 'Email address or group alias if available',
+      },
+      shouldMatchFormat: {
+        message: 'should be matching the format https://example.com',
+      },
+      affiliationHeading: {
+        message: 'Affiliation to primary domain',
+      },
+      rwsJsonGenerator: {
+        message: 'Related Website Sets JSON Generator',
+      },
+    });
   });
 
   it('should render form', () => {
@@ -73,7 +89,7 @@ describe('RWSJsonGenerator', () => {
 
     expect(
       await screen.findByText(
-        'Url should be matching the format https://<example.com>'
+        'Url should be matching the format https://example.com'
       )
     ).toBeInTheDocument();
 
@@ -104,7 +120,7 @@ describe('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[0]
     ).toBeInTheDocument();
@@ -157,7 +173,7 @@ describe('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[1]
     ).toBeInTheDocument();
@@ -206,7 +222,7 @@ describe('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[1]
     ).toBeInTheDocument();
@@ -214,7 +230,7 @@ describe('RWSJsonGenerator', () => {
     expect(
       (
         await screen.findAllByText(
-          'Url should be matching the format https://<example.com>'
+          'Url should be matching the format https://example.com'
         )
       )[2]
     ).toBeInTheDocument();

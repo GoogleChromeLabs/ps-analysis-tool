@@ -36,6 +36,10 @@ const root = {
         { from: './icons', to: 'icons' },
         { from: '../../assets', to: 'assets' },
         { from: '../../data', to: 'data' },
+        {
+          from: '../i18n/_locales/messages',
+          to: './_locales/',
+        },
       ],
     }),
     new WebpackBar({

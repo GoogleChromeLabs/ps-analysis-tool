@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  *	Evaluate if the 'All' option is present in parsedQuery.
@@ -28,7 +32,7 @@ const evaluateSelectAllOption = (
 ) => {
   const options: string[] = parsedQuery?.filter?.[filterKey];
 
-  if (options?.[0] === 'All') {
+  if (options?.[0] === I18n.getMessage('selectAll')) {
     clearActivePanelQuery?.();
 
     return true;

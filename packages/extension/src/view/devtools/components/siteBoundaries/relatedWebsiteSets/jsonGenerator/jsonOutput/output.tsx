@@ -19,6 +19,7 @@
  */
 import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -44,7 +45,9 @@ const Output = ({ data }: OutputProps) => {
           setTimeout(() => setCopied(false), 2000);
         }}
       >
-        <button className="float-right">{copied ? 'Copied!' : 'Copy'}</button>
+        <button className="float-right">
+          {copied ? I18n.getMessage('copied') : I18n.getMessage('copy')}
+        </button>
       </CopyToClipboard>
       <code data-testid="rws-output">
         {data && JSON.stringify(data, null, 2)}

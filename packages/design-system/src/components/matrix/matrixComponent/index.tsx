@@ -32,7 +32,7 @@ export interface MatrixComponentProps {
   count: number;
   isExpanded?: boolean;
   countClassName: string;
-  containerClasses: string;
+  containerClasses?: string;
 }
 
 const MatrixComponent = ({

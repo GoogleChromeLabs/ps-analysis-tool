@@ -41,7 +41,7 @@ const ColumnListItem = ({
   return (
     <li>
       <button
-        className="w-full rounded text-xs px-1 py-[3px] my-px flex items-center hover:bg-royal-blue hover:text-white select-none touch-none cursor-default"
+        className="w-full rounded text-xs text-left px-1 py-[3px] my-px flex items-center hover:bg-royal-blue hover:text-white select-none touch-none cursor-default"
         onClick={() => {
           toggleVisibility(column.accessorKey);
           handleClose();

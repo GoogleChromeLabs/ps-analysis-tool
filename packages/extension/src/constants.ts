@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
+
 export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
 export const SERVICE_WORKER_PORT_NAME = 'psat-serviceworker';
@@ -20,15 +22,21 @@ export const SERVICE_WORKER_PORT_NAME = 'psat-serviceworker';
 export const SETTING_PAGE_CONTROLS = [
   {
     id: 'enableCDP',
-    heading: 'Enable CDP',
-    description:
-      'The Chrome DevTools Protocol allows for tools to instrument, inspect, debug and profile Chromium, Chrome and other Blink-based browsers. <a class="text-bright-navy-blue dark:text-jordy-blue" href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat" target="_blank">Learn More.</a>',
+    heading: () => I18n.getMessage('enableCDP'),
+    description: () =>
+      I18n.getMessage('enableCDPNote', [
+        `<a class="text-bright-navy-blue dark:text-jordy-blue" href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat" target="_blank">`,
+        '</a>',
+      ]),
   },
   {
     id: 'multitabDebugging',
-    heading: 'Multitab Debugging',
-    description:
-      "The PSAT tool is designed for efficient single-tab analysis. While <a class='text-bright-navy-blue dark:text-jordy-blue' href='https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging' target='_blank'>multi-tab debugging</a> is available for more comprehensive analysis, it is intended for examining 2-3 tabs simultaneously. Using more tabs may impact the tool's responsiveness.",
+    heading: () => I18n.getMessage('multitabDebugging'),
+    description: () =>
+      I18n.getMessage('multitabDebuggingNote', [
+        `<a class='text-bright-navy-blue dark:text-jordy-blue' href='https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging' target='_blank'>`,
+        '</a>',
+      ]),
   },
 ];
 

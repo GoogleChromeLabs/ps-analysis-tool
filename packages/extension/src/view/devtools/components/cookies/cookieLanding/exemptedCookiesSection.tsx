@@ -28,6 +28,7 @@ import {
   LEGEND_DESCRIPTION,
   InfoIcon,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
@@ -49,7 +50,10 @@ const ExemptedCookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description: legendDescription,
+        description:
+          typeof legendDescription === 'string'
+            ? I18n.getMessage(legendDescription)
+            : I18n.getFormattedMessages(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) => {
@@ -59,12 +63,16 @@ const ExemptedCookiesSection = () => {
     });
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
       onClick:
         cookieStats.exemptedCookies.total > 0
-          ? () => selectedItemUpdater('All', 'exemptionReason')
+          ? () =>
+              selectedItemUpdater(
+                I18n.getMessage('selectAll'),
+                'exemptionReason'
+              )
           : null,
     },
   ];
@@ -88,9 +96,9 @@ const ExemptedCookiesSection = () => {
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title="Exemption Reasons"
+          title={I18n.getMessage('exemptionReasons')}
           matrixData={dataComponents}
-          infoIconTitle="Cookies that should have been blocked by the browser but was exempted."
+          infoIconTitle={I18n.getMessage('exemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>

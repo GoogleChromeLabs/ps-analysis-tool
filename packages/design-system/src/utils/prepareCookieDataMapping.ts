@@ -21,6 +21,7 @@ import type {
   CookiesCount,
   DataMapping,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Calcualte insights about frames to be shown on cookies landing page.
@@ -36,22 +37,24 @@ export default function prepareCookieDataMapping(
 ): DataMapping[] {
   return [
     {
-      title: 'Total cookies',
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
       onClick: () => selectedItemUpdater('', 'isFirstParty'), // title is empty as we don't want to select any filter.
     },
     {
-      title: '1st party cookies',
+      title: I18n.getMessage('firstPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
-      onClick: () => selectedItemUpdater('First Party', 'isFirstParty'),
+      onClick: () =>
+        selectedItemUpdater(I18n.getMessage('firstParty'), 'isFirstParty'),
     },
     {
-      title: '3rd party cookies',
+      title: I18n.getMessage('thirdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
-      onClick: () => selectedItemUpdater('Third Party', 'isFirstParty'),
+      onClick: () =>
+        selectedItemUpdater(I18n.getMessage('thirdParty'), 'isFirstParty'),
     },
   ];
 }

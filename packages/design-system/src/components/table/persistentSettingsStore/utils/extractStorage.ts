@@ -24,16 +24,16 @@ const extractStorage = async (
   isChromeExtension: boolean
 ): Promise<TablePersistentSettingsStoreContext['state']> => {
   const options = isChromeExtension
-    ? extractChromeStorage(persistenceKey)
-    : await extractLocalStorage(persistenceKey);
+    ? await extractChromeStorage(persistenceKey)
+    : extractSessionStorage(persistenceKey);
 
   return options;
 };
 
-const extractLocalStorage = (
+const extractSessionStorage = (
   persistenceKey: string
 ): TablePersistentSettingsStoreContext['state'] => {
-  const data = localStorage.getItem(persistenceKey);
+  const data = sessionStorage.getItem(persistenceKey);
   if (data) {
     return JSON.parse(data);
   }

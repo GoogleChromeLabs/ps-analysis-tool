@@ -24,6 +24,7 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { JETPACK_LIKES_HELP_URL } from './constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -39,8 +40,8 @@ const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   return (
     <Accordion title={'Jetpack Like Button'} isLoading={false} featuresText="">
       <DetectionMessage
-        libraryName="Jetpack like button"
-        provider="Jetpack"
+        libraryName={I18n.getMessage('jetpackLikeButton')}
+        provider={I18n.getMessage('jetpack')}
         supportURL={JETPACK_LIKES_HELP_URL}
       />
     </Accordion>

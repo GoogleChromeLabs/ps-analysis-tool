@@ -26,6 +26,7 @@ import path from 'path';
  * @param {string} sitemapPath File system path to a sitemap xml file.
  * @param {string} numberOfUrls Url limit argument.
  * @param {string} outDir File system path to the output directory.
+ * @param {string} locale Locale of the site.
  */
 // eslint-disable-next-line complexity
 const validateArgs = async (
@@ -34,7 +35,8 @@ const validateArgs = async (
   csvPath: string,
   sitemapPath: string,
   numberOfUrls: string,
-  outDir: string
+  outDir: string,
+  locale: string
 ) => {
   const numArgs: number = [
     Boolean(url),
@@ -112,6 +114,17 @@ const validateArgs = async (
       console.log(`"${output}" does not exist, creating now.`);
       await mkdir(output);
     }
+  }
+
+  const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
+
+  if (locale && !availableLocales.includes(locale)) {
+    console.error(
+      `Locale '${locale}' is not supported, please use ${availableLocales.join(
+        ', '
+      )}.`
+    );
+    process.exit(1);
   }
 };
 

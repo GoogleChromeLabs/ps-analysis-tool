@@ -28,6 +28,7 @@ import {
   SiteBoundariesIconWhite,
   SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -121,7 +122,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       if (technologies && technologies.length > 0) {
         _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES] = {
-          title: 'Technologies',
+          title: I18n.getMessage('technologies'),
           children: {},
           icon: {
             Element: SiteBoundariesIcon,

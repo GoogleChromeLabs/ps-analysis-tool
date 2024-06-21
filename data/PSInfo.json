@@ -1,7 +1,7 @@
 {
   "private-state-token": {
     "name": "Private State Token",
-    "description": "Allows websites and services to evaluate a user's authenticity without needing to know the user's identity.   With this API, a website/service can issue a batch of Private State Tokens (renamed to Private state tokens from Trust Tokens)  to a user's browser. The tokens are stored on the user’s browser and can then be “redeemed” by other sites and services as a signal of the user's authenticity.",
+    "description": "PSPrivateStateToken",
     "proposal": "https://github.com/WICG/trust-token-api",
     "publicDiscussion": "https://github.com/WICG/trust-token-api/issues",
     "videoOverview": "https://www.youtube.com/watch?v=bXB1Iwq6Eq4",
@@ -9,7 +9,7 @@
   },
   "topics": {
     "name": "Topics",
-    "description": "Provide a way for advertising to reach users based on interests inferred from the sites or apps the user visits, without needing to know the specific sites or apps the user has visited.",
+    "description": "PSTopics",
     "proposal": "https://github.com/patcg-individual-drafts/topics",
     "publicDiscussion": "https://github.com/patcg-individual-drafts/topics/issues",
     "videoOverview": "https://youtu.be/hEBzWuXjeTQ",
@@ -25,7 +25,7 @@
   },
   "attribution-reporting": {
     "name": "Attribution Reporting",
-    "description": "Allow the recording and matching of ad events with conversion events to occur on-device. </br> Event-level: Determine the effectiveness of specific ad interactions to help drive optimization. </br>Summary Reporting: Allows for more detail about the overall conversions (e.g. region, revenue, time of day, etc) that their advertising has delivered, while minimizing details about individual conversions.",
+    "description": "PSAttributionReporting",
     "proposal": "https://github.com/WICG/attribution-reporting-api",
     "publicDiscussion": "https://github.com/WICG/attribution-reporting-api/issues",
     "videoOverview": "https://www.youtube.com/watch?v=UGA74CIcom8",
@@ -33,15 +33,14 @@
   },
   "related-website-sets": {
     "name": "Related Website Sets",
-    "description": "A new web platform mechanism that would allow a company that owns multiple sites to declare a collection of related domains as being in a Related Website Sets. Sites that are part of a Related Website Set would be able to access cookies across the set of included domains.",
-    "proposal": "https://github.com/WICG/first-party-sets",
+    "description": "PSRelatedWebsiteSets",
     "publicDiscussion": "https://github.com/WICG/first-party-sets/issues",
     "videoOverview": "https://www.youtube.com/watch?v=cNJ8mZ-J3F8",
     "devDocumentation": "https://developers.google.com/privacy-sandbox/3pcd/related-website-sets"
   },
   "shared-storage": {
     "name": "Shared Storage",
-    "description": "The Shared Storage API allows sites to store and access unpartitioned cross-site data as to prevent cross-site user tracking, browsers are partitioning all forms of storage (cookies, localStorage, caches, etc). However, there are a number of legitimate use cases that rely on unpartitioned storage which would be impossible without help from new web APIs.",
+    "description": "PSSharedStorage",
     "proposal": "https://github.com/WICG/shared-storage",
     "publicDiscussion": "https://github.com/WICG/shared-storage/issues",
     "videoOverview": "",
@@ -49,7 +48,7 @@
   },
   "chips": {
     "name": "Cookies Having Independent Partitioned State (CHIPS)",
-    "description": "A new way to enable 3rd party developers to access cookies on sites where their services are embedded on a per-site basis (meaning a different cookie on each site), restricting the ability to track users across sites.",
+    "description": "PSChips",
     "proposal": "https://github.com/privacycg/CHIPS",
     "publicDiscussion": "https://github.com/privacycg/CHIPS/issues",
     "videoOverview": "",
@@ -57,7 +56,7 @@
   },
   "fenced-frames": {
     "name": "Fenced Frames",
-    "description": "A fenced frame (<fencedframe>) is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context.",
+    "description": "PSFencedFrames",
     "proposal": "https://github.com/WICG/fenced-frame",
     "publicDiscussion": "https://github.com/WICG/fenced-frame/issues",
     "videoOverview": "https://www.youtube.com/watch?v=CqbluZHZofI",
@@ -65,7 +64,7 @@
   },
   "fedcm": {
     "name": "Federated Credential Management(FedCM)",
-    "description": "FedCM is a proposal for a privacy-preserving approach to federated identity services (such as \"Sign in with...\") where users can log into sites without sharing their personal information with the identity service or the site.",
+    "description": "PSFedCM",
     "proposal": "https://github.com/fedidcg/FedCM",
     "publicDiscussion": "https://github.com/fedidcg/FedCM/issues",
     "videoOverview": "https://www.youtube.com/watch?v=rSOqIR3lzBk",
@@ -73,7 +72,7 @@
   },
   "bounce-tracking": {
     "name": "Bounce Tracking Mitigation",
-    "description": "Bounce Tracking Mitigation is a Privacy Sandbox proposal to mitigate bounce tracking, a technique used to track users across sites by abusing the referrer header.",
+    "description": "PSBounceTracking",
     "proposal": "https://github.com/privacycg/nav-tracking-mitigations",
     "publicDiscussion": "https://github.com/privacycg/nav-tracking-mitigations/issues",
     "videoOverview": "",
@@ -81,7 +80,7 @@
   },
   "user-agent-reduction": {
     "name": "User Agent Reduction",
-    "description": "User-Agent (UA) reduction minimizes the identifying information shared in the User-Agent string, which may be used for passive fingerprinting.",
+    "description": "PSUserAgentReduction",
     "proposal": "https://github.com/miketaylr/user-agent-reduction/",
     "publicDiscussion": "https://github.com/miketaylr/user-agent-reduction/issues",
     "videoOverview": "",

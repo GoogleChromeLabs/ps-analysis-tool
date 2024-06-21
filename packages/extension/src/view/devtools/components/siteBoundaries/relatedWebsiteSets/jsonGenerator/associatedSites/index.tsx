@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -46,8 +47,8 @@ const AssociatedSites = ({
     <div className="p-3">
       <div className="flex justify-between items-center">
         <p className="text-base flex items-center gap-2 ">
-          Associated Subset
-          <span title="Browsers may enforce a limit on Associated Domains (e.g. Chrome's limit is 5)">
+          {I18n.getMessage('associatedSubset')}
+          <span title={I18n.getMessage('associatedDomainsLimit')}>
             <InfoIcon className="fill-granite-gray" />
           </span>
         </p>
@@ -59,7 +60,9 @@ const AssociatedSites = ({
             <div key={idx} className="flex gap-10 my-5">
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={`Associated Domain #${idx + 1}`}
+                  inputLabel={I18n.getMessage('associatedDomainIdx', [
+                    (idx + 1).toString(),
+                  ])}
                   inputValue={url}
                   inputPlaceholder="https://associated.com"
                   inputChangeHandler={(e) => {
@@ -75,9 +78,11 @@ const AssociatedSites = ({
               </div>
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={`Rationale Domain #${idx + 1}`}
+                  inputLabel={I18n.getMessage('rationaleDomainCount', [
+                    (idx + 1).toString(),
+                  ])}
                   inputValue={rationale}
-                  inputPlaceholder="Affiliation to primary domain"
+                  inputPlaceholder={I18n.getMessage('affiliationHeading')}
                   inputChangeHandler={(e) => {
                     setAssociatedSites({
                       idx,
@@ -88,10 +93,7 @@ const AssociatedSites = ({
                   error={rationaleError}
                   formValidationFailed={formValidationFailed}
                 />
-                <span>
-                  How is the affiliation across domains presented and why users
-                  would expect it
-                </span>
+                <span>{I18n.getMessage('affiliationNote')}</span>
               </div>
               <div className="flex items-center">
                 <RemoveButton onClick={() => removeAssociatedSite(idx)} />

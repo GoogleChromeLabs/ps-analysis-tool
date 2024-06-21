@@ -30,6 +30,7 @@ import type {
   TabCookies,
   TabFrames,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -63,7 +64,7 @@ const CookiesLandingContainer = ({
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const baseSections: Array<CookiesLandingSection> = [
       {
-        name: 'Cookies',
+        name: I18n.getMessage('cookies'),
         link: 'cookies',
         panel: {
           Element: CookiesSection,
@@ -74,7 +75,7 @@ const CookiesLandingContainer = ({
         },
       },
       {
-        name: 'Blocked Cookies',
+        name: I18n.getMessage('blockedCookies'),
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
@@ -100,7 +101,7 @@ const CookiesLandingContainer = ({
 
     if (!isSiteMapLandingContainer) {
       baseSections.push({
-        name: 'Known Breakages',
+        name: I18n.getMessage('knownBreakages'),
         link: 'known-breakages',
         panel: {
           Element: KnownBreakages,
@@ -116,6 +117,7 @@ const CookiesLandingContainer = ({
     tabCookies,
     tabFrames,
     cookiesWithIssues,
+    cookieStats,
     isSiteMapLandingContainer,
     libraryMatches,
   ]);

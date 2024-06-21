@@ -9,10 +9,12 @@
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
   ],
+  "exclude": ["**/tests/**/*.ts", "**/tests/**/*.tsx"],
   "references": [
     { "path": "../common" },
     {
       "path": "../design-system"
-    }
+    },
+    { "path": "../i18n" }
   ]
 }

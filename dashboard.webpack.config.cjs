@@ -16,6 +16,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const commonConfig = require('./webpack.shared.cjs');
 
@@ -62,6 +63,14 @@ const dashboard = {
       template: '../cli-dashboard/public/index.html',
       filename: 'index.html',
       inject: false,
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: '../i18n/_locales/messages',
+          to: './_locales/',
+        },
+      ],
     }),
   ],
   ...commonConfig,

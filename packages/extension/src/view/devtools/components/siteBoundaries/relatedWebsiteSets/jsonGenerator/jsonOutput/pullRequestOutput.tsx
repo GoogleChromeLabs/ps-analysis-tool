@@ -24,6 +24,7 @@ import React from 'react';
  */
 import type { PrimaryWellKnownOutputType } from '../types';
 import Output from './output';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface PullRequestOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;
@@ -38,20 +39,21 @@ const PullRequestOutput = ({
         <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           3
         </p>
-        <p className="text-base">
-          Submit a GitHub PR with your Related Site Set to the{' '}
-          <a
-            className="text-blue-500 hover:opacity-70"
-            title="https://github.com/GoogleChrome/related-website-sets/blob/main/related_website_sets.JSON"
-            href="https://github.com/GoogleChrome/related-website-sets/blob/main/related_website_sets.JSON"
-            target="_blank"
-            rel="noreferrer"
-          >
-            canonical list
-          </a>{' '}
-          by adding the content below as a new item to the &quot;sets&quot;
-          list.
-        </p>
+        <p
+          className="text-base"
+          dangerouslySetInnerHTML={{
+            __html: I18n.getMessage('submitPRForRws', [
+              `<a
+								className="text-blue-500 hover:opacity-70"
+								title="https://github.com/GoogleChrome/related-website-sets/blob/main/related_website_sets.JSON"
+								href="https://github.com/GoogleChrome/related-website-sets/blob/main/related_website_sets.JSON"
+								target="_blank"
+								rel="noreferrer"
+							>`,
+              '</a>',
+            ]),
+          }}
+        />
       </div>
       <Output data={primaryWellKnownOutput} />
     </div>

@@ -24,6 +24,7 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_COMMENTS_HELP_URL } from './constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -37,10 +38,14 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Facebook Comments'} isLoading={false} featuresText="">
+    <Accordion
+      title={I18n.getMessage('fBComments')}
+      isLoading={false}
+      featuresText=""
+    >
       <DetectionMessage
-        libraryName="Facebook comments plugin"
-        provider="Facebook"
+        libraryName={I18n.getMessage('fBCommentsPlugin')}
+        provider={I18n.getMessage('fB')}
         supportURL={FB_COMMENTS_HELP_URL}
       />
     </Accordion>

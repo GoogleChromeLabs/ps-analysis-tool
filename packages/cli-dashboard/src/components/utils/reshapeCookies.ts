@@ -24,6 +24,7 @@ import {
   type BlockedReason,
   deriveBlockingStatus,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -105,7 +106,7 @@ const createCookieObj = (
           ...cookie.analytics,
           category:
             cookie.analytics?.category === 'Unknown Category'
-              ? 'Uncategorized'
+              ? I18n.getMessage('sdUncategorized')
               : cookie.analytics?.category,
         } as CookieTableData['analytics'],
         url: cookie.url,

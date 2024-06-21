@@ -18,12 +18,13 @@
  */
 import React from 'react';
 import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const BounceTracking = () => {
   return (
     <div data-testid="bounce-tracking-content" className="h-full w-full">
       <LandingPage
-        title="Bounce Tracking Mitigation"
+        title={I18n.getMessage('bounceTrackingMitigation')}
         psInfoKey={PSInfoKey.BounceTracking}
         extraClasses="max-w-2xl h-fit"
       />

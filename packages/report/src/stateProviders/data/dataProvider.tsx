@@ -18,6 +18,7 @@
  */
 import React, { useEffect, useState, type PropsWithChildren } from 'react';
 import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -39,6 +40,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     //@ts-ignore custom data attached to window breaks types
     const _data = window.PSAT_DATA;
+
+    I18n.initMessages(_data.translations);
 
     setData(_data);
     if (_data?.libraryMatches) {

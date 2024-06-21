@@ -32,6 +32,7 @@ import {
   prepareCookiesCount,
   prepareFrameStatsComponent,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -84,17 +85,17 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
-      title: 'Total cookies',
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
     },
     {
-      title: '1st party cookies',
+      title: I18n.getMessage('firstPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
     },
     {
-      title: '3rd party cookies',
+      title: I18n.getMessage('thirdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
@@ -102,7 +103,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -110,7 +111,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
     },
@@ -131,6 +132,8 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     showBlockedCategory: true,
     url: siteURL,
     source: 'cli',
+    // @ts-ignore - 'typeof globalThis' has no index signature.
+    translations: globalThis?.PSAT_DATA?.translations,
   };
 }
 
@@ -163,17 +166,17 @@ function generateSitemapReportObject(
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
-      title: 'Total cookies',
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
     },
     {
-      title: '1st party cookies',
+      title: I18n.getMessage('firstPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
     },
     {
-      title: '3rd party cookies',
+      title: I18n.getMessage('thirdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
@@ -181,7 +184,7 @@ function generateSitemapReportObject(
 
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -189,7 +192,7 @@ function generateSitemapReportObject(
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
     },
@@ -210,6 +213,8 @@ function generateSitemapReportObject(
     showFramesSection: false,
     showBlockedCategory: true,
     url: sitemapURL,
+    // @ts-ignore - 'typeof globalThis' has no index signature
+    translations: globalThis?.PSAT_DATA?.translations,
   };
 }
 

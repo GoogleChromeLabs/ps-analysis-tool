@@ -22,6 +22,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies.
  */
@@ -135,7 +136,11 @@ const Provider = ({ children }: PropsWithChildren) => {
       const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
       if (browserInfo) {
         setBrowserInformation(
-          'Version ' + browserInfo[1] + ' ' + OSInformation?.split(' ')[1]
+          I18n.getMessage('version') +
+            ' ' +
+            browserInfo[1] +
+            ' ' +
+            OSInformation?.split(' ')[1]
         );
       }
     }

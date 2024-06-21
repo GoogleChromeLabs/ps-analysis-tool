@@ -24,6 +24,7 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_LIKES_HELP_URL } from './constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -37,10 +38,14 @@ const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Facebook Like Button'} isLoading={false} featuresText="">
+    <Accordion
+      title={I18n.getMessage('fBLike')}
+      isLoading={false}
+      featuresText=""
+    >
       <DetectionMessage
-        libraryName="Facebook like button"
-        provider="Facebook"
+        libraryName={I18n.getMessage('fBLike')}
+        provider={I18n.getMessage('fB')}
         supportURL={FB_LIKES_HELP_URL}
       />
     </Accordion>

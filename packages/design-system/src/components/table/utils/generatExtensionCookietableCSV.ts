@@ -21,25 +21,26 @@ import {
   CookieTableData,
   sanitizeCsvRecord,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
-  'Name',
-  'Scope',
-  'Domain',
-  'Partition Key',
-  'Same Site',
-  'Category',
-  'Platform',
-  'Http Only',
-  'Secure',
-  'Value',
-  'Path',
-  'Expires',
-  'Issues',
-  'GDPRPortal',
-  'Priority',
-  'Size',
-  'Blocking Status',
+  () => I18n.getMessage('name'),
+  () => I18n.getMessage('scope'),
+  () => I18n.getMessage('domain'),
+  () => I18n.getMessage('partitionKey'),
+  () => I18n.getMessage('sameSite'),
+  () => I18n.getMessage('category'),
+  () => I18n.getMessage('platform'),
+  () => I18n.getMessage('httpOnly'),
+  () => I18n.getMessage('secure'),
+  () => I18n.getMessage('value'),
+  () => I18n.getMessage('path'),
+  () => I18n.getMessage('expires'),
+  () => I18n.getMessage('issues'),
+  () => I18n.getMessage('gdpr'),
+  () => I18n.getMessage('priority'),
+  () => I18n.getMessage('size'),
+  () => I18n.getMessage('blockingStatus'),
 ];
 
 const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
@@ -56,24 +57,32 @@ const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
     let status = '';
 
     if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
-      status = 'Undetermined';
+      status = I18n.getMessage('undetermined');
     }
 
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
-      cookie.isFirstParty ? 'First Party' : 'Third Party',
+      cookie.isFirstParty
+        ? I18n.getMessage('firstParty')
+        : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.samesite,
-      cookie.analytics?.category,
+      I18n.getMessage(
+        cookie.analytics?.category?.toLowerCase() || 'uncategorized'
+      ),
       cookie.analytics?.platform,
-      cookie.parsedCookie.httponly ? 'Yes' : 'No',
-      cookie.parsedCookie.secure ? 'Yes' : 'No',
+      cookie.parsedCookie.httponly
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
+      cookie.parsedCookie.secure
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
       cookie.parsedCookie.expires,
-      cookie.isBlocked ? 'Yes' : 'No',
+      cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics?.gdprUrl || 'NA',
       cookie.parsedCookie.priority || ' ',
       cookie.parsedCookie.size?.toString(),
@@ -84,7 +93,9 @@ const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
   }
 
   return new Blob([
-    COOKIES_TABLE_DATA_HEADER_EXTENSION.join(',') + '\r\n' + cookieRecords,
+    COOKIES_TABLE_DATA_HEADER_EXTENSION.map((header) => header()).join(',') +
+      '\r\n' +
+      cookieRecords,
   ]);
 };
 

@@ -22,6 +22,7 @@ import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 import { render, screen } from '@testing-library/react';
 import { addUTMParams } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -42,6 +43,23 @@ describe('should match the json file data with the component', () => {
 
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      proposal: {
+        message: 'Proposal',
+      },
+      publicDiscussion: {
+        message: 'Public Discussion',
+      },
+      videoOverview: {
+        message: 'Video Overview',
+      },
+      devDocumentation: {
+        message: 'Dev Documentation',
+      },
+    });
+
     jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.fetch = function () {
       return Promise.resolve({

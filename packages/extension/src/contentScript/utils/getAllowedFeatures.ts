@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import { I18n } from '@ps-analysis-tool/i18n';
+/**
  * Internal dependencies.
  */
 import { PS_RELATED_ALLOWED_FEATURES } from '../constants';
 
 const getAllowedFeatures = (iframe: HTMLElement) => {
   if (!iframe || !iframe?.featurePolicy) {
-    return 'Unknown';
+    return I18n.getMessage('unknown');
   }
 
   const featurePolicy = iframe?.featurePolicy;
