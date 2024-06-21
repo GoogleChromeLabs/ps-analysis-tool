@@ -132,7 +132,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     showBlockedCategory: true,
     url: siteURL,
     source: 'cli',
-    // @ts-ignore
+    // @ts-ignore - 'typeof globalThis' has no index signature.
     translations: globalThis?.PSAT_DATA?.translations,
   };
 }
