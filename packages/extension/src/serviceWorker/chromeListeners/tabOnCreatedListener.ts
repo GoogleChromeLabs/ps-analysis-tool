@@ -20,50 +20,56 @@ import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 import syncCookieStore from '../../store/synchnorousCookieStore';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
-  if (!tab.id) {
-    return;
-  }
-
-  const targets = await chrome.debugger.getTargets();
-
-  if (syncCookieStore.tabMode && syncCookieStore.tabMode !== 'unlimited') {
-    const doesTabExist = syncCookieStore.tabToRead;
-    if (
-      Object.keys(syncCookieStore?.tabsData ?? {}).length >=
-        ALLOWED_NUMBER_OF_TABS &&
-      doesTabExist
-    ) {
+  try {
+    if (!tab?.id) {
       return;
     }
-    syncCookieStore.tabToRead = tab.id.toString();
-    syncCookieStore?.addTabData(tab.id);
 
-    if (syncCookieStore.globalIsUsingCDP) {
-      const currentTab = targets.filter(
-        ({ tabId }) => tabId && tab.id && tabId === tab.id
-      );
-      syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
+    const targets = await chrome.debugger.getTargets();
 
-      syncCookieStore.updateParentChildFrameAssociation(
-        tab.id,
-        currentTab[0].id,
-        '0'
-      );
+    if (syncCookieStore.tabMode && syncCookieStore.tabMode !== 'unlimited') {
+      const doesTabExist = syncCookieStore.tabToRead;
+      if (
+        Object.keys(syncCookieStore?.tabsData ?? {}).length >=
+          ALLOWED_NUMBER_OF_TABS &&
+        doesTabExist
+      ) {
+        return;
+      }
+      syncCookieStore.tabToRead = tab.id.toString();
+      syncCookieStore?.addTabData(tab.id);
+
+      if (syncCookieStore.globalIsUsingCDP) {
+        const currentTab = targets.filter(
+          ({ tabId }) => tabId && tab.id && tabId === tab.id
+        );
+        syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
+
+        syncCookieStore.updateParentChildFrameAssociation(
+          tab.id,
+          currentTab[0].id,
+          '0'
+        );
+      }
+    } else {
+      syncCookieStore?.addTabData(tab.id);
+
+      if (syncCookieStore.globalIsUsingCDP) {
+        const currentTab = targets.filter(
+          ({ tabId }) => tabId && tab.id && tabId === tab.id
+        );
+        syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
+
+        syncCookieStore.updateParentChildFrameAssociation(
+          tab.id,
+          currentTab[0].id,
+          '0'
+        );
+      }
     }
-  } else {
-    syncCookieStore?.addTabData(tab.id);
-
-    if (syncCookieStore.globalIsUsingCDP) {
-      const currentTab = targets.filter(
-        ({ tabId }) => tabId && tab.id && tabId === tab.id
-      );
-      syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
-
-      syncCookieStore.updateParentChildFrameAssociation(
-        tab.id,
-        currentTab[0].id,
-        '0'
-      );
-    }
+  } catch (error) {
+    //Fail silently
+    //eslint-disable-next-line no-console
+    console.warn(error);
   }
 };
