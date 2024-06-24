@@ -45,5 +45,6 @@ module.exports = {
       ],
     }),
   ],
+  stats: 'errors-only',
   ...commonConfig,
 };
