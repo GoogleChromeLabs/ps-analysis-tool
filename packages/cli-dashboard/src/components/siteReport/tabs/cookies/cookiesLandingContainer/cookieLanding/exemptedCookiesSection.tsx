@@ -24,6 +24,7 @@ import {
   CookiesLandingWrapper,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
+  InfoIcon,
 } from '@ps-analysis-tool/design-system';
 import type {
   CookiesCount,
@@ -56,6 +57,7 @@ const ExemptedCookiesSection = ({
         },
       };
     });
+
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
       title: 'Exempted cookies',
@@ -68,8 +70,20 @@ const ExemptedCookiesSection = ({
     },
   ];
 
+  const description = !cookieStats.exemptedCookies.total ? (
+    <div className="flex gap-1 justify-center items-center">
+      No cookies were exempted by the browser.
+      <span title="Exempted cookies are only available in 3PCD browser.">
+        <InfoIcon className="fill-granite-gray" />
+      </span>
+    </div>
+  ) : (
+    ''
+  );
+
   return (
     <CookiesLandingWrapper
+      description={description}
       dataMapping={exemptedCookiesDataMapping}
       testId="blocked-cookies-insights"
     >
@@ -83,4 +97,5 @@ const ExemptedCookiesSection = ({
     </CookiesLandingWrapper>
   );
 };
+
 export default ExemptedCookiesSection;

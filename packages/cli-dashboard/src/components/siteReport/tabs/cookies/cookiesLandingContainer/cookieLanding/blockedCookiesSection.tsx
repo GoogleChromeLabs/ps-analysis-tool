@@ -19,7 +19,6 @@
 import React from 'react';
 import {
   CookiesLandingWrapper,
-  type DataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
   MatrixContainer,
@@ -27,7 +26,11 @@ import {
   LEGEND_DESCRIPTION,
   useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import type {
+  TabCookies,
+  TabFrames,
+  DataMapping,
+} from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
 
 interface BlockedCookiesSectionProps {

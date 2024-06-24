@@ -17,10 +17,10 @@
  * External dependencies
  */
 import React from 'react';
+import type { DataMapping } from '@ps-analysis-tool/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
-  type DataMapping,
   useFiltersMapping,
   MatrixContainer,
   CookiesLandingWrapper,

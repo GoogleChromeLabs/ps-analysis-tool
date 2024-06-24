@@ -251,7 +251,7 @@ export interface DataMapping {
     count: number;
     color: string;
   }[];
-  onClick?: () => void;
+  onClick?: () => void | null;
 }
 
 export type FrameStateCreator = {
