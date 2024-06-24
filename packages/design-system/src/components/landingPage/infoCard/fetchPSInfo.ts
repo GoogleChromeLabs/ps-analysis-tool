@@ -33,6 +33,7 @@ export type PSInfoKeyType = (typeof PSInfoKey)[keyof typeof PSInfoKey];
 export type PSInfo = {
   name: string;
   description: string;
+  useI18n: boolean;
   proposal: string;
   publicExplainer: string;
   publicDiscussion: string;

@@ -53,7 +53,10 @@ const InfoCard = ({ infoKey, className }: InfoCardProps) => {
           <p
             className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
             dangerouslySetInnerHTML={{
-              __html: I18n.getMessage(PSInfo.description),
+              __html:
+                PSInfo.useI18n === false
+                  ? PSInfo.description
+                  : I18n.getMessage(PSInfo.description),
             }}
           />
           <LearnMoreDropdown PSInfo={PSInfo} />
