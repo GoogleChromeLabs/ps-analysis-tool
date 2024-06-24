@@ -19,9 +19,9 @@
   },
   "scripts": {
     "publish:local": "npm publish --registry=http://localhost:4873",
-    "publish:remote": "npm publish --registry=https://registry.npmjs.org",
+    "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
-    "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
+    "unpublish:remote": "npm unpublish --registry=https://registry.npmjs.org --force"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "dependencies": {
