@@ -5,6 +5,7 @@
     "noEmit": false,
     "target": "es6",
     "outDir": "dist",
+    "jsx": "react",
     "declarationDir": "dist-types",
     "types": ["chrome"]
   },

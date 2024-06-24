@@ -2,7 +2,7 @@
   "name": "@ps-analysis-tool/library-detection",
   "version": "1.0.0",
   "description": "A package for detecting libraries for potential breakage",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist-types/index.d.ts",
   "repository": {
