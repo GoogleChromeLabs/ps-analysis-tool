@@ -7,7 +7,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+    "directory": "packages/cli-dashboard"
   },
   "main": "./dist/index.js",
   "files": [

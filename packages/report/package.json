@@ -4,7 +4,8 @@
   "description": "Static HTML analysis report",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+    "directory": "packages/report"
   },
   "license": "Apache-2.0",
   "bugs": {

@@ -20,7 +20,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+    "directory": "packages/design-system"
   },
   "author": {
     "name": "Google"

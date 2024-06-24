@@ -24,7 +24,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+    "directory": "packages/analysis-utils"
   },
   "license": "Apache-2.0",
   "bugs": {
