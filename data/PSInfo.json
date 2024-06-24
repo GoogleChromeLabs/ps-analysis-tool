@@ -18,6 +18,7 @@
   "protected-audience": {
     "name": "Protected Audience",
     "description": "The Protected Audience API is a Privacy Sandbox technology to serve remarketing and custom audience use cases, designed so third parties cannot track user browsing behavior across sites.",
+		"useI18n": false,
     "proposal": "https://github.com/WICG/turtledove",
     "publicDiscussion": "https://github.com/WICG/turtledove/issues",
 		"publicExplainer": "https://github.com/WICG/turtledove/blob/main/FLEDGE.md",

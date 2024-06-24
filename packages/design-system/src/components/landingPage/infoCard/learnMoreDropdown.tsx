@@ -36,22 +36,27 @@ const LABELS = [
   {
     label: 'proposal',
     linkLabel: 'proposalNote',
+    useI18n: true,
   },
   {
     label: 'Public Explainer',
     linkLabel: 'Implementation explainer',
+    useI18n: false,
   },
   {
     label: 'publicDiscussion',
     linkLabel: 'publicDiscussionNote',
+    useI18n: true,
   },
   {
     label: 'videoOverview',
     linkLabel: 'videoOverviewNote',
+    useI18n: true,
   },
   {
     label: 'devDocumentation',
     linkLabel: 'devDocumentationNote',
+    useI18n: true,
   },
 ];
 
@@ -87,6 +92,14 @@ const LearnMoreDropdown = ({
               return null;
             }
 
+            const label = LABELS[index].useI18n
+              ? I18n.getMessage(LABELS[index].label)
+              : LABELS[index].label;
+
+            const linkLabel = LABELS[index].useI18n
+              ? I18n.getMessage(LABELS[index].linkLabel)
+              : LABELS[index].linkLabel;
+
             return (
               <RenderLink
                 key={index}
@@ -97,8 +110,8 @@ const LearnMoreDropdown = ({
                     ? addUTMParams(value)
                     : value
                 }
-                label={I18n.getMessage(LABELS[index].label)}
-                linkLabel={I18n.getMessage(LABELS[index].linkLabel)}
+                label={label}
+                linkLabel={linkLabel}
               />
             );
           })}
