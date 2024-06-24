@@ -62,7 +62,7 @@ const validateArgs = async (
   if (csvPath) {
     const csvFileExists = await exists(csvPath);
     if (!csvFileExists) {
-      console.log(`No file at ${csvPath}`);
+      console.log(`Error: No file at ${csvPath}`);
       process.exit(1);
     }
   }
@@ -70,7 +70,7 @@ const validateArgs = async (
   if (sitemapPath) {
     const sitemapFileExists = await exists(sitemapPath);
     if (!sitemapFileExists) {
-      console.log(`No file at ${sitemapPath}`);
+      console.log(`Error: No file at ${sitemapPath}`);
       process.exit(1);
     }
   }
@@ -81,7 +81,7 @@ const validateArgs = async (
     const parsedUrl = parseUrl(_url);
 
     if (parsedUrl === null) {
-      console.log(`Provided Url ${parsedUrl} is not valid`);
+      console.log(`Error: Invalid Url  ${parsedUrl}`);
       process.exit(1);
     }
   }
@@ -111,7 +111,7 @@ const validateArgs = async (
     const outDirExists = await exists(output);
 
     if (!outDirExists) {
-      console.log(`"${output}" does not exist, creating now.`);
+      console.log(`"${output}" does not exist, creating!`);
       await mkdir(output);
     }
   }
