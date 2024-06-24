@@ -16,8 +16,12 @@
 /**
  * External dependencies
  */
+import { noop } from '@ps-analysis-tool/common';
 import React from 'react';
-import { noop, type InfoType } from '@ps-analysis-tool/design-system';
+/**
+ * Internal dependencies.
+ */
+import { InfoType } from '../components';
 
 export const originalData = [
   {

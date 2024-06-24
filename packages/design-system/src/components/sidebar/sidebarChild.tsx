@@ -17,18 +17,11 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
-import {
-  ArrowDown,
-  ArrowDownWhite,
-  InfoIcon,
-  SidebarItemValue,
-  useSidebar,
-} from '@ps-analysis-tool/design-system';
-
 /**
  * Internal dependencies.
  */
-
+import { ArrowDown, ArrowDownWhite, InfoIcon } from '../../icons';
+import { useSidebar, SidebarItemValue } from './useSidebar';
 interface SidebarItemProps {
   didUserInteract: boolean;
   setDidUserInteract: (didUserInteract: boolean) => void;

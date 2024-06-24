@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowDown, InfoIcon } from '@ps-analysis-tool/design-system';
 import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
@@ -25,6 +24,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
  */
 import SubList from './subList';
 import { TableFilter } from '../../useTable';
+import { ArrowDown, InfoIcon } from '../../../../icons';
 
 interface ListItemProps {
   filter: TableFilter[keyof TableFilter];

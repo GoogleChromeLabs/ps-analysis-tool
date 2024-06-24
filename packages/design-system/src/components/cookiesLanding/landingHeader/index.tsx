@@ -17,10 +17,13 @@
  * External dependencies.
  */
 import React from 'react';
-import { CirclePieChart } from '@ps-analysis-tool/design-system';
 import { DataMapping } from '@ps-analysis-tool/common';
 import classnames from 'classnames';
 
+/**
+ * Internal depenencies.
+ */
+import CirclePieChart from '../../circlePieChart';
 interface LandingHeaderProps {
   dataMapping?: DataMapping[];
 }

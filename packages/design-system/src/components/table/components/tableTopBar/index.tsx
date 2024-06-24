@@ -18,7 +18,6 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import { FilterIcon, SearchInput } from '@ps-analysis-tool/design-system';
 import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
@@ -26,6 +25,8 @@ import { I18n } from '@ps-analysis-tool/i18n';
  */
 import ExportButton from '../../../exportButton';
 import { useTable } from '../../useTable';
+import { FilterIcon } from '../../../../icons';
+import SearchInput from '../../../searchInput';
 
 interface TableTopBarProps {
   showFilterSidebar: boolean;

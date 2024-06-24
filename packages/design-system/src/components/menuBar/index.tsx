@@ -19,13 +19,13 @@
  */
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
-import { Export } from '@ps-analysis-tool/design-system';
 import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import { isElementInView } from './utils';
+import { Export } from '../../icons';
 
 export type MenuData = Array<{
   name: string;
