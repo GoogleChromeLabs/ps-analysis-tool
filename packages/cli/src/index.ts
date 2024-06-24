@@ -101,8 +101,7 @@ const saveResultsAsJSON = async (
 const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson | CompleteJson[],
-  isSiteMap: boolean,
-  locale: string
+  isSiteMap: boolean
 ) => {
   const htmlText = fs.readFileSync(
     path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -114,7 +113,6 @@ const saveResultsAsHTML = async (
     'base64'
   );
 
-  I18n.loadCLIMessagesData(locale);
   const messages = I18n.getMessages();
 
   const html =
@@ -285,6 +283,8 @@ const saveResultsAsHTML = async (
     } as unknown as CompleteJson;
   });
 
+  I18n.loadCLIMessagesData(locale);
+
   const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   if (outDir) {
@@ -293,7 +293,7 @@ const saveResultsAsHTML = async (
   }
 
   await saveResultsAsJSON(outputDir, result);
-  await saveResultsAsHTML(outputDir, result, isSiteMap, locale);
+  await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
   console.log('Some error occured while analysing the website.');
   console.log('For more information check the stack trace below:\n');
