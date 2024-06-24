@@ -2,9 +2,9 @@
   "name": "@ps-analysis-tool/common",
   "version": "1.0.0",
   "description": "A package for common utilities that are being used in multiple packages",
-  "main": "./dist/index.js",
-  "types": "./dist-types/index.d.ts",
-  "source": "./src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
+  "source": "src/index.ts",
   "customExports": {
     ".": {
       "default": "./src/index.ts"
@@ -23,6 +23,9 @@
     "type": "git",
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
     "directory": "packages/common"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "author": {
     "name": "Google"

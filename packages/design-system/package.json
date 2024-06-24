@@ -2,8 +2,9 @@
   "name": "@ps-analysis-tool/design-system",
   "version": "1.0.0",
   "description": "A package for presentational components that are being used in multiple packages",
-  "main": "./src/index.ts",
-  "source":"./src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
+  "source": "src/index.ts",
   "customExports": {
     ".": {
       "default": "./src/index.ts"
@@ -22,6 +23,9 @@
     "type": "git",
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
     "directory": "packages/design-system"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "author": {
     "name": "Google"

@@ -2,9 +2,9 @@
   "name": "@ps-analysis-tool/analysis-utils",
   "version": "1.0.0",
   "description": "A package for CLI analysis",
-  "main": "./dist/index.js",
-  "types": "./dist-types/index.d.ts",
-  "source": "./src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
+  "source": "src/index.ts",
   "author": {
     "name": "Google"
   },
@@ -21,6 +21,9 @@
     "publish:remote": "npm publish --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
     "unpublish:remote": "npm publish --registry=https://registry.npmjs.org"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",

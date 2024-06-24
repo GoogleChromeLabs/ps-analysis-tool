@@ -10,7 +10,11 @@
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
     "directory": "packages/cli-dashboard"
   },
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
+  "source": "src/index.tsx",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist",
     "public"

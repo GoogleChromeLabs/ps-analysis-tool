@@ -2,8 +2,9 @@
   "name": "@ps-analysis-tool/library-detection",
   "version": "1.0.0",
   "description": "A package for detecting libraries for potential breakage",
-  "main": "./src/index.ts",
-  "source": "./src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
+  "source": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
@@ -24,6 +25,9 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
