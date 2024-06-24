@@ -137,9 +137,7 @@ const saveResultsAsHTML = async (
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
   fs.writeFile(outDir + '/index.html', buffer, () =>
-    console.log(
-      `Report created successfully:\n${URL.pathToFileURL(outFileFullDir)}`
-    )
+    console.log(`Report:${URL.pathToFileURL(outFileFullDir)}`)
   );
 };
 
@@ -200,11 +198,7 @@ const saveResultsAsHTML = async (
 
     if (!shouldSkipPrompts && !numberOfUrlsInput) {
       userInput = await askUserInput(
-        `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
-          urls.length
-        } pages. Please enter the number of pages you want to analyze (Default ${
-          urls.length
-        }):`,
+        `Please enter the number of pages to analyze (Default: ${urls.length}):`,
         { default: urls.length.toString() }
       );
       numberOfUrls =
@@ -227,7 +221,7 @@ const saveResultsAsHTML = async (
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analysing cookies on first site visit',
+    text: 'Analysing cookies on first site visit...',
   });
 
   const cookieAnalysisAndFetchedResourceData =
@@ -244,7 +238,7 @@ const saveResultsAsHTML = async (
     );
 
   spinnies.succeed('cookie-spinner', {
-    text: 'Done analyzing cookies.',
+    text: 'Done analyzing cookies!',
   });
 
   let technologyAnalysisData: any = null;
@@ -261,7 +255,7 @@ const saveResultsAsHTML = async (
     );
 
     spinnies.succeed('technology-spinner', {
-      text: 'Done analyzing technologies.',
+      text: 'Done analyzing technologies!',
     });
   }
 
