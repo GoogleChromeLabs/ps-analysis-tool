@@ -11,7 +11,6 @@
     "directory": "packages/cli-dashboard"
   },
   "main": "dist/index.js",
-  "source": "src/index.tsx",
   "publishConfig": {
     "access": "public"
   },

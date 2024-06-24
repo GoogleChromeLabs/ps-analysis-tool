@@ -4,7 +4,6 @@
   "description": "CLI tool for analysis",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
-  "source": "src/index.ts",
   "files": [
     "assets",
     "dist",
