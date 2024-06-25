@@ -283,6 +283,7 @@ const saveResultsAsHTML = async (
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
+    console.log('Reports created successfully!');
     process.exit(0);
   }
 
