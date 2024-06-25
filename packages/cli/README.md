@@ -57,6 +57,8 @@ Report created successfully: /Users/milind/projects/psat-cli-tool/out/www-google
 
 Open the HTML file generated in the browser
 
+![PSAT CLI Output](https://s3.amazonaws.com/i.snag.gy/Dyzq6N.jpg)
+
 ## Docs
 
 - Learn more about the [Privacy Sandbox](https://privacysandbox.com/) initiative.
@@ -75,5 +77,7 @@ To develop and contribute, Please check our [contribution guide](https://github.
 
 PSAT is available as a Chrome extension that allows you to do an analysis while interacting with websites.
 
-Installation: You can install the PSAT extension from the [Chrome web store] (https://chromewebstore.google.com/detail/privacy-sandbox-analysis/ehbnpceebmgpanbbfckhoefhdibijkef)
+Installation: You can install the PSAT extension from the [Chrome web store](https://chromewebstore.google.com/detail/privacy-sandbox-analysis/ehbnpceebmgpanbbfckhoefhdibijkef)
 To run it: Visit the website you want to analyze, open Chrome DevTools, and select the Privacy Sandbox panel.
+
+![PSAT Chrome Extension](https://s3.amazonaws.com/i.snag.gy/OcCl5i.jpg)
