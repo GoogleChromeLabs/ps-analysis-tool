@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/design-system",
+  "name": "@google-psat/design-system",
   "version": "1.0.0",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "dist/index.js",
@@ -36,8 +36,8 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-		"@ps-analysis-tool/common": "*",
-		"@ps-analysis-tool/i18n": "*",
+		"@google-psat/common": "*",
+		"@google-psat/i18n": "*",
     "p-queue": "^7.3.4",
 		"use-context-selector": "^1.4.1"
   },

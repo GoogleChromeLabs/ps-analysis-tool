@@ -6,7 +6,7 @@ Custom resolver for eslint-plugin-import to resolve packages locally in a monore
 {
   "settings": {
     "import/resolver": {
-      "@ps-analysis-tool/eslint-import-resolver": {
+      "@google-psat/eslint-import-resolver": {
         "mapping": {
           "^@foo\\/(.*)": "./packages/$1/src/",
         }

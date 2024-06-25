@@ -16,11 +16,7 @@
 /**
  * External dependencies
  */
-import {
-  type LibraryData,
-  noop,
-  createContext,
-} from '@ps-analysis-tool/common';
+import { type LibraryData, noop, createContext } from '@google-psat/common';
 /**
  * Internal dependencies
  */

@@ -25,9 +25,9 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { noop, type CookieTableData } from '@ps-analysis-tool/common';
-import type { TableRow } from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { noop, type CookieTableData } from '@google-psat/common';
+import type { TableRow } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CookieData } from '@ps-analysis-tool/common';
+import { CookieData } from '@google-psat/common';
 
 export type ViewportConfig = {
   width: number;

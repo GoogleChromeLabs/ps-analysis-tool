@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/library-detection",
+  "name": "@google-psat/library-detection",
   "version": "1.0.0",
   "description": "A package for detecting libraries for potential breakage",
   "main": "dist/index.js",
@@ -31,9 +31,9 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-    "@ps-analysis-tool/common": "*",
-    "@ps-analysis-tool/design-system": "*",
-    "@ps-analysis-tool/i18n": "*",
+    "@google-psat/common": "*",
+    "@google-psat/design-system": "*",
+    "@google-psat/i18n": "*",
     "classnames": "^2.5.1",
     "escape-string-regexp": "^4.0.0",
     "react": "^18.2.0",

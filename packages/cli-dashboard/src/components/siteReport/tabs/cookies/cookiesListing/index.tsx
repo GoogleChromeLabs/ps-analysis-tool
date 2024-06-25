@@ -19,8 +19,8 @@
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
-import { type CookieTableData } from '@ps-analysis-tool/common';
+import { CookieDetails, CookieTable } from '@google-psat/design-system';
+import { type CookieTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies

@@ -24,7 +24,7 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import JetpackCommentsAccordion from '../accordion';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 describe('Jetpack Comments Accordion', () => {
   const accordionTitleText = 'Jetpack Comments';

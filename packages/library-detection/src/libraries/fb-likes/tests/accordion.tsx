@@ -24,7 +24,7 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import FacebookLikesAccordion from '../accordion';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 describe('Facebook Likes Accordion', () => {
   const accordionTitleText = 'Facebook Like Button';

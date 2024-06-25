@@ -18,7 +18,7 @@ import {
   calculateEffectiveExpiryDate,
   type CompleteJson,
   type CookieFrameStorageType,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies

@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
 
 const ProtectedAudience = () => {
   return (

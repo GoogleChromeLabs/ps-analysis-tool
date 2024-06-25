@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/extension",
+  "name": "@google-psat/extension",
   "version": "1.0.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
@@ -22,10 +22,10 @@
   "dependencies": {
     "@floating-ui/core": "^1.5.0",
     "@floating-ui/dom": "^1.5.3",
-    "@ps-analysis-tool/common": "*",
-    "@ps-analysis-tool/design-system": "*",
-    "@ps-analysis-tool/i18n": "*",
-    "@ps-analysis-tool/library-detection": "*",
+    "@google-psat/common": "*",
+    "@google-psat/design-system": "*",
+    "@google-psat/i18n": "*",
+    "@google-psat/library-detection": "*",
     "classnames": "^2.3.2",
     "fast-xml-parser": "^4.3.2",
     "file-saver": "^2.0.5",

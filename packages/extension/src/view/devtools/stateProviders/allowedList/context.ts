@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { noop, createContext } from '@ps-analysis-tool/common';
+import { noop, createContext } from '@google-psat/common';
 
 export interface AllowedListStoreContext {
   state: {

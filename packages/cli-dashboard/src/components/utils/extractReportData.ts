@@ -22,7 +22,7 @@ import type {
   CookieFrameStorageType,
   LibraryData,
   TechnologyData,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies

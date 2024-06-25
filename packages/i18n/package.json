@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/i18n",
+  "name": "@google-psat/i18n",
   "version": "1.0.0",
   "description": "A package that handles internationalization and localization.",
   "main": "dist/index.js",

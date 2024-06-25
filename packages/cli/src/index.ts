@@ -24,17 +24,17 @@ import { ensureFile, writeFile } from 'fs-extra';
 import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
-import { I18n } from '@ps-analysis-tool/i18n';
-import { CompleteJson, LibraryData } from '@ps-analysis-tool/common';
+import { I18n } from '@google-psat/i18n';
+import { CompleteJson, LibraryData } from '@google-psat/common';
 import {
   analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
-} from '@ps-analysis-tool/analysis-utils';
+} from '@google-psat/analysis-utils';
 import {
   DetectionFunctions,
   Libraries,
   detectMatchingSignatures,
-} from '@ps-analysis-tool/library-detection';
+} from '@google-psat/library-detection';
 import URL from 'node:url';
 
 /**

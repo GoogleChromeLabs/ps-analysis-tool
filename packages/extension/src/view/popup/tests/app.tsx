@@ -30,7 +30,7 @@ import { useCookie } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 jest.mock('../stateProviders/cookie', () => ({
   useCookie: jest.fn(),

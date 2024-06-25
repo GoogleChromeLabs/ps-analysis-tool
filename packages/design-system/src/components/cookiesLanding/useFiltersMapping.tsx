@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { useCallback, useMemo } from 'react';
-import type { TabFrames } from '@ps-analysis-tool/common';
+import type { TabFrames } from '@google-psat/common';
 /**
  * Internal dependencies.
  */

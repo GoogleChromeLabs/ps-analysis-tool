@@ -25,7 +25,7 @@ import React, {
   useRef,
 } from 'react';
 import PQueue from 'p-queue';
-import { useContextSelector, createContext } from '@ps-analysis-tool/common';
+import { useContextSelector, createContext } from '@google-psat/common';
 
 /**
  * Internal dependencies

@@ -16,7 +16,7 @@
 /**
  * Internal Dependencies.
  */
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 import { NUMBER_OF_ALLOWED_FEATURES_IN_COMPACT_VIEW } from '../constants';
 
 const getTooltipInfoData = (

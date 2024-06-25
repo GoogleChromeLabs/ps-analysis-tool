@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/eslint-import-resolver",
+  "name": "@google-psat/eslint-import-resolver",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.cjs",

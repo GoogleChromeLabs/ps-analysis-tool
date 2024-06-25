@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { type TabFrames } from '@ps-analysis-tool/common';
+import { type TabFrames } from '@google-psat/common';
 
 /**
  * This function returns tab frames state for frame ids and frame URLs along with rws information from using chrome.webNavigation.getAllFrames.

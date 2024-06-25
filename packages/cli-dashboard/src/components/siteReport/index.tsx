@@ -23,11 +23,8 @@ import type {
   CookieJsonDataType,
   LibraryData,
   TechnologyData,
-} from '@ps-analysis-tool/common';
-import {
-  SidebarProvider,
-  type SidebarItems,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/common';
+import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.

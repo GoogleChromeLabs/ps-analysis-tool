@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useContextSelector } from '@ps-analysis-tool/common';
+import { useContextSelector } from '@google-psat/common';
 import { SidebarContext, SidebarStoreContext } from './context';
 
 export function useSidebar(): SidebarStoreContext;

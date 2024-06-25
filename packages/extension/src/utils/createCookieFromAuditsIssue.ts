@@ -24,7 +24,7 @@ import {
   type CookieDatabase,
   RESPONSE_EVENT,
   auditsToNetworkMap,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 import { type Cookie, parse } from 'simple-cookie';
 

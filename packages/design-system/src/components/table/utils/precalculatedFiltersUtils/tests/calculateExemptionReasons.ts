@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { BlockedReason, CookieData } from '@ps-analysis-tool/common';
+import { BlockedReason, CookieData } from '@google-psat/common';
 /**
  * Internal dependencies
  */

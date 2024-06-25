@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { BLOCK_STATUS, type CookieTableData } from '@ps-analysis-tool/common';
+import { BLOCK_STATUS, type CookieTableData } from '@google-psat/common';
 import {
   type TableRow,
   GreenTick,
@@ -27,7 +27,7 @@ import {
   QuestionMark,
   OutboundInboundIcon,
   OutboundInboundColoredIcon,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 
 const NamePrefixIconSelector = ({ originalData }: TableRow) => {
   const data = originalData as CookieTableData;

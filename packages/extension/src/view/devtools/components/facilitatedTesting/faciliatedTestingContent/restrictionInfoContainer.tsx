@@ -18,9 +18,9 @@
  * Internal dependencies.
  */
 import React from 'react';
-import { PSTimelineIcon } from '@ps-analysis-tool/design-system';
-import { addUTMParams } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { PSTimelineIcon } from '@google-psat/design-system';
+import { addUTMParams } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 const RestrictionInfoContainer = () => (
   <div className="flex flex-col w-full text-sm text-raisin-black dark:text-bright-gray mb-7">

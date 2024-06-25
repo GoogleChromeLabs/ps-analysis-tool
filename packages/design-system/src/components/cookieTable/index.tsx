@@ -24,7 +24,7 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
-import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
+import { CookieTableData, getCookieKey } from '@google-psat/common';
 
 /**
  * Internal dependencies.

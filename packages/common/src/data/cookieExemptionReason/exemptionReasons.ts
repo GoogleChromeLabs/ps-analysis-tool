@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 //For source see https://source.chromium.org/chromium/chromium/src/+/main:third_party/devtools-frontend/src/front_end/core/sdk/NetworkRequest.ts
 const CookieExemptionReason = {

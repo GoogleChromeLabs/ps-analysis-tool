@@ -16,7 +16,7 @@
 
 import { useCallback, useEffect } from 'react';
 import { PersistentStorageData, TableData, TableFilter } from '../../types';
-import { getValueByKey } from '@ps-analysis-tool/common';
+import { getValueByKey } from '@google-psat/common';
 
 /**
  * External dependencies.

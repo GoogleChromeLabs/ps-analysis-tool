@@ -20,7 +20,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import {
   executeTaskInDevToolWorker,
   LIBRARY_DETECTION_WORKER_TASK,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.

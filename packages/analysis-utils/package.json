@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/analysis-utils",
+  "name": "@google-psat/analysis-utils",
   "version": "1.0.0",
   "description": "A package for CLI analysis",
   "main": "dist/index.js",
@@ -36,7 +36,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-    "@ps-analysis-tool/common": "*",
+    "@google-psat/common": "*",
     "puppeteer": "^22.10.0",
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.14",

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import type { CookieAnalytics, CookieDatabase } from '@ps-analysis-tool/common';
+import type { CookieAnalytics, CookieDatabase } from '@google-psat/common';
 
 /**
  * Matches wildcard string to a provided string. For eg Foo_* matches Foo_123.

@@ -22,7 +22,7 @@ import {
   generateAllCookiesCSV,
   generateSummaryDataCSV,
   generateTechnologyCSV,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);

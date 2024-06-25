@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
+import { CookieTableData, TechnologyData } from '@google-psat/common';
 
 export type TableData = (CookieTableData | TechnologyData) & {
   highlighted?: boolean;

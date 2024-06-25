@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import { TabCookies, TabFrames } from '@google-psat/common';
 
 export const emptyAnalytics = {
   platform: '',

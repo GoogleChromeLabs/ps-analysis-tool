@@ -16,9 +16,9 @@
 /**
  * External dependencies.
  */
-import type { DetectedSignature } from '@ps-analysis-tool/common';
+import type { DetectedSignature } from '@google-psat/common';
 
-export type { LibraryData, DetectedSignature } from '@ps-analysis-tool/common';
+export type { LibraryData, DetectedSignature } from '@google-psat/common';
 
 export type SignaturesConfigItem = {
   signature: string;

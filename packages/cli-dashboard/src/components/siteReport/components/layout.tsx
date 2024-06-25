@@ -27,8 +27,8 @@ import {
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
   SIDEBAR_ITEMS_KEYS,
-} from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

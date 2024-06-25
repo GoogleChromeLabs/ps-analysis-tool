@@ -28,7 +28,7 @@ import {
   delay,
   RESPONSE_EVENT,
   REQUEST_EVENT,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { addUTMParams } from '@ps-analysis-tool/common';
+import { addUTMParams } from '@google-psat/common';
 
 export const QUICK_LINKS = [
   {

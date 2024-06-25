@@ -20,13 +20,13 @@ import React, { useMemo } from 'react';
 import {
   LibraryDetection,
   useLibraryDetectionContext,
-} from '@ps-analysis-tool/library-detection';
+} from '@google-psat/library-detection';
 import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
-} from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */

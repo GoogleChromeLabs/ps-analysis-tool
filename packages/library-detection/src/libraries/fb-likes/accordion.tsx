@@ -24,7 +24,7 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_LIKES_HELP_URL } from './constants';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {

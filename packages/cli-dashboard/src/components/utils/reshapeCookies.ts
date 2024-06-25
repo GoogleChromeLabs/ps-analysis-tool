@@ -23,8 +23,8 @@ import {
   type CookieFrameStorageType,
   type BlockedReason,
   deriveBlockingStatus,
-} from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies

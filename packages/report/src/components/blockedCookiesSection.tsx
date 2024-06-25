@@ -25,13 +25,13 @@ import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   type MatrixComponentProps,
-} from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
-import type { DataMapping } from '@ps-analysis-tool/common';
+import type { DataMapping } from '@google-psat/common';
 
 const CookiesSection = () => {
   const data = useData(({ state }) => state.data);

@@ -21,7 +21,7 @@ import {
   Ellipse,
   BorderProgressBar,
   ChevronDown,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 import classNames from 'classnames';
 
 interface AccodionHeadingProps {

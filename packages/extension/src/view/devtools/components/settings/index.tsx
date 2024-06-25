@@ -18,8 +18,8 @@
  */
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { ArrowUp } from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { ArrowUp } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies

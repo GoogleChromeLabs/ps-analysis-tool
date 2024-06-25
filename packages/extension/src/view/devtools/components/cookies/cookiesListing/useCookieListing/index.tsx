@@ -22,7 +22,7 @@ import {
   type CookieTableData,
   type TabCookies,
   BLOCK_STATUS,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import {
   RefreshButton,
   type InfoType,
@@ -37,8 +37,8 @@ import {
   type TableData,
   InfoIcon,
   calculateExemptionReason,
-} from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies

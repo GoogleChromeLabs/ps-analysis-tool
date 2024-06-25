@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 /**
  *	Evaluate if the 'All' option is present in parsedQuery.

@@ -19,7 +19,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getDomain } from 'tldts';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies

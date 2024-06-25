@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { parseUrl } from '@ps-analysis-tool/common';
+import { parseUrl } from '@google-psat/common';
 import { exists, mkdir } from 'fs-extra';
 import path from 'path';
 

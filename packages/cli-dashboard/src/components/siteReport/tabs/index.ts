@@ -22,8 +22,8 @@ import {
   SIDEBAR_ITEMS_KEYS,
   WarningBare,
   type SidebarItems,
-} from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const Tabs: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {

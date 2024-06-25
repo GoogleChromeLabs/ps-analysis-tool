@@ -16,8 +16,8 @@
 /**
  * External dependencies.
  */
-import { CookieTableData, sanitizeCsvRecord } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 const COOKIES_TABLE_DATA_HEADER_CLI = [
   () => I18n.getMessage('name'),

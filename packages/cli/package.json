@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/cli",
+  "name": "@google-psat/cli",
   "version": "1.0.0",
   "description": "CLI tool for analysis",
   "main": "dist/index.js",
@@ -39,10 +39,10 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-    "@ps-analysis-tool/analysis-utils": "*",
-    "@ps-analysis-tool/common": "*",
-    "@ps-analysis-tool/i18n": "*",
-    "@ps-analysis-tool/library-detection": "*",
+    "@google-psat/analysis-utils": "*",
+    "@google-psat/common": "*",
+    "@google-psat/i18n": "*",
+    "@google-psat/library-detection": "*",
     "commander": "^10.0.1", 
     "fs-extra": "^11.1.1",
     "promptly": "^3.2.0",
@@ -60,6 +60,6 @@
     "webpack": "^5.86.0"
   },
   "peerDependencies": {
-    "@ps-analysis-tool/cli-dashboard": "*"
+    "@google-psat/cli-dashboard": "*"
   }
 }

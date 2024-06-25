@@ -43,7 +43,7 @@ import {
   InfoIcon,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -68,7 +68,7 @@ import {
   Settings,
   FacilitatedTesting,
 } from './components';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 import ProtectedAudience from './components/privateAdvertising/protectedAudience';
 
 const TABS: SidebarItems = {

@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { addUTMParams } from '@ps-analysis-tool/common';
+import { addUTMParams } from '@google-psat/common';
 
 /**
  * Internal dependencies.

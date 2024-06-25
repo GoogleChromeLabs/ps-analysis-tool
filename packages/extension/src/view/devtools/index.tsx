@@ -22,8 +22,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import {
   ErrorFallback,
   Provider as TablePersistentSettingsProvider,
-} from '@ps-analysis-tool/design-system';
-import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
+} from '@google-psat/design-system';
+import { LibraryDetectionProvider } from '@google-psat/library-detection';
 
 /**
  * Internal dependencies.

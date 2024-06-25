@@ -22,7 +22,7 @@ import {
   TABLE_PERSISTENT_SETTINGS_STORE_KEY,
   TablePersistentSettingsStoreContext,
 } from '..';
-import { mergeDeep } from '@ps-analysis-tool/common';
+import { mergeDeep } from '@google-psat/common';
 
 const updateStorage = async (
   persistenceKey: string,

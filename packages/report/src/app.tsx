@@ -17,8 +17,8 @@
  * External dependencies
  */
 import React from 'react';
-import { LibraryDetection } from '@ps-analysis-tool/library-detection';
-import { PrivacySandboxColoredIcon } from '@ps-analysis-tool/design-system';
+import { LibraryDetection } from '@google-psat/library-detection';
+import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
 
 /**
  * Internal dependencies

@@ -23,8 +23,8 @@ import {
   prepareFrameStatsComponent,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
-} from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
