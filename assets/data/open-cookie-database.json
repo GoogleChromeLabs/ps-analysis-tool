@@ -10360,6 +10360,45 @@
       "wildcard": "0"
     }
   ],
+  "__hs_cookie_cat_pref": [
+    {
+      "platform": "HubSpot",
+      "category": "Functional",
+      "name": "__hs_cookie_cat_pref",
+      "domain": "",
+      "description": "OCD___hs_cookie_cat_pref_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "HubSpot",
+      "gdprUrl": "https://legal.hubspot.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "__hs_gpc_banner_dismiss": [
+    {
+      "platform": "HubSpot",
+      "category": "Functional",
+      "name": "__hs_gpc_banner_dismiss",
+      "domain": "",
+      "description": "OCD___hs_gpc_banner_dismiss_description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "HubSpot",
+      "gdprUrl": "https://legal.hubspot.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "__hs_notify_banner_dismiss": [
+    {
+      "platform": "HubSpot",
+      "category": "Functional",
+      "name": "__hs_notify_banner_dismiss",
+      "domain": "",
+      "description": "OCD___hs_notify_banner_dismiss_description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "HubSpot",
+      "gdprUrl": "https://legal.hubspot.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
   "vuid": [
     {
       "platform": "Vimeo",
@@ -14098,6 +14137,17 @@
       "dataController": "PayPal",
       "gdprUrl": "https://www.paypal.com/privacy-center",
       "wildcard": "0"
+    },
+    {
+      "platform": "CreativeCDN",
+      "category": "Functional",
+      "name": "ts",
+      "domain": "creativecdn.com",
+      "description": "This cookie is associated with creativecdn.com. It is provided by PayPal and supports payment services in the website.",
+      "retention": "365 days",
+      "dataController": "RTB House",
+      "gdprUrl": "https://rtbhouse.com/privacy-center",
+      "wildcard": "0"
     }
   ],
   "ts_c": [
@@ -15748,6 +15798,17 @@
       "retention": "OCD_retention_1_month",
       "dataController": "Magnite",
       "gdprUrl": "https://www.magnite.com/legal/platform-cookie-statement/",
+      "wildcard": "0"
+    },
+    {
+      "platform": "CreativeCDN",
+      "category": "Marketing",
+      "name": "c",
+      "domain": "creativecdn.com",
+      "description": "Regulates the synchronization of user identification and the exchange of your data between various advertising services.",
+      "retention": "364 days",
+      "dataController": "RTB House",
+      "gdprUrl": "https://rtbhouse.com/privacy-center",
       "wildcard": "0"
     }
   ],
@@ -20037,6 +20098,17 @@
       "dataController": "Totvs",
       "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
       "wildcard": "0"
+    },
+    {
+      "platform": "CreativeCDN",
+      "category": "Marketing",
+      "name": "u",
+      "domain": "creativecdn.com",
+      "description": "This cookie is associated with creativecdn.com. It collects unidentifiable data that is sent to an unidentifiable source. The source's identity is kept secret by the company, Perfect Privacy LLC.",
+      "retention": "365 days",
+      "dataController": "RTB House",
+      "gdprUrl": "https://rtbhouse.com/privacy-center",
+      "wildcard": "0"
     }
   ],
   "_ssc": [
@@ -24246,6 +24318,19 @@
       "retention": "OCD_retention_1_year",
       "dataController": "Adobe",
       "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "g": [
+    {
+      "platform": "CreativeCDN",
+      "category": "Marketing",
+      "name": "g",
+      "domain": "creativecdn.com",
+      "description": "OCD_g_description",
+      "retention": "OCD_retention_364_days",
+      "dataController": "RTB House",
+      "gdprUrl": "https://rtbhouse.com/privacy-center",
       "wildcard": "0"
     }
   ]

@@ -8139,5 +8139,20 @@
   },
   "RWS_rationale_https___infoedgeindia_com": {
     "message": "InfoEdge India website"
+  },
+  "OCD___hs_cookie_cat_pref_description": {
+    "message": "This cookie is used to record the categories a visitor consented to."
+  },
+  "OCD___hs_gpc_banner_dismiss_description": {
+    "message": "This cookie is used when the Global Privacy Control banner is dismissed."
+  },
+  "OCD___hs_notify_banner_dismiss_description": {
+    "message": "This cookie is used when the website uses a Notify consent banner type."
+  },
+  "OCD_g_description": {
+    "message": "This domain is associated with the delivery of advertising material or scripts for advertising content. It is a service used by advertising agencies to optimize their online ad campaigns."
+  },
+  "OCD_retention_364_days": {
+    "message": "364 days"
   }
 }
