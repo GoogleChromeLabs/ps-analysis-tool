@@ -1,4 +1,82 @@
-# PSAT CLI
+> The Privacy Sandbox Analysis Tool CLI aims to empower developers to prepare their sites/applications for the upcoming deprecation of Third-party Cookies (3PC) on Chrome as part of the Privacy Sandbox initiative.
 
-## Description 
-A CLI tool to help developers to prepare for 3PCD. 
+
+## Using the Node CLI
+
+The PSAT CLI offers the most flexibility in configuration, execution, and reporting for maximum control and automation of third-party cookie audits. It's ideal for advanced users and automated workflows.
+
+> Note : PSAT CLI requires Node 18 LTS (18.x) or later.
+
+
+### Installation
+
+```
+npm i -g @google-psat/cli
+```
+
+Run it : psat https://example.com
+
+
+By default, PSAT generates the report as an HTML file. You can open it in a web browser of your choice and use it to filter the output.
+
+### CLI option
+
+```                                   
+Usage: psat [options]
+
+CLI to test a URL for 3p cookies
+
+Arguments:
+  website-url                 The URL of website you want to analyse
+
+Options:
+  -V, --version               output the version number
+  -u, --url <value>           URL of a site
+  -s, --sitemap-url <value>   URL of a sitemap
+  -c, --csv-path <value>      Path to a CSV file with a set of URLs.
+  -p, --sitemap-path <value>  Path to a sitemap saved in the file system
+  -l, --locale <value>        Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR
+  -ul, --url-limit <value>    No of URLs to analyze
+  -nh, --no-headless          Flag for running puppeteer in non-headless mode
+  -np, --no-prompts           Flags for skipping all prompts. Default options will be used
+  -nt, --no-technology        Flags for skipping technology analysis.
+  -d, --out-dir <value>       Directory path where the analysis data will be stored
+  -ab, --accept-banner        This will accept the GDPR banner if present.
+  -h, --help                  display help for command
+
+```
+
+### Output
+After running the analysis, it will create a report in /out/ directory
+```bash
+psat -u https://www.google.co.in
+✓ Done analyzing cookies.
+✓ Done analyzing technologies.
+Report created successfully: /Users/milind/projects/psat-cli-tool/out/www-google-co-in/index.html
+```
+
+Open the HTML file generated in the browser
+
+## Docs
+
+- Learn more about the [Privacy Sandbox](https://privacysandbox.com/) initiative.
+- Please visit our [wiki](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/) to learn more about PSAT.
+- To understand the reports better, please check the [CLI output](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Command-Line-Interface#cli-output) section on our wiki.
+- To understand about cookie filters, check the [Cookie table](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Cookies-Table) section on our wiki.
+
+
+
+
+
+## Contributing
+We're excited to accept your code improvements (patches) and ideas for this project! Whether you want to be a regular contributor or just tackle an issue you care about, we value your input.
+
+To develop and contribute, Please check our [contribution guide](https://github.com/GoogleChromeLabs/ps-analysis-tool/blob/main/docs/CONTRIBUTING.md) for detailed information.
+
+
+## Using PSAT in Chrome extension
+
+PSAT is available as a Chrome extension that allows you to do an analysis while interacting with websites.
+
+Installation: You can install the PSAT extension from the Chrome web store 
+To run it: Visit the website you want to analyze, open Chrome DevTools, and select the Privacy Sandbox panel.
