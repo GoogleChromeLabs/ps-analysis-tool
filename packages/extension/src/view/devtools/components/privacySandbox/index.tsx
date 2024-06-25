@@ -18,12 +18,11 @@
  */
 import React from 'react';
 import { LandingPage } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 
 const PrivacySandbox = () => (
   <div data-testid="privacy-sandbox-content" className="h-full w-full">
     <LandingPage
-      title={I18n.getMessage('privacySandbox')}
+      title="Privacy Sandbox"
       extraClasses="h-[78vh] w-full"
       iframeSrc="https://privacysandbox.com"
       iframeBorderClass="border border-hex-gray dark:border-quartz"
