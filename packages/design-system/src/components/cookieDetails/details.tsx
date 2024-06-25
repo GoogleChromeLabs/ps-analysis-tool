@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import {
   BLOCK_STATUS,
@@ -94,6 +94,18 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
     }
     return reason;
   });
+
+  const canBeDecoded = useMemo(() => {
+    let errorOnDecode = true;
+
+    try {
+      decodeURIComponent(selectedCookie.parsedCookie.value);
+    } catch (error) {
+      errorOnDecode = false;
+    }
+
+    return errorOnDecode;
+  }, [selectedCookie.parsedCookie.value]);
 
   return (
     <div className="text-xs py-1 px-1.5">
@@ -291,7 +303,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         </label>
       </p>
       <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
-        {showUrlDecoded
+        {showUrlDecoded && canBeDecoded
           ? decodeURIComponent(selectedCookie.parsedCookie.value)
           : selectedCookie.parsedCookie.value}
       </p>
