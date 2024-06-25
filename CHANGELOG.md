@@ -357,3 +357,40 @@
 
 ## Others
 * Feature: Update babel-loader webpack config to have caching support for faster builds https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/452
+
+
+#v1.0.0
+## Extension
+* Feature: Complete migration to CDP https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/539
+* Feature: Add and implement i18n translation locales https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/713
+* Feature: Navigate from PSAT to network panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/685
+* Feature: Add “Protected Audience” landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/714
+* Feature: Add blocking direction icons in CLI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/715
+* Fix: Persist filters after web page reload https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/692
+* Fix: Exemption section disappearing https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/691
+* Fix: GSI messaging on correct urls. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/684
+* Fix: Inconsistent highlighting on livemint.com https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/683
+* Fix: Update menu bar scrolling logic https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/699
+* Add known breakages section in CLI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/708
+* Fix: v1.0 QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/717
+* Fix: Conditionally use `I18n.getMessage` function inside `InfoCard` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/720
+* Fix: Update UI/UX of table components https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/679
+* Fix: Update UX of design system components https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/693
+
+
+## CLI
+* Upgrade to the latest Puppeteer version and fix cookie mapping issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/704
+* Update CLI messaging to be smaller and more concise https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/721
+* CLI: Refactor CLI package into 2 different packages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/687
+* Feature: Publish packages on the NPM registry https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/698
+* Make -u argument optional in CLI. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/711
+* Fix: Create separate CSV generation utils for CLI dashboard and extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/619
+* Add website hostname as prefix to cookie table CSV https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/700
+* Fix: Report throwing error when downloaded from CLI. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/709
+* CLI: Add ability to catch exempted cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/712
+
+## Others
+* Add `chrome-pat` and `chrome-pat-ps` commands to test Private Advertising https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/706
+* Close support issues using stale actions. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/571
+* Temporarily remove storybook package https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/702
+* Refactor: Update package scope name to `@google-psat` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/725
