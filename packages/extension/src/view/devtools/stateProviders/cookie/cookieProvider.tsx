@@ -24,7 +24,7 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import { type TabCookies } from '@ps-analysis-tool/common';
+import { type TabCookies } from '@google-psat/common';
 
 /**
  * Internal dependencies.

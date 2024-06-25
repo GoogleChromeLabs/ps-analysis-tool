@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { emptyAnalytics } from '@ps-analysis-tool/common';
+import { emptyAnalytics } from '@google-psat/common';
 /**
  * Internal dependencies.
  */

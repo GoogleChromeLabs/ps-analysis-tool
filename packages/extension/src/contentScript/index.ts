@@ -22,7 +22,7 @@ import {
   findAnalyticsMatch,
   calculateEffectiveExpiryDate,
   type CookieDatabase,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import { computePosition, flip, shift } from '@floating-ui/core';
 import { autoUpdate, platform, arrow } from '@floating-ui/dom';
 

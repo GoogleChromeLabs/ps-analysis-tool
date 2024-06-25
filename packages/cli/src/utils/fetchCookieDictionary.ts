@@ -19,7 +19,7 @@
  */
 import fs from 'fs/promises';
 import path from 'path';
-import { CookieDatabase } from '@ps-analysis-tool/common';
+import { CookieDatabase } from '@google-psat/common';
 
 /**
  * Internal dependencies.

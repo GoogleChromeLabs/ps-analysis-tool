@@ -18,8 +18,8 @@
  * External dependencies.
  */
 import React from 'react';
-import type { CookieTableData } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+import type { CookieTableData } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

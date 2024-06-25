@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

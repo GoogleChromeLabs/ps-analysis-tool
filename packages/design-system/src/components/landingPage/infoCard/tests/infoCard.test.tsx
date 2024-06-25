@@ -21,8 +21,8 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 import { render, screen } from '@testing-library/react';
-import { addUTMParams } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { addUTMParams } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

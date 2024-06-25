@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { type DataMapping } from '@ps-analysis-tool/common';
+import { type DataMapping } from '@google-psat/common';
 /**
  * Internal dependencies.
  */

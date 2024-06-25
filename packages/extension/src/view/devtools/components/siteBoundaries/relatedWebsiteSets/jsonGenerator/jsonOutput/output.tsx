@@ -19,7 +19,7 @@
  */
 import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

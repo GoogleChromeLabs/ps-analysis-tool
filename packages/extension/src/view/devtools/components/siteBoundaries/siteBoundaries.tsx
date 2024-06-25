@@ -17,7 +17,7 @@
  * External Dependencies
  */
 import React from 'react';
-import { ContentPanel, LandingPage } from '@ps-analysis-tool/design-system';
+import { ContentPanel, LandingPage } from '@google-psat/design-system';
 
 const content = [
   {

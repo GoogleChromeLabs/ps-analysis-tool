@@ -18,7 +18,7 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import type { CompleteJson } from '@ps-analysis-tool/common';
+import type { CompleteJson } from '@google-psat/common';
 
 /**
  * Internal dependencies

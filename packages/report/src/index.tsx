@@ -19,8 +19,8 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
-import { noop } from '@ps-analysis-tool/common';
+import { LibraryDetectionProvider } from '@google-psat/library-detection';
+import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies

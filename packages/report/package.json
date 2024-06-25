@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/report",
+  "name": "@google-psat/report",
   "version": "1.0.0",
   "description": "Static HTML analysis report",
   "repository": {
@@ -27,10 +27,10 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@ps-analysis-tool/common": "*",
-    "@ps-analysis-tool/design-system": "*",
-    "@ps-analysis-tool/library-detection": "*",
-		"@ps-analysis-tool/i18n": "*"
+    "@google-psat/common": "*",
+    "@google-psat/design-system": "*",
+    "@google-psat/library-detection": "*",
+		"@google-psat/i18n": "*"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",

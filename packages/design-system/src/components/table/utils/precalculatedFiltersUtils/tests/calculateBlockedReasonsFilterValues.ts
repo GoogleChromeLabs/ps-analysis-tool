@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { BlockedReason } from '@ps-analysis-tool/common';
+import { BlockedReason } from '@google-psat/common';
 /**
  * Internal dependencies
  */

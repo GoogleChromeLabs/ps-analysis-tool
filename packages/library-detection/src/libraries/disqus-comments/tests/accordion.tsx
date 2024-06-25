@@ -24,7 +24,7 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import DisqusCommentsAccordion from '../accordion';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 describe('Disqus Comments Accordion', () => {
   const accordionTitleText = 'Disqus Comments';

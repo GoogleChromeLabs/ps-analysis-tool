@@ -18,7 +18,7 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

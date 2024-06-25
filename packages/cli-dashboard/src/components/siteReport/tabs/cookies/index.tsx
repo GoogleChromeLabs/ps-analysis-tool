@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useMemo, useCallback } from 'react';
-import { type TabFrames } from '@ps-analysis-tool/common';
+import { type TabFrames } from '@google-psat/common';
 
 /**
  * Internal dependencies.

@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { CookieData } from '@ps-analysis-tool/common';
+import type { CookieData } from '@google-psat/common';
 
 /**
  * Internal dependencies

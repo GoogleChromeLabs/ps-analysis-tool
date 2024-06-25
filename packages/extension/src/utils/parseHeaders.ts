@@ -17,7 +17,7 @@
  * External dependencies
  */
 import { Protocol } from 'devtools-protocol';
-import { type CookieData, type CookieDatabase } from '@ps-analysis-tool/common';
+import { type CookieData, type CookieDatabase } from '@google-psat/common';
 
 /**
  * Internal dependencies.

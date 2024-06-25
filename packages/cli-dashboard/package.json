@@ -1,5 +1,5 @@
 {
-  "name": "@ps-analysis-tool/cli-dashboard",
+  "name": "@google-psat/cli-dashboard",
   "version": "1.0.0",
   "description": "Dashboard for visualizing cli analysis output",
   "author": {
@@ -33,10 +33,10 @@
     "unpublish:remote": "npm unpublish --registry=https://registry.npmjs.org --force"
   },
   "dependencies": {
-    "@ps-analysis-tool/common": "*",
-    "@ps-analysis-tool/design-system": "*",
-    "@ps-analysis-tool/i18n": "*",
-    "@ps-analysis-tool/library-detection": "*",
+    "@google-psat/common": "*",
+    "@google-psat/design-system": "*",
+    "@google-psat/i18n": "*",
+    "@google-psat/library-detection": "*",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",

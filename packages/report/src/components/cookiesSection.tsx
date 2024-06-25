@@ -21,7 +21,7 @@ import React from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 /**
  * Internal dependencies
  */

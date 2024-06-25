@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { type CookieTableData } from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@google-psat/common';
 import {
   Sidebar,
   useSidebar,
@@ -28,9 +28,9 @@ import {
   InspectButton,
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

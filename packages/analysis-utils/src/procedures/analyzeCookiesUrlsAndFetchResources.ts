@@ -23,7 +23,7 @@ import {
   CookieDatabase,
   LibraryMatchers,
   deriveBlockingStatus,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.

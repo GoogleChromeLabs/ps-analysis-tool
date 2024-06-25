@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useContextSelector } from '@ps-analysis-tool/common';
+import { useContextSelector } from '@google-psat/common';
 /**
  * Internal dependencies.
  */

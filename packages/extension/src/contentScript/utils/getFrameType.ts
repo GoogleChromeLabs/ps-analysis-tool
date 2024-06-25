@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 const getFrameType = (
   isHidden: boolean,

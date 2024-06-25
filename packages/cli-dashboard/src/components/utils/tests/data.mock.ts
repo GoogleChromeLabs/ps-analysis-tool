@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { type CompleteJson } from '@ps-analysis-tool/common';
+import { type CompleteJson } from '@google-psat/common';
 
 export const tempSinglePageData: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',

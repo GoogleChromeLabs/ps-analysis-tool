@@ -18,15 +18,12 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import {
-  SidebarProvider,
-  type SidebarItems,
-} from '@ps-analysis-tool/design-system';
+import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 import type {
   CookieFrameStorageType,
   CompleteJson,
   LibraryData,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.

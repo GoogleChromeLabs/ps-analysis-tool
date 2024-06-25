@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { fetchLocalData } from '@ps-analysis-tool/common';
+import { fetchLocalData } from '@google-psat/common';
 
 export enum PSInfoKey {
   'Topics' = 'topics',

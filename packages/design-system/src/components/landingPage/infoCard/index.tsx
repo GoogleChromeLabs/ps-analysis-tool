@@ -28,7 +28,7 @@ import {
   type PSInfo as PSInfoType,
   type PSInfoKeyType,
 } from './fetchPSInfo';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;

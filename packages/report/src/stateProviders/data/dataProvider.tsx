@@ -17,8 +17,8 @@
  * External dependencies.
  */
 import React, { useEffect, useState, type PropsWithChildren } from 'react';
-import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { useLibraryDetectionContext } from '@google-psat/library-detection';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.

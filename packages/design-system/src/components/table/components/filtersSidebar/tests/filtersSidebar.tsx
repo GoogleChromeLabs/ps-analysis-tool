@@ -21,7 +21,7 @@ import '@testing-library/jest-dom';
 import { TableFilter } from '../../../useTable/types';
 import * as table from '../../../useTable/useTable';
 import ChipsBar from '../chips';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 describe('FiltersSidebar', () => {
   const mockUseTable = jest.fn();

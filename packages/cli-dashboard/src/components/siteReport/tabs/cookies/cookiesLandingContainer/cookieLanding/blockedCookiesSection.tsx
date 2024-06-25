@@ -25,13 +25,9 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
   useFiltersMapping,
-} from '@ps-analysis-tool/design-system';
-import type {
-  TabCookies,
-  TabFrames,
-  DataMapping,
-} from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/design-system';
+import type { TabCookies, TabFrames, DataMapping } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 interface BlockedCookiesSectionProps {
   tabCookies: TabCookies | null;

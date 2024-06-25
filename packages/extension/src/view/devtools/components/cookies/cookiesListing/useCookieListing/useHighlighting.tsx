@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { useCallback, useEffect } from 'react';
-import { getCookieKey, type TabCookies } from '@ps-analysis-tool/common';
+import { getCookieKey, type TabCookies } from '@google-psat/common';
 
 /**
  * Internal dependencies.

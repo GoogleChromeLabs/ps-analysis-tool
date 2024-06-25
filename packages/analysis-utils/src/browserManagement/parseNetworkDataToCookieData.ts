@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { getDomain } from 'tldts';
-import { CookieData } from '@ps-analysis-tool/common';
+import { CookieData } from '@google-psat/common';
 import type { Page } from 'puppeteer';
 /**
  * Internal dependencies.

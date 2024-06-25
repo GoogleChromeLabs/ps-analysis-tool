@@ -24,7 +24,7 @@ module.exports = {
   rootDir: '../',
   transformIgnorePatterns: ['node_modules/(?!(p-queue|p-timeout))'],
   moduleNameMapper: {
-    '^@ps-analysis-tool\\/(.*)': '<rootDir>/packages/$1/src/',
+    '^@google-psat\\/(.*)': '<rootDir>/packages/$1/src/',
     '\\.svg': join(__dirname, '/svgMock.cjs'),
     '\\.css': join(__dirname, '/styleMock.cjs'),
     '\\.png': join(__dirname, '/imageMock.cjs'),

@@ -20,7 +20,7 @@ import {
   calculateEffectiveExpiryDate,
   type CookieData,
   getDomainFromUrl,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**

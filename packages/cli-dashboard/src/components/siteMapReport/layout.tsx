@@ -26,13 +26,13 @@ import {
   useSidebar,
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 import {
   type TabFrames,
   type CookieFrameStorageType,
   type CompleteJson,
   type LibraryData,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.

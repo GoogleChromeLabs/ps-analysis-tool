@@ -20,8 +20,8 @@ import {
   BLOCK_STATUS,
   CookieTableData,
   sanitizeCsvRecord,
-} from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('name'),

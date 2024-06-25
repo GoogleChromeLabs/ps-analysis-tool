@@ -16,11 +16,7 @@
 /**
  * External dependencies.
  */
-import type {
-  LibraryData,
-  TabCookies,
-  TabFrames,
-} from '@ps-analysis-tool/common';
+import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 
 /**

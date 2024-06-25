@@ -21,7 +21,7 @@ import {
   findAnalyticsMatch,
   type CookieData,
   type CookieDatabase,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**

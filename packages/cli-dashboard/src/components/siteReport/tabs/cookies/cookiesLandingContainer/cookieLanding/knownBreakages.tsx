@@ -17,16 +17,10 @@
  * External dependencies
  */
 import React from 'react';
-import type { LibraryData } from '@ps-analysis-tool/common';
-import {
-  COLOR_MAP,
-  CookiesLandingWrapper,
-} from '@ps-analysis-tool/design-system';
-import {
-  Libraries,
-  type AccordionProps,
-} from '@ps-analysis-tool/library-detection';
-import { I18n } from '@ps-analysis-tool/i18n';
+import type { LibraryData } from '@google-psat/common';
+import { COLOR_MAP, CookiesLandingWrapper } from '@google-psat/design-system';
+import { Libraries, type AccordionProps } from '@google-psat/library-detection';
+import { I18n } from '@google-psat/i18n';
 
 interface KnownBreakagesProps {
   libraryMatches: LibraryData;

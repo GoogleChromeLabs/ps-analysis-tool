@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import { getValueByKey } from '@ps-analysis-tool/common';
+import { getValueByKey } from '@google-psat/common';
 /**
  * Internal dependencies.
  */

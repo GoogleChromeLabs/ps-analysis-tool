@@ -19,13 +19,13 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
 import RowContextMenu from '../cookiesListing/rowContextMenu';
-import type { TableRow } from '@ps-analysis-tool/design-system';
+import type { TableRow } from '@google-psat/design-system';
 import SinonChrome from 'sinon-chrome';
 
 const rowContextMenuProp = {

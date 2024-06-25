@@ -25,12 +25,8 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
   InfoIcon,
-} from '@ps-analysis-tool/design-system';
-import type {
-  CookiesCount,
-  TabFrames,
-  DataMapping,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/design-system';
+import type { CookiesCount, TabFrames, DataMapping } from '@google-psat/common';
 
 interface ExemptedCookiesSectionProps {
   cookieStats: CookiesCount;

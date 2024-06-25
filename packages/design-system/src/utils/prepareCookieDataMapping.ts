@@ -20,8 +20,8 @@ import type {
   CookieStatsComponents,
   CookiesCount,
   DataMapping,
-} from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Calcualte insights about frames to be shown on cookies landing page.

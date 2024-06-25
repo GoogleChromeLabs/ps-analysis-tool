@@ -24,7 +24,7 @@ import {
   type CookieAnalytics,
   type CookieDatabase,
   RESPONSE_EVENT,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import { getDomain } from 'tldts';
 import type { Protocol } from 'devtools-protocol';
 

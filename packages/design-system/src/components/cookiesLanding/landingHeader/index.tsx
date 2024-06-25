@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { DataMapping } from '@ps-analysis-tool/common';
+import { DataMapping } from '@google-psat/common';
 import classnames from 'classnames';
 
 /**

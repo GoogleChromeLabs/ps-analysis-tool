@@ -29,9 +29,9 @@ import {
   evaluateStaticFilterValues,
   calculateExemptionReason,
   type TableRow,
-} from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
-import { type CookieTableData, BLOCK_STATUS } from '@ps-analysis-tool/common';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+import { type CookieTableData, BLOCK_STATUS } from '@google-psat/common';
 /**
  * Internal dependencies
  */

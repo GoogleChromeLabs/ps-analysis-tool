@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { type CookieDatabase } from '@ps-analysis-tool/common';
+import { type CookieDatabase } from '@google-psat/common';
 
 /**
  * Fetch dictionary from local data folder.

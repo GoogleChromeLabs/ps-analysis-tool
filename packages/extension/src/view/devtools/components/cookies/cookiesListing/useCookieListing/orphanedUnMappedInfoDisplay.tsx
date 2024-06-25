@@ -18,8 +18,8 @@
  * External dependencies.
  */
 import React from 'react';
-import { InfoIcon } from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
+import { InfoIcon } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies

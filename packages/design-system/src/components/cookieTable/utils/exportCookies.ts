@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { CookieTableData } from '@ps-analysis-tool/common';
+import { CookieTableData } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 
 /**

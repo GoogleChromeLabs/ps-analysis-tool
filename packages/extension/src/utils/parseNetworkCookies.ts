@@ -23,7 +23,7 @@ import {
   isFirstParty,
   type CookieData,
   type CookieDatabase,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Parse Network.responseReceivedExtraInfo for extra information about a cookie.
