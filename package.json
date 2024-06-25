@@ -143,6 +143,9 @@
 		"packages/*"
 	],
 	"overrides": {
-		"xml2js": "^0.5.0"
+		"xml2js": "^0.5.0",
+		"wappalyzer": {
+			"puppeteer": "^22.11.1"
+		}
 	}
 }
