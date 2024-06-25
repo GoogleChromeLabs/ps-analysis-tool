@@ -137,7 +137,7 @@ const saveResultsAsHTML = async (
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
   fs.writeFile(outDir + '/index.html', buffer, () =>
-    console.log(`Report:${URL.pathToFileURL(outFileFullDir)}`)
+    console.log(`Report: ${URL.pathToFileURL(outFileFullDir)}`)
   );
 };
 
