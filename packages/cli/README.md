@@ -65,9 +65,6 @@ Open the HTML file generated in the browser
 - To understand about cookie filters, check the [Cookie table](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Cookies-Table) section on our wiki.
 
 
-
-
-
 ## Contributing
 We're excited to accept your code improvements (patches) and ideas for this project! Whether you want to be a regular contributor or just tackle an issue you care about, we value your input.
 
@@ -78,5 +75,5 @@ To develop and contribute, Please check our [contribution guide](https://github.
 
 PSAT is available as a Chrome extension that allows you to do an analysis while interacting with websites.
 
-Installation: You can install the PSAT extension from the Chrome web store 
+Installation: You can install the PSAT extension from the [Chrome web store] (https://chromewebstore.google.com/detail/privacy-sandbox-analysis/ehbnpceebmgpanbbfckhoefhdibijkef)
 To run it: Visit the website you want to analyze, open Chrome DevTools, and select the Privacy Sandbox panel.
