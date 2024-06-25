@@ -28,6 +28,7 @@ module.exports = {
           fullySpecified: false,
           fallback: {
             fs: false,
+            path: false,
           },
         },
         use: [

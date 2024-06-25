@@ -18,6 +18,7 @@
  */
 import { existsSync, readFileSync } from 'fs';
 import { IntlMessageFormat } from 'intl-messageformat';
+import path from 'path';
 
 /**
  * Class representing Internationalization (i18n) functionality.
@@ -139,11 +140,19 @@ class I18n {
 
     for (const _locale of localeArray) {
       if (
-        existsSync(`packages/i18n/_locales/messages/${_locale}/messages.json`)
+        existsSync(
+          path.resolve(
+            __dirname +
+              `../../../i18n/_locales/messages/${_locale}/messages.json`
+          )
+        )
       ) {
         const messages = JSON.parse(
           readFileSync(
-            `packages/i18n/_locales/messages/${_locale}/messages.json`,
+            path.resolve(
+              __dirname +
+                `../../../i18n/_locales/messages/${_locale}/messages.json`
+            ),
             {
               encoding: 'utf-8',
             }
