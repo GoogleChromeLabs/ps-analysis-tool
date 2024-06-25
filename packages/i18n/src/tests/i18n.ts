@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import fs from 'fs';
+import path from 'path';
 
 /**
  * Internal dependencies.
@@ -86,12 +87,16 @@ describe('I18n', () => {
     await I18n.loadCLIMessagesData(locale);
 
     expect(existsSyncMock).toHaveBeenCalledWith(
-      'packages/i18n/_locales/messages/hi/messages.json'
+      path.resolve(
+        __dirname + `../../../../i18n/_locales/messages/hi/messages.json`
+      )
     );
     expect(existsSyncMock).toHaveBeenCalledTimes(1);
 
     expect(readFileSyncMock).toHaveBeenCalledWith(
-      'packages/i18n/_locales/messages/hi/messages.json',
+      path.resolve(
+        __dirname + `../../../../i18n/_locales/messages/hi/messages.json`
+      ),
       {
         encoding: 'utf-8',
       }

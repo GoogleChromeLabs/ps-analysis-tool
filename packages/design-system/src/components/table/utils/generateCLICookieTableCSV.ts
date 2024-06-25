@@ -48,7 +48,8 @@ const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
         : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
-      cookie.parsedCookie.samesite,
+      //@ts-ignore
+      cookie.parsedCookie?.sameSite ?? cookie.parsedCookie?.samesite,
       I18n.getMessage(
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),
