@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/common",
-  "version": "1.0.01",
+  "version": "1.0.2",
   "description": "A package for common utilities that are being used in multiple packages",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
