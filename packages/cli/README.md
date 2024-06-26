@@ -1,11 +1,15 @@
 ## Privacy Sandbox Analysis Tool CLI
 
-> The Privacy Sandbox Analysis Tool CLI is designed to help developers prepare their websites for the upcoming deprecation of third-party cookies (3PCD) in Chrome as part of the Privacy Sandbox initiative.
+<p align="center">
+<img src="https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/packages/extension/icons/icon.svg" height="100" width="100">
+</p>
+
+> The Privacy Sandbox Analysis Tool CLI is designed to help developers audit their websites for the upcoming deprecation of third-party cookies (3PCD) in Chrome as part of the Privacy Sandbox initiative.
 
 
-## Using the Node CLI
+## Using the CLI
 
-The PSAT CLI offers the most flexibility in configuration, execution, and reporting for maximum control and automation of third-party cookie audits. It's ideal for advanced users and automated workflows.
+PSAT CLI allows you to audit a single website or multiple websites using a sitemap or a CSV file, and generates a report that should help any user draft their future action items to prepare their website for third-party cookie depreciation.
 
 > Required Node Version: 18 or later
 
