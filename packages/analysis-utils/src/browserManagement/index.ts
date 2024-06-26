@@ -605,8 +605,9 @@ export class BrowserManagement {
         }
       })
     );
+    const mainFrameUrl = new URL(page.url()).origin;
 
-    return { [page.url()]: domQueryMatches };
+    return { [mainFrameUrl]: domQueryMatches };
   }
 
   async analyzeCookies(
