@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/cli",
-  "version": "1.0.0",
+  "version": "1.0.01",
   "description": "CLI tool for analysis",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",

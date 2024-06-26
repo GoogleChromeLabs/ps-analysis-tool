@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/report",
-  "version": "1.0.0",
+  "version": "1.0.01",
   "description": "Static HTML analysis report",
   "repository": {
     "type": "git",

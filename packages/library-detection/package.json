@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/library-detection",
-  "version": "1.0.0",
+  "version": "1.0.01",
   "description": "A package for detecting libraries for potential breakage",
   "main": "dist/index.js",
   "source": "src/index.ts",

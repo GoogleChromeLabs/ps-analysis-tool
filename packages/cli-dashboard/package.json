@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/cli-dashboard",
-  "version": "1.0.0",
+  "version": "1.0.01",
   "description": "Dashboard for visualizing cli analysis output",
   "author": {
     "name": "Google"

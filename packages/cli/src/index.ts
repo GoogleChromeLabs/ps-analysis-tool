@@ -55,7 +55,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('1.0.0')
+  .version('1.0.01')
   .description('CLI to test a URL for 3p cookies')
   .argument('[website-url]', 'The URL of website you want to analyse')
   .option('-u, --url <value>', 'URL of a site')
