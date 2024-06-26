@@ -8,7 +8,7 @@
 		"build-cli": "npm run cli-dashboard:build && npm run cli:build",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
 		"unpublish:all:local": "npm run unpublish:local --workspaces",
-		"publish:all:remote": "npm run build:all && npm run publish:local --workspaces",
+		"publish:all:remote": "npm run build:all && npm run publish:remote --workspaces",
 		"unpublish:all:remote": "npm run unpublish:remote --workspaces",
 		"i18n:prebuild": "npm run build:remove -w @google-psat/i18n",
 		"i18n:build": "npm run i18n:prebuild && npm run build -w @google-psat/i18n",
