@@ -19,8 +19,7 @@
     "unpublish:remote": "npm unpublish --registry=https://registry.npmjs.org --force"
   },
   "bin": {
-    "psat": "./dist/main.js",
-    "@google-psat/cli": "./dist/main.js"
+    "psat": "./dist/main.js"
   },
   "publishConfig": {
     "access": "public"
