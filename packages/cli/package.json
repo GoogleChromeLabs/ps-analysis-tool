@@ -4,6 +4,7 @@
   "description": "CLI tool for analysis",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
+  "keywords": ["psat", "privacy sandbox", "google", "chrome", "3pcd"],
   "files": [
     "assets",
     "dist",
