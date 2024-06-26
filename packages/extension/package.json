@@ -10,7 +10,11 @@
   "scripts": {
     "dev": "webpack --config ../../extension.webpack.config.cjs --watch",
     "build": "npm run build:remove && webpack --config ../../extension.webpack.config.cjs",
-    "build:remove": "rimraf ../../dist/extension"
+    "build:remove": "rimraf ../../dist/extension",
+    "publish:local": "",
+    "publish:remote": "",
+    "unpublish:local": "",
+    "unpublish:remote": ""
   },
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

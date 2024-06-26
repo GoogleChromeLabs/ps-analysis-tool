@@ -4,6 +4,10 @@
   "description": "",
   "main": "src/index.cjs",
   "scripts": {
+    "publish:local": "",
+    "publish:remote": "",
+    "unpublish:local": "",
+    "unpublish:remote": ""
   },
   "repository": {
     "type": "git",
