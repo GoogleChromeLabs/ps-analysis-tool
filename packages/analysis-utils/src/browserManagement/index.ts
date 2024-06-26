@@ -666,7 +666,13 @@ export class BrowserManagement {
     const mainFrameUrlIdMap = await this.getMainframeIds();
 
     Object.entries(mainFrameUrlIdMap).forEach(([_url, id]) => {
-      this.pageFrames[_url][id] = '0';
+      if (!this.pageFrames[_url]) {
+        this.pageFrames[_url] = {
+          [id]: '0',
+        };
+      } else {
+        this.pageFrames[_url][id] = '0';
+      }
     });
 
     const result = await Promise.all(
