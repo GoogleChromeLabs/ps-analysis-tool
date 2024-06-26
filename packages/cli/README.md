@@ -1,6 +1,6 @@
 ## Privacy Sandbox Analysis Tool CLI
 
-> The Privacy Sandbox Analysis Tool CLI aims to empower developers to prepare their sites/applications for the upcoming deprecation of Third-party Cookies (3PC) on Chrome as part of the Privacy Sandbox initiative.
+> The Privacy Sandbox Analysis Tool CLI is designed to help developers prepare their websites for the upcoming deprecation of third-party cookies (3PCD) in Chrome as part of the Privacy Sandbox initiative.
 
 
 ## Using the Node CLI
