@@ -65,7 +65,6 @@ describe('I18n', () => {
 
     expect(result).toEqual(messages);
   });
-
   it('should load CLI messages data', async () => {
     const existsSyncMock = jest.spyOn(fs, 'existsSync');
     const readFileSyncMock = jest.spyOn(fs, 'readFileSync');
@@ -86,17 +85,14 @@ describe('I18n', () => {
     readFileSyncMock.mockReturnValueOnce(JSON.stringify(messages));
     await I18n.loadCLIMessagesData(locale);
 
-    expect(existsSyncMock).toHaveBeenCalledWith(
-      path.resolve(
-        __dirname + `../../../../i18n/_locales/messages/hi/messages.json`
-      )
+    expect(existsSyncMock).toHaveBeenNthCalledWith(
+      2,
+      path.resolve(__dirname + `../../../_locales/messages/hi/messages.json`)
     );
-    expect(existsSyncMock).toHaveBeenCalledTimes(1);
+    expect(existsSyncMock).toHaveBeenCalledTimes(2);
 
     expect(readFileSyncMock).toHaveBeenCalledWith(
-      path.resolve(
-        __dirname + `../../../../i18n/_locales/messages/hi/messages.json`
-      ),
+      path.resolve(__dirname + `../../../_locales/messages/hi/messages.json`),
       {
         encoding: 'utf-8',
       }

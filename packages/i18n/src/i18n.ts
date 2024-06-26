@@ -139,24 +139,30 @@ class I18n {
     const localeArray = this.createLocaleArray(locale);
 
     for (const _locale of localeArray) {
+      let localePath = '';
       if (
         existsSync(
           path.resolve(
             __dirname +
-              `../../../i18n/_locales/messages/${_locale}/messages.json`
+              `../../node_modules/@google-psat/i18n/_locales/messages/${_locale}/messages.json`
           )
         )
       ) {
+        localePath = path.resolve(
+          __dirname +
+            `../../node_modules/@google-psat/i18n/_locales/messages/${_locale}/messages.json`
+        );
+      } else {
+        localePath = path.resolve(
+          __dirname + `../../../i18n/_locales/messages/${_locale}/messages.json`
+        );
+      }
+
+      if (existsSync(localePath)) {
         const messages = JSON.parse(
-          readFileSync(
-            path.resolve(
-              __dirname +
-                `../../../i18n/_locales/messages/${_locale}/messages.json`
-            ),
-            {
-              encoding: 'utf-8',
-            }
-          )
+          readFileSync(localePath, {
+            encoding: 'utf-8',
+          })
         );
 
         this.initMessages(messages);
