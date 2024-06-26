@@ -388,6 +388,9 @@
 * Add website hostname as prefix to cookie table CSV https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/700
 * Fix: Report throwing error when downloaded from CLI. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/709
 * CLI: Add ability to catch exempted cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/712
+* Fix: `Samesite` value in cookie table CSV https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/726
+* CLI: Fix missing frame key in the page frames hash map https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/728
+* Fix: Paths for CLI to work on global as well as local installation https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/727 
 
 ## Others
 * Add `chrome-pat` and `chrome-pat-ps` commands to test Private Advertising https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/706
