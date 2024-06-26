@@ -19,7 +19,7 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { ensureFile, writeFile } from 'fs-extra';
+import { existsSync, ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import fs from 'fs';
@@ -103,15 +103,56 @@ const saveResultsAsHTML = async (
   result: CompleteJson | CompleteJson[],
   isSiteMap: boolean
 ) => {
-  const htmlText = fs.readFileSync(
-    path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
-    'utf-8'
-  );
+  let htmlText = '';
+  let reportHTML = '';
 
-  const reportHTML = fs.readFileSync(
-    path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
-    'base64'
-  );
+  if (
+    existsSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/index.html'
+      )
+    )
+  ) {
+    htmlText = fs.readFileSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/index.html'
+      ),
+      'utf-8'
+    );
+
+    reportHTML = fs.readFileSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/report/index.html'
+      ),
+      'base64'
+    );
+
+    fs.copyFileSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
+      ),
+      outDir + '/index.js'
+    );
+  } else {
+    htmlText = fs.readFileSync(
+      path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
+      'utf-8'
+    );
+
+    reportHTML = fs.readFileSync(
+      path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
+      'base64'
+    );
+
+    fs.copyFileSync(
+      path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+      outDir + '/index.js'
+    );
+  }
 
   const messages = I18n.getMessages();
 
@@ -126,11 +167,6 @@ const saveResultsAsHTML = async (
       translations: messages,
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
-
-  fs.copyFileSync(
-    path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
-    outDir + '/index.js'
-  );
 
   const outFileFullDir = path.resolve(outDir + '/index.html');
   const htmlBlob = new Blob([html]);
