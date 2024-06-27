@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { ContentPanel, LandingPage } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
@@ -56,7 +57,7 @@ const content = [
 const AntiCovertTracking = () => {
   return (
     <LandingPage
-      title="Tracking Protection"
+      title={I18n.getMessage('trackingProtection')}
       extraClasses="min-h-[78vh] w-full"
       contentPanel={
         <ContentPanel

@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { ContentPanel, LandingPage } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
@@ -50,7 +51,7 @@ const content = [
 const PrivateAdvertising = () => {
   return (
     <LandingPage
-      title="Private Advertising"
+      title={I18n.getMessage('privateAdvertising')}
       extraClasses="min-h-[78vh] w-full"
       contentPanel={
         <ContentPanel

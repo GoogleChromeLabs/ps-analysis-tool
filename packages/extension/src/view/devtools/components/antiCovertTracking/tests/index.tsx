@@ -30,6 +30,7 @@ import AntiCovertTracking from '../antiCovertTracking';
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { act } from 'react-dom/test-utils';
+import { I18n } from '@google-psat/i18n';
 
 describe('AntiCovertTracking Landing Pages', () => {
   beforeAll(() => {
@@ -43,6 +44,14 @@ describe('AntiCovertTracking Landing Pages', () => {
         text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
+
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      trackingProtection: {
+        message: 'Tracking Protection',
+      },
+    });
   });
 
   it('should render BounceTracking', async () => {
@@ -68,6 +77,8 @@ describe('AntiCovertTracking Landing Pages', () => {
     act(() => {
       render(<AntiCovertTracking />);
     });
-    expect(await screen.findByText('Tracking Protection')).toBeInTheDocument();
+    expect(
+      await screen.findByText(I18n.getMessage('trackingProtection'))
+    ).toBeInTheDocument();
   });
 });
