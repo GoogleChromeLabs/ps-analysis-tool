@@ -18,39 +18,44 @@
  * Internal dependencies.
  */
 import React from 'react';
-import { PSTimelineIcon } from '@ps-analysis-tool/design-system';
-import { addUTMParams } from '@ps-analysis-tool/common';
-
-/**
- * Internal dependencies.
- */
-import Link from './link';
+import { PSTimelineIcon } from '@google-psat/design-system';
+import { addUTMParams } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 const RestrictionInfoContainer = () => (
   <div className="flex flex-col w-full text-sm text-raisin-black dark:text-bright-gray mb-7">
-    <p className="mb-7">
-      To facilitate testing,{' '}
-      <Link
-        href={addUTMParams(
-          'https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan'
-        )}
-        title="Chrome has restricted third-party cookies by default for 1% of users."
-      />
-    </p>
+    <p
+      className="mb-7"
+      dangerouslySetInnerHTML={{
+        __html: I18n.getMessage('facilitateTesting', [
+          `<a 
+						className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+						target="_blank"
+						rel="noreferrer"
+						href="${addUTMParams(
+              'https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan'
+            )}">`,
+          '</a>',
+        ]),
+      }}
+    />
     <div className="w-full grid place-items-center mb-6">
       <PSTimelineIcon className="scale-125" />
     </div>
-    <p>
-      During this testing period, it is important for sites and services to{' '}
-      <Link
-        href={addUTMParams(
+    <p
+      dangerouslySetInnerHTML={{
+        __html: I18n.getMessage('faciliatedTestingPeriod', [
+          `<a 
+				className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+				target="_blank"
+				rel="noreferrer"
+				href="${addUTMParams(
           'https://developers.google.com/privacy-sandbox/3pcd/prepare/audit-cookies'
-        )}
-        title="start preparing"
-      />{' '}
-      for third-party cookie restrictions, including moving to more private
-      alternatives.
-    </p>
+        )}">`,
+          '</a>',
+        ]),
+      }}
+    />
   </div>
 );
 

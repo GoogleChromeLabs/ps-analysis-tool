@@ -1,10 +1,10 @@
 {
-  "name": "@ps-analysis-tool/i18n",
-  "version": "0.8.0",
+  "name": "@google-psat/i18n",
+  "version": "0.9.0-2",
   "description": "A package that handles internationalization and localization.",
-  "main": "./dist/index.js",
-  "types": "./dist-types/index.d.ts",
-  "source": "./src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
+  "source": "src/index.ts",
   "customExports": {
     ".": {
       "default": "./src/index.ts"
@@ -12,13 +12,24 @@
   },
   "scripts": {
     "build": "tsc --build",
-    "dev": "tsc-watch --build"
+    "dev": "tsc-watch --build",
+    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm unpublish --registry=https://registry.npmjs.org --force"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+    "directory": "packages/i18n"
   },
-  "author": "",
+  "author": {
+    "name": "Google"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

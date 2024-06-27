@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
+import { I18n } from '@google-psat/i18n';
 import evaluateSelectAllOption from '../evaluateSelectAllOption';
 
 describe('evaluateSelectAllOption', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      selectAll: {
+        message: 'All',
+      },
+    });
+  });
+
   it('should return true if the first option is "All"', () => {
     // Arrange
     const filterKey = 'blockedReasons';
@@ -29,7 +40,7 @@ describe('evaluateSelectAllOption', () => {
 
     const result = evaluateSelectAllOption(
       filterKey,
-      undefined,
+      {},
       clearActivePanelQuery
     );
 

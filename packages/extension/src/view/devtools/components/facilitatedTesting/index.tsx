@@ -18,7 +18,8 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import { I18n } from '@google-psat/i18n';
+import { LandingPage } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -28,7 +29,7 @@ import FacilitatedTestingContent from './faciliatedTestingContent';
 const FacilitatedTesting = () => (
   <div data-testid="facilitated-testing-content" className="h-full w-full">
     <LandingPage
-      title="Facilitated Testing"
+      title={I18n.getMessage('facilitatedTesting')}
       contentPanel={<FacilitatedTestingContent />}
       extraClasses="2xl:max-w-6xl xl:max-w-4xl max-w-2xl h-fit"
     />

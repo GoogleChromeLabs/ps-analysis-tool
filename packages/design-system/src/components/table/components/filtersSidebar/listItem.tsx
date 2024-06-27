@@ -17,13 +17,14 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowDown, InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
 import SubList from './subList';
 import { TableFilter } from '../../useTable';
+import { ArrowDown, InfoIcon } from '../../../../icons';
 
 interface ListItemProps {
   filter: TableFilter[keyof TableFilter];
@@ -128,7 +129,7 @@ const ListItem = ({
               className="text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
               href="#"
             >
-              {isExpanded ? 'Show Less' : 'Show More'}
+              {I18n.getMessage(isExpanded ? 'showLess' : 'showMore')}
             </a>
           )}
         </>

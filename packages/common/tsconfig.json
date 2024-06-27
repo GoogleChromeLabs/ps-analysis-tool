@@ -12,5 +12,6 @@
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"]
+  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
+  "references": [{ "path": "../i18n" }]
 }

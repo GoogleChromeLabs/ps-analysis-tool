@@ -20,8 +20,9 @@ import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
-import { noop } from '@ps-analysis-tool/common';
-import { useTablePersistentSettingsStore } from '@ps-analysis-tool/design-system';
+import { noop } from '@google-psat/common';
+import { useTablePersistentSettingsStore } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -165,6 +166,13 @@ describe('App', () => {
           }),
       });
     } as unknown as typeof fetch;
+
+    I18n.initMessages({
+      refreshPanel: {
+        message: 'Refresh Panel',
+      },
+    });
+    globalThis.chrome.i18n = null;
   });
 
   it('Should show cookie table if frame is selected', async () => {
@@ -225,7 +233,7 @@ describe('App', () => {
       render(<App />);
     });
 
-    expect(await screen.findByText('Refresh panel')).toBeInTheDocument();
+    expect(await screen.findByText('Refresh Panel')).toBeInTheDocument();
   });
 
   afterAll(() => {

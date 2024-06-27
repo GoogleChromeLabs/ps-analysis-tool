@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
@@ -21,8 +25,53 @@ import generateSummaryDataCSV from '../generateSummaryDataCSV';
 import { mockData1 } from './data.mock';
 
 describe('generateSummaryDataCSV', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      totalCookies: {
+        message: 'Total Cookies',
+      },
+      totalFirstPartyCookies: {
+        message: 'Total First Party Cookies',
+      },
+      totalThirdPartyCookies: {
+        message: 'Total Third Party Cookies',
+      },
+      analyticsCookies: {
+        message: 'Analytics Cookies',
+      },
+      functionalCookies: {
+        message: 'Functional Cookies',
+      },
+      marketingCookies: {
+        message: 'Marketing Cookies',
+      },
+      uncategorizedCookies: {
+        message: 'Uncategorised Cookies',
+      },
+      cookiesWithIssues: {
+        message: 'Cookies With Issues',
+      },
+      analyticsCookiesWithIssues: {
+        message: 'Analytics Cookies With Issues',
+      },
+      functionalCookiesWithIssues: {
+        message: 'Functional Cookies With Issues',
+      },
+      marketingCookiesWithIssues: {
+        message: 'Marketing Cookies With Issues',
+      },
+      uncategorisedCookiesWithIssues: {
+        message: 'Uncategorised Cookies With Issues',
+      },
+    });
+  });
+
   it('should create CSV string for summary data', () => {
     const CSVString = generateSummaryDataCSV(mockData1);
+
+    console.log(CSVString);
 
     expect(CSVString.split('\r\n').filter((str) => str).length).toBe(12);
   });

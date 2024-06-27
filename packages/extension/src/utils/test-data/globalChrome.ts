@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
-import { noop } from '@ps-analysis-tool/common';
+import { noop } from '@google-psat/common';
 
 export default {
   ...SinonChrome,

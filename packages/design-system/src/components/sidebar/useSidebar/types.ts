@@ -20,7 +20,7 @@ export type SidebarComponent = {
 };
 
 export type SidebarItemValue = {
-  title: string;
+  title: (() => string) | string;
   children: SidebarItems;
   popupTitle?: string;
   infoIconDescription?: string;

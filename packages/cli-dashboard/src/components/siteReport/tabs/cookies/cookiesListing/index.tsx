@@ -19,8 +19,8 @@
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import { CookieDetails, CookieTable } from '@google-psat/design-system';
+import { type CookieTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -45,8 +45,9 @@ const CookiesListing = ({
     [frame: string]: CookieTableData | null;
   } | null>(null);
 
-  const { tabCookies } = useContentStore(({ state }) => ({
+  const { tabCookies, path } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
+    path: state.path,
   }));
 
   const cookies = useMemo(
@@ -66,7 +67,7 @@ const CookiesListing = ({
   } = useCookieListing(
     Object.values(tabCookies),
     selectedFrameUrl,
-    'cookiesListing',
+    'cookiesListing' + selectedSite,
     selectedSite
   );
 
@@ -94,6 +95,8 @@ const CookiesListing = ({
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           isFiltersSidebarOpen={isSidebarOpen}
+          isCLI
+          hostname={path}
         />
       </Resizable>
       <CookieDetails

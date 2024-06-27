@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
-import { emptyAnalytics } from '@ps-analysis-tool/common';
+import { emptyAnalytics } from '@google-psat/common';
 /**
  * Internal dependencies.
  */

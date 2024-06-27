@@ -16,11 +16,7 @@
 /**
  * External dependencies.
  */
-import type {
-  LibraryData,
-  TabCookies,
-  TabFrames,
-} from '@ps-analysis-tool/common';
+import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 
 /**
@@ -48,7 +44,7 @@ export default async function downloadReport(
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateReportObject(
+  const reportData = await generateReportObject(
     tabCookies,
     tabFrames,
     libraryMatches,

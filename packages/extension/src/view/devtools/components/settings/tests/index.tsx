@@ -20,7 +20,7 @@ import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
-import { noop } from '@ps-analysis-tool/common';
+import { noop } from '@google-psat/common';
 /**
  * Internal dependencies
  */

@@ -17,7 +17,8 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -29,7 +30,7 @@ const RelatedWebsiteSets = () => {
   return (
     <div data-testid="related-website-sets-content" className="h-full w-full">
       <LandingPage
-        title="Related Website Sets"
+        title={I18n.getMessage('rws')}
         psInfoKey={PSInfoKey.RelatedWebsiteSets}
         extraClasses="max-w-2xl h-fit"
       >

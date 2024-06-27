@@ -25,7 +25,7 @@ import '@testing-library/jest-dom';
  */
 import SettingsContainer from '../settingsContainer';
 import { useSettings } from '../../../../stateProviders';
-import { noop } from '@ps-analysis-tool/common';
+import { noop } from '@google-psat/common';
 
 jest.mock('../../../../stateProviders', () => ({
   useSettings: jest.fn(),

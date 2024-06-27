@@ -9,7 +9,7 @@
     "declarationDir": "dist-types",
     "composite": true,
     "strict": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "esModuleInterop": true,
     "moduleResolution": "node"
   },

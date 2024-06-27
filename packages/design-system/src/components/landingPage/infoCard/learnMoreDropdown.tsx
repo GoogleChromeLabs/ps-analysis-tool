@@ -18,7 +18,8 @@
  * External dependencies.
  */
 import React from 'react';
-import { addUTMParams } from '@ps-analysis-tool/common';
+import { addUTMParams } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -33,20 +34,29 @@ import RenderLink from './renderLink';
  */
 const LABELS = [
   {
-    label: 'Proposal',
-    linkLabel: 'Public explanation for the proposed solution (Chrome)',
+    label: 'proposal',
+    linkLabel: 'proposalNote',
+    useI18n: true,
   },
   {
-    label: 'Public Discussion',
-    linkLabel: 'Public questions and feedback about the proposal',
+    label: 'Public Explainer',
+    linkLabel: 'Implementation explainer',
+    useI18n: false,
   },
   {
-    label: 'Video Overview',
-    linkLabel: 'Short summary video',
+    label: 'publicDiscussion',
+    linkLabel: 'publicDiscussionNote',
+    useI18n: true,
   },
   {
-    label: 'Dev Documentation',
-    linkLabel: 'Developer documentation',
+    label: 'videoOverview',
+    linkLabel: 'videoOverviewNote',
+    useI18n: true,
+  },
+  {
+    label: 'devDocumentation',
+    linkLabel: 'devDocumentationNote',
+    useI18n: true,
   },
 ];
 
@@ -56,7 +66,13 @@ interface LearnMoreDropdownProps {
 }
 
 const LearnMoreDropdown = ({
-  PSInfo: { proposal, publicDiscussion, videoOverview, devDocumentation },
+  PSInfo: {
+    proposal,
+    publicExplainer,
+    publicDiscussion,
+    videoOverview,
+    devDocumentation,
+  },
 }: LearnMoreDropdownProps) => {
   return (
     <>
@@ -65,22 +81,40 @@ const LearnMoreDropdown = ({
           role="list"
           className="divide-y divide-gray-200 dark:divide-gray-500"
         >
-          {[proposal, publicDiscussion, videoOverview, devDocumentation].map(
-            (value, index) => (
+          {[
+            proposal,
+            publicExplainer,
+            publicDiscussion,
+            videoOverview,
+            devDocumentation,
+          ].map((value, index) => {
+            if (!value) {
+              return null;
+            }
+
+            const label = LABELS[index].useI18n
+              ? I18n.getMessage(LABELS[index].label)
+              : LABELS[index].label;
+
+            const linkLabel = LABELS[index].useI18n
+              ? I18n.getMessage(LABELS[index].linkLabel)
+              : LABELS[index].linkLabel;
+
+            return (
               <RenderLink
                 key={index}
                 link={
-                  value.startsWith('https://developers.google.com') ||
-                  value.startsWith('https://www.youtube.com') ||
-                  value.startsWith('https://youtu.be/')
+                  value?.startsWith('https://developers.google.com') ||
+                  value?.startsWith('https://www.youtube.com') ||
+                  value?.startsWith('https://youtu.be/')
                     ? addUTMParams(value)
                     : value
                 }
-                label={LABELS[index].label}
-                linkLabel={LABELS[index].linkLabel}
+                label={label}
+                linkLabel={linkLabel}
               />
-            )
-          )}
+            );
+          })}
         </ul>
       </div>
     </>

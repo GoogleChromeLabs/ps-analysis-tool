@@ -23,7 +23,9 @@ import {
   prepareFrameStatsComponent,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { getLegendDescription } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -38,10 +40,11 @@ const FramesSection = () => {
   const framesStats = prepareFrameStatsComponent(tabFrames, tabCookies);
   const dataComponents: MatrixComponentProps[] = framesStats.legend.map(
     (component) => {
-      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      const legendDescription =
+        LEGEND_DESCRIPTION[component.descriptionKey] || '';
       return {
         ...component,
-        description: legendDescription,
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
       };
@@ -54,9 +57,9 @@ const FramesSection = () => {
       testId="frames-insights"
     >
       <MatrixContainer
-        title="Frames"
+        title={I18n.getMessage('frames')}
         matrixData={dataComponents}
-        infoIconTitle="The details regarding frames and associated cookies in this page."
+        infoIconTitle={I18n.getMessage('framesNote')}
       />
     </CookiesLandingWrapper>
   );

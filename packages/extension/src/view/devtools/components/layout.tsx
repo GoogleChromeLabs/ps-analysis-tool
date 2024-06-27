@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { type CookieTableData } from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@google-psat/common';
 import {
   Sidebar,
   useSidebar,
@@ -28,8 +28,9 @@ import {
   InspectButton,
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -104,7 +105,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].children = Object.keys(
         tabFrames || {}
       ).reduce<SidebarItems>((acc, url) => {
-        const popupTitle = `Cookies used by frames from ${url}`;
+        const popupTitle = I18n.getMessage('cookiesUsedByFrame', [url]);
 
         acc[url] = {
           title: url,
@@ -187,7 +188,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const lastUrl = useRef(tabUrl);
 
   useEffect(() => {
-    if (lastUrl.current === tabUrl || lastUrl.current === null) {
+    if (
+      lastUrl.current === null ||
+      new URL(lastUrl.current).hostname === new URL(tabUrl || '').hostname
+    ) {
       lastUrl.current = tabUrl;
       return;
     }
@@ -241,7 +245,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
             />

@@ -22,7 +22,9 @@ import {
   type TabFrames,
   Legend,
   filterFramesWithCookies,
-} from '@ps-analysis-tool/common';
+  getLegendDescription,
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -52,7 +54,7 @@ const CookiesMatrix = ({
   tabCookies,
   tabFrames,
   componentData = [],
-  title = 'Categories',
+  title = I18n.getMessage('categories'),
   description = '',
   showHorizontalMatrix = true,
   showMatrix = true,
@@ -67,12 +69,12 @@ const CookiesMatrix = ({
   const dataComponents: MatrixComponentProps[] = [];
 
   componentData.forEach((component) => {
-    const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+    const legendDescription =
+      LEGEND_DESCRIPTION[component.descriptionKey || component.label] || '';
     dataComponents.push({
       ...component,
-      description: legendDescription,
+      description: getLegendDescription(legendDescription),
       title: component.label,
-      containerClasses: '',
     });
   });
 
@@ -83,14 +85,15 @@ const CookiesMatrix = ({
     ? matrixHorizontalData
     : [
         {
-          title: 'Number of Frames',
-          description: 'Number of unique frames found across the page(s).',
+          title: I18n.getMessage('numberOfFrames'),
+          description: I18n.getMessage('numberOfFramesNote'),
           count: totalFrames,
         },
         {
-          title: 'Number of Frames with Associated Cookies',
-          description:
-            'Unique frames across the page(s) that have cookies associated with them.',
+          title: I18n.getMessage('numberOfFramesWithAssociatedCookies'),
+          description: I18n.getMessage(
+            'numberOfFramesWithAssociatedCookiesNote'
+          ),
           count: associatedCookiesCount
             ? associatedCookiesCount
             : framesWithCookies

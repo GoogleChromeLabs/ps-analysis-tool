@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -38,7 +39,7 @@ const InspectButton = ({
 
   return (
     <span
-      title="Hover over the iframes on the page or select frames below to inspect them."
+      title={I18n.getMessage('hoverOverIframes')}
       onClick={() => {
         setIsInspecting(!isInspecting);
       }}

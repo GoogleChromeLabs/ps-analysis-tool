@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 
-export { default as generateCookieTableCSV } from './generateCookieTableCSV';
+export { default as generateCLICookieTableCSV } from './generateCLICookieTableCSV';
+export { default as generateExtensionCookieTableCSV } from './generatExtensionCookietableCSV';
 export * from './precalculatedFiltersUtils';

@@ -15,10 +15,6 @@
  */
 
 /**
- * External dependencies
- */
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
-/**
  * Internal dependencies
  */
 import extractReportData from '../extractReportData';
@@ -27,103 +23,13 @@ import { tempMultiPageData } from './data.mock';
 describe('extractReportData', () => {
   it('should return an empty object if no cookies are present', () => {
     expect(extractReportData([])).toEqual({
-      cookies: {},
-      technologies: [],
       landingPageCookies: {},
+      consolidatedLibraryMatches: {},
     });
   });
 
   it('should return an object with the cookies', () => {
     expect(extractReportData(tempMultiPageData)).toEqual({
-      cookies: {
-        'https://edition.cnn.com': {
-          ['countryCode:.cnn.com:/https://www.cnn.com/index.html']: {
-            parsedCookie: {
-              name: 'countryCode',
-              domain: '.cnn.com',
-              path: '/',
-              value: 'IN',
-              sameSite: 'None',
-              expires: 'Session',
-              httpOnly: false,
-              secure: true,
-            },
-            analytics: {
-              platform: 'Unknown',
-              category: 'Uncategorized',
-              GDPR: '',
-              description: '',
-            },
-            url: '',
-            pageUrl: 'https://www.cnn.com/index.html',
-            isBlocked: false,
-            blockedReasons: ['ThirdPartyPhaseout'],
-            isFirstParty: true,
-          },
-          ['countryCode:.cnn.com:/https://edition.cnn.com/index.html']: {
-            parsedCookie: {
-              name: 'countryCode',
-              domain: '.cnn.com',
-              path: '/',
-              value: 'IN',
-              sameSite: 'None',
-              expires: 'Session',
-              httpOnly: false,
-              secure: true,
-            },
-            analytics: {
-              platform: 'Unknown',
-              category: 'Uncategorized',
-              GDPR: '',
-              description: '',
-            },
-            url: '',
-            pageUrl: 'https://edition.cnn.com/index.html',
-            isBlocked: false,
-            isFirstParty: true,
-            blockedReasons: ['ExcludeDomainNonASCII'],
-          },
-        },
-        [UNKNOWN_FRAME_KEY]: {},
-      },
-      technologies: [
-        {
-          pageUrl: 'https://www.cnn.com/index.html',
-          slug: 'varnish',
-          name: 'Varnish',
-          description: 'Varnish is a reverse caching proxy.',
-          confidence: 100,
-          version: null,
-          icon: 'Varnish.svg',
-          website: 'https://www.varnish-cache.org',
-          cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
-          categories: [
-            {
-              id: 23,
-              slug: 'caching',
-              name: 'Caching',
-            },
-          ],
-        },
-        {
-          pageUrl: 'https://edition.cnn.com/index.html',
-          slug: 'varnish',
-          name: 'Varnish',
-          description: 'Varnish is a reverse caching proxy.',
-          confidence: 100,
-          version: null,
-          icon: 'Varnish.svg',
-          website: 'https://www.varnish-cache.org',
-          cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
-          categories: [
-            {
-              id: 23,
-              slug: 'caching',
-              name: 'Caching',
-            },
-          ],
-        },
-      ],
       landingPageCookies: {
         'https://edition.cnn.com': {
           ['countryCode:.cnn.com:/']: {
@@ -146,11 +52,14 @@ describe('extractReportData', () => {
             url: '',
             pageUrl: 'https://edition.cnn.com/index.html',
             isBlocked: false,
-            blockedReasons: ['ThirdPartyPhaseout', 'ExcludeDomainNonASCII'],
+            blockedReasons: ['ThirdPartyPhaseout'],
             isFirstParty: true,
           },
         },
-        [UNKNOWN_FRAME_KEY]: {},
+      },
+      consolidatedLibraryMatches: {
+        'https://edition.cnn.com/index.html': {},
+        'https://www.cnn.com/index.html': {},
       },
     });
   });

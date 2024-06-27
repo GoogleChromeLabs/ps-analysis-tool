@@ -13,24 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//out/win-Debug/gen/third_party/devtools-frontend/src/front_end/core/sdk/NetworkRequest.js
 const CookieBlockedReason = {
-  SecureOnly: `<p>This cookie was blocked because it had the 'Secure' attribute and the connection was not secure.</p><br />`,
-  NotOnPath: `<p>This cookie was blocked because its path was not an exact match for, or a superdirectory of, the request URL's path.</p><br />`,
-  DomainMismatch: `<p>This cookie was blocked because the request URL's domain did not exactly match the cookie's domain, nor was the request URL's domain a subdomain of the cookie's Domain attribute value.</p><br />`,
-  SameSiteStrict: `<p>This cookie was blocked because it had the <code>SameSite=Strict</code> attribute and the request was made from a different site. This includes top-level navigation requests initiated by other sites.</p><br />`,
-  SameSiteLax: `<p>This cookie was blocked because it had the <code>SameSite=Lax</code> attribute and the request was made from a different site and was not initiated by a top-level navigation.</p><br />`,
-  SameSiteUnspecifiedTreatedAsLax: `<p>This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to <code>SameSite=Lax</code>, and was blocked because the request was made from a different site and was not initiated by a top-level navigation. The cookie had to have been set with <code>SameSite=None</code> to enable cross-site usage.</p><br />`,
-  SameSiteNoneInsecure: `This cookie was blocked because it had the <code>SameSite=None</code> attribute but was not marked 'Secure'. Cookies without SameSite restrictions must be marked 'Secure' and sent over a secure connection.</p><br />`,
-  UserPreferences: `<p>This cookie was blocked due to user preferences.</p><br />`,
-  ThirdPartyPhaseout: `<p>Prepare for phasing out third-party cookies.</p><br />`,
-  ThirdPartyBlockedInFirstPartySet: `<p>The cookie was blocked by third-party cookie blocking between sites in the same First-Party Set.</p><br />`,
-  UnknownError: `<p>Unknown error.</p><br />`,
-  SchemefulSameSiteStrict: `<p>This cookie was blocked because it had the <code>SameSite=Strict</code> attribute but the request was cross-site. This includes top-level navigation requests initiated by other sites. This request is considered cross-site because the URL has a different scheme than the current site.</p><br />`,
-  SchemefulSameSiteLax: `<p>This cookie was blocked because it had the <code>SameSite=Lax</code> attribute but the request was cross-site and was not initiated by a top-level navigation. This request is considered cross-site because the URL has a different scheme than the current site.</p><br />`,
-  SchemefulSameSiteUnspecifiedTreatedAsLax: `<p>This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to <code>SameSite=Lax</code>, and was blocked because the request was cross-site and was not initiated by a top-level navigation. This request is considered cross-site because the URL has a different scheme than the current site.</p><br />`,
-  SamePartyFromCrossPartyContext: `<p>This cookie was blocked because it had the 'SameParty' attribute but the request was cross-party. The request was considered cross-party because the domain of the resource's URL and the domains of the resource's enclosing frames/documents are neither owners nor members in the same first-party set.</p><br />`,
-  NameValuePairExceedsMaxSize: `<p>This cookie was blocked because it was too large. The combined size of the name and value must be less than or equal to 4,096 characters.</p><br />`,
-  InvalidDomain: `<p>This attempt to set a cookie via 'Set-Cookie' header was blocked because its Domain value was invalid with regards to the current host url.</p><br />`,
+  SecureOnly: ['body_SecureOnly'],
+  NotOnPath: ['body_NotOnPath'],
+  DomainMismatch: ['body_DomainMismatch'],
+  SameSiteStrict: ['body_SameSiteStrict'],
+  SameSiteUnspecifiedTreatedAsLax: ['body_SameSiteUnspecifiedTreatedAsLax'],
+  SameSiteNoneInsecure: ['body_SameSiteNoneInsecure'],
+  UserPreferences: ['body_UserPreferences'],
+  ThirdPartyPhaseout: ['body_ThirdPartyPhaseout'],
+  ThirdPartyBlockedInFirstPartySet: ['body_ThirdPartyBlockedInFirstPartySet'],
+  UnknownError: ['body_UnknownError'],
+  SchemefulSameSiteStrict: ['body_SchemefulSameSiteStrict'],
+  SchemefulSameSiteLax: ['body_SchemefulSameSiteLax'],
+  SchemefulSameSiteUnspecifiedTreatedAsLax: [
+    'body_SchemefulSameSiteUnspecifiedTreatedAsLax',
+  ],
+  SamePartyFromCrossPartyContext: ['body_SamePartyFromCrossPartyContext'],
+  NameValuePairExceedsMaxSize: ['body_NameValuePairExceedsMaxSize'],
+  InvalidDomain: ['body_InvalidDomain'],
+  SameSiteLax:
+    "This cookie was blocked because it had the 'SameSite=Lax' attribute and the request was made from a different site and was not initiated by a top-level navigation.",
+  SyntaxError: "This 'Set-Cookie' header had invalid syntax.",
+  SchemeNotSupported:
+    'The scheme of this connection is not allowed to store cookies.',
+  OverwriteSecure:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it was not sent over a secure connection and would have overwritten a cookie with the Secure attribute.",
+  InvalidPrefix:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it used the '__Secure-' or '__Host-' prefix in its name and broke the additional rules applied to cookies with these prefixes.",
+  SamePartyConflictsWithOtherAttributes:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it had the 'SameParty' attribute but also had other conflicting attributes. Chrome requires cookies that use the 'SameParty' attribute to also have the 'Secure' attribute, and to not be restricted to 'SameSite=Strict'.",
+  DisallowedCharacter:
+    "This 'Set-Cookie' header contained a disallowed character (a forbidden ASCII control character, or the tab character if it appears in the middle of the cookie name, value, an attribute name, or an attribute value).",
+  NoCookieContent:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because the header did not contain any value.",
 };
 
 export default CookieBlockedReason;

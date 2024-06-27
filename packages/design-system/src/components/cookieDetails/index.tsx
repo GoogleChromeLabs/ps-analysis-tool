@@ -18,14 +18,15 @@
  * External dependencies.
  */
 import React from 'react';
+import type { CookieTableData } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '@ps-analysis-tool/common';
 import Details from './details';
 
-interface CookieDetailsProps {
+export interface CookieDetailsProps {
   isUsingCDP: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
@@ -48,7 +49,7 @@ const CookieDetails = ({
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-            Select cookies to preview its value
+            {I18n.getMessage('selectCookie')}
           </p>
         </div>
       )}

@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -22,19 +25,19 @@ import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 import sanitizeCsvRecord from '../sanitizeCsvRecord';
 
 export const COOKIES_WITH_ISSUES_DATA_HEADERS = [
-  'Name',
-  'Scope',
-  'Domain',
-  'Partition Key',
-  'Same Site',
-  'Category',
-  'Platform',
-  'Http Only',
-  'Secure',
-  'Value',
-  'Path',
-  'Expires',
-  'GDPRPortal',
+  () => I18n.getMessage('name'),
+  () => I18n.getMessage('scope'),
+  () => I18n.getMessage('domain'),
+  () => I18n.getMessage('partitionKey'),
+  () => I18n.getMessage('sameSite'),
+  () => I18n.getMessage('category'),
+  () => I18n.getMessage('platform'),
+  () => I18n.getMessage('httpOnly'),
+  () => I18n.getMessage('secure'),
+  () => I18n.getMessage('value'),
+  () => I18n.getMessage('path'),
+  () => I18n.getMessage('expires'),
+  () => I18n.getMessage('gDPR'),
 ];
 
 const generateCookiesWithIssuesCSV = (
@@ -59,14 +62,22 @@ const generateCookiesWithIssuesCSV = (
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
-      cookie.isFirstParty ? 'First Party' : 'Third Party',
+      cookie.isFirstParty
+        ? I18n.getMessage('firstParty')
+        : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.sameSite,
-      cookie.analytics.category,
+      I18n.getMessage(
+        cookie.analytics?.category?.toLowerCase() || 'uncategorized'
+      ),
       cookie.analytics.platform,
-      cookie.parsedCookie.httpOnly ? 'Yes' : 'No',
-      cookie.parsedCookie.secure ? 'Yes' : 'No',
+      cookie.parsedCookie.httpOnly
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
+      cookie.parsedCookie.secure
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
       calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
@@ -76,7 +87,11 @@ const generateCookiesWithIssuesCSV = (
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return COOKIES_WITH_ISSUES_DATA_HEADERS.join(',') + '\r\n' + cookieRecords;
+  return (
+    COOKIES_WITH_ISSUES_DATA_HEADERS.map((header) => header()).join(',') +
+    '\r\n' +
+    cookieRecords
+  );
 };
 
 export default generateCookiesWithIssuesCSV;

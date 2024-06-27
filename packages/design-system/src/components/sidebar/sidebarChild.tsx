@@ -17,18 +17,11 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
-import {
-  ArrowDown,
-  ArrowDownWhite,
-  InfoIcon,
-  SidebarItemValue,
-  useSidebar,
-} from '@ps-analysis-tool/design-system';
-
 /**
  * Internal dependencies.
  */
-
+import { ArrowDown, ArrowDownWhite, InfoIcon } from '../../icons';
+import { useSidebar, SidebarItemValue } from './useSidebar';
 interface SidebarItemProps {
   didUserInteract: boolean;
   setDidUserInteract: (didUserInteract: boolean) => void;
@@ -98,7 +91,11 @@ const SidebarChild = ({
           setIsSidebarFocused(true);
         }}
         onKeyDown={(event) => {
-          onKeyNavigation(event, itemKey);
+          if (event.key === 'Enter' || event.key === ' ') {
+            toggleDropdown(!sidebarItem.dropdownOpen, itemKey);
+          } else {
+            onKeyNavigation(event, itemKey);
+          }
           setIsSidebarFocused(true);
         }}
         className={`relative w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
@@ -133,7 +130,7 @@ const SidebarChild = ({
           </button>
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
-          <div className="mr-1 pointer-events-none">
+          <div className="mr-1 pointer-events-none w-4 h-4">
             {isKeySelected(itemKey) && isSidebarFocused
               ? SelectedIcon && (
                   <SelectedIcon {...sidebarItem.selectedIcon.props} />
@@ -142,7 +139,10 @@ const SidebarChild = ({
           </div>
         )}
         <p className="flex flex-row items-center justify-center whitespace-nowrap gap-x-1 pr-1">
-          {sidebarItem.title}
+          {typeof sidebarItem.title === 'function'
+            ? sidebarItem.title()
+            : sidebarItem.title}
+
           {sidebarItem.infoIconDescription ? (
             <span title={sidebarItem.infoIconDescription}>
               <InfoIcon

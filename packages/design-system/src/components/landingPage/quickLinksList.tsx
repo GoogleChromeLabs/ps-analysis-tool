@@ -19,7 +19,8 @@
  */
 import React, { useEffect, useState } from 'react';
 import { XMLParser } from 'fast-xml-parser';
-import { addUTMParams } from '@ps-analysis-tool/common';
+import { addUTMParams } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -59,14 +60,19 @@ const QuickLinksList = () => {
     })();
   }, []);
 
+  const quickLinks = QUICK_LINKS.map((link) => ({
+    ...link,
+    title: I18n.getMessage(link.title),
+  }));
+
   return (
     <div className="flex flex-col md:flex-row px-4 pt-6 pb-24 gap-10">
       <div className="md:w-[35%] flex flex-col gap-4">
-        <BulletList rows={QUICK_LINKS} heading="Quick Links" />
+        <BulletList rows={quickLinks} heading={I18n.getMessage('quickLinks')} />
       </div>
       <div className="md:w-[65%] flex flex-col gap-4">
         <h2 className="text-xs font-bold uppercase text-darkest-gray dark:text-bright-gray">
-          Latest News
+          {I18n.getMessage('latestNews')}
         </h2>
         <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
         <div className="space-y-4">
@@ -79,7 +85,7 @@ const QuickLinksList = () => {
               rel="noreferrer"
               className="leading-6 text-sm text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
             >
-              View More
+              {I18n.getMessage('viewMore')}
               <ChevronRight className="text-bright-navy-blue dark:text-jordy-blue" />
             </a>
           </div>

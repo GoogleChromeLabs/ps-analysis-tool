@@ -24,6 +24,7 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { JETPACK_COMMENTS_HELP_URL } from './constants';
+import { I18n } from '@google-psat/i18n';
 
 const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -37,10 +38,14 @@ const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Jetpack Comments'} isLoading={false} featuresText="">
+    <Accordion
+      title={I18n.getMessage('jetpackComments')}
+      isLoading={false}
+      featuresText=""
+    >
       <DetectionMessage
-        libraryName="Jetpack comments widget"
-        provider="Jetpack"
+        libraryName={I18n.getMessage('jetpackCommentsWidget')}
+        provider={I18n.getMessage('jetpack')}
         supportURL={JETPACK_COMMENTS_HELP_URL}
       />
     </Accordion>

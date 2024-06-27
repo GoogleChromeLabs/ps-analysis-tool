@@ -25,7 +25,6 @@ const errorHandler = (err) => {
   process.exit(1);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const addKeysToLocale = async (data) => {
   const messagesPath = path.resolve(
     'packages/i18n/_locales/messages/en/messages.json'
@@ -39,7 +38,6 @@ const addKeysToLocale = async (data) => {
 
       messages[key] = {
         message: rationale,
-        description: 'Rationale for a site in the related website set',
       };
 
       rationalesObj[site] = key;
@@ -60,6 +58,9 @@ const main = async () => {
     }
 
     const data = await response.json();
+
+    // Add keys, messages to _locale/en/messages.json and replace the text with keys in the formattedData
+    await addKeysToLocale(data);
 
     await fs.writeFile(
       path.resolve(targetDIR, 'related_website_sets.json'),

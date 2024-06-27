@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { noop } from '@ps-analysis-tool/common';
+import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.

@@ -16,10 +16,8 @@
 /**
  * External dependencies.
  */
-import type {
-  CookieStatsComponents,
-  CookiesCount,
-} from '@ps-analysis-tool/common';
+import type { CookieStatsComponents, CookiesCount } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies.
  */
@@ -48,14 +46,14 @@ const prepareCookieStatsComponents = (
 
     blockedCookiesStats.push({
       count: cookieStats.blockedCookies[key],
-      color: COLOR_MAP[key].color,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
     });
 
     blockedCookiesLegend.push({
       label: key,
       count: cookieStats.blockedCookies[key],
-      color: COLOR_MAP[key].color,
-      countClassName: COLOR_MAP[key].className,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
+      countClassName: COLOR_MAP[key]?.className ?? 'text-jamboo',
     });
   });
 
@@ -69,42 +67,46 @@ const prepareCookieStatsComponents = (
 
     exemptedCookiesStats.push({
       count: cookieStats.exemptedCookies[key],
-      color: COLOR_MAP[key].color,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
     });
 
     exemptedCookiesLegend.push({
       label: key,
       count: cookieStats.exemptedCookies[key],
-      color: COLOR_MAP[key].color,
-      countClassName: COLOR_MAP[key].className,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
+      countClassName: COLOR_MAP[key]?.className ?? 'text-jamboo',
     });
   });
 
   return {
     legend: [
       {
-        label: 'Functional',
+        label: I18n.getMessage('functional'),
+        descriptionKey: 'Functional',
         count:
           cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
         color: COLOR_MAP.functional.color,
         countClassName: COLOR_MAP.functional.className,
       },
       {
-        label: 'Marketing',
+        label: I18n.getMessage('marketing'),
+        descriptionKey: 'Marketing',
         count:
           cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
         color: COLOR_MAP.marketing.color,
         countClassName: COLOR_MAP.uncategorized.className,
       },
       {
-        label: 'Analytics',
+        label: I18n.getMessage('analytics'),
+        descriptionKey: 'Analytics',
         count:
           cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
         color: COLOR_MAP.analytics.color,
         countClassName: COLOR_MAP.uncategorized.className,
       },
       {
-        label: 'Uncategorized',
+        label: I18n.getMessage('uncategorized'),
+        descriptionKey: 'Uncategorized',
         count:
           cookieStats.firstParty.uncategorized +
           cookieStats.thirdParty.uncategorized,

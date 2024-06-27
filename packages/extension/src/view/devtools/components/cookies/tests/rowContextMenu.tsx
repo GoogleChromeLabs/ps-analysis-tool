@@ -19,12 +19,13 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
 import RowContextMenu from '../cookiesListing/rowContextMenu';
-import type { TableRow } from '@ps-analysis-tool/design-system';
+import type { TableRow } from '@google-psat/design-system';
 import SinonChrome from 'sinon-chrome';
 
 const rowContextMenuProp = {
@@ -44,6 +45,15 @@ globalThis.chrome = {
     },
   },
 };
+globalThis.chrome.i18n = null;
+I18n.initMessages({
+  removeDomainFromAllowList: {
+    message: 'Remove Domain from Allow List',
+  },
+  allowDomin: {
+    message: 'Allow Domain During Session',
+  },
+});
 
 describe('RowContextMenu', () => {
   it('should render Row Context Menu component', async () => {
@@ -122,5 +132,58 @@ describe('RowContextMenu', () => {
     );
 
     expect(rowContextMenu).toBeVisible();
+  });
+
+  it('should call chrome.devtools.panels.network.show with filter when filter button is clicked', async () => {
+    globalThis.chrome.devtools.panels = {
+      ...globalThis.chrome.devtools.panels,
+      network: {
+        show: jest.fn(),
+      },
+    };
+
+    const ref = React.createRef<{
+      onRowContextMenu: (
+        e: React.MouseEvent<HTMLElement, MouseEvent>,
+        row: TableRow
+      ) => void;
+    }>();
+
+    render(<RowContextMenu {...rowContextMenuProp} ref={ref} />);
+
+    act(() => {
+      ref.current?.onRowContextMenu(
+        // @ts-ignore
+        {
+          clientX: 0,
+          clientY: 0,
+          preventDefault: jest.fn(),
+        } as React.MouseEvent<HTMLElement, MouseEvent>,
+        // @ts-ignore
+        {
+          originalData: {
+            // @ts-ignore
+            parsedCookie: {
+              name: 'AWSALB',
+              domain: 'bbc.com',
+            },
+          },
+        }
+      );
+    });
+
+    const filterButton = await screen.findByText(
+      'Show Requests With This Cookie'
+    );
+
+    act(() => {
+      filterButton.click();
+    });
+
+    expect(globalThis.chrome.devtools.panels.network.show).toHaveBeenCalledWith(
+      {
+        filter: 'cookie-domain:bbc.com cookie-name:AWSALB',
+      }
+    );
   });
 });

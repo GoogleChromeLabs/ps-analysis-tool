@@ -25,7 +25,7 @@ import React, {
   useRef,
 } from 'react';
 import PQueue from 'p-queue';
-import { useContextSelector, createContext } from '@ps-analysis-tool/common';
+import { useContextSelector, createContext } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -67,7 +67,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const PROMISE_QUEUE = useMemo(() => new PQueue({ concurrency: 1 }), []);
 
   const isChromeExtension = useMemo(() => {
-    return window.location.protocol === 'chrome-extension:';
+    return globalThis?.location.protocol === 'chrome-extension:';
   }, []);
 
   const preferences = useRef<TablePersistentSettingsStoreContext['state']>(

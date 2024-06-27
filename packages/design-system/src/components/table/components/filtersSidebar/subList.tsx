@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -63,7 +64,7 @@ const SubList = ({
       {isSelectAllFilterEnabled && (
         <Option
           filterKey={filterKey}
-          filterValue="All"
+          filterValue={I18n.getMessage('selectAll')}
           selected={isSelectAllFilterSelected}
           toggleFilterSelection={() => toggleSelectAllFilter(filterKey)}
           isExpanded={true}

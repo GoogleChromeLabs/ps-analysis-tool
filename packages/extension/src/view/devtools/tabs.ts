@@ -42,7 +42,8 @@ import {
   type SidebarItems,
   InfoIcon,
   SIDEBAR_ITEMS_KEYS,
-} from '@ps-analysis-tool/design-system';
+  GroupsIcon,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -67,10 +68,12 @@ import {
   Settings,
   FacilitatedTesting,
 } from './components';
+import { I18n } from '@google-psat/i18n';
+import ProtectedAudience from './components/privateAdvertising/protectedAudience';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
-    title: 'Privacy Sandbox',
+    title: () => 'Privacy Sandbox',
     panel: {
       Element: PrivacySandbox,
     },
@@ -83,7 +86,7 @@ const TABS: SidebarItems = {
     dropdownOpen: true,
     children: {
       [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-        title: 'Cookies',
+        title: () => I18n.getMessage('cookies'),
         icon: {
           Element: CookieIcon,
         },
@@ -94,7 +97,7 @@ const TABS: SidebarItems = {
         dropdownOpen: true,
       },
       [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
-        title: 'Site Boundaries',
+        title: () => I18n.getMessage('siteBoundaries'),
         panel: {
           Element: SiteBoundaries,
         },
@@ -106,7 +109,7 @@ const TABS: SidebarItems = {
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.CHIPS]: {
-            title: 'CHIPS',
+            title: () => I18n.getMessage('chips'),
             panel: {
               Element: Chips,
             },
@@ -119,7 +122,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
-            title: 'Related Website Sets',
+            title: () => I18n.getMessage('rws'),
             panel: {
               Element: RelatedWebsiteSets,
             },
@@ -134,7 +137,7 @@ const TABS: SidebarItems = {
         },
       },
       [SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING]: {
-        title: 'Private Advertising',
+        title: () => I18n.getMessage('privateAdvertising'),
         panel: {
           Element: PrivateAdvertising,
         },
@@ -146,7 +149,7 @@ const TABS: SidebarItems = {
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.TOPICS]: {
-            title: 'Topics',
+            title: () => I18n.getMessage('topics'),
             panel: {
               Element: Topics,
             },
@@ -159,7 +162,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
-            title: 'Attribution',
+            title: () => I18n.getMessage('attribution'),
             panel: {
               Element: Attribution,
             },
@@ -171,10 +174,29 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+          [SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE]: {
+            title: 'Protected Audience',
+            panel: {
+              Element: ProtectedAudience,
+            },
+            icon: {
+              Element: GroupsIcon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: GroupsIcon,
+              props: {
+                className: 'fill-white',
+              },
+            },
+            children: {},
+          },
         },
       },
       [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
-        title: 'Tracking Protection',
+        title: () => I18n.getMessage('trackingProtection'),
         panel: {
           Element: AntiCovertTracking,
         },
@@ -186,7 +208,7 @@ const TABS: SidebarItems = {
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
-            title: 'Bounce Tracking',
+            title: () => I18n.getMessage('bounceTracking'),
             panel: {
               Element: BounceTracking,
             },
@@ -199,7 +221,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
-            title: 'Fingerprinting',
+            title: () => I18n.getMessage('fingerprinting'),
             panel: {
               Element: Fingerprinting,
             },
@@ -216,7 +238,7 @@ const TABS: SidebarItems = {
     },
   },
   [SIDEBAR_ITEMS_KEYS.FACILITATED_TESTING]: {
-    title: 'Facilitated Testing',
+    title: () => I18n.getMessage('facilitatedTesting'),
     panel: {
       Element: FacilitatedTesting,
     },
@@ -236,7 +258,7 @@ const TABS: SidebarItems = {
     children: {},
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
-    title: 'Settings',
+    title: () => I18n.getMessage('settings'),
     panel: {
       Element: Settings,
     },

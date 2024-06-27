@@ -2,6 +2,11 @@
   "extends": "../../tsconfig.shared.json",
   "compilerOptions": {
     "rootDir": "src",
+    "noEmit": false,
+    "target": "es6",
+    "outDir": "dist",
+    "jsx": "react",
+    "declarationDir": "dist-types",
     "types": ["chrome"]
   },
   "include": [
@@ -9,11 +14,17 @@
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
   ],
-  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
+  "exclude": [
+    "**/tests/**/*.ts",
+    "**/tests/**/*.tsx",
+    "dist/**",
+    "dist-types/**"
+  ],
   "references": [
     { "path": "../common" },
     {
       "path": "../design-system"
-    }
+    },
+    { "path": "../i18n" }
   ]
 }

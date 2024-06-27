@@ -17,13 +17,14 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const Topics = () => {
   return (
     <div data-testid="topics-content" className="h-full w-full">
       <LandingPage
-        title="Topics"
+        title={I18n.getMessage('topics')}
         psInfoKey={PSInfoKey.Topics}
         extraClasses="max-w-2xl h-fit"
       />

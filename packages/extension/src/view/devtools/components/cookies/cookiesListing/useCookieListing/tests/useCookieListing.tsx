@@ -19,6 +19,7 @@
 import React from 'react';
 import SinonChrome from 'sinon-chrome';
 import { renderHook } from '@testing-library/react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -50,6 +51,47 @@ describe('useCookieListing', () => {
       },
     },
   };
+
+  globalThis.chrome.i18n = null;
+
+  I18n.initMessages({
+    name: {
+      message: 'Name',
+    },
+    scope: {
+      message: 'Scope',
+    },
+    firstParty: {
+      message: 'First Party',
+    },
+    category: {
+      message: 'Category',
+    },
+    marketing: {
+      message: 'Marketing',
+    },
+    uncategorized: {
+      message: 'Uncategorized',
+    },
+    true: {
+      message: 'True',
+    },
+    session: {
+      message: 'Session',
+    },
+    shortTerm: {
+      message: 'Short Term (< 24h)',
+    },
+    mediumTerm: {
+      message: 'Medium Term (24h - 1 week)',
+    },
+    longTerm: {
+      message: 'Long Term (1 week - 1 month)',
+    },
+    extentedTerm: {
+      message: 'Extended Term (>1 month)',
+    },
+  });
 
   it('should return the correct values', () => {
     mockUseCookieStore.mockReturnValue({
@@ -118,7 +160,7 @@ describe('useCookieListing', () => {
       result.current.filters['parsedCookie.expires'].comparator(
         // 2 months ahead
         new Date(new Date().getTime() + 5184000000).toUTCString(),
-        'Extended Term (> 1 month)'
+        'Extended Term (>1 month)'
       )
     ).toBe(true);
 

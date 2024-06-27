@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { ToggleSwitch } from '@ps-analysis-tool/design-system';
+import { ToggleSwitch } from '@google-psat/design-system';
 import React from 'react';
 
 interface SettingOptionProps {

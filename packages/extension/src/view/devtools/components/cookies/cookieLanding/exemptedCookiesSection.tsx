@@ -17,29 +17,27 @@
  * External dependencies
  */
 import React from 'react';
+import { type DataMapping, getLegendDescription } from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
-  type DataMapping,
   useFiltersMapping,
   MatrixContainer,
   CookiesLandingWrapper,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
-} from '@ps-analysis-tool/design-system';
+  InfoIcon,
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import { useSettings, useCookie } from '../../../stateProviders';
+import { useCookie } from '../../../stateProviders';
 
 const ExemptedCookiesSection = () => {
   const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-  }));
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
   }));
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
@@ -52,7 +50,7 @@ const ExemptedCookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description: legendDescription,
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) => {
@@ -62,28 +60,27 @@ const ExemptedCookiesSection = () => {
     });
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
-      onClick: () => selectedItemUpdater('All', 'exemptionReason'),
+      onClick:
+        cookieStats.exemptedCookies.total > 0
+          ? () =>
+              selectedItemUpdater(
+                I18n.getMessage('selectAll'),
+                'exemptionReason'
+              )
+          : null,
     },
   ];
 
-  const description = !isUsingCDP ? (
-    <>
-      To gather data and insights regarding blocked cookies and exempted
-      cookies, please enable PSAT to use the Chrome DevTools protocol. You can
-      do this in the Settings page or in the extension popup. For more
-      information check the PSAT&nbsp;
-      <a
-        target="_blank"
-        rel="noreferrer"
-        className="text-bright-navy-blue dark:text-jordy-blue"
-        href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
-      >
-        Wiki
-      </a>
-    </>
+  const description = !cookieStats.exemptedCookies.total ? (
+    <div className="flex gap-1 justify-center items-center">
+      No cookies were exempted by the browser.
+      <span title="Exempted cookies are only available in 3PCD browser.">
+        <InfoIcon className="fill-granite-gray" />
+      </span>
+    </div>
   ) : (
     ''
   );
@@ -96,9 +93,9 @@ const ExemptedCookiesSection = () => {
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title="Exemption Reasons"
+          title={I18n.getMessage('exemptionReasons')}
           matrixData={dataComponents}
-          infoIconTitle="Cookies that should have been blocked by the browser but was exempted."
+          infoIconTitle={I18n.getMessage('exemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>

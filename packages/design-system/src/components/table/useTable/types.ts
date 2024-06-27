@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
+import { CookieTableData, TechnologyData } from '@google-psat/common';
 
 export type TableData = (CookieTableData | TechnologyData) & {
   highlighted?: boolean;
@@ -57,7 +57,7 @@ export type TableFilter = {
     isSelectAllOptionSelected?: boolean;
     filterValues?: {
       [filterValue: string]: {
-        selected: boolean;
+        selected: boolean | null;
         description?: string;
       };
     };

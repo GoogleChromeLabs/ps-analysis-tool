@@ -18,7 +18,7 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import type { CompleteJson } from '@ps-analysis-tool/common';
+import type { CompleteJson } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -27,6 +27,7 @@ import { createZip, getFolderName } from './utils';
 
 const generateSiteReportandDownload = async (
   JSONReport: CompleteJson[],
+  reportHTML: string,
   selectedPageUrl?: string | null
 ) => {
   if (!JSONReport.length) {
@@ -61,7 +62,7 @@ const generateSiteReportandDownload = async (
     return;
   }
 
-  createZip(siteAnalysisData, zipFolder, JSONReport[0].pageUrl);
+  createZip(siteAnalysisData, zipFolder, JSONReport[0].pageUrl, reportHTML);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(

@@ -19,11 +19,11 @@
  */
 import fs from 'fs/promises';
 import path from 'path';
+import { CookieDatabase } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import { CookieDatabase } from '../types';
 
 /**
  * Fetch dictionary from local data folder.
@@ -31,9 +31,12 @@ import { CookieDatabase } from '../types';
  */
 export async function fetchDictionary(): Promise<CookieDatabase> {
   const data = JSON.parse(
-    await fs.readFile(path.resolve('./assets/data/open-cookie-database.json'), {
-      encoding: 'utf8',
-    })
+    await fs.readFile(
+      path.resolve(__dirname, './assets/data/open-cookie-database.json'),
+      {
+        encoding: 'utf8',
+      }
+    )
   );
 
   return data;

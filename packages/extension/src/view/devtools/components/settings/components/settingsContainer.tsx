@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
@@ -52,6 +53,8 @@ const SettingsContainer = () => {
         case 'enableCDP':
           settingsToReturn.push({
             ...setting,
+            heading: setting.heading(),
+            description: setting.description(),
             changeSwitchState: setIsUsingCDP,
             switchState: isUsingCDP,
           });
@@ -59,6 +62,8 @@ const SettingsContainer = () => {
         case 'multitabDebugging':
           settingsToReturn.push({
             ...setting,
+            heading: setting.heading(),
+            description: setting.description(),
             changeSwitchState: setProcessingMode,
             switchState: allowedNumberOfTabs === 'unlimited',
           });
@@ -77,7 +82,7 @@ const SettingsContainer = () => {
       <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
         <Gear className="dark:text-bright-gray" />
         <span className="text-base font-bold dark:text-bright-gray">
-          PSAT Extension Settings
+          {I18n.getMessage('pSATSettings')}
         </span>
       </div>
       <div className="rounded w-full divide-y divide-hex-gray dark:divide-quartz px-2 border border-american-silver dark:border-quartz">

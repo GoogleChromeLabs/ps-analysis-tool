@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -85,18 +88,20 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
   }
 
   const summary = {
-    'Total Cookies': cookieMap.size,
-    'Total First Party Cookies': totalFirstPartyCookies,
-    'Total Third Party Cookies': totalThirdPartyCookies,
-    'Analytics Cookies': analyticsCookies,
-    'Functional Cookies': functionalCookies,
-    'Marketing Cookies': marketingCookies,
-    'Uncategorized Cookies': uncategorisedCookies,
-    'Cookies With Issues': cookiesWithIssues,
-    'Analytics Cookies With Issues': analyticsCookiesWithIssues,
-    'Functional Cookies With Issues': functionalCookiesWithIssues,
-    'Marketing Cookies With Issues': marketingCookiesWithIssues,
-    'Uncategorized Cookies With Issues': uncategorisedCookiesWithIssues,
+    [I18n.getMessage('totalCookies')]: cookieMap.size,
+    [I18n.getMessage('totalFirstPartyCookies')]: totalFirstPartyCookies,
+    [I18n.getMessage('totalThirdPartyCookies')]: totalThirdPartyCookies,
+    [I18n.getMessage('analyticsCookies')]: analyticsCookies,
+    [I18n.getMessage('functionalCookies')]: functionalCookies,
+    [I18n.getMessage('marketingCookies')]: marketingCookies,
+    [I18n.getMessage('uncategorizedCookies')]: uncategorisedCookies,
+    [I18n.getMessage('cookiesWithIssues')]: cookiesWithIssues,
+    [I18n.getMessage('analyticsCookiesWithIssues')]: analyticsCookiesWithIssues,
+    [I18n.getMessage('functionalCookiesWithIssues')]:
+      functionalCookiesWithIssues,
+    [I18n.getMessage('marketingCookiesWithIssues')]: marketingCookiesWithIssues,
+    [I18n.getMessage('uncategorizedCookiesWithIssues')]:
+      uncategorisedCookiesWithIssues,
   };
 
   const CSVString = Object.entries(summary).reduce(

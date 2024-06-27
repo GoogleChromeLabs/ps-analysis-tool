@@ -25,7 +25,8 @@ import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   useFiltersMapping,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -64,18 +65,14 @@ const CookiesSection = () => {
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       infoIconTitle={
-        <>
-          Please setup the{' '}
-          <a
-            href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment"
-            target="_blank"
-            rel="noreferrer"
-            className="text-bright-navy-blue dark:text-jordy-blue"
-          >
-            evaluation environment
-          </a>{' '}
-          before analyzing cookies.
-        </>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: I18n.getMessage('setUpEvaluationEnvironment', [
+              '<a href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment" target="_blank" rel="noreferrer" class="text-bright-navy-blue dark:text-jordy-blue">',
+              '</a>',
+            ]),
+          }}
+        />
       }
       testId="cookies-insights"
     >
@@ -83,8 +80,8 @@ const CookiesSection = () => {
         (cookieStats?.firstParty.total === 0 &&
           cookieStats?.thirdParty.total === 0 && (
             <MessageBox
-              headerText="No cookies found on this page"
-              bodyText="Please try reloading the page"
+              headerText={I18n.getMessage('noCookies')}
+              bodyText={I18n.getMessage('tryReloading')}
             />
           ))}
       <CookiesMatrix

@@ -16,27 +16,27 @@
 /**
  * External dependencies.
  */
-import { addUTMParams } from '@ps-analysis-tool/common';
+import { addUTMParams } from '@google-psat/common';
 
 export const QUICK_LINKS = [
   {
-    title: 'Learn more about PSAT',
+    title: 'learnMore',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
   },
   {
-    title: 'Join the discussions',
+    title: 'joinDiscussions',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions',
   },
   {
-    title: 'Report a bug',
+    title: 'reportBug',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=',
   },
   {
-    title: 'Report a breakage',
+    title: 'reportBreakage',
     link: 'https://goo.gle/report-3pc-broken',
   },
   {
-    title: 'Request Additional Migration Time',
+    title: 'requestMigrationTime',
     link: addUTMParams(
       'https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369'
     ),

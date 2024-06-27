@@ -15,10 +15,6 @@
  */
 
 /**
- * External dependencies
- */
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
-/**
  * Internal dependencies
  */
 import reshapeCookies from '../reshapeCookies';
@@ -51,16 +47,17 @@ describe('reshapeCookies', () => {
           url: 'https://www.cnn.com/index.html',
           isBlocked: false,
           blockedReasons: [],
+          blockingStatus: undefined,
+          networkEvents: undefined,
           isFirstParty: true,
           pageUrl: 'https://www.cnn.com/index.html',
           frameUrls: { sadf: 'https://edition.cnn.com' },
         },
       },
-      [UNKNOWN_FRAME_KEY]: {},
     };
 
     expect(reshapeCookies(cookies)).toEqual({
-      'countryCode.cnn.com/': {
+      'countryCode:.cnn.com:/': {
         parsedCookie: {
           name: 'countryCode',
           value: 'IN',
@@ -77,6 +74,8 @@ describe('reshapeCookies', () => {
           description: '',
           GDPR: '',
         },
+        blockingStatus: undefined,
+        networkEvents: undefined,
         isFirstParty: true,
         url: 'https://www.cnn.com/index.html',
         frameUrls: ['https://edition.cnn.com'],

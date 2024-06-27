@@ -22,7 +22,9 @@ import {
   CookiesLandingWrapper,
   LEGEND_DESCRIPTION,
   MatrixContainer,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+import { getLegendDescription } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -36,10 +38,12 @@ const CookiesSection = () => {
   }
 
   const _data = data.frameStateCreator.legend.map((component) => {
-    const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+    const legendDescription =
+      LEGEND_DESCRIPTION[component.descriptionKey || ''];
+
     return {
       ...component,
-      description: legendDescription,
+      description: getLegendDescription(legendDescription),
       title: component.label,
       containerClasses: '',
     };
@@ -51,9 +55,9 @@ const CookiesSection = () => {
       testId="frames-insights"
     >
       <MatrixContainer
-        title="Frames"
+        title={I18n.getMessage('frames')}
         matrixData={_data}
-        infoIconTitle="The details regarding frames and associated cookies in this page."
+        infoIconTitle={I18n.getMessage('framesNote')}
       />
     </CookiesLandingWrapper>
   );

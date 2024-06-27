@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { noop } from '@ps-analysis-tool/common';
+import { noop } from '@google-psat/common';
 import '@testing-library/jest-dom';
 
 /**

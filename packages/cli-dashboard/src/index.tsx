@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider as TablePersistentSettingsProvider } from '@ps-analysis-tool/design-system';
+import { Provider as TablePersistentSettingsProvider } from '@google-psat/design-system';
 
 /**
  * Internal dependencies

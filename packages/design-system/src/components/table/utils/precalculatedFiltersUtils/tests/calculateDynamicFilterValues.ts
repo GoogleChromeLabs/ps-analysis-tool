@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies
+ */
+import { BlockedReason } from '@google-psat/common';
+/**
+ * Internal dependencies
+ */
 import calculateDynamicFilterValues from '../calculateDynamicFilterValues';
 
 describe('calculateDynamicFilterValues', () => {
@@ -21,24 +27,60 @@ describe('calculateDynamicFilterValues', () => {
     // Arrange
     const tabCookies = [
       {
-        keyToExtract: 'value1',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: 'cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['DomainMismatch'] as BlockedReason[],
+        frameIdList: [1, 2, 3],
       },
       {
-        keyToExtract: 'value2',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['SameSiteUnspecifiedTreatedAsLax'] as BlockedReason[],
+        frameIdList: [1, 2, 3],
       },
       {
-        keyToExtract: 'value3',
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: [
+          'ThirdPartyPhaseout',
+          'DomainMismatch',
+        ] as BlockedReason[],
+        frameIdList: [],
       },
     ];
 
     const expected = {
-      value1: {
+      'cnn.com': {
         selected: false,
       },
-      value2: {
-        selected: false,
-      },
-      value3: {
+      '.cnn.com': {
         selected: false,
       },
     };
@@ -47,8 +89,9 @@ describe('calculateDynamicFilterValues', () => {
 
     // Act
     const result = calculateDynamicFilterValues(
-      'keyToExtract',
+      'parsedCookie.domain',
       tabCookies,
+      //@ts-ignore
       undefined,
       mockClearQuery
     );
@@ -57,23 +100,20 @@ describe('calculateDynamicFilterValues', () => {
     expect(result).toEqual(expected);
     expect(mockClearQuery).not.toHaveBeenCalled();
 
-    const options = ['value1', 'value2'];
+    const options = ['cnn.com', '.cnn.com'];
 
     const expectedWithSelected = {
-      value1: {
+      'cnn.com': {
         selected: true,
       },
-      value2: {
+      '.cnn.com': {
         selected: true,
-      },
-      value3: {
-        selected: false,
       },
     };
 
     // Act
     const resultWithSelected = calculateDynamicFilterValues(
-      'keyToExtract',
+      'parsedCookie.domain',
       tabCookies,
       options,
       mockClearQuery

@@ -25,12 +25,13 @@ import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   type MatrixComponentProps,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+import { type DataMapping, getLegendDescription } from '@google-psat/common';
 /**
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
-import type { DataMapping } from '@ps-analysis-tool/common';
 
 const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
@@ -43,7 +44,7 @@ const CookiesSection = () => {
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -53,7 +54,7 @@ const CookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description: legendDescription,
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
       };
@@ -71,7 +72,10 @@ const CookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description: legendDescription,
+        description:
+          typeof legendDescription === 'string'
+            ? I18n.getMessage(legendDescription)
+            : I18n.getFormattedMessages(legendDescription),
         title: component.label,
         containerClasses: '',
       };
@@ -85,9 +89,9 @@ const CookiesSection = () => {
       {dataComponents.length > 0 && (
         <>
           <MatrixContainer
-            title="Blocked Reasons"
+            title={I18n.getMessage('blockedReasons')}
             matrixData={dataComponents}
-            infoIconTitle="Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+            infoIconTitle={I18n.getMessage('cookiesBlockedNote')}
           />
           {data.showBlockedCategory && (
             <div className="flex flex-col mt-8">

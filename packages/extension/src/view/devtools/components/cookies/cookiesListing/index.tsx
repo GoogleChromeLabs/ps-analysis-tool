@@ -21,8 +21,8 @@ import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
   type CookieTableData,
-} from '@ps-analysis-tool/common';
-import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
+} from '@google-psat/common';
+import { CookieDetails, CookieTable } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -113,6 +113,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           extraInterfaceToTopBar={extraInterfaceToTopBar}
           onRowContextMenu={rowContextMenuRef.current?.onRowContextMenu}
           ref={cookieTableRef}
+          hostname={tabUrl ? new URL(tabUrl).hostname : ''}
         />
       </Resizable>
       <CookieDetails

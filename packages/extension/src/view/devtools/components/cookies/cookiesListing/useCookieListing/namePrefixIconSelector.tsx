@@ -18,14 +18,14 @@
  * External dependencies.
  */
 import React from 'react';
-import { BLOCK_STATUS, type CookieTableData } from '@ps-analysis-tool/common';
+import { BLOCK_STATUS, type CookieTableData } from '@google-psat/common';
 import {
   GreenTick,
   InboundIcon,
   OutboundIcon,
   OutboundInboundIcon,
   OutboundInboundColoredIcon,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
 
 interface NamePrefixIconSelectorProps {
   originalData: CookieTableData;

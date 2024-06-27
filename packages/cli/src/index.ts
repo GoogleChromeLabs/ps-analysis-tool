@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Copyright 2023 Google LLC
  *
@@ -18,27 +19,35 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { ensureFile, writeFile } from 'fs-extra';
+import { existsSync, ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import { spawn } from 'child_process';
+import fs from 'fs';
 import path from 'path';
-import { CompleteJson } from '@ps-analysis-tool/common';
+import { I18n } from '@google-psat/i18n';
+import { CompleteJson, LibraryData } from '@google-psat/common';
+import {
+  analyzeCookiesUrlsInBatchesAndFetchResources,
+  analyzeTechnologiesUrlsInBatches,
+} from '@google-psat/analysis-utils';
+import {
+  DetectionFunctions,
+  Libraries,
+  detectMatchingSignatures,
+} from '@google-psat/library-detection';
+import URL from 'node:url';
 
 /**
  * Internal dependencies.
  */
-import Utility from './utils/utility';
-import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
-import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 import {
   fetchDictionary,
-  delay,
   getUrlListFromArgs,
   validateArgs,
   saveCSVReports,
+  askUserInput,
+  generatePrefix,
 } from './utils';
-import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -46,8 +55,9 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.8.0')
+  .version('0.9.0-2')
   .description('CLI to test a URL for 3p cookies')
+  .argument('[website-url]', 'The URL of website you want to analyse')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
   .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
@@ -55,7 +65,10 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
-  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
+  .option(
+    '-l, --locale <value>',
+    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR'
+  )
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -77,7 +90,7 @@ program
 
 program.parse();
 
-const saveResults = async (
+const saveResultsAsJSON = async (
   outDir: string,
   result: CompleteJson | CompleteJson[]
 ) => {
@@ -85,27 +98,92 @@ const saveResults = async (
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
-const startDashboardServer = async (dir: string, port: number) => {
-  spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', [
-    'run',
-    'cli-dashboard:dev',
-    '--',
-    '--port',
-    port.toString(),
-  ]);
+const saveResultsAsHTML = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[],
+  isSiteMap: boolean
+) => {
+  let htmlText = '';
+  let reportHTML = '';
 
-  await delay(2000);
+  if (
+    existsSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/index.html'
+      )
+    )
+  ) {
+    htmlText = fs.readFileSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/index.html'
+      ),
+      'utf-8'
+    );
 
-  console.log(`Report: http://localhost:${port}?dir=${dir}`);
+    reportHTML = fs.readFileSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/report/index.html'
+      ),
+      'base64'
+    );
+
+    fs.copyFileSync(
+      path.resolve(
+        __dirname +
+          '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
+      ),
+      outDir + '/index.js'
+    );
+  } else {
+    htmlText = fs.readFileSync(
+      path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
+      'utf-8'
+    );
+
+    reportHTML = fs.readFileSync(
+      path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
+      'base64'
+    );
+
+    fs.copyFileSync(
+      path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+      outDir + '/index.js'
+    );
+  }
+
+  const messages = I18n.getMessages();
+
+  const html =
+    htmlText.substring(0, htmlText.indexOf('</head>')) +
+    `<script>
+    window.PSAT_REPORT_HTML = '${reportHTML}'
+    window.PSAT_DATA = ${JSON.stringify({
+      json: result,
+      type: isSiteMap ? 'sitemap' : 'url',
+      selectedSite: outDir?.trim()?.slice(6) ?? '',
+      translations: messages,
+    })}</script>` +
+    htmlText.substring(htmlText.indexOf('</head>'));
+
+  const outFileFullDir = path.resolve(outDir + '/index.html');
+  const htmlBlob = new Blob([html]);
+  const buffer = Buffer.from(await htmlBlob.arrayBuffer());
+
+  fs.writeFile(outDir + '/index.html', buffer, () =>
+    console.log(`Report: ${URL.pathToFileURL(outFileFullDir)}`)
+  );
 };
 
 // eslint-disable-next-line complexity
 (async () => {
-  const url = program.opts().url;
+  const url = program.args?.[0] ?? program.opts().url;
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
-  const port = parseInt(program.opts().port || '9000');
+  const locale = program.opts().locale;
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
@@ -120,25 +198,12 @@ const startDashboardServer = async (dir: string, port: number) => {
     sitemapPath,
     numberOfUrlsInput,
     outDir,
-    port
+    locale
   );
-
-  //check if devserver port in already in use only if the dashboard is goint to be used
-
-  if (!outDir) {
-    const isPortInUse = await checkPortInUse(port);
-
-    if (isPortInUse) {
-      console.error(
-        `Error: Report server port ${port} already in use. You might be already running CLI`
-      );
-      process.exit(1);
-    }
-  }
 
   const prefix =
     url || sitemapUrl
-      ? Utility.generatePrefix(url || sitemapUrl)
+      ? generatePrefix(url || sitemapUrl)
       : path.parse(csvPath || sitemapPath).name;
 
   let outputDir;
@@ -168,18 +233,14 @@ const startDashboardServer = async (dir: string, port: number) => {
     let userInput: string | null = null;
 
     if (!shouldSkipPrompts && !numberOfUrlsInput) {
-      userInput = await Utility.askUserInput(
-        `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
-          urls.length
-        } pages. Please enter the number of pages you want to analyze (Default ${
-          urls.length
-        }):`,
+      userInput = await askUserInput(
+        `Please enter the number of pages to analyze (Default: ${urls.length}):`,
         { default: urls.length.toString() }
       );
       numberOfUrls =
         userInput && isNaN(parseInt(userInput))
           ? urls.length
-          : parseInt(userInput);
+          : parseInt(userInput as string);
     } else if (numberOfUrlsInput) {
       console.log(`Analysing ${numberOfUrlsInput} urls.`);
       numberOfUrls = parseInt(numberOfUrlsInput);
@@ -196,21 +257,24 @@ const startDashboardServer = async (dir: string, port: number) => {
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analysing cookies on first site visit',
+    text: 'Analysing cookies on first site visit...',
   });
 
-  const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
-    urlsToProcess,
-    isHeadless,
-    DELAY_TIME,
-    cookieDictionary,
-    3,
-    urlsToProcess.length !== 1 ? spinnies : undefined,
-    shouldSkipAcceptBanner
-  );
+  const cookieAnalysisAndFetchedResourceData =
+    await analyzeCookiesUrlsInBatchesAndFetchResources(
+      urlsToProcess,
+      //@ts-ignore Fix type.
+      Libraries,
+      isHeadless,
+      DELAY_TIME,
+      cookieDictionary,
+      3,
+      urlsToProcess.length !== 1 ? spinnies : undefined,
+      shouldSkipAcceptBanner
+    );
 
   spinnies.succeed('cookie-spinner', {
-    text: 'Done analyzing cookies.',
+    text: 'Done analyzing cookies!',
   });
 
   let technologyAnalysisData: any = null;
@@ -227,28 +291,43 @@ const startDashboardServer = async (dir: string, port: number) => {
     );
 
     spinnies.succeed('technology-spinner', {
-      text: 'Done analyzing technologies.',
+      text: 'Done analyzing technologies!',
     });
   }
 
   const result = urlsToProcess.map((_url, ind) => {
+    const detectedMatchingSignatures: LibraryData = {
+      ...detectMatchingSignatures(
+        cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
+        Object.fromEntries(
+          Libraries.map((library) => [library.name, library.detectionFunction])
+        ) as DetectionFunctions
+      ),
+      ...(cookieAnalysisAndFetchedResourceData[ind]?.domQueryMatches ?? {}),
+    };
     return {
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
-      cookieData: cookieAnalysisData[ind].cookieData,
-    } as CompleteJson;
+      cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
+      libraryMatches: detectedMatchingSignatures ?? [],
+    } as unknown as CompleteJson;
   });
 
-  await saveResults(outputDir, result);
+  I18n.loadCLIMessagesData(locale);
+
+  const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
+    console.log('Reports created successfully!');
     process.exit(0);
   }
 
-  startDashboardServer(
-    encodeURIComponent(prefix) +
-      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''),
-    port
-  );
-})();
+  await saveResultsAsJSON(outputDir, result);
+  await saveResultsAsHTML(outputDir, result, isSiteMap);
+})().catch((error) => {
+  console.log('Some error occured while analysing the website.');
+  console.log('For more information check the stack trace below:\n');
+  console.log(error);
+  process.exit(process?.exitCode ?? 0);
+});

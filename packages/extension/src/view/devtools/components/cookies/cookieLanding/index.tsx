@@ -20,20 +20,20 @@ import React, { useMemo } from 'react';
 import {
   LibraryDetection,
   useLibraryDetectionContext,
-} from '@ps-analysis-tool/library-detection';
+} from '@google-psat/library-detection';
 import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
-  prepareCookiesCount,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
-import { useCookie } from '../../../stateProviders';
+import { useCookie, useSettings } from '../../../stateProviders';
 import downloadReport from '../../../../../utils/downloadReport';
 import ExemptedCookiesSection from './exemptedCookiesSection';
 
@@ -44,6 +44,8 @@ const AssembledCookiesLanding = () => {
     url: state.tabUrl,
   }));
 
+  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
+
   const { libraryMatches, showLoader } = useLibraryDetectionContext(
     ({ state }) => ({
       libraryMatches: state.libraryMatches,
@@ -51,49 +53,50 @@ const AssembledCookiesLanding = () => {
     })
   );
 
-  const cookieStats = prepareCookiesCount(tabCookies);
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const defaultSections = [
       {
-        name: 'Cookies',
+        name: I18n.getMessage('cookies'),
         link: 'cookies',
         panel: {
           Element: CookiesSection,
         },
       },
       {
-        name: 'Blocked Cookies',
+        name: I18n.getMessage('blockedCookies'),
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
         },
       },
       {
-        name: 'Library Detection',
+        name: I18n.getMessage('libraryDetection'),
         link: 'library-detection',
         panel: {
           Element: LibraryDetection,
         },
       },
       {
-        name: 'Frames',
+        name: I18n.getMessage('frames'),
         link: 'frames',
         panel: {
           Element: FramesSection,
         },
       },
     ];
-    if (cookieStats.exemptedCookies.total > 0) {
+
+    if (isUsingCDP) {
       defaultSections.splice(2, 0, {
-        name: 'Exemption Reason',
+        name: I18n.getMessage('exemptionReasons'),
         link: 'exemption-reasons',
         panel: {
           Element: ExemptedCookiesSection,
         },
       });
     }
+
     return defaultSections;
-  }, [cookieStats.exemptedCookies.total]);
+  }, [isUsingCDP]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),

@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -43,17 +44,13 @@ const OtherDomainOutput = ({
         <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           2
         </p>
-        <p className="text-base">
-          Add the file <code>related-website-set.json</code> in the directory
-          <code>.well-known</code> of <b>all the other domains</b> in your set
-          with the following content:
-        </p>
+        <p className="text-base">{I18n.getMessage('addToRwsOtherDomains')}</p>
       </div>
       <div id="domainsListOutput">
         <ul className="list-disc">
           {primaryWellKnownOutput && primaryWellKnownOutput.associatedSites && (
             <div className="mb-2">
-              <p className="text-sm">Associated Sites</p>
+              <p className="text-sm">{I18n.getMessage('associatedSites')}</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.associatedSites.map((url) => (
                   <li key={url} className="text-sm">
@@ -65,7 +62,7 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.serviceSites && (
             <div className="mb-2">
-              <p className="text-sm">Service Sites</p>
+              <p className="text-sm">{I18n.getMessage('serviceSites')}</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.serviceSites.map((url) => (
                   <li key={url} className="text-sm">
@@ -77,7 +74,7 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.ccTLDs && (
             <div className="mb-2">
-              <p className="text-sm">Country Sites</p>
+              <p className="text-sm">{I18n.getMessage('countrySites')}</p>
               <div className="pl-4">
                 {Object.values(primaryWellKnownOutput.ccTLDs).map((cctlds) =>
                   cctlds.map((cctld) => (

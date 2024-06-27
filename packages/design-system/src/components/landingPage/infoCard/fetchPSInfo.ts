@@ -16,11 +16,12 @@
 /**
  * External dependencies.
  */
-import { fetchLocalData } from '@ps-analysis-tool/common';
+import { fetchLocalData } from '@google-psat/common';
 
 export enum PSInfoKey {
   'Topics' = 'topics',
   'AttributionReporting' = 'attribution-reporting',
+  'ProtectedAudience' = 'protected-audience',
   'BounceTracking' = 'bounce-tracking',
   'UserAgentReduction' = 'user-agent-reduction',
   'RelatedWebsiteSets' = 'related-website-sets',
@@ -32,7 +33,9 @@ export type PSInfoKeyType = (typeof PSInfoKey)[keyof typeof PSInfoKey];
 export type PSInfo = {
   name: string;
   description: string;
+  useI18n: boolean;
   proposal: string;
+  publicExplainer: string;
   publicDiscussion: string;
   videoOverview: string;
   devDocumentation: string;

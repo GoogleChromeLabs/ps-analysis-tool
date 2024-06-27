@@ -30,6 +30,7 @@ const getInitialLibraryData = (): LibraryData => {
 
       if (domQueryFunction) {
         initialData = {
+          //@ts-ignore
           domQueryMatches: null,
         };
       }
