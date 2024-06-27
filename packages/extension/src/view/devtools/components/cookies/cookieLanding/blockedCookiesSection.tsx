@@ -77,7 +77,9 @@ const BlockedCookiesSection = () => {
         ...component,
         description:
           typeof legendDescription === 'string'
-            ? I18n.getMessage(legendDescription)
+            ? legendDescription.includes(' ')
+              ? legendDescription
+              : I18n.getMessage(legendDescription)
             : I18n.getFormattedMessages(legendDescription),
         title: component.label,
         containerClasses: '',
