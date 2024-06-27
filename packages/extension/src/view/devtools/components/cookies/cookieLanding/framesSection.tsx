@@ -24,6 +24,7 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
 } from '@google-psat/design-system';
+import { getLegendDescription } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
@@ -43,12 +44,7 @@ const FramesSection = () => {
         LEGEND_DESCRIPTION[component.descriptionKey] || '';
       return {
         ...component,
-        description:
-          typeof legendDescription === 'string'
-            ? legendDescription.includes(' ')
-              ? legendDescription
-              : I18n.getMessage(legendDescription)
-            : I18n.getFormattedMessages(legendDescription),
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
       };

@@ -28,7 +28,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
 } from '@google-psat/design-system';
-import type { DataMapping } from '@google-psat/common';
+import { type DataMapping, getLegendDescription } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
@@ -75,12 +75,7 @@ const BlockedCookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description:
-          typeof legendDescription === 'string'
-            ? legendDescription.includes(' ')
-              ? legendDescription
-              : I18n.getMessage(legendDescription)
-            : I18n.getFormattedMessages(legendDescription),
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) =>

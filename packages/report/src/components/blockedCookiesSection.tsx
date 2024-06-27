@@ -27,11 +27,11 @@ import {
   type MatrixComponentProps,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { type DataMapping, getLegendDescription } from '@google-psat/common';
 /**
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
-import type { DataMapping } from '@google-psat/common';
 
 const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
@@ -54,12 +54,7 @@ const CookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description:
-          typeof legendDescription === 'string'
-            ? legendDescription.includes(' ')
-              ? legendDescription
-              : I18n.getMessage(legendDescription)
-            : I18n.getFormattedMessages(legendDescription),
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
       };
