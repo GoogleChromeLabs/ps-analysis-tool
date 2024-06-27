@@ -359,7 +359,7 @@
 * Feature: Update babel-loader webpack config to have caching support for faster builds https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/452
 
 
-#v1.0.0
+#v0.9.0
 ## Extension
 * Feature: Complete migration to CDP https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/539
 * Feature: Add and implement i18n translation locales https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/713
