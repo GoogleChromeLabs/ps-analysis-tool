@@ -1,8 +1,8 @@
-## Privacy Sandbox Analysis Tool CLI
-
 <p align="center">
 <img src="https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/packages/extension/icons/icon.svg" height="100" width="100">
 </p>
+
+## Privacy Sandbox Analysis Tool CLI
 
 > The Privacy Sandbox Analysis Tool CLI is designed to help developers audit their websites for the upcoming deprecation of third-party cookies (3PCD) in Chrome as part of the Privacy Sandbox initiative.
 
