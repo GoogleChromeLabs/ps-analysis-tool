@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//out/win-Debug/gen/third_party/devtools-frontend/src/front_end/core/sdk/NetworkRequest.js
 const CookieBlockedReason = {
   SecureOnly: ['body_SecureOnly'],
   NotOnPath: ['body_NotOnPath'],
@@ -32,6 +33,21 @@ const CookieBlockedReason = {
   SamePartyFromCrossPartyContext: ['body_SamePartyFromCrossPartyContext'],
   NameValuePairExceedsMaxSize: ['body_NameValuePairExceedsMaxSize'],
   InvalidDomain: ['body_InvalidDomain'],
+  SameSiteLax:
+    "This cookie was blocked because it had the 'SameSite=Lax' attribute and the request was made from a different site and was not initiated by a top-level navigation.",
+  SyntaxError: "This 'Set-Cookie' header had invalid syntax.",
+  SchemeNotSupported:
+    'The scheme of this connection is not allowed to store cookies.',
+  OverwriteSecure:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it was not sent over a secure connection and would have overwritten a cookie with the Secure attribute.",
+  InvalidPrefix:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it used the '__Secure-' or '__Host-' prefix in its name and broke the additional rules applied to cookies with these prefixes.",
+  SamePartyConflictsWithOtherAttributes:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it had the 'SameParty' attribute but also had other conflicting attributes. Chrome requires cookies that use the 'SameParty' attribute to also have the 'Secure' attribute, and to not be restricted to 'SameSite=Strict'.",
+  DisallowedCharacter:
+    "This 'Set-Cookie' header contained a disallowed character (a forbidden ASCII control character, or the tab character if it appears in the middle of the cookie name, value, an attribute name, or an attribute value).",
+  NoCookieContent:
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked beacuse this cookie had no content",
 };
 
 export default CookieBlockedReason;
