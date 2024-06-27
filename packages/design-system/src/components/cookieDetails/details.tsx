@@ -63,10 +63,15 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
     const cookieExclusionReason =
       // @ts-ignore
       cookieIssueDetails.CookieExclusionReason[reason];
-    const cookieBlockedReason = I18n.getFormattedMessages(
-      // @ts-ignore
-      cookieIssueDetails.CookieBlockedReason[reason]
-    );
+    const cookieBlockedReason =
+      //@ts-ignore
+      typeof cookieIssueDetails.CookieBlockedReason[reason] === 'string'
+        ? //@ts-ignore
+          cookieIssueDetails.CookieBlockedReason[reason]
+        : I18n.getFormattedMessages(
+            // @ts-ignore
+            cookieIssueDetails.CookieBlockedReason[reason]
+          );
 
     if (cookieBlockedReason) {
       blockedReasons = blockedReasons + cookieBlockedReason;

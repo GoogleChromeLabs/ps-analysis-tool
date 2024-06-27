@@ -46,14 +46,14 @@ const prepareCookieStatsComponents = (
 
     blockedCookiesStats.push({
       count: cookieStats.blockedCookies[key],
-      color: COLOR_MAP[key].color,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
     });
 
     blockedCookiesLegend.push({
       label: key,
       count: cookieStats.blockedCookies[key],
-      color: COLOR_MAP[key].color,
-      countClassName: COLOR_MAP[key].className,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
+      countClassName: COLOR_MAP[key]?.className ?? 'text-jamboo',
     });
   });
 
@@ -67,14 +67,14 @@ const prepareCookieStatsComponents = (
 
     exemptedCookiesStats.push({
       count: cookieStats.exemptedCookies[key],
-      color: COLOR_MAP[key].color,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
     });
 
     exemptedCookiesLegend.push({
       label: key,
       count: cookieStats.exemptedCookies[key],
-      color: COLOR_MAP[key].color,
-      countClassName: COLOR_MAP[key].className,
+      color: COLOR_MAP[key]?.color ?? '#E59500',
+      countClassName: COLOR_MAP[key]?.className ?? 'text-jamboo',
     });
   });
 

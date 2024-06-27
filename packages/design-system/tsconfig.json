@@ -14,7 +14,12 @@
     "noImplicitAny": true,
     "strictNullChecks": true
   },
-  "exclude": ["**/tests/**/*.ts", "**/tests/**/*.tsx"],
+  "exclude": [
+    "**/tests/**/*.ts",
+    "**/tests/**/*.tsx",
+    "**/dist/**/*",
+    "**/dist-types/**/*"
+  ],
   "references": [
     {
       "path": "../common"
