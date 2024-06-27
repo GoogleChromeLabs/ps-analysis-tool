@@ -43,7 +43,7 @@ const prepareCookieStatsComponents = (
     if (isNaN(cookieStats.blockedCookies[key])) {
       return;
     }
-    console.log('key', key);
+
     blockedCookiesStats.push({
       count: cookieStats.blockedCookies[key],
       color: COLOR_MAP[key]?.color ?? '#E59500',
