@@ -47,7 +47,7 @@ const CookieBlockedReason = {
   DisallowedCharacter:
     "This 'Set-Cookie' header contained a disallowed character (a forbidden ASCII control character, or the tab character if it appears in the middle of the cookie name, value, an attribute name, or an attribute value).",
   NoCookieContent:
-    "This attempt to set a cookie via a 'Set-Cookie' header was blocked beacuse this cookie had no content",
+    "This attempt to set a cookie via a 'Set-Cookie' header was blocked beacuse the header did not contain any value.",
 };
 
 export default CookieBlockedReason;
