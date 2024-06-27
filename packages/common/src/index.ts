@@ -41,6 +41,7 @@ export { default as delay } from './utils/delay';
 export { default as mergeDeep } from './utils/mergeDeep';
 export { default as resolveWithTimeout } from './utils/resolveWithTimeout';
 export { default as deriveBlockingStatus } from './utils/deriveBlockingStatus';
+export { default as getLegendDescription } from './utils/getLegendDescription';
 export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';
