@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import { ContentPanel, LandingPage } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
@@ -48,7 +49,7 @@ const content = [
 const SiteBoundaries = () => {
   return (
     <LandingPage
-      title="Site Boundaries"
+      title={I18n.getMessage('siteBoundaries')}
       contentPanel={
         <ContentPanel
           title="Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents."

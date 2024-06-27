@@ -17,7 +17,7 @@
  * External dependencies
  */
 import React from 'react';
-import type { DataMapping } from '@google-psat/common';
+import { type DataMapping, getLegendDescription } from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -50,10 +50,7 @@ const ExemptedCookiesSection = () => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description:
-          typeof legendDescription === 'string'
-            ? I18n.getMessage(legendDescription)
-            : I18n.getFormattedMessages(legendDescription),
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) => {

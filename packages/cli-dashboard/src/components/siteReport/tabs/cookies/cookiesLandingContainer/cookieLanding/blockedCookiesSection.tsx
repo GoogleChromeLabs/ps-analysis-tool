@@ -26,7 +26,12 @@ import {
   LEGEND_DESCRIPTION,
   useFiltersMapping,
 } from '@google-psat/design-system';
-import type { TabCookies, TabFrames, DataMapping } from '@google-psat/common';
+import {
+  type TabCookies,
+  type TabFrames,
+  type DataMapping,
+  getLegendDescription,
+} from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 interface BlockedCookiesSectionProps {
@@ -65,10 +70,7 @@ const BlockedCookiesSection = ({
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description:
-          typeof legendDescription === 'string'
-            ? I18n.getMessage(legendDescription)
-            : I18n.getFormattedMessages(legendDescription),
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) =>
@@ -85,10 +87,7 @@ const BlockedCookiesSection = ({
         LEGEND_DESCRIPTION[component.descriptionKey || ''];
       return {
         ...component,
-        description:
-          typeof legendDescription === 'string'
-            ? I18n.getMessage(legendDescription)
-            : I18n.getFormattedMessages(legendDescription),
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) => {

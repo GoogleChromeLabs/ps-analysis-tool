@@ -152,6 +152,13 @@ module.exports = {
       'cocoa-brown': '#D96C06',
       'persian-indigo': '#3A1772',
       'hollywood-cerise': '#D741A7',
+      'baby-pink-gradient': '#FF6F91',
+      'spot-palette-mud-pink': '#B39CD0',
+      jamboo: '#E59500',
+      'rose-bourbon': '#EB4B98',
+      'orange-buff': '#E0A890',
+      'spring-green': '#0FFF95',
+      'maroon-claret': '#840032',
     },
     backgroundColor: {
       ...colors,

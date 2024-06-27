@@ -22,6 +22,7 @@ import {
   type TabFrames,
   Legend,
   filterFramesWithCookies,
+  getLegendDescription,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
@@ -72,10 +73,7 @@ const CookiesMatrix = ({
       LEGEND_DESCRIPTION[component.descriptionKey || component.label] || '';
     dataComponents.push({
       ...component,
-      description:
-        typeof legendDescription === 'string'
-          ? I18n.getMessage(legendDescription)
-          : I18n.getFormattedMessages(legendDescription),
+      description: getLegendDescription(legendDescription),
       title: component.label,
     });
   });

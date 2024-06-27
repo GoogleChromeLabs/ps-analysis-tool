@@ -24,6 +24,7 @@ import {
   MatrixContainer,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { getLegendDescription } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -42,10 +43,7 @@ const CookiesSection = () => {
 
     return {
       ...component,
-      description:
-        typeof legendDescription === 'string'
-          ? I18n.getMessage(legendDescription)
-          : I18n.getFormattedMessages(legendDescription),
+      description: getLegendDescription(legendDescription),
       title: component.label,
       containerClasses: '',
     };
