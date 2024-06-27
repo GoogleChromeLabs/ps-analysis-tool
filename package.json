@@ -1,6 +1,6 @@
 {
 	"name": "ps-analysis-tool",
-	"version": "2.0.1-0",
+	"version": "0.9.0",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"build-storybook": "storybook build",
