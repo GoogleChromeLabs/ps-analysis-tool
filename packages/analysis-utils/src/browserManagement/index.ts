@@ -606,7 +606,6 @@ export class BrowserManagement {
       })
     );
     const mainFrameUrl = new URL(page.url()).origin;
-
     return { [mainFrameUrl]: domQueryMatches };
   }
 
@@ -655,12 +654,18 @@ export class BrowserManagement {
 
     await Promise.all(
       userProvidedUrls.map(async (url) => {
+        const newMatches = await this.insertAndRunDOMQueryFunctions(
+          url,
+          Libraries
+        );
+
         consolidatedDOMQueryMatches = {
           ...consolidatedDOMQueryMatches,
-          ...(await this.insertAndRunDOMQueryFunctions(url, Libraries)),
+          ...newMatches,
         };
       })
     );
+
     // Delay for page to load more resources
     await delay(this.pageWaitTime / 2);
 
