@@ -36,7 +36,8 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
-  shouldSkipAcceptBanner: boolean
+  shouldSkipAcceptBanner: boolean,
+  verbose: boolean
 ) => {
   const browser = new BrowserManagement(
     {
@@ -46,7 +47,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
     },
     isHeadless,
     delayTime,
-    false
+    verbose
   );
 
   await browser.initializeBrowser(true);
