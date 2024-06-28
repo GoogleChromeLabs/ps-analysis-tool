@@ -56,36 +56,38 @@ const program = new Command();
 
 program
   .version('0.9.0-2')
-  .description('CLI to test a URL for 3p cookies')
-  .argument('[website-url]', 'The URL of website you want to analyse')
-  .option('-u, --url <value>', 'URL of a site')
-  .option('-s, --sitemap-url <value>', 'URL of a sitemap')
-  .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
+  .description('CLI to test a URL for 3p cookies.')
+  .argument('[website-url]', 'The URL of website you want to analyse.')
+  .option('-u, --url <value>', 'URL of a website.')
+  .option('-s, --source-url <value>', 'URL of a sitemap.')
+  .option('-f, --file <value>', 'Path to a sitemap saved in the file system.')
   .option(
-    '-p, --sitemap-path <value>',
-    'Path to a sitemap saved in the file system'
+    '-l, --limit <num>',
+    'Limit the number of URLs to analyze (from sitemap or CSV).'
   )
+  .option('-d, --display', 'Flag for running puppeteer in non-headless mode.')
+  .option('-v, --verbose', 'Enables verbose logging.')
+  .option('-t, --tech', 'Enables technology analysis')
   .option(
-    '-l, --locale <value>',
-    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR'
-  )
-  .option('-ul, --url-limit <value>', 'No of URLs to analyze')
-  .option(
-    '-nh, --no-headless ',
-    'Flag for running puppeteer in non-headless mode'
-  )
-  .option(
-    '-np, --no-prompts',
-    'Flags for skipping all prompts. Default options will be used'
-  )
-  .option('-nt, --no-technology', 'Flags for skipping technology analysis.')
-  .option(
-    '-d, --out-dir <value>',
+    '--o, --out-dir <value>',
     'Directory path where the analysis data will be stored'
   )
+  .option('-i, --ignore-gdpr', 'This will accept the GDPR banner if present.')
   .option(
-    '-ab, --accept-banner',
-    'This will accept the GDPR banner if present.'
+    '-q, --quiet',
+    'Flags for skipping all prompts. Default options will be used'
+  )
+  .option(
+    '-c, --concurrency <num>',
+    'Number of URLs to be analysed in parallel during sitemap or CSV analysis.'
+  )
+  .option(
+    '-w, --wait <num>',
+    'Number of mili-seconds to wait after the page is loaded before generating the report.'
+  )
+  .option(
+    '-w, --wording <value>',
+    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR.'
   );
 
 program.parse();
@@ -180,31 +182,34 @@ const saveResultsAsHTML = async (
 // eslint-disable-next-line complexity
 (async () => {
   const url = program.args?.[0] ?? program.opts().url;
-  const sitemapUrl = program.opts().sitemapUrl;
-  const csvPath = program.opts().csvPath;
-  const sitemapPath = program.opts().sitemapPath;
-  const locale = program.opts().locale;
-  const numberOfUrlsInput = program.opts().urlLimit;
-  const isHeadless = Boolean(program.opts().headless);
-  const shouldSkipPrompts = !program.opts().prompts;
-  const shouldSkipTechnologyAnalysis = !program.opts().technology;
+  const verbose = Boolean(program.opts().verbose);
+  const sitemapUrl = program.opts().sourceUrl;
+  const filePath = program.opts().file;
+  const locale = program.opts().wording;
+  const numberOfUrlsInput = program.opts().limit;
+  const isHeadless = program.opts().display;
+  const shouldSkipPrompts = program.opts().quiet;
+  const shouldSkipTechnologyAnalysis = program.opts().technology;
   const outDir = program.opts().outDir;
-  const shouldSkipAcceptBanner = program.opts().acceptBanner;
+  const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
+  const concurrency = program.opts().concurrency ?? 3;
+  const waitTime = program.opts().wait;
 
   await validateArgs(
     url,
     sitemapUrl,
-    csvPath,
-    sitemapPath,
+    filePath,
     numberOfUrlsInput,
     outDir,
-    locale
+    locale,
+    concurrency,
+    waitTime
   );
 
   const prefix =
     url || sitemapUrl
       ? generatePrefix(url || sitemapUrl)
-      : path.parse(csvPath || sitemapPath).name;
+      : path.parse(filePath).name;
 
   let outputDir;
 
@@ -218,17 +223,11 @@ const saveResultsAsHTML = async (
 
   const spinnies = new Spinnies();
 
-  const urls = await getUrlListFromArgs(
-    url,
-    sitemapUrl,
-    csvPath,
-    sitemapPath,
-    spinnies
-  );
+  const urls = await getUrlListFromArgs(url, sitemapUrl, filePath, spinnies);
 
   let urlsToProcess: string[] = [];
 
-  if (sitemapUrl || csvPath || sitemapPath) {
+  if (sitemapUrl || filePath) {
     let numberOfUrls: number | null = null;
     let userInput: string | null = null;
 
@@ -266,11 +265,12 @@ const saveResultsAsHTML = async (
       //@ts-ignore Fix type.
       Libraries,
       isHeadless,
-      DELAY_TIME,
+      isNaN(parseInt(waitTime)) ? DELAY_TIME : parseInt(waitTime),
       cookieDictionary,
-      3,
+      isNaN(parseInt(concurrency)) ? 3 : parseInt(concurrency),
       urlsToProcess.length !== 1 ? spinnies : undefined,
-      shouldSkipAcceptBanner
+      shouldSkipAcceptBanner,
+      verbose
     );
 
   spinnies.succeed('cookie-spinner', {
@@ -286,7 +286,7 @@ const saveResultsAsHTML = async (
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
       urlsToProcess,
-      3,
+      isNaN(parseInt(concurrency)) ? 3 : parseInt(concurrency),
       urlsToProcess.length !== 1 ? spinnies : undefined
     );
 
@@ -315,7 +315,7 @@ const saveResultsAsHTML = async (
 
   I18n.loadCLIMessagesData(locale);
 
-  const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
+  const isSiteMap = sitemapUrl || filePath ? true : false;
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
