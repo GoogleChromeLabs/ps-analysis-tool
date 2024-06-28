@@ -18,7 +18,7 @@
  */
 import { readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
-import { basename } from 'path';
+import path, { basename } from 'path';
 /**
  * Internal dependencies.
  */
@@ -136,16 +136,14 @@ const parseUrlsFromLocalSitemap = async (
  * Validate arguments passed to the CLI. Process for the CLI is exited with appropriate message.
  * @param {string} url Url input to CLI.
  * @param {string} sitemapUrl Url of a sitemap.
- * @param {string} csvPath File system path to a csv file with urls.
- * @param {string} sitemapPath File system path to a sitemap xml file.
+ * @param {string} filePath File system path to a csv file with urls or sitemap xml file.
  * @param {any} spinnies handler for logging.
  * @returns {string[]} list of urls.
  */
 const getUrlListFromArgs = async (
   url: string,
   sitemapUrl?: string,
-  csvPath?: string,
-  sitemapPath?: string,
+  filePath?: string,
   // @ts-ignore Package does not support typescript.
   spinnies
 ): Promise<string[]> => {
@@ -161,23 +159,19 @@ const getUrlListFromArgs = async (
       console.log('Error: Error parsing sitemap.');
       process.exit(1);
     }
-  } else if (csvPath) {
+  } else if (filePath) {
     try {
-      const _urls = await parseUrlsFromCSV(csvPath, spinnies);
-      urls = urls.concat(_urls);
-    } catch (error) {
-      console.log('Error parsing CSV file');
-      process.exit(1);
-    }
-  } else if (sitemapPath) {
-    try {
-      const _urls = await parseUrlsFromLocalSitemap(sitemapPath, spinnies);
-      urls = urls.concat(_urls);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-        process.exit(1);
+      const isCSV = path.parse(filePath).ext === '.csv';
+      if (isCSV) {
+        const _urls = await parseUrlsFromCSV(filePath, spinnies);
+        urls = urls.concat(_urls);
+        return urls;
       }
+      const _urls = await parseUrlsFromLocalSitemap(filePath, spinnies);
+      urls = urls.concat(_urls);
+    } catch (error) {
+      console.log('Error parsing file');
+      process.exit(1);
     }
   }
 

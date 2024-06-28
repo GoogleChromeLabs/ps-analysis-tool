@@ -22,27 +22,28 @@ import path from 'path';
  * Validate arguments passed to the CLI. Process for the CLI is exited with appropriate message.
  * @param {string} url Url input to CLI.
  * @param {string} sitemapUrl Url of a sitemap.
- * @param {string} csvPath File system path to a csv file with urls.
- * @param {string} sitemapPath File system path to a sitemap xml file.
+ * @param {string} filePath File system path to a csv file with urls.
  * @param {string} numberOfUrls Url limit argument.
  * @param {string} outDir File system path to the output directory.
  * @param {string} locale Locale of the site.
+ * @param {string} concurrency The number of tabs to be opened during sitemap analysis.
+ * @param {string} waitTime The amount of time to be waited on a page.
  */
 // eslint-disable-next-line complexity
 const validateArgs = async (
   url: string,
   sitemapUrl: string,
-  csvPath: string,
-  sitemapPath: string,
+  filePath: string,
   numberOfUrls: string,
   outDir: string,
-  locale: string
+  locale: string,
+  concurrency: string,
+  waitTime: string
 ) => {
   const numArgs: number = [
     Boolean(url),
     Boolean(sitemapUrl),
-    Boolean(csvPath),
-    Boolean(sitemapPath),
+    Boolean(filePath),
   ].reduce((acc, arg) => {
     acc += arg ? 1 : 0;
     return acc;
@@ -53,24 +54,25 @@ const validateArgs = async (
       `Please provide one and only one of the following
         a) URL of a site (-u or --url or default argument)
         b) URL of a sitemap (-s or --sitemap-url)
-        c) Path to a CSV file (-c or --csv-path)
-        d) Path to an XML file (-p or --sitemap-path)`
+        c) Path to a file (CSV or XML sitemap) (-f or --file)`
     );
     process.exit(1);
   }
 
-  if (csvPath) {
-    const csvFileExists = await exists(csvPath);
-    if (!csvFileExists) {
-      console.log(`Error: No file at ${csvPath}`);
-      process.exit(1);
-    }
+  if (isNaN(parseInt(concurrency))) {
+    console.log(`${concurrency} is not valid numeric value`);
+    process.exit(1);
   }
 
-  if (sitemapPath) {
-    const sitemapFileExists = await exists(sitemapPath);
-    if (!sitemapFileExists) {
-      console.log(`Error: No file at ${sitemapPath}`);
+  if (isNaN(parseInt(waitTime))) {
+    console.log(`${waitTime} is not valid numeric value`);
+    process.exit(1);
+  }
+
+  if (filePath) {
+    const csvFileExists = await exists(filePath);
+    if (!csvFileExists) {
+      console.log(`Error: No file at ${filePath}`);
       process.exit(1);
     }
   }
