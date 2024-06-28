@@ -43,34 +43,47 @@ import URL from 'node:url';
 import {
   fetchDictionary,
   getUrlListFromArgs,
-  validateArgs,
   saveCSVReports,
   askUserInput,
   generatePrefix,
+  localeValidator,
+  outDirValidator,
+  filePathValidator,
+  urlValidator,
+  numericValidator,
 } from './utils';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-const DELAY_TIME = 20000;
 const program = new Command();
 
 program
   .version('0.9.0-2')
   .description('CLI to test a URL for 3p cookies.')
-  .argument('[website-url]', 'The URL of website you want to analyse.')
-  .option('-u, --url <value>', 'URL of a website.')
-  .option('-s, --source-url <value>', 'URL of a sitemap.')
-  .option('-f, --file <value>', 'Path to a sitemap saved in the file system.')
+  .argument(
+    '[website-url]',
+    'The URL of website you want to analyse.',
+    urlValidator
+  )
+  .option('-u, --url <value>', 'URL of a website.', urlValidator)
+  .option('-s, --source-url <value>', 'URL of a sitemap.', urlValidator)
+  .option(
+    '-f, --file <value>',
+    'Path to a sitemap saved in the file system.',
+    filePathValidator
+  )
   .option(
     '-l, --limit <num>',
-    'Limit the number of URLs to analyze (from sitemap or CSV).'
+    'Limit the number of URLs to analyze (from sitemap or CSV).',
+    numericValidator
   )
   .option('-d, --display', 'Flag for running puppeteer in non-headless mode.')
   .option('-v, --verbose', 'Enables verbose logging.')
   .option('-t, --tech', 'Enables technology analysis')
   .option(
     '--o, --out-dir <value>',
-    'Directory path where the analysis data will be stored'
+    'Directory path where the analysis data will be stored',
+    outDirValidator
   )
   .option('-i, --ignore-gdpr', 'This will accept the GDPR banner if present.')
   .option(
@@ -79,15 +92,21 @@ program
   )
   .option(
     '-c, --concurrency <num>',
-    'Number of URLs to be analysed in parallel during sitemap or CSV analysis.'
+    'Number of URLs to be analysed in parallel during sitemap or CSV analysis.',
+    numericValidator,
+    3
   )
   .option(
     '-w, --wait <num>',
-    'Number of mili-seconds to wait after the page is loaded before generating the report.'
+    'Number of mili-seconds to wait after the page is loaded before generating the report.',
+    numericValidator,
+    20000
   )
   .option(
     '-w, --wording <value>',
-    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR.'
+    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR.',
+    localeValidator,
+    'en'
   );
 
 program.parse();
@@ -195,16 +214,24 @@ const saveResultsAsHTML = async (
   const concurrency = program.opts().concurrency ?? 3;
   const waitTime = program.opts().wait;
 
-  await validateArgs(
-    url,
-    sitemapUrl,
-    filePath,
-    numberOfUrlsInput,
-    outDir,
-    locale,
-    concurrency,
-    waitTime
-  );
+  const numArgs: number = [
+    Boolean(url),
+    Boolean(sitemapUrl),
+    Boolean(filePath),
+  ].reduce((acc, arg) => {
+    acc += arg ? 1 : 0;
+    return acc;
+  }, 0);
+
+  if (numArgs !== 1) {
+    console.error(
+      `Please provide one and only one of the following
+        a) URL of a site (-u or --url or default argument)
+        b) URL of a sitemap (-s or --sitemap-url)
+        c) Path to a file (CSV or XML sitemap) (-f or --file)`
+    );
+    process.exit(1);
+  }
 
   const prefix =
     url || sitemapUrl
@@ -265,9 +292,9 @@ const saveResultsAsHTML = async (
       //@ts-ignore Fix type.
       Libraries,
       isHeadless,
-      isNaN(parseInt(waitTime)) ? DELAY_TIME : parseInt(waitTime),
+      waitTime,
       cookieDictionary,
-      isNaN(parseInt(concurrency)) ? 3 : parseInt(concurrency),
+      concurrency,
       urlsToProcess.length !== 1 ? spinnies : undefined,
       shouldSkipAcceptBanner,
       verbose
@@ -286,7 +313,7 @@ const saveResultsAsHTML = async (
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
       urlsToProcess,
-      isNaN(parseInt(concurrency)) ? 3 : parseInt(concurrency),
+      concurrency,
       urlsToProcess.length !== 1 ? spinnies : undefined
     );
 

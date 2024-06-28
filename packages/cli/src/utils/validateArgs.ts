@@ -36,9 +36,7 @@ const validateArgs = async (
   filePath: string,
   numberOfUrls: string,
   outDir: string,
-  locale: string,
-  concurrency: string,
-  waitTime: string
+  locale: string
 ) => {
   const numArgs: number = [
     Boolean(url),
@@ -56,16 +54,6 @@ const validateArgs = async (
         b) URL of a sitemap (-s or --sitemap-url)
         c) Path to a file (CSV or XML sitemap) (-f or --file)`
     );
-    process.exit(1);
-  }
-
-  if (isNaN(parseInt(concurrency))) {
-    console.log(`${concurrency} is not valid numeric value`);
-    process.exit(1);
-  }
-
-  if (isNaN(parseInt(waitTime))) {
-    console.log(`${waitTime} is not valid numeric value`);
     process.exit(1);
   }
 
