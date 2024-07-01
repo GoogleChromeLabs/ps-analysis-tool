@@ -1404,7 +1404,7 @@
     "message": "Provide a way for advertising to reach users based on interests inferred from the sites or apps the user visits, without needing to know the specific sites or apps the user has visited"
   },
   "PSProtectedAudience": {
-    "message": "A proposal to serve remarketing and custom audience use cases by allowing custom defined interested groups to be stored on-device and allowing an on-device auction that then matches appropriate ads with people in a desired interest group."
+    "message": "The Protected Audience API is a Privacy Sandbox technology to serve remarketing and custom audience use cases, designed so third parties cannot track user browsing behavior across sites."
   },
   "PSAttributionReporting": {
     "message": "Allow the recording and matching of ad events with conversion events to occur on-device. </br> Event-level: Determine the effectiveness of specific ad interactions to help drive optimization. </br>Summary Reporting: Allows for more detail about the overall conversions (e.g. region, revenue, time of day, etc) that their advertising has delivered, while minimizing details about individual conversions."
