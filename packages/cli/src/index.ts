@@ -65,10 +65,10 @@ program
     'The URL of website you want to analyse.',
     urlValidator
   )
-  .option('-u, --url <value>', 'URL of a website.', urlValidator)
-  .option('-s, --source-url <value>', 'URL of a sitemap.', urlValidator)
+  .option('-u, --url <url>', 'URL of a website.', urlValidator)
+  .option('-s, --source-url <url>', 'URL of a sitemap.', urlValidator)
   .option(
-    '-f, --file <value>',
+    '-f, --file <path>',
     'Path to a sitemap saved in the file system.',
     filePathValidator
   )
@@ -81,7 +81,7 @@ program
   .option('-v, --verbose', 'Enables verbose logging.')
   .option('-t, --tech', 'Enables technology analysis')
   .option(
-    '--o, --out-dir <value>',
+    '--o, --out-dir <path>',
     'Directory path where the analysis data will be stored',
     outDirValidator
   )
@@ -103,7 +103,7 @@ program
     20000
   )
   .option(
-    '-w, --wording <value>',
+    '-w, --wording <language>',
     'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR.',
     localeValidator,
     'en'
