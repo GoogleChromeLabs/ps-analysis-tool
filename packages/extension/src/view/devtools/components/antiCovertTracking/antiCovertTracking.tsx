@@ -23,33 +23,28 @@ import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
-    title: 'IP Protection',
-    description:
-      "IP Protection is a proposal to avoid sharing a user's real IP address with third parties.",
+    title: () => I18n.getMessage('ipProtection'),
+    description: () => I18n.getMessage('ipProtectionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
   },
   {
-    title: 'Bounce Tracking Mitigations',
-    description:
-      'Reduce or eliminate the ability of bounce tracking to recognize people across contexts.',
+    title: () => I18n.getMessage('bounceTrackingMitigations'),
+    description: () => I18n.getMessage('bounceTrackingMitigationsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
   },
   {
-    title: 'Privacy Budget',
-    description:
-      'This proposal suggests a limit to the amount of individual user data that can be exposed to sites, so that in total it is insufficient to track and identify individuals.',
+    title: () => I18n.getMessage('privacyBudget'),
+    description: () => I18n.getMessage('privacyBudgetDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/privacy-budget',
   },
   {
-    title: 'User-Agent Reduction',
-    description:
-      'Minimize the identifying information shared in the User-Agent string, which may be used for passive fingerprinting.',
+    title: () => I18n.getMessage('userAgentReduction'),
+    description: () => I18n.getMessage('userAgentReductionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
   },
   {
-    title: 'Private State Tokens',
-    description:
-      "Enable trust in a user's authenticity to be conveyed from one context to another, to help sites combat fraud and distinguish bots from real humans—without passive tracking.",
+    title: () => I18n.getMessage('privateStateTokens'),
+    description: () => I18n.getMessage('privateStateTokensDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
   },
 ];
@@ -61,7 +56,7 @@ const AntiCovertTracking = () => {
       extraClasses="min-h-[78vh] w-full"
       contentPanel={
         <ContentPanel
-          title="The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking."
+          title={I18n.getMessage('antiCovertTrackingDescription')}
           content={content}
           counterStyles="bg-yellow-500"
           titleStyles="text-yellow-500"

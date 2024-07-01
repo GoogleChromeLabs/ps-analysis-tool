@@ -1752,7 +1752,7 @@
     "message": "Facebook Like Button"
   },
   "gISTitle": {
-    "message": "Avoid use of unsupported Google Identity Services features."
+    "message": "Unsupported Google Identity Services"
   },
   "featureCount": {
     "message": "$count$ features",
@@ -1764,7 +1764,7 @@
     }
   },
   "gISNote": {
-    "message": "Due to Privacy Sandbox enforcements some features are backward incompatible or deprecated. This report performs a page scan for script src elements and affected JavaScript objects and methods. Review the following features and $a_tag_start$migrate$a_tag_end$ if necessary.",
+    "message": "Due to Privacy Sandbox enforcements some features are backward incompatible or deprecated. Some features of Google Identity Services are in use. Please review the following documentation and $a_tag_start$migrate$a_tag_end$ if necessary.",
     "placeholders": {
       "a_tag_start": {
         "content": "$1",
@@ -1777,10 +1777,10 @@
     }
   },
   "gSITitle": {
-    "message": "Avoid use of deprecated Google Sign-In functionality."
+    "message": "Deprecated Google Sign-In"
   },
   "gSInote": {
-    "message": "The Google Sign-In JavaScript library is deprecated and is no longer supported. Review the following features and consider $a_tag_start$migrating$a_tag_end$ to a newer library if necessary.",
+    "message": "The Google Sign-In JavaScript library is deprecated and is no longer supported. Some features of Google Identity Services are in use. Please review the following documentation and $a_tag_start$migrating$a_tag_end$` if necessary.",
     "placeholders": {
       "a_tag_start": {
         "content": "$1",
@@ -8154,5 +8154,166 @@
   },
   "OCD_retention_364_days": {
     "message": "364 days"
+  },
+  "type": {
+    "message": "Type"
+  },
+  "origin": {
+    "message": "Origin",
+    "description": "The origin of the cookie"
+  },
+  "visibleIframes": {
+    "message": "Visible iframes"
+  },
+  "hiddenIframes": {
+    "message": "Hidden iframes"
+  },
+  "note": {
+    "message": "Note"
+  },
+  "belongsToRWSHeader": {
+    "message": "Belongs to RWS"
+  },
+  "allowedFeatures": {
+    "message": "Allowed Features (PS related)"
+  },
+  "ipProtection": {
+    "message": "IP Protection"
+  },
+  "ipProtectionDescription": {
+    "message": "IP Protection is a proposal to avoid sharing a user's real IP address with third parties."
+  },
+  "bounceTrackingMitigations": {
+    "message": "Bounce Tracking Mitigations"
+  },
+  "bounceTrackingMitigationsDescription": {
+    "message": "Reduce or eliminate the ability of bounce tracking to recognize people across contexts."
+  },
+  "privacyBudget": {
+    "message": "Privacy Budget"
+  },
+  "privacyBudgetDescription": {
+    "message": "This proposal suggests a limit to the amount of individual user data that can be exposed to sites, so that in total it is insufficient to track and identify individuals."
+  },
+  "userAgentReductionDescription": {
+    "message": "Minimize the identifying information shared in the User-Agent string, which may be used for passive fingerprinting."
+  },
+  "privateStateTokens": {
+    "message": "Private State Tokens"
+  },
+  "privateStateTokensDescription": {
+    "message": "Enable trust in a user's authenticity to be conveyed from one context to another, to help sites combat fraud and distinguish bots from real humans—without passive tracking."
+  },
+  "antiCovertTrackingDescription": {
+    "message": "The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking."
+  },
+  "noCookiesExempted": {
+    "message": "No cookies were exempted by the browser."
+  },
+  "exemptedCookiesIn3PCD": {
+    "message": "Exempted cookies are only available in 3PCD browser."
+  },
+  "low": {
+    "message": "Low"
+  },
+  "high": {
+    "message": "High"
+  },
+  "showRequestsWithCookie": {
+    "message": "Show Requests With This Cookie"
+  },
+  "thirdPartyCookieDeprecationReadiness": {
+    "message": "Third-Pary Cookie Deprecation Readiness"
+  },
+  "thirdPartyCookieDeprecationReadinessNote": {
+    "message": "Discover how companies across the web are gearing up for third-party cookie deprecation. This $a_tag_start$ comprehensive list $a_tag_end$ is compiled with insights from participants who have voluntarily shared their preparations.",
+    "placeholders": {
+      "a_tag_start": {
+        "content": "$1",
+        "example": "<a href='https://example.com'>"
+      },
+      "a_tag_end": {
+        "content": "$2",
+        "example": "</a>"
+      }
+    }
+  },
+  "protectedAudience": {
+    "message": "Protected Audience"
+  },
+  "protectedAudienceDescription": {
+    "message": "The Protected Audience API serves remarketing and custom audience use cases without third party cross-site tracking."
+  },
+  "attributionReportingDescription": {
+    "message": "The Attribution Reporting API enables measurement of ad performance without third party cross-site tracking."
+  },
+  "privateAggregation": {
+    "message": "Private Aggregation"
+  },
+  "privateAggregationDescription": {
+    "message": "The Private Aggregation API has been built for aggregating and reporting on cross-site data in a privacy-preserving manner."
+  },
+  "topicsDescription": {
+    "message": "The Topics API enables interest-based advertising while preserving user privacy."
+  },
+  "privateAdvertisingDescription": {
+    "message": "Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads."
+  },
+  "generate": {
+    "message": "Generate"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "chipsDescription": {
+    "message": "The new cookie attribute, Partitioned, allows developers to opt a cookie into partitioned storage, with separate cookie jars per top-level site."
+  },
+  "storageAccessAPI": {
+    "message": "Storage Access API"
+  },
+  "storageAccessAPIDescription": {
+    "message": "Storage Access API allows iframes to request storage access permissions when access would otherwise be denied by browser settings."
+  },
+  "rwsDescription": {
+    "message": "Related Website Sets (RWS) is a way for a company to declare relationships among sites, so that browsers allow limited third-party cookie access for specific purposes."
+  },
+  "fedcm": {
+    "message": "Federated Credential Management API"
+  },
+  "fedcmDescription": {
+    "message": "A web API for privacy-preserving identity federation."
+  },
+  "siteBoundariesDescription": {
+    "message": "Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents."
+  },
+  "publicExplainer": {
+    "message": "Public Explainer"
+  },
+  "implementationExplainer": {
+    "message": "Implementation Explainer"
+  },
+  "exportTableData": {
+    "message": "Export Table Data"
+  },
+  "body_SyntaxError": {
+    "message": "This 'Set-Cookie' header had invalid syntax."
+  },
+  "body_SchemeNotSupported": {
+    "message": "The scheme of this connection is not allowed to store cookies."
+  },
+  "body_OverwriteSecure": {
+    "message": "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it was not sent over a secure connection and would have overwritten a cookie with the Secure attribute."
+  },
+  "body_InvalidPrefix": {
+    "message": "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it used the '__Secure-' or '__Host-' prefix in its name and broke the additional rules applied to cookies with these prefixes."
+  },
+  "body_SamePartyConflictsWithOtherAttributes": {
+    "message": "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it had the 'SameParty' attribute but also had other conflicting attributes. Chrome requires cookies that use the 'SameParty' attribute to also have the 'Secure' attribute, and to not be restricted to 'SameSite=Strict'."
+  },
+  "body_DisallowedCharacter": {
+    "message": "This 'Set-Cookie' header contained a disallowed character (a forbidden ASCII control character, or the tab character if it appears in the middle of the cookie name, value, an attribute name, or an attribute value)."
+  },
+  "body_NoCookieContent": {
+    "message": "This attempt to set a cookie via a 'Set-Cookie' header was blocked because the header did not contain any value."
   }
 }

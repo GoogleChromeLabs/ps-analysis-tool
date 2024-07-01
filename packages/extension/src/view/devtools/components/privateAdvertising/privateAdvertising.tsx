@@ -23,27 +23,23 @@ import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
-    title: 'Protected Audience',
-    description:
-      'The Protected Audience API serves remarketing and custom audience use cases without third party cross-site tracking.',
+    title: () => I18n.getMessage('protectedAudience'),
+    description: () => I18n.getMessage('protectedAudienceDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
   },
   {
-    title: 'Attribution Reporting',
-    description:
-      'The Attribution Reporting API enables measurement of ad performance without third party cross-site tracking.',
+    title: () => I18n.getMessage('attributionReporting'),
+    description: () => I18n.getMessage('attributionReportingDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
   },
   {
-    title: 'Private Aggregation',
-    description:
-      'The Private Aggregation API has been built for aggregating and reporting on cross-site data in a privacy-preserving manner.',
+    title: () => I18n.getMessage('privateAggregation'),
+    description: () => I18n.getMessage('privateAggregationDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
   },
   {
-    title: 'Topics',
-    description:
-      'The Topics API enables interest-based advertising while preserving user privacy.',
+    title: () => I18n.getMessage('topics'),
+    description: () => I18n.getMessage('topicsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
   },
 ];
@@ -55,7 +51,7 @@ const PrivateAdvertising = () => {
       extraClasses="min-h-[78vh] w-full"
       contentPanel={
         <ContentPanel
-          title="Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads."
+          title={I18n.getMessage('privateAdvertisingDescription')}
           content={content}
           counterStyles="bg-blue-600"
           titleStyles="text-blue-600"

@@ -39,9 +39,9 @@ const LABELS = [
     useI18n: true,
   },
   {
-    label: 'Public Explainer',
-    linkLabel: 'Implementation explainer',
-    useI18n: false,
+    label: 'publicExplainer',
+    linkLabel: 'implementationExplainer',
+    useI18n: true,
   },
   {
     label: 'publicDiscussion',

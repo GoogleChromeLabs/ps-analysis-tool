@@ -22,7 +22,7 @@ import { addUTMParams } from '@google-psat/common';
 
 interface ContentPanelProps {
   title: string;
-  content: { title: string; description: string; url: string }[];
+  content: { title: () => string; description: () => string; url: string }[];
   titleStyles?: string;
   counterStyles?: string;
 }
@@ -57,10 +57,10 @@ const ContentPanel = ({
               </div>
             </div>
             <h3 className={`text-lg font-medium mb-5 ${titleStyles}`}>
-              {item.title}
+              {item.title()}
             </h3>
             <p className="text-base text-raisin-black dark:text-bright-gray">
-              {item.description}
+              {item.description()}
             </p>
           </a>
         ))}

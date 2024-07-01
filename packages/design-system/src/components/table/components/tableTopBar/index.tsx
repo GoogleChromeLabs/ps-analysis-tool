@@ -92,7 +92,7 @@ const TableTopBar = ({
         {extraInterface?.()}
         {exportTableData && (
           <ExportButton
-            title="Export Table Data"
+            title={I18n.getMessage('exportTableData')}
             disabled={rows.length === 0}
             onClick={() => exportTableData(rows)}
           />

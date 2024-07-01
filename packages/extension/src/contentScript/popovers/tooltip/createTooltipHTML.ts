@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { I18n } from '@google-psat/i18n';
+
 const createTooltipHTML = (
   info: Record<string, string>,
   infoAttribtues: { [key: string]: string }
@@ -25,7 +27,7 @@ const createTooltipHTML = (
     const p: HTMLParagraphElement = document.createElement('p');
 
     if (value) {
-      if (label === 'Visible iframes') {
+      if (label === I18n.getMessage('visibleIframes')) {
         if (Number(info['Hidden iframes']) > 0 || Number(value) > 1) {
           p.innerHTML = `<strong>${label}</strong>: <span>${value}</span>`;
         } else {
@@ -33,7 +35,7 @@ const createTooltipHTML = (
             <strong>${label}</strong>: <span>${value}</span>
           </span>`;
         }
-      } else if (label === 'Hidden iframes') {
+      } else if (label === I18n.getMessage('hiddenIframes')) {
         if (Number(value) > 0) {
           p.innerHTML = `<strong>${label}</strong>: <span>${value}</span>`;
         } else {
@@ -41,9 +43,9 @@ const createTooltipHTML = (
             <strong>${label}</strong>: <span>${value}</span>
           </span>`;
         }
-      } else if (label === 'Allowed Features (PS related)') {
+      } else if (label === I18n.getMessage('allowedFeatures')) {
         p.innerHTML = `<strong>${label}</strong>: <span class="ps-allowed-features" data-compact-allowed-features="${infoAttribtues['allowedFeaturesInCompactView']}" data-expanded-allowed-features="${infoAttribtues['allowedFeatureInExpandedView']}">${value}</span>`;
-      } else if (label === 'Note') {
+      } else if (label === I18n.getMessage('note')) {
         p.innerHTML = `
           <svg style="vertical-align:middle" width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 10.0833C8.03131 10.0833 10.0833 8.03131 10.0833 5.5C10.0833 2.96869 8.03131 0.916667 5.5 0.916667C2.96869 0.916667 0.916667 2.96869 0.916667 5.5C0.916667 8.03131 2.96869 10.0833 5.5 10.0833ZM5.5 11C8.53757 11 11 8.53757 11 5.5C11 2.46243 8.53757 0 5.5 0C2.46243 0 0 2.46243 0 5.5C0 8.53757 2.46243 11 5.5 11ZM5 8V5H6V8H5ZM5 3V3.5H6V3H5Z" fill="#616161"/>

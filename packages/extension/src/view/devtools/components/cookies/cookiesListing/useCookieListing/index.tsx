@@ -183,7 +183,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: I18n.getMessage('priority'),
         accessorKey: 'parsedCookie.priority',
         isHiddenByDefault: true,
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) =>
+          I18n.getMessage((info as string).toLowerCase()),
         widthWeightagePercentage: 4,
       },
       {
@@ -485,13 +486,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: I18n.getMessage('priority'),
         hasStaticFilterValues: true,
         filterValues: {
-          Low: {
+          [I18n.getMessage('low')]: {
             selected: false,
           },
-          Medium: {
+          [I18n.getMessage('medium')]: {
             selected: false,
           },
-          High: {
+          [I18n.getMessage('high')]: {
             selected: false,
           },
         },

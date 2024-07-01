@@ -25,9 +25,12 @@ const EXPERIMENT_GROUP = () => I18n.getMessage('memberShipInExperimentGroup');
 
 const INFO_CARDS_DATA = [
   {
-    heading: () => 'Third-Party Cookie Depreciation Readiness',
+    heading: () => I18n.getMessage('thirdPartyCookieDeprecationReadiness'),
     content: () =>
-      'Discover how companies across the web are gearing up for third-party cookie deprecation. This <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/privacysandbox/privacy-sandbox-dev-support/blob/main/3pcd-readiness.md" target="_blank">comprehensive list</a> is compiled with insights from participants who have voluntarily shared their preparations.',
+      I18n.getMessage('thirdPartyCookieDeprecationReadinessNote', [
+        '<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/privacysandbox/privacy-sandbox-dev-support/blob/main/3pcd-readiness.md" target="_blank">',
+        '</a>',
+      ]),
   },
   {
     heading: EXPERIMENT_GROUP,

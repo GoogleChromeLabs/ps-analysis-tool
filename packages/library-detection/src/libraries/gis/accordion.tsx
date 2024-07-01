@@ -24,6 +24,7 @@ import { addUTMParams } from '@google-psat/common';
  */
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import { I18n } from '@google-psat/i18n';
 
 const GISAccordion = ({ matches }: AccordionProps) => {
   if (!matches) {
@@ -37,22 +38,14 @@ const GISAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Unsupported Google Identity Services'}>
+    <Accordion title={I18n.getMessage('gISTitle')}>
       <p className="text-darkest-gray dark:text-bright-gray">
-        Due to Privacy Sandbox enforcements some features are backward
-        incompatible or deprecated. Some features of Google Identity Services
-        are in use. Please review the following documentation and{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          target="_blank"
-          href={addUTMParams(
+        {I18n.getMessage('gISNote', [
+          `<a target="_blank" className="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
             'https://developers.google.com/identity/gsi/web/guides/fedcm-migration'
-          )}
-          rel="noreferrer"
-        >
-          migrate
-        </a>{' '}
-        if necessary.
+          )} rel="noreferrer">`,
+          `</a>`,
+        ])}
       </p>
     </Accordion>
   );

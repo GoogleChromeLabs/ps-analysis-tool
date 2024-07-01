@@ -83,7 +83,7 @@ const CookiesLandingContainer = ({
         },
       },
       {
-        name: 'Exempted Cookies',
+        name: I18n.getMessage('exemptionReasons'),
         link: 'exempted-cookies',
         panel: {
           Element: ExemptedCookiesSection,
