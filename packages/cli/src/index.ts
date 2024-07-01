@@ -73,7 +73,7 @@ program
     filePathValidator
   )
   .option(
-    '-l, --limit <num>',
+    '-n, --number-of-urls <num>',
     'Limit the number of URLs to analyze (from sitemap or CSV).',
     numericValidator
   )
@@ -205,13 +205,13 @@ const saveResultsAsHTML = async (
   const sitemapUrl = program.opts().sourceUrl;
   const filePath = program.opts().file;
   const locale = program.opts().wording;
-  const numberOfUrlsInput = program.opts().limit;
-  const isHeadless = program.opts().display;
+  const numberOfUrlsInput = program.opts().numberOfUrls;
+  const isHeadless = !program.opts().display;
   const shouldSkipPrompts = program.opts().quiet;
   const shouldSkipTechnologyAnalysis = program.opts().technology;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
-  const concurrency = program.opts().concurrency ?? 3;
+  const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
 
   const numArgs: number = [
