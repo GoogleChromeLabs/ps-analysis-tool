@@ -19,8 +19,8 @@ import path from 'path';
 import { pathToFileURL } from 'url';
 
 describe.skip('CLI E2E Test', () => {
-  const cli = require.resolve('../../dist/main.js');
-
+  //const cli = require.resolve('../../dist/main.js');
+  const cli = '';
   afterAll(() => {
     fs.rmSync(path.join(process.cwd(), '/out/bbc-com'), { recursive: true });
   });
