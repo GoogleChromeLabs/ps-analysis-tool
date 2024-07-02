@@ -138,7 +138,7 @@ const AssembledCookiesLanding = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex justify-center items-center border-b border-gray-300 dark:border-quartz">
+      <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz">
         <button
           className="w-3 h-3 m-1 pl-1"
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
@@ -154,7 +154,12 @@ const AssembledCookiesLanding = () => {
         </button>
         <ChipsBar {...filter} />
       </div>
-      <div className="flex grow-0 h-full">
+      <div
+        className="flex grow-0"
+        style={{
+          height: 'calc(100% - 26px)',
+        }}
+      >
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"
