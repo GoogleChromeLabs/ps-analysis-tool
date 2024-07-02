@@ -46,7 +46,8 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
       { text, indent }: { text: string; indent: number }
     ) => void;
   },
-  shouldSkipAcceptBanner = false
+  shouldSkipAcceptBanner = false,
+  verbose = false
 ) => {
   let report: {
     url: string;
@@ -70,7 +71,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
     const end = Math.min(urls.length - 1, i + batchSize - 1);
 
     spinnies &&
-      spinnies.add(`cookie-batch-spinner`, {
+      spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
         text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}...`,
         indent: 2,
       });
@@ -84,13 +85,14 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
         isHeadless,
         delayTime,
         cookieDictionary,
-        shouldSkipAcceptBanner
+        shouldSkipAcceptBanner,
+        verbose
       );
 
     report = [...report, ...cookieAnalysisAndFetchedResources];
 
     spinnies &&
-      spinnies.succeed(`cookie-batch-spinner`, {
+      spinnies.succeed(`cookie-batch-spinner${start + 1}-${end + 1}`, {
         text: `Done analyzing cookies in URLs ${start + 1} - ${end + 1}.`,
         indent: 2,
       });

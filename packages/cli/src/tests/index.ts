@@ -13,33 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import coffee from 'coffee';
+import fs from 'fs';
+import path from 'path';
+import { pathToFileURL } from 'url';
 
-/**
- * External dependencies.
- */
+xdescribe('CLI E2E Test', () => {
+  const cli = require.resolve('../../dist/main.js');
 
-import Sitemapper from 'sitemapper';
-
-/**
- * Get List of urls from sitemap url.
- * @param {string} sitemapURL Site map URL.
- * @returns {Promise<Array<string>>} List of URLs.
- */
-async function getUrlsFromSitemap(sitemapURL: string): Promise<Array<string>> {
-  const siteMapper = new Sitemapper({
-    url: sitemapURL,
-    timeout: 3000,
+  afterAll(() => {
+    fs.rmSync(path.join(process.cwd(), '/out/bbc-com'), { recursive: true });
   });
 
-  let urls: Array<string> = [];
-  try {
-    const { sites } = await siteMapper.fetch();
-    urls = sites;
-  } catch (error) {
-    throw new Error();
-  }
-
-  return urls;
-}
-
-export default getUrlsFromSitemap;
+  it('Should run site analysis', () => {
+    return coffee
+      .fork(cli, ['https://bbc.com'])
+      .debug()
+      .expect(
+        'stdout',
+        `Report: ${pathToFileURL(
+          path.join(process.cwd(), '/out/bbc-com/index.html')
+        )}\n`
+      )
+      .end();
+  }, 60000);
+});

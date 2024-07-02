@@ -18,7 +18,7 @@
  */
 import { readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
-import { basename } from 'path';
+import path, { basename } from 'path';
 /**
  * Internal dependencies.
  */
@@ -73,7 +73,7 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
     });
     return _urls;
   } catch (error) {
-    throw new Error();
+    throw new Error('csv parsing error');
   }
 };
 
@@ -81,71 +81,80 @@ const parseUrlsFromLocalSitemap = async (
   sitemapPath: string,
   spinnies: any
 ) => {
-  spinnies?.add('sitemap-spinner', {
-    text: 'Parsing XML File',
-  });
-
-  const xmlString = await readFile(sitemapPath, 'utf-8');
-  const data = await parseStringPromise(xmlString as string);
-
-  const isSiteIndex = Boolean(data['siteIndex']);
-  const isSiteMap = Boolean(data['urlset']);
-
-  if (isSiteIndex) {
-    throw new Error('Error: Sitemap index not supported');
-  }
-
-  if (!isSiteMap) {
-    throw new Error(
-      `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
-    );
-  }
-
-  let _urls: string[] = [];
-
   try {
-    _urls = data['urlset']['url'].reduce(
-      (acc: string[], { loc }: { loc: string | undefined }) =>
-        loc ? acc.concat(loc) : acc,
-      []
-    );
-  } catch (error) {
-    throw new Error(
-      `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
-    );
-  }
+    spinnies?.add('sitemap-spinner', {
+      text: 'Parsing XML File',
+    });
+    const xmlString = await readFile(sitemapPath, 'utf-8');
+    const data = await parseStringPromise(xmlString as string);
 
-  if (_urls.length === 0) {
-    throw new Error(
-      `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
-    );
-  }
-  _urls.forEach((_url) => {
-    if (!_url.includes('http')) {
-      throw new Error(`Error: Invalid URL: ${_url}.`);
+    const isSiteIndex = Boolean(data['siteIndex']);
+    const isSiteMap = Boolean(data['urlset']);
+
+    if (isSiteIndex) {
+      console.log('Error: Sitemap index not supported');
+      process.exit(1);
     }
-  });
-  spinnies?.succeed('sitemap-spinner', {
-    text: 'Done parsing XML file!',
-  });
 
-  return _urls;
+    if (!isSiteMap) {
+      console.log(
+        `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+      );
+      process.exit(1);
+    }
+
+    let _urls: string[] = [];
+
+    try {
+      _urls = data['urlset']['url'].reduce(
+        (acc: string[], { loc }: { loc: string | undefined }) =>
+          loc ? acc.concat(loc) : acc,
+        []
+      );
+    } catch (error) {
+      console.log(
+        `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+      );
+      process.exit(1);
+    }
+
+    if (_urls.length === 0) {
+      console.log(
+        `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+      );
+      process.exit(1);
+    }
+    _urls.forEach((_url) => {
+      if (!_url.includes('http')) {
+        console.log(
+          `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+        );
+        process.exit(1);
+      }
+    });
+
+    spinnies?.succeed('sitemap-spinner', {
+      text: 'Done parsing XML file!',
+    });
+
+    return _urls;
+  } catch (error) {
+    throw new Error('Local sitemap parsing error');
+  }
 };
 
 /**
  * Validate arguments passed to the CLI. Process for the CLI is exited with appropriate message.
  * @param {string} url Url input to CLI.
  * @param {string} sitemapUrl Url of a sitemap.
- * @param {string} csvPath File system path to a csv file with urls.
- * @param {string} sitemapPath File system path to a sitemap xml file.
+ * @param {string} filePath File system path to a csv file with urls or sitemap xml file.
  * @param {any} spinnies handler for logging.
  * @returns {string[]} list of urls.
  */
 const getUrlListFromArgs = async (
   url: string,
   sitemapUrl?: string,
-  csvPath?: string,
-  sitemapPath?: string,
+  filePath?: string,
   // @ts-ignore Package does not support typescript.
   spinnies
 ): Promise<string[]> => {
@@ -161,23 +170,27 @@ const getUrlListFromArgs = async (
       console.log('Error: Error parsing sitemap.');
       process.exit(1);
     }
-  } else if (csvPath) {
+  } else if (filePath) {
     try {
-      const _urls = await parseUrlsFromCSV(csvPath, spinnies);
+      const isCSV = path.parse(filePath).ext === '.csv';
+      if (isCSV) {
+        const _urls = await parseUrlsFromCSV(filePath, spinnies);
+        urls = urls.concat(_urls);
+        return urls;
+      }
+      const _urls = await parseUrlsFromLocalSitemap(filePath, spinnies);
       urls = urls.concat(_urls);
     } catch (error) {
-      console.log('Error parsing CSV file');
-      process.exit(1);
-    }
-  } else if (sitemapPath) {
-    try {
-      const _urls = await parseUrlsFromLocalSitemap(sitemapPath, spinnies);
-      urls = urls.concat(_urls);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
+      if (error === 'csv parsing error') {
+        console.log('Error: CSV file could not be parsed');
         process.exit(1);
       }
+      if (error === 'Local sitemap parsing error') {
+        console.log('Error: Sitemap could not be parsed');
+        process.exit(1);
+      }
+      console.log('Error parsing file.');
+      process.exit(1);
     }
   }
 
