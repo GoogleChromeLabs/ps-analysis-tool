@@ -13,114 +13,169 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  LibraryDetection,
-  useLibraryDetectionContext,
-} from '@google-psat/library-detection';
+  getCookieKey,
+  noop,
+  type CookieTableData,
+  type TabCookies,
+} from '@google-psat/common';
 import {
-  MenuBar,
-  type CookiesLandingSection,
-  type MenuData,
+  ChipsBar,
+  FilterIcon,
+  FiltersSidebar,
+  calculateBlockedReasonsFilterValues,
+  calculateDynamicFilterValues,
+  evaluateStaticFilterValues,
+  useFiltering,
+  type InfoType,
+  type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+
 /**
  * Internal dependencies
  */
-import CookiesSection from './cookiesSection';
-import FramesSection from './framesSection';
-import BlockedCookiesSection from './blockedCookiesSection';
-import { useCookie, useSettings } from '../../../stateProviders';
-import downloadReport from '../../../../../utils/downloadReport';
-import ExemptedCookiesSection from './exemptedCookiesSection';
+import Landing from './landing';
+import { useCookie } from '../../../stateProviders';
+import { Resizable } from 're-resizable';
 
 const AssembledCookiesLanding = () => {
-  const { url, tabCookies, tabFrames } = useCookie(({ state }) => ({
+  const { tabCookies } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
-    url: state.tabUrl,
   }));
 
-  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
+  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
 
-  const { libraryMatches, showLoader } = useLibraryDetectionContext(
-    ({ state }) => ({
-      libraryMatches: state.libraryMatches,
-      showLoader: state.showLoader,
-    })
+  const filters = useMemo<TableFilter>(
+    () => ({
+      'analytics.category': {
+        title: I18n.getMessage('category'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateDynamicFilterValues(
+          'analytics.category',
+          cookies,
+          [],
+          noop,
+          true
+        ),
+        sortValues: true,
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return (
+            I18n.getMessage(val?.toLowerCase() || 'uncategorized') ===
+            filterValue
+          );
+        },
+      },
+      isFirstParty: {
+        title: I18n.getMessage('scope'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: evaluateStaticFilterValues(
+          {
+            [I18n.getMessage('firstParty')]: {
+              selected: false,
+            },
+            [I18n.getMessage('thirdParty')]: {
+              selected: false,
+            },
+          },
+          'isFirstParty',
+          [],
+          noop
+        ),
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = Boolean(value);
+          return val === (filterValue === I18n.getMessage('firstParty'));
+        },
+      },
+      blockedReasons: {
+        title: I18n.getMessage('blockedReasons'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateBlockedReasonsFilterValues(cookies, [], noop),
+        sortValues: true,
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string[];
+          return val?.includes(filterValue);
+        },
+      },
+    }),
+    [cookies]
   );
 
-  const sections: Array<CookiesLandingSection> = useMemo(() => {
-    const defaultSections = [
-      {
-        name: I18n.getMessage('cookies'),
-        link: 'cookies',
-        panel: {
-          Element: CookiesSection,
-        },
-      },
-      {
-        name: I18n.getMessage('blockedCookies'),
-        link: 'blocked-cookies',
-        panel: {
-          Element: BlockedCookiesSection,
-        },
-      },
-      {
-        name: I18n.getMessage('libraryDetection'),
-        link: 'library-detection',
-        panel: {
-          Element: LibraryDetection,
-        },
-      },
-      {
-        name: I18n.getMessage('frames'),
-        link: 'frames',
-        panel: {
-          Element: FramesSection,
-        },
-      },
-    ];
-
-    if (isUsingCDP) {
-      defaultSections.splice(2, 0, {
-        name: I18n.getMessage('exemptionReasons'),
-        link: 'exemption-reasons',
-        panel: {
-          Element: ExemptedCookiesSection,
-        },
-      });
-    }
-
-    return defaultSections;
-  }, [isUsingCDP]);
-
-  const menuData: MenuData = useMemo(
-    () => sections.map(({ name, link }) => ({ name, link })),
-    [sections]
+  const filter = useFiltering(
+    cookies,
+    filters,
+    'cookieListing',
+    'cookieListing'
   );
+
+  const cookiesByKey = useMemo(() => {
+    return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
+      const cookieKey = getCookieKey((cookie as CookieTableData).parsedCookie);
+
+      if (!cookieKey) {
+        return acc;
+      }
+
+      acc[cookieKey] = cookie as CookieTableData;
+
+      return acc;
+    }, {});
+  }, [filter.filteredData]);
+
+  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
   return (
-    <>
-      <MenuBar
-        disableReportDownload={showLoader}
-        downloadReport={() => {
-          if (tabCookies && tabFrames && libraryMatches && url) {
-            downloadReport(url, tabCookies, tabFrames, libraryMatches);
-          }
-        }}
-        menuData={menuData}
-        scrollContainerId="cookies-landing-scroll-container"
-      />
-      {sections.map(({ link, panel: { Element, props } }) => (
-        <div id={link} key={link} className="cookie-landing-section">
-          {Element && <Element {...(props || {})} />}
+    <div className="h-full flex flex-col">
+      <div className="flex justify-center items-center border-b border-gray-300 dark:border-quartz">
+        <button
+          className="w-3 h-3 m-1 pl-1"
+          onClick={() => setShowFilterSidebar(!showFilterSidebar)}
+          title={I18n.getMessage('openFilterOptions')}
+        >
+          <FilterIcon
+            className={
+              showFilterSidebar
+                ? 'text-royal-blue dark:text-medium-persian-blue'
+                : 'text-mischka'
+            }
+          />
+        </button>
+        <ChipsBar {...filter} />
+      </div>
+      <div className="flex grow-0 h-full">
+        {showFilterSidebar && (
+          <Resizable
+            minWidth="100px"
+            maxWidth="50%"
+            enable={{
+              right: true,
+            }}
+            className="border border-r border-gray-300 dark:border-quartz"
+          >
+            <FiltersSidebar {...filter} />
+          </Resizable>
+        )}
+        <div
+          className="flex-1 overflow-auto h-full"
+          id="cookies-landing-scroll-container"
+        >
+          <Landing tabCookies={cookiesByKey} />
         </div>
-      ))}
-    </>
+      </div>
+    </div>
   );
 };
+
 export default AssembledCookiesLanding;
