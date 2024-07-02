@@ -52,7 +52,7 @@ const LandingPage = ({
   const [open, setOpen] = useState(true);
 
   return (
-    <>
+    <div className="overflow-auto h-full">
       {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
       <div
         className={classNames(
@@ -116,7 +116,7 @@ const LandingPage = ({
         </div>
         <QuickLinksList />
       </div>
-    </>
+    </div>
   );
 };
 
