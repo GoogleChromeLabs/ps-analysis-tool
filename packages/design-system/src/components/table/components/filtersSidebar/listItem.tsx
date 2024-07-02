@@ -32,6 +32,15 @@ interface ListItemProps {
   expandAll: boolean;
   isSelectAllFilterSelected: boolean;
   toggleFilterExpansion: (filterKey: string, expand?: boolean) => void;
+  toggleFilterSelection: (
+    filterKey: string,
+    filterValue: string,
+    isRemovalAction?: boolean
+  ) => void;
+  toggleSelectAllFilter: (
+    filterKey: string,
+    isSingleFilterRemovalAction?: boolean
+  ) => void;
 }
 
 const ListItem = ({
@@ -40,6 +49,8 @@ const ListItem = ({
   expandAll,
   toggleFilterExpansion,
   isSelectAllFilterSelected,
+  toggleFilterSelection,
+  toggleSelectAllFilter,
 }: ListItemProps) => {
   const [hasScannedFiltersOnce, setHasScannedFiltersOnce] =
     useState<boolean>(true);
@@ -122,6 +133,8 @@ const ListItem = ({
             isExpanded={isExpanded}
             isSelectAllFilterEnabled={Boolean(filter.enableSelectAllOption)}
             isSelectAllFilterSelected={isSelectAllFilterSelected}
+            toggleFilterSelection={toggleFilterSelection}
+            toggleSelectAllFilter={toggleSelectAllFilter}
           />
           {Number(Object.keys(filter.filterValues || {}).length) > 4 && (
             <a

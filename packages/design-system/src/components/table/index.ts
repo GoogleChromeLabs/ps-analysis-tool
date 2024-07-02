@@ -15,6 +15,9 @@
  */
 
 export { default as Table } from './components';
+export { default as FiltersSidebar } from './components/filtersSidebar';
+export { default as ChipsBar } from './components/filtersSidebar/chips';
+export { default as useFiltering } from './useTable/useFiltering';
 export * from './persistentSettingsStore';
 export * from './useTable';
 export * from './utils';

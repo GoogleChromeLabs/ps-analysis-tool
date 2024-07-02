@@ -22,16 +22,21 @@ import React from 'react';
  * Internal dependencies.
  */
 import Chip from './chip';
-import { useTable } from '../../../useTable';
+import { TableFilter } from '../../../useTable';
 
-const ChipList = () => {
-  const { selectedFilters, toggleFilterSelection } = useTable(
-    ({ state, actions }) => ({
-      selectedFilters: state.selectedFilters,
-      toggleFilterSelection: actions.toggleFilterSelection,
-    })
-  );
+interface ChipListProps {
+  selectedFilters: TableFilter;
+  toggleFilterSelection: (
+    filterKey: string,
+    filterValue: string,
+    isRemovalAction?: boolean
+  ) => void;
+}
 
+const ChipList = ({
+  selectedFilters,
+  toggleFilterSelection,
+}: ChipListProps) => {
   return (
     <div className="flex flex-nowrap max-w-full">
       {Object.entries(selectedFilters).map(([filterKey, filter]) => {

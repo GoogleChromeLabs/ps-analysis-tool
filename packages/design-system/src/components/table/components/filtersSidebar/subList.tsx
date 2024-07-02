@@ -22,7 +22,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies.
  */
-import { useTable, type TableFilter } from '../../useTable';
+import { type TableFilter } from '../../useTable';
 import Option from './option';
 
 interface SubListProps {
@@ -32,6 +32,15 @@ interface SubListProps {
   isExpanded: boolean;
   isSelectAllFilterEnabled: boolean;
   isSelectAllFilterSelected: boolean;
+  toggleFilterSelection: (
+    filterKey: string,
+    filterValue: string,
+    isRemovalAction?: boolean | undefined
+  ) => void;
+  toggleSelectAllFilter: (
+    filterKey: string,
+    isSingleFilterRemovalAction?: boolean | undefined
+  ) => void;
 }
 
 const SubList = ({
@@ -41,14 +50,9 @@ const SubList = ({
   isExpanded,
   isSelectAllFilterEnabled,
   isSelectAllFilterSelected,
+  toggleFilterSelection,
+  toggleSelectAllFilter,
 }: SubListProps) => {
-  const { toggleFilterSelection, toggleSelectAllFilter } = useTable(
-    ({ actions }) => ({
-      toggleFilterSelection: actions.toggleFilterSelection,
-      toggleSelectAllFilter: actions.toggleSelectAllFilter,
-    })
-  );
-
   const sortedFilterValueKeys = useMemo(() => {
     if (!sort) {
       return Object.keys(filterValues || {});

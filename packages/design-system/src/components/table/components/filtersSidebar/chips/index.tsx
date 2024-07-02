@@ -24,14 +24,23 @@ import { I18n } from '@google-psat/i18n';
  */
 import ChipList from './chipList';
 import { StopIcon } from '../../../../../icons';
-import { useTable } from '../../../useTable';
+import { TableFilter } from '../../../useTable';
 
-const ChipsBar = () => {
-  const { selectedFilters, resetFilters } = useTable(({ state, actions }) => ({
-    selectedFilters: state.selectedFilters,
-    resetFilters: actions.resetFilters,
-  }));
+interface ChipsBarProps {
+  selectedFilters: TableFilter;
+  resetFilters: () => void;
+  toggleFilterSelection: (
+    filterKey: string,
+    filterValue: string,
+    isRemovalAction?: boolean
+  ) => void;
+}
 
+const ChipsBar = ({
+  selectedFilters,
+  resetFilters,
+  toggleFilterSelection,
+}: ChipsBarProps) => {
   const appliedFiltersCount = Object.values(selectedFilters).reduce(
     (acc, filter) => {
       acc += Number(Object.keys(filter.filterValues || {}).length);
@@ -43,7 +52,7 @@ const ChipsBar = () => {
   return (
     <div
       className={
-        'w-full h-6 px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz'
+        'w-full h-6 px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black'
       }
     >
       {appliedFiltersCount > 0 && (
@@ -58,7 +67,10 @@ const ChipsBar = () => {
           <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
         </button>
       )}
-      <ChipList />
+      <ChipList
+        selectedFilters={selectedFilters}
+        toggleFilterSelection={toggleFilterSelection}
+      />
     </div>
   );
 };
