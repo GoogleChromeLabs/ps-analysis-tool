@@ -54,12 +54,34 @@ export class BrowserManagement {
   pageRequests: Record<string, Record<string, RequestData>>;
   pageResourcesMaps: Record<string, Record<string, ScriptTagUnderCheck>>;
   shouldLogDebug: boolean;
+  spinnies:
+    | {
+        add: (
+          id: string,
+          { text, indent }: { text: string; indent: number }
+        ) => void;
+        succeed: (
+          id: string,
+          { text, indent }: { text: string; indent: number }
+        ) => void;
+      }
+    | undefined;
 
   constructor(
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
     pageWaitTime: number,
-    shouldLogDebug: boolean
+    shouldLogDebug: boolean,
+    spinnies?: {
+      add: (
+        id: string,
+        { text, indent }: { text: string; indent: number }
+      ) => void;
+      succeed: (
+        id: string,
+        { text, indent }: { text: string; indent: number }
+      ) => void;
+    }
   ) {
     this.viewportConfig = viewportConfig;
     this.browser = null;
@@ -71,11 +93,17 @@ export class BrowserManagement {
     this.pageRequests = {};
     this.shouldLogDebug = shouldLogDebug;
     this.pageResourcesMaps = {};
+    this.spinnies = spinnies;
   }
 
   debugLog(msg: any) {
-    if (this.shouldLogDebug) {
-      console.log(msg);
+    if (this.shouldLogDebug && this.spinnies) {
+      this.spinnies.add(msg, {
+        text: msg,
+        //@ts-ignore
+        succeedColor: 'white',
+        status: 'non-spinnable',
+      });
     }
   }
 

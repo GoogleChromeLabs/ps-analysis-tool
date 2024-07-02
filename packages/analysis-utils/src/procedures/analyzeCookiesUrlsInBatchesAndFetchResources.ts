@@ -71,6 +71,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
     const end = Math.min(urls.length - 1, i + batchSize - 1);
 
     spinnies &&
+      urls.length > 1 &&
       spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
         text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}...`,
         indent: 2,
@@ -86,12 +87,14 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
         delayTime,
         cookieDictionary,
         shouldSkipAcceptBanner,
-        verbose
+        verbose,
+        spinnies
       );
 
     report = [...report, ...cookieAnalysisAndFetchedResources];
 
     spinnies &&
+      urls.length > 1 &&
       spinnies.succeed(`cookie-batch-spinner${start + 1}-${end + 1}`, {
         text: `Done analyzing cookies in URLs ${start + 1} - ${end + 1}.`,
         indent: 2,

@@ -295,7 +295,7 @@ const saveResultsAsHTML = async (
       waitTime,
       cookieDictionary,
       concurrency,
-      urlsToProcess.length !== 1 ? spinnies : undefined,
+      spinnies,
       shouldSkipAcceptBanner,
       verbose
     );
@@ -314,7 +314,7 @@ const saveResultsAsHTML = async (
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
       urlsToProcess,
       concurrency,
-      urlsToProcess.length !== 1 ? spinnies : undefined
+      spinnies
     );
 
     spinnies.succeed('technology-spinner', {
