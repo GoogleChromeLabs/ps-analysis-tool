@@ -17,26 +17,35 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  CookiesLanding,
-  MenuBar,
-  type CookiesLandingSection,
-  type MenuData,
-  prepareCookiesCount,
-} from '@google-psat/design-system';
-import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
+  getCookieKey,
+  noop,
+  type CookieTableData,
+  type LibraryData,
+  type TabCookies,
+  type TabFrames,
+} from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+import {
+  ChipsBar,
+  FilterIcon,
+  FiltersSidebar,
+  calculateBlockedReasonsFilterValues,
+  calculateDynamicFilterValues,
+  evaluateStaticFilterValues,
+  useFiltering,
+  type InfoType,
+  type TableFilter,
+} from '@google-psat/design-system';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
-import CookiesSection from './cookieLanding/cookiesSection';
-import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
-import KnownBreakages from './cookieLanding/knownBreakages';
-import ExemptedCookiesSection from './cookieLanding/exemptedCookiesSection';
+import Landing from './cookieLanding/landing';
 
-interface CookiesLandingContainerProps {
+interface AssembledCookiesLandingProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
@@ -46,7 +55,7 @@ interface CookiesLandingContainerProps {
   menuBarScrollContainerId?: string;
 }
 
-const CookiesLandingContainer = ({
+const AssembledCookiesLanding = ({
   tabFrames,
   tabCookies,
   cookiesWithIssues,
@@ -54,92 +63,147 @@ const CookiesLandingContainer = ({
   libraryMatches,
   isSiteMapLandingContainer = false,
   menuBarScrollContainerId = 'dashboard-layout-container',
-}: CookiesLandingContainerProps) => {
-  const cookieStats = prepareCookiesCount(tabCookies);
+}: AssembledCookiesLandingProps) => {
+  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
 
-  const sections: Array<CookiesLandingSection> = useMemo(() => {
-    const baseSections: Array<CookiesLandingSection> = [
-      {
-        name: I18n.getMessage('cookies'),
-        link: 'cookies',
-        panel: {
-          Element: CookiesSection,
-          props: {
-            tabCookies,
-            tabFrames,
-          },
+  const filters = useMemo<TableFilter>(
+    () => ({
+      'analytics.category': {
+        title: I18n.getMessage('category'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateDynamicFilterValues(
+          'analytics.category',
+          cookies,
+          [],
+          noop,
+          true
+        ),
+        sortValues: true,
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return (
+            I18n.getMessage(val?.toLowerCase() || 'uncategorized') ===
+            filterValue
+          );
         },
       },
-      {
-        name: I18n.getMessage('blockedCookies'),
-        link: 'blocked-cookies',
-        panel: {
-          Element: BlockedCookiesSection,
-          props: {
-            tabCookies,
-            cookiesWithIssues,
-            tabFrames,
+      isFirstParty: {
+        title: I18n.getMessage('scope'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: evaluateStaticFilterValues(
+          {
+            [I18n.getMessage('firstParty')]: {
+              selected: false,
+            },
+            [I18n.getMessage('thirdParty')]: {
+              selected: false,
+            },
           },
+          'isFirstParty',
+          [],
+          noop
+        ),
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = Boolean(value);
+          return val === (filterValue === I18n.getMessage('firstParty'));
         },
       },
-      {
-        name: 'Exempted Cookies',
-        link: 'exempted-cookies',
-        panel: {
-          Element: ExemptedCookiesSection,
-          props: {
-            cookieStats,
-            tabFrames,
-          },
+      blockedReasons: {
+        title: I18n.getMessage('blockedReasons'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateBlockedReasonsFilterValues(cookies, [], noop),
+        sortValues: true,
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string[];
+          return val?.includes(filterValue);
         },
       },
-    ];
-
-    if (!isSiteMapLandingContainer) {
-      baseSections.push({
-        name: I18n.getMessage('knownBreakages'),
-        link: 'known-breakages',
-        panel: {
-          Element: KnownBreakages,
-          props: {
-            libraryMatches: libraryMatches ?? {},
-          },
-        },
-      });
-    }
-
-    return baseSections;
-  }, [
-    tabCookies,
-    tabFrames,
-    cookiesWithIssues,
-    cookieStats,
-    isSiteMapLandingContainer,
-    libraryMatches,
-  ]);
-
-  const menuData: MenuData = useMemo(
-    () => sections.map(({ name, link }) => ({ name, link })),
-    [sections]
+    }),
+    [cookies]
   );
 
+  const filter = useFiltering(
+    cookies,
+    filters,
+    'cookieListing',
+    'cookieListing'
+  );
+
+  const cookiesByKey = useMemo(() => {
+    return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
+      const cookieKey = getCookieKey((cookie as CookieTableData).parsedCookie);
+
+      if (!cookieKey) {
+        return acc;
+      }
+
+      acc[cookieKey] = cookie as CookieTableData;
+
+      return acc;
+    }, {});
+  }, [filter.filteredData]);
+
+  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
+
   return (
-    <>
-      <CookiesLanding>
-        <MenuBar
-          disableReportDownload={false}
-          downloadReport={downloadReport}
-          menuData={menuData}
-          scrollContainerId={menuBarScrollContainerId}
-        />
-        {sections.map(({ link, panel: { Element, props } }) => (
-          <div id={link} key={link} className="cookie-landing-section">
-            {Element && <Element {...(props || {})} />}
-          </div>
-        ))}
-      </CookiesLanding>
-    </>
+    <div className="h-full flex flex-col">
+      <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
+        <button
+          className="w-3 h-3 m-1 pl-1"
+          onClick={() => setShowFilterSidebar(!showFilterSidebar)}
+          title={I18n.getMessage('openFilterOptions')}
+        >
+          <FilterIcon
+            className={
+              showFilterSidebar
+                ? 'text-royal-blue dark:text-medium-persian-blue'
+                : 'text-mischka'
+            }
+          />
+        </button>
+        <ChipsBar {...filter} />
+      </div>
+      <div
+        className="flex grow-0"
+        style={{
+          height: 'calc(100% - 26px)',
+        }}
+      >
+        {showFilterSidebar && (
+          <Resizable
+            minWidth="100px"
+            maxWidth="50%"
+            enable={{
+              right: true,
+            }}
+            className="border border-r border-gray-300 dark:border-quartz"
+          >
+            <FiltersSidebar {...filter} />
+          </Resizable>
+        )}
+        <div
+          className="flex-1 overflow-auto h-full"
+          id="cookies-landing-scroll-container"
+        >
+          <Landing
+            tabCookies={cookiesByKey}
+            tabFrames={tabFrames}
+            cookiesWithIssues={cookiesWithIssues}
+            downloadReport={downloadReport}
+            libraryMatches={libraryMatches}
+            isSiteMapLandingContainer={isSiteMapLandingContainer}
+            menuBarScrollContainerId={menuBarScrollContainerId}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default CookiesLandingContainer;
+export default AssembledCookiesLanding;

@@ -22,7 +22,7 @@ import { type TabFrames } from '@google-psat/common';
 import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
 import { generateSiteReportandDownload } from '../../../utils/reportDownloader';
-import CookiesLandingContainer from './cookiesLandingContainer';
+import AssembledCookiesLanding from './cookiesLandingContainer';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -88,7 +88,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
         />
       ) : (
         <div className="flex flex-col h-full w-full">
-          <CookiesLandingContainer
+          <AssembledCookiesLanding
             libraryMatches={libraryMatches}
             tabFrames={tabFrames}
             tabCookies={tabCookies}

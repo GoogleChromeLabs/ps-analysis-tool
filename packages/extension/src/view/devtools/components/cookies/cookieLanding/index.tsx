@@ -138,9 +138,9 @@ const AssembledCookiesLanding = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz">
+      <div className="flex justify-center items-center gap-2 flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
         <button
-          className="w-3 h-3 m-1 pl-1"
+          className="w-3 h-3 m-1 px-1"
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
           title={I18n.getMessage('openFilterOptions')}
         >
