@@ -193,7 +193,7 @@ const saveResultsAsHTML = async (
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
-  fs.writeFile(outDir + '/index.html', buffer, () =>
+  writeFile(outDir + '/index.html', buffer, () =>
     console.log(`Report: ${URL.pathToFileURL(outFileFullDir)}`)
   );
 };
@@ -208,7 +208,7 @@ const saveResultsAsHTML = async (
   const numberOfUrlsInput = program.opts().numberOfUrls;
   const isHeadless = !program.opts().display;
   const shouldSkipPrompts = program.opts().quiet;
-  const shouldSkipTechnologyAnalysis = program.opts().technology;
+  const shouldSkipTechnologyAnalysis = !program.opts().technology;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
