@@ -31,10 +31,14 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
+import type { TabCookies } from '@google-psat/common';
 
-const CookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
-    tabCookies: state.tabCookies,
+interface CookiesSectionProps {
+  tabCookies: TabCookies;
+}
+
+const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
+  const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
   }));
 
