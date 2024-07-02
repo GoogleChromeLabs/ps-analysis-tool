@@ -18,7 +18,7 @@ import fs from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 
-xdescribe('CLI E2E Test', () => {
+describe.skip('CLI E2E Test', () => {
   const cli = require.resolve('../../dist/main.js');
 
   afterAll(() => {
