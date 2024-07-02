@@ -81,7 +81,7 @@ program
   .option('-v, --verbose', 'Enables verbose logging.')
   .option('-t, --tech', 'Enables technology analysis')
   .option(
-    '--o, --out-dir <path>',
+    '-o, --out-dir <path>',
     'Directory path where the analysis data will be stored',
     outDirValidator
   )

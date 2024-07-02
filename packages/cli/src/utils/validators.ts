@@ -15,7 +15,7 @@
  */
 
 import { parseUrl } from '@google-psat/common';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, accessSync, constants } from 'fs';
 import path from 'path';
 
 /**
@@ -85,6 +85,20 @@ export function urlValidator(url: string) {
  * @returns validated outDir or the created output directory.
  */
 export function outDirValidator(outDir: string) {
+  let hasAccessWriteAccess = true;
+
+  try {
+    accessSync('/etc/passwd', constants.W_OK);
+    hasAccessWriteAccess = true;
+  } catch (error) {
+    hasAccessWriteAccess = false;
+  }
+
+  if (!hasAccessWriteAccess) {
+    console.log(`Error: No write permission for ${outDir}`);
+    process.exit(1);
+  }
+
   if (outDir) {
     const parentDirExists = existsSync(path.resolve('./out'));
 
