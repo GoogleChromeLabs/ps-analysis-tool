@@ -51,6 +51,7 @@ interface AssembledCookiesLandingProps {
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
+  selectedSite: string;
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
 }
@@ -59,6 +60,7 @@ const AssembledCookiesLanding = ({
   tabFrames,
   tabCookies,
   cookiesWithIssues,
+  selectedSite,
   downloadReport,
   libraryMatches,
   isSiteMapLandingContainer = false,
@@ -131,8 +133,8 @@ const AssembledCookiesLanding = ({
   const filter = useFiltering(
     cookies,
     filters,
-    'cookieListing',
-    'cookieListing'
+    'cookiesListing' + selectedSite,
+    'cookiesListing' + selectedSite
   );
 
   const cookiesByKey = useMemo(() => {
