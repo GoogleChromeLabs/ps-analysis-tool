@@ -122,7 +122,7 @@ export class BrowserManagement {
       headless: this.isHeadless,
       args,
     });
-    this.debugLog('browser intialized');
+    this.debugLog('Browser intialized');
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -195,14 +195,14 @@ export class BrowserManagement {
       throw new Error('no page with the provided id was found');
     }
 
-    this.debugLog(`starting navigation to url ${url}`);
+    this.debugLog(`Starting navigation to url ${url}`);
 
     try {
       await page.goto(url, { timeout: 10000 });
-      this.debugLog(`done with navigation to url:${url}`);
+      this.debugLog(`Done with navigation to url:${url}`);
     } catch (error) {
       this.debugLog(
-        `navigation did not finish in 10 seconds moving on to scrolling`
+        `Navigation did not finish in 10 seconds moving on to scrolling`
       );
       //ignore
     }
@@ -220,11 +220,11 @@ export class BrowserManagement {
         window.scrollBy(0, 10000);
       });
     } catch (error) {
-      this.debugLog(`scrolling the page to the end.`);
+      this.debugLog(`Scrolling the page to the end.`);
       //ignore
     }
 
-    this.debugLog(`scrolling on url:${url}`);
+    this.debugLog(`Scrolling on url:${url}`);
   }
 
   responseEventListener(pageId: string, response: HTTPResponse) {
@@ -488,7 +488,7 @@ export class BrowserManagement {
     if (!page) {
       throw new Error(`no page with the provided id was found:${pageId}`);
     }
-
+    this.debugLog('Attaching network event listeners to page.');
     const cdpSession = await page.createCDPSession();
 
     await cdpSession.send('Target.setAutoAttach', {
@@ -529,7 +529,7 @@ export class BrowserManagement {
       this.pageFrameAttachedListener(pageId, ev)
     );
 
-    this.debugLog('done attaching network event listeners');
+    this.debugLog('Done attaching network event listeners');
   }
 
   async getJSCookies(page: Page) {

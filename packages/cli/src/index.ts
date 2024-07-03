@@ -305,8 +305,8 @@ const saveResultsAsHTML = async (
     status: 'succeed',
   });
 
-  spinnies.succeed('cookie-spinner', {
-    status: 'succeed',
+  spinnies.update('cookie-spinner', {
+    status: 'non-spinnable',
   });
 
   let technologyAnalysisData: any = null;
@@ -328,7 +328,7 @@ const saveResultsAsHTML = async (
     });
 
     spinnies.succeed('technology-spinner', {
-      status: 'succeed',
+      status: 'non-spinnable',
     });
   }
 
