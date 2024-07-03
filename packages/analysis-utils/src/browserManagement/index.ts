@@ -195,14 +195,14 @@ export class BrowserManagement {
       throw new Error('no page with the provided id was found');
     }
 
-    this.debugLog(`Starting navigation to url ${url}`);
+    this.debugLog(`Starting navigation to url: ${url}.`);
 
     try {
       await page.goto(url, { timeout: 10000 });
-      this.debugLog(`Done with navigation to url:${url}`);
+      this.debugLog(`Navigation completed to url: ${url}.`);
     } catch (error) {
       this.debugLog(
-        `Navigation did not finish in 10 seconds moving on to scrolling`
+        `Navigation did not finish in 10 seconds moving on to scrolling.`
       );
       //ignore
     }
@@ -220,11 +220,11 @@ export class BrowserManagement {
         window.scrollBy(0, 10000);
       });
     } catch (error) {
-      this.debugLog(`Scrolling the page to the end.`);
+      this.debugLog('Scrolled to end of page.');
       //ignore
     }
 
-    this.debugLog(`Scrolling on url:${url}`);
+    this.debugLog(`Scrolling on url: ${url}.`);
   }
 
   responseEventListener(pageId: string, response: HTTPResponse) {
@@ -488,7 +488,9 @@ export class BrowserManagement {
     if (!page) {
       throw new Error(`no page with the provided id was found:${pageId}`);
     }
+
     this.debugLog('Attaching network event listeners to page.');
+
     const cdpSession = await page.createCDPSession();
 
     await cdpSession.send('Target.setAutoAttach', {
@@ -529,7 +531,7 @@ export class BrowserManagement {
       this.pageFrameAttachedListener(pageId, ev)
     );
 
-    this.debugLog('Done attaching network event listeners');
+    this.debugLog('Finished attaching network event listeners.');
   }
 
   async getJSCookies(page: Page) {
