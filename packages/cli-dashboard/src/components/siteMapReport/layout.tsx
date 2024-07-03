@@ -96,6 +96,7 @@ const Layout = ({
     }));
 
   const { Element: PanelElement, props } = activePanel.panel;
+  const { query, clearQuery } = activePanel;
 
   const [
     siteFilteredCookies,
@@ -179,6 +180,8 @@ const Layout = ({
                 selectedSite: site,
                 path,
                 libraryMatches: libraryMatches ? libraryMatches[site] : {},
+                query,
+                clearQuery,
               },
             },
             children: {},
@@ -219,6 +222,8 @@ const Layout = ({
     siteFilteredCookies,
     siteFilteredTechnologies,
     sites,
+    query,
+    clearQuery,
   ]);
 
   useEffect(() => {

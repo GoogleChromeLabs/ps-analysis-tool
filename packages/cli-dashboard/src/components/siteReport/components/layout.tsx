@@ -29,6 +29,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -41,9 +42,16 @@ import Technologies from '../tabs/technologies';
 interface LayoutProps {
   selectedSite: string | null;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
+  query?: string;
+  clearQuery?: () => void;
 }
 
-const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
+const Layout = ({
+  selectedSite,
+  setSidebarData,
+  query = '',
+  clearQuery = noop,
+}: LayoutProps) => {
   const { technologies, completeJson } = useContentStore(({ state }) => ({
     technologies: state.technologies,
     completeJson: state.completeJson,
@@ -166,6 +174,13 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
       lastSelectedSite.current = selectedSite;
     }
   }, [selectedSite, updateSelectedItemKey]);
+
+  useEffect(() => {
+    if (query) {
+      updateSelectedItemKey(frameUrls[0], query);
+      clearQuery();
+    }
+  }, [query, clearQuery, updateSelectedItemKey, frameUrls]);
 
   return (
     <div className="w-full h-full flex">
