@@ -27,7 +27,7 @@ describe.skip('CLI E2E Test', () => {
 
   it('Should run site analysis', () => {
     return coffee
-      .fork(cli, ['https://bbc.com'])
+      .fork(cli, ['-u https://bbc.com', '-v'])
       .debug()
       .expect(
         'stdout',
