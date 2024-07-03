@@ -300,8 +300,13 @@ const saveResultsAsHTML = async (
       verbose
     );
 
-  spinnies.succeed('cookie-spinner', {
+  spinnies.add('cookie-spinner-succees', {
     text: 'Done analyzing cookies!',
+    status: 'succeed',
+  });
+
+  spinnies.succeed('cookie-spinner', {
+    status: 'succeed',
   });
 
   let technologyAnalysisData: any = null;
@@ -317,8 +322,13 @@ const saveResultsAsHTML = async (
       spinnies
     );
 
-    spinnies.succeed('technology-spinner', {
+    spinnies.add('technology-spinner-succees', {
       text: 'Done analyzing technologies!',
+      status: 'succeed',
+    });
+
+    spinnies.succeed('technology-spinner', {
+      status: 'succeed',
     });
   }
 
