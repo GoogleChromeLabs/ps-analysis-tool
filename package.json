@@ -44,7 +44,8 @@
 		"prepare": "husky install",
 		"rws-json:update": "node scripts/update-rws-json.cjs",
 		"storybook": "storybook dev -p 6006",
-		"test": "jest --config=tests/jest.config.cjs",
+		"test": "jest --config=tests/unitTest.jest.config.cjs",
+		"test:e2e": "jest --config=tests/cli.jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
 		"serve": "webpack serve"
 	},
