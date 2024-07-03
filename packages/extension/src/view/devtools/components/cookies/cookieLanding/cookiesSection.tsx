@@ -68,6 +68,7 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
+      landingHeaderExtraClasses="border-t-0"
       infoIconTitle={
         <p
           dangerouslySetInnerHTML={{

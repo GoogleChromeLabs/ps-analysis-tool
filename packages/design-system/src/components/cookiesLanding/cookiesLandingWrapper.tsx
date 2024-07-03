@@ -31,6 +31,7 @@ export interface CookiesLandingWrapperProps {
   testId?: string | null;
   children?: React.ReactNode;
   description?: React.ReactNode;
+  landingHeaderExtraClasses?: string;
 }
 
 const CookiesLandingWrapper = ({
@@ -40,12 +41,18 @@ const CookiesLandingWrapper = ({
   testId = 'cookie-landing-insights',
   description = '',
   children,
+  landingHeaderExtraClasses = '',
 }: CookiesLandingWrapperProps) => {
   return (
     <div className="w-full flex flex-col min-w-[40rem]">
       <div className="w-full min-w-[40rem]" data-testid={testId}>
         <div className="pb-5">
-          {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
+          {showLandingHeader && (
+            <LandingHeader
+              dataMapping={dataMapping}
+              extraClasses={landingHeaderExtraClasses}
+            />
+          )}
           {Boolean(infoIconTitle) && (
             <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-center max-w-2xl">
               <div>
