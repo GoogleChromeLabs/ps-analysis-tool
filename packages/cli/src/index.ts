@@ -83,7 +83,7 @@ program
   )
   .option(
     '-s, --source-url <url>',
-    ' The URL of a sitemap or CSV to analyze',
+    'The URL of a sitemap or CSV to analyze',
     urlValidator
   )
   .option(
@@ -127,6 +127,7 @@ program
     localeValidator,
     'en'
   )
+  .helpOption('-h, --help', 'Display help for command')
   .addHelpText(
     'after',
     '\nTo learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.'
