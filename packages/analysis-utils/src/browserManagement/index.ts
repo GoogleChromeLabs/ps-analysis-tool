@@ -66,12 +66,13 @@ export class BrowserManagement {
         ) => void;
       }
     | undefined;
-
+  indent = 0;
   constructor(
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
     pageWaitTime: number,
     shouldLogDebug: boolean,
+    indent: number,
     spinnies?: {
       add: (
         id: string,
@@ -94,6 +95,7 @@ export class BrowserManagement {
     this.shouldLogDebug = shouldLogDebug;
     this.pageResourcesMaps = {};
     this.spinnies = spinnies;
+    this.indent = indent;
   }
 
   debugLog(msg: any) {
@@ -103,6 +105,7 @@ export class BrowserManagement {
         //@ts-ignore
         succeedColor: 'white',
         status: 'non-spinnable',
+        indent: this.indent,
       });
     }
   }
@@ -195,11 +198,11 @@ export class BrowserManagement {
       throw new Error('no page with the provided id was found');
     }
 
-    this.debugLog(`Starting navigation to url: ${url}.`);
+    this.debugLog(`Starting navigation to URL: ${url}`);
 
     try {
       await page.goto(url, { timeout: 10000 });
-      this.debugLog(`Navigation completed to url: ${url}.`);
+      this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
       this.debugLog(
         `Navigation did not finish in 10 seconds moving on to scrolling.`
@@ -220,11 +223,11 @@ export class BrowserManagement {
         window.scrollBy(0, 10000);
       });
     } catch (error) {
-      this.debugLog('Scrolled to end of page.');
+      this.debugLog('Scrolled to end of page');
       //ignore
     }
 
-    this.debugLog(`Scrolling on url: ${url}.`);
+    this.debugLog(`Scrolling on URL: ${url}`);
   }
 
   responseEventListener(pageId: string, response: HTTPResponse) {
@@ -489,7 +492,7 @@ export class BrowserManagement {
       throw new Error(`no page with the provided id was found:${pageId}`);
     }
 
-    this.debugLog('Attaching network event listeners to page.');
+    this.debugLog('Attaching network event listeners to page');
 
     const cdpSession = await page.createCDPSession();
 
@@ -531,7 +534,7 @@ export class BrowserManagement {
       this.pageFrameAttachedListener(pageId, ev)
     );
 
-    this.debugLog('Finished attaching network event listeners.');
+    this.debugLog('Finished attaching network event listeners');
   }
 
   async getJSCookies(page: Page) {

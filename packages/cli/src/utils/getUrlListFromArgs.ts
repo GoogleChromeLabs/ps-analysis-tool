@@ -20,6 +20,7 @@ import { readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
 import path, { basename } from 'path';
 import chalk from 'chalk';
+import { removeAndAddNewSpinnerText } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -32,9 +33,11 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
 
   try {
     const _urls = await getUrlsFromSitemap(sitemapUrl);
-    spinnies?.succeed('sitemap-spinner', {
-      text: 'Done parsing Sitemap!',
-    });
+    removeAndAddNewSpinnerText(
+      spinnies,
+      'sitemap-spinner',
+      'Done parsing Sitemap!'
+    );
     return _urls;
   } catch (error) {
     throw new Error();
@@ -71,9 +74,12 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
         process.exit(1);
       }
     });
-    spinnies?.succeed('csv-spinner', {
-      text: 'Done parsing CSV file!',
-    });
+
+    removeAndAddNewSpinnerText(
+      spinnies,
+      'csv-spinner',
+      'Done parsing CSV file!'
+    );
     return _urls;
   } catch (error) {
     throw new Error('csv parsing error');
@@ -144,9 +150,11 @@ const parseUrlsFromLocalSitemap = async (
       }
     });
 
-    spinnies?.succeed('sitemap-spinner', {
-      text: 'Done parsing XML file!',
-    });
+    removeAndAddNewSpinnerText(
+      spinnies,
+      'sitemap-spinner',
+      'Done parsing XML file!'
+    );
 
     return _urls;
   } catch (error) {

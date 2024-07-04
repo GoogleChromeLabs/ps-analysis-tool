@@ -19,6 +19,7 @@
  */
 // @ts-ignore Package does not support typescript.
 import Wapplalyzer from 'wappalyzer';
+import { removeAndAddNewSpinnerText } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -68,10 +69,12 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     spinnies &&
       urls.length > 1 &&
-      spinnies.succeed(`tech-batch-spinner${start + 1}-${end + 1}`, {
-        text: `Done analyzing technology in URLs ${start + 1} - ${end + 1}.`,
-        indent: 2,
-      });
+      removeAndAddNewSpinnerText(
+        spinnies,
+        `tech-batch-spinner${start + 1}-${end + 1}`,
+        `Done analyzing technology in URLs ${start + 1} - ${end + 1}.`,
+        3
+      );
     await wappalyzer.destroy();
   }
 

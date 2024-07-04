@@ -22,6 +22,7 @@ export {
   default as findAnalyticsMatch,
   emptyAnalytics,
 } from './utils/findAnalyticsMatch';
+export { default as removeAndAddNewSpinnerText } from './utils/removeAndAddNewSpinnerText';
 export { default as calculateEffectiveExpiryDate } from './utils/calculateEffectiveExpiryDate';
 export { default as sanitizeCsvRecord } from './utils/sanitizeCsvRecord';
 export { parseUrl } from './utils/parseUrl';

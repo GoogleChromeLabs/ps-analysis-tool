@@ -22,6 +22,7 @@ import {
   CookieDatabase,
   LibraryData,
   LibraryMatchers,
+  removeAndAddNewSpinnerText,
 } from '@google-psat/common';
 
 /**
@@ -95,10 +96,12 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
 
     spinnies &&
       urls.length > 1 &&
-      spinnies.succeed(`cookie-batch-spinner${start + 1}-${end + 1}`, {
-        text: `Done analyzing cookies in URLs ${start + 1} - ${end + 1}.`,
-        indent: 2,
-      });
+      removeAndAddNewSpinnerText(
+        spinnies,
+        `cookie-batch-spinner${start + 1}-${end + 1}`,
+        `Done analyzing cookies in URLs ${start + 1} - ${end + 1}.`,
+        4
+      );
   }
 
   return report;

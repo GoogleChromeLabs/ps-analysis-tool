@@ -25,7 +25,11 @@ import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
 import { I18n } from '@google-psat/i18n';
-import { CompleteJson, LibraryData } from '@google-psat/common';
+import {
+  CompleteJson,
+  LibraryData,
+  removeAndAddNewSpinnerText,
+} from '@google-psat/common';
 import {
   analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
@@ -269,10 +273,10 @@ const saveResultsAsHTML = async (
           ? urls.length
           : parseInt(userInput as string);
     } else if (numberOfUrlsInput) {
-      console.log(`Analysing ${numberOfUrlsInput} urls.`);
+      console.log(`Analyzing ${numberOfUrlsInput} urls.`);
       numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
-      console.log(`Analysing all ${urls.length} urls.`);
+      console.log(`Analyzing all ${urls.length} urls.`);
       numberOfUrls = urls.length;
     }
 
@@ -284,7 +288,7 @@ const saveResultsAsHTML = async (
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analysing cookies on first site visit...',
+    text: 'Analyzing cookies on first site visit...',
   });
 
   const cookieAnalysisAndFetchedResourceData =
@@ -301,20 +305,17 @@ const saveResultsAsHTML = async (
       verbose
     );
 
-  spinnies.add('cookie-spinner-succees', {
-    text: 'Done analyzing cookies!',
-    status: 'succeed',
-  });
-
-  spinnies.update('cookie-spinner', {
-    status: 'non-spinnable',
-  });
+  removeAndAddNewSpinnerText(
+    spinnies,
+    'cookie-spinner',
+    'Done analyzing cookies!'
+  );
 
   let technologyAnalysisData: any = null;
 
   if (!shouldSkipTechnologyAnalysis) {
     spinnies.add('technology-spinner', {
-      text: 'Analysing technologies',
+      text: 'Analyzing technologies',
     });
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
@@ -323,14 +324,11 @@ const saveResultsAsHTML = async (
       spinnies
     );
 
-    spinnies.add('technology-spinner-succees', {
-      text: 'Done analyzing technologies!',
-      status: 'succeed',
-    });
-
-    spinnies.succeed('technology-spinner', {
-      status: 'non-spinnable',
-    });
+    removeAndAddNewSpinnerText(
+      spinnies,
+      'technology-spinner',
+      'Done analyzing technologies!'
+    );
   }
 
   const result = urlsToProcess.map((_url, ind) => {
@@ -364,7 +362,7 @@ const saveResultsAsHTML = async (
   await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
-  console.log(chalk.red('Some error occured while analysing the website.'));
+  console.log(chalk.red('Some error occured while analyzing the website.'));
   console.log(chalk.red('For more information check the stack trace below:\n'));
   console.log(chalk.red(error));
   process.exit(process?.exitCode ?? 0);
