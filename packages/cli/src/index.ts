@@ -20,7 +20,6 @@
 import { Command } from 'commander';
 import events from 'events';
 import { existsSync, ensureFile, writeFile } from 'fs-extra';
-// @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
@@ -262,7 +261,7 @@ const saveResultsAsHTML = async (
 
   const spinnies = new Spinnies();
 
-  const urls = await getUrlListFromArgs(url, sitemapUrl, filePath, spinnies);
+  const urls = await getUrlListFromArgs(url, spinnies, sitemapUrl, filePath);
 
   let urlsToProcess: string[] = [];
 

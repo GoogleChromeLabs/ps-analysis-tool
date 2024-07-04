@@ -37,16 +37,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   delayTime: number,
   cookieDictionary: CookieDatabase,
   batchSize = 3,
-  spinnies?: {
-    add: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-    succeed: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-  },
+  spinnies?: Spinnies,
   shouldSkipAcceptBanner = false,
   verbose = false
 ) => {

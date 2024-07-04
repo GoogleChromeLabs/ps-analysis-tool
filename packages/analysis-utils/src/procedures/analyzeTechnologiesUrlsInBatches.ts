@@ -29,16 +29,7 @@ import { TechnologyDetailList } from '../types';
 export const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,
   batchSize = 3,
-  spinnies?: {
-    add: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-    succeed: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-  }
+  spinnies: Spinnies
 ): Promise<TechnologyDetailList[]> => {
   const wappalyzer = new Wapplalyzer();
 

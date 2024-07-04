@@ -25,9 +25,10 @@ import { removeAndAddNewSpinnerText } from '@google-psat/common';
  * Internal dependencies.
  */
 import getUrlsFromSitemap from './getUrlsfromSitemap';
+import Spinnies from 'spinnies';
 
-const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
-  spinnies?.add('sitemap-spinner', {
+const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: Spinnies) => {
+  spinnies.add('sitemap-spinner', {
     text: 'Parsing Sitemap',
   });
 
@@ -165,17 +166,16 @@ const parseUrlsFromLocalSitemap = async (
 /**
  * Validate arguments passed to the CLI. Process for the CLI is exited with appropriate message.
  * @param {string} url Url input to CLI.
+ * @param {Spinnies} spinnies handler for logging.
  * @param {string} sitemapUrl Url of a sitemap.
  * @param {string} filePath File system path to a csv file with urls or sitemap xml file.
- * @param {any} spinnies handler for logging.
  * @returns {string[]} list of urls.
  */
 const getUrlListFromArgs = async (
   url: string,
+  spinnies: Spinnies,
   sitemapUrl?: string,
-  filePath?: string,
-  // @ts-ignore Package does not support typescript.
-  spinnies
+  filePath?: string
 ): Promise<string[]> => {
   let urls: string[] = [];
 
