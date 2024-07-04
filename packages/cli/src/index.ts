@@ -199,7 +199,7 @@ const saveResultsAsHTML = async (
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
   writeFile(outDir + '/index.html', buffer, () =>
-    console.log(`Report: ${URL.pathToFileURL(outFileFullDir)}`)
+    console.log(`\nReport: ${URL.pathToFileURL(outFileFullDir)}`)
   );
 };
 
@@ -209,7 +209,7 @@ const saveResultsAsHTML = async (
   const verbose = Boolean(program.opts().verbose);
   const sitemapUrl = program.opts().sourceUrl;
   const filePath = program.opts().file;
-  const locale = program.opts().wording;
+  const locale = program.opts().locale;
   const numberOfUrlsInput = program.opts().numberOfUrls;
   const isHeadless = !program.opts().display;
   const shouldSkipPrompts = program.opts().quiet;
