@@ -45,8 +45,8 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: Spinnies) => {
   }
 };
 
-const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
-  spinnies?.add('csv-spinner', {
+const parseUrlsFromCSV = async (csvPath: string, spinnies: Spinnies) => {
+  spinnies.add('csv-spinner', {
     text: 'Parsing CSV File',
   });
 
@@ -89,10 +89,10 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
 
 const parseUrlsFromLocalSitemap = async (
   sitemapPath: string,
-  spinnies: any
+  spinnies: Spinnies
 ) => {
   try {
-    spinnies?.add('sitemap-spinner', {
+    spinnies.add('sitemap-spinner', {
       text: 'Parsing XML File',
     });
     const xmlString = await readFile(sitemapPath, 'utf-8');

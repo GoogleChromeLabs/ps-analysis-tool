@@ -54,18 +54,7 @@ export class BrowserManagement {
   pageRequests: Record<string, Record<string, RequestData>>;
   pageResourcesMaps: Record<string, Record<string, ScriptTagUnderCheck>>;
   shouldLogDebug: boolean;
-  spinnies:
-    | {
-        add: (
-          id: string,
-          { text, indent }: { text: string; indent: number }
-        ) => void;
-        succeed: (
-          id: string,
-          { text, indent }: { text: string; indent: number }
-        ) => void;
-      }
-    | undefined;
+  spinnies: Spinnies | undefined;
   indent = 0;
   constructor(
     viewportConfig: ViewportConfig,
@@ -73,16 +62,7 @@ export class BrowserManagement {
     pageWaitTime: number,
     shouldLogDebug: boolean,
     indent: number,
-    spinnies?: {
-      add: (
-        id: string,
-        { text, indent }: { text: string; indent: number }
-      ) => void;
-      succeed: (
-        id: string,
-        { text, indent }: { text: string; indent: number }
-      ) => void;
-    }
+    spinnies?: Spinnies
   ) {
     this.viewportConfig = viewportConfig;
     this.browser = null;

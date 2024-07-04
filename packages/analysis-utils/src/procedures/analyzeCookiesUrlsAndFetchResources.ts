@@ -38,16 +38,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   cookieDictionary: CookieDatabase,
   shouldSkipAcceptBanner: boolean,
   verbose: boolean,
-  spinnies?: {
-    add: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-    succeed: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-  }
+  spinnies?: Spinnies
 ) => {
   const browser = new BrowserManagement(
     {
