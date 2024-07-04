@@ -55,6 +55,7 @@ import {
   urlValidator,
   numericValidator,
 } from './utils';
+import chalk from 'chalk';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -131,7 +132,18 @@ program
   .addHelpText(
     'after',
     '\nTo learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.'
-  );
+  )
+  .configureOutput({
+    outputError: (error) => {
+      if (error.startsWith('error')) {
+        console.error(
+          chalk.red(error.charAt(0).toUpperCase() + error.slice(1))
+        );
+      } else {
+        console.error(chalk.red(error));
+      }
+    },
+  });
 
 program.parse();
 
