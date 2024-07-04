@@ -27,7 +27,7 @@ import chalk from 'chalk';
 export function numericValidator(value: string) {
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
-    console.error(chalk.red(`${value} is not valid numeric value.`));
+    console.log(chalk.red(`${value} is not valid numeric value.`));
     process.exit(1);
   }
   return parsedValue;
@@ -41,7 +41,7 @@ export function numericValidator(value: string) {
 export function localeValidator(locale: string) {
   const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
   if (locale && !availableLocales.includes(locale)) {
-    console.error(
+    console.log(
       chalk.red(
         `Locale '${locale}' is not supported, please use ${availableLocales.join(
           ', '
@@ -61,7 +61,7 @@ export function localeValidator(locale: string) {
 export function filePathValidator(filePath: string) {
   const csvFileExists = existsSync(filePath);
   if (!csvFileExists) {
-    console.error(chalk.red(`Error: No file at ${filePath}`));
+    console.log(chalk.red(`Error: No file at ${filePath}`));
     process.exit(1);
   }
   return filePath;
@@ -76,7 +76,7 @@ export function urlValidator(url: string) {
   const parsedUrl = parseUrl(url);
 
   if (parsedUrl === null) {
-    console.error(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
+    console.log(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
     process.exit(1);
   }
   return url;

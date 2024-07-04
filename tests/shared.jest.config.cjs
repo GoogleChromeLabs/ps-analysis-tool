@@ -28,6 +28,15 @@ module.exports = {
     '\\.svg': join(__dirname, '/svgMock.cjs'),
     '\\.css': join(__dirname, '/styleMock.cjs'),
     '\\.png': join(__dirname, '/imageMock.cjs'),
+    chalk: require.resolve('chalk'),
+    '#ansi-styles': join(
+      require.resolve('chalk').split('chalk')[0],
+      'chalk/source/vendor/ansi-styles/index.js'
+    ),
+    '#supports-color': join(
+      require.resolve('chalk').split('chalk')[0],
+      'chalk/source/vendor/supports-color/index.js'
+    ),
   },
   testEnvironment: 'jsdom',
   testMatch: [
