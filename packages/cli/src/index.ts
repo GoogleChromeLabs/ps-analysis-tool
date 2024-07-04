@@ -60,8 +60,16 @@ events.EventEmitter.defaultMaxListeners = 15;
 
 const program = new Command();
 
+const isFromNPMRegistry = !existsSync(
+  path.resolve(__dirname + '../../../extension')
+);
+
 program
+  .name(isFromNPMRegistry ? 'psat' : 'npm run cli')
   .version('0.9.0-2')
+  .usage(
+    isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
+  )
   .description('CLI to test a URL for 3p cookies.')
   .argument(
     '[website-url]',
