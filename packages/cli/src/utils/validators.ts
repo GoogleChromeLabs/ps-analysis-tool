@@ -17,6 +17,7 @@
 import { parseUrl } from '@google-psat/common';
 import { existsSync, mkdirSync, accessSync, constants } from 'fs';
 import path from 'path';
+import chalk from 'chalk';
 
 /**
  * This validates the waitTime or the concurrency of the URLs to be analysed together.
@@ -26,7 +27,7 @@ import path from 'path';
 export function numericValidator(value: string) {
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
-    console.error(`${value} is not valid numeric value.`);
+    console.error(chalk.red(`${value} is not valid numeric value.`));
     process.exit(1);
   }
   return parsedValue;
@@ -41,9 +42,11 @@ export function localeValidator(locale: string) {
   const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
   if (locale && !availableLocales.includes(locale)) {
     console.error(
-      `Locale '${locale}' is not supported, please use ${availableLocales.join(
-        ', '
-      )}.`
+      chalk.red(
+        `Locale '${locale}' is not supported, please use ${availableLocales.join(
+          ', '
+        )}.`
+      )
     );
     process.exit(1);
   }
@@ -58,7 +61,7 @@ export function localeValidator(locale: string) {
 export function filePathValidator(filePath: string) {
   const csvFileExists = existsSync(filePath);
   if (!csvFileExists) {
-    console.error(`Error: No file at ${filePath}`);
+    console.error(chalk.red(`Error: No file at ${filePath}`));
     process.exit(1);
   }
   return filePath;
@@ -73,7 +76,7 @@ export function urlValidator(url: string) {
   const parsedUrl = parseUrl(url);
 
   if (parsedUrl === null) {
-    console.error(`Error: Invalid Url  ${parsedUrl}`);
+    console.error(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
     process.exit(1);
   }
   return url;
@@ -95,7 +98,7 @@ export function outDirValidator(outDir: string) {
   }
 
   if (!hasAccessWriteAccess) {
-    console.log(`Error: No write permission for ${outDir}`);
+    console.log(chalk.red(`Error: No write permission for ${outDir}`));
     process.exit(1);
   }
 

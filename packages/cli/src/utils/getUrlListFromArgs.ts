@@ -19,6 +19,7 @@
 import { readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
 import path, { basename } from 'path';
+import chalk from 'chalk';
 /**
  * Internal dependencies.
  */
@@ -59,12 +60,14 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
     }, [] as string[]);
 
     if (_urls.length === 0) {
-      console.log(`Error: CSV file contains no URLs: ${basename(csvPath)}`);
+      console.log(
+        chalk.red(`Error: CSV file contains no URLs: ${basename(csvPath)}`)
+      );
       process.exit(1);
     }
     _urls.forEach((_url) => {
       if (!_url.includes('http')) {
-        console.log(`Error: Invalid URL: ${_url}.`);
+        console.log(chalk.red(`Error: Invalid URL: ${_url}.`));
         process.exit(1);
       }
     });
@@ -92,13 +95,15 @@ const parseUrlsFromLocalSitemap = async (
     const isSiteMap = Boolean(data['urlset']);
 
     if (isSiteIndex) {
-      console.log('Error: Sitemap index not supported');
+      console.log(chalk.red('Error: Sitemap index not supported'));
       process.exit(1);
     }
 
     if (!isSiteMap) {
       console.log(
-        `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+        chalk.red(
+          `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+        )
       );
       process.exit(1);
     }
@@ -113,21 +118,27 @@ const parseUrlsFromLocalSitemap = async (
       );
     } catch (error) {
       console.log(
-        `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+        chalk.red(
+          `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+        )
       );
       process.exit(1);
     }
 
     if (_urls.length === 0) {
       console.log(
-        `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+        chalk.red(
+          `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+        )
       );
       process.exit(1);
     }
     _urls.forEach((_url) => {
       if (!_url.includes('http')) {
         console.log(
-          `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+          chalk.red(
+            `Error: Sitemap file contains no URLs: ${basename(sitemapPath)}`
+          )
         );
         process.exit(1);
       }
@@ -167,7 +178,7 @@ const getUrlListFromArgs = async (
       const _urls = await parseUrlsFromSitemap(sitemapUrl, spinnies);
       urls = urls.concat(_urls);
     } catch (error) {
-      console.log('Error: Error parsing sitemap.');
+      console.log(chalk.red('Error: Error parsing sitemap.'));
       process.exit(1);
     }
   } else if (filePath) {
@@ -182,14 +193,14 @@ const getUrlListFromArgs = async (
       urls = urls.concat(_urls);
     } catch (error) {
       if (error === 'csv parsing error') {
-        console.log('Error: CSV file could not be parsed');
+        console.log(chalk.red('Error: CSV file could not be parsed'));
         process.exit(1);
       }
       if (error === 'Local sitemap parsing error') {
-        console.log('Error: Sitemap could not be parsed');
+        console.log(chalk.red('Error: Sitemap could not be parsed'));
         process.exit(1);
       }
-      console.log('Error parsing file.');
+      console.log(chalk.red('Error parsing file.'));
       process.exit(1);
     }
   }

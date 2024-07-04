@@ -36,6 +36,7 @@ import {
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
 import URL from 'node:url';
+import chalk from 'chalk';
 
 /**
  * Internal dependencies.
@@ -62,49 +63,49 @@ program
   .description('CLI to test a URL for 3p cookies.')
   .argument(
     '[website-url]',
-    'The URL of website you want to analyse.',
+    'The URL of website you want to analyse',
     urlValidator
   )
-  .option('-u, --url <url>', 'URL of a website.', urlValidator)
-  .option('-s, --source-url <url>', 'URL of a sitemap.', urlValidator)
+  .option('-u, --url <url>', 'URL of a website', urlValidator)
+  .option('-s, --source-url <url>', 'URL of a sitemap', urlValidator)
   .option(
     '-f, --file <path>',
-    'Path to a sitemap saved in the file system.',
+    'Path to a sitemap saved in the file system',
     filePathValidator
   )
   .option(
     '-n, --number-of-urls <num>',
-    'Limit the number of URLs to analyze (from sitemap or CSV).',
+    'Limit the number of URLs to analyze (from sitemap or CSV)',
     numericValidator
   )
-  .option('-d, --display', 'Flag for running puppeteer in non-headless mode.')
-  .option('-v, --verbose', 'Enables verbose logging.')
+  .option('-d, --display', 'Flag for running puppeteer in non-headless mode')
+  .option('-v, --verbose', 'Enables verbose logging')
   .option('-t, --tech', 'Enables technology analysis')
   .option(
     '-o, --out-dir <path>',
     'Directory path where the analysis data will be stored',
     outDirValidator
   )
-  .option('-i, --ignore-gdpr', 'This will accept the GDPR banner if present.')
+  .option('-i, --ignore-gdpr', 'This will accept the GDPR banner if present')
   .option(
     '-q, --quiet',
     'Flags for skipping all prompts. Default options will be used'
   )
   .option(
     '-c, --concurrency <num>',
-    'Number of URLs to be analysed in parallel during sitemap or CSV analysis.',
+    'Number of URLs to be analysed in parallel during sitemap or CSV analysis',
     numericValidator,
     3
   )
   .option(
     '-w, --wait <num>',
-    'Number of mili-seconds to wait after the page is loaded before generating the report.',
+    'Number of mili-seconds to wait after the page is loaded before generating the report',
     numericValidator,
     20000
   )
   .option(
-    '-w, --wording <language>',
-    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR.',
+    '-l, --locale <language>',
+    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR',
     localeValidator,
     'en'
   );
@@ -363,8 +364,8 @@ const saveResultsAsHTML = async (
   await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
-  console.log('Some error occured while analysing the website.');
-  console.log('For more information check the stack trace below:\n');
-  console.log(error);
+  console.log(chalk.red('Some error occured while analysing the website.'));
+  console.log(chalk.red('For more information check the stack trace below:\n'));
+  console.log(chalk.red(error));
   process.exit(process?.exitCode ?? 0);
 });

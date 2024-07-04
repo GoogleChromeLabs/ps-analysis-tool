@@ -129,7 +129,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided id was found');
     }
 
     await page.evaluate(() => {
