@@ -372,7 +372,7 @@ const saveResultsAsHTML = async (
     status: 'non-spinnable',
     color: 'red',
   });
-  spinnies.add('error-line-2', {
+  spinnies.add('error-line-3', {
     text: `${error}`,
     status: 'non-spinnable',
     color: 'red',
