@@ -66,14 +66,22 @@ program
   .description('CLI to test a URL for 3p cookies.')
   .argument(
     '[website-url]',
-    'The URL of website you want to analyse',
+    'The URL of a single site to analyze',
     urlValidator
   )
-  .option('-u, --url <url>', 'URL of a website', urlValidator)
-  .option('-s, --source-url <url>', 'URL of a sitemap', urlValidator)
+  .option(
+    '-u, --url <url>',
+    'The URL of a single site to analyze',
+    urlValidator
+  )
+  .option(
+    '-s, --source-url <url>',
+    ' The URL of a sitemap or CSV to analyze',
+    urlValidator
+  )
   .option(
     '-f, --file <path>',
-    'Path to a sitemap saved in the file system',
+    'The path to a local file (CSV or XML sitemap) to analyze',
     filePathValidator
   )
   .option(
@@ -81,28 +89,28 @@ program
     'Limit the number of URLs to analyze (from sitemap or CSV)',
     numericValidator
   )
-  .option('-d, --display', 'Flag for running puppeteer in non-headless mode')
+  .option('-d, --display', 'Flag for running CLI in non-headless mode')
   .option('-v, --verbose', 'Enables verbose logging')
   .option('-t, --tech', 'Enables technology analysis')
   .option(
     '-o, --out-dir <path>',
-    'Directory path where the analysis data will be stored',
+    'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
     outDirValidator
   )
-  .option('-i, --ignore-gdpr', 'This will accept the GDPR banner if present')
   .option(
-    '-q, --quiet',
-    'Flags for skipping all prompts. Default options will be used'
+    '-i, --ignore-gdpr',
+    'Ignore automatically accepting the GDPR banner if present'
   )
+  .option('-q, --quiet', 'Skips all prompts; uses default options')
   .option(
     '-c, --concurrency <num>',
-    'Number of URLs to be analysed in parallel during sitemap or CSV analysis',
+    'Number of tabs to open in parallel during sitemap or CSV analysis',
     numericValidator,
     3
   )
   .option(
     '-w, --wait <num>',
-    'Number of mili-seconds to wait after the page is loaded before generating the report',
+    'Number of seconds to wait after the page is loaded before generating the report',
     numericValidator,
     20000
   )
