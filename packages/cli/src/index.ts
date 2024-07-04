@@ -126,6 +126,10 @@ program
     'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR',
     localeValidator,
     'en'
+  )
+  .addHelpText(
+    'after',
+    '\nTo learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.'
   );
 
 program.parse();
