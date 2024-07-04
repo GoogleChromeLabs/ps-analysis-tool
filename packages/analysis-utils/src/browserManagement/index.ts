@@ -205,7 +205,7 @@ export class BrowserManagement {
       this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
       this.debugLog(
-        `Navigation did not finish in 10 seconds moving on to scrolling.`
+        `Navigation did not finish in 10 seconds moving on to scrolling`
       );
       //ignore
     }

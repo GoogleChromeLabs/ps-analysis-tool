@@ -75,7 +75,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
       urls.length > 1 &&
       spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
         text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}`,
-        indent: 2,
+        indent: 4,
       });
 
     const urlsWindow = urls.slice(start, end + 1);
