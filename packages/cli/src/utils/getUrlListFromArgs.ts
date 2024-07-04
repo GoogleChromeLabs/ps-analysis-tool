@@ -70,7 +70,7 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
     }
     _urls.forEach((_url) => {
       if (!_url.includes('http')) {
-        console.log(chalk.red(`Error: Invalid URL: ${_url}.`));
+        console.log(chalk.red(`Error: Invalid URL: ${_url}`));
         process.exit(1);
       }
     });
