@@ -15,7 +15,7 @@
  */
 
 import { parseUrl } from '@google-psat/common';
-import { existsSync, mkdirSync, accessSync, constants } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 
@@ -88,41 +88,25 @@ export function urlValidator(url: string) {
  * @returns validated outDir or the created output directory.
  */
 export function outDirValidator(outDir: string) {
-  let hasAccessWriteAccess = true;
+  const parentDirExists = existsSync(path.resolve('./out'));
 
-  try {
-    accessSync('/etc/passwd', constants.W_OK);
-    hasAccessWriteAccess = true;
-  } catch (error) {
-    hasAccessWriteAccess = false;
+  if (!parentDirExists) {
+    mkdirSync(path.resolve('./out'));
   }
 
-  if (!hasAccessWriteAccess) {
-    console.log(chalk.red(`Error: No write permission for ${outDir}`));
-    process.exit(1);
+  let output;
+
+  if (!path.isAbsolute(outDir)) {
+    output = path.resolve('./out', outDir);
+  } else {
+    output = path.resolve(outDir);
   }
 
-  if (outDir) {
-    const parentDirExists = existsSync(path.resolve('./out'));
+  const outDirExists = existsSync(output);
 
-    if (!parentDirExists) {
-      mkdirSync(path.resolve('./out'));
-    }
-
-    let output;
-
-    if (!path.isAbsolute(outDir)) {
-      output = path.resolve('./out', outDir);
-    } else {
-      output = path.resolve(outDir);
-    }
-
-    const outDirExists = existsSync(output);
-
-    if (!outDirExists) {
-      console.log(`"${output}" does not exist, creating!`);
-      mkdirSync(output);
-    }
+  if (!outDirExists) {
+    console.log(`"${output}" does not exist, creating\n`);
+    mkdirSync(output);
   }
   return outDir;
 }

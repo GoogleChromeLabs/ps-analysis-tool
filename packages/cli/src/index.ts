@@ -287,10 +287,10 @@ const saveResultsAsHTML = async (
           ? urls.length
           : parseInt(userInput as string);
     } else if (numberOfUrlsInput) {
-      console.log(`Analyzing ${numberOfUrlsInput} urls.`);
+      console.log(`Analyzing ${numberOfUrlsInput} urls`);
       numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
-      console.log(`Analyzing all ${urls.length} urls.`);
+      console.log(`Analyzing all ${urls.length} urls`);
       numberOfUrls = urls.length;
     }
 
