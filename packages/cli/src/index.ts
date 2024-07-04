@@ -212,7 +212,7 @@ const saveResultsAsHTML = async (
   const numberOfUrlsInput = program.opts().numberOfUrls;
   const isHeadless = !program.opts().display;
   const shouldSkipPrompts = program.opts().quiet;
-  const shouldSkipTechnologyAnalysis = !program.opts().technology;
+  const shouldSkipTechnologyAnalysis = Boolean(program.opts().technology);
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
@@ -362,15 +362,18 @@ const saveResultsAsHTML = async (
   await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
   const spinnies = new Spinnies();
-  spinnies.add('Some error occured while analyzing the website.', {
+  spinnies.add('error-line-1', {
+    text: 'Some error occured while analyzing the website.',
     status: 'non-spinnable',
     color: 'red',
   });
-  spinnies.add('For more information check the stack trace below:\n', {
+  spinnies.add('error-line-2', {
+    text: 'For more information check the stack trace below:\n',
     status: 'non-spinnable',
     color: 'red',
   });
-  spinnies.add(error, {
+  spinnies.add('error-line-2', {
+    text: `${error}`,
     status: 'non-spinnable',
     color: 'red',
   });
