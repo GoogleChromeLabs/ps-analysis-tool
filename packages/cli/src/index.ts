@@ -40,7 +40,6 @@ import {
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
 import URL from 'node:url';
-import chalk from 'chalk';
 
 /**
  * Internal dependencies.
@@ -288,7 +287,7 @@ const saveResultsAsHTML = async (
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analyzing cookies on first site visit...',
+    text: 'Analyzing cookies on first site visit',
   });
 
   const cookieAnalysisAndFetchedResourceData =
@@ -362,8 +361,18 @@ const saveResultsAsHTML = async (
   await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
-  console.log(chalk.red('Some error occured while analyzing the website.'));
-  console.log(chalk.red('For more information check the stack trace below:\n'));
-  console.log(chalk.red(error));
+  const spinnies = new Spinnies();
+  spinnies.add('Some error occured while analyzing the website.', {
+    status: 'non-spinnable',
+    color: 'red',
+  });
+  spinnies.add('For more information check the stack trace below:\n', {
+    status: 'non-spinnable',
+    color: 'red',
+  });
+  spinnies.add(error, {
+    status: 'non-spinnable',
+    color: 'red',
+  });
   process.exit(process?.exitCode ?? 0);
 });

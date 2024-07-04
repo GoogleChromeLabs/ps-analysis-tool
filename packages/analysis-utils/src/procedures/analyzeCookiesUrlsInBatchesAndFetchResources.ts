@@ -74,7 +74,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
     spinnies &&
       urls.length > 1 &&
       spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
-        text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}...`,
+        text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}`,
         indent: 2,
       });
 
@@ -99,7 +99,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
       removeAndAddNewSpinnerText(
         spinnies,
         `cookie-batch-spinner${start + 1}-${end + 1}`,
-        `Done analyzing cookies in URLs ${start + 1} - ${end + 1}.`,
+        `Done analyzing cookies in URLs ${start + 1} - ${end + 1}`,
         4
       );
   }

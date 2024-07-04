@@ -52,7 +52,7 @@ export const analyzeTechnologiesUrlsInBatches = async (
     spinnies &&
       urls.length > 1 &&
       spinnies.add(`tech-batch-spinner${start + 1}-${end + 1}`, {
-        text: `Analyzing technologies in URLs ${start + 1} - ${end + 1}...`,
+        text: `Analyzing technologies in URLs ${start + 1} - ${end + 1}`,
         indent: 2,
       });
 
@@ -72,7 +72,7 @@ export const analyzeTechnologiesUrlsInBatches = async (
       removeAndAddNewSpinnerText(
         spinnies,
         `tech-batch-spinner${start + 1}-${end + 1}`,
-        `Done analyzing technology in URLs ${start + 1} - ${end + 1}.`,
+        `Done analyzing technology in URLs ${start + 1} - ${end + 1}`,
         3
       );
     await wappalyzer.destroy();
