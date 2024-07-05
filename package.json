@@ -5,7 +5,7 @@
 	"scripts": {
 		"build-storybook": "storybook build",
 		"build:all": "npm-run-all **:build ",
-		"build-cli": "npm run cli-dashboard:build && npm run cli:build",
+		"build-cli": "npm run i18n:build && npm run common:build && npm run design-system:build && npm run library-detection:build && npm run analysis-utils:build && npm run cli-dashboard:build && npm run cli:build",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
 		"unpublish:all:local": "npm run unpublish:local --workspaces",
 		"publish:all:remote": "npm run build:all && npm run publish:remote --workspaces",
