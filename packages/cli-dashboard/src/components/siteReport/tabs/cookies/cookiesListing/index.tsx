@@ -58,6 +58,8 @@ const CookiesListing = ({
     [tabCookies, selectedFrameUrl]
   );
 
+  const memoTabCookies = useMemo(() => Object.values(tabCookies), [tabCookies]);
+
   const {
     tableColumns,
     filters,
@@ -65,7 +67,7 @@ const CookiesListing = ({
     tablePersistentSettingsKey,
     isSidebarOpen,
   } = useCookieListing(
-    Object.values(tabCookies),
+    memoTabCookies,
     selectedFrameUrl,
     'cookiesListing',
     selectedSite

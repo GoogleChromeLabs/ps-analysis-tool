@@ -55,6 +55,14 @@ const useCookieListing = (
     [activePanelQuery]
   );
 
+  const tablePersistentSettingsKey = useMemo(() => {
+    if (selectedSite) {
+      return persistenceKey + '#' + selectedSite + selectedFrameUrl;
+    }
+
+    return persistenceKey + '#' + selectedFrameUrl;
+  }, [persistenceKey, selectedFrameUrl, selectedSite]);
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -381,14 +389,6 @@ const useCookieListing = (
     () => ['parsedCookie.name', 'parsedCookie.domain'],
     []
   );
-
-  const tablePersistentSettingsKey = useMemo(() => {
-    if (selectedSite) {
-      return persistenceKey + '#' + selectedSite + selectedFrameUrl;
-    }
-
-    return persistenceKey + '#' + selectedFrameUrl;
-  }, [persistenceKey, selectedFrameUrl, selectedSite]);
 
   return {
     tableColumns,
