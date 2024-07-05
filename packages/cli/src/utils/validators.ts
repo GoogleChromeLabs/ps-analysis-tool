@@ -70,16 +70,31 @@ export function filePathValidator(filePath: string) {
 /**
  * This validates the url to be analysed by the user.
  * @param {string} url The url provided by the user.
+ * @param program
  * @returns validated url.
  */
-export function urlValidator(url: string) {
-  const parsedUrl = parseUrl(url);
+export function urlValidator(url: string, program?: any) {
+  if (program) {
+    if (!program.opts()?.url) {
+      const parsedUrl = parseUrl(url);
 
-  if (parsedUrl === null) {
-    console.log(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
-    process.exit(1);
+      if (parsedUrl === null) {
+        console.log(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
+        process.exit(1);
+      }
+      return url;
+    } else {
+      return undefined;
+    }
+  } else {
+    const parsedUrl = parseUrl(url);
+
+    if (parsedUrl === null) {
+      console.log(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
+      process.exit(1);
+    }
+    return url;
   }
-  return url;
 }
 
 /**

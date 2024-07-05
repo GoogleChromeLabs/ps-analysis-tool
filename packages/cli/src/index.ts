@@ -72,10 +72,8 @@ program
     isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
   )
   .description('CLI to test a URL for 3p cookies.')
-  .argument(
-    '[website-url]',
-    'The URL of a single site to analyze',
-    urlValidator
+  .argument('[website-url]', 'The URL of a single site to analyze', (url) =>
+    urlValidator(url, program)
   )
   .option(
     '-u, --url <url>',
@@ -97,9 +95,9 @@ program
     'Limit the number of URLs to analyze (from sitemap or CSV)',
     numericValidator
   )
-  .option('-d, --display', 'Flag for running CLI in non-headless mode')
-  .option('-v, --verbose', 'Enables verbose logging')
-  .option('-t, --tech', 'Enables technology analysis')
+  .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
+  .option('-v, --verbose', 'Enables verbose logging', false)
+  .option('-t, --tech', 'Enables technology analysis', false)
   .option(
     '-o, --out-dir <path>',
     'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
@@ -107,9 +105,10 @@ program
   )
   .option(
     '-i, --ignore-gdpr',
-    'Ignore automatically accepting the GDPR banner if present'
+    'Ignore automatically accepting the GDPR banner if present',
+    false
   )
-  .option('-q, --quiet', 'Skips all prompts; uses default options')
+  .option('-q, --quiet', 'Skips all prompts; uses default options', false)
   .option(
     '-c, --concurrency <num>',
     'Number of tabs to open in parallel during sitemap or CSV analysis',
@@ -233,10 +232,9 @@ const saveResultsAsHTML = async (
     console.log(`\nReport: ${URL.pathToFileURL(outFileFullDir)}`)
   );
 };
-
 // eslint-disable-next-line complexity
 (async () => {
-  const url = program.args?.[0] ?? program.opts().url;
+  const url = program.processedArgs?.[0] ?? program.opts().url;
   const verbose = Boolean(program.opts().verbose);
   const sitemapUrl = program.opts().sourceUrl;
   const filePath = program.opts().file;
