@@ -95,9 +95,9 @@ program
     'Limit the number of URLs to analyze (from sitemap or CSV)',
     numericValidator
   )
-  .option('-d, --display', 'Flag for running CLI in non-headless mode')
-  .option('-v, --verbose', 'Enables verbose logging')
-  .option('-t, --tech', 'Enables technology analysis')
+  .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
+  .option('-v, --verbose', 'Enables verbose logging', false)
+  .option('-t, --tech', 'Enables technology analysis', false)
   .option(
     '-o, --out-dir <path>',
     'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
@@ -105,9 +105,10 @@ program
   )
   .option(
     '-i, --ignore-gdpr',
-    'Ignore automatically accepting the GDPR banner if present'
+    'Ignore automatically accepting the GDPR banner if present',
+    false
   )
-  .option('-q, --quiet', 'Skips all prompts; uses default options')
+  .option('-q, --quiet', 'Skips all prompts; uses default options', false)
   .option(
     '-c, --concurrency <num>',
     'Number of tabs to open in parallel during sitemap or CSV analysis',
@@ -234,14 +235,14 @@ const saveResultsAsHTML = async (
 // eslint-disable-next-line complexity
 (async () => {
   const url = program.processedArgs?.[0] ?? program.opts().url;
-  const verbose = Boolean(program.opts().verbose);
+  const verbose = program.opts().verbose;
   const sitemapUrl = program.opts().sourceUrl;
   const filePath = program.opts().file;
   const locale = program.opts().locale;
   const numberOfUrlsInput = program.opts().numberOfUrls;
-  const isHeadless = !program.opts().display;
+  const isHeadful = program.opts().display;
   const shouldSkipPrompts = program.opts().quiet;
-  const shouldSkipTechnologyAnalysis = !program.opts().tech;
+  const shouldDoTechnologyAnalysis = program.opts().tech;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
@@ -324,7 +325,7 @@ const saveResultsAsHTML = async (
       urlsToProcess,
       //@ts-ignore Fix type.
       Libraries,
-      isHeadless,
+      !isHeadful,
       waitTime,
       cookieDictionary,
       concurrency,
@@ -341,7 +342,7 @@ const saveResultsAsHTML = async (
 
   let technologyAnalysisData: any = null;
 
-  if (!shouldSkipTechnologyAnalysis) {
+  if (shouldDoTechnologyAnalysis) {
     spinnies.add('technology-spinner', {
       text: 'Analyzing technologies',
     });
