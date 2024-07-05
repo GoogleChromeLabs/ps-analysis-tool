@@ -73,6 +73,12 @@ describe('useCookieListing', () => {
     uncategorized: {
       message: 'Uncategorized',
     },
+    analytics: {
+      message: 'Analytics',
+    },
+    functional: {
+      message: 'Functional',
+    },
     true: {
       message: 'True',
     },
@@ -115,6 +121,12 @@ describe('useCookieListing', () => {
       result.current.filters['analytics.category'].hasPrecalculatedFilterValues
     ).toBe(true);
     expect(result.current.filters['analytics.category'].filterValues).toEqual({
+      Analytics: {
+        selected: false,
+      },
+      Functional: {
+        selected: false,
+      },
       Marketing: {
         selected: false,
       },
