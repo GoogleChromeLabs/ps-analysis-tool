@@ -88,10 +88,6 @@ const Layout = ({
         },
       };
 
-      const selectedFrameUrl = frameUrls.find(
-        (url) => url === keys[keys.length - 1]
-      );
-
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].children = frameUrls.reduce(
         (acc: SidebarItems, url: string): SidebarItems => {
           acc[url] = {
@@ -99,7 +95,7 @@ const Layout = ({
             panel: {
               Element: CookiesTab,
               props: {
-                selectedFrameUrl,
+                selectedFrameUrl: keys[keys.length - 1],
                 selectedSite,
               },
             },
