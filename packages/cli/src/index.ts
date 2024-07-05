@@ -95,9 +95,9 @@ program
     'Limit the number of URLs to analyze (from sitemap or CSV)',
     numericValidator
   )
-  .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
-  .option('-v, --verbose', 'Enables verbose logging', false)
-  .option('-t, --tech', 'Enables technology analysis', false)
+  .option('-d, --display', 'Flag for running CLI in non-headless mode')
+  .option('-v, --verbose', 'Enables verbose logging')
+  .option('-t, --tech', 'Enables technology analysis')
   .option(
     '-o, --out-dir <path>',
     'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
@@ -105,10 +105,9 @@ program
   )
   .option(
     '-i, --ignore-gdpr',
-    'Ignore automatically accepting the GDPR banner if present',
-    false
+    'Ignore automatically accepting the GDPR banner if present'
   )
-  .option('-q, --quiet', 'Skips all prompts; uses default options', false)
+  .option('-q, --quiet', 'Skips all prompts; uses default options')
   .option(
     '-c, --concurrency <num>',
     'Number of tabs to open in parallel during sitemap or CSV analysis',
