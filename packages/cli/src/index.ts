@@ -19,7 +19,7 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { existsSync, ensureFile, writeFile } from 'fs-extra';
+import { existsSync, ensureDir } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import fs from 'fs';
@@ -90,14 +90,6 @@ program
 
 program.parse();
 
-const saveResultsAsJSON = async (
-  outDir: string,
-  result: CompleteJson | CompleteJson[]
-) => {
-  await ensureFile(outDir + '/out.json');
-  await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
-};
-
 const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson | CompleteJson[],
@@ -105,6 +97,8 @@ const saveResultsAsHTML = async (
 ) => {
   let htmlText = '';
   let reportHTML = '';
+
+  await ensureDir(outDir);
 
   if (
     existsSync(
@@ -323,7 +317,6 @@ const saveResultsAsHTML = async (
     process.exit(0);
   }
 
-  await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
   console.log('Some error occured while analysing the website.');
