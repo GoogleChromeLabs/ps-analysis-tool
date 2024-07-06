@@ -62,7 +62,7 @@ const dashboard = {
       title: 'Report',
       template: '../cli-dashboard/public/index.html',
       filename: 'index.html',
-      inject: false,
+      inject: true,
     }),
     new CopyPlugin({
       patterns: [
