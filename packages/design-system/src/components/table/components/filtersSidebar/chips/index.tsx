@@ -34,12 +34,14 @@ interface ChipsBarProps {
     filterValue: string,
     isRemovalAction?: boolean
   ) => void;
+  hideClearAll?: boolean;
 }
 
 const ChipsBar = ({
   selectedFilters,
   resetFilters,
   toggleFilterSelection,
+  hideClearAll = false,
 }: ChipsBarProps) => {
   const appliedFiltersCount = Object.values(selectedFilters).reduce(
     (acc, filter) => {
@@ -55,7 +57,7 @@ const ChipsBar = ({
         'w-full h-6 px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black'
       }
     >
-      {appliedFiltersCount > 0 && (
+      {appliedFiltersCount > 0 && !hideClearAll && (
         <button
           className="h-full flex items-center text-link text-xs whitespace-nowrap"
           onClick={resetFilters}
@@ -70,6 +72,7 @@ const ChipsBar = ({
       <ChipList
         selectedFilters={selectedFilters}
         toggleFilterSelection={toggleFilterSelection}
+        hideCloseIcon={hideClearAll}
       />
     </div>
   );

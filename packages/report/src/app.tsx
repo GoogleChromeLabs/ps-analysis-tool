@@ -18,7 +18,10 @@
  */
 import React from 'react';
 import { LibraryDetection } from '@google-psat/library-detection';
-import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
+import {
+  PrivacySandboxColoredIcon,
+  ChipsBar,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies
@@ -31,6 +34,7 @@ import {
   ExemptedCookiesSection,
 } from './components';
 import { useData } from './stateProviders/data';
+import { noop } from '@google-psat/common';
 
 const App = () => {
   const data = useData(({ state }) => state.data);
@@ -43,6 +47,17 @@ const App = () => {
           <p className="text-sm">{data.url}</p>
         </div>
       )}
+      <div className="h-fit border border-t border-gray-300 bg-anti-flash-white flex gap-2 items-center px-4">
+        <p className="text-xs">Applied Filters:</p>
+        <div className="overflow-auto">
+          <ChipsBar
+            selectedFilters={data?.filters || {}}
+            resetFilters={noop}
+            toggleFilterSelection={noop}
+            hideClearAll
+          />
+        </div>
+      </div>
       <CookiesSection />
       <BlockedCookiesSection />
       <ExemptedCookiesSection />

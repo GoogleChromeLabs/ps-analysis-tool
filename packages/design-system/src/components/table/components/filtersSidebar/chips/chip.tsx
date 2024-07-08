@@ -27,20 +27,28 @@ interface ChipProps {
   filterTitle: string;
   value: string;
   toggleFilterSelection: () => void;
+  hideCloseIcon?: boolean;
 }
 
-const Chip = ({ filterTitle, value, toggleFilterSelection }: ChipProps) => {
+const Chip = ({
+  filterTitle,
+  value,
+  toggleFilterSelection,
+  hideCloseIcon,
+}: ChipProps) => {
   return (
     <div className="flex items-center px-2 rounded-sm bg-gainsboro dark:bg-charleston-green mx-1 h-4">
       <span className="block whitespace-nowrap text-onyx dark:text-manatee text-xs">
         {filterTitle + ': ' + value}
       </span>
-      <button
-        onClick={toggleFilterSelection}
-        className="w-1.5 h-1.5 text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
-      >
-        <ClearIcon className="text-mischka" />
-      </button>
+      {hideCloseIcon ? null : (
+        <button
+          onClick={toggleFilterSelection}
+          className="w-1.5 h-1.5 text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
+        >
+          <ClearIcon className="text-mischka" />
+        </button>
+      )}
     </div>
   );
 };

@@ -23,6 +23,7 @@ import { saveAs } from 'file-saver';
  * Internal dependencies.
  */
 import generateReportObject from './generateReportObject';
+import type { TableFilter } from '@google-psat/design-system';
 
 /**
  * Utility function to download report.
@@ -30,12 +31,14 @@ import generateReportObject from './generateReportObject';
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
  * @param libraryMatches Libary matches
+ * @param filters Filter applied to the landing page.
  */
 export default async function downloadReport(
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData
+  libraryMatches: LibraryData,
+  filters: TableFilter
 ) {
   const htmlText = await (await fetch('../report/index.html')).text();
   const parser = new DOMParser();
@@ -48,7 +51,8 @@ export default async function downloadReport(
     tabCookies,
     tabFrames,
     libraryMatches,
-    url
+    url,
+    filters
   );
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;

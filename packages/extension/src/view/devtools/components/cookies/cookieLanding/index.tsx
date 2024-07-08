@@ -30,6 +30,7 @@ import {
   FiltersSidebar,
   calculateBlockedReasonsFilterValues,
   calculateDynamicFilterValues,
+  calculateExemptionReason,
   evaluateStaticFilterValues,
   useFiltering,
   type InfoType,
@@ -109,6 +110,21 @@ const AssembledCookiesLanding = () => {
           return val?.includes(filterValue);
         },
       },
+      exemptionReason: {
+        title: I18n.getMessage('exemptionReasons'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateExemptionReason(
+          Object.values(cookies),
+          noop,
+          []
+        ),
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val === filterValue;
+        },
+        useGenericPersistenceKey: true,
+      },
     }),
     [cookies]
   );
@@ -176,7 +192,7 @@ const AssembledCookiesLanding = () => {
           className="flex-1 overflow-auto h-full"
           id="cookies-landing-scroll-container"
         >
-          <Landing tabCookies={cookiesByKey} />
+          <Landing tabCookies={cookiesByKey} filters={filter.selectedFilters} />
         </div>
       </div>
     </div>

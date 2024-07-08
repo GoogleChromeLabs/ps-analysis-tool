@@ -26,6 +26,7 @@ import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
+  type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -35,13 +36,15 @@ import { I18n } from '@google-psat/i18n';
  * @param tabFrames Tab frames.
  * @param libraryMatches Library matches
  * @param url Top level URL.
+ * @param filters Filter applied to the landing page.
  * @returns Report Object
  */
 export default async function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData,
-  url: string
+  url: string,
+  filters: TableFilter
 ) {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -100,6 +103,7 @@ export default async function generateReportObject(
     showBlockedCategory: false,
     url,
     translations,
+    filters,
     source: 'extension',
   };
 }

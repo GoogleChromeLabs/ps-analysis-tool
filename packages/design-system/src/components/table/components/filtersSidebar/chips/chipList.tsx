@@ -31,11 +31,13 @@ interface ChipListProps {
     filterValue: string,
     isRemovalAction?: boolean
   ) => void;
+  hideCloseIcon?: boolean;
 }
 
 const ChipList = ({
   selectedFilters,
   toggleFilterSelection,
+  hideCloseIcon = false,
 }: ChipListProps) => {
   return (
     <div className="flex flex-nowrap max-w-full">
@@ -48,6 +50,7 @@ const ChipList = ({
             toggleFilterSelection={() => {
               toggleFilterSelection(filterKey, filterValue, true);
             }}
+            hideCloseIcon={hideCloseIcon}
           />
         ));
       })}
