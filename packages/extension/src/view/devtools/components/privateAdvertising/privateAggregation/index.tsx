@@ -24,7 +24,7 @@ const PrivateAggregation = () => {
   return (
     <div data-testid="protected-audience-content" className="h-full w-full">
       <LandingPage
-        title="Protected Audience"
+        title="Private Aggregation"
         psInfoKey={PSInfoKey.PrivateAggregation}
         extraClasses="max-w-2xl h-fit"
       />
