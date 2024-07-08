@@ -55,7 +55,7 @@ import {
   urlValidator,
   numericValidator,
 } from './utils';
-import chalk from 'chalk';
+import { redLogger } from './utils/coloredLoggers';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -135,11 +135,9 @@ program
   .configureOutput({
     outputError: (error) => {
       if (error.startsWith('error')) {
-        console.error(
-          chalk.red(error.charAt(0).toUpperCase() + error.slice(1))
-        );
+        redLogger(error.charAt(0).toUpperCase() + error.slice(1));
       } else {
-        console.error(chalk.red(error));
+        redLogger(error);
       }
     },
   });

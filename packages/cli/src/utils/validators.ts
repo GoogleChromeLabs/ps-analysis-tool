@@ -17,7 +17,11 @@
 import { parseUrl } from '@google-psat/common';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
-import chalk from 'chalk';
+
+/**
+ * Internal dependencies.
+ */
+import { redLogger } from './coloredLoggers';
 
 /**
  * This validates the waitTime or the concurrency of the URLs to be analysed together.
@@ -27,7 +31,7 @@ import chalk from 'chalk';
 export function numericValidator(value: string) {
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
-    console.log(chalk.red(`${value} is not valid numeric value.`));
+    redLogger(`${value} is not valid numeric value.`);
     process.exit(1);
   }
   return parsedValue;
@@ -41,12 +45,10 @@ export function numericValidator(value: string) {
 export function localeValidator(locale: string) {
   const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
   if (locale && !availableLocales.includes(locale)) {
-    console.log(
-      chalk.red(
-        `Locale '${locale}' is not supported, please use ${availableLocales.join(
-          ', '
-        )}.`
-      )
+    redLogger(
+      `Locale '${locale}' is not supported, please use ${availableLocales.join(
+        ', '
+      )}.`
     );
     process.exit(1);
   }
@@ -61,7 +63,7 @@ export function localeValidator(locale: string) {
 export function filePathValidator(filePath: string) {
   const csvFileExists = existsSync(filePath);
   if (!csvFileExists) {
-    console.log(chalk.red(`Error: No file at ${filePath}`));
+    redLogger(`Error: No file at ${filePath}`);
     process.exit(1);
   }
   return filePath;
@@ -79,7 +81,7 @@ export function urlValidator(url: string, program?: any) {
       const parsedUrl = parseUrl(url);
 
       if (parsedUrl === null) {
-        console.log(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
+        redLogger(`Error: Invalid Url ${parsedUrl}`);
         process.exit(1);
       }
       return url;
@@ -90,7 +92,7 @@ export function urlValidator(url: string, program?: any) {
     const parsedUrl = parseUrl(url);
 
     if (parsedUrl === null) {
-      console.log(chalk.red(`Error: Invalid Url  ${parsedUrl}`));
+      redLogger(`Error: Invalid Url ${parsedUrl}`);
       process.exit(1);
     }
     return url;
