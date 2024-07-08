@@ -29,7 +29,8 @@ import { TechnologyDetailList } from '../types';
 export const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,
   batchSize = 3,
-  spinnies: Spinnies
+  spinnies: Spinnies,
+  indent = 4
 ): Promise<TechnologyDetailList[]> => {
   const wappalyzer = new Wapplalyzer();
 
@@ -41,10 +42,10 @@ export const analyzeTechnologiesUrlsInBatches = async (
     await wappalyzer.init();
 
     spinnies &&
-      urls.length > 1 &&
+      indent === 4 &&
       spinnies.add(`tech-batch-spinner${start + 1}-${end + 1}`, {
         text: `Analyzing technologies in URLs ${start + 1} - ${end + 1}`,
-        indent: 4,
+        indent,
       });
 
     const urlsWindow = urls.slice(start, end + 1);
@@ -59,12 +60,12 @@ export const analyzeTechnologiesUrlsInBatches = async (
     report = [...report, ...technologyAnalysis];
 
     spinnies &&
-      urls.length > 1 &&
+      indent === 4 &&
       removeAndAddNewSpinnerText(
         spinnies,
         `tech-batch-spinner${start + 1}-${end + 1}`,
         `Done analyzing technology in URLs ${start + 1} - ${end + 1}`,
-        4
+        indent
       );
     await wappalyzer.destroy();
   }

@@ -38,7 +38,8 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   cookieDictionary: CookieDatabase,
   shouldSkipAcceptBanner: boolean,
   verbose: boolean,
-  spinnies?: Spinnies
+  spinnies?: Spinnies,
+  indent = 4
 ) => {
   const browser = new BrowserManagement(
     {
@@ -49,7 +50,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
     isHeadless,
     delayTime,
     verbose,
-    urls.length > 1 ? 4 : 3,
+    indent,
     spinnies
   );
 

@@ -331,7 +331,8 @@ const saveResultsAsHTML = async (
       concurrency,
       spinnies,
       shouldSkipAcceptBanner,
-      verbose
+      verbose,
+      sitemapUrl || filePath ? 4 : 3
     );
 
   removeAndAddNewSpinnerText(
@@ -350,7 +351,8 @@ const saveResultsAsHTML = async (
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
       urlsToProcess,
       concurrency,
-      spinnies
+      spinnies,
+      sitemapUrl || filePath ? 4 : 3
     );
 
     removeAndAddNewSpinnerText(

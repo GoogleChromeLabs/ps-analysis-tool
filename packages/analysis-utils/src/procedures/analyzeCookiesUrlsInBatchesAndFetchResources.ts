@@ -39,7 +39,8 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   batchSize = 3,
   spinnies?: Spinnies,
   shouldSkipAcceptBanner = false,
-  verbose = false
+  verbose = false,
+  indent = 4
 ) => {
   let report: {
     url: string;
@@ -63,10 +64,10 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
     const end = Math.min(urls.length - 1, i + batchSize - 1);
 
     spinnies &&
-      urls.length > 1 &&
+      indent === 4 &&
       spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
         text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}`,
-        indent: 4,
+        indent,
       });
 
     const urlsWindow = urls.slice(start, end + 1);
@@ -86,12 +87,12 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
     report = [...report, ...cookieAnalysisAndFetchedResources];
 
     spinnies &&
-      urls.length > 1 &&
+      indent === 4 &&
       removeAndAddNewSpinnerText(
         spinnies,
         `cookie-batch-spinner${start + 1}-${end + 1}`,
         `Done analyzing cookies in URLs ${start + 1} - ${end + 1}`,
-        4
+        indent
       );
   }
 
