@@ -33,6 +33,7 @@ import {
   FiltersSidebar,
   calculateBlockedReasonsFilterValues,
   calculateDynamicFilterValues,
+  calculateExemptionReason,
   evaluateStaticFilterValues,
   useFiltering,
   type InfoType,
@@ -51,7 +52,6 @@ interface AssembledCookiesLandingProps {
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
-  selectedSite: string;
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
 }
@@ -60,7 +60,6 @@ const AssembledCookiesLanding = ({
   tabFrames,
   tabCookies,
   cookiesWithIssues,
-  selectedSite,
   downloadReport,
   libraryMatches,
   isSiteMapLandingContainer = false,
@@ -126,6 +125,17 @@ const AssembledCookiesLanding = ({
           return val?.includes(filterValue);
         },
       },
+      exemptionReason: {
+        title: I18n.getMessage('exemptionReasons'),
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateExemptionReason(cookies, noop, []),
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val === filterValue;
+        },
+        useGenericPersistenceKey: true,
+      },
     }),
     [cookies]
   );
@@ -133,8 +143,8 @@ const AssembledCookiesLanding = ({
   const filter = useFiltering(
     cookies,
     filters,
-    'cookiesListing' + selectedSite,
-    'cookiesListing' + selectedSite
+    'cookiesListing',
+    'cookiesListing'
   );
 
   const cookiesByKey = useMemo(() => {

@@ -67,7 +67,7 @@ const CookiesListing = ({
   } = useCookieListing(
     Object.values(tabCookies),
     selectedFrameUrl,
-    'cookiesListing' + selectedSite,
+    'cookiesListing',
     selectedSite
   );
 

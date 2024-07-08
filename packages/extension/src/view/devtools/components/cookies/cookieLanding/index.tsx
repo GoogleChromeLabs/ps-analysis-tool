@@ -114,11 +114,7 @@ const AssembledCookiesLanding = () => {
         title: I18n.getMessage('exemptionReasons'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateExemptionReason(
-          Object.values(cookies),
-          noop,
-          []
-        ),
+        filterValues: calculateExemptionReason(cookies, noop, []),
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
           return val === filterValue;

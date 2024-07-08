@@ -94,7 +94,6 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
             tabCookies={tabCookies}
             cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
-            selectedSite={selectedSite || ''}
           />
         </div>
       )}
