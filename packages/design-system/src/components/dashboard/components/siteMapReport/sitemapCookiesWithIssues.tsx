@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,27 @@
  * limitations under the License.
  */
 
-export { default as SiteReport } from './components/siteReport';
-export { default as SiteMapReport } from './components/siteMapReport';
-export { default as extractReportData } from './components/utils/extractReportData';
-export { default as extractCookies } from './components/utils/extractCookies';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import type { CookieTableData } from '@google-psat/common';
+
+/**
+ * Internal dependencies.
+ */
+import CookiesWithIssues from '../cookiesWithIssues';
+
+interface SiteMapCookiesWithIssuesProps {
+  cookies: CookieTableData[];
+}
+
+const SiteMapCookiesWithIssues = ({
+  cookies,
+}: SiteMapCookiesWithIssuesProps) => {
+  return (
+    <CookiesWithIssues cookies={cookies} selectedSite={null} hostName="" />
+  );
+};
+
+export default SiteMapCookiesWithIssues;
