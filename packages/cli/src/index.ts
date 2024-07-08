@@ -51,6 +51,7 @@ import {
 
 events.EventEmitter.defaultMaxListeners = 15;
 
+const isProduction = process.env.NODE_ENV === 'production';
 const DELAY_TIME = 20000;
 const program = new Command();
 
@@ -124,13 +125,15 @@ const saveResultsAsHTML = async (
       'base64'
     );
 
-    fs.copyFileSync(
-      path.resolve(
-        __dirname +
-          '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
-      ),
-      outDir + '/index.js'
-    );
+    if (!isProduction) {
+      fs.copyFileSync(
+        path.resolve(
+          __dirname +
+            '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
+        ),
+        outDir + '/index.js'
+      );
+    }
   } else {
     htmlText = fs.readFileSync(
       path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -142,10 +145,12 @@ const saveResultsAsHTML = async (
       'base64'
     );
 
-    fs.copyFileSync(
-      path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
-      outDir + '/index.js'
-    );
+    if (!isProduction) {
+      fs.copyFileSync(
+        path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+        outDir + '/index.js'
+      );
+    }
   }
 
   const messages = I18n.getMessages();
