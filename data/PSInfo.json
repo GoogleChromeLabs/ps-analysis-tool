@@ -89,7 +89,7 @@
   },
   "private-aggregation": {
     "name": "Private Aggregation",
-    "description": "Generate aggregate data reports using data from Protected Audience and cross-site data from Shared Storage. To provide critical features that the web relies on, the Private Aggregation API has been built for aggregating and reporting on cross-site data in a privacy-preserving manner.",
+    "description": "The Private Aggregation API has been built for aggregating and reporting on cross-site data in a privacy-preserving manner.",
 		"useI18n": false,
     "proposal": "https://github.com/patcg-individual-drafts/private-aggregation-api",
     "publicDiscussion": "https://github.com/patcg-individual-drafts/private-aggregation-api/issues",
