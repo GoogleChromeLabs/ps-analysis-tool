@@ -49,7 +49,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
     isHeadless,
     delayTime,
     verbose,
-    urls.length > 2 ? 4 : 3,
+    urls.length > 1 ? 4 : 3,
     spinnies
   );
 
