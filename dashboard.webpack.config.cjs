@@ -62,8 +62,9 @@ const dashboard = {
       title: 'Report',
       template: '../cli-dashboard/public/index.html',
       filename: 'index.html',
-      inject: true,
+      inject: 'body',
     }),
+    new HtmlInlineScriptPlugin(),
     new CopyPlugin({
       patterns: [
         {
