@@ -127,4 +127,28 @@ const report = {
   ...commonConfig,
 };
 
-module.exports = [root, devTools, popup, report];
+const dashboard = {
+  entry: {
+    index: './src/view/devtools/dashboard.tsx',
+  },
+  output: {
+    path: path.resolve(__dirname, './dist/extension/devtools'),
+    filename: 'devtoolsDashboard.js',
+  },
+  plugins: [
+    new WebpackBar({
+      name: 'Dashboard',
+      color: '#357BB5',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Report',
+      template: './src/view/devtools/dashboard.html',
+      filename: 'dashboard.html',
+      inject: 'body',
+    }),
+    new HtmlInlineScriptPlugin(),
+  ],
+  ...commonConfig,
+};
+
+module.exports = [root, devTools, popup, report, dashboard];
