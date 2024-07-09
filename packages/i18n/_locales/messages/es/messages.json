@@ -1148,9 +1148,6 @@
   "size": {
     "message": "Tamaño"
   },
-  "mapping": {
-    "message": "Asignación"
-  },
   "lookAtNetworkTab": {
     "message": "Consulta la pestaña de red para ver la información de bloqueo de esta cookie."
   },

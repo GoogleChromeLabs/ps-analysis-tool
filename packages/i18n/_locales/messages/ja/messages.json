@@ -1148,9 +1148,6 @@
   "size": {
     "message": "サイズ"
   },
-  "mapping": {
-    "message": "マッピング"
-  },
   "lookAtNetworkTab": {
     "message": "ネットワーク タブで、この Cookie のブロック情報を確認してください。"
   },

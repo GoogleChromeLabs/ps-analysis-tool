@@ -44,7 +44,6 @@ import { I18n } from '@google-psat/i18n';
 import { useCookie, useSettings } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
-import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
@@ -190,15 +189,6 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         isHiddenByDefault: true,
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 3,
-      },
-      {
-        header: I18n.getMessage('mapping'),
-        accessorKey: 'frameIdList',
-        isHiddenByDefault: true,
-        cell: (info: InfoType) => (
-          <OrphanedUnMappedInfoDisplay frameIdList={info as number[]} />
-        ),
-        widthWeightagePercentage: 6.6,
       },
     ],
     [isUsingCDP]
