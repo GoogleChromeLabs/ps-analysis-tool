@@ -38,17 +38,24 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    //@ts-ignore custom data attached to window breaks types
-    const _data = window.PSAT_DATA;
+    (async () => {
+      if (process.env.NODE_ENV === 'development') {
+        const module = await import('./PSAT_DATA.js');
+        window.PSAT_DATA = module.default;
+      }
 
-    I18n.initMessages(_data.translations);
+      //@ts-ignore custom data attached to window breaks types
+      const _data = window.PSAT_DATA;
 
-    setData(_data);
-    if (_data?.libraryMatches) {
-      setLibraryMatches(_data.libraryMatches);
-    }
-    setShowLoader(false);
-    setIsDataLoaded(true);
+      I18n.initMessages(_data.translations);
+
+      setData(_data);
+      if (_data?.libraryMatches) {
+        setLibraryMatches(_data.libraryMatches);
+      }
+      setShowLoader(false);
+      setIsDataLoaded(true);
+    })();
   }, [setLibraryMatches, setShowLoader]);
 
   return (
