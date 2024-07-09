@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import type { LibraryData } from '@google-psat/common';
-import { Libraries, type AccordionProps } from '@google-psat/library-detection';
+import { LIBRARIES, type AccordionProps } from '@google-psat/library-detection';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -50,7 +50,7 @@ const KnownBreakages = ({ libraryMatches }: KnownBreakagesProps) => {
   const result =
     detectedLibraryNames.length > 0 ? (
       <>
-        {Libraries.map((library) => {
+        {LIBRARIES.map((library) => {
           const Component = library.component as React.FC<AccordionProps>;
 
           const matches =
