@@ -29,7 +29,7 @@ import { EMPTY_FRAME_COUNT, EMPTY_FRAME_LEGEND } from '../constants';
  * @param json Complete json for the Dashboard.
  * @returns object
  */
-export default function prepareFrameStatsComponentForCLI(
+export default function prepareFrameStatsComponentForExtensionDashboard(
   json: CompleteJson | null
 ) {
   if (!json) {

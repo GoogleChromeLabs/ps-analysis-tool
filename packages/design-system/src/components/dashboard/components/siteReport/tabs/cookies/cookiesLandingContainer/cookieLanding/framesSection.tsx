@@ -26,10 +26,10 @@ import { type MatrixComponentProps } from '../../../../../../../matrix/matrixCom
 import CookiesLandingWrapper from '../../../../../../../cookiesLanding/cookiesLandingWrapper';
 import MatrixContainer from '../../../../../../../matrixContainer';
 import { LEGEND_DESCRIPTION } from '../../../../../../../../constants';
-import prepareFrameStatsComponentForCLI from '../../../../../../../../utils/prepareFrameStatsComponentForCLI';
+import { prepareFrameStatsComponentForExtensionDashboard } from '../../../../../../../../utils';
 
 const FramesSection = () => {
-  const framesStats = prepareFrameStatsComponentForCLI(
+  const framesStats = prepareFrameStatsComponentForExtensionDashboard(
     //@ts-ignore
     globalThis?.PSAT_DATA.json || {}
   );

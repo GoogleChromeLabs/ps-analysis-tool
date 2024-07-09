@@ -39,7 +39,7 @@ import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
-  prepareFrameStatsComponentForCLI,
+  prepareFrameStatsComponentForExtensionDashboard,
 } from '../../../../../utils';
 
 const generateCSVFiles = (data: CompleteJson) => {
@@ -83,7 +83,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   //@ts-ignore
   const frameStateCreator = globalThis?.PSAT_EXTENSION
-    ? prepareFrameStatsComponentForCLI(analysisData)
+    ? prepareFrameStatsComponentForExtensionDashboard(analysisData)
     : prepareFrameStatsComponent(tabFrames, tabCookies);
 
   const cookieClassificationDataMapping: DataMapping[] = [
