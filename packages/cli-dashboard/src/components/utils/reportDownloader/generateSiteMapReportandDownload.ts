@@ -19,17 +19,28 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import type { CompleteJson } from '@google-psat/common';
+import {
+  getCookieKey,
+  getValueByKey,
+  type CompleteJson,
+  type CookieTableData,
+  type TabCookies,
+} from '@google-psat/common';
+import type { TableFilter } from '@google-psat/design-system';
 
 /**
  * Internal dependencies
  */
-import { createZip, getFolderName, generateSiemapHTMLFile } from './utils';
+import { createZip, getFolderName, generateSitemapHTMLFile } from './utils';
+import extractCookies from '../extractCookies';
+import reshapeCookies from '../reshapeCookies';
 
 const generateSiteMapReportandDownload = async (
   JSONReport: CompleteJson[],
-  reportHTML: string,
-  sitemapUrl: string
+  filteredData: TabCookies,
+  appliedFilters: TableFilter,
+  path: string,
+  reportHTML: string
 ) => {
   if (!JSONReport.length) {
     return;
@@ -52,19 +63,71 @@ const generateSiteMapReportandDownload = async (
       return;
     }
 
-    createZip(data, zipFolder, data.pageUrl, reportHTML);
+    let siteFilteredData: TabCookies = reshapeCookies(
+      extractCookies(data.cookieData, data.pageUrl, true)
+    );
+
+    if (Object.keys(appliedFilters).length) {
+      siteFilteredData = Object.values(siteFilteredData)
+        .filter((row) => {
+          return Object.entries(appliedFilters).every(([filterKey, filter]) => {
+            const filterValues = filter.filterValues || {};
+
+            if (Object.keys(filterValues).length === 0) {
+              return true;
+            }
+
+            const value = getValueByKey(filterKey, row);
+
+            if (filter.comparator !== undefined) {
+              return Object.keys(filterValues).some((filterValue) =>
+                filter.comparator?.(value, filterValue)
+              );
+            } else if (filterValues[value]) {
+              return filterValues[value].selected;
+            }
+
+            return false;
+          });
+        })
+        .reduce<TabCookies>((acc, cookie) => {
+          const cookieKey = getCookieKey(
+            (cookie as CookieTableData).parsedCookie
+          );
+
+          if (!cookieKey) {
+            return acc;
+          }
+
+          acc[cookieKey] = cookie as CookieTableData;
+
+          return acc;
+        }, {});
+    }
+
+    createZip(
+      data,
+      siteFilteredData,
+      appliedFilters,
+      zipFolder,
+      data.pageUrl,
+      reportHTML
+    );
   });
 
-  const report = generateSiemapHTMLFile(JSONReport, sitemapUrl, reportHTML);
+  const report = generateSitemapHTMLFile(
+    filteredData,
+    appliedFilters,
+    path,
+    reportHTML
+  );
 
   zip.file('report.html', report);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
     content,
-    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${
-      day + month + year
-    }.zip`
+    `psat_cli_report_${getFolderName(path)}_${day + month + year}.zip`
   );
 };
 

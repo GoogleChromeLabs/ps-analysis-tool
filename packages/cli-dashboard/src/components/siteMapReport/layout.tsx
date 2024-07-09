@@ -26,12 +26,14 @@ import {
   useSidebar,
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
+  type TableFilter,
 } from '@google-psat/design-system';
 import {
   type TabFrames,
   type CookieFrameStorageType,
   type CompleteJson,
   type LibraryData,
+  type TabCookies,
 } from '@google-psat/common';
 
 /**
@@ -62,6 +64,8 @@ const Layout = ({
   libraryMatches,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
+  const [filteredData, setFilteredData] = useState<TabCookies>({});
+  const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
 
   useEffect(() => {
     const _sites = new Set<string>();
@@ -149,6 +153,8 @@ const Layout = ({
 
             return acc;
           }, {}),
+          setFilteredData,
+          setAppliedFilters,
           cookiesWithIssues,
           downloadReport: () => {
             if (!Array.isArray(completeJson)) {
@@ -157,9 +163,11 @@ const Layout = ({
 
             generateSiteMapReportandDownload(
               completeJson,
+              filteredData,
+              appliedFilters,
+              path,
               //@ts-ignore
-              atob(globalThis.PSAT_REPORT_HTML),
-              ''
+              atob(globalThis.PSAT_REPORT_HTML)
             );
           },
           menuBarScrollContainerId: 'dashboard-sitemap-layout-container',
@@ -208,10 +216,12 @@ const Layout = ({
       return _data;
     });
   }, [
-    libraryMatches,
+    appliedFilters,
     completeJson,
     cookiesWithIssues,
     doesSiteHaveCookies,
+    filteredData,
+    libraryMatches,
     path,
     reshapedCookies,
     setSidebarData,
