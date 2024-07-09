@@ -41,17 +41,6 @@ jobs:
       contents: read # For actions/checkout to fetch code
     timeout-minutes: 20
     steps:
-      - name: Harden Runner # Security agent: blocks outbound traffic & detects code overwrite to prevent breaches
-        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969
-        with:
-          disable-sudo: true
-          disable-file-monitoring: true
-          egress-policy: block
-          allowed-endpoints: >
-            api.github.com:443
-            github.com:443
-            registry.npmjs.org:443
-
       - name: Checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
 
