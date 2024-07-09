@@ -40,7 +40,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     (async () => {
       if (process.env.NODE_ENV === 'development') {
-        const module = await import('./PSAT_DATA.js');
+        const module = await import('../../dummyData/PSAT_DATA.js');
         window.PSAT_DATA = module.default;
       }
 
