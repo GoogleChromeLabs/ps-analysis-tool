@@ -238,6 +238,7 @@ export type CompleteJson = {
       frameCookies: {
         [cookieKey: string]: CookieJsonDataType;
       };
+      frameType?: string | undefined;
     };
   };
   libraryMatches: { [key: string]: LibraryData };

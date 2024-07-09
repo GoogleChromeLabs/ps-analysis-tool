@@ -39,6 +39,7 @@ import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
+  prepareFrameStatsComponentForCLI,
 } from '../../../../../utils';
 
 const generateCSVFiles = (data: CompleteJson) => {
@@ -61,8 +62,7 @@ const generateCSVFiles = (data: CompleteJson) => {
 /**
  *
  * @param analysisData Anaylsis Data
- * @param url URL
- * @param siteURL
+ * @param siteURL The main site url.
  * @returns Object Report object required to make HTML report
  */
 function generateReportObject(analysisData: CompleteJson, siteURL: string) {
@@ -81,7 +81,10 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
+  //@ts-ignore
+  const frameStateCreator = globalThis?.PSAT_EXTENSION
+    ? prepareFrameStatsComponentForCLI(analysisData)
+    : prepareFrameStatsComponent(tabFrames, tabCookies);
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
@@ -128,6 +131,8 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     blockedCookieDataMapping,
     showBlockedInfoIcon: true,
     frameStateCreator,
+    //@ts-ignore
+    showFramesSection: Boolean(globalThis?.PSAT_EXTENSION),
     exemptedCookiesDataMapping,
     showBlockedCategory: true,
     url: siteURL,

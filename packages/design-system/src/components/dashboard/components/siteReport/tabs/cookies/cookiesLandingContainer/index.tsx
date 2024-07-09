@@ -33,6 +33,7 @@ import MenuBar, { type MenuData } from '../../../../../../menuBar';
 import CookiesLanding, {
   type CookiesLandingSection,
 } from '../../../../../../cookiesLanding';
+import FramesSection from './cookieLanding/framesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -102,6 +103,16 @@ const CookiesLandingContainer = ({
           props: {
             libraryMatches: libraryMatches ?? {},
           },
+        },
+      });
+    }
+    //@ts-ignore
+    if (globalThis.PSAT_EXTENSION) {
+      baseSections.push({
+        name: I18n.getMessage('frames'),
+        link: 'frames',
+        panel: {
+          Element: FramesSection,
         },
       });
     }

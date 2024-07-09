@@ -136,6 +136,7 @@ const generateCookieDataForDashboard = (
   const cookieData: {
     [frame: string]: {
       frameCookies: { [cookieName: string]: CookieJsonDataType };
+      frameType: string | undefined;
     };
   } = {};
 
@@ -143,29 +144,44 @@ const generateCookieDataForDashboard = (
 
   Object.entries(tabFrames).forEach(([key, value]) => {
     value.frameIds.forEach((frameId: string) => {
-      frameIdToUrlMapping[frameId] = key;
-      frameUrlSet.add(key);
+      if (key !== 'undefined') {
+        frameIdToUrlMapping[frameId] = key;
+        frameUrlSet.add(key);
+      }
     });
   });
 
   Array.from(frameUrlSet).forEach((frameURL) => {
+    if (frameURL === 'undefined' || !frameURL) {
+      return;
+    }
+
     cookieData[frameURL] = {
       frameCookies: {},
+      frameType: tabFrames[frameURL]?.frameType ?? 'sub_frame',
     };
   });
 
   Object.entries(tabCookies).forEach(([cookieKey, cookie]) => {
     cookie.frameIdList?.forEach((frameId) => {
       const frameURL = frameIdToUrlMapping[frameId];
+
+      if (frameURL === 'undefined' || !frameURL) {
+        return;
+      }
+
       if (cookieData[frameURL]?.frameCookies) {
         //@ts-ignore since the parsedCookie
         cookieData[frameURL].frameCookies[cookieKey] = cookie;
+        cookieData[frameURL].frameType =
+          tabFrames[frameURL]?.frameType ?? 'sub_frame';
       } else {
         cookieData[frameURL] = {
           //@ts-ignore since the parsedCookie
           frameCookies: {
             [cookieKey]: cookie,
           },
+          frameType: tabFrames[frameURL]?.frameType ?? 'sub_frame',
         };
       }
     });
