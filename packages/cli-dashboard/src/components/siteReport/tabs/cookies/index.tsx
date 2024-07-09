@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useMemo, useCallback } from 'react';
-import { type TabFrames } from '@google-psat/common';
+import React, { useMemo, useCallback, useState } from 'react';
+import { type TabCookies, type TabFrames } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -23,6 +23,7 @@ import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
 import { generateSiteReportandDownload } from '../../../utils/reportDownloader';
 import AssembledCookiesLanding from './cookiesLandingContainer';
+import type { TableFilter } from '@google-psat/design-system';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -37,6 +38,9 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       libraryMatches: state.libraryMatches,
     })
   );
+
+  const [filteredData, setFilteredData] = useState<TabCookies>({});
+  const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
 
   const tabFrames = useMemo(() => {
     const frames = Object.keys(
@@ -59,13 +63,17 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       ),
     [tabCookies]
   );
+
   const downloadReport = useCallback(() => {
     if (!completeJson) {
       return;
     }
+
     if (completeJson.length > 1) {
       generateSiteReportandDownload(
         completeJson,
+        filteredData,
+        appliedFilters,
         //@ts-ignore
         atob(globalThis.PSAT_REPORT_HTML),
         selectedSite
@@ -73,11 +81,13 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     } else {
       generateSiteReportandDownload(
         completeJson,
+        filteredData,
+        appliedFilters,
         //@ts-ignore
         atob(globalThis.PSAT_REPORT_HTML)
       );
     }
-  }, [completeJson, selectedSite]);
+  }, [appliedFilters, completeJson, filteredData, selectedSite]);
 
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -94,6 +104,8 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
             tabCookies={tabCookies}
             cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
+            setAppliedFilters={setAppliedFilters}
+            setFilteredData={setFilteredData}
           />
         </div>
       )}

@@ -18,15 +18,18 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import type { CompleteJson } from '@google-psat/common';
+import type { CompleteJson, TabCookies } from '@google-psat/common';
 
 /**
  * Internal dependencies
  */
 import { createZip, getFolderName } from './utils';
+import type { TableFilter } from '@google-psat/design-system';
 
 const generateSiteReportandDownload = async (
   JSONReport: CompleteJson[],
+  filteredData: TabCookies,
+  appliedFilters: TableFilter,
   reportHTML: string,
   selectedPageUrl?: string | null
 ) => {
@@ -62,7 +65,14 @@ const generateSiteReportandDownload = async (
     return;
   }
 
-  createZip(siteAnalysisData, zipFolder, JSONReport[0].pageUrl, reportHTML);
+  createZip(
+    siteAnalysisData,
+    filteredData,
+    appliedFilters,
+    zipFolder,
+    JSONReport[0].pageUrl,
+    reportHTML
+  );
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(

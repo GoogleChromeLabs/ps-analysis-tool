@@ -47,17 +47,19 @@ const App = () => {
           <p className="text-sm">{data.url}</p>
         </div>
       )}
-      <div className="h-fit border border-t border-gray-300 bg-anti-flash-white flex gap-2 items-center px-4">
-        <p className="text-xs">Applied Filters:</p>
-        <div className="overflow-auto">
-          <ChipsBar
-            selectedFilters={data?.filters || {}}
-            resetFilters={noop}
-            toggleFilterSelection={noop}
-            hideClearAll
-          />
+      {data?.filters && (
+        <div className="h-fit border border-t border-gray-300 bg-anti-flash-white flex gap-2 items-center px-4">
+          <p className="text-xs">Applied Filters:</p>
+          <div className="overflow-auto">
+            <ChipsBar
+              selectedFilters={data?.filters || {}}
+              resetFilters={noop}
+              toggleFilterSelection={noop}
+              hideClearAll
+            />
+          </div>
         </div>
-      </div>
+      )}
       <CookiesSection />
       <BlockedCookiesSection />
       <ExemptedCookiesSection />

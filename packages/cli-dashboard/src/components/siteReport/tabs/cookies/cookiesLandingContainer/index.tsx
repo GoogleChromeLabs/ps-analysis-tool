@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   getCookieKey,
   noop,
@@ -50,6 +50,8 @@ interface AssembledCookiesLandingProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
+  setFilteredData: React.Dispatch<React.SetStateAction<TabCookies>>;
+  setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
   isSiteMapLandingContainer?: boolean;
@@ -59,6 +61,8 @@ interface AssembledCookiesLandingProps {
 const AssembledCookiesLanding = ({
   tabFrames,
   tabCookies,
+  setFilteredData,
+  setAppliedFilters,
   cookiesWithIssues,
   downloadReport,
   libraryMatches,
@@ -160,6 +164,14 @@ const AssembledCookiesLanding = ({
       return acc;
     }, {});
   }, [filter.filteredData]);
+
+  useEffect(() => {
+    setFilteredData(cookiesByKey);
+  }, [cookiesByKey, setFilteredData]);
+
+  useEffect(() => {
+    setAppliedFilters(filter.selectedFilters);
+  }, [filter.selectedFilters, setAppliedFilters]);
 
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
