@@ -16,14 +16,12 @@
 /**
  * External dependencies.
  */
-import {
-  CookieIcon,
-  CookieIconWhite,
-  SIDEBAR_ITEMS_KEYS,
-  WarningBare,
-  type SidebarItems,
-} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+/**
+ * Internal dependencies.
+ */
+import { CookieIcon, CookieIconWhite, WarningBare } from '../../../../../icons';
+import { SIDEBAR_ITEMS_KEYS, type SidebarItems } from '../../../../sidebar';
 
 const Tabs: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {

@@ -18,11 +18,15 @@
  */
 import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
 import { saveAs } from 'file-saver';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
-import generateReportObject from './generateReportObject';
+import {
+  generateReportObject,
+  generateDashboardObject,
+} from './generateReportObject';
 
 /**
  * Utility function to download report.
@@ -37,6 +41,65 @@ export default async function downloadReport(
   tabFrames: TabFrames,
   libraryMatches: LibraryData
 ) {
+  const { html, fileName } = await generateDashboard(
+    url,
+    tabCookies,
+    tabFrames,
+    libraryMatches
+  );
+
+  saveAs(html, fileName);
+}
+
+const generateDashboard = async (
+  url: string,
+  tabCookies: TabCookies,
+  tabFrames: TabFrames,
+  libraryMatches: LibraryData
+) => {
+  const dashboardReport = await (await fetch('./dashboard.html')).text();
+  const parser = new DOMParser();
+  const reportDom = parser.parseFromString(dashboardReport, 'text/html');
+
+  // Injections
+  const script = reportDom.createElement('script');
+
+  const reportData = generateDashboardObject(
+    tabCookies,
+    tabFrames,
+    libraryMatches,
+    url
+  );
+
+  const locale = I18n.getLocale();
+  const translations = await I18n.fetchMessages(locale);
+  const htmlText = await (await fetch('../report/index.html')).text();
+
+  const code = `
+  window.PSAT_EXTENSION = true;
+  window.PSAT_REPORT_HTML = '${btoa(unescape(encodeURIComponent(htmlText)))}';
+  window.PSAT_DATA = ${JSON.stringify({
+    json: reportData,
+    selectedSite: url,
+    translations,
+  })}`;
+
+  script.text = code;
+  reportDom.head.appendChild(script);
+
+  const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
+  const html = new Blob([injectedHtmlText]);
+  const hostname = new URL(url).hostname;
+
+  return { html, fileName: `${hostname.replace('.', '-')}-report.html` };
+};
+
+export const generateReportFile = async (
+  url: string,
+  tabCookies: TabCookies,
+  tabFrames: TabFrames,
+  libraryMatches: LibraryData
+) => {
   const htmlText = await (await fetch('../report/index.html')).text();
   const parser = new DOMParser();
   const reportDom = parser.parseFromString(htmlText, 'text/html');
@@ -60,5 +123,5 @@ export default async function downloadReport(
   const html = new Blob([injectedHtmlText]);
   const hostname = new URL(url).hostname;
 
-  saveAs(html, `${hostname.replace('.', '-')}-report.html`);
-}
+  return [html, `${hostname.replace('.', '-')}-report.html`];
+};

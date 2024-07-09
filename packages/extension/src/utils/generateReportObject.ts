@@ -21,6 +21,7 @@ import type {
   TabCookies,
   TabFrames,
   DataMapping,
+  CookieJsonDataType,
 } from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
@@ -37,7 +38,7 @@ import { I18n } from '@google-psat/i18n';
  * @param url Top level URL.
  * @returns Report Object
  */
-export default async function generateReportObject(
+export async function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData,
@@ -103,3 +104,71 @@ export default async function generateReportObject(
     source: 'extension',
   };
 }
+/**
+ * Utility function to generate dashboard report object.
+ * @param tabCookies Tab cookies.
+ * @param tabFrames Tab frames.
+ * @param libraryMatches Library matches
+ * @param url Top level URL.
+ * @returns Dashboard Report Object
+ */
+export function generateDashboardObject(
+  tabCookies: TabCookies,
+  tabFrames: TabFrames,
+  libraryMatches: LibraryData,
+  url: string
+) {
+  const completeJSON = {
+    pageUrl: url,
+    libraryMatches,
+    cookieData: generateCookieDataForDashboard(tabCookies, tabFrames),
+    technologyData: [],
+  };
+
+  return completeJSON;
+}
+
+const generateCookieDataForDashboard = (
+  tabCookies: TabCookies,
+  tabFrames: TabFrames
+) => {
+  const frameIdToUrlMapping: { [frameId: string]: string } = {};
+  const cookieData: {
+    [frame: string]: {
+      frameCookies: { [cookieName: string]: CookieJsonDataType };
+    };
+  } = {};
+
+  const frameUrlSet = new Set<string>();
+
+  Object.entries(tabFrames).forEach(([key, value]) => {
+    value.frameIds.forEach((frameId: string) => {
+      frameIdToUrlMapping[frameId] = key;
+      frameUrlSet.add(key);
+    });
+  });
+
+  Array.from(frameUrlSet).forEach((frameURL) => {
+    cookieData[frameURL] = {
+      frameCookies: {},
+    };
+  });
+
+  Object.entries(tabCookies).forEach(([cookieKey, cookie]) => {
+    cookie.frameIdList?.forEach((frameId) => {
+      const frameURL = frameIdToUrlMapping[frameId];
+      if (cookieData[frameURL]?.frameCookies) {
+        //@ts-ignore since the parsedCookie
+        cookieData[frameURL].frameCookies[cookieKey] = cookie;
+      } else {
+        cookieData[frameURL] = {
+          //@ts-ignore since the parsedCookie
+          frameCookies: {
+            [cookieKey]: cookie,
+          },
+        };
+      }
+    });
+  });
+  return cookieData;
+};

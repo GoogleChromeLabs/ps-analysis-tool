@@ -27,11 +27,6 @@ import {
   type DataMapping,
   type TabFrames,
 } from '@google-psat/common';
-import {
-  prepareCookieStatsComponents,
-  prepareCookiesCount,
-  prepareFrameStatsComponent,
-} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -40,6 +35,11 @@ import { I18n } from '@google-psat/i18n';
 import reshapeCookies from '../reshapeCookies';
 import extractCookies from '../extractCookies';
 import extractReportData from '../extractReportData';
+import {
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+  prepareFrameStatsComponent,
+} from '../../../../../utils';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);

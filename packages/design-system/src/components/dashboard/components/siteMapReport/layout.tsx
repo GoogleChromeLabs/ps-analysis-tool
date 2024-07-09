@@ -158,7 +158,11 @@ const Layout = ({
             generateSiteMapReportandDownload(
               completeJson,
               //@ts-ignore
-              atob(globalThis.PSAT_REPORT_HTML),
+              globalThis?.PSAT_EXTENSION
+                ? //@ts-ignore
+                  decodeURIComponent(escape(atob(globalThis.PSAT_REPORT_HTML)))
+                : //@ts-ignore
+                  atob(globalThis.PSAT_REPORT_HTML),
               ''
             );
           },

@@ -19,15 +19,18 @@
  */
 import React from 'react';
 import { BLOCK_STATUS, type CookieTableData } from '@google-psat/common';
+/**
+ * Internal dependencies.
+ */
 import {
-  type TableRow,
-  GreenTick,
   InboundIcon,
   OutboundIcon,
-  QuestionMark,
-  OutboundInboundIcon,
   OutboundInboundColoredIcon,
-} from '@google-psat/design-system';
+  OutboundInboundIcon,
+  QuestionMark,
+  GreenTick,
+} from '../../../../icons';
+import type { TableRow } from '../../../table';
 
 const NamePrefixIconSelector = ({ originalData }: TableRow) => {
   const data = originalData as CookieTableData;

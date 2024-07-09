@@ -19,21 +19,22 @@
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import {
-  Table,
-  type TableColumn,
-  type InfoType,
-  type TableRow,
-  type TableFilter,
-  TableProvider,
-} from '@google-psat/design-system';
 import { noop, type TechnologyData } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
  */
+
 import { useContentStore } from '../../stateProviders/contentStore';
+import {
+  Table,
+  TableProvider,
+  type TableColumn,
+  type InfoType,
+  type TableRow,
+  type TableFilter,
+} from '../../../../../table';
 
 interface TechnologiesProps {
   selectedSite: string | null;
