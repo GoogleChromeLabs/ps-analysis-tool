@@ -114,16 +114,19 @@ const BlockedCookiesSection = ({
             matrixData={dataComponents}
             infoIconTitle={I18n.getMessage('blockedReasonsNote')}
           />
-          {!globalThis?.PSAT_EXTENSION && (
-            <div className="flex flex-col mt-8">
-              <div className="pt-4">
-                <MatrixContainer
-                  matrixData={blockedDataComponents}
-                  allowExpand={false}
-                />
+          {
+            //@ts-ignore
+            !globalThis?.PSAT_EXTENSION && (
+              <div className="flex flex-col mt-8">
+                <div className="pt-4">
+                  <MatrixContainer
+                    matrixData={blockedDataComponents}
+                    allowExpand={false}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )
+          }
         </>
       )}
     </CookiesLandingWrapper>

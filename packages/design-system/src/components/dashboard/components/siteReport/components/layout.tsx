@@ -100,9 +100,11 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
             },
             children: {},
             icon: {
+              //@ts-ignore
               Element: CookieIcon,
             },
             selectedIcon: {
+              //@ts-ignore
               Element: CookieIconWhite,
             },
             isBlurred:
@@ -128,9 +130,11 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
           title: I18n.getMessage('technologies'),
           children: {},
           icon: {
+            //@ts-ignore
             Element: SiteBoundariesIcon,
           },
           selectedIcon: {
+            //@ts-ignore
             Element: SiteBoundariesIconWhite,
           },
           panel: {

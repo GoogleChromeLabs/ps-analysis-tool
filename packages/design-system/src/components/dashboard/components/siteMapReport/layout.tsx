@@ -187,9 +187,11 @@ const Layout = ({
             },
             children: {},
             icon: {
+              //@ts-ignore
               Element: File,
             },
             selectedIcon: {
+              //@ts-ignore
               Element: FileWhite,
             },
             isBlurred: doesSiteHaveCookies[site] === false,

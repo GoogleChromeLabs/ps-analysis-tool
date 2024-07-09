@@ -33,12 +33,14 @@ const sidebarData: SidebarItems = {
     title: () => I18n.getMessage('cookieIssues'),
     children: {},
     icon: {
+      //@ts-ignore
       Element: WarningBare,
       props: {
         className: 'fill-granite-gray',
       },
     },
     selectedIcon: {
+      //@ts-ignore
       Element: WarningBare,
       props: {
         className: 'fill-white',

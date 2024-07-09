@@ -38,6 +38,7 @@
   "dependencies": {
 		"@google-psat/common": "*",
 		"@google-psat/i18n": "*",
+    "@google-psat/library-detection": "*",
     "p-queue": "^7.3.4",
 		"use-context-selector": "^1.4.1"
   },
