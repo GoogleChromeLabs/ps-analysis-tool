@@ -34,8 +34,6 @@ import {
   evaluateStaticFilterValues,
   evaluateSelectAllOption,
   calculateBlockedReasonsFilterValues,
-  type TableData,
-  InfoIcon,
   calculateExemptionReason,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
@@ -201,50 +199,6 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           <OrphanedUnMappedInfoDisplay frameIdList={info as number[]} />
         ),
         widthWeightagePercentage: 6.6,
-      },
-      {
-        header: I18n.getMessage('blockingStatus'),
-        accessorKey: 'isBlocked',
-        isHiddenByDefault: true,
-        widthWeightagePercentage: 5.4,
-        cell: (_, details: TableData | undefined) => {
-          //skip calculation of blocking status when not using CDP
-          if (!isUsingCDP) {
-            return <></>;
-          }
-          const cookieData = details as CookieTableData;
-
-          const isInboundBlocked =
-            cookieData.blockingStatus?.inboundBlock !==
-            BLOCK_STATUS.NOT_BLOCKED;
-          const isOutboundBlocked =
-            cookieData.blockingStatus?.outboundBlock !==
-            BLOCK_STATUS.NOT_BLOCKED;
-          const hasValidBlockedReason =
-            cookieData?.blockedReasons &&
-            cookieData.blockedReasons.length !== 0;
-
-          if (
-            (isInboundBlocked || isOutboundBlocked) &&
-            !hasValidBlockedReason
-          ) {
-            return (
-              <span
-                className="flex"
-                title={I18n.getMessage('lookAtNetworkTab')}
-              >
-                <span>
-                  <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
-                </span>
-                <span className="ml-[2px] truncate">
-                  {I18n.getMessage('undetermined')}
-                </span>
-              </span>
-            );
-          } else {
-            return <></>;
-          }
-        },
       },
     ],
     [isUsingCDP]
