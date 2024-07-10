@@ -41,7 +41,7 @@ jobs:
       contents: read # For actions/checkout to fetch code
     timeout-minutes: 20
     steps:
-      - name: Harden Runner
+      - name: Harden Runner # Security agent: blocks outbound traffic & detects code overwrite to prevent breaches
         uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6
         with:
           disable-sudo: true
