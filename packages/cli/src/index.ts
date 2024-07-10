@@ -72,9 +72,6 @@ program
     isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
   )
   .description('CLI to test a URL for 3p cookies.')
-  .argument('[website-url]', 'The URL of a single site to analyze', (url) =>
-    urlValidator(url, program)
-  )
   .option(
     '-u, --url <url>',
     'The URL of a single site to analyze',
@@ -143,6 +140,7 @@ program
   });
 
 program.parse();
+console.log(program.opts());
 
 const saveResultsAsJSON = async (
   outDir: string,

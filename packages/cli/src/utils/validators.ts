@@ -29,6 +29,11 @@ import { redLogger } from './coloredLoggers';
  * @returns The user passed value else default value.
  */
 export function numericValidator(value: string) {
+  if (value.startsWith('-') || value.startsWith('--')) {
+    redLogger(`Error: Please provide an argument to locale.`);
+    process.exit(1);
+  }
+
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
     redLogger(`${value} is not valid numeric value.`);
@@ -43,6 +48,11 @@ export function numericValidator(value: string) {
  * @returns validated locale.
  */
 export function localeValidator(locale: string) {
+  if (locale.startsWith('-') || locale.startsWith('--')) {
+    redLogger(`Error: Please provide an argument to locale.`);
+    process.exit(1);
+  }
+
   const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
   if (locale && !availableLocales.includes(locale)) {
     redLogger(
@@ -105,6 +115,10 @@ export function urlValidator(url: string, program?: any) {
  * @returns validated outDir or the created output directory.
  */
 export function outDirValidator(outDir: string) {
+  if (outDir.startsWith('-') || outDir.startsWith('--')) {
+    redLogger(`Error: Please provide a path to the output directory`);
+    process.exit(1);
+  }
   const parentDirExists = existsSync(path.resolve('./out'));
 
   if (!parentDirExists) {
