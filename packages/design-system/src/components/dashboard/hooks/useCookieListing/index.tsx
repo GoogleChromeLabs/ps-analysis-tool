@@ -413,6 +413,7 @@ const useCookieListing = (
         useGenericPersistenceKey: true,
       };
     }
+    return baseFilters;
   }, [clearActivePanelQuery, parsedQuery, tabCookies]);
 
   const searchKeys = useMemo<string[]>(
