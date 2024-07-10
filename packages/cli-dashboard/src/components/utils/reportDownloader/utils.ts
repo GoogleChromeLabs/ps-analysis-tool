@@ -198,11 +198,24 @@ function generateSitemapReportObject(
     },
   ];
 
+  const libraryMatches = analysisData.reduce<CompleteJson['libraryMatches']>(
+    (acc, data) => {
+      const _libraryMatches = data.libraryMatches;
+
+      Object.keys(_libraryMatches).forEach((key) => {
+        acc[key] = _libraryMatches[key];
+      });
+
+      return acc;
+    },
+    {}
+  );
+
   return {
     cookieClassificationDataMapping,
     tabCookies,
     cookiesStatsComponents,
-    libraryDetection: {},
+    libraryMatches,
     tabFrames,
     showInfoIcon: true,
     showHorizontalMatrix: false,

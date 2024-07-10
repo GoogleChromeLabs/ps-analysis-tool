@@ -135,6 +135,18 @@ const Layout = ({
     return store;
   }, [completeJson]);
 
+  const siteMapLibraryMatches = useMemo(() => {
+    return completeJson?.reduce<CompleteJson['libraryMatches']>((acc, data) => {
+      const _libraryMatches = data.libraryMatches;
+
+      Object.keys(_libraryMatches).forEach((key) => {
+        acc[key] = _libraryMatches[key];
+      });
+
+      return acc;
+    }, {});
+  }, [completeJson]);
+
   useEffect(() => {
     setSidebarData((prev) => {
       const _data = { ...prev };
@@ -143,13 +155,13 @@ const Layout = ({
         Element: CookiesLandingContainer,
         props: {
           tabCookies: reshapedCookies,
-          isSiteMapLandingContainer: true,
           tabFrames: sites.reduce<TabFrames>((acc, site) => {
             acc[site] = {} as TabFrames[string];
 
             return acc;
           }, {}),
           cookiesWithIssues,
+          libraryMatches: siteMapLibraryMatches,
           downloadReport: () => {
             if (!Array.isArray(completeJson)) {
               return;
@@ -219,6 +231,7 @@ const Layout = ({
     siteFilteredCookies,
     siteFilteredTechnologies,
     sites,
+    siteMapLibraryMatches,
   ]);
 
   useEffect(() => {
