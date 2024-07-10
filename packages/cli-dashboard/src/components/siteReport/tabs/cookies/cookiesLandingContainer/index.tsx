@@ -52,7 +52,6 @@ const CookiesLandingContainer = ({
   cookiesWithIssues,
   downloadReport,
   libraryMatches,
-  isSiteMapLandingContainer = false,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: CookiesLandingContainerProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -93,10 +92,7 @@ const CookiesLandingContainer = ({
           },
         },
       },
-    ];
-
-    if (!isSiteMapLandingContainer) {
-      baseSections.push({
+      {
         name: I18n.getMessage('knownBreakages'),
         link: 'known-breakages',
         panel: {
@@ -105,18 +101,11 @@ const CookiesLandingContainer = ({
             libraryMatches: libraryMatches ?? {},
           },
         },
-      });
-    }
+      },
+    ];
 
     return baseSections;
-  }, [
-    tabCookies,
-    tabFrames,
-    cookiesWithIssues,
-    cookieStats,
-    isSiteMapLandingContainer,
-    libraryMatches,
-  ]);
+  }, [tabCookies, tabFrames, cookiesWithIssues, cookieStats, libraryMatches]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),
