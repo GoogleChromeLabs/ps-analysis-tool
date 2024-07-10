@@ -27,6 +27,7 @@ import {
   generateReportObject,
   generateDashboardObject,
 } from './generateReportObject';
+import isValidURL from './isValidURL';
 
 /**
  * Utility function to download report.
@@ -80,7 +81,9 @@ const generateDashboard = async (
   window.PSAT_REPORT_HTML = '${btoa(unescape(encodeURIComponent(htmlText)))}';
   window.PSAT_DATA = ${JSON.stringify({
     json: reportData,
-    selectedSite: url,
+    selectedSite: isValidURL(url)
+      ? new URL(url).hostname.replace('.', '-')
+      : '',
     translations,
   })}`;
 

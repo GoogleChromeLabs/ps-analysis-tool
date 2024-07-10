@@ -29,6 +29,7 @@ import {
   prepareFrameStatsComponent,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import isValidURL from './isValidURL';
 
 /**
  * Utility function to generate report object.
@@ -119,7 +120,7 @@ export function generateDashboardObject(
   url: string
 ) {
   const completeJSON = {
-    pageUrl: url,
+    pageUrl: isValidURL(url) ? new URL(url).origin : '',
     libraryMatches,
     cookieData: generateCookieDataForDashboard(tabCookies, tabFrames),
     technologyData: [],
