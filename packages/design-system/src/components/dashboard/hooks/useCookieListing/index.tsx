@@ -56,8 +56,8 @@ const useCookieListing = (
     [activePanelQuery]
   );
 
-  const tableColumns = useMemo<TableColumn[]>(
-    () => [
+  const tableColumns = useMemo<TableColumn[]>(() => {
+    const baseColumns: TableColumn[] = [
       {
         header: I18n.getMessage('name'),
         accessorKey: 'parsedCookie.name',
@@ -161,12 +161,31 @@ const useCookieListing = (
           info === 'Session' || !info ? I18n.getMessage('session') : info,
         widthWeightagePercentage: 7,
       },
-    ],
-    []
-  );
+    ];
+    //@ts-ignore
+    if (globalThis?.PSAT_EXTENSION) {
+      baseColumns.push(
+        {
+          header: I18n.getMessage('priority'),
+          accessorKey: 'parsedCookie.priority',
+          isHiddenByDefault: true,
+          cell: (info: InfoType) => info,
+          widthWeightagePercentage: 4,
+        },
+        {
+          header: I18n.getMessage('size'),
+          accessorKey: 'parsedCookie.size',
+          isHiddenByDefault: true,
+          cell: (info: InfoType) => info,
+          widthWeightagePercentage: 3,
+        }
+      );
+    }
+    return baseColumns;
+  }, []);
 
-  const filters = useMemo<TableFilter>(
-    () => ({
+  const filters = useMemo<TableFilter>(() => {
+    const baseFilters: TableFilter = {
       'analytics.category': {
         title: I18n.getMessage('category'),
         hasStaticFilterValues: true,
@@ -374,9 +393,27 @@ const useCookieListing = (
         },
         useGenericPersistenceKey: true,
       },
-    }),
-    [clearActivePanelQuery, parsedQuery, tabCookies]
-  );
+    };
+    //@ts-ignore
+    if (globalThis?.PSAT_EXTENSION) {
+      baseFilters['parsedCookie.priority'] = {
+        title: I18n.getMessage('priority'),
+        hasStaticFilterValues: true,
+        filterValues: {
+          Low: {
+            selected: false,
+          },
+          Medium: {
+            selected: false,
+          },
+          High: {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+      };
+    }
+  }, [clearActivePanelQuery, parsedQuery, tabCookies]);
 
   const searchKeys = useMemo<string[]>(
     () => ['parsedCookie.name', 'parsedCookie.domain'],
