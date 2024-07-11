@@ -22,15 +22,40 @@ import path from 'path';
  * Internal dependencies.
  */
 import { redLogger } from './coloredLoggers';
+import { LONG_CONSTANTS, SHORT_CONSTANTS } from './constants';
 
+/**
+ * This will check if the argument for the flag is another flag.
+ * @param argument The value of the argument.
+ * @returns boolean true if the argumment is a flag, false otherwise.
+ */
+function isOtherFlagsAsArgumentValidator(argument: string) {
+  let isAFlag = false;
+
+  LONG_CONSTANTS.forEach((flag) => {
+    if (argument.startsWith(flag)) {
+      isAFlag = true;
+    }
+  });
+
+  SHORT_CONSTANTS.forEach((flag) => {
+    if (argument.startsWith(flag)) {
+      isAFlag = true;
+    }
+  });
+
+  return isAFlag;
+}
 /**
  * This validates the waitTime or the concurrency of the URLs to be analysed together.
  * @param {string} value The supposed numeric value.
  * @returns The user passed value else default value.
  */
 export function numericValidator(value: string) {
-  if (value.startsWith('-') || value.startsWith('--')) {
-    redLogger(`Error: Please provide an argument to locale.`);
+  if (isOtherFlagsAsArgumentValidator(value)) {
+    redLogger(
+      `Error: Please provide an argument for the flag as it cannot be empty.`
+    );
     process.exit(1);
   }
 
@@ -48,8 +73,10 @@ export function numericValidator(value: string) {
  * @returns validated locale.
  */
 export function localeValidator(locale: string) {
-  if (locale.startsWith('-') || locale.startsWith('--')) {
-    redLogger(`Error: Please provide an argument to locale.`);
+  if (isOtherFlagsAsArgumentValidator(locale)) {
+    redLogger(
+      `Error: Please provide an argument for the flag as it cannot be empty.`
+    );
     process.exit(1);
   }
 
@@ -71,6 +98,13 @@ export function localeValidator(locale: string) {
  * @returns validated file path.
  */
 export function filePathValidator(filePath: string) {
+  if (isOtherFlagsAsArgumentValidator(filePath)) {
+    redLogger(
+      `Error: Please provide an argument for the flag as it cannot be empty.`
+    );
+    process.exit(1);
+  }
+
   const csvFileExists = existsSync(filePath);
   if (!csvFileExists) {
     redLogger(`Error: No file at ${filePath}`);
@@ -82,31 +116,23 @@ export function filePathValidator(filePath: string) {
 /**
  * This validates the url to be analysed by the user.
  * @param {string} url The url provided by the user.
- * @param program
  * @returns validated url.
  */
-export function urlValidator(url: string, program?: any) {
-  if (program) {
-    if (!program.opts()?.url) {
-      const parsedUrl = parseUrl(url);
-
-      if (parsedUrl === null) {
-        redLogger(`Error: Invalid Url ${parsedUrl}`);
-        process.exit(1);
-      }
-      return url;
-    } else {
-      return undefined;
-    }
-  } else {
-    const parsedUrl = parseUrl(url);
-
-    if (parsedUrl === null) {
-      redLogger(`Error: Invalid Url ${parsedUrl}`);
-      process.exit(1);
-    }
-    return url;
+export function urlValidator(url: string) {
+  if (isOtherFlagsAsArgumentValidator(url)) {
+    redLogger(
+      `Error: Please provide an argument for the flag as it cannot be empty.`
+    );
+    process.exit(1);
   }
+
+  const parsedUrl = parseUrl(url);
+
+  if (parsedUrl === null) {
+    redLogger(`Error: Invalid Url ${parsedUrl}`);
+    process.exit(1);
+  }
+  return url;
 }
 
 /**
@@ -115,10 +141,13 @@ export function urlValidator(url: string, program?: any) {
  * @returns validated outDir or the created output directory.
  */
 export function outDirValidator(outDir: string) {
-  if (outDir.startsWith('-') || outDir.startsWith('--')) {
-    redLogger(`Error: Please provide a path to the output directory`);
+  if (isOtherFlagsAsArgumentValidator(outDir)) {
+    redLogger(
+      `Error: Please provide an argument for the flag as it cannot be empty.`
+    );
     process.exit(1);
   }
+
   const parentDirExists = existsSync(path.resolve('./out'));
 
   if (!parentDirExists) {

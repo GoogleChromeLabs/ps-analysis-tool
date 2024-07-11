@@ -140,7 +140,6 @@ program
   });
 
 program.parse();
-console.log(program.opts());
 
 const saveResultsAsJSON = async (
   outDir: string,
