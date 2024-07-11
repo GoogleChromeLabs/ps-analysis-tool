@@ -203,7 +203,11 @@ function generateSitemapReportObject(
       const _libraryMatches = data.libraryMatches;
 
       Object.keys(_libraryMatches).forEach((key) => {
-        acc[key] = _libraryMatches[key];
+        acc[key] =
+          // @ts-ignore
+          acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
+            ? acc[key]
+            : _libraryMatches[key];
       });
 
       return acc;
