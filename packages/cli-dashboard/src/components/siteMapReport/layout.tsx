@@ -135,8 +135,12 @@ const Layout = ({
     return store;
   }, [completeJson]);
 
-  const siteMapLibraryMatches = useMemo(() => {
-    return completeJson?.reduce<CompleteJson['libraryMatches']>((acc, data) => {
+  const [siteMapLibraryMatches, urlCountHavingLibraryMatches] = useMemo(() => {
+    let _urlCountHavingLibraryMatches = 0;
+
+    const _siteMapLibraryMatches = completeJson?.reduce<
+      CompleteJson['libraryMatches']
+    >((acc, data) => {
       const _libraryMatches = data.libraryMatches;
 
       Object.keys(_libraryMatches).forEach((key) => {
@@ -147,8 +151,22 @@ const Layout = ({
             : _libraryMatches[key];
       });
 
+      _urlCountHavingLibraryMatches += Object.keys(_libraryMatches).some(
+        (key) => {
+          const matches = _libraryMatches[key]?.matches;
+          const domQueryMatches = _libraryMatches[key]?.domQuerymatches;
+
+          // @ts-ignore
+          return matches?.length || domQueryMatches?.length;
+        }
+      )
+        ? 1
+        : 0;
+
       return acc;
     }, {});
+
+    return [_siteMapLibraryMatches, _urlCountHavingLibraryMatches];
   }, [completeJson]);
 
   useEffect(() => {
@@ -166,6 +184,7 @@ const Layout = ({
           }, {}),
           cookiesWithIssues,
           libraryMatches: siteMapLibraryMatches,
+          urlCountHavingLibraryMatches,
           downloadReport: () => {
             if (!Array.isArray(completeJson)) {
               return;
@@ -236,6 +255,7 @@ const Layout = ({
     siteFilteredTechnologies,
     sites,
     siteMapLibraryMatches,
+    urlCountHavingLibraryMatches,
   ]);
 
   useEffect(() => {

@@ -198,6 +198,7 @@ function generateSitemapReportObject(
     },
   ];
 
+  let urlCountHavingLibraryMatches = 0;
   const libraryMatches = analysisData.reduce<CompleteJson['libraryMatches']>(
     (acc, data) => {
       const _libraryMatches = data.libraryMatches;
@@ -209,6 +210,18 @@ function generateSitemapReportObject(
             ? acc[key]
             : _libraryMatches[key];
       });
+
+      urlCountHavingLibraryMatches += Object.keys(_libraryMatches).some(
+        (key) => {
+          const matches = _libraryMatches[key]?.matches;
+          const domQueryMatches = _libraryMatches[key]?.domQuerymatches;
+
+          // @ts-ignore
+          return matches?.length || domQueryMatches?.length;
+        }
+      )
+        ? 1
+        : 0;
 
       return acc;
     },
@@ -230,6 +243,7 @@ function generateSitemapReportObject(
     showFramesSection: false,
     showBlockedCategory: true,
     url: sitemapURL,
+    urlCountHavingLibraryMatches,
     // @ts-ignore - 'typeof globalThis' has no index signature
     translations: globalThis?.PSAT_DATA?.translations,
   };
