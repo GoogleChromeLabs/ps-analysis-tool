@@ -27,7 +27,7 @@ import {
 } from './syncStorageOnChangedListener';
 import { onTabCreatedListener } from './tabOnCreatedListener';
 import { onTabRemovedListener } from './tabOnRemovedListener';
-import { onTabUpdatedListener } from './tabsOnUpdatedListener';
+import { onCommittedNavigationListener } from './onCommittedNavigationListener';
 import { windowsOnRemovedListener } from './windowsOnRemovedListener';
 import { windowsOnCreatedListener } from './windowsOnCreatedListener';
 
@@ -84,7 +84,7 @@ chrome.tabs.onRemoved.addListener(onTabRemovedListener);
  * Fires when a tab is updated.
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
  */
-chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
+chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
 /**
  * Fires when a window is removed (closed).
