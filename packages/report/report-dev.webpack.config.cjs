@@ -17,12 +17,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const WebpackBar = require('webpackbar');
-const commonConfig = require('./webpack.shared.cjs');
+const commonConfig = require('../../webpack.shared.cjs');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+// Webpack configuration only for the development of report.
 const report = {
   entry: {
-    index: '../report/src/index.tsx',
+    index: './src/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, './packages/report/dist'),
@@ -36,7 +37,7 @@ const report = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: '../report/public/index.html',
+      template: './public/index.html',
       filename: 'index.html',
       inject: true,
     }),

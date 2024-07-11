@@ -18,7 +18,7 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "webpack serve --config ../../report-dev.webpack.config.cjs --open",
+    "dev": "webpack serve --config ./report-dev.webpack.config.cjs --open",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
