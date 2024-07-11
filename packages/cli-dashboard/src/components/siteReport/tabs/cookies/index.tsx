@@ -56,14 +56,6 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     return frames;
   }, [completeJson]);
 
-  const cookiesWithIssues = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(tabCookies).filter(([, cookie]) => cookie.isBlocked)
-      ),
-    [tabCookies]
-  );
-
   const downloadReport = useCallback(() => {
     if (!completeJson) {
       return;
@@ -102,7 +94,6 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
             libraryMatches={libraryMatches}
             tabFrames={tabFrames}
             tabCookies={tabCookies}
-            cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
             setAppliedFilters={setAppliedFilters}
             setFilteredData={setFilteredData}

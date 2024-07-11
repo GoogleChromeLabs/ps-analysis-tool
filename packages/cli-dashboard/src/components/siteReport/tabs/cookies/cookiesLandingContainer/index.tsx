@@ -49,7 +49,6 @@ import Landing from './cookieLanding/landing';
 interface AssembledCookiesLandingProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
-  cookiesWithIssues: TabCookies;
   setFilteredData: React.Dispatch<React.SetStateAction<TabCookies>>;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => void;
@@ -63,7 +62,6 @@ const AssembledCookiesLanding = ({
   tabCookies,
   setFilteredData,
   setAppliedFilters,
-  cookiesWithIssues,
   downloadReport,
   libraryMatches,
   isSiteMapLandingContainer = false,
@@ -168,6 +166,14 @@ const AssembledCookiesLanding = ({
   useEffect(() => {
     setFilteredData(cookiesByKey);
   }, [cookiesByKey, setFilteredData]);
+
+  const cookiesWithIssues = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(cookiesByKey).filter(([, cookie]) => cookie.isBlocked)
+      ),
+    [cookiesByKey]
+  );
 
   useEffect(() => {
     setAppliedFilters(filter.selectedFilters);
