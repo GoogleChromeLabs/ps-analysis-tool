@@ -25,7 +25,7 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import App from '../app';
-import data from './data.mock';
+import data from '../dummyData/PSAT_DATA';
 import { useData } from '../stateProviders/data';
 
 jest.mock('../stateProviders/data', () => ({
@@ -74,6 +74,6 @@ describe('Report View', () => {
   it('Should add chrome API mocks ', async () => {
     mockUseDataStore.mockReturnValue(data);
     render(<App />);
-    expect(await screen.findByText('Total cookies')).toBeInTheDocument();
+    expect(await screen.findByText('Total Cookies')).toBeInTheDocument();
   });
 });
