@@ -32,6 +32,7 @@ import {
 import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import LIBRARIES from '../../config';
+import { diff } from 'deep-object-diff';
 
 // The delay after the page load, because some scripts arrive right after the page load.
 const LOADING_DELAY = 2000;
@@ -91,8 +92,13 @@ const useLibraryDetection = () => {
                 matches,
                 realtimeComputationResult
               );
+              const diffedLibraryMatches = diff(data, matches);
 
-              return data;
+              if (Object.keys(diffedLibraryMatches).length > 0) {
+                return data;
+              }
+
+              return matches;
             });
           }
         }
