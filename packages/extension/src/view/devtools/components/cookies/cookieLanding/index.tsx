@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import {
   LibraryDetection,
   useLibraryDetectionContext,
@@ -123,4 +123,4 @@ const AssembledCookiesLanding = () => {
     </>
   );
 };
-export default AssembledCookiesLanding;
+export default memo(AssembledCookiesLanding);
