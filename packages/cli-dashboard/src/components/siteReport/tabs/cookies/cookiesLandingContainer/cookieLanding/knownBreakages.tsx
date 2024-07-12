@@ -24,12 +24,14 @@ import { I18n } from '@google-psat/i18n';
 
 interface KnownBreakagesProps {
   libraryMatches: LibraryData;
-  urlCountHavingLibraryMatches?: number;
+  libraryMatchesUrlCount?: {
+    [url: string]: number;
+  };
 }
 
 const KnownBreakages = ({
   libraryMatches,
-  urlCountHavingLibraryMatches,
+  libraryMatchesUrlCount,
 }: KnownBreakagesProps) => {
   const names = Object.keys(libraryMatches);
 
@@ -68,6 +70,7 @@ const KnownBreakages = ({
               key={library.name}
               matches={matches}
               domQueryMatches={domQueryMatches}
+              urlCount={libraryMatchesUrlCount?.[library.name]}
             />
           );
         })}
@@ -82,13 +85,7 @@ const KnownBreakages = ({
     <CookiesLandingWrapper
       dataMapping={dataMapping}
       testId="library-detection"
-      description={
-        urlCountHavingLibraryMatches && (
-          <p className="text-center">
-            {urlCountHavingLibraryMatches} URLs have known breakages.
-          </p>
-        )
-      }
+      description=""
     >
       <div className="divide-y divide-hex-gray">{result}</div>
     </CookiesLandingWrapper>

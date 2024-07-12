@@ -42,9 +42,11 @@ interface CookiesLandingContainerProps {
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
+  libraryMatchesUrlCount?: {
+    [url: string]: number;
+  };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
-  urlCountHavingLibraryMatches?: number;
 }
 
 const CookiesLandingContainer = ({
@@ -53,8 +55,8 @@ const CookiesLandingContainer = ({
   cookiesWithIssues,
   downloadReport,
   libraryMatches,
+  libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
-  urlCountHavingLibraryMatches,
 }: CookiesLandingContainerProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
 
@@ -101,7 +103,7 @@ const CookiesLandingContainer = ({
           Element: KnownBreakages,
           props: {
             libraryMatches: libraryMatches ?? {},
-            urlCountHavingLibraryMatches,
+            libraryMatchesUrlCount,
           },
         },
       },
@@ -114,7 +116,7 @@ const CookiesLandingContainer = ({
     cookiesWithIssues,
     cookieStats,
     libraryMatches,
-    urlCountHavingLibraryMatches,
+    libraryMatchesUrlCount,
   ]);
 
   const menuData: MenuData = useMemo(

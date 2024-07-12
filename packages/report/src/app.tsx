@@ -50,9 +50,7 @@ const App = () => {
         <div className="text-xs">
           <KnownBreakages
             libraryMatches={data.libraryMatches}
-            urlCountHavingLibraryMatches={
-              data?.urlCountHavingLibraryMatches || 0
-            }
+            libraryMatchesUrlCount={data.libraryMatchesUrlCount}
           />
         </div>
       )}

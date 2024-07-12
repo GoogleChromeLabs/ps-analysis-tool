@@ -135,8 +135,10 @@ const Layout = ({
     return store;
   }, [completeJson]);
 
-  const [siteMapLibraryMatches, urlCountHavingLibraryMatches] = useMemo(() => {
-    let _urlCountHavingLibraryMatches = 0;
+  const [siteMapLibraryMatches, libraryMatchesUrlCount] = useMemo(() => {
+    const _libraryMatchesUrlCount: {
+      [key: string]: number;
+    } = {};
 
     const _siteMapLibraryMatches = completeJson?.reduce<
       CompleteJson['libraryMatches']
@@ -149,24 +151,20 @@ const Layout = ({
           acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
             ? acc[key]
             : _libraryMatches[key];
-      });
 
-      _urlCountHavingLibraryMatches += Object.keys(_libraryMatches).some(
-        (key) => {
-          const matches = _libraryMatches[key]?.matches;
-          const domQueryMatches = _libraryMatches[key]?.domQuerymatches;
-
-          // @ts-ignore
-          return matches?.length || domQueryMatches?.length;
+        if (
+          Object.keys(_libraryMatches[key]?.matches ?? {}).length ||
+          Object.keys(_libraryMatches[key]?.domQuerymatches ?? {}).length
+        ) {
+          _libraryMatchesUrlCount[key] =
+            (_libraryMatchesUrlCount[key] || 0) + 1;
         }
-      )
-        ? 1
-        : 0;
+      });
 
       return acc;
     }, {});
 
-    return [_siteMapLibraryMatches, _urlCountHavingLibraryMatches];
+    return [_siteMapLibraryMatches, _libraryMatchesUrlCount];
   }, [completeJson]);
 
   useEffect(() => {
@@ -184,7 +182,7 @@ const Layout = ({
           }, {}),
           cookiesWithIssues,
           libraryMatches: siteMapLibraryMatches,
-          urlCountHavingLibraryMatches,
+          libraryMatchesUrlCount,
           downloadReport: () => {
             if (!Array.isArray(completeJson)) {
               return;
@@ -243,19 +241,19 @@ const Layout = ({
       return _data;
     });
   }, [
-    libraryMatches,
     completeJson,
     cookiesWithIssues,
     doesSiteHaveCookies,
+    libraryMatches,
+    libraryMatchesUrlCount,
     path,
     reshapedCookies,
     setSidebarData,
     siteFilteredCompleteJson,
     siteFilteredCookies,
     siteFilteredTechnologies,
-    sites,
     siteMapLibraryMatches,
-    urlCountHavingLibraryMatches,
+    sites,
   ]);
 
   useEffect(() => {
