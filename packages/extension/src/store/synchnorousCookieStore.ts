@@ -558,6 +558,7 @@ class SynchnorousCookieStore {
               requestEvents: [],
               responseEvents: [],
             },
+            url: '',
           };
         });
 
