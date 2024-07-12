@@ -559,6 +559,11 @@ class SynchnorousCookieStore {
               responseEvents: [],
             },
             url: '',
+            headerType: ['request', 'response'].includes(
+              this.tabsData[tabId][key]?.headerType ?? ''
+            )
+              ? 'http'
+              : 'javascript',
           };
         });
 

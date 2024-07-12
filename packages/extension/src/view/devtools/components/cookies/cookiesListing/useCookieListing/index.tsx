@@ -475,7 +475,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             case I18n.getMessage('jS'):
               return value === 'javascript';
             case I18n.getMessage('http'):
-              return value === 'request' || value === 'response';
+              return (
+                value === 'request' || value === 'response' || value === 'http'
+              );
             default:
               return true;
           }
