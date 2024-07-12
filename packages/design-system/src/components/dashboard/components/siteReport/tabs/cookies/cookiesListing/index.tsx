@@ -71,6 +71,8 @@ const CookiesListing = ({
     'cookiesListing' + selectedSite,
     selectedSite
   );
+  //@ts-ignore
+  const isCLI = globalThis?.PSAT_EXTENSION ? false : true;
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -96,7 +98,7 @@ const CookiesListing = ({
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           isFiltersSidebarOpen={isSidebarOpen}
-          isCLI
+          isCLI={isCLI}
           hostname={path}
         />
       </Resizable>

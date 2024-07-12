@@ -50,6 +50,8 @@ const CookiesWithIssues = ({
       'cookiesWithIssuesListing',
       selectedSite
     );
+  //@ts-ignore
+  const isCLI = globalThis?.PSAT_EXTENSION ? false : true;
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -78,7 +80,7 @@ const CookiesWithIssues = ({
           selectedFrameCookie={selectedFrameCookie}
           hideExport={true}
           setSelectedFrameCookie={setSelectedFrameCookie}
-          isCLI
+          isCLI={isCLI}
           hostname={hostName}
         />
       </Resizable>
