@@ -39,11 +39,11 @@ const App = () => {
     <div className="h-full w-full flex flex-col">
       <div className="flex justify-between gap-3 px-4 py-2">
         <div className="flex gap-2 items-center">
-          <PrivacySandboxColoredIcon className="w-[70px] h-[70px]" />
+          <PrivacySandboxColoredIcon className="w-[65px] h-[65px]" />
           <div>
-            {data?.url && <p className="text-sm mb-[1px]">{data.url}</p>}
-            <p className="text-sm mb-[1px]">08 July,2024, 4:18pm</p>
-            <p className="text-sm">
+            {data?.url && <p className="text-xs mb-[1px]">{data.url}</p>}
+            <p className="text-xs mb-[1px]">08 July,2024, 4:18pm</p>
+            <p className="text-xs">
               <span className="mr-1">Applied Filters:</span>
               <span>
                 Domain:bbc.com | Scope: Third Party | Category: Analytics
