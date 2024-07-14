@@ -37,24 +37,22 @@ const App = () => {
 
   return (
     <div className="h-full w-full flex flex-col">
-      {data?.url && (
-        <div className="flex gap-2 items-center px-4 py-2">
+      <div className="flex justify-between gap-3 px-4 py-2">
+        <div className="flex gap-2 items-center">
+          <PrivacySandboxColoredIcon className="w-[70px] h-[70px]" />
           <div>
-            <PrivacySandboxColoredIcon className="w-[80px] h-[80px]" />
-          </div>
-          <div>
-            <p className="text-sm">{data.url}</p>
-            <p className="text-sm">08 July,2024, 4:18pm</p>
+            {data?.url && <p className="text-sm mb-[1px]">{data.url}</p>}
+            <p className="text-sm mb-[1px]">08 July,2024, 4:18pm</p>
             <p className="text-sm">
-              <span>Applied Filters:</span>
+              <span className="mr-1">Applied Filters:</span>
               <span>
                 Domain:bbc.com | Scope: Third Party | Category: Analytics
               </span>
             </p>
           </div>
-          <div>PSAT CLI Analysis</div>
         </div>
-      )}
+        <div className="flex items-center text-cente">PSAT CLI Analysis</div>
+      </div>
       <CookiesSection />
       <BlockedCookiesSection />
       <ExemptedCookiesSection />
