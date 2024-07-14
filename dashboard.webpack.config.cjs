@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
+
+/**
+ * Internal dependencies.
+ */
 const commonConfig = require('./webpack.shared.cjs');
 
 const report = {
@@ -62,8 +69,11 @@ const dashboard = {
       title: 'Report',
       template: '../cli-dashboard/public/index.html',
       filename: 'index.html',
-      inject: false,
+      inject: commonConfig.mode === 'production' ? 'body' : false,
     }),
+    ...(commonConfig.mode === 'production'
+      ? [new HtmlInlineScriptPlugin()]
+      : []),
     new CopyPlugin({
       patterns: [
         {
