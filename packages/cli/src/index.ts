@@ -47,6 +47,7 @@ import {
   saveCSVReports,
   askUserInput,
   generatePrefix,
+  getCurrentDateAndTime,
 } from './utils';
 
 events.EventEmitter.defaultMaxListeners = 15;
@@ -165,6 +166,7 @@ const saveResultsAsHTML = async (
       type: isSiteMap ? 'sitemap' : 'url',
       selectedSite: outDir?.trim()?.slice(6) ?? '',
       translations: messages,
+      dateTime: getCurrentDateAndTime(),
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
 
