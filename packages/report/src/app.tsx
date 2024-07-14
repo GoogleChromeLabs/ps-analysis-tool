@@ -39,8 +39,20 @@ const App = () => {
     <div className="h-full w-full flex flex-col">
       {data?.url && (
         <div className="flex gap-2 items-center px-4 py-2">
-          <PrivacySandboxColoredIcon className="w-6 h-6" />
-          <p className="text-sm">{data.url}</p>
+          <div className="w-15">
+            <PrivacySandboxColoredIcon />
+          </div>
+          <div>
+            <p className="text-sm">{data.url}</p>
+            <p className="text-sm">08 July,2024, 4:18pm</p>
+            <p className="text-sm">
+              <span>Applied Filters:</span>
+              <span>
+                Domain:bbc.com | Scope: Third Party | Category: Analytics
+              </span>
+            </p>
+          </div>
+          <div>PSAT CLI Analysis</div>
         </div>
       )}
       <CookiesSection />
