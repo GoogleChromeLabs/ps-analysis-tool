@@ -39,8 +39,8 @@ const App = () => {
     <div className="h-full w-full flex flex-col">
       {data?.url && (
         <div className="flex gap-2 items-center px-4 py-2">
-          <div className="w-15">
-            <PrivacySandboxColoredIcon />
+          <div>
+            <PrivacySandboxColoredIcon className="w-[80px] h-[80px]" />
           </div>
           <div>
             <p className="text-sm">{data.url}</p>
