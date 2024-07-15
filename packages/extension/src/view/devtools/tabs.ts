@@ -54,6 +54,10 @@ import SettingsTab from '../../../../../assets/icons/settings-tab.svg';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import SettingsTabWhite from '../../../../../assets/icons/settings-tab-white.svg';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import PrivateAggregationicon from '../../../../../assets/icons/private-aggregation.svg';
+
 import {
   SiteBoundaries,
   Chips,
@@ -200,13 +204,13 @@ const TABS: SidebarItems = {
               Element: PrivateAggregation,
             },
             icon: {
-              Element: GroupsIcon,
+              Element: PrivateAggregationicon,
               props: {
                 className: 'fill-gray',
               },
             },
             selectedIcon: {
-              Element: GroupsIcon,
+              Element: PrivateAggregationicon,
               props: {
                 className: 'fill-white',
               },
