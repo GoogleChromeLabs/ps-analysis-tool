@@ -17,7 +17,6 @@
  * External dependencies
  */
 import React from 'react';
-import { LibraryDetection } from '@google-psat/library-detection';
 import {
   PrivacySandboxColoredIcon,
   ChipsBar,
@@ -32,6 +31,7 @@ import {
   BlockedCookiesSection,
   FramesSection,
   ExemptedCookiesSection,
+  KnownBreakages,
 } from './components';
 import { useData } from './stateProviders/data';
 import { noop } from '@google-psat/common';
@@ -75,7 +75,10 @@ const App = () => {
       <ExemptedCookiesSection />
       {data?.libraryMatches && (
         <div className="text-xs">
-          <LibraryDetection />
+          <KnownBreakages
+            libraryMatches={data.libraryMatches}
+            libraryMatchesUrlCount={data.libraryMatchesUrlCount}
+          />
         </div>
       )}
       {data?.showFramesSection && <FramesSection />}

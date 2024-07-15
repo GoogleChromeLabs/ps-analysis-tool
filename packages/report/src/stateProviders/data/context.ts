@@ -46,6 +46,7 @@ export interface DataStoreContext {
       showBlockedCategory: boolean;
       url: string;
       filters: TableFilter;
+      libraryMatchesUrlCount: { [url: string]: number };
     } | null;
   };
 }
@@ -79,6 +80,7 @@ const initialState: DataStoreContext = {
       showFramesSection: false,
       url: '',
       filters: {},
+      libraryMatchesUrlCount: {},
     },
     isDataLoaded: false,
   },

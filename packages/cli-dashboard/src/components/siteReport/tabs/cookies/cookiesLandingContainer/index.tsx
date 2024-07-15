@@ -53,6 +53,9 @@ interface AssembledCookiesLandingProps {
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
+  libraryMatchesUrlCount?: {
+    [url: string]: number;
+  };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
 }
@@ -64,7 +67,7 @@ const AssembledCookiesLanding = ({
   setAppliedFilters,
   downloadReport,
   libraryMatches,
-  isSiteMapLandingContainer = false,
+  libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: AssembledCookiesLandingProps) => {
   const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
@@ -227,7 +230,7 @@ const AssembledCookiesLanding = ({
             cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
             libraryMatches={libraryMatches}
-            isSiteMapLandingContainer={isSiteMapLandingContainer}
+            libraryMatchesUrlCount={libraryMatchesUrlCount}
             menuBarScrollContainerId={menuBarScrollContainerId}
           />
         </div>

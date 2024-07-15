@@ -25,7 +25,7 @@ import { addUTMParams } from '@google-psat/common';
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
-const GISAccordion = ({ matches }: AccordionProps) => {
+const GISAccordion = ({ matches, urlCount }: AccordionProps) => {
   if (!matches) {
     return null;
   }
@@ -37,7 +37,10 @@ const GISAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Unsupported Google Identity Services'}>
+    <Accordion
+      title={'Unsupported Google Identity Services'}
+      urlCount={urlCount}
+    >
       <p className="text-darkest-gray dark:text-bright-gray">
         Due to Privacy Sandbox enforcements some features are backward
         incompatible or deprecated. Some features of Google Identity Services
