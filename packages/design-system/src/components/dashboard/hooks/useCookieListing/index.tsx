@@ -185,7 +185,7 @@ const useCookieListing = (
   }, []);
 
   const filters = useMemo<TableFilter>(() => {
-    const baseFilters: TableFilter = {
+    let baseFilters: TableFilter = {
       'analytics.category': {
         title: I18n.getMessage('category'),
         hasStaticFilterValues: true,
@@ -396,21 +396,27 @@ const useCookieListing = (
     };
     //@ts-ignore
     if (globalThis?.PSAT_EXTENSION) {
-      baseFilters['parsedCookie.priority'] = {
-        title: I18n.getMessage('priority'),
-        hasStaticFilterValues: true,
-        filterValues: {
-          Low: {
-            selected: false,
+      const { exemptionReason, ...rest } = baseFilters;
+
+      baseFilters = {
+        ...rest,
+        'parsedCookie.priority': {
+          title: I18n.getMessage('priority'),
+          hasStaticFilterValues: true,
+          filterValues: {
+            Low: {
+              selected: false,
+            },
+            Medium: {
+              selected: false,
+            },
+            High: {
+              selected: false,
+            },
           },
-          Medium: {
-            selected: false,
-          },
-          High: {
-            selected: false,
-          },
+          useGenericPersistenceKey: true,
         },
-        useGenericPersistenceKey: true,
+        exemptionReason,
       };
     }
     return baseFilters;
