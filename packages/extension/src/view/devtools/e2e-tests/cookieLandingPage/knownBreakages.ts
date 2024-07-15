@@ -32,39 +32,121 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;
 
-  beforeEach(async () => {
-    puppeteer = new PuppeteerManagement();
-    await puppeteer.setup();
-    page = await puppeteer.openPage();
+  describe('GSI, GIS', () => {
+    beforeEach(async () => {
+      puppeteer = new PuppeteerManagement();
+      await puppeteer.setup();
+      page = await puppeteer.openPage();
+    });
+
+    afterEach(async () => {
+      await puppeteer.close();
+    });
+
+    test('Should be able to validate the Known Breakages, GSI and GIS', async () => {
+      await puppeteer.navigateToURL(page, 'https://in.linkedin.com/');
+
+      const devtools = await puppeteer.getDevtools();
+      const key = puppeteer.getCMDKey();
+      interaction = new Interaction(devtools, key);
+
+      // Navigate to the cookie tab
+      const frame = await interaction.navigateToCookieTab();
+
+      await interaction.delay(8000);
+      // Validate the "Facebook Like" known breakages
+      const deprecatedGoogleSignInText = await interaction.getInnerText(
+        frame ?? null,
+        '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
+      );
+      expect(deprecatedGoogleSignInText).toBe('Deprecated Google Sign-In');
+
+      // Validate the "GIS" known breakages
+      const gisText = await interaction.getInnerText(
+        frame ?? null,
+        '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
+      );
+      expect(gisText).toBe('Unsupported Google Identity Services');
+    }, 50000);
   });
 
-  afterEach(async () => {
-    await puppeteer.close();
+  describe('Disqus comments', () => {
+    beforeEach(async () => {
+      puppeteer = new PuppeteerManagement();
+      await puppeteer.setup();
+      page = await puppeteer.openPage();
+    });
+
+    afterEach(async () => {
+      await puppeteer.close();
+    });
+
+    test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
+      await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');
+
+      const devtools = await puppeteer.getDevtools();
+      const key = puppeteer.getCMDKey();
+      interaction = new Interaction(devtools, key);
+
+      // Navigate to the cookie tab
+      const frame = await interaction.navigateToCookieTab();
+      if (!frame) {
+        throw new Error('Content frame not found');
+      }
+      await interaction.delay(8000);
+      // Validate the "Facebook Like" known breakages
+      const facebookcomment = await interaction.getInnerText(
+        frame,
+        '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
+      );
+      expect(facebookcomment).not.toBe(null);
+      await interaction.delay(2000);
+      // Validate the "Facebook Comment" known breakages
+      const facebooklike = await interaction.getInnerText(
+        frame,
+        '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
+      );
+      expect(facebooklike).toBe('Facebook Like Button');
+    }, 60000);
   });
 
-  test('Should be able to validate the Known Breakages, GSI and GIS', async () => {
-    await puppeteer.navigateToURL(page, 'https://in.linkedin.com/');
+  describe('Facebook like and comment', () => {
+    beforeEach(async () => {
+      puppeteer = new PuppeteerManagement();
+      await puppeteer.setup();
+      page = await puppeteer.openPage();
+    });
 
-    const devtools = await puppeteer.getDevtools();
-    const key = puppeteer.getCMDKey();
-    interaction = new Interaction(devtools, key);
+    afterEach(async () => {
+      await puppeteer.close();
+    });
 
-    // Navigate to the cookie tab
-    const frame = await interaction.navigateToCookieTab();
+    test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
+      await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');
 
-    await interaction.delay(8000);
-    // Validate the "Facebook Like" known breakages
-    const deprecatedGoogleSignInText = await interaction.getInnerText(
-      frame ?? null,
-      '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
-    );
-    expect(deprecatedGoogleSignInText).toBe('Deprecated Google Sign-In');
+      const devtools = await puppeteer.getDevtools();
+      const key = puppeteer.getCMDKey();
+      interaction = new Interaction(devtools, key);
 
-    // Validate the "GIS" known breakages
-    const gisText = await interaction.getInnerText(
-      frame ?? null,
-      '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
-    );
-    expect(gisText).toBe('Unsupported Google Identity Services');
-  }, 50000);
+      // Navigate to the cookie tab
+      const frame = await interaction.navigateToCookieTab();
+      if (!frame) {
+        throw new Error('Content frame not found');
+      }
+      await interaction.delay(8000);
+      // Validate the "Facebook Like" known breakages
+      const facebookcomment = await interaction.getInnerText(
+        frame,
+        '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
+      );
+      expect(facebookcomment).not.toBe(null);
+      await interaction.delay(2000);
+      // Validate the "Facebook Comment" known breakages
+      const facebooklike = await interaction.getInnerText(
+        frame,
+        '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
+      );
+      expect(facebooklike).toBe('Facebook Like Button');
+    }, 60000);
+  });
 });
