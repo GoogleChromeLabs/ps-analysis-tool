@@ -21,13 +21,17 @@ import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 import getQueryParams from '../../utils/getQueryParams';
 import attachCDP from '../attachCDP';
 
-export const onTabUpdatedListener = async (
-  tabId: number,
-  changeInfo: chrome.tabs.TabChangeInfo,
-  tab: chrome.tabs.Tab
-) => {
+export const onCommittedNavigationListener = async ({
+  frameId,
+  frameType,
+  url,
+  tabId,
+}: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
   try {
-    if (!tab.url) {
+    if (frameType !== 'outermost_frame' && frameId !== 0) {
+      return;
+    }
+    if (!url) {
       return;
     }
 
@@ -37,7 +41,7 @@ export const onTabUpdatedListener = async (
           ?.id
       : 0;
 
-    const queryParams = getQueryParams(tab.url);
+    const queryParams = getQueryParams(url);
 
     if (queryParams.psat_cdp || queryParams.psat_multitab) {
       await chrome.storage.sync.set({
@@ -51,13 +55,9 @@ export const onTabUpdatedListener = async (
         queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
     }
 
-    synchnorousCookieStore?.updateUrl(tabId, tab.url);
+    synchnorousCookieStore?.updateUrl(tabId, url);
 
-    if (
-      changeInfo.status === 'loading' &&
-      tab.url &&
-      !tab.url.startsWith('chrome://')
-    ) {
+    if (url && !url.startsWith('chrome://')) {
       synchnorousCookieStore?.removeCookieData(tabId);
 
       if (synchnorousCookieStore.globalIsUsingCDP) {
