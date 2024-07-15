@@ -13,11 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { fetchDictionary } from './fetchCookieDictionary';
-export { default as getUrlListFromArgs } from './getUrlListFromArgs';
-export { default as generateCSVFiles } from './generateCSVfiles';
-export { default as saveCSVReports } from './saveCSVReports';
-export { default as getUrlsFromSitemap } from './getUrlListFromArgs';
-export { default as askUserInput } from './askUserInput';
-export { default as generatePrefix } from './generatePrefix';
-export * from './validators';
+export const LONG_CONSTANTS = [
+  '--url',
+  '--file',
+  '--source-url',
+  '--file',
+  '--number-of-urls',
+  '--display',
+  '--verbose',
+  '--tech',
+  '--out-dir',
+  '--ignore-gdpr',
+  '--wait',
+  '--locale',
+  '--help',
+  '--version',
+];
+
+export const SHORT_CONSTANTS = [
+  '-u',
+  '-s',
+  '-f',
+  '-n',
+  '-d',
+  '-v',
+  '-t',
+  '-i',
+  '-q',
+  '-c',
+  '-w',
+  '-l',
+  '-h',
+  '-V',
+];
