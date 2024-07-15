@@ -26,6 +26,7 @@
 		"cli:build": "cross-env NODE_ENV=production npm run build -w @google-psat/cli",
 		"cli:start": "npm install && npm run cli:dev",
 		"cli": "node packages/cli/dist/main.js",
+		"report:dev": "npm run dev -w @google-psat/report",
 		"cli-dashboard:dev": "npm run dev -w @google-psat/cli-dashboard",
 		"cli-dashboard:prebuild": "npm run build:remove -w @google-psat/cli-dashboard",
 		"cli-dashboard:build": "npm run cli-dashboard:prebuild && cross-env NODE_ENV=production npm run build -w @google-psat/cli-dashboard",

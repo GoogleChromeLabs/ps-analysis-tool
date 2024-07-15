@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React, { useEffect, useState, type PropsWithChildren } from 'react';
-import { useLibraryDetectionContext } from '@google-psat/library-detection';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -30,26 +29,22 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [isDataLoaded, setIsDataLoaded] =
     useState<DataStoreContext['state']['isDataLoaded']>(false);
 
-  const { setLibraryMatches, setShowLoader } = useLibraryDetectionContext(
-    ({ actions }) => ({
-      setLibraryMatches: actions.setLibraryMatches,
-      setShowLoader: actions.setShowLoader,
-    })
-  );
-
   useEffect(() => {
-    //@ts-ignore custom data attached to window breaks types
-    const _data = window.PSAT_DATA;
+    (async () => {
+      if (process.env.NODE_ENV === 'development') {
+        const module = await import('../../dummyData/PSAT_DATA.js');
+        window.PSAT_DATA = module.default;
+      }
 
-    I18n.initMessages(_data.translations);
+      //@ts-ignore custom data attached to window breaks types
+      const _data = window.PSAT_DATA;
 
-    setData(_data);
-    if (_data?.libraryMatches) {
-      setLibraryMatches(_data.libraryMatches);
-    }
-    setShowLoader(false);
-    setIsDataLoaded(true);
-  }, [setLibraryMatches, setShowLoader]);
+      I18n.initMessages(_data.translations);
+
+      setData(_data);
+      setIsDataLoaded(true);
+    })();
+  }, []);
 
   return (
     <Context.Provider
