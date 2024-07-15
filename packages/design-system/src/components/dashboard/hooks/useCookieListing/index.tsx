@@ -400,6 +400,48 @@ const useCookieListing = (
 
       baseFilters = {
         ...rest,
+        'parsedCookie.partitionKey': {
+          title: I18n.getMessage('partitionKey'),
+          hasStaticFilterValues: true,
+          filterValues: {
+            [I18n.getMessage('set')]: {
+              selected: false,
+            },
+            [I18n.getMessage('notSet')]: {
+              selected: false,
+            },
+          },
+          useGenericPersistenceKey: true,
+          comparator: (value: InfoType, filterValue: string) => {
+            const val = value as string;
+            return val
+              ? filterValue === I18n.getMessage('set')
+              : filterValue === I18n.getMessage('notSet');
+          },
+        },
+        headerType: {
+          title: I18n.getMessage('setVia'),
+          hasStaticFilterValues: true,
+          filterValues: {
+            [I18n.getMessage('http')]: {
+              selected: false,
+            },
+            [I18n.getMessage('jS')]: {
+              selected: false,
+            },
+          },
+          useGenericPersistenceKey: true,
+          comparator: (value: InfoType, filterValue: string) => {
+            switch (filterValue) {
+              case I18n.getMessage('jS'):
+                return value === 'javascript';
+              case I18n.getMessage('http'):
+                return value === 'request' || value === 'response';
+              default:
+                return true;
+            }
+          },
+        },
         'parsedCookie.priority': {
           title: I18n.getMessage('priority'),
           hasStaticFilterValues: true,
