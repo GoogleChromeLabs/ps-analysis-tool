@@ -43,6 +43,9 @@ interface LandingProps {
   libraryMatches: LibraryData | null;
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
+  libraryMatchesUrlCount?: {
+    [url: string]: number;
+  };
 }
 
 const Landing = ({
@@ -51,7 +54,7 @@ const Landing = ({
   cookiesWithIssues,
   downloadReport,
   libraryMatches,
-  isSiteMapLandingContainer = false,
+  libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: LandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -92,29 +95,27 @@ const Landing = ({
           },
         },
       },
-    ];
-
-    if (!isSiteMapLandingContainer) {
-      baseSections.push({
+      {
         name: I18n.getMessage('knownBreakages'),
         link: 'known-breakages',
         panel: {
           Element: KnownBreakages,
           props: {
             libraryMatches: libraryMatches ?? {},
+            libraryMatchesUrlCount,
           },
         },
-      });
-    }
+      },
+    ];
 
     return baseSections;
   }, [
+    cookieStats,
+    cookiesWithIssues,
+    libraryMatches,
+    libraryMatchesUrlCount,
     tabCookies,
     tabFrames,
-    cookiesWithIssues,
-    cookieStats,
-    isSiteMapLandingContainer,
-    libraryMatches,
   ]);
 
   const menuData: MenuData = useMemo(
