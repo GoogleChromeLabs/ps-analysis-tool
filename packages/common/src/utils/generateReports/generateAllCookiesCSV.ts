@@ -57,6 +57,14 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     });
   });
 
+  //@ts-ignore
+  if (globalThis?.PSAT_EXTENSION) {
+    COOKIES_DATA_HEADER.push(
+      () => I18n.getMessage('priority'),
+      () => I18n.getMessage('size')
+    );
+  }
+
   let cookieRecords = '';
 
   for (const cookie of cookieMap.values()) {
@@ -84,7 +92,17 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
       cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics.GDPR || 'NA',
-    ].map(sanitizeCsvRecord);
+    ];
+    //@ts-ignore
+    if (globalThis?.PSAT_EXTENSION) {
+      recordsArray.push(
+        //@ts-ignore
+        cookie.parsedCookie?.priority || ' ',
+        //@ts-ignore
+        cookie.parsedCookie?.size?.toString()
+      );
+    }
+    recordsArray.map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
