@@ -29,7 +29,6 @@ module.exports = {
     '\\.css': join(__dirname, '/styleMock.cjs'),
     '\\.png': join(__dirname, '/imageMock.cjs'),
   },
-  testEnvironment: 'jsdom',
   testMatch: [
     '**/tests/**/*.{js,jsx,ts,tsx}',
     '!**/dist/**/*.{js,jsx,ts,tsx}',
