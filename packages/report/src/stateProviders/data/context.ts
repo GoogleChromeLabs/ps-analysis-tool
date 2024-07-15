@@ -44,6 +44,7 @@ export interface DataStoreContext {
       showFramesSection: boolean;
       showBlockedCategory: boolean;
       url: string;
+      libraryMatchesUrlCount: { [url: string]: number };
     } | null;
   };
 }
@@ -76,6 +77,7 @@ const initialState: DataStoreContext = {
       showBlockedCategory: false,
       showFramesSection: false,
       url: '',
+      libraryMatchesUrlCount: {},
     },
     isDataLoaded: false,
   },

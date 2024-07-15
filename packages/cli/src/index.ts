@@ -19,7 +19,7 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { existsSync, ensureFile, writeFile } from 'fs-extra';
+import { existsSync, ensureDir } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import fs from 'fs';
@@ -51,6 +51,7 @@ import {
 
 events.EventEmitter.defaultMaxListeners = 15;
 
+const isProduction = process.env.NODE_ENV === 'production';
 const DELAY_TIME = 20000;
 const program = new Command();
 
@@ -90,14 +91,6 @@ program
 
 program.parse();
 
-const saveResultsAsJSON = async (
-  outDir: string,
-  result: CompleteJson | CompleteJson[]
-) => {
-  await ensureFile(outDir + '/out.json');
-  await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
-};
-
 const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson | CompleteJson[],
@@ -105,6 +98,8 @@ const saveResultsAsHTML = async (
 ) => {
   let htmlText = '';
   let reportHTML = '';
+
+  await ensureDir(outDir);
 
   if (
     existsSync(
@@ -130,13 +125,15 @@ const saveResultsAsHTML = async (
       'base64'
     );
 
-    fs.copyFileSync(
-      path.resolve(
-        __dirname +
-          '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
-      ),
-      outDir + '/index.js'
-    );
+    if (!isProduction) {
+      fs.copyFileSync(
+        path.resolve(
+          __dirname +
+            '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
+        ),
+        outDir + '/index.js'
+      );
+    }
   } else {
     htmlText = fs.readFileSync(
       path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -148,10 +145,12 @@ const saveResultsAsHTML = async (
       'base64'
     );
 
-    fs.copyFileSync(
-      path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
-      outDir + '/index.js'
-    );
+    if (!isProduction) {
+      fs.copyFileSync(
+        path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+        outDir + '/index.js'
+      );
+    }
   }
 
   const messages = I18n.getMessages();
@@ -323,7 +322,6 @@ const saveResultsAsHTML = async (
     process.exit(0);
   }
 
-  await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
   console.log('Some error occured while analysing the website.');
