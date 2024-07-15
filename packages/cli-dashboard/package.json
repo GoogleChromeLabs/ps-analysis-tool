@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "scripts": {
-    "start": "webpack-dev-server --config ../../dashboard.webpack.config.cjs",
+    "dev": "webpack --config ../../dashboard.webpack.config.cjs --watch",
     "build": "webpack --config ../../dashboard.webpack.config.cjs",
     "build:remove": "rimraf dist",
     "publish:local": "npm publish --registry=http://localhost:4873",
@@ -55,7 +55,6 @@
     "babel-loader": "^9.1.3",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
     "webpackbar": "^5.0.2"
   }
 }
