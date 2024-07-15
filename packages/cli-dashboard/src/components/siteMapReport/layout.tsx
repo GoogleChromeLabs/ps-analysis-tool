@@ -135,6 +135,38 @@ const Layout = ({
     return store;
   }, [completeJson]);
 
+  const [siteMapLibraryMatches, libraryMatchesUrlCount] = useMemo(() => {
+    const _libraryMatchesUrlCount: {
+      [key: string]: number;
+    } = {};
+
+    const _siteMapLibraryMatches = completeJson?.reduce<
+      CompleteJson['libraryMatches']
+    >((acc, data) => {
+      const _libraryMatches = data.libraryMatches;
+
+      Object.keys(_libraryMatches).forEach((key) => {
+        acc[key] =
+          // @ts-ignore
+          acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
+            ? acc[key]
+            : _libraryMatches[key];
+
+        if (
+          Object.keys(_libraryMatches[key]?.matches ?? {}).length ||
+          Object.keys(_libraryMatches[key]?.domQuerymatches ?? {}).length
+        ) {
+          _libraryMatchesUrlCount[key] =
+            (_libraryMatchesUrlCount[key] || 0) + 1;
+        }
+      });
+
+      return acc;
+    }, {});
+
+    return [_siteMapLibraryMatches, _libraryMatchesUrlCount];
+  }, [completeJson]);
+
   useEffect(() => {
     setSidebarData((prev) => {
       const _data = { ...prev };
@@ -143,13 +175,14 @@ const Layout = ({
         Element: CookiesLandingContainer,
         props: {
           tabCookies: reshapedCookies,
-          isSiteMapLandingContainer: true,
           tabFrames: sites.reduce<TabFrames>((acc, site) => {
             acc[site] = {} as TabFrames[string];
 
             return acc;
           }, {}),
           cookiesWithIssues,
+          libraryMatches: siteMapLibraryMatches,
+          libraryMatchesUrlCount,
           downloadReport: () => {
             if (!Array.isArray(completeJson)) {
               return;
@@ -208,16 +241,18 @@ const Layout = ({
       return _data;
     });
   }, [
-    libraryMatches,
     completeJson,
     cookiesWithIssues,
     doesSiteHaveCookies,
+    libraryMatches,
+    libraryMatchesUrlCount,
     path,
     reshapedCookies,
     setSidebarData,
     siteFilteredCompleteJson,
     siteFilteredCookies,
     siteFilteredTechnologies,
+    siteMapLibraryMatches,
     sites,
   ]);
 

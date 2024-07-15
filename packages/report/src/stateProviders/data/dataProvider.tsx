@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React, { useEffect, useState, type PropsWithChildren } from 'react';
-import { useLibraryDetectionContext } from '@google-psat/library-detection';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -29,13 +28,6 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [data, setData] = useState<DataStoreContext['state']['data']>(null);
   const [isDataLoaded, setIsDataLoaded] =
     useState<DataStoreContext['state']['isDataLoaded']>(false);
-
-  const { setLibraryMatches, setShowLoader } = useLibraryDetectionContext(
-    ({ actions }) => ({
-      setLibraryMatches: actions.setLibraryMatches,
-      setShowLoader: actions.setShowLoader,
-    })
-  );
 
   useEffect(() => {
     (async () => {
@@ -50,13 +42,9 @@ const Provider = ({ children }: PropsWithChildren) => {
       I18n.initMessages(_data.translations);
 
       setData(_data);
-      if (_data?.libraryMatches) {
-        setLibraryMatches(_data.libraryMatches);
-      }
-      setShowLoader(false);
       setIsDataLoaded(true);
     })();
-  }, [setLibraryMatches, setShowLoader]);
+  }, []);
 
   return (
     <Context.Provider
