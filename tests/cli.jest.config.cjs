@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { fetchDictionary } from './fetchCookieDictionary';
-export { default as getUrlListFromArgs } from './getUrlListFromArgs';
-export { default as generateCSVFiles } from './generateCSVfiles';
-export { default as saveCSVReports } from './saveCSVReports';
-export { default as getUrlsFromSitemap } from './getUrlListFromArgs';
-export { default as askUserInput } from './askUserInput';
-export { default as generatePrefix } from './generatePrefix';
-export * from './validators';
+const sharedConfig = require('./shared.jest.config.cjs');
+
+module.exports = {
+  ...sharedConfig,
+  testMatch: [
+    '**/cli/**/e2e-tests/**/*.{js,jsx,ts,tsx}',
+    '!**/dist/**/*.{js,jsx,ts,tsx}',
+    '!**/dist-types/**/*.{js,jsx,ts,tsx}',
+  ],
+};
