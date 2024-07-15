@@ -45,7 +45,13 @@ const KnownBreakages = ({
     {
       title: I18n.getMessage('knownBreakages'),
       count: Number(detectedLibraryNames.length),
-      data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
+      data: detectedLibraryNames.map((name) => ({
+        count:
+          libraryMatches[name as keyof LibraryData]?.matches?.length ||
+          libraryMatches[name as keyof LibraryData]?.domQuerymatches?.length ||
+          0,
+        color: COLOR_MAP[name].color,
+      })),
     },
   ];
 
