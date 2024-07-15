@@ -19,7 +19,7 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { existsSync, writeFile } from 'fs-extra';
+import { existsSync, writeFile, ensureDir } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import fs from 'fs';
