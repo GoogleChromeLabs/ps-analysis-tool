@@ -96,7 +96,14 @@ export class Interaction {
    * @param {string} selector - The selector used to find the element within the frame.
    * @returns {Promise<string | null>} A promise that resolves to the inner text of the element or null.
    */
-  async getInnerText(frame: Frame, selector: string): Promise<string | null> {
+  async getInnerText(
+    frame: Frame | null,
+    selector: string
+  ): Promise<string | null> {
+    if (!frame) {
+      return null;
+    }
+
     await this.delay(3000);
     const element = await frame.$(selector);
 
