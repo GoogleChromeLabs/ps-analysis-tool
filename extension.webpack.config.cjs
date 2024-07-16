@@ -139,7 +139,7 @@ const dashboard = {
   plugins: [
     new WebpackBar({
       name: 'Dashboard',
-      color: '#357BB5',
+      color: '#FF9B71',
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
