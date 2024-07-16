@@ -17,8 +17,8 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { getAndParseNetworkCookies } from '../../utils/getAndParseNetworkCookies';
 import attachCDP from '../attachCDP';
+import setupTimeOuts from './setupTimeOuts';
 
 export const onEnabledListener = async (
   details: chrome.management.ExtensionInfo
@@ -29,33 +29,7 @@ export const onEnabledListener = async (
 
   synchnorousCookieStore?.clear();
 
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(async () => {
-    await chrome.storage.session.get();
-  }, 20000);
-
-  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
-  setInterval(() => {
-    if (Object.keys(synchnorousCookieStore?.tabsData ?? {}).length === 0) {
-      return;
-    }
-
-    Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
-      synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
-    });
-  }, 1200);
-
-  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
-  setInterval(() => {
-    if (Object.keys(synchnorousCookieStore?.tabsData ?? {}).length === 0) {
-      return;
-    }
-
-    Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
-      getAndParseNetworkCookies(key);
-    });
-  }, 5000);
+  setupTimeOuts();
 
   await chrome.storage.local.clear();
   const preSetSettings = await chrome.storage.sync.get();
