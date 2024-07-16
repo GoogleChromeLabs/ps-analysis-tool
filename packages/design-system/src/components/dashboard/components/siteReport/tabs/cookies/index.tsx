@@ -63,26 +63,25 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     if (!completeJson) {
       return;
     }
+    //@ts-ignore
+    const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
+    //@ts-ignore
+    const reportHTMLText = globalThis?.PSAT_REPORT_HTML;
+
     if (completeJson.length > 1) {
       generateSiteReportandDownload(
         completeJson,
-        //@ts-ignore
-        globalThis?.PSAT_EXTENSION
-          ? //@ts-ignore
-            decodeURIComponent(escape(atob(globalThis.PSAT_REPORT_HTML)))
-          : //@ts-ignore
-            atob(globalThis.PSAT_REPORT_HTML),
+        isExtension
+          ? decodeURIComponent(escape(atob(reportHTMLText)))
+          : atob(reportHTMLText),
         selectedSite
       );
     } else {
       generateSiteReportandDownload(
         completeJson,
-        //@ts-ignore
-        globalThis?.PSAT_EXTENSION
-          ? //@ts-ignore
-            decodeURIComponent(escape(atob(globalThis.PSAT_REPORT_HTML)))
-          : //@ts-ignore
-            atob(globalThis.PSAT_REPORT_HTML)
+        isExtension
+          ? decodeURIComponent(escape(atob(reportHTMLText)))
+          : atob(reportHTMLText)
       );
     }
   }, [completeJson, selectedSite]);

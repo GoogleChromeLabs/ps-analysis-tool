@@ -27,13 +27,15 @@ import CookiesWithIssues from '../cookiesWithIssues';
 
 interface SiteMapCookiesWithIssuesProps {
   cookies: CookieTableData[];
+  path: string;
 }
 
 const SiteMapCookiesWithIssues = ({
   cookies,
+  path,
 }: SiteMapCookiesWithIssuesProps) => {
   return (
-    <CookiesWithIssues cookies={cookies} selectedSite={null} hostName="" />
+    <CookiesWithIssues cookies={cookies} selectedSite={null} hostName={path} />
   );
 };
 

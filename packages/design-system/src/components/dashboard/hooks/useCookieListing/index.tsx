@@ -51,6 +51,9 @@ const useCookieListing = (
     })
   );
 
+  //@ts-ignore
+  const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
+
   const parsedQuery = useMemo(
     () => JSON.parse(activePanelQuery || '{}'),
     [activePanelQuery]
@@ -170,8 +173,8 @@ const useCookieListing = (
         widthWeightagePercentage: 7,
       },
     ];
-    //@ts-ignore
-    if (globalThis?.PSAT_EXTENSION) {
+
+    if (isExtension) {
       baseColumns.push(
         {
           header: I18n.getMessage('priority'),
@@ -190,7 +193,7 @@ const useCookieListing = (
       );
     }
     return baseColumns;
-  }, []);
+  }, [isExtension]);
 
   const filters = useMemo<TableFilter>(() => {
     let baseFilters: TableFilter = {
@@ -414,8 +417,8 @@ const useCookieListing = (
         useGenericPersistenceKey: true,
       },
     };
-    //@ts-ignore
-    if (globalThis?.PSAT_EXTENSION) {
+
+    if (isExtension) {
       const { exemptionReason, ...rest } = baseFilters;
 
       baseFilters = {
@@ -482,7 +485,7 @@ const useCookieListing = (
       };
     }
     return baseFilters;
-  }, [clearActivePanelQuery, parsedQuery, tabCookies]);
+  }, [clearActivePanelQuery, parsedQuery, tabCookies, isExtension]);
 
   const searchKeys = useMemo<string[]>(
     () => ['parsedCookie.name', 'parsedCookie.domain'],

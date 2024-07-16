@@ -32,17 +32,18 @@ interface SiteCookiesWithIssuesProps {
 const SiteCookiesWithIssues = ({
   selectedSite,
 }: SiteCookiesWithIssuesProps) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
+  const { tabCookies, path } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
       (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
     ),
+    path: state.path,
   }));
 
   return (
     <CookiesWithIssues
       cookies={tabCookies}
       selectedSite={selectedSite}
-      hostName=""
+      hostName={path}
     />
   );
 };

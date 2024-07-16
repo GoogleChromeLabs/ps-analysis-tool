@@ -189,14 +189,16 @@ const Layout = ({
               return;
             }
 
+            //@ts-ignore
+            const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
+            //@ts-ignore
+            const reportHTMLText = globalThis?.PSAT_REPORT_HTML;
+
             generateSiteMapReportandDownload(
               completeJson,
-              //@ts-ignore
-              globalThis?.PSAT_EXTENSION
-                ? //@ts-ignore
-                  decodeURIComponent(escape(atob(globalThis.PSAT_REPORT_HTML)))
-                : //@ts-ignore
-                  atob(globalThis.PSAT_REPORT_HTML),
+              isExtension
+                ? decodeURIComponent(escape(atob(reportHTMLText)))
+                : atob(reportHTMLText),
               ''
             );
           },
@@ -244,6 +246,7 @@ const Layout = ({
           cookies: Object.values(reshapedCookies).filter(
             (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
           ),
+          path: path,
         },
       };
 

@@ -82,7 +82,9 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   //@ts-ignore
-  const frameStateCreator = globalThis?.PSAT_EXTENSION
+  const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
+
+  const frameStateCreator = isExtension
     ? prepareFrameStatsComponentForExtensionDashboard(analysisData)
     : prepareFrameStatsComponent(tabFrames, tabCookies);
 
@@ -131,8 +133,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     blockedCookieDataMapping,
     showBlockedInfoIcon: true,
     frameStateCreator,
-    //@ts-ignore
-    showFramesSection: Boolean(globalThis?.PSAT_EXTENSION),
+    showFramesSection: isExtension,
     exemptedCookiesDataMapping,
     showBlockedCategory: true,
     url: siteURL,

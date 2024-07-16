@@ -93,15 +93,15 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics.GDPR || 'NA',
     ];
+
     //@ts-ignore
     if (globalThis?.PSAT_EXTENSION) {
       recordsArray.push(
-        //@ts-ignore
         cookie.parsedCookie?.priority || ' ',
-        //@ts-ignore
-        cookie.parsedCookie?.size?.toString()
+        cookie.parsedCookie?.size?.toString() ?? ' '
       );
     }
+
     recordsArray.map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
