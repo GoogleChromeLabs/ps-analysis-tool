@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { fetchDictionary } from './fetchCookieDictionary';
-export { default as getUrlListFromArgs } from './getUrlListFromArgs';
-export { default as generateCSVFiles } from './generateCSVfiles';
-export { default as saveCSVReports } from './saveCSVReports';
-export { default as getUrlsFromSitemap } from './getUrlListFromArgs';
-export { default as askUserInput } from './askUserInput';
-export { default as generatePrefix } from './generatePrefix';
-export * from './validators';
+/**
+ * External dependencies
+ */
+import chalk from 'chalk';
+
+export const redLogger = (message: string) => {
+  console.log(chalk.red(message));
+};
