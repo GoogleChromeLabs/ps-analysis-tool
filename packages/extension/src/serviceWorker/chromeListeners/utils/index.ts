@@ -13,21 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies
- */
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { setupTimeOuts } from './utils';
-
-export const onStartUpListener = async () => {
-  const storage = await chrome.storage.sync.get();
-  setupTimeOuts();
-
-  if (storage?.allowedNumberOfTabs) {
-    synchnorousCookieStore.tabMode = storage.allowedNumberOfTabs;
-  }
-
-  if (Object.keys(storage).includes('isUsingCDP')) {
-    synchnorousCookieStore.globalIsUsingCDP = storage.isUsingCDP;
-  }
-};
+export { default as setupTimeOuts } from './setupTimeOuts';
+export { default as getAndUpdateGlobalVariable } from './getAndUpdateGlobalVariable';

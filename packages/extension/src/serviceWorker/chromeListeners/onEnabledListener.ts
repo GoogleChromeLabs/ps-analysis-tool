@@ -17,8 +17,7 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import attachCDP from '../attachCDP';
-import setupTimeOuts from './setupTimeOuts';
+import { getAndUpdateGlobalVariable, setupTimeOuts } from './utils';
 
 export const onEnabledListener = async (
   details: chrome.management.ExtensionInfo
@@ -31,41 +30,5 @@ export const onEnabledListener = async (
 
   setupTimeOuts();
 
-  await chrome.storage.local.clear();
-  const preSetSettings = await chrome.storage.sync.get();
-
-  synchnorousCookieStore.tabMode =
-    preSetSettings?.allowedNumberOfTabs ?? 'single';
-  synchnorousCookieStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
-
-  if (synchnorousCookieStore.tabMode === 'unlimited') {
-    const allTabs = await chrome.tabs.query({});
-    const targets = await chrome.debugger.getTargets();
-    await Promise.all(
-      allTabs.map(async (tab) => {
-        if (!tab.id || tab.url?.startsWith('chrome://')) {
-          return;
-        }
-
-        synchnorousCookieStore?.addTabData(tab.id);
-
-        if (synchnorousCookieStore.globalIsUsingCDP) {
-          synchnorousCookieStore.initialiseVariablesForNewTab(
-            tab.id.toString()
-          );
-
-          await attachCDP({ tabId: tab.id });
-
-          const currentTab = targets.filter(
-            ({ tabId }) => tabId && tab.id && tabId === tab.id
-          );
-          synchnorousCookieStore?.updateParentChildFrameAssociation(
-            tab.id,
-            currentTab[0].id,
-            '0'
-          );
-        }
-      })
-    );
-  }
+  await getAndUpdateGlobalVariable();
 };

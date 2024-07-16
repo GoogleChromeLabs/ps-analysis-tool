@@ -17,8 +17,8 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { getAndParseNetworkCookies } from '../../utils/getAndParseNetworkCookies';
+import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
+import { getAndParseNetworkCookies } from '../../../utils/getAndParseNetworkCookies';
 
 const setupTimeOuts = () => {
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
