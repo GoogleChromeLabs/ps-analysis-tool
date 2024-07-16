@@ -13,9 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export const LONG_CONSTANTS = [
+  '--url',
+  '--file',
+  '--source-url',
+  '--file',
+  '--number-of-urls',
+  '--display',
+  '--verbose',
+  '--tech',
+  '--out-dir',
+  '--ignore-gdpr',
+  '--wait',
+  '--locale',
+  '--help',
+  '--version',
+];
 
-export { default as CookiesSection } from './cookiesSection';
-export { default as BlockedCookiesSection } from './blockedCookiesSection';
-export { default as ExemptedCookiesSection } from './exemptedCookiesSection';
-export { default as FramesSection } from './framesSection';
-export { default as KnownBreakages } from './knownBreakages';
+export const SHORT_CONSTANTS = [
+  '-u',
+  '-s',
+  '-f',
+  '-n',
+  '-d',
+  '-v',
+  '-t',
+  '-i',
+  '-q',
+  '-c',
+  '-w',
+  '-l',
+  '-h',
+  '-V',
+];

@@ -41,6 +41,9 @@ interface CookiesLandingContainerProps {
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
+  libraryMatchesUrlCount?: {
+    [url: string]: number;
+  };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
 }
@@ -51,7 +54,7 @@ const CookiesLandingContainer = ({
   cookiesWithIssues,
   downloadReport,
   libraryMatches,
-  isSiteMapLandingContainer = false,
+  libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: CookiesLandingContainerProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -92,22 +95,20 @@ const CookiesLandingContainer = ({
           },
         },
       },
-    ];
-
-    if (!isSiteMapLandingContainer) {
-      baseSections.push({
+      {
         name: I18n.getMessage('knownBreakages'),
         link: 'known-breakages',
         panel: {
           Element: KnownBreakages,
           props: {
             libraryMatches: libraryMatches ?? {},
+            libraryMatchesUrlCount,
           },
         },
-      });
-    }
+      },
+    ];
     //@ts-ignore
-    if (globalThis.PSAT_EXTENSION) {
+    if (globalThis?.PSAT_EXTENSION) {
       baseSections.push({
         name: I18n.getMessage('frames'),
         link: 'frames',
@@ -123,8 +124,8 @@ const CookiesLandingContainer = ({
     tabFrames,
     cookiesWithIssues,
     cookieStats,
-    isSiteMapLandingContainer,
     libraryMatches,
+    libraryMatchesUrlCount,
   ]);
 
   const menuData: MenuData = useMemo(

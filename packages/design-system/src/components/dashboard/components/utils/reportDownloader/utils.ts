@@ -203,11 +203,38 @@ function generateSitemapReportObject(
     },
   ];
 
+  const libraryMatchesUrlCount: {
+    [key: string]: number;
+  } = {};
+  const libraryMatches = analysisData.reduce<CompleteJson['libraryMatches']>(
+    (acc, data) => {
+      const _libraryMatches = data.libraryMatches;
+
+      Object.keys(_libraryMatches).forEach((key) => {
+        acc[key] =
+          // @ts-ignore
+          acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
+            ? acc[key]
+            : _libraryMatches[key];
+
+        if (
+          Object.keys(_libraryMatches[key]?.matches ?? {}).length ||
+          Object.keys(_libraryMatches[key]?.domQuerymatches ?? {}).length
+        ) {
+          libraryMatchesUrlCount[key] = (libraryMatchesUrlCount[key] || 0) + 1;
+        }
+      });
+
+      return acc;
+    },
+    {}
+  );
+
   return {
     cookieClassificationDataMapping,
     tabCookies,
     cookiesStatsComponents,
-    libraryDetection: {},
+    libraryMatches,
     tabFrames,
     showInfoIcon: true,
     showHorizontalMatrix: false,
@@ -218,6 +245,7 @@ function generateSitemapReportObject(
     showFramesSection: false,
     showBlockedCategory: true,
     url: sitemapURL,
+    libraryMatchesUrlCount,
     // @ts-ignore - 'typeof globalThis' has no index signature
     translations: globalThis?.PSAT_DATA?.translations,
   };

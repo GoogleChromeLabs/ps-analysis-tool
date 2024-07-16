@@ -18,14 +18,10 @@
  */
 import React from 'react';
 import type { LibraryData } from '@google-psat/common';
-import { LIBRARIES, type AccordionProps } from '@google-psat/library-detection';
+import { COLOR_MAP, CookiesLandingWrapper } from '@google-psat/design-system';
+import { Libraries, type AccordionProps } from '@google-psat/library-detection';
 import { I18n } from '@google-psat/i18n';
 
-/**
- * Internal dependencies
- */
-import { COLOR_MAP } from '../../../../../../../../theme/colors';
-import CookiesLandingWrapper from '../../../../../../../cookiesLanding/cookiesLandingWrapper';
 interface KnownBreakagesProps {
   libraryMatches: LibraryData;
   libraryMatchesUrlCount?: {
@@ -62,7 +58,7 @@ const KnownBreakages = ({
   const result =
     detectedLibraryNames.length > 0 ? (
       <>
-        {LIBRARIES.map((library) => {
+        {Libraries.map((library) => {
           const Component = library.component as React.FC<AccordionProps>;
 
           const matches =
