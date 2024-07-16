@@ -318,7 +318,6 @@ const saveResultsAsHTML = async (
   const cookieAnalysisAndFetchedResourceData =
     await analyzeCookiesUrlsInBatchesAndFetchResources(
       urlsToProcess,
-      //@ts-ignore Fix type.
       LIBRARIES,
       !isHeadful,
       waitTime,
