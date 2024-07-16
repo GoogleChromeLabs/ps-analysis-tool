@@ -49,6 +49,8 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
   const frameCookieDataMap = siteAnalysisData.cookieData;
 
   const cookieMap: Map<string, CookieJsonDataType> = new Map();
+  //@ts-ignore
+  const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
 
   // More than one frame can use one cookie, need to make a map for gettig unique entries.
   Object.entries(frameCookieDataMap).forEach(([, { frameCookies }]) => {
@@ -57,8 +59,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     });
   });
 
-  //@ts-ignore
-  if (globalThis?.PSAT_EXTENSION) {
+  if (isExtension) {
     COOKIES_DATA_HEADER.push(
       () => I18n.getMessage('priority'),
       () => I18n.getMessage('size')
@@ -94,8 +95,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       cookie.analytics.GDPR || 'NA',
     ];
 
-    //@ts-ignore
-    if (globalThis?.PSAT_EXTENSION) {
+    if (isExtension) {
       recordsArray.push(
         cookie.parsedCookie?.priority || ' ',
         cookie.parsedCookie?.size?.toString() ?? ' '
