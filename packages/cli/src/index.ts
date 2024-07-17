@@ -19,13 +19,17 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { existsSync, ensureFile, writeFile } from 'fs-extra';
+import { existsSync, writeFile, ensureDir } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import fs from 'fs';
 import path from 'path';
 import { I18n } from '@google-psat/i18n';
-import { CompleteJson, LibraryData } from '@google-psat/common';
+import {
+  CompleteJson,
+  LibraryData,
+  removeAndAddNewSpinnerText,
+} from '@google-psat/common';
 import {
   analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
@@ -43,60 +47,101 @@ import URL from 'node:url';
 import {
   fetchDictionary,
   getUrlListFromArgs,
-  validateArgs,
   saveCSVReports,
   askUserInput,
   generatePrefix,
+  localeValidator,
+  outDirValidator,
+  filePathValidator,
+  urlValidator,
+  numericValidator,
 } from './utils';
+import { redLogger } from './utils/coloredLoggers';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-const DELAY_TIME = 20000;
+const isProduction = process.env.NODE_ENV === 'production';
 const program = new Command();
 
+const isFromNPMRegistry = !existsSync(
+  path.resolve(__dirname + '../../../extension')
+);
+
 program
+  .name(isFromNPMRegistry ? 'psat' : 'npm run cli')
   .version('0.9.0-2')
-  .description('CLI to test a URL for 3p cookies')
-  .argument('[website-url]', 'The URL of website you want to analyse')
-  .option('-u, --url <value>', 'URL of a site')
-  .option('-s, --sitemap-url <value>', 'URL of a sitemap')
-  .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
+  .usage(
+    isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
+  )
+  .description('CLI to test a URL for 3p cookies.')
   .option(
-    '-p, --sitemap-path <value>',
-    'Path to a sitemap saved in the file system'
+    '-u, --url <url>',
+    'The URL of a single site to analyze',
+    urlValidator
   )
   .option(
-    '-l, --locale <value>',
-    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR'
-  )
-  .option('-ul, --url-limit <value>', 'No of URLs to analyze')
-  .option(
-    '-nh, --no-headless ',
-    'Flag for running puppeteer in non-headless mode'
+    '-s, --source-url <url>',
+    'The URL of a sitemap or CSV to analyze',
+    urlValidator
   )
   .option(
-    '-np, --no-prompts',
-    'Flags for skipping all prompts. Default options will be used'
-  )
-  .option('-nt, --no-technology', 'Flags for skipping technology analysis.')
-  .option(
-    '-d, --out-dir <value>',
-    'Directory path where the analysis data will be stored'
+    '-f, --file <path>',
+    'The path to a local file (CSV or XML sitemap) to analyze',
+    filePathValidator
   )
   .option(
-    '-ab, --accept-banner',
-    'This will accept the GDPR banner if present.'
-  );
+    '-n, --number-of-urls <num>',
+    'Limit the number of URLs to analyze (from sitemap or CSV)',
+    numericValidator
+  )
+  .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
+  .option('-v, --verbose', 'Enables verbose logging', false)
+  .option('-t, --tech', 'Enables technology analysis', false)
+  .option(
+    '-o, --out-dir <path>',
+    'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
+    outDirValidator
+  )
+  .option(
+    '-i, --ignore-gdpr',
+    'Ignore automatically accepting the GDPR banner if present',
+    false
+  )
+  .option('-q, --quiet', 'Skips all prompts; uses default options', false)
+  .option(
+    '-c, --concurrency <num>',
+    'Number of tabs to open in parallel during sitemap or CSV analysis',
+    numericValidator,
+    3
+  )
+  .option(
+    '-w, --wait <num>',
+    'Number of seconds to wait after the page is loaded before generating the report',
+    numericValidator,
+    20000
+  )
+  .option(
+    '-l, --locale <language>',
+    'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR',
+    localeValidator,
+    'en'
+  )
+  .helpOption('-h, --help', 'Display help for command')
+  .addHelpText(
+    'after',
+    '\nTo learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.'
+  )
+  .configureOutput({
+    outputError: (error) => {
+      if (error.startsWith('error')) {
+        redLogger(error.charAt(0).toUpperCase() + error.slice(1));
+      } else {
+        redLogger(error);
+      }
+    },
+  });
 
 program.parse();
-
-const saveResultsAsJSON = async (
-  outDir: string,
-  result: CompleteJson | CompleteJson[]
-) => {
-  await ensureFile(outDir + '/out.json');
-  await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
-};
 
 const saveResultsAsHTML = async (
   outDir: string,
@@ -105,6 +150,8 @@ const saveResultsAsHTML = async (
 ) => {
   let htmlText = '';
   let reportHTML = '';
+
+  await ensureDir(outDir);
 
   if (
     existsSync(
@@ -130,13 +177,15 @@ const saveResultsAsHTML = async (
       'base64'
     );
 
-    fs.copyFileSync(
-      path.resolve(
-        __dirname +
-          '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
-      ),
-      outDir + '/index.js'
-    );
+    if (!isProduction) {
+      fs.copyFileSync(
+        path.resolve(
+          __dirname +
+            '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
+        ),
+        outDir + '/index.js'
+      );
+    }
   } else {
     htmlText = fs.readFileSync(
       path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
@@ -148,10 +197,12 @@ const saveResultsAsHTML = async (
       'base64'
     );
 
-    fs.copyFileSync(
-      path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
-      outDir + '/index.js'
-    );
+    if (!isProduction) {
+      fs.copyFileSync(
+        path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
+        outDir + '/index.js'
+      );
+    }
   }
 
   const messages = I18n.getMessages();
@@ -172,39 +223,49 @@ const saveResultsAsHTML = async (
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
-  fs.writeFile(outDir + '/index.html', buffer, () =>
-    console.log(`Report: ${URL.pathToFileURL(outFileFullDir)}`)
+  writeFile(outDir + '/index.html', buffer, () =>
+    console.log(`\nReport: ${URL.pathToFileURL(outFileFullDir)}`)
   );
 };
-
 // eslint-disable-next-line complexity
 (async () => {
-  const url = program.args?.[0] ?? program.opts().url;
-  const sitemapUrl = program.opts().sitemapUrl;
-  const csvPath = program.opts().csvPath;
-  const sitemapPath = program.opts().sitemapPath;
+  const url = program.processedArgs?.[0] ?? program.opts().url;
+  const verbose = program.opts().verbose;
+  const sitemapUrl = program.opts().sourceUrl;
+  const filePath = program.opts().file;
   const locale = program.opts().locale;
-  const numberOfUrlsInput = program.opts().urlLimit;
-  const isHeadless = Boolean(program.opts().headless);
-  const shouldSkipPrompts = !program.opts().prompts;
-  const shouldSkipTechnologyAnalysis = !program.opts().technology;
+  const numberOfUrlsInput = program.opts().numberOfUrls;
+  const isHeadful = program.opts().display;
+  const shouldSkipPrompts = program.opts().quiet;
+  const shouldDoTechnologyAnalysis = program.opts().tech;
   const outDir = program.opts().outDir;
-  const shouldSkipAcceptBanner = program.opts().acceptBanner;
+  const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
+  const concurrency = program.opts().concurrency;
+  const waitTime = program.opts().wait;
 
-  await validateArgs(
-    url,
-    sitemapUrl,
-    csvPath,
-    sitemapPath,
-    numberOfUrlsInput,
-    outDir,
-    locale
-  );
+  const numArgs: number = [
+    Boolean(url),
+    Boolean(sitemapUrl),
+    Boolean(filePath),
+  ].reduce((acc, arg) => {
+    acc += arg ? 1 : 0;
+    return acc;
+  }, 0);
+
+  if (numArgs !== 1) {
+    console.error(
+      `Please provide one and only one of the following
+        a) URL of a site (-u or --url or default argument)
+        b) URL of a sitemap (-s or --sitemap-url)
+        c) Path to a file (CSV or XML sitemap) (-f or --file)`
+    );
+    process.exit(1);
+  }
 
   const prefix =
     url || sitemapUrl
       ? generatePrefix(url || sitemapUrl)
-      : path.parse(csvPath || sitemapPath).name;
+      : path.parse(filePath).name;
 
   let outputDir;
 
@@ -218,17 +279,11 @@ const saveResultsAsHTML = async (
 
   const spinnies = new Spinnies();
 
-  const urls = await getUrlListFromArgs(
-    url,
-    sitemapUrl,
-    csvPath,
-    sitemapPath,
-    spinnies
-  );
+  const urls = await getUrlListFromArgs(url, spinnies, sitemapUrl, filePath);
 
   let urlsToProcess: string[] = [];
 
-  if (sitemapUrl || csvPath || sitemapPath) {
+  if (sitemapUrl || filePath) {
     let numberOfUrls: number | null = null;
     let userInput: string | null = null;
 
@@ -242,10 +297,10 @@ const saveResultsAsHTML = async (
           ? urls.length
           : parseInt(userInput as string);
     } else if (numberOfUrlsInput) {
-      console.log(`Analysing ${numberOfUrlsInput} urls.`);
+      console.log(`Analyzing ${numberOfUrlsInput} urls`);
       numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
-      console.log(`Analysing all ${urls.length} urls.`);
+      console.log(`Analyzing all ${urls.length} urls`);
       numberOfUrls = urls.length;
     }
 
@@ -257,7 +312,7 @@ const saveResultsAsHTML = async (
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analysing cookies on first site visit...',
+    text: 'Analyzing cookies on first site visit',
   });
 
   const cookieAnalysisAndFetchedResourceData =
@@ -265,34 +320,41 @@ const saveResultsAsHTML = async (
       urlsToProcess,
       //@ts-ignore Fix type.
       Libraries,
-      isHeadless,
-      DELAY_TIME,
+      !isHeadful,
+      waitTime,
       cookieDictionary,
-      3,
-      urlsToProcess.length !== 1 ? spinnies : undefined,
-      shouldSkipAcceptBanner
+      concurrency,
+      spinnies,
+      shouldSkipAcceptBanner,
+      verbose,
+      sitemapUrl || filePath ? 4 : 3
     );
 
-  spinnies.succeed('cookie-spinner', {
-    text: 'Done analyzing cookies!',
-  });
+  removeAndAddNewSpinnerText(
+    spinnies,
+    'cookie-spinner',
+    'Done analyzing cookies!'
+  );
 
   let technologyAnalysisData: any = null;
 
-  if (!shouldSkipTechnologyAnalysis) {
+  if (shouldDoTechnologyAnalysis) {
     spinnies.add('technology-spinner', {
-      text: 'Analysing technologies',
+      text: 'Analyzing technologies',
     });
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
       urlsToProcess,
-      3,
-      urlsToProcess.length !== 1 ? spinnies : undefined
+      concurrency,
+      spinnies,
+      sitemapUrl || filePath ? 4 : 3
     );
 
-    spinnies.succeed('technology-spinner', {
-      text: 'Done analyzing technologies!',
-    });
+    removeAndAddNewSpinnerText(
+      spinnies,
+      'technology-spinner',
+      'Done analyzing technologies!'
+    );
   }
 
   const result = urlsToProcess.map((_url, ind) => {
@@ -315,7 +377,7 @@ const saveResultsAsHTML = async (
 
   I18n.loadCLIMessagesData(locale);
 
-  const isSiteMap = sitemapUrl || csvPath || sitemapPath ? true : false;
+  const isSiteMap = sitemapUrl || filePath ? true : false;
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
@@ -323,11 +385,23 @@ const saveResultsAsHTML = async (
     process.exit(0);
   }
 
-  await saveResultsAsJSON(outputDir, result);
   await saveResultsAsHTML(outputDir, result, isSiteMap);
 })().catch((error) => {
-  console.log('Some error occured while analysing the website.');
-  console.log('For more information check the stack trace below:\n');
-  console.log(error);
+  const spinnies = new Spinnies();
+  spinnies.add('error-line-1', {
+    text: 'Some error occured while analyzing the website.',
+    status: 'non-spinnable',
+    color: 'red',
+  });
+  spinnies.add('error-line-2', {
+    text: 'For more information check the stack trace below:\n',
+    status: 'non-spinnable',
+    color: 'red',
+  });
+  spinnies.add('error-line-3', {
+    text: `${error}`,
+    status: 'non-spinnable',
+    color: 'red',
+  });
   process.exit(process?.exitCode ?? 0);
 });

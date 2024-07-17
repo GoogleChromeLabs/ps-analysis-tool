@@ -17,7 +17,6 @@
  * External dependencies
  */
 import React from 'react';
-import { LibraryDetection } from '@google-psat/library-detection';
 import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
 
 /**
@@ -29,6 +28,7 @@ import {
   BlockedCookiesSection,
   FramesSection,
   ExemptedCookiesSection,
+  KnownBreakages,
 } from './components';
 import { useData } from './stateProviders/data';
 
@@ -48,7 +48,10 @@ const App = () => {
       <ExemptedCookiesSection />
       {data?.libraryMatches && (
         <div className="text-xs">
-          <LibraryDetection />
+          <KnownBreakages
+            libraryMatches={data.libraryMatches}
+            libraryMatchesUrlCount={data.libraryMatchesUrlCount}
+          />
         </div>
       )}
       {data?.showFramesSection && <FramesSection />}

@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const sharedConfig = require('./shared.jest.config.cjs');
 
-export { default as CookiesSection } from './cookiesSection';
-export { default as BlockedCookiesSection } from './blockedCookiesSection';
-export { default as ExemptedCookiesSection } from './exemptedCookiesSection';
-export { default as FramesSection } from './framesSection';
-export { default as KnownBreakages } from './knownBreakages';
+module.exports = {
+  ...sharedConfig,
+  testMatch: [
+    '**/cli/**/e2e-tests/**/*.{js,jsx,ts,tsx}',
+    '!**/dist/**/*.{js,jsx,ts,tsx}',
+    '!**/dist-types/**/*.{js,jsx,ts,tsx}',
+  ],
+};
