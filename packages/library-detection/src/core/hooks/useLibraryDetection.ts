@@ -16,12 +16,13 @@
 /**
  * External dependencies.
  */
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   executeTaskInDevToolWorker,
   LIBRARY_DETECTION_WORKER_TASK,
 } from '@google-psat/common';
-
+import PQueue from 'p-queue';
+import { diff } from 'deep-object-diff';
 /**
  * Internal dependencies.
  */
@@ -32,7 +33,6 @@ import {
 import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import LIBRARIES from '../../config';
-import { diff } from 'deep-object-diff';
 
 // The delay after the page load, because some scripts arrive right after the page load.
 const LOADING_DELAY = 2000;
@@ -41,6 +41,8 @@ const LOADING_DELAY = 2000;
  * Custom hook that handles the library detection logic.
  */
 const useLibraryDetection = () => {
+  const PROMISE_QUEUE = useMemo(() => new PQueue({ concurrency: 10 }), []);
+
   const {
     isCurrentTabLoading,
     isInitialDataUpdated,
@@ -115,10 +117,14 @@ const useLibraryDetection = () => {
 
   const attachListener = useCallback(() => {
     removeListener();
-    chrome.devtools.inspectedWindow.onResourceAdded.addListener(
-      listenerCallback
-    );
-  }, [listenerCallback, removeListener]);
+    chrome.devtools.inspectedWindow.onResourceAdded.addListener((resource) => {
+      (async () => {
+        await PROMISE_QUEUE.add(async () => {
+          await listenerCallback(resource);
+        });
+      })();
+    });
+  }, [PROMISE_QUEUE, listenerCallback, removeListener]);
 
   const updateInitialData = useCallback(async () => {
     if (isInitialDataUpdated) {
