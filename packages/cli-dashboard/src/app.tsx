@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
@@ -51,13 +51,6 @@ const App = () => {
     [key: string]: LibraryData;
   } | null>(null);
 
-  const type = useMemo(() => {
-    // @ts-ignore
-    return globalThis?.PSAT_DATA?.type === 'sitemap'
-      ? DisplayType.SITEMAP
-      : DisplayType.SITE;
-  }, []);
-
   useEffect(() => {
     const bodyTag = document.querySelector('body');
 
@@ -68,43 +61,58 @@ const App = () => {
     bodyTag.style.fontSize = '75%';
   }, []);
 
+  const [type, setType] = useState<DisplayType>(DisplayType.SITE);
+
   useEffect(() => {
     (async () => {
       if (process.env.NODE_ENV === 'development') {
         const module = await import('./dummyData/PSAT_DATA.js');
+        // @ts-ignore
         globalThis.PSAT_DATA = module.default;
       }
 
-      sessionStorage.clear();
-      //@ts-ignore
-      const messages = globalThis?.PSAT_DATA?.translations;
-      I18n.initMessages(messages);
-
-      // @ts-ignore
-      const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
-      setCompleteJsonReport(data);
-
-      let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [],
-        _libraryMatches: {
-          [key: string]: LibraryData;
-        } = {};
-
-      if (type === DisplayType.SITEMAP) {
-        const extractedData = extractReportData(data);
-
-        _libraryMatches = extractedData.consolidatedLibraryMatches;
-        setLandingPageCookies(extractedData.landingPageCookies);
-      } else {
-        _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
-        _technologies = data[0].technologyData;
-        _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
-      }
-
-      setCookies(_cookies);
-      setTechnologies(_technologies);
-      setLibraryMatches(_libraryMatches);
+      setType(
+        globalThis?.PSAT_DATA?.type === 'sitemap'
+          ? DisplayType.SITEMAP
+          : DisplayType.SITE
+      );
     })();
+  }, []);
+
+  useEffect(() => {
+    if (!globalThis?.PSAT_DATA) {
+      return;
+    }
+
+    sessionStorage.clear();
+    //@ts-ignore
+    const messages = globalThis?.PSAT_DATA?.translations;
+    I18n.initMessages(messages);
+
+    // @ts-ignore
+    const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
+    setCompleteJsonReport(data);
+
+    let _cookies: CookieFrameStorageType = {},
+      _technologies: TechnologyData[] = [],
+      _libraryMatches: {
+        [key: string]: LibraryData;
+      } = {};
+
+    if (type === DisplayType.SITEMAP) {
+      const extractedData = extractReportData(data);
+
+      _libraryMatches = extractedData.consolidatedLibraryMatches;
+      setLandingPageCookies(extractedData.landingPageCookies);
+    } else {
+      _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+      _technologies = data[0].technologyData;
+      _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
+    }
+
+    setCookies(_cookies);
+    setTechnologies(_technologies);
+    setLibraryMatches(_libraryMatches);
   }, [type]);
 
   if (type === DisplayType.SITEMAP) {
