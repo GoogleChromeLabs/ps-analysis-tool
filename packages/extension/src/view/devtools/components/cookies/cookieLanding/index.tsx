@@ -29,7 +29,6 @@ import {
   FilterIcon,
   FiltersSidebar,
   calculateBlockedReasonsFilterValues,
-  calculateDynamicFilterValues,
   calculateExemptionReason,
   evaluateStaticFilterValues,
   useFiltering,
@@ -58,12 +57,24 @@ const AssembledCookiesLanding = () => {
         title: I18n.getMessage('category'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateDynamicFilterValues(
+        filterValues: evaluateStaticFilterValues(
+          {
+            [I18n.getMessage('analytics')]: {
+              selected: false,
+            },
+            [I18n.getMessage('functional')]: {
+              selected: false,
+            },
+            [I18n.getMessage('marketing')]: {
+              selected: false,
+            },
+            [I18n.getMessage('uncategorized')]: {
+              selected: false,
+            },
+          },
           'analytics.category',
-          cookies,
-          [],
-          noop,
-          true
+          {},
+          noop
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
