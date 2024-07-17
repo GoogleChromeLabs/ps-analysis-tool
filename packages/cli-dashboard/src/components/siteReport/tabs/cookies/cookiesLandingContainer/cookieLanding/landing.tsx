@@ -57,7 +57,10 @@ const Landing = ({
   libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: LandingProps) => {
-  const cookieStats = prepareCookiesCount(tabCookies);
+  const cookieStats = useMemo(
+    () => prepareCookiesCount(tabCookies),
+    [tabCookies]
+  );
 
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const baseSections: Array<CookiesLandingSection> = [

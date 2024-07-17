@@ -380,7 +380,8 @@ const useCookieListing = (
         enableSelectAllOption: true,
         isSelectAllOptionSelected: evaluateSelectAllOption(
           'exemptionReason',
-          parsedQuery
+          parsedQuery,
+          clearActivePanelQuery
         ),
         filterValues: calculateExemptionReason(
           tabCookies,

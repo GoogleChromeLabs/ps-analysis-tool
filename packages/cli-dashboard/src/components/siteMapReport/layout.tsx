@@ -34,6 +34,7 @@ import {
   type CompleteJson,
   type LibraryData,
   type TabCookies,
+  noop,
 } from '@google-psat/common';
 
 /**
@@ -222,7 +223,7 @@ const Layout = ({
                 path,
                 libraryMatches: libraryMatches ? libraryMatches[site] : {},
                 query,
-                clearQuery,
+                clearQuery: query ? clearQuery : noop,
               },
             },
             children: {},

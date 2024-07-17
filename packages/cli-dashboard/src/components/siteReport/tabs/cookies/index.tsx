@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import React, { useMemo, useCallback, useState } from 'react';
-import { type TabCookies, type TabFrames } from '@google-psat/common';
+import { noop, type TabCookies, type TabFrames } from '@google-psat/common';
+import type { TableFilter } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -23,14 +24,20 @@ import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
 import { generateSiteReportandDownload } from '../../../utils/reportDownloader';
 import AssembledCookiesLanding from './cookiesLandingContainer';
-import type { TableFilter } from '@google-psat/design-system';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
   selectedSite?: string | null;
+  query?: string;
+  clearQuery?: () => void;
 }
 
-const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
+const CookiesTab = ({
+  selectedFrameUrl,
+  selectedSite,
+  query = '',
+  clearQuery = noop,
+}: CookiesTabProps) => {
   const { tabCookies, completeJson, libraryMatches } = useContentStore(
     ({ state }) => ({
       tabCookies: state.tabCookies,
@@ -97,6 +104,8 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
             downloadReport={downloadReport}
             setAppliedFilters={setAppliedFilters}
             setFilteredData={setFilteredData}
+            query={query}
+            clearQuery={clearQuery}
           />
         </div>
       )}

@@ -33,6 +33,7 @@ import {
   FiltersSidebar,
   calculateBlockedReasonsFilterValues,
   calculateExemptionReason,
+  evaluateSelectAllOption,
   evaluateStaticFilterValues,
   useFiltering,
   type InfoType,
@@ -57,6 +58,8 @@ interface AssembledCookiesLandingProps {
   };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
+  query?: string;
+  clearQuery?: () => void;
 }
 
 const AssembledCookiesLanding = ({
@@ -68,8 +71,18 @@ const AssembledCookiesLanding = ({
   libraryMatches,
   libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
+  query = '',
+  clearQuery = noop,
 }: AssembledCookiesLandingProps) => {
   const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
+
+  const parsedQuery = useMemo(() => {
+    if (query) {
+      return JSON.parse(query);
+    }
+
+    return {};
+  }, [query]);
 
   const filters = useMemo<TableFilter>(
     () => ({
@@ -93,8 +106,8 @@ const AssembledCookiesLanding = ({
             },
           },
           'analytics.category',
-          {},
-          noop
+          parsedQuery,
+          clearQuery
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -120,8 +133,8 @@ const AssembledCookiesLanding = ({
             },
           },
           'isFirstParty',
-          [],
-          noop
+          parsedQuery,
+          clearQuery
         ),
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -133,7 +146,17 @@ const AssembledCookiesLanding = ({
         title: I18n.getMessage('blockedReasons'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateBlockedReasonsFilterValues(cookies, [], noop),
+        enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'blockedReasons',
+          parsedQuery,
+          clearQuery
+        ),
+        filterValues: calculateBlockedReasonsFilterValues(
+          cookies,
+          parsedQuery?.filter?.blockedReasons,
+          clearQuery
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -145,7 +168,17 @@ const AssembledCookiesLanding = ({
         title: I18n.getMessage('exemptionReasons'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateExemptionReason(cookies, noop, []),
+        enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'exemptionReason',
+          parsedQuery,
+          clearQuery
+        ),
+        filterValues: calculateExemptionReason(
+          cookies,
+          clearQuery,
+          parsedQuery?.filter?.exemptionReason
+        ),
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
           return val === filterValue;
@@ -153,7 +186,7 @@ const AssembledCookiesLanding = ({
         useGenericPersistenceKey: true,
       },
     }),
-    [cookies]
+    [clearQuery, cookies, parsedQuery]
   );
 
   const filter = useFiltering(
