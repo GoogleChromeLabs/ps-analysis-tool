@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   prepareCookieStatsComponents,
   useFiltersMapping,
@@ -25,31 +25,58 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
   InfoIcon,
+  prepareCookiesCount,
 } from '@google-psat/design-system';
-import type { CookiesCount, TabFrames, DataMapping } from '@google-psat/common';
+import {
+  type TabFrames,
+  type DataMapping,
+  getLegendDescription,
+  type TabCookies,
+} from '@google-psat/common';
 
 interface ExemptedCookiesSectionProps {
-  cookieStats: CookiesCount;
+  tabCookies: TabCookies | null;
   tabFrames: TabFrames | null;
 }
 
 const ExemptedCookiesSection = ({
-  cookieStats,
+  tabCookies,
   tabFrames,
 }: ExemptedCookiesSectionProps) => {
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+  const cookieStats = useMemo(
+    () => prepareCookiesCount(tabCookies),
+    [tabCookies]
+  );
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+
+  const selectTabFrame = useCallback(
+    (exemptionReason: string) => {
+      const cookie = Object.values(tabCookies || {}).find((_cookie) => {
+        // @ts-ignore - exemptionReasons is a string array
+
+        if (_cookie.exemptionReason === exemptionReason) {
+          return true;
+        }
+
+        return false;
+      });
+
+      return cookie?.pageUrl || '';
+    },
+    [tabCookies]
+  );
 
   const dataComponents: MatrixComponentProps[] =
     cookiesStatsComponents.exemptedCookiesLegend.map((component) => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description: legendDescription,
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) => {
-          selectedItemUpdater(title, 'exemptionReason');
+          selectedItemUpdater(title, 'exemptionReason', selectTabFrame(title));
         },
       };
     });

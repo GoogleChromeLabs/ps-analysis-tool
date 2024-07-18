@@ -22,7 +22,6 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
-  prepareCookiesCount,
 } from '@google-psat/design-system';
 import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
@@ -57,11 +56,6 @@ const Landing = ({
   libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: LandingProps) => {
-  const cookieStats = useMemo(
-    () => prepareCookiesCount(tabCookies),
-    [tabCookies]
-  );
-
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const baseSections: Array<CookiesLandingSection> = [
       {
@@ -93,8 +87,8 @@ const Landing = ({
         panel: {
           Element: ExemptedCookiesSection,
           props: {
-            cookieStats,
             tabFrames,
+            tabCookies,
           },
         },
       },
@@ -113,7 +107,6 @@ const Landing = ({
 
     return baseSections;
   }, [
-    cookieStats,
     cookiesWithIssues,
     libraryMatches,
     libraryMatchesUrlCount,

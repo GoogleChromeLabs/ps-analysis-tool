@@ -265,7 +265,7 @@ export default {
               },
               isBlocked: false,
               blockedReasons: [],
-              exemptionReason: 'None',
+              exemptionReason: 'UserSetting',
               url: 'https://www.math-only-math.com/favicon.ico',
               headerType: 'request',
               analytics: {
@@ -319,7 +319,7 @@ export default {
               },
               isBlocked: false,
               blockedReasons: [],
-              exemptionReason: 'None',
+              exemptionReason: 'TPCDMetadata',
               url: 'https://www.math-only-math.com/favicon.ico',
               headerType: 'request',
               analytics: {
@@ -1377,7 +1377,7 @@ export default {
               },
               isBlocked: true,
               blockedReasons: ['SameSiteUnspecifiedTreatedAsLax'],
-              exemptionReason: 'None',
+              exemptionReason: 'TPCDDeprecationTrial',
               url: 'https://jetpack.com/wp-content/uploads/2013/11/screen-shot-2015-02-20-at-12-19-40.png?w=350&h=200&crop=1',
               headerType: 'request',
               analytics: {
