@@ -128,9 +128,9 @@ const report = {
   ...commonConfig,
 };
 
-const dashboard = {
+const dashboardReport = {
   entry: {
-    index: './src/view/devtools/dashboard.tsx',
+    index: './src/view/report/dashboard.tsx',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension/devtools'),
@@ -143,7 +143,7 @@ const dashboard = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './src/view/devtools/dashboard.html',
+      template: './src/view/report/dashboard.html',
       filename: 'dashboard.html',
       inject: 'body',
     }),
@@ -152,4 +152,4 @@ const dashboard = {
   ...commonConfig,
 };
 
-module.exports = [root, devTools, popup, report, dashboard];
+module.exports = [root, devTools, popup, report, dashboardReport];
