@@ -39,8 +39,8 @@
   },
   "ignorePatterns": [
     "**/node_modules/**",
-    "dist/**",
-    "dist-types/**",
+    "**/dist/**",
+    "**/dist-types/**",
     "out/**",
     "data/**",
     "coverage/**"

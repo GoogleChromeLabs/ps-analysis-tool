@@ -67,6 +67,7 @@ export type ResourceTreeItem = {
 export type AccordionProps = {
   matches?: DetectedSignature[];
   domQueryMatches?: string[] | null;
+  urlCount?: number;
 };
 
 export type DomainPaths = {

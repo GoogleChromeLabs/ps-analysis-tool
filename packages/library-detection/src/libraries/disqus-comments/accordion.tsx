@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -24,9 +25,11 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { DISQUS_COMMENTS_HELP_URL } from './constants';
-import { I18n } from '@google-psat/i18n';
 
-const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
+const DisqusCommentsAccordion = ({
+  domQueryMatches,
+  urlCount,
+}: AccordionProps) => {
   if (!domQueryMatches) {
     return null;
   }
@@ -42,6 +45,7 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
       title={I18n.getMessage('disqusComments')}
       isLoading={false}
       featuresText=""
+      urlCount={urlCount}
     >
       <DetectionMessage
         libraryName={I18n.getMessage('disqusComments')}

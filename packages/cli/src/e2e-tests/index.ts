@@ -13,13 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import coffee from 'coffee';
+import fs from 'fs';
+import path from 'path';
+import { pathToFileURL } from 'url';
 
-import getUrlListFromArgs from '../getUrlListFromArgs';
+describe('CLI E2E Test', () => {
+  const cli = require.resolve('../../dist/main.js');
 
-describe('getUrlListFromArgs', () => {
-  it('parses a url', async () => {
-    expect(
-      await getUrlListFromArgs('https://example.com', '', '', '')
-    ).toStrictEqual(['https://example.com']);
+  afterAll(() => {
+    fs.rmSync(path.join(process.cwd(), '/out/bbc-com'), { recursive: true });
   });
+
+  it('Should run site analysis', () => {
+    return coffee
+      .fork(cli, ['-u https://bbc.com', '-v'])
+      .debug()
+      .expect(
+        'stdout',
+        `Report: ${pathToFileURL(
+          path.join(process.cwd(), '/out/bbc-com/index.html')
+        )}\n`
+      )
+      .end();
+  }, 60000);
 });
