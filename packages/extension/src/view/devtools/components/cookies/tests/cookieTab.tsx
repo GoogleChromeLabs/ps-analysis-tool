@@ -82,7 +82,7 @@ describe('CookieTab', () => {
                 40245632: {
                   selectedSidebarItem: 'privacySandbox#cookies',
                   tablePersistentSettingsStore: {
-                    'cookieListing#https://edition.cnn.com/': {
+                    'cookiesListing#https://edition.cnn.com/': {
                       sortBy: 'parsedCookie.name',
                       sortOrder: 'asc',
                     },

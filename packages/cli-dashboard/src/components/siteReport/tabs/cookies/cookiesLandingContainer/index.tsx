@@ -31,6 +31,7 @@ import {
   ChipsBar,
   FilterIcon,
   FiltersSidebar,
+  useGlobalFiltering,
   type TableFilter,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
@@ -39,7 +40,6 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import Landing from './cookieLanding/landing';
-import useGlobalFiltering from '../../../../../hooks/useGlobalFiltering';
 
 interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;

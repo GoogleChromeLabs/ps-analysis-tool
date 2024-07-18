@@ -201,7 +201,7 @@ describe('useCookieListing', () => {
       'parsedCookie.domain',
     ]);
 
-    expect(result.current.tablePersistentSettingsKey).toBe('cookieListing');
+    expect(result.current.tablePersistentSettingsKey).toBe('cookiesListing');
 
     mockUseCookieStore.mockReturnValue({
       cookies: [],
@@ -211,7 +211,7 @@ describe('useCookieListing', () => {
     rerender();
 
     expect(result.current.tablePersistentSettingsKey).toBe(
-      'cookieListing#https://edition.cnn.com/'
+      'cookiesListing#https://edition.cnn.com/'
     );
   });
 });

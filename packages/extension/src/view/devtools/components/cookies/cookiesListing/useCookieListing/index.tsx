@@ -540,10 +540,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
 
   const tablePersistentSettingsKey = useMemo(() => {
     if (!selectedFrame) {
-      return 'cookieListing';
+      return 'cookiesListing';
     }
 
-    return `cookieListing#${selectedFrame}`;
+    return `cookiesListing#${selectedFrame}`;
   }, [selectedFrame]);
 
   const extraInterfaceToTopBar = useCallback(() => {

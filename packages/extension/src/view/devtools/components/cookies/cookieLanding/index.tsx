@@ -28,12 +28,7 @@ import {
   ChipsBar,
   FilterIcon,
   FiltersSidebar,
-  calculateBlockedReasonsFilterValues,
-  calculateExemptionReason,
-  evaluateStaticFilterValues,
-  useFiltering,
-  type InfoType,
-  type TableFilter,
+  useGlobalFiltering,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -51,97 +46,7 @@ const AssembledCookiesLanding = () => {
 
   const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
 
-  const filters = useMemo<TableFilter>(
-    () => ({
-      'analytics.category': {
-        title: I18n.getMessage('category'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: evaluateStaticFilterValues(
-          {
-            [I18n.getMessage('analytics')]: {
-              selected: false,
-            },
-            [I18n.getMessage('functional')]: {
-              selected: false,
-            },
-            [I18n.getMessage('marketing')]: {
-              selected: false,
-            },
-            [I18n.getMessage('uncategorized')]: {
-              selected: false,
-            },
-          },
-          'analytics.category',
-          {},
-          noop
-        ),
-        sortValues: true,
-        useGenericPersistenceKey: true,
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string;
-          return (
-            I18n.getMessage(val?.toLowerCase() || 'uncategorized') ===
-            filterValue
-          );
-        },
-      },
-      isFirstParty: {
-        title: I18n.getMessage('scope'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: evaluateStaticFilterValues(
-          {
-            [I18n.getMessage('firstParty')]: {
-              selected: false,
-            },
-            [I18n.getMessage('thirdParty')]: {
-              selected: false,
-            },
-          },
-          'isFirstParty',
-          [],
-          noop
-        ),
-        useGenericPersistenceKey: true,
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = Boolean(value);
-          return val === (filterValue === I18n.getMessage('firstParty'));
-        },
-      },
-      blockedReasons: {
-        title: I18n.getMessage('blockedReasons'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: calculateBlockedReasonsFilterValues(cookies, [], noop),
-        sortValues: true,
-        useGenericPersistenceKey: true,
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string[];
-          return val?.includes(filterValue);
-        },
-      },
-      exemptionReason: {
-        title: I18n.getMessage('exemptionReasons'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: calculateExemptionReason(cookies, noop, []),
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string;
-          return val === filterValue;
-        },
-        useGenericPersistenceKey: true,
-      },
-    }),
-    [cookies]
-  );
-
-  const filter = useFiltering(
-    cookies,
-    filters,
-    'cookieListing',
-    'cookieListing'
-  );
+  const filter = useGlobalFiltering(cookies, '', noop);
 
   const cookiesByKey = useMemo(() => {
     return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
