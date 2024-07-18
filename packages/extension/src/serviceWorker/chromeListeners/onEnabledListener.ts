@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,18 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { setupIntervals } from './utils';
+import { updateGlobalVariableAndAttachCDP, setupIntervals } from './utils';
 
-export const onStartUpListener = async () => {
-  const storage = await chrome.storage.sync.get();
+export const onEnabledListener = async (
+  details: chrome.management.ExtensionInfo
+) => {
+  if (chrome.runtime.id !== details.id) {
+    return;
+  }
+
+  synchnorousCookieStore?.clear();
+
   setupIntervals();
 
-  if (storage?.allowedNumberOfTabs) {
-    synchnorousCookieStore.tabMode = storage.allowedNumberOfTabs;
-  }
-
-  if (Object.keys(storage).includes('isUsingCDP')) {
-    synchnorousCookieStore.globalIsUsingCDP = storage.isUsingCDP;
-  }
+  await updateGlobalVariableAndAttachCDP();
 };
