@@ -36,7 +36,7 @@ async function getUrlsFromSitemap(sitemapURL: string): Promise<Array<string>> {
     const { sites } = await siteMapper.fetch();
     urls = sites;
   } catch (error) {
-    console.log('Error: Error parsing sitemap');
+    throw new Error();
   }
 
   return urls;

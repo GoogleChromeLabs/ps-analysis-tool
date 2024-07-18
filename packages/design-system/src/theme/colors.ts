@@ -215,4 +215,32 @@ export const COLOR_MAP: {
     color: '#840032',
     className: 'text-maroon-claret',
   },
+  gsiV2: {
+    color: '#25ACAD',
+    className: 'text-greenland-green',
+  },
+  gis: {
+    color: '#C5A06A',
+    className: 'text-good-life',
+  },
+  'fb-comments': {
+    color: '#AF7AA3',
+    className: 'text-victorian-violet',
+  },
+  'fb-likes': {
+    color: '#F54021',
+    className: 'text-strawberry-spinach-red',
+  },
+  'disqus-comments': {
+    color: '#A98307',
+    className: 'text-chestnut-gold',
+  },
+  'jetpack-comments': {
+    color: '#7D8471',
+    className: 'text-battle-dress',
+  },
+  'jetpack-likes': {
+    color: '#C5A06A',
+    className: 'text-good-life',
+  },
 };
