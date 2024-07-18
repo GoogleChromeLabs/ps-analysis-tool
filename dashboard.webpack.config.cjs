@@ -60,6 +60,7 @@ const dashboard = {
   output: {
     path: path.resolve(__dirname, './packages/cli-dashboard/dist'),
     filename: '[name].js',
+    publicPath: '/',
   },
   plugins: [
     new WebpackBar({
