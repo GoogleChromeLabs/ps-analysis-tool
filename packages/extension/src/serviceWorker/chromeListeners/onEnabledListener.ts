@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as Attribution } from './attribution';
-export { default as Topics } from './topics';
-export { default as PrivateAdvertising } from './privateAdvertising';
-export { default as ProtectedAudience } from './protectedAudience';
-export { default as PrivateAggregation } from './privateAggregation';
+/**
+ * Internal dependencies
+ */
+import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import { updateGlobalVariableAndAttachCDP, setupIntervals } from './utils';
+
+export const onEnabledListener = async (
+  details: chrome.management.ExtensionInfo
+) => {
+  if (chrome.runtime.id !== details.id) {
+    return;
+  }
+
+  synchnorousCookieStore?.clear();
+
+  setupIntervals();
+
+  await updateGlobalVariableAndAttachCDP();
+};
