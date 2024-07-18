@@ -13,10 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components';
-export * from './worker';
-export * from './worker/constants';
-export * from './core/stateProvider';
-export { default as detectMatchingSignatures } from './core/detectMatchingSignatures';
-export { default as LIBRARIES } from './config';
-export * from './types';
+
+/**
+ * External dependencies
+ */
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { Provider as TablePersistentSettingsProvider } from '@google-psat/design-system';
+
+/**
+ * Internal dependencies
+ */
+import App from './dashboardApp';
+
+const root = document.getElementById('root');
+
+if (root) {
+  createRoot(root).render(
+    <TablePersistentSettingsProvider>
+      <App />
+    </TablePersistentSettingsProvider>
+  );
+}

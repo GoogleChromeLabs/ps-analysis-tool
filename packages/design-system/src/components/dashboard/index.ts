@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components';
-export * from './worker';
-export * from './worker/constants';
-export * from './core/stateProvider';
-export { default as detectMatchingSignatures } from './core/detectMatchingSignatures';
-export { default as LIBRARIES } from './config';
-export * from './types';
+
+export { default as SiteReport } from './components/siteReport';
+export { default as SiteMapReport } from './components/siteMapReport';
+export { default as extractReportData } from './components/utils/extractReportData';
+export { default as extractCookies } from './components/utils/extractCookies';

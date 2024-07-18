@@ -13,10 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components';
-export * from './worker';
-export * from './worker/constants';
-export * from './core/stateProvider';
-export { default as detectMatchingSignatures } from './core/detectMatchingSignatures';
-export { default as LIBRARIES } from './config';
-export * from './types';
+
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import type { CookieTableData } from '@google-psat/common';
+
+/**
+ * Internal dependencies.
+ */
+import CookiesWithIssues from '../cookiesWithIssues';
+
+interface SiteMapCookiesWithIssuesProps {
+  cookies: CookieTableData[];
+  path: string;
+}
+
+const SiteMapCookiesWithIssues = ({
+  cookies,
+  path,
+}: SiteMapCookiesWithIssuesProps) => {
+  return (
+    <CookiesWithIssues cookies={cookies} selectedSite={null} hostName={path} />
+  );
+};
+
+export default SiteMapCookiesWithIssues;

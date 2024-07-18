@@ -16,49 +16,27 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
   LibraryData,
-  TechnologyData,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import {
-  extractReportData,
-  extractCookies,
-  SiteMapReport,
-  SiteReport,
-} from '@google-psat/design-system';
+import { extractCookies, SiteReport } from '@google-psat/design-system';
 
 /**
  * Internal dependencies
  */
 import './app.css';
 
-enum DisplayType {
-  SITEMAP,
-  SITE,
-}
-
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
-  const [landingPageCookies, setLandingPageCookies] =
-    useState<CookieFrameStorageType>({});
-  const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
-  const [completeJsonReport, setCompleteJsonReport] = useState<
-    CompleteJson[] | null
-  >(null);
+  const [completeJsonReport, setCompleteJsonReport] =
+    useState<CompleteJson | null>(null);
   const [libraryMatches, setLibraryMatches] = useState<{
     [key: string]: LibraryData;
   } | null>(null);
-
-  const type = useMemo(() => {
-    // @ts-ignore
-    return globalThis?.PSAT_DATA?.type === 'sitemap'
-      ? DisplayType.SITEMAP
-      : DisplayType.SITE;
-  }, []);
 
   useEffect(() => {
     const bodyTag = document.querySelector('body');
@@ -77,49 +55,31 @@ const App = () => {
     I18n.initMessages(messages);
 
     // @ts-ignore
-    const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
+    const data: CompleteJson = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);
 
     let _cookies: CookieFrameStorageType = {},
-      _technologies: TechnologyData[] = [],
       _libraryMatches: {
         [key: string]: LibraryData;
       } = {};
 
-    if (type === DisplayType.SITEMAP) {
-      const extractedData = extractReportData(data);
-
-      _libraryMatches = extractedData.consolidatedLibraryMatches;
-      setLandingPageCookies(extractedData.landingPageCookies);
-    } else {
-      _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
-      _technologies = data[0].technologyData;
-      _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
-    }
+    _cookies = extractCookies(data.cookieData, data.pageUrl, true);
+    _libraryMatches = { [data.pageUrl]: data.libraryMatches };
 
     setCookies(_cookies);
-    setTechnologies(_technologies);
     setLibraryMatches(_libraryMatches);
-  }, [type]);
+  }, []);
 
-  if (type === DisplayType.SITEMAP) {
-    return (
-      <SiteMapReport
-        landingPageCookies={landingPageCookies}
-        completeJson={completeJsonReport}
-        // @ts-ignore
-        path={globalThis?.PSAT_DATA?.selectedSite}
-        libraryMatches={libraryMatches}
-      />
-    );
+  if (!completeJsonReport) {
+    return <></>;
   }
 
   return (
     <div className="w-full h-screen flex">
       <SiteReport
-        completeJson={completeJsonReport}
+        completeJson={[completeJsonReport]}
         cookies={cookies}
-        technologies={technologies}
+        technologies={[]}
         // @ts-ignore
         selectedSite={globalThis?.PSAT_DATA?.selectedSite}
         // @ts-ignore
