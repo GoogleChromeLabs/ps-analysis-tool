@@ -1148,12 +1148,6 @@
   "size": {
     "message": "크기"
   },
-  "mapping": {
-    "message": "매핑"
-  },
-  "blockingStatus": {
-    "message": "차단 상태"
-  },
   "lookAtNetworkTab": {
     "message": "이 쿠키의 차단 정보를 확인하려면 네트워크 탭을 확인하세요."
   },
