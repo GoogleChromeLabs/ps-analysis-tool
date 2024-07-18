@@ -13,8 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as Attribution } from './attribution';
-export { default as Topics } from './topics';
-export { default as PrivateAdvertising } from './privateAdvertising';
-export { default as ProtectedAudience } from './protectedAudience';
-export { default as PrivateAggregation } from './privateAggregation';
+
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+
+const PrivateAggregation = () => {
+  return (
+    <div data-testid="protected-audience-content" className="h-full w-full">
+      <LandingPage
+        title="Private Aggregation"
+        psInfoKey={PSInfoKey.PrivateAggregation}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
+  );
+};
+
+export default PrivateAggregation;
