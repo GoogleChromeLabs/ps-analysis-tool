@@ -34,7 +34,6 @@ import AssembledCookiesLanding from '../siteReport/tabs/cookies/cookiesLandingCo
 import SiteReport from '../siteReport';
 import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
 import extractCookies from '../utils/extractCookies';
-import useGlobalFiltering from '../../hooks/useGlobalFiltering';
 
 interface CookiesTabProps {
   selectedSite?: string;
@@ -131,22 +130,20 @@ const CookiesTab = ({
     return [_cookies, _technologies, [reportData]];
   }, [completeJson, isKeySelected]);
 
-  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
-
-  const filter = useGlobalFiltering(cookies, query, clearQuery);
-
   return (
     <>
       {!selectedSite ? (
         <AssembledCookiesLanding
+          tabCookies={tabCookies}
           tabFrames={tabFrames}
-          filterOutput={filter}
           libraryMatches={siteMapLibraryMatches}
           libraryMatchesUrlCount={libraryMatchesUrlCount}
           downloadReport={downloadReport}
           menuBarScrollContainerId="dashboard-sitemap-layout-container"
           setAppliedFilters={setAppliedFilters}
           setFilteredData={setFilteredData}
+          query={query}
+          clearQuery={clearQuery}
         />
       ) : (
         <SiteReport

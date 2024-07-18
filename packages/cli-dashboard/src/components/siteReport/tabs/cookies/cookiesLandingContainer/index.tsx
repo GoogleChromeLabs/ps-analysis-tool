@@ -32,7 +32,6 @@ import {
   FilterIcon,
   FiltersSidebar,
   type TableFilter,
-  type TableFilteringOutput,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 
@@ -40,10 +39,11 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import Landing from './cookieLanding/landing';
+import useGlobalFiltering from '../../../../../hooks/useGlobalFiltering';
 
 interface AssembledCookiesLandingProps {
+  tabCookies: TabCookies;
   tabFrames: TabFrames;
-  filterOutput: TableFilteringOutput;
   setFilteredData: React.Dispatch<React.SetStateAction<TabCookies>>;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => void;
@@ -53,18 +53,25 @@ interface AssembledCookiesLandingProps {
   };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
+  query?: string;
+  clearQuery?: () => void;
 }
 
 const AssembledCookiesLanding = ({
+  tabCookies,
   tabFrames,
-  filterOutput,
   setFilteredData,
   setAppliedFilters,
   downloadReport,
   libraryMatches,
   libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
+  query = '',
+  clearQuery = noop,
 }: AssembledCookiesLandingProps) => {
+  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
+  const filterOutput = useGlobalFiltering(cookies, query, clearQuery);
+
   const cookiesByKey = useMemo(() => {
     return (
       filterOutput?.filteredData.reduce<TabCookies>((acc, cookie) => {
