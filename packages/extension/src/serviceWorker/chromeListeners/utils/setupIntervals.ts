@@ -20,7 +20,7 @@
 import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
 import { getAndParseNetworkCookies } from '../../../utils/getAndParseNetworkCookies';
 
-const setupTimeouts = () => {
+const setupIntervals = () => {
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
   // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
   setInterval(async () => {
@@ -50,4 +50,4 @@ const setupTimeouts = () => {
   }, 5000);
 };
 
-export default setupTimeouts;
+export default setupIntervals;

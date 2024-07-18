@@ -19,7 +19,7 @@
 import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
 import attachCDP from '../../attachCDP';
 
-const getAndUpdateGlobalVariable = async () => {
+const updateGlobalVariableAndAttachCDP = async () => {
   await chrome.storage.local.clear();
 
   const preSetSettings = await chrome.storage.sync.get();
@@ -31,6 +31,7 @@ const getAndUpdateGlobalVariable = async () => {
   if (synchnorousCookieStore.tabMode === 'unlimited') {
     const allTabs = await chrome.tabs.query({});
     const targets = await chrome.debugger.getTargets();
+
     await Promise.all(
       allTabs.map(async (tab) => {
         if (!tab.id || tab.url?.startsWith('chrome://')) {
@@ -60,4 +61,4 @@ const getAndUpdateGlobalVariable = async () => {
   }
 };
 
-export default getAndUpdateGlobalVariable;
+export default updateGlobalVariableAndAttachCDP;

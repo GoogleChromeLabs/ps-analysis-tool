@@ -17,14 +17,14 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { getAndUpdateGlobalVariable, setupTimeouts } from './utils';
+import { updateGlobalVariableAndAttachCDP, setupIntervals } from './utils';
 
 export const runtimeOnInstalledListener = async (
   details: chrome.runtime.InstalledDetails
 ) => {
   synchnorousCookieStore?.clear();
 
-  setupTimeouts();
+  setupIntervals();
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
@@ -37,7 +37,7 @@ export const runtimeOnInstalledListener = async (
   if (details.reason === 'update') {
     const preSetSettings = await chrome.storage.sync.get();
 
-    await getAndUpdateGlobalVariable();
+    await updateGlobalVariableAndAttachCDP();
 
     if (
       preSetSettings?.allowedNumberOfTabs &&

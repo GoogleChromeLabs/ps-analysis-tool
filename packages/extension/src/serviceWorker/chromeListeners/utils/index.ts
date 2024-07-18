@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as setupTimeouts } from './setupTimeouts';
-export { default as getAndUpdateGlobalVariable } from './getAndUpdateGlobalVariable';
+export { default as setupIntervals } from './setupIntervals';
+export { default as updateGlobalVariableAndAttachCDP } from './updateGlobalVariableAndAttachCDP';
