@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-export { default as CookiesSection } from './cookiesSection';
-export { default as BlockedCookiesSection } from './blockedCookiesSection';
-export { default as ExemptedCookiesSection } from './exemptedCookiesSection';
-export { default as FramesSection } from './framesSection';
-export { default as KnownBreakages } from './knownBreakages';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+
+const PrivateAggregation = () => {
+  return (
+    <div data-testid="protected-audience-content" className="h-full w-full">
+      <LandingPage
+        title="Private Aggregation"
+        psInfoKey={PSInfoKey.PrivateAggregation}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
+  );
+};
+
+export default PrivateAggregation;

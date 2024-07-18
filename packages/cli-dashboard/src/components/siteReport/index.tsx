@@ -18,11 +18,12 @@
  * External dependencies
  */
 import React, { useState } from 'react';
-import type {
-  CompleteJson,
-  CookieJsonDataType,
-  LibraryData,
-  TechnologyData,
+import {
+  noop,
+  type CompleteJson,
+  type CookieJsonDataType,
+  type LibraryData,
+  type TechnologyData,
 } from '@google-psat/common';
 import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 
@@ -44,6 +45,8 @@ interface SiteReportProps {
   selectedSite: string | null;
   path: string;
   libraryMatches: LibraryData | null;
+  query?: string;
+  clearQuery?: () => void;
 }
 
 const SiteReport = ({
@@ -53,8 +56,11 @@ const SiteReport = ({
   selectedSite,
   path,
   libraryMatches,
+  query = '',
+  clearQuery = noop,
 }: SiteReportProps) => {
   const [data, setData] = useState<SidebarItems>(Tabs);
+
   return (
     <ContentStoreProvider
       cookies={cookies}
@@ -64,7 +70,12 @@ const SiteReport = ({
       path={path}
     >
       <SidebarProvider data={data}>
-        <Layout selectedSite={selectedSite} setSidebarData={setData} />
+        <Layout
+          selectedSite={selectedSite}
+          setSidebarData={setData}
+          query={query}
+          clearQuery={clearQuery}
+        />
       </SidebarProvider>
     </ContentStoreProvider>
   );

@@ -110,6 +110,7 @@ const report = {
   output: {
     path: path.resolve(__dirname, './dist/extension/report'),
     filename: '[name].js',
+    publicPath: '/',
   },
   plugins: [
     new WebpackBar({
