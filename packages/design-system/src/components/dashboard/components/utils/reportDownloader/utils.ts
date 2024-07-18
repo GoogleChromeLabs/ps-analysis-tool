@@ -81,7 +81,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  //@ts-ignore
+  //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
   const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
 
   const frameStateCreator = isExtension

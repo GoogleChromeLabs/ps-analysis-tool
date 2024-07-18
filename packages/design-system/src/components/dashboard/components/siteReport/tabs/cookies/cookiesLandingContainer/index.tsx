@@ -107,7 +107,7 @@ const CookiesLandingContainer = ({
         },
       },
     ];
-    //@ts-ignore
+    //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
     if (globalThis?.PSAT_EXTENSION) {
       baseSections.push({
         name: I18n.getMessage('frames'),

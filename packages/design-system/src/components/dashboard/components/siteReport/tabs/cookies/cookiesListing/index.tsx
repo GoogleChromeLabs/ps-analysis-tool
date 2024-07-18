@@ -73,7 +73,7 @@ const CookiesListing = ({
     'cookiesListing',
     selectedSite
   );
-  //@ts-ignore
+  //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
   const isCLI = globalThis?.PSAT_EXTENSION ? false : true;
 
   return (

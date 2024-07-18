@@ -49,7 +49,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
   const frameCookieDataMap = siteAnalysisData.cookieData;
 
   const cookieMap: Map<string, CookieJsonDataType> = new Map();
-  //@ts-ignore
+  //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
   const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
 
   // More than one frame can use one cookie, need to make a map for gettig unique entries.

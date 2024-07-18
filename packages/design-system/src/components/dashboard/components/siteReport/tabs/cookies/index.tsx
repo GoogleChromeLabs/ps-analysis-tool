@@ -63,9 +63,9 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     if (!completeJson) {
       return;
     }
-    //@ts-ignore
+    //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
     const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
-    //@ts-ignore
+    //@ts-ignore -- PSAT_REPORT_HTML is a custom variable that is injected when report is being downloaded.
     const reportHTMLText = globalThis?.PSAT_REPORT_HTML;
 
     if (completeJson.length > 1) {

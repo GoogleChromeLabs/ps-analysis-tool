@@ -115,7 +115,7 @@ const BlockedCookiesSection = ({
             infoIconTitle={I18n.getMessage('blockedReasonsNote')}
           />
           {
-            //@ts-ignore
+            //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
             !globalThis?.PSAT_EXTENSION && (
               <div className="flex flex-col mt-8">
                 <div className="pt-4">
