@@ -31,13 +31,8 @@ import {
   ChipsBar,
   FilterIcon,
   FiltersSidebar,
-  calculateBlockedReasonsFilterValues,
-  calculateExemptionReason,
-  evaluateSelectAllOption,
-  evaluateStaticFilterValues,
-  useFiltering,
-  type InfoType,
   type TableFilter,
+  type TableFilteringOutput,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 
@@ -48,7 +43,7 @@ import Landing from './cookieLanding/landing';
 
 interface AssembledCookiesLandingProps {
   tabFrames: TabFrames;
-  tabCookies: TabCookies;
+  filterOutput: TableFilteringOutput;
   setFilteredData: React.Dispatch<React.SetStateAction<TabCookies>>;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => void;
@@ -58,157 +53,35 @@ interface AssembledCookiesLandingProps {
   };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
-  query?: string;
-  clearQuery?: () => void;
 }
 
 const AssembledCookiesLanding = ({
   tabFrames,
-  tabCookies,
+  filterOutput,
   setFilteredData,
   setAppliedFilters,
   downloadReport,
   libraryMatches,
   libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
-  query = '',
-  clearQuery = noop,
 }: AssembledCookiesLandingProps) => {
-  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
-
-  const parsedQuery = useMemo(() => {
-    if (query) {
-      return JSON.parse(query);
-    }
-
-    return {};
-  }, [query]);
-
-  const filters = useMemo<TableFilter>(
-    () => ({
-      'analytics.category': {
-        title: I18n.getMessage('category'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: evaluateStaticFilterValues(
-          {
-            [I18n.getMessage('analytics')]: {
-              selected: false,
-            },
-            [I18n.getMessage('functional')]: {
-              selected: false,
-            },
-            [I18n.getMessage('marketing')]: {
-              selected: false,
-            },
-            [I18n.getMessage('uncategorized')]: {
-              selected: false,
-            },
-          },
-          'analytics.category',
-          parsedQuery,
-          clearQuery
-        ),
-        sortValues: true,
-        useGenericPersistenceKey: true,
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string;
-          return (
-            I18n.getMessage(val?.toLowerCase() || 'uncategorized') ===
-            filterValue
-          );
-        },
-      },
-      isFirstParty: {
-        title: I18n.getMessage('scope'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: evaluateStaticFilterValues(
-          {
-            [I18n.getMessage('firstParty')]: {
-              selected: false,
-            },
-            [I18n.getMessage('thirdParty')]: {
-              selected: false,
-            },
-          },
-          'isFirstParty',
-          parsedQuery,
-          clearQuery
-        ),
-        useGenericPersistenceKey: true,
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = Boolean(value);
-          return val === (filterValue === I18n.getMessage('firstParty'));
-        },
-      },
-      blockedReasons: {
-        title: I18n.getMessage('blockedReasons'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        enableSelectAllOption: true,
-        isSelectAllOptionSelected: evaluateSelectAllOption(
-          'blockedReasons',
-          parsedQuery,
-          clearQuery
-        ),
-        filterValues: calculateBlockedReasonsFilterValues(
-          cookies,
-          parsedQuery?.filter?.blockedReasons,
-          clearQuery
-        ),
-        sortValues: true,
-        useGenericPersistenceKey: true,
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string[];
-          return val?.includes(filterValue);
-        },
-      },
-      exemptionReason: {
-        title: I18n.getMessage('exemptionReasons'),
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        enableSelectAllOption: true,
-        isSelectAllOptionSelected: evaluateSelectAllOption(
-          'exemptionReason',
-          parsedQuery,
-          clearQuery
-        ),
-        filterValues: calculateExemptionReason(
-          cookies,
-          clearQuery,
-          parsedQuery?.filter?.exemptionReason
-        ),
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string;
-          return val === filterValue;
-        },
-        useGenericPersistenceKey: true,
-      },
-    }),
-    [clearQuery, cookies, parsedQuery]
-  );
-
-  const filter = useFiltering(
-    cookies,
-    filters,
-    'cookiesListing',
-    'cookiesListing'
-  );
-
   const cookiesByKey = useMemo(() => {
-    return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
-      const cookieKey = getCookieKey((cookie as CookieTableData).parsedCookie);
+    return (
+      filterOutput?.filteredData.reduce<TabCookies>((acc, cookie) => {
+        const cookieKey = getCookieKey(
+          (cookie as CookieTableData).parsedCookie
+        );
 
-      if (!cookieKey) {
+        if (!cookieKey) {
+          return acc;
+        }
+
+        acc[cookieKey] = cookie as CookieTableData;
+
         return acc;
-      }
-
-      acc[cookieKey] = cookie as CookieTableData;
-
-      return acc;
-    }, {});
-  }, [filter.filteredData]);
+      }, {}) || {}
+    );
+  }, [filterOutput?.filteredData]);
 
   useEffect(() => {
     setFilteredData(cookiesByKey);
@@ -223,8 +96,8 @@ const AssembledCookiesLanding = ({
   );
 
   useEffect(() => {
-    setAppliedFilters(filter.selectedFilters);
-  }, [filter.selectedFilters, setAppliedFilters]);
+    setAppliedFilters(filterOutput?.selectedFilters);
+  }, [filterOutput?.selectedFilters, setAppliedFilters]);
 
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
@@ -244,7 +117,11 @@ const AssembledCookiesLanding = ({
             }
           />
         </button>
-        <ChipsBar {...filter} />
+        <ChipsBar
+          selectedFilters={filterOutput?.selectedFilters || {}}
+          resetFilters={filterOutput?.resetFilters || noop}
+          toggleFilterSelection={filterOutput?.toggleFilterSelection || noop}
+        />
       </div>
       <div
         className="flex grow-0"
@@ -261,7 +138,18 @@ const AssembledCookiesLanding = ({
             }}
             className="border border-r border-gray-300 dark:border-quartz"
           >
-            <FiltersSidebar {...filter} />
+            <FiltersSidebar
+              filters={filterOutput?.filters || {}}
+              toggleFilterSelection={
+                filterOutput?.toggleFilterSelection || noop
+              }
+              toggleSelectAllFilter={
+                filterOutput?.toggleSelectAllFilter || noop
+              }
+              isSelectAllFilterSelected={
+                filterOutput?.isSelectAllFilterSelected || noop
+              }
+            />
           </Resizable>
         )}
         <div

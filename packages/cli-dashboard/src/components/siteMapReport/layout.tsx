@@ -26,26 +26,21 @@ import {
   useSidebar,
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
-  type TableFilter,
 } from '@google-psat/design-system';
 import {
   type TabFrames,
   type CookieFrameStorageType,
   type CompleteJson,
   type LibraryData,
-  type TabCookies,
   noop,
 } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import SiteReport from '../siteReport';
 import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
-import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
-import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
-import extractCookies from '../utils/extractCookies';
+import CookiesTab from './cookies';
 
 interface LayoutProps {
   landingPageCookies: CookieFrameStorageType;
@@ -65,8 +60,6 @@ const Layout = ({
   libraryMatches,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
-  const [filteredData, setFilteredData] = useState<TabCookies>({});
-  const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
 
   useEffect(() => {
     const _sites = new Set<string>();
@@ -103,29 +96,6 @@ const Layout = ({
   const { Element: PanelElement, props } = activePanel.panel;
   const { query, clearQuery } = activePanel;
 
-  const [
-    siteFilteredCookies,
-    siteFilteredTechnologies,
-    siteFilteredCompleteJson,
-  ] = useMemo(() => {
-    const reportData = completeJson?.find((data) =>
-      isKeySelected(data.pageUrl)
-    );
-
-    if (!reportData) {
-      return [{}, [], null];
-    }
-
-    const _cookies = extractCookies(
-      reportData.cookieData,
-      reportData.pageUrl,
-      true
-    );
-    const _technologies = reportData.technologyData;
-
-    return [_cookies, _technologies, [reportData]];
-  }, [completeJson, isKeySelected]);
-
   const doesSiteHaveCookies = useMemo(() => {
     const store = {} as Record<string, boolean>;
 
@@ -141,71 +111,30 @@ const Layout = ({
     return store;
   }, [completeJson]);
 
-  const [siteMapLibraryMatches, libraryMatchesUrlCount] = useMemo(() => {
-    const _libraryMatchesUrlCount: {
-      [key: string]: number;
-    } = {};
+  const tabFrames = useMemo(
+    () =>
+      sites.reduce<TabFrames>((acc, site) => {
+        acc[site] = {} as TabFrames[string];
 
-    const _siteMapLibraryMatches = completeJson?.reduce<
-      CompleteJson['libraryMatches']
-    >((acc, data) => {
-      const _libraryMatches = data.libraryMatches;
-
-      Object.keys(_libraryMatches).forEach((key) => {
-        acc[key] =
-          // @ts-ignore
-          acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
-            ? acc[key]
-            : _libraryMatches[key];
-
-        if (
-          Object.keys(_libraryMatches[key]?.matches ?? {}).length ||
-          Object.keys(_libraryMatches[key]?.domQuerymatches ?? {}).length
-        ) {
-          _libraryMatchesUrlCount[key] =
-            (_libraryMatchesUrlCount[key] || 0) + 1;
-        }
-      });
-
-      return acc;
-    }, {});
-
-    return [_siteMapLibraryMatches, _libraryMatchesUrlCount];
-  }, [completeJson]);
+        return acc;
+      }, {}),
+    [sites]
+  );
 
   useEffect(() => {
     setSidebarData((prev) => {
       const _data = { ...prev };
 
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
-        Element: CookiesLandingContainer,
+        Element: CookiesTab,
         props: {
           tabCookies: reshapedCookies,
-          tabFrames: sites.reduce<TabFrames>((acc, site) => {
-            acc[site] = {} as TabFrames[string];
-
-            return acc;
-          }, {}),
-          setFilteredData,
-          setAppliedFilters,
-          cookiesWithIssues,
-          libraryMatches: siteMapLibraryMatches,
-          libraryMatchesUrlCount,
-          downloadReport: () => {
-            if (!Array.isArray(completeJson)) {
-              return;
-            }
-
-            generateSiteMapReportandDownload(
-              completeJson,
-              filteredData,
-              appliedFilters,
-              path,
-              //@ts-ignore
-              atob(globalThis.PSAT_REPORT_HTML)
-            );
-          },
-          menuBarScrollContainerId: 'dashboard-sitemap-layout-container',
+          tabFrames,
+          completeJson,
+          path,
+          libraryMatches,
+          query,
+          clearQuery: query ? clearQuery : noop,
         },
       };
 
@@ -214,14 +143,14 @@ const Layout = ({
           acc[site] = {
             title: site,
             panel: {
-              Element: SiteReport,
+              Element: CookiesTab,
               props: {
-                cookies: siteFilteredCookies,
-                technologies: siteFilteredTechnologies,
-                completeJson: siteFilteredCompleteJson,
                 selectedSite: site,
+                tabCookies: reshapedCookies,
+                tabFrames,
+                completeJson,
                 path,
-                libraryMatches: libraryMatches ? libraryMatches[site] : {},
+                libraryMatches,
                 query,
                 clearQuery: query ? clearQuery : noop,
               },
@@ -244,32 +173,24 @@ const Layout = ({
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {
-          cookies: Object.values(reshapedCookies).filter(
-            (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
-          ),
+          cookies: cookiesWithIssues,
         },
       };
 
       return _data;
     });
   }, [
-    appliedFilters,
+    clearQuery,
     completeJson,
     cookiesWithIssues,
     doesSiteHaveCookies,
-    filteredData,
     libraryMatches,
-    libraryMatchesUrlCount,
     path,
+    query,
     reshapedCookies,
     setSidebarData,
-    siteFilteredCompleteJson,
-    siteFilteredCookies,
-    siteFilteredTechnologies,
-    siteMapLibraryMatches,
     sites,
-    query,
-    clearQuery,
+    tabFrames,
   ]);
 
   useEffect(() => {

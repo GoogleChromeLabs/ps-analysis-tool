@@ -24,6 +24,7 @@ import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
 import { generateSiteReportandDownload } from '../../../utils/reportDownloader';
 import AssembledCookiesLanding from './cookiesLandingContainer';
+import useGlobalFiltering from '../../../../hooks/useGlobalFiltering';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -88,6 +89,10 @@ const CookiesTab = ({
     }
   }, [appliedFilters, completeJson, filteredData, selectedSite]);
 
+  const cookies = useMemo(() => Object.values(tabCookies), [tabCookies]);
+
+  const filter = useGlobalFiltering(cookies, query, clearQuery);
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       {selectedFrameUrl ? (
@@ -100,12 +105,10 @@ const CookiesTab = ({
           <AssembledCookiesLanding
             libraryMatches={libraryMatches}
             tabFrames={tabFrames}
-            tabCookies={tabCookies}
             downloadReport={downloadReport}
             setAppliedFilters={setAppliedFilters}
             setFilteredData={setFilteredData}
-            query={query}
-            clearQuery={clearQuery}
+            filterOutput={filter}
           />
         </div>
       )}
