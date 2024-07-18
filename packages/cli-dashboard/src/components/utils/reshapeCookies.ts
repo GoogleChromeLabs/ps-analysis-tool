@@ -119,6 +119,7 @@ const createCookieObj = (
         blockingStatus: cookie.blockingStatus,
         frameUrls: [frame],
         exemptionReason: cookie.exemptionReason,
+        pageUrl: cookie.pageUrl,
       } as CookieTableData,
     ])
   );

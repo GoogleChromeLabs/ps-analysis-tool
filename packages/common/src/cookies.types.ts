@@ -123,6 +123,7 @@ export type CookieData = {
     outboundBlock: BLOCK_STATUS;
   };
   exemptionReason?: Protocol.Network.CookieExemptionReason;
+  pageUrl?: string;
 };
 
 export type CookieTableData = CookieData & {

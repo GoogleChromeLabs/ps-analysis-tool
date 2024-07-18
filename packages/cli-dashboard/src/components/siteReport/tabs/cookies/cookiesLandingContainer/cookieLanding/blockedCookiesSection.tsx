@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   CookiesLandingWrapper,
   prepareCookieStatsComponents,
@@ -65,6 +65,23 @@ const BlockedCookiesSection = ({
           : null,
     },
   ];
+
+  const selectTabFrame = useCallback(
+    (blockedReason: string) => {
+      const cookie = Object.values(tabCookies || {}).find((_cookie) => {
+        // @ts-ignore - blockedReasons is a string array
+        if (_cookie.blockedReasons?.includes(blockedReason)) {
+          return true;
+        }
+
+        return false;
+      });
+
+      return cookie?.pageUrl || '';
+    },
+    [tabCookies]
+  );
+
   const dataComponents: MatrixComponentProps[] =
     cookiesStatsComponents.blockedCookiesLegend.map((component) => {
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
@@ -74,7 +91,7 @@ const BlockedCookiesSection = ({
         title: component.label,
         containerClasses: '',
         onClick: (title: string) =>
-          selectedItemUpdater(title, 'blockedReasons'),
+          selectedItemUpdater(title, 'blockedReasons', selectTabFrame(title)),
       };
     });
 
