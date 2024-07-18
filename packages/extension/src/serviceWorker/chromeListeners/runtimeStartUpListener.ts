@@ -17,11 +17,11 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { setupTimeOuts } from './utils';
+import { setupTimeouts } from './utils';
 
 export const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
-  setupTimeOuts();
+  setupTimeouts();
 
   if (storage?.allowedNumberOfTabs) {
     synchnorousCookieStore.tabMode = storage.allowedNumberOfTabs;

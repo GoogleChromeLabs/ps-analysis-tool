@@ -17,14 +17,14 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { getAndUpdateGlobalVariable, setupTimeOuts } from './utils';
+import { getAndUpdateGlobalVariable, setupTimeouts } from './utils';
 
 export const runtimeOnInstalledListener = async (
   details: chrome.runtime.InstalledDetails
 ) => {
   synchnorousCookieStore?.clear();
 
-  setupTimeOuts();
+  setupTimeouts();
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();

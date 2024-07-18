@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-import { getAndUpdateGlobalVariable, setupTimeOuts } from './utils';
+import { getAndUpdateGlobalVariable, setupTimeouts } from './utils';
 
 export const onEnabledListener = async (
   details: chrome.management.ExtensionInfo
@@ -28,7 +28,7 @@ export const onEnabledListener = async (
 
   synchnorousCookieStore?.clear();
 
-  setupTimeOuts();
+  setupTimeouts();
 
   await getAndUpdateGlobalVariable();
 };
