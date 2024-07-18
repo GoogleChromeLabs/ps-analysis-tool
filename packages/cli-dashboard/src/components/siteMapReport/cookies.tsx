@@ -120,11 +120,7 @@ const CookiesTab = ({
       return [{}, [], null];
     }
 
-    const _cookies = extractCookies(
-      reportData.cookieData,
-      reportData.pageUrl,
-      true
-    );
+    const _cookies = extractCookies(reportData.cookieData, '', true);
     const _technologies = reportData.technologyData;
 
     return [_cookies, _technologies, [reportData]];

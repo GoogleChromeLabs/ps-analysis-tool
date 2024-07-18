@@ -116,6 +116,7 @@ const generateSiteMapReportandDownload = async (
   });
 
   const report = generateSitemapHTMLFile(
+    JSONReport,
     filteredData,
     appliedFilters,
     path,

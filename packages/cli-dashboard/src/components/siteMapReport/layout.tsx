@@ -173,7 +173,7 @@ const Layout = ({
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {
-          cookies: cookiesWithIssues,
+          cookies: Object.values(cookiesWithIssues),
         },
       };
 

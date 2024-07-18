@@ -147,6 +147,7 @@ function generateReportObject(
  * @returns Object Report object required to make HTML report
  */
 function generateSitemapReportObject(
+  analysisData: CompleteJson[],
   filteredData: TabCookies,
   appliedFilters: TableFilter,
   sitemapURL: string
@@ -281,6 +282,7 @@ const generateHTMLFile = (
 };
 
 export const generateSitemapHTMLFile = (
+  analysisData: CompleteJson[],
   filteredData: TabCookies,
   appliedFilters: TableFilter,
   sitemapURL: string,
@@ -293,6 +295,7 @@ export const generateSitemapHTMLFile = (
   const script = reportDom.createElement('script');
 
   const reportData = generateSitemapReportObject(
+    analysisData,
     filteredData,
     appliedFilters,
     sitemapURL
