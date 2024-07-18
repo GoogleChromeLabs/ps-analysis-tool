@@ -205,7 +205,7 @@ export type CookieJsonDataType = {
     httpOnly: boolean;
     secure: boolean;
     sameSite: string;
-    priority?: string;
+    priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };
   analytics: {

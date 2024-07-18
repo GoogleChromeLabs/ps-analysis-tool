@@ -5,7 +5,7 @@
 	"scripts": {
 		"build-storybook": "storybook build",
 		"build:all": "npm-run-all **:build ",
-		"build:tsc-packages": "npm run i18n:build && npm run common:build && npm run design-system:build && npm run library-detection:build && npm run analysis-utils:build",
+		"build:tsc-packages": "npm run i18n:build && npm run common:build && npm run library-detection:build && npm run design-system:build && npm run analysis-utils:build",
 		"build-cli": "npm run build:tsc-packages && npm run cli-dashboard:build && npm run cli:build",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
 		"unpublish:all:local": "npm run unpublish:local --workspaces",
