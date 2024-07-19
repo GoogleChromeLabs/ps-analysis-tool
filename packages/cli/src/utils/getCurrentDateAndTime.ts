@@ -15,13 +15,12 @@
  */
 /**
  * Formats a given Date object into a specific string format.
- * The format is: DD Month, YYYY, HH:MMam/pm
- * @param {Date} date - The date object to format.
+ * The format is: DD Month, YYYY, HH:MM:SSam/pm
  * @param format {string} Format in which date is required.
  * @returns {string} The formatted date string.
  */
 function getCurrentDateAndTime(
-  format: 'YYYY-MM-DD_HH-MM' | 'DD MMMM, YYYY, hh:mmam/pm'
+  format: 'YYYY-MM-DD_HH-MM-SS' | 'DD MMMM, YYYY, hh:mm:ssam/pm'
 ): string {
   const date = new Date();
 
@@ -31,6 +30,7 @@ function getCurrentDateAndTime(
   const year = date.getFullYear();
   const hours24 = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
 
   let hours12 = date.getHours();
   const ampm = hours12 >= 12 ? 'pm' : 'am';
@@ -39,10 +39,10 @@ function getCurrentDateAndTime(
   hours12 = hours12 ? hours12 : 12; // the hour '0' should be '12'
   const hoursPadded12 = String(hours12).padStart(2, '0');
 
-  if (format === 'YYYY-MM-DD_HH-MM') {
-    return `${year}-${monthShort}-${day}_${hours24}-${minutes}`;
-  } else if (format === 'DD MMMM, YYYY, hh:mmam/pm') {
-    return `${day} ${monthLong}, ${year}, ${hoursPadded12}:${minutes}${ampm}`;
+  if (format === 'YYYY-MM-DD_HH-MM-SS') {
+    return `${year}-${monthShort}-${day}_${hours24}-${minutes}-${seconds}`;
+  } else if (format === 'DD MMMM, YYYY, hh:mm:ssam/pm') {
+    return `${day} ${monthLong}, ${year}, ${hoursPadded12}:${minutes}:${seconds}${ampm}`;
   } else {
     throw new Error('Invalid format');
   }

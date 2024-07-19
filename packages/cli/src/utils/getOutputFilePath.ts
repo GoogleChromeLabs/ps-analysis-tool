@@ -24,7 +24,7 @@ import { getCurrentDateAndTime } from '.';
  * @returns {string} file path
  */
 const getOutputFilePath = (outDir: string): string => {
-  const currentDateAndTime = getCurrentDateAndTime('YYYY-MM-DD_HH-MM');
+  const currentDateAndTime = getCurrentDateAndTime('YYYY-MM-DD_HH-MM-SS');
   const fileName = outDir + `/report_` + currentDateAndTime + '.html';
 
   return fileName;
