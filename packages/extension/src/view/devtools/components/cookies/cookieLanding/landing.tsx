@@ -43,7 +43,8 @@ interface LandingProps {
 }
 
 const Landing = ({ tabCookies }: LandingProps) => {
-  const { url, tabFrames } = useCookie(({ state }) => ({
+  const { unfilteredCookies, url, tabFrames } = useCookie(({ state }) => ({
+    unfilteredCookies: state.tabCookies,
     tabFrames: state.tabFrames,
     url: state.tabUrl,
   }));
@@ -124,8 +125,8 @@ const Landing = ({ tabCookies }: LandingProps) => {
       <MenuBar
         disableReportDownload={showLoader}
         downloadReport={() => {
-          if (tabCookies && tabFrames && libraryMatches && url) {
-            downloadReport(url, tabCookies, tabFrames, libraryMatches);
+          if (unfilteredCookies && tabFrames && libraryMatches && url) {
+            downloadReport(url, unfilteredCookies, tabFrames, libraryMatches);
           }
         }}
         menuData={menuData}
