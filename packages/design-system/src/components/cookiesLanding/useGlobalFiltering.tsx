@@ -19,16 +19,16 @@
  */
 import { useMemo } from 'react';
 import type { CookieTableData } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 import {
   calculateBlockedReasonsFilterValues,
   calculateExemptionReason,
   evaluateSelectAllOption,
   evaluateStaticFilterValues,
+  InfoType,
+  TableFilter,
   useFiltering,
-  type InfoType,
-  type TableFilter,
-} from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
+} from '../table';
 
 const useGlobalFiltering = (
   cookies: CookieTableData[],
