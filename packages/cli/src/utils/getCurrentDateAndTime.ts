@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 /**
- * Formats a given Date object into a specific string format.
- * The format is: DD Month, YYYY, HH:MM:SSam/pm
- * @param format {string} Format in which date is required.
+ * Formats the current date and time into a specified string format.
+ * The supported formats are:
+ * - 'YYYY-MM-DD_HH-MM-SS': 24-hour format with seconds (e.g., 2024-07-19_14-30-45)
+ * - 'DD MMMM, YYYY, hh:mm:ssam/pm': 12-hour format with seconds and AM/PM (e.g., 19 July, 2024, 02:30:45pm)
+ * @param format {string} The format in which the date is required.
  * @returns {string} The formatted date string.
  */
 function getCurrentDateAndTime(
