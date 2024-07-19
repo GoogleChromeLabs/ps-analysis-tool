@@ -107,7 +107,7 @@ const App = () => {
       _libraryMatches = extractedData.consolidatedLibraryMatches;
       setLandingPageCookies(extractedData.landingPageCookies);
     } else {
-      _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+      _cookies = extractCookies(data[0].cookieData, '', true);
       _technologies = data[0].technologyData;
       _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
     }
