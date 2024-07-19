@@ -1148,12 +1148,6 @@
   "size": {
     "message": "サイズ"
   },
-  "mapping": {
-    "message": "マッピング"
-  },
-  "blockingStatus": {
-    "message": "ブロック ステータス"
-  },
   "lookAtNetworkTab": {
     "message": "ネットワーク タブで、この Cookie のブロック情報を確認してください。"
   },

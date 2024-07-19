@@ -19,7 +19,6 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { LibraryDetectionProvider } from '@google-psat/library-detection';
 import { noop } from '@google-psat/common';
 
 /**
@@ -36,7 +35,6 @@ chrome = {
       addListener: noop,
       removeListener: noop,
     },
-    get: noop,
   },
   devtools: {
     inspectedWindow: {
@@ -68,11 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (root) {
     createRoot(root).render(
-      <LibraryDetectionProvider>
-        <DataProvider>
-          <App />
-        </DataProvider>
-      </LibraryDetectionProvider>
+      <DataProvider>
+        <App />
+      </DataProvider>
     );
   }
 });

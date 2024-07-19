@@ -37,7 +37,7 @@ export const COOKIES_WITH_ISSUES_DATA_HEADERS = [
   () => I18n.getMessage('value'),
   () => I18n.getMessage('path'),
   () => I18n.getMessage('expires'),
-  () => I18n.getMessage('gDPR'),
+  () => I18n.getMessage('gdpr'),
 ];
 
 const generateCookiesWithIssuesCSV = (

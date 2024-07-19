@@ -30,6 +30,7 @@ interface AccodionHeadingProps {
   loading: boolean;
   isOpen: boolean;
   featuresText: string;
+  urlCount?: number;
 }
 
 const AccordionHeading = ({
@@ -38,14 +39,25 @@ const AccordionHeading = ({
   loading,
   isOpen,
   featuresText,
+  urlCount = 0,
 }: AccodionHeadingProps) => {
   return (
     <div
       onClick={() => setIsOpen(!isOpen)}
-      className="transition-colors flex py-3 cursor-pointer hover:opacity-90 active:opacity-60 hover:bg-[#f5f5f5] hover:dark:bg-[#1d1d1d] rounded-md"
+      className="transition-colors flex items-center py-3 cursor-pointer hover:opacity-90 active:opacity-60 hover:bg-[#f5f5f5] hover:dark:bg-[#1d1d1d] rounded-md"
     >
-      <span className="flex items-center px-2">
-        <Ellipse />
+      <span className="flex items-center px-2 relative">
+        <Ellipse className={urlCount ? 'w-6 h-6' : ''} />
+        {urlCount !== 0 && (
+          <span
+            className={`${
+              urlCount > 9 ? 'text-xxxs' : 'text-xs'
+            } text-gray dark:text-bright-gray font-semibold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+            title={`${urlCount} URL(s) have this known breakage.`}
+          >
+            {urlCount > 9 ? '9+' : urlCount}
+          </span>
+        )}
       </span>
       <p className="flex-1 dark:text-bright-gray font-medium">
         {title}

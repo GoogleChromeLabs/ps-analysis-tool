@@ -21,7 +21,7 @@ import type { LibraryData } from '../types';
 
 const getInitialLibraryData = (): LibraryData => {
   return Object.fromEntries(
-    LIBRARIES.map(({ name, domQueryFunction }) => {
+    (LIBRARIES ?? []).map(({ name, domQueryFunction }) => {
       let initialData = {
         signatureMatches: 0,
         matches: [],
