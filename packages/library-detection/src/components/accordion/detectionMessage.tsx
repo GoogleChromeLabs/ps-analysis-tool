@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 
 interface DetectionMessageProps {
   libraryName: string;
