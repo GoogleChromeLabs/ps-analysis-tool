@@ -49,7 +49,7 @@ export default async function downloadReport(
   saveAs(html, fileName);
 }
 
-const generateDashboard = async (
+export const generateDashboard = async (
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
