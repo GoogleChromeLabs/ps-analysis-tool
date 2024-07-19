@@ -1148,12 +1148,6 @@
   "size": {
     "message": "Tamanho"
   },
-  "mapping": {
-    "message": "Mapeamento"
-  },
-  "blockingStatus": {
-    "message": "Status de bloqueio"
-  },
   "lookAtNetworkTab": {
     "message": "Consulte a guia \"Rede\" para conferir as informações de bloqueio do cookie."
   },
