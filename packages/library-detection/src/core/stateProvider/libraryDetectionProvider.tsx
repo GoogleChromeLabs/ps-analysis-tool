@@ -63,6 +63,12 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         error !== 'net::ERR_ABORTED'
       ) {
         setErrorOccured(true);
+      } else if (
+        frameId === 0 &&
+        _tabId === chrome.devtools.inspectedWindow.tabId &&
+        error === 'net::ERR_ABORTED'
+      ) {
+        setIsCurrentTabLoading(false);
       }
     },
     []
