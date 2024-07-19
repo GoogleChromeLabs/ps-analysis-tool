@@ -26,7 +26,6 @@ import {
   type CookieTableData,
   type TabCookies,
 } from '@google-psat/common';
-import type { TableFilter } from '@google-psat/design-system';
 
 /**
  * Internal dependencies
@@ -34,6 +33,7 @@ import type { TableFilter } from '@google-psat/design-system';
 import { createZip, getFolderName, generateSitemapHTMLFile } from './utils';
 import extractCookies from '../extractCookies';
 import reshapeCookies from '../reshapeCookies';
+import { TableFilter } from '../../../../table';
 
 const generateSiteMapReportandDownload = async (
   JSONReport: CompleteJson[],

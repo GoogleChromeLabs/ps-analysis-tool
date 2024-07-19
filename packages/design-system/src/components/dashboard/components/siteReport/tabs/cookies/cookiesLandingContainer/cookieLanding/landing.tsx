@@ -18,11 +18,6 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import {
-  MenuBar,
-  type CookiesLandingSection,
-  type MenuData,
-} from '@google-psat/design-system';
 import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
@@ -34,6 +29,8 @@ import BlockedCookiesSection from './blockedCookiesSection';
 import KnownBreakages from './knownBreakages';
 import ExemptedCookiesSection from './exemptedCookiesSection';
 import FramesSection from './framesSection';
+import { CookiesLandingSection } from '../../../../../../../cookiesLanding';
+import MenuBar, { MenuData } from '../../../../../../../menuBar';
 
 interface LandingProps {
   tabFrames: TabFrames;

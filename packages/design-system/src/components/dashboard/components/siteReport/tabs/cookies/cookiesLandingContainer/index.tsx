@@ -27,19 +27,15 @@ import {
   type TabFrames,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import {
-  ChipsBar,
-  FilterIcon,
-  FiltersSidebar,
-  useGlobalFiltering,
-  type TableFilter,
-} from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
 import Landing from './cookieLanding/landing';
+import { ChipsBar, FiltersSidebar, TableFilter } from '../../../../../../table';
+import useGlobalFiltering from '../../../../../../cookiesLanding/useGlobalFiltering';
+import { FilterIcon } from '../../../../../../../icons';
 
 interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;

@@ -24,7 +24,7 @@ import type { CompleteJson, TabCookies } from '@google-psat/common';
  * Internal dependencies
  */
 import { createZip, getFolderName } from './utils';
-import type { TableFilter } from '@google-psat/design-system';
+import { TableFilter } from '../../../../table';
 
 const generateSiteReportandDownload = async (
   JSONReport: CompleteJson[],

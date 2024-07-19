@@ -15,7 +15,6 @@
  */
 import React, { useMemo, useCallback, useState } from 'react';
 import { noop, type TabCookies, type TabFrames } from '@google-psat/common';
-import type { TableFilter } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -24,6 +23,7 @@ import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
 import { generateSiteReportandDownload } from '../../../utils/reportDownloader';
 import AssembledCookiesLanding from './cookiesLandingContainer';
+import { TableFilter } from '../../../../../table';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
