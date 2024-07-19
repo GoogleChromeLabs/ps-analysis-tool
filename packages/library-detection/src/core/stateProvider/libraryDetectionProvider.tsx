@@ -68,16 +68,18 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     []
   );
 
-  const onCommittedListener = useCallback(
+  const onCompletedListener = useCallback(
     ({
       frameId,
       frameType,
       tabId: changingTabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameId === 0 && frameType === 'outermost_frame') {
-        if (Number(changingTabId) === Number(tabId)) {
-          setIsCurrentTabLoading(false);
-        }
+      if (
+        frameId === 0 &&
+        frameType === 'outermost_frame' &&
+        Number(changingTabId) === Number(tabId)
+      ) {
+        setIsCurrentTabLoading(false);
       }
     },
     [tabId]
@@ -109,21 +111,24 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.webNavigation.onCompleted.addListener(onCommittedListener);
+    chrome.webNavigation.onCompleted.addListener(onCompletedListener);
     chrome.webNavigation.onErrorOccurred.addListener(onErrorOccuredListener);
     chrome.webNavigation.onBeforeNavigate.addListener(onNavigatedListener);
     chrome.webNavigation.onCompleted.addListener(onCompleted);
 
     return () => {
-      chrome.webNavigation.onCompleted.removeListener(onCommittedListener);
+      chrome.webNavigation.onCompleted.removeListener(onCompletedListener);
       chrome.webNavigation.onBeforeNavigate.removeListener(onNavigatedListener);
       chrome.webNavigation.onCompleted.removeListener(onCompleted);
+      chrome.webNavigation.onErrorOccurred.removeListener(
+        onErrorOccuredListener
+      );
     };
   }, [
     onErrorOccuredListener,
     onNavigatedListener,
     onCompleted,
-    onCommittedListener,
+    onCompletedListener,
   ]);
 
   return (
