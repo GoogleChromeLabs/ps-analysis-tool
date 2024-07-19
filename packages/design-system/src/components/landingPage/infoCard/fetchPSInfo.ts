@@ -26,6 +26,7 @@ export enum PSInfoKey {
   'UserAgentReduction' = 'user-agent-reduction',
   'RelatedWebsiteSets' = 'related-website-sets',
   'Chips' = 'chips',
+  'PrivateAggregation' = 'private-aggregation',
 }
 
 export type PSInfoKeyType = (typeof PSInfoKey)[keyof typeof PSInfoKey];

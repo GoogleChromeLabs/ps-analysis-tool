@@ -206,6 +206,8 @@ export type CookieJsonDataType = {
     httpOnly: boolean;
     secure: boolean;
     sameSite: string;
+    priority?: 'Low' | 'Medium' | 'High';
+    size?: number;
   };
   analytics: {
     platform: string;
@@ -239,6 +241,7 @@ export type CompleteJson = {
       frameCookies: {
         [cookieKey: string]: CookieJsonDataType;
       };
+      frameType?: string | undefined;
     };
   };
   libraryMatches: { [key: string]: LibraryData };

@@ -24,15 +24,17 @@ import type {
   TechnologyData,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+import {
+  extractReportData,
+  extractCookies,
+  SiteMapReport,
+  SiteReport,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies
  */
 import './app.css';
-import SiteReport from './components/siteReport';
-import SiteMapReport from './components/siteMapReport';
-import extractReportData from './components/utils/extractReportData';
-import extractCookies from './components/utils/extractCookies';
 
 enum DisplayType {
   SITEMAP,

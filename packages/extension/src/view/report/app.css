@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+@layer base {
+  body {
+    @apply font-sans;
+  }
+  :root {
+    --color-message-box-dark: 33deg 14% 18%;
+    --color-message-box-light: 30deg 100% 75%;
+  }
+}

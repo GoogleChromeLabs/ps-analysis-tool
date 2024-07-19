@@ -36,7 +36,7 @@ import {
 } from '@google-psat/analysis-utils';
 import {
   DetectionFunctions,
-  Libraries,
+  LIBRARIES,
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
 import URL from 'node:url';
@@ -318,8 +318,7 @@ const saveResultsAsHTML = async (
   const cookieAnalysisAndFetchedResourceData =
     await analyzeCookiesUrlsInBatchesAndFetchResources(
       urlsToProcess,
-      //@ts-ignore Fix type.
-      Libraries,
+      LIBRARIES,
       !isHeadful,
       waitTime,
       cookieDictionary,
@@ -362,7 +361,7 @@ const saveResultsAsHTML = async (
       ...detectMatchingSignatures(
         cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
         Object.fromEntries(
-          Libraries.map((library) => [library.name, library.detectionFunction])
+          LIBRARIES.map((library) => [library.name, library.detectionFunction])
         ) as DetectionFunctions
       ),
       ...(cookieAnalysisAndFetchedResourceData[ind]?.domQueryMatches ?? {}),

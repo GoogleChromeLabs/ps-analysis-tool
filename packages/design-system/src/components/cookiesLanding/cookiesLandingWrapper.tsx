@@ -58,12 +58,12 @@ const CookiesLandingWrapper = ({
               <div>
                 <InfoIcon className="w-3 h-3 fill-granite-gray" />
               </div>
-              <p
+              <div
                 className="text-xxxs text-center text-gray dark:text-bright-gray"
                 style={{ whiteSpace: 'pre-line' }}
               >
                 {infoIconTitle}
-              </p>
+              </div>
             </div>
           )}
         </div>
