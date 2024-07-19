@@ -21,7 +21,7 @@ import {
   executeTaskInDevToolWorker,
   LIBRARY_DETECTION_WORKER_TASK,
 } from '@google-psat/common';
-
+import { diff } from 'deep-object-diff';
 /**
  * Internal dependencies.
  */
@@ -32,7 +32,6 @@ import {
 import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import LIBRARIES from '../../config';
-import { diff } from 'deep-object-diff';
 
 // The delay after the page load, because some scripts arrive right after the page load.
 const LOADING_DELAY = 2000;

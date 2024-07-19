@@ -68,18 +68,15 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     []
   );
 
-  // It is attached, next time the tab is updated or reloaded.
-  const onTabUpdate = useCallback(
-    (changingTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (Number(changingTabId) === Number(tabId)) {
-        if (changeInfo.status === 'complete') {
+  const onCommittedListener = useCallback(
+    ({
+      frameId,
+      frameType,
+      tabId: changingTabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameId === 0 && frameType === 'outermost_frame') {
+        if (Number(changingTabId) === Number(tabId)) {
           setIsCurrentTabLoading(false);
-        } else if (changeInfo.status === 'loading') {
-          setLibraryMatches(initialLibraryMatches);
-          setIsCurrentTabLoading(true);
-          setShowLoader(true);
-          setLoadedBeforeState(false);
-          setIsInitialDataUpdated(false);
         }
       }
     },
@@ -112,18 +109,22 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.tabs.onUpdated.removeListener(onTabUpdate);
-    chrome.tabs.onUpdated.addListener(onTabUpdate);
+    chrome.webNavigation.onCompleted.addListener(onCommittedListener);
     chrome.webNavigation.onErrorOccurred.addListener(onErrorOccuredListener);
     chrome.webNavigation.onBeforeNavigate.addListener(onNavigatedListener);
     chrome.webNavigation.onCompleted.addListener(onCompleted);
 
     return () => {
-      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+      chrome.webNavigation.onCompleted.removeListener(onCommittedListener);
       chrome.webNavigation.onBeforeNavigate.removeListener(onNavigatedListener);
       chrome.webNavigation.onCompleted.removeListener(onCompleted);
     };
-  }, [onTabUpdate, onErrorOccuredListener, onNavigatedListener, onCompleted]);
+  }, [
+    onErrorOccuredListener,
+    onNavigatedListener,
+    onCompleted,
+    onCommittedListener,
+  ]);
 
   return (
     <Context.Provider
