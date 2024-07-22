@@ -40,7 +40,6 @@ import { FilterIcon } from '../../../../../../../icons';
 interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;
   tabFrames: TabFrames;
-  setFilteredData: React.Dispatch<React.SetStateAction<TabCookies>>;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
@@ -56,7 +55,6 @@ interface AssembledCookiesLandingProps {
 const AssembledCookiesLanding = ({
   tabCookies,
   tabFrames,
-  setFilteredData,
   setAppliedFilters,
   downloadReport,
   libraryMatches,
@@ -85,10 +83,6 @@ const AssembledCookiesLanding = ({
       }, {}) || {}
     );
   }, [filterOutput?.filteredData]);
-
-  useEffect(() => {
-    setFilteredData(cookiesByKey);
-  }, [cookiesByKey, setFilteredData]);
 
   const cookiesWithIssues = useMemo(
     () =>

@@ -19,28 +19,18 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import {
-  getCookieKey,
-  getValueByKey,
-  type CompleteJson,
-  type CookieTableData,
-  type TabCookies,
-} from '@google-psat/common';
+import { type CompleteJson } from '@google-psat/common';
 
 /**
  * Internal dependencies
  */
 import { createZip, getFolderName, generateSitemapHTMLFile } from './utils';
-import extractCookies from '../extractCookies';
-import reshapeCookies from '../reshapeCookies';
 import { TableFilter } from '../../../../table';
 
 const generateSiteMapReportandDownload = async (
   JSONReport: CompleteJson[],
-  filteredData: TabCookies,
   appliedFilters: TableFilter,
-  path: string,
-  reportHTML: string
+  path: string
 ) => {
   if (!JSONReport.length) {
     return;
@@ -63,65 +53,10 @@ const generateSiteMapReportandDownload = async (
       return;
     }
 
-    let siteFilteredData: TabCookies = reshapeCookies(
-      extractCookies(data.cookieData, data.pageUrl, true)
-    );
-
-    if (Object.keys(appliedFilters).length) {
-      siteFilteredData = Object.values(siteFilteredData)
-        .filter((row) => {
-          return Object.entries(appliedFilters).every(([filterKey, filter]) => {
-            const filterValues = filter.filterValues || {};
-
-            if (Object.keys(filterValues).length === 0) {
-              return true;
-            }
-
-            const value = getValueByKey(filterKey, row);
-
-            if (filter.comparator !== undefined) {
-              return Object.keys(filterValues).some((filterValue) =>
-                filter.comparator?.(value, filterValue)
-              );
-            } else if (filterValues[value]) {
-              return filterValues[value].selected;
-            }
-
-            return false;
-          });
-        })
-        .reduce<TabCookies>((acc, cookie) => {
-          const cookieKey = getCookieKey(
-            (cookie as CookieTableData).parsedCookie
-          );
-
-          if (!cookieKey) {
-            return acc;
-          }
-
-          acc[cookieKey] = cookie as CookieTableData;
-
-          return acc;
-        }, {});
-    }
-
-    createZip(
-      data,
-      siteFilteredData,
-      appliedFilters,
-      zipFolder,
-      data.pageUrl,
-      reportHTML
-    );
+    createZip(data, appliedFilters, zipFolder);
   });
 
-  const report = generateSitemapHTMLFile(
-    JSONReport,
-    filteredData,
-    appliedFilters,
-    path,
-    reportHTML
-  );
+  const report = generateSitemapHTMLFile(JSONReport, appliedFilters);
 
   zip.file('report.html', report);
 

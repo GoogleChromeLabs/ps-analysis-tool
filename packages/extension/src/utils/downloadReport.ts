@@ -71,13 +71,12 @@ export const generateDashboard = async (
 
   const locale = I18n.getLocale();
   const translations = await I18n.fetchMessages(locale);
-  const htmlText = await (await fetch('../report/index.html')).text();
 
   const code = `
   window.PSAT_EXTENSION = true;
-  window.PSAT_REPORT_HTML = '${btoa(unescape(encodeURIComponent(htmlText)))}';
   window.PSAT_DATA = ${JSON.stringify({
     json: reportData,
+    type: 'url',
     selectedSite: isValidURL(url)
       ? new URL(url).hostname.replace('.', '-')
       : '',
@@ -85,6 +84,7 @@ export const generateDashboard = async (
   })}`;
 
   script.text = code;
+  script.id = 'JSONDATASCRIPT';
   reportDom.head.appendChild(script);
 
   const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;

@@ -24,21 +24,11 @@ import {
   generateSummaryDataCSV,
   generateTechnologyCSV,
   type CompleteJson,
-  type DataMapping,
-  type TabFrames,
-  type TabCookies,
 } from '@google-psat/common';
-import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
  */
-import {
-  prepareCookieStatsComponents,
-  prepareCookiesCount,
-  prepareFrameStatsComponent,
-  prepareFrameStatsComponentForExtensionDashboard,
-} from '../../../../../utils';
 import { TableFilter } from '../../../../table';
 
 const generateCSVFiles = (data: CompleteJson) => {
@@ -58,231 +48,54 @@ const generateCSVFiles = (data: CompleteJson) => {
   };
 };
 
-/**
- *
- * @param analysisData Anaylsis Data
- * @param filteredData Filtered cookies data
- * @param appliedFilters Applied filters
- * @param siteURL The main site url.
- * @returns Object Report object required to make HTML report
- */
-function generateReportObject(
-  analysisData: CompleteJson,
-  filteredData: TabCookies,
-  appliedFilters: TableFilter,
-  siteURL: string
-) {
-  const tabCookies = filteredData;
-
-  const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
-    (cookie.frameUrls as string[]).forEach((url) => {
-      if (url?.includes('http')) {
-        acc[url] = {} as TabFrames[string];
-      }
-    });
-    return acc;
-  }, {} as TabFrames);
-
-  const cookieStats = prepareCookiesCount(tabCookies);
-  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
-  const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
-
-  const frameStateCreator = isExtension
-    ? prepareFrameStatsComponentForExtensionDashboard(analysisData)
-    : prepareFrameStatsComponent(tabFrames, tabCookies);
-
-  const cookieClassificationDataMapping: DataMapping[] = [
-    {
-      title: I18n.getMessage('totalCookies'),
-      count: cookieStats.total,
-      data: cookiesStatsComponents.legend,
-    },
-    {
-      title: I18n.getMessage('firstPartyCookies'),
-      count: cookieStats.firstParty.total,
-      data: cookiesStatsComponents.firstParty,
-    },
-    {
-      title: I18n.getMessage('thirdPartyCookies'),
-      count: cookieStats.thirdParty.total,
-      data: cookiesStatsComponents.thirdParty,
-    },
-  ];
-
-  const blockedCookieDataMapping: DataMapping[] = [
-    {
-      title: I18n.getMessage('blockedCookies'),
-      count: cookieStats.blockedCookies.total,
-      data: cookiesStatsComponents.blocked,
-    },
-  ];
-
-  const exemptedCookiesDataMapping: DataMapping[] = [
-    {
-      title: I18n.getMessage('exemptedCookies'),
-      count: cookieStats.exemptedCookies.total,
-      data: cookiesStatsComponents.exempted,
-    },
-  ];
-
-  return {
-    cookieClassificationDataMapping,
-    tabCookies,
-    cookiesStatsComponents,
-    libraryMatches: analysisData.libraryMatches,
-    tabFrames,
-    showInfoIcon: true,
-    showHorizontalMatrix: false,
-    blockedCookieDataMapping,
-    showBlockedInfoIcon: true,
-    frameStateCreator,
-    showFramesSection: isExtension,
-    exemptedCookiesDataMapping,
-    showBlockedCategory: true,
-    url: siteURL,
-    source: 'cli',
-    // @ts-ignore - 'typeof globalThis' has no index signature.
-    translations: globalThis?.PSAT_DATA?.translations,
-    filters: appliedFilters,
-  };
-}
-
-/**
- *
- * @param analysisData Analysis Data
- * @param filteredData Filtered cookies data
- * @param appliedFilters Applied filters
- * @param sitemapURL URL for the sitemap
- * @returns Object Report object required to make HTML report
- */
-function generateSitemapReportObject(
-  analysisData: CompleteJson[],
-  filteredData: TabCookies,
-  appliedFilters: TableFilter,
-  sitemapURL: string
-) {
-  const tabCookies = filteredData;
-
-  const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
-    (cookie.frameUrls as string[]).forEach((url) => {
-      if (url?.includes('http')) {
-        acc[url] = {} as TabFrames[string];
-      }
-    });
-    return acc;
-  }, {} as TabFrames);
-
-  const cookieStats = prepareCookiesCount(tabCookies);
-  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
-
-  const cookieClassificationDataMapping: DataMapping[] = [
-    {
-      title: I18n.getMessage('totalCookies'),
-      count: cookieStats.total,
-      data: cookiesStatsComponents.legend,
-    },
-    {
-      title: I18n.getMessage('firstPartyCookies'),
-      count: cookieStats.firstParty.total,
-      data: cookiesStatsComponents.firstParty,
-    },
-    {
-      title: I18n.getMessage('thirdPartyCookies'),
-      count: cookieStats.thirdParty.total,
-      data: cookiesStatsComponents.thirdParty,
-    },
-  ];
-
-  const blockedCookieDataMapping: DataMapping[] = [
-    {
-      title: I18n.getMessage('blockedCookies'),
-      count: cookieStats.blockedCookies.total,
-      data: cookiesStatsComponents.blocked,
-    },
-  ];
-
-  const exemptedCookiesDataMapping: DataMapping[] = [
-    {
-      title: I18n.getMessage('exemptedCookies'),
-      count: cookieStats.exemptedCookies.total,
-      data: cookiesStatsComponents.exempted,
-    },
-  ];
-
-  const libraryMatchesUrlCount: {
-    [key: string]: number;
-  } = {};
-  const libraryMatches = analysisData.reduce<CompleteJson['libraryMatches']>(
-    (acc, data) => {
-      const _libraryMatches = data.libraryMatches;
-
-      Object.keys(_libraryMatches).forEach((key) => {
-        acc[key] =
-          // @ts-ignore
-          acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
-            ? acc[key]
-            : _libraryMatches[key];
-
-        if (
-          Object.keys(_libraryMatches[key]?.matches ?? {}).length ||
-          Object.keys(_libraryMatches[key]?.domQuerymatches ?? {}).length
-        ) {
-          libraryMatchesUrlCount[key] = (libraryMatchesUrlCount[key] || 0) + 1;
-        }
-      });
-
-      return acc;
-    },
-    {}
-  );
-
-  return {
-    cookieClassificationDataMapping,
-    tabCookies,
-    cookiesStatsComponents,
-    libraryMatches,
-    tabFrames,
-    showInfoIcon: true,
-    showHorizontalMatrix: false,
-    blockedCookieDataMapping,
-    showBlockedInfoIcon: true,
-    frameStateCreator,
-    exemptedCookiesDataMapping,
-    showFramesSection: false,
-    showBlockedCategory: true,
-    url: sitemapURL,
-    libraryMatchesUrlCount,
-    // @ts-ignore - 'typeof globalThis' has no index signature
-    translations: globalThis?.PSAT_DATA?.translations,
-    filters: appliedFilters,
-  };
-}
-
 const generateHTMLFile = (
   analysisData: CompleteJson,
-  filteredData: TabCookies,
-  appliedFilters: TableFilter,
-  url: string,
-  reportHTML: string
+  appliedFilters: TableFilter
 ) => {
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(reportHTML, 'text/html');
+  const reportDom = parser.parseFromString(
+    `
+    <html>
+    ${document.documentElement.innerHTML}
+    </html>
+    `,
+    'text/html'
+  );
 
+  const translations =
+    // @ts-ignore
+    globalThis?.PSAT_DATA?.translations;
+
+  const previousJSONDATA = reportDom.getElementById('JSONDATASCRIPT');
+  const styleNodes = reportDom.querySelectorAll('style');
+
+  if (styleNodes.length > 1) {
+    styleNodes.forEach((styleNode, index) => {
+      if (index !== 0) {
+        reportDom.head.removeChild(styleNode);
+      }
+    });
+  }
+
+  if (previousJSONDATA) {
+    reportDom.head.removeChild(previousJSONDATA);
+  }
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateReportObject(
-    analysisData,
-    filteredData,
+  const reportData = {
+    json: [analysisData],
+    type: 'url',
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    selectedSite: globalThis?.PSAT_DATA?.selectedSite ?? '',
+    translations,
     appliedFilters,
-    url
-  );
+  };
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 
   script.text = code;
+  script.id = 'JSONDATASCRIPT';
   reportDom.head.appendChild(script);
 
   const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
@@ -293,27 +106,53 @@ const generateHTMLFile = (
 
 export const generateSitemapHTMLFile = (
   analysisData: CompleteJson[],
-  filteredData: TabCookies,
-  appliedFilters: TableFilter,
-  sitemapURL: string,
-  reportHTML: string
+  appliedFilters: TableFilter
 ) => {
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(reportHTML, 'text/html');
+  const reportDom = parser.parseFromString(
+    `
+    <html>
+    ${document.documentElement.innerHTML}
+    </html>
+    `,
+    'text/html'
+  );
+
+  const previousJSONDATA = reportDom.getElementById('JSONDATASCRIPT');
+  const styleNodes = reportDom.querySelectorAll('style');
+
+  if (styleNodes.length > 1) {
+    styleNodes.forEach((styleNode, index) => {
+      if (index !== 0) {
+        reportDom.head.removeChild(styleNode);
+      }
+    });
+  }
+
+  if (previousJSONDATA) {
+    reportDom.head.removeChild(previousJSONDATA);
+  }
 
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateSitemapReportObject(
-    analysisData,
-    filteredData,
+  const translations =
+    // @ts-ignore
+    globalThis?.PSAT_DATA?.translations;
+
+  const reportData = {
+    json: analysisData,
+    type: 'sitemap',
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    selectedSite: globalThis?.PSAT_DATA?.selectedSite ?? '',
+    translations,
     appliedFilters,
-    sitemapURL
-  );
+  };
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 
   script.text = code;
+  script.id = 'JSONDATASCRIPT';
   reportDom.head.appendChild(script);
 
   const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
@@ -324,11 +163,8 @@ export const generateSitemapHTMLFile = (
 
 export const createZip = (
   analysisData: CompleteJson,
-  filteredData: TabCookies,
   appliedFilters: TableFilter,
-  zipObject: JSZip,
-  url: string,
-  reportHTML: string
+  zipObject: JSZip
 ) => {
   const {
     allCookiesCSV,
@@ -337,13 +173,7 @@ export const createZip = (
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
-  const file = generateHTMLFile(
-    analysisData,
-    filteredData,
-    appliedFilters,
-    url,
-    reportHTML
-  );
+  const file = generateHTMLFile(analysisData, appliedFilters);
 
   zipObject.file('cookies.csv', allCookiesCSV);
   if (technologyDataCSV) {

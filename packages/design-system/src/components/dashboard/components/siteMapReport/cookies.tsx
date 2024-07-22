@@ -58,8 +58,6 @@ const CookiesTab = ({
   clearQuery = noop,
 }: CookiesTabProps) => {
   const isKeySelected = useSidebar(({ actions }) => actions.isKeySelected);
-
-  const [filteredData, setFilteredData] = useState<TabCookies>({});
   const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
 
   const [siteMapLibraryMatches, libraryMatchesUrlCount] = useMemo(() => {
@@ -98,21 +96,8 @@ const CookiesTab = ({
       return;
     }
 
-    //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
-    const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
-    //@ts-ignore -- PSAT_REPORT_HTML is a custom variable that is injected when report is being downloaded.
-    const reportHTMLText = globalThis?.PSAT_REPORT_HTML;
-
-    generateSiteMapReportandDownload(
-      completeJson,
-      filteredData,
-      appliedFilters,
-      path,
-      isExtension
-        ? decodeURIComponent(escape(atob(reportHTMLText)))
-        : atob(reportHTMLText)
-    );
-  }, [appliedFilters, completeJson, filteredData, path]);
+    generateSiteMapReportandDownload(completeJson, appliedFilters, path);
+  }, [appliedFilters, completeJson, path]);
 
   const [
     siteFilteredCookies,
@@ -144,7 +129,6 @@ const CookiesTab = ({
           downloadReport={downloadReport}
           menuBarScrollContainerId="dashboard-sitemap-layout-container"
           setAppliedFilters={setAppliedFilters}
-          setFilteredData={setFilteredData}
           query={query}
           clearQuery={clearQuery}
         />
