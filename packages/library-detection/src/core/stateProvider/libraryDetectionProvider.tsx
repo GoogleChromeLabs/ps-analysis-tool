@@ -86,6 +86,7 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         Number(changingTabId) === Number(tabId)
       ) {
         setIsCurrentTabLoading(false);
+        setErrorOccured(false);
       }
     },
     [tabId]
@@ -107,35 +108,19 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
-  const onCompleted = useCallback(
-    ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameId === 0) {
-        setErrorOccured(false);
-      }
-    },
-    []
-  );
-
   useEffect(() => {
     chrome.webNavigation.onCompleted.addListener(onCompletedListener);
     chrome.webNavigation.onErrorOccurred.addListener(onErrorOccuredListener);
     chrome.webNavigation.onBeforeNavigate.addListener(onNavigatedListener);
-    chrome.webNavigation.onCompleted.addListener(onCompleted);
 
     return () => {
       chrome.webNavigation.onCompleted.removeListener(onCompletedListener);
       chrome.webNavigation.onBeforeNavigate.removeListener(onNavigatedListener);
-      chrome.webNavigation.onCompleted.removeListener(onCompleted);
       chrome.webNavigation.onErrorOccurred.removeListener(
         onErrorOccuredListener
       );
     };
-  }, [
-    onErrorOccuredListener,
-    onNavigatedListener,
-    onCompleted,
-    onCompletedListener,
-  ]);
+  }, [onErrorOccuredListener, onNavigatedListener, onCompletedListener]);
 
   return (
     <Context.Provider
