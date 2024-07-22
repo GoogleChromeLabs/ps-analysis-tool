@@ -52,3 +52,4 @@ export { default as MatrixContainer } from './matrixContainer';
 export { default as MenuBar } from './menuBar';
 export * from './menuBar';
 export { default as useFiltersMapping } from './cookiesLanding/useFiltersMapping';
+export { default as useGlobalFiltering } from './cookiesLanding/useGlobalFiltering';

@@ -59,6 +59,7 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       testId="cookies-insights"
+      landingHeaderExtraClasses="border-t-0"
     >
       {!cookieStats ||
         (cookieStats?.firstParty.total === 0 &&

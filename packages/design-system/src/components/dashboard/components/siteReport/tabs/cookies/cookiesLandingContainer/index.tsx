@@ -17,28 +17,31 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
-import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  CookieTableData,
+  getCookieKey,
+  noop,
+  type LibraryData,
+  type TabCookies,
+  type TabFrames,
+} from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
-import CookiesSection from './cookieLanding/cookiesSection';
-import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
-import KnownBreakages from './cookieLanding/knownBreakages';
-import ExemptedCookiesSection from './cookieLanding/exemptedCookiesSection';
-import { prepareCookiesCount } from '../../../../../../../utils';
-import MenuBar, { type MenuData } from '../../../../../../menuBar';
-import CookiesLanding, {
-  type CookiesLandingSection,
-} from '../../../../../../cookiesLanding';
-import FramesSection from './cookieLanding/framesSection';
+import Landing from './cookieLanding/landing';
+import { ChipsBar, FiltersSidebar, TableFilter } from '../../../../../../table';
+import useGlobalFiltering from '../../../../../../cookiesLanding/useGlobalFiltering';
+import { FilterIcon } from '../../../../../../../icons';
 
-interface CookiesLandingContainerProps {
-  tabFrames: TabFrames;
+interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;
-  cookiesWithIssues: TabCookies;
+  tabFrames: TabFrames;
+  setFilteredData: React.Dispatch<React.SetStateAction<TabCookies>>;
+  setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => void;
   libraryMatches: LibraryData | null;
   libraryMatchesUrlCount?: {
@@ -46,110 +49,129 @@ interface CookiesLandingContainerProps {
   };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
+  query?: string;
+  clearQuery?: () => void;
 }
 
-const CookiesLandingContainer = ({
-  tabFrames,
+const AssembledCookiesLanding = ({
   tabCookies,
-  cookiesWithIssues,
+  tabFrames,
+  setFilteredData,
+  setAppliedFilters,
   downloadReport,
   libraryMatches,
   libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
-}: CookiesLandingContainerProps) => {
-  const cookieStats = prepareCookiesCount(tabCookies);
+  query = '',
+  clearQuery = noop,
+}: AssembledCookiesLandingProps) => {
+  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
+  const filterOutput = useGlobalFiltering(cookies, query, clearQuery);
 
-  const sections: Array<CookiesLandingSection> = useMemo(() => {
-    const baseSections: Array<CookiesLandingSection> = [
-      {
-        name: I18n.getMessage('cookies'),
-        link: 'cookies',
-        panel: {
-          Element: CookiesSection,
-          props: {
-            tabCookies,
-            tabFrames,
-          },
-        },
-      },
-      {
-        name: I18n.getMessage('blockedCookies'),
-        link: 'blocked-cookies',
-        panel: {
-          Element: BlockedCookiesSection,
-          props: {
-            tabCookies,
-            cookiesWithIssues,
-            tabFrames,
-          },
-        },
-      },
-      {
-        name: 'Exempted Cookies',
-        link: 'exempted-cookies',
-        panel: {
-          Element: ExemptedCookiesSection,
-          props: {
-            cookieStats,
-            tabFrames,
-          },
-        },
-      },
-      {
-        name: I18n.getMessage('knownBreakages'),
-        link: 'known-breakages',
-        panel: {
-          Element: KnownBreakages,
-          props: {
-            libraryMatches: libraryMatches ?? {},
-            libraryMatchesUrlCount,
-          },
-        },
-      },
-    ];
-    //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
-    if (globalThis?.PSAT_EXTENSION) {
-      baseSections.push({
-        name: I18n.getMessage('frames'),
-        link: 'frames',
-        panel: {
-          Element: FramesSection,
-        },
-      });
-    }
+  const cookiesByKey = useMemo(() => {
+    return (
+      filterOutput?.filteredData.reduce<TabCookies>((acc, cookie) => {
+        const cookieKey = getCookieKey(
+          (cookie as CookieTableData).parsedCookie
+        );
 
-    return baseSections;
-  }, [
-    tabCookies,
-    tabFrames,
-    cookiesWithIssues,
-    cookieStats,
-    libraryMatches,
-    libraryMatchesUrlCount,
-  ]);
+        if (!cookieKey) {
+          return acc;
+        }
 
-  const menuData: MenuData = useMemo(
-    () => sections.map(({ name, link }) => ({ name, link })),
-    [sections]
+        acc[cookieKey] = cookie as CookieTableData;
+
+        return acc;
+      }, {}) || {}
+    );
+  }, [filterOutput?.filteredData]);
+
+  useEffect(() => {
+    setFilteredData(cookiesByKey);
+  }, [cookiesByKey, setFilteredData]);
+
+  const cookiesWithIssues = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(cookiesByKey).filter(([, cookie]) => cookie.isBlocked)
+      ),
+    [cookiesByKey]
   );
 
+  useEffect(() => {
+    setAppliedFilters(filterOutput?.selectedFilters);
+  }, [filterOutput?.selectedFilters, setAppliedFilters]);
+
+  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
+
   return (
-    <>
-      <CookiesLanding>
-        <MenuBar
-          disableReportDownload={false}
-          downloadReport={downloadReport}
-          menuData={menuData}
-          scrollContainerId={menuBarScrollContainerId}
+    <div className="h-full flex flex-col">
+      <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
+        <button
+          className="w-3 h-3 m-1 pl-1"
+          onClick={() => setShowFilterSidebar(!showFilterSidebar)}
+          title={I18n.getMessage('openFilterOptions')}
+        >
+          <FilterIcon
+            className={
+              showFilterSidebar
+                ? 'text-royal-blue dark:text-medium-persian-blue'
+                : 'text-mischka'
+            }
+          />
+        </button>
+        <ChipsBar
+          selectedFilters={filterOutput?.selectedFilters || {}}
+          resetFilters={filterOutput?.resetFilters || noop}
+          toggleFilterSelection={filterOutput?.toggleFilterSelection || noop}
         />
-        {sections.map(({ link, panel: { Element, props } }) => (
-          <div id={link} key={link} className="cookie-landing-section">
-            {Element && <Element {...(props || {})} />}
-          </div>
-        ))}
-      </CookiesLanding>
-    </>
+      </div>
+      <div
+        className="flex grow-0"
+        style={{
+          height: 'calc(100% - 26px)',
+        }}
+      >
+        {showFilterSidebar && (
+          <Resizable
+            minWidth="100px"
+            maxWidth="50%"
+            enable={{
+              right: true,
+            }}
+            className="border border-r border-gray-300 dark:border-quartz"
+          >
+            <FiltersSidebar
+              filters={filterOutput?.filters || {}}
+              toggleFilterSelection={
+                filterOutput?.toggleFilterSelection || noop
+              }
+              toggleSelectAllFilter={
+                filterOutput?.toggleSelectAllFilter || noop
+              }
+              isSelectAllFilterSelected={
+                filterOutput?.isSelectAllFilterSelected || noop
+              }
+            />
+          </Resizable>
+        )}
+        <div
+          className="flex-1 overflow-auto h-full"
+          id="cookies-landing-scroll-container"
+        >
+          <Landing
+            tabCookies={cookiesByKey}
+            tabFrames={tabFrames}
+            cookiesWithIssues={cookiesWithIssues}
+            downloadReport={downloadReport}
+            libraryMatches={libraryMatches}
+            libraryMatchesUrlCount={libraryMatchesUrlCount}
+            menuBarScrollContainerId={menuBarScrollContainerId}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default CookiesLandingContainer;
+export default AssembledCookiesLanding;

@@ -26,14 +26,21 @@ import classnames from 'classnames';
 import CirclePieChart from '../../circlePieChart';
 interface LandingHeaderProps {
   dataMapping?: DataMapping[];
+  extraClasses?: string;
 }
 
-const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
+const LandingHeader = ({
+  dataMapping = [],
+  extraClasses = '',
+}: LandingHeaderProps) => {
   return (
     <div
-      className={
-        'flex justify-center border-hex-gray pt-5 dark:border-quartz border-t'
-      }
+      className={classnames(
+        'flex justify-center border-hex-gray pt-5 dark:border-quartz border-t',
+        {
+          [extraClasses]: Boolean(extraClasses),
+        }
+      )}
       data-testid="cookies-landing-header"
     >
       <div className="lg:max-w-[729px] flex gap-9 px-4">

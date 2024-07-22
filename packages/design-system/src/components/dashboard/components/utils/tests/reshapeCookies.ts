@@ -83,6 +83,8 @@ describe('reshapeCookies', () => {
         isBlocked: false,
         blockedReasons: [],
         headerType: 'response',
+        exemptionReason: undefined,
+        pageUrl: 'https://www.cnn.com/index.html',
       },
     });
   });

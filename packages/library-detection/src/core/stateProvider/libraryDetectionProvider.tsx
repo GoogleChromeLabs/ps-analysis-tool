@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, {
+import {
   type PropsWithChildren,
   useState,
   useCallback,

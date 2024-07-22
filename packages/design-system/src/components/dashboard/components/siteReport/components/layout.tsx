@@ -88,6 +88,8 @@ const Layout = ({
           selectedFrameUrl: null,
           selectedSite,
           isSiteMapLandingContainer: false,
+          query,
+          clearQuery: query ? clearQuery : noop,
         },
       };
 
@@ -155,8 +157,10 @@ const Layout = ({
       return _data;
     });
   }, [
+    clearQuery,
     completeJson,
     frameUrls,
+    query,
     selectedItemKey,
     selectedSite,
     setSidebarData,
@@ -167,7 +171,7 @@ const Layout = ({
     if (selectedItemKey === null) {
       updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
     }
-  }, [selectedItemKey, updateSelectedItemKey]);
+  }, [clearQuery, selectedItemKey, updateSelectedItemKey]);
 
   const lastSelectedSite = useRef<string | null>(null);
 
@@ -177,13 +181,6 @@ const Layout = ({
       lastSelectedSite.current = selectedSite;
     }
   }, [selectedSite, updateSelectedItemKey]);
-
-  useEffect(() => {
-    if (query) {
-      updateSelectedItemKey(frameUrls[0], query);
-      clearQuery();
-    }
-  }, [query, clearQuery, updateSelectedItemKey, frameUrls]);
 
   return (
     <div className="w-full h-full flex">

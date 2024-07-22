@@ -21,6 +21,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 /**
  * Internal dependencies.
@@ -59,6 +60,7 @@ const dashboard = {
   output: {
     path: path.resolve(__dirname, './packages/cli-dashboard/dist'),
     filename: '[name].js',
+    publicPath: '/',
   },
   plugins: [
     new WebpackBar({
@@ -73,6 +75,9 @@ const dashboard = {
     }),
     ...(commonConfig.mode === 'production'
       ? [new HtmlInlineScriptPlugin()]
+      : []),
+    ...(commonConfig.mode !== 'production'
+      ? [new ReactRefreshWebpackPlugin()]
       : []),
     new CopyPlugin({
       patterns: [

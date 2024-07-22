@@ -17,7 +17,10 @@
  * External dependencies
  */
 import React from 'react';
-import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
+import {
+  PrivacySandboxColoredIcon,
+  ChipsBar,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies
@@ -31,18 +34,42 @@ import {
   KnownBreakages,
 } from './components';
 import { useData } from './stateProviders/data';
+import { noop } from '@google-psat/common';
 
 const App = () => {
   const data = useData(({ state }) => state.data);
 
+  const appliedFiltersCount = Object.values(data?.filters || {}).reduce(
+    (acc, filter) => {
+      acc += Number(Object.keys(filter.filterValues || {}).length);
+      return acc;
+    },
+    0
+  );
+
   return (
     <div className="h-full w-full flex flex-col">
       {data?.url && (
-        <div className="flex gap-2 items-center px-4 py-2">
+        <div className="flex gap-2 items-center px-4 py-2 border-b border-gray-300">
           <PrivacySandboxColoredIcon className="w-6 h-6" />
           <p className="text-sm">{data.url}</p>
         </div>
       )}
+
+      {appliedFiltersCount > 0 && (
+        <div className="h-fit bg-anti-flash-white flex gap-2 items-center px-4 border-b border-gray-300">
+          <p className="text-xs">Applied Filters:</p>
+          <div className="overflow-auto">
+            <ChipsBar
+              selectedFilters={data?.filters || {}}
+              resetFilters={noop}
+              toggleFilterSelection={noop}
+              hideClearAll
+            />
+          </div>
+        </div>
+      )}
+
       <CookiesSection />
       <BlockedCookiesSection />
       <ExemptedCookiesSection />

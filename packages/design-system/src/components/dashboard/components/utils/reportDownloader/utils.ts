@@ -26,21 +26,20 @@ import {
   type CompleteJson,
   type DataMapping,
   type TabFrames,
+  type TabCookies,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
  */
-import reshapeCookies from '../reshapeCookies';
-import extractCookies from '../extractCookies';
-import extractReportData from '../extractReportData';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
   prepareFrameStatsComponentForExtensionDashboard,
 } from '../../../../../utils';
+import { TableFilter } from '../../../../table';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);
@@ -62,13 +61,18 @@ const generateCSVFiles = (data: CompleteJson) => {
 /**
  *
  * @param analysisData Anaylsis Data
+ * @param filteredData Filtered cookies data
+ * @param appliedFilters Applied filters
  * @param siteURL The main site url.
  * @returns Object Report object required to make HTML report
  */
-function generateReportObject(analysisData: CompleteJson, siteURL: string) {
-  const tabCookies = reshapeCookies(
-    extractCookies(analysisData.cookieData, analysisData.pageUrl)
-  );
+function generateReportObject(
+  analysisData: CompleteJson,
+  filteredData: TabCookies,
+  appliedFilters: TableFilter,
+  siteURL: string
+) {
+  const tabCookies = filteredData;
 
   const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
     (cookie.frameUrls as string[]).forEach((url) => {
@@ -140,22 +144,25 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     source: 'cli',
     // @ts-ignore - 'typeof globalThis' has no index signature.
     translations: globalThis?.PSAT_DATA?.translations,
+    filters: appliedFilters,
   };
 }
 
 /**
  *
  * @param analysisData Analysis Data
+ * @param filteredData Filtered cookies data
+ * @param appliedFilters Applied filters
  * @param sitemapURL URL for the sitemap
  * @returns Object Report object required to make HTML report
  */
 function generateSitemapReportObject(
   analysisData: CompleteJson[],
+  filteredData: TabCookies,
+  appliedFilters: TableFilter,
   sitemapURL: string
 ) {
-  const tabCookies = reshapeCookies(
-    extractReportData(analysisData).landingPageCookies
-  );
+  const tabCookies = filteredData;
 
   const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
     (cookie.frameUrls as string[]).forEach((url) => {
@@ -249,11 +256,14 @@ function generateSitemapReportObject(
     libraryMatchesUrlCount,
     // @ts-ignore - 'typeof globalThis' has no index signature
     translations: globalThis?.PSAT_DATA?.translations,
+    filters: appliedFilters,
   };
 }
 
 const generateHTMLFile = (
   analysisData: CompleteJson,
+  filteredData: TabCookies,
+  appliedFilters: TableFilter,
   url: string,
   reportHTML: string
 ) => {
@@ -263,7 +273,12 @@ const generateHTMLFile = (
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateReportObject(analysisData, url);
+  const reportData = generateReportObject(
+    analysisData,
+    filteredData,
+    appliedFilters,
+    url
+  );
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 
@@ -276,8 +291,10 @@ const generateHTMLFile = (
   return html;
 };
 
-export const generateSiemapHTMLFile = (
+export const generateSitemapHTMLFile = (
   analysisData: CompleteJson[],
+  filteredData: TabCookies,
+  appliedFilters: TableFilter,
   sitemapURL: string,
   reportHTML: string
 ) => {
@@ -287,7 +304,12 @@ export const generateSiemapHTMLFile = (
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateSitemapReportObject(analysisData, sitemapURL);
+  const reportData = generateSitemapReportObject(
+    analysisData,
+    filteredData,
+    appliedFilters,
+    sitemapURL
+  );
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 
@@ -302,6 +324,8 @@ export const generateSiemapHTMLFile = (
 
 export const createZip = (
   analysisData: CompleteJson,
+  filteredData: TabCookies,
+  appliedFilters: TableFilter,
   zipObject: JSZip,
   url: string,
   reportHTML: string
@@ -313,7 +337,13 @@ export const createZip = (
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
-  const file = generateHTMLFile(analysisData, url, reportHTML);
+  const file = generateHTMLFile(
+    analysisData,
+    filteredData,
+    appliedFilters,
+    url,
+    reportHTML
+  );
 
   zipObject.file('cookies.csv', allCookiesCSV);
   if (technologyDataCSV) {

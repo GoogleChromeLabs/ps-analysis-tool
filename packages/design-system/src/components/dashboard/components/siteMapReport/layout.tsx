@@ -24,18 +24,15 @@ import {
   type CookieFrameStorageType,
   type CompleteJson,
   type LibraryData,
+  noop,
 } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 
-import SiteReport from '../siteReport';
 import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
-import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
-import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
-import extractCookies from '../utils/extractCookies';
 import {
   SIDEBAR_ITEMS_KEYS,
   Sidebar,
@@ -43,6 +40,7 @@ import {
   type SidebarItems,
 } from '../../../sidebar';
 import { File, FileWhite } from '../../../../icons';
+import CookiesTab from './cookies';
 
 interface LayoutProps {
   landingPageCookies: CookieFrameStorageType;
@@ -98,29 +96,6 @@ const Layout = ({
   const { Element: PanelElement, props } = activePanel.panel;
   const { query, clearQuery } = activePanel;
 
-  const [
-    siteFilteredCookies,
-    siteFilteredTechnologies,
-    siteFilteredCompleteJson,
-  ] = useMemo(() => {
-    const reportData = completeJson?.find((data) =>
-      isKeySelected(data.pageUrl)
-    );
-
-    if (!reportData) {
-      return [{}, [], null];
-    }
-
-    const _cookies = extractCookies(
-      reportData.cookieData,
-      reportData.pageUrl,
-      true
-    );
-    const _technologies = reportData.technologyData;
-
-    return [_cookies, _technologies, [reportData]];
-  }, [completeJson, isKeySelected]);
-
   const doesSiteHaveCookies = useMemo(() => {
     const store = {} as Record<string, boolean>;
 
@@ -136,73 +111,30 @@ const Layout = ({
     return store;
   }, [completeJson]);
 
-  const [siteMapLibraryMatches, libraryMatchesUrlCount] = useMemo(() => {
-    const _libraryMatchesUrlCount: {
-      [key: string]: number;
-    } = {};
+  const tabFrames = useMemo(
+    () =>
+      sites.reduce<TabFrames>((acc, site) => {
+        acc[site] = {} as TabFrames[string];
 
-    const _siteMapLibraryMatches = completeJson?.reduce<
-      CompleteJson['libraryMatches']
-    >((acc, data) => {
-      const _libraryMatches = data.libraryMatches;
-
-      Object.keys(_libraryMatches).forEach((key) => {
-        acc[key] =
-          // @ts-ignore
-          acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
-            ? acc[key]
-            : _libraryMatches[key];
-
-        if (
-          Object.keys(_libraryMatches[key]?.matches ?? {}).length ||
-          Object.keys(_libraryMatches[key]?.domQuerymatches ?? {}).length
-        ) {
-          _libraryMatchesUrlCount[key] =
-            (_libraryMatchesUrlCount[key] || 0) + 1;
-        }
-      });
-
-      return acc;
-    }, {});
-
-    return [_siteMapLibraryMatches, _libraryMatchesUrlCount];
-  }, [completeJson]);
+        return acc;
+      }, {}),
+    [sites]
+  );
 
   useEffect(() => {
     setSidebarData((prev) => {
       const _data = { ...prev };
 
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
-        Element: CookiesLandingContainer,
+        Element: CookiesTab,
         props: {
           tabCookies: reshapedCookies,
-          tabFrames: sites.reduce<TabFrames>((acc, site) => {
-            acc[site] = {} as TabFrames[string];
-
-            return acc;
-          }, {}),
-          cookiesWithIssues,
-          libraryMatches: siteMapLibraryMatches,
-          libraryMatchesUrlCount,
-          downloadReport: () => {
-            if (!Array.isArray(completeJson)) {
-              return;
-            }
-
-            //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
-            const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
-            //@ts-ignore -- PSAT_REPORT_HTML is a custom variable that is injected when report is being downloaded.
-            const reportHTMLText = globalThis?.PSAT_REPORT_HTML;
-
-            generateSiteMapReportandDownload(
-              completeJson,
-              isExtension
-                ? decodeURIComponent(escape(atob(reportHTMLText)))
-                : atob(reportHTMLText),
-              ''
-            );
-          },
-          menuBarScrollContainerId: 'dashboard-sitemap-layout-container',
+          tabFrames,
+          completeJson,
+          path,
+          libraryMatches,
+          query,
+          clearQuery: query ? clearQuery : noop,
         },
       };
 
@@ -211,16 +143,16 @@ const Layout = ({
           acc[site] = {
             title: site,
             panel: {
-              Element: SiteReport,
+              Element: CookiesTab,
               props: {
-                cookies: siteFilteredCookies,
-                technologies: siteFilteredTechnologies,
-                completeJson: siteFilteredCompleteJson,
                 selectedSite: site,
+                tabCookies: reshapedCookies,
+                tabFrames,
+                completeJson,
                 path,
-                libraryMatches: libraryMatches ? libraryMatches[site] : {},
+                libraryMatches,
                 query,
-                clearQuery,
+                clearQuery: query ? clearQuery : noop,
               },
             },
             children: {},
@@ -243,31 +175,25 @@ const Layout = ({
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {
-          cookies: Object.values(reshapedCookies).filter(
-            (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
-          ),
-          path: path,
+          cookies: Object.values(cookiesWithIssues),
+          path,
         },
       };
 
       return _data;
     });
   }, [
+    clearQuery,
     completeJson,
     cookiesWithIssues,
     doesSiteHaveCookies,
     libraryMatches,
-    libraryMatchesUrlCount,
     path,
+    query,
     reshapedCookies,
     setSidebarData,
-    siteFilteredCompleteJson,
-    siteFilteredCookies,
-    siteFilteredTechnologies,
-    siteMapLibraryMatches,
     sites,
-    query,
-    clearQuery,
+    tabFrames,
   ]);
 
   useEffect(() => {

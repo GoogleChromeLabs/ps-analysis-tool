@@ -16,35 +16,59 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
-  type CookiesCount,
   type TabFrames,
   type DataMapping,
   getLegendDescription,
+  TabCookies,
 } from '@google-psat/common';
 /**
  * Internal dependencies
  */
 import { type MatrixComponentProps } from '../../../../../../../matrix/matrixComponent';
 import useFiltersMapping from '../../../../../../../cookiesLanding/useFiltersMapping';
-import { prepareCookieStatsComponents } from '../../../../../../../../utils';
+import {
+  prepareCookiesCount,
+  prepareCookieStatsComponents,
+} from '../../../../../../../../utils';
 import CookiesLandingWrapper from '../../../../../../../cookiesLanding/cookiesLandingWrapper';
 import MatrixContainer from '../../../../../../../matrixContainer';
 import { InfoIcon } from '../../../../../../../../icons';
 import { LEGEND_DESCRIPTION } from '../../../../../../../../constants';
 
 interface ExemptedCookiesSectionProps {
-  cookieStats: CookiesCount;
+  tabCookies: TabCookies | null;
   tabFrames: TabFrames | null;
 }
 
 const ExemptedCookiesSection = ({
-  cookieStats,
+  tabCookies,
   tabFrames,
 }: ExemptedCookiesSectionProps) => {
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+  const cookieStats = useMemo(
+    () => prepareCookiesCount(tabCookies),
+    [tabCookies]
+  );
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+
+  const selectTabFrame = useCallback(
+    (exemptionReason: string) => {
+      const cookie = Object.values(tabCookies || {}).find((_cookie) => {
+        // @ts-ignore - exemptionReasons is a string array
+
+        if (_cookie.exemptionReason === exemptionReason) {
+          return true;
+        }
+
+        return false;
+      });
+
+      return cookie?.pageUrl || '';
+    },
+    [tabCookies]
+  );
 
   const dataComponents: MatrixComponentProps[] =
     cookiesStatsComponents.exemptedCookiesLegend.map((component) => {
@@ -55,7 +79,7 @@ const ExemptedCookiesSection = ({
         title: component.label,
         containerClasses: '',
         onClick: (title: string) => {
-          selectedItemUpdater(title, 'exemptionReason');
+          selectedItemUpdater(title, 'exemptionReason', selectTabFrame(title));
         },
       };
     });

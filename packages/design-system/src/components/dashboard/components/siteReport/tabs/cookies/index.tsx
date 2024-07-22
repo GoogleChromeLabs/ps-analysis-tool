@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useMemo, useCallback } from 'react';
-import { type TabFrames } from '@google-psat/common';
+import React, { useMemo, useCallback, useState } from 'react';
+import { noop, type TabCookies, type TabFrames } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -22,14 +22,22 @@ import { type TabFrames } from '@google-psat/common';
 import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
 import { generateSiteReportandDownload } from '../../../utils/reportDownloader';
-import CookiesLandingContainer from './cookiesLandingContainer';
+import AssembledCookiesLanding from './cookiesLandingContainer';
+import { TableFilter } from '../../../../../table';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
   selectedSite?: string | null;
+  query?: string;
+  clearQuery?: () => void;
 }
 
-const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
+const CookiesTab = ({
+  selectedFrameUrl,
+  selectedSite,
+  query = '',
+  clearQuery = noop,
+}: CookiesTabProps) => {
   const { tabCookies, completeJson, libraryMatches } = useContentStore(
     ({ state }) => ({
       tabCookies: state.tabCookies,
@@ -37,6 +45,9 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       libraryMatches: state.libraryMatches,
     })
   );
+
+  const [filteredData, setFilteredData] = useState<TabCookies>({});
+  const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
 
   const tabFrames = useMemo(() => {
     const frames = Object.keys(
@@ -52,13 +63,6 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     return frames;
   }, [completeJson]);
 
-  const cookiesWithIssues = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(tabCookies).filter(([, cookie]) => cookie.isBlocked)
-      ),
-    [tabCookies]
-  );
   const downloadReport = useCallback(() => {
     if (!completeJson) {
       return;
@@ -71,6 +75,9 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     if (completeJson.length > 1) {
       generateSiteReportandDownload(
         completeJson,
+        filteredData,
+        appliedFilters,
+        //@ts-ignore
         isExtension
           ? decodeURIComponent(escape(atob(reportHTMLText)))
           : atob(reportHTMLText),
@@ -79,12 +86,15 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     } else {
       generateSiteReportandDownload(
         completeJson,
+        filteredData,
+        appliedFilters,
+        //@ts-ignore
         isExtension
           ? decodeURIComponent(escape(atob(reportHTMLText)))
           : atob(reportHTMLText)
       );
     }
-  }, [completeJson, selectedSite]);
+  }, [appliedFilters, completeJson, filteredData, selectedSite]);
 
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -95,12 +105,15 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
         />
       ) : (
         <div className="flex flex-col h-full w-full">
-          <CookiesLandingContainer
+          <AssembledCookiesLanding
+            tabCookies={tabCookies}
             libraryMatches={libraryMatches}
             tabFrames={tabFrames}
-            tabCookies={tabCookies}
-            cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
+            setAppliedFilters={setAppliedFilters}
+            setFilteredData={setFilteredData}
+            query={query}
+            clearQuery={clearQuery}
           />
         </div>
       )}

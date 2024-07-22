@@ -23,10 +23,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies.
  */
-import {
-  generateReportObject,
-  generateDashboardObject,
-} from './generateReportObject';
+import { generateDashboardObject } from './generateReportObject';
 import isValidURL from './isValidURL';
 
 /**
@@ -52,7 +49,7 @@ export default async function downloadReport(
   saveAs(html, fileName);
 }
 
-const generateDashboard = async (
+export const generateDashboard = async (
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
@@ -95,36 +92,4 @@ const generateDashboard = async (
   const hostname = new URL(url).hostname;
 
   return { html, fileName: `${hostname.replace('.', '-')}-report.html` };
-};
-
-export const generateReportFile = async (
-  url: string,
-  tabCookies: TabCookies,
-  tabFrames: TabFrames,
-  libraryMatches: LibraryData
-) => {
-  const htmlText = await (await fetch('../report/index.html')).text();
-  const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
-
-  // Injections
-  const script = reportDom.createElement('script');
-
-  const reportData = await generateReportObject(
-    tabCookies,
-    tabFrames,
-    libraryMatches,
-    url
-  );
-
-  const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
-
-  script.text = code;
-  reportDom.head.appendChild(script);
-
-  const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
-  const html = new Blob([injectedHtmlText]);
-  const hostname = new URL(url).hostname;
-
-  return [html, `${hostname.replace('.', '-')}-report.html`];
 };
