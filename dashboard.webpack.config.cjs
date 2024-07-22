@@ -28,31 +28,6 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
  */
 const commonConfig = require('./webpack.shared.cjs');
 
-const report = {
-  entry: {
-    index: '../report/src/index.tsx',
-  },
-  output: {
-    path: path.resolve(__dirname, './packages/cli-dashboard/dist/report'),
-    filename: '[name].js',
-    publicPath: '/',
-  },
-  plugins: [
-    new WebpackBar({
-      name: 'Report',
-      color: '#357B66',
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Report',
-      template: '../report/public/index.html',
-      filename: 'index.html',
-      inject: true,
-    }),
-    new HtmlInlineScriptPlugin(),
-  ],
-  ...commonConfig,
-};
-
 const dashboard = {
   entry: {
     index: './src/index.tsx',
@@ -91,4 +66,4 @@ const dashboard = {
   ...commonConfig,
 };
 
-module.exports = [dashboard, report];
+module.exports = [dashboard];
