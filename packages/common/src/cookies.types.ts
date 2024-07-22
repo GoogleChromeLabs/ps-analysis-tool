@@ -112,7 +112,7 @@ export type CookieData = {
   };
   analytics?: CookieAnalytics | null;
   url?: string;
-  headerType?: 'response' | 'request' | 'javascript';
+  headerType?: 'response' | 'request' | 'javascript' | 'http';
   isFirstParty?: boolean | null;
   frameIdList?: Array<number | string>;
   blockedReasons?: BlockedReason[];
