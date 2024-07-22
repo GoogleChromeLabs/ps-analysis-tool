@@ -122,7 +122,7 @@ program
   )
   .option(
     '-w, --wait <num>',
-    'Number of seconds to wait after the page is loaded before generating the report',
+    'Number of milliseconds to wait after the page is loaded before generating the report',
     numericValidator,
     20000
   )
