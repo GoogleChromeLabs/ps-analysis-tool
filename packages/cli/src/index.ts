@@ -55,6 +55,7 @@ import {
   filePathValidator,
   urlValidator,
   numericValidator,
+  getOutputFilePath,
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
 
@@ -219,11 +220,12 @@ const saveResultsAsHTML = async (
     })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
 
-  const outFileFullDir = path.resolve(outDir + '/index.html');
+  const outputFilePath = getOutputFilePath(outDir);
+  const outFileFullDir = path.resolve(outputFilePath);
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
-  writeFile(outDir + '/index.html', buffer, () =>
+  writeFile(outputFilePath, buffer, () =>
     console.log(`\nReport: ${URL.pathToFileURL(outFileFullDir)}`)
   );
 };

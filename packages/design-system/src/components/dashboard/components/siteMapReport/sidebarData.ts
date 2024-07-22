@@ -25,7 +25,7 @@ import { WarningBare } from '../../../../icons';
 
 const sidebarData: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-    title: () => I18n.getMessage('sitemapReport'),
+    title: () => 'Aggregated Report',
     children: {},
     dropdownOpen: true,
   },

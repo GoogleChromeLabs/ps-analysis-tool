@@ -1918,9 +1918,6 @@ export default {
     session: {
       message: 'Session',
     },
-    sitemapReport: {
-      message: 'Sitemap report',
-    },
     cookieIssues: {
       message: 'Cookie Issues',
     },
