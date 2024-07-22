@@ -75,30 +75,26 @@ program
     isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
   )
   .description('CLI to test a URL for 3p cookies.')
-  .argument(
-    '[website-url]',
-    'The URL of a single site to analyze',
-    urlValidator
+  .argument('[website-url]', 'The URL of a single site to analyze', (value) =>
+    urlValidator(value, '[website-url]')
   )
-  .option(
-    '-u, --url <url>',
-    'The URL of a single site to analyze',
-    urlValidator
+  .option('-u, --url <url>', 'The URL of a single site to analyze', (value) =>
+    urlValidator(value, '-u')
   )
   .option(
     '-s, --source-url <url>',
     'The URL of a sitemap or CSV to analyze',
-    urlValidator
+    (value) => urlValidator(value, '-s')
   )
   .option(
     '-f, --file <path>',
     'The path to a local file (CSV or XML sitemap) to analyze',
-    filePathValidator
+    (value) => filePathValidator(value, '-f')
   )
   .option(
     '-n, --number-of-urls <num>',
     'Limit the number of URLs to analyze (from sitemap or CSV)',
-    numericValidator
+    (value) => numericValidator(value, '-n')
   )
   .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
   .option('-v, --verbose', 'Enables verbose logging', false)
@@ -106,7 +102,7 @@ program
   .option(
     '-o, --out-dir <path>',
     'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
-    outDirValidator
+    (value) => outDirValidator(value, '-o')
   )
   .option(
     '-i, --ignore-gdpr',
@@ -117,19 +113,19 @@ program
   .option(
     '-c, --concurrency <num>',
     'Number of tabs to open in parallel during sitemap or CSV analysis',
-    numericValidator,
+    (value) => numericValidator(value, '-c'),
     3
   )
   .option(
     '-w, --wait <num>',
     'Number of milliseconds to wait after the page is loaded before generating the report',
-    numericValidator,
+    (value) => numericValidator(value, '-w'),
     20000
   )
   .option(
     '-l, --locale <language>',
     'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR',
-    localeValidator,
+    (value) => localeValidator(value, '-l'),
     'en'
   )
   .helpOption('-h, --help', 'Display help for command')
