@@ -229,9 +229,6 @@
   "session": {
     "message": "세션"
   },
-  "sitemapReport": {
-    "message": "사이트맵 보고서"
-  },
   "cookieIssues": {
     "message": "쿠키 문제"
   },
