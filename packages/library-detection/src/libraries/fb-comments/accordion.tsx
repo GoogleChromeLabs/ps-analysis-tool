@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -23,7 +24,6 @@
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_COMMENTS_HELP_URL } from './constants';
-import { I18n } from '@google-psat/i18n';
 
 const FBCommentsAccordion = ({ domQueryMatches, urlCount }: AccordionProps) => {
   if (!domQueryMatches) {

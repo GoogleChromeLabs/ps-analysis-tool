@@ -20,6 +20,10 @@
 import { useMemo } from 'react';
 import type { CookieTableData } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import {
   calculateBlockedReasonsFilterValues,
   calculateExemptionReason,

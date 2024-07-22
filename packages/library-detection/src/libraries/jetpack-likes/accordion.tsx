@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -23,7 +24,6 @@
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { JETPACK_LIKES_HELP_URL } from './constants';
-import { I18n } from '@google-psat/i18n';
 
 const JetpackLikesAccordion = ({
   domQueryMatches,

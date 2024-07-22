@@ -31,13 +31,13 @@ import {
   useGlobalFiltering,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies
  */
 import Landing from './landing';
 import { useCookie } from '../../../stateProviders';
-import { Resizable } from 're-resizable';
 
 const AssembledCookiesLanding = () => {
   const { tabCookies } = useCookie(({ state }) => ({
