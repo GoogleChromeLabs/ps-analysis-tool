@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import {
   getCookieKey,
   noop,
@@ -110,5 +110,4 @@ const AssembledCookiesLanding = () => {
     </div>
   );
 };
-
-export default AssembledCookiesLanding;
+export default memo(AssembledCookiesLanding);

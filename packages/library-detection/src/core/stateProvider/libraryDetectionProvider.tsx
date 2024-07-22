@@ -63,24 +63,30 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         error !== 'net::ERR_ABORTED'
       ) {
         setErrorOccured(true);
+      } else if (
+        frameId === 0 &&
+        _tabId === chrome.devtools.inspectedWindow.tabId &&
+        error === 'net::ERR_ABORTED'
+      ) {
+        setIsCurrentTabLoading(false);
       }
     },
     []
   );
 
-  // It is attached, next time the tab is updated or reloaded.
-  const onTabUpdate = useCallback(
-    (changingTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (Number(changingTabId) === Number(tabId)) {
-        if (changeInfo.status === 'complete') {
-          setIsCurrentTabLoading(false);
-        } else if (changeInfo.status === 'loading') {
-          setLibraryMatches(initialLibraryMatches);
-          setIsCurrentTabLoading(true);
-          setShowLoader(true);
-          setLoadedBeforeState(false);
-          setIsInitialDataUpdated(false);
-        }
+  const onCompletedListener = useCallback(
+    ({
+      frameId,
+      frameType,
+      tabId: changingTabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        frameId === 0 &&
+        frameType === 'outermost_frame' &&
+        Number(changingTabId) === Number(tabId)
+      ) {
+        setIsCurrentTabLoading(false);
+        setErrorOccured(false);
       }
     },
     [tabId]
@@ -102,28 +108,19 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
-  const onCompleted = useCallback(
-    ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameId === 0) {
-        setErrorOccured(false);
-      }
-    },
-    []
-  );
-
   useEffect(() => {
-    chrome.tabs.onUpdated.removeListener(onTabUpdate);
-    chrome.tabs.onUpdated.addListener(onTabUpdate);
+    chrome.webNavigation.onCompleted.addListener(onCompletedListener);
     chrome.webNavigation.onErrorOccurred.addListener(onErrorOccuredListener);
     chrome.webNavigation.onBeforeNavigate.addListener(onNavigatedListener);
-    chrome.webNavigation.onCompleted.addListener(onCompleted);
 
     return () => {
-      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+      chrome.webNavigation.onCompleted.removeListener(onCompletedListener);
       chrome.webNavigation.onBeforeNavigate.removeListener(onNavigatedListener);
-      chrome.webNavigation.onCompleted.removeListener(onCompleted);
+      chrome.webNavigation.onErrorOccurred.removeListener(
+        onErrorOccuredListener
+      );
     };
-  }, [onTabUpdate, onErrorOccuredListener, onNavigatedListener, onCompleted]);
+  }, [onErrorOccuredListener, onNavigatedListener, onCompletedListener]);
 
   return (
     <Context.Provider

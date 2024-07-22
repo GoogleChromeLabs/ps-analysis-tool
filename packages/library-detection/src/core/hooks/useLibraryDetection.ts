@@ -21,7 +21,7 @@ import {
   executeTaskInDevToolWorker,
   LIBRARY_DETECTION_WORKER_TASK,
 } from '@google-psat/common';
-
+import { diff } from 'deep-object-diff';
 /**
  * Internal dependencies.
  */
@@ -91,8 +91,13 @@ const useLibraryDetection = () => {
                 matches,
                 realtimeComputationResult
               );
+              const diffedLibraryMatches = diff(data, matches);
 
-              return data;
+              if (Object.keys(diffedLibraryMatches).length > 0) {
+                return data;
+              }
+
+              return matches;
             });
           }
         }
