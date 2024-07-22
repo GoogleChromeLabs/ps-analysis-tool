@@ -42,7 +42,7 @@ export const COOKIES_DATA_HEADER = [
   () => I18n.getMessage('path'),
   () => I18n.getMessage('expires'),
   () => I18n.getMessage('issues'),
-  () => I18n.getMessage('gDPR'),
+  () => I18n.getMessage('gdpr'),
 ];
 
 const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {

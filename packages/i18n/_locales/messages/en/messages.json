@@ -1145,12 +1145,6 @@
   "size": {
     "message": "Size"
   },
-  "mapping": {
-    "message": "Mapping"
-  },
-  "blockingStatus": {
-    "message": "Blocking Status"
-  },
   "lookAtNetworkTab": {
     "message": "Please take a look at the network tab to get this cookie's blocking information."
   },
