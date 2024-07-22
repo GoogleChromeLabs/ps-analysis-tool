@@ -150,7 +150,6 @@ const saveResultsAsHTML = async (
   isSiteMap: boolean
 ) => {
   let htmlText = '';
-  let reportHTML = '';
 
   await ensureDir(outDir);
 
@@ -170,14 +169,6 @@ const saveResultsAsHTML = async (
       'utf-8'
     );
 
-    reportHTML = fs.readFileSync(
-      path.resolve(
-        __dirname +
-          '../../node_modules/@google-psat/cli-dashboard/dist/report/index.html'
-      ),
-      'base64'
-    );
-
     if (!isProduction) {
       fs.copyFileSync(
         path.resolve(
@@ -193,11 +184,6 @@ const saveResultsAsHTML = async (
       'utf-8'
     );
 
-    reportHTML = fs.readFileSync(
-      path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
-      'base64'
-    );
-
     if (!isProduction) {
       fs.copyFileSync(
         path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
@@ -210,8 +196,7 @@ const saveResultsAsHTML = async (
 
   const html =
     htmlText.substring(0, htmlText.indexOf('</head>')) +
-    `<script>
-    window.PSAT_REPORT_HTML = '${reportHTML}'
+    `<script id='JSONDATASCRIPT'>
     window.PSAT_DATA = ${JSON.stringify({
       json: result,
       type: isSiteMap ? 'sitemap' : 'url',
