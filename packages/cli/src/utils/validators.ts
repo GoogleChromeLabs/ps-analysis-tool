@@ -17,11 +17,11 @@
 import { parseUrl } from '@google-psat/common';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
+import { InvalidArgumentError } from 'commander';
 
 /**
  * Internal dependencies.
  */
-import { redLogger } from './coloredLoggers';
 import { LONG_CONSTANTS, SHORT_CONSTANTS } from './constants';
 
 /**
@@ -53,16 +53,14 @@ function isOtherFlagsAsArgumentValidator(argument: string) {
  */
 export function numericValidator(value: string) {
   if (isOtherFlagsAsArgumentValidator(value)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    throw new InvalidArgumentError('');
   }
 
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
-    redLogger(`${value} is not valid numeric value.`);
-    process.exit(1);
+    throw new InvalidArgumentError(
+      `Error: ${value} is not valid numeric value.`
+    );
   }
   return parsedValue;
 }
@@ -74,20 +72,16 @@ export function numericValidator(value: string) {
  */
 export function localeValidator(locale: string) {
   if (isOtherFlagsAsArgumentValidator(locale)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    throw new InvalidArgumentError('');
   }
 
   const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
   if (locale && !availableLocales.includes(locale)) {
-    redLogger(
-      `Locale '${locale}' is not supported, please use ${availableLocales.join(
+    throw new InvalidArgumentError(
+      `Error: Locale '${locale}' is not supported, please use ${availableLocales.join(
         ', '
       )}.`
     );
-    process.exit(1);
   }
   return locale;
 }
@@ -99,16 +93,12 @@ export function localeValidator(locale: string) {
  */
 export function filePathValidator(filePath: string) {
   if (isOtherFlagsAsArgumentValidator(filePath)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    throw new InvalidArgumentError('');
   }
 
   const csvFileExists = existsSync(filePath);
   if (!csvFileExists) {
-    redLogger(`Error: No file at ${filePath}`);
-    process.exit(1);
+    throw new InvalidArgumentError(`Error: No file at ${filePath}`);
   }
   return filePath;
 }
@@ -120,17 +110,13 @@ export function filePathValidator(filePath: string) {
  */
 export function urlValidator(url: string) {
   if (isOtherFlagsAsArgumentValidator(url)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    throw new InvalidArgumentError('');
   }
 
   const parsedUrl = parseUrl(url);
 
   if (parsedUrl === null) {
-    redLogger(`Error: Invalid Url ${parsedUrl}`);
-    process.exit(1);
+    throw new InvalidArgumentError(`Error: Invalid Url ${parsedUrl}`);
   }
   return url;
 }
@@ -142,10 +128,7 @@ export function urlValidator(url: string) {
  */
 export function outDirValidator(outDir: string) {
   if (isOtherFlagsAsArgumentValidator(outDir)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    throw new InvalidArgumentError('');
   }
 
   const parentDirExists = existsSync(path.resolve('./out'));
