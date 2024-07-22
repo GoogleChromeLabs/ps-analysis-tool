@@ -20,4 +20,6 @@ export { default as saveCSVReports } from './saveCSVReports';
 export { default as getUrlsFromSitemap } from './getUrlListFromArgs';
 export { default as askUserInput } from './askUserInput';
 export { default as generatePrefix } from './generatePrefix';
+export { default as getCurrentDateAndTime } from './getCurrentDateAndTime';
+export { default as getOutputFilePath } from './getOutputFilePath';
 export * from './validators';
