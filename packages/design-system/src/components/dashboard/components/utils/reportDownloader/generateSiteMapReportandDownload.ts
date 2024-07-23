@@ -36,17 +36,13 @@ const generateSiteMapReportandDownload = async (
     return;
   }
 
-  const today = new Date();
-
-  const day = String(today.getDate()).padStart(2, '0'); // Get the day and ensure it has leading zero if needed
-  const month = String(today.getMonth() + 1).padStart(2, '0'); // Get the month and ensure it has leading zero if needed
-  const year = today.getFullYear();
-
   const zip = new JSZip();
 
   JSONReport.forEach((data) => {
     const zipFolder: JSZip | null = zip.folder(
-      `psat_cli_report_${getFolderName(data.pageUrl)}_${day + month + year}`
+      `psat_cli_report_${getFolderName(data.pageUrl)}_${getCurrentDateAndTime(
+        'YYYY-MM-DD_HH-MM-SS'
+      )}`
     );
 
     if (!zipFolder) {
