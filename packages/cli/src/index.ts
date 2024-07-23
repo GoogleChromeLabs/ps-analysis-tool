@@ -244,7 +244,7 @@ const saveResultsAsHTML = async (
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
-  const waitTime = program.opts().wait;
+  const waitTime = program.opts().wait * 1000;
 
   const numArgs: number = [
     Boolean(url),
