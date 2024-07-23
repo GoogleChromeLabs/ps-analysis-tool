@@ -125,8 +125,13 @@ const Landing = ({ tabCookies }: LandingProps) => {
       <MenuBar
         disableReportDownload={showLoader}
         downloadReport={() => {
-          if (unfilteredCookies && tabFrames && libraryMatches && url) {
-            downloadReport(url, unfilteredCookies, tabFrames, libraryMatches);
+          if (tabFrames && libraryMatches && url) {
+            downloadReport(
+              url,
+              unfilteredCookies ?? {},
+              tabFrames,
+              libraryMatches
+            );
           }
         }}
         menuData={menuData}
