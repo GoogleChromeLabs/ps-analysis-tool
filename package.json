@@ -27,7 +27,7 @@
 		"analysis-utils:prebuild": "npm run build:remove -w @google-psat/analysis-utils",
 		"analysis-utils:dev": "npm run dev -w @google-psat/analysis-utils",
 		"analysis-utils:build": "npm run analysis-utils:prebuild && npm run build -w @google-psat/analysis-utils",
-		"cli:predev": "npm run tsc-packages:dev && npm run dev -w @google-psat/cli",
+		"cli:predev": "npm run dev -w @google-psat/cli",
 		"cli:dev": "run-p tsc-packages:dev cli:predev",
 		"cli:prebuild": "npm run build:remove -w @google-psat/cli",
 		"cli:build": "cross-env NODE_ENV=production npm run build -w @google-psat/cli",
