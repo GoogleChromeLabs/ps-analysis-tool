@@ -130,7 +130,7 @@ export function generateDashboardObject(
     technologyData: [],
   };
 
-  return completeJSON;
+  return [completeJSON];
 }
 
 const generateCookieDataForDashboard = (
