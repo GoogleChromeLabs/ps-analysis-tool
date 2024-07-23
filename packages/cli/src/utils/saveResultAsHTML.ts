@@ -101,7 +101,7 @@ const saveResultsAsHTML = async (
   const outputFilePath = fileName
     ? outDir + `/${fileName}`
     : getOutputFilePath(outDir);
-  console.log(fileName, outputFilePath, html);
+
   const outFileFullDir = path.resolve(outputFilePath);
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
