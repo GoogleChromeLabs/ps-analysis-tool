@@ -244,7 +244,7 @@ const saveResultsAsHTML = async (
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
-  const waitTime = program.opts().wait * 1000;
+  const waitTime = program.opts().wait;
 
   const numArgs: number = [
     Boolean(url),
@@ -255,7 +255,7 @@ const saveResultsAsHTML = async (
     return acc;
   }, 0);
 
-  if (numArgs !== 1) {
+  if (numArgs > 1) {
     console.error(
       `Please provide one and only one of the following
         a) URL of a site (-u or --url or default argument)
