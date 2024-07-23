@@ -19,7 +19,7 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { type CompleteJson } from '@google-psat/common';
+import { getCurrentDateAndTime, type CompleteJson } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -63,7 +63,9 @@ const generateSiteMapReportandDownload = async (
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
     content,
-    `psat_cli_report_${getFolderName(path)}_${day + month + year}.zip`
+    `psat_cli_report_${getFolderName(path)}_${getCurrentDateAndTime(
+      'YYYY-MM-DD_HH-MM-SS'
+    )}.zip`
   );
 };
 

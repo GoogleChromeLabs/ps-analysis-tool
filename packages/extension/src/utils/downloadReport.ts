@@ -16,7 +16,12 @@
 /**
  * External dependencies.
  */
-import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
+import {
+  getCurrentDateAndTime,
+  type LibraryData,
+  type TabCookies,
+  type TabFrames,
+} from '@google-psat/common';
 import { saveAs } from 'file-saver';
 import { I18n } from '@google-psat/i18n';
 
@@ -91,5 +96,10 @@ export const generateDashboard = async (
   const html = new Blob([injectedHtmlText]);
   const hostname = new URL(url).hostname;
 
-  return { html, fileName: `${hostname.replace('.', '-')}-report.html` };
+  return {
+    html,
+    fileName: `${hostname.replace('.', '-')}-report-${getCurrentDateAndTime(
+      'YYYY-MM-DD_HH-MM-SS'
+    )}.html`,
+  };
 };

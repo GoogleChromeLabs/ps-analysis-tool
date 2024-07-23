@@ -91,7 +91,7 @@ const saveResultsAsHTML = async (
     htmlText.substring(0, htmlText.indexOf('</head>')) +
     `<script id='JSONDATASCRIPT'>
       window.PSAT_DATA = ${JSON.stringify({
-        json: result,
+        json: [result],
         type: isSiteMap ? 'sitemap' : 'url',
         selectedSite: outDir?.trim()?.slice(6) ?? '',
         translations: messages,
@@ -101,6 +101,7 @@ const saveResultsAsHTML = async (
   const outputFilePath = fileName
     ? outDir + `/report.html`
     : getOutputFilePath(outDir);
+
   const outFileFullDir = path.resolve(outputFilePath);
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
