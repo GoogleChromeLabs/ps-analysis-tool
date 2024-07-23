@@ -116,7 +116,7 @@ program
     '-w, --wait <num>',
     'Number of seconds to wait after the page is loaded before generating the report',
     numericValidator,
-    20000
+    20
   )
   .option(
     '-l, --locale <language>',
@@ -155,7 +155,7 @@ program.parse();
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
-  const waitTime = program.opts().wait;
+  const waitTime = program.opts().wait * 1000;
 
   const numArgs: number = [
     Boolean(url),
