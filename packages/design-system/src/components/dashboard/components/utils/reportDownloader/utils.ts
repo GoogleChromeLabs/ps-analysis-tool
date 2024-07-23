@@ -92,7 +92,12 @@ const generateHTMLFile = (
     appliedFilters,
   };
 
-  const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
+  let code = `window.PSAT_DATA = ${JSON.stringify(reportData)};`;
+
+  // @ts-ignore -- because this data will already be injected from cli or the extension.
+  if (globalThis?.PSAT_EXTENSION) {
+    code += `window.PSAT_EXTENSION = true;`;
+  }
 
   script.text = code;
   script.id = 'JSONDATASCRIPT';
