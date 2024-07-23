@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { getCurrentDateAndTime } from '..';
+import getCurrentDateAndTime from '../getCurrentDateAndTime';
 
 describe('getCurrentDateAndTime', () => {
   beforeAll(() => {

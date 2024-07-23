@@ -20,7 +20,6 @@ export { default as saveReports } from './saveReports';
 export { default as getUrlsFromSitemap } from './getUrlListFromArgs';
 export { default as askUserInput } from './askUserInput';
 export { default as generatePrefix } from './generatePrefix';
-export { default as getCurrentDateAndTime } from './getCurrentDateAndTime';
 export { default as getOutputFilePath } from './getOutputFilePath';
 export { default as saveResultAsHTML } from './saveResultAsHTML';
 export * from './validators';
