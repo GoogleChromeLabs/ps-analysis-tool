@@ -24,6 +24,7 @@ import { ensureFile, writeFile } from 'fs-extra';
  */
 import generateCSVFiles from './generateCSVfiles';
 import path from 'path';
+import { saveResultAsHTML } from '.';
 
 const getFolderName = (pageUrl: string) => {
   let folderName = pageUrl
@@ -39,7 +40,7 @@ const getFolderName = (pageUrl: string) => {
   return folderName;
 };
 
-const saveCSVReports = async (outDir: string, result: CompleteJson[]) => {
+const saveReports = async (outDir: string, result: CompleteJson[]) => {
   if (result.length > 1) {
     // Sitemap report
     await Promise.all(
@@ -55,6 +56,9 @@ const saveCSVReports = async (outDir: string, result: CompleteJson[]) => {
 
         await ensureFile(path.join(fileDir, 'cookies.csv'));
         await writeFile(path.join(fileDir, 'cookies.csv'), allCookiesCSV);
+
+        await ensureFile(path.join(fileDir, 'report.html'));
+        await saveResultAsHTML(outDir, siteReport, false, 'report.html');
 
         if (technologyDataCSV) {
           await ensureFile(path.join(fileDir, 'technologies.csv'));
@@ -85,6 +89,9 @@ const saveCSVReports = async (outDir: string, result: CompleteJson[]) => {
     await ensureFile(path.join(outDir, 'cookies.csv'));
     await writeFile(path.join(outDir, 'cookies.csv'), allCookiesCSV);
 
+    await ensureFile(path.join(outDir, 'report.html'));
+    await saveResultAsHTML(outDir, result[0], false, 'report.html');
+
     if (technologyDataCSV) {
       await ensureFile(path.join(outDir, 'technologies.csv'));
       await writeFile(path.join(outDir, 'technologies.csv'), technologyDataCSV);
@@ -101,4 +108,4 @@ const saveCSVReports = async (outDir: string, result: CompleteJson[]) => {
   }
 };
 
-export default saveCSVReports;
+export default saveReports;
