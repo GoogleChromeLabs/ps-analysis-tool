@@ -11533,4 +11533,5 @@ export default {
       message: '364 days',
     },
   },
+  dateTime: '24 July, 2024, 12:12:04pm Asia/Calcutta',
 };

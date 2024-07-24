@@ -36,6 +36,7 @@ import Landing from './cookieLanding/landing';
 import { ChipsBar, FiltersSidebar, TableFilter } from '../../../../../../table';
 import useGlobalFiltering from '../../../../../../cookiesLanding/useGlobalFiltering';
 import { FilterIcon } from '../../../../../../../icons';
+import Header from '../../../../header';
 
 interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;
@@ -65,6 +66,9 @@ const AssembledCookiesLanding = ({
 }: AssembledCookiesLandingProps) => {
   const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
   const filterOutput = useGlobalFiltering(cookies, query, clearQuery);
+
+  // @ts-ignore Using global variable.
+  const { dateTime } = globalThis.PSAT_DATA;
 
   const cookiesByKey = useMemo(() => {
     return (
@@ -100,6 +104,7 @@ const AssembledCookiesLanding = ({
 
   return (
     <div className="h-full flex flex-col">
+      <Header url="www.bbc.com" dateTime={dateTime} />
       <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
         <button
           className="w-3 h-3 m-1 pl-1"
