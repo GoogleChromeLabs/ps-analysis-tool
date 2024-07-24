@@ -75,6 +75,10 @@ const Layout = ({
   );
 
   const { Element: PanelElement, props } = activePanel.panel;
+  const _clearQuery = useMemo(
+    () => (query ? clearQuery : noop),
+    [query, clearQuery]
+  );
 
   useEffect(() => {
     setSidebarData((prev) => {
@@ -89,7 +93,7 @@ const Layout = ({
           selectedSite,
           isSiteMapLandingContainer: false,
           query,
-          clearQuery: query ? clearQuery : noop,
+          clearQuery: _clearQuery,
         },
       };
 
@@ -157,7 +161,7 @@ const Layout = ({
       return _data;
     });
   }, [
-    clearQuery,
+    _clearQuery,
     completeJson,
     frameUrls,
     query,
