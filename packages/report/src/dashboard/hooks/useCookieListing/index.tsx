@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { type CookieTableData, BLOCK_STATUS } from '@google-psat/common';
 import {

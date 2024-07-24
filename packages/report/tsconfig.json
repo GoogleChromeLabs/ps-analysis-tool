@@ -1,13 +1,27 @@
 {
   "extends": "../../tsconfig.shared.json",
   "compilerOptions": {
-    "rootDir": "src"
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist-types",
+    "types": ["jest", "node"]
   },
   "include": [
     "src",
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
   ],
-  "exclude": ["**/tests/**/*.ts", "**/tests/**/*.tsx"],
-  "references": [{ "path": "../i18n" }]
+  "references": [
+    { "path": "../common" },
+    {
+      "path": "../design-system"
+    },
+    {
+      "path": "../i18n"
+    },
+    {
+      "path": "../library-detection"
+    }
+  ]
 }

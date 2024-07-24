@@ -17,7 +17,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import { BLOCK_STATUS, type CookieTableData } from '@google-psat/common';
 import {
   InboundIcon,

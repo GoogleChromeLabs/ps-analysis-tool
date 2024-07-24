@@ -146,7 +146,6 @@ export const tempMultiPageData: CompleteJson[] = [
     ],
     cookieData: {
       'https://edition.cnn.com': {
-        cookiesCount: 1,
         frameCookies: {
           'countryCode:.cnn.com:/': {
             parsedCookie: {

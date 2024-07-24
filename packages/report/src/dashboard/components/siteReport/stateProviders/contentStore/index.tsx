@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { type PropsWithChildren, useMemo } from 'react';
+import { type PropsWithChildren, useMemo } from 'react';
 import {
   type CompleteJson,
   type CookieJsonDataType,
