@@ -51,6 +51,7 @@ interface AssembledCookiesLandingProps {
   menuBarScrollContainerId?: string;
   query?: string;
   clearQuery?: () => void;
+  url: string | undefined | null;
 }
 
 const AssembledCookiesLanding = ({
@@ -63,12 +64,13 @@ const AssembledCookiesLanding = ({
   menuBarScrollContainerId = 'dashboard-layout-container',
   query = '',
   clearQuery = noop,
+  url,
 }: AssembledCookiesLandingProps) => {
   const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
   const filterOutput = useGlobalFiltering(cookies, query, clearQuery);
 
   // @ts-ignore Using global variable.
-  const { dateTime } = globalThis.PSAT_DATA;
+  const { dateTime } = globalThis?.PSAT_DATA || {};
 
   const cookiesByKey = useMemo(() => {
     return (
@@ -104,7 +106,7 @@ const AssembledCookiesLanding = ({
 
   return (
     <div className="h-full flex flex-col">
-      <Header url="www.bbc.com" dateTime={dateTime} />
+      <Header url={url} dateTime={dateTime} />
       <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
         <button
           className="w-3 h-3 m-1 pl-1"

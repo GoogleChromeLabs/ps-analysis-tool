@@ -82,7 +82,7 @@ const App = () => {
         cookies={cookies}
         technologies={[]}
         // @ts-ignore
-        selectedSite={globalThis?.PSAT_DATA?.selectedSite}
+        selectedSite={completeJsonReport[0].pageUrl}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
         libraryMatches={

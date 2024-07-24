@@ -24,11 +24,14 @@ import React from 'react';
 import { PrivacySandboxColoredIcon } from '../../../../icons';
 
 interface HeaderProps {
-  url: string;
+  url: string | undefined | null;
   dateTime: string;
 }
 
 const Header = ({ url, dateTime }: HeaderProps) => {
+  // @ts-ignore - Global object.
+  const isExtension = globalThis?.PSAT_EXTENSION;
+
   return (
     <div className="flex justify-between gap-3 px-4 py-2">
       <div className="flex gap-2 items-center">
@@ -38,7 +41,9 @@ const Header = ({ url, dateTime }: HeaderProps) => {
           <p className="text-xs mb-[1px]">{dateTime}</p>
         </div>
       </div>
-      <div className="flex items-center text-cente">PSAT CLI Analysis</div>
+      <div className="flex items-center text-cente">
+        {isExtension ? 'PSAT Extension Analysis' : 'PSAT CLI Analysis'}
+      </div>
     </div>
   );
 };

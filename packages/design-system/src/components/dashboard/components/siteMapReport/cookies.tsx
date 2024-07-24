@@ -118,6 +118,10 @@ const CookiesTab = ({
     return [_cookies, _technologies, [reportData]];
   }, [completeJson, isKeySelected]);
 
+  const sitemapPath =
+    // @ts-ignore - Global object
+    globalThis?.PSAT_DATA?.siteMapUrl || globalThis?.PSAT_DATA?.selectedSite;
+
   return (
     <>
       {!selectedSite ? (
@@ -131,6 +135,7 @@ const CookiesTab = ({
           setAppliedFilters={setAppliedFilters}
           query={query}
           clearQuery={clearQuery}
+          url={sitemapPath}
         />
       ) : (
         <SiteReport

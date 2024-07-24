@@ -135,6 +135,7 @@ const Landing = ({
         downloadReport={downloadReport}
         menuData={menuData}
         scrollContainerId={menuBarScrollContainerId}
+        extraClasses="top-[85px]"
       />
       {sections.map(({ link, panel: { Element, props } }) => (
         <div id={link} key={link} className="cookie-landing-section">

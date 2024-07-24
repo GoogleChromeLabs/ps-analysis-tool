@@ -40,9 +40,13 @@ const getFolderName = (pageUrl: string) => {
   return folderName;
 };
 
-const saveReports = async (outDir: string, result: CompleteJson[]) => {
+const saveReports = async (
+  outDir: string,
+  result: CompleteJson[],
+  sitemapUrl: string
+) => {
   if (result.length > 1) {
-    await saveResultAsHTML(outDir, result, true, 'report.html');
+    await saveResultAsHTML(outDir, result, true, 'report.html', sitemapUrl);
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {
@@ -59,7 +63,13 @@ const saveReports = async (outDir: string, result: CompleteJson[]) => {
         await writeFile(path.join(fileDir, 'cookies.csv'), allCookiesCSV);
 
         await ensureFile(path.join(fileDir, 'report.html'));
-        await saveResultAsHTML(fileDir, [siteReport], false, 'report.html');
+        await saveResultAsHTML(
+          fileDir,
+          [siteReport],
+          false,
+          'report.html',
+          sitemapUrl
+        );
 
         if (technologyDataCSV) {
           await ensureFile(path.join(fileDir, 'technologies.csv'));
