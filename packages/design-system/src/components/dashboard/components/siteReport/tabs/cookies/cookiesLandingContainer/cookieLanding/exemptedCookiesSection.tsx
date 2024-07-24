@@ -23,6 +23,7 @@ import {
   getLegendDescription,
   TabCookies,
 } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -36,7 +37,6 @@ import CookiesLandingWrapper from '../../../../../../../cookiesLanding/cookiesLa
 import MatrixContainer from '../../../../../../../matrixContainer';
 import { InfoIcon } from '../../../../../../../../icons';
 import { LEGEND_DESCRIPTION } from '../../../../../../../../constants';
-import { I18n } from '@google-psat/i18n';
 
 interface ExemptedCookiesSectionProps {
   tabCookies: TabCookies | null;
