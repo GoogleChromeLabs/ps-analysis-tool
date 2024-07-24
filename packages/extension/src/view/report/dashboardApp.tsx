@@ -16,14 +16,14 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
   LibraryData,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import { extractCookies, SiteReport } from '@google-psat/design-system';
+import { extractCookies, SiteReport } from '@google-psat/report';
 
 /**
  * Internal dependencies

@@ -36,6 +36,7 @@
     "@google-psat/common": "*",
     "@google-psat/design-system": "*",
     "@google-psat/i18n": "*",
+    "@google-psat/report": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

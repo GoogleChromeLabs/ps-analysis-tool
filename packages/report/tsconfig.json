@@ -5,6 +5,7 @@
     "outDir": "dist",
     "declaration": true,
     "declarationDir": "dist-types",
+    "noEmit": false,
     "types": ["jest", "node"]
   },
   "include": [
