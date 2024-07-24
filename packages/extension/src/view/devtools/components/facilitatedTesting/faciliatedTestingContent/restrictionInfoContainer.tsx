@@ -18,7 +18,6 @@
  * Internal dependencies.
  */
 import React from 'react';
-import { PSTimelineIcon } from '@google-psat/design-system';
 import { addUTMParams } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
@@ -39,9 +38,6 @@ const RestrictionInfoContainer = () => (
         ]),
       }}
     />
-    <div className="w-full grid place-items-center mb-6">
-      <PSTimelineIcon className="scale-125" />
-    </div>
     <p
       dangerouslySetInnerHTML={{
         __html: I18n.getMessage('faciliatedTestingPeriod', [
