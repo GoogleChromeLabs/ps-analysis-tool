@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { CookieTableData } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
@@ -47,30 +47,58 @@ const useGlobalFiltering = (
     return {};
   }, [query]);
 
+  const evaluateFilterWithOptions = useCallback(
+    (filters: TableFilter[keyof TableFilter]['filterValues'], key: string) => {
+      // @ts-ignore
+      const appliedFilters: TableFilter = globalThis?.PSAT_DATA?.appliedFilters;
+
+      if (!appliedFilters?.[key]?.filterValues) {
+        return filters;
+      }
+
+      const filterValues = { ...filters };
+
+      Object.keys(appliedFilters[key].filterValues).forEach((filterKey) => {
+        if (filterValues[filterKey]) {
+          filterValues[filterKey].selected = true;
+        }
+      });
+
+      // @ts-ignore
+      globalThis.PSAT_DATA.appliedFilters[key].filterValues = undefined;
+
+      return filterValues;
+    },
+    []
+  );
+
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
         title: I18n.getMessage('category'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: evaluateStaticFilterValues(
-          {
-            [I18n.getMessage('analytics')]: {
-              selected: false,
+        filterValues: evaluateFilterWithOptions(
+          evaluateStaticFilterValues(
+            {
+              [I18n.getMessage('analytics')]: {
+                selected: false,
+              },
+              [I18n.getMessage('functional')]: {
+                selected: false,
+              },
+              [I18n.getMessage('marketing')]: {
+                selected: false,
+              },
+              [I18n.getMessage('uncategorized')]: {
+                selected: false,
+              },
             },
-            [I18n.getMessage('functional')]: {
-              selected: false,
-            },
-            [I18n.getMessage('marketing')]: {
-              selected: false,
-            },
-            [I18n.getMessage('uncategorized')]: {
-              selected: false,
-            },
-          },
-          'analytics.category',
-          parsedQuery,
-          clearQuery
+            'analytics.category',
+            parsedQuery,
+            clearQuery
+          ),
+          'analytics.category'
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -86,18 +114,21 @@ const useGlobalFiltering = (
         title: I18n.getMessage('scope'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: evaluateStaticFilterValues(
-          {
-            [I18n.getMessage('firstParty')]: {
-              selected: false,
+        filterValues: evaluateFilterWithOptions(
+          evaluateStaticFilterValues(
+            {
+              [I18n.getMessage('firstParty')]: {
+                selected: false,
+              },
+              [I18n.getMessage('thirdParty')]: {
+                selected: false,
+              },
             },
-            [I18n.getMessage('thirdParty')]: {
-              selected: false,
-            },
-          },
-          'isFirstParty',
-          parsedQuery,
-          clearQuery
+            'isFirstParty',
+            parsedQuery,
+            clearQuery
+          ),
+          'isFirstParty'
         ),
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -115,10 +146,13 @@ const useGlobalFiltering = (
           parsedQuery,
           clearQuery
         ),
-        filterValues: calculateBlockedReasonsFilterValues(
-          cookies,
-          parsedQuery?.filter?.blockedReasons,
-          clearQuery
+        filterValues: evaluateFilterWithOptions(
+          calculateBlockedReasonsFilterValues(
+            cookies,
+            parsedQuery?.filter?.blockedReasons,
+            clearQuery
+          ),
+          'blockedReasons'
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -137,10 +171,13 @@ const useGlobalFiltering = (
           parsedQuery,
           clearQuery
         ),
-        filterValues: calculateExemptionReason(
-          cookies,
-          clearQuery,
-          parsedQuery?.filter?.exemptionReason
+        filterValues: evaluateFilterWithOptions(
+          calculateExemptionReason(
+            cookies,
+            clearQuery,
+            parsedQuery?.filter?.exemptionReason
+          ),
+          'exemptionReason'
         ),
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
@@ -149,7 +186,7 @@ const useGlobalFiltering = (
         useGenericPersistenceKey: true,
       },
     }),
-    [clearQuery, cookies, parsedQuery]
+    [clearQuery, cookies, evaluateFilterWithOptions, parsedQuery]
   );
 
   const filterOutput = useFiltering(

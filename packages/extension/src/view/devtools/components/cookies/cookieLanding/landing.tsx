@@ -25,6 +25,7 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
+  type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import type { TabCookies } from '@google-psat/common';
@@ -40,9 +41,10 @@ import ExemptedCookiesSection from './exemptedCookiesSection';
 
 interface LandingProps {
   tabCookies: TabCookies;
+  appliedFilters: TableFilter;
 }
 
-const Landing = ({ tabCookies }: LandingProps) => {
+const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
   const { unfilteredCookies, url, tabFrames } = useCookie(({ state }) => ({
     unfilteredCookies: state.tabCookies,
     tabFrames: state.tabFrames,
@@ -124,13 +126,14 @@ const Landing = ({ tabCookies }: LandingProps) => {
     <div>
       <MenuBar
         disableReportDownload={showLoader}
-        downloadReport={() => {
-          if (tabFrames && libraryMatches && url) {
-            downloadReport(
+        downloadReport={async () => {
+          if (unfilteredCookies && tabFrames && libraryMatches && url) {
+            await downloadReport(
               url,
-              unfilteredCookies ?? {},
+              unfilteredCookies,
               tabFrames,
-              libraryMatches
+              libraryMatches,
+              appliedFilters
             );
           }
         }}

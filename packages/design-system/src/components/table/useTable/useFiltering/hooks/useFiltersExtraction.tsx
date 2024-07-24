@@ -182,6 +182,8 @@ const useFiltersExtraction = (
                   null,
               };
             }
+
+            filterValueData.selected = null;
           }
         );
 

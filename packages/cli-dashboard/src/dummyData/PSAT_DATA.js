@@ -11533,4 +11533,64 @@ export default {
       message: '364 days',
     },
   },
+  appliedFilters: {
+    'analytics.category': {
+      title: 'Category',
+      hasStaticFilterValues: true,
+      hasPrecalculatedFilterValues: true,
+      filterValues: {
+        Functional: {
+          selected: true,
+        },
+        Marketing: {
+          selected: true,
+        },
+      },
+      sortValues: true,
+      useGenericPersistenceKey: true,
+    },
+    isFirstParty: {
+      title: 'Scope',
+      hasStaticFilterValues: true,
+      hasPrecalculatedFilterValues: true,
+      filterValues: {
+        'Third Party': {
+          selected: true,
+        },
+      },
+      useGenericPersistenceKey: true,
+    },
+    blockedReasons: {
+      title: 'Blocked Reasons',
+      hasStaticFilterValues: true,
+      hasPrecalculatedFilterValues: true,
+      enableSelectAllOption: true,
+      isSelectAllOptionSelected: false,
+      filterValues: {
+        ThirdPartyPhaseout: {
+          selected: true,
+        },
+        SameSiteUnspecifiedTreatedAsLax: {
+          selected: true,
+        },
+        DomainMismatch: {
+          selected: true,
+        },
+        NotOnPath: {
+          selected: true,
+        },
+      },
+      sortValues: true,
+      useGenericPersistenceKey: true,
+    },
+    exemptionReason: {
+      title: 'Exemption Reasons',
+      hasStaticFilterValues: true,
+      hasPrecalculatedFilterValues: true,
+      enableSelectAllOption: true,
+      isSelectAllOptionSelected: false,
+      filterValues: {},
+      useGenericPersistenceKey: true,
+    },
+  },
 };
