@@ -36,6 +36,7 @@ import CookiesLandingWrapper from '../../../../../../../cookiesLanding/cookiesLa
 import MatrixContainer from '../../../../../../../matrixContainer';
 import { InfoIcon } from '../../../../../../../../icons';
 import { LEGEND_DESCRIPTION } from '../../../../../../../../constants';
+import { I18n } from '@google-psat/i18n';
 
 interface ExemptedCookiesSectionProps {
   tabCookies: TabCookies | null;
@@ -111,13 +112,12 @@ const ExemptedCookiesSection = ({
     <CookiesLandingWrapper
       description={description}
       dataMapping={exemptedCookiesDataMapping}
-      testId="blocked-cookies-insights"
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title="Exemption Reasons"
+          title={I18n.getMessage('exemptionReasons')}
           matrixData={dataComponents}
-          infoIconTitle="Cookies that should have been blocked by the browser but was exempted."
+          infoIconTitle={I18n.getMessage('exemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>
