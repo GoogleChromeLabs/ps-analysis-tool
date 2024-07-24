@@ -73,6 +73,12 @@ describe('useCookieListing', () => {
     uncategorized: {
       message: 'Uncategorized',
     },
+    analytics: {
+      message: 'Analytics',
+    },
+    functional: {
+      message: 'Functional',
+    },
     true: {
       message: 'True',
     },
@@ -115,6 +121,12 @@ describe('useCookieListing', () => {
       result.current.filters['analytics.category'].hasPrecalculatedFilterValues
     ).toBe(true);
     expect(result.current.filters['analytics.category'].filterValues).toEqual({
+      Analytics: {
+        selected: false,
+      },
+      Functional: {
+        selected: false,
+      },
       Marketing: {
         selected: false,
       },
@@ -189,7 +201,7 @@ describe('useCookieListing', () => {
       'parsedCookie.domain',
     ]);
 
-    expect(result.current.tablePersistentSettingsKey).toBe('cookieListing');
+    expect(result.current.tablePersistentSettingsKey).toBe('cookiesListing');
 
     mockUseCookieStore.mockReturnValue({
       cookies: [],
@@ -199,7 +211,7 @@ describe('useCookieListing', () => {
     rerender();
 
     expect(result.current.tablePersistentSettingsKey).toBe(
-      'cookieListing#https://edition.cnn.com/'
+      'cookiesListing#https://edition.cnn.com/'
     );
   });
 });

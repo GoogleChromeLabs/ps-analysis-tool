@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import { addUTMParams } from '@google-psat/common';
 
 /**
@@ -25,7 +24,7 @@ import { addUTMParams } from '@google-psat/common';
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
-const GSIAccordion = ({ matches }: AccordionProps) => {
+const GSIAccordion = ({ matches, urlCount }: AccordionProps) => {
   if (!matches) {
     return null;
   }
@@ -37,7 +36,11 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Deprecated Google Sign-In'} isLoading={false}>
+    <Accordion
+      title={'Deprecated Google Sign-In'}
+      isLoading={false}
+      urlCount={urlCount}
+    >
       <p className="text-darkest-gray dark:text-bright-gray">
         The Google Sign-In JavaScript library is deprecated and is no longer
         supported. Some features of Google Identity Services are in use. Please

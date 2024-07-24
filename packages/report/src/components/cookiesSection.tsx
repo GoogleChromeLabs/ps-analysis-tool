@@ -38,6 +38,7 @@ const CookiesSection = () => {
     <CookiesLandingWrapper
       dataMapping={data.cookieClassificationDataMapping}
       testId="cookies-insights"
+      landingHeaderExtraClasses="border-t-0"
     >
       <CookiesMatrix
         tabCookies={data.tabCookies}

@@ -41,7 +41,7 @@ const useFiltersMapping = (tabFrames: TabFrames) => {
   );
 
   const selectedItemUpdater = useCallback(
-    (title: string, accessorKey?: string) => {
+    (title: string, accessorKey?: string, selectedFrame?: string) => {
       const queryObject = accessorKey
         ? {
             [accessorKey]: [title],
@@ -54,7 +54,10 @@ const useFiltersMapping = (tabFrames: TabFrames) => {
         },
       };
 
-      updateSelectedItemKey(firstFrame, JSON.stringify(modifiedQuery));
+      updateSelectedItemKey(
+        selectedFrame ? selectedFrame : firstFrame,
+        JSON.stringify(modifiedQuery)
+      );
     },
     [firstFrame, updateSelectedItemKey]
   );

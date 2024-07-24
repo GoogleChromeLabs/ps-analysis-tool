@@ -547,11 +547,31 @@ class SynchnorousCookieStore {
       ) {
         sentMessageAnyWhere = true;
 
+        const newCookieData: {
+          [cookieKey: string]: CookieData;
+        } = {};
+
+        Object.keys(this.tabsData[tabId]).forEach((key) => {
+          newCookieData[key] = {
+            ...this.tabsData[tabId][key],
+            networkEvents: {
+              requestEvents: [],
+              responseEvents: [],
+            },
+            url: '',
+            headerType: ['request', 'response'].includes(
+              this.tabsData[tabId][key]?.headerType ?? ''
+            )
+              ? 'http'
+              : 'javascript',
+          };
+        });
+
         await chrome.runtime.sendMessage({
           type: NEW_COOKIE_DATA,
           payload: {
             tabId,
-            cookieData: this.tabsData[tabId],
+            cookieData: newCookieData,
             extraData: {
               extraFrameData: this.tabs[tabId].frameIDURLSet,
             },

@@ -234,23 +234,25 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
         <div
-          className="w-full h-full overflow-auto"
-          id="cookies-landing-scroll-container"
+          className="w-full"
+          style={{
+            height: settingsChanged ? 'calc(100% - 5rem)' : '100%',
+          }}
         >
           <div className="min-w-[45rem] h-full z-1">
             {PanelElement && <PanelElement {...props} />}
           </div>
         </div>
-        <div className="h-fit">
-          {settingsChanged && (
+        {settingsChanged && (
+          <div className="h-fit">
             <ToastMessage
               additionalStyles="text-sm"
               text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
             />
-          )}
-        </div>
+          </div>
+        )}
       </main>
     </div>
   );

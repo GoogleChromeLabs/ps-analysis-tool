@@ -18,11 +18,13 @@
  */
 import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
 import { saveAs } from 'file-saver';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
-import generateReportObject from './generateReportObject';
+import { generateDashboardObject } from './generateReportObject';
+import isValidURL from './isValidURL';
 
 /**
  * Utility function to download report.
@@ -37,21 +39,50 @@ export default async function downloadReport(
   tabFrames: TabFrames,
   libraryMatches: LibraryData
 ) {
-  const htmlText = await (await fetch('../report/index.html')).text();
+  const { html, fileName } = await generateDashboard(
+    url,
+    tabCookies,
+    tabFrames,
+    libraryMatches
+  );
+
+  saveAs(html, fileName);
+}
+
+export const generateDashboard = async (
+  url: string,
+  tabCookies: TabCookies,
+  tabFrames: TabFrames,
+  libraryMatches: LibraryData
+) => {
+  const dashboardReport = await (await fetch('./dashboard.html')).text();
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(dashboardReport, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = await generateReportObject(
+  const reportData = generateDashboardObject(
     tabCookies,
     tabFrames,
     libraryMatches,
     url
   );
 
-  const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
+  const locale = I18n.getLocale();
+  const translations = await I18n.fetchMessages(locale);
+  const htmlText = await (await fetch('../report/index.html')).text();
+
+  const code = `
+  window.PSAT_EXTENSION = true;
+  window.PSAT_REPORT_HTML = '${btoa(unescape(encodeURIComponent(htmlText)))}';
+  window.PSAT_DATA = ${JSON.stringify({
+    json: reportData,
+    selectedSite: isValidURL(url)
+      ? new URL(url).hostname.replace('.', '-')
+      : '',
+    translations,
+  })}`;
 
   script.text = code;
   reportDom.head.appendChild(script);
@@ -60,5 +91,5 @@ export default async function downloadReport(
   const html = new Blob([injectedHtmlText]);
   const hostname = new URL(url).hostname;
 
-  saveAs(html, `${hostname.replace('.', '-')}-report.html`);
-}
+  return { html, fileName: `${hostname.replace('.', '-')}-report.html` };
+};

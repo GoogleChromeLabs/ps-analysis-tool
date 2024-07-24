@@ -16,3 +16,5 @@
 export { default as Attribution } from './attribution';
 export { default as Topics } from './topics';
 export { default as PrivateAdvertising } from './privateAdvertising';
+export { default as ProtectedAudience } from './protectedAudience';
+export { default as PrivateAggregation } from './privateAggregation';

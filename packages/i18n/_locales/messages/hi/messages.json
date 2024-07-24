@@ -229,9 +229,6 @@
   "session": {
     "message": "सेशन"
   },
-  "sitemapReport": {
-    "message": "साइटमैप के बारे में रिपोर्ट"
-  },
   "cookieIssues": {
     "message": "कुकी से जुड़ी समस्याएं"
   },
@@ -1147,12 +1144,6 @@
   },
   "size": {
     "message": "साइज़"
-  },
-  "mapping": {
-    "message": "मैपिंग"
-  },
-  "blockingStatus": {
-    "message": "ब्लॉक की स्थिति"
   },
   "lookAtNetworkTab": {
     "message": "इस कुकी को ब्लॉक करने से जुड़ी जानकारी पाने के लिए, कृपया नेटवर्क टैब देखें."

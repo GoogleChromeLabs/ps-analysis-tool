@@ -229,9 +229,6 @@
   "session": {
     "message": "Sesión"
   },
-  "sitemapReport": {
-    "message": "Informe \"Sitemaps\""
-  },
   "cookieIssues": {
     "message": "Problemas de cookies"
   },
@@ -1147,12 +1144,6 @@
   },
   "size": {
     "message": "Tamaño"
-  },
-  "mapping": {
-    "message": "Asignación"
-  },
-  "blockingStatus": {
-    "message": "Estado de bloqueo"
   },
   "lookAtNetworkTab": {
     "message": "Consulta la pestaña de red para ver la información de bloqueo de esta cookie."

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Button,
   CookiesLanding,
@@ -105,4 +105,4 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   );
 };
 
-export default Cookies;
+export default memo(Cookies);

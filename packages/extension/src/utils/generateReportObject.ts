@@ -21,13 +21,16 @@ import type {
   TabCookies,
   TabFrames,
   DataMapping,
+  CookieJsonDataType,
 } from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
+  type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import isValidURL from './isValidURL';
 
 /**
  * Utility function to generate report object.
@@ -35,13 +38,15 @@ import { I18n } from '@google-psat/i18n';
  * @param tabFrames Tab frames.
  * @param libraryMatches Library matches
  * @param url Top level URL.
+ * @param filters Filter applied to the landing page.
  * @returns Report Object
  */
-export default async function generateReportObject(
+export async function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData,
-  url: string
+  url: string,
+  filters: TableFilter
 ) {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -100,6 +105,91 @@ export default async function generateReportObject(
     showBlockedCategory: false,
     url,
     translations,
+    filters,
     source: 'extension',
   };
 }
+/**
+ * Utility function to generate dashboard report object.
+ * @param tabCookies Tab cookies.
+ * @param tabFrames Tab frames.
+ * @param libraryMatches Library matches
+ * @param url Top level URL.
+ * @returns Dashboard Report Object
+ */
+export function generateDashboardObject(
+  tabCookies: TabCookies,
+  tabFrames: TabFrames,
+  libraryMatches: LibraryData,
+  url: string
+) {
+  const completeJSON = {
+    pageUrl: isValidURL(url) ? new URL(url).origin : '',
+    libraryMatches,
+    cookieData: generateCookieDataForDashboard(tabCookies, tabFrames),
+    technologyData: [],
+  };
+
+  return completeJSON;
+}
+
+const generateCookieDataForDashboard = (
+  tabCookies: TabCookies,
+  tabFrames: TabFrames
+) => {
+  const frameIdToUrlMapping: { [frameId: string]: string } = {};
+  const cookieData: {
+    [frame: string]: {
+      frameCookies: { [cookieName: string]: CookieJsonDataType };
+      frameType: string | undefined;
+    };
+  } = {};
+
+  const frameUrlSet = new Set<string>();
+
+  Object.entries(tabFrames).forEach(([key, value]) => {
+    value.frameIds.forEach((frameId: string) => {
+      if (key !== 'undefined') {
+        frameIdToUrlMapping[frameId] = key;
+        frameUrlSet.add(key);
+      }
+    });
+  });
+
+  Array.from(frameUrlSet).forEach((frameURL) => {
+    if (frameURL === 'undefined' || !frameURL) {
+      return;
+    }
+
+    cookieData[frameURL] = {
+      frameCookies: {},
+      frameType: tabFrames[frameURL]?.frameType ?? 'sub_frame',
+    };
+  });
+
+  Object.entries(tabCookies).forEach(([cookieKey, cookie]) => {
+    cookie.frameIdList?.forEach((frameId) => {
+      const frameURL = frameIdToUrlMapping[frameId];
+
+      if (frameURL === 'undefined' || !frameURL) {
+        return;
+      }
+
+      if (cookieData[frameURL]?.frameCookies) {
+        //@ts-ignore since the parsedCookie
+        cookieData[frameURL].frameCookies[cookieKey] = cookie;
+        cookieData[frameURL].frameType =
+          tabFrames[frameURL]?.frameType ?? 'sub_frame';
+      } else {
+        cookieData[frameURL] = {
+          //@ts-ignore since the parsedCookie
+          frameCookies: {
+            [cookieKey]: cookie,
+          },
+          frameType: tabFrames[frameURL]?.frameType ?? 'sub_frame',
+        };
+      }
+    });
+  });
+  return cookieData;
+};

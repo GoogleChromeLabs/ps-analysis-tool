@@ -103,7 +103,7 @@ describe('FiltersSidebar', () => {
     },
   };
 
-  it('should render null', () => {
+  it('should render sidebar', () => {
     mockUseTable.mockReturnValue({
       filters: initialProps.filters,
       isSelectAllFilterSelected: initialProps.isSelectAllFilterSelected,
@@ -111,11 +111,11 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: initialProps.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar />);
+    render(<FiltersSidebar {...props} />);
 
     const filtersSidebar = screen.queryByTestId('filters-sidebar');
 
-    expect(filtersSidebar).toBeNull();
+    expect(filtersSidebar).toBeInTheDocument();
   });
 
   it('should render a list of filters', () => {
@@ -126,7 +126,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar />);
+    render(<FiltersSidebar {...props} />);
 
     const filtersSidebar = screen.getByTestId('filters-sidebar');
     const filter1 = screen.getByText('Filter 1');
@@ -145,7 +145,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar />);
+    render(<FiltersSidebar {...props} />);
 
     const filter1 = screen.getByText('Filter 1');
     const filter2 = screen.getByText('Filter 2');
@@ -175,7 +175,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar />);
+    render(<FiltersSidebar {...props} />);
 
     const filtersSidebar = screen.getByTestId('filters-sidebar');
     const filter3 = screen.getByText('Filter 3');
@@ -193,7 +193,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar />);
+    render(<FiltersSidebar {...props} />);
 
     await waitFor(() => {
       const list = screen.getAllByTestId('sub-list-item');
@@ -210,7 +210,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    const { rerender } = render(<FiltersSidebar />);
+    const { rerender } = render(<FiltersSidebar {...props} />);
 
     const expandAll = await screen.findByText('Expand All');
     act(() => {
@@ -265,7 +265,25 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    rerender(<FiltersSidebar />);
+    rerender(
+      <FiltersSidebar
+        {...props}
+        filters={{
+          ...props.filters,
+          filters3: {
+            filterValues: {
+              value5: {
+                selected: true,
+              },
+              value6: {
+                selected: false,
+              },
+            },
+            title: 'Filter 3',
+          },
+        }}
+      />
+    );
 
     act(() => {
       listExpandArrows[2].click();
@@ -285,7 +303,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    rerender(<FiltersSidebar />);
+    rerender(<FiltersSidebar {...props} />);
 
     await waitFor(() => {
       expect(expandAll.innerHTML).not.toEqual('Expand All');
@@ -323,7 +341,13 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter,
     });
 
-    const { rerender } = render(<FiltersSidebar />);
+    const { rerender } = render(
+      <FiltersSidebar
+        {...props}
+        toggleFilterSelection={toggleFilterSelection}
+        toggleSelectAllFilter={toggleSelectAllFilter}
+      />
+    );
 
     const selectAll = await screen.findByText('All');
     act(() => {
@@ -341,7 +365,13 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter,
     });
 
-    rerender(<FiltersSidebar />);
+    rerender(
+      <FiltersSidebar
+        {...props}
+        toggleFilterSelection={toggleFilterSelection}
+        toggleSelectAllFilter={toggleSelectAllFilter}
+      />
+    );
 
     await waitFor(() => {
       const filterCheckBoxes = screen.getAllByRole('checkbox');
@@ -375,8 +405,8 @@ describe('FiltersSidebar', () => {
 
     render(
       <>
-        <ChipsBar />
-        <FiltersSidebar />
+        <ChipsBar {...props} resetFilters={resetFilters} />
+        <FiltersSidebar {...props} />
       </>
     );
 

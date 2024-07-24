@@ -54,10 +54,7 @@ const updateSessionStorage = (
     if (!requiredData) {
       newData[persistenceKey] = storageData;
     } else {
-      newData[persistenceKey] = {
-        ...requiredData,
-        ...storageData,
-      };
+      newData[persistenceKey] = mergeDeep(requiredData, storageData);
     }
 
     const updatedData = {

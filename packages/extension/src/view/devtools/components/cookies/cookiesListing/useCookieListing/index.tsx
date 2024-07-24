@@ -34,8 +34,6 @@ import {
   evaluateStaticFilterValues,
   evaluateSelectAllOption,
   calculateBlockedReasonsFilterValues,
-  type TableData,
-  InfoIcon,
   calculateExemptionReason,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
@@ -46,7 +44,6 @@ import { I18n } from '@google-psat/i18n';
 import { useCookie, useSettings } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
-import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
@@ -193,59 +190,6 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 3,
       },
-      {
-        header: I18n.getMessage('mapping'),
-        accessorKey: 'frameIdList',
-        isHiddenByDefault: true,
-        cell: (info: InfoType) => (
-          <OrphanedUnMappedInfoDisplay frameIdList={info as number[]} />
-        ),
-        widthWeightagePercentage: 6.6,
-      },
-      {
-        header: I18n.getMessage('blockingStatus'),
-        accessorKey: 'isBlocked',
-        isHiddenByDefault: true,
-        widthWeightagePercentage: 5.4,
-        cell: (_, details: TableData | undefined) => {
-          //skip calculation of blocking status when not using CDP
-          if (!isUsingCDP) {
-            return <></>;
-          }
-          const cookieData = details as CookieTableData;
-
-          const isInboundBlocked =
-            cookieData.blockingStatus?.inboundBlock !==
-            BLOCK_STATUS.NOT_BLOCKED;
-          const isOutboundBlocked =
-            cookieData.blockingStatus?.outboundBlock !==
-            BLOCK_STATUS.NOT_BLOCKED;
-          const hasValidBlockedReason =
-            cookieData?.blockedReasons &&
-            cookieData.blockedReasons.length !== 0;
-
-          if (
-            (isInboundBlocked || isOutboundBlocked) &&
-            !hasValidBlockedReason
-          ) {
-            return (
-              <span
-                className="flex"
-                title={I18n.getMessage('lookAtNetworkTab')}
-              >
-                <span>
-                  <InfoIcon className="fill-granite-gray dark:fill-bright-gray" />
-                </span>
-                <span className="ml-[2px] truncate">
-                  {I18n.getMessage('undetermined')}
-                </span>
-              </span>
-            );
-          } else {
-            return <></>;
-          }
-        },
-      },
     ],
     [isUsingCDP]
   );
@@ -256,12 +200,24 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: I18n.getMessage('category'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateDynamicFilterValues(
+        filterValues: evaluateStaticFilterValues(
+          {
+            [I18n.getMessage('analytics')]: {
+              selected: false,
+            },
+            [I18n.getMessage('functional')]: {
+              selected: false,
+            },
+            [I18n.getMessage('marketing')]: {
+              selected: false,
+            },
+            [I18n.getMessage('uncategorized')]: {
+              selected: false,
+            },
+          },
           'analytics.category',
-          Object.values(cookies),
-          parsedQuery?.filter?.['analytics.category'],
-          clearActivePanelQuery,
-          true
+          parsedQuery,
+          clearActivePanelQuery
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -475,7 +431,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             case I18n.getMessage('jS'):
               return value === 'javascript';
             case I18n.getMessage('http'):
-              return value === 'request' || value === 'response';
+              return (
+                value === 'request' || value === 'response' || value === 'http'
+              );
             default:
               return true;
           }
@@ -528,10 +486,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
 
   const tablePersistentSettingsKey = useMemo(() => {
     if (!selectedFrame) {
-      return 'cookieListing';
+      return 'cookiesListing';
     }
 
-    return `cookieListing#${selectedFrame}`;
+    return `cookiesListing#${selectedFrame}`;
   }, [selectedFrame]);
 
   const extraInterfaceToTopBar = useCallback(() => {

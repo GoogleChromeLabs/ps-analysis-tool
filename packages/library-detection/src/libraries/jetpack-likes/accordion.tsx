@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -24,9 +24,11 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { JETPACK_LIKES_HELP_URL } from './constants';
-import { I18n } from '@google-psat/i18n';
 
-const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
+const JetpackLikesAccordion = ({
+  domQueryMatches,
+  urlCount,
+}: AccordionProps) => {
   if (!domQueryMatches) {
     return null;
   }
@@ -38,7 +40,12 @@ const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Jetpack Like Button'} isLoading={false} featuresText="">
+    <Accordion
+      title={'Jetpack Like Button'}
+      isLoading={false}
+      featuresText=""
+      urlCount={urlCount}
+    >
       <DetectionMessage
         libraryName={I18n.getMessage('jetpackLikeButton')}
         provider={I18n.getMessage('jetpack')}

@@ -229,9 +229,6 @@
   "session": {
     "message": "セッション"
   },
-  "sitemapReport": {
-    "message": "サイトマップ レポート"
-  },
   "cookieIssues": {
     "message": "Cookie に関する問題"
   },
@@ -1147,12 +1144,6 @@
   },
   "size": {
     "message": "サイズ"
-  },
-  "mapping": {
-    "message": "マッピング"
-  },
-  "blockingStatus": {
-    "message": "ブロック ステータス"
   },
   "lookAtNetworkTab": {
     "message": "ネットワーク タブで、この Cookie のブロック情報を確認してください。"

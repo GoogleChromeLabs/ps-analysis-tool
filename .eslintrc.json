@@ -39,8 +39,8 @@
   },
   "ignorePatterns": [
     "**/node_modules/**",
-    "dist/**",
-    "dist-types/**",
+    "**/dist/**",
+    "**/dist-types/**",
     "out/**",
     "data/**",
     "coverage/**"
@@ -139,7 +139,8 @@
         "forbid": ["for"]
       }
     ],
-    "@typescript-eslint/ban-ts-comment": "off"
+    "@typescript-eslint/ban-ts-comment": "off",
+    "react/react-in-jsx-scope": "off"
   },
   "overrides": [
     {

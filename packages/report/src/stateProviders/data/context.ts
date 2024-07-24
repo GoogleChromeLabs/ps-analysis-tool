@@ -25,6 +25,7 @@ import {
   type DataMapping,
   type LibraryData,
 } from '@google-psat/common';
+import type { TableFilter } from '@google-psat/design-system';
 
 export interface DataStoreContext {
   state: {
@@ -44,6 +45,8 @@ export interface DataStoreContext {
       showFramesSection: boolean;
       showBlockedCategory: boolean;
       url: string;
+      filters: TableFilter;
+      libraryMatchesUrlCount: { [url: string]: number };
     } | null;
   };
 }
@@ -76,6 +79,8 @@ const initialState: DataStoreContext = {
       showBlockedCategory: false,
       showFramesSection: false,
       url: '',
+      filters: {},
+      libraryMatchesUrlCount: {},
     },
     isDataLoaded: false,
   },

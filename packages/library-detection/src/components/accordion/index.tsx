@@ -30,6 +30,7 @@ interface AccordionProps {
   title: string;
   isLoading?: boolean;
   featuresText?: string;
+  urlCount?: number;
 }
 
 const Accordion = ({
@@ -37,6 +38,7 @@ const Accordion = ({
   title,
   isLoading = false,
   featuresText = '',
+  urlCount,
 }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,6 +54,7 @@ const Accordion = ({
         loading={isLoading}
         title={title}
         featuresText={featuresText}
+        urlCount={urlCount}
       />
       <AccordionContent isOpen={isOpen}>{children}</AccordionContent>
     </div>

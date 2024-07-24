@@ -26,6 +26,7 @@ export enum SIDEBAR_ITEMS_KEYS {
   TOPICS = 'topics',
   ATTRIBUTION = 'attribution',
   PROTECTED_AUDIENCE = 'protected-audience',
+  PRIVATE_AGGREGATION = 'private-aggregation',
   ANTI_COVERT_TRACKING = 'anti-covert-tracking',
   BOUNCE_TRACKING = 'bounce-tracking',
   FINGERPRINTING = 'fingerprinting',

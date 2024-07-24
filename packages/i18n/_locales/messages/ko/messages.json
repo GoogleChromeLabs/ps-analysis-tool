@@ -229,9 +229,6 @@
   "session": {
     "message": "세션"
   },
-  "sitemapReport": {
-    "message": "사이트맵 보고서"
-  },
   "cookieIssues": {
     "message": "쿠키 문제"
   },
@@ -1147,12 +1144,6 @@
   },
   "size": {
     "message": "크기"
-  },
-  "mapping": {
-    "message": "매핑"
-  },
-  "blockingStatus": {
-    "message": "차단 상태"
   },
   "lookAtNetworkTab": {
     "message": "이 쿠키의 차단 정보를 확인하려면 네트워크 탭을 확인하세요."
