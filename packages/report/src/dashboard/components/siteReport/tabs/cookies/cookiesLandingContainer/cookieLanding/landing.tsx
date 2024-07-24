@@ -38,7 +38,7 @@ interface LandingProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
-  downloadReport?: () => void;
+  downloadReport?: () => Promise<void>;
   libraryMatches: LibraryData | null;
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
@@ -134,7 +134,10 @@ const Landing = ({
     <>
       <MenuBar
         disableReportDownload={false}
-        downloadReport={downloadReport}
+        downloadReport={
+          // @ts-ignore -- PSAT_DATA is not present in globalThis type.
+          globalThis?.PSAT_DATA?.hideDownloadButton ? undefined : downloadReport
+        }
         menuData={menuData}
         scrollContainerId={menuBarScrollContainerId}
       />

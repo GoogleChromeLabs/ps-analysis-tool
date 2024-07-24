@@ -397,7 +397,7 @@ const useCookieListing = (
         },
       },
       exemptionReason: {
-        title: 'Exemption Reason',
+        title: I18n.getMessage('exemptionReasons'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,

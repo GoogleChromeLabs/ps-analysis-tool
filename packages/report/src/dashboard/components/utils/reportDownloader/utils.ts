@@ -86,6 +86,7 @@ const generateHTMLFile = (
     selectedSite: globalThis?.PSAT_DATA?.selectedSite ?? '',
     translations,
     appliedFilters,
+    hideDownloadButton: true,
   };
 
   let code = `window.PSAT_DATA = ${JSON.stringify(reportData)};`;
@@ -148,6 +149,7 @@ export const generateSitemapHTMLFile = (
     selectedSite: globalThis?.PSAT_DATA?.selectedSite ?? '',
     translations,
     appliedFilters,
+    hideDownloadButton: true,
   };
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;

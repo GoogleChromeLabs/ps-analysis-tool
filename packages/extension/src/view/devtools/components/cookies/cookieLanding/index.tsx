@@ -104,7 +104,10 @@ const AssembledCookiesLanding = () => {
           className="flex-1 overflow-auto h-full"
           id="cookies-landing-scroll-container"
         >
-          <Landing tabCookies={cookiesByKey} />
+          <Landing
+            tabCookies={cookiesByKey}
+            appliedFilters={filter.selectedFilters}
+          />
         </div>
       </div>
     </div>
