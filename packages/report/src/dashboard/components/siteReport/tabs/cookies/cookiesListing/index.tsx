@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { type CookieTableData } from '@google-psat/common';
 import { CookieTable, CookieDetails } from '@google-psat/design-system';

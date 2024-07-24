@@ -16,7 +16,6 @@
 /**
  * External dependencies
  */
-import React from 'react';
 import { getLegendDescription } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import {

@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   noop,
   type CompleteJson,

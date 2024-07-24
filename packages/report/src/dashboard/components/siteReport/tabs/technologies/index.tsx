@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { noop, type TechnologyData } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';

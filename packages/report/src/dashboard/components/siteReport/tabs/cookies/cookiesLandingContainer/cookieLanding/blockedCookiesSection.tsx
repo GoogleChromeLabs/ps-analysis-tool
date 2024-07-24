@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import {
   type TabCookies,
   type TabFrames,

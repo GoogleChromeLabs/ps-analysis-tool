@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import {

@@ -6,6 +6,7 @@
     "declaration": true,
     "declarationDir": "dist-types",
     "noEmit": false,
+    "jsx": "react-jsx",
     "types": ["jest", "node"]
   },
   "include": [

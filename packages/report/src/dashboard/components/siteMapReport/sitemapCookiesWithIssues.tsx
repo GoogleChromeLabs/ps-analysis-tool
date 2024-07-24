@@ -17,7 +17,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import type { CookieTableData } from '@google-psat/common';
 
 /**
