@@ -126,9 +126,9 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
     <div>
       <MenuBar
         disableReportDownload={showLoader}
-        downloadReport={() => {
+        downloadReport={async () => {
           if (unfilteredCookies && tabFrames && libraryMatches && url) {
-            downloadReport(
+            await downloadReport(
               url,
               unfilteredCookies,
               tabFrames,

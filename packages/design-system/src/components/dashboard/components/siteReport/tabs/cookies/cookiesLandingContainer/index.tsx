@@ -41,7 +41,7 @@ interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;
   tabFrames: TabFrames;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
-  downloadReport?: () => void;
+  downloadReport?: () => Promise<void>;
   libraryMatches: LibraryData | null;
   libraryMatchesUrlCount?: {
     [url: string]: number;

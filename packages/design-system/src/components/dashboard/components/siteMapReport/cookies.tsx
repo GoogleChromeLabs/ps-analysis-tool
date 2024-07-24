@@ -91,12 +91,12 @@ const CookiesTab = ({
     return [_siteMapLibraryMatches, _libraryMatchesUrlCount];
   }, [completeJson]);
 
-  const downloadReport = useCallback(() => {
+  const downloadReport = useCallback(async () => {
     if (!Array.isArray(completeJson)) {
       return;
     }
 
-    generateSiteMapReportandDownload(completeJson, appliedFilters, path);
+    await generateSiteMapReportandDownload(completeJson, appliedFilters, path);
   }, [appliedFilters, completeJson, path]);
 
   const [

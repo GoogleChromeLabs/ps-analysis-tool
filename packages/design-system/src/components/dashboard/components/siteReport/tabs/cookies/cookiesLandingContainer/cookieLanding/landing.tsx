@@ -36,7 +36,7 @@ interface LandingProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
-  downloadReport?: () => void;
+  downloadReport?: () => Promise<void>;
   libraryMatches: LibraryData | null;
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
