@@ -17,12 +17,13 @@
 import { parseUrl } from '@google-psat/common';
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
+import { InvalidArgumentError } from 'commander';
 
 /**
  * Internal dependencies.
  */
-import { redLogger } from './coloredLoggers';
 import { LONG_CONSTANTS, SHORT_CONSTANTS } from './constants';
+import { redLogger } from './coloredLoggers';
 
 /**
  * This will check if the argument for the flag is another flag.
@@ -49,20 +50,32 @@ function isOtherFlagsAsArgumentValidator(argument: string) {
 /**
  * This validates the waitTime or the concurrency of the URLs to be analysed together.
  * @param {string} value The supposed numeric value.
+ * @param {string} flag The flag that the validator is validating.
  * @returns The user passed value else default value.
  */
-export function numericValidator(value: string) {
+export function numericValidator(value: string, flag: string) {
   if (isOtherFlagsAsArgumentValidator(value)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    switch (flag) {
+      case '-n':
+        throw new InvalidArgumentError(
+          "Correct value for option  '-n, --number-of-urls <num>' would be non negative number greater than 0 and less than equal to total number of urls"
+        );
+      case '-c':
+        throw new InvalidArgumentError(
+          "Correct value for option '-c, --concurrency <num>' would be non negative number greater than 0 and less than equal to total number of urls"
+        );
+      case '-w':
+        throw new InvalidArgumentError(
+          "Correct value for option '-w, --wait <num>' would be number of milliseconds greater than 0"
+        );
+      default:
+        throw new InvalidArgumentError('');
+    }
   }
 
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
-    redLogger(`${value} is not valid numeric value.`);
-    process.exit(1);
+    redLogger(`Error: ${value} is not valid numeric value.`);
   }
   return parsedValue;
 }
@@ -70,24 +83,31 @@ export function numericValidator(value: string) {
 /**
  * This validates the locale provided by the user.
  * @param {string} locale The locale provided by the user.
+ * @param {string} flag The flag that the validator is validating.
  * @returns validated locale.
  */
-export function localeValidator(locale: string) {
+export function localeValidator(locale: string, flag: string) {
+  const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
+
   if (isOtherFlagsAsArgumentValidator(locale)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    switch (flag) {
+      case '-l':
+        throw new InvalidArgumentError(
+          `Correct value for option '-l, --locale <language>' would be ${availableLocales.join(
+            ', '
+          )}`
+        );
+      default:
+        throw new InvalidArgumentError('');
+    }
   }
 
-  const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
   if (locale && !availableLocales.includes(locale)) {
     redLogger(
-      `Locale '${locale}' is not supported, please use ${availableLocales.join(
+      `Error: Locale '${locale}' is not supported, please use ${availableLocales.join(
         ', '
       )}.`
     );
-    process.exit(1);
   }
   return locale;
 }
@@ -95,20 +115,24 @@ export function localeValidator(locale: string) {
 /**
  * This validates the file path to be analysed by the user.
  * @param {string} filePath The file path provided by the user.
+ * @param {string} flag The flag that the validator is validating.
  * @returns validated file path.
  */
-export function filePathValidator(filePath: string) {
+export function filePathValidator(filePath: string, flag: string) {
   if (isOtherFlagsAsArgumentValidator(filePath)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    switch (flag) {
+      case '-f':
+        throw new InvalidArgumentError(
+          "Correct value for option '-f, --file <path>' would be /users/path/to/urls.csv or /users/path/to/urls.xml"
+        );
+      default:
+        throw new InvalidArgumentError('');
+    }
   }
 
   const csvFileExists = existsSync(filePath);
   if (!csvFileExists) {
     redLogger(`Error: No file at ${filePath}`);
-    process.exit(1);
   }
   return filePath;
 }
@@ -116,21 +140,33 @@ export function filePathValidator(filePath: string) {
 /**
  * This validates the url to be analysed by the user.
  * @param {string} url The url provided by the user.
+ * @param {string} flag The flag that the validator is validating.
  * @returns validated url.
  */
-export function urlValidator(url: string) {
+export function urlValidator(url: string, flag: string) {
   if (isOtherFlagsAsArgumentValidator(url)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    switch (flag) {
+      case '[website-url]':
+        throw new InvalidArgumentError(
+          'Correct value for command-argument would be https://example.com'
+        );
+      case '-u':
+        throw new InvalidArgumentError(
+          "Correct value for option '-u, --url <url>' would be https://example.com"
+        );
+      case '-s':
+        throw new InvalidArgumentError(
+          "Correct value for option '-s, --source-url <url>' would be https://gagan.pro/sitemap/toypta.xml or https://sitemap.superintegratedapp.com/sitemaps/sitemap.csv"
+        );
+      default:
+        throw new InvalidArgumentError('');
+    }
   }
 
   const parsedUrl = parseUrl(url);
 
   if (parsedUrl === null) {
-    redLogger(`Error: Invalid Url ${parsedUrl}`);
-    process.exit(1);
+    redLogger(`Error: Invalid Url ${url}`);
   }
   return url;
 }
@@ -138,14 +174,19 @@ export function urlValidator(url: string) {
 /**
  * This validates the output directory path provided by the user.
  * @param {string} outDir output directory path provided by the user.
+ * @param {string} flag The flag that the validator is validating.
  * @returns validated outDir or the created output directory.
  */
-export function outDirValidator(outDir: string) {
+export function outDirValidator(outDir: string, flag: string) {
   if (isOtherFlagsAsArgumentValidator(outDir)) {
-    redLogger(
-      `Error: Please provide an argument for the flag as it cannot be empty.`
-    );
-    process.exit(1);
+    switch (flag) {
+      case '-o':
+        throw new InvalidArgumentError(
+          "Correct value for option '-o, --out-dir <path>' would be /users/path/to/save/output"
+        );
+      default:
+        throw new InvalidArgumentError('');
+    }
   }
 
   const parentDirExists = existsSync(path.resolve('./out'));

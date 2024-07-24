@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import { noop, type TabFrames } from '@google-psat/common';
 import { type TableFilter } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
