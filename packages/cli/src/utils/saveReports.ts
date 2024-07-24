@@ -42,6 +42,7 @@ const getFolderName = (pageUrl: string) => {
 
 const saveReports = async (outDir: string, result: CompleteJson[]) => {
   if (result.length > 1) {
+    await saveResultAsHTML(outDir, result, true, 'report.html');
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {
@@ -58,7 +59,7 @@ const saveReports = async (outDir: string, result: CompleteJson[]) => {
         await writeFile(path.join(fileDir, 'cookies.csv'), allCookiesCSV);
 
         await ensureFile(path.join(fileDir, 'report.html'));
-        await saveResultAsHTML(outDir, siteReport, false, 'report.html');
+        await saveResultAsHTML(fileDir, [siteReport], false, 'report.html');
 
         if (technologyDataCSV) {
           await ensureFile(path.join(fileDir, 'technologies.csv'));
@@ -90,7 +91,7 @@ const saveReports = async (outDir: string, result: CompleteJson[]) => {
     await writeFile(path.join(outDir, 'cookies.csv'), allCookiesCSV);
 
     await ensureFile(path.join(outDir, 'report.html'));
-    await saveResultAsHTML(outDir, result[0], false, 'report.html');
+    await saveResultAsHTML(outDir, [result[0]], false, 'report.html');
 
     if (technologyDataCSV) {
       await ensureFile(path.join(outDir, 'technologies.csv'));
