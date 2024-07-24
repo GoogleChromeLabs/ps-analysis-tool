@@ -6,7 +6,7 @@
 		"build-storybook": "storybook build",
 		"build:all": "npm-run-all **:build ",
 		"tsc-packages:build": "npm run i18n:build && npm run common:build && npm run design-system:build && npm run library-detection:build && npm run analysis-utils:build",
-		"tsc-packages:dev": "run-p i18n:dev common:dev library-detection:dev design-system:dev analysis-utils:dev",
+		"tsc-packages:dev": "run-p i18n:dev common:dev design-system:dev library-detection:dev analysis-utils:dev",
 		"build-cli": "npm run tsc-packages:build && npm run cli-dashboard:build && npm run cli:build",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
 		"unpublish:all:local": "npm run unpublish:local --workspaces",
