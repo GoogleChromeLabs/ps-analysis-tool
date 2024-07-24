@@ -39,7 +39,7 @@ const isProduction = process.env.NODE_ENV === 'production';
  */
 const saveResultsAsHTML = async (
   outDir: string,
-  result: CompleteJson | CompleteJson[],
+  result: CompleteJson[],
   isSiteMap: boolean,
   fileName?: string | null
 ) => {
@@ -95,7 +95,7 @@ const saveResultsAsHTML = async (
     htmlText.substring(0, htmlText.indexOf('</head>')) +
     `<script id='JSONDATASCRIPT'>
       window.PSAT_DATA = ${JSON.stringify({
-        json: [result],
+        json: result,
         type: isSiteMap ? 'sitemap' : 'url',
         selectedSite: outDir?.trim()?.slice(6) ?? '',
         translations: messages,
@@ -104,7 +104,7 @@ const saveResultsAsHTML = async (
     htmlText.substring(htmlText.indexOf('</head>'));
 
   const outputFilePath = fileName
-    ? outDir + `/report.html`
+    ? outDir + `/${fileName}`
     : getOutputFilePath(outDir);
 
   const outFileFullDir = path.resolve(outputFilePath);

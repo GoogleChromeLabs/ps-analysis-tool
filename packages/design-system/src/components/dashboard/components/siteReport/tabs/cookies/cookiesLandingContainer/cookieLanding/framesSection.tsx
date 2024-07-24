@@ -31,7 +31,7 @@ import { prepareFrameStatsComponentForExtensionDashboard } from '../../../../../
 const FramesSection = () => {
   const framesStats = prepareFrameStatsComponentForExtensionDashboard(
     //@ts-ignore
-    globalThis?.PSAT_DATA.json || {}
+    globalThis?.PSAT_DATA.json[0] || {}
   );
 
   const dataComponents: MatrixComponentProps[] = framesStats.legend.map(
