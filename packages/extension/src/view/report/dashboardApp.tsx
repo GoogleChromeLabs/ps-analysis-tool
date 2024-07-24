@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
