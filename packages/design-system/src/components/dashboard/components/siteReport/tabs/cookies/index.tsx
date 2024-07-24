@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useMemo, useCallback, useState } from 'react';
-import { noop, type TabCookies, type TabFrames } from '@google-psat/common';
+import { noop, type TabFrames } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -46,7 +46,6 @@ const CookiesTab = ({
     })
   );
 
-  const [filteredData, setFilteredData] = useState<TabCookies>({});
   const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
 
   const tabFrames = useMemo(() => {
@@ -67,34 +66,13 @@ const CookiesTab = ({
     if (!completeJson) {
       return;
     }
-    //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
-    const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
-    //@ts-ignore -- PSAT_REPORT_HTML is a custom variable that is injected when report is being downloaded.
-    const reportHTMLText = globalThis?.PSAT_REPORT_HTML;
 
     if (completeJson.length > 1) {
-      generateSiteReportandDownload(
-        completeJson,
-        filteredData,
-        appliedFilters,
-        //@ts-ignore
-        isExtension
-          ? decodeURIComponent(escape(atob(reportHTMLText)))
-          : atob(reportHTMLText),
-        selectedSite
-      );
+      generateSiteReportandDownload(completeJson, appliedFilters, selectedSite);
     } else {
-      generateSiteReportandDownload(
-        completeJson,
-        filteredData,
-        appliedFilters,
-        //@ts-ignore
-        isExtension
-          ? decodeURIComponent(escape(atob(reportHTMLText)))
-          : atob(reportHTMLText)
-      );
+      generateSiteReportandDownload(completeJson, appliedFilters);
     }
-  }, [appliedFilters, completeJson, filteredData, selectedSite]);
+  }, [appliedFilters, completeJson, selectedSite]);
 
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -111,7 +89,6 @@ const CookiesTab = ({
             tabFrames={tabFrames}
             downloadReport={downloadReport}
             setAppliedFilters={setAppliedFilters}
-            setFilteredData={setFilteredData}
             query={query}
             clearQuery={clearQuery}
           />

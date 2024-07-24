@@ -19,116 +19,49 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import {
-  getCookieKey,
-  getValueByKey,
-  type CompleteJson,
-  type CookieTableData,
-  type TabCookies,
-} from '@google-psat/common';
+import { getCurrentDateAndTime, type CompleteJson } from '@google-psat/common';
 
 /**
  * Internal dependencies
  */
 import { createZip, getFolderName, generateSitemapHTMLFile } from './utils';
-import extractCookies from '../extractCookies';
-import reshapeCookies from '../reshapeCookies';
 import { TableFilter } from '../../../../table';
 
 const generateSiteMapReportandDownload = async (
   JSONReport: CompleteJson[],
-  filteredData: TabCookies,
   appliedFilters: TableFilter,
-  path: string,
-  reportHTML: string
+  path: string
 ) => {
   if (!JSONReport.length) {
     return;
   }
 
-  const today = new Date();
-
-  const day = String(today.getDate()).padStart(2, '0'); // Get the day and ensure it has leading zero if needed
-  const month = String(today.getMonth() + 1).padStart(2, '0'); // Get the month and ensure it has leading zero if needed
-  const year = today.getFullYear();
-
   const zip = new JSZip();
 
   JSONReport.forEach((data) => {
     const zipFolder: JSZip | null = zip.folder(
-      `psat_cli_report_${getFolderName(data.pageUrl)}_${day + month + year}`
+      `psat_cli_report_${getFolderName(data.pageUrl)}_${getCurrentDateAndTime(
+        'YYYY-MM-DD_HH-MM-SS'
+      )}`
     );
 
     if (!zipFolder) {
       return;
     }
 
-    let siteFilteredData: TabCookies = reshapeCookies(
-      extractCookies(data.cookieData, data.pageUrl, true)
-    );
-
-    if (Object.keys(appliedFilters).length) {
-      siteFilteredData = Object.values(siteFilteredData)
-        .filter((row) => {
-          return Object.entries(appliedFilters).every(([filterKey, filter]) => {
-            const filterValues = filter.filterValues || {};
-
-            if (Object.keys(filterValues).length === 0) {
-              return true;
-            }
-
-            const value = getValueByKey(filterKey, row);
-
-            if (filter.comparator !== undefined) {
-              return Object.keys(filterValues).some((filterValue) =>
-                filter.comparator?.(value, filterValue)
-              );
-            } else if (filterValues[value]) {
-              return filterValues[value].selected;
-            }
-
-            return false;
-          });
-        })
-        .reduce<TabCookies>((acc, cookie) => {
-          const cookieKey = getCookieKey(
-            (cookie as CookieTableData).parsedCookie
-          );
-
-          if (!cookieKey) {
-            return acc;
-          }
-
-          acc[cookieKey] = cookie as CookieTableData;
-
-          return acc;
-        }, {});
-    }
-
-    createZip(
-      data,
-      siteFilteredData,
-      appliedFilters,
-      zipFolder,
-      data.pageUrl,
-      reportHTML
-    );
+    createZip(data, appliedFilters, zipFolder);
   });
 
-  const report = generateSitemapHTMLFile(
-    JSONReport,
-    filteredData,
-    appliedFilters,
-    path,
-    reportHTML
-  );
+  const report = generateSitemapHTMLFile(JSONReport, appliedFilters);
 
   zip.file('report.html', report);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
     content,
-    `psat_cli_report_${getFolderName(path)}_${day + month + year}.zip`
+    `psat_cli_report_${getFolderName(path)}_${getCurrentDateAndTime(
+      'YYYY-MM-DD_HH-MM-SS'
+    )}.zip`
   );
 };
 

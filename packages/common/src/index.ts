@@ -40,6 +40,7 @@ export * from './utils/contextSelector';
 export { default as addUTMParams, type MediumType } from './utils/addUTMParams';
 export { default as delay } from './utils/delay';
 export { default as mergeDeep } from './utils/mergeDeep';
+export { default as getCurrentDateAndTime } from './utils/getCurrentDateAndTime';
 export { default as resolveWithTimeout } from './utils/resolveWithTimeout';
 export { default as deriveBlockingStatus } from './utils/deriveBlockingStatus';
 export { default as getLegendDescription } from './utils/getLegendDescription';

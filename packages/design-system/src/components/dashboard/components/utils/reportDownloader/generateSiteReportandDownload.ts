@@ -18,7 +18,7 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import type { CompleteJson, TabCookies } from '@google-psat/common';
+import { getCurrentDateAndTime, type CompleteJson } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -28,20 +28,12 @@ import { TableFilter } from '../../../../table';
 
 const generateSiteReportandDownload = async (
   JSONReport: CompleteJson[],
-  filteredData: TabCookies,
   appliedFilters: TableFilter,
-  reportHTML: string,
   selectedPageUrl?: string | null
 ) => {
   if (!JSONReport.length) {
     return;
   }
-
-  const today = new Date();
-
-  const day = String(today.getDate()).padStart(2, '0'); // Get the day and ensure it has leading zero if needed
-  const month = String(today.getMonth() + 1).padStart(2, '0'); // Get the month and ensure it has leading zero if needed
-  const year = today.getFullYear();
 
   const zip = new JSZip();
 
@@ -55,32 +47,27 @@ const generateSiteReportandDownload = async (
     siteAnalysisData = JSONReport[0];
   }
 
-  const zipFolder: JSZip | null = zip.folder(
-    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${
-      day + month + year
-    }`
-  );
+  const hostName = new URL(siteAnalysisData.pageUrl).hostname;
+  // @ts-ignore -- because this data will already be injected from the extension.
+  const fileName = globalThis?.PSAT_EXTENSION
+    ? `${hostName.replace('.', '-')}-report-${getCurrentDateAndTime(
+        'YYYY-MM-DD_HH-MM-SS'
+      )}`
+    : `psat_cli_report_${getFolderName(
+        JSONReport[0].pageUrl
+      )}_${getCurrentDateAndTime('YYYY-MM-DD_HH-MM-SS')}`;
+
+  const zipFolder: JSZip | null = zip.folder(fileName);
 
   if (!zipFolder) {
     return;
   }
 
-  createZip(
-    siteAnalysisData,
-    filteredData,
-    appliedFilters,
-    zipFolder,
-    JSONReport[0].pageUrl,
-    reportHTML
-  );
+  createZip(siteAnalysisData, appliedFilters, zipFolder);
 
   const content = await zip.generateAsync({ type: 'blob' });
-  saveAs(
-    content,
-    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${
-      day + month + year
-    }.zip`
-  );
+
+  saveAs(content, fileName + '.zip');
 };
 
 export default generateSiteReportandDownload;
