@@ -75,6 +75,10 @@ const Layout = ({
   );
 
   const { Element: PanelElement, props } = activePanel.panel;
+  const _clearQuery = useMemo(
+    () => (query ? clearQuery : noop),
+    [query, clearQuery]
+  );
 
   useEffect(() => {
     setSidebarData((prev) => {
@@ -89,7 +93,7 @@ const Layout = ({
           selectedSite,
           isSiteMapLandingContainer: false,
           query,
-          clearQuery: query ? clearQuery : noop,
+          clearQuery: _clearQuery,
           url:
             completeJson && completeJson?.length > 1
               ? selectedSite
@@ -161,7 +165,7 @@ const Layout = ({
       return _data;
     });
   }, [
-    clearQuery,
+    _clearQuery,
     completeJson,
     frameUrls,
     query,
@@ -198,10 +202,7 @@ const Layout = ({
       >
         <Sidebar />
       </Resizable>
-      <div
-        className="flex-1 max-h-screen overflow-auto"
-        id="dashboard-layout-container"
-      >
+      <div className="flex-1 max-h-screen overflow-auto">
         {PanelElement && <PanelElement {...props} />}
       </div>
     </div>

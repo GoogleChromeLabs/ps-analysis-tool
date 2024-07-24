@@ -23,6 +23,7 @@ import {
   getLegendDescription,
   TabCookies,
 } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -86,7 +87,7 @@ const ExemptedCookiesSection = ({
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
       onClick:
@@ -111,13 +112,12 @@ const ExemptedCookiesSection = ({
     <CookiesLandingWrapper
       description={description}
       dataMapping={exemptedCookiesDataMapping}
-      testId="blocked-cookies-insights"
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title="Exemption Reasons"
+          title={I18n.getMessage('exemptionReasons')}
           matrixData={dataComponents}
-          infoIconTitle="Cookies that should have been blocked by the browser but was exempted."
+          infoIconTitle={I18n.getMessage('exemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>

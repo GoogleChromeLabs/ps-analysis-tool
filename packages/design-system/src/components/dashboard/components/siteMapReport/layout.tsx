@@ -94,7 +94,10 @@ const Layout = ({
     }));
 
   const { Element: PanelElement, props } = activePanel.panel;
-  const { query, clearQuery } = activePanel;
+  const { query } = activePanel;
+  const clearQuery = useMemo(() => {
+    return query ? activePanel.clearQuery : noop;
+  }, [query, activePanel.clearQuery]);
 
   const doesSiteHaveCookies = useMemo(() => {
     const store = {} as Record<string, boolean>;
@@ -134,7 +137,7 @@ const Layout = ({
           path,
           libraryMatches,
           query,
-          clearQuery: query ? clearQuery : noop,
+          clearQuery,
         },
       };
 
@@ -152,7 +155,7 @@ const Layout = ({
                 path,
                 libraryMatches,
                 query,
-                clearQuery: query ? clearQuery : noop,
+                clearQuery,
               },
             },
             children: {},
@@ -214,10 +217,7 @@ const Layout = ({
       >
         <Sidebar />
       </Resizable>
-      <div
-        className="flex-1 max-h-screen overflow-auto"
-        id="dashboard-sitemap-layout-container"
-      >
+      <div className="flex-1 max-h-screen overflow-auto">
         {PanelElement && <PanelElement {...props} />}
       </div>
     </div>

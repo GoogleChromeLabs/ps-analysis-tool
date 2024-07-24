@@ -92,6 +92,7 @@ const generateHTMLFile = (
     appliedFilters,
     // @ts-ignore -- because this data will already be injected from cli or the extension.
     dateTime: globalThis?.PSAT_DATA.dateTime,
+    hideDownloadButton: true,
   };
 
   let code = `window.PSAT_DATA = ${JSON.stringify(reportData)};`;
@@ -154,6 +155,7 @@ export const generateSitemapHTMLFile = (
     selectedSite: globalThis?.PSAT_DATA?.selectedSite ?? '',
     translations,
     appliedFilters,
+    hideDownloadButton: true,
   };
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;

@@ -72,7 +72,7 @@ export const TableProvider = ({
     useColumnResizing(visibleColumns, allTableColumnsKeys, commonKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, commonKey);
+    useColumnSorting(data, tableColumns, commonKey);
 
   const {
     filters,

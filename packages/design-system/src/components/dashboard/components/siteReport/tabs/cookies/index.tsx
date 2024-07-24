@@ -64,15 +64,19 @@ const CookiesTab = ({
     return frames;
   }, [completeJson]);
 
-  const downloadReport = useCallback(() => {
+  const downloadReport = useCallback(async () => {
     if (!completeJson) {
       return;
     }
 
     if (completeJson.length > 1) {
-      generateSiteReportandDownload(completeJson, appliedFilters, selectedSite);
+      await generateSiteReportandDownload(
+        completeJson,
+        appliedFilters,
+        selectedSite
+      );
     } else {
-      generateSiteReportandDownload(completeJson, appliedFilters);
+      await generateSiteReportandDownload(completeJson, appliedFilters);
     }
   }, [appliedFilters, completeJson, selectedSite]);
 

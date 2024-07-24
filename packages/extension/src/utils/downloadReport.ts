@@ -24,6 +24,7 @@ import {
 } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 import { I18n } from '@google-psat/i18n';
+import type { TableFilter } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -37,18 +38,21 @@ import isValidURL from './isValidURL';
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
  * @param libraryMatches Libary matches
+ * @param appliedFilters Applied filters.
  */
 export default async function downloadReport(
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData
+  libraryMatches: LibraryData,
+  appliedFilters: TableFilter
 ) {
   const { html, fileName } = await generateDashboard(
     url,
     tabCookies,
     tabFrames,
-    libraryMatches
+    libraryMatches,
+    appliedFilters
   );
 
   saveAs(html, fileName);
@@ -58,7 +62,8 @@ export const generateDashboard = async (
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData
+  libraryMatches: LibraryData,
+  appliedFilters: TableFilter
 ) => {
   const dashboardReport = await (await fetch('./dashboard.html')).text();
   const parser = new DOMParser();
@@ -90,6 +95,7 @@ export const generateDashboard = async (
       ? new URL(url).hostname.replace('.', '-')
       : '',
     translations,
+    appliedFilters,
     dateTime,
   })}`;
 

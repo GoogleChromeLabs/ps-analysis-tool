@@ -37,6 +37,7 @@ export type TableColumn = {
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   widthWeightagePercentage?: number;
   width?: number; // For internal use only
+  sortingComparator?: (a: InfoType, b: InfoType) => number;
 };
 
 export type TableRow = {
