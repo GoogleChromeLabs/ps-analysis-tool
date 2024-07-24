@@ -5,8 +5,8 @@
 	"scripts": {
 		"build-storybook": "storybook build",
 		"build:all": "npm-run-all **:build ",
-		"tsc-packages:build": "npm run i18n:build && npm run common:build && npm run library-detection:build && npm run design-system:build && npm run analysis-utils:build",
-		"tsc-packages:dev": "run-p i18n:dev common:dev library-detection:dev design-system:dev analysis-utils:dev",
+		"tsc-packages:build": "npm run i18n:build && npm run common:build && npm run library-detection:build && npm run design-system:build && npm run analysis-utils:build && npm run report:build",
+		"tsc-packages:dev": "run-p i18n:dev common:dev library-detection:dev design-system:dev analysis-utils:dev report:dev",
 		"build-cli": "npm run tsc-packages:build && npm run cli-dashboard:build && npm run cli:build",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
 		"unpublish:all:local": "npm run unpublish:local --workspaces",
@@ -40,7 +40,7 @@
 		"cli-dashboard:prebuild": "npm run build:remove -w @google-psat/cli-dashboard",
 		"cli-dashboard:build": "npm run cli-dashboard:prebuild && cross-env NODE_ENV=production npm run build -w @google-psat/cli-dashboard",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
-		"ext:predev":"npm run dev -w @google-psat/extension",
+		"ext:predev": "npm run dev -w @google-psat/extension",
 		"ext:dev": "run-p tsc-packages:dev ext:predev",
 		"ext:prebuild": "npm run build:remove -w @google-psat/extension",
 		"ext:build": "npm run tsc-packages:build && npm run ext:prebuild && cross-env NODE_ENV=production npm run build -w @google-psat/extension",
@@ -160,5 +160,7 @@
 		"wappalyzer": {
 			"puppeteer": "^22.11.1"
 		}
+	},
+	"dependencies": {
 	}
 }
