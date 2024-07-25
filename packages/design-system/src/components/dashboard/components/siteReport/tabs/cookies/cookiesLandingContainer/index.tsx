@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import {
   CookieTableData,
   getCookieKey,
@@ -41,7 +41,7 @@ interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;
   tabFrames: TabFrames;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
-  downloadReport?: () => void;
+  downloadReport?: () => Promise<void>;
   libraryMatches: LibraryData | null;
   libraryMatchesUrlCount?: {
     [url: string]: number;
@@ -68,7 +68,7 @@ const AssembledCookiesLanding = ({
 
   const cookiesByKey = useMemo(() => {
     return (
-      filterOutput?.filteredData.reduce<TabCookies>((acc, cookie) => {
+      filterOutput.filteredData.reduce<TabCookies>((acc, cookie) => {
         const cookieKey = getCookieKey(
           (cookie as CookieTableData).parsedCookie
         );
@@ -82,7 +82,7 @@ const AssembledCookiesLanding = ({
         return acc;
       }, {}) || {}
     );
-  }, [filterOutput?.filteredData]);
+  }, [filterOutput.filteredData]);
 
   const cookiesWithIssues = useMemo(
     () =>
@@ -93,8 +93,8 @@ const AssembledCookiesLanding = ({
   );
 
   useEffect(() => {
-    setAppliedFilters(filterOutput?.selectedFilters);
-  }, [filterOutput?.selectedFilters, setAppliedFilters]);
+    setAppliedFilters(filterOutput.selectedFilters);
+  }, [filterOutput.selectedFilters, setAppliedFilters]);
 
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
@@ -115,9 +115,9 @@ const AssembledCookiesLanding = ({
           />
         </button>
         <ChipsBar
-          selectedFilters={filterOutput?.selectedFilters || {}}
-          resetFilters={filterOutput?.resetFilters || noop}
-          toggleFilterSelection={filterOutput?.toggleFilterSelection || noop}
+          selectedFilters={filterOutput.selectedFilters}
+          resetFilters={filterOutput.resetFilters}
+          toggleFilterSelection={filterOutput.toggleFilterSelection}
         />
       </div>
       <div
@@ -136,22 +136,16 @@ const AssembledCookiesLanding = ({
             className="border border-r border-gray-300 dark:border-quartz"
           >
             <FiltersSidebar
-              filters={filterOutput?.filters || {}}
-              toggleFilterSelection={
-                filterOutput?.toggleFilterSelection || noop
-              }
-              toggleSelectAllFilter={
-                filterOutput?.toggleSelectAllFilter || noop
-              }
-              isSelectAllFilterSelected={
-                filterOutput?.isSelectAllFilterSelected || noop
-              }
+              filters={filterOutput.filters}
+              toggleFilterSelection={filterOutput.toggleFilterSelection}
+              toggleSelectAllFilter={filterOutput.toggleSelectAllFilter}
+              isSelectAllFilterSelected={filterOutput.isSelectAllFilterSelected}
             />
           </Resizable>
         )}
         <div
           className="flex-1 overflow-auto h-full"
-          id="cookies-landing-scroll-container"
+          id={menuBarScrollContainerId}
         >
           <Landing
             tabCookies={cookiesByKey}
@@ -168,4 +162,4 @@ const AssembledCookiesLanding = ({
   );
 };
 
-export default AssembledCookiesLanding;
+export default memo(AssembledCookiesLanding);

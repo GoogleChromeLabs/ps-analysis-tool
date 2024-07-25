@@ -75,6 +75,18 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
         accessorKey: 'categories',
         cell: (info: InfoType) =>
           (info as TechnologyData['categories']).map((i) => i.name).join(' | '),
+        sortingComparator: (a: InfoType, b: InfoType) => {
+          const aCategories =
+            (a as TechnologyData['categories'])
+              ?.map((i) => i.name)
+              .join(' | ') || '';
+          const bCategories =
+            (b as TechnologyData['categories'])
+              ?.map((i) => i.name)
+              .join(' | ') || '';
+
+          return aCategories.localeCompare(bCategories);
+        },
       },
     ],
     []
