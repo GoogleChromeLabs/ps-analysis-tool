@@ -74,11 +74,16 @@ const useColumnSorting = (
     )?.sortingComparator;
 
     const _sortedData = [...data].sort((a, b) => {
-      const candidateA = getValueByKey(sortKey, a);
-      const candidateB = getValueByKey(sortKey, b);
+      let candidateA = getValueByKey(sortKey, a);
+      let candidateB = getValueByKey(sortKey, b);
 
       if (sortingComparator) {
         return sortingComparator(candidateA, candidateB) * (ascending ? 1 : -1);
+      }
+
+      if (typeof candidateA === 'string' && typeof candidateB === 'string') {
+        candidateA = candidateA.trim();
+        candidateB = candidateB.trim();
       }
 
       return (
