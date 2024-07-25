@@ -130,7 +130,7 @@ const AssembledCookiesLanding = ({
       <div
         className="flex grow-0"
         style={{
-          height: 'calc(100% - 26px)',
+          height: 'calc(100% - 82px)',
         }}
       >
         {showFilterSidebar && (
