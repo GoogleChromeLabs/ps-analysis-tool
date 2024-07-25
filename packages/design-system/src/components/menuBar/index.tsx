@@ -111,7 +111,7 @@ const MenuBar = ({
       data-testid="menu-bar"
       className={classnames(
         'fixed right-0 flex flex-col gap-4 justify-center items-center z-10 w-10 p-2 bg-dynamic-grey dark:bg-charleston-green rounded-l-lg border border-bright-gray dark:border-quartz',
-        extraClasses ? extraClasses : 'top-4'
+        extraClasses ? extraClasses : 'top-6'
       )}
     >
       {downloadReport && (
