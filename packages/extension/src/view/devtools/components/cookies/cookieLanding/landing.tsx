@@ -127,15 +127,13 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
       <MenuBar
         disableReportDownload={showLoader}
         downloadReport={async () => {
-          if (unfilteredCookies && tabFrames && libraryMatches && url) {
-            await downloadReport(
-              url,
-              unfilteredCookies,
-              tabFrames,
-              libraryMatches,
-              appliedFilters
-            );
-          }
+          await downloadReport(
+            url || '',
+            unfilteredCookies || {},
+            tabFrames || {},
+            libraryMatches,
+            appliedFilters
+          );
         }}
         menuData={menuData}
         scrollContainerId="cookies-landing-scroll-container"
