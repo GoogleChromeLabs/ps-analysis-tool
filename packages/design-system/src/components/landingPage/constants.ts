@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import { addUTMParams } from '@google-psat/common';
 
 export const QUICK_LINKS = [
   {
@@ -34,11 +30,5 @@ export const QUICK_LINKS = [
   {
     title: 'reportBreakage',
     link: 'https://goo.gle/report-3pc-broken',
-  },
-  {
-    title: 'requestMigrationTime',
-    link: addUTMParams(
-      'https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369'
-    ),
   },
 ];
