@@ -1,5 +1,3 @@
-Here is an improved version of the documentation:
-
 # Developer Workflows
 
 This documentation provides the commands necessary for developing the extension and CLI packages.
@@ -8,7 +6,7 @@ This documentation provides the commands necessary for developing the extension 
 
 ### Development Mode
 
-To run the extension in development mode for continuous changes, use:
+To run the extension in development mode for continuous changes only for the extension package, use:
 ```bash
 npm run webpack:dev:ext
 ```
@@ -29,7 +27,7 @@ npm run build:ext
 
 ### Development Mode
 
-To run the CLI in development mode for continuous changes, use:
+To run the CLI in development mode for continuous changes only for the cli package, use:
 ```bash
 npm run webpack:dev:cli
 ```
@@ -75,5 +73,3 @@ Any changes to the cookie database need to be updated before a release. To updat
 ```bash
 npm run cookie-db:update
 ```
-
-Feel free to adjust the structure and content to best fit your project's needs!
