@@ -29,7 +29,7 @@ import {
   extractCookies,
   SiteMapReport,
   SiteReport,
-} from '@google-psat/design-system';
+} from '@google-psat/report';
 
 /**
  * Internal dependencies
