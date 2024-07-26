@@ -977,9 +977,6 @@
   "reportBreakage": {
     "message": "Informar sobre un fallo"
   },
-  "requestMigrationTime": {
-    "message": "Solicitar más tiempo para la migración"
-  },
   "quickLinks": {
     "message": "Enlaces rápidos"
   },

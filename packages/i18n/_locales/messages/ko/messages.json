@@ -977,9 +977,6 @@
   "reportBreakage": {
     "message": "중단 신고"
   },
-  "requestMigrationTime": {
-    "message": "추가 이전 시간 요청"
-  },
   "quickLinks": {
     "message": "빠른 링크"
   },

@@ -977,9 +977,6 @@
   "reportBreakage": {
     "message": "障害の報告"
   },
-  "requestMigrationTime": {
-    "message": "移行期間の延長のリクエスト"
-  },
   "quickLinks": {
     "message": "クイックリンク"
   },
