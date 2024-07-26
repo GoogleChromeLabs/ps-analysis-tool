@@ -31,6 +31,7 @@ module.exports = {
     path.resolve(__dirname, './packages/extension/src/**/*.{tsx,ts,js}'),
     path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,ts,js}'),
     path.resolve(__dirname, './packages/cli-dashboard/src/**/*.{tsx,ts,js}'),
+    path.resolve(__dirname, './packages/report/src/**/*.{tsx,ts,js}'),
     path.resolve(
       __dirname,
       './packages/library-detection/src/**/*.{tsx,ts,js}'
