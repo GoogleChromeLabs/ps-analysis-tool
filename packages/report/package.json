@@ -2,6 +2,8 @@
   "name": "@google-psat/report",
   "version": "0.9.0-2",
   "description": "Static HTML analysis report",
+  "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
@@ -18,7 +20,9 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "webpack serve --config ./webpack.config.cjs --open",
+    "build": "tsc",
+    "dev": "tsc-watch",
+    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
