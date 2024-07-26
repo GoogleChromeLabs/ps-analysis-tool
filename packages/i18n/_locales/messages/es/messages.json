@@ -977,9 +977,6 @@
   "reportBreakage": {
     "message": "Informar sobre un fallo"
   },
-  "requestMigrationTime": {
-    "message": "Solicitar más tiempo para la migración"
-  },
   "quickLinks": {
     "message": "Enlaces rápidos"
   },
@@ -1608,9 +1605,6 @@
   },
   "fingerprinting": {
     "message": "Recogida de huella digital"
-  },
-  "facilitatedTesting": {
-    "message": "Pruebas facilitadas"
   },
   "rwsJsonGenerator": {
     "message": "Generador de JSON para conjuntos de sitios web relacionados"
