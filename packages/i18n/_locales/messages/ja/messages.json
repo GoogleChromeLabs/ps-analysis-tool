@@ -1609,9 +1609,6 @@
   "fingerprinting": {
     "message": "フィンガープリント"
   },
-  "facilitatedTesting": {
-    "message": "主導テスト"
-  },
   "rwsJsonGenerator": {
     "message": "関連ウェブサイト セットの JSON 生成ツール"
   },

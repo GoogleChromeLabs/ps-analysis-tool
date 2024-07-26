@@ -1609,9 +1609,6 @@
   "fingerprinting": {
     "message": "ऑनलाइन ट्रैकिंग"
   },
-  "facilitatedTesting": {
-    "message": "जांच करने की सुविधा देना"
-  },
   "rwsJsonGenerator": {
     "message": "Related Website Sets JSON Generator"
   },

@@ -1609,9 +1609,6 @@
   "fingerprinting": {
     "message": "Técnicas de impressão digital"
   },
-  "facilitatedTesting": {
-    "message": "Teste facilitado"
-  },
   "rwsJsonGenerator": {
     "message": "Gerador JSON de conjuntos de sites relacionados"
   },

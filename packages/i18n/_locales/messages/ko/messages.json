@@ -1609,9 +1609,6 @@
   "fingerprinting": {
     "message": "디지털 지문 수집"
   },
-  "facilitatedTesting": {
-    "message": "원활한 테스트"
-  },
   "rwsJsonGenerator": {
     "message": "관련 웹사이트 세트 JSON 생성기"
   },
