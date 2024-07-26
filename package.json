@@ -26,7 +26,7 @@
 		"build:cli": "npm run build:tsc-packages && cross-env NODE_ENV=production npm run build -w @google-psat/cli",
 		"build:cli:dashboard": "run-p build:cli build:cli-dashboard",
 		"cli": "node packages/cli/dist/main.js",
-		"build:report": "npm run dev -w @google-psat/report",
+		"build:report": "npm run build -w @google-psat/report",
 		"dev:report": "npm run dev -w @google-psat/report",
 		"dev:cli-dashboard": "npm run dev -w @google-psat/cli-dashboard",
 		"build:cli-dashboard": "cross-env NODE_ENV=production npm run build -w @google-psat/cli-dashboard",
