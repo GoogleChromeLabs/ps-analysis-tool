@@ -26,7 +26,7 @@
   "scripts": {
     "dev": "webpack serve --config ../../dashboard.webpack.config.cjs --open --port 8085",
     "build": "webpack --config ../../dashboard.webpack.config.cjs",
-    "build:remove": "rimraf dist",
+    "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
