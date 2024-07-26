@@ -86,6 +86,8 @@ const generateHTMLFile = (
     selectedSite: globalThis?.PSAT_DATA?.selectedSite ?? '',
     translations,
     appliedFilters,
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    dateTime: globalThis?.PSAT_DATA.dateTime,
     hideDownloadButton: true,
   };
 

@@ -16,13 +16,14 @@
 /**
  * External dependencies
  */
-import { CompleteJson } from '@google-psat/common';
+import { CompleteJson, getCurrentDateAndTime } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { ensureDir } from 'fs-extra';
 import { existsSync, writeFile } from 'node:fs';
 import path from 'node:path';
 import URL from 'node:url';
 import fs from 'fs';
+
 /**
  * Internal dependencies
  */
@@ -35,12 +36,14 @@ const isProduction = process.env.NODE_ENV === 'production';
  * @param result The completeJSON of the output.
  * @param isSiteMap Whether the output is sitemap of not
  * @param fileName Optional filename to use used for the output file.
+ * @param sitemapUrl Sitemap URL
  */
 const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson[],
   isSiteMap: boolean,
-  fileName?: string | null
+  fileName?: string | null,
+  sitemapUrl?: string | undefined
 ) => {
   let htmlText = '';
 
@@ -86,6 +89,9 @@ const saveResultsAsHTML = async (
   }
 
   const messages = I18n.getMessages();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const dateTime =
+    getCurrentDateAndTime('DD MMMM, YYYY, hh:mm:ssam/pm') + ' ' + timeZone;
 
   const html =
     htmlText.substring(0, htmlText.indexOf('</head>')) +
@@ -95,6 +101,8 @@ const saveResultsAsHTML = async (
         type: isSiteMap ? 'sitemap' : 'url',
         selectedSite: outDir?.trim()?.slice(6) ?? '',
         translations: messages,
+        dateTime,
+        siteMapUrl: isSiteMap ? sitemapUrl : '',
       })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
 

@@ -91,6 +91,10 @@ const Layout = ({
           isSiteMapLandingContainer: false,
           query,
           clearQuery: _clearQuery,
+          url:
+            completeJson && completeJson?.length > 1
+              ? selectedSite
+              : completeJson?.[0]?.pageUrl,
         },
       };
 

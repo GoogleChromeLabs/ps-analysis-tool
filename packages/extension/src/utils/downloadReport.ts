@@ -82,6 +82,10 @@ export const generateDashboard = async (
   const locale = I18n.getLocale();
   const translations = await I18n.fetchMessages(locale);
 
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const dateTime =
+    getCurrentDateAndTime('DD MMMM, YYYY, hh:mm:ssam/pm') + ' ' + timeZone;
+
   const code = `
   window.PSAT_EXTENSION = true;
   window.PSAT_DATA = ${JSON.stringify({
@@ -92,6 +96,7 @@ export const generateDashboard = async (
       : '',
     translations,
     appliedFilters,
+    dateTime,
   })}`;
 
   script.text = code;

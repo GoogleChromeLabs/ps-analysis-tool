@@ -294,12 +294,12 @@ program.parse();
   const isSiteMap = sitemapUrl || filePath ? true : false;
 
   if (outDir) {
-    await saveReports(path.resolve(outputDir), result);
+    await saveReports(path.resolve(outputDir), result, sitemapUrl);
     console.log('Reports created successfully!');
     process.exit(0);
   }
 
-  await saveResultsAsHTML(outputDir, result, isSiteMap);
+  await saveResultsAsHTML(outputDir, result, isSiteMap, null, sitemapUrl);
 })().catch((error) => {
   const spinnies = new Spinnies();
   spinnies.add('error-line-1', {

@@ -30,6 +30,7 @@ interface CookiesTabProps {
   selectedSite?: string | null;
   query?: string;
   clearQuery?: () => void;
+  url?: string;
 }
 
 const CookiesTab = ({
@@ -37,6 +38,7 @@ const CookiesTab = ({
   selectedSite,
   query = '',
   clearQuery = noop,
+  url = '',
 }: CookiesTabProps) => {
   const { tabCookies, completeJson, libraryMatches } = useContentStore(
     ({ state }) => ({
@@ -51,9 +53,9 @@ const CookiesTab = ({
   const tabFrames = useMemo(() => {
     const frames = Object.keys(
       completeJson?.[0].cookieData ?? {}
-    ).reduce<TabFrames>((acc, url) => {
-      if (url?.includes('http')) {
-        acc[url] = {} as TabFrames[string];
+    ).reduce<TabFrames>((acc, _url) => {
+      if (_url?.includes('http')) {
+        acc[_url] = {} as TabFrames[string];
       }
 
       return acc;
@@ -95,6 +97,7 @@ const CookiesTab = ({
             setAppliedFilters={setAppliedFilters}
             query={query}
             clearQuery={clearQuery}
+            url={url}
           />
         </div>
       )}

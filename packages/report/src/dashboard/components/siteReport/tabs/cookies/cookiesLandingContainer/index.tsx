@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -35,10 +34,12 @@ import {
   useGlobalFiltering,
   FilterIcon,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
 import Landing from './cookieLanding/landing';
+import Header from '../../../../header';
 
 interface AssembledCookiesLandingProps {
   tabCookies: TabCookies;
@@ -53,6 +54,7 @@ interface AssembledCookiesLandingProps {
   menuBarScrollContainerId?: string;
   query?: string;
   clearQuery?: () => void;
+  url: string | undefined | null;
 }
 
 const AssembledCookiesLanding = ({
@@ -65,9 +67,13 @@ const AssembledCookiesLanding = ({
   menuBarScrollContainerId = 'dashboard-layout-container',
   query = '',
   clearQuery = noop,
+  url,
 }: AssembledCookiesLandingProps) => {
   const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
   const filterOutput = useGlobalFiltering(cookies, query, clearQuery);
+
+  // @ts-ignore Using global variable.
+  const { dateTime } = globalThis?.PSAT_DATA || {};
 
   const cookiesByKey = useMemo(() => {
     return (
@@ -103,6 +109,7 @@ const AssembledCookiesLanding = ({
 
   return (
     <div className="h-full flex flex-col">
+      <Header url={url} dateTime={dateTime} />
       <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
         <button
           className="w-3 h-3 m-1 pl-1"
@@ -126,7 +133,7 @@ const AssembledCookiesLanding = ({
       <div
         className="flex grow-0"
         style={{
-          height: 'calc(100% - 26px)',
+          height: 'calc(100% - 82px)',
         }}
       >
         {showFilterSidebar && (
