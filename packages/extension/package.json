@@ -9,8 +9,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "webpack --config ../../extension.webpack.config.cjs --watch",
-    "build": "npm run build:remove && webpack --config ../../extension.webpack.config.cjs",
-    "build:remove": "rimraf ../../dist/extension",
+    "prebuild": "rimraf ../../dist/extension",
+    "build": "webpack --config ../../extension.webpack.config.cjs",
     "publish:local": "",
     "publish:remote": "",
     "unpublish:local": "",
