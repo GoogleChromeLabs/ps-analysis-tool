@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { LIBRARY_DETECTION_WORKER_TASK } from '@ps-analysis-tool/common';
+import { LIBRARY_DETECTION_WORKER_TASK } from '@google-psat/common';
 
 /**
  * Internal dependencies.

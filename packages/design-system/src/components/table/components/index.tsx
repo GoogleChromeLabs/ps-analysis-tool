@@ -67,10 +67,14 @@ const Table = ({
         setIsRowFocused(true);
       }
     };
-    document.addEventListener('click', handleClickOutside, true);
+    globalThis?.document?.addEventListener('click', handleClickOutside, true);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      globalThis?.document?.removeEventListener(
+        'click',
+        handleClickOutside,
+        true
+      );
     };
   }, []);
 

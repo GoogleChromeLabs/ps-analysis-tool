@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import { LandingPage } from '@google-psat/design-system';
 
 const PrivacySandbox = () => (
   <div data-testid="privacy-sandbox-content" className="h-full w-full">

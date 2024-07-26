@@ -50,10 +50,10 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
+    globalThis?.document?.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      globalThis?.document?.removeEventListener('click', handleClickOutside);
     };
   }, [setIsSidebarFocused]);
 

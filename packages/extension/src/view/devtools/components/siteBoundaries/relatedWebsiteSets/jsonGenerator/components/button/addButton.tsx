@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { Add, Button } from '@ps-analysis-tool/design-system';
+import { Add, Button } from '@google-psat/design-system';
 
 interface AddButtonProps {
   onClick: () => void;

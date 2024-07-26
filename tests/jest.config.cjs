@@ -17,21 +17,28 @@
  * External dependencies.
  */
 const { join } = require('path');
+const chrome = require('sinon-chrome/extensions');
 
 /** @type {import('jest').Config} */
 module.exports = {
   rootDir: '../',
   transformIgnorePatterns: ['node_modules/(?!(p-queue|p-timeout))'],
   moduleNameMapper: {
-    '^@ps-analysis-tool\\/(.*)': '<rootDir>/packages/$1/src/',
+    '^@google-psat\\/(.*)': '<rootDir>/packages/$1/src/',
     '\\.svg': join(__dirname, '/svgMock.cjs'),
     '\\.css': join(__dirname, '/styleMock.cjs'),
     '\\.png': join(__dirname, '/imageMock.cjs'),
   },
   testEnvironment: 'jsdom',
-  testMatch: ['**/tests/**/*.{js,jsx,ts,tsx}'],
-  globals: {},
+  testMatch: [
+    '**/tests/**/*.{js,jsx,ts,tsx}',
+    '!**/dist/**/*.{js,jsx,ts,tsx}',
+    '!**/dist-types/**/*.{js,jsx,ts,tsx}',
+  ],
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.cjs'],
+  globals: {
+    chrome,
+  },
   testPathIgnorePatterns: [
     '<rootDir>/.git',
     '<rootDir>/dist',

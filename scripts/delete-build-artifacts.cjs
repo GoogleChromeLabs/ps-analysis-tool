@@ -17,7 +17,7 @@
 const path = require('path');
 const rimraf = require('rimraf');
 
-const dirs = ['common', 'i18n'];
+const dirs = ['common', 'i18n', 'analysis-utils'];
 
 dirs.forEach((dir) => {
   const distDir = path.resolve(__dirname, `../packages/${dir}/dist`);

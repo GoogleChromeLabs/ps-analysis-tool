@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { LIBRARY_DETECTION_WORKER_TASK } from '@ps-analysis-tool/common';
+import { LIBRARY_DETECTION_WORKER_TASK } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -25,6 +25,7 @@ import detectMatchingSignatures from '../core/detectMatchingSignatures';
 import { type PreDefinedLibraryWorkerTaskPayload } from './constants';
 import LIBRARIES from '../config';
 import type { DetectionFunctions } from '../types';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Library Detection worker function that handles tasks related to library detection.
@@ -49,6 +50,6 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
       break;
     }
     default:
-      postMessage('Task not defined');
+      postMessage(I18n.getMessage('taskNotDefined'));
   }
 };

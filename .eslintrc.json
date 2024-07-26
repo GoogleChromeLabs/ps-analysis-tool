@@ -27,10 +27,10 @@
       "version": "detect"
     },
     "import/resolver": {
-      "@ps-analysis-tool/eslint-import-resolver": {
+      "@google-psat/eslint-import-resolver": {
         "mapping": {
-          "^@ps-analysis-tool\\/(.*)\\/(.*)": "./packages/$1/src/$2",
-          "^@ps-analysis-tool\\/(.*)": "./packages/$1/src/"
+          "^@google-psat\\/(.*)\\/(.*)": "./packages/$1/src/$2",
+          "^@google-psat\\/(.*)": "./packages/$1/src/"
         },
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },

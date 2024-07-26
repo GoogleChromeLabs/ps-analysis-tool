@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -25,7 +24,7 @@ import {
   type CookieAnalytics,
   type CookieDatabase,
   REQUEST_EVENT,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -39,7 +38,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
- * @param {number} frameId Id of the frame the cookie is used in.
+ * @param {string} frameId Id of the frame the cookie is used in.
  * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
  * @param {string} requestId Request id.
  * @returns {CookieData[]} Parsed cookie object array.
@@ -49,7 +48,7 @@ const parseRequestCookieHeader = (
   value: string,
   dictionary: CookieDatabase,
   tabUrl: string,
-  frameId: number,
+  frameId: string,
   cdpCookiesList: Protocol.Network.Cookie[],
   requestId: string
 ): CookieData[] => {

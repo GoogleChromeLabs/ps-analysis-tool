@@ -1,23 +1,36 @@
 {
-  "name": "@ps-analysis-tool/report",
-  "version": "0.8.0",
+  "name": "@google-psat/report",
+  "version": "0.9.0-2",
   "description": "Static HTML analysis report",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+    "directory": "packages/report"
   },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
+  "author": {
+    "name": "Google"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "publish:local": "npm publish --registry=http://localhost:4873",
+    "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
+    "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
+    "unpublish:remote": "npm unpublish --registry=https://registry.npmjs.org --force"
+  },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
-  "scripts": {},
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@ps-analysis-tool/common": "*",
-    "@ps-analysis-tool/design-system": "*",
-    "@ps-analysis-tool/library-detection": "*"
+    "@google-psat/common": "*",
+    "@google-psat/design-system": "*",
+    "@google-psat/library-detection": "*",
+		"@google-psat/i18n": "*"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",

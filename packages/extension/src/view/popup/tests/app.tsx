@@ -30,6 +30,7 @@ import { useCookie } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
+import { I18n } from '@google-psat/i18n';
 
 jest.mock('../stateProviders/cookie', () => ({
   useCookie: jest.fn(),
@@ -49,6 +50,23 @@ describe('App', () => {
           }),
       });
     } as unknown as typeof fetch;
+
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      firstPartyCookies: {
+        message: '1st Party Cookies',
+      },
+      thirdPartyCookies: {
+        message: '3rd Party Cookies',
+      },
+      noCookies: {
+        message: 'No cookies found on this page',
+      },
+      tryReloading: {
+        message: 'Please try reloading the page',
+      },
+    });
   });
 
   it('Should show refresh page message if cookie stats are not available', () => {

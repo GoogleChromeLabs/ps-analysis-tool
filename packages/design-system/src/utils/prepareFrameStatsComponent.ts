@@ -16,7 +16,8 @@
 /**
  * External dependencies
  */
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import type { TabCookies, TabFrames } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
@@ -49,7 +50,7 @@ export default function prepareFrameStatsComponent(
     let hasUnblockedCookie = false;
     let hasCookie = false;
 
-    tabFrames[frame]?.frameIds?.forEach((frameId: number) => {
+    tabFrames[frame]?.frameIds?.forEach((frameId: string) => {
       Object.values(tabCookies || {}).forEach((cookie) => {
         if (
           cookie?.parsedCookie &&
@@ -84,7 +85,7 @@ export default function prepareFrameStatsComponent(
   return {
     dataMapping: [
       {
-        title: 'Frames',
+        title: I18n.getMessage('frames'),
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
@@ -114,31 +115,36 @@ export default function prepareFrameStatsComponent(
     ],
     legend: [
       {
-        label: 'Total frames',
+        label: I18n.getMessage('totalFrames'),
+        descriptionKey: 'Total frames',
         count: Object.keys(tabFrames || {}).length,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },
       {
-        label: 'Frames with cookies',
+        label: I18n.getMessage('framesWithCookies'),
+        descriptionKey: 'Frames with cookies',
         count: cookieFrame.size,
         color: '#C5A06A',
         countClassName: 'text-good-life',
       },
       {
-        label: 'Frames with blocked cookies',
+        label: I18n.getMessage('framesWithBlockedCookies'),
+        descriptionKey: 'Frames with blocked cookies',
         count: blockedCookieFrame.size,
         color: '#AF7AA3',
         countClassName: 'text-victorian-violet',
       },
       {
-        label: 'Frames with unblocked cookies',
+        label: I18n.getMessage('framesWithUnblockedCookies'),
+        descriptionKey: 'Frames with unblocked cookies',
         count: unBlockedCookieFrame.size,
         color: '#F54021',
         countClassName: 'text-strawberry-spinach-red',
       },
       {
-        label: 'Fenced frames',
+        label: I18n.getMessage('fencedFrames'),
+        descriptionKey: 'Fenced frames',
         count: Object.values(tabFrames || {}).filter(
           (frame) => frame?.frameType === 'fenced_frame'
         ).length,

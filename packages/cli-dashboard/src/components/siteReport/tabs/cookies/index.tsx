@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useMemo, useCallback } from 'react';
-import { UNKNOWN_FRAME_KEY, type TabFrames } from '@ps-analysis-tool/common';
+import { type TabFrames } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -30,23 +30,27 @@ interface CookiesTabProps {
 }
 
 const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
-  const { tabCookies, completeJson } = useContentStore(({ state }) => ({
-    tabCookies: state.tabCookies,
-    completeJson: state.completeJson,
-  }));
-
-  const tabFrames = useMemo<TabFrames>(
-    () =>
-      Object.values(tabCookies).reduce((acc, cookie) => {
-        (cookie.frameUrls as string[]).forEach((url) => {
-          if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
-            acc[url] = {} as TabFrames[string];
-          }
-        });
-        return acc;
-      }, {} as TabFrames),
-    [tabCookies]
+  const { tabCookies, completeJson, libraryMatches } = useContentStore(
+    ({ state }) => ({
+      tabCookies: state.tabCookies,
+      completeJson: state.completeJson,
+      libraryMatches: state.libraryMatches,
+    })
   );
+
+  const tabFrames = useMemo(() => {
+    const frames = Object.keys(
+      completeJson?.[0].cookieData ?? {}
+    ).reduce<TabFrames>((acc, url) => {
+      if (url?.includes('http')) {
+        acc[url] = {} as TabFrames[string];
+      }
+
+      return acc;
+    }, {});
+
+    return frames;
+  }, [completeJson]);
 
   const cookiesWithIssues = useMemo(
     () =>
@@ -60,9 +64,18 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       return;
     }
     if (completeJson.length > 1) {
-      generateSiteReportandDownload(completeJson, selectedSite);
+      generateSiteReportandDownload(
+        completeJson,
+        //@ts-ignore
+        atob(globalThis.PSAT_REPORT_HTML),
+        selectedSite
+      );
     } else {
-      generateSiteReportandDownload(completeJson);
+      generateSiteReportandDownload(
+        completeJson,
+        //@ts-ignore
+        atob(globalThis.PSAT_REPORT_HTML)
+      );
     }
   }, [completeJson, selectedSite]);
 
@@ -76,6 +89,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       ) : (
         <div className="flex flex-col h-full w-full">
           <CookiesLandingContainer
+            libraryMatches={libraryMatches}
             tabFrames={tabFrames}
             tabCookies={tabCookies}
             cookiesWithIssues={cookiesWithIssues}

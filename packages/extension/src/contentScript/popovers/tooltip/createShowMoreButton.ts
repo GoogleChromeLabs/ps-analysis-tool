@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import { I18n } from '@google-psat/i18n';
 
 const createShowMoreButton = (): HTMLElement => {
   const tooltipShowButton: HTMLButtonElement = document.createElement('button');
@@ -27,7 +31,7 @@ const createShowMoreButton = (): HTMLElement => {
     'ps-tooltip-info-toggle-btn',
     'ps-tooltip-compact'
   );
-  tooltipShowButton.innerText = 'Show more';
+  tooltipShowButton.innerText = I18n.getMessage('showMore');
 
   tooltipShowButton.onclick = (event) => {
     const showMoreButton = event.target as HTMLElement;
@@ -49,7 +53,7 @@ const createShowMoreButton = (): HTMLElement => {
     const isCompact = showMoreButton.classList.contains('ps-tooltip-compact');
 
     if (isCompact) {
-      showMoreButton.innerText = 'Show less';
+      showMoreButton.innerText = I18n.getMessage('showLess');
       showMoreButton.classList.remove('ps-tooltip-compact');
       const hiddenElements = tooltipContainer.querySelectorAll('.hidden');
       hiddenElements.forEach((element) => {
@@ -57,7 +61,7 @@ const createShowMoreButton = (): HTMLElement => {
       });
       allowedFeatures.innerText = expandedAllowedFeatures ?? 'N/A';
     } else {
-      showMoreButton.innerText = 'Show more';
+      showMoreButton.innerText = I18n.getMessage('showMore');
       showMoreButton.classList.add('ps-tooltip-compact');
       const compactViewHiddenElements =
         tooltipContainer.querySelectorAll('.ps-compact');

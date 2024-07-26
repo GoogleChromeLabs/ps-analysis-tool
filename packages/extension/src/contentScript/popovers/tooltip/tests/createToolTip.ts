@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import '@testing-library/jest-dom';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -24,6 +25,25 @@ import '@testing-library/jest-dom';
 import createTooltip from '../createTooltip';
 
 describe('createTooltip', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      hiddenIframe: {
+        message: 'Hidden iframe',
+      },
+      nestedIframe: {
+        message: 'Nested iframe',
+      },
+      mainFrame: {
+        message: 'Main frame',
+      },
+      unknown: {
+        message: 'Unknown',
+      },
+    });
+  });
+
   it('should be an instance of HTMLDivElement', () => {
     const response = {
       isInspecting: true,

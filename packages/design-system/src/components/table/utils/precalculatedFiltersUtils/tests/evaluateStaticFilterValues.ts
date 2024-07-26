@@ -36,7 +36,7 @@ describe('evaluateSelectAllOption', () => {
     const result1 = evaluateStaticFilterValues(
       staticValues,
       filterKey,
-      undefined,
+      {},
       clearActivePanelQuery
     );
 

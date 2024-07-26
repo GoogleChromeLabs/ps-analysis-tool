@@ -19,15 +19,20 @@
 import React from 'react';
 import {
   CookiesLandingWrapper,
-  type DataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
   MatrixContainer,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
   useFiltersMapping,
-} from '@ps-analysis-tool/design-system';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+} from '@google-psat/design-system';
+import {
+  type TabCookies,
+  type TabFrames,
+  type DataMapping,
+  getLegendDescription,
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 interface BlockedCookiesSectionProps {
   tabCookies: TabCookies | null;
@@ -47,10 +52,17 @@ const BlockedCookiesSection = ({
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
-      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
+      onClick:
+        cookieStats.blockedCookies.total > 0
+          ? () =>
+              selectedItemUpdater(
+                I18n.getMessage('selectAll'),
+                'blockedReasons'
+              )
+          : null,
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -58,7 +70,7 @@ const BlockedCookiesSection = ({
       const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
       return {
         ...component,
-        description: legendDescription,
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) =>
@@ -71,15 +83,16 @@ const BlockedCookiesSection = ({
     prepareCookieStatsComponents(blockedCookiesStats);
   const blockedDataComponents: MatrixComponentProps[] =
     blockedCookiesStatsComponents.legend.map((component) => {
-      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      const legendDescription =
+        LEGEND_DESCRIPTION[component.descriptionKey || ''];
       return {
         ...component,
-        description: legendDescription,
+        description: getLegendDescription(legendDescription),
         title: component.label,
         containerClasses: '',
         onClick: (title: string) => {
           multiSelectItemUpdater({
-            blockedReasons: ['All'],
+            blockedReasons: [I18n.getMessage('selectAll')],
             'analytics.category': [title],
           });
         },
@@ -94,9 +107,9 @@ const BlockedCookiesSection = ({
       {dataComponents.length > 0 && (
         <>
           <MatrixContainer
-            title="Blocked Reasons"
+            title={I18n.getMessage('blockedCookies')}
             matrixData={dataComponents}
-            infoIconTitle="Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+            infoIconTitle={I18n.getMessage('blockedReasonsNote')}
           />
           <div className="flex flex-col mt-8">
             <div className="pt-4">

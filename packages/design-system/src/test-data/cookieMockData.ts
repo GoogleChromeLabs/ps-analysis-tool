@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import { TabCookies, TabFrames } from '@google-psat/common';
 
 export const emptyAnalytics = {
   platform: '',
@@ -166,7 +166,7 @@ const data: {
   tabUrl: 'https://edition.cnn.com/',
   tabFrames: {
     'https://edition.cnn.com/': {
-      frameIds: [1],
+      frameIds: ['1'],
     },
   },
   selectedFrame: 'https://edition.cnn.com/',

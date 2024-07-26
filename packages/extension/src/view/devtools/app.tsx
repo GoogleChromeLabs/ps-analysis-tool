@@ -21,7 +21,8 @@ import {
   ExtensionReloadNotification,
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -42,6 +43,11 @@ const App: React.FC = () => {
   const [defaultSelectedItemKey, setDefaultSelectedItemKey] = useState(
     SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX
   );
+
+  const reloadTexts = useRef({
+    displayText: I18n.getMessage('extensionUpdated'),
+    buttonText: I18n.getMessage('refreshPanel'),
+  });
 
   useEffect(() => {
     (async () => {
@@ -72,7 +78,10 @@ const App: React.FC = () => {
           <Layout setSidebarData={setSidebarData} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">
-            <ExtensionReloadNotification tabId={tabIdRef.current} />
+            <ExtensionReloadNotification
+              tabId={tabIdRef.current}
+              texts={reloadTexts.current}
+            />
           </div>
         )}
       </div>

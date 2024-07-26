@@ -17,8 +17,9 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowUp, Copy } from '@ps-analysis-tool/design-system';
+import { ArrowUp, Copy } from '@google-psat/design-system';
 import classNames from 'classnames';
+import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
@@ -122,7 +123,7 @@ const InformationContainer = () => {
           <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
             <InformationIcon className="dark:text-bright-gray" />
             <span className="text-base font-bold dark:text-bright-gray">
-              System Information
+              {I18n.getMessage('systemInformation')}
             </span>
           </div>
           <ArrowUp
@@ -149,14 +150,16 @@ const InformationContainer = () => {
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">Open Tabs</span>
+              <span className="text-sm dark:text-bright-gray">
+                {I18n.getMessage('openTabs')}
+              </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {currentTabs}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="text-sm dark:text-bright-gray">
-                Chrome version
+                {I18n.getMessage('chromeVersion')}
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {browserInformation}
@@ -164,7 +167,7 @@ const InformationContainer = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-sm dark:text-bright-gray">
-                PSAT version
+                {I18n.getMessage('pSATVersion')}
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {PSATVersion}
@@ -172,7 +175,7 @@ const InformationContainer = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-sm dark:text-bright-gray">
-                OS - System Architecture
+                {I18n.getMessage('systemArchitecture')}
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {OSInformation}
@@ -182,7 +185,7 @@ const InformationContainer = () => {
           <div className="flex flex-row">
             <div className="mt-1">
               <span className="text-sm dark:text-bright-gray">
-                Active Extensions
+                {I18n.getMessage('activeExtensions')}
               </span>
               <ul className="list-disc ml-4 mt-1">
                 {currentExtensions?.map((extension, index) => {

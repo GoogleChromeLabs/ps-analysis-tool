@@ -21,7 +21,7 @@ import {
   createContext,
   type TabCookies,
   type TabFrames,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 export interface CookieStoreContext {
   state: {

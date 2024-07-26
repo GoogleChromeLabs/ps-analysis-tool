@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { getValueByKey, type CookieTableData } from '@ps-analysis-tool/common';
+import { getValueByKey, type CookieTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies

@@ -25,7 +25,8 @@ import {
   ToastMessage,
   ToggleSwitch,
   prepareCookieStatsComponents,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -65,26 +66,30 @@ const App: React.FC = () => {
     handleSettingsChange: actions.handleSettingsChange,
   }));
 
-  const cdpLabel = isUsingCDP ? 'Disable CDP' : 'Enable CDP';
+  const cdpLabel = isUsingCDP
+    ? I18n.getMessage('disableCDP')
+    : I18n.getMessage('enableCDP');
 
   if (onChromeUrl) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
+      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg mb-2">Not much to analyze here</p>
+        <p className="font-bold text-lg mb-2">
+          {I18n.getMessage('noMoreAnalysis')}
+        </p>
         <p className="text-chart-label text-xs">
-          Its emptier than a cookie jar after a midnight snack!
+          {I18n.getMessage('emptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -111,19 +116,22 @@ const App: React.FC = () => {
     allowedNumberOfTabs !== 'unlimited'
   ) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
+      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
+        <Button
+          onClick={changeListeningToThisTab}
+          text={I18n.getMessage('analyzeThisTab')}
+        />
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -138,22 +146,22 @@ const App: React.FC = () => {
     (cookieStats?.firstParty.total === 0 && cookieStats?.thirdParty.total === 0)
   ) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1">
+      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg">No cookies found on this page</p>
+        <p className="font-bold text-lg">{I18n.getMessage('noCookies')}</p>
         <p className="text-chart-label text-xs">
-          Please try reloading the page
+          {I18n.getMessage('tryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -165,7 +173,7 @@ const App: React.FC = () => {
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-full h-full flex justify-center items-center flex-col z-1">
+    <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
       <ToggleSwitch
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
@@ -177,14 +185,14 @@ const App: React.FC = () => {
           <CirclePieChart
             centerCount={cookieStats.firstParty.total}
             data={statsComponents.firstParty}
-            title="1st Party Cookies"
+            title={I18n.getMessage('firstPartyCookies')}
           />
         </div>
         <div className="w-32 text-center">
           <CirclePieChart
             centerCount={cookieStats.thirdParty.total}
             data={statsComponents.thirdParty}
-            title="3rd Party Cookies"
+            title={I18n.getMessage('thirdPartyCookies')}
           />
         </div>
       </div>
@@ -193,14 +201,14 @@ const App: React.FC = () => {
       </div>
       <div className="w-full text-center">
         <p className="text-chart-label text-xs">
-          {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
+          {I18n.getMessage('inspectInPSATPanel')}
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
         {settingsChanged && (
           <ToastMessage
             additionalStyles="text-sm"
-            text="Settings changed, please reload all tabs."
+            text={I18n.getMessage('settingsChanged')}
             onClick={handleSettingsChange}
             textAdditionalStyles="xxs:p-1 text-xxs leading-5"
           />

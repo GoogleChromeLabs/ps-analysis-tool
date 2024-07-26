@@ -21,10 +21,24 @@ import '@testing-library/jest-dom';
 import { TableFilter } from '../../../useTable/types';
 import * as table from '../../../useTable/useTable';
 import ChipsBar from '../chips';
+import { I18n } from '@google-psat/i18n';
 
 describe('FiltersSidebar', () => {
   const mockUseTable = jest.fn();
   jest.spyOn(table, 'useTable').mockImplementation(mockUseTable);
+  globalThis.chrome.i18n = null;
+
+  I18n.initMessages({
+    clearAll: {
+      message: 'Clear all',
+    },
+    selectAll: {
+      message: 'All',
+    },
+    expandAll: {
+      message: 'Expand All',
+    },
+  });
 
   const initialProps = {
     filters: {},

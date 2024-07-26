@@ -17,13 +17,14 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const Fingerprinting = () => {
   return (
     <div data-testid="fingerprinting-content" className="h-full w-full">
       <LandingPage
-        title="User Agent Reduction"
+        title={I18n.getMessage('userAgentReduction')}
         psInfoKey={PSInfoKey.UserAgentReduction}
         extraClasses="max-w-2xl h-fit"
       />

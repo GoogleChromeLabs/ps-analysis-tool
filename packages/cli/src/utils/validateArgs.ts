@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { parseUrl } from '@ps-analysis-tool/common';
+import { parseUrl } from '@google-psat/common';
 import { exists, mkdir } from 'fs-extra';
 import path from 'path';
 
@@ -26,7 +26,7 @@ import path from 'path';
  * @param {string} sitemapPath File system path to a sitemap xml file.
  * @param {string} numberOfUrls Url limit argument.
  * @param {string} outDir File system path to the output directory.
- * @param port
+ * @param {string} locale Locale of the site.
  */
 // eslint-disable-next-line complexity
 const validateArgs = async (
@@ -36,13 +36,8 @@ const validateArgs = async (
   sitemapPath: string,
   numberOfUrls: string,
   outDir: string,
-  port: number
+  locale: string
 ) => {
-  if (isNaN(port) || (!isNaN(port) && (port < 0 || port > 65536))) {
-    console.log(`Invalid port argument. Please porvide a port >=0 and <=65536`);
-    process.exit(1);
-  }
-
   const numArgs: number = [
     Boolean(url),
     Boolean(sitemapUrl),
@@ -56,7 +51,7 @@ const validateArgs = async (
   if (numArgs !== 1) {
     console.log(
       `Please provide one and only one of the following
-        a) URL of a site (-u or --url)
+        a) URL of a site (-u or --url or default argument)
         b) URL of a sitemap (-s or --sitemap-url)
         c) Path to a CSV file (-c or --csv-path)
         d) Path to an XML file (-p or --sitemap-path)`
@@ -67,7 +62,7 @@ const validateArgs = async (
   if (csvPath) {
     const csvFileExists = await exists(csvPath);
     if (!csvFileExists) {
-      console.log(`No file at ${csvPath}`);
+      console.log(`Error: No file at ${csvPath}`);
       process.exit(1);
     }
   }
@@ -75,7 +70,7 @@ const validateArgs = async (
   if (sitemapPath) {
     const sitemapFileExists = await exists(sitemapPath);
     if (!sitemapFileExists) {
-      console.log(`No file at ${sitemapPath}`);
+      console.log(`Error: No file at ${sitemapPath}`);
       process.exit(1);
     }
   }
@@ -86,7 +81,7 @@ const validateArgs = async (
     const parsedUrl = parseUrl(_url);
 
     if (parsedUrl === null) {
-      console.log(`Provided Url ${parsedUrl} is not valid`);
+      console.log(`Error: Invalid Url  ${parsedUrl}`);
       process.exit(1);
     }
   }
@@ -116,9 +111,20 @@ const validateArgs = async (
     const outDirExists = await exists(output);
 
     if (!outDirExists) {
-      console.log(`"${output}" does not exist, creating now.`);
+      console.log(`"${output}" does not exist, creating!`);
       await mkdir(output);
     }
+  }
+
+  const availableLocales = ['en [default]', 'hi', 'es', 'ja', 'ko', 'pt-BR'];
+
+  if (locale && !availableLocales.includes(locale)) {
+    console.error(
+      `Locale '${locale}' is not supported, please use ${availableLocales.join(
+        ', '
+      )}.`
+    );
+    process.exit(1);
   }
 };
 

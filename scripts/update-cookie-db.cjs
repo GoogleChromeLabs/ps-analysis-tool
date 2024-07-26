@@ -85,7 +85,6 @@ const errorHandler = (err) => {
  * Add keys to the locale file and replace the text with keys in the formattedData.
  * @param formattedData formatted data
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const addKeysToLocale = async (formattedData) => {
   const messagesPath = path.resolve(
     'packages/i18n/_locales/messages/en/messages.json'
@@ -98,14 +97,12 @@ const addKeysToLocale = async (formattedData) => {
     const descriptionKey = `OCD_${key.replace(regex, '_')}_description`;
     messages[descriptionKey] = {
       message: value.description,
-      description: 'Description of the cookie from the Open Cookie DB',
     };
     value.description = descriptionKey;
 
     const retentionKey = `OCD_retention_${value.retention.replace(regex, '_')}`;
     messages[retentionKey] = {
       message: value.retention,
-      description: 'Retention period of the cookie from the Open Cookie DB',
     };
 
     value.retention = retentionKey;
@@ -134,6 +131,9 @@ const main = async () => {
 
     // Format the raw data.
     const formattedData = await formatRawData(rawData);
+
+    // Add keys, messages to _locale/en/messages.json and replace the text with keys in the formattedData
+    await addKeysToLocale(formattedData);
 
     await fs.ensureFile(path.resolve(targetDIR, 'open-cookie-database.json'));
     // Write the formatted data to a file.

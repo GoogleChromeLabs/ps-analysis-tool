@@ -24,7 +24,7 @@ import {
   type TabFrames,
   type DataMapping,
   type LibraryData,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 
 export interface DataStoreContext {
   state: {

@@ -10,8 +10,16 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "noImplicitAny": true,
+    "strictNullChecks": true
   },
+  "exclude": [
+    "**/tests/**/*.ts",
+    "**/tests/**/*.tsx",
+    "**/dist/**/*",
+    "**/dist-types/**/*"
+  ],
   "references": [
     {
       "path": "../common"

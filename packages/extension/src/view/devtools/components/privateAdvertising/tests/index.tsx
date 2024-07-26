@@ -30,6 +30,7 @@ import Topics from '../topics';
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { act } from 'react-dom/test-utils';
 import PrivateAdvertising from '../privateAdvertising';
+import { I18n } from '@google-psat/i18n';
 
 describe('Private advertising Landing Pages', () => {
   beforeAll(() => {
@@ -43,6 +44,14 @@ describe('Private advertising Landing Pages', () => {
         text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
+
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      privateAdvertising: {
+        message: 'Private Advertising',
+      },
+    });
   });
 
   it('should render Attribution', async () => {
@@ -60,7 +69,9 @@ describe('Private advertising Landing Pages', () => {
       render(<PrivateAdvertising />);
     });
 
-    expect(await screen.findByText('Private Advertising')).toBeInTheDocument();
+    expect(
+      await screen.findByText(I18n.getMessage('privateAdvertising'))
+    ).toBeInTheDocument();
   });
 
   it('should render Topics', async () => {

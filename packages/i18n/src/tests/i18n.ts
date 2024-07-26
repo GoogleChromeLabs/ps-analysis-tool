@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import fs from 'fs';
+import path from 'path';
 
 /**
  * Internal dependencies.
@@ -57,16 +58,13 @@ describe('I18n', () => {
       ok: true,
     });
 
-    await I18n.loadDashboardMessagesData(locale);
+    const result = await I18n.fetchMessages(locale);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith('/_locales/en/messages.json');
 
-    expect(I18n.getMessage('test.message', ['Sam'])).toEqual(
-      'Test message for Sam'
-    );
+    expect(result).toEqual(messages);
   });
-
   it('should load CLI messages data', async () => {
     const existsSyncMock = jest.spyOn(fs, 'existsSync');
     const readFileSyncMock = jest.spyOn(fs, 'readFileSync');
@@ -87,13 +85,14 @@ describe('I18n', () => {
     readFileSyncMock.mockReturnValueOnce(JSON.stringify(messages));
     await I18n.loadCLIMessagesData(locale);
 
-    expect(existsSyncMock).toHaveBeenCalledWith(
-      'packages/i18n/_locales/messages/hi/messages.json'
+    expect(existsSyncMock).toHaveBeenNthCalledWith(
+      2,
+      path.resolve(__dirname + `../../../_locales/messages/hi/messages.json`)
     );
-    expect(existsSyncMock).toHaveBeenCalledTimes(4);
+    expect(existsSyncMock).toHaveBeenCalledTimes(2);
 
     expect(readFileSyncMock).toHaveBeenCalledWith(
-      'packages/i18n/_locales/messages/en/messages.json',
+      path.resolve(__dirname + `../../../_locales/messages/hi/messages.json`),
       {
         encoding: 'utf-8',
       }

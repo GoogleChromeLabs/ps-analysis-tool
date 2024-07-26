@@ -18,13 +18,15 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import { FilterIcon, SearchInput } from '@ps-analysis-tool/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
 import ExportButton from '../../../exportButton';
 import { useTable } from '../../useTable';
+import { FilterIcon } from '../../../../icons';
+import SearchInput from '../../../searchInput';
 
 interface TableTopBarProps {
   showFilterSidebar: boolean;
@@ -66,7 +68,7 @@ const TableTopBar = ({
           })}
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
           disabled={disableFiltering}
-          title="Open filter options"
+          title={I18n.getMessage('openFilterOptions')}
         >
           <FilterIcon
             className={
@@ -98,7 +100,7 @@ const TableTopBar = ({
       </div>
 
       <div className="text-right w-full text-xxxs text-secondary">
-        Count: {rows.length ?? 0}
+        {I18n.getMessage('count')}: {rows.length ?? 0}
       </div>
     </div>
   );

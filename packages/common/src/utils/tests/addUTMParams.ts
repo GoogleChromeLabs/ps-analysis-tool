@@ -21,7 +21,7 @@ import addUTMParams from '../addUTMParams';
 describe('addUTMParams', () => {
   it('should add UTM parameters with default medium', () => {
     expect(addUTMParams('http://example.com')).toBe(
-      'http://example.com?utm_source=psat&utm_medium=extension'
+      'http://example.com?utm_source=psat&utm_medium=cli'
     );
   });
 

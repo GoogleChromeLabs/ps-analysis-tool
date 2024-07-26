@@ -25,11 +25,9 @@ import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   useFiltersMapping,
-} from '@ps-analysis-tool/design-system';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
-/**
- * Internal dependencies
- */
+} from '@google-psat/design-system';
+import type { TabCookies, TabFrames } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 interface CookiesSectionProps {
   tabCookies: TabCookies | null;
@@ -63,8 +61,8 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
         (cookieStats?.firstParty.total === 0 &&
           cookieStats?.thirdParty.total === 0 && (
             <MessageBox
-              headerText="No cookies found on this page"
-              bodyText="Please try reloading the page"
+              headerText={I18n.getMessage('noCookies')}
+              bodyText={I18n.getMessage('tryReloading')}
             />
           ))}
       <CookiesMatrix

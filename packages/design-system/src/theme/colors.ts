@@ -187,4 +187,32 @@ export const COLOR_MAP: {
     color: '#D741A7',
     className: 'text-hollywood-cerise',
   },
+  SyntaxError: {
+    color: '#FF6F91',
+    className: 'text-baby-pink-gradient',
+  },
+  SchemeNotSupported: {
+    color: '#B39CD0',
+    className: 'text-spot-palette-mud-pink',
+  },
+  OverwriteSecure: {
+    color: '#E59500',
+    className: 'text-jamboo',
+  },
+  InvalidPrefix: {
+    color: '#EB4B98',
+    className: 'text-rose-bourbon',
+  },
+  SamePartyConflictsWithOtherAttributes: {
+    color: '#E0A890',
+    className: 'text-orange-buff',
+  },
+  DisallowedCharacter: {
+    color: '#0FFF95',
+    className: 'text-spring-green',
+  },
+  NoCookieContent: {
+    color: '#840032',
+    className: 'text-maroon-claret',
+  },
 };

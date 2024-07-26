@@ -17,13 +17,14 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const Chips = () => {
   return (
     <div data-testid="chips-content" className="h-full w-full">
       <LandingPage
-        title={'Cookies Having Independent Partitioned State (CHIPS)'}
+        title={I18n.getMessage('chipsExpanded')}
         psInfoKey={PSInfoKey.Chips}
         extraClasses="max-w-2xl h-fit"
       />

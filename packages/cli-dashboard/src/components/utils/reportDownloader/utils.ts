@@ -25,14 +25,14 @@ import {
   generateTechnologyCSV,
   type CompleteJson,
   type DataMapping,
-  UNKNOWN_FRAME_KEY,
   type TabFrames,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
-} from '@ps-analysis-tool/design-system';
+} from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
@@ -72,7 +72,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
     (cookie.frameUrls as string[]).forEach((url) => {
-      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+      if (url?.includes('http')) {
         acc[url] = {} as TabFrames[string];
       }
     });
@@ -85,17 +85,17 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
-      title: 'Total cookies',
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
     },
     {
-      title: '1st party cookies',
+      title: I18n.getMessage('firstPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
     },
     {
-      title: '3rd party cookies',
+      title: I18n.getMessage('thirdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
@@ -103,7 +103,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -111,7 +111,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
     },
@@ -121,7 +121,7 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     cookieClassificationDataMapping,
     tabCookies,
     cookiesStatsComponents,
-    libraryDetection: {},
+    libraryMatches: analysisData.libraryMatches,
     tabFrames,
     showInfoIcon: true,
     showHorizontalMatrix: false,
@@ -131,6 +131,9 @@ function generateReportObject(analysisData: CompleteJson, siteURL: string) {
     exemptedCookiesDataMapping,
     showBlockedCategory: true,
     url: siteURL,
+    source: 'cli',
+    // @ts-ignore - 'typeof globalThis' has no index signature.
+    translations: globalThis?.PSAT_DATA?.translations,
   };
 }
 
@@ -150,7 +153,7 @@ function generateSitemapReportObject(
 
   const tabFrames = Object.values(tabCookies).reduce((acc, cookie) => {
     (cookie.frameUrls as string[]).forEach((url) => {
-      if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+      if (url?.includes('http')) {
         acc[url] = {} as TabFrames[string];
       }
     });
@@ -163,17 +166,17 @@ function generateSitemapReportObject(
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
-      title: 'Total cookies',
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
     },
     {
-      title: '1st party cookies',
+      title: I18n.getMessage('firstPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
     },
     {
-      title: '3rd party cookies',
+      title: I18n.getMessage('thirdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
@@ -181,7 +184,7 @@ function generateSitemapReportObject(
 
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -189,7 +192,7 @@ function generateSitemapReportObject(
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
     },
@@ -210,13 +213,18 @@ function generateSitemapReportObject(
     showFramesSection: false,
     showBlockedCategory: true,
     url: sitemapURL,
+    // @ts-ignore - 'typeof globalThis' has no index signature
+    translations: globalThis?.PSAT_DATA?.translations,
   };
 }
 
-const generateHTMLFile = async (analysisData: CompleteJson, url: string) => {
-  const htmlText = await (await fetch('./report/index.html')).text();
+const generateHTMLFile = (
+  analysisData: CompleteJson,
+  url: string,
+  reportHTML: string
+) => {
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(reportHTML, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
@@ -234,13 +242,13 @@ const generateHTMLFile = async (analysisData: CompleteJson, url: string) => {
   return html;
 };
 
-export const generateSiemapHTMLFile = async (
+export const generateSiemapHTMLFile = (
   analysisData: CompleteJson[],
-  sitemapURL: string
+  sitemapURL: string,
+  reportHTML: string
 ) => {
-  const htmlText = await (await fetch('./report/index.html')).text();
   const parser = new DOMParser();
-  const reportDom = parser.parseFromString(htmlText, 'text/html');
+  const reportDom = parser.parseFromString(reportHTML, 'text/html');
 
   // Injections
   const script = reportDom.createElement('script');
@@ -261,7 +269,8 @@ export const generateSiemapHTMLFile = async (
 export const createZip = (
   analysisData: CompleteJson,
   zipObject: JSZip,
-  url: string
+  url: string,
+  reportHTML: string
 ) => {
   const {
     allCookiesCSV,
@@ -270,7 +279,7 @@ export const createZip = (
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
-  const file = generateHTMLFile(analysisData, url);
+  const file = generateHTMLFile(analysisData, url, reportHTML);
 
   zipObject.file('cookies.csv', allCookiesCSV);
   if (technologyDataCSV) {

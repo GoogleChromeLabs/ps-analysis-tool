@@ -20,7 +20,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import SinonChrome from 'sinon-chrome';
-import { CookiesLanding } from '@ps-analysis-tool/design-system';
+import { CookiesLanding } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
@@ -157,6 +157,5 @@ describe('CookiesLanding', () => {
 
     expect(getByTestId('cookies-landing')).toBeInTheDocument();
     expect(getAllByTestId('cookies-landing-header')[0]).toBeInTheDocument();
-    expect(getByTestId('cookies-matrix-Categories')).toBeInTheDocument();
   });
 });

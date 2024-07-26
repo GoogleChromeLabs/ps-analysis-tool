@@ -19,8 +19,8 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
-import { noop } from '@ps-analysis-tool/common';
+import { LibraryDetectionProvider } from '@google-psat/library-detection';
+import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -31,10 +31,12 @@ import { DataProvider } from './stateProviders/data';
 //@ts-ignore this global mock is needed for the provider LibraryDetectionProvider and the component LibraryDetection to work
 chrome = {
   tabs: {
+    get: noop,
     onUpdated: {
       addListener: noop,
       removeListener: noop,
     },
+    get: noop,
   },
   devtools: {
     inspectedWindow: {

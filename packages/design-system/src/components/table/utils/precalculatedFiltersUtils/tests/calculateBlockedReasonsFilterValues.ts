@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies
+ */
+import { BlockedReason } from '@google-psat/common';
+/**
+ * Internal dependencies
+ */
 import calculateBlockedReasonsFilterValues from '../calculateBlockedReasonsFilterValues';
 
 describe('calculateBlockedReasonsFilterValues', () => {
@@ -21,26 +27,63 @@ describe('calculateBlockedReasonsFilterValues', () => {
     // Arrange
     const tabCookies = [
       {
-        blockedReasons: ['foo', 'bar'],
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['DomainMismatch'] as BlockedReason[],
         frameIdList: [1, 2, 3],
       },
       {
-        blockedReasons: ['foo', 'baz'],
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: ['SameSiteUnspecifiedTreatedAsLax'] as BlockedReason[],
         frameIdList: [1, 2, 3],
       },
       {
-        blockedReasons: ['zee', 'zoo'],
+        parsedCookie: {
+          name: 'countryCode',
+          domain: '.cnn.com',
+          path: '/',
+          value: 'IN',
+          sameSite: 'None',
+          expires: 'Session',
+          httpOnly: false,
+          secure: true,
+        },
+        url: '',
+        blockedReasons: [
+          'ThirdPartyPhaseout',
+          'DomainMismatch',
+        ] as BlockedReason[],
+        frameIdList: [],
       },
     ];
 
     const expected = {
-      foo: {
+      SameSiteUnspecifiedTreatedAsLax: {
         selected: false,
       },
-      bar: {
+      ThirdPartyPhaseout: {
         selected: false,
       },
-      baz: {
+      DomainMismatch: {
         selected: false,
       },
     };
@@ -48,6 +91,7 @@ describe('calculateBlockedReasonsFilterValues', () => {
 
     const result = calculateBlockedReasonsFilterValues(
       tabCookies,
+      //@ts-ignore
       undefined,
       mockClearQuery
     );
@@ -55,16 +99,16 @@ describe('calculateBlockedReasonsFilterValues', () => {
     expect(result).toEqual(expected);
     expect(mockClearQuery).not.toHaveBeenCalled();
 
-    const options = ['foo', 'bar'];
+    const options = ['SameSiteUnspecifiedTreatedAsLax', 'ThirdPartyPhaseout'];
 
     const expectedWithSelected = {
-      foo: {
+      SameSiteUnspecifiedTreatedAsLax: {
         selected: true,
       },
-      bar: {
+      ThirdPartyPhaseout: {
         selected: true,
       },
-      baz: {
+      DomainMismatch: {
         selected: false,
       },
     };

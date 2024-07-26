@@ -17,7 +17,8 @@
  * External dependencies.
  */
 import React, { useEffect, useState, type PropsWithChildren } from 'react';
-import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection';
+import { useLibraryDetectionContext } from '@google-psat/library-detection';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -40,13 +41,15 @@ const Provider = ({ children }: PropsWithChildren) => {
     //@ts-ignore custom data attached to window breaks types
     const _data = window.PSAT_DATA;
 
+    I18n.initMessages(_data.translations);
+
     setData(_data);
     if (_data?.libraryMatches) {
       setLibraryMatches(_data.libraryMatches);
     }
     setShowLoader(false);
     setIsDataLoaded(true);
-  }, []);
+  }, [setLibraryMatches, setShowLoader]);
 
   return (
     <Context.Provider

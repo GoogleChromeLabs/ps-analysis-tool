@@ -18,7 +18,7 @@ import {
   BLOCK_STATUS,
   CookieTableData,
   getCookieKey,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import classnames from 'classnames';
 
 import { TableRow } from '../../table';

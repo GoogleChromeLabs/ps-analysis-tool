@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { TabFrames } from '@ps-analysis-tool/common';
+import { TabFrames } from '@google-psat/common';
 import { renderHook } from '@testing-library/react';
 import useFiltersMapping from '../useFiltersMapping';
 import { useSidebar } from '../../sidebar/useSidebar';

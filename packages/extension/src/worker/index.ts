@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { ldWorkerOnMessageCallback } from '@ps-analysis-tool/library-detection';
+import { ldWorkerOnMessageCallback } from '@google-psat/library-detection';
 
 /**
  * Main onmessage handler of the worker thread.

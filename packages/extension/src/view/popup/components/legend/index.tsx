@@ -17,11 +17,8 @@
  * External dependencies.
  */
 import React from 'react';
-import type { Legend as LegendProp } from '@ps-analysis-tool/common';
-import {
-  Matrix,
-  type MatrixComponentProps,
-} from '@ps-analysis-tool/design-system';
+import type { Legend as LegendProp } from '@google-psat/common';
+import { Matrix, type MatrixComponentProps } from '@google-psat/design-system';
 
 interface LegendProps {
   legendItemList: LegendProp[];

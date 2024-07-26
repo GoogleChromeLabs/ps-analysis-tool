@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -21,8 +20,9 @@ import {
   calculateEffectiveExpiryDate,
   type CookieData,
   getDomainFromUrl,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
+
 /**
  * Internal dependencies
  */
@@ -184,5 +184,6 @@ function parseAttributeValues(
     default:
       return value;
   }
+
   return value;
 }

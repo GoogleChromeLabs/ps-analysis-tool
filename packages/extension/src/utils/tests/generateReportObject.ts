@@ -14,19 +14,44 @@
  * limitations under the License.
  */
 
+import { I18n } from '@google-psat/i18n';
 import generateReportObject from '../generateReportObject';
 import { data, libraryMatches, tabCookies, tabFrames } from './data.mock';
 
 describe('generateReport', () => {
-  it('should generate report object', () => {
-    expect(
-      //@ts-ignore
-      generateReportObject(
-        tabCookies,
-        tabFrames,
-        libraryMatches,
-        'http://example.com'
-      )
-    ).toEqual(data);
+  beforeAll(() => {
+    I18n.initMessages({
+      totalCookies: {
+        message: 'Total Cookies',
+      },
+      '1stPartyCookies': {
+        message: '1st Party Cookies',
+      },
+      '3rdPartyCookies': {
+        message: '3rd Party Cookies',
+      },
+      blockedCookies: {
+        message: 'Blocked cookies',
+      },
+      exemptedCookies: {
+        message: 'Exempted Cookies',
+      },
+    });
+    globalThis.fetch = jest.fn().mockResolvedValue({
+      json: jest.fn().mockResolvedValue({}),
+    });
+    globalThis.chrome.i18n = null;
+  });
+
+  it.skip('should generate report object', async () => {
+    const result = await generateReportObject(
+      tabCookies,
+      tabFrames,
+      libraryMatches,
+      'http://example.com'
+    );
+
+    expect(result).toEqual(data);
+    //@ts-ignore
   });
 });

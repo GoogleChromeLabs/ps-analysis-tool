@@ -22,6 +22,7 @@ import {
   TABLE_PERSISTENT_SETTINGS_STORE_KEY,
   TablePersistentSettingsStoreContext,
 } from '..';
+import { mergeDeep } from '@google-psat/common';
 
 const updateStorage = async (
   persistenceKey: string,
@@ -34,14 +35,14 @@ const updateStorage = async (
     return result;
   }
 
-  return updateLocalStorage(persistenceKey, options);
+  return updateSessionStorage(persistenceKey, options);
 };
 
-const updateLocalStorage = (
+const updateSessionStorage = (
   persistenceKey: string,
   storageData: PersistentStorageData
 ) => {
-  const data = localStorage.getItem(TABLE_PERSISTENT_SETTINGS_STORE_KEY);
+  const data = sessionStorage.getItem(TABLE_PERSISTENT_SETTINGS_STORE_KEY);
 
   if (data) {
     const allData = JSON.parse(
@@ -64,7 +65,7 @@ const updateLocalStorage = (
       ...newData,
     } as TablePersistentSettingsStoreContext['state'];
 
-    localStorage.setItem(
+    sessionStorage.setItem(
       TABLE_PERSISTENT_SETTINGS_STORE_KEY,
       JSON.stringify(updatedData)
     );
@@ -72,7 +73,7 @@ const updateLocalStorage = (
     return updatedData;
   }
 
-  localStorage.setItem(
+  sessionStorage.setItem(
     TABLE_PERSISTENT_SETTINGS_STORE_KEY,
     JSON.stringify({
       [persistenceKey]: storageData,
@@ -100,10 +101,7 @@ const updateChromeStorage = async (
   let requiredData = tableData?.[persistenceKey];
 
   if (requiredData) {
-    requiredData = {
-      ...requiredData,
-      ...storageData,
-    };
+    requiredData = mergeDeep(requiredData, storageData);
   } else {
     requiredData = storageData;
   }

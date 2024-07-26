@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { CookieData } from '@ps-analysis-tool/common';
+import type { CookieData } from '@google-psat/common';
 /**
  * Update cookie badge text.
  * @param storage {object} The storage object from local store.

@@ -39,3 +39,39 @@ export type LibraryData = {
     domQuerymatches?: [string] | null;
   };
 };
+
+export type ScriptTagUnderCheck = {
+  origin: string | null;
+  content: string;
+  type?: string;
+};
+
+export type DetectionFunctions = (
+  arg0: ScriptTagUnderCheck,
+  arg1: DetectedSignature[],
+  arg2: number,
+  arg3?: number
+) => {
+  signatureMatches: number;
+  matches: DetectedSignature[];
+  moduleMatch?: number;
+};
+
+export type LibraryMatchers = {
+  name?: string;
+  component: React.FC;
+  signatures?: {
+    strongMatches: {
+      signature: string;
+      helpUrl: string;
+    }[];
+    weakMatches: {
+      signature: string;
+      helpUrl: string;
+    }[];
+  };
+  domainsToSkip?: string[];
+  helpUrl: string;
+  detectionFunction?: DetectionFunctions;
+  domQueryFunction?: (externalDocument?: Document | null) => string[];
+};

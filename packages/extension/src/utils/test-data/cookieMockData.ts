@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { emptyAnalytics } from '@ps-analysis-tool/common';
+import { emptyAnalytics } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -101,8 +101,7 @@ const data: {
         category: 'Marketing',
         name: '__qca',
         domain: "Advertiser's website domain",
-        description:
-          'This cookie is set by Quantcast, who present targeted advertising. Stores browser and HTTP request information.',
+        description: 'known1pCookie_description',
         retention: '1 year',
         dataController: 'Quantcast',
         gdprUrl: 'https://www.quantcast.com/privacy/',

@@ -17,7 +17,7 @@ const tabFrames = [
   {
     processId: 1,
     frameId: 0,
-    url: 'https://edition.cnn.com',
+    url: 'https://edition.cnn.com?refresh=1',
     documentId: '40245632AWDER',
     documentLifecycle: 'active',
     errorOccurred: false,
@@ -37,12 +37,37 @@ const tabFrames = [
   {
     processId: 1,
     frameId: 3,
-    url: 'https://edition.cnn.com',
+    url: 'https://crxd.net',
     documentId: '40245632AWDER',
     documentLifecycle: 'active',
     errorOccurred: false,
     frameType: 'outermost_frame',
     parentFrameId: 0,
+  },
+];
+
+export const targetInfo = [
+  {
+    type: 'page',
+    id: 'SADASQ5546SDT45673',
+    url: 'https://edition.cnn.com?refresh=1',
+    tabId: 40245632,
+    attached: true,
+    title: 'CNN',
+  },
+  {
+    type: 'other',
+    id: 'ASFGHSD2453465645568679FR',
+    attached: true,
+    title: 'https://crxd.net',
+    url: 'https://crxd.net',
+  },
+  {
+    type: 'other',
+    id: 'ADFSDGRW4365663SDGF',
+    attached: true,
+    title: 'https://crxd.net',
+    url: 'https://crxd.net',
   },
 ];
 export default tabFrames;

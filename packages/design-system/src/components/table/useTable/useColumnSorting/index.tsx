@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { getValueByKey } from '@ps-analysis-tool/common';
+import { getValueByKey } from '@google-psat/common';
 
 /**
  * Internal dependencies.

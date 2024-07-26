@@ -24,6 +24,7 @@ import React from 'react';
  */
 import type { PrimaryWellKnownOutputType } from '../types';
 import Output from './output';
+import { I18n } from '@google-psat/i18n';
 
 interface PrimaryDomainOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;
@@ -38,11 +39,7 @@ const PrimaryDomainOutput = ({
         <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           1
         </p>
-        <p className="text-base">
-          Add the file <code>related-website-set.json</code> in the directory
-          <code>.well-known</code> of the <b>primary domain</b> with the
-          following content:
-        </p>
+        <p className="text-base">{I18n.getMessage('addToRws')}</p>
       </div>
       <ul className="mb-2">
         <li id="primaryOutput" className="text-sm">

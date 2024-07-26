@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import type { CookieTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -25,6 +25,7 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
   attributes: { iframeOrigin: string | null; setInPage?: boolean };
@@ -258,71 +259,78 @@ const useFrameOverlay = (
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
-    try {
-      if (!connectedToPort && !canStartInspecting) {
-        connectToPort();
-      }
+    (async () => {
+      try {
+        if (!connectedToPort && !canStartInspecting) {
+          connectToPort();
+        }
 
-      if (!isInspecting && portRef.current && canStartInspecting) {
-        portRef.current.postMessage({
-          isInspecting: false,
-        });
+        if (!isInspecting && portRef.current && canStartInspecting) {
+          portRef.current.postMessage({
+            isInspecting: false,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      if (
-        chrome.runtime?.id &&
-        portRef.current &&
-        tabFrames &&
-        canStartInspecting
-      ) {
-        const thirdPartyCookies = filteredCookies
-          ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
-          : [];
-        const firstPartyCookies = filteredCookies
-          ? filteredCookies.filter((cookie) => cookie.isFirstParty)
-          : [];
-        const blockedCookies = filteredCookies
-          ? filteredCookies.filter(
-              (cookie) =>
-                cookie.isBlocked ||
-                (cookie.blockedReasons?.length !== undefined &&
-                  cookie.blockedReasons?.length > 0)
-            )
-          : [];
-        const blockedReasons = filteredCookies
-          ? filteredCookies
-              .filter((cookie) => cookie.isBlocked)
-              .reduce((previousReasons: string[], cookie) => {
-                if (
-                  cookie.blockedReasons?.length !== undefined &&
-                  cookie.blockedReasons?.length > 0
-                ) {
-                  return [
-                    ...new Set([
-                      ...previousReasons,
-                      ...(cookie.blockedReasons || []),
-                    ]),
-                  ];
-                }
-                return [...new Set([...previousReasons])];
-              }, [])
-          : [];
-        portRef.current?.postMessage({
-          selectedFrame,
-          removeAllFramePopovers: isFrameSelectedFromDevTool,
-          thirdPartyCookies: thirdPartyCookies.length,
-          firstPartyCookies: firstPartyCookies.length,
-          blockedCookies: blockedCookies.length,
-          blockedReasons: blockedReasons.join(', '),
-          isInspecting,
-          isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
-        });
+        if (
+          chrome.runtime?.id &&
+          portRef.current &&
+          tabFrames &&
+          canStartInspecting
+        ) {
+          const thirdPartyCookies = filteredCookies
+            ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
+            : [];
+          const firstPartyCookies = filteredCookies
+            ? filteredCookies.filter((cookie) => cookie.isFirstParty)
+            : [];
+          const blockedCookies = filteredCookies
+            ? filteredCookies.filter(
+                (cookie) =>
+                  cookie.isBlocked ||
+                  (cookie.blockedReasons?.length !== undefined &&
+                    cookie.blockedReasons?.length > 0)
+              )
+            : [];
+          const blockedReasons = filteredCookies
+            ? filteredCookies
+                .filter((cookie) => cookie.isBlocked)
+                .reduce((previousReasons: string[], cookie) => {
+                  if (
+                    cookie.blockedReasons?.length !== undefined &&
+                    cookie.blockedReasons?.length > 0
+                  ) {
+                    return [
+                      ...new Set([
+                        ...previousReasons,
+                        ...(cookie.blockedReasons || []),
+                      ]),
+                    ];
+                  }
+                  return [...new Set([...previousReasons])];
+                }, [])
+            : [];
+
+          const isFrameOnRWS = selectedFrame
+            ? await isOnRWS(selectedFrame)
+            : false;
+
+          portRef.current?.postMessage({
+            selectedFrame,
+            removeAllFramePopovers: isFrameSelectedFromDevTool,
+            thirdPartyCookies: thirdPartyCookies.length,
+            firstPartyCookies: firstPartyCookies.length,
+            blockedCookies: blockedCookies.length,
+            blockedReasons: blockedReasons.join(', '),
+            isInspecting,
+            isOnRWS: isFrameOnRWS,
+          });
+        }
+      } catch (error) {
+        // Silently fail.
       }
-    } catch (error) {
-      // Silently fail.
-    }
+    })();
   }, [
     canStartInspecting,
     connectToPort,

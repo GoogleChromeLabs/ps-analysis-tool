@@ -24,8 +24,8 @@ import React, {
   useRef,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { prepareCookiesCount } from '@ps-analysis-tool/design-system';
-import { type CookieData } from '@ps-analysis-tool/common';
+import { prepareCookiesCount } from '@google-psat/design-system';
+import { type CookieData } from '@google-psat/common';
 
 /**
  * Internal dependencies.

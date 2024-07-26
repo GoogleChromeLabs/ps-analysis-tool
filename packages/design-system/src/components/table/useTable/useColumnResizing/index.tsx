@@ -84,9 +84,9 @@ const useColumnResizing = (
 
   useEffect(() => {
     const _setColumnsCallback = () => setColumnsCallback();
-    window.addEventListener('resize', _setColumnsCallback);
+    globalThis?.addEventListener('resize', _setColumnsCallback);
     return () => {
-      window.removeEventListener('resize', _setColumnsCallback);
+      globalThis?.removeEventListener('resize', _setColumnsCallback);
     };
   }, [setColumnsCallback]);
 
@@ -151,13 +151,22 @@ const useColumnResizing = (
         moveHandler: (e: MouseEvent) => onMove(e.clientX),
         upHandler: () => {
           setTimeout(() => setIsResizing(false), 100);
-          document.removeEventListener('mousemove', mouseEvents.moveHandler);
-          document.removeEventListener('mouseup', mouseEvents.upHandler);
+          globalThis?.document?.removeEventListener(
+            'mousemove',
+            mouseEvents.moveHandler
+          );
+          globalThis?.document?.removeEventListener(
+            'mouseup',
+            mouseEvents.upHandler
+          );
         },
       };
 
-      document.addEventListener('mousemove', mouseEvents.moveHandler);
-      document.addEventListener('mouseup', mouseEvents.upHandler);
+      globalThis?.document?.addEventListener(
+        'mousemove',
+        mouseEvents.moveHandler
+      );
+      globalThis?.document?.addEventListener('mouseup', mouseEvents.upHandler);
     },
     []
   );

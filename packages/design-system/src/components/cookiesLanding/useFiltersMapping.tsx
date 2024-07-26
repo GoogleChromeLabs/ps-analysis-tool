@@ -18,8 +18,11 @@
  * External dependencies.
  */
 import { useCallback, useMemo } from 'react';
-import { useSidebar } from '@ps-analysis-tool/design-system';
-import type { TabFrames } from '@ps-analysis-tool/common';
+import type { TabFrames } from '@google-psat/common';
+/**
+ * Internal dependencies.
+ */
+import { useSidebar } from '../sidebar';
 
 /**
  * Hook to expose the selectedItemUpdater function.

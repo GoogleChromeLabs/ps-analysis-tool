@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { CompleteJson } from '@ps-analysis-tool/common';
+import { CompleteJson } from '@google-psat/common';
 import { ensureFile, writeFile } from 'fs-extra';
 /**
  * Internal dependencies.

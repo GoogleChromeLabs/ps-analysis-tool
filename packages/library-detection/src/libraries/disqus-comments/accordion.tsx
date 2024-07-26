@@ -24,6 +24,7 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { DISQUS_COMMENTS_HELP_URL } from './constants';
+import { I18n } from '@google-psat/i18n';
 
 const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -37,10 +38,14 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Disqus Comments'} isLoading={false} featuresText="">
+    <Accordion
+      title={I18n.getMessage('disqusComments')}
+      isLoading={false}
+      featuresText=""
+    >
       <DetectionMessage
-        libraryName="Disqus comments"
-        provider="Disqus"
+        libraryName={I18n.getMessage('disqusComments')}
+        provider={I18n.getMessage('disqus')}
         supportURL={DISQUS_COMMENTS_HELP_URL}
       />
     </Accordion>

@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import type { CookieTableData } from '@google-psat/common';
 
 export const frameFilteredCookies: { [key: string]: CookieTableData } = {
   LSOLH: {

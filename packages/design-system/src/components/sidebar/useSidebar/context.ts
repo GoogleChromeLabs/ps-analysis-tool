@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { createContext, noop } from '@ps-analysis-tool/common';
+import { createContext, noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.

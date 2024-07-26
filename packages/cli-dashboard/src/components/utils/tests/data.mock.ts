@@ -17,13 +17,13 @@
 /**
  * External dependencies
  */
-import { UNKNOWN_FRAME_KEY, type CompleteJson } from '@ps-analysis-tool/common';
+import { type CompleteJson } from '@google-psat/common';
 
 export const tempSinglePageData: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
+  libraryMatches: {},
   cookieData: {
     'https://edition.cnn.com': {
-      cookiesCount: 1,
       frameCookies: {
         'countryCode:.cnn.com:/': {
           parsedCookie: {
@@ -47,10 +47,6 @@ export const tempSinglePageData: CompleteJson = {
           isFirstParty: true,
         },
       },
-    },
-    [UNKNOWN_FRAME_KEY]: {
-      frameCookies: {},
-      cookiesCount: 0,
     },
   },
   technologyData: [
@@ -76,7 +72,59 @@ export const tempSinglePageData: CompleteJson = {
 
 export const tempMultiPageData: CompleteJson[] = [
   {
+    libraryMatches: {},
     pageUrl: 'https://www.cnn.com/index.html',
+    technologyData: [
+      {
+        slug: 'varnish',
+        name: 'Varnish',
+        description: 'Varnish is a reverse caching proxy.',
+        confidence: 100,
+        version: null,
+        icon: 'Varnish.svg',
+        website: 'https://www.varnish-cache.org',
+        cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
+        categories: [
+          {
+            id: 23,
+            slug: 'caching',
+            name: 'Caching',
+          },
+        ],
+      },
+    ],
+    cookieData: {
+      'https://edition.cnn.com': {
+        frameCookies: {
+          'countryCode:.cnn.com:/': {
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              sameSite: 'None',
+              expires: 'Session',
+              httpOnly: false,
+              secure: true,
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
+            isBlocked: false,
+            blockedReasons: ['ThirdPartyPhaseout'],
+            isFirstParty: true,
+          },
+        },
+      },
+    },
+  },
+  {
+    libraryMatches: {},
+    pageUrl: 'https://edition.cnn.com/index.html',
     technologyData: [
       {
         slug: 'varnish',
@@ -123,65 +171,6 @@ export const tempMultiPageData: CompleteJson[] = [
             isFirstParty: true,
           },
         },
-      },
-      [UNKNOWN_FRAME_KEY]: {
-        frameCookies: {},
-        cookiesCount: 1,
-      },
-    },
-  },
-  {
-    pageUrl: 'https://edition.cnn.com/index.html',
-    technologyData: [
-      {
-        slug: 'varnish',
-        name: 'Varnish',
-        description: 'Varnish is a reverse caching proxy.',
-        confidence: 100,
-        version: null,
-        icon: 'Varnish.svg',
-        website: 'https://www.varnish-cache.org',
-        cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
-        categories: [
-          {
-            id: 23,
-            slug: 'caching',
-            name: 'Caching',
-          },
-        ],
-      },
-    ],
-    cookieData: {
-      'https://edition.cnn.com': {
-        cookiesCount: 1,
-        frameCookies: {
-          'countryCode:.cnn.com:/': {
-            parsedCookie: {
-              name: 'countryCode',
-              domain: '.cnn.com',
-              path: '/',
-              value: 'IN',
-              sameSite: 'None',
-              expires: 'Session',
-              httpOnly: false,
-              secure: true,
-            },
-            analytics: {
-              platform: 'Unknown',
-              category: 'Uncategorized',
-              GDPR: '',
-              description: '',
-            },
-            url: '',
-            isBlocked: false,
-            blockedReasons: ['ExcludeDomainNonASCII'],
-            isFirstParty: true,
-          },
-        },
-      },
-      [UNKNOWN_FRAME_KEY]: {
-        frameCookies: {},
-        cookiesCount: 1,
       },
     },
   },

@@ -17,8 +17,8 @@
  * External dependencies
  */
 import React from 'react';
-import { LibraryDetection } from '@ps-analysis-tool/library-detection';
-import { PrivacySandboxColoredIcon } from '@ps-analysis-tool/design-system';
+import { LibraryDetection } from '@google-psat/library-detection';
+import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
 
 /**
  * Internal dependencies
@@ -45,9 +45,7 @@ const App = () => {
       )}
       <CookiesSection />
       <BlockedCookiesSection />
-      {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
-        <ExemptedCookiesSection />
-      )}
+      <ExemptedCookiesSection />
       {data?.libraryMatches && (
         <div className="text-xs">
           <LibraryDetection />

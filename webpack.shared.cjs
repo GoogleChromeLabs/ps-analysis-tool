@@ -28,6 +28,7 @@ module.exports = {
           fullySpecified: false,
           fallback: {
             fs: false,
+            path: false,
           },
         },
         use: [
@@ -84,7 +85,7 @@ module.exports = {
   resolve: {
     // Fixes resolving packages in the monorepo so we use the "src" folder, not "dist".
     exportsFields: ['customExports', 'exports'],
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
   performance: {
     maxEntrypointSize: 2048000,

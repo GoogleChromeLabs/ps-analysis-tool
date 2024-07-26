@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import {
   BLOCK_STATUS,
@@ -25,7 +25,8 @@ import {
   cookieExemptionReason,
   cookieIssueDetails,
   type CookieTableData,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -55,10 +56,22 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
   const hasValidBlockedReason =
     selectedCookie.blockedReasons && selectedCookie.blockedReasons.length !== 0;
 
+  const selectedCookieExemptionReason =
+    selectedCookie?.exemptionReason ?? 'None';
+
   selectedCookie?.blockedReasons?.forEach((reason) => {
     const cookieExclusionReason =
+      // @ts-ignore
       cookieIssueDetails.CookieExclusionReason[reason];
-    const cookieBlockedReason = cookieIssueDetails.CookieBlockedReason[reason];
+    const cookieBlockedReason =
+      //@ts-ignore
+      typeof cookieIssueDetails.CookieBlockedReason[reason] === 'string'
+        ? //@ts-ignore
+          cookieIssueDetails.CookieBlockedReason[reason]
+        : I18n.getFormattedMessages(
+            // @ts-ignore
+            cookieIssueDetails.CookieBlockedReason[reason]
+          );
 
     if (cookieBlockedReason) {
       blockedReasons = blockedReasons + cookieBlockedReason;
@@ -87,46 +100,56 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
     return reason;
   });
 
+  const canBeDecoded = useMemo(() => {
+    let errorOnDecode = true;
+
+    try {
+      decodeURIComponent(selectedCookie.parsedCookie.value);
+    } catch (error) {
+      errorOnDecode = false;
+    }
+
+    return errorOnDecode;
+  }, [selectedCookie.parsedCookie.value]);
+
   return (
     <div className="text-xs py-1 px-1.5">
-      {selectedCookie.exemptionReason &&
-        selectedCookie.exemptionReason.toLowerCase() !== 'none' && (
+      {selectedCookieExemptionReason &&
+        selectedCookieExemptionReason.toLowerCase() !== 'none' && (
           <div className="mb-4">
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-              Exemption Reason
+              {I18n.getMessage('exemptionReason')}
             </p>
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              {
-                cookieExemptionReason[
-                  selectedCookie.exemptionReason as CookieData['exemptionReason']
-                ]
-              }
+              {cookieExemptionReason[
+                //@ts-ignore
+                selectedCookieExemptionReason as CookieData['exemptionReason']
+              ]()}
             </p>
           </div>
         )}
       {selectedCookie.isDomainInAllowList && (
         <div className="mb-4">
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Allow Listed
+            {I18n.getMessage('allowListed')}
           </p>
           <p className="text-outer-space-crayola dark:text-bright-gray">
-            The cookie domain was added to the allow-list for this session,
-            however the browser may still block these cookies for various
-            reasons, such as invalid attributes. You can check the allowed
-            domains under chrome://settings/content/siteData.
+            {I18n.getMessage('allowListedNote', [
+              'chrome://settings/content/siteData',
+            ])}
           </p>
         </div>
       )}
       {hasValidBlockedReason && isUsingCDP && (
-        <>
+        <div className="mb-4">
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Blocked Reason
+            {I18n.getMessage('blockedReason')}
           </p>
           <p
             className="text-outer-space-crayola dark:text-bright-gray"
             dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
           />
-        </>
+        </div>
       )}
 
       {selectedCookie?.blockingStatus?.inboundBlock ===
@@ -137,7 +160,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the responses.
+              {I18n.getMessage('blockedInAtLeastOne', ['responses'])}
             </p>
             <br />
           </div>
@@ -151,7 +174,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all responses.
+              {I18n.getMessage('blockedInAll', ['responses'])}
             </p>
             <br />
           </div>
@@ -165,7 +188,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the requests.
+              {I18n.getMessage('blockedInAtLeastOne', ['requests'])}
             </p>
             <br />
           </div>
@@ -179,7 +202,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all requests.
+              {I18n.getMessage('blockedInAll', ['requests'])}
             </p>
             <br />
           </div>
@@ -194,7 +217,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all of the requests and responses.
+              {I18n.getMessage('blockedInAllRequestResponse')}
             </p>
             <br />
           </div>
@@ -209,8 +232,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the requests and at
-              least one of the responses.
+              {I18n.getMessage('blockedInSomeRequestResponse')}
             </p>
             <br />
           </div>
@@ -225,8 +247,10 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all requests and at least one of the
-              responses.
+              {I18n.getMessage('blockedinSomeAndAll', [
+                'requests',
+                'responses',
+              ])}
             </p>
             <br />
           </div>
@@ -241,8 +265,10 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="rotate-180 scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the requests and all of
-              the responses.
+              {I18n.getMessage('blockedinSomeAndAll', [
+                'responses',
+                'requests',
+              ])}
             </p>
             <br />
           </div>
@@ -250,18 +276,19 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
 
       {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
-          <>
+          <div className="mb-4">
             <p className="font-bold text-raising-black dark:text-bright-gray">
-              Warnings
+              {I18n.getMessage('warnings')}
             </p>
             <p
               className="text-outer-space-crayola dark:text-bright-gray"
               dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
             />
-          </>
+          </div>
         )}
+
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
-        <span>Cookie Value</span>
+        <span>{I18n.getMessage('cookieValue')}</span>
         <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
           <input
             data-testid="show-url-decoded-checkbox"
@@ -277,19 +304,21 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             checked={showUrlDecoded}
             onChange={() => setShowUrlDecoded(!showUrlDecoded)}
           />
-          <span>Show URL-decoded</span>
+          <span>{I18n.getMessage('uRLDecoded')}</span>
         </label>
       </p>
       <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
-        {showUrlDecoded
+        {showUrlDecoded && canBeDecoded
           ? decodeURIComponent(selectedCookie.parsedCookie.value)
           : selectedCookie.parsedCookie.value}
       </p>
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-        Description
+        {I18n.getMessage('description')}
       </p>
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
-        {selectedCookie.analytics?.description || 'No description available.'}
+        {I18n.getMessage(
+          selectedCookie.analytics?.description || 'noDescription'
+        )}
       </p>
     </div>
   );

@@ -1,0 +1,26 @@
+name: Mark issues as stale.
+
+on:
+  schedule:
+    - cron: '44 20 * * *'
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/stale@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 30
+          days-before-issue-close: 14
+          exempt-all-milestones: true
+          only-labels: 'support'
+          stale-issue-message: 'This issue has been marked as stale because there has been no activity in the past 30 days.'
+          close-issue-message: 'This issue has been closed since there was no activity since it was marked as stale.'
+          stale-issue-label: 'stale'
+          remove-issue-stale-when-updated: true
+          labels-to-remove-when-unstale: 'stale'

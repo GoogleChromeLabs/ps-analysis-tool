@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -42,7 +43,9 @@ const BulletList = ({ rows, heading }: BulletListProps) => {
       )}
       <div className="space-y-4">
         {rows.length === 0 ? (
-          <p className="text-darkest-gray dark:text-bright-gray">No News</p>
+          <p className="text-darkest-gray dark:text-bright-gray">
+            {I18n.getMessage('noNews')}
+          </p>
         ) : (
           <>
             {rows.map((rowItem) => (

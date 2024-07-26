@@ -21,19 +21,19 @@ import {
   findAnalyticsMatch,
   type CookieData,
   type CookieDatabase,
-} from '@ps-analysis-tool/common';
+} from '@google-psat/common';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
-
 import { GET_JS_COOKIES } from '../constants';
 
 interface ProcessAndStoreDucmentCookies {
   tabUrl: string;
   tabId: string;
+  frameId: string;
   documentCookies: ParsedCookie[];
   cookieDB: CookieDatabase;
 }
@@ -41,6 +41,7 @@ interface ProcessAndStoreDucmentCookies {
 const processAndStoreDocumentCookies = async ({
   tabUrl,
   tabId,
+  frameId,
   documentCookies,
   cookieDB,
 }: ProcessAndStoreDucmentCookies) => {
@@ -84,7 +85,7 @@ const processAndStoreDocumentCookies = async ({
           url: tabUrl,
           headerType: 'javascript', // @todo Update headerType name.
           isFirstParty: isFirstPartyCookie || null,
-          frameIdList: [0],
+          frameIdList: [frameId.toString()],
         };
       }
     );

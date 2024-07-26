@@ -1,13 +1,23 @@
 {
   "sets": [
     {
+      "contact": "oterrell28@gmail.com",
+      "primary": "https://sackrace.ai",
+      "serviceSites": [
+        "https://socket-to-me.vip"
+      ],
+      "rationaleBySite": {
+        "https://socket-to-me.vip": "RWS_rationale_https___socket_to_me_vip"
+      }
+    },
+    {
       "contact": "il.mrbit@gmail.com",
       "primary": "https://poalim.xyz",
       "associatedSites": [
         "https://poalim.site"
       ],
       "rationaleBySite": {
-        "https://poalim.site": "one of 3rd party cookie solutions option"
+        "https://poalim.site": "RWS_rationale_https___poalim_site"
       }
     },
     {
@@ -18,8 +28,8 @@
         "https://elfinancierocr.com"
       ],
       "rationaleBySite": {
-        "https://lateja.cr": "Newspaper owned by Grupo Nación",
-        "https://elfinancierocr.com": "Newspaper owned by Grupo Nación"
+        "https://lateja.cr": "RWS_rationale_https___lateja_cr",
+        "https://elfinancierocr.com": "RWS_rationale_https___elfinancierocr_com"
       }
     },
     {
@@ -33,11 +43,11 @@
         "https://wpext.pl"
       ],
       "rationaleBySite": {
-        "https://o2.pl": "News portal and email service",
-        "https://pudelek.pl": "Special Interest Website - celebrity news and gossip",
-        "https://money.pl": "Special Interest Website - news and information on the stock market, currencies, business and economics",
-        "https://abczdrowie.pl": "Special Interest Website - healthy living and medical health",
-        "https://wpext.pl": "Content delivery domain for sensitive content websites"
+        "https://o2.pl": "RWS_rationale_https___o2_pl",
+        "https://pudelek.pl": "RWS_rationale_https___pudelek_pl",
+        "https://money.pl": "RWS_rationale_https___money_pl",
+        "https://abczdrowie.pl": "RWS_rationale_https___abczdrowie_pl",
+        "https://wpext.pl": "RWS_rationale_https___wpext_pl"
       }
     },
     {
@@ -48,8 +58,8 @@
         "https://nourishingpursuits.com"
       ],
       "rationaleBySite": {
-        "https://cardsayings.net": "Co-branded content site",
-        "https://nourishingpursuits.com": "Co-branded content site"
+        "https://cardsayings.net": "RWS_rationale_https___cardsayings_net",
+        "https://nourishingpursuits.com": "RWS_rationale_https___nourishingpursuits_com"
       }
     },
     {
@@ -65,11 +75,11 @@
         "https://www.asadcdn.com"
       ],
       "rationaleBySite": {
-        "https://welt.de": "News Website welt.de",
-        "https://autobild.de": "Special Interest Website Autobild",
-        "https://computerbild.de": "Special Interest Website Computerbild",
-        "https://wieistmeineip.de": "Internet speed Measurement Website of Computerbild",
-        "https://www.asadcdn.com": "CDN for Ad Files - Frequency Capping"
+        "https://welt.de": "RWS_rationale_https___welt_de",
+        "https://autobild.de": "RWS_rationale_https___autobild_de",
+        "https://computerbild.de": "RWS_rationale_https___computerbild_de",
+        "https://wieistmeineip.de": "RWS_rationale_https___wieistmeineip_de",
+        "https://www.asadcdn.com": "RWS_rationale_https___www_asadcdn_com"
       }
     },
     {
@@ -81,9 +91,9 @@
         "https://salemovetravel.com"
       ],
       "rationaleBySite": {
-        "https://salemoveadvisor.com": "The domains are very clear that they are all a part of the SaleMove family of sites. These sites are used as demo sites to show how multiple sites can be linked together for the purpose of live chat linking across multiple domains. A user would expect the sites to be linked as they are all a part of the same demo family of sites to show how it works",
-        "https://salemovefinancial.com": "The domains are very clear that they are all a part of the SaleMove family of sites. These sites are used as demo sites to show how multiple sites can be linked together for the purpose of live chat linking across multiple domains. A user would expect the sites to be linked as they are all a part of the same demo family of sites to show how it works",
-        "https://salemovetravel.com": "The domains are very clear that they are all a part of the SaleMove family of sites. These sites are used as demo sites to show how multiple sites can be linked together for the purpose of live chat linking across multiple domains. A user would expect the sites to be linked as they are all a part of the same demo family of sites to show how it works"
+        "https://salemoveadvisor.com": "RWS_rationale_https___salemoveadvisor_com",
+        "https://salemovefinancial.com": "RWS_rationale_https___salemovefinancial_com",
+        "https://salemovetravel.com": "RWS_rationale_https___salemovetravel_com"
       }
     },
     {
@@ -94,8 +104,8 @@
         "https://mystudentdashboard.com"
       ],
       "rationaleBySite": {
-        "https://teacherdashboard.com": "Portal for Hapara teachers",
-        "https://mystudentdashboard.com": "Portal for Hapara students"
+        "https://teacherdashboard.com": "RWS_rationale_https___teacherdashboard_com",
+        "https://mystudentdashboard.com": "RWS_rationale_https___mystudentdashboard_com"
       }
     },
     {
@@ -105,7 +115,7 @@
         "https://songshare.com"
       ],
       "rationaleBySite": {
-        "https://songshare.com": "Specialized Platform for Music Smart Links"
+        "https://songshare.com": "RWS_rationale_https___songshare_com"
       }
     },
     {
@@ -119,11 +129,11 @@
         "https://desimartini.com"
       ],
       "rationaleBySite": {
-        "https://livemint.com": "https://livemint.com",
-        "https://livehindustan.com": "https://livehindustan.com",
-        "https://healthshots.com": "https://healthshots.com",
-        "https://ottplay.com": "https://ottplay.com",
-        "https://desimartini.com": "https://desimartini.com"
+        "https://livemint.com": "RWS_rationale_https___livemint_com",
+        "https://livehindustan.com": "RWS_rationale_https___livehindustan_com",
+        "https://healthshots.com": "RWS_rationale_https___healthshots_com",
+        "https://ottplay.com": "RWS_rationale_https___ottplay_com",
+        "https://desimartini.com": "RWS_rationale_https___desimartini_com"
       }
     },
     {
@@ -133,7 +143,7 @@
         "https://landyrev.ru"
       ],
       "rationaleBySite": {
-        "https://landyrev.ru": "Same publisher's website in a different region"
+        "https://landyrev.ru": "RWS_rationale_https___landyrev_ru"
       }
     },
     {
@@ -144,8 +154,8 @@
         "https://punjabijagran.com"
       ],
       "rationaleBySite": {
-        "https://gujaratijagran.com": "News Website for Gujarati audience",
-        "https://punjabijagran.com": "News Website for Punjabi audience"
+        "https://gujaratijagran.com": "RWS_rationale_https___gujaratijagran_com",
+        "https://punjabijagran.com": "RWS_rationale_https___punjabijagran_com"
       }
     },
     {
@@ -159,11 +169,11 @@
         "https://tucarro.com"
       ],
       "rationaleBySite": {
-        "https://mercadolivre.com": "Mercado Libre in Brazil",
-        "https://mercadopago.com": "Mercado Libre's payments ecosystem",
-        "https://mercadoshops.com": "Mercado Libre's online ecommerce store builder",
-        "https://portalinmobiliario.com": "Mercado Libre's brand for real estate ecommerce in Chile",
-        "https://tucarro.com": "Mercado Libre's brand for motors ecommerce in Colombia and Venezuela"
+        "https://mercadolivre.com": "RWS_rationale_https___mercadolivre_com",
+        "https://mercadopago.com": "RWS_rationale_https___mercadopago_com",
+        "https://mercadoshops.com": "RWS_rationale_https___mercadoshops_com",
+        "https://portalinmobiliario.com": "RWS_rationale_https___portalinmobiliario_com",
+        "https://tucarro.com": "RWS_rationale_https___tucarro_com"
       },
       "ccTLDs": {
         "https://mercadolibre.com": [
@@ -220,8 +230,8 @@
         "https://cookreactor.com"
       ],
       "rationaleBySite": {
-        "https://reactor.cc": "Domain for fandomes, old version of site and mirror",
-        "https://cookreactor.com": "Cooking fandome"
+        "https://reactor.cc": "RWS_rationale_https___reactor_cc",
+        "https://cookreactor.com": "RWS_rationale_https___cookreactor_com"
       },
       "ccTLDs": {
         "https://joyreactor.cc": [
@@ -239,8 +249,8 @@
         "https://cmxd.com.mx"
       ],
       "rationaleBySite": {
-        "https://clarosports.com": "Member of AMX Contenido websites, as unotv",
-        "https://cmxd.com.mx": "Used for personalization purposes across AMX Contenido websites."
+        "https://clarosports.com": "RWS_rationale_https___clarosports_com",
+        "https://cmxd.com.mx": "RWS_rationale_https___cmxd_com_mx"
       }
     },
     {
@@ -254,11 +264,11 @@
         "https://eworkbookrequest.com"
       ],
       "rationaleBySite": {
-        "https://idbs-dev.com": "Dev version of main application IDBS-cloud",
-        "https://idbs-staging.com": "Staging version of main application IDBS-cloud",
-        "https://idbs-eworkbook.com": "E-workbook services part of IDBS-cloud product",
-        "https://eworkbookcloud.com": "E-workbook services part of IDBS-cloud product",
-        "https://eworkbookrequest.com": "E-workbook request part of IDBS-cloud product"
+        "https://idbs-dev.com": "RWS_rationale_https___idbs_dev_com",
+        "https://idbs-staging.com": "RWS_rationale_https___idbs_staging_com",
+        "https://idbs-eworkbook.com": "RWS_rationale_https___idbs_eworkbook_com",
+        "https://eworkbookcloud.com": "RWS_rationale_https___eworkbookcloud_com",
+        "https://eworkbookrequest.com": "RWS_rationale_https___eworkbookrequest_com"
       }
     },
     {
@@ -269,8 +279,8 @@
         "https://mighty-app.appspot.com"
       ],
       "rationaleBySite": {
-        "https://textyserver.appspot.com": "API service for mightytext.net",
-        "https://mighty-app.appspot.com": "alternative domain for API service for mightytext.net"
+        "https://textyserver.appspot.com": "RWS_rationale_https___textyserver_appspot_com",
+        "https://mighty-app.appspot.com": "RWS_rationale_https___mighty_app_appspot_com"
       }
     },
     {
@@ -280,7 +290,7 @@
         "https://wingify.com"
       ],
       "rationaleBySite": {
-        "https://wingify.com": "Alias"
+        "https://wingify.com": "RWS_rationale_https___wingify_com"
       }
     },
     {
@@ -290,7 +300,7 @@
         "https://wildixin.com"
       ],
       "rationaleBySite": {
-        "https://wildixin.com": "Wildix PBX's domain"
+        "https://wildixin.com": "RWS_rationale_https___wildixin_com"
       }
     },
     {
@@ -309,14 +319,14 @@
         "https://tvid.in"
       ],
       "rationaleBySite": {
-        "https://indiatimes.com": "Indiatimes.com is primary domain for Times Internet which publish stories on Indian Lifestyle, Culture, Relationships, Food, Travel, Entertainment, News and New Technology News",
-        "https://timesofindia.com": "Times of India (TOI) is Indias largest and most influential news publisher in English. Its digital platform timesofindia.com is powered by Times Internet Limited",
-        "https://economictimes.com": "Economic Times is India's top business news platform, providing comprehensive coverage of the economy, stock markets, and personal finance to inspire and empower business leaders and entrepreneurs. This digital platform is powered by Times Internet Limited",
-        "https://samayam.com": "Samayam is a Regional News publisher powered by Times Internet Limited",
-        "https://cricbuzz.com": "Cricbuzz is an Indian cricket news & live score platform owned by Times Internet Limited",
-        "https://growthrx.in": "GrowthRx is a customer engagement platform powered by Times Internet",
-        "https://clmbtech.com": "This is a times-internet data and customer management platform for managing publisher data.",
-        "https://tvid.in": "TVID is an in-house video management platform powered by Times Internet"
+        "https://indiatimes.com": "RWS_rationale_https___indiatimes_com",
+        "https://timesofindia.com": "RWS_rationale_https___timesofindia_com",
+        "https://economictimes.com": "RWS_rationale_https___economictimes_com",
+        "https://samayam.com": "RWS_rationale_https___samayam_com",
+        "https://cricbuzz.com": "RWS_rationale_https___cricbuzz_com",
+        "https://growthrx.in": "RWS_rationale_https___growthrx_in",
+        "https://clmbtech.com": "RWS_rationale_https___clmbtech_com",
+        "https://tvid.in": "RWS_rationale_https___tvid_in"
       }
     },
     {
@@ -330,9 +340,9 @@
         "https://hc1cas.global"
       ],
       "rationaleBySite": {
-        "https://hc1.global": "hc1 Insights Lab platform for UK.",
-        "https://hc1cas.com": "hc1 Insights Lab platform authentication service for US.",
-        "https://hc1cas.global": "hc1 Insight Lab platform authentication service for UK."
+        "https://hc1.global": "RWS_rationale_https___hc1_global",
+        "https://hc1cas.com": "RWS_rationale_https___hc1cas_com",
+        "https://hc1cas.global": "RWS_rationale_https___hc1cas_global"
       }
     },
     {
@@ -346,11 +356,11 @@
         "https://kompas.tv"
       ],
       "rationaleBySite": {
-        "https://tribunnews.com": "Indonesian local news by KG Media",
-        "https://grid.id": "Indonesian entertainment & lifestyle news by KG Media ",
-        "https://bolasport.com": "Indonesian sport news by KG Media ",
-        "https://kompasiana.com": "Indonesian largest blog community by KG Media ",
-        "https://kompas.tv": "Indonesian national news by KG Media "
+        "https://tribunnews.com": "RWS_rationale_https___tribunnews_com",
+        "https://grid.id": "RWS_rationale_https___grid_id",
+        "https://bolasport.com": "RWS_rationale_https___bolasport_com",
+        "https://kompasiana.com": "RWS_rationale_https___kompasiana_com",
+        "https://kompas.tv": "RWS_rationale_https___kompas_tv"
       }
     },
     {
@@ -364,11 +374,11 @@
         "https://commentcamarche.com"
       ],
       "rationaleBySite": {
-        "https://commentcamarche.net": "Centralized account for redactors, forums & real-time messages",
-        "https://linternaute.com": "Centralized account for redactors, forums & real-time messages",
-        "https://journaldunet.com": "Centralized account for redactors, forums & real-time messages",
-        "https://phonandroid.com": "Centralized account for redactors, forums & real-time messages",
-        "https://commentcamarche.com": "Centralized account for redactors, forums & real-time messages"
+        "https://commentcamarche.net": "RWS_rationale_https___commentcamarche_net",
+        "https://linternaute.com": "RWS_rationale_https___linternaute_com",
+        "https://journaldunet.com": "RWS_rationale_https___journaldunet_com",
+        "https://phonandroid.com": "RWS_rationale_https___phonandroid_com",
+        "https://commentcamarche.com": "RWS_rationale_https___commentcamarche_com"
       },
       "ccTLDs": {
         "https://journaldesfemmes.com": [
@@ -383,13 +393,23 @@
       }
     },
     {
+      "contact": "bergmanpatrickr@johndeere.com",
+      "primary": "https://johndeere.com",
+      "associatedSites": [
+        "https://deere.com"
+      ],
+      "rationaleBySite": {
+        "https://deere.com": "RWS_rationale_https___deere_com"
+      }
+    },
+    {
       "contact": "jquintana@lanacion.com.ar",
       "primary": "https://lanacion.com.ar",
       "associatedSites": [
         "https://bonvivir.com"
       ],
       "rationaleBySite": {
-        "https://bonvivir.com": "Wine club for sell wine by La Nación"
+        "https://bonvivir.com": "RWS_rationale_https___bonvivir_com"
       }
     },
     {
@@ -401,9 +421,9 @@
         "https://nien.co"
       ],
       "rationaleBySite": {
-        "https://chennien.com": "Alias domain for Nien Studio",
-        "https://nien.org": "Campaign pages for Nien Studio",
-        "https://nien.co": "URL shortener for Nien Studio"
+        "https://chennien.com": "RWS_rationale_https___chennien_com",
+        "https://nien.org": "RWS_rationale_https___nien_org",
+        "https://nien.co": "RWS_rationale_https___nien_co"
       }
     },
     {
@@ -419,13 +439,13 @@
         "https://miss.com.tw"
       ],
       "rationaleBySite": {
-        "https://hearty.app": "API endpoints for Hearty Journal",
-        "https://hearty.gift": "Campaign pages for Hearty Journal",
-        "https://hj.rs": "URL shortener for Hearty Journal",
-        "https://heartymail.com": "Email service for Hearty Journal",
-        "https://alice.tw": "Alice's blog",
-        "https://jiayi.life": "Jiayi's blog",
-        "https://miss.com.tw": "Company website"
+        "https://hearty.app": "RWS_rationale_https___hearty_app",
+        "https://hearty.gift": "RWS_rationale_https___hearty_gift",
+        "https://hj.rs": "RWS_rationale_https___hj_rs",
+        "https://heartymail.com": "RWS_rationale_https___heartymail_com",
+        "https://alice.tw": "RWS_rationale_https___alice_tw",
+        "https://jiayi.life": "RWS_rationale_https___jiayi_life",
+        "https://miss.com.tw": "RWS_rationale_https___miss_com_tw"
       }
     },
     {
@@ -435,7 +455,7 @@
         "https://trytalkdesk.com"
       ],
       "rationaleBySite": {
-        "https://trytalkdesk.com": "Specialized platform for CCaS"
+        "https://trytalkdesk.com": "RWS_rationale_https___trytalkdesk_com"
       }
     },
     {
@@ -445,7 +465,7 @@
         "https://gettalkdesk.com"
       ],
       "rationaleBySite": {
-        "https://gettalkdesk.com": "Specialized platform for CCaS"
+        "https://gettalkdesk.com": "RWS_rationale_https___gettalkdesk_com"
       }
     },
     {
@@ -461,11 +481,11 @@
         "https://ocdn.eu"
       ],
       "rationaleBySite": {
-        "https://fakt.pl": "Special interest news website that is part of the Ringier Axel Springer Polska media group. It provides up-to-date news and covers a wide range of topics including politics, sports, entertainment, and lifestyle. Fakt.pl aims to deliver reliable and engaging content to its readers, keeping them informed about the latest events and trends.",
-        "https://businessinsider.com.pl": "Special interest news website within the Ringier Axel Springer Polska media group. It focuses on business, finance, technology, and related topics. The website provides in-depth analysis, market insights, and news articles tailored for professionals, entrepreneurs, and those interested in the business world.",
-        "https://medonet.pl": "Special interest news website within the Ringier Axel Springer Polska media group dedicated to health and medical topics. It offers a wide range of articles, news, and features related to various aspects of health, wellness, medical research, treatments, and lifestyle. Medonet.pl aims to provide reliable and accurate information to its readers, promoting healthy living and informed decision-making.",
-        "https://ocdn.eu": "Service dedicated to processing events that occur on websites, assists in managing and optimizing multimedia content, including images, videos, or other resources, for websites that rely on event-related functionality.",
-        "https://plejada.pl": "Special interest news website within the Ringier Axel Springer Polska media group dedicated to exclusive information, interviews, videos, and galleries from the world of show business."
+        "https://fakt.pl": "RWS_rationale_https___fakt_pl",
+        "https://businessinsider.com.pl": "RWS_rationale_https___businessinsider_com_pl",
+        "https://medonet.pl": "RWS_rationale_https___medonet_pl",
+        "https://ocdn.eu": "RWS_rationale_https___ocdn_eu",
+        "https://plejada.pl": "RWS_rationale_https___plejada_pl"
       }
     },
     {
@@ -477,9 +497,9 @@
         "https://gallito.com.uy"
       ],
       "rationaleBySite": {
-        "https://clubelpais.com.uy": "Domain from El Pais Uruguay",
-        "https://paula.com.uy": "Domain from El Pais Uruguay",
-        "https://gallito.com.uy": "Domain from El Pais Uruguay"
+        "https://clubelpais.com.uy": "RWS_rationale_https___clubelpais_com_uy",
+        "https://paula.com.uy": "RWS_rationale_https___paula_com_uy",
+        "https://gallito.com.uy": "RWS_rationale_https___gallito_com_uy"
       },
       "ccTLDs": {
         "https://elpais.com.uy": [
@@ -497,9 +517,9 @@
         "https://iolam.it"
       ],
       "rationaleBySite": {
-        "https://libero.it": "Web portal",
-        "https://supereva.it": "Gossip web site",
-        "https://iolam.it": "Used for personalization purposes"
+        "https://libero.it": "RWS_rationale_https___libero_it",
+        "https://supereva.it": "RWS_rationale_https___supereva_it",
+        "https://iolam.it": "RWS_rationale_https___iolam_it"
       }
     },
     {
@@ -510,8 +530,8 @@
         "https://rws3nvtvt.com"
       ],
       "rationaleBySite": {
-        "https://rws2nvtvt.com": "Test 1",
-        "https://rws3nvtvt.com": "Test 2"
+        "https://rws2nvtvt.com": "RWS_rationale_https___rws2nvtvt_com",
+        "https://rws3nvtvt.com": "RWS_rationale_https___rws3nvtvt_com"
       }
     },
     {
@@ -522,8 +542,8 @@
         "https://stripe.network"
       ],
       "rationaleBySite": {
-        "https://stripecdn.com": "Serves static assets accelerating page loads and sandboxes select Javascript",
-        "https://stripe.network": "Receives telemetry preventing fraud across Stripe services"
+        "https://stripecdn.com": "RWS_rationale_https___stripecdn_com",
+        "https://stripe.network": "RWS_rationale_https___stripe_network"
       }
     },
     {
@@ -534,8 +554,8 @@
         "https://human-talk.org"
       ],
       "rationaleBySite": {
-        "https://reshim.org": "Silent login",
-        "https://human-talk.org": "Silent login"
+        "https://reshim.org": "RWS_rationale_https___reshim_org",
+        "https://human-talk.org": "RWS_rationale_https___human_talk_org"
       }
     },
     {
@@ -553,15 +573,15 @@
         "https://yastatic.net"
       ],
       "rationaleBySite": {
-        "https://yandex.ru": "Yandex owned website",
-        "https://yandex.net": "Yandex owned website",
-        "https://yastatic.net": "Yandex owned website",
-        "https://auto.ru": "Yandex owned website",
-        "https://kinopoisk.ru": "Yandex owned website",
-        "https://clck.ru": "Yandex owned website",
-        "https://webvisor.com": "Yandex owned website",
-        "https://turbopages.org": "Yandex owned website",
-        "https://edadeal.ru": "Yandex owned website"
+        "https://yandex.ru": "RWS_rationale_https___yandex_ru",
+        "https://yandex.net": "RWS_rationale_https___yandex_net",
+        "https://yastatic.net": "RWS_rationale_https___yastatic_net",
+        "https://auto.ru": "RWS_rationale_https___auto_ru",
+        "https://kinopoisk.ru": "RWS_rationale_https___kinopoisk_ru",
+        "https://clck.ru": "RWS_rationale_https___clck_ru",
+        "https://webvisor.com": "RWS_rationale_https___webvisor_com",
+        "https://turbopages.org": "RWS_rationale_https___turbopages_org",
+        "https://edadeal.ru": "RWS_rationale_https___edadeal_ru"
       },
       "ccTLDs": {
         "https://ya.ru": [
@@ -592,8 +612,8 @@
         "https://technology-revealed.com"
       ],
       "rationaleBySite": {
-        "https://standardsandpraiserepurpose.com": "Publisher #1 for RWS Test",
-        "https://technology-revealed.com": "Frequency Capping Domain #1 for RWS Test"
+        "https://standardsandpraiserepurpose.com": "RWS_rationale_https___standardsandpraiserepurpose_com",
+        "https://technology-revealed.com": "RWS_rationale_https___technology_revealed_com"
       }
     },
     {
@@ -604,8 +624,8 @@
         "https://startupislandtaiwan.org"
       ],
       "rationaleBySite": {
-        "https://startupislandtaiwan.net": "Domain alias",
-        "https://startupislandtaiwan.org": "Domain alias"
+        "https://startupislandtaiwan.net": "RWS_rationale_https___startupislandtaiwan_net",
+        "https://startupislandtaiwan.org": "RWS_rationale_https___startupislandtaiwan_org"
       }
     },
     {
@@ -632,11 +652,11 @@
         "https://hjck.com"
       ],
       "rationaleBySite": {
-        "https://noticiascaracol.com": "Informative news show that covers the most important events in Colombia and around the world, owned by Valorem business group.",
-        "https://bluradio.com": "Blu Radio is a Colombian radio network, owned by Valorem business group.",
-        "https://shock.co": "It is a media outlet that publishes specialized content daily about music, movies, and television series. Owned by Valorem business group.",
-        "https://bumbox.com": "Podcast platform from the media group of Caracol Televisión, El Espectador, and Blu Radio. Owned by Valorem business group.",
-        "https://hjck.com": "It's a private Colombian radio station with a cultural programming. It belongs to the Valorem business group."
+        "https://noticiascaracol.com": "RWS_rationale_https___noticiascaracol_com",
+        "https://bluradio.com": "RWS_rationale_https___bluradio_com",
+        "https://shock.co": "RWS_rationale_https___shock_co",
+        "https://bumbox.com": "RWS_rationale_https___bumbox_com",
+        "https://hjck.com": "RWS_rationale_https___hjck_com"
       }
     },
     {
@@ -646,7 +666,7 @@
         "https://firstlook.biz"
       ],
       "rationaleBySite": {
-        "https://firstlook.biz": "Presents core reports and SSO auth flow"
+        "https://firstlook.biz": "RWS_rationale_https___firstlook_biz"
       }
     },
     {
@@ -656,7 +676,7 @@
         "https://wordle.at"
       ],
       "rationaleBySite": {
-        "https://wordle.at": "We are migrating our domain and will soon redirect all traffic from here to the primary, both of which we own. The two sites are almost identical. For convenience we want to transfer session cookies so users stay logged in."
+        "https://wordle.at": "RWS_rationale_https___wordle_at"
       }
     },
     {
@@ -670,11 +690,11 @@
         "https://ishares.com"
       ],
       "rationaleBySite": {
-        "https://blackrockadvisorelite.it": "A site for Italian investment professionals. The branding is clearly visible on the site.",
-        "https://cachematrix.com": "Cachematrix is a cash management firm acquired by BlackRock. The relationship is described on the About Us page.",
-        "https://efront.com": "eFront is BlackRock's alternative solutions platform. The BlackRock branding is clearly visible on the site.",
-        "https://etfacademy.it": "An Italian language education site about ETFs. The iShares by BlackRock branding is clearly visible on the site.",
-        "https://ishares.com": "iShares is BlackRock's ETF brand. The branding is clearly visible on the site."
+        "https://blackrockadvisorelite.it": "RWS_rationale_https___blackrockadvisorelite_it",
+        "https://cachematrix.com": "RWS_rationale_https___cachematrix_com",
+        "https://efront.com": "RWS_rationale_https___efront_com",
+        "https://etfacademy.it": "RWS_rationale_https___etfacademy_it",
+        "https://ishares.com": "RWS_rationale_https___ishares_com"
       }
     },
     {
@@ -686,9 +706,9 @@
         "https://zdrowietvn.pl"
       ],
       "rationaleBySite": {
-        "https://player.pl": "Streaming service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website",
-        "https://zdrowietvn.pl": "Educational service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website",
-        "https://tvn24.pl": "News service that is owned by TVN S.A.. Information about the connection with TVN is included in the footer of this website"
+        "https://player.pl": "RWS_rationale_https___player_pl",
+        "https://zdrowietvn.pl": "RWS_rationale_https___zdrowietvn_pl",
+        "https://tvn24.pl": "RWS_rationale_https___tvn24_pl"
       }
     },
     {
@@ -700,9 +720,9 @@
         "https://smoney.vn"
       ],
       "rationaleBySite": {
-        "https://zingmp3.vn": "Music Website owned by Zalo Group, VNG",
-        "https://baomoi.com": "News Website owned by Zalo Group, VNG",
-        "https://smoney.vn": "News Website owned by Zalo Group, VNG"
+        "https://zingmp3.vn": "RWS_rationale_https___zingmp3_vn",
+        "https://baomoi.com": "RWS_rationale_https___baomoi_com",
+        "https://smoney.vn": "RWS_rationale_https___smoney_vn"
       }
     },
     {
@@ -716,9 +736,9 @@
         "https://pdmp-apis.no"
       ],
       "rationaleBySite": {
-        "https://prisjakt.no": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites.",
-        "https://mittanbud.no": "Site owned by Schibsted with shared SSO across Schibsted Norway's sites and common branding that clearly shows the relation between the sites.",
-        "https://pdmp-apis.no": "Site owned by Schibsted that provides APIs for users across Schibsted's sites."
+        "https://prisjakt.no": "RWS_rationale_https___prisjakt_no",
+        "https://mittanbud.no": "RWS_rationale_https___mittanbud_no",
+        "https://pdmp-apis.no": "RWS_rationale_https___pdmp_apis_no"
       }
     },
     {
@@ -731,10 +751,10 @@
         "https://grupolpg.sv"
       ],
       "rationaleBySite": {
-        "https://elgrafico.com": "News portal owned by La Prensa Grafica Group",
-        "https://eleconomista.net": "News portal owned by La Prensa Grafica Group",
-        "https://ella.sv": "News portal owned by La Prensa Grafica Group",
-        "https://grupolpg.sv": "Domain owned by La Prensa Grafica Group"
+        "https://elgrafico.com": "RWS_rationale_https___elgrafico_com",
+        "https://eleconomista.net": "RWS_rationale_https___eleconomista_net",
+        "https://ella.sv": "RWS_rationale_https___ella_sv",
+        "https://grupolpg.sv": "RWS_rationale_https___grupolpg_sv"
       }
     },
     {
@@ -745,24 +765,7 @@
       ],
       "serviceSites": [],
       "rationaleBySite": {
-        "https://nidhiacademyonline.com": "This website is a subpart of kaksya.in and is used to host Nidhi Academy educational content videos/notes and more."
-      }
-    },
-    {
-      "contact": "jsteam@intra.sapo.pt",
-      "primary": "https://sapo.pt",
-      "associatedSites": [
-        "https://sapo.pt",
-        "https://meo.pt"
-      ],
-      "rationaleBySite": {
-        "https://sapo.pt": "SAPO is Portugal's leading online platform offering a diverse range of news, information, and services catering to various interests including news, entertainment, sports, technology, and lifestyle.",
-        "https://meo.pt": "MEO is a prominent telecommunications and entertainment provider in Portugal, offering a wide range of services including television, internet, phone, and mobile."
-      },
-      "ccTLDs": {
-        "https://sapo.pt": [
-          "https://sapo.io"
-        ]
+        "https://nidhiacademyonline.com": "RWS_rationale_https___nidhiacademyonline_com"
       }
     },
     {
@@ -776,11 +779,126 @@
         "https://radio1.be"
       ],
       "rationaleBySite": {
-        "https://dewarmsteweek.be": "domain for a yearly campaign",
-        "https://sporza.be": "sub brand for sports news",
-        "https://een.be": "sub brand site",
-        "https://radio2.be": "sub brand site",
-        "https://radio1.be": "sub brand site"
+        "https://dewarmsteweek.be": "RWS_rationale_https___dewarmsteweek_be",
+        "https://sporza.be": "RWS_rationale_https___sporza_be",
+        "https://een.be": "RWS_rationale_https___een_be",
+        "https://radio2.be": "RWS_rationale_https___radio2_be",
+        "https://radio1.be": "RWS_rationale_https___radio1_be"
+      }
+    },
+    {
+      "contact": "abatahi@nvidia.com",
+      "primary": "https://nvidia.com",
+      "associatedSites": [
+        "https://geforcenow.com"
+      ],
+      "rationaleBySite": {
+        "https://geforcenow.com": "RWS_rationale_https___geforcenow_com"
+      }
+    },
+    {
+      "contact": "jsteam@intra.sapo.pt",
+      "primary": "https://sapo.pt",
+      "associatedSites": [
+        "https://meo.pt"
+      ],
+      "rationaleBySite": {
+        "https://meo.pt": "RWS_rationale_https___meo_pt"
+      },
+      "ccTLDs": {
+        "https://sapo.pt": [
+          "https://sapo.io"
+        ]
+      }
+    },
+    {
+      "contact": "support@tolteck.com",
+      "primary": "https://tolteck.com",
+      "associatedSites": [
+        "https://tolteck.app"
+      ],
+      "rationaleBySite": {
+        "https://tolteck.app": "RWS_rationale_https___tolteck_app"
+      }
+    },
+    {
+      "contact": "datateam@centralmediacsoport.hu",
+      "primary": "https://p24.hu",
+      "associatedSites": [
+        "https://24.hu",
+        "https://startlap.hu",
+        "https://nlc.hu",
+        "https://hazipatika.com",
+        "https://nosalty.hu"
+      ],
+      "rationaleBySite": {
+        "https://24.hu": "RWS_rationale_https___24_hu",
+        "https://startlap.hu": "RWS_rationale_https___startlap_hu",
+        "https://nlc.hu": "RWS_rationale_https___nlc_hu",
+        "https://hazipatika.com": "RWS_rationale_https___hazipatika_com",
+        "https://nosalty.hu": "RWS_rationale_https___nosalty_hu"
+      }
+    },
+    {
+      "contact": "info@cognitiveai.ru",
+      "primary": "https://cognitiveai.ru",
+      "associatedSites": [
+        "https://cognitive-ai.ru"
+      ],
+      "rationaleBySite": {
+        "https://cognitive-ai.ru": "RWS_rationale_https___cognitive_ai_ru"
+      }
+    },
+    {
+      "contact": "technical@citybibleforum.org",
+      "primary": "https://citybibleforum.org",
+      "associatedSites": [
+        "https://thirdspace.org.au"
+      ],
+      "rationaleBySite": {
+        "https://thirdspace.org.au": "RWS_rationale_https___thirdspace_org_au"
+      }
+    },
+    {
+      "contact": "admin@smpn106jkt.sch.id",
+      "primary": "https://p106.net",
+      "associatedSites": [
+        "https://smpn106jkt.sch.id"
+      ],
+      "rationaleBySite": {
+        "https://p106.net": "RWS_rationale_https___p106_net",
+        "https://smpn106jkt.sch.id": "RWS_rationale_https___smpn106jkt_sch_id"
+      }
+    },
+    {
+      "contact": "sanjay.nagpal@aajtak.com",
+      "primary": "https://indiatoday.in",
+      "associatedSites": [
+        "https://aajtak.in",
+        "https://businesstoday.in",
+        "https://intoday.in",
+        "https://gnttv.com",
+        "https://indiatodayne.in"
+      ],
+      "rationaleBySite": {
+        "https://intoday.in": "RWS_rationale_https___intoday_in",
+        "https://aajtak.in": "RWS_rationale_https___aajtak_in",
+        "https://businesstoday.in": "RWS_rationale_https___businesstoday_in",
+        "https://indiatoday.in": "RWS_rationale_https___indiatoday_in",
+        "https://gnttv.com": "RWS_rationale_https___gnttv_com",
+        "https://indiatodayne.in": "RWS_rationale_https___indiatodayne_in"
+      }
+    },
+    {
+      "contact": "naukri.comapp@gmail.com",
+      "primary": "https://naukri.com",
+      "associatedSites": [
+        "https://ambitionbox.com",
+        "https://infoedgeindia.com"
+      ],
+      "rationaleBySite": {
+        "https://ambitionbox.com": "RWS_rationale_https___ambitionbox_com",
+        "https://infoedgeindia.com": "RWS_rationale_https___infoedgeindia_com"
       }
     }
   ]

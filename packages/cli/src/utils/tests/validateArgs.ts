@@ -27,10 +27,10 @@ describe('validateArgs', () => {
   let mockExit: jest.SpyInstance;
 
   beforeAll(() => {
-    mockExit = jest
-      .spyOn(process, 'exit')
+    mockExit = jest.spyOn(process, 'exit').mockImplementation(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .mockImplementation((code?: number) => undefined as never);
+      (code?: string | number | null | undefined) => undefined as never
+    );
   });
 
   it('works with one arg', () => {
@@ -44,7 +44,7 @@ describe('validateArgs', () => {
       return;
     });
 
-    validateArgs('https://example.com', '', '', '', '', '', 9000);
+    validateArgs('https://example.com', '', '', '', '', '');
 
     expect(mockExit).toHaveBeenCalledTimes(0);
   });
@@ -59,7 +59,7 @@ describe('validateArgs', () => {
     jest.spyOn(fse, 'mkdir').mockImplementation(() => {
       return;
     });
-    validateArgs('', '', '', '', '', '', 9000);
+    validateArgs('', '', '', '', '', '');
 
     expect(mockExit).toHaveBeenCalled();
   });
@@ -80,8 +80,7 @@ describe('validateArgs', () => {
       '',
       '',
       '',
-      '',
-      9000
+      ''
     );
 
     expect(mockExit).toHaveBeenCalled();
@@ -93,7 +92,7 @@ describe('validateArgs', () => {
       return false;
     });
 
-    validateArgs('', '', '', './path/list.xml', '', '', 9000);
+    validateArgs('', '', '', './path/list.xml', '', '');
 
     expect(mockExit).toHaveBeenCalled();
   });
@@ -104,7 +103,7 @@ describe('validateArgs', () => {
       return true;
     });
 
-    validateArgs('', '', '', './path/list.xml', 'a', '', 9000);
+    validateArgs('', '', '', './path/list.xml', 'a', '');
 
     expect(mockExit).toHaveBeenCalled();
   });

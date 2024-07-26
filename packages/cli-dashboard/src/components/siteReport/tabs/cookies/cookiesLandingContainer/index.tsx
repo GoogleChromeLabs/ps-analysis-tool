@@ -23,16 +23,27 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
-} from '@ps-analysis-tool/design-system';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+  prepareCookiesCount,
+} from '@google-psat/design-system';
+import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
+import KnownBreakages from './cookieLanding/knownBreakages';
+import ExemptedCookiesSection from './cookieLanding/exemptedCookiesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
+  libraryMatches: LibraryData | null;
+  isSiteMapLandingContainer?: boolean;
+  menuBarScrollContainerId?: string;
 }
 
 const CookiesLandingContainer = ({
@@ -40,11 +51,16 @@ const CookiesLandingContainer = ({
   tabCookies,
   cookiesWithIssues,
   downloadReport,
+  libraryMatches,
+  isSiteMapLandingContainer = false,
+  menuBarScrollContainerId = 'dashboard-layout-container',
 }: CookiesLandingContainerProps) => {
-  const sections: Array<CookiesLandingSection> = useMemo(
-    () => [
+  const cookieStats = prepareCookiesCount(tabCookies);
+
+  const sections: Array<CookiesLandingSection> = useMemo(() => {
+    const baseSections: Array<CookiesLandingSection> = [
       {
-        name: 'Cookies',
+        name: I18n.getMessage('cookies'),
         link: 'cookies',
         panel: {
           Element: CookiesSection,
@@ -55,7 +71,7 @@ const CookiesLandingContainer = ({
         },
       },
       {
-        name: 'Blocked Cookies',
+        name: I18n.getMessage('blockedCookies'),
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
@@ -66,9 +82,41 @@ const CookiesLandingContainer = ({
           },
         },
       },
-    ],
-    [tabCookies, tabFrames, cookiesWithIssues]
-  );
+      {
+        name: 'Exempted Cookies',
+        link: 'exempted-cookies',
+        panel: {
+          Element: ExemptedCookiesSection,
+          props: {
+            cookieStats,
+            tabFrames,
+          },
+        },
+      },
+    ];
+
+    if (!isSiteMapLandingContainer) {
+      baseSections.push({
+        name: I18n.getMessage('knownBreakages'),
+        link: 'known-breakages',
+        panel: {
+          Element: KnownBreakages,
+          props: {
+            libraryMatches: libraryMatches ?? {},
+          },
+        },
+      });
+    }
+
+    return baseSections;
+  }, [
+    tabCookies,
+    tabFrames,
+    cookiesWithIssues,
+    cookieStats,
+    isSiteMapLandingContainer,
+    libraryMatches,
+  ]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),
@@ -82,7 +130,7 @@ const CookiesLandingContainer = ({
           disableReportDownload={false}
           downloadReport={downloadReport}
           menuData={menuData}
-          scrollContainerId="dashboard-layout-container"
+          scrollContainerId={menuBarScrollContainerId}
         />
         {sections.map(({ link, panel: { Element, props } }) => (
           <div id={link} key={link} className="cookie-landing-section">
