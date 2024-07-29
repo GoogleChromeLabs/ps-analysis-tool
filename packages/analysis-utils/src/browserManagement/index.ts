@@ -361,7 +361,7 @@ export class BrowserManagement {
 
         if (headerLine.includes('Partitioned')) {
           singleCookie.parsedCookie.partitionKey =
-            cookiePartitionKey as unknown as string;
+            cookiePartitionKey?.topLevelSite as unknown as string;
         }
 
         return singleCookie;
