@@ -102,7 +102,7 @@ export type responseEvent = {
 
 export type CookieData = {
   parsedCookie: ParsedCookie & {
-    partitionKey?: string;
+    partitionKey: string;
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };
@@ -200,7 +200,7 @@ export type CookieJsonDataType = {
     name: string;
     value: string;
     domain: string;
-    partitionKey?: string;
+    partitionKey: string;
     path: string;
     expires: string;
     httpOnly: boolean;

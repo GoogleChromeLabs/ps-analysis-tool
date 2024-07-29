@@ -45,18 +45,18 @@ export default function parseNetworkCookies(
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       cookie.expires
     );
+
+    const { partitionKey, ...cookieWithoutPartitionKey } = cookie;
+
     const singleCookie: CookieData = {
       isBlocked: false,
       blockedReasons: [],
       parsedCookie: {
-        ...cookie,
+        ...cookieWithoutPartitionKey,
+        httponly: cookie?.httpOnly ?? false,
         expires: effectiveExpirationDate,
         samesite: cookie.sameSite ?? '',
-        partitionKey:
-          cookie?.partitionKey && typeof cookie?.partitionKey === 'string'
-            ? cookie?.partitionKey
-            : //@ts-ignore This is to handle both stable and canary version of Chrome.
-              cookie?.partitionKey?.topLevelSite,
+        partitionKey: '',
       },
       networkEvents: {
         requestEvents: [],
@@ -68,6 +68,15 @@ export default function parseNetworkCookies(
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [frameId],
     };
+
+    if (partitionKey) {
+      if (typeof partitionKey === 'string') {
+        singleCookie.parsedCookie.partitionKey = partitionKey as string;
+      } else {
+        singleCookie.parsedCookie.partitionKey =
+          partitionKey?.topLevelSite as string;
+      }
+    }
 
     parsedCookies.push(singleCookie);
   });

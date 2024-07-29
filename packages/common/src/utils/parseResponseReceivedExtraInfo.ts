@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { parse } from 'simple-cookie';
+import { parse, type Cookie } from 'simple-cookie';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -59,7 +59,7 @@ export default function parseResponseReceivedExtraInfo(
   const responseToParse = headers['set-cookie'] ?? headers['Set-Cookie'];
 
   responseToParse?.split('\n').forEach((headerLine: string) => {
-    let parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
+    const parsedCookie: Cookie = parse(headerLine);
 
     const blockedCookie = blockedCookies.find((c) => {
       if (c.cookie) {
@@ -81,17 +81,6 @@ export default function parseResponseReceivedExtraInfo(
       parsedCookie.expires
     );
 
-    if (headerLine.toLowerCase().includes('partitioned')) {
-      parsedCookie = {
-        ...parsedCookie,
-        partitionKey:
-          cookiePartitionKey && typeof cookiePartitionKey === 'string'
-            ? cookiePartitionKey
-            : //@ts-ignore This is to handle both stable and canary version of Chrome.
-              cookiePartitionKey?.topLevelSite,
-      };
-    }
-
     let domain;
 
     if (parsedCookie?.domain) {
@@ -108,6 +97,7 @@ export default function parseResponseReceivedExtraInfo(
         expires: effectiveExpirationDate,
         samesite: parsedCookie.samesite ?? '',
         domain,
+        partitionKey: '',
       },
       networkEvents: {
         requestEvents: [],
@@ -134,6 +124,15 @@ export default function parseResponseReceivedExtraInfo(
           ? exemptedCookie?.exemptionReason
           : undefined,
     };
+
+    if (headerLine.toLowerCase().includes('partitioned')) {
+      if (typeof cookiePartitionKey === 'string') {
+        singleCookie.parsedCookie.partitionKey = cookiePartitionKey as string;
+      } else {
+        singleCookie.parsedCookie.partitionKey =
+          cookiePartitionKey?.topLevelSite as string;
+      }
+    }
 
     //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
     if (frameIds.length > 0) {

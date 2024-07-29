@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import puppeteer, { Browser, HTTPResponse, Page, Protocol } from 'puppeteer';
-import { parse } from 'simple-cookie';
+import { parse, type Cookie } from 'simple-cookie';
 import {
   type CookieData,
   type ScriptTagUnderCheck,
@@ -292,7 +292,7 @@ export class BrowserManagement {
     const cookies: CookieData[] = headersToBeParsed
       .split('\n')
       .map((headerLine) => {
-        const parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
+        const parsedCookie: Cookie = parse(headerLine);
 
         const url = this.pageResponses[pageId][requestId]?.url;
 
@@ -338,6 +338,7 @@ export class BrowserManagement {
             expires: parsedCookie.expires || 'Session',
             httponly: parsedCookie.httponly || false,
             secure: parsedCookie.secure || false,
+            partitionKey: '',
           },
           networkEvents: {
             responseEvents: [
@@ -410,6 +411,7 @@ export class BrowserManagement {
           expires: associatedCookie.cookie.expires || 'Session',
           httpOnly: associatedCookie.cookie.httpOnly || false,
           secure: associatedCookie.cookie.secure || false,
+          partitionKey: '',
         },
         networkEvents: {
           requestEvents: [
@@ -429,6 +431,12 @@ export class BrowserManagement {
         url: this.pageRequests[pageId][requestId]?.url || '',
         headerType: 'request' as CookieData['headerType'],
       };
+
+      if (associatedCookie.cookie?.partitionKey) {
+        singleCookie.parsedCookie.partitionKey =
+          associatedCookie.cookie?.partitionKey?.topLevelSite;
+      }
+
       return singleCookie;
     });
 
@@ -553,7 +561,9 @@ export class BrowserManagement {
               cookie.domain = '.' + cookie.domain;
             }
             const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
-            frameCookies[key] = { parsedCookie: cookie };
+            frameCookies[key] = {
+              parsedCookie: { ...cookie, partitionKey: '' },
+            };
           });
 
           const frameUrl = new URL(frame.url()).origin;

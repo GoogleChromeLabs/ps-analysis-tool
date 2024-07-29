@@ -632,14 +632,23 @@ class SynchnorousCookieStore {
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
             ...cookie.parsedCookie,
+            httponly:
+              cookie.parsedCookie.httponly ??
+              this.tabsData[tabId][cookieKey].parsedCookie.httponly,
             priority:
               cookie.parsedCookie?.priority ??
               this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
               'Medium',
-            partitionKey:
-              cookie.parsedCookie?.partitionKey ??
-              this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,
+            partitionKey: '',
           };
+          if (
+            cookie.parsedCookie?.partitionKey ||
+            this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey
+          ) {
+            parsedCookie.partitionKey =
+              cookie.parsedCookie?.partitionKey ||
+              this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey;
+          }
 
           const networkEvents: CookieData['networkEvents'] = {
             requestEvents: [

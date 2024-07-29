@@ -16,8 +16,7 @@
 /**
  * External dependencies.
  */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { TabCookies, TabFrames } from '@google-psat/common';
+import { CookieData, TabCookies, TabFrames } from '@google-psat/common';
 
 export const emptyAnalytics = {
   platform: '',
@@ -40,37 +39,38 @@ const emptyCookie = {
   httponly: false,
   path: '',
   expires: '',
+  partitionKey: '',
 };
 
-export const uncategorized1pCookie: ParsedCookie = {
+export const uncategorized1pCookie: CookieData['parsedCookie'] = {
   ...emptyCookie,
   name: '_cb',
   value: 'v1%3A168740954476563235',
   domain: '.cnn.com',
 };
 
-export const uncategorized3pCookie: ParsedCookie = {
+export const uncategorized3pCookie: CookieData['parsedCookie'] = {
   ...emptyCookie,
   name: 'pubsyncexp',
   value: 'uncategorized3pCookie',
   domain: '.ads.pubmatic.com',
 };
 
-export const known1pCookie: ParsedCookie = {
+export const known1pCookie: CookieData['parsedCookie'] = {
   ...emptyCookie,
   name: '__qca',
   value: 'known1pCookie',
   domain: '.cnn.com',
 };
 
-export const known3pCookie: ParsedCookie = {
+export const known3pCookie: CookieData['parsedCookie'] = {
   ...emptyCookie,
   name: 'KRTBCOOKIE_290',
   value: 'known3pCookie',
   domain: '.pubmatic.com',
 };
 
-export const known3pCookieWithValue: ParsedCookie = {
+export const known3pCookieWithValue: CookieData['parsedCookie'] = {
   ...emptyCookie,
   name: 'KRTBCOOKIE_290',
   value: 'known3p_Cookie-with%20value',
