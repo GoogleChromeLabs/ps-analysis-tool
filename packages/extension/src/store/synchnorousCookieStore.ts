@@ -184,12 +184,8 @@ class SynchnorousCookieStore {
     tabId: string,
     frameIds: string[]
   ) {
-    const {
-      headers,
-      blockedCookies,
-      cookiePartitionKey = '',
-      exemptedCookies,
-    } = response;
+    const { headers, blockedCookies, cookiePartitionKey, exemptedCookies } =
+      response;
 
     const cookies: CookieData[] = parseResponseReceivedExtraInfo(
       headers,

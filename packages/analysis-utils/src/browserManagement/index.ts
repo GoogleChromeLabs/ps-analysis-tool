@@ -292,10 +292,7 @@ export class BrowserManagement {
     const cookies: CookieData[] = headersToBeParsed
       .split('\n')
       .map((headerLine) => {
-        const parsedCookie = parse(headerLine);
-        const partitionKey = headerLine.includes('Partitioned')
-          ? cookiePartitionKey
-          : undefined;
+        const parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
 
         const url = this.pageResponses[pageId][requestId]?.url;
 
@@ -331,17 +328,16 @@ export class BrowserManagement {
           }
         });
 
-        return {
+        const singleCookie: CookieData = {
           parsedCookie: {
             name: parsedCookie.name,
             domain: parsedCookie.domain,
             path: parsedCookie.path || '/',
             value: parsedCookie.value,
-            sameSite: parsedCookie.samesite || 'Lax',
+            samesite: parsedCookie.samesite || 'Lax',
             expires: parsedCookie.expires || 'Session',
-            httpOnly: parsedCookie.httponly || false,
+            httponly: parsedCookie.httponly || false,
             secure: parsedCookie.secure || false,
-            partitionKey,
           },
           networkEvents: {
             responseEvents: [
@@ -361,6 +357,13 @@ export class BrowserManagement {
           url,
           headerType: 'response',
         };
+
+        if (headerLine.includes('Partitioned')) {
+          singleCookie.parsedCookie.partitionKey =
+            cookiePartitionKey as unknown as string;
+        }
+
+        return singleCookie;
       });
 
     const prevCookies = this.pageResponses[pageId][requestId]?.cookies || [];
@@ -397,7 +400,7 @@ export class BrowserManagement {
     }
 
     const cookies = associatedCookies.map<CookieData>((associatedCookie) => {
-      return {
+      const singleCookie = {
         parsedCookie: {
           name: associatedCookie.cookie.name,
           domain: associatedCookie.cookie.domain,
@@ -407,7 +410,6 @@ export class BrowserManagement {
           expires: associatedCookie.cookie.expires || 'Session',
           httpOnly: associatedCookie.cookie.httpOnly || false,
           secure: associatedCookie.cookie.secure || false,
-          partitionKey: associatedCookie.cookie.partitionKey,
         },
         networkEvents: {
           requestEvents: [
@@ -425,8 +427,9 @@ export class BrowserManagement {
         blockedReasons: associatedCookie.blockedReasons,
         exemptionReason: associatedCookie?.exemptionReason,
         url: this.pageRequests[pageId][requestId]?.url || '',
-        headerType: 'request',
+        headerType: 'request' as CookieData['headerType'],
       };
+      return singleCookie;
     });
 
     this.pageRequests[pageId][requestId] = {
