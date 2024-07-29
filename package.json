@@ -4,7 +4,7 @@
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"build-storybook": "storybook build",
-		"build:all": "run-p build:tsc-packages build:cli-dashboard webpack:build:cli webpack:build:ext",
+		"build:all": "npm run build:tsc-packages && npm run  build:cli-dashboard && npm run webpack:build:cli && npm run webpack:build:ext",
 		"build:tsc-packages": "npm run build:i18n && npm run build:common && npm run build:design-system && npm run build:library-detection && npm run build:analysis-utils && npm run build:report",
 		"dev:tsc-packages": "run-p dev:i18n dev:common dev:design-system dev:library-detection dev:analysis-utils dev:report",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
@@ -25,7 +25,7 @@
 		"dev:cli": "run-p dev:tsc-packages webpack:dev:cli",
 		"webpack:build:cli": "cross-env NODE_ENV=production npm run build -w @google-psat/cli",
 		"build:cli": "npm run build:tsc-packages && npm run webpack:build:cli",
-		"build:cli:dashboard": "run-p build:cli build:cli-dashboard",
+		"build:cli:dashboard": "npm run build:cli && npm run build:cli-dashboard",
 		"cli": "node packages/cli/dist/main.js",
 		"build:report": "npm run build -w @google-psat/report",
 		"dev:report": "npm run dev -w @google-psat/report",
