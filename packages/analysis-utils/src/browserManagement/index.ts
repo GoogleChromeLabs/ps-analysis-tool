@@ -527,36 +527,40 @@ export class BrowserManagement {
 
     await Promise.all(
       frames.map(async (frame) => {
-        if (!frame.url().includes('http')) {
-          return;
+        try {
+          if (!frame.url().includes('http')) {
+            return;
+          }
+
+          const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
+            frame.evaluate(() => {
+              // @ts-ignore
+              return cookieStore?.getAll();
+            }),
+            [],
+            200
+          );
+
+          const frameCookies: {
+            [key: string]: CookieData;
+          } = {};
+
+          _JSCookies.forEach((cookie) => {
+            if (!cookie.domain) {
+              cookie.domain = new URL(frame.url()).hostname;
+            }
+            if (cookie.domain[0] !== '.') {
+              cookie.domain = '.' + cookie.domain;
+            }
+            const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
+            frameCookies[key] = { parsedCookie: cookie };
+          });
+
+          const frameUrl = new URL(frame.url()).origin;
+          cookies[frameUrl] = { frameCookies };
+        } catch (error) {
+          //Fail silently
         }
-
-        const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
-          frame.evaluate(() => {
-            // @ts-ignore
-            return cookieStore?.getAll();
-          }),
-          [],
-          200
-        );
-
-        const frameCookies: {
-          [key: string]: CookieData;
-        } = {};
-
-        _JSCookies.forEach((cookie) => {
-          if (!cookie.domain) {
-            cookie.domain = new URL(frame.url()).hostname;
-          }
-          if (cookie.domain[0] !== '.') {
-            cookie.domain = '.' + cookie.domain;
-          }
-          const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
-          frameCookies[key] = { parsedCookie: cookie };
-        });
-
-        const frameUrl = new URL(frame.url()).origin;
-        cookies[frameUrl] = { frameCookies };
       })
     );
 
