@@ -534,7 +534,7 @@ export class BrowserManagement {
         const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
           frame.evaluate(() => {
             // @ts-ignore
-            return cookieStore.getAll();
+            return cookieStore?.getAll();
           }),
           [],
           200
