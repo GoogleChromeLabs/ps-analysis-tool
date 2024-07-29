@@ -68,6 +68,7 @@ describe('reshapeCookies', () => {
           httpOnly: false,
           secure: true,
           sameSite: 'None',
+          partitionKey: '',
         },
         analytics: {
           platform: 'Unknown',

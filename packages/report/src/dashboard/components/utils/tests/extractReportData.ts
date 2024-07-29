@@ -42,6 +42,7 @@ describe('extractReportData', () => {
               expires: 'Session',
               httpOnly: false,
               secure: true,
+              psrtitionKey: '',
             },
             analytics: {
               platform: 'Unknown',

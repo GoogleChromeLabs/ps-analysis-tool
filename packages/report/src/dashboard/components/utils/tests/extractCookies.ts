@@ -42,6 +42,7 @@ describe('extractCookies', () => {
             expires: 'Session',
             httpOnly: false,
             secure: true,
+            psrtitionKey: '',
           },
           analytics: {
             platform: 'Unknown',
@@ -73,6 +74,7 @@ describe('extractCookies', () => {
             expires: 'Session',
             httpOnly: false,
             secure: true,
+            psrtitionKey: '',
           },
           analytics: {
             platform: 'Unknown',
