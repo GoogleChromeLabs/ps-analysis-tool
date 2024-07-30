@@ -231,7 +231,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       </Resizable>
       <main
         ref={mainRef}
-        className="h-full flex-1 relative overflow-hidden flex flex-col"
+        className="h-full flex-1 relative overflow-auto flex flex-col"
       >
         <div
           className="w-full"

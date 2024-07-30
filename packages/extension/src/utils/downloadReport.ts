@@ -16,9 +16,15 @@
 /**
  * External dependencies.
  */
-import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
+import {
+  getCurrentDateAndTime,
+  type LibraryData,
+  type TabCookies,
+  type TabFrames,
+} from '@google-psat/common';
 import { saveAs } from 'file-saver';
 import { I18n } from '@google-psat/i18n';
+import type { TableFilter } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -32,18 +38,24 @@ import isValidURL from './isValidURL';
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
  * @param libraryMatches Libary matches
+ * @param appliedFilters Applied filters.
+ * @param isUsingCDP CDP status.
  */
 export default async function downloadReport(
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData
+  libraryMatches: LibraryData,
+  appliedFilters: TableFilter,
+  isUsingCDP: boolean
 ) {
   const { html, fileName } = await generateDashboard(
     url,
     tabCookies,
     tabFrames,
-    libraryMatches
+    libraryMatches,
+    appliedFilters,
+    isUsingCDP
   );
 
   saveAs(html, fileName);
@@ -53,7 +65,9 @@ export const generateDashboard = async (
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData
+  libraryMatches: LibraryData,
+  appliedFilters: TableFilter,
+  isUsingCDP: boolean
 ) => {
   const dashboardReport = await (await fetch('./dashboard.html')).text();
   const parser = new DOMParser();
@@ -71,25 +85,37 @@ export const generateDashboard = async (
 
   const locale = I18n.getLocale();
   const translations = await I18n.fetchMessages(locale);
-  const htmlText = await (await fetch('../report/index.html')).text();
+
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const dateTime =
+    getCurrentDateAndTime('DD MMMM, YYYY, hh:mm:ssam/pm') + ' ' + timeZone;
 
   const code = `
   window.PSAT_EXTENSION = true;
-  window.PSAT_REPORT_HTML = '${btoa(unescape(encodeURIComponent(htmlText)))}';
+	window.PSAT_USING_CDP = ${isUsingCDP};
   window.PSAT_DATA = ${JSON.stringify({
     json: reportData,
+    type: 'url',
     selectedSite: isValidURL(url)
       ? new URL(url).hostname.replace('.', '-')
       : '',
     translations,
+    appliedFilters,
+    dateTime,
   })}`;
 
   script.text = code;
+  script.id = 'JSONDATASCRIPT';
   reportDom.head.appendChild(script);
 
   const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
   const html = new Blob([injectedHtmlText]);
   const hostname = new URL(url).hostname;
 
-  return { html, fileName: `${hostname.replace('.', '-')}-report.html` };
+  return {
+    html,
+    fileName: `${hostname.replace('.', '-')}-report-${getCurrentDateAndTime(
+      'YYYY-MM-DD_HH-MM-SS'
+    )}.html`,
+  };
 };

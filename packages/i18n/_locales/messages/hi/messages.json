@@ -974,9 +974,6 @@
   "reportBreakage": {
     "message": "ब्रेकेज की शिकायत करें"
   },
-  "requestMigrationTime": {
-    "message": "माइग्रेशन के लिए अतिरिक्त समय का अनुरोध करें"
-  },
   "quickLinks": {
     "message": "क्विक लिंक (खास पेजों पर सीधे पहुंचाने वाले लिंक)"
   },
@@ -1599,9 +1596,6 @@
   },
   "fingerprinting": {
     "message": "ऑनलाइन ट्रैकिंग"
-  },
-  "facilitatedTesting": {
-    "message": "जांच करने की सुविधा देना"
   },
   "rwsJsonGenerator": {
     "message": "Related Website Sets JSON Generator"

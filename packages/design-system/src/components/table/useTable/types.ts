@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { CookieTableData, TechnologyData } from '@google-psat/common';
+import type { CookieTableData, TechnologyData } from '@google-psat/common';
 
 export type TableData = (CookieTableData | TechnologyData) & {
   highlighted?: boolean;
@@ -37,6 +37,7 @@ export type TableColumn = {
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   widthWeightagePercentage?: number;
   width?: number; // For internal use only
+  sortingComparator?: (a: InfoType, b: InfoType) => number;
 };
 
 export type TableRow = {

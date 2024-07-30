@@ -23,7 +23,7 @@ import type {
   LibraryData,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import { extractCookies, SiteReport } from '@google-psat/design-system';
+import { extractCookies, SiteReport } from '@google-psat/report';
 
 /**
  * Internal dependencies
@@ -32,8 +32,9 @@ import './app.css';
 
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
-  const [completeJsonReport, setCompleteJsonReport] =
-    useState<CompleteJson | null>(null);
+  const [completeJsonReport, setCompleteJsonReport] = useState<
+    CompleteJson[] | null
+  >(null);
   const [libraryMatches, setLibraryMatches] = useState<{
     [key: string]: LibraryData;
   } | null>(null);
@@ -55,7 +56,7 @@ const App = () => {
     I18n.initMessages(messages);
 
     // @ts-ignore
-    const data: CompleteJson = globalThis?.PSAT_DATA?.json;
+    const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);
 
     let _cookies: CookieFrameStorageType = {},
@@ -63,8 +64,8 @@ const App = () => {
         [key: string]: LibraryData;
       } = {};
 
-    _cookies = extractCookies(data.cookieData, data.pageUrl, true);
-    _libraryMatches = { [data.pageUrl]: data.libraryMatches };
+    _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+    _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
 
     setCookies(_cookies);
     setLibraryMatches(_libraryMatches);
@@ -77,11 +78,11 @@ const App = () => {
   return (
     <div className="w-full h-screen flex">
       <SiteReport
-        completeJson={[completeJsonReport]}
+        completeJson={completeJsonReport}
         cookies={cookies}
         technologies={[]}
         // @ts-ignore
-        selectedSite={globalThis?.PSAT_DATA?.selectedSite}
+        selectedSite={completeJsonReport[0].pageUrl}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
         libraryMatches={

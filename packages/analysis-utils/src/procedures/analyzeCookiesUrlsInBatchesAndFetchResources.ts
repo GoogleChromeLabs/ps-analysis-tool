@@ -18,10 +18,10 @@
  * External dependencies.
  */
 import {
-  CookieData,
-  CookieDatabase,
+  type CookieData,
+  type CookieDatabase,
   LibraryData,
-  LibraryMatchers,
+  type LibraryMatchers,
   removeAndAddNewSpinnerText,
 } from '@google-psat/common';
 

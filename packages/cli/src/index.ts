@@ -19,15 +19,14 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { existsSync, writeFile, ensureDir } from 'fs-extra';
+import { existsSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import fs from 'fs';
 import path from 'path';
 import { I18n } from '@google-psat/i18n';
 import {
-  CompleteJson,
-  LibraryData,
+  type CompleteJson,
+  type LibraryData,
   removeAndAddNewSpinnerText,
 } from '@google-psat/common';
 import {
@@ -39,7 +38,6 @@ import {
   LIBRARIES,
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
-import URL from 'node:url';
 
 /**
  * Internal dependencies.
@@ -47,7 +45,7 @@ import URL from 'node:url';
 import {
   fetchDictionary,
   getUrlListFromArgs,
-  saveCSVReports,
+  saveReports,
   askUserInput,
   generatePrefix,
   localeValidator,
@@ -55,13 +53,12 @@ import {
   filePathValidator,
   urlValidator,
   numericValidator,
-  getOutputFilePath,
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
+import saveResultsAsHTML from './utils/saveResultAsHTML';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-const isProduction = process.env.NODE_ENV === 'production';
 const program = new Command();
 
 const isFromNPMRegistry = !existsSync(
@@ -75,25 +72,26 @@ program
     isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
   )
   .description('CLI to test a URL for 3p cookies.')
-  .option(
-    '-u, --url <url>',
-    'The URL of a single site to analyze',
-    urlValidator
+  .argument('[website-url]', 'The URL of a single site to analyze', (value) =>
+    urlValidator(value, '[website-url]')
+  )
+  .option('-u, --url <url>', 'The URL of a single site to analyze', (value) =>
+    urlValidator(value, '-u')
   )
   .option(
     '-s, --source-url <url>',
     'The URL of a sitemap or CSV to analyze',
-    urlValidator
+    (value) => urlValidator(value, '-s')
   )
   .option(
     '-f, --file <path>',
     'The path to a local file (CSV or XML sitemap) to analyze',
-    filePathValidator
+    (value) => filePathValidator(value, '-f')
   )
   .option(
     '-n, --number-of-urls <num>',
     'Limit the number of URLs to analyze (from sitemap or CSV)',
-    numericValidator
+    (value) => numericValidator(value, '-n')
   )
   .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
   .option('-v, --verbose', 'Enables verbose logging', false)
@@ -101,7 +99,7 @@ program
   .option(
     '-o, --out-dir <path>',
     'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
-    outDirValidator
+    (value) => outDirValidator(value, '-o')
   )
   .option(
     '-i, --ignore-gdpr',
@@ -112,19 +110,19 @@ program
   .option(
     '-c, --concurrency <num>',
     'Number of tabs to open in parallel during sitemap or CSV analysis',
-    numericValidator,
+    (value) => numericValidator(value, '-c'),
     3
   )
   .option(
     '-w, --wait <num>',
-    'Number of seconds to wait after the page is loaded before generating the report',
-    numericValidator,
-    20
+    'Number of milliseconds to wait after the page is loaded before generating the report',
+    (value) => numericValidator(value, '-w'),
+    20000
   )
   .option(
     '-l, --locale <language>',
     'Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR',
-    localeValidator,
+    (value) => localeValidator(value, '-l'),
     'en'
   )
   .helpOption('-h, --help', 'Display help for command')
@@ -144,91 +142,6 @@ program
 
 program.parse();
 
-const saveResultsAsHTML = async (
-  outDir: string,
-  result: CompleteJson | CompleteJson[],
-  isSiteMap: boolean
-) => {
-  let htmlText = '';
-  let reportHTML = '';
-
-  await ensureDir(outDir);
-
-  if (
-    existsSync(
-      path.resolve(
-        __dirname +
-          '../../node_modules/@google-psat/cli-dashboard/dist/index.html'
-      )
-    )
-  ) {
-    htmlText = fs.readFileSync(
-      path.resolve(
-        __dirname +
-          '../../node_modules/@google-psat/cli-dashboard/dist/index.html'
-      ),
-      'utf-8'
-    );
-
-    reportHTML = fs.readFileSync(
-      path.resolve(
-        __dirname +
-          '../../node_modules/@google-psat/cli-dashboard/dist/report/index.html'
-      ),
-      'base64'
-    );
-
-    if (!isProduction) {
-      fs.copyFileSync(
-        path.resolve(
-          __dirname +
-            '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
-        ),
-        outDir + '/index.js'
-      );
-    }
-  } else {
-    htmlText = fs.readFileSync(
-      path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
-      'utf-8'
-    );
-
-    reportHTML = fs.readFileSync(
-      path.resolve(__dirname + '../../../cli-dashboard/dist/report/index.html'),
-      'base64'
-    );
-
-    if (!isProduction) {
-      fs.copyFileSync(
-        path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
-        outDir + '/index.js'
-      );
-    }
-  }
-
-  const messages = I18n.getMessages();
-
-  const html =
-    htmlText.substring(0, htmlText.indexOf('</head>')) +
-    `<script>
-    window.PSAT_REPORT_HTML = '${reportHTML}'
-    window.PSAT_DATA = ${JSON.stringify({
-      json: result,
-      type: isSiteMap ? 'sitemap' : 'url',
-      selectedSite: outDir?.trim()?.slice(6) ?? '',
-      translations: messages,
-    })}</script>` +
-    htmlText.substring(htmlText.indexOf('</head>'));
-
-  const outputFilePath = getOutputFilePath(outDir);
-  const outFileFullDir = path.resolve(outputFilePath);
-  const htmlBlob = new Blob([html]);
-  const buffer = Buffer.from(await htmlBlob.arrayBuffer());
-
-  writeFile(outputFilePath, buffer, () =>
-    console.log(`\nReport: ${URL.pathToFileURL(outFileFullDir)}`)
-  );
-};
 // eslint-disable-next-line complexity
 (async () => {
   const url = program.processedArgs?.[0] ?? program.opts().url;
@@ -243,7 +156,7 @@ const saveResultsAsHTML = async (
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
-  const waitTime = program.opts().wait * 1000;
+  const waitTime = program.opts().wait;
 
   const numArgs: number = [
     Boolean(url),
@@ -254,7 +167,7 @@ const saveResultsAsHTML = async (
     return acc;
   }, 0);
 
-  if (numArgs !== 1) {
+  if (numArgs > 1) {
     console.error(
       `Please provide one and only one of the following
         a) URL of a site (-u or --url or default argument)
@@ -381,12 +294,12 @@ const saveResultsAsHTML = async (
   const isSiteMap = sitemapUrl || filePath ? true : false;
 
   if (outDir) {
-    await saveCSVReports(path.resolve(outputDir), result);
+    await saveReports(path.resolve(outputDir), result, sitemapUrl);
     console.log('Reports created successfully!');
     process.exit(0);
   }
 
-  await saveResultsAsHTML(outputDir, result, isSiteMap);
+  await saveResultsAsHTML(outputDir, result, isSiteMap, null, sitemapUrl);
 })().catch((error) => {
   const spinnies = new Spinnies();
   spinnies.add('error-line-1', {

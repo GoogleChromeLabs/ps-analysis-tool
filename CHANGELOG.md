@@ -397,3 +397,9 @@
 * Close support issues using stale actions. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/571
 * Temporarily remove storybook package https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/702
 * Refactor: Update package scope name to `@google-psat` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/725
+
+
+#v0.9.0
+
+## Extension
+Remove facilitated testing page Remove facilitated testing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/787

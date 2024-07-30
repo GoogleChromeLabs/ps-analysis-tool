@@ -112,9 +112,12 @@ export default function createCookieFromAuditsIssue(
   const cookieObjectToUpdate: CookieData = {
     parsedCookie: {
       ...generatedCookie,
+      //@ts-ignore if the generatedCookie doesnt contain httpOnly then it will default to false
+      httponly: generatedCookie?.httponly ?? false,
       name: generatedCookie?.name ?? '',
       priority: 'Medium',
       value: '',
+      partitionKey: '',
     },
     warningReasons: cookieWarningReasons,
     blockedReasons: modifiedCookieExclusionReasons,

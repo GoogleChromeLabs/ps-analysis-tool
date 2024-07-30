@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies
+ */
+import { mergeDeep } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -22,7 +25,6 @@ import {
   TABLE_PERSISTENT_SETTINGS_STORE_KEY,
   TablePersistentSettingsStoreContext,
 } from '..';
-import { mergeDeep } from '@google-psat/common';
 
 const updateStorage = async (
   persistenceKey: string,

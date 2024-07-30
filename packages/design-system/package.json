@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc-watch",
-    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
@@ -38,8 +38,8 @@
   "dependencies": {
     "@google-psat/common": "*",
     "@google-psat/i18n": "*",
-    "@google-psat/library-detection": "*",
     "classnames": "^2.3.2",
+    "fast-xml-parser": "^4.4.1",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "p-queue": "^7.3.4",
@@ -47,7 +47,5 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "use-context-selector": "^1.4.1"
-  },
-  "devDependencies": {
   }
 }

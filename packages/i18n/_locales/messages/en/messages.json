@@ -974,9 +974,6 @@
   "reportBreakage": {
     "message": "Report a breakage"
   },
-  "requestMigrationTime": {
-    "message": "Request Additional Migration Time"
-  },
   "quickLinks": {
     "message": "Quick Links"
   },

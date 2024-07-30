@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { TabFrames } from '@google-psat/common';
+/**
+ * External dependencies
+ */
+import { type TabFrames } from '@google-psat/common';
 import { renderHook } from '@testing-library/react';
+/**
+ * Internal dependencies
+ */
 import useFiltersMapping from '../useFiltersMapping';
 import { useSidebar } from '../../sidebar/useSidebar';
 

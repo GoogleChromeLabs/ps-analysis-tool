@@ -103,31 +103,6 @@ const popup = {
   ...commonConfig,
 };
 
-const report = {
-  entry: {
-    index: '../report/src/index.tsx',
-  },
-  output: {
-    path: path.resolve(__dirname, './dist/extension/report'),
-    filename: '[name].js',
-    publicPath: '/',
-  },
-  plugins: [
-    new WebpackBar({
-      name: 'Report',
-      color: '#357B66',
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Report',
-      template: '../report/public/index.html',
-      filename: 'index.html',
-      inject: true,
-    }),
-    new HtmlInlineScriptPlugin(),
-  ],
-  ...commonConfig,
-};
-
 const dashboardReport = {
   entry: {
     index: './src/view/report/dashboard.tsx',
@@ -152,4 +127,4 @@ const dashboardReport = {
   ...commonConfig,
 };
 
-module.exports = [root, devTools, popup, report, dashboardReport];
+module.exports = [root, devTools, popup, dashboardReport];

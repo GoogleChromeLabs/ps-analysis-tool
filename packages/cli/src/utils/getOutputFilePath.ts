@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { getCurrentDateAndTime } from '.';
+import { getCurrentDateAndTime } from '@google-psat/common';
 
 /**
  * Get output file path.

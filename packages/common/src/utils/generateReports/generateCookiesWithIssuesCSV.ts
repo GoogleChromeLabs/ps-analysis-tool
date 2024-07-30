@@ -43,6 +43,15 @@ export const COOKIES_WITH_ISSUES_DATA_HEADERS = [
 const generateCookiesWithIssuesCSV = (
   siteAnalysisData: CompleteJson
 ): string => {
+  //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
+  const isExtension = Boolean(globalThis?.PSAT_EXTENSION);
+  if (isExtension) {
+    COOKIES_WITH_ISSUES_DATA_HEADERS.push(
+      () => I18n.getMessage('priority'),
+      () => I18n.getMessage('size')
+    );
+  }
+
   const frameCookieDataMap = siteAnalysisData.cookieData;
 
   const CookieWithIssueMap: Map<string, CookieJsonDataType> = new Map();
@@ -82,8 +91,16 @@ const generateCookiesWithIssuesCSV = (
       cookie.parsedCookie.path,
       calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
       cookie.analytics.GDPR || 'NA',
-    ].map(sanitizeCsvRecord);
+    ];
 
+    if (isExtension) {
+      recordsArray.push(
+        cookie.parsedCookie?.priority || ' ',
+        cookie.parsedCookie?.size?.toString() ?? ' '
+      );
+    }
+
+    recordsArray.map(sanitizeCsvRecord);
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
