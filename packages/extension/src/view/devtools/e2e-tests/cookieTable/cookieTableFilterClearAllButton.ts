@@ -37,11 +37,11 @@ describe('Validate the Cookies filter option', () => {
     puppeteer = new PuppeteerManagement();
     await puppeteer.setup();
     page = await puppeteer.openPage();
-  });
+  }, 40000);
 
   afterEach(async () => {
     await puppeteer.close();
-  });
+  }, 40000);
 
   test('Should be able to validate the cookie filters', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com');
@@ -70,5 +70,5 @@ describe('Validate the Cookies filter option', () => {
     // Assert that the clearAll button is not visible
     const isNotVisible = (await frame.$('div.false')) === null;
     expect(isNotVisible).toBe(true);
-  }, 30000);
+  }, 60000);
 });

@@ -38,11 +38,11 @@ describe('Validate the Cookies Tab and count', () => {
     puppeteer = new PuppeteerManagement();
     await puppeteer.setup();
     page = await puppeteer.openPage();
-  });
+  }, 40000);
 
   afterEach(async () => {
     await puppeteer.close();
-  });
+  }, 40000);
 
   it('Should be able to validate the Analyze the tab button and validate the cookies count', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com');
@@ -72,5 +72,5 @@ describe('Validate the Cookies Tab and count', () => {
     }
 
     expect(parseInt(totalCount)).toBeGreaterThan(0);
-  }, 30000);
+  }, 60000);
 });

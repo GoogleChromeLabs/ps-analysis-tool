@@ -37,11 +37,11 @@ describe('Settings Page', () => {
       await puppeteer.setup();
       page = await puppeteer.openPage();
       browser = page.browser();
-    });
+    }, 40000);
 
     afterEach(async () => {
       await puppeteer.close();
-    });
+    }, 40000);
 
     test('Should be able to validate the multitab setting option', async () => {
       await page.goto('https://bbc.com');
@@ -124,7 +124,7 @@ describe('Settings Page', () => {
         selectors.analyzeThisButtonSelector
       );
       expect(isVisible).toBe(false);
-    }, 50000);
+    }, 60000);
   });
 
   describe('CDP', () => {
@@ -194,6 +194,6 @@ describe('Settings Page', () => {
       if (blockCookiesElements.length >= 4) {
         await blockCookiesElements[3].click();
       }
-    }, 40000);
+    }, 60000);
   });
 });

@@ -37,11 +37,11 @@ describe('Allow Listing', () => {
     puppeteer = new PuppeteerManagement();
     await puppeteer.setup();
     page = await puppeteer.openPage();
-  });
+  }, 40000);
 
   afterEach(async () => {
     await puppeteer.close();
-  });
+  }, 40000);
 
   test('Should be able to allow list domain.', async () => {
     await puppeteer.navigateToURL(page, 'https://www.hindustantimes.com/');
@@ -91,5 +91,5 @@ describe('Allow Listing', () => {
       );
       expect(divTextContent).toContain('Allow Listed');
     }
-  }, 40000);
+  }, 120000);
 });

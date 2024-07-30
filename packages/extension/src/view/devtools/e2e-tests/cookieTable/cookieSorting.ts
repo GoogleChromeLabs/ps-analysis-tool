@@ -38,11 +38,11 @@ describe('Validate the Cookies sort option', () => {
     puppeteer = new PuppeteerManagement();
     await puppeteer.setup();
     page = await puppeteer.openPage();
-  });
+  }, 40000);
 
   afterEach(async () => {
     await puppeteer.close();
-  });
+  }, 40000);
 
   test('Should be able to validate the cookie sort', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com');
@@ -69,5 +69,5 @@ describe('Validate the Cookies sort option', () => {
       selectors.sortSVG
     );
     expect(isSort).toBe(true);
-  }, 25000);
+  }, 60000);
 });

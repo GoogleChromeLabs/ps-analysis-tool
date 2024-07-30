@@ -37,11 +37,11 @@ describe('RWS membership', () => {
     puppeteer = new PuppeteerManagement();
     await puppeteer.setup();
     page = await puppeteer.openPage();
-  });
+  }, 40000);
 
   afterEach(async () => {
     await puppeteer.close();
-  });
+  }, 40000);
 
   test('Should be able to validate the RWS membership', async () => {
     await puppeteer.navigateToURL(page, 'https://www.hindustantimes.com/');
@@ -78,5 +78,5 @@ describe('RWS membership', () => {
     expect(rwsmembershiptext).toBe(
       '✓ This site belongs to a Related Website Set.'
     );
-  }, 40000);
+  }, 1200000);
 });

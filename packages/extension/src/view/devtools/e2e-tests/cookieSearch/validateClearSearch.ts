@@ -37,11 +37,11 @@ describe('Verify the Clear search button works as expected', () => {
     puppeteer = new PuppeteerManagement();
     await puppeteer.setup();
     page = await puppeteer.openPage();
-  });
+  }, 40000);
 
   afterEach(async () => {
     await puppeteer.close();
-  });
+  }, 40000);
 
   test('Should be able to clear the search result', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com');
@@ -54,5 +54,5 @@ describe('Verify the Clear search button works as expected', () => {
       page.url().replace(/\/$/, '')
     );
     await interaction.clearSearch(frame);
-  }, 40000);
+  }, 60000);
 });

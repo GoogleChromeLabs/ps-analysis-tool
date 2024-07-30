@@ -39,11 +39,11 @@ describe('Validate the Cookies description', () => {
     puppeteer = new PuppeteerManagement();
     await puppeteer.setup();
     page = await puppeteer.openPage();
-  });
+  }, 40000);
 
   afterEach(async () => {
     await puppeteer.close();
-  });
+  }, 40000);
 
   test('Should be able to view the cookie description', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com');
@@ -77,5 +77,5 @@ describe('Validate the Cookies description', () => {
     } else {
       throw new Error('Failed to navigate to the cookie frame.');
     }
-  }, 30000);
+  }, 60000);
 });

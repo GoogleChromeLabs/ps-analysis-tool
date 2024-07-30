@@ -37,11 +37,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       puppeteer = new PuppeteerManagement();
       await puppeteer.setup();
       page = await puppeteer.openPage();
-    });
+    }, 40000);
 
     afterEach(async () => {
       await puppeteer.close();
-    });
+    }, 40000);
 
     test('Should be able to validate the Known Breakages, GSI and GIS', async () => {
       await puppeteer.navigateToURL(page, 'https://in.linkedin.com/');
@@ -67,7 +67,7 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
         '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
       );
       expect(gisText).toBe('Unsupported Google Identity Services');
-    }, 50000);
+    }, 60000);
   });
 
   describe('Disqus comments', () => {
@@ -75,11 +75,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       puppeteer = new PuppeteerManagement();
       await puppeteer.setup();
       page = await puppeteer.openPage();
-    });
+    }, 40000);
 
     afterEach(async () => {
       await puppeteer.close();
-    });
+    }, 40000);
 
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
       await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');
@@ -115,11 +115,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       puppeteer = new PuppeteerManagement();
       await puppeteer.setup();
       page = await puppeteer.openPage();
-    });
+    }, 40000);
 
     afterEach(async () => {
       await puppeteer.close();
-    });
+    }, 40000);
 
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
       await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');

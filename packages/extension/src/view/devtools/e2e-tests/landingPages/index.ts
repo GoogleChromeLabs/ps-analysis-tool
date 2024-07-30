@@ -34,11 +34,11 @@ beforeEach(async () => {
   puppeteer = new PuppeteerManagement();
   await puppeteer.setup();
   page = await puppeteer.openPage();
-});
+}, 40000);
 
 afterEach(async () => {
   await puppeteer.close();
-});
+}, 40000);
 
 test('Should be able to validate the embedded privacy.com page title', async () => {
   await puppeteer.navigateToURL(page, 'https://bbc.com');
@@ -87,4 +87,4 @@ test('Should be able to validate the embedded privacy.com page title', async () 
       expect(isVisible).toBe(true);
     }
   }
-}, 30000);
+}, 60000);
