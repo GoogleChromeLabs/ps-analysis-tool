@@ -94,6 +94,7 @@ export default function parseResponseReceivedExtraInfo(
       blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
       parsedCookie: {
         ...parsedCookie,
+        httponly: parsedCookie?.httponly ?? false,
         expires: effectiveExpirationDate,
         samesite: parsedCookie.samesite ?? '',
         domain,

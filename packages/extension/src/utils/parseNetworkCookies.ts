@@ -53,7 +53,7 @@ export default function parseNetworkCookies(
       blockedReasons: [],
       parsedCookie: {
         ...cookieWithoutPartitionKey,
-        httponly: cookie?.httpOnly ?? false,
+        httponly: cookieWithoutPartitionKey?.httpOnly ?? false,
         expires: effectiveExpirationDate,
         samesite: cookie.sameSite ?? '',
         partitionKey: '',

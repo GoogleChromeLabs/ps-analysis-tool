@@ -69,6 +69,7 @@ export default function parseRequestWillBeSentExtraInfo(
       isBlocked: blockedReasons.length !== 0,
       parsedCookie: {
         ...cookieWithoutPartitionKey,
+        httponly: cookieWithoutPartitionKey?.httpOnly ?? false,
         expires: effectiveExpirationDate,
         samesite: cookie.sameSite?.toLowerCase() ?? '',
         domain,
