@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { CookieData } from '@google-psat/common';
+/**
+ * External dependencies
+ */
+import { type CookieData } from '@google-psat/common';
 
 export type ViewportConfig = {
   width: number;

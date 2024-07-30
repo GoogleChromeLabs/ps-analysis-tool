@@ -26,10 +26,6 @@ import {
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
-/**
- * Internal dependencies
- */
-
 const reshapeCookies = (cookies: CookieFrameStorageType) => {
   return Object.entries(cookies)
     .filter(([frame]) => frame.includes('http'))

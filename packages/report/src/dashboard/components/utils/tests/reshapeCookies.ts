@@ -37,6 +37,7 @@ describe('reshapeCookies', () => {
             expires: 'Session',
             httpOnly: false,
             secure: true,
+            partitionKey: '',
           },
           analytics: {
             platform: 'Unknown',
@@ -67,6 +68,7 @@ describe('reshapeCookies', () => {
           httpOnly: false,
           secure: true,
           sameSite: 'None',
+          partitionKey: '',
         },
         analytics: {
           platform: 'Unknown',

@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import type { Meta, StoryObj } from '@storybook/react';
-import { CookieTableData } from '@google-psat/common';
+import { type CookieTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies.

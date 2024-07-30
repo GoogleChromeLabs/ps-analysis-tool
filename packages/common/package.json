@@ -40,6 +40,6 @@
     "tldts": "^6.0.14"
   },
   "devDependencies": {
-    "devtools-protocol": "^0.0.1282316"
+    "devtools-protocol": "^0.0.1333880"
   }
 }

@@ -20,7 +20,7 @@ import { Protocol } from 'puppeteer';
 import { type Cookie as SimpleCookie } from 'simple-cookie';
 
 export interface Cookie extends Protocol.Network.Cookie {
-  partitionKey?: string;
+  partitionKey?: Protocol.Network.CookiePartitionKey;
 }
 
 export type ResponseReceivedExtraInfo =
@@ -57,7 +57,7 @@ export interface CookieLogDetails
   description: string;
   isFirstParty: 'Yes' | 'No';
   sameSite: string;
-  partitionKey?: string;
+  partitionKey?: Protocol.Network.CookiePartitionKey;
   pageUrl: string;
   requestUrls: { [key: string]: string };
   frameUrls: { [key: string]: string };
