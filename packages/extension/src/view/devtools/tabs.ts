@@ -40,7 +40,6 @@ import {
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
-  InfoIcon,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
 } from '@google-psat/design-system';
@@ -70,7 +69,6 @@ import {
   Fingerprinting,
   PrivacySandbox,
   Settings,
-  FacilitatedTesting,
   ProtectedAudience,
   PrivateAggregation,
 } from './components';
@@ -260,26 +258,6 @@ const TABS: SidebarItems = {
         },
       },
     },
-  },
-  [SIDEBAR_ITEMS_KEYS.FACILITATED_TESTING]: {
-    title: () => I18n.getMessage('facilitatedTesting'),
-    panel: {
-      Element: FacilitatedTesting,
-    },
-    icon: {
-      Element: InfoIcon,
-      props: {
-        className: 'fill-gray',
-      },
-    },
-    selectedIcon: {
-      Element: InfoIcon,
-      props: {
-        className: 'fill-white',
-      },
-    },
-    dropdownOpen: false,
-    children: {},
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),
