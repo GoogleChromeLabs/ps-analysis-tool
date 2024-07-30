@@ -99,9 +99,7 @@ const generateHTMLFile = (
   }
 
   // @ts-ignore -- because this data will already be injected from the extension.
-  if (globalThis?.PSAT_USING_CDP !== false) {
-    code += `window.PSAT_USING_CDP = true;`;
-  }
+  code += `window.PSAT_USING_CDP = ${globalThis?.PSAT_USING_CDP ?? undefined};`;
 
   script.text = code;
   script.id = 'JSONDATASCRIPT';
