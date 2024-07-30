@@ -974,9 +974,6 @@
   "reportBreakage": {
     "message": "중단 신고"
   },
-  "requestMigrationTime": {
-    "message": "추가 이전 시간 요청"
-  },
   "quickLinks": {
     "message": "빠른 링크"
   },
@@ -1599,9 +1596,6 @@
   },
   "fingerprinting": {
     "message": "디지털 지문 수집"
-  },
-  "facilitatedTesting": {
-    "message": "원활한 테스트"
   },
   "rwsJsonGenerator": {
     "message": "관련 웹사이트 세트 JSON 생성기"
