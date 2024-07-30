@@ -20,7 +20,7 @@
 import React, { act } from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { CookieTableData } from '@google-psat/common';
+import { type CookieTableData } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 /**

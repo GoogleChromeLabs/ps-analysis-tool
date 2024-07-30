@@ -16,7 +16,7 @@
 
 import {
   BLOCK_STATUS,
-  CookieTableData,
+  type CookieTableData,
   getCookieKey,
 } from '@google-psat/common';
 import classnames from 'classnames';

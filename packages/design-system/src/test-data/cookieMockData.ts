@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { CookieData, TabCookies, TabFrames } from '@google-psat/common';
+import type { CookieData, TabCookies, TabFrames } from '@google-psat/common';
 
 export const emptyAnalytics = {
   platform: '',

@@ -17,7 +17,10 @@
 /**
  * External dependencies
  */
-import { CookieTableData, getCurrentDateAndTime } from '@google-psat/common';
+import {
+  type CookieTableData,
+  getCurrentDateAndTime,
+} from '@google-psat/common';
 import { saveAs } from 'file-saver';
 
 /**

@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { useCallback, useEffect } from 'react';
-import { PersistentStorageData, TableData, TableFilter } from '../../types';
-import { getValueByKey } from '@google-psat/common';
-
 /**
  * External dependencies.
  */
+import { useCallback, useEffect } from 'react';
+import { getValueByKey } from '@google-psat/common';
+/**
+ * Internal dependencies
+ */
+import { PersistentStorageData, TableData, TableFilter } from '../../types';
 
 const useFiltersExtraction = (
   data: TableData[],

@@ -20,8 +20,8 @@
 import {
   isFirstParty,
   findAnalyticsMatch,
-  CookieDatabase,
-  LibraryMatchers,
+  type CookieDatabase,
+  type LibraryMatchers,
   deriveBlockingStatus,
 } from '@google-psat/common';
 

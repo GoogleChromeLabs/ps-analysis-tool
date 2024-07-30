@@ -25,8 +25,8 @@ import Spinnies from 'spinnies';
 import path from 'path';
 import { I18n } from '@google-psat/i18n';
 import {
-  CompleteJson,
-  LibraryData,
+  type CompleteJson,
+  type LibraryData,
   removeAndAddNewSpinnerText,
 } from '@google-psat/common';
 import {

@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { BlockedReason } from '@google-psat/common';
+import type { BlockedReason } from '@google-psat/common';
 /**
  * Internal dependencies
  */
