@@ -98,6 +98,9 @@ const generateHTMLFile = (
     code += `window.PSAT_EXTENSION = true;`;
   }
 
+  // @ts-ignore -- because this data will already be injected from the extension.
+  code += `window.PSAT_USING_CDP = ${globalThis?.PSAT_USING_CDP ?? undefined};`;
+
   script.text = code;
   script.id = 'JSONDATASCRIPT';
   reportDom.head.appendChild(script);

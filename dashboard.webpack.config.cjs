@@ -44,7 +44,7 @@ const dashboard = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: '../cli-dashboard/public/index.html',
+      template: '../cli-dashboard/public/index.ejs',
       filename: 'index.html',
       inject: commonConfig.mode === 'production' ? 'body' : false,
     }),

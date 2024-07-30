@@ -55,6 +55,8 @@ export default function parseRequestWillBeSentExtraInfo(
       cookie.expires
     );
 
+    const { partitionKey, ...cookieWithoutPartitionKey } = cookie;
+
     let domain;
 
     if (cookie?.domain) {
@@ -66,15 +68,12 @@ export default function parseRequestWillBeSentExtraInfo(
     const singleCookie: CookieData = {
       isBlocked: blockedReasons.length !== 0,
       parsedCookie: {
-        ...cookie,
+        ...cookieWithoutPartitionKey,
+        httponly: cookieWithoutPartitionKey?.httpOnly ?? false,
         expires: effectiveExpirationDate,
         samesite: cookie.sameSite?.toLowerCase() ?? '',
         domain,
-        partitionKey:
-          cookie?.partitionKey && typeof cookie?.partitionKey === 'string'
-            ? cookie?.partitionKey
-            : //@ts-ignore This is to handle both stable and canary version of Chrome.
-              cookie?.partitionKey?.topLevelSite,
+        partitionKey: '',
       },
       networkEvents: {
         requestEvents: [
@@ -99,6 +98,15 @@ export default function parseRequestWillBeSentExtraInfo(
           ? exemptionReason
           : undefined,
     };
+
+    if (partitionKey) {
+      if (typeof partitionKey === 'string') {
+        singleCookie.parsedCookie.partitionKey = partitionKey as string;
+      } else {
+        singleCookie.parsedCookie.partitionKey =
+          partitionKey?.topLevelSite as string;
+      }
+    }
 
     //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
     if (frameIds.length > 0) {

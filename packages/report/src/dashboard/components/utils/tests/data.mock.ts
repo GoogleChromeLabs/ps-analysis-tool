@@ -35,6 +35,7 @@ export const tempSinglePageData: CompleteJson = {
             expires: 'Session',
             httpOnly: false,
             secure: true,
+            partitionKey: '',
           },
           analytics: {
             platform: 'Unknown',
@@ -106,6 +107,7 @@ export const tempMultiPageData: CompleteJson[] = [
               expires: 'Session',
               httpOnly: false,
               secure: true,
+              partitionKey: '',
             },
             analytics: {
               platform: 'Unknown',
@@ -157,6 +159,7 @@ export const tempMultiPageData: CompleteJson[] = [
               expires: 'Session',
               httpOnly: false,
               secure: true,
+              partitionKey: '',
             },
             analytics: {
               platform: 'Unknown',

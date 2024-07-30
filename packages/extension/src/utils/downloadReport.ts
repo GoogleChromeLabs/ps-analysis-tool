@@ -39,20 +39,23 @@ import isValidURL from './isValidURL';
  * @param tabFrames Tab frames.
  * @param libraryMatches Libary matches
  * @param appliedFilters Applied filters.
+ * @param isUsingCDP CDP status.
  */
 export default async function downloadReport(
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData,
-  appliedFilters: TableFilter
+  appliedFilters: TableFilter,
+  isUsingCDP: boolean
 ) {
   const { html, fileName } = await generateDashboard(
     url,
     tabCookies,
     tabFrames,
     libraryMatches,
-    appliedFilters
+    appliedFilters,
+    isUsingCDP
   );
 
   saveAs(html, fileName);
@@ -63,7 +66,8 @@ export const generateDashboard = async (
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData,
-  appliedFilters: TableFilter
+  appliedFilters: TableFilter,
+  isUsingCDP: boolean
 ) => {
   const dashboardReport = await (await fetch('./dashboard.html')).text();
   const parser = new DOMParser();
@@ -88,6 +92,7 @@ export const generateDashboard = async (
 
   const code = `
   window.PSAT_EXTENSION = true;
+	window.PSAT_USING_CDP = ${isUsingCDP};
   window.PSAT_DATA = ${JSON.stringify({
     json: reportData,
     type: 'url',

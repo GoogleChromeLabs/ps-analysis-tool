@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
+import { type CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 const COOKIES_TABLE_DATA_HEADER_CLI = [

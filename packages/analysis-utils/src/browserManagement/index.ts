@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import puppeteer, { Browser, HTTPResponse, Page, Protocol } from 'puppeteer';
-import { parse } from 'simple-cookie';
+import { parse, type Cookie } from 'simple-cookie';
 import {
   type CookieData,
   type ScriptTagUnderCheck,
@@ -292,10 +292,7 @@ export class BrowserManagement {
     const cookies: CookieData[] = headersToBeParsed
       .split('\n')
       .map((headerLine) => {
-        const parsedCookie = parse(headerLine);
-        const partitionKey = headerLine.includes('Partitioned')
-          ? cookiePartitionKey
-          : undefined;
+        const parsedCookie: Cookie = parse(headerLine);
 
         const url = this.pageResponses[pageId][requestId]?.url;
 
@@ -331,17 +328,17 @@ export class BrowserManagement {
           }
         });
 
-        return {
+        const singleCookie: CookieData = {
           parsedCookie: {
             name: parsedCookie.name,
             domain: parsedCookie.domain,
             path: parsedCookie.path || '/',
             value: parsedCookie.value,
-            sameSite: parsedCookie.samesite || 'Lax',
+            samesite: parsedCookie.samesite || 'Lax',
             expires: parsedCookie.expires || 'Session',
-            httpOnly: parsedCookie.httponly || false,
+            httponly: parsedCookie.httponly || false,
             secure: parsedCookie.secure || false,
-            partitionKey,
+            partitionKey: '',
           },
           networkEvents: {
             responseEvents: [
@@ -361,6 +358,13 @@ export class BrowserManagement {
           url,
           headerType: 'response',
         };
+
+        if (headerLine.includes('Partitioned')) {
+          singleCookie.parsedCookie.partitionKey =
+            cookiePartitionKey?.topLevelSite as unknown as string;
+        }
+
+        return singleCookie;
       });
 
     const prevCookies = this.pageResponses[pageId][requestId]?.cookies || [];
@@ -397,7 +401,7 @@ export class BrowserManagement {
     }
 
     const cookies = associatedCookies.map<CookieData>((associatedCookie) => {
-      return {
+      const singleCookie = {
         parsedCookie: {
           name: associatedCookie.cookie.name,
           domain: associatedCookie.cookie.domain,
@@ -407,7 +411,7 @@ export class BrowserManagement {
           expires: associatedCookie.cookie.expires || 'Session',
           httpOnly: associatedCookie.cookie.httpOnly || false,
           secure: associatedCookie.cookie.secure || false,
-          partitionKey: associatedCookie.cookie.partitionKey,
+          partitionKey: '',
         },
         networkEvents: {
           requestEvents: [
@@ -425,8 +429,15 @@ export class BrowserManagement {
         blockedReasons: associatedCookie.blockedReasons,
         exemptionReason: associatedCookie?.exemptionReason,
         url: this.pageRequests[pageId][requestId]?.url || '',
-        headerType: 'request',
+        headerType: 'request' as CookieData['headerType'],
       };
+
+      if (associatedCookie.cookie?.partitionKey) {
+        singleCookie.parsedCookie.partitionKey =
+          associatedCookie.cookie?.partitionKey?.topLevelSite;
+      }
+
+      return singleCookie;
     });
 
     this.pageRequests[pageId][requestId] = {
@@ -524,36 +535,42 @@ export class BrowserManagement {
 
     await Promise.all(
       frames.map(async (frame) => {
-        if (!frame.url().includes('http')) {
-          return;
+        try {
+          if (!frame.url().includes('http')) {
+            return;
+          }
+
+          const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
+            frame.evaluate(() => {
+              // @ts-ignore
+              return cookieStore?.getAll();
+            }),
+            [],
+            200
+          );
+
+          const frameCookies: {
+            [key: string]: CookieData;
+          } = {};
+
+          _JSCookies.forEach((cookie) => {
+            if (!cookie.domain) {
+              cookie.domain = new URL(frame.url()).hostname;
+            }
+            if (cookie.domain[0] !== '.') {
+              cookie.domain = '.' + cookie.domain;
+            }
+            const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
+            frameCookies[key] = {
+              parsedCookie: { ...cookie, partitionKey: '' },
+            };
+          });
+
+          const frameUrl = new URL(frame.url()).origin;
+          cookies[frameUrl] = { frameCookies };
+        } catch (error) {
+          //Fail silently
         }
-
-        const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
-          frame.evaluate(() => {
-            // @ts-ignore
-            return cookieStore.getAll();
-          }),
-          [],
-          200
-        );
-
-        const frameCookies: {
-          [key: string]: CookieData;
-        } = {};
-
-        _JSCookies.forEach((cookie) => {
-          if (!cookie.domain) {
-            cookie.domain = new URL(frame.url()).hostname;
-          }
-          if (cookie.domain[0] !== '.') {
-            cookie.domain = '.' + cookie.domain;
-          }
-          const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
-          frameCookies[key] = { parsedCookie: cookie };
-        });
-
-        const frameUrl = new URL(frame.url()).origin;
-        cookies[frameUrl] = { frameCookies };
       })
     );
 
@@ -648,7 +665,7 @@ export class BrowserManagement {
     await delay(this.pageWaitTime / 2);
 
     // Accept Banners
-    if (shouldSkipAcceptBanner) {
+    if (!shouldSkipAcceptBanner) {
       // delay
 
       await Promise.all(

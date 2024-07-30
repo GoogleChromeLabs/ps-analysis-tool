@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { CompleteJson, getCurrentDateAndTime } from '@google-psat/common';
+import { type CompleteJson, getCurrentDateAndTime } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { ensureDir } from 'fs-extra';
 import { existsSync, writeFile } from 'node:fs';
