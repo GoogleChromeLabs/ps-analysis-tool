@@ -27,8 +27,58 @@ import {
   expectedResult,
   resetExpectedResult,
 } from '../test-data/getToolTipInfoData';
+import { I18n } from '@google-psat/i18n';
 
 describe('getTooltipInfoData', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      hiddenIframe: {
+        message: 'Hidden iframe',
+      },
+      nestedIframe: {
+        message: 'Nested iframe',
+      },
+      mainFrame: {
+        message: 'Main frame',
+      },
+      unknown: {
+        message: 'Unknown',
+      },
+      type: {
+        message: 'Type',
+      },
+      origin: {
+        message: 'Origin',
+      },
+      visibleIframes: {
+        message: 'Visible iframes',
+      },
+      hiddenIframes: {
+        message: 'Hidden iframes',
+      },
+      firstPartyCookies: {
+        message: 'First-party cookies',
+      },
+      thirdPartyCookies: {
+        message: 'Third-party cookies',
+      },
+      blockedCookies: {
+        message: 'Blocked cookies',
+      },
+      blockedReasons: {
+        message: 'Blocked reasons',
+      },
+      belongsToRWSHeader: {
+        message: 'Belongs to RWS',
+      },
+      allowedFeatures: {
+        message: 'Allowed Features (PS related)',
+      },
+    });
+  });
+
   it('should return an object containing data for tooltip', () => {
     resetExpectedResult();
     const result = getTooltipInfoData(
