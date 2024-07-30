@@ -16,7 +16,6 @@
 import coffee from 'coffee';
 import fs from 'fs';
 import path from 'path';
-import { pathToFileURL } from 'url';
 
 describe('CLI E2E Test', () => {
   const cli = require.resolve('../../dist/main.js');
@@ -27,14 +26,8 @@ describe('CLI E2E Test', () => {
 
   it('Should run site analysis', () => {
     return coffee
-      .fork(cli, ['-u https://bbc.com', '-v'])
-      .debug()
-      .expect(
-        'stdout',
-        `Report: ${pathToFileURL(
-          path.join(process.cwd(), '/out/bbc-com/index.html')
-        )}\n`
-      )
+      .fork(cli, ['-u https://bbc.com', '-w 1'])
+      .includes('stdout', '/out/bbc-com/report_')
       .end();
   }, 60000);
 });
