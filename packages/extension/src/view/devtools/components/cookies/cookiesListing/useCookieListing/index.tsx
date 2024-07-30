@@ -181,7 +181,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         accessorKey: 'parsedCookie.priority',
         isHiddenByDefault: true,
         cell: (info: InfoType) =>
-          I18n.getMessage((info as string).toLowerCase()),
+          I18n.getMessage((info as string)?.toLowerCase()),
         widthWeightagePercentage: 4,
       },
       {
@@ -455,6 +455,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           },
         },
         useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = I18n.getMessage((value as string)?.toLowerCase());
+          return val === filterValue;
+        },
       },
       exemptionReason: {
         title: I18n.getMessage('exemptionReasons'),
