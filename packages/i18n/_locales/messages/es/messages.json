@@ -8207,22 +8207,6 @@
   "showRequestsWithCookie": {
     "message": "Mostrar solicitudes con esta cookie"
   },
-  "thirdPartyCookieDeprecationReadiness": {
-    "message": "Preparación para la discontinuación de cookies de terceros"
-  },
-  "thirdPartyCookieDeprecationReadinessNote": {
-    "message": "Descubre cómo las empresas de Internet se están preparando para la discontinuación de las cookies de terceros. Esta $a_tag_start$ lista exhaustiva $a_tag_end$ se ha confeccionado con información valiosa de participantes que han compartido voluntariamente sus medidas de preparación.",
-    "placeholders": {
-      "a_tag_start": {
-        "content": "$1",
-        "example": "<a href='https://example.com'>"
-      },
-      "a_tag_end": {
-        "content": "$2",
-        "example": "</a>"
-      }
-    }
-  },
   "protectedAudience": {
     "message": "Protected Audience"
   },

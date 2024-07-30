@@ -8207,22 +8207,6 @@
   "showRequestsWithCookie": {
     "message": "이 쿠키를 통한 요청 표시"
   },
-  "thirdPartyCookieDeprecationReadiness": {
-    "message": "서드 파티 쿠키 지원 중단 준비"
-  },
-  "thirdPartyCookieDeprecationReadinessNote": {
-    "message": "웹상에서 회사들이 서드 파티 쿠키 지원 중단에 어떻게 대비하고 있는지 알아보세요. 이 $a_tag_start$종합적인 목록$a_tag_end$에는 대비 태세에 관한 내용을 자발적으로 공유한 참여자의 인사이트가 정리되어 있습니다.",
-    "placeholders": {
-      "a_tag_start": {
-        "content": "$1",
-        "example": "<a href='https://example.com'>"
-      },
-      "a_tag_end": {
-        "content": "$2",
-        "example": "</a>"
-      }
-    }
-  },
   "protectedAudience": {
     "message": "Protected Audience"
   },

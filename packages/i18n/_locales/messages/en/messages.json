@@ -8210,22 +8210,6 @@
   "showRequestsWithCookie": {
     "message": "Show Requests With This Cookie"
   },
-  "thirdPartyCookieDeprecationReadiness": {
-    "message": "Third-Pary Cookie Deprecation Readiness"
-  },
-  "thirdPartyCookieDeprecationReadinessNote": {
-    "message": "Discover how companies across the web are gearing up for third-party cookie deprecation. This $a_tag_start$ comprehensive list $a_tag_end$ is compiled with insights from participants who have voluntarily shared their preparations.",
-    "placeholders": {
-      "a_tag_start": {
-        "content": "$1",
-        "example": "<a href='https://example.com'>"
-      },
-      "a_tag_end": {
-        "content": "$2",
-        "example": "</a>"
-      }
-    }
-  },
   "protectedAudience": {
     "message": "Protected Audience"
   },

@@ -8207,22 +8207,6 @@
   "showRequestsWithCookie": {
     "message": "इस कुकी के साथ वाले अनुरोध दिखाएं"
   },
-  "thirdPartyCookieDeprecationReadiness": {
-    "message": "तीसरे पक्ष की कुकी हटाए जाने के लिए तैयार है"
-  },
-  "thirdPartyCookieDeprecationReadinessNote": {
-    "message": "जानें कि तीसरे पक्ष की कुकी के इस्तेमाल को रोकने के लिए, इंटरनेट पर कंपनियां किस तरह तैयारी कर रही हैं. यह$a_tag_start$ पूरी सूची $a_tag_end$उन प्रतिभागियों की दी गई अहम जानकारी से तैयार की गई है जिन्होंने अपनी मर्ज़ी से अपनी तैयारियों को शेयर किया है.",
-    "placeholders": {
-      "a_tag_start": {
-        "content": "$1",
-        "example": "<a href='https://example.com'>"
-      },
-      "a_tag_end": {
-        "content": "$2",
-        "example": "</a>"
-      }
-    }
-  },
   "protectedAudience": {
     "message": "Protected Audience"
   },

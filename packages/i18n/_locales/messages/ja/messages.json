@@ -8207,22 +8207,6 @@
   "showRequestsWithCookie": {
     "message": "この Cookie を使用したリクエストを表示"
   },
-  "thirdPartyCookieDeprecationReadiness": {
-    "message": "サードパーティ Cookie のサポート終了に向けた準備状況"
-  },
-  "thirdPartyCookieDeprecationReadinessNote": {
-    "message": "サードパーティ Cookie のサポート終了に向けて企業がウェブで進めている準備状況を検証します。こちらの$a_tag_start$リスト$a_tag_end$で、準備状況を自主的に共有している参加企業から集められたインサイトを確認できます。",
-    "placeholders": {
-      "a_tag_start": {
-        "content": "$1",
-        "example": "<a href='https://example.com'>"
-      },
-      "a_tag_end": {
-        "content": "$2",
-        "example": "</a>"
-      }
-    }
-  },
   "protectedAudience": {
     "message": "Protected Audience"
   },
