@@ -132,7 +132,8 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
             unfilteredCookies || {},
             tabFrames || {},
             libraryMatches,
-            appliedFilters
+            appliedFilters,
+            isUsingCDP
           );
         }}
         menuData={menuData}

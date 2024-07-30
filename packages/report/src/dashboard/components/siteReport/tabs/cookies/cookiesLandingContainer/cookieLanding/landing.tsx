@@ -82,17 +82,6 @@ const Landing = ({
         },
       },
       {
-        name: 'Exempted Cookies',
-        link: 'exempted-cookies',
-        panel: {
-          Element: ExemptedCookiesSection,
-          props: {
-            tabFrames,
-            tabCookies,
-          },
-        },
-      },
-      {
         name: I18n.getMessage('knownBreakages'),
         link: 'known-breakages',
         panel: {
@@ -104,6 +93,21 @@ const Landing = ({
         },
       },
     ];
+
+    // @ts-ignore -- PSAT_USING_CDP is added only when the report is downloaded from the extension. Only false value to be considered.
+    if (globalThis?.PSAT_USING_CDP !== false) {
+      baseSections.splice(2, 0, {
+        name: I18n.getMessage('exemptionReasons'),
+        link: 'exemption-reasons',
+        panel: {
+          Element: ExemptedCookiesSection,
+          props: {
+            tabFrames,
+            tabCookies,
+          },
+        },
+      });
+    }
 
     //@ts-ignore -- PSAT_EXTENSTION is added only when the report is downloaded from the extension. Since optional chaining is done it will return false if it doesnt exist.
     if (globalThis?.PSAT_EXTENSION) {
