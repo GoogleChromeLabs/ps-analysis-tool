@@ -153,6 +153,8 @@ export const generateSitemapHTMLFile = (
     // @ts-ignore -- because this data will already be injected from cli or the extension.
     selectedSite: globalThis?.PSAT_DATA?.selectedSite ?? '',
     translations,
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    dateTime: globalThis?.PSAT_DATA.dateTime,
     appliedFilters,
     hideDownloadButton: true,
   };
