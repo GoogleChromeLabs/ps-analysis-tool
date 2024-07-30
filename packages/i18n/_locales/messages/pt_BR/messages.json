@@ -344,7 +344,7 @@
     "message": "Nenhum caminho fornecido"
   },
   "none": {
-    "message": "Nenhum"
+    "message": "None"
   },
   "strict": {
     "message": "Strict"
@@ -1580,7 +1580,7 @@
     "message": "Publicidade privada"
   },
   "topics": {
-    "message": "Temas"
+    "message": "Tópicos"
   },
   "attribution": {
     "message": "Atribuição"
