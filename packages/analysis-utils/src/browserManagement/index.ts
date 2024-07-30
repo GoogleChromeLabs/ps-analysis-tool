@@ -665,7 +665,7 @@ export class BrowserManagement {
     await delay(this.pageWaitTime / 2);
 
     // Accept Banners
-    if (shouldSkipAcceptBanner) {
+    if (!shouldSkipAcceptBanner) {
       // delay
 
       await Promise.all(
