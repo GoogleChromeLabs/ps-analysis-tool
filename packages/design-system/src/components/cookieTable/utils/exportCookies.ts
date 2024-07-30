@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import { CookieTableData } from '@google-psat/common';
+import { CookieTableData, getCurrentDateAndTime } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 
 /**
@@ -39,7 +39,10 @@ const exportCookies = (isCLI = false, rows: TableRow[], hostname: string) => {
   if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
     const csvTextBlob = generateCookieTableCSV(_cookies as CookieTableData[]);
     const fileName = hostname.split('.').join('-');
-    saveAs(csvTextBlob, `${fileName}-report.csv`);
+    saveAs(
+      csvTextBlob,
+      `${fileName}-report-${getCurrentDateAndTime('YYYY-MM-DD_HH-MM-SS')}.csv`
+    );
   }
 };
 
