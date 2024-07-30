@@ -50,7 +50,7 @@ export type DetectionFunctions = (
   arg0: ScriptTagUnderCheck,
   arg1: DetectedSignature[],
   arg2: number,
-  arg3?: number
+  arg3: number
 ) => {
   signatureMatches: number;
   matches: DetectedSignature[];

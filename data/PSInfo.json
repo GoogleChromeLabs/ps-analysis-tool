@@ -85,5 +85,14 @@
     "publicDiscussion": "https://github.com/miketaylr/user-agent-reduction/issues",
     "videoOverview": "",
     "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/user-agent"
+  },
+  "private-aggregation": {
+    "name": "Private Aggregation",
+    "description": "The Private Aggregation API has been built for aggregating and reporting on cross-site data in a privacy-preserving manner.",
+		"useI18n": false,
+    "proposal": "https://github.com/patcg-individual-drafts/private-aggregation-api",
+    "publicDiscussion": "https://github.com/patcg-individual-drafts/private-aggregation-api/issues",
+		"publicExplainer": "https://github.com/patcg-individual-drafts/private-aggregation-api/blob/main/report_verification.md",
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/private-aggregation/fundamentals"
   }
 }

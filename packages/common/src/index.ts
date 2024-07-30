@@ -22,6 +22,7 @@ export {
   default as findAnalyticsMatch,
   emptyAnalytics,
 } from './utils/findAnalyticsMatch';
+export { default as removeAndAddNewSpinnerText } from './utils/removeAndAddNewSpinnerText';
 export { default as calculateEffectiveExpiryDate } from './utils/calculateEffectiveExpiryDate';
 export { default as sanitizeCsvRecord } from './utils/sanitizeCsvRecord';
 export { parseUrl } from './utils/parseUrl';
@@ -39,6 +40,7 @@ export * from './utils/contextSelector';
 export { default as addUTMParams, type MediumType } from './utils/addUTMParams';
 export { default as delay } from './utils/delay';
 export { default as mergeDeep } from './utils/mergeDeep';
+export { default as getCurrentDateAndTime } from './utils/getCurrentDateAndTime';
 export { default as resolveWithTimeout } from './utils/resolveWithTimeout';
 export { default as deriveBlockingStatus } from './utils/deriveBlockingStatus';
 export { default as getLegendDescription } from './utils/getLegendDescription';

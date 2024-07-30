@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import { addUTMParams } from '@google-psat/common';
 
 /**
@@ -26,7 +25,7 @@ import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 import { I18n } from '@google-psat/i18n';
 
-const GSIAccordion = ({ matches }: AccordionProps) => {
+const GSIAccordion = ({ matches, urlCount }: AccordionProps) => {
   if (!matches) {
     return null;
   }
@@ -38,7 +37,11 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={I18n.getMessage('gSITitle')} isLoading={false}>
+    <Accordion
+      title={I18n.getMessage('gSITitle')}
+      isLoading={false}
+      urlCount={urlCount}
+    >
       <p className="text-darkest-gray dark:text-bright-gray">
         {I18n.getMessage('gSInote', [
           `<a target="_blank" className="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(

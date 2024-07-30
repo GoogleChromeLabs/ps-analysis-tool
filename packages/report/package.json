@@ -2,6 +2,8 @@
   "name": "@google-psat/report",
   "version": "0.9.0-2",
   "description": "Static HTML analysis report",
+  "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
@@ -18,6 +20,9 @@
     "access": "public"
   },
   "scripts": {
+    "build": "tsc",
+    "dev": "tsc-watch",
+    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
@@ -25,18 +30,19 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "@google-psat/common": "*",
     "@google-psat/design-system": "*",
+    "@google-psat/i18n": "*",
     "@google-psat/library-detection": "*",
-		"@google-psat/i18n": "*"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",
     "@babel/preset-env": "^7.22.15",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "@types/file-saver": "^2.0.5",
     "babel-loader": "^9.1.3",
     "webpack": "^5.88.2",

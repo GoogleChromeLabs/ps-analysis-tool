@@ -182,6 +182,8 @@ const useFiltersExtraction = (
                   null,
               };
             }
+
+            filterValueData.selected = null;
           }
         );
 
@@ -222,14 +224,12 @@ const useFiltersExtraction = (
 
       Object.entries(filtersWithSelectAllFilterEnabled).forEach(
         ([filterKey, filterValueData]) => {
-          if (!newSelectAllFilterSelection[filterKey]) {
-            newSelectAllFilterSelection[filterKey] = {
-              selected:
-                newSelectAllFilterSelection[filterKey]?.selected ||
-                filterValueData.selected ||
-                null,
-            };
-          }
+          newSelectAllFilterSelection[filterKey] = {
+            selected:
+              newSelectAllFilterSelection[filterKey]?.selected ||
+              filterValueData.selected ||
+              null,
+          };
         }
       );
 

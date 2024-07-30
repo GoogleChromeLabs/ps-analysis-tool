@@ -40,7 +40,6 @@ import {
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
-  InfoIcon,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
 } from '@google-psat/design-system';
@@ -54,6 +53,10 @@ import SettingsTab from '../../../../../assets/icons/settings-tab.svg';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import SettingsTabWhite from '../../../../../assets/icons/settings-tab-white.svg';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import PrivateAggregationicon from '../../../../../assets/icons/private-aggregation.svg';
+
 import {
   SiteBoundaries,
   Chips,
@@ -66,10 +69,10 @@ import {
   Fingerprinting,
   PrivacySandbox,
   Settings,
-  FacilitatedTesting,
+  ProtectedAudience,
+  PrivateAggregation,
 } from './components';
 import { I18n } from '@google-psat/i18n';
-import ProtectedAudience from './components/privateAdvertising/protectedAudience';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -193,6 +196,25 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+          [SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION]: {
+            title: 'Private Aggregation',
+            panel: {
+              Element: PrivateAggregation,
+            },
+            icon: {
+              Element: PrivateAggregationicon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: PrivateAggregationicon,
+              props: {
+                className: 'fill-white',
+              },
+            },
+            children: {},
+          },
         },
       },
       [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
@@ -236,26 +258,6 @@ const TABS: SidebarItems = {
         },
       },
     },
-  },
-  [SIDEBAR_ITEMS_KEYS.FACILITATED_TESTING]: {
-    title: () => I18n.getMessage('facilitatedTesting'),
-    panel: {
-      Element: FacilitatedTesting,
-    },
-    icon: {
-      Element: InfoIcon,
-      props: {
-        className: 'fill-gray',
-      },
-    },
-    selectedIcon: {
-      Element: InfoIcon,
-      props: {
-        className: 'fill-white',
-      },
-    },
-    dropdownOpen: false,
-    children: {},
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),

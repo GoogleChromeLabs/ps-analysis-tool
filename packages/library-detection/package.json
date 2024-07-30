@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc-watch",
-    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
@@ -35,6 +35,7 @@
     "@google-psat/design-system": "*",
     "@google-psat/i18n": "*",
     "classnames": "^2.5.1",
+    "deep-object-diff": "^1.1.9",
     "escape-string-regexp": "^4.0.0",
     "react": "^18.2.0",
     "use-context-selector": "^1.4.1"

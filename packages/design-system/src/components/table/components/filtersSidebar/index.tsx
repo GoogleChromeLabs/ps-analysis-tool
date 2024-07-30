@@ -23,16 +23,28 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies.
  */
 import ListItem from './listItem';
-import { useTable } from '../../useTable';
+import { TableFilter } from '../../useTable';
 
-const FiltersSidebar = () => {
-  const { filters, isSelectAllFilterSelected } = useTable(
-    ({ state, actions }) => ({
-      filters: state.filters,
-      isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
-    })
-  );
+interface FiltersSidebarProps {
+  filters: TableFilter;
+  isSelectAllFilterSelected: (filterKey: string) => boolean;
+  toggleFilterSelection: (
+    filterKey: string,
+    filterValue: string,
+    isRemovalAction?: boolean | undefined
+  ) => void;
+  toggleSelectAllFilter: (
+    filterKey: string,
+    isSingleFilterRemovalAction?: boolean | undefined
+  ) => void;
+}
 
+const FiltersSidebar = ({
+  filters,
+  isSelectAllFilterSelected,
+  toggleFilterSelection,
+  toggleSelectAllFilter,
+}: FiltersSidebarProps) => {
   const [expandAll, setExpandAll] = useState(false);
   const expandedFilters = useRef(new Set<string>());
   const filterKeys = useMemo(() => {
@@ -102,6 +114,8 @@ const FiltersSidebar = () => {
             expandAll={expandAll}
             toggleFilterExpansion={toggleFilterExpansion}
             isSelectAllFilterSelected={isSelectAllFilterSelected(filterKey)}
+            toggleFilterSelection={toggleFilterSelection}
+            toggleSelectAllFilter={toggleSelectAllFilter}
           />
         ))}
       </ul>

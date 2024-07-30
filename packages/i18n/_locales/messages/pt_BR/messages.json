@@ -229,9 +229,6 @@
   "session": {
     "message": "Sessão"
   },
-  "sitemapReport": {
-    "message": "Relatório de sitemaps"
-  },
   "cookieIssues": {
     "message": "Problemas com cookies"
   },
@@ -977,9 +974,6 @@
   "reportBreakage": {
     "message": "Informar uma falha"
   },
-  "requestMigrationTime": {
-    "message": "Solicitar mais tempo de migração"
-  },
   "quickLinks": {
     "message": "Links rápidos"
   },
@@ -1147,12 +1141,6 @@
   },
   "size": {
     "message": "Tamanho"
-  },
-  "mapping": {
-    "message": "Mapeamento"
-  },
-  "blockingStatus": {
-    "message": "Status de bloqueio"
   },
   "lookAtNetworkTab": {
     "message": "Consulte a guia \"Rede\" para conferir as informações de bloqueio do cookie."
@@ -1608,9 +1596,6 @@
   },
   "fingerprinting": {
     "message": "Técnicas de impressão digital"
-  },
-  "facilitatedTesting": {
-    "message": "Teste facilitado"
   },
   "rwsJsonGenerator": {
     "message": "Gerador JSON de conjuntos de sites relacionados"

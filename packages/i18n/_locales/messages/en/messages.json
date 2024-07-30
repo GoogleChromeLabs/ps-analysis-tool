@@ -229,9 +229,6 @@
   "session": {
     "message": "Session"
   },
-  "sitemapReport": {
-    "message": "Sitemap report"
-  },
   "cookieIssues": {
     "message": "Cookie Issues"
   },
@@ -977,9 +974,6 @@
   "reportBreakage": {
     "message": "Report a breakage"
   },
-  "requestMigrationTime": {
-    "message": "Request Additional Migration Time"
-  },
   "quickLinks": {
     "message": "Quick Links"
   },
@@ -1147,12 +1141,6 @@
   },
   "size": {
     "message": "Size"
-  },
-  "mapping": {
-    "message": "Mapping"
-  },
-  "blockingStatus": {
-    "message": "Blocking Status"
   },
   "lookAtNetworkTab": {
     "message": "Please take a look at the network tab to get this cookie's blocking information."

@@ -229,9 +229,6 @@
   "session": {
     "message": "セッション"
   },
-  "sitemapReport": {
-    "message": "サイトマップ レポート"
-  },
   "cookieIssues": {
     "message": "Cookie に関する問題"
   },
@@ -977,9 +974,6 @@
   "reportBreakage": {
     "message": "障害の報告"
   },
-  "requestMigrationTime": {
-    "message": "移行期間の延長のリクエスト"
-  },
   "quickLinks": {
     "message": "クイックリンク"
   },
@@ -1147,12 +1141,6 @@
   },
   "size": {
     "message": "サイズ"
-  },
-  "mapping": {
-    "message": "マッピング"
-  },
-  "blockingStatus": {
-    "message": "ブロック ステータス"
   },
   "lookAtNetworkTab": {
     "message": "ネットワーク タブで、この Cookie のブロック情報を確認してください。"
@@ -1608,9 +1596,6 @@
   },
   "fingerprinting": {
     "message": "フィンガープリント"
-  },
-  "facilitatedTesting": {
-    "message": "主導テスト"
   },
   "rwsJsonGenerator": {
     "message": "関連ウェブサイト セットの JSON 生成ツール"

@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/extension",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
@@ -9,8 +9,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "webpack --config ../../extension.webpack.config.cjs --watch",
-    "build": "npm run build:remove && webpack --config ../../extension.webpack.config.cjs",
-    "build:remove": "rimraf ../../dist/extension",
+    "prebuild": "rimraf ../../dist/extension",
+    "build": "webpack --config ../../extension.webpack.config.cjs",
     "publish:local": "",
     "publish:remote": "",
     "unpublish:local": "",
@@ -30,8 +30,9 @@
     "@google-psat/design-system": "*",
     "@google-psat/i18n": "*",
     "@google-psat/library-detection": "*",
+    "@google-psat/report": "*",
     "classnames": "^2.3.2",
-    "fast-xml-parser": "^4.3.2",
+    "deep-object-diff": "^1.1.9",
     "file-saver": "^2.0.5",
     "p-queue": "^7.3.4",
     "re-resizable": "^6.9.9",

@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import { I18n } from '@google-psat/i18n';
-import React from 'react';
 
 interface DetectionMessageProps {
   libraryName: string;
