@@ -55,7 +55,7 @@ jobs:
 
       - name: Run the tests
         run: |
-          npm run test packages/extension/src/view/devtools/tests/e2e-tests
+          npm run test:cli:e2e && npm run test:extension:e2e
       - name: Archive build artifacts
         uses: actions/upload-artifact@v2
         with:
