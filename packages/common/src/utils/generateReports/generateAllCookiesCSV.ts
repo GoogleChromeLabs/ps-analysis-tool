@@ -84,7 +84,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),
       cookie.analytics.platform,
-      cookie.parsedCookie.httpOnly
+      cookie.parsedCookie.httponly
         ? I18n.getMessage('yes')
         : I18n.getMessage('no'),
       cookie.parsedCookie.secure
