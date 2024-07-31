@@ -329,6 +329,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         setSettingsChanged(false);
         if (message?.payload?.actionsPerformed?.allowedNumberOfTabs === 1) {
           isCurrentTabBeingListenedToRef.current = false;
+          setTabFrames(null);
         }
       }
     },
