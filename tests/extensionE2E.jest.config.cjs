@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import coffee from 'coffee';
-import fs from 'fs';
-import path from 'path';
+const sharedConfig = require('./shared.jest.config.cjs');
 
-describe('CLI E2E Test', () => {
-  const cli = require.resolve('../../dist/main.js');
-
-  afterAll(() => {
-    fs.rmSync(path.join(process.cwd(), '/out/bbc-com'), { recursive: true });
-  });
-
-  it('Should run site analysis', () => {
-    return coffee
-      .fork(cli, ['-u https://bbc.com', '-w 1'])
-      .includes('stdout', '/out/bbc-com/report_')
-      .end();
-  }, 60000);
-});
+module.exports = {
+  ...sharedConfig,
+  testMatch: [
+    '**/extension/**/e2e-tests/**/*.{js,jsx,ts,tsx}',
+    '!**/dist/**/*.{js,jsx,ts,tsx}',
+    '!**/dist-types/**/*.{js,jsx,ts,tsx}',
+  ],
+};

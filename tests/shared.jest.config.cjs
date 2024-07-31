@@ -38,7 +38,6 @@ module.exports = {
       'chalk/source/vendor/supports-color/index.js'
     ),
   },
-  testEnvironment: 'jsdom',
   testMatch: [
     '**/tests/**/*.{js,jsx,ts,tsx}',
     '!**/e2e-tests/**/*.{js,jsx,ts,tsx}',
