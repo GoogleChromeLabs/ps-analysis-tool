@@ -247,6 +247,9 @@ const Provider = ({ children }: PropsWithChildren) => {
           extraFrameData?: Record<string, string[]>;
         };
         psatOpenedAfterPageLoad?: boolean;
+        actionsPerformed: {
+          allowedNumberOfTabs: number;
+        };
       };
     }) => {
       if (!message.type) {
@@ -324,6 +327,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (message.type === SERVICE_WORKER_RELOAD_MESSAGE) {
         setSettingsChanged(false);
+        if (message?.payload?.actionsPerformed?.allowedNumberOfTabs === 1) {
+          isCurrentTabBeingListenedToRef.current = false;
+          setTabFrames(null);
+        }
       }
     },
     [getAllFramesForCurrentTab, setSettingsChanged]

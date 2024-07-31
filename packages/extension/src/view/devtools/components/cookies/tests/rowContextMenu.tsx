@@ -53,6 +53,9 @@ I18n.initMessages({
   allowDomin: {
     message: 'Allow Domain During Session',
   },
+  showRequestsWithCookie: {
+    message: 'Show Requests With This Cookie',
+  },
 });
 
 describe('RowContextMenu', () => {

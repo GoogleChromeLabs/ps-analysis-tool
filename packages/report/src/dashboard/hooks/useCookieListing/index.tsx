@@ -180,7 +180,8 @@ const useCookieListing = (
           header: I18n.getMessage('priority'),
           accessorKey: 'parsedCookie.priority',
           isHiddenByDefault: true,
-          cell: (info: InfoType) => info,
+          cell: (info: InfoType) =>
+            I18n.getMessage((info as string)?.toLowerCase()),
           widthWeightagePercentage: 4,
         },
         {
@@ -470,17 +471,21 @@ const useCookieListing = (
           title: I18n.getMessage('priority'),
           hasStaticFilterValues: true,
           filterValues: {
-            Low: {
+            [I18n.getMessage('low')]: {
               selected: false,
             },
-            Medium: {
+            [I18n.getMessage('medium')]: {
               selected: false,
             },
-            High: {
+            [I18n.getMessage('high')]: {
               selected: false,
             },
           },
           useGenericPersistenceKey: true,
+          comparator: (value: InfoType, filterValue: string) => {
+            const val = I18n.getMessage((value as string)?.toLowerCase());
+            return val === filterValue;
+          },
         },
         exemptionReason,
       };

@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import { I18n } from '@google-psat/i18n';
 
 interface DetectionMessageProps {
   libraryName: string;
@@ -27,18 +31,12 @@ const DetectionMessage = ({
 }: DetectionMessageProps) => {
   return (
     <p className="text-darkest-gray dark:text-bright-gray">
-      {libraryName} functionality may not work properly due to the phaseout of
-      third-party cookies. To inquire further about the same, please visit the
-      {' ' + provider + ' '}
-      <a
-        target="_blank"
-        className="text-bright-navy-blue dark:text-jordy-blue"
-        href={supportURL}
-        rel="noreferrer"
-      >
-        support forum
-      </a>
-      .
+      {I18n.getMessage('detectionMessage', [
+        libraryName,
+        provider,
+        `<a target="_blank" className="text-bright-navy-blue dark:text-jordy-blue" href=${supportURL} rel="noreferrer">`,
+        `</a>`,
+      ])}
     </p>
   );
 };

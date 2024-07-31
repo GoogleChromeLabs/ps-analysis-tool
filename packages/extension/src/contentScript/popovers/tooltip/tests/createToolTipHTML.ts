@@ -26,8 +26,55 @@ import {
   getInfo,
   getInfoAttributes,
 } from '../../../utils/test-data/getToolTipInfoData';
+import { I18n } from '@google-psat/i18n';
 
 describe('createTooltipHTML', () => {
+  beforeAll(() => {
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      hiddenIframe: {
+        message: 'Hidden iframe',
+      },
+      nestedIframe: {
+        message: 'Nested iframe',
+      },
+      mainFrame: {
+        message: 'Main frame',
+      },
+      unknown: {
+        message: 'Unknown',
+      },
+      type: {
+        message: 'Type',
+      },
+      origin: {
+        message: 'Origin',
+      },
+      visibleIframes: {
+        message: 'Visible iframes',
+      },
+      hiddenIframes: {
+        message: 'Hidden iframes',
+      },
+      firstPartyCookies: {
+        message: 'First-party cookies',
+      },
+      thirdPartyCookies: {
+        message: 'Third-party cookies',
+      },
+      blockedCookies: {
+        message: 'Blocked cookies',
+      },
+      belongsToRWSHeader: {
+        message: 'Belongs to RWS',
+      },
+      allowedFeatures: {
+        message: 'Allowed Features (PS related)',
+      },
+    });
+  });
+
   it('should contain "p" and "strong" tag elements', () => {
     const infoHTMLElement = createTooltipHTML(getInfo(), getInfoAttributes());
     document.body.appendChild(infoHTMLElement);

@@ -41,23 +41,27 @@ const getTooltipInfoData = (
     attr: attr,
   };
 
-  info['Type'] = frameType;
+  info[I18n.getMessage('type')] = frameType;
 
   if (origin) {
-    info['Origin'] =
+    info[I18n.getMessage('origin')] =
       origin === 'about:blank'
         ? origin
         : `<a href="${origin}" target="_blank" class="ps-enable-pointer-event">${origin}</a>`;
   } else {
-    info['Origin'] = 'empty';
+    info[I18n.getMessage('origin')] = 'empty';
   }
 
-  info['Visible iframes'] = String(numberOfVisibleFrames);
-  info['Hidden iframes'] = String(numberOfHiddenFrames);
-  info['First-party cookies'] = String(numberOfFirstPartyCookies);
-  info['Third-party cookies'] = String(numberOfThirdPartyCookies);
-  info['Blocked cookies'] = String(blockedCookies);
-  info['Blocked reasons'] = String(blockedReasons);
+  info[I18n.getMessage('visibleIframes')] = String(numberOfVisibleFrames);
+  info[I18n.getMessage('hiddenIframes')] = String(numberOfHiddenFrames);
+  info[I18n.getMessage('firstPartyCookies')] = String(
+    numberOfFirstPartyCookies
+  );
+  info[I18n.getMessage('thirdPartyCookies')] = String(
+    numberOfThirdPartyCookies
+  );
+  info[I18n.getMessage('blockedCookies')] = String(blockedCookies);
+  info[I18n.getMessage('blockedReasons')] = String(blockedReasons);
 
   if (Array.isArray(allowedFeatures)) {
     allowedFeatureInExpandedView = allowedFeatures.join(', ');
@@ -82,13 +86,13 @@ const getTooltipInfoData = (
     : allowedFeatureInExpandedView;
 
   if (frameType === 'Unknown') {
-    info['Note'] = I18n.getMessage('unknownFrameNote');
+    info[I18n.getMessage('note')] = I18n.getMessage('unknownFrameNote');
   } else {
-    info['Belongs to RWS'] = belongsToRWS;
+    info[I18n.getMessage('belongsToRWSHeader')] = belongsToRWS;
     attr['allowedFeaturesInCompactView'] = allowedFeaturesInCompactView;
     attr['allowedFeatureInExpandedView'] = allowedFeatureInExpandedView;
 
-    info['Allowed Features (PS related)'] = allowedFeaturesValue;
+    info[I18n.getMessage('allowedFeatures')] = allowedFeaturesValue;
   }
 
   return infoData;

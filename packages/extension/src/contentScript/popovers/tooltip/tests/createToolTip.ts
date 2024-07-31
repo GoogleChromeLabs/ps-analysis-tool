@@ -41,6 +41,33 @@ describe('createTooltip', () => {
       unknown: {
         message: 'Unknown',
       },
+      type: {
+        message: 'Type',
+      },
+      origin: {
+        message: 'Origin',
+      },
+      visibleIframes: {
+        message: 'Visible iframes',
+      },
+      hiddenIframes: {
+        message: 'Hidden iframes',
+      },
+      firstPartyCookies: {
+        message: 'First-party cookies',
+      },
+      thirdPartyCookies: {
+        message: 'Third-party cookies',
+      },
+      blockedCookies: {
+        message: 'Blocked cookies',
+      },
+      belongsToRWSHeader: {
+        message: 'Belongs to RWS',
+      },
+      allowedFeatures: {
+        message: 'Allowed Features (PS related)',
+      },
     });
   });
 
