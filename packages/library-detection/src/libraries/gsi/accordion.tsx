@@ -42,14 +42,17 @@ const GSIAccordion = ({ matches, urlCount }: AccordionProps) => {
       isLoading={false}
       urlCount={urlCount}
     >
-      <p className="text-darkest-gray dark:text-bright-gray">
-        {I18n.getMessage('gSInote', [
-          `<a target="_blank" className="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
-            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
-          )} rel="noreferrer">`,
-          `</a>`,
-        ])}
-      </p>
+      <p
+        className="text-darkest-gray dark:text-bright-gray"
+        dangerouslySetInnerHTML={{
+          __html: I18n.getMessage('gSInote', [
+            `<a target="_blank" class="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
+              'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
+            )} rel="noreferrer">`,
+            `</a>`,
+          ]),
+        }}
+      />
     </Accordion>
   );
 };

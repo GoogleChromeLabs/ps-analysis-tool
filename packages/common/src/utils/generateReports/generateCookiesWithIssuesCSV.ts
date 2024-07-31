@@ -69,6 +69,8 @@ const generateCookiesWithIssuesCSV = (
 
   for (const cookie of CookieWithIssueMap.values()) {
     //This should be in the same order as cookieDataHeader
+    const expires = calculateEffectiveExpiryDate(cookie.parsedCookie.expires);
+
     const recordsArray = [
       cookie.parsedCookie.name,
       cookie.isFirstParty
@@ -89,7 +91,7 @@ const generateCookiesWithIssuesCSV = (
         : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
-      calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
+      expires === 'Session' ? I18n.getMessage('session') : expires,
       cookie.analytics.GDPR || 'NA',
     ];
 

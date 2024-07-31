@@ -38,14 +38,17 @@ const GISAccordion = ({ matches, urlCount }: AccordionProps) => {
 
   return (
     <Accordion title={I18n.getMessage('gISTitle')} urlCount={urlCount}>
-      <p className="text-darkest-gray dark:text-bright-gray">
-        {I18n.getMessage('gISNote', [
-          `<a target="_blank" className="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
-            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration'
-          )} rel="noreferrer">`,
-          `</a>`,
-        ])}
-      </p>
+      <p
+        className="text-darkest-gray dark:text-bright-gray"
+        dangerouslySetInnerHTML={{
+          __html: I18n.getMessage('gISNote', [
+            `<a target="_blank" class="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
+              'https://developers.google.com/identity/gsi/web/guides/fedcm-migration'
+            )} rel="noreferrer">`,
+            `</a>`,
+          ]),
+        }}
+      />
     </Accordion>
   );
 };

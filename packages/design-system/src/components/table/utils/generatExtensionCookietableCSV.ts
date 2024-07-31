@@ -63,10 +63,12 @@ const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
         : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
-      cookie.parsedCookie.expires,
+      cookie.parsedCookie.expires === 'Session'
+        ? I18n.getMessage('session')
+        : cookie.parsedCookie.expires,
       cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics?.gdprUrl || 'NA',
-      cookie.parsedCookie.priority || ' ',
+      I18n.getMessage(cookie.parsedCookie?.priority || ''),
       cookie.parsedCookie.size?.toString(),
     ].map(sanitizeCsvRecord);
 

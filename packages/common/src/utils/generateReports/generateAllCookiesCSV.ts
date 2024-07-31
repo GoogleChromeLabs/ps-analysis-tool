@@ -70,6 +70,8 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
 
   for (const cookie of cookieMap.values()) {
     //This should be in the same order as cookieDataHeader
+    const expires = calculateEffectiveExpiryDate(cookie.parsedCookie.expires);
+
     const recordsArray = [
       cookie.parsedCookie.name,
       cookie.isFirstParty
@@ -90,7 +92,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
         : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
-      calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
+      expires === 'Session' ? I18n.getMessage('session') : expires,
       cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics.GDPR || 'NA',
     ];
