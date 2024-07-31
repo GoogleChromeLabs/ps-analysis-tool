@@ -206,7 +206,7 @@ const Layout = ({
   }, [isKeySelected, selectedItemKey, sidebarData, updateSelectedItemKey]);
 
   return (
-    <div className="w-full h-screen flex">
+    <div className="w-full h-screen flex bg-anti-flash-white dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
       <Resizable
         defaultSize={{ width: '200px', height: '100%' }}
         minWidth={'150px'}
