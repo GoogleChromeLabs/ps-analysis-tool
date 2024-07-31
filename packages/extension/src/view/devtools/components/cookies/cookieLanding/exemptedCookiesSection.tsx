@@ -17,7 +17,11 @@
  * External dependencies
  */
 import React from 'react';
-import { type DataMapping, getLegendDescription } from '@google-psat/common';
+import {
+  type DataMapping,
+  getLegendDescription,
+  type TabCookies,
+} from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -34,9 +38,14 @@ import { I18n } from '@google-psat/i18n';
  */
 import { useCookie } from '../../../stateProviders';
 
-const ExemptedCookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
-    tabCookies: state.tabCookies,
+interface ExemptedCookiesSectionProps {
+  tabCookies: TabCookies;
+}
+
+const ExemptedCookiesSection = ({
+  tabCookies,
+}: ExemptedCookiesSectionProps) => {
+  const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
   }));
 
@@ -76,8 +85,8 @@ const ExemptedCookiesSection = () => {
 
   const description = !cookieStats.exemptedCookies.total ? (
     <div className="flex gap-1 justify-center items-center">
-      No cookies were exempted by the browser.
-      <span title="Exempted cookies are only available in 3PCD browser.">
+      {I18n.getMessage('noCookiesExempted')}
+      <span title={I18n.getMessage('exemptedCookiesIn3PCD')}>
         <InfoIcon className="fill-granite-gray" />
       </span>
     </div>

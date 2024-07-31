@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -24,9 +24,8 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_COMMENTS_HELP_URL } from './constants';
-import { I18n } from '@google-psat/i18n';
 
-const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
+const FBCommentsAccordion = ({ domQueryMatches, urlCount }: AccordionProps) => {
   if (!domQueryMatches) {
     return null;
   }
@@ -42,6 +41,7 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
       title={I18n.getMessage('fBComments')}
       isLoading={false}
       featuresText=""
+      urlCount={urlCount}
     >
       <DetectionMessage
         libraryName={I18n.getMessage('fBCommentsPlugin')}

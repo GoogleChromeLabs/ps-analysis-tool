@@ -1,10 +1,15 @@
 {
   "name": "@google-psat/cli",
-  "version": "0.9.0-2",
+  "version": "0.10.0",
   "description": "CLI tool for analysis",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
-  "keywords": ["psat", "privacy sandbox", "google", "chrome", "3pcd"],
+  "keywords": [
+    "psat",
+    "privacy sandbox",
+    "google",
+    "chrome"
+  ],
   "files": [
     "assets",
     "dist",
@@ -13,7 +18,7 @@
   "scripts": {
     "build": "webpack --config ../../cli.webpack.config.cjs ",
     "dev": "webpack --config ../../cli.webpack.config.cjs --watch",
-    "build:remove": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
@@ -45,7 +50,8 @@
     "@google-psat/common": "*",
     "@google-psat/i18n": "*",
     "@google-psat/library-detection": "*",
-    "commander": "^10.0.1", 
+    "chalk": "^5.3.0",
+    "commander": "^10.0.1",
     "fs-extra": "^11.1.1",
     "promptly": "^3.2.0",
     "sitemapper": "^3.1.8",
@@ -57,6 +63,7 @@
     "@types/node": "^20.2.3",
     "@types/promptly": "^3.0.2",
     "@types/xml2js": "^0.4.14",
+    "coffee": "^5.5.1",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.0.4",
     "webpack": "^5.86.0"

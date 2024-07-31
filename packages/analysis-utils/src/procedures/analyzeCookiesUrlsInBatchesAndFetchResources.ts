@@ -18,10 +18,11 @@
  * External dependencies.
  */
 import {
-  CookieData,
-  CookieDatabase,
+  type CookieData,
+  type CookieDatabase,
   LibraryData,
-  LibraryMatchers,
+  type LibraryMatchers,
+  removeAndAddNewSpinnerText,
 } from '@google-psat/common';
 
 /**
@@ -36,17 +37,10 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   delayTime: number,
   cookieDictionary: CookieDatabase,
   batchSize = 3,
-  spinnies?: {
-    add: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-    succeed: (
-      id: string,
-      { text, indent }: { text: string; indent: number }
-    ) => void;
-  },
-  shouldSkipAcceptBanner = false
+  spinnies?: Spinnies,
+  shouldSkipAcceptBanner = false,
+  verbose = false,
+  indent = 4
 ) => {
   let report: {
     url: string;
@@ -70,9 +64,10 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
     const end = Math.min(urls.length - 1, i + batchSize - 1);
 
     spinnies &&
-      spinnies.add(`cookie-batch-spinner`, {
-        text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}...`,
-        indent: 2,
+      indent === 4 &&
+      spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
+        text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}`,
+        indent,
       });
 
     const urlsWindow = urls.slice(start, end + 1);
@@ -84,16 +79,21 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
         isHeadless,
         delayTime,
         cookieDictionary,
-        shouldSkipAcceptBanner
+        shouldSkipAcceptBanner,
+        verbose,
+        spinnies
       );
 
     report = [...report, ...cookieAnalysisAndFetchedResources];
 
     spinnies &&
-      spinnies.succeed(`cookie-batch-spinner`, {
-        text: `Done analyzing cookies in URLs ${start + 1} - ${end + 1}.`,
-        indent: 2,
-      });
+      indent === 4 &&
+      removeAndAddNewSpinnerText(
+        spinnies,
+        `cookie-batch-spinner${start + 1}-${end + 1}`,
+        `Done analyzing cookies in URLs ${start + 1} - ${end + 1}`,
+        indent
+      );
   }
 
   return report;

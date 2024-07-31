@@ -27,9 +27,10 @@ import {
 } from './syncStorageOnChangedListener';
 import { onTabCreatedListener } from './tabOnCreatedListener';
 import { onTabRemovedListener } from './tabOnRemovedListener';
-import { onTabUpdatedListener } from './tabsOnUpdatedListener';
+import { onCommittedNavigationListener } from './onCommittedNavigationListener';
 import { windowsOnRemovedListener } from './windowsOnRemovedListener';
 import { windowsOnCreatedListener } from './windowsOnCreatedListener';
+import { onEnabledListener } from './onEnabledListener';
 
 /**
  * Fires before sending an HTTP request, once the request headers are available.
@@ -50,6 +51,12 @@ chrome?.webRequest?.onResponseStarted?.addListener(
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']
 );
+
+/**
+ * Fires when the etension is enabled.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/management#event-onEnabled
+ */
+chrome.management.onEnabled.addListener(onEnabledListener);
 
 chrome.tabs.onCreated.addListener(onTabCreatedListener);
 
@@ -84,7 +91,7 @@ chrome.tabs.onRemoved.addListener(onTabRemovedListener);
  * Fires when a tab is updated.
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
  */
-chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
+chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
 /**
  * Fires when a window is removed (closed).

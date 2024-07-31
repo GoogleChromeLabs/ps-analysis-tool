@@ -53,6 +53,10 @@ import SettingsTab from '../../../../../assets/icons/settings-tab.svg';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import SettingsTabWhite from '../../../../../assets/icons/settings-tab-white.svg';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import PrivateAggregationicon from '../../../../../assets/icons/private-aggregation.svg';
+
 import {
   SiteBoundaries,
   Chips,
@@ -65,9 +69,10 @@ import {
   Fingerprinting,
   PrivacySandbox,
   Settings,
+  ProtectedAudience,
+  PrivateAggregation,
 } from './components';
 import { I18n } from '@google-psat/i18n';
-import ProtectedAudience from './components/privateAdvertising/protectedAudience';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -185,6 +190,25 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: GroupsIcon,
+              props: {
+                className: 'fill-white',
+              },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION]: {
+            title: 'Private Aggregation',
+            panel: {
+              Element: PrivateAggregation,
+            },
+            icon: {
+              Element: PrivateAggregationicon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: PrivateAggregationicon,
               props: {
                 className: 'fill-white',
               },

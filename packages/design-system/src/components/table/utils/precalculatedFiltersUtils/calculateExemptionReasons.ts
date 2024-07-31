@@ -16,7 +16,7 @@
 /*
  * External dependencies
  */
-import { CookieTableData } from '@google-psat/common';
+import type { CookieTableData } from '@google-psat/common';
 /*
  * Internal dependencies
  */

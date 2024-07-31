@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import { addUTMParams } from '@google-psat/common';
 
 /**
@@ -24,8 +23,9 @@ import { addUTMParams } from '@google-psat/common';
  */
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import { I18n } from '@google-psat/i18n';
 
-const GSIAccordion = ({ matches }: AccordionProps) => {
+const GSIAccordion = ({ matches, urlCount }: AccordionProps) => {
   if (!matches) {
     return null;
   }
@@ -37,23 +37,22 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Deprecated Google Sign-In'} isLoading={false}>
-      <p className="text-darkest-gray dark:text-bright-gray">
-        The Google Sign-In JavaScript library is deprecated and is no longer
-        supported. Some features of Google Identity Services are in use. Please
-        review the following documentation and{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={addUTMParams(
-            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
-          )}
-          target="_blank"
-          rel="noreferrer"
-        >
-          migrate
-        </a>{' '}
-        if necessary.
-      </p>
+    <Accordion
+      title={I18n.getMessage('gSITitle')}
+      isLoading={false}
+      urlCount={urlCount}
+    >
+      <p
+        className="text-darkest-gray dark:text-bright-gray"
+        dangerouslySetInnerHTML={{
+          __html: I18n.getMessage('gSInote', [
+            `<a target="_blank" class="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
+              'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
+            )} rel="noreferrer">`,
+            `</a>`,
+          ]),
+        }}
+      />
     </Accordion>
   );
 };

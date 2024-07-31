@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { BlockedReason, CookieData } from '@google-psat/common';
+import type { BlockedReason, CookieData } from '@google-psat/common';
 /**
  * Internal dependencies
  */

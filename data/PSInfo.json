@@ -17,8 +17,7 @@
   },
   "protected-audience": {
     "name": "Protected Audience",
-    "description": "The Protected Audience API is a Privacy Sandbox technology to serve remarketing and custom audience use cases, designed so third parties cannot track user browsing behavior across sites.",
-		"useI18n": false,
+    "description": "PSProtectedAudience",
     "proposal": "https://github.com/WICG/turtledove",
     "publicDiscussion": "https://github.com/WICG/turtledove/issues",
 		"publicExplainer": "https://github.com/WICG/turtledove/blob/main/FLEDGE.md",
@@ -86,5 +85,13 @@
     "publicDiscussion": "https://github.com/miketaylr/user-agent-reduction/issues",
     "videoOverview": "",
     "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/user-agent"
+  },
+  "private-aggregation": {
+    "name": "Private Aggregation",
+    "description": "privateAggregationDescription",
+    "proposal": "https://github.com/patcg-individual-drafts/private-aggregation-api",
+    "publicDiscussion": "https://github.com/patcg-individual-drafts/private-aggregation-api/issues",
+		"publicExplainer": "https://github.com/patcg-individual-drafts/private-aggregation-api/blob/main/report_verification.md",
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/private-aggregation/fundamentals"
   }
 }

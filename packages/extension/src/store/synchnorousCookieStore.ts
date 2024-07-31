@@ -184,12 +184,8 @@ class SynchnorousCookieStore {
     tabId: string,
     frameIds: string[]
   ) {
-    const {
-      headers,
-      blockedCookies,
-      cookiePartitionKey = '',
-      exemptedCookies,
-    } = response;
+    const { headers, blockedCookies, cookiePartitionKey, exemptedCookies } =
+      response;
 
     const cookies: CookieData[] = parseResponseReceivedExtraInfo(
       headers,
@@ -547,11 +543,31 @@ class SynchnorousCookieStore {
       ) {
         sentMessageAnyWhere = true;
 
+        const newCookieData: {
+          [cookieKey: string]: CookieData;
+        } = {};
+
+        Object.keys(this.tabsData[tabId]).forEach((key) => {
+          newCookieData[key] = {
+            ...this.tabsData[tabId][key],
+            networkEvents: {
+              requestEvents: [],
+              responseEvents: [],
+            },
+            url: '',
+            headerType: ['request', 'response'].includes(
+              this.tabsData[tabId][key]?.headerType ?? ''
+            )
+              ? 'http'
+              : 'javascript',
+          };
+        });
+
         await chrome.runtime.sendMessage({
           type: NEW_COOKIE_DATA,
           payload: {
             tabId,
-            cookieData: this.tabsData[tabId],
+            cookieData: newCookieData,
             extraData: {
               extraFrameData: this.tabs[tabId].frameIDURLSet,
             },
@@ -616,14 +632,23 @@ class SynchnorousCookieStore {
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
             ...cookie.parsedCookie,
+            httponly:
+              cookie.parsedCookie.httponly ??
+              this.tabsData[tabId][cookieKey].parsedCookie.httponly,
             priority:
               cookie.parsedCookie?.priority ??
               this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
               'Medium',
-            partitionKey:
-              cookie.parsedCookie?.partitionKey ??
-              this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,
+            partitionKey: '',
           };
+          if (
+            cookie.parsedCookie?.partitionKey ||
+            this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey
+          ) {
+            parsedCookie.partitionKey =
+              cookie.parsedCookie?.partitionKey ||
+              this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey;
+          }
 
           const networkEvents: CookieData['networkEvents'] = {
             requestEvents: [

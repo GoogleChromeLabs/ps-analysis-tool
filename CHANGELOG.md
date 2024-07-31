@@ -399,7 +399,45 @@
 * Refactor: Update package scope name to `@google-psat` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/725
 
 
-#v0.9.0
+#v0.9.1
 
 ## Extension
 Remove facilitated testing page Remove facilitated testing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/787
+
+
+#v0.10.0
+
+# Changelog
+
+## Extension
+* Feature: Add global filtering capabilities https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/735
+* Feature: Generate complete report from extension. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/749
+* Feature: Add 0.9v i18n translations https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/791
+* Feature: Add “Private Aggregation” panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/746
+* Feature: Enable navigating from sitemap report insights page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/736
+* Fix: Use `onCommittedNavigation` listener instead of `onTabUpdated` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/755
+* Fix: Load settings when extension has been enabled https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/758
+* Fix: Performance issues in chrome PSAT extension. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/762
+* Fix: Report generation https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/766
+* Fix: QA issues on develop https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/779
+* Fix: QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/789
+* Refactor: Move dashboard from design-system to report. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/772
+* Chore: Remove blocking status and mapping columns from cookies table https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/748
+
+## CLI
+* Feature: Add report header https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/777
+* Feature: Add section summarizing known breakages https://github.com/GoogleChromeLabs/ps-analysis-tool/issues/752
+* Feature: Inline scripts and data for the CLI analysis report file https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/745
+* Feature: Add known breakages section in aggregated report https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/754
+* Feature: Redesign CLI console messages and user interactions. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/734
+* Feature: Add favicon to the downloadable report and CLI dashboard. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/742
+* Feature: Implement output folder naming conventions for saved reports https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/759
+* Enhancement: Add filters in full report file https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/770
+* Fix: Revert removal of use arguments and update CLI build commands https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/769
+* Fix: Add custom sorting comparator for categories https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/771
+
+## Others
+* Code Quality: Add E2E tests for extension and CLI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/773
+* Chore: Make NPM commands used for development uniform. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/775
+* Bump “fast-xml-parser” from 4.4.0 to 4.4.1 https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/790
+* Chore: Setup report package development configurations https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/756

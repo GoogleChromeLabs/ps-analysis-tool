@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/cli-dashboard",
-  "version": "0.9.0-2",
+  "version": "0.10.0",
   "description": "Dashboard for visualizing cli analysis output",
   "author": {
     "name": "Google"
@@ -24,9 +24,9 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "scripts": {
-    "start": "webpack-dev-server --config ../../dashboard.webpack.config.cjs",
+    "dev": "webpack serve --config ../../dashboard.webpack.config.cjs --open --port 8085",
     "build": "webpack --config ../../dashboard.webpack.config.cjs",
-    "build:remove": "rimraf dist",
+    "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
@@ -36,26 +36,20 @@
     "@google-psat/common": "*",
     "@google-psat/design-system": "*",
     "@google-psat/i18n": "*",
-    "@google-psat/library-detection": "*",
-    "classnames": "^2.3.2",
-    "file-saver": "^2.0.5",
-    "jszip": "^3.10.1",
-    "ora": "^7.0.1",
-    "re-resizable": "^6.9.9",
+    "@google-psat/report": "*",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "use-context-selector": "^1.4.1"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",
     "@babel/preset-env": "^7.22.15",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
+		"@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "@types/file-saver": "^2.0.5",
     "babel-loader": "^9.1.3",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
     "webpackbar": "^5.0.2"
   }
 }

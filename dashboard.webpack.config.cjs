@@ -13,37 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
-const commonConfig = require('./webpack.shared.cjs');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
-const report = {
-  entry: {
-    index: '../report/src/index.tsx',
-  },
-  output: {
-    path: path.resolve(__dirname, './packages/cli-dashboard/dist/report'),
-    filename: '[name].js',
-    publicPath: '/',
-  },
-  plugins: [
-    new WebpackBar({
-      name: 'Report',
-      color: '#357B66',
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Report',
-      template: '../report/public/index.html',
-      filename: 'index.html',
-      inject: true,
-    }),
-    new HtmlInlineScriptPlugin(),
-  ],
-  ...commonConfig,
-};
+/**
+ * Internal dependencies.
+ */
+const commonConfig = require('./webpack.shared.cjs');
 
 const dashboard = {
   entry: {
@@ -52,6 +35,7 @@ const dashboard = {
   output: {
     path: path.resolve(__dirname, './packages/cli-dashboard/dist'),
     filename: '[name].js',
+    publicPath: '/',
   },
   plugins: [
     new WebpackBar({
@@ -60,10 +44,16 @@ const dashboard = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: '../cli-dashboard/public/index.html',
+      template: '../cli-dashboard/public/index.ejs',
       filename: 'index.html',
-      inject: false,
+      inject: commonConfig.mode === 'production' ? 'body' : false,
     }),
+    ...(commonConfig.mode === 'production'
+      ? [new HtmlInlineScriptPlugin()]
+      : []),
+    ...(commonConfig.mode !== 'production'
+      ? [new ReactRefreshWebpackPlugin()]
+      : []),
     new CopyPlugin({
       patterns: [
         {
@@ -76,4 +66,4 @@ const dashboard = {
   ...commonConfig,
 };
 
-module.exports = [dashboard, report];
+module.exports = [dashboard];

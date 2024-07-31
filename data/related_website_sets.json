@@ -900,6 +900,72 @@
         "https://ambitionbox.com": "RWS_rationale_https___ambitionbox_com",
         "https://infoedgeindia.com": "RWS_rationale_https___infoedgeindia_com"
       }
+    },
+    {
+      "contact": "l.powazka@text.com",
+      "primary": "https://text.com",
+      "associatedSites": [
+        "https://livechat.com",
+        "https://helpdesk.com",
+        "https://chatbot.com",
+        "https://livechatinc.com",
+        "https://knowledgebase.com",
+        "https://openwidget.com"
+      ],
+      "rationaleBySite": {
+        "https://livechat.com": "RWS_rationale_https___livechat_com",
+        "https://helpdesk.com": "RWS_rationale_https___helpdesk_com",
+        "https://openwidget.com": "RWS_rationale_https___openwidget_com",
+        "https://chatbot.com": "RWS_rationale_https___chatbot_com",
+        "https://knowledgebase.com": "RWS_rationale_https___knowledgebase_com",
+        "https://livechatinc.com": "RWS_rationale_https___livechatinc_com"
+      }
+    },
+    {
+      "contact": "tech@thejournal.ie",
+      "primary": "https://thejournal.ie",
+      "associatedSites": [
+        "https://the42.ie"
+      ],
+      "rationaleBySite": {
+        "https://the42.ie": "RWS_rationale_https___the42_ie"
+      }
+    },
+    {
+      "contact": "dev@ad-shield.io",
+      "primary": "https://html-load.com",
+      "associatedSites": [
+        "https://css-load.com",
+        "https://img-load.com",
+        "https://content-loader.com",
+        "https://07c225f3.online",
+        "https://html-load.cc"
+      ],
+      "rationaleBySite": {
+        "https://css-load.com": "RWS_rationale_https___css_load_com",
+        "https://img-load.com": "RWS_rationale_https___img_load_com",
+        "https://content-loader.com": "RWS_rationale_https___content_loader_com",
+        "https://07c225f3.online": "RWS_rationale_https___07c225f3_online",
+        "https://html-load.cc": "RWS_rationale_https___html_load_cc"
+      }
+    },
+    {
+      "contact": "jakub.lasecki@firma.interia.pl",
+      "primary": "https://interia.pl",
+      "associatedSites": [
+        "https://pomponik.pl",
+        "https://deccoria.pl",
+        "https://top.pl",
+        "https://smaker.pl",
+        "https://terazgotuje.pl"
+      ],
+      "rationaleBySite": {
+        "https://pomponik.pl": "RWS_rationale_https___pomponik_pl",
+        "https://deccoria.pl": "RWS_rationale_https___deccoria_pl",
+        "https://top.pl": "RWS_rationale_https___top_pl",
+        "https://smaker.pl": "RWS_rationale_https___smaker_pl",
+        "https://terazgotuje.pl": "RWS_rationale_https___terazgotuje_pl"
+      }
     }
   ]
 }

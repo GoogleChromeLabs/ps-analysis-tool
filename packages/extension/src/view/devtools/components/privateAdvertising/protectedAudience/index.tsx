@@ -19,12 +19,13 @@
  */
 import React from 'react';
 import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 const ProtectedAudience = () => {
   return (
     <div data-testid="protected-audience-content" className="h-full w-full">
       <LandingPage
-        title="Protected Audience"
+        title={I18n.getMessage('protectedAudience')}
         psInfoKey={PSInfoKey.ProtectedAudience}
         extraClasses="max-w-2xl h-fit"
       />

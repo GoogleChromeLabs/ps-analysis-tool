@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import puppeteer, { Browser, HTTPResponse, Page, Protocol } from 'puppeteer';
-import { parse } from 'simple-cookie';
+import { parse, type Cookie } from 'simple-cookie';
 import {
   type CookieData,
   type ScriptTagUnderCheck,
@@ -54,12 +54,15 @@ export class BrowserManagement {
   pageRequests: Record<string, Record<string, RequestData>>;
   pageResourcesMaps: Record<string, Record<string, ScriptTagUnderCheck>>;
   shouldLogDebug: boolean;
-
+  spinnies: Spinnies | undefined;
+  indent = 0;
   constructor(
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
     pageWaitTime: number,
-    shouldLogDebug: boolean
+    shouldLogDebug: boolean,
+    indent: number,
+    spinnies?: Spinnies
   ) {
     this.viewportConfig = viewportConfig;
     this.browser = null;
@@ -71,11 +74,19 @@ export class BrowserManagement {
     this.pageRequests = {};
     this.shouldLogDebug = shouldLogDebug;
     this.pageResourcesMaps = {};
+    this.spinnies = spinnies;
+    this.indent = indent;
   }
 
   debugLog(msg: any) {
-    if (this.shouldLogDebug) {
-      console.log(msg);
+    if (this.shouldLogDebug && this.spinnies) {
+      this.spinnies.add(msg, {
+        text: msg,
+        //@ts-ignore
+        succeedColor: 'white',
+        status: 'non-spinnable',
+        indent: this.indent,
+      });
     }
   }
 
@@ -94,14 +105,14 @@ export class BrowserManagement {
       headless: this.isHeadless,
       args,
     });
-    this.debugLog('browser intialized');
+    this.debugLog('Browser intialized');
   }
 
   async clickOnAcceptBanner(url: string) {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided id was found');
     }
 
     await page.evaluate(() => {
@@ -167,14 +178,14 @@ export class BrowserManagement {
       throw new Error('no page with the provided id was found');
     }
 
-    this.debugLog(`starting navigation to url ${url}`);
+    this.debugLog(`Starting navigation to URL: ${url}`);
 
     try {
       await page.goto(url, { timeout: 10000 });
-      this.debugLog(`done with navigation to url:${url}`);
+      this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
       this.debugLog(
-        `navigation did not finish in 10 seconds moving on to scrolling`
+        `Navigation did not finish in 10 seconds moving on to scrolling`
       );
       //ignore
     }
@@ -192,11 +203,11 @@ export class BrowserManagement {
         window.scrollBy(0, 10000);
       });
     } catch (error) {
-      this.debugLog(`scrolling the page to the end.`);
+      this.debugLog('Scrolled to end of page');
       //ignore
     }
 
-    this.debugLog(`scrolling on url:${url}`);
+    this.debugLog(`Scrolling on URL: ${url}`);
   }
 
   responseEventListener(pageId: string, response: HTTPResponse) {
@@ -281,10 +292,7 @@ export class BrowserManagement {
     const cookies: CookieData[] = headersToBeParsed
       .split('\n')
       .map((headerLine) => {
-        const parsedCookie = parse(headerLine);
-        const partitionKey = headerLine.includes('Partitioned')
-          ? cookiePartitionKey
-          : undefined;
+        const parsedCookie: Cookie = parse(headerLine);
 
         const url = this.pageResponses[pageId][requestId]?.url;
 
@@ -320,17 +328,17 @@ export class BrowserManagement {
           }
         });
 
-        return {
+        const singleCookie: CookieData = {
           parsedCookie: {
             name: parsedCookie.name,
             domain: parsedCookie.domain,
             path: parsedCookie.path || '/',
             value: parsedCookie.value,
-            sameSite: parsedCookie.samesite || 'Lax',
+            samesite: parsedCookie.samesite || 'Lax',
             expires: parsedCookie.expires || 'Session',
-            httpOnly: parsedCookie.httponly || false,
+            httponly: parsedCookie.httponly || false,
             secure: parsedCookie.secure || false,
-            partitionKey,
+            partitionKey: '',
           },
           networkEvents: {
             responseEvents: [
@@ -350,6 +358,13 @@ export class BrowserManagement {
           url,
           headerType: 'response',
         };
+
+        if (headerLine.includes('Partitioned')) {
+          singleCookie.parsedCookie.partitionKey =
+            cookiePartitionKey?.topLevelSite as unknown as string;
+        }
+
+        return singleCookie;
       });
 
     const prevCookies = this.pageResponses[pageId][requestId]?.cookies || [];
@@ -386,7 +401,7 @@ export class BrowserManagement {
     }
 
     const cookies = associatedCookies.map<CookieData>((associatedCookie) => {
-      return {
+      const singleCookie = {
         parsedCookie: {
           name: associatedCookie.cookie.name,
           domain: associatedCookie.cookie.domain,
@@ -396,7 +411,7 @@ export class BrowserManagement {
           expires: associatedCookie.cookie.expires || 'Session',
           httpOnly: associatedCookie.cookie.httpOnly || false,
           secure: associatedCookie.cookie.secure || false,
-          partitionKey: associatedCookie.cookie.partitionKey,
+          partitionKey: '',
         },
         networkEvents: {
           requestEvents: [
@@ -414,8 +429,15 @@ export class BrowserManagement {
         blockedReasons: associatedCookie.blockedReasons,
         exemptionReason: associatedCookie?.exemptionReason,
         url: this.pageRequests[pageId][requestId]?.url || '',
-        headerType: 'request',
+        headerType: 'request' as CookieData['headerType'],
       };
+
+      if (associatedCookie.cookie?.partitionKey) {
+        singleCookie.parsedCookie.partitionKey =
+          associatedCookie.cookie?.partitionKey?.topLevelSite;
+      }
+
+      return singleCookie;
     });
 
     this.pageRequests[pageId][requestId] = {
@@ -461,6 +483,8 @@ export class BrowserManagement {
       throw new Error(`no page with the provided id was found:${pageId}`);
     }
 
+    this.debugLog('Attaching network event listeners to page');
+
     const cdpSession = await page.createCDPSession();
 
     await cdpSession.send('Target.setAutoAttach', {
@@ -501,7 +525,7 @@ export class BrowserManagement {
       this.pageFrameAttachedListener(pageId, ev)
     );
 
-    this.debugLog('done attaching network event listeners');
+    this.debugLog('Finished attaching network event listeners');
   }
 
   async getJSCookies(page: Page) {
@@ -511,36 +535,42 @@ export class BrowserManagement {
 
     await Promise.all(
       frames.map(async (frame) => {
-        if (!frame.url().includes('http')) {
-          return;
+        try {
+          if (!frame.url().includes('http')) {
+            return;
+          }
+
+          const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
+            frame.evaluate(() => {
+              // @ts-ignore
+              return cookieStore?.getAll();
+            }),
+            [],
+            200
+          );
+
+          const frameCookies: {
+            [key: string]: CookieData;
+          } = {};
+
+          _JSCookies.forEach((cookie) => {
+            if (!cookie.domain) {
+              cookie.domain = new URL(frame.url()).hostname;
+            }
+            if (cookie.domain[0] !== '.') {
+              cookie.domain = '.' + cookie.domain;
+            }
+            const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
+            frameCookies[key] = {
+              parsedCookie: { ...cookie, partitionKey: '' },
+            };
+          });
+
+          const frameUrl = new URL(frame.url()).origin;
+          cookies[frameUrl] = { frameCookies };
+        } catch (error) {
+          //Fail silently
         }
-
-        const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
-          frame.evaluate(() => {
-            // @ts-ignore
-            return cookieStore.getAll();
-          }),
-          [],
-          200
-        );
-
-        const frameCookies: {
-          [key: string]: CookieData;
-        } = {};
-
-        _JSCookies.forEach((cookie) => {
-          if (!cookie.domain) {
-            cookie.domain = new URL(frame.url()).hostname;
-          }
-          if (cookie.domain[0] !== '.') {
-            cookie.domain = '.' + cookie.domain;
-          }
-          const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
-          frameCookies[key] = { parsedCookie: cookie };
-        });
-
-        const frameUrl = new URL(frame.url()).origin;
-        cookies[frameUrl] = { frameCookies };
       })
     );
 
@@ -635,7 +665,7 @@ export class BrowserManagement {
     await delay(this.pageWaitTime / 2);
 
     // Accept Banners
-    if (shouldSkipAcceptBanner) {
+    if (!shouldSkipAcceptBanner) {
       // delay
 
       await Promise.all(

@@ -43,6 +43,7 @@ import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 import Context, { type CookieStoreContext } from './context';
+import { diff } from 'deep-object-diff';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -91,15 +92,22 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       const currentTargets = await chrome.debugger.getTargets();
 
-      setTabFrames((prevState) =>
-        getFramesForCurrentTab(
+      setTabFrames((prevState) => {
+        const updatedTabFrames = getFramesForCurrentTab(
           prevState,
           currentTabFrames,
           currentTargets,
           extraFrameData ?? {},
           isUsingCDP
-        )
-      );
+        );
+        const isThereDiff = diff(prevState ?? {}, updatedTabFrames);
+
+        if (Object.keys(isThereDiff).length === 0) {
+          return prevState;
+        }
+
+        return updatedTabFrames;
+      });
     },
     [isUsingCDP]
   );
@@ -239,6 +247,9 @@ const Provider = ({ children }: PropsWithChildren) => {
           extraFrameData?: Record<string, string[]>;
         };
         psatOpenedAfterPageLoad?: boolean;
+        actionsPerformed: {
+          allowedNumberOfTabs: number;
+        };
       };
     }) => {
       if (!message.type) {
@@ -297,7 +308,16 @@ const Provider = ({ children }: PropsWithChildren) => {
         if (tabId.toString() === message.payload.tabId.toString()) {
           if (isCurrentTabBeingListenedToRef.current) {
             setTabToRead(tabId.toString());
-            setTabCookies(Object.keys(data).length > 0 ? data : null);
+            setTabCookies((prevState) => {
+              if (Object.keys(data).length > 0) {
+                const isThereDiff = diff(prevState ?? {}, data);
+                if (Object.keys(isThereDiff).length === 0) {
+                  return prevState;
+                }
+                return data;
+              }
+              return null;
+            });
             await getAllFramesForCurrentTab(frameData);
           } else {
             setTabFrames(null);
@@ -307,6 +327,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (message.type === SERVICE_WORKER_RELOAD_MESSAGE) {
         setSettingsChanged(false);
+        if (message?.payload?.actionsPerformed?.allowedNumberOfTabs === 1) {
+          isCurrentTabBeingListenedToRef.current = false;
+          setTabFrames(null);
+        }
       }
     },
     [getAllFramesForCurrentTab, setSettingsChanged]
@@ -414,36 +438,48 @@ const Provider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  return (
-    <Context.Provider
-      value={{
-        state: {
-          tabCookies,
-          tabUrl,
-          tabFrames,
-          loading,
-          selectedFrame,
-          isCurrentTabBeingListenedTo: isCurrentTabBeingListenedToRef.current,
-          returningToSingleTab,
-          contextInvalidated,
-          isInspecting,
-          canStartInspecting,
-          tabToRead,
-          frameHasCookies,
-        },
-        actions: {
-          setSelectedFrame,
-          changeListeningToThisTab,
-          getCookiesSetByJavascript,
-          setIsInspecting,
-          setContextInvalidated,
-          setCanStartInspecting,
-        },
-      }}
-    >
-      {children}
-    </Context.Provider>
-  );
+  const memoisedValue = useMemo(() => {
+    return {
+      state: {
+        tabCookies,
+        tabUrl,
+        tabFrames,
+        loading,
+        selectedFrame,
+        isCurrentTabBeingListenedTo: isCurrentTabBeingListenedToRef.current,
+        returningToSingleTab,
+        contextInvalidated,
+        isInspecting,
+        canStartInspecting,
+        tabToRead,
+        frameHasCookies,
+      },
+      actions: {
+        setSelectedFrame,
+        changeListeningToThisTab,
+        getCookiesSetByJavascript,
+        setIsInspecting,
+        setContextInvalidated,
+        setCanStartInspecting,
+      },
+    };
+  }, [
+    canStartInspecting,
+    changeListeningToThisTab,
+    contextInvalidated,
+    frameHasCookies,
+    getCookiesSetByJavascript,
+    isInspecting,
+    loading,
+    returningToSingleTab,
+    selectedFrame,
+    tabCookies,
+    tabFrames,
+    tabToRead,
+    tabUrl,
+  ]);
+
+  return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };
 
 export default Provider;

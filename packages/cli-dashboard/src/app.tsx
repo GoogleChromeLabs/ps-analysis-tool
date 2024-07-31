@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
@@ -24,15 +24,17 @@ import type {
   TechnologyData,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+import {
+  extractReportData,
+  extractCookies,
+  SiteMapReport,
+  SiteReport,
+} from '@google-psat/report';
 
 /**
  * Internal dependencies
  */
 import './app.css';
-import SiteReport from './components/siteReport';
-import SiteMapReport from './components/siteMapReport';
-import extractReportData from './components/utils/extractReportData';
-import extractCookies from './components/utils/extractCookies';
 
 enum DisplayType {
   SITEMAP,
@@ -51,13 +53,6 @@ const App = () => {
     [key: string]: LibraryData;
   } | null>(null);
 
-  const type = useMemo(() => {
-    // @ts-ignore
-    return globalThis?.PSAT_DATA?.type === 'sitemap'
-      ? DisplayType.SITEMAP
-      : DisplayType.SITE;
-  }, []);
-
   useEffect(() => {
     const bodyTag = document.querySelector('body');
 
@@ -68,7 +63,29 @@ const App = () => {
     bodyTag.style.fontSize = '75%';
   }, []);
 
+  const [type, setType] = useState<DisplayType>(DisplayType.SITE);
+
   useEffect(() => {
+    (async () => {
+      if (process.env.NODE_ENV === 'development') {
+        const module = await import('./dummyData/PSAT_DATA.js');
+        // @ts-ignore
+        globalThis.PSAT_DATA = module.default;
+      }
+
+      setType(
+        globalThis?.PSAT_DATA?.type === 'sitemap'
+          ? DisplayType.SITEMAP
+          : DisplayType.SITE
+      );
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!globalThis?.PSAT_DATA) {
+      return;
+    }
+
     sessionStorage.clear();
     //@ts-ignore
     const messages = globalThis?.PSAT_DATA?.translations;
@@ -90,7 +107,7 @@ const App = () => {
       _libraryMatches = extractedData.consolidatedLibraryMatches;
       setLandingPageCookies(extractedData.landingPageCookies);
     } else {
-      _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+      _cookies = extractCookies(data[0].cookieData, '', true);
       _technologies = data[0].technologyData;
       _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
     }

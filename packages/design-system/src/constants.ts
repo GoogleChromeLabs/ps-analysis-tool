@@ -83,21 +83,16 @@ export const LEGEND_DESCRIPTION: LegendData = {
   StorageAccessAPI: 'exemptionReasonStorageAccessAPI',
   TopLevelStorageAccessAPI: 'exemptionReasonTopLevelStorageAccessAPI',
   CorsOptIn: 'exemptionReasonCorsOptIn',
-  SameSiteLax:
-    "This cookie was blocked because it had the 'SameSite=Lax' attribute and the request was made from a different site and was not initiated by a top-level navigation.",
-  SyntaxError: "This 'Set-Cookie' header had invalid syntax.",
-  SchemeNotSupported:
-    'The scheme of this connection is not allowed to store cookies.',
-  OverwriteSecure:
-    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it was not sent over a secure connection and would have overwritten a cookie with the Secure attribute.",
-  InvalidPrefix:
-    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it used the '__Secure-' or '__Host-' prefix in its name and broke the additional rules applied to cookies with these prefixes.",
-  SamePartyConflictsWithOtherAttributes:
-    "This attempt to set a cookie via a 'Set-Cookie' header was blocked because it had the 'SameParty' attribute but also had other conflicting attributes. Chrome requires cookies that use the 'SameParty' attribute to also have the 'Secure' attribute, and to not be restricted to 'SameSite=Strict'.",
-  DisallowedCharacter:
-    "This 'Set-Cookie' header contained a disallowed character (a forbidden ASCII control character, or the tab character if it appears in the middle of the cookie name, value, an attribute name, or an attribute value).",
-  NoCookieContent:
-    "This attempt to set a cookie via a 'Set-Cookie' header was blocked beacuse the header did not contain any value.",
+  SameSiteLax: ['body_SameSiteLax'],
+  SyntaxError: ['body_SyntaxError'],
+  SchemeNotSupported: ['body_SchemeNotSupported'],
+  OverwriteSecure: ['body_OverwriteSecure'],
+  InvalidPrefix: ['body_InvalidPrefix'],
+  SamePartyConflictsWithOtherAttributes: [
+    'body_SamePartyConflictsWithOtherAttributes',
+  ],
+  DisallowedCharacter: ['body_DisallowedCharacter'],
+  NoCookieContent: ['body_NoCookieContent'],
 };
 
 export const EMPTY_FRAME_COUNT = [

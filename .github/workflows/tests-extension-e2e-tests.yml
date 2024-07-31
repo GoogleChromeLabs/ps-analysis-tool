@@ -1,0 +1,69 @@
+name: PSAT E2E tests
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - develop
+
+  pull_request:
+    branches:
+      - develop
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Cancels all prior workflow runs associated with pull requests that are still in progress.
+concurrency:
+  # The concurrency group contains the workflow name and the (target) branch name.
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e-test:
+    # The type of runner that the job will run on
+    name: Extension E2E Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Set Chrome executable path
+        run: |
+          CHROME_PATH=$(which google-chrome-stable || which google-chrome || which chrome || which chromium)
+          echo "CHROME_PATH=$CHROME_PATH" >> $GITHUB_ENV
+      - name: Install dependancy
+        run: |
+          ls 
+          pwd 
+          npm install || true
+          npm run build:ext
+      - name: Install Xvfb
+        run: sudo apt-get install -y xvfb
+
+      - name: Start Xvfb
+        run: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
+      - name: Delay for Xvfb to Start
+        run: sleep 6 # Adjust the sleep duration as needed
+
+      - name: Export DISPLAY
+        run: export DISPLAY=:99
+
+      - name: Run the tests
+        run: |
+          npm run test:extension:e2e
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: cd tests/e2e-test/utils/

@@ -44,8 +44,22 @@ const Table = ({
   hideFiltering = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
-  const { tableContainerRef } = useTable(({ state }) => ({
+  const {
+    tableContainerRef,
+    filters,
+    isSelectAllFilterSelected,
+    toggleFilterSelection,
+    toggleSelectAllFilter,
+    selectedFilters,
+    resetFilters,
+  } = useTable(({ state, actions }) => ({
     tableContainerRef: state.tableContainerRef,
+    filters: state.filters,
+    isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
+    toggleFilterSelection: actions.toggleFilterSelection,
+    toggleSelectAllFilter: actions.toggleSelectAllFilter,
+    selectedFilters: state.selectedFilters,
+    resetFilters: actions.resetFilters,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -103,8 +117,12 @@ const Table = ({
         setShowFilterSidebar={setShowFilterSidebar}
         extraInterface={extraInterfaceToTopBar}
       />
-      <ChipsBar />
-      <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz">
+      <ChipsBar
+        selectedFilters={selectedFilters}
+        resetFilters={resetFilters}
+        toggleFilterSelection={toggleFilterSelection}
+      />
+      <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"
@@ -113,7 +131,12 @@ const Table = ({
               right: true,
             }}
           >
-            <FiltersSidebar />
+            <FiltersSidebar
+              filters={filters}
+              isSelectAllFilterSelected={isSelectAllFilterSelected}
+              toggleFilterSelection={toggleFilterSelection}
+              toggleSelectAllFilter={toggleSelectAllFilter}
+            />
           </Resizable>
         )}
         <div

@@ -53,6 +53,12 @@ describe('RWSJsonGenerator', () => {
       rwsJsonGenerator: {
         message: 'Related Website Sets JSON Generator',
       },
+      generate: {
+        message: 'Generate',
+      },
+      reset: {
+        message: 'Reset',
+      },
     });
   });
 

@@ -23,7 +23,7 @@ import { getValueByKey } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import type { TableData } from '../types';
+import type { TableColumn, TableData } from '../types';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type DefaultOptions = {
@@ -41,6 +41,7 @@ export type ColumnSortingOutput = {
 
 const useColumnSorting = (
   data: TableData[],
+  tableColumns: TableColumn[],
   tablePersistentSettingsKey?: string
 ): ColumnSortingOutput => {
   const [sortKey, _setSortKey] = useState<string>('');
@@ -68,9 +69,22 @@ const useColumnSorting = (
       return [];
     }
 
+    const sortingComparator = tableColumns.find(
+      (column) => column.accessorKey === sortKey
+    )?.sortingComparator;
+
     const _sortedData = [...data].sort((a, b) => {
-      const candidateA = getValueByKey(sortKey, a);
-      const candidateB = getValueByKey(sortKey, b);
+      let candidateA = getValueByKey(sortKey, a);
+      let candidateB = getValueByKey(sortKey, b);
+
+      if (sortingComparator) {
+        return sortingComparator(candidateA, candidateB) * (ascending ? 1 : -1);
+      }
+
+      if (typeof candidateA === 'string' && typeof candidateB === 'string') {
+        candidateA = candidateA.trim();
+        candidateB = candidateB.trim();
+      }
 
       return (
         (candidateA === candidateB ? 0 : candidateA > candidateB ? 1 : -1) *
@@ -79,7 +93,7 @@ const useColumnSorting = (
     });
 
     return _sortedData;
-  }, [ascending, data, isDataLoading, sortKey]);
+  }, [ascending, data, isDataLoading, sortKey, tableColumns]);
 
   const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
     ({ actions }) => ({

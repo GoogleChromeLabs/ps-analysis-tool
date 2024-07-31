@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import { addUTMParams } from '@google-psat/common';
 
 /**
@@ -24,8 +23,9 @@ import { addUTMParams } from '@google-psat/common';
  */
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import { I18n } from '@google-psat/i18n';
 
-const GISAccordion = ({ matches }: AccordionProps) => {
+const GISAccordion = ({ matches, urlCount }: AccordionProps) => {
   if (!matches) {
     return null;
   }
@@ -37,23 +37,18 @@ const GISAccordion = ({ matches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Unsupported Google Identity Services'}>
-      <p className="text-darkest-gray dark:text-bright-gray">
-        Due to Privacy Sandbox enforcements some features are backward
-        incompatible or deprecated. Some features of Google Identity Services
-        are in use. Please review the following documentation and{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          target="_blank"
-          href={addUTMParams(
-            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration'
-          )}
-          rel="noreferrer"
-        >
-          migrate
-        </a>{' '}
-        if necessary.
-      </p>
+    <Accordion title={I18n.getMessage('gISTitle')} urlCount={urlCount}>
+      <p
+        className="text-darkest-gray dark:text-bright-gray"
+        dangerouslySetInnerHTML={{
+          __html: I18n.getMessage('gISNote', [
+            `<a target="_blank" class="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
+              'https://developers.google.com/identity/gsi/web/guides/fedcm-migration'
+            )} rel="noreferrer">`,
+            `</a>`,
+          ]),
+        }}
+      />
     </Accordion>
   );
 };

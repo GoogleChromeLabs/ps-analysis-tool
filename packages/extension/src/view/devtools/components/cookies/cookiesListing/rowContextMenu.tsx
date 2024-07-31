@@ -211,7 +211,7 @@ const RowContextMenu = forwardRef<
                   {
                     // @ts-ignore
                     chrome.devtools.panels?.network?.show
-                      ? 'Show Requests With This Cookie'
+                      ? I18n.getMessage('showRequestsWithCookie')
                       : I18n.getMessage('copyNetworkFilter')
                   }
                 </span>

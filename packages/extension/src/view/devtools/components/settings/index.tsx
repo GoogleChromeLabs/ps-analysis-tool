@@ -32,7 +32,7 @@ const Settings = () => {
   return (
     <div
       data-testid="extension-settings-content"
-      className="h-full w-full flex flex-col min-w-[40rem]"
+      className="h-full w-full flex flex-col min-w-[40rem] overflow-auto"
     >
       <div
         className={`${!open && 'border-b border-hex-gray dark:border-quartz'}`}

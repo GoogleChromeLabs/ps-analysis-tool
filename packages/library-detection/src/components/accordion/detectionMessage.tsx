@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import { I18n } from '@google-psat/i18n';
 
 interface DetectionMessageProps {
   libraryName: string;
@@ -30,20 +30,17 @@ const DetectionMessage = ({
   supportURL,
 }: DetectionMessageProps) => {
   return (
-    <p className="text-darkest-gray dark:text-bright-gray">
-      {libraryName} functionality may not work properly due to the phaseout of
-      third-party cookies. To inquire further about the same, please visit the
-      {' ' + provider + ' '}
-      <a
-        target="_blank"
-        className="text-bright-navy-blue dark:text-jordy-blue"
-        href={supportURL}
-        rel="noreferrer"
-      >
-        support forum
-      </a>
-      .
-    </p>
+    <p
+      className="text-darkest-gray dark:text-bright-gray"
+      dangerouslySetInnerHTML={{
+        __html: I18n.getMessage('detectionMessage', [
+          libraryName,
+          provider,
+          `<a target="_blank" class="text-bright-navy-blue dark:text-jordy-blue" href=${supportURL} rel="noreferrer">`,
+          `</a>`,
+        ]),
+      }}
+    />
   );
 };
 

@@ -102,7 +102,7 @@ export type responseEvent = {
 
 export type CookieData = {
   parsedCookie: ParsedCookie & {
-    partitionKey?: string;
+    partitionKey: string;
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };
@@ -112,7 +112,7 @@ export type CookieData = {
   };
   analytics?: CookieAnalytics | null;
   url?: string;
-  headerType?: 'response' | 'request' | 'javascript';
+  headerType?: 'response' | 'request' | 'javascript' | 'http';
   isFirstParty?: boolean | null;
   frameIdList?: Array<number | string>;
   blockedReasons?: BlockedReason[];
@@ -123,6 +123,7 @@ export type CookieData = {
     outboundBlock: BLOCK_STATUS;
   };
   exemptionReason?: Protocol.Network.CookieExemptionReason;
+  pageUrl?: string;
 };
 
 export type CookieTableData = CookieData & {
@@ -199,12 +200,14 @@ export type CookieJsonDataType = {
     name: string;
     value: string;
     domain: string;
-    partitionKey?: string;
+    partitionKey: string;
     path: string;
     expires: string;
     httpOnly: boolean;
     secure: boolean;
     sameSite: string;
+    priority?: 'Low' | 'Medium' | 'High';
+    size?: number;
   };
   analytics: {
     platform: string;
@@ -238,6 +241,7 @@ export type CompleteJson = {
       frameCookies: {
         [cookieKey: string]: CookieJsonDataType;
       };
+      frameType?: string | undefined;
     };
   };
   libraryMatches: { [key: string]: LibraryData };

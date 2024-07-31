@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import {
-  CompleteJson,
+  type CompleteJson,
   generateCookiesWithIssuesCSV,
   generateAllCookiesCSV,
   generateSummaryDataCSV,

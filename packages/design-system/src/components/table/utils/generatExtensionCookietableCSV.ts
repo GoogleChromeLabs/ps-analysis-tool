@@ -16,11 +16,7 @@
 /**
  * External dependencies.
  */
-import {
-  BLOCK_STATUS,
-  CookieTableData,
-  sanitizeCsvRecord,
-} from '@google-psat/common';
+import { type CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
@@ -40,26 +36,12 @@ const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('gdpr'),
   () => I18n.getMessage('priority'),
   () => I18n.getMessage('size'),
-  () => I18n.getMessage('blockingStatus'),
 ];
 
 const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
-    const isInboundBlocked =
-      cookie.blockingStatus?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
-    const isOutboundBlocked =
-      cookie.blockingStatus?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
-    const hasValidBlockedReason =
-      cookie?.blockedReasons && cookie.blockedReasons.length !== 0;
-
-    let status = '';
-
-    if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
-      status = I18n.getMessage('undetermined');
-    }
-
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
@@ -81,12 +63,13 @@ const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
         : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
-      cookie.parsedCookie.expires,
+      cookie.parsedCookie.expires === 'Session'
+        ? I18n.getMessage('session')
+        : cookie.parsedCookie.expires,
       cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics?.gdprUrl || 'NA',
-      cookie.parsedCookie.priority || ' ',
+      I18n.getMessage((cookie.parsedCookie?.priority || '').toLowerCase()),
       cookie.parsedCookie.size?.toString(),
-      status,
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
