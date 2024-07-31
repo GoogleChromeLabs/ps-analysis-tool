@@ -9265,5 +9265,56 @@
   },
   "OCD_tc_ss__description": {
     "message": "Used for restore deleted cookies by ITP In case your cookie 'tc_ss' contains more than 2048 characters, cookies will be created with incremented names (ex. tc_ss1, tc_ss2, ...)"
+  },
+  "RWS_rationale_https___livechat_com": {
+    "message": "LiveChat - leading live chat software for business"
+  },
+  "RWS_rationale_https___helpdesk_com": {
+    "message": "HelpDesk - leading help desk software for business"
+  },
+  "RWS_rationale_https___openwidget_com": {
+    "message": "OpenWidget - free widgets for websites"
+  },
+  "RWS_rationale_https___chatbot_com": {
+    "message": "ChatBot - leading automation software and chatbot platform"
+  },
+  "RWS_rationale_https___knowledgebase_com": {
+    "message": "Knowledge base software for customer support and self-service"
+  },
+  "RWS_rationale_https___livechatinc_com": {
+    "message": "Services supporting LiveChat"
+  },
+  "RWS_rationale_https___the42_ie": {
+    "message": "Sports publication of TheJournal"
+  },
+  "RWS_rationale_https___css_load_com": {
+    "message": "This domain is designated for the Pro version."
+  },
+  "RWS_rationale_https___img_load_com": {
+    "message": "This domain is designated for the Enterprise version."
+  },
+  "RWS_rationale_https___content_loader_com": {
+    "message": "This domain is designated for the Legacy version."
+  },
+  "RWS_rationale_https___07c225f3_online": {
+    "message": "This domain is designated for the Legacy version."
+  },
+  "RWS_rationale_https___html_load_cc": {
+    "message": "This domain is designated for the Essential version."
+  },
+  "RWS_rationale_https___pomponik_pl": {
+    "message": "Special Interest Website - celebrity news and gossip"
+  },
+  "RWS_rationale_https___deccoria_pl": {
+    "message": "Special Interest Website - advice and inspirations foron interior design and garden care"
+  },
+  "RWS_rationale_https___top_pl": {
+    "message": "Special Interest Website - wide range of articles, news and tips "
+  },
+  "RWS_rationale_https___smaker_pl": {
+    "message": "Special Interest Website - recipes, cooking, diet and everything for home cooks"
+  },
+  "RWS_rationale_https___terazgotuje_pl": {
+    "message": "Special Interest Website - cooking news, tips and recipes"
   }
 }
