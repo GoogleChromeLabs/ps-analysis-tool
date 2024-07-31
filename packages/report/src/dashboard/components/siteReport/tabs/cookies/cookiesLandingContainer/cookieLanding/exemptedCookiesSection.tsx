@@ -89,15 +89,19 @@ const ExemptedCookiesSection = ({
       data: cookiesStatsComponents.exempted,
       onClick:
         cookieStats.exemptedCookies.total > 0
-          ? () => selectedItemUpdater('All', 'exemptionReason')
+          ? () =>
+              selectedItemUpdater(
+                I18n.getMessage('selectAll'),
+                'exemptionReason'
+              )
           : null,
     },
   ];
 
   const description = !cookieStats.exemptedCookies.total ? (
     <div className="flex gap-1 justify-center items-center">
-      No cookies were exempted by the browser.
-      <span title="Exempted cookies are only available in 3PCD browser.">
+      {I18n.getMessage('noCookiesExempted')}
+      <span title={I18n.getMessage('exemptedCookiesIn3PCD')}>
         <InfoIcon className="fill-granite-gray" />
       </span>
     </div>

@@ -22,26 +22,23 @@ import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
-    title: 'CHIPS',
-    description:
-      'The new cookie attribute, Partitioned, allows developers to opt a cookie into partitioned storage, with separate cookie jars per top-level site.',
+    title: () => I18n.getMessage('chips'),
+    description: () => I18n.getMessage('chipsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
   },
   {
-    title: 'Storage Access API',
-    description:
-      'Storage Access API allows iframes to request storage access permissions when access would otherwise be denied by browser settings.',
+    title: () => I18n.getMessage('storageAccessAPI'),
+    description: () => I18n.getMessage('storageAccessAPIDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
   },
   {
-    title: 'Related Website Sets',
-    description:
-      'Related Website Sets (RWS) is a way for a company to declare relationships among sites, so that browsers allow limited third-party cookie access for specific purposes.',
+    title: () => I18n.getMessage('rws'),
+    description: () => I18n.getMessage('rwsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
   },
   {
-    title: 'Federated Credential Management API',
-    description: 'A web API for privacy-preserving identity federation.',
+    title: () => I18n.getMessage('fedcm'),
+    description: () => I18n.getMessage('fedcmDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
   },
 ];
@@ -52,7 +49,7 @@ const SiteBoundaries = () => {
       title={I18n.getMessage('siteBoundaries')}
       contentPanel={
         <ContentPanel
-          title="Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents."
+          title={I18n.getMessage('siteBoundariesDescription')}
           content={content}
           counterStyles="bg-green-700"
           titleStyles="text-green-700"

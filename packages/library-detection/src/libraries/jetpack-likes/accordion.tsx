@@ -41,7 +41,7 @@ const JetpackLikesAccordion = ({
 
   return (
     <Accordion
-      title={'Jetpack Like Button'}
+      title={I18n.getMessage('jetpackLikeButton')}
       isLoading={false}
       featuresText=""
       urlCount={urlCount}

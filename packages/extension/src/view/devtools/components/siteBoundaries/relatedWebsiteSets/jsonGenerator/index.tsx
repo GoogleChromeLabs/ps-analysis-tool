@@ -134,8 +134,12 @@ const RWSJsonGenerator = () => {
                   </div>
                 ) : (
                   <div className="flex gap-2">
-                    <Button text="Generate" type="submit" />
-                    <Button text="Reset" type="reset" variant="secondary" />
+                    <Button text={I18n.getMessage('generate')} type="submit" />
+                    <Button
+                      text={I18n.getMessage('reset')}
+                      type="reset"
+                      variant="secondary"
+                    />
                   </div>
                 )}
               </div>

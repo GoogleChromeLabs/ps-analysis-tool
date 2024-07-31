@@ -1391,9 +1391,6 @@
   "PSTopics": {
     "message": "사용자가 방문하는 특정 사이트 또는 앱을 알지 않아도 사용자가 방문하는 사이트 또는 앱으로부터 추론된 관심분야를 기반으로 광고가 사용자에게 도달할 방법을 제공합니다."
   },
-  "PSProtectedAudience": {
-    "message": "맞춤 정의된 관심분야 그룹을 기기 내에 저장되고 원하는 관심분야 그룹에 속한 사람들에게 적절한 광고를 매칭하는 기기 내 입찰이 진행되도록 허용하여 리마케팅 및 맞춤 잠재고객 사용 사례를 지원하는 제안입니다."
-  },
   "PSAttributionReporting": {
     "message": "광고 이벤트가 전환 이벤트와 함께 기기 내에서 기록 및 매칭되도록 허용합니다. </br> 이벤트 수준: 특정 광고 상호작용의 효과를 파악하여 최적화를 지원합니다. </br>요약 보고: 개별 전환의 세부정보는 최소화하면서 광고에서 달성된 전체적인 전환(예: 지역, 수익, 시간대 등)에 대한 추가 세부정보를 제공합니다."
   },
@@ -1736,44 +1733,12 @@
   "fBLike": {
     "message": "Facebook 좋아요 버튼"
   },
-  "gISTitle": {
-    "message": "지원되지 않는 Google ID 서비스 기능은 사용하지 마세요."
-  },
   "featureCount": {
     "message": "$count$ 기능",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "2"
-      }
-    }
-  },
-  "gISNote": {
-    "message": "개인 정보 보호 샌드박스 시행으로 인해 일부 기능이 이전 버전과 호환되지 않거나 지원 중단됩니다. 이 보고서는 스크립트 src 요소와 영향을 받는 JavaScript 객체 및 메서드에 대해 페이지 검사를 수행합니다. 다음 기능을 검토하고 필요한 경우 $a_tag_start$이전$a_tag_end$하세요.",
-    "placeholders": {
-      "a_tag_start": {
-        "content": "$1",
-        "example": "<a href='https://developers.google.com/identity/gsi/web/guides/migrate'>"
-      },
-      "a_tag_end": {
-        "content": "$2",
-        "example": "</a>"
-      }
-    }
-  },
-  "gSITitle": {
-    "message": "지원 중단된 Google 로그인 기능은 사용하지 마세요."
-  },
-  "gSInote": {
-    "message": "Google 로그인 JavaScript 라이브러리는 지원 중단되었으며 더 이상 지원되지 않습니다. 다음 기능을 검토하고 필요한 경우 최신 라이브러리로 $a_tag_start$이전$a_tag_end$하세요.",
-    "placeholders": {
-      "a_tag_start": {
-        "content": "$1",
-        "example": "<a href='https://developers.google.com/identity/sign-in/web/migration-guide'>"
-      },
-      "a_tag_end": {
-        "content": "$2",
-        "example": "</a>"
       }
     }
   },
@@ -1906,9 +1871,6 @@
   "OCD_retention_6_months_after_last_activity": {
     "message": "마지막 활동 후 6개월"
   },
-  "OCD___utmv_description": {
-    "message": "Bevat custom informatie die door de webdeveloper is ingesteld via de _setCustomVar methode in Google Analytics. Deze cookie wordt iedere keer geupdate als er nieuwe gegevens naar de Google Analytics server worden gestuurd."
-  },
   "OCD___utmx_description": {
     "message": "사용자가 A/B 테스트 또는 다변수 테스트에 포함되어 있는지 여부를 확인하는 데 사용됩니다."
   },
@@ -1956,9 +1918,6 @@
   },
   "OCD_retention_5_minutes": {
     "message": "5분"
-  },
-  "OCD_AEC_description": {
-    "message": "AEC 쿠키는 하나의 탐색 세션 중에 발생한 요청이 다른 사이트가 아닌 사용자에 의해 이루어진 것이 맞는지 확인합니다. 이 쿠키는 사용자 모르게 사용자인 척하는 악성 사이트를 차단합니다."
   },
   "OCD_retention_6_months": {
     "message": "6개월"
@@ -2076,9 +2035,6 @@
   },
   "OCD_NID_description": {
     "message": "이 쿠키는 웹사이트 통계를 수집하고 전환율 및 Google 광고 맞춤설정을 추적하는 데 사용됩니다."
-  },
-  "OCD_TAID_description": {
-    "message": "이 쿠키는 이전에 다른 기기에서 Google 계정에 로그인한 적이 있는 경우 모든 기기에서의 활동을 연결하는 데 사용됩니다. 이는 모든 기기에 표시되는 광고를 조정하고 전환 이벤트를 측정하기 위함입니다."
   },
   "OCD_retention_14_days": {
     "message": "14일"
@@ -2662,9 +2618,6 @@
   "OCD_ads_prefs_description": {
     "message": "이 쿠키는 Google이 X 광고로부터 발생한 방문자 활동을 추적하고 사용자가 웹사이트의 콘텐츠를 공유할 수 있도록 지원합니다. 이 쿠키는 Google에 사용자의 계정과 관련된 기밀 정보를 제공하지 않습니다."
   },
-  "OCD_auth_token_description": {
-    "message": "이 쿠키는 Google이 X 광고로부터 발생한 방문자 활동을 추적하고 사용자가 웹사이트의 콘텐츠를 공유할 수 있도록 지원합니다. 이 쿠키는 Google에 사용자의 계정과 관련된 기밀 정보를 제공하지 않습니다."
-  },
   "OCD_csrf_same_site_description": {
     "message": "이 쿠키는 Google이 X 광고로부터 발생한 방문자 활동을 추적하고 사용자가 웹사이트의 콘텐츠를 공유할 수 있도록 지원합니다. 이 쿠키는 Google에 사용자의 계정과 관련된 기밀 정보를 제공하지 않습니다."
   },
@@ -2722,16 +2675,10 @@
   "OCD___insp_dct_description": {
     "message": "웹사이트에서 방문자가 취한 행동에 관한 통계 데이터를 등록합니다. 웹사이트 운영자가 수행하는 내부 분석에 사용됩니다."
   },
-  "OCD_CTK_description": {
-    "message": "indeed.com의 채용 정보를 통한 지원서 등록과 관련된 정보를 포함합니다."
-  },
   "OCD_retention_17_years": {
     "message": "17년"
   },
   "OCD_ctkgen_description": {
-    "message": "indeed.com의 채용 정보를 통한 지원서 등록과 관련된 정보를 포함합니다."
-  },
-  "OCD_INDEED_CSRF_TOKEN_description": {
     "message": "indeed.com의 채용 정보를 통한 지원서 등록과 관련된 정보를 포함합니다."
   },
   "OCD_jasx_pool_id_description": {
@@ -6784,21 +6731,6 @@
   "RWS_rationale_https___wildixin_com": {
     "message": "Wildix PBX의 도메인"
   },
-  "RWS_rationale_https___indiatimes_com": {
-    "message": "Indiatimes.com은 Times Internet의 기본 도메인으로, 인도 라이프스타일, 문화, 관계, 음식, 여행, 엔터테인먼트, 뉴스, 신기술 뉴스에 관한 기사를 게시합니다."
-  },
-  "RWS_rationale_https___timesofindia_com": {
-    "message": "Times of India(TOI)는 인도 최대 규모를 자랑하며 가장 영향력 있는 영어 뉴스 게시자입니다. 디지털 플랫폼인 timesofindia.com은 Times Internet Limited에서 제공합니다."
-  },
-  "RWS_rationale_https___economictimes_com": {
-    "message": "Economic Times는 인도 최고의 비즈니스 뉴스 플랫폼으로, 비즈니스 리더와 기업가들에게 영감을 주고 역량 강화를 지원하기 위해 경제, 주식 시장, 개인 금융을 종합적으로 보도합니다. 이 디지털 플랫폼은 Times Internet Limited에서 제공합니다."
-  },
-  "RWS_rationale_https___samayam_com": {
-    "message": "Samayam은 Times Internet Limited에서 제공하는 지역 뉴스 게시자입니다."
-  },
-  "RWS_rationale_https___cricbuzz_com": {
-    "message": "Cricbuzz는 Times Internet Limited 소유의 인도 크리켓 뉴스 및 실시간 점수 플랫폼입니다."
-  },
   "RWS_rationale_https___growthrx_in": {
     "message": "GrowthRx는 Times Internet에서 제공하는 고객 참여 플랫폼입니다."
   },
@@ -7026,5 +6958,1331 @@
   },
   "RWS_rationale_https___smoney_vn": {
     "message": "Zalo Group, VNG 소유의 뉴스 웹사이트"
+  },
+  "PSProtectedAudience": {
+    "message": "Protected Audience API는 리마케팅 및 맞춤 잠재고객 사용 사례를 대상으로 하는 Privacy Sandbox 기술로, 서드 파티가 사이트 전반에서 사용자 탐색 행동을 추적하지 못하도록 만들어졌습니다."
+  },
+  "gISTitle": {
+    "message": "지원되지 않는 Google ID 서비스"
+  },
+  "gISNote": {
+    "message": "개인 정보 보호 샌드박스 시행으로 인해 일부 기능이 이전 버전과 호환되지 않거나 지원 중단됩니다. Google ID 서비스의 일부 기능은 사용 중입니다. 다음 문서를 검토하고, 필요한 경우 $a_tag_start$이전$a_tag_end$하세요.",
+    "placeholders": {
+      "a_tag_start": {
+        "content": "$1",
+        "example": "<a href='https://developers.google.com/identity/gsi/web/guides/migrate'>"
+      },
+      "a_tag_end": {
+        "content": "$2",
+        "example": "</a>"
+      }
+    }
+  },
+  "gSITitle": {
+    "message": "지원 중단된 Google 로그인"
+  },
+  "gSInote": {
+    "message": "Google 로그인 JavaScript 라이브러리는 지원 중단되었으며, 더 이상 지원되지 않습니다. Google ID 서비스의 일부 기능은 사용 중입니다. 다음 문서를 검토하고, 필요한 경우 $a_tag_start$이전$a_tag_end$하세요.",
+    "placeholders": {
+      "a_tag_start": {
+        "content": "$1",
+        "example": "<a href='https://developers.google.com/identity/sign-in/web/migration-guide'>"
+      },
+      "a_tag_end": {
+        "content": "$2",
+        "example": "</a>"
+      }
+    }
+  },
+  "OCD___utmv_description": {
+    "message": "Google 애널리틱스의 _setCustomVar 메서드를 통해 웹 개발자가 설정한 사용자 설정 정보가 포함되어 있습니다. 이 쿠키는 Google 애널리틱스 서버에 새 데이터가 전송될 때마다 업데이트됩니다."
+  },
+  "OCD_AEC_description": {
+    "message": "AEC 쿠키는 하나의 탐색 세션 중에 발생한 요청이 다른 사이트가 아닌 사용자에 의해 이루어진 것이 맞는지 확인합니다. 이 쿠키는 사용자 모르게 사용자인 척하는 악성 사이트를 차단합니다."
+  },
+  "OCD_TAID_description": {
+    "message": "이 쿠키는 이전에 다른 기기에서 Google 계정에 로그인한 적이 있는 경우 모든 기기에서의 활동을 연결하는 데 사용됩니다. 이는 모든 기기에 표시되는 광고를 조정하고 전환 이벤트를 측정하기 위함입니다."
+  },
+  "OCD_auth_token_description": {
+    "message": "이 쿠키는 인증 및 승인에 사용됩니다."
+  },
+  "OCD_CTK_description": {
+    "message": "이 쿠키는 Indeed에서 Google이 제공하는 일자리 추천 및 기타 서비스를 개선하여 세션 전반에서 보다 일관성 있는 사용자 환경을 제공하는 데 사용됩니다. 또한 Indeed에서 사용자의 구직 활동에 가장 적합한 방식을 집계 분석하는 데도 도움이 됩니다. 이 쿠키는 서드 파티 데이터를 사용하지 않으며 타겟팅에 사용되지 않습니다."
+  },
+  "OCD_INDEED_CSRF_TOKEN_description": {
+    "message": "이 쿠키는 Cloudflare에서 신뢰할 수 있는 웹 트래픽을 식별하는 데 사용됩니다."
+  },
+  "RWS_rationale_https___indiatimes_com": {
+    "message": "Indiatimes.com은 Times Internet의 기본 도메인으로, 인도 라이프스타일, 문화, 관계, 음식, 여행, 엔터테인먼트, 뉴스, 신기술 뉴스에 관한 기사를 게시합니다. Times Internet Limited와의 관계는 웹사이트의 회사 소개 섹션과 바닥글에 반영되어 있습니다."
+  },
+  "RWS_rationale_https___timesofindia_com": {
+    "message": "Times of India(TOI)는 인도 최대 규모를 자랑하며 가장 영향력 있는 영어 뉴스 게시자입니다. 디지털 플랫폼인 timesofindia.com은 Times Internet Limited에서 제공하며, 웹사이트의 회사 소개 섹션과 바닥글에 적절하게 설명되어 있습니다."
+  },
+  "RWS_rationale_https___economictimes_com": {
+    "message": "Economic Times는 인도 최고의 비즈니스 뉴스 플랫폼으로, 비즈니스 리더와 기업가들에게 영감을 주고 역량 강화를 지원하기 위해 경제, 주식 시장, 개인 금융을 종합적으로 보도합니다. 이 디지털 플랫폼은 웹사이트의 회사 소개 섹션에 명시되어 있는 바와 같이 Times Internet Limited에서 제공합니다."
+  },
+  "RWS_rationale_https___samayam_com": {
+    "message": "Samayam은 Times Internet Limited에서 제공하는 지역 뉴스 게시자입니다. Times Internet과의 관계는 웹사이트의 바닥글에 반영되어 있습니다."
+  },
+  "RWS_rationale_https___cricbuzz_com": {
+    "message": "Cricbuzz는 Times Internet Limited 소유의 인도 크리켓 뉴스 및 실시간 점수 플랫폼으로, 이 내용은 웹사이트의 바닥글에 적절하게 반영되어 있습니다."
+  },
+  "OCD___eoi_description": {
+    "message": "이 쿠키는 사용자가 서비스와 상호작용할 때 사용자를 인증하고, 사기를 방지하며, 사용자를 보호하는 보안 목적으로 사용됩니다."
+  },
+  "OCD_retention_3_Months": {
+    "message": "3개월"
+  },
+  "OCD_pm_sess_description": {
+    "message": "이 쿠키는 사용자가 서비스 또는 사이트와 상호작용하여 해당 서비스의 기본 기능을 이용하도록 허용하는 기능에 사용됩니다. 서비스의 기본 기능에는 사용자의 언어 선택, 서비스 유지 및 개선에 도움이 되는 제품 최적화, 사용자 세션과 관련된 정보 유지(예: 장바구니 내용)와 같은 환경설정이 있습니다."
+  },
+  "OCD_pm_sess_NNN_description": {
+    "message": "이 쿠키는 사용자가 서비스 또는 사이트와 상호작용하여 해당 서비스의 기본 기능을 이용하도록 허용하는 기능에 사용됩니다. 서비스의 기본 기능에는 사용자의 언어 선택, 서비스 유지 및 개선에 도움이 되는 제품 최적화, 사용자 세션과 관련된 정보 유지(예: 장바구니 내용)와 같은 환경설정이 있습니다."
+  },
+  "OCD_aboutads_sessNNN_description": {
+    "message": "이 쿠키는 사용자가 서비스와 상호작용할 때 사용자를 인증하고, 사기를 방지하며, 사용자를 보호하는 보안 목적으로 사용됩니다."
+  },
+  "OCD_ANID_description": {
+    "message": "기능에 사용되는 쿠키는 사용자가 서비스 또는 사이트와 상호작용하여 해당 서비스의 기본 기능을 이용하도록 허용합니다. 서비스의 기본 기능에는 사용자의 언어 선택, 서비스 유지 및 개선에 도움이 되는 제품 최적화, 사용자 세션과 관련된 정보 유지(예: 장바구니 내용)와 같은 환경설정이 있습니다."
+  },
+  "OCD_GA_OPT_OUT_description": {
+    "message": "기능에 사용되는 쿠키는 사용자가 서비스 또는 사이트와 상호작용하여 해당 서비스의 기본 기능을 이용하도록 허용합니다. 서비스의 기본 기능에는 사용자의 언어 선택, 서비스 유지 및 개선에 도움이 되는 제품 최적화, 사용자 세션과 관련된 정보 유지(예: 장바구니 내용)와 같은 환경설정이 있습니다."
+  },
+  "OCD_retention_10_Nov_2030": {
+    "message": "2030년 11월 10일"
+  },
+  "OCD_Conversion_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD__opt_awkid_description": {
+    "message": "분석에 사용되는 쿠키는 데이터를 수집하여 서비스에서 사용자가 특정 서비스와 상호작용하는 방식을 파악하는 데 도움이 됩니다. 이러한 인사이트를 통해 서비스에서는 콘텐츠를 개선할 뿐만 아니라 사용자 경험을 개선하는 더 나은 기능을 개발할 수 있습니다."
+  },
+  "OCD__opt_awgid_description": {
+    "message": "분석에 사용되는 쿠키는 데이터를 수집하여 서비스에서 사용자가 특정 서비스와 상호작용하는 방식을 파악하는 데 도움이 됩니다. 이러한 인사이트를 통해 서비스에서는 콘텐츠를 개선할 뿐만 아니라 사용자 경험을 개선하는 더 나은 기능을 개발할 수 있습니다."
+  },
+  "OCD__opt_awmid_description": {
+    "message": "분석에 사용되는 쿠키는 데이터를 수집하여 서비스에서 사용자가 특정 서비스와 상호작용하는 방식을 파악하는 데 도움이 됩니다. 이러한 인사이트를 통해 서비스에서는 콘텐츠를 개선할 뿐만 아니라 사용자 경험을 개선하는 더 나은 기능을 개발할 수 있습니다."
+  },
+  "OCD__gaexp_rc_description": {
+    "message": "분석에 사용되는 쿠키는 데이터를 수집하여 서비스에서 사용자가 특정 서비스와 상호작용하는 방식을 파악하는 데 도움이 됩니다. 이러한 인사이트를 통해 서비스에서는 콘텐츠를 개선할 뿐만 아니라 사용자 경험을 개선하는 더 나은 기능을 개발할 수 있습니다."
+  },
+  "OCD__opt_awcid_description": {
+    "message": "분석에 사용되는 쿠키는 데이터를 수집하여 서비스에서 사용자가 특정 서비스와 상호작용하는 방식을 파악하는 데 도움이 됩니다. 이러한 인사이트를 통해 서비스에서는 콘텐츠를 개선할 뿐만 아니라 사용자 경험을 개선하는 더 나은 기능을 개발할 수 있습니다."
+  },
+  "OCD_PAIDCONTENT_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD_retention_30_Days": {
+    "message": "30일"
+  },
+  "OCD__opt_expid_description": {
+    "message": "분석에 사용되는 쿠키는 데이터를 수집하여 서비스에서 사용자가 특정 서비스와 상호작용하는 방식을 파악하는 데 도움이 됩니다. 이러한 인사이트를 통해 서비스에서는 콘텐츠를 개선할 뿐만 아니라 사용자 경험을 개선하는 더 나은 기능을 개발할 수 있습니다."
+  },
+  "OCD__gcl_ha_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD_retention_90_Days": {
+    "message": "90일"
+  },
+  "OCD__gcl_gf_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD__gcl_aw_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD__gcl_gb_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD__gac_gb___description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD_FPGCLGB_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD_FPGCLAW_description": {
+    "message": "Google에서는 광고 게재 및 렌더링, 광고 개인 최적화(g.co/adsettings의 사용자 광고 설정에 따름), 특정 광고가 사용자에게 표시되는 횟수 제한, 게재되지 않도록 광고 끄기, 광고 효과 측정 등 광고와 관련된 목적으로 쿠키를 사용합니다."
+  },
+  "OCD_SNID_description": {
+    "message": "이 쿠키는 웹사이트 통계를 수집하고 전환율 및 Google 광고 맞춤설정을 추적하는 데 사용됩니다."
+  },
+  "OCD_cookies_accepted_description": {
+    "message": "이 기능 쿠키는 사용 중인 머신에서 쿠키를 설정하도록 허용했는지 확인하기만 합니다."
+  },
+  "OCD_django_language_description": {
+    "message": "웹사이트의 옵션과 서비스를 사용하기 위해 필요한 쿠키입니다."
+  },
+  "OCD_retention_3_month": {
+    "message": "3개월"
+  },
+  "OCD_GN_PREF_description": {
+    "message": "이 쿠키는 웹사이트 통계를 수집하고 전환율 및 Google 광고 맞춤설정을 추적하는 데 사용됩니다."
+  },
+  "OCD_OSID_description": {
+    "message": "이 쿠키는 웹사이트 통계를 수집하고 전환율 및 Google 광고 맞춤설정을 추적하는 데 사용됩니다."
+  },
+  "OCD___Secure_OSID_description": {
+    "message": "이 쿠키는 웹사이트 통계를 수집하고 전환율 및 Google 광고 맞춤설정을 추적하는 데 사용됩니다."
+  },
+  "OCD_LSID_description": {
+    "message": "이 쿠키는 웹사이트 통계를 수집하고 전환율 및 Google 광고 맞춤설정을 추적하는 데 사용됩니다."
+  },
+  "OCD_COMPASS_description": {
+    "message": "이 쿠키는 웹사이트 통계를 수집하고 전환율 및 Google 광고 맞춤설정을 추적하는 데 사용됩니다."
+  },
+  "OCD_UULE_description": {
+    "message": "Google이 사용자의 위치와 관련성이 있는 결과를 표시할 수 있도록 정확한 위치 정보를 브라우저에서 Google 서버로 보냅니다. 이 쿠키는 사용자의 브라우저 설정 및 브라우저에서 위치를 사용 설정했는지에 따라 사용 여부가 결정됩니다."
+  },
+  "OCD_retention_1825_days": {
+    "message": "1825일"
+  },
+  "OCD_hjViewportId_description": {
+    "message": "이 쿠키는 규모, 측정기준과 같은 사용자 표시 영역의 세부정보를 저장합니다."
+  },
+  "OCD__hjSessionStorageTest_description": {
+    "message": "이 쿠키는 Hotjar Tracking Code가 Session Storage를 사용할 수 있는지 검사합니다. 사용할 수 있는 경우 값이 1로 설정됩니다."
+  },
+  "OCD__hjCookieTest_description": {
+    "message": "이 쿠키는 Hotjar Tracking Code가 쿠키를 사용할 수 있는지 검사합니다. 사용할 수 있는 경우 값이 1로 설정됩니다."
+  },
+  "OCD_taboola_select_description": {
+    "message": "사용자가 'Taboola Select' 기능의 작업을 수행했는지에 관한 기록을 유지관리합니다."
+  },
+  "OCD_taboola_fp_td_user_id_description": {
+    "message": "사용자가 Taboola의 서비스에서 추천한 항목을 클릭했음을 나타냅니다. 보고 및 분석 목적으로 사용됩니다."
+  },
+  "OCD_trc_cookie_storage_description": {
+    "message": "기여 분석 및 보고 목적으로 사용되는 고유한 사용자 ID를 할당합니다."
+  },
+  "OCD__tb_sess_r_description": {
+    "message": "Taboola Newsroom 서비스를 활용하는 게시자 고객의 웹사이트에 사용됩니다. 사용자의 특정 웹사이트 방문에 대한 세션 참조를 유지관리합니다."
+  },
+  "OCD__tb_t_ppg_description": {
+    "message": "Taboola Newsroom 서비스를 활용하는 게시자 고객의 웹사이트에 사용됩니다. 이 쿠키는 추천 웹사이트(이 게시자의 웹사이트에 도달하기 전에 사용자가 방문했던 웹사이트)를 식별하는 데 사용됩니다."
+  },
+  "OCD_abLdr_description": {
+    "message": "Taboola의 브라우저 기반 서비스를 대상으로 정기적인 기술 및 성능 개선을 지원합니다."
+  },
+  "OCD_abMbl_description": {
+    "message": "\tTaboola의 모바일 SDK 서비스를 대상으로 정기적인 기술 및 성능 개선을 지원합니다."
+  },
+  "OCD_tb_click_param_description": {
+    "message": "Taboola Newsroom 서비스를 활용하는 게시자 고객의 웹사이트에 사용됩니다. 클릭된 게시자 홈페이지 기사의 실적을 측정합니다."
+  },
+  "OCD_retention_50_seconds": {
+    "message": "50초"
+  },
+  "OCD_OneTrustWPCCPAGoogleOptOut_description": {
+    "message": "이 쿠키는 OneTrust에서 설정합니다. 동의에 관한 IAB CCPA 법규를 준수하는 데 사용됩니다."
+  },
+  "OCD_FunctionalCookie_description": {
+    "message": "사용자가 적절한 동의를 부여할 경우, 이 쿠키는 OneTrust Cookie Management Platform에서 작동하여 기능적 쿠키 카테고리와 관련된 스크립트 및 쿠키를 활성화합니다."
+  },
+  "OCD_retention_0_days": {
+    "message": "0일"
+  },
+  "OCD_adaptv_unique_user_cookie_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_cmp_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_adsrcvw1_description": {
+    "message": "이 쿠키는 사용자 동의가 있는 경우에만 사용됩니다. 사용자는 서드 파티의 사이트 또는 앱에 관한 동의를 제공하거나 철회할 수 있습니다."
+  },
+  "OCD_migrated2y_description": {
+    "message": "이 쿠키는 오래된 쿠키를 대상으로 하는 이전 표시로만 사용됩니다."
+  },
+  "OCD_OTH_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_rtbData0_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_rxx_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_tearsheet_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_unique_ad_source_impression_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_axids_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_GUC_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_tbla_id_description": {
+    "message": "이 쿠키는 방문자에 관한 정보를 수집하는 데 사용됩니다. 이 정보는 특정 방문자에 관한 정보가 포함된 ID 문자열이 됩니다. ID 정보 문자열은 환경설정이 비슷한 그룹을 타겟팅하는 데 사용되거나 서드 파티 도메인 또는 광고 거래소에서 사용될 수 있습니다."
+  },
+  "OCD_mics_vid_description": {
+    "message": "이 쿠키는 Mediarithmics 서드 파티 쿠키 식별자에서 요구됩니다."
+  },
+  "OCD_mics_uaid_description": {
+    "message": "이 쿠키는 Mediarithmics에서 추가한 레거시 쿠키로, 지원 중단될 예정입니다."
+  },
+  "OCD_mics_lts_description": {
+    "message": "이 쿠키는 Mediarithmics에서 추가했으며, 브라우저가 마지막으로 표시된 시간을 판단합니다."
+  },
+  "OCD_n360_thirtythreeacross_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 33Across에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_appnexus_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Xandr에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_bliink_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Bliink에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_amx_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 AdaptMX에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_adform_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Adform에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_adnuntius_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Adnuntius에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_adot_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Adot에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_adyoulike_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Adyoulike에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_connectad_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 ConnectAd에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_conversant_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Conversant에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_cwire_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Cwire에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_firstid_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 First ID에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_freewheel_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Freewheel에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_fueldigitalmedia_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Fuel Digital Media에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_fueldigitalix_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Fuel Digital(IX)에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_fueldigital_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Fuel Digital(Smart)에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_gingerad_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 GingerAd에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_goodad_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 GoodAd에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_gravity_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Gravity에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_groupm_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 GroupM에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_improve_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Improve에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_ix_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Index에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_medianet_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Media.net에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_moneytag_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Moneytag에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_nextmillennium_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 NextMillennium에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_onetag_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 OneTag에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_openx_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 OpenX에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_outbrain_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Outbrain에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_plista_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Plista에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_pubmatic_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Pubmatic에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_pulsepoint_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 PulsePoint에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_quantum_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Quantum에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_richaudience_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 RichAudience에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_rtbhouse_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 RTB House에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_rubicon_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Rubicon(Magnite)에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_sharethrough_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Sharethrough에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_smaato_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Smaato에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_smartadserver_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Smart(Equativ)에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_smartyads_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 SmartyAds에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_smilewanted_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Smilewanted에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_staila_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Staila에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_tappx_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 TappX에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_mediagrid_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 The MediaGrid에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_ttd_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 The Trade Desk에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_traffective_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Traffective에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_triplelift_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Triplelift에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_yahoo_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Verizon(Yahoo)에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_vidoomy_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Vidoomy에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_n360_yieldlab_description": {
+    "message": "이 쿠키는 Nexx360 Header Bidding이 Yieldlab에서 사전 입찰하는 데 사용됩니다."
+  },
+  "OCD_mv_tokens_description": {
+    "message": "서드 파티 광고주가 관련성 있는 광고로 방문자를 타겟팅하도록 허용하는 방문자의 고유 ID를 설정합니다. 이 페어링 서비스는 광고주의 실시간 입찰을 지원하는 서드 파티 광고 허브에서 제공합니다."
+  },
+  "OCD_mv_tokens_invalidate_verizon_pushes_description": {
+    "message": "서드 파티 광고주가 관련성 있는 광고로 방문자를 타겟팅하도록 허용하는 방문자의 고유 ID를 설정합니다. 이 페어링 서비스는 광고주의 실시간 입찰을 지원하는 서드 파티 광고 허브에서 제공합니다."
+  },
+  "OCD_am_tokens_description": {
+    "message": "사용자에게 관련성 있는 콘텐츠와 광고를 제공합니다. 이 서비스는 광고주의 실시간 입찰을 지원하는 서드 파티 광고 허브에서 제공합니다."
+  },
+  "OCD_am_tokens_invalidate_verizon_pushes_description": {
+    "message": "사용자에게 관련성 있는 콘텐츠와 광고를 제공합니다. 이 서비스는 광고주의 실시간 입찰을 지원하는 서드 파티 광고 허브에서 제공합니다."
+  },
+  "OCD__bit_description": {
+    "message": "이 쿠키는 bit.ly 사용을 추적하기 위해 사용자에게 할당된 고유 식별자입니다. 수집되는 정보에는 IP 주소가 포함됩니다."
+  },
+  "OCD_ptrcriteo_description": {
+    "message": "이 쿠키는 외부 광고주(서드 파티)가 관련성 있는 광고를 통해 방문자를 타겟팅하도록 허용하는 방문자의 고유 식별자를 설정하는 데 사용됩니다. 이 결합된 서비스는 광고주에게 실시간 혜택을 제공하는 광고 허브에서 제공합니다."
+  },
+  "OCD_ptrrhs_description": {
+    "message": "이 쿠키는 세션 길이, IP 주소, 위치, 사용 시간, 조회한 페이지 및 파일, 광고 캠페인 선택, 웹사이트 사용 관련 기타 정보를 식별하는 데 사용됩니다."
+  },
+  "OCD_yieldmo_id_description": {
+    "message": "Yieldmo는 기기 식별자만 사용해 추적하므로, 모든 요청에는 기기의 광고 ID 또는 요청과 관련된 기기의 'yieldmo_id' 쿠키가 포함되어 있어야 합니다. 기기 식별자 없이 제출된 요청은 처리할 수 없습니다."
+  },
+  "OCD_ssid_description": {
+    "message": "이 쿠키는 SpringServe와 관련이 있으며, 동영상 광고를 제공하는 데 사용됩니다."
+  },
+  "OCD_sst_description": {
+    "message": "이 쿠키는 SpringServe와 관련이 있으며, 동영상 광고를 제공하는 데 사용됩니다."
+  },
+  "OCD_dgzsdl08v4_description": {
+    "message": "이 쿠키는 개선된 기능과 광고 개인 최적화를 제공합니다."
+  },
+  "OCD_bounceClientVisit_description": {
+    "message": "이 쿠키는 사용자 웹 탐색 활동을 저장하는 데 사용되며, 인구통계(예: 연령, 성별)를 이해하는 데 사용될 수도 있습니다."
+  },
+  "OCD__vfa_description": {
+    "message": "이 쿠키는 분석을 위해 사용자 및 세션 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD__vfb_description": {
+    "message": "이 쿠키는 분석을 위해 재순환 데이터를 저장하는 데 사용됩니다."
+  },
+  "OCD__vfz_description": {
+    "message": "이 쿠키는 분석을 위해 추천 데이터를 저장하는 데 사용됩니다."
+  },
+  "OCD_retention_6_minutes": {
+    "message": "6분"
+  },
+  "OCD__vf_rd_test__description": {
+    "message": "이 쿠키는 쿠키를 설정할 최적의 도메인 이름(SLD+TLD)을 테스트하는 데 사용됩니다."
+  },
+  "OCD_retention_1_second": {
+    "message": "1초"
+  },
+  "OCD_VfSess_description": {
+    "message": "이 쿠키는 인증을 위해 세션 식별자에 사용됩니다."
+  },
+  "OCD_VfRefresh_description": {
+    "message": "이 쿠키는 인증을 위해 식별자를 새로고침하는 데 사용됩니다."
+  },
+  "OCD_VfAccess__description": {
+    "message": "이 쿠키는 인증을 위해 식별자에 액세스하는 데 사용됩니다."
+  },
+  "OCD_vfThirdpartyCookiesEnabled_description": {
+    "message": "이 쿠키는 서드 파티 쿠키 지원 여부를 테스트하는 데 사용됩니다."
+  },
+  "OCD_ttbprf_description": {
+    "message": "이 쿠키는 사용자 세분화에 사용됩니다."
+  },
+  "OCD_ttc_description": {
+    "message": "이 쿠키는 사용자의 캐시 만료를 활용한 사용자 세분화에 사용됩니다."
+  },
+  "OCD_ttnprf_description": {
+    "message": "이 쿠키는 사용자 세분화에 사용됩니다."
+  },
+  "OCD_n_description": {
+    "message": "이 쿠키는 최근 액세스의 타임스탬프를 활용한 사용자 세분화에 사용됩니다."
+  },
+  "OCD_trk_description": {
+    "message": "이 쿠키는 광고 게재에 사용됩니다."
+  },
+  "OCD_ttca_description": {
+    "message": "이 쿠키는 사용자 전환 데이터를 활용해 광고를 게재하는 데 사용됩니다."
+  },
+  "OCD_tp__description": {
+    "message": "이 쿠키는 DSP의 동기 ID를 사용해 광고를 게재하는 데 사용됩니다."
+  },
+  "OCD_ttgcm_description": {
+    "message": "이 쿠키는 Google 서비스와의 동기화에 사용됩니다."
+  },
+  "OCD__ut__description": {
+    "message": "이 쿠키는 다른 도메인의 동일한 사용자를 고유하게 식별하는 데 사용됩니다."
+  },
+  "OCD__u__description": {
+    "message": "이 쿠키는 다른 도메인의 동일한 사용자를 고유하게 식별하는 데 사용됩니다."
+  },
+  "OCD__s__description": {
+    "message": "이 쿠키는 일시적인 세션을 저장하는 데 사용됩니다."
+  },
+  "OCD__lv__description": {
+    "message": "이 쿠키는 최근 방문을 저장하는 데 사용됩니다."
+  },
+  "OCD__nrbi_description": {
+    "message": "이 쿠키는 Cookie Management Platform의 사용자 데이터를 저장하는 데 사용됩니다."
+  },
+  "OCD_compass_sid_description": {
+    "message": "이 쿠키는 Marfeel 세션 ID를 저장하는 데 사용됩니다."
+  },
+  "OCD_compass_uid_description": {
+    "message": "이 쿠키는 Marfeel 사용자 ID를 저장하는 데 사용됩니다."
+  },
+  "OCD____m_rec_description": {
+    "message": "이 쿠키는 재순환 모듈에 관한 데이터를 저장하는 데 사용됩니다."
+  },
+  "OCD_GRV_BHV_UID__description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_GRV_BHV_IDCC__description": {
+    "message": "이 쿠키는 사용자의 지리적 위치를 저장하는 데 사용됩니다."
+  },
+  "OCD_GRV_BHV_SKU__description": {
+    "message": "이 쿠키는 사용자의 SKU를 저장하는 데 사용됩니다."
+  },
+  "OCD_GRV_BHV_IDCAT__description": {
+    "message": "이 쿠키는 고유 식별자에 사용됩니다."
+  },
+  "OCD_GRV_BHV_DATE__description": {
+    "message": "이 쿠키는 사용자 환경설정의 날짜를 저장하는 데 사용됩니다."
+  },
+  "OCD_GRV_IDU_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_retention_296_days": {
+    "message": "296일"
+  },
+  "OCD_NPA__description": {
+    "message": "이 쿠키는 사용자의 방문 기록을 저장하는 데 사용됩니다."
+  },
+  "OCD_GRV_BHV_BRND___description": {
+    "message": "이 쿠키는 사용자의 브랜드 선호도에 사용됩니다."
+  },
+  "OCD_GRV_google_description": {
+    "message": "이 쿠키는 사용자의 Google 검색 기록을 저장하는 데 사용됩니다."
+  },
+  "OCD_duid_update_time_description": {
+    "message": "재방문 시 사용자 기기를 식별하는 고유 ID를 등록합니다. 전환 추적과 온라인 광고 효과 측정에 사용됩니다."
+  },
+  "OCD__ssp_update_time__description": {
+    "message": "이 쿠키는 고유 식별자 타임스탬프를 저장하는 데 사용됩니다."
+  },
+  "OCD__dsp_uid__description": {
+    "message": "이 쿠키는 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_connect_sid_description": {
+    "message": "사용자 세션에 사용되며, 커뮤니티에 반드시 필요합니다. 세션 쿠키를 통해 웹사이트에서는 웹사이트 내에서 웹페이지 사이를 이동하는 사용자를 기억합니다. 이러한 쿠키는 사용자가 마지막으로 본 위치를 기억하거나 사이트를 완전히 처음부터 다시 탐색할 필요가 없도록 사용자에게 표시할 페이지를 서버에 알려 주는 역할을 합니다."
+  },
+  "OCD__zendesk_cookie_description": {
+    "message": "이 쿠키는 임의의 환경설정을 저장합니다. 이 쿠키가 없으면 2단계 인증 기능과 기기 추적이 작동하지 않습니다."
+  },
+  "OCD_zte2095_description": {
+    "message": "이 쿠키는 Chat Widget이 있는 도메인/하위 도메인을 식별하는 데 사용됩니다."
+  },
+  "OCD___zlcprivacy_description": {
+    "message": "이 쿠키는 CookieLaw에 관한 방문자의 결정을 저장합니다."
+  },
+  "OCD__answer_bot_service_session_description": {
+    "message": "이 쿠키는 Answer Bot 제품의 고유 세션 키를 저장합니다. Answer Bot Article Recommendations를 사용할 때 사용자 세션을 고유하게 식별하기 위해 사용됩니다."
+  },
+  "OCD_ZD_zE_oauth_description": {
+    "message": "이 쿠키는 사용자가 인증을 완료하고 나면 인증 토큰을 저장합니다. Web Widget(Classic)은 쿠키 동의를 위해 사전 빌드된 API 기능을 제공합니다. Developer Center의 Web Widget (Classic) Cookie Permission을 참고하세요. 또는 이러한 쿠키는 외부 쿠키 봇 기능도 따릅니다."
+  },
+  "OCD__zendesk_session_description": {
+    "message": "이 쿠키는 계정 ID, 내부 서비스 호출 경로, 크로스 사이트 요청 위조 토큰을 저장합니다."
+  },
+  "OCD_retention_8_hours": {
+    "message": "8시간"
+  },
+  "OCD_zendesk_thirdparty_test_description": {
+    "message": "이 쿠키는 계정 ID, 내부 서비스 호출 경로, 크로스 사이트 요청 위조 토큰을 저장합니다."
+  },
+  "OCD__zendesk_shared_session_description": {
+    "message": "이 쿠키는 인증에 사용되며, 익명으로 설정됩니다."
+  },
+  "OCD__zendesk_authenticated_description": {
+    "message": "사용자가 최신 콘텐츠를 표시할 수 있도록 인증받을 때 설정되는 플래그입니다."
+  },
+  "OCD__help_center_session_description": {
+    "message": "이 쿠키는 Help Center Functionality의 고유한 세션 키를 저장합니다."
+  },
+  "OCD_help_center_data_description": {
+    "message": "이 쿠키는 Help Center Functionality에서 최종 사용자 검색어의 텍스트 문자열을 저장합니다. 검색어를 검색한 후 티켓이 생성되었는지를 검사할 수 있도록 이 내용을 저장합니다. 사용자 식별자는 저장되지 않으므로, 보고 당시 검색을 완료한 사용자를 특정할 수 없습니다."
+  },
+  "OCD_retention_48_hours": {
+    "message": "48시간"
+  },
+  "OCD__zdshared_user_session_analytics_description": {
+    "message": "이 쿠키는 분석 목적으로 방문에 관한 정보를 추적하는 데 사용됩니다."
+  },
+  "OCD__zendesk_nps_session_description": {
+    "message": "이 쿠키는 NPS 설문조사에 응답한 후 방문 페이지의 세션에 대한 고유한 키를 저장합니다(사용 설정된 경우)."
+  },
+  "OCD_ZD_settings_description": {
+    "message": "이 쿠키는 Google에서 Google의 백엔드에 계속 요청을 보내지 않도록 설정의 해시를 저장합니다."
+  },
+  "OCD_ZD_suid_description": {
+    "message": "이 쿠키는 sessionId를 생성하며 Web Widget을 로드하는 페이지의 분석 이벤트를 추적하는 데 사용됩니다."
+  },
+  "OCD_ZD_buid_description": {
+    "message": "이 쿠키는 deviceId를 생성하고 웹 위젯을 로드할 페이지의 분석 이벤트를 추적하는 데 사용됩니다."
+  },
+  "OCD_ZD_store_description": {
+    "message": "이 쿠키로 인해 최종 사용자가 새로운 웹페이지로 이동할 때 Web Widget(Classic)이 일관되게 표시됩니다."
+  },
+  "OCD_ZD_widgetOpen_description": {
+    "message": "이 쿠키는 웹 방문 전반에 걸쳐 웹 위젯의 공개/비공개 상태를 유지관리합니다."
+  },
+  "OCD_ZD_launcherLabelRemoved_description": {
+    "message": "최종 사용자가 런처 라벨을 닫기로 선택할 경우 다른 페이지에 메시지가 다시 표시되지 않도록 이 값을 저장합니다."
+  },
+  "OCD__zdsession_talk_embeddables_service_description": {
+    "message": "이 쿠키는 부하 분산에 사용됩니다."
+  },
+  "OCD_RT_description": {
+    "message": "이 쿠키는 애플리케이션을 통한 방문자를 식별하는 데 사용됩니다. 일례로 이 쿠키를 사용하면 LinkedIn 애플리케이션을 통해 웹사이트에 로그인할 수 있습니다."
+  },
+  "OCD_retention_399_days": {
+    "message": "399일"
+  },
+  "OCD_TADCID_description": {
+    "message": "이 쿠키는 추천 수수료 결제, 웹사이트상의 사용자 추적 등 TripAdvisor의 삽입된 콘텐츠를 보는 데 사용됩니다."
+  },
+  "OCD_ServerPool_description": {
+    "message": "이 쿠키는 일반적으로 TripAdvisor에서 제공하며 광고 목적으로 사용됩니다."
+  },
+  "OCD_TATravelInfo_description": {
+    "message": "이 쿠키는 웹사이트에서 사용자를 추적하여 검색 프로필 및 방문 기록을 구축하는 데 사용됩니다."
+  },
+  "OCD_TAUnique_description": {
+    "message": "이 쿠키는 웹사이트에서 사용자를 추적하여 검색 프로필 및 방문 기록을 구축하는 데 사용됩니다."
+  },
+  "OCD_TAReturnTo_description": {
+    "message": "이 쿠키는 TripAdvisor에서 인증 후 복귀 URL을 추적하는 데 사용됩니다."
+  },
+  "OCD_dt_description": {
+    "message": "이 쿠키는 웹사이트 방문자가 다양한 소셜 네트워크에서 콘텐츠를 공유할 수 있도록 AddThis에서 설정합니다."
+  },
+  "OCD_rtbh_description": {
+    "message": "이 쿠키는 광고 게재위치를 통해 게시자 웹사이트에 마케팅 파트너의 디지털 광고를 게재하는 데 사용됩니다"
+  },
+  "OCD_udmts_description": {
+    "message": "이 쿠키는 광고 게재위치를 통해 게시자 웹사이트에 마케팅 파트너의 디지털 광고를 게재하는 데 사용됩니다"
+  },
+  "OCD_retention_89_days": {
+    "message": "89일"
+  },
+  "OCD_api_token_description": {
+    "message": "이 쿠키는 웹사이트에서 동영상 콘텐츠를 구현하는 데 필요합니다."
+  },
+  "OCD_retention_3652_days": {
+    "message": "3652일"
+  },
+  "OCD_unique_id_description": {
+    "message": "이 쿠키는 twitch.com과 관련이 있습니다. 페이지 요청 전반에 걸쳐 사용자 상태를 보존합니다."
+  },
+  "OCD_unique_id_durable_description": {
+    "message": "이 쿠키는 twitch.com과 관련이 있습니다. 이를 통해 호스트 도메인은 사용자가 Twitch 서비스에서 한 선택을 저장하고, 웹페이지를 맞춤설정하거나 호스트 도메인에서 사용자에게 프로모션 참여 의향을 물었는지를 기억하는 등 보다 개선되고 맞춤화된 기능 및 동영상 시청, 블로그 댓글 작성과 같이 사용자가 요청하는 기타 서비스를 제공할 수 있습니다."
+  },
+  "OCD_session_unique_id_description": {
+    "message": "이 쿠키는 요리, 여행, 예술, 스포츠, 비디오 게임 등의 여러 주제에 걸친 라이브 또는 사전 녹화 동영상을 시청하거나 방송하는 데 사용되는 온라인 서비스인 Twitch.tv에 사용됩니다."
+  },
+  "OCD_server_session_id_description": {
+    "message": "이 쿠키는 twitch.com과 관련이 있습니다. 이를 통해 호스트 도메인은 사용자가 Twitch 서비스에서 한 선택을 저장하고, 웹페이지를 맞춤설정하거나 호스트 도메인에서 사용자에게 프로모션 참여 의향을 물었는지를 기억하는 등 보다 개선되고 맞춤화된 기능 및 동영상 시청, 블로그 댓글 작성과 같이 사용자가 요청하는 기타 서비스를 제공할 수 있습니다."
+  },
+  "OCD_twitch_lohp_countryCode_description": {
+    "message": "이 쿠키는 국가를 판단하는 데 사용됩니다."
+  },
+  "OCD_retention_3650_days": {
+    "message": "3650일"
+  },
+  "OCD_enable_compact_scene_listing_description": {
+    "message": "이 쿠키는 사용자 환경설정을 저장하는 데 사용됩니다."
+  },
+  "OCD_videoChat_notice_dismissed_description": {
+    "message": "이 쿠키는 사용자 환경설정을 저장하는 데 사용됩니다."
+  },
+  "OCD_chat_rules_shown_description": {
+    "message": "이 쿠키는 사용자 환경설정을 저장하는 데 사용됩니다."
+  },
+  "OCD_algoliasearch_client_js_description": {
+    "message": "이 쿠키는 검색 최적화에 사용됩니다"
+  },
+  "OCD_device_id_description": {
+    "message": "이 쿠키는 사용자가 사용 중인 기기를 고유하게 식별하는 ID입니다."
+  },
+  "OCD_referrer_url_description": {
+    "message": "이 쿠키는 사용자의 마지막 URL 주소를 등록하여 웹사이트에 도달한 방식을 감지합니다."
+  },
+  "OCD_sentry_device_id_description": {
+    "message": "이 쿠키는 페이지 요청 전반에 걸친 사용자 상태를 보존합니다."
+  },
+  "OCD_session_storage_last_visited_twitch_url_description": {
+    "message": "이 쿠키는 삽입된 Twitch 동영상을 사용하여 사용자의 동영상 플레이어 환경설정을 저장합니다"
+  },
+  "OCD_local_storage_app_session_id_description": {
+    "message": "이 쿠키는 페이지 요청 전반에 걸친 사용자 상태를 보존합니다."
+  },
+  "OCD__ceir_description": {
+    "message": "이 쿠키는 방문자가 전에 사이트를 방문한 적이 있는지를 추적합니다."
+  },
+  "OCD__CEFT_description": {
+    "message": "이 쿠키는 A/B 실적 테스트를 위해 방문자에게 할당된 페이지 변형을 저장합니다."
+  },
+  "OCD__cer_v_description": {
+    "message": "(기존 추적 스크립트) 방문자가 전에 사이트를 방문한 적이 있는지를 추적합니다."
+  },
+  "OCD__ce_s_description": {
+    "message": "이 쿠키는 녹화 방문자 세션 고유 ID, 추적 호스트, 시작 시간을 추적합니다."
+  },
+  "OCD__ce_cch_description": {
+    "message": "이 쿠키는 쿠키 추가 가능 여부를 확인하는 데 사용됩니다."
+  },
+  "OCD__ce_gtld_description": {
+    "message": "이 쿠키는 최상위 도메인을 식별하는 데 사용됩니다."
+  },
+  "OCD_ce_need_secure_cookie_description": {
+    "message": "이 쿠키는 쿠키 보안 매개변수를 결정하는 데 사용됩니다."
+  },
+  "OCD_ce_successful_csp_check_description": {
+    "message": "이 쿠키는 페이지에 추적을 방지하는 콘텐츠 보안 정책 규칙이 있는지를 판단하는 데 사용됩니다."
+  },
+  "OCD_cebs_description": {
+    "message": "이 쿠키는 현재 사용자 세션을 내부적으로 추적하는 데 사용됩니다."
+  },
+  "OCD_cebsp__description": {
+    "message": "이 쿠키는 현재 사용자 세션을 내부적으로 추적하는 데 사용됩니다."
+  },
+  "OCD__ce_clock_event_description": {
+    "message": "이 쿠키는 Clock API에 반복적으로 이루어지는 요청을 방지합니다."
+  },
+  "OCD_retention_1_Day": {
+    "message": "1일"
+  },
+  "OCD__ce_clock_data_description": {
+    "message": "이 쿠키는 서버 시간과 현재 브라우저의 시간 차이를 저장합니다."
+  },
+  "OCD__ce_irv_description": {
+    "message": "이 쿠키는 세션 중 isReturning 값을 저장하는 데 사용됩니다."
+  },
+  "OCD_ceft_variant_override_description": {
+    "message": "이 쿠키는 강제 변형 ID를 저장합니다."
+  },
+  "OCD__crazyegg_description": {
+    "message": "이 쿠키는 마케팅 페이지 기능과 관련된 정보를 기억합니다."
+  },
+  "OCD_ce_login_description": {
+    "message": "이 쿠키는 사용자가 마지막으로 로그인하는 데 사용한 이메일 주소를 기억합니다."
+  },
+  "OCD_ce_signup_flow_description": {
+    "message": "이 쿠키는 사용자에게 표시된 가입 흐름을 기억합니다."
+  },
+  "OCD_ce_signup_partner_description": {
+    "message": "이 쿠키는 사용자가 추천을 받은 가입 파트너를 기억합니다."
+  },
+  "OCD_ceac_description": {
+    "message": "이 쿠키는 계정 ID 번호를 저장합니다."
+  },
+  "OCD_cean_description": {
+    "message": "이 쿠키는 익명 ID 번호를 저장합니다."
+  },
+  "OCD_cehc_description": {
+    "message": "이 쿠키는 사용자 정보를 CrazyEgg 고객센터와 공유합니다."
+  },
+  "OCD_celi_description": {
+    "message": "이 쿠키는 로그인 상태를 저장합니다."
+  },
+  "OCD_cean_assoc_description": {
+    "message": "이 쿠키는 로그인된 사용자와 연결된 익명 ID를 저장합니다."
+  },
+  "OCD_first_snapshot_url_description": {
+    "message": "이 쿠키는 첫 스냅샷을 만드는 데 사용한 웹사이트 URL을 저장합니다."
+  },
+  "OCD_sharing___description": {
+    "message": "이 쿠키는 공유된 항목 코드를 저장합니다."
+  },
+  "OCD_ce_sid_description": {
+    "message": "이 쿠키는 로그인된 사용자 식별을 저장합니다."
+  },
+  "OCD_cecu_description": {
+    "message": "이 쿠키는 로그인된 사용자 식별을 저장합니다."
+  },
+  "OCD_TiPMix_description": {
+    "message": "방문자에게 서비스를 제공하는 서버 클러스터를 등록합니다. 사용자 경험을 최적화하기 위해 부하 분산 컨텍스트에서 사용됩니다."
+  },
+  "OCD_retention_0_day": {
+    "message": "0일"
+  },
+  "OCD_x_ms_routing_name_description": {
+    "message": "방문자에게 서비스를 제공하는 서버 클러스터를 등록합니다. 사용자 경험을 최적화하기 위해 부하 분산 컨텍스트에서 사용됩니다."
+  },
+  "OCD__distillery_description": {
+    "message": "이 쿠키는 Wistia 동영상 플레이어에서 인터넷 연결이 끊기는 등의 이유로 재생이 중단되는 경우 마지막으로 본 지점부터 바로 다시 시작할 수 있도록 사용자가 보던 동영상 위치를 기억하는 데 사용됩니다."
+  },
+  "OCD_muxData_description": {
+    "message": "이 쿠키는 Wistia 동영상 플레이어에서 인터넷 연결이 끊기는 등의 이유로 재생이 중단되는 경우 마지막으로 본 지점부터 바로 다시 시작할 수 있도록 사용자가 보던 동영상 위치를 기억하는 데 사용됩니다."
+  },
+  "OCD_wistia_http2_push_disabled_description": {
+    "message": "이 쿠키는 Analytics를 위한 Wistia의 실적 추적을 지원하므로 동영상 시청 빈도, 사용자와 동영상 기능의 상호작용 방식 등을 확인할 수 있습니다."
+  },
+  "OCD_retention_2_Weeks": {
+    "message": "2주"
+  },
+  "OCD__simplex_description": {
+    "message": "사용자의 리퍼러와 방문 페이지 세부정보를 저장하기 위한 Wistia의 쿠키입니다."
+  },
+  "OCD_wistia_description": {
+    "message": "동영상 플레이어가 작동하려면 필요한 쿠키입니다."
+  },
+  "OCD_wistia_video_progress___description": {
+    "message": "동영상 플레이어가 작동하려면 필요한 쿠키입니다."
+  },
+  "OCD___uin_rh_description": {
+    "message": "이 도메인은 자동화된 온라인 광고 구매 및 판매 플랫폼인 Sonobi 소유입니다."
+  },
+  "OCD_retention_364_Days": {
+    "message": "364일"
+  },
+  "OCD___uir_rh_description": {
+    "message": "이 도메인은 자동화된 온라인 광고 구매 및 판매 플랫폼인 Sonobi 소유입니다."
+  },
+  "OCD_retention_32_Days": {
+    "message": "32일"
+  },
+  "OCD_HAPLB3A_description": {
+    "message": "이 도메인은 자동화된 온라인 광고 구매 및 판매 플랫폼인 Sonobi 소유입니다."
+  },
+  "OCD_SSPR___description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SSPZ_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_DSP2F___description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_ADKUID_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SCM_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SCMaps_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SCMsovrn_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SCMinf_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SCMo_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SCMg_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_SCM__description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_UID_EXT___description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_UTID_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_UTID_ENC_description": {
+    "message": "이 쿠키는 사용자의 고유 식별자를 저장하는 데 사용됩니다."
+  },
+  "OCD_DYID_description": {
+    "message": "맞춤설정을 위한 키로 작동하는 Dynamic Yield 고유 식별자입니다."
+  },
+  "OCD__dyid_description": {
+    "message": "맞춤설정을 위한 키로 작동하는 Dynamic Yield 고유 식별자입니다."
+  },
+  "OCD__dyid_server_description": {
+    "message": "맞춤설정을 위한 키로 작동하는 Dynamic Yield 고유 식별자입니다."
+  },
+  "OCD_DYSES_description": {
+    "message": "맞춤설정을 위한 키로 작동하는 Dynamic Yield 고유 식별자입니다."
+  },
+  "OCD__dyjsession_description": {
+    "message": "맞춤설정을 위한 키로 작동하는 Dynamic Yield 고유 식별자입니다."
+  },
+  "OCD__dy_csc_ses_description": {
+    "message": "이 쿠키는 사용자가 브라우저를 닫는 시점을 추적합니다."
+  },
+  "OCD__dycmc_description": {
+    "message": "이 쿠키는 적극적으로 쿠키를 삭제하는 사용자를 감지하는 단순한 휴리스틱을 유지관리합니다. 보고된 페이지 방문 데이터 내에서 'cookie deleter' 마크업이 수집됩니다."
+  },
+  "OCD__dycnst_description": {
+    "message": "이 쿠키는 사용자 쿠키 동의 환경설정을 기억하는 데 사용됩니다."
+  },
+  "OCD__dy_lu_ses_description": {
+    "message": "이 쿠키는 사용자가 유입된 첫 번째 페이지 URL과 그 유효성을 판단합니다."
+  },
+  "OCD__dy_df_geo_description": {
+    "message": "이 쿠키는 잠재고객 생성 목적으로 지리적 위치 데이터(국가, 주, 도시)를 저장하는 데 사용됩니다."
+  },
+  "OCD__dy_geo_description": {
+    "message": "이 쿠키는 잠재고객 생성 목적으로 지리적 위치 데이터(국가, 대륙, 지역, 도시)를 저장하는 데 사용됩니다."
+  },
+  "OCD__dycst_description": {
+    "message": "이 쿠키는 잠재고객 생성 목적으로 사용자-에이전트와 관련 창 크기에 관한 데이터를 수집하는 데 사용됩니다."
+  },
+  "OCD__dy_ses_load_seq_description": {
+    "message": "이 쿠키는 실험 및 A/B 테스트 목적으로 브라우저 세션을 감지하는 데 사용됩니다."
+  },
+  "OCD__dy_soct_description": {
+    "message": "이 쿠키는 정기적으로 활성화되는 캠페인의 빈도를 제어합니다. 이 쿠키가 없으면 정기적으로 활성화되는 캠페인은 페이지가 로드될 때마다 비활성화되거나 실행됩니다."
+  },
+  "OCD__dy_toffset_description": {
+    "message": "이 쿠키는 사용자의 시계 드리프트를 검사합니다(시계를 인터넷과 동기화하지 않는 컴퓨터의 경우)."
+  },
+  "OCD_dy_fs_page_description": {
+    "message": "이 쿠키는 웹사이트에서 세션을 시작할 때 사용자가 방문하는 첫 번째 페이지의 URL을 나타내며 세션의 첫 번째 페이지로 사용자를 타겟팅합니다."
+  },
+  "OCD__dy_cs_storage_items_description": {
+    "message": "이 쿠키는 Dynamic Yield 캠페인을 제대로 운영하기 위한 맞춤형 구현에 사용됩니다."
+  },
+  "OCD__dy_cs_cookie_items_description": {
+    "message": "이 쿠키는 Dynamic Yield 캠페인을 제대로 운영하기 위한 맞춤형 구현에 사용됩니다."
+  },
+  "OCD_ckid_description": {
+    "message": "‍이 쿠키는 사용자의 인터넷 브라우저에서 제공하는 식별자(ID)이며 사용자와 마케팅 캠페인의 관련 제품을 일치시키는 데 사용됩니다."
+  },
+  "OCD_hash_description": {
+    "message": "‍사용자를 식별하지 못하도록 익명성을 정확하게 유지하는 무작위 생성 식별자(ID)입니다. ID는 ckid로부터 생성됩니다."
+  },
+  "OCD_BLUEID_description": {
+    "message": "‍Blue에서 생성하는 식별자(ID)로, 사용자가 인터넷 브라우저를 벗어나서 다른 탐색 세션을 생성하더라도 한 번 이상 식별되지 않고 시스템에서 중복을 생성하도록 합니다."
+  },
+  "OCD_ig_did_description": {
+    "message": "Instagram 사용자 방문을 추적하는 데 사용되는 타겟팅 쿠키입니다."
+  },
+  "OCD_retention_9_years": {
+    "message": "9년"
+  },
+  "OCD_ig_cb_description": {
+    "message": "이 쿠키는 삽입된 Instagram 게시물과 같은 Instagram 플러그인의 올바른 기능을 지원합니다."
+  },
+  "OCD_ds_user_id_description": {
+    "message": "Instagram의 광고를 최적화하는 데 사용되는 타겟팅 쿠키입니다."
+  },
+  "OCD_mid_description": {
+    "message": "웹사이트에서 Instagram 사용을 최적화하는 데 사용되는 기능 쿠키입니다."
+  },
+  "OCD_fbm___description": {
+    "message": "Instagram 사용자 방문을 추적하는 데 사용되는 타겟팅 쿠키입니다."
+  },
+  "OCD_shbid_description": {
+    "message": "Instagram의 광고를 최적화하는 데 사용되는 타겟팅 쿠키입니다."
+  },
+  "OCD_shbts_description": {
+    "message": "Instagram의 광고를 최적화하는 데 사용되는 타겟팅 쿠키입니다."
+  },
+  "OCD_sessionid_description": {
+    "message": "웹사이트에서 로그인하고 로그아웃하는 사용자에 관한 데이터를 수집하는 데 사용되는 실적 쿠키입니다."
+  },
+  "OCD__parsely_visitor_description": {
+    "message": "브라우저를 고유하게 식별하고 세션을 집계하는 JSON 문서입니다."
+  },
+  "OCD__parsely_tpa_blocked_description": {
+    "message": "플래그를 저장하는 JSON 문서로, 추적기에서 pixel.parsely.com에 액세스할 수 있는지를 나타냅니다."
+  },
+  "OCD__parsely_slot_click_description": {
+    "message": "일부 추적기 로드에서 명시적으로 지워진 JSON 문서로, 클릭된 내부 링크에 관한 위치 정보를 저장합니다."
+  },
+  "OCD__parsely_session_description": {
+    "message": "Parsely의 독점 정의에 따라 탐색 세션을 식별하는 정보를 저장하는 JSON 문서입니다."
+  },
+  "OCD_test_description": {
+    "message": "이 쿠키는 쿠키 지원을 탐색하는 데 사용되며 값은 정의되어 있지 않습니다."
+  },
+  "OCD___editor_layout_description": {
+    "message": "Codepen에 사용되며, 일부 블로그 기사와 문서에 사용됩니다."
+  },
+  "OCD_codepen_session_description": {
+    "message": "CodePen에서 CodePen 스니펫 삽입 시 사용됩니다."
+  },
+  "OCD_codepen_signup_referrer_description": {
+    "message": "Codepen에서 가입 추천 플랫폼을 저장하는 데 사용됩니다."
+  },
+  "OCD_codepen_signup_referrer_date_description": {
+    "message": "Codepen에서 가입 추천 플랫폼 최근 날짜를 저장하는 데 사용됩니다."
+  },
+  "OCD_rl_user_id_description": {
+    "message": "Identify API를 통해 설정한 사용자 ID를 저장합니다. 스토리지에서 삭제하지 않는 한 모든 후속 이벤트 페이로드에는 이 데이터가 포함됩니다."
+  },
+  "OCD_rl_trait_description": {
+    "message": "식별 API를 통해 설정한 사용자 특징 객체 ID를 저장합니다. 스토리지에서 삭제하지 않는 한 모든 후속 이벤트 페이로드에는 이 데이터가 포함됩니다."
+  },
+  "OCD_rl_anonymous_id_description": {
+    "message": "익명 ID를 저장합니다. setAnonymousId API를 통해 재정의되지 않는 경우 기본적으로 SDK에서 방문자별로 자동 생성하는 고유 ID입니다. 스토리지에서 삭제하지 않는 한 모든 후속 이벤트 페이로드에는 이 데이터가 포함됩니다."
+  },
+  "OCD_rl_group_id_description": {
+    "message": "그룹 API를 통해 설정한 사용자 그룹 ID를 저장합니다. 스토리지에서 삭제하지 않는 한 모든 후속 이벤트 페이로드에는 이 데이터가 포함됩니다."
+  },
+  "OCD_rl_group_trait_description": {
+    "message": "그룹 API를 통해 설정한 사용자 그룹 특징 객체를 저장합니다. 스토리지에서 삭제하지 않는 한 모든 후속 이벤트 페이로드에는 이 데이터가 포함됩니다."
+  },
+  "OCD_rl_page_init_referrer_description": {
+    "message": "사용자가 사이트를 처음 방문할 때 페이지의 초기 리퍼러를 저장합니다. 모든 후속 이벤트 페이로드에는 이 데이터가 포함됩니다."
+  },
+  "OCD_rl_page_init_referring_domain_description": {
+    "message": "사용자가 사이트를 처음 방문할 때 페이지의 초기 참조 도메인을 저장합니다. 모든 후속 이벤트 페이로드에는 이 데이터가 포함됩니다."
+  },
+  "OCD_test_rudder_cookie_description": {
+    "message": "브라우저의 쿠키 저장소 액세스 가능 여부를 검사합니다. 검사하고 나면 SDK는 쿠키를 즉시 삭제합니다."
+  },
+  "OCD_rl_session_description": {
+    "message": "세션 추적이 사용 설정된 경우 sessionId 등 세션 관련 정보를 저장합니다."
+  },
+  "OCD_rl_auth_token_description": {
+    "message": "사용자가 전달한 인증 토큰을 저장합니다."
+  },
+  "OCD__biz_uid_description": {
+    "message": "현재 도메인에서 사용자를 고유하게 식별합니다."
+  },
+  "OCD__biz_nA_description": {
+    "message": "Marketo Measure에서 내부 진단 목적으로 모든 요청에 포함하는 시퀀스 넘버입니다."
+  },
+  "OCD__biz_flagsA_description": {
+    "message": "양식 제출, 크로스 도메인 이전, 조회 완료 픽셀, 추적 거부 상태 등 다양한 사용자 정보를 저장하는 쿠키입니다."
+  },
+  "OCD__biz_pendingA_description": {
+    "message": "Marketo Measure 서버에 전송하기 전까지 일시적으로 분석 데이터를 저장합니다."
+  },
+  "OCD__biz_ABTestA_description": {
+    "message": "Optimizely 및 Visual Web Optimizer ABTests 데이터의 체크섬 목록으로, bizible.js가 수집된 데이터를 다시 전송하지 못하도록 이미 보고되었습니다."
+  },
+  "OCD__biz_su_description": {
+    "message": "여러 도메인에서 사용자를 식별하는 범용 사용자 ID로, 통합 우회 ITP 제한이 있는 테넌트에만 적용 가능합니다."
+  },
+  "OCD__biz_EventA_description": {
+    "message": "여러 도메인에서 사용자를 식별하는 범용 사용자 ID로, 통합 우회 ITP 제한이 있는 테넌트에만 적용 가능합니다."
+  },
+  "RWS_rationale_https___socket_to_me_vip": {
+    "message": "기본 서버리스 구조를 갖춘 애플리케이션을 보강해 주는 헤드리스 서버입니다."
+  },
+  "RWS_rationale_https___deere_com": {
+    "message": "johndeere.com과 deere.com은 모두 브랜딩, 로고, 이용약관을 공유합니다. 상호 교환식으로 사용합니다. 자체 명칭은 시장에서 Deere & Company에 연결되어 있습니다."
+  },
+  "RWS_rationale_https___player_pl": {
+    "message": "TVN S.A. 소유의 스트리밍 서비스입니다. TVN과의 관련성에 관한 정보는 이 웹사이트의 바닥글에 포함되어 있습니다."
+  },
+  "RWS_rationale_https___prisjakt_no": {
+    "message": "Schibsted에서 소유한 사이트로, Schibsted Norway의 여러 사이트에서 SSO를 공유하고 공동 브랜딩을 통해 사이트 간의 관계를 명확하게 보여줍니다."
+  },
+  "RWS_rationale_https___mittanbud_no": {
+    "message": "Schibsted에서 소유한 사이트로, Schibsted Norway의 여러 사이트에서 SSO를 공유하고 공동 브랜딩을 통해 사이트 간의 관계를 명확하게 보여줍니다."
+  },
+  "RWS_rationale_https___pdmp_apis_no": {
+    "message": "Schibsted에서 소유한 사이트로, Schibsted 사이트 전반에서 사용자에게 API를 제공합니다."
+  },
+  "RWS_rationale_https___elgrafico_com": {
+    "message": "La Prensa Grafica Group 소유 뉴스 포털"
+  },
+  "RWS_rationale_https___eleconomista_net": {
+    "message": "La Prensa Grafica Group 소유 뉴스 포털"
+  },
+  "RWS_rationale_https___ella_sv": {
+    "message": "La Prensa Grafica Group 소유 뉴스 포털"
+  },
+  "RWS_rationale_https___grupolpg_sv": {
+    "message": "La Prensa Grafica Group 소유 도메인"
+  },
+  "RWS_rationale_https___nidhiacademyonline_com": {
+    "message": "이 웹사이트는 kaksya.in의 일부이며, Nidhi Academy 교육 콘텐츠 동영상/메모 등을 호스팅하는 데 사용됩니다."
+  },
+  "RWS_rationale_https___dewarmsteweek_be": {
+    "message": "연간 캠페인용 도메인"
+  },
+  "RWS_rationale_https___sporza_be": {
+    "message": "스포츠 뉴스를 위한 하위 브랜드"
+  },
+  "RWS_rationale_https___een_be": {
+    "message": "하위 브랜드 사이트"
+  },
+  "RWS_rationale_https___radio2_be": {
+    "message": "하위 브랜드 사이트"
+  },
+  "RWS_rationale_https___radio1_be": {
+    "message": "하위 브랜드 사이트"
+  },
+  "RWS_rationale_https___geforcenow_com": {
+    "message": "NVIDIA GEFORCE NOW 서비스를위한 웹 클라이언트를 나타내는 사이트입니다. 플레이어는 PC 게임 라이브러리를 바로 스트리밍할 수 있습니다. NVIDIA 브랜딩이 이 사이트에 명확하게 표시됩니다."
+  },
+  "RWS_rationale_https___meo_pt": {
+    "message": "MEO는 포르투갈의 유명 통신 및 엔터테인먼트 공급업체이며, 텔레비전, 인터넷, 전화, 모바일 등 다양한 서비스를 제공합니다."
+  },
+  "RWS_rationale_https___tolteck_app": {
+    "message": "Tolteck 애플리케이션"
+  },
+  "RWS_rationale_https___24_hu": {
+    "message": "헝가리 뉴스 포털"
+  },
+  "RWS_rationale_https___startlap_hu": {
+    "message": "헝가리 뉴스 애그리게이터 사이트 및 링크 수집"
+  },
+  "RWS_rationale_https___nlc_hu": {
+    "message": "헝가리 여성 온라인 잡지"
+  },
+  "RWS_rationale_https___hazipatika_com": {
+    "message": "헝가리 보건 포털"
+  },
+  "RWS_rationale_https___nosalty_hu": {
+    "message": "헝가리 레시피 포털"
+  },
+  "RWS_rationale_https___cognitive_ai_ru": {
+    "message": "이 도메인은 인증 및 세션 관리를 위해 주요 사용자 대상 도메인과 쿠키를 공유해야 하는 백엔드 서비스입니다."
+  },
+  "RWS_rationale_https___thirdspace_org_au": {
+    "message": "유사한 콘텐츠가 다른 독자층에게 약간 다른 형식으로 게재됩니다."
+  },
+  "RWS_rationale_https___p106_net": {
+    "message": "인도네시아 중학교"
+  },
+  "RWS_rationale_https___smpn106jkt_sch_id": {
+    "message": "인도네시아 중학교"
+  },
+  "RWS_rationale_https___intoday_in": {
+    "message": "India Today Group의 모든 디지털 부동산을 위한 원스톱 도착 페이지입니다."
+  },
+  "RWS_rationale_https___aajtak_in": {
+    "message": "aajtak.in은 힌디어 뉴스를 전하는 가장 빠르고 신뢰할 수 있으며 인기가 높은 웹사이트입니다. 완전한 수준의 진정성을 갖추고 독자들에게 일상 생활과 관련된 중요한 정보와 더불어 인도 및 전 세계의 뉴스를 전달합니다."
+  },
+  "RWS_rationale_https___businesstoday_in": {
+    "message": "비즈니스 뉴스, 시장, 경제 등에 관한 주요 도착 페이지"
+  },
+  "RWS_rationale_https___indiatoday_in": {
+    "message": "IndiaToday.in은 정치, 범죄, 사회 문제, 비즈니스, 스포츠, 기술, 과학, 보건, 라이프스타일 등 다양한 주제에 관한 뉴스, 분석, 설명, 의견을 제공합니다."
+  },
+  "RWS_rationale_https___gnttv_com": {
+    "message": " Good News Today는 삶의 밝은 부분에 초점을 맞추고 승리와 긍정의 이야기를 들려주는 웹사이트입니다."
+  },
+  "RWS_rationale_https___indiatodayne_in": {
+    "message": "India Today NE는 인도 북동부 지역 여덟 개 주인 앗삼, 아루나찰 프라데쉬, 나가랜드, 매니푸르, 미조람, 트리푸라, 메갈라야, 시킴의 뉴스와 관점을 주로 다룹니다."
+  },
+  "RWS_rationale_https___ambitionbox_com": {
+    "message": "Ambition box 관련 URL"
+  },
+  "RWS_rationale_https___infoedgeindia_com": {
+    "message": "InfoEdge India 웹사이트"
+  },
+  "OCD___hs_cookie_cat_pref_description": {
+    "message": "이 쿠키는 방문자가 동의한 카테고리를 기록하는 데 사용됩니다."
+  },
+  "OCD___hs_gpc_banner_dismiss_description": {
+    "message": "이 쿠키는 글로벌 개인 정보 보호 설정 배너를 닫은 경우에 사용됩니다."
+  },
+  "OCD___hs_notify_banner_dismiss_description": {
+    "message": "이 쿠키는 웹사이트에서 Notify 동의 배너 유형을 이용하는 경우에 사용됩니다."
+  },
+  "OCD_g_description": {
+    "message": "이 도메인은 광고 소재 또는 광고 콘텐츠의 스크립트 제공과 관련되어 있습니다. 광고 대행사에서 온라인 광고 캠페인을 최적화하는 데 사용하는 서비스입니다."
+  },
+  "OCD_retention_364_days": {
+    "message": "364일"
+  },
+  "type": {
+    "message": "유형"
+  },
+  "origin": {
+    "message": "출처",
+    "description": "The origin of the cookie"
+  },
+  "visibleIframes": {
+    "message": "표시 iframe"
+  },
+  "hiddenIframes": {
+    "message": "숨긴 iframe"
+  },
+  "note": {
+    "message": "참고"
+  },
+  "belongsToRWSHeader": {
+    "message": "RWS에 속함"
+  },
+  "allowedFeatures": {
+    "message": "허용된 기능(PS 관련)"
+  },
+  "ipProtection": {
+    "message": "IP 보호"
+  },
+  "ipProtectionDescription": {
+    "message": "IP 보호는 사용자의 실제 IP 주소를 서드 파티와 공유하지 않도록 하는 제안입니다."
+  },
+  "bounceTrackingMitigations": {
+    "message": "이탈 추적 감소"
+  },
+  "bounceTrackingMitigationsDescription": {
+    "message": "다양한 컨텍스트에서 사용자를 인식하고자 시도하는 이탈 추적 기능을 줄이거나 없애줍니다."
+  },
+  "privacyBudget": {
+    "message": "개인 정보 보호 예산"
+  },
+  "privacyBudgetDescription": {
+    "message": "이 제안은 사이트에 노출될 수 있는 개별 사용자 데이터의 총량을 개인을 추적하거나 식별하기에 충분하지 않을 정도로 제한하도록 제안합니다."
+  },
+  "userAgentReductionDescription": {
+    "message": "사용자-에이전트 문자열에 공유되어 패시브 디지털 지문 수집에 사용될 수 있는 신원 정보의 양을 최소화합니다."
+  },
+  "privateStateTokens": {
+    "message": "비공개 상태 토큰"
+  },
+  "privateStateTokensDescription": {
+    "message": "패시브 추적 없이도 한 맥락에서 다른 맥락으로 전환하고, 사이트에서 사기를 방지하며, 실제 사람과 봇을 구분할 수 있도록 사용자의 신뢰성에 대한 트러스트를 사용 설정합니다."
+  },
+  "antiCovertTrackingDescription": {
+    "message": "개인 정보 보호 샌드박스 이니셔티브에는 디지털 지문 수집, 네트워크 수준 추적과 같은 특정 전환 추적 기술의 처리를 포함해 은밀한 추적을 제한하기 위한 노력도 포함됩니다."
+  },
+  "noCookiesExempted": {
+    "message": "브라우저에서 제외한 쿠키는 없습니다."
+  },
+  "exemptedCookiesIn3PCD": {
+    "message": "제외된 쿠키는 서드 파티 쿠키 지원 중단 브라우저에서만 사용할 수 있습니다."
+  },
+  "low": {
+    "message": "낮음"
+  },
+  "high": {
+    "message": "높음"
+  },
+  "showRequestsWithCookie": {
+    "message": "이 쿠키를 통한 요청 표시"
+  },
+  "protectedAudience": {
+    "message": "Protected Audience"
+  },
+  "protectedAudienceDescription": {
+    "message": "Protected Audience API는 서드 파티 크로스 사이트 추적을 사용하지 않는 리마케팅 및 맞춤 잠재고객 사용 사례에 서비스를 제공합니다."
+  },
+  "attributionReportingDescription": {
+    "message": "Attribution Reporting API를 사용하면 서드 파티 크로스 사이트 추적 없이 광고 실적을 측정할 수 있습니다."
+  },
+  "privateAggregation": {
+    "message": "Private Aggregation"
+  },
+  "privateAggregationDescription": {
+    "message": "Private Aggregation API는 개인 정보를 보호하는 방식으로 크로스 사이트 데이터를 집계하고 보고하기 위해 만들어졌습니다."
+  },
+  "topicsDescription": {
+    "message": "Topics API를 사용하면 사용자 개인 정보를 보호하면서 관심사 기반 광고를 게재할 수 있습니다."
+  },
+  "privateAdvertisingDescription": {
+    "message": "정확하게 관련성 있는 정보와 디지털 광고를 위한 측정 데이터를 제공하는 API를 통해 크로스 사이트 추적을 사용하지 않고도 중요한 광고 사용 사례를 지원할 수 있습니다."
+  },
+  "generate": {
+    "message": "생성"
+  },
+  "reset": {
+    "message": "재설정"
+  },
+  "chipsDescription": {
+    "message": "새로운 쿠키 속성인 분할됨을 통해 개발자는 분할된 스토리지에 쿠키를 사용하기로 선택하고 최상위 수준 사이트마다 별도의 쿠키 집합을 유지합니다."
+  },
+  "storageAccessAPI": {
+    "message": "Storage Access API"
+  },
+  "storageAccessAPIDescription": {
+    "message": "Storage Access API를 사용하면 브라우저 설정에 따라 액세스가 거부되는 경우에도 iframe이 스토리지 액세스 권한을 요청할 수 있습니다."
+  },
+  "rwsDescription": {
+    "message": "관련 웹사이트 세트(RWS)는 회사가 사이트 사이의 관계를 선언하는 방식으로, 브라우저에서 특정한 목적으로 제한된 서드 파티 쿠키 액세스를 허용합니다."
+  },
+  "fedcm": {
+    "message": "Federated Credential Management API"
+  },
+  "fedcmDescription": {
+    "message": "개인 정보 보호 ID 제휴를 위한 웹 API입니다."
+  },
+  "siteBoundariesDescription": {
+    "message": "개인 정보 보호 API는 한 사이트에서 수집된 정보가 사용자의 명시적인 동의 없이 다른 사이트와 자동으로 공유되지 않도록 합니다."
+  },
+  "publicExplainer": {
+    "message": "공개 설명서"
+  },
+  "implementationExplainer": {
+    "message": "구현 설명서"
+  },
+  "exportTableData": {
+    "message": "테이블 데이터 내보내기"
+  },
+  "body_SyntaxError": {
+    "message": "이 'Set-Cookie' 헤더에 잘못된 문법이 있습니다."
+  },
+  "body_SchemeNotSupported": {
+    "message": "이 연결의 스키마로 쿠키를 저장할 수 없습니다."
+  },
+  "body_OverwriteSecure": {
+    "message": "보안 연결을 통해 전송되지 않으며 Secure 속성이 있는 쿠키를 덮어쓸 것으로 보이므로 'Set-Cookie' 헤더를 통해 쿠키를 설정하려는 시도가 차단되었습니다."
+  },
+  "body_InvalidPrefix": {
+    "message": "이름에 '__Secure-' 또는 '__Host-' 접두사를 사용하고 이러한 접두사가 붙은 쿠키에 적용되는 추가 규칙을 위반했으므로 'Set-Cookie' 헤더를 통해 쿠키를 설정하려는 시도가 차단되었습니다."
+  },
+  "body_SamePartyConflictsWithOtherAttributes": {
+    "message": "'SameParty' 속성은 있지만 이와 충돌하는 다른 속성도 포함되어 있으므로 'Set-Cookie' 헤더를 통해 쿠키를 설정하려는 시도가 차단되었습니다. Chrome에는 'SameParty' 속성을 사용하여 'Secure' 속성을 갖고 'SameSite=Strict'로 제한되지 않는 쿠키가 필요합니다."
+  },
+  "body_DisallowedCharacter": {
+    "message": "이 'Set-Cookie' 헤더에 허용되지 않는 문자(금지된 ASCII 제어 문자 또는 탭 문자(쿠키 이름, 값, 속성 이름 또는 속성 값 중간에 표시되는 경우))가 포함되어 있습니다."
+  },
+  "body_NoCookieContent": {
+    "message": "쿠키에 값이 포함되어 있지 않으므로 'Set-Cookie' 헤더를 통해 쿠키를 설정하려는 시도가 차단되었습니다."
   }
 }
