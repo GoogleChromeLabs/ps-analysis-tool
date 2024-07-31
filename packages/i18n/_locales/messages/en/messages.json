@@ -1862,7 +1862,7 @@
     "message": "Used to monitor number of Google Analytics server requests"
   },
   "OCD_AMP_TOKEN_description": {
-    "message": "Contains a token code that is used to read out a Client ID from the AMP Client ID Service. By matching this ID with that of Google Analytics, users can be matched when switching between AMP content and non-AMP content.\n\nReference: https://support.google.com/analytics/answer/7486764?hl=en"
+    "message": "Contains a token code that is used to read out a Client ID from the AMP Client ID Service. By matching this ID with that of Google Analytics, users can be matched when switching between AMP content and non-AMP content. Reference: https://support.google.com/analytics/answer/7486764?hl=en"
   },
   "OCD_retention_30_seconds_till_1_year": {
     "message": "30 seconds till 1 year"
@@ -2312,37 +2312,37 @@
     "message": "30 days"
   },
   "OCD_lu_description": {
-    "message": "Used to record whether the person chose to remain logged in\n\nContents: User ID and miscellaneous log in information (e.g., number of logins per account, state of the \"remember me\" check box, etc.)"
+    "message": "Used to record whether the person chose to remain logged in Contents: User ID and miscellaneous log in information (e.g., number of logins per account, state of the \"remember me\" check box, etc.)"
   },
   "OCD_retention_2_year": {
     "message": "2 year"
   },
   "OCD_xs_description": {
-    "message": "Used in conjunction with the c_user cookie to authenticate your identity to Facebook.\n\nContents: Session ID, creation time, authentication value, secure session state, caching group ID"
+    "message": "Used in conjunction with the c_user cookie to authenticate your identity to Facebook. Contents: Session ID, creation time, authentication value, secure session state, caching group ID"
   },
   "OCD_c_user_description": {
-    "message": "Used in conjunction with the xs cookie to authenticate your identity to Facebook.\n\nContents: User ID"
+    "message": "Used in conjunction with the xs cookie to authenticate your identity to Facebook. Contents: User ID"
   },
   "OCD_m_user_description": {
-    "message": "Used to authenticate your identity on Facebook's mobile website.\n\nContents: Email, User ID, authentication value, version, user agent capability, creation time, Facebook version indicator"
+    "message": "Used to authenticate your identity on Facebook's mobile website. Contents: Email, User ID, authentication value, version, user agent capability, creation time, Facebook version indicator"
   },
   "OCD_pl_description": {
-    "message": "Used to record that a device or browser logged in via Facebook platform.\n\nContents: Y/N"
+    "message": "Used to record that a device or browser logged in via Facebook platform. Contents: Y/N"
   },
   "OCD_dbln_description": {
-    "message": "Used to enable device-based logins\n\nContents: Login authentication values"
+    "message": "Used to enable device-based logins Contents: Login authentication values"
   },
   "OCD_aks_description": {
-    "message": "Determines the login state of a person visiting accountkit.com\n\nContents: Account kit access token"
+    "message": "Determines the login state of a person visiting accountkit.com Contents: Account kit access token"
   },
   "OCD_aksb_description": {
-    "message": "Authenticates logins using Account Kit\n\nContents: Request time value"
+    "message": "Authenticates logins using Account Kit Contents: Request time value"
   },
   "OCD_retention_30_minutes": {
     "message": "30 minutes"
   },
   "OCD_sfau_description": {
-    "message": "Optimizes recovery flow after failed login attempts\n\nContents: Encrypted user ID, contact point, time stamp, and other login information"
+    "message": "Optimizes recovery flow after failed login attempts Contents: Encrypted user ID, contact point, time stamp, and other login information"
   },
   "OCD_ick_description": {
     "message": "Stores an encryption key used to encrypt cookies"
@@ -2351,7 +2351,7 @@
     "message": "Insecure indicator"
   },
   "OCD_s_description": {
-    "message": "\nFacebook browser identification, authentication, marketing, and other Facebook-specific function cookies."
+    "message": "Facebook browser identification, authentication, marketing, and other Facebook-specific function cookies."
   },
   "OCD_datr_description": {
     "message": "Used to prevent creation of fake / spammy accounts. Datr cookie is associated with a browser, not individual people."
@@ -2372,7 +2372,7 @@
     "message": "28 days"
   },
   "OCD_locale_description": {
-    "message": "This cookie contains the display locale of the last logged in user on this browser. This cookie\nappears to only be set after the user logs out.\nThe locale cookie has a lifetime of one week."
+    "message": "This cookie contains the display locale of the last logged in user on this browser. This cookie appears to only be set after the user logs out. The locale cookie has a lifetime of one week."
   },
   "OCD__fbp_description": {
     "message": "Used by Facebook to deliver a series of advertisement products such as real time bidding from third party advertisers"
@@ -3113,7 +3113,7 @@
     "message": "Stores the recommendations we’re recommending so that we don’t show only the same recommendations on the same page"
   },
   "OCD_obsessionid___description": {
-    "message": "Stores a unique identifier of the session so that we don’t show only the same recommendations on the same session"
+    "message": "This cookie stores a unique identifier of the session so that we don’t show only the same recommendations on the same session"
   },
   "OCD__cq_duid_description": {
     "message": "Used by the website to protect against fraud in relation to its referral system."
@@ -3326,7 +3326,7 @@
     "message": "This cookie is used to determine which type of device the visitor is using, so the website can be properly formatted"
   },
   "OCD_gckp_description": {
-    "message": "Registers a unique ID that identifies a returning user's device. The ID is used for targeted ads."
+    "message": "This cookie is used for building user profile information across sites of a single customer where cx.js is implemented"
   },
   "OCD_um2_description": {
     "message": "Sets a unique ID for the visitor, that allows third party advertisers to target the visitor with relevant advertisement. This pairing service is provided by third party advertisement hubs, which facilitates real-time bidding for advertisers."
@@ -3470,7 +3470,7 @@
     "message": "Creates a temporary session ID to avoid the display of duplicate recommendations on the page."
   },
   "OCD___zlcmid_description": {
-    "message": "Live chat widget on Slack contact page (ZopIM)"
+    "message": "This cookie Chat Widget offers out-of-the-box cookie consent management, see here: Enabling cookie consent for the Chat widget & Web Widget. Alternatively, these Chat Cookies respect external cookie bot functionality as well."
   },
   "OCD_i_description": {
     "message": "Registers user data, such as IP address, geographical location, websites visited and on which advertisements the user has clicked, with the aim of optimizing the display of advertisements based on user relocation on websites that use the same advertising network."
@@ -7154,7 +7154,7 @@
     "message": "Indicates that the user clicked on an item that was recommended by Taboola’s Services. This is used for reporting and analytics purposes."
   },
   "OCD_trc_cookie_storage_description": {
-    "message": "Assigns a unique User ID that is used for attribution and reporting purposes."
+    "message": "This cookie is used to collect information on a visitor. This information will become an ID string with information on a specific visitor – ID information strings can be used to target groups with similar preferences, or can be used by third-party domains or ad-exchanges."
   },
   "OCD__tb_sess_r_description": {
     "message": "Used on websites of our publisher Customers that utilize the Taboola Newsroom services. It maintains a session reference about the user’s visit to this particular website."
@@ -7397,7 +7397,7 @@
     "message": "This cookie is used to identify, session length, IP address, location, time of usage, viewed pages and files, your advertising campaign selections, and other information regarding your use of the Website."
   },
   "OCD_yieldmo_id_description": {
-    "message": "Yieldmo only tracks using device identifiers and so all requests must include your device's Advertising ID or the 'yieldmo_id' cookie of the device related to the request. Requests submitted without a device identifier cannot be processed."
+    "message": "Yieldmo only tracks using device identifiers and so all requests must include your device's Advertising ID or the yieldmo_id cookie of the device related to the request. Requests submitted without a device identifier cannot be processed."
   },
   "OCD_ssid_description": {
     "message": "This cookie is associated with SpringServe. It is used for serving video ads."
@@ -8287,5 +8287,1034 @@
   },
   "body_NoCookieContent": {
     "message": "This attempt to set a cookie via a 'Set-Cookie' header was blocked because the header did not contain any value."
+  },
+  "OCD_CrossConsent_description": {
+    "message": "Stores the user's cookie consent state for the current domain"
+  },
+  "OCD_1_gif_description": {
+    "message": "Used to count the number of sessions to the website, necessary for optimizing CMP product delivery."
+  },
+  "OCD_cb_currency_description": {
+    "message": "Stores the user's currency preference"
+  },
+  "OCD_CookieConsentBulkSetting___description": {
+    "message": "Enables cookie consent across multiple websites"
+  },
+  "OCD_isFirstSession__description": {
+    "message": "This cookie is used when user opts-in to saving information"
+  },
+  "OCD_MSO__description": {
+    "message": "This cookie identifies a session"
+  },
+  "OCD_X_FD_FEATURES__description": {
+    "message": "This cookie is used for tracking analytics and evenly spreading load on the website"
+  },
+  "OCD_X_FD_Time__description": {
+    "message": "This cookie is used for tracking analytics and evenly spreading load on website"
+  },
+  "OCD__hjHasCachedUserAttributes_description": {
+    "message": "This cookie sets when a user first lands on a page. Persists the Hotjar User ID which is unique to that site. Hotjar does not track users across different sites. Ensures data from subsequent visits to the same site are attributed to the same user ID."
+  },
+  "OCD_hj_visitor_description": {
+    "message": "hotjar uses cookies to enhance the user’s experience on our website, for example to complete forms, navigating the site, and identify returning users and offer related content. Users can control the use of cookies at the individual browser level."
+  },
+  "OCD_lihc_auth__description": {
+    "message": "Used by LinkedIn HelpCenter Live Chat to store language and chat start timestamp. Example names of this cookie include lihc_auth_en, lihc_auth_es, depending on language preference."
+  },
+  "OCD_li_a_description": {
+    "message": "Used to authenticate enterprise users on Sales Navigator and Recruiter"
+  },
+  "OCD_li_ep_auth_context_description": {
+    "message": "User to authenticate LinkedIn enterprise customers"
+  },
+  "OCD_fcookie_description": {
+    "message": "Used for bot detection."
+  },
+  "OCD_ccookie_description": {
+    "message": "To remember if a user received a captcha challenge."
+  },
+  "OCD_chp_token_description": {
+    "message": "Used to denote whether the user has gone through two factor authentication or solved a Captcha."
+  },
+  "OCD_li_cu_description": {
+    "message": "Used to map a user to a captcha challenge page"
+  },
+  "OCD_denial_client_ip_description": {
+    "message": "Stores user IP address for anti-scraping and DOS prevention"
+  },
+  "OCD_denial_reason_code_description": {
+    "message": "Used for anti-scraping and DOS prevention"
+  },
+  "OCD_rtc_description": {
+    "message": "Used as part of anti-abuse processes on LinkedIn"
+  },
+  "OCD_retention_120_seconds": {
+    "message": "120 seconds"
+  },
+  "OCD_li_referer_description": {
+    "message": "Used to detect bots. Cookie remembers the referring website before redirecting the user to captcha for authorization"
+  },
+  "OCD_f_token_description": {
+    "message": "Used to detect bots for anti-scraping"
+  },
+  "OCD_retention_3_minutes": {
+    "message": "3 minutes"
+  },
+  "OCD_li_apfcdc_description": {
+    "message": "Used for triggering the abuse prevention features on member device."
+  },
+  "OCD_retention_10_hours": {
+    "message": "10 hours"
+  },
+  "OCD_li_odapfcc_description": {
+    "message": "Used to control the number of abuse prevention features collected from member device."
+  },
+  "OCD_retention_2_Years": {
+    "message": "2 Years"
+  },
+  "OCD_ac_L_description": {
+    "message": "Counts the number of times the account center banner, which is displayed to inform users with an incomplete profile how to complete their profile, was closed by a user to determine display logic"
+  },
+  "OCD_ac_LD_description": {
+    "message": "Contains the date when the account center was displayed to a user to determine display logic"
+  },
+  "OCD_recent_history_status_description": {
+    "message": "Used to determine whether a user enabled or disabled the Guest Recent History Setting"
+  },
+  "OCD_all_u_b_description": {
+    "message": "To know if a user has opted in to viewing LinkedIn on an unsupported browser"
+  },
+  "OCD_retention_21_days": {
+    "message": "21 days"
+  },
+  "OCD_uh_description": {
+    "message": "Used to set the user preference for the mobile web platform via a user's settings"
+  },
+  "OCD_pushPermInfo_description": {
+    "message": "Used across multiple LinkedIn services to determine cool off for push notification prompts"
+  },
+  "OCD_pushPermState_description": {
+    "message": "Used across multiple LinkedIn services to determine the user's push notification permission preference "
+  },
+  "OCD_wwepo_description": {
+    "message": "Used to ensure that useres who choose to sign up using phone only have that setting and preference respected"
+  },
+  "OCD_li_ec_description": {
+    "message": "Used to store unbound enterprise users' cookie consent"
+  },
+  "OCD_li_gpc_description": {
+    "message": "Used to remember a user's preferences on LinkedIn's Global Privacy Control"
+  },
+  "OCD_li_gp_description": {
+    "message": "Stores privacy preferences for guests to LinkedIn"
+  },
+  "OCD_PLAY_FLASH_description": {
+    "message": "Used by some LinkedIn services to facilitate the display of messages on page transitions . Users include notifying a user when a form is successfully submitted or fails , and to provide other similar notifications."
+  },
+  "OCD_PLAY_LANG_description": {
+    "message": "Used by some LinkedIn services to remember a user's language preference"
+  },
+  "OCD_PLAY_SESSION_description": {
+    "message": "Used by some LinkedIn services to store session information"
+  },
+  "OCD_redirectFromM2MInviteAccept_description": {
+    "message": "Determines the appropriate profile display logic when a user accepts an invitation to connect on LinkedIn from a LinkedIn member via email."
+  },
+  "OCD_redirectFromM2MInviteSent_description": {
+    "message": "Used to notify and provide the appropriate profile display logic when the user sends an invitation to connect on LinkedIn from a LinkedIn member via email."
+  },
+  "OCD_cookie_policy_banner_eu_description": {
+    "message": "Used to display cookie banner in LinkedIn Lite "
+  },
+  "OCD_cookie_policy_banner_nl_description": {
+    "message": "Used to display cookie banner in LinkedIn Lite on the Netherlands site."
+  },
+  "OCD_appName_description": {
+    "message": "Used to identify the source as the LinkedIn Lite app to send the right service worker to the app"
+  },
+  "OCD_appLang_description": {
+    "message": "Used to set the right language on the LinkedIn Lite app"
+  },
+  "OCD_lls_integration_description": {
+    "message": "Validates whitelisted partners for content integrations"
+  },
+  "OCD_feed_sort_description": {
+    "message": "Used to remember a member's preference how the feed should be sorted"
+  },
+  "OCD_abiRedirect_description": {
+    "message": "Enables import of address book during onboarding flow for users who choose to import their address book"
+  },
+  "OCD_lil_lang_description": {
+    "message": "Stores user's selected language setting for LinkedIn Learning"
+  },
+  "OCD_li_alerts_description": {
+    "message": "Used to track impressions of LinkedIn alerts, such as the Cookie Banner and to implement cool off periods for display of alerts"
+  },
+  "OCD_li_theme_description": {
+    "message": "Remembers a user's display preference/theme setting"
+  },
+  "OCD_integration_type_description": {
+    "message": "Used to determine which integration traffic is coming from to render the profile namecard experience"
+  },
+  "OCD_li_theme_set_description": {
+    "message": "Remembers which users have updated their display / theme preferences"
+  },
+  "OCD_lms_analytics_description": {
+    "message": "Used to identify LinkedIn Members off LinkedIn for analytics"
+  },
+  "OCD_li_fat_id_description": {
+    "message": "Member indirect identifier for Members for conversion tracking, retargeting, analytics"
+  },
+  "OCD_li_giant_description": {
+    "message": "Indirect indentifier for groups of LinkedIn Members used for conversion tracking"
+  },
+  "OCD_queryString_description": {
+    "message": "This cookie is used to persist marketing tracking parameters"
+  },
+  "OCD_VID_description": {
+    "message": "ID associated with a visitor to a LinkedIn microsite which is used to determine conversions for lead gen purposes"
+  },
+  "OCD_recent_history_description": {
+    "message": "Used to remember URLs visited by the guest to show the pages back where they left off"
+  },
+  "OCD_sharebox_suggestion_description": {
+    "message": "Displays a banner that provides help text to first time users of the Elevate share box"
+  },
+  "OCD_li_cc_description": {
+    "message": "Used to ensure a user's phone number is inputted in China"
+  },
+  "OCD_lss_bundle_viewer_description": {
+    "message": "Stores consent when a user agrees to view a Smartlinks link"
+  },
+  "OCD_interstitial_page_reg_oauth_url_description": {
+    "message": "Stores the referring page to ensure the Authentication screen displays correctly"
+  },
+  "OCD_df_ts_description": {
+    "message": "Device fingerprinting sampling for performance optimization"
+  },
+  "OCD_li_feed_xray_description": {
+    "message": "Used to show new items in developer option 'Feed X-ray'"
+  },
+  "OCD_gpp_description": {
+    "message": "A valid IAB Global Privacy Platform consent string. If the string is missing, misconstructed, or otherwise invalid, we will treat the request as if it has no consent string and process accordingly."
+  },
+  "OCD_mtm_consent_removed_description": {
+    "message": "Cookie is used to store the user consent preference"
+  },
+  "OCD_mtm_cookie_consent_description": {
+    "message": "Cookie is used to store the user consent preference"
+  },
+  "OCD_matomo_ignore_description": {
+    "message": "cookie will be a third party cookie. This cookie does not contain personal information or any ID and the cookie value is the same for all visitors)"
+  },
+  "OCD_retention_30_years": {
+    "message": "30 years"
+  },
+  "OCD_matomo_sessid_description": {
+    "message": "when you use the opt-out feature (this is called a nonce and helps prevent CSRF security issues)"
+  },
+  "OCD__mkto_trk_description": {
+    "message": "This cookie is associated with an email marketing service provided by Marketo. This tracking cookie allows a website to link visitor behaviour to the recipient of an email marketing campaign, to measure campaign effectiveness."
+  },
+  "OCD_retention_729_days": {
+    "message": "729 days"
+  },
+  "OCD_utm_key_description": {
+    "message": "This cookie is set to save personalized marketing campaign parameters. It displays customized data depending on the type of website visitor."
+  },
+  "OCD___Secure_fgpt_description": {
+    "message": "This cookie is set due an HTTP response header to send information between client and cloud server domains, like location and payload data. Its attribute has a “secure” flag in its name indicating that the cookie is sent only in HTTPS schemas to enhance security and prevent unauthorized access of information."
+  },
+  "OCD__customer_account_shop_sessions_description": {
+    "message": "Used in combination with the _secure_account_session_id cookie to track a user's session for new customer accounts"
+  },
+  "OCD__secure_account_session_id_description": {
+    "message": "Used to track a user's session for new customer accounts"
+  },
+  "OCD__shopify_m_description": {
+    "message": "Used for managing customer privacy settings."
+  },
+  "OCD__shopify_tm_description": {
+    "message": "Used for managing customer privacy settings."
+  },
+  "OCD__shopify_tw_description": {
+    "message": "Used for managing customer privacy settings."
+  },
+  "OCD__storefront_u_description": {
+    "message": "Used to facilitate updating customer account information."
+  },
+  "OCD_customer_account_locale_description": {
+    "message": "Used in connection with new customer accounts"
+  },
+  "OCD_hide_shopify_pay_for_checkout_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_master_device_id_description": {
+    "message": "Used in connection with merchant login."
+  },
+  "OCD_previous_step_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_discount_code_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_remember_me_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_shopify_pay_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_shop_pay_accelerated_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_checkout_prefill_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_checkout_queue_token_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_checkout_worker_session_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_checkout_session_token___description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_identity_state_description": {
+    "message": "Used in connection with customer authentication"
+  },
+  "OCD_identity_state___description": {
+    "message": "Used in connection with customer authentication"
+  },
+  "OCD_identity_customer_account_number_description": {
+    "message": "Used in connection with customer authentication"
+  },
+  "OCD_retention_12_weeks": {
+    "message": "12 weeks"
+  },
+  "OCD_card_update_verification_id_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_customer_account_new_login_description": {
+    "message": "Used in connection with customer authentication"
+  },
+  "OCD_customer_account_preview_description": {
+    "message": "Used in connection with customer authentication"
+  },
+  "OCD_customer_payment_method_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_customer_shop_pay_agreement_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_pay_update_intent_id_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_profile_preview_token_description": {
+    "message": "Used in connection with checkout."
+  },
+  "OCD_login_with_shop_finalize_description": {
+    "message": "Used in connection with customer authentication"
+  },
+  "OCD_preview_theme_description": {
+    "message": "Used in connection with the theme editor"
+  },
+  "OCD_shopify_editor_unconfirmed_settings_description": {
+    "message": "Used in connection with the theme editor"
+  },
+  "OCD_retention_16_hours": {
+    "message": "16 hours"
+  },
+  "OCD__shopify_d_description": {
+    "message": "Shopify analytics."
+  },
+  "OCD_shop_analytics_description": {
+    "message": "Shopify analytics."
+  },
+  "OCD__shopify_ga_description": {
+    "message": "Shopify and Google Analytics."
+  },
+  "OCD__pk_id___description": {
+    "message": "Used to recognize visitors and hold their various properties."
+  },
+  "OCD_retention_13_Months": {
+    "message": "13 Months"
+  },
+  "OCD__pk_ses___description": {
+    "message": "Shows the visitor’s active session. If the cookie doesn’t exist, it means that the session ended more than 30 minutes ago and was counted in the _pk_id cookie."
+  },
+  "OCD_ppms_privacy___description": {
+    "message": "Stores the visitor’s consent to data collection and usage."
+  },
+  "OCD_ppms_privacy_bar___description": {
+    "message": "Stores information that the visitor has closed the consent reminder."
+  },
+  "OCD_stg_fired____description": {
+    "message": "Indicates whether the tag and trigger combination was fired during the current visitor session. This cookie can be set multiple times with different condition IDs."
+  },
+  "OCD_stg_utm_campaign_description": {
+    "message": "Stores the name of the campaign that directed the visitor to your site."
+  },
+  "OCD_stg_pk_campaign_description": {
+    "message": "Stores the name of the campaign that directed the visitor to your site."
+  },
+  "OCD__stg_optout_description": {
+    "message": "Helps to turn off all tracking tags on your site."
+  },
+  "OCD_stg_global_opt_out_description": {
+    "message": "Helps to turn off all tracking tags on sites that belong to one Piwik PRO account."
+  },
+  "OCD_apbct_cookies_test_description": {
+    "message": "Сookie to validate other cookies, so they can’t be spoofed."
+  },
+  "OCD_apbct___description": {
+    "message": "Group of cookies which are set from backend and contain information about the current user"
+  },
+  "OCD_ct___description": {
+    "message": "Group of cookies used for storing dynamic variables from browser"
+  },
+  "OCD_ct_sfw__description": {
+    "message": "Group of cookies used for our SpamFireWall technology."
+  },
+  "OCD_spbc_cookies_test_description": {
+    "message": "Cookie to test cookies so we know that everything working properly"
+  },
+  "OCD_spbc_firewall_pass_key_description": {
+    "message": "The flag defines if the Security Firewall was passed."
+  },
+  "OCD_spbc_is_logged_in_description": {
+    "message": "Dashboard. Flag defines if a user was logged in."
+  },
+  "OCD_spbc_2fa_passed_description": {
+    "message": "Dashboard. Flag defines if Two-Factor Authentication was passed."
+  },
+  "OCD_spbc_timer_description": {
+    "message": "Dashboard. Time spent on the page."
+  },
+  "OCD_spbc_log_id_description": {
+    "message": "Dashboard. User identification."
+  },
+  "OCD_mnet_session_depth_description": {
+    "message": "Contains the scroll-depth across the website's sub-pages."
+  },
+  "OCD___Host_ERIC_PROD___description": {
+    "message": "Enterprise Request Infrastructure Cookie (ERIC) carries the cross-site request forgery (CSRF) security token between the server and the client. The cookie name indicates the server mode (PROD or PRODDEBUG) and a random number. A different token is generated for each Lightning app."
+  },
+  "OCD_SetupDomainProbePassed_description": {
+    "message": "Indicates whether the web client successfully accessed the new *.salesforce-setup.com domain. If the cookie value is true, then Setup pages are served from *.salesforce-setup.com. If false, Setup pages are served from *.force.com. In this case, users are sometimes required to view Setup pages in Salesforce Classic instead of in Lightning Experience."
+  },
+  "OCD_RP___description": {
+    "message": "Enforces the one response per computer setting."
+  },
+  "OCD_sso_user_description": {
+    "message": "Determines if certain Enterprise respondents are authenticated if an account holder requires respondents to authenticate."
+  },
+  "OCD_CX___description": {
+    "message": "Used for pop-up surveys to track whether the survey was already taken to avoid re-showing the pop-up."
+  },
+  "OCD_P___description": {
+    "message": "Used for pop-up surveys to track whether the survey was already taken to avoid re-showing the pop-up."
+  },
+  "OCD_sm_ir_description": {
+    "message": "Used by the instant results page so a survey creator can display data."
+  },
+  "OCD__splunk_rum_sid_description": {
+    "message": "This is a site observability cookie that identifies/monitors site issues."
+  },
+  "OCD_sm_rec_description": {
+    "message": "Stores unencrypted user data. Expiry time based on the 'remember me' button on login."
+  },
+  "OCD_RE___description": {
+    "message": "Used to track the current page of the respondent in a multi-page survey. If the respondent leaves the survey, it enables the respondent to resume on the page they were last on."
+  },
+  "OCD_REPID___description": {
+    "message": "Used to track the current page of the respondent in a multi-page survey. If the respondent leaves the survey, it enables the respondent to resume on the page they were last on."
+  },
+  "OCD_HACIVICLB_description": {
+    "message": "This cookie is used by CIVIC's load balancer to identify the server that is active for your request on our cluster. Its purpose is to improve the performance of the website. The cookie is essential to the operation of the site and is always set by the load balancer, but does not store any personal information. This cookie might be set from the civicuk.com domain or from stats.civiccomputing.com"
+  },
+  "OCD_HACIVIC_description": {
+    "message": "This cookie is used by CIVIC's load balancer to identify the server that is active for your request on our cluster. Its purpose is to improve the performance of the website. The cookie is essential to the operation of the site and is always set by the load balancer, but does not store any personal information. This cookie might be set from the civicuk.com domain or from stats.civiccomputing.com"
+  },
+  "OCD_HAAPPLB_description": {
+    "message": "This cookie is used by CIVIC's load balancer to identify the server that is active for your request on our cluster. Its purpose is to improve the performance of the website. The cookie is essential to the operation of the site and is always set by the load balancer, but does not store any personal information. This cookie might be set from the civicuk.com domain or from stats.civiccomputing.com"
+  },
+  "OCD_ptrrc_description": {
+    "message": "This cookie is used to establishes a unique identifier for the visitor that allows external advertisers (third parties) to target the visitor with relevant advertising. This combined service is provided by advertising hubs, which provide real-time offers to advertisers."
+  },
+  "OCD_retention_10_months": {
+    "message": "10 months"
+  },
+  "OCD_ptran_description": {
+    "message": "This cookie is used to establish a unique identifier for the visitor that allows external advertisers (third parties) to target the visitor with relevant advertising. This combined service is provided by advertising hubs, which provide real-time offers to advertisers."
+  },
+  "OCD_ptrt_description": {
+    "message": "This website uses a cookie to track you and show you ads from other companies that might interest you. These ad platforms connect advertisers with viewers in real-time"
+  },
+  "OCD_ptrpp_description": {
+    "message": "We use a cookie to create a unique ID for you. This allows advertisers (not affiliated with us) to show you relevant ads. Advertisers use platforms that connect them with potential customers in real-time."
+  },
+  "OCD_ptrpub_description": {
+    "message": "This cookie helps us personalize your ad experience. It creates a unique identifier that allows advertisers to show you relevant ads based on your browsing habits. Advertisers use real-time platforms to connect with viewers who might be interested in their products."
+  },
+  "OCD_ptrc_description": {
+    "message": "This website utilizes a cookie to assign a unique visitor ID. This ID is used by external advertising networks (third-party) to deliver targeted advertising based on your browsing behavior. These ad networks function as real-time marketplaces where advertisers compete for your attention."
+  },
+  "OCD_ptrb_description": {
+    "message": "This cookie is used to establish a unique identifier for the visitor that allows external advertisers (third parties) to target the visitor with relevant advertising. This combined service is provided by advertising hubs, which provide real-time offers to advertisers."
+  },
+  "OCD_ptropenx_description": {
+    "message": "This cookie is used to establish a unique identifier for the visitor that allows external advertisers (third parties) to target the visitor with relevant advertising. This combined service is provided by advertising hubs, which provide real-time offers to advertisers."
+  },
+  "OCD_ptrbsw_description": {
+    "message": "When you visit our site, a cookie is placed to identify you. This allows advertisers (separate companies) to target you with relevant ads. These ad platforms connect advertisers with potential customers in real-time, like an auction."
+  },
+  "OCD_ptreps_description": {
+    "message": "This cookie is used to establish a unique identifier for the visitor that allows external advertisers (third parties) to target the visitor with relevant advertising. This combined service is provided by advertising hubs, which provide real-time offers to advertisers."
+  },
+  "OCD_ptradtrt_description": {
+    "message": "This cookie is used to establish a unique identifier for the visitor that allows external advertisers (third parties) to target the visitor with relevant advertising. This combined service is provided by advertising hubs, which provide real-time offers to advertisers."
+  },
+  "OCD_opout_description": {
+    "message": "This cookie holds information about optout from Outbrain personalized advertising"
+  },
+  "OCD_recs___description": {
+    "message": "This cookie stores the recommendations we’re recommending so that we don’t show only the same recommendations on the same page"
+  },
+  "OCD_europe_description": {
+    "message": "This cookie stores if the user is from Europe"
+  },
+  "OCD_ref__description": {
+    "message": "This cookie stores the referring document information to identify the source of traffic to improve contextual recommendations"
+  },
+  "OCD_outbrain_dicbo_id_description": {
+    "message": "This cookie Used for conversion attribution when a browser does not allow third party cookies"
+  },
+  "OCD_unifiedPixel_description": {
+    "message": "Collects data on the user’s navigation and behavior on the website. This is used to compile statistical reports and heatmaps for the website owner."
+  },
+  "OCD_retention_Seesion": {
+    "message": "Seesion"
+  },
+  "OCD_dicbo_id_description": {
+    "message": "Collects statistics concerning the visitors' use of the website and its general functionality. This is used to optimize and compile reports on the website for comparison through a third party analysis service."
+  },
+  "OCD__cs_c_description": {
+    "message": "Consent state: digit between 0 and 3. Used for capturing analytics on web pages"
+  },
+  "OCD__cs_cvars_description": {
+    "message": "This cookie is used to capture analytics on the web page"
+  },
+  "OCD__cs_id_description": {
+    "message": "Contains: user ID, timestamp (in seconds) of user creation, number of visits for this user"
+  },
+  "OCD__cs_s_description": {
+    "message": "Number of page views for the current session, and the recording state"
+  },
+  "OCD___CT_Data_description": {
+    "message": "This cookie is used to count the number of a guest’s pageviews or visits"
+  },
+  "OCD__CT_RS__description": {
+    "message": "This cookie is used to capture analytics on the web page"
+  },
+  "OCD_WRUID_description": {
+    "message": "This cookie is used for analytics"
+  },
+  "OCD__cs_ex_description": {
+    "message": "This cookie stores if the user is excluded from tracking. Contains the timestamp of the last time this visitor was drawn."
+  },
+  "OCD__cs_optout_description": {
+    "message": "This cookie stores the user is optout"
+  },
+  "OCD__cs_rl_description": {
+    "message": "This cookie is used for a few integrations we have that require us to generate replay links and put them into cookies."
+  },
+  "OCD__cs_root_domain_description": {
+    "message": "Use as a test cookie to get the root domain name excluding subdomains for cookie. For more technical, info we almost use the same code as this"
+  },
+  "OCD_WRIgnore_description": {
+    "message": "This cookie is created to indicate that the user was not selected during random ratio check. This user will not participate again in the random ratio check for as long as the life time of the cookie."
+  },
+  "OCD_WRBlock_description": {
+    "message": "If a visitor to client’s website does not wish to be tracked by the software, Clicking this link shall place a cookie on the visitor’s machine for the purpose of blocking any recording by the Contentsquare software of this visitor’s session."
+  },
+  "OCD__cs_same_site_description": {
+    "message": "Check if the browser supports the SameSite flag"
+  },
+  "OCD_retention_Immediately_removed": {
+    "message": "Immediately removed"
+  },
+  "OCD__cs_debug_description": {
+    "message": "Enables/disables specific behavior of the Tag for debugging purposes"
+  },
+  "OCD__hjasCachedUserAttributes_description": {
+    "message": "Specifies whether the data set in _hjUserAttributes Local Storage item is up to date or not"
+  },
+  "OCD__hjUserAttrbutesHash_description": {
+    "message": "Specifies whether any user attribute has changed and needs to be updated"
+  },
+  "OCD_retention_2_minutes": {
+    "message": "2 minutes"
+  },
+  "OCD__hjUserAttributes_description": {
+    "message": "Stores user attributes sent through the Identify API."
+  },
+  "OCD_retention_no_expiration": {
+    "message": "no expiration"
+  },
+  "OCD__hp2_hld_description": {
+    "message": "Used to determine the highest-level domain a cookie can be set on (since public suffix domains block setting cookies on the top level)."
+  },
+  "OCD__hp5_event_props___description": {
+    "message": "Event properties cookie."
+  },
+  "OCD__hp5_meta___description": {
+    "message": "Contains all metadata related to user/session"
+  },
+  "OCD__cs_mk_aa_description": {
+    "message": "Ensures Adobe dimensions and eVars are set only once every 30 minutes. Stores the value of the csMatchingKey which is a random number plus timestamp in milliseconds."
+  },
+  "OCD__cs_mk_ga_description": {
+    "message": "Ensures Google dimensions and eVars are set only once every 30 minutes. Stores the value of the csMatchingKey which is a random number plus timestamp in milliseconds."
+  },
+  "OCD__cs_tld__description": {
+    "message": "Cookies generated for Google Analytics and Adobe Analytics integrations which help determine the main domain on which create integration cookies."
+  },
+  "OCD_app_manifest_token_description": {
+    "message": "This cookie is used during the App Manifest flow to maintain the state of the flow during the redirect to fetch a user session."
+  },
+  "OCD_color_mode_description": {
+    "message": "This cookie is used to indicate the user selected theme preference."
+  },
+  "OCD__device_id_description": {
+    "message": "This cookie is used to track recognized devices for security purposes."
+  },
+  "OCD_dotcom_user_description": {
+    "message": "This cookie is used to signal to us that the user is already logged in."
+  },
+  "OCD_enterprise_trial_redirect_to_description": {
+    "message": "This cookie is used to complete a redirect for trial users"
+  },
+  "OCD_fileTreeExpanded_description": {
+    "message": "Used to indicate whether the file tree on the code view was last expanded or collapsed"
+  },
+  "OCD_ghcc_description": {
+    "message": "This cookie validates user's choice about cookies"
+  },
+  "OCD__gh_ent_description": {
+    "message": "This cookie is used for temporary application and framework state between pages like what step the customer is on in a multiple step form."
+  },
+  "OCD__gh_sess_description": {
+    "message": "_gh_sess\tThis cookie is used for temporary application and framework state between pages like what step the user is on in a multiple step form."
+  },
+  "OCD_gist_oauth_csrf_description": {
+    "message": "This cookie is set by Gist to ensure the user that started the oauth flow is the same user that completes it."
+  },
+  "OCD_retention_Deleted_when_oauth_state_is_validated": {
+    "message": "Deleted when oauth state is validated"
+  },
+  "OCD_gist_user_session_description": {
+    "message": "This cookie is used by Gist when running on a separate host."
+  },
+  "OCD_has_recent_activity_description": {
+    "message": "This cookie is used to prevent showing the security interstitial to users that have visited the app recently."
+  },
+  "OCD_retention_1_Hour": {
+    "message": "1 Hour"
+  },
+  "OCD___Host_gist_user_session_same_site_description": {
+    "message": "This cookie is set to ensure that browsers that support SameSite cookies can check to see if a request originates from GitHub."
+  },
+  "OCD___Host_user_session_same_site_description": {
+    "message": "This cookie is set to ensure that browsers that support SameSite cookies can check to see if a request originates from GitHub."
+  },
+  "OCD_marketplace_repository_ids_description": {
+    "message": "This cookie is used for the marketplace installation flow."
+  },
+  "OCD_marketplace_suggested_target_id_description": {
+    "message": "This cookie is used for the marketplace installation flow."
+  },
+  "OCD__octo_description": {
+    "message": "This cookie is used for session management including caching of dynamic content, conditional feature access, support request metadata, and first party analytics"
+  },
+  "OCD_org_transform_notice_description": {
+    "message": "This cookie is used to provide notice during organization transforms."
+  },
+  "OCD_private_mode_user_session_description": {
+    "message": "This cookie is used for Enterprise authentication requests."
+  },
+  "OCD_saml_csrf_token_description": {
+    "message": "This cookie is set by SAML auth path method to associate a token with the client."
+  },
+  "OCD_saml_return_to_description": {
+    "message": "This cookie is set by the SAML auth path method to maintain state during the SAML authentication loop."
+  },
+  "OCD_saml_return_to_legacy_description": {
+    "message": "This cookie is set by the SAML auth path method to maintain state during the SAML authentication loop."
+  },
+  "OCD_show_cookie_banner_description": {
+    "message": "Set based on the client’s region and used to determine if a cookie consent banner should be shown"
+  },
+  "OCD_tz_description": {
+    "message": "This cookie allows us to customize timestamps to your time zone."
+  },
+  "OCD_user_session_description": {
+    "message": "This cookie is used to log you in."
+  },
+  "OCD_AMP___description": {
+    "message": "Registers statistical data on users' behaviour on the website. Used for internal analytics by the website operator."
+  },
+  "OCD_AMP_MKTG___description": {
+    "message": "Registers statistical data on users' behaviour on the website. Used for internal analytics by the website operator."
+  },
+  "OCD_AMP_TEST_description": {
+    "message": "Registers statistical data on users' behaviour on the website. Used for internal analytics by the website operator."
+  },
+  "OCD_AMP_TLDTEST_description": {
+    "message": "Registers statistical data on users' behaviour on the website. Used for internal analytics by the website operator."
+  },
+  "OCD_amplitude_cookie_test_description": {
+    "message": "the cookie is used to test whether the user has cookies enabled, and the SDK should remove it when the test completes"
+  },
+  "OCD_amplitude_id___description": {
+    "message": "In previous versions of the Amplitude JavaScript SDK, the cookie key was set by default to amplitude_id; this may appear in projects that use an SDK version prior to 6.0.0. In that case, the cookie is set under the key"
+  },
+  "OCD_amplitude_test__description": {
+    "message": "The Amplitude SDK uses this cookie to test more thoroughly if cookies are available. By default, the key is used as amplitude_cookie_test, but as mentioned above, the SDK should remove this cookie after the test."
+  },
+  "OCD__conv_r_description": {
+    "message": "This cookie is used as a referral-cookie that stores the visitor’s profile – the cookie is overwritten when the visitor re-enters the website and new information on the visitor is collected and stored."
+  },
+  "OCD__conv_s_description": {
+    "message": "This cookie contains an ID string on the current session. This contains non-personal information on what subpages the visitor enters – this information is used to optimize the visitor's experience."
+  },
+  "OCD__conv_v_description": {
+    "message": "This cookie is used to identify the frequency of visits and how long the visitor is on the website. The cookie is also used to determine how many and which subpages the visitor visits on a website – this information can be used by the website to optimize the domain and its subpages."
+  },
+  "OCD_QSI_HistorySession_description": {
+    "message": "Used in lieu of the “Site History” cookie, for the same purpose (keeping track of the number page views as well as how long the visitor has been on the site)."
+  },
+  "OCD_QSI_OptInIDsAndWindowNames_description": {
+    "message": "These two keys contain the Intercept ID mapped to any PopUnder opened by said intercept, as well as a map from the Intercept ID to the page “origin” that it originally came from.  This is then used to update the PopUnder with updated Embedded Data upon navigation (unload), with the origin being used as additional security for the cross-window postMessage targetOrigin field."
+  },
+  "OCD_QSI_OptInIDsAndTargetOrigins_description": {
+    "message": "These two keys contain the Intercept ID mapped to any PopUnder opened by said intercept, as well as a map from the Intercept ID to the page “origin” that it originally came from.  This is then used to update the PopUnder with updated Embedded Data upon navigation (unload), with the origin being used as additional security for the cross-window postMessage targetOrigin field."
+  },
+  "OCD_SiteReferrer_description": {
+    "message": "These are used for supporting certain targeting conditions, such as which website originally referred the site visitor. They are typically set in session storage, but in the event they are unavailable, cookies will be used as a fallback."
+  },
+  "OCD_PageReferrer_description": {
+    "message": "These are used for supporting certain targeting conditions, such as which website originally referred the site visitor. They are typically set in session storage, but in the event they are unavailable, cookies will be used as a fallback."
+  },
+  "OCD_SearchTerm_description": {
+    "message": "These are used for supporting certain targeting conditions, such as which website originally referred the site visitor. They are typically set in session storage, but in the event they are unavailable, cookies will be used as a fallback."
+  },
+  "OCD_FocusTime_description": {
+    "message": "These are used for supporting certain targeting conditions, such as which website originally referred the site visitor. They are typically set in session storage, but in the event they are unavailable, cookies will be used as a fallback."
+  },
+  "OCD_BlurTime_description": {
+    "message": "These are used for supporting certain targeting conditions, such as which website originally referred the site visitor. They are typically set in session storage, but in the event they are unavailable, cookies will be used as a fallback."
+  },
+  "OCD_ActionSetHistory_description": {
+    "message": "These are used for supporting certain targeting conditions, such as which website originally referred the site visitor. They are typically set in session storage, but in the event they are unavailable, cookies will be used as a fallback."
+  },
+  "OCD_SISessID_description": {
+    "message": "The SISessID and CPSessID cookies are set and used when a Qualtrics user logs into Qualtrics. The value of these cookies is an identifier that is used to retrieve information about a user’s logged-in session in the Website / App Insights Portal. It is important to note that this cookie is only set for users of the Qualtrics product (not your website visitors)."
+  },
+  "OCD_CPSessID_description": {
+    "message": "The SISessID and CPSessID cookies are set and used when a Qualtrics user logs into Qualtrics. The value of these cookies is an identifier that is used to retrieve information about a user’s logged-in session in the Website / App Insights Portal. It is important to note that this cookie is only set for users of the Qualtrics product (not your website visitors)."
+  },
+  "OCD_QSI_ReplaySession_Info___description": {
+    "message": "This cookie is used for identifying the session that is being recorded. This is necessary for recording page changes and reloads to be recorded on the same session. It contains information like sessionId, creationDataCenter, and sessionStartTime in a JSON format."
+  },
+  "OCD_QSI_TestSessions___description": {
+    "message": "This cookie is used to determine whether the session is recorded in test session mode. A test session debugger will appear and sessions recorded will be identified by a test session label. This value is a boolean."
+  },
+  "OCD_QSI_SI___description": {
+    "message": "Used to determine whether or not we should display a survey on repeated user visits within a period"
+  },
+  "OCD_QSI_S___description": {
+    "message": "Used to track visits and sampling rate set in the survey"
+  },
+  "OCD_QST_description": {
+    "message": "Qualtrics surveys will add a persistent cookie (QST) that is used to prevent the same person from taking the same survey multiple times. Website / App Insights also uses this cookie to evaluate “survey has been taken” logic in action sets. See the Submitting Survey Sessions section for more information on how this cookie works."
+  },
+  "OCD_QSIPopUnder_PopUnderTarget_SI___description": {
+    "message": "It helps Qualtrics prevent displaying another pop under if there is already one. This prevents multiple windows from crowding a site visitor"
+  },
+  "OCD_QSI_CT_description": {
+    "message": "This cookie is used for tracking events. It has a counter of each event and the number of times that event has occurred. For instance, if there are 2 different events that you are tracking."
+  },
+  "OCD_QSI_DATA_description": {
+    "message": "This cookie is used for cookie storage and will only be set if both session and local storage do not exist. It is extremely rare that session storage is not set in the browser window. QSI_DATA is rarely used."
+  },
+  "OCD_QSI_ReplaySession_Throttled___description": {
+    "message": "This cookie is used to stop session creation and recording due to an encountered error. This value is a boolean. This cookie is ignored if it is a test session."
+  },
+  "OCD_QSI_ReplaySession_SampledOut___description": {
+    "message": "This cookie is used to stop session creation due to the session being sampled-out. The sampling percentage is determined by the sample rate set in your session replay settings. This value is a boolean. This cookie is ignored if it is a test session."
+  },
+  "OCD_Site_History_description": {
+    "message": "This cookie tracks the URLs of the web pages that the user visited. The pages must have the site intercept code snippet for tracking to work. By default, the maximum size is 2000 bytes, but you can specify a different size in your intercept settings."
+  },
+  "OCD_c_referrer_description": {
+    "message": "We use cookies to understand who referred users to our Website to support our referral program and provide referral discounts. We do not store user identifiable information in these cookies."
+  },
+  "OCD_c_signup_description": {
+    "message": "We use cookies to understand who referred users to our Website to support our referral program and provide referral discounts. We do not store user identifiable information in these cookies."
+  },
+  "OCD_c_plan_description": {
+    "message": "We use cookies to understand who referred users to our Website to support our referral program and provide referral discounts. We do not store user identifiable information in these cookies."
+  },
+  "OCD_cognito_services_a_description": {
+    "message": "We use cookies to identify the user session when users log in to use the Website. This cookie is required for the secure operation of our Services."
+  },
+  "OCD_cognito_organization_description": {
+    "message": "We use cookies to identify the user session when users log in to use the Website. This cookie is required for the secure operation of our Services."
+  },
+  "OCD_rdtrk_description": {
+    "message": "Save a list of all pages that the visitor accessed within your domain, even before conversion (only for accounts with access to Lead Tracking)."
+  },
+  "OCD__rdtrk_description": {
+    "message": "Save a list of all pages that the visitor accessed within your domain, even before conversion (only for accounts with access to Lead Tracking)."
+  },
+  "OCD__rd_experiment_version_description": {
+    "message": "Ensure that the user always sees the same version of an A/B test, preserving the experience and consistency of results."
+  },
+  "OCD__form_fields_description": {
+    "message": "Automatically fill in previously answered fields."
+  },
+  "OCD__rdlps_pp_description": {
+    "message": "Do not require the same visitor to answer the same questions in a smart form."
+  },
+  "OCD__rd_wa_first_session__description": {
+    "message": "Save the website from which the visitor first accessed."
+  },
+  "OCD__sp_wa_first_session__description": {
+    "message": "Save the website from which the visitor first accessed."
+  },
+  "OCD__rd_wa_id__description": {
+    "message": "Save information regarding the existence of a session in progress, to differentiate visits."
+  },
+  "OCD__sp_wa_id__description": {
+    "message": "Save information regarding the existence of a session in progress, to differentiate visits."
+  },
+  "OCD__rd_wa_ses_id__description": {
+    "message": "Store the visitor's unique identifier, the time it was created, the visit count, the current time, the time of the last visit and the session id."
+  },
+  "OCD__sp_wa_ses_id__description": {
+    "message": "Store the visitor's unique identifier, the time it was created, the visit count, the current time, the time of the last visit and the session id."
+  },
+  "OCD__sp_root_domain_test__description": {
+    "message": "Checks the site's main domain. Does not store data."
+  },
+  "OCD_NEXT_LOCALE_description": {
+    "message": "This cookie can be set using a language switcher and then when a user comes back to the site it will leverage the locale specified in the cookie when redirecting from / to the correct locale location."
+  },
+  "OCD_dtCookie__description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_dtLatC__description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_dtPC__description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_dtSa_description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_dtValidationCookie_description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_dtDisabled_description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_rxVisitor__description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_rxvt_description": {
+    "message": "This cookie is used by RUM API, Dynatrace Real User Monitoring (RUM) gives you the power to know your customers by providing performance analysis in real time."
+  },
+  "OCD_b925d32c_description": {
+    "message": "Indicates if a user is logged in or not."
+  },
+  "OCD_ssoCSRFCookie_description": {
+    "message": "Serves as cross-site request forgery (CSRF) protection when moving between servlets in SSO."
+  },
+  "OCD_p23mn32t_description": {
+    "message": "Contains a unique Base32 identifier that indicates to SSO that a user is logging in from a new device. The identifier is created based on the user login, browser, and user agent."
+  },
+  "OCD_l34kn6no_description": {
+    "message": "Stores the OpenID state when SSO acts as a relying party, for example, for signing in with Microsoft using OpenID."
+  },
+  "OCD_iu2g34bw_description": {
+    "message": "Stores the OpenID code_verifier when SSO acts as a relying party, for example, for signing in with Microsoft using OpenID."
+  },
+  "OCD_a69k21bb_description": {
+    "message": "Stores redirect_uri upon successful sign-in when SSO acts as a relying party, for example, for signing in with Microsoft using OpenID."
+  },
+  "OCD_cgq80xhu_description": {
+    "message": "Contains an SHA-256 hash of a random UUID. When a user signs in via OpenID, this cookie is used to track the session state via the SSO OpenID iFrame and perform frontend logout if necessary."
+  },
+  "OCD_72ddbc27_description": {
+    "message": "Added when a user selects the Remember me option to store their credentials. Thanks to this option, the user doesn't have to provide their credentials again when the session expires, and the user is logged in automatically."
+  },
+  "OCD_kj76fg4h_description": {
+    "message": "Prevents the user from becoming stuck following a failed federated login if the user selected the Remember me option to store their credentials. If the user is signed in, this cookie is deleted."
+  },
+  "OCD_tc_cj_v2_description": {
+    "message": "Used for user customer journey storage for TMS deduplication (channel and source storage)."
+  },
+  "OCD_tc_cj_v2_cmp__description": {
+    "message": "Used for user customer journey storage for TMS deduplication (campaign storage)."
+  },
+  "OCD_tc_cj_v2_med_description": {
+    "message": "Used for user customer journey storage for TMS deduplication (medium storage)."
+  },
+  "OCD_tc_test_cookie_description": {
+    "message": "Cookie linked to the display of the privacy banner, it allows to check whether cookies can be deposited and not to redisplay the consent banner when consent is given. Deposited then disappears, cannot be deleted. Technical cookie (exempted)"
+  },
+  "OCD_TCIPD_description": {
+    "message": "Used to identify visitors exposed to the privacy banner. CMP Commanders Act uses this cookie to measure statistics for privacy banner usage until visitors provide consent for the TCID cookie. With this 2-cookie system, CMP Commanders Act is the only CMP that has been granted the right of exemption from consent for statistical measurement by the French CNIL"
+  },
+  "OCD_TC_PRIVACY_description": {
+    "message": "Used for user status storage (optin or optout) and Privacy banner display."
+  },
+  "OCD_retention_396_days": {
+    "message": "396 days"
+  },
+  "OCD_TC_PRIVACY_CENTER_description": {
+    "message": "Used to display the optin/optout categories in the Privacy Center if the user re-open it."
+  },
+  "OCD_TC_OUTPUT_description": {
+    "message": "Used for user status storage (optin or optout) and Privacy banner display."
+  },
+  "OCD_TC_OUTPUT_categories_description": {
+    "message": "Used to display the optin/optout categories in the Privacy Center if the user re-open it."
+  },
+  "OCD_CAID_description": {
+    "message": "The CAID is the user identifier for cookie 1st"
+  },
+  "OCD_TCID_description": {
+    "message": "Visitor identifier used to compute deduplicated statistics per user (for campaign and on-site tracking, segmentation, ...). CMP Commanders Act uses this cookie to measure statistics for privacy banner performance after a visitor provided consent. Before users provided consent CMP Commanders Act uses the TCPID cookie to measure anonymous statistics for privacy banner."
+  },
+  "OCD_WID_description": {
+    "message": "Used to identify when the browser is closed in order to split page views into multiple functional sessions."
+  },
+  "OCD_tc_sample__description": {
+    "message": "Used for visitor and session sampling in the TMSCommander rules."
+  },
+  "OCD_TMS_description": {
+    "message": "Used when the deduplication is based on CAMPAIGN tracking (so the CAMPAIGN tracking is taken into account and not the landing page tracking)"
+  },
+  "OCD_TC_CHECK_COOKIES_SUPPORT_description": {
+    "message": " Technical cookie, TMS verification of Cookies deposit (exempted)"
+  },
+  "OCD_TCSESSION_description": {
+    "message": "Used to calculate CAMPAIGN metrics based on the session."
+  },
+  "OCD_TCREDIRECT_description": {
+    "message": "Used to deduplicate clicks (if redirect, just store the page view and ignore the click)."
+  },
+  "OCD_TCLANDINGURL_description": {
+    "message": "Used to store landing page URL for CAMPAIGN raw data."
+  },
+  "OCD_TCAUDIENCE_description": {
+    "message": "Used to store the user segment for user targeting."
+  },
+  "OCD__TCCookieSync_description": {
+    "message": " Used to store the date of the last cookie synchronisation with the partner (set in local storage by default, and cookie if local storage not available)."
+  },
+  "OCD_DLBCTLYOXA_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRSTAPI_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRSTDATA_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRSTCAMPAIGN_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRSTCAMPAIGNEF_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBCAMPAIGNCDOM_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRSTTMS_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRSTCMP_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRST_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBCTLY_description": {
+    "message": "Used for internal infrastructure dispatch."
+  },
+  "OCD_FDLBFIRSTEVENTS_description": {
+    "message": " Used for internal infrastructure dispatch."
+  },
+  "OCD_tc_caids_description": {
+    "message": "Used for restore deleted cookies by ITP"
+  },
+  "OCD_tc_cj_ss_description": {
+    "message": "Used for restore deleted cookies by ITP"
+  },
+  "OCD_tc_ss__description": {
+    "message": "Used for restore deleted cookies by ITP In case your cookie 'tc_ss' contains more than 2048 characters, cookies will be created with incremented names (ex. tc_ss1, tc_ss2, ...)"
+  },
+  "RWS_rationale_https___livechat_com": {
+    "message": "LiveChat - leading live chat software for business"
+  },
+  "RWS_rationale_https___helpdesk_com": {
+    "message": "HelpDesk - leading help desk software for business"
+  },
+  "RWS_rationale_https___openwidget_com": {
+    "message": "OpenWidget - free widgets for websites"
+  },
+  "RWS_rationale_https___chatbot_com": {
+    "message": "ChatBot - leading automation software and chatbot platform"
+  },
+  "RWS_rationale_https___knowledgebase_com": {
+    "message": "Knowledge base software for customer support and self-service"
+  },
+  "RWS_rationale_https___livechatinc_com": {
+    "message": "Services supporting LiveChat"
+  },
+  "RWS_rationale_https___the42_ie": {
+    "message": "Sports publication of TheJournal"
+  },
+  "RWS_rationale_https___css_load_com": {
+    "message": "This domain is designated for the Pro version."
+  },
+  "RWS_rationale_https___img_load_com": {
+    "message": "This domain is designated for the Enterprise version."
+  },
+  "RWS_rationale_https___content_loader_com": {
+    "message": "This domain is designated for the Legacy version."
+  },
+  "RWS_rationale_https___07c225f3_online": {
+    "message": "This domain is designated for the Legacy version."
+  },
+  "RWS_rationale_https___html_load_cc": {
+    "message": "This domain is designated for the Essential version."
+  },
+  "RWS_rationale_https___pomponik_pl": {
+    "message": "Special Interest Website - celebrity news and gossip"
+  },
+  "RWS_rationale_https___deccoria_pl": {
+    "message": "Special Interest Website - advice and inspirations foron interior design and garden care"
+  },
+  "RWS_rationale_https___top_pl": {
+    "message": "Special Interest Website - wide range of articles, news and tips "
+  },
+  "RWS_rationale_https___smaker_pl": {
+    "message": "Special Interest Website - recipes, cooking, diet and everything for home cooks"
+  },
+  "RWS_rationale_https___terazgotuje_pl": {
+    "message": "Special Interest Website - cooking news, tips and recipes"
   }
 }

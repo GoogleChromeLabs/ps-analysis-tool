@@ -4,12 +4,12 @@
 
 ## Privacy Sandbox Analysis Tool CLI
 
-> The Privacy Sandbox Analysis Tool CLI is designed to help developers audit their websites for the upcoming deprecation of third-party cookies (3PCD) in Chrome as part of the Privacy Sandbox initiative.
+>The Privacy Sandbox Analysis Tool CLI is designed to help developers audit and analyze their websites in Chrome environments where the unrestricted use of 3P cookies has been blocked.
 
 
 ## Using the CLI
 
-PSAT CLI allows you to audit a single website or multiple websites using a sitemap or a CSV file, and generates a report that should help any user draft their future action items to prepare their website for third-party cookie depreciation.
+PSAT CLI allows you to audit a single website or multiple websites using a sitemap or a CSV file. It generates a report to help users draft future action items to prepare their websites for environments where the unrestricted use of 3P cookies has been blocked.
 
 > Required Node Version: 18 or later
 
@@ -32,28 +32,32 @@ By default, PSAT generates the report as an HTML file. You can open it in a web 
 ### CLI option
 
 ```                                   
-Usage: psat [options]
+Usage: npm run cli [website-url] -- [options]
 
-CLI to test a URL for third-party cookies
+CLI to test a URL for 3p cookies.
 
 Arguments:
-  url                         The URL of a website or sitemap you want to analyse.
+  website-url                 The URL of a single site to analyze
 
 Options:
   -V, --version               output the version number
-  -u, --url <value>           URL of a site
-  -s, --sitemap-url <value>   URL of a sitemap
-  -c, --csv-path <value>      Path to a CSV file with a set of URLs.
-  -p, --sitemap-path <value>  Path to a sitemap saved in the file system
-  -l, --locale <value>        Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR
-  -ul, --url-limit <value>    No of URLs to analyze
-  -nh, --no-headless          Flag for running puppeteer in non-headless mode
-  -np, --no-prompts           Flags for skipping all prompts. Default options will be used
-  -nt, --no-technology        Flags for skipping technology analysis.
-  -d, --out-dir <value>       Directory path where the analysis data will be stored
-  -ab, --accept-banner        This will accept the GDPR banner if present.
-  -h, --help                  display help for command
+  -u, --url <url>             The URL of a single site to analyze
+  -s, --source-url <url>      The URL of a sitemap or CSV to analyze
+  -f, --file <path>           The path to a local file (CSV or XML sitemap) to analyze
+  -n, --number-of-urls <num>  Limit the number of URLs to analyze (from sitemap or CSV)
+  -d, --display               Flag for running CLI in non-headless mode (default: false)
+  -v, --verbose               Enables verbose logging (default: false)
+  -t, --tech                  Enables technology analysis (default: false)
+  -o, --out-dir <path>        Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard
+  -i, --ignore-gdpr           Ignore automatically accepting the GDPR banner if present (default: false)
+  -q, --quiet                 Skips all prompts; uses default options (default: false)
+  -c, --concurrency <num>     Number of tabs to open in parallel during sitemap or CSV analysis (default: 3)
+  -w, --wait <num>            Number of milliseconds to wait after the page is loaded before generating the report (default:
+                              20000)
+  -l, --locale <language>     Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR (default: "en")
+  -h, --help                  Display help for command
 
+To learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.
 ```
 
 ### Output
@@ -61,8 +65,7 @@ After running the analysis, it will create a report in `/out/` directory
 ```bash
 psat -u https://www.google.co.in
 ✓ Done analyzing cookies.
-✓ Done analyzing technologies.
-Report created successfully: /Users/username/projects/psat-cli-tool/out/www-google-co-in/index.html
+Report created successfully: /Users/username/projects/psat-cli-tool/out/www-google-co-in/report_2024-07-31_14-41-27.html
 ```
 
 Open the generated HTML file in the browser.
