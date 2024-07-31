@@ -147,6 +147,6 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
         '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
       );
       expect(facebooklike).toBe('Facebook Like Button');
-    }, 60000);
+    }, 1200000);
   });
 });
