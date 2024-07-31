@@ -88,8 +88,7 @@
   },
   "private-aggregation": {
     "name": "Private Aggregation",
-    "description": "The Private Aggregation API has been built for aggregating and reporting on cross-site data in a privacy-preserving manner.",
-		"useI18n": false,
+    "description": "privateAggregationDescription",
     "proposal": "https://github.com/patcg-individual-drafts/private-aggregation-api",
     "publicDiscussion": "https://github.com/patcg-individual-drafts/private-aggregation-api/issues",
 		"publicExplainer": "https://github.com/patcg-individual-drafts/private-aggregation-api/blob/main/report_verification.md",
