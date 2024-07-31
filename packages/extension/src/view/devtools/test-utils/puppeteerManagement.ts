@@ -64,9 +64,7 @@ export class PuppeteerManagement {
 
   async setup(extraArgs?: string[], defaultViewport?: Viewport) {
     this.browser = await puppeteer.launch({
-      // executablePath:
-      //   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-      headless: true,
+      headless: false,
       args: [...puppeteerArgs, ...(extraArgs || [])],
       devtools: true,
       defaultViewport: defaultViewport || null,
