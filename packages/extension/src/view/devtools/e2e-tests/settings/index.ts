@@ -80,7 +80,7 @@ describe('Settings Page', () => {
 
       // Open a new page
       const newPage = await browser.newPage();
-      await newPage.goto('https://aljazeera.com');
+      await newPage.goto('https://bbc.com');
 
       // Find the DevTools target for the new page
       const targets = browser.targets();
@@ -124,6 +124,76 @@ describe('Settings Page', () => {
         selectors.analyzeThisButtonSelector
       );
       expect(isVisible).toBe(false);
+    }, 60000);
+  });
+
+  describe('CDP', () => {
+    let page: Page;
+    let puppeteer: PuppeteerManagement;
+    let interaction: Interaction;
+
+    beforeEach(async () => {
+      puppeteer = new PuppeteerManagement();
+      await puppeteer.setup();
+      page = await puppeteer.openPage();
+    });
+
+    afterEach(async () => {
+      await puppeteer.close();
+    });
+
+    test('Should be able to validate the CDP setting option', async () => {
+      await puppeteer.navigateToURL(page, 'https://bbc.com');
+
+      const devtools = await puppeteer.getDevtools();
+      const key = puppeteer.getCMDKey();
+      interaction = new Interaction(devtools, key);
+
+      // Navigate to Settings Page
+      const devtoolsTargets = await interaction.navigateToSettingsTab();
+
+      // Switch to the iframe of devtool
+      const iframe = await devtoolsTargets.$(selectors.devtoolIframeSelector);
+      const frame = await iframe?.contentFrame();
+      await interaction.delay(2000);
+
+      if (!frame) {
+        throw new Error('Content frame not found');
+      }
+
+      // click on enable CDP button
+      await frame.click('input[type="checkbox"][name="autoSaver"]');
+      await interaction.delay(2000);
+
+      await frame.click('button[data-test-id="button"]');
+      await interaction.delay(3000);
+
+      const elementTextToClick = 'Cookies';
+      await interaction.clickMatchingElement(frame, 'p', elementTextToClick);
+
+      await interaction.delay(3000);
+
+      // Click on the Analyze the tab button.
+      await frame.waitForSelector(selectors.analyzeThisButtonSelector, {
+        timeout: 5000,
+      });
+      const button = await frame.$(selectors.analyzeThisButtonSelector);
+      await button?.click();
+
+      await interaction.delay(3000);
+
+      // Assert if Blocked cookies description is visible on cookie landing page.
+      const isVisible = await interaction.isElementVisible(
+        frame,
+        'div[data-testid="blocked-cookies-insights"]'
+      );
+      expect(isVisible).toBe(true);
+
+      // Click on the blocked cookies count and validate it should render the first frame with blocked reason selected.
+      const blockCookiesElements = await frame.$$('.VictoryContainer');
+      if (blockCookiesElements.length >= 4) {
+        await blockCookiesElements[3].click();
+      }
     }, 60000);
   });
 });
