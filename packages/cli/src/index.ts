@@ -67,7 +67,7 @@ const isFromNPMRegistry = !existsSync(
 
 program
   .name(isFromNPMRegistry ? 'psat' : 'npm run cli')
-  .version('0.9.0-2')
+  .version('0.10.0')
   .usage(
     isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
   )
