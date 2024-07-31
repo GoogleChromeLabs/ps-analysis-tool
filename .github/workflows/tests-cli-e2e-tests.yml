@@ -1,4 +1,4 @@
-name: CI PSAT tests
+name: PSAT E2E Tests
 
 # Controls when the workflow will run
 on:
@@ -17,7 +17,7 @@ on:
 jobs:
   e2e-test:
     # The type of runner that the job will run on
-    name: PSAT automation tests
+    name: CLI E2E Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -40,7 +40,7 @@ jobs:
           ls 
           pwd 
           npm install || true
-          npm run build:all
+          npm run build:cli:dashboard
       - name: Install Xvfb
         run: sudo apt-get install -y xvfb
 
@@ -55,7 +55,7 @@ jobs:
 
       - name: Run the tests
         run: |
-          npm run test:cli:e2e && npm run test:extension:e2e
+          npm run test:cli:e2e
       - name: Archive build artifacts
         uses: actions/upload-artifact@v2
         with:
