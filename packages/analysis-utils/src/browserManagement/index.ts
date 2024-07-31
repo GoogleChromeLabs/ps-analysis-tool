@@ -409,7 +409,7 @@ export class BrowserManagement {
           value: associatedCookie.cookie.value,
           sameSite: associatedCookie.cookie.sameSite || 'Lax',
           expires: associatedCookie.cookie.expires || 'Session',
-          httpOnly: associatedCookie.cookie.httpOnly || false,
+          httponly: associatedCookie.cookie.httpOnly || false,
           secure: associatedCookie.cookie.secure || false,
           partitionKey: '',
         },
