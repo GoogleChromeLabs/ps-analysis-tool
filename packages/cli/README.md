@@ -4,7 +4,7 @@
 
 ## Privacy Sandbox Analysis Tool CLI
 
->The Privacy Sandbox Analysis Tool CLI is designed to help developers audit and analyze their websites in Chrome environments where the unrestricted use of 3P cookies have been blocked.
+>The Privacy Sandbox Analysis Tool CLI is designed to help developers audit and analyze their websites in Chrome environments where the unrestricted use of 3P cookies has been blocked.
 
 
 ## Using the CLI
