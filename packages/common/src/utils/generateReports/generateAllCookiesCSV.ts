@@ -99,7 +99,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
 
     if (isExtension) {
       recordsArray.push(
-        cookie.parsedCookie?.priority || ' ',
+        I18n.getMessage((cookie.parsedCookie?.priority || ' ').toLowerCase()),
         cookie.parsedCookie?.size?.toString() ?? ' '
       );
     }
