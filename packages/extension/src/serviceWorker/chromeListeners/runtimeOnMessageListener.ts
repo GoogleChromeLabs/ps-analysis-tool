@@ -60,12 +60,17 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (SERVICE_WORKER_TABS_RELOAD_COMMAND === incomingMessageType) {
     const sessionStorage = await chrome.storage.session.get();
+    const actionsPerformed: { [key: string]: boolean | number } = {};
+
     if (sessionStorage?.allowedNumberOfTabs) {
       synchnorousCookieStore.tabMode = sessionStorage.allowedNumberOfTabs;
+      actionsPerformed.allowedNumberOfTabs =
+        sessionStorage.allowedNumberOfTabs === 'unlimited' ? 0 : 1;
     }
 
     if (Object.keys(sessionStorage).includes('isUsingCDP')) {
       synchnorousCookieStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
+      actionsPerformed.globalIsUsingCDP = true;
     }
 
     await chrome.storage.session.remove(['allowedNumberOfTabs', 'isUsingCDP']);
@@ -113,7 +118,9 @@ export const runtimeOnMessageListener = async (request: any) => {
         await reloadCurrentTab(id);
       })
     );
-    await sendMessageWrapper(SERVICE_WORKER_RELOAD_MESSAGE);
+    await sendMessageWrapper(SERVICE_WORKER_RELOAD_MESSAGE, {
+      actionsPerformed,
+    });
   }
 
   if (!request?.payload?.tabId) {
