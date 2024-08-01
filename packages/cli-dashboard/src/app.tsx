@@ -134,7 +134,7 @@ const App = () => {
   }
 
   return (
-    <div className="w-full h-screen flex bg-anti-flash-white dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
+    <div className="w-full h-screen flex dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
       <SiteReport
         completeJson={completeJsonReport}
         cookies={cookies}
