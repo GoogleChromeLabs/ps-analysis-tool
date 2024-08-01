@@ -320,7 +320,7 @@ describe('parseHeaders: ', () => {
           domain: '',
           gdprUrl: '',
           name: '',
-          platform: 'Unkown',
+          platform: 'Unknown',
           retention: '',
           wildcard: '',
         },
