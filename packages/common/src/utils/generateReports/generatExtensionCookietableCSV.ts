@@ -19,7 +19,7 @@
 import { type CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
-const COOKIES_TABLE_DATA_HEADER_CLI = [
+const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('name'),
   () => I18n.getMessage('scope'),
   () => I18n.getMessage('domain'),
@@ -34,9 +34,14 @@ const COOKIES_TABLE_DATA_HEADER_CLI = [
   () => I18n.getMessage('expires'),
   () => I18n.getMessage('issues'),
   () => I18n.getMessage('gdpr'),
+  () => I18n.getMessage('priority'),
+  () => I18n.getMessage('size'),
 ];
 
-const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
+const generateExtensionCookieTableCSV = (
+  cookies: CookieTableData[],
+  returnString = false
+): Blob | string => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
@@ -48,8 +53,7 @@ const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
         : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
-      //@ts-ignore
-      cookie.parsedCookie?.sameSite ?? cookie.parsedCookie?.samesite,
+      cookie.parsedCookie.samesite,
       I18n.getMessage(
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),
@@ -62,19 +66,31 @@ const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
         : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
-      cookie.parsedCookie.expires,
+      cookie.parsedCookie.expires === 'Session'
+        ? I18n.getMessage('session')
+        : cookie.parsedCookie.expires,
       cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics?.gdprUrl || 'NA',
+      I18n.getMessage((cookie.parsedCookie?.priority || '').toLowerCase()),
+      cookie.parsedCookie.size?.toString(),
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
+  if (returnString) {
+    return (
+      COOKIES_TABLE_DATA_HEADER_EXTENSION.map((header) => header()).join(',') +
+      '\r\n' +
+      cookieRecords
+    );
+  }
+
   return new Blob([
-    COOKIES_TABLE_DATA_HEADER_CLI.map((header) => header()).join(',') +
+    COOKIES_TABLE_DATA_HEADER_EXTENSION.map((header) => header()).join(',') +
       '\r\n' +
       cookieRecords,
   ]);
 };
 
-export default generateCLICookieTableCSV;
+export default generateExtensionCookieTableCSV;
