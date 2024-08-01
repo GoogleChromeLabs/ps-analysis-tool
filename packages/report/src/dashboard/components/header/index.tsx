@@ -28,7 +28,7 @@ const Header = ({ url, dateTime }: HeaderProps) => {
   const isExtension = globalThis?.PSAT_EXTENSION;
 
   return (
-    <div className="flex justify-between gap-3 px-4 py-2 bg-white dark:bg-black">
+    <div className="flex justify-between gap-3 px-4 py-2 bg-white dark:bg-charleston-green border-b border-hex-gray dark:border-quartz">
       <div className="flex gap-2 items-center">
         <PrivacySandboxColoredIcon className="w-[40px] h-[40px]" />
         <div>
