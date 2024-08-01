@@ -562,7 +562,11 @@ export class BrowserManagement {
             }
             const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
             frameCookies[key] = {
-              parsedCookie: { ...cookie, partitionKey: '' },
+              parsedCookie: {
+                ...cookie,
+                partitionKey: '',
+                httponly: false,
+              },
             };
           });
 
