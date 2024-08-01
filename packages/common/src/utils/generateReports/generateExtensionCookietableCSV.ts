@@ -16,8 +16,12 @@
 /**
  * External dependencies.
  */
-import { type CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+/**
+ * Internal dependencies.
+ */
+import sanitizeCsvRecord from '../sanitizeCsvRecord';
+import { type CookieTableData } from '../../cookies.types';
 
 const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('name'),

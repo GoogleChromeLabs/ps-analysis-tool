@@ -26,7 +26,7 @@ import {
   type CompleteJson,
   type CookieJsonDataType,
 } from '../../cookies.types';
-import generateExtensionCookieTableCSV from './generatExtensionCookietableCSV';
+import generateExtensionCookieTableCSV from './generateExtensionCookietableCSV';
 import generateCLICookieTableCSV from './generateCLICookieTableCSV';
 
 export const COOKIES_DATA_HEADER = [
