@@ -40,7 +40,7 @@ describe('extractReportData', () => {
               value: 'IN',
               sameSite: 'None',
               expires: 'Session',
-              httpOnly: false,
+              httponly: false,
               secure: true,
               partitionKey: '',
             },
