@@ -274,7 +274,7 @@ const useCookieListing = (
           return val === (filterValue === I18n.getMessage('true'));
         },
       },
-      'parsedCookie.sameSite': {
+      'parsedCookie.samesite': {
         title: I18n.getMessage('sameSite'),
         hasStaticFilterValues: true,
         filterValues: {
