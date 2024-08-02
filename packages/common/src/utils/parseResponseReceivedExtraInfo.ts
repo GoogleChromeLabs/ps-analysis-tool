@@ -96,7 +96,7 @@ export default function parseResponseReceivedExtraInfo(
         ...parsedCookie,
         httponly: parsedCookie?.httponly ?? false,
         expires: effectiveExpirationDate,
-        samesite: parsedCookie.samesite ?? '',
+        samesite: parsedCookie.samesite?.toLowerCase() ?? 'lax',
         domain,
         partitionKey: '',
       },

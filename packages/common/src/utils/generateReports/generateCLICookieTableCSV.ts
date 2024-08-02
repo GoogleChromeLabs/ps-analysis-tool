@@ -55,8 +55,7 @@ const generateCLICookieTableCSV = (
         : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
-      //@ts-ignore
-      cookie.parsedCookie?.sameSite ?? cookie.parsedCookie?.samesite,
+      cookie.parsedCookie?.samesite ?? 'lax',
       I18n.getMessage(
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),

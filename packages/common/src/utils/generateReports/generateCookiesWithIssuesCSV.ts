@@ -78,7 +78,7 @@ const generateCookiesWithIssuesCSV = (
         : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
-      cookie.parsedCookie.sameSite,
+      cookie.parsedCookie.samesite,
       I18n.getMessage(
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),

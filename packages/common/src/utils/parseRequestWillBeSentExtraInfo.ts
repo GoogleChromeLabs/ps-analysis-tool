@@ -71,7 +71,7 @@ export default function parseRequestWillBeSentExtraInfo(
         ...cookieWithoutPartitionKey,
         httponly: cookieWithoutPartitionKey?.httpOnly ?? false,
         expires: effectiveExpirationDate,
-        samesite: cookie.sameSite?.toLowerCase() ?? '',
+        samesite: cookie.sameSite?.toLowerCase() ?? 'lax',
         domain,
         partitionKey: '',
       },

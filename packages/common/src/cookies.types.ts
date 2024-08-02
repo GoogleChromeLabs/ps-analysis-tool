@@ -205,7 +205,7 @@ export type CookieJsonDataType = {
     expires: string;
     httponly: boolean;
     secure: boolean;
-    sameSite: string;
+    samesite: string;
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };

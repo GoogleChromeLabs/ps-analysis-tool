@@ -55,7 +55,7 @@ export default function parseNetworkCookies(
         ...cookieWithoutPartitionKey,
         httponly: cookieWithoutPartitionKey?.httpOnly ?? false,
         expires: effectiveExpirationDate,
-        samesite: cookie.sameSite ?? '',
+        samesite: cookie.sameSite?.toLowerCase() ?? 'lax',
         partitionKey: '',
       },
       networkEvents: {
