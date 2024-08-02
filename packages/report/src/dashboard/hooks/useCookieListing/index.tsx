@@ -115,7 +115,7 @@ const useCookieListing = (
       },
       {
         header: I18n.getMessage('sameSite'),
-        accessorKey: 'parsedCookie.sameSite',
+        accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) =>
           I18n.getMessage((info?.toString() || '').toLowerCase()),
         widthWeightagePercentage: 8,

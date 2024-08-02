@@ -23,3 +23,15 @@ export interface ResponseType {
   blockedCookies?: number;
   blockedReasons?: string;
 }
+
+// @see https://developer.mozilla.org/en-US/docs/Web/API/CookieStore/getAll
+export type CookieStoreCookie = {
+  name: string;
+  domain: string;
+  expires: number; // UNIX time in miliseconds
+  partitioned: boolean;
+  path: string;
+  sameSite: 'strict' | 'lax' | 'none';
+  secure: boolean;
+  value: string;
+};
