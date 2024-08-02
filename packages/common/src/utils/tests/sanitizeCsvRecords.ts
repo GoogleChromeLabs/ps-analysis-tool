@@ -33,13 +33,13 @@ describe('sanitizeCsvRecord : ', () => {
 
   it('should add double quotes before any double quotes in the string', () => {
     const invalidString = 'a value with "quotes"';
-    const validString = 'a value with """quotes"""';
+    const validString = '"a value with ""quotes"""';
     expect(sanitizeCsvRecord(invalidString)).toBe(validString);
   });
 
   it('should handle comma and quotes simultaneously', () => {
     const invalidString = 'a value with comma , with "quotes"';
-    const validString = '"a value with comma , with """quotes""""';
+    const validString = '"a value with comma , with ""quotes"""';
     expect(sanitizeCsvRecord(invalidString)).toBe(validString);
   });
 });
