@@ -274,7 +274,7 @@ const useCookieListing = (
           return val === (filterValue === I18n.getMessage('true'));
         },
       },
-      'parsedCookie.sameSite': {
+      'parsedCookie.samesite': {
         title: I18n.getMessage('sameSite'),
         hasStaticFilterValues: true,
         filterValues: {
@@ -291,7 +291,7 @@ const useCookieListing = (
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
-          return val?.toLowerCase() === filterValue.toLowerCase();
+          return I18n.getMessage(val?.toLowerCase()) === filterValue;
         },
       },
       'parsedCookie.secure': {

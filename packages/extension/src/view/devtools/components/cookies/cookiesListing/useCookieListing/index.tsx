@@ -290,7 +290,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
-          return val?.toLowerCase() === filterValue.toLowerCase();
+          return I18n.getMessage(val?.toLowerCase()) === filterValue;
         },
       },
       'parsedCookie.secure': {
