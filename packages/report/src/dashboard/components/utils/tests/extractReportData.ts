@@ -38,7 +38,7 @@ describe('extractReportData', () => {
               domain: '.cnn.com',
               path: '/',
               value: 'IN',
-              sameSite: 'None',
+              samesite: 'None',
               expires: 'Session',
               httponly: false,
               secure: true,
