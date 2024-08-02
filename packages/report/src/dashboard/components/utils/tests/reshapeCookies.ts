@@ -33,7 +33,7 @@ describe('reshapeCookies', () => {
             domain: '.cnn.com',
             path: '/',
             value: 'IN',
-            sameSite: 'None',
+            samesite: 'None',
             expires: 'Session',
             httponly: false,
             secure: true,
@@ -67,7 +67,7 @@ describe('reshapeCookies', () => {
           expires: 'Session',
           httponly: false,
           secure: true,
-          sameSite: 'None',
+          samesite: 'None',
           partitionKey: '',
         },
         analytics: {
