@@ -188,7 +188,7 @@ const Layout = ({
   }, [selectedSite, updateSelectedItemKey]);
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
       <Resizable
         defaultSize={{ width: '200px', height: '100%' }}
         minWidth={'150px'}

@@ -17,16 +17,17 @@
 /**
  * External dependencies
  */
-import sanitizeCsvRecord from '../sanitizeCsvRecord';
 import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
 import {
+  CookieTableData,
   type CompleteJson,
   type CookieJsonDataType,
 } from '../../cookies.types';
-import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
+import generateExtensionCookieTableCSV from './generateExtensionCookietableCSV';
+import generateCLICookieTableCSV from './generateCLICookieTableCSV';
 
 export const COOKIES_DATA_HEADER = [
   () => I18n.getMessage('name'),
@@ -59,61 +60,19 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     });
   });
 
-  if (isExtension) {
-    COOKIES_DATA_HEADER.push(
-      () => I18n.getMessage('priority'),
-      () => I18n.getMessage('size')
-    );
-  }
-
-  let cookieRecords = '';
+  const cookieRecords: CookieTableData[] = [];
 
   for (const cookie of cookieMap.values()) {
-    //This should be in the same order as cookieDataHeader
-    const expires = calculateEffectiveExpiryDate(cookie.parsedCookie.expires);
-
-    const recordsArray = [
-      cookie.parsedCookie.name,
-      cookie.isFirstParty
-        ? I18n.getMessage('firstParty')
-        : I18n.getMessage('thirdParty'),
-      cookie.parsedCookie.domain || ' ',
-      cookie.parsedCookie.partitionKey || ' ',
-      cookie.parsedCookie.sameSite,
-      I18n.getMessage(
-        cookie.analytics?.category?.toLowerCase() || 'uncategorized'
-      ),
-      cookie.analytics.platform,
-      cookie.parsedCookie.httpOnly
-        ? I18n.getMessage('yes')
-        : I18n.getMessage('no'),
-      cookie.parsedCookie.secure
-        ? I18n.getMessage('yes')
-        : I18n.getMessage('no'),
-      cookie.parsedCookie.value,
-      cookie.parsedCookie.path,
-      expires === 'Session' ? I18n.getMessage('session') : expires,
-      cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
-      cookie.analytics.GDPR || 'NA',
-    ];
-
-    if (isExtension) {
-      recordsArray.push(
-        I18n.getMessage((cookie.parsedCookie?.priority || ' ').toLowerCase()),
-        cookie.parsedCookie?.size?.toString() ?? ' '
-      );
-    }
-
-    recordsArray.map(sanitizeCsvRecord);
-
-    cookieRecords += recordsArray.join(',') + '\r\n';
+    //@ts-ignore
+    cookieRecords.push(cookie);
+  }
+  if (isExtension) {
+    return generateExtensionCookieTableCSV(cookieRecords, true) as string;
+  } else {
+    return generateCLICookieTableCSV(cookieRecords, true) as string;
   }
 
-  return (
-    COOKIES_DATA_HEADER.map((header) => header()).join(',') +
-    '\r\n' +
-    cookieRecords
-  );
+  return '';
 };
 
 export default generateAllCookiesCSV;

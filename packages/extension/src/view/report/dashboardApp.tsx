@@ -46,6 +46,10 @@ const App = () => {
       return;
     }
 
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      bodyTag.classList.add('dark');
+    }
+
     bodyTag.style.fontSize = '75%';
   }, []);
 

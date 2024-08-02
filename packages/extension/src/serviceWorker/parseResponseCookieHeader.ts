@@ -56,7 +56,14 @@ const parseResponseCookieHeader = (
   requestId: string,
   globalIsUsingCDP: boolean
 ): CookieData => {
+  //@ts-ignore because we need httponly and samesite.
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
+
+  parsedCookie = {
+    ...parsedCookie,
+    httponly: parsedCookie.httponly ?? false,
+    samesite: parsedCookie.samesite?.toLowerCase() ?? 'lax',
+  };
 
   parsedCookie = createCookieObject(
     parsedCookie,

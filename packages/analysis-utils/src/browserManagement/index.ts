@@ -334,7 +334,7 @@ export class BrowserManagement {
             domain: parsedCookie.domain,
             path: parsedCookie.path || '/',
             value: parsedCookie.value,
-            samesite: parsedCookie.samesite || 'Lax',
+            samesite: parsedCookie.samesite?.toLowerCase() || 'lax',
             expires: parsedCookie.expires || 'Session',
             httponly: parsedCookie.httponly || false,
             secure: parsedCookie.secure || false,
@@ -407,9 +407,9 @@ export class BrowserManagement {
           domain: associatedCookie.cookie.domain,
           path: associatedCookie.cookie.path || '/',
           value: associatedCookie.cookie.value,
-          sameSite: associatedCookie.cookie.sameSite || 'Lax',
+          samesite: associatedCookie.cookie.sameSite?.toLowerCase() || 'lax',
           expires: associatedCookie.cookie.expires || 'Session',
-          httpOnly: associatedCookie.cookie.httpOnly || false,
+          httponly: associatedCookie.cookie.httpOnly || false,
           secure: associatedCookie.cookie.secure || false,
           partitionKey: '',
         },
@@ -562,7 +562,12 @@ export class BrowserManagement {
             }
             const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
             frameCookies[key] = {
-              parsedCookie: { ...cookie, partitionKey: '' },
+              parsedCookie: {
+                ...cookie,
+                partitionKey: '',
+                httponly: false,
+                samesite: cookie.sameSite?.toLowerCase() || 'lax',
+              },
             };
           });
 

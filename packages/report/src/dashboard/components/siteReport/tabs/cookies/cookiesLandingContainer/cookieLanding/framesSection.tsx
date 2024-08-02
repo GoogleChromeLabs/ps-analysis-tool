@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { getLegendDescription } from '@google-psat/common';
+import { getLegendDescription, type TabCookies } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import {
   CookiesLandingWrapper,
@@ -26,10 +26,15 @@ import {
   prepareFrameStatsComponentForExtensionDashboard,
 } from '@google-psat/design-system';
 
-const FramesSection = () => {
+interface FramesSectionProps {
+  tabCookies: TabCookies | null;
+}
+
+const FramesSection = ({ tabCookies }: FramesSectionProps) => {
   const framesStats = prepareFrameStatsComponentForExtensionDashboard(
     //@ts-ignore
-    globalThis?.PSAT_DATA.json[0] || {}
+    globalThis?.PSAT_DATA.json[0] || {},
+    tabCookies
   );
 
   const dataComponents: MatrixComponentProps[] = framesStats.legend.map(

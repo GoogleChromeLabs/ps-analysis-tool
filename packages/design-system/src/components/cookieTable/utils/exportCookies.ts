@@ -20,6 +20,8 @@
 import {
   type CookieTableData,
   getCurrentDateAndTime,
+  generateCLICookieTableCSV,
+  generateExtensionCookieTableCSV,
 } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 
@@ -27,10 +29,6 @@ import { saveAs } from 'file-saver';
  * Internal dependencies
  */
 import { TableRow } from '../../table';
-import {
-  generateCLICookieTableCSV,
-  generateExtensionCookieTableCSV,
-} from '../../table/utils';
 
 const exportCookies = (isCLI = false, rows: TableRow[], hostname: string) => {
   const _cookies = rows.map(({ originalData }) => originalData);

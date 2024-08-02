@@ -16,8 +16,12 @@
 /**
  * External dependencies.
  */
-import { type CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+/**
+ * Internal dependencies.
+ */
+import sanitizeCsvRecord from '../sanitizeCsvRecord';
+import { type CookieTableData } from '../../cookies.types';
 
 const COOKIES_TABLE_DATA_HEADER_CLI = [
   () => I18n.getMessage('name'),
@@ -36,7 +40,10 @@ const COOKIES_TABLE_DATA_HEADER_CLI = [
   () => I18n.getMessage('gdpr'),
 ];
 
-const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
+const generateCLICookieTableCSV = (
+  cookies: CookieTableData[],
+  returnString = false
+): Blob | string => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
@@ -48,8 +55,7 @@ const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
         : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
-      //@ts-ignore
-      cookie.parsedCookie?.sameSite ?? cookie.parsedCookie?.samesite,
+      I18n.getMessage((cookie.parsedCookie?.samesite ?? 'lax').toLowerCase()),
       I18n.getMessage(
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),
@@ -68,6 +74,14 @@ const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
+  }
+
+  if (returnString) {
+    return (
+      COOKIES_TABLE_DATA_HEADER_CLI.map((header) => header()).join(',') +
+      '\r\n' +
+      cookieRecords
+    );
   }
 
   return new Blob([

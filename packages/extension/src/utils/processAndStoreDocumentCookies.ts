@@ -22,19 +22,19 @@ import {
   type CookieData,
   type CookieDatabase,
 } from '@google-psat/common';
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
 import { GET_JS_COOKIES } from '../constants';
+import type { CookieStoreCookie } from '../contentScript/types';
 
 interface ProcessAndStoreDucmentCookies {
   tabUrl: string;
   tabId: string;
   frameId: string;
-  documentCookies: ParsedCookie[];
+  documentCookies: CookieStoreCookie[];
   cookieDB: CookieDatabase;
 }
 
@@ -47,9 +47,15 @@ const processAndStoreDocumentCookies = async ({
 }: ProcessAndStoreDucmentCookies) => {
   try {
     const parsedCookieData: CookieData[] = documentCookies.map(
-      (singleCookie: ParsedCookie) => {
+      (singleCookie: CookieStoreCookie) => {
+        const { sameSite, partitioned, ...cookieWithoutAttributes } =
+          singleCookie;
+
         let parsedCookie = {
-          ...singleCookie,
+          ...cookieWithoutAttributes,
+          partitionKey: partitioned ? '' : '',
+          httponly: false,
+          samesite: sameSite?.toLowerCase() || 'lax',
         };
 
         if (singleCookie.domain) {
@@ -60,6 +66,7 @@ const processAndStoreDocumentCookies = async ({
           parsedCookie.domain = window.location.hostname;
         }
 
+        //@ts-ignore
         parsedCookie = createCookieObject(
           parsedCookie,
           tabUrl,

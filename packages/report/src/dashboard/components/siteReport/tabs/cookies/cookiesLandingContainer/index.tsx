@@ -74,7 +74,6 @@ const AssembledCookiesLanding = ({
 
   // @ts-ignore Using global variable.
   const { dateTime } = globalThis?.PSAT_DATA || {};
-
   const cookiesByKey = useMemo(() => {
     return (
       filterOutput.filteredData.reduce<TabCookies>((acc, cookie) => {

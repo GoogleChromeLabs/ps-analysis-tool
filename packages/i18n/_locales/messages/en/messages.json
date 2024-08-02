@@ -1768,7 +1768,7 @@
     "message": "Deprecated Google Sign-In"
   },
   "gSInote": {
-    "message": "The Google Sign-In JavaScript library is deprecated and is no longer supported. Some features of Google Identity Services are in use. Please review the following documentation and $a_tag_start$migrating$a_tag_end$` if necessary.",
+    "message": "The Google Sign-In JavaScript library is deprecated and is no longer supported. Some features of Google Identity Services are in use. Please review the following documentation and $a_tag_start$migrating$a_tag_end$ if necessary.",
     "placeholders": {
       "a_tag_start": {
         "content": "$1",

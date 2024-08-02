@@ -34,7 +34,7 @@ const wildTest = (wildcard: string, str: string): boolean => {
 };
 
 export const emptyAnalytics = {
-  platform: '',
+  platform: 'Unknown',
   category: 'Uncategorized',
   name: '',
   domain: '',

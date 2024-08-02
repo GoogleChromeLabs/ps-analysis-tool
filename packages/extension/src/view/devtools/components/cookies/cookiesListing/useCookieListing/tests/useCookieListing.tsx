@@ -97,6 +97,15 @@ describe('useCookieListing', () => {
     extentedTerm: {
       message: 'Extended Term (>1 month)',
     },
+    strict: {
+      message: 'Strict',
+    },
+    lax: {
+      message: 'Lax',
+    },
+    none: {
+      message: 'None',
+    },
   });
 
   it('should return the correct values', () => {

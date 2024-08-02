@@ -632,6 +632,11 @@ class SynchnorousCookieStore {
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
             ...cookie.parsedCookie,
+            samesite: (
+              cookie.parsedCookie.samesite ??
+              this.tabsData[tabId][cookieKey].parsedCookie.samesite ??
+              'lax'
+            ).toLowerCase(),
             httponly:
               cookie.parsedCookie.httponly ??
               this.tabsData[tabId][cookieKey].parsedCookie.httponly,

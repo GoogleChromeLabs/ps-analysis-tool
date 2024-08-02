@@ -116,6 +116,10 @@ const Landing = ({
         link: 'frames',
         panel: {
           Element: FramesSection,
+          props: {
+            tabCookies,
+            tabFrames,
+          },
         },
       });
     }

@@ -112,6 +112,8 @@ export default function createCookieFromAuditsIssue(
   const cookieObjectToUpdate: CookieData = {
     parsedCookie: {
       ...generatedCookie,
+      //@ts-ignore if the generatedCookie doesnt contain same then it will default to lax
+      samesite: generatedCookie?.httponly?.toLowerCase() ?? 'lax',
       //@ts-ignore if the generatedCookie doesnt contain httpOnly then it will default to false
       httponly: generatedCookie?.httponly ?? false,
       name: generatedCookie?.name ?? '',

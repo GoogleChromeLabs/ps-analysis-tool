@@ -16,8 +16,12 @@
 /**
  * External dependencies.
  */
-import { type CookieTableData, sanitizeCsvRecord } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+/**
+ * Internal dependencies.
+ */
+import sanitizeCsvRecord from '../sanitizeCsvRecord';
+import { type CookieTableData } from '../../cookies.types';
 
 const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('name'),
@@ -38,7 +42,10 @@ const COOKIES_TABLE_DATA_HEADER_EXTENSION = [
   () => I18n.getMessage('size'),
 ];
 
-const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
+const generateExtensionCookieTableCSV = (
+  cookies: CookieTableData[],
+  returnString = false
+): Blob | string => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
@@ -50,7 +57,7 @@ const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
         : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
-      cookie.parsedCookie.samesite,
+      I18n.getMessage((cookie.parsedCookie.samesite ?? 'lax').toLowerCase()),
       I18n.getMessage(
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),
@@ -73,6 +80,14 @@ const generateExtensionCookieTableCSV = (cookies: CookieTableData[]): Blob => {
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
+  }
+
+  if (returnString) {
+    return (
+      COOKIES_TABLE_DATA_HEADER_EXTENSION.map((header) => header()).join(',') +
+      '\r\n' +
+      cookieRecords
+    );
   }
 
   return new Blob([
