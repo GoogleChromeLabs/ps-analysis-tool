@@ -441,3 +441,11 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 * Chore: Make NPM commands used for development uniform. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/775
 * Bump “fast-xml-parser” from 4.4.0 to 4.4.1 https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/790
 * Chore: Setup report package development configurations https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/756
+
+
+#v0.10.1
+
+# Changelog
+
+## Extension
+- Fix: Miscellaneous QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/795
