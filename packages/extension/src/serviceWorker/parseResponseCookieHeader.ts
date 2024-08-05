@@ -62,7 +62,10 @@ const parseResponseCookieHeader = (
   parsedCookie = {
     ...parsedCookie,
     httponly: parsedCookie.httponly ?? false,
-    samesite: parsedCookie.samesite?.toLowerCase() ?? 'lax',
+    samesite:
+      parsedCookie.samesite !== ''
+        ? parsedCookie.samesite?.toLowerCase()
+        : 'lax',
   };
 
   parsedCookie = createCookieObject(

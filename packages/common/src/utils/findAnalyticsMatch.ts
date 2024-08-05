@@ -44,7 +44,7 @@ export const emptyAnalytics = {
   gdprUrl: '',
   wildcard: '',
 };
-
+const STATIC_CATEGORIES = ['Functional', 'Marketing', 'Analytics'];
 /**
  * Finds analytics in cookie DB for a cookie name.
  * @param {string} key cookie name to be matched.
@@ -70,7 +70,9 @@ const findAnalyticsMatch = (
     }
   });
 
-  analytics.category = analytics.category || 'Uncategorized';
+  analytics.category = STATIC_CATEGORIES.includes(analytics.category ?? '')
+    ? analytics.category
+    : 'Uncategorized';
 
   return analytics;
 };
