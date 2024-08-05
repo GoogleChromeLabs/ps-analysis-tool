@@ -63,6 +63,13 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
             ],
           };
 
+          let blockingStatus = deriveBlockingStatus(networkEvents);
+
+          //@ts-ignore -- Since this has to be run for data coming from extension only.
+          if (globalThis?.PSAT_EXTENSION) {
+            blockingStatus = cookieObj[key].blockingStatus;
+          }
+
           acc[key] = {
             ...cookieObj[key],
             ...acc[key],
@@ -72,7 +79,7 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
               acc[key]?.exemptionReason || cookieObj[key]?.exemptionReason,
             frameUrls,
             networkEvents,
-            blockingStatus: deriveBlockingStatus(networkEvents),
+            blockingStatus,
           };
         } else {
           acc[key] = cookieObj[key];
