@@ -23,8 +23,8 @@ import { ensureFile, writeFile } from 'fs-extra';
  * Internal dependencies.
  */
 import generateCSVFiles from './generateCSVfiles';
-import path from 'path';
-import { saveResultAsHTML } from '.';
+import path, { basename } from 'path';
+import saveResultsAsHTML from './saveResultAsHTML';
 
 const getFolderName = (pageUrl: string) => {
   let folderName = pageUrl
@@ -46,7 +46,14 @@ const saveReports = async (
   sitemapUrl: string
 ) => {
   if (result.length > 1) {
-    await saveResultAsHTML(outDir, result, true, 'report.html', sitemapUrl);
+    await saveResultsAsHTML(
+      outDir,
+      result,
+      true,
+      sitemapUrl ? new URL(sitemapUrl).hostname : basename(outDir),
+      'report.html',
+      sitemapUrl
+    );
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {
@@ -63,10 +70,11 @@ const saveReports = async (
         await writeFile(path.join(fileDir, 'cookies.csv'), allCookiesCSV);
 
         await ensureFile(path.join(fileDir, 'report.html'));
-        await saveResultAsHTML(
+        await saveResultsAsHTML(
           fileDir,
           [siteReport],
           false,
+          new URL(siteReport.pageUrl).hostname,
           'report.html',
           sitemapUrl
         );
@@ -101,7 +109,13 @@ const saveReports = async (
     await writeFile(path.join(outDir, 'cookies.csv'), allCookiesCSV);
 
     await ensureFile(path.join(outDir, 'report.html'));
-    await saveResultAsHTML(outDir, [result[0]], false, 'report.html');
+    await saveResultsAsHTML(
+      outDir,
+      [result[0]],
+      false,
+      new URL(result[0].pageUrl).hostname,
+      'report.html'
+    );
 
     if (technologyDataCSV) {
       await ensureFile(path.join(outDir, 'technologies.csv'));

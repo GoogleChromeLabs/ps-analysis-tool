@@ -35,6 +35,7 @@ const isProduction = process.env.NODE_ENV === 'production';
  * @param outDir The path to the output.
  * @param result The completeJSON of the output.
  * @param isSiteMap Whether the output is sitemap of not
+ * @param selectedSiteName Selected site name to be used for exporting cookies.
  * @param fileName Optional filename to use used for the output file.
  * @param sitemapUrl Sitemap URL
  */
@@ -42,6 +43,7 @@ const saveResultsAsHTML = async (
   outDir: string,
   result: CompleteJson[],
   isSiteMap: boolean,
+  selectedSiteName: string,
   fileName?: string | null,
   sitemapUrl?: string | undefined
 ) => {
@@ -99,7 +101,7 @@ const saveResultsAsHTML = async (
       window.PSAT_DATA = ${JSON.stringify({
         json: result,
         type: isSiteMap ? 'sitemap' : 'url',
-        selectedSite: outDir?.trim()?.slice(6) ?? '',
+        selectedSite: selectedSiteName,
         translations: messages,
         dateTime,
         siteMapUrl: isSiteMap ? sitemapUrl : '',

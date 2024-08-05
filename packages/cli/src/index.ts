@@ -22,7 +22,7 @@ import events from 'events';
 import { existsSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
-import path from 'path';
+import path, { basename } from 'path';
 import { I18n } from '@google-psat/i18n';
 import {
   type CompleteJson,
@@ -299,7 +299,26 @@ program.parse();
     process.exit(0);
   }
 
-  await saveResultsAsHTML(outputDir, result, isSiteMap, null, sitemapUrl);
+  let selectedSiteName = '';
+
+  if (isSiteMap) {
+    if (sitemapUrl) {
+      selectedSiteName = new URL(sitemapUrl).hostname;
+    } else {
+      selectedSiteName = basename(outputDir);
+    }
+  } else {
+    selectedSiteName = new URL(result[0].pageUrl).hostname;
+  }
+
+  await saveResultsAsHTML(
+    outputDir,
+    result,
+    isSiteMap,
+    selectedSiteName,
+    null,
+    sitemapUrl
+  );
 })().catch((error) => {
   const spinnies = new Spinnies();
   spinnies.add('error-line-1', {
