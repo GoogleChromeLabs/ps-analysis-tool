@@ -21,5 +21,5 @@ export { default as getUrlsFromSitemap } from './getUrlListFromArgs';
 export { default as askUserInput } from './askUserInput';
 export { default as generatePrefix } from './generatePrefix';
 export { default as getOutputFilePath } from './getOutputFilePath';
-export { default as saveResultAsHTML } from './saveResultAsHTML';
+export { default as saveResultsAsHTML } from './saveResultAsHTML';
 export * from './validators';

@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { CompleteJson } from '@google-psat/common';
+import type { CompleteJson, TabCookies } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -27,10 +27,12 @@ import { EMPTY_FRAME_COUNT, EMPTY_FRAME_LEGEND } from '../constants';
 /**
  * Calcualte insights about frames to be shown on cookies landing page.
  * @param json Complete json for the Dashboard.
+ * @param tabCookies
  * @returns object
  */
 export default function prepareFrameStatsComponentForExtensionDashboard(
-  json: CompleteJson | null
+  json: CompleteJson | null,
+  tabCookies: TabCookies | null
 ) {
   if (!json) {
     return {
@@ -42,15 +44,38 @@ export default function prepareFrameStatsComponentForExtensionDashboard(
   const blockedCookieFrame = new Set();
   const unBlockedCookieFrame = new Set();
   const cookieFrame = new Set();
+  const filteredCookiesKey = new Set();
+
+  Object.keys(tabCookies || {}).forEach((key) => {
+    filteredCookiesKey.add(key);
+  });
+
+  const cookiesToBeUsed: CompleteJson['cookieData'] = {};
 
   Object.keys(json.cookieData || {}).forEach((frame) => {
+    cookiesToBeUsed[frame] = {
+      frameCookies: {},
+      frameType: json.cookieData[frame]?.frameType ?? '',
+    };
+
+    if (Object.keys(json.cookieData[frame].frameCookies).length > 0) {
+      Object.keys(json.cookieData[frame].frameCookies).forEach((cookieKey) => {
+        if (filteredCookiesKey.has(cookieKey)) {
+          cookiesToBeUsed[frame].frameCookies[cookieKey] =
+            json.cookieData[frame].frameCookies[cookieKey];
+        }
+      });
+    }
+  });
+
+  Object.keys(cookiesToBeUsed || {}).forEach((frame) => {
     let hasBlockedCookie = false;
     let hasUnblockedCookie = false;
 
-    if (Object.keys(json.cookieData[frame].frameCookies).length > 0) {
+    if (Object.keys(cookiesToBeUsed[frame].frameCookies).length > 0) {
       cookieFrame.add(frame);
-      Object.keys(json.cookieData[frame].frameCookies).forEach((cookieKey) => {
-        const cookie = json.cookieData[frame].frameCookies[cookieKey];
+      Object.keys(cookiesToBeUsed[frame].frameCookies).forEach((cookieKey) => {
+        const cookie = cookiesToBeUsed[frame].frameCookies[cookieKey];
         if (cookie?.blockedReasons && cookie?.blockedReasons?.length > 0) {
           hasBlockedCookie = true;
         }
@@ -103,7 +128,7 @@ export default function prepareFrameStatsComponentForExtensionDashboard(
       {
         label: I18n.getMessage('totalFrames'),
         descriptionKey: 'Total frames',
-        count: Object.keys(json.cookieData || {}).length,
+        count: Object.keys(cookiesToBeUsed || {}).length,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },

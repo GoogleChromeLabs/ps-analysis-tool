@@ -43,10 +43,10 @@ const LandingHeader = ({
       )}
       data-testid="cookies-landing-header"
     >
-      <div className="lg:max-w-[729px] flex gap-9 px-4">
+      <div className="lg:max-w-[729px] flex gap-9">
         {dataMapping.map((circleData, index) => {
           return (
-            <div key={index} className="text-center w-16 h-fit">
+            <div key={index} className="text-center w-fit h-fit">
               <button
                 key={index}
                 className={classnames('group text-center w-20 p-2 h-full', {

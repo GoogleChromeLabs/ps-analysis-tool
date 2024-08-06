@@ -65,6 +65,7 @@ export default function createCookieFromAuditsIssue(
 
   let generatedCookie: Protocol.Audits.AffectedCookie | Cookie | undefined =
     cookie;
+  let sameSiteAttribute = 'Lax';
 
   if (cookie) {
     generatedCookie = cookie;
@@ -72,6 +73,10 @@ export default function createCookieFromAuditsIssue(
 
   if (!cookie && rawCookieLine) {
     generatedCookie = parse(rawCookieLine);
+    sameSiteAttribute =
+      generatedCookie.samesite && generatedCookie.samesite !== ''
+        ? generatedCookie.samesite?.toLowerCase()
+        : 'lax';
   }
 
   const requestEvents = [];
@@ -112,6 +117,7 @@ export default function createCookieFromAuditsIssue(
   const cookieObjectToUpdate: CookieData = {
     parsedCookie: {
       ...generatedCookie,
+      samesite: sameSiteAttribute,
       //@ts-ignore if the generatedCookie doesnt contain httpOnly then it will default to false
       httponly: generatedCookie?.httponly ?? false,
       name: generatedCookie?.name ?? '',

@@ -78,12 +78,12 @@ const generateCookiesWithIssuesCSV = (
         : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
-      cookie.parsedCookie.sameSite,
+      I18n.getMessage((cookie.parsedCookie.samesite ?? 'lax').toLowerCase()),
       I18n.getMessage(
         cookie.analytics?.category?.toLowerCase() || 'uncategorized'
       ),
       cookie.analytics.platform,
-      cookie.parsedCookie.httpOnly
+      cookie.parsedCookie.httponly
         ? I18n.getMessage('yes')
         : I18n.getMessage('no'),
       cookie.parsedCookie.secure

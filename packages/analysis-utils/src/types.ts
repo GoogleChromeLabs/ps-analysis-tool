@@ -56,7 +56,7 @@ export interface CookieLogDetails
   category: string;
   description: string;
   isFirstParty: 'Yes' | 'No';
-  sameSite: string;
+  samesite: string;
   partitionKey?: Protocol.Network.CookiePartitionKey;
   pageUrl: string;
   requestUrls: { [key: string]: string };

@@ -41,7 +41,7 @@ npm run dev:cli
 
 After making changes in the `cli`, `cli-dashboard`, or any CLI-related packages, use:
 ```bash
-npm run build:cli
+npm run build:cli:dashboard
 ```
 
 ## Build Workflows

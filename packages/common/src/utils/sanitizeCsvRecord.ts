@@ -31,7 +31,9 @@ const sanitizeCsvRecord = (record: unknown): string => {
   }
 
   recordCopy = recordCopy.replace(/"/g, '""');
-  return recordCopy.includes(',') ? '"' + recordCopy + '"' : recordCopy;
+  return recordCopy.includes(',') || recordCopy.includes('"')
+    ? '"' + recordCopy + '"'
+    : recordCopy;
 };
 
 export default sanitizeCsvRecord;

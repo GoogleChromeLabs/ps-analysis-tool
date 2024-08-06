@@ -164,7 +164,7 @@ function parseAttributeValues(
       } else if (value === 'unspecified') {
         value = '';
       }
-      value = ((value || '') as string).toLowerCase();
+      value = ((value || 'lax') as string).toLowerCase();
       break;
     case 'size':
       if (!value) {

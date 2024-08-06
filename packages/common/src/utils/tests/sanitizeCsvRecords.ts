@@ -33,7 +33,7 @@ describe('sanitizeCsvRecord : ', () => {
 
   it('should add double quotes before any double quotes in the string', () => {
     const invalidString = 'a value with "quotes"';
-    const validString = 'a value with ""quotes""';
+    const validString = '"a value with ""quotes"""';
     expect(sanitizeCsvRecord(invalidString)).toBe(validString);
   });
 

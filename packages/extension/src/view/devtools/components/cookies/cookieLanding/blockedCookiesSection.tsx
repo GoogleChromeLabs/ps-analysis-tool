@@ -116,6 +116,8 @@ const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
       </a>
       .
     </>
+  ) : cookieStats.blockedCookies.total === 0 ? (
+    'No cookies were blocked by the browser.'
   ) : (
     ''
   );

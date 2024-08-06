@@ -116,8 +116,14 @@ const BlockedCookiesSection = ({
       };
     });
 
+  const description =
+    blockedCookiesStats.blockedCookies.total === 0
+      ? 'No cookies were blocked by the browser.'
+      : '';
+
   return (
     <CookiesLandingWrapper
+      description={description}
       dataMapping={blockedCookieDataMapping}
       testId="blocked-cookies-insights"
     >

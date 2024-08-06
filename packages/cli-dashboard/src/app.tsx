@@ -60,6 +60,10 @@ const App = () => {
       return;
     }
 
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      bodyTag.classList.add('dark');
+    }
+
     bodyTag.style.fontSize = '75%';
   }, []);
 
@@ -130,7 +134,7 @@ const App = () => {
   }
 
   return (
-    <div className="w-full h-screen flex">
+    <div className="w-full h-screen flex dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
       <SiteReport
         completeJson={completeJsonReport}
         cookies={cookies}

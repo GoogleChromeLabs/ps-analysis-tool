@@ -203,9 +203,9 @@ export type CookieJsonDataType = {
     partitionKey: string;
     path: string;
     expires: string;
-    httpOnly: boolean;
+    httponly: boolean;
     secure: boolean;
-    sameSite: string;
+    samesite: string;
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };

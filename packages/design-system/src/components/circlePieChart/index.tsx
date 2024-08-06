@@ -56,7 +56,6 @@ const CirclePieChart = ({
             <VictoryPie
               padding={0}
               innerRadius={175}
-              animate={{ duration: 400 }}
               data={data.map(({ count }) => ({ x: '', y: count }))}
               labels={() => ''}
               colorScale={data.map(({ color }) => color)}
