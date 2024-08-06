@@ -38,7 +38,7 @@
   "dependencies": {
     "@google-psat/common": "*",
     "chalk": "^5.3.0",
-    "puppeteer": "^22.10.0",
+    "puppeteer": "22.15.0",
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.14",
     "wappalyzer": "^6.10.66"
