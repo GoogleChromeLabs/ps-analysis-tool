@@ -16,8 +16,13 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import React, { useMemo } from 'react';
+import {
+  InfoCard,
+  PSInfoKey,
+  QuickLinksList,
+  Tabs,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -27,16 +32,44 @@ import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
+  const tabItems = useMemo(
+    () => [
+      {
+        title: 'Info Card',
+        content: {
+          Element: InfoCard,
+          props: {
+            infoKey: PSInfoKey.RelatedWebsiteSets,
+          },
+        },
+      },
+      {
+        title: 'Membership',
+        content: {
+          Element: Insights,
+        },
+      },
+      {
+        title: 'JSON Generator',
+        content: {
+          Element: RWSJsonGenerator,
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <div data-testid="related-website-sets-content" className="h-full w-full">
-      <LandingPage
-        title={I18n.getMessage('rws')}
-        psInfoKey={PSInfoKey.RelatedWebsiteSets}
-        extraClasses="max-w-2xl h-fit"
-      >
-        <Insights />
-        <RWSJsonGenerator />
-      </LandingPage>
+      <div className="p-4">
+        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+          <h1 className="text-left">{I18n.getMessage('rws')}</h1>
+        </div>
+      </div>
+      <Tabs items={tabItems} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
     </div>
   );
 };
