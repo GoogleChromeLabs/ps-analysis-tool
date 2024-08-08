@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
-export * from './protectedAudience';
+export { default as ProtectedAudienceContextProvider } from './protectedAudienceProvider';
+export {
+  default as ProtectedAudienceContext,
+  type ProtectedAudienceContextType,
+} from './context';
+export { default as useProtectedAudience } from './useProtectedAudience';

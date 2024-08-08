@@ -13,7 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
-export * from './protectedAudience';
+/**
+ * External dependencies.
+ */
+import { createContext } from '@google-psat/common';
+import type { singleAuctionEvent } from '../../../../store/dataStore';
+
+export type InterestGroups = singleAuctionEvent & {
+  details: any;
+};
+export interface ProtectedAudienceContextType {
+  state: {
+    auctionEvents: singleAuctionEvent[];
+    interestGroupDetails: InterestGroups[];
+  };
+}
+
+const initialState: ProtectedAudienceContextType = {
+  state: {
+    auctionEvents: [],
+    interestGroupDetails: [],
+  },
+};
+
+export default createContext<ProtectedAudienceContextType>(initialState);
