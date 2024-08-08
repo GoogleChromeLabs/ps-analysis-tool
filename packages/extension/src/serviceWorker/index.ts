@@ -26,7 +26,6 @@ import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 
 import './chromeListeners';
 import networkTime from '../store/utils/networkTime';
-import attachCDP from './attachCDP';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -38,6 +37,7 @@ const ALLOWED_EVENTS = [
   'Network.loadingFinished',
   'Audits.issueAdded',
   'Network.requestWillBeSent',
+  'Storage.interestGroupAccessed',
   'Page.frameAttached',
   'Page.frameNavigated',
   'Target.attachedToTarget',
@@ -74,7 +74,52 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           targetInfo: { targetId, url },
         } = params as Protocol.Target.AttachedToTargetEvent;
 
-        attachCDP({ targetId });
+        const childDebuggee = { targetId };
+        chrome.debugger.attach(childDebuggee, '1.3', async () => {
+          if (chrome.runtime.lastError) {
+            // eslint-disable-next-line no-console
+            console.warn(chrome.runtime.lastError);
+          }
+          try {
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Storage.setInterestGroupAuctionTracking',
+              { enable: true }
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Network.enable',
+              {}
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Audits.enable',
+              {}
+            );
+
+            await chrome.debugger.sendCommand(childDebuggee, 'Page.enable', {});
+
+            const message = {
+              id: 0,
+              method: 'Runtime.runIfWaitingForDebugger',
+              params: {},
+            };
+
+            await chrome.debugger.sendCommand(
+              source,
+              'Target.sendMessageToTarget',
+              {
+                message: JSON.stringify(message),
+                targetId: targetId,
+              }
+            );
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.warn(error);
+          }
+        });
 
         targets = await chrome.debugger.getTargets();
         const parentFrameId = targets.filter(
@@ -173,6 +218,23 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
+      if (method === 'Storage.interestGroupAccessed' && params) {
+        const interestGroupAccessedParams =
+          params as Protocol.Storage.InterestGroupAccessedEvent;
+
+        syncCookieStore.auctionEvents[parseInt(tabId)].push({
+          bidCurrency: '',
+          bid: 0,
+          name: interestGroupAccessedParams.name,
+          ownerOrigin: interestGroupAccessedParams.ownerOrigin,
+          type: interestGroupAccessedParams.type,
+          time: interestGroupAccessedParams.accessTime,
+          auctionConfig: {},
+          interestGroupConfig: interestGroupAccessedParams,
+          eventType: 'interestGroupAccessed',
+        });
+      }
+
       if (
         method === 'Storage.interestGroupAuctionNetworkRequestCreated' &&
         params
@@ -204,6 +266,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               tabId
             ),
             auctionConfig: {},
+            eventType: 'interestGroupAuctionNetworkRequestCreated',
           });
         }
 
@@ -273,6 +336,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 .type,
             time: networkTime(requestId, timestamp, tabId),
             auctionConfig: {},
+            eventType: 'interestGroupAuctionNetworkRequestCreated',
           });
         }
 

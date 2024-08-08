@@ -44,6 +44,11 @@ interface singleAuctionEvent {
   type: string;
   time: string | Date | number | undefined;
   auctionConfig: object;
+  interestGroupConfig?: Protocol.Storage.InterestGroupAccessedEvent;
+  eventType:
+    | 'interestGroupAuctionNetworkRequestCompleted'
+    | 'interestGroupAuctionNetworkRequestCreated'
+    | 'interestGroupAccessed';
 }
 class SynchnorousCookieStore {
   /**
@@ -251,6 +256,7 @@ class SynchnorousCookieStore {
         type: method + type,
         time: calculatedNetworkTime,
         auctionConfig,
+        eventType: 'interestGroupAuctionNetworkRequestCompleted',
       });
     });
   }
@@ -598,6 +604,8 @@ class SynchnorousCookieStore {
   removeTabData(tabId: number) {
     delete this.tabsData[tabId];
     delete this.tabs[tabId];
+    delete this.auctionDataForTabId[tabId];
+    delete this.auctionEvents[tabId];
   }
 
   /**
