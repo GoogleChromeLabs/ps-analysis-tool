@@ -44,7 +44,7 @@ import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
 export interface singleAuctionEvent {
   bidCurrency: string;
-  bid: number;
+  bid: number | null;
   name: string;
   ownerOrigin: string;
   type: string;

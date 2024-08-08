@@ -56,7 +56,7 @@ class PAStore {
 
       dataStore.auctionEvents[parseInt(tabId)].push({
         bidCurrency: auctionConfig?.bidCurrency ?? '',
-        bid: auctionConfig?.bid ?? '',
+        bid: auctionConfig?.bid ?? null,
         name: auctionConfig?.name ?? '',
         ownerOrigin: auctionConfig?.ownerOrigin ?? '',
         type: method + type,

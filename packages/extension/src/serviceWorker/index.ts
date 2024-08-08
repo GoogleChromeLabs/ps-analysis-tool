@@ -211,7 +211,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           dataStore.auctionEvents[parseInt(tabId)].push({
             bidCurrency: '',
-            bid: 0,
+            bid: null,
             name: '',
             ownerOrigin: '',
             type: interestGroupAuctionEventOccured.type,
@@ -234,9 +234,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const interestGroupAccessedParams =
           params as Protocol.Storage.InterestGroupAccessedEvent;
 
+        let bid = null;
+
+        if (interestGroupAccessedParams?.bid) {
+          bid = interestGroupAccessedParams?.bid;
+        }
+        if (
+          !interestGroupAccessedParams?.bid &&
+          interestGroupAccessedParams.type === 'win'
+        ) {
+          bid = dataStore.auctionEvents[parseInt(tabId)].filter(
+            (event) =>
+              event?.type === 'bid' &&
+              event.eventType === 'interestGroupAccessed' &&
+              event?.interestGroupConfig?.uniqueAuctionId &&
+              interestGroupAccessedParams?.uniqueAuctionId &&
+              event?.interestGroupConfig?.uniqueAuctionId ===
+                interestGroupAccessedParams.uniqueAuctionId
+          )?.[0]?.bid;
+        }
+
         dataStore.auctionEvents[parseInt(tabId)].push({
           bidCurrency: interestGroupAccessedParams?.bidCurrency ?? '',
-          bid: interestGroupAccessedParams?.bid ?? 0,
+          bid: bid && bid > 0 ? bid : null,
           name: interestGroupAccessedParams.name,
           ownerOrigin: interestGroupAccessedParams.ownerOrigin,
           formattedTime:
@@ -279,7 +299,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           dataStore.auctionEvents[parseInt(tabId)].push({
             bidCurrency: '',
-            bid: 0,
+            bid: null,
             name: '',
             ownerOrigin: '',
             formattedTime:
@@ -355,7 +375,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         if (dataStore.unParsedRequestHeadersForPA[tabId][requestId]) {
           dataStore.auctionEvents[parseInt(tabId)].push({
             bidCurrency: '',
-            bid: 0,
+            bid: null,
             name: '',
             ownerOrigin: '',
             type:
