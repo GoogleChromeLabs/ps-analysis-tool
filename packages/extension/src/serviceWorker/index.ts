@@ -23,13 +23,19 @@ import { Protocol } from 'devtools-protocol';
  */
 import syncCookieStore from '../store/synchnorousCookieStore';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
-import attachCDP from './attachCDP';
+
 import './chromeListeners';
+import networkTime from '../store/utils/networkTime';
+import attachCDP from './attachCDP';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
   'Network.requestWillBeSentExtraInfo',
   'Network.responseReceivedExtraInfo',
+  'Network.loadingFailed',
+  'Storage.interestGroupAuctionEventOccurred',
+  'Storage.interestGroupAuctionNetworkRequestCreated',
+  'Network.loadingFinished',
   'Audits.issueAdded',
   'Network.requestWillBeSent',
   'Page.frameAttached',
@@ -62,21 +68,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       targets = await chrome.debugger.getTargets();
 
-      await Promise.all(
-        targets.map(async ({ id, url }) => {
-          if (url.startsWith('http')) {
-            await attachCDP({ targetId: id });
-          }
-        })
-      );
-
       // This is to get a list of all targets being attached to the main frame.
       if (method === 'Target.attachedToTarget' && params) {
         const {
           targetInfo: { targetId, url },
         } = params as Protocol.Target.AttachedToTargetEvent;
 
-        await attachCDP({ targetId });
+        attachCDP({ targetId });
 
         targets = await chrome.debugger.getTargets();
         const parentFrameId = targets.filter(
@@ -145,6 +143,73 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
+      if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
+        const interestGroupAuctionEventOccured =
+          params as Protocol.Storage.InterestGroupAuctionEventOccurredEvent;
+
+        const { uniqueAuctionId } = interestGroupAuctionEventOccured;
+        if (interestGroupAuctionEventOccured.type === 'started') {
+          syncCookieStore.auctionDataForTabId[parseInt(tabId)][
+            uniqueAuctionId
+          ] = {
+            auctionTime: interestGroupAuctionEventOccured.eventTime,
+            auctionConfig: interestGroupAuctionEventOccured.auctionConfig,
+          };
+        }
+
+        if (
+          interestGroupAuctionEventOccured.type === 'configResolved' ||
+          interestGroupAuctionEventOccured.type === 'started'
+        ) {
+          syncCookieStore.auctionDataForTabId[parseInt(tabId)][
+            uniqueAuctionId
+          ] = {
+            ...syncCookieStore.auctionDataForTabId[parseInt(tabId)][
+              uniqueAuctionId
+            ],
+            auctionConfig: interestGroupAuctionEventOccured.auctionConfig,
+          };
+        }
+        return;
+      }
+
+      if (
+        method === 'Storage.interestGroupAuctionNetworkRequestCreated' &&
+        params
+      ) {
+        const interestGroupAuctionNetworkRequestCreatedParams =
+          params as Protocol.Storage.InterestGroupAuctionNetworkRequestCreatedEvent;
+
+        const requestId =
+          interestGroupAuctionNetworkRequestCreatedParams.requestId;
+
+        syncCookieStore.unParsedRequestHeadersForPA[tabId][requestId] = {
+          auctions: interestGroupAuctionNetworkRequestCreatedParams.auctions,
+          type: interestGroupAuctionNetworkRequestCreatedParams.type,
+        };
+
+        if (syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]) {
+          syncCookieStore.auctionEvents[parseInt(tabId)].push({
+            bidCurrency: '',
+            bid: 0,
+            name: '',
+            ownerOrigin: '',
+            type:
+              'Start fetch ' +
+              interestGroupAuctionNetworkRequestCreatedParams.type,
+            time: networkTime(
+              requestId,
+              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                .timeStamp,
+              tabId
+            ),
+            auctionConfig: {},
+          });
+        }
+
+        return;
+      }
+
       //If we get requestWillBeSent before requestWillBeSentExtraInfo then we add the frame if to the object.
       // If we get requestWillBeSent afterwards then we will remove the add the frameId and then process the requestWillBeSentExtraInfo.
       if (method === 'Network.requestWillBeSent' && params) {
@@ -152,13 +217,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           requestId,
           request: { url: requestUrl },
           frameId = '',
+          timestamp,
+          wallTime,
         } = params as Protocol.Network.RequestWillBeSentEvent;
 
         let finalFrameId = frameId;
-
-        if (!finalFrameId) {
-          return;
-        }
 
         targets = await chrome.debugger.getTargets();
         const setTargets = new Set<string>();
@@ -181,6 +244,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               finalFrameId,
               frameId,
               url: requestUrl,
+              timeStamp: timestamp,
+              wallTime,
             },
           };
         } else {
@@ -190,13 +255,33 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               finalFrameId,
               frameId,
               url: requestUrl,
+              timeStamp: timestamp,
+              wallTime,
             },
           };
         }
 
-        if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
-          syncCookieStore.parseRequestHeaders(
-            syncCookieStore.unParsedRequestHeaders[tabId][requestId],
+        if (syncCookieStore.unParsedRequestHeadersForPA[tabId][requestId]) {
+          syncCookieStore.auctionEvents[parseInt(tabId)].push({
+            bidCurrency: '',
+            bid: 0,
+            name: '',
+            ownerOrigin: '',
+            type:
+              'Start fetch ' +
+              syncCookieStore.unParsedRequestHeadersForPA[tabId][requestId]
+                .type,
+            time: networkTime(requestId, timestamp, tabId),
+            auctionConfig: {},
+          });
+        }
+
+        if (
+          syncCookieStore.tabs[Number(tabId)]?.isCookieAnalysisEnabled &&
+          syncCookieStore.unParsedRequestHeadersForCA[tabId][requestId]
+        ) {
+          syncCookieStore.parseRequestHeadersForCA(
+            syncCookieStore.unParsedRequestHeadersForCA[tabId][requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
@@ -205,12 +290,36 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
+      if (method === 'Network.loadingFinished' && params) {
+        const loadingFinishedParams =
+          params as Protocol.Network.LoadingFinishedEvent;
+
+        syncCookieStore.parseRequestHeadersForPA(
+          loadingFinishedParams.requestId,
+          loadingFinishedParams.timestamp,
+          tabId,
+          'Finished Fetch'
+        );
+      }
+
+      if (method === 'Network.loadingFailed' && params) {
+        const loadingFailedParams =
+          params as Protocol.Network.LoadingFinishedEvent;
+
+        syncCookieStore.parseRequestHeadersForPA(
+          loadingFailedParams.requestId,
+          loadingFailedParams.timestamp,
+          tabId,
+          'Failed Fetch'
+        );
+      }
+
       if (method === 'Network.requestWillBeSentExtraInfo') {
         const { requestId } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
         if (syncCookieStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
-          syncCookieStore.parseRequestHeaders(
+          syncCookieStore.parseRequestHeadersForCA(
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
             requestId,
             tabId,
@@ -224,7 +333,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             )
           );
         } else {
-          syncCookieStore.unParsedRequestHeaders[tabId][requestId] =
+          syncCookieStore.unParsedRequestHeadersForCA[tabId][requestId] =
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
         }
         return;
@@ -264,6 +373,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         if (!syncCookieStore.requestIdToCDPURLMapping[tabId]) {
           syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
+              ...(syncCookieStore.requestIdToCDPURLMapping[tabId]?.[
+                requestId
+              ] ?? {}),
               finalFrameId,
               frameId,
               url: requestUrl,
@@ -273,6 +385,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             ...syncCookieStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
+              ...syncCookieStore.requestIdToCDPURLMapping[tabId][requestId],
               finalFrameId,
               frameId,
               url: requestUrl,
@@ -280,25 +393,24 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (syncCookieStore.unParsedResponseHeaders[tabId][requestId]) {
-          syncCookieStore.parseResponseHeaders(
-            syncCookieStore.unParsedResponseHeaders[tabId][requestId],
+        if (syncCookieStore.unParsedResponseHeadersForCA[tabId][requestId]) {
+          syncCookieStore.parseResponseHeadersForCA(
+            syncCookieStore.unParsedResponseHeadersForCA[tabId][requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
 
-        if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
-          syncCookieStore.parseRequestHeaders(
-            syncCookieStore.unParsedRequestHeaders[tabId][requestId],
+        if (syncCookieStore.unParsedRequestHeadersForCA[tabId][requestId]) {
+          syncCookieStore.parseRequestHeadersForCA(
+            syncCookieStore.unParsedRequestHeadersForCA[tabId][requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
 
-        delete syncCookieStore.requestIdToCDPURLMapping[tabId][requestId];
         return;
       }
 
@@ -321,23 +433,23 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             ])
           );
 
-          syncCookieStore.parseResponseHeaders(
+          syncCookieStore.parseResponseHeadersForCA(
             params as Protocol.Network.ResponseReceivedExtraInfoEvent,
             requestId,
             tabId,
             frameIds
           );
 
-          if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
-            syncCookieStore.parseRequestHeaders(
-              syncCookieStore.unParsedRequestHeaders[tabId][requestId],
+          if (syncCookieStore.unParsedRequestHeadersForCA[tabId][requestId]) {
+            syncCookieStore.parseRequestHeadersForCA(
+              syncCookieStore.unParsedRequestHeadersForCA[tabId][requestId],
               requestId,
               tabId,
               frameIds
             );
           }
         } else {
-          syncCookieStore.unParsedResponseHeaders[tabId][requestId] =
+          syncCookieStore.unParsedResponseHeadersForCA[tabId][requestId] =
             params as Protocol.Network.ResponseReceivedExtraInfoEvent;
         }
         return;

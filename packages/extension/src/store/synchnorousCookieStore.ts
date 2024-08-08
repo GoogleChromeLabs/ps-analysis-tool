@@ -35,7 +35,16 @@ import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
-
+import networkTime from './utils/networkTime';
+interface singleAuctionEvent {
+  bidCurrency: string;
+  bid: number;
+  name: string;
+  ownerOrigin: string;
+  type: string;
+  time: string | Date | number | undefined;
+  auctionConfig: object;
+}
 class SynchnorousCookieStore {
   /**
    * The cookie data of the tabs.
@@ -43,6 +52,25 @@ class SynchnorousCookieStore {
   tabsData: {
     [tabId: number]: {
       [cookieKey: string]: CookieData;
+    };
+  } = {};
+
+  /**
+   * The cookie data of the tabs.
+   */
+  auctionEvents: {
+    [tabId: number]: singleAuctionEvent[];
+  } = {};
+
+  /**
+   * The auction data of the tabs.
+   */
+  auctionDataForTabId: {
+    [tabId: number]: {
+      [uniqueAuctionId: Protocol.Storage.InterestGroupAuctionId]: {
+        auctionTime: Protocol.Network.TimeSinceEpoch;
+        auctionConfig?: any;
+      };
     };
   } = {};
 
@@ -70,6 +98,8 @@ class SynchnorousCookieStore {
         frameId: string;
         url: string;
         finalFrameId: string;
+        timeStamp: Protocol.Network.MonotonicTime;
+        wallTime: Protocol.Network.TimeSinceEpoch;
       };
     };
   } = {};
@@ -78,7 +108,7 @@ class SynchnorousCookieStore {
    * This variable stores the unParsedRequest headers received from Network.requestWillBeSentExtraInfo.
    * These are the requests whose Network.requestWillBeSent counter part havent yet been fired.
    */
-  unParsedRequestHeaders: {
+  unParsedRequestHeadersForCA: {
     [tabId: string]: {
       [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
     };
@@ -88,7 +118,20 @@ class SynchnorousCookieStore {
    * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
    * These are the responses whose Network.responseReceived counter part havent yet been fired.
    */
-  unParsedResponseHeaders: {
+  unParsedRequestHeadersForPA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        auctions: Protocol.Storage.InterestGroupAuctionId[];
+        type: Protocol.Storage.InterestGroupAuctionFetchType;
+      };
+    };
+  } = {};
+
+  /**
+   * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
+   * These are the responses whose Network.responseReceived counter part havent yet been fired.
+   */
+  unParsedResponseHeadersForCA: {
     [tabId: string]: {
       [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
     };
@@ -117,6 +160,8 @@ class SynchnorousCookieStore {
       newUpdates: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
+      isCookieAnalysisEnabled: boolean;
+      isPAAnalysisEnabled: boolean;
     };
   } = {};
 
@@ -172,13 +217,52 @@ class SynchnorousCookieStore {
   }
 
   /**
-   * This function parses response headers
+   * This function parses response headers for Protected Analysis PA.
+   * @param {string} requestId This is used to get the related data for parsing the request.
+   * @param { Protocol.Network.MonotonicTime } timestamp Timestamp of the request
+   * @param {string} tabId The tabId this request is associated to.
+   * @param {string} method determines which event called the function.
+   */
+  parseRequestHeadersForPA(
+    requestId: string,
+    timestamp: Protocol.Network.MonotonicTime,
+    tabId: string,
+    method: string
+  ) {
+    if (!this.unParsedRequestHeadersForPA[tabId][requestId]?.auctions) {
+      return;
+    }
+    const { auctions, type } =
+      this.unParsedRequestHeadersForPA[tabId][requestId];
+
+    const calculatedNetworkTime = networkTime(requestId, timestamp, tabId);
+    auctions.forEach((uniqueAuctionId) => {
+      if (!this.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId]) {
+        return;
+      }
+      const { auctionConfig = {} } =
+        this.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId];
+
+      this.auctionEvents[parseInt(tabId)].push({
+        bidCurrency: auctionConfig?.bidCurrency ?? '',
+        bid: auctionConfig?.bid ?? '',
+        name: auctionConfig?.name ?? '',
+        ownerOrigin: auctionConfig?.ownerOrigin ?? '',
+        type: method + type,
+        time: calculatedNetworkTime,
+        auctionConfig,
+      });
+    });
+  }
+
+  /**
+   * This function parses response headers for Cookie Analysis.
    * @param {Protocol.Network.ResponseReceivedExtraInfoEvent} response The response to be parsed.
    * @param {string} requestId This is used to get the related data for parsing the response.
    * @param {string} tabId The tabId this request is associated to.
    * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
    */
-  parseResponseHeaders(
+  parseResponseHeadersForCA(
     response: Protocol.Network.ResponseReceivedExtraInfoEvent,
     requestId: string,
     tabId: string,
@@ -200,17 +284,17 @@ class SynchnorousCookieStore {
     );
     this.update(Number(tabId), cookies);
 
-    delete this.unParsedResponseHeaders[tabId][requestId];
+    delete this.unParsedResponseHeadersForCA[tabId][requestId];
   }
 
   /**
-   * This function parses request headers
+   * This function parses request headers for Cookie Analysis.
    * @param {Protocol.Network.RequestWillBeSentExtraInfoEvent} request The response to be parsed.
    * @param {string} requestId This is used to get the related data for parsing the response.
    * @param {string} tabId The tabId this request is associated to.
    * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
    */
-  parseRequestHeaders(
+  parseRequestHeadersForCA(
     request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
     requestId: string,
     tabId: string,
@@ -227,13 +311,13 @@ class SynchnorousCookieStore {
       requestId
     );
 
-    delete this.unParsedRequestHeaders[tabId][requestId];
+    delete this.unParsedRequestHeadersForCA[tabId][requestId];
     if (cookies.length === 0) {
       return;
     }
 
     this.update(Number(tabId), cookies);
-    delete this.unParsedRequestHeaders[tabId][requestId];
+    delete this.unParsedRequestHeadersForCA[tabId][requestId];
   }
 
   /**
@@ -360,9 +444,11 @@ class SynchnorousCookieStore {
     globalThis.PSAT = {
       tabsData: this.tabsData,
       tabs: this.tabs,
+      auctionEvents: this.auctionEvents,
     };
 
     this.tabsData[tabId] = {};
+    this.auctionEvents[tabId] = [];
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -370,7 +456,12 @@ class SynchnorousCookieStore {
       newUpdates: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
+      isCookieAnalysisEnabled: true,
+      isPAAnalysisEnabled: true,
     };
+
+    this.auctionDataForTabId[tabId] = {};
+
     (async () => {
       if (!this.cookieDB) {
         this.cookieDB = await fetchDictionary();
@@ -397,8 +488,8 @@ class SynchnorousCookieStore {
    * @param {string} tabId The tab whose data has to be deinitialised.
    */
   deinitialiseVariablesForTab(tabId: string) {
-    delete this.unParsedRequestHeaders[tabId];
-    delete this.unParsedResponseHeaders[tabId];
+    delete this.unParsedRequestHeadersForCA[tabId];
+    delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
   }
@@ -466,16 +557,19 @@ class SynchnorousCookieStore {
    * @param {string} tabId The tab whose data has to be initialised.
    */
   initialiseVariablesForNewTab(tabId: string) {
-    this.unParsedRequestHeaders[tabId] = {};
-    this.unParsedResponseHeaders[tabId] = {};
+    this.unParsedRequestHeadersForCA[tabId] = {};
+    this.unParsedResponseHeadersForCA[tabId] = {};
     this.requestIdToCDPURLMapping[tabId] = {};
     this.frameIdToResourceMap[tabId] = {};
+    this.unParsedRequestHeadersForPA[tabId] = {};
     //@ts-ignore
     globalThis.PSATAdditionalData = {
-      unParsedRequestHeaders: this.unParsedRequestHeaders,
-      unParsedResponseHeaders: this.unParsedResponseHeaders,
+      unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
+      unParsedResponseHeadersForCA: this.unParsedResponseHeadersForCA,
       requestIdToCDPURLMapping: this.requestIdToCDPURLMapping,
       frameIdToResourceMap: this.frameIdToResourceMap,
+      auctionDataForTabId: this.auctionDataForTabId,
+      unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
     };
   }
 
@@ -493,7 +587,7 @@ class SynchnorousCookieStore {
     this.tabs[tabId].newUpdates = 0;
     this.tabs[tabId].frameIDURLSet = {};
     this.tabs[tabId].parentChildFrameAssociation = {};
-
+    this.auctionEvents[tabId] = [];
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 

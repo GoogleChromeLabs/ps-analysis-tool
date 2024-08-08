@@ -16,24 +16,43 @@
 /**
  * This function will attach the debugger to the given target.
  * @param {{ [key: string]: number | string }} target The target where debugger needs to be attached.
+ * @param { boolean } childDebugee determine whether the target is child debugee or not.
  */
-export default async function attachCDP(target: {
-  [key: string]: number | string;
-}) {
-  try {
-    await chrome.debugger.attach(target, '1.3');
-    await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
-      // If this is set to true, debugger will be attached to every new target that is added to the current target.
+export default function attachCDP(
+  target: { [key: string]: number | string },
+  childDebugee = false
+) {
+  chrome.debugger.attach(target, '1.3', () => {
+    chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
       autoAttach: true,
-      waitForDebuggerOnStart: false,
-      //Enables "flat" access to the session via specifying sessionId attribute in the commands.
-      // If this is set to true the debugger is also attached to the child targets of that the target it has been attached to.
-      flatten: true,
+      flatten: false,
+      waitForDebuggerOnStart: true,
     });
-    await chrome.debugger.sendCommand(target, 'Network.enable');
-    await chrome.debugger.sendCommand(target, 'Audits.enable');
-    await chrome.debugger.sendCommand(target, 'Page.enable');
-  } catch (error) {
-    //Fail silently
-  }
+
+    chrome.debugger.sendCommand(
+      target,
+      'Storage.setInterestGroupAuctionTracking',
+      { enable: true }
+    );
+    chrome.debugger.sendCommand(target, 'Audits.enable');
+    chrome.debugger.sendCommand(target, 'Storage.setInterestGroupTracking', {
+      enable: true,
+    });
+    chrome.debugger.sendCommand(target, 'Page.enable');
+    chrome.debugger.sendCommand(target, 'Network.enable');
+
+    if (childDebugee) {
+      // In non-flat mode, we must send runIfWaitingForDebugger via
+      // sendMessageToTarget for it to actually work.
+      const message = {
+        id: 0,
+        method: 'Runtime.runIfWaitingForDebugger',
+        params: {},
+      };
+      chrome.debugger.sendCommand(target, 'Target.sendMessageToTarget', {
+        message: JSON.stringify(message),
+        targetId: target?.targetId,
+      });
+    }
+  });
 }
