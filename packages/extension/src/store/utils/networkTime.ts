@@ -17,7 +17,7 @@
  * External dependencies
  */
 import type { Protocol } from 'devtools-protocol';
-import synchnorousCookieStore from '../synchnorousCookieStore';
+import synchnorousCookieStore from '../PAStore';
 
 /**
  * Helps decode timestamps in network-related events, which are only convertible

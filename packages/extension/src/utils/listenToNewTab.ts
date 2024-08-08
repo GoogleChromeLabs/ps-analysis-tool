@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../store/synchnorousCookieStore';
+import synchnorousCookieStore from '../store/PAStore';
 import { getTab } from './getTab';
 
 const listenToNewTab = async (tabId?: number) => {
