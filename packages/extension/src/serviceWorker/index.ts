@@ -26,6 +26,7 @@ import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 
 import './chromeListeners';
 import networkTime from '../store/utils/networkTime';
+import formatTime from '../store/utils/formatTime';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -214,6 +215,24 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             ],
             auctionConfig: interestGroupAuctionEventOccured.auctionConfig,
           };
+
+          syncCookieStore.auctionEvents[parseInt(tabId)].push({
+            bidCurrency: '',
+            bid: 0,
+            name: '',
+            ownerOrigin: '',
+            type: interestGroupAuctionEventOccured.type,
+            formattedTime:
+              syncCookieStore.auctionEvents[parseInt(tabId)].length === 0
+                ? '0 ms'
+                : formatTime(
+                    syncCookieStore.auctionEvents[parseInt(tabId)][0].time,
+                    interestGroupAuctionEventOccured.eventTime
+                  ),
+            time: interestGroupAuctionEventOccured.eventTime,
+            auctionConfig: interestGroupAuctionEventOccured.auctionConfig,
+            eventType: 'interestGroupAuctionEventOccurred',
+          });
         }
         return;
       }
@@ -223,10 +242,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           params as Protocol.Storage.InterestGroupAccessedEvent;
 
         syncCookieStore.auctionEvents[parseInt(tabId)].push({
-          bidCurrency: '',
-          bid: 0,
+          bidCurrency: interestGroupAccessedParams?.bidCurrency ?? '',
+          bid: interestGroupAccessedParams?.bid ?? 0,
           name: interestGroupAccessedParams.name,
           ownerOrigin: interestGroupAccessedParams.ownerOrigin,
+          formattedTime:
+            syncCookieStore.auctionEvents[parseInt(tabId)].length === 0
+              ? '0 ms'
+              : formatTime(
+                  syncCookieStore.auctionEvents[parseInt(tabId)][0].time,
+                  interestGroupAccessedParams.accessTime
+                ),
           type: interestGroupAccessedParams.type,
           time: interestGroupAccessedParams.accessTime,
           auctionConfig: {},
@@ -251,20 +277,30 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         };
 
         if (syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]) {
+          const time: number =
+            networkTime(
+              requestId,
+              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                .timeStamp,
+              tabId
+            ) ?? new Date().getTime();
+
           syncCookieStore.auctionEvents[parseInt(tabId)].push({
             bidCurrency: '',
             bid: 0,
             name: '',
             ownerOrigin: '',
+            formattedTime:
+              syncCookieStore.auctionEvents[parseInt(tabId)].length === 0
+                ? '0 ms'
+                : formatTime(
+                    syncCookieStore.auctionEvents[parseInt(tabId)][0].time,
+                    time
+                  ),
             type:
               'Start fetch ' +
               interestGroupAuctionNetworkRequestCreatedParams.type,
-            time: networkTime(
-              requestId,
-              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                .timeStamp,
-              tabId
-            ),
+            time,
             auctionConfig: {},
             eventType: 'interestGroupAuctionNetworkRequestCreated',
           });
@@ -334,6 +370,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               'Start fetch ' +
               syncCookieStore.unParsedRequestHeadersForPA[tabId][requestId]
                 .type,
+            formattedTime:
+              syncCookieStore.auctionEvents[parseInt(tabId)].length === 0
+                ? '0 ms'
+                : formatTime(
+                    syncCookieStore.auctionEvents[parseInt(tabId)][0].time,
+                    networkTime(requestId, timestamp, tabId)
+                  ),
             time: networkTime(requestId, timestamp, tabId),
             auctionConfig: {},
             eventType: 'interestGroupAuctionNetworkRequestCreated',

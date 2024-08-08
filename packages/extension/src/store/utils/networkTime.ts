@@ -36,7 +36,7 @@ export default function networkTime(
     synchnorousCookieStore.requestIdToCDPURLMapping[tabId][requestId];
   // Somehow missed the start event?
   if (!timeInfo) {
-    return undefined;
+    return new Date().getTime();
   }
   return timeInfo.wallTime + (timestamp - timeInfo.timeStamp);
 }

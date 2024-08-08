@@ -36,16 +36,19 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import networkTime from './utils/networkTime';
+import formatTime from './utils/formatTime';
 interface singleAuctionEvent {
   bidCurrency: string;
   bid: number;
   name: string;
   ownerOrigin: string;
   type: string;
-  time: string | Date | number | undefined;
+  formattedTime: string | Date;
+  time: number;
   auctionConfig: object;
   interestGroupConfig?: Protocol.Storage.InterestGroupAccessedEvent;
   eventType:
+    | 'interestGroupAuctionEventOccurred'
     | 'interestGroupAuctionNetworkRequestCompleted'
     | 'interestGroupAuctionNetworkRequestCreated'
     | 'interestGroupAccessed';
@@ -241,6 +244,7 @@ class SynchnorousCookieStore {
       this.unParsedRequestHeadersForPA[tabId][requestId];
 
     const calculatedNetworkTime = networkTime(requestId, timestamp, tabId);
+
     auctions.forEach((uniqueAuctionId) => {
       if (!this.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId]) {
         return;
@@ -254,6 +258,13 @@ class SynchnorousCookieStore {
         name: auctionConfig?.name ?? '',
         ownerOrigin: auctionConfig?.ownerOrigin ?? '',
         type: method + type,
+        formattedTime:
+          this.auctionEvents[parseInt(tabId)].length === 0
+            ? '0 ms'
+            : formatTime(
+                this.auctionEvents[parseInt(tabId)][0].time,
+                networkTime(requestId, timestamp, tabId)
+              ),
         time: calculatedNetworkTime,
         auctionConfig,
         eventType: 'interestGroupAuctionNetworkRequestCompleted',
