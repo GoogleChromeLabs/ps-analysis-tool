@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import {
+import React, {
   type PropsWithChildren,
   useEffect,
   useState,
@@ -33,6 +33,7 @@ import Context, {
   type ProtectedAudienceContextType,
 } from './context';
 import type { singleAuctionEvent } from '../../../../store/dataStore';
+import { diff } from 'deep-object-diff';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] = useState<singleAuctionEvent[]>([]);
@@ -62,17 +63,33 @@ const Provider = ({ children }: PropsWithChildren) => {
         message.payload.auctionEvents?.length > 0
       ) {
         if (message.payload.tabId === tabId) {
-          setAuctionEvents(message.payload.auctionEvents);
+          setAuctionEvents((prevState) => {
+            if (
+              message.payload.auctionEvents &&
+              Object.keys(diff(prevState, message.payload.auctionEvents))
+                .length > 0
+            ) {
+              return message.payload.auctionEvents;
+            }
+            return prevState;
+          });
           const shapedInterestGroupDetails = await Promise.all(
             message.payload.auctionEvents
               .filter((event) => event.eventType === 'interestGroupAccessed')
               .map(async (event) => {
+                if (!event?.name && !event?.ownerOrigin) {
+                  return {
+                    ...event,
+                    details: {},
+                  };
+                }
+
                 const result = (await chrome.debugger.sendCommand(
                   { tabId },
                   'Storage.getInterestGroupDetails',
                   {
-                    name: '',
-                    ownerOrigin: '',
+                    name: event?.name,
+                    ownerOrigin: event?.ownerOrigin,
                   }
                 )) as Protocol.Storage.GetInterestGroupDetailsResponse;
 
@@ -82,7 +99,15 @@ const Provider = ({ children }: PropsWithChildren) => {
                 };
               })
           );
-          setInterestGroupDetails(shapedInterestGroupDetails);
+          setInterestGroupDetails((prevState) => {
+            if (
+              Object.keys(diff(prevState, shapedInterestGroupDetails)).length >
+              0
+            ) {
+              return shapedInterestGroupDetails;
+            }
+            return prevState;
+          });
         }
       }
     },

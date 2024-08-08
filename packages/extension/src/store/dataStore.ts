@@ -531,6 +531,13 @@ class DataStore {
             },
           },
         });
+        await chrome.runtime.sendMessage({
+          type: 'AUCTION_EVENTS',
+          payload: {
+            tabId,
+            auctionEvents: this.auctionEvents[tabId],
+          },
+        });
       }
 
       if (sentMessageAnyWhere) {
