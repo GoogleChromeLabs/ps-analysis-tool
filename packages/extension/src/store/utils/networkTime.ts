@@ -17,7 +17,7 @@
  * External dependencies
  */
 import type { Protocol } from 'devtools-protocol';
-import synchnorousCookieStore from '../PAStore';
+import dataStore from '../dataStore';
 
 /**
  * Helps decode timestamps in network-related events, which are only convertible
@@ -32,8 +32,7 @@ export default function networkTime(
   timestamp: Protocol.Network.MonotonicTime,
   tabId: string
 ) {
-  const timeInfo =
-    synchnorousCookieStore.requestIdToCDPURLMapping[tabId][requestId];
+  const timeInfo = dataStore.requestIdToCDPURLMapping[tabId][requestId];
   // Somehow missed the start event?
   if (!timeInfo) {
     return new Date().getTime();

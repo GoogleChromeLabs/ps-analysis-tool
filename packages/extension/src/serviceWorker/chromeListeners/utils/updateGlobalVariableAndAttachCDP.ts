@@ -31,30 +31,28 @@ const updateGlobalVariableAndAttachCDP = async () => {
     const allTabs = await chrome.tabs.query({});
     const targets = await chrome.debugger.getTargets();
 
-    await Promise.all(
-      allTabs.map(async (tab) => {
-        if (!tab.id || tab.url?.startsWith('chrome://')) {
-          return;
-        }
+    allTabs.forEach((tab) => {
+      if (!tab.id || tab.url?.startsWith('chrome://')) {
+        return;
+      }
 
-        dataStore?.addTabData(tab.id);
+      dataStore?.addTabData(tab.id);
 
-        if (dataStore.globalIsUsingCDP) {
-          dataStore.initialiseVariablesForNewTab(tab.id.toString());
+      if (dataStore.globalIsUsingCDP) {
+        dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
-          await attachCDP({ tabId: tab.id });
+        attachCDP({ tabId: tab.id });
 
-          const currentTab = targets.filter(
-            ({ tabId }) => tabId && tab.id && tabId === tab.id
-          );
-          dataStore?.updateParentChildFrameAssociation(
-            tab.id,
-            currentTab[0].id,
-            '0'
-          );
-        }
-      })
-    );
+        const currentTab = targets.filter(
+          ({ tabId }) => tabId && tab.id && tabId === tab.id
+        );
+        dataStore?.updateParentChildFrameAssociation(
+          tab.id,
+          currentTab[0].id,
+          '0'
+        );
+      }
+    });
   }
 };
 
