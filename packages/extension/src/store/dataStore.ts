@@ -42,7 +42,7 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
-interface singleAuctionEvent {
+export interface singleAuctionEvent {
   bidCurrency: string;
   bid: number;
   name: string;
