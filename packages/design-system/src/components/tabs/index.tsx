@@ -69,10 +69,13 @@ const Tabs = ({ items }: TabsProps) => {
             onClick={() => setActiveTab(index)}
             onKeyDown={handleKeyDown}
             autoFocus={index === 0}
-            className={classNames('hover:opacity-50 outline-none', {
-              'border-b-2 border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
-                index === activeTab,
-            })}
+            className={classNames(
+              'hover:opacity-80 outline-none text-raisin-black dark:text-bright-gray',
+              {
+                'border-b-2 border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
+                  index === activeTab,
+              }
+            )}
           >
             {item.title}
           </button>
