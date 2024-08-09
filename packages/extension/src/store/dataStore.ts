@@ -44,6 +44,7 @@ import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
 export interface singleAuctionEvent {
   bidCurrency: string;
+  uniqueAuctionId?: Protocol.Storage.InterestGroupAuctionId;
   bid: number | null;
   name: string;
   ownerOrigin: string;
@@ -52,6 +53,7 @@ export interface singleAuctionEvent {
   time: number;
   auctionConfig: object;
   interestGroupConfig?: Protocol.Storage.InterestGroupAccessedEvent;
+  parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
   eventType:
     | 'interestGroupAuctionEventOccurred'
     | 'interestGroupAuctionNetworkRequestCompleted'
@@ -70,7 +72,7 @@ class DataStore {
   } = {};
 
   /**
-   * The cookie data of the tabs.
+   * The auction data of the tabs.
    */
   auctionEvents: {
     [tabId: number]: singleAuctionEvent[];
@@ -84,6 +86,7 @@ class DataStore {
       [uniqueAuctionId: Protocol.Storage.InterestGroupAuctionId]: {
         auctionTime: Protocol.Network.TimeSinceEpoch;
         auctionConfig?: any;
+        parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
       };
     };
   } = {};

@@ -55,6 +55,7 @@ class PAStore {
         dataStore.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId];
 
       dataStore.auctionEvents[parseInt(tabId)].push({
+        uniqueAuctionId,
         bidCurrency: auctionConfig?.bidCurrency ?? '',
         bid: auctionConfig?.bid ?? null,
         name: auctionConfig?.name ?? '',
@@ -69,6 +70,10 @@ class PAStore {
               ),
         time: calculatedNetworkTime,
         auctionConfig,
+        parentAuctionId: uniqueAuctionId
+          ? dataStore.auctionDataForTabId[parseInt(tabId)]?.[uniqueAuctionId]
+              ?.parentAuctionId
+          : undefined,
         eventType: 'interestGroupAuctionNetworkRequestCompleted',
       });
     });
