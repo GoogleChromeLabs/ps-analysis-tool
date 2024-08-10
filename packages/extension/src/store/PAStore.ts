@@ -23,7 +23,7 @@ import type { Protocol } from 'devtools-protocol';
  */
 import networkTime from './utils/networkTime';
 import formatTime from './utils/formatTime';
-import dataStore from './dataStore';
+import dataStore, { type singleAuctionEvent } from './dataStore';
 
 class PAStore {
   /**
@@ -77,6 +77,23 @@ class PAStore {
         eventType: 'interestGroupAuctionNetworkRequestCompleted',
       });
     });
+  }
+
+  /**
+   * Decides if auction is multiSeller or singleSeller
+   * @param {singleAuctionEvent[]} auctionEvents This is used to get the related data for parsing the request.
+   * @returns { boolean } True for multiSeller False for singleSeller
+   */
+  isMUltiSellerAuction(auctionEvents: singleAuctionEvent[]): boolean {
+    const uniqueSellers = new Set<string>();
+
+    auctionEvents
+      //@ts-ignore -- Ignoring this for now since we dont have any type of auctionConfig
+      .filter((event) => Boolean(event.auctionConfig?.seller))
+      //@ts-ignore -- Ignoring this for now since we dont have any type of auctionConfig
+      .forEach(({ auctionConfig }) => uniqueSellers.add(auctionConfig?.seller));
+
+    return uniqueSellers.size > 1;
   }
 }
 

@@ -24,30 +24,64 @@ import React, {
   useMemo,
 } from 'react';
 import type { Protocol } from 'devtools-protocol';
-
+import { diff } from 'deep-object-diff';
 /**
  * Internal dependencies.
  */
-import Context, {
-  type InterestGroups,
-  type ProtectedAudienceContextType,
-} from './context';
+import Context, { type ProtectedAudienceContextType } from './context';
 import type { singleAuctionEvent } from '../../../../store/dataStore';
-import { diff } from 'deep-object-diff';
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [auctionEvents, setAuctionEvents] = useState<singleAuctionEvent[]>([]);
+  const [auctionEvents, setAuctionEvents] =
+    useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
+  const [isMultiSellerAuction, setIsMultiSellerAuction] =
+    useState<boolean>(false);
   const [interestGroupDetails, setInterestGroupDetails] = useState<
-    InterestGroups[]
+    ProtectedAudienceContextType['state']['interestGroupDetails']
   >([]);
+
+  const computeInterestGroupDetails = useCallback(
+    (auctionEventsToBeParsed: singleAuctionEvent[]) => {
+      return Promise.all(
+        auctionEventsToBeParsed
+          .filter((event) => event.eventType === 'interestGroupAccessed')
+          .map(async (event) => {
+            if (!event?.name && !event?.ownerOrigin) {
+              return {
+                ...event,
+                details: {},
+              };
+            }
+
+            const result = (await chrome.debugger.sendCommand(
+              { tabId: chrome.devtools.inspectedWindow.tabId },
+              'Storage.getInterestGroupDetails',
+              {
+                name: event?.name,
+                ownerOrigin: event?.ownerOrigin,
+              }
+            )) as Protocol.Storage.GetInterestGroupDetailsResponse;
+
+            return {
+              ...event,
+              details: {
+                ...result,
+              },
+            };
+          })
+      );
+    },
+    []
+  );
 
   const messagePassingListener = useCallback(
     // eslint-disable-next-line complexity
     async (message: {
       type: string;
       payload: {
-        tabId?: number;
-        auctionEvents?: singleAuctionEvent[];
+        tabId: number;
+        auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'];
+        multiSellerAuction: boolean;
       };
     }) => {
       if (!message.type) {
@@ -59,12 +93,16 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (
         incomingMessageType === 'AUCTION_EVENTS' &&
-        message.payload.auctionEvents &&
-        message.payload.auctionEvents?.length > 0
+        message.payload.auctionEvents
       ) {
         if (message.payload.tabId === tabId) {
+          setIsMultiSellerAuction(message.payload.multiSellerAuction);
           setAuctionEvents((prevState) => {
+            if (!prevState && message.payload.auctionEvents) {
+              return message.payload.auctionEvents;
+            }
             if (
+              prevState &&
               message.payload.auctionEvents &&
               Object.keys(diff(prevState, message.payload.auctionEvents))
                 .length > 0
@@ -73,32 +111,28 @@ const Provider = ({ children }: PropsWithChildren) => {
             }
             return prevState;
           });
-          const shapedInterestGroupDetails = await Promise.all(
-            message.payload.auctionEvents
-              .filter((event) => event.eventType === 'interestGroupAccessed')
-              .map(async (event) => {
-                if (!event?.name && !event?.ownerOrigin) {
-                  return {
-                    ...event,
-                    details: {},
-                  };
-                }
 
-                const result = (await chrome.debugger.sendCommand(
-                  { tabId },
-                  'Storage.getInterestGroupDetails',
-                  {
-                    name: event?.name,
-                    ownerOrigin: event?.ownerOrigin,
-                  }
-                )) as Protocol.Storage.GetInterestGroupDetailsResponse;
+          let shapedInterestGroupDetails: ProtectedAudienceContextType['state']['interestGroupDetails'] =
+            [];
 
-                return {
-                  ...event,
-                  details: result,
-                };
-              })
-          );
+          if (!Array.isArray(message.payload.auctionEvents)) {
+            const eventsToBeParsed = Object.values(
+              message.payload.auctionEvents
+            ).flat();
+
+            const singleAuctionEventsFlatMapped = eventsToBeParsed
+              .map((eventSet) => Object.values(eventSet).flat())
+              .flat();
+
+            shapedInterestGroupDetails = await computeInterestGroupDetails(
+              singleAuctionEventsFlatMapped
+            );
+          } else {
+            shapedInterestGroupDetails = await computeInterestGroupDetails(
+              message.payload.auctionEvents
+            );
+          }
+
           setInterestGroupDetails((prevState) => {
             if (
               Object.keys(diff(prevState, shapedInterestGroupDetails)).length >
@@ -111,7 +145,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    []
+    [computeInterestGroupDetails]
   );
 
   useEffect(() => {
@@ -127,9 +161,10 @@ const Provider = ({ children }: PropsWithChildren) => {
       state: {
         auctionEvents,
         interestGroupDetails,
+        isMultiSellerAuction,
       },
     };
-  }, [auctionEvents, interestGroupDetails]);
+  }, [auctionEvents, interestGroupDetails, isMultiSellerAuction]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };

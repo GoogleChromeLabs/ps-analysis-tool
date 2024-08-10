@@ -31,6 +31,7 @@ import TABS from './tabs';
 import './app.css';
 import { Layout } from './components';
 import useContextInvalidated from './hooks/useContextInvalidated';
+import { useProtectedAudience } from './stateProviders';
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
@@ -64,6 +65,16 @@ const App: React.FC = () => {
       }
     })();
   }, []);
+
+  const { auctionEvents, interestGroupDetails } = useProtectedAudience(
+    ({ state }) => ({
+      auctionEvents: state.auctionEvents,
+      interestGroupDetails: state.interestGroupDetails,
+    })
+  );
+
+  // eslint-disable-next-line no-console -- leaving this intentionally since we dont have a definite UI to show the events in extension.
+  console.log(auctionEvents, interestGroupDetails);
 
   return (
     <SidebarProvider

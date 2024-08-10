@@ -21,10 +21,12 @@ import { useContextSelector } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import Context, { type CookieStoreContext } from './context';
+import Context, { type ProtectedAudienceContextType } from './context';
 
-export function useCookie(): CookieStoreContext;
-export function useCookie<T>(selector: (state: CookieStoreContext) => T): T;
+export function useCookie(): ProtectedAudienceContextType;
+export function useCookie<T>(
+  selector: (state: ProtectedAudienceContextType) => T
+): T;
 
 /**
  * Cookie store hook.
@@ -32,8 +34,9 @@ export function useCookie<T>(selector: (state: CookieStoreContext) => T): T;
  * @returns selected part of the state
  */
 export function useCookie<T>(
-  selector: (state: CookieStoreContext) => T | CookieStoreContext = (state) =>
-    state
+  selector: (
+    state: ProtectedAudienceContextType
+  ) => T | ProtectedAudienceContextType = (state) => state
 ) {
   return useContextSelector(Context, selector);
 }

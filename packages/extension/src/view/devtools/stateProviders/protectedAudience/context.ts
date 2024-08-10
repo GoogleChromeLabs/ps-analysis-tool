@@ -24,15 +24,24 @@ export type InterestGroups = singleAuctionEvent & {
 };
 export interface ProtectedAudienceContextType {
   state: {
-    auctionEvents: singleAuctionEvent[];
+    auctionEvents:
+      | singleAuctionEvent[]
+      | {
+          [parentAuctionId: string]: {
+            [uniqueAuctionId: string]: singleAuctionEvent[];
+          };
+        }
+      | null;
     interestGroupDetails: InterestGroups[];
+    isMultiSellerAuction: boolean;
   };
 }
 
 const initialState: ProtectedAudienceContextType = {
   state: {
-    auctionEvents: [],
+    auctionEvents: null,
     interestGroupDetails: [],
+    isMultiSellerAuction: false,
   },
 };
 

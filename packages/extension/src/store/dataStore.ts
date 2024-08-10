@@ -41,6 +41,7 @@ import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
+import PAStore from './PAStore';
 
 export interface singleAuctionEvent {
   bidCurrency: string;
@@ -534,11 +535,62 @@ class DataStore {
             },
           },
         });
+
+        const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
+          this.auctionEvents[tabId]
+        );
+        const groupedAuctionBids: {
+          [parentAuctionId: string]: {
+            0: singleAuctionEvent[];
+            [uniqueAuctionId: string]: singleAuctionEvent[];
+          };
+        } = {};
+
+        if (isMultiSellerAuction) {
+          this.auctionEvents[tabId].forEach((event) => {
+            if (!event?.parentAuctionId) {
+              if (event?.uniqueAuctionId) {
+                if (!groupedAuctionBids[event?.uniqueAuctionId]) {
+                  groupedAuctionBids[event?.uniqueAuctionId] = {
+                    0: [],
+                  };
+                }
+                groupedAuctionBids[event?.uniqueAuctionId]['0'].push(event);
+              }
+              return;
+            }
+
+            if (!groupedAuctionBids[event.parentAuctionId]) {
+              groupedAuctionBids[event.parentAuctionId] = {
+                0: [],
+              };
+            }
+
+            if (!event?.uniqueAuctionId) {
+              return;
+            }
+
+            if (
+              !groupedAuctionBids[event.parentAuctionId][event.uniqueAuctionId]
+            ) {
+              groupedAuctionBids[event.parentAuctionId][event.uniqueAuctionId] =
+                [];
+            }
+
+            groupedAuctionBids[event.parentAuctionId][
+              event.uniqueAuctionId
+            ].push(event);
+          });
+        }
+
         await chrome.runtime.sendMessage({
           type: 'AUCTION_EVENTS',
           payload: {
             tabId,
-            auctionEvents: this.auctionEvents[tabId],
+            auctionEvents: isMultiSellerAuction
+              ? groupedAuctionBids
+              : this.auctionEvents[tabId],
+            multiSellerAuction: isMultiSellerAuction,
           },
         });
       }
