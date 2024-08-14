@@ -175,7 +175,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     this.debugLog(`Starting navigation to URL: ${url}`);
@@ -195,7 +195,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     try {
@@ -203,7 +203,7 @@ export class BrowserManagement {
         window.scrollBy(0, 10000);
       });
     } catch (error) {
-      this.debugLog('Scrolled to end of page');
+      this.debugLog('Scrolled to the end of page');
       //ignore
     }
 
@@ -611,7 +611,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     const domQueryMatches: LibraryData = {};
