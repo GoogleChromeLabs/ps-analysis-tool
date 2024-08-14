@@ -480,10 +480,10 @@ export class BrowserManagement {
     const page = this.pages[pageId];
 
     if (!page) {
-      throw new Error(`no page with the provided id was found:${pageId}`);
+      throw new Error(`No page with the provided ID was found:${pageId}`);
     }
 
-    this.debugLog('Attaching network event listeners to page');
+    this.debugLog('Attaching network event listeners to the page');
 
     const cdpSession = await page.createCDPSession();
 
