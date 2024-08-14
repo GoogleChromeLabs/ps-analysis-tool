@@ -44,15 +44,16 @@ import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
 
 export interface singleAuctionEvent {
-  bidCurrency: string;
+  bidCurrency?: string;
   uniqueAuctionId?: Protocol.Storage.InterestGroupAuctionId;
-  bid: number | null;
-  name: string;
-  ownerOrigin: string;
+  bid?: number;
+  name?: string;
+  ownerOrigin?: string;
   type: string;
   formattedTime: string | Date;
+  componentSellerOrigin?: string;
   time: number;
-  auctionConfig: object;
+  auctionConfig?: object;
   interestGroupConfig?: Protocol.Storage.InterestGroupAccessedEvent;
   parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
   eventType:
@@ -76,14 +77,16 @@ class DataStore {
    * The auction data of the tabs.
    */
   auctionEvents: {
-    [tabId: number]: singleAuctionEvent[];
+    [tabId: string]: {
+      [uniqueAuctionId: string]: singleAuctionEvent[];
+    };
   } = {};
 
   /**
    * The auction data of the tabs.
    */
   auctionDataForTabId: {
-    [tabId: number]: {
+    [tabId: string]: {
       [uniqueAuctionId: Protocol.Storage.InterestGroupAuctionId]: {
         auctionTime: Protocol.Network.TimeSinceEpoch;
         auctionConfig?: any;
@@ -314,7 +317,7 @@ class DataStore {
     };
 
     this.tabsData[tabId] = {};
-    this.auctionEvents[tabId] = [];
+    this.auctionEvents[tabId.toString()] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -453,7 +456,7 @@ class DataStore {
     this.tabs[tabId].newUpdates = 0;
     this.tabs[tabId].frameIDURLSet = {};
     this.tabs[tabId].parentChildFrameAssociation = {};
-    this.auctionEvents[tabId] = [];
+    this.auctionEvents[tabId.toString()] = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 
@@ -545,9 +548,12 @@ class DataStore {
             [uniqueAuctionId: string]: singleAuctionEvent[];
           };
         } = {};
+        const auctionEventsToBeProcessed = Object.values(
+          this.auctionEvents[tabId]
+        ).flat();
 
         if (isMultiSellerAuction) {
-          this.auctionEvents[tabId].forEach((event) => {
+          auctionEventsToBeProcessed.forEach((event) => {
             if (!event?.parentAuctionId) {
               if (event?.uniqueAuctionId) {
                 if (!groupedAuctionBids[event?.uniqueAuctionId]) {

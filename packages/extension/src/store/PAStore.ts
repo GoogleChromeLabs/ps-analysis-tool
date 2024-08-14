@@ -48,13 +48,13 @@ class PAStore {
     const calculatedNetworkTime = networkTime(requestId, timestamp, tabId);
 
     auctions.forEach((uniqueAuctionId) => {
-      if (!dataStore.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId]) {
+      if (!dataStore.auctionDataForTabId[tabId][uniqueAuctionId]) {
         return;
       }
       const { auctionConfig = {} } =
-        dataStore.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId];
+        dataStore.auctionDataForTabId[tabId][uniqueAuctionId];
 
-      dataStore.auctionEvents[parseInt(tabId)].push({
+      dataStore.auctionEvents[tabId][uniqueAuctionId].push({
         uniqueAuctionId,
         bidCurrency: auctionConfig?.bidCurrency ?? '',
         bid: auctionConfig?.bid ?? null,
@@ -62,16 +62,16 @@ class PAStore {
         ownerOrigin: auctionConfig?.ownerOrigin ?? '',
         type: method + type,
         formattedTime:
-          dataStore.auctionEvents[parseInt(tabId)].length === 0
+          dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
             ? '0 ms'
             : formatTime(
-                dataStore.auctionEvents[parseInt(tabId)][0].time,
+                dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
                 networkTime(requestId, timestamp, tabId)
               ),
         time: calculatedNetworkTime,
         auctionConfig,
         parentAuctionId: uniqueAuctionId
-          ? dataStore.auctionDataForTabId[parseInt(tabId)]?.[uniqueAuctionId]
+          ? dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId]
               ?.parentAuctionId
           : undefined,
         eventType: 'interestGroupAuctionNetworkRequestCompleted',
@@ -84,7 +84,9 @@ class PAStore {
    * @param {singleAuctionEvent[]} auctionEvents This is used to get the related data for parsing the request.
    * @returns { boolean } True for multiSeller False for singleSeller
    */
-  isMUltiSellerAuction(auctionEvents: singleAuctionEvent[]): boolean {
+  isMUltiSellerAuction(auctionEvents: {
+    [uniqueAuctionId: string]: singleAuctionEvent[];
+  }): boolean {
     const uniqueSellers = new Set<string>();
 
     auctionEvents
@@ -94,6 +96,153 @@ class PAStore {
       .forEach(({ auctionConfig }) => uniqueSellers.add(auctionConfig?.seller));
 
     return uniqueSellers.size > 1;
+  }
+
+  /**
+   * Processes interest group acccess event.
+   * @param {Protocol.Storage.InterestGroupAccessedEvent} interestGroupAccessedParams The params that were passed when interestGroupAccessed Event was fired
+   * @param {string} tabId The tabId for which the event has to be added.
+   */
+  processInterestGroupEvent(
+    interestGroupAccessedParams: Protocol.Storage.InterestGroupAccessedEvent,
+    tabId: string
+  ) {
+    const { uniqueAuctionId, accessTime, ownerOrigin, name, type } =
+      interestGroupAccessedParams;
+
+    if (!uniqueAuctionId) {
+      return;
+    }
+    const {
+      bid: initialBidValue,
+      componentSellerOrigin,
+      bidCurrency: initialBidCurrencyValue,
+    } = interestGroupAccessedParams;
+
+    let bid;
+
+    if (initialBidValue) {
+      bid = initialBidValue;
+    }
+
+    if (!initialBidValue && type === 'win') {
+      bid = dataStore.auctionEvents[tabId][uniqueAuctionId].filter(
+        ({
+          type: storedType,
+          eventType,
+          interestGroupConfig: { uniqueAuctionId: eventAuctionId } = {},
+        }) =>
+          storedType === 'bid' &&
+          eventType === 'interestGroupAccessed' &&
+          eventAuctionId &&
+          uniqueAuctionId &&
+          eventAuctionId === interestGroupAccessedParams.uniqueAuctionId
+      )?.[0]?.bid;
+    }
+    const eventData: singleAuctionEvent = {
+      uniqueAuctionId,
+      name,
+      ownerOrigin,
+      formattedTime:
+        dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
+          ? '0 ms'
+          : formatTime(
+              dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
+              accessTime
+            ),
+      type,
+      time: accessTime,
+      parentAuctionId:
+        dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId]
+          ?.parentAuctionId ?? undefined,
+      eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
+    };
+
+    if (componentSellerOrigin) {
+      eventData.componentSellerOrigin = componentSellerOrigin;
+    }
+
+    if (bid) {
+      eventData.bid = bid;
+    }
+
+    if (initialBidCurrencyValue) {
+      eventData.bidCurrency = initialBidCurrencyValue;
+    }
+
+    dataStore.auctionEvents[tabId][uniqueAuctionId].push(eventData);
+  }
+
+  /**
+   * Process StartFetchEvents
+   * @param {Protocol.Storage.InterestGroupAuctionId[]} auctions Unique auction id's which need to be added to the event data store.
+   * @param {string} tabId The tabId for which the event has to be added.
+   * @param {string} requestId The requestId associated with the event.
+   * @param {string} type The type of JS which was fetched.
+   */
+  processStartFetchEvents(
+    auctions: Protocol.Storage.InterestGroupAuctionId[],
+    tabId: string,
+    requestId: string,
+    type: string
+  ) {
+    const time: number =
+      networkTime(
+        requestId,
+        dataStore.requestIdToCDPURLMapping[tabId][requestId].timeStamp,
+        tabId
+      ) ?? new Date().getTime();
+
+    auctions.forEach((uniqueAuctionId) => {
+      dataStore.auctionEvents[tabId][uniqueAuctionId].push({
+        uniqueAuctionId,
+        formattedTime:
+          dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
+            ? '0 ms'
+            : formatTime(
+                dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
+                time
+              ),
+        type: 'Start fetch ' + type,
+        time,
+        parentAuctionId:
+          dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId]
+            ?.parentAuctionId,
+        eventType: 'interestGroupAuctionNetworkRequestCreated',
+      });
+    });
+  }
+
+  /**
+   * Process InterestGroupAuctionEventOccurred
+   * @param {Protocol.Storage.InterestGroupAuctionEventOccurredEvent} interestGroupAuctionEventOccured Event data passed to the InterestGroupAuctionEventOccurred
+   * @param {string} tabId The tabId for which the event has to be added.
+   */
+  processInterestGroupAuctionEventOccurred(
+    interestGroupAuctionEventOccured: Protocol.Storage.InterestGroupAuctionEventOccurredEvent,
+    tabId: string
+  ) {
+    const { uniqueAuctionId, eventTime, type, auctionConfig, parentAuctionId } =
+      interestGroupAuctionEventOccured;
+
+    const eventData = {
+      uniqueAuctionId,
+      type,
+      formattedTime:
+        dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
+          ? '0 ms'
+          : formatTime(
+              dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
+              eventTime
+            ),
+      time: eventTime,
+      auctionConfig,
+      parentAuctionId,
+      eventType:
+        'interestGroupAuctionEventOccurred' as singleAuctionEvent['eventType'],
+    };
+
+    dataStore.auctionEvents[tabId][uniqueAuctionId].push(eventData);
   }
 }
 

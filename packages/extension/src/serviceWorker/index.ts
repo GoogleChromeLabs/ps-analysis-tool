@@ -24,8 +24,6 @@ import { Protocol } from 'devtools-protocol';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 
 import './chromeListeners';
-import networkTime from '../store/utils/networkTime';
-import formatTime from '../store/utils/formatTime';
 import dataStore from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
@@ -192,45 +190,21 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const interestGroupAuctionEventOccured =
           params as Protocol.Storage.InterestGroupAuctionEventOccurredEvent;
 
-        const { uniqueAuctionId } = interestGroupAuctionEventOccured;
-        if (interestGroupAuctionEventOccured.type === 'started') {
-          dataStore.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId] = {
-            auctionTime: interestGroupAuctionEventOccured.eventTime,
-            auctionConfig: interestGroupAuctionEventOccured.auctionConfig,
-            parentAuctionId: interestGroupAuctionEventOccured.parentAuctionId,
-          };
-        }
+        const { uniqueAuctionId, eventTime, auctionConfig, parentAuctionId } =
+          interestGroupAuctionEventOccured;
 
-        if (
-          interestGroupAuctionEventOccured.type === 'configResolved' ||
-          interestGroupAuctionEventOccured.type === 'started'
-        ) {
-          dataStore.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId] = {
-            ...dataStore.auctionDataForTabId[parseInt(tabId)][uniqueAuctionId],
-            auctionConfig: interestGroupAuctionEventOccured.auctionConfig,
-            parentAuctionId: interestGroupAuctionEventOccured.parentAuctionId,
-          };
+        dataStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
+          ...(dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
+          auctionConfig,
+          parentAuctionId,
+          auctionTime: eventTime,
+        };
 
-          dataStore.auctionEvents[parseInt(tabId)].push({
-            uniqueAuctionId,
-            bidCurrency: '',
-            bid: null,
-            name: '',
-            ownerOrigin: '',
-            type: interestGroupAuctionEventOccured.type,
-            formattedTime:
-              dataStore.auctionEvents[parseInt(tabId)].length === 0
-                ? '0 ms'
-                : formatTime(
-                    dataStore.auctionEvents[parseInt(tabId)][0].time,
-                    interestGroupAuctionEventOccured.eventTime
-                  ),
-            time: interestGroupAuctionEventOccured.eventTime,
-            auctionConfig: interestGroupAuctionEventOccured.auctionConfig,
-            parentAuctionId: interestGroupAuctionEventOccured.parentAuctionId,
-            eventType: 'interestGroupAuctionEventOccurred',
-          });
-        }
+        PAStore.processInterestGroupAuctionEventOccurred(
+          interestGroupAuctionEventOccured,
+          tabId
+        );
+
         return;
       }
 
@@ -238,50 +212,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const interestGroupAccessedParams =
           params as Protocol.Storage.InterestGroupAccessedEvent;
 
-        let bid = null;
-
-        if (interestGroupAccessedParams?.bid) {
-          bid = interestGroupAccessedParams?.bid;
-        }
-        if (
-          !interestGroupAccessedParams?.bid &&
-          interestGroupAccessedParams.type === 'win'
-        ) {
-          bid = dataStore.auctionEvents[parseInt(tabId)].filter(
-            (event) =>
-              event?.type === 'bid' &&
-              event.eventType === 'interestGroupAccessed' &&
-              event?.interestGroupConfig?.uniqueAuctionId &&
-              interestGroupAccessedParams?.uniqueAuctionId &&
-              event?.interestGroupConfig?.uniqueAuctionId ===
-                interestGroupAccessedParams.uniqueAuctionId
-          )?.[0]?.bid;
-        }
-
-        dataStore.auctionEvents[parseInt(tabId)].push({
-          uniqueAuctionId: interestGroupAccessedParams?.uniqueAuctionId,
-          bidCurrency: interestGroupAccessedParams?.bidCurrency ?? '',
-          bid: bid && bid > 0 ? bid : null,
-          name: interestGroupAccessedParams.name,
-          ownerOrigin: interestGroupAccessedParams.ownerOrigin,
-          formattedTime:
-            dataStore.auctionEvents[parseInt(tabId)].length === 0
-              ? '0 ms'
-              : formatTime(
-                  dataStore.auctionEvents[parseInt(tabId)][0].time,
-                  interestGroupAccessedParams.accessTime
-                ),
-          type: interestGroupAccessedParams.type,
-          time: interestGroupAccessedParams.accessTime,
-          auctionConfig: {},
-          interestGroupConfig: interestGroupAccessedParams,
-          parentAuctionId: interestGroupAccessedParams?.uniqueAuctionId
-            ? dataStore.auctionDataForTabId[parseInt(tabId)]?.[
-                interestGroupAccessedParams?.uniqueAuctionId
-              ]?.parentAuctionId
-            : undefined,
-          eventType: 'interestGroupAccessed',
-        });
+        PAStore.processInterestGroupEvent(interestGroupAccessedParams, tabId);
       }
 
       if (
@@ -291,50 +222,16 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const interestGroupAuctionNetworkRequestCreatedParams =
           params as Protocol.Storage.InterestGroupAuctionNetworkRequestCreatedEvent;
 
-        const requestId =
-          interestGroupAuctionNetworkRequestCreatedParams.requestId;
+        const { auctions, type, requestId } =
+          interestGroupAuctionNetworkRequestCreatedParams;
 
         dataStore.unParsedRequestHeadersForPA[tabId][requestId] = {
-          auctions: interestGroupAuctionNetworkRequestCreatedParams.auctions,
-          type: interestGroupAuctionNetworkRequestCreatedParams.type,
+          auctions,
+          type,
         };
 
         if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
-          const time: number =
-            networkTime(
-              requestId,
-              dataStore.requestIdToCDPURLMapping[tabId][requestId].timeStamp,
-              tabId
-            ) ?? new Date().getTime();
-          interestGroupAuctionNetworkRequestCreatedParams.auctions.forEach(
-            (uniqueAuctionId) => {
-              dataStore.auctionEvents[parseInt(tabId)].push({
-                uniqueAuctionId,
-                bidCurrency: '',
-                bid: null,
-                name: '',
-                ownerOrigin: '',
-                formattedTime:
-                  dataStore.auctionEvents[parseInt(tabId)].length === 0
-                    ? '0 ms'
-                    : formatTime(
-                        dataStore.auctionEvents[parseInt(tabId)][0].time,
-                        time
-                      ),
-                type:
-                  'Start fetch ' +
-                  interestGroupAuctionNetworkRequestCreatedParams.type,
-                time,
-                auctionConfig: {},
-                parentAuctionId: uniqueAuctionId
-                  ? dataStore.auctionDataForTabId[parseInt(tabId)]?.[
-                      uniqueAuctionId
-                    ]?.parentAuctionId
-                  : undefined,
-                eventType: 'interestGroupAuctionNetworkRequestCreated',
-              });
-            }
-          );
+          PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
         }
 
         return;
@@ -392,35 +289,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
 
         if (dataStore.unParsedRequestHeadersForPA[tabId][requestId]) {
-          dataStore.unParsedRequestHeadersForPA[tabId][
-            requestId
-          ].auctions.forEach((uniqueAuctionId) => {
-            dataStore.auctionEvents[parseInt(tabId)].push({
-              uniqueAuctionId,
-              bidCurrency: '',
-              bid: null,
-              name: '',
-              ownerOrigin: '',
-              type:
-                'Start fetch ' +
-                dataStore.unParsedRequestHeadersForPA[tabId][requestId].type,
-              formattedTime:
-                dataStore.auctionEvents[parseInt(tabId)].length === 0
-                  ? '0 ms'
-                  : formatTime(
-                      dataStore.auctionEvents[parseInt(tabId)][0].time,
-                      networkTime(requestId, timestamp, tabId)
-                    ),
-              time: networkTime(requestId, timestamp, tabId),
-              auctionConfig: {},
-              parentAuctionId: uniqueAuctionId
-                ? dataStore.auctionDataForTabId[parseInt(tabId)]?.[
-                    uniqueAuctionId
-                  ]?.parentAuctionId
-                : undefined,
-              eventType: 'interestGroupAuctionNetworkRequestCreated',
-            });
-          });
+          const { auctions, type } =
+            dataStore.unParsedRequestHeadersForPA[tabId][requestId];
+
+          PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
         }
 
         if (
@@ -482,6 +354,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           dataStore.unParsedRequestHeadersForCA[tabId][requestId] =
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
         }
+
         return;
       }
 
