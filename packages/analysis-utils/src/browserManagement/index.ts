@@ -105,7 +105,7 @@ export class BrowserManagement {
       headless: this.isHeadless,
       args,
     });
-    this.debugLog('Browser intialized');
+    this.debugLog('Browser initialized');
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -152,7 +152,7 @@ export class BrowserManagement {
 
   async openPage(): Promise<Page> {
     if (!this.browser) {
-      throw new Error('Browser not intialized');
+      throw new Error('Browser not initialized');
     }
     const sitePage = await this.browser.newPage();
 

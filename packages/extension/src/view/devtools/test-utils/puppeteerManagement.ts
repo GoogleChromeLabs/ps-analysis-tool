@@ -73,7 +73,7 @@ export class PuppeteerManagement {
 
   async openPage(): Promise<Page> {
     if (!this.browser) {
-      throw new Error('Browser not intialized');
+      throw new Error('Browser not initialized');
     }
     const sitePage = await this.browser.newPage();
     const pages = await this.browser.pages();
