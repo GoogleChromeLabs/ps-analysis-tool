@@ -41,9 +41,13 @@ import { useCookie, useSettings } from '../../../stateProviders';
 
 interface BlockedCookiesSectionProps {
   tabCookies: TabCookies;
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
 
-const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
+const BlockedCookiesSection = ({
+  tabCookies,
+  isFilterValueSelected,
+}: BlockedCookiesSectionProps) => {
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
   }));
@@ -87,6 +91,8 @@ const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
         containerClasses: '',
         onClick: (title: string) =>
           selectedItemUpdater(title, 'blockedReasons'),
+        isSelected: (title: string) =>
+          isFilterValueSelected('blockedReasons', title),
       };
     });
 
