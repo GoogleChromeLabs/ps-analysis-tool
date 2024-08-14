@@ -40,10 +40,12 @@ import { useCookie } from '../../../stateProviders';
 
 interface ExemptedCookiesSectionProps {
   tabCookies: TabCookies;
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
 
 const ExemptedCookiesSection = ({
   tabCookies,
+  isFilterValueSelected,
 }: ExemptedCookiesSectionProps) => {
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
@@ -65,6 +67,8 @@ const ExemptedCookiesSection = ({
         onClick: (title: string) => {
           selectedItemUpdater(title, 'exemptionReason');
         },
+        isSelected: (title: string) =>
+          isFilterValueSelected(title, 'exemptionReason'),
       };
     });
   const exemptedCookiesDataMapping: DataMapping[] = [
