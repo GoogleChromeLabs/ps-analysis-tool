@@ -65,7 +65,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             return {
               ...event,
               details: {
-                ...result,
+                ...result.details,
               },
             };
           })
