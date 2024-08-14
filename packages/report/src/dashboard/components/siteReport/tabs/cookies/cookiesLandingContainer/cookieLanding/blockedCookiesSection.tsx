@@ -38,12 +38,14 @@ interface BlockedCookiesSectionProps {
   tabCookies: TabCookies | null;
   cookiesWithIssues: TabCookies | null;
   tabFrames: TabFrames | null;
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
 
 const BlockedCookiesSection = ({
   tabCookies,
   cookiesWithIssues,
   tabFrames,
+  isFilterValueSelected,
 }: BlockedCookiesSectionProps) => {
   const { selectedItemUpdater, multiSelectItemUpdater } = useFiltersMapping(
     tabFrames || {}
@@ -92,6 +94,8 @@ const BlockedCookiesSection = ({
         containerClasses: '',
         onClick: (title: string) =>
           selectedItemUpdater(title, 'blockedReasons', selectTabFrame(title)),
+        isSelected: (title: string) =>
+          isFilterValueSelected('blockedReasons', title),
       };
     });
 
@@ -113,6 +117,8 @@ const BlockedCookiesSection = ({
             'analytics.category': [title],
           });
         },
+        isSelected: (title: string) =>
+          isFilterValueSelected('analytics.category', title),
       };
     });
 

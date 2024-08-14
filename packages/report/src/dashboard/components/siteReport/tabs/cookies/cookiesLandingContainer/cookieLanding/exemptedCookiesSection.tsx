@@ -38,11 +38,13 @@ import {
 interface ExemptedCookiesSectionProps {
   tabCookies: TabCookies | null;
   tabFrames: TabFrames | null;
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
 
 const ExemptedCookiesSection = ({
   tabCookies,
   tabFrames,
+  isFilterValueSelected,
 }: ExemptedCookiesSectionProps) => {
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
   const cookieStats = useMemo(
@@ -79,6 +81,8 @@ const ExemptedCookiesSection = ({
         onClick: (title: string) => {
           selectedItemUpdater(title, 'exemptionReason', selectTabFrame(title));
         },
+        isSelected: (title: string) =>
+          isFilterValueSelected('exemptionReason', title),
       };
     });
 
