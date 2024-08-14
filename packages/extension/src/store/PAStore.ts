@@ -54,7 +54,7 @@ class PAStore {
       const { auctionConfig = {} } =
         dataStore.auctionDataForTabId[tabId][uniqueAuctionId];
 
-      dataStore.auctionEvents[tabId][uniqueAuctionId].push({
+      this.getAuctionEventsArray(tabId, uniqueAuctionId).push({
         uniqueAuctionId,
         bidCurrency: auctionConfig?.bidCurrency ?? '',
         bid: auctionConfig?.bid ?? null,
@@ -62,7 +62,7 @@ class PAStore {
         ownerOrigin: auctionConfig?.ownerOrigin ?? '',
         type: method + type,
         formattedTime:
-          dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
+          this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
             ? '0 ms'
             : formatTime(
                 dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
@@ -84,9 +84,7 @@ class PAStore {
    * @param {singleAuctionEvent[]} auctionEvents This is used to get the related data for parsing the request.
    * @returns { boolean } True for multiSeller False for singleSeller
    */
-  isMUltiSellerAuction(auctionEvents: {
-    [uniqueAuctionId: string]: singleAuctionEvent[];
-  }): boolean {
+  isMUltiSellerAuction(auctionEvents: singleAuctionEvent[]): boolean {
     const uniqueSellers = new Set<string>();
 
     auctionEvents
@@ -113,6 +111,7 @@ class PAStore {
     if (!uniqueAuctionId) {
       return;
     }
+
     const {
       bid: initialBidValue,
       componentSellerOrigin,
@@ -126,7 +125,7 @@ class PAStore {
     }
 
     if (!initialBidValue && type === 'win') {
-      bid = dataStore.auctionEvents[tabId][uniqueAuctionId].filter(
+      bid = this.getAuctionEventsArray(tabId, uniqueAuctionId).filter(
         ({
           type: storedType,
           eventType,
@@ -144,7 +143,7 @@ class PAStore {
       name,
       ownerOrigin,
       formattedTime:
-        dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
+        this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
           ? '0 ms'
           : formatTime(
               dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
@@ -170,7 +169,7 @@ class PAStore {
       eventData.bidCurrency = initialBidCurrencyValue;
     }
 
-    dataStore.auctionEvents[tabId][uniqueAuctionId].push(eventData);
+    this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
   }
 
   /**
@@ -194,7 +193,7 @@ class PAStore {
       ) ?? new Date().getTime();
 
     auctions.forEach((uniqueAuctionId) => {
-      dataStore.auctionEvents[tabId][uniqueAuctionId].push({
+      this.getAuctionEventsArray(tabId, uniqueAuctionId).push({
         uniqueAuctionId,
         formattedTime:
           dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
@@ -229,7 +228,7 @@ class PAStore {
       uniqueAuctionId,
       type,
       formattedTime:
-        dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
+        this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
           ? '0 ms'
           : formatTime(
               dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
@@ -242,7 +241,20 @@ class PAStore {
         'interestGroupAuctionEventOccurred' as singleAuctionEvent['eventType'],
     };
 
-    dataStore.auctionEvents[tabId][uniqueAuctionId].push(eventData);
+    this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
+  }
+
+  /**
+   * Push into auction events
+   * @param {string} tabId The ID of the tab auction event is associated with.
+   * @param {string} uniqueAuctionId The ID of the auction event whose array is to be fetched.
+   * @returns {object} An object holder reporesenting the event data.
+   */
+  getAuctionEventsArray(tabId: string, uniqueAuctionId: string) {
+    if (!dataStore.auctionEvents[tabId][uniqueAuctionId]) {
+      dataStore.auctionEvents[tabId][uniqueAuctionId] = [];
+    }
+    return dataStore.auctionEvents[tabId][uniqueAuctionId];
   }
 }
 
