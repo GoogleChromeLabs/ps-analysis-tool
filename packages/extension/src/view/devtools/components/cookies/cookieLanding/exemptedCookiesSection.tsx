@@ -68,7 +68,7 @@ const ExemptedCookiesSection = ({
           selectedItemUpdater(title, 'exemptionReason');
         },
         isSelected: (title: string) =>
-          isFilterValueSelected(title, 'exemptionReason'),
+          isFilterValueSelected('exemptionReason', title),
       };
     });
   const exemptedCookiesDataMapping: DataMapping[] = [
