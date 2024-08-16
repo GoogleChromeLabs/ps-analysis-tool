@@ -67,7 +67,7 @@ const RWSJsonGenerator = () => {
       <div className="overflow-auto">
         <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
           <p
-            className="text-xs"
+            className="text-sm"
             dangerouslySetInnerHTML={{
               __html: I18n.getMessage('rwsJsonGeneratorNote', [
                 `<a

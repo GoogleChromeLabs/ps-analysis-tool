@@ -70,10 +70,14 @@ const Tabs = ({ items }: TabsProps) => {
             onKeyDown={handleKeyDown}
             autoFocus={index === 0}
             className={classNames(
-              'pb-1.5 hover:opacity-80 outline-none text-raisin-black dark:text-bright-gray text-sm',
+              'pb-1.5 px-3 border-b-2 hover:opacity-80 outline-none text-sm',
               {
-                'border-b-2 border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
+                'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
                   index === activeTab,
+              },
+              {
+                'border-transparent text-raisin-black dark:text-bright-gray':
+                  index !== activeTab,
               }
             )}
           >
