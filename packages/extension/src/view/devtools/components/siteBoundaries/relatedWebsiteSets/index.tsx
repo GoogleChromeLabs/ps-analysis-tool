@@ -35,7 +35,7 @@ const RelatedWebsiteSets = () => {
   const tabItems = useMemo(
     () => [
       {
-        title: 'Info Card',
+        title: 'Overview',
         content: {
           Element: InfoCard,
           props: {

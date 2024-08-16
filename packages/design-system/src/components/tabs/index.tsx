@@ -62,7 +62,7 @@ const Tabs = ({ items }: TabsProps) => {
 
   return (
     <div className="max-w-2xl h-fit px-4">
-      <div className="flex gap-6 border-b border-gray-300 dark:border-quartz">
+      <div className="flex gap-10 border-b border-gray-300 dark:border-quartz">
         {items.map((item, index) => (
           <button
             key={index}
@@ -70,7 +70,7 @@ const Tabs = ({ items }: TabsProps) => {
             onKeyDown={handleKeyDown}
             autoFocus={index === 0}
             className={classNames(
-              'hover:opacity-80 outline-none text-raisin-black dark:text-bright-gray',
+              'pb-1.5 hover:opacity-80 outline-none text-raisin-black dark:text-bright-gray text-sm',
               {
                 'border-b-2 border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
                   index === activeTab,
