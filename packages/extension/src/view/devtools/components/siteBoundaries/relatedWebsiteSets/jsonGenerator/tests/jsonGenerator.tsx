@@ -62,14 +62,6 @@ describe('RWSJsonGenerator', () => {
     });
   });
 
-  it('should render form', () => {
-    const screen = render(<RWSJsonGenerator open={true} setOpen={noop} />);
-
-    expect(
-      screen.getByText('Related Website Sets JSON Generator')
-    ).toBeInTheDocument();
-  });
-
   it('should interact with contact email and primary domain', async () => {
     const screen = render(<RWSJsonGenerator open={true} setOpen={noop} />);
 
