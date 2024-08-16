@@ -17,18 +17,42 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import React, { useMemo } from 'react';
+import {
+  InfoCard,
+  PSInfoKey,
+  QuickLinksList,
+  Tabs,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 const ProtectedAudience = () => {
+  const tabItems = useMemo(
+    () => [
+      {
+        title: 'Overview',
+        content: {
+          Element: InfoCard,
+          props: {
+            infoKey: PSInfoKey.ProtectedAudience,
+          },
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <div data-testid="protected-audience-content" className="h-full w-full">
-      <LandingPage
-        title={I18n.getMessage('protectedAudience')}
-        psInfoKey={PSInfoKey.ProtectedAudience}
-        extraClasses="max-w-2xl h-fit"
-      />
+      <div className="p-4">
+        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+          <h1 className="text-left">{I18n.getMessage('protectedAudience')}</h1>
+        </div>
+      </div>
+      <Tabs items={tabItems} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
     </div>
   );
 };
