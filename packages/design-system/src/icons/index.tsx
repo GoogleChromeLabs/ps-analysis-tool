@@ -75,3 +75,5 @@ export { default as WarningBare } from './warning.svg';
 export { default as GroupsIcon } from './groups.svg';
 export { default as FrameIcon } from './frame.svg';
 export { default as ScreenIcon } from './screen.svg';
+export { default as BottomTrayIcon } from './bottom-tray.svg';
+export { default as BreakpointIcon } from './breakpoint.svg';
