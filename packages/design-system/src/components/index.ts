@@ -55,3 +55,4 @@ export { default as useGlobalFiltering } from './cookiesLanding/useGlobalFilteri
 export { default as Tabs } from './tabs';
 export { default as QuickLinksList } from './landingPage/quickLinksList';
 export { default as Pill } from './pill';
+export { default as PillToggle } from './pillToggle';
