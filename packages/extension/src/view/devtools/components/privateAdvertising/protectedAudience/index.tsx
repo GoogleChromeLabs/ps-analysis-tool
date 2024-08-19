@@ -25,6 +25,10 @@ import {
   Tabs,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import InterestGroups from './interestGroups';
+import AdUnits from './adUnits';
+import Auctions from './auctions';
+import Bids from './bids';
 
 const ProtectedAudience = () => {
   const tabItems = useMemo(
@@ -36,6 +40,30 @@ const ProtectedAudience = () => {
           props: {
             infoKey: PSInfoKey.ProtectedAudience,
           },
+        },
+      },
+      {
+        title: 'Interest Groups',
+        content: {
+          Element: InterestGroups,
+        },
+      },
+      {
+        title: 'Ad Units',
+        content: {
+          Element: AdUnits,
+        },
+      },
+      {
+        title: 'Auctions',
+        content: {
+          Element: Auctions,
+        },
+      },
+      {
+        title: 'Bids',
+        content: {
+          Element: Bids,
         },
       },
     ],
