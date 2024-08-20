@@ -181,7 +181,7 @@ describe('SynchnorousCookieStore:', () => {
     );
 
     expect(dataStore.tabsData[123456]['_cbcnn.com/'].blockedReasons).toContain(
-      'ExcludeSameSiteUnspecifiedTreatedAsLax'
+      'SameSiteUnspecifiedTreatedAsLax'
     );
   });
 
