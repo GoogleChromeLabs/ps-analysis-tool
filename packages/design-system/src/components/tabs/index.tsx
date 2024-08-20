@@ -25,6 +25,7 @@ export type TabItems = Array<{
   content: {
     Element: (props: any) => React.JSX.Element;
     props?: Record<string, any>;
+    className?: string;
   };
 }>;
 interface TabsProps {

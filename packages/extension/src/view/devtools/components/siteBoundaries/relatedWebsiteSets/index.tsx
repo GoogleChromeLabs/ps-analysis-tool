@@ -76,7 +76,7 @@ const RelatedWebsiteSets = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
-      <div className="p-4 flex-1 max-w-2xl">
+      <div className="p-4 max-w-2xl">
         {ActiveTabContent && (
           <ActiveTabContent {...tabItems[activeTab].content.props} />
         )}
