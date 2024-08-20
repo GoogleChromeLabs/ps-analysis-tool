@@ -227,7 +227,7 @@ program.parse();
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analyzing cookies on first site visit',
+    text: 'Analyzing cookies on the first site visit',
   });
 
   const cookieAnalysisAndFetchedResourceData =
@@ -322,12 +322,12 @@ program.parse();
 })().catch((error) => {
   const spinnies = new Spinnies();
   spinnies.add('error-line-1', {
-    text: 'Some error occured while analyzing the website.',
+    text: 'Some errors occurred while analyzing the website.',
     status: 'non-spinnable',
     color: 'red',
   });
   spinnies.add('error-line-2', {
-    text: 'For more information check the stack trace below:\n',
+    text: 'For more information, check the stack trace below:\n',
     status: 'non-spinnable',
     color: 'red',
   });

@@ -73,7 +73,7 @@ export class PuppeteerManagement {
 
   async openPage(): Promise<Page> {
     if (!this.browser) {
-      throw new Error('Browser not intialized');
+      throw new Error('Browser not initialized');
     }
     const sitePage = await this.browser.newPage();
     const pages = await this.browser.pages();
@@ -100,11 +100,11 @@ export class PuppeteerManagement {
       return t.type() === 'other' && t.url().startsWith('devtools://');
     });
     if (!devtoolsTargets) {
-      throw new Error('Devtools targets not found.');
+      throw new Error('DevTools targets not found.');
     }
     const devtools = await devtoolsTargets.page();
     if (!devtools) {
-      throw new Error('Devtools not found.');
+      throw new Error('DevTools not found.');
     }
 
     return devtools;
