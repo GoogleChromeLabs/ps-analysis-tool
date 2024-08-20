@@ -17,21 +17,41 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  InfoCard,
+  InfoCard as InfoCardTemplate,
   PSInfoKey,
   QuickLinksList,
   Tabs,
+  type PSInfoKeyType,
+  type TabItems,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import InterestGroups from './interestGroups';
 import AdUnits from './adUnits';
 import Auctions from './auctions';
 import Bids from './bids';
+import classNames from 'classnames';
+
+const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
+  return (
+    <>
+      <InfoCardTemplate infoKey={infoKey} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
+    </>
+  );
+};
 
 const ProtectedAudience = () => {
-  const tabItems = useMemo(
+  const [activeTab, setActiveTab] = useState(0);
+
+  const tabItems = useMemo<TabItems>(
     () => [
       {
         title: 'Overview',
@@ -40,18 +60,21 @@ const ProtectedAudience = () => {
           props: {
             infoKey: PSInfoKey.ProtectedAudience,
           },
+          className: 'p-4',
         },
       },
       {
         title: 'Interest Groups',
         content: {
           Element: InterestGroups,
+          className: 'pt-4 overflow-hidden',
         },
       },
       {
         title: 'Ad Units',
         content: {
           Element: AdUnits,
+          className: 'overflow-hidden',
         },
       },
       {
@@ -70,16 +93,29 @@ const ProtectedAudience = () => {
     []
   );
 
+  const ActiveTabContent = tabItems[activeTab].content.Element;
+
   return (
-    <div data-testid="protected-audience-content" className="h-full w-full">
+    <div
+      data-testid="protected-audience-content"
+      className="h-screen w-full flex flex-col"
+    >
       <div className="p-4">
         <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
           <h1 className="text-left">{I18n.getMessage('protectedAudience')}</h1>
         </div>
       </div>
-      <Tabs items={tabItems} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
+      <Tabs
+        items={tabItems}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+      <div
+        className={classNames(tabItems[activeTab].content.className, 'flex-1')}
+      >
+        {ActiveTabContent && (
+          <ActiveTabContent {...tabItems[activeTab].content.props} />
+        )}
       </div>
     </div>
   );

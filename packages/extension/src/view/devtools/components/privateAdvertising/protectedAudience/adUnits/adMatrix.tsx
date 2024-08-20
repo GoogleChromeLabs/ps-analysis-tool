@@ -17,35 +17,63 @@
 /**
  * External dependencies.
  */
-import { Matrix } from '@google-psat/design-system';
 import React from 'react';
+import { MatrixComponent } from '@google-psat/design-system';
 
 const AdMatrix = () => {
   const matrixData = [
     {
       title: 'Ad Unit 1',
       count: 5,
-      color: 'red',
+      color: '#5CC971',
       description: 'This is the first ad unit',
-      countClassName: 'text-red-500',
+      countClassName: 'text-[#5CC971]',
     },
     {
       title: 'Ad Unit 2',
       count: 10,
-      color: 'blue',
+      color: '#F3AE4E',
       description: 'This is the second ad unit',
-      countClassName: 'text-blue-500',
+      countClassName: 'text-[#F3AE4E]',
     },
     {
       title: 'Ad Unit 3',
       count: 15,
-      color: 'green',
+      color: '#4C79F4',
       description: 'This is the third ad unit',
-      countClassName: 'text-green-500',
+      countClassName: 'text-[#4C79F4]',
+    },
+    {
+      title: 'Ad Unit 4',
+      count: 20,
+      color: '#EC7159',
+      description: 'This is the fourth ad unit',
+      countClassName: 'text-[#EC7159]',
     },
   ];
 
-  return <Matrix dataComponents={matrixData} extraClasses="grid-cols-4" />;
+  return (
+    <div className="grid grid-cols-4 gap-x-2 max-w-2xl">
+      {matrixData.map((dataComponent, index) => {
+        if (dataComponent && dataComponent.countClassName) {
+          return (
+            <div key={index} className={'py-1'}>
+              <button className="p-3.5 w-full box-border cursor-default">
+                <MatrixComponent
+                  {...dataComponent}
+                  countClassName={
+                    dataComponent.countClassName + ' text-xxl leading-none'
+                  }
+                />
+              </button>
+            </div>
+          );
+        }
+
+        return null;
+      })}
+    </div>
+  );
 };
 
 export default AdMatrix;

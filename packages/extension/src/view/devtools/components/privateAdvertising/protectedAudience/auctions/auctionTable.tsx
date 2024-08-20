@@ -30,34 +30,75 @@ import {
 const AuctionTable = () => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
-  const tableColumns = useMemo<TableColumn[]>(() => [], []);
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Event Time',
+        accessorKey: 'eventTime',
+        cell: (info) => info,
+      },
+      {
+        header: 'Event',
+        accessorKey: 'event',
+        cell: (info) => info,
+      },
+      {
+        header: 'Interest Group Origin',
+        accessorKey: 'interestGroupOrigin',
+        cell: (info) => info,
+      },
+      {
+        header: 'Interest Group Name',
+        accessorKey: 'interestGroupName',
+        cell: (info) => info,
+      },
+      {
+        header: 'Bid',
+        accessorKey: 'bid',
+        cell: (info) => info,
+      },
+      {
+        header: 'Bid Currency',
+        accessorKey: 'bidCurrency',
+        cell: (info) => info,
+      },
+      {
+        header: 'Component Seller',
+        accessorKey: 'componentSeller',
+        cell: (info) => info,
+      },
+    ],
+    []
+  );
 
   return (
-    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
-      <div className="flex justify-between items-center">
+    <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
+      <div className="flex justify-between items-center px-1">
         <p>Started by: https://example.com</p>
         <p>Date</p>
       </div>
-      <TableProvider
-        data={[]}
-        tableColumns={tableColumns}
-        tableFilterData={undefined}
-        tableSearchKeys={undefined}
-        tablePersistentSettingsKey="adtable"
-        onRowClick={(row) => {
-          setSelectedRow(row);
-        }}
-        onRowContextMenu={noop}
-        getRowObjectKey={(row: TableRow) => {
-          return row.originalData.name;
-        }}
-      >
-        <Table hideFiltering={true} selectedKey={selectedRow?.name} />
-      </TableProvider>
-      <div>
+      <div className="border border-american-silver dark:border-quartz">
+        <TableProvider
+          data={[]}
+          tableColumns={tableColumns}
+          tableFilterData={undefined}
+          tableSearchKeys={undefined}
+          tablePersistentSettingsKey="adtable"
+          onRowClick={(row) => {
+            setSelectedRow(row);
+          }}
+          onRowContextMenu={noop}
+          getRowObjectKey={(row: TableRow) => {
+            return row.originalData.name;
+          }}
+        >
+          <Table hideFiltering={true} selectedKey={selectedRow?.name} />
+        </TableProvider>
+      </div>
+      <button className="flex gap-1 items-center hover:opacity-70 px-1">
         <BottomTrayIcon />
         Show Config
-      </div>
+      </button>
     </div>
   );
 };

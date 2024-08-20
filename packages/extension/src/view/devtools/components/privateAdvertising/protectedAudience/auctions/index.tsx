@@ -27,11 +27,11 @@ import BottomTray from './bottomTray';
 
 const Auctions = () => {
   return (
-    <>
+    <div className="w-full h-full p-4 flex flex-col gap-4">
       <Breakpoints />
       <AuctionTable />
       <BottomTray selectedRow={{}} />
-    </>
+    </div>
   );
 };
 

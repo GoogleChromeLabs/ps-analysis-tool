@@ -19,6 +19,8 @@
  */
 import { PillToggle } from '@google-psat/design-system';
 import React, { useState } from 'react';
+import { I18n } from '@google-psat/i18n';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -38,25 +40,54 @@ const Bids = () => {
   );
 
   return (
-    <>
-      <PillToggle
-        firstOption={PillToggleOptions.ReceivedBids}
-        secondOption={PillToggleOptions.NoBids}
-        pillToggle={pillToggle}
-        setPillToggle={setPillToggle}
-      />
-      {pillToggle === PillToggleOptions.ReceivedBids ? (
-        <ReceivedBidsTable
-          setSelectedRow={setSelectedRow}
-          selectedRow={selectedRow}
+    <div className="flex flex-col gap-4 pt-4 h-full w-full">
+      <div className="px-4">
+        <PillToggle
+          firstOption={PillToggleOptions.ReceivedBids}
+          secondOption={PillToggleOptions.NoBids}
+          pillToggle={pillToggle}
+          setPillToggle={setPillToggle}
         />
-      ) : (
-        <NoBidsTable
-          setSelectedRow={setSelectedRow}
-          selectedRow={selectedRow}
-        />
-      )}
-    </>
+      </div>
+      <div className="flex-1 border-t border-american-silver dark:border-quartz flex flex-col ">
+        <Resizable
+          defaultSize={{
+            width: '100%',
+            height: '80%',
+          }}
+          minHeight="20%"
+          maxHeight="90%"
+          enable={{
+            bottom: true,
+          }}
+        >
+          {pillToggle === PillToggleOptions.ReceivedBids ? (
+            <ReceivedBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+            />
+          ) : (
+            <NoBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+            />
+          )}
+        </Resizable>
+        <div className="flex-1 border border-gray-300 dark:border-quartz shadow min-w-[10rem]">
+          {selectedRow ? (
+            <div className="text-xs py-1 px-1.5">
+              <pre>{JSON.stringify(selectedRow, null, 2)}</pre>
+            </div>
+          ) : (
+            <div className="h-full p-8 flex items-center">
+              <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+                {I18n.getMessage('selectRowToPreview')}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

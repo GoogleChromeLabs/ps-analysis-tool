@@ -26,7 +26,7 @@ interface BottomTrayProps {
 
 const BottomTray = ({ selectedRow }: BottomTrayProps) => {
   return (
-    <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
+    <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
       {selectedRow ? (
         <div className="text-xs py-1 px-1.5">
           <pre>{JSON.stringify(selectedRow, null, 2)}</pre>

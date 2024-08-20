@@ -72,21 +72,17 @@ const AdTable = () => {
   );
 
   return (
-    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
+    <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-t border-american-silver dark:border-quartz flex flex-col">
       <Resizable
         defaultSize={{
           width: '100%',
           height: '80%',
         }}
-        minHeight="6%"
-        maxHeight="95%"
+        minHeight="20%"
+        maxHeight="90%"
         enable={{
-          top: false,
-          right: false,
           bottom: true,
-          left: false,
         }}
-        className="h-full flex"
       >
         <TableProvider
           data={[]}
@@ -105,7 +101,7 @@ const AdTable = () => {
           <Table hideFiltering={true} selectedKey={selectedRow?.name} />
         </TableProvider>
       </Resizable>
-      <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
+      <div className="flex-1 border border-gray-300 dark:border-quartz shadow min-w-[10rem]">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
             <pre>{JSON.stringify(selectedRow, null, 2)}</pre>
