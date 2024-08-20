@@ -53,6 +53,7 @@ export * from './menuBar';
 export { default as useFiltersMapping } from './cookiesLanding/useFiltersMapping';
 export { default as useGlobalFiltering } from './cookiesLanding/useGlobalFiltering';
 export { default as Tabs } from './tabs';
+export * from './tabs';
 export { default as QuickLinksList } from './landingPage/quickLinksList';
 export { default as Pill } from './pill';
 export { default as PillToggle } from './pillToggle';

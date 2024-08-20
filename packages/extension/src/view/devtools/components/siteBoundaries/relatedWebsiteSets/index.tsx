@@ -16,12 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   InfoCard,
   PSInfoKey,
   QuickLinksList,
   Tabs,
+  type TabItems,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -32,7 +33,9 @@ import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
-  const tabItems = useMemo(
+  const [activeTab, setActiveTab] = useState(0);
+
+  const tabItems = useMemo<TabItems>(
     () => [
       {
         title: 'Overview',
@@ -59,6 +62,8 @@ const RelatedWebsiteSets = () => {
     []
   );
 
+  const ActiveTabContent = tabItems[activeTab].content.Element;
+
   return (
     <div data-testid="related-website-sets-content" className="h-full w-full">
       <div className="p-4">
@@ -66,8 +71,17 @@ const RelatedWebsiteSets = () => {
           <h1 className="text-left">{I18n.getMessage('rws')}</h1>
         </div>
       </div>
-      <Tabs items={tabItems} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+      <Tabs
+        items={tabItems}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+      <div className="p-4 flex-1 max-w-2xl">
+        {ActiveTabContent && (
+          <ActiveTabContent {...tabItems[activeTab].content.props} />
+        )}
+      </div>
+      <div className="mx-4 mt-8 border-t border-gray-300 dark:border-quartz">
         <QuickLinksList />
       </div>
     </div>
