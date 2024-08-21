@@ -36,6 +36,8 @@ interface TableProps {
   isFiltersSidebarOpen?: boolean;
   hideFiltering?: boolean;
   extraInterfaceToTopBar?: () => React.JSX.Element;
+  minWidth?: string;
+  hideSearch?: boolean;
 }
 
 const Table = ({
@@ -43,6 +45,8 @@ const Table = ({
   isFiltersSidebarOpen = false,
   hideFiltering = false,
   extraInterfaceToTopBar,
+  minWidth,
+  hideSearch,
 }: TableProps) => {
   const {
     tableContainerRef,
@@ -116,12 +120,15 @@ const Table = ({
         hideFiltering={hideFiltering}
         setShowFilterSidebar={setShowFilterSidebar}
         extraInterface={extraInterfaceToTopBar}
+        hideSearch={hideSearch}
       />
-      <ChipsBar
-        selectedFilters={selectedFilters}
-        resetFilters={resetFilters}
-        toggleFilterSelection={toggleFilterSelection}
-      />
+      {hideFiltering ? null : (
+        <ChipsBar
+          selectedFilters={selectedFilters}
+          resetFilters={resetFilters}
+          toggleFilterSelection={toggleFilterSelection}
+        />
+      )}
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         {showFilterSidebar && (
           <Resizable
@@ -149,7 +156,10 @@ const Table = ({
             position={columnPosition}
           />
           <div
-            className="h-full w-full overflow-hidden min-w-[70rem] flex flex-col"
+            className="h-full w-full overflow-hidden flex flex-col"
+            style={{
+              minWidth: minWidth ?? '70rem',
+            }}
             ref={tableRef}
           >
             <TableHeader
