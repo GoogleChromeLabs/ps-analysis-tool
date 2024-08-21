@@ -178,10 +178,22 @@ export class BrowserManagement {
       throw new Error('No page with the provided ID was found');
     }
 
+    await page.on('response', (response) => {
+      const SUCCESS_RESPONSE = 200;
+
+      this.debugLog(`Server response: ${response.status()}`);
+      if (response.status() !== SUCCESS_RESPONSE) {
+        throw new Error(`Invalid server response: ${response.status()}`);
+      }
+    });
+
     this.debugLog(`Starting navigation to URL: ${url}`);
 
     try {
-      await page.goto(url, { timeout: 10000 });
+      await page.goto(url, {
+        timeout: 10000,
+      });
+
       this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
       this.debugLog(
