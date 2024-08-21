@@ -85,7 +85,11 @@ const ReceivedBidsTable = ({
         return row.originalData.name;
       }}
     >
-      <Table hideFiltering={true} selectedKey={selectedRow?.name} />
+      <Table
+        hideFiltering={true}
+        selectedKey={selectedRow?.name}
+        hideSearch={true}
+      />
     </TableProvider>
   );
 };

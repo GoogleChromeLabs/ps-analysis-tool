@@ -49,7 +49,7 @@ const Bids = () => {
           setPillToggle={setPillToggle}
         />
       </div>
-      <div className="flex-1 border-t border-american-silver dark:border-quartz flex flex-col ">
+      <div className="flex-1 flex flex-col">
         <Resizable
           defaultSize={{
             width: '100%',
@@ -62,15 +62,19 @@ const Bids = () => {
           }}
         >
           {pillToggle === PillToggleOptions.ReceivedBids ? (
-            <ReceivedBidsTable
-              setSelectedRow={setSelectedRow}
-              selectedRow={selectedRow}
-            />
+            <div className="w-full h-full border-t border-american-silver dark:border-quartz">
+              <ReceivedBidsTable
+                setSelectedRow={setSelectedRow}
+                selectedRow={selectedRow}
+              />
+            </div>
           ) : (
-            <NoBidsTable
-              setSelectedRow={setSelectedRow}
-              selectedRow={selectedRow}
-            />
+            <div className="w-[42rem] h-full border-r border-t border-american-silver dark:border-quartz">
+              <NoBidsTable
+                setSelectedRow={setSelectedRow}
+                selectedRow={selectedRow}
+              />
+            </div>
           )}
         </Resizable>
         <div className="flex-1 border border-gray-300 dark:border-quartz shadow min-w-[10rem]">

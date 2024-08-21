@@ -91,7 +91,7 @@ const AuctionTable = ({ setSelectedJSON }: AuctionTableProps) => {
             return row.originalData.name;
           }}
         >
-          <Table hideFiltering={true} selectedKey={''} />
+          <Table hideFiltering={true} selectedKey={''} hideSearch={true} />
         </TableProvider>
       </div>
       <button

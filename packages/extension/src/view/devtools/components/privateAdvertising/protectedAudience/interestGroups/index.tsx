@@ -90,7 +90,11 @@ const InterestGroups = () => {
             return row.originalData.name;
           }}
         >
-          <Table hideFiltering={true} selectedKey={selectedRow?.name} />
+          <Table
+            hideFiltering={true}
+            selectedKey={selectedRow?.name}
+            hideSearch={true}
+          />
         </TableProvider>
       </Resizable>
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow min-w-[10rem]">

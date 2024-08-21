@@ -62,7 +62,12 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
         return row.originalData.name;
       }}
     >
-      <Table hideFiltering={true} selectedKey={selectedRow?.name} />
+      <Table
+        hideFiltering={true}
+        selectedKey={selectedRow?.name}
+        minWidth="42rem"
+        hideSearch={true}
+      />
     </TableProvider>
   );
 };

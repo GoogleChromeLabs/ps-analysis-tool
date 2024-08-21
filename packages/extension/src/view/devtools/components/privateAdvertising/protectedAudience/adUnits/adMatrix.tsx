@@ -23,31 +23,31 @@ import { MatrixComponent } from '@google-psat/design-system';
 const AdMatrix = () => {
   const matrixData = [
     {
-      title: 'Ad Unit 1',
+      title: 'Ad Units',
       count: 5,
       color: '#5CC971',
-      description: 'This is the first ad unit',
+      description: 'Placeholder',
       countClassName: 'text-[#5CC971]',
     },
     {
-      title: 'Ad Unit 2',
+      title: 'Bidders',
       count: 10,
       color: '#F3AE4E',
-      description: 'This is the second ad unit',
+      description: 'Placeholder',
       countClassName: 'text-[#F3AE4E]',
     },
     {
-      title: 'Ad Unit 3',
+      title: 'Bids',
       count: 15,
       color: '#4C79F4',
-      description: 'This is the third ad unit',
+      description: 'Placeholder',
       countClassName: 'text-[#4C79F4]',
     },
     {
-      title: 'Ad Unit 4',
+      title: 'No Bids',
       count: 20,
       color: '#EC7159',
-      description: 'This is the fourth ad unit',
+      description: 'Placeholder',
       countClassName: 'text-[#EC7159]',
     },
   ];
