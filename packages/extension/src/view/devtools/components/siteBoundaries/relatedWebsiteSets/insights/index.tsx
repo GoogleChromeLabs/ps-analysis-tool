@@ -88,9 +88,6 @@ const Insights = () => {
         </div>
       ) : (
         <div className="space-y-3">
-          <h3 className="text-xl font-semibold">
-            {I18n.getMessage('membership')}
-          </h3>
           {insightsData?.isURLInRWS ? (
             <>
               <p className="text-lg font-medium">

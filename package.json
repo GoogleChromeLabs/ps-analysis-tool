@@ -150,7 +150,7 @@
 	"overrides": {
 		"xml2js": "^0.5.0",
 		"wappalyzer": {
-			"puppeteer": "^22.11.1"
+			"puppeteer": "22.15.0"
 		}
 	}
 }
