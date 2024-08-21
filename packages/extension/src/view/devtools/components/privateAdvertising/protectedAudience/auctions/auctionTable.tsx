@@ -16,20 +16,21 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { noop } from '@google-psat/common';
 import {
   BottomTrayIcon,
   Table,
   TableProvider,
   type TableColumn,
-  type TableData,
   type TableRow,
 } from '@google-psat/design-system';
 
-const AuctionTable = () => {
-  const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
+interface AuctionTableProps {
+  setSelectedJSON: (json: any) => void;
+}
 
+const AuctionTable = ({ setSelectedJSON }: AuctionTableProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -72,7 +73,7 @@ const AuctionTable = () => {
   );
 
   return (
-    <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
+    <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col p-4 pb-0">
       <div className="flex justify-between items-center px-1">
         <p>Started by: https://example.com</p>
         <p>Date</p>
@@ -84,18 +85,19 @@ const AuctionTable = () => {
           tableFilterData={undefined}
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="adtable"
-          onRowClick={(row) => {
-            setSelectedRow(row);
-          }}
           onRowContextMenu={noop}
+          onRowClick={noop}
           getRowObjectKey={(row: TableRow) => {
             return row.originalData.name;
           }}
         >
-          <Table hideFiltering={true} selectedKey={selectedRow?.name} />
+          <Table hideFiltering={true} selectedKey={''} />
         </TableProvider>
       </div>
-      <button className="flex gap-1 items-center hover:opacity-70 px-1">
+      <button
+        className="flex gap-1 items-center hover:opacity-70 px-1"
+        onClick={() => setSelectedJSON({})}
+      >
         <BottomTrayIcon />
         Show Config
       </button>

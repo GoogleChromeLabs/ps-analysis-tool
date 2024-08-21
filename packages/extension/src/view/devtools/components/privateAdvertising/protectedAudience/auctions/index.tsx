@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -24,13 +24,30 @@ import React from 'react';
 import Breakpoints from './breakpoints';
 import AuctionTable from './auctionTable';
 import BottomTray from './bottomTray';
+import { Resizable } from 're-resizable';
 
 const Auctions = () => {
+  const [selectedJSON, setSelectedJSON] = useState(null);
+
   return (
-    <div className="w-full h-full p-4 flex flex-col gap-4">
-      <Breakpoints />
-      <AuctionTable />
-      <BottomTray selectedRow={{}} />
+    <div className="w-full h-full flex flex-col">
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '80%',
+        }}
+        enable={{
+          bottom: true,
+        }}
+        minHeight="10%"
+        maxHeight="90%"
+      >
+        <Breakpoints />
+        {['Dummy'].map((auction) => (
+          <AuctionTable key={auction} setSelectedJSON={setSelectedJSON} />
+        ))}
+      </Resizable>
+      <BottomTray selectedJSON={selectedJSON} />
     </div>
   );
 };

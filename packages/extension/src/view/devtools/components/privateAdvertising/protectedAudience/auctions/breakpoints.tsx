@@ -22,7 +22,7 @@ import { BreakpointIcon } from '@google-psat/design-system';
 
 const Breakpoints = () => {
   return (
-    <div className="flex gap-4 text-raisin-black dark:text-bright-gray">
+    <div className="flex gap-4 text-raisin-black dark:text-bright-gray p-4 pb-0">
       <div className="flex gap-2 justify-center items-center">
         <BreakpointIcon className="fill-granite-gray" />
         Ad Worklet Breakpoints
