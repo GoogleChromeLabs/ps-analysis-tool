@@ -178,27 +178,25 @@ export class BrowserManagement {
       throw new Error('No page with the provided ID was found');
     }
 
-    await page.on('response', (response) => {
-      const SUCCESS_RESPONSE = 200;
-
-      this.debugLog(`Server response: ${response.status()}`);
-      if (response.status() !== SUCCESS_RESPONSE) {
-        throw new Error(`Invalid server response: ${response.status()}`);
-      }
-    });
-
     this.debugLog(`Starting navigation to URL: ${url}`);
 
     try {
-      await page.goto(url, {
+      const response = await page.goto(url, {
         timeout: 10000,
       });
+
+      const SUCCESS_RESPONSE = 200;
+
+      if (response && response.status() !== SUCCESS_RESPONSE) {
+        throw new Error(`Invalid server response: ${response.status()}`);
+      }
 
       this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
       this.debugLog(
         `Navigation did not finish in 10 seconds moving on to scrolling`
       );
+      throw error;
       //ignore
     }
   }
@@ -672,11 +670,16 @@ export class BrowserManagement {
     );
 
     // Navigate to URLs
-    await Promise.all(
-      userProvidedUrls.map(async (url) => {
-        await this.navigateToPage(url);
-      })
-    );
+    // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
+    try {
+      await Promise.all(
+        userProvidedUrls.map(async (url) => {
+          await this.navigateToPage(url);
+        })
+      );
+    } catch (error) {
+      throw error;
+    }
 
     // Delay for page to load resources
     await delay(this.pageWaitTime / 2);

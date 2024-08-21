@@ -230,20 +230,26 @@ program.parse();
     text: 'Analyzing cookies on the first site visit',
   });
 
-  const cookieAnalysisAndFetchedResourceData =
-    await analyzeCookiesUrlsInBatchesAndFetchResources(
-      urlsToProcess,
-      LIBRARIES,
-      !isHeadful,
-      waitTime,
-      cookieDictionary,
-      concurrency,
-      spinnies,
-      shouldSkipAcceptBanner,
-      verbose,
-      sitemapUrl || filePath ? 4 : 3
-    );
+  let cookieAnalysisAndFetchedResourceData: any;
 
+  // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
+  try {
+    cookieAnalysisAndFetchedResourceData =
+      await analyzeCookiesUrlsInBatchesAndFetchResources(
+        urlsToProcess,
+        LIBRARIES,
+        !isHeadful,
+        waitTime,
+        cookieDictionary,
+        concurrency,
+        spinnies,
+        shouldSkipAcceptBanner,
+        verbose,
+        sitemapUrl || filePath ? 4 : 3
+      );
+  } catch (error) {
+    throw error;
+  }
   removeAndAddNewSpinnerText(
     spinnies,
     'cookie-spinner',
