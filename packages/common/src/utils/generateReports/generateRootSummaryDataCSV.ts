@@ -20,25 +20,16 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import type {
-  CompleteJson,
-  CookieFrameStorageType,
-  CookieJsonDataType,
-} from '../../cookies.types';
+import type { CompleteJson, CookieTableData } from '../../cookies.types';
 import extractReportData from '../extractReportData';
+import reshapeCookies from '../reshapeCookies';
 
 const generateRootSummaryDataCSV = (
   siteMapAnalysisData: CompleteJson[]
 ): string => {
-  const uniqueCookiesDataMap: Map<string, CookieJsonDataType> = new Map();
-  const extractedData: CookieFrameStorageType =
-    extractReportData(siteMapAnalysisData).landingPageCookies;
-
-  Object.values(extractedData).forEach((cookies) => {
-    Object.entries(cookies).forEach(([cookieKey, cookieData]) => {
-      uniqueCookiesDataMap.set(cookieKey, cookieData);
-    });
-  });
+  const extractedData: { [key: string]: CookieTableData } = reshapeCookies(
+    extractReportData(siteMapAnalysisData).landingPageCookies
+  );
 
   let totalFirstPartyCookies = 0;
   let totalThirdPartyCookies = 0;
@@ -51,8 +42,13 @@ const generateRootSummaryDataCSV = (
   let functionalCookiesWithIssues = 0;
   let marketingCookiesWithIssues = 0;
   let uncategorisedCookiesWithIssues = 0;
+  let totalCookies = 0;
 
-  for (const cookie of uniqueCookiesDataMap.values()) {
+  Object.keys(extractedData).forEach((cookieKey) => {
+    const cookie = extractedData[cookieKey];
+    if (!cookie.analytics) {
+      return;
+    }
     if (cookie.isFirstParty) {
       totalFirstPartyCookies += 1;
     } else {
@@ -62,12 +58,7 @@ const generateRootSummaryDataCSV = (
     if (cookie.isBlocked) {
       cookiesWithIssues += 1;
     }
-    console.log(
-      cookie.parsedCookie.name,
-      cookie.isFirstParty,
-      cookie,
-      uniqueCookiesDataMap
-    );
+
     switch (cookie.analytics.category) {
       case 'Analytics':
         analyticsCookies += 1;
@@ -96,11 +87,11 @@ const generateRootSummaryDataCSV = (
       default:
         break;
     }
-  }
-  //@ts-ignore
-  console.log(totalFirstPartyCookies, totalThirdPartyCookies);
+    totalCookies += 1;
+  });
+
   const summary = {
-    [I18n.getMessage('totalCookies')]: uniqueCookiesDataMap.size,
+    [I18n.getMessage('totalCookies')]: totalCookies,
     [I18n.getMessage('totalFirstPartyCookies')]: totalFirstPartyCookies,
     [I18n.getMessage('totalThirdPartyCookies')]: totalThirdPartyCookies,
     [I18n.getMessage('analyticsCookies')]: analyticsCookies,
