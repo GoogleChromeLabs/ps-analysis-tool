@@ -24,21 +24,24 @@ import 'github-markdown-css';
  * Internal dependencies.
  */
 import Sidebar, { type SidebarMenuItem } from './sidebar';
-import { fetchLocalData } from '@google-psat/common';
-
-interface Wiki {
-  url: string;
-  sidebar: SidebarMenuItem[];
-}
+import parseMenuMarkup from './parseMenuMarkup';
 
 const Wiki = () => {
   const [html, setHTML] = useState<string>('');
-  const [wikiData, setWikiData] = useState<Wiki | undefined>();
+  const [menuItems, setMenuItems] = useState<SidebarMenuItem[] | undefined>();
 
   useEffect(() => {
     (async () => {
-      const data = await fetchLocalData('data/wiki.json');
-      setWikiData(data);
+      const menuResponse = await fetch(
+        'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/_Sidebar.md'
+      );
+      const menuMarkdown = await menuResponse.text();
+      const _menuItems = parseMenuMarkup(menuMarkdown, [
+        'Contributor Guide',
+        'Code of Conduct',
+      ]);
+
+      setMenuItems(_menuItems);
 
       const response = await fetch(
         'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/Home.md'
@@ -53,7 +56,7 @@ const Wiki = () => {
   return (
     <div className="p-5 pb-10">
       <div className="flex gap-5">
-        <Sidebar data={wikiData?.sidebar} />
+        <Sidebar data={menuItems} />
         <div className="markdown-body h-full w-full">
           <h2>Home</h2>
           <div dangerouslySetInnerHTML={{ __html: html }} />

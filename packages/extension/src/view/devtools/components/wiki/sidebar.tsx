@@ -49,7 +49,7 @@ const Sidebar = ({ data }: SidebarMenu) => {
                   return (
                     <li key={menuItem.name}>
                       <Link item={menuItem} />
-                      {menuItem?.menu?.length && (
+                      {Boolean(menuItem?.menu?.length) && (
                         <ul>
                           {menuItem?.menu.map((subMenuItem) => {
                             return (
