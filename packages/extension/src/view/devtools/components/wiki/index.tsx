@@ -22,18 +22,9 @@ import 'github-markdown-css';
 
 const Wiki = () => {
   const [html, setHTML] = useState<string>('');
-  const [sidebarHTML, setSidebarHTML] = useState('');
 
   useEffect(() => {
     (async () => {
-      const sidebarResponse = await fetch(
-        'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/_Sidebar.md'
-      );
-      const _sidebarMarkdown = await sidebarResponse.text();
-      const _sidebarHtml = await marked.parse(_sidebarMarkdown);
-
-      setSidebarHTML(_sidebarHtml);
-
       const response = await fetch(
         'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/Home.md'
       );
@@ -47,9 +38,7 @@ const Wiki = () => {
   return (
     <div className="p-5 pb-10">
       <div className="flex gap-5">
-        <div className="markdown-body wiki-sidebar border-r border-gray-300 dark:border-quartz">
-          <div dangerouslySetInnerHTML={{ __html: sidebarHTML }} />
-        </div>
+        <div className="markdown-body wiki-sidebar border-r border-gray-300 dark:border-quartz"></div>
         <div className="markdown-body h-full w-full">
           <h2>Home</h2>
           <div dangerouslySetInnerHTML={{ __html: html }} />
