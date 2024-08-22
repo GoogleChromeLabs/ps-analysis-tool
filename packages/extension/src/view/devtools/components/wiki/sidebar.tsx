@@ -18,15 +18,10 @@
  */
 import React from 'react';
 
-interface MenuItem {
-  name: string;
-  link?: string;
-  menu?: MenuItem[];
-}
-
-interface LinkProps {
-  item: MenuItem;
-}
+/**
+ * Internal dependencies.
+ */
+import Link, { type MenuItem } from './link';
 
 export interface SidebarMenuItem {
   title: string;
@@ -35,20 +30,6 @@ export interface SidebarMenuItem {
 
 type SidebarMenu = {
   data: SidebarMenuItem[] | undefined;
-};
-
-const Link = ({ item }: LinkProps) => {
-  const fileName = item?.link ? '' : item.name.replace(' ', '-') + '.md';
-
-  return (
-    <a
-      href={item?.link ? item.link : '#'}
-      target={item?.link ? '__blank' : '_self'}
-      data-file-name={fileName}
-    >
-      {item.name}
-    </a>
-  );
 };
 
 const Sidebar = ({ data }: SidebarMenu) => {
