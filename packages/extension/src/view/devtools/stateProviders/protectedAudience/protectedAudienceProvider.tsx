@@ -24,12 +24,12 @@ import React, {
   useMemo,
 } from 'react';
 import type { Protocol } from 'devtools-protocol';
+import type { singleAuctionEvent } from '@google-psat/common';
 import { diff } from 'deep-object-diff';
 /**
  * Internal dependencies.
  */
 import Context, { type ProtectedAudienceContextType } from './context';
-import type { singleAuctionEvent } from '../../../../store/dataStore';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =

@@ -48,3 +48,4 @@ export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';
 export * from './libraryDetection.types';
+export * from './protectedAudience.types';

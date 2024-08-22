@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import type { singleAuctionEvent } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -23,7 +24,7 @@ import type { Protocol } from 'devtools-protocol';
  */
 import networkTime from './utils/networkTime';
 import formatTime from './utils/formatTime';
-import dataStore, { type singleAuctionEvent } from './dataStore';
+import dataStore from './dataStore';
 
 class PAStore {
   /**
