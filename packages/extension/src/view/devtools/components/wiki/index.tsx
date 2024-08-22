@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React, { useEffect, useState } from 'react';
-import { marked } from 'marked';
 import 'github-markdown-css';
 
 /**
@@ -25,6 +24,7 @@ import 'github-markdown-css';
  */
 import Sidebar, { type SidebarMenuItem } from './sidebar';
 import parseMenuMarkup from './parseMenuMarkup';
+import convertMarkupToHTML from './convertMarkupToHTML';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
@@ -53,7 +53,7 @@ const Wiki = () => {
       const response = await fetch(GITHUB_URL + '/' + fileName);
 
       const _markdown = await response.text();
-      const _html = await marked.parse(_markdown);
+      const _html = await convertMarkupToHTML(_markdown);
 
       setHTML(_html);
     })();
