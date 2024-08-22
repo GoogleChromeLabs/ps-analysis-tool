@@ -73,3 +73,5 @@ export { default as GreenTick } from './green-tick-icon.svg';
 export { default as ChevronDown } from './chevron-down.svg';
 export { default as WarningBare } from './warning.svg';
 export { default as GroupsIcon } from './groups.svg';
+export { default as WikiIcon } from './wiki.svg';
+export { default as WikiIconWhite } from './wiki-white.svg';
