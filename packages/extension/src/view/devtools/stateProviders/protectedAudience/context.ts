@@ -16,21 +16,15 @@
 /**
  * External dependencies.
  */
-import { createContext, type singleAuctionEvent } from '@google-psat/common';
+import {
+  createContext,
+  type AuctionEventsType,
+  type InterestGroups,
+} from '@google-psat/common';
 
-export type InterestGroups = singleAuctionEvent & {
-  details: any;
-};
 export interface ProtectedAudienceContextType {
   state: {
-    auctionEvents:
-      | singleAuctionEvent[]
-      | {
-          [parentAuctionId: string]: {
-            [uniqueAuctionId: string]: singleAuctionEvent[];
-          };
-        }
-      | null;
+    auctionEvents: AuctionEventsType;
     interestGroupDetails: InterestGroups[];
     isMultiSellerAuction: boolean;
   };

@@ -45,3 +45,16 @@ export interface auctionData {
     parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
   };
 }
+
+export type InterestGroups = singleAuctionEvent & {
+  details: any;
+};
+
+export type AuctionEventsType =
+  | singleAuctionEvent[]
+  | {
+      [parentAuctionId: string]: {
+        [uniqueAuctionId: string]: singleAuctionEvent[];
+      };
+    }
+  | null;
