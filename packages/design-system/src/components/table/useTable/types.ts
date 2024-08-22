@@ -16,9 +16,13 @@
 /**
  * External dependencies.
  */
-import type { CookieTableData, TechnologyData } from '@google-psat/common';
+import type {
+  CookieTableData,
+  InterestGroups,
+  TechnologyData,
+} from '@google-psat/common';
 
-export type TableData = (CookieTableData | TechnologyData) & {
+export type TableData = (CookieTableData | TechnologyData | InterestGroups) & {
   highlighted?: boolean;
 };
 

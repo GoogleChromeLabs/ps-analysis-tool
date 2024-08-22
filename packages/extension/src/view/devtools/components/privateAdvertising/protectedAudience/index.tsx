@@ -32,6 +32,7 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies.
  */
 import classNames from 'classnames';
+import InterestGroups from './interestGroups';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -59,13 +60,13 @@ const ProtectedAudience = () => {
           className: 'p-4',
         },
       },
-      // {
-      //   title: 'Interest Groups',
-      //   content: {
-      //     Element: InterestGroups,
-      //     className: 'pt-4 overflow-hidden',
-      //   },
-      // },
+      {
+        title: 'Interest Groups',
+        content: {
+          Element: InterestGroups,
+          className: 'pt-4 overflow-hidden',
+        },
+      },
       // {
       //   title: 'Ad Units',
       //   content: {

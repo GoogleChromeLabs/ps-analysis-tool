@@ -23,30 +23,43 @@ import {
   Table,
   TableProvider,
   type TableColumn,
-  type TableData,
   type TableRow,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-import { noop } from '@google-psat/common';
+import {
+  noop,
+  type InterestGroups as InterestGroupsType,
+} from '@google-psat/common';
+
+/**
+ * Internal dependencies.
+ */
+import { useProtectedAudience } from '../../../../stateProviders';
 
 const InterestGroups = () => {
-  const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
+  const [selectedRow, setSelectedRow] = useState<InterestGroupsType | null>(
+    null
+  );
+
+  const { interestGroupDetails } = useProtectedAudience(({ state }) => ({
+    interestGroupDetails: state.interestGroupDetails,
+  }));
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Event Time',
-        accessorKey: 'eventTime',
+        accessorKey: 'formattedTime',
         cell: (info) => info,
       },
       {
         header: 'Access Type',
-        accessorKey: 'accessType',
+        accessorKey: 'type',
         cell: (info) => info,
       },
       {
         header: 'Owner',
-        accessorKey: 'owner',
+        accessorKey: 'ownerOrigin',
         cell: (info) => info,
       },
       {
@@ -56,7 +69,7 @@ const InterestGroups = () => {
       },
       {
         header: 'Expiration Time',
-        accessorKey: 'expirationTime',
+        accessorKey: 'details.expirationTime',
         cell: (info) => info,
       },
     ],
@@ -77,22 +90,26 @@ const InterestGroups = () => {
         }}
       >
         <TableProvider
-          data={[]}
+          data={interestGroupDetails}
           tableColumns={tableColumns}
           tableFilterData={undefined}
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="interestGroupsTable"
           onRowClick={(row) => {
-            setSelectedRow(row);
+            setSelectedRow(row as InterestGroupsType);
           }}
           onRowContextMenu={noop}
           getRowObjectKey={(row: TableRow) => {
-            return row.originalData.name;
+            return new Date(
+              (row.originalData as InterestGroupsType).formattedTime
+            ).toUTCString();
           }}
         >
           <Table
             hideFiltering={true}
-            selectedKey={selectedRow?.name}
+            selectedKey={new Date(
+              selectedRow?.formattedTime ?? ''
+            ).toUTCString()}
             hideSearch={true}
           />
         </TableProvider>
