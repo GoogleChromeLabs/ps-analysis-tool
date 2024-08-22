@@ -44,6 +44,8 @@ export { default as getCurrentDateAndTime } from './utils/getCurrentDateAndTime'
 export { default as resolveWithTimeout } from './utils/resolveWithTimeout';
 export { default as deriveBlockingStatus } from './utils/deriveBlockingStatus';
 export { default as getLegendDescription } from './utils/getLegendDescription';
+export { default as extractCookies } from './utils/extractCookies';
+export { default as extractReportData } from './utils/extractReportData';
 export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';

@@ -20,6 +20,7 @@
 import {
   generateRootSummaryDataCSV,
   type CompleteJson,
+  extractReportData,
 } from '@google-psat/common';
 import { ensureFile, writeFile } from 'fs-extra';
 /**
@@ -57,6 +58,7 @@ const saveReports = async (
       'report.html',
       sitemapUrl
     );
+    console.log(extractReportData(result).landingPageCookies);
     const rootSummaryData = generateRootSummaryDataCSV(result);
     await ensureFile(path.join(outDir, 'report.csv'));
     await writeFile(path.join(outDir, 'report.csv'), rootSummaryData);

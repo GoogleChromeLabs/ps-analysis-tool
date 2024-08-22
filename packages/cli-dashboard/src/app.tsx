@@ -17,19 +17,16 @@
  * External dependencies
  */
 import React, { useEffect, useState } from 'react';
-import type {
-  CompleteJson,
-  CookieFrameStorageType,
-  LibraryData,
-  TechnologyData,
-} from '@google-psat/common';
-import { I18n } from '@google-psat/i18n';
 import {
+  type CompleteJson,
+  type CookieFrameStorageType,
+  type LibraryData,
+  type TechnologyData,
   extractReportData,
   extractCookies,
-  SiteMapReport,
-  SiteReport,
-} from '@google-psat/report';
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
+import { SiteMapReport, SiteReport } from '@google-psat/report';
 
 /**
  * Internal dependencies

@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-import {
-  calculateEffectiveExpiryDate,
-  type CompleteJson,
-  type CookieFrameStorageType,
-} from '@google-psat/common';
-
 /**
  * Internal dependencies
  */
+import { CompleteJson, CookieFrameStorageType } from '../cookies.types';
+import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 
 const extractCookies = (
   cookieData: CompleteJson['cookieData'],

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CompleteJson } from '../../../cookies.types';
+import { CompleteJson } from '../../cookies.types';
 
 export const mockData1: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/',
@@ -279,3 +279,161 @@ export const mockData2: CompleteJson = {
     },
   },
 };
+export const tempSinglePageData: CompleteJson = {
+  pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
+  libraryMatches: {},
+  cookieData: {
+    'https://edition.cnn.com': {
+      frameCookies: {
+        'countryCode:.cnn.com:/': {
+          parsedCookie: {
+            name: 'countryCode',
+            domain: '.cnn.com',
+            path: '/',
+            value: 'IN',
+            samesite: 'None',
+            expires: 'Session',
+            httponly: false,
+            secure: true,
+            partitionKey: '',
+          },
+          analytics: {
+            platform: 'Unknown',
+            category: 'Uncategorized',
+            GDPR: '',
+            description: '',
+          },
+          url: '',
+          isBlocked: false,
+          isFirstParty: true,
+        },
+      },
+    },
+  },
+  technologyData: [
+    {
+      slug: 'varnish',
+      name: 'Varnish',
+      description: 'Varnish is a reverse caching proxy.',
+      confidence: 100,
+      version: null,
+      icon: 'Varnish.svg',
+      website: 'https://www.varnish-cache.org',
+      cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
+      categories: [
+        {
+          id: 23,
+          slug: 'caching',
+          name: 'Caching',
+        },
+      ],
+    },
+  ],
+};
+
+export const tempMultiPageData: CompleteJson[] = [
+  {
+    libraryMatches: {},
+    pageUrl: 'https://www.cnn.com/index.html',
+    technologyData: [
+      {
+        slug: 'varnish',
+        name: 'Varnish',
+        description: 'Varnish is a reverse caching proxy.',
+        confidence: 100,
+        version: null,
+        icon: 'Varnish.svg',
+        website: 'https://www.varnish-cache.org',
+        cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
+        categories: [
+          {
+            id: 23,
+            slug: 'caching',
+            name: 'Caching',
+          },
+        ],
+      },
+    ],
+    cookieData: {
+      'https://edition.cnn.com': {
+        frameCookies: {
+          'countryCode:.cnn.com:/': {
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              samesite: 'None',
+              expires: 'Session',
+              httponly: false,
+              secure: true,
+              partitionKey: '',
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
+            isBlocked: false,
+            blockedReasons: ['ThirdPartyPhaseout'],
+            isFirstParty: true,
+          },
+        },
+      },
+    },
+  },
+  {
+    libraryMatches: {},
+    pageUrl: 'https://edition.cnn.com/index.html',
+    technologyData: [
+      {
+        slug: 'varnish',
+        name: 'Varnish',
+        description: 'Varnish is a reverse caching proxy.',
+        confidence: 100,
+        version: null,
+        icon: 'Varnish.svg',
+        website: 'https://www.varnish-cache.org',
+        cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
+        categories: [
+          {
+            id: 23,
+            slug: 'caching',
+            name: 'Caching',
+          },
+        ],
+      },
+    ],
+    cookieData: {
+      'https://edition.cnn.com': {
+        frameCookies: {
+          'countryCode:.cnn.com:/': {
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              samesite: 'None',
+              expires: 'Session',
+              httponly: false,
+              secure: true,
+              partitionKey: '',
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
+            isBlocked: false,
+            blockedReasons: ['ThirdPartyPhaseout'],
+            isFirstParty: true,
+          },
+        },
+      },
+    },
+  },
+];

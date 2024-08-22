@@ -20,18 +20,23 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
+import type {
+  CompleteJson,
+  CookieFrameStorageType,
+  CookieJsonDataType,
+} from '../../cookies.types';
+import extractReportData from '../extractReportData';
 
 const generateRootSummaryDataCSV = (
-  siteAnalysisData: CompleteJson[]
+  siteMapAnalysisData: CompleteJson[]
 ): string => {
   const uniqueCookiesDataMap: Map<string, CookieJsonDataType> = new Map();
+  const extractedData: CookieFrameStorageType =
+    extractReportData(siteMapAnalysisData).landingPageCookies;
 
-  Object.entries(siteAnalysisData).forEach(([, { cookieData: frameData }]) => {
-    Object.values(frameData).forEach(({ frameCookies }) => {
-      Object.entries(frameCookies).forEach(([cookieKey, cookieData]) => {
-        uniqueCookiesDataMap.set(cookieKey, cookieData);
-      });
+  Object.values(extractedData).forEach((cookies) => {
+    Object.entries(cookies).forEach(([cookieKey, cookieData]) => {
+      uniqueCookiesDataMap.set(cookieKey, cookieData);
     });
   });
 
@@ -57,7 +62,12 @@ const generateRootSummaryDataCSV = (
     if (cookie.isBlocked) {
       cookiesWithIssues += 1;
     }
-
+    console.log(
+      cookie.parsedCookie.name,
+      cookie.isFirstParty,
+      cookie,
+      uniqueCookiesDataMap
+    );
     switch (cookie.analytics.category) {
       case 'Analytics':
         analyticsCookies += 1;
@@ -87,7 +97,8 @@ const generateRootSummaryDataCSV = (
         break;
     }
   }
-
+  //@ts-ignore
+  console.log(totalFirstPartyCookies, totalThirdPartyCookies);
   const summary = {
     [I18n.getMessage('totalCookies')]: uniqueCookiesDataMap.size,
     [I18n.getMessage('totalFirstPartyCookies')]: totalFirstPartyCookies,
