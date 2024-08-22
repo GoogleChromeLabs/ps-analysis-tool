@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { type Dispatch, type SetStateAction } from 'react';
 
 /**
  * Internal dependencies.
@@ -30,9 +30,10 @@ export interface SidebarMenuItem {
 
 type SidebarMenu = {
   data: SidebarMenuItem[] | undefined;
+  setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
 };
 
-const Sidebar = ({ data }: SidebarMenu) => {
+const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
   if (!data?.length) {
     return null;
   }
@@ -48,13 +49,21 @@ const Sidebar = ({ data }: SidebarMenu) => {
                 {topMenuItem.menu.map((menuItem) => {
                   return (
                     <li key={menuItem.name}>
-                      <Link item={menuItem} />
+                      <Link
+                        item={menuItem}
+                        setCurrentSelectedPage={setCurrentSelectedPage}
+                      />
                       {Boolean(menuItem?.menu?.length) && (
                         <ul>
                           {menuItem?.menu.map((subMenuItem) => {
                             return (
                               <li key={subMenuItem.name}>
-                                <Link item={subMenuItem} />
+                                <Link
+                                  item={subMenuItem}
+                                  setCurrentSelectedPage={
+                                    setCurrentSelectedPage
+                                  }
+                                />
                               </li>
                             );
                           })}

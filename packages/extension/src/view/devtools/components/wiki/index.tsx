@@ -26,15 +26,17 @@ import 'github-markdown-css';
 import Sidebar, { type SidebarMenuItem } from './sidebar';
 import parseMenuMarkup from './parseMenuMarkup';
 
+const GITHUB_URL =
+  'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
+
 const Wiki = () => {
   const [html, setHTML] = useState<string>('');
   const [menuItems, setMenuItems] = useState<SidebarMenuItem[] | undefined>();
+  const [currentSelectedPage, setCurrentSelectedPage] = useState('Home');
 
   useEffect(() => {
     (async () => {
-      const menuResponse = await fetch(
-        'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/_Sidebar.md'
-      );
+      const menuResponse = await fetch(GITHUB_URL + '/_Sidebar.md');
       const menuMarkdown = await menuResponse.text();
       const _menuItems = parseMenuMarkup(menuMarkdown, [
         'Contributor Guide',
@@ -42,23 +44,30 @@ const Wiki = () => {
       ]);
 
       setMenuItems(_menuItems);
+    })();
+  }, []);
 
-      const response = await fetch(
-        'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/Home.md'
-      );
+  useEffect(() => {
+    (async () => {
+      const fileName = currentSelectedPage.replaceAll(' ', '-') + '.md';
+      const response = await fetch(GITHUB_URL + '/' + fileName);
+
       const _markdown = await response.text();
       const _html = await marked.parse(_markdown);
 
       setHTML(_html);
     })();
-  }, []);
+  }, [currentSelectedPage]);
 
   return (
     <div className="p-5 pb-10">
       <div className="flex gap-5">
-        <Sidebar data={menuItems} />
+        <Sidebar
+          data={menuItems}
+          setCurrentSelectedPage={setCurrentSelectedPage}
+        />
         <div className="markdown-body h-full w-full">
-          <h2>Home</h2>
+          <h2>{currentSelectedPage}</h2>
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
       </div>

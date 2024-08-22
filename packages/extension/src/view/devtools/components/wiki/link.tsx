@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { type Dispatch, type SetStateAction } from 'react';
 
 export interface MenuItem {
   name: string;
@@ -26,16 +26,15 @@ export interface MenuItem {
 
 interface LinkProps {
   item: MenuItem;
+  setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
 }
 
-const Link = ({ item }: LinkProps) => {
-  const fileName = item?.link ? '' : item.name.replace(' ', '-') + '.md';
-
+const Link = ({ item, setCurrentSelectedPage }: LinkProps) => {
   return (
     <a
       href={item?.link ? item.link : '#'}
       target={item?.link ? '__blank' : '_self'}
-      data-file-name={fileName}
+      onClick={() => setCurrentSelectedPage(item.name)}
     >
       {item.name}
     </a>
