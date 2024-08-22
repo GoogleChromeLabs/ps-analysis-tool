@@ -36,9 +36,10 @@ const PillToggle = ({
     <div className="w-80 h-8 rounded-full border border-gray-300 dark:border-quartz text-sm">
       <button
         className={classNames(
-          'w-1/2 h-full rounded-full bg-transparent text-raisin-black dark:text-bright-gray',
+          'w-1/2 h-full rounded-full text-raisin-black dark:text-bright-gray',
           {
-            'bg-gray-300 dark:bg-gray-500 ': pillToggle === firstOption,
+            'bg-gray-200 dark:bg-gray-500 ': pillToggle === firstOption,
+            'bg-transparent': pillToggle !== firstOption,
           }
         )}
         onClick={() => setPillToggle(firstOption)}
@@ -47,9 +48,10 @@ const PillToggle = ({
       </button>
       <button
         className={classNames(
-          'w-1/2 h-full rounded-full bg-transparent text-raisin-black dark:text-bright-gray',
+          'w-1/2 h-full rounded-full text-raisin-black dark:text-bright-gray',
           {
-            'bg-gray-300 dark:bg-gray-500': pillToggle === secondOption,
+            'bg-gray-200 dark:bg-gray-500': pillToggle === secondOption,
+            'bg-transparent': pillToggle !== secondOption,
           }
         )}
         onClick={() => setPillToggle(secondOption)}
