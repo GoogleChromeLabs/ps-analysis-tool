@@ -18,6 +18,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { marked } from 'marked';
+import 'github-markdown-css';
 
 const Wiki = () => {
   const [html, setHTML] = useState<string>('');
@@ -35,12 +36,11 @@ const Wiki = () => {
   }, []);
 
   return (
-    <div
-      data-testid="extension-settings-content"
-      className="h-full w-full flex flex-col min-w-[40rem] overflow-auto p-5"
-    >
-      <h1>Wiki Page</h1>
-      <div dangerouslySetInnerHTML={{ __html: html }}></div>
+    <div className="p-5 pb-10">
+      <div className="markdown-body h-full w-full">
+        <h2>Wiki</h2>
+        <div dangerouslySetInnerHTML={{ __html: html }}></div>
+      </div>
     </div>
   );
 };
