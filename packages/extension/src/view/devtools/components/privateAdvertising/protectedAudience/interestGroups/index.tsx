@@ -83,7 +83,7 @@ const InterestGroups = () => {
           width: '100%',
           height: '80%',
         }}
-        minHeight="20%"
+        minHeight="15%"
         maxHeight="90%"
         enable={{
           bottom: true,
@@ -114,7 +114,7 @@ const InterestGroups = () => {
           />
         </TableProvider>
       </Resizable>
-      <div className="flex-1 border border-gray-300 dark:border-quartz shadow min-w-[10rem]">
+      <div className="flex-1 border border-gray-300 dark:border-quartz shadow min-w-[10rem] overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
             <pre>{JSON.stringify(selectedRow, null, 2)}</pre>
