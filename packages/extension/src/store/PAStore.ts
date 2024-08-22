@@ -119,9 +119,7 @@ class PAStore {
       eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
     };
 
-    this.getAuctionEventsArray('globalEvents', 'interestGroupEvents').push(
-      eventData
-    );
+    this.getAuctionEventsArray(tabId, 'globalEvents').push(eventData);
 
     if (!uniqueAuctionId) {
       return;

@@ -59,16 +59,38 @@ class DataStore {
   } = {};
 
   /**
-   * The auction data of the tabs.
+   * The auction event of the tabs (Interest group access as well as interest group auction events).
    */
   auctionEvents: {
     [tabId: string]: {
       [uniqueAuctionId: string]: singleAuctionEvent[];
     };
   } = {};
+  /**
+   * For tab 123456 auction events will have interestGroup accessed events as well as the interestGroupAuctionEvents.
+   * There can be 2 types of interestGroupAccessed events:
+   * 1) Join and Leave eventsare global and are fired on all the tabs.
+   * 2) Bid Win topLevelBid are fired where bidding is happening.
+   *
+   * To accomodate these 2 events we have 2 different keys in the auctionEvent for each tab:
+   * 1) The uniqueParentAuctionId,
+   *     a) if its a multi-seller auction then it will have:
+   *         i) a uniqueParentAuctionId where component auction Events are added.
+   *        ii) top level auction in an id whose key is '0',
+   *     b) if its a single sale then it will have a key with uniqueAuctionId where all the auctionEvents are added.
+   * 2) a 'globalEvents' key where all the global events are added like join leave etc.
+   *
+   * Structure may look like this:
+   * auctionEvents: {
+   *     123456: {
+   *          'globalEvents': [],
+   *          '12413hsad23e1nsd': {}
+   *     }
+   * };
+   */
 
   /**
-   * The auction data of the tabs.
+   * The auction data of the tabs which is added when interestGroupAuctionEvent occurs.
    */
   auctionDataForTabId: {
     [tabId: string]: auctionData;
@@ -524,8 +546,10 @@ class DataStore {
           },
         });
 
+        const { interestGroupEvents, ...rest } = this.auctionEvents[tabId];
+
         const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
-          Object.values(this.auctionEvents[tabId]).flat()
+          Object.values(rest).flat()
         );
         const groupedAuctionBids: {
           [parentAuctionId: string]: {
@@ -534,44 +558,39 @@ class DataStore {
           };
         } = {};
 
-        const auctionEventsToBeProcessed = Object.values(
-          this.auctionEvents[tabId]
-        ).flat();
+        const auctionEventsToBeProcessed = Object.values(rest).flat();
 
         if (isMultiSellerAuction) {
           auctionEventsToBeProcessed.forEach((event) => {
-            if (!event?.parentAuctionId) {
-              if (event?.uniqueAuctionId) {
-                if (!groupedAuctionBids[event?.uniqueAuctionId]) {
-                  groupedAuctionBids[event?.uniqueAuctionId] = {
+            const { parentAuctionId = null, uniqueAuctionId = null } = event;
+
+            if (!parentAuctionId) {
+              if (uniqueAuctionId) {
+                if (!groupedAuctionBids[uniqueAuctionId]) {
+                  groupedAuctionBids[uniqueAuctionId] = {
                     0: [],
                   };
                 }
-                groupedAuctionBids[event?.uniqueAuctionId]['0'].push(event);
+                groupedAuctionBids[uniqueAuctionId]['0'].push(event);
               }
               return;
             }
 
-            if (!groupedAuctionBids[event.parentAuctionId]) {
-              groupedAuctionBids[event.parentAuctionId] = {
+            if (!groupedAuctionBids[parentAuctionId]) {
+              groupedAuctionBids[parentAuctionId] = {
                 0: [],
               };
             }
 
-            if (!event?.uniqueAuctionId) {
+            if (!uniqueAuctionId) {
               return;
             }
 
-            if (
-              !groupedAuctionBids[event.parentAuctionId][event.uniqueAuctionId]
-            ) {
-              groupedAuctionBids[event.parentAuctionId][event.uniqueAuctionId] =
-                [];
+            if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
+              groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
             }
 
-            groupedAuctionBids[event.parentAuctionId][
-              event.uniqueAuctionId
-            ].push(event);
+            groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
           });
         }
 
@@ -579,12 +598,9 @@ class DataStore {
           type: 'AUCTION_EVENTS',
           payload: {
             tabId,
-            auctionEvents: isMultiSellerAuction
-              ? groupedAuctionBids
-              : this.auctionEvents[tabId],
+            auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
             multiSellerAuction: isMultiSellerAuction,
-            globalEvents:
-              this.auctionEvents['globalEvents']['interestGroupEvents'],
+            globalEvents: interestGroupEvents,
           },
         });
       }
