@@ -82,6 +82,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         tabId: number;
         auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'];
         multiSellerAuction: boolean;
+        globalEvents: singleAuctionEvent[];
       };
     }) => {
       if (!message.type) {
@@ -115,23 +116,9 @@ const Provider = ({ children }: PropsWithChildren) => {
           let shapedInterestGroupDetails: ProtectedAudienceContextType['state']['interestGroupDetails'] =
             [];
 
-          if (!Array.isArray(message.payload.auctionEvents)) {
-            const eventsToBeParsed = Object.values(
-              message.payload.auctionEvents
-            ).flat();
-
-            const singleAuctionEventsFlatMapped = eventsToBeParsed
-              .map((eventSet) => Object.values(eventSet).flat())
-              .flat();
-
-            shapedInterestGroupDetails = await computeInterestGroupDetails(
-              singleAuctionEventsFlatMapped
-            );
-          } else {
-            shapedInterestGroupDetails = await computeInterestGroupDetails(
-              message.payload.auctionEvents
-            );
-          }
+          shapedInterestGroupDetails = await computeInterestGroupDetails(
+            message.payload.globalEvents
+          );
 
           setInterestGroupDetails((prevState) => {
             if (
