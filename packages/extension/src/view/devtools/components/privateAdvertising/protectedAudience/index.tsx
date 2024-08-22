@@ -17,18 +17,102 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import React, { useMemo, useState } from 'react';
+import {
+  InfoCard as InfoCardTemplate,
+  PSInfoKey,
+  QuickLinksList,
+  Tabs,
+  type PSInfoKeyType,
+  type TabItems,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const ProtectedAudience = () => {
+/**
+ * Internal dependencies.
+ */
+import classNames from 'classnames';
+
+const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
-    <div data-testid="protected-audience-content" className="h-full w-full">
-      <LandingPage
-        title={I18n.getMessage('protectedAudience')}
-        psInfoKey={PSInfoKey.ProtectedAudience}
-        extraClasses="max-w-2xl h-fit"
+    <>
+      <InfoCardTemplate infoKey={infoKey} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
+    </>
+  );
+};
+
+const ProtectedAudience = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
+  const tabItems = useMemo<TabItems>(
+    () => [
+      {
+        title: 'Overview',
+        content: {
+          Element: InfoCard,
+          props: {
+            infoKey: PSInfoKey.ProtectedAudience,
+          },
+          className: 'p-4',
+        },
+      },
+      // {
+      //   title: 'Interest Groups',
+      //   content: {
+      //     Element: InterestGroups,
+      //     className: 'pt-4 overflow-hidden',
+      //   },
+      // },
+      // {
+      //   title: 'Ad Units',
+      //   content: {
+      //     Element: AdUnits,
+      //     className: 'overflow-hidden',
+      //   },
+      // },
+      // {
+      //   title: 'Auctions',
+      //   content: {
+      //     Element: Auctions,
+      //   },
+      // },
+      // {
+      //   title: 'Bids',
+      //   content: {
+      //     Element: Bids,
+      //   },
+      // },
+    ],
+    []
+  );
+
+  const ActiveTabContent = tabItems[activeTab].content.Element;
+
+  return (
+    <div
+      data-testid="protected-audience-content"
+      className="h-screen w-full flex flex-col"
+    >
+      <div className="p-4">
+        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+          <h1 className="text-left">{I18n.getMessage('protectedAudience')}</h1>
+        </div>
+      </div>
+      <Tabs
+        items={tabItems}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
+      <div
+        className={classNames(tabItems[activeTab].content.className, 'flex-1')}
+      >
+        {ActiveTabContent && (
+          <ActiveTabContent {...tabItems[activeTab].content.props} />
+        )}
+      </div>
     </div>
   );
 };
