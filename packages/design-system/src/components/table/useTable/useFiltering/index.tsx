@@ -45,7 +45,6 @@ export type TableFilteringOutput = {
     isSingleFilterRemovalAction?: boolean
   ) => void;
   isSelectAllFilterSelected: (filterKey: string) => boolean;
-  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
   resetFilters: () => void;
 };
 
@@ -97,15 +96,6 @@ const useFiltering = (
       return Boolean(selectAllFilterSelection?.[filterKey]?.selected);
     },
     [selectAllFilterSelection]
-  );
-
-  const isFilterValueSelected = useCallback(
-    (accessorKey: string, filterValue: string) => {
-      return Boolean(
-        filters[accessorKey]?.filterValues?.[filterValue]?.selected
-      );
-    },
-    [filters]
   );
 
   const toggleSelectAllFilter = useCallback(
@@ -346,7 +336,6 @@ const useFiltering = (
     toggleSelectAllFilter,
     isSelectAllFilterSelected,
     resetFilters,
-    isFilterValueSelected,
   };
 };
 

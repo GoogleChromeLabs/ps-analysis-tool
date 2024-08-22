@@ -107,7 +107,6 @@ const AssembledCookiesLanding = () => {
           <Landing
             tabCookies={cookiesByKey}
             appliedFilters={filter.selectedFilters}
-            isFilterValueSelected={filter.isFilterValueSelected}
           />
         </div>
       </div>

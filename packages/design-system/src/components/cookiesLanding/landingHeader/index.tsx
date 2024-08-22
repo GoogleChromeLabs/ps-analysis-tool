@@ -53,8 +53,6 @@ const LandingHeader = ({
                   'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer ':
                     circleData.onClick,
                   'cursor-default': !circleData.onClick,
-                  'bg-[#f5f5f5] dark:bg-[#1d1d1d] rounded-md':
-                    circleData?.isSelected?.(),
                 })}
                 onClick={() => {
                   circleData.onClick?.();

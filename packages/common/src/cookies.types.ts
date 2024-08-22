@@ -167,7 +167,6 @@ export interface Legend {
   color: string;
   countClassName: string;
   onClick?: (title: string) => void;
-  isSelected?: (title: string) => boolean;
 }
 
 export interface CookieStatsComponents {
@@ -257,7 +256,6 @@ export interface DataMapping {
     color: string;
   }[];
   onClick?: (() => void) | null;
-  isSelected?: () => boolean;
 }
 
 export type FrameStateCreator = {

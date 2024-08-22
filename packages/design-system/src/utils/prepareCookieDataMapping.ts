@@ -28,14 +28,12 @@ import { I18n } from '@google-psat/i18n';
  * @param {CookiesCount} cookieStats The calculated cookie count for each type.
  * @param {CookieStatsComponents} cookiesStatsComponents cookies statistics of curent tab with the legend data.
  * @param selectedItemUpdater The function to update the selected item.
- * @param isFilterValueSelected The function to check if the filter value is selected.
  * @returns {DataMapping[]} Mapped data array for displaying the landing header.
  */
 export default function prepareCookieDataMapping(
   cookieStats: CookiesCount,
   cookiesStatsComponents: CookieStatsComponents,
-  selectedItemUpdater: (title: string, accessorKey?: string) => void,
-  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean
+  selectedItemUpdater: (title: string, accessorKey?: string) => void
 ): DataMapping[] {
   return [
     {
@@ -43,7 +41,6 @@ export default function prepareCookieDataMapping(
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
       onClick: () => selectedItemUpdater('', 'isFirstParty'), // title is empty as we don't want to select any filter.
-      isSelected: () => isFilterValueSelected('isFirstParty', ''),
     },
     {
       title: I18n.getMessage('firstPartyCookies'),
@@ -51,8 +48,6 @@ export default function prepareCookieDataMapping(
       data: cookiesStatsComponents.firstParty,
       onClick: () =>
         selectedItemUpdater(I18n.getMessage('firstParty'), 'isFirstParty'),
-      isSelected: () =>
-        isFilterValueSelected('isFirstParty', I18n.getMessage('firstParty')),
     },
     {
       title: I18n.getMessage('thirdPartyCookies'),
@@ -60,8 +55,6 @@ export default function prepareCookieDataMapping(
       data: cookiesStatsComponents.thirdParty,
       onClick: () =>
         selectedItemUpdater(I18n.getMessage('thirdParty'), 'isFirstParty'),
-      isSelected: () =>
-        isFilterValueSelected('isFirstParty', I18n.getMessage('thirdParty')),
     },
   ];
 }
