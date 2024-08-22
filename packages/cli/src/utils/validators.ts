@@ -58,11 +58,11 @@ export function numericValidator(value: string, flag: string) {
     switch (flag) {
       case '-n':
         throw new InvalidArgumentError(
-          "Correct value for option  '-n, --number-of-urls <num>' would be non negative number greater than 0 and less than equal to total number of urls"
+          "The correct value for option  '-n, --number-of-urls <num>' would be a nonnegative number greater than 0 and less than equal to the total number of URLs"
         );
       case '-c':
         throw new InvalidArgumentError(
-          "Correct value for option '-c, --concurrency <num>' would be non negative number greater than 0 and less than equal to total number of urls"
+          "The correct value for option '-c, --concurrency <num>' would be a nonnegative number greater than 0 and less than equal to the total number of URLs"
         );
       case '-w':
         throw new InvalidArgumentError(
@@ -75,7 +75,7 @@ export function numericValidator(value: string, flag: string) {
 
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
-    redLogger(`Error: ${value} is not valid numeric value.`);
+    redLogger(`Error: ${value} is not a valid numeric value.`);
   }
   return parsedValue;
 }
@@ -148,15 +148,15 @@ export function urlValidator(url: string, flag: string) {
     switch (flag) {
       case '[website-url]':
         throw new InvalidArgumentError(
-          'Correct value for command-argument would be https://example.com'
+          'The correct value for the command-argument would be https://example.com'
         );
       case '-u':
         throw new InvalidArgumentError(
-          "Correct value for option '-u, --url <url>' would be https://example.com"
+          "The correct value for option '-u, --url <url>' would be https://example.com"
         );
       case '-s':
         throw new InvalidArgumentError(
-          "Correct value for option '-s, --source-url <url>' would be https://gagan.pro/sitemap/toypta.xml or https://sitemap.superintegratedapp.com/sitemaps/sitemap.csv"
+          "The correct value for option '-s, --source-url <url>' would be https://example.com/sitemap/sitemap.xml or https://example.com/sitemaps/sitemap.csv"
         );
       default:
         throw new InvalidArgumentError('');
@@ -182,7 +182,7 @@ export function outDirValidator(outDir: string, flag: string) {
     switch (flag) {
       case '-o':
         throw new InvalidArgumentError(
-          "Correct value for option '-o, --out-dir <path>' would be /users/path/to/save/output"
+          "The correct value for option '-o, --out-dir <path>' would be /users/path/to/save/output"
         );
       default:
         throw new InvalidArgumentError('');

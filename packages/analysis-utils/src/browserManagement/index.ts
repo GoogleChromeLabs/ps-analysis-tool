@@ -105,7 +105,7 @@ export class BrowserManagement {
       headless: this.isHeadless,
       args,
     });
-    this.debugLog('Browser intialized');
+    this.debugLog('Browser initialized');
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -152,7 +152,7 @@ export class BrowserManagement {
 
   async openPage(): Promise<Page> {
     if (!this.browser) {
-      throw new Error('Browser not intialized');
+      throw new Error('Browser not initialized');
     }
     const sitePage = await this.browser.newPage();
 
@@ -175,7 +175,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     this.debugLog(`Starting navigation to URL: ${url}`);
@@ -195,7 +195,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     try {
@@ -203,7 +203,7 @@ export class BrowserManagement {
         window.scrollBy(0, 10000);
       });
     } catch (error) {
-      this.debugLog('Scrolled to end of page');
+      this.debugLog('Scrolled to the end of page');
       //ignore
     }
 
@@ -480,10 +480,10 @@ export class BrowserManagement {
     const page = this.pages[pageId];
 
     if (!page) {
-      throw new Error(`no page with the provided id was found:${pageId}`);
+      throw new Error(`No page with the provided ID was found:${pageId}`);
     }
 
-    this.debugLog('Attaching network event listeners to page');
+    this.debugLog('Attaching network event listeners to the page');
 
     const cdpSession = await page.createCDPSession();
 
@@ -611,7 +611,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     const domQueryMatches: LibraryData = {};
