@@ -546,7 +546,7 @@ class DataStore {
           },
         });
 
-        const { interestGroupEvents, ...rest } = this.auctionEvents[tabId];
+        const { globalEvents, ...rest } = this.auctionEvents[tabId];
 
         const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
           Object.values(rest).flat()
@@ -600,7 +600,7 @@ class DataStore {
             tabId,
             auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
             multiSellerAuction: isMultiSellerAuction,
-            globalEvents: interestGroupEvents,
+            globalEvents: globalEvents,
           },
         });
       }
