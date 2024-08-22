@@ -79,7 +79,9 @@ const Layout = ({
     () =>
       Object.fromEntries(
         Object.entries(reshapedCookies).filter(
-          ([, cookie]) => cookie.isBlocked || cookie.blockedReasons?.length
+          ([, cookie]) =>
+            cookie.isBlocked ||
+            (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
         )
       ),
     [reshapedCookies]

@@ -46,6 +46,7 @@ const generateRootSummaryDataCSV = (
 
   Object.keys(extractedData).forEach((cookieKey) => {
     const cookie = extractedData[cookieKey];
+
     if (!cookie.analytics) {
       return;
     }
@@ -55,7 +56,10 @@ const generateRootSummaryDataCSV = (
       totalThirdPartyCookies += 1;
     }
 
-    if (cookie.isBlocked) {
+    if (
+      cookie.isBlocked ||
+      (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
+    ) {
       cookiesWithIssues += 1;
     }
 
@@ -68,19 +72,28 @@ const generateRootSummaryDataCSV = (
         break;
       case 'Functional':
         functionalCookies += 1;
-        if (cookie.isBlocked) {
+        if (
+          cookie.isBlocked ||
+          (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
+        ) {
           functionalCookiesWithIssues += 1;
         }
         break;
       case 'Marketing':
         marketingCookies += 1;
-        if (cookie.isBlocked) {
+        if (
+          cookie.isBlocked ||
+          (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
+        ) {
           marketingCookiesWithIssues += 1;
         }
         break;
       case 'Uncategorized':
         uncategorisedCookies += 1;
-        if (cookie.isBlocked) {
+        if (
+          cookie.isBlocked ||
+          (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
+        ) {
           uncategorisedCookiesWithIssues += 1;
         }
         break;
