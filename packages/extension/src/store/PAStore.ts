@@ -109,6 +109,20 @@ class PAStore {
     const { uniqueAuctionId, accessTime, ownerOrigin, name, type } =
       interestGroupAccessedParams;
 
+    let eventData: singleAuctionEvent = {
+      uniqueAuctionId,
+      name,
+      ownerOrigin,
+      formattedTime: new Date(accessTime * 1000),
+      type,
+      time: accessTime,
+      eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
+    };
+
+    this.getAuctionEventsArray('globalEvents', 'interestGroupEvents').push(
+      eventData
+    );
+
     if (!uniqueAuctionId) {
       return;
     }
@@ -125,7 +139,7 @@ class PAStore {
       bid = initialBidValue;
     }
 
-    if (!initialBidValue && type === 'win') {
+    if (uniqueAuctionId && !initialBidValue && type === 'win') {
       bid = this.getAuctionEventsArray(tabId, uniqueAuctionId).filter(
         ({
           type: storedType,
@@ -139,15 +153,17 @@ class PAStore {
           eventAuctionId === interestGroupAccessedParams.uniqueAuctionId
       )?.[0]?.bid;
     }
-    const eventData: singleAuctionEvent = {
+
+    eventData = {
       uniqueAuctionId,
       name,
       ownerOrigin,
       formattedTime:
+        uniqueAuctionId &&
         this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
           ? '0 ms'
           : formatTime(
-              dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
+              dataStore.auctionEvents[tabId][uniqueAuctionId]?.[0].time,
               accessTime
             ),
       type,
