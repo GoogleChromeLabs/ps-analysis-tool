@@ -20,11 +20,26 @@ import React, { useEffect, useState } from 'react';
 import { marked } from 'marked';
 import 'github-markdown-css';
 
+/**
+ * Internal dependencies.
+ */
+import Sidebar, { type SidebarMenuItem } from './sidebar';
+import { fetchLocalData } from '@google-psat/common';
+
+interface Wiki {
+  url: string;
+  sidebar: SidebarMenuItem[];
+}
+
 const Wiki = () => {
   const [html, setHTML] = useState<string>('');
+  const [wikiData, setWikiData] = useState<Wiki | undefined>();
 
   useEffect(() => {
     (async () => {
+      const data = await fetchLocalData('data/wiki.json');
+      setWikiData(data);
+
       const response = await fetch(
         'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/Home.md'
       );
@@ -38,7 +53,7 @@ const Wiki = () => {
   return (
     <div className="p-5 pb-10">
       <div className="flex gap-5">
-        <div className="markdown-body wiki-sidebar border-r border-gray-300 dark:border-quartz"></div>
+        <Sidebar data={wikiData?.sidebar} />
         <div className="markdown-body h-full w-full">
           <h2>Home</h2>
           <div dangerouslySetInnerHTML={{ __html: html }} />
