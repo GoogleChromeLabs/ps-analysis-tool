@@ -31,7 +31,12 @@
 /**
  * External dependencies.
  */
-import { type CookieData, type CookieDatabase } from '@google-psat/common';
+import type {
+  CookieData,
+  CookieDatabase,
+  singleAuctionEvent,
+  auctionData,
+} from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -42,26 +47,6 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
-
-export interface singleAuctionEvent {
-  bidCurrency?: string;
-  uniqueAuctionId?: Protocol.Storage.InterestGroupAuctionId;
-  bid?: number;
-  name?: string;
-  ownerOrigin?: string;
-  type: string;
-  formattedTime: string | Date;
-  componentSellerOrigin?: string;
-  time: number;
-  auctionConfig?: object;
-  interestGroupConfig?: Protocol.Storage.InterestGroupAccessedEvent;
-  parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
-  eventType:
-    | 'interestGroupAuctionEventOccurred'
-    | 'interestGroupAuctionNetworkRequestCompleted'
-    | 'interestGroupAuctionNetworkRequestCreated'
-    | 'interestGroupAccessed';
-}
 
 class DataStore {
   /**
@@ -86,13 +71,7 @@ class DataStore {
    * The auction data of the tabs.
    */
   auctionDataForTabId: {
-    [tabId: string]: {
-      [uniqueAuctionId: Protocol.Storage.InterestGroupAuctionId]: {
-        auctionTime: Protocol.Network.TimeSinceEpoch;
-        auctionConfig?: any;
-        parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
-      };
-    };
+    [tabId: string]: auctionData;
   } = {};
 
   /**

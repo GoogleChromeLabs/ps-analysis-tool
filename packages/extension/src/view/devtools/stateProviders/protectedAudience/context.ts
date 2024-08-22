@@ -16,8 +16,7 @@
 /**
  * External dependencies.
  */
-import { createContext } from '@google-psat/common';
-import type { singleAuctionEvent } from '../../../../store/dataStore';
+import { createContext, type singleAuctionEvent } from '@google-psat/common';
 
 export type InterestGroups = singleAuctionEvent & {
   details: any;
