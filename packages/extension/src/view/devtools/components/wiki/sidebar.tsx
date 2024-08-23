@@ -50,7 +50,7 @@ const Sidebar = ({
       }}
     >
       <div className="markdown-body wiki-sidebar w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black p-5">
-        {Boolean(data?.length) && (
+        {data && Boolean(data?.length) && (
           <ul>
             {data.map((topMenuItem) => {
               return (
@@ -67,9 +67,9 @@ const Sidebar = ({
                             setCurrentSelectedPage={setCurrentSelectedPage}
                             currentSelectedPage={currentSelectedPage}
                           />
-                          {Boolean(menuItem?.menu?.length) && (
+                          {menuItem.menu && Boolean(menuItem?.menu?.length) && (
                             <ul>
-                              {menuItem?.menu.map((subMenuItem) => {
+                              {menuItem.menu.map((subMenuItem) => {
                                 return (
                                   <li key={subMenuItem.name}>
                                     <Link
