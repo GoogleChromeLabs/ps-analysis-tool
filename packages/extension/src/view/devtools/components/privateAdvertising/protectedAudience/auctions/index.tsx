@@ -17,6 +17,8 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import type { singleAuctionEvent } from '@google-psat/common';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -24,28 +26,63 @@ import React, { useState } from 'react';
 import Breakpoints from './breakpoints';
 import AuctionTable from './auctionTable';
 import BottomTray from './bottomTray';
-import { Resizable } from 're-resizable';
+import MultiSellerAuctionTable from './mutliSellerAuctionTable';
+import { useProtectedAudience } from '../../../../stateProviders';
 
 const Auctions = () => {
-  const [selectedJSON, setSelectedJSON] = useState(null);
+  const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
+    null
+  );
+
+  const { auctionEvents, isMultiSellerAuction } = useProtectedAudience(
+    ({ state }) => ({
+      auctionEvents: state.auctionEvents ?? {},
+      isMultiSellerAuction: state.isMultiSellerAuction,
+    })
+  );
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-screen flex flex-col overflow-hidden">
       <Resizable
         defaultSize={{
           width: '100%',
-          height: '80%',
+          height: '75%',
         }}
         enable={{
           bottom: true,
         }}
-        minHeight="10%"
-        maxHeight="90%"
+        minHeight="20%"
+        maxHeight="80%"
+        className="overflow-auto"
       >
         <Breakpoints />
-        {['Dummy'].map((auction) => (
-          <AuctionTable key={auction} setSelectedJSON={setSelectedJSON} />
-        ))}
+        {!isMultiSellerAuction ? (
+          <div className="p-4 pt-0">
+            <AuctionTable
+              selectedJSON={selectedJSON}
+              setSelectedJSON={setSelectedJSON}
+              auctionEvents={
+                (Object.values(auctionEvents ?? {})?.[0] ??
+                  []) as singleAuctionEvent[]
+              }
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-8">
+            {Object.keys(auctionEvents ?? {}).map((parentAuctionId) => (
+              <MultiSellerAuctionTable
+                key={parentAuctionId}
+                selectedJSON={selectedJSON}
+                setSelectedJSON={setSelectedJSON}
+                auctionEvents={
+                  (auctionEvents[parentAuctionId] || {}) as {
+                    [uniqueAuctionId: string]: singleAuctionEvent[];
+                  }
+                }
+              />
+            ))}
+          </div>
+        )}
       </Resizable>
       <BottomTray selectedJSON={selectedJSON} />
     </div>

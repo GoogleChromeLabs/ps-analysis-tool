@@ -19,10 +19,16 @@
 import type {
   CookieTableData,
   InterestGroups,
+  singleAuctionEvent,
   TechnologyData,
 } from '@google-psat/common';
 
-export type TableData = (CookieTableData | TechnologyData | InterestGroups) & {
+export type TableData = (
+  | CookieTableData
+  | TechnologyData
+  | InterestGroups
+  | singleAuctionEvent
+) & {
   highlighted?: boolean;
 };
 

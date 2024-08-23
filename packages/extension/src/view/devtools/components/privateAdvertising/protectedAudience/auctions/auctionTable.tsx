@@ -17,9 +17,8 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import { noop } from '@google-psat/common';
+import { noop, type singleAuctionEvent } from '@google-psat/common';
 import {
-  BottomTrayIcon,
   Table,
   TableProvider,
   type TableColumn,
@@ -27,30 +26,38 @@ import {
 } from '@google-psat/design-system';
 
 interface AuctionTableProps {
-  setSelectedJSON: (json: any) => void;
+  selectedJSON: singleAuctionEvent | null;
+  setSelectedJSON: React.Dispatch<
+    React.SetStateAction<singleAuctionEvent | null>
+  >;
+  auctionEvents: singleAuctionEvent[];
 }
 
-const AuctionTable = ({ setSelectedJSON }: AuctionTableProps) => {
+const AuctionTable = ({
+  selectedJSON,
+  setSelectedJSON,
+  auctionEvents,
+}: AuctionTableProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Event Time',
-        accessorKey: 'eventTime',
+        accessorKey: 'formattedTime',
         cell: (info) => info,
       },
       {
         header: 'Event',
-        accessorKey: 'event',
+        accessorKey: 'type',
         cell: (info) => info,
       },
       {
         header: 'Interest Group Origin',
-        accessorKey: 'interestGroupOrigin',
+        accessorKey: 'ownerOrigin',
         cell: (info) => info,
       },
       {
         header: 'Interest Group Name',
-        accessorKey: 'interestGroupName',
+        accessorKey: 'name',
         cell: (info) => info,
       },
       {
@@ -65,7 +72,7 @@ const AuctionTable = ({ setSelectedJSON }: AuctionTableProps) => {
       },
       {
         header: 'Component Seller',
-        accessorKey: 'componentSeller',
+        accessorKey: 'componentSellerOrigin',
         cell: (info) => info,
       },
     ],
@@ -73,34 +80,41 @@ const AuctionTable = ({ setSelectedJSON }: AuctionTableProps) => {
   );
 
   return (
-    <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col p-4 pb-0">
+    <div className="w-full h-fit text-outer-space-crayola dark:text-bright-gray flex flex-col pt-4">
       <div className="flex justify-between items-center px-1">
-        <p>Started by: https://example.com</p>
-        <p>Date</p>
+        <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
+        <p>
+          Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
+        </p>
       </div>
       <div className="border border-american-silver dark:border-quartz">
         <TableProvider
-          data={[]}
+          data={auctionEvents}
           tableColumns={tableColumns}
           tableFilterData={undefined}
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="adtable"
           onRowContextMenu={noop}
-          onRowClick={noop}
+          onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
           getRowObjectKey={(row: TableRow) => {
-            return row.originalData.name;
+            return (
+              // @ts-ignore
+              ((row.originalData as singleAuctionEvent).auctionConfig?.seller ||
+                '') + (row.originalData as singleAuctionEvent).time
+            );
           }}
         >
-          <Table hideFiltering={true} selectedKey={''} hideSearch={true} />
+          <Table
+            hideFiltering={true}
+            selectedKey={
+              // @ts-ignore
+              (selectedJSON?.auctionConfig?.seller || '') +
+                selectedJSON?.time || ''
+            }
+            hideSearch={true}
+          />
         </TableProvider>
       </div>
-      <button
-        className="flex gap-1 items-center hover:opacity-70 px-1"
-        onClick={() => setSelectedJSON({})}
-      >
-        <BottomTrayIcon />
-        Show Config
-      </button>
     </div>
   );
 };
