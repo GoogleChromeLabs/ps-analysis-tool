@@ -37,7 +37,7 @@ type SidebarMenu = {
 const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
   return (
     <Resizable
-      defaultSize={{ width: '200px', height: '100%' }}
+      defaultSize={{ width: '220px', height: '100%' }}
       minWidth={'150px'}
       maxWidth={'90%'}
       enable={{
@@ -50,7 +50,7 @@ const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
             {data.map((topMenuItem) => {
               return (
                 <li key={topMenuItem.title} className="mb-4">
-                  <span className="font-semibold text-sm text-outer-space block mb-2">
+                  <span className="font-semibold text-sm text-outer-space block mb-2 dark:text-bright-gray">
                     {topMenuItem.title}
                   </span>
                   <ul>

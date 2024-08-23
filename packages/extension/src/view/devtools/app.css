@@ -39,3 +39,11 @@
     }
   }
 }
+
+.dark {
+  .markdown-body {
+    table {
+      color: black;
+    }
+  }
+}
