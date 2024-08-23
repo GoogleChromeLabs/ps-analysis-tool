@@ -24,21 +24,139 @@ import React, {
   useMemo,
 } from 'react';
 import type { Protocol } from 'devtools-protocol';
-import type { singleAuctionEvent } from '@google-psat/common';
+import type {
+  MultiSellerAuction,
+  singleAuctionEvent,
+  SingleSellerAuction,
+} from '@google-psat/common';
 import { diff } from 'deep-object-diff';
 /**
  * Internal dependencies.
  */
 import Context, { type ProtectedAudienceContextType } from './context';
 
+const BIDDING_TYPES = [
+  'bid',
+  'additionalBid',
+  'topLevelBid',
+  'topLevelAdditionalBid',
+];
+
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
+
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
     useState<boolean>(false);
+
   const [interestGroupDetails, setInterestGroupDetails] = useState<
     ProtectedAudienceContextType['state']['interestGroupDetails']
   >([]);
+
+  const [receivedBids, setReceivedBids] = useState<
+    ProtectedAudienceContextType['state']['receivedBids']
+  >([]);
+
+  const [noBids, setNoBids] = useState<
+    ProtectedAudienceContextType['state']['noBids']
+  >([]);
+
+  const computeBids = useCallback(
+    (
+      _auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'],
+      _isMultiSellerAuction: boolean
+    ) => {
+      if (
+        !_auctionEvents ||
+        (_auctionEvents && Object.keys(_auctionEvents).length === 0)
+      ) {
+        return null;
+      }
+
+      const _receivedBids: singleAuctionEvent[] = [];
+      const _noBids: string[] = [];
+
+      const _interestGroupBuyers = new Set();
+
+      if (_isMultiSellerAuction) {
+        const multisellerAuctionEvents = _auctionEvents as MultiSellerAuction;
+        Object.keys(multisellerAuctionEvents).forEach((parentAuctionId) => {
+          Object.keys(multisellerAuctionEvents[parentAuctionId]).forEach(
+            (uniqueAuctionId) => {
+              if ('globalEvents' === uniqueAuctionId) {
+                return;
+              }
+
+              const { auctionConfig } =
+                multisellerAuctionEvents[parentAuctionId]?.[
+                  uniqueAuctionId
+                ]?.[1] ?? {};
+
+              //@ts-ignore
+              auctionConfig?.interestGroupBuyers?.forEach((element) => {
+                _interestGroupBuyers.add(element);
+              });
+
+              _receivedBids.push(
+                ...multisellerAuctionEvents[parentAuctionId][
+                  uniqueAuctionId
+                ].filter(
+                  (event) =>
+                    event.eventType === 'interestGroupAccessed' &&
+                    BIDDING_TYPES.includes(event.type)
+                )
+              );
+            }
+          );
+        });
+
+        if (_interestGroupBuyers.size > 0) {
+          const buyersWhoBid = new Set<string>();
+
+          _receivedBids.forEach((event) => {
+            if (event.ownerOrigin) {
+              buyersWhoBid.add(event.ownerOrigin);
+            }
+          });
+
+          _noBids.push(
+            ...Array.from(buyersWhoBid.difference(_interestGroupBuyers))
+          );
+        }
+      } else {
+        const singleSellerAuctionEvents = _auctionEvents as SingleSellerAuction;
+        Object.keys(singleSellerAuctionEvents).forEach((parentAuctionId) => {
+          if ('globalEvents' === parentAuctionId) {
+            return;
+          }
+
+          _receivedBids.push(
+            ...singleSellerAuctionEvents[parentAuctionId].filter(
+              (event) =>
+                event.eventType === 'interestGroupAccessed' &&
+                BIDDING_TYPES.includes(event.type)
+            )
+          );
+        });
+
+        if (_interestGroupBuyers.size > 0) {
+          const buyersWhoBid = new Set<string>();
+
+          _receivedBids.forEach((event) => {
+            if (event.ownerOrigin) {
+              buyersWhoBid.add(event.ownerOrigin);
+            }
+          });
+
+          _noBids.push(
+            ...Array.from(buyersWhoBid.difference(_interestGroupBuyers))
+          );
+        }
+      }
+      return { receivedBids: _receivedBids, noBids: _noBids };
+    },
+    []
+  );
 
   const computeInterestGroupDetails = useCallback(
     (auctionEventsToBeParsed: singleAuctionEvent[]) => {
@@ -98,6 +216,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       ) {
         if (message.payload.tabId === tabId) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
+
           setAuctionEvents((prevState) => {
             if (!prevState && message.payload.auctionEvents) {
               return message.payload.auctionEvents;
@@ -120,6 +239,19 @@ const Provider = ({ children }: PropsWithChildren) => {
             message.payload.globalEvents
           );
 
+          const computedBids: {
+            receivedBids: singleAuctionEvent[];
+            noBids: string[];
+          } | null = computeBids(
+            message.payload.auctionEvents,
+            message.payload.multiSellerAuction
+          );
+
+          if (computedBids) {
+            setReceivedBids(computedBids.receivedBids);
+            setNoBids(computedBids.noBids);
+          }
+
           setInterestGroupDetails((prevState) => {
             if (
               Object.keys(diff(prevState, shapedInterestGroupDetails)).length >
@@ -127,6 +259,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             ) {
               return shapedInterestGroupDetails;
             }
+
             return prevState;
           });
         }
@@ -149,9 +282,17 @@ const Provider = ({ children }: PropsWithChildren) => {
         auctionEvents,
         interestGroupDetails,
         isMultiSellerAuction,
+        receivedBids,
+        noBids,
       },
     };
-  }, [auctionEvents, interestGroupDetails, isMultiSellerAuction]);
+  }, [
+    auctionEvents,
+    interestGroupDetails,
+    isMultiSellerAuction,
+    noBids,
+    receivedBids,
+  ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };
