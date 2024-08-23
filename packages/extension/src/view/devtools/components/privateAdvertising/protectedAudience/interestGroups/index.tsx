@@ -100,16 +100,17 @@ const InterestGroups = () => {
           }}
           onRowContextMenu={noop}
           getRowObjectKey={(row: TableRow) => {
-            return new Date(
-              (row.originalData as InterestGroupsType).formattedTime
-            ).toUTCString();
+            return (
+              ((row.originalData as InterestGroupsType).uniqueAuctionId ?? '') +
+              (row.originalData as InterestGroupsType).time
+            );
           }}
         >
           <Table
             hideFiltering={true}
-            selectedKey={new Date(
-              selectedRow?.formattedTime ?? ''
-            ).toUTCString()}
+            selectedKey={
+              (selectedRow?.uniqueAuctionId ?? '') + String(selectedRow?.time)
+            }
             hideSearch={true}
           />
         </TableProvider>
