@@ -61,13 +61,13 @@ const Wiki = () => {
   }, [currentSelectedPage]);
 
   return (
-    <div className="p-5 pb-10">
-      <div className="flex gap-5">
+    <div className="w-full h-full overflow-hidden">
+      <div className="w-full h-full flex gap-1">
         <Sidebar
           data={menuItems}
           setCurrentSelectedPage={setCurrentSelectedPage}
         />
-        <div className="markdown-body h-full w-full">
+        <div className="markdown-body h-full w-full overflow-auto p-5 pb-10">
           <h2>{currentSelectedPage}</h2>
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>

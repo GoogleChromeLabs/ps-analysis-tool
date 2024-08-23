@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { type Dispatch, type SetStateAction, useState } from 'react';
+import React, { type Dispatch, type SetStateAction } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -35,27 +35,20 @@ type SidebarMenu = {
 };
 
 const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
-  const [sidebarWidth, setSidebarWidth] = useState(200);
-
   if (!data?.length) {
     return null;
   }
 
   return (
     <Resizable
-      size={{ width: sidebarWidth, height: '100%' }}
       defaultSize={{ width: '200px', height: '100%' }}
-      onResizeStop={(_, __, ___, d) => {
-        setSidebarWidth((prevState) => prevState + d.width);
-      }}
       minWidth={'150px'}
       maxWidth={'90%'}
       enable={{
         right: true,
       }}
-      className="h-full"
     >
-      <div className="markdown-body wiki-sidebar w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black">
+      <div className="markdown-body wiki-sidebar w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black p-5">
         <ul>
           {data.map((topMenuItem) => {
             return (
