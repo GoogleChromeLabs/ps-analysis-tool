@@ -71,6 +71,7 @@ const Wiki = () => {
         <Sidebar
           data={menuItems}
           setCurrentSelectedPage={setCurrentSelectedPage}
+          currentSelectedPage={currentSelectedPage}
         />
         <div className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
           {!isLoading ? (

@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { type Dispatch, type SetStateAction, useCallback } from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -32,9 +33,14 @@ export interface MenuItem {
 interface LinkProps {
   item: MenuItem;
   setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
+  currentSelectedPage: string;
 }
 
-const Link = ({ item, setCurrentSelectedPage }: LinkProps) => {
+const Link = ({
+  item,
+  setCurrentSelectedPage,
+  currentSelectedPage,
+}: LinkProps) => {
   const handleClick = useCallback(() => {
     if (item.name && !item.link) {
       setCurrentSelectedPage(item.name);
@@ -48,6 +54,9 @@ const Link = ({ item, setCurrentSelectedPage }: LinkProps) => {
       href={isLink ? item.link : '#'}
       target={isLink ? '__blank' : '_self'}
       onClick={handleClick}
+      className={classNames('text-sm block', {
+        'decoration-solid': currentSelectedPage === item.name,
+      })}
     >
       {item.name}
       {isLink && (

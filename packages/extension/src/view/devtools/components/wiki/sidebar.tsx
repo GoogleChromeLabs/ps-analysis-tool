@@ -32,9 +32,14 @@ export interface SidebarMenuItem {
 type SidebarMenu = {
   data: SidebarMenuItem[] | undefined;
   setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
+  currentSelectedPage: string;
 };
 
-const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
+const Sidebar = ({
+  data,
+  setCurrentSelectedPage,
+  currentSelectedPage,
+}: SidebarMenu) => {
   return (
     <Resizable
       defaultSize={{ width: '220px', height: '100%' }}
@@ -60,6 +65,7 @@ const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
                           <Link
                             item={menuItem}
                             setCurrentSelectedPage={setCurrentSelectedPage}
+                            currentSelectedPage={currentSelectedPage}
                           />
                           {Boolean(menuItem?.menu?.length) && (
                             <ul>
@@ -71,6 +77,7 @@ const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
                                       setCurrentSelectedPage={
                                         setCurrentSelectedPage
                                       }
+                                      currentSelectedPage={currentSelectedPage}
                                     />
                                   </li>
                                 );
