@@ -30,12 +30,14 @@ const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
 
 const Wiki = () => {
-  const [html, setHTML] = useState<string>('');
+  const [pageContent, setPageContent] = useState<string>('');
   const [menuItems, setMenuItems] = useState<SidebarMenuItem[] | undefined>();
   const [currentSelectedPage, setCurrentSelectedPage] = useState('Home');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       const menuResponse = await fetch(GITHUB_URL + '/_Sidebar.md');
       const menuMarkdown = await menuResponse.text();
       const _menuItems = parseMenuMarkup(menuMarkdown, [
@@ -45,18 +47,21 @@ const Wiki = () => {
       ]);
 
       setMenuItems(_menuItems);
+      setIsLoading(false);
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       const fileName = currentSelectedPage.replaceAll(' ', '-') + '.md';
       const response = await fetch(GITHUB_URL + '/' + fileName);
 
-      const _markdown = await response.text();
-      const _html = await convertMarkupToHTML(_markdown);
+      const markdown = await response.text();
+      const html = await convertMarkupToHTML(markdown);
 
-      setHTML(_html);
+      setPageContent(html);
+      setIsLoading(false);
     })();
   }, [currentSelectedPage]);
 
@@ -68,8 +73,16 @@ const Wiki = () => {
           setCurrentSelectedPage={setCurrentSelectedPage}
         />
         <div className="markdown-body h-full w-full overflow-auto p-5 pb-10">
-          <h2>{currentSelectedPage}</h2>
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          {!isLoading ? (
+            <>
+              <h2>{currentSelectedPage}</h2>
+              <div dangerouslySetInnerHTML={{ __html: pageContent }} />
+            </>
+          ) : (
+            <div className="flex justify-center items-center w-full h-full">
+              <p className="inline-block text-gray">Loading...</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
