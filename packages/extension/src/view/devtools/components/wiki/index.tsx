@@ -41,6 +41,7 @@ const Wiki = () => {
       const _menuItems = parseMenuMarkup(menuMarkdown, [
         'Contributor Guide',
         'Code of Conduct',
+        'Support Forum',
       ]);
 
       setMenuItems(_menuItems);
