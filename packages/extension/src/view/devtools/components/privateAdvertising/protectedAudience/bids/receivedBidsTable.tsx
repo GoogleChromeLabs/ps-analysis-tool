@@ -34,6 +34,33 @@ const ReceivedBidsTable = ({
   setSelectedRow,
   selectedRow,
 }: ReceivedBidsTableProps) => {
+  const data = [
+    {
+      bidder: 'bidder',
+      bid: 'bid',
+      bidCurrency: 'bidCurrency',
+      adUnitCode: 'adUnitCode',
+      adContainerSize: 'adContainerSize',
+      mediaType: 'mediaType',
+    },
+    {
+      bidder: 'bidder2',
+      bid: 'bid2',
+      bidCurrency: 'bidCurrency2',
+      adUnitCode: 'adUnitCode2',
+      adContainerSize: 'adContainerSize2',
+      mediaType: 'mediaType2',
+    },
+    {
+      bidder: 'bidder3',
+      bid: 'bid3',
+      bidCurrency: 'bidCurrency3',
+      adUnitCode: 'adUnitCode3',
+      adContainerSize: 'adContainerSize3',
+      mediaType: 'mediaType3',
+    },
+  ];
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -72,7 +99,7 @@ const ReceivedBidsTable = ({
 
   return (
     <TableProvider
-      data={[]}
+      data={data}
       tableColumns={tableColumns}
       tableFilterData={undefined}
       tableSearchKeys={undefined}
@@ -82,12 +109,12 @@ const ReceivedBidsTable = ({
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
-        return row.originalData.name;
+        return row.originalData?.bidder;
       }}
     >
       <Table
         hideFiltering={true}
-        selectedKey={selectedRow?.name}
+        selectedKey={selectedRow?.bidder}
         hideSearch={true}
       />
     </TableProvider>

@@ -34,6 +34,7 @@ import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
+import Bids from './bids';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -81,12 +82,12 @@ const ProtectedAudience = () => {
           Element: Auctions,
         },
       },
-      // {
-      //   title: 'Bids',
-      //   content: {
-      //     Element: Bids,
-      //   },
-      // },
+      {
+        title: 'Bids',
+        content: {
+          Element: Bids,
+        },
+      },
     ],
     []
   );

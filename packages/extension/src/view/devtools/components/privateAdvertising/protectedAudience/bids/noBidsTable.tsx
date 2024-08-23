@@ -31,6 +31,21 @@ interface NoBidsTableProps {
 }
 
 const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
+  const data = [
+    {
+      bidder: 'bidder',
+      adUnitCode: 'adUnitCode',
+    },
+    {
+      bidder: 'bidder2',
+      adUnitCode: 'adUnitCode2',
+    },
+    {
+      bidder: 'bidder3',
+      adUnitCode: 'adUnitCode3',
+    },
+  ];
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -49,7 +64,7 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
 
   return (
     <TableProvider
-      data={[]}
+      data={data}
       tableColumns={tableColumns}
       tableFilterData={undefined}
       tableSearchKeys={undefined}
@@ -59,12 +74,12 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
-        return row.originalData.name;
+        return row.originalData.bidder;
       }}
     >
       <Table
         hideFiltering={true}
-        selectedKey={selectedRow?.name}
+        selectedKey={selectedRow?.bidder}
         minWidth="42rem"
         hideSearch={true}
       />
