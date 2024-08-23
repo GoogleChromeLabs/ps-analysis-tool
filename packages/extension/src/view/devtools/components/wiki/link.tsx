@@ -16,7 +16,12 @@
 /**
  * External dependencies.
  */
-import React, { type Dispatch, type SetStateAction } from 'react';
+import React, { type Dispatch, type SetStateAction, useCallback } from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { ExternalLinkIcon } from '@google-psat/design-system';
 
 export interface MenuItem {
   name: string;
@@ -30,13 +35,28 @@ interface LinkProps {
 }
 
 const Link = ({ item, setCurrentSelectedPage }: LinkProps) => {
+  const handleClick = useCallback(() => {
+    if (item.name && !item.link) {
+      setCurrentSelectedPage(item.name);
+    }
+  }, [item.name, item.link, setCurrentSelectedPage]);
+
+  const isLink = Boolean(item?.link);
+
   return (
     <a
-      href={item?.link ? item.link : '#'}
-      target={item?.link ? '__blank' : '_self'}
-      onClick={() => setCurrentSelectedPage(item.name)}
+      href={isLink ? item.link : '#'}
+      target={isLink ? '__blank' : '_self'}
+      onClick={handleClick}
     >
       {item.name}
+      {isLink && (
+        <ExternalLinkIcon
+          className="inline-block ml-1 color-royal-blue"
+          width="14"
+          height="14"
+        />
+      )}
     </a>
   );
 };

@@ -35,10 +35,6 @@ type SidebarMenu = {
 };
 
 const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
-  if (!data?.length) {
-    return null;
-  }
-
   return (
     <Resizable
       defaultSize={{ width: '200px', height: '100%' }}
@@ -49,45 +45,47 @@ const Sidebar = ({ data, setCurrentSelectedPage }: SidebarMenu) => {
       }}
     >
       <div className="markdown-body wiki-sidebar w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black p-5">
-        <ul>
-          {data.map((topMenuItem) => {
-            return (
-              <li key={topMenuItem.title} className="mb-4">
-                <span className="font-semibold text-sm text-outer-space block mb-2">
-                  {topMenuItem.title}
-                </span>
-                <ul>
-                  {topMenuItem.menu.map((menuItem) => {
-                    return (
-                      <li key={menuItem.name}>
-                        <Link
-                          item={menuItem}
-                          setCurrentSelectedPage={setCurrentSelectedPage}
-                        />
-                        {Boolean(menuItem?.menu?.length) && (
-                          <ul>
-                            {menuItem?.menu.map((subMenuItem) => {
-                              return (
-                                <li key={subMenuItem.name}>
-                                  <Link
-                                    item={subMenuItem}
-                                    setCurrentSelectedPage={
-                                      setCurrentSelectedPage
-                                    }
-                                  />
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </li>
-            );
-          })}
-        </ul>
+        {Boolean(data?.length) && (
+          <ul>
+            {data.map((topMenuItem) => {
+              return (
+                <li key={topMenuItem.title} className="mb-4">
+                  <span className="font-semibold text-sm text-outer-space block mb-2">
+                    {topMenuItem.title}
+                  </span>
+                  <ul>
+                    {topMenuItem.menu.map((menuItem) => {
+                      return (
+                        <li key={menuItem.name}>
+                          <Link
+                            item={menuItem}
+                            setCurrentSelectedPage={setCurrentSelectedPage}
+                          />
+                          {Boolean(menuItem?.menu?.length) && (
+                            <ul>
+                              {menuItem?.menu.map((subMenuItem) => {
+                                return (
+                                  <li key={subMenuItem.name}>
+                                    <Link
+                                      item={subMenuItem}
+                                      setCurrentSelectedPage={
+                                        setCurrentSelectedPage
+                                      }
+                                    />
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </Resizable>
   );
