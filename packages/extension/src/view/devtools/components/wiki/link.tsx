@@ -18,10 +18,6 @@
  */
 import React, { type Dispatch, type SetStateAction, useCallback } from 'react';
 import classNames from 'classnames';
-
-/**
- * Internal dependencies.
- */
 import { ExternalLinkIcon } from '@google-psat/design-system';
 
 export interface MenuItem {

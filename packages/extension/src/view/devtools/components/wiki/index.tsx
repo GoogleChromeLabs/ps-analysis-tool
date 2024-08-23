@@ -23,8 +23,8 @@ import 'github-markdown-css';
  * Internal dependencies.
  */
 import Sidebar, { type SidebarMenuItem } from './sidebar';
-import parseMenuMarkup from './parseMenuMarkup';
-import convertMarkupToHTML from './convertMarkupToHTML';
+import parseMenuMarkup from '../../../../utils/parseMenuMarkup';
+import convertMarkupToHTML from '../../../../utils/convertMarkupToHTML';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
