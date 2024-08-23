@@ -44,6 +44,7 @@ const generateRootSummaryDataCSV = (
   let uncategorisedCookiesWithIssues = 0;
   let totalCookies = 0;
 
+  // eslint-disable-next-line complexity
   Object.keys(extractedData).forEach((cookieKey) => {
     const cookie = extractedData[cookieKey];
 
@@ -66,7 +67,10 @@ const generateRootSummaryDataCSV = (
     switch (cookie.analytics.category) {
       case 'Analytics':
         analyticsCookies += 1;
-        if (cookie.isBlocked) {
+        if (
+          cookie.isBlocked ||
+          (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
+        ) {
           analyticsCookiesWithIssues += 1;
         }
         break;
