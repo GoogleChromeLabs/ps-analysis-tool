@@ -17,6 +17,8 @@
   }
 }
 
+@import 'github-markdown-css';
+
 .wiki-sidebar {
   ul {
     padding-left: 0;
