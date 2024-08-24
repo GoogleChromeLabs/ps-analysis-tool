@@ -170,6 +170,7 @@ program.parse();
   // Notify using the built-in convenience method
   notifier.notify({
     isGlobal: true,
+    defer: false,
   });
 
   const numArgs: number = [
