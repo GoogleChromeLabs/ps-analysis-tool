@@ -161,14 +161,16 @@ program.parse();
   const waitTime = program.opts().wait;
 
   // Checks for available update and returns an instance
-  const notifier = updateNotifier({ pkg: packageJson, updateCheckInterval: 0 });
-
-  if (!notifier.update) {
-    console.log('No updates available');
-  }
+  const notifier = updateNotifier({
+    pkg: packageJson,
+    updateCheckInterval: 1000 * 60 * 60, // Check after 1 hour.
+    shouldNotifyInNpmScript: true,
+  });
 
   // Notify using the built-in convenience method
-  notifier.notify();
+  notifier.notify({
+    isGlobal: true,
+  });
 
   const numArgs: number = [
     Boolean(url),
