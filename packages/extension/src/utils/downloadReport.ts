@@ -89,6 +89,9 @@ export const generateDashboard = async (
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const dateTime =
     getCurrentDateAndTime('DD MMMM, YYYY, hh:mm:ssam/pm') + ' ' + timeZone;
+  const { version } = chrome?.runtime?.getManifest
+    ? chrome.runtime.getManifest()
+    : { version: '' };
 
   const code = `
   window.PSAT_EXTENSION = true;
@@ -102,6 +105,7 @@ export const generateDashboard = async (
     translations,
     appliedFilters,
     dateTime,
+    psatVersion: version,
   })}`;
 
   script.text = code;
