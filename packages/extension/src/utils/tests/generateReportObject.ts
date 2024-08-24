@@ -42,7 +42,7 @@ describe('generateReport', () => {
       json: jest.fn().mockResolvedValue({}),
     });
 
-    //@ts-ignore
+    //@ts-ignore -- ignoring this because we need not worry about the chrome api.
     globalThis.chrome.i18n = null;
   });
 

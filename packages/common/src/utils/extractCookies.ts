@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import { CompleteJson, CookieFrameStorageType } from '../cookies.types';
+import type { CompleteJson, CookieFrameStorageType } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 
 const extractCookies = (
