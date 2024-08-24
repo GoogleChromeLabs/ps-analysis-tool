@@ -124,12 +124,10 @@ const generateRootSummaryDataCSV = (
       uncategorisedCookiesWithIssues,
   };
 
-  const CSVString = Object.entries(summary).reduce(
-    (acc, [key, value]) => (acc += `${key}, ${value}\r\n`),
-    ''
-  );
-
-  return CSVString;
+  return Object.entries(summary)
+    .map(([key, value]) => `${key}, ${value}`)
+    .join('\r\n')
+    .concat('\r\n');
 };
 
 export default generateRootSummaryDataCSV;
