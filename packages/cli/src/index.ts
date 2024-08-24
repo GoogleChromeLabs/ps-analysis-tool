@@ -23,6 +23,7 @@ import { existsSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import path, { basename } from 'path';
+import updateNotifier from 'update-notifier';
 import { I18n } from '@google-psat/i18n';
 import {
   type CompleteJson,
@@ -56,6 +57,7 @@ import {
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
 import saveResultsAsHTML from './utils/saveResultAsHTML';
+import packageJson from '../package.json';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -157,6 +159,16 @@ program.parse();
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
+
+  // Checks for available update and returns an instance
+  const notifier = updateNotifier({ pkg: packageJson, updateCheckInterval: 0 });
+
+  if (!notifier.update) {
+    console.log('No updates available');
+  }
+
+  // Notify using the built-in convenience method
+  notifier.notify();
 
   const numArgs: number = [
     Boolean(url),

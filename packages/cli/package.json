@@ -56,12 +56,14 @@
     "promptly": "^3.2.0",
     "sitemapper": "^3.1.8",
     "spinnies": "^0.5.1",
+    "update-notifier": "^7.2.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^20.2.3",
     "@types/promptly": "^3.0.2",
+    "@types/update-notifier": "^6.0.8",
     "@types/xml2js": "^0.4.14",
     "coffee": "^5.5.1",
     "tsc-watch": "^6.0.4",
