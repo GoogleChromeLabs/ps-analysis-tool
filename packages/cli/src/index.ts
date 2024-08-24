@@ -298,6 +298,7 @@ program.parse();
     };
     return {
       pageUrl: _url,
+      psatVersion: packageJson.version, // For adding in downloaded JSON file.
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
