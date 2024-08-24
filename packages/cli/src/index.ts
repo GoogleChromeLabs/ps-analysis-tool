@@ -163,7 +163,7 @@ program.parse();
   // Checks for available update and returns an instance
   const notifier = updateNotifier({
     pkg: packageJson,
-    updateCheckInterval: 1000 * 60 * 60, // Check after 1 hour.
+    updateCheckInterval: 0, // @todo: Use 1000 * 60 * 60 after QA is done.
     shouldNotifyInNpmScript: true,
   });
 
