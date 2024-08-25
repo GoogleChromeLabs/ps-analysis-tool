@@ -54,10 +54,7 @@ const Link = ({
 
   const handleClick = useCallback(() => {
     if (pageName && !isLink) {
-      if (hash) {
-        setCurrentHash(hash);
-      }
-
+      setCurrentHash(hash ?? null);
       setCurrentSelectedPage(pageName);
     }
   }, [pageName, isLink, hash, setCurrentHash, setCurrentSelectedPage]);

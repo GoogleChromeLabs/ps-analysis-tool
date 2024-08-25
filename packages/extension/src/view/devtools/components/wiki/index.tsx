@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 /**
  * Internal dependencies.
@@ -26,6 +26,7 @@ import parseMenuMarkDown from '../../../../utils/parseMenuMarkDown';
 import convertMarkdownToHTML from '../../../../utils/convertMarkdownToHTML';
 import extractWikiPage from '../../../../utils/extractWikiPage';
 import { INTERNAL_LINK } from './link';
+import convertTitleToHash from '../../../../utils/convertTitleToHash';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
@@ -36,6 +37,8 @@ const Wiki = () => {
   const [currentSelectedPage, setCurrentSelectedPage] = useState('Home');
   const [currentHash, setCurrentHash] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const contentContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -53,6 +56,22 @@ const Wiki = () => {
     })();
   }, []);
 
+  const scrollToHashElement = useCallback(() => {
+    if (!contentContainer.current) {
+      return;
+    }
+
+    const headingElement = Array.from(
+      contentContainer.current.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    ).find((el) => {
+      return convertTitleToHash(el.textContent ?? '') === currentHash;
+    });
+
+    if (headingElement) {
+      headingElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [currentHash]);
+
   useEffect(() => {
     (async () => {
       setIsLoading(true);
@@ -64,8 +83,13 @@ const Wiki = () => {
 
       setPageContent(html);
       setIsLoading(false);
+
+      // Allow content to load.
+      setTimeout(() => {
+        scrollToHashElement();
+      }, 100);
     })();
-  }, [currentSelectedPage]);
+  }, [currentSelectedPage, scrollToHashElement]);
 
   const handleContentClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
@@ -110,6 +134,7 @@ const Wiki = () => {
             <>
               <h2>{currentSelectedPage}</h2>
               <div
+                ref={contentContainer}
                 onClick={handleContentClick}
                 dangerouslySetInnerHTML={{ __html: pageContent }}
               />
