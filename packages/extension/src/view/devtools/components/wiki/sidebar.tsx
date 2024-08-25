@@ -18,6 +18,7 @@
  */
 import React, { type Dispatch, type SetStateAction } from 'react';
 import { Resizable } from 're-resizable';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -47,7 +48,7 @@ const Sidebar = ({
 }: SidebarMenuProps) => {
   const renderMenuItems = (menu: MenuItemType[]) => {
     return (
-      <ul className="list-disc">
+      <ul className="list-disc ml-3">
         {menu.map((menuItem) => (
           <MenuItem
             key={menuItem.name}
@@ -76,14 +77,21 @@ const Sidebar = ({
       <div className="markdown-body wiki-sidebar w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black p-5">
         {data && data?.length > 0 && (
           <ul>
-            {data.map((topMenuItem) => (
-              <li key={topMenuItem.title} className="mb-4">
-                <span className="font-semibold text-sm text-outer-space block mb-2 dark:text-bright-gray">
-                  {topMenuItem.title}
-                </span>
-                {renderMenuItems(topMenuItem.menu)}
-              </li>
-            ))}
+            {data.map((topMenuItem, index) => {
+              const listClassNames = classNames(
+                'font-semibold text-sm text-outer-space block mb-2 dark:text-bright-gray',
+                {
+                  'mt-4': index !== 0,
+                }
+              );
+
+              return (
+                <li key={topMenuItem.title}>
+                  <span className={listClassNames}>{topMenuItem.title}</span>
+                  {renderMenuItems(topMenuItem.menu)}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

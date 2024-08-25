@@ -104,7 +104,7 @@ const Wiki = () => {
       // Allow content to load.
       timeout = setTimeout(() => {
         scrollToHashElement();
-      }, 200);
+      }, 500);
     })();
 
     return () => {

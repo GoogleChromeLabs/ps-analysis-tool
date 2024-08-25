@@ -61,7 +61,7 @@ const Link = ({
       href={isLink ? link : '#'}
       target={isLink ? '__blank' : '_self'}
       onClick={handleClick}
-      className={classNames('text-sm block', {
+      className={classNames('text-[13px] block', {
         'decoration-solid': currentSelectedPage === name,
       })}
     >

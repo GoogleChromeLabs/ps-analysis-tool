@@ -48,7 +48,7 @@ const MenuItem = ({
     : menuItem.name;
 
   return (
-    <li key={menuItemPageName}>
+    <li key={menuItemPageName} className="leading-5">
       <Link
         name={menuItem.name}
         pageName={menuItemPageName}
