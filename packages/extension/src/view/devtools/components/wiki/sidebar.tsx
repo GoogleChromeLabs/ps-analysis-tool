@@ -33,6 +33,8 @@ export interface SidebarMenuItem {
 type SidebarMenu = {
   data: SidebarMenuItem[] | undefined;
   setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
+  setCurrentHash: Dispatch<SetStateAction<string | null>>;
+  currentHash: string | null;
   currentSelectedPage: string;
 };
 
@@ -40,6 +42,8 @@ const Sidebar = ({
   data,
   setCurrentSelectedPage,
   currentSelectedPage,
+  setCurrentHash,
+  currentHash,
 }: SidebarMenu) => {
   return (
     <Resizable
@@ -66,6 +70,8 @@ const Sidebar = ({
                           key={menuItem.name}
                           menuItem={menuItem}
                           setCurrentSelectedPage={setCurrentSelectedPage}
+                          setCurrentHash={setCurrentHash}
+                          currentHash={currentHash}
                           currentSelectedPage={currentSelectedPage}
                         >
                           {menuItem.menu && Boolean(menuItem?.menu?.length) && (
@@ -79,6 +85,8 @@ const Sidebar = ({
                                       setCurrentSelectedPage
                                     }
                                     currentSelectedPage={currentSelectedPage}
+                                    setCurrentHash={setCurrentHash}
+                                    currentHash={currentHash}
                                   >
                                     {subMenuItem.menu &&
                                       Boolean(subMenuItem?.menu?.length) && (
@@ -99,6 +107,10 @@ const Sidebar = ({
                                                   currentSelectedPage={
                                                     currentSelectedPage
                                                   }
+                                                  setCurrentHash={
+                                                    setCurrentHash
+                                                  }
+                                                  currentHash={currentHash}
                                                 ></MenuItem>
                                               );
                                             }

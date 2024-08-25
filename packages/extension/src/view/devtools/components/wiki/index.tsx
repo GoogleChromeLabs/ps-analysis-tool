@@ -34,6 +34,7 @@ const Wiki = () => {
   const [pageContent, setPageContent] = useState<string>('');
   const [menuItems, setMenuItems] = useState<SidebarMenuItem[] | undefined>();
   const [currentSelectedPage, setCurrentSelectedPage] = useState('Home');
+  const [currentHash, setCurrentHash] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -101,6 +102,8 @@ const Wiki = () => {
           data={menuItems}
           setCurrentSelectedPage={setCurrentSelectedPage}
           currentSelectedPage={currentSelectedPage}
+          currentHash={currentHash}
+          setCurrentHash={setCurrentHash}
         />
         <div className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
           {!isLoading ? (

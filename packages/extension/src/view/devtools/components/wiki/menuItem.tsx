@@ -27,6 +27,8 @@ import Link, { type MenuItemType } from './link';
 interface MenuItemProps {
   menuItem: MenuItemType;
   setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
+  setCurrentHash: Dispatch<SetStateAction<string | null>>;
+  currentHash: string | null;
   currentSelectedPage: string;
   children?: React.ReactNode;
 }
@@ -35,6 +37,8 @@ const MenuItem = ({
   menuItem,
   setCurrentSelectedPage,
   currentSelectedPage,
+  setCurrentHash,
+  currentHash,
   children,
 }: MenuItemProps) => {
   const pageComponents = menuItem?.link ? extractWikiPage(menuItem.link) : null;
@@ -53,6 +57,8 @@ const MenuItem = ({
         item={{ ...menuItem, name: menuItemPageName }}
         setCurrentSelectedPage={setCurrentSelectedPage}
         currentSelectedPage={currentSelectedPage}
+        setCurrentHash={setCurrentHash}
+        currentHash={currentHash}
       />
       {children}
     </li>

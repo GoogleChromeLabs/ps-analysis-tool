@@ -34,6 +34,8 @@ interface LinkProps {
   hash?: string | null;
   setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
   currentSelectedPage: string;
+  setCurrentHash: Dispatch<SetStateAction<string | null>>;
+  currentHash: string | null;
 }
 
 export const INTERNAL_LINK =
@@ -45,14 +47,20 @@ const Link = ({
   pageName,
   setCurrentSelectedPage,
   currentSelectedPage,
+  hash,
+  setCurrentHash,
 }: LinkProps) => {
   const isLink = !pageName && Boolean(link);
 
   const handleClick = useCallback(() => {
     if (pageName && !isLink) {
+      if (hash) {
+        setCurrentHash(hash);
+      }
+
       setCurrentSelectedPage(pageName);
     }
-  }, [pageName, isLink, setCurrentSelectedPage]);
+  }, [pageName, isLink, hash, setCurrentHash, setCurrentSelectedPage]);
 
   return (
     <a
