@@ -22,11 +22,12 @@ import { Resizable } from 're-resizable';
 /**
  * Internal dependencies.
  */
-import Link, { type MenuItem } from './link';
+import type { MenuItemType } from './link';
+import MenuItem from './menuItem';
 
 export interface SidebarMenuItem {
   title: string;
-  menu: MenuItem[];
+  menu: MenuItemType[];
 }
 
 type SidebarMenu = {
@@ -61,30 +62,29 @@ const Sidebar = ({
                   <ul>
                     {topMenuItem.menu.map((menuItem) => {
                       return (
-                        <li key={menuItem.name}>
-                          <Link
-                            item={menuItem}
-                            setCurrentSelectedPage={setCurrentSelectedPage}
-                            currentSelectedPage={currentSelectedPage}
-                          />
+                        <MenuItem
+                          key={menuItem.name}
+                          menuItem={menuItem}
+                          setCurrentSelectedPage={setCurrentSelectedPage}
+                          currentSelectedPage={currentSelectedPage}
+                        >
                           {menuItem.menu && Boolean(menuItem?.menu?.length) && (
                             <ul>
                               {menuItem.menu.map((subMenuItem) => {
                                 return (
-                                  <li key={subMenuItem.name}>
-                                    <Link
-                                      item={subMenuItem}
-                                      setCurrentSelectedPage={
-                                        setCurrentSelectedPage
-                                      }
-                                      currentSelectedPage={currentSelectedPage}
-                                    />
-                                  </li>
+                                  <MenuItem
+                                    key={subMenuItem.name}
+                                    menuItem={subMenuItem}
+                                    setCurrentSelectedPage={
+                                      setCurrentSelectedPage
+                                    }
+                                    currentSelectedPage={currentSelectedPage}
+                                  ></MenuItem>
                                 );
                               })}
                             </ul>
                           )}
-                        </li>
+                        </MenuItem>
                       );
                     })}
                   </ul>

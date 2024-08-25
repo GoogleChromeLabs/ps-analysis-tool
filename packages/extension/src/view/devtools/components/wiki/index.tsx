@@ -25,11 +25,10 @@ import Sidebar, { type SidebarMenuItem } from './sidebar';
 import parseMenuMarkDown from '../../../../utils/parseMenuMarkDown';
 import convertMarkdownToHTML from '../../../../utils/convertMarkdownToHTML';
 import extractWikiPage from '../../../../utils/extractWikiPage';
+import { INTERNAL_LINK } from './link';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
-const INTERNAL_LINK =
-  'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki';
 
 const Wiki = () => {
   const [pageContent, setPageContent] = useState<string>('');

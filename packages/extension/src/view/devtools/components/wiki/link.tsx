@@ -20,41 +20,50 @@ import React, { type Dispatch, type SetStateAction, useCallback } from 'react';
 import classNames from 'classnames';
 import { ExternalLinkIcon } from '@google-psat/design-system';
 
-export interface MenuItem {
+export interface MenuItemType {
   name: string;
   link?: string;
-  menu?: MenuItem[];
+  menu?: MenuItemType[];
 }
 
 interface LinkProps {
-  item: MenuItem;
+  item: MenuItemType;
+  name: string;
+  link: string | undefined;
+  pageName: string;
+  hash?: string | null;
   setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
   currentSelectedPage: string;
 }
 
+export const INTERNAL_LINK =
+  'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki';
+
 const Link = ({
-  item,
+  link,
+  name,
+  pageName,
   setCurrentSelectedPage,
   currentSelectedPage,
 }: LinkProps) => {
   const handleClick = useCallback(() => {
-    if (item.name && !item.link) {
-      setCurrentSelectedPage(item.name);
+    if (pageName && !link) {
+      setCurrentSelectedPage(pageName);
     }
-  }, [item.name, item.link, setCurrentSelectedPage]);
+  }, [pageName, link, setCurrentSelectedPage]);
 
-  const isLink = Boolean(item?.link);
+  const isLink = Boolean(link);
 
   return (
     <a
-      href={isLink ? item.link : '#'}
+      href={isLink ? link : '#'}
       target={isLink ? '__blank' : '_self'}
       onClick={handleClick}
       className={classNames('text-sm block', {
-        'decoration-solid': currentSelectedPage === item.name,
+        'decoration-solid': currentSelectedPage === name,
       })}
     >
-      {item.name}
+      {name}
       {isLink && (
         <ExternalLinkIcon
           className="inline-block ml-1 color-royal-blue"
