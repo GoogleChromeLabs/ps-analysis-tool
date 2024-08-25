@@ -19,6 +19,11 @@ interface Page {
   hash: string | null;
 }
 
+/**
+ * Extract Wiki page parts.
+ * @param url URL
+ * @returns page object.
+ */
 const extractWikiPage = (url: string) => {
   const page: Page = { pageName: '', hash: null };
 

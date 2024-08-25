@@ -67,30 +67,33 @@ const Wiki = () => {
     })();
   }, [currentSelectedPage]);
 
-  const handleContentClick = useCallback((event: Event) => {
-    const target = event?.target as HTMLElement;
+  const handleContentClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const target = event?.target as HTMLElement;
 
-    if (!target) {
-      return;
-    }
-
-    // Find the closest anchor element
-    const anchorElement = target.closest('a');
-
-    if (!anchorElement) {
-      return;
-    }
-
-    if (anchorElement.href.startsWith(INTERNAL_LINK)) {
-      event.preventDefault();
-
-      const page = extractWikiPage(anchorElement.href);
-
-      if (page.pageName) {
-        setCurrentSelectedPage(page.pageName);
+      if (!target) {
+        return;
       }
-    }
-  }, []);
+
+      // Find the closest anchor element
+      const anchorElement = target.closest('a');
+
+      if (!anchorElement) {
+        return;
+      }
+
+      if (anchorElement.href.startsWith(INTERNAL_LINK)) {
+        event.preventDefault();
+
+        const page = extractWikiPage(anchorElement.href);
+
+        if (page.pageName) {
+          setCurrentSelectedPage(page.pageName);
+        }
+      }
+    },
+    []
+  );
 
   return (
     <div className="w-full h-full overflow-hidden">
