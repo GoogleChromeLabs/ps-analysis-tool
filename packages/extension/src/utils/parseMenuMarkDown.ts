@@ -26,16 +26,16 @@ interface Menu {
 }
 
 /**
- * Parse menu markup recieved from Github Wiki.
- * @param {string} markup Markup to be parsed.
+ * Parse menu markdown recieved from Github Wiki.
+ * @param {string} markdown Markdown to be parsed.
  * @param {Array} excludeItems Menu items to exclude from the result.
  * @returns array Parsed array from the menu.
  */
 const parseMenuMarkDown = (
-  markup: string,
+  markdown: string,
   excludeItems: string[] = []
 ): Menu[] => {
-  const lines = markup.split('\n');
+  const lines = markdown.split('\n');
   const menu = [];
 
   let currentSection: Menu | null = null;
