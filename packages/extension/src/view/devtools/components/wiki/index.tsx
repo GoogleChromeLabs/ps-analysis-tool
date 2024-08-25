@@ -22,7 +22,7 @@ import React, { useEffect, useState } from 'react';
  * Internal dependencies.
  */
 import Sidebar, { type SidebarMenuItem } from './sidebar';
-import parseMenuMarkup from '../../../../utils/parseMenuMarkup';
+import parseMenuMarkDown from '../../../../utils/parseMenuMarkDown';
 import convertMarkdownToHTML from '../../../../utils/convertMarkdownToHTML';
 
 const GITHUB_URL =
@@ -39,7 +39,7 @@ const Wiki = () => {
       setIsLoading(true);
       const menuResponse = await fetch(GITHUB_URL + '/_Sidebar.md');
       const menuMarkdown = await menuResponse.text();
-      const _menuItems = parseMenuMarkup(menuMarkdown, [
+      const _menuItems = parseMenuMarkDown(menuMarkdown, [
         'Contributor Guide',
         'Code of Conduct',
         'Support Forum',

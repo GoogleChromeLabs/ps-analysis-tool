@@ -31,7 +31,7 @@ interface Menu {
  * @param {Array} excludeItems Menu items to exclude from the result.
  * @returns array Parsed array from the menu.
  */
-const parseMenuMarkup = (
+const parseMenuMarkDown = (
   markup: string,
   excludeItems: string[] = []
 ): Menu[] => {
@@ -95,4 +95,4 @@ const parseMenuMarkup = (
   return menu;
 };
 
-export default parseMenuMarkup;
+export default parseMenuMarkDown;
