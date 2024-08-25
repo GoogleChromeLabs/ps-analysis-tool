@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Convert title to hash.
+ * @param title Title
+ * @returns hash string
+ */
 const convertTitleToHash = (title: string): string => {
   return title
-    .trim() // Remove leading and trailing whitespace
-    .toLowerCase() // Convert to lowercase
-    .replace(/[^a-z0-9\s]/g, '') // Remove any non-alphanumeric characters except spaces
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-'); // Replace multiple hyphens with a single hyphen
+    ? title
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '') // Remove any non-alphanumeric characters except spaces
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-')
+    : ''; // Replace multiple hyphens with a single hyphen
 };
 
 export default convertTitleToHash;

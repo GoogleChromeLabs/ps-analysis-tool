@@ -30,6 +30,9 @@ import convertTitleToHash from '../../../../utils/convertTitleToHash';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
+const loadedContent: {
+  [key: string]: string;
+} = {};
 
 const Wiki = () => {
   const [pageContent, setPageContent] = useState<string>('');
@@ -74,15 +77,21 @@ const Wiki = () => {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true);
-      const fileName = currentSelectedPage.replaceAll(' ', '-') + '.md';
-      const response = await fetch(GITHUB_URL + '/' + fileName);
+      if (!loadedContent[currentSelectedPage]) {
+        setIsLoading(true);
+        const fileName = currentSelectedPage.replaceAll(' ', '-') + '.md';
+        const response = await fetch(GITHUB_URL + '/' + fileName);
 
-      const markdown = await response.text();
-      const html = await convertMarkdownToHTML(markdown);
+        const markdown = await response.text();
+        const html = await convertMarkdownToHTML(markdown);
 
-      setPageContent(html);
-      setIsLoading(false);
+        loadedContent[currentSelectedPage] = html;
+
+        setPageContent(html);
+        setIsLoading(false);
+      } else {
+        setPageContent(loadedContent[currentSelectedPage]);
+      }
 
       // Allow content to load.
       setTimeout(() => {
