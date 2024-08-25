@@ -18,13 +18,16 @@
  */
 import { marked } from 'marked';
 
-const IMAGE_BASE_URL =
+export const IMAGE_BASE_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/images';
 
-const convertMarkupToHTML = async (markup: string) => {
-  let html = await marked.parse(markup);
+const convertMarkdownToHTML = async (markdown: string) => {
+  let html = await marked.parse(markdown);
 
-  html = html.replace(/src="images\/([^"]+)"/g, `src="${IMAGE_BASE_URL}/$1"`);
+  html = html.replace(
+    /src="\/?images\/([^"]+)"/g,
+    `src="${IMAGE_BASE_URL}/$1"`
+  );
   html = html.replace(
     /<a\s+(?![^>]*target=["']_blank["'])/g,
     '<a target="_blank" '
@@ -33,4 +36,4 @@ const convertMarkupToHTML = async (markup: string) => {
   return html;
 };
 
-export default convertMarkupToHTML;
+export default convertMarkdownToHTML;

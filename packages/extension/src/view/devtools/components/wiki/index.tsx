@@ -23,7 +23,7 @@ import React, { useEffect, useState } from 'react';
  */
 import Sidebar, { type SidebarMenuItem } from './sidebar';
 import parseMenuMarkup from '../../../../utils/parseMenuMarkup';
-import convertMarkupToHTML from '../../../../utils/convertMarkupToHTML';
+import convertMarkdownToHTML from '../../../../utils/convertMarkdownToHTML';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
@@ -57,7 +57,7 @@ const Wiki = () => {
       const response = await fetch(GITHUB_URL + '/' + fileName);
 
       const markdown = await response.text();
-      const html = await convertMarkupToHTML(markdown);
+      const html = await convertMarkdownToHTML(markdown);
 
       setPageContent(html);
       setIsLoading(false);
