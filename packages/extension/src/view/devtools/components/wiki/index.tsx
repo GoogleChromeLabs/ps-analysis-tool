@@ -25,11 +25,15 @@ import Sidebar, { type SidebarMenuItem } from './sidebar';
 import parseMenuMarkDown from '../../../../utils/parseMenuMarkDown';
 import convertMarkdownToHTML from '../../../../utils/convertMarkdownToHTML';
 import extractWikiPage from '../../../../utils/extractWikiPage';
-import { INTERNAL_LINK } from './link';
 import convertTitleToHash from '../../../../utils/convertTitleToHash';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
+const INTERNAL_LINK =
+  'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki';
+const INGORE_LIST = ['Contributor Guide', 'Code of Conduct', 'Support Forum'];
+const DEFAULT_PAGE = 'Home';
+
 const loadedContent: {
   [key: string]: string;
 } = {};
@@ -37,7 +41,7 @@ const loadedContent: {
 const Wiki = () => {
   const [pageContent, setPageContent] = useState<string>('');
   const [menuItems, setMenuItems] = useState<SidebarMenuItem[] | undefined>();
-  const [currentSelectedPage, setCurrentSelectedPage] = useState('Home');
+  const [currentSelectedPage, setCurrentSelectedPage] = useState(DEFAULT_PAGE);
   const [currentHash, setCurrentHash] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,11 +52,7 @@ const Wiki = () => {
       setIsLoading(true);
       const menuResponse = await fetch(GITHUB_URL + '/_Sidebar.md');
       const menuMarkdown = await menuResponse.text();
-      const _menuItems = parseMenuMarkDown(menuMarkdown, [
-        'Contributor Guide',
-        'Code of Conduct',
-        'Support Forum',
-      ]);
+      const _menuItems = parseMenuMarkDown(menuMarkdown, INGORE_LIST);
 
       setMenuItems(_menuItems);
       setIsLoading(false);
@@ -76,28 +76,40 @@ const Wiki = () => {
   }, [currentHash]);
 
   useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+
     (async () => {
       if (!loadedContent[currentSelectedPage]) {
         setIsLoading(true);
         const fileName = currentSelectedPage.replaceAll(' ', '-') + '.md';
-        const response = await fetch(GITHUB_URL + '/' + fileName);
 
-        const markdown = await response.text();
-        const html = await convertMarkdownToHTML(markdown);
+        try {
+          const response = await fetch(GITHUB_URL + '/' + fileName);
 
-        loadedContent[currentSelectedPage] = html;
+          const markdown = await response.text();
+          const html = await convertMarkdownToHTML(markdown);
 
-        setPageContent(html);
-        setIsLoading(false);
+          loadedContent[currentSelectedPage] = html;
+
+          setPageContent(html);
+        } catch (error) {
+          setPageContent('<p>Error loading page content.</p>');
+        } finally {
+          setIsLoading(false);
+        }
       } else {
         setPageContent(loadedContent[currentSelectedPage]);
       }
 
       // Allow content to load.
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         scrollToHashElement();
-      }, 100);
+      }, 200);
     })();
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [currentSelectedPage, scrollToHashElement]);
 
   const handleContentClick = useCallback(
@@ -108,14 +120,9 @@ const Wiki = () => {
         return;
       }
 
-      // Find the closest anchor element
       const anchorElement = target.closest('a');
 
-      if (!anchorElement) {
-        return;
-      }
-
-      if (anchorElement.href.startsWith(INTERNAL_LINK)) {
+      if (anchorElement && anchorElement.href.startsWith(INTERNAL_LINK)) {
         event.preventDefault();
 
         const page = extractWikiPage(anchorElement.href);

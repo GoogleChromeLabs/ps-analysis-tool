@@ -38,9 +38,6 @@ interface LinkProps {
   currentHash: string | null;
 }
 
-export const INTERNAL_LINK =
-  'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki';
-
 const Link = ({
   link,
   name,

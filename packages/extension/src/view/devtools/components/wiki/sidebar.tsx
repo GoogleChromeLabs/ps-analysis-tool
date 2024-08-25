@@ -30,8 +30,8 @@ export interface SidebarMenuItem {
   menu: MenuItemType[];
 }
 
-type SidebarMenu = {
-  data: SidebarMenuItem[] | undefined;
+type SidebarMenuProps = {
+  data?: SidebarMenuItem[];
   setCurrentSelectedPage: Dispatch<SetStateAction<string>>;
   setCurrentHash: Dispatch<SetStateAction<string | null>>;
   currentHash: string | null;
@@ -44,91 +44,46 @@ const Sidebar = ({
   currentSelectedPage,
   setCurrentHash,
   currentHash,
-}: SidebarMenu) => {
+}: SidebarMenuProps) => {
+  const renderMenuItems = (menu: MenuItemType[]) => {
+    return (
+      <ul className="list-disc">
+        {menu.map((menuItem) => (
+          <MenuItem
+            key={menuItem.name}
+            menuItem={menuItem}
+            setCurrentSelectedPage={setCurrentSelectedPage}
+            currentSelectedPage={currentSelectedPage}
+            setCurrentHash={setCurrentHash}
+            currentHash={currentHash}
+          >
+            {menuItem?.menu &&
+              menuItem.menu?.length > 0 &&
+              renderMenuItems(menuItem.menu)}
+          </MenuItem>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <Resizable
       defaultSize={{ width: '220px', height: '100%' }}
-      minWidth={'150px'}
-      maxWidth={'90%'}
-      enable={{
-        right: true,
-      }}
+      minWidth="150px"
+      maxWidth="90%"
+      enable={{ right: true }}
     >
       <div className="markdown-body wiki-sidebar w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black p-5">
-        {data && Boolean(data?.length) && (
+        {data && data?.length > 0 && (
           <ul>
-            {data.map((topMenuItem) => {
-              return (
-                <li key={topMenuItem.title} className="mb-4">
-                  <span className="font-semibold text-sm text-outer-space block mb-2 dark:text-bright-gray">
-                    {topMenuItem.title}
-                  </span>
-                  <ul className="list-disc">
-                    {topMenuItem.menu.map((menuItem) => {
-                      return (
-                        <MenuItem
-                          key={menuItem.name}
-                          menuItem={menuItem}
-                          setCurrentSelectedPage={setCurrentSelectedPage}
-                          setCurrentHash={setCurrentHash}
-                          currentHash={currentHash}
-                          currentSelectedPage={currentSelectedPage}
-                        >
-                          {menuItem.menu && Boolean(menuItem?.menu?.length) && (
-                            <ul className="list-disc">
-                              {menuItem.menu.map((subMenuItem) => {
-                                return (
-                                  <MenuItem
-                                    key={subMenuItem.name}
-                                    menuItem={subMenuItem}
-                                    setCurrentSelectedPage={
-                                      setCurrentSelectedPage
-                                    }
-                                    currentSelectedPage={currentSelectedPage}
-                                    setCurrentHash={setCurrentHash}
-                                    currentHash={currentHash}
-                                  >
-                                    {subMenuItem.menu &&
-                                      Boolean(subMenuItem?.menu?.length) && (
-                                        <ul className="list-disc">
-                                          {subMenuItem.menu.map(
-                                            (subMenuLevelThreeItem) => {
-                                              return (
-                                                <MenuItem
-                                                  key={
-                                                    subMenuLevelThreeItem.name
-                                                  }
-                                                  menuItem={
-                                                    subMenuLevelThreeItem
-                                                  }
-                                                  setCurrentSelectedPage={
-                                                    setCurrentSelectedPage
-                                                  }
-                                                  currentSelectedPage={
-                                                    currentSelectedPage
-                                                  }
-                                                  setCurrentHash={
-                                                    setCurrentHash
-                                                  }
-                                                  currentHash={currentHash}
-                                                ></MenuItem>
-                                              );
-                                            }
-                                          )}
-                                        </ul>
-                                      )}
-                                  </MenuItem>
-                                );
-                              })}
-                            </ul>
-                          )}
-                        </MenuItem>
-                      );
-                    })}
-                  </ul>
-                </li>
-              );
-            })}
+            {data.map((topMenuItem) => (
+              <li key={topMenuItem.title} className="mb-4">
+                <span className="font-semibold text-sm text-outer-space block mb-2 dark:text-bright-gray">
+                  {topMenuItem.title}
+                </span>
+                {renderMenuItems(topMenuItem.menu)}
+              </li>
+            ))}
           </ul>
         )}
       </div>
