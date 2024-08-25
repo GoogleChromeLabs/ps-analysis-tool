@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 /**
  * Internal dependencies.
@@ -24,9 +24,12 @@ import React, { useEffect, useState } from 'react';
 import Sidebar, { type SidebarMenuItem } from './sidebar';
 import parseMenuMarkDown from '../../../../utils/parseMenuMarkDown';
 import convertMarkdownToHTML from '../../../../utils/convertMarkdownToHTML';
+import extractWikiPage from '../../../../utils/extractWikiPage';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
+const INTERNAL_LINK =
+  'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki';
 
 const Wiki = () => {
   const [pageContent, setPageContent] = useState<string>('');
@@ -64,6 +67,31 @@ const Wiki = () => {
     })();
   }, [currentSelectedPage]);
 
+  const handleContentClick = useCallback((event: Event) => {
+    const target = event?.target as HTMLElement;
+
+    if (!target) {
+      return;
+    }
+
+    // Find the closest anchor element
+    const anchorElement = target.closest('a');
+
+    if (!anchorElement) {
+      return;
+    }
+
+    if (anchorElement.href.startsWith(INTERNAL_LINK)) {
+      event.preventDefault();
+
+      const page = extractWikiPage(anchorElement.href);
+
+      if (page.pageName) {
+        setCurrentSelectedPage(page.pageName);
+      }
+    }
+  }, []);
+
   return (
     <div className="w-full h-full overflow-hidden">
       <div className="w-full h-full flex gap-1">
@@ -76,7 +104,10 @@ const Wiki = () => {
           {!isLoading ? (
             <>
               <h2>{currentSelectedPage}</h2>
-              <div dangerouslySetInnerHTML={{ __html: pageContent }} />
+              <div
+                onClick={handleContentClick}
+                dangerouslySetInnerHTML={{ __html: pageContent }}
+              />
             </>
           ) : (
             <div className="flex justify-center items-center w-full h-full">
