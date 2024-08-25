@@ -59,7 +59,7 @@ const Sidebar = ({
                   <span className="font-semibold text-sm text-outer-space block mb-2 dark:text-bright-gray">
                     {topMenuItem.title}
                   </span>
-                  <ul>
+                  <ul className="list-disc">
                     {topMenuItem.menu.map((menuItem) => {
                       return (
                         <MenuItem
@@ -69,7 +69,7 @@ const Sidebar = ({
                           currentSelectedPage={currentSelectedPage}
                         >
                           {menuItem.menu && Boolean(menuItem?.menu?.length) && (
-                            <ul>
+                            <ul className="list-disc">
                               {menuItem.menu.map((subMenuItem) => {
                                 return (
                                   <MenuItem
@@ -79,7 +79,33 @@ const Sidebar = ({
                                       setCurrentSelectedPage
                                     }
                                     currentSelectedPage={currentSelectedPage}
-                                  ></MenuItem>
+                                  >
+                                    {subMenuItem.menu &&
+                                      Boolean(subMenuItem?.menu?.length) && (
+                                        <ul className="list-disc">
+                                          {subMenuItem.menu.map(
+                                            (subMenuLevelThreeItem) => {
+                                              return (
+                                                <MenuItem
+                                                  key={
+                                                    subMenuLevelThreeItem.name
+                                                  }
+                                                  menuItem={
+                                                    subMenuLevelThreeItem
+                                                  }
+                                                  setCurrentSelectedPage={
+                                                    setCurrentSelectedPage
+                                                  }
+                                                  currentSelectedPage={
+                                                    currentSelectedPage
+                                                  }
+                                                ></MenuItem>
+                                              );
+                                            }
+                                          )}
+                                        </ul>
+                                      )}
+                                  </MenuItem>
                                 );
                               })}
                             </ul>

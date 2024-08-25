@@ -46,13 +46,13 @@ const Link = ({
   setCurrentSelectedPage,
   currentSelectedPage,
 }: LinkProps) => {
+  const isLink = !pageName && Boolean(link);
+
   const handleClick = useCallback(() => {
-    if (pageName && !link) {
+    if (pageName && !isLink) {
       setCurrentSelectedPage(pageName);
     }
-  }, [pageName, link, setCurrentSelectedPage]);
-
-  const isLink = Boolean(link);
+  }, [pageName, isLink, setCurrentSelectedPage]);
 
   return (
     <a
