@@ -27,6 +27,7 @@ import { Resizable } from 're-resizable';
  */
 import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
+import type { NoBidsType, singleAuctionEvent } from '@google-psat/common';
 
 enum PillToggleOptions {
   ReceivedBids = 'Received Bids',
@@ -34,7 +35,9 @@ enum PillToggleOptions {
 }
 
 const Bids = () => {
-  const [selectedRow, setSelectedRow] = useState<any>(null);
+  const [selectedRow, setSelectedRow] = useState<
+    singleAuctionEvent | NoBidsType[keyof NoBidsType] | null
+  >(null);
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.ReceivedBids
   );

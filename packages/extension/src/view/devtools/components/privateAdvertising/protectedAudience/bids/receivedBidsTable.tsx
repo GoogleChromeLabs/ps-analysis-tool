@@ -16,7 +16,11 @@
 /**
  * External dependencies.
  */
-import { noop } from '@google-psat/common';
+import {
+  noop,
+  type NoBidsType,
+  type singleAuctionEvent,
+} from '@google-psat/common';
 import {
   Table,
   TableProvider,
@@ -24,48 +28,28 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
+import { useProtectedAudience } from '../../../../stateProviders';
 
 interface ReceivedBidsTableProps {
-  setSelectedRow: (row: any) => void;
-  selectedRow: any;
+  setSelectedRow: React.Dispatch<
+    React.SetStateAction<
+      singleAuctionEvent | NoBidsType[keyof NoBidsType] | null
+    >
+  >;
+  selectedRow: singleAuctionEvent | NoBidsType[keyof NoBidsType] | null;
 }
 
 const ReceivedBidsTable = ({
   setSelectedRow,
   selectedRow,
 }: ReceivedBidsTableProps) => {
-  const data = [
-    {
-      bidder: 'bidder',
-      bid: 'bid',
-      bidCurrency: 'bidCurrency',
-      adUnitCode: 'adUnitCode',
-      adContainerSize: 'adContainerSize',
-      mediaType: 'mediaType',
-    },
-    {
-      bidder: 'bidder2',
-      bid: 'bid2',
-      bidCurrency: 'bidCurrency2',
-      adUnitCode: 'adUnitCode2',
-      adContainerSize: 'adContainerSize2',
-      mediaType: 'mediaType2',
-    },
-    {
-      bidder: 'bidder3',
-      bid: 'bid3',
-      bidCurrency: 'bidCurrency3',
-      adUnitCode: 'adUnitCode3',
-      adContainerSize: 'adContainerSize3',
-      mediaType: 'mediaType3',
-    },
-  ];
+  const receivedBids = useProtectedAudience(({ state }) => state.receivedBids);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Bidder',
-        accessorKey: 'bidder',
+        accessorKey: 'ownerOrigin',
         cell: (info) => info,
       },
       {
@@ -99,22 +83,27 @@ const ReceivedBidsTable = ({
 
   return (
     <TableProvider
-      data={data}
+      data={receivedBids}
       tableColumns={tableColumns}
       tableFilterData={undefined}
       tableSearchKeys={undefined}
       tablePersistentSettingsKey="receivedBidsTable"
       onRowClick={(row) => {
-        setSelectedRow(row);
+        setSelectedRow(row as singleAuctionEvent);
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
-        return row.originalData?.bidder;
+        const data = row.originalData as singleAuctionEvent;
+        return data?.ownerOrigin + data?.uniqueAuctionId + data?.time;
       }}
     >
       <Table
         hideFiltering={true}
-        selectedKey={selectedRow?.bidder}
+        selectedKey={
+          selectedRow?.ownerOrigin +
+          selectedRow?.uniqueAuctionId +
+          selectedRow?.time
+        }
         hideSearch={true}
       />
     </TableProvider>

@@ -16,7 +16,11 @@
 /**
  * External dependencies.
  */
-import { noop } from '@google-psat/common';
+import {
+  noop,
+  type NoBidsType,
+  type singleAuctionEvent,
+} from '@google-psat/common';
 import {
   Table,
   TableProvider,
@@ -25,32 +29,28 @@ import {
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import { useProtectedAudience } from '../../../../stateProviders';
+
 interface NoBidsTableProps {
-  setSelectedRow: (row: any) => void;
-  selectedRow: any;
+  setSelectedRow: React.Dispatch<
+    React.SetStateAction<
+      singleAuctionEvent | NoBidsType[keyof NoBidsType] | null
+    >
+  >;
+  selectedRow: singleAuctionEvent | NoBidsType[keyof NoBidsType] | null;
 }
 
 const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
-  const data = [
-    {
-      bidder: 'bidder',
-      adUnitCode: 'adUnitCode',
-    },
-    {
-      bidder: 'bidder2',
-      adUnitCode: 'adUnitCode2',
-    },
-    {
-      bidder: 'bidder3',
-      adUnitCode: 'adUnitCode3',
-    },
-  ];
+  const noBids = useProtectedAudience(({ state }) => state.noBids);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Bidder',
-        accessorKey: 'bidder',
+        accessorKey: 'ownerOrigin',
         cell: (info) => info,
       },
       {
@@ -64,22 +64,22 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
 
   return (
     <TableProvider
-      data={data}
+      data={Object.values(noBids)}
       tableColumns={tableColumns}
       tableFilterData={undefined}
       tableSearchKeys={undefined}
       tablePersistentSettingsKey="noBidsTable"
       onRowClick={(row) => {
-        setSelectedRow(row);
+        setSelectedRow(row as NoBidsType[keyof NoBidsType]);
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
-        return row.originalData.bidder;
+        return row.originalData?.ownerOrigin;
       }}
     >
       <Table
         hideFiltering={true}
-        selectedKey={selectedRow?.bidder}
+        selectedKey={selectedRow?.ownerOrigin}
         minWidth="42rem"
         hideSearch={true}
       />
