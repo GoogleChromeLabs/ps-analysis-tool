@@ -50,11 +50,14 @@ export type InterestGroups = singleAuctionEvent & {
   details: any;
 };
 
-export type AuctionEventsType =
-  | singleAuctionEvent[]
-  | {
-      [parentAuctionId: string]: {
-        [uniqueAuctionId: string]: singleAuctionEvent[];
-      };
-    }
-  | null;
+export type MultiSellerAuction = {
+  [parentAuctionId: string]: {
+    [uniqueAuctionId: string]: singleAuctionEvent[];
+  };
+};
+
+export type SingleSellerAuction = {
+  [parentAuctionId: string]: singleAuctionEvent[];
+};
+
+export type AuctionEventsType = SingleSellerAuction | MultiSellerAuction | null;
