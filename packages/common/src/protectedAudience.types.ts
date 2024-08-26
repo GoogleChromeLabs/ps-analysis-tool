@@ -66,7 +66,21 @@ export type NoBidsType = {
     name: string;
     uniqueAuctionId: string;
     adUnitCode?: string;
+    mediaContainerSize?: number[][];
   };
+};
+
+export type AdsAndBiddersType = {
+  [adUnitCode: string]: {
+    adUnitCode: string;
+    bidders: string[];
+    mediaContainerSize: number[][];
+  };
+};
+
+export type ReceivedBids = singleAuctionEvent & {
+  adUnitCode?: string;
+  mediaContainerSize?: number[];
 };
 
 export type AuctionEventsType = SingleSellerAuction | MultiSellerAuction | null;
