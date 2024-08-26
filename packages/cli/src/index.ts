@@ -248,7 +248,16 @@ program.parse();
         sitemapUrl || filePath ? 4 : 3
       );
   } catch (error) {
-    throw error;
+    if (urlsToProcess.length === 1) {
+      removeAndAddNewSpinnerText(
+        spinnies,
+        'cookie-spinner',
+        'Failure in analyzing cookies!',
+        0,
+        true
+      );
+      throw error;
+    }
   }
   removeAndAddNewSpinnerText(
     spinnies,

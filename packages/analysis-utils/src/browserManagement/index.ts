@@ -197,7 +197,6 @@ export class BrowserManagement {
         `Navigation did not finish in 10 seconds moving on to scrolling`
       );
       throw error;
-      //ignore
     }
   }
 
@@ -678,7 +677,9 @@ export class BrowserManagement {
         })
       );
     } catch (error) {
-      throw error;
+      if (userProvidedUrls.length === 1) {
+        throw error;
+      }
     }
 
     // Delay for page to load resources
