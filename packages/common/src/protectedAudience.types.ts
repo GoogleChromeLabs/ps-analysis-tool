@@ -60,4 +60,12 @@ export type SingleSellerAuction = {
   [parentAuctionId: string]: singleAuctionEvent[];
 };
 
+export type NoBidsType = {
+  [auctionId: string]: {
+    ownerOrigin: string;
+    name: string;
+    uniqueAuctionId: string;
+  };
+};
+
 export type AuctionEventsType = SingleSellerAuction | MultiSellerAuction | null;

@@ -26,6 +26,7 @@ import React, {
 import type { Protocol } from 'devtools-protocol';
 import type {
   MultiSellerAuction,
+  NoBidsType,
   singleAuctionEvent,
   SingleSellerAuction,
 } from '@google-psat/common';
@@ -59,7 +60,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const [noBids, setNoBids] = useState<
     ProtectedAudienceContextType['state']['noBids']
-  >([]);
+  >({});
 
   const computeBids = useCallback(
     (
@@ -74,12 +75,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       const _receivedBids: singleAuctionEvent[] = [];
-      const _noBids: string[] = [];
+      const _noBids: NoBidsType = {};
 
       const _interestGroupBuyers = new Set();
 
       if (_isMultiSellerAuction) {
         const multisellerAuctionEvents = _auctionEvents as MultiSellerAuction;
+
         Object.keys(multisellerAuctionEvents).forEach((parentAuctionId) => {
           Object.keys(multisellerAuctionEvents[parentAuctionId]).forEach(
             (uniqueAuctionId) => {
@@ -91,6 +93,13 @@ const Provider = ({ children }: PropsWithChildren) => {
                 multisellerAuctionEvents[parentAuctionId]?.[
                   uniqueAuctionId
                 ]?.[1] ?? {};
+
+              const { name } =
+                multisellerAuctionEvents[parentAuctionId]?.[
+                  uniqueAuctionId
+                ]?.find(
+                  (event) => event?.eventType === 'interestGroupAccessed'
+                ) ?? {};
 
               //@ts-ignore
               auctionConfig?.interestGroupBuyers?.forEach((element) => {
@@ -106,52 +115,70 @@ const Provider = ({ children }: PropsWithChildren) => {
                     BIDDING_TYPES.includes(event.type)
                 )
               );
+
+              if (_interestGroupBuyers.size > 0) {
+                const buyersWhoBid = new Set<string>();
+
+                _receivedBids.forEach((event) => {
+                  if (event.ownerOrigin) {
+                    buyersWhoBid.add(event.ownerOrigin);
+                  }
+                });
+
+                Array.from(
+                  buyersWhoBid.difference(_interestGroupBuyers)
+                ).forEach((buyer) => {
+                  _noBids[uniqueAuctionId] = {
+                    ownerOrigin: buyer,
+                    name: name ?? '',
+                    uniqueAuctionId,
+                  };
+                });
+              }
             }
           );
         });
-
-        if (_interestGroupBuyers.size > 0) {
-          const buyersWhoBid = new Set<string>();
-
-          _receivedBids.forEach((event) => {
-            if (event.ownerOrigin) {
-              buyersWhoBid.add(event.ownerOrigin);
-            }
-          });
-
-          _noBids.push(
-            ...Array.from(buyersWhoBid.difference(_interestGroupBuyers))
-          );
-        }
       } else {
         const singleSellerAuctionEvents = _auctionEvents as SingleSellerAuction;
-        Object.keys(singleSellerAuctionEvents).forEach((parentAuctionId) => {
-          if ('globalEvents' === parentAuctionId) {
+
+        Object.keys(singleSellerAuctionEvents).forEach((uniqueAuctionId) => {
+          if ('globalEvents' === uniqueAuctionId) {
             return;
           }
 
           _receivedBids.push(
-            ...singleSellerAuctionEvents[parentAuctionId].filter(
+            ...singleSellerAuctionEvents[uniqueAuctionId].filter(
               (event) =>
                 event.eventType === 'interestGroupAccessed' &&
                 BIDDING_TYPES.includes(event.type)
             )
           );
+
+          const { name } =
+            singleSellerAuctionEvents[uniqueAuctionId]?.find(
+              (event) => event?.eventType === 'interestGroupAccessed'
+            ) ?? {};
+
+          if (_interestGroupBuyers.size > 0) {
+            const buyersWhoBid = new Set<string>();
+
+            _receivedBids.forEach((event) => {
+              if (event.ownerOrigin) {
+                buyersWhoBid.add(event.ownerOrigin);
+              }
+            });
+
+            Array.from(buyersWhoBid.difference(_interestGroupBuyers)).forEach(
+              (buyer) => {
+                _noBids[uniqueAuctionId] = {
+                  ownerOrigin: buyer,
+                  name: name ?? '',
+                  uniqueAuctionId,
+                };
+              }
+            );
+          }
         });
-
-        if (_interestGroupBuyers.size > 0) {
-          const buyersWhoBid = new Set<string>();
-
-          _receivedBids.forEach((event) => {
-            if (event.ownerOrigin) {
-              buyersWhoBid.add(event.ownerOrigin);
-            }
-          });
-
-          _noBids.push(
-            ...Array.from(buyersWhoBid.difference(_interestGroupBuyers))
-          );
-        }
       }
       return { receivedBids: _receivedBids, noBids: _noBids };
     },
@@ -241,7 +268,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
           const computedBids: {
             receivedBids: singleAuctionEvent[];
-            noBids: string[];
+            noBids: NoBidsType;
           } | null = computeBids(
             message.payload.auctionEvents,
             message.payload.multiSellerAuction
@@ -265,7 +292,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    [computeInterestGroupDetails]
+    [computeBids, computeInterestGroupDetails]
   );
 
   useEffect(() => {
