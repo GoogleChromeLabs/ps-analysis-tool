@@ -42,6 +42,7 @@ import {
 } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import collateCookieData from './collateCookieData';
+import { CMP_SELECTORS, CMP_TEXT_SELECTORS } from '../constants';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -108,11 +109,38 @@ export class BrowserManagement {
     this.debugLog('Browser initialized');
   }
 
+  async clickOnButtonUsingCMPSelectors(page: Page): Promise<boolean> {
+    let clickedOnButton = false;
+
+    try {
+      await Promise.all(
+        CMP_SELECTORS.map(async (selector) => {
+          const buttonToClick = await page.$(selector);
+          if (buttonToClick) {
+            await buttonToClick.click();
+            clickedOnButton = true;
+          }
+        })
+      );
+      return clickedOnButton;
+    } catch (error) {
+      return clickedOnButton;
+    }
+  }
+
   async clickOnAcceptBanner(url: string) {
     const page = this.pages[url];
 
     if (!page) {
       throw new Error('No page with the provided id was found');
+    }
+    // Click using CSS selectors.
+    const clickedUsingCMPCSSSelectors =
+      await this.clickOnButtonUsingCMPSelectors(page);
+
+    if (clickedUsingCMPCSSSelectors) {
+      await delay(this.pageWaitTime / 2);
+      return;
     }
 
     await page.evaluate(() => {
@@ -130,22 +158,20 @@ export class BrowserManagement {
           return regex.test(node.textContent.toLowerCase());
         });
 
-      const buttonToClick: HTMLButtonElement[] = bannerNodes
-        .map((node: Element) => {
-          const buttonNodes = Array.from(node.getElementsByTagName('button'));
-          const isButtonForAccept = buttonNodes.filter(
-            (cnode) =>
-              cnode.textContent &&
-              (cnode.textContent.toLowerCase().includes('accept') ||
-                cnode.textContent.toLowerCase().includes('allow') ||
-                cnode.textContent.toLowerCase().includes('ok') ||
-                cnode.textContent.toLowerCase().includes('agree'))
-          );
+      bannerNodes.forEach((node: Element) => {
+        const buttonNodes = Array.from(node.getElementsByTagName('button'));
+        buttonNodes.forEach((cnode) => {
+          if (!cnode.textContent) {
+            return;
+          }
 
-          return isButtonForAccept[0];
-        })
-        .filter((button) => button);
-      buttonToClick[0]?.click();
+          CMP_TEXT_SELECTORS.forEach((text) => {
+            if (cnode.textContent?.toLowerCase().includes(text)) {
+              cnode.click();
+            }
+          });
+        });
+      });
     });
 
     await delay(this.pageWaitTime / 2);
