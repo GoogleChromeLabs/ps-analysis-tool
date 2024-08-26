@@ -65,6 +65,7 @@ export type NoBidsType = {
     ownerOrigin: string;
     name: string;
     uniqueAuctionId: string;
+    adUnitCode?: string;
   };
 };
 
