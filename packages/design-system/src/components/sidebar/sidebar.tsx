@@ -39,12 +39,14 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
     toggleSidebarCollapse,
     isCollapsed,
     isSidebarCollapsible,
+    isSidebarFocused,
   } = useSidebar(({ state, actions }) => ({
     sidebarItems: state.sidebarItems,
     setIsSidebarFocused: actions.setIsSidebarFocused,
     toggleSidebarCollapse: actions.toggleSidebarCollapse,
     isCollapsed: state.isCollapsed,
     isSidebarCollapsible: state.isSidebarCollapsible,
+    isSidebarFocused: state.isSidebarFocused,
   }));
 
   const [didUserInteract, setDidUserInteract] = useState(false);
@@ -84,7 +86,10 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
           >
             <DoubleArrowIcon
               className={classNames(
-                'dark:fill-bright-gray fill-granite-gray w-5 h-5 rotate-180'
+                'dark:fill-bright-gray fill-granite-gray w-5 h-5 rotate-180',
+                {
+                  'fill-bright-gray': isSidebarFocused,
+                }
               )}
             />
           </button>
