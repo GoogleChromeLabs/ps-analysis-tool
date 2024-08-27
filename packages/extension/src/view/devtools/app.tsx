@@ -69,7 +69,6 @@ const App: React.FC = () => {
     <SidebarProvider
       data={sidebarData}
       defaultSelectedItemKey={defaultSelectedItemKey}
-      isSidebarCollapsible={true}
       collapsedData={collapsedSidebarData}
     >
       <div

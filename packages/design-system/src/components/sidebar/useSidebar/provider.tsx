@@ -40,7 +40,6 @@ import { SidebarContext, SidebarStoreContext, initialState } from './context';
 export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
-  isSidebarCollapsible = false,
   collapsedData,
   children,
 }: PropsWithChildren<useSidebarProps>) => {
@@ -276,7 +275,7 @@ export const SidebarProvider = ({
           collapsedSidebarItems: collapsedData,
           isSidebarFocused,
           isCollapsed,
-          isSidebarCollapsible,
+          isSidebarCollapsible: Boolean(collapsedData),
         },
         actions: {
           setIsSidebarFocused,
