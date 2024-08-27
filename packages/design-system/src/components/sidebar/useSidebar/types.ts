@@ -39,4 +39,5 @@ export type SidebarItems = {
 export interface useSidebarProps {
   data: SidebarItems;
   defaultSelectedItemKey?: string | null;
+  isSidebarCollapsible?: boolean;
 }

@@ -69,6 +69,7 @@ const App: React.FC = () => {
     <SidebarProvider
       data={sidebarData}
       defaultSelectedItemKey={defaultSelectedItemKey}
+      isSidebarCollapsible={true}
     >
       <div
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"

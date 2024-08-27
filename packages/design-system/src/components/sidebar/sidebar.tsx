@@ -24,18 +24,25 @@ import React, { useEffect, useRef, useState } from 'react';
  */
 import SidebarChild from './sidebarChild';
 import { useSidebar } from './useSidebar';
+import { DoubleArrowIcon } from '../../icons';
+import classNames from 'classnames';
 
 interface SidebarProps {
   visibleWidth?: number;
 }
 
 const Sidebar = ({ visibleWidth }: SidebarProps) => {
-  const { sidebarItems, setIsSidebarFocused } = useSidebar(
-    ({ state, actions }) => ({
-      sidebarItems: state.sidebarItems,
-      setIsSidebarFocused: actions.setIsSidebarFocused,
-    })
-  );
+  const {
+    sidebarItems,
+    setIsSidebarFocused,
+    toggleSidebarCollapse,
+    isSidebarCollapsible,
+  } = useSidebar(({ state, actions }) => ({
+    sidebarItems: state.sidebarItems,
+    setIsSidebarFocused: actions.setIsSidebarFocused,
+    toggleSidebarCollapse: actions.toggleSidebarCollapse,
+    isSidebarCollapsible: state.isSidebarCollapsible,
+  }));
 
   const [didUserInteract, setDidUserInteract] = useState(false);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
@@ -59,10 +66,22 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
 
   return (
     <div
-      className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black"
+      className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black relative"
       data-testid="sidebar"
     >
       <div ref={sidebarContainerRef} className="min-w-fit">
+        {isSidebarCollapsible && (
+          <button
+            onClick={toggleSidebarCollapse}
+            className="cursor-pointer hover:opacity-50 absolute right-0 z-20"
+          >
+            <DoubleArrowIcon
+              className={classNames(
+                'dark:fill-bright-gray fill-granite-gray w-5 h-5 rotate-180'
+              )}
+            />
+          </button>
+        )}
         {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild
             didUserInteract={didUserInteract}

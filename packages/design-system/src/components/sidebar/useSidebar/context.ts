@@ -35,6 +35,8 @@ export interface SidebarStoreContext {
     currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
     sidebarItems: SidebarItems;
     isSidebarFocused: boolean;
+    isCollapsed: boolean;
+    isSidebarCollapsible: boolean;
   };
   actions: {
     setIsSidebarFocused: React.Dispatch<boolean>;
@@ -46,6 +48,7 @@ export interface SidebarStoreContext {
     toggleDropdown: (action: boolean, key: string) => void;
     isKeyAncestor: (key: string) => boolean;
     isKeySelected: (key: string) => boolean;
+    toggleSidebarCollapse: () => void;
   };
 }
 
@@ -63,6 +66,7 @@ export const initialState: SidebarStoreContext = {
     currentItemKey: null,
     sidebarItems: {},
     isSidebarFocused: true,
+    isCollapsed: false,
   },
   actions: {
     setIsSidebarFocused: noop,
@@ -71,6 +75,7 @@ export const initialState: SidebarStoreContext = {
     toggleDropdown: noop,
     isKeyAncestor: () => false,
     isKeySelected: () => false,
+    toggleSidebarCollapse: noop,
   },
 };
 
