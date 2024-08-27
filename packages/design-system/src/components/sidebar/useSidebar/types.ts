@@ -36,8 +36,17 @@ export type SidebarItems = {
   [key: string]: SidebarItemValue;
 };
 
+export type CollapsedSidebarItems = {
+  footerElements: {
+    [key: string]: {
+      icon: SidebarComponent;
+    };
+  };
+};
+
 export interface useSidebarProps {
   data: SidebarItems;
   defaultSelectedItemKey?: string | null;
   isSidebarCollapsible?: boolean;
+  collapsedData?: CollapsedSidebarItems;
 }

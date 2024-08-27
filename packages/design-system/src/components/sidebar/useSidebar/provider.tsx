@@ -41,6 +41,7 @@ export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
   isSidebarCollapsible = false,
+  collapsedData,
   children,
 }: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
@@ -272,6 +273,7 @@ export const SidebarProvider = ({
           selectedItemKey,
           currentItemKey,
           sidebarItems,
+          collapsedSidebarItems: collapsedData,
           isSidebarFocused,
           isCollapsed,
           isSidebarCollapsible,

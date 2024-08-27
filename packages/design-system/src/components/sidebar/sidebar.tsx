@@ -26,6 +26,7 @@ import SidebarChild from './sidebarChild';
 import { useSidebar } from './useSidebar';
 import { DoubleArrowIcon } from '../../icons';
 import classNames from 'classnames';
+import CollapsedSidebar from './collapsedSidebar';
 
 interface SidebarProps {
   visibleWidth?: number;
@@ -36,11 +37,13 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
     sidebarItems,
     setIsSidebarFocused,
     toggleSidebarCollapse,
+    isCollapsed,
     isSidebarCollapsible,
   } = useSidebar(({ state, actions }) => ({
     sidebarItems: state.sidebarItems,
     setIsSidebarFocused: actions.setIsSidebarFocused,
     toggleSidebarCollapse: actions.toggleSidebarCollapse,
+    isCollapsed: state.isCollapsed,
     isSidebarCollapsible: state.isSidebarCollapsible,
   }));
 
@@ -64,6 +67,10 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
     };
   }, [setIsSidebarFocused]);
 
+  if (isCollapsed) {
+    return <CollapsedSidebar />;
+  }
+
   return (
     <div
       className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black relative"
@@ -73,7 +80,7 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
         {isSidebarCollapsible && (
           <button
             onClick={toggleSidebarCollapse}
-            className="cursor-pointer hover:opacity-50 absolute right-0 z-20"
+            className="cursor-pointer hover:opacity-70 absolute right-0 z-20"
           >
             <DoubleArrowIcon
               className={classNames(
