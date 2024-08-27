@@ -230,7 +230,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         onResizeStop={(_, __, ___, d) => {
           setSidebarWidth((prevState) => prevState + d.width);
         }}
-        minWidth={isCollapsed ? 48 : 150}
+        minWidth={isCollapsed ? 48 : 160}
         maxWidth={'90%'}
         enable={{
           right: !isCollapsed,

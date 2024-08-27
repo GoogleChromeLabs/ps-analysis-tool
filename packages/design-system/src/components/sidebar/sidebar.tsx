@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -40,6 +40,7 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
     isCollapsed,
     isSidebarCollapsible,
     isSidebarFocused,
+    isKeySelected,
   } = useSidebar(({ state, actions }) => ({
     sidebarItems: state.sidebarItems,
     setIsSidebarFocused: actions.setIsSidebarFocused,
@@ -47,6 +48,7 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
     isCollapsed: state.isCollapsed,
     isSidebarCollapsible: state.isSidebarCollapsible,
     isSidebarFocused: state.isSidebarFocused,
+    isKeySelected: actions.isKeySelected,
   }));
 
   const [didUserInteract, setDidUserInteract] = useState(false);
@@ -69,6 +71,10 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
     };
   }, [setIsSidebarFocused]);
 
+  const isFirstElementSelected = useMemo(() => {
+    return isKeySelected(Object.keys(sidebarItems)[0]);
+  }, [isKeySelected, sidebarItems]);
+
   if (isCollapsed) {
     return <CollapsedSidebar />;
   }
@@ -88,7 +94,8 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
               className={classNames(
                 'dark:fill-bright-gray fill-granite-gray w-5 h-5 rotate-180',
                 {
-                  'fill-bright-gray': isSidebarFocused,
+                  'fill-bright-gray':
+                    isSidebarFocused && isFirstElementSelected,
                 }
               )}
             />
