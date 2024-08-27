@@ -42,6 +42,8 @@ import {
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
+  type CollapsedSidebarItems,
+  Settings as SettingsIcon,
 } from '@google-psat/design-system';
 
 /**
@@ -276,3 +278,16 @@ const TABS: SidebarItems = {
 };
 
 export default TABS;
+
+export const collapsedSidebarData: CollapsedSidebarItems = {
+  footerElements: {
+    [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
+      icon: {
+        Element: SettingsIcon,
+        props: {
+          className: 'fill-granite-gray dark:fill-bright-gray',
+        },
+      },
+    },
+  },
+};

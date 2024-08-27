@@ -27,7 +27,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies.
  */
-import TABS from './tabs';
+import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './components';
 import useContextInvalidated from './hooks/useContextInvalidated';
@@ -70,6 +70,7 @@ const App: React.FC = () => {
       data={sidebarData}
       defaultSelectedItemKey={defaultSelectedItemKey}
       isSidebarCollapsible={true}
+      collapsedData={collapsedSidebarData}
     >
       <div
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
