@@ -39,9 +39,9 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
   return (
     <div
       className={classNames(
-        'h-full border-r border-gray-300 dark:border-quartz dark:bg-raisin-black relative transition-all duration-300',
+        'h-full border-r border-gray-300 dark:border-quartz relative transition-all duration-300',
         {
-          'w-full overflow-auto': !isCollapsed,
+          'w-full overflow-auto dark:bg-raisin-black': !isCollapsed,
         },
         {
           'w-10 bg-anti-flash-white dark:bg-charleston-green flex flex-col justify-between items-center px-2 py-4':
