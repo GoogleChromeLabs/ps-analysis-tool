@@ -17,101 +17,44 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import SidebarChild from './sidebarChild';
 import { useSidebar } from './useSidebar';
-import { DoubleArrowIcon } from '../../icons';
-import classNames from 'classnames';
 import CollapsedSidebar from './collapsedSidebar';
+import ExpandedSidebar from './expandedSidebar';
 
 interface SidebarProps {
   visibleWidth?: number;
 }
 
 const Sidebar = ({ visibleWidth }: SidebarProps) => {
-  const {
-    sidebarItems,
-    setIsSidebarFocused,
-    toggleSidebarCollapse,
-    isCollapsed,
-    isSidebarCollapsible,
-    isSidebarFocused,
-    isKeySelected,
-  } = useSidebar(({ state, actions }) => ({
-    sidebarItems: state.sidebarItems,
-    setIsSidebarFocused: actions.setIsSidebarFocused,
-    toggleSidebarCollapse: actions.toggleSidebarCollapse,
+  const { isCollapsed } = useSidebar(({ state }) => ({
     isCollapsed: state.isCollapsed,
-    isSidebarCollapsible: state.isSidebarCollapsible,
-    isSidebarFocused: state.isSidebarFocused,
-    isKeySelected: actions.isKeySelected,
   }));
-
-  const [didUserInteract, setDidUserInteract] = useState(false);
-  const sidebarContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        sidebarContainerRef.current &&
-        !sidebarContainerRef.current?.contains(event.target as Node)
-      ) {
-        setIsSidebarFocused(false);
-      }
-    };
-
-    globalThis?.document?.addEventListener('click', handleClickOutside);
-
-    return () => {
-      globalThis?.document?.removeEventListener('click', handleClickOutside);
-    };
-  }, [setIsSidebarFocused]);
-
-  const isFirstElementSelected = useMemo(() => {
-    return isKeySelected(Object.keys(sidebarItems)[0]);
-  }, [isKeySelected, sidebarItems]);
-
-  if (isCollapsed) {
-    return <CollapsedSidebar />;
-  }
 
   return (
     <div
-      className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black relative"
+      className={classNames(
+        'h-full border-r border-gray-300 dark:border-quartz dark:bg-raisin-black relative transition-all duration-300',
+        {
+          'w-full overflow-auto': !isCollapsed,
+        },
+        {
+          'w-10 bg-anti-flash-white dark:bg-charleston-green flex flex-col justify-between items-center px-2 py-4':
+            isCollapsed,
+        }
+      )}
       data-testid="sidebar"
     >
-      <div ref={sidebarContainerRef} className="min-w-fit">
-        {isSidebarCollapsible && (
-          <button
-            onClick={toggleSidebarCollapse}
-            className="cursor-pointer hover:opacity-70 absolute right-0 z-20"
-          >
-            <DoubleArrowIcon
-              className={classNames(
-                'dark:fill-bright-gray fill-granite-gray w-5 h-5 rotate-180',
-                {
-                  'fill-bright-gray':
-                    isSidebarFocused && isFirstElementSelected,
-                }
-              )}
-            />
-          </button>
-        )}
-        {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
-          <SidebarChild
-            didUserInteract={didUserInteract}
-            setDidUserInteract={setDidUserInteract}
-            itemKey={itemKey}
-            sidebarItem={sidebarItem}
-            key={itemKey}
-            visibleWidth={visibleWidth}
-          />
-        ))}
-      </div>
+      {isCollapsed ? (
+        <CollapsedSidebar />
+      ) : (
+        <ExpandedSidebar visibleWidth={visibleWidth} />
+      )}
     </div>
   );
 };

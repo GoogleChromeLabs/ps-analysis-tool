@@ -216,7 +216,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useEffect(() => {
     if (isCollapsed) {
-      setSidebarWidth(48);
+      setSidebarWidth(40);
     } else {
       setSidebarWidth(200);
     }
@@ -230,12 +230,12 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         onResizeStop={(_, __, ___, d) => {
           setSidebarWidth((prevState) => prevState + d.width);
         }}
-        minWidth={isCollapsed ? 48 : 160}
+        minWidth={isCollapsed ? 40 : 160}
         maxWidth={'90%'}
         enable={{
           right: !isCollapsed,
         }}
-        className="h-full"
+        className="h-full transition-all duration-300"
       >
         <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>

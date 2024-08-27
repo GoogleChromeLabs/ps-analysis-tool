@@ -39,7 +39,7 @@ const CollapsedSidebar = () => {
   }));
 
   return (
-    <div className="w-12 h-full bg-bright-gray dark:bg-charleston-green flex flex-col justify-between items-center px-2 py-4 border-r border-gray-300 dark:border-quartz">
+    <>
       <div />
       <button
         onClick={toggleSidebarCollapse}
@@ -61,7 +61,7 @@ const CollapsedSidebar = () => {
             <button
               key={key}
               className={classNames(
-                'cursor-pointer hover:opacity-70 p-2 rounded-full',
+                'cursor-pointer hover:opacity-70 p-1 rounded-full',
                 {
                   'bg-white dark:bg-raisin-black':
                     key === currentSelectedItemKey,
@@ -74,7 +74,7 @@ const CollapsedSidebar = () => {
           );
         })}
       </div>
-    </div>
+    </>
   );
 };
 
