@@ -125,15 +125,20 @@ export function filePathValidator(filePath: string, flag: string) {
         throw new InvalidArgumentError(
           "Correct value for option '-f, --file <path>' would be /users/path/to/urls.csv or /users/path/to/urls.xml"
         );
+      case '-b':
+        throw new InvalidArgumentError(
+          "Correct value for option '-b, --button-selector <path>' would be /users/path/to/selectors.json"
+        );
       default:
         throw new InvalidArgumentError('');
     }
   }
 
-  const csvFileExists = existsSync(filePath);
-  if (!csvFileExists) {
+  const fileExists = existsSync(filePath);
+  if (!fileExists) {
     redLogger(`Error: No file at ${filePath}`);
   }
+
   return filePath;
 }
 

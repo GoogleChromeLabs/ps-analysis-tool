@@ -28,6 +28,7 @@ import {
   delay,
   RESPONSE_EVENT,
   REQUEST_EVENT,
+  type Selectors,
 } from '@google-psat/common';
 
 /**
@@ -57,13 +58,15 @@ export class BrowserManagement {
   shouldLogDebug: boolean;
   spinnies: Spinnies | undefined;
   indent = 0;
+  selectors = {};
   constructor(
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
     pageWaitTime: number,
     shouldLogDebug: boolean,
     indent: number,
-    spinnies?: Spinnies
+    spinnies?: Spinnies,
+    selectors?: Selectors
   ) {
     this.viewportConfig = viewportConfig;
     this.browser = null;
@@ -77,6 +80,7 @@ export class BrowserManagement {
     this.pageResourcesMaps = {};
     this.spinnies = spinnies;
     this.indent = indent;
+    this.selectors = selectors || {};
   }
 
   debugLog(msg: any) {

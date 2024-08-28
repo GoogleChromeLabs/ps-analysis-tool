@@ -56,6 +56,7 @@ import {
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
 import saveResultsAsHTML from './utils/saveResultAsHTML';
+import getSelectorsFromPath from './utils/getSelectorsFromPath';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -125,6 +126,11 @@ program
     (value) => localeValidator(value, '-l'),
     'en'
   )
+  .option(
+    '-b, --button-selectors <path>',
+    'The path to a json file which contains selectors or button text to be used for GDPR banner acceptance',
+    (value) => filePathValidator(value, '-b')
+  )
   .helpOption('-h, --help', 'Display help for command')
   .addHelpText(
     'after',
@@ -157,6 +163,7 @@ program.parse();
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
+  const selectorFilePath = program.opts().buttonSelectors;
 
   const numArgs: number = [
     Boolean(url),
@@ -193,6 +200,8 @@ program.parse();
   }
 
   const spinnies = new Spinnies();
+
+  const selectors = getSelectorsFromPath(selectorFilePath);
 
   const urls = await getUrlListFromArgs(url, spinnies, sitemapUrl, filePath);
 
@@ -241,7 +250,8 @@ program.parse();
       spinnies,
       shouldSkipAcceptBanner,
       verbose,
-      sitemapUrl || filePath ? 4 : 3
+      sitemapUrl || filePath ? 4 : 3,
+      selectors
     );
 
   removeAndAddNewSpinnerText(

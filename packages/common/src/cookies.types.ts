@@ -262,3 +262,9 @@ export type FrameStateCreator = {
   dataMapping: DataMapping[];
   legend: Legend[];
 };
+
+export type Selectors = {
+  textSelectors: string[];
+  cssSelectors: string[];
+  xPath: string[];
+};
