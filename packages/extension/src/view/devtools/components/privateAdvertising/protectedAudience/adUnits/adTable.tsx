@@ -31,7 +31,16 @@ import {
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
 
+/**
+ * Internal dependencies.
+ */
+import { useProtectedAudience } from '../../../../stateProviders';
+
 const AdTable = () => {
+  const { adsAndBidders } = useProtectedAudience(({ state }) => ({
+    adsAndBidders: state.adsAndBidders,
+  }));
+
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -48,11 +57,17 @@ const AdTable = () => {
       },
       {
         header: 'Ad Container Sizes',
-        accessorKey: 'adContainerSizes',
+        accessorKey: 'mediaContainerSize',
         cell: (info) => (
           <div className="flex gap-2 justify-center items-center">
             <ScreenIcon className="fill-[#323232]" />
-            {(info as string[]).join(' | ')}
+            {(info as number[][])
+              .map((size: number[], idx: number) => (
+                <React.Fragment
+                  key={idx}
+                >{`${size[0]}x${size[1]}`}</React.Fragment>
+              ))
+              .join(' | ')}
           </div>
         ),
       },
@@ -85,7 +100,7 @@ const AdTable = () => {
         }}
       >
         <TableProvider
-          data={[]}
+          data={Object.values(adsAndBidders)}
           tableColumns={tableColumns}
           tableFilterData={undefined}
           tableSearchKeys={undefined}

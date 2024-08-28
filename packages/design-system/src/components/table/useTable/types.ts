@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import type {
+  AdsAndBiddersType,
   CookieTableData,
   InterestGroups,
   NoBidsType,
@@ -30,6 +31,7 @@ export type TableData = (
   | InterestGroups
   | singleAuctionEvent
   | NoBidsType[keyof NoBidsType]
+  | AdsAndBiddersType[keyof AdsAndBiddersType]
 ) & {
   highlighted?: boolean;
 };

@@ -35,6 +35,7 @@ import classNames from 'classnames';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
+import AdUnits from './adUnits';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -69,13 +70,13 @@ const ProtectedAudience = () => {
           className: 'pt-4 overflow-hidden',
         },
       },
-      // {
-      //   title: 'Ad Units',
-      //   content: {
-      //     Element: AdUnits,
-      //     className: 'overflow-hidden',
-      //   },
-      // },
+      {
+        title: 'Ad Units',
+        content: {
+          Element: AdUnits,
+          className: 'overflow-hidden',
+        },
+      },
       {
         title: 'Auctions',
         content: {
