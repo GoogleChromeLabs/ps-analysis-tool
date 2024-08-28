@@ -345,13 +345,13 @@ const Provider = ({ children }: PropsWithChildren) => {
 
                 adUnitCodeToBidders[adUnitCode] = {
                   adUnitCode:
-                    adUnitCodeToBidders[adUnitCode].adUnitCode ?? adUnitCode,
-                  bidders: Array.from(
-                    new Set(
+                    adUnitCodeToBidders[adUnitCode]?.adUnitCode ?? adUnitCode,
+                  bidders: [
+                    ...new Set<string>([
                       ...(adUnitCodeToBidders[adUnitCode]?.bidders ?? []),
-                      ownerOrigin
-                    )
-                  ),
+                      ...(ownerOrigin ? [ownerOrigin] : []),
+                    ]),
+                  ],
                   mediaContainerSize: [
                     Array.from(
                       new Set(
