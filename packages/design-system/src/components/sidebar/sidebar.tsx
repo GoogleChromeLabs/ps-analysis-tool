@@ -32,9 +32,12 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ visibleWidth }: SidebarProps) => {
-  const { isCollapsed } = useSidebar(({ state }) => ({
-    isCollapsed: state.isCollapsed,
-  }));
+  const { isCollapsed, toggleSidebarCollapse } = useSidebar(
+    ({ state, actions }) => ({
+      isCollapsed: state.isCollapsed,
+      toggleSidebarCollapse: actions.toggleSidebarCollapse,
+    })
+  );
 
   return (
     <div
@@ -44,10 +47,10 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
           'w-full overflow-auto dark:bg-raisin-black': !isCollapsed,
         },
         {
-          'w-10 bg-anti-flash-white dark:bg-charleston-green flex flex-col justify-between items-center px-2 py-4':
-            isCollapsed,
+          'w-10 bg-anti-flash-white dark:bg-charleston-green': isCollapsed,
         }
       )}
+      onClick={isCollapsed ? toggleSidebarCollapse : undefined}
       data-testid="sidebar"
     >
       {isCollapsed ? (

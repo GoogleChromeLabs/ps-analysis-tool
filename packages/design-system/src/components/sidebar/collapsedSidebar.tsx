@@ -16,38 +16,56 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import { DoubleArrowIcon } from '../../icons';
 import { useSidebar } from './useSidebar';
-import classNames from 'classnames';
 
 const CollapsedSidebar = () => {
   const {
     collapsedSidebarItems,
-    toggleSidebarCollapse,
     updateSelectedItemKey,
     currentSelectedItemKey,
   } = useSidebar(({ state, actions }) => ({
     collapsedSidebarItems: state.collapsedSidebarItems,
-    toggleSidebarCollapse: actions.toggleSidebarCollapse,
     updateSelectedItemKey: actions.updateSelectedItemKey,
     currentSelectedItemKey: state.currentItemKey,
   }));
 
+  const [hoverOnMenuIcon, setHoverOnMenuIcon] = useState(false);
+
+  const handleFooterElementClick = useCallback(
+    (e: React.MouseEvent, key: string) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      updateSelectedItemKey(key);
+    },
+    [updateSelectedItemKey]
+  );
+
   return (
-    <>
+    <div
+      className={classNames(
+        'flex flex-col justify-between items-center px-2 py-4 w-full h-full',
+        {
+          'cursor-pointer group': !hoverOnMenuIcon,
+        }
+      )}
+    >
       <div />
-      <button
-        onClick={toggleSidebarCollapse}
-        className="cursor-pointer hover:opacity-70"
-      >
+      <div className="cursor-pointer group-hover:opacity-60">
         <DoubleArrowIcon className="dark:fill-bright-gray fill-granite-gray w-6 h-6" />
-      </button>
-      <div className="flex flex-col gap-4">
+      </div>
+      <div
+        className="flex flex-col gap-4"
+        onMouseEnter={() => setHoverOnMenuIcon(true)}
+        onMouseLeave={() => setHoverOnMenuIcon(false)}
+      >
         {Object.keys(collapsedSidebarItems?.footerElements || {}).map((key) => {
           const Icon = collapsedSidebarItems?.footerElements[key].icon.Element;
 
@@ -67,14 +85,14 @@ const CollapsedSidebar = () => {
                     key === currentSelectedItemKey,
                 }
               )}
-              onClick={() => updateSelectedItemKey(key)}
+              onClick={(e) => handleFooterElementClick(e, key)}
             >
               <Icon className="w-5 h-5" {...props} />
             </button>
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 
