@@ -29,6 +29,7 @@ import type {
   NoBidsType,
   singleAuctionEvent,
   SingleSellerAuction,
+  ReceivedBids,
 } from '@google-psat/common';
 import { diff } from 'deep-object-diff';
 /**
@@ -62,6 +63,10 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['noBids']
   >({});
 
+  const [adsAndBidders, setAdsAndBidders] = useState<
+    ProtectedAudienceContextType['state']['adsAndBidders']
+  >({});
+
   const computeBids = useCallback(
     (
       _auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'],
@@ -74,10 +79,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         return null;
       }
 
-      const _receivedBids: singleAuctionEvent[] = [];
+      const _receivedBids: ReceivedBids[] = [];
       const _noBids: NoBidsType = {};
 
-      const _interestGroupBuyers = new Set();
+      const _interestGroupBuyers = new Set<string>();
 
       if (_isMultiSellerAuction) {
         const multisellerAuctionEvents = _auctionEvents as MultiSellerAuction;
@@ -89,10 +94,12 @@ const Provider = ({ children }: PropsWithChildren) => {
                 return;
               }
 
-              const { auctionConfig } =
+              const { auctionConfig, uniqueAuctionId: _uniqueAuctionId } =
                 multisellerAuctionEvents[parentAuctionId]?.[
                   uniqueAuctionId
-                ]?.[1] ?? {};
+                ]?.filter(
+                  ({ type }) => type && type === 'configResolved'
+                )?.[0] ?? {};
 
               const { name } =
                 multisellerAuctionEvents[parentAuctionId]?.[
@@ -106,14 +113,27 @@ const Provider = ({ children }: PropsWithChildren) => {
                 _interestGroupBuyers.add(element);
               });
 
+              const filteredEvents = multisellerAuctionEvents[parentAuctionId][
+                uniqueAuctionId
+              ].filter(
+                (event) =>
+                  event.eventType === 'interestGroupAccessed' &&
+                  BIDDING_TYPES.includes(event.type)
+              );
+
               _receivedBids.push(
-                ...multisellerAuctionEvents[parentAuctionId][
-                  uniqueAuctionId
-                ].filter(
-                  (event) =>
-                    event.eventType === 'interestGroupAccessed' &&
-                    BIDDING_TYPES.includes(event.type)
-                )
+                ...filteredEvents.map((event) => {
+                  const sellerSignals = JSON.parse(
+                    //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
+                    auctionConfig?.sellerSignals.value
+                  );
+
+                  return {
+                    ...event,
+                    mediaContainerSize: sellerSignals?.size,
+                    adUnitCode: sellerSignals?.divId,
+                  };
+                })
               );
 
               if (_interestGroupBuyers.size > 0) {
@@ -126,12 +146,27 @@ const Provider = ({ children }: PropsWithChildren) => {
                 });
 
                 Array.from(
-                  buyersWhoBid.difference(_interestGroupBuyers)
+                  _interestGroupBuyers.difference(buyersWhoBid)
                 ).forEach((buyer) => {
-                  _noBids[uniqueAuctionId] = {
+                  const auctionId =
+                    uniqueAuctionId === '0'
+                      ? _uniqueAuctionId
+                      : uniqueAuctionId;
+
+                  if (!auctionId) {
+                    return;
+                  }
+
+                  const sellerSignals = JSON.parse(
+                    //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
+                    auctionConfig?.sellerSignals.value
+                  );
+
+                  _noBids[auctionId] = {
                     ownerOrigin: buyer,
                     name: name ?? '',
-                    uniqueAuctionId,
+                    uniqueAuctionId: auctionId,
+                    adUnitCode: sellerSignals?.divId,
                   };
                 });
               }
@@ -146,13 +181,31 @@ const Provider = ({ children }: PropsWithChildren) => {
             return;
           }
 
-          _receivedBids.push(
-            ...singleSellerAuctionEvents[uniqueAuctionId].filter(
-              (event) =>
-                event.eventType === 'interestGroupAccessed' &&
-                BIDDING_TYPES.includes(event.type)
-            )
+          const filteredEvents = singleSellerAuctionEvents[
+            uniqueAuctionId
+          ].filter(
+            (event) =>
+              event.eventType === 'interestGroupAccessed' &&
+              BIDDING_TYPES.includes(event.type)
           );
+
+          _receivedBids.push(
+            ...filteredEvents.map((event) => {
+              const sellerSignals = JSON.parse(
+                //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
+                auctionConfig?.sellerSignals.value
+              );
+
+              return {
+                ...event,
+                mediaContainerSize: sellerSignals.size,
+                adUnitCode: sellerSignals?.divId,
+              };
+            })
+          );
+
+          const { auctionConfig } =
+            singleSellerAuctionEvents[uniqueAuctionId]?.[1] ?? {};
 
           const { name } =
             singleSellerAuctionEvents[uniqueAuctionId]?.find(
@@ -168,11 +221,13 @@ const Provider = ({ children }: PropsWithChildren) => {
               }
             });
 
-            Array.from(buyersWhoBid.difference(_interestGroupBuyers)).forEach(
+            Array.from(_interestGroupBuyers.difference(buyersWhoBid)).forEach(
               (buyer) => {
                 _noBids[uniqueAuctionId] = {
                   ownerOrigin: buyer,
                   name: name ?? '',
+                  //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
+                  adUnitCode: JSON.parse(auctionConfig?.sellerSignals)?.divId,
                   uniqueAuctionId,
                 };
               }
@@ -187,6 +242,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const computeInterestGroupDetails = useCallback(
     (auctionEventsToBeParsed: singleAuctionEvent[]) => {
+      if (!auctionEventsToBeParsed) {
+        return [];
+      }
+
       return Promise.all(
         auctionEventsToBeParsed
           .filter((event) => event.eventType === 'interestGroupAccessed')
@@ -267,7 +326,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           );
 
           const computedBids: {
-            receivedBids: singleAuctionEvent[];
+            receivedBids: ReceivedBids[];
             noBids: NoBidsType;
           } | null = computeBids(
             message.payload.auctionEvents,
@@ -275,8 +334,67 @@ const Provider = ({ children }: PropsWithChildren) => {
           );
 
           if (computedBids) {
-            setReceivedBids(computedBids.receivedBids);
-            setNoBids(computedBids.noBids);
+            const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
+              {};
+
+            computedBids.receivedBids.forEach(
+              ({ adUnitCode, ownerOrigin, mediaContainerSize }) => {
+                if (!adUnitCode) {
+                  return;
+                }
+
+                adUnitCodeToBidders[adUnitCode] = {
+                  adUnitCode:
+                    adUnitCodeToBidders[adUnitCode].adUnitCode ?? adUnitCode,
+                  bidders: Array.from(
+                    new Set(
+                      ...(adUnitCodeToBidders[adUnitCode]?.bidders ?? []),
+                      ownerOrigin
+                    )
+                  ),
+                  mediaContainerSize: [
+                    Array.from(
+                      new Set(
+                        ...(adUnitCodeToBidders[adUnitCode]
+                          ?.mediaContainerSize ?? []),
+                        mediaContainerSize
+                      )
+                    ),
+                  ],
+                };
+              }
+            );
+
+            setAdsAndBidders((prevState) => {
+              if (
+                Object.keys(diff(prevState, adUnitCodeToBidders)).length > 0
+              ) {
+                return adUnitCodeToBidders;
+              }
+
+              return prevState;
+            });
+
+            setReceivedBids((prevState) => {
+              if (
+                Object.keys(diff(prevState, computedBids.receivedBids)).length >
+                0
+              ) {
+                return computedBids.receivedBids;
+              }
+
+              return prevState;
+            });
+
+            setNoBids((prevState) => {
+              if (
+                Object.keys(diff(prevState, computedBids.noBids)).length > 0
+              ) {
+                return computedBids.noBids;
+              }
+
+              return prevState;
+            });
           }
 
           setInterestGroupDetails((prevState) => {
@@ -311,6 +429,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         isMultiSellerAuction,
         receivedBids,
         noBids,
+        adsAndBidders,
       },
     };
   }, [
@@ -319,6 +438,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     isMultiSellerAuction,
     noBids,
     receivedBids,
+    adsAndBidders,
   ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;

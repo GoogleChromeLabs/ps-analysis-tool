@@ -20,8 +20,9 @@ import {
   createContext,
   type AuctionEventsType,
   type InterestGroups,
-  type singleAuctionEvent,
+  type ReceivedBids,
   type NoBidsType,
+  type AdsAndBiddersType,
 } from '@google-psat/common';
 
 export interface ProtectedAudienceContextType {
@@ -29,8 +30,9 @@ export interface ProtectedAudienceContextType {
     auctionEvents: AuctionEventsType;
     interestGroupDetails: InterestGroups[];
     isMultiSellerAuction: boolean;
-    receivedBids: singleAuctionEvent[];
+    receivedBids: ReceivedBids[];
     noBids: NoBidsType;
+    adsAndBidders: AdsAndBiddersType;
   };
 }
 
@@ -41,6 +43,7 @@ const initialState: ProtectedAudienceContextType = {
     isMultiSellerAuction: false,
     receivedBids: [],
     noBids: {},
+    adsAndBidders: {},
   },
 };
 
