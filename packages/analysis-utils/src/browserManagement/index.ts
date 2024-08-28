@@ -58,7 +58,7 @@ export class BrowserManagement {
   shouldLogDebug: boolean;
   spinnies: Spinnies | undefined;
   indent = 0;
-  selectors = {};
+  selectors: Selectors | undefined;
   constructor(
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
@@ -80,7 +80,7 @@ export class BrowserManagement {
     this.pageResourcesMaps = {};
     this.spinnies = spinnies;
     this.indent = indent;
-    this.selectors = selectors || {};
+    this.selectors = selectors;
   }
 
   debugLog(msg: any) {
@@ -132,20 +132,11 @@ export class BrowserManagement {
     }
   }
 
-  async clickOnAcceptBanner(url: string) {
-    const page = this.pages[url];
-
-    if (!page) {
-      throw new Error('No page with the provided id was found');
-    }
-    // Click using CSS selectors.
-    const clickedUsingCMPCSSSelectors =
-      await this.clickOnButtonUsingCMPSelectors(page);
-
-    if (clickedUsingCMPCSSSelectors) {
-      await delay(this.pageWaitTime / 2);
-      return;
-    }
+  async clickOnGDPRUsingTextSelectors(
+    page: Page,
+    textSelectors: string[]
+  ): Promise<boolean> {
+    let clickedOnButton = false;
 
     await page.evaluate(() => {
       const bannerNodes: Element[] = Array.from(
@@ -169,8 +160,9 @@ export class BrowserManagement {
             return;
           }
 
-          CMP_TEXT_SELECTORS.forEach((text) => {
+          textSelectors.forEach((text) => {
             if (cnode.textContent?.toLowerCase().includes(text)) {
+              clickedOnButton = true;
               cnode.click();
             }
           });
@@ -178,7 +170,84 @@ export class BrowserManagement {
       });
     });
 
+    return clickedOnButton;
+  }
+
+  async clickOnAcceptBanner(url: string) {
+    const page = this.pages[url];
+
+    if (!page) {
+      throw new Error('No page with the provided id was found');
+    }
+
+    const didSelectorsFromUserWork = await this.useSelectorsToSelectGDPRBanner(
+      page
+    );
+
+    if (didSelectorsFromUserWork) {
+      await delay(this.pageWaitTime / 2);
+      return;
+    }
+
+    // Click using CSS selectors.
+    const clickedUsingCMPCSSSelectors =
+      await this.clickOnButtonUsingCMPSelectors(page);
+
+    if (clickedUsingCMPCSSSelectors) {
+      await delay(this.pageWaitTime / 2);
+      return;
+    }
+
+    await this.clickOnGDPRUsingTextSelectors(page, CMP_TEXT_SELECTORS);
+
     await delay(this.pageWaitTime / 2);
+  }
+
+  async useSelectorsToSelectGDPRBanner(page: Page): Promise<boolean> {
+    let clickedOnButton = false;
+
+    if (!this.selectors) {
+      return false;
+    }
+
+    try {
+      await Promise.all(
+        this.selectors?.cssSelectors.map(async (selector) => {
+          const buttonToClick = await page.$(`button.${selector}`);
+          if (buttonToClick) {
+            await buttonToClick.click();
+            clickedOnButton = true;
+          }
+        })
+      );
+
+      if (clickedOnButton) {
+        return clickedOnButton;
+      }
+
+      await Promise.all(
+        this.selectors?.xPath.map(async (path) => {
+          const buttonToClick = await page.$(path);
+          if (buttonToClick) {
+            await buttonToClick.click();
+            clickedOnButton = true;
+          }
+        })
+      );
+
+      if (clickedOnButton) {
+        return clickedOnButton;
+      }
+
+      clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
+        page,
+        this.selectors.textSelectors
+      );
+
+      return clickedOnButton;
+    } catch (error) {
+      return clickedOnButton;
+    }
   }
 
   async openPage(): Promise<Page> {
