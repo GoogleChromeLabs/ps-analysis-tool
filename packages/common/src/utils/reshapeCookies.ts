@@ -17,14 +17,14 @@
 /**
  * External dependencies
  */
-import {
-  type CookieTableData,
-  type CookieData,
-  type CookieFrameStorageType,
-  type BlockedReason,
-  deriveBlockingStatus,
-} from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+import {
+  CookieFrameStorageType,
+  BlockedReason,
+  CookieData,
+  CookieTableData,
+} from '../cookies.types';
+import deriveBlockingStatus from './deriveBlockingStatus';
 
 const reshapeCookies = (cookies: CookieFrameStorageType) => {
   return Object.entries(cookies)

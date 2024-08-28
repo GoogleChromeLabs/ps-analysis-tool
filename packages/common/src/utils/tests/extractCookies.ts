@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import extractCookies from '../extractCookies';
-import { tempSinglePageData } from './data.mock';
+import { tempSinglePageData } from '../../test-utils/data.mock';
 
 describe('extractCookies', () => {
   it('should return an empty object if no cookies are present', () => {

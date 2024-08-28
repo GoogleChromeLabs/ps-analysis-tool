@@ -25,6 +25,7 @@ import {
   type CompleteJson,
   type LibraryData,
   noop,
+  reshapeCookies,
 } from '@google-psat/common';
 import {
   useSidebar,
@@ -39,7 +40,6 @@ import {
  */
 
 import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
-import reshapeCookies from '../utils/reshapeCookies';
 import CookiesTab from './cookies';
 
 interface LayoutProps {
@@ -79,7 +79,9 @@ const Layout = ({
     () =>
       Object.fromEntries(
         Object.entries(reshapedCookies).filter(
-          ([, cookie]) => cookie.isBlocked || cookie.blockedReasons?.length
+          ([, cookie]) =>
+            cookie.isBlocked ||
+            (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
         )
       ),
     [reshapedCookies]

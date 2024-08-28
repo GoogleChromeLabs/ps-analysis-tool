@@ -15,18 +15,14 @@
  */
 
 /**
- * External dependencies
- */
-import type {
-  CompleteJson,
-  CookieFrameStorageType,
-  LibraryData,
-  TechnologyData,
-} from '@google-psat/common';
-
-/**
  * Internal dependencies
  */
+import {
+  CompleteJson,
+  TechnologyData,
+  CookieFrameStorageType,
+} from '../cookies.types';
+import { LibraryData } from '../libraryDetection.types';
 import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
