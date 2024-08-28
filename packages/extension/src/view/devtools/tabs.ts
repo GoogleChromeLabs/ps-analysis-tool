@@ -288,6 +288,7 @@ export const collapsedSidebarData: CollapsedSidebarItems = {
           className: 'fill-granite-gray dark:fill-bright-gray',
         },
       },
+      title: () => I18n.getMessage('settings'),
     },
   },
 };

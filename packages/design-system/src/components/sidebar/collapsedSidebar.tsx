@@ -58,7 +58,10 @@ const CollapsedSidebar = () => {
       )}
     >
       <div />
-      <div className="cursor-pointer group-hover:opacity-60">
+      <div
+        className="cursor-pointer group-hover:opacity-60"
+        title="Expand Sidebar Menu"
+      >
         <DoubleArrowIcon className="dark:fill-bright-gray fill-granite-gray w-6 h-6" />
       </div>
       <div
@@ -74,10 +77,12 @@ const CollapsedSidebar = () => {
           }
 
           const props = collapsedSidebarItems?.footerElements[key].icon.props;
+          const title = collapsedSidebarItems?.footerElements[key].title;
 
           return (
             <button
               key={key}
+              title={typeof title === 'function' ? title() : title}
               className={classNames(
                 'cursor-pointer hover:opacity-70 p-1 rounded-full',
                 {

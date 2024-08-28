@@ -78,6 +78,7 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
         <button
           onClick={toggleSidebarCollapse}
           className="cursor-pointer hover:opacity-70 absolute right-0 z-20"
+          title="Collapse Sidebar Menu"
         >
           <DoubleArrowIcon
             className={classNames(

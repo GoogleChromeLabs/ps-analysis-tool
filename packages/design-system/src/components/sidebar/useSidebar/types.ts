@@ -40,6 +40,7 @@ export type CollapsedSidebarItems = {
   footerElements: {
     [key: string]: {
       icon: SidebarComponent;
+      title: (() => string) | string;
     };
   };
 };
