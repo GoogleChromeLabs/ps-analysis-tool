@@ -38,6 +38,7 @@ interface TableProps {
   extraInterfaceToTopBar?: () => React.JSX.Element;
   minWidth?: string;
   hideSearch?: boolean;
+  rowHeightClass?: string;
 }
 
 const Table = ({
@@ -47,6 +48,7 @@ const Table = ({
   extraInterfaceToTopBar,
   minWidth,
   hideSearch,
+  rowHeightClass,
 }: TableProps) => {
   const {
     tableContainerRef,
@@ -171,6 +173,7 @@ const Table = ({
               isRowFocused={isRowFocused}
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
+              rowHeightClass={rowHeightClass}
             />
           </div>
         </div>

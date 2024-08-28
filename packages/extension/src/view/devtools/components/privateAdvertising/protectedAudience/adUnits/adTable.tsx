@@ -62,11 +62,7 @@ const AdTable = () => {
           <div className="flex gap-2 justify-center items-center">
             <ScreenIcon className="fill-[#323232]" />
             {(info as number[][])
-              .map((size: number[], idx: number) => (
-                <React.Fragment
-                  key={idx}
-                >{`${size[0]}x${size[1]}`}</React.Fragment>
-              ))
+              .map((size: number[]) => `${size[0]}x${size[1]}`)
               .join(' | ')}
           </div>
         ),
@@ -75,7 +71,7 @@ const AdTable = () => {
         header: 'Bidders',
         accessorKey: 'bidders',
         cell: (info) => (
-          <div className="flex flex-wrap gap-2 justify-center items-center">
+          <div className="flex flex-wrap gap-2 px-1 py-2 overflow-auto h-full w-full">
             {(info as string[]).map((bidder: string, idx: number) => (
               <div key={idx}>{<Pill title={bidder} />}</div>
             ))}
@@ -110,13 +106,14 @@ const AdTable = () => {
           }}
           onRowContextMenu={noop}
           getRowObjectKey={(row: TableRow) => {
-            return row.originalData.name;
+            return row.originalData.adUnitCode;
           }}
         >
           <Table
             hideFiltering={true}
-            selectedKey={selectedRow?.name}
+            selectedKey={selectedRow?.adUnitCode}
             hideSearch={true}
+            rowHeightClass="h-20"
           />
         </TableProvider>
       </Resizable>
