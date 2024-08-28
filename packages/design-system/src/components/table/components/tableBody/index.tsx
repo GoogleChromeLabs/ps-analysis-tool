@@ -127,7 +127,8 @@ const TableBody = ({
   );
 
   const tableRowClassName = classNames(
-    'h-5 outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    rowHeightClass ?? 'h-5',
     selectedKey === null &&
       (isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
