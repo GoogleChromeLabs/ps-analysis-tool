@@ -101,10 +101,15 @@ const Wiki = () => {
         setPageContent(loadedContent[currentSelectedPage]);
       }
 
-      // Allow content to load.
-      timeout = setTimeout(() => {
-        scrollToHashElement();
-      }, 500);
+      if (currentHash) {
+        timeout = setTimeout(() => {
+          scrollToHashElement();
+        }, 500); // Allow content to load.
+      } else {
+        if (contentContainer.current) {
+          contentContainer.current.scrollTop = 0;
+        }
+      }
     })();
 
     return () => {
@@ -145,12 +150,14 @@ const Wiki = () => {
           currentHash={currentHash}
           setCurrentHash={setCurrentHash}
         />
-        <div className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
+        <div
+          ref={contentContainer}
+          className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
+        >
           {!isLoading ? (
             <>
               <h2>{currentSelectedPage}</h2>
               <div
-                ref={contentContainer}
                 onClick={handleContentClick}
                 dangerouslySetInnerHTML={{ __html: pageContent }}
               />
