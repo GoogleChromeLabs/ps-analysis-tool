@@ -182,10 +182,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       }
 
       data['selectedSidebarItem#' + tabId] = selectedItemKey;
+      data['sidebarCollapsedState#' + tabId] = isCollapsed
+        ? 'collapsed'
+        : 'expanded';
 
       await chrome.storage.session.set(data);
     })();
-  }, [selectedItemKey]);
+  }, [selectedItemKey, isCollapsed]);
 
   const lastUrl = useRef(tabUrl);
 

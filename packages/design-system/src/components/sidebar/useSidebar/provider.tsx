@@ -41,6 +41,7 @@ export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
   collapsedData,
+  collapsedState = false,
   children,
 }: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
@@ -50,7 +51,7 @@ export const SidebarProvider = ({
   const [query, setQuery] = useState<string>('');
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(collapsedState);
 
   /**
    * Update the selected item key when the defaultSelectedItemKey loads.

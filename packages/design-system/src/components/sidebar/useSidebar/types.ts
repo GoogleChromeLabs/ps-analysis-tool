@@ -47,5 +47,6 @@ export type CollapsedSidebarItems = {
 export interface useSidebarProps {
   data: SidebarItems;
   defaultSelectedItemKey?: string | null;
+  collapsedState?: boolean;
   collapsedData?: CollapsedSidebarItems;
 }

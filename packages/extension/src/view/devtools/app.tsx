@@ -44,6 +44,8 @@ const App: React.FC = () => {
     SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX
   );
 
+  const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
+
   const reloadTexts = useRef({
     displayText: I18n.getMessage('extensionUpdated'),
     buttonText: I18n.getMessage('refreshPanel'),
@@ -62,14 +64,27 @@ const App: React.FC = () => {
       if (data?.['selectedSidebarItem#' + tabId]) {
         setDefaultSelectedItemKey(data['selectedSidebarItem#' + tabId]);
       }
+
+      if (data?.['sidebarCollapsedState#' + tabId]) {
+        setCollapsedState(
+          data?.['sidebarCollapsedState#' + tabId] === 'collapsed'
+        );
+      } else {
+        setCollapsedState(false);
+      }
     })();
   }, []);
+
+  if (collapsedState === null) {
+    return null;
+  }
 
   return (
     <SidebarProvider
       data={sidebarData}
       defaultSelectedItemKey={defaultSelectedItemKey}
       collapsedData={collapsedSidebarData}
+      collapsedState={collapsedState}
     >
       <div
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
