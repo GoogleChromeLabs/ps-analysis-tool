@@ -69,7 +69,7 @@ program
   .name(isFromNPMRegistry ? 'psat' : 'npm run cli')
   .version('0.10.1')
   .usage(
-    isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
+    isFromNPMRegistry ? '[website-url] [options]' : '[website-url] -- [options]'
   )
   .description('CLI to test a URL for 3p cookies.')
   .argument('[website-url]', 'The URL of a single site to analyze', (value) =>
