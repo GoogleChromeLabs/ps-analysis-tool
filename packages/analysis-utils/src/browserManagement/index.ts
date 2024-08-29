@@ -110,6 +110,7 @@ export class BrowserManagement {
       headless: this.isHeadless,
       args,
     });
+
     this.debugLog('Browser initialized');
   }
 
@@ -123,6 +124,7 @@ export class BrowserManagement {
           if (buttonToClick) {
             await buttonToClick.click();
             clickedOnButton = true;
+            this.debugLog('GDPR banner found and accepted');
           }
         })
       );
@@ -148,7 +150,7 @@ export class BrowserManagement {
             return false;
           }
           const regex =
-            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
+            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences|cookies)\b/;
 
           return regex.test(node.textContent.toLowerCase());
         });
@@ -165,6 +167,7 @@ export class BrowserManagement {
             if (cnode.textContent?.toLowerCase().includes(text)) {
               clickedOnButton = true;
               cnode.click();
+              this.debugLog('GDPR banner found and accepted');
             }
           });
         });
@@ -220,6 +223,7 @@ export class BrowserManagement {
           if (buttonToClick) {
             await buttonToClick.click();
             clickedOnButton = true;
+            this.debugLog('GDPR banner found and accepted');
           }
         })
       );
@@ -246,6 +250,8 @@ export class BrowserManagement {
             }
             //@ts-ignore
             _acceptButton?.click();
+
+            this.debugLog('GDPR banner found and accepted');
             return true;
           }, singleXPath);
 
