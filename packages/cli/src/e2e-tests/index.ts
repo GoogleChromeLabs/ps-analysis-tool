@@ -20,13 +20,14 @@ import path from 'path';
 describe('CLI E2E Test', () => {
   const cli = require.resolve('../../dist/main.js');
 
-  afterAll(() => {
+  afterEach(() => {
     fs.rmSync(path.join(process.cwd(), '/out/bbc-com'), { recursive: true });
   });
 
   it('Should run site analysis', () => {
     return coffee
-      .fork(cli, ['-u https://bbc.com', '-w 1'])
+      .fork(cli, ['-u https://www.bbc.com', '-w 100'])
+      .debug()
       .includes('stdout', '/out/bbc-com/report_')
       .end();
   }, 60000);

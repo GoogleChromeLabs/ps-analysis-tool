@@ -201,7 +201,11 @@ program.parse();
 
   const spinnies = new Spinnies();
 
-  const selectors = getSelectorsFromPath(selectorFilePath);
+  let selectors;
+
+  if (selectorFilePath) {
+    selectors = getSelectorsFromPath(selectorFilePath);
+  }
 
   const urls = await getUrlListFromArgs(url, spinnies, sitemapUrl, filePath);
 
