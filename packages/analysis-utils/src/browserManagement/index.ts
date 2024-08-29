@@ -124,7 +124,6 @@ export class BrowserManagement {
           if (buttonToClick) {
             await buttonToClick.click();
             clickedOnButton = true;
-            this.debugLog('GDPR banner found and accepted');
           }
         })
       );
@@ -138,45 +137,52 @@ export class BrowserManagement {
     page: Page,
     textSelectors: string[]
   ): Promise<boolean> {
-    const result = await page.evaluate((args: string[]) => {
-      let clickedOnButton = false;
+    if (textSelectors.length === 0) {
+      return false;
+    }
 
-      const bannerNodes: Element[] = Array.from(
-        (document.querySelector('body')?.childNodes || []) as Element[]
-      )
-        .filter((node: Element) => node && node?.tagName === 'DIV')
-        .filter((node) => {
-          if (!node || !node?.textContent) {
-            return false;
-          }
-          const regex =
-            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences|cookies)\b/;
+    try {
+      const result = await page.evaluate((args: string[]) => {
+        let clickedOnButton = false;
 
-          return regex.test(node.textContent.toLowerCase());
-        });
-
-      bannerNodes?.forEach((node: Element) => {
-        const buttonNodes = Array.from(node.getElementsByTagName('button'));
-
-        buttonNodes?.forEach((cnode) => {
-          if (!cnode.textContent) {
-            return;
-          }
-          //@ts-ignore
-          args?.forEach((text) => {
-            if (cnode.textContent?.toLowerCase().includes(text)) {
-              clickedOnButton = true;
-              cnode.click();
-              this.debugLog('GDPR banner found and accepted');
+        const bannerNodes: Element[] = Array.from(
+          (document.querySelector('body')?.childNodes || []) as Element[]
+        )
+          ?.filter((node: Element) => node && node?.tagName === 'DIV')
+          ?.filter((node) => {
+            if (!node || !node?.textContent) {
+              return false;
             }
+            const regex =
+              /\b(consent|policy|cookie policy|privacy policy|personalize|preferences|cookies)\b/;
+
+            return regex.test(node.textContent.toLowerCase());
+          });
+
+        bannerNodes?.forEach((node: Element) => {
+          const buttonNodes = Array.from(node?.getElementsByTagName('button'));
+
+          buttonNodes?.forEach((cnode) => {
+            if (!cnode?.textContent) {
+              return;
+            }
+            //@ts-ignore
+            args.forEach((text) => {
+              if (cnode?.textContent?.toLowerCase().includes(text)) {
+                clickedOnButton = true;
+                cnode?.click();
+              }
+            });
           });
         });
-      });
 
-      return clickedOnButton;
-    }, textSelectors);
+        return clickedOnButton;
+      }, textSelectors);
 
-    return result;
+      return result;
+    } catch (error) {
+      return false;
+    }
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -191,6 +197,7 @@ export class BrowserManagement {
     );
 
     if (didSelectorsFromUserWork) {
+      this.debugLog('GDPR banner found and accepted');
       await delay(this.pageWaitTime / 2);
       return;
     }
@@ -200,13 +207,25 @@ export class BrowserManagement {
       await this.clickOnButtonUsingCMPSelectors(page);
 
     if (clickedUsingCMPCSSSelectors) {
+      this.debugLog('GDPR banner found and accepted');
       await delay(this.pageWaitTime / 2);
       return;
     }
 
-    await this.clickOnGDPRUsingTextSelectors(page, CMP_TEXT_SELECTORS);
+    const buttonClicked = await this.clickOnGDPRUsingTextSelectors(
+      page,
+      CMP_TEXT_SELECTORS
+    );
 
+    if (buttonClicked) {
+      this.debugLog('GDPR banner found and accepted');
+      await delay(this.pageWaitTime / 2);
+      return;
+    }
+
+    this.debugLog('GDPR banner could not be found');
     await delay(this.pageWaitTime / 2);
+    return;
   }
 
   async useSelectorsToSelectGDPRBanner(page: Page): Promise<boolean> {
@@ -221,9 +240,9 @@ export class BrowserManagement {
         this.selectors?.cssSelectors.map(async (selector) => {
           const buttonToClick = await page.$(selector);
           if (buttonToClick) {
-            await buttonToClick.click();
             clickedOnButton = true;
             this.debugLog('GDPR banner found and accepted');
+            await buttonToClick.click();
           }
         })
       );
@@ -270,7 +289,6 @@ export class BrowserManagement {
 
       return clickedOnButton;
     } catch (error) {
-      console.log(error);
       return clickedOnButton;
     }
   }
