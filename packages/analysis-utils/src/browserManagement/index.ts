@@ -136,9 +136,9 @@ export class BrowserManagement {
     page: Page,
     textSelectors: string[]
   ): Promise<boolean> {
-    let clickedOnButton = false;
+    const result = await page.evaluate((args: string[]) => {
+      let clickedOnButton = false;
 
-    await page.evaluate(() => {
       const bannerNodes: Element[] = Array.from(
         (document.querySelector('body')?.childNodes || []) as Element[]
       )
@@ -153,14 +153,15 @@ export class BrowserManagement {
           return regex.test(node.textContent.toLowerCase());
         });
 
-      bannerNodes.forEach((node: Element) => {
+      bannerNodes?.forEach((node: Element) => {
         const buttonNodes = Array.from(node.getElementsByTagName('button'));
-        buttonNodes.forEach((cnode) => {
+
+        buttonNodes?.forEach((cnode) => {
           if (!cnode.textContent) {
             return;
           }
-
-          textSelectors.forEach((text) => {
+          //@ts-ignore
+          args?.forEach((text) => {
             if (cnode.textContent?.toLowerCase().includes(text)) {
               clickedOnButton = true;
               cnode.click();
@@ -168,9 +169,11 @@ export class BrowserManagement {
           });
         });
       });
-    });
 
-    return clickedOnButton;
+      return clickedOnButton;
+    }, textSelectors);
+
+    return result;
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -213,7 +216,7 @@ export class BrowserManagement {
     try {
       await Promise.all(
         this.selectors?.cssSelectors.map(async (selector) => {
-          const buttonToClick = await page.$(`button.${selector}`);
+          const buttonToClick = await page.$(selector);
           if (buttonToClick) {
             await buttonToClick.click();
             clickedOnButton = true;
@@ -226,26 +229,42 @@ export class BrowserManagement {
       }
 
       await Promise.all(
-        this.selectors?.xPath.map(async (path) => {
-          const buttonToClick = await page.$(path);
-          if (buttonToClick) {
-            await buttonToClick.click();
-            clickedOnButton = true;
+        this.selectors?.xPath.map(async (singleXPath) => {
+          clickedOnButton = await page.evaluate((args: string) => {
+            const rootElement = document.querySelector('html');
+
+            if (!rootElement) {
+              return false;
+            }
+
+            const _acceptButton = document
+              .evaluate(args, rootElement)
+              .iterateNext();
+
+            if (!_acceptButton) {
+              return false;
+            }
+            //@ts-ignore
+            _acceptButton?.click();
+            return true;
+          }, singleXPath);
+
+          if (clickedOnButton) {
+            return clickedOnButton;
           }
+
+          return false;
         })
       );
 
-      if (clickedOnButton) {
-        return clickedOnButton;
-      }
-
       clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
         page,
-        this.selectors.textSelectors
+        this.selectors?.textSelectors
       );
 
       return clickedOnButton;
     } catch (error) {
+      console.log(error);
       return clickedOnButton;
     }
   }
