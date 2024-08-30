@@ -85,7 +85,7 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
               'w-5 h-5',
               isSidebarFocused && isFirstElementSelected
                 ? 'fill-bright-gray'
-                : 'dark:fill-bright-gray fill-granite-gray'
+                : 'fill-granite-gray'
             )}
           />
         </button>
