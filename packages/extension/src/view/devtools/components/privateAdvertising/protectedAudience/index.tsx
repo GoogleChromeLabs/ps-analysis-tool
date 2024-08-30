@@ -28,6 +28,10 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
+import InterestGroups from './interestGroups';
+import AdUnits from './adUnits';
+import Auctions from './auctions';
+import Bids from './bids';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -55,32 +59,32 @@ const ProtectedAudience = () => {
           className: 'p-4',
         },
       },
-      // {
-      //   title: 'Interest Groups',
-      //   content: {
-      //     Element: InterestGroups,
-      //     className: 'pt-4 overflow-hidden',
-      //   },
-      // },
-      // {
-      //   title: 'Ad Units',
-      //   content: {
-      //     Element: AdUnits,
-      //     className: 'overflow-hidden',
-      //   },
-      // },
-      // {
-      //   title: 'Auctions',
-      //   content: {
-      //     Element: Auctions,
-      //   },
-      // },
-      // {
-      //   title: 'Bids',
-      //   content: {
-      //     Element: Bids,
-      //   },
-      // },
+      {
+        title: 'Interest Groups',
+        content: {
+          Element: InterestGroups,
+          className: 'pt-4 overflow-hidden',
+        },
+      },
+      {
+        title: 'Ad Units',
+        content: {
+          Element: AdUnits,
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Auctions',
+        content: {
+          Element: Auctions,
+        },
+      },
+      {
+        title: 'Bids',
+        content: {
+          Element: Bids,
+        },
+      },
     ],
     []
   );
