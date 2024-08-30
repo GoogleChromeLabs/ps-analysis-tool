@@ -103,7 +103,7 @@ const SidebarChild = ({
             ? isSidebarFocused
               ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
               : 'bg-gainsboro dark:bg-outer-space'
-            : 'bg-white dark:bg-raisin-black'
+            : 'bg-lotion dark:bg-raisin-black'
         } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''}`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
         data-testid="sidebar-child"
