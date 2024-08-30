@@ -87,7 +87,6 @@ export class BrowserManagement {
     if (this.shouldLogDebug && this.spinnies) {
       this.spinnies.add(msg, {
         text: msg,
-        //@ts-ignore
         succeedColor: 'white',
         status: 'non-spinnable',
         indent: this.indent,
@@ -166,7 +165,7 @@ export class BrowserManagement {
             if (!cnode?.textContent) {
               return;
             }
-            //@ts-ignore
+
             args.forEach((text) => {
               if (cnode?.textContent?.toLowerCase().includes(text)) {
                 clickedOnButton = true;
@@ -251,9 +250,9 @@ export class BrowserManagement {
         return clickedOnButton;
       }
 
-      await Promise.all(
-        this.selectors?.xPath.map(async (singleXPath) => {
-          clickedOnButton = await page.evaluate((args: string) => {
+      const evaluatedArray = await Promise.all(
+        this.selectors?.xPath.map((singleXPath) => {
+          return page.evaluate((args: string) => {
             const rootElement = document.querySelector('html');
 
             if (!rootElement) {
@@ -267,20 +266,19 @@ export class BrowserManagement {
             if (!_acceptButton) {
               return false;
             }
-            //@ts-ignore
-            _acceptButton?.click();
 
-            this.debugLog('GDPR banner found and accepted');
+            if (_acceptButton instanceof HTMLElement) {
+              _acceptButton?.click();
+            }
+
             return true;
           }, singleXPath);
-
-          if (clickedOnButton) {
-            return clickedOnButton;
-          }
-
-          return false;
         })
       );
+
+      if (evaluatedArray.some((value) => value === true)) {
+        return true;
+      }
 
       clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
         page,
