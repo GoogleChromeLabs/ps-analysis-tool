@@ -22,7 +22,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import { DoubleArrowIcon } from '../../icons';
+import { MenuOpenIcon } from '../../icons';
 import SidebarChild from './sidebarChild';
 import { useSidebar } from './useSidebar';
 
@@ -80,9 +80,9 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
           className="cursor-pointer hover:opacity-70 absolute right-0 z-20"
           title="Collapse Sidebar Menu"
         >
-          <DoubleArrowIcon
+          <MenuOpenIcon
             className={classNames(
-              'w-5 h-5 rotate-180',
+              'w-5 h-5',
               isSidebarFocused && isFirstElementSelected
                 ? 'fill-bright-gray'
                 : 'dark:fill-bright-gray fill-granite-gray'

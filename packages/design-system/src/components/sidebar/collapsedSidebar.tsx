@@ -16,13 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import { DoubleArrowIcon } from '../../icons';
+import { MenuOpenIcon } from '../../icons';
 import { useSidebar } from './useSidebar';
 
 const CollapsedSidebar = () => {
@@ -30,13 +30,13 @@ const CollapsedSidebar = () => {
     collapsedSidebarItems,
     updateSelectedItemKey,
     currentSelectedItemKey,
+    toggleSidebarCollapse,
   } = useSidebar(({ state, actions }) => ({
     collapsedSidebarItems: state.collapsedSidebarItems,
     updateSelectedItemKey: actions.updateSelectedItemKey,
     currentSelectedItemKey: state.currentItemKey,
+    toggleSidebarCollapse: actions.toggleSidebarCollapse,
   }));
-
-  const [hoverOnMenuIcon, setHoverOnMenuIcon] = useState(false);
 
   const handleFooterElementClick = useCallback(
     (e: React.MouseEvent, key: string) => {
@@ -51,24 +51,17 @@ const CollapsedSidebar = () => {
   return (
     <div
       className={classNames(
-        'flex flex-col justify-between items-center px-2 py-4 w-full h-full',
-        {
-          'cursor-pointer group': !hoverOnMenuIcon,
-        }
+        'flex flex-col justify-between items-center p-2 w-full h-full'
       )}
     >
-      <div />
-      <div
-        className="cursor-pointer group-hover:opacity-60"
+      <button
+        className="cursor-pointer hover:opacity-60"
         title="Expand Sidebar Menu"
+        onClick={toggleSidebarCollapse}
       >
-        <DoubleArrowIcon className="dark:fill-bright-gray fill-granite-gray w-6 h-6" />
-      </div>
-      <div
-        className="flex flex-col gap-4"
-        onMouseEnter={() => setHoverOnMenuIcon(true)}
-        onMouseLeave={() => setHoverOnMenuIcon(false)}
-      >
+        <MenuOpenIcon className="dark:fill-bright-gray fill-granite-gray w-5 h-5 rotate-180" />
+      </button>
+      <div className="flex flex-col gap-4">
         {Object.keys(collapsedSidebarItems?.footerElements || {}).map((key) => {
           const Icon = collapsedSidebarItems?.footerElements[key].icon.Element;
 

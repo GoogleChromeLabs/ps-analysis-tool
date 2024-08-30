@@ -32,25 +32,21 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ visibleWidth }: SidebarProps) => {
-  const { isCollapsed, toggleSidebarCollapse } = useSidebar(
-    ({ state, actions }) => ({
-      isCollapsed: state.isCollapsed,
-      toggleSidebarCollapse: actions.toggleSidebarCollapse,
-    })
-  );
+  const { isCollapsed } = useSidebar(({ state }) => ({
+    isCollapsed: state.isCollapsed,
+  }));
 
   return (
     <div
       className={classNames(
-        'h-full border-r border-gray-300 dark:border-quartz relative transition-all duration-300',
+        'h-full border-r border-gray-300 dark:border-quartz relative transition-all duration-300 bg-lotion dark:bg-raisin-black',
         {
-          'w-full overflow-auto dark:bg-raisin-black': !isCollapsed,
+          'w-full overflow-auto': !isCollapsed,
         },
         {
-          'w-10 bg-anti-flash-white dark:bg-charleston-green': isCollapsed,
+          'w-10': isCollapsed,
         }
       )}
-      onClick={isCollapsed ? toggleSidebarCollapse : undefined}
       data-testid="sidebar"
     >
       {isCollapsed ? (

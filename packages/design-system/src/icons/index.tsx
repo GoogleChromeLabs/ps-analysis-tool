@@ -75,3 +75,4 @@ export { default as WarningBare } from './warning.svg';
 export { default as GroupsIcon } from './groups.svg';
 export { default as DoubleArrowIcon } from './double-arrow-icon.svg';
 export { default as Settings } from './settings.svg';
+export { default as MenuOpenIcon } from './menu-open-icon.svg';
