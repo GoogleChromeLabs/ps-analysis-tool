@@ -54,9 +54,7 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
       tableFilterData={undefined}
       tableSearchKeys={undefined}
       tablePersistentSettingsKey="noBidsTable"
-      onRowClick={(row) => {
-        setSelectedRow(row);
-      }}
+      onRowClick={setSelectedRow}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
         return row.originalData.name;
