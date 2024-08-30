@@ -79,7 +79,7 @@ const CollapsedSidebar = () => {
               className={classNames(
                 'cursor-pointer hover:opacity-70 p-1 rounded-full',
                 {
-                  'bg-white dark:bg-raisin-black':
+                  'bg-anti-flash-white dark:bg-charleston-green':
                     key === currentSelectedItemKey,
                 }
               )}
