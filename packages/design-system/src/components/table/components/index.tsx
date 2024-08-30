@@ -122,7 +122,7 @@ const Table = ({
         extraInterface={extraInterfaceToTopBar}
         hideSearch={hideSearch}
       />
-      {hideFiltering ? null : (
+      {!hideFiltering && (
         <ChipsBar
           selectedFilters={selectedFilters}
           resetFilters={resetFilters}

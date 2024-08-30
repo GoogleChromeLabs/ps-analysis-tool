@@ -27,28 +27,28 @@ const AdMatrix = () => {
       count: 5,
       color: '#5CC971',
       description: 'Placeholder',
-      countClassName: 'text-[#5CC971]',
+      countClassName: 'text-emerald',
     },
     {
       title: 'Bidders',
       count: 10,
       color: '#F3AE4E',
       description: 'Placeholder',
-      countClassName: 'text-[#F3AE4E]',
+      countClassName: 'text-max-yellow-red',
     },
     {
       title: 'Bids',
       count: 15,
       color: '#4C79F4',
       description: 'Placeholder',
-      countClassName: 'text-[#4C79F4]',
+      countClassName: 'text-blue-berry',
     },
     {
       title: 'No Bids',
       count: 20,
       color: '#EC7159',
       description: 'Placeholder',
-      countClassName: 'text-[#EC7159]',
+      countClassName: 'text-burnt-sienna',
     },
   ];
 

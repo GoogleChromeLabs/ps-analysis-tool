@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -24,7 +25,6 @@ import React, { useState } from 'react';
 import Breakpoints from './breakpoints';
 import AuctionTable from './auctionTable';
 import BottomTray from './bottomTray';
-import { Resizable } from 're-resizable';
 
 const Auctions = () => {
   const [selectedJSON, setSelectedJSON] = useState(null);

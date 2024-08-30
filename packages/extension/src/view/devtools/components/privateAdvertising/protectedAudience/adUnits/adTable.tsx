@@ -41,7 +41,7 @@ const AdTable = () => {
         accessorKey: 'adUnitCode',
         cell: (info) => (
           <button className="flex gap-2 justify-center items-center">
-            <FrameIcon className="fill-[#1A73E8]" />
+            <FrameIcon className="fill-bright-navy-blue" />
             {info}
           </button>
         ),
@@ -51,7 +51,7 @@ const AdTable = () => {
         accessorKey: 'adContainerSizes',
         cell: (info) => (
           <div className="flex gap-2 justify-center items-center">
-            <ScreenIcon className="fill-[#323232]" />
+            <ScreenIcon className="fill-dark-charcoal" />
             {(info as string[]).join(' | ')}
           </div>
         ),

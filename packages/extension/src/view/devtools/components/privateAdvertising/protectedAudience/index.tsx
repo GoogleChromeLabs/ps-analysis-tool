@@ -27,10 +27,6 @@ import {
   type TabItems,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-
-/**
- * Internal dependencies.
- */
 import classNames from 'classnames';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
