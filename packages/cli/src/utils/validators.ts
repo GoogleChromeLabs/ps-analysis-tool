@@ -16,7 +16,7 @@
 
 import { parseUrl } from '@google-psat/common';
 import { existsSync, mkdirSync } from 'fs';
-import path from 'path';
+import path, { isAbsolute } from 'path';
 import { InvalidArgumentError } from 'commander';
 
 /**
@@ -134,9 +134,18 @@ export function filePathValidator(filePath: string, flag: string) {
     }
   }
 
+  if (flag === '-b' && path.extname(filePath) !== '.json') {
+    redLogger('Error: Provided selector file must be a JSON file.');
+  }
+
   const fileExists = existsSync(filePath);
   if (!fileExists) {
-    redLogger(`Error: No file at ${filePath}`);
+    const isAbsoluteFilePath = isAbsolute(filePath);
+    const absoluteFilePath = path.resolve(filePath);
+
+    redLogger(
+      `Error: No file at ${isAbsoluteFilePath ? filePath : absoluteFilePath}`
+    );
   }
 
   return filePath;
