@@ -82,9 +82,9 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
         >
           <MenuOpenIcon
             className={classNames(
-              'w-5 h-5',
-              isSidebarFocused && isFirstElementSelected
-                ? 'fill-bright-gray'
+              'w-5 h-5 fill-granite-gray dark:fill-bright-gray',
+              isFirstElementSelected && isSidebarFocused
+                ? 'fill-white'
                 : 'fill-granite-gray'
             )}
           />
