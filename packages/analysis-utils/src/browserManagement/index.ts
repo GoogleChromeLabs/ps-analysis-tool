@@ -250,34 +250,34 @@ export class BrowserManagement {
         return clickedOnButton;
       }
 
-      const evaluatedArray = await Promise.all(
-        this.selectors?.xPath.map((singleXPath) => {
-          return page.evaluate((args: string) => {
-            const rootElement = document.querySelector('html');
+      clickedOnButton = await page.evaluate((xPaths: string[]) => {
+        const rootElement = document.querySelector('html');
+        let bannerAccepted = false;
 
-            if (!rootElement) {
-              return false;
-            }
+        if (!rootElement) {
+          return false;
+        }
 
-            const _acceptButton = document
-              .evaluate(args, rootElement)
-              .iterateNext();
+        xPaths.forEach((xPath) => {
+          const _acceptButton = document
+            .evaluate(xPath, rootElement)
+            .iterateNext();
 
-            if (!_acceptButton) {
-              return false;
-            }
+          if (!_acceptButton) {
+            return;
+          }
 
-            if (_acceptButton instanceof HTMLElement) {
-              _acceptButton?.click();
-            }
+          if (_acceptButton instanceof HTMLElement) {
+            _acceptButton?.click();
+            bannerAccepted = true;
+          }
+        });
 
-            return true;
-          }, singleXPath);
-        })
-      );
+        return bannerAccepted;
+      }, this.selectors?.xPath);
 
-      if (evaluatedArray.some((value) => value === true)) {
-        return true;
+      if (clickedOnButton) {
+        return clickedOnButton;
       }
 
       clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
