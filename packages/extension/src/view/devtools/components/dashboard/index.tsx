@@ -115,7 +115,7 @@ const FEATURE_LIST = [
     icon: SiteBoundariesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description:
-      'Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents. Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents.',
+      'Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents.',
     colorClasses: {
       heading: 'text-first-party',
     },
