@@ -40,14 +40,17 @@ const PINNED_ITEMS = [
   {
     name: 'Protected Audience',
     icon: GroupsIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
   },
   {
     name: 'Cookies',
     icon: CookieIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
   },
   {
     name: 'Related Website Sets',
     icon: RelatedWebsiteSetsIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
   },
 ];
 
@@ -55,12 +58,14 @@ const FEATURE_LIST = [
   {
     name: 'Cookies',
     icon: CookieIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
     description:
       'Privacy Sandbox technologies enhance user privacy by allowing ad selection and measurement without individual tracking or third-party cookies.',
   },
   {
     name: 'Private Advertising',
     icon: PrivateAggregationIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
     description:
       'Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads.',
     colorClasses: {
@@ -88,6 +93,7 @@ const FEATURE_LIST = [
   {
     name: 'Tracking Protection',
     icon: AntiCovertTrackingIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
     description:
       'The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking.',
     colorClasses: {
@@ -107,6 +113,7 @@ const FEATURE_LIST = [
   {
     name: 'Site Boundaries',
     icon: SiteBoundariesIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description:
       'Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents. Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents.',
     colorClasses: {
@@ -147,7 +154,8 @@ const Dashboard = () => {
               return (
                 <div
                   key={item.name}
-                  className="border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1"
+                  className="border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <Icon width={20} height={20} />
                   <span className="text-sm">{item.name}</span>
@@ -169,7 +177,8 @@ const Dashboard = () => {
               return (
                 <div
                   key={item.name}
-                  className="border border-chinese-silver px-3 py-4 rounded"
+                  className="border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <div className="flex gap-2 justify-start mb-3">
                     <Icon width={20} height={20} />
