@@ -24,20 +24,12 @@ import { existsSync } from 'fs-extra';
 import Spinnies from 'spinnies';
 import path, { basename } from 'path';
 import { I18n } from '@google-psat/i18n';
-import {
-  type CompleteJson,
-  type LibraryData,
-  removeAndAddNewSpinnerText,
-} from '@google-psat/common';
+import { removeAndAddNewSpinnerText } from '@google-psat/common';
 import {
   analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
 } from '@google-psat/analysis-utils';
-import {
-  DetectionFunctions,
-  LIBRARIES,
-  detectMatchingSignatures,
-} from '@google-psat/library-detection';
+import { LIBRARIES } from '@google-psat/library-detection';
 
 /**
  * Internal dependencies.
@@ -56,6 +48,7 @@ import {
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
 import saveResultsAsHTML from './utils/saveResultAsHTML';
+import getSiteReport from './getSiteReport';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -286,23 +279,11 @@ program.parse();
     );
   }
 
-  const result = urlsToProcess.map((_url, ind) => {
-    const detectedMatchingSignatures: LibraryData = {
-      ...detectMatchingSignatures(
-        cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
-        Object.fromEntries(
-          LIBRARIES.map((library) => [library.name, library.detectionFunction])
-        ) as DetectionFunctions
-      ),
-      ...(cookieAnalysisAndFetchedResourceData[ind]?.domQueryMatches ?? {}),
-    };
-    return {
-      pageUrl: _url,
-      technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
-      cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
-      libraryMatches: detectedMatchingSignatures ?? [],
-    } as unknown as CompleteJson;
-  });
+  const result = getSiteReport(
+    urlsToProcess,
+    cookieAnalysisAndFetchedResourceData,
+    technologyAnalysisData
+  );
 
   I18n.loadCLIMessagesData(locale);
 

@@ -49,12 +49,14 @@ export class BrowserManagement {
   isHeadless: boolean;
   pageWaitTime: number;
   pages: Record<string, Page>;
+  erroredOutUrls: Record<string, Record<string, string>[]>;
   pageFrames: Record<string, Record<string, string>>;
   pageResponses: Record<string, Record<string, ResponseData>>;
   pageRequests: Record<string, Record<string, RequestData>>;
   pageResourcesMaps: Record<string, Record<string, ScriptTagUnderCheck>>;
   shouldLogDebug: boolean;
   spinnies: Spinnies | undefined;
+  isSiteMap: boolean;
   indent = 0;
   constructor(
     viewportConfig: ViewportConfig,
@@ -62,12 +64,14 @@ export class BrowserManagement {
     pageWaitTime: number,
     shouldLogDebug: boolean,
     indent: number,
+    isSiteMap: boolean,
     spinnies?: Spinnies
   ) {
     this.viewportConfig = viewportConfig;
     this.browser = null;
     this.isHeadless = isHeadless;
     this.pageWaitTime = pageWaitTime;
+    this.isSiteMap = isSiteMap;
     this.pages = {};
     this.pageFrames = {};
     this.pageResponses = {};
@@ -76,13 +80,13 @@ export class BrowserManagement {
     this.pageResourcesMaps = {};
     this.spinnies = spinnies;
     this.indent = indent;
+    this.erroredOutUrls = {};
   }
 
-  debugLog(msg: any) {
+  debugLog(msg: string) {
     if (this.shouldLogDebug && this.spinnies) {
       this.spinnies.add(msg, {
         text: msg,
-        //@ts-ignore
         succeedColor: 'white',
         status: 'non-spinnable',
         indent: this.indent,
@@ -109,46 +113,52 @@ export class BrowserManagement {
   }
 
   async clickOnAcceptBanner(url: string) {
-    const page = this.pages[url];
+    try {
+      const page = this.pages[url];
 
-    if (!page) {
-      throw new Error('No page with the provided id was found');
+      if (!page) {
+        throw new Error('No page with the provided id was found');
+      }
+
+      await page.evaluate(() => {
+        const bannerNodes: Element[] = Array.from(
+          (document.querySelector('body')?.childNodes || []) as Element[]
+        )
+          .filter((node: Element) => node && node?.tagName === 'DIV')
+          .filter((node) => {
+            if (!node || !node?.textContent) {
+              return false;
+            }
+            const regex =
+              /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
+
+            return regex.test(node.textContent.toLowerCase());
+          });
+
+        const buttonToClick: HTMLButtonElement[] = bannerNodes
+          .map((node: Element) => {
+            const buttonNodes = Array.from(node.getElementsByTagName('button'));
+            const isButtonForAccept = buttonNodes.filter(
+              (cnode) =>
+                cnode.textContent &&
+                (cnode.textContent.toLowerCase().includes('accept') ||
+                  cnode.textContent.toLowerCase().includes('allow') ||
+                  cnode.textContent.toLowerCase().includes('ok') ||
+                  cnode.textContent.toLowerCase().includes('agree'))
+            );
+
+            return isButtonForAccept[0];
+          })
+          .filter((button) => button);
+        buttonToClick[0]?.click();
+      });
+
+      await delay(this.pageWaitTime / 2);
+    } catch (error) {
+      this.pushErrors(url, {
+        errorMessage: error as string,
+      });
     }
-
-    await page.evaluate(() => {
-      const bannerNodes: Element[] = Array.from(
-        (document.querySelector('body')?.childNodes || []) as Element[]
-      )
-        .filter((node: Element) => node && node?.tagName === 'DIV')
-        .filter((node) => {
-          if (!node || !node?.textContent) {
-            return false;
-          }
-          const regex =
-            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
-
-          return regex.test(node.textContent.toLowerCase());
-        });
-
-      const buttonToClick: HTMLButtonElement[] = bannerNodes
-        .map((node: Element) => {
-          const buttonNodes = Array.from(node.getElementsByTagName('button'));
-          const isButtonForAccept = buttonNodes.filter(
-            (cnode) =>
-              cnode.textContent &&
-              (cnode.textContent.toLowerCase().includes('accept') ||
-                cnode.textContent.toLowerCase().includes('allow') ||
-                cnode.textContent.toLowerCase().includes('ok') ||
-                cnode.textContent.toLowerCase().includes('agree'))
-          );
-
-          return isButtonForAccept[0];
-        })
-        .filter((button) => button);
-      buttonToClick[0]?.click();
-    });
-
-    await delay(this.pageWaitTime / 2);
   }
 
   async openPage(): Promise<Page> {
@@ -172,6 +182,14 @@ export class BrowserManagement {
     return sitePage;
   }
 
+  pushErrors(url: string, objectToPushed: Record<string, string>) {
+    if (!this.erroredOutUrls[url]) {
+      this.erroredOutUrls[url] = [];
+    }
+
+    this.erroredOutUrls[url].push(objectToPushed);
+  }
+
   async navigateToPage(url: string) {
     const page = this.pages[url];
 
@@ -189,13 +207,21 @@ export class BrowserManagement {
       const SUCCESS_RESPONSE = 200;
 
       if (response && response.status() !== SUCCESS_RESPONSE) {
-        throw new Error(`Invalid server response: ${response.status()}`);
+        this.pushErrors(url, {
+          errorMessage: `Invalid server response: ${response.status()}`,
+          errorCode: `${response.status()}`,
+        });
+
+        this.debugLog(`Warning: Server error found in URL: ${url}`);
+        if (!this.isSiteMap) {
+          throw new Error(`Invalid server response: ${response.status()}`);
+        }
       }
 
       this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
       this.debugLog(
-        `Navigation did not finish in 10 seconds moving on to scrolling`
+        `Navigation did not finish on URL ${url} in 10 seconds moving on to scrolling`
       );
       throw error;
     }
@@ -618,40 +644,52 @@ export class BrowserManagement {
     url: string,
     Libraries: LibraryMatchers[]
   ) {
-    const page = this.pages[url];
+    try {
+      const page = this.pages[url];
 
-    if (!page) {
-      throw new Error('No page with the provided ID was found');
+      if (!page) {
+        throw new Error('No page with the provided ID was found');
+      }
+
+      const domQueryMatches: LibraryData = {};
+
+      await Promise.all(
+        Libraries.map(async ({ domQueryFunction, name }) => {
+          if (domQueryFunction && name) {
+            await page.addScriptTag({
+              content: `window.${name.replaceAll(
+                '-',
+                ''
+              )} = ${domQueryFunction}`,
+            });
+
+            const queryResult = await page.evaluate((library: string) => {
+              //@ts-ignore
+              const functionDOMQuery = window[`${library}`];
+
+              if (!functionDOMQuery) {
+                return [];
+              }
+
+              return functionDOMQuery();
+            }, name.replaceAll('-', ''));
+
+            domQueryMatches[name] = {
+              domQuerymatches: queryResult as [string],
+            };
+          }
+        })
+      );
+
+      const mainFrameUrl = new URL(page.url()).origin;
+
+      return { [mainFrameUrl]: domQueryMatches };
+    } catch (error) {
+      this.pushErrors(url, {
+        errorMessage: error as string,
+      });
+      return {};
     }
-
-    const domQueryMatches: LibraryData = {};
-
-    await Promise.all(
-      Libraries.map(async ({ domQueryFunction, name }) => {
-        if (domQueryFunction && name) {
-          await page.addScriptTag({
-            content: `window.${name.replaceAll('-', '')} = ${domQueryFunction}`,
-          });
-
-          const queryResult = await page.evaluate((library: string) => {
-            //@ts-ignore
-            const functionDOMQuery = window[`${library}`];
-
-            if (!functionDOMQuery) {
-              return [];
-            }
-
-            return functionDOMQuery();
-          }, name.replaceAll('-', ''));
-
-          domQueryMatches[name] = {
-            domQuerymatches: queryResult as [string],
-          };
-        }
-      })
-    );
-    const mainFrameUrl = new URL(page.url()).origin;
-    return { [mainFrameUrl]: domQueryMatches };
   }
 
   async analyzeCookies(
@@ -678,7 +716,7 @@ export class BrowserManagement {
         })
       );
     } catch (error) {
-      if (userProvidedUrls.length === 1) {
+      if (!this.isSiteMap) {
         throw error;
       }
     }
@@ -689,12 +727,17 @@ export class BrowserManagement {
     // Accept Banners
     if (!shouldSkipAcceptBanner) {
       // delay
-
-      await Promise.all(
-        userProvidedUrls.map(async (url) => {
-          await this.clickOnAcceptBanner(url);
-        })
-      );
+      try {
+        await Promise.all(
+          userProvidedUrls.map(async (url) => {
+            await this.clickOnAcceptBanner(url);
+          })
+        );
+      } catch (error) {
+        if (!this.isSiteMap) {
+          throw error;
+        }
+      }
     }
 
     // Scroll to bottom of the page
@@ -704,19 +747,25 @@ export class BrowserManagement {
       })
     );
 
-    await Promise.all(
-      userProvidedUrls.map(async (url) => {
-        const newMatches = await this.insertAndRunDOMQueryFunctions(
-          url,
-          Libraries
-        );
+    try {
+      await Promise.all(
+        userProvidedUrls.map(async (url) => {
+          const newMatches = await this.insertAndRunDOMQueryFunctions(
+            url,
+            Libraries
+          );
 
-        consolidatedDOMQueryMatches = {
-          ...consolidatedDOMQueryMatches,
-          ...newMatches,
-        };
-      })
-    );
+          consolidatedDOMQueryMatches = {
+            ...consolidatedDOMQueryMatches,
+            ...newMatches,
+          };
+        })
+      );
+    } catch (error) {
+      if (!this.isSiteMap) {
+        throw error;
+      }
+    }
 
     // Delay for page to load more resources
     await delay(this.pageWaitTime / 2);
@@ -740,7 +789,12 @@ export class BrowserManagement {
         const _page = this.pages[userProvidedUrl];
         const _pageFrames = this.pageFrames[userProvidedUrl];
 
-        if (!_responses || !_requests || !_page) {
+        if (
+          !_responses ||
+          !_requests ||
+          !_page ||
+          this.erroredOutUrls[userProvidedUrl]
+        ) {
           return {
             url: userProvidedUrl,
             cookieData: {},
@@ -771,7 +825,11 @@ export class BrowserManagement {
       })
     );
 
-    return { result, consolidatedDOMQueryMatches };
+    return {
+      result,
+      consolidatedDOMQueryMatches,
+      erroredOutUrls: this.erroredOutUrls,
+    };
   }
 
   async deinitialize() {

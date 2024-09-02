@@ -38,6 +38,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   cookieDictionary: CookieDatabase,
   shouldSkipAcceptBanner: boolean,
   verbose: boolean,
+  isSitemap: boolean,
   spinnies?: Spinnies,
   indent = 4
 ) => {
@@ -53,12 +54,17 @@ export const analyzeCookiesUrlsAndFetchResources = async (
       delayTime,
       verbose,
       indent,
+      isSitemap,
       spinnies
     );
 
     await browser.initializeBrowser(true);
-    const { result: analysisCookieData, consolidatedDOMQueryMatches } =
-      await browser.analyzeCookies(urls, shouldSkipAcceptBanner, Libraries);
+
+    const {
+      result: analysisCookieData,
+      consolidatedDOMQueryMatches,
+      erroredOutUrls,
+    } = await browser.analyzeCookies(urls, shouldSkipAcceptBanner, Libraries);
 
     const resources = browser.getResources(urls);
 
@@ -93,6 +99,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
         url: pageUrl,
         cookieData,
         resources: resources[pageUrl],
+        erroredOutUrls,
         domQueryMatches: consolidatedDOMQueryMatches[pageUrl],
       };
     });

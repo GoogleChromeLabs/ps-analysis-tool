@@ -59,6 +59,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
         type?: string;
       }[];
       domQueryMatches: LibraryData;
+      erroredOutUrls: Record<string, Record<string, string>[]>;
     }[] = [];
 
     for (let i = 0; i < urls.length; i += batchSize) {
@@ -83,6 +84,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
           cookieDictionary,
           shouldSkipAcceptBanner,
           verbose,
+          urls.length > 1,
           spinnies
         );
 
