@@ -24,6 +24,8 @@ import {
   RelatedWebsiteSetsIcon,
   AntiCovertTrackingIcon,
   SiteBoundariesIcon,
+  useSidebar,
+  SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 import classNames from 'classnames';
 
@@ -67,15 +69,19 @@ const FEATURE_LIST = [
     buttons: [
       {
         name: 'Topics',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.TOPICS,
       },
       {
         name: 'Attribution',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION,
       },
       {
         name: 'Protected Audience',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
       },
       {
         name: 'Private Aggregation',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
       },
     ],
   },
@@ -90,9 +96,11 @@ const FEATURE_LIST = [
     buttons: [
       {
         name: 'Bounce Tracking',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
       },
       {
         name: 'Fingerprinting',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
       },
     ],
   },
@@ -107,15 +115,19 @@ const FEATURE_LIST = [
     buttons: [
       {
         name: 'CHIPS',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.CHIPS,
       },
       {
         name: 'Related Website Sets',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
       },
     ],
   },
 ];
 
 const Dashboard = () => {
+  const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
+
   return (
     <div
       data-testid="dashboard-content"
@@ -170,6 +182,7 @@ const Dashboard = () => {
                         <button
                           className="bg-cultured-grey py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
                           key={button.name}
+                          onClick={() => navigateTo(button.sidebarKey)}
                         >
                           {button.name}
                         </button>
