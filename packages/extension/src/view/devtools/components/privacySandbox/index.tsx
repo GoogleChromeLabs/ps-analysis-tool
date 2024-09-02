@@ -17,7 +17,10 @@
  * External dependencies.
  */
 import React from 'react';
-import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
+import {
+  PrivacySandboxColoredIcon,
+  ExternalLinkBlack,
+} from '@google-psat/design-system';
 
 const PrivacySandbox = () => (
   <div data-testid="privacy-sandbox-content" className="h-full w-full">
@@ -43,11 +46,12 @@ const PrivacySandbox = () => (
             Sandbox reduces cross-site and cross-app tracking while helping to
             keep online content and services free for all.
           </p>
-          <div className="flex gap-10 justify-center mt-5">
-            <button className="bg-cultured-grey py-2 px-4 rounded border border-dark-grey text-base">
-              Learn About Privacy Sandbox
+          <div className="flex gap-6 justify-center mt-5">
+            <button className="bg-cultured-grey py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex">
+              <span>Learn About Privacy Sandbox</span>
+              <ExternalLinkBlack width="16" height="16" className="mt-1 ml-1" />
             </button>
-            <button className="bg-cultured-grey py-2 px-4 rounded border border-dark-grey text-base">
+            <button className="bg-cultured-grey py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver">
               Dashboard
             </button>
           </div>
