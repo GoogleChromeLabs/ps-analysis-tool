@@ -60,6 +60,7 @@ const FEATURE_LIST = [
     icon: PrivateAggregationIcon,
     description:
       'Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads.',
+    color: '',
     buttons: [
       {
         name: 'Topics',
@@ -107,7 +108,10 @@ const FEATURE_LIST = [
 
 const Dashboard = () => {
   return (
-    <div data-testid="privacy-sandbox-content" className="h-full w-full">
+    <div
+      data-testid="dashboard-content"
+      className="h-full w-full text-raisin-black"
+    >
       <div className="p-4">
         <header className="flex items-center">
           <DashboardIcon width="22" height="22" className="mr-1.5" />
@@ -147,6 +151,17 @@ const Dashboard = () => {
                     <span className="text-sm">{item.name}</span>
                   </div>
                   <p>{item.description}</p>
+                  <div className="flex flex-wrap gap-x-3 gap-y-2 mt-2">
+                    {item.buttons &&
+                      item.buttons.map((button) => (
+                        <button
+                          className="bg-cultured-grey py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
+                          key={button.name}
+                        >
+                          {button.name}
+                        </button>
+                      ))}
+                  </div>
                 </div>
               );
             })}
