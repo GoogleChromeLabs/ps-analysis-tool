@@ -45,10 +45,10 @@ import {
   filePathValidator,
   urlValidator,
   numericValidator,
+  redLogger,
+  getSiteReport,
+  saveResultsAsHTML,
 } from './utils';
-import { redLogger } from './utils/coloredLoggers';
-import saveResultsAsHTML from './utils/saveResultAsHTML';
-import getSiteReport from './getSiteReport';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
