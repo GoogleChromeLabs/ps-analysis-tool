@@ -40,6 +40,8 @@ import { SidebarContext, SidebarStoreContext, initialState } from './context';
 export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
+  collapsedData,
+  collapsedState = false,
   children,
 }: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
@@ -49,6 +51,7 @@ export const SidebarProvider = ({
   const [query, setQuery] = useState<string>('');
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(collapsedState);
 
   /**
    * Update the selected item key when the defaultSelectedItemKey loads.
@@ -258,6 +261,10 @@ export const SidebarProvider = ({
     [selectedItemKey]
   );
 
+  const toggleSidebarCollapse = useCallback(() => {
+    setIsCollapsed((prev) => !prev);
+  }, []);
+
   return (
     <SidebarContext.Provider
       value={{
@@ -266,7 +273,10 @@ export const SidebarProvider = ({
           selectedItemKey,
           currentItemKey,
           sidebarItems,
+          collapsedSidebarItems: collapsedData,
           isSidebarFocused,
+          isCollapsed,
+          isSidebarCollapsible: Boolean(collapsedData),
         },
         actions: {
           setIsSidebarFocused,
@@ -275,6 +285,7 @@ export const SidebarProvider = ({
           toggleDropdown,
           isKeyAncestor,
           isKeySelected,
+          toggleSidebarCollapse,
         },
       }}
     >

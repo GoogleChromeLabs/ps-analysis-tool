@@ -82,6 +82,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isSidebarFocused,
     updateSelectedItemKey,
     isKeySelected,
+    isCollapsed,
   } = useSidebar(({ state, actions }) => ({
     activePanel: state.activePanel,
     selectedItemKey: state.selectedItemKey,
@@ -89,6 +90,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isSidebarFocused: state.isSidebarFocused,
     updateSelectedItemKey: actions.updateSelectedItemKey,
     isKeySelected: actions.isKeySelected,
+    isCollapsed: state.isCollapsed,
   }));
 
   const { Element: PanelElement, props } = activePanel.panel;
@@ -180,10 +182,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       }
 
       data['selectedSidebarItem#' + tabId] = selectedItemKey;
+      data['sidebarCollapsedState#' + tabId] = isCollapsed
+        ? 'collapsed'
+        : 'expanded';
 
       await chrome.storage.session.set(data);
     })();
-  }, [selectedItemKey]);
+  }, [selectedItemKey, isCollapsed]);
 
   const lastUrl = useRef(tabUrl);
 
@@ -212,6 +217,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
+  useEffect(() => {
+    if (isCollapsed) {
+      setSidebarWidth(40);
+    } else {
+      setSidebarWidth(200);
+    }
+  }, [isCollapsed]);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -220,12 +233,12 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         onResizeStop={(_, __, ___, d) => {
           setSidebarWidth((prevState) => prevState + d.width);
         }}
-        minWidth={'150px'}
+        minWidth={isCollapsed ? 40 : 160}
         maxWidth={'90%'}
         enable={{
-          right: true,
+          right: !isCollapsed,
         }}
-        className="h-full"
+        className="h-full transition-all duration-300"
       >
         <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>

@@ -76,3 +76,6 @@ export { default as GroupsIcon } from './groups.svg';
 export { default as ExternalLinkBlack } from './external-link-black.svg';
 export { default as DashboardIcon } from './dashboard.svg';
 export { default as DashboardIconWhite } from './dashboard-white.svg';
+export { default as DoubleArrowIcon } from './double-arrow-icon.svg';
+export { default as Settings } from './settings.svg';
+export { default as MenuOpenIcon } from './menu-open-icon.svg';
