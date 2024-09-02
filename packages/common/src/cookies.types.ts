@@ -153,6 +153,7 @@ export type ErroredOutUrlsData = {
   errorCode?: string;
   errorMessage: string;
   url: string;
+  stackTrace?: string;
 };
 
 export interface TabCookies {
@@ -240,7 +241,11 @@ export type CookieFrameStorageType = {
   };
 };
 
-export type SingleURLError = { errorMessage: string; errorCode?: string };
+export type SingleURLError = {
+  errorMessage: string;
+  errorCode?: string;
+  stackTrace?: string;
+};
 
 export type CompleteJson = {
   pageUrl: string;

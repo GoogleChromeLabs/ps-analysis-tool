@@ -89,6 +89,7 @@ export class BrowserManagement {
       this.spinnies.add(msg, {
         text: msg,
         succeedColor: shouldShowWarning ? 'yellowBright' : 'white',
+        spinnerColor: shouldShowWarning ? 'yellowBright' : 'white',
         status: 'non-spinnable',
         indent: this.indent,
       });
@@ -158,6 +159,7 @@ export class BrowserManagement {
     } catch (error) {
       this.pushErrors(url, {
         errorMessage: error as string,
+        stackTrace: error as string,
       });
     }
   }
@@ -688,6 +690,7 @@ export class BrowserManagement {
     } catch (error) {
       this.pushErrors(url, {
         errorMessage: error as string,
+        stackTrace: error as string,
       });
       return {};
     }

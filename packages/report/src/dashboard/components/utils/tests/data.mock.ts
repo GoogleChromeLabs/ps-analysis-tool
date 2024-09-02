@@ -22,7 +22,7 @@ import { type CompleteJson } from '@google-psat/common';
 export const tempSinglePageData: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
   libraryMatches: {},
-  erroredOutUrls: {},
+  erroredOutUrls: [],
   cookieData: {
     'https://edition.cnn.com': {
       frameCookies: {
@@ -76,7 +76,7 @@ export const tempMultiPageData: CompleteJson[] = [
   {
     libraryMatches: {},
     pageUrl: 'https://www.cnn.com/index.html',
-    erroredOutUrls: {},
+    erroredOutUrls: [],
     technologyData: [
       {
         slug: 'varnish',
@@ -129,7 +129,7 @@ export const tempMultiPageData: CompleteJson[] = [
   {
     libraryMatches: {},
     pageUrl: 'https://edition.cnn.com/index.html',
-    erroredOutUrls: {},
+    erroredOutUrls: [],
     technologyData: [
       {
         slug: 'varnish',
