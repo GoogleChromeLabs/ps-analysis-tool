@@ -21,6 +21,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   type SidebarItems,
   WarningBare,
+  URLWithErrorIcon,
 } from '@google-psat/design-system';
 
 const sidebarData: SidebarItems = {
@@ -52,14 +53,14 @@ const sidebarData: SidebarItems = {
     children: {},
     icon: {
       //@ts-ignore
-      Element: WarningBare,
+      Element: URLWithErrorIcon,
       props: {
         className: 'fill-granite-gray',
       },
     },
     selectedIcon: {
       //@ts-ignore
-      Element: WarningBare,
+      Element: URLWithErrorIcon,
       props: {
         className: 'fill-white',
       },
