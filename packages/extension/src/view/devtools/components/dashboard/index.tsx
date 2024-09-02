@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   DashboardIcon,
   GroupsIcon,
@@ -135,6 +135,27 @@ const FEATURE_LIST = [
 const Dashboard = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
 
+  const handleFeatureBoxClick = useCallback(
+    (event: React.MouseEvent, sidebarKey: string) => {
+      const target = event.target as HTMLElement;
+      if (target?.tagName !== 'BUTTON') {
+        navigateTo(sidebarKey);
+      }
+    },
+    [navigateTo]
+  );
+
+  const handleButtonClick = useCallback(
+    (event: React.MouseEvent, sidebarKey: string) => {
+      const target = event.target as HTMLElement;
+
+      if (target?.tagName === 'BUTTON') {
+        navigateTo(sidebarKey);
+      }
+    },
+    [navigateTo]
+  );
+
   return (
     <div
       data-testid="dashboard-content"
@@ -178,7 +199,9 @@ const Dashboard = () => {
                 <div
                   key={item.name}
                   className="border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
-                  onClick={() => navigateTo(item.sidebarKey)}
+                  onClick={(event) =>
+                    handleFeatureBoxClick(event, item.sidebarKey)
+                  }
                 >
                   <div className="flex gap-2 justify-start mb-3">
                     <Icon width={20} height={20} />
@@ -191,7 +214,9 @@ const Dashboard = () => {
                         <button
                           className="bg-cultured-grey py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
                           key={button.name}
-                          onClick={() => navigateTo(button.sidebarKey)}
+                          onClick={(event) =>
+                            handleButtonClick(event, button.sidebarKey)
+                          }
                         >
                           {button.name}
                         </button>
