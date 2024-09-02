@@ -22,7 +22,16 @@ import {
   GroupsIcon,
   CookieIcon,
   RelatedWebsiteSetsIcon,
+  AntiCovertTrackingIcon,
+  SiteBoundariesIcon,
 } from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
+// @ts-ignore - To ignore auto fixing path with package name.
+// eslint-disable-next-line import/no-relative-packages
+import PrivateAggregationIcon from '../../../../../../../assets/icons/private-aggregation.svg';
 
 const PINNED_ITEMS = [
   {
@@ -39,6 +48,63 @@ const PINNED_ITEMS = [
   },
 ];
 
+const FEATURE_LIST = [
+  {
+    name: 'Cookies',
+    icon: CookieIcon,
+    description:
+      'Privacy Sandbox technologies enhance user privacy by allowing ad selection and measurement without individual tracking or third-party cookies.',
+  },
+  {
+    name: 'Private Advertising',
+    icon: PrivateAggregationIcon,
+    description:
+      'Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads.',
+    buttons: [
+      {
+        name: 'Topics',
+      },
+      {
+        name: 'Attribution',
+      },
+      {
+        name: 'Protected Audience',
+      },
+      {
+        name: 'Private Aggregation',
+      },
+    ],
+  },
+  {
+    name: 'Tracking Protection',
+    icon: AntiCovertTrackingIcon,
+    description:
+      'The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking.',
+    buttons: [
+      {
+        name: 'Bounce Tracking',
+      },
+      {
+        name: 'Fingerprinting',
+      },
+    ],
+  },
+  {
+    name: 'Site Boundaries',
+    icon: SiteBoundariesIcon,
+    description:
+      'Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents. Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents.',
+    buttons: [
+      {
+        name: 'CHIPS',
+      },
+      {
+        name: 'Related Website Sets',
+      },
+    ],
+  },
+];
+
 const Dashboard = () => {
   return (
     <div data-testid="privacy-sandbox-content" className="h-full w-full">
@@ -47,7 +113,7 @@ const Dashboard = () => {
           <DashboardIcon width="22" height="22" className="mr-1.5" />
           <h1 className="text-lg">Dashboard</h1>
         </header>
-        <section className="mt-5">
+        <section className="mt-5 border-b border-hex-gray mb-5 pb-5">
           <h3 className="text-sm mb-2">Pinned</h3>
           <div className="flex gap-5">
             {PINNED_ITEMS.map((item) => {
@@ -60,6 +126,27 @@ const Dashboard = () => {
                 >
                   <Icon width={20} height={20} />
                   <span className="text-sm">{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+        <section>
+          <h3 className="text-sm mb-2">Features</h3>
+          <div className="grid grid-cols-3 gap-5">
+            {FEATURE_LIST.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <div
+                  key={item.name}
+                  className="border border-chinese-silver px-3 py-4 rounded"
+                >
+                  <div className="flex gap-2 justify-start mb-3">
+                    <Icon width={20} height={20} />
+                    <span className="text-sm">{item.name}</span>
+                  </div>
+                  <p>{item.description}</p>
                 </div>
               );
             })}
