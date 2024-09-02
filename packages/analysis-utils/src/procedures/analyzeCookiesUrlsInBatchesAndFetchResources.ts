@@ -23,6 +23,7 @@ import {
   LibraryData,
   type LibraryMatchers,
   removeAndAddNewSpinnerText,
+  type SingleURLError,
 } from '@google-psat/common';
 
 /**
@@ -59,7 +60,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
         type?: string;
       }[];
       domQueryMatches: LibraryData;
-      erroredOutUrls: Record<string, Record<string, string>[]>;
+      erroredOutUrls: Record<string, SingleURLError[]>;
     }[] = [];
 
     for (let i = 0; i < urls.length; i += batchSize) {

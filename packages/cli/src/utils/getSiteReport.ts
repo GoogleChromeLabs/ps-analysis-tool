@@ -16,7 +16,11 @@
 /**
  * External dependencies
  */
-import { CompleteJson } from '@google-psat/common';
+import type {
+  CompleteJson,
+  ErroredOutUrlsData,
+  SingleURLError,
+} from '@google-psat/common';
 import {
   type DetectionFunctions,
   detectMatchingSignatures,
@@ -44,7 +48,18 @@ function getSiteReport(
       return {
         pageUrl: _url,
         technologyData: [],
-        errors: processedData[ind].erroredOutUrls[_url],
+        cookieData: processedData[ind].cookieData,
+        libraryMatches: [],
+        erroredOutUrls: [
+          ...processedData[ind].erroredOutUrls[_url].map(
+            (errors: SingleURLError) => {
+              return {
+                url: _url,
+                ...errors,
+              };
+            }
+          ),
+        ] as ErroredOutUrlsData[],
       } as unknown as CompleteJson;
     }
 

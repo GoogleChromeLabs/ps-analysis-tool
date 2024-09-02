@@ -24,6 +24,7 @@ import {
   type ScriptTagUnderCheck,
   type LibraryData,
   type LibraryMatchers,
+  type SingleURLError,
   resolveWithTimeout,
   delay,
   RESPONSE_EVENT,
@@ -49,7 +50,7 @@ export class BrowserManagement {
   isHeadless: boolean;
   pageWaitTime: number;
   pages: Record<string, Page>;
-  erroredOutUrls: Record<string, Record<string, string>[]>;
+  erroredOutUrls: Record<string, SingleURLError[]>;
   pageFrames: Record<string, Record<string, string>>;
   pageResponses: Record<string, Record<string, ResponseData>>;
   pageRequests: Record<string, Record<string, RequestData>>;
@@ -83,11 +84,11 @@ export class BrowserManagement {
     this.erroredOutUrls = {};
   }
 
-  debugLog(msg: string) {
+  debugLog(msg: string, shouldShowWarning?: boolean) {
     if (this.shouldLogDebug && this.spinnies) {
       this.spinnies.add(msg, {
         text: msg,
-        succeedColor: 'white',
+        succeedColor: shouldShowWarning ? 'yellowBright' : 'white',
         status: 'non-spinnable',
         indent: this.indent,
       });
@@ -182,7 +183,7 @@ export class BrowserManagement {
     return sitePage;
   }
 
-  pushErrors(url: string, objectToPushed: Record<string, string>) {
+  pushErrors(url: string, objectToPushed: SingleURLError) {
     if (!this.erroredOutUrls[url]) {
       this.erroredOutUrls[url] = [];
     }
@@ -212,7 +213,7 @@ export class BrowserManagement {
           errorCode: `${response.status()}`,
         });
 
-        this.debugLog(`Warning: Server error found in URL: ${url}`);
+        this.debugLog(`Warning: Server error found in URL: ${url}`, true);
         if (!this.isSiteMap) {
           throw new Error(`Invalid server response: ${response.status()}`);
         }
