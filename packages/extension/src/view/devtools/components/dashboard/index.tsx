@@ -21,9 +21,13 @@ import { DashboardIcon } from '@google-psat/design-system';
 
 const Dashboard = () => {
   return (
-    <div className="flex">
-      <DashboardIcon width="16" height="16" />
-      <h1>Dashboard</h1>
+    <div data-testid="privacy-sandbox-content" className="h-full w-full">
+      <div className="p-4">
+        <header className="flex items-center">
+          <DashboardIcon width="22" height="22" className="mr-1.5" />
+          <h1 className="text-lg">Dashboard</h1>
+        </header>
+      </div>
     </div>
   );
 };
