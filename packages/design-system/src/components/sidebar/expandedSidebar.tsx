@@ -47,6 +47,16 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
     isKeySelected: actions.isKeySelected,
   }));
 
+  const [isResizing, setIsResizing] = useState(true);
+
+  useEffect(() => {
+    setIsResizing(true);
+
+    setTimeout(() => {
+      setIsResizing(false);
+    }, 180);
+  }, []);
+
   const [didUserInteract, setDidUserInteract] = useState(false);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
@@ -74,7 +84,7 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
 
   return (
     <div ref={sidebarContainerRef} className="min-w-fit">
-      {isSidebarCollapsible && (
+      {isSidebarCollapsible && !isResizing && (
         <button
           onClick={toggleSidebarCollapse}
           className="cursor-pointer hover:opacity-70 absolute right-0 z-20"
