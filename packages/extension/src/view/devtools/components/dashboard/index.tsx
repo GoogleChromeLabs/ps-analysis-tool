@@ -47,8 +47,8 @@ const Dashboard = () => {
           <DashboardIcon width="22" height="22" className="mr-1.5" />
           <h1 className="text-lg">Dashboard</h1>
         </header>
-        <section>
-          <h3>Pinned</h3>
+        <section className="mt-5">
+          <h3 className="text-sm mb-2">Pinned</h3>
           <div className="flex gap-5">
             {PINNED_ITEMS.map((item) => {
               const Icon = item.icon;
@@ -56,10 +56,10 @@ const Dashboard = () => {
               return (
                 <div
                   key={item.name}
-                  className="border px-10 py-5 pl-2 flex gap-2 justify-start"
+                  className="border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1"
                 >
-                  <Icon />
-                  <span>{item.name}</span>
+                  <Icon width={20} height={20} />
+                  <span className="text-sm">{item.name}</span>
                 </div>
               );
             })}
