@@ -18,9 +18,11 @@
  */
 import React from 'react';
 import {
+  QuickLinksList,
   PrivacySandboxColoredIcon,
   ExternalLinkBlack,
 } from '@google-psat/design-system';
+import { addUTMParams } from '@google-psat/common';
 
 const PrivacySandbox = () => (
   <div data-testid="privacy-sandbox-content" className="h-full w-full">
@@ -47,16 +49,23 @@ const PrivacySandbox = () => (
             keep online content and services free for all.
           </p>
           <div className="flex gap-6 justify-center mt-5">
-            <button className="bg-cultured-grey py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex">
+            <a
+              href={addUTMParams('https://privacysandbox.com')}
+              target="__blank"
+              className="bg-cultured-grey py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex"
+            >
               <span>Learn About Privacy Sandbox</span>
               <ExternalLinkBlack width="16" height="16" className="mt-1 ml-1" />
-            </button>
+            </a>
             <button className="bg-cultured-grey py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver">
               Dashboard
             </button>
           </div>
         </div>
       </section>
+    </div>
+    <div className="mt-10">
+      <QuickLinksList />
     </div>
   </div>
 );
