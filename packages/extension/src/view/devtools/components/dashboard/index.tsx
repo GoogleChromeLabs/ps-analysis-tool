@@ -60,7 +60,7 @@ const FEATURE_LIST = [
     icon: CookieIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
     description:
-      'Privacy Sandbox technologies enhance user privacy by allowing ad selection and measurement without individual tracking or third-party cookies.',
+      'Provide information and insights regarding the behavior and distribution of cookies on web pages while navigating across sites during browsing sessions.',
   },
   {
     name: 'Private Advertising',
