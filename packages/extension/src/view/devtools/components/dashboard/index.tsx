@@ -17,7 +17,27 @@
  * External dependencies.
  */
 import React from 'react';
-import { DashboardIcon } from '@google-psat/design-system';
+import {
+  DashboardIcon,
+  GroupsIcon,
+  CookieIcon,
+  RelatedWebsiteSetsIcon,
+} from '@google-psat/design-system';
+
+const PINNED_ITEMS = [
+  {
+    name: 'Protected Audience',
+    icon: GroupsIcon,
+  },
+  {
+    name: 'Cookies',
+    icon: CookieIcon,
+  },
+  {
+    name: 'Related Website Sets',
+    icon: RelatedWebsiteSetsIcon,
+  },
+];
 
 const Dashboard = () => {
   return (
@@ -27,6 +47,24 @@ const Dashboard = () => {
           <DashboardIcon width="22" height="22" className="mr-1.5" />
           <h1 className="text-lg">Dashboard</h1>
         </header>
+        <section>
+          <h3>Pinned</h3>
+          <div className="flex gap-5">
+            {PINNED_ITEMS.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <div
+                  key={item.name}
+                  className="border px-10 py-5 pl-2 flex gap-2 justify-start"
+                >
+                  <Icon />
+                  <span>{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
       </div>
     </div>
   );
