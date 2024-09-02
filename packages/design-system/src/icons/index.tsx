@@ -74,3 +74,5 @@ export { default as ChevronDown } from './chevron-down.svg';
 export { default as WarningBare } from './warning.svg';
 export { default as GroupsIcon } from './groups.svg';
 export { default as ExternalLinkBlack } from './external-link-black.svg';
+export { default as DashboardIcon } from './dashboard.svg';
+export { default as DashboardIconWhite } from './dashboard-white.svg';

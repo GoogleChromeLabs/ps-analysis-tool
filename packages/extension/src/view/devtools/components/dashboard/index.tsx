@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Settings } from './settings';
-export { default as Layout } from './layout';
-export { default as Dashboard } from './dashboard';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { DashboardIcon } from '@google-psat/design-system';
+
+const Dashboard = () => {
+  return (
+    <div className="flex">
+      <DashboardIcon width="16" height="16" />
+      <h1>Dashboard</h1>
+    </div>
+  );
+};
+
+export default Dashboard;

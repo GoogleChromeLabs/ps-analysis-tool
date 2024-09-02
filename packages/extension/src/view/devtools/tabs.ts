@@ -42,6 +42,8 @@ import {
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
+  DashboardIcon,
+  DashboardIconWhite,
 } from '@google-psat/design-system';
 
 /**
@@ -71,10 +73,25 @@ import {
   Settings,
   ProtectedAudience,
   PrivateAggregation,
+  Dashboard,
 } from './components';
 import { I18n } from '@google-psat/i18n';
 
 const TABS: SidebarItems = {
+  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
+    title: () => 'Dashboard',
+    panel: {
+      Element: Dashboard,
+    },
+    icon: {
+      Element: DashboardIcon,
+    },
+    selectedIcon: {
+      Element: DashboardIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
+  },
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
     title: () => 'Privacy Sandbox',
     panel: {

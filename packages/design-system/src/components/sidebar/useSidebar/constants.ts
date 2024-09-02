@@ -15,6 +15,7 @@
  */
 
 export enum SIDEBAR_ITEMS_KEYS {
+  DASHBOARD = 'dashboard',
   COOKIES = 'cookies',
   COOKIES_WITH_ISSUES = 'cookie-issues',
   TECHNOLOGIES = 'technologies',
