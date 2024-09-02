@@ -25,6 +25,7 @@ import {
   AntiCovertTrackingIcon,
   SiteBoundariesIcon,
 } from '@google-psat/design-system';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -60,7 +61,9 @@ const FEATURE_LIST = [
     icon: PrivateAggregationIcon,
     description:
       'Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads.',
-    color: '',
+    colorClasses: {
+      heading: 'text-bright-navy-blue',
+    },
     buttons: [
       {
         name: 'Topics',
@@ -81,6 +84,9 @@ const FEATURE_LIST = [
     icon: AntiCovertTrackingIcon,
     description:
       'The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking.',
+    colorClasses: {
+      heading: 'text-third-party',
+    },
     buttons: [
       {
         name: 'Bounce Tracking',
@@ -95,6 +101,9 @@ const FEATURE_LIST = [
     icon: SiteBoundariesIcon,
     description:
       'Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents. Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents.',
+    colorClasses: {
+      heading: 'text-first-party',
+    },
     buttons: [
       {
         name: 'CHIPS',
@@ -140,6 +149,10 @@ const Dashboard = () => {
           <div className="grid grid-cols-3 gap-5">
             {FEATURE_LIST.map((item) => {
               const Icon = item.icon;
+              const headingClasses = classNames(
+                'text-sm',
+                item?.colorClasses?.heading ? item?.colorClasses?.heading : ''
+              );
 
               return (
                 <div
@@ -148,7 +161,7 @@ const Dashboard = () => {
                 >
                   <div className="flex gap-2 justify-start mb-3">
                     <Icon width={20} height={20} />
-                    <span className="text-sm">{item.name}</span>
+                    <h4 className={headingClasses}>{item.name}</h4>
                   </div>
                   <p>{item.description}</p>
                   <div className="flex flex-wrap gap-x-3 gap-y-2 mt-2">
