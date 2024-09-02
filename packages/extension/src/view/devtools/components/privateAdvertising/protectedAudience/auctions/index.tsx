@@ -42,20 +42,9 @@ const Auctions = () => {
   );
 
   return (
-    <div className="w-full h-screen flex flex-col overflow-hidden">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '75%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-        minHeight="20%"
-        maxHeight="80%"
-        className="overflow-auto"
-      >
-        <Breakpoints />
+    <div className="w-full h-full flex flex-col">
+      <Breakpoints />
+      <div className="overflow-auto flex-1">
         {!isMultiSellerAuction ? (
           <div className="p-4 pt-0">
             <AuctionTable
@@ -83,8 +72,20 @@ const Auctions = () => {
             ))}
           </div>
         )}
+      </div>
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '20%',
+        }}
+        enable={{
+          top: true,
+        }}
+        minHeight="10%"
+        maxHeight="80%"
+      >
+        <BottomTray selectedJSON={selectedJSON} />
       </Resizable>
-      <BottomTray selectedJSON={selectedJSON} />
     </div>
   );
 };

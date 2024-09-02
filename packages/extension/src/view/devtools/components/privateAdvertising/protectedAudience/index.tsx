@@ -81,12 +81,14 @@ const ProtectedAudience = () => {
         title: 'Auctions',
         content: {
           Element: Auctions,
+          className: 'overflow-hidden',
         },
       },
       {
         title: 'Bids',
         content: {
           Element: Bids,
+          className: 'overflow-hidden',
         },
       },
     ],
@@ -98,7 +100,7 @@ const ProtectedAudience = () => {
   return (
     <div
       data-testid="protected-audience-content"
-      className="h-screen w-full flex flex-col"
+      className="h-screen w-full flex flex-col overflow-hidden"
     >
       <div className="p-4">
         <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
@@ -111,7 +113,13 @@ const ProtectedAudience = () => {
         setActiveTab={setActiveTab}
       />
       <div
-        className={classNames(tabItems[activeTab].content.className, 'flex-1')}
+        className={classNames(
+          'overflow-auto',
+          tabItems[activeTab].content.className
+        )}
+        style={{
+          minHeight: 'calc(100% - 93px)',
+        }}
       >
         {ActiveTabContent && (
           <ActiveTabContent {...tabItems[activeTab].content.props} />

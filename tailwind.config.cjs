@@ -233,6 +233,9 @@ module.exports = {
       'baby-blue-eyes': '#A8C7FA',
       'leaf-green-dark': '#87DFB2',
       sapphire: '#0B57D0',
+      platinum: '#E5E5E5',
+      'anti-flash-white': '#F1F3F4',
+      'dark-gray-x11': '#A9A9A9',
     },
     colors: {
       ...colors,

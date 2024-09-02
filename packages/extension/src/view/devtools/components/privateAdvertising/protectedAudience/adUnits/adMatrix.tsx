@@ -82,7 +82,7 @@ const AdMatrix = () => {
   );
 
   return (
-    <div className="grid grid-cols-4 gap-x-2 max-w-2xl">
+    <div className="grid grid-cols-4 gap-x-2 max-w-2xl mb-4">
       {matrixData.map((dataComponent, index) => {
         if (dataComponent && dataComponent.countClassName) {
           return (

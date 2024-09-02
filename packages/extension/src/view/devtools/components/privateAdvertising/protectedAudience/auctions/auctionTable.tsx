@@ -81,7 +81,7 @@ const AuctionTable = ({
 
   return (
     <div className="w-full h-fit text-outer-space-crayola dark:text-bright-gray flex flex-col pt-4">
-      <div className="flex justify-between items-center px-1">
+      <div className="flex justify-between items-center">
         <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
         <p>
           Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}

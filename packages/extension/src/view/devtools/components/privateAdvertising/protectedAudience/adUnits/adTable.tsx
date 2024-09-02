@@ -50,9 +50,9 @@ const AdTable = () => {
         header: 'Ad Unit Code',
         accessorKey: 'adUnitCode',
         cell: (info) => (
-          <button className="flex gap-2 justify-center items-center">
-            <FrameIcon className="fill-[#1A73E8]" />
-            {info}
+          <button className="w-full flex gap-2 items-center">
+            <FrameIcon className="fill-[#1A73E8] min-w-5 min-h-5" />
+            <p className="truncate">{info}</p>
           </button>
         ),
       },
@@ -60,11 +60,13 @@ const AdTable = () => {
         header: 'Ad Container Sizes',
         accessorKey: 'mediaContainerSize',
         cell: (info) => (
-          <div className="flex gap-2 justify-center items-center">
-            <ScreenIcon className="fill-[#323232]" />
-            {(info as number[][])
-              .map((size: number[]) => `${size[0]}x${size[1]}`)
-              .join(' | ')}
+          <div className="flex gap-2 items-center">
+            <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
+            <p className="truncate">
+              {(info as number[][])
+                .map((size: number[]) => `${size[0]}x${size[1]}`)
+                .join(' | ')}
+            </p>
           </div>
         ),
       },
@@ -72,19 +74,25 @@ const AdTable = () => {
         header: 'Bidders',
         accessorKey: 'bidders',
         cell: (info) => (
-          <div className="flex flex-wrap gap-2 px-1 py-2 overflow-auto h-full w-full">
+          <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
             {(info as string[]).map((bidder: string, idx: number) => (
               <div key={idx}>{<Pill title={bidder} />}</div>
             ))}
           </div>
         ),
+        sortingComparator: (a, b) => {
+          const aBidders = (a as string[]).join('');
+          const bBidders = (b as string[]).join('');
+
+          return aBidders.localeCompare(bBidders);
+        },
       },
     ],
     []
   );
 
   return (
-    <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-t border-american-silver dark:border-quartz flex flex-col">
+    <div className="w-full flex-1 text-outer-space-crayola border-x border-t border-american-silver dark:border-quartz flex flex-col">
       <Resizable
         defaultSize={{
           width: '100%',
@@ -118,7 +126,7 @@ const AdTable = () => {
           />
         </TableProvider>
       </Resizable>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
             <pre>

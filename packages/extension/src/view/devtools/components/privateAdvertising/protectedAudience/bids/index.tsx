@@ -44,8 +44,8 @@ const Bids = () => {
   );
 
   return (
-    <div className="flex flex-col gap-4 pt-4 h-full w-full">
-      <div className="px-4">
+    <div className="flex flex-col pt-4 h-full w-full">
+      <div className="px-4 pb-4">
         <PillToggle
           firstOption={PillToggleOptions.ReceivedBids}
           secondOption={PillToggleOptions.NoBids}
@@ -53,35 +53,35 @@ const Bids = () => {
           setPillToggle={setPillToggle}
         />
       </div>
-      <div className="flex-1 flex flex-col">
-        <Resizable
-          defaultSize={{
-            width: '100%',
-            height: '80%',
-          }}
-          minHeight="20%"
-          maxHeight="90%"
-          enable={{
-            bottom: true,
-          }}
-        >
-          {pillToggle === PillToggleOptions.ReceivedBids ? (
-            <div className="w-full h-full border-t border-american-silver dark:border-quartz">
-              <ReceivedBidsTable
-                setSelectedRow={setSelectedRow}
-                selectedRow={selectedRow}
-              />
-            </div>
-          ) : (
-            <div className="w-[42rem] h-full border-r border-t border-american-silver dark:border-quartz">
-              <NoBidsTable
-                setSelectedRow={setSelectedRow}
-                selectedRow={selectedRow}
-              />
-            </div>
-          )}
-        </Resizable>
-        <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+      <div className="flex-1 overflow-auto">
+        {pillToggle === PillToggleOptions.ReceivedBids ? (
+          <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+            <ReceivedBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+            />
+          </div>
+        ) : (
+          <div className="w-[42rem] h-full border-r border-t border-american-silver dark:border-quartz">
+            <NoBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+            />
+          </div>
+        )}
+      </div>
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '20%',
+        }}
+        minHeight="10%"
+        maxHeight="90%"
+        enable={{
+          top: true,
+        }}
+      >
+        <div className="text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
           {selectedRow ? (
             <div className="text-xs py-1 px-1.5">
               <pre>
@@ -100,7 +100,7 @@ const Bids = () => {
             </div>
           )}
         </div>
-      </div>
+      </Resizable>
     </div>
   );
 };

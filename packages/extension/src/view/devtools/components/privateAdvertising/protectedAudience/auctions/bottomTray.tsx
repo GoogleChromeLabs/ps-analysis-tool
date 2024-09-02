@@ -27,7 +27,7 @@ interface BottomTrayProps {
 
 const BottomTray = ({ selectedJSON }: BottomTrayProps) => {
   return (
-    <div className="z-20 flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+    <div className="z-20 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
       <div className="text-xs py-1 px-1.5">
         {selectedJSON ? (
           <pre>
