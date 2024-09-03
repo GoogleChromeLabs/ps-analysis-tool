@@ -41,6 +41,16 @@ const Auctions = () => {
     })
   );
 
+  if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          No auction events were recorded.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full flex flex-col">
       <Breakpoints />

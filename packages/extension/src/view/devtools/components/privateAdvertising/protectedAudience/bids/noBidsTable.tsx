@@ -62,6 +62,16 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
     []
   );
 
+  if (!noBids || Object.keys(noBids).length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          No bids data was recorded.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <TableProvider
       data={Object.values(noBids)}

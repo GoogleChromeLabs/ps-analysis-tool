@@ -44,14 +44,26 @@ const MultiSellerAuctionTable = ({
         Auction started by <i>{parentOrigin}</i>
       </h1>
       <div className="flex-1 flex flex-col gap-4 divide-y divide-american-silver">
-        {Object.entries(auctionEvents).map(([uniqueAuctionId, events]) => (
-          <AuctionTable
-            key={uniqueAuctionId}
-            selectedJSON={selectedJSON}
-            setSelectedJSON={setSelectedJSON}
-            auctionEvents={events}
-          />
-        ))}
+        {Object.entries(auctionEvents).map(([uniqueAuctionId, events]) => {
+          if (uniqueAuctionId === '0') {
+            return null;
+          }
+
+          return (
+            <AuctionTable
+              key={uniqueAuctionId}
+              selectedJSON={selectedJSON}
+              setSelectedJSON={setSelectedJSON}
+              auctionEvents={events}
+            />
+          );
+        })}
+        <AuctionTable
+          key={'0'}
+          selectedJSON={selectedJSON}
+          setSelectedJSON={setSelectedJSON}
+          auctionEvents={auctionEvents['0']}
+        />
       </div>
     </div>
   );

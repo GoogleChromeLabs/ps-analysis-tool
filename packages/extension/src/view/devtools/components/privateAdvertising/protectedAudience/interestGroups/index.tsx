@@ -77,8 +77,18 @@ const InterestGroups = () => {
     []
   );
 
+  if (!interestGroupDetails || interestGroupDetails.length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          No interests group events recorded.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full h-full text-outer-space-crayola border-x border-t border-american-silver dark:border-quartz flex flex-col">
+    <div className="w-full h-full text-outer-space-crayola mt-4 border-x border-t border-american-silver dark:border-quartz flex flex-col">
       <Resizable
         defaultSize={{
           width: '100%',

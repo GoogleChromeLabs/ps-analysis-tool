@@ -67,7 +67,7 @@ const ProtectedAudience = () => {
         title: 'Interest Groups',
         content: {
           Element: InterestGroups,
-          className: 'pt-4 overflow-hidden',
+          className: 'overflow-hidden',
         },
       },
       {
