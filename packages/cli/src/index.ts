@@ -171,8 +171,6 @@ program.parse();
 
   const info = await notifier.fetchInfo();
 
-  console.log(info, 'info');
-
   const message =
     'Update available ' +
     chalk.dim(info.current) +
@@ -182,16 +180,17 @@ program.parse();
     chalk.cyan('npm i -g @google-psat/cli') +
     ' to update';
 
-  // @todo Check condition before showing message.
-  console.log(
-    boxen(message, {
-      padding: 1,
-      margin: 1,
-      textAlignment: 'center',
-      borderColor: 'yellow',
-      borderStyle: 'round',
-    })
-  );
+  if (info.type !== 'latest') {
+    console.log(
+      boxen(message, {
+        padding: 1,
+        margin: 1,
+        textAlignment: 'center',
+        borderColor: 'yellow',
+        borderStyle: 'round',
+      })
+    );
+  }
 
   const numArgs: number = [
     Boolean(url),
