@@ -49,6 +49,12 @@ const AuctionTable = ({
         header: 'Event',
         accessorKey: 'type',
         cell: (info) => info,
+        sortingComparator: (a, b) => {
+          const aString = (a as string).toLowerCase().trim();
+          const bString = (b as string).toLowerCase().trim();
+
+          return aString > bString ? 1 : -1;
+        },
       },
       {
         header: 'Interest Group Origin',
@@ -81,7 +87,7 @@ const AuctionTable = ({
 
   return (
     <div className="w-full h-fit text-outer-space-crayola dark:text-bright-gray flex flex-col pt-4">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-1">
         <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
         <p>
           Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}

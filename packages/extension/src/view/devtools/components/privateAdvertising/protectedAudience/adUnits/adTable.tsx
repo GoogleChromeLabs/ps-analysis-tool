@@ -69,6 +69,16 @@ const AdTable = () => {
             </p>
           </div>
         ),
+        sortingComparator: (a, b) => {
+          const aSizes = (a as number[][])
+            .map((size: number[]) => `${size[0]}x${size[1]}`)
+            .join('');
+          const bSizes = (b as number[][])
+            .map((size: number[]) => `${size[0]}x${size[1]}`)
+            .join('');
+
+          return aSizes > bSizes ? 1 : -1;
+        },
       },
       {
         header: 'Bidders',
@@ -81,10 +91,10 @@ const AdTable = () => {
           </div>
         ),
         sortingComparator: (a, b) => {
-          const aBidders = (a as string[]).join('');
-          const bBidders = (b as string[]).join('');
+          const aBidders = (a as string[]).join('').toLowerCase();
+          const bBidders = (b as string[]).join('').toLowerCase();
 
-          return aBidders.localeCompare(bBidders);
+          return aBidders > bBidders ? 1 : -1;
         },
       },
     ],
