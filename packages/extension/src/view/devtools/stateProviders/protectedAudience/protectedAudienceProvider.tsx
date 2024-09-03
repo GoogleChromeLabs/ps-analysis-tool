@@ -70,8 +70,13 @@ const Provider = ({ children }: PropsWithChildren) => {
   const computeBids = useCallback(
     (
       _auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'],
-      _isMultiSellerAuction: boolean
+      _isMultiSellerAuction: boolean,
+      refreshTabData = false
     ) => {
+      if (refreshTabData) {
+        return { receivedBids: [], noBids: {} };
+      }
+
       if (
         !_auctionEvents ||
         (_auctionEvents && Object.keys(_auctionEvents).length === 0)
@@ -289,6 +294,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'];
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
+        refreshTabData: boolean;
       };
     }) => {
       if (!message.type) {
@@ -309,6 +315,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             if (!prevState && message.payload.auctionEvents) {
               return message.payload.auctionEvents;
             }
+
             if (
               prevState &&
               message.payload.auctionEvents &&
@@ -317,6 +324,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             ) {
               return message.payload.auctionEvents;
             }
+
             return prevState;
           });
 
@@ -332,7 +340,8 @@ const Provider = ({ children }: PropsWithChildren) => {
             noBids: NoBidsType;
           } | null = computeBids(
             message.payload.auctionEvents,
-            message.payload.multiSellerAuction
+            message.payload.multiSellerAuction,
+            message.payload.refreshTabData
           );
 
           if (computedBids) {
