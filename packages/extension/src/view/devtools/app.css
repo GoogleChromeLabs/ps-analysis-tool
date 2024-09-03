@@ -19,6 +19,8 @@
 
 @import 'github-markdown-css';
 
+
+
 .wiki-sidebar {
   ul {
     padding-left: 0;
@@ -35,6 +37,8 @@
 
 .dark {
   .markdown-body {
+    --bgColor-neutral-muted: #000000;
+
     table {
       color: black;
     }
@@ -42,6 +46,12 @@
 }
 
 .markdown-body {
+
+  --bgColor-default: #ffffff;
+  --bgColor-muted: #fbfbfb;
+  --fgColor-default: #000000;
+  --bgColor-neutral-muted: #fbfbfb;
+
   h1, h2, h3, h4, h5, h6 {
     scroll-margin-top: 20px;
   }

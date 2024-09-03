@@ -115,7 +115,7 @@ const Wiki = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [currentSelectedPage, scrollToHashElement]);
+  }, [currentSelectedPage, scrollToHashElement, currentHash]);
 
   const handleContentClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
