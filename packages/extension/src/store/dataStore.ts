@@ -464,6 +464,7 @@ class DataStore {
     this.auctionEvents['globalEvents'] = {
       interestGroupEvents: [],
     };
+    this.auctionDataForTabId[tabId] = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 
@@ -597,6 +598,7 @@ class DataStore {
         await chrome.runtime.sendMessage({
           type: 'AUCTION_EVENTS',
           payload: {
+            refreshTabData: overrideForInitialSync,
             tabId,
             auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
             multiSellerAuction: isMultiSellerAuction,
