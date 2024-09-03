@@ -171,6 +171,8 @@ program.parse();
 
   const info = await notifier.fetchInfo();
 
+  console.log(info, 'info');
+
   const message =
     'Update available ' +
     chalk.dim(info.current) +
@@ -190,12 +192,6 @@ program.parse();
       borderStyle: 'round',
     })
   );
-
-  // // Notify using the built-in convenience method
-  // notifier.notify({
-  //   isGlobal: true,
-  //   defer: false,
-  // });
 
   const numArgs: number = [
     Boolean(url),
