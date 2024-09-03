@@ -164,19 +164,6 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
-          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
-            title: () => I18n.getMessage('attribution'),
-            panel: {
-              Element: Attribution,
-            },
-            icon: {
-              Element: AttributionIcon,
-            },
-            selectedIcon: {
-              Element: AttributionIconWhite,
-            },
-            children: {},
-          },
           [SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE]: {
             title: 'Protected Audience',
             panel: {
@@ -193,6 +180,19 @@ const TABS: SidebarItems = {
               props: {
                 className: 'fill-white',
               },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
+            title: () => I18n.getMessage('attribution'),
+            panel: {
+              Element: Attribution,
+            },
+            icon: {
+              Element: AttributionIcon,
+            },
+            selectedIcon: {
+              Element: AttributionIconWhite,
             },
             children: {},
           },
