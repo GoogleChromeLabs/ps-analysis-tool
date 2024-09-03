@@ -74,12 +74,20 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
-        return row.originalData?.ownerOrigin;
+        return (
+          row.originalData?.ownerOrigin +
+          row.originalData?.adUnitCode +
+          row.originalData?.uniqueAuctionId
+        );
       }}
     >
       <Table
         hideFiltering={true}
-        selectedKey={selectedRow?.ownerOrigin}
+        selectedKey={
+          selectedRow?.ownerOrigin +
+          (selectedRow?.adUnitCode || '') +
+          selectedRow?.uniqueAuctionId
+        }
         minWidth="42rem"
         hideSearch={true}
       />

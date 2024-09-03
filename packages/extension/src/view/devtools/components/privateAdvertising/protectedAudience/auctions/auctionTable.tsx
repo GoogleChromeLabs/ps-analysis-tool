@@ -49,6 +49,12 @@ const AuctionTable = ({
         header: 'Event',
         accessorKey: 'type',
         cell: (info) => info,
+        sortingComparator: (a, b) => {
+          const aString = (a as string).toLowerCase().trim();
+          const bString = (b as string).toLowerCase().trim();
+
+          return aString > bString ? 1 : -1;
+        },
       },
       {
         header: 'Interest Group Origin',

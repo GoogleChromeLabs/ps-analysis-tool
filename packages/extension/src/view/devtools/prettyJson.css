@@ -1,0 +1,49 @@
+/*! Modified version of pretty-print-json v3.0.2 ~~ https://pretty-print-json.js.org */
+
+/* Layout */
+.json-container           { font-family: system-ui, sans-serif; font-style: normal; line-height: 16px; font-size: 12px; transition: background-color 400ms; }
+a.json-link               { text-decoration: none; border-bottom: 1px solid; outline: none; }
+a.json-link:hover         { background-color: transparent; outline: none; }
+ol.json-lines             { white-space: normal; padding-inline-start: 3em; margin: 0px; }
+ol.json-lines >li         { white-space: pre; text-indent: 0.7em; line-height: 1.5em; padding: 0px; }
+ol.json-lines >li::marker { font-family: system-ui, sans-serif; font-weight: normal; }
+.json-key, .json-string, .json-number, .json-boolean, .json-null, .json-mark, a.json-link, ol.json-lines >li { transition: all 400ms; }
+
+/* Custom Colors */
+ol.json-lines {
+   --colorGraphite: #303030;
+   --colorCharcoal: #222222;
+   --colorTar:      #161616;
+   }
+
+/* Colors */
+.json-key                         { color: #8E004B; }
+.json-string                      { color: #DE3730; }
+.json-number                      { color: #0842A0; }
+.json-boolean                     { color: #0842A0; }
+.json-null                        { color: #0842A0; }
+.json-mark                        { color: black; }
+a.json-link                       { color: #DE3730; }
+a.json-link:visited               { color: #DE3730; }
+a.json-link:hover                 { color: #DE3730; }
+a.json-link:active                { color: slategray; }
+ol.json-lines >li::marker         { color: dimgray; }
+ol.json-lines >li:nth-child(odd)  { background-color: gainsboro; }
+ol.json-lines >li:nth-child(even) { background-color: whitesmoke; }
+ol.json-lines >li:hover           { background-color: lemonchiffon; }
+
+/* Dark Mode */
+.dark-mode .json-key                         { color: #7CACF8; }
+.dark-mode .json-string                      { color: #5CD5FB; }
+.dark-mode .json-number                      { color: #9980FF; }
+.dark-mode .json-boolean                     { color: #9980FF; }
+.dark-mode .json-null                        { color: #9980FF; }
+.dark-mode .json-mark                        { color: silver; }
+.dark-mode a.json-link                       { color: #5CD5FB; }
+.dark-mode a.json-link:visited               { color: #5CD5FB; }
+.dark-mode a.json-link:hover                 { color: #5CD5FB; }
+.dark-mode a.json-link:active                { color: slategray; }
+.dark-mode ol.json-lines >li::marker         { color: silver; }
+.dark-mode ol.json-lines >li:nth-child(odd)  { background-color: var(--colorCharcoal); }
+.dark-mode ol.json-lines >li:nth-child(even) { background-color: var(--colorTar); }
+.dark-mode ol.json-lines >li:hover           { background-color: dimgray; }

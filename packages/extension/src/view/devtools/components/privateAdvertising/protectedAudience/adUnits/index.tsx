@@ -26,7 +26,7 @@ import AdTable from './adTable';
 
 const AdUnits = () => {
   return (
-    <div className="flex flex-col gap-4 h-full w-full">
+    <div className="flex flex-col h-full w-full">
       <AdMatrix />
       <AdTable />
     </div>
