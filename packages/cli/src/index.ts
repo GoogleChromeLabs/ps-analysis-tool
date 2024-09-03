@@ -167,6 +167,10 @@ program.parse();
     shouldNotifyInNpmScript: true,
   });
 
+  const info = await notifier.fetchInfo();
+
+  console.log(info, 'notifier.fetchInfo()');
+
   // Notify using the built-in convenience method
   notifier.notify({
     isGlobal: true,
