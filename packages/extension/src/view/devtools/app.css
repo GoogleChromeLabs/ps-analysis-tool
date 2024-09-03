@@ -38,9 +38,11 @@
 .dark {
   .markdown-body {
     --bgColor-neutral-muted: #000000;
+    --bgColor-default: #000000;
+    --bgColor-muted: #1a1a1a;
 
     table {
-      color: black;
+      color: var(--text-bright-gray);
     }
   }
 }
