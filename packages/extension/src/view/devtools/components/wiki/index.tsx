@@ -154,19 +154,21 @@ const Wiki = () => {
           ref={contentContainer}
           className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
         >
-          {!isLoading ? (
-            <>
-              <h2>{currentSelectedPage}</h2>
-              <div
-                onClick={handleContentClick}
-                dangerouslySetInnerHTML={{ __html: pageContent }}
-              />
-            </>
-          ) : (
-            <div className="flex justify-center items-center w-full h-full">
-              <p className="inline-block text-gray">Loading...</p>
-            </div>
-          )}
+          <div className="min-w-[45rem]">
+            {!isLoading ? (
+              <>
+                <h2>{currentSelectedPage}</h2>
+                <div
+                  onClick={handleContentClick}
+                  dangerouslySetInnerHTML={{ __html: pageContent }}
+                />
+              </>
+            ) : (
+              <div className="flex justify-center items-center w-full h-full">
+                <p className="inline-block text-gray">Loading...</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
