@@ -39,6 +39,8 @@ import {
   LIBRARIES,
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
+import boxen from 'boxen';
+import chalk from 'chalk';
 
 /**
  * Internal dependencies.
@@ -169,13 +171,31 @@ program.parse();
 
   const info = await notifier.fetchInfo();
 
-  console.log(info, 'notifier.fetchInfo()');
+  const message =
+    'Update available ' +
+    chalk.dim(info.current) +
+    chalk.reset(' → ') +
+    chalk.green(info.latest) +
+    ' \nRun ' +
+    chalk.cyan('npm i -g @google-psat/cli') +
+    ' to update';
 
-  // Notify using the built-in convenience method
-  notifier.notify({
-    isGlobal: true,
-    defer: false,
-  });
+  // @todo Check condition before showing message.
+  console.log(
+    boxen(message, {
+      padding: 1,
+      margin: 1,
+      textAlignment: 'center',
+      borderColor: 'yellow',
+      borderStyle: 'round',
+    })
+  );
+
+  // // Notify using the built-in convenience method
+  // notifier.notify({
+  //   isGlobal: true,
+  //   defer: false,
+  // });
 
   const numArgs: number = [
     Boolean(url),
