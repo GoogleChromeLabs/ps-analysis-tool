@@ -157,10 +157,14 @@ export class BrowserManagement {
 
       await delay(this.pageWaitTime / 2);
     } catch (error) {
-      this.pushErrors(url, {
-        errorMessage: error as string,
-        stackTrace: error as string,
-      });
+      if (error instanceof Error) {
+        this.pushErrors(url, {
+          errorMessage: error.message,
+          stackTrace: error?.stack ?? '',
+        });
+
+        throw error;
+      }
     }
   }
 
@@ -216,6 +220,7 @@ export class BrowserManagement {
         });
 
         this.debugLog(`Warning: Server error found in URL: ${url}`, true);
+
         if (!this.isSiteMap) {
           throw new Error(`Invalid server response: ${response.status()}`);
         }
@@ -223,10 +228,20 @@ export class BrowserManagement {
 
       this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
-      this.debugLog(
-        `Navigation did not finish on URL ${url} in 10 seconds moving on to scrolling`
-      );
-      throw error;
+      if (error instanceof Error) {
+        this.pushErrors(url, {
+          errorMessage: error.message,
+          stackTrace: error?.stack ?? '',
+        });
+
+        if (error?.name === 'TimeoutError') {
+          this.debugLog(
+            `Navigation did not finish on URL ${url} in 10 seconds moving on to scrolling`
+          );
+        }
+
+        throw error;
+      }
     }
   }
 
@@ -688,10 +703,14 @@ export class BrowserManagement {
 
       return { [mainFrameUrl]: domQueryMatches };
     } catch (error) {
-      this.pushErrors(url, {
-        errorMessage: error as string,
-        stackTrace: error as string,
-      });
+      if (error instanceof Error) {
+        this.pushErrors(url, {
+          errorMessage: error.message,
+          stackTrace: error?.stack ?? '',
+        });
+
+        throw error;
+      }
       return {};
     }
   }

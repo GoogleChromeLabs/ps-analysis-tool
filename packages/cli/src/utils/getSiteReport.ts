@@ -46,7 +46,7 @@ function getSiteReport(
       processedData[ind].erroredOutUrls[_url].length > 0
     ) {
       return {
-        pageUrl: _url,
+        pageUrl: encodeURI(_url),
         technologyData: [],
         cookieData: processedData[ind].cookieData,
         libraryMatches: [],
@@ -74,7 +74,7 @@ function getSiteReport(
     };
 
     return {
-      pageUrl: _url,
+      pageUrl: encodeURI(_url),
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: processedData[ind].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
