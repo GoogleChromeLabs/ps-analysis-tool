@@ -25,12 +25,8 @@ import {
   useContextSelector,
   createContext,
   type LibraryData,
+  reshapeCookies,
 } from '@google-psat/common';
-
-/**
- * Internal dependencies.
- */
-import reshapeCookies from '../../../utils/reshapeCookies';
 
 export interface ContentStore {
   state: {

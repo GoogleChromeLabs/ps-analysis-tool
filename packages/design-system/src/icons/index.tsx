@@ -76,3 +76,6 @@ export { default as GroupsIcon } from './groups.svg';
 export { default as WikiIcon } from './wiki.svg';
 export { default as WikiIconWhite } from './wiki-white.svg';
 export { default as ExternalLinkIcon } from './external-link.svg';
+export { default as DoubleArrowIcon } from './double-arrow-icon.svg';
+export { default as Settings } from './settings.svg';
+export { default as MenuOpenIcon } from './menu-open-icon.svg';

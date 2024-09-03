@@ -95,7 +95,11 @@ const AssembledCookiesLanding = ({
   const cookiesWithIssues = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(cookiesByKey).filter(([, cookie]) => cookie.isBlocked)
+        Object.entries(cookiesByKey).filter(
+          ([, cookie]) =>
+            cookie.isBlocked ||
+            (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
+        )
       ),
     [cookiesByKey]
   );

@@ -44,17 +44,14 @@ import {
   GroupsIcon,
   WikiIcon,
   WikiIconWhite,
+  type CollapsedSidebarItems,
+  Settings as SettingsIcon,
 } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
-// @ts-ignore
-// eslint-disable-next-line import/no-relative-packages
-import SettingsTab from '../../../../../assets/icons/settings-tab.svg';
-// @ts-ignore
-// eslint-disable-next-line import/no-relative-packages
-import SettingsTabWhite from '../../../../../assets/icons/settings-tab-white.svg';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import PrivateAggregationicon from '../../../../../assets/icons/private-aggregation.svg';
@@ -75,7 +72,6 @@ import {
   ProtectedAudience,
   PrivateAggregation,
 } from './components';
-import { I18n } from '@google-psat/i18n';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -282,10 +278,16 @@ const TABS: SidebarItems = {
       Element: Settings,
     },
     icon: {
-      Element: SettingsTab,
+      Element: SettingsIcon,
+      props: {
+        className: 'fill-gray w-4 h-4',
+      },
     },
     selectedIcon: {
-      Element: SettingsTabWhite,
+      Element: SettingsIcon,
+      props: {
+        className: 'fill-white w-4 h-4',
+      },
     },
     dropdownOpen: false,
     children: {},
@@ -293,3 +295,17 @@ const TABS: SidebarItems = {
 };
 
 export default TABS;
+
+export const collapsedSidebarData: CollapsedSidebarItems = {
+  footerElements: {
+    [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
+      icon: {
+        Element: SettingsIcon,
+        props: {
+          className: 'fill-granite-gray dark:fill-bright-gray',
+        },
+      },
+      title: () => I18n.getMessage('settings'),
+    },
+  },
+};
