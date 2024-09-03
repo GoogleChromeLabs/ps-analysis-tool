@@ -23,12 +23,27 @@ import React from 'react';
  */
 import AdMatrix from './adMatrix';
 import AdTable from './adTable';
+import { useProtectedAudience } from '../../../../stateProviders';
 
 const AdUnits = () => {
+  const { adsAndBidders } = useProtectedAudience(({ state }) => ({
+    adsAndBidders: state.adsAndBidders,
+  }));
+
   return (
     <div className="flex flex-col h-full w-full">
-      <AdMatrix />
-      <AdTable />
+      {adsAndBidders && Object.keys(adsAndBidders).length > 0 ? (
+        <>
+          <AdMatrix />
+          <AdTable />
+        </>
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">
+          <p className="text-sm text-raisin-black dark:text-bright-gray">
+            No ad units were recorded.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
