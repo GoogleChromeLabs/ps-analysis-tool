@@ -42,7 +42,7 @@ const Header = ({ url, dateTime, version }: HeaderProps) => {
           <span className="block">
             {isExtension ? 'PSAT Extension Analysis' : 'PSAT CLI Analysis'}
           </span>
-          <span className="block text-right text-darkest-gray text-[11px]">
+          <span className="block text-right text-darkest-gray dark:text-white text-[11px]">
             {version ? 'v' + version : ''}
           </span>
         </div>
