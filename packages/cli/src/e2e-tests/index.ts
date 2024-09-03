@@ -26,7 +26,8 @@ describe('CLI E2E Test', () => {
 
   it('Should run site analysis', () => {
     return coffee
-      .fork(cli, ['-u https://bbc.com', '-w 100'])
+      .fork(cli, ['-u https://bbc.com', '-w 1000'])
+      .debug()
       .includes('stdout', '/out/bbc-com/report_')
       .end();
   }, 60000);
