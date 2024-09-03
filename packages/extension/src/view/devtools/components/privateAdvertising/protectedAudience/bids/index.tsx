@@ -86,6 +86,7 @@ const Bids = () => {
             <div className="text-xs py-1 px-1.5">
               <pre>
                 <div
+                  className="json-container"
                   dangerouslySetInnerHTML={{
                     __html: prettyPrintJson.toHtml(selectedRow),
                   }}

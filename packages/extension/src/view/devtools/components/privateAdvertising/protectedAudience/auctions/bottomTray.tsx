@@ -32,6 +32,7 @@ const BottomTray = ({ selectedJSON }: BottomTrayProps) => {
         {selectedJSON ? (
           <pre>
             <div
+              className="json-container"
               dangerouslySetInnerHTML={{
                 __html: prettyPrintJson.toHtml(selectedJSON),
               }}

@@ -25,7 +25,7 @@ import {
 } from '@google-psat/design-system';
 import { LibraryDetectionProvider } from '@google-psat/library-detection';
 // eslint-disable-next-line import/no-relative-packages -- Relative import is necessary, because package doesn't export css file.
-import '../../../../../node_modules/pretty-print-json/dist/css/pretty-print-json.css';
+import './prettyJson.css';
 
 /**
  * Internal dependencies.
