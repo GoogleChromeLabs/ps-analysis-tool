@@ -21,7 +21,6 @@ describe('CLI E2E Test', () => {
   it('Should run site analysis', () => {
     return coffee
       .fork(cli, ['-u https://httpstatus.us/200', '-w 1000'])
-      .debug()
       .includes('stdout', '/out/httpstatus-us-200/report_')
       .end();
   }, 60000);
