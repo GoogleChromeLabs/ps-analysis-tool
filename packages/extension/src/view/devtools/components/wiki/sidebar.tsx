@@ -48,7 +48,7 @@ const Sidebar = ({
 }: SidebarMenuProps) => {
   const renderMenuItems = (menu: MenuItemType[]) => {
     return (
-      <ul className="list-disc ml-3">
+      <ul className="list-disc ml-3 dark:marker:text-sky-400">
         {menu.map((menuItem) => (
           <MenuItem
             key={menuItem.name}

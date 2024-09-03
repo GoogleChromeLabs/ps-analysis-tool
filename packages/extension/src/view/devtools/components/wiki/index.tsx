@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { ProgressBar } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -154,7 +155,7 @@ const Wiki = () => {
           ref={contentContainer}
           className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
         >
-          <div className="min-w-[45rem]">
+          <div className="min-w-[45rem] w-full h-full">
             {!isLoading ? (
               <>
                 <h2>{currentSelectedPage}</h2>
@@ -165,7 +166,7 @@ const Wiki = () => {
               </>
             ) : (
               <div className="flex justify-center items-center w-full h-full">
-                <p className="inline-block text-gray">Loading...</p>
+                <ProgressBar additionalStyles="w-1/6 mx-auto h-full" />
               </div>
             )}
           </div>
