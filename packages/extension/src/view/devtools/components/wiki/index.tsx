@@ -155,7 +155,7 @@ const Wiki = () => {
           ref={contentContainer}
           className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
         >
-          <div className="min-w-[45rem] w-full h-full">
+          <div className="markdown-container min-w-[45rem] w-full h-full">
             {!isLoading ? (
               <>
                 <h2>{currentSelectedPage}</h2>
