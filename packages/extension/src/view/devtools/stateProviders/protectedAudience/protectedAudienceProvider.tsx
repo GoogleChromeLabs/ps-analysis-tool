@@ -189,6 +189,11 @@ const Provider = ({ children }: PropsWithChildren) => {
               BIDDING_TYPES.includes(event.type)
           );
 
+          const { auctionConfig } =
+            singleSellerAuctionEvents?.[uniqueAuctionId]?.filter(
+              ({ type }) => type && type === 'configResolved'
+            )?.[0] ?? {};
+
           _receivedBids.push(
             ...filteredEvents.map((event) => {
               const sellerSignals = JSON.parse(
@@ -203,9 +208,6 @@ const Provider = ({ children }: PropsWithChildren) => {
               };
             })
           );
-
-          const { auctionConfig } =
-            singleSellerAuctionEvents[uniqueAuctionId]?.[1] ?? {};
 
           const { name } =
             singleSellerAuctionEvents[uniqueAuctionId]?.find(
