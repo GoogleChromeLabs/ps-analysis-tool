@@ -134,7 +134,7 @@ const Wiki = () => {
         const page = extractWikiPage(anchorElement.href);
 
         if (page.pageName) {
-          setCurrentSelectedPage(page.pageName);
+          setCurrentSelectedPage(page.pageName.replaceAll('-', ' '));
         }
       }
     },
