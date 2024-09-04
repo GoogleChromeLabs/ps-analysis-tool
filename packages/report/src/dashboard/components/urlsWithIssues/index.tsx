@@ -46,7 +46,7 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
         enableHiding: false,
       },
       {
-        header: I18n.getMessage('description'),
+        header: 'Error Description',
         accessorKey: 'errorMessage',
         cell: (info: InfoType) => info,
       },
