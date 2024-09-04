@@ -159,7 +159,7 @@ const Dashboard = () => {
   return (
     <div
       data-testid="dashboard-content"
-      className="h-full w-full text-raisin-black"
+      className="h-full w-full text-raisin-black dark:text-bright-gray"
     >
       <div className="p-4">
         <header className="flex items-center">
@@ -175,10 +175,10 @@ const Dashboard = () => {
               return (
                 <div
                   key={item.name}
-                  className="border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
-                  <Icon width={20} height={20} />
+                  <Icon width={20} height={20} className="fill-gray" />
                   <span className="text-sm">{item.name}</span>
                 </div>
               );
@@ -198,13 +198,13 @@ const Dashboard = () => {
               return (
                 <div
                   key={item.name}
-                  className="border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={(event) =>
                     handleFeatureBoxClick(event, item.sidebarKey)
                   }
                 >
                   <div className="flex gap-2 justify-start mb-3">
-                    <Icon width={20} height={20} />
+                    <Icon width={20} height={20} className="fill-gray" />
                     <h4 className={headingClasses}>{item.name}</h4>
                   </div>
                   <p>{item.description}</p>
@@ -212,7 +212,7 @@ const Dashboard = () => {
                     {item.buttons &&
                       item.buttons.map((button) => (
                         <button
-                          className="bg-cultured-grey py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
+                          className="bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
                           key={button.name}
                           onClick={(event) =>
                             handleButtonClick(event, button.sidebarKey)

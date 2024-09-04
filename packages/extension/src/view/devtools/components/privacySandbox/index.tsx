@@ -31,7 +31,7 @@ const PrivacySandbox = () => {
 
   return (
     <div data-testid="privacy-sandbox-content" className="h-full w-full">
-      <div className="p-4">
+      <div className="p-4 dark:text-bright-gray">
         <header className="flex items-center">
           <PrivacySandboxColoredIcon
             width="25"
@@ -61,7 +61,7 @@ const PrivacySandbox = () => {
               <a
                 href={addUTMParams('https://privacysandbox.com')}
                 target="__blank"
-                className="bg-cultured-grey py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex"
+                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex"
               >
                 <span>Learn About Privacy Sandbox</span>
                 <ExternalLinkBlack
@@ -72,7 +72,7 @@ const PrivacySandbox = () => {
               </a>
               <button
                 onClick={() => navigateTo(SIDEBAR_ITEMS_KEYS.DASHBOARD)}
-                className="bg-cultured-grey py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver"
+                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver"
               >
                 Dashboard
               </button>
