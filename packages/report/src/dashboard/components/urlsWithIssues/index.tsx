@@ -120,10 +120,28 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
               <p className="font-bold text-granite-gray dark:text-manatee mb-1">
                 Error code
               </p>
-              <p className="text-outer-space-crayola dark:text-bright-gray">
+              <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
                 {selectedRow?.errorCode || I18n.getMessage('noDescription')}
               </p>
             </>
+            {selectedRow?.stackTrace && (
+              <>
+                <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+                  Stack trace
+                </p>
+                <p className="text-outer-space-crayola dark:text-bright-gray">
+                  <pre>
+                    <code
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          selectedRow?.stackTrace ||
+                          I18n.getMessage('noDescription'),
+                      }}
+                    />
+                  </pre>
+                </p>
+              </>
+            )}
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
