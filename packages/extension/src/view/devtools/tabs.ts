@@ -74,20 +74,6 @@ import {
 } from './components';
 
 const TABS: SidebarItems = {
-  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
-    title: () => 'Dashboard',
-    panel: {
-      Element: Dashboard,
-    },
-    icon: {
-      Element: DashboardIcon,
-    },
-    selectedIcon: {
-      Element: DashboardIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-  },
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
     title: () => 'Privacy Sandbox',
     panel: {
@@ -271,6 +257,20 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
+    title: () => 'Dashboard',
+    panel: {
+      Element: Dashboard,
+    },
+    icon: {
+      Element: DashboardIcon,
+    },
+    selectedIcon: {
+      Element: DashboardIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),
