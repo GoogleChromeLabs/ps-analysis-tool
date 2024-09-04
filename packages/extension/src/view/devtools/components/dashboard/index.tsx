@@ -60,7 +60,7 @@ const FEATURE_LIST = [
     icon: CookieIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
     description:
-      'Provide information and insights regarding the behavior and distribution of cookies on web pages while navigating across sites during browsing sessions.',
+      'Gain insights into the behavior and distribution of cookies on web pages while navigating across sites during browsing sessions.',
   },
   {
     name: 'Private Advertising',
