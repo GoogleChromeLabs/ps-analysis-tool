@@ -44,6 +44,10 @@
     table {
       color: var(--text-bright-gray);
     }
+
+    pre {
+      --fgColor-default: var(--text-bright-gray);
+    }
   }
 }
 
@@ -58,13 +62,14 @@
     scroll-margin-top: 20px;
   }
 
-  ul {
+  ul > ul {
     list-style: initial;
   }
 
   /* h1 */
   .markdown-container > h2 {
     font-size: 22px;
+    margin-top: 0;
   }
 
   h2 {

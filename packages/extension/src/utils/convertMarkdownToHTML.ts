@@ -16,12 +16,13 @@
 /**
  * External dependencies.
  */
-import { marked } from 'marked';
+import { Marked } from 'marked';
 
 export const IMAGE_BASE_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/images';
 
 const convertMarkdownToHTML = async (markdown: string) => {
+  const marked = new Marked();
   let html = await marked.parse(markdown);
 
   html = html.replace(
