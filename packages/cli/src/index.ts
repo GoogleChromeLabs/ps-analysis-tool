@@ -23,7 +23,6 @@ import { existsSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import path, { basename } from 'path';
-import updateNotifier from 'update-notifier';
 import { I18n } from '@google-psat/i18n';
 import {
   type CompleteJson,
@@ -39,8 +38,6 @@ import {
   LIBRARIES,
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
-import boxen from 'boxen';
-import chalk from 'chalk';
 
 /**
  * Internal dependencies.
@@ -59,6 +56,7 @@ import {
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
 import saveResultsAsHTML from './utils/saveResultAsHTML';
+import checkLatestVersion from './utils/checkLatestVersion';
 import packageJson from '../package.json';
 
 events.EventEmitter.defaultMaxListeners = 15;
@@ -162,35 +160,7 @@ program.parse();
   const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
 
-  // Checks for available update and returns an instance
-  const notifier = updateNotifier({
-    pkg: packageJson,
-    updateCheckInterval: 0, // @todo: Use 1000 * 60 * 60 after QA is done.
-    shouldNotifyInNpmScript: true,
-  });
-
-  const info = await notifier.fetchInfo();
-
-  const message =
-    'Update available ' +
-    chalk.dim(info.current) +
-    chalk.reset(' → ') +
-    chalk.green(info.latest) +
-    ' \nRun ' +
-    chalk.cyan('npm i -g @google-psat/cli') +
-    ' to update';
-
-  if (info.type !== 'latest') {
-    console.log(
-      boxen(message, {
-        padding: 1,
-        margin: 1,
-        textAlignment: 'center',
-        borderColor: 'yellow',
-        borderStyle: 'round',
-      })
-    );
-  }
+  await checkLatestVersion();
 
   const numArgs: number = [
     Boolean(url),
