@@ -24,7 +24,12 @@ import { type TableFilter } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
-import { createZip, getFolderName, generateSitemapHTMLFile } from './utils';
+import {
+  createZip,
+  getFolderName,
+  generateSitemapHTMLFile,
+  generateErrorLogFile,
+} from './utils';
 
 const generateSiteMapReportandDownload = async (
   JSONReport: CompleteJson[],
@@ -54,6 +59,10 @@ const generateSiteMapReportandDownload = async (
   const report = generateSitemapHTMLFile(JSONReport, appliedFilters);
 
   zip.file('report.html', report);
+
+  const errorLogs = generateErrorLogFile(JSONReport);
+
+  zip.file('error_logs.txt', errorLogs);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
