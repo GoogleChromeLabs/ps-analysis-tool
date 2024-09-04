@@ -21,7 +21,6 @@ import {
   SIDEBAR_ITEMS_KEYS,
   type SidebarItems,
   WarningBare,
-  URLWithErrorIcon,
 } from '@google-psat/design-system';
 
 const sidebarData: SidebarItems = {
@@ -49,18 +48,18 @@ const sidebarData: SidebarItems = {
     },
   },
   [SIDEBAR_ITEMS_KEYS.URL_WITH_ISSUES]: {
-    title: 'URL with issues',
+    title: 'URL issues',
     children: {},
     icon: {
       //@ts-ignore
-      Element: URLWithErrorIcon,
+      Element: WarningBare,
       props: {
         className: 'fill-granite-gray',
       },
     },
     selectedIcon: {
       //@ts-ignore
-      Element: URLWithErrorIcon,
+      Element: WarningBare,
       props: {
         className: 'fill-white',
       },

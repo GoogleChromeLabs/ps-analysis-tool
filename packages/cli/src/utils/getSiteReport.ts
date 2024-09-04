@@ -41,10 +41,47 @@ function getSiteReport(
   technologyAnalysisData: any
 ) {
   return urls.map((_url, ind) => {
+    const hasTimeOutError = (
+      processedData[ind].erroredOutUrls[_url] as ErroredOutUrlsData[]
+    ).some(
+      ({ url, errorName }) => url === _url && errorName !== 'TIMEOUT_ERROR'
+    );
+
+    const detectedMatchingSignatures: LibraryData = {
+      ...detectMatchingSignatures(
+        processedData[ind].resources ?? [],
+        Object.fromEntries(
+          LIBRARIES.map((library) => [library.name, library.detectionFunction])
+        ) as DetectionFunctions
+      ),
+      ...(processedData[ind]?.domQueryMatches ?? {}),
+    };
+
     if (
       processedData[ind].erroredOutUrls[_url] &&
       processedData[ind].erroredOutUrls[_url].length > 0
     ) {
+      if (hasTimeOutError) {
+        return {
+          pageUrl: encodeURI(_url),
+          technologyData: technologyAnalysisData
+            ? technologyAnalysisData[ind]
+            : [],
+          cookieData: processedData[ind].cookieData,
+          libraryMatches: detectedMatchingSignatures ?? [],
+          erroredOutUrls: [
+            ...processedData[ind].erroredOutUrls[_url].map(
+              (errors: SingleURLError) => {
+                return {
+                  url: _url,
+                  ...errors,
+                };
+              }
+            ),
+          ] as ErroredOutUrlsData[],
+        } as unknown as CompleteJson;
+      }
+
       return {
         pageUrl: encodeURI(_url),
         technologyData: [],
@@ -62,16 +99,6 @@ function getSiteReport(
         ] as ErroredOutUrlsData[],
       } as unknown as CompleteJson;
     }
-
-    const detectedMatchingSignatures: LibraryData = {
-      ...detectMatchingSignatures(
-        processedData[ind].resources ?? [],
-        Object.fromEntries(
-          LIBRARIES.map((library) => [library.name, library.detectionFunction])
-        ) as DetectionFunctions
-      ),
-      ...(processedData[ind]?.domQueryMatches ?? {}),
-    };
 
     return {
       pageUrl: encodeURI(_url),

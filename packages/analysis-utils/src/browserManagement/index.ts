@@ -161,6 +161,7 @@ export class BrowserManagement {
         this.pushErrors(url, {
           errorMessage: error.message,
           stackTrace: error?.stack ?? '',
+          errorName: error?.name,
         });
 
         throw error;
@@ -217,6 +218,7 @@ export class BrowserManagement {
         this.pushErrors(url, {
           errorMessage: `Invalid server response: ${response.status()}`,
           errorCode: `${response.status()}`,
+          errorName: `INVALID_SERVER_RESPONSE`,
         });
 
         this.debugLog(`Warning: Server error found in URL: ${url}`, true);
@@ -232,6 +234,7 @@ export class BrowserManagement {
         this.pushErrors(url, {
           errorMessage: error.message,
           stackTrace: error?.stack ?? '',
+          errorName: error?.name,
         });
 
         if (error?.name === 'TimeoutError') {
@@ -707,6 +710,7 @@ export class BrowserManagement {
         this.pushErrors(url, {
           errorMessage: error.message,
           stackTrace: error?.stack ?? '',
+          errorName: error?.name,
         });
 
         throw error;

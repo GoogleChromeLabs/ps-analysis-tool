@@ -73,4 +73,3 @@ export { default as GreenTick } from './green-tick-icon.svg';
 export { default as ChevronDown } from './chevron-down.svg';
 export { default as WarningBare } from './warning.svg';
 export { default as GroupsIcon } from './groups.svg';
-export { default as URLWithErrorIcon } from './url-with-errors.svg';

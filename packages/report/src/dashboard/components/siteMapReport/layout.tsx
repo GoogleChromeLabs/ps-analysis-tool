@@ -67,8 +67,15 @@ const Layout = ({
 
   useEffect(() => {
     const _sites = new Set<string>();
-    completeJson?.forEach(({ pageUrl }) => {
-      _sites.add(pageUrl);
+    completeJson?.forEach(({ pageUrl, erroredOutUrls: _erroredOutURLs }) => {
+      if (
+        !_erroredOutURLs.some(
+          ({ url, errorName }) =>
+            url === pageUrl && errorName !== 'TIMEOUT_ERROR'
+        )
+      ) {
+        _sites.add(pageUrl);
+      }
     });
 
     setSites(Array.from(_sites));
