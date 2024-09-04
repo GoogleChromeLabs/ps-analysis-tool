@@ -17,12 +17,13 @@
  * External dependencies.
  */
 import { Marked } from 'marked';
+import markedAlert from 'marked-alert';
 
 export const IMAGE_BASE_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/images';
 
 const convertMarkdownToHTML = async (markdown: string) => {
-  const marked = new Marked();
+  const marked = new Marked().use(markedAlert());
   let html = await marked.parse(markdown);
 
   html = html.replace(
