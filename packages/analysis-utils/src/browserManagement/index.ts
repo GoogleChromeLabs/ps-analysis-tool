@@ -142,8 +142,6 @@ export class BrowserManagement {
 
     try {
       const result = await page.evaluate((args: string[]) => {
-        let clickedOnButton = false;
-
         const bannerNodes: Element[] = Array.from(
           (document.querySelector('body')?.childNodes || []) as Element[]
         )
@@ -158,24 +156,24 @@ export class BrowserManagement {
             return regex.test(node.textContent.toLowerCase());
           });
 
-        bannerNodes?.forEach((node: Element) => {
+        return bannerNodes?.some((node: Element) => {
           const buttonNodes = Array.from(node?.getElementsByTagName('button'));
 
-          buttonNodes?.forEach((cnode) => {
+          return buttonNodes?.some((cnode) => {
             if (!cnode?.textContent) {
-              return;
+              return false;
             }
 
-            args.forEach((text) => {
+            return args.some((text) => {
               if (cnode?.textContent?.toLowerCase().includes(text)) {
-                clickedOnButton = true;
                 cnode?.click();
+                return true;
               }
+
+              return false;
             });
           });
         });
-
-        return clickedOnButton;
       }, textSelectors);
 
       return result;
@@ -252,28 +250,27 @@ export class BrowserManagement {
 
       clickedOnButton = await page.evaluate((xPaths: string[]) => {
         const rootElement = document.querySelector('html');
-        let bannerAccepted = false;
 
         if (!rootElement) {
           return false;
         }
 
-        xPaths.forEach((xPath) => {
+        return xPaths.some((xPath) => {
           const _acceptButton = document
             .evaluate(xPath, rootElement)
             .iterateNext();
 
           if (!_acceptButton) {
-            return;
+            return false;
           }
 
           if (_acceptButton instanceof HTMLElement) {
             _acceptButton?.click();
-            bannerAccepted = true;
+            return true;
           }
-        });
 
-        return bannerAccepted;
+          return false;
+        });
       }, this.selectors?.xPath);
 
       if (clickedOnButton) {
