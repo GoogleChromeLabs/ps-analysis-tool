@@ -20,7 +20,9 @@ import React, { useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
+  InternalNavigationForAnchor,
   MessageBox,
+  SIDEBAR_ITEMS_KEYS,
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -70,13 +72,9 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
       dataMapping={cookieClassificationDataMapping}
       landingHeaderExtraClasses="border-t-0"
       infoIconTitle={
-        <p
-          dangerouslySetInnerHTML={{
-            __html: I18n.getMessage('setUpEvaluationEnvironment', [
-              '<a href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment" target="_blank" rel="noreferrer" class="text-bright-navy-blue dark:text-jordy-blue">',
-              '</a>',
-            ]),
-          }}
+        <InternalNavigationForAnchor
+          text={I18n.getMessage('setUpEvaluationEnvironment', ['<a>', '</a>'])}
+          to={[SIDEBAR_ITEMS_KEYS.WIKI]}
         />
       }
       testId="cookies-insights"
