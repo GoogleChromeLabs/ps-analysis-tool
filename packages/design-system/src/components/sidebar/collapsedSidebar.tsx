@@ -32,12 +32,14 @@ const CollapsedSidebar = () => {
     currentSelectedItemKey,
     toggleSidebarCollapse,
     sidebarItems,
+    selectedItemKey,
   } = useSidebar(({ state, actions }) => ({
     collapsedSidebarItems: state.collapsedSidebarItems,
     updateSelectedItemKey: actions.updateSelectedItemKey,
     currentSelectedItemKey: state.currentItemKey,
     toggleSidebarCollapse: actions.toggleSidebarCollapse,
     sidebarItems: state.sidebarItems,
+    selectedItemKey: state.selectedItemKey,
   }));
 
   const handleFooterElementClick = useCallback(
@@ -76,12 +78,17 @@ const CollapsedSidebar = () => {
             typeof sidebarItem.title === 'function'
               ? sidebarItem.title()
               : sidebarItem.title;
+          const isCurrent = itemKey === selectedItemKey;
+          const buttonClassNames = classNames('cursor-pointer', {
+            'opacity-70': isCurrent,
+            'hover:opacity-60': !isCurrent,
+          });
 
           return (
             <button
               key={title}
               title={title}
-              className="cursor-pointer hover:opacity-60"
+              className={buttonClassNames}
               onClick={() => updateSelectedItemKey(itemKey)}
             >
               {Icon && <Icon {...props} />}
@@ -99,18 +106,16 @@ const CollapsedSidebar = () => {
 
           const props = collapsedSidebarItems?.footerElements[key].icon.props;
           const title = collapsedSidebarItems?.footerElements[key].title;
+          const isCurrent = key === currentSelectedItemKey;
 
           return (
             <button
               key={key}
               title={typeof title === 'function' ? title() : title}
-              className={classNames(
-                'cursor-pointer hover:opacity-70 p-1 rounded-full',
-                {
-                  'bg-anti-flash-white dark:bg-charleston-green':
-                    key === currentSelectedItemKey,
-                }
-              )}
+              className={classNames('cursor-pointer rounded-full p-1', {
+                'opacity-70': isCurrent,
+                'hover:opacity-70': !isCurrent,
+              })}
               onClick={(e) => handleFooterElementClick(e, key)}
             >
               <Icon width="20" height="20" {...props} />
