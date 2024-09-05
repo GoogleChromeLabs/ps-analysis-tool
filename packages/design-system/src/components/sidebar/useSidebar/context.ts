@@ -50,6 +50,7 @@ export interface SidebarStoreContext {
     isKeyAncestor: (key: string) => boolean;
     isKeySelected: (key: string) => boolean;
     toggleSidebarCollapse: () => void;
+    extractSelectedItemKeyTitles: () => string[];
   };
 }
 
