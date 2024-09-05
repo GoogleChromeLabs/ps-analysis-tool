@@ -70,8 +70,7 @@ const Layout = ({
     completeJson?.forEach(({ pageUrl, erroredOutUrls: _erroredOutURLs }) => {
       if (
         !_erroredOutURLs?.some(
-          ({ url, errorName }) =>
-            url === pageUrl && errorName !== 'TIMEOUT_ERROR'
+          ({ url, errorName }) => url === pageUrl && errorName !== 'i'
         )
       ) {
         _sites.add(pageUrl);

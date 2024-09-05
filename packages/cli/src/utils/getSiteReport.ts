@@ -43,9 +43,7 @@ function getSiteReport(
   return urls.map((_url, ind) => {
     const hasTimeOutError = (
       processedData[ind].erroredOutUrls[_url] as ErroredOutUrlsData[]
-    )?.some(
-      ({ url, errorName }) => url === _url && errorName !== 'TIMEOUT_ERROR'
-    );
+    )?.some(({ url, errorName }) => url === _url && errorName !== 'i');
 
     const detectedMatchingSignatures: LibraryData = {
       ...detectMatchingSignatures(
