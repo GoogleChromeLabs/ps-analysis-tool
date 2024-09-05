@@ -79,8 +79,8 @@ const CollapsedSidebar = () => {
               ? sidebarItem.title()
               : sidebarItem.title;
           const isCurrent = itemKey === selectedItemKey;
-          const buttonClassNames = classNames('cursor-pointer', {
-            'opacity-70': isCurrent,
+          const buttonClassNames = classNames({
+            'cursor-auto opacity-70': isCurrent,
             'hover:opacity-60': !isCurrent,
           });
 
@@ -112,8 +112,8 @@ const CollapsedSidebar = () => {
             <button
               key={key}
               title={typeof title === 'function' ? title() : title}
-              className={classNames('cursor-pointer rounded-full p-1', {
-                'opacity-70': isCurrent,
+              className={classNames('rounded-full p-1', {
+                'opacity-70 cursor-auto': isCurrent,
                 'hover:opacity-70': !isCurrent,
               })}
               onClick={(e) => handleFooterElementClick(e, key)}
