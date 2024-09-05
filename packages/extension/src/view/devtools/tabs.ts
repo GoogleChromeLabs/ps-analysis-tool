@@ -183,7 +183,7 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
-          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
+          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING]: {
             title: () => I18n.getMessage('attributionReporting'),
             panel: {
               Element: Attribution,

@@ -24,7 +24,7 @@ export enum SIDEBAR_ITEMS_KEYS {
   RELATED_WEBSITE_SETS = 'related-website-sets',
   PRIVATE_ADVERTISING = 'private-advertising',
   TOPICS = 'topics',
-  ATTRIBUTION = 'attribution-reporting',
+  ATTRIBUTION_REPORTING = 'attribution-reporting',
   PROTECTED_AUDIENCE = 'protected-audience',
   PRIVATE_AGGREGATION = 'private-aggregation',
   ANTI_COVERT_TRACKING = 'anti-covert-tracking',
