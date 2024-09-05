@@ -816,12 +816,7 @@ export class BrowserManagement {
         const _page = this.pages[userProvidedUrl];
         const _pageFrames = this.pageFrames[userProvidedUrl];
 
-        if (
-          !_responses ||
-          !_requests ||
-          !_page ||
-          this.erroredOutUrls[userProvidedUrl]
-        ) {
+        if (!_responses || !_requests || !_page) {
           return {
             url: userProvidedUrl,
             cookieData: {},
