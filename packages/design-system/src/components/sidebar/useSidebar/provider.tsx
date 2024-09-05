@@ -269,7 +269,7 @@ export const SidebarProvider = ({
    * Extract the titles of the selected item key chain.
    * Eg: selectedItemKey = 'Privacy-Sandbox#cookies#frameUrl'
    * extractSelectedItemKeyTitles() => ['Privacy Sandbox', 'Cookies', 'Frame URL']
-   * @returns string[]
+   * @returns Array<{title: string, key: string}>
    */
   const extractSelectedItemKeyTitles = useCallback(() => {
     if (!selectedItemKey) {
@@ -278,7 +278,7 @@ export const SidebarProvider = ({
 
     let _sidebarItems = sidebarItems;
     const keys = selectedItemKey.split('#');
-    const titles: string[] = [];
+    const titles: Array<{ title: string; key: string }> = [];
 
     for (const key of keys) {
       const sidebarItem = _sidebarItems?.[key];
@@ -287,11 +287,13 @@ export const SidebarProvider = ({
         break;
       }
 
-      titles.push(
-        typeof sidebarItem.title === 'function'
-          ? sidebarItem.title()
-          : sidebarItem.title
-      );
+      titles.push({
+        title:
+          typeof sidebarItem.title === 'function'
+            ? sidebarItem.title()
+            : sidebarItem.title,
+        key,
+      });
 
       _sidebarItems = sidebarItem.children;
     }
