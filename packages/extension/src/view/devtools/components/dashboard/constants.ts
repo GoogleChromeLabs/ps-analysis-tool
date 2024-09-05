@@ -57,6 +57,16 @@ export const FEATURE_LIST = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
     description:
       'Gain insights into the behavior and distribution of cookies on web pages while navigating across sites during browsing sessions.',
+    buttons: [
+      {
+        name: 'Landing Page',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+      },
+      {
+        name: 'Cookies Table',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+      },
+    ],
   },
   {
     name: 'Private Advertising',
