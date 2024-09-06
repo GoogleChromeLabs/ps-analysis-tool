@@ -41,37 +41,37 @@ function getSiteReport(
   processedData: any,
   technologyAnalysisData: any
 ) {
-  return urls.map((url, ind) => {
+  return urls.map((url, index) => {
     const hasTimeOutError = (
-      processedData[ind].erroredOutUrls[url] as SingleURLError[]
+      processedData[index].erroredOutUrls[url] as SingleURLError[]
     )?.some(
       ({ errorName }) => errorName === 'TimeoutError' || errorName === 'i'
     );
 
     const detectedMatchingSignatures: LibraryData = {
       ...detectMatchingSignatures(
-        processedData[ind].resources ?? [],
+        processedData[index].resources ?? [],
         Object.fromEntries(
           LIBRARIES.map((library) => [library.name, library.detectionFunction])
         ) as DetectionFunctions
       ),
-      ...(processedData[ind]?.domQueryMatches ?? {}),
+      ...(processedData[index]?.domQueryMatches ?? {}),
     };
 
     if (
-      processedData[ind].erroredOutUrls[url] &&
-      processedData[ind].erroredOutUrls[url].length > 0
+      processedData[index].erroredOutUrls[url] &&
+      processedData[index].erroredOutUrls[url].length > 0
     ) {
       if (hasTimeOutError) {
         return {
           pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
           technologyData: technologyAnalysisData
-            ? technologyAnalysisData[ind]
+            ? technologyAnalysisData[index]
             : [],
-          cookieData: processedData[ind].cookieData,
+          cookieData: processedData[index].cookieData,
           libraryMatches: detectedMatchingSignatures ?? [],
           erroredOutUrls: [
-            ...processedData[ind].erroredOutUrls[url].map(
+            ...processedData[index].erroredOutUrls[url].map(
               (errors: SingleURLError) => {
                 return {
                   url: parseUrl(url) ? new URL(url).href : encodeURI(url),
@@ -89,10 +89,10 @@ function getSiteReport(
         cookieData: {},
         libraryMatches: [],
         erroredOutUrls: [
-          ...processedData[ind].erroredOutUrls[url].map(
+          ...processedData[index].erroredOutUrls[url].map(
             (errors: SingleURLError) => {
               return {
-                url: url,
+                url,
                 ...errors,
               };
             }
@@ -103,8 +103,10 @@ function getSiteReport(
 
     return {
       pageUrl: encodeURI(url),
-      technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
-      cookieData: processedData[ind].cookieData,
+      technologyData: technologyAnalysisData
+        ? technologyAnalysisData[index]
+        : [],
+      cookieData: processedData[index].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;
   });
