@@ -48,7 +48,7 @@ const sidebarData: SidebarItems = {
     },
   },
   [SIDEBAR_ITEMS_KEYS.URL_WITH_ISSUES]: {
-    title: 'URL issues',
+    title: 'URL Issues',
     children: {},
     icon: {
       //@ts-ignore

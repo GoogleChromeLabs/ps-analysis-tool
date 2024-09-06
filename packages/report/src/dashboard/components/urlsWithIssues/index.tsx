@@ -63,12 +63,6 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
 
   const filters = useMemo<TableFilter>(() => ({}), []);
 
-  const searchKeys = useMemo<string[]>(() => ['url'], []);
-
-  const tablePersistentSettingsKey = useMemo<string>(() => {
-    return 'urlsWithIssues';
-  }, []);
-
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
       <Resizable
@@ -90,8 +84,8 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
           data={erroredOutUrls}
           tableColumns={tableColumns}
           tableFilterData={filters}
-          tableSearchKeys={searchKeys}
-          tablePersistentSettingsKey={tablePersistentSettingsKey}
+          tableSearchKeys={['url']}
+          tablePersistentSettingsKey="urlsWithIssues"
           onRowClick={(row) => {
             setSelectedRow(row as ErroredOutUrlsData);
           }}
