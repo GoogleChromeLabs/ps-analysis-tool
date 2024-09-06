@@ -56,6 +56,7 @@ import {
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
 import saveResultsAsHTML from './utils/saveResultAsHTML';
+import getSelectorsFromPath from './utils/getSelectorsFromPath';
 import checkLatestVersion from './utils/checkLatestVersion';
 import packageJson from '../package.json';
 
@@ -71,7 +72,7 @@ program
   .name(isFromNPMRegistry ? 'psat' : 'npm run cli')
   .version(packageJson.version)
   .usage(
-    isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
+    isFromNPMRegistry ? '[website-url] [options]' : '[website-url] -- [options]'
   )
   .description('CLI to test a URL for 3p cookies.')
   .argument('[website-url]', 'The URL of a single site to analyze', (value) =>
@@ -127,6 +128,11 @@ program
     (value) => localeValidator(value, '-l'),
     'en'
   )
+  .option(
+    '-b, --button-selectors <path>',
+    'The path to a json file which contains selectors or button text to be used for GDPR banner acceptance',
+    (value) => filePathValidator(value, '-b')
+  )
   .helpOption('-h, --help', 'Display help for command')
   .addHelpText(
     'after',
@@ -159,6 +165,7 @@ program.parse();
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
+  const selectorFilePath = program.opts().buttonSelectors;
 
   await checkLatestVersion();
 
@@ -197,6 +204,12 @@ program.parse();
   }
 
   const spinnies = new Spinnies();
+
+  let selectors;
+
+  if (selectorFilePath) {
+    selectors = getSelectorsFromPath(selectorFilePath);
+  }
 
   const urls = await getUrlListFromArgs(url, spinnies, sitemapUrl, filePath);
 
@@ -245,7 +258,8 @@ program.parse();
       spinnies,
       shouldSkipAcceptBanner,
       verbose,
-      sitemapUrl || filePath ? 4 : 3
+      sitemapUrl || filePath ? 4 : 3,
+      selectors
     );
 
   removeAndAddNewSpinnerText(
