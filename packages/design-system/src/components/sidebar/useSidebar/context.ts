@@ -80,6 +80,7 @@ export const initialState: SidebarStoreContext = {
     isKeyAncestor: () => false,
     isKeySelected: () => false,
     toggleSidebarCollapse: noop,
+    extractSelectedItemKeyTitles: () => [],
   },
 };
 
