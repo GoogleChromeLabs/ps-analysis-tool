@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   QuickLinksList,
   PrivacySandboxColoredIcon,
@@ -28,6 +28,14 @@ import { addUTMParams } from '@google-psat/common';
 
 const PrivacySandbox = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
+
+  useEffect(() => {
+    (async () => {
+      await chrome.storage.sync.set({
+        psLandingPageViewed: true,
+      });
+    })();
+  }, []);
 
   return (
     <div data-testid="privacy-sandbox-content" className="h-full w-full">
