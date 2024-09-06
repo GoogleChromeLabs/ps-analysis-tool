@@ -23,14 +23,8 @@ import {
   AntiCovertTrackingIcon,
   SiteBoundariesIcon,
   SIDEBAR_ITEMS_KEYS,
+  PrivateAdvertisingIcon,
 } from '@google-psat/design-system';
-
-/**
- * Internal dependencies.
- */
-// @ts-ignore - To ignore auto fixing path with package name.
-// eslint-disable-next-line import/no-relative-packages
-import PrivateAggregationIcon from '../../../../../../../assets/icons/private-aggregation.svg';
 
 export const PINNED_ITEMS = [
   {
@@ -70,12 +64,12 @@ export const FEATURE_LIST = [
   },
   {
     name: 'Private Advertising',
-    icon: PrivateAggregationIcon,
+    icon: PrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
     description:
       'Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads.',
     colorClasses: {
-      heading: 'text-bright-navy-blue',
+      heading: 'text-blue-600',
     },
     buttons: [
       {
@@ -103,7 +97,7 @@ export const FEATURE_LIST = [
     description:
       'The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking.',
     colorClasses: {
-      heading: 'text-third-party',
+      heading: 'text-yellow-500',
     },
     buttons: [
       {
@@ -123,7 +117,7 @@ export const FEATURE_LIST = [
     description:
       'Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents.',
     colorClasses: {
-      heading: 'text-first-party',
+      heading: 'text-green-700',
     },
     buttons: [
       {
