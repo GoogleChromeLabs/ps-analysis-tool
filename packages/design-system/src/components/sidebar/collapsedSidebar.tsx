@@ -80,7 +80,7 @@ const CollapsedSidebar = () => {
               : sidebarItem.title;
           const isCurrent = itemKey === selectedItemKey;
           const buttonClassNames = classNames({
-            'cursor-auto opacity-70': isCurrent,
+            'cursor-auto opacity-70 dark:opacity-40': isCurrent,
             'hover:opacity-60': !isCurrent,
           });
 
@@ -91,7 +91,7 @@ const CollapsedSidebar = () => {
               className={buttonClassNames}
               onClick={() => updateSelectedItemKey(itemKey)}
             >
-              {Icon && <Icon {...props} />}
+              {Icon && <Icon className="dark:fill-bright-gray" {...props} />}
             </button>
           );
         })}
@@ -113,12 +113,17 @@ const CollapsedSidebar = () => {
               key={key}
               title={typeof title === 'function' ? title() : title}
               className={classNames('rounded-full p-1', {
-                'opacity-70 cursor-auto': isCurrent,
+                'opacity-70 cursor-auto dark:opacity-40': isCurrent,
                 'hover:opacity-70': !isCurrent,
               })}
               onClick={(e) => handleFooterElementClick(e, key)}
             >
-              <Icon width="20" height="20" {...props} />
+              <Icon
+                width="20"
+                height="20"
+                className="dark:fill-bright-gray"
+                {...props}
+              />
             </button>
           );
         })}
