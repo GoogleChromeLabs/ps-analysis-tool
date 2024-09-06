@@ -24,6 +24,7 @@ describe('extractReportData', () => {
   it('should return an empty object if no cookies are present', () => {
     expect(extractReportData([])).toEqual({
       landingPageCookies: {},
+      erroredOutUrlsData: [],
       consolidatedLibraryMatches: {},
     });
   });
@@ -58,6 +59,7 @@ describe('extractReportData', () => {
           },
         },
       },
+      erroredOutUrlsData: [],
       consolidatedLibraryMatches: {
         'https://edition.cnn.com/index.html': {},
         'https://www.cnn.com/index.html': {},

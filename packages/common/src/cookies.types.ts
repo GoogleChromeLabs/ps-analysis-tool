@@ -149,6 +149,14 @@ export type TechnologyData = {
   pageUrl?: string;
 };
 
+export type ErroredOutUrlsData = {
+  errorCode?: string;
+  errorMessage: string;
+  url: string;
+  stackTrace?: string;
+  errorName: string;
+};
+
 export interface TabCookies {
   [key: string]: CookieTableData;
 }
@@ -234,6 +242,13 @@ export type CookieFrameStorageType = {
   };
 };
 
+export type SingleURLError = {
+  errorMessage: string;
+  errorCode?: string;
+  stackTrace?: string;
+  errorName: string;
+};
+
 export type CompleteJson = {
   pageUrl: string;
   cookieData: {
@@ -244,6 +259,7 @@ export type CompleteJson = {
       frameType?: string | undefined;
     };
   };
+  erroredOutUrls: ErroredOutUrlsData[];
   libraryMatches: { [key: string]: LibraryData };
   technologyData: TechnologyData[];
 };

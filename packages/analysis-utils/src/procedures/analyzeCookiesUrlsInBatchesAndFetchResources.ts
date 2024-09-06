@@ -23,6 +23,7 @@ import {
   LibraryData,
   type LibraryMatchers,
   removeAndAddNewSpinnerText,
+  type SingleURLError,
 } from '@google-psat/common';
 
 /**
@@ -42,59 +43,66 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   verbose = false,
   indent = 4
 ) => {
-  let report: {
-    url: string;
-    cookieData: {
-      [frameUrl: string]: {
-        frameCookies: {
-          [key: string]: CookieData;
+  // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
+  try {
+    let report: {
+      url: string;
+      cookieData: {
+        [frameUrl: string]: {
+          frameCookies: {
+            [key: string]: CookieData;
+          };
         };
       };
-    };
-    resources: {
-      origin: string | null;
-      content: string;
-      type?: string;
-    }[];
-    domQueryMatches: LibraryData;
-  }[] = [];
+      resources: {
+        origin: string | null;
+        content: string;
+        type?: string;
+      }[];
+      domQueryMatches: LibraryData;
+      erroredOutUrls: Record<string, SingleURLError[]>;
+    }[] = [];
 
-  for (let i = 0; i < urls.length; i += batchSize) {
-    const start = i;
-    const end = Math.min(urls.length - 1, i + batchSize - 1);
+    for (let i = 0; i < urls.length; i += batchSize) {
+      const start = i;
+      const end = Math.min(urls.length - 1, i + batchSize - 1);
 
-    spinnies &&
-      indent === 4 &&
-      spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
-        text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}`,
-        indent,
-      });
+      spinnies &&
+        indent === 4 &&
+        spinnies.add(`cookie-batch-spinner${start + 1}-${end + 1}`, {
+          text: `Analyzing cookies in URLs ${start + 1} - ${end + 1}`,
+          indent,
+        });
 
-    const urlsWindow = urls.slice(start, end + 1);
+      const urlsWindow = urls.slice(start, end + 1);
 
-    const cookieAnalysisAndFetchedResources =
-      await analyzeCookiesUrlsAndFetchResources(
-        urlsWindow,
-        Libraries,
-        isHeadless,
-        delayTime,
-        cookieDictionary,
-        shouldSkipAcceptBanner,
-        verbose,
-        spinnies
-      );
+      const cookieAnalysisAndFetchedResources =
+        await analyzeCookiesUrlsAndFetchResources(
+          urlsWindow,
+          Libraries,
+          isHeadless,
+          delayTime,
+          cookieDictionary,
+          shouldSkipAcceptBanner,
+          verbose,
+          urls.length > 1,
+          spinnies
+        );
 
-    report = [...report, ...cookieAnalysisAndFetchedResources];
+      report = [...report, ...cookieAnalysisAndFetchedResources];
 
-    spinnies &&
-      indent === 4 &&
-      removeAndAddNewSpinnerText(
-        spinnies,
-        `cookie-batch-spinner${start + 1}-${end + 1}`,
-        `Done analyzing cookies in URLs ${start + 1} - ${end + 1}`,
-        indent
-      );
+      spinnies &&
+        indent === 4 &&
+        removeAndAddNewSpinnerText(
+          spinnies,
+          `cookie-batch-spinner${start + 1}-${end + 1}`,
+          `Done analyzing cookies in URLs ${start + 1} - ${end + 1}`,
+          indent
+        );
+    }
+
+    return report;
+  } catch (error) {
+    throw error;
   }
-
-  return report;
 };

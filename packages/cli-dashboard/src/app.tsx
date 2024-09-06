@@ -20,6 +20,7 @@ import React, { useEffect, useState } from 'react';
 import type {
   CompleteJson,
   CookieFrameStorageType,
+  ErroredOutUrlsData,
   LibraryData,
   TechnologyData,
 } from '@google-psat/common';
@@ -43,12 +44,20 @@ enum DisplayType {
 
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
+
   const [landingPageCookies, setLandingPageCookies] =
     useState<CookieFrameStorageType>({});
+
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
+
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
+
+  const [erroredOutUrls, setErroredOutUrls] = useState<ErroredOutUrlsData[]>(
+    []
+  );
+
   const [libraryMatches, setLibraryMatches] = useState<{
     [key: string]: LibraryData;
   } | null>(null);
@@ -110,6 +119,7 @@ const App = () => {
 
       _libraryMatches = extractedData.consolidatedLibraryMatches;
       setLandingPageCookies(extractedData.landingPageCookies);
+      setErroredOutUrls(extractedData.erroredOutUrlsData);
     } else {
       _cookies = extractCookies(data[0].cookieData, '', true);
       _technologies = data[0].technologyData;
@@ -124,6 +134,7 @@ const App = () => {
   if (type === DisplayType.SITEMAP) {
     return (
       <SiteMapReport
+        erroredOutUrls={erroredOutUrls}
         landingPageCookies={landingPageCookies}
         completeJson={completeJsonReport}
         // @ts-ignore

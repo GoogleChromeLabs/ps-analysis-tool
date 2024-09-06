@@ -24,20 +24,12 @@ import { existsSync } from 'fs-extra';
 import Spinnies from 'spinnies';
 import path, { basename } from 'path';
 import { I18n } from '@google-psat/i18n';
-import {
-  type CompleteJson,
-  type LibraryData,
-  removeAndAddNewSpinnerText,
-} from '@google-psat/common';
+import { removeAndAddNewSpinnerText } from '@google-psat/common';
 import {
   analyzeCookiesUrlsInBatchesAndFetchResources,
   analyzeTechnologiesUrlsInBatches,
 } from '@google-psat/analysis-utils';
-import {
-  DetectionFunctions,
-  LIBRARIES,
-  detectMatchingSignatures,
-} from '@google-psat/library-detection';
+import { LIBRARIES } from '@google-psat/library-detection';
 
 /**
  * Internal dependencies.
@@ -53,9 +45,10 @@ import {
   filePathValidator,
   urlValidator,
   numericValidator,
+  redLogger,
+  getSiteReport,
+  saveResultsAsHTML,
 } from './utils';
-import { redLogger } from './utils/coloredLoggers';
-import saveResultsAsHTML from './utils/saveResultAsHTML';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -230,20 +223,35 @@ program.parse();
     text: 'Analyzing cookies on the first site visit',
   });
 
-  const cookieAnalysisAndFetchedResourceData =
-    await analyzeCookiesUrlsInBatchesAndFetchResources(
-      urlsToProcess,
-      LIBRARIES,
-      !isHeadful,
-      waitTime,
-      cookieDictionary,
-      concurrency,
-      spinnies,
-      shouldSkipAcceptBanner,
-      verbose,
-      sitemapUrl || filePath ? 4 : 3
-    );
+  let cookieAnalysisAndFetchedResourceData: any;
 
+  // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
+  try {
+    cookieAnalysisAndFetchedResourceData =
+      await analyzeCookiesUrlsInBatchesAndFetchResources(
+        urlsToProcess,
+        LIBRARIES,
+        !isHeadful,
+        waitTime,
+        cookieDictionary,
+        concurrency,
+        spinnies,
+        shouldSkipAcceptBanner,
+        verbose,
+        sitemapUrl || filePath ? 4 : 3
+      );
+  } catch (error) {
+    if (urlsToProcess.length === 1) {
+      removeAndAddNewSpinnerText(
+        spinnies,
+        'cookie-spinner',
+        'Failure in analyzing cookies!',
+        0,
+        true
+      );
+      throw error;
+    }
+  }
   removeAndAddNewSpinnerText(
     spinnies,
     'cookie-spinner',
@@ -271,23 +279,11 @@ program.parse();
     );
   }
 
-  const result = urlsToProcess.map((_url, ind) => {
-    const detectedMatchingSignatures: LibraryData = {
-      ...detectMatchingSignatures(
-        cookieAnalysisAndFetchedResourceData[ind].resources ?? [],
-        Object.fromEntries(
-          LIBRARIES.map((library) => [library.name, library.detectionFunction])
-        ) as DetectionFunctions
-      ),
-      ...(cookieAnalysisAndFetchedResourceData[ind]?.domQueryMatches ?? {}),
-    };
-    return {
-      pageUrl: _url,
-      technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
-      cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
-      libraryMatches: detectedMatchingSignatures ?? [],
-    } as unknown as CompleteJson;
-  });
+  const result = getSiteReport(
+    urlsToProcess,
+    cookieAnalysisAndFetchedResourceData,
+    technologyAnalysisData
+  );
 
   I18n.loadCLIMessagesData(locale);
 

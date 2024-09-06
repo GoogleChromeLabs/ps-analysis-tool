@@ -20,6 +20,7 @@
 import type {
   CompleteJson,
   CookieFrameStorageType,
+  ErroredOutUrlsData,
   LibraryData,
   TechnologyData,
 } from '@google-psat/common';
@@ -31,28 +32,47 @@ import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
   const landingPageCookies = {};
+  const erroredOutUrlsData: ErroredOutUrlsData[] = [];
   const technologies: TechnologyData[] = [];
   const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
 
-  data.forEach(({ cookieData, pageUrl, libraryMatches, technologyData }) => {
-    formatCookieData(
-      extractCookies(cookieData, pageUrl, true),
-      landingPageCookies
-    );
+  data.forEach(
+    ({
+      cookieData,
+      pageUrl,
+      libraryMatches,
+      technologyData,
+      erroredOutUrls,
+    }) => {
+      erroredOutUrlsData.push(...(erroredOutUrls ?? []));
 
-    technologies.push(
-      ...technologyData.map((technology) => ({
-        ...technology,
-        pageUrl,
-      }))
-    );
+      if (
+        erroredOutUrls &&
+        erroredOutUrls.filter(({ url }) => url === pageUrl).length > 0
+      ) {
+        return;
+      }
 
-    consolidatedLibraryMatches[pageUrl] = libraryMatches;
-  });
+      formatCookieData(
+        extractCookies(cookieData, pageUrl, true),
+        landingPageCookies
+      );
+
+      technologies.push(
+        ...technologyData.map((technology) => ({
+          ...technology,
+          pageUrl,
+        }))
+      );
+
+      consolidatedLibraryMatches[pageUrl] = libraryMatches;
+    }
+  );
 
   return {
     landingPageCookies,
     consolidatedLibraryMatches,
+    erroredOutUrlsData,
   };
 };
 

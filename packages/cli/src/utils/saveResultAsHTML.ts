@@ -118,6 +118,17 @@ const saveResultsAsHTML = async (
 
   writeFile(outputFilePath, buffer, () => {
     if (!fileName) {
+      if (
+        result.some(
+          (singleResult) =>
+            singleResult.erroredOutUrls &&
+            singleResult.erroredOutUrls.length > 0
+        )
+      ) {
+        console.log(
+          `\nWarning: Some URLs encountered issues while analysing cookies. Please check the dashboard for more details.`
+        );
+      }
       console.log(`\nReport: ${URL.pathToFileURL(outFileFullDir)}`);
     }
   });

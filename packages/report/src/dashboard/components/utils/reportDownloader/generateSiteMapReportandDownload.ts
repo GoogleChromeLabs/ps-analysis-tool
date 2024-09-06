@@ -19,7 +19,11 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { getCurrentDateAndTime, type CompleteJson } from '@google-psat/common';
+import {
+  getCurrentDateAndTime,
+  type CompleteJson,
+  generateErrorLogFile,
+} from '@google-psat/common';
 import { type TableFilter } from '@google-psat/design-system';
 /**
  * Internal dependencies
@@ -54,6 +58,10 @@ const generateSiteMapReportandDownload = async (
   const report = generateSitemapHTMLFile(JSONReport, appliedFilters);
 
   zip.file('report.html', report);
+
+  const errorLogs = generateErrorLogFile(JSONReport);
+
+  zip.file('error_logs.txt', errorLogs);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
