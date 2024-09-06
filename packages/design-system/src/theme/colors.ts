@@ -18,19 +18,19 @@ export const COLOR_MAP: {
 } = {
   functional: {
     color: '#5CC971',
-    className: 'text-functional',
+    className: 'text-emerald',
   },
   marketing: {
     color: '#F3AE4E',
-    className: 'text-marketing',
+    className: 'text-max-yellow-red',
   },
   analytics: {
     color: '#4C79F4',
-    className: 'text-analytics',
+    className: 'text-blue-berry',
   },
   uncategorized: {
     color: '#EC7159',
-    className: 'text-uncategorised',
+    className: 'text-blue-berry',
   },
   brightGray: {
     color: '#E8EAED',

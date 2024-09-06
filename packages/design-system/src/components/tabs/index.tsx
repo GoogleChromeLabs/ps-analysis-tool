@@ -18,23 +18,23 @@
  * External dependencies
  */
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 
+export type TabItems = Array<{
+  title: string;
+  content: {
+    Element: (props: any) => React.JSX.Element;
+    props?: Record<string, any>;
+    className?: string;
+  };
+}>;
 interface TabsProps {
-  items: Array<{
-    title: string;
-    content: {
-      Element: (props: any) => React.JSX.Element;
-      props?: Record<string, any>;
-    };
-  }>;
+  items: TabItems;
+  activeTab: number;
+  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Tabs = ({ items }: TabsProps) => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const ActiveTabContent = items?.[activeTab].content?.Element;
-
+const Tabs = ({ items, activeTab, setActiveTab }: TabsProps) => {
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       event.preventDefault();
@@ -57,7 +57,7 @@ const Tabs = ({ items }: TabsProps) => {
         }
       }
     },
-    [activeTab, items.length]
+    [activeTab, items.length, setActiveTab]
   );
 
   return (
@@ -84,11 +84,6 @@ const Tabs = ({ items }: TabsProps) => {
             {item.title}
           </button>
         ))}
-      </div>
-      <div className="pt-4">
-        {ActiveTabContent && (
-          <ActiveTabContent {...items?.[activeTab].content?.props} />
-        )}
       </div>
     </div>
   );

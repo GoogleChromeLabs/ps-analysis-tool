@@ -45,19 +45,19 @@ describe('Tabs', () => {
   };
 
   it('should render', () => {
-    render(<Tabs {...props} />);
+    const setActiveTab = jest.fn();
+
+    render(<Tabs setActiveTab={setActiveTab} {...props} />);
 
     expect(screen.getByText('title1')).toBeInTheDocument();
     expect(screen.getByText('title1')).toHaveClass('border-b-2');
 
     fireEvent.click(screen.getByText('title2'));
 
-    expect(screen.getByText('content2')).toBeInTheDocument();
     expect(screen.getByText('title2')).toHaveClass('border-b-2');
 
     fireEvent.keyDown(screen.getByText('title2'), { key: 'Tab' });
 
-    expect(screen.getByText('content1')).toBeInTheDocument();
     expect(screen.getByText('title1')).toHaveClass('border-b-2');
 
     fireEvent.keyDown(screen.getByText('title1'), {
@@ -65,7 +65,6 @@ describe('Tabs', () => {
       shiftKey: true,
     });
 
-    expect(screen.getByText('content2')).toBeInTheDocument();
     expect(screen.getByText('title2')).toHaveClass('border-b-2');
   });
 });

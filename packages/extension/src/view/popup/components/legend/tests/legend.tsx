@@ -37,7 +37,7 @@ describe('Legend', () => {
       label: 'Marketing',
       count: 20,
       color: 'blue',
-      countClassName: 'text-marketing',
+      countClassName: 'text-max-yellow-red',
     },
   ];
 
