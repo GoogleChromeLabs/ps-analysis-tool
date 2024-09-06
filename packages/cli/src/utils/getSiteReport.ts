@@ -42,43 +42,44 @@ function getSiteReport(
   technologyAnalysisData: any
 ) {
   return urls.map((url, index) => {
-    const hasTimeOutError = (
-      processedData[index].erroredOutUrls[url] as SingleURLError[]
-    )?.some(
-      ({ errorName }) => errorName === 'TimeoutError' || errorName === 'i'
+    const {
+      erroredOutUrls = {},
+      cookieData = {},
+      domQueryMatches = {},
+      resources = [],
+    } = processedData[index];
+
+    const hasTimeOutError = erroredOutUrls[url]?.some(
+      ({ errorName }: SingleURLError) =>
+        errorName === 'TimeoutError' || errorName === 'i'
     );
 
     const detectedMatchingSignatures: LibraryData = {
       ...detectMatchingSignatures(
-        processedData[index].resources ?? [],
+        resources ?? [],
         Object.fromEntries(
           LIBRARIES.map((library) => [library.name, library.detectionFunction])
         ) as DetectionFunctions
       ),
-      ...(processedData[index]?.domQueryMatches ?? {}),
+      ...(domQueryMatches ?? {}),
     };
 
-    if (
-      processedData[index].erroredOutUrls[url] &&
-      processedData[index].erroredOutUrls[url].length > 0
-    ) {
+    if (erroredOutUrls[url] && erroredOutUrls[url].length > 0) {
       if (hasTimeOutError) {
         return {
           pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
           technologyData: technologyAnalysisData
             ? technologyAnalysisData[index]
             : [],
-          cookieData: processedData[index].cookieData,
+          cookieData: cookieData,
           libraryMatches: detectedMatchingSignatures ?? [],
           erroredOutUrls: [
-            ...processedData[index].erroredOutUrls[url].map(
-              (errors: SingleURLError) => {
-                return {
-                  url: parseUrl(url) ? new URL(url).href : encodeURI(url),
-                  ...errors,
-                };
-              }
-            ),
+            ...erroredOutUrls[url].map((errors: SingleURLError) => {
+              return {
+                url: parseUrl(url) ? new URL(url).href : encodeURI(url),
+                ...errors,
+              };
+            }),
           ] as ErroredOutUrlsData[],
         } as unknown as CompleteJson;
       }
@@ -89,24 +90,22 @@ function getSiteReport(
         cookieData: {},
         libraryMatches: [],
         erroredOutUrls: [
-          ...processedData[index].erroredOutUrls[url].map(
-            (errors: SingleURLError) => {
-              return {
-                url,
-                ...errors,
-              };
-            }
-          ),
+          ...erroredOutUrls[url].map((errors: SingleURLError) => {
+            return {
+              url,
+              ...errors,
+            };
+          }),
         ] as ErroredOutUrlsData[],
       } as unknown as CompleteJson;
     }
 
     return {
-      pageUrl: encodeURI(url),
+      pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
       technologyData: technologyAnalysisData
         ? technologyAnalysisData[index]
         : [],
-      cookieData: processedData[index].cookieData,
+      cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;
   });
