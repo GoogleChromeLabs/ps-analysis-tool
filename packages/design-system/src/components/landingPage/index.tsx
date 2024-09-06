@@ -37,6 +37,7 @@ interface LandingPageProps {
   contentPanel?: ReactNode;
   iframeBorderClass?: string;
   extraClasses?: string;
+  showQuickLinks?: boolean;
 }
 
 const LandingPage = ({
@@ -47,6 +48,7 @@ const LandingPage = ({
   children,
   extraClasses,
   contentPanel,
+  showQuickLinks = true,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
@@ -114,7 +116,7 @@ const LandingPage = ({
             </div>
           )}
         </div>
-        <QuickLinksList />
+        {showQuickLinks && <QuickLinksList />}
       </div>
     </div>
   );
