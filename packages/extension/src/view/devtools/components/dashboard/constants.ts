@@ -64,7 +64,7 @@ export const FEATURE_LIST = [
       },
       {
         name: 'Cookies Table',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+        sidebarKey: 'FIRST_COOKIE_TABLE',
       },
     ],
   },

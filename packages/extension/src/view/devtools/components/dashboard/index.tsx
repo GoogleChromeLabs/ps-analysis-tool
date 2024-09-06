@@ -17,20 +17,29 @@
  * External dependencies.
  */
 import React, { useCallback } from 'react';
-import { DashboardIcon, useSidebar } from '@google-psat/design-system';
+import {
+  DashboardIcon,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
+} from '@google-psat/design-system';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import { PINNED_ITEMS, FEATURE_LIST } from './constants';
+import { useCookie } from '../../stateProviders';
 
 const Dashboard = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
+  const { tabFrames } = useCookie(({ state }) => ({
+    tabFrames: state.tabFrames,
+  }));
 
   const handleFeatureBoxClick = useCallback(
     (event: React.MouseEvent, sidebarKey: string) => {
       const target = event.target as HTMLElement;
+
       if (target?.tagName !== 'BUTTON') {
         navigateTo(sidebarKey);
       }
@@ -41,12 +50,16 @@ const Dashboard = () => {
   const handleButtonClick = useCallback(
     (event: React.MouseEvent, sidebarKey: string) => {
       const target = event.target as HTMLElement;
+      const firstFrame =
+        Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.COOKIES;
 
       if (target?.tagName === 'BUTTON') {
-        navigateTo(sidebarKey);
+        navigateTo(
+          sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey
+        );
       }
     },
-    [navigateTo]
+    [navigateTo, tabFrames]
   );
 
   return (
