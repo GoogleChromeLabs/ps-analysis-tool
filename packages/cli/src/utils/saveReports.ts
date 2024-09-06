@@ -22,6 +22,7 @@ import {
   type CompleteJson,
 } from '@google-psat/common';
 import { ensureFile, writeFile } from 'fs-extra';
+
 /**
  * Internal dependencies.
  */

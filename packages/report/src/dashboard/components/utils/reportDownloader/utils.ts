@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
@@ -26,6 +25,11 @@ import {
   type CompleteJson,
 } from '@google-psat/common';
 import { type TableFilter } from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import packageJson from '../../../../../package.json';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);
@@ -89,6 +93,7 @@ const generateHTMLFile = (
     // @ts-ignore -- because this data will already be injected from cli or the extension.
     dateTime: globalThis?.PSAT_DATA.dateTime,
     hideDownloadButton: true,
+    psatVersion: packageJson.version,
   };
 
   let code = `window.PSAT_DATA = ${JSON.stringify(reportData)};`;

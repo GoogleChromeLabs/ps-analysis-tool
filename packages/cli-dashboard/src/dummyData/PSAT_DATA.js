@@ -11739,4 +11739,5 @@ export default {
     },
   },
   dateTime: '24 July, 2024, 12:12:04pm Asia/Calcutta',
+  psatVersion: '0.10.1-1',
 };
