@@ -45,6 +45,7 @@ interface LandingProps {
   libraryMatchesUrlCount?: {
     [url: string]: number;
   };
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
 
 const Landing = ({
@@ -54,6 +55,7 @@ const Landing = ({
   downloadReport,
   libraryMatches,
   libraryMatchesUrlCount,
+  isFilterValueSelected,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: LandingProps) => {
   const sections: Array<CookiesLandingSection> = useMemo(() => {
@@ -66,6 +68,7 @@ const Landing = ({
           props: {
             tabCookies,
             tabFrames,
+            isFilterValueSelected,
           },
         },
       },
@@ -78,6 +81,7 @@ const Landing = ({
             tabCookies,
             cookiesWithIssues,
             tabFrames,
+            isFilterValueSelected,
           },
         },
       },
@@ -104,6 +108,7 @@ const Landing = ({
           props: {
             tabFrames,
             tabCookies,
+            isFilterValueSelected,
           },
         },
       });
@@ -127,6 +132,7 @@ const Landing = ({
     return baseSections;
   }, [
     cookiesWithIssues,
+    isFilterValueSelected,
     libraryMatches,
     libraryMatchesUrlCount,
     tabCookies,

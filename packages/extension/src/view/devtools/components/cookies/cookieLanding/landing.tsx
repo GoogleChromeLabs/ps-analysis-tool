@@ -42,9 +42,14 @@ import ExemptedCookiesSection from './exemptedCookiesSection';
 interface LandingProps {
   tabCookies: TabCookies;
   appliedFilters: TableFilter;
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
 
-const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
+const Landing = ({
+  tabCookies,
+  appliedFilters,
+  isFilterValueSelected,
+}: LandingProps) => {
   const { unfilteredCookies, url, tabFrames } = useCookie(({ state }) => ({
     unfilteredCookies: state.tabCookies,
     tabFrames: state.tabFrames,
@@ -69,6 +74,7 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
           Element: CookiesSection,
           props: {
             tabCookies,
+            isFilterValueSelected,
           },
         },
       },
@@ -79,6 +85,7 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
           Element: BlockedCookiesSection,
           props: {
             tabCookies,
+            isFilterValueSelected,
           },
         },
       },
@@ -109,13 +116,14 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
           Element: ExemptedCookiesSection,
           props: {
             tabCookies,
+            isFilterValueSelected,
           },
         },
       });
     }
 
     return defaultSections;
-  }, [isUsingCDP, tabCookies]);
+  }, [isUsingCDP, tabCookies, isFilterValueSelected]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),

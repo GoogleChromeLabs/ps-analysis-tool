@@ -32,8 +32,13 @@ import {
 interface CookiesSectionProps {
   tabCookies: TabCookies | null;
   tabFrames: TabFrames | null;
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
-const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
+const CookiesSection = ({
+  tabCookies,
+  tabFrames,
+  isFilterValueSelected,
+}: CookiesSectionProps) => {
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -41,7 +46,8 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
     cookiesStatsComponents,
-    selectedItemUpdater
+    selectedItemUpdater,
+    isFilterValueSelected
   );
 
   const cookieComponentData = useMemo(() => {
@@ -49,8 +55,14 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
       ...component,
       onClick: (title: string) =>
         selectedItemUpdater(title, 'analytics.category'),
+      isSelected: (title: string) =>
+        isFilterValueSelected('analytics.category', title),
     }));
-  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
+  }, [
+    cookiesStatsComponents.legend,
+    isFilterValueSelected,
+    selectedItemUpdater,
+  ]);
 
   return (
     <CookiesLandingWrapper

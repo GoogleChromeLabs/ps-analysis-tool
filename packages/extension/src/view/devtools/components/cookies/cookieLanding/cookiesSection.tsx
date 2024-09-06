@@ -27,17 +27,21 @@ import {
   useFiltersMapping,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import type { TabCookies } from '@google-psat/common';
 /**
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
-import type { TabCookies } from '@google-psat/common';
 
 interface CookiesSectionProps {
   tabCookies: TabCookies;
+  isFilterValueSelected: (accessorKey: string, filterValue: string) => boolean;
 }
 
-const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
+const CookiesSection = ({
+  tabCookies,
+  isFilterValueSelected,
+}: CookiesSectionProps) => {
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
   }));
@@ -49,7 +53,8 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
     cookiesStatsComponents,
-    selectedItemUpdater
+    selectedItemUpdater,
+    isFilterValueSelected
   );
 
   const cookieComponentData = useMemo(() => {
@@ -57,8 +62,14 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
       ...component,
       onClick: (title: string) =>
         selectedItemUpdater(title, 'analytics.category'),
+      isSelected: (title: string) =>
+        isFilterValueSelected('analytics.category', title),
     }));
-  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
+  }, [
+    cookiesStatsComponents.legend,
+    isFilterValueSelected,
+    selectedItemUpdater,
+  ]);
 
   const processedTabFrames = useMemo(
     () => Object.fromEntries(Object.entries(tabFrames || {})),

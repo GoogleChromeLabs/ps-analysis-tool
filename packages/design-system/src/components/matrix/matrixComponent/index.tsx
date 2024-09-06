@@ -33,6 +33,7 @@ export interface MatrixComponentProps {
   isExpanded?: boolean;
   countClassName: string;
   containerClasses?: string;
+  isSelected?: (title: string) => boolean;
 }
 
 const MatrixComponent = ({

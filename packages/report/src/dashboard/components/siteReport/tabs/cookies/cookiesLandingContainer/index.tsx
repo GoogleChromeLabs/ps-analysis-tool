@@ -164,6 +164,7 @@ const AssembledCookiesLanding = ({
             libraryMatches={libraryMatches}
             libraryMatchesUrlCount={libraryMatchesUrlCount}
             menuBarScrollContainerId={menuBarScrollContainerId}
+            isFilterValueSelected={filterOutput.isFilterValueSelected}
           />
         </div>
       </div>
