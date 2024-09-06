@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { type CompleteJson } from '@google-psat/common';
+import { generateErrorLogFile, type CompleteJson } from '@google-psat/common';
 import { ensureFile, writeFile } from 'fs-extra';
 /**
  * Internal dependencies.
@@ -54,6 +54,11 @@ const saveReports = async (
       'report.html',
       sitemapUrl
     );
+
+    const errorLogs = generateErrorLogFile(result);
+
+    await ensureFile(path.join(outDir, 'error_logs.txt'));
+    await writeFile(path.join(outDir, 'error_logs.txt'), errorLogs);
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {

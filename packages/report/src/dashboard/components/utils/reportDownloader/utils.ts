@@ -209,27 +209,3 @@ export const getFolderName = (pageUrl: string) => {
 
   return folderName;
 };
-
-export const generateErrorLogFile = (JSONReport: CompleteJson[]) => {
-  let erroredOutTextFileData = '';
-
-  JSONReport.forEach(({ erroredOutUrls }) => {
-    if (!erroredOutUrls) {
-      return;
-    }
-
-    erroredOutUrls.forEach((error) => {
-      const temporaryFormedData = `
-      URL: ${error.url}
-      Error Code: ${error.errorCode ?? 'N/A'}
-      Error Message: ${error.errorMessage}
-      ErrorStack: 
-      ${error.stackTrace ?? 'N/A'}
-      `;
-
-      erroredOutTextFileData += temporaryFormedData + '\n';
-    });
-  });
-
-  return erroredOutTextFileData;
-};

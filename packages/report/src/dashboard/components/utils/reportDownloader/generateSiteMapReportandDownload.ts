@@ -19,17 +19,16 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { getCurrentDateAndTime, type CompleteJson } from '@google-psat/common';
+import {
+  getCurrentDateAndTime,
+  type CompleteJson,
+  generateErrorLogFile,
+} from '@google-psat/common';
 import { type TableFilter } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
-import {
-  createZip,
-  getFolderName,
-  generateSitemapHTMLFile,
-  generateErrorLogFile,
-} from './utils';
+import { createZip, getFolderName, generateSitemapHTMLFile } from './utils';
 
 const generateSiteMapReportandDownload = async (
   JSONReport: CompleteJson[],
