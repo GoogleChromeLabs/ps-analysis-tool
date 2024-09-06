@@ -24,6 +24,7 @@ import {
   type LibraryData,
   type TabCookies,
   type TabFrames,
+  extractCookies,
 } from '@google-psat/common';
 import { useSidebar, type TableFilter } from '@google-psat/design-system';
 
@@ -33,7 +34,6 @@ import { useSidebar, type TableFilter } from '@google-psat/design-system';
 import AssembledCookiesLanding from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import SiteReport from '../siteReport';
 import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
-import extractCookies from '../utils/extractCookies';
 
 interface CookiesTabProps {
   selectedSite?: string;

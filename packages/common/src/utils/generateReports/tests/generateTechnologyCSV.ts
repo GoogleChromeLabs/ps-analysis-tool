@@ -18,7 +18,7 @@
  * Internal dependencies
  */
 import generateTechnologyCSV from '../generateTechnologyCSV';
-import { mockData1 } from './data.mock';
+import { mockData1 } from '../../../test-utils/data.mock';
 
 describe('generateTechnologyCSV', () => {
   it('should create CSV string for technology data', () => {

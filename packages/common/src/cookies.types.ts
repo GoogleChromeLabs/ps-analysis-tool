@@ -153,10 +153,11 @@ export interface TabCookies {
   [key: string]: CookieTableData;
 }
 
+export type FrameType = 'outermost_frame' | 'fenced_frame' | 'sub_frame';
 export interface TabFrames {
   [key: string]: {
     frameIds: string[];
-    frameType?: 'outermost_frame' | 'fenced_frame' | 'sub_frame';
+    frameType?: FrameType;
   };
 }
 

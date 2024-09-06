@@ -18,7 +18,7 @@
  * Internal dependencies
  */
 import generateAllCookiesCSV from '../generateAllCookiesCSV';
-import { mockData1, mockData2 } from './data.mock';
+import { mockData2, mockData1 } from '../../../test-utils/data.mock';
 
 describe('generateAllCookiesCSV', () => {
   it('should generate CSV with one more line than no of cookies', () => {

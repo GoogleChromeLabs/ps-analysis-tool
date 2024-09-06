@@ -57,6 +57,8 @@ import {
 import { redLogger } from './utils/coloredLoggers';
 import saveResultsAsHTML from './utils/saveResultAsHTML';
 import getSelectorsFromPath from './utils/getSelectorsFromPath';
+import checkLatestVersion from './utils/checkLatestVersion';
+import packageJson from '../package.json';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -68,7 +70,7 @@ const isFromNPMRegistry = !existsSync(
 
 program
   .name(isFromNPMRegistry ? 'psat' : 'npm run cli')
-  .version('0.10.1')
+  .version(packageJson.version)
   .usage(
     isFromNPMRegistry ? '[website-url] [options]' : '[website-url] -- [options]'
   )
@@ -164,6 +166,8 @@ program.parse();
   const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
   const selectorFilePath = program.opts().buttonSelectors;
+
+  await checkLatestVersion();
 
   const numArgs: number = [
     Boolean(url),
@@ -297,6 +301,7 @@ program.parse();
     };
     return {
       pageUrl: _url,
+      psatVersion: packageJson.version, // For adding in downloaded JSON file.
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],

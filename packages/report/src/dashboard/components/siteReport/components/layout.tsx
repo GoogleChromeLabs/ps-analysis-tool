@@ -30,10 +30,10 @@ import {
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
-
 import { useContentStore } from '../stateProviders/contentStore';
 import CookiesTab from '../tabs/cookies';
 import SiteCookiesWithIssues from '../tabs/siteCookiesWithIssues';
