@@ -41,9 +41,9 @@ function getSiteReport(
   processedData: any,
   technologyAnalysisData: any
 ) {
-  return urls.map((_url, ind) => {
+  return urls.map((url, ind) => {
     const hasTimeOutError = (
-      processedData[ind].erroredOutUrls[_url] as SingleURLError[]
+      processedData[ind].erroredOutUrls[url] as SingleURLError[]
     )?.some(
       ({ errorName }) => errorName === 'TimeoutError' || errorName === 'i'
     );
@@ -59,22 +59,22 @@ function getSiteReport(
     };
 
     if (
-      processedData[ind].erroredOutUrls[_url] &&
-      processedData[ind].erroredOutUrls[_url].length > 0
+      processedData[ind].erroredOutUrls[url] &&
+      processedData[ind].erroredOutUrls[url].length > 0
     ) {
       if (hasTimeOutError) {
         return {
-          pageUrl: parseUrl(_url) ? new URL(_url).href : encodeURI(_url),
+          pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
           technologyData: technologyAnalysisData
             ? technologyAnalysisData[ind]
             : [],
           cookieData: processedData[ind].cookieData,
           libraryMatches: detectedMatchingSignatures ?? [],
           erroredOutUrls: [
-            ...processedData[ind].erroredOutUrls[_url].map(
+            ...processedData[ind].erroredOutUrls[url].map(
               (errors: SingleURLError) => {
                 return {
-                  url: parseUrl(_url) ? new URL(_url).href : encodeURI(_url),
+                  url: parseUrl(url) ? new URL(url).href : encodeURI(url),
                   ...errors,
                 };
               }
@@ -84,15 +84,15 @@ function getSiteReport(
       }
 
       return {
-        pageUrl: parseUrl(_url) ? new URL(_url).href : encodeURI(_url),
+        pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
         technologyData: [],
         cookieData: {},
         libraryMatches: [],
         erroredOutUrls: [
-          ...processedData[ind].erroredOutUrls[_url].map(
+          ...processedData[ind].erroredOutUrls[url].map(
             (errors: SingleURLError) => {
               return {
-                url: _url,
+                url: url,
                 ...errors,
               };
             }
@@ -102,7 +102,7 @@ function getSiteReport(
     }
 
     return {
-      pageUrl: encodeURI(_url),
+      pageUrl: encodeURI(url),
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: processedData[ind].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
