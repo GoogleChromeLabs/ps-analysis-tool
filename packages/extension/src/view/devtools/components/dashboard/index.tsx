@@ -65,7 +65,7 @@ const Dashboard = () => {
   return (
     <div
       data-testid="dashboard-content"
-      className="h-full w-full text-raisin-black dark:text-bright-gray"
+      className="h-full w-full overflow-auto text-raisin-black dark:text-bright-gray"
     >
       <div className="p-4 min-w-[1100px] max-w-[1200px]">
         <header className="flex items-center">

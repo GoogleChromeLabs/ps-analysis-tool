@@ -38,7 +38,10 @@ const PrivacySandbox = () => {
   }, []);
 
   return (
-    <div data-testid="privacy-sandbox-content" className="h-full w-full">
+    <div
+      data-testid="privacy-sandbox-content"
+      className="h-full w-full overflow-auto"
+    >
       <div className="p-4 dark:text-bright-gray">
         <header className="flex items-center">
           <PrivacySandboxColoredIcon
