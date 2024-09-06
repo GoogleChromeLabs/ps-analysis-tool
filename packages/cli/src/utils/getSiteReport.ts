@@ -16,10 +16,11 @@
 /**
  * External dependencies
  */
-import type {
-  CompleteJson,
-  ErroredOutUrlsData,
-  SingleURLError,
+import {
+  parseUrl,
+  type CompleteJson,
+  type ErroredOutUrlsData,
+  type SingleURLError,
 } from '@google-psat/common';
 import {
   type DetectionFunctions,
@@ -63,7 +64,7 @@ function getSiteReport(
     ) {
       if (hasTimeOutError) {
         return {
-          pageUrl: encodeURI(_url),
+          pageUrl: parseUrl(_url) ? new URL(_url).href : encodeURI(_url),
           technologyData: technologyAnalysisData
             ? technologyAnalysisData[ind]
             : [],
@@ -73,7 +74,7 @@ function getSiteReport(
             ...processedData[ind].erroredOutUrls[_url].map(
               (errors: SingleURLError) => {
                 return {
-                  url: _url,
+                  url: parseUrl(_url) ? new URL(_url).href : encodeURI(_url),
                   ...errors,
                 };
               }
@@ -83,7 +84,7 @@ function getSiteReport(
       }
 
       return {
-        pageUrl: encodeURI(_url),
+        pageUrl: parseUrl(_url) ? new URL(_url).href : encodeURI(_url),
         technologyData: [],
         cookieData: {},
         libraryMatches: [],
