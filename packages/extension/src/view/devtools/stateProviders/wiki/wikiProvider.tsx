@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
-export * from './wiki';
+/**
+ * External dependencies.
+ */
+import React, { type PropsWithChildren } from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import WikiContext from './wikiContext';
+
+const WikiProvider = ({ children }: PropsWithChildren) => {
+  return (
+    <WikiContext.Provider
+      value={{
+        state: {},
+        actions: {},
+      }}
+    >
+      {children}
+    </WikiContext.Provider>
+  );
+};
+
+export default WikiProvider;
