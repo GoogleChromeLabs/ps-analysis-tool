@@ -259,7 +259,7 @@ const TABS: SidebarItems = {
     },
   },
   [SIDEBAR_ITEMS_KEYS.WIKI]: {
-    title: () => 'Wiki', // @todo Use translated text.
+    title: () => I18n.getMessage('wiki'),
     panel: {
       Element: Wiki,
     },
