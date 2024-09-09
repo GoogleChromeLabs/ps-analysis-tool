@@ -32,7 +32,7 @@ const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';
 const INTERNAL_LINK =
   'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki';
-const INGORE_LIST = ['Contributor Guide', 'Code of Conduct', 'Support Forum'];
+const IGNORE_LIST = ['Contributor Guide', 'Code of Conduct', 'Support Forum'];
 const DEFAULT_PAGE = 'Home';
 
 /**
@@ -78,7 +78,7 @@ const Wiki = () => {
       setIsLoading(true);
       const menuResponse = await fetch(GITHUB_URL + '/_Sidebar.md');
       const menuMarkdown = await menuResponse.text();
-      const _menuItems = parseMenuMarkDown(menuMarkdown, INGORE_LIST);
+      const _menuItems = parseMenuMarkDown(menuMarkdown, IGNORE_LIST);
 
       setMenuItems(_menuItems);
       setIsLoading(false);
