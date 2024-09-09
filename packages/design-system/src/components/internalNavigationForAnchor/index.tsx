@@ -27,19 +27,21 @@ import { useSidebar } from '../sidebar';
 interface InternalNavigationForAnchorProps {
   text: string;
   to: string[];
+  queries?: string[];
 }
 
 const InternalNavigationForAnchor = ({
   text,
   to,
+  queries,
 }: InternalNavigationForAnchorProps) => {
   const updateSelectedItemKey = useSidebar(
     ({ actions }) => actions.updateSelectedItemKey
   );
 
   const navigateTo = useCallback(
-    (key: string) => {
-      return () => updateSelectedItemKey(key);
+    (key: string, query: string) => {
+      return () => updateSelectedItemKey(key, query);
     },
     [updateSelectedItemKey]
   );
@@ -66,7 +68,10 @@ const InternalNavigationForAnchor = ({
           } else {
             const button = (
               <button
-                onClick={navigateTo(to[anchorIdxToNavigate])}
+                onClick={navigateTo(
+                  to[anchorIdxToNavigate],
+                  queries?.[anchorIdxToNavigate] || ''
+                )}
                 className="text-bright-navy-blue dark:text-jordy-blue"
               >
                 {textToProcess.slice(stringStart, stringEnd)}
@@ -92,7 +97,7 @@ const InternalNavigationForAnchor = ({
 
       return elements;
     },
-    [navigateTo, to]
+    [navigateTo, queries, to]
   );
 
   return (

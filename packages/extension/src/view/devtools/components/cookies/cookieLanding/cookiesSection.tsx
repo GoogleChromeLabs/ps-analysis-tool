@@ -34,6 +34,7 @@ import { I18n } from '@google-psat/i18n';
  */
 import { useCookie } from '../../../stateProviders';
 import type { TabCookies } from '@google-psat/common';
+import { NAVIGATION_TAGS } from '../../wiki';
 
 interface CookiesSectionProps {
   tabCookies: TabCookies;
@@ -75,6 +76,7 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
         <InternalNavigationForAnchor
           text={I18n.getMessage('setUpEvaluationEnvironment', ['<a>', '</a>'])}
           to={[SIDEBAR_ITEMS_KEYS.WIKI]}
+          queries={[NAVIGATION_TAGS.EVALUATION_ENVIRONMENT]}
         />
       }
       testId="cookies-insights"

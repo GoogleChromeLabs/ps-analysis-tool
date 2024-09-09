@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { ProgressBar } from '@google-psat/design-system';
+import { ProgressBar, useSidebar } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -35,6 +35,16 @@ const INTERNAL_LINK =
 const INGORE_LIST = ['Contributor Guide', 'Code of Conduct', 'Support Forum'];
 const DEFAULT_PAGE = 'Home';
 
+/**
+enum for exporting page string to be passed as query inside useSidebar hook.
+For page: PAGE = 'Page Url',
+For page with has: PAGE_HASH = 'Page Url#Hash Url'
+ */
+export enum NAVIGATION_TAGS {
+  EVALUATION_ENVIRONMENT = 'Evaluation Environment',
+  PSAT_SETTINGS_AND_PERMISSIONS = 'PSAT Settings and Permissions',
+}
+
 const loadedContent: {
   [key: string]: string;
 } = {};
@@ -47,6 +57,21 @@ const Wiki = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const contentContainer = useRef<HTMLDivElement>(null);
+
+  const { query, clearQuery } = useSidebar(({ state }) => ({
+    query: state.activePanel.query,
+    clearQuery: state.activePanel.clearQuery,
+  }));
+
+  useEffect(() => {
+    if (query) {
+      // NAVIGATION_TAGS are split here when passed as query
+      const [page, hash] = query.split('#');
+      setCurrentSelectedPage(page);
+      setCurrentHash(hash ? hash : null);
+      clearQuery?.();
+    }
+  }, [query, clearQuery]);
 
   useEffect(() => {
     (async () => {

@@ -28,6 +28,7 @@ interface SettingOptionProps {
   description: string;
   switchState: boolean;
   changeSwitchState: (newState: boolean) => void;
+  queries?: string[];
 }
 
 const SettingOption = ({
@@ -35,6 +36,7 @@ const SettingOption = ({
   description,
   switchState,
   changeSwitchState,
+  queries,
 }: SettingOptionProps) => {
   return (
     <div className="flex flex-row items-center justify-between">
@@ -44,6 +46,7 @@ const SettingOption = ({
           <InternalNavigationForAnchor
             text={description}
             to={[SIDEBAR_ITEMS_KEYS.WIKI]}
+            queries={queries}
           />
         </div>
       </div>
