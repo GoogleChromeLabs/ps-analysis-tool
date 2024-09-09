@@ -46,6 +46,7 @@ const Link = ({
   currentSelectedPage,
   hash,
   setCurrentHash,
+  currentHash,
 }: LinkProps) => {
   const isLink = !pageName && Boolean(link);
 
@@ -62,7 +63,8 @@ const Link = ({
       target={isLink ? '__blank' : '_self'}
       onClick={handleClick}
       className={classNames('text-[13px] block', {
-        'decoration-solid': currentSelectedPage === name,
+        'decoration-solid':
+          currentSelectedPage === name || (currentHash && currentHash === hash),
       })}
     >
       {name}
