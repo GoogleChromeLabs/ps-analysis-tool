@@ -43,13 +43,19 @@ describe('InternalNavigationForAnchor', () => {
 
   it('should render the text passed in as a prop', () => {
     const text = 'Test <a>anchor</a> text. Another <a>anchor 2</a> text.';
-    render(<InternalNavigationForAnchor text={text} to={['test', 'test2']} />);
+    render(
+      <InternalNavigationForAnchor
+        text={text}
+        to={['test', 'test2']}
+        queries={['q1']}
+      />
+    );
 
     const anchor = screen.getByText('anchor');
     expect(anchor).toBeInTheDocument();
 
     fireEvent.click(anchor);
-    expect(updateSelectedItemKey).toHaveBeenCalledWith('test');
+    expect(updateSelectedItemKey).toHaveBeenCalledWith('test', 'q1');
 
     const textElement = screen.getByText('Test');
     expect(textElement).toBeInTheDocument();
@@ -58,7 +64,7 @@ describe('InternalNavigationForAnchor', () => {
     expect(anchor2).toBeInTheDocument();
 
     fireEvent.click(anchor2);
-    expect(updateSelectedItemKey).toHaveBeenCalledWith('test2');
+    expect(updateSelectedItemKey).toHaveBeenCalledWith('test2', '');
 
     const lastTextElement = screen.getByText('text.');
     expect(lastTextElement).toBeInTheDocument();
