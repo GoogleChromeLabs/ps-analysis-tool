@@ -33,7 +33,6 @@ import {
   CookieProvider,
   SettingsProvider,
   AllowedListProvider,
-  WikiProvider,
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
@@ -44,19 +43,17 @@ const root = document.getElementById('root');
 if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>
-      <WikiProvider>
-        <SettingsProvider>
-          <CookieProvider>
-            <TablePersistentSettingsProvider>
-              <LibraryDetectionProvider>
-                <AllowedListProvider>
-                  <App />
-                </AllowedListProvider>
-              </LibraryDetectionProvider>
-            </TablePersistentSettingsProvider>
-          </CookieProvider>
-        </SettingsProvider>
-      </WikiProvider>
+      <SettingsProvider>
+        <CookieProvider>
+          <TablePersistentSettingsProvider>
+            <LibraryDetectionProvider>
+              <AllowedListProvider>
+                <App />
+              </AllowedListProvider>
+            </LibraryDetectionProvider>
+          </TablePersistentSettingsProvider>
+        </CookieProvider>
+      </SettingsProvider>
     </ErrorBoundary>
   );
 }
