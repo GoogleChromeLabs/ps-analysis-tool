@@ -254,18 +254,18 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         >
           <div className="min-w-[45rem] h-full z-1">
             {PanelElement && <PanelElement {...props} />}
-            {settingsChanged && (
-              <div className="h-fit w-full">
-                <ToastMessage
-                  additionalStyles="text-sm"
-                  text={I18n.getMessage('settingsChanged')}
-                  onClick={handleSettingsChange}
-                  textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-                />
-              </div>
-            )}
           </div>
         </div>
+        {settingsChanged && (
+          <div className="h-fit w-full">
+            <ToastMessage
+              additionalStyles="text-sm"
+              text={I18n.getMessage('settingsChanged')}
+              onClick={handleSettingsChange}
+              textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+            />
+          </div>
+        )}
       </main>
     </div>
   );
