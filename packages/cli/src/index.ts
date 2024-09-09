@@ -29,10 +29,7 @@ import {
   type LibraryData,
   removeAndAddNewSpinnerText,
 } from '@google-psat/common';
-import {
-  analyzeCookiesUrlsInBatchesAndFetchResources,
-  analyzeTechnologiesUrlsInBatches,
-} from '@google-psat/analysis-utils';
+import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
 import {
   DetectionFunctions,
   LIBRARIES,
@@ -98,7 +95,6 @@ program
   )
   .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
   .option('-v, --verbose', 'Enables verbose logging', false)
-  .option('-t, --tech', 'Enables technology analysis', false)
   .option(
     '-o, --out-dir <path>',
     'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
@@ -160,7 +156,6 @@ program.parse();
   const numberOfUrlsInput = program.opts().numberOfUrls;
   const isHeadful = program.opts().display;
   const shouldSkipPrompts = program.opts().quiet;
-  const shouldDoTechnologyAnalysis = program.opts().tech;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
@@ -268,27 +263,6 @@ program.parse();
     'Done analyzing cookies!'
   );
 
-  let technologyAnalysisData: any = null;
-
-  if (shouldDoTechnologyAnalysis) {
-    spinnies.add('technology-spinner', {
-      text: 'Analyzing technologies',
-    });
-
-    technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
-      urlsToProcess,
-      concurrency,
-      spinnies,
-      sitemapUrl || filePath ? 4 : 3
-    );
-
-    removeAndAddNewSpinnerText(
-      spinnies,
-      'technology-spinner',
-      'Done analyzing technologies!'
-    );
-  }
-
   const result = urlsToProcess.map((_url, ind) => {
     const detectedMatchingSignatures: LibraryData = {
       ...detectMatchingSignatures(
@@ -302,7 +276,6 @@ program.parse();
     return {
       pageUrl: _url,
       psatVersion: packageJson.version, // For adding in downloaded JSON file.
-      technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;
