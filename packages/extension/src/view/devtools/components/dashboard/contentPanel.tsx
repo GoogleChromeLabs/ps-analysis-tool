@@ -48,7 +48,7 @@ const ContentPanel = () => {
   return (
     <div
       data-testid="dashboard-content"
-      className="h-full w-full text-raisin-black dark:text-bright-gray pb-14"
+      className="h-full w-full text-raisin-black dark:text-bright-gray px-2 pb-14"
     >
       <div className="w-fit">
         <section className="border-b border-hex-gray mb-5 pb-5">
@@ -60,7 +60,7 @@ const ContentPanel = () => {
               return (
                 <div
                   key={item.name}
-                  className="min-w-[345px] max-w-[400px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="min-w-[343px] max-w-[400px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <Icon width={20} height={20} className="fill-gray" />
@@ -83,7 +83,7 @@ const ContentPanel = () => {
               return (
                 <div
                   key={item.name}
-                  className="min-w-[345px] max-w-[400px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="min-w-[343px] max-w-[400px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <div className="flex gap-2 justify-start mb-3">

@@ -54,12 +54,12 @@ const LandingPage = ({
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="overflow-auto h-full">
+    <div className="w-fit h-full">
       {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
       <div
         className={classNames(
           { hidden: loading },
-          'divide-y divide-hex-gray dark:divide-quartz w-fit'
+          'divide-y divide-hex-gray dark:divide-quartz'
         )}
       >
         <div className="p-4">
@@ -75,12 +75,12 @@ const LandingPage = ({
             </div>
           </button>
         </div>
-        <div className={classNames({ hidden: !open && !children }, 'w-fit')}>
+        <div className={classNames({ hidden: !open && !children })}>
           <div
             id="#__psat-collapsible-content"
             className={classNames(
               { hidden: !open },
-              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6 w-fit',
+              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
               {
                 'border-b border-american-silver dark:border-quartz': children,
               },
