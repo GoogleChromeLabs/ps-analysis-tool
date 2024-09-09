@@ -127,7 +127,6 @@ export function generateDashboardObject(
     pageUrl: isValidURL(url) ? new URL(url).origin : '',
     libraryMatches,
     cookieData: generateCookieDataForDashboard(tabCookies, tabFrames),
-    technologyData: [],
   };
 
   return [completeJSON];

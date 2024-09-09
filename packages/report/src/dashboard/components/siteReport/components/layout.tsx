@@ -53,7 +53,7 @@ const Layout = ({
   }));
 
   const frameUrls = useMemo(() => {
-    const frames = Object.keys(completeJson?.[0].cookieData ?? {});
+    const frames = Object.keys(completeJson?.[0]?.cookieData ?? {});
 
     return frames.filter((url) => url?.includes('http'));
   }, [completeJson]);
@@ -115,7 +115,7 @@ const Layout = ({
             },
             isBlurred:
               Object.keys(
-                completeJson?.[0].cookieData?.[url]?.frameCookies || {}
+                completeJson?.[0]?.cookieData?.[url]?.frameCookies || {}
               ).length === 0,
           };
 
