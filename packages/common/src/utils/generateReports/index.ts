@@ -18,6 +18,5 @@ export { default as generateCookiesWithIssuesCSV } from './generateCookiesWithIs
 export { default as generateAllCookiesCSV } from './generateAllCookiesCSV';
 export { default as generateSummaryDataCSV } from './generateSummaryDataCSV';
 export { default as generateRootSummaryDataCSV } from './generateRootSummaryDataCSV';
-export { default as generateTechnologyCSV } from './generateTechnologyCSV';
 export { default as generateCLICookieTableCSV } from './generateCLICookieTableCSV';
 export { default as generateExtensionCookieTableCSV } from './generateExtensionCookietableCSV';

@@ -246,7 +246,6 @@ export type CompleteJson = {
     };
   };
   libraryMatches: { [key: string]: LibraryData };
-  technologyData: TechnologyData[];
 };
 
 export interface DataMapping {

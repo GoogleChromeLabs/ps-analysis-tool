@@ -98,11 +98,7 @@ const CookiesTab = ({
     await generateSiteMapReportandDownload(completeJson, appliedFilters, path);
   }, [appliedFilters, completeJson, path]);
 
-  const [
-    siteFilteredCookies,
-    siteFilteredTechnologies,
-    siteFilteredCompleteJson,
-  ] = useMemo(() => {
+  const [siteFilteredCookies, siteFilteredCompleteJson] = useMemo(() => {
     const reportData = completeJson?.find((data) =>
       isKeySelected(data.pageUrl)
     );
@@ -112,9 +108,8 @@ const CookiesTab = ({
     }
 
     const _cookies = extractCookies(reportData.cookieData, '', true);
-    const _technologies = reportData.technologyData;
 
-    return [_cookies, _technologies, [reportData]];
+    return [_cookies, [reportData]];
   }, [completeJson, isKeySelected]);
 
   const sitemapPath =
@@ -139,7 +134,6 @@ const CookiesTab = ({
       ) : (
         <SiteReport
           cookies={siteFilteredCookies}
-          technologies={siteFilteredTechnologies}
           completeJson={siteFilteredCompleteJson}
           selectedSite={selectedSite || ''}
           path={path}

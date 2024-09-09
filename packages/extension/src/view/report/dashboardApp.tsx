@@ -85,7 +85,6 @@ const App = () => {
       <SiteReport
         completeJson={completeJsonReport}
         cookies={cookies}
-        technologies={[]}
         // @ts-ignore
         selectedSite={completeJsonReport[0].pageUrl}
         // @ts-ignore

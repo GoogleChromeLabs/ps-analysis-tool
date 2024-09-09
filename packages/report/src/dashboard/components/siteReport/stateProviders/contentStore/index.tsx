@@ -21,7 +21,6 @@ import {
   type CompleteJson,
   type CookieJsonDataType,
   type CookieTableData,
-  type TechnologyData,
   useContextSelector,
   createContext,
   type LibraryData,
@@ -31,7 +30,6 @@ import {
 export interface ContentStore {
   state: {
     tabCookies: { [key: string]: CookieTableData };
-    technologies: TechnologyData[] | undefined;
     completeJson: CompleteJson[] | null;
     path: string;
     libraryMatches: LibraryData | null;
@@ -41,7 +39,6 @@ export interface ContentStore {
 const initialState: ContentStore = {
   state: {
     tabCookies: {},
-    technologies: [],
     completeJson: null,
     path: '',
     libraryMatches: null,
@@ -56,7 +53,6 @@ interface ContentStoreProviderProps {
       [key: string]: CookieJsonDataType;
     };
   };
-  technologies?: TechnologyData[];
   completeJson: CompleteJson[] | null;
   path: string;
   libraryMatches: LibraryData | null;
@@ -64,7 +60,6 @@ interface ContentStoreProviderProps {
 
 export const Provider = ({
   cookies,
-  technologies,
   completeJson,
   children,
   path,
@@ -77,7 +72,6 @@ export const Provider = ({
       value={{
         state: {
           tabCookies,
-          technologies,
           completeJson,
           path,
           libraryMatches,

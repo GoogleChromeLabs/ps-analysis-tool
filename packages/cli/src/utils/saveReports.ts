@@ -65,12 +65,8 @@ const saveReports = async (
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {
-        const {
-          allCookiesCSV,
-          technologyDataCSV,
-          cookiesWithIssuesDataCSV,
-          summaryDataCSV,
-        } = generateCSVFiles(siteReport);
+        const { allCookiesCSV, cookiesWithIssuesDataCSV, summaryDataCSV } =
+          generateCSVFiles(siteReport);
 
         const fileDir = path.join(outDir, getFolderName(siteReport.pageUrl));
 
@@ -87,14 +83,6 @@ const saveReports = async (
           sitemapUrl
         );
 
-        if (technologyDataCSV) {
-          await ensureFile(path.join(fileDir, 'technologies.csv'));
-          await writeFile(
-            path.join(fileDir, 'technologies.csv'),
-            technologyDataCSV
-          );
-        }
-
         await ensureFile(path.join(fileDir, 'cookie-issues.csv'));
         await writeFile(
           path.join(fileDir, 'cookies-issues.csv'),
@@ -107,12 +95,8 @@ const saveReports = async (
     );
   } else {
     //site report
-    const {
-      allCookiesCSV,
-      technologyDataCSV,
-      cookiesWithIssuesDataCSV,
-      summaryDataCSV,
-    } = generateCSVFiles(result[0]);
+    const { allCookiesCSV, cookiesWithIssuesDataCSV, summaryDataCSV } =
+      generateCSVFiles(result[0]);
     await ensureFile(path.join(outDir, 'cookies.csv'));
     await writeFile(path.join(outDir, 'cookies.csv'), allCookiesCSV);
 
@@ -124,11 +108,6 @@ const saveReports = async (
       new URL(result[0].pageUrl).hostname,
       'report.html'
     );
-
-    if (technologyDataCSV) {
-      await ensureFile(path.join(outDir, 'technologies.csv'));
-      await writeFile(path.join(outDir, 'technologies.csv'), technologyDataCSV);
-    }
 
     await ensureFile(path.join(outDir, 'cookie-issues.csv'));
     await writeFile(
