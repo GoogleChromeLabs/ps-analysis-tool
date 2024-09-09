@@ -31,7 +31,7 @@ const ContentPanel = () => {
   return (
     <div
       data-testid="privacy-sandbox-content"
-      className="dark:text-bright-gray pb-10"
+      className="text-raisin-black dark:text-bright-gray pb-10"
     >
       <section className="flex justify-center pt-3">
         <div className="max-w-screen-md text-center">

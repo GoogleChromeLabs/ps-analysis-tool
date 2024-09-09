@@ -59,7 +59,7 @@ const LandingPage = ({
       <div
         className={classNames(
           { hidden: loading },
-          'divide-y divide-hex-gray dark:divide-quartz'
+          'divide-y divide-hex-gray dark:divide-quartz w-fit'
         )}
       >
         <div className="p-4">
@@ -75,12 +75,12 @@ const LandingPage = ({
             </div>
           </button>
         </div>
-        <div className={classNames({ hidden: !open && !children })}>
+        <div className={classNames({ hidden: !open && !children }, 'w-fit')}>
           <div
             id="#__psat-collapsible-content"
             className={classNames(
               { hidden: !open },
-              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
+              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6 w-fit',
               {
                 'border-b border-american-silver dark:border-quartz': children,
               },
@@ -101,7 +101,7 @@ const LandingPage = ({
               />
             )}
             {psInfoKey && <InfoCard infoKey={psInfoKey} />}
-            {contentPanel && <div>{contentPanel}</div>}
+            {contentPanel && <>{contentPanel}</>}
           </div>
 
           {children && (

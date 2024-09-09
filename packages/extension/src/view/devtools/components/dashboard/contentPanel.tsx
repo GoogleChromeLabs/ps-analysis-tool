@@ -32,28 +32,15 @@ const ContentPanel = () => {
     tabFrames: state.tabFrames,
   }));
 
-  const handleFeatureBoxClick = useCallback(
-    (event: React.MouseEvent, sidebarKey: string) => {
-      const target = event.target as HTMLElement;
-
-      if (target?.tagName !== 'BUTTON') {
-        navigateTo(sidebarKey);
-      }
-    },
-    [navigateTo]
-  );
-
   const handleButtonClick = useCallback(
     (event: React.MouseEvent, sidebarKey: string) => {
-      const target = event.target as HTMLElement;
+      event.preventDefault();
+      event.stopPropagation();
+
       const firstFrame =
         Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.COOKIES;
 
-      if (target?.tagName === 'BUTTON') {
-        navigateTo(
-          sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey
-        );
-      }
+      navigateTo(sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey);
     },
     [navigateTo, tabFrames]
   );
@@ -61,9 +48,9 @@ const ContentPanel = () => {
   return (
     <div
       data-testid="dashboard-content"
-      className="h-full w-full text-raisin-black dark:text-bright-gray"
+      className="h-full w-full text-raisin-black dark:text-bright-gray pb-14"
     >
-      <div className="min-w-[1100px] max-w-[1200px]">
+      <div className="w-fit">
         <section className="border-b border-hex-gray mb-5 pb-5">
           <h3 className="text-sm mb-2">Pinned</h3>
           <div className="flex gap-5">
@@ -73,7 +60,7 @@ const ContentPanel = () => {
               return (
                 <div
                   key={item.name}
-                  className="border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="min-w-[345px] max-w-[400px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <Icon width={20} height={20} className="fill-gray" />
@@ -96,10 +83,8 @@ const ContentPanel = () => {
               return (
                 <div
                   key={item.name}
-                  className="border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
-                  onClick={(event) =>
-                    handleFeatureBoxClick(event, item.sidebarKey)
-                  }
+                  className="min-w-[345px] max-w-[400px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <div className="flex gap-2 justify-start mb-3">
                     <Icon width={20} height={20} className="fill-gray" />
