@@ -67,7 +67,11 @@ const CollapsedSidebar = () => {
           <MenuOpenIcon className="dark:fill-bright-gray fill-granite-gray w-5 h-5 rotate-180" />
         </button>
         {Object.keys(sidebarItems).map((itemKey) => {
-          if (['settings'].includes(itemKey)) {
+          if (
+            Object.keys(collapsedSidebarItems?.footerElements || {}).includes(
+              itemKey
+            )
+          ) {
             return null;
           }
 
