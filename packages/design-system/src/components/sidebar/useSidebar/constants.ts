@@ -15,21 +15,22 @@
  */
 
 export enum SIDEBAR_ITEMS_KEYS {
+  DASHBOARD = 'dashboard',
   COOKIES = 'cookies',
   COOKIES_WITH_ISSUES = 'cookie-issues',
-  TECHNOLOGIES = 'technologies',
   PRIVACY_SANDBOX = 'privacy-sandbox',
   SITE_BOUNDARIES = 'site-boundaries',
   CHIPS = 'chips',
   RELATED_WEBSITE_SETS = 'related-website-sets',
   PRIVATE_ADVERTISING = 'private-advertising',
   TOPICS = 'topics',
-  ATTRIBUTION = 'attribution',
+  ATTRIBUTION_REPORTING = 'attribution-reporting',
   PROTECTED_AUDIENCE = 'protected-audience',
   PRIVATE_AGGREGATION = 'private-aggregation',
   ANTI_COVERT_TRACKING = 'anti-covert-tracking',
   BOUNCE_TRACKING = 'bounce-tracking',
   FINGERPRINTING = 'fingerprinting',
   FACILITATED_TESTING = 'facilitated-testing',
+  WIKI = 'wiki',
   SETTINGS = 'settings',
 }

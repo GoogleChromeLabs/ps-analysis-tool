@@ -39,6 +39,7 @@ interface LandingPageProps {
   contentPanel?: ReactNode;
   iframeBorderClass?: string;
   extraClasses?: string;
+  showQuickLinks?: boolean;
 }
 
 const LandingPage = ({
@@ -49,6 +50,7 @@ const LandingPage = ({
   children,
   extraClasses,
   contentPanel,
+  showQuickLinks = true,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
@@ -57,7 +59,7 @@ const LandingPage = ({
   }));
 
   return (
-    <div className="overflow-auto h-full">
+    <div className="w-full h-full">
       {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
       <div
         className={classNames(
@@ -105,7 +107,7 @@ const LandingPage = ({
               />
             )}
             {psInfoKey && <InfoCard infoKey={psInfoKey} />}
-            {contentPanel && <div>{contentPanel}</div>}
+            {contentPanel && <>{contentPanel}</>}
           </div>
 
           {children && (
@@ -120,7 +122,7 @@ const LandingPage = ({
             </div>
           )}
         </div>
-        <QuickLinksList />
+        {showQuickLinks && <QuickLinksList />}
       </div>
     </div>
   );

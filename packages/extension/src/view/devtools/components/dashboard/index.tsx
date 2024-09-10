@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage } from '@google-psat/design-system';
 
 /**
- * Internal dependencies
+ * Internal dependencies.
  */
-import generateTechnologyCSV from '../generateTechnologyCSV';
-import { mockData1 } from '../../../test-utils/data.mock';
+import ContentPanel from './contentPanel';
 
-describe('generateTechnologyCSV', () => {
-  it('should create CSV string for technology data', () => {
-    const CSVString = generateTechnologyCSV(mockData1);
+const Dashboard = () => {
+  return (
+    <LandingPage
+      title="Dashboard"
+      contentPanel={<ContentPanel />}
+      showQuickLinks={false}
+    />
+  );
+};
 
-    expect(CSVString.split('\r\n').filter((str) => str).length).toBe(4);
-  });
-});
+export default Dashboard;

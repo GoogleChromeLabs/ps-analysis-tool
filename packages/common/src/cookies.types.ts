@@ -131,24 +131,6 @@ export type CookieTableData = CookieData & {
   isDomainInAllowList?: boolean;
 };
 
-export type TechnologyData = {
-  slug: string;
-  name: string;
-  description: string;
-  confidence: number;
-  version: string | null;
-  icon: string;
-  website: string;
-  cpe: string;
-  categories: {
-    id: number;
-    name: string;
-    slug: string;
-  }[];
-  rootPath?: boolean;
-  pageUrl?: string;
-};
-
 export interface TabCookies {
   [key: string]: CookieTableData;
 }
@@ -246,7 +228,6 @@ export type CompleteJson = {
     };
   };
   libraryMatches: { [key: string]: LibraryData };
-  technologyData: TechnologyData[];
 };
 
 export interface DataMapping {
@@ -262,4 +243,10 @@ export interface DataMapping {
 export type FrameStateCreator = {
   dataMapping: DataMapping[];
   legend: Legend[];
+};
+
+export type Selectors = {
+  textSelectors: string[];
+  cssSelectors: string[];
+  xPath: string[];
 };

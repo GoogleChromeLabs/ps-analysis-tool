@@ -216,6 +216,7 @@ module.exports = {
       'selection-green-dark': '#74d47e',
       'selection-yellow-light': '#8b8f18',
       'selection-yellow-dark': '#dbdb48',
+      'cultured-grey': '#F7F7F7',
     },
     borderColor: {
       ...colors,
@@ -233,6 +234,7 @@ module.exports = {
       'baby-blue-eyes': '#A8C7FA',
       'leaf-green-dark': '#87DFB2',
       sapphire: '#0B57D0',
+      'dark-grey': '#AAAAAA',
     },
     colors: {
       ...colors,
