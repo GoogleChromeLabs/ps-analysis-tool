@@ -22,6 +22,7 @@ import React, {
   useState,
   useCallback,
   useMemo,
+  useRef,
 } from 'react';
 import type {
   NoBidsType,
@@ -45,6 +46,8 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
     useState<boolean>(false);
+
+  const globalEvents = useRef<singleAuctionEvent[] | null>([]);
 
   const [interestGroupDetails, setInterestGroupDetails] = useState<
     ProtectedAudienceContextType['state']['interestGroupDetails']
@@ -108,7 +111,13 @@ const Provider = ({ children }: PropsWithChildren) => {
             return prevState;
           });
 
-          if (!didAuctionEventsChange) {
+          if (
+            !didAuctionEventsChange &&
+            !shouldUpdateState(
+              globalEvents.current,
+              message.payload.globalEvents
+            )
+          ) {
             return;
           }
 
@@ -118,6 +127,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           shapedInterestGroupDetails = await computeInterestGroupDetails(
             message.payload.globalEvents
           );
+
+          globalEvents.current = message.payload.globalEvents;
 
           const computedBids: {
             receivedBids: ReceivedBids[];
