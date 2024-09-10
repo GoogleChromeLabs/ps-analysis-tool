@@ -602,7 +602,7 @@ class DataStore {
             tabId,
             auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
             multiSellerAuction: isMultiSellerAuction,
-            globalEvents: globalEvents,
+            globalEvents: globalEvents ?? [],
           },
         });
       }
