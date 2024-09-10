@@ -17,30 +17,18 @@
 /**
  * Internal dependencies
  */
-import {
-  CompleteJson,
-  TechnologyData,
-  CookieFrameStorageType,
-} from '../cookies.types';
+import { CompleteJson, CookieFrameStorageType } from '../cookies.types';
 import { LibraryData } from '../libraryDetection.types';
 import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
   const landingPageCookies = {};
-  const technologies: TechnologyData[] = [];
   const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
 
-  data.forEach(({ cookieData, pageUrl, libraryMatches, technologyData }) => {
+  data.forEach(({ cookieData, pageUrl, libraryMatches }) => {
     formatCookieData(
       extractCookies(cookieData, pageUrl, true),
       landingPageCookies
-    );
-
-    technologies.push(
-      ...technologyData.map((technology) => ({
-        ...technology,
-        pageUrl,
-      }))
     );
 
     consolidatedLibraryMatches[pageUrl] = libraryMatches;

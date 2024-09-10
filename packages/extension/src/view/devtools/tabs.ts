@@ -44,6 +44,8 @@ import {
   GroupsIcon,
   DashboardIcon,
   DashboardIconWhite,
+  WikiIcon,
+  WikiIconWhite,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
 } from '@google-psat/design-system';
@@ -67,6 +69,7 @@ import {
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
+  Wiki,
   Settings,
   ProtectedAudience,
   PrivateAggregation,
@@ -163,19 +166,6 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
-          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
-            title: () => I18n.getMessage('attribution'),
-            panel: {
-              Element: Attribution,
-            },
-            icon: {
-              Element: AttributionIcon,
-            },
-            selectedIcon: {
-              Element: AttributionIconWhite,
-            },
-            children: {},
-          },
           [SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE]: {
             title: 'Protected Audience',
             panel: {
@@ -192,6 +182,19 @@ const TABS: SidebarItems = {
               props: {
                 className: 'fill-white',
               },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING]: {
+            title: () => I18n.getMessage('attributionReporting'),
+            panel: {
+              Element: Attribution,
+            },
+            icon: {
+              Element: AttributionIcon,
+            },
+            selectedIcon: {
+              Element: AttributionIconWhite,
             },
             children: {},
           },
@@ -268,6 +271,20 @@ const TABS: SidebarItems = {
     },
     selectedIcon: {
       Element: DashboardIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
+  },
+  [SIDEBAR_ITEMS_KEYS.WIKI]: {
+    title: () => I18n.getMessage('wiki'),
+    panel: {
+      Element: Wiki,
+    },
+    icon: {
+      Element: WikiIcon,
+    },
+    selectedIcon: {
+      Element: WikiIconWhite,
     },
     dropdownOpen: false,
     children: {},

@@ -23,5 +23,6 @@ type BulletListItem = {
   title: string;
   link?: string;
   key?: string;
+  sidebarKey?: string;
   pubDate?: string;
 };

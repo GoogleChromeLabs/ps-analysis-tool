@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "declarationDir": "dist-types",
-    "composite": true
+    "composite": true,
+    "resolveJsonModule": true
   },
   "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
   "references": [

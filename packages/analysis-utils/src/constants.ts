@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export const CMP_SELECTORS = [
+  '.fc-cta-consent',
+  '.cky-btn-accept',
+  '.cc-accept-all',
+  '.cmplz-accept',
+  '.cc-allow',
+  '#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll',
+  '#CybotCookiebotDialog button[value=”accept”]',
+  '#onetrust-accept-btn-handler',
+  '.iubenda-cs-accept-btn',
+];
 
-/**
- * Internal dependencies
- */
-import generateTechnologyCSV from '../generateTechnologyCSV';
-import { mockData1 } from '../../../test-utils/data.mock';
-
-describe('generateTechnologyCSV', () => {
-  it('should create CSV string for technology data', () => {
-    const CSVString = generateTechnologyCSV(mockData1);
-
-    expect(CSVString.split('\r\n').filter((str) => str).length).toBe(4);
-  });
-});
+export const CMP_TEXT_SELECTORS = ['accept', 'allow', 'agree', 'ok'];
