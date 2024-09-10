@@ -37,17 +37,25 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
     ({ actions }) => actions.updateSelectedItemKey
   );
 
+  if (items.length === 1) {
+    return null;
+  }
+
   return (
-    <div className={classNames('w-full flex items-center h-fit')}>
+    <div className={classNames('w-full flex items-center h-fit pt-1')}>
       <div className="flex items-center">
         {items.map((item, index) => (
           <div
             key={item.key}
             onClick={() => updateSelectedItemKey(item.key)}
             className={classNames(
-              'cursor-pointer hover:text-blue-500 hover:dark:text-blue-400 active:opacity-70 text-xs flex items-center text-raisin-black dark:text-bright-gray',
+              'text-xs flex items-center text-raisin-black dark:text-bright-gray',
               {
                 'font-bold': index === items.length - 1,
+              },
+              {
+                'cursor-pointer hover:text-blue-500 hover:dark:text-blue-400 active:opacity-70':
+                  index !== items.length - 1,
               }
             )}
           >
