@@ -60,9 +60,12 @@ const App: React.FC = () => {
       }
 
       const data = await chrome.storage.session.get();
+      const syncData = await chrome.storage.sync.get();
 
       if (data?.['selectedSidebarItem#' + tabId]) {
         setDefaultSelectedItemKey(data['selectedSidebarItem#' + tabId]);
+      } else if (syncData?.psLandingPageViewed) {
+        setDefaultSelectedItemKey(SIDEBAR_ITEMS_KEYS.DASHBOARD);
       }
 
       if (data?.['sidebarCollapsedState#' + tabId]) {

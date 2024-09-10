@@ -42,6 +42,8 @@ import {
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
+  DashboardIcon,
+  DashboardIconWhite,
   WikiIcon,
   WikiIconWhite,
   type CollapsedSidebarItems,
@@ -71,6 +73,7 @@ import {
   Settings,
   ProtectedAudience,
   PrivateAggregation,
+  Dashboard,
 } from './components';
 
 const TABS: SidebarItems = {
@@ -257,6 +260,20 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
+    title: () => 'Dashboard',
+    panel: {
+      Element: Dashboard,
+    },
+    icon: {
+      Element: DashboardIcon,
+    },
+    selectedIcon: {
+      Element: DashboardIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
   },
   [SIDEBAR_ITEMS_KEYS.WIKI]: {
     title: () => I18n.getMessage('wiki'),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Wiki } from './wiki';
-export { default as Settings } from './settings';
-export { default as Layout } from './layout';
-export { default as Dashboard } from './dashboard';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage } from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import ContentPanel from './contentPanel';
+
+const Dashboard = () => {
+  return (
+    <LandingPage
+      title="Dashboard"
+      contentPanel={<ContentPanel />}
+      showQuickLinks={false}
+    />
+  );
+};
+
+export default Dashboard;
