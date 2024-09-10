@@ -31,6 +31,7 @@ import {
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -225,20 +226,28 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     }
   }, [isCollapsed]);
 
+  const [allowTransition, setAllowTransition] = useState(true);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
         size={{ width: sidebarWidth, height: '100%' }}
         defaultSize={{ width: '200px', height: '100%' }}
+        onResizeStart={() => {
+          setAllowTransition(false);
+        }}
         onResizeStop={(_, __, ___, d) => {
           setSidebarWidth((prevState) => prevState + d.width);
+          setAllowTransition(true);
         }}
         minWidth={isCollapsed ? 40 : 160}
         maxWidth={'90%'}
         enable={{
           right: !isCollapsed,
         }}
-        className="h-full transition-all duration-300"
+        className={classNames('h-full', {
+          'transition-all duration-300': allowTransition,
+        })}
       >
         <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>

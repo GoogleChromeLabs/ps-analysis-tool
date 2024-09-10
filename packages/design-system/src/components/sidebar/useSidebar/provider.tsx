@@ -265,6 +265,42 @@ export const SidebarProvider = ({
     setIsCollapsed((prev) => !prev);
   }, []);
 
+  /**
+   * Extract the titles of the selected item key chain.
+   * Eg: selectedItemKey = 'Privacy-Sandbox#cookies#frameUrl'
+   * extractSelectedItemKeyTitles() => ['Privacy Sandbox', 'Cookies', 'Frame URL']
+   * @returns Array<{title: string, key: string}>
+   */
+  const extractSelectedItemKeyTitles = useCallback(() => {
+    if (!selectedItemKey) {
+      return [];
+    }
+
+    let _sidebarItems = sidebarItems;
+    const keys = selectedItemKey.split('#');
+    const titles: Array<{ title: string; key: string }> = [];
+
+    for (const key of keys) {
+      const sidebarItem = _sidebarItems?.[key];
+
+      if (!sidebarItem) {
+        break;
+      }
+
+      titles.push({
+        title:
+          typeof sidebarItem.title === 'function'
+            ? sidebarItem.title()
+            : sidebarItem.title,
+        key,
+      });
+
+      _sidebarItems = sidebarItem.children;
+    }
+
+    return titles;
+  }, [selectedItemKey, sidebarItems]);
+
   return (
     <SidebarContext.Provider
       value={{
@@ -286,6 +322,7 @@ export const SidebarProvider = ({
           isKeyAncestor,
           isKeySelected,
           toggleSidebarCollapse,
+          extractSelectedItemKeyTitles,
         },
       }}
     >
