@@ -53,14 +53,14 @@ const ContentPanel = () => {
       <div className="w-fit">
         <section className="border-b border-hex-gray mb-5 pb-5">
           <h3 className="text-sm mb-2">Pinned</h3>
-          <div className="flex gap-5">
+          <div className="flex gap-x-5 gap-y-4 flex-wrap">
             {PINNED_ITEMS.map((item) => {
               const Icon = item.icon;
 
               return (
                 <div
                   key={item.name}
-                  className="min-w-[343px] max-w-[400px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded flex-1 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="w-[380px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <Icon width={20} height={20} className="fill-gray" />
@@ -72,7 +72,7 @@ const ContentPanel = () => {
         </section>
         <section>
           <h3 className="text-sm mb-2">Features</h3>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="flex gap-5 flex-wrap">
             {FEATURE_LIST.map((item) => {
               const Icon = item.icon;
               const headingClasses = classNames(
@@ -83,7 +83,7 @@ const ContentPanel = () => {
               return (
                 <div
                   key={item.name}
-                  className="min-w-[343px] max-w-[400px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="w-[380px] h-[206px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <div className="flex gap-2 justify-start mb-3">
