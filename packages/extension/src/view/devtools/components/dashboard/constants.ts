@@ -56,10 +56,6 @@ export const FEATURE_LIST = [
         name: 'Landing Page',
         sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
       },
-      {
-        name: 'Cookies Table',
-        sidebarKey: 'FIRST_COOKIE_TABLE',
-      },
     ],
   },
   {
@@ -78,7 +74,7 @@ export const FEATURE_LIST = [
       },
       {
         name: 'Attribution',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION,
+        sidebarKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
       },
       {
         name: 'Protected Audience',

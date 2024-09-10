@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 import classNames from 'classnames';
 
@@ -25,12 +25,14 @@ import classNames from 'classnames';
  */
 import { PINNED_ITEMS, FEATURE_LIST } from './constants';
 import { useCookie } from '../../stateProviders';
+import useCanShowAnalyzeTabButton from '../../hooks/useCanShowAnalyzeTabButton';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
   }));
+  const canShowAnalyzeTabButton = useCanShowAnalyzeTabButton();
 
   const handleButtonClick = useCallback(
     (event: React.MouseEvent, sidebarKey: string) => {
@@ -44,6 +46,15 @@ const ContentPanel = () => {
     },
     [navigateTo, tabFrames]
   );
+
+  useEffect(() => {
+    if (canShowAnalyzeTabButton && FEATURE_LIST[0].buttons.length === 1) {
+      FEATURE_LIST[0].buttons.push({
+        name: 'Cookies Table',
+        sidebarKey: 'FIRST_COOKIE_TABLE',
+      });
+    }
+  }, [canShowAnalyzeTabButton]);
 
   return (
     <div
