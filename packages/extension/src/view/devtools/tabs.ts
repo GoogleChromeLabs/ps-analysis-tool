@@ -42,6 +42,8 @@ import {
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
+  WikiIcon,
+  WikiIconWhite,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
 } from '@google-psat/design-system';
@@ -65,6 +67,7 @@ import {
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
+  Wiki,
   Settings,
   ProtectedAudience,
   PrivateAggregation,
@@ -254,6 +257,20 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  [SIDEBAR_ITEMS_KEYS.WIKI]: {
+    title: () => I18n.getMessage('wiki'),
+    panel: {
+      Element: Wiki,
+    },
+    icon: {
+      Element: WikiIcon,
+    },
+    selectedIcon: {
+      Element: WikiIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Wiki } from './wiki';
-export { default as Settings } from './settings';
-export { default as Layout } from './layout';
+/**
+ * Convert title to hash.
+ * @param title Title
+ * @returns hash string
+ */
+const convertTitleToHash = (title: string): string => {
+  return title
+    ? title
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '') // Remove any non-alphanumeric characters except spaces
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-')
+    : ''; // Replace multiple hyphens with a single hyphen
+};
+
+export default convertTitleToHash;

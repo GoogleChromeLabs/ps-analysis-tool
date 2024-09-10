@@ -30,5 +30,6 @@ export enum SIDEBAR_ITEMS_KEYS {
   BOUNCE_TRACKING = 'bounce-tracking',
   FINGERPRINTING = 'fingerprinting',
   FACILITATED_TESTING = 'facilitated-testing',
+  WIKI = 'wiki',
   SETTINGS = 'settings',
 }
