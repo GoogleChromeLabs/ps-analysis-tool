@@ -242,20 +242,19 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       >
         <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>
-      <main
-        ref={mainRef}
-        className="h-full flex-1 relative overflow-auto flex flex-col"
-      >
-        <div
-          className="w-full"
-          style={{
-            height: settingsChanged ? 'calc(100% - 5rem)' : '100%',
-          }}
-        >
-          <div className="min-w-[45rem] h-full z-1">
-            {PanelElement && <PanelElement {...props} />}
+      <div className="flex-1 h-full overflow-hidden flex flex-col">
+        <main ref={mainRef} className="w-full flex-1 relative overflow-auto">
+          <div
+            className="w-full"
+            style={{
+              height: settingsChanged ? 'calc(100% - 5rem)' : '100%',
+            }}
+          >
+            <div className="min-w-[45rem] h-full z-1">
+              {PanelElement && <PanelElement {...props} />}
+            </div>
           </div>
-        </div>
+        </main>
         {settingsChanged && (
           <div className="h-fit w-full">
             <ToastMessage
@@ -266,7 +265,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             />
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 };
