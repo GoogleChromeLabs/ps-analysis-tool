@@ -25,20 +25,21 @@ import {
   SIDEBAR_ITEMS_KEYS,
   PrivateAdvertisingIcon,
 } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 export const PINNED_ITEMS = [
   {
-    name: 'Protected Audience',
+    name: I18n.getMessage('protectedAudience'),
     icon: GroupsIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
   },
   {
-    name: 'Cookies',
+    name: I18n.getMessage('cookies'),
     icon: CookieIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
   },
   {
-    name: 'Related Website Sets',
+    name: I18n.getMessage('rws'),
     icon: RelatedWebsiteSetsIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
   },
@@ -46,7 +47,7 @@ export const PINNED_ITEMS = [
 
 export const FEATURE_LIST = [
   {
-    name: 'Cookies',
+    name: I18n.getMessage('cookies'),
     icon: CookieIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
     description:
@@ -59,69 +60,66 @@ export const FEATURE_LIST = [
     ],
   },
   {
-    name: 'Private Advertising',
+    name: I18n.getMessage('privateAdvertising'),
     icon: PrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
-    description:
-      'Enable your critical advertising use cases without relying on cross-site tracking via APIs providing accurate relevance information and and measurement data for digital ads.',
+    description: I18n.getMessage('privateAdvertisingDescription'),
     colorClasses: {
       heading: 'text-blue-600',
     },
     buttons: [
       {
-        name: 'Topics',
+        name: I18n.getMessage('topics'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.TOPICS,
       },
       {
-        name: 'Attribution',
+        name: I18n.getMessage('attribution'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
       },
       {
-        name: 'Protected Audience',
+        name: I18n.getMessage('protectedAudience'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
       },
       {
-        name: 'Private Aggregation',
+        name: I18n.getMessage('privateAggregation'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
       },
     ],
   },
   {
-    name: 'Tracking Protection',
+    name: I18n.getMessage('trackingProtection'),
     icon: AntiCovertTrackingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description:
-      'The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking.',
+    description: I18n.getMessage('antiCovertTrackingDescription'),
     colorClasses: {
       heading: 'text-yellow-500',
     },
     buttons: [
       {
-        name: 'Bounce Tracking',
+        name: I18n.getMessage('bounceTracking'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
       },
       {
-        name: 'Fingerprinting',
+        name: I18n.getMessage('fingerprinting'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
       },
     ],
   },
   {
-    name: 'Site Boundaries',
+    name: I18n.getMessage('siteBoundaries'),
     icon: SiteBoundariesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
-    description:
-      'Privacy-preserving APIs ensuring that information collected on one site is not automatically shared with another site, unless the user explicitly consents.',
+    description: I18n.getMessage('siteBoundariesDescription'),
     colorClasses: {
       heading: 'text-green-700',
     },
     buttons: [
       {
-        name: 'CHIPS',
+        name: I18n.getMessage('chips'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.CHIPS,
       },
       {
-        name: 'Related Website Sets',
+        name: I18n.getMessage('rws'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
       },
     ],
