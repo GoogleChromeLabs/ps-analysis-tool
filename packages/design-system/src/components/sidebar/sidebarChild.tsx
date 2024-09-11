@@ -98,7 +98,7 @@ const SidebarChild = ({
           }
           setIsSidebarFocused(true);
         }}
-        className={`relative w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
+        className={`w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
           isKeySelected(itemKey)
             ? isSidebarFocused
               ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
@@ -155,12 +155,7 @@ const SidebarChild = ({
             </span>
           ) : null}
         </p>
-        <div
-          className="absolute"
-          style={{
-            left: visibleWidth ? visibleWidth - 20 : 0,
-          }}
-        >
+        <div className="absolute right-0 px-1">
           {ExtraInterfaceToTitle && (
             <ExtraInterfaceToTitle
               {...sidebarItem.extraInterfaceToTitle?.props}
