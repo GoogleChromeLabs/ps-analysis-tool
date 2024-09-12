@@ -23,6 +23,7 @@ import type { CookieData } from '@google-psat/common';
  */
 import parseNetworkCookies from './parseNetworkCookies';
 import dataStore from '../store/dataStore';
+import cookieStore from '../store/cookieStore';
 
 export const getAndParseNetworkCookies = async (tabId: string) => {
   if (!dataStore.globalIsUsingCDP) {
@@ -58,5 +59,5 @@ export const getAndParseNetworkCookies = async (tabId: string) => {
     )
   );
 
-  dataStore.update(Number(tabId), allCookies);
+  cookieStore.update(Number(tabId), allCookies);
 };
