@@ -149,6 +149,27 @@ const Provider = ({ children }: PropsWithChildren) => {
    */
   const intitialSync = useCallback(async () => {
     const tabId = chrome.devtools.inspectedWindow.tabId;
+    const { globalEvents } = await chrome.storage.session.get('globalEvents');
+    const { cookieAnalysis } = await chrome.storage.session.get(
+      'cookieAnalysis'
+    );
+
+    if (globalEvents.allowedNumberOfTabs === 'unlimited') {
+      isCurrentTabBeingListenedToRef.current = true;
+      setTabToRead(null);
+      setTabCookies(cookieAnalysis[tabId]?.cookieData ?? {});
+      await getAllFramesForCurrentTab(cookieAnalysis[tabId]?.extraFrameData);
+    }
+
+    if (
+      globalEvents.allowedNumberOfTabs === 'single' &&
+      globalEvents.tabToRead === tabId.toString()
+    ) {
+      isCurrentTabBeingListenedToRef.current = true;
+      setTabToRead(globalEvents.tabToRead);
+      setTabCookies(cookieAnalysis[tabId]?.cookieData ?? {});
+      await getAllFramesForCurrentTab(cookieAnalysis[tabId]?.extraFrameData);
+    }
 
     if (isCurrentTabBeingListenedToRef.current) {
       await getAllFramesForCurrentTab();

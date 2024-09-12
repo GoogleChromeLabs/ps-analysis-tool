@@ -65,11 +65,146 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['adsAndBidders']
   >({});
 
+  const getParseAndUpdateStates = useCallback(
+    async (
+      multiSellerAuction: boolean,
+      _auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'],
+      _globalEvents: singleAuctionEvent[],
+      refreshTabData: boolean
+    ) => {
+      let didAuctionEventsChange = false;
+      setIsMultiSellerAuction(multiSellerAuction);
+
+      setAuctionEvents((prevState) => {
+        if (!prevState && _auctionEvents) {
+          didAuctionEventsChange = true;
+          return _auctionEvents;
+        }
+
+        if (
+          prevState &&
+          _auctionEvents &&
+          shouldUpdateState(prevState, _auctionEvents)
+        ) {
+          didAuctionEventsChange = true;
+          return _auctionEvents;
+        }
+
+        return prevState;
+      });
+
+      if (
+        !didAuctionEventsChange &&
+        !shouldUpdateState(globalEvents.current, _globalEvents)
+      ) {
+        return;
+      }
+
+      let shapedInterestGroupDetails: ProtectedAudienceContextType['state']['interestGroupDetails'] =
+        [];
+
+      shapedInterestGroupDetails = await computeInterestGroupDetails(
+        _globalEvents
+      );
+
+      globalEvents.current = _globalEvents;
+
+      const computedBids: {
+        receivedBids: ReceivedBids[];
+        noBids: NoBidsType;
+      } | null = computeReceivedBidsAndNoBids(
+        _auctionEvents,
+        multiSellerAuction,
+        refreshTabData
+      );
+
+      if (computedBids) {
+        const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
+          {};
+
+        computedBids.receivedBids.forEach(
+          ({ adUnitCode, ownerOrigin, mediaContainerSize }) => {
+            if (!adUnitCode) {
+              return;
+            }
+
+            adUnitCodeToBidders[adUnitCode] = {
+              adUnitCode:
+                adUnitCodeToBidders[adUnitCode]?.adUnitCode ?? adUnitCode,
+              bidders: [
+                ...new Set<string>([
+                  ...(adUnitCodeToBidders[adUnitCode]?.bidders ?? []),
+                  ...(ownerOrigin ? [ownerOrigin] : []),
+                ]),
+              ],
+              mediaContainerSize: [
+                Array.from(
+                  new Set(
+                    ...(adUnitCodeToBidders[adUnitCode]?.mediaContainerSize ??
+                      []),
+                    mediaContainerSize
+                  )
+                ),
+              ],
+            };
+          }
+        );
+
+        setAdsAndBidders((prevState) => {
+          return shouldUpdateState(prevState, adUnitCodeToBidders)
+            ? adUnitCodeToBidders
+            : prevState;
+        });
+
+        setReceivedBids((prevState) => {
+          return shouldUpdateState(prevState, computedBids.receivedBids)
+            ? computedBids.receivedBids
+            : prevState;
+        });
+
+        setNoBids((prevState) => {
+          return shouldUpdateState(prevState, computedBids.noBids)
+            ? computedBids.noBids
+            : prevState;
+        });
+      }
+
+      setInterestGroupDetails((prevState) => {
+        return shouldUpdateState(prevState, shapedInterestGroupDetails)
+          ? shapedInterestGroupDetails
+          : prevState;
+      });
+    },
+    []
+  );
+
+  /**
+   * Sets the auction events protected audience events etc for initial state.
+   */
+  const intitialSync = useCallback(async () => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
+    const { protectedAudience } = await chrome.storage.session.get(
+      'protectedAudience'
+    );
+
+    const {
+      multiSellerAuction,
+      auctionEvents: _auctionEvents,
+      globalEvents: _globalEvents,
+      refreshTabData,
+    } = protectedAudience?.[tabId] ?? {};
+
+    await getParseAndUpdateStates(
+      multiSellerAuction,
+      _auctionEvents,
+      _globalEvents,
+      refreshTabData
+    );
+  }, [getParseAndUpdateStates]);
+
   const sessionStorageListener = useCallback(
     // eslint-disable-next-line complexity
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      let didAuctionEventsChange = false;
-
       if (!changes) {
         return;
       }
@@ -84,110 +219,15 @@ const Provider = ({ children }: PropsWithChildren) => {
           refreshTabData,
         } = changes?.protectedAudience?.newValue[tabId] ?? {};
 
-        setIsMultiSellerAuction(multiSellerAuction);
-
-        setAuctionEvents((prevState) => {
-          if (!prevState && _auctionEvents) {
-            didAuctionEventsChange = true;
-            return _auctionEvents;
-          }
-
-          if (
-            prevState &&
-            _auctionEvents &&
-            shouldUpdateState(prevState, _auctionEvents)
-          ) {
-            didAuctionEventsChange = true;
-            return _auctionEvents;
-          }
-
-          return prevState;
-        });
-
-        if (
-          !didAuctionEventsChange &&
-          !shouldUpdateState(globalEvents.current, _globalEvents)
-        ) {
-          return;
-        }
-
-        let shapedInterestGroupDetails: ProtectedAudienceContextType['state']['interestGroupDetails'] =
-          [];
-
-        shapedInterestGroupDetails = await computeInterestGroupDetails(
-          _globalEvents
-        );
-
-        globalEvents.current = _globalEvents;
-
-        const computedBids: {
-          receivedBids: ReceivedBids[];
-          noBids: NoBidsType;
-        } | null = computeReceivedBidsAndNoBids(
-          _auctionEvents,
+        await getParseAndUpdateStates(
           multiSellerAuction,
+          _auctionEvents,
+          _globalEvents,
           refreshTabData
         );
-
-        if (computedBids) {
-          const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
-            {};
-
-          computedBids.receivedBids.forEach(
-            ({ adUnitCode, ownerOrigin, mediaContainerSize }) => {
-              if (!adUnitCode) {
-                return;
-              }
-
-              adUnitCodeToBidders[adUnitCode] = {
-                adUnitCode:
-                  adUnitCodeToBidders[adUnitCode]?.adUnitCode ?? adUnitCode,
-                bidders: [
-                  ...new Set<string>([
-                    ...(adUnitCodeToBidders[adUnitCode]?.bidders ?? []),
-                    ...(ownerOrigin ? [ownerOrigin] : []),
-                  ]),
-                ],
-                mediaContainerSize: [
-                  Array.from(
-                    new Set(
-                      ...(adUnitCodeToBidders[adUnitCode]?.mediaContainerSize ??
-                        []),
-                      mediaContainerSize
-                    )
-                  ),
-                ],
-              };
-            }
-          );
-
-          setAdsAndBidders((prevState) => {
-            return shouldUpdateState(prevState, adUnitCodeToBidders)
-              ? adUnitCodeToBidders
-              : prevState;
-          });
-
-          setReceivedBids((prevState) => {
-            return shouldUpdateState(prevState, computedBids.receivedBids)
-              ? computedBids.receivedBids
-              : prevState;
-          });
-
-          setNoBids((prevState) => {
-            return shouldUpdateState(prevState, computedBids.noBids)
-              ? computedBids.noBids
-              : prevState;
-          });
-        }
-
-        setInterestGroupDetails((prevState) => {
-          return shouldUpdateState(prevState, shapedInterestGroupDetails)
-            ? shapedInterestGroupDetails
-            : prevState;
-        });
       }
     },
-    []
+    [getParseAndUpdateStates]
   );
 
   useEffect(() => {
@@ -197,6 +237,10 @@ const Provider = ({ children }: PropsWithChildren) => {
       chrome.storage.session.onChanged.removeListener(sessionStorageListener);
     };
   }, [sessionStorageListener]);
+
+  useEffect(() => {
+    intitialSync();
+  }, [intitialSync]);
 
   const memoisedValue: ProtectedAudienceContextType = useMemo(() => {
     return {
