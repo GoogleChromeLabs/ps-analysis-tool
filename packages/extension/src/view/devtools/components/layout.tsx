@@ -225,6 +225,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     }
   }, [isCollapsed]);
 
+  useEffect(() => {
+    mainRef.current?.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, [PanelElement]);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
