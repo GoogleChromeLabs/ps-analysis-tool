@@ -58,7 +58,7 @@ const CollapsedSidebar = () => {
         'flex flex-col justify-between items-center p-2 w-full h-full'
       )}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 justify-center items-center">
         <button
           className="cursor-pointer hover:opacity-60"
           title="Expand Sidebar Menu"
@@ -100,7 +100,7 @@ const CollapsedSidebar = () => {
           );
         })}
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col justify-center items-center gap-4">
         {Object.keys(collapsedSidebarItems?.footerElements || {}).map((key) => {
           const Icon = collapsedSidebarItems?.footerElements[key].icon.Element;
 
