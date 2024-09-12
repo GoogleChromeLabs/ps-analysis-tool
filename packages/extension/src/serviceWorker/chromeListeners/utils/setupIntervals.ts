@@ -28,17 +28,6 @@ const setupIntervals = () => {
     }
 
     Object.keys(dataStore?.tabsData ?? {}).forEach((key) => {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
-    });
-  }, 1200);
-
-  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
-  setInterval(() => {
-    if (Object.keys(dataStore?.tabsData ?? {}).length === 0) {
-      return;
-    }
-
-    Object.keys(dataStore?.tabsData ?? {}).forEach((key) => {
       getAndParseNetworkCookies(key);
     });
   }, 5000);

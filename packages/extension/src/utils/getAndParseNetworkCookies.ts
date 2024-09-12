@@ -21,42 +21,42 @@ import type { CookieData } from '@google-psat/common';
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../store/PAStore';
 import parseNetworkCookies from './parseNetworkCookies';
+import dataStore from '../store/dataStore';
 
 export const getAndParseNetworkCookies = async (tabId: string) => {
-  if (!synchnorousCookieStore.globalIsUsingCDP) {
+  if (!dataStore.globalIsUsingCDP) {
     return;
   }
 
   let allCookies: CookieData[] = [];
 
   await Promise.all(
-    Object.entries(
-      synchnorousCookieStore.frameIdToResourceMap[tabId] ?? {}
-    ).map(async ([key, value]) => {
-      try {
-        //@ts-ignore
-        const { cookies = [] } = await chrome.debugger.sendCommand(
-          { targetId: key },
-          'Network.getCookies',
-          { urls: Array.from(value) }
-        );
+    Object.entries(dataStore.frameIdToResourceMap[tabId] ?? {}).map(
+      async ([key, value]) => {
+        try {
+          //@ts-ignore
+          const { cookies = [] } = await chrome.debugger.sendCommand(
+            { targetId: key },
+            'Network.getCookies',
+            { urls: Array.from(value) }
+          );
 
-        const parsedCookies = parseNetworkCookies(
-          cookies,
-          synchnorousCookieStore?.getTabUrl(Number(tabId)) ?? '',
-          synchnorousCookieStore.cookieDB ?? {},
-          key
-        );
-        if (parsedCookies.length > 0) {
-          allCookies = [...allCookies, ...parsedCookies];
+          const parsedCookies = parseNetworkCookies(
+            cookies,
+            dataStore?.getTabUrl(Number(tabId)) ?? '',
+            dataStore.cookieDB ?? {},
+            key
+          );
+          if (parsedCookies.length > 0) {
+            allCookies = [...allCookies, ...parsedCookies];
+          }
+        } catch (error) {
+          //Fail silently. There will be only one reason stating target id not found.
         }
-      } catch (error) {
-        //Fail silently. There will be only one reason stating target id not found.
       }
-    })
+    )
   );
 
-  synchnorousCookieStore.update(Number(tabId), allCookies);
+  dataStore.update(Number(tabId), allCookies);
 };
