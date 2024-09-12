@@ -22,10 +22,8 @@ import {
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
-  INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
-  SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
 } from '../../constants';
@@ -33,7 +31,6 @@ import listenToNewTab from '../../utils/listenToNewTab';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import { getTab } from '../../utils/getTab';
-import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 
 // eslint-disable-next-line complexity
@@ -48,9 +45,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     dataStore.tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
-    await sendMessageWrapper(SET_TAB_TO_READ, {
-      tabId: Number(newTab),
-    });
+    dataStore?.sendUpdatedDataToPopupAndDevTools(Number(newTab), true);
 
     if (dataStore.globalIsUsingCDP) {
       await attachCDP({ tabId: Number(newTab) });
@@ -83,6 +78,14 @@ export const runtimeOnMessageListener = async (request: any) => {
     await chrome.storage.sync.set({
       allowedNumberOfTabs: dataStore.tabMode,
       isUsingCDP: dataStore.globalIsUsingCDP,
+    });
+
+    await chrome.storage.sync.set({
+      globalEvents: {
+        allowedNumberOfTabs: dataStore.tabMode,
+        isUsingCDP: dataStore.globalIsUsingCDP,
+        tabToRead: '',
+      },
     });
 
     const tabs = await chrome.tabs.query({});
@@ -119,9 +122,6 @@ export const runtimeOnMessageListener = async (request: any) => {
         await reloadCurrentTab(id);
       })
     );
-    await sendMessageWrapper(SERVICE_WORKER_RELOAD_MESSAGE, {
-      actionsPerformed,
-    });
   }
 
   if (!request?.payload?.tabId) {
@@ -150,13 +150,8 @@ export const runtimeOnMessageListener = async (request: any) => {
       dataStore?.updateUrl(incomingMessageTabId, currentTab?.url || '');
     }
 
-    await sendMessageWrapper(INITIAL_SYNC, dataToSend);
-
     dataStore?.updateDevToolsState(incomingMessageTabId, true);
-
-    if (dataStore?.tabsData[incomingMessageTabId]) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
-    }
+    dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
   }
 
   if (POPUP_OPEN === incomingMessageType) {
@@ -167,13 +162,8 @@ export const runtimeOnMessageListener = async (request: any) => {
       dataToSend['tabToRead'] = dataStore.tabToRead;
     }
 
-    await sendMessageWrapper(INITIAL_SYNC, dataToSend);
-
     dataStore?.updatePopUpState(incomingMessageTabId, true);
-
-    if (dataStore?.tabsData[incomingMessageTabId]) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
-    }
+    dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
   }
 
   if (DEVTOOLS_CLOSE === incomingMessageType) {

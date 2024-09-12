@@ -42,7 +42,6 @@ import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */
-import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
@@ -498,10 +497,12 @@ class DataStore {
    * Sends updated data to the popup and devtools
    * @param {number} tabId The window id.
    * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
+   * @param {boolean} extraData Optional is only passed when we want to send additional data to devtools.
    */
-  async sendUpdatedDataToPopupAndDevTools(
+  sendUpdatedDataToPopupAndDevTools(
     tabId: number,
-    overrideForInitialSync = false
+    overrideForInitialSync = false,
+    extraData = {}
   ) {
     if (!this.tabs[tabId] || !this.tabsData[tabId]) {
       return;
@@ -534,17 +535,6 @@ class DataStore {
               ? 'http'
               : 'javascript',
           };
-        });
-
-        await chrome.runtime.sendMessage({
-          type: NEW_COOKIE_DATA,
-          payload: {
-            tabId,
-            cookieData: newCookieData,
-            extraData: {
-              extraFrameData: this.tabs[tabId].frameIDURLSet,
-            },
-          },
         });
 
         const { globalEvents, ...rest } = this.auctionEvents[tabId];
@@ -595,14 +585,28 @@ class DataStore {
           });
         }
 
-        await chrome.runtime.sendMessage({
-          type: 'AUCTION_EVENTS',
-          payload: {
-            refreshTabData: overrideForInitialSync,
-            tabId,
-            auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
-            multiSellerAuction: isMultiSellerAuction,
-            globalEvents: globalEvents ?? [],
+        chrome.storage.session.set({
+          globalEvents: {
+            allowedNumberOfTabs: this.tabMode,
+            tabToRead: this.tabToRead,
+            isUsingCDP: this.globalIsUsingCDP,
+            ...extraData,
+          },
+          cookieAnalysis: {
+            [tabId]: {
+              cookieData: newCookieData,
+              extraData: {
+                extraFrameData: this.tabs[tabId].frameIDURLSet,
+              },
+            },
+          },
+          protectedAudience: {
+            [tabId]: {
+              refreshTabData: overrideForInitialSync,
+              auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
+              multiSellerAuction: isMultiSellerAuction,
+              globalEvents: globalEvents ?? [],
+            },
           },
         });
       }

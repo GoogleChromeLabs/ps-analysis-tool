@@ -24,7 +24,6 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import { type TabCookies } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -34,9 +33,6 @@ import {
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   GET_JS_COOKIES,
-  INITIAL_SYNC,
-  NEW_COOKIE_DATA,
-  SERVICE_WORKER_RELOAD_MESSAGE,
   SET_TAB_TO_READ,
 } from '../../../../constants';
 import { useSettings } from '../settings';
@@ -73,13 +69,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   // This was converted to useRef because setting state was creating a race condition in rerendering the provider.
   const isCurrentTabBeingListenedToRef = useRef(false);
 
-  const { allowedNumberOfTabs, setSettingsChanged, isUsingCDP } = useSettings(
-    ({ state, actions }) => ({
-      allowedNumberOfTabs: state.allowedNumberOfTabs,
-      setSettingsChanged: actions.setSettingsChanged,
-      isUsingCDP: state.isUsingCDP,
-    })
-  );
+  const { allowedNumberOfTabs, isUsingCDP } = useSettings(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
+    isUsingCDP: state.isUsingCDP,
+  }));
 
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
@@ -234,115 +227,95 @@ const Provider = ({ children }: PropsWithChildren) => {
     });
   }, [selectedFrame]);
 
-  const messagePassingListener = useCallback(
+  const sessionStorageListener = useCallback(
     // eslint-disable-next-line complexity
-    async (message: {
-      type: string;
-      payload: {
-        tabId?: number;
-        cookieData?: TabCookies;
-        tabToRead?: string;
-        tabMode?: string;
-        extraData?: {
-          extraFrameData?: Record<string, string[]>;
-        };
-        psatOpenedAfterPageLoad?: boolean;
-        actionsPerformed: {
-          allowedNumberOfTabs: number;
-        };
-      };
-    }) => {
-      if (!message.type) {
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      if (!changes) {
         return;
       }
 
       const tabId = chrome.devtools.inspectedWindow.tabId;
-      const incomingMessageType = message.type;
 
-      if (incomingMessageType === 'SERVICE_WORKER_SLEPT') {
-        setContextInvalidated(true);
-        localStorage.setItem('contextInvalidated', 'true');
-      }
+      if (changes?.cookieAnalysis?.newValue) {
+        const data = changes?.cookieAnalysis?.newValue[tabId]?.cookieData;
+        const frameData =
+          changes?.cookieAnalysis?.newValue[tabId]?.extraFrameData ?? {};
 
-      if (SET_TAB_TO_READ === incomingMessageType) {
-        const tab = await getTab(tabId?.toString() || '');
-        setTabUrl(tab?.url ?? '');
-        isCurrentTabBeingListenedToRef.current =
-          tabId === message?.payload?.tabId;
-        setTabToRead(message?.payload?.tabId?.toString() || null);
-        setTabFrames(null);
-        setLoading(false);
-        setCanStartInspecting(false);
-      }
-
-      if (INITIAL_SYNC === incomingMessageType && message?.payload?.tabMode) {
-        if (message.payload.tabMode === 'unlimited') {
-          isCurrentTabBeingListenedToRef.current = true;
-          if (
-            Object.keys(message.payload).includes('psatOpenedAfterPageLoad') &&
-            message.payload.psatOpenedAfterPageLoad
-          ) {
-            setContextInvalidated(true);
-            localStorage.setItem('psatOpenedAfterPageLoad', 'true');
-          }
-          setTabToRead(null);
-        } else {
-          if (tabId.toString() !== message?.payload?.tabToRead) {
-            setTabFrames(null);
-          }
-
-          isCurrentTabBeingListenedToRef.current =
-            tabId.toString() === message?.payload?.tabToRead;
-          setTabToRead(message?.payload?.tabToRead || null);
-        }
-      }
-
-      if (
-        NEW_COOKIE_DATA === incomingMessageType &&
-        message?.payload?.tabId &&
-        message?.payload?.cookieData
-      ) {
-        const data = message.payload.cookieData;
-        const frameData = message.payload.extraData?.extraFrameData ?? {};
-
-        if (tabId.toString() === message.payload.tabId.toString()) {
-          if (isCurrentTabBeingListenedToRef.current) {
-            setTabToRead(tabId.toString());
-            setTabCookies((prevState) => {
-              if (Object.keys(data).length > 0) {
-                const isThereDiff = diff(prevState ?? {}, data);
-                if (Object.keys(isThereDiff).length === 0) {
-                  return prevState;
-                }
-                return data;
+        if (allowedNumberOfTabs === 'unlimited') {
+          setTabCookies((prevState) => {
+            if (data && Object.keys(data).length > 0) {
+              const isThereDiff = diff(prevState ?? {}, data);
+              if (Object.keys(isThereDiff).length === 0) {
+                return prevState;
               }
-              return null;
-            });
-            await getAllFramesForCurrentTab(frameData);
-          } else {
+              return data;
+            }
+            return prevState;
+          });
+          await getAllFramesForCurrentTab(frameData);
+        } else {
+          if (tabToRead !== tabId.toString()) {
             setTabFrames(null);
+            isCurrentTabBeingListenedToRef.current = false;
+            return;
           }
+          isCurrentTabBeingListenedToRef.current = true;
+          setTabCookies((prevState) => {
+            if (data && Object.keys(data).length > 0) {
+              const isThereDiff = diff(prevState ?? {}, data);
+              if (Object.keys(isThereDiff).length === 0) {
+                return prevState;
+              }
+              return data;
+            }
+            return prevState;
+          });
+          await getAllFramesForCurrentTab(frameData);
         }
       }
 
-      if (message.type === SERVICE_WORKER_RELOAD_MESSAGE) {
-        setSettingsChanged(false);
-        if (message?.payload?.actionsPerformed?.allowedNumberOfTabs === 1) {
-          isCurrentTabBeingListenedToRef.current = false;
+      if (changes?.globalEvents?.newValue) {
+        const newValue = changes?.globalEvents?.newValue;
+
+        const {
+          allowedNumberOfTabs: _allowedNumberOfTabs,
+          tabToRead: _tabToRead,
+          psatOpenedAfterPageLoad = false,
+        } = newValue;
+
+        if (_allowedNumberOfTabs === 'single' && _tabToRead) {
+          setTabToRead(_tabToRead);
+          isCurrentTabBeingListenedToRef.current =
+            tabToRead === tabId.toString();
+
           setTabFrames(null);
+          setLoading(false);
+          setCanStartInspecting(false);
+          const tab = await getTab(tabId?.toString() || '');
+          setTabUrl(tab?.url ?? '');
+        }
+
+        if (_allowedNumberOfTabs === 'unlimited') {
+          setTabToRead(null);
+          isCurrentTabBeingListenedToRef.current = true;
+        }
+
+        if (psatOpenedAfterPageLoad) {
+          setContextInvalidated(true);
+          localStorage.setItem('psatOpenedAfterPageLoad', 'true');
         }
       }
     },
-    [getAllFramesForCurrentTab, setSettingsChanged]
+    [allowedNumberOfTabs, getAllFramesForCurrentTab, tabToRead]
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.storage.session.onChanged.addListener(sessionStorageListener);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.storage.session.onChanged.removeListener(sessionStorageListener);
     };
-  }, [messagePassingListener]);
+  }, [sessionStorageListener]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {

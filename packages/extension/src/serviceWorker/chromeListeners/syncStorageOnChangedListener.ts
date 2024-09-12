@@ -16,10 +16,8 @@
 /**
  * Internal dependencies
  */
-import { INITIAL_SYNC } from '../../constants';
 import dataStore from '../../store/dataStore';
 import resetCookieBadgeText from '../../store/utils/resetCookieBadgeText';
-import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
 export const onSyncStorageChangedListenerForMultiTab = async (changes: {
   [key: string]: chrome.storage.StorageChange;
@@ -34,10 +32,6 @@ export const onSyncStorageChangedListenerForMultiTab = async (changes: {
   dataStore.tabMode = changes.allowedNumberOfTabs.newValue;
 
   const tabs = await chrome.tabs.query({});
-  await sendMessageWrapper(INITIAL_SYNC, {
-    tabMode: dataStore.tabMode,
-    tabToRead: dataStore.tabToRead,
-  });
 
   if (changes?.allowedNumberOfTabs?.newValue === 'single') {
     dataStore.tabToRead = '';
