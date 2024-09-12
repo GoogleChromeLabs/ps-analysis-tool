@@ -144,6 +144,7 @@ class CookieStore {
         },
       };
     }
+    dataStore.sendUpdatedDataToPopupAndDevTools(Number(tabId));
   }
 
   /**
@@ -262,6 +263,7 @@ class CookieStore {
       // eslint-disable-next-line no-console
       console.warn(error);
     }
+    dataStore.sendUpdatedDataToPopupAndDevTools(Number(tabId));
   }
 }
 
