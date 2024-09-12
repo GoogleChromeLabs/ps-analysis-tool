@@ -29,5 +29,5 @@ export default function formatTime(
 ) {
   return startTime
     ? `${((eventTime - startTime) * 1000).toFixed(2)}ms`
-    : new Date(eventTime * 1000);
+    : new Date(eventTime * 1000).toString();
 }

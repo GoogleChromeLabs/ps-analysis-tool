@@ -113,7 +113,7 @@ class PAStore {
       uniqueAuctionId,
       name,
       ownerOrigin,
-      formattedTime: new Date(accessTime * 1000),
+      formattedTime: new Date(accessTime * 1000).toString(),
       type,
       time: accessTime,
       eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
