@@ -60,6 +60,11 @@ const devTools = {
     path: path.resolve(__dirname, './dist/extension/devtools'),
     filename: '[name].js',
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   plugins: [
     new WebpackBar({
       name: 'DevTools',
