@@ -65,149 +65,138 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['adsAndBidders']
   >({});
 
-  const messagePassingListener = useCallback(
+  const sessionStorageListener = useCallback(
     // eslint-disable-next-line complexity
-    async (message: {
-      type: string;
-      payload: {
-        tabId: number;
-        auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'];
-        multiSellerAuction: boolean;
-        globalEvents: singleAuctionEvent[];
-        refreshTabData: boolean;
-      };
-    }) => {
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       let didAuctionEventsChange = false;
 
-      if (!message.type) {
+      if (!changes) {
         return;
       }
 
       const tabId = chrome.devtools.inspectedWindow.tabId;
-      const incomingMessageType = message.type;
 
-      if (
-        incomingMessageType === 'AUCTION_EVENTS' &&
-        message.payload.auctionEvents
-      ) {
-        if (message.payload.tabId === tabId) {
-          setIsMultiSellerAuction(message.payload.multiSellerAuction);
+      if (changes?.protectedAudience?.newValue[tabId]) {
+        const {
+          multiSellerAuction,
+          auctionEvents: _auctionEvents,
+          globalEvents: _globalEvents,
+          refreshTabData,
+        } = changes?.protectedAudience?.newValue[tabId] ?? {};
 
-          setAuctionEvents((prevState) => {
-            if (!prevState && message.payload.auctionEvents) {
-              didAuctionEventsChange = true;
-              return message.payload.auctionEvents;
-            }
+        setIsMultiSellerAuction(multiSellerAuction);
 
-            if (
-              prevState &&
-              message.payload.auctionEvents &&
-              shouldUpdateState(prevState, message.payload.auctionEvents)
-            ) {
-              didAuctionEventsChange = true;
-              return message.payload.auctionEvents;
-            }
-
-            return prevState;
-          });
+        setAuctionEvents((prevState) => {
+          if (!prevState && _auctionEvents) {
+            didAuctionEventsChange = true;
+            return _auctionEvents;
+          }
 
           if (
-            !didAuctionEventsChange &&
-            !shouldUpdateState(
-              globalEvents.current,
-              message.payload.globalEvents
-            )
+            prevState &&
+            _auctionEvents &&
+            shouldUpdateState(prevState, _auctionEvents)
           ) {
-            return;
+            didAuctionEventsChange = true;
+            return _auctionEvents;
           }
 
-          let shapedInterestGroupDetails: ProtectedAudienceContextType['state']['interestGroupDetails'] =
-            [];
+          return prevState;
+        });
 
-          shapedInterestGroupDetails = await computeInterestGroupDetails(
-            message.payload.globalEvents
-          );
+        if (
+          !didAuctionEventsChange &&
+          !shouldUpdateState(globalEvents.current, _globalEvents)
+        ) {
+          return;
+        }
 
-          globalEvents.current = message.payload.globalEvents;
+        let shapedInterestGroupDetails: ProtectedAudienceContextType['state']['interestGroupDetails'] =
+          [];
 
-          const computedBids: {
-            receivedBids: ReceivedBids[];
-            noBids: NoBidsType;
-          } | null = computeReceivedBidsAndNoBids(
-            message.payload.auctionEvents,
-            message.payload.multiSellerAuction,
-            message.payload.refreshTabData
-          );
+        shapedInterestGroupDetails = await computeInterestGroupDetails(
+          _globalEvents
+        );
 
-          if (computedBids) {
-            const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
-              {};
+        globalEvents.current = _globalEvents;
 
-            computedBids.receivedBids.forEach(
-              ({ adUnitCode, ownerOrigin, mediaContainerSize }) => {
-                if (!adUnitCode) {
-                  return;
-                }
+        const computedBids: {
+          receivedBids: ReceivedBids[];
+          noBids: NoBidsType;
+        } | null = computeReceivedBidsAndNoBids(
+          _auctionEvents,
+          multiSellerAuction,
+          refreshTabData
+        );
 
-                adUnitCodeToBidders[adUnitCode] = {
-                  adUnitCode:
-                    adUnitCodeToBidders[adUnitCode]?.adUnitCode ?? adUnitCode,
-                  bidders: [
-                    ...new Set<string>([
-                      ...(adUnitCodeToBidders[adUnitCode]?.bidders ?? []),
-                      ...(ownerOrigin ? [ownerOrigin] : []),
-                    ]),
-                  ],
-                  mediaContainerSize: [
-                    Array.from(
-                      new Set(
-                        ...(adUnitCodeToBidders[adUnitCode]
-                          ?.mediaContainerSize ?? []),
-                        mediaContainerSize
-                      )
-                    ),
-                  ],
-                };
+        if (computedBids) {
+          const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
+            {};
+
+          computedBids.receivedBids.forEach(
+            ({ adUnitCode, ownerOrigin, mediaContainerSize }) => {
+              if (!adUnitCode) {
+                return;
               }
-            );
 
-            setAdsAndBidders((prevState) => {
-              return shouldUpdateState(prevState, adUnitCodeToBidders)
-                ? adUnitCodeToBidders
-                : prevState;
-            });
+              adUnitCodeToBidders[adUnitCode] = {
+                adUnitCode:
+                  adUnitCodeToBidders[adUnitCode]?.adUnitCode ?? adUnitCode,
+                bidders: [
+                  ...new Set<string>([
+                    ...(adUnitCodeToBidders[adUnitCode]?.bidders ?? []),
+                    ...(ownerOrigin ? [ownerOrigin] : []),
+                  ]),
+                ],
+                mediaContainerSize: [
+                  Array.from(
+                    new Set(
+                      ...(adUnitCodeToBidders[adUnitCode]?.mediaContainerSize ??
+                        []),
+                      mediaContainerSize
+                    )
+                  ),
+                ],
+              };
+            }
+          );
 
-            setReceivedBids((prevState) => {
-              return shouldUpdateState(prevState, computedBids.receivedBids)
-                ? computedBids.receivedBids
-                : prevState;
-            });
+          setAdsAndBidders((prevState) => {
+            return shouldUpdateState(prevState, adUnitCodeToBidders)
+              ? adUnitCodeToBidders
+              : prevState;
+          });
 
-            setNoBids((prevState) => {
-              return shouldUpdateState(prevState, computedBids.noBids)
-                ? computedBids.noBids
-                : prevState;
-            });
-          }
+          setReceivedBids((prevState) => {
+            return shouldUpdateState(prevState, computedBids.receivedBids)
+              ? computedBids.receivedBids
+              : prevState;
+          });
 
-          setInterestGroupDetails((prevState) => {
-            return shouldUpdateState(prevState, shapedInterestGroupDetails)
-              ? shapedInterestGroupDetails
+          setNoBids((prevState) => {
+            return shouldUpdateState(prevState, computedBids.noBids)
+              ? computedBids.noBids
               : prevState;
           });
         }
+
+        setInterestGroupDetails((prevState) => {
+          return shouldUpdateState(prevState, shapedInterestGroupDetails)
+            ? shapedInterestGroupDetails
+            : prevState;
+        });
       }
     },
     []
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.storage.session.onChanged.addListener(sessionStorageListener);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.storage.session.onChanged.removeListener(sessionStorageListener);
     };
-  }, [messagePassingListener]);
+  }, [sessionStorageListener]);
 
   const memoisedValue: ProtectedAudienceContextType = useMemo(() => {
     return {
