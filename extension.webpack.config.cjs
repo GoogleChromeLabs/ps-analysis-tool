@@ -74,7 +74,8 @@ const devTools = {
       title: 'PSAT Devtool',
       template: './src/view/devtools/index.html',
       filename: 'index.html',
-      inject: false,
+      inject: 'body',
+      chunks: 'all',
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT',
