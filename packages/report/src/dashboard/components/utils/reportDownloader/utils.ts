@@ -157,6 +157,8 @@ export const generateSitemapHTMLFile = (
     dateTime: globalThis?.PSAT_DATA.dateTime,
     appliedFilters,
     hideDownloadButton: true,
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    psatVersion: globalThis?.PSAT_DATA.psatVersion ?? packageJson.version,
   };
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
