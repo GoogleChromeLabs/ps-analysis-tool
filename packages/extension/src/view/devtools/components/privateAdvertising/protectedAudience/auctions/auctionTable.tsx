@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { noop, type singleAuctionEvent } from '@google-psat/common';
 import {
   Table,
@@ -26,22 +26,26 @@ import {
   type TableRow,
   type InfoType,
 } from '@google-psat/design-system';
+import { Resizable } from 're-resizable';
+
+/**
+ * Internal dependencies.
+ */
+import BottomTray from './bottomTray';
 
 interface AuctionTableProps {
-  selectedJSON: singleAuctionEvent | null;
-  setSelectedJSON: React.Dispatch<
-    React.SetStateAction<singleAuctionEvent | null>
-  >;
   auctionEvents: singleAuctionEvent[];
   parentOrigin?: string;
 }
 
 const AuctionTable = ({
-  selectedJSON,
-  setSelectedJSON,
   auctionEvents,
   parentOrigin = '',
 }: AuctionTableProps) => {
+  const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
+    null
+  );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -159,42 +163,60 @@ const AuctionTable = ({
   );
 
   return (
-    <div className="w-full h-fit text-outer-space-crayola dark:text-bright-gray flex flex-col pt-4">
-      <div className="flex justify-between items-center px-1">
-        <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
-        <p>
-          Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
-        </p>
-      </div>
-      <div className="flex-1 border border-american-silver dark:border-quartz">
-        <TableProvider
-          data={auctionEvents}
-          tableColumns={tableColumns}
-          tableFilterData={tableFilters}
-          tableSearchKeys={undefined}
-          tablePersistentSettingsKey={
-            'adtable' + auctionEvents?.[0]?.auctionConfig?.seller + parentOrigin
-          }
-          onRowContextMenu={noop}
-          onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
-          getRowObjectKey={(row: TableRow) => {
-            return (
-              // @ts-ignore
-              ((row.originalData as singleAuctionEvent).auctionConfig?.seller ||
-                '') + (row.originalData as singleAuctionEvent).time
-            );
-          }}
-        >
-          <Table
-            selectedKey={
-              // @ts-ignore
-              (selectedJSON?.auctionConfig?.seller || '') +
-                selectedJSON?.time || ''
+    <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
+      <div className="flex-1 w-full flex flex-col">
+        <div className="flex justify-between items-center p-2">
+          <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
+          <p>
+            Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
+          </p>
+        </div>
+        <div className="flex-1 border border-american-silver dark:border-quartz">
+          <TableProvider
+            data={auctionEvents}
+            tableColumns={tableColumns}
+            tableFilterData={tableFilters}
+            tableSearchKeys={undefined}
+            tablePersistentSettingsKey={
+              'adtable' +
+              auctionEvents?.[0]?.auctionConfig?.seller +
+              parentOrigin
             }
-            hideSearch={true}
-          />
-        </TableProvider>
+            onRowContextMenu={noop}
+            onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
+            getRowObjectKey={(row: TableRow) => {
+              return (
+                // @ts-ignore
+                ((row.originalData as singleAuctionEvent).auctionConfig
+                  ?.seller || '') +
+                (row.originalData as singleAuctionEvent).time
+              );
+            }}
+          >
+            <Table
+              selectedKey={
+                // @ts-ignore
+                (selectedJSON?.auctionConfig?.seller || '') +
+                  selectedJSON?.time || ''
+              }
+              hideSearch={true}
+            />
+          </TableProvider>
+        </div>
       </div>
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '10%',
+        }}
+        enable={{
+          top: true,
+        }}
+        minHeight="10%"
+        maxHeight="80%"
+      >
+        <BottomTray selectedJSON={selectedJSON} />
+      </Resizable>
     </div>
   );
 };

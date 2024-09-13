@@ -16,55 +16,110 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import type { singleAuctionEvent } from '@google-psat/common';
+import React, { useEffect } from 'react';
+import type { MultiSellerAuction } from '@google-psat/common';
+import {
+  Sidebar,
+  useSidebar,
+  type SidebarItems,
+} from '@google-psat/design-system';
+import { Resizable } from 're-resizable';
+
+/**
+ * Internal dependencies.
+ */
 import AuctionTable from './auctionTable';
 
 interface MultiSellerAuctionTableProps {
-  selectedJSON: singleAuctionEvent | null;
-  setSelectedJSON: React.Dispatch<
-    React.SetStateAction<singleAuctionEvent | null>
-  >;
-  auctionEvents: {
-    [uniqueAuctionId: string]: singleAuctionEvent[];
-  };
+  auctionEvents: MultiSellerAuction;
+  setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
 }
 
 const MultiSellerAuctionTable = ({
-  selectedJSON,
-  setSelectedJSON,
   auctionEvents,
+  setSidebarData,
 }: MultiSellerAuctionTableProps) => {
-  // @ts-ignore - seller is present in auctionConfig
-  const parentOrigin = auctionEvents['0']?.[0]?.auctionConfig?.seller;
-
-  return (
-    <div className="max-w-full h-fit flex flex-col border border-chinese-silver dark:border-quartz m-4 p-4">
-      <h1 className="text-sm text-raisin-black dark:text-bright-gray">
-        Auction started by <i>{parentOrigin}</i>
-      </h1>
-      <div className="flex-1 flex flex-col gap-4 divide-y divide-american-silver">
-        {Object.entries(auctionEvents).map(([uniqueAuctionId, events]) => {
+  useEffect(() => {
+    const data = Object.keys(auctionEvents).reduce<SidebarItems>(
+      (acc, parentAuctionId) => {
+        const singleAuctionEvents = auctionEvents[parentAuctionId];
+        const children = Object.entries(
+          singleAuctionEvents
+        ).reduce<SidebarItems>((childrenAcc, [uniqueAuctionId, events]) => {
           if (uniqueAuctionId === '0') {
-            return null;
+            return childrenAcc;
           }
 
-          return (
-            <AuctionTable
-              key={uniqueAuctionId}
-              selectedJSON={selectedJSON}
-              setSelectedJSON={setSelectedJSON}
-              auctionEvents={events}
-              parentOrigin={parentOrigin}
-            />
-          );
-        })}
-        <AuctionTable
-          key={'0'}
-          selectedJSON={selectedJSON}
-          setSelectedJSON={setSelectedJSON}
-          auctionEvents={auctionEvents['0']}
-        />
+          childrenAcc[uniqueAuctionId] = {
+            title: events?.[0]?.auctionConfig?.seller,
+            dropdownOpen: false,
+            panel: {
+              Element: AuctionTable,
+              props: {
+                auctionEvents: events,
+                parentOrigin: events?.[0]?.auctionConfig?.seller,
+              },
+            },
+            children: {},
+          };
+
+          return childrenAcc;
+        }, {});
+
+        acc[parentAuctionId] = {
+          title: singleAuctionEvents['0']?.[0]?.auctionConfig?.seller,
+          dropdownOpen: false,
+          panel: {
+            Element: AuctionTable,
+            props: {
+              auctionEvents: Object.values(singleAuctionEvents)[0],
+              parentOrigin:
+                singleAuctionEvents['0']?.[0]?.auctionConfig?.seller,
+            },
+          },
+          children,
+        };
+
+        return acc;
+      },
+      {}
+    );
+
+    setSidebarData(data);
+  }, [auctionEvents, setSidebarData]);
+
+  const { activePanel, updateSelectedItemKey } = useSidebar(
+    ({ state, actions }) => ({
+      activePanel: state.activePanel,
+      updateSelectedItemKey: actions.updateSelectedItemKey,
+    })
+  );
+
+  useEffect(() => {
+    const parentAuctionId = Object.keys(auctionEvents)[0];
+
+    updateSelectedItemKey(parentAuctionId);
+  }, [auctionEvents, updateSelectedItemKey]);
+
+  const { Element, props } = activePanel.panel;
+
+  return (
+    <div className="w-full h-full flex border-t border-chinese-silver dark:border-quartz">
+      <Resizable
+        defaultSize={{
+          width: 200,
+          height: '100%',
+        }}
+        minWidth={100}
+        maxWidth={800}
+        enable={{
+          right: true,
+        }}
+      >
+        <Sidebar />
+      </Resizable>
+      <div className="flex-1 h-full flex flex-col">
+        {Element && <Element {...props} />}
       </div>
     </div>
   );

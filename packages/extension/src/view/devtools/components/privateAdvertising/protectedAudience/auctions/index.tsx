@@ -17,22 +17,22 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import type { singleAuctionEvent } from '@google-psat/common';
-import { Resizable } from 're-resizable';
+import type {
+  MultiSellerAuction,
+  singleAuctionEvent,
+} from '@google-psat/common';
 
+import { SidebarProvider } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
 import Breakpoints from './breakpoints';
 import AuctionTable from './auctionTable';
-import BottomTray from './bottomTray';
 import MultiSellerAuctionTable from './mutliSellerAuctionTable';
 import { useProtectedAudience } from '../../../../stateProviders';
 
 const Auctions = () => {
-  const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
-    null
-  );
+  const [sidebarData, setSidebarData] = useState({});
 
   const { auctionEvents, isMultiSellerAuction } = useProtectedAudience(
     ({ state }) => ({
@@ -58,8 +58,6 @@ const Auctions = () => {
         {!isMultiSellerAuction ? (
           <div className="p-4 pt-0">
             <AuctionTable
-              selectedJSON={selectedJSON}
-              setSelectedJSON={setSelectedJSON}
               auctionEvents={
                 (Object.values(auctionEvents ?? {})?.[0] ??
                   []) as singleAuctionEvent[]
@@ -67,35 +65,16 @@ const Auctions = () => {
             />
           </div>
         ) : (
-          <div className="flex flex-col gap-8 h-full">
-            {Object.keys(auctionEvents ?? {}).map((parentAuctionId) => (
+          <div className="w-full h-full">
+            <SidebarProvider data={sidebarData}>
               <MultiSellerAuctionTable
-                key={parentAuctionId}
-                selectedJSON={selectedJSON}
-                setSelectedJSON={setSelectedJSON}
-                auctionEvents={
-                  (auctionEvents[parentAuctionId] || {}) as {
-                    [uniqueAuctionId: string]: singleAuctionEvent[];
-                  }
-                }
+                auctionEvents={auctionEvents as MultiSellerAuction}
+                setSidebarData={setSidebarData}
               />
-            ))}
+            </SidebarProvider>
           </div>
         )}
       </div>
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '10%',
-        }}
-        enable={{
-          top: true,
-        }}
-        minHeight="10%"
-        maxHeight="80%"
-      >
-        <BottomTray selectedJSON={selectedJSON} />
-      </Resizable>
     </div>
   );
 };
