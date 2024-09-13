@@ -86,18 +86,9 @@ const MultiSellerAuctionTable = ({
     setSidebarData(data);
   }, [auctionEvents, setSidebarData]);
 
-  const { activePanel, updateSelectedItemKey } = useSidebar(
-    ({ state, actions }) => ({
-      activePanel: state.activePanel,
-      updateSelectedItemKey: actions.updateSelectedItemKey,
-    })
-  );
-
-  useEffect(() => {
-    const parentAuctionId = Object.keys(auctionEvents)[0];
-
-    updateSelectedItemKey(parentAuctionId);
-  }, [auctionEvents, updateSelectedItemKey]);
+  const { activePanel } = useSidebar(({ state }) => ({
+    activePanel: state.activePanel,
+  }));
 
   const { Element, props } = activePanel.panel;
 

@@ -182,7 +182,7 @@ const AuctionTable = ({
             Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
           </p>
         </div>
-        <div className="flex-1 border border-american-silver dark:border-quartz">
+        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             data={auctionEvents}
             tableColumns={tableColumns}

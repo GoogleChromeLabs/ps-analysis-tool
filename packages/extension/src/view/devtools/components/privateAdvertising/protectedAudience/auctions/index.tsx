@@ -64,7 +64,10 @@ const Auctions = () => {
           />
         ) : (
           <div className="w-full h-full">
-            <SidebarProvider data={sidebarData}>
+            <SidebarProvider
+              data={sidebarData}
+              defaultSelectedItemKey={Object.keys(auctionEvents)[0]}
+            >
               <MultiSellerAuctionTable
                 auctionEvents={auctionEvents as MultiSellerAuction}
                 setSidebarData={setSidebarData}
