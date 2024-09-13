@@ -48,6 +48,8 @@ const AuctionTable = ({
         header: 'Event Time',
         accessorKey: 'formattedTime',
         cell: (info) => info,
+        enableHiding: false,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'Event',
@@ -59,31 +61,37 @@ const AuctionTable = ({
 
           return aString > bString ? 1 : -1;
         },
+        widthWeightagePercentage: 20,
       },
       {
         header: 'Interest Group Origin',
         accessorKey: 'ownerOrigin',
         cell: (info) => info,
+        widthWeightagePercentage: 20,
       },
       {
         header: 'Interest Group Name',
         accessorKey: 'name',
         cell: (info) => info,
+        widthWeightagePercentage: 17,
       },
       {
         header: 'Bid',
         accessorKey: 'bid',
         cell: (info) => info,
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Bid Currency',
         accessorKey: 'bidCurrency',
         cell: (info) => info,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Component Seller',
         accessorKey: 'componentSellerOrigin',
         cell: (info) => info,
+        widthWeightagePercentage: 20,
       },
     ],
     []

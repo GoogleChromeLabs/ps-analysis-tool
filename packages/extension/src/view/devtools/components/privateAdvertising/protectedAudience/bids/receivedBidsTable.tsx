@@ -53,31 +53,38 @@ const ReceivedBidsTable = ({
         header: 'Bidder',
         accessorKey: 'ownerOrigin',
         cell: (info) => info,
+        enableHiding: false,
+        widthWeightagePercentage: 20,
       },
       {
         header: 'Bid',
         accessorKey: 'bid',
         cell: (info) => info,
+        widthWeightagePercentage: 15,
       },
       {
         header: 'Bid Currency',
         accessorKey: 'bidCurrency',
         cell: (info) => info,
+        widthWeightagePercentage: 16,
       },
       {
         header: 'Ad Unit Code',
         accessorKey: 'adUnitCode',
         cell: (info) => info,
+        widthWeightagePercentage: 16,
       },
       {
         header: 'Ad Container Size',
         accessorKey: 'adContainerSize',
         cell: (info) => info,
+        widthWeightagePercentage: 16,
       },
       {
         header: 'Media Type',
         accessorKey: 'mediaType',
         cell: (info) => info,
+        widthWeightagePercentage: 16,
       },
     ],
     []

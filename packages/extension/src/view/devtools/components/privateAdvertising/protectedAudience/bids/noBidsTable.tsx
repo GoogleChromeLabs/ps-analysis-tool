@@ -53,6 +53,7 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
         header: 'Bidder',
         accessorKey: 'ownerOrigin',
         cell: (info) => info,
+        enableHiding: false,
       },
       {
         header: 'Ad Unit Code',

@@ -53,6 +53,7 @@ const InterestGroups = () => {
         header: 'Event Time',
         accessorKey: 'formattedTime',
         cell: (info) => info,
+        enableHiding: false,
       },
       {
         header: 'Access Type',
