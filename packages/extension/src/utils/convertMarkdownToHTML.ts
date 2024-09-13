@@ -65,7 +65,7 @@ const convertMarkdownToHTML = async (markdown: string) => {
     })
   );
 
-  return content.documentElement.innerHTML;
+  return content.documentElement.querySelector('body')?.innerHTML ?? '';
 };
 
 export default convertMarkdownToHTML;
