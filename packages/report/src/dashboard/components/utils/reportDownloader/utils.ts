@@ -87,7 +87,8 @@ const generateHTMLFile = (
     // @ts-ignore -- because this data will already be injected from cli or the extension.
     dateTime: globalThis?.PSAT_DATA.dateTime,
     hideDownloadButton: true,
-    psatVersion: packageJson.version,
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    psatVersion: globalThis?.PSAT_DATA.psatVersion ?? packageJson.version,
   };
 
   let code = `window.PSAT_DATA = ${JSON.stringify(reportData)};`;
