@@ -28,6 +28,8 @@ import ProgressBar from '../progressBar';
 import QuickLinksList from './quickLinksList';
 import { PSInfoKeyType } from './infoCard/fetchPSInfo';
 import InfoCard from './infoCard';
+import Breadcrumbs from '../breadcrumbs';
+import { useSidebar } from '../sidebar';
 
 interface LandingPageProps {
   title?: string;
@@ -52,6 +54,9 @@ const LandingPage = ({
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
+  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
+    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
+  }));
 
   return (
     <div className="w-full h-full">
@@ -62,7 +67,7 @@ const LandingPage = ({
           'divide-y divide-hex-gray dark:divide-quartz'
         )}
       >
-        <div className="p-4">
+        <div className="p-4 flex flex-col gap-1">
           <button
             className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
@@ -74,6 +79,7 @@ const LandingPage = ({
               />
             </div>
           </button>
+          <Breadcrumbs items={extractSelectedItemKeyTitles()} />
         </div>
         <div className={classNames({ hidden: !open && !children })}>
           <div

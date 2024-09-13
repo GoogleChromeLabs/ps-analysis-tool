@@ -50,6 +50,7 @@ export interface SidebarStoreContext {
     isKeyAncestor: (key: string) => boolean;
     isKeySelected: (key: string) => boolean;
     toggleSidebarCollapse: () => void;
+    extractSelectedItemKeyTitles: () => Array<{ title: string; key: string }>;
   };
 }
 
@@ -79,6 +80,7 @@ export const initialState: SidebarStoreContext = {
     isKeyAncestor: () => false,
     isKeySelected: () => false,
     toggleSidebarCollapse: noop,
+    extractSelectedItemKeyTitles: () => [],
   },
 };
 
