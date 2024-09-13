@@ -24,6 +24,7 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
+import isEqual from 'lodash/isEqual';
 
 /**
  * Internal dependencies.
@@ -39,7 +40,6 @@ import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 import Context, { type CookieStoreContext } from './context';
-import { diff } from 'deep-object-diff';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -93,9 +93,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           extraFrameData ?? {},
           isUsingCDP
         );
-        const isThereDiff = diff(prevState ?? {}, updatedTabFrames);
 
-        if (Object.keys(isThereDiff).length === 0) {
+        if (isEqual(prevState, updatedTabFrames)) {
           return prevState;
         }
 
@@ -265,10 +264,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         if (allowedNumberOfTabs === 'unlimited') {
           setTabCookies((prevState) => {
             if (data && Object.keys(data).length > 0) {
-              const isThereDiff = diff(prevState ?? {}, data);
-              if (Object.keys(isThereDiff).length === 0) {
+              if (isEqual(data, prevState)) {
                 return prevState;
               }
+
               return data;
             }
             return prevState;
@@ -283,10 +282,10 @@ const Provider = ({ children }: PropsWithChildren) => {
           isCurrentTabBeingListenedToRef.current = true;
           setTabCookies((prevState) => {
             if (data && Object.keys(data).length > 0) {
-              const isThereDiff = diff(prevState ?? {}, data);
-              if (Object.keys(isThereDiff).length === 0) {
+              if (isEqual(data, prevState)) {
                 return prevState;
               }
+
               return data;
             }
             return prevState;

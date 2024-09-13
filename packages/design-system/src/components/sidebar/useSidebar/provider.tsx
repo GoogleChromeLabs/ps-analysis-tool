@@ -23,6 +23,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import isEqual from 'lodash/isEqual';
 
 /**
  * Internal dependencies.
@@ -77,7 +78,12 @@ export const SidebarProvider = ({
    * Update the sidebar items when the sidebar data changes.
    */
   useEffect(() => {
-    setSidebarItems(data);
+    setSidebarItems((prevState) => {
+      if (isEqual(prevState, data)) {
+        return prevState;
+      }
+      return data;
+    });
   }, [data]);
 
   /**

@@ -29,12 +29,12 @@ import type {
   singleAuctionEvent,
   ReceivedBids,
 } from '@google-psat/common';
+import isEqual from 'lodash/isEqual';
 
 /**
  * Internal dependencies.
  */
 import Context, { type ProtectedAudienceContextType } from './context';
-import shouldUpdateState from '../../../../utils/shouldUpdateState';
 import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
@@ -84,7 +84,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         if (
           prevState &&
           _auctionEvents &&
-          shouldUpdateState(prevState, _auctionEvents)
+          !isEqual(prevState, _auctionEvents)
         ) {
           didAuctionEventsChange = true;
           return _auctionEvents;
@@ -95,7 +95,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (
         !didAuctionEventsChange &&
-        !shouldUpdateState(globalEvents.current, _globalEvents)
+        isEqual(globalEvents.current, _globalEvents)
       ) {
         return;
       }
@@ -151,26 +151,26 @@ const Provider = ({ children }: PropsWithChildren) => {
         );
 
         setAdsAndBidders((prevState) => {
-          return shouldUpdateState(prevState, adUnitCodeToBidders)
+          return !isEqual(prevState, adUnitCodeToBidders)
             ? adUnitCodeToBidders
             : prevState;
         });
 
         setReceivedBids((prevState) => {
-          return shouldUpdateState(prevState, computedBids.receivedBids)
+          return !isEqual(prevState, computedBids.receivedBids)
             ? computedBids.receivedBids
             : prevState;
         });
 
         setNoBids((prevState) => {
-          return shouldUpdateState(prevState, computedBids.noBids)
+          return !isEqual(prevState, computedBids.noBids)
             ? computedBids.noBids
             : prevState;
         });
       }
 
       setInterestGroupDetails((prevState) => {
-        return shouldUpdateState(prevState, shapedInterestGroupDetails)
+        return !isEqual(prevState, shapedInterestGroupDetails)
           ? shapedInterestGroupDetails
           : prevState;
       });
