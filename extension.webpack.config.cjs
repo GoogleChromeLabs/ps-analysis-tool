@@ -62,7 +62,10 @@ const devTools = {
   },
   optimization: {
     splitChunks: {
-      chunks: 'all',
+      chunks(chunk) {
+        // exclude `my-excluded-chunk`
+        return chunk.name !== 'worker';
+      },
     },
   },
   plugins: [

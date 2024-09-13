@@ -158,7 +158,13 @@ const useLibraryDetection = () => {
           ...domQueryMatches,
         };
 
-        setLibraryMatches(data);
+        setLibraryMatches((matches) => {
+          if (isEqual(matches, data)) {
+            return matches;
+          }
+
+          return data;
+        });
         attachListener();
         setShowLoader(false);
       }
