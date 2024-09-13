@@ -23,7 +23,9 @@ import {
 } from '@google-psat/common';
 import {
   Table,
+  TableFilter,
   TableProvider,
+  type InfoType,
   type TableColumn,
   type TableRow,
 } from '@google-psat/design-system';
@@ -81,6 +83,59 @@ const ReceivedBidsTable = ({
     []
   );
 
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      ownerOrigin: {
+        title: 'Bidder',
+        sortValues: true,
+      },
+      bid: {
+        title: 'Bid',
+        hasStaticFilterValues: true,
+        filterValues: {
+          ['0 - 20']: {
+            selected: false,
+          },
+          ['20 - 40']: {
+            selected: false,
+          },
+          ['40 - 60']: {
+            selected: false,
+          },
+          ['60 - 80']: {
+            selected: false,
+          },
+          ['80 - 100']: {
+            selected: false,
+          },
+          ['100+']: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const bid = value as number;
+
+          if (filterValue === '100+') {
+            return bid > 100;
+          }
+
+          const [min, max] = filterValue.split(' - ').map(Number);
+
+          return bid >= min && bid <= max;
+        },
+      },
+      bidCurrency: {
+        title: 'Bid Currency',
+        sortValues: true,
+      },
+      adUnitCode: {
+        title: 'Ad Unit Code',
+        sortValues: true,
+      },
+    }),
+    []
+  );
+
   if (!receivedBids || receivedBids.length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -95,7 +150,7 @@ const ReceivedBidsTable = ({
     <TableProvider
       data={receivedBids}
       tableColumns={tableColumns}
-      tableFilterData={undefined}
+      tableFilterData={tableFilters}
       tableSearchKeys={undefined}
       tablePersistentSettingsKey="receivedBidsTable"
       onRowClick={(row) => {
@@ -108,7 +163,6 @@ const ReceivedBidsTable = ({
       }}
     >
       <Table
-        hideFiltering={true}
         selectedKey={
           selectedRow?.ownerOrigin +
           selectedRow?.uniqueAuctionId +

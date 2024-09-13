@@ -25,6 +25,7 @@ import {
   Table,
   TableProvider,
   type TableColumn,
+  type TableFilter,
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
@@ -62,6 +63,20 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
     []
   );
 
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      ownerOrigin: {
+        title: 'Bidder',
+        sortValues: true,
+      },
+      adUnitCode: {
+        title: 'Ad Unit Code',
+        sortValues: true,
+      },
+    }),
+    []
+  );
+
   if (!noBids || Object.keys(noBids).length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -76,7 +91,7 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
     <TableProvider
       data={Object.values(noBids)}
       tableColumns={tableColumns}
-      tableFilterData={undefined}
+      tableFilterData={tableFilters}
       tableSearchKeys={undefined}
       tablePersistentSettingsKey="noBidsTable"
       onRowClick={(row) => {
@@ -92,7 +107,6 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
       }}
     >
       <Table
-        hideFiltering={true}
         selectedKey={
           selectedRow?.ownerOrigin +
           (selectedRow?.adUnitCode || '') +

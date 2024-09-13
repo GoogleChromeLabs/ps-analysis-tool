@@ -21,8 +21,10 @@ import { noop, type singleAuctionEvent } from '@google-psat/common';
 import {
   Table,
   TableProvider,
+  type TableFilter,
   type TableColumn,
   type TableRow,
+  type InfoType,
 } from '@google-psat/design-system';
 
 interface AuctionTableProps {
@@ -31,12 +33,14 @@ interface AuctionTableProps {
     React.SetStateAction<singleAuctionEvent | null>
   >;
   auctionEvents: singleAuctionEvent[];
+  parentOrigin?: string;
 }
 
 const AuctionTable = ({
   selectedJSON,
   setSelectedJSON,
   auctionEvents,
+  parentOrigin = '',
 }: AuctionTableProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -85,6 +89,67 @@ const AuctionTable = ({
     []
   );
 
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      type: {
+        title: 'Event',
+        sortValues: true,
+      },
+      ownerOrigin: {
+        title: 'Interest Group Origin',
+        sortValues: true,
+      },
+      name: {
+        title: 'Interest Group Name',
+        sortValues: true,
+      },
+      bid: {
+        title: 'Bid',
+        hasStaticFilterValues: true,
+        filterValues: {
+          ['0 - 20']: {
+            selected: false,
+          },
+          ['20 - 40']: {
+            selected: false,
+          },
+          ['40 - 60']: {
+            selected: false,
+          },
+          ['60 - 80']: {
+            selected: false,
+          },
+          ['80 - 100']: {
+            selected: false,
+          },
+          ['100+']: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const bid = value as number;
+
+          if (filterValue === '100+') {
+            return bid > 100;
+          }
+
+          const [min, max] = filterValue.split(' - ').map(Number);
+
+          return bid >= min && bid <= max;
+        },
+      },
+      bidCurrency: {
+        title: 'Bid Currency',
+        sortValues: true,
+      },
+      componentSellerOrigin: {
+        title: 'Component Seller',
+        sortValues: true,
+      },
+    }),
+    []
+  );
+
   return (
     <div className="w-full h-fit text-outer-space-crayola dark:text-bright-gray flex flex-col pt-4">
       <div className="flex justify-between items-center px-1">
@@ -93,13 +158,15 @@ const AuctionTable = ({
           Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
         </p>
       </div>
-      <div className="border border-american-silver dark:border-quartz">
+      <div className="flex-1 border border-american-silver dark:border-quartz">
         <TableProvider
           data={auctionEvents}
           tableColumns={tableColumns}
-          tableFilterData={undefined}
+          tableFilterData={tableFilters}
           tableSearchKeys={undefined}
-          tablePersistentSettingsKey="adtable"
+          tablePersistentSettingsKey={
+            'adtable' + auctionEvents?.[0]?.auctionConfig?.seller + parentOrigin
+          }
           onRowContextMenu={noop}
           onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
           getRowObjectKey={(row: TableRow) => {
@@ -111,7 +178,6 @@ const AuctionTable = ({
           }}
         >
           <Table
-            hideFiltering={true}
             selectedKey={
               // @ts-ignore
               (selectedJSON?.auctionConfig?.seller || '') +

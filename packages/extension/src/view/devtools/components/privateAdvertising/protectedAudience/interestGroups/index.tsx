@@ -21,6 +21,7 @@ import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Table,
+  TableFilter,
   TableProvider,
   type TableColumn,
   type TableRow,
@@ -77,6 +78,24 @@ const InterestGroups = () => {
     []
   );
 
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      type: {
+        title: 'Access Type',
+        sortValues: true,
+      },
+      ownerOrigin: {
+        title: 'Owner',
+        sortValues: true,
+      },
+      name: {
+        title: 'Name',
+        sortValues: true,
+      },
+    }),
+    []
+  );
+
   if (!interestGroupDetails || interestGroupDetails.length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -103,7 +122,7 @@ const InterestGroups = () => {
         <TableProvider
           data={interestGroupDetails}
           tableColumns={tableColumns}
-          tableFilterData={undefined}
+          tableFilterData={tableFilters}
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="interestGroupsTable"
           onRowClick={(row) => {
@@ -118,7 +137,6 @@ const InterestGroups = () => {
           }}
         >
           <Table
-            hideFiltering={true}
             selectedKey={
               (selectedRow?.uniqueAuctionId ?? '') + String(selectedRow?.time)
             }

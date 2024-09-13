@@ -67,7 +67,7 @@ const Auctions = () => {
             />
           </div>
         ) : (
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 h-full">
             {Object.keys(auctionEvents ?? {}).map((parentAuctionId) => (
               <MultiSellerAuctionTable
                 key={parentAuctionId}
@@ -86,7 +86,7 @@ const Auctions = () => {
       <Resizable
         defaultSize={{
           width: '100%',
-          height: '20%',
+          height: '10%',
         }}
         enable={{
           top: true,

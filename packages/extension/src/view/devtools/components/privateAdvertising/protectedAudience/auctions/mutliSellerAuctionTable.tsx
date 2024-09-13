@@ -55,6 +55,7 @@ const MultiSellerAuctionTable = ({
               selectedJSON={selectedJSON}
               setSelectedJSON={setSelectedJSON}
               auctionEvents={events}
+              parentOrigin={parentOrigin}
             />
           );
         })}

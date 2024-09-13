@@ -24,8 +24,10 @@ import {
   ScreenIcon,
   Table,
   TableProvider,
+  type InfoType,
   type TableColumn,
   type TableData,
+  type TableFilter,
   type TableRow,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
@@ -101,6 +103,36 @@ const AdTable = () => {
     []
   );
 
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      bidders: {
+        title: 'Bidders',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: Object.values(adsAndBidders).reduce((acc, bidder) => {
+          const bidders = bidder.bidders;
+
+          if (!acc) {
+            acc = {};
+          }
+
+          bidders.forEach((_bidder) => {
+            acc[_bidder] = {
+              selected: false,
+            };
+          });
+
+          return acc;
+        }, {} as TableFilter['bidders']['filterValues']),
+        sortValues: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          return (value as string[]).includes(filterValue);
+        },
+      },
+    }),
+    [adsAndBidders]
+  );
+
   return (
     <div className="w-full flex-1 text-outer-space-crayola border-x border-t border-american-silver dark:border-quartz flex flex-col">
       <Resizable
@@ -117,7 +149,7 @@ const AdTable = () => {
         <TableProvider
           data={Object.values(adsAndBidders)}
           tableColumns={tableColumns}
-          tableFilterData={undefined}
+          tableFilterData={tableFilters}
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="adtable"
           onRowClick={(row) => {
@@ -129,7 +161,6 @@ const AdTable = () => {
           }}
         >
           <Table
-            hideFiltering={true}
             selectedKey={selectedRow?.adUnitCode}
             hideSearch={true}
             rowHeightClass="h-20"
