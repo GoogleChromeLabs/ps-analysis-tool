@@ -182,7 +182,11 @@ const Wiki = () => {
         >
           {!isLoading ? (
             <div className="markdown-container min-w-[45rem]">
-              <h2>{currentSelectedPage}</h2>
+              <h2>
+                {currentSelectedPage
+                  ? currentSelectedPage.replaceAll('-', ' ')
+                  : ''}
+              </h2>
               <div
                 onClick={handleContentClick}
                 dangerouslySetInnerHTML={{ __html: pageContent }}
