@@ -56,14 +56,12 @@ const Auctions = () => {
       <Breakpoints />
       <div className="overflow-auto flex-1">
         {!isMultiSellerAuction ? (
-          <div className="p-4 pt-0">
-            <AuctionTable
-              auctionEvents={
-                (Object.values(auctionEvents ?? {})?.[0] ??
-                  []) as singleAuctionEvent[]
-              }
-            />
-          </div>
+          <AuctionTable
+            auctionEvents={
+              (Object.values(auctionEvents ?? {})?.[0] ??
+                []) as singleAuctionEvent[]
+            }
+          />
         ) : (
           <div className="w-full h-full">
             <SidebarProvider data={sidebarData}>

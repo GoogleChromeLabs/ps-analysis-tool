@@ -52,7 +52,6 @@ const MultiSellerAuctionTable = ({
 
           childrenAcc[uniqueAuctionId] = {
             title: events?.[0]?.auctionConfig?.seller,
-            dropdownOpen: false,
             panel: {
               Element: AuctionTable,
               props: {
@@ -68,7 +67,6 @@ const MultiSellerAuctionTable = ({
 
         acc[parentAuctionId] = {
           title: singleAuctionEvents['0']?.[0]?.auctionConfig?.seller,
-          dropdownOpen: false,
           panel: {
             Element: AuctionTable,
             props: {
@@ -118,7 +116,7 @@ const MultiSellerAuctionTable = ({
       >
         <Sidebar />
       </Resizable>
-      <div className="flex-1 h-full flex flex-col">
+      <div className="flex-1 h-full flex flex-col overflow-auto">
         {Element && <Element {...props} />}
       </div>
     </div>

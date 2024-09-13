@@ -164,7 +164,18 @@ const AuctionTable = ({
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
-      <div className="flex-1 w-full flex flex-col">
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '80%',
+        }}
+        enable={{
+          bottom: true,
+        }}
+        minHeight="20%"
+        maxHeight="90%"
+        className="w-full flex flex-col"
+      >
         <div className="flex justify-between items-center p-2">
           <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
           <p>
@@ -203,20 +214,8 @@ const AuctionTable = ({
             />
           </TableProvider>
         </div>
-      </div>
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '10%',
-        }}
-        enable={{
-          top: true,
-        }}
-        minHeight="10%"
-        maxHeight="80%"
-      >
-        <BottomTray selectedJSON={selectedJSON} />
       </Resizable>
+      <BottomTray selectedJSON={selectedJSON} />
     </div>
   );
 };
