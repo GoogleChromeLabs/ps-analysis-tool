@@ -27,7 +27,10 @@ describe('convertMarkdownToHTML', () => {
     const markdown = '![alt text](/images/sample.png)';
     const html = `<p><img src="${IMAGE_BASE_URL}/sample.png" alt="alt text"></p>`;
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.trim()).toEqual(html);
 
@@ -35,7 +38,11 @@ describe('convertMarkdownToHTML', () => {
       '[![Alt text](/images/sample.png)](https://example.com)';
 
     const resultClickableLink = await convertMarkdownToHTML(
-      markdownClickableLink
+      markdownClickableLink,
+      {
+        initialize: () => undefined,
+        render: () => undefined,
+      }
     );
     const htmlClickableLink = `<p><a target="_blank" href="https://example.com"><img src="${IMAGE_BASE_URL}/sample.png" alt="Alt text"></a></p>`;
 
@@ -47,7 +54,11 @@ describe('convertMarkdownToHTML', () => {
       '<p><img src="https://example.com/images/sample.png" alt="alt text"></p>';
 
     const resultExternalImage = await convertMarkdownToHTML(
-      markdownExternalImage
+      markdownExternalImage,
+      {
+        initialize: () => undefined,
+        render: () => undefined,
+      }
     );
 
     expect(resultExternalImage.trim()).toEqual(htmlExternalImage);
@@ -58,7 +69,10 @@ describe('convertMarkdownToHTML', () => {
     const html =
       '<p><a target="_blank" href="https://example.com">Link</a></p>';
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.trim()).toEqual(html);
   });
@@ -67,7 +81,10 @@ describe('convertMarkdownToHTML', () => {
     const markdown = `![image](/images/sample.png)[Link](https://example.com)`;
     const html = `<p><img src="${IMAGE_BASE_URL}/sample.png" alt="image"><a target="_blank" href="https://example.com">Link</a></p>`;
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.trim()).toEqual(html);
   });
@@ -141,7 +158,10 @@ If you need to debug the extension or submit improvements, you can download the 
 </ul>
 `;
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.replace(/\s+/g, ' ').trim()).toEqual(
       html.replace(/\s+/g, ' ').trim()

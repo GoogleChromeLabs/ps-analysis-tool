@@ -18,12 +18,11 @@
  */
 import { Marked } from 'marked';
 import markedAlert from 'marked-alert';
-import mermaid from 'mermaid';
 
 export const IMAGE_BASE_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/images';
 
-const convertMarkdownToHTML = async (markdown: string) => {
+const convertMarkdownToHTML = async (markdown: string, mermaidJS: any) => {
   const marked = new Marked().use(markedAlert(), {
     renderer: {
       code: function (code) {
@@ -46,11 +45,15 @@ const convertMarkdownToHTML = async (markdown: string) => {
     '<a target="_blank" '
   );
 
+  if (!mermaidJS) {
+    return html;
+  }
+
   const DOMParsers = new DOMParser();
   const content = DOMParsers.parseFromString(html, 'text/html');
 
   if (document.querySelector('body')?.classList.contains('dark')) {
-    mermaid.initialize({
+    mermaidJS?.initialize({
       theme: 'dark',
     });
   }
@@ -58,7 +61,10 @@ const convertMarkdownToHTML = async (markdown: string) => {
   await Promise.all(
     Array.from(content.querySelectorAll('.mermaid')).map(async (el, i) => {
       if (el?.textContent) {
-        const element = await mermaid.render(`mermaid-${i}`, el?.textContent);
+        const element = await mermaidJS?.render(
+          `mermaid-${i}`,
+          el?.textContent
+        );
         return (el.innerHTML = element.svg);
       }
       return el;

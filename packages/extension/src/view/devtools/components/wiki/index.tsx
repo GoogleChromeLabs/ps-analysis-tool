@@ -113,7 +113,9 @@ const Wiki = () => {
           const response = await fetch(GITHUB_URL + '/' + fileName);
 
           const markdown = await response.text();
-          const html = await convertMarkdownToHTML(markdown);
+          const mermaidJS = await import('mermaid');
+
+          const html = await convertMarkdownToHTML(markdown, mermaidJS);
 
           loadedContent[currentSelectedPage] = html;
 
