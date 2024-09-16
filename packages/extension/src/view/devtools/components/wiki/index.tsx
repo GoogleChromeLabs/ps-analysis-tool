@@ -113,7 +113,7 @@ const Wiki = () => {
           const response = await fetch(GITHUB_URL + '/' + fileName);
 
           const markdown = await response.text();
-          const mermaidJS = await import('mermaid');
+          const mermaidJS = (await import('mermaid')).default;
 
           const html = await convertMarkdownToHTML(markdown, mermaidJS);
 
