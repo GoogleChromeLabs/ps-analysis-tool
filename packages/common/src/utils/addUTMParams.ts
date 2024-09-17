@@ -28,7 +28,9 @@ const addUTMParams = (
   if (
     //@ts-ignore
     !globalThis?.WorkerNavigator &&
-    !globalThis?.chrome?.devtools?.inspectedWindow?.tabId
+    !globalThis?.chrome?.devtools?.inspectedWindow?.tabId &&
+    // @ts-ignore Global variable.
+    !globalThis?.PSAT_EXTENSION
   ) {
     //@ts-ignore
     calculatedMedium = globalThis?.PSAT_DATA?.source ?? 'cli';
