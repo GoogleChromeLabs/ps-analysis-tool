@@ -260,19 +260,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       </Resizable>
       <div className="flex-1 h-full overflow-hidden flex flex-col">
         <main ref={mainRef} className="w-full flex-1 relative overflow-auto">
-          <div
-            className="w-full"
-            style={{
-              height: settingsChanged ? 'calc(100% - 5rem)' : '100%',
-            }}
-          >
+          <div className="w-full h-full">
             <div className="min-w-[45rem] h-full z-1">
               {PanelElement && <PanelElement {...props} />}
             </div>
           </div>
         </main>
         {settingsChanged && (
-          <div className="h-fit w-full">
+          <div className="h-fit w-full relative z-10">
             <ToastMessage
               additionalStyles="text-sm"
               text={I18n.getMessage('settingsChanged')}
