@@ -80,6 +80,7 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
             frameUrls,
             networkEvents,
             blockingStatus,
+            isBlocked: acc[key]?.isBlocked || cookieObj[key]?.isBlocked,
           };
         } else {
           acc[key] = cookieObj[key];
