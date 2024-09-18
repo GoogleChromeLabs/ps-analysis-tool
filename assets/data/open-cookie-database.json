@@ -4283,6 +4283,97 @@
       "wildcard": "0"
     }
   ],
+  "__cfseq": [
+    {
+      "platform": "Cloudflare",
+      "category": "Functional",
+      "name": "__cfseq",
+      "domain": "",
+      "description": "OCD___cfseq_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Cloudflare",
+      "gdprUrl": "https://www.cloudflare.com/privacypolicy/",
+      "wildcard": "0"
+    }
+  ],
+  "cf_ob_info": [
+    {
+      "platform": "CloudFlare",
+      "category": "Functional",
+      "name": "cf_ob_info",
+      "domain": "",
+      "description": "OCD_cf_ob_info_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Cloudflare",
+      "gdprUrl": "https://www.cloudflare.com/privacypolicy/",
+      "wildcard": "0"
+    }
+  ],
+  "cf_use_ob": [
+    {
+      "platform": "CloudFlare",
+      "category": "Functional",
+      "name": "cf_use_ob",
+      "domain": "",
+      "description": "OCD_cf_use_ob_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Cloudflare",
+      "gdprUrl": "https://www.cloudflare.com/privacypolicy/",
+      "wildcard": "0"
+    }
+  ],
+  "__cfwaitingroom": [
+    {
+      "platform": "CloudFlare",
+      "category": "Functional",
+      "name": "__cfwaitingroom",
+      "domain": "",
+      "description": "OCD___cfwaitingroom_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Cloudflare",
+      "gdprUrl": "https://www.cloudflare.com/privacypolicy/",
+      "wildcard": "0"
+    }
+  ],
+  "cf_chl_rc_i": [
+    {
+      "platform": "CloudFlare",
+      "category": "Functional",
+      "name": "cf_chl_rc_i",
+      "domain": "",
+      "description": "OCD_cf_chl_rc_i_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Cloudflare",
+      "gdprUrl": "https://www.cloudflare.com/privacypolicy/",
+      "wildcard": "0"
+    }
+  ],
+  "cf_chl_rc_ni": [
+    {
+      "platform": "CloudFlare",
+      "category": "Functional",
+      "name": "cf_chl_rc_ni",
+      "domain": "",
+      "description": "OCD_cf_chl_rc_ni_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Cloudflare",
+      "gdprUrl": "https://www.cloudflare.com/privacypolicy/",
+      "wildcard": "0"
+    }
+  ],
+  "cf_chl_rc_m": [
+    {
+      "platform": "CloudFlare",
+      "category": "Functional",
+      "name": "cf_chl_rc_m",
+      "domain": "",
+      "description": "OCD_cf_chl_rc_m_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Cloudflare",
+      "gdprUrl": "https://www.cloudflare.com/privacypolicy/",
+      "wildcard": "0"
+    }
+  ],
   "__uin_bw": [
     {
       "platform": "Sonobi",
@@ -4388,7 +4479,7 @@
   "hj_visitor": [
     {
       "platform": "Hotjar",
-      "category": "Analysis",
+      "category": "Analytics",
       "name": "hj_visitor",
       "domain": "",
       "description": "OCD_hj_visitor_description",
@@ -11971,6 +12062,19 @@
       "wildcard": "0"
     }
   ],
+  "_rdt_uuid": [
+    {
+      "platform": "Reddit",
+      "category": "Marketing",
+      "name": "_rdt_uuid",
+      "domain": "",
+      "description": "OCD__rdt_uuid_description",
+      "retention": "OCD_retention_90_days",
+      "dataController": "Reddit",
+      "gdprUrl": "https://www.reddit.com/policies/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
   "incap_ses_*": [
     {
       "platform": "Imperva",
@@ -17282,6 +17386,32 @@
       "wildcard": "0"
     }
   ],
+  "khaos_p": [
+    {
+      "platform": "Magnite",
+      "category": "Marketing",
+      "name": "khaos_p",
+      "domain": ".rubiconproject.com",
+      "description": "OCD_khaos_p_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Magnite",
+      "gdprUrl": "https://rubiconproject.com/privacy/consumer-online-profile-and-opt-out/",
+      "wildcard": "0"
+    }
+  ],
+  "audit_p": [
+    {
+      "platform": "Magnite",
+      "category": "Marketing",
+      "name": "audit_p",
+      "domain": ".rubiconproject.com",
+      "description": "OCD_audit_p_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Magnite",
+      "gdprUrl": "https://rubiconproject.com/privacy/consumer-online-profile-and-opt-out/",
+      "wildcard": "0"
+    }
+  ],
   "apiDomain_*": [
     {
       "platform": "SAP",
@@ -22042,7 +22172,7 @@
       "retention": "OCD_retention_1_year",
       "dataController": "MercadoLibre",
       "gdprUrl": "https://www.mercadolibre.com.ar/privacidad",
-      "wildcard": ""
+      "wildcard": "0"
     }
   ],
   "ftid": [
@@ -28231,6 +28361,32 @@
       "dataController": "Command Act X",
       "gdprUrl": "https://www.commandersact.com/en/privacy-policy/",
       "wildcard": "1"
+    }
+  ],
+  "cs": [
+    {
+      "platform": "GumGum",
+      "category": "Marketing",
+      "name": "cs",
+      "domain": ".gumgum.com",
+      "description": "OCD_cs_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "GumGum",
+      "gdprUrl": "https://gumgum.com/terms-and-policies/cookies-policy",
+      "wildcard": "0"
+    }
+  ],
+  "vst": [
+    {
+      "platform": "GumGum",
+      "category": "Marketing",
+      "name": "vst",
+      "domain": ".gumgum.com",
+      "description": "OCD_vst_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "GumGum",
+      "gdprUrl": "https://gumgum.com/terms-and-policies/cookies-policy",
+      "wildcard": "0"
     }
   ]
 }
