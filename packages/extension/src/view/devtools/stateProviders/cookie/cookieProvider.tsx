@@ -24,8 +24,13 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import { type TabCookies } from '@google-psat/common';
-import { diff } from 'deep-object-diff';
+import {
+  getCookieKey,
+  noop,
+  type CookieTableData,
+  type TabCookies,
+} from '@google-psat/common';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -44,6 +49,7 @@ import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 import Context, { type CookieStoreContext } from './context';
+import { useGlobalFiltering } from '@google-psat/design-system';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -100,9 +106,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           extraFrameData ?? {},
           isUsingCDP
         );
-        const isThereDiff = diff(prevState ?? {}, updatedTabFrames);
 
-        if (Object.keys(isThereDiff).length === 0) {
+        if (isEqual(prevState ?? {}, updatedTabFrames)) {
           return prevState;
         }
 
@@ -117,7 +122,7 @@ const Provider = ({ children }: PropsWithChildren) => {
    */
   const frameHasCookies = useCallback(() => {
     if (!tabCookies) {
-      return {};
+      return null;
     }
 
     const tabFramesIdsWithURL = Object.entries(tabFrames || {}).reduce<
@@ -221,6 +226,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       Object.keys(tabFrames).length > 0
     ) {
       setTabFrames(null);
+      setTabCookies(null);
     }
   }, [allowedNumberOfTabs, tabFrames]);
 
@@ -310,8 +316,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             setTabToRead(tabId.toString());
             setTabCookies((prevState) => {
               if (Object.keys(data).length > 0) {
-                const isThereDiff = diff(prevState ?? {}, data);
-                if (Object.keys(isThereDiff).length === 0) {
+                if (isEqual(prevState ?? {}, data)) {
                   return prevState;
                 }
                 return data;
@@ -416,6 +421,24 @@ const Provider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
+  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
+
+  const filter = useGlobalFiltering(cookies, '', noop);
+
+  const cookiesByKey = useMemo(() => {
+    return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
+      const cookieKey = getCookieKey((cookie as CookieTableData).parsedCookie);
+
+      if (!cookieKey) {
+        return acc;
+      }
+
+      acc[cookieKey] = cookie as CookieTableData;
+
+      return acc;
+    }, {});
+  }, [filter.filteredData]);
+
   useEffect(() => {
     const doNotReReload =
       localStorage.getItem('contextInvalidated') &&
@@ -453,6 +476,8 @@ const Provider = ({ children }: PropsWithChildren) => {
         canStartInspecting,
         tabToRead,
         frameHasCookies: frameHasCookies(),
+        cookiesByKey,
+        filter,
       },
       actions: {
         setSelectedFrame,
@@ -464,6 +489,8 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    filter,
+    cookiesByKey,
     canStartInspecting,
     changeListeningToThisTab,
     contextInvalidated,

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { memo } from 'react';
 import { type DataMapping } from '@google-psat/common';
 import classnames from 'classnames';
 
@@ -81,4 +81,4 @@ const LandingHeader = ({
   );
 };
 
-export default LandingHeader;
+export default memo(LandingHeader);

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { type DataMapping } from '@google-psat/common';
 /**
  * Internal dependencies.
@@ -43,16 +43,23 @@ const CookiesLandingWrapper = ({
   children,
   landingHeaderExtraClasses = '',
 }: CookiesLandingWrapperProps) => {
+  const component = useMemo(() => {
+    if (showLandingHeader) {
+      return (
+        <LandingHeader
+          dataMapping={dataMapping}
+          extraClasses={landingHeaderExtraClasses}
+        />
+      );
+    }
+    return <></>;
+  }, [dataMapping, landingHeaderExtraClasses, showLandingHeader]);
+
   return (
     <div className="w-full flex flex-col min-w-[40rem]">
       <div className="w-full min-w-[40rem]" data-testid={testId}>
         <div className="pb-5">
-          {showLandingHeader && (
-            <LandingHeader
-              dataMapping={dataMapping}
-              extraClasses={landingHeaderExtraClasses}
-            />
-          )}
+          {component}
           {Boolean(infoIconTitle) && (
             <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-center max-w-2xl">
               <div>
