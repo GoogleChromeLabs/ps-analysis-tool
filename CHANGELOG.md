@@ -449,3 +449,28 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 
 ## Extension
 - Fix: Miscellaneous QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/795
+
+
+#v0.11.0
+
+# Changelog
+
+## Extension
+* Feature: Create PSAT landing page and dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/827
+* Feature: Add Wiki section in the extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/816
+* Feature: Add breadcrumbs to landing pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/832
+* Feature: Add tabs navigation inside landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/808
+* Feature: Add collapsible sidebar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/821
+* Refactor: Update order of PAT Section components https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/831
+
+
+## CLI
+* Feature: High level aggregated CSV download for sitemaps https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/814
+* Feature: Expand support for GDPR banner acceptance in CLI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/823
+* Feature: Check for latest version and show message in CLI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/822
+* Fix CLI output typo and improve text https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/806
+* Add "ok" for gdpr consent button lookup https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/812
+* Remove Wappalyzer used for technologies from CLI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/833
+
+## Others
+* Resolve high and moderate vulnerabilities in package dependencies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/836
