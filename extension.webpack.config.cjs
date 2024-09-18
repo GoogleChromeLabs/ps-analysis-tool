@@ -19,7 +19,6 @@ const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const commonConfig = require('./webpack.shared.cjs');
-const MillionLint = require('@million/lint');
 
 const root = {
   entry: {
@@ -73,7 +72,6 @@ const devTools = {
       name: 'DevTools',
       color: '#357BB5',
     }),
-    MillionLint.webpack(),
     new HtmlWebpackPlugin({
       title: 'PSAT Devtool',
       template: './src/view/devtools/index.html',
