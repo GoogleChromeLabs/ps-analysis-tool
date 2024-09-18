@@ -23,7 +23,7 @@ npm i -g @google-psat/cli
 ### Usage
 
 ```
-psat https://example.com
+psat -u https://example.com
 ```
 
 
