@@ -16,8 +16,15 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import React, { useMemo } from 'react';
+import {
+  Breadcrumbs,
+  InfoCard,
+  PSInfoKey,
+  QuickLinksList,
+  Tabs,
+  useSidebar,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -27,16 +34,49 @@ import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
+  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
+    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
+  }));
+
+  const tabItems = useMemo(
+    () => [
+      {
+        title: 'Overview',
+        content: {
+          Element: InfoCard,
+          props: {
+            infoKey: PSInfoKey.RelatedWebsiteSets,
+          },
+        },
+      },
+      {
+        title: 'Membership',
+        content: {
+          Element: Insights,
+        },
+      },
+      {
+        title: 'JSON Generator',
+        content: {
+          Element: RWSJsonGenerator,
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <div data-testid="related-website-sets-content" className="h-full w-full">
-      <LandingPage
-        title={I18n.getMessage('rws')}
-        psInfoKey={PSInfoKey.RelatedWebsiteSets}
-        extraClasses="max-w-2xl h-fit"
-      >
-        <Insights />
-        <RWSJsonGenerator />
-      </LandingPage>
+      <div className="p-4 flex flex-col gap-1 mb-2">
+        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+          <h1 className="text-left">{I18n.getMessage('rws')}</h1>
+        </div>
+        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
+      </div>
+      <Tabs items={tabItems} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
     </div>
   );
 };

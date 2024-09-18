@@ -64,17 +64,14 @@ const RWSJsonGenerator = () => {
 
   return (
     <>
-      <div className="overflow-auto py-6">
+      <div className="overflow-auto">
         <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
-          <h1 className="text-lg font-semibold">
-            {I18n.getMessage('rwsJsonGenerator')}
-          </h1>
           <p
-            className="text-xs py-3"
+            className="text-sm"
             dangerouslySetInnerHTML={{
               __html: I18n.getMessage('rwsJsonGeneratorNote', [
                 `<a
-              className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
+              class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
               title="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
               href="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
               target="_blank"

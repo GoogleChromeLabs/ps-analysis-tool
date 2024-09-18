@@ -18,7 +18,6 @@
  */
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Resizable } from 're-resizable';
-import { I18n } from '@google-psat/i18n';
 import { noop } from '@google-psat/common';
 import {
   Sidebar,
@@ -27,17 +26,14 @@ import {
   type SidebarItems,
   CookieIcon,
   CookieIconWhite,
-  SiteBoundariesIcon,
-  SiteBoundariesIconWhite,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
-
 import { useContentStore } from '../stateProviders/contentStore';
 import CookiesTab from '../tabs/cookies';
 import SiteCookiesWithIssues from '../tabs/siteCookiesWithIssues';
-import Technologies from '../tabs/technologies';
 
 interface LayoutProps {
   selectedSite: string | null;
@@ -52,13 +48,12 @@ const Layout = ({
   query = '',
   clearQuery = noop,
 }: LayoutProps) => {
-  const { technologies, completeJson } = useContentStore(({ state }) => ({
-    technologies: state.technologies,
+  const { completeJson } = useContentStore(({ state }) => ({
     completeJson: state.completeJson,
   }));
 
   const frameUrls = useMemo(() => {
-    const frames = Object.keys(completeJson?.[0].cookieData ?? {});
+    const frames = Object.keys(completeJson?.[0]?.cookieData ?? {});
 
     return frames.filter((url) => url?.includes('http'));
   }, [completeJson]);
@@ -120,7 +115,7 @@ const Layout = ({
             },
             isBlurred:
               Object.keys(
-                completeJson?.[0].cookieData?.[url]?.frameCookies || {}
+                completeJson?.[0]?.cookieData?.[url]?.frameCookies || {}
               ).length === 0,
           };
 
@@ -136,29 +131,6 @@ const Layout = ({
         },
       };
 
-      if (technologies && technologies.length > 0) {
-        _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES] = {
-          title: I18n.getMessage('technologies'),
-          children: {},
-          icon: {
-            //@ts-ignore
-            Element: SiteBoundariesIcon,
-          },
-          selectedIcon: {
-            //@ts-ignore
-            Element: SiteBoundariesIconWhite,
-          },
-          panel: {
-            Element: Technologies,
-            props: {
-              selectedSite,
-            },
-          },
-        };
-      } else {
-        delete _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES];
-      }
-
       return _data;
     });
   }, [
@@ -169,7 +141,6 @@ const Layout = ({
     selectedItemKey,
     selectedSite,
     setSidebarData,
-    technologies,
   ]);
 
   useEffect(() => {

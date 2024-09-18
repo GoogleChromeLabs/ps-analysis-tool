@@ -90,11 +90,11 @@ const LibraryDetection = memo(function LibraryDetection() {
         })}
       </>
     ) : !errorOccured ? (
-      <p className="text-center dark:text-bright-gray">
+      <p className="text-center text-gray  dark:text-bright-gray">
         {I18n.getMessage('noLibraries')}
       </p>
     ) : (
-      <p className="text-center dark:text-bright-gray">
+      <p className="text-center text-gray dark:text-bright-gray">
         {I18n.getMessage('errorOccured')}
       </p>
     );
@@ -108,7 +108,7 @@ const LibraryDetection = memo(function LibraryDetection() {
       {!errorOccured && showLoader ? (
         <>
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
-          <p className="text-center dark:text-bright-gray">
+          <p className="text-center text-gray  dark:text-bright-gray">
             {isCurrentTabLoading
               ? I18n.getMessage('waitingPageLoad')
               : I18n.getMessage('checkingLibraries')}

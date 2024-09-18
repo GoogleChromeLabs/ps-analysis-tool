@@ -29,15 +29,13 @@ import {
   type LibraryData,
   removeAndAddNewSpinnerText,
 } from '@google-psat/common';
-import {
-  analyzeCookiesUrlsInBatchesAndFetchResources,
-  analyzeTechnologiesUrlsInBatches,
-} from '@google-psat/analysis-utils';
+import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
 import {
   DetectionFunctions,
   LIBRARIES,
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
+import { pathToFileURL } from 'node:url';
 
 /**
  * Internal dependencies.
@@ -56,6 +54,9 @@ import {
 } from './utils';
 import { redLogger } from './utils/coloredLoggers';
 import saveResultsAsHTML from './utils/saveResultAsHTML';
+import getSelectorsFromPath from './utils/getSelectorsFromPath';
+import checkLatestVersion from './utils/checkLatestVersion';
+import packageJson from '../package.json';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -67,9 +68,9 @@ const isFromNPMRegistry = !existsSync(
 
 program
   .name(isFromNPMRegistry ? 'psat' : 'npm run cli')
-  .version('0.10.1')
+  .version(packageJson.version)
   .usage(
-    isFromNPMRegistry ? '[website-url] [option]' : '[website-url] -- [options]'
+    isFromNPMRegistry ? '[website-url] [options]' : '[website-url] -- [options]'
   )
   .description('CLI to test a URL for 3p cookies.')
   .argument('[website-url]', 'The URL of a single site to analyze', (value) =>
@@ -95,7 +96,6 @@ program
   )
   .option('-d, --display', 'Flag for running CLI in non-headless mode', false)
   .option('-v, --verbose', 'Enables verbose logging', false)
-  .option('-t, --tech', 'Enables technology analysis', false)
   .option(
     '-o, --out-dir <path>',
     'Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard',
@@ -125,6 +125,11 @@ program
     (value) => localeValidator(value, '-l'),
     'en'
   )
+  .option(
+    '-b, --button-selectors <path>',
+    'The path to a json file which contains selectors or button text to be used for GDPR banner acceptance',
+    (value) => filePathValidator(value, '-b')
+  )
   .helpOption('-h, --help', 'Display help for command')
   .addHelpText(
     'after',
@@ -152,11 +157,13 @@ program.parse();
   const numberOfUrlsInput = program.opts().numberOfUrls;
   const isHeadful = program.opts().display;
   const shouldSkipPrompts = program.opts().quiet;
-  const shouldDoTechnologyAnalysis = program.opts().tech;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().ignoreGdpr;
   const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
+  const selectorFilePath = program.opts().buttonSelectors;
+
+  await checkLatestVersion();
 
   const numArgs: number = [
     Boolean(url),
@@ -194,6 +201,12 @@ program.parse();
 
   const spinnies = new Spinnies();
 
+  let selectors;
+
+  if (selectorFilePath) {
+    selectors = getSelectorsFromPath(selectorFilePath);
+  }
+
   const urls = await getUrlListFromArgs(url, spinnies, sitemapUrl, filePath);
 
   let urlsToProcess: string[] = [];
@@ -227,7 +240,7 @@ program.parse();
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analyzing cookies on first site visit',
+    text: 'Analyzing cookies on the first site visit',
   });
 
   const cookieAnalysisAndFetchedResourceData =
@@ -241,7 +254,8 @@ program.parse();
       spinnies,
       shouldSkipAcceptBanner,
       verbose,
-      sitemapUrl || filePath ? 4 : 3
+      sitemapUrl || filePath ? 4 : 3,
+      selectors
     );
 
   removeAndAddNewSpinnerText(
@@ -249,27 +263,6 @@ program.parse();
     'cookie-spinner',
     'Done analyzing cookies!'
   );
-
-  let technologyAnalysisData: any = null;
-
-  if (shouldDoTechnologyAnalysis) {
-    spinnies.add('technology-spinner', {
-      text: 'Analyzing technologies',
-    });
-
-    technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
-      urlsToProcess,
-      concurrency,
-      spinnies,
-      sitemapUrl || filePath ? 4 : 3
-    );
-
-    removeAndAddNewSpinnerText(
-      spinnies,
-      'technology-spinner',
-      'Done analyzing technologies!'
-    );
-  }
 
   const result = urlsToProcess.map((_url, ind) => {
     const detectedMatchingSignatures: LibraryData = {
@@ -283,7 +276,7 @@ program.parse();
     };
     return {
       pageUrl: _url,
-      technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
+      psatVersion: packageJson.version, // For adding in downloaded JSON file.
       cookieData: cookieAnalysisAndFetchedResourceData[ind].cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;
@@ -296,6 +289,7 @@ program.parse();
   if (outDir) {
     await saveReports(path.resolve(outputDir), result, sitemapUrl);
     console.log('Reports created successfully!');
+    console.log(`Report path: ${pathToFileURL(outputDir)}`);
     process.exit(0);
   }
 
@@ -322,12 +316,12 @@ program.parse();
 })().catch((error) => {
   const spinnies = new Spinnies();
   spinnies.add('error-line-1', {
-    text: 'Some error occured while analyzing the website.',
+    text: 'Some errors occurred while analyzing the website.',
     status: 'non-spinnable',
     color: 'red',
   });
   spinnies.add('error-line-2', {
-    text: 'For more information check the stack trace below:\n',
+    text: 'For more information, check the stack trace below:\n',
     status: 'non-spinnable',
     color: 'red',
   });

@@ -17,19 +17,15 @@
  * External dependencies
  */
 import React, { useEffect, useState } from 'react';
-import type {
-  CompleteJson,
-  CookieFrameStorageType,
-  LibraryData,
-  TechnologyData,
-} from '@google-psat/common';
-import { I18n } from '@google-psat/i18n';
 import {
+  type CompleteJson,
+  type CookieFrameStorageType,
+  type LibraryData,
   extractReportData,
   extractCookies,
-  SiteMapReport,
-  SiteReport,
-} from '@google-psat/report';
+} from '@google-psat/common';
+import { I18n } from '@google-psat/i18n';
+import { SiteMapReport, SiteReport } from '@google-psat/report';
 
 /**
  * Internal dependencies
@@ -45,7 +41,6 @@ const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
   const [landingPageCookies, setLandingPageCookies] =
     useState<CookieFrameStorageType>({});
-  const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
@@ -100,7 +95,6 @@ const App = () => {
     setCompleteJsonReport(data);
 
     let _cookies: CookieFrameStorageType = {},
-      _technologies: TechnologyData[] = [],
       _libraryMatches: {
         [key: string]: LibraryData;
       } = {};
@@ -112,12 +106,10 @@ const App = () => {
       setLandingPageCookies(extractedData.landingPageCookies);
     } else {
       _cookies = extractCookies(data[0].cookieData, '', true);
-      _technologies = data[0].technologyData;
       _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
     }
 
     setCookies(_cookies);
-    setTechnologies(_technologies);
     setLibraryMatches(_libraryMatches);
   }, [type]);
 
@@ -138,7 +130,6 @@ const App = () => {
       <SiteReport
         completeJson={completeJsonReport}
         cookies={cookies}
-        technologies={technologies}
         // @ts-ignore
         selectedSite={globalThis?.PSAT_DATA?.selectedSite}
         // @ts-ignore

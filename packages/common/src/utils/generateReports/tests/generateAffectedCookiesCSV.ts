@@ -15,7 +15,7 @@
  */
 
 import generateCookiesWithIssuesCSV from '../generateCookiesWithIssuesCSV';
-import { mockData1 } from './data.mock';
+import { mockData1 } from '../../../test-utils/data.mock';
 
 describe('generateCookiesWithIssuesCSV', () => {
   it('should create CSV string for cookies with issues', () => {

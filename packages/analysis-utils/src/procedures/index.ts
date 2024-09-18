@@ -16,4 +16,3 @@
 
 export { analyzeCookiesUrlsAndFetchResources } from './analyzeCookiesUrlsAndFetchResources';
 export { analyzeCookiesUrlsInBatchesAndFetchResources } from './analyzeCookiesUrlsInBatchesAndFetchResources';
-export { analyzeTechnologiesUrlsInBatches } from './analyzeTechnologiesUrlsInBatches';

@@ -16,7 +16,7 @@
 
 import { parseUrl } from '@google-psat/common';
 import { existsSync, mkdirSync } from 'fs';
-import path from 'path';
+import path, { isAbsolute } from 'path';
 import { InvalidArgumentError } from 'commander';
 
 /**
@@ -58,11 +58,11 @@ export function numericValidator(value: string, flag: string) {
     switch (flag) {
       case '-n':
         throw new InvalidArgumentError(
-          "Correct value for option  '-n, --number-of-urls <num>' would be non negative number greater than 0 and less than equal to total number of urls"
+          "The correct value for option  '-n, --number-of-urls <num>' would be a nonnegative number greater than 0 and less than equal to the total number of URLs"
         );
       case '-c':
         throw new InvalidArgumentError(
-          "Correct value for option '-c, --concurrency <num>' would be non negative number greater than 0 and less than equal to total number of urls"
+          "The correct value for option '-c, --concurrency <num>' would be a nonnegative number greater than 0 and less than equal to the total number of URLs"
         );
       case '-w':
         throw new InvalidArgumentError(
@@ -75,7 +75,7 @@ export function numericValidator(value: string, flag: string) {
 
   const parsedValue = parseInt(value);
   if (isNaN(parsedValue)) {
-    redLogger(`Error: ${value} is not valid numeric value.`);
+    redLogger(`Error: ${value} is not a valid numeric value.`);
   }
   return parsedValue;
 }
@@ -125,15 +125,29 @@ export function filePathValidator(filePath: string, flag: string) {
         throw new InvalidArgumentError(
           "Correct value for option '-f, --file <path>' would be /users/path/to/urls.csv or /users/path/to/urls.xml"
         );
+      case '-b':
+        throw new InvalidArgumentError(
+          "Correct value for option '-b, --button-selector <path>' would be /users/path/to/selectors.json"
+        );
       default:
         throw new InvalidArgumentError('');
     }
   }
 
-  const csvFileExists = existsSync(filePath);
-  if (!csvFileExists) {
-    redLogger(`Error: No file at ${filePath}`);
+  if (flag === '-b' && path.extname(filePath) !== '.json') {
+    redLogger('Error: Provided selector file must be a JSON file.');
   }
+
+  const fileExists = existsSync(filePath);
+  if (!fileExists) {
+    const isAbsoluteFilePath = isAbsolute(filePath);
+    const absoluteFilePath = path.resolve(filePath);
+
+    redLogger(
+      `Error: No file at ${isAbsoluteFilePath ? filePath : absoluteFilePath}`
+    );
+  }
+
   return filePath;
 }
 
@@ -148,15 +162,15 @@ export function urlValidator(url: string, flag: string) {
     switch (flag) {
       case '[website-url]':
         throw new InvalidArgumentError(
-          'Correct value for command-argument would be https://example.com'
+          'The correct value for the command-argument would be https://example.com'
         );
       case '-u':
         throw new InvalidArgumentError(
-          "Correct value for option '-u, --url <url>' would be https://example.com"
+          "The correct value for option '-u, --url <url>' would be https://example.com"
         );
       case '-s':
         throw new InvalidArgumentError(
-          "Correct value for option '-s, --source-url <url>' would be https://gagan.pro/sitemap/toypta.xml or https://sitemap.superintegratedapp.com/sitemaps/sitemap.csv"
+          "The correct value for option '-s, --source-url <url>' would be https://example.com/sitemap/sitemap.xml or https://example.com/sitemaps/sitemap.csv"
         );
       default:
         throw new InvalidArgumentError('');
@@ -182,32 +196,37 @@ export function outDirValidator(outDir: string, flag: string) {
     switch (flag) {
       case '-o':
         throw new InvalidArgumentError(
-          "Correct value for option '-o, --out-dir <path>' would be /users/path/to/save/output"
+          "The correct value for option '-o, --out-dir <path>' would be /users/path/to/save/output"
         );
       default:
         throw new InvalidArgumentError('');
     }
   }
 
-  const parentDirExists = existsSync(path.resolve('./out'));
-
-  if (!parentDirExists) {
-    mkdirSync(path.resolve('./out'));
-  }
-
   let output;
 
-  if (!path.isAbsolute(outDir)) {
-    output = path.resolve('./out', outDir);
-  } else {
-    output = path.resolve(outDir);
-  }
+  try {
+    const parentDirExists = existsSync(path.resolve('./out'));
 
-  const outDirExists = existsSync(output);
+    if (!parentDirExists) {
+      mkdirSync(path.resolve('./out'));
+    }
 
-  if (!outDirExists) {
-    console.log(`"${output}" does not exist, creating\n`);
-    mkdirSync(output);
+    if (!path.isAbsolute(outDir)) {
+      output = path.resolve('./out', outDir);
+    } else {
+      output = path.resolve(outDir);
+    }
+
+    const outDirExists = existsSync(output);
+
+    if (!outDirExists) {
+      mkdirSync(output);
+      console.log(`"${output}" does not exist, creating\n`);
+    }
+    return outDir;
+  } catch (error) {
+    redLogger(`Error in creating directory ${output}.`);
+    return null;
   }
-  return outDir;
 }

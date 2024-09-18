@@ -23,6 +23,7 @@ import {
   LibraryData,
   type LibraryMatchers,
   removeAndAddNewSpinnerText,
+  type Selectors,
 } from '@google-psat/common';
 
 /**
@@ -40,7 +41,8 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   spinnies?: Spinnies,
   shouldSkipAcceptBanner = false,
   verbose = false,
-  indent = 4
+  indent = 4,
+  selectors?: Selectors
 ) => {
   let report: {
     url: string;
@@ -81,6 +83,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
         cookieDictionary,
         shouldSkipAcceptBanner,
         verbose,
+        selectors,
         spinnies
       );
 

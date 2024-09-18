@@ -28,6 +28,7 @@ import {
   delay,
   RESPONSE_EVENT,
   REQUEST_EVENT,
+  type Selectors,
 } from '@google-psat/common';
 
 /**
@@ -42,6 +43,7 @@ import {
 } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import collateCookieData from './collateCookieData';
+import { CMP_SELECTORS, CMP_TEXT_SELECTORS } from '../constants';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -56,13 +58,15 @@ export class BrowserManagement {
   shouldLogDebug: boolean;
   spinnies: Spinnies | undefined;
   indent = 0;
+  selectors: Selectors | undefined;
   constructor(
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
     pageWaitTime: number,
     shouldLogDebug: boolean,
     indent: number,
-    spinnies?: Spinnies
+    spinnies?: Spinnies,
+    selectors?: Selectors
   ) {
     this.viewportConfig = viewportConfig;
     this.browser = null;
@@ -76,13 +80,13 @@ export class BrowserManagement {
     this.pageResourcesMaps = {};
     this.spinnies = spinnies;
     this.indent = indent;
+    this.selectors = selectors;
   }
 
   debugLog(msg: any) {
     if (this.shouldLogDebug && this.spinnies) {
       this.spinnies.add(msg, {
         text: msg,
-        //@ts-ignore
         succeedColor: 'white',
         status: 'non-spinnable',
         indent: this.indent,
@@ -105,7 +109,77 @@ export class BrowserManagement {
       headless: this.isHeadless,
       args,
     });
-    this.debugLog('Browser intialized');
+
+    this.debugLog('Browser initialized');
+  }
+
+  async clickOnButtonUsingCMPSelectors(page: Page): Promise<boolean> {
+    let clickedOnButton = false;
+
+    try {
+      await Promise.all(
+        CMP_SELECTORS.map(async (selector) => {
+          const buttonToClick = await page.$(selector);
+          if (buttonToClick) {
+            await buttonToClick.click();
+            clickedOnButton = true;
+          }
+        })
+      );
+      return clickedOnButton;
+    } catch (error) {
+      return clickedOnButton;
+    }
+  }
+
+  async clickOnGDPRUsingTextSelectors(
+    page: Page,
+    textSelectors: string[]
+  ): Promise<boolean> {
+    if (textSelectors.length === 0) {
+      return false;
+    }
+
+    try {
+      const result = await page.evaluate((args: string[]) => {
+        const bannerNodes: Element[] = Array.from(
+          (document.querySelector('body')?.childNodes || []) as Element[]
+        )
+          ?.filter((node: Element) => node && node?.tagName === 'DIV')
+          ?.filter((node) => {
+            if (!node || !node?.textContent) {
+              return false;
+            }
+            const regex =
+              /\b(consent|policy|cookie policy|privacy policy|personalize|preferences|cookies)\b/;
+
+            return regex.test(node.textContent.toLowerCase());
+          });
+
+        return bannerNodes?.some((node: Element) => {
+          const buttonNodes = Array.from(node?.getElementsByTagName('button'));
+
+          return buttonNodes?.some((cnode) => {
+            if (!cnode?.textContent) {
+              return false;
+            }
+
+            return args.some((text) => {
+              if (cnode?.textContent?.toLowerCase().includes(text)) {
+                cnode?.click();
+                return true;
+              }
+
+              return false;
+            });
+          });
+        });
+      }, textSelectors);
+
+      return result;
+    } catch (error) {
+      return false;
+    }
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -115,44 +189,108 @@ export class BrowserManagement {
       throw new Error('No page with the provided id was found');
     }
 
-    await page.evaluate(() => {
-      const bannerNodes: Element[] = Array.from(
-        (document.querySelector('body')?.childNodes || []) as Element[]
-      )
-        .filter((node: Element) => node && node?.tagName === 'DIV')
-        .filter((node) => {
-          if (!node || !node?.textContent) {
+    const didSelectorsFromUserWork = await this.useSelectorsToSelectGDPRBanner(
+      page
+    );
+
+    if (didSelectorsFromUserWork) {
+      this.debugLog('GDPR banner found and accepted');
+      await delay(this.pageWaitTime / 2);
+      return;
+    }
+
+    // Click using CSS selectors.
+    const clickedUsingCMPCSSSelectors =
+      await this.clickOnButtonUsingCMPSelectors(page);
+
+    if (clickedUsingCMPCSSSelectors) {
+      this.debugLog('GDPR banner found and accepted');
+      await delay(this.pageWaitTime / 2);
+      return;
+    }
+
+    const buttonClicked = await this.clickOnGDPRUsingTextSelectors(
+      page,
+      CMP_TEXT_SELECTORS
+    );
+
+    if (buttonClicked) {
+      this.debugLog('GDPR banner found and accepted');
+      await delay(this.pageWaitTime / 2);
+      return;
+    }
+
+    this.debugLog('GDPR banner could not be found');
+    await delay(this.pageWaitTime / 2);
+    return;
+  }
+
+  async useSelectorsToSelectGDPRBanner(page: Page): Promise<boolean> {
+    let clickedOnButton = false;
+
+    if (!this.selectors) {
+      return false;
+    }
+
+    try {
+      await Promise.all(
+        this.selectors?.cssSelectors.map(async (selector) => {
+          const buttonToClick = await page.$(selector);
+          if (buttonToClick) {
+            clickedOnButton = true;
+            this.debugLog('GDPR banner found and accepted');
+            await buttonToClick.click();
+          }
+        })
+      );
+
+      if (clickedOnButton) {
+        return clickedOnButton;
+      }
+
+      clickedOnButton = await page.evaluate((xPaths: string[]) => {
+        const rootElement = document.querySelector('html');
+
+        if (!rootElement) {
+          return false;
+        }
+
+        return xPaths.some((xPath) => {
+          const _acceptButton = document
+            .evaluate(xPath, rootElement)
+            .iterateNext();
+
+          if (!_acceptButton) {
             return false;
           }
-          const regex =
-            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
 
-          return regex.test(node.textContent.toLowerCase());
+          if (_acceptButton instanceof HTMLElement) {
+            _acceptButton?.click();
+            return true;
+          }
+
+          return false;
         });
+      }, this.selectors?.xPath);
 
-      const buttonToClick: HTMLButtonElement[] = bannerNodes
-        .map((node: Element) => {
-          const buttonNodes = Array.from(node.getElementsByTagName('button'));
-          const isButtonForAccept = buttonNodes.filter(
-            (cnode) =>
-              cnode.textContent &&
-              (cnode.textContent.toLowerCase().includes('accept') ||
-                cnode.textContent.toLowerCase().includes('allow') ||
-                cnode.textContent.toLowerCase().includes('agree'))
-          );
+      if (clickedOnButton) {
+        return clickedOnButton;
+      }
 
-          return isButtonForAccept[0];
-        })
-        .filter((button) => button);
-      buttonToClick[0]?.click();
-    });
+      clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
+        page,
+        this.selectors?.textSelectors
+      );
 
-    await delay(this.pageWaitTime / 2);
+      return clickedOnButton;
+    } catch (error) {
+      return clickedOnButton;
+    }
   }
 
   async openPage(): Promise<Page> {
     if (!this.browser) {
-      throw new Error('Browser not intialized');
+      throw new Error('Browser not initialized');
     }
     const sitePage = await this.browser.newPage();
 
@@ -175,7 +313,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     this.debugLog(`Starting navigation to URL: ${url}`);
@@ -195,7 +333,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     try {
@@ -203,7 +341,7 @@ export class BrowserManagement {
         window.scrollBy(0, 10000);
       });
     } catch (error) {
-      this.debugLog('Scrolled to end of page');
+      this.debugLog('Scrolled to the end of page');
       //ignore
     }
 
@@ -480,10 +618,10 @@ export class BrowserManagement {
     const page = this.pages[pageId];
 
     if (!page) {
-      throw new Error(`no page with the provided id was found:${pageId}`);
+      throw new Error(`No page with the provided ID was found:${pageId}`);
     }
 
-    this.debugLog('Attaching network event listeners to page');
+    this.debugLog('Attaching network event listeners to the page');
 
     const cdpSession = await page.createCDPSession();
 
@@ -611,7 +749,7 @@ export class BrowserManagement {
     const page = this.pages[url];
 
     if (!page) {
-      throw new Error('no page with the provided id was found');
+      throw new Error('No page with the provided ID was found');
     }
 
     const domQueryMatches: LibraryData = {};

@@ -28,6 +28,7 @@ import fs from 'fs';
  * Internal dependencies
  */
 import getOutputFilePath from './getOutputFilePath';
+import packageJson from '../../package.json';
 
 const isProduction = process.env.NODE_ENV === 'production';
 /**
@@ -105,6 +106,7 @@ const saveResultsAsHTML = async (
         translations: messages,
         dateTime,
         siteMapUrl: isSiteMap ? sitemapUrl : '',
+        psatVersion: packageJson.version,
       })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
 
