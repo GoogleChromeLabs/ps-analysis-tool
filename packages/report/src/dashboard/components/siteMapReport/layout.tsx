@@ -26,6 +26,7 @@ import {
   type LibraryData,
   noop,
   reshapeCookies,
+  BLOCK_STATUS,
 } from '@google-psat/common';
 import {
   useSidebar,
@@ -80,7 +81,12 @@ const Layout = ({
       Object.fromEntries(
         Object.entries(reshapedCookies).filter(
           ([, cookie]) =>
-            cookie.isBlocked ||
+            Boolean(
+              cookie?.blockingStatus?.inboundBlock !==
+                BLOCK_STATUS.NOT_BLOCKED ||
+                cookie?.blockingStatus?.outboundBlock !==
+                  BLOCK_STATUS.NOT_BLOCKED
+            ) ||
             (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
         )
       ),

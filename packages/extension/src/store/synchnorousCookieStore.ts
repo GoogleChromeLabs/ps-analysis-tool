@@ -35,6 +35,7 @@ import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
+import shouldUpdateCounter from './utils/shouldUpdateCounter';
 
 class SynchnorousCookieStore {
   /**
@@ -626,8 +627,16 @@ class SynchnorousCookieStore {
           ])
         ).map((frameId) => frameId.toString());
 
-        if (this.tabsData[tabId]?.[cookieKey]) {
+        const updateCounterBoolean = shouldUpdateCounter(
+          this.tabsData[tabId][cookieKey],
+          cookie
+        );
+
+        if (updateCounterBoolean) {
           this.tabs[tabId].newUpdates++;
+        }
+
+        if (this.tabsData[tabId]?.[cookieKey]) {
           // Merge in previous warning reasons.
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
@@ -646,6 +655,7 @@ class SynchnorousCookieStore {
               'Medium',
             partitionKey: '',
           };
+
           if (
             cookie.parsedCookie?.partitionKey ||
             this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey

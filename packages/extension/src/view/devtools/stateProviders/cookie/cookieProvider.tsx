@@ -51,6 +51,17 @@ import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 import Context, { type CookieStoreContext } from './context';
 import { useGlobalFiltering } from '@google-psat/design-system';
 
+const getCookiesSetByJavascript = async () => {
+  if (chrome.devtools.inspectedWindow.tabId) {
+    await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+      payload: {
+        type: GET_JS_COOKIES,
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      },
+    });
+  }
+};
+
 const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -138,21 +149,20 @@ const Provider = ({ children }: PropsWithChildren) => {
       return acc;
     }, {});
 
-    const _frameHasCookies = Object.values(tabCookies).reduce<
-      Record<string, boolean>
-    >((acc, cookie) => {
-      cookie.frameIdList?.forEach((frameId) => {
-        const url = tabFramesIdsWithURL[frameId];
+    return Object.values(tabCookies).reduce<Record<string, boolean>>(
+      (acc, cookie) => {
+        cookie.frameIdList?.forEach((frameId) => {
+          const url = tabFramesIdsWithURL[frameId];
 
-        if (url) {
-          acc[url] = true;
-        }
-      });
+          if (url) {
+            acc[url] = true;
+          }
+        });
 
-      return acc;
-    }, {});
-
-    return _frameHasCookies;
+        return acc;
+      },
+      {}
+    );
   }, [tabCookies, tabFrames]);
 
   /**
@@ -192,17 +202,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     setLoading(false);
   }, [getAllFramesForCurrentTab, canStartInspecting]);
-
-  const getCookiesSetByJavascript = useCallback(async () => {
-    if (chrome.devtools.inspectedWindow.tabId) {
-      await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
-        payload: {
-          type: GET_JS_COOKIES,
-          tabId: chrome.devtools.inspectedWindow.tabId,
-        },
-      });
-    }
-  }, []);
 
   const changeListeningToThisTab = useCallback(() => {
     const tabId = chrome.devtools.inspectedWindow.tabId;
@@ -495,7 +494,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     changeListeningToThisTab,
     contextInvalidated,
     frameHasCookies,
-    getCookiesSetByJavascript,
     isInspecting,
     loading,
     returningToSingleTab,

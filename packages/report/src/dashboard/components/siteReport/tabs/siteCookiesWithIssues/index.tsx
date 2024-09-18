@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import { BLOCK_STATUS } from '@google-psat/common';
+/**
  * Internal dependencies
  */
 import CookiesWithIssues from '../../../cookiesWithIssues';
@@ -28,7 +32,11 @@ const SiteCookiesWithIssues = ({
 }: SiteCookiesWithIssuesProps) => {
   const { tabCookies, path } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
-      (cookie) => cookie.isBlocked || cookie.blockedReasons?.length
+      (cookie) =>
+        Boolean(
+          cookie?.blockingStatus?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED ||
+            cookie?.blockingStatus?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED
+        ) || cookie.blockedReasons?.length
     ),
     path: state.path,
   }));

@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CookieTableData } from '@google-psat/common';
+import { BLOCK_STATUS, type CookieTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -288,14 +288,26 @@ const useFrameOverlay = (
           const blockedCookies = filteredCookies
             ? filteredCookies.filter(
                 (cookie) =>
-                  cookie.isBlocked ||
+                  Boolean(
+                    cookie?.blockingStatus?.inboundBlock !==
+                      BLOCK_STATUS.NOT_BLOCKED ||
+                      cookie?.blockingStatus?.outboundBlock !==
+                        BLOCK_STATUS.NOT_BLOCKED
+                  ) ||
                   (cookie.blockedReasons?.length !== undefined &&
                     cookie.blockedReasons?.length > 0)
               )
             : [];
           const blockedReasons = filteredCookies
             ? filteredCookies
-                .filter((cookie) => cookie.isBlocked)
+                .filter((cookie) =>
+                  Boolean(
+                    cookie?.blockingStatus?.inboundBlock !==
+                      BLOCK_STATUS.NOT_BLOCKED ||
+                      cookie?.blockingStatus?.outboundBlock !==
+                        BLOCK_STATUS.NOT_BLOCKED
+                  )
+                )
                 .reduce((previousReasons: string[], cookie) => {
                   if (
                     cookie.blockedReasons?.length !== undefined &&

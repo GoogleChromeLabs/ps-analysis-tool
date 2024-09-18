@@ -24,6 +24,7 @@ import {
   type LibraryData,
   type TabCookies,
   type TabFrames,
+  BLOCK_STATUS,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
@@ -97,7 +98,12 @@ const AssembledCookiesLanding = ({
       Object.fromEntries(
         Object.entries(cookiesByKey).filter(
           ([, cookie]) =>
-            cookie.isBlocked ||
+            Boolean(
+              cookie.blockingStatus?.inboundBlock !==
+                BLOCK_STATUS.NOT_BLOCKED ||
+                cookie?.blockingStatus?.outboundBlock !==
+                  BLOCK_STATUS.NOT_BLOCKED
+            ) ||
             (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
         )
       ),
