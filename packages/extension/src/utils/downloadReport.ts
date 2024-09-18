@@ -106,6 +106,7 @@ export const generateDashboard = async (
     appliedFilters,
     dateTime,
     psatVersion: version,
+    hideDownloadButton: true,
   })}`;
 
   script.text = code;

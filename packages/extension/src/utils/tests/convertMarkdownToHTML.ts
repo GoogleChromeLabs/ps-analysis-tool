@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable no-useless-escape -- This is being done in order to pass the test since the output is going to be an html */
 /**
  * Internal dependencies.
  */
@@ -25,7 +27,10 @@ describe('convertMarkdownToHTML', () => {
     const markdown = '![alt text](/images/sample.png)';
     const html = `<p><img src="${IMAGE_BASE_URL}/sample.png" alt="alt text"></p>`;
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.trim()).toEqual(html);
 
@@ -33,7 +38,11 @@ describe('convertMarkdownToHTML', () => {
       '[![Alt text](/images/sample.png)](https://example.com)';
 
     const resultClickableLink = await convertMarkdownToHTML(
-      markdownClickableLink
+      markdownClickableLink,
+      {
+        initialize: () => undefined,
+        render: () => undefined,
+      }
     );
     const htmlClickableLink = `<p><a target="_blank" href="https://example.com"><img src="${IMAGE_BASE_URL}/sample.png" alt="Alt text"></a></p>`;
 
@@ -45,7 +54,11 @@ describe('convertMarkdownToHTML', () => {
       '<p><img src="https://example.com/images/sample.png" alt="alt text"></p>';
 
     const resultExternalImage = await convertMarkdownToHTML(
-      markdownExternalImage
+      markdownExternalImage,
+      {
+        initialize: () => undefined,
+        render: () => undefined,
+      }
     );
 
     expect(resultExternalImage.trim()).toEqual(htmlExternalImage);
@@ -56,7 +69,10 @@ describe('convertMarkdownToHTML', () => {
     const html =
       '<p><a target="_blank" href="https://example.com">Link</a></p>';
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.trim()).toEqual(html);
   });
@@ -65,7 +81,10 @@ describe('convertMarkdownToHTML', () => {
     const markdown = `![image](/images/sample.png)[Link](https://example.com)`;
     const html = `<p><img src="${IMAGE_BASE_URL}/sample.png" alt="image"><a target="_blank" href="https://example.com">Link</a></p>`;
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.trim()).toEqual(html);
   });
@@ -125,7 +144,7 @@ If you need to debug the extension or submit improvements, you can download the 
 <p>Expand the “Assets” dropdown, and click on the file named “extension-v*.*.zip” to download the extension.</p>
 <img width="742" alt="Install from zip file, step three" src="${IMAGE_BASE_URL}/evaluation-environment/psat_v0.8.0_download_zip_24_04_2024.png">
 
-<p>Go to <code>chrome://extensions</code> in the browser you want PSAT to be installed on, turn on <code>Developer mode</code> to <a target="_blank" href="https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked">load the unpacked extension</a>, click the &quot;Load unpacked&quot; button, and select the unzipped extension folder.</p>
+<p>Go to <code>chrome://extensions</code> in the browser you want PSAT to be installed on, turn on <code>Developer mode</code> to <a target="_blank" href="https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked">load the unpacked extension</a>, click the \"Load unpacked"\ button, and select the unzipped extension folder.</p>
 <img width="742" alt="Chrome Settings page, step four" src="${IMAGE_BASE_URL}/evaluation-environment/psat_v0.8.0_chrome_extension_settings_24_05_2024.png">
 
 <h2>PSAT installation from source code</h2>
@@ -134,12 +153,15 @@ If you need to debug the extension or submit improvements, you can download the 
 <li>Clone this Privacy Sandbox Analysis Tool Repository</li>
 <li>Run <code>npm install</code> to install all dependencies</li>
 <li><code>npm run ext:dev</code> or <code>npm run ext:build</code> to generate a build in <code>/dist/extension</code></li>
-<li>Turn on &quot;Developer mode&quot; in <code>chrome://extensions</code> to <a target="_blank" href="https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked">load the unpacked extension</a></li>
-<li>Click on the &quot;Load Unpacked&quot; button and upload the <code>dist/extension</code> folder</li>
+<li>Turn on \"Developer mode"\ in <code>chrome://extensions</code> to <a target="_blank" href="https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked">load the unpacked extension</a></li>
+<li>Click on the \"Load Unpacked"\ button and upload the <code>dist/extension</code> folder</li>
 </ul>
 `;
 
-    const result = await convertMarkdownToHTML(markdown);
+    const result = await convertMarkdownToHTML(markdown, {
+      initialize: () => undefined,
+      render: () => undefined,
+    });
 
     expect(result.replace(/\s+/g, ' ').trim()).toEqual(
       html.replace(/\s+/g, ' ').trim()

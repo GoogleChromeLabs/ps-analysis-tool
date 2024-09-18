@@ -113,7 +113,9 @@ const Wiki = () => {
           const response = await fetch(GITHUB_URL + '/' + fileName);
 
           const markdown = await response.text();
-          const html = await convertMarkdownToHTML(markdown);
+          const mermaidJS = (await import('mermaid')).default;
+
+          const html = await convertMarkdownToHTML(markdown, mermaidJS);
 
           loadedContent[currentSelectedPage] = html;
 
@@ -182,7 +184,11 @@ const Wiki = () => {
         >
           {!isLoading ? (
             <div className="markdown-container min-w-[45rem]">
-              <h2>{currentSelectedPage}</h2>
+              <h2>
+                {currentSelectedPage
+                  ? currentSelectedPage.replaceAll('-', ' ')
+                  : ''}
+              </h2>
               <div
                 onClick={handleContentClick}
                 dangerouslySetInnerHTML={{ __html: pageContent }}

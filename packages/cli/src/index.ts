@@ -35,6 +35,7 @@ import {
   LIBRARIES,
   detectMatchingSignatures,
 } from '@google-psat/library-detection';
+import { pathToFileURL } from 'node:url';
 
 /**
  * Internal dependencies.
@@ -288,6 +289,7 @@ program.parse();
   if (outDir) {
     await saveReports(path.resolve(outputDir), result, sitemapUrl);
     console.log('Reports created successfully!');
+    console.log(`Report path: ${pathToFileURL(outputDir)}`);
     process.exit(0);
   }
 

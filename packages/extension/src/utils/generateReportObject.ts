@@ -157,6 +157,10 @@ const generateCookieDataForDashboard = (
 
   Array.from(frameUrlSet).forEach((frameURL) => {
     if (frameURL === 'undefined' || !frameURL) {
+      cookieData['unknown'] = {
+        frameCookies: {},
+        frameType: 'sub_frame',
+      };
       return;
     }
 
@@ -167,6 +171,7 @@ const generateCookieDataForDashboard = (
   });
 
   Object.entries(tabCookies).forEach(([cookieKey, cookie]) => {
+    let wasCookieAdded = false;
     cookie.frameIdList?.forEach((frameId) => {
       const frameURL = frameIdToUrlMapping[frameId];
 
@@ -175,11 +180,14 @@ const generateCookieDataForDashboard = (
       }
 
       if (cookieData[frameURL]?.frameCookies) {
+        wasCookieAdded = true;
         //@ts-ignore since the parsedCookie
         cookieData[frameURL].frameCookies[cookieKey] = cookie;
         cookieData[frameURL].frameType =
           tabFrames[frameURL]?.frameType ?? 'sub_frame';
+        return;
       } else {
+        wasCookieAdded = true;
         cookieData[frameURL] = {
           //@ts-ignore since the parsedCookie
           frameCookies: {
@@ -187,8 +195,19 @@ const generateCookieDataForDashboard = (
           },
           frameType: tabFrames[frameURL]?.frameType ?? 'sub_frame',
         };
+        return;
       }
     });
+
+    if (!wasCookieAdded) {
+      cookieData['unknown'] = {
+        //@ts-ignore since the parsedCookie
+        frameCookies: {
+          ...(cookieData['unknown']?.frameCookies ?? {}),
+          [cookieKey]: cookie,
+        },
+      };
+    }
   });
   return cookieData;
 };

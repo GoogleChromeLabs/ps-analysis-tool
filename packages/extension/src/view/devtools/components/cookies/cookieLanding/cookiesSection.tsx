@@ -29,11 +29,12 @@ import {
   useFiltersMapping,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import type { TabCookies } from '@google-psat/common';
+
 /**
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
-import type { TabCookies } from '@google-psat/common';
 import { NAVIGATION_TAGS } from '../../wiki';
 
 interface CookiesSectionProps {

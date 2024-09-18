@@ -22,8 +22,18 @@ import markedAlert from 'marked-alert';
 export const IMAGE_BASE_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool/images';
 
-const convertMarkdownToHTML = async (markdown: string) => {
-  const marked = new Marked().use(markedAlert());
+const convertMarkdownToHTML = async (markdown: string, mermaidJS: any) => {
+  const marked = new Marked().use(markedAlert(), {
+    renderer: {
+      code: function (code) {
+        if (code.lang === 'mermaid') {
+          return `<pre class="mermaid">${code.text}</pre>`;
+        }
+        return `<pre>${code.text}</pre>`;
+      },
+    },
+  });
+
   let html = await marked.parse(markdown);
 
   html = html.replace(
@@ -35,7 +45,33 @@ const convertMarkdownToHTML = async (markdown: string) => {
     '<a target="_blank" '
   );
 
-  return html;
+  if (!mermaidJS) {
+    return html;
+  }
+
+  const DOMParsers = new DOMParser();
+  const content = DOMParsers.parseFromString(html, 'text/html');
+
+  if (document.querySelector('body')?.classList.contains('dark')) {
+    mermaidJS?.initialize({
+      theme: 'dark',
+    });
+  }
+
+  await Promise.all(
+    Array.from(content.querySelectorAll('.mermaid')).map(async (el, i) => {
+      if (el?.textContent) {
+        const element = await mermaidJS?.render(
+          `mermaid-${i}`,
+          el?.textContent
+        );
+        return (el.innerHTML = element.svg);
+      }
+      return el;
+    })
+  );
+
+  return content.documentElement.querySelector('body')?.innerHTML ?? '';
 };
 
 export default convertMarkdownToHTML;

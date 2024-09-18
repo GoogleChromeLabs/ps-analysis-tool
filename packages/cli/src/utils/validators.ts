@@ -203,25 +203,30 @@ export function outDirValidator(outDir: string, flag: string) {
     }
   }
 
-  const parentDirExists = existsSync(path.resolve('./out'));
-
-  if (!parentDirExists) {
-    mkdirSync(path.resolve('./out'));
-  }
-
   let output;
 
-  if (!path.isAbsolute(outDir)) {
-    output = path.resolve('./out', outDir);
-  } else {
-    output = path.resolve(outDir);
-  }
+  try {
+    const parentDirExists = existsSync(path.resolve('./out'));
 
-  const outDirExists = existsSync(output);
+    if (!parentDirExists) {
+      mkdirSync(path.resolve('./out'));
+    }
 
-  if (!outDirExists) {
-    console.log(`"${output}" does not exist, creating\n`);
-    mkdirSync(output);
+    if (!path.isAbsolute(outDir)) {
+      output = path.resolve('./out', outDir);
+    } else {
+      output = path.resolve(outDir);
+    }
+
+    const outDirExists = existsSync(output);
+
+    if (!outDirExists) {
+      mkdirSync(output);
+      console.log(`"${output}" does not exist, creating\n`);
+    }
+    return outDir;
+  } catch (error) {
+    redLogger(`Error in creating directory ${output}.`);
+    return null;
   }
-  return outDir;
 }

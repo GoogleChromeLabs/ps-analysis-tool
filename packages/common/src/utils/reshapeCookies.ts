@@ -28,7 +28,7 @@ import deriveBlockingStatus from './deriveBlockingStatus';
 
 const reshapeCookies = (cookies: CookieFrameStorageType) => {
   return Object.entries(cookies)
-    .filter(([frame]) => frame.includes('http'))
+    .filter(([frame]) => frame.includes('http') || frame === 'unknown')
     .map(([frame, _cookies]) => createCookieObj(frame, _cookies))
     .reduce((acc, cookieObj) => {
       Object.keys(cookieObj).forEach((key) => {
@@ -80,6 +80,7 @@ const reshapeCookies = (cookies: CookieFrameStorageType) => {
             frameUrls,
             networkEvents,
             blockingStatus,
+            isBlocked: acc[key]?.isBlocked || cookieObj[key]?.isBlocked,
           };
         } else {
           acc[key] = cookieObj[key];

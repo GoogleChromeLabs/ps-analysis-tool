@@ -71,7 +71,7 @@ const RWSJsonGenerator = () => {
             dangerouslySetInnerHTML={{
               __html: I18n.getMessage('rwsJsonGeneratorNote', [
                 `<a
-              className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
+              class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
               title="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
               href="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
               target="_blank"
