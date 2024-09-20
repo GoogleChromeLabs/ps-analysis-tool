@@ -48,7 +48,6 @@ const SiteMapReport = ({
   erroredOutUrls,
 }: SiteMapReportProps) => {
   const [data, setData] = useState<SidebarItems>(sidebarData);
-
   return (
     <SidebarProvider data={data}>
       <Layout

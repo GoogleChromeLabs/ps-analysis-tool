@@ -357,7 +357,7 @@ export class BrowserManagement {
           errorName: `INVALID_SERVER_RESPONSE`,
         });
 
-        this.debugLog(`Warning: Server error found in URL: ${url}`, true);
+        this.debugLog(`Warning: Server error found in URL: ${url}`);
 
         if (!this.isSiteMap) {
           throw new Error(`Invalid server response: ${response.status()}`);
