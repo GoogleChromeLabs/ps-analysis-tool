@@ -131,24 +131,6 @@ export type CookieTableData = CookieData & {
   isDomainInAllowList?: boolean;
 };
 
-export type TechnologyData = {
-  slug: string;
-  name: string;
-  description: string;
-  confidence: number;
-  version: string | null;
-  icon: string;
-  website: string;
-  cpe: string;
-  categories: {
-    id: number;
-    name: string;
-    slug: string;
-  }[];
-  rootPath?: boolean;
-  pageUrl?: string;
-};
-
 export type ErroredOutUrlsData = {
   errorCode?: string;
   errorMessage: string;
@@ -161,10 +143,11 @@ export interface TabCookies {
   [key: string]: CookieTableData;
 }
 
+export type FrameType = 'outermost_frame' | 'fenced_frame' | 'sub_frame';
 export interface TabFrames {
   [key: string]: {
     frameIds: string[];
-    frameType?: 'outermost_frame' | 'fenced_frame' | 'sub_frame';
+    frameType?: FrameType;
   };
 }
 
@@ -261,7 +244,6 @@ export type CompleteJson = {
   };
   erroredOutUrls: ErroredOutUrlsData[];
   libraryMatches: { [key: string]: LibraryData };
-  technologyData: TechnologyData[];
 };
 
 export interface DataMapping {
@@ -277,4 +259,10 @@ export interface DataMapping {
 export type FrameStateCreator = {
   dataMapping: DataMapping[];
   legend: Legend[];
+};
+
+export type Selectors = {
+  textSelectors: string[];
+  cssSelectors: string[];
+  xPath: string[];
 };

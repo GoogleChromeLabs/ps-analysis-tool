@@ -21,9 +21,10 @@ import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
 interface HeaderProps {
   url: string | undefined | null;
   dateTime: string;
+  version: string;
 }
 
-const Header = ({ url, dateTime }: HeaderProps) => {
+const Header = ({ url, dateTime, version }: HeaderProps) => {
   // @ts-ignore - Global object.
   const isExtension = globalThis?.PSAT_EXTENSION;
 
@@ -36,8 +37,15 @@ const Header = ({ url, dateTime }: HeaderProps) => {
           <p className="text-xs mb-[1px]">{dateTime}</p>
         </div>
       </div>
-      <div className="flex items-center text-cente">
-        {isExtension ? 'PSAT Extension Analysis' : 'PSAT CLI Analysis'}
+      <div className="flex items-center">
+        <div>
+          <span className="block">
+            {isExtension ? 'PSAT Extension Analysis' : 'PSAT CLI Analysis'}
+          </span>
+          <span className="block text-right text-darkest-gray dark:text-white text-[11px]">
+            {version ? 'v' + version : ''}
+          </span>
+        </div>
       </div>
     </div>
   );

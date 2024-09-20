@@ -22,7 +22,7 @@ import { createContext, noop } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { SidebarComponent, SidebarItems } from './types';
+import { CollapsedSidebarItems, SidebarComponent, SidebarItems } from './types';
 
 export interface SidebarStoreContext {
   state: {
@@ -34,7 +34,10 @@ export interface SidebarStoreContext {
     selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
     currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
     sidebarItems: SidebarItems;
+    collapsedSidebarItems?: CollapsedSidebarItems;
     isSidebarFocused: boolean;
+    isCollapsed: boolean;
+    isSidebarCollapsible: boolean;
   };
   actions: {
     setIsSidebarFocused: React.Dispatch<boolean>;
@@ -46,6 +49,8 @@ export interface SidebarStoreContext {
     toggleDropdown: (action: boolean, key: string) => void;
     isKeyAncestor: (key: string) => boolean;
     isKeySelected: (key: string) => boolean;
+    toggleSidebarCollapse: () => void;
+    extractSelectedItemKeyTitles: () => Array<{ title: string; key: string }>;
   };
 }
 
@@ -62,7 +67,10 @@ export const initialState: SidebarStoreContext = {
     selectedItemKey: null,
     currentItemKey: null,
     sidebarItems: {},
+    collapsedSidebarItems: undefined,
     isSidebarFocused: true,
+    isSidebarCollapsible: false,
+    isCollapsed: false,
   },
   actions: {
     setIsSidebarFocused: noop,
@@ -71,6 +79,8 @@ export const initialState: SidebarStoreContext = {
     toggleDropdown: noop,
     isKeyAncestor: () => false,
     isKeySelected: () => false,
+    toggleSidebarCollapse: noop,
+    extractSelectedItemKeyTitles: () => [],
   },
 };
 

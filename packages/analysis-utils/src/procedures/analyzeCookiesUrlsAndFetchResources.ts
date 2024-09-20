@@ -23,6 +23,7 @@ import {
   type CookieDatabase,
   type LibraryMatchers,
   deriveBlockingStatus,
+  type Selectors,
 } from '@google-psat/common';
 
 /**
@@ -39,6 +40,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   shouldSkipAcceptBanner: boolean,
   verbose: boolean,
   isSitemap: boolean,
+  selectors?: Selectors,
   spinnies?: Spinnies,
   indent = 4
 ) => {
@@ -55,7 +57,8 @@ export const analyzeCookiesUrlsAndFetchResources = async (
       verbose,
       indent,
       isSitemap,
-      spinnies
+      spinnies,
+      selectors
     );
 
     await browser.initializeBrowser(true);

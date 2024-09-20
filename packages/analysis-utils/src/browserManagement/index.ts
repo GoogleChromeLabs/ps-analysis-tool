@@ -29,6 +29,7 @@ import {
   delay,
   RESPONSE_EVENT,
   REQUEST_EVENT,
+  type Selectors,
 } from '@google-psat/common';
 
 /**
@@ -43,6 +44,7 @@ import {
 } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import collateCookieData from './collateCookieData';
+import { CMP_SELECTORS, CMP_TEXT_SELECTORS } from '../constants';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -59,6 +61,7 @@ export class BrowserManagement {
   spinnies: Spinnies | undefined;
   isSiteMap: boolean;
   indent = 0;
+  selectors: Selectors | undefined;
   constructor(
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
@@ -66,7 +69,8 @@ export class BrowserManagement {
     shouldLogDebug: boolean,
     indent: number,
     isSiteMap: boolean,
-    spinnies?: Spinnies
+    spinnies?: Spinnies,
+    selectors?: Selectors
   ) {
     this.viewportConfig = viewportConfig;
     this.browser = null;
@@ -82,14 +86,14 @@ export class BrowserManagement {
     this.spinnies = spinnies;
     this.indent = indent;
     this.erroredOutUrls = {};
+    this.selectors = selectors;
   }
 
-  debugLog(msg: string, shouldShowWarning?: boolean) {
+  debugLog(msg: string) {
     if (this.shouldLogDebug && this.spinnies) {
       this.spinnies.add(msg, {
         text: msg,
-        succeedColor: shouldShowWarning ? 'yellowBright' : 'white',
-        spinnerColor: shouldShowWarning ? 'yellowBright' : 'white',
+        succeedColor: 'white',
         status: 'non-spinnable',
         indent: this.indent,
       });
@@ -111,7 +115,77 @@ export class BrowserManagement {
       headless: this.isHeadless,
       args,
     });
+
     this.debugLog('Browser initialized');
+  }
+
+  async clickOnButtonUsingCMPSelectors(page: Page): Promise<boolean> {
+    let clickedOnButton = false;
+
+    try {
+      await Promise.all(
+        CMP_SELECTORS.map(async (selector) => {
+          const buttonToClick = await page.$(selector);
+          if (buttonToClick) {
+            await buttonToClick.click();
+            clickedOnButton = true;
+          }
+        })
+      );
+      return clickedOnButton;
+    } catch (error) {
+      return clickedOnButton;
+    }
+  }
+
+  async clickOnGDPRUsingTextSelectors(
+    page: Page,
+    textSelectors: string[]
+  ): Promise<boolean> {
+    if (textSelectors.length === 0) {
+      return false;
+    }
+
+    try {
+      const result = await page.evaluate((args: string[]) => {
+        const bannerNodes: Element[] = Array.from(
+          (document.querySelector('body')?.childNodes || []) as Element[]
+        )
+          ?.filter((node: Element) => node && node?.tagName === 'DIV')
+          ?.filter((node) => {
+            if (!node || !node?.textContent) {
+              return false;
+            }
+            const regex =
+              /\b(consent|policy|cookie policy|privacy policy|personalize|preferences|cookies)\b/;
+
+            return regex.test(node.textContent.toLowerCase());
+          });
+
+        return bannerNodes?.some((node: Element) => {
+          const buttonNodes = Array.from(node?.getElementsByTagName('button'));
+
+          return buttonNodes?.some((cnode) => {
+            if (!cnode?.textContent) {
+              return false;
+            }
+
+            return args.some((text) => {
+              if (cnode?.textContent?.toLowerCase().includes(text)) {
+                cnode?.click();
+                return true;
+              }
+
+              return false;
+            });
+          });
+        });
+      }, textSelectors);
+
+      return result;
+    } catch (error) {
+      return false;
+    }
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -122,40 +196,39 @@ export class BrowserManagement {
         throw new Error('No page with the provided id was found');
       }
 
-      await page.evaluate(() => {
-        const bannerNodes: Element[] = Array.from(
-          (document.querySelector('body')?.childNodes || []) as Element[]
-        )
-          .filter((node: Element) => node && node?.tagName === 'DIV')
-          .filter((node) => {
-            if (!node || !node?.textContent) {
-              return false;
-            }
-            const regex =
-              /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
+      const didSelectorsFromUserWork =
+        await this.useSelectorsToSelectGDPRBanner(page);
 
-            return regex.test(node.textContent.toLowerCase());
-          });
+      if (didSelectorsFromUserWork) {
+        this.debugLog('GDPR banner found and accepted');
+        await delay(this.pageWaitTime / 2);
+        return;
+      }
 
-        const buttonToClick: HTMLButtonElement[] = bannerNodes
-          .map((node: Element) => {
-            const buttonNodes = Array.from(node.getElementsByTagName('button'));
-            const isButtonForAccept = buttonNodes.filter(
-              (cnode) =>
-                cnode.textContent &&
-                (cnode.textContent.toLowerCase().includes('accept') ||
-                  cnode.textContent.toLowerCase().includes('allow') ||
-                  cnode.textContent.toLowerCase().includes('ok') ||
-                  cnode.textContent.toLowerCase().includes('agree'))
-            );
+      // Click using CSS selectors.
+      const clickedUsingCMPCSSSelectors =
+        await this.clickOnButtonUsingCMPSelectors(page);
 
-            return isButtonForAccept[0];
-          })
-          .filter((button) => button);
-        buttonToClick[0]?.click();
-      });
+      if (clickedUsingCMPCSSSelectors) {
+        this.debugLog('GDPR banner found and accepted');
+        await delay(this.pageWaitTime / 2);
+        return;
+      }
 
+      const buttonClicked = await this.clickOnGDPRUsingTextSelectors(
+        page,
+        CMP_TEXT_SELECTORS
+      );
+
+      if (buttonClicked) {
+        this.debugLog('GDPR banner found and accepted');
+        await delay(this.pageWaitTime / 2);
+        return;
+      }
+
+      this.debugLog('GDPR banner could not be found');
       await delay(this.pageWaitTime / 2);
+      return;
     } catch (error) {
       if (error instanceof Error) {
         this.pushErrors(url, {
@@ -166,6 +239,69 @@ export class BrowserManagement {
 
         throw error;
       }
+    }
+  }
+
+  async useSelectorsToSelectGDPRBanner(page: Page): Promise<boolean> {
+    let clickedOnButton = false;
+
+    if (!this.selectors) {
+      return false;
+    }
+
+    try {
+      await Promise.all(
+        this.selectors?.cssSelectors.map(async (selector) => {
+          const buttonToClick = await page.$(selector);
+          if (buttonToClick) {
+            clickedOnButton = true;
+            this.debugLog('GDPR banner found and accepted');
+            await buttonToClick.click();
+          }
+        })
+      );
+
+      if (clickedOnButton) {
+        return clickedOnButton;
+      }
+
+      clickedOnButton = await page.evaluate((xPaths: string[]) => {
+        const rootElement = document.querySelector('html');
+
+        if (!rootElement) {
+          return false;
+        }
+
+        return xPaths.some((xPath) => {
+          const _acceptButton = document
+            .evaluate(xPath, rootElement)
+            .iterateNext();
+
+          if (!_acceptButton) {
+            return false;
+          }
+
+          if (_acceptButton instanceof HTMLElement) {
+            _acceptButton?.click();
+            return true;
+          }
+
+          return false;
+        });
+      }, this.selectors?.xPath);
+
+      if (clickedOnButton) {
+        return clickedOnButton;
+      }
+
+      clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
+        page,
+        this.selectors?.textSelectors
+      );
+
+      return clickedOnButton;
+    } catch (error) {
+      return clickedOnButton;
     }
   }
 

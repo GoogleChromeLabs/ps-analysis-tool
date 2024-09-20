@@ -98,12 +98,12 @@ const SidebarChild = ({
           }
           setIsSidebarFocused(true);
         }}
-        className={`relative w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
+        className={`w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
           isKeySelected(itemKey)
             ? isSidebarFocused
               ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
               : 'bg-gainsboro dark:bg-outer-space'
-            : 'bg-white dark:bg-raisin-black'
+            : 'bg-lotion dark:bg-raisin-black'
         } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''}`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
         data-testid="sidebar-child"
@@ -155,12 +155,7 @@ const SidebarChild = ({
             </span>
           ) : null}
         </p>
-        <div
-          className="absolute"
-          style={{
-            left: visibleWidth ? visibleWidth - 35 : 0,
-          }}
-        >
+        <div className="absolute right-0 px-1">
           {ExtraInterfaceToTitle && (
             <ExtraInterfaceToTitle
               {...sidebarItem.extraInterfaceToTitle?.props}

@@ -33,14 +33,9 @@ import {
  * This function returns the exact object which will be sent to the cli dashboard when report is generated.
  * @param urls The user provided urls to be processed.
  * @param processedData The cookie data along with library detection information with erroredOutUrls.
- * @param technologyAnalysisData The technology analysis data from CLI.
  * @returns {object} The object which will be used to send the report to the cli dashboard.
  */
-function getSiteReport(
-  urls: string[],
-  processedData: any,
-  technologyAnalysisData: any
-) {
+function getSiteReport(urls: string[], processedData: any) {
   return urls.map((url, index) => {
     const {
       erroredOutUrls = {},
@@ -68,9 +63,6 @@ function getSiteReport(
       if (hasTimeOutError) {
         return {
           pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
-          technologyData: technologyAnalysisData
-            ? technologyAnalysisData[index]
-            : [],
           cookieData: cookieData,
           libraryMatches: detectedMatchingSignatures ?? [],
           erroredOutUrls: [
@@ -86,7 +78,6 @@ function getSiteReport(
 
       return {
         pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
-        technologyData: [],
         cookieData: {},
         libraryMatches: [],
         erroredOutUrls: [
@@ -102,9 +93,6 @@ function getSiteReport(
 
     return {
       pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
-      technologyData: technologyAnalysisData
-        ? technologyAnalysisData[index]
-        : [],
       cookieData,
       libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;

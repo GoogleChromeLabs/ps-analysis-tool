@@ -24,6 +24,7 @@ import {
   type LibraryMatchers,
   removeAndAddNewSpinnerText,
   type SingleURLError,
+  type Selectors,
 } from '@google-psat/common';
 
 /**
@@ -41,7 +42,8 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   spinnies?: Spinnies,
   shouldSkipAcceptBanner = false,
   verbose = false,
-  indent = 4
+  indent = 4,
+  selectors?: Selectors
 ) => {
   // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
   try {
@@ -86,6 +88,7 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
           shouldSkipAcceptBanner,
           verbose,
           urls.length > 1,
+          selectors,
           spinnies
         );
 

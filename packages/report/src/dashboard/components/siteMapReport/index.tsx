@@ -29,7 +29,6 @@ import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-
 import sidebarData from './sidebarData';
 import Layout from './layout';
 

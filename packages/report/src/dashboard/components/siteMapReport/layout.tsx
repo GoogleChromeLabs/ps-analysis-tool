@@ -26,6 +26,7 @@ import {
   type LibraryData,
   noop,
   type ErroredOutUrlsData,
+  reshapeCookies,
 } from '@google-psat/common';
 import {
   useSidebar,
@@ -35,12 +36,11 @@ import {
   File,
   FileWhite,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
-
 import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
-import reshapeCookies from '../utils/reshapeCookies';
 import CookiesTab from './cookies';
 import ErroredOutUrls from '../urlsWithIssues';
 
@@ -89,7 +89,9 @@ const Layout = ({
     () =>
       Object.fromEntries(
         Object.entries(reshapedCookies).filter(
-          ([, cookie]) => cookie.isBlocked || cookie.blockedReasons?.length
+          ([, cookie]) =>
+            cookie.isBlocked ||
+            (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
         )
       ),
     [reshapedCookies]
