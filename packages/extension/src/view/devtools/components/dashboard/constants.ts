@@ -54,7 +54,7 @@ export const FEATURE_LIST = [
       'Gain insights into the behavior and distribution of cookies on web pages while navigating across sites during browsing sessions.',
     buttons: [
       {
-        name: 'Landing Page',
+        name: 'Insights',
         sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
       },
     ],
