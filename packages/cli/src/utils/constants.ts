@@ -28,6 +28,7 @@ export const LONG_CONSTANTS = [
   '--locale',
   '--help',
   '--version',
+  '--button-selectors',
 ];
 
 export const SHORT_CONSTANTS = [
@@ -45,4 +46,5 @@ export const SHORT_CONSTANTS = [
   '-l',
   '-h',
   '-V',
+  '-b',
 ];

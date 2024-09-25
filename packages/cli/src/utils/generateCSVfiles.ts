@@ -21,21 +21,15 @@ import {
   generateCookiesWithIssuesCSV,
   generateAllCookiesCSV,
   generateSummaryDataCSV,
-  generateTechnologyCSV,
 } from '@google-psat/common';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);
-  let technologyDataCSV = null;
-  if (data.technologyData.length > 0) {
-    technologyDataCSV = generateTechnologyCSV(data);
-  }
   const cookiesWithIssuesDataCSV = generateCookiesWithIssuesCSV(data);
   const summaryDataCSV = generateSummaryDataCSV(data);
 
   return {
     allCookiesCSV,
-    technologyDataCSV,
     cookiesWithIssuesDataCSV,
     summaryDataCSV,
   };

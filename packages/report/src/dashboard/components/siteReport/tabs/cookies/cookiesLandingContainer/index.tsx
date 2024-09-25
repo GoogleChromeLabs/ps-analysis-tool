@@ -73,7 +73,7 @@ const AssembledCookiesLanding = ({
   const filterOutput = useGlobalFiltering(cookies, query, clearQuery);
 
   // @ts-ignore Using global variable.
-  const { dateTime } = globalThis?.PSAT_DATA || {};
+  const { dateTime, psatVersion } = globalThis?.PSAT_DATA || {};
   const cookiesByKey = useMemo(() => {
     return (
       filterOutput.filteredData.reduce<TabCookies>((acc, cookie) => {
@@ -95,7 +95,11 @@ const AssembledCookiesLanding = ({
   const cookiesWithIssues = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(cookiesByKey).filter(([, cookie]) => cookie.isBlocked)
+        Object.entries(cookiesByKey).filter(
+          ([, cookie]) =>
+            cookie.isBlocked ||
+            (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
+        )
       ),
     [cookiesByKey]
   );
@@ -108,7 +112,7 @@ const AssembledCookiesLanding = ({
 
   return (
     <div className="h-full flex flex-col">
-      <Header url={url} dateTime={dateTime} />
+      <Header url={url} dateTime={dateTime} version={psatVersion} />
       <div className="flex justify-center items-center flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
         <button
           className="w-3 h-3 m-1 pl-1"

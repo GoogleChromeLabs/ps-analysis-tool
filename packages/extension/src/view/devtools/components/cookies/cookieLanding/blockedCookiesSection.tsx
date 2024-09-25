@@ -27,6 +27,7 @@ import {
   useFiltersMapping,
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
+  InternalNavigationForAnchor,
 } from '@google-psat/design-system';
 import {
   type DataMapping,
@@ -106,14 +107,10 @@ const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
       </button>
       . <br />
       {I18n.getMessage('visitPSAT')}&nbsp;
-      <a
-        target="_blank"
-        rel="noreferrer"
-        className="text-bright-navy-blue dark:text-jordy-blue"
-        href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
-      >
-        {I18n.getMessage('wiki')}
-      </a>
+      <InternalNavigationForAnchor
+        text={'<a>' + I18n.getMessage('wiki') + '</a>'}
+        to={[SIDEBAR_ITEMS_KEYS.WIKI]}
+      />
       .
     </>
   ) : cookieStats.blockedCookies.total === 0 ? (

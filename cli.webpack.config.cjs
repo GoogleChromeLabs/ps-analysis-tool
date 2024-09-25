@@ -37,11 +37,6 @@ module.exports = {
       patterns: [
         { from: '../../assets', to: 'assets' },
         { from: '../../data', to: 'assets/data' },
-        {
-          from: '../../node_modules/wappalyzer/technologies',
-          to: 'technologies',
-        },
-        { from: '../../node_modules/wappalyzer/categories.json', to: '' },
       ],
     }),
   ],

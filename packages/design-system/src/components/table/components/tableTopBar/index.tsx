@@ -111,7 +111,7 @@ const TableTopBar = ({
         )}
       </div>
 
-      <div className="text-right w-full text-xxxs text-secondary">
+      <div className="text-right w-full text-xxxs text-secondary dark:text-chinese-silver">
         {I18n.getMessage('count')}: {rows.length ?? 0}
       </div>
     </div>

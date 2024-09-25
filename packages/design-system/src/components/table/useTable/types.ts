@@ -22,16 +22,16 @@ import type {
   InterestGroups,
   NoBidsType,
   singleAuctionEvent,
-  TechnologyData,
+  ErroredOutUrlsData,
 } from '@google-psat/common';
 
 export type TableData = (
   | CookieTableData
-  | TechnologyData
   | InterestGroups
   | singleAuctionEvent
   | NoBidsType[keyof NoBidsType]
   | AdsAndBiddersType[keyof AdsAndBiddersType]
+  | ErroredOutUrlsData
 ) & {
   highlighted?: boolean;
 };

@@ -47,6 +47,24 @@ const sidebarData: SidebarItems = {
       },
     },
   },
+  [SIDEBAR_ITEMS_KEYS.URL_WITH_ISSUES]: {
+    title: 'URL Issues',
+    children: {},
+    icon: {
+      //@ts-ignore
+      Element: WarningBare,
+      props: {
+        className: 'fill-granite-gray',
+      },
+    },
+    selectedIcon: {
+      //@ts-ignore
+      Element: WarningBare,
+      props: {
+        className: 'fill-white',
+      },
+    },
+  },
 };
 
 export default sidebarData;

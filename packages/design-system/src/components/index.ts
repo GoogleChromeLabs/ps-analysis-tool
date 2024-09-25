@@ -58,3 +58,5 @@ export * from './tabs';
 export { default as QuickLinksList } from './landingPage/quickLinksList';
 export { default as Pill } from './pill';
 export { default as PillToggle } from './pillToggle';
+export { default as Breadcrumbs } from './breadcrumbs';
+export { default as InternalNavigationForAnchor } from './internalNavigationForAnchor';
