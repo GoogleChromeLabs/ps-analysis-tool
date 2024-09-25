@@ -96,7 +96,7 @@ const MultiSellerAuctionTable = ({
     <div className="w-full h-full flex border-t border-chinese-silver dark:border-quartz">
       <Resizable
         defaultSize={{
-          width: 200,
+          width: 250,
           height: '100%',
         }}
         minWidth={100}

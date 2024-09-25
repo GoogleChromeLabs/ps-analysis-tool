@@ -26,7 +26,6 @@ import { SidebarProvider } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import Breakpoints from './breakpoints';
 import AuctionTable from './auctionTable';
 import MultiSellerAuctionTable from './mutliSellerAuctionTable';
 import { useProtectedAudience } from '../../../../stateProviders';
@@ -53,8 +52,7 @@ const Auctions = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <Breakpoints />
-      <div className="overflow-auto flex-1">
+      <div className="overflow-auto flex-1 pt-4">
         {!isMultiSellerAuction ? (
           <AuctionTable
             auctionEvents={
