@@ -18,6 +18,7 @@ import { CompleteJson } from '../cookies.types';
 
 export const mockData1: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/',
+  erroredOutUrls: [],
   cookieData: {
     'https://edition.cnn.com': {
       frameCookies: {
@@ -100,6 +101,7 @@ export const mockData1: CompleteJson = {
 
 export const mockData2: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/',
+  erroredOutUrls: [],
   cookieData: {
     'https://edition.cnn.com': {
       frameCookies: {
@@ -227,6 +229,7 @@ export const mockData2: CompleteJson = {
 export const tempSinglePageData: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
   libraryMatches: {},
+  erroredOutUrls: [],
   cookieData: {
     'https://edition.cnn.com': {
       frameCookies: {
@@ -260,6 +263,7 @@ export const tempSinglePageData: CompleteJson = {
 export const tempMultiPageData: CompleteJson[] = [
   {
     libraryMatches: {},
+    erroredOutUrls: [],
     pageUrl: 'https://www.cnn.com/index.html',
     cookieData: {
       'https://edition.cnn.com': {
@@ -293,6 +297,7 @@ export const tempMultiPageData: CompleteJson[] = [
   },
   {
     libraryMatches: {},
+    erroredOutUrls: [],
     pageUrl: 'https://edition.cnn.com/index.html',
     cookieData: {
       'https://edition.cnn.com': {
