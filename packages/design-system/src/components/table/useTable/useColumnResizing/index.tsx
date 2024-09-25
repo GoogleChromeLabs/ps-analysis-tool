@@ -202,10 +202,6 @@ const useColumnResizing = (
         );
       }
     }
-
-    return () => {
-      setColumns([]);
-    };
   }, [getPreferences, setColumnsCallback, tablePersistentSettingsKey]);
 
   useEffect(() => {
@@ -244,6 +240,10 @@ const useColumnResizing = (
     setPreferences,
     tablePersistentSettingsKey,
   ]);
+
+  useEffect(() => {
+    console.log(columns);
+  }, [columns]);
 
   return {
     columns,
