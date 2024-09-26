@@ -39,7 +39,7 @@ import { useCookie, useSettings } from '../../../stateProviders';
 const BlockedCookiesSection = () => {
   const { tabFrames, tabCookies } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
-    tabCookies: state.tabCookies,
+    tabCookies: state.cookiesByKey,
   }));
 
   const { isUsingCDP } = useSettings(({ state }) => ({

@@ -37,7 +37,7 @@ import { useCookie } from '../../../stateProviders';
 const ExemptedCookiesSection = () => {
   const { tabFrames, tabCookies } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
-    tabCookies: state.tabCookies,
+    tabCookies: state.cookiesByKey,
   }));
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});

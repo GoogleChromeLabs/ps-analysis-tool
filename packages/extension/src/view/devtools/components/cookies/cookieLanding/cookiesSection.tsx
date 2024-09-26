@@ -39,7 +39,7 @@ import { NAVIGATION_TAGS } from '../../wiki';
 const CookiesSection = () => {
   const { tabFrames, tabCookies } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
-    tabCookies: state.tabCookies,
+    tabCookies: state.cookiesByKey,
   }));
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});

@@ -34,7 +34,7 @@ import { useCookie } from '../../../stateProviders';
 const FramesSection = () => {
   const { tabFrames, tabCookies } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
-    tabCookies: state.tabCookies,
+    tabCookies: state.cookiesByKey,
   }));
 
   const framesStats = prepareFrameStatsComponent(tabFrames, tabCookies);
