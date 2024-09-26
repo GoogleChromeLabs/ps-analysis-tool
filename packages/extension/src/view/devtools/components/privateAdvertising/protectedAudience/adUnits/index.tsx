@@ -17,18 +17,49 @@
  * External dependencies.
  */
 import React from 'react';
+import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import AdMatrix from './adMatrix';
 import AdTable from './adTable';
-import { useProtectedAudience } from '../../../../stateProviders';
+import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
 const AdUnits = () => {
   const { adsAndBidders } = useProtectedAudience(({ state }) => ({
     adsAndBidders: state.adsAndBidders,
   }));
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
+  if (!isUsingCDP) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          To view ad units, enable PSAT to use CDP via the{' '}
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={() => {
+              document
+                .getElementById('cookies-landing-scroll-container')
+                ?.scrollTo(0, 0);
+              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+            }}
+          >
+            Settings Page
+          </button>
+          .
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full w-full">

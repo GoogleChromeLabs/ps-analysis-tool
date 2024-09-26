@@ -21,10 +21,12 @@ import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Table,
-  TableFilter,
+  type TableFilter,
   TableProvider,
   type TableColumn,
   type TableRow,
+  useSidebar,
+  SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import {
@@ -36,7 +38,7 @@ import { prettyPrintJson } from 'pretty-print-json';
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience } from '../../../../stateProviders';
+import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
 const InterestGroups = () => {
   const [selectedRow, setSelectedRow] = useState<InterestGroupsType | null>(
@@ -45,6 +47,14 @@ const InterestGroups = () => {
 
   const { interestGroupDetails } = useProtectedAudience(({ state }) => ({
     interestGroupDetails: state.interestGroupDetails,
+  }));
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -96,6 +106,28 @@ const InterestGroups = () => {
     }),
     []
   );
+
+  if (!isUsingCDP) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          To view interest group events, enable PSAT to use CDP via the{' '}
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={() => {
+              document
+                .getElementById('cookies-landing-scroll-container')
+                ?.scrollTo(0, 0);
+              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+            }}
+          >
+            Settings Page
+          </button>
+          .
+        </p>
+      </div>
+    );
+  }
 
   if (!interestGroupDetails || interestGroupDetails.length === 0) {
     return (

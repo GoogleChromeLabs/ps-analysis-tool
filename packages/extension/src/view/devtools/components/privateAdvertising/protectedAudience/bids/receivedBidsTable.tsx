@@ -22,15 +22,17 @@ import {
   type singleAuctionEvent,
 } from '@google-psat/common';
 import {
+  SIDEBAR_ITEMS_KEYS,
   Table,
-  TableFilter,
+  type TableFilter,
   TableProvider,
+  useSidebar,
   type InfoType,
   type TableColumn,
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
-import { useProtectedAudience } from '../../../../stateProviders';
+import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
 interface ReceivedBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -46,6 +48,14 @@ const ReceivedBidsTable = ({
   selectedRow,
 }: ReceivedBidsTableProps) => {
   const receivedBids = useProtectedAudience(({ state }) => state.receivedBids);
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -63,7 +73,7 @@ const ReceivedBidsTable = ({
         widthWeightagePercentage: 15,
       },
       {
-        header: 'Bid Currency',
+        header: 'Currency',
         accessorKey: 'bidCurrency',
         cell: (info) => info,
         widthWeightagePercentage: 16,
@@ -142,6 +152,28 @@ const ReceivedBidsTable = ({
     }),
     []
   );
+
+  if (!isUsingCDP) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          To view bids data, enable PSAT to use CDP via the{' '}
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={() => {
+              document
+                .getElementById('cookies-landing-scroll-container')
+                ?.scrollTo(0, 0);
+              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+            }}
+          >
+            Settings Page
+          </button>
+          .
+        </p>
+      </div>
+    );
+  }
 
   if (!receivedBids || receivedBids.length === 0) {
     return (

@@ -21,14 +21,17 @@ import type {
   MultiSellerAuction,
   singleAuctionEvent,
 } from '@google-psat/common';
-
-import { SidebarProvider } from '@google-psat/design-system';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  SidebarProvider,
+  useSidebar,
+} from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
 import AuctionTable from './auctionTable';
 import MultiSellerAuctionTable from './mutliSellerAuctionTable';
-import { useProtectedAudience } from '../../../../stateProviders';
+import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState({});
@@ -39,6 +42,36 @@ const Auctions = () => {
       isMultiSellerAuction: state.isMultiSellerAuction,
     })
   );
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
+  if (!isUsingCDP) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          To view auctions, enable PSAT to use CDP via the{' '}
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={() => {
+              document
+                .getElementById('cookies-landing-scroll-container')
+                ?.scrollTo(0, 0);
+              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+            }}
+          >
+            Settings Page
+          </button>
+          .
+        </p>
+      </div>
+    );
+  }
 
   if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
     return (
