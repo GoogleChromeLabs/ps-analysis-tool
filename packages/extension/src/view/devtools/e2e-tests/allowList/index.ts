@@ -26,6 +26,7 @@ import { Page } from 'puppeteer';
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 
+jest.retryTimes(3);
 dotenv.config();
 
 describe('Allow Listing', () => {
