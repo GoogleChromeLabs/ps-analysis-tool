@@ -24,20 +24,17 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
 } from '@google-psat/design-system';
-import { getLegendDescription, type TabCookies } from '@google-psat/common';
+import { getLegendDescription } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
 
-interface FramesSectionProps {
-  tabCookies: TabCookies;
-}
-
-const FramesSection = ({ tabCookies }: FramesSectionProps) => {
-  const { tabFrames } = useCookie(({ state }) => ({
+const FramesSection = () => {
+  const { tabFrames, tabCookies } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
+    tabCookies: state.tabCookies,
   }));
 
   const framesStats = prepareFrameStatsComponent(tabFrames, tabCookies);

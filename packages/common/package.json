@@ -37,6 +37,8 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "@google-psat/i18n": "*",
+    "@types/lodash-es": "^4.17.12",
+    "lodash-es": "^4.17.21",
     "tldts": "^6.0.14"
   },
   "devDependencies": {

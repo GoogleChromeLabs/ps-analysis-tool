@@ -25,10 +25,8 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
-  type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-import type { TabCookies } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -39,17 +37,46 @@ import { useCookie, useSettings } from '../../../stateProviders';
 import downloadReport from '../../../../../utils/downloadReport';
 import ExemptedCookiesSection from './exemptedCookiesSection';
 
-interface LandingProps {
-  tabCookies: TabCookies;
-  appliedFilters: TableFilter;
-}
+const defaultSections: CookiesLandingSection[] = [
+  {
+    name: I18n.getMessage('cookies'),
+    link: 'cookies',
+    panel: {
+      Element: CookiesSection,
+    },
+  },
+  {
+    name: I18n.getMessage('blockedCookies'),
+    link: 'blocked-cookies',
+    panel: {
+      Element: BlockedCookiesSection,
+    },
+  },
+  {
+    name: I18n.getMessage('libraryDetection'),
+    link: 'library-detection',
+    panel: {
+      Element: LibraryDetection,
+    },
+  },
+  {
+    name: I18n.getMessage('frames'),
+    link: 'frames',
+    panel: {
+      Element: FramesSection,
+    },
+  },
+];
 
-const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
-  const { unfilteredCookies, url, tabFrames } = useCookie(({ state }) => ({
-    unfilteredCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
-    url: state.tabUrl,
-  }));
+const Landing = () => {
+  const { unfilteredCookies, url, tabFrames, filter } = useCookie(
+    ({ state }) => ({
+      unfilteredCookies: state.tabCookies,
+      tabFrames: state.tabFrames,
+      url: state.tabUrl,
+      filter: state.filter,
+    })
+  );
 
   const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
@@ -61,61 +88,19 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
   );
 
   const sections: Array<CookiesLandingSection> = useMemo(() => {
-    const defaultSections: CookiesLandingSection[] = [
-      {
-        name: I18n.getMessage('cookies'),
-        link: 'cookies',
-        panel: {
-          Element: CookiesSection,
-          props: {
-            tabCookies,
-          },
-        },
-      },
-      {
-        name: I18n.getMessage('blockedCookies'),
-        link: 'blocked-cookies',
-        panel: {
-          Element: BlockedCookiesSection,
-          props: {
-            tabCookies,
-          },
-        },
-      },
-      {
-        name: I18n.getMessage('libraryDetection'),
-        link: 'library-detection',
-        panel: {
-          Element: LibraryDetection,
-        },
-      },
-      {
-        name: I18n.getMessage('frames'),
-        link: 'frames',
-        panel: {
-          Element: FramesSection,
-          props: {
-            tabCookies,
-          },
-        },
-      },
-    ];
-
     if (isUsingCDP) {
       defaultSections.splice(2, 0, {
         name: I18n.getMessage('exemptionReasons'),
         link: 'exemption-reasons',
         panel: {
           Element: ExemptedCookiesSection,
-          props: {
-            tabCookies,
-          },
+          props: {},
         },
       });
     }
 
     return defaultSections;
-  }, [isUsingCDP, tabCookies]);
+  }, [isUsingCDP]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),
@@ -123,16 +108,20 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
   );
 
   const _downloadReport = useCallback(async () => {
+    if (!filter?.selectedFilters) {
+      return;
+    }
+
     await downloadReport(
       url || '',
       unfilteredCookies || {},
       tabFrames || {},
       libraryMatches,
-      appliedFilters,
+      filter.selectedFilters,
       isUsingCDP
     );
   }, [
-    appliedFilters,
+    filter?.selectedFilters,
     isUsingCDP,
     libraryMatches,
     tabFrames,
