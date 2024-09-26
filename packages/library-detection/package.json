@@ -34,9 +34,10 @@
     "@google-psat/common": "*",
     "@google-psat/design-system": "*",
     "@google-psat/i18n": "*",
+    "@types/lodash-es": "^4.17.12",
     "classnames": "^2.5.1",
-    "deep-object-diff": "^1.1.9",
     "escape-string-regexp": "^4.0.0",
+    "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "use-context-selector": "^1.4.1"
   }
