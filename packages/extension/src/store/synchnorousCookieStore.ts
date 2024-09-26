@@ -333,7 +333,6 @@ class SynchnorousCookieStore {
 
       this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
-      this.tabs[tabId].newUpdates++;
     } else {
       this.tabs[tabId].newUpdates++;
       // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
@@ -697,7 +696,6 @@ class SynchnorousCookieStore {
               this.tabsData[tabId][cookieKey]?.exemptionReason,
           };
         } else {
-          this.tabs[tabId].newUpdates++;
           this.tabsData[tabId][cookieKey] = {
             ...cookie,
             blockingStatus: deriveBlockingStatus(cookie.networkEvents),
