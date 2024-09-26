@@ -62,7 +62,12 @@ const InterestGroups = () => {
       {
         header: 'Event Time',
         accessorKey: 'formattedTime',
-        cell: (info) => info,
+        cell: (info) =>
+          (info as string)
+            .replace('T', ' | ')
+            .replace('Z', '')
+            .split('-')
+            .join('/'),
         enableHiding: false,
       },
       {
@@ -71,19 +76,32 @@ const InterestGroups = () => {
         cell: (info) => info,
       },
       {
-        header: 'Owner',
-        accessorKey: 'ownerOrigin',
-        cell: (info) => info,
-      },
-      {
         header: 'Name',
         accessorKey: 'name',
         cell: (info) => info,
       },
       {
+        header: 'Owner',
+        accessorKey: 'ownerOrigin',
+        cell: (info) => {
+          return new URL(info as string).hostname;
+        },
+      },
+      {
         header: 'Expiration Time',
         accessorKey: 'details.expirationTime',
-        cell: (info) => info,
+        cell: (info) => {
+          if (!info) {
+            return '';
+          }
+
+          return new Date(Number(info) * 1000)
+            .toISOString()
+            .replace('T', ' | ')
+            .replace('Z', '')
+            .split('-')
+            .join('/');
+        },
       },
     ],
     []
