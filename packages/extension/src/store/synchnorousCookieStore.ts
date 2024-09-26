@@ -538,9 +538,9 @@ class SynchnorousCookieStore {
 
     try {
       if (
-        this.tabs[tabId].devToolsOpenState ||
-        (this.tabs[tabId].popupOpenState &&
-          (overrideForInitialSync || this.tabs[tabId].newUpdates > 0))
+        (this.tabs[tabId].devToolsOpenState ||
+          this.tabs[tabId].popupOpenState) &&
+        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
         sentMessageAnyWhere = true;
 
