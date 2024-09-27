@@ -24,14 +24,8 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import {
-  getCookieKey,
-  noop,
-  type CookieTableData,
-  type TabCookies,
-} from '@google-psat/common';
+import { type TabCookies } from '@google-psat/common';
 import { isEqual } from 'lodash-es';
-import { useGlobalFiltering } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -395,19 +389,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [tabToRead]);
 
-  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
-  const filter = useGlobalFiltering(cookies, '', noop);
-  const cookiesByKey = useMemo(() => {
-    return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
-      const cookieKey = getCookieKey((cookie as CookieTableData).parsedCookie);
-      if (!cookieKey) {
-        return acc;
-      }
-      acc[cookieKey] = cookie as CookieTableData;
-      return acc;
-    }, {});
-  }, [filter.filteredData]);
-
   useEffect(() => {
     intitialSync();
   }, [intitialSync]);
@@ -470,8 +451,6 @@ const Provider = ({ children }: PropsWithChildren) => {
         canStartInspecting,
         tabToRead,
         frameHasCookies: frameHasCookies(),
-        cookiesByKey,
-        filter,
       },
       actions: {
         setSelectedFrame,
@@ -483,8 +462,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
-    cookiesByKey,
-    filter,
     canStartInspecting,
     changeListeningToThisTab,
     contextInvalidated,

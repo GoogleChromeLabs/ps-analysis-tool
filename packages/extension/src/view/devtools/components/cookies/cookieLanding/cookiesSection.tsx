@@ -35,11 +35,15 @@ import { I18n } from '@google-psat/i18n';
  */
 import { useCookie } from '../../../stateProviders';
 import { NAVIGATION_TAGS } from '../../wiki';
+import type { TabCookies } from '@google-psat/common';
 
-const CookiesSection = () => {
-  const { tabFrames, tabCookies } = useCookie(({ state }) => ({
+interface CookiesSectionProps {
+  tabCookies: TabCookies;
+}
+
+const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
+  const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
-    tabCookies: state.cookiesByKey,
   }));
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});

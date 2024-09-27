@@ -17,7 +17,11 @@
  * External dependencies
  */
 import React from 'react';
-import { type DataMapping, getLegendDescription } from '@google-psat/common';
+import {
+  type DataMapping,
+  getLegendDescription,
+  type TabCookies,
+} from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -34,10 +38,15 @@ import { I18n } from '@google-psat/i18n';
  */
 import { useCookie } from '../../../stateProviders';
 
-const ExemptedCookiesSection = () => {
-  const { tabFrames, tabCookies } = useCookie(({ state }) => ({
+interface ExemptedCookiesSectionProps {
+  tabCookies: TabCookies;
+}
+
+const ExemptedCookiesSection = ({
+  tabCookies,
+}: ExemptedCookiesSectionProps) => {
+  const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
-    tabCookies: state.cookiesByKey,
   }));
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});

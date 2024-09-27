@@ -17,11 +17,18 @@
 /**
  * External dependencies
  */
-import React, { memo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
+import {
+  getCookieKey,
+  noop,
+  type CookieTableData,
+  type TabCookies,
+} from '@google-psat/common';
 import {
   ChipsBar,
   FilterIcon,
   FiltersSidebar,
+  useGlobalFiltering,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
@@ -33,15 +40,29 @@ import Landing from './landing';
 import { useCookie } from '../../../stateProviders';
 
 const AssembledCookiesLanding = () => {
-  const { filter } = useCookie(({ state }) => ({
-    filter: state.filter,
+  const { tabCookies } = useCookie(({ state }) => ({
+    tabCookies: state.tabCookies,
   }));
 
-  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
+  const cookies = useMemo(() => Object.values(tabCookies || {}), [tabCookies]);
 
-  if (!filter) {
-    return <></>;
-  }
+  const filter = useGlobalFiltering(cookies, '', noop);
+
+  const cookiesByKey = useMemo(() => {
+    return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
+      const cookieKey = getCookieKey((cookie as CookieTableData).parsedCookie);
+
+      if (!cookieKey) {
+        return acc;
+      }
+
+      acc[cookieKey] = cookie as CookieTableData;
+
+      return acc;
+    }, {});
+  }, [filter.filteredData]);
+
+  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
   return (
     <div className="h-full flex flex-col">
@@ -83,7 +104,10 @@ const AssembledCookiesLanding = () => {
           className="flex-1 overflow-auto h-full"
           id="cookies-landing-scroll-container"
         >
-          <Landing />
+          <Landing
+            tabCookies={cookiesByKey}
+            appliedFilters={filter.selectedFilters}
+          />
         </div>
       </div>
     </div>

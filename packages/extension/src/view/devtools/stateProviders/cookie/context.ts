@@ -22,7 +22,6 @@ import {
   type TabCookies,
   type TabFrames,
 } from '@google-psat/common';
-import type { TableFilteringOutput } from '@google-psat/design-system';
 
 export interface CookieStoreContext {
   state: {
@@ -38,8 +37,6 @@ export interface CookieStoreContext {
     canStartInspecting: boolean;
     tabToRead: string | null;
     frameHasCookies: Record<string, boolean> | null;
-    cookiesByKey: TabCookies;
-    filter: TableFilteringOutput | null;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -65,8 +62,6 @@ const initialState: CookieStoreContext = {
     canStartInspecting: false,
     tabToRead: null,
     frameHasCookies: null,
-    cookiesByKey: {},
-    filter: null,
   },
   actions: {
     setSelectedFrame: noop,

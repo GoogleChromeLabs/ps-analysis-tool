@@ -29,17 +29,24 @@ import {
   useSidebar,
   InternalNavigationForAnchor,
 } from '@google-psat/design-system';
-import { type DataMapping, getLegendDescription } from '@google-psat/common';
+import {
+  type DataMapping,
+  getLegendDescription,
+  type TabCookies,
+} from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
 import { useCookie, useSettings } from '../../../stateProviders';
 
-const BlockedCookiesSection = () => {
-  const { tabFrames, tabCookies } = useCookie(({ state }) => ({
+interface BlockedCookiesSectionProps {
+  tabCookies: TabCookies;
+}
+
+const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
+  const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
-    tabCookies: state.cookiesByKey,
   }));
 
   const { isUsingCDP } = useSettings(({ state }) => ({
