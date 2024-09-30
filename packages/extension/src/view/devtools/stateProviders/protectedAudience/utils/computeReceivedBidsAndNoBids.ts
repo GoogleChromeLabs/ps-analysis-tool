@@ -101,7 +101,7 @@ function computeReceivedBidsAndNoBids(
             ...filteredEvents.map((event) => {
               const sellerSignals = JSON.parse(
                 //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-                auctionConfig?.sellerSignals.value
+                auctionConfig?.sellerSignals?.value ?? '{}'
               );
 
               return {
@@ -132,7 +132,7 @@ function computeReceivedBidsAndNoBids(
 
                 const sellerSignals = JSON.parse(
                   //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-                  auctionConfig?.sellerSignals.value
+                  auctionConfig?.sellerSignals?.value ?? '{}'
                 );
 
                 _noBids[auctionId] = {
@@ -170,7 +170,7 @@ function computeReceivedBidsAndNoBids(
         ...filteredEvents.map((event) => {
           const sellerSignals = JSON.parse(
             //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-            auctionConfig?.sellerSignals.value
+            auctionConfig?.sellerSignals?.value ?? '{}'
           );
 
           return {
