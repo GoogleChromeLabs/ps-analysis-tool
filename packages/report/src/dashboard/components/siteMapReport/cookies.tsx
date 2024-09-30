@@ -24,6 +24,7 @@ import {
   type LibraryData,
   type TabCookies,
   type TabFrames,
+  extractCookies,
 } from '@google-psat/common';
 import { useSidebar, type TableFilter } from '@google-psat/design-system';
 
@@ -33,7 +34,6 @@ import { useSidebar, type TableFilter } from '@google-psat/design-system';
 import AssembledCookiesLanding from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import SiteReport from '../siteReport';
 import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
-import extractCookies from '../utils/extractCookies';
 
 interface CookiesTabProps {
   selectedSite?: string;
@@ -98,11 +98,7 @@ const CookiesTab = ({
     await generateSiteMapReportandDownload(completeJson, appliedFilters, path);
   }, [appliedFilters, completeJson, path]);
 
-  const [
-    siteFilteredCookies,
-    siteFilteredTechnologies,
-    siteFilteredCompleteJson,
-  ] = useMemo(() => {
+  const [siteFilteredCookies, siteFilteredCompleteJson] = useMemo(() => {
     const reportData = completeJson?.find((data) =>
       isKeySelected(data.pageUrl)
     );
@@ -112,9 +108,8 @@ const CookiesTab = ({
     }
 
     const _cookies = extractCookies(reportData.cookieData, '', true);
-    const _technologies = reportData.technologyData;
 
-    return [_cookies, _technologies, [reportData]];
+    return [_cookies, [reportData]];
   }, [completeJson, isKeySelected]);
 
   const sitemapPath =
@@ -139,7 +134,6 @@ const CookiesTab = ({
       ) : (
         <SiteReport
           cookies={siteFilteredCookies}
-          technologies={siteFilteredTechnologies}
           completeJson={siteFilteredCompleteJson}
           selectedSite={selectedSite || ''}
           path={path}

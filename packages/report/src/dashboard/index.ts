@@ -16,5 +16,3 @@
 
 export { default as SiteReport } from './components/siteReport';
 export { default as SiteMapReport } from './components/siteMapReport';
-export { default as extractReportData } from './components/utils/extractReportData';
-export { default as extractCookies } from './components/utils/extractCookies';

@@ -25,10 +25,3 @@ export type SanitisedCookieType = ParsedCookie & {
   sameSite: string;
   scope: string;
 };
-export interface SingleTechnology {
-  name: string;
-  description: string;
-  confidence: number;
-  website: string;
-  categories: string;
-}

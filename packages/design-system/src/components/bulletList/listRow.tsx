@@ -17,18 +17,31 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 
 /**
  * Internal dependencies.
  */
 import { Ellipse } from '../../icons';
+import { useSidebar } from '../sidebar';
 
 type Props = {
   row: BulletListItem;
 };
 
 const ListRow = ({ row }: Props) => {
+  const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (row?.sidebarKey) {
+        navigateTo(row.sidebarKey);
+        event.preventDefault();
+      }
+    },
+    [navigateTo, row?.sidebarKey]
+  );
+
   return (
     <div className="flex gap-4 items-baseline" key={row?.key ?? row.title}>
       <span>
@@ -39,6 +52,7 @@ const ListRow = ({ row }: Props) => {
           title={row.link}
           href={row.link}
           target="_blank"
+          onClick={handleClick}
           rel="noreferrer"
           className="text-sm text-bright-navy-blue dark:text-jordy-blue font-medium leading-6"
         >

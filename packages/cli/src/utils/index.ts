@@ -22,4 +22,6 @@ export { default as askUserInput } from './askUserInput';
 export { default as generatePrefix } from './generatePrefix';
 export { default as getOutputFilePath } from './getOutputFilePath';
 export { default as saveResultsAsHTML } from './saveResultAsHTML';
+export { default as getSiteReport } from './getSiteReport';
+export * from './coloredLoggers';
 export * from './validators';

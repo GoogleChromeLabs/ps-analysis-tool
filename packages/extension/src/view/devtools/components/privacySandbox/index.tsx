@@ -16,18 +16,26 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { LandingPage } from '@google-psat/design-system';
 
-const PrivacySandbox = () => (
-  <div data-testid="privacy-sandbox-content" className="h-full w-full">
-    <LandingPage
-      title="Privacy Sandbox"
-      extraClasses="h-[78vh] w-full"
-      iframeSrc="https://privacysandbox.com"
-      iframeBorderClass="border border-hex-gray dark:border-quartz"
-    />
-  </div>
-);
+/**
+ * Internal dependencies.
+ */
+import ContentPanel from './contentPanel';
+
+const PrivacySandbox = () => {
+  useEffect(() => {
+    (async () => {
+      await chrome.storage.sync.set({
+        psLandingPageViewed: true,
+      });
+    })();
+  }, []);
+
+  return (
+    <LandingPage title="Privacy Sandbox" contentPanel={<ContentPanel />} />
+  );
+};
 
 export default PrivacySandbox;

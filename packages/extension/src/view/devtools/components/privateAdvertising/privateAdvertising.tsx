@@ -23,6 +23,11 @@ import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
+    title: () => I18n.getMessage('topics'),
+    description: () => I18n.getMessage('topicsDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
+  },
+  {
     title: () => I18n.getMessage('protectedAudience'),
     description: () => I18n.getMessage('protectedAudienceDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
@@ -36,11 +41,6 @@ const content = [
     title: () => I18n.getMessage('privateAggregation'),
     description: () => I18n.getMessage('privateAggregationDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
-  },
-  {
-    title: () => I18n.getMessage('topics'),
-    description: () => I18n.getMessage('topicsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
   },
 ];
 

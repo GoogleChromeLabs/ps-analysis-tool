@@ -966,6 +966,34 @@
         "https://smaker.pl": "RWS_rationale_https___smaker_pl",
         "https://terazgotuje.pl": "RWS_rationale_https___terazgotuje_pl"
       }
+    },
+    {
+      "contact": "david.molloy@bauermedia.co.uk",
+      "primary": "https://graziadaily.co.uk",
+      "associatedSites": [
+        "https://heatworld.com",
+        "https://closeronline.co.uk",
+        "https://yours.co.uk",
+        "https://motherandbaby.com",
+        "https://takeabreak.co.uk"
+      ],
+      "rationaleBySite": {
+        "https://heatworld.com": "RWS_rationale_https___heatworld_com",
+        "https://closeronline.co.uk": "RWS_rationale_https___closeronline_co_uk",
+        "https://yours.co.uk": "RWS_rationale_https___yours_co_uk",
+        "https://motherandbaby.com": "RWS_rationale_https___motherandbaby_com",
+        "https://takeabreak.co.uk": "RWS_rationale_https___takeabreak_co_uk"
+      }
+    },
+    {
+      "contact": "hello@drimer.io",
+      "primary": "https://drimer.io",
+      "associatedSites": [
+        "https://drimer.travel"
+      ],
+      "rationaleBySite": {
+        "https://drimer.travel": "RWS_rationale_https___drimer_travel"
+      }
     }
   ]
 }

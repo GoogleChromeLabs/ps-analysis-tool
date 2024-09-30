@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   LibraryDetection,
   useLibraryDetectionContext,
@@ -122,20 +122,33 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
     [sections]
   );
 
+  const _downloadReport = useCallback(async () => {
+    await downloadReport(
+      url || '',
+      unfilteredCookies || {},
+      tabFrames || {},
+      libraryMatches,
+      appliedFilters,
+      isUsingCDP
+    );
+  }, [
+    appliedFilters,
+    isUsingCDP,
+    libraryMatches,
+    tabFrames,
+    unfilteredCookies,
+    url,
+  ]);
+
   return (
     <div>
       <MenuBar
         disableReportDownload={showLoader}
-        downloadReport={async () => {
-          await downloadReport(
-            url || '',
-            unfilteredCookies || {},
-            tabFrames || {},
-            libraryMatches,
-            appliedFilters,
-            isUsingCDP
-          );
-        }}
+        downloadReport={
+          Object.keys(unfilteredCookies ?? {}).length > 0
+            ? _downloadReport
+            : undefined
+        }
         menuData={menuData}
         scrollContainerId="cookies-landing-scroll-container"
       />

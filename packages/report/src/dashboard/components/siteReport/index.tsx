@@ -23,7 +23,6 @@ import {
   type CompleteJson,
   type CookieJsonDataType,
   type LibraryData,
-  type TechnologyData,
 } from '@google-psat/common';
 import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 /**
@@ -39,7 +38,6 @@ interface SiteReportProps {
       [key: string]: CookieJsonDataType;
     };
   };
-  technologies: TechnologyData[];
   completeJson: CompleteJson[] | null;
   selectedSite: string | null;
   path: string;
@@ -50,7 +48,6 @@ interface SiteReportProps {
 
 const SiteReport = ({
   cookies,
-  technologies,
   completeJson,
   selectedSite,
   path,
@@ -63,7 +60,6 @@ const SiteReport = ({
   return (
     <ContentStoreProvider
       cookies={cookies}
-      technologies={technologies}
       completeJson={completeJson}
       libraryMatches={libraryMatches}
       path={path}

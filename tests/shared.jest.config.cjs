@@ -37,6 +37,7 @@ module.exports = {
       require.resolve('chalk').split('chalk')[0],
       'chalk/source/vendor/supports-color/index.js'
     ),
+    mermaid: join(__dirname, '/mermaidMock.js'),
   },
   testMatch: [
     '**/tests/**/*.{js,jsx,ts,tsx}',

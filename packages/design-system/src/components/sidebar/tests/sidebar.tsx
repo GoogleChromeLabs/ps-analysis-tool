@@ -44,6 +44,9 @@ const initialState = {
   isKeyAncestor: jest.fn(),
   isKeySelected: jest.fn(),
   onKeyNavigation: jest.fn(),
+  isCollapsed: false,
+  toggleSidebarCollapse: jest.fn(),
+  isSidebarCollapsible: true,
 };
 
 describe('Sidebar', () => {
@@ -150,5 +153,47 @@ describe('Sidebar', () => {
     // Assert
     expect(initialState.toggleDropdown).toHaveBeenCalled();
     expect(initialState.toggleDropdown).toHaveBeenCalledWith(true, 'item1');
+  });
+
+  it('should collapse the sidebar', async () => {
+    // Arrange
+    const props = {
+      visibleWidth: 200,
+    };
+
+    // Act
+    render(<Sidebar {...props} />);
+
+    // Assert
+    expect(initialState.toggleSidebarCollapse).not.toHaveBeenCalled();
+
+    const collapseButton = await screen.findByTitle('Collapse Sidebar Menu');
+    expect(collapseButton).toBeInTheDocument();
+
+    // Act
+    fireEvent.click(collapseButton);
+
+    // Assert
+    expect(initialState.toggleSidebarCollapse).toHaveBeenCalled();
+
+    jest.clearAllMocks();
+
+    mockUseSidebar.mockReturnValue({
+      ...initialState,
+      isCollapsed: true,
+    });
+
+    // Act
+    render(<Sidebar {...props} />);
+
+    // Assert
+    const expandedSidebar = await screen.findByTitle('Expand Sidebar Menu');
+    expect(expandedSidebar).toBeInTheDocument();
+
+    // Act
+    fireEvent.click(expandedSidebar);
+
+    // Assert
+    expect(initialState.toggleSidebarCollapse).toHaveBeenCalled();
   });
 });

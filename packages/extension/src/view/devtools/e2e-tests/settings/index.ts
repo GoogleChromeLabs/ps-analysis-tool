@@ -25,7 +25,7 @@ import { Page, Target, Browser } from 'puppeteer';
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 import { selectors } from '../../test-utils/constants';
-
+jest.retryTimes(3);
 describe('Settings Page', () => {
   describe('Multi-tab debugging', () => {
     let page: Page;

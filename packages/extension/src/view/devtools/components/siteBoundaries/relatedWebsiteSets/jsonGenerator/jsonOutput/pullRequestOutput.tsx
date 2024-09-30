@@ -44,7 +44,7 @@ const PullRequestOutput = ({
           dangerouslySetInnerHTML={{
             __html: I18n.getMessage('submitPRForRws', [
               `<a
-								className="text-blue-500 hover:opacity-70"
+								class="text-blue-500 hover:opacity-70"
 								title="https://github.com/GoogleChrome/related-website-sets/blob/main/related_website_sets.JSON"
 								href="https://github.com/GoogleChrome/related-website-sets/blob/main/related_website_sets.JSON"
 								target="_blank"

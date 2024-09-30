@@ -144,7 +144,10 @@ const Landing = ({
         disableReportDownload={false}
         downloadReport={
           // @ts-ignore -- PSAT_DATA is not present in globalThis type.
-          globalThis?.PSAT_DATA?.hideDownloadButton ? undefined : downloadReport
+          globalThis?.PSAT_DATA?.hideDownloadButton ||
+          Object.keys(tabCookies ?? {}).length === 0
+            ? undefined
+            : downloadReport
         }
         menuData={menuData}
         scrollContainerId={menuBarScrollContainerId}

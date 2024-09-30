@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
@@ -22,23 +21,22 @@ import {
   generateCookiesWithIssuesCSV,
   generateAllCookiesCSV,
   generateSummaryDataCSV,
-  generateTechnologyCSV,
   type CompleteJson,
 } from '@google-psat/common';
 import { type TableFilter } from '@google-psat/design-system';
 
+/**
+ * Internal dependencies.
+ */
+import packageJson from '../../../../../package.json';
+
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);
-  let technologyDataCSV = null;
-  if (data.technologyData.length > 0) {
-    technologyDataCSV = generateTechnologyCSV(data);
-  }
   const cookiesWithIssuesDataCSV = generateCookiesWithIssuesCSV(data);
   const summaryDataCSV = generateSummaryDataCSV(data);
 
   return {
     allCookiesCSV,
-    technologyDataCSV,
     cookiesWithIssuesDataCSV,
     summaryDataCSV,
   };
@@ -89,6 +87,8 @@ const generateHTMLFile = (
     // @ts-ignore -- because this data will already be injected from cli or the extension.
     dateTime: globalThis?.PSAT_DATA.dateTime,
     hideDownloadButton: true,
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    psatVersion: globalThis?.PSAT_DATA.psatVersion ?? packageJson.version,
   };
 
   let code = `window.PSAT_DATA = ${JSON.stringify(reportData)};`;
@@ -157,6 +157,8 @@ export const generateSitemapHTMLFile = (
     dateTime: globalThis?.PSAT_DATA.dateTime,
     appliedFilters,
     hideDownloadButton: true,
+    // @ts-ignore -- because this data will already be injected from cli or the extension.
+    psatVersion: globalThis?.PSAT_DATA.psatVersion ?? packageJson.version,
   };
 
   const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
@@ -176,19 +178,12 @@ export const createZip = (
   appliedFilters: TableFilter,
   zipObject: JSZip
 ) => {
-  const {
-    allCookiesCSV,
-    technologyDataCSV,
-    cookiesWithIssuesDataCSV,
-    summaryDataCSV,
-  } = generateCSVFiles(analysisData);
+  const { allCookiesCSV, cookiesWithIssuesDataCSV, summaryDataCSV } =
+    generateCSVFiles(analysisData);
 
   const file = generateHTMLFile(analysisData, appliedFilters);
 
   zipObject.file('cookies.csv', allCookiesCSV);
-  if (technologyDataCSV) {
-    zipObject.file('technologies.csv', technologyDataCSV);
-  }
   zipObject.file('cookie-issues.csv', cookiesWithIssuesDataCSV);
   zipObject.file('report.csv', summaryDataCSV);
   zipObject.file('report.json', JSON.stringify(analysisData, null, 4));

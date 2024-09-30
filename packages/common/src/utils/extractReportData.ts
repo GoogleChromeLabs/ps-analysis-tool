@@ -13,38 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies
- */
-import type {
-  CompleteJson,
-  CookieFrameStorageType,
-  LibraryData,
-  TechnologyData,
-} from '@google-psat/common';
-
 /**
  * Internal dependencies
  */
+import {
+  ErroredOutUrlsData,
+  CompleteJson,
+  CookieFrameStorageType,
+} from '../cookies.types';
+import { LibraryData } from '../libraryDetection.types';
 import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
   const landingPageCookies = {};
-  const technologies: TechnologyData[] = [];
   const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
+  const erroredOutUrlsData: ErroredOutUrlsData[] = [];
 
-  data.forEach(({ cookieData, pageUrl, libraryMatches, technologyData }) => {
+  data.forEach(({ cookieData, pageUrl, libraryMatches, erroredOutUrls }) => {
+    erroredOutUrlsData.push(...(erroredOutUrls ?? []));
+
     formatCookieData(
       extractCookies(cookieData, pageUrl, true),
       landingPageCookies
-    );
-
-    technologies.push(
-      ...technologyData.map((technology) => ({
-        ...technology,
-        pageUrl,
-      }))
     );
 
     consolidatedLibraryMatches[pageUrl] = libraryMatches;
@@ -53,6 +43,7 @@ const extractReportData = (data: CompleteJson[]) => {
   return {
     landingPageCookies,
     consolidatedLibraryMatches,
+    erroredOutUrlsData,
   };
 };
 

@@ -107,7 +107,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   /**
    * Stores object with frame URLs as keys and boolean values indicating if the frame contains cookies.
    */
-  const frameHasCookies = useMemo(() => {
+  const frameHasCookies = useCallback(() => {
     if (!tabCookies) {
       return {};
     }
@@ -445,7 +445,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         isInspecting,
         canStartInspecting,
         tabToRead,
-        frameHasCookies,
+        frameHasCookies: frameHasCookies(),
       },
       actions: {
         setSelectedFrame,

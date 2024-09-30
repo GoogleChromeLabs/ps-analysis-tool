@@ -22,12 +22,10 @@ import type {
   InterestGroups,
   NoBidsType,
   singleAuctionEvent,
-  TechnologyData,
 } from '@google-psat/common';
 
 export type TableData = (
   | CookieTableData
-  | TechnologyData
   | InterestGroups
   | singleAuctionEvent
   | NoBidsType[keyof NoBidsType]

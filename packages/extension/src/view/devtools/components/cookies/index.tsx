@@ -29,6 +29,7 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies.
  */
 import { useCookie, useSettings } from '../../stateProviders';
+import useCanShowAnalyzeTabButton from '../../hooks/useCanShowAnalyzeTabButton';
 import CookiesListing from './cookiesListing';
 import AssembledCookiesLanding from './cookieLanding';
 
@@ -50,6 +51,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     tabToRead: state.tabToRead,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
+  const canShowAnalyzeTabButton = useCanShowAnalyzeTabButton();
 
   const { allowedNumberOfTabs } = useSettings(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
@@ -70,13 +72,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     );
   }
 
-  if (
-    (tabToRead &&
-      isCurrentTabBeingListenedTo &&
-      allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single') ||
-    (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
-  ) {
+  if (canShowAnalyzeTabButton) {
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}

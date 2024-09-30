@@ -27,7 +27,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies.
  */
-import TABS from './tabs';
+import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './components';
 import useContextInvalidated from './hooks/useContextInvalidated';
@@ -44,6 +44,8 @@ const App: React.FC = () => {
     SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX
   );
 
+  const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
+
   const reloadTexts = useRef({
     displayText: I18n.getMessage('extensionUpdated'),
     buttonText: I18n.getMessage('refreshPanel'),
@@ -58,17 +60,34 @@ const App: React.FC = () => {
       }
 
       const data = await chrome.storage.session.get();
+      const syncData = await chrome.storage.sync.get();
 
       if (data?.['selectedSidebarItem#' + tabId]) {
         setDefaultSelectedItemKey(data['selectedSidebarItem#' + tabId]);
+      } else if (syncData?.psLandingPageViewed) {
+        setDefaultSelectedItemKey(SIDEBAR_ITEMS_KEYS.DASHBOARD);
+      }
+
+      if (data?.['sidebarCollapsedState#' + tabId]) {
+        setCollapsedState(
+          data?.['sidebarCollapsedState#' + tabId] === 'collapsed'
+        );
+      } else {
+        setCollapsedState(false);
       }
     })();
   }, []);
+
+  if (collapsedState === null) {
+    return null;
+  }
 
   return (
     <SidebarProvider
       data={sidebarData}
       defaultSelectedItemKey={defaultSelectedItemKey}
+      collapsedData={collapsedSidebarData}
+      collapsedState={collapsedState}
     >
       <div
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"

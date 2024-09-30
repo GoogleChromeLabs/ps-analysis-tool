@@ -28,6 +28,7 @@ import fs from 'fs';
  * Internal dependencies
  */
 import getOutputFilePath from './getOutputFilePath';
+import packageJson from '../../package.json';
 
 const isProduction = process.env.NODE_ENV === 'production';
 /**
@@ -105,6 +106,7 @@ const saveResultsAsHTML = async (
         translations: messages,
         dateTime,
         siteMapUrl: isSiteMap ? sitemapUrl : '',
+        psatVersion: packageJson.version,
       })}</script>` +
     htmlText.substring(htmlText.indexOf('</head>'));
 
@@ -118,6 +120,17 @@ const saveResultsAsHTML = async (
 
   writeFile(outputFilePath, buffer, () => {
     if (!fileName) {
+      if (
+        result.some(
+          (singleResult) =>
+            singleResult.erroredOutUrls &&
+            singleResult.erroredOutUrls.length > 0
+        )
+      ) {
+        console.log(
+          `\nWarning: Some URLs encountered issues while analysing cookies. Please check the dashboard for more details.`
+        );
+      }
       console.log(`\nReport: ${URL.pathToFileURL(outFileFullDir)}`);
     }
   });

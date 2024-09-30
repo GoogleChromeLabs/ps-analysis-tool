@@ -16,7 +16,7 @@
 
 import { parseUrl } from '@google-psat/common';
 import { existsSync, mkdirSync } from 'fs';
-import path from 'path';
+import path, { isAbsolute } from 'path';
 import { InvalidArgumentError } from 'commander';
 
 /**
@@ -125,15 +125,29 @@ export function filePathValidator(filePath: string, flag: string) {
         throw new InvalidArgumentError(
           "Correct value for option '-f, --file <path>' would be /users/path/to/urls.csv or /users/path/to/urls.xml"
         );
+      case '-b':
+        throw new InvalidArgumentError(
+          "Correct value for option '-b, --button-selector <path>' would be /users/path/to/selectors.json"
+        );
       default:
         throw new InvalidArgumentError('');
     }
   }
 
-  const csvFileExists = existsSync(filePath);
-  if (!csvFileExists) {
-    redLogger(`Error: No file at ${filePath}`);
+  if (flag === '-b' && path.extname(filePath) !== '.json') {
+    redLogger('Error: Provided selector file must be a JSON file.');
   }
+
+  const fileExists = existsSync(filePath);
+  if (!fileExists) {
+    const isAbsoluteFilePath = isAbsolute(filePath);
+    const absoluteFilePath = path.resolve(filePath);
+
+    redLogger(
+      `Error: No file at ${isAbsoluteFilePath ? filePath : absoluteFilePath}`
+    );
+  }
+
   return filePath;
 }
 
@@ -189,25 +203,30 @@ export function outDirValidator(outDir: string, flag: string) {
     }
   }
 
-  const parentDirExists = existsSync(path.resolve('./out'));
-
-  if (!parentDirExists) {
-    mkdirSync(path.resolve('./out'));
-  }
-
   let output;
 
-  if (!path.isAbsolute(outDir)) {
-    output = path.resolve('./out', outDir);
-  } else {
-    output = path.resolve(outDir);
-  }
+  try {
+    const parentDirExists = existsSync(path.resolve('./out'));
 
-  const outDirExists = existsSync(output);
+    if (!parentDirExists) {
+      mkdirSync(path.resolve('./out'));
+    }
 
-  if (!outDirExists) {
-    console.log(`"${output}" does not exist, creating\n`);
-    mkdirSync(output);
+    if (!path.isAbsolute(outDir)) {
+      output = path.resolve('./out', outDir);
+    } else {
+      output = path.resolve(outDir);
+    }
+
+    const outDirExists = existsSync(output);
+
+    if (!outDirExists) {
+      mkdirSync(output);
+      console.log(`"${output}" does not exist, creating\n`);
+    }
+    return outDir;
+  } catch (error) {
+    redLogger(`Error in creating directory ${output}.`);
+    return null;
   }
-  return outDir;
 }

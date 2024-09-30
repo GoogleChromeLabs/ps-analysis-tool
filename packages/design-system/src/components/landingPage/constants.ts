@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
+import { SIDEBAR_ITEMS_KEYS } from '../sidebar';
 
 export const QUICK_LINKS = [
   {
     title: 'learnMore',
-    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
+    link: '#wiki',
+    sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
   },
   {
     title: 'joinDiscussions',

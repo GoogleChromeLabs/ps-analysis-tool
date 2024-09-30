@@ -20,6 +20,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
+import { useSidebar } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
@@ -31,6 +32,14 @@ import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { act } from 'react-dom/test-utils';
 import PrivateAdvertising from '../privateAdvertising';
 import { I18n } from '@google-psat/i18n';
+
+jest.mock(
+  '../../../../../../../design-system/src/components/sidebar/useSidebar',
+  () => ({
+    useSidebar: jest.fn(),
+  })
+);
+const mockUseSidebar = useSidebar as jest.Mock;
 
 describe('Private advertising Landing Pages', () => {
   beforeAll(() => {
@@ -52,6 +61,8 @@ describe('Private advertising Landing Pages', () => {
         message: 'Private Advertising',
       },
     });
+
+    mockUseSidebar.mockReturnValue({ extractSelectedItemKeyTitles: () => [] });
   });
 
   it('should render Attribution', async () => {

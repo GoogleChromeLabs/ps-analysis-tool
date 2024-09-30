@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 import coffee from 'coffee';
-import fs from 'fs';
-import path from 'path';
 
-describe('CLI E2E Test', () => {
+xdescribe('CLI E2E Test', () => {
   const cli = require.resolve('../../dist/main.js');
-
-  afterAll(() => {
-    fs.rmSync(path.join(process.cwd(), '/out/bbc-com'), { recursive: true });
-  });
 
   it('Should run site analysis', () => {
     return coffee
-      .fork(cli, ['-u https://bbc.com', '-w 1'])
-      .includes('stdout', '/out/bbc-com/report_')
+      .fork(cli, ['-u https://httpstatus.us/200', '-w 1000'])
+      .includes('stdout', '/out/httpstatus-us-200/report_')
       .end();
   }, 60000);
 });

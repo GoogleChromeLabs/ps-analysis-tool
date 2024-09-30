@@ -32,13 +32,6 @@ export type CookiesObjects = { [key: string]: Cookie };
 
 export type ParsedCookie = SimpleCookie;
 
-export interface TechnologyDetail {
-  name: string;
-  categories: string[];
-}
-
-export type TechnologyDetailList = Array<TechnologyDetail>;
-
 export interface CookieLogDetails
   extends Omit<
     Cookie,
