@@ -23,6 +23,7 @@ import {
   type CookieDatabase,
   type LibraryMatchers,
   deriveBlockingStatus,
+  type Selectors,
 } from '@google-psat/common';
 
 /**
@@ -38,63 +39,77 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   cookieDictionary: CookieDatabase,
   shouldSkipAcceptBanner: boolean,
   verbose: boolean,
+  isSitemap: boolean,
+  selectors?: Selectors,
   spinnies?: Spinnies,
   indent = 4
 ) => {
-  const browser = new BrowserManagement(
-    {
-      width: 1440,
-      height: 790,
-      deviceScaleFactor: 1,
-    },
-    isHeadless,
-    delayTime,
-    verbose,
-    indent,
-    spinnies
-  );
+  // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
+  try {
+    const browser = new BrowserManagement(
+      {
+        width: 1440,
+        height: 790,
+        deviceScaleFactor: 1,
+      },
+      isHeadless,
+      delayTime,
+      verbose,
+      indent,
+      isSitemap,
+      spinnies,
+      selectors
+    );
 
-  await browser.initializeBrowser(true);
-  const { result: analysisCookieData, consolidatedDOMQueryMatches } =
-    await browser.analyzeCookies(urls, shouldSkipAcceptBanner, Libraries);
+    await browser.initializeBrowser(true);
 
-  const resources = browser.getResources(urls);
+    const {
+      result: analysisCookieData,
+      consolidatedDOMQueryMatches,
+      erroredOutUrls,
+    } = await browser.analyzeCookies(urls, shouldSkipAcceptBanner, Libraries);
 
-  const res = analysisCookieData.map(({ url: pageUrl, cookieData }) => {
-    Object.entries(cookieData).forEach(([, frameData]) => {
-      const frameCookies = frameData.frameCookies;
-      Object.entries(frameCookies).forEach(([key, cookie]) => {
-        const analytics = findAnalyticsMatch(
-          cookie.parsedCookie.name,
-          cookieDictionary
-        );
+    const resources = browser.getResources(urls);
 
-        frameCookies[key.trim()].analytics = {
-          platform: analytics?.platform || 'Unknown',
-          category: analytics?.category || 'Uncategorized',
-          gdprUrl: analytics?.gdprUrl || '',
-          description: analytics?.description,
-        };
+    const res = analysisCookieData.map(({ url: pageUrl, cookieData }) => {
+      Object.entries(cookieData).forEach(([, frameData]) => {
+        const frameCookies = frameData.frameCookies;
+        Object.entries(frameCookies).forEach(([key, cookie]) => {
+          const analytics = findAnalyticsMatch(
+            cookie.parsedCookie.name,
+            cookieDictionary
+          );
 
-        frameCookies[key.trim()].isFirstParty = isFirstParty(
-          cookie.parsedCookie.domain,
-          pageUrl
-        );
+          frameCookies[key.trim()].analytics = {
+            platform: analytics?.platform || 'Unknown',
+            category: analytics?.category || 'Uncategorized',
+            gdprUrl: analytics?.gdprUrl || '',
+            description: analytics?.description,
+          };
 
-        frameCookies[key.trim()].blockingStatus = deriveBlockingStatus(
-          cookie.networkEvents
-        );
+          frameCookies[key.trim()].isFirstParty = isFirstParty(
+            cookie.parsedCookie.domain,
+            pageUrl
+          );
+
+          frameCookies[key.trim()].blockingStatus = deriveBlockingStatus(
+            cookie.networkEvents
+          );
+        });
       });
+
+      return {
+        url: pageUrl,
+        cookieData,
+        resources: resources[pageUrl],
+        erroredOutUrls,
+        domQueryMatches: consolidatedDOMQueryMatches[pageUrl],
+      };
     });
 
-    return {
-      url: pageUrl,
-      cookieData,
-      resources: resources[pageUrl],
-      domQueryMatches: consolidatedDOMQueryMatches[pageUrl],
-    };
-  });
-
-  await browser.deinitialize();
-  return res;
+    await browser.deinitialize();
+    return res;
+  } catch (error) {
+    throw error;
+  }
 };

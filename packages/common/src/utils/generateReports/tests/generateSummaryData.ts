@@ -22,10 +22,11 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies
  */
 import generateSummaryDataCSV from '../generateSummaryDataCSV';
-import { mockData1 } from './data.mock';
+import { mockData1 } from '../../../test-utils/data.mock';
 
 describe('generateSummaryDataCSV', () => {
   beforeAll(() => {
+    //@ts-ignore
     globalThis.chrome.i18n = null;
 
     I18n.initMessages({

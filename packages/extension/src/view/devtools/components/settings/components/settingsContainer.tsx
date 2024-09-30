@@ -28,6 +28,7 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
+import { NAVIGATION_TAGS } from '../../wiki';
 
 interface settingsToReturnObject {
   id: string;
@@ -35,6 +36,7 @@ interface settingsToReturnObject {
   switchState: boolean;
   description: string;
   changeSwitchState: (newState: boolean) => void;
+  navigationQueries?: string[];
 }
 const SettingsContainer = () => {
   const { allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode } =
@@ -57,6 +59,7 @@ const SettingsContainer = () => {
             description: setting.description(),
             changeSwitchState: setIsUsingCDP,
             switchState: isUsingCDP,
+            navigationQueries: [NAVIGATION_TAGS.PSAT_SETTINGS_AND_PERMISSIONS],
           });
           break;
         case 'multitabDebugging':
@@ -66,6 +69,7 @@ const SettingsContainer = () => {
             description: setting.description(),
             changeSwitchState: setProcessingMode,
             switchState: allowedNumberOfTabs === 'unlimited',
+            navigationQueries: [NAVIGATION_TAGS.PSAT_SETTINGS_AND_PERMISSIONS],
           });
           break;
         default:
@@ -94,6 +98,7 @@ const SettingsContainer = () => {
               switchState={setting.switchState}
               changeSwitchState={setting.changeSwitchState}
               description={setting.description}
+              queries={setting.navigationQueries}
             />
           );
         })}

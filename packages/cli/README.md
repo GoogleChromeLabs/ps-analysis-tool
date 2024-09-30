@@ -23,7 +23,7 @@ npm i -g @google-psat/cli
 ### Usage
 
 ```
-psat https://example.com
+psat -u https://example.com
 ```
 
 
@@ -37,25 +37,24 @@ Usage: npm run cli [website-url] -- [options]
 CLI to test a URL for 3p cookies.
 
 Arguments:
-  website-url                 The URL of a single site to analyze
+  website-url                    The URL of a single site to analyze
 
 Options:
-  -V, --version               output the version number
-  -u, --url <url>             The URL of a single site to analyze
-  -s, --source-url <url>      The URL of a sitemap or CSV to analyze
-  -f, --file <path>           The path to a local file (CSV or XML sitemap) to analyze
-  -n, --number-of-urls <num>  Limit the number of URLs to analyze (from sitemap or CSV)
-  -d, --display               Flag for running CLI in non-headless mode (default: false)
-  -v, --verbose               Enables verbose logging (default: false)
-  -t, --tech                  Enables technology analysis (default: false)
-  -o, --out-dir <path>        Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard
-  -i, --ignore-gdpr           Ignore automatically accepting the GDPR banner if present (default: false)
-  -q, --quiet                 Skips all prompts; uses default options (default: false)
-  -c, --concurrency <num>     Number of tabs to open in parallel during sitemap or CSV analysis (default: 3)
-  -w, --wait <num>            Number of milliseconds to wait after the page is loaded before generating the report (default:
-                              20000)
-  -l, --locale <language>     Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR (default: "en")
-  -h, --help                  Display help for command
+  -V, --version                  output the version number
+  -u, --url <url>                The URL of a single site to analyze
+  -s, --source-url <url>         The URL of a sitemap or CSV to analyze
+  -f, --file <path>              The path to a local file (CSV or XML sitemap) to analyze
+  -n, --number-of-urls <num>     Limit the number of URLs to analyze (from sitemap or CSV)
+  -d, --display                  Flag for running CLI in non-headless mode (default: false)
+  -v, --verbose                  Enables verbose logging (default: false)
+  -o, --out-dir <path>           Directory to store analysis data (JSON, CSV, HTML) without launching the dashboard
+  -i, --ignore-gdpr              Ignore automatically accepting the GDPR banner if present (default: false)
+  -q, --quiet                    Skips all prompts; uses default options (default: false)
+  -c, --concurrency <num>        Number of tabs to open in parallel during sitemap or CSV analysis (default: 3)
+  -w, --wait <num>               Number of milliseconds to wait after the page is loaded before generating the report (default: 20000)
+  -l, --locale <language>        Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR (default: "en")
+  -b, --button-selectors <path>  The path to a json file which contains selectors or button text to be used for GDPR banner acceptance
+  -h, --help                     Display help for command
 
 To learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.
 ```

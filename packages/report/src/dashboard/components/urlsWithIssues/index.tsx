@@ -19,7 +19,7 @@
  */
 import { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { noop, type TechnologyData } from '@google-psat/common';
+import { noop, type ErroredOutUrlsData } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import {
   Table,
@@ -29,79 +29,39 @@ import {
   type TableRow,
   type TableFilter,
 } from '@google-psat/design-system';
-/**
- * Internal dependencies
- */
 
-import { useContentStore } from '../../stateProviders/contentStore';
-
-interface TechnologiesProps {
-  selectedSite: string | null;
+interface ErroredOutUrlsProps {
+  erroredOutUrls: ErroredOutUrlsData[];
 }
 
-const Technologies = ({ selectedSite }: TechnologiesProps) => {
-  const data = useContentStore(({ state }) => state.technologies || []);
-
-  const [selectedRow, setSelectedRow] = useState<TechnologyData>();
+const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
+  const [selectedRow, setSelectedRow] = useState<ErroredOutUrlsData>();
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
-        header: I18n.getMessage('name'),
-        accessorKey: 'name',
+        header: 'URL',
+        accessorKey: 'url',
         cell: (info: InfoType) => info,
         enableHiding: false,
       },
       {
-        header: I18n.getMessage('description'),
-        accessorKey: 'description',
+        header: 'Error Description',
+        accessorKey: 'errorMessage',
         cell: (info: InfoType) => info,
       },
       {
-        header: I18n.getMessage('confidence'),
-        accessorKey: 'confidence',
+        header: 'Error Code',
+        accessorKey: 'errorCode',
         cell: (info: InfoType) => (
-          <span className="w-full flex justify-center">{info + '%'}</span>
+          <span className="w-full flex justify-center">{info}</span>
         ),
-      },
-      {
-        header: I18n.getMessage('website'),
-        accessorKey: 'website',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: I18n.getMessage('category'),
-        accessorKey: 'categories',
-        cell: (info: InfoType) =>
-          (info as TechnologyData['categories']).map((i) => i.name).join(' | '),
-        sortingComparator: (a: InfoType, b: InfoType) => {
-          const aCategories =
-            (a as TechnologyData['categories'])
-              ?.map((i) => i.name)
-              .join(' | ') || '';
-          const bCategories =
-            (b as TechnologyData['categories'])
-              ?.map((i) => i.name)
-              .join(' | ') || '';
-
-          return aCategories.localeCompare(bCategories);
-        },
       },
     ],
     []
   );
 
   const filters = useMemo<TableFilter>(() => ({}), []);
-
-  const searchKeys = useMemo<string[]>(() => ['name', 'website'], []);
-
-  const tablePersistentSettingsKey = useMemo<string>(() => {
-    if (selectedSite) {
-      return `technologyListing#${selectedSite}`;
-    }
-
-    return 'technologyListing';
-  }, [selectedSite]);
 
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
@@ -121,43 +81,61 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
         className="h-full flex"
       >
         <TableProvider
-          data={data}
+          data={erroredOutUrls}
           tableColumns={tableColumns}
           tableFilterData={filters}
-          tableSearchKeys={searchKeys}
-          tablePersistentSettingsKey={tablePersistentSettingsKey}
+          tableSearchKeys={['url']}
+          tablePersistentSettingsKey="urlsWithIssues"
           onRowClick={(row) => {
-            setSelectedRow(row as TechnologyData);
+            setSelectedRow(row as ErroredOutUrlsData);
           }}
           onRowContextMenu={noop}
           getRowObjectKey={(row: TableRow) => {
-            return (row.originalData as TechnologyData).slug;
+            return (row.originalData as ErroredOutUrlsData).url;
           }}
         >
-          <Table hideFiltering={true} selectedKey={selectedRow?.slug} />
+          <Table hideFiltering={true} selectedKey={selectedRow?.url} />
         </TableProvider>
       </Resizable>
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
-            {selectedRow.name && (
+            {selectedRow.url && (
               <>
                 <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
-                  <span>{I18n.getMessage('technologyDetails')}</span>
+                  <span>Error Message</span>
                 </p>
                 <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
-                  {selectedRow.name}
+                  {selectedRow.errorMessage}
                 </p>
               </>
             )}
             <>
               <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-                {I18n.getMessage('description')}
+                Error code
               </p>
-              <p className="text-outer-space-crayola dark:text-bright-gray">
-                {selectedRow?.description || I18n.getMessage('noDescription')}
+              <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
+                {selectedRow?.errorCode || I18n.getMessage('noDescription')}
               </p>
             </>
+            {selectedRow?.stackTrace && (
+              <>
+                <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+                  Stack trace
+                </p>
+                <p className="text-outer-space-crayola dark:text-bright-gray">
+                  <pre>
+                    <code
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          selectedRow?.stackTrace ||
+                          I18n.getMessage('noDescription'),
+                      }}
+                    />
+                  </pre>
+                </p>
+              </>
+            )}
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
@@ -171,4 +149,4 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
   );
 };
 
-export default Technologies;
+export default ErroredOutUrls;

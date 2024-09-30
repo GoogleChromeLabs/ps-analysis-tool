@@ -28,7 +28,15 @@ import RelatedWebsiteSets from '../relatedWebsiteSets';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
+import { useSidebar } from '@google-psat/design-system';
 
+jest.mock(
+  '../../../../../../../design-system/src/components/sidebar/useSidebar',
+  () => ({
+    useSidebar: jest.fn(),
+  })
+);
+const mockUseSidebar = useSidebar as jest.Mock;
 describe('Private advertising Landing Pages', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
@@ -41,6 +49,8 @@ describe('Private advertising Landing Pages', () => {
         text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
+
+    mockUseSidebar.mockReturnValue({ extractSelectedItemKeyTitles: () => [] });
   });
 
   it('should render RelatedWebsiteSets', async () => {

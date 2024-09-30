@@ -56,7 +56,11 @@ const findNextItem = (
   const currentItem = findItem(items, currentKey) as SidebarItemValue;
 
   if (currentItem?.dropdownOpen && !skipDropdown) {
-    return handleNextItemOnParent(currentItem);
+    const next = handleNextItemOnParent(currentItem);
+
+    if (next) {
+      return next;
+    }
   }
 
   const parentKey = findKeyParent(keyPath);

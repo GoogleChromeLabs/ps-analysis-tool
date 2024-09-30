@@ -25,6 +25,7 @@ import React, {
   useMemo,
 } from 'react';
 import { type TabCookies } from '@google-psat/common';
+import { diff } from 'deep-object-diff';
 
 /**
  * Internal dependencies.
@@ -43,7 +44,6 @@ import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 import Context, { type CookieStoreContext } from './context';
-import { diff } from 'deep-object-diff';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -115,7 +115,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   /**
    * Stores object with frame URLs as keys and boolean values indicating if the frame contains cookies.
    */
-  const frameHasCookies = useMemo(() => {
+  const frameHasCookies = useCallback(() => {
     if (!tabCookies) {
       return {};
     }
@@ -452,7 +452,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         isInspecting,
         canStartInspecting,
         tabToRead,
-        frameHasCookies,
+        frameHasCookies: frameHasCookies(),
       },
       actions: {
         setSelectedFrame,
