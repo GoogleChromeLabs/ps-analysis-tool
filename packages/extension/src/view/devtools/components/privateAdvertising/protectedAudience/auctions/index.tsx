@@ -32,6 +32,7 @@ import {
 import AuctionTable from './auctionTable';
 import MultiSellerAuctionTable from './mutliSellerAuctionTable';
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import Breakpoints from './breakpoints';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState({});
@@ -85,7 +86,8 @@ const Auctions = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="overflow-auto flex-1 pt-4">
+      <Breakpoints />
+      <div className="overflow-auto flex-1">
         {!isMultiSellerAuction ? (
           <AuctionTable
             auctionEvents={
