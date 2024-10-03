@@ -319,9 +319,6 @@ class DataStore {
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
-    this.auctionEvents['globalEvents'] = {
-      interestGroupEvents: [],
-    };
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -460,10 +457,12 @@ class DataStore {
     this.tabs[tabId].newUpdates = 0;
     this.tabs[tabId].frameIDURLSet = {};
     this.tabs[tabId].parentChildFrameAssociation = {};
-    this.auctionEvents[tabId.toString()] = {};
-    this.auctionEvents['globalEvents'] = {
-      interestGroupEvents: [],
-    };
+    Object.keys(this.auctionEvents[tabId.toString()]).forEach((key) => {
+      if (key === 'globalEvents') {
+        return;
+      }
+      delete this.auctionEvents[tabId.toString()][key];
+    });
     this.auctionDataForTabId[tabId] = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
