@@ -40,7 +40,7 @@ import { prettyPrintJson } from 'pretty-print-json';
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
-const InterestGroups = () => {
+const Events = () => {
   const [selectedRow, setSelectedRow] = useState<InterestGroupsType | null>(
     null
   );
@@ -48,14 +48,6 @@ const InterestGroups = () => {
   const { interestGroupDetails } = useProtectedAudience(({ state }) => ({
     interestGroupDetails: state.interestGroupDetails,
   }));
-
-  const memoisedInterestGroupDetails = useMemo(() => {
-    return interestGroupDetails.filter(
-      (interestGroup) =>
-        interestGroup.type.toLowerCase() === 'join' ||
-        interestGroup.type.toLowerCase() === 'leave'
-    );
-  }, [interestGroupDetails]);
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
@@ -137,7 +129,7 @@ const InterestGroups = () => {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view interest group events, enable PSAT to use CDP via the{' '}
+          To view events, enable PSAT to use CDP via the{' '}
           <button
             className="text-bright-navy-blue dark:text-jordy-blue"
             onClick={() => {
@@ -179,7 +171,7 @@ const InterestGroups = () => {
         }}
       >
         <TableProvider
-          data={memoisedInterestGroupDetails}
+          data={interestGroupDetails}
           tableColumns={tableColumns}
           tableFilterData={tableFilters}
           tableSearchKeys={undefined}
@@ -227,4 +219,4 @@ const InterestGroups = () => {
   );
 };
 
-export default InterestGroups;
+export default Events;

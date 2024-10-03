@@ -36,6 +36,7 @@ import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
 import AdUnits from './adUnits';
+import Events from './events';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -67,6 +68,13 @@ const ProtectedAudience = () => {
         title: 'Interest Groups',
         content: {
           Element: InterestGroups,
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Events',
+        content: {
+          Element: Events,
           className: 'overflow-hidden',
         },
       },
