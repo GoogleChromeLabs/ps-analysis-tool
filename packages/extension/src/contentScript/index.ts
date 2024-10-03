@@ -354,6 +354,82 @@ class WebpageContentScript {
 
   /**
    * Insert tooltip.
+   * @param {ResponseType} response Response.
+   * @returns {HTMLElement} Tooltip.
+   */
+  insertProtectedAudienceTooltip(response: ResponseType): HTMLElement | null {
+    if (!response.selectedAdUnit) {
+      return null;
+    }
+
+    const frame = document.getElementById(response.selectedAdUnit);
+
+    if (!frame) {
+      return null;
+    }
+    this.insertOverlay(frame);
+
+    const tooltip = addTooltip(frame, response, 0, 0);
+
+    const arrowElement = document.getElementById('ps-content-tooltip-arrow');
+
+    if (
+      frame &&
+      (frame.tagName !== 'BODY' || !isFrameHidden(frame)) &&
+      tooltip &&
+      arrowElement
+    ) {
+      this.cleanup = autoUpdate(frame, tooltip, () => {
+        computePosition(frame, tooltip, {
+          platform: platform,
+          placement: 'top',
+          middleware: [
+            shift({
+              boundary: document.querySelector('body'),
+            }),
+            flip({
+              boundary: document.querySelector('body'),
+            }),
+            arrow({
+              element: arrowElement,
+            }),
+          ],
+        }).then(({ x, y, middlewareData, placement }) => {
+          Object.assign(tooltip.style, {
+            top: `${y}px`,
+            left: `${x}px`,
+          });
+          const side = placement.split('-')[0];
+
+          const staticSide = {
+            top: 'bottom',
+            right: 'left',
+            bottom: 'top',
+            left: 'right',
+          }[side];
+
+          if (middlewareData.arrow) {
+            const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+            Object.assign(arrowElement.style, {
+              left: arrowX ? `${arrowX - 15}px` : '',
+              top: arrowY ? `${arrowY}px` : '',
+              right: '',
+              bottom: '',
+              [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
+              transform: 'rotate(45deg)',
+            });
+          }
+          return tooltip;
+        });
+      });
+    }
+
+    return tooltip;
+  }
+
+  /**
+   * Insert tooltip.
    * @param {HTMLElement} frame Frame
    * @param {number} numberOfVisibleFrames Number of visible frames.
    * @param {number} numberOfHiddenFrames Number of hidden frames.
@@ -586,6 +662,11 @@ class WebpageContentScript {
    * @param {ResponseType} response - The incoming message/response from the port.
    */
   insertPopovers(response: ResponseType) {
+    if (response.isForProtectedAudience) {
+      this.insertProtectedAudienceTooltip(response);
+      return;
+    }
+
     // If the no frame was selected in devtool.
     if (response.removeAllFramePopovers && !response.selectedFrame) {
       removeAllPopovers();

@@ -53,6 +53,8 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['interestGroupDetails']
   >([]);
 
+  const [selectedAdUnit, setSelectedAdUnit] = useState<string | null>(null);
+
   const [receivedBids, setReceivedBids] = useState<
     ProtectedAudienceContextType['state']['receivedBids']
   >([]);
@@ -144,9 +146,27 @@ const Provider = ({ children }: PropsWithChildren) => {
               {};
 
             computedBids.receivedBids.forEach(
-              ({ adUnitCode, ownerOrigin, mediaContainerSize }) => {
+              ({
+                adUnitCode,
+                ownerOrigin,
+                mediaContainerSize,
+                bid,
+                bidCurrency,
+              }) => {
                 if (!adUnitCode) {
                   return;
+                }
+
+                let winningBid = bid ?? 0;
+                let winningBidder = ownerOrigin ?? '';
+
+                if (
+                  winningBid &&
+                  winningBid < adUnitCodeToBidders[adUnitCode]?.winningBid
+                ) {
+                  winningBid = adUnitCodeToBidders[adUnitCode]?.winningBid;
+                  winningBidder =
+                    adUnitCodeToBidders[adUnitCode]?.winningBidder;
                 }
 
                 adUnitCodeToBidders[adUnitCode] = {
@@ -167,6 +187,9 @@ const Provider = ({ children }: PropsWithChildren) => {
                       )
                     ),
                   ],
+                  bidCurrency: bidCurrency ?? '',
+                  winningBid,
+                  winningBidder,
                 };
               }
             );
@@ -218,9 +241,14 @@ const Provider = ({ children }: PropsWithChildren) => {
         receivedBids,
         noBids,
         adsAndBidders,
+        selectedAdUnit,
+      },
+      actions: {
+        setSelectedAdUnit,
       },
     };
   }, [
+    selectedAdUnit,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,

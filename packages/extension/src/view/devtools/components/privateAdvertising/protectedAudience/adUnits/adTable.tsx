@@ -37,11 +37,19 @@ import { prettyPrintJson } from 'pretty-print-json';
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience } from '../../../../stateProviders';
+import { useCookie, useProtectedAudience } from '../../../../stateProviders';
 
 const AdTable = () => {
-  const { adsAndBidders } = useProtectedAudience(({ state }) => ({
-    adsAndBidders: state.adsAndBidders,
+  const { adsAndBidders, setSelectedAdUnit } = useProtectedAudience(
+    ({ state, actions }) => ({
+      adsAndBidders: state.adsAndBidders,
+      setSelectedAdUnit: actions.setSelectedAdUnit,
+    })
+  );
+
+  const { setIsInspecting, isInspecting } = useCookie(({ state, actions }) => ({
+    isInspecting: state.isInspecting,
+    setIsInspecting: actions.setIsInspecting,
   }));
 
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
@@ -52,7 +60,13 @@ const AdTable = () => {
         header: 'Ad Unit Code',
         accessorKey: 'adUnitCode',
         cell: (info) => (
-          <button className="w-full flex gap-2 items-center">
+          <button
+            className="w-full flex gap-2 items-center"
+            onClick={() => {
+              setSelectedAdUnit(info as string);
+              setIsInspecting(!isInspecting);
+            }}
+          >
             <FrameIcon className="fill-[#1A73E8] min-w-5 min-h-5" />
             <p className="truncate">{info}</p>
           </button>
@@ -104,7 +118,7 @@ const AdTable = () => {
         widthWeightagePercentage: 60,
       },
     ],
-    []
+    [isInspecting, setIsInspecting, setSelectedAdUnit]
   );
 
   const tableFilters = useMemo<TableFilter>(
