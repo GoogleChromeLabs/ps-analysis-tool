@@ -40,12 +40,12 @@ import { prettyPrintJson } from 'pretty-print-json';
 import { useCookie, useProtectedAudience } from '../../../../stateProviders';
 
 const AdTable = () => {
-  const { adsAndBidders, setSelectedAdUnit } = useProtectedAudience(
-    ({ state, actions }) => ({
+  const { adsAndBidders, setSelectedAdUnit, selectedAdUnit } =
+    useProtectedAudience(({ state, actions }) => ({
       adsAndBidders: state.adsAndBidders,
       setSelectedAdUnit: actions.setSelectedAdUnit,
-    })
-  );
+      selectedAdUnit: state.selectedAdUnit,
+    }));
 
   const { setIsInspecting, isInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
@@ -63,7 +63,12 @@ const AdTable = () => {
           <button
             className="w-full flex gap-2 items-center"
             onClick={() => {
-              setSelectedAdUnit(info as string);
+              if (selectedAdUnit === info) {
+                setSelectedAdUnit(null);
+              } else {
+                setSelectedAdUnit(info as string);
+              }
+
               setIsInspecting(!isInspecting);
             }}
           >

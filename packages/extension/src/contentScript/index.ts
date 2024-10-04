@@ -367,18 +367,14 @@ class WebpageContentScript {
     if (!frame) {
       return null;
     }
+    removeAllPopovers();
     this.insertOverlay(frame);
 
     const tooltip = addTooltip(frame, response, 0, 0);
 
     const arrowElement = document.getElementById('ps-content-tooltip-arrow');
 
-    if (
-      frame &&
-      (frame.tagName !== 'BODY' || !isFrameHidden(frame)) &&
-      tooltip &&
-      arrowElement
-    ) {
+    if (frame && tooltip && arrowElement) {
       this.cleanup = autoUpdate(frame, tooltip, () => {
         computePosition(frame, tooltip, {
           platform: platform,
@@ -663,7 +659,7 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     if (response.isForProtectedAudience) {
-      this.insertProtectedAudienceTooltip(response);
+      this.insertProtectedAudienceTooltip(response)?.scrollIntoView();
       return;
     }
 
