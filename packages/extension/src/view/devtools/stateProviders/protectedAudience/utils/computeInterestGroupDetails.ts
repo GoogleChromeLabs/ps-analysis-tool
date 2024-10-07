@@ -41,22 +41,29 @@ function computeInterestGroupDetails(
             details: {},
           };
         }
+        let result;
+        try {
+          result = (await chrome.debugger.sendCommand(
+            { tabId: chrome.devtools.inspectedWindow.tabId },
+            'Storage.getInterestGroupDetails',
+            {
+              name: event?.name,
+              ownerOrigin: event?.ownerOrigin,
+            }
+          )) as Protocol.Storage.GetInterestGroupDetailsResponse;
 
-        const result = (await chrome.debugger.sendCommand(
-          { tabId: chrome.devtools.inspectedWindow.tabId },
-          'Storage.getInterestGroupDetails',
-          {
-            name: event?.name,
-            ownerOrigin: event?.ownerOrigin,
-          }
-        )) as Protocol.Storage.GetInterestGroupDetailsResponse;
-
-        return {
-          ...event,
-          details: {
-            ...result.details,
-          },
-        };
+          return {
+            ...event,
+            details: {
+              ...result.details,
+            },
+          };
+        } catch (error) {
+          //Fail silently.
+          return {
+            ...event,
+          };
+        }
       })
   );
 }
