@@ -16,28 +16,8 @@
 /**
  * External dependencies
  */
-import { shallowEqualArrays, shallowEqualObjects } from 'shallow-equal';
+import { isEqual } from 'lodash-es';
 
 export const shallowEqual = (a: unknown, b: unknown): boolean => {
-  if (a === b) {
-    return true;
-  }
-
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (
-      typeof a[0] === 'object' &&
-      typeof b[0] === 'object' &&
-      a.length === b.length
-    ) {
-      return a.every((item, index) => shallowEqualObjects(item, b[index]));
-    }
-
-    return shallowEqualArrays(a, b);
-  }
-
-  if (typeof a === 'object' && typeof b === 'object') {
-    return shallowEqualObjects(a, b);
-  }
-
-  return false;
+  return isEqual(a, b);
 };

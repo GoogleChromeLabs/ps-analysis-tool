@@ -38,6 +38,7 @@ module.exports = {
       'chalk/source/vendor/supports-color/index.js'
     ),
     mermaid: join(__dirname, '/mermaidMock.js'),
+    '^lodash-es$': 'lodash',
   },
   testMatch: [
     '**/tests/**/*.{js,jsx,ts,tsx}',

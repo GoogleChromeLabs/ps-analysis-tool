@@ -67,7 +67,8 @@ describe('Allow Listing', () => {
       // Click on 'allow-list-option'
       await frame.click('#allow-list-option');
     }
-    const firstrow = await frame.$('div[title="HTMyOffer"]');
+    await interaction.delay(3000);
+    const firstrow = await frame.waitForSelector('div[title="HTMyOffer"]');
     await firstrow?.click();
 
     // Click on the green color background row from table.
