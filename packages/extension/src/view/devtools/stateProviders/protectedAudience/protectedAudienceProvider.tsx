@@ -34,11 +34,11 @@ import type {
  * Internal dependencies.
  */
 import Context, { type ProtectedAudienceContextType } from './context';
-import shouldUpdateState from '../../../../utils/shouldUpdateState';
 import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
+import { isEqual } from 'lodash-es';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
@@ -102,7 +102,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             if (
               prevState &&
               message.payload.auctionEvents &&
-              shouldUpdateState(prevState, message.payload.auctionEvents)
+              !isEqual(prevState, message.payload.auctionEvents)
             ) {
               didAuctionEventsChange = true;
               return message.payload.auctionEvents;
@@ -113,10 +113,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
           if (
             !didAuctionEventsChange &&
-            !shouldUpdateState(
-              globalEvents.current,
-              message.payload.globalEvents
-            )
+            isEqual(globalEvents.current, message.payload.globalEvents)
           ) {
             return;
           }
@@ -172,26 +169,26 @@ const Provider = ({ children }: PropsWithChildren) => {
             );
 
             setAdsAndBidders((prevState) => {
-              return shouldUpdateState(prevState, adUnitCodeToBidders)
+              return !isEqual(prevState, adUnitCodeToBidders)
                 ? adUnitCodeToBidders
                 : prevState;
             });
 
             setReceivedBids((prevState) => {
-              return shouldUpdateState(prevState, computedBids.receivedBids)
+              return !isEqual(prevState, computedBids.receivedBids)
                 ? computedBids.receivedBids
                 : prevState;
             });
 
             setNoBids((prevState) => {
-              return shouldUpdateState(prevState, computedBids.noBids)
+              return !isEqual(prevState, computedBids.noBids)
                 ? computedBids.noBids
                 : prevState;
             });
           }
 
           setInterestGroupDetails((prevState) => {
-            return shouldUpdateState(prevState, shapedInterestGroupDetails)
+            return !isEqual(prevState, shapedInterestGroupDetails)
               ? shapedInterestGroupDetails
               : prevState;
           });
