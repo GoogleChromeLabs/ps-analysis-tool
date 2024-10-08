@@ -69,7 +69,7 @@ const Tabs = ({ items, activeTab, setActiveTab }: TabsProps) => {
             onClick={() => setActiveTab(index)}
             onKeyDown={handleKeyDown}
             className={classNames(
-              'pb-1.5 px-3 border-b-2 hover:opacity-80 outline-none text-sm',
+              'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-sm text-nowrap',
               {
                 'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
                   index === activeTab,
