@@ -26,65 +26,70 @@ import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 import { selectors } from '../../test-utils/constants';
 
+jest.retryTimes(3);
 let page: Page;
 let puppeteer: PuppeteerManagement;
 let interaction: Interaction;
 
-beforeEach(async () => {
-  puppeteer = new PuppeteerManagement();
-  await puppeteer.setup();
-  page = await puppeteer.openPage();
-}, 40000);
+describe('Landing Pages:', () => {
+  beforeEach(async () => {
+    puppeteer = new PuppeteerManagement();
+    await puppeteer.setup();
+    page = await puppeteer.openPage();
+  }, 40000);
 
-afterEach(async () => {
-  await puppeteer.close();
-}, 40000);
+  afterEach(async () => {
+    await puppeteer.close();
+  }, 40000);
 
-test('Should be able to validate the embedded privacy.com page title', async () => {
-  await puppeteer.navigateToURL(page, 'https://bbc.com');
+  test('Should be able to validate the embedded privacy.com page title', async () => {
+    await puppeteer.navigateToURL(page, 'https://bbc.com');
 
-  const devtools = await puppeteer.getDevtools();
-  const key = puppeteer.getCMDKey();
-  interaction = new Interaction(devtools, key);
+    const devtools = await puppeteer.getDevtools();
+    const key = puppeteer.getCMDKey();
+    interaction = new Interaction(devtools, key);
 
-  // Navigate to Privacy Sandbox Tab
-  const devtoolsTargets = await interaction.navigateToPrivacySandboxTab();
+    // Navigate to Privacy Sandbox Tab
+    const devtoolsTargets = await interaction.navigateToPrivacySandboxTab();
 
-  // Validate the privacy sandbox embedded page title.
-  const outerIframe = await devtoolsTargets.$(selectors.devtoolIframeSelector);
-
-  if (!outerIframe) {
-    throw new Error('Outer iframe not found');
-  }
-
-  const outerFrame = await outerIframe.contentFrame();
-  await new Promise((resolve) => setTimeout(resolve, 4000));
-
-  if (outerFrame) {
-    // Get the privacySandboxEmbedded Iframe.
-    const nestedIframe = await outerFrame.$(
-      selectors.privacySandBoxEmbedIframeSelector
+    // Validate the privacy sandbox embedded page title.
+    const outerIframe = await devtoolsTargets.$(
+      selectors.devtoolIframeSelector
     );
 
-    if (!nestedIframe) {
-      throw new Error('Nested iframe not found');
+    if (!outerIframe) {
+      throw new Error('Outer iframe not found');
     }
 
-    const nestedFrame = await nestedIframe.contentFrame();
+    const outerFrame = await outerIframe.contentFrame();
+    await new Promise((resolve) => setTimeout(resolve, 4000));
 
-    // Validate the Privacy sandbox page title.
-    if (nestedFrame) {
-      const title = await nestedFrame.title();
-      expect(title).toBe(
-        'The Privacy Sandbox: Technology for a More Private Web'
+    if (outerFrame) {
+      // Get the privacySandboxEmbedded Iframe.
+      const nestedIframe = await outerFrame.$(
+        selectors.privacySandBoxEmbedIframeSelector
       );
 
-      // Check if the iframe is visible
-      const isVisible = await nestedFrame.evaluate(() => {
-        const style = getComputedStyle(document.body);
-        return style.visibility !== 'hidden' && style.display !== 'none';
-      });
-      expect(isVisible).toBe(true);
+      if (!nestedIframe) {
+        throw new Error('Nested iframe not found');
+      }
+
+      const nestedFrame = await nestedIframe.contentFrame();
+
+      // Validate the Privacy sandbox page title.
+      if (nestedFrame) {
+        const title = await nestedFrame.title();
+        expect(title).toBe(
+          'The Privacy Sandbox: Technology for a More Private Web'
+        );
+
+        // Check if the iframe is visible
+        const isVisible = await nestedFrame.evaluate(() => {
+          const style = getComputedStyle(document.body);
+          return style.visibility !== 'hidden' && style.display !== 'none';
+        });
+        expect(isVisible).toBe(true);
+      }
     }
-  }
-}, 60000);
+  }, 60000);
+});

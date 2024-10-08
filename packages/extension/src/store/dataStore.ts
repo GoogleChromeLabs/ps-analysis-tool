@@ -179,7 +179,8 @@ class DataStore {
       url: string;
       devToolsOpenState: boolean;
       popupOpenState: boolean;
-      newUpdates: number;
+      newUpdatesCA: number;
+      newUpdatesPA: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
@@ -323,7 +324,8 @@ class DataStore {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
-      newUpdates: 0,
+      newUpdatesCA: 0,
+      newUpdatesPA: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
@@ -454,7 +456,8 @@ class DataStore {
 
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
-    this.tabs[tabId].newUpdates = 0;
+    this.tabs[tabId].newUpdatesCA = 0;
+    this.tabs[tabId].newUpdatesPA = 0;
     this.tabs[tabId].frameIDURLSet = {};
     this.tabs[tabId].parentChildFrameAssociation = {};
     Object.keys(this.auctionEvents[tabId.toString()]).forEach((key) => {
@@ -505,46 +508,49 @@ class DataStore {
     if (!this.tabs[tabId] || !this.tabsData[tabId]) {
       return;
     }
-    let sentMessageAnyWhere = false;
 
     try {
       if (
-        this.tabs[tabId].devToolsOpenState ||
-        (this.tabs[tabId].popupOpenState &&
-          (overrideForInitialSync || this.tabs[tabId].newUpdates > 0))
+        (this.tabs[tabId].devToolsOpenState ||
+          this.tabs[tabId].popupOpenState) &&
+        (overrideForInitialSync ||
+          this.tabs[tabId].newUpdatesCA > 0 ||
+          this.tabs[tabId].newUpdatesPA > 0)
       ) {
-        sentMessageAnyWhere = true;
+        if (this.tabs[tabId].newUpdatesCA > 0) {
+          const newCookieData: {
+            [cookieKey: string]: CookieData;
+          } = {};
 
-        const newCookieData: {
-          [cookieKey: string]: CookieData;
-        } = {};
+          Object.keys(this.tabsData[tabId]).forEach((key) => {
+            newCookieData[key] = {
+              ...this.tabsData[tabId][key],
+              networkEvents: {
+                requestEvents: [],
+                responseEvents: [],
+              },
+              url: '',
+              headerType: ['request', 'response'].includes(
+                this.tabsData[tabId][key]?.headerType ?? ''
+              )
+                ? 'http'
+                : 'javascript',
+            };
+          });
 
-        Object.keys(this.tabsData[tabId]).forEach((key) => {
-          newCookieData[key] = {
-            ...this.tabsData[tabId][key],
-            networkEvents: {
-              requestEvents: [],
-              responseEvents: [],
+          await chrome.runtime.sendMessage({
+            type: NEW_COOKIE_DATA,
+            payload: {
+              tabId,
+              cookieData: newCookieData,
+              extraData: {
+                extraFrameData: this.tabs[tabId].frameIDURLSet,
+              },
             },
-            url: '',
-            headerType: ['request', 'response'].includes(
-              this.tabsData[tabId][key]?.headerType ?? ''
-            )
-              ? 'http'
-              : 'javascript',
-          };
-        });
+          });
 
-        await chrome.runtime.sendMessage({
-          type: NEW_COOKIE_DATA,
-          payload: {
-            tabId,
-            cookieData: newCookieData,
-            extraData: {
-              extraFrameData: this.tabs[tabId].frameIDURLSet,
-            },
-          },
-        });
+          this.tabs[tabId].newUpdatesCA = 0;
+        }
 
         const { globalEvents, ...rest } = this.auctionEvents[tabId];
 
@@ -594,20 +600,19 @@ class DataStore {
           });
         }
 
-        await chrome.runtime.sendMessage({
-          type: 'AUCTION_EVENTS',
-          payload: {
-            refreshTabData: overrideForInitialSync,
-            tabId,
-            auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
-            multiSellerAuction: isMultiSellerAuction,
-            globalEvents: globalEvents ?? [],
-          },
-        });
-      }
-
-      if (sentMessageAnyWhere) {
-        this.tabs[tabId].newUpdates = 0;
+        if (this.tabs[tabId].newUpdatesPA > 0) {
+          await chrome.runtime.sendMessage({
+            type: 'AUCTION_EVENTS',
+            payload: {
+              refreshTabData: overrideForInitialSync,
+              tabId,
+              auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
+              multiSellerAuction: isMultiSellerAuction,
+              globalEvents: globalEvents ?? [],
+            },
+          });
+          this.tabs[tabId].newUpdatesPA = 0;
+        }
       }
     } catch (error) {
       // eslint-disable-next-line no-console

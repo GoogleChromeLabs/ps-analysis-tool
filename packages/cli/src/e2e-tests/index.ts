@@ -15,7 +15,7 @@
  */
 import coffee from 'coffee';
 
-xdescribe('CLI E2E Test', () => {
+describe('CLI E2E Test', () => {
   const cli = require.resolve('../../dist/main.js');
 
   it('Should run site analysis', () => {
