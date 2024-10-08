@@ -18,6 +18,7 @@
  */
 import { type CookieData } from '@google-psat/common';
 import { isEqual } from 'lodash-es';
+
 const shouldUpdateCounter = (
   oldCookieObj: CookieData,
   newCookieObj: CookieData
