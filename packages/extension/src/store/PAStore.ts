@@ -77,6 +77,7 @@ class PAStore {
           : undefined,
         eventType: 'interestGroupAuctionNetworkRequestCompleted',
       });
+      dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
     });
   }
 
@@ -120,6 +121,8 @@ class PAStore {
     };
 
     this.getAuctionEventsArray(tabId, 'globalEvents').push(eventData);
+
+    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
 
     if (!uniqueAuctionId) {
       return;
@@ -185,6 +188,8 @@ class PAStore {
     }
 
     this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
+
+    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
   }
 
   /**
@@ -224,6 +229,8 @@ class PAStore {
             ?.parentAuctionId,
         eventType: 'interestGroupAuctionNetworkRequestCreated',
       });
+
+      dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
     });
   }
 
@@ -257,6 +264,8 @@ class PAStore {
     };
 
     this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
+
+    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
   }
 
   /**

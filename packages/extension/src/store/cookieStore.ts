@@ -31,6 +31,7 @@ import type { Protocol } from 'devtools-protocol';
  */
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import dataStore from './dataStore';
+import shouldUpdateCounter from '../utils/shouldUpdateCounter';
 
 class CookieStore {
   /**
@@ -130,9 +131,9 @@ class CookieStore {
 
       dataStore.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
-      dataStore.tabs[tabId].newUpdates++;
+      dataStore.tabs[tabId].newUpdatesCA++;
     } else {
-      dataStore.tabs[tabId].newUpdates++;
+      dataStore.tabs[tabId].newUpdatesCA++;
       // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
       dataStore.tabsData[tabId] = {
         ...dataStore.tabsData[tabId],
@@ -187,8 +188,16 @@ class CookieStore {
           ])
         ).map((frameId) => frameId.toString());
 
+        const updateCounterBoolean = shouldUpdateCounter(
+          dataStore.tabsData[tabId][cookieKey],
+          cookie
+        );
+
+        if (updateCounterBoolean) {
+          dataStore.tabs[tabId].newUpdatesCA++;
+        }
+
         if (dataStore.tabsData[tabId]?.[cookieKey]) {
-          dataStore.tabs[tabId].newUpdates++;
           // Merge in previous warning reasons.
           const parsedCookie = {
             ...dataStore.tabsData[tabId][cookieKey].parsedCookie,
@@ -228,6 +237,7 @@ class CookieStore {
               ...(cookie.networkEvents?.responseEvents || []),
             ],
           };
+
           dataStore.tabsData[tabId][cookieKey] = {
             ...dataStore.tabsData[tabId][cookieKey],
             ...cookie,
@@ -248,7 +258,6 @@ class CookieStore {
               dataStore.tabsData[tabId][cookieKey]?.exemptionReason,
           };
         } else {
-          dataStore.tabs[tabId].newUpdates++;
           dataStore.tabsData[tabId][cookieKey] = {
             ...cookie,
             blockingStatus: deriveBlockingStatus(cookie.networkEvents),
