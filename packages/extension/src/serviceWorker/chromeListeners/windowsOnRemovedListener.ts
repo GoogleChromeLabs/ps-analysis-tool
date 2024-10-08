@@ -16,17 +16,17 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import dataStore from '../../store/dataStore';
 
 export const windowsOnRemovedListener = (windowId: number) => {
   chrome.tabs.query({ windowId }, (tabs) => {
     tabs.map((tab) => {
       if (tab.id) {
-        synchnorousCookieStore.deinitialiseVariablesForTab(tab.id.toString());
+        dataStore.deinitialiseVariablesForTab(tab.id.toString());
       }
       return tab;
     });
   });
 
-  synchnorousCookieStore?.removeWindowData(windowId);
+  dataStore?.removeWindowData(windowId);
 };

@@ -27,7 +27,7 @@ import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-databas
 
 import { onResponseStartedListener } from '../onResponseStartedListener';
 import { responseHeaders } from '../test-utils/requestHeaders';
-import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
+import dataStore from '../../../store/dataStore';
 
 describe('chrome.webRequest.onResponseStarted.addListener', () => {
   beforeAll(() => {
@@ -50,15 +50,15 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
   });
 
   beforeEach(() => {
-    synchnorousCookieStore.globalIsUsingCDP = false;
-    synchnorousCookieStore.tabMode = 'single';
-    synchnorousCookieStore.addTabData(1141143618);
-    synchnorousCookieStore.updateUrl(1141143618, 'https://bbc.com');
-    synchnorousCookieStore.tabToRead = '1141143618';
+    dataStore.globalIsUsingCDP = false;
+    dataStore.tabMode = 'single';
+    dataStore.addTabData(1141143618);
+    dataStore.updateUrl(1141143618, 'https://bbc.com');
+    dataStore.tabToRead = '1141143618';
   });
 
   afterEach(() => {
-    synchnorousCookieStore.removeTabData(1141143618);
+    dataStore.removeTabData(1141143618);
   });
 
   test('Should parse response Cookies', async () => {
@@ -73,9 +73,7 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
 
     await new Promise((r) => setTimeout(r, 2000));
 
-    expect(
-      Object.keys(synchnorousCookieStore.tabsData[1141143618]).length
-    ).toEqual(2);
+    expect(Object.keys(dataStore.tabsData[1141143618]).length).toEqual(2);
   });
 
   test('Should not parse cookies if no cookie header is found in response header', async () => {
@@ -91,13 +89,11 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
 
     await new Promise((r) => setTimeout(r, 2000));
 
-    expect(
-      Object.keys(synchnorousCookieStore.tabsData[1141143618]).length
-    ).toEqual(0);
+    expect(Object.keys(dataStore.tabsData[1141143618]).length).toEqual(0);
   });
 
   test('Should not parse cookies if cdp is on', async () => {
-    synchnorousCookieStore.globalIsUsingCDP = true;
+    dataStore.globalIsUsingCDP = true;
     SinonChrome.webRequest.onResponseStarted.dispatch({
       url: 'https://bbc.com',
       frameId: 0,
@@ -110,9 +106,7 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
 
     await new Promise((r) => setTimeout(r, 2000));
 
-    expect(
-      Object.keys(synchnorousCookieStore.tabsData[1141143618]).length
-    ).toEqual(0);
-    synchnorousCookieStore.globalIsUsingCDP = false;
+    expect(Object.keys(dataStore.tabsData[1141143618]).length).toEqual(0);
+    dataStore.globalIsUsingCDP = false;
   });
 });

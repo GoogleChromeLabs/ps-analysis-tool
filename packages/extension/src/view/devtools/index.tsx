@@ -33,6 +33,7 @@ import {
   CookieProvider,
   SettingsProvider,
   AllowedListProvider,
+  ProtectedAudienceContextProvider,
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
@@ -45,13 +46,15 @@ if (root) {
     <ErrorBoundary fallbackRender={ErrorFallback}>
       <SettingsProvider>
         <CookieProvider>
-          <TablePersistentSettingsProvider>
-            <LibraryDetectionProvider>
-              <AllowedListProvider>
-                <App />
-              </AllowedListProvider>
-            </LibraryDetectionProvider>
-          </TablePersistentSettingsProvider>
+          <ProtectedAudienceContextProvider>
+            <TablePersistentSettingsProvider>
+              <LibraryDetectionProvider>
+                <AllowedListProvider>
+                  <App />
+                </AllowedListProvider>
+              </LibraryDetectionProvider>
+            </TablePersistentSettingsProvider>
+          </ProtectedAudienceContextProvider>
         </CookieProvider>
       </SettingsProvider>
     </ErrorBoundary>

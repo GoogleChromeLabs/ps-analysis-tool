@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import dataStore from '../../store/dataStore';
 import { updateGlobalVariableAndAttachCDP, setupIntervals } from './utils';
 
 export const onEnabledListener = async (
@@ -26,7 +26,7 @@ export const onEnabledListener = async (
     return;
   }
 
-  synchnorousCookieStore?.clear();
+  dataStore?.clear();
 
   setupIntervals();
 

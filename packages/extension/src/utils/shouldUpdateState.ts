@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies;
  */
-import dataStore from '../../store/dataStore';
+import { diff } from 'deep-object-diff';
 
-export const onTabRemovedListener = (tabId: number) => {
-  dataStore.deinitialiseVariablesForTab(tabId.toString());
+/**
+ * This is a utility function that decided whether or not we should update the state.
+ * @param previousState The previous state of the state object.
+ * @param update The new state of the state object
+ * @returns boolean Whether or not to update the state.
+ */
+function shouldUpdateState(previousState: any, update: any) {
+  return Object.keys(diff(previousState, update)).length > 0;
+}
 
-  dataStore?.removeTabData(tabId);
-};
+export default shouldUpdateState;
