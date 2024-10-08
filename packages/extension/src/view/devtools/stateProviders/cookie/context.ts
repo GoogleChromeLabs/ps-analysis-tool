@@ -36,7 +36,7 @@ export interface CookieStoreContext {
     contextInvalidated: boolean;
     canStartInspecting: boolean;
     tabToRead: string | null;
-    frameHasCookies: Record<string, boolean>;
+    frameHasCookies: Record<string, boolean> | null;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -61,7 +61,7 @@ const initialState: CookieStoreContext = {
     contextInvalidated: false,
     canStartInspecting: false,
     tabToRead: null,
-    frameHasCookies: {},
+    frameHasCookies: null,
   },
   actions: {
     setSelectedFrame: noop,

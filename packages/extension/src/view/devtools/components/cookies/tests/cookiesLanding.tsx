@@ -168,6 +168,9 @@ describe('CookiesLanding', () => {
       frameHasCookies: {
         'https://edition.cnn.com/': true,
       },
+      filter: {
+        selectedFilters: {},
+      },
     });
     mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
     const { getByTestId, getAllByTestId } = render(

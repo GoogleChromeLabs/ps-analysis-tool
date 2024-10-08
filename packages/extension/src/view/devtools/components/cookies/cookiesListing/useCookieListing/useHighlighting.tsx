@@ -18,7 +18,7 @@
  */
 import { useCallback, useEffect } from 'react';
 import { getCookieKey, type TabCookies } from '@google-psat/common';
-
+import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies.
  */
@@ -49,11 +49,15 @@ const useHighlighting = (
 
   useEffect(() => {
     setTableData((prevState) => {
+      let newData: TabCookies = {};
       if (Object.values(cookies).length > 0) {
-        return handleHighlighting(cookies);
+        newData = handleHighlighting(cookies);
       }
 
-      return prevState;
+      if (isEqual(prevState, newData)) {
+        return prevState;
+      }
+      return newData;
     });
   }, [cookies, handleHighlighting, setTableData, domainsInAllowList?.size]);
 };

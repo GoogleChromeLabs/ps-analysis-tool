@@ -18,7 +18,8 @@ export const selectors = {
   chromeExtensionUrl: 'chrome://extensions/',
   extensionPageErrorButton: 'cr-button#errors-button',
   devtoolIframeSelector: 'iframe.extension',
-  privacySandBoxEmbedIframeSelector: 'iframe[src="https://privacysandbox.com"]',
+  privacySandBoxEmbedIframeSelector:
+    'div[data-testid="privacy-sandbox-content"]',
   analyzeThisButtonSelector: 'button[data-test-id="button"]',
   cookieTabAccordion: 'div[data-testid="cookies-accordion-opener"]',
   siteBoundriesTabAccordion:

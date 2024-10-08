@@ -60,6 +60,13 @@ const devTools = {
     path: path.resolve(__dirname, './dist/extension/devtools'),
     filename: '[name].js',
   },
+  optimization: {
+    splitChunks: {
+      chunks(chunk) {
+        return chunk.name === 'index';
+      },
+    },
+  },
   plugins: [
     new WebpackBar({
       name: 'DevTools',
@@ -69,7 +76,7 @@ const devTools = {
       title: 'PSAT Devtool',
       template: './src/view/devtools/index.html',
       filename: 'index.html',
-      inject: false,
+      inject: 'body',
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT',

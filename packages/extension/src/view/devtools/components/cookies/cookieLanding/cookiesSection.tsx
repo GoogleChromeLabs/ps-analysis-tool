@@ -30,7 +30,6 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import type { TabCookies } from '@google-psat/common';
-
 /**
  * Internal dependencies
  */

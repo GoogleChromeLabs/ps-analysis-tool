@@ -35,6 +35,7 @@ import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
+import shouldUpdateCounter from '../utils/shouldUpdateCounter';
 
 class SynchnorousCookieStore {
   /**
@@ -332,7 +333,6 @@ class SynchnorousCookieStore {
 
       this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
-      this.tabs[tabId].newUpdates++;
     } else {
       this.tabs[tabId].newUpdates++;
       // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
@@ -537,9 +537,9 @@ class SynchnorousCookieStore {
 
     try {
       if (
-        this.tabs[tabId].devToolsOpenState ||
-        (this.tabs[tabId].popupOpenState &&
-          (overrideForInitialSync || this.tabs[tabId].newUpdates > 0))
+        (this.tabs[tabId].devToolsOpenState ||
+          this.tabs[tabId].popupOpenState) &&
+        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
         sentMessageAnyWhere = true;
 
@@ -626,8 +626,16 @@ class SynchnorousCookieStore {
           ])
         ).map((frameId) => frameId.toString());
 
-        if (this.tabsData[tabId]?.[cookieKey]) {
+        const updateCounterBoolean = shouldUpdateCounter(
+          this.tabsData[tabId][cookieKey],
+          cookie
+        );
+
+        if (updateCounterBoolean) {
           this.tabs[tabId].newUpdates++;
+        }
+
+        if (this.tabsData[tabId]?.[cookieKey]) {
           // Merge in previous warning reasons.
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
@@ -667,6 +675,7 @@ class SynchnorousCookieStore {
               ...(cookie.networkEvents?.responseEvents || []),
             ],
           };
+
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
             ...cookie,
@@ -687,7 +696,6 @@ class SynchnorousCookieStore {
               this.tabsData[tabId][cookieKey]?.exemptionReason,
           };
         } else {
-          this.tabs[tabId].newUpdates++;
           this.tabsData[tabId][cookieKey] = {
             ...cookie,
             blockingStatus: deriveBlockingStatus(cookie.networkEvents),
