@@ -82,3 +82,5 @@ export { default as ExternalLinkIcon } from './external-link.svg';
 export { default as DoubleArrowIcon } from './double-arrow-icon.svg';
 export { default as Settings } from './settings.svg';
 export { default as MenuOpenIcon } from './menu-open-icon.svg';
+export { default as SupportIcon } from './support.svg';
+export { default as SupportIconWhite } from './support-white.svg';

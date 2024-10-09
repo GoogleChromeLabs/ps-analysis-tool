@@ -48,6 +48,8 @@ import {
   WikiIconWhite,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
+  SupportIcon,
+  SupportIconWhite,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -285,6 +287,20 @@ const TABS: SidebarItems = {
     },
     selectedIcon: {
       Element: WikiIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
+  },
+  [SIDEBAR_ITEMS_KEYS.SUPPORT_FORUM]: {
+    title: () => 'Support Forum',
+    panel: {
+      Element: Wiki,
+    },
+    icon: {
+      Element: SupportIcon,
+    },
+    selectedIcon: {
+      Element: SupportIconWhite,
     },
     dropdownOpen: false,
     children: {},
