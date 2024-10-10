@@ -41,6 +41,7 @@ interface LandingPageProps {
   iframeBorderClass?: string;
   extraClasses?: string;
   showQuickLinks?: boolean;
+  showSupportLink?: boolean;
 }
 
 const LandingPage = ({
@@ -52,6 +53,7 @@ const LandingPage = ({
   extraClasses,
   contentPanel,
   showQuickLinks = true,
+  showSupportLink = false,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
@@ -84,7 +86,7 @@ const LandingPage = ({
             <Breadcrumbs items={extractSelectedItemKeyTitles()} />
           </div>
           <div className="p-4 flex items-center">
-            <SupportLink />
+            {showSupportLink && <SupportLink />}
           </div>
         </div>
         <div className={classNames({ hidden: !open && !children })}>
