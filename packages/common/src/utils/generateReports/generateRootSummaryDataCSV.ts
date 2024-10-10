@@ -132,6 +132,7 @@ export const generateRootSummaryDataCSV = (
     'Functional Cookies',
     'Marketing Cookies',
     'Uncategorised Cookies',
+    'Total Cookies With Issues',
     'Analytics Cookies With Cookies',
     'Functional Cookies With Cookies',
     'Marketing Cookies With Cookies',
