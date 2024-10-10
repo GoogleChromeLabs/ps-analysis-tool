@@ -33,6 +33,5 @@ export enum SIDEBAR_ITEMS_KEYS {
   FINGERPRINTING = 'fingerprinting',
   FACILITATED_TESTING = 'facilitated-testing',
   WIKI = 'wiki',
-  SUPPORT_FORUM = 'support-forum',
   SETTINGS = 'settings',
 }
