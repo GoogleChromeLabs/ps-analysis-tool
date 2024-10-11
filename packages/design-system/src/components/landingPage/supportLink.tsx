@@ -26,18 +26,18 @@ import { SupportIcon, ExternalLinkBlack } from '../../icons';
 const SupportLink = () => {
   return (
     <a
-      className="group flex items-center hover:text-blue-500 hover:dark:text-blue-400"
+      className="group dark:text-bright-gray flex items-center hover:text-blue-500 hover:dark:text-blue-400"
       target="_blank"
       href="https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions/categories/support-forum"
       rel="noreferrer"
     >
       <span className="mt-[1px] mr-1">
-        <SupportIcon className="fill-current text-black group-hover:text-blue-500" />
+        <SupportIcon className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500" />
       </span>
       <span>Support Forum</span>
       <span className="ml-[2px] inline-block">
         <ExternalLinkBlack
-          className="fill-current text-black group-hover:text-blue-500"
+          className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
           width="14"
         />
       </span>
