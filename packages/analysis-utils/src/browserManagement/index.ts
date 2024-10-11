@@ -31,6 +31,11 @@ import {
   REQUEST_EVENT,
   type Selectors,
 } from '@google-psat/common';
+import {
+  createRunner,
+  parse as replayParse,
+  PuppeteerRunnerExtension,
+} from '@puppeteer/replay';
 
 /**
  * Internal dependencies.
@@ -858,7 +863,8 @@ export class BrowserManagement {
   async analyzeCookies(
     userProvidedUrls: string[],
     shouldSkipAcceptBanner: boolean,
-    Libraries: LibraryMatchers[]
+    Libraries: LibraryMatchers[],
+    recording = '{}'
   ) {
     let consolidatedDOMQueryMatches: { [key: string]: LibraryData } = {};
     // Open tabs and attach network listeners
@@ -886,29 +892,48 @@ export class BrowserManagement {
 
     // Delay for page to load resources
     await delay(this.pageWaitTime / 2);
+    const jsonRecording = JSON.parse(recording);
 
-    // Accept Banners
-    if (!shouldSkipAcceptBanner) {
-      // delay
-      try {
-        await Promise.all(
-          userProvidedUrls.map(async (url) => {
-            await this.clickOnAcceptBanner(url);
-          })
-        );
-      } catch (error) {
-        if (!this.isSiteMap) {
-          throw error;
+    if (Object.keys(jsonRecording).length > 0) {
+      await Promise.all(
+        userProvidedUrls.map(async (url) => {
+          if (jsonRecording[url]) {
+            const isRecordingLegitimate = replayParse(jsonRecording[url]);
+            if (isRecordingLegitimate && this.browser && this.pages[url]) {
+              const runner = await createRunner(
+                jsonRecording[url],
+                //@ts-ignore
+                new PuppeteerRunnerExtension(this.browser, this.pages[url])
+              );
+              await runner.run();
+            }
+          }
+        })
+      );
+    } else {
+      // Accept Banners
+      if (!shouldSkipAcceptBanner) {
+        // delay
+        try {
+          await Promise.all(
+            userProvidedUrls.map(async (url) => {
+              await this.clickOnAcceptBanner(url);
+            })
+          );
+        } catch (error) {
+          if (!this.isSiteMap) {
+            throw error;
+          }
         }
       }
-    }
 
-    // Scroll to bottom of the page
-    await Promise.all(
-      userProvidedUrls.map(async (url) => {
-        await this.pageScroll(url);
-      })
-    );
+      // Scroll to bottom of the page
+      await Promise.all(
+        userProvidedUrls.map(async (url) => {
+          await this.pageScroll(url);
+        })
+      );
+    }
 
     try {
       await Promise.all(

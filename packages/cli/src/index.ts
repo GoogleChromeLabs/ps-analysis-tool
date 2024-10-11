@@ -19,7 +19,7 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { existsSync } from 'fs-extra';
+import { existsSync, readFileSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import path, { basename } from 'path';
@@ -160,6 +160,7 @@ program.parse();
   const concurrency = program.opts().concurrency;
   const waitTime = program.opts().wait;
   const selectorFilePath = program.opts().buttonSelectors;
+  const recordingJSONFilePath = program.opts().recording;
 
   await checkLatestVersion();
 
@@ -199,10 +200,15 @@ program.parse();
 
   const spinnies = new Spinnies();
 
-  let selectors;
+  let selectors,
+    recordingString = '{}';
 
   if (selectorFilePath) {
     selectors = getSelectorsFromPath(selectorFilePath);
+  }
+
+  if (recordingJSONFilePath) {
+    recordingString = readFileSync(recordingJSONFilePath, 'utf-8');
   }
 
   const urls = await getUrlListFromArgs(url, spinnies, sitemapUrl, filePath);
@@ -252,6 +258,7 @@ program.parse();
         !isHeadful,
         waitTime,
         cookieDictionary,
+        recordingString,
         concurrency,
         spinnies,
         shouldSkipAcceptBanner,

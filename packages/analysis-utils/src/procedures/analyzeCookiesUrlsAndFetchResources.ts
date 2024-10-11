@@ -36,6 +36,7 @@ export const analyzeCookiesUrlsAndFetchResources = async (
   Libraries: LibraryMatchers[],
   isHeadless: boolean,
   delayTime: number,
+  recordingString = '{}',
   cookieDictionary: CookieDatabase,
   shouldSkipAcceptBanner: boolean,
   verbose: boolean,
@@ -67,7 +68,12 @@ export const analyzeCookiesUrlsAndFetchResources = async (
       result: analysisCookieData,
       consolidatedDOMQueryMatches,
       erroredOutUrls,
-    } = await browser.analyzeCookies(urls, shouldSkipAcceptBanner, Libraries);
+    } = await browser.analyzeCookies(
+      urls,
+      shouldSkipAcceptBanner,
+      Libraries,
+      recordingString
+    );
 
     const resources = browser.getResources(urls);
 
