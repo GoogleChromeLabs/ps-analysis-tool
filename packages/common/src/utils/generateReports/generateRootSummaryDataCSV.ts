@@ -124,7 +124,7 @@ export const generateRootSummaryDataCSV = (
     extractReportData(siteMapAnalysisData).landingPageCookies
   );
   const headers = [
-    'URL Heading',
+    'URL',
     'Total Cookies',
     'First Party Cookies',
     'Third Party Cookies',
