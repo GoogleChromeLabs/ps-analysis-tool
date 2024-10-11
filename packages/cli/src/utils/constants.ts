@@ -29,6 +29,7 @@ export const LONG_CONSTANTS = [
   '--help',
   '--version',
   '--button-selectors',
+  '--recording',
 ];
 
 export const SHORT_CONSTANTS = [
@@ -47,4 +48,5 @@ export const SHORT_CONSTANTS = [
   '-h',
   '-V',
   '-b',
+  '-r',
 ];

@@ -123,6 +123,11 @@ program
     'The path to a json file which contains selectors or button text to be used for GDPR banner acceptance',
     (value) => filePathValidator(value, '-b')
   )
+  .option(
+    '-r, --recording <path>',
+    'The path to a json file which was exported from chrome recording.',
+    (value) => filePathValidator(value, '-r')
+  )
   .helpOption('-h, --help', 'Display help for command')
   .addHelpText(
     'after',

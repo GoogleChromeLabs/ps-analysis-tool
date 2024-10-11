@@ -129,6 +129,10 @@ export function filePathValidator(filePath: string, flag: string) {
         throw new InvalidArgumentError(
           "Correct value for option '-b, --button-selector <path>' would be /users/path/to/selectors.json"
         );
+      case '-r':
+        throw new InvalidArgumentError(
+          "Correct value for option '-r, --recording <path>' would be /users/path/to/recording.json"
+        );
       default:
         throw new InvalidArgumentError('');
     }
