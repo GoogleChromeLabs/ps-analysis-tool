@@ -39,6 +39,7 @@
     "@google-psat/common": "*",
     "@puppeteer/replay": "^3.1.1",
     "chalk": "^5.3.0",
+    "lighthouse": "^12.2.1",
     "puppeteer": "22.15.0",
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.14"
