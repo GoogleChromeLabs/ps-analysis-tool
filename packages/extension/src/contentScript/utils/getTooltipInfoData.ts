@@ -111,7 +111,7 @@ export const getTooltipInfoDataForPA = (
 
   info['bidders'] = data.bidders?.join(', ') ?? '';
   info['winningBid'] = `${data.winningBid} ${data.bidCurrency}`;
-  info['numbeOfBidders'] = `${data.numbeOfBidders}`;
+  info['numberOfBidders'] = `${data.numberOfBidders}`;
   info['winningBidder'] = data.winningBidder ?? '';
   info['selectedAdUnit'] = data.selectedAdUnit ?? '';
 

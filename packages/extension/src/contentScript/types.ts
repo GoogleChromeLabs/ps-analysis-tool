@@ -24,7 +24,7 @@ export interface ResponseType {
   blockedReasons?: string;
   isForProtectedAudience?: boolean;
   selectedAdUnit?: string;
-  numbeOfBidders?: number;
+  numberOfBidders?: number;
   bidders?: string[];
   winningBid?: number;
   winningBidder?: string;

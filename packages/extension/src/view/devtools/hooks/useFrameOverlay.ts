@@ -295,7 +295,7 @@ const useFrameOverlay = (
         portRef.current?.postMessage({
           isForProtectedAudience: true,
           selectedAdUnit,
-          numbeOfBidders: adsAndBidders[selectedAdUnit]?.bidders?.length,
+          numberOfBidders: adsAndBidders[selectedAdUnit]?.bidders?.length,
           bidders: adsAndBidders[selectedAdUnit]?.bidders,
           winningBid: adsAndBidders[selectedAdUnit]?.winningBid,
           bidCurrency: adsAndBidders[selectedAdUnit]?.bidCurrency,
