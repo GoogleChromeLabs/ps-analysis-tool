@@ -34,7 +34,11 @@ const PrivacySandbox = () => {
   }, []);
 
   return (
-    <LandingPage title="Privacy Sandbox" contentPanel={<ContentPanel />} />
+    <LandingPage
+      title="Privacy Sandbox"
+      showSupportLink={true}
+      contentPanel={<ContentPanel />}
+    />
   );
 };
 
