@@ -24,6 +24,7 @@ import {
   type ScriptTagUnderCheck,
   type LibraryData,
   type LibraryMatchers,
+  type SingleURLError,
   resolveWithTimeout,
   delay,
   RESPONSE_EVENT,
@@ -51,12 +52,14 @@ export class BrowserManagement {
   isHeadless: boolean;
   pageWaitTime: number;
   pages: Record<string, Page>;
+  erroredOutUrls: Record<string, SingleURLError[]>;
   pageFrames: Record<string, Record<string, string>>;
   pageResponses: Record<string, Record<string, ResponseData>>;
   pageRequests: Record<string, Record<string, RequestData>>;
   pageResourcesMaps: Record<string, Record<string, ScriptTagUnderCheck>>;
   shouldLogDebug: boolean;
   spinnies: Spinnies | undefined;
+  isSiteMap: boolean;
   indent = 0;
   selectors: Selectors | undefined;
   constructor(
@@ -65,6 +68,7 @@ export class BrowserManagement {
     pageWaitTime: number,
     shouldLogDebug: boolean,
     indent: number,
+    isSiteMap: boolean,
     spinnies?: Spinnies,
     selectors?: Selectors
   ) {
@@ -72,6 +76,7 @@ export class BrowserManagement {
     this.browser = null;
     this.isHeadless = isHeadless;
     this.pageWaitTime = pageWaitTime;
+    this.isSiteMap = isSiteMap;
     this.pages = {};
     this.pageFrames = {};
     this.pageResponses = {};
@@ -80,10 +85,11 @@ export class BrowserManagement {
     this.pageResourcesMaps = {};
     this.spinnies = spinnies;
     this.indent = indent;
+    this.erroredOutUrls = {};
     this.selectors = selectors;
   }
 
-  debugLog(msg: any) {
+  debugLog(msg: string) {
     if (this.shouldLogDebug && this.spinnies) {
       this.spinnies.add(msg, {
         text: msg,
@@ -183,46 +189,57 @@ export class BrowserManagement {
   }
 
   async clickOnAcceptBanner(url: string) {
-    const page = this.pages[url];
+    try {
+      const page = this.pages[url];
 
-    if (!page) {
-      throw new Error('No page with the provided id was found');
-    }
+      if (!page) {
+        throw new Error('No page with the provided id was found');
+      }
 
-    const didSelectorsFromUserWork = await this.useSelectorsToSelectGDPRBanner(
-      page
-    );
+      const didSelectorsFromUserWork =
+        await this.useSelectorsToSelectGDPRBanner(page);
 
-    if (didSelectorsFromUserWork) {
-      this.debugLog('GDPR banner found and accepted');
+      if (didSelectorsFromUserWork) {
+        this.debugLog('GDPR banner found and accepted');
+        await delay(this.pageWaitTime / 2);
+        return;
+      }
+
+      // Click using CSS selectors.
+      const clickedUsingCMPCSSSelectors =
+        await this.clickOnButtonUsingCMPSelectors(page);
+
+      if (clickedUsingCMPCSSSelectors) {
+        this.debugLog('GDPR banner found and accepted');
+        await delay(this.pageWaitTime / 2);
+        return;
+      }
+
+      const buttonClicked = await this.clickOnGDPRUsingTextSelectors(
+        page,
+        CMP_TEXT_SELECTORS
+      );
+
+      if (buttonClicked) {
+        this.debugLog('GDPR banner found and accepted');
+        await delay(this.pageWaitTime / 2);
+        return;
+      }
+
+      this.debugLog('GDPR banner could not be found');
       await delay(this.pageWaitTime / 2);
       return;
+    } catch (error) {
+      if (error instanceof Error) {
+        this.pushErrors(url, {
+          errorMessage: error.message,
+          stackTrace: error?.stack ?? '',
+          errorName: error?.name,
+        });
+
+        throw error;
+      }
     }
-
-    // Click using CSS selectors.
-    const clickedUsingCMPCSSSelectors =
-      await this.clickOnButtonUsingCMPSelectors(page);
-
-    if (clickedUsingCMPCSSSelectors) {
-      this.debugLog('GDPR banner found and accepted');
-      await delay(this.pageWaitTime / 2);
-      return;
-    }
-
-    const buttonClicked = await this.clickOnGDPRUsingTextSelectors(
-      page,
-      CMP_TEXT_SELECTORS
-    );
-
-    if (buttonClicked) {
-      this.debugLog('GDPR banner found and accepted');
-      await delay(this.pageWaitTime / 2);
-      return;
-    }
-
-    this.debugLog('GDPR banner could not be found');
-    await delay(this.pageWaitTime / 2);
-    return;
   }
 
   async useSelectorsToSelectGDPRBanner(page: Page): Promise<boolean> {
@@ -309,6 +326,14 @@ export class BrowserManagement {
     return sitePage;
   }
 
+  pushErrors(url: string, objectToPushed: SingleURLError) {
+    if (!this.erroredOutUrls[url]) {
+      this.erroredOutUrls[url] = [];
+    }
+
+    this.erroredOutUrls[url].push(objectToPushed);
+  }
+
   async navigateToPage(url: string) {
     const page = this.pages[url];
 
@@ -319,13 +344,43 @@ export class BrowserManagement {
     this.debugLog(`Starting navigation to URL: ${url}`);
 
     try {
-      await page.goto(url, { timeout: 10000 });
+      const response = await page.goto(url, {
+        timeout: 10000,
+      });
+
+      const SUCCESS_RESPONSE = 200;
+
+      if (response && response.status() !== SUCCESS_RESPONSE) {
+        this.pushErrors(url, {
+          errorMessage: `Invalid server response: ${response.status()}`,
+          errorCode: `${response.status()}`,
+          errorName: `INVALID_SERVER_RESPONSE`,
+        });
+
+        this.debugLog(`Warning: Server error found in URL: ${url}`);
+
+        if (!this.isSiteMap) {
+          throw new Error(`Invalid server response: ${response.status()}`);
+        }
+      }
+
       this.debugLog(`Navigation completed to URL: ${url}`);
     } catch (error) {
-      this.debugLog(
-        `Navigation did not finish in 10 seconds moving on to scrolling`
-      );
-      //ignore
+      if (error instanceof Error) {
+        this.pushErrors(url, {
+          errorMessage: error.message,
+          stackTrace: error?.stack ?? '',
+          errorName: error?.name,
+        });
+
+        if (error?.name === 'TimeoutError') {
+          this.debugLog(
+            `Navigation did not finish on URL ${url} in 10 seconds moving on to scrolling`
+          );
+        }
+
+        throw error;
+      }
     }
   }
 
@@ -746,40 +801,58 @@ export class BrowserManagement {
     url: string,
     Libraries: LibraryMatchers[]
   ) {
-    const page = this.pages[url];
+    try {
+      const page = this.pages[url];
 
-    if (!page) {
-      throw new Error('No page with the provided ID was found');
+      if (!page) {
+        throw new Error('No page with the provided ID was found');
+      }
+
+      const domQueryMatches: LibraryData = {};
+
+      await Promise.all(
+        Libraries.map(async ({ domQueryFunction, name }) => {
+          if (domQueryFunction && name) {
+            await page.addScriptTag({
+              content: `window.${name.replaceAll(
+                '-',
+                ''
+              )} = ${domQueryFunction}`,
+            });
+
+            const queryResult = await page.evaluate((library: string) => {
+              //@ts-ignore
+              const functionDOMQuery = window[`${library}`];
+
+              if (!functionDOMQuery) {
+                return [];
+              }
+
+              return functionDOMQuery();
+            }, name.replaceAll('-', ''));
+
+            domQueryMatches[name] = {
+              domQuerymatches: queryResult as [string],
+            };
+          }
+        })
+      );
+
+      const mainFrameUrl = new URL(page.url()).origin;
+
+      return { [mainFrameUrl]: domQueryMatches };
+    } catch (error) {
+      if (error instanceof Error) {
+        this.pushErrors(url, {
+          errorMessage: error.message,
+          stackTrace: error?.stack ?? '',
+          errorName: error?.name,
+        });
+
+        throw error;
+      }
+      return {};
     }
-
-    const domQueryMatches: LibraryData = {};
-
-    await Promise.all(
-      Libraries.map(async ({ domQueryFunction, name }) => {
-        if (domQueryFunction && name) {
-          await page.addScriptTag({
-            content: `window.${name.replaceAll('-', '')} = ${domQueryFunction}`,
-          });
-
-          const queryResult = await page.evaluate((library: string) => {
-            //@ts-ignore
-            const functionDOMQuery = window[`${library}`];
-
-            if (!functionDOMQuery) {
-              return [];
-            }
-
-            return functionDOMQuery();
-          }, name.replaceAll('-', ''));
-
-          domQueryMatches[name] = {
-            domQuerymatches: queryResult as [string],
-          };
-        }
-      })
-    );
-    const mainFrameUrl = new URL(page.url()).origin;
-    return { [mainFrameUrl]: domQueryMatches };
   }
 
   async analyzeCookies(
@@ -798,11 +871,18 @@ export class BrowserManagement {
     );
 
     // Navigate to URLs
-    await Promise.all(
-      userProvidedUrls.map(async (url) => {
-        await this.navigateToPage(url);
-      })
-    );
+    // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
+    try {
+      await Promise.all(
+        userProvidedUrls.map(async (url) => {
+          await this.navigateToPage(url);
+        })
+      );
+    } catch (error) {
+      if (!this.isSiteMap) {
+        throw error;
+      }
+    }
 
     // Delay for page to load resources
     await delay(this.pageWaitTime / 2);
@@ -810,12 +890,17 @@ export class BrowserManagement {
     // Accept Banners
     if (!shouldSkipAcceptBanner) {
       // delay
-
-      await Promise.all(
-        userProvidedUrls.map(async (url) => {
-          await this.clickOnAcceptBanner(url);
-        })
-      );
+      try {
+        await Promise.all(
+          userProvidedUrls.map(async (url) => {
+            await this.clickOnAcceptBanner(url);
+          })
+        );
+      } catch (error) {
+        if (!this.isSiteMap) {
+          throw error;
+        }
+      }
     }
 
     // Scroll to bottom of the page
@@ -825,19 +910,25 @@ export class BrowserManagement {
       })
     );
 
-    await Promise.all(
-      userProvidedUrls.map(async (url) => {
-        const newMatches = await this.insertAndRunDOMQueryFunctions(
-          url,
-          Libraries
-        );
+    try {
+      await Promise.all(
+        userProvidedUrls.map(async (url) => {
+          const newMatches = await this.insertAndRunDOMQueryFunctions(
+            url,
+            Libraries
+          );
 
-        consolidatedDOMQueryMatches = {
-          ...consolidatedDOMQueryMatches,
-          ...newMatches,
-        };
-      })
-    );
+          consolidatedDOMQueryMatches = {
+            ...consolidatedDOMQueryMatches,
+            ...newMatches,
+          };
+        })
+      );
+    } catch (error) {
+      if (!this.isSiteMap) {
+        throw error;
+      }
+    }
 
     // Delay for page to load more resources
     await delay(this.pageWaitTime / 2);
@@ -892,7 +983,11 @@ export class BrowserManagement {
       })
     );
 
-    return { result, consolidatedDOMQueryMatches };
+    return {
+      result,
+      consolidatedDOMQueryMatches,
+      erroredOutUrls: this.erroredOutUrls,
+    };
   }
 
   async deinitialize() {
