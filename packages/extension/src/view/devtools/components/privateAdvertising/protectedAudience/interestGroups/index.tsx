@@ -49,14 +49,6 @@ const InterestGroups = () => {
     interestGroupDetails: state.interestGroupDetails,
   }));
 
-  const memoisedInterestGroupDetails = useMemo(() => {
-    return interestGroupDetails.filter(
-      (interestGroup) =>
-        interestGroup.type.toLowerCase() === 'join' ||
-        interestGroup.type.toLowerCase() === 'leave'
-    );
-  }, [interestGroupDetails]);
-
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
@@ -179,7 +171,7 @@ const InterestGroups = () => {
         }}
       >
         <TableProvider
-          data={memoisedInterestGroupDetails}
+          data={interestGroupDetails}
           tableColumns={tableColumns}
           tableFilterData={tableFilters}
           tableSearchKeys={undefined}
