@@ -99,6 +99,11 @@ class WebpageContentScript {
   bodyHoverStateSent = false;
 
   /**
+   * Keeps track if the hover state message has been sent.
+   */
+  isProtectedAudience = false;
+
+  /**
    * Array of scroll event listeners.
    */
   scrollEventListeners: Array<() => void> = [];
@@ -659,6 +664,7 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     if (response.isForProtectedAudience) {
+      this.isProtectedAudience = true;
       this.insertProtectedAudienceTooltip(response)?.scrollIntoView();
       return;
     }
@@ -715,6 +721,10 @@ class WebpageContentScript {
    */
   // eslint-disable-next-line complexity
   handleHoverEvent = (event: MouseEvent) => {
+    if (this.isProtectedAudience) {
+      return;
+    }
+
     const target = event.target as HTMLElement;
     const isNonIframeElement = target.tagName !== 'IFRAME';
     const isTooltipElement =

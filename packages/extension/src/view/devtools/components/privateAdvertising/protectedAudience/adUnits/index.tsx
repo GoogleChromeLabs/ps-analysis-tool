@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 
 /**
@@ -27,9 +27,12 @@ import AdTable from './adTable';
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
 const AdUnits = () => {
-  const { adsAndBidders } = useProtectedAudience(({ state }) => ({
-    adsAndBidders: state.adsAndBidders,
-  }));
+  const { adsAndBidders, setSelectedAdUnit } = useProtectedAudience(
+    ({ state, actions }) => ({
+      adsAndBidders: state.adsAndBidders,
+      setSelectedAdUnit: actions.setSelectedAdUnit,
+    })
+  );
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
@@ -38,6 +41,12 @@ const AdUnits = () => {
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
+
+  useEffect(() => {
+    return () => {
+      setSelectedAdUnit(null);
+    };
+  }, [setSelectedAdUnit]);
 
   if (!isUsingCDP) {
     return (
