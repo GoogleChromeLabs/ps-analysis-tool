@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies
- */
-import dataStore from '../../store/dataStore';
-
-export const onTabRemovedListener = (tabId: number) => {
-  dataStore.deinitialiseVariablesForTab(tabId.toString());
-
-  dataStore?.removeTabData(tabId);
-};
+export { default as computeInterestGroupDetails } from './computeInterestGroupDetails';
+export { default as computeReceivedBidsAndNoBids } from './computeReceivedBidsAndNoBids';

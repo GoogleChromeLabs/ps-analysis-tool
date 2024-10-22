@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
+import dataStore from '../../../store/dataStore';
 import attachCDP from '../../attachCDP';
 
 const updateGlobalVariableAndAttachCDP = async () => {
@@ -24,40 +24,35 @@ const updateGlobalVariableAndAttachCDP = async () => {
 
   const preSetSettings = await chrome.storage.sync.get();
 
-  synchnorousCookieStore.tabMode =
-    preSetSettings?.allowedNumberOfTabs ?? 'single';
-  synchnorousCookieStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
+  dataStore.tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
+  dataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
 
-  if (synchnorousCookieStore.tabMode === 'unlimited') {
+  if (dataStore.tabMode === 'unlimited') {
     const allTabs = await chrome.tabs.query({});
     const targets = await chrome.debugger.getTargets();
 
-    await Promise.all(
-      allTabs.map(async (tab) => {
-        if (!tab.id || tab.url?.startsWith('chrome://')) {
-          return;
-        }
+    allTabs.forEach((tab) => {
+      if (!tab.id || tab.url?.startsWith('chrome://')) {
+        return;
+      }
 
-        synchnorousCookieStore?.addTabData(tab.id);
+      dataStore?.addTabData(tab.id);
 
-        if (synchnorousCookieStore.globalIsUsingCDP) {
-          synchnorousCookieStore.initialiseVariablesForNewTab(
-            tab.id.toString()
-          );
+      if (dataStore.globalIsUsingCDP) {
+        dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
-          await attachCDP({ tabId: tab.id });
+        attachCDP({ tabId: tab.id });
 
-          const currentTab = targets.filter(
-            ({ tabId }) => tabId && tab.id && tabId === tab.id
-          );
-          synchnorousCookieStore?.updateParentChildFrameAssociation(
-            tab.id,
-            currentTab[0].id,
-            '0'
-          );
-        }
-      })
-    );
+        const currentTab = targets.filter(
+          ({ tabId }) => tabId && tab.id && tabId === tab.id
+        );
+        dataStore?.updateParentChildFrameAssociation(
+          tab.id,
+          currentTab[0].id,
+          '0'
+        );
+      }
+    });
   }
 };
 

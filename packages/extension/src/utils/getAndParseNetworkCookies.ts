@@ -21,7 +21,7 @@ import type { CookieData } from '@google-psat/common';
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../store/synchnorousCookieStore';
+import synchnorousCookieStore from '../store/PAStore';
 import parseNetworkCookies from './parseNetworkCookies';
 
 export const getAndParseNetworkCookies = async (tabId: string) => {

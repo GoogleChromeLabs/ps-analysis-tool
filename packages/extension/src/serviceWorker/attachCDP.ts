@@ -17,23 +17,41 @@
  * This function will attach the debugger to the given target.
  * @param {{ [key: string]: number | string }} target The target where debugger needs to be attached.
  */
-export default async function attachCDP(target: {
-  [key: string]: number | string;
-}) {
-  try {
-    await chrome.debugger.attach(target, '1.3');
-    await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
-      // If this is set to true, debugger will be attached to every new target that is added to the current target.
-      autoAttach: true,
-      waitForDebuggerOnStart: false,
-      //Enables "flat" access to the session via specifying sessionId attribute in the commands.
-      // If this is set to true the debugger is also attached to the child targets of that the target it has been attached to.
-      flatten: true,
-    });
-    await chrome.debugger.sendCommand(target, 'Network.enable');
-    await chrome.debugger.sendCommand(target, 'Audits.enable');
-    await chrome.debugger.sendCommand(target, 'Page.enable');
-  } catch (error) {
-    //Fail silently
-  }
+export default function attachCDP(target: { [key: string]: number | string }) {
+  chrome.debugger.attach(target, '1.3', async () => {
+    if (chrome.runtime.lastError) {
+      // eslint-disable-next-line no-console
+      console.warn(chrome.runtime.lastError);
+    }
+    try {
+      await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
+        autoAttach: true,
+        flatten: false,
+        waitForDebuggerOnStart: true,
+      });
+
+      await chrome.debugger.sendCommand(
+        target,
+        'Storage.setInterestGroupAuctionTracking',
+        { enable: true }
+      );
+
+      await chrome.debugger.sendCommand(target, 'Audits.enable');
+
+      await chrome.debugger.sendCommand(
+        target,
+        'Storage.setInterestGroupTracking',
+        {
+          enable: true,
+        }
+      );
+
+      await chrome.debugger.sendCommand(target, 'Page.enable');
+
+      await chrome.debugger.sendCommand(target, 'Network.enable');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
+    }
+  });
 }

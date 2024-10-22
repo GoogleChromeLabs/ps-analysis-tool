@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import dataStore from '../../store/dataStore';
 import { setupIntervals } from './utils';
 
 export const onStartUpListener = async () => {
@@ -24,10 +24,10 @@ export const onStartUpListener = async () => {
   setupIntervals();
 
   if (storage?.allowedNumberOfTabs) {
-    synchnorousCookieStore.tabMode = storage.allowedNumberOfTabs;
+    dataStore.tabMode = storage.allowedNumberOfTabs;
   }
 
   if (Object.keys(storage).includes('isUsingCDP')) {
-    synchnorousCookieStore.globalIsUsingCDP = storage.isUsingCDP;
+    dataStore.globalIsUsingCDP = storage.isUsingCDP;
   }
 };

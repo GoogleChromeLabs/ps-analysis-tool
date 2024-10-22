@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import { INITIAL_SYNC } from '../../constants';
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import dataStore from '../../store/dataStore';
 import resetCookieBadgeText from '../../store/utils/resetCookieBadgeText';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
@@ -31,16 +31,16 @@ export const onSyncStorageChangedListenerForMultiTab = async (changes: {
   ) {
     return;
   }
-  synchnorousCookieStore.tabMode = changes.allowedNumberOfTabs.newValue;
+  dataStore.tabMode = changes.allowedNumberOfTabs.newValue;
 
   const tabs = await chrome.tabs.query({});
   await sendMessageWrapper(INITIAL_SYNC, {
-    tabMode: synchnorousCookieStore.tabMode,
-    tabToRead: synchnorousCookieStore.tabToRead,
+    tabMode: dataStore.tabMode,
+    tabToRead: dataStore.tabToRead,
   });
 
   if (changes?.allowedNumberOfTabs?.newValue === 'single') {
-    synchnorousCookieStore.tabToRead = '';
+    dataStore.tabToRead = '';
 
     tabs.map((tab) => {
       if (!tab?.id) {
@@ -49,7 +49,7 @@ export const onSyncStorageChangedListenerForMultiTab = async (changes: {
 
       resetCookieBadgeText(tab.id);
 
-      synchnorousCookieStore?.removeTabData(tab.id);
+      dataStore?.removeTabData(tab.id);
 
       return tab;
     });
@@ -58,9 +58,9 @@ export const onSyncStorageChangedListenerForMultiTab = async (changes: {
       if (!tab?.id) {
         return;
       }
-      synchnorousCookieStore?.addTabData(tab.id);
-      synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-      synchnorousCookieStore?.updateDevToolsState(tab.id, true);
+      dataStore?.addTabData(tab.id);
+      dataStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+      dataStore?.updateDevToolsState(tab.id, true);
     });
   }
 };
@@ -76,7 +76,7 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
     return;
   }
 
-  synchnorousCookieStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+  dataStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
 
   const tabs = await chrome.tabs.query({});
   const debuggerTargets = await chrome.debugger.getTargets();
@@ -91,7 +91,7 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
         try {
           await chrome.debugger.detach({ targetId: id });
           if (tabId) {
-            synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(tabId);
+            dataStore?.sendUpdatedDataToPopupAndDevTools(tabId);
           }
         } catch (error) {
           // eslint-disable-next-line no-console
@@ -105,7 +105,7 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
         return;
       }
 
-      synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
+      dataStore?.sendUpdatedDataToPopupAndDevTools(id);
     });
   }
 };

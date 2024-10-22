@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies
- */
-import dataStore from '../../store/dataStore';
-
-export const onTabRemovedListener = (tabId: number) => {
-  dataStore.deinitialiseVariablesForTab(tabId.toString());
-
-  dataStore?.removeTabData(tabId);
-};
+export { default as ProtectedAudienceContextProvider } from './protectedAudienceProvider';
+export {
+  default as ProtectedAudienceContext,
+  type ProtectedAudienceContextType,
+} from './context';
+export { default as useProtectedAudience } from './useProtectedAudience';
