@@ -109,6 +109,9 @@ const useFrameOverlay = (
     });
 
     portRef.current.onMessage.addListener((response: Response) => {
+      if (selectedAdUnit) {
+        return;
+      }
       setSelectedFrame(response.attributes.iframeOrigin, true);
     });
 
@@ -122,7 +125,7 @@ const useFrameOverlay = (
     });
 
     setConnectedToPort(true);
-  }, [canStartInspecting, setSelectedFrame, setIsInspecting]);
+  }, [canStartInspecting, setSelectedFrame, setIsInspecting, selectedAdUnit]);
 
   const listenIfContentScriptSet = useCallback(
     async (
