@@ -58,12 +58,16 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
       x: xPositionForCircle,
       y: yPositionForCircle,
     });
+    p.push();
+    p.stroke('#808080');
     timeline.drawCircle(index);
+    p.pop();
 
     p.push();
     p.stroke(0, 0, 0);
     p.textSize(12);
     p.strokeWeight(0.1);
+    p.textFont('ui-sans-serif');
     p.text(circleItem.datetime, xPositionForCircle, position.y);
     p.text(circleItem.website, xPositionForCircle, position.y + 20);
     p.pop();
@@ -81,6 +85,8 @@ timeline.drawTimelineLine = () => {
   let x = 0;
 
   if (app.timeline.currentIndex === 0) {
+    p.push();
+    p.stroke('#808080');
     app.p.line(
       0,
       yPositonForLine,
@@ -88,6 +94,7 @@ timeline.drawTimelineLine = () => {
         circleVerticalSpace * (config.timeline.circles.length - 1),
       yPositonForLine
     );
+    p.pop();
     return;
   }
 
@@ -199,7 +206,7 @@ timeline.eraseAndRedraw = () => {
     timeline.drawTimelineLine();
     let i = 0;
     while (i < app.timeline.currentIndex) {
-      app.p.stroke(26, 115, 232);
+      app.p.stroke('#1A73E8');
       timeline.drawCircle(i, true);
       app.p.stroke(0);
       timeline.drawLineAboveCircle(i, true);

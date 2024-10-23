@@ -24,6 +24,7 @@ flow.createBox = (title, x, y, width, height) => {
   app.p.rect(x, y, width, height);
   app.p.push();
   app.p.strokeWeight(0.1);
+  app.p.textFont('ui-sans-serif');
   app.p.text(title, x + width / 2, y + height / 2);
   app.p.pop();
 };
@@ -67,6 +68,7 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
             p.push();
             p.strokeWeight(0.1);
             p.textSize(config.canvas.fontSize - 2);
+            p.textFont('ui-sans-serif');
             p.text(text, __x2 + width / 2, y1 + height / 2);
             p.pop();
           }
@@ -90,6 +92,7 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
             p.push();
             p.strokeWeight(0.1);
             p.textSize(config.canvas.fontSize - 2);
+            p.textFont('ui-sans-serif');
             p.text(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
@@ -115,6 +118,7 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
             p.push();
             p.strokeWeight(0.1);
             p.textSize(config.canvas.fontSize - 2);
+            p.textFont('ui-sans-serif');
             p.text(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),
