@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
 import config from '../config';
 import app from '../app';
 
@@ -31,6 +28,19 @@ timeline.init = () => {
   app.timeline.drawTimelineLine();
   app.timeline.drawTimeline(config.timeline);
   app.timeline.renderUserIcon(); // On first render.
+};
+
+timeline.drawLineAboveCircle = (index, completed = false) => {
+  const { position } = config.timeline;
+  const { diameter } = config.timeline.circleProps;
+  const p = app.p;
+  const positions = app.timeline.circlePositions[index];
+  const strokeColor = completed ? '#1A73E8' : '#808080';
+
+  p.push();
+  p.stroke(strokeColor);
+  p.line(positions.x, positions.y - diameter / 2, positions.x, position.y + 37);
+  p.pop();
 };
 
 timeline.drawTimeline = ({ position, circleProps, circles }) => {
@@ -50,18 +60,15 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     });
     timeline.drawCircle(index);
 
+    p.push();
+    p.stroke(0, 0, 0);
+    p.textSize(12);
+    p.strokeWeight(0.1);
     p.text(circleItem.datetime, xPositionForCircle, position.y);
     p.text(circleItem.website, xPositionForCircle, position.y + 20);
+    p.pop();
 
-    // Draw line leading out of the circle
-    app.p.stroke(26, 115, 232);
-    p.line(
-      xPositionForCircle,
-      yPositionForCircle - diameter / 2,
-      xPositionForCircle,
-      position.y + 37
-    );
-    app.p.stroke(0);
+    timeline.drawLineAboveCircle(index);
   });
 };
 
@@ -70,15 +77,33 @@ timeline.drawTimelineLine = () => {
   const { diameter, verticalSpacing } = config.timeline.circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
   const yPositonForLine = position.y + circleVerticalSpace;
+  const p = app.p;
+  let x = 0;
 
-  app.p.stroke(26, 115, 232);
-  app.p.line(
-    0,
-    yPositonForLine,
-    circleVerticalSpace * (config.timeline.circles.length + 1),
-    yPositonForLine
-  );
-  app.p.stroke(0);
+  if (app.timeline.currentIndex === 0) {
+    app.p.line(
+      0,
+      yPositonForLine,
+      config.timeline.position.x +
+        circleVerticalSpace * (config.timeline.circles.length - 1),
+      yPositonForLine
+    );
+    return;
+  }
+
+  while (
+    x <=
+      circleVerticalSpace * app.timeline.currentIndex +
+        config.timeline.position.x &&
+    app.timeline.currentIndex < config.timeline.circles.length
+  ) {
+    p.push();
+    p.stroke(26, 115, 232);
+    p.line(0, yPositonForLine, x, yPositonForLine);
+    p.stroke(0);
+    p.pop();
+    x = x + 1;
+  }
 };
 
 timeline.drawCircle = (index, completed = false) => {
@@ -86,6 +111,7 @@ timeline.drawCircle = (index, completed = false) => {
   const { diameter } = config.timeline.circleProps;
 
   app.p.circle(position.x, position.y, diameter);
+
   if (completed) {
     const user = config.timeline.user;
     app.p.image(
@@ -108,7 +134,7 @@ timeline.drawSmallCircles = (index) => {
   const distanceFromEdge = 6;
 
   const numSmallCircles = Math.floor(Math.random() * 3) + 1;
-  const p = app.p;
+  const p = app.ip;
 
   const smallCirclePositions = [];
 
@@ -123,6 +149,7 @@ timeline.drawSmallCircles = (index) => {
       randomY =
         position.y + (diameter / 2 + distanceFromEdge) * Math.sin(angle);
 
+      // eslint-disable-next-line no-loop-func
       isOverlapping = smallCirclePositions.some((pos) => {
         const dx = pos.x - randomX;
         const dy = pos.y - randomY;
@@ -150,9 +177,6 @@ timeline.drawSmallCircles = (index) => {
 timeline.renderUserIcon = () => {
   const circlePosition =
     app.timeline.circlePositions[app.timeline.currentIndex];
-  const { diameter } = config.timeline.circleProps;
-  const smallCircleDiameter = diameter / 5;
-  const lastIndex = app.timeline.currentIndex - 1;
 
   if (circlePosition === undefined) {
     return;
@@ -160,18 +184,7 @@ timeline.renderUserIcon = () => {
 
   const user = config.timeline.user;
 
-  if (app.timeline.currentIndex > 0) {
-    app.p.stroke(26, 115, 232);
-    timeline.drawCircle(lastIndex, true);
-    app.p.stroke(0);
-
-    app.timeline.smallCirclePositions[lastIndex]?.forEach((circleData) => {
-      app.p.push();
-      app.p.fill(circleData[2]);
-      app.p.circle(circleData[0], circleData[1], smallCircleDiameter);
-      app.p.pop();
-    });
-  }
+  timeline.eraseAndRedraw();
 
   app.p.image(
     app.p.userIcon,
@@ -180,6 +193,19 @@ timeline.renderUserIcon = () => {
     user.width,
     user.height
   );
+};
+timeline.eraseAndRedraw = () => {
+  if (app.timeline.currentIndex > 0) {
+    timeline.drawTimelineLine();
+    let i = 0;
+    while (i < app.timeline.currentIndex) {
+      app.p.stroke(26, 115, 232);
+      timeline.drawCircle(i, true);
+      app.p.stroke(0);
+      timeline.drawLineAboveCircle(i, true);
+      i = i + 1;
+    }
+  }
 };
 
 export default timeline;

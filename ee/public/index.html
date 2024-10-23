@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,8 +16,15 @@
         }
 
         #ps-canvas {
-            position: relative;
-            width: 700px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #overlay-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .play-pause-button {
@@ -36,23 +44,32 @@
             width: 20px;
             height: 20px;
         }
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
     </style>
 </head>
+
 <body>
     <main>
         <div id="ps-canvas">
-            
-<div class="play-pause-button">
-    <button id="play" class="hidden">
-      <img src="./icons/play-button.png" alt="play" />
-    </button>
-    <button id="pause">
-      <img src="./icons/pause-button.png" alt="pause" />
-    </button>
-  </div>
+            <div id="canvas-container">
+                <div class="play-pause-button">
+                    <button id="play" class="hidden">
+                        <img src="./icons/play-button.png" alt="play" />
+                    </button>
+                    <button id="pause">
+                        <img src="./icons/pause-button.png" alt="pause" />
+                    </button>
+                </div>
+            </div>
         </div>
+        <div id="overlay-canvas"></div>
     </main>
 
     <script src="bundle.js"></script>
 </body>
+
 </html>

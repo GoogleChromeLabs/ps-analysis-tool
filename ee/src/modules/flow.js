@@ -22,7 +22,10 @@ const flow = {};
 flow.createBox = (title, x, y, width, height) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
   app.p.rect(x, y, width, height);
+  app.p.push();
+  app.p.strokeWeight(0.1);
   app.p.text(title, x + width / 2, y + height / 2);
+  app.p.pop();
 };
 
 flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
@@ -61,9 +64,11 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
           clearInterval(app.flow.intervals['progressline']);
 
           if (text) {
+            p.push();
+            p.strokeWeight(0.1);
             p.textSize(config.canvas.fontSize - 2);
             p.text(text, __x2 + width / 2, y1 + height / 2);
-            p.textSize(config.canvas.fontSize); // Reset.
+            p.pop();
           }
 
           resolve(); // Resolve the promise once the interval is cleared
@@ -82,13 +87,15 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
           clearInterval(app.flow.intervals['progressline']);
 
           if (text) {
+            p.push();
+            p.strokeWeight(0.1);
             p.textSize(config.canvas.fontSize - 2);
             p.text(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
               y1 + height / 2
             );
-            p.textSize(config.canvas.fontSize); // Reset.
+            p.pop();
           }
           resolve(); // Resolve the promise once the interval is cleared
         }
@@ -105,13 +112,15 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
           clearInterval(app.flow.intervals['progressline']);
 
           if (text) {
+            p.push();
+            p.strokeWeight(0.1);
             p.textSize(config.canvas.fontSize - 2);
             p.text(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),
               y1 - height / 2
             );
-            p.textSize(config.canvas.fontSize); // Reset.
+            p.pop();
           }
 
           resolve(); // Resolve the promise once the interval is cleared
@@ -128,18 +137,12 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
 };
 
 flow.calculateXYPostions = (index) => {
-  const { position, circleProps } = config.timeline;
-  const { diameter, verticalSpacing } = circleProps;
-  const { lineWidth } = config.flow;
+  const { circleProps } = config.timeline;
+  const { diameter } = circleProps;
 
-  // Calculate (x, y) coordinates
-  const spaceFromTimeline = lineWidth + diameter / 2;
-  const circleVerticalSpace = verticalSpacing + diameter;
+  const positions = app.timeline.circlePositions[index];
 
-  const y = position.y + spaceFromTimeline + circleVerticalSpace;
-  const x = position.x + diameter / 2 + circleVerticalSpace * index;
-
-  return { x, y };
+  return { x: positions.x, y: positions.y + diameter / 2 };
 };
 
 flow.createOverrideBox = (x1, y1, x2, height) => {
@@ -150,7 +153,7 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
   const width = x2 - x1;
 
   // Calculate the top y-position for the rectangle
-  const topY = y1 + height / 2;
+  const topY = y1;
 
   // Draw the rectangle
   p.push();

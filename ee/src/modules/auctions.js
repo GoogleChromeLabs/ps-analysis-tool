@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
 import flow from './flow';
 import app from '../app';
 import config from '../config';
@@ -25,13 +22,9 @@ import rippleEffect from './ripple-effect';
 const auction = {};
 
 auction.setupAuctions = () => {
-  rippleEffect.setUp();
-
   config.timeline.circles.forEach((circle, index) => {
     auction.setUp(index);
   });
-
-  auction.remove(2);
 };
 
 auction.setUp = (index) => {
@@ -52,13 +45,13 @@ auction.setUp = (index) => {
     name: 'SSP',
     box: {
       x: x - box.width / 2,
-      y: y - box.height / 2 + 2,
+      y: y + box.height / 2 + 2,
       width: box.width,
       height: box.height,
     },
     line: {
       x1: x,
-      y1: y - lineHeight * 2,
+      y1: y,
       x2: x,
       y2: y + lineHeight,
       speed: 0.6,
@@ -80,15 +73,15 @@ auction.setUp = (index) => {
       name: title,
       box: {
         x: xForSmallBox,
-        y: y + box.height / 2 + lineHeight + 7,
+        y: y + box.height + lineHeight * 2 + 7,
         width: smallBox.width,
         height: smallBox.height,
       },
       line: {
         x1: xForSmallBoxLine + 10,
-        y1: y + box.height / 2 + 5,
+        y1: y + box.height + lineHeight + 5,
         x2: xForSmallBoxLine + 10,
-        y2: y + box.height / 2 + lineHeight,
+        y2: y + box.height + lineHeight * 2,
         speed: 0.05,
         direction: 'down',
         text: '',
@@ -99,9 +92,9 @@ auction.setUp = (index) => {
       name: title,
       line: {
         x1: xForSmallBoxLine + 20,
-        y1: y + box.height / 2 + lineHeight + 5,
+        y1: y + box.height + lineHeight * 2 + 7,
         x2: xForSmallBoxLine + 20,
-        y2: y + box.height / 2,
+        y2: y + box.height + lineHeight + 5,
         speed: 0.05,
         direction: 'up',
         text: `$${Math.floor(Math.random() * 10) + 1}`,
@@ -118,20 +111,22 @@ auction.setUp = (index) => {
     const title = mediumBoxes[i];
     const boxXPosition =
       x + box.width / 2 + mediumBox.width * i + lineWidth * (i + 1);
+    const lineXPosition =
+      boxXPosition - mediumBox.width + config.timeline.circleProps.diameter / 2;
 
     _auction.bottomFlow.push({
       name: title,
       box: {
         x: boxXPosition,
-        y: y - mediumBox.height / 2,
+        y: y + box.height / 2 + mediumBox.height / 2,
         width: mediumBox.width,
         height: mediumBox.height,
       },
       line: {
-        x1: boxXPosition - lineWidth,
-        y1: y,
-        x2: boxXPosition,
-        y2: y,
+        x1: lineXPosition,
+        y1: y + box.height / 2 + mediumBox.height,
+        x2: lineXPosition,
+        y2: y + box.height / 2 + mediumBox.height,
         speed: 0.06,
         direction: 'right',
       },
@@ -183,6 +178,7 @@ auction.draw = async (index) => {
   await drawLineAndBox(_auction.ssp);
   await utils.delay(500);
 
+  rippleEffect.setUp();
   await rippleEffect.start(
     _auction.ssp.box.x + config.flow.box.width / 2,
     _auction.ssp.box.y + config.flow.box.height + 2
@@ -191,20 +187,25 @@ auction.draw = async (index) => {
   // Sequentially draw DSP boxes and lines
   const dsp = _auction.dsp;
   for (const dspItem of dsp) {
+    // eslint-disable-next-line no-await-in-loop
     await drawBox(dspItem); // Sequential execution for DSP items
   }
 
   await utils.delay(1000);
 
   for (const dspItem of dsp) {
+    // eslint-disable-next-line no-await-in-loop
     await drawLine(dspItem); // Sequential execution for DSP items
+    // eslint-disable-next-line no-await-in-loop
     await utils.delay(1000);
   }
 
   // Sequentially draw bottom flow boxes and lines
   const bottomFlow = _auction.bottomFlow;
   for (const flowItem of bottomFlow) {
+    // eslint-disable-next-line no-await-in-loop
     await drawLineAndBox(flowItem); // Sequential execution for bottom flow
+    // eslint-disable-next-line no-await-in-loop
     await utils.delay(1000);
   }
 
@@ -213,9 +214,9 @@ auction.draw = async (index) => {
 };
 
 auction.remove = (index) => {
-  const { dsp, bottomFlow } = app.auction.auctions[index];
+  const { ssp, dsp, bottomFlow } = app.auction.auctions[index];
   const x1 = dsp[0]?.box?.x - 10;
-  const y1 = config.timeline.circleProps.diameter / 2;
+  const y1 = ssp.line.y1;
   const x2 = bottomFlow[1]?.box?.x + config.flow.mediumBox.width;
 
   const height =

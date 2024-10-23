@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
 import app from '../app';
 import config from '../config';
 
-const rippleEffect = {
-  config: config.ripple,
-};
-
+const rippleEffect = {};
 rippleEffect.setUp = () => {
-  rippleEffect.rippled = false;
+  config.rippleEffect.rippled = false;
 
-  for (let i = 0; i < rippleEffect.config.numRipples; i++) {
-    rippleEffect.config.ripples.push({
+  for (let i = 0; i < config.rippleEffect.numRipples; i++) {
+    config.rippleEffect.ripples.push({
       radius: 0,
       baseSpeed: 1 + i * 0.5,
     });
@@ -35,8 +29,9 @@ rippleEffect.setUp = () => {
 };
 
 rippleEffect.start = (x = 0, y = 0) => {
+  // eslint-disable-next-line consistent-return
   return new Promise((resolve) => {
-    if (rippleEffect.rippled) {
+    if (config.rippleEffect.rippled) {
       resolve();
       return false;
     }
@@ -44,10 +39,10 @@ rippleEffect.start = (x = 0, y = 0) => {
     let totalTime = 0;
     const runInternval = 20;
 
-    rippleEffect.rippled = true;
+    config.rippleEffect.rippled = true;
 
     const interval = setInterval(() => {
-      if (totalTime > rippleEffect.config.time) {
+      if (totalTime > config.rippleEffect.time) {
         clearInterval(interval);
         resolve();
       }
@@ -60,7 +55,7 @@ rippleEffect.start = (x = 0, y = 0) => {
 
 rippleEffect.create = (rippleX, rippleY) => {
   // Calculate the area to clear
-  const { ripples, numRipples, speed, maxRadius } = rippleEffect.config;
+  const { ripples, numRipples, speed, maxRadius } = config.rippleEffect;
   const clearWidth = maxRadius * 2 + (numRipples - 1) * 40;
   const clearHeight = maxRadius * 2;
   const p = app.p;
@@ -75,13 +70,15 @@ rippleEffect.create = (rippleX, rippleY) => {
     clearWidth * 2,
     clearHeight + 400
   );
-
+  let allComplete = true;
   p.translate(rippleX, rippleY);
 
   for (let i = 0; i < ripples.length; i++) {
     const ripple = ripples[i];
     if (ripple.radius < maxRadius) {
       ripple.radius += ripple.baseSpeed * speed;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      allComplete = false;
     } else {
       ripple.radius = maxRadius; // Ensure the radius doesn't exceed maxRadius
     }

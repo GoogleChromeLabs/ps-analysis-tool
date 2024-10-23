@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
 import flow from './flow';
 import app from '../app';
 import config from '../config';
@@ -50,13 +47,13 @@ joinInterestGroup.setUp = (index) => {
     name: 'DSP Tag',
     box: {
       x: x - box.width / 2,
-      y: y - box.height / 2 + 2,
+      y: y + box.height / 2 + 2,
       width: box.width,
       height: box.height,
     },
     line: {
       x1: x,
-      y1: y - lineHeight * 2,
+      y1: y,
       x2: x,
       y2: y + lineHeight,
       speed: 0.6,
@@ -69,7 +66,7 @@ joinInterestGroup.setUp = (index) => {
     name: 'DSP Tag',
     line: {
       x1: x + 10,
-      y1: y - box.height / 2,
+      y1: y + lineHeight,
       x2: x + 10,
       y2: y,
       speed: 0.6,
@@ -91,15 +88,15 @@ joinInterestGroup.setUp = (index) => {
       name: title,
       box: {
         x: xForSmallBox,
-        y: y + box.height / 2 + lineHeight + 7,
+        y: y + box.height + lineHeight * 2 + 7,
         width: smallBox.width,
         height: smallBox.height,
       },
       line: {
         x1: xForSmallBoxLine + 20,
-        y1: y + box.height / 2 + 5,
+        y1: y + box.height + lineHeight + 5,
         x2: xForSmallBoxLine + 20,
-        y2: y + box.height / 2 + lineHeight,
+        y2: y + box.height + lineHeight * 2,
         speed: 0.05,
         direction: 'down',
       },
@@ -109,9 +106,9 @@ joinInterestGroup.setUp = (index) => {
       name: title,
       line: {
         x1: xForSmallBoxLine + 10,
-        y1: y + box.height / 2 + lineHeight + 5,
+        y1: y + box.height + lineHeight * 2 + 7,
         x2: xForSmallBoxLine + 10,
-        y2: y + box.height / 2,
+        y2: y + box.height + lineHeight + 5,
         speed: 0.05,
         direction: 'up',
       },
@@ -147,7 +144,7 @@ joinInterestGroup.draw = async (index) => {
     );
   };
 
-  const drawBox = async (item) => {
+  const drawBox = (item) => {
     if (item.box) {
       flow.createBox(
         item.name,
@@ -167,6 +164,7 @@ joinInterestGroup.draw = async (index) => {
   // Sequentially draw DSP boxes and lines
   const dsp = _joining.dsp;
   for (const dspItem of dsp) {
+    // eslint-disable-next-line no-await-in-loop
     await drawLineAndBox(dspItem); // Sequential execution for DSP items
   }
 
@@ -182,7 +180,7 @@ joinInterestGroup.draw = async (index) => {
 joinInterestGroup.remove = (index) => {
   const { dspTags, dsp } = app.joinInterestGroup.joinings[index];
   const x1 = dsp[0]?.box?.x - 10;
-  const y1 = config.timeline.circleProps.diameter / 2;
+  const y1 = dspTags[0]?.line?.y1;
   const x2 = dspTags[0]?.box?.x + config.flow.box.width * 2;
 
   const height =
