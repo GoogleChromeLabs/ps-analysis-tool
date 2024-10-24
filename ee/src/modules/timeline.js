@@ -34,11 +34,11 @@ timeline.init = () => {
 };
 
 timeline.drawLineAboveCircle = (index, completed = false) => {
-  const { position } = config.timeline;
+  const { position, colors } = config.timeline;
   const { diameter } = config.timeline.circleProps;
   const p = app.p;
   const positions = app.timeline.circlePositions[index];
-  const strokeColor = completed ? '#1A73E8' : '#808080';
+  const strokeColor = completed ? colors.visitedBlue : colors.grey;
 
   p.push();
   p.stroke(strokeColor);
@@ -50,6 +50,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   const { diameter, verticalSpacing } = circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
   const p = app.p;
+
   p.textAlign(p.CENTER, p.CENTER);
   // Draw circles and text at the timeline position
   circles.forEach((circleItem, index) => {
@@ -62,7 +63,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
       y: yPositionForCircle,
     });
     p.push();
-    p.stroke('#808080');
+    p.stroke(config.timeline.colors.grey);
     timeline.drawCircle(index);
     p.pop();
 
@@ -80,8 +81,8 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
 };
 
 timeline.drawTimelineLine = () => {
-  const position = config.timeline.position;
-  const { diameter, verticalSpacing } = config.timeline.circleProps;
+  const { position, colors, circleProps } = config.timeline;
+  const { diameter, verticalSpacing } = circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
   const yPositonForLine = position.y + circleVerticalSpace;
   const p = app.p;
@@ -89,7 +90,7 @@ timeline.drawTimelineLine = () => {
 
   if (app.timeline.currentIndex === 0) {
     p.push();
-    p.stroke('#808080');
+    p.stroke(colors.grey);
     app.p.line(
       0,
       yPositonForLine,
@@ -117,13 +118,13 @@ timeline.drawTimelineLine = () => {
 };
 
 timeline.drawCircle = (index, completed = false) => {
+  const { circleProps, user } = config.timeline;
   const position = app.timeline.circlePositions[index];
-  const { diameter } = config.timeline.circleProps;
+  const { diameter } = circleProps;
 
   app.p.circle(position.x, position.y, diameter);
 
   if (completed) {
-    const user = config.timeline.user;
     app.p.image(
       app.p.completedCheckMark,
       position.x - user.width / 2,
@@ -138,9 +139,11 @@ timeline.drawSmallCircles = (index) => {
   const position = app.timeline.circlePositions[index];
   const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
+
   if (!app.timeline.smallCirclePositions[index]) {
     app.timeline.smallCirclePositions[index] = [];
   }
+
   const distanceFromEdge = 6;
 
   const numSmallCircles = Math.floor(Math.random() * 3) + 1;
@@ -206,11 +209,14 @@ timeline.renderUserIcon = () => {
 };
 
 timeline.eraseAndRedraw = () => {
-  if (app.timeline.currentIndex > 0) {
+  const currentIndex = app.timeline.currentIndex;
+  const { colors } = config.timeline;
+
+  if (currentIndex > 0) {
     timeline.drawTimelineLine();
     let i = 0;
-    while (i < app.timeline.currentIndex) {
-      app.p.stroke('#1A73E8');
+    while (i < currentIndex) {
+      app.p.stroke(colors.visitedBlue);
       timeline.drawCircle(i, true);
       app.p.stroke(0);
       timeline.drawLineAboveCircle(i, true);

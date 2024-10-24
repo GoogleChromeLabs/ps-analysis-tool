@@ -40,6 +40,10 @@ const config = {
       { type: 'advertiser', website: 'adv6.com', datetime: '2023-10-01 14:01' },
       { type: 'advertiser', website: 'adv7.com', datetime: '2023-10-01 15:00' },
     ],
+    colors: {
+      visitedBlue: '#1A73E8',
+      grey: '#808080',
+    },
   },
   flow: {
     box: { width: 125, height: 100 },
