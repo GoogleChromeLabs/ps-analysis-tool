@@ -98,10 +98,51 @@ app.handlePlayPauseButttons = () => {
   app.pauseButton.addEventListener('click', app.pause);
 };
 
+app.calculateCanvasDimensions = () => {
+  const {
+    timeline: {
+      circleProps: { verticalSpacing, diameter },
+      position: { x: timelineX, y: timelineY },
+      circles,
+    },
+    rippleEffect: { maxRadius, numRipples },
+    flow: {
+      lineWidth,
+      box: { height: boxHeight, width: boxWidth },
+      smallBox: { height: smallBoxHeight },
+      mediumBox: { width: mediumBoxWidth },
+    },
+  } = config;
+
+  const circleSpace = verticalSpacing + diameter;
+  const rippleRadius = maxRadius * 2 + (numRipples - 1) * 40;
+  const maxHeightUsingBoxAndLine = lineWidth * 2 + boxHeight + smallBoxHeight;
+  const height =
+    timelineY + circleSpace + Math.max(rippleRadius, maxHeightUsingBoxAndLine);
+
+  const auctionBoxesWidth = boxWidth + mediumBoxWidth * 2 + lineWidth * 2;
+  const interestGroupWidth = boxWidth;
+  let maxXposition = timelineX + circleSpace * circles.length;
+
+  circles.forEach((circle, index) => {
+    const xPos = timelineX + circleSpace * index;
+    maxXposition = Math.max(
+      maxXposition,
+      xPos +
+        (circle.type === 'publisher' ? auctionBoxesWidth : interestGroupWidth)
+    );
+  });
+
+  return {
+    height,
+    width: maxXposition,
+  };
+};
+
 // Define the sketch
 const sketch = (p) => {
   p.setup = () => {
-    const { height, width } = calculateHeightAndWidth();
+    const { height, width } = app.calculateCanvasDimensions();
     const canvas = p.createCanvas(width, height);
     canvas.parent('ps-canvas');
     canvas.style('z-index', 0);
@@ -124,8 +165,9 @@ const sketch = (p) => {
 // Define the sketch
 const interestGroupSketch = (p) => {
   p.setup = () => {
-    const { height, width } = calculateHeightAndWidth();
+    const { height, width } = app.calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
+
     overlayCanvas.parent('overlay-canvas');
     overlayCanvas.style('z-index', 1);
     p.textSize(config.canvas.fontSize);
@@ -133,55 +175,6 @@ const interestGroupSketch = (p) => {
     (async () => {
       await app.interestGroupInit(p);
     })();
-  };
-
-  p.preload = () => {
-    p.userIcon = p.loadImage(icons.user);
-    p.playIcon = p.loadImage(icons.play);
-    p.pauseIcon = p.loadImage(icons.pause);
-    p.completedCheckMark = p.loadImage(icons.completedCheckMark);
-  };
-};
-
-const calculateHeightAndWidth = () => {
-  const circleSpace =
-    config.timeline.circleProps.verticalSpacing +
-    config.timeline.circleProps.diameter;
-  const rippleRadius =
-    config.rippleEffect.maxRadius * 2 +
-    (config.rippleEffect.numRipples - 1) * 40;
-  const maxHeightUsingBoxAndLine =
-    config.flow.lineWidth * 2 +
-    config.flow.box.height +
-    config.flow.smallBox.height;
-  const height =
-    config.timeline.position.y +
-    circleSpace +
-    (rippleRadius > maxHeightUsingBoxAndLine
-      ? rippleRadius
-      : maxHeightUsingBoxAndLine);
-
-  const auctionBoxesWidth =
-    config.flow.box.width +
-    config.flow.mediumBox.width * 2 +
-    config.flow.lineWidth * 2;
-  const interestGroupWidth = config.flow.box.width;
-  let maxXposition =
-    config.timeline.position.x + circleSpace * config.timeline.circles.length;
-
-  config.timeline.circles.forEach((circle, index) => {
-    const xPos = config.timeline.position.x + circleSpace * index;
-
-    if (circle.type === 'publisher') {
-      maxXposition = Math.max(maxXposition, xPos + auctionBoxesWidth);
-    } else {
-      maxXposition = Math.max(maxXposition, xPos + interestGroupWidth);
-    }
-  });
-
-  return {
-    height,
-    width: maxXposition,
   };
 };
 
