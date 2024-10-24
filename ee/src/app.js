@@ -31,11 +31,6 @@ const app = {
     intervals: {},
   },
   utils: {},
-  animated: {
-    timelineVerticleLine: undefined,
-    ssp: undefined,
-  },
-  canDrawAuctionFlow: true,
   p: null,
   ip: null,
 };
