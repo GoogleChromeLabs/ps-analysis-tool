@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal Dependencies
+ */
 import config from '../config.js';
 import app from '../app.js';
 

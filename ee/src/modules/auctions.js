@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
 import flow from './flow';
 import app from '../app';
 import config from '../config';
@@ -148,7 +151,7 @@ auction.draw = async (index) => {
   // Helper function to draw lines and boxes
   const drawLineAndBox = async (item) => {
     await drawLine(item);
-    await drawBox(item);
+    drawBox(item);
   };
 
   const drawLine = async (item) => {

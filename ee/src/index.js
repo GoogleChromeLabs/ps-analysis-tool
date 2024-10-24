@@ -120,6 +120,7 @@ const sketch = (p) => {
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
 };
+
 // Define the sketch
 const interestGroupSketch = (p) => {
   p.setup = () => {
@@ -186,5 +187,6 @@ const calculateHeightAndWidth = () => {
 
 // eslint-disable-next-line no-new
 new p5(sketch);
+
 // eslint-disable-next-line no-new
 new p5(interestGroupSketch);
