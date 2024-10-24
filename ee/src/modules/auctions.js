@@ -189,10 +189,7 @@ auction.draw = async (index) => {
 
   // Sequentially draw DSP boxes and lines
   const dsp = _auction.dsp;
-  for (const dspItem of dsp) {
-    // eslint-disable-next-line no-await-in-loop
-    await drawBox(dspItem); // Sequential execution for DSP items
-  }
+  await Promise.all(dsp.map((dspItem) => drawBox(dspItem)));
 
   await utils.delay(1000);
 
