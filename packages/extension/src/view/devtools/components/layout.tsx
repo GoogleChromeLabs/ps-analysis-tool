@@ -31,6 +31,7 @@ import {
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -82,6 +83,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isSidebarFocused,
     updateSelectedItemKey,
     isKeySelected,
+    isCollapsed,
   } = useSidebar(({ state, actions }) => ({
     activePanel: state.activePanel,
     selectedItemKey: state.selectedItemKey,
@@ -89,6 +91,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isSidebarFocused: state.isSidebarFocused,
     updateSelectedItemKey: actions.updateSelectedItemKey,
     isKeySelected: actions.isKeySelected,
+    isCollapsed: state.isCollapsed,
   }));
 
   const { Element: PanelElement, props } = activePanel.panel;
@@ -180,10 +183,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       }
 
       data['selectedSidebarItem#' + tabId] = selectedItemKey;
+      data['sidebarCollapsedState#' + tabId] = isCollapsed
+        ? 'collapsed'
+        : 'expanded';
 
       await chrome.storage.session.set(data);
     })();
-  }, [selectedItemKey]);
+  }, [selectedItemKey, isCollapsed]);
 
   const lastUrl = useRef(tabUrl);
 
@@ -212,39 +218,56 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
+  useEffect(() => {
+    if (isCollapsed) {
+      setSidebarWidth(40);
+    } else {
+      setSidebarWidth(200);
+    }
+  }, [isCollapsed]);
+
+  useEffect(() => {
+    mainRef.current?.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, [PanelElement]);
+
+  const [allowTransition, setAllowTransition] = useState(true);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
         size={{ width: sidebarWidth, height: '100%' }}
         defaultSize={{ width: '200px', height: '100%' }}
+        onResizeStart={() => {
+          setAllowTransition(false);
+        }}
         onResizeStop={(_, __, ___, d) => {
           setSidebarWidth((prevState) => prevState + d.width);
+          setAllowTransition(true);
         }}
-        minWidth={'150px'}
+        minWidth={isCollapsed ? 40 : 160}
         maxWidth={'90%'}
         enable={{
-          right: true,
+          right: !isCollapsed,
         }}
-        className="h-full"
+        className={classNames('h-full', {
+          'transition-all duration-300': allowTransition,
+        })}
       >
         <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>
-      <main
-        ref={mainRef}
-        className="h-full flex-1 relative overflow-auto flex flex-col"
-      >
-        <div
-          className="w-full"
-          style={{
-            height: settingsChanged ? 'calc(100% - 5rem)' : '100%',
-          }}
-        >
-          <div className="min-w-[45rem] h-full z-1">
-            {PanelElement && <PanelElement {...props} />}
+      <div className="flex-1 h-full overflow-hidden flex flex-col">
+        <main ref={mainRef} className="w-full flex-1 relative overflow-auto">
+          <div className="w-full h-full">
+            <div className="min-w-[45rem] h-full z-1">
+              {PanelElement && <PanelElement {...props} />}
+            </div>
           </div>
-        </div>
+        </main>
         {settingsChanged && (
-          <div className="h-fit">
+          <div className="h-fit w-full relative z-10">
             <ToastMessage
               additionalStyles="text-sm"
               text={I18n.getMessage('settingsChanged')}
@@ -253,7 +276,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             />
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 };

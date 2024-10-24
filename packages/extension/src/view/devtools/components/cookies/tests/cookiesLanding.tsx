@@ -27,6 +27,7 @@ import { CookiesLanding } from '@google-psat/design-system';
 import AssembledCookiesLanding from '../cookieLanding';
 import { useCookie, useSettings } from '../../../stateProviders';
 import data from '../../../../../utils/test-data/cookieMockData';
+import { I18n } from '@google-psat/i18n';
 
 jest.mock('../../../stateProviders', () => ({
   useCookie: jest.fn(),
@@ -138,6 +139,26 @@ describe('CookiesLanding', () => {
         }),
       },
     };
+
+    //@ts-ignore
+    globalThis.chrome.i18n = null;
+
+    I18n.initMessages({
+      setUpEvaluationEnvironment: {
+        message:
+          'Please setup the $anchor_tag_start$ evaluation environment$anchor_tag_end$ before analyzing cookies.',
+        placeholders: {
+          anchor_tag_start: {
+            content: '$1',
+            example: "<a href='https://example.com'>",
+          },
+          anchor_tag_end: {
+            content: '$2',
+            example: '</a>',
+          },
+        },
+      },
+    });
   });
 
   it('renders CookiesLanding with data', () => {
@@ -146,6 +167,9 @@ describe('CookiesLanding', () => {
       tabFrames: data.tabFrames,
       frameHasCookies: {
         'https://edition.cnn.com/': true,
+      },
+      filter: {
+        selectedFilters: {},
       },
     });
     mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });

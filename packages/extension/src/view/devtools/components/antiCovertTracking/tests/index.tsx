@@ -31,7 +31,15 @@ import AntiCovertTracking from '../antiCovertTracking';
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { act } from 'react-dom/test-utils';
 import { I18n } from '@google-psat/i18n';
+import { useSidebar } from '@google-psat/design-system';
 
+jest.mock(
+  '../../../../../../../design-system/src/components/sidebar/useSidebar',
+  () => ({
+    useSidebar: jest.fn(),
+  })
+);
+const mockUseSidebar = useSidebar as jest.Mock;
 describe('AntiCovertTracking Landing Pages', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
@@ -52,6 +60,8 @@ describe('AntiCovertTracking Landing Pages', () => {
         message: 'Tracking Protection',
       },
     });
+
+    mockUseSidebar.mockReturnValue({ extractSelectedItemKeyTitles: () => [] });
   });
 
   it('should render BounceTracking', async () => {

@@ -25,6 +25,8 @@ import {
   type CompleteJson,
   type LibraryData,
   noop,
+  type ErroredOutUrlsData,
+  reshapeCookies,
 } from '@google-psat/common';
 import {
   useSidebar,
@@ -34,13 +36,13 @@ import {
   File,
   FileWhite,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
-
 import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
-import reshapeCookies from '../utils/reshapeCookies';
 import CookiesTab from './cookies';
+import ErroredOutUrls from '../urlsWithIssues';
 
 interface LayoutProps {
   landingPageCookies: CookieFrameStorageType;
@@ -49,6 +51,7 @@ interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
   path: string;
   libraryMatches: { [url: string]: LibraryData } | null;
+  erroredOutUrls: ErroredOutUrlsData[];
 }
 
 const Layout = ({
@@ -57,14 +60,21 @@ const Layout = ({
   sidebarData,
   setSidebarData,
   path,
+  erroredOutUrls,
   libraryMatches,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
 
   useEffect(() => {
     const _sites = new Set<string>();
-    completeJson?.forEach(({ pageUrl }) => {
-      _sites.add(pageUrl);
+    completeJson?.forEach(({ pageUrl, erroredOutUrls: _erroredOutURLs }) => {
+      if (
+        !_erroredOutURLs?.some(
+          ({ url, errorName }) => url === pageUrl && errorName !== 'i'
+        )
+      ) {
+        _sites.add(pageUrl);
+      }
     });
 
     setSites(Array.from(_sites));
@@ -79,7 +89,9 @@ const Layout = ({
     () =>
       Object.fromEntries(
         Object.entries(reshapedCookies).filter(
-          ([, cookie]) => cookie.isBlocked || cookie.blockedReasons?.length
+          ([, cookie]) =>
+            cookie.isBlocked ||
+            (cookie.blockedReasons && cookie.blockedReasons?.length > 0)
         )
       ),
     [reshapedCookies]
@@ -183,9 +195,17 @@ const Layout = ({
         },
       };
 
+      _data[SIDEBAR_ITEMS_KEYS.URL_WITH_ISSUES].panel = {
+        Element: ErroredOutUrls,
+        props: {
+          erroredOutUrls,
+        },
+      };
+
       return _data;
     });
   }, [
+    erroredOutUrls,
     clearQuery,
     completeJson,
     cookiesWithIssues,

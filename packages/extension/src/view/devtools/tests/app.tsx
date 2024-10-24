@@ -173,6 +173,11 @@ describe('App', () => {
       },
     });
     globalThis.chrome.i18n = null;
+
+    Object.defineProperty(window.HTMLElement.prototype, 'scrollTo', {
+      configurable: true,
+      value: jest.fn(),
+    });
   });
 
   it('Should show cookie table if frame is selected', async () => {

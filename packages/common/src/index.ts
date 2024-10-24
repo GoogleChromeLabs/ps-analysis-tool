@@ -24,6 +24,7 @@ export {
 } from './utils/findAnalyticsMatch';
 export { default as removeAndAddNewSpinnerText } from './utils/removeAndAddNewSpinnerText';
 export { default as calculateEffectiveExpiryDate } from './utils/calculateEffectiveExpiryDate';
+export { default as generateErrorLogFile } from './utils/generateErrorLogs';
 export { default as sanitizeCsvRecord } from './utils/sanitizeCsvRecord';
 export { parseUrl } from './utils/parseUrl';
 export { default as fetchLocalData } from './utils/fetchLocalData';
@@ -44,6 +45,9 @@ export { default as getCurrentDateAndTime } from './utils/getCurrentDateAndTime'
 export { default as resolveWithTimeout } from './utils/resolveWithTimeout';
 export { default as deriveBlockingStatus } from './utils/deriveBlockingStatus';
 export { default as getLegendDescription } from './utils/getLegendDescription';
+export { default as extractCookies } from './utils/extractCookies';
+export { default as extractReportData } from './utils/extractReportData';
+export { default as reshapeCookies } from './utils/reshapeCookies';
 export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';

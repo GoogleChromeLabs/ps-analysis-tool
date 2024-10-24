@@ -42,17 +42,18 @@ import {
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
+  DashboardIcon,
+  DashboardIconWhite,
+  WikiIcon,
+  WikiIconWhite,
+  type CollapsedSidebarItems,
+  Settings as SettingsIcon,
 } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
-// @ts-ignore
-// eslint-disable-next-line import/no-relative-packages
-import SettingsTab from '../../../../../assets/icons/settings-tab.svg';
-// @ts-ignore
-// eslint-disable-next-line import/no-relative-packages
-import SettingsTabWhite from '../../../../../assets/icons/settings-tab-white.svg';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import PrivateAggregationicon from '../../../../../assets/icons/private-aggregation.svg';
@@ -68,11 +69,12 @@ import {
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
+  Wiki,
   Settings,
   ProtectedAudience,
   PrivateAggregation,
+  Dashboard,
 } from './components';
-import { I18n } from '@google-psat/i18n';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -164,19 +166,6 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
-          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
-            title: () => I18n.getMessage('attribution'),
-            panel: {
-              Element: Attribution,
-            },
-            icon: {
-              Element: AttributionIcon,
-            },
-            selectedIcon: {
-              Element: AttributionIconWhite,
-            },
-            children: {},
-          },
           [SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE]: {
             title: 'Protected Audience',
             panel: {
@@ -193,6 +182,19 @@ const TABS: SidebarItems = {
               props: {
                 className: 'fill-white',
               },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING]: {
+            title: () => I18n.getMessage('attributionReporting'),
+            panel: {
+              Element: Attribution,
+            },
+            icon: {
+              Element: AttributionIcon,
+            },
+            selectedIcon: {
+              Element: AttributionIconWhite,
             },
             children: {},
           },
@@ -259,16 +261,50 @@ const TABS: SidebarItems = {
       },
     },
   },
+  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
+    title: () => 'Dashboard',
+    panel: {
+      Element: Dashboard,
+    },
+    icon: {
+      Element: DashboardIcon,
+    },
+    selectedIcon: {
+      Element: DashboardIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
+  },
+  [SIDEBAR_ITEMS_KEYS.WIKI]: {
+    title: () => I18n.getMessage('wiki'),
+    panel: {
+      Element: Wiki,
+    },
+    icon: {
+      Element: WikiIcon,
+    },
+    selectedIcon: {
+      Element: WikiIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
+  },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),
     panel: {
       Element: Settings,
     },
     icon: {
-      Element: SettingsTab,
+      Element: SettingsIcon,
+      props: {
+        className: 'fill-gray w-4 h-4',
+      },
     },
     selectedIcon: {
-      Element: SettingsTabWhite,
+      Element: SettingsIcon,
+      props: {
+        className: 'fill-white w-4 h-4',
+      },
     },
     dropdownOpen: false,
     children: {},
@@ -276,3 +312,17 @@ const TABS: SidebarItems = {
 };
 
 export default TABS;
+
+export const collapsedSidebarData: CollapsedSidebarItems = {
+  footerElements: {
+    [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
+      icon: {
+        Element: SettingsIcon,
+        props: {
+          className: 'fill-granite-gray dark:fill-bright-gray',
+        },
+      },
+      title: () => I18n.getMessage('settings'),
+    },
+  },
+};

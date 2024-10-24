@@ -15,7 +15,7 @@
  */
 
 import { I18n } from '@google-psat/i18n';
-import generateReportObject from '../generateReportObject';
+import { generateReportObject } from '../generateReportObject';
 import { data, libraryMatches, tabCookies, tabFrames } from './data.mock';
 
 describe('generateReport', () => {
@@ -37,9 +37,12 @@ describe('generateReport', () => {
         message: 'Exempted Cookies',
       },
     });
+
     globalThis.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue({}),
     });
+
+    //@ts-ignore -- ignoring this because we need not worry about the chrome api.
     globalThis.chrome.i18n = null;
   });
 
@@ -48,7 +51,8 @@ describe('generateReport', () => {
       tabCookies,
       tabFrames,
       libraryMatches,
-      'http://example.com'
+      'http://example.com',
+      {}
     );
 
     expect(result).toEqual(data);

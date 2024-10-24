@@ -40,6 +40,8 @@ import { SidebarContext, SidebarStoreContext, initialState } from './context';
 export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
+  collapsedData,
+  collapsedState = false,
   children,
 }: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
@@ -49,6 +51,7 @@ export const SidebarProvider = ({
   const [query, setQuery] = useState<string>('');
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(collapsedState);
 
   /**
    * Update the selected item key when the defaultSelectedItemKey loads.
@@ -258,6 +261,46 @@ export const SidebarProvider = ({
     [selectedItemKey]
   );
 
+  const toggleSidebarCollapse = useCallback(() => {
+    setIsCollapsed((prev) => !prev);
+  }, []);
+
+  /**
+   * Extract the titles of the selected item key chain.
+   * Eg: selectedItemKey = 'Privacy-Sandbox#cookies#frameUrl'
+   * extractSelectedItemKeyTitles() => ['Privacy Sandbox', 'Cookies', 'Frame URL']
+   * @returns Array<{title: string, key: string}>
+   */
+  const extractSelectedItemKeyTitles = useCallback(() => {
+    if (!selectedItemKey) {
+      return [];
+    }
+
+    let _sidebarItems = sidebarItems;
+    const keys = selectedItemKey.split('#');
+    const titles: Array<{ title: string; key: string }> = [];
+
+    for (const key of keys) {
+      const sidebarItem = _sidebarItems?.[key];
+
+      if (!sidebarItem) {
+        break;
+      }
+
+      titles.push({
+        title:
+          typeof sidebarItem.title === 'function'
+            ? sidebarItem.title()
+            : sidebarItem.title,
+        key,
+      });
+
+      _sidebarItems = sidebarItem.children;
+    }
+
+    return titles;
+  }, [selectedItemKey, sidebarItems]);
+
   return (
     <SidebarContext.Provider
       value={{
@@ -266,7 +309,10 @@ export const SidebarProvider = ({
           selectedItemKey,
           currentItemKey,
           sidebarItems,
+          collapsedSidebarItems: collapsedData,
           isSidebarFocused,
+          isCollapsed,
+          isSidebarCollapsible: Boolean(collapsedData),
         },
         actions: {
           setIsSidebarFocused,
@@ -275,6 +321,8 @@ export const SidebarProvider = ({
           toggleDropdown,
           isKeyAncestor,
           isKeySelected,
+          toggleSidebarCollapse,
+          extractSelectedItemKeyTitles,
         },
       }}
     >

@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/design-system",
-  "version": "0.10.1-1",
+  "version": "0.11.0-1",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
@@ -38,10 +38,12 @@
   "dependencies": {
     "@google-psat/common": "*",
     "@google-psat/i18n": "*",
+    "@types/lodash-es": "^4.17.12",
     "classnames": "^2.3.2",
     "fast-xml-parser": "^4.4.1",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
+    "lodash-es": "^4.17.21",
     "p-queue": "^7.3.4",
     "re-resizable": "^6.9.9",
     "react": "^18.2.0",

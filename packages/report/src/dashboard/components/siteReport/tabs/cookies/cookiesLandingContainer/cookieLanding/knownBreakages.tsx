@@ -82,7 +82,7 @@ const KnownBreakages = ({
         })}
       </>
     ) : (
-      <p className="text-center dark:text-bright-gray">
+      <p className="text-center text-gray  dark:text-bright-gray">
         {I18n.getMessage('noLibraries')}
       </p>
     );
