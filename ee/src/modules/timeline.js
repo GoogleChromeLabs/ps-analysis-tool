@@ -111,7 +111,6 @@ timeline.drawTimelineLine = () => {
     p.push();
     p.stroke(26, 115, 232);
     p.line(0, yPositonForLine, x, yPositonForLine);
-    p.stroke(0);
     p.pop();
     x = x + 1;
   }
@@ -135,55 +134,49 @@ timeline.drawCircle = (index, completed = false) => {
   }
 };
 
-timeline.drawSmallCircles = (index) => {
+timeline.drawSmallCircles = (index, numCircles) => {
   const position = app.timeline.circlePositions[index];
   const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
+  const smallCircleRadius = smallCircleDiameter / 2;
+  const mainCircleRadius = config.timeline.user.width / 2;
 
-  if (!app.timeline.smallCirclePositions[index]) {
-    app.timeline.smallCirclePositions[index] = [];
+  const accomodatingCircles = Math.round(
+    (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
+  );
+
+  if (!app.timeline.smallCirclePositions) {
+    app.timeline.smallCirclePositions = [];
   }
 
-  const distanceFromEdge = 6;
-
-  const numSmallCircles = Math.floor(Math.random() * 3) + 1;
+  const numSmallCircles = numCircles ?? Math.floor(Number(Math.random())) + 1;
+  const angleStep = 360 / accomodatingCircles;
   const p = app.igp;
+  const maxLen = numCircles
+    ? numCircles
+    : app.timeline.smallCirclePositions.length + numSmallCircles;
 
-  const smallCirclePositions = [];
-
-  for (let i = 0; i < numSmallCircles; i++) {
-    let randomX, randomY, isOverlapping;
-
-    do {
-      const angle = Math.random() * 2 * Math.PI;
-
-      randomX =
-        position.x + (diameter / 2 + distanceFromEdge) * Math.cos(angle);
-      randomY =
-        position.y + (diameter / 2 + distanceFromEdge) * Math.sin(angle);
-
-      // eslint-disable-next-line no-loop-func
-      isOverlapping = smallCirclePositions.some((pos) => {
-        const dx = pos.x - randomX;
-        const dy = pos.y - randomY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        return distance < smallCircleDiameter;
-      });
-    } while (isOverlapping);
-
-    smallCirclePositions.push({ x: randomX, y: randomY });
+  for (
+    let i = numCircles ? 0 : app.timeline.smallCirclePositions.length;
+    i < maxLen;
+    i++
+  ) {
+    const randomX =
+      position.x +
+      (smallCircleRadius + mainCircleRadius) * Math.cos(i * angleStep);
+    const randomY =
+      position.y +
+      (smallCircleRadius + mainCircleRadius) * Math.sin(i * angleStep);
 
     const randomColor = p.color(p.random(255), p.random(255), p.random(255));
 
     p.push();
-    p.fill(randomColor);
-    app.timeline.smallCirclePositions[index].push([
-      randomX,
-      randomY,
-      randomColor,
-    ]);
+    p.fill(numCircles ? app.timeline.smallCirclePositions[i] : randomColor);
     p.circle(randomX, randomY, smallCircleDiameter);
     p.pop();
+    if (!numCircles) {
+      app.timeline.smallCirclePositions.push(randomColor);
+    }
   }
 };
 
@@ -198,6 +191,11 @@ timeline.renderUserIcon = () => {
   const user = config.timeline.user;
 
   timeline.eraseAndRedraw();
+
+  timeline.drawSmallCircles(
+    app.timeline.currentIndex,
+    app.timeline.smallCirclePositions.length
+  );
 
   app.p.image(
     app.p.userIcon,
@@ -216,9 +214,16 @@ timeline.eraseAndRedraw = () => {
     timeline.drawTimelineLine();
     let i = 0;
     while (i < currentIndex) {
+      const { height, width } = app.calculateCanvasDimensions();
+      const overlayCanvas = app.igp.createCanvas(width, height);
+
+      overlayCanvas.parent('overlay-canvas');
+      overlayCanvas.style('z-index', 1);
+
+      app.p.push();
       app.p.stroke(colors.visitedBlue);
       timeline.drawCircle(i, true);
-      app.p.stroke(0);
+      app.p.pop();
       timeline.drawLineAboveCircle(i, true);
       i = i + 1;
     }
