@@ -61,7 +61,6 @@ joinInterestGroup.setUp = (index) => {
       y2: y + lineHeight,
       speed: 0.6,
       direction: 'down',
-      text: 'joinInterestGroup()',
     },
   });
 
@@ -74,6 +73,7 @@ joinInterestGroup.setUp = (index) => {
       y2: y,
       speed: 0.6,
       direction: 'up',
+      text: 'joinInterestGroup()',
     },
   });
 

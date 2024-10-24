@@ -104,7 +104,7 @@ timeline.drawTimelineLine = () => {
 
   while (
     x <=
-      circleVerticalSpace * app.timeline.currentIndex +
+      circleVerticalSpace * (app.timeline.currentIndex - 1) +
         config.timeline.position.x &&
     app.timeline.currentIndex < config.timeline.circles.length
   ) {
