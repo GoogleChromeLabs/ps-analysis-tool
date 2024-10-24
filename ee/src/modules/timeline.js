@@ -144,7 +144,7 @@ timeline.drawSmallCircles = (index) => {
   const distanceFromEdge = 6;
 
   const numSmallCircles = Math.floor(Math.random() * 3) + 1;
-  const p = app.ip;
+  const p = app.igp;
 
   const smallCirclePositions = [];
 

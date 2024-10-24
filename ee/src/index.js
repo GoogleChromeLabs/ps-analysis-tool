@@ -32,11 +32,7 @@ import icons from './icons.json';
 
 app.init = (p) => {
   app.p = p;
-  app.auction = { ...app.auction, ...auctions };
-  app.flow = { ...app.flow, ...flow };
-  app.utils = { ...app.utils, ...utils };
-  app.timeline = { ...app.timeline, ...timeline };
-  app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
+  app.setup();
 
   app.handlePlayPauseButttons();
 
@@ -48,15 +44,17 @@ app.init = (p) => {
   app.play();
 };
 
-app.interestGroupInit = (p) => {
-  app.ip = p;
+app.setup = () => {
   app.auction = { ...app.auction, ...auctions };
   app.flow = { ...app.flow, ...flow };
   app.utils = { ...app.utils, ...utils };
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
+};
 
-  app.handlePlayPauseButttons();
+app.interestGroupInit = (p) => {
+  app.igp = p;
+  app.setup();
 };
 
 app.play = () => {
