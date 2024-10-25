@@ -87,7 +87,6 @@ auction.setUp = (index) => {
         y2: y + box.height + lineHeight * 2,
         speed: 0.05,
         direction: 'down',
-        text: '',
       },
     });
 
@@ -207,7 +206,7 @@ auction.draw = async (index) => {
     await drawLineAndBox(flowItem); // Sequential execution for bottom flow
     if (flowItem.name === 'runAuction()') {
       // eslint-disable-next-line no-await-in-loop
-      await flow.barrage(index);
+      await flow.barrageAnimation(index);
     }
     // eslint-disable-next-line no-await-in-loop
     await utils.delay(1000);

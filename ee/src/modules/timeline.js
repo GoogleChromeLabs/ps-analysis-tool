@@ -56,12 +56,13 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   circles.forEach((circleItem, index) => {
     const xPositionForCircle =
       config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
-
     const yPositionForCircle = position.y + circleVerticalSpace;
+
     app.timeline.circlePositions.push({
       x: xPositionForCircle,
       y: yPositionForCircle,
     });
+
     p.push();
     p.stroke(config.timeline.colors.grey);
     timeline.drawCircle(index);
@@ -83,6 +84,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
 timeline.drawTimelineLine = () => {
   const { position, colors, circleProps } = config.timeline;
   const { diameter, verticalSpacing } = circleProps;
+
   const circleVerticalSpace = verticalSpacing + diameter;
   const yPositonForLine = position.y + circleVerticalSpace;
   const p = app.p;
@@ -167,13 +169,13 @@ timeline.drawSmallCircles = (index, numCircles) => {
     const randomY =
       position.y +
       (smallCircleRadius + mainCircleRadius) * Math.sin(i * angleStep);
-
     const randomColor = p.color(p.random(255), p.random(255), p.random(255));
 
     p.push();
     p.fill(numCircles ? app.timeline.smallCirclePositions[i] : randomColor);
     p.circle(randomX, randomY, smallCircleDiameter);
     p.pop();
+
     if (!numCircles) {
       app.timeline.smallCirclePositions.push(randomColor);
     }
@@ -224,6 +226,7 @@ timeline.eraseAndRedraw = () => {
       app.p.stroke(colors.visitedBlue);
       timeline.drawCircle(i, true);
       app.p.pop();
+
       timeline.drawLineAboveCircle(i, true);
       i = i + 1;
     }

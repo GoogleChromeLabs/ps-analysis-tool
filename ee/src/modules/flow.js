@@ -175,7 +175,7 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
   p.pop();
 };
 
-flow.barrage = async (index) => {
+flow.barrageAnimation = async (index) => {
   const p = app.igp;
   const position = app.timeline.circlePositions[index];
   const { diameter } = config.timeline.circleProps;
@@ -188,6 +188,7 @@ flow.barrage = async (index) => {
   const angleStep = 360 / accomodatingCircles;
   const { bottomFlow } = app.auction.auctions[index];
 
+  // calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.timeline.smallCirclePositions.map(
     (originalColor, i) => {
       const randomX =
@@ -200,6 +201,8 @@ flow.barrage = async (index) => {
       const speed = 2;
       const width = config.flow.mediumBox.width;
       const height = config.flow.mediumBox.height;
+
+      // calculate the target where the interest group bubbles have to land;
       const target = p.createVector(
         bottomFlow[0]?.box?.x +
           Math.floor(Math.random() * (1 - width / 2 + 1)) +
@@ -209,6 +212,7 @@ flow.barrage = async (index) => {
           height / 2
       );
 
+      // calculate the opacity of the interest group bubble which will be animated.
       const currentColor = p.color(originalColor);
       const color = p.color(
         p.red(currentColor),
@@ -228,21 +232,23 @@ flow.barrage = async (index) => {
         app.timeline.smallCirclePositions.length
       );
 
+      //Calculating the maximum bound of the flow box
       const maxX = bottomFlow[0]?.box?.x + config.flow.mediumBox.width;
       const maxY = bottomFlow[0]?.box?.y + config.flow.mediumBox.height;
 
+      //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
         let { x, y } = positionsOfCircles[i];
         const { target, speed, color } = positionsOfCircles[i];
         const dir = p5.Vector.sub(target, p.createVector(x, y));
         dir.normalize();
 
+        //Only increment the coordinates if the the target is not reached.
         if (!(x < maxX && x > target.x && y < maxY && y > target.y)) {
           x += dir.x * speed;
           y += dir.y * speed;
         }
 
-        // Draw the circle
         p.push();
         p.fill(color);
         p.circle(x, y, smallCircleDiameter);
@@ -250,6 +256,7 @@ flow.barrage = async (index) => {
         positionsOfCircles[i] = { x, y, target, speed, color };
       }
 
+      //Resolve if all bubbles have reached the targets.
       if (
         positionsOfCircles.every((circle) => {
           return (
