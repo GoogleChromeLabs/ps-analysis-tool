@@ -18,6 +18,7 @@
  */
 import config from '../config';
 import app from '../app';
+import utils from './utils';
 
 const timeline = {};
 
@@ -216,11 +217,7 @@ timeline.eraseAndRedraw = () => {
     timeline.drawTimelineLine();
     let i = 0;
     while (i < currentIndex) {
-      const { height, width } = app.calculateCanvasDimensions();
-      const overlayCanvas = app.igp.createCanvas(width, height);
-
-      overlayCanvas.parent('overlay-canvas');
-      overlayCanvas.style('z-index', 1);
+      utils.wipeAndRecreateCanvas();
 
       app.p.push();
       app.p.stroke(colors.visitedBlue);
