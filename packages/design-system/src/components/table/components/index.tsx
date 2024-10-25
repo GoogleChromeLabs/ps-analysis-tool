@@ -38,6 +38,7 @@ interface TableProps {
   extraInterfaceToTopBar?: () => React.JSX.Element;
   minWidth?: string;
   hideSearch?: boolean;
+  hideTableTopBar?: boolean;
 }
 
 const Table = ({
@@ -47,6 +48,7 @@ const Table = ({
   extraInterfaceToTopBar,
   minWidth,
   hideSearch,
+  hideTableTopBar,
 }: TableProps) => {
   const {
     tableContainerRef,
@@ -115,19 +117,23 @@ const Table = ({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <TableTopBar
-        showFilterSidebar={showFilterSidebar}
-        hideFiltering={hideFiltering}
-        setShowFilterSidebar={setShowFilterSidebar}
-        extraInterface={extraInterfaceToTopBar}
-        hideSearch={hideSearch}
-      />
-      {!hideFiltering && (
-        <ChipsBar
-          selectedFilters={selectedFilters}
-          resetFilters={resetFilters}
-          toggleFilterSelection={toggleFilterSelection}
-        />
+      {!hideTableTopBar && (
+        <>
+          <TableTopBar
+            showFilterSidebar={showFilterSidebar}
+            hideFiltering={hideFiltering}
+            setShowFilterSidebar={setShowFilterSidebar}
+            extraInterface={extraInterfaceToTopBar}
+            hideSearch={hideSearch}
+          />
+          {!hideFiltering && (
+            <ChipsBar
+              selectedFilters={selectedFilters}
+              resetFilters={resetFilters}
+              toggleFilterSelection={toggleFilterSelection}
+            />
+          )}
+        </>
       )}
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         {showFilterSidebar && (

@@ -20,15 +20,44 @@
 import { Tabs, type TabItems } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import TopicsTable from './topicsTable';
+
 const TableTray = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const tabs = useMemo<TabItems>(() => {
     return [
       {
-        title: 'Epoch1',
+        title: 'Epoch 1',
         content: {
-          Element: () => <div>Table</div>,
+          Element: TopicsTable,
+          props: {},
+          className: '',
+        },
+      },
+      {
+        title: 'Epoch 2',
+        content: {
+          Element: TopicsTable,
+          props: {},
+          className: '',
+        },
+      },
+      {
+        title: 'Epoch 3',
+        content: {
+          Element: TopicsTable,
+          props: {},
+          className: '',
+        },
+      },
+      {
+        title: 'Epoch 4',
+        content: {
+          Element: TopicsTable,
           props: {},
           className: '',
         },
