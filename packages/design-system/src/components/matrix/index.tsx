@@ -27,15 +27,19 @@ import MatrixComponent, { type MatrixComponentProps } from './matrixComponent';
 interface MatrixProps {
   dataComponents: MatrixComponentProps[];
   expand?: boolean;
+  extraClasses?: string;
 }
 
-const Matrix = ({ dataComponents, expand }: MatrixProps) => {
+const Matrix = ({ dataComponents, expand, extraClasses }: MatrixProps) => {
   if (!dataComponents || !dataComponents.length) {
     return null;
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-5" data-testid="matrix">
+    <div
+      className={`grid grid-cols-2 gap-x-5 ${extraClasses}`}
+      data-testid="matrix"
+    >
       {dataComponents.map((dataComponent, index) => {
         if (dataComponent && dataComponent.countClassName) {
           const isLastTwoItems =

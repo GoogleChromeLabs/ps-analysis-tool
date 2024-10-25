@@ -32,10 +32,9 @@ import { I18n } from '@google-psat/i18n';
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
-  className?: string;
 }
 
-const InfoCard = ({ infoKey, className }: InfoCardProps) => {
+const InfoCard = ({ infoKey }: InfoCardProps) => {
   const [PSInfo, setPSInfo] = useState({} as PSInfoType);
 
   useEffect(() => {
@@ -49,7 +48,7 @@ const InfoCard = ({ infoKey, className }: InfoCardProps) => {
   return (
     <>
       {Object.keys(PSInfo).length ? (
-        <div className={className}>
+        <div className="max-w-2xl">
           <p
             className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
             dangerouslySetInnerHTML={{
