@@ -142,9 +142,9 @@ timeline.drawSmallCircles = (index, numCircles) => {
   const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
   const smallCircleRadius = smallCircleDiameter / 2;
-  const mainCircleRadius = config.timeline.user.width / 2;
+  let mainCircleRadius = config.timeline.user.width / 2;
 
-  const accomodatingCircles = Math.round(
+  let accomodatingCircles = Math.round(
     (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
   );
 
@@ -152,29 +152,42 @@ timeline.drawSmallCircles = (index, numCircles) => {
     app.timeline.smallCirclePositions = [];
   }
 
-  const numSmallCircles = numCircles ?? Math.floor(Number(Math.random())) + 1;
-  const angleStep = 360 / accomodatingCircles;
+  const numSmallCircles = numCircles ?? 9;
+  let angleStep = 360 / accomodatingCircles;
   const p = app.igp;
   const maxLen = numCircles
     ? numCircles
     : app.timeline.smallCirclePositions.length + numSmallCircles;
+  let totalCircles = numCircles ? 0 : app.timeline.smallCirclePositions.length;
 
   for (
     let i = numCircles ? 0 : app.timeline.smallCirclePositions.length;
-    i < maxLen;
+    totalCircles < maxLen;
     i++
   ) {
+    if (i > accomodatingCircles) {
+      mainCircleRadius += smallCircleDiameter;
+      i = i - accomodatingCircles;
+      accomodatingCircles = Math.round(
+        (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
+      );
+      angleStep = 360 / accomodatingCircles;
+    }
+
     const randomX =
       position.x +
-      (smallCircleRadius + mainCircleRadius) * Math.cos(i * angleStep);
+      (smallCircleRadius + mainCircleRadius) *
+        Math.cos(p.radians(i * angleStep));
     const randomY =
       position.y +
-      (smallCircleRadius + mainCircleRadius) * Math.sin(i * angleStep);
+      (smallCircleRadius + mainCircleRadius) *
+        Math.sin(p.radians(i * angleStep));
     const randomColor = p.color(p.random(255), p.random(255), p.random(255));
 
     p.push();
     p.fill(numCircles ? app.timeline.smallCirclePositions[i] : randomColor);
     p.circle(randomX, randomY, smallCircleDiameter);
+    totalCircles++;
     p.pop();
 
     if (!numCircles) {
