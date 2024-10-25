@@ -24,6 +24,10 @@ import React, { useMemo } from 'react';
  * Internal dependencies.
  */
 import TableTray from '../../../explorableExplanation/tableTray';
+import InterestGroups from '../interestGroups';
+import Auctions from '../auctions';
+import AdUnits from '../adUnits';
+import Bids from '../bids';
 
 const Tray = () => {
   const tabItems = useMemo<TabItems>(
@@ -31,25 +35,25 @@ const Tray = () => {
       {
         title: 'Interest Groups',
         content: {
-          Element: () => <div>Interest Groups</div>,
+          Element: InterestGroups,
         },
       },
       {
         title: 'Auctions',
         content: {
-          Element: () => <div>Auctions</div>,
+          Element: Auctions,
         },
       },
       {
         title: 'Ad Units',
         content: {
-          Element: () => <div>Ad Units</div>,
+          Element: AdUnits,
         },
       },
       {
         title: 'Bids',
         content: {
-          Element: () => <div>Bids</div>,
+          Element: Bids,
         },
       },
     ],
