@@ -126,5 +126,12 @@ utils.triangle = (size, x, y, direction = 'right', color = 'black') => {
 utils.delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+utils.wipeAndRecreateCanvas = () => {
+  const { height, width } = app.calculateCanvasDimensions();
+  const overlayCanvas = app.igp.createCanvas(width, height);
+
+  overlayCanvas.parent('overlay-canvas');
+  overlayCanvas.style('z-index', 1);
+};
 
 export default utils;

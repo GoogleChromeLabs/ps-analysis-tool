@@ -22,6 +22,7 @@ import config from '../config';
 const rippleEffect = {};
 rippleEffect.setUp = () => {
   config.rippleEffect.rippled = false;
+  config.rippleEffect.ripples = [];
 
   for (let i = 0; i < config.rippleEffect.numRipples; i++) {
     config.rippleEffect.ripples.push({

@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import p5 from 'p5';
+/**
  * Internal dependencies.
  */
 import utils from './utils.js';
 import app from '../app.js';
 import config from '../config.js';
+import timeline from './timeline.js';
 
 const flow = {};
 
@@ -168,6 +173,106 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
   p.fill(config.canvas.background); // Set the fill color from the config
   p.rect(x1 + paddingLeft, topY, width, height); // Draw the rectangle
   p.pop();
+};
+
+flow.barrage = async (index) => {
+  const p = app.igp;
+  const position = app.timeline.circlePositions[index];
+  const { diameter } = config.timeline.circleProps;
+  const smallCircleDiameter = diameter / 5;
+  const smallCircleRadius = smallCircleDiameter / 2;
+  const mainCircleRadius = config.timeline.user.width / 2;
+  const accomodatingCircles = Math.round(
+    (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
+  );
+  const angleStep = 360 / accomodatingCircles;
+  const { bottomFlow } = app.auction.auctions[index];
+
+  const positionsOfCircles = app.timeline.smallCirclePositions.map(
+    (originalColor, i) => {
+      const randomX =
+        position.x +
+        (smallCircleRadius + mainCircleRadius) * Math.cos(i * angleStep);
+      const randomY =
+        position.y +
+        (smallCircleRadius + mainCircleRadius) * Math.sin(i * angleStep);
+
+      const speed = 2;
+      const width = config.flow.mediumBox.width;
+      const height = config.flow.mediumBox.height;
+      const target = p.createVector(
+        bottomFlow[0]?.box?.x +
+          Math.floor(Math.random() * (1 - width / 2 + 1)) +
+          width / 2,
+        bottomFlow[0]?.box?.y +
+          Math.floor(Math.random() * (1 - height / 2 + 1)) +
+          height / 2
+      );
+
+      const currentColor = p.color(originalColor);
+      const color = p.color(
+        p.red(currentColor),
+        p.green(currentColor),
+        p.blue(currentColor),
+        128
+      );
+      return { x: randomX, y: randomY, color, speed, target };
+    }
+  );
+
+  await new Promise((resolve) => {
+    app.flow.intervals['circleMovements'] = setInterval(() => {
+      utils.wipeAndRecreateCanvas();
+      timeline.drawSmallCircles(
+        app.timeline.currentIndex,
+        app.timeline.smallCirclePositions.length
+      );
+
+      const maxX = bottomFlow[0]?.box?.x + config.flow.mediumBox.width;
+      const maxY = bottomFlow[0]?.box?.y + config.flow.mediumBox.height;
+
+      for (let i = 0; i < positionsOfCircles.length; i++) {
+        let { x, y } = positionsOfCircles[i];
+        const { target, speed, color } = positionsOfCircles[i];
+        const dir = p5.Vector.sub(target, p.createVector(x, y));
+        dir.normalize();
+
+        if (!(x < maxX && x > target.x && y < maxY && y > target.y)) {
+          x += dir.x * speed;
+          y += dir.y * speed;
+        }
+
+        // Draw the circle
+        p.push();
+        p.fill(color);
+        p.circle(x, y, smallCircleDiameter);
+        p.pop();
+        positionsOfCircles[i] = { x, y, target, speed, color };
+      }
+
+      if (
+        positionsOfCircles.every((circle) => {
+          return (
+            circle.x < maxX &&
+            circle.x > circle.target.x &&
+            circle.y < maxY &&
+            circle.y > circle.target.y
+          );
+        })
+      ) {
+        clearInterval(app.flow.intervals['circleMovements']);
+        resolve();
+      }
+    }, 10);
+  });
+
+  await utils.delay(500);
+
+  utils.wipeAndRecreateCanvas();
+  timeline.drawSmallCircles(
+    app.timeline.currentIndex,
+    app.timeline.smallCirclePositions.length
+  );
 };
 
 export default flow;

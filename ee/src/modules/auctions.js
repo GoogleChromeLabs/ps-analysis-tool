@@ -205,6 +205,10 @@ auction.draw = async (index) => {
   for (const flowItem of bottomFlow) {
     // eslint-disable-next-line no-await-in-loop
     await drawLineAndBox(flowItem); // Sequential execution for bottom flow
+    if (flowItem.name === 'runAuction()') {
+      // eslint-disable-next-line no-await-in-loop
+      await flow.barrage(index);
+    }
     // eslint-disable-next-line no-await-in-loop
     await utils.delay(1000);
   }
