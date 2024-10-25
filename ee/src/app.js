@@ -32,7 +32,8 @@ const app = {
   },
   utils: {},
   p: null,
-  ip: null,
+  igp: null,
+  up: null,
 };
 
 export default app;

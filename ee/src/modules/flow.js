@@ -226,7 +226,7 @@ flow.barrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
-      utils.wipeAndRecreateCanvas();
+      utils.wipeAndRecreateInterestCanvas();
       timeline.drawSmallCircles(
         app.timeline.currentIndex,
         app.timeline.smallCirclePositions.length
@@ -276,7 +276,7 @@ flow.barrageAnimation = async (index) => {
 
   await utils.delay(500);
 
-  utils.wipeAndRecreateCanvas();
+  utils.wipeAndRecreateInterestCanvas();
   timeline.drawSmallCircles(
     app.timeline.currentIndex,
     app.timeline.smallCirclePositions.length

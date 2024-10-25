@@ -22,7 +22,14 @@
             pointer-events: auto;
         }
 
-        #overlay-canvas {
+        #interest-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none; 
+        }
+
+        #user-canvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -68,7 +75,8 @@
                 </div>
             </div>
         </div>
-        <div id="overlay-canvas"></div>
+        <div id="interest-canvas"></div>
+        <div id="user-canvas"></div>
     </main>
 
     <script src="bundle.js"></script>

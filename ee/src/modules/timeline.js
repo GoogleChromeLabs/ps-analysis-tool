@@ -127,7 +127,7 @@ timeline.drawCircle = (index, completed = false) => {
   app.p.circle(position.x, position.y, diameter);
 
   if (completed) {
-    app.p.image(
+    app.up.image(
       app.p.completedCheckMark,
       position.x - user.width / 2,
       position.y - user.height / 2,
@@ -206,7 +206,6 @@ timeline.renderUserIcon = () => {
   }
 
   const user = config.timeline.user;
-
   timeline.eraseAndRedraw();
 
   timeline.drawSmallCircles(
@@ -214,7 +213,7 @@ timeline.renderUserIcon = () => {
     app.timeline.smallCirclePositions.length
   );
 
-  app.p.image(
+  app.up.image(
     app.p.userIcon,
     circlePosition.x - user.width / 2,
     circlePosition.y - user.height / 2,
@@ -226,12 +225,13 @@ timeline.renderUserIcon = () => {
 timeline.eraseAndRedraw = () => {
   const currentIndex = app.timeline.currentIndex;
   const { colors } = config.timeline;
+  utils.wipeAndRecreateUserCanvas();
 
   if (currentIndex > 0) {
     timeline.drawTimelineLine();
     let i = 0;
     while (i < currentIndex) {
-      utils.wipeAndRecreateCanvas();
+      utils.wipeAndRecreateInterestCanvas();
 
       app.p.push();
       app.p.stroke(colors.visitedBlue);

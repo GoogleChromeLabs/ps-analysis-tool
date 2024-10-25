@@ -126,12 +126,12 @@ utils.triangle = (size, x, y, direction = 'right', color = 'black') => {
 utils.delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
-utils.wipeAndRecreateCanvas = () => {
+utils.wipeAndRecreateInterestCanvas = () => {
   const { height, width } = app.calculateCanvasDimensions();
   const overlayCanvas = app.igp.createCanvas(width, height);
 
-  overlayCanvas.parent('overlay-canvas');
-  overlayCanvas.style('z-index', 1);
+  overlayCanvas.parent('interest-canvas');
+  overlayCanvas.style('z-index', 2);
 };
 
 utils.wipeAndRecreateMainCanvas = () => {
@@ -141,6 +141,14 @@ utils.wipeAndRecreateMainCanvas = () => {
   canvas.style('z-index', 0);
   app.p.background(config.canvas.background);
   app.p.textSize(config.canvas.fontSize);
+};
+
+utils.wipeAndRecreateUserCanvas = () => {
+  const { height, width } = app.calculateCanvasDimensions();
+  const canvas = app.up.createCanvas(width, height);
+
+  canvas.parent('user-canvas');
+  canvas.style('z-index', 1);
 };
 
 utils.isInsideCircle = (x, y, x0, y0, r) => {

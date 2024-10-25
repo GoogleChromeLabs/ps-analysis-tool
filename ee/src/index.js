@@ -57,6 +57,11 @@ app.interestGroupInit = (p) => {
   app.setup();
 };
 
+app.userInit = (p) => {
+  app.up = p;
+  app.setup();
+};
+
 app.play = () => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
@@ -166,12 +171,28 @@ const interestGroupSketch = (p) => {
     const { height, width } = app.calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
 
-    overlayCanvas.parent('overlay-canvas');
-    overlayCanvas.style('z-index', 1);
+    overlayCanvas.parent('interest-canvas');
+    overlayCanvas.style('z-index', 2);
     p.textSize(config.canvas.fontSize);
 
     (async () => {
       await app.interestGroupInit(p);
+    })();
+  };
+};
+
+// Define the sketch
+const userSketch = (p) => {
+  p.setup = () => {
+    const { height, width } = app.calculateCanvasDimensions();
+    const overlayCanvas = p.createCanvas(width, height);
+
+    overlayCanvas.parent('user-canvas');
+    overlayCanvas.style('z-index', 1);
+    p.textSize(config.canvas.fontSize);
+
+    (async () => {
+      await app.userInit(p);
     })();
   };
 };
@@ -181,3 +202,6 @@ new p5(sketch);
 
 // eslint-disable-next-line no-new
 new p5(interestGroupSketch);
+
+// eslint-disable-next-line no-new
+new p5(userSketch);
