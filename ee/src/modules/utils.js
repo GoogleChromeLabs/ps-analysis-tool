@@ -134,4 +134,18 @@ utils.wipeAndRecreateCanvas = () => {
   overlayCanvas.style('z-index', 1);
 };
 
+utils.wipeAndRecreateMainCanvas = () => {
+  const { height, width } = app.calculateCanvasDimensions();
+  const canvas = app.p.createCanvas(width, height);
+  canvas.parent('ps-canvas');
+  canvas.style('z-index', 0);
+  app.p.background(config.canvas.background);
+  app.p.textSize(config.canvas.fontSize);
+};
+
+utils.isInsideCircle = (x, y, x0, y0, r) => {
+  const distance = Math.sqrt((x - x0) ** 2 + (y - y0) ** 2);
+  return distance <= r;
+};
+
 export default utils;
