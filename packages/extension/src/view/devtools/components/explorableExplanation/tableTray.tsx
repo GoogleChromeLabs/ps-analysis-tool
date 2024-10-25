@@ -18,60 +18,22 @@
  * External dependencies.
  */
 import { Tabs, type TabItems } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
-/**
- * Internal dependencies.
- */
-import TopicsTable from './topicsTable';
+interface TableTrayProps {
+  tabItems: TabItems;
+}
 
-const TableTray = () => {
+const TableTray = ({ tabItems }: TableTrayProps) => {
   const [activeTab, setActiveTab] = useState(0);
 
-  const tabs = useMemo<TabItems>(() => {
-    return [
-      {
-        title: 'Epoch 1',
-        content: {
-          Element: TopicsTable,
-          props: {},
-          className: '',
-        },
-      },
-      {
-        title: 'Epoch 2',
-        content: {
-          Element: TopicsTable,
-          props: {},
-          className: '',
-        },
-      },
-      {
-        title: 'Epoch 3',
-        content: {
-          Element: TopicsTable,
-          props: {},
-          className: '',
-        },
-      },
-      {
-        title: 'Epoch 4',
-        content: {
-          Element: TopicsTable,
-          props: {},
-          className: '',
-        },
-      },
-    ];
-  }, []);
-
-  const ActiveTabContent = tabs[activeTab].content.Element;
+  const ActiveTabContent = tabItems[activeTab].content.Element;
 
   return (
     <div className="w-full">
       <div className="bg-sky-100 h-fit pt-2">
         <Tabs
-          items={tabs}
+          items={tabItems}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           showBottomBorder={false}

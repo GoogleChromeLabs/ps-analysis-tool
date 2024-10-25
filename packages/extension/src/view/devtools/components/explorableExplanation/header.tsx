@@ -18,12 +18,30 @@
  * External dependencies.
  */
 import { PauseIcon, PlayIcon, RestartIcon } from '@google-psat/design-system';
-import React, { useState } from 'react';
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import Slider from './slider';
 
-const Header = () => {
-  const [play, setPlay] = useState(false);
+interface HeaderProps {
+  play: boolean;
+  setPlay: React.Dispatch<React.SetStateAction<boolean>>;
+  reset: () => void;
+  historyCount: number;
+  sliderStep: number;
+  setSliderStep: React.Dispatch<React.SetStateAction<number>>;
+}
 
+const Header = ({
+  play,
+  setPlay,
+  reset,
+  historyCount,
+  sliderStep,
+  setSliderStep,
+}: HeaderProps) => {
   return (
     <div className="w-full px-2 flex items-center justify-between border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px]">
       <div className="flex items-center divide-x divide-gray-300 text-slate-700 text-sm">
@@ -37,14 +55,17 @@ const Header = () => {
             <PlayIcon className="h-5 w-5" />
           )}
         </button>
-        <button className="px-2 hover:opacity-70 active:opacity-50">
+        <button
+          className="px-2 hover:opacity-70 active:opacity-50"
+          onClick={reset}
+        >
           <RestartIcon className="h-5 w-5" />
         </button>
         <div className="px-2">
-          <Slider />
+          <Slider sliderStep={sliderStep} setSliderStep={setSliderStep} />
         </div>
       </div>
-      <p>History count: 0</p>
+      <p>History count: {historyCount}</p>
     </div>
   );
 };

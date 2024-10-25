@@ -17,19 +17,31 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
+import { Resizable } from 're-resizable';
+import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import Header from './header';
-import TableTray from './tableTray';
-import { Resizable } from 're-resizable';
+import Header from '../../../explorableExplanation/header';
+import Tray from './tray';
 
 const ExplorableExplanation = () => {
+  const [play, setPlay] = useState(false);
+  const [sliderStep, setSliderStep] = useState(1);
+  const historyCount = 10;
+
   return (
     <div className="flex flex-col h-full">
-      <Header />
+      <Header
+        play={play}
+        setPlay={setPlay}
+        sliderStep={sliderStep}
+        setSliderStep={setSliderStep}
+        historyCount={historyCount}
+        reset={noop}
+      />
       <div className="flex-1" />
       <Resizable
         defaultSize={{
@@ -43,7 +55,7 @@ const ExplorableExplanation = () => {
         }}
         className="h-full flex"
       >
-        <TableTray />
+        <Tray />
       </Resizable>
     </div>
   );

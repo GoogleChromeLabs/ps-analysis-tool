@@ -17,11 +17,14 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React from 'react';
 
-const Slider = () => {
-  const [sliderPosition, setSliderPosition] = useState(1);
+interface SliderProps {
+  sliderStep: number;
+  setSliderStep: React.Dispatch<React.SetStateAction<number>>;
+}
 
+const Slider = ({ sliderStep, setSliderStep }: SliderProps) => {
   return (
     <div className="flex items-center gap-2">
       <label
@@ -34,9 +37,9 @@ const Slider = () => {
         type="range"
         min="0"
         max="3"
-        value={sliderPosition}
+        value={sliderStep}
         step="1"
-        onChange={(e) => setSliderPosition(parseInt(e.target.value))}
+        onChange={(e) => setSliderStep(parseInt(e.target.value))}
         className="w-full h-1 bg-baby-blue-eyes rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
       />
     </div>
