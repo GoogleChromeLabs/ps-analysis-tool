@@ -185,6 +185,7 @@ timeline.drawSmallCircles = (index, numCircles) => {
     const randomColor = p.color(p.random(255), p.random(255), p.random(255));
 
     p.push();
+    p.noStroke();
     p.fill(numCircles ? app.timeline.smallCirclePositions[i] : randomColor);
     p.circle(randomX, randomY, smallCircleDiameter);
     totalCircles++;

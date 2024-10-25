@@ -250,6 +250,7 @@ flow.barrageAnimation = async (index) => {
         }
 
         p.push();
+        p.noStroke();
         p.fill(color);
         p.circle(x, y, smallCircleDiameter);
         p.pop();
