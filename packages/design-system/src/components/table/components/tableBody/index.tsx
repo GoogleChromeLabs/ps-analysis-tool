@@ -45,6 +45,7 @@ const TableBody = ({
     getRowObjectKey,
     conditionalTableRowClassesHandler,
     hasVerticalBar,
+    getVerticalBarColorHash,
   } = useTable(({ state, actions }) => ({
     rows: state.rows,
     columns: state.columns,
@@ -54,6 +55,7 @@ const TableBody = ({
     conditionalTableRowClassesHandler:
       actions.conditionalTableRowClassesHandler,
     hasVerticalBar: actions.hasVerticalBar,
+    getVerticalBarColorHash: actions.getVerticalBarColorHash,
   }));
 
   const tableBodyRef = useRef(null);
@@ -156,6 +158,7 @@ const TableBody = ({
             );
           }}
           hasVerticalBar={hasVerticalBar?.(row) ?? false}
+          verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
           getRowObjectKey={getRowObjectKey}
           onRowClick={() => {
             onRowClick(row?.originalData);

@@ -99,5 +99,6 @@ export interface TableProviderProps {
   ) => string;
   exportTableData?: (rows: TableRow[]) => void;
   hasVerticalBar?: (row: TableRow) => boolean;
+  getVerticalBarColorHash?: (row: TableRow) => string;
   isRowSelected?: (cookie: TableData | null) => boolean;
 }
