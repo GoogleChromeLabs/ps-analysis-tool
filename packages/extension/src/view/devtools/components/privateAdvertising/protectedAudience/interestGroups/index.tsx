@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Table,
@@ -29,7 +29,29 @@ import {
 import { I18n } from '@google-psat/i18n';
 import { noop } from '@google-psat/common';
 
-const InterestGroups = () => {
+interface InterestGroupsProps {
+  filters?: Record<string, any>;
+}
+
+const InterestGroups = ({ filters }: InterestGroupsProps) => {
+  const [, setQuery] = useState({
+    filter: {},
+  });
+
+  useEffect(() => {
+    setQuery({
+      filter: {
+        ...filters,
+      },
+    });
+  }, [filters]);
+
+  // const clearQuery = useCallback(() => {
+  //   setQuery({
+  //     filter: {},
+  //   });
+  // }, []);
+
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
   const tableColumns = useMemo<TableColumn[]>(
