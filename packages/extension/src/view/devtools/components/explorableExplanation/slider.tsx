@@ -35,10 +35,10 @@ const Slider = ({ sliderStep, setSliderStep }: SliderProps) => {
       </label>
       <input
         type="range"
-        min="0"
-        max="3"
+        min={0.5}
+        max={2}
+        step={0.5}
         value={sliderStep}
-        step="1"
         onChange={(e) => setSliderStep(parseInt(e.target.value))}
         className="w-full h-1 bg-baby-blue-eyes rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
       />
