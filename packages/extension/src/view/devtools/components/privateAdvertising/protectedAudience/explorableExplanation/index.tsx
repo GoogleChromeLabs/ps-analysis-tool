@@ -30,6 +30,7 @@ import Tray from './tray';
 const ExplorableExplanation = () => {
   const [play, setPlay] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const historyCount = 10;
 
   return (
@@ -55,7 +56,7 @@ const ExplorableExplanation = () => {
         }}
         className="h-full flex"
       >
-        <Tray />
+        <Tray activeTab={activeTab} setActiveTab={setActiveTab} />
       </Resizable>
     </div>
   );

@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import type { TabItems } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -29,9 +29,12 @@ import Auctions from '../auctions';
 import AdUnits from '../adUnits';
 import Bids from '../bids';
 
-const Tray = () => {
-  const [activeTab, setActiveTab] = useState(0);
+interface TrayProps {
+  activeTab: number;
+  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+}
 
+const Tray = ({ activeTab, setActiveTab }: TrayProps) => {
   const tabItems = useMemo<TabItems>(
     () => [
       {
