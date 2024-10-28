@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import type { TabItems } from '@google-psat/design-system';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -30,6 +30,8 @@ import AdUnits from '../adUnits';
 import Bids from '../bids';
 
 const Tray = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -60,7 +62,13 @@ const Tray = () => {
     []
   );
 
-  return <TableTray tabItems={tabItems} />;
+  return (
+    <TableTray
+      tabItems={tabItems}
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+    />
+  );
 };
 
 export default Tray;

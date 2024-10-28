@@ -18,15 +18,15 @@
  * External dependencies.
  */
 import { Tabs, type TabItems } from '@google-psat/design-system';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface TableTrayProps {
   tabItems: TabItems;
+  activeTab: number;
+  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const TableTray = ({ tabItems }: TableTrayProps) => {
-  const [activeTab, setActiveTab] = useState(0);
-
+const TableTray = ({ tabItems, activeTab, setActiveTab }: TableTrayProps) => {
   const ActiveTabContent = tabItems[activeTab].content.Element;
 
   return (
