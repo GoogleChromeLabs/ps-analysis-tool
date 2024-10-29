@@ -31,7 +31,30 @@ const ExplorableExplanation = () => {
   const [play, setPlay] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
+  const [interactiveMode, setInteractiveMode] = useState(false);
+  const [multiSeller, setMultiSeller] = useState(false);
   const historyCount = 10;
+
+  const extraInterface = (
+    <div className="flex gap-2 items-center">
+      <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
+        Interactive Mode
+        <input
+          type="checkbox"
+          checked={interactiveMode}
+          onChange={(e) => setInteractiveMode(e.target.checked)}
+        />
+      </label>
+      <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
+        Multi Seller
+        <input
+          type="checkbox"
+          checked={multiSeller}
+          onChange={(e) => setMultiSeller(e.target.checked)}
+        />
+      </label>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full">
@@ -42,6 +65,7 @@ const ExplorableExplanation = () => {
         setSliderStep={setSliderStep}
         historyCount={historyCount}
         reset={noop}
+        extraInterface={extraInterface}
       />
       <div className="flex-1" />
       <Resizable

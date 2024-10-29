@@ -32,6 +32,7 @@ interface HeaderProps {
   historyCount: number;
   sliderStep: number;
   setSliderStep: React.Dispatch<React.SetStateAction<number>>;
+  extraInterface?: React.ReactNode;
 }
 
 const Header = ({
@@ -41,6 +42,7 @@ const Header = ({
   historyCount,
   sliderStep,
   setSliderStep,
+  extraInterface,
 }: HeaderProps) => {
   return (
     <div className="w-full px-2 flex items-center justify-between border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px]">
@@ -58,6 +60,7 @@ const Header = ({
         <div className="px-2">
           <Slider sliderStep={sliderStep} setSliderStep={setSliderStep} />
         </div>
+        {extraInterface && <div className="px-2">{extraInterface}</div>}
       </div>
       <p className="text-raisin-black dark:text-bright-gray">
         History count: {historyCount}
