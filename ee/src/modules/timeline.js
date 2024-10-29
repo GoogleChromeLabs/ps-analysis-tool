@@ -35,16 +35,12 @@ timeline.init = () => {
     const { diameter, verticalSpacing } = config.timeline.circleProps;
     const circleVerticalSpace = verticalSpacing + diameter;
 
-    const currentIndex = app.timeline.currentIndex;
-    const distanceBetweenLastAndCurrentCircle =
-      circleVerticalSpace * (currentIndex - 1);
-
     app.timeline.smallCirclePositions.forEach((positions, index) => {
       if (
         utils.isInsideCircle(
           x,
           y,
-          positions.x + distanceBetweenLastAndCurrentCircle,
+          positions.x + circleVerticalSpace,
           positions.y,
           config.timeline.circleProps.diameter / 5
         )
@@ -164,16 +160,15 @@ timeline.drawCircle = (index, completed = false) => {
     );
   }
 };
-timeline.drawSmallCircles = (index, numCircles) => {
+timeline.generateSmallCircles = (index, numCircles) => {
   const position = app.timeline.circlePositions[index];
   const centerX = position.x;
   const centerY = position.y;
   const numSmallCircles =
-    numCircles ?? config.timeline.circles[index].igGroupsCount;
+    numCircles ?? config.timeline.circles[index].igGroupsCount ?? 0;
   const { diameter, verticalSpacing } = config.timeline.circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
 
-  const currentIndex = app.timeline.currentIndex;
   const smallCircleDiameter = diameter / 5;
   const p = app.igp;
   const maxLen = numCircles
@@ -181,12 +176,11 @@ timeline.drawSmallCircles = (index, numCircles) => {
     : app.timeline.smallCirclePositions.length + numSmallCircles;
 
   if (!numCircles) {
-    const distanceBetweenLastAndCurrentCircle = circleVerticalSpace * index;
     app.timeline.smallCirclePositions = app.timeline.smallCirclePositions.map(
       (data) => {
         return {
           ...data,
-          x: data.x + distanceBetweenLastAndCurrentCircle,
+          x: data.x + circleVerticalSpace,
         };
       }
     );
@@ -213,13 +207,12 @@ timeline.drawSmallCircles = (index, numCircles) => {
   for (let i = alreadyAddedIgGroupCount; i < maxLen; i++) {
     let placed = false;
     if (numCircles) {
-      const distanceBetweenLastAndCurrentCircle =
-        circleVerticalSpace * (currentIndex - 1);
       const { color, x, y } = app.timeline.smallCirclePositions[i];
+
       p.push();
       p.noStroke();
       p.fill(color);
-      p.circle(x + distanceBetweenLastAndCurrentCircle, y, smallCircleDiameter);
+      p.circle(x + circleVerticalSpace, y, smallCircleDiameter);
       p.pop();
       continue;
     }
@@ -271,7 +264,7 @@ timeline.renderUserIcon = () => {
   const user = config.timeline.user;
   timeline.eraseAndRedraw();
 
-  timeline.drawSmallCircles(
+  timeline.generateSmallCircles(
     app.timeline.currentIndex,
     app.timeline.smallCirclePositions.length
   );

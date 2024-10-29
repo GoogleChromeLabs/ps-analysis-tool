@@ -184,12 +184,6 @@ flow.barrageAnimation = async (index) => {
     const speed = 1;
     const width = config.flow.mediumBox.width;
     const height = config.flow.mediumBox.height;
-    const { diameter, verticalSpacing } = config.timeline.circleProps;
-    const circleVerticalSpace = verticalSpacing + diameter;
-
-    const currentIndex = app.timeline.currentIndex;
-    const distanceBetweenLastAndCurrentCircle =
-      circleVerticalSpace * (currentIndex - 1);
 
     // calculate the target where the interest group bubbles have to land;
     const target = p.createVector(
@@ -210,7 +204,7 @@ flow.barrageAnimation = async (index) => {
       128
     );
     return {
-      x: data.x + distanceBetweenLastAndCurrentCircle,
+      x: data.x,
       y: data.y,
       color,
       speed,
@@ -222,19 +216,13 @@ flow.barrageAnimation = async (index) => {
     positionsOfCircles,
     app.auction.auctions[index].bottomFlow
   );
-
   await utils.delay(500);
 
   utils.wipeAndRecreateInterestCanvas();
-  timeline.drawSmallCircles(
-    app.timeline.currentIndex,
-    app.timeline.smallCirclePositions.length
-  );
+  utils.drawPreviousCircles(index);
 };
 
 flow.reverseBarrageAnimation = async (index) => {
-  const { diameter } = config.timeline.circleProps;
-  const smallCircleDiameter = diameter / 5;
   const { dspTags } = app.joinInterestGroup.joinings[index];
 
   const alreadyAddedIgGroupCount = config.timeline.circles.reduce(
@@ -285,17 +273,6 @@ flow.reverseBarrageAnimation = async (index) => {
   );
 
   await utils.delay(500);
-  const p = app.igp;
-
-  utils.wipeAndRecreateInterestCanvas();
-  app.timeline.smallCirclePositions.forEach((data) => {
-    const { color, x, y } = data;
-    p.push();
-    p.noStroke();
-    p.fill(color);
-    p.circle(x, y, smallCircleDiameter);
-    p.pop();
-  });
 };
 
 flow.barrageAnimationCoreLogic = async (
@@ -311,13 +288,12 @@ flow.barrageAnimationCoreLogic = async (
     app.flow.intervals['circleMovements'] = setInterval(() => {
       utils.wipeAndRecreateInterestCanvas();
       if (!reverseBarrage) {
-        timeline.drawSmallCircles(
+        timeline.generateSmallCircles(
           app.timeline.currentIndex,
           app.timeline.smallCirclePositions.length
         );
-      } else {
-        utils.drawPreviousCircles(app.timeline.currentIndex);
       }
+      utils.drawPreviousCircles(app.timeline.currentIndex);
 
       //Calculating the maximum bound of the flow box
       const maxX = boundingBox[0]?.box?.x + config.flow.mediumBox.width;

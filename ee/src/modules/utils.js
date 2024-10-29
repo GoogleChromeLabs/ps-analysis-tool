@@ -159,7 +159,6 @@ utils.isInsideCircle = (x, y, x0, y0, r) => {
 utils.drawPreviousCircles = (index) => {
   const p = app.igp;
   const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
-
   app.timeline.smallCirclePositions.forEach((data, currIndex) => {
     if (currIndex < index) {
       p.push();

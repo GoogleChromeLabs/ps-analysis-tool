@@ -159,9 +159,9 @@ joinInterestGroup.draw = async (index) => {
     }
   };
 
-  timeline.drawSmallCircles(index);
+  timeline.generateSmallCircles(index);
 
-  utils.drawPreviousCircles(app.timeline.currentIndex);
+  utils.drawPreviousCircles(index);
   // Draw DSP Tags box and line
   await drawLineAndBox(_joining.dspTags[0]);
 

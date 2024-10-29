@@ -21,6 +21,7 @@ import app from '../app';
 import config from '../config';
 import utils from './utils';
 import rippleEffect from './ripple-effect';
+import timeline from './timeline';
 
 const auction = {};
 
@@ -175,7 +176,9 @@ auction.draw = async (index) => {
       );
     }
   };
+  timeline.generateSmallCircles(index);
 
+  utils.drawPreviousCircles(index + 1);
   // Draw SSP box and line
   await drawLineAndBox(_auction.ssp);
   await utils.delay(500);
