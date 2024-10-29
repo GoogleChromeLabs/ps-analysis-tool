@@ -29,7 +29,7 @@ const Slider = ({ sliderStep, setSliderStep }: SliderProps) => {
     <div className="flex items-center gap-2">
       <label
         htmlFor="steps-range"
-        className="text-raisin-black dark:text-white"
+        className="text-raisin-black dark:text-bright-gray"
       >
         Speed:
       </label>
@@ -39,8 +39,8 @@ const Slider = ({ sliderStep, setSliderStep }: SliderProps) => {
         max={2}
         step={0.5}
         value={sliderStep}
-        onChange={(e) => setSliderStep(parseInt(e.target.value))}
-        className="w-full h-1 bg-baby-blue-eyes rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+        onChange={(e) => setSliderStep(Number(e.target.value))}
+        className="w-full h-1 bg-baby-blue-eyes rounded-lg appearance-none cursor-pointer"
       />
     </div>
   );

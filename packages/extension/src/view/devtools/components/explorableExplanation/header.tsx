@@ -44,28 +44,24 @@ const Header = ({
 }: HeaderProps) => {
   return (
     <div className="w-full px-2 flex items-center justify-between border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px]">
-      <div className="flex items-center divide-x divide-gray-300 text-slate-700 text-sm">
-        <button
-          className="pr-2 hover:opacity-70 active:opacity-50"
-          onClick={() => setPlay(!play)}
-        >
+      <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray text-sm">
+        <button className="pr-2" onClick={() => setPlay(!play)}>
           {play ? (
-            <PauseIcon className="h-5 w-5" />
+            <PauseIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           ) : (
-            <PlayIcon className="h-5 w-5" />
+            <PlayIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           )}
         </button>
-        <button
-          className="px-2 hover:opacity-70 active:opacity-50"
-          onClick={reset}
-        >
-          <RestartIcon className="h-5 w-5" />
+        <button className="px-2" onClick={reset}>
+          <RestartIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
         </button>
         <div className="px-2">
           <Slider sliderStep={sliderStep} setSliderStep={setSliderStep} />
         </div>
       </div>
-      <p>History count: {historyCount}</p>
+      <p className="text-raisin-black dark:text-bright-gray">
+        History count: {historyCount}
+      </p>
     </div>
   );
 };

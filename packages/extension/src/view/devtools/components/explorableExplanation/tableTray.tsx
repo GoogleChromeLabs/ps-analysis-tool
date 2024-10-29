@@ -30,8 +30,8 @@ const TableTray = ({ tabItems, activeTab, setActiveTab }: TableTrayProps) => {
   const ActiveTabContent = tabItems[activeTab].content.Element;
 
   return (
-    <div className="w-full">
-      <div className="bg-sky-100 h-fit pt-2">
+    <div className="w-full h-full">
+      <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-2">
         <Tabs
           items={tabItems}
           activeTab={activeTab}
