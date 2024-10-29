@@ -54,14 +54,14 @@ describe('SynchnorousCookieStore:', () => {
   it('Should not update storage if there are no new cookies', () => {
     synchnorousCookieStore.update(123456, []);
     expect(Object.keys(dataStore.tabsData[123456]).length).toBe(0);
-    expect(dataStore.tabs[123456].newUpdates).toBe(0);
+    expect(dataStore.tabs[123456].newUpdatesCA).toBe(0);
   });
 
   it('Should add new cookie if cookie doesnt exist', () => {
     expect(dataStore.tabsData[123456]['_cbcnn.com/']).toBeUndefined();
     synchnorousCookieStore.update(123456, [data.tabCookies['_cb']]);
     expect(dataStore.tabsData[123456]['_cbcnn.com/']).not.toBeUndefined();
-    expect(dataStore.tabs[123456].newUpdates).toBe(1);
+    expect(dataStore.tabs[123456].newUpdatesCA).toBe(1);
   });
 
   it('Should update cookie with new blocked reason', () => {
@@ -74,7 +74,7 @@ describe('SynchnorousCookieStore:', () => {
     expect(
       dataStore.tabsData[123456]['_cbcnn.com/']?.blockedReasons?.length
     ).toBe(0);
-    expect(dataStore.tabs[123456].newUpdates).toBe(1);
+    expect(dataStore.tabs[123456].newUpdatesCA).toBe(1);
 
     synchnorousCookieStore.update(123456, [
       {
@@ -89,7 +89,7 @@ describe('SynchnorousCookieStore:', () => {
     expect(dataStore.tabsData[123456]['_cbcnn.com/'].blockedReasons).toContain(
       'InvalidDomain'
     );
-    expect(dataStore.tabs[123456].newUpdates).toBe(2);
+    expect(dataStore.tabs[123456].newUpdatesCA).toBe(2);
   });
 
   it('Should persist the partition key from the previous set data', () => {
@@ -107,7 +107,7 @@ describe('SynchnorousCookieStore:', () => {
     expect(
       dataStore.tabsData[123456]['_cbcnn.com/']?.parsedCookie?.partitionKey
     ).toBe('https://bbc.com');
-    expect(dataStore.tabs[123456].newUpdates).toBe(1);
+    expect(dataStore.tabs[123456].newUpdatesCA).toBe(1);
 
     synchnorousCookieStore.update(123456, [
       {
@@ -123,7 +123,7 @@ describe('SynchnorousCookieStore:', () => {
     expect(
       dataStore.tabsData[123456]['_cbcnn.com/']?.parsedCookie?.partitionKey
     ).toBe('https://bbc.com');
-    expect(dataStore.tabs[123456].newUpdates).toBe(2);
+    expect(dataStore.tabs[123456].newUpdatesCA).toBe(2);
   });
 
   it('Should not update the data if tabId is not present', () => {
@@ -137,7 +137,7 @@ describe('SynchnorousCookieStore:', () => {
         },
       },
     ]);
-    expect(dataStore.tabs[12345]?.newUpdates).toBeUndefined();
+    expect(dataStore.tabs[12345]?.newUpdatesCA).toBeUndefined();
   });
 
   it('Should clear cookie store when clear is called', () => {

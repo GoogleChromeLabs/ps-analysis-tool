@@ -517,7 +517,7 @@ class DataStore {
           this.tabs[tabId].newUpdatesCA > 0 ||
           this.tabs[tabId].newUpdatesPA > 0)
       ) {
-        if (this.tabs[tabId].newUpdatesCA > 0) {
+        if (this.tabs[tabId].newUpdatesCA > 0 || overrideForInitialSync) {
           const newCookieData: {
             [cookieKey: string]: CookieData;
           } = {};
@@ -600,7 +600,7 @@ class DataStore {
           });
         }
 
-        if (this.tabs[tabId].newUpdatesPA > 0) {
+        if (this.tabs[tabId].newUpdatesPA > 0 || overrideForInitialSync) {
           await chrome.runtime.sendMessage({
             type: 'AUCTION_EVENTS',
             payload: {
