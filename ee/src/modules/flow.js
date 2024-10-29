@@ -177,52 +177,45 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
 
 flow.barrageAnimation = async (index) => {
   const p = app.igp;
-  const position = app.timeline.circlePositions[index];
   const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
-  const smallCircleRadius = smallCircleDiameter / 2;
-  const mainCircleRadius = config.timeline.user.width / 2;
-  const accomodatingCircles = Math.round(
-    (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-  );
-  const angleStep = 360 / accomodatingCircles;
   const { bottomFlow } = app.auction.auctions[index];
 
   // calculate the current position of the interest group bubbles.
-  const positionsOfCircles = app.timeline.smallCirclePositions.map(
-    (originalColor, i) => {
-      const randomX =
-        position.x +
-        (smallCircleRadius + mainCircleRadius) * Math.cos(i * angleStep);
-      const randomY =
-        position.y +
-        (smallCircleRadius + mainCircleRadius) * Math.sin(i * angleStep);
+  const positionsOfCircles = app.timeline.smallCirclePositions.map((data) => {
+    const speed = 2;
+    const width = config.flow.mediumBox.width;
+    const height = config.flow.mediumBox.height;
+    const distanceBetweenLastAndCurrentCircle =
+      app.timeline.circlePositions[index].x -
+      app.timeline.circlePositions[index - 1].x;
 
-      const speed = 2;
-      const width = config.flow.mediumBox.width;
-      const height = config.flow.mediumBox.height;
+    // calculate the target where the interest group bubbles have to land;
+    const target = p.createVector(
+      bottomFlow[0]?.box?.x +
+        Math.floor(Math.random() * (1 - width / 2 + 1)) +
+        width / 2,
+      bottomFlow[0]?.box?.y +
+        Math.floor(Math.random() * (1 - height / 2 + 1)) +
+        height / 2
+    );
 
-      // calculate the target where the interest group bubbles have to land;
-      const target = p.createVector(
-        bottomFlow[0]?.box?.x +
-          Math.floor(Math.random() * (1 - width / 2 + 1)) +
-          width / 2,
-        bottomFlow[0]?.box?.y +
-          Math.floor(Math.random() * (1 - height / 2 + 1)) +
-          height / 2
-      );
-
-      // calculate the opacity of the interest group bubble which will be animated.
-      const currentColor = p.color(originalColor);
-      const color = p.color(
-        p.red(currentColor),
-        p.green(currentColor),
-        p.blue(currentColor),
-        128
-      );
-      return { x: randomX, y: randomY, color, speed, target };
-    }
-  );
+    // calculate the opacity of the interest group bubble which will be animated.
+    const currentColor = p.color(data.color);
+    const color = p.color(
+      p.red(currentColor),
+      p.green(currentColor),
+      p.blue(currentColor),
+      128
+    );
+    return {
+      x: data.x + distanceBetweenLastAndCurrentCircle,
+      y: data.y,
+      color,
+      speed,
+      target,
+    };
+  });
 
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
@@ -271,7 +264,7 @@ flow.barrageAnimation = async (index) => {
         clearInterval(app.flow.intervals['circleMovements']);
         resolve();
       }
-    }, 10);
+    }, 1000);
   });
 
   await utils.delay(500);

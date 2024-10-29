@@ -136,63 +136,81 @@ timeline.drawCircle = (index, completed = false) => {
     );
   }
 };
-
 timeline.drawSmallCircles = (index, numCircles) => {
   const position = app.timeline.circlePositions[index];
+  const centerX = position.x;
+  const centerY = position.y;
+  const numSmallCircles = numCircles ?? 9;
   const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
-  const smallCircleRadius = smallCircleDiameter / 2;
-  let mainCircleRadius = config.timeline.user.width / 2;
-
-  let accomodatingCircles = Math.round(
-    (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-  );
-
-  if (!app.timeline.smallCirclePositions) {
-    app.timeline.smallCirclePositions = [];
-  }
-
-  const numSmallCircles = numCircles ?? 9;
-  let angleStep = 360 / accomodatingCircles;
   const p = app.igp;
   const maxLen = numCircles
     ? numCircles
     : app.timeline.smallCirclePositions.length + numSmallCircles;
-  let totalCircles = numCircles ? 0 : app.timeline.smallCirclePositions.length;
 
-  for (
-    let i = numCircles ? 0 : app.timeline.smallCirclePositions.length;
-    totalCircles < maxLen;
-    i++
-  ) {
-    if (i > accomodatingCircles) {
-      mainCircleRadius += smallCircleDiameter;
-      i = i - accomodatingCircles;
-      accomodatingCircles = Math.round(
-        (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-      );
-      angleStep = 360 / accomodatingCircles;
+  if (!numCircles) {
+    app.timeline.smallCirclePositions = [];
+  }
+  const clusterRadius = 150;
+
+  // Minimum distance between circles
+  const minDistance = smallCircleDiameter;
+
+  for (let i = 0; i < maxLen; i++) {
+    let placed = false;
+    if (numCircles) {
+      const distanceBetweenLastAndCurrentCircle =
+        app.timeline.circlePositions[index].x -
+        app.timeline.circlePositions[index - 1].x;
+      const { color, x, y } = app.timeline.smallCirclePositions[i];
+      p.push();
+      p.noStroke();
+      p.fill(color);
+      p.circle(x + distanceBetweenLastAndCurrentCircle, y, smallCircleDiameter);
+      p.pop();
+      continue;
     }
 
-    const randomX =
-      position.x +
-      (smallCircleRadius + mainCircleRadius) *
-        Math.cos(p.radians(i * angleStep));
-    const randomY =
-      position.y +
-      (smallCircleRadius + mainCircleRadius) *
-        Math.sin(p.radians(i * angleStep));
-    const randomColor = p.color(p.random(255), p.random(255), p.random(255));
+    while (!placed) {
+      // Calculate random angle and distance from center
+      const angle = p.random(p.TWO_PI);
+      const distance = p.random(clusterRadius);
 
-    p.push();
-    p.noStroke();
-    p.fill(numCircles ? app.timeline.smallCirclePositions[i] : randomColor);
-    p.circle(randomX, randomY, smallCircleDiameter);
-    totalCircles++;
-    p.pop();
+      // Calculate x and y position of the circle
+      const x = centerX + p.cos(angle) * distance;
+      const y = centerY + p.sin(angle) * distance;
 
-    if (!numCircles) {
-      app.timeline.smallCirclePositions.push(randomColor);
+      // Check for overlaps with existing circles
+      let overlap = false;
+      for (let j = 0; j < i; j++) {
+        const otherX = app.timeline.smallCirclePositions[j].x;
+        const otherY = app.timeline.smallCirclePositions[j].y;
+        const d = p.dist(x, y, otherX, otherY);
+        if (d < minDistance) {
+          overlap = true;
+          break;
+        }
+      }
+
+      if (!overlap) {
+        // Draw the circle directly
+        p.push();
+        p.noStroke();
+        const randomColor = p.color(
+          p.random(255),
+          p.random(255),
+          p.random(255)
+        );
+        p.fill(
+          numCircles ? app.timeline.smallCirclePositions[i].color : randomColor
+        );
+        p.circle(x, y, smallCircleDiameter);
+        p.pop();
+        if (!numCircles) {
+          app.timeline.smallCirclePositions.push({ x, y, color: randomColor });
+        }
+        placed = true;
+      }
     }
   }
 };
