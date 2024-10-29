@@ -168,8 +168,12 @@ timeline.drawSmallCircles = (index, numCircles) => {
   const position = app.timeline.circlePositions[index];
   const centerX = position.x;
   const centerY = position.y;
-  const numSmallCircles = numCircles ?? 9;
-  const { diameter } = config.timeline.circleProps;
+  const numSmallCircles =
+    numCircles ?? config.timeline.circles[index].igGroupsCount;
+  const { diameter, verticalSpacing } = config.timeline.circleProps;
+  const circleVerticalSpace = verticalSpacing + diameter;
+
+  const currentIndex = app.timeline.currentIndex;
   const smallCircleDiameter = diameter / 5;
   const p = app.igp;
   const maxLen = numCircles
@@ -177,19 +181,40 @@ timeline.drawSmallCircles = (index, numCircles) => {
     : app.timeline.smallCirclePositions.length + numSmallCircles;
 
   if (!numCircles) {
-    app.timeline.smallCirclePositions = [];
+    const distanceBetweenLastAndCurrentCircle = circleVerticalSpace * index;
+    app.timeline.smallCirclePositions = app.timeline.smallCirclePositions.map(
+      (data) => {
+        return {
+          ...data,
+          x: data.x + distanceBetweenLastAndCurrentCircle,
+        };
+      }
+    );
   }
-  const clusterRadius = 150;
+
+  const alreadyAddedIgGroupCount = config.timeline.circles.reduce(
+    (acc, circle, currIndex) => {
+      if (!circle?.igGroupsCount) {
+        return acc;
+      }
+      if (currIndex < index) {
+        acc = acc + circle.igGroupsCount;
+        return acc;
+      }
+      return acc;
+    },
+    0
+  );
+  const clusterRadius = 75;
 
   // Minimum distance between circles
   const minDistance = smallCircleDiameter;
 
-  for (let i = 0; i < maxLen; i++) {
+  for (let i = alreadyAddedIgGroupCount; i < maxLen; i++) {
     let placed = false;
     if (numCircles) {
       const distanceBetweenLastAndCurrentCircle =
-        app.timeline.circlePositions[index].x -
-        app.timeline.circlePositions[index - 1].x;
+        circleVerticalSpace * (currentIndex - 1);
       const { color, x, y } = app.timeline.smallCirclePositions[i];
       p.push();
       p.noStroke();
@@ -221,19 +246,11 @@ timeline.drawSmallCircles = (index, numCircles) => {
       }
 
       if (!overlap) {
-        // Draw the circle directly
-        p.push();
-        p.noStroke();
         const randomColor = p.color(
           p.random(255),
           p.random(255),
           p.random(255)
         );
-        p.fill(
-          numCircles ? app.timeline.smallCirclePositions[i].color : randomColor
-        );
-        p.circle(x, y, smallCircleDiameter);
-        p.pop();
         if (!numCircles) {
           app.timeline.smallCirclePositions.push({ x, y, color: randomColor });
         }

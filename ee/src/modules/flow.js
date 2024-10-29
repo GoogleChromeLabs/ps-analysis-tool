@@ -177,18 +177,19 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
 
 flow.barrageAnimation = async (index) => {
   const p = app.igp;
-  const { diameter } = config.timeline.circleProps;
-  const smallCircleDiameter = diameter / 5;
   const { bottomFlow } = app.auction.auctions[index];
 
   // calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.timeline.smallCirclePositions.map((data) => {
-    const speed = 2;
+    const speed = 1;
     const width = config.flow.mediumBox.width;
     const height = config.flow.mediumBox.height;
+    const { diameter, verticalSpacing } = config.timeline.circleProps;
+    const circleVerticalSpace = verticalSpacing + diameter;
+
+    const currentIndex = app.timeline.currentIndex;
     const distanceBetweenLastAndCurrentCircle =
-      app.timeline.circlePositions[index].x -
-      app.timeline.circlePositions[index - 1].x;
+      circleVerticalSpace * (currentIndex - 1);
 
     // calculate the target where the interest group bubbles have to land;
     const target = p.createVector(
@@ -217,55 +218,10 @@ flow.barrageAnimation = async (index) => {
     };
   });
 
-  await new Promise((resolve) => {
-    app.flow.intervals['circleMovements'] = setInterval(() => {
-      utils.wipeAndRecreateInterestCanvas();
-      timeline.drawSmallCircles(
-        app.timeline.currentIndex,
-        app.timeline.smallCirclePositions.length
-      );
-
-      //Calculating the maximum bound of the flow box
-      const maxX = bottomFlow[0]?.box?.x + config.flow.mediumBox.width;
-      const maxY = bottomFlow[0]?.box?.y + config.flow.mediumBox.height;
-
-      //Run a loop over the position of the circles to move them according to the speed.
-      for (let i = 0; i < positionsOfCircles.length; i++) {
-        let { x, y } = positionsOfCircles[i];
-        const { target, speed, color } = positionsOfCircles[i];
-        const dir = p5.Vector.sub(target, p.createVector(x, y));
-        dir.normalize();
-
-        //Only increment the coordinates if the the target is not reached.
-        if (!(x < maxX && x > target.x && y < maxY && y > target.y)) {
-          x += dir.x * speed;
-          y += dir.y * speed;
-        }
-
-        p.push();
-        p.noStroke();
-        p.fill(color);
-        p.circle(x, y, smallCircleDiameter);
-        p.pop();
-        positionsOfCircles[i] = { x, y, target, speed, color };
-      }
-
-      //Resolve if all bubbles have reached the targets.
-      if (
-        positionsOfCircles.every((circle) => {
-          return (
-            circle.x < maxX &&
-            circle.x > circle.target.x &&
-            circle.y < maxY &&
-            circle.y > circle.target.y
-          );
-        })
-      ) {
-        clearInterval(app.flow.intervals['circleMovements']);
-        resolve();
-      }
-    }, 1000);
-  });
+  await flow.barrageAnimationCoreLogic(
+    positionsOfCircles,
+    app.auction.auctions[index].bottomFlow
+  );
 
   await utils.delay(500);
 
@@ -274,6 +230,154 @@ flow.barrageAnimation = async (index) => {
     app.timeline.currentIndex,
     app.timeline.smallCirclePositions.length
   );
+};
+
+flow.reverseBarrageAnimation = async (index) => {
+  const { diameter } = config.timeline.circleProps;
+  const smallCircleDiameter = diameter / 5;
+  const { dspTags } = app.joinInterestGroup.joinings[index];
+
+  const alreadyAddedIgGroupCount = config.timeline.circles.reduce(
+    (acc, circle, currIndex) => {
+      if (!circle?.igGroupsCount) {
+        return acc;
+      }
+      if (currIndex < index) {
+        acc = acc + circle.igGroupsCount;
+        return acc;
+      }
+      return acc;
+    },
+    0
+  );
+
+  const positionsOfCircles = [];
+  app.timeline.smallCirclePositions.forEach((data, currIndex) => {
+    if (currIndex < alreadyAddedIgGroupCount) {
+      return;
+    }
+
+    const speed = 1;
+    const width = config.flow.box.width;
+    const height = config.flow.box.height;
+
+    // calculate the target where the interest group bubbles have to land;
+    const target = app.igp.createVector(data.x, data.y);
+    positionsOfCircles.push({
+      x:
+        dspTags[0]?.box?.x +
+        Math.floor(Math.random() * (1 - width / 2 + 1)) +
+        width / 2,
+      y:
+        dspTags[0]?.box?.y +
+        Math.floor(Math.random() * (1 - height / 2 + 1)) +
+        height / 2,
+      color: data.color,
+      speed,
+      target,
+    });
+  });
+
+  await flow.barrageAnimationCoreLogic(
+    positionsOfCircles,
+    app.joinInterestGroup.joinings[index].dspTags,
+    true
+  );
+
+  await utils.delay(500);
+  const p = app.igp;
+
+  utils.wipeAndRecreateInterestCanvas();
+  app.timeline.smallCirclePositions.forEach((data) => {
+    const { color, x, y } = data;
+    p.push();
+    p.noStroke();
+    p.fill(color);
+    p.circle(x, y, smallCircleDiameter);
+    p.pop();
+  });
+};
+
+flow.barrageAnimationCoreLogic = async (
+  positionsOfCircles,
+  boundingBox,
+  reverseBarrage = false
+) => {
+  const p = app.igp;
+  const { diameter } = config.timeline.circleProps;
+  const smallCircleDiameter = diameter / 5;
+
+  await new Promise((resolve) => {
+    app.flow.intervals['circleMovements'] = setInterval(() => {
+      utils.wipeAndRecreateInterestCanvas();
+      if (!reverseBarrage) {
+        timeline.drawSmallCircles(
+          app.timeline.currentIndex,
+          app.timeline.smallCirclePositions.length
+        );
+      } else {
+        utils.drawPreviousCircles(app.timeline.currentIndex);
+      }
+
+      //Calculating the maximum bound of the flow box
+      const maxX = boundingBox[0]?.box?.x + config.flow.mediumBox.width;
+      const maxY = boundingBox[0]?.box?.y + config.flow.mediumBox.height;
+
+      //Run a loop over the position of the circles to move them according to the speed.
+      for (let i = 0; i < positionsOfCircles.length; i++) {
+        let { x, y } = positionsOfCircles[i];
+        const { target, speed, color } = positionsOfCircles[i];
+        const dir = p5.Vector.sub(target, p.createVector(x, y));
+        dir.normalize();
+
+        if (reverseBarrage) {
+          if (
+            !(
+              x < target.x + 2 &&
+              x > target.x - 2 &&
+              y < target.y - 2 &&
+              y > target.y + 2
+            )
+          ) {
+            x += dir.x * speed;
+            y += dir.y * speed;
+          }
+        } else {
+          if (!(x < maxX && x > target.x && y < maxY && y > target.y)) {
+            x += dir.x * speed;
+            y += dir.y * speed;
+          }
+        }
+
+        p.push();
+        p.noStroke();
+        p.fill(color);
+        p.circle(x, y, smallCircleDiameter);
+        p.pop();
+        positionsOfCircles[i] = {
+          x,
+          y,
+          target,
+          speed,
+          color,
+        };
+      }
+      //Resolve if all bubbles have reached the targets.
+      if (
+        positionsOfCircles.every((circle) => {
+          return (
+            Math.floor(circle.x) < Math.floor(circle.target.x + 2) &&
+            Math.floor(circle.x) > Math.floor(circle.target.x - 2) &&
+            Math.floor(circle.y) > Math.floor(circle.target.y - 2) &&
+            Math.floor(circle.y) < Math.floor(circle.target.y + 2)
+          );
+        })
+      ) {
+        clearInterval(app.flow.intervals['circleMovements']);
+        resolve();
+      }
+    }, 10);
+  });
 };
 
 export default flow;

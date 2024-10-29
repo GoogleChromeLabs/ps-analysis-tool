@@ -159,6 +159,9 @@ joinInterestGroup.draw = async (index) => {
     }
   };
 
+  timeline.drawSmallCircles(index);
+
+  utils.drawPreviousCircles(app.timeline.currentIndex);
   // Draw DSP Tags box and line
   await drawLineAndBox(_joining.dspTags[0]);
 
@@ -173,7 +176,7 @@ joinInterestGroup.draw = async (index) => {
 
   await drawLine(_joining.dspTags[1]);
 
-  timeline.drawSmallCircles(index);
+  await flow.reverseBarrageAnimation(index);
 
   await utils.delay(1500);
 
