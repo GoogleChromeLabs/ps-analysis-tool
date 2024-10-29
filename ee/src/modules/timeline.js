@@ -29,6 +29,34 @@ timeline.init = () => {
     }
   });
 
+  app.p.mouseClicked = (event) => {
+    const { x, y } = event;
+    let clickedIndex;
+    const { diameter, verticalSpacing } = config.timeline.circleProps;
+    const circleVerticalSpace = verticalSpacing + diameter;
+
+    const currentIndex = app.timeline.currentIndex;
+    const distanceBetweenLastAndCurrentCircle =
+      circleVerticalSpace * (currentIndex - 1);
+
+    app.timeline.smallCirclePositions.forEach((positions, index) => {
+      if (
+        utils.isInsideCircle(
+          x,
+          y,
+          positions.x + distanceBetweenLastAndCurrentCircle,
+          positions.y,
+          config.timeline.circleProps.diameter / 5
+        )
+      ) {
+        clickedIndex = index;
+      }
+    });
+
+    // eslint-disable-next-line no-console
+    console.log(app.timeline.smallCirclePositions[clickedIndex]);
+  };
+
   app.timeline.drawTimelineLine();
   app.timeline.drawTimeline(config.timeline);
   app.timeline.renderUserIcon(); // On first render.
