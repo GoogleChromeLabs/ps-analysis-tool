@@ -134,14 +134,12 @@ const Provider = ({ children }: PropsWithChildren) => {
             noBids: NoBidsType;
           } | null = computeReceivedBidsAndNoBids(
             message.payload.auctionEvents,
-            message.payload.multiSellerAuction,
-            message.payload.refreshTabData
+            message.payload.multiSellerAuction
           );
 
           if (computedBids) {
             const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
               {};
-
             computedBids.receivedBids.forEach(
               ({
                 adUnitCode,

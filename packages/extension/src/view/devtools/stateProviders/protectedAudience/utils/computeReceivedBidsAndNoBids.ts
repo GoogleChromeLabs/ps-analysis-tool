@@ -39,18 +39,12 @@ const BIDDING_TYPES = [
  * This function computes the received bids and no bids data to be displayed in the PSAT extension.
  * @param _auctionEvents The array of auction events that are associated with the tab.
  * @param _isMultiSellerAuction This speicifes if the auction event occuring is multi seller auction or single seller auction.
- * @param refreshTabData If provided then it specifies the tab was reloaded.
  * @returns null | receivedBids array and noBids object.
  */
 function computeReceivedBidsAndNoBids(
   _auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'],
-  _isMultiSellerAuction: boolean,
-  refreshTabData = false
+  _isMultiSellerAuction: boolean
 ) {
-  if (refreshTabData) {
-    return { receivedBids: [], noBids: {} };
-  }
-
   if (
     !_auctionEvents ||
     (_auctionEvents && Object.keys(_auctionEvents).length === 0)
