@@ -26,6 +26,7 @@ import { noop } from '@google-psat/common';
  */
 import Header from '../../../explorableExplanation/header';
 import Tray from './tray';
+import Animation from './animation';
 
 const ExplorableExplanation = () => {
   const [play, setPlay] = useState(false);
@@ -42,7 +43,9 @@ const ExplorableExplanation = () => {
         historyCount={historyCount}
         reset={noop}
       />
-      <div className="flex-1" />
+      <div className="flex-1">
+        <Animation />
+      </div>
       <Resizable
         defaultSize={{
           width: '100%',
