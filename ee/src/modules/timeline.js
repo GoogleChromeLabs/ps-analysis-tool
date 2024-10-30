@@ -39,7 +39,7 @@ timeline.init = () => {
       config.mouseY = y;
       utils.wipeAndRecreateInterestCanvas();
       utils.wipeAndRecreateUserCanvas();
-      app.timeline.renderUserIcon(x, y); // On first render.
+      timeline.renderUserIcon(x, y); // On first render.
     };
 
     app.p.mouseClicked = async () => {
@@ -60,12 +60,14 @@ timeline.init = () => {
         }
       });
 
-      if (clickedIndex !== undefined) {
+      if (clickedIndex !== undefined && config.shouldRespondToClick) {
+        config.shouldRespondToClick = false;
         await app.drawFlows(clickedIndex);
+        config.shouldRespondToClick = true;
       }
     };
   } else {
-    app.timeline.renderUserIcon(); // On first render.
+    timeline.renderUserIcon(); // On first render.
   }
 };
 

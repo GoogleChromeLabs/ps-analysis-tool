@@ -93,6 +93,7 @@ const config = {
   isInteractiveMode: true,
   mouseX: 0,
   mouseY: 0,
+  shouldRespondToClick: true,
 };
 
 export default config;
