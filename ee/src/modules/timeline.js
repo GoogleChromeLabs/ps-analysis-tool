@@ -37,11 +37,8 @@ timeline.init = () => {
 
       config.mouseX = x;
       config.mouseY = y;
-      app.timeline.circlePositions = [];
       utils.wipeAndRecreateInterestCanvas();
       utils.wipeAndRecreateUserCanvas();
-      app.timeline.drawTimelineLine();
-      app.timeline.drawTimeline(config.timeline);
       app.timeline.renderUserIcon(x, y); // On first render.
     };
 
