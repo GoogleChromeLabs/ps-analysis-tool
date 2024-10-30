@@ -38,20 +38,20 @@ const ExplorableExplanation = () => {
   const extraInterface = (
     <div className="flex gap-2 items-center">
       <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
-        Interactive Mode
         <input
           type="checkbox"
           checked={interactiveMode}
           onChange={(e) => setInteractiveMode(e.target.checked)}
         />
+        Interactive Mode
       </label>
       <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
-        Multi Seller
         <input
           type="checkbox"
           checked={multiSeller}
           onChange={(e) => setMultiSeller(e.target.checked)}
         />
+        Multi Seller
       </label>
     </div>
   );
