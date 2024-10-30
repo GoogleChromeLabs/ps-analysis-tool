@@ -29,33 +29,76 @@ timeline.init = () => {
     }
   });
 
-  app.p.mouseClicked = (event) => {
-    const { x, y } = event;
-    let clickedIndex;
-    const { diameter, verticalSpacing } = config.timeline.circleProps;
-    const circleVerticalSpace = verticalSpacing + diameter;
-
-    app.timeline.smallCirclePositions.forEach((positions, index) => {
-      if (
-        utils.isInsideCircle(
-          x,
-          y,
-          positions.x + circleVerticalSpace,
-          positions.y,
-          config.timeline.circleProps.diameter / 5
-        )
-      ) {
-        clickedIndex = index;
-      }
-    });
-
-    // eslint-disable-next-line no-console
-    console.log(app.timeline.smallCirclePositions[clickedIndex]);
-  };
-
   app.timeline.drawTimelineLine();
   app.timeline.drawTimeline(config.timeline);
-  app.timeline.renderUserIcon(); // On first render.
+  if (config.isInteractiveMode) {
+    app.p.mouseMoved = (event) => {
+      const { x, y } = event;
+
+      config.pMouseY = config.mouseY;
+      config.pMouseX = config.mouseX;
+      config.mouseX = x;
+      config.mouseY = y;
+
+      utils.wipeAndRecreateInterestCanvas();
+      utils.wipeAndRecreateUserCanvas();
+      utils.drawPreviousCircles(0);
+      app.timeline.renderUserIcon(x, y); // On first render.
+    };
+
+    app.p.mouseClicked = async () => {
+      const { circlePositions } = app.timeline;
+      let clickedIndex;
+
+      circlePositions.forEach((positions, index) => {
+        if (
+          utils.isInsideCircle(
+            config.mouseX,
+            config.mouseY,
+            positions.x,
+            positions.y,
+            config.timeline.circleProps.diameter / 2
+          )
+        ) {
+          clickedIndex = index;
+        }
+      });
+
+      if (clickedIndex !== undefined) {
+        config.barrageEnded = false;
+        await app.drawFlows(clickedIndex);
+        utils.wipeAndRecreateInterestCanvas();
+        utils.drawPreviousCircles(0);
+        config.alreadyAddedInterestGroup +=
+          config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
+      }
+    };
+  } else {
+    app.p.mouseClicked = (event) => {
+      const { x, y } = event;
+      let clickedIndex;
+      const { diameter, verticalSpacing } = config.timeline.circleProps;
+      const circleVerticalSpace = verticalSpacing + diameter;
+
+      app.timeline.smallCirclePositions.forEach((positions, index) => {
+        if (
+          utils.isInsideCircle(
+            x,
+            y,
+            positions.x + circleVerticalSpace,
+            positions.y,
+            config.timeline.circleProps.diameter / 5
+          )
+        ) {
+          clickedIndex = index;
+        }
+      });
+
+      // eslint-disable-next-line no-console
+      console.log(app.timeline.smallCirclePositions[clickedIndex]);
+    };
+    app.timeline.renderUserIcon(); // On first render.
+  }
 };
 
 timeline.drawLineAboveCircle = (index, completed = false) => {
@@ -75,7 +118,6 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   const { diameter, verticalSpacing } = circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
   const p = app.p;
-
   p.textAlign(p.CENTER, p.CENTER);
   // Draw circles and text at the timeline position
   circles.forEach((circleItem, index) => {
@@ -160,53 +202,62 @@ timeline.drawCircle = (index, completed = false) => {
     );
   }
 };
-timeline.generateSmallCircles = (index, numCircles) => {
-  const position = app.timeline.circlePositions[index];
+timeline.generateSmallCircles = (index, numCircles = null) => {
+  const isNumCirclesProvided = numCircles !== null;
+  const position = config.isInteractiveMode
+    ? { x: config.mouseX, y: config.mouseY }
+    : app.timeline.circlePositions[index];
   const centerX = position.x;
   const centerY = position.y;
   const numSmallCircles =
     numCircles ?? config.timeline.circles[index].igGroupsCount ?? 0;
   const { diameter, verticalSpacing } = config.timeline.circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
-
   const smallCircleDiameter = diameter / 5;
   const p = app.igp;
-  const maxLen = numCircles
+  const maxLen = isNumCirclesProvided
     ? numCircles
     : app.timeline.smallCirclePositions.length + numSmallCircles;
+  const clusterRadius = 75;
 
-  if (!numCircles) {
+  if (isNumCirclesProvided) {
     app.timeline.smallCirclePositions = app.timeline.smallCirclePositions.map(
       (data) => {
         return {
           ...data,
-          x: data.x + circleVerticalSpace,
+          x: config.isInteractiveMode
+            ? config.mouseX + data.cosAngle
+            : data.x + Number(circleVerticalSpace),
+          y: config.isInteractiveMode
+            ? config.mouseY + data.sinAngle
+            : data.y + 0,
         };
       }
     );
   }
 
-  const alreadyAddedIgGroupCount = config.timeline.circles.reduce(
-    (acc, circle, currIndex) => {
-      if (!circle?.igGroupsCount) {
+  const alreadyAddedIgGroupCount = config.isInteractiveMode
+    ? config.alreadyAddedInterestGroup
+    : config.timeline.circles.reduce((acc, circle, currIndex) => {
+        if (!circle?.igGroupsCount) {
+          return acc;
+        }
+        if (currIndex < index) {
+          acc = acc + circle.igGroupsCount;
+          return acc;
+        }
         return acc;
-      }
-      if (currIndex < index) {
-        acc = acc + circle.igGroupsCount;
-        return acc;
-      }
-      return acc;
-    },
-    0
-  );
-  const clusterRadius = 75;
+      }, 0);
 
   // Minimum distance between circles
   const minDistance = smallCircleDiameter;
-
   for (let i = alreadyAddedIgGroupCount; i < maxLen; i++) {
     let placed = false;
-    if (numCircles) {
+    if (
+      isNumCirclesProvided &&
+      ((config.isInteractiveMode && config.barrageEnded) ||
+        !config.isInteractiveMode)
+    ) {
       const { color, x, y } = app.timeline.smallCirclePositions[i];
 
       p.push();
@@ -237,15 +288,21 @@ timeline.generateSmallCircles = (index, numCircles) => {
           break;
         }
       }
-
       if (!overlap) {
         const randomColor = p.color(
           p.random(255),
           p.random(255),
           p.random(255)
         );
-        if (!numCircles) {
-          app.timeline.smallCirclePositions.push({ x, y, color: randomColor });
+
+        if (!isNumCirclesProvided) {
+          app.timeline.smallCirclePositions.push({
+            x,
+            y,
+            color: randomColor,
+            sinAngle: p.sin(angle) * distance,
+            cosAngle: p.cos(angle) * distance,
+          });
         }
         placed = true;
       }
@@ -254,8 +311,10 @@ timeline.generateSmallCircles = (index, numCircles) => {
 };
 
 timeline.renderUserIcon = () => {
-  const circlePosition =
-    app.timeline.circlePositions[app.timeline.currentIndex];
+  const { mouseX, mouseY } = config;
+  const circlePosition = config.isInteractiveMode
+    ? { x: mouseX, y: mouseY }
+    : app.timeline.circlePositions[app.timeline.currentIndex];
 
   if (circlePosition === undefined) {
     return;

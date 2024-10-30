@@ -90,6 +90,11 @@ const config = {
     speed: 1,
     rippled: false,
   },
+  isInteractiveMode: true,
+  mouseX: 0,
+  mouseY: 0,
+  barrageEnded: true,
+  alreadyAddedInterestGroup: 0,
 };
 
 export default config;

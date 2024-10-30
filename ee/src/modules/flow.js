@@ -225,19 +225,18 @@ flow.barrageAnimation = async (index) => {
 flow.reverseBarrageAnimation = async (index) => {
   const { dspTags } = app.joinInterestGroup.joinings[index];
 
-  const alreadyAddedIgGroupCount = config.timeline.circles.reduce(
-    (acc, circle, currIndex) => {
-      if (!circle?.igGroupsCount) {
+  const alreadyAddedIgGroupCount = config.isInteractiveMode
+    ? config.alreadyAddedInterestGroup
+    : config.timeline.circles.reduce((acc, circle, currIndex) => {
+        if (!circle?.igGroupsCount) {
+          return acc;
+        }
+        if (currIndex < index) {
+          acc = acc + circle.igGroupsCount;
+          return acc;
+        }
         return acc;
-      }
-      if (currIndex < index) {
-        acc = acc + circle.igGroupsCount;
-        return acc;
-      }
-      return acc;
-    },
-    0
-  );
+      }, 0);
 
   const positionsOfCircles = [];
   app.timeline.smallCirclePositions.forEach((data, currIndex) => {
@@ -273,6 +272,10 @@ flow.reverseBarrageAnimation = async (index) => {
   );
 
   await utils.delay(500);
+
+  if (config.isInteractiveMode) {
+    config.barrageEnded = true;
+  }
 };
 
 flow.barrageAnimationCoreLogic = async (
