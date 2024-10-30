@@ -89,6 +89,11 @@ class WebpageContentScript {
   isInspecting = false;
 
   /**
+   * If true, the page is currently being inspected.
+   */
+  mode = 'Cookies';
+
+  /**
    * If true, the mouse is currently hovering over the page.
    */
   isHoveringOverPage = false;
@@ -320,6 +325,9 @@ class WebpageContentScript {
    */
   onMessage = (response: ResponseType) => {
     this.isInspecting = response.isInspecting;
+    if (response?.selectedAdUnit) {
+      this.mode = 'PA';
+    }
 
     if (response.isInspecting) {
       this.removeEventListeners();
@@ -549,6 +557,7 @@ class WebpageContentScript {
     this.port?.onMessage.removeListener(this.onMessage);
     this.port = null;
     this.abortInspection();
+    this.mode = 'Cookies';
   };
 
   /**
@@ -715,6 +724,10 @@ class WebpageContentScript {
    */
   // eslint-disable-next-line complexity
   handleHoverEvent = (event: MouseEvent) => {
+    if (this.mode === 'PA') {
+      return;
+    }
+
     const target = event.target as HTMLElement;
     const isNonIframeElement = target.tagName !== 'IFRAME';
     const isTooltipElement =

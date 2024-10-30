@@ -47,8 +47,7 @@ const AdTable = () => {
       selectedAdUnit: state.selectedAdUnit,
     }));
 
-  const { setIsInspecting, isInspecting } = useCookie(({ state, actions }) => ({
-    isInspecting: state.isInspecting,
+  const { setIsInspecting } = useCookie(({ actions }) => ({
     setIsInspecting: actions.setIsInspecting,
   }));
 
@@ -65,11 +64,11 @@ const AdTable = () => {
             onClick={() => {
               if (selectedAdUnit === info) {
                 setSelectedAdUnit(null);
+                setIsInspecting(false);
               } else {
+                setIsInspecting(true);
                 setSelectedAdUnit(info as string);
               }
-
-              setIsInspecting(!isInspecting);
             }}
           >
             <FrameIcon className="fill-[#1A73E8] min-w-5 min-h-5" />
@@ -123,7 +122,7 @@ const AdTable = () => {
         widthWeightagePercentage: 60,
       },
     ],
-    [isInspecting, setIsInspecting, setSelectedAdUnit]
+    [selectedAdUnit, setIsInspecting, setSelectedAdUnit]
   );
 
   const tableFilters = useMemo<TableFilter>(
