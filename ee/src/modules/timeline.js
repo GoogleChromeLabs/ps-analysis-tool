@@ -31,7 +31,45 @@ timeline.init = () => {
 
   app.timeline.drawTimelineLine();
   app.timeline.drawTimeline(config.timeline);
-  app.timeline.renderUserIcon(); // On first render.
+  if (config.isInteractiveMode) {
+    app.p.mouseMoved = (event) => {
+      const { x, y } = event;
+
+      config.mouseX = x;
+      config.mouseY = y;
+      app.timeline.circlePositions = [];
+      utils.wipeAndRecreateInterestCanvas();
+      utils.wipeAndRecreateUserCanvas();
+      app.timeline.drawTimelineLine();
+      app.timeline.drawTimeline(config.timeline);
+      app.timeline.renderUserIcon(x, y); // On first render.
+    };
+
+    app.p.mouseClicked = async () => {
+      const { circlePositions } = app.timeline;
+      let clickedIndex;
+
+      circlePositions.forEach((positions, index) => {
+        if (
+          utils.isInsideCircle(
+            config.mouseX,
+            config.mouseY,
+            positions.x,
+            positions.y,
+            config.timeline.circleProps.diameter / 2
+          )
+        ) {
+          clickedIndex = index;
+        }
+      });
+
+      if (clickedIndex !== undefined) {
+        await app.drawFlows(clickedIndex);
+      }
+    };
+  } else {
+    app.timeline.renderUserIcon(); // On first render.
+  }
 };
 
 timeline.drawLineAboveCircle = (index, completed = false) => {
@@ -138,7 +176,10 @@ timeline.drawCircle = (index, completed = false) => {
 };
 
 timeline.drawSmallCircles = (index, numCircles) => {
-  const position = app.timeline.circlePositions[index];
+  const { mouseX, mouseY } = config;
+  const position = config.isInteractiveMode
+    ? { x: mouseX, y: mouseY }
+    : app.timeline.circlePositions[index];
   const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
   const smallCircleRadius = smallCircleDiameter / 2;
@@ -199,8 +240,10 @@ timeline.drawSmallCircles = (index, numCircles) => {
 };
 
 timeline.renderUserIcon = () => {
-  const circlePosition =
-    app.timeline.circlePositions[app.timeline.currentIndex];
+  const { mouseX, mouseY } = config;
+  const circlePosition = config.isInteractiveMode
+    ? { x: mouseX, y: mouseY }
+    : app.timeline.circlePositions[app.timeline.currentIndex];
 
   if (circlePosition === undefined) {
     return;

@@ -40,8 +40,9 @@ app.init = (p) => {
 
   app.auction.setupAuctions();
   app.joinInterestGroup.setupJoinings();
-
-  app.play();
+  if (!config.isInteractiveMode) {
+    app.play();
+  }
 };
 
 app.setup = () => {
