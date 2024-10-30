@@ -16,3 +16,4 @@
 export * from './cookie';
 export * from './settings';
 export * from './allowedList';
+export * from './protectedAudience';
