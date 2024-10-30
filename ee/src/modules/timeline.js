@@ -152,7 +152,8 @@ timeline.drawSmallCircles = (index, numCircles) => {
     app.timeline.smallCirclePositions = [];
   }
 
-  const numSmallCircles = numCircles ?? 9;
+  const numSmallCircles =
+    numCircles ?? config.timeline.circles[index].igGroupsCount ?? 0;
   let angleStep = 360 / accomodatingCircles;
   const p = app.igp;
   const maxLen = numCircles
