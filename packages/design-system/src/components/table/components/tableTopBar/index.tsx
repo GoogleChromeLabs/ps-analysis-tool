@@ -34,6 +34,7 @@ interface TableTopBarProps {
   hideFiltering?: boolean;
   disableFiltering?: boolean;
   extraInterface?: () => React.JSX.Element;
+  hideSearch?: boolean;
 }
 
 const TableTopBar = ({
@@ -42,6 +43,7 @@ const TableTopBar = ({
   hideFiltering = false,
   disableFiltering = false,
   extraInterface,
+  hideSearch,
 }: TableTopBarProps) => {
   const { rows, searchValue, setSearchValue, exportTableData } = useTable(
     ({ state, actions }) => ({
@@ -60,7 +62,13 @@ const TableTopBar = ({
   );
 
   return (
-    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green">
+    <div
+      className={classNames(
+        'w-full px-2 flex items-center border-american-silver dark:border-quartz bg-white dark:bg-charleston-green',
+        { 'border-b': !hideFiltering },
+        hideSearch && hideFiltering ? 'h-[20px]' : 'h-[25px]'
+      )}
+    >
       {!hideFiltering && (
         <button
           className={classNames('w-3 h-3 mr-2', {
@@ -79,14 +87,18 @@ const TableTopBar = ({
           />
         </button>
       )}
-      <SearchInput
-        value={searchValue}
-        onChange={handleInput}
-        clearInput={() => {
-          setSearchValue('');
-        }}
-      />
-      <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
+      {hideSearch ? null : (
+        <>
+          <SearchInput
+            value={searchValue}
+            onChange={handleInput}
+            clearInput={() => {
+              setSearchValue('');
+            }}
+          />
+          <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
+        </>
+      )}
 
       <div className="flex gap-3 justify-center items-center h-full">
         {extraInterface?.()}
