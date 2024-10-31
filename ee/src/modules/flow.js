@@ -176,7 +176,10 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
 
 flow.barrageAnimation = async (index) => {
   const p = app.igp;
-  const position = app.timeline.circlePositions[index];
+  const { mouseX, mouseY } = config;
+  const position = config.isInteractiveMode
+    ? { x: mouseX, y: mouseY }
+    : app.timeline.circlePositions[index];
   const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
   const smallCircleRadius = smallCircleDiameter / 2;
@@ -228,10 +231,6 @@ flow.barrageAnimation = async (index) => {
       utils.wipeAndRecreateInterestCanvas();
       utils.drawPreviousCircles();
 
-      //Calculating the maximum bound of the flow box
-      const maxX = bottomFlow[0]?.box?.x + config.flow.mediumBox.width;
-      const maxY = bottomFlow[0]?.box?.y + config.flow.mediumBox.height;
-
       //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
         let { x, y } = positionsOfCircles[i];
@@ -240,7 +239,14 @@ flow.barrageAnimation = async (index) => {
         dir.normalize();
 
         //Only increment the coordinates if the the target is not reached.
-        if (!(x < maxX && x > target.x && y < maxY && y > target.y)) {
+        if (
+          !(
+            x < target.x + 4 &&
+            x > target.x - 4 &&
+            y < target.y - 4 &&
+            y > target.y + 4
+          )
+        ) {
           x += dir.x * speed;
           y += dir.y * speed;
         }
@@ -257,10 +263,10 @@ flow.barrageAnimation = async (index) => {
       if (
         positionsOfCircles.every((circle) => {
           return (
-            circle.x < maxX &&
-            circle.x > circle.target.x &&
-            circle.y < maxY &&
-            circle.y > circle.target.y
+            Math.floor(circle.x) < Math.floor(circle.target.x + 4) &&
+            Math.floor(circle.x) > Math.floor(circle.target.x - 4) &&
+            Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
+            Math.floor(circle.y) < Math.floor(circle.target.y + 4)
           );
         })
       ) {
