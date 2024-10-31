@@ -33,7 +33,7 @@ timeline.init = () => {
     const { x, y } = event;
     let clickedIndex;
 
-    app.timeline.circlePositions.forEach((positions, index) => {
+    app.timeline.smallCirclePositions.forEach((positions, index) => {
       if (
         utils.isInsideCircle(
           x,
@@ -48,7 +48,7 @@ timeline.init = () => {
     });
 
     // eslint-disable-next-line no-console
-    console.log(app.timeline.circlePositions[clickedIndex]);
+    console.log(app.timeline.smallCirclePositions[clickedIndex]);
   };
 
   app.timeline.drawTimelineLine();
