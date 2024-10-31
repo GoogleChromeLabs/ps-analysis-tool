@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * External dependencies
  */
-import React from 'react';
-import { LandingPage } from '@google-psat/design-system';
-
+import type { Protocol } from 'devtools-protocol';
 /**
- * Internal dependencies.
+ * This formats the time and returns it in a readable format
+ * @param { Protocol.Network.TimeSinceEpoch } startTime time at which the event started.
+ * @param { Protocol.Network.TimeSinceEpoch } eventTime time at which the event occured.
+ * @returns {Date} the formatted time.
  */
-import ContentPanel from './contentPanel';
-
-const Dashboard = () => {
-  return (
-    <LandingPage
-      title="Dashboard"
-      showSupportLink={true}
-      contentPanel={<ContentPanel />}
-      showQuickLinks={false}
-    />
-  );
-};
-
-export default Dashboard;
+export default function formatTime(
+  startTime: Protocol.Network.TimeSinceEpoch,
+  eventTime: Protocol.Network.TimeSinceEpoch
+) {
+  return startTime
+    ? `${((eventTime - startTime) * 1000).toFixed(2)}ms`
+    : new Date(eventTime * 1000);
+}

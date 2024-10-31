@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../../store/synchnorousCookieStore';
+import dataStore from '../../../store/dataStore';
 import { getAndParseNetworkCookies } from '../../../utils/getAndParseNetworkCookies';
 
 const setupIntervals = () => {
@@ -29,22 +29,22 @@ const setupIntervals = () => {
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
-    if (Object.keys(synchnorousCookieStore?.tabsData ?? {}).length === 0) {
+    if (Object.keys(dataStore?.tabsData ?? {}).length === 0) {
       return;
     }
 
-    Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
-      synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
+    Object.keys(dataStore?.tabsData ?? {}).forEach((key) => {
+      dataStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
   }, 1200);
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
-    if (Object.keys(synchnorousCookieStore?.tabsData ?? {}).length === 0) {
+    if (Object.keys(dataStore?.tabsData ?? {}).length === 0) {
       return;
     }
 
-    Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
+    Object.keys(dataStore?.tabsData ?? {}).forEach((key) => {
       getAndParseNetworkCookies(key);
     });
   }, 5000);

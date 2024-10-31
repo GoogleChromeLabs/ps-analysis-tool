@@ -16,30 +16,29 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
-import { LandingPage } from '@google-psat/design-system';
+import { useContextSelector } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import ContentPanel from './contentPanel';
+import Context, { type ProtectedAudienceContextType } from './context';
 
-const PrivacySandbox = () => {
-  useEffect(() => {
-    (async () => {
-      await chrome.storage.sync.set({
-        psLandingPageViewed: true,
-      });
-    })();
-  }, []);
+export function useCookie(): ProtectedAudienceContextType;
+export function useCookie<T>(
+  selector: (state: ProtectedAudienceContextType) => T
+): T;
 
-  return (
-    <LandingPage
-      title="Privacy Sandbox"
-      showSupportLink={true}
-      contentPanel={<ContentPanel />}
-    />
-  );
-};
+/**
+ * Cookie store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useCookie<T>(
+  selector: (
+    state: ProtectedAudienceContextType
+  ) => T | ProtectedAudienceContextType = (state) => state
+) {
+  return useContextSelector(Context, selector);
+}
 
-export default PrivacySandbox;
+export default useCookie;
