@@ -72,6 +72,15 @@ const TaxonomyTree = () => {
         svgGroup.dispatchEvent(clickEvent);
 
         svgGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        svgGroup.style.fill = 'orangered';
+        svgGroup.style.transition = 'fill 1s';
+
+        setTimeout(() => {
+          svgGroup.style.fill = '';
+          svgGroup.style.fontWeight = '';
+          svgGroup.style.transition = '';
+        }, 3000);
       }
     };
 
