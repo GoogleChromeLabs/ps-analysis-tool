@@ -94,7 +94,7 @@ const TaxonomyTree = () => {
   return (
     <>
       <SearchDropdown values={taxonomyArray} onSelect={nodeClickHandler} />
-      <div ref={divRef} />
+      <div className="p-4" ref={divRef} />
     </>
   );
 };

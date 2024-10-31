@@ -84,16 +84,21 @@ const SearchDropdown = ({ values, onSelect }: SearchDropdownProps) => {
   );
 
   return (
-    <div className="relative w-full max-w-md" onKeyDown={keyHandler}>
-      <SearchInput
-        value={searchTerm}
-        onChange={handleChange}
-        clearInput={() => setSearchTerm('')}
-      />
+    <div
+      className="relative w-full border-b border-american-silver dark:border-quartz px-4 py-0.5 bg-anti-flash-white dark:bg-raisin-black"
+      onKeyDown={keyHandler}
+    >
+      <div className="w-full max-w-md">
+        <SearchInput
+          value={searchTerm}
+          onChange={handleChange}
+          clearInput={() => setSearchTerm('')}
+        />
+      </div>
       {searchTerm && !closeDropdown && (
         <ul className="absolute left-0 right-0 z-10 mt-2 bg-white border border-gray-300 rounded-md shadow-lg">
           {filteredValues.length > 0 ? (
-            filteredValues.map((value, index) => (
+            filteredValues.slice(0, 5).map((value, index) => (
               <li
                 key={index}
                 className={classNames(

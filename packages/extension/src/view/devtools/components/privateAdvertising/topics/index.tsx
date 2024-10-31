@@ -61,7 +61,6 @@ const Topics = () => {
         content: {
           Element: TaxonomyTree,
           props: {},
-          className: 'p-4',
         },
       },
     ],
