@@ -332,7 +332,11 @@ class WebpageContentScript {
     if (response.isInspecting) {
       this.removeEventListeners();
       this.addEventListeners();
-      toggleFrameHighlighting(true);
+      toggleFrameHighlighting(
+        true,
+        response?.selectedAdUnit,
+        this.mode === 'PA'
+      );
       this.insertPopovers(response);
     } else {
       this.abortInspection();
@@ -668,7 +672,8 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     if (response.isForProtectedAudience) {
-      this.insertProtectedAudienceTooltip(response)?.scrollIntoView();
+      const tooltip = this.insertProtectedAudienceTooltip(response);
+      tooltip?.scrollIntoView();
       return;
     }
 
