@@ -218,14 +218,23 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
+  const onCommittedNavigationListener = useCallback(() => {
+    setNoBids({});
+    setReceivedBids([]);
+    setAdsAndBidders({});
+  }, []);
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
     return () => {
       chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.webNavigation.onCommitted.removeListener(
+        onCommittedNavigationListener
+      );
     };
-  }, [messagePassingListener]);
+  }, [messagePassingListener, onCommittedNavigationListener]);
 
   const memoisedValue: ProtectedAudienceContextType = useMemo(() => {
     return {
