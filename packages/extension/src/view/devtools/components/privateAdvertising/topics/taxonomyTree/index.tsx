@@ -59,7 +59,11 @@ const TaxonomyTree = () => {
   }, []);
 
   const nodeClickHandler = useCallback((value: string) => {
-    const clicker = (id: string) => {
+    const clicker = (id: string, nextId?: string) => {
+      if (nextId && document.getElementById(nextId)) {
+        return;
+      }
+
       const svgGroup = document.getElementById(id);
 
       if (svgGroup) {
@@ -86,8 +90,11 @@ const TaxonomyTree = () => {
 
     const nodeIds = value.split('/');
 
-    nodeIds.forEach((id) => {
-      clicker(id.trim().split(' ').join(''));
+    nodeIds.forEach((id, idx) => {
+      const _id = id.trim().split(' ').join('');
+      const nextId = nodeIds[idx + 1]?.trim().split(' ').join('');
+
+      clicker(_id, nextId);
     });
   }, []);
 
