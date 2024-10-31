@@ -190,7 +190,7 @@ flow.barrageAnimation = async (index) => {
 
   // calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.timeline.smallCirclePositions.map(
-    (originalColor, i) => {
+    (data, i) => {
       const randomX =
         position.x +
         (smallCircleRadius + mainCircleRadius) * Math.cos(i * angleStep);
@@ -213,7 +213,7 @@ flow.barrageAnimation = async (index) => {
       );
 
       // calculate the opacity of the interest group bubble which will be animated.
-      const currentColor = p.color(originalColor);
+      const currentColor = p.color(data.color);
       const color = p.color(
         p.red(currentColor),
         p.green(currentColor),

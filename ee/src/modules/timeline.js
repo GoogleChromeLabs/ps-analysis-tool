@@ -29,6 +29,28 @@ timeline.init = () => {
     }
   });
 
+  app.p.mouseClicked = (event) => {
+    const { x, y } = event;
+    let clickedIndex;
+
+    app.timeline.circlePositions.forEach((positions, index) => {
+      if (
+        utils.isInsideCircle(
+          x,
+          y,
+          positions.x,
+          positions.y,
+          config.timeline.circleProps.diameter / 5
+        )
+      ) {
+        clickedIndex = index;
+      }
+    });
+
+    // eslint-disable-next-line no-console
+    console.log(app.timeline.circlePositions[clickedIndex]);
+  };
+
   app.timeline.drawTimelineLine();
   app.timeline.drawTimeline(config.timeline);
   app.timeline.renderUserIcon(); // On first render.
@@ -138,11 +160,12 @@ timeline.drawCircle = (index, completed = false) => {
 };
 
 timeline.drawSmallCircles = (index, numCircles) => {
+  const { diameter, verticalSpacing } = config.timeline.circleProps;
   const position = app.timeline.circlePositions[index];
-  const { diameter } = config.timeline.circleProps;
   const smallCircleDiameter = diameter / 5;
   const smallCircleRadius = smallCircleDiameter / 2;
   let mainCircleRadius = config.timeline.user.width / 2;
+  const circleVerticalSpace = verticalSpacing + diameter;
 
   let accomodatingCircles = Math.round(
     (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
@@ -152,7 +175,19 @@ timeline.drawSmallCircles = (index, numCircles) => {
     app.timeline.smallCirclePositions = [];
   }
 
-  const numSmallCircles = numCircles ?? 9;
+  if (numCircles) {
+    app.timeline.smallCirclePositions = app.timeline.smallCirclePositions.map(
+      (data) => {
+        return {
+          ...data,
+          x: data.x + circleVerticalSpace,
+        };
+      }
+    );
+  }
+
+  const numSmallCircles =
+    numCircles ?? config.timeline.circles[index].igGroupsCount ?? 0;
   let angleStep = 360 / accomodatingCircles;
   const p = app.igp;
   const maxLen = numCircles
@@ -173,6 +208,15 @@ timeline.drawSmallCircles = (index, numCircles) => {
       );
       angleStep = 360 / accomodatingCircles;
     }
+    if (numCircles) {
+      app.timeline.smallCirclePositions.forEach(({ x, y, color }) => {
+        p.push();
+        p.fill(color);
+        p.circle(x, y, smallCircleDiameter);
+        p.pop();
+      });
+      return;
+    }
 
     const randomX =
       position.x +
@@ -189,10 +233,13 @@ timeline.drawSmallCircles = (index, numCircles) => {
     p.fill(numCircles ? app.timeline.smallCirclePositions[i] : randomColor);
     p.circle(randomX, randomY, smallCircleDiameter);
     totalCircles++;
-    p.pop();
 
     if (!numCircles) {
-      app.timeline.smallCirclePositions.push(randomColor);
+      app.timeline.smallCirclePositions.push({
+        x: randomX,
+        y: randomY,
+        color: randomColor,
+      });
     }
   }
 };
