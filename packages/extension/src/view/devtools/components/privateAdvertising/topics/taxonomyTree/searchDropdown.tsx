@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { SearchInput } from '@google-psat/design-system';
+import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 
 interface SearchDropdownProps {
@@ -52,8 +53,38 @@ const SearchDropdown = ({ values, onSelect }: SearchDropdownProps) => {
     [onSelect, values]
   );
 
+  const keyHandler = useCallback(
+    (
+      event:
+        | React.KeyboardEvent<HTMLInputElement>
+        | React.KeyboardEvent<HTMLDivElement>
+    ) => {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        if (filteredValues.length > 0) {
+          const index = filteredValues.findIndex(
+            (value) => value === searchTerm
+          );
+          const nextIndex = event.key === 'ArrowDown' ? index + 1 : index - 1;
+
+          if (nextIndex < 0) {
+            setSearchTerm(filteredValues[filteredValues.length - 1]);
+          } else if (nextIndex === filteredValues.length) {
+            setSearchTerm(filteredValues[0]);
+          } else {
+            setSearchTerm(filteredValues[nextIndex]);
+          }
+        }
+      } else if (event.key === 'Enter') {
+        if (searchTerm) {
+          handleSelect(searchTerm);
+        }
+      }
+    },
+    [filteredValues, handleSelect, searchTerm]
+  );
+
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative w-full max-w-md" onKeyDown={keyHandler}>
       <SearchInput
         value={searchTerm}
         onChange={handleChange}
@@ -65,7 +96,12 @@ const SearchDropdown = ({ values, onSelect }: SearchDropdownProps) => {
             filteredValues.map((value, index) => (
               <li
                 key={index}
-                className="px-2 py-1 cursor-pointer hover:bg-gray-100"
+                className={classNames(
+                  'px-2 py-1 cursor-pointer hover:bg-gray-100',
+                  {
+                    'bg-gray-200': value === searchTerm,
+                  }
+                )}
                 onClick={() => handleSelect(value)}
               >
                 {value}
