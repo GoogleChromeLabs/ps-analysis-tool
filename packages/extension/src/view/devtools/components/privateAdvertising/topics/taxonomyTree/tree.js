@@ -56,7 +56,7 @@ const Tree = async (
 
   const marginTop = 40;
   const marginRight = 10;
-  const marginBottom = 40;
+  const marginBottom = 100;
   const marginLeft = 100;
 
   const root = d3.hierarchy(data);
@@ -131,7 +131,7 @@ const Tree = async (
     const nodeEnter = node
       .enter()
       .append('g')
-      .attr('class', 'node closed')
+      .attr('id', (d) => d.data.name.split(' ').join(''))
       .attr('transform', () => `translate(${source.y0},${source.x0})`)
       .attr('fill-opacity', 0)
       .attr('stroke-opacity', 0)

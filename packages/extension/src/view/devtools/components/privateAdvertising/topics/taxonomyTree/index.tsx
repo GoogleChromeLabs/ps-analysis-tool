@@ -17,8 +17,13 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import Tree from './tree';
+import SearchDropdown from './searchDropdown';
 
 const taxonomyUrl =
   'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md';
@@ -31,10 +36,16 @@ const loadTaxonomy = async () => {
 
 const TaxonomyTree = () => {
   const divRef = useRef<HTMLDivElement>(null);
+  const [taxonomyArray, setTaxonomyArray] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
       const taxonomy = await loadTaxonomy();
+      const lines = taxonomy.trim().split('\n').slice(2);
+      const _taxonomyArray = lines.map((line) => line.split('|')[2].trim());
+
+      setTaxonomyArray(_taxonomyArray);
+
       const treeConfig = {
         width: 2000,
       };
@@ -47,8 +58,33 @@ const TaxonomyTree = () => {
     })();
   }, []);
 
+  const nodeClickHandler = useCallback((value: string) => {
+    const clicker = (id: string) => {
+      const svgGroup = document.getElementById(id);
+
+      if (svgGroup) {
+        const clickEvent = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+
+        svgGroup.dispatchEvent(clickEvent);
+
+        svgGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+
+    const nodeIds = value.split('/');
+
+    nodeIds.forEach((id) => {
+      clicker(id.trim().split(' ').join(''));
+    });
+  }, []);
+
   return (
     <>
+      <SearchDropdown values={taxonomyArray} onSelect={nodeClickHandler} />
       <div ref={divRef} />
     </>
   );
