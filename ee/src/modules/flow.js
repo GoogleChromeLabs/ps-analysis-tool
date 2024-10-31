@@ -212,10 +212,7 @@ flow.barrageAnimation = async (index) => {
     };
   });
 
-  await flow.barrageAnimationCoreLogic(
-    positionsOfCircles,
-    app.auction.auctions[index].bottomFlow
-  );
+  await flow.barrageAnimationCoreLogic(positionsOfCircles);
   await utils.delay(500);
 
   utils.wipeAndRecreateInterestCanvas();
@@ -265,22 +262,13 @@ flow.reverseBarrageAnimation = async (index) => {
     });
   });
 
-  await flow.barrageAnimationCoreLogic(
-    positionsOfCircles,
-    app.joinInterestGroup.joinings[index].dspTags,
-    true
-  );
+  await flow.barrageAnimationCoreLogic(positionsOfCircles, true);
 
   await utils.delay(500);
-
-  if (config.isInteractiveMode) {
-    config.barrageEnded = true;
-  }
 };
 
 flow.barrageAnimationCoreLogic = async (
   positionsOfCircles,
-  boundingBox,
   reverseBarrage = false
 ) => {
   const p = app.igp;
@@ -298,10 +286,6 @@ flow.barrageAnimationCoreLogic = async (
       }
       utils.drawPreviousCircles(app.timeline.currentIndex);
 
-      //Calculating the maximum bound of the flow box
-      const maxX = boundingBox[0]?.box?.x + config.flow.mediumBox.width;
-      const maxY = boundingBox[0]?.box?.y + config.flow.mediumBox.height;
-
       //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
         let { x, y } = positionsOfCircles[i];
@@ -309,23 +293,16 @@ flow.barrageAnimationCoreLogic = async (
         const dir = p5.Vector.sub(target, p.createVector(x, y));
         dir.normalize();
 
-        if (reverseBarrage) {
-          if (
-            !(
-              x < target.x + 2 &&
-              x > target.x - 2 &&
-              y < target.y - 2 &&
-              y > target.y + 2
-            )
-          ) {
-            x += dir.x * speed;
-            y += dir.y * speed;
-          }
-        } else {
-          if (!(x < maxX && x > target.x && y < maxY && y > target.y)) {
-            x += dir.x * speed;
-            y += dir.y * speed;
-          }
+        if (
+          !(
+            x < target.x + 4 &&
+            x > target.x - 4 &&
+            y < target.y - 4 &&
+            y > target.y + 4
+          )
+        ) {
+          x += dir.x * speed;
+          y += dir.y * speed;
         }
 
         p.push();
@@ -345,10 +322,10 @@ flow.barrageAnimationCoreLogic = async (
       if (
         positionsOfCircles.every((circle) => {
           return (
-            Math.floor(circle.x) < Math.floor(circle.target.x + 2) &&
-            Math.floor(circle.x) > Math.floor(circle.target.x - 2) &&
-            Math.floor(circle.y) > Math.floor(circle.target.y - 2) &&
-            Math.floor(circle.y) < Math.floor(circle.target.y + 2)
+            Math.floor(circle.x) < Math.floor(circle.target.x + 4) &&
+            Math.floor(circle.x) > Math.floor(circle.target.x - 4) &&
+            Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
+            Math.floor(circle.y) < Math.floor(circle.target.y + 4)
           );
         })
       ) {

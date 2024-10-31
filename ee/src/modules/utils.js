@@ -159,18 +159,14 @@ utils.isInsideCircle = (x, y, x0, y0, r) => {
 utils.drawPreviousCircles = (index) => {
   const p = app.igp;
   const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
-  let currentInterestGroup = 0;
 
   app.timeline.smallCirclePositions.forEach((data, currIndex) => {
     if (config.isInteractiveMode && config.barrageEnded) {
-      if (currentInterestGroup <= config.alreadyAddedInterestGroup) {
-        p.push();
-        p.noStroke();
-        p.fill(data.color);
-        p.circle(data.x, data.y, smallCircleDiameter);
-        p.pop();
-        currentInterestGroup++;
-      }
+      p.push();
+      p.noStroke();
+      p.fill(data.color);
+      p.circle(data.x, data.y, smallCircleDiameter);
+      p.pop();
     } else {
       if (currIndex < index) {
         p.push();

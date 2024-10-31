@@ -34,9 +34,9 @@ timeline.init = () => {
   if (config.isInteractiveMode) {
     app.p.mouseMoved = (event) => {
       const { x, y } = event;
-
-      config.pMouseY = config.mouseY;
-      config.pMouseX = config.mouseX;
+      if (!config.barrageEnded) {
+        return;
+      }
       config.mouseX = x;
       config.mouseY = y;
 
@@ -65,8 +65,16 @@ timeline.init = () => {
       });
 
       if (clickedIndex !== undefined) {
-        config.barrageEnded = false;
+        const { circles } = config.timeline;
+        if (circles[clickedIndex]?.igGroupsCount) {
+          config.barrageEnded = false;
+        }
+
         await app.drawFlows(clickedIndex);
+
+        if (circles[clickedIndex]?.igGroupsCount) {
+          config.barrageEnded = true;
+        }
         utils.wipeAndRecreateInterestCanvas();
         utils.drawPreviousCircles(0);
         config.alreadyAddedInterestGroup +=
@@ -259,7 +267,6 @@ timeline.generateSmallCircles = (index, numCircles = null) => {
         !config.isInteractiveMode)
     ) {
       const { color, x, y } = app.timeline.smallCirclePositions[i];
-
       p.push();
       p.noStroke();
       p.fill(color);
