@@ -61,8 +61,8 @@ const Tabs = ({ items, activeTab, setActiveTab }: TabsProps) => {
   );
 
   return (
-    <div className="max-w-2xl h-fit px-4">
-      <div className="flex gap-10 border-b border-gray-300 dark:border-quartz">
+    <div className="w-full h-fit border-b border-gray-300 dark:border-quartz">
+      <div className="flex gap-10 mx-4">
         {items.map((item, index) => (
           <button
             key={index}

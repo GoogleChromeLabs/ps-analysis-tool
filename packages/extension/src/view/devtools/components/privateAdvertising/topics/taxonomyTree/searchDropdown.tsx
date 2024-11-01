@@ -93,6 +93,7 @@ const SearchDropdown = ({ values, onSelect }: SearchDropdownProps) => {
           value={searchTerm}
           onChange={handleChange}
           clearInput={() => setSearchTerm('')}
+          placeholder="Search Topic"
         />
       </div>
       {searchTerm && !closeDropdown && (
