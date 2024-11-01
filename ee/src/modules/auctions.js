@@ -21,7 +21,8 @@ import app from '../app';
 import config from '../config';
 import utils from './utils';
 import rippleEffect from './ripple-effect';
-import box from '../components/box';
+import Box from '../components/box';
+import ProgressLine from '../components/progressLine';
 
 const auction = {};
 
@@ -33,7 +34,7 @@ auction.setupAuctions = () => {
 
 auction.setUp = (index) => {
   const { circles } = config.timeline;
-  const { box: _box, smallBox, mediumBox, lineWidth, lineHeight } = config.flow;
+  const { box, smallBox, mediumBox, lineWidth, lineHeight } = config.flow;
   const currentCircle = circles[index];
   const _auction = {};
 
@@ -48,10 +49,10 @@ auction.setUp = (index) => {
   _auction.ssp = {
     name: 'SSP',
     box: {
-      x: x - _box.width / 2,
-      y: y + _box.height / 2 + 2,
-      width: _box.width,
-      height: _box.height,
+      x: x - box.width / 2,
+      y: y + box.height / 2 + 2,
+      width: box.width,
+      height: box.height,
     },
     line: {
       x1: x,
@@ -69,24 +70,23 @@ auction.setUp = (index) => {
   for (let i = 0; i <= 1; i++) {
     const title = 'DSP ' + (i + 1);
 
-    const xForSmallBox =
-      i % 2 === 0 ? x - _box.width / 1.5 : x + _box.width / 4;
+    const xForSmallBox = i % 2 === 0 ? x - box.width / 1.5 : x + box.width / 4;
     const xForSmallBoxLine =
-      i % 2 === 0 ? x - _box.width / 2 : x + _box.width / 4;
+      i % 2 === 0 ? x - box.width / 2 : x + box.width / 4;
 
     _auction.dsp.push({
       name: title,
       box: {
         x: xForSmallBox,
-        y: y + _box.height + lineHeight * 2 + 7,
+        y: y + box.height + lineHeight * 2 + 7,
         width: smallBox.width,
         height: smallBox.height,
       },
       line: {
         x1: xForSmallBoxLine + 10,
-        y1: y + _box.height + lineHeight + 5,
+        y1: y + box.height + lineHeight + 5,
         x2: xForSmallBoxLine + 10,
-        y2: y + _box.height + lineHeight * 2,
+        y2: y + box.height + lineHeight * 2,
         speed: 0.05,
         direction: 'down',
       },
@@ -96,9 +96,9 @@ auction.setUp = (index) => {
       name: title,
       line: {
         x1: xForSmallBoxLine + 20,
-        y1: y + _box.height + lineHeight * 2 + 7,
+        y1: y + box.height + lineHeight * 2 + 7,
         x2: xForSmallBoxLine + 20,
-        y2: y + _box.height + lineHeight + 5,
+        y2: y + box.height + lineHeight + 5,
         speed: 0.05,
         direction: 'up',
         text: `$${Math.floor(Math.random() * 10) + 1}`,
@@ -114,7 +114,7 @@ auction.setUp = (index) => {
   for (let i = 0; i < mediumBoxes.length; i++) {
     const title = mediumBoxes[i];
     const boxXPosition =
-      x + _box.width / 2 + mediumBox.width * i + lineWidth * (i + 1);
+      x + box.width / 2 + mediumBox.width * i + lineWidth * (i + 1);
     const lineXPosition =
       boxXPosition - mediumBox.width + config.timeline.circleProps.diameter / 2;
 
@@ -122,15 +122,15 @@ auction.setUp = (index) => {
       name: title,
       box: {
         x: boxXPosition,
-        y: y + _box.height / 2 + mediumBox.height / 2,
+        y: y + box.height / 2 + mediumBox.height / 2,
         width: mediumBox.width,
         height: mediumBox.height,
       },
       line: {
         x1: lineXPosition,
-        y1: y + _box.height / 2 + mediumBox.height,
+        y1: y + box.height / 2 + mediumBox.height,
         x2: lineXPosition,
-        y2: y + _box.height / 2 + mediumBox.height,
+        y2: y + box.height / 2 + mediumBox.height,
         speed: 0.06,
         direction: 'right',
       },
@@ -156,19 +156,19 @@ auction.draw = async (index) => {
   };
 
   const drawLine = async (item) => {
-    await flow.progressLine(
-      item.line.x1,
-      item.line.y1,
-      item.line.x2,
-      item.line.y2,
-      item.line?.direction,
-      item.line?.text
-    );
+    await ProgressLine({
+      x1: item.line.x1,
+      y1: item.line.y1,
+      x2: item.line.x2,
+      y2: item.line.y2,
+      direction: item.line?.direction,
+      text: item.line?.text,
+    });
   };
 
   const drawBox = (item) => {
     if (item.box) {
-      box({
+      Box({
         title: item.name,
         x: item.box.x,
         y: item.box.y,

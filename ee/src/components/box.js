@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Internal dependencies.
+ */
 import app from '../app';
 
-const box = ({ title, x, y, width, height }) => {
+const Box = ({ title, x, y, width, height }) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
   app.p.rect(x, y, width, height);
   app.p.push();
@@ -26,4 +28,4 @@ const box = ({ title, x, y, width, height }) => {
   app.p.pop();
 };
 
-export default box;
+export default Box;
