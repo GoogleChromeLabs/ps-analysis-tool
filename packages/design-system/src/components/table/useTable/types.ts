@@ -16,9 +16,23 @@
 /**
  * External dependencies.
  */
-import type { CookieTableData, ErroredOutUrlsData } from '@google-psat/common';
+import type {
+  AdsAndBiddersType,
+  CookieTableData,
+  InterestGroups,
+  NoBidsType,
+  singleAuctionEvent,
+  ErroredOutUrlsData,
+} from '@google-psat/common';
 
-export type TableData = (CookieTableData | ErroredOutUrlsData) & {
+export type TableData = (
+  | CookieTableData
+  | InterestGroups
+  | singleAuctionEvent
+  | NoBidsType[keyof NoBidsType]
+  | AdsAndBiddersType[keyof AdsAndBiddersType]
+  | ErroredOutUrlsData
+) & {
   highlighted?: boolean;
 };
 
