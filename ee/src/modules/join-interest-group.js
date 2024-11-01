@@ -20,6 +20,7 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from './utils';
+import bubbles from './bubbles';
 
 const joinInterestGroup = {};
 
@@ -132,7 +133,7 @@ joinInterestGroup.draw = async (index) => {
   // Helper function to draw lines and boxes
   const drawLineAndBox = async (item) => {
     await drawLine(item);
-    await drawBox(item);
+    drawBox(item);
   };
 
   const drawLine = async (item) => {
@@ -171,6 +172,8 @@ joinInterestGroup.draw = async (index) => {
   }
 
   await drawLine(_joining.dspTags[1]);
+  bubbles.generateBubbles();
+  await bubbles.reverseBarrageAnimation(index);
 
   await utils.delay(1500);
 

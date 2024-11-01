@@ -21,6 +21,7 @@ import app from '../app';
 import config from '../config';
 import utils from './utils';
 import rippleEffect from './ripple-effect';
+import bubbles from './bubbles';
 
 const auction = {};
 
@@ -206,7 +207,7 @@ auction.draw = async (index) => {
     await drawLineAndBox(flowItem); // Sequential execution for bottom flow
     if (flowItem.name === 'runAuction()') {
       // eslint-disable-next-line no-await-in-loop
-      await flow.barrageAnimation(index);
+      await bubbles.barrageAnimation(index);
     }
     // eslint-disable-next-line no-await-in-loop
     await utils.delay(1000);

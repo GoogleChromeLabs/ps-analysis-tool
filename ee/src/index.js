@@ -29,6 +29,7 @@ import utils from './modules/utils.js';
 import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
+import bubbles from './modules/bubbles.js';
 
 app.init = (p) => {
   app.p = p;
@@ -51,6 +52,7 @@ app.setup = () => {
   app.utils = { ...app.utils, ...utils };
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
+  app.bubbles = { ...app.bubbles, ...bubbles };
 };
 
 app.interestGroupInit = (p) => {
@@ -82,6 +84,7 @@ app.setupLoop = async () => {
     app.timeline.currentIndex < config.timeline.circles.length
   ) {
     app.timeline.renderUserIcon();
+    bubbles.drawSmallCircles();
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);
     app.timeline.currentIndex++;
@@ -176,6 +179,8 @@ const interestGroupSketch = (p) => {
     overlayCanvas.parent('interest-canvas');
     overlayCanvas.style('z-index', 2);
     p.textSize(config.canvas.fontSize);
+    config.bubbles.minifiedBubbleX = 60;
+    config.bubbles.minifiedBubbleY = height - 50;
 
     (async () => {
       await app.interestGroupInit(p);

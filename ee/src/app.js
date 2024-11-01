@@ -30,6 +30,9 @@ const app = {
   flow: {
     intervals: {},
   },
+  bubbles: {
+    positions: [],
+  },
   utils: {},
   p: null,
   igp: null,
