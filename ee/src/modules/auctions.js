@@ -23,6 +23,7 @@ import utils from './utils';
 import rippleEffect from './ripple-effect';
 import Box from '../components/box';
 import ProgressLine from '../components/progressLine';
+import Branches from '../components/branches';
 
 const auction = {};
 
@@ -179,43 +180,44 @@ auction.draw = async (index) => {
   };
 
   // Draw SSP box and line
-  await drawLineAndBox(_auction.ssp);
-  await utils.delay(500);
+  // await drawLineAndBox(_auction.ssp);
+  await Branches({ x1: _auction.ssp.line.x1, y1: _auction.ssp.line.y1 });
+  await utils.delay(500000);
 
-  rippleEffect.setUp();
-  await rippleEffect.start(
-    _auction.ssp.box.x + config.flow.box.width / 2,
-    _auction.ssp.box.y + config.flow.box.height + 2
-  );
+  // rippleEffect.setUp();
+  // await rippleEffect.start(
+  //   _auction.ssp.box.x + config.flow.box.width / 2,
+  //   _auction.ssp.box.y + config.flow.box.height + 2
+  // );
 
-  // Sequentially draw DSP boxes and lines
-  const dsp = _auction.dsp;
-  await Promise.all(dsp.map((dspItem) => drawBox(dspItem)));
+  // // Sequentially draw DSP boxes and lines
+  // const dsp = _auction.dsp;
+  // await Promise.all(dsp.map((dspItem) => drawBox(dspItem)));
 
-  await utils.delay(1000);
+  // await utils.delay(1000);
 
-  for (const dspItem of dsp) {
-    // eslint-disable-next-line no-await-in-loop
-    await drawLine(dspItem); // Sequential execution for DSP items
-    // eslint-disable-next-line no-await-in-loop
-    await utils.delay(1000);
-  }
+  // for (const dspItem of dsp) {
+  //   // eslint-disable-next-line no-await-in-loop
+  //   await drawLine(dspItem); // Sequential execution for DSP items
+  //   // eslint-disable-next-line no-await-in-loop
+  //   await utils.delay(1000);
+  // }
 
-  // Sequentially draw bottom flow boxes and lines
-  const bottomFlow = _auction.bottomFlow;
-  for (const flowItem of bottomFlow) {
-    // eslint-disable-next-line no-await-in-loop
-    await drawLineAndBox(flowItem); // Sequential execution for bottom flow
-    if (flowItem.name === 'runAuction()') {
-      // eslint-disable-next-line no-await-in-loop
-      await flow.barrageAnimation(index);
-    }
-    // eslint-disable-next-line no-await-in-loop
-    await utils.delay(1000);
-  }
+  // // Sequentially draw bottom flow boxes and lines
+  // const bottomFlow = _auction.bottomFlow;
+  // for (const flowItem of bottomFlow) {
+  //   // eslint-disable-next-line no-await-in-loop
+  //   await drawLineAndBox(flowItem); // Sequential execution for bottom flow
+  //   if (flowItem.name === 'runAuction()') {
+  //     // eslint-disable-next-line no-await-in-loop
+  //     await flow.barrageAnimation(index);
+  //   }
+  //   // eslint-disable-next-line no-await-in-loop
+  //   await utils.delay(1000);
+  // }
 
-  utils.delay(1000);
-  auction.remove(index);
+  // utils.delay(1000);
+  // auction.remove(index);
 };
 
 auction.remove = (index) => {

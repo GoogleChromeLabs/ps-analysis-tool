@@ -20,6 +20,7 @@ import app from '../app';
 import config from '../config';
 
 const rippleEffect = {};
+
 rippleEffect.setUp = () => {
   config.rippleEffect.rippled = false;
   config.rippleEffect.ripples = [];

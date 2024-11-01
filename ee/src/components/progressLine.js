@@ -20,7 +20,15 @@ import config from '../config';
 import app from '../app';
 import utils from '../modules/utils';
 
-const ProgressLine = ({ x1, y1, x2, y2, direction = 'right', text = '' }) => {
+const ProgressLine = ({
+  x1,
+  y1,
+  x2,
+  y2,
+  direction = 'right',
+  text = '',
+  noArrow = false,
+}) => {
   const arrowSize = 10;
   const width = config.flow.lineWidth - arrowSize;
   const height = config.flow.lineHeight - arrowSize;
@@ -47,7 +55,9 @@ const ProgressLine = ({ x1, y1, x2, y2, direction = 'right', text = '' }) => {
         p.line(x1, y1, _x2, y2);
 
         // Draw the arrow in the correct direction
-        utils.drawArrow(arrowSize, _x2, y1, direction); // Draw new arrow
+        if (!noArrow) {
+          utils.drawArrow(arrowSize, _x2, y1, direction); // Draw new arrow
+        }
       } else if (direction === 'left') {
         __x2 = __x2 - incrementBy;
         const margin = 10;
@@ -71,7 +81,9 @@ const ProgressLine = ({ x1, y1, x2, y2, direction = 'right', text = '' }) => {
         p.line(x2, y2 + margin, __x2, y1 + margin);
 
         // Draw the arrow in the correct direction
-        utils.drawArrow(arrowSize, __x2, y1 + 4, direction); // Draw new arrow
+        if (!noArrow) {
+          utils.drawArrow(arrowSize, __x2, y1 + 4, direction); // Draw new arrow
+        }
       } else if (direction === 'down') {
         _y2 = _y2 + incrementBy;
 
@@ -98,7 +110,9 @@ const ProgressLine = ({ x1, y1, x2, y2, direction = 'right', text = '' }) => {
         p.line(x1, y1, x2, _y2);
 
         // Draw the arrow in the correct direction
-        utils.drawArrow(arrowSize, x1, _y2, direction); // Draw new arrow
+        if (!noArrow) {
+          utils.drawArrow(arrowSize, x1, _y2, direction); // Draw new arrow
+        }
       } else if (direction === 'up') {
         _y2 = _y2 - incrementBy;
         // Check if the line has reached the target length for vertical direction
