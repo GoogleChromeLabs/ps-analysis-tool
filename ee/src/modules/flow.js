@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import p5 from 'p5';
-/**
  * Internal dependencies.
  */
 import utils from './utils.js';
@@ -172,114 +168,6 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
   p.fill(config.canvas.background); // Set the fill color from the config
   p.rect(x1 + paddingLeft, topY, width, height); // Draw the rectangle
   p.pop();
-};
-
-flow.barrageAnimation = async (index) => {
-  const p = app.igp;
-  const { mouseX, mouseY } = config;
-  const position = config.isInteractiveMode
-    ? { x: mouseX, y: mouseY }
-    : app.timeline.circlePositions[index];
-  const { diameter } = config.timeline.circleProps;
-  const smallCircleDiameter = diameter / 5;
-  const smallCircleRadius = smallCircleDiameter / 2;
-  const mainCircleRadius = config.timeline.user.width / 2;
-  const accomodatingCircles = Math.round(
-    (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-  );
-  const angleStep = 360 / accomodatingCircles;
-  const { bottomFlow } = app.auction.auctions[index];
-
-  // calculate the current position of the interest group bubbles.
-  const positionsOfCircles = app.timeline.smallCirclePositions.map(
-    (data, i) => {
-      const randomX =
-        position.x +
-        (smallCircleRadius + mainCircleRadius) * Math.cos(i * angleStep);
-      const randomY =
-        position.y +
-        (smallCircleRadius + mainCircleRadius) * Math.sin(i * angleStep);
-
-      const speed = 2;
-      const width = config.flow.mediumBox.width;
-      const height = config.flow.mediumBox.height;
-
-      // calculate the target where the interest group bubbles have to land;
-      const target = p.createVector(
-        bottomFlow[0]?.box?.x +
-          Math.floor(Math.random() * (1 - width / 2 + 1)) +
-          width / 2,
-        bottomFlow[0]?.box?.y +
-          Math.floor(Math.random() * (1 - height / 2 + 1)) +
-          height / 2
-      );
-
-      // calculate the opacity of the interest group bubble which will be animated.
-      const currentColor = p.color(data.color);
-      const color = p.color(
-        p.red(currentColor),
-        p.green(currentColor),
-        p.blue(currentColor),
-        128
-      );
-      return { x: randomX, y: randomY, color, speed, target };
-    }
-  );
-
-  await new Promise((resolve) => {
-    app.flow.intervals['circleMovements'] = setInterval(() => {
-      utils.wipeAndRecreateInterestCanvas();
-      utils.drawPreviousCircles();
-
-      //Run a loop over the position of the circles to move them according to the speed.
-      for (let i = 0; i < positionsOfCircles.length; i++) {
-        let { x, y } = positionsOfCircles[i];
-        const { target, speed, color } = positionsOfCircles[i];
-        const dir = p5.Vector.sub(target, p.createVector(x, y));
-        dir.normalize();
-
-        //Only increment the coordinates if the the target is not reached.
-        if (
-          !(
-            x < target.x + 4 &&
-            x > target.x - 4 &&
-            y < target.y - 4 &&
-            y > target.y + 4
-          )
-        ) {
-          x += dir.x * speed;
-          y += dir.y * speed;
-        }
-
-        p.push();
-        p.noStroke();
-        p.fill(color);
-        p.circle(x, y, smallCircleDiameter);
-        p.pop();
-        positionsOfCircles[i] = { x, y, target, speed, color };
-      }
-
-      //Resolve if all bubbles have reached the targets.
-      if (
-        positionsOfCircles.every((circle) => {
-          return (
-            Math.floor(circle.x) < Math.floor(circle.target.x + 4) &&
-            Math.floor(circle.x) > Math.floor(circle.target.x - 4) &&
-            Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
-            Math.floor(circle.y) < Math.floor(circle.target.y + 4)
-          );
-        })
-      ) {
-        clearInterval(app.flow.intervals['circleMovements']);
-        resolve();
-      }
-    }, 10);
-  });
-
-  await utils.delay(500);
-
-  utils.wipeAndRecreateInterestCanvas();
-  utils.drawPreviousCircles();
 };
 
 export default flow;
