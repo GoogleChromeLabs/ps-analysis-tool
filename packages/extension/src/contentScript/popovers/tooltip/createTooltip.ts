@@ -31,7 +31,8 @@ import {
 } from '../../utils';
 import type { ResponseType } from '../../types';
 import createShowMoreButton from './createShowMoreButton';
-import createTooltipHTML from './createTooltipHTML';
+import createTooltipHTML, { createTooltipHTMLForPA } from './createTooltipHTML';
+import { getTooltipInfoDataForPA } from '../../utils/getTooltipInfoData';
 
 /**
  * Creates a tooltip element for an iframe overlay.
@@ -42,6 +43,7 @@ import createTooltipHTML from './createTooltipHTML';
  * @param {number} numberOfHiddenFrames - The number of hidden frames.
  * @returns {HTMLDivElement} The tooltip element containing information about the frame.
  */
+// eslint-disable-next-line complexity
 const createTooltip = (
   frame: HTMLIFrameElement | HTMLElement | null,
   data: ResponseType,
@@ -84,32 +86,39 @@ const createTooltip = (
     frame.dataset.psatInsideFrame = '';
   }
 
-  const infoData = getTooltipInfoData(
-    getFrameType(
-      isHidden,
-      insideFrame,
-      frame ? frame.tagName : I18n.getMessage('unknown')
-    ),
-    origin ?? '',
-    numberOfVisibleFrames,
-    numberOfHiddenFrames,
-    data?.firstPartyCookies || 0,
-    data?.thirdPartyCookies || 0,
-    origin
-      ? data?.isOnRWS
-        ? I18n.getMessage('yes')
-        : I18n.getMessage('no')
-      : 'N/A',
-    allowedFeatured,
-    DISPLAY_SHOW_MORE_BUTTON,
-    data?.blockedCookies || 0,
-    data?.blockedReasons || ''
-  );
+  let infoData;
+  if (data?.isForProtectedAudience) {
+    infoData = getTooltipInfoDataForPA(data);
+  } else {
+    infoData = getTooltipInfoData(
+      getFrameType(
+        isHidden,
+        insideFrame,
+        frame ? frame.tagName : I18n.getMessage('unknown')
+      ),
+      origin ?? '',
+      numberOfVisibleFrames,
+      numberOfHiddenFrames,
+      data?.firstPartyCookies || 0,
+      data?.thirdPartyCookies || 0,
+      origin
+        ? data?.isOnRWS
+          ? I18n.getMessage('yes')
+          : I18n.getMessage('no')
+        : 'N/A',
+      allowedFeatured,
+      DISPLAY_SHOW_MORE_BUTTON,
+      data?.blockedCookies || 0,
+      data?.blockedReasons || ''
+    );
+  }
 
   const info = infoData['info'];
   const infoAttribtues = infoData['attr'];
 
-  const tooltipHTML = createTooltipHTML(info, infoAttribtues);
+  const tooltipHTML = data?.isForProtectedAudience
+    ? createTooltipHTMLForPA(info)
+    : createTooltipHTML(info, infoAttribtues);
   content.appendChild(tooltipHTML);
 
   if (DISPLAY_SHOW_MORE_BUTTON) {

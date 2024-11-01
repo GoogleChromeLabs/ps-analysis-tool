@@ -62,4 +62,21 @@ const createTooltipHTML = (
   return tooltipHTML;
 };
 
+export const createTooltipHTMLForPA = (
+  info: Record<string, string>
+): HTMLElement => {
+  const tooltipHTML = document.createElement('div');
+  // eslint-disable-next-line guard-for-in
+  for (const label in info) {
+    const value = info[label];
+    const p: HTMLParagraphElement = document.createElement('p');
+
+    if (value) {
+      p.innerHTML = `<strong>${label}</strong>: <span>${value}</span>`;
+      tooltipHTML.appendChild(p);
+    }
+  }
+
+  return tooltipHTML;
+};
 export default createTooltipHTML;
