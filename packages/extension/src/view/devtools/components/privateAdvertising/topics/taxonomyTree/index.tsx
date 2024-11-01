@@ -25,22 +25,25 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Tree from './tree';
 import SearchDropdown from './searchDropdown';
 
-const taxonomyUrl =
-  'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md';
-
-const loadTaxonomy = async () => {
+const loadTaxonomy = async (taxonomyUrl: string) => {
   const response = await fetch(taxonomyUrl);
   const taxonomy = await response.text();
   return taxonomy;
 };
 
-const TaxonomyTree = () => {
+interface TaxonomyTreeProps {
+  taxonomyUrl: string;
+}
+
+const TaxonomyTree = ({ taxonomyUrl }: TaxonomyTreeProps) => {
   const divRef = useRef<HTMLDivElement>(null);
   const [taxonomyArray, setTaxonomyArray] = useState<string[]>([]);
 
   useEffect(() => {
+    const divContainer = divRef.current;
+
     (async () => {
-      const taxonomy = await loadTaxonomy();
+      const taxonomy = await loadTaxonomy(taxonomyUrl);
       const lines = taxonomy.trim().split('\n').slice(2);
       const _taxonomyArray = lines.map((line) => line.split('|')[2].trim());
 
@@ -52,11 +55,17 @@ const TaxonomyTree = () => {
 
       const chart = await Tree(taxonomy, treeConfig);
 
-      if (divRef.current) {
-        divRef.current.appendChild(chart);
+      if (divContainer) {
+        divContainer.appendChild(chart);
       }
     })();
-  }, []);
+
+    return () => {
+      if (divContainer) {
+        divContainer.innerHTML = '';
+      }
+    };
+  }, [taxonomyUrl]);
 
   const nodeClickHandler = useCallback((value: string) => {
     const clicker = (id: string, nextId?: string) => {

@@ -142,7 +142,7 @@ const Tree = async (
 
     nodeEnter
       .append('circle')
-      .attr('r', 15)
+      .attr('r', (d) => (d._children ? 15 : 0))
       .attr('fill', (d) => {
         if (!d.children && !d._children) {
           return fill;
@@ -150,8 +150,22 @@ const Tree = async (
           return '#92DCE5';
         }
       })
-      .attr('stroke-width', 3)
+      .attr('stroke-width', (d) => (d._children ? 3 : 0))
       .attr('stroke', '#197BBD');
+
+    nodeEnter
+      .append('rect')
+      .attr('x', -12.5)
+      .attr('y', -12.5)
+      .attr('width', (d) => (!d._children ? 25 : 0))
+      .attr('height', (d) => (!d._children ? 25 : 0))
+      .attr('fill', 'white')
+      .attr('stroke', '#197BBD')
+      .attr('stroke-width', 3)
+      .attr('rx', 5)
+      .attr('ry', 5)
+      .attr('stroke-linejoin', 'round')
+      .attr('style', 'pointer-events: none;');
 
     nodeEnter
       .append('title')
@@ -168,7 +182,8 @@ const Tree = async (
       .attr('stroke-width', 3)
       .attr('stroke', 'white')
       .attr('paint-order', 'stroke')
-      .attr('font-size', '1.5rem');
+      .attr('font-size', '1.5rem')
+      .attr('style', (d) => `cursor: ${d._children ? 'pointer' : 'default'}`);
 
     node
       .merge(nodeEnter)

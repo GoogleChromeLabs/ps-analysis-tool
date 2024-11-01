@@ -57,10 +57,23 @@ const Topics = () => {
         },
       },
       {
-        title: 'Taxonomy Tree',
+        title: 'Taxonomy V2',
         content: {
           Element: TaxonomyTree,
-          props: {},
+          props: {
+            taxonomyUrl:
+              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md',
+          },
+        },
+      },
+      {
+        title: 'Taxonomy V1',
+        content: {
+          Element: TaxonomyTree,
+          props: {
+            taxonomyUrl:
+              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v1.md',
+          },
         },
       },
     ],
