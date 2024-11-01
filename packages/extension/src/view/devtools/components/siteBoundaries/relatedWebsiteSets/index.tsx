@@ -23,6 +23,7 @@ import {
   PSInfoKey,
   QuickLinksList,
   Tabs,
+  type TabItems,
   useSidebar,
   type TabItems,
 } from '@google-psat/design-system';

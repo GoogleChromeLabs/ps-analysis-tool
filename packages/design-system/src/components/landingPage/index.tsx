@@ -25,6 +25,7 @@ import classNames from 'classnames';
  */
 import { ArrowUp } from '../../icons';
 import ProgressBar from '../progressBar';
+import SupportLink from './supportLink';
 import QuickLinksList from './quickLinksList';
 import { PSInfoKeyType } from './infoCard/fetchPSInfo';
 import InfoCard from './infoCard';
@@ -40,6 +41,7 @@ interface LandingPageProps {
   iframeBorderClass?: string;
   extraClasses?: string;
   showQuickLinks?: boolean;
+  showSupportLink?: boolean;
 }
 
 const LandingPage = ({
@@ -51,6 +53,7 @@ const LandingPage = ({
   extraClasses,
   contentPanel,
   showQuickLinks = true,
+  showSupportLink = false,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
@@ -67,19 +70,24 @@ const LandingPage = ({
           'divide-y divide-hex-gray dark:divide-quartz'
         )}
       >
-        <div className="p-4 flex flex-col gap-1">
-          <button
-            className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
-            onClick={() => setOpen((prevOpen) => !prevOpen)}
-          >
-            {title && <h1 className="text-left">{title}</h1>}
-            <div>
-              <ArrowUp
-                className={classNames(open && 'rotate-180 -translate-y-1')}
-              />
-            </div>
-          </button>
-          <Breadcrumbs items={extractSelectedItemKeyTitles()} />
+        <div className="flex justify-between">
+          <div className="p-4 flex flex-col gap-1">
+            <button
+              className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
+              onClick={() => setOpen((prevOpen) => !prevOpen)}
+            >
+              {title && <h1 className="text-left">{title}</h1>}
+              <div>
+                <ArrowUp
+                  className={classNames(open && 'rotate-180 -translate-y-1')}
+                />
+              </div>
+            </button>
+            <Breadcrumbs items={extractSelectedItemKeyTitles()} />
+          </div>
+          <div className="p-4 flex items-center">
+            {showSupportLink && <SupportLink />}
+          </div>
         </div>
         <div className={classNames({ hidden: !open && !children })}>
           <div

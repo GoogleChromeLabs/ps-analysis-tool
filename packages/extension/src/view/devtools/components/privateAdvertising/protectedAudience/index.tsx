@@ -27,11 +27,11 @@ import {
   type TabItems,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import classNames from 'classnames';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';

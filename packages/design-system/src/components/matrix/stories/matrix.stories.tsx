@@ -37,7 +37,7 @@ export const Primary: StoryObj<typeof meta> = {
       {
         count: 7,
         color: '#5CC971',
-        countClassName: 'text-functional',
+        countClassName: 'text-emerald',
         description:
           'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size), etc.',
         title: 'Functional',
@@ -47,7 +47,7 @@ export const Primary: StoryObj<typeof meta> = {
       {
         count: 9,
         color: '#F3AE4E',
-        countClassName: 'text-marketing',
+        countClassName: 'text-max-yellow-red',
         description:
           "They are used to track visitors across websites to gather information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
         title: 'Marketing',
@@ -57,7 +57,7 @@ export const Primary: StoryObj<typeof meta> = {
       {
         count: 2,
         color: '#4C79F4',
-        countClassName: 'text-analytics',
+        countClassName: 'text-blue-berry',
         description:
           'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
         title: 'Analytics',
@@ -67,7 +67,7 @@ export const Primary: StoryObj<typeof meta> = {
       {
         count: 23,
         color: '#EC7159',
-        countClassName: 'text-uncategorized',
+        countClassName: 'text-blue-berry',
         description:
           'We are unable to categorize certain cookies since we do not possess any relevant information about them. Nonetheless, you may visit sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
         title: 'Uncategorized',
