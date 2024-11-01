@@ -195,119 +195,6 @@ timeline.drawCircle = (index, completed = false) => {
   }
 };
 
-timeline.drawSmallCircles = (index, numCircles) => {
-  const {
-    mouseX,
-    mouseY,
-    isInteractiveMode,
-    timeline: { circles, user, circleProps },
-  } = config;
-
-  const {
-    timeline: { circlePositions },
-    igp,
-  } = app;
-
-  const position = isInteractiveMode
-    ? { x: mouseX, y: mouseY }
-    : circlePositions[index];
-
-  const { diameter, verticalSpacing } = circleProps;
-  const smallCircleDiameter = diameter / 5;
-  const smallCircleRadius = smallCircleDiameter / 2;
-  let mainCircleRadius = user.width / 2;
-  const circleVerticalSpace = verticalSpacing + diameter;
-  const numSmallCircles = numCircles ?? circles[index].igGroupsCount ?? 0;
-  let accomodatingCircles = Math.round(
-    (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-  );
-  let angleStep = 360 / accomodatingCircles;
-  const maxLen = numCircles
-    ? numCircles
-    : app.timeline.smallCirclePositions.length + numSmallCircles;
-  let totalCircles = numCircles ? 0 : app.timeline.smallCirclePositions.length;
-
-  if (!app.timeline.smallCirclePositions) {
-    app.timeline.smallCirclePositions = [];
-  }
-
-  if (numCircles && !isInteractiveMode) {
-    app.timeline.smallCirclePositions = app.timeline.smallCirclePositions.map(
-      (data) => {
-        return {
-          ...data,
-          x: data.x + circleVerticalSpace,
-        };
-      }
-    );
-  }
-
-  for (
-    let i = numCircles ? 0 : app.timeline.smallCirclePositions.length;
-    totalCircles < maxLen;
-    i++
-  ) {
-    if (i > accomodatingCircles) {
-      mainCircleRadius += smallCircleDiameter;
-      i = i - accomodatingCircles;
-      accomodatingCircles = Math.round(
-        (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-      );
-      angleStep = 360 / accomodatingCircles;
-    }
-    if (numCircles) {
-      app.timeline.smallCirclePositions.forEach(({ x, y, color }) => {
-        igp.push();
-        igp.fill(color);
-        igp.circle(x, y, smallCircleDiameter);
-        igp.pop();
-      });
-      return;
-    }
-
-    const randomX =
-      position.x +
-      (smallCircleRadius + mainCircleRadius) *
-        Math.cos(igp.radians(i * angleStep));
-    const randomY =
-      position.y +
-      (smallCircleRadius + mainCircleRadius) *
-        Math.sin(igp.radians(i * angleStep));
-    const randomColor = igp.color(
-      igp.random(255),
-      igp.random(255),
-      igp.random(255)
-    );
-    totalCircles++;
-
-    if (numCircles && isInteractiveMode) {
-      app.timeline.smallCirclePositions[i] = {
-        ...app.timeline.smallCirclePositions[i],
-        x: randomX,
-        y: randomY,
-      };
-      igp.push();
-      igp.fill(app.timeline.smallCirclePositions[i]?.color);
-      igp.circle(randomX, randomY, smallCircleDiameter);
-      igp.pop();
-      continue;
-    }
-
-    igp.push();
-    igp.noStroke();
-    igp.fill(randomColor);
-    igp.circle(randomX, randomY, smallCircleDiameter);
-
-    if (!numCircles) {
-      app.timeline.smallCirclePositions.push({
-        x: randomX,
-        y: randomY,
-        color: randomColor,
-      });
-    }
-  }
-};
-
 timeline.renderUserIcon = () => {
   const { mouseX, mouseY } = config;
   const circlePosition = config.isInteractiveMode
@@ -320,11 +207,6 @@ timeline.renderUserIcon = () => {
 
   const user = config.timeline.user;
   timeline.eraseAndRedraw();
-
-  timeline.drawSmallCircles(
-    app.timeline.currentIndex,
-    app.timeline.smallCirclePositions.length
-  );
 
   app.up.image(
     app.p.userIcon,

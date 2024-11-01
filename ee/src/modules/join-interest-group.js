@@ -20,7 +20,6 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from './utils';
-import timeline from './timeline';
 
 const joinInterestGroup = {};
 
@@ -172,8 +171,6 @@ joinInterestGroup.draw = async (index) => {
   }
 
   await drawLine(_joining.dspTags[1]);
-
-  timeline.drawSmallCircles(index);
 
   await utils.delay(1500);
 
