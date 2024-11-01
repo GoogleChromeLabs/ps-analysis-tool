@@ -256,6 +256,15 @@ timeline.drawSmallCircles = (index, numCircles) => {
       );
       angleStep = 360 / accomodatingCircles;
     }
+    if (numCircles) {
+      app.timeline.smallCirclePositions.forEach(({ x, y, color }) => {
+        igp.push();
+        igp.fill(color);
+        igp.circle(x, y, smallCircleDiameter);
+        igp.pop();
+      });
+      return;
+    }
 
     const randomX =
       position.x +
