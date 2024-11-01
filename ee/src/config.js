@@ -31,12 +31,12 @@ const config = {
       height: 30,
     },
     circles: [
-      {
-        type: 'advertiser',
-        website: 'adv1.com',
-        datetime: '2023-10-01 10:00',
-        igGroupsCount: 1,
-      },
+      // {
+      //   type: 'advertiser',
+      //   website: 'adv1.com',
+      //   datetime: '2023-10-01 10:00',
+      //   igGroupsCount: 1,
+      // },
       {
         type: 'advertiser',
         website: 'adv2.com',

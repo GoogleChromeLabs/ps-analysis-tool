@@ -34,6 +34,7 @@ const app = {
   p: null,
   igp: null,
   up: null,
+  isMultiSeller: false,
 };
 
 export default app;

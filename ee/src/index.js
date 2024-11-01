@@ -34,7 +34,7 @@ app.init = (p) => {
   app.p = p;
   app.setup();
 
-  app.handlePlayPauseButttons();
+  app.handleControls();
 
   timeline.init();
 
@@ -93,12 +93,19 @@ app.drawFlows = async (index) => {
   await app.auction.draw(index);
 };
 
-app.handlePlayPauseButttons = () => {
+app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
+  app.multSellerCheckBox = document.getElementById('multi-seller');
 
   app.playButton.addEventListener('click', app.play);
   app.pauseButton.addEventListener('click', app.pause);
+  app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
+};
+
+// Write a callback function to get the value of the checkbox.
+app.toggleMultSeller = (event) => {
+  app.isMultiSeller = event.target.checked;
 };
 
 app.calculateCanvasDimensions = () => {
