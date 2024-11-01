@@ -31,7 +31,7 @@ bubbles.init = () => {
   app.bubbles.positions = [];
 };
 
-bubbles.generateBubbles = () => {
+bubbles.generateBubbles = (recalculate = false) => {
   const igp = app.igp;
   const {
     canvas: { height, width },
@@ -42,7 +42,10 @@ bubbles.generateBubbles = () => {
       minifiedBubbleX,
       minifiedBubbleY,
       minifiedCircleDiameter,
+      interestGroupCounts,
+      expandedCircleDiameter,
     },
+    timeline: { circles },
   } = config;
 
   const x = isExpanded ? width / 2 : minifiedBubbleX;
@@ -50,17 +53,19 @@ bubbles.generateBubbles = () => {
   const calculatedMinDiameter = isExpanded ? minDiameter : minDiameter / 10;
   const calculatedMaxDiameter = isExpanded ? maxDiameter : maxDiameter / 10;
 
-  const maxBubbles = config.timeline.circles.reduce((acc, circle, index) => {
-    if (index <= app.timeline.currentIndex) {
-      acc = acc + (circle?.igGroupsCount ?? 0);
-    }
-    return acc;
-  }, 0);
+  const maxBubbles =
+    interestGroupCounts +
+    (recalculate ? 0 : circles[app.timeline.currentIndex].igGroupsCount ?? 0);
 
-  const bigRadius = minifiedCircleDiameter / 2;
+  const bigRadius =
+    (isExpanded ? expandedCircleDiameter : minifiedCircleDiameter) / 2;
   let attempts = 0;
+  let i = 0;
   while (
-    app.bubbles.positions.length < maxBubbles &&
+    // eslint-disable-next-line no-unmodified-loop-condition
+    ((app.bubbles.positions.length < maxBubbles && !recalculate) ||
+      // eslint-disable-next-line no-unmodified-loop-condition
+      (recalculate && i < maxBubbles)) &&
     attempts < maxBubbles * 10
   ) {
     const angle = igp.random(igp.TWO_PI);
@@ -72,7 +77,9 @@ bubbles.generateBubbles = () => {
       x: randomX,
       y: randomY,
       radius,
-      color: igp.color(igp.random(255), igp.random(255), igp.random(255)),
+      color: recalculate
+        ? app.bubbles.positions[i]?.color
+        : igp.color(igp.random(255), igp.random(255), igp.random(255)),
     };
 
     // Check if new bubble overlaps with any existing bubble
@@ -87,9 +94,13 @@ bubbles.generateBubbles = () => {
 
     const distToCenter = igp.dist(x, y, randomX, randomY);
     if (!overlapping && distToCenter + radius <= bigRadius) {
-      app.bubbles.positions.push(newBubble);
+      if (recalculate) {
+        app.bubbles.positions[i] = newBubble;
+      } else {
+        app.bubbles.positions.push(newBubble);
+      }
+      i++;
     }
-
     attempts++;
   }
 };
@@ -104,6 +115,7 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
       minifiedBubbleY,
       minifiedCircleDiameter,
       expandedCircleDiameter,
+      interestGroupCounts,
     },
   } = config;
 
@@ -116,19 +128,9 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
     isExpanded ? expandedCircleDiameter : minifiedCircleDiameter
   );
 
-  const bubblesBeforeCurrentIndex = config.timeline.circles.reduce(
-    (acc, circle, index) => {
-      if (index < app.timeline.currentIndex) {
-        acc = acc + (circle?.igGroupsCount ?? 0);
-      }
-      return acc;
-    },
-    0
-  );
-
   if (inBarrage) {
     app.bubbles.positions.forEach((bubble, currIndex) => {
-      if (currIndex < bubblesBeforeCurrentIndex) {
+      if (currIndex < interestGroupCounts) {
         igp.push();
         igp.fill(bubble.color);
         igp.circle(bubble.x, bubble.y, bubble.radius * 2);
@@ -142,6 +144,17 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
       igp.circle(bubble.x, bubble.y, bubble.radius * 2);
       igp.pop();
     });
+  }
+
+  if (!isExpanded) {
+    igp.push();
+    igp.stroke(0, 0, 0);
+    igp.textSize(12);
+    igp.strokeWeight(0.1);
+    igp.textFont('ui-sans-serif');
+    igp.textAlign(igp.CENTER, igp.CENTER);
+    igp.text(interestGroupCounts, x, y);
+    igp.pop();
   }
 };
 
@@ -243,7 +256,12 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const igp = app.igp;
   const {
     canvas: { height, width },
-    bubbles: { isExpanded, minifiedBubbleX, minifiedBubbleY },
+    bubbles: {
+      isExpanded,
+      minifiedBubbleX,
+      minifiedBubbleY,
+      interestGroupCounts,
+    },
     timeline: {
       circleProps: { diameter },
     },
@@ -253,19 +271,10 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const midPointX = isExpanded ? width / 2 : minifiedBubbleX;
   const midPointY = isExpanded ? height / 2 : minifiedBubbleY;
 
-  const bubblesBeforeCurrentIndex = config.timeline.circles.reduce(
-    (acc, circle, currIndex) => {
-      if (currIndex < app.timeline.currentIndex) {
-        acc = acc + (circle?.igGroupsCount ?? 0);
-      }
-      return acc;
-    },
-    0
-  );
-
   const positionsOfCircles = [];
+
   app.bubbles.positions.forEach((data, currIndex) => {
-    if (currIndex < bubblesBeforeCurrentIndex) {
+    if (currIndex < interestGroupCounts) {
       return;
     }
     const speed = 1;

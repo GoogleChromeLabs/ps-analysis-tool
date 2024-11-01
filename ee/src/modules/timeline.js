@@ -19,6 +19,7 @@
 import config from '../config';
 import app from '../app';
 import utils from './utils';
+import bubbles from './bubbles';
 
 const timeline = {};
 
@@ -75,7 +76,8 @@ timeline.init = () => {
           )
         ) {
           config.bubbles.isExpanded = true;
-          app.timeline.isPaused = true;
+          bubbles.generateBubbles(true);
+          app.pause();
         }
       }
     };
@@ -110,7 +112,8 @@ timeline.init = () => {
           )
         ) {
           config.bubbles.isExpanded = true;
-          app.timeline.isPaused = true;
+          bubbles.generateBubbles(true);
+          app.pause();
         }
       } else {
         // eslint-disable-next-line no-console

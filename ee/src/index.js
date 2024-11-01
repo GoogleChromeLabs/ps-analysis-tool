@@ -69,6 +69,12 @@ app.play = () => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
+  if (config.bubbles.isExpanded) {
+    config.bubbles.isExpanded = false;
+    utils.wipeAndRecreateInterestCanvas();
+    bubbles.generateBubbles(true);
+    bubbles.drawSmallCircles();
+  }
   app.setupLoop();
 };
 
@@ -76,6 +82,10 @@ app.pause = () => {
   app.pauseButton.classList.add('hidden');
   app.playButton.classList.remove('hidden');
   app.timeline.isPaused = true;
+  if (config.bubbles.isExpanded) {
+    bubbles.generateBubbles(true);
+    bubbles.drawSmallCircles();
+  }
 };
 
 app.setupLoop = async () => {

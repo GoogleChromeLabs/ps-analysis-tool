@@ -174,6 +174,8 @@ joinInterestGroup.draw = async (index) => {
   await drawLine(_joining.dspTags[1]);
   bubbles.generateBubbles();
   await bubbles.reverseBarrageAnimation(index);
+  config.bubbles.interestGroupCounts +=
+    config.timeline.circles[index]?.igGroupsCount ?? 0;
 
   await utils.delay(1500);
 

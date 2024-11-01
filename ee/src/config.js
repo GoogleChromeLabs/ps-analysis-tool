@@ -100,6 +100,7 @@ const config = {
     isExpanded: false,
     expandedCircleDiameter: 300,
     minifiedCircleDiameter: 50,
+    interestGroupCounts: 0,
   },
   isInteractiveMode: false,
   mouseX: 0,
