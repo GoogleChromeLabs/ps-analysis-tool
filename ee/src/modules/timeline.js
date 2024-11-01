@@ -29,8 +29,6 @@ timeline.init = () => {
     }
   });
 
-  app.timeline.drawTimeline(config.timeline);
-
   if (config.isInteractiveMode) {
     app.p.mouseMoved = (event) => {
       const { x, y } = event;
@@ -91,6 +89,7 @@ timeline.init = () => {
     };
     app.timeline.renderUserIcon(); // On first render.
   }
+  app.timeline.drawTimeline(config.timeline);
 };
 
 timeline.drawLineAboveCircle = (index, completed = false) => {
