@@ -21,6 +21,7 @@ import app from '../app';
 import config from '../config';
 import utils from './utils';
 import timeline from './timeline';
+import box from '../components/box';
 
 const joinInterestGroup = {};
 
@@ -32,7 +33,7 @@ joinInterestGroup.setupJoinings = () => {
 
 joinInterestGroup.setUp = (index) => {
   const { circles } = config.timeline;
-  const { box, smallBox, lineHeight } = config.flow;
+  const { box: _box, smallBox, lineHeight } = config.flow;
   const currentCircle = circles[index];
   const _joining = {};
 
@@ -49,10 +50,10 @@ joinInterestGroup.setUp = (index) => {
   _joining.dspTags.push({
     name: 'DSP Tag',
     box: {
-      x: x - box.width / 2,
-      y: y + box.height / 2 + 2,
-      width: box.width,
-      height: box.height,
+      x: x - _box.width / 2,
+      y: y + _box.height / 2 + 2,
+      width: _box.width,
+      height: _box.height,
     },
     line: {
       x1: x,
@@ -83,23 +84,24 @@ joinInterestGroup.setUp = (index) => {
   for (let i = 0; i <= 1; i++) {
     const title = 'DSP ' + (i + 1);
 
-    const xForSmallBox = i % 2 === 0 ? x - box.width / 1.5 : x + box.width / 4;
+    const xForSmallBox =
+      i % 2 === 0 ? x - _box.width / 1.5 : x + _box.width / 4;
     const xForSmallBoxLine =
-      i % 2 === 0 ? x - box.width / 2 : x + box.width / 4;
+      i % 2 === 0 ? x - _box.width / 2 : x + _box.width / 4;
 
     _joining.dsp.push({
       name: title,
       box: {
         x: xForSmallBox,
-        y: y + box.height + lineHeight * 2 + 7,
+        y: y + _box.height + lineHeight * 2 + 7,
         width: smallBox.width,
         height: smallBox.height,
       },
       line: {
         x1: xForSmallBoxLine + 20,
-        y1: y + box.height + lineHeight + 5,
+        y1: y + _box.height + lineHeight + 5,
         x2: xForSmallBoxLine + 20,
-        y2: y + box.height + lineHeight * 2,
+        y2: y + _box.height + lineHeight * 2,
         speed: 0.05,
         direction: 'down',
       },
@@ -109,9 +111,9 @@ joinInterestGroup.setUp = (index) => {
       name: title,
       line: {
         x1: xForSmallBoxLine + 10,
-        y1: y + box.height + lineHeight * 2 + 7,
+        y1: y + _box.height + lineHeight * 2 + 7,
         x2: xForSmallBoxLine + 10,
-        y2: y + box.height + lineHeight + 5,
+        y2: y + _box.height + lineHeight + 5,
         speed: 0.05,
         direction: 'up',
       },
@@ -149,13 +151,13 @@ joinInterestGroup.draw = async (index) => {
 
   const drawBox = (item) => {
     if (item.box) {
-      flow.createBox(
-        item.name,
-        item.box.x,
-        item.box.y,
-        item.box.width,
-        item.box.height
-      );
+      box({
+        title: item.name,
+        x: item.box.x,
+        y: item.box.y,
+        width: item.box.width,
+        height: item.box.height,
+      });
     }
   };
 

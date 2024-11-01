@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import p5 from 'p5';
+
 /**
  * Internal dependencies.
  */
@@ -25,16 +26,6 @@ import app from '../app.js';
 import config from '../config.js';
 
 const flow = {};
-
-flow.createBox = (title, x, y, width, height) => {
-  app.p.textAlign(app.p.CENTER, app.p.CENTER);
-  app.p.rect(x, y, width, height);
-  app.p.push();
-  app.p.strokeWeight(0.1);
-  app.p.textFont('ui-sans-serif');
-  app.p.text(title, x + width / 2, y + height / 2);
-  app.p.pop();
-};
 
 flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
   const arrowSize = 10;
