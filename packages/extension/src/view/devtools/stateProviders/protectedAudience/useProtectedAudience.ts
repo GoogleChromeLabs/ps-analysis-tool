@@ -23,8 +23,8 @@ import { useContextSelector } from '@google-psat/common';
  */
 import Context, { type ProtectedAudienceContextType } from './context';
 
-export function useCookie(): ProtectedAudienceContextType;
-export function useCookie<T>(
+export function useProtectedAudience(): ProtectedAudienceContextType;
+export function useProtectedAudience<T>(
   selector: (state: ProtectedAudienceContextType) => T
 ): T;
 
@@ -33,7 +33,7 @@ export function useCookie<T>(
  * @param selector Selector function to partially select state.
  * @returns selected part of the state
  */
-export function useCookie<T>(
+export function useProtectedAudience<T>(
   selector: (
     state: ProtectedAudienceContextType
   ) => T | ProtectedAudienceContextType = (state) => state
@@ -41,4 +41,4 @@ export function useCookie<T>(
   return useContextSelector(Context, selector);
 }
 
-export default useCookie;
+export default useProtectedAudience;
