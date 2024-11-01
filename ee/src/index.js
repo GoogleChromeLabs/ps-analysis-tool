@@ -136,7 +136,8 @@ app.calculateCanvasDimensions = () => {
         (circle.type === 'publisher' ? auctionBoxesWidth : interestGroupWidth)
     );
   });
-
+  config.canvas.width = maxXposition;
+  config.canvas.height = height;
   return {
     height,
     width: maxXposition,
