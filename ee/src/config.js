@@ -16,6 +16,7 @@
 const config = {
   canvas: {
     width: 700,
+    height: 500,
     background: 245,
     fontSize: 12,
   },
@@ -90,7 +91,12 @@ const config = {
     speed: 1,
     rippled: false,
   },
-  isInteractiveMode: true,
+  bubbles: {
+    minDiameter: 10,
+    maxDiameter: 30,
+    mainBubbleDiameter: 300,
+  },
+  isInteractiveMode: false,
   mouseX: 0,
   mouseY: 0,
   shouldRespondToClick: true,
