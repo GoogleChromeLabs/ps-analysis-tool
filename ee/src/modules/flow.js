@@ -23,7 +23,6 @@ import p5 from 'p5';
 import utils from './utils.js';
 import app from '../app.js';
 import config from '../config.js';
-import timeline from './timeline.js';
 
 const flow = {};
 
@@ -190,7 +189,7 @@ flow.barrageAnimation = async (index) => {
 
   // calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.timeline.smallCirclePositions.map(
-    (originalColor, i) => {
+    (data, i) => {
       const randomX =
         position.x +
         (smallCircleRadius + mainCircleRadius) * Math.cos(i * angleStep);
@@ -213,7 +212,7 @@ flow.barrageAnimation = async (index) => {
       );
 
       // calculate the opacity of the interest group bubble which will be animated.
-      const currentColor = p.color(originalColor);
+      const currentColor = p.color(data.color);
       const color = p.color(
         p.red(currentColor),
         p.green(currentColor),
@@ -227,10 +226,7 @@ flow.barrageAnimation = async (index) => {
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
       utils.wipeAndRecreateInterestCanvas();
-      timeline.drawSmallCircles(
-        app.timeline.currentIndex,
-        app.timeline.smallCirclePositions.length
-      );
+      utils.drawPreviousCircles();
 
       //Calculating the maximum bound of the flow box
       const maxX = bottomFlow[0]?.box?.x + config.flow.mediumBox.width;
@@ -277,10 +273,7 @@ flow.barrageAnimation = async (index) => {
   await utils.delay(500);
 
   utils.wipeAndRecreateInterestCanvas();
-  timeline.drawSmallCircles(
-    app.timeline.currentIndex,
-    app.timeline.smallCirclePositions.length
-  );
+  utils.drawPreviousCircles();
 };
 
 export default flow;
