@@ -60,8 +60,10 @@ timeline.init = () => {
         }
       });
 
-      if (clickedIndex !== undefined) {
+      if (clickedIndex !== undefined && config.shouldRespondToClick) {
+        config.shouldRespondToClick = false;
         await app.drawFlows(clickedIndex);
+        config.shouldRespondToClick = true;
       }
     };
   } else {
@@ -268,29 +270,25 @@ timeline.drawSmallCircles = (index, numCircles) => {
       igp.random(255),
       igp.random(255)
     );
+    totalCircles++;
 
     if (numCircles && isInteractiveMode) {
-      app.timeline.smallCirclePositions = app.timeline.smallCirclePositions.map(
-        (data) => {
-          igp.push();
-          igp.fill(data.color);
-          igp.circle(randomX, randomY, smallCircleDiameter);
-          igp.pop();
-          return {
-            ...data,
-            x: randomX,
-            y: randomY,
-          };
-        }
-      );
-      return;
+      app.timeline.smallCirclePositions[i] = {
+        ...app.timeline.smallCirclePositions[i],
+        x: randomX,
+        y: randomY,
+      };
+      igp.push();
+      igp.fill(app.timeline.smallCirclePositions[i]?.color);
+      igp.circle(randomX, randomY, smallCircleDiameter);
+      igp.pop();
+      continue;
     }
 
     igp.push();
     igp.noStroke();
-    igp.fill(numCircles ? app.timeline.smallCirclePositions[i] : randomColor);
+    igp.fill(randomColor);
     igp.circle(randomX, randomY, smallCircleDiameter);
-    totalCircles++;
 
     if (!numCircles) {
       app.timeline.smallCirclePositions.push({
