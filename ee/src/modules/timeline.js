@@ -63,6 +63,21 @@ timeline.init = () => {
         await app.drawFlows(clickedIndex);
         config.shouldRespondToClick = true;
       }
+
+      if (!clickedIndex) {
+        if (
+          utils.isInsideCircle(
+            config.mouseX,
+            config.mouseY,
+            config.bubbles.minifiedBubbleX,
+            config.bubbles.minifiedBubbleY,
+            config.bubbles.minifiedCircleDiameter / 2
+          )
+        ) {
+          config.bubbles.isExpanded = true;
+          app.timeline.isPaused = true;
+        }
+      }
     };
   } else {
     app.timeline.drawTimelineLine();
@@ -84,8 +99,23 @@ timeline.init = () => {
         }
       });
 
-      // eslint-disable-next-line no-console
-      console.log(app.timeline.smallCirclePositions[clickedIndex]);
+      if (!clickedIndex) {
+        if (
+          utils.isInsideCircle(
+            x,
+            y,
+            config.bubbles.minifiedBubbleX,
+            config.bubbles.minifiedBubbleY,
+            config.bubbles.minifiedCircleDiameter / 2
+          )
+        ) {
+          config.bubbles.isExpanded = true;
+          app.timeline.isPaused = true;
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.log(app.timeline.smallCirclePositions[clickedIndex]);
+      }
     };
     app.timeline.renderUserIcon(); // On first render.
   }
@@ -226,8 +256,6 @@ timeline.eraseAndRedraw = () => {
     timeline.drawTimelineLine();
     let i = 0;
     while (i < currentIndex) {
-      utils.wipeAndRecreateInterestCanvas();
-
       app.p.push();
       app.p.stroke(colors.visitedBlue);
       timeline.drawCircle(i, true);

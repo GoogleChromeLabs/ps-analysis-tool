@@ -45,8 +45,8 @@ bubbles.generateBubbles = () => {
     },
   } = config;
 
-  const x = isExpanded ? height / 2 : minifiedBubbleX;
-  const y = isExpanded ? width / 2 : minifiedBubbleY;
+  const x = isExpanded ? width / 2 : minifiedBubbleX;
+  const y = isExpanded ? height / 2 : minifiedBubbleY;
   const calculatedMinDiameter = isExpanded ? minDiameter : minDiameter / 10;
   const calculatedMaxDiameter = isExpanded ? maxDiameter : maxDiameter / 10;
 
@@ -106,8 +106,9 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
       expandedCircleDiameter,
     },
   } = config;
-  const x = isExpanded ? height / 2 : minifiedBubbleX;
-  const y = isExpanded ? width / 2 : minifiedBubbleY;
+
+  const x = isExpanded ? width / 2 : minifiedBubbleX;
+  const y = isExpanded ? height / 2 : minifiedBubbleY;
 
   igp.circle(
     x,
@@ -249,8 +250,8 @@ bubbles.reverseBarrageAnimation = async (index) => {
   } = config;
 
   const smallCircleDiameter = diameter / 5;
-  const midPointX = isExpanded ? height / 2 : minifiedBubbleX;
-  const midPointY = isExpanded ? width / 2 : minifiedBubbleY;
+  const midPointX = isExpanded ? width / 2 : minifiedBubbleX;
+  const midPointY = isExpanded ? height / 2 : minifiedBubbleY;
 
   const bubblesBeforeCurrentIndex = config.timeline.circles.reduce(
     (acc, circle, currIndex) => {
