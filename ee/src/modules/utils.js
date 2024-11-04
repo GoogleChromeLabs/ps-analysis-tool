@@ -152,8 +152,7 @@ utils.wipeAndRecreateUserCanvas = () => {
 };
 
 utils.isInsideCircle = (x, y, x0, y0, r) => {
-  const distance = Math.sqrt((x - x0) ** 2 + (y - y0) ** 2);
-  return distance <= r;
+  return app.p.dist(x, y, x0, y0) <= r;
 };
 
 export default utils;

@@ -90,6 +90,7 @@ timeline.init = () => {
     app.p.mouseClicked = (event) => {
       const { x, y } = event;
       let clickedIndex;
+
       if (!config.bubbles.isExpanded) {
         if (
           utils.isInsideCircle(
@@ -106,15 +107,10 @@ timeline.init = () => {
           return;
         }
       }
+
       app.bubbles.positions.forEach((positions, index) => {
         if (
-          utils.isInsideCircle(
-            x,
-            y,
-            positions.x,
-            positions.y,
-            config.timeline.circleProps.diameter / 5
-          )
+          utils.isInsideCircle(x, y, positions.x, positions.y, positions.radius)
         ) {
           clickedIndex = index;
         }

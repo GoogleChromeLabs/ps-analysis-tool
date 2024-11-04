@@ -94,11 +94,10 @@ const config = {
   bubbles: {
     minDiameter: 20,
     maxDiameter: 50,
-    mainBubbleDiameter: 300,
     minifiedBubbleX: 0,
     minifiedBubbleY: 0,
     isExpanded: false,
-    expandedCircleDiameter: 300,
+    expandedCircleDiameter: 500,
     minifiedCircleDiameter: 50,
     interestGroupCounts: 0,
   },

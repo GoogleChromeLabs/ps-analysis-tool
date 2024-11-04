@@ -31,6 +31,7 @@ bubbles.init = () => {
   app.bubbles.positions = [];
 };
 
+// eslint-disable-next-line complexity
 bubbles.generateBubbles = (recalculate = false) => {
   const igp = app.igp;
   const {
@@ -48,15 +49,30 @@ bubbles.generateBubbles = (recalculate = false) => {
 
   const x = isExpanded ? width / 2 : minifiedBubbleX;
   const y = isExpanded ? height / 2 : minifiedBubbleY;
-  const calculatedMinRadius =
-    (isExpanded ? expandedCircleDiameter / 10 : minifiedCircleDiameter / 10) /
-    2;
-  const calculatedMaxRadius =
-    (isExpanded ? expandedCircleDiameter / 5 : minifiedCircleDiameter / 5) / 2;
 
   const maxBubbles =
     interestGroupCounts +
     (recalculate ? 0 : circles[app.timeline.currentIndex].igGroupsCount ?? 0);
+
+  const expandedCircleRadius = expandedCircleDiameter / 2;
+  let accomodatingCircles =
+    (expandedCircleRadius / 2) * (expandedCircleRadius / 2);
+  let smallCircleRadius = 2;
+  while (accomodatingCircles >= maxBubbles) {
+    const tempAccomodatingCircles =
+      (expandedCircleRadius / smallCircleRadius) *
+      (expandedCircleRadius / smallCircleRadius);
+
+    if (tempAccomodatingCircles >= maxBubbles) {
+      accomodatingCircles = Math.min(
+        accomodatingCircles,
+        tempAccomodatingCircles
+      );
+      smallCircleRadius++;
+    } else {
+      break;
+    }
+  }
 
   const bigRadius =
     (isExpanded ? expandedCircleDiameter : minifiedCircleDiameter) / 2;
@@ -67,10 +83,10 @@ bubbles.generateBubbles = (recalculate = false) => {
     ((app.bubbles.positions.length < maxBubbles && !recalculate) ||
       // eslint-disable-next-line no-unmodified-loop-condition
       (recalculate && i < maxBubbles)) &&
-    attempts < maxBubbles * 10
+    attempts < maxBubbles * 10000
   ) {
     const angle = igp.random(igp.TWO_PI);
-    const radius = igp.random(calculatedMinRadius, calculatedMaxRadius);
+    const radius = isExpanded ? igp.random(10, smallCircleRadius) : 5;
     const distanceFromCenter = igp.random(bigRadius - radius);
     const randomX = x + igp.cos(angle) * distanceFromCenter;
     const randomY = y + igp.sin(angle) * distanceFromCenter;
@@ -85,11 +101,13 @@ bubbles.generateBubbles = (recalculate = false) => {
 
     // Check if new bubble overlaps with any existing bubble
     let overlapping = false;
-    for (const bubble of app.bubbles.positions) {
-      const d = igp.dist(newBubble.x, newBubble.y, bubble.x, bubble.y);
-      if (d < newBubble.radius + bubble.radius) {
-        overlapping = true;
-        break;
+    if (isExpanded) {
+      for (const bubble of app.bubbles.positions) {
+        const d = igp.dist(newBubble.x, newBubble.y, bubble.x, bubble.y);
+        if (d < newBubble.radius + bubble.radius) {
+          overlapping = true;
+          break;
+        }
       }
     }
 
