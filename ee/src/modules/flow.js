@@ -56,7 +56,7 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
         }
 
         // Draw the progressing line horizontally
-        p.line(x1, y1, _x2, y2);
+        p.line(x1, y1 + 0.5, _x2, y2 + 0.5);
 
         // Draw the arrow in the correct direction
         utils.drawArrow(arrowSize, _x2, y1, direction); // Draw new arrow
@@ -80,7 +80,7 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
         }
 
         // Draw the progressing line horizontally (left direction)
-        p.line(x2, y2 + margin, __x2, y1 + margin);
+        p.line(x2, y2 + margin + 0.5, __x2, y1 + margin + 0.5);
 
         // Draw the arrow in the correct direction
         utils.drawArrow(arrowSize, __x2, y1 + 4, direction); // Draw new arrow
@@ -107,7 +107,7 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
         }
 
         // Draw the progressing line vertically
-        p.line(x1, y1, x2, _y2);
+        p.line(Math.floor(x1) + 0.5, y1, Math.floor(x2) + 0.5, _y2);
 
         // Draw the arrow in the correct direction
         utils.drawArrow(arrowSize, x1, _y2, direction); // Draw new arrow
@@ -134,7 +134,7 @@ flow.progressLine = (x1, y1, x2, y2, direction = 'right', text = '') => {
         }
 
         // Draw the progressing line vertically
-        p.line(x1, y1, x2, _y2);
+        p.line(Math.floor(x1) + 0.5, y1, Math.floor(x2) + 0.5, _y2);
 
         // Draw the arrow in the correct direction
         utils.drawArrow(arrowSize, x1, _y2, direction); // Draw new arrow

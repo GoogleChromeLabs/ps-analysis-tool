@@ -66,7 +66,7 @@ utils.drawArrow = (size, x, y, direction = 'right') => {
   }
 
   // Clear previous one.
-  utils.triangle(size + 1, _x, _y, direction, config.canvas.background);
+  utils.triangle(size + 2, _x, _y, direction, config.canvas.background);
 
   utils.triangle(size, x, y, direction, 'black');
 };
