@@ -19,11 +19,10 @@
 import ProgressLine from './progressLine';
 import app from '../app';
 
-const leftMargin = 50; // Margin from the left side of the canvas
-let spacing; // Spacing between each branch
-let progress = 0; // Tracks the progress of the horizontal line animation
-const animationSpeed = 5; // Controls the speed of the horizontal line drawing
-let interval = null;
+const LEFT_MARGIN = 50; // Margin from the left side of the canvas
+const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
+
+let spacing, progress, interval;
 
 // @todo: Handle canvas width changes when the branches do not fit in the existing size.
 const Branches = async ({ x1, y1 }) => {
@@ -42,8 +41,10 @@ const Branches = async ({ x1, y1 }) => {
     },
   ];
 
+  progress = 0;
+  interval = null;
   const y2 = y1 + 50;
-  spacing = (app.p.width - 2 * leftMargin) / (branches.length - 1); // Calculate spacing based on canvas width
+  spacing = (app.p.width - 2 * LEFT_MARGIN) / (branches.length - 1); // Calculate spacing based on canvas width
 
   await ProgressLine({
     x1: x1,
@@ -57,7 +58,7 @@ const Branches = async ({ x1, y1 }) => {
   return new Promise((resolve) => {
     interval = setInterval(async () => {
       const coodinates = await drawAnimatedTimeline(
-        leftMargin,
+        LEFT_MARGIN,
         y2 - 9,
         branches
       );
@@ -76,7 +77,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
   return new Promise((resolve) => {
     // Draw the animated horizontal line
     if (progress < (branches.length - 1) * spacing) {
-      progress += animationSpeed; // Increase the length of the horizontal line
+      progress += ANIMATION_SPEED; // Increase the length of the horizontal line
     } else {
       clearInterval(interval);
       resolve(endpoints);
