@@ -168,6 +168,8 @@ const sketch = (p) => {
     p.userIcon = p.loadImage(icons.user);
     p.playIcon = p.loadImage(icons.play);
     p.pauseIcon = p.loadImage(icons.pause);
+    p.expandIcon = p.loadImage(icons.expand);
+
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
 };

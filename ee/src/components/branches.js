@@ -18,6 +18,7 @@
  */
 import ProgressLine from './progressLine';
 import app from '../app';
+import config from '../config';
 
 const LEFT_MARGIN = 50; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
@@ -98,8 +99,11 @@ const drawAnimatedTimeline = (x, y, branches) => {
         // Display date and time below the line
         p.noStroke();
         p.fill(0);
+        p.textSize(config.canvas.fontSize);
         p.text(`${branches[i].date}`, branchX, y + 35);
         p.text(`${branches[i].time}`, branchX, y + 50);
+
+        p.image(p.expandIcon, 100, 100, 10, 10);
 
         // Store the endpoint coordinates for each branch
         endpoints.push({ x: branchX, y: y + 50 });
