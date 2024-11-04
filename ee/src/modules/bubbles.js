@@ -162,6 +162,22 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
       igp.fill(bubble.color);
       igp.circle(bubble.x, bubble.y, bubble.radius * 2);
       igp.pop();
+
+      igp.push();
+      igp.textAlign(igp.CENTER, igp.CENTER);
+      let textToDisplay = 'bubble text';
+      const maxTextWidth = bubble.radius * 2;
+      const textSizeVal = bubble.radius * 0.5;
+      while (igp.textWidth(textToDisplay) > maxTextWidth) {
+        textToDisplay = textToDisplay.slice(0, -1);
+        if (textToDisplay.length <= 1) {
+          break;
+        }
+      }
+      igp.textSize(textSizeVal);
+      igp.fill(255);
+      igp.text(textToDisplay, bubble.x, bubble.y);
+      igp.pop();
     });
   }
 
