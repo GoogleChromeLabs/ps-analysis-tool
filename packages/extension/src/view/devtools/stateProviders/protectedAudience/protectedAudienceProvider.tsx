@@ -218,11 +218,21 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
-  const onCommittedNavigationListener = useCallback(() => {
-    setNoBids({});
-    setReceivedBids([]);
-    setAdsAndBidders({});
-  }, []);
+  const onCommittedNavigationListener = useCallback(
+    ({
+      frameId,
+      frameType,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameType !== 'outermost_frame' && frameId !== 0) {
+        return;
+      }
+
+      setNoBids({});
+      setReceivedBids([]);
+      setAdsAndBidders({});
+    },
+    []
+  );
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(messagePassingListener);
