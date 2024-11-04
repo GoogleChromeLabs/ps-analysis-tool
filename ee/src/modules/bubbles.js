@@ -167,7 +167,7 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
 
   if (!isExpanded) {
     igp.push();
-    igp.stroke(0, 0, 0);
+    igp.fill(interestGroupCounts < 10 ? 0 : 255);
     igp.textSize(14);
     igp.strokeWeight(1);
     igp.textFont('ui-sans-serif');
@@ -208,7 +208,7 @@ bubbles.barrageAnimation = async (index) => {
       p.red(currentColor),
       p.green(currentColor),
       p.blue(currentColor),
-      128
+      200
     );
 
     return { x: minifiedBubbleX, y: minifiedBubbleY, color, speed, target };
