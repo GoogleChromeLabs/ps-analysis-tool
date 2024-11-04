@@ -124,7 +124,7 @@ timeline.init = () => {
         console.log(app.bubbles.positions[clickedIndex]);
       }
     };
-    app.timeline.renderUserIcon(); // On first render.
+    app.timeline.renderUserIcon();
   }
   app.timeline.drawTimeline(config.timeline);
 };
