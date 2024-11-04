@@ -25,6 +25,7 @@ let progress = 0; // Tracks the progress of the horizontal line animation
 const animationSpeed = 5; // Controls the speed of the horizontal line drawing
 let interval = null;
 
+// @todo: Handle canvas width changes when the branches do not fit in the existing size.
 const Branches = async ({ x1, y1 }) => {
   const branches = [
     {
@@ -53,13 +54,22 @@ const Branches = async ({ x1, y1 }) => {
     noArrow: true,
   });
 
-  interval = setInterval(async () => {
-    await drawAnimatedTimeline(leftMargin, y2 - 9, branches);
-  }, 20);
+  return new Promise((resolve) => {
+    interval = setInterval(async () => {
+      const coodinates = await drawAnimatedTimeline(
+        leftMargin,
+        y2 - 9,
+        branches
+      );
+      resolve(coodinates);
+    }, 20);
+  });
 };
 
 const drawAnimatedTimeline = (x, y, branches) => {
+  const endpoints = [];
   const p = app.p;
+
   p.stroke(0);
   p.strokeWeight(1);
 
@@ -68,9 +78,10 @@ const drawAnimatedTimeline = (x, y, branches) => {
     if (progress < (branches.length - 1) * spacing) {
       progress += animationSpeed; // Increase the length of the horizontal line
     } else {
-      resolve(true);
       clearInterval(interval);
+      resolve(endpoints);
     }
+
     p.line(x, y, x + progress, y);
 
     // Draw each vertical line and label when the horizontal line reaches its position
@@ -88,8 +99,13 @@ const drawAnimatedTimeline = (x, y, branches) => {
         p.fill(0);
         p.text(`${branches[i].date}`, branchX, y + 35);
         p.text(`${branches[i].time}`, branchX, y + 50);
+
+        // Store the endpoint coordinates for each branch
+        endpoints.push({ x: branchX, y: y + 50 });
       }
     }
+
+    return endpoints;
   });
 };
 
