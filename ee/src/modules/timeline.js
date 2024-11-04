@@ -90,7 +90,22 @@ timeline.init = () => {
     app.p.mouseClicked = (event) => {
       const { x, y } = event;
       let clickedIndex;
-
+      if (!config.bubbles.isExpanded) {
+        if (
+          utils.isInsideCircle(
+            x,
+            y,
+            config.bubbles.minifiedBubbleX,
+            config.bubbles.minifiedBubbleY,
+            config.bubbles.minifiedCircleDiameter / 2
+          )
+        ) {
+          config.bubbles.isExpanded = true;
+          bubbles.generateBubbles(true);
+          app.pause();
+          return;
+        }
+      }
       app.bubbles.positions.forEach((positions, index) => {
         if (
           utils.isInsideCircle(
@@ -105,24 +120,8 @@ timeline.init = () => {
         }
       });
 
-      if (!clickedIndex) {
-        if (
-          utils.isInsideCircle(
-            x,
-            y,
-            config.bubbles.minifiedBubbleX,
-            config.bubbles.minifiedBubbleY,
-            config.bubbles.minifiedCircleDiameter / 2
-          )
-        ) {
-          config.bubbles.isExpanded = true;
-          bubbles.generateBubbles(true);
-          app.pause();
-        }
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(app.bubbles.positions[clickedIndex]);
-      }
+      // eslint-disable-next-line no-console
+      console.log(app.bubbles.positions[clickedIndex]);
     };
     app.timeline.renderUserIcon();
   }
