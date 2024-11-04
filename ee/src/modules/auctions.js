@@ -46,6 +46,33 @@ auction.setUp = (index) => {
     return;
   }
 
+  const steps = [];
+
+  // Setup Branches
+  steps.push({
+    component: 'Branches',
+    props: {
+      branches: [
+        {
+          date: '2024-10-02',
+          time: '10:00:22PM',
+        },
+        {
+          date: '2024-10-03',
+          time: '11:00:22PM',
+        },
+        {
+          date: '2024-10-03',
+          time: '11:00:22PM',
+        },
+      ],
+    },
+  });
+
+  steps.push({
+    component: 'ProgressLine',
+  });
+
   // Setup DSP blocks
   _auction.ssp = {
     name: 'SSP',

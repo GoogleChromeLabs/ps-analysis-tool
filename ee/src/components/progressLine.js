@@ -20,129 +20,133 @@ import config from '../config';
 import app from '../app';
 import utils from '../modules/utils';
 
+const ARROW_SIZE = 10;
+
 const ProgressLine = ({
   x1,
   y1,
-  x2,
-  y2,
   direction = 'right',
   text = '',
   noArrow = false,
 }) => {
-  const arrowSize = 10;
-  const width = config.flow.lineWidth - arrowSize;
-  const height = config.flow.lineHeight - arrowSize;
-  const incrementBy = 1;
+  const width = config.flow.lineWidth - ARROW_SIZE;
+  const height = config.flow.lineHeight - ARROW_SIZE;
+  const incrementBy = 1; // @todo Use it to control speed.
   const p = app.p;
+  const { x2, y2 } = getEndpointCoordinates(x1, y1, direction);
 
-  let _x2 = x1; // For horizontal directions
-  let _y2 = y1; // For vertical direction
-  let __x2 = x2;
+  let currentX = x1; // For horizontal directions
+  let currentY = y1; // For vertical directions
+  let targetX = x2;
+
+  const drawText = (x, y) => {
+    if (text) {
+      p.push();
+      p.strokeWeight(0.1);
+      p.textSize(config.canvas.fontSize - 2);
+      p.textFont('ui-sans-serif');
+      p.text(text, x, y);
+      p.pop();
+    }
+  };
+
+  const drawArrow = (x, y, dir) => {
+    if (!noArrow) {
+      utils.drawArrow(ARROW_SIZE, x, y, dir);
+    }
+  };
 
   return new Promise((resolve) => {
     app.flow.intervals['progressline'] = setInterval(() => {
-      // Check the direction and adjust the respective coordinate
-      if (direction === 'right') {
-        _x2 = _x2 + incrementBy;
-
-        // Check if the line has reached the target length for horizontal direction
-        if (_x2 - x1 > width) {
-          clearInterval(app.flow.intervals['progressline']);
-          resolve(); // Resolve the promise once the interval is cleared
-        }
-
-        // Draw the progressing line horizontally
-        p.line(x1, y1, _x2, y2);
-
-        // Draw the arrow in the correct direction
-        if (!noArrow) {
-          utils.drawArrow(arrowSize, _x2, y1, direction); // Draw new arrow
-        }
-      } else if (direction === 'left') {
-        __x2 = __x2 - incrementBy;
-        const margin = 10;
-
-        if (x2 - __x2 > width) {
-          clearInterval(app.flow.intervals['progressline']);
-
-          if (text) {
-            p.push();
-            p.strokeWeight(0.1);
-            p.textSize(config.canvas.fontSize - 2);
-            p.textFont('ui-sans-serif');
-            p.text(text, __x2 + width / 2, y1 + height / 2);
-            p.pop();
+      switch (direction) {
+        case 'right':
+          currentX += incrementBy;
+          if (currentX - x1 > width) {
+            clearInterval(app.flow.intervals['progressline']);
+            resolve();
           }
+          p.line(x1, y1, currentX, y2);
+          drawArrow(currentX, y1, direction);
+          break;
 
-          resolve(); // Resolve the promise once the interval is cleared
-        }
+        case 'left':
+          targetX -= incrementBy;
+          if (x2 - targetX > width) {
+            clearInterval(app.flow.intervals['progressline']);
+            drawText(targetX + width / 2, y1 + height / 2);
+            resolve();
+          }
+          p.line(x2, y2 + 10, targetX, y1 + 10);
+          drawArrow(targetX, y1 + 4, direction);
+          break;
 
-        // Draw the progressing line horizontally (left direction)
-        p.line(x2, y2 + margin, __x2, y1 + margin);
-
-        // Draw the arrow in the correct direction
-        if (!noArrow) {
-          utils.drawArrow(arrowSize, __x2, y1 + 4, direction); // Draw new arrow
-        }
-      } else if (direction === 'down') {
-        _y2 = _y2 + incrementBy;
-
-        // Check if the line has reached the target length for vertical direction
-        if (_y2 - y1 > height) {
-          clearInterval(app.flow.intervals['progressline']);
-
-          if (text) {
-            p.push();
-            p.strokeWeight(0.1);
-            p.textSize(config.canvas.fontSize - 2);
-            p.textFont('ui-sans-serif');
-            p.text(
-              text,
+        case 'down':
+          currentY += incrementBy;
+          if (currentY - y1 > height) {
+            clearInterval(app.flow.intervals['progressline']);
+            drawText(
               x1 - (text.startsWith('$') ? 10 : width / 2),
               y1 + height / 2
             );
-            p.pop();
+            resolve();
           }
-          resolve(); // Resolve the promise once the interval is cleared
-        }
+          p.line(x1, y1, x2, currentY);
+          drawArrow(x1, currentY, direction);
+          break;
 
-        // Draw the progressing line vertically
-        p.line(x1, y1, x2, _y2);
-
-        // Draw the arrow in the correct direction
-        if (!noArrow) {
-          utils.drawArrow(arrowSize, x1, _y2, direction); // Draw new arrow
-        }
-      } else if (direction === 'up') {
-        _y2 = _y2 - incrementBy;
-        // Check if the line has reached the target length for vertical direction
-        if (y1 - _y2 > height) {
-          clearInterval(app.flow.intervals['progressline']);
-
-          if (text) {
-            p.push();
-            p.strokeWeight(0.1);
-            p.textSize(config.canvas.fontSize - 2);
-            p.textFont('ui-sans-serif');
-            p.text(
-              text,
+        case 'up':
+          currentY -= incrementBy;
+          if (y1 - currentY > height) {
+            clearInterval(app.flow.intervals['progressline']);
+            drawText(
               x1 + (text.startsWith('$') ? 10 : width / 2),
               y1 - height / 2
             );
-            p.pop();
+            resolve();
           }
+          p.line(x1, y1, x2, currentY);
+          drawArrow(x1, currentY, direction);
+          break;
 
-          resolve(); // Resolve the promise once the interval is cleared
-        }
-
-        // Draw the progressing line vertically
-        p.line(x1, y1, x2, _y2);
-
-        // Draw the arrow in the correct direction
-        utils.drawArrow(arrowSize, x1, _y2, direction); // Draw new arrow
+        default:
+          clearInterval(app.flow.intervals['progressline']);
+          throw new Error(`Invalid direction: ${direction}`);
       }
     }, 10);
   });
+};
+
+/**
+ * Calculates the endpoint coordinates based on the given direction.
+ * @param {number} x1 - The starting x-coordinate.
+ * @param {number} y1 - The starting y-coordinate.
+ * @param {string} direction - The direction of the line ('down', 'right', 'left', 'up').
+ * @returns {{x2: number, y2: number}} The endpoint coordinates.
+ */
+const getEndpointCoordinates = (x1, y1, direction) => {
+  const { lineHeight, lineWidth } = config.flow;
+  let x2 = x1;
+  let y2 = y1;
+
+  switch (direction) {
+    case 'down':
+      y2 += lineHeight;
+      break;
+    case 'right':
+      x2 += lineWidth;
+      break;
+    case 'left':
+      x2 -= lineWidth;
+      x2 = x2 < lineWidth ? lineWidth : x2;
+      break;
+    case 'up':
+      y2 -= lineHeight;
+      break;
+    default:
+      throw new Error(`Invalid direction: ${direction}`);
+  }
+
+  return { x2, y2 };
 };
 
 export default ProgressLine;

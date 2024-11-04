@@ -27,27 +27,30 @@ let spacing, progress, interval, renderedBranchIds;
 
 // @todo: Handle canvas width changes when the branches do not fit in the existing size.
 const Branches = async ({ x1, y1 }) => {
-  const branches = [
+  let branches = [
     {
       date: '2024-10-02',
       time: '10:00:22PM',
-      id: '1', // To prevent duplicate rendering
     },
     {
       date: '2024-10-03',
       time: '11:00:22PM',
-      id: '2',
     },
     {
       date: '2024-10-03',
       time: '11:00:22PM',
-      id: '3',
     },
   ];
+
+  branches = branches.map((branch, index) => ({
+    ...branch,
+    id: index, // To prevent duplicate rendering
+  }));
 
   progress = 0;
   interval = null;
   renderedBranchIds = [];
+
   const y2 = y1 + 50;
   spacing = (app.p.width - 2 * LEFT_MARGIN) / (branches.length - 1); // Calculate spacing based on canvas width
 
