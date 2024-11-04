@@ -23,7 +23,7 @@ import config from '../config';
 const LEFT_MARGIN = 50; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
 
-let spacing, progress, interval;
+let spacing, progress, interval, renderedBranchIds;
 
 // @todo: Handle canvas width changes when the branches do not fit in the existing size.
 const Branches = async ({ x1, y1 }) => {
@@ -31,19 +31,23 @@ const Branches = async ({ x1, y1 }) => {
     {
       date: '2024-10-02',
       time: '10:00:22PM',
+      id: '1', // To prevent duplicate rendering
     },
     {
       date: '2024-10-03',
       time: '11:00:22PM',
+      id: '2',
     },
     {
       date: '2024-10-03',
       time: '11:00:22PM',
+      id: '3',
     },
   ];
 
   progress = 0;
   interval = null;
+  renderedBranchIds = [];
   const y2 = y1 + 50;
   spacing = (app.p.width - 2 * LEFT_MARGIN) / (branches.length - 1); // Calculate spacing based on canvas width
 
@@ -91,7 +95,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
       const branchX = x + i * spacing;
       const expandIconSize = 20;
 
-      if (progress >= i * spacing) {
+      if (progress >= i * spacing && !(branches[i].id in renderedBranchIds)) {
         // Start drawing each vertical line once the horizontal line reaches it
         // Draw vertical line fully
         p.stroke(0);
@@ -114,6 +118,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
 
         // Store the endpoint coordinates for each branch
         endpoints.push({ x: branchX, y: y + 50 });
+        renderedBranchIds.push(branches[i].id);
       }
     }
 
