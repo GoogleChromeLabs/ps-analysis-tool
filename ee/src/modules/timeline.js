@@ -36,9 +36,12 @@ timeline.init = () => {
 
       config.mouseX = x;
       config.mouseY = y;
-      utils.wipeAndRecreateInterestCanvas();
+      if (config.shouldRespondToClick) {
+        utils.wipeAndRecreateInterestCanvas();
+        bubbles.drawSmallCircles();
+      }
       utils.wipeAndRecreateUserCanvas();
-      timeline.renderUserIcon(x, y); // On first render.
+      timeline.renderUserIcon(x, y);
     };
 
     app.p.mouseClicked = async () => {
@@ -63,6 +66,7 @@ timeline.init = () => {
         config.shouldRespondToClick = false;
         await app.drawFlows(clickedIndex);
         config.shouldRespondToClick = true;
+        bubbles.drawSmallCircles();
       }
 
       if (!clickedIndex) {
@@ -87,7 +91,7 @@ timeline.init = () => {
       const { x, y } = event;
       let clickedIndex;
 
-      app.timeline.smallCirclePositions.forEach((positions, index) => {
+      app.bubbles.positions.forEach((positions, index) => {
         if (
           utils.isInsideCircle(
             x,
@@ -117,7 +121,7 @@ timeline.init = () => {
         }
       } else {
         // eslint-disable-next-line no-console
-        console.log(app.timeline.smallCirclePositions[clickedIndex]);
+        console.log(app.bubbles.positions[clickedIndex]);
       }
     };
     app.timeline.renderUserIcon(); // On first render.

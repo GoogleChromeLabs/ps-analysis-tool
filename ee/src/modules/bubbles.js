@@ -36,8 +36,6 @@ bubbles.generateBubbles = (recalculate = false) => {
   const {
     canvas: { height, width },
     bubbles: {
-      minDiameter,
-      maxDiameter,
       isExpanded,
       minifiedBubbleX,
       minifiedBubbleY,
@@ -50,8 +48,11 @@ bubbles.generateBubbles = (recalculate = false) => {
 
   const x = isExpanded ? width / 2 : minifiedBubbleX;
   const y = isExpanded ? height / 2 : minifiedBubbleY;
-  const calculatedMinDiameter = isExpanded ? minDiameter : minDiameter / 10;
-  const calculatedMaxDiameter = isExpanded ? maxDiameter : maxDiameter / 10;
+  const calculatedMinRadius =
+    (isExpanded ? expandedCircleDiameter / 10 : minifiedCircleDiameter / 10) /
+    2;
+  const calculatedMaxRadius =
+    (isExpanded ? expandedCircleDiameter / 5 : minifiedCircleDiameter / 5) / 2;
 
   const maxBubbles =
     interestGroupCounts +
@@ -69,7 +70,7 @@ bubbles.generateBubbles = (recalculate = false) => {
     attempts < maxBubbles * 10
   ) {
     const angle = igp.random(igp.TWO_PI);
-    const radius = igp.random(calculatedMinDiameter, calculatedMaxDiameter);
+    const radius = igp.random(calculatedMinRadius, calculatedMaxRadius);
     const distanceFromCenter = igp.random(bigRadius - radius);
     const randomX = x + igp.cos(angle) * distanceFromCenter;
     const randomY = y + igp.sin(angle) * distanceFromCenter;
@@ -149,8 +150,8 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
   if (!isExpanded) {
     igp.push();
     igp.stroke(0, 0, 0);
-    igp.textSize(12);
-    igp.strokeWeight(0.1);
+    igp.textSize(14);
+    igp.strokeWeight(1);
     igp.textFont('ui-sans-serif');
     igp.textAlign(igp.CENTER, igp.CENTER);
     igp.text(interestGroupCounts, x, y);
@@ -352,8 +353,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
       }
     }, 10);
   });
-
-  await utils.delay(500);
 
   utils.wipeAndRecreateInterestCanvas();
   bubbles.drawSmallCircles();
