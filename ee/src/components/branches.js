@@ -89,6 +89,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
     // Draw each vertical line and label when the horizontal line reaches its position
     for (let i = 0; i < branches.length; i++) {
       const branchX = x + i * spacing;
+      const expandIconSize = 20;
 
       if (progress >= i * spacing) {
         // Start drawing each vertical line once the horizontal line reaches it
@@ -103,7 +104,13 @@ const drawAnimatedTimeline = (x, y, branches) => {
         p.text(`${branches[i].date}`, branchX, y + 35);
         p.text(`${branches[i].time}`, branchX, y + 50);
 
-        p.image(p.expandIcon, 100, 100, 10, 10);
+        p.image(
+          p.expandIcon,
+          branchX - expandIconSize / 2,
+          y + 65,
+          expandIconSize,
+          expandIconSize
+        );
 
         // Store the endpoint coordinates for each branch
         endpoints.push({ x: branchX, y: y + 50 });
