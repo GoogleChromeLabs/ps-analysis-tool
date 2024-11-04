@@ -182,9 +182,6 @@ bubbles.barrageAnimation = async (index) => {
   const { diameter } = config.timeline.circleProps;
   const { bottomFlow } = app.auction.auctions[index];
   const smallCircleDiameter = diameter / 5;
-  const {
-    bubbles: { minifiedBubbleX, minifiedBubbleY },
-  } = config;
 
   // calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.bubbles.positions.map((data) => {
@@ -211,7 +208,7 @@ bubbles.barrageAnimation = async (index) => {
       200
     );
 
-    return { x: minifiedBubbleX, y: minifiedBubbleY, color, speed, target };
+    return { x: data.x, y: data.y, color, speed, target };
   });
 
   await new Promise((resolve) => {
