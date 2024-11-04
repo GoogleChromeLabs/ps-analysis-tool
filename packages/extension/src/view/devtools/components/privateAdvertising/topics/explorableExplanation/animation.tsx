@@ -18,21 +18,33 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
-import { p5Setup } from './p5';
 import p5 from 'p5';
 
-const Animation = () => {
+/**
+ * Internal dependencies.
+ */
+import { topicsAnimation } from './topicsAnimation';
+
+interface AnimationProps {
+  epoch: { datetime: string; website: string; topics: string[] }[];
+}
+
+const Animation = ({ epoch }: AnimationProps) => {
   const node = useRef(null);
 
   useEffect(() => {
-    const p = node.current ? new p5(p5Setup, node.current) : null;
+    const tAnimation = (p: p5) => {
+      topicsAnimation(p, epoch);
+    };
+
+    const p = node.current ? new p5(tAnimation, node.current) : null;
 
     return () => {
       p?.remove();
     };
-  }, []);
+  }, [epoch]);
 
-  return <div ref={node} />;
+  return <div ref={node} className="overflow-auto" />;
 };
 
 export default Animation;

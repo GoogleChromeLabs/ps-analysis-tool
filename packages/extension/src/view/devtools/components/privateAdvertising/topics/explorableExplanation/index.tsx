@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 
@@ -27,11 +27,15 @@ import { noop } from '@google-psat/common';
 import Header from '../../../explorableExplanation/header';
 import Tray from './tray';
 import Animation from './animation';
+import { createEpochs } from './topicsAnimation/utils';
 
 const ExplorableExplanation = () => {
   const [play, setPlay] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const historyCount = 10;
+
+  const epochs = useMemo(() => createEpochs(), []);
 
   return (
     <div className="flex flex-col h-full">
@@ -44,7 +48,7 @@ const ExplorableExplanation = () => {
         reset={noop}
       />
       <div className="flex-1">
-        <Animation />
+        <Animation epoch={epochs[activeTab].webVisits} />
       </div>
       <Resizable
         defaultSize={{
@@ -58,7 +62,7 @@ const ExplorableExplanation = () => {
         }}
         className="h-full flex"
       >
-        <Tray />
+        <Tray activeTab={activeTab} setActiveTab={setActiveTab} />
       </Resizable>
     </div>
   );
