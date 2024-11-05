@@ -85,10 +85,7 @@ export function topicsAnimation(
       }
 
       app.handleUserVisit(app.visitIndex);
-
-      if (app.visitIndex < epoch.length - 1) {
-        app.visitIndex++;
-      }
+      app.visitIndex++;
     },
 
     handleUserVisit: (visitIndex: number) => {
@@ -102,6 +99,7 @@ export function topicsAnimation(
 
       if (visitIndex > 0) {
         app.drawCircle(visitIndex - 1);
+        app.resetInfoBox(visitIndex - 1);
       }
 
       p.image(
@@ -114,6 +112,8 @@ export function topicsAnimation(
 
       const currentCircle = epoch[visitIndex];
       const currentSite = currentCircle.website;
+
+      app.drawInfoBox(visitIndex, currentSite);
 
       app.drawSmallCircles(visitIndex, currentSite);
     },
@@ -161,6 +161,82 @@ export function topicsAnimation(
         p.pop();
       }
     },
+
+    drawInfoBox: (index: number, currentSite: string) => {
+      const position = app.circlePositions[index];
+      const topics = epoch[index].topics;
+      const { diameter } = config.timeline.circleProps;
+
+      p.push();
+      p.rectMode(p.CENTER);
+      p.fill(245);
+      p.stroke(255);
+      p.rect(
+        position.x,
+        position.y + diameter / 2 + 150,
+        300,
+        200,
+        10,
+        10,
+        10,
+        10
+      );
+
+      p.fill(0);
+      p.textSize(16);
+      p.textAlign(p.LEFT, p.CENTER);
+      p.textStyle(p.BOLD);
+      p.text('Topics:', position.x - 125, position.y + diameter / 2 + 90);
+      p.textStyle(p.NORMAL);
+      p.text(
+        topics.join(', '),
+        position.x - 60,
+        position.y + diameter / 2 + 90
+      );
+
+      const adTechs = app.siteAdTechs[currentSite];
+      const numAdTechs = adTechs.length;
+
+      p.textStyle(p.BOLD);
+      p.text(
+        'Observed-by context domains:',
+        position.x - 125,
+        position.y + diameter / 2 + 130
+      );
+      p.textStyle(p.NORMAL);
+      for (let i = 0; i < numAdTechs; i++) {
+        const adTech = adTechs[i];
+        // @ts-ignore
+        const adTechColor = getAdtechsColors(p)[adTech];
+
+        p.fill(adTechColor);
+        p.circle(
+          position.x - 115,
+          position.y + diameter / 2 + 160 + i * 25,
+          20
+        );
+        p.fill(0);
+        p.text(
+          adTech,
+          position.x - 90,
+          position.y + diameter / 2 + 160 + 25 * i
+        );
+      }
+
+      p.pop();
+    },
+
+    resetInfoBox: (index: number) => {
+      const position = app.circlePositions[index];
+      const { diameter } = config.timeline.circleProps;
+
+      p.push();
+      p.fill(255);
+      p.stroke(255);
+      p.rectMode(p.CENTER);
+      p.rect(position.x, position.y + diameter / 2 + 150, 300, 200);
+      p.pop();
+    },
   };
 
   p.preload = () => {
@@ -177,6 +253,7 @@ export function topicsAnimation(
 
     app.siteAdTechs = assignAdtechsToSites(websites, adtechs);
 
+    p.textFont('sans-serif');
     app.drawTimelineLine(config.timeline.position);
     app.drawTimeline(config.timeline.position, epoch);
   };
