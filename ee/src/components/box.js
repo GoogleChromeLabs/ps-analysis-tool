@@ -19,7 +19,13 @@
 import app from '../app';
 import config from '../config';
 
-const Box = ({ title, x, y, width, height }) => {
+const Box = ({
+  title,
+  x,
+  y,
+  width = config.flow.box.width,
+  height = config.flow.box.height,
+}) => {
   if (typeof x === 'function') {
     x = x();
   }
