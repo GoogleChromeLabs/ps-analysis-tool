@@ -33,6 +33,15 @@ const ProgressLine = ({
   const height = config.flow.lineHeight - ARROW_SIZE;
   const incrementBy = 1; // @todo Use it to control speed.
   const p = app.p;
+
+  if (typeof x1 === 'function') {
+    x1 = x1();
+  }
+
+  if (typeof y1 === 'function') {
+    y1 = y1();
+  }
+
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction);
 
   let currentX = x1; // For horizontal directions

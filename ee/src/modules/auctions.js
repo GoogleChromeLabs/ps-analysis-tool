@@ -52,6 +52,8 @@ auction.setUp = (index) => {
   steps.push({
     component: Branches,
     props: {
+      x1: x,
+      y1: y,
       branches: [
         {
           date: '2024-10-02',
@@ -67,25 +69,8 @@ auction.setUp = (index) => {
         },
       ],
     },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: app.auction.currentBranchBottomTipCoordinates.x,
-      y1: app.auction.currentBranchBottomTipCoordinates.y,
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'SSP Tag',
-      x: x - box.width / 2,
-      y: y + box.height / 2 + 2,
-      width: box.width,
-      height: box.height,
+    callBack: (returnValue) => {
+      app.auction.currentBranchBottomTipCoordinates = returnValue[0];
     },
   });
 
@@ -93,10 +78,31 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: app.currentBranchBottomTipCoordinates.x,
-      y1: app.currentBranchBottomTipCoordinates.y,
+      x1: () => app.auction.currentBranchBottomTipCoordinates.x,
+      y1: () => app.auction.currentBranchBottomTipCoordinates.y + 40,
+      noArrow: true,
     },
   });
+
+  // steps.push({
+  //   component: Box,
+  //   props: {
+  //     title: 'SSP Tag',
+  //     x: x - box.width / 2,
+  //     y: y + box.height / 2 + 2,
+  //     width: box.width,
+  //     height: box.height,
+  //   },
+  // });
+
+  // steps.push({
+  //   component: ProgressLine,
+  //   props: {
+  //     direction: 'down',
+  //     x1: app.auction.currentBranchBottomTipCoordinates.x,
+  //     y1: app.auction.currentBranchBottomTipCoordinates.y,
+  //   },
+  // });
 
   app.auction.auctions.push(steps);
 
@@ -196,45 +202,56 @@ auction.setUp = (index) => {
 auction.draw = async (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
-  const _auction = app.auction.auctions[index];
+  const steps = app.auction.auctions[index];
 
-  if (!_auction) {
+  if (!steps) {
     return;
   }
 
-  // Helper function to draw lines and boxes
-  const drawLineAndBox = async (item) => {
-    await drawLine(item);
-    drawBox(item);
-  };
+  for (const step of steps) {
+    const { component, props, callBack } = step;
+    const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
-  const drawLine = async (item) => {
-    await ProgressLine({
-      x1: item.line.x1,
-      y1: item.line.y1,
-      x2: item.line.x2,
-      y2: item.line.y2,
-      direction: item.line?.direction,
-      text: item.line?.text,
-    });
-  };
-
-  const drawBox = (item) => {
-    if (item.box) {
-      Box({
-        title: item.name,
-        x: item.box.x,
-        y: item.box.y,
-        width: item.box.width,
-        height: item.box.height,
-      });
+    if (callBack) {
+      callBack(returnValue);
     }
-  };
+
+    await utils.delay(1000); // eslint-disable-line no-await-in-loop
+  }
+
+  // Helper function to draw lines and boxes
+  // const drawLineAndBox = async (item) => {
+  //   await drawLine(item);
+  //   drawBox(item);
+  // };
+
+  // const drawLine = async (item) => {
+  //   await ProgressLine({
+  //     x1: item.line.x1,
+  //     y1: item.line.y1,
+  //     x2: item.line.x2,
+  //     y2: item.line.y2,
+  //     direction: item.line?.direction,
+  //     text: item.line?.text,
+  //   });
+  // };
+
+  // const drawBox = (item) => {
+  //   if (item.box) {
+  //     Box({
+  //       title: item.name,
+  //       x: item.box.x,
+  //       y: item.box.y,
+  //       width: item.box.width,
+  //       height: item.box.height,
+  //     });
+  //   }
+  // };
 
   // Draw SSP box and line
   // await drawLineAndBox(_auction.ssp);
-  await Branches({ x1: _auction.ssp.line.x1, y1: _auction.ssp.line.y1 });
-  await utils.delay(500000);
+  // await Branches({ x1: _auction.ssp.line.x1, y1: _auction.ssp.line.y1 });
+  // await utils.delay(500000);
 
   // rippleEffect.setUp();
   // await rippleEffect.start(

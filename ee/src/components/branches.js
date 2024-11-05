@@ -23,25 +23,10 @@ import config from '../config';
 const LEFT_MARGIN = 50; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
 
-let spacing, progress, interval, renderedBranchIds;
+let spacing, progress, interval, renderedBranchIds, endpoints;
 
 // @todo: Handle canvas width changes when the branches do not fit in the existing size.
-const Branches = async ({ x1, y1 }) => {
-  let branches = [
-    {
-      date: '2024-10-02',
-      time: '10:00:22PM',
-    },
-    {
-      date: '2024-10-03',
-      time: '11:00:22PM',
-    },
-    {
-      date: '2024-10-03',
-      time: '11:00:22PM',
-    },
-  ];
-
+const Branches = async ({ x1, y1, branches }) => {
   branches = branches.map((branch, index) => ({
     ...branch,
     id: index, // To prevent duplicate rendering
@@ -50,6 +35,7 @@ const Branches = async ({ x1, y1 }) => {
   progress = 0;
   interval = null;
   renderedBranchIds = [];
+  endpoints = [];
 
   const y2 = y1 + 50;
   spacing = (app.p.width - 2 * LEFT_MARGIN) / (branches.length - 1); // Calculate spacing based on canvas width
@@ -65,18 +51,13 @@ const Branches = async ({ x1, y1 }) => {
 
   return new Promise((resolve) => {
     interval = setInterval(async () => {
-      const coodinates = await drawAnimatedTimeline(
-        LEFT_MARGIN,
-        y2 - 9,
-        branches
-      );
-      resolve(coodinates);
+      await drawAnimatedTimeline(LEFT_MARGIN, y2 - 9, branches);
+      resolve(endpoints);
     }, 20);
   });
 };
 
 const drawAnimatedTimeline = (x, y, branches) => {
-  const endpoints = [];
   const p = app.p;
 
   p.stroke(0);
@@ -88,7 +69,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
       progress += ANIMATION_SPEED; // Increase the length of the horizontal line
     } else {
       clearInterval(interval);
-      resolve(endpoints);
+      resolve();
     }
 
     p.line(x, y, x + progress, y);
@@ -124,8 +105,6 @@ const drawAnimatedTimeline = (x, y, branches) => {
         renderedBranchIds.push(branches[i].id);
       }
     }
-
-    return endpoints;
   });
 };
 
