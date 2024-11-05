@@ -44,13 +44,12 @@ bubbles.generateBubbles = (recalculate = false) => {
 
   const interestGroupsToBeAdded =
     config.timeline.circles[app.timeline.currentIndex].igGroupsCount ?? 0;
-  const previouslyAddedInterestGroup = config.bubbles.interestGroupCounts;
 
   if (!recalculate) {
     for (let index = 0; index < interestGroupsToBeAdded; index++) {
       app.bubbles.positions.push({
         id: uuidv4(),
-        value: previouslyAddedInterestGroup + index,
+        value: igp.random(0, 1000000),
         color,
       });
     }
@@ -140,7 +139,7 @@ bubbles.barrageAnimation = async (index) => {
       200
     );
 
-    return { x: data.x, y: data.y, color, speed, target };
+    return { x: data.minified.x, y: data.minified.y, color, speed, target };
   });
 
   await new Promise((resolve) => {
@@ -365,13 +364,26 @@ bubbles.showExpandedBubbles = (inBarrage = false) => {
 
   for (const node of app.bubbles.positions) {
     if (!node.children) {
-      app.igp.push();
-      app.igp.fill(node.color);
-      app.igp.ellipse(node.expanded.x, node.expanded.y, node.expanded.r * 2);
-      app.igp.fill(0);
-      app.igp.textSize(node.expanded.r / 4);
-      app.igp.text(node.id, node.expanded.x, node.expanded.y);
-      app.igp.pop();
+      igp.push();
+      igp.fill(node.color);
+      igp.ellipse(node.expanded.x, node.expanded.y, node.expanded.r * 2);
+      igp.pop();
+
+      igp.push();
+      igp.textAlign(igp.CENTER, igp.CENTER);
+      let textToDisplay = node.id;
+      const maxTextWidth = node.expanded.r * 1.5;
+      const textSizeVal = node.expanded.r * 0.5;
+      while (igp.textWidth(textToDisplay) > maxTextWidth) {
+        textToDisplay = textToDisplay.slice(0, -1);
+        if (textToDisplay.length <= 1) {
+          break;
+        }
+      }
+      igp.textSize(textSizeVal);
+      igp.fill(255);
+      igp.text(textToDisplay, node.expanded.x, node.expanded.y);
+      igp.pop();
     }
   }
 };
