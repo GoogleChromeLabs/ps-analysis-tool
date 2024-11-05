@@ -152,34 +152,31 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
   );
 
   if (inBarrage) {
+    const _bubbles = app.bubbles.positions.filter((data, currIndex) => {
+      if (currIndex < interestGroupCounts) {
+        return true;
+      }
+      return false;
+    });
+
+    if (isExpanded) {
+      bubbles.showExpandedBubbles(x, y, _bubbles);
+    }
+
     app.bubbles.positions.forEach((bubble, currIndex) => {
+      const _x = bubble?.expanded?.x ?? bubble.x;
+      const _y = bubble?.expanded?.y ?? bubble.y;
+      const _r = bubble?.expanded?.r ?? bubble.radius;
       if (currIndex < interestGroupCounts) {
         igp.push();
         igp.fill(bubble.color);
-        igp.circle(bubble.x, bubble.y, bubble.radius * 2);
+        igp.circle(_x, _y, _r * 2);
         igp.pop();
       }
     });
   } else {
     if (isExpanded) {
-      const { nodes, maxRadius } = bubbles.bubbleChart({
-        name: 'root',
-        children: app.bubbles.positions,
-      });
-
-      igp.circle(x, y, maxRadius * 2);
-
-      for (const node of nodes) {
-        if (!node.children) {
-          app.igp.push();
-          app.igp.fill(node.data.color);
-          app.igp.ellipse(node.x, node.y, node.r * 2);
-          app.igp.fill(0);
-          app.igp.textSize(node.r / 4);
-          app.igp.text(node.data.name, node.x, node.y);
-          app.igp.pop();
-        }
-      }
+      bubbles.showExpandedBubbles(x, y);
       return;
     }
 
@@ -426,6 +423,29 @@ bubbles.bubbleChart = (data) => {
   });
 
   return { nodes, maxRadius };
+};
+
+bubbles.showExpandedBubbles = (x, y, data = null) => {
+  const igp = app.igp;
+
+  const { nodes, maxRadius } = bubbles.bubbleChart({
+    name: 'root',
+    children: data ?? app.bubbles.positions,
+  });
+
+  igp.circle(x, y, maxRadius * 2);
+
+  for (const node of nodes) {
+    if (!node.children) {
+      app.igp.push();
+      app.igp.fill(node.data.color);
+      app.igp.ellipse(node.x, node.y, node.r * 2);
+      app.igp.fill(0);
+      app.igp.textSize(node.r / 4);
+      app.igp.text(node.data.name, node.x, node.y);
+      app.igp.pop();
+    }
+  }
 };
 
 export default bubbles;
