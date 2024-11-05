@@ -174,8 +174,8 @@ export function topicsAnimation(
       p.rect(
         position.x,
         position.y + diameter / 2 + 150,
-        300,
-        200,
+        280,
+        180,
         10,
         10,
         10,
@@ -186,12 +186,12 @@ export function topicsAnimation(
       p.textSize(16);
       p.textAlign(p.LEFT, p.CENTER);
       p.textStyle(p.BOLD);
-      p.text('Topics:', position.x - 125, position.y + diameter / 2 + 90);
+      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 85);
       p.textStyle(p.NORMAL);
       p.text(
         topics.join(', '),
-        position.x - 60,
-        position.y + diameter / 2 + 90
+        position.x - 55,
+        position.y + diameter / 2 + 85
       );
 
       const adTechs = app.siteAdTechs[currentSite];
@@ -200,7 +200,7 @@ export function topicsAnimation(
       p.textStyle(p.BOLD);
       p.text(
         'Observed-by context domains:',
-        position.x - 125,
+        position.x - 120,
         position.y + diameter / 2 + 130
       );
       p.textStyle(p.NORMAL);
@@ -211,14 +211,14 @@ export function topicsAnimation(
 
         p.fill(adTechColor);
         p.circle(
-          position.x - 115,
+          position.x - 110,
           position.y + diameter / 2 + 160 + i * 25,
           20
         );
         p.fill(0);
         p.text(
           adTech,
-          position.x - 90,
+          position.x - 85,
           position.y + diameter / 2 + 160 + 25 * i
         );
       }
