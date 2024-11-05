@@ -181,6 +181,34 @@ auction.setUp = async (index) => {
     },
   });
 
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates.x - 10 + mediumBox.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates.y - 10 - mediumBox.height / 2;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'runAdAuction',
+      x: () => app.auction.nextTipCoordinates.x + 10,
+      y: () => app.auction.nextTipCoordinates.y - mediumBox.height / 2,
+      width: mediumBox.width,
+      height: mediumBox.height,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
   // steps.push({
   //   component: Box,
   //   props: {
