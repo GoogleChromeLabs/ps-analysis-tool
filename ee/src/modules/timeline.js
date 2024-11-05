@@ -109,9 +109,11 @@ timeline.init = () => {
       }
 
       app.bubbles.positions.forEach((positions, index) => {
-        if (
-          utils.isInsideCircle(x, y, positions.x, positions.y, positions.radius)
-        ) {
+        const _x = positions?.expanded?.x ?? positions.x;
+        const _y = positions?.expanded?.y ?? positions.y;
+        const _r = positions?.expanded?.r ?? positions.radius;
+
+        if (utils.isInsideCircle(x, y, _x, _y, _r)) {
           clickedIndex = index;
         }
       });
@@ -239,6 +241,8 @@ timeline.renderUserIcon = () => {
 
   const user = config.timeline.user;
   timeline.eraseAndRedraw();
+  utils.wipeAndRecreateInterestCanvas();
+  bubbles.drawSmallCircles();
 
   app.up.image(
     app.p.userIcon,

@@ -17,6 +17,8 @@
  * External dependencies.
  */
 import p5 from 'p5';
+import * as d3 from 'd3';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Internal dependencies.
@@ -91,6 +93,8 @@ bubbles.generateBubbles = (recalculate = false) => {
     const randomX = x + igp.cos(angle) * distanceFromCenter;
     const randomY = y + igp.sin(angle) * distanceFromCenter;
     const newBubble = {
+      id: uuidv4(),
+      value: i,
       x: randomX,
       y: randomY,
       radius,
@@ -157,26 +161,32 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
       }
     });
   } else {
+    if (isExpanded) {
+      const { nodes, maxRadius } = bubbles.bubbleChart({
+        name: 'root',
+        children: app.bubbles.positions,
+      });
+
+      igp.circle(x, y, maxRadius * 2);
+
+      for (const node of nodes) {
+        if (!node.children) {
+          app.igp.push();
+          app.igp.fill(node.data.color);
+          app.igp.ellipse(node.x, node.y, node.r * 2);
+          app.igp.fill(0);
+          app.igp.textSize(node.r / 4);
+          app.igp.text(node.data.name, node.x, node.y);
+          app.igp.pop();
+        }
+      }
+      return;
+    }
+
     app.bubbles.positions.forEach((bubble) => {
       igp.push();
       igp.fill(bubble.color);
       igp.circle(bubble.x, bubble.y, bubble.radius * 2);
-      igp.pop();
-
-      igp.push();
-      igp.textAlign(igp.CENTER, igp.CENTER);
-      let textToDisplay = 'bubble text';
-      const maxTextWidth = bubble.radius * 2;
-      const textSizeVal = bubble.radius * 0.5;
-      while (igp.textWidth(textToDisplay) > maxTextWidth) {
-        textToDisplay = textToDisplay.slice(0, -1);
-        if (textToDisplay.length <= 1) {
-          break;
-        }
-      }
-      igp.textSize(textSizeVal);
-      igp.fill(255);
-      igp.text(textToDisplay, bubble.x, bubble.y);
       igp.pop();
     });
   }
@@ -387,6 +397,35 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   utils.wipeAndRecreateInterestCanvas();
   bubbles.drawSmallCircles();
+};
+
+bubbles.bubbleChart = (data) => {
+  const root = d3
+    .hierarchy(data)
+    .sum((d) => d.value)
+    .sort((a, b) => b.value - a.value);
+
+  d3.pack().size([config.canvas.width, config.canvas.height]).padding(3)(root);
+
+  const nodes = root.descendants();
+  const nodeMap = {};
+
+  const maxRadius = nodes.reduce((acc, node) => {
+    nodeMap[node.data.id] = node;
+    acc = Math.max(acc, node.r);
+    return acc;
+  }, 0);
+
+  app.bubbles.positions = app.bubbles.positions.map((_data) => {
+    return {
+      ..._data,
+      expanded: {
+        ...nodeMap[_data.id],
+      },
+    };
+  });
+
+  return { nodes, maxRadius };
 };
 
 export default bubbles;
