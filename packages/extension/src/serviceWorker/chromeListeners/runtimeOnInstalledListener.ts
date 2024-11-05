@@ -16,13 +16,13 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import dataStore from '../../store/dataStore';
 import { updateGlobalVariableAndAttachCDP, setupIntervals } from './utils';
 
 export const runtimeOnInstalledListener = async (
   details: chrome.runtime.InstalledDetails
 ) => {
-  synchnorousCookieStore?.clear();
+  dataStore?.clear();
 
   setupIntervals();
 

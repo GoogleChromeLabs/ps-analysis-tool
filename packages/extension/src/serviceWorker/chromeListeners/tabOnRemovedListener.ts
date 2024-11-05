@@ -16,10 +16,10 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import dataStore from '../../store/dataStore';
 
 export const onTabRemovedListener = (tabId: number) => {
-  synchnorousCookieStore.deinitialiseVariablesForTab(tabId.toString());
+  dataStore.deinitialiseVariablesForTab(tabId.toString());
 
-  synchnorousCookieStore?.removeTabData(tabId);
+  dataStore?.removeTabData(tabId);
 };

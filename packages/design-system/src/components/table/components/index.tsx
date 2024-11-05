@@ -39,6 +39,7 @@ interface TableProps {
   minWidth?: string;
   hideSearch?: boolean;
   hideTableTopBar?: boolean;
+  rowHeightClass?: string;
 }
 
 const Table = ({
@@ -49,6 +50,7 @@ const Table = ({
   minWidth,
   hideSearch,
   hideTableTopBar,
+  rowHeightClass,
 }: TableProps) => {
   const {
     tableContainerRef,
@@ -143,6 +145,7 @@ const Table = ({
             enable={{
               right: true,
             }}
+            className="overflow-auto h-full"
           >
             <FiltersSidebar
               filters={filters}
@@ -177,6 +180,7 @@ const Table = ({
               isRowFocused={isRowFocused}
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
+              rowHeightClass={rowHeightClass}
             />
           </div>
         </div>

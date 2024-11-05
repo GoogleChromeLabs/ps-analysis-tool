@@ -1,4 +1,19 @@
 /*
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*
  * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,28 +31,24 @@
 /**
  * External dependencies.
  */
-import {
-  getCookieKey,
-  type CookieData,
-  type BlockedReason,
-  parseResponseReceivedExtraInfo,
-  type CookieDatabase,
-  parseRequestWillBeSentExtraInfo,
-  deriveBlockingStatus,
+import type {
+  CookieData,
+  CookieDatabase,
+  singleAuctionEvent,
+  auctionData,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
  */
-import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
-import shouldUpdateCounter from '../utils/shouldUpdateCounter';
+import PAStore from './PAStore';
 
-class SynchnorousCookieStore {
+class DataStore {
   /**
    * The cookie data of the tabs.
    */
@@ -45,6 +56,44 @@ class SynchnorousCookieStore {
     [tabId: number]: {
       [cookieKey: string]: CookieData;
     };
+  } = {};
+
+  /**
+   * The auction event of the tabs (Interest group access as well as interest group auction events).
+   */
+  auctionEvents: {
+    [tabId: string]: {
+      [uniqueAuctionId: string]: singleAuctionEvent[];
+    };
+  } = {};
+  /**
+   * For tab 123456 auction events will have interestGroup accessed events as well as the interestGroupAuctionEvents.
+   * There can be 2 types of interestGroupAccessed events:
+   * 1) Join and Leave eventsare global and are fired on all the tabs.
+   * 2) Bid Win topLevelBid are fired where bidding is happening.
+   *
+   * To accomodate these 2 events we have 2 different keys in the auctionEvent for each tab:
+   * 1) The uniqueParentAuctionId,
+   *     a) if its a multi-seller auction then it will have:
+   *         i) a uniqueParentAuctionId where component auction Events are added.
+   *        ii) top level auction in an id whose key is '0',
+   *     b) if its a single sale then it will have a key with uniqueAuctionId where all the auctionEvents are added.
+   * 2) a 'globalEvents' key where all the global events are added like join leave etc.
+   *
+   * Structure may look like this:
+   * auctionEvents: {
+   *     123456: {
+   *          'globalEvents': [],
+   *          '12413hsad23e1nsd': {}
+   *     }
+   * };
+   */
+
+  /**
+   * The auction data of the tabs which is added when interestGroupAuctionEvent occurs.
+   */
+  auctionDataForTabId: {
+    [tabId: string]: auctionData;
   } = {};
 
   /**
@@ -71,6 +120,8 @@ class SynchnorousCookieStore {
         frameId: string;
         url: string;
         finalFrameId: string;
+        timeStamp: Protocol.Network.MonotonicTime;
+        wallTime: Protocol.Network.TimeSinceEpoch;
       };
     };
   } = {};
@@ -79,7 +130,7 @@ class SynchnorousCookieStore {
    * This variable stores the unParsedRequest headers received from Network.requestWillBeSentExtraInfo.
    * These are the requests whose Network.requestWillBeSent counter part havent yet been fired.
    */
-  unParsedRequestHeaders: {
+  unParsedRequestHeadersForCA: {
     [tabId: string]: {
       [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
     };
@@ -89,7 +140,20 @@ class SynchnorousCookieStore {
    * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
    * These are the responses whose Network.responseReceived counter part havent yet been fired.
    */
-  unParsedResponseHeaders: {
+  unParsedRequestHeadersForPA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        auctions: Protocol.Storage.InterestGroupAuctionId[];
+        type: Protocol.Storage.InterestGroupAuctionFetchType;
+      };
+    };
+  } = {};
+
+  /**
+   * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
+   * These are the responses whose Network.responseReceived counter part havent yet been fired.
+   */
+  unParsedResponseHeadersForCA: {
     [tabId: string]: {
       [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
     };
@@ -115,9 +179,12 @@ class SynchnorousCookieStore {
       url: string;
       devToolsOpenState: boolean;
       popupOpenState: boolean;
-      newUpdates: number;
+      newUpdatesCA: number;
+      newUpdatesPA: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
+      isCookieAnalysisEnabled: boolean;
+      isPAAnalysisEnabled: boolean;
     };
   } = {};
 
@@ -170,71 +237,6 @@ class SynchnorousCookieStore {
       }
       return frameId;
     }
-  }
-
-  /**
-   * This function parses response headers
-   * @param {Protocol.Network.ResponseReceivedExtraInfoEvent} response The response to be parsed.
-   * @param {string} requestId This is used to get the related data for parsing the response.
-   * @param {string} tabId The tabId this request is associated to.
-   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
-   */
-  parseResponseHeaders(
-    response: Protocol.Network.ResponseReceivedExtraInfoEvent,
-    requestId: string,
-    tabId: string,
-    frameIds: string[]
-  ) {
-    const { headers, blockedCookies, cookiePartitionKey, exemptedCookies } =
-      response;
-
-    const cookies: CookieData[] = parseResponseReceivedExtraInfo(
-      headers,
-      blockedCookies,
-      exemptedCookies,
-      cookiePartitionKey,
-      this.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
-      this.tabs[Number(tabId)].url ?? '',
-      this.cookieDB ?? {},
-      frameIds,
-      requestId
-    );
-    this.update(Number(tabId), cookies);
-
-    delete this.unParsedResponseHeaders[tabId][requestId];
-  }
-
-  /**
-   * This function parses request headers
-   * @param {Protocol.Network.RequestWillBeSentExtraInfoEvent} request The response to be parsed.
-   * @param {string} requestId This is used to get the related data for parsing the response.
-   * @param {string} tabId The tabId this request is associated to.
-   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
-   */
-  parseRequestHeaders(
-    request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
-    requestId: string,
-    tabId: string,
-    frameIds: string[]
-  ) {
-    const { associatedCookies } = request;
-
-    const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-      associatedCookies,
-      this.cookieDB ?? {},
-      this.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
-      this.tabs[Number(tabId)].url ?? '',
-      frameIds,
-      requestId
-    );
-
-    delete this.unParsedRequestHeaders[tabId][requestId];
-    if (cookies.length === 0) {
-      return;
-    }
-
-    this.update(Number(tabId), cookies);
-    delete this.unParsedRequestHeaders[tabId][requestId];
   }
 
   /**
@@ -302,53 +304,6 @@ class SynchnorousCookieStore {
   }
 
   /**
-   * Adds exclusion and warning reasons for a given cookie.
-   * @param {string} cookieName Name of the cookie.
-   * @param {string[]} exclusionReasons reasons to be added to the blocked reason array.
-   * @param {string[]} warningReasons warning reasons to be added to the warning reason array.
-   * @param {number} tabId tabId where change has to be made.
-   */
-  addCookieExclusionWarningReason(
-    cookieName: string,
-    exclusionReasons: BlockedReason[],
-    warningReasons: Protocol.Audits.CookieWarningReason[],
-    tabId: number
-  ) {
-    if (!this.tabsData[tabId]) {
-      return;
-    }
-    if (this.tabsData[tabId] && this.tabsData[tabId][cookieName]) {
-      this.tabsData[tabId][cookieName].blockedReasons = [
-        ...new Set([
-          ...(this.tabsData[tabId][cookieName].blockedReasons ?? []),
-          ...exclusionReasons,
-        ]),
-      ];
-      this.tabsData[tabId][cookieName].warningReasons = [
-        ...new Set([
-          ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
-          ...warningReasons,
-        ]),
-      ];
-
-      this.tabsData[tabId][cookieName].isBlocked =
-        exclusionReasons.length > 0 ? true : false;
-    } else {
-      this.tabs[tabId].newUpdates++;
-      // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
-      this.tabsData[tabId] = {
-        ...this.tabsData[tabId],
-        [cookieName]: {
-          ...(this.tabsData[tabId][cookieName] ?? {}),
-          blockedReasons: [...exclusionReasons],
-          warningReasons: [...warningReasons],
-          isBlocked: exclusionReasons.length > 0 ? true : false,
-        },
-      };
-    }
-  }
-
-  /**
    * Creates an entry for a tab
    * @param {number} tabId The tab id.
    */
@@ -360,17 +315,25 @@ class SynchnorousCookieStore {
     globalThis.PSAT = {
       tabsData: this.tabsData,
       tabs: this.tabs,
+      auctionEvents: this.auctionEvents,
     };
 
     this.tabsData[tabId] = {};
+    this.auctionEvents[tabId.toString()] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
-      newUpdates: 0,
+      newUpdatesCA: 0,
+      newUpdatesPA: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
+      isCookieAnalysisEnabled: true,
+      isPAAnalysisEnabled: true,
     };
+
+    this.auctionDataForTabId[tabId] = {};
+
     (async () => {
       if (!this.cookieDB) {
         this.cookieDB = await fetchDictionary();
@@ -397,8 +360,8 @@ class SynchnorousCookieStore {
    * @param {string} tabId The tab whose data has to be deinitialised.
    */
   deinitialiseVariablesForTab(tabId: string) {
-    delete this.unParsedRequestHeaders[tabId];
-    delete this.unParsedResponseHeaders[tabId];
+    delete this.unParsedRequestHeadersForCA[tabId];
+    delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
   }
@@ -466,16 +429,19 @@ class SynchnorousCookieStore {
    * @param {string} tabId The tab whose data has to be initialised.
    */
   initialiseVariablesForNewTab(tabId: string) {
-    this.unParsedRequestHeaders[tabId] = {};
-    this.unParsedResponseHeaders[tabId] = {};
+    this.unParsedRequestHeadersForCA[tabId] = {};
+    this.unParsedResponseHeadersForCA[tabId] = {};
     this.requestIdToCDPURLMapping[tabId] = {};
     this.frameIdToResourceMap[tabId] = {};
+    this.unParsedRequestHeadersForPA[tabId] = {};
     //@ts-ignore
     globalThis.PSATAdditionalData = {
-      unParsedRequestHeaders: this.unParsedRequestHeaders,
-      unParsedResponseHeaders: this.unParsedResponseHeaders,
+      unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
+      unParsedResponseHeadersForCA: this.unParsedResponseHeadersForCA,
       requestIdToCDPURLMapping: this.requestIdToCDPURLMapping,
       frameIdToResourceMap: this.frameIdToResourceMap,
+      auctionDataForTabId: this.auctionDataForTabId,
+      unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
     };
   }
 
@@ -490,10 +456,17 @@ class SynchnorousCookieStore {
 
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
-    this.tabs[tabId].newUpdates = 0;
+    this.tabs[tabId].newUpdatesCA = 0;
+    this.tabs[tabId].newUpdatesPA = 0;
     this.tabs[tabId].frameIDURLSet = {};
     this.tabs[tabId].parentChildFrameAssociation = {};
-
+    Object.keys(this.auctionEvents[tabId.toString()]).forEach((key) => {
+      if (key === 'globalEvents') {
+        return;
+      }
+      delete this.auctionEvents[tabId.toString()][key];
+    });
+    this.auctionDataForTabId[tabId] = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 
@@ -504,6 +477,8 @@ class SynchnorousCookieStore {
   removeTabData(tabId: number) {
     delete this.tabsData[tabId];
     delete this.tabs[tabId];
+    delete this.auctionDataForTabId[tabId];
+    delete this.auctionEvents[tabId];
   }
 
   /**
@@ -533,181 +508,116 @@ class SynchnorousCookieStore {
     if (!this.tabs[tabId] || !this.tabsData[tabId]) {
       return;
     }
-    let sentMessageAnyWhere = false;
 
     try {
       if (
         (this.tabs[tabId].devToolsOpenState ||
           this.tabs[tabId].popupOpenState) &&
-        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
+        (overrideForInitialSync ||
+          this.tabs[tabId].newUpdatesCA > 0 ||
+          this.tabs[tabId].newUpdatesPA > 0)
       ) {
-        sentMessageAnyWhere = true;
+        if (this.tabs[tabId].newUpdatesCA > 0 || overrideForInitialSync) {
+          const newCookieData: {
+            [cookieKey: string]: CookieData;
+          } = {};
 
-        const newCookieData: {
-          [cookieKey: string]: CookieData;
+          Object.keys(this.tabsData[tabId]).forEach((key) => {
+            newCookieData[key] = {
+              ...this.tabsData[tabId][key],
+              networkEvents: {
+                requestEvents: [],
+                responseEvents: [],
+              },
+              url: '',
+              headerType: ['request', 'response'].includes(
+                this.tabsData[tabId][key]?.headerType ?? ''
+              )
+                ? 'http'
+                : 'javascript',
+            };
+          });
+
+          await chrome.runtime.sendMessage({
+            type: NEW_COOKIE_DATA,
+            payload: {
+              tabId,
+              cookieData: newCookieData,
+              extraData: {
+                extraFrameData: this.tabs[tabId].frameIDURLSet,
+              },
+            },
+          });
+
+          this.tabs[tabId].newUpdatesCA = 0;
+        }
+
+        const { globalEvents, ...rest } = this.auctionEvents[tabId];
+
+        const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
+          Object.values(rest).flat()
+        );
+        const groupedAuctionBids: {
+          [parentAuctionId: string]: {
+            0: singleAuctionEvent[];
+            [uniqueAuctionId: string]: singleAuctionEvent[];
+          };
         } = {};
 
-        Object.keys(this.tabsData[tabId]).forEach((key) => {
-          newCookieData[key] = {
-            ...this.tabsData[tabId][key],
-            networkEvents: {
-              requestEvents: [],
-              responseEvents: [],
-            },
-            url: '',
-            headerType: ['request', 'response'].includes(
-              this.tabsData[tabId][key]?.headerType ?? ''
-            )
-              ? 'http'
-              : 'javascript',
-          };
-        });
+        const auctionEventsToBeProcessed = Object.values(rest).flat();
 
-        await chrome.runtime.sendMessage({
-          type: NEW_COOKIE_DATA,
-          payload: {
-            tabId,
-            cookieData: newCookieData,
-            extraData: {
-              extraFrameData: this.tabs[tabId].frameIDURLSet,
-            },
-          },
-        });
-      }
+        if (isMultiSellerAuction) {
+          auctionEventsToBeProcessed.forEach((event) => {
+            const { parentAuctionId = null, uniqueAuctionId = null } = event;
 
-      if (sentMessageAnyWhere) {
-        this.tabs[tabId].newUpdates = 0;
+            if (!parentAuctionId) {
+              if (uniqueAuctionId) {
+                if (!groupedAuctionBids[uniqueAuctionId]) {
+                  groupedAuctionBids[uniqueAuctionId] = {
+                    0: [],
+                  };
+                }
+                groupedAuctionBids[uniqueAuctionId]['0'].push(event);
+              }
+              return;
+            }
+
+            if (!groupedAuctionBids[parentAuctionId]) {
+              groupedAuctionBids[parentAuctionId] = {
+                0: [],
+              };
+            }
+
+            if (!uniqueAuctionId) {
+              return;
+            }
+
+            if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
+              groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
+            }
+
+            groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
+          });
+        }
+
+        if (this.tabs[tabId].newUpdatesPA > 0 || overrideForInitialSync) {
+          await chrome.runtime.sendMessage({
+            type: 'AUCTION_EVENTS',
+            payload: {
+              refreshTabData: overrideForInitialSync,
+              tabId,
+              auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
+              multiSellerAuction: isMultiSellerAuction,
+              globalEvents: globalEvents ?? [],
+            },
+          });
+          this.tabs[tabId].newUpdatesPA = 0;
+        }
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(error);
       //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
-    }
-  }
-
-  /**
-   * Update cookie store.
-   * @param {number} tabId Tab id.
-   * @param {Array} cookies Cookies data.
-   */
-  // eslint-disable-next-line complexity
-  update(tabId: number, cookies: CookieData[]) {
-    try {
-      if (!this.tabsData[tabId] || !this.tabs[tabId]) {
-        return;
-      }
-
-      for (const cookie of cookies) {
-        const cookieKey = getCookieKey(cookie.parsedCookie);
-        if (!cookieKey) {
-          continue;
-        }
-
-        // Merge in previous blocked reasons.
-        const blockedReasons: BlockedReason[] = [
-          ...new Set<BlockedReason>([
-            ...(cookie?.blockedReasons ?? []),
-            ...(this.tabsData[tabId]?.[cookieKey]?.blockedReasons ?? []),
-          ]),
-        ];
-
-        const warningReasons = Array.from(
-          new Set<Protocol.Audits.CookieWarningReason>([
-            ...(cookie?.warningReasons ?? []),
-            ...(this.tabsData[tabId]?.[cookieKey]?.warningReasons ?? []),
-          ])
-        );
-
-        const frameIdList = Array.from(
-          new Set<number>([
-            ...((cookie?.frameIdList ?? []) as number[]),
-            ...((this.tabsData[tabId]?.[cookieKey]?.frameIdList ??
-              []) as number[]),
-          ])
-        ).map((frameId) => frameId.toString());
-
-        const updateCounterBoolean = shouldUpdateCounter(
-          this.tabsData[tabId][cookieKey],
-          cookie
-        );
-
-        if (updateCounterBoolean) {
-          this.tabs[tabId].newUpdates++;
-        }
-
-        if (this.tabsData[tabId]?.[cookieKey]) {
-          // Merge in previous warning reasons.
-          const parsedCookie = {
-            ...this.tabsData[tabId][cookieKey].parsedCookie,
-            ...cookie.parsedCookie,
-            samesite: (
-              cookie.parsedCookie.samesite ??
-              this.tabsData[tabId][cookieKey].parsedCookie.samesite ??
-              'lax'
-            ).toLowerCase(),
-            httponly:
-              cookie.parsedCookie.httponly ??
-              this.tabsData[tabId][cookieKey].parsedCookie.httponly,
-            priority:
-              cookie.parsedCookie?.priority ??
-              this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
-              'Medium',
-            partitionKey: '',
-          };
-          if (
-            cookie.parsedCookie?.partitionKey ||
-            this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey
-          ) {
-            parsedCookie.partitionKey =
-              cookie.parsedCookie?.partitionKey ||
-              this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey;
-          }
-
-          const networkEvents: CookieData['networkEvents'] = {
-            requestEvents: [
-              ...(this.tabsData[tabId][cookieKey]?.networkEvents
-                ?.requestEvents || []),
-              ...(cookie.networkEvents?.requestEvents || []),
-            ],
-            responseEvents: [
-              ...(this.tabsData[tabId][cookieKey]?.networkEvents
-                ?.responseEvents || []),
-              ...(cookie.networkEvents?.responseEvents || []),
-            ],
-          };
-
-          this.tabsData[tabId][cookieKey] = {
-            ...this.tabsData[tabId][cookieKey],
-            ...cookie,
-            parsedCookie,
-            isBlocked: blockedReasons.length > 0,
-            blockedReasons,
-            networkEvents,
-            blockingStatus: deriveBlockingStatus(networkEvents),
-            warningReasons,
-            url: this.tabsData[tabId][cookieKey].url ?? cookie.url,
-            headerType:
-              this.tabsData[tabId][cookieKey].headerType === 'javascript'
-                ? this.tabsData[tabId][cookieKey].headerType
-                : cookie.headerType,
-            frameIdList,
-            exemptionReason:
-              cookie?.exemptionReason ||
-              this.tabsData[tabId][cookieKey]?.exemptionReason,
-          };
-        } else {
-          this.tabsData[tabId][cookieKey] = {
-            ...cookie,
-            blockingStatus: deriveBlockingStatus(cookie.networkEvents),
-          };
-        }
-      }
-
-      updateCookieBadgeText(this.tabsData[tabId], tabId);
-    } catch (error) {
-      //Fail silently
-      // eslint-disable-next-line no-console
-      console.warn(error);
     }
   }
 
@@ -814,4 +724,4 @@ class SynchnorousCookieStore {
   }
 }
 
-export default new SynchnorousCookieStore();
+export default new DataStore();

@@ -17,8 +17,9 @@
  * Internal dependencies
  */
 import parseHeaders from '../../utils/parseHeaders';
-import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import dataStore from '../../store/dataStore';
 import { getTab } from '../../utils/getTab';
+import cookieStore from '../../store/cookieStore';
 
 export const onResponseStartedListener = ({
   tabId,
@@ -27,26 +28,26 @@ export const onResponseStartedListener = ({
   frameId,
   requestId,
 }: chrome.webRequest.WebResponseCacheDetails) => {
-  if (synchnorousCookieStore.globalIsUsingCDP) {
+  if (dataStore.globalIsUsingCDP) {
     return;
   }
 
   (async () => {
     const tab = await getTab(tabId);
-    let tabUrl = synchnorousCookieStore?.getTabUrl(tabId);
+    let tabUrl = dataStore?.getTabUrl(tabId);
 
     if (tab && tab.pendingUrl) {
       tabUrl = tab.pendingUrl;
     }
 
     const cookies = await parseHeaders(
-      synchnorousCookieStore.globalIsUsingCDP,
+      dataStore.globalIsUsingCDP,
       'response',
-      synchnorousCookieStore.tabToRead,
-      synchnorousCookieStore.tabMode,
+      dataStore.tabToRead,
+      dataStore.tabMode,
       tabId,
       url,
-      synchnorousCookieStore.cookieDB ?? {},
+      dataStore.cookieDB ?? {},
       tabUrl,
       frameId.toString(),
       requestId,
@@ -58,6 +59,6 @@ export const onResponseStartedListener = ({
     }
 
     // Adds the cookies from the request headers to the cookies object.
-    synchnorousCookieStore?.update(tabId, cookies);
+    cookieStore?.update(tabId, cookies);
   })();
 };

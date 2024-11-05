@@ -17,37 +17,98 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import { Resizable } from 're-resizable';
-
+import type {
+  MultiSellerAuction,
+  singleAuctionEvent,
+} from '@google-psat/common';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  SidebarProvider,
+  useSidebar,
+} from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import Breakpoints from './breakpoints';
 import AuctionTable from './auctionTable';
-import BottomTray from './bottomTray';
+import MultiSellerAuctionTable from './mutliSellerAuctionTable';
+import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import Breakpoints from './breakpoints';
 
 const Auctions = () => {
-  const [selectedJSON, setSelectedJSON] = useState(null);
+  const [sidebarData, setSidebarData] = useState({});
+
+  const { auctionEvents, isMultiSellerAuction } = useProtectedAudience(
+    ({ state }) => ({
+      auctionEvents: state.auctionEvents ?? {},
+      isMultiSellerAuction: state.isMultiSellerAuction,
+    })
+  );
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
+  if (!isUsingCDP) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          To view auctions, enable PSAT to use CDP via the{' '}
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={() => {
+              document
+                .getElementById('cookies-landing-scroll-container')
+                ?.scrollTo(0, 0);
+              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+            }}
+          >
+            Settings Page
+          </button>
+          .
+        </p>
+      </div>
+    );
+  }
+
+  if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          No auction events were recorded.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '80%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-        minHeight="10%"
-        maxHeight="90%"
-      >
-        <Breakpoints />
-        {['Dummy'].map((auction) => (
-          <AuctionTable key={auction} setSelectedJSON={setSelectedJSON} />
-        ))}
-      </Resizable>
-      <BottomTray selectedJSON={selectedJSON} />
+      <Breakpoints />
+      <div className="overflow-auto flex-1">
+        {!isMultiSellerAuction ? (
+          <AuctionTable
+            auctionEvents={
+              (Object.values(auctionEvents ?? {})?.[0] ??
+                []) as singleAuctionEvent[]
+            }
+          />
+        ) : (
+          <div className="w-full h-full">
+            <SidebarProvider
+              data={sidebarData}
+              defaultSelectedItemKey={Object.keys(auctionEvents)[0]}
+            >
+              <MultiSellerAuctionTable
+                auctionEvents={auctionEvents as MultiSellerAuction}
+                setSidebarData={setSidebarData}
+              />
+            </SidebarProvider>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

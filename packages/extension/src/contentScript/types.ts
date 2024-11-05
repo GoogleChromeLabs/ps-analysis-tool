@@ -22,6 +22,13 @@ export interface ResponseType {
   removeAllFramePopovers?: boolean;
   blockedCookies?: number;
   blockedReasons?: string;
+  isForProtectedAudience?: boolean;
+  selectedAdUnit?: string;
+  numberOfBidders?: number;
+  bidders?: string[];
+  winningBid?: number;
+  winningBidder?: string;
+  bidCurrency?: string;
 }
 
 // @see https://developer.mozilla.org/en-US/docs/Web/API/CookieStore/getAll
