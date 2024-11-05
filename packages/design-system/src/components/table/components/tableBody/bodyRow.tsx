@@ -42,6 +42,7 @@ interface BodyRowProps {
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow
   ) => void;
+  rowHeightClass?: string;
 }
 
 const BodyRow = ({
@@ -57,6 +58,7 @@ const BodyRow = ({
   onRowClick,
   onKeyDown,
   onRowContextMenu,
+  rowHeightClass,
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
@@ -130,6 +132,7 @@ const BodyRow = ({
               showBodyCellPrefixIcon ? showBodyCellPrefixIcon(row) : false
             }
             icon={bodyCellPrefixIcon ?? undefined}
+            rowHeightClass={rowHeightClass}
           />
         )
       )}

@@ -89,3 +89,4 @@ export { default as MenuOpenIcon } from './menu-open-icon.svg';
 export { default as PlayIcon } from './play.svg';
 export { default as RestartIcon } from './restart.svg';
 export { default as PauseIcon } from './pause.svg';
+export { default as SupportIcon } from './support.svg';

@@ -30,12 +30,14 @@ interface TableBodyProps {
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
+  rowHeightClass?: string;
 }
 
 const TableBody = ({
   isRowFocused,
   setIsRowFocused,
   selectedKey,
+  rowHeightClass,
 }: TableBodyProps) => {
   const {
     rows,
@@ -127,7 +129,8 @@ const TableBody = ({
   );
 
   const tableRowClassName = classNames(
-    'h-5 outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    rowHeightClass ?? 'h-5',
     selectedKey === null &&
       (isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
@@ -166,6 +169,7 @@ const TableBody = ({
           }}
           onKeyDown={handleKeyDown}
           onRowContextMenu={onRowContextMenu}
+          rowHeightClass={rowHeightClass}
         />
       ))}
       <div

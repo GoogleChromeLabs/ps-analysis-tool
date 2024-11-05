@@ -24,6 +24,8 @@ import {
   Provider as TablePersistentSettingsProvider,
 } from '@google-psat/design-system';
 import { LibraryDetectionProvider } from '@google-psat/library-detection';
+// eslint-disable-next-line import/no-relative-packages -- Relative import is necessary, because package doesn't export css file.
+import './prettyJson.css';
 
 /**
  * Internal dependencies.
@@ -33,10 +35,13 @@ import {
   CookieProvider,
   SettingsProvider,
   AllowedListProvider,
+  ProtectedAudienceContextProvider,
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
-document.body.classList.add(isDarkMode ? 'dark' : 'light');
+// dark-mode class is added to body to apply pretty-print-json dark theme.
+const classes = isDarkMode ? ['dark', 'dark-mode'] : ['light'];
+document.body.classList.add(...classes);
 
 const root = document.getElementById('root');
 
@@ -45,13 +50,15 @@ if (root) {
     <ErrorBoundary fallbackRender={ErrorFallback}>
       <SettingsProvider>
         <CookieProvider>
-          <TablePersistentSettingsProvider>
-            <LibraryDetectionProvider>
-              <AllowedListProvider>
-                <App />
-              </AllowedListProvider>
-            </LibraryDetectionProvider>
-          </TablePersistentSettingsProvider>
+          <ProtectedAudienceContextProvider>
+            <TablePersistentSettingsProvider>
+              <LibraryDetectionProvider>
+                <AllowedListProvider>
+                  <App />
+                </AllowedListProvider>
+              </LibraryDetectionProvider>
+            </TablePersistentSettingsProvider>
+          </ProtectedAudienceContextProvider>
         </CookieProvider>
       </SettingsProvider>
     </ErrorBoundary>
