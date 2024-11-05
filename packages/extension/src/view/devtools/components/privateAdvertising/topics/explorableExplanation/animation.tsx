@@ -29,20 +29,32 @@ interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
   isPlaying: boolean;
   resetAnimation: boolean;
+  speedMultiplier: number;
 }
 
-const Animation = ({ epoch, isPlaying, resetAnimation }: AnimationProps) => {
+const Animation = ({
+  epoch,
+  isPlaying,
+  resetAnimation,
+  speedMultiplier,
+}: AnimationProps) => {
   const node = useRef(null);
   const [togglePlayCallback, setTogglePlayCallback] =
     useState<(state: boolean) => void>();
   const [resetCallback, setResetCallback] = useState<() => void>();
+  const [speedMultiplierCallback, setSpeedMultiplierCallback] =
+    useState<(speed: number) => void>();
 
   useEffect(() => {
     const tAnimation = (p: p5) => {
-      const { togglePlay, reset } = topicsAnimation(p, epoch);
+      const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
+        p,
+        epoch
+      );
 
       setTogglePlayCallback(() => togglePlay);
       setResetCallback(() => reset);
+      setSpeedMultiplierCallback(() => updateSpeedMultiplier);
     };
 
     const p = node.current ? new p5(tAnimation, node.current) : null;
@@ -61,6 +73,10 @@ const Animation = ({ epoch, isPlaying, resetAnimation }: AnimationProps) => {
       resetCallback?.();
     }
   }, [resetAnimation, resetCallback]);
+
+  useEffect(() => {
+    speedMultiplierCallback?.(speedMultiplier);
+  }, [speedMultiplier, speedMultiplierCallback]);
 
   return <div ref={node} className="overflow-auto" />;
 };

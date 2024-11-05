@@ -35,6 +35,7 @@ export function topicsAnimation(
     siteAdTechs: {} as Record<string, string[]>,
     visitIndex: 0,
     playing: true,
+    speedMultiplier: 1,
 
     drawTimelineLine: (position: { x: number; y: number }) => {
       const { diameter, horizontalSpacing } = config.timeline.circleProps;
@@ -96,9 +97,14 @@ export function topicsAnimation(
 
     reset: () => {
       app.visitIndex = 0;
+      app.speedMultiplier = 1;
       p.clear();
       app.drawTimelineLine(config.timeline.position);
       app.drawTimeline(config.timeline.position, epoch);
+    },
+
+    updateSpeedMultiplier: (speedMultiplier: number) => {
+      app.speedMultiplier = speedMultiplier;
     },
 
     handleUserVisit: (visitIndex: number) => {
@@ -272,7 +278,8 @@ export function topicsAnimation(
   };
 
   p.draw = () => {
-    const delay = config.timeline.stepDelay / 10;
+    const step = config.timeline.stepDelay / app.speedMultiplier;
+    const delay = step / 10;
 
     if (p.frameCount % delay === 0 && app.playing) {
       app.play();
@@ -282,5 +289,6 @@ export function topicsAnimation(
   return {
     togglePlay: app.togglePlay,
     reset: app.reset,
+    updateSpeedMultiplier: app.updateSpeedMultiplier,
   };
 }

@@ -44,6 +44,7 @@ const ExplorableExplanation = () => {
     }, 0);
 
     setPlay(true);
+    setSliderStep(1);
   }, []);
 
   return (
@@ -61,6 +62,7 @@ const ExplorableExplanation = () => {
           epoch={epochs[activeTab].webVisits}
           isPlaying={play}
           resetAnimation={reset}
+          speedMultiplier={sliderStep}
         />
       </div>
       <Resizable
