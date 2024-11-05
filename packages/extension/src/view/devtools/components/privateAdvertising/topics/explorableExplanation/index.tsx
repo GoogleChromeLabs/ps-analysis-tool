@@ -47,7 +47,7 @@ const ExplorableExplanation = () => {
         historyCount={historyCount}
         reset={noop}
       />
-      <div className="flex-1">
+      <div className="flex-1 overflow-auto">
         <Animation epoch={epochs[activeTab].webVisits} />
       </div>
       <Resizable
