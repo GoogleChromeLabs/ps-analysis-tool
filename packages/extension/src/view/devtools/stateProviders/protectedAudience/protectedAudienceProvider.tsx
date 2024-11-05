@@ -53,6 +53,8 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['interestGroupDetails']
   >([]);
 
+  const [selectedAdUnit, setSelectedAdUnit] = useState<string | null>(null);
+
   const [receivedBids, setReceivedBids] = useState<
     ProtectedAudienceContextType['state']['receivedBids']
   >([]);
@@ -138,11 +140,28 @@ const Provider = ({ children }: PropsWithChildren) => {
           if (computedBids) {
             const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
               {};
-
             computedBids.receivedBids.forEach(
-              ({ adUnitCode, ownerOrigin, mediaContainerSize }) => {
+              ({
+                adUnitCode,
+                ownerOrigin,
+                mediaContainerSize,
+                bid,
+                bidCurrency,
+              }) => {
                 if (!adUnitCode) {
                   return;
+                }
+
+                let winningBid = bid ?? 0;
+                let winningBidder = ownerOrigin ?? '';
+
+                if (
+                  winningBid &&
+                  winningBid < adUnitCodeToBidders[adUnitCode]?.winningBid
+                ) {
+                  winningBid = adUnitCodeToBidders[adUnitCode]?.winningBid;
+                  winningBidder =
+                    adUnitCodeToBidders[adUnitCode]?.winningBidder;
                 }
 
                 adUnitCodeToBidders[adUnitCode] = {
@@ -163,6 +182,9 @@ const Provider = ({ children }: PropsWithChildren) => {
                       )
                     ),
                   ],
+                  bidCurrency: bidCurrency ?? '',
+                  winningBid,
+                  winningBidder,
                 };
               }
             );
@@ -196,14 +218,33 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
+  const onCommittedNavigationListener = useCallback(
+    ({
+      frameId,
+      frameType,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameType !== 'outermost_frame' && frameId !== 0) {
+        return;
+      }
+
+      setNoBids({});
+      setReceivedBids([]);
+      setAdsAndBidders({});
+    },
+    []
+  );
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
     return () => {
       chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.webNavigation.onCommitted.removeListener(
+        onCommittedNavigationListener
+      );
     };
-  }, [messagePassingListener]);
+  }, [messagePassingListener, onCommittedNavigationListener]);
 
   const memoisedValue: ProtectedAudienceContextType = useMemo(() => {
     return {
@@ -214,9 +255,14 @@ const Provider = ({ children }: PropsWithChildren) => {
         receivedBids,
         noBids,
         adsAndBidders,
+        selectedAdUnit,
+      },
+      actions: {
+        setSelectedAdUnit,
       },
     };
   }, [
+    selectedAdUnit,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,

@@ -22,7 +22,9 @@ const chrome = require('sinon-chrome/extensions');
 /** @type {import('jest').Config} */
 module.exports = {
   rootDir: '../',
-  transformIgnorePatterns: ['node_modules/(?!(p-queue|p-timeout))'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(p-queue|p-timeout|pretty-print-json))',
+  ],
   moduleNameMapper: {
     '^@google-psat\\/(.*)': '<rootDir>/packages/$1/src/',
     '\\.svg': join(__dirname, '/svgMock.cjs'),

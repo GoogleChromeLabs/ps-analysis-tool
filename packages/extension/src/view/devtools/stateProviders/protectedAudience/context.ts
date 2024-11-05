@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import {
   createContext,
   type AuctionEventsType,
@@ -23,6 +24,7 @@ import {
   type ReceivedBids,
   type NoBidsType,
   type AdsAndBiddersType,
+  noop,
 } from '@google-psat/common';
 
 export interface ProtectedAudienceContextType {
@@ -33,6 +35,10 @@ export interface ProtectedAudienceContextType {
     receivedBids: ReceivedBids[];
     noBids: NoBidsType;
     adsAndBidders: AdsAndBiddersType;
+    selectedAdUnit: string | null;
+  };
+  actions: {
+    setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   };
 }
 
@@ -44,6 +50,10 @@ const initialState: ProtectedAudienceContextType = {
     receivedBids: [],
     noBids: {},
     adsAndBidders: {},
+    selectedAdUnit: null,
+  },
+  actions: {
+    setSelectedAdUnit: noop,
   },
 };
 
