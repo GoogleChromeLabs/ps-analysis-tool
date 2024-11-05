@@ -17,9 +17,8 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -30,12 +29,22 @@ import Animation from './animation';
 import { createEpochs } from './topicsAnimation/utils';
 
 const ExplorableExplanation = () => {
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState(true);
+  const [reset, _setReset] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
   const historyCount = 10;
 
   const epochs = useMemo(() => createEpochs(), []);
+
+  const setReset = useCallback(() => {
+    _setReset(true);
+    setTimeout(() => {
+      _setReset(false);
+    }, 0);
+
+    setPlay(true);
+  }, []);
 
   return (
     <div className="flex flex-col h-full">
@@ -45,10 +54,14 @@ const ExplorableExplanation = () => {
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
         historyCount={historyCount}
-        reset={noop}
+        reset={setReset}
       />
       <div className="flex-1 overflow-auto">
-        <Animation epoch={epochs[activeTab].webVisits} />
+        <Animation
+          epoch={epochs[activeTab].webVisits}
+          isPlaying={play}
+          resetAnimation={reset}
+        />
       </div>
       <Resizable
         defaultSize={{

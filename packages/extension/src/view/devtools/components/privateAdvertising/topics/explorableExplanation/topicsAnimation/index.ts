@@ -23,6 +23,7 @@ import { adtechs, websites } from './data';
  * Setup function for p5.js
  * @param p - p5.js instance
  * @param epoch - Array of objects containing datetime, website, and topics
+ * @returns Object with callbacks to control the animation
  */
 export function topicsAnimation(
   p: p5,
@@ -33,6 +34,7 @@ export function topicsAnimation(
     circlePositions: [] as { x: number; y: number }[],
     siteAdTechs: {} as Record<string, string[]>,
     visitIndex: 0,
+    playing: true,
 
     drawTimelineLine: (position: { x: number; y: number }) => {
       const { diameter, horizontalSpacing } = config.timeline.circleProps;
@@ -86,6 +88,17 @@ export function topicsAnimation(
 
       app.handleUserVisit(app.visitIndex);
       app.visitIndex++;
+    },
+
+    togglePlay: (state: boolean) => {
+      app.playing = state;
+    },
+
+    reset: () => {
+      app.visitIndex = 0;
+      p.clear();
+      app.drawTimelineLine(config.timeline.position);
+      app.drawTimeline(config.timeline.position, epoch);
     },
 
     handleUserVisit: (visitIndex: number) => {
@@ -261,8 +274,13 @@ export function topicsAnimation(
   p.draw = () => {
     const delay = config.timeline.stepDelay / 10;
 
-    if (p.frameCount % delay === 0) {
+    if (p.frameCount % delay === 0 && app.playing) {
       app.play();
     }
+  };
+
+  return {
+    togglePlay: app.togglePlay,
+    reset: app.reset,
   };
 }

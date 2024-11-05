@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 
 /**
@@ -27,14 +27,22 @@ import { topicsAnimation } from './topicsAnimation';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
+  isPlaying: boolean;
+  resetAnimation: boolean;
 }
 
-const Animation = ({ epoch }: AnimationProps) => {
+const Animation = ({ epoch, isPlaying, resetAnimation }: AnimationProps) => {
   const node = useRef(null);
+  const [togglePlayCallback, setTogglePlayCallback] =
+    useState<(state: boolean) => void>();
+  const [resetCallback, setResetCallback] = useState<() => void>();
 
   useEffect(() => {
     const tAnimation = (p: p5) => {
-      topicsAnimation(p, epoch);
+      const { togglePlay, reset } = topicsAnimation(p, epoch);
+
+      setTogglePlayCallback(() => togglePlay);
+      setResetCallback(() => reset);
     };
 
     const p = node.current ? new p5(tAnimation, node.current) : null;
@@ -43,6 +51,16 @@ const Animation = ({ epoch }: AnimationProps) => {
       p?.remove();
     };
   }, [epoch]);
+
+  useEffect(() => {
+    togglePlayCallback?.(isPlaying);
+  }, [isPlaying, togglePlayCallback]);
+
+  useEffect(() => {
+    if (resetAnimation) {
+      resetCallback?.();
+    }
+  }, [resetAnimation, resetCallback]);
 
   return <div ref={node} className="overflow-auto" />;
 };
