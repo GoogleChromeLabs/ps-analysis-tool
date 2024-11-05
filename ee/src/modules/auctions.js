@@ -50,7 +50,7 @@ auction.setUp = (index) => {
 
   // Setup Branches
   steps.push({
-    component: 'Branches',
+    component: Branches,
     props: {
       branches: [
         {
@@ -70,102 +70,127 @@ auction.setUp = (index) => {
   });
 
   steps.push({
-    component: 'ProgressLine',
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: app.auction.currentBranchBottomTipCoordinates.x,
+      y1: app.auction.currentBranchBottomTipCoordinates.y,
+    },
   });
 
-  // Setup DSP blocks
-  _auction.ssp = {
-    name: 'SSP',
-    box: {
+  steps.push({
+    component: Box,
+    props: {
+      title: 'SSP Tag',
       x: x - box.width / 2,
       y: y + box.height / 2 + 2,
       width: box.width,
       height: box.height,
     },
-    line: {
-      x1: x,
-      y1: y,
-      x2: x,
-      y2: y + lineHeight,
-      speed: 0.6,
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
       direction: 'down',
+      x1: app.currentBranchBottomTipCoordinates.x,
+      y1: app.currentBranchBottomTipCoordinates.y,
     },
-  };
+  });
 
-  // Setup DSP blocks
-  _auction.dsp = [];
+  app.auction.auctions.push(steps);
 
-  for (let i = 0; i <= 1; i++) {
-    const title = 'DSP ' + (i + 1);
+  // // Setup DSP blocks
+  // _auction.ssp = {
+  //   name: 'SSP',
+  //   box: {
+  //     x: x - box.width / 2,
+  //     y: y + box.height / 2 + 2,
+  //     width: box.width,
+  //     height: box.height,
+  //   },
+  //   line: {
+  //     x1: x,
+  //     y1: y,
+  //     x2: x,
+  //     y2: y + lineHeight,
+  //     speed: 0.6,
+  //     direction: 'down',
+  //   },
+  // };
 
-    const xForSmallBox = i % 2 === 0 ? x - box.width / 1.5 : x + box.width / 4;
-    const xForSmallBoxLine =
-      i % 2 === 0 ? x - box.width / 2 : x + box.width / 4;
+  // // Setup DSP blocks
+  // _auction.dsp = [];
 
-    _auction.dsp.push({
-      name: title,
-      box: {
-        x: xForSmallBox,
-        y: y + box.height + lineHeight * 2 + 7,
-        width: smallBox.width,
-        height: smallBox.height,
-      },
-      line: {
-        x1: xForSmallBoxLine + 10,
-        y1: y + box.height + lineHeight + 5,
-        x2: xForSmallBoxLine + 10,
-        y2: y + box.height + lineHeight * 2,
-        speed: 0.05,
-        direction: 'down',
-      },
-    });
+  // for (let i = 0; i <= 1; i++) {
+  //   const title = 'DSP ' + (i + 1);
 
-    _auction.dsp.push({
-      name: title,
-      line: {
-        x1: xForSmallBoxLine + 20,
-        y1: y + box.height + lineHeight * 2 + 7,
-        x2: xForSmallBoxLine + 20,
-        y2: y + box.height + lineHeight + 5,
-        speed: 0.05,
-        direction: 'up',
-        text: `$${Math.floor(Math.random() * 10) + 1}`,
-      },
-    });
-  }
+  //   const xForSmallBox = i % 2 === 0 ? x - box.width / 1.5 : x + box.width / 4;
+  //   const xForSmallBoxLine =
+  //     i % 2 === 0 ? x - box.width / 2 : x + box.width / 4;
 
-  const mediumBoxes = ['runAuction()', 'Show Winning Ad'];
+  //   _auction.dsp.push({
+  //     name: title,
+  //     box: {
+  //       x: xForSmallBox,
+  //       y: y + box.height + lineHeight * 2 + 7,
+  //       width: smallBox.width,
+  //       height: smallBox.height,
+  //     },
+  //     line: {
+  //       x1: xForSmallBoxLine + 10,
+  //       y1: y + box.height + lineHeight + 5,
+  //       x2: xForSmallBoxLine + 10,
+  //       y2: y + box.height + lineHeight * 2,
+  //       speed: 0.05,
+  //       direction: 'down',
+  //     },
+  //   });
 
-  _auction.bottomFlow = [];
+  //   _auction.dsp.push({
+  //     name: title,
+  //     line: {
+  //       x1: xForSmallBoxLine + 20,
+  //       y1: y + box.height + lineHeight * 2 + 7,
+  //       x2: xForSmallBoxLine + 20,
+  //       y2: y + box.height + lineHeight + 5,
+  //       speed: 0.05,
+  //       direction: 'up',
+  //       text: `$${Math.floor(Math.random() * 10) + 1}`,
+  //     },
+  //   });
+  // }
 
-  // Setup bottom blocks
-  for (let i = 0; i < mediumBoxes.length; i++) {
-    const title = mediumBoxes[i];
-    const boxXPosition =
-      x + box.width / 2 + mediumBox.width * i + lineWidth * (i + 1);
-    const lineXPosition =
-      boxXPosition - mediumBox.width + config.timeline.circleProps.diameter / 2;
+  // const mediumBoxes = ['runAuction()', 'Show Winning Ad'];
 
-    _auction.bottomFlow.push({
-      name: title,
-      box: {
-        x: boxXPosition,
-        y: y + box.height / 2 + mediumBox.height / 2,
-        width: mediumBox.width,
-        height: mediumBox.height,
-      },
-      line: {
-        x1: lineXPosition,
-        y1: y + box.height / 2 + mediumBox.height,
-        x2: lineXPosition,
-        y2: y + box.height / 2 + mediumBox.height,
-        speed: 0.06,
-        direction: 'right',
-      },
-    });
-  }
+  // _auction.bottomFlow = [];
 
-  app.auction.auctions.push(_auction);
+  // // Setup bottom blocks
+  // for (let i = 0; i < mediumBoxes.length; i++) {
+  //   const title = mediumBoxes[i];
+  //   const boxXPosition =
+  //     x + box.width / 2 + mediumBox.width * i + lineWidth * (i + 1);
+  //   const lineXPosition =
+  //     boxXPosition - mediumBox.width + config.timeline.circleProps.diameter / 2;
+
+  //   _auction.bottomFlow.push({
+  //     name: title,
+  //     box: {
+  //       x: boxXPosition,
+  //       y: y + box.height / 2 + mediumBox.height / 2,
+  //       width: mediumBox.width,
+  //       height: mediumBox.height,
+  //     },
+  //     line: {
+  //       x1: lineXPosition,
+  //       y1: y + box.height / 2 + mediumBox.height,
+  //       x2: lineXPosition,
+  //       y2: y + box.height / 2 + mediumBox.height,
+  //       speed: 0.06,
+  //       direction: 'right',
+  //     },
+  //   });
+  // }
 };
 
 auction.draw = async (index) => {

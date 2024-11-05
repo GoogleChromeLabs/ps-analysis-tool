@@ -23,7 +23,7 @@ const app = {
   },
   auction: {
     auctions: [],
-    currentBranchBottomTipCoordinates: [],
+    currentBranchBottomTipCoordinates: { x: 0, y: 0 },
   },
   joinInterestGroup: {
     joinings: [],
