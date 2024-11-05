@@ -38,7 +38,7 @@ joinInterestGroup.setUp = (index) => {
   const currentCircle = circles[index];
   const _joining = {};
 
-  const { x, y } = flow.calculateXYPostions(index);
+  const { x, y } = flow.getTimelineCircleCoordinates(index);
 
   if (currentCircle.type !== 'advertiser') {
     app.joinInterestGroup.joinings.push(null);

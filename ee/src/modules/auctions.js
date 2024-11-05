@@ -33,13 +33,13 @@ auction.setupAuctions = () => {
   });
 };
 
-auction.setUp = (index) => {
+auction.setUp = async (index) => {
   const { circles } = config.timeline;
   const { box, smallBox, mediumBox, lineWidth, lineHeight } = config.flow;
   const currentCircle = circles[index];
   const _auction = {};
 
-  const { x, y } = flow.calculateXYPostions(index);
+  const { x, y } = flow.getTimelineCircleCoordinates(index);
 
   if (currentCircle.type !== 'publisher') {
     app.auction.auctions.push(null);
@@ -70,7 +70,7 @@ auction.setUp = (index) => {
       ],
     },
     callBack: (returnValue) => {
-      app.auction.currentBranchBottomTipCoordinates = returnValue[0];
+      app.auction.nextTipCoordinates = returnValue[1];
     },
   });
 
@@ -78,20 +78,120 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.currentBranchBottomTipCoordinates.x,
-      y1: () => app.auction.currentBranchBottomTipCoordinates.y + 40,
+      x1: () => app.auction.nextTipCoordinates.x,
+      y1: () => app.auction.nextTipCoordinates.y + 40,
       noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'SSP Tag',
+      x: () => app.auction.nextTipCoordinates.x - mediumBox.width / 2,
+      y: () => app.auction.nextTipCoordinates.y,
+      width: mediumBox.width,
+      height: mediumBox.height,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates.x,
+      y1: () => app.auction.nextTipCoordinates.y + 40,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'SSP',
+      x: () => app.auction.nextTipCoordinates.x - mediumBox.width / 2,
+      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
+      width: mediumBox.width,
+      height: mediumBox.height,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates.x,
+      y1: () => app.auction.nextTipCoordinates.y + 40,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'DSPs',
+      x: () => app.auction.nextTipCoordinates.x - mediumBox.width / 2,
+      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
+      width: mediumBox.width,
+      height: mediumBox.height,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'up',
+      x1: () => app.auction.nextTipCoordinates.x + 10,
+      y1: () => {
+        return app.auction.nextTipCoordinates.y - 15;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'up',
+      x1: () => app.auction.nextTipCoordinates.x,
+      y1: () => {
+        return app.auction.nextTipCoordinates.y - mediumBox.height - 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
     },
   });
 
   // steps.push({
   //   component: Box,
   //   props: {
-  //     title: 'SSP Tag',
-  //     x: x - box.width / 2,
-  //     y: y + box.height / 2 + 2,
+  //     title: 'DSPs',
+  //     x: () => app.auction.nextTipCoordinates.x - box.width / 2,
+  //     y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
   //     width: box.width,
-  //     height: box.height,
+  //     height: box.height / 2,
+  //   },
+  //   callBack: (returnValue) => {
+  //     app.auction.nextTipCoordinates = returnValue.down;
   //   },
   // });
 
@@ -99,8 +199,8 @@ auction.setUp = (index) => {
   //   component: ProgressLine,
   //   props: {
   //     direction: 'down',
-  //     x1: app.auction.currentBranchBottomTipCoordinates.x,
-  //     y1: app.auction.currentBranchBottomTipCoordinates.y,
+  //     x1: app.auction.nextTipCoordinates.x,
+  //     y1: app.auction.nextTipCoordinates.y,
   //   },
   // });
 

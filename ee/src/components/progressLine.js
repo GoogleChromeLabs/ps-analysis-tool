@@ -72,7 +72,10 @@ const ProgressLine = ({
           currentX += incrementBy;
           if (currentX - x1 > width) {
             clearInterval(app.flow.intervals['progressline']);
-            resolve();
+            resolve({
+              x: currentX,
+              y: y2,
+            });
           }
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1, direction);
@@ -83,7 +86,10 @@ const ProgressLine = ({
           if (x2 - targetX > width) {
             clearInterval(app.flow.intervals['progressline']);
             drawText(targetX + width / 2, y1 + height / 2);
-            resolve();
+            resolve({
+              x: targetX,
+              y: y1 + 10,
+            });
           }
           p.line(x2, y2 + 10, targetX, y1 + 10);
           drawArrow(targetX, y1 + 4, direction);
@@ -97,7 +103,10 @@ const ProgressLine = ({
               x1 - (text.startsWith('$') ? 10 : width / 2),
               y1 + height / 2
             );
-            resolve();
+            resolve({
+              x: x2,
+              y: currentY,
+            });
           }
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);
@@ -111,7 +120,10 @@ const ProgressLine = ({
               x1 + (text.startsWith('$') ? 10 : width / 2),
               y1 - height / 2
             );
-            resolve();
+            resolve({
+              x: x2,
+              y: currentY,
+            });
           }
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);

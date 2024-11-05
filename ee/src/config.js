@@ -81,6 +81,13 @@ const config = {
     mediumBox: { width: 125, height: 50 },
     lineWidth: 100,
     lineHeight: 50,
+    arrowSize: 10,
+    colors: {
+      box: {
+        background: '255',
+        text: '#000',
+      },
+    },
   },
   rippleEffect: {
     ripples: [],

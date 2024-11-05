@@ -43,8 +43,6 @@ const Branches = async ({ x1, y1, branches }) => {
   await ProgressLine({
     x1: x1,
     y1: y1,
-    x2: x1,
-    y2,
     direction: 'down',
     noArrow: true,
   });
@@ -59,6 +57,8 @@ const Branches = async ({ x1, y1, branches }) => {
 
 const drawAnimatedTimeline = (x, y, branches) => {
   const p = app.p;
+  const leftMargin = 15;
+  x = x + leftMargin;
 
   p.stroke(0);
   p.strokeWeight(1);

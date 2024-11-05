@@ -17,15 +17,35 @@
  * Internal dependencies.
  */
 import app from '../app';
+import config from '../config';
 
 const Box = ({ title, x, y, width, height }) => {
+  if (typeof x === 'function') {
+    x = x();
+  }
+
+  if (typeof y === 'function') {
+    y = y();
+  }
+
+  const nextTip = {
+    down: {
+      x: x + width / 2,
+      y: y + height / 4,
+    },
+  };
+
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
+  app.p.fill(config.flow.colors.box.background);
   app.p.rect(x, y, width, height);
   app.p.push();
   app.p.strokeWeight(0.1);
+  app.p.fill(config.flow.colors.box.text);
   app.p.textFont('ui-sans-serif');
   app.p.text(title, x + width / 2, y + height / 2);
   app.p.pop();
+
+  return nextTip;
 };
 
 export default Box;

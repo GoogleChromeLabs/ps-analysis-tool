@@ -27,7 +27,7 @@ import config from '../config.js';
 
 const flow = {};
 
-flow.calculateXYPostions = (index) => {
+flow.getTimelineCircleCoordinates = (index) => {
   const { circleProps } = config.timeline;
   const { diameter } = circleProps;
 
