@@ -178,9 +178,7 @@ const AuctionTable = ({
       >
         <div className="flex justify-between items-center p-2">
           <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
-          <p>
-            Date {new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
-          </p>
+          <p>{new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}</p>
         </div>
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider

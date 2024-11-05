@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 /**
- * Internal Dependencies.
+ * External dependencies.
  */
 import { I18n } from '@google-psat/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import { NUMBER_OF_ALLOWED_FEATURES_IN_COMPACT_VIEW } from '../constants';
 import type { ResponseType } from '../types';
 
