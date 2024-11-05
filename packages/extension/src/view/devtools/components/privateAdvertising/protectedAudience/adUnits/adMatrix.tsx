@@ -17,43 +17,72 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { MatrixComponent } from '@google-psat/design-system';
 
+/**
+ * Internal dependencies.
+ */
+import { useProtectedAudience } from '../../../../stateProviders';
+
 const AdMatrix = () => {
-  const matrixData = [
-    {
-      title: 'Ad Units',
-      count: 5,
-      color: '#5CC971',
-      description: 'Placeholder',
-      countClassName: 'text-emerald',
-    },
-    {
-      title: 'Bidders',
-      count: 10,
-      color: '#F3AE4E',
-      description: 'Placeholder',
-      countClassName: 'text-max-yellow-red',
-    },
-    {
-      title: 'Bids',
-      count: 15,
-      color: '#4C79F4',
-      description: 'Placeholder',
-      countClassName: 'text-blue-berry',
-    },
-    {
-      title: 'No Bids',
-      count: 20,
-      color: '#EC7159',
-      description: 'Placeholder',
-      countClassName: 'text-burnt-sienna',
-    },
-  ];
+  const { adsAndBidders, receivedBids, noBids } = useProtectedAudience(
+    ({ state }) => ({
+      adsAndBidders: state.adsAndBidders,
+      receivedBids: state.receivedBids,
+      noBids: state.noBids,
+    })
+  );
+
+  const biddersCount = useMemo(() => {
+    const bidders = Object.values(adsAndBidders).reduce((acc, ad) => {
+      if (ad.bidders) {
+        ad.bidders.forEach((bidder) => {
+          acc.add(bidder);
+        });
+      }
+      return acc;
+    }, new Set());
+
+    return bidders.size;
+  }, [adsAndBidders]);
+
+  const matrixData = useMemo(
+    () => [
+      {
+        title: 'Ad Units',
+        count: Object.values(adsAndBidders).length,
+        color: '#5CC971',
+        description: 'Placeholder',
+        countClassName: 'text-[#5CC971]',
+      },
+      {
+        title: 'Bidders',
+        count: biddersCount,
+        color: '#F3AE4E',
+        description: 'Placeholder',
+        countClassName: 'text-[#F3AE4E]',
+      },
+      {
+        title: 'Bids',
+        count: receivedBids.length,
+        color: '#4C79F4',
+        description: 'Placeholder',
+        countClassName: 'text-[#4C79F4]',
+      },
+      {
+        title: 'No Bids',
+        count: Object.values(noBids).length,
+        color: '#EC7159',
+        description: 'Placeholder',
+        countClassName: 'text-[#EC7159]',
+      },
+    ],
+    [adsAndBidders, biddersCount, noBids, receivedBids.length]
+  );
 
   return (
-    <div className="grid grid-cols-4 gap-x-2 max-w-2xl">
+    <div className="grid grid-cols-4 gap-x-2 max-w-2xl mb-4">
       {matrixData.map((dataComponent, index) => {
         if (dataComponent && dataComponent.countClassName) {
           return (

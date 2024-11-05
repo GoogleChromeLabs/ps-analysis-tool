@@ -29,6 +29,14 @@ import {
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
 
+/**
+ * Internal dependencies.
+ */
+import InterestGroups from './interestGroups';
+import Auctions from './auctions';
+import Bids from './bids';
+import AdUnits from './adUnits';
+
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
     <>
@@ -55,32 +63,34 @@ const ProtectedAudience = () => {
           className: 'p-4',
         },
       },
-      // {
-      //   title: 'Interest Groups',
-      //   content: {
-      //     Element: InterestGroups,
-      //     className: 'pt-4 overflow-hidden',
-      //   },
-      // },
-      // {
-      //   title: 'Ad Units',
-      //   content: {
-      //     Element: AdUnits,
-      //     className: 'overflow-hidden',
-      //   },
-      // },
-      // {
-      //   title: 'Auctions',
-      //   content: {
-      //     Element: Auctions,
-      //   },
-      // },
-      // {
-      //   title: 'Bids',
-      //   content: {
-      //     Element: Bids,
-      //   },
-      // },
+      {
+        title: 'Interest Groups',
+        content: {
+          Element: InterestGroups,
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Ad Units',
+        content: {
+          Element: AdUnits,
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Auctions',
+        content: {
+          Element: Auctions,
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Bids',
+        content: {
+          Element: Bids,
+          className: 'overflow-hidden',
+        },
+      },
     ],
     []
   );
@@ -90,7 +100,7 @@ const ProtectedAudience = () => {
   return (
     <div
       data-testid="protected-audience-content"
-      className="h-screen w-full flex flex-col"
+      className="h-screen w-full flex flex-col overflow-hidden"
     >
       <div className="p-4">
         <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
@@ -103,7 +113,13 @@ const ProtectedAudience = () => {
         setActiveTab={setActiveTab}
       />
       <div
-        className={classNames(tabItems[activeTab].content.className, 'flex-1')}
+        className={classNames(
+          'overflow-auto',
+          tabItems[activeTab].content.className
+        )}
+        style={{
+          minHeight: 'calc(100% - 93px)',
+        }}
       >
         {ActiveTabContent && (
           <ActiveTabContent {...tabItems[activeTab].content.props} />

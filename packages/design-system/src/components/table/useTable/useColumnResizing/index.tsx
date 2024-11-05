@@ -202,10 +202,6 @@ const useColumnResizing = (
         );
       }
     }
-
-    return () => {
-      setColumns([]);
-    };
   }, [getPreferences, setColumnsCallback, tablePersistentSettingsKey]);
 
   useEffect(() => {
