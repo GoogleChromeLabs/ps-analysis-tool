@@ -36,96 +36,27 @@ bubbles.init = () => {
 // eslint-disable-next-line complexity
 bubbles.generateBubbles = (recalculate = false) => {
   const igp = app.igp;
-  const {
-    canvas: { height, width },
-    bubbles: {
-      isExpanded,
-      minifiedBubbleX,
-      minifiedBubbleY,
-      minifiedCircleDiameter,
-      interestGroupCounts,
-      expandedCircleDiameter,
-    },
-    timeline: { circles },
-  } = config;
+  const color = igp.color(
+    igp.random(80, 255),
+    igp.random(140, 255),
+    igp.random(120, 255)
+  );
 
-  const x = isExpanded ? width / 2 : minifiedBubbleX;
-  const y = isExpanded ? height / 2 : minifiedBubbleY;
+  const interestGroupsToBeAdded =
+    config.timeline.circles[app.timeline.currentIndex].igGroupsCount ?? 0;
+  const previouslyAddedInterestGroup = config.bubbles.interestGroupCounts;
 
-  const maxBubbles =
-    interestGroupCounts +
-    (recalculate ? 0 : circles[app.timeline.currentIndex].igGroupsCount ?? 0);
-
-  const expandedCircleRadius = expandedCircleDiameter / 2;
-  let accomodatingCircles =
-    (expandedCircleRadius / 2) * (expandedCircleRadius / 2);
-  let smallCircleRadius = 2;
-  while (accomodatingCircles >= maxBubbles) {
-    const tempAccomodatingCircles =
-      (expandedCircleRadius / smallCircleRadius) *
-      (expandedCircleRadius / smallCircleRadius);
-
-    if (tempAccomodatingCircles >= maxBubbles) {
-      accomodatingCircles = Math.min(
-        accomodatingCircles,
-        tempAccomodatingCircles
-      );
-      smallCircleRadius++;
-    } else {
-      break;
+  if (!recalculate) {
+    for (let index = 0; index < interestGroupsToBeAdded; index++) {
+      app.bubbles.positions.push({
+        id: uuidv4(),
+        value: previouslyAddedInterestGroup + index,
+        color,
+      });
     }
   }
-
-  const bigRadius =
-    (isExpanded ? expandedCircleDiameter : minifiedCircleDiameter) / 2;
-  let attempts = 0;
-  let i = 0;
-  while (
-    // eslint-disable-next-line no-unmodified-loop-condition
-    ((app.bubbles.positions.length < maxBubbles && !recalculate) ||
-      // eslint-disable-next-line no-unmodified-loop-condition
-      (recalculate && i < maxBubbles)) &&
-    attempts < maxBubbles * 10000
-  ) {
-    const angle = igp.random(igp.TWO_PI);
-    const radius = isExpanded ? igp.random(10, smallCircleRadius) : 5;
-    const distanceFromCenter = igp.random(bigRadius - radius);
-    const randomX = x + igp.cos(angle) * distanceFromCenter;
-    const randomY = y + igp.sin(angle) * distanceFromCenter;
-    const newBubble = {
-      id: uuidv4(),
-      value: i,
-      x: randomX,
-      y: randomY,
-      radius,
-      color: recalculate
-        ? app.bubbles.positions[i]?.color
-        : igp.color(igp.random(255), igp.random(255), igp.random(255)),
-    };
-
-    // Check if new bubble overlaps with any existing bubble
-    let overlapping = false;
-    if (isExpanded) {
-      for (const bubble of app.bubbles.positions) {
-        const d = igp.dist(newBubble.x, newBubble.y, bubble.x, bubble.y);
-        if (d < newBubble.radius + bubble.radius) {
-          overlapping = true;
-          break;
-        }
-      }
-    }
-
-    const distToCenter = igp.dist(x, y, randomX, randomY);
-    if (!overlapping && distToCenter + radius <= bigRadius) {
-      if (recalculate) {
-        app.bubbles.positions[i] = newBubble;
-      } else {
-        app.bubbles.positions.push(newBubble);
-      }
-      i++;
-    }
-    attempts++;
-  }
+  bubbles.generateExpandedBubbles();
+  bubbles.generateMinifiedBubbles();
 };
 
 bubbles.drawSmallCircles = (inBarrage = false) => {
@@ -152,40 +83,18 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
   );
 
   if (inBarrage) {
-    const _bubbles = app.bubbles.positions.filter((data, currIndex) => {
-      if (currIndex < interestGroupCounts) {
-        return true;
-      }
-      return false;
-    });
-
     if (isExpanded) {
-      bubbles.showExpandedBubbles(x, y, _bubbles);
+      bubbles.showExpandedBubbles(true);
     }
 
-    app.bubbles.positions.forEach((bubble, currIndex) => {
-      const _x = bubble?.expanded?.x ?? bubble.x;
-      const _y = bubble?.expanded?.y ?? bubble.y;
-      const _r = bubble?.expanded?.r ?? bubble.radius;
-      if (currIndex < interestGroupCounts) {
-        igp.push();
-        igp.fill(bubble.color);
-        igp.circle(_x, _y, _r * 2);
-        igp.pop();
-      }
-    });
+    bubbles.showMinifiedBubbles();
   } else {
     if (isExpanded) {
-      bubbles.showExpandedBubbles(x, y);
+      bubbles.showExpandedBubbles();
       return;
     }
 
-    app.bubbles.positions.forEach((bubble) => {
-      igp.push();
-      igp.fill(bubble.color);
-      igp.circle(bubble.x, bubble.y, bubble.radius * 2);
-      igp.pop();
-    });
+    bubbles.showMinifiedBubbles();
   }
 
   if (!isExpanded) {
@@ -395,55 +304,136 @@ bubbles.reverseBarrageAnimation = async (index) => {
   utils.wipeAndRecreateInterestCanvas();
   bubbles.drawSmallCircles();
 };
+bubbles.generateExpandedBubbles = () => {
+  const assembledData = {
+    name: 'root',
+    children: app.bubbles.positions,
+  };
 
-bubbles.bubbleChart = (data) => {
   const root = d3
-    .hierarchy(data)
+    .hierarchy(assembledData)
     .sum((d) => d.value)
     .sort((a, b) => b.value - a.value);
 
   d3.pack().size([config.canvas.width, config.canvas.height]).padding(3)(root);
 
-  const nodes = root.descendants();
+  const expandedNodes = root.descendants();
+
   const nodeMap = {};
 
-  const maxRadius = nodes.reduce((acc, node) => {
+  expandedNodes.forEach((node) => {
     nodeMap[node.data.id] = node;
-    acc = Math.max(acc, node.r);
-    return acc;
-  }, 0);
+  });
 
   app.bubbles.positions = app.bubbles.positions.map((_data) => {
     return {
       ..._data,
       expanded: {
-        ...nodeMap[_data.id],
+        x: nodeMap[_data.id].x,
+        y: nodeMap[_data.id].y,
+        r: nodeMap[_data.id].r,
       },
     };
   });
-
-  return { nodes, maxRadius };
 };
-
-bubbles.showExpandedBubbles = (x, y, data = null) => {
+bubbles.showExpandedBubbles = (inBarrage = false) => {
   const igp = app.igp;
+  const {
+    canvas: { height, width },
+    bubbles: { isExpanded, minifiedBubbleX, minifiedBubbleY },
+  } = config;
 
-  const { nodes, maxRadius } = bubbles.bubbleChart({
-    name: 'root',
-    children: data ?? app.bubbles.positions,
-  });
+  if (app.bubbles.positions.length === 0) {
+    const x = isExpanded ? width / 2 : minifiedBubbleX;
+    const y = isExpanded ? height / 2 : minifiedBubbleY;
 
-  igp.circle(x, y, maxRadius * 2);
+    igp.circle(x, y, config.bubbles.expandedCircleDiameter);
+    return;
+  }
 
-  for (const node of nodes) {
+  if (!inBarrage) {
+    const { x, y, r } = d3.packEnclose(
+      app.bubbles.positions.map((data) => {
+        return {
+          ...data.expanded,
+        };
+      })
+    );
+
+    igp.circle(x, y, r * 2);
+  }
+
+  for (const node of app.bubbles.positions) {
     if (!node.children) {
       app.igp.push();
-      app.igp.fill(node.data.color);
-      app.igp.ellipse(node.x, node.y, node.r * 2);
+      app.igp.fill(node.color);
+      app.igp.ellipse(node.expanded.x, node.expanded.y, node.expanded.r * 2);
       app.igp.fill(0);
-      app.igp.textSize(node.r / 4);
-      app.igp.text(node.data.name, node.x, node.y);
+      app.igp.textSize(node.expanded.r / 4);
+      app.igp.text(node.id, node.expanded.x, node.expanded.y);
       app.igp.pop();
+    }
+  }
+};
+bubbles.generateMinifiedBubbles = () => {
+  const {
+    bubbles: { minifiedBubbleX, minifiedBubbleY, minifiedCircleDiameter },
+  } = config;
+
+  const assembledData = {
+    name: 'root',
+    children: app.bubbles.positions,
+  };
+
+  const root = d3
+    .hierarchy(assembledData)
+    .sum((d) => d.value)
+    .sort((a, b) => b.value - a.value);
+
+  d3
+    .pack()
+    .size([
+      config.bubbles.minifiedCircleDiameter,
+      config.bubbles.minifiedCircleDiameter,
+    ])
+    .padding(3)(root);
+
+  const minifiedNodes = root.descendants();
+
+  const nodeMap = {};
+
+  minifiedNodes.forEach((node) => {
+    nodeMap[node.data.id] = node;
+  });
+
+  const smallCircleX = minifiedBubbleX - minifiedCircleDiameter / 2;
+  const smallCircleY = minifiedBubbleY - minifiedCircleDiameter / 2;
+
+  app.bubbles.positions = app.bubbles.positions.map((_data) => {
+    return {
+      ..._data,
+      minified: {
+        x: smallCircleX + nodeMap[_data.id].x + nodeMap[_data.id].r,
+        y: smallCircleY + nodeMap[_data.id].y + nodeMap[_data.id].r,
+        r: nodeMap[_data.id].r,
+      },
+    };
+  });
+};
+bubbles.showMinifiedBubbles = () => {
+  const igp = app.igp;
+  const {
+    bubbles: { minifiedBubbleX, minifiedBubbleY },
+  } = config;
+
+  igp.circle(minifiedBubbleX, minifiedBubbleY, 50);
+
+  for (const node of app.bubbles.positions) {
+    if (!node.children) {
+      igp.push();
+      igp.fill(node.color);
+      igp.ellipse(node.minified.x, node.minified.y, node.minified.r * 2);
+      igp.pop();
     }
   }
 };

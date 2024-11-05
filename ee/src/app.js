@@ -32,6 +32,7 @@ const app = {
   },
   bubbles: {
     positions: [],
+    maxRadius: 0,
   },
   utils: {},
   p: null,

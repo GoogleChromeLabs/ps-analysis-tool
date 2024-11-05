@@ -80,7 +80,7 @@ timeline.init = () => {
           )
         ) {
           config.bubbles.isExpanded = true;
-          bubbles.generateBubbles(true);
+          bubbles.generateBubbles();
           app.pause();
         }
       }
@@ -109,9 +109,9 @@ timeline.init = () => {
       }
 
       app.bubbles.positions.forEach((positions, index) => {
-        const _x = positions?.expanded?.x ?? positions.x;
-        const _y = positions?.expanded?.y ?? positions.y;
-        const _r = positions?.expanded?.r ?? positions.radius;
+        const _x = positions?.expanded?.x;
+        const _y = positions?.expanded?.y;
+        const _r = positions?.expanded?.r;
 
         if (utils.isInsideCircle(x, y, _x, _y, _r)) {
           clickedIndex = index;
