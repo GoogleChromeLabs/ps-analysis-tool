@@ -235,6 +235,8 @@ bubbles.reverseBarrageAnimation = async (index) => {
     });
   }
 
+  document.getElementById('interest-canvas').style.zIndex = 4;
+
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
       utils.wipeAndRecreateInterestCanvas();
@@ -283,21 +285,17 @@ bubbles.reverseBarrageAnimation = async (index) => {
     }, 10);
   });
 
+  document.getElementById('interest-canvas').style.zIndex = 2;
   utils.wipeAndRecreateInterestCanvas();
 };
 bubbles.showExpandedBubbles = () => {
-  app.expandedBubbleContainer.innerHTML = '';
   app.minifiedBubbleContainer.innerHTML = '';
-
-  app.expandedBubbleContainer.style.height = `${config.canvas.height}px`;
-  app.expandedBubbleContainer.style.width = `${config.canvas.height}px`;
-  app.expandedBubbleContainer.style.backgroundColor = 'white';
-
+  bubbles.generateBubbles(true);
   if (app.bubbles.expandedSVG) {
-    app.expandedBubbleContainer.appendChild(app.bubbles.expandedSVG);
+    app.minifiedBubbleContainer.appendChild(app.bubbles.expandedSVG);
   }
-  app.minifiedBubbleContainer.style.display = 'none';
-  app.expandedBubbleContainer.style.display = 'block';
+
+  app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
 bubbles.showMinifiedBubbles = () => {
   if (config.bubbles.isExpanded) {
@@ -305,8 +303,6 @@ bubbles.showMinifiedBubbles = () => {
   }
 
   app.minifiedBubbleContainer.innerHTML = '';
-  app.minifiedBubbleContainer.style.height = '50px';
-  app.minifiedBubbleContainer.style.width = '50px';
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
 
   const pTag = document.createElement('p');
@@ -324,8 +320,7 @@ bubbles.showMinifiedBubbles = () => {
     app.minifiedBubbleContainer.appendChild(app.bubbles.minifiedSVG);
   }
 
-  app.minifiedBubbleContainer.style.display = 'block';
-  app.expandedBubbleContainer.style.display = 'none';
+  app.minifiedBubbleContainer.classList.toggle('expanded', false);
 };
 bubbles.bubbleChart = (
   data,
@@ -408,17 +403,19 @@ bubbles.bubbleChart = (
     };
   });
 
-  if (
-    app.expandedBubbleContainer &&
-    data.length > 0 &&
-    config.bubbles.isExpanded
-  ) {
+  if (data.length > 0) {
     const nodes = root.leaves();
     const { r } = d3.packEnclose(nodes);
-    app.expandedBubbleContainer.style.left = `${config.canvas.width / 2 - r}px`;
-    app.expandedBubbleContainer.style.top = '0px';
-    app.expandedBubbleContainer.style.width = `${r * 2}px`;
-    app.expandedBubbleContainer.style.height = `${r * 2}px`;
+    document.styleSheets[0].cssRules.forEach((rules, index) => {
+      if (rules.selectorText === '.minified-bubble-container.expanded') {
+        document.styleSheets[0].cssRules[index].style.left = `${
+          config.canvas.width / 2 - r
+        }px`;
+        document.styleSheets[0].cssRules[index].style.top = `0px`;
+        document.styleSheets[0].cssRules[index].style.width = `${r * 2}px`;
+        document.styleSheets[0].cssRules[index].style.height = `${r * 2}px`;
+      }
+    });
   }
 
   leaf
@@ -426,6 +423,7 @@ bubbles.bubbleChart = (
     .attr('stroke', stroke)
     .attr('stroke-width', strokeWidth)
     .attr('stroke-opacity', strokeOpacity)
+    .attr('class', 'svg')
     .attr(
       'fill',
       groups
@@ -456,10 +454,6 @@ bubbles.bubbleChart = (
       return d.r;
     });
 
-  if (titles) {
-    leaf.append('title').text((d) => titles[d.data]);
-  }
-
   if (labels) {
     // A unique identifier for clip paths (to avoid conflicts).
     const uid = `O-${Math.random().toString(16).slice(2)}`;
@@ -470,19 +464,26 @@ bubbles.bubbleChart = (
       .append('circle')
       .attr('r', (d) => d.r);
 
-    leaf
-      .append('text')
-      .attr(
-        'clip-path',
-        (d) => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`
-      )
-      .selectAll('tspan')
-      .data((d) => `${labels[d.data]}`.split(/\n/g))
-      .join('tspan')
-      .attr('x', 0)
-      .attr('y', (d, i, D) => `${i - D.length / 2 + 0.85}em`)
-      .attr('fill-opacity', (d, i, D) => (i === D.length - 1 ? 0.7 : null))
-      .text((d) => d);
+    if (config.bubbles.isExpanded) {
+      if (titles) {
+        leaf.append('title').text((d) => titles[d.data]);
+      }
+
+      leaf
+        .append('text')
+        .attr(
+          'clip-path',
+          (d) => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`
+        )
+        .selectAll('tspan')
+        .data((d) => `${labels[d.data]}`.split(/\n/g))
+        .join('tspan')
+        .attr('x', 0)
+        .attr('cursor', 'default')
+        .attr('y', (d, i, D) => `${i - D.length / 2 + 0.85}em`)
+        .attr('fill-opacity', (d, i, D) => (i === D.length - 1 ? 0.7 : null))
+        .text((d) => d);
+    }
   }
 
   return Object.assign(svg.node(), { scales: { color } });

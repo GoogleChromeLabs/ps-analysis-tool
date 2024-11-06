@@ -60,15 +60,6 @@
             position: relative;
         }
 
-        #expanded-bubble-container{
-            position: absolute;
-            display: none;
-            top: 0px;
-            left: 0px;
-            border-radius: 50%;
-            border: 1px solid black;
-        }
-
         #bubble-container{
             position: absolute;
             pointer-events: none;
@@ -76,11 +67,32 @@
             left: 0px;
         }
 
-        #minified-bubble-container{
+        .minified-bubble-container{
             position: absolute;
-            display: none;
+            top: 575px;
+            left: 35px;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid black;
+            transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+        }
+
+        .svg:hover{
+            opacity: 95%
+        }
+
+        .svg:active{
+            transform: translateY(4px);
+        }
+
+        .minified-bubble-container.expanded{
+            position: absolute;
+            display: block;
             top: 0px;
-            left: 0px;
+            height: 500px;
+            width: 500px;
             border-radius: 50%;
             border: 1px solid black;
         }
@@ -101,10 +113,8 @@
                 </div>
             </div>
         </div>
-        <div id="interest-canvas">
-        </div>
-        <div id="minified-bubble-container"></div>
-        <div id="expanded-bubble-container"></div>
+        <div id="interest-canvas"></div>
+        <div id="minified-bubble-container" class="minified-bubble-container"></div>
         <div id="user-canvas"></div>
     </main>
 

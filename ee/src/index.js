@@ -196,25 +196,27 @@ const interestGroupSketch = (p) => {
     overlayCanvas.parent('interest-canvas');
     overlayCanvas.style('z-index', 2);
     p.textSize(config.canvas.fontSize);
+    app.igpCanvas = overlayCanvas;
+
     config.bubbles.minifiedBubbleX = 60;
     config.bubbles.minifiedBubbleY = height - 50;
-    const diameter = config.bubbles.minifiedCircleDiameter;
 
-    app.expandedBubbleContainer = document.getElementById(
-      'expanded-bubble-container'
-    );
     app.minifiedBubbleContainer = document.getElementById(
       'minified-bubble-container'
     );
+
+    document.styleSheets[0].cssRules.forEach((rules, index) => {
+      if (rules.selectorText === '.minified-bubble-container.expanded') {
+        document.styleSheets[0].cssRules[index].style.width = `${height}px`;
+        document.styleSheets[0].cssRules[index].style.height = `${height}px`;
+      }
+    });
 
     app.minifiedBubbleContainer.addEventListener(
       'click',
       app.minifiedBubbleClickListener
     );
-    app.minifiedBubbleContainer.style.left = `${60 - diameter / 2}px`;
     app.minifiedBubbleContainer.style.zIndex = 3;
-    app.expandedBubbleContainer.style.zIndex = 3;
-    app.minifiedBubbleContainer.style.top = `${height - 50 - diameter / 2}px`;
 
     (async () => {
       await app.interestGroupInit(p);
