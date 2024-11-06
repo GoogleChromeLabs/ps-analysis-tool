@@ -18,7 +18,6 @@
  */
 import p5 from 'p5';
 import * as d3 from 'd3';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Internal dependencies.
@@ -48,7 +47,9 @@ bubbles.generateBubbles = (recalculate = false) => {
   if (!recalculate) {
     for (let index = 0; index < interestGroupsToBeAdded; index++) {
       app.bubbles.positions.push({
-        id: uuidv4(),
+        id: config.timeline.circles[app.timeline.currentIndex].interestGroups[
+          index
+        ],
         value: igp.random(0, 1000000),
         group: config.timeline.circles[app.timeline.currentIndex].website,
         color,
@@ -63,7 +64,6 @@ bubbles.generateBubbles = (recalculate = false) => {
           .split('.')
           .pop()
           .split(/(?=[A-Z][a-z])/g),
-        d.value.toLocaleString('en'),
       ].join('\n'),
     value: (d) => d.value,
     groupFn: (d) => d.group,
@@ -79,7 +79,6 @@ bubbles.generateBubbles = (recalculate = false) => {
           .split('.')
           .pop()
           .split(/(?=[A-Z][a-z])/g),
-        d.value.toLocaleString('en'),
       ].join('\n'),
     value: (d) => d.value,
     groupFn: (d) => d.group,
