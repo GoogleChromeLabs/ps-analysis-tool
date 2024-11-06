@@ -50,15 +50,13 @@ const TopicsTable = ({ data }: TopicsTableProps) => {
         header: 'Count',
         accessorKey: 'count',
         cell: (info: InfoType) => info,
-        enableHiding: false,
         widthWeightagePercentage: 10,
       },
       {
         header:
           'Observed-by context domains (hashed if the original value is unavailable)',
         accessorKey: 'observedByContextDomains',
-        cell: (info: InfoType) => info,
-        enableHiding: false,
+        cell: (info: InfoType) => (info as string[]).join(' | '),
         widthWeightagePercentage: 60,
       },
     ],
@@ -74,7 +72,7 @@ const TopicsTable = ({ data }: TopicsTableProps) => {
       tableColumns={tableColumns}
       onRowClick={noop}
       onRowContextMenu={noop}
-      getRowObjectKey={() => ''}
+      getRowObjectKey={(row) => row.originalData.topicName}
       tablePersistentSettingsKey={tablePersistentSettingsKey}
     >
       <Table hideSearch hideFiltering selectedKey={''} hideTableTopBar />

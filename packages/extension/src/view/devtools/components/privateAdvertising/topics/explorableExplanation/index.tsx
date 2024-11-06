@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -35,7 +35,7 @@ const ExplorableExplanation = () => {
   const [reset, _setReset] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
-  const historyCount = 10;
+  const [topicsTableData, setTopicsTableData] = useState<TopicsTableType[]>([]);
 
   const epochs = useMemo(() => createEpochs(), []);
   const siteAdTechs = useMemo(() => {
@@ -50,9 +50,12 @@ const ExplorableExplanation = () => {
 
     setPlay(true);
     setSliderStep(1);
+    setTopicsTableData([]);
   }, []);
 
-  const [topicsTableData, setTopicsTableData] = useState<TopicsTableType[]>([]);
+  useEffect(() => {
+    setTopicsTableData([]);
+  }, [activeTab]);
 
   const handleUserVisit = useCallback(
     (visitIndex: number) => {
@@ -95,7 +98,7 @@ const ExplorableExplanation = () => {
         setPlay={setPlay}
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
-        historyCount={historyCount}
+        historyCount={epochs[activeTab].webVisits.length}
         reset={setReset}
       />
       <div className="flex-1 overflow-auto">
