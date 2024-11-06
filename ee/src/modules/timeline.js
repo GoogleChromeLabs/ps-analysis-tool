@@ -38,7 +38,6 @@ timeline.init = () => {
       config.mouseY = y;
       if (config.shouldRespondToClick) {
         utils.wipeAndRecreateInterestCanvas();
-        bubbles.drawSmallCircles();
       }
       utils.wipeAndRecreateUserCanvas();
       timeline.renderUserIcon(x, y);
@@ -66,23 +65,6 @@ timeline.init = () => {
         config.shouldRespondToClick = false;
         await app.drawFlows(clickedIndex);
         config.shouldRespondToClick = true;
-        bubbles.drawSmallCircles();
-      }
-
-      if (!clickedIndex) {
-        if (
-          utils.isInsideCircle(
-            config.mouseX,
-            config.mouseY,
-            config.bubbles.minifiedBubbleX,
-            config.bubbles.minifiedBubbleY,
-            config.bubbles.minifiedCircleDiameter / 2
-          )
-        ) {
-          config.bubbles.isExpanded = true;
-          bubbles.generateBubbles();
-          app.pause();
-        }
       }
     };
   } else {
@@ -227,7 +209,6 @@ timeline.renderUserIcon = () => {
   const user = config.timeline.user;
   timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
-  bubbles.drawSmallCircles();
 
   app.up.image(
     app.p.userIcon,

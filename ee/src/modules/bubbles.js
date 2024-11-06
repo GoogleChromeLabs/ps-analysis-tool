@@ -43,7 +43,7 @@ bubbles.generateBubbles = (recalculate = false) => {
   );
 
   const interestGroupsToBeAdded =
-    config.timeline.circles[app.timeline.currentIndex].igGroupsCount ?? 0;
+    config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
 
   if (!recalculate) {
     for (let index = 0; index < interestGroupsToBeAdded; index++) {
@@ -55,28 +55,40 @@ bubbles.generateBubbles = (recalculate = false) => {
       });
     }
   }
+
+  app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
+    label: (d) =>
+      [
+        ...d.id
+          .split('.')
+          .pop()
+          .split(/(?=[A-Z][a-z])/g),
+        d.value.toLocaleString('en'),
+      ].join('\n'),
+    value: (d) => d.value,
+    groupFn: (d) => d.group,
+    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+    width: config.bubbles.minifiedCircleDiameter,
+    height: config.bubbles.minifiedCircleDiameter,
+  });
+
+  app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
+    label: (d) =>
+      [
+        ...d.id
+          .split('.')
+          .pop()
+          .split(/(?=[A-Z][a-z])/g),
+        d.value.toLocaleString('en'),
+      ].join('\n'),
+    value: (d) => d.value,
+    groupFn: (d) => d.group,
+    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+    width: config.canvas.height,
+    height: config.canvas.height,
+  });
 };
 
-bubbles.drawSmallCircles = (inBarrage = false) => {
-  const {
-    bubbles: { isExpanded },
-  } = config;
-
-  if (inBarrage) {
-    if (isExpanded) {
-      bubbles.showExpandedBubbles(true);
-    } else {
-      bubbles.showMinifiedBubbles();
-    }
-  } else {
-    if (isExpanded) {
-      bubbles.showExpandedBubbles();
-      return;
-    }
-
-    bubbles.showMinifiedBubbles();
-  }
-};
 bubbles.barrageAnimation = async (index) => {
   const p = app.igp;
   const {
@@ -122,7 +134,6 @@ bubbles.barrageAnimation = async (index) => {
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
       utils.wipeAndRecreateInterestCanvas();
-      bubbles.drawSmallCircles(true);
 
       //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
@@ -172,7 +183,6 @@ bubbles.barrageAnimation = async (index) => {
   await utils.delay(500);
 
   utils.wipeAndRecreateInterestCanvas();
-  bubbles.drawSmallCircles();
 };
 bubbles.reverseBarrageAnimation = async (index) => {
   const { dspTags } = app.joinInterestGroup.joinings[index];
@@ -206,7 +216,9 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const flowBoxHeight = config.flow.box.height;
     const speed = 1;
     const target = igp.createVector(midPointX, midPointY);
-    const color = igp.color('black');
+
+    const { color: currentColor } = app.bubbles.positions[i];
+    const color = currentColor;
 
     positionsOfCircles.push({
       x:
@@ -226,7 +238,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
       utils.wipeAndRecreateInterestCanvas();
-      bubbles.drawSmallCircles(true);
       //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
         let { x, y } = positionsOfCircles[i];
@@ -273,54 +284,25 @@ bubbles.reverseBarrageAnimation = async (index) => {
   });
 
   utils.wipeAndRecreateInterestCanvas();
-  bubbles.drawSmallCircles();
 };
 bubbles.showExpandedBubbles = () => {
   app.expandedBubbleContainer.innerHTML = '';
-  const svg = bubbles.bubbleChart(app.bubbles.positions, {
-    label: (d) =>
-      [
-        ...d.id
-          .split('.')
-          .pop()
-          .split(/(?=[A-Z][a-z])/g),
-        d.value.toLocaleString('en'),
-      ].join('\n'),
-    value: (d) => d.value,
-    groupFn: (d) => d.group,
-    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: config.canvas.height,
-    height: config.canvas.height,
-  });
+
   app.expandedBubbleContainer.style.height = `${config.canvas.height}px`;
   app.expandedBubbleContainer.style.width = `${config.canvas.height}px`;
   app.expandedBubbleContainer.style.backgroundColor = 'white';
-  app.expandedBubbleContainer.appendChild(svg);
+  app.expandedBubbleContainer.appendChild(app.bubbles.expandedSVG);
   app.expandedBubbleContainer.style.display = 'block';
   app.minifiedBubbleContainer.style.display = 'none';
 };
 bubbles.showMinifiedBubbles = () => {
   app.minifiedBubbleContainer.innerHTML = '';
-  const svg = bubbles.bubbleChart(app.bubbles.positions, {
-    label: (d) =>
-      [
-        ...d.id
-          .split('.')
-          .pop()
-          .split(/(?=[A-Z][a-z])/g),
-        d.value.toLocaleString('en'),
-      ].join('\n'),
-    value: (d) => d.value,
-    groupFn: (d) => d.group,
-    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: 50,
-    height: 50,
-  });
-
   app.minifiedBubbleContainer.style.height = '50px';
   app.minifiedBubbleContainer.style.width = '50px';
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
-  app.minifiedBubbleContainer.appendChild(svg);
+  if (app.bubbles.minifiedSVG) {
+    app.minifiedBubbleContainer.appendChild(app.bubbles.minifiedSVG);
+  }
   app.minifiedBubbleContainer.style.display = 'block';
   app.expandedBubbleContainer.style.display = 'none';
 };
@@ -387,6 +369,14 @@ bubbles.bubbleChart = (
     .join('a')
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
+  app.bubbles.positions = app.bubbles.positions.map((_data, i) => {
+    const nodes = root.leaves();
+    return {
+      ..._data,
+      color: color(groups[nodes[i].data]),
+    };
+  });
+
   if (
     app.expandedBubbleContainer &&
     data.length > 0 &&
@@ -407,7 +397,13 @@ bubbles.bubbleChart = (
     .attr('stroke-opacity', strokeOpacity)
     .attr(
       'fill',
-      groups ? (d) => color(groups[d.data]) : fill === null ? 'none' : fill
+      groups
+        ? (d) => {
+            return color(groups[d.data]);
+          }
+        : fill === null
+        ? 'none'
+        : fill
     )
     .on('click', (event) => {
       if (!config.bubbles.isExpanded) {

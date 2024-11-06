@@ -75,14 +75,14 @@ app.play = () => {
     app.minifiedBubbleContainer.style.display = 'block';
     utils.wipeAndRecreateInterestCanvas();
     bubbles.generateBubbles(true);
-    bubbles.drawSmallCircles();
+    bubbles.showExpandedBubbles();
   }
   app.setupLoop();
 };
 app.minifiedBubbleClickListener = () => {
   if (!config.bubbles.isExpanded) {
     config.bubbles.isExpanded = true;
-    bubbles.generateBubbles(true);
+    bubbles.showExpandedBubbles();
     app.pause();
   }
 };
@@ -95,17 +95,16 @@ app.pause = () => {
     app.expandedBubbleContainer.style.display = 'true';
     app.minifiedBubbleContainer.style.display = 'block';
     bubbles.generateBubbles(true);
-    bubbles.drawSmallCircles();
   }
 };
 
 app.setupLoop = async () => {
+  bubbles.showMinifiedBubbles();
   while (
     !app.timeline.isPaused &&
     app.timeline.currentIndex < config.timeline.circles.length
   ) {
     app.timeline.renderUserIcon();
-    bubbles.drawSmallCircles();
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);
     app.timeline.currentIndex++;

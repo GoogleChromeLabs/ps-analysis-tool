@@ -33,6 +33,8 @@ const app = {
   bubbles: {
     positions: [],
     maxRadius: 0,
+    minifiedSVG: null,
+    expandedSVG: null,
   },
   utils: {},
   p: null,

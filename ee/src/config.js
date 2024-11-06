@@ -92,8 +92,6 @@ const config = {
     rippled: false,
   },
   bubbles: {
-    minDiameter: 20,
-    maxDiameter: 50,
     minifiedBubbleX: 0,
     minifiedBubbleY: 0,
     isExpanded: false,
