@@ -289,11 +289,11 @@ bubbles.showExpandedBubbles = () => {
     value: (d) => d.value,
     groupFn: (d) => d.group,
     title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: config.canvas.width,
+    width: config.canvas.height,
     height: config.canvas.height,
   });
   app.expandedBubbleContainer.style.height = `${config.canvas.height}px`;
-  app.expandedBubbleContainer.style.width = `${config.canvas.width}px`;
+  app.expandedBubbleContainer.style.width = `${config.canvas.height}px`;
   app.expandedBubbleContainer.style.backgroundColor = 'white';
   app.expandedBubbleContainer.appendChild(svg);
   app.expandedBubbleContainer.style.display = 'block';
@@ -386,6 +386,19 @@ bubbles.bubbleChart = (
     .data(root.leaves())
     .join('a')
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
+
+  if (
+    app.expandedBubbleContainer &&
+    data.length > 0 &&
+    config.bubbles.isExpanded
+  ) {
+    const nodes = root.leaves();
+    const { r } = d3.packEnclose(nodes);
+    app.expandedBubbleContainer.style.left = `${config.canvas.width / 2 - r}px`;
+    app.expandedBubbleContainer.style.top = '0px';
+    app.expandedBubbleContainer.style.width = `${r * 2}px`;
+    app.expandedBubbleContainer.style.height = `${r * 2}px`;
+  }
 
   leaf
     .append('circle')
