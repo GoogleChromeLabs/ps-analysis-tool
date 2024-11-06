@@ -71,10 +71,9 @@ app.play = () => {
   app.timeline.isPaused = false;
   if (config.bubbles.isExpanded) {
     config.bubbles.isExpanded = false;
-    app.expandedBubbleContainer.style.display = 'none';
-    app.minifiedBubbleContainer.style.display = 'block';
     utils.wipeAndRecreateInterestCanvas();
     bubbles.generateBubbles(true);
+    app.minifiedBubbleContainer.style.display = 'none';
     bubbles.showExpandedBubbles();
   }
   app.setupLoop();
@@ -92,18 +91,16 @@ app.pause = () => {
   app.playButton.classList.remove('hidden');
   app.timeline.isPaused = true;
   if (config.bubbles.isExpanded) {
-    app.expandedBubbleContainer.style.display = 'true';
-    app.minifiedBubbleContainer.style.display = 'block';
     bubbles.generateBubbles(true);
   }
 };
 
 app.setupLoop = async () => {
-  bubbles.showMinifiedBubbles();
   while (
     !app.timeline.isPaused &&
     app.timeline.currentIndex < config.timeline.circles.length
   ) {
+    bubbles.showMinifiedBubbles();
     app.timeline.renderUserIcon();
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);

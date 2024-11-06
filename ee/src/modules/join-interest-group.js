@@ -177,7 +177,11 @@ joinInterestGroup.draw = async (index) => {
 
   await bubbles.reverseBarrageAnimation(index);
 
-  bubbles.showMinifiedBubbles();
+  if (config.bubbles.isExpanded) {
+    bubbles.showExpandedBubbles();
+  } else {
+    bubbles.showMinifiedBubbles();
+  }
 
   config.bubbles.interestGroupCounts +=
     config.timeline.circles[index]?.igGroupsCount ?? 0;

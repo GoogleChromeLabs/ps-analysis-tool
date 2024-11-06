@@ -287,22 +287,43 @@ bubbles.reverseBarrageAnimation = async (index) => {
 };
 bubbles.showExpandedBubbles = () => {
   app.expandedBubbleContainer.innerHTML = '';
+  app.minifiedBubbleContainer.innerHTML = '';
 
   app.expandedBubbleContainer.style.height = `${config.canvas.height}px`;
   app.expandedBubbleContainer.style.width = `${config.canvas.height}px`;
   app.expandedBubbleContainer.style.backgroundColor = 'white';
-  app.expandedBubbleContainer.appendChild(app.bubbles.expandedSVG);
-  app.expandedBubbleContainer.style.display = 'block';
+
+  if (app.bubbles.expandedSVG) {
+    app.expandedBubbleContainer.appendChild(app.bubbles.expandedSVG);
+  }
   app.minifiedBubbleContainer.style.display = 'none';
+  app.expandedBubbleContainer.style.display = 'block';
 };
 bubbles.showMinifiedBubbles = () => {
+  if (config.bubbles.isExpanded) {
+    return;
+  }
+
   app.minifiedBubbleContainer.innerHTML = '';
   app.minifiedBubbleContainer.style.height = '50px';
   app.minifiedBubbleContainer.style.width = '50px';
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
+
+  const pTag = document.createElement('p');
+  pTag.textContent = config.bubbles.interestGroupCounts;
+  pTag.style.textAlign = 'center';
+  pTag.style.fontSize = '14px';
+  pTag.style.position = 'absolute';
+  pTag.style.top = '0px';
+  pTag.style.left = '0px';
+  pTag.style.width = '100%';
+
+  app.minifiedBubbleContainer.appendChild(pTag);
+
   if (app.bubbles.minifiedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.minifiedSVG);
   }
+
   app.minifiedBubbleContainer.style.display = 'block';
   app.expandedBubbleContainer.style.display = 'none';
 };
@@ -361,7 +382,17 @@ bubbles.bubbleChart = (
     .attr('fill', 'currentColor')
     .attr('font-size', 10)
     .attr('font-family', 'sans-serif')
-    .attr('text-anchor', 'middle');
+    .attr('text-anchor', 'middle')
+    .on(
+      'click',
+      !config.bubbles.isExpanded
+        ? () => {
+            config.bubbles.isExpanded = true;
+            bubbles.generateBubbles(true);
+            app.pause();
+          }
+        : null
+    );
 
   const leaf = svg
     .selectAll('a')
@@ -405,16 +436,21 @@ bubbles.bubbleChart = (
         ? 'none'
         : fill
     )
-    .on('click', (event) => {
-      if (!config.bubbles.isExpanded) {
-        config.bubbles.isExpanded = true;
-        bubbles.generateBubbles(true);
-        app.pause();
-      } else {
-        // eslint-disable-next-line no-console
-        console.log(event);
-      }
-    })
+    .on(
+      'click',
+      !config.bubbles.isExpanded
+        ? null
+        : (event) => {
+            if (!config.bubbles.isExpanded) {
+              config.bubbles.isExpanded = true;
+              bubbles.generateBubbles(true);
+              app.pause();
+            } else {
+              // eslint-disable-next-line no-console
+              console.log(event);
+            }
+          }
+    )
     .attr('fill-opacity', fillOpacity)
     .attr('r', (d) => {
       return d.r;
