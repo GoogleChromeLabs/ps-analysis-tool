@@ -89,8 +89,6 @@ timeline.init = () => {
     app.timeline.drawTimelineLine();
     app.p.mouseClicked = (event) => {
       const { x, y } = event;
-      let clickedIndex;
-
       if (!config.bubbles.isExpanded) {
         if (
           utils.isInsideCircle(
@@ -107,19 +105,6 @@ timeline.init = () => {
           return;
         }
       }
-
-      app.bubbles.positions.forEach((positions, index) => {
-        const _x = positions?.expanded?.x;
-        const _y = positions?.expanded?.y;
-        const _r = positions?.expanded?.r;
-
-        if (utils.isInsideCircle(x, y, _x, _y, _r)) {
-          clickedIndex = index;
-        }
-      });
-
-      // eslint-disable-next-line no-console
-      console.log(app.bubbles.positions[clickedIndex]);
     };
     app.timeline.renderUserIcon();
   }

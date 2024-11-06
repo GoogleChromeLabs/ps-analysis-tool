@@ -71,11 +71,20 @@ app.play = () => {
   app.timeline.isPaused = false;
   if (config.bubbles.isExpanded) {
     config.bubbles.isExpanded = false;
+    app.expandedBubbleContainer.style.display = 'none';
+    app.minifiedBubbleContainer.style.display = 'block';
     utils.wipeAndRecreateInterestCanvas();
     bubbles.generateBubbles(true);
     bubbles.drawSmallCircles();
   }
   app.setupLoop();
+};
+app.minifiedBubbleClickListener = () => {
+  if (!config.bubbles.isExpanded) {
+    config.bubbles.isExpanded = true;
+    bubbles.generateBubbles(true);
+    app.pause();
+  }
 };
 
 app.pause = () => {
@@ -83,6 +92,8 @@ app.pause = () => {
   app.playButton.classList.remove('hidden');
   app.timeline.isPaused = true;
   if (config.bubbles.isExpanded) {
+    app.expandedBubbleContainer.style.display = 'true';
+    app.minifiedBubbleContainer.style.display = 'block';
     bubbles.generateBubbles(true);
     bubbles.drawSmallCircles();
   }
@@ -191,6 +202,23 @@ const interestGroupSketch = (p) => {
     p.textSize(config.canvas.fontSize);
     config.bubbles.minifiedBubbleX = 60;
     config.bubbles.minifiedBubbleY = height - 50;
+    const diameter = config.bubbles.minifiedCircleDiameter;
+
+    app.expandedBubbleContainer = document.getElementById(
+      'expanded-bubble-container'
+    );
+    app.minifiedBubbleContainer = document.getElementById(
+      'minified-bubble-container'
+    );
+
+    app.minifiedBubbleContainer.addEventListener(
+      'click',
+      app.minifiedBubbleClickListener
+    );
+    app.minifiedBubbleContainer.style.left = `${60 - diameter / 2}px`;
+    app.minifiedBubbleContainer.style.zIndex = 3;
+    app.expandedBubbleContainer.style.zIndex = 3;
+    app.minifiedBubbleContainer.style.top = `${height - 50 - diameter / 2}px`;
 
     (async () => {
       await app.interestGroupInit(p);

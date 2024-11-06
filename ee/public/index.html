@@ -53,10 +53,36 @@
             width: 20px;
             height: 20px;
         }
+
         #canvas-container {
             width: 100%;
             height: 100%;
             position: relative;
+        }
+
+        #expanded-bubble-container{
+            position: absolute;
+            display: none;
+            top: 0px;
+            left: 0px;
+            border-radius: 50%;
+            border: 1px solid black;
+        }
+
+        #bubble-container{
+            position: absolute;
+            pointer-events: none;
+            top: 0px;
+            left: 0px;
+        }
+
+        #minified-bubble-container{
+            position: absolute;
+            display: none;
+            top: 0px;
+            left: 0px;
+            border-radius: 50%;
+            border: 1px solid black;
         }
     </style>
 </head>
@@ -75,7 +101,10 @@
                 </div>
             </div>
         </div>
-        <div id="interest-canvas"></div>
+        <div id="interest-canvas">
+        </div>
+        <div id="minified-bubble-container"></div>
+        <div id="expanded-bubble-container"></div>
         <div id="user-canvas"></div>
     </main>
 

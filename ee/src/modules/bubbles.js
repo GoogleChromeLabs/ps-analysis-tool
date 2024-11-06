@@ -50,43 +50,24 @@ bubbles.generateBubbles = (recalculate = false) => {
       app.bubbles.positions.push({
         id: uuidv4(),
         value: igp.random(0, 1000000),
+        group: config.timeline.circles[app.timeline.currentIndex].website,
         color,
       });
     }
   }
-  bubbles.generateExpandedBubbles();
-  bubbles.generateMinifiedBubbles();
 };
 
 bubbles.drawSmallCircles = (inBarrage = false) => {
-  const igp = app.igp;
   const {
-    canvas: { height, width },
-    bubbles: {
-      isExpanded,
-      minifiedBubbleX,
-      minifiedBubbleY,
-      minifiedCircleDiameter,
-      expandedCircleDiameter,
-      interestGroupCounts,
-    },
+    bubbles: { isExpanded },
   } = config;
-
-  const x = isExpanded ? width / 2 : minifiedBubbleX;
-  const y = isExpanded ? height / 2 : minifiedBubbleY;
-
-  igp.circle(
-    x,
-    y,
-    isExpanded ? expandedCircleDiameter : minifiedCircleDiameter
-  );
 
   if (inBarrage) {
     if (isExpanded) {
       bubbles.showExpandedBubbles(true);
+    } else {
+      bubbles.showMinifiedBubbles();
     }
-
-    bubbles.showMinifiedBubbles();
   } else {
     if (isExpanded) {
       bubbles.showExpandedBubbles();
@@ -95,22 +76,16 @@ bubbles.drawSmallCircles = (inBarrage = false) => {
 
     bubbles.showMinifiedBubbles();
   }
-
-  if (!isExpanded) {
-    igp.push();
-    igp.fill(interestGroupCounts < 10 ? 0 : 255);
-    igp.textSize(14);
-    igp.strokeWeight(1);
-    igp.textFont('ui-sans-serif');
-    igp.textAlign(igp.CENTER, igp.CENTER);
-    igp.text(interestGroupCounts, x, y);
-    igp.pop();
-  }
 };
-
 bubbles.barrageAnimation = async (index) => {
   const p = app.igp;
-  const { diameter } = config.timeline.circleProps;
+  const {
+    canvas: { height: canvasHeight, width: canvasWidth },
+    bubbles: { isExpanded, minifiedBubbleX, minifiedBubbleY },
+    timeline: {
+      circleProps: { diameter },
+    },
+  } = config;
   const { bottomFlow } = app.auction.auctions[index];
   const smallCircleDiameter = diameter / 5;
 
@@ -138,8 +113,10 @@ bubbles.barrageAnimation = async (index) => {
       p.blue(currentColor),
       200
     );
+    const x = isExpanded ? canvasWidth / 2 : minifiedBubbleX;
+    const y = isExpanded ? canvasHeight / 2 : minifiedBubbleY;
 
-    return { x: data.minified.x, y: data.minified.y, color, speed, target };
+    return { x, y, color, speed, target };
   });
 
   await new Promise((resolve) => {
@@ -197,7 +174,6 @@ bubbles.barrageAnimation = async (index) => {
   utils.wipeAndRecreateInterestCanvas();
   bubbles.drawSmallCircles();
 };
-
 bubbles.reverseBarrageAnimation = async (index) => {
   const { dspTags } = app.joinInterestGroup.joinings[index];
   const igp = app.igp;
@@ -211,6 +187,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
     },
     timeline: {
       circleProps: { diameter },
+      circles,
     },
   } = config;
 
@@ -219,22 +196,17 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const midPointY = isExpanded ? height / 2 : minifiedBubbleY;
 
   const positionsOfCircles = [];
-
-  app.bubbles.positions.forEach((data, currIndex) => {
-    if (currIndex < interestGroupCounts) {
-      return;
+  const currentIGGroupToBeAdded = circles[index]?.igGroupsCount ?? 0;
+  for (let i = 0; i < interestGroupCounts + currentIGGroupToBeAdded; i++) {
+    if (i < interestGroupCounts) {
+      continue;
     }
-    const speed = 1;
-    const target = igp.createVector(midPointX, midPointY);
+
     const flowBoxWidth = config.flow.box.width;
     const flowBoxHeight = config.flow.box.height;
-
-    const currentColor = igp.color(data.color);
-    const color = igp.color(
-      igp.red(currentColor),
-      igp.green(currentColor),
-      igp.blue(currentColor)
-    );
+    const speed = 1;
+    const target = igp.createVector(midPointX, midPointY);
+    const color = igp.color('black');
 
     positionsOfCircles.push({
       x:
@@ -249,7 +221,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
       speed,
       target,
     });
-  });
+  }
 
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
@@ -303,151 +275,172 @@ bubbles.reverseBarrageAnimation = async (index) => {
   utils.wipeAndRecreateInterestCanvas();
   bubbles.drawSmallCircles();
 };
-bubbles.generateExpandedBubbles = () => {
-  const assembledData = {
-    name: 'root',
-    children: app.bubbles.positions,
-  };
-
-  const root = d3
-    .hierarchy(assembledData)
-    .sum((d) => d.value)
-    .sort((a, b) => b.value - a.value);
-
-  d3.pack().size([config.canvas.width, config.canvas.height]).padding(3)(root);
-
-  const expandedNodes = root.descendants();
-
-  const nodeMap = {};
-
-  expandedNodes.forEach((node) => {
-    nodeMap[node.data.id] = node;
+bubbles.showExpandedBubbles = () => {
+  app.expandedBubbleContainer.innerHTML = '';
+  const svg = bubbles.bubbleChart(app.bubbles.positions, {
+    label: (d) =>
+      [
+        ...d.id
+          .split('.')
+          .pop()
+          .split(/(?=[A-Z][a-z])/g),
+        d.value.toLocaleString('en'),
+      ].join('\n'),
+    value: (d) => d.value,
+    groupFn: (d) => d.group,
+    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+    width: config.canvas.width,
+    height: config.canvas.height,
   });
-
-  app.bubbles.positions = app.bubbles.positions.map((_data) => {
-    return {
-      ..._data,
-      expanded: {
-        x: nodeMap[_data.id].x,
-        y: nodeMap[_data.id].y,
-        r: nodeMap[_data.id].r,
-      },
-    };
-  });
-};
-bubbles.showExpandedBubbles = (inBarrage = false) => {
-  const igp = app.igp;
-  const {
-    canvas: { height, width },
-    bubbles: { isExpanded, minifiedBubbleX, minifiedBubbleY },
-  } = config;
-
-  if (app.bubbles.positions.length === 0) {
-    const x = isExpanded ? width / 2 : minifiedBubbleX;
-    const y = isExpanded ? height / 2 : minifiedBubbleY;
-
-    igp.circle(x, y, config.bubbles.expandedCircleDiameter);
-    return;
-  }
-
-  if (!inBarrage) {
-    const { x, y, r } = d3.packEnclose(
-      app.bubbles.positions.map((data) => {
-        return {
-          ...data.expanded,
-        };
-      })
-    );
-
-    igp.circle(x, y, r * 2);
-  }
-
-  for (const node of app.bubbles.positions) {
-    if (!node.children) {
-      igp.push();
-      igp.fill(node.color);
-      igp.ellipse(node.expanded.x, node.expanded.y, node.expanded.r * 2);
-      igp.pop();
-
-      igp.push();
-      igp.textAlign(igp.CENTER, igp.CENTER);
-      let textToDisplay = node.id;
-      const maxTextWidth = node.expanded.r * 1.5;
-      const textSizeVal = node.expanded.r * 0.5;
-      while (igp.textWidth(textToDisplay) > maxTextWidth) {
-        textToDisplay = textToDisplay.slice(0, -1);
-        if (textToDisplay.length <= 1) {
-          break;
-        }
-      }
-      igp.textSize(textSizeVal);
-      igp.fill(255);
-      igp.text(textToDisplay, node.expanded.x, node.expanded.y);
-      igp.pop();
-    }
-  }
-};
-bubbles.generateMinifiedBubbles = () => {
-  const {
-    bubbles: { minifiedBubbleX, minifiedBubbleY, minifiedCircleDiameter },
-  } = config;
-
-  const assembledData = {
-    name: 'root',
-    children: app.bubbles.positions,
-  };
-
-  const root = d3
-    .hierarchy(assembledData)
-    .sum((d) => d.value)
-    .sort((a, b) => b.value - a.value);
-
-  d3
-    .pack()
-    .size([
-      config.bubbles.minifiedCircleDiameter,
-      config.bubbles.minifiedCircleDiameter,
-    ])
-    .padding(3)(root);
-
-  const minifiedNodes = root.descendants();
-
-  const nodeMap = {};
-
-  minifiedNodes.forEach((node) => {
-    nodeMap[node.data.id] = node;
-  });
-
-  const smallCircleX = minifiedBubbleX - minifiedCircleDiameter / 2;
-  const smallCircleY = minifiedBubbleY - minifiedCircleDiameter / 2;
-
-  app.bubbles.positions = app.bubbles.positions.map((_data) => {
-    return {
-      ..._data,
-      minified: {
-        x: smallCircleX + nodeMap[_data.id].x + nodeMap[_data.id].r,
-        y: smallCircleY + nodeMap[_data.id].y + nodeMap[_data.id].r,
-        r: nodeMap[_data.id].r,
-      },
-    };
-  });
+  app.expandedBubbleContainer.style.height = `${config.canvas.height}px`;
+  app.expandedBubbleContainer.style.width = `${config.canvas.width}px`;
+  app.expandedBubbleContainer.style.backgroundColor = 'white';
+  app.expandedBubbleContainer.appendChild(svg);
+  app.expandedBubbleContainer.style.display = 'block';
+  app.minifiedBubbleContainer.style.display = 'none';
 };
 bubbles.showMinifiedBubbles = () => {
-  const igp = app.igp;
-  const {
-    bubbles: { minifiedBubbleX, minifiedBubbleY },
-  } = config;
+  app.minifiedBubbleContainer.innerHTML = '';
+  const svg = bubbles.bubbleChart(app.bubbles.positions, {
+    label: (d) =>
+      [
+        ...d.id
+          .split('.')
+          .pop()
+          .split(/(?=[A-Z][a-z])/g),
+        d.value.toLocaleString('en'),
+      ].join('\n'),
+    value: (d) => d.value,
+    groupFn: (d) => d.group,
+    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+    width: 50,
+    height: 50,
+  });
 
-  igp.circle(minifiedBubbleX, minifiedBubbleY, 50);
+  app.minifiedBubbleContainer.style.height = '50px';
+  app.minifiedBubbleContainer.style.width = '50px';
+  app.minifiedBubbleContainer.style.backgroundColor = 'white';
+  app.minifiedBubbleContainer.appendChild(svg);
+  app.minifiedBubbleContainer.style.display = 'block';
+  app.expandedBubbleContainer.style.display = 'none';
+};
+bubbles.bubbleChart = (
+  data,
+  {
+    name = ([x]) => x,
+    label = name,
+    value = ([, y]) => y,
+    groupFn,
+    title,
+    width = 640,
+    height = width,
+    padding = 3,
+    margin = 1,
+    marginTop = margin,
+    marginRight = margin,
+    marginBottom = margin,
+    marginLeft = margin,
+    groupsParams,
+    colors = d3.schemeTableau10,
+    fill = '#ccc',
+    fillOpacity = 0.7,
+    stroke,
+    strokeWidth,
+    strokeOpacity,
+  } = {}
+) => {
+  const values = d3.map(data, value);
+  const groups = groupFn === null ? null : d3.map(data, groupFn);
+  const groupIntervals = d3.range(values.length).filter((i) => values[i] > 0);
 
-  for (const node of app.bubbles.positions) {
-    if (!node.children) {
-      igp.push();
-      igp.fill(node.color);
-      igp.ellipse(node.minified.x, node.minified.y, node.minified.r * 2);
-      igp.pop();
-    }
+  if (groups && groupsParams === undefined) {
+    groupsParams = groupIntervals.map((i) => groups[i]);
   }
+
+  groupsParams = groupFn && new d3.InternSet(groupsParams);
+  const color = groups && d3.scaleOrdinal(groups, colors);
+  const labels = label === null ? null : d3.map(data, label);
+  const titles =
+    title === undefined ? labels : title === null ? null : d3.map(data, title);
+
+  const root = d3
+    .pack()
+    .size([width - marginLeft - marginRight, height - marginTop - marginBottom])
+    .padding(padding)(
+    d3.hierarchy({ children: groupIntervals }).sum((i) => values[i])
+  );
+
+  const svg = d3
+    .create('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('viewBox', [-marginLeft, -marginTop, width, height])
+    .attr('style', 'max-width: 100%; height: auto; height: intrinsic;')
+    .attr('fill', 'currentColor')
+    .attr('font-size', 10)
+    .attr('font-family', 'sans-serif')
+    .attr('text-anchor', 'middle');
+
+  const leaf = svg
+    .selectAll('a')
+    .data(root.leaves())
+    .join('a')
+    .attr('transform', (d) => `translate(${d.x},${d.y})`);
+
+  leaf
+    .append('circle')
+    .attr('stroke', stroke)
+    .attr('stroke-width', strokeWidth)
+    .attr('stroke-opacity', strokeOpacity)
+    .attr(
+      'fill',
+      groups ? (d) => color(groups[d.data]) : fill === null ? 'none' : fill
+    )
+    .on('click', (event) => {
+      if (!config.bubbles.isExpanded) {
+        config.bubbles.isExpanded = true;
+        bubbles.generateBubbles(true);
+        app.pause();
+      } else {
+        // eslint-disable-next-line no-console
+        console.log(event);
+      }
+    })
+    .attr('fill-opacity', fillOpacity)
+    .attr('r', (d) => {
+      return d.r;
+    });
+
+  if (titles) {
+    leaf.append('title').text((d) => titles[d.data]);
+  }
+
+  if (labels) {
+    // A unique identifier for clip paths (to avoid conflicts).
+    const uid = `O-${Math.random().toString(16).slice(2)}`;
+
+    leaf
+      .append('clipPath')
+      .attr('id', (d) => `${uid}-clip-${d.data}`)
+      .append('circle')
+      .attr('r', (d) => d.r);
+
+    leaf
+      .append('text')
+      .attr(
+        'clip-path',
+        (d) => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`
+      )
+      .selectAll('tspan')
+      .data((d) => `${labels[d.data]}`.split(/\n/g))
+      .join('tspan')
+      .attr('x', 0)
+      .attr('y', (d, i, D) => `${i - D.length / 2 + 0.85}em`)
+      .attr('fill-opacity', (d, i, D) => (i === D.length - 1 ? 0.7 : null))
+      .text((d) => d);
+  }
+
+  return Object.assign(svg.node(), { scales: { color } });
 };
 
 export default bubbles;
