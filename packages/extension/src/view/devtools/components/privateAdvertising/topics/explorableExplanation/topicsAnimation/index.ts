@@ -16,18 +16,21 @@
 
 import type p5 from 'p5';
 import { config } from './config';
-import { assignAdtechsToSites, getAdtechsColors } from './utils';
-import { adtechs, websites } from './data';
+import { getAdtechsColors } from './utils';
 
 /**
  * Setup function for p5.js
  * @param p - p5.js instance
  * @param epoch - Array of objects containing datetime, website, and topics
+ * @param siteAdTechs - Object with websites as keys and adtechs as values
+ * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
  * @returns Object with callbacks to control the animation
  */
 export function topicsAnimation(
   p: p5,
-  epoch: { datetime: string; website: string; topics: string[] }[]
+  epoch: { datetime: string; website: string; topics: string[] }[],
+  siteAdTechs: Record<string, string[]>,
+  handleUserVisit: (visitIndex: number) => void
 ) {
   const app = {
     userIcon: null as p5.Image | null,
@@ -133,8 +136,9 @@ export function topicsAnimation(
       const currentSite = currentCircle.website;
 
       app.drawInfoBox(visitIndex, currentSite);
-
       app.drawSmallCircles(visitIndex, currentSite);
+
+      handleUserVisit(visitIndex);
     },
 
     drawSmallCircles: (index: number, currentSite: string) => {
@@ -144,7 +148,7 @@ export function topicsAnimation(
 
       const distanceFromEdge = 6;
 
-      const adTechs = app.siteAdTechs[currentSite];
+      const adTechs = siteAdTechs[currentSite];
       const numSmallCircles = adTechs.length;
 
       const smallCirclePositions = [];
@@ -213,7 +217,7 @@ export function topicsAnimation(
         position.y + diameter / 2 + 85
       );
 
-      const adTechs = app.siteAdTechs[currentSite];
+      const adTechs = siteAdTechs[currentSite];
       const numAdTechs = adTechs.length;
 
       p.textStyle(p.BOLD);
@@ -269,8 +273,6 @@ export function topicsAnimation(
       config.timeline.circleProps.horizontalSpacing +
       config.timeline.circleProps.diameter;
     p.createCanvas(circleHorizontalSpace * 6, config.canvas.height);
-
-    app.siteAdTechs = assignAdtechsToSites(websites, adtechs);
 
     p.textFont('sans-serif');
     app.drawTimelineLine(config.timeline.position);

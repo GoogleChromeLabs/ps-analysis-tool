@@ -26,7 +26,17 @@ import {
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
 
-const TopicsTable = () => {
+export type TopicsTableType = {
+  topicName: string;
+  count: number;
+  observedByContextDomains: string[];
+};
+
+interface TopicsTableProps {
+  data: TopicsTableType[];
+}
+
+const TopicsTable = ({ data }: TopicsTableProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -59,7 +69,8 @@ const TopicsTable = () => {
 
   return (
     <TableProvider
-      data={[]}
+      // @ts-ignore
+      data={data}
       tableColumns={tableColumns}
       onRowClick={noop}
       onRowContextMenu={noop}

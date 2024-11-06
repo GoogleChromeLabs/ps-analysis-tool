@@ -28,6 +28,7 @@ interface TableTrayProps {
 
 const TableTray = ({ tabItems, activeTab, setActiveTab }: TableTrayProps) => {
   const ActiveTabContent = tabItems[activeTab].content.Element;
+  const props = tabItems[activeTab].content.props;
 
   return (
     <div className="w-full h-full">
@@ -39,7 +40,7 @@ const TableTray = ({ tabItems, activeTab, setActiveTab }: TableTrayProps) => {
           showBottomBorder={false}
         />
       </div>
-      <ActiveTabContent />
+      <ActiveTabContent {...props} />
     </div>
   );
 };

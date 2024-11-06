@@ -26,7 +26,9 @@ import { Resizable } from 're-resizable';
 import Header from '../../../explorableExplanation/header';
 import Tray from './tray';
 import Animation from './animation';
-import { createEpochs } from './topicsAnimation/utils';
+import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
+import type { TopicsTableType } from './topicsTable';
+import { adtechs, websites } from './topicsAnimation/data';
 
 const ExplorableExplanation = () => {
   const [play, setPlay] = useState(true);
@@ -36,6 +38,9 @@ const ExplorableExplanation = () => {
   const historyCount = 10;
 
   const epochs = useMemo(() => createEpochs(), []);
+  const siteAdTechs = useMemo(() => {
+    return assignAdtechsToSites(websites, adtechs);
+  }, []);
 
   const setReset = useCallback(() => {
     _setReset(true);
@@ -46,6 +51,42 @@ const ExplorableExplanation = () => {
     setPlay(true);
     setSliderStep(1);
   }, []);
+
+  const [topicsTableData, setTopicsTableData] = useState<TopicsTableType[]>([]);
+
+  const handleUserVisit = useCallback(
+    (visitIndex: number) => {
+      setTopicsTableData((prevTopicsTableData) => {
+        const { topics, website } = epochs[activeTab].webVisits[visitIndex];
+
+        const newTopicsTableData = topics.reduce(
+          (acc, topic) => {
+            const existingTopic = acc.find((t) => t.topicName === topic);
+            if (existingTopic) {
+              existingTopic.count += 1;
+              existingTopic.observedByContextDomains = [
+                ...new Set([
+                  ...existingTopic.observedByContextDomains,
+                  ...siteAdTechs[website],
+                ]),
+              ];
+            } else {
+              acc.push({
+                topicName: topic,
+                count: 1,
+                observedByContextDomains: siteAdTechs[website] || [],
+              });
+            }
+            return acc;
+          },
+          [...prevTopicsTableData]
+        );
+
+        return newTopicsTableData;
+      });
+    },
+    [activeTab, epochs, siteAdTechs]
+  );
 
   return (
     <div className="flex flex-col h-full">
@@ -60,9 +101,11 @@ const ExplorableExplanation = () => {
       <div className="flex-1 overflow-auto">
         <Animation
           epoch={epochs[activeTab].webVisits}
+          siteAdTechs={siteAdTechs}
           isPlaying={play}
           resetAnimation={reset}
           speedMultiplier={sliderStep}
+          handleUserVisit={handleUserVisit}
         />
       </div>
       <Resizable
@@ -77,7 +120,11 @@ const ExplorableExplanation = () => {
         }}
         className="h-full flex"
       >
-        <Tray activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Tray
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          topicsTableData={topicsTableData}
+        />
       </Resizable>
     </div>
   );
