@@ -73,8 +73,7 @@ app.play = () => {
     config.bubbles.isExpanded = false;
     utils.wipeAndRecreateInterestCanvas();
     bubbles.generateBubbles(true);
-    app.minifiedBubbleContainer.style.display = 'none';
-    bubbles.showExpandedBubbles();
+    bubbles.showMinifiedBubbles();
   }
   app.setupLoop();
 };
@@ -91,6 +90,7 @@ app.pause = () => {
   app.playButton.classList.remove('hidden');
   app.timeline.isPaused = true;
   if (config.bubbles.isExpanded) {
+    bubbles.showExpandedBubbles();
     bubbles.generateBubbles(true);
   }
 };

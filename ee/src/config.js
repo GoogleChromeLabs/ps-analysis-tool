@@ -36,7 +36,7 @@ const config = {
         type: 'advertiser',
         website: 'adv1.com',
         datetime: '2023-10-01 10:00',
-        igGroupsCount: 100,
+        igGroupsCount: 5,
       },
       {
         type: 'advertiser',
