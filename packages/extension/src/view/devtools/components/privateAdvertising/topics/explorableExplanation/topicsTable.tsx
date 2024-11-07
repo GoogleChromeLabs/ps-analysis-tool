@@ -44,17 +44,16 @@ const TopicsTable = ({ data }: TopicsTableProps) => {
         accessorKey: 'topicName',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        widthWeightagePercentage: 30,
+        widthWeightagePercentage: 20,
       },
       {
-        header: 'Count',
+        header: 'Access Count',
         accessorKey: 'count',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 10,
+        widthWeightagePercentage: 20,
       },
       {
-        header:
-          'Observed-by context domains (hashed if the original value is unavailable)',
+        header: 'Observed-by context domains',
         accessorKey: 'observedByContextDomains',
         cell: (info: InfoType) => (info as string[]).join(' | '),
         widthWeightagePercentage: 60,
