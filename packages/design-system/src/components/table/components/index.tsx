@@ -38,6 +38,7 @@ interface TableProps {
   extraInterfaceToTopBar?: () => React.JSX.Element;
   minWidth?: string;
   hideSearch?: boolean;
+  rowHeightClass?: string;
 }
 
 const Table = ({
@@ -47,6 +48,7 @@ const Table = ({
   extraInterfaceToTopBar,
   minWidth,
   hideSearch,
+  rowHeightClass,
 }: TableProps) => {
   const {
     tableContainerRef,
@@ -122,7 +124,7 @@ const Table = ({
         extraInterface={extraInterfaceToTopBar}
         hideSearch={hideSearch}
       />
-      {!hideFiltering && (
+      {hideFiltering ? null : (
         <ChipsBar
           selectedFilters={selectedFilters}
           resetFilters={resetFilters}
@@ -137,6 +139,7 @@ const Table = ({
             enable={{
               right: true,
             }}
+            className="overflow-auto h-full"
           >
             <FiltersSidebar
               filters={filters}
@@ -171,6 +174,7 @@ const Table = ({
               isRowFocused={isRowFocused}
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
+              rowHeightClass={rowHeightClass}
             />
           </div>
         </div>

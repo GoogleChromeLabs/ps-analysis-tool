@@ -36,6 +36,7 @@ interface BodyCellProps {
     Element: (props: any) => React.JSX.Element;
   };
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  rowHeightClass?: string;
 }
 
 const BodyCell = ({
@@ -47,6 +48,7 @@ const BodyCell = ({
   showIcon = false,
   icon,
   isHighlighted = false,
+  rowHeightClass,
 }: BodyCellProps) => {
   const IconElement = icon?.Element;
   const cellValue = cell?.() ?? '';
@@ -68,13 +70,13 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`flex box-border outline-0 px-1 py-px h-5 text-xs ${
+      className={`flex box-border outline-0 px-1 py-px text-xs ${
         isHighlighted
           ? `${
               isRowFocused ? 'text-white' : 'dark:text-dirty-red text-dirty-red'
             }`
           : 'dark:text-bright-gray'
-      } cursor-default flex-1`}
+      } cursor-default flex-1 ${rowHeightClass ?? 'h-5'}`}
     >
       {hasIcon && (
         <div className="h-full grid place-items-center min-w-[15px] pr-1">

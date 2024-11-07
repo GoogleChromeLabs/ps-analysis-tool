@@ -342,35 +342,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [messagePassingListener]);
 
-  const tabUpdateListener = useCallback(
-    async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      const tabId = chrome.devtools.inspectedWindow.tabId;
-      if (tabId === _tabId && changeInfo.url) {
-        setIsInspecting(false);
-        try {
-          const nextURL = new URL(changeInfo.url);
-          const nextDomain = nextURL?.hostname;
-          const currentURL = new URL(tabUrl ?? '');
-          const currentDomain = currentURL?.hostname;
-
-          if (selectedFrame && nextDomain === currentDomain) {
-            setSelectedFrame(nextURL.origin);
-          } else {
-            setSelectedFrame(null);
-          }
-
-          setTabUrl(changeInfo.url);
-        } catch (error) {
-          setSelectedFrame(null);
-        } finally {
-          setTabFrames(null);
-          await getAllFramesForCurrentTab();
-        }
-      }
-    },
-    [tabUrl, getAllFramesForCurrentTab, selectedFrame]
-  );
-
   const tabRemovedListener = useCallback(async () => {
     try {
       const availableTabs = await chrome.tabs.query({});
@@ -394,13 +365,11 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync]);
 
   useEffect(() => {
-    chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
     return () => {
-      chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
     };
-  }, [tabUpdateListener, tabRemovedListener]);
+  }, [tabRemovedListener]);
 
   useEffect(() => {
     loadingTimeout.current = setTimeout(() => {

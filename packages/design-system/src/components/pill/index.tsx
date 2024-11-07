@@ -25,7 +25,7 @@ interface PillProps {
 
 const Pill = ({ title }: PillProps) => {
   return (
-    <div className="h-5 p-2 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz rounded-full">
+    <div className="h-fit p-1 dark:text-bright-gray border border-gray-400 dark:border-dark-gray-x11 rounded-full">
       {title}
     </div>
   );
