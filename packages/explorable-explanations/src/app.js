@@ -13,3 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const app = {
+  timeline: {
+    isPaused: false,
+    circlePositions: [],
+    smallCirclePositions: [],
+    circlePublisherIndices: [],
+    currentIndex: 0,
+  },
+  auction: {
+    auctions: [],
+    nextTipCoordinates: { x: 0, y: 0 },
+  },
+  joinInterestGroup: {
+    joinings: [],
+  },
+  flow: {
+    intervals: {},
+  },
+  utils: {},
+  p: null,
+  igp: null,
+  up: null,
+  isMultiSeller: false,
+};
+
+export default app;
