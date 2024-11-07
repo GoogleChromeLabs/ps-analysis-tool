@@ -22,7 +22,7 @@ import * as d3 from 'd3';
 
 const parseTaxonomy = (text) => {
   const lines = text.trim().split('\n').slice(2);
-  const data = { name: 'Root', children: [] };
+  const data = { name: '', children: [] };
 
   lines.forEach((line) => {
     const [id, path] = line
@@ -182,7 +182,7 @@ const Tree = async (
       .attr('stroke-width', 3)
       .attr('stroke', 'white')
       .attr('paint-order', 'stroke')
-      .attr('font-size', '1.5rem')
+      .attr('font-size', '1.4rem')
       .attr('style', (d) => `cursor: ${d._children ? 'pointer' : 'default'}`);
 
     node
@@ -233,7 +233,7 @@ const Tree = async (
     d.id = i;
     d._children = d.children;
 
-    if (d.data.name !== 'Root') {
+    if (d.data.name !== '') {
       d.children = null;
     }
   });

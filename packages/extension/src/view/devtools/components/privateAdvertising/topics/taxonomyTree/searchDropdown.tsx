@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies.
+ */
 import { SearchInput } from '@google-psat/design-system';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
@@ -59,7 +63,7 @@ const SearchDropdown = ({ values, onSelect }: SearchDropdownProps) => {
         | React.KeyboardEvent<HTMLInputElement>
         | React.KeyboardEvent<HTMLDivElement>
     ) => {
-      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      if (['ArrowDown', 'ArrowUp'].includes(event.key)) {
         if (filteredValues.length > 0) {
           const index = filteredValues.findIndex(
             (value) => value === searchTerm
@@ -85,7 +89,7 @@ const SearchDropdown = ({ values, onSelect }: SearchDropdownProps) => {
 
   return (
     <div
-      className="relative w-full border-b border-american-silver dark:border-quartz px-4 py-0.5 bg-anti-flash-white dark:bg-raisin-black"
+      className="relative w-full border-b border-american-silver dark:border-quartz px-2 py-0.5 bg-anti-flash-white dark:bg-raisin-black"
       onKeyDown={keyHandler}
     >
       <div className="w-full max-w-md">

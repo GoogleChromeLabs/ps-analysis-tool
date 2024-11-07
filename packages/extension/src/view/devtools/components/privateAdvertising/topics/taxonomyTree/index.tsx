@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ExternalLinkBlack } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -33,10 +34,12 @@ const loadTaxonomy = async (taxonomyUrl: string) => {
 
 interface TaxonomyTreeProps {
   taxonomyUrl: string;
+  githubUrl: string;
 }
 
-const TaxonomyTree = ({ taxonomyUrl }: TaxonomyTreeProps) => {
+const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   const divRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [taxonomyArray, setTaxonomyArray] = useState<string[]>([]);
 
   useEffect(() => {
@@ -89,7 +92,7 @@ const TaxonomyTree = ({ taxonomyUrl }: TaxonomyTreeProps) => {
         svgGroup.style.fill = 'orangered';
         svgGroup.style.transition = 'fill 1s';
 
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           svgGroup.style.fill = '';
           svgGroup.style.fontWeight = '';
           svgGroup.style.transition = '';
@@ -107,11 +110,31 @@ const TaxonomyTree = ({ taxonomyUrl }: TaxonomyTreeProps) => {
     });
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <>
+    <div className="relative">
       <SearchDropdown values={taxonomyArray} onSelect={nodeClickHandler} />
+      <a
+        href={githubUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="absolute right-2 top-0"
+        title="View on GitHub"
+      >
+        <ExternalLinkBlack
+          className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+          width="14"
+        />
+      </a>
       <div className="p-4" ref={divRef} />
-    </>
+    </div>
   );
 };
 

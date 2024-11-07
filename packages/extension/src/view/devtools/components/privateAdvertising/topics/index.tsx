@@ -28,6 +28,10 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
+
+/**
+ * Internal dependencies.
+ */
 import TaxonomyTree from './taxonomyTree';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
@@ -63,6 +67,8 @@ const Topics = () => {
           props: {
             taxonomyUrl:
               'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md',
+            githubUrl:
+              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
           },
         },
       },
@@ -73,6 +79,8 @@ const Topics = () => {
           props: {
             taxonomyUrl:
               'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v1.md',
+            githubUrl:
+              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
           },
         },
       },
