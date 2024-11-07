@@ -71,7 +71,7 @@ const Tabs = ({
   return (
     <div
       className={classNames(
-        'w-full h-fit border-gray-300 dark:border-quartz',
+        'w-full h-fit border-american-silver dark:border-quartz',
         showBottomBorder ? 'border-b' : ' border-b-0'
       )}
     >
