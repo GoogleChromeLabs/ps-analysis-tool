@@ -17,7 +17,13 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -36,6 +42,7 @@ const ExplorableExplanation = () => {
   const [sliderStep, setSliderStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
   const [topicsTableData, setTopicsTableData] = useState<TopicsTableType[]>([]);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const epochs = useMemo(() => createEpochs(), []);
   const siteAdTechs = useMemo(() => {
@@ -44,7 +51,7 @@ const ExplorableExplanation = () => {
 
   const setReset = useCallback(() => {
     _setReset(true);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       _setReset(false);
     }, 0);
 
@@ -56,6 +63,14 @@ const ExplorableExplanation = () => {
   useEffect(() => {
     setTopicsTableData([]);
   }, [activeTab]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleUserVisit = useCallback(
     (visitIndex: number) => {
