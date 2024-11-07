@@ -32,10 +32,17 @@ interface TabsProps {
   items: TabItems;
   activeTab: number;
   setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+  showBottomBorder?: boolean;
   fontSizeClass?: string;
 }
 
-const Tabs = ({ items, activeTab, setActiveTab, fontSizeClass }: TabsProps) => {
+const Tabs = ({
+  items,
+  activeTab,
+  setActiveTab,
+  showBottomBorder = true,
+  fontSizeClass,
+}: TabsProps) => {
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       event.preventDefault();
@@ -62,7 +69,12 @@ const Tabs = ({ items, activeTab, setActiveTab, fontSizeClass }: TabsProps) => {
   );
 
   return (
-    <div className="w-full h-fit border-b border-gray-300 dark:border-quartz">
+    <div
+      className={classNames(
+        'w-full h-fit border-gray-300 dark:border-quartz',
+        showBottomBorder ? 'border-b' : ' border-b-0'
+      )}
+    >
       <div
         className={classNames(
           'flex gap-10 mx-4',

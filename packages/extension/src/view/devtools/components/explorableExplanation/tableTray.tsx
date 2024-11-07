@@ -36,6 +36,7 @@ const TableTray = ({ tabItems, activeTab, setActiveTab }: TableTrayProps) => {
           items={tabItems}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          showBottomBorder={false}
           fontSizeClass="text-xs"
         />
       </div>
