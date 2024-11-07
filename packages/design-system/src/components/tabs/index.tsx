@@ -33,6 +33,7 @@ interface TabsProps {
   activeTab: number;
   setActiveTab: React.Dispatch<React.SetStateAction<number>>;
   showBottomBorder?: boolean;
+  fontSizeClass?: string;
 }
 
 const Tabs = ({
@@ -40,6 +41,7 @@ const Tabs = ({
   activeTab,
   setActiveTab,
   showBottomBorder = true,
+  fontSizeClass,
 }: TabsProps) => {
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -67,11 +69,16 @@ const Tabs = ({
   );
 
   return (
-    <div className="max-w-2xl h-fit px-4">
+    <div
+      className={classNames(
+        'w-full h-fit border-american-silver dark:border-quartz',
+        showBottomBorder ? 'border-b' : ' border-b-0'
+      )}
+    >
       <div
         className={classNames(
-          'flex gap-10 border-b border-gray-300 dark:border-quartz',
-          showBottomBorder ? 'border-b' : 'border-b-0'
+          'flex gap-10 mx-4',
+          fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
         {items.map((item, index) => (
@@ -80,7 +87,7 @@ const Tabs = ({
             onClick={() => setActiveTab(index)}
             onKeyDown={handleKeyDown}
             className={classNames(
-              'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-sm text-nowrap',
+              'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
               {
                 'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
                   index === activeTab,

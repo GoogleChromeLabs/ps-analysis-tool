@@ -45,16 +45,20 @@ const Header = ({
   extraInterface,
 }: HeaderProps) => {
   return (
-    <div className="w-full px-2 flex items-center justify-between border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px]">
-      <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray text-sm">
-        <button className="pr-2" onClick={() => setPlay(!play)}>
+    <div className="w-full px-2 flex items-center justify-between border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px]">
+      <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray">
+        <button
+          className="pr-2"
+          onClick={() => setPlay(!play)}
+          title={play ? 'Pause' : 'Play'}
+        >
           {play ? (
             <PauseIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           ) : (
             <PlayIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           )}
         </button>
-        <button className="px-2" onClick={reset}>
+        <button className="px-2" onClick={reset} title="Restart">
           <RestartIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
         </button>
         <div className="px-2">

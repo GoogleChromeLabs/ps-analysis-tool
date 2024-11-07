@@ -39,7 +39,7 @@ const Slider = ({ sliderStep, setSliderStep }: SliderProps) => {
         max={2}
         step={0.5}
         value={sliderStep}
-        onChange={(e) => setSliderStep(Number(e.target.value))}
+        onChange={(event) => setSliderStep(Number(event.target.value))}
         className="w-full h-1 bg-baby-blue-eyes rounded-lg appearance-none cursor-pointer"
       />
     </div>

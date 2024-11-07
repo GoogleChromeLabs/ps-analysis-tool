@@ -32,12 +32,13 @@ const TableTray = ({ tabItems, activeTab, setActiveTab }: TableTrayProps) => {
 
   return (
     <div className="w-full h-full">
-      <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-2">
+      <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-1.5">
         <Tabs
           items={tabItems}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           showBottomBorder={false}
+          fontSizeClass="text-xs"
         />
       </div>
       <ActiveTabContent {...props} />
