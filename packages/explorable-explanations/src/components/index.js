@@ -13,4 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components';
+export { default as Box } from './box';
+export { default as Branches } from './branches';
+export { default as ProgressLine } from './progressLine';

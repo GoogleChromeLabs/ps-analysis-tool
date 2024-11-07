@@ -20,9 +20,7 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from './utils';
-import Box from '../components/box';
-import ProgressLine from '../components/progressLine';
-import Branches from '../components/branches';
+import { Box, ProgressLine, Branches } from '../components';
 
 const auction = {};
 

@@ -20,7 +20,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    index: './src/index.js',
+    'protected-audience': './src/protectedAudience.js',
   },
   output: {
     filename: '[name].js',
