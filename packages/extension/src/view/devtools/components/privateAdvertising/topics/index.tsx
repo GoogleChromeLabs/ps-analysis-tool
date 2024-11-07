@@ -33,6 +33,7 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import ExplorableExplanation from './explorableExplanation';
+import TaxonomyTree from './taxonomyTree';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -66,6 +67,30 @@ const Topics = () => {
           Element: ExplorableExplanation,
         },
       },
+      {
+        title: 'Taxonomy V2',
+        content: {
+          Element: TaxonomyTree,
+          props: {
+            taxonomyUrl:
+              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md',
+            githubUrl:
+              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
+          },
+        },
+      },
+      {
+        title: 'Taxonomy V1',
+        content: {
+          Element: TaxonomyTree,
+          props: {
+            taxonomyUrl:
+              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v1.md',
+            githubUrl:
+              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
+          },
+        },
+      },
     ],
     []
   );
@@ -89,7 +114,7 @@ const Topics = () => {
       />
       <div
         className={classNames(
-          'overflow-auto',
+          'overflow-auto flex-1',
           tabItems[activeTab].content.className
         )}
         style={{
