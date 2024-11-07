@@ -32,9 +32,17 @@ interface TabsProps {
   items: TabItems;
   activeTab: number;
   setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+  showBottomBorder?: boolean;
+  fontSizeClass?: string;
 }
 
-const Tabs = ({ items, activeTab, setActiveTab }: TabsProps) => {
+const Tabs = ({
+  items,
+  activeTab,
+  setActiveTab,
+  showBottomBorder = true,
+  fontSizeClass,
+}: TabsProps) => {
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       event.preventDefault();
@@ -61,15 +69,25 @@ const Tabs = ({ items, activeTab, setActiveTab }: TabsProps) => {
   );
 
   return (
-    <div className="w-full h-fit border-b border-gray-300 dark:border-quartz">
-      <div className="flex gap-10 mx-4">
+    <div
+      className={classNames(
+        'w-full h-fit border-american-silver dark:border-quartz',
+        showBottomBorder ? 'border-b' : ' border-b-0'
+      )}
+    >
+      <div
+        className={classNames(
+          'flex gap-10 mx-4',
+          fontSizeClass ? fontSizeClass : 'text-sm'
+        )}
+      >
         {items.map((item, index) => (
           <button
             key={index}
             onClick={() => setActiveTab(index)}
             onKeyDown={handleKeyDown}
             className={classNames(
-              'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-sm text-nowrap',
+              'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
               {
                 'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
                   index === activeTab,

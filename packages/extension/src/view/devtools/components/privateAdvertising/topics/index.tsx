@@ -32,6 +32,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
+import ExplorableExplanation from './explorableExplanation';
 import TaxonomyTree from './taxonomyTree';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
@@ -58,6 +59,12 @@ const Topics = () => {
             infoKey: PSInfoKey.Topics,
           },
           className: 'p-4',
+        },
+      },
+      {
+        title: 'Explorable Explantion',
+        content: {
+          Element: ExplorableExplanation,
         },
       },
       {
@@ -91,10 +98,13 @@ const Topics = () => {
   const ActiveTabContent = tabItems[activeTab].content.Element;
 
   return (
-    <div data-testid="topics-content" className="h-screen w-full flex flex-col">
+    <div
+      data-testid="topics-content"
+      className="h-screen w-full flex flex-col overflow-hidden"
+    >
       <div className="p-4">
         <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">{I18n.getMessage('Topics')}</h1>
+          <h1 className="text-left">{I18n.getMessage('topics')}</h1>
         </div>
       </div>
       <Tabs
@@ -103,7 +113,13 @@ const Topics = () => {
         setActiveTab={setActiveTab}
       />
       <div
-        className={classNames(tabItems[activeTab].content.className, 'flex-1')}
+        className={classNames(
+          'overflow-auto flex-1',
+          tabItems[activeTab].content.className
+        )}
+        style={{
+          minHeight: 'calc(100% - 93px)',
+        }}
       >
         {ActiveTabContent && (
           <ActiveTabContent {...tabItems[activeTab].content.props} />
