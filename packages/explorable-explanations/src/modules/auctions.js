@@ -238,31 +238,27 @@ auction.draw = async (index) => {
   for (const step of steps) {
     const { component, props, callBack } = step;
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+    const delay = component === Box ? 1000 : 0;
 
     if (callBack) {
       callBack(returnValue);
     }
 
-    await utils.delay(1000); // eslint-disable-line no-await-in-loop
+    await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
 
-  // auction.remove(index);
+  auction.remove(index);
 };
 
 auction.remove = (index) => {
-  const { ssp, dsp, bottomFlow } = app.auction.auctions[index];
-  const x1 = dsp[0]?.box?.x - 10;
-  const y1 = ssp.line.y1;
-  const x2 = bottomFlow[1]?.box?.x + config.flow.mediumBox.width;
+  const { y } = flow.getTimelineCircleCoordinates(index);
+  const p = app.p;
 
-  const height =
-    config.flow.box.height +
-    config.flow.smallBox.height +
-    config.flow.lineWidth +
-    config.timeline.circleProps.diameter;
-  600;
-
-  flow.createOverrideBox(x1, y1, x2, height);
+  p.push();
+  p.noStroke();
+  p.fill(config.canvas.background);
+  p.rect(0, y, p.width, p.height - y);
+  p.pop();
 };
 
 export default auction;
