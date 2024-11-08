@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Table,
@@ -27,6 +27,7 @@ import {
   type TableRow,
   useSidebar,
   SIDEBAR_ITEMS_KEYS,
+  type TableData,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import {
@@ -40,10 +41,30 @@ import { prettyPrintJson } from 'pretty-print-json';
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
-const InterestGroups = () => {
-  const [selectedRow, setSelectedRow] = useState<InterestGroupsType | null>(
-    null
-  );
+interface InterestGroupsProps {
+  filters?: Record<string, any>;
+}
+
+const InterestGroups = ({ filters }: InterestGroupsProps) => {
+  const [, setQuery] = useState({
+    filter: {},
+  });
+
+  useEffect(() => {
+    setQuery({
+      filter: {
+        ...filters,
+      },
+    });
+  }, [filters]);
+
+  // const clearQuery = useCallback(() => {
+  //   setQuery({
+  //     filter: {},
+  //   });
+  // }, []);
+
+  const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
   const { interestGroupDetails } = useProtectedAudience(({ state }) => ({
     interestGroupDetails: state.interestGroupDetails,

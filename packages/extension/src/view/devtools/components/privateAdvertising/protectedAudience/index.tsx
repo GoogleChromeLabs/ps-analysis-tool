@@ -28,6 +28,7 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
+import ExplorableExplanation from './explorableExplanation';
 
 /**
  * Internal dependencies.
@@ -61,6 +62,12 @@ const ProtectedAudience = () => {
             infoKey: PSInfoKey.ProtectedAudience,
           },
           className: 'p-4',
+        },
+      },
+      {
+        title: 'Explorable Explanation',
+        content: {
+          Element: ExplorableExplanation,
         },
       },
       {
