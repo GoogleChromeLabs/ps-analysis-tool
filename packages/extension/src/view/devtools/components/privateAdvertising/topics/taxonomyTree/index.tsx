@@ -103,7 +103,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
     const nodeIds = value.split('/');
 
     nodeIds.forEach((id, idx) => {
-      const _id = id.trim().split(' ').join('');
+      const _id = id.trim().split(' ').join('') || 'tax-tree-root-node'; // if no id is provided it's the root of the tree
       const nextId = nodeIds[idx + 1]?.trim().split(' ').join('');
 
       clicker(_id, nextId);
