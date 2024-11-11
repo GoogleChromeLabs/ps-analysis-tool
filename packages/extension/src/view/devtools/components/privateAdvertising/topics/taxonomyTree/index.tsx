@@ -39,7 +39,7 @@ interface TaxonomyTreeProps {
 
 const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   const divRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [taxonomyArray, setTaxonomyArray] = useState<string[]>([]);
 
   useEffect(() => {
@@ -92,11 +92,13 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
         svgGroup.style.fill = 'orangered';
         svgGroup.style.transition = 'fill 1s';
 
-        timeoutRef.current = setTimeout(() => {
+        const timeout = setTimeout(() => {
           svgGroup.style.fill = '';
           svgGroup.style.fontWeight = '';
           svgGroup.style.transition = '';
         }, 3000);
+
+        timeoutRef.current.push(timeout);
       }
     };
 
@@ -111,9 +113,13 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   }, []);
 
   useEffect(() => {
+    const timeouts = timeoutRef.current;
+
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (timeouts) {
+        timeouts.forEach((timeout) => {
+          clearTimeout(timeout);
+        });
       }
     };
   }, []);
