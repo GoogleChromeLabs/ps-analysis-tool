@@ -104,10 +104,14 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
     const nodeIds = value.split('/');
 
     nodeIds.forEach((id, idx) => {
-      const _id = id.trim().split(' ').join('') || 'tax-tree-root-node'; // if no id is provided it's the root of the tree
+      const _id = id.trim().split(' ').join('');
       const nextId = nodeIds[idx + 1]?.trim().split(' ').join('');
 
-      clicker(_id, nextId);
+      if (idx !== 0 && _id === '') {
+        return;
+      }
+
+      clicker(_id || 'tax-tree-root-node', nextId); // if no id is provided it's the root of the tree
     });
   }, []);
 
@@ -124,7 +128,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative h-full flex flex-col">
       <SearchDropdown values={taxonomyArray} onSelect={nodeClickHandler} />
       <a
         href={githubUrl}
@@ -138,7 +142,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           width="14"
         />
       </a>
-      <div className="p-4" ref={divRef} />
+      <div className="p-4 overflow-auto" ref={divRef} />
     </div>
   );
 };
