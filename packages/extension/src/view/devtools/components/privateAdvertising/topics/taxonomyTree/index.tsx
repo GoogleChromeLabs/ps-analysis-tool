@@ -72,23 +72,22 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
 
   const nodeClickHandler = useCallback((value: string) => {
     const clicker = (id: string, nextId?: string) => {
-      if (nextId && document.getElementById(nextId)) {
-        return;
-      }
+      const shouldClick = Boolean(!(nextId && document.getElementById(nextId)));
 
       const svgGroup = document.getElementById(id);
 
       if (svgGroup) {
-        const clickEvent = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
+        if (shouldClick) {
+          const clickEvent = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+          });
 
-        svgGroup.dispatchEvent(clickEvent);
+          svgGroup.dispatchEvent(clickEvent);
+        }
 
         svgGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
         svgGroup.style.fill = 'orangered';
         svgGroup.style.transition = 'fill 1s';
 
