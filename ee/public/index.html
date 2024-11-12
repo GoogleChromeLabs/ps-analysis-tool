@@ -11,9 +11,9 @@
             padding: 0;
         }
 
-        .overflowing-text{
+        .overflowing-text {
             white-space: nowrap;
-            overflow:hidden;
+            overflow: hidden;
             text-overflow: ellipsis;
         }
 
@@ -32,14 +32,14 @@
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         #user-canvas {
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         .play-pause-button {
@@ -66,14 +66,14 @@
             position: relative;
         }
 
-        #bubble-container{
+        #bubble-container {
             position: absolute;
             pointer-events: none;
             top: 0px;
             left: 0px;
         }
 
-        .minified-bubble-container{
+        .minified-bubble-container {
             position: absolute;
             top: 575px;
             left: 35px;
@@ -85,7 +85,7 @@
             transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
         }
 
-        .svg:active{
+        .svg:active {
             transform: translateY(4px);
             cursor: pointer;
         }
@@ -98,7 +98,7 @@
             cursor: pointer;
         }
 
-        .minified-bubble-container.expanded{
+        .minified-bubble-container.expanded {
             position: absolute;
             display: block;
             top: 0px;
@@ -109,8 +109,8 @@
             backdrop-filter: blur(10px);
         }
 
-        .bubble-container{
-            height:100vh;
+        .bubble-container {
+            height: 100vh;
             width: 100vw;
         }
 
@@ -118,10 +118,26 @@
             backdrop-filter: blur(1px);
         }
 
-        #close-container {
+        #close-button {
             position: absolute;
             top: 10px;
             transform: rotate(45deg);
+        }
+
+        #count-display {
+            align-items: center;
+            display: flex;
+            justify-content: space-around;
+            font-size: 16px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            backdrop-filter: blur(1.2px);
+            font-weight: bolder;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -142,8 +158,11 @@
         </div>
         <div id="interest-canvas"></div>
         <div id="bubble-container-div" class="bubble-container">
-            <div id="minified-bubble-container" class="minified-bubble-container"></div>
-            <img id="close-container" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguMDQ2MSAxMi45NTkxVjEuMDQwODlDOC4wNDYxIDAuNDY4NDAxIDcuNTc3NjkgMCA3LjAwNTIgMEM2LjQzMjcxIDAgNS45NjQzMSAwLjQ2ODQwMSA1Ljk2NDMxIDEuMDQwODlWMTIuOTU5MUM1Ljk2NDMxIDEzLjUzMTYgNi40MzI3MSAxNCA3LjAwNTIgMTRDNy41Nzc2OSAxNCA4LjA0NjEgMTMuNTMxNiA4LjA0NjEgMTIuOTU5MVpNMTQgNy4wMDUyQzE0IDYuNDMyNzEgMTMuNTMxNiA1Ljk2NDMxIDEyLjk1OTEgNS45NjQzMUgxLjA0MDg5QzAuNDY4NDAxIDUuOTY0MzEgMCA2LjQzMjcxIDAgNy4wMDUyQzAgNy41Nzc2OSAwLjQ2ODQwMSA4LjA0NjEgMS4wNDA4OSA4LjA0NjFIMTIuOTU5MUMxMy41MzE2IDguMDQ2MSAxNCA3LjU3NzY5IDE0IDcuMDA1MloiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgo8L3N2Zz4K"/>
+            <div id="minified-bubble-container" class="minified-bubble-container">
+                <p id="count-display"></p>
+            </div>
+            <img id="close-button"
+                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguMDQ2MSAxMi45NTkxVjEuMDQwODlDOC4wNDYxIDAuNDY4NDAxIDcuNTc3NjkgMCA3LjAwNTIgMEM2LjQzMjcxIDAgNS45NjQzMSAwLjQ2ODQwMSA1Ljk2NDMxIDEuMDQwODlWMTIuOTU5MUM1Ljk2NDMxIDEzLjUzMTYgNi40MzI3MSAxNCA3LjAwNTIgMTRDNy41Nzc2OSAxNCA4LjA0NjEgMTMuNTMxNiA4LjA0NjEgMTIuOTU5MVpNMTQgNy4wMDUyQzE0IDYuNDMyNzEgMTMuNTMxNiA1Ljk2NDMxIDEyLjk1OTEgNS45NjQzMUgxLjA0MDg5QzAuNDY4NDAxIDUuOTY0MzEgMCA2LjQzMjcxIDAgNy4wMDUyQzAgNy41Nzc2OSAwLjQ2ODQwMSA4LjA0NjEgMS4wNDA4OSA4LjA0NjFIMTIuOTU5MUMxMy41MzE2IDguMDQ2MSAxNCA3LjU3NzY5IDE0IDcuMDA1MloiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgo8L3N2Zz4K" />
         </div>
         <div id="user-canvas"></div>
     </main>

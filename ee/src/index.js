@@ -117,9 +117,7 @@ app.drawFlows = async (index) => {
 app.handlePlayPauseButttons = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
-  document
-    .getElementById('close-container')
-    .addEventListener('click', app.play);
+  document.getElementById('close-button').addEventListener('click', app.play);
 
   app.playButton.addEventListener('click', app.play);
   app.pauseButton.addEventListener('click', app.pause);
@@ -214,7 +212,7 @@ const interestGroupSketch = (p) => {
           config.canvas.width / 4
         }px`;
 
-        document.getElementById('close-container').style.left = `${
+        document.getElementById('close-button').style.left = `${
           config.canvas.width - 100
         }px`;
         document.styleSheets[0].cssRules[index].style.width = `${height}px`;

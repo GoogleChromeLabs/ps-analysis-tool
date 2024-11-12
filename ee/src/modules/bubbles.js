@@ -290,8 +290,9 @@ bubbles.reverseBarrageAnimation = async (index) => {
   utils.wipeAndRecreateInterestCanvas();
 };
 bubbles.showExpandedBubbles = () => {
-  app.minifiedBubbleContainer.innerHTML = '';
+  bubbles.clearAndRewriteBubbles();
   bubbles.generateBubbles(true);
+
   if (app.bubbles.expandedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.expandedSVG);
   }
@@ -300,7 +301,7 @@ bubbles.showExpandedBubbles = () => {
     .getElementById('bubble-container-div')
     .classList.toggle('expanded', true);
 
-  document.getElementById('close-container').style.display = 'block';
+  document.getElementById('close-button').style.display = 'block';
 
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
@@ -313,21 +314,13 @@ bubbles.showMinifiedBubbles = () => {
     .getElementById('bubble-container-div')
     .classList.toggle('expanded', false);
 
-  document.getElementById('close-container').style.display = 'none';
+  document.getElementById('close-button').style.display = 'none';
 
-  app.minifiedBubbleContainer.innerHTML = '';
+  bubbles.clearAndRewriteBubbles();
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
 
-  const pTag = document.createElement('p');
-  pTag.textContent = config.bubbles.interestGroupCounts;
-  pTag.style.textAlign = 'center';
-  pTag.style.fontSize = '14px';
-  pTag.style.position = 'absolute';
-  pTag.style.top = '0px';
-  pTag.style.left = '0px';
-  pTag.style.width = '100%';
-
-  app.minifiedBubbleContainer.appendChild(pTag);
+  document.getElementById('count-display').innerHTML =
+    config.bubbles.interestGroupCounts;
 
   if (app.bubbles.minifiedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.minifiedSVG);
@@ -486,6 +479,16 @@ bubbles.bubbleChart = (
   }
 
   return Object.assign(svg.node(), { scales: { color } });
+};
+
+bubbles.clearAndRewriteBubbles = () => {
+  if (!app.minifiedBubbleContainer) {
+    return;
+  }
+  const countDisplay =
+    app.minifiedBubbleContainer.querySelector('[id=count-display]');
+  app.minifiedBubbleContainer.innerHTML = '';
+  app.minifiedBubbleContainer.appendChild(countDisplay);
 };
 
 export default bubbles;
