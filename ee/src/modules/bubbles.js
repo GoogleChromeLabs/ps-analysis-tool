@@ -416,19 +416,6 @@ bubbles.bubbleChart = (
     };
   });
 
-  if (data.length > 0) {
-    const nodes = root.leaves();
-    const { r } = d3.packEnclose(nodes);
-
-    document.styleSheets[0].cssRules.forEach((rules, index) => {
-      if (rules.selectorText === '.minified-bubble-container.expanded') {
-        document.styleSheets[0].cssRules[index].style.top = `0px`;
-        document.styleSheets[0].cssRules[index].style.width = `${r * 2}px`;
-        document.styleSheets[0].cssRules[index].style.height = `${r * 2}px`;
-      }
-    });
-  }
-
   leaf
     .append('circle')
     .attr('stroke', stroke)
