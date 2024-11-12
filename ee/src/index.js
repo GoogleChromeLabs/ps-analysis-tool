@@ -117,6 +117,9 @@ app.drawFlows = async (index) => {
 app.handlePlayPauseButttons = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
+  document
+    .getElementById('close-container')
+    .addEventListener('click', app.play);
 
   app.playButton.addEventListener('click', app.play);
   app.pauseButton.addEventListener('click', app.pause);
@@ -207,6 +210,13 @@ const interestGroupSketch = (p) => {
 
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
+        document.styleSheets[0].cssRules[index].style.left = `${
+          config.canvas.width / 4
+        }px`;
+
+        document.getElementById('close-container').style.left = `${
+          config.canvas.width - 100
+        }px`;
         document.styleSheets[0].cssRules[index].style.width = `${height}px`;
         document.styleSheets[0].cssRules[index].style.height = `${height}px`;
       }

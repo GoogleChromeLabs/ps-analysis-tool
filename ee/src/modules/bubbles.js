@@ -31,8 +31,6 @@ const bubbles = {};
 bubbles.init = () => {
   app.bubbles.positions = [];
 };
-
-// eslint-disable-next-line complexity
 bubbles.generateBubbles = (recalculate = false) => {
   const igp = app.igp;
   const color = igp.color(
@@ -302,15 +300,20 @@ bubbles.showExpandedBubbles = () => {
     .getElementById('bubble-container-div')
     .classList.toggle('expanded', true);
 
+  document.getElementById('close-container').style.display = 'block';
+
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
 bubbles.showMinifiedBubbles = () => {
   if (config.bubbles.isExpanded) {
     return;
   }
+
   document
     .getElementById('bubble-container-div')
     .classList.toggle('expanded', false);
+
+  document.getElementById('close-container').style.display = 'none';
 
   app.minifiedBubbleContainer.innerHTML = '';
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
@@ -419,9 +422,6 @@ bubbles.bubbleChart = (
 
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
-        document.styleSheets[0].cssRules[index].style.left = `${
-          config.canvas.width / 2 - r
-        }px`;
         document.styleSheets[0].cssRules[index].style.top = `0px`;
         document.styleSheets[0].cssRules[index].style.width = `${r * 2}px`;
         document.styleSheets[0].cssRules[index].style.height = `${r * 2}px`;
