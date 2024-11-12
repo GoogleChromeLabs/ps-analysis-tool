@@ -27,6 +27,7 @@ import { topicsAnimation } from './topicsAnimation';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
+  isAnimating: boolean;
   siteAdTechs: Record<string, string[]>;
   handleUserVisit: (visitIndex: number) => void;
   isPlaying: boolean;
@@ -36,6 +37,7 @@ interface AnimationProps {
 
 const Animation = ({
   epoch,
+  isAnimating,
   siteAdTechs,
   handleUserVisit,
   isPlaying,
@@ -54,6 +56,7 @@ const Animation = ({
       const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
         p,
         epoch,
+        isAnimating,
         siteAdTechs,
         handleUserVisit
       );
@@ -68,7 +71,7 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [epoch, handleUserVisit, siteAdTechs]);
+  }, [epoch, handleUserVisit, isAnimating, siteAdTechs]);
 
   useEffect(() => {
     togglePlayCallback?.(isPlaying);

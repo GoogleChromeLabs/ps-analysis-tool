@@ -41,7 +41,12 @@ const ExplorableExplanation = () => {
   const [reset, _setReset] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
-  const [topicsTableData, setTopicsTableData] = useState<TopicsTableType[]>([]);
+  const [topicsTableData, setTopicsTableData] = useState<
+    Record<number, TopicsTableType[]>
+  >({});
+  const [epochCompleted, setEpochCompleted] = useState<Record<number, boolean>>(
+    {}
+  );
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const epochs = useMemo(() => createEpochs(), []);
@@ -53,7 +58,9 @@ const ExplorableExplanation = () => {
     setPlay(false);
     _setReset(true);
     setSliderStep(1);
-    setTopicsTableData([]);
+    setTopicsTableData({});
+    setActiveTab(0);
+    setEpochCompleted({});
 
     timeoutRef.current = setTimeout(() => {
       _setReset(false);
@@ -62,8 +69,14 @@ const ExplorableExplanation = () => {
   }, []);
 
   useEffect(() => {
-    setTopicsTableData([]);
-  }, [activeTab]);
+    if (!epochCompleted[activeTab]) {
+      setTopicsTableData((prevTopicsTableData) => {
+        const newTopicsTableData = { ...prevTopicsTableData };
+        newTopicsTableData[activeTab] = [];
+        return newTopicsTableData;
+      });
+    }
+  }, [activeTab, epochCompleted]);
 
   useEffect(() => {
     return () => {
@@ -75,11 +88,18 @@ const ExplorableExplanation = () => {
 
   const handleUserVisit = useCallback(
     (visitIndex: number) => {
-      if (visitIndex < epochs[activeTab].webVisits.length) {
+      if (
+        visitIndex < epochs[activeTab].webVisits.length &&
+        !epochCompleted[activeTab]
+      ) {
         setTopicsTableData((prevTopicsTableData) => {
           const { topics, website } = epochs[activeTab].webVisits[visitIndex];
+          const topicsData = prevTopicsTableData[activeTab];
+          const newTopicsTableData = {
+            ...prevTopicsTableData,
+          };
 
-          const newTopicsTableData = topics.reduce(
+          const newTopicsData = topics.reduce(
             (acc, topic) => {
               const existingTopic = acc.find((t) => t.topicName === topic);
               if (existingTopic) {
@@ -99,18 +119,26 @@ const ExplorableExplanation = () => {
               }
               return acc;
             },
-            [...prevTopicsTableData]
+            [...(topicsData || [])]
           );
+
+          newTopicsTableData[activeTab] = newTopicsData;
 
           return newTopicsTableData;
         });
       }
 
-      if (visitIndex === epochs[activeTab].webVisits.length && activeTab < 3) {
-        setActiveTab((prevActiveTab) => prevActiveTab + 1);
+      if (visitIndex === epochs[activeTab].webVisits.length) {
+        setEpochCompleted((prevEpochCompleted) => ({
+          ...prevEpochCompleted,
+          [activeTab]: true,
+        }));
+        setActiveTab((prevActiveTab) =>
+          prevActiveTab < 3 ? prevActiveTab + 1 : 3
+        );
       }
     },
-    [activeTab, epochs, siteAdTechs]
+    [activeTab, epochCompleted, epochs, siteAdTechs]
   );
 
   return (
@@ -126,6 +154,7 @@ const ExplorableExplanation = () => {
       <div className="flex-1 overflow-auto">
         <Animation
           epoch={epochs[activeTab].webVisits}
+          isAnimating={!epochCompleted?.[activeTab]}
           siteAdTechs={siteAdTechs}
           isPlaying={play}
           resetAnimation={reset}
@@ -148,7 +177,7 @@ const ExplorableExplanation = () => {
         <Tray
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          topicsTableData={topicsTableData}
+          topicsTableData={topicsTableData[activeTab] || []}
         />
       </Resizable>
     </div>

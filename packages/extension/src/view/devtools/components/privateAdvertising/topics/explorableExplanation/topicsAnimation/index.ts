@@ -22,6 +22,7 @@ import { getAdtechsColors } from './utils';
  * Setup function for p5.js
  * @param p - p5.js instance
  * @param epoch - Array of objects containing datetime, website, and topics
+ * @param isAnimating - Boolean to tell if the animation should play
  * @param siteAdTechs - Object with websites as keys and adtechs as values
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
  * @returns Object with callbacks to control the animation
@@ -29,6 +30,7 @@ import { getAdtechsColors } from './utils';
 export function topicsAnimation(
   p: p5,
   epoch: { datetime: string; website: string; topics: string[] }[],
+  isAnimating: boolean,
   siteAdTechs: Record<string, string[]>,
   handleUserVisit: (visitIndex: number) => void
 ) {
@@ -337,6 +339,12 @@ export function topicsAnimation(
     p.textFont('sans-serif');
     app.drawTimelineLine(config.timeline.position);
     app.drawTimeline(config.timeline.position, epoch);
+
+    if (!isAnimating) {
+      while (app.visitIndex < epoch.length) {
+        app.play();
+      }
+    }
   };
 
   p.draw = () => {
