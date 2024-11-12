@@ -298,12 +298,19 @@ bubbles.showExpandedBubbles = () => {
     app.minifiedBubbleContainer.appendChild(app.bubbles.expandedSVG);
   }
 
+  document
+    .getElementById('bubble-container-div')
+    .classList.toggle('expanded', true);
+
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
 bubbles.showMinifiedBubbles = () => {
   if (config.bubbles.isExpanded) {
     return;
   }
+  document
+    .getElementById('bubble-container-div')
+    .classList.toggle('expanded', false);
 
   app.minifiedBubbleContainer.innerHTML = '';
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
