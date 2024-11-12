@@ -166,6 +166,10 @@ export function topicsAnimation(
       }
 
       if (visitIndex >= epoch.length) {
+        if (visitIndex === epoch.length) {
+          handleUserVisit(visitIndex);
+        }
+
         return;
       }
 

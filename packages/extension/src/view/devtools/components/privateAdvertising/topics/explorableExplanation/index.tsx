@@ -75,34 +75,40 @@ const ExplorableExplanation = () => {
 
   const handleUserVisit = useCallback(
     (visitIndex: number) => {
-      setTopicsTableData((prevTopicsTableData) => {
-        const { topics, website } = epochs[activeTab].webVisits[visitIndex];
+      if (visitIndex < epochs[activeTab].webVisits.length) {
+        setTopicsTableData((prevTopicsTableData) => {
+          const { topics, website } = epochs[activeTab].webVisits[visitIndex];
 
-        const newTopicsTableData = topics.reduce(
-          (acc, topic) => {
-            const existingTopic = acc.find((t) => t.topicName === topic);
-            if (existingTopic) {
-              existingTopic.count += 1;
-              existingTopic.observedByContextDomains = [
-                ...new Set([
-                  ...existingTopic.observedByContextDomains,
-                  ...siteAdTechs[website],
-                ]),
-              ];
-            } else {
-              acc.push({
-                topicName: topic,
-                count: 1,
-                observedByContextDomains: siteAdTechs[website] || [],
-              });
-            }
-            return acc;
-          },
-          [...prevTopicsTableData]
-        );
+          const newTopicsTableData = topics.reduce(
+            (acc, topic) => {
+              const existingTopic = acc.find((t) => t.topicName === topic);
+              if (existingTopic) {
+                existingTopic.count += 1;
+                existingTopic.observedByContextDomains = [
+                  ...new Set([
+                    ...existingTopic.observedByContextDomains,
+                    ...siteAdTechs[website],
+                  ]),
+                ];
+              } else {
+                acc.push({
+                  topicName: topic,
+                  count: 1,
+                  observedByContextDomains: siteAdTechs[website] || [],
+                });
+              }
+              return acc;
+            },
+            [...prevTopicsTableData]
+          );
 
-        return newTopicsTableData;
-      });
+          return newTopicsTableData;
+        });
+      }
+
+      if (visitIndex === epochs[activeTab].webVisits.length && activeTab < 3) {
+        setActiveTab((prevActiveTab) => prevActiveTab + 1);
+      }
     },
     [activeTab, epochs, siteAdTechs]
   );
