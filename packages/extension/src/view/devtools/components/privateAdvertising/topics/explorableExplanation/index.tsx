@@ -50,14 +50,15 @@ const ExplorableExplanation = () => {
   }, []);
 
   const setReset = useCallback(() => {
+    setPlay(false);
     _setReset(true);
-    timeoutRef.current = setTimeout(() => {
-      _setReset(false);
-    }, 0);
-
-    setPlay(true);
     setSliderStep(1);
     setTopicsTableData([]);
+
+    timeoutRef.current = setTimeout(() => {
+      _setReset(false);
+      setPlay(true);
+    }, 0);
   }, []);
 
   useEffect(() => {
