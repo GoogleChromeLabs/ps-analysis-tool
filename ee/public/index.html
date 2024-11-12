@@ -11,6 +11,12 @@
             padding: 0;
         }
 
+        .overflowing-text{
+            white-space: nowrap;
+            overflow:hidden;
+            text-overflow: ellipsis;
+        }
+
         .hidden {
             display: none;
         }
@@ -79,12 +85,17 @@
             transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
         }
 
-        .svg:hover{
-            opacity: 95%
-        }
-
         .svg:active{
             transform: translateY(4px);
+            cursor: pointer;
+        }
+
+        .svg{
+            cursor: pointer;
+        }
+
+        text {
+            cursor: pointer;
         }
 
         .minified-bubble-container.expanded{

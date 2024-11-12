@@ -50,7 +50,10 @@ bubbles.generateBubbles = (recalculate = false) => {
         id: config.timeline.circles[app.timeline.currentIndex].interestGroups[
           index
         ],
-        value: igp.random(0, 1000000),
+        value:
+          config.timeline.circles[app.timeline.currentIndex].interestGroups[
+            index
+          ].length,
         group: config.timeline.circles[app.timeline.currentIndex].website,
         color,
       });
@@ -85,6 +88,7 @@ bubbles.generateBubbles = (recalculate = false) => {
     title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
     width: config.canvas.height,
     height: config.canvas.height,
+    margin: 4,
   });
 };
 
@@ -405,6 +409,7 @@ bubbles.bubbleChart = (
   if (data.length > 0) {
     const nodes = root.leaves();
     const { r } = d3.packEnclose(nodes);
+
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
         document.styleSheets[0].cssRules[index].style.left = `${
@@ -422,7 +427,7 @@ bubbles.bubbleChart = (
     .attr('stroke', stroke)
     .attr('stroke-width', strokeWidth)
     .attr('stroke-opacity', strokeOpacity)
-    .attr('class', 'svg')
+    .attr('class', 'svg overflowing-text')
     .attr(
       'fill',
       groups
@@ -461,6 +466,7 @@ bubbles.bubbleChart = (
       .append('clipPath')
       .attr('id', (d) => `${uid}-clip-${d.data}`)
       .append('circle')
+      .attr('class', 'svg overflowing-text')
       .attr('r', (d) => d.r);
 
     if (config.bubbles.isExpanded) {
@@ -474,11 +480,11 @@ bubbles.bubbleChart = (
           'clip-path',
           (d) => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`
         )
+        .attr('class', 'svg')
         .selectAll('tspan')
         .data((d) => `${labels[d.data]}`.split(/\n/g))
         .join('tspan')
         .attr('x', 0)
-        .attr('cursor', 'default')
         .attr('y', (d, i, D) => `${i - D.length / 2 + 0.85}em`)
         .attr('fill-opacity', (d, i, D) => (i === D.length - 1 ? 0.7 : null))
         .text((d) => d);
