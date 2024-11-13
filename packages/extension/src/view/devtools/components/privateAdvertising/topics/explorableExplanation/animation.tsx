@@ -51,15 +51,21 @@ const Animation = ({
   const [resetCallback, setResetCallback] = useState<() => void>();
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
+  const animationRef = useRef(isAnimating);
+
+  useEffect(() => {
+    // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
+    animationRef.current = isAnimating;
+  }, [isAnimating]);
 
   useEffect(() => {
     const tAnimation = (p: p5) => {
       const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
         p,
         epoch,
-        isAnimating,
+        animationRef.current,
         siteAdTechs,
-        isAnimating ? handleUserVisit : noop
+        animationRef.current ? handleUserVisit : noop
       );
 
       setTogglePlayCallback(() => togglePlay);
@@ -72,7 +78,7 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [epoch, handleUserVisit, isAnimating, siteAdTechs]);
+  }, [epoch, handleUserVisit, siteAdTechs]);
 
   useEffect(() => {
     togglePlayCallback?.(isPlaying);
