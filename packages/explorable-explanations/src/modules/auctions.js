@@ -22,14 +22,27 @@ import config from '../config';
 import utils from './utils';
 import { Box, ProgressLine, Branches } from '../components';
 
+/**
+ * @module Auction
+ * Handles the setup and rendering of auction steps in a flowchart-like interface.
+ */
 const auction = {};
 
+/**
+ * Initializes auction setup for all circles defined in the configuration.
+ * Loops through each circle and sets up the auction steps.
+ */
 auction.setupAuctions = () => {
   config.timeline.circles.forEach((circle, index) => {
     auction.setUp(index);
   });
 };
 
+/**
+ * Sets up the auction steps for a specific circle index.
+ * Adds steps and coordinates for rendering components like Boxes, ProgressLines, and Branches.
+ * @param {number} index - The index of the circle to set up.
+ */
 auction.setUp = (index) => {
   const { circles } = config.timeline;
   const { box } = config.flow;
@@ -51,21 +64,9 @@ auction.setUp = (index) => {
       x1: x,
       y1: y,
       branches: [
-        {
-          title: 'adunit-code',
-          content: 'div-200-1',
-          type: 'box',
-        },
-        {
-          title: 'adunit-code',
-          content: 'div-200-1',
-          type: 'box',
-        },
-        {
-          title: 'adunit-code',
-          content: 'div-200-1',
-          type: 'box',
-        },
+        { title: 'adunit-code', content: 'div-200-1', type: 'box' },
+        { title: 'adunit-code', content: 'div-200-1', type: 'box' },
+        { title: 'adunit-code', content: 'div-200-1', type: 'box' },
       ],
     },
     callBack: (returnValue) => {
@@ -73,28 +74,16 @@ auction.setUp = (index) => {
     },
   });
 
-  // Setup Branches
+  // Setup Branches with timestamps
   steps.push({
     component: Branches,
     props: {
       x1: () => app.auction.nextTipCoordinates.x,
       y1: () => app.auction.nextTipCoordinates.y + 40,
       branches: [
-        {
-          date: '2024-10-02',
-          time: '10:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
+        { date: '2024-10-02', time: '10:00:22PM', type: 'datetime' },
+        { date: '2024-10-03', time: '11:00:22PM', type: 'datetime' },
+        { date: '2024-10-03', time: '11:00:22PM', type: 'datetime' },
       ],
     },
     callBack: (returnValue) => {
@@ -102,121 +91,40 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
-      noArrow: true,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
+  // Setup sequential steps with ProgressLines and Boxes
+  const components = [
+    { title: 'SSP Tag', offset: 0 },
+    { title: 'SSP', offset: config.flow.arrowSize },
+    { title: 'DSPs', offset: config.flow.arrowSize },
+  ];
 
-  steps.push({
-    component: Box,
-    props: {
-      title: 'SSP Tag',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'SSP',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'DSPs',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'up',
-      x1: () => app.auction.nextTipCoordinates.x + 10,
-      y1: () => {
-        return app.auction.nextTipCoordinates.y - 15;
+  components.forEach(({ title, offset }) => {
+    steps.push({
+      component: ProgressLine,
+      props: {
+        direction: 'down',
+        x1: () => app.auction.nextTipCoordinates.x,
+        y1: () => app.auction.nextTipCoordinates.y + 40,
       },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'up',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => {
-        return app.auction.nextTipCoordinates.y - box.height - 10;
+      callBack: (returnValue) => {
+        app.auction.nextTipCoordinates = returnValue;
       },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
+    });
 
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'right',
-      x1: () => app.auction.nextTipCoordinates.x - 10 + box.width / 2,
-      y1: () => {
-        return app.auction.nextTipCoordinates.y - 10 - box.height / 2;
+    steps.push({
+      component: Box,
+      props: {
+        title,
+        x: () => app.auction.nextTipCoordinates.x - box.width / 2,
+        y: () => app.auction.nextTipCoordinates.y + offset,
       },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
+      callBack: (returnValue) => {
+        app.auction.nextTipCoordinates = returnValue.down;
+      },
+    });
   });
 
+  // Final steps
   steps.push({
     component: Box,
     props: {
@@ -245,9 +153,7 @@ auction.setUp = (index) => {
       props: {
         direction: 'down',
         x1: () => app.auction.nextTipCoordinates.x,
-        y1: () => {
-          return app.auction.nextTipCoordinates.y + box.height - 10;
-        },
+        y1: () => app.auction.nextTipCoordinates.y + box.height - 10,
       },
       callBack: (returnValue) => {
         app.auction.nextTipCoordinates = returnValue;
@@ -270,6 +176,11 @@ auction.setUp = (index) => {
   app.auction.auctions.push(steps);
 };
 
+/**
+ * Draws the auction steps for a specific index asynchronously.
+ * Each step is rendered sequentially with delays.
+ * @param {number} index - The index of the auction steps to draw.
+ */
 auction.draw = async (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
