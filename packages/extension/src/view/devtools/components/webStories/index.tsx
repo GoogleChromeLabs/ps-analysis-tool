@@ -57,6 +57,18 @@ const WebStories = () => {
           chrome.runtime.getURL('assets/data/amp-story-player-v0.js')
         );
         break;
+      case 'https://cdn.ampproject.org/v0.js':
+        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
+          'https://cdn.ampproject.org/v0.js',
+          chrome.runtime.getURL('assets/data/v0.js')
+        );
+        break;
+      case 'https://cdn.ampproject.org/v0/amp-story-1.0.js':
+        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
+          'https://cdn.ampproject.org/v0/amp-story-1.0.js',
+          chrome.runtime.getURL('assets/data/amp-story-1.0.js')
+        );
+        break;
       default:
         if (script.src.endsWith('main.js')) {
           parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
@@ -65,6 +77,23 @@ const WebStories = () => {
           );
         }
         script.remove();
+        break;
+    }
+  });
+
+  Array.from(doc.querySelectorAll('a')).forEach(({ href }) => {
+    if (!href) {
+      return;
+    }
+
+    switch (href) {
+      case 'https://wsdemos.uc.r.appspot.com/animal-poll':
+        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
+          'https://wsdemos.uc.r.appspot.com/animal-poll',
+          chrome.runtime.getURL('assets/index.html')
+        );
+        break;
+      default:
         break;
     }
   });

@@ -651,13 +651,13 @@ body {
           ]
         }
       </script>
-            <a href="https://wp.stories.google/stories/a-taste-of-new-york-pizza-history/"></a>
-            <a href="https://wp.stories.google/stories/a-day-in-the-life-of-dap-the-contract/"></a>
-            <a href="https://wsdemos.uc.r.appspot.com/homewarrior"></a>
-            <a href="https://wsdemos.uc.r.appspot.com/kitchen"></a>
-            <a href="https://wsdemos.uc.r.appspot.com/art-quiz"></a>
-            <a href="https://wp.stories.google/stories/a-guide-to-shaping-clay/"></a>
-            <a href="https://wsdemos.uc.r.appspot.com/animal-poll"></a>
+            <a href="https://wp.stories.google/stories/a-taste-of-new-york-pizza-history/" class="story"></a>
+            <a href="https://wp.stories.google/stories/a-day-in-the-life-of-dap-the-contract/" class="story"></a>
+            <a href="https://wsdemos.uc.r.appspot.com/homewarrior" class="story"></a>
+            <a href="https://wsdemos.uc.r.appspot.com/kitchen" class="story"></a>
+            <a href="https://wsdemos.uc.r.appspot.com/art-quiz" class="story"></a>
+            <a href="https://wp.stories.google/stories/a-guide-to-shaping-clay/" class="story"></a>
+            <a href="https://wsdemos.uc.r.appspot.com/animal-poll" class="story"></a>
 
         </amp-story-player>
     </div>
