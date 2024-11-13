@@ -26,13 +26,8 @@ const Box = ({
   width = config.flow.box.width,
   height = config.flow.box.height,
 }) => {
-  if (typeof x === 'function') {
-    x = x();
-  }
-
-  if (typeof y === 'function') {
-    y = y();
-  }
+  x = typeof x === 'function' ? x() : x;
+  y = typeof y === 'function' ? y() : y;
 
   const nextTip = {
     down: {

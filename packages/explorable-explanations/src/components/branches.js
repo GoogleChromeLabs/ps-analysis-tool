@@ -19,14 +19,19 @@
 import ProgressLine from './progressLine';
 import app from '../app';
 import config from '../config';
+import Box from './box';
 
 const LEFT_MARGIN = 50; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
+const EXPAND_ICON_SIZE = 20;
 
 let spacing, progress, interval, renderedBranchIds, endpoints;
 
 // @todo: Handle canvas width changes when the branches do not fit in the existing size.
 const Branches = async ({ x1, y1, branches }) => {
+  x1 = typeof x1 === 'function' ? x1() : x1;
+  y1 = typeof y1 === 'function' ? y1() : y1;
+
   branches = branches.map((branch, index) => ({
     ...branch,
     id: index, // To prevent duplicate rendering
@@ -77,35 +82,73 @@ const drawAnimatedTimeline = (x, y, branches) => {
     // Draw each vertical line and label when the horizontal line reaches its position
     for (let i = 0; i < branches.length; i++) {
       const branchX = x + i * spacing;
-      const expandIconSize = 20;
+      const branch = branches[i];
+      let endpoint;
 
-      if (progress >= i * spacing && !(branches[i].id in renderedBranchIds)) {
+      if (progress >= i * spacing && !(branch.id in renderedBranchIds)) {
         // Start drawing each vertical line once the horizontal line reaches it
         // Draw vertical line fully
         p.stroke(0);
         p.line(branchX, y, branchX, y + 20);
 
-        // Display date and time below the line
-        p.noStroke();
-        p.fill(0);
-        p.textSize(config.canvas.fontSize);
-        p.text(`${branches[i].date}`, branchX, y + 35);
-        p.text(`${branches[i].time}`, branchX, y + 50);
-
-        p.image(
-          p.expandIcon,
-          branchX - expandIconSize / 2,
-          y + 65,
-          expandIconSize,
-          expandIconSize
-        );
+        switch (branch.type) {
+          case 'datetime':
+            endpoint = drawDateTimeBranch(branchX, y, branch);
+            break;
+          case 'box':
+            endpoint = drawBoxesBranch(branchX, y, branch);
+            break;
+          default:
+            break;
+        }
 
         // Store the endpoint coordinates for each branch
-        endpoints.push({ x: branchX, y: y + 50 });
-        renderedBranchIds.push(branches[i].id);
+        endpoints.push(endpoint);
+
+        renderedBranchIds.push(branch.id);
       }
     }
   });
+};
+
+const drawDateTimeBranch = (x, y, branch) => {
+  const p = app.p;
+
+  p.noStroke();
+  p.fill(0);
+  p.textSize(config.canvas.fontSize);
+  p.text(`${branch.date}`, x, y + 35);
+  p.text(`${branch.time}`, x, y + 50);
+
+  p.image(
+    p.expandIcon,
+    x - EXPAND_ICON_SIZE / 2,
+    y + 65,
+    EXPAND_ICON_SIZE,
+    EXPAND_ICON_SIZE
+  );
+
+  return { x: x, y: y + 50 };
+};
+
+const drawBoxesBranch = (x, y, branch) => {
+  const p = app.p;
+
+  Box({
+    title: branch.title + ' ' + branch.content,
+    x: x - config.flow.box.width / 2,
+    y: y + 20,
+  });
+
+  p.image(
+    p.expandIcon,
+    x - EXPAND_ICON_SIZE / 2,
+    y + 80,
+    EXPAND_ICON_SIZE,
+    EXPAND_ICON_SIZE
+  );
+
+  return { x: x, y: y + EXPAND_ICON_SIZE * 3 + 5 };
 };
 
 export default Branches;

@@ -44,7 +44,7 @@ auction.setUp = (index) => {
 
   const steps = [];
 
-  // Setup Branches
+  // Setup Ad unit codes
   steps.push({
     component: Branches,
     props: {
@@ -52,16 +52,48 @@ auction.setUp = (index) => {
       y1: y,
       branches: [
         {
+          title: 'adunit-code',
+          content: 'div-200-1',
+          type: 'box',
+        },
+        {
+          title: 'adunit-code',
+          content: 'div-200-1',
+          type: 'box',
+        },
+        {
+          title: 'adunit-code',
+          content: 'div-200-1',
+          type: 'box',
+        },
+      ],
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue[1];
+    },
+  });
+
+  // Setup Branches
+  steps.push({
+    component: Branches,
+    props: {
+      x1: () => app.auction.nextTipCoordinates.x,
+      y1: () => app.auction.nextTipCoordinates.y + 40,
+      branches: [
+        {
           date: '2024-10-02',
           time: '10:00:22PM',
+          type: 'datetime',
         },
         {
           date: '2024-10-03',
           time: '11:00:22PM',
+          type: 'datetime',
         },
         {
           date: '2024-10-03',
           time: '11:00:22PM',
+          type: 'datetime',
         },
       ],
     },
@@ -247,7 +279,7 @@ auction.draw = async (index) => {
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
 
-  auction.remove(index);
+  // auction.remove(index);
 };
 
 auction.remove = (index) => {
