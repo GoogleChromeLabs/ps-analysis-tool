@@ -45,7 +45,7 @@ const config = {
         datetime: '2023-10-01 11:00',
         igGroupsCount: 7,
         interestGroups: [
-          'wJk91XxpVnFvc2oySFZtdjFaQmxzV3U1ODdnPT18',
+          'IGG22012',
           'adidas.co.in',
           'stilletos',
           'shorts',
