@@ -229,30 +229,42 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => {
-        return app.auction.nextTipCoordinates.y + box.height - 10;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
+  const boxes = [
+    'Load Interest Group',
+    'Key/Value DSP Server',
+    'generateBid()',
+    'Key/Value SSP Server',
+    'scoreAd()',
+    'reportWin()',
+    'reportResult()',
+  ];
 
-  steps.push({
-    component: Box,
-    props: {
-      title: 'Load Interest Group',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y + 10,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
+  boxes.forEach((title) => {
+    steps.push({
+      component: ProgressLine,
+      props: {
+        direction: 'down',
+        x1: () => app.auction.nextTipCoordinates.x,
+        y1: () => {
+          return app.auction.nextTipCoordinates.y + box.height - 10;
+        },
+      },
+      callBack: (returnValue) => {
+        app.auction.nextTipCoordinates = returnValue;
+      },
+    });
+
+    steps.push({
+      component: Box,
+      props: {
+        title,
+        x: () => app.auction.nextTipCoordinates.x - box.width / 2,
+        y: () => app.auction.nextTipCoordinates.y + 10,
+      },
+      callBack: (returnValue) => {
+        app.auction.nextTipCoordinates = returnValue.down;
+      },
+    });
   });
 
   app.auction.auctions.push(steps);
