@@ -21,8 +21,7 @@ import app from '../app';
 import config from '../config';
 import utils from './utils';
 import timeline from './timeline';
-import Box from '../components/box';
-import ProgressLine from '../components/progressLine';
+import { Box, ProgressLine } from '../components';
 
 const joinInterestGroup = {};
 const ARROW_SIZE = 10;
@@ -145,6 +144,7 @@ joinInterestGroup.draw = async (index) => {
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
 
+  await utils.delay(2000);
   flow.clearBelowTimelineCircles();
 
   timeline.drawSmallCircles(index);

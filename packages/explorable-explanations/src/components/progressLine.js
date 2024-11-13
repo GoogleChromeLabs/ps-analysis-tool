@@ -34,31 +34,14 @@ const ProgressLine = ({
   const incrementBy = 1; // @todo Use it to control speed.
   const p = app.p;
 
-  if (typeof x1 === 'function') {
-    x1 = x1();
-  }
-
-  if (typeof y1 === 'function') {
-    y1 = y1();
-  }
+  x1 = typeof x1 === 'function' ? x1() : x1;
+  y1 = typeof y1 === 'function' ? y1() : y1;
 
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction);
 
   let currentX = x1; // For horizontal directions
   let currentY = y1; // For vertical directions
   let targetX = x2;
-
-  const drawText = (x, y) => {
-    if (text) {
-      p.push();
-      p.strokeWeight(0.1);
-      p.fill('#000');
-      p.textSize(config.canvas.fontSize - 2);
-      p.textFont('ui-sans-serif');
-      p.text(text, x, y);
-      p.pop();
-    }
-  };
 
   const drawArrow = (x, y, dir) => {
     if (!noArrow) {
@@ -86,7 +69,7 @@ const ProgressLine = ({
           targetX -= incrementBy;
           if (x2 - targetX > width) {
             clearInterval(app.flow.intervals['progressline']);
-            drawText(targetX + width / 2, y1 + height / 2);
+            utils.drawText(text, targetX + width / 2, y1 + height / 2);
             resolve({
               x: targetX,
               y: y1 + 10,
@@ -100,7 +83,8 @@ const ProgressLine = ({
           currentY += incrementBy;
           if (currentY - y1 > height) {
             clearInterval(app.flow.intervals['progressline']);
-            drawText(
+            utils.drawText(
+              text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
               y1 + height / 2
             );
@@ -117,7 +101,8 @@ const ProgressLine = ({
           currentY -= incrementBy;
           if (y1 - currentY > height) {
             clearInterval(app.flow.intervals['progressline']);
-            drawText(
+            utils.drawText(
+              text,
               x1 + (text.startsWith('$') ? 10 : width / 2),
               y1 - height / 2
             );

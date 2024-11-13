@@ -168,4 +168,18 @@ utils.drawPreviousCircles = () => {
   });
 };
 
+utils.drawText = (text, x, y) => {
+  const p = app.p;
+
+  if (text) {
+    p.push();
+    p.strokeWeight(0.1);
+    p.fill('#000');
+    p.textSize(config.canvas.fontSize - 2);
+    p.textFont('ui-sans-serif');
+    p.text(text, x, y);
+    p.pop();
+  }
+};
+
 export default utils;
