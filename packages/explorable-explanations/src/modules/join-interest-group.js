@@ -113,7 +113,7 @@ joinInterestGroup.setUp = (index) => {
       direction: 'up',
       x1: () => app.auction.nextTipCoordinates.x,
       y1: () => app.auction.nextTipCoordinates.y - 13 - box.height,
-      text: 'joinInterestGroup',
+      text: 'joinInterestGroup()',
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
