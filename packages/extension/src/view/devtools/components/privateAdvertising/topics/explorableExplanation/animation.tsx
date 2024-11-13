@@ -24,6 +24,7 @@ import p5 from 'p5';
  * Internal dependencies.
  */
 import { topicsAnimation } from './topicsAnimation';
+import { noop } from '@google-psat/design-system';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -58,7 +59,7 @@ const Animation = ({
         epoch,
         isAnimating,
         siteAdTechs,
-        handleUserVisit
+        isAnimating ? handleUserVisit : noop
       );
 
       setTogglePlayCallback(() => togglePlay);

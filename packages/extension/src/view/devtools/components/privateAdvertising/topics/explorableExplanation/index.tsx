@@ -86,59 +86,66 @@ const ExplorableExplanation = () => {
     };
   }, []);
 
+  const handleTopicsCalculation = useCallback(
+    (visitIndex: number) => {
+      setTopicsTableData((prevTopicsTableData) => {
+        const { topics, website } = epochs[activeTab].webVisits[visitIndex];
+        const topicsData = prevTopicsTableData[activeTab];
+        const newTopicsTableData = {
+          ...prevTopicsTableData,
+        };
+
+        const newTopicsData = topics.reduce(
+          (acc, topic) => {
+            const existingTopic = acc.find((t) => t.topicName === topic);
+            if (existingTopic) {
+              existingTopic.count += 1;
+              existingTopic.observedByContextDomains = [
+                ...new Set([
+                  ...existingTopic.observedByContextDomains,
+                  ...siteAdTechs[website],
+                ]),
+              ];
+            } else {
+              acc.push({
+                topicName: topic,
+                count: 1,
+                observedByContextDomains: siteAdTechs[website] || [],
+              });
+            }
+            return acc;
+          },
+          [...(topicsData || [])]
+        );
+
+        newTopicsTableData[activeTab] = newTopicsData;
+
+        return newTopicsTableData;
+      });
+    },
+    [activeTab, epochs, siteAdTechs]
+  );
+
   const handleUserVisit = useCallback(
     (visitIndex: number) => {
-      if (
-        visitIndex < epochs[activeTab].webVisits.length &&
-        !epochCompleted[activeTab]
-      ) {
-        setTopicsTableData((prevTopicsTableData) => {
-          const { topics, website } = epochs[activeTab].webVisits[visitIndex];
-          const topicsData = prevTopicsTableData[activeTab];
-          const newTopicsTableData = {
-            ...prevTopicsTableData,
-          };
-
-          const newTopicsData = topics.reduce(
-            (acc, topic) => {
-              const existingTopic = acc.find((t) => t.topicName === topic);
-              if (existingTopic) {
-                existingTopic.count += 1;
-                existingTopic.observedByContextDomains = [
-                  ...new Set([
-                    ...existingTopic.observedByContextDomains,
-                    ...siteAdTechs[website],
-                  ]),
-                ];
-              } else {
-                acc.push({
-                  topicName: topic,
-                  count: 1,
-                  observedByContextDomains: siteAdTechs[website] || [],
-                });
-              }
-              return acc;
-            },
-            [...(topicsData || [])]
-          );
-
-          newTopicsTableData[activeTab] = newTopicsData;
-
-          return newTopicsTableData;
-        });
+      if (visitIndex < epochs[activeTab].webVisits.length) {
+        handleTopicsCalculation(visitIndex);
       }
 
       if (visitIndex === epochs[activeTab].webVisits.length) {
+        if (activeTab < 3) {
+          setActiveTab(activeTab + 1);
+        } else {
+          setPlay(false);
+        }
+
         setEpochCompleted((prevEpochCompleted) => ({
           ...prevEpochCompleted,
           [activeTab]: true,
         }));
-        setActiveTab((prevActiveTab) =>
-          prevActiveTab < 3 ? prevActiveTab + 1 : 3
-        );
       }
     },
-    [activeTab, epochCompleted, epochs, siteAdTechs]
+    [activeTab, epochs, handleTopicsCalculation]
   );
 
   return (
