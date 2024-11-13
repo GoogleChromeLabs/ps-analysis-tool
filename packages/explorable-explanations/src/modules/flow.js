@@ -25,8 +25,17 @@ import utils from './utils.js';
 import app from '../app.js';
 import config from '../config.js';
 
+/**
+ * @module Flow
+ * Handles animations, coordinate calculations, and visual effects for the timeline and interest groups.
+ */
 const flow = {};
 
+/**
+ * Gets the coordinates of a timeline circle based on its index.
+ * @param {number} index - The index of the circle in the timeline.
+ * @returns {object} An object containing `x` and `y` coordinates of the circle.
+ */
 flow.getTimelineCircleCoordinates = (index) => {
   const { circleProps } = config.timeline;
   const { diameter } = circleProps;
@@ -36,24 +45,32 @@ flow.getTimelineCircleCoordinates = (index) => {
   return { x: positions.x, y: positions.y + diameter / 2 };
 };
 
+/**
+ * Creates a rectangle (override box) to cover a specific area on the canvas.
+ * @param {number} x1 - The x-coordinate of the rectangle's starting point.
+ * @param {number} y1 - The y-coordinate of the rectangle's starting point.
+ * @param {number} x2 - The x-coordinate of the rectangle's ending point.
+ * @param {number} height - The height of the rectangle.
+ */
 flow.createOverrideBox = (x1, y1, x2, height) => {
   const p = app.p;
   const paddingLeft = 1;
 
-  // Calculate the width of the box
   const width = x2 - x1;
-
-  // Calculate the top y-position for the rectangle
   const topY = y1;
 
-  // Draw the rectangle
   p.push();
-  p.noStroke(); // Remove the border
-  p.fill(config.canvas.background); // Set the fill color from the config
+  p.noStroke(); // No border
+  p.fill(config.canvas.background); // Fill color from config
   p.rect(x1 + paddingLeft, topY, width, height); // Draw the rectangle
   p.pop();
 };
 
+/**
+ * Animates interest group bubbles from their initial positions to their targets.
+ * @param {number} index - The index of the timeline circle where the animation begins.
+ * @returns {Promise<void>} Resolves once all bubbles reach their targets.
+ */
 flow.barrageAnimation = async (index) => {
   const p = app.igp;
   const position = app.timeline.circlePositions[index];
@@ -67,7 +84,6 @@ flow.barrageAnimation = async (index) => {
   const angleStep = 360 / accomodatingCircles;
   const { bottomFlow } = app.auction.auctions[index];
 
-  // calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.timeline.smallCirclePositions.map(
     (data, i) => {
       const randomX =
@@ -81,7 +97,6 @@ flow.barrageAnimation = async (index) => {
       const width = config.flow.mediumBox.width;
       const height = config.flow.mediumBox.height;
 
-      // calculate the target where the interest group bubbles have to land;
       const target = p.createVector(
         bottomFlow[0]?.box?.x +
           Math.floor(Math.random() * (1 - width / 2 + 1)) +
@@ -91,7 +106,6 @@ flow.barrageAnimation = async (index) => {
           height / 2
       );
 
-      // calculate the opacity of the interest group bubble which will be animated.
       const currentColor = p.color(data.color);
       const color = p.color(
         p.red(currentColor),
@@ -99,6 +113,7 @@ flow.barrageAnimation = async (index) => {
         p.blue(currentColor),
         128
       );
+
       return { x: randomX, y: randomY, color, speed, target };
     }
   );
@@ -108,18 +123,15 @@ flow.barrageAnimation = async (index) => {
       utils.wipeAndRecreateInterestCanvas();
       utils.drawPreviousCircles();
 
-      //Calculating the maximum bound of the flow box
       const maxX = bottomFlow[0]?.box?.x + config.flow.mediumBox.width;
       const maxY = bottomFlow[0]?.box?.y + config.flow.mediumBox.height;
 
-      //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
         let { x, y } = positionsOfCircles[i];
         const { target, speed, color } = positionsOfCircles[i];
         const dir = p5.Vector.sub(target, p.createVector(x, y));
         dir.normalize();
 
-        //Only increment the coordinates if the the target is not reached.
         if (!(x < maxX && x > target.x && y < maxY && y > target.y)) {
           x += dir.x * speed;
           y += dir.y * speed;
@@ -133,7 +145,6 @@ flow.barrageAnimation = async (index) => {
         positionsOfCircles[i] = { x, y, target, speed, color };
       }
 
-      //Resolve if all bubbles have reached the targets.
       if (
         positionsOfCircles.every((circle) => {
           return (
@@ -156,6 +167,10 @@ flow.barrageAnimation = async (index) => {
   utils.drawPreviousCircles();
 };
 
+/**
+ * Clears all visuals below the timeline circles.
+ * Useful for resetting the canvas or clearing unwanted elements.
+ */
 flow.clearBelowTimelineCircles = () => {
   const { y } = flow.getTimelineCircleCoordinates(0);
   const p = app.p;
