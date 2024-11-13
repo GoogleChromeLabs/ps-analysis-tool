@@ -21,7 +21,7 @@ import p5 from 'p5';
 /**
  * Internal dependencies.
  */
-import utils from './utils.js';
+import utils from '../lib/utils';
 import app from '../app.js';
 import config from '../config.js';
 

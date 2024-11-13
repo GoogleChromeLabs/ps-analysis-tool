@@ -19,19 +19,33 @@
 import flow from './flow';
 import app from '../app';
 import config from '../config';
-import utils from './utils';
+import utils from '../lib/utils';
 import timeline from './timeline';
 import { Box, ProgressLine } from '../components';
 
+/**
+ * @module joinInterestGroup
+ * Handles the setup and rendering of joining steps for advertisers in a flowchart-like interface.
+ */
 const joinInterestGroup = {};
+
 const ARROW_SIZE = 10;
 
+/**
+ * Initializes the joining setup for all circles in the timeline.
+ * Loops through each circle and sets up joining steps.
+ */
 joinInterestGroup.setupJoinings = () => {
   config.timeline.circles.forEach((circle, index) => {
     joinInterestGroup.setUp(index);
   });
 };
 
+/**
+ * Sets up the joining steps for a specific circle index.
+ * Adds steps and coordinates for rendering components like Boxes and ProgressLines.
+ * @param {number} index - The index of the circle in the timeline to set up.
+ */
 joinInterestGroup.setUp = (index) => {
   const { circles } = config.timeline;
   const { box } = config.flow;
@@ -46,6 +60,7 @@ joinInterestGroup.setUp = (index) => {
 
   const steps = [];
 
+  // Add a downward progress line
   steps.push({
     component: ProgressLine,
     props: {
@@ -58,6 +73,7 @@ joinInterestGroup.setUp = (index) => {
     },
   });
 
+  // Add DSP Tag Box
   steps.push({
     component: Box,
     props: {
@@ -70,6 +86,7 @@ joinInterestGroup.setUp = (index) => {
     },
   });
 
+  // Add another downward progress line
   steps.push({
     component: ProgressLine,
     props: {
@@ -82,6 +99,7 @@ joinInterestGroup.setUp = (index) => {
     },
   });
 
+  // Add DSPs Box
   steps.push({
     component: Box,
     props: {
@@ -95,6 +113,7 @@ joinInterestGroup.setUp = (index) => {
     },
   });
 
+  // Add upward progress line
   steps.push({
     component: ProgressLine,
     props: {
@@ -107,6 +126,7 @@ joinInterestGroup.setUp = (index) => {
     },
   });
 
+  // Add upward progress line with text
   steps.push({
     component: ProgressLine,
     props: {
@@ -123,6 +143,11 @@ joinInterestGroup.setUp = (index) => {
   app.joinInterestGroup.joinings.push(steps);
 };
 
+/**
+ * Draws the joining steps for a specific circle index asynchronously.
+ * Each step is rendered sequentially with delays.
+ * @param {number} index - The index of the circle in the timeline to draw.
+ */
 joinInterestGroup.draw = async (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 

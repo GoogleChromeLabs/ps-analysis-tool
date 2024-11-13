@@ -18,7 +18,7 @@
  */
 import config from '../config';
 import app from '../app';
-import utils from './utils';
+import utils from '../lib/utils';
 
 const timeline = {};
 

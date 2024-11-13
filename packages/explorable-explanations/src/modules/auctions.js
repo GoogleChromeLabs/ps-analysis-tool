@@ -19,7 +19,7 @@
 import flow from './flow';
 import app from '../app';
 import config from '../config';
-import utils from './utils';
+import utils from '../lib/utils';
 import { Box, ProgressLine, Branches } from '../components';
 
 /**

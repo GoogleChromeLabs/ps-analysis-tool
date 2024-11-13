@@ -19,6 +19,7 @@
 import app from '../app';
 import config from '../config';
 
+// @todo To be moved to components.
 const rippleEffect = {};
 
 rippleEffect.setUp = () => {

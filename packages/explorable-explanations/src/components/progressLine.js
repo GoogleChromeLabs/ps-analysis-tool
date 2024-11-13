@@ -18,7 +18,7 @@
  */
 import config from '../config';
 import app from '../app';
-import utils from '../modules/utils';
+import utils from '../lib/utils';
 
 const ARROW_SIZE = 10;
 

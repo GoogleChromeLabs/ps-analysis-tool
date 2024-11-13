@@ -25,7 +25,7 @@ import config from './config.js';
 import app from './app.js';
 import auctions from './modules/auctions.js';
 import flow from './modules/flow.js';
-import utils from './modules/utils.js';
+import utils from './lib/utils.js';
 import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';

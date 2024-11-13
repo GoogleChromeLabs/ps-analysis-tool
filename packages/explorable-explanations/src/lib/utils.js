@@ -19,6 +19,7 @@
 import config from '../config.js';
 import app from '../app.js';
 
+// @todo To be broken down into multipe functions.
 const utils = {};
 
 utils.requestInterval = (fn, delay) => {
