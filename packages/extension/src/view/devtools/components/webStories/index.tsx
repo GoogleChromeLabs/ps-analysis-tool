@@ -303,9 +303,42 @@ const embeddedHtml = `
 `;
 
 const WebStories = () => {
+  const domParser = new DOMParser();
+  const doc = domParser.parseFromString(embeddedHtml, 'text/html');
+  let parsedEmbeddedHtml = embeddedHtml;
+
+  Array.from(doc.scripts).forEach((script, index) => {
+    if (!script.src || !doc.scripts.item(index)) {
+      return;
+    }
+
+    switch (script.src) {
+      case 'https://cdn.ampproject.org/v0/amp-animation-0.1.js':
+        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
+          'https://cdn.ampproject.org/v0/amp-animation-0.1.js',
+          chrome.runtime.getURL('assets/data/amp-animation-0.1.js')
+        );
+        break;
+      case 'https://cdn.ampproject.org/v0/amp-video-0.1.js':
+        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
+          'https://cdn.ampproject.org/v0/amp-video-0.1.js',
+          chrome.runtime.getURL('assets/data/amp-video-0.1.js')
+        );
+        break;
+      case 'https://cdn.ampproject.org/amp4ads-v0.js':
+        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
+          'https://cdn.ampproject.org/amp4ads-v0.js',
+          chrome.runtime.getURL('assets/data/amp4ads-v0.js')
+        );
+        break;
+      default:
+        script.remove();
+    }
+  });
+
   return (
     <iframe
-      srcDoc={embeddedHtml}
+      srcDoc={parsedEmbeddedHtml}
       style={{ width: '100%', height: '100vh', border: 'none' }}
       title="Embedded AMP Content"
     />
