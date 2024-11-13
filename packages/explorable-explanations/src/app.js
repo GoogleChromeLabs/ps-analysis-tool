@@ -27,6 +27,7 @@ const app = {
   },
   joinInterestGroup: {
     joinings: [],
+    nextTipCoordinates: { x: 0, y: 0 },
   },
   flow: {
     intervals: {},

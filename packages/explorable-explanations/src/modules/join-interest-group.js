@@ -55,7 +55,7 @@ joinInterestGroup.setUp = (index) => {
       y1: y,
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
+      app.joinInterestGroup.nextTipCoordinates = returnValue;
     },
   });
 
@@ -63,11 +63,11 @@ joinInterestGroup.setUp = (index) => {
     component: Box,
     props: {
       title: 'DSP Tag',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y + ARROW_SIZE,
+      x: () => app.joinInterestGroup.nextTipCoordinates.x - box.width / 2,
+      y: () => app.joinInterestGroup.nextTipCoordinates.y + ARROW_SIZE,
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      app.joinInterestGroup.nextTipCoordinates = returnValue.down;
     },
   });
 
@@ -75,11 +75,11 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
+      x1: () => app.joinInterestGroup.nextTipCoordinates.x,
+      y1: () => app.joinInterestGroup.nextTipCoordinates.y + 40,
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
+      app.joinInterestGroup.nextTipCoordinates = returnValue;
     },
   });
 
@@ -87,11 +87,12 @@ joinInterestGroup.setUp = (index) => {
     component: Box,
     props: {
       title: 'DSPs',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
+      x: () => app.joinInterestGroup.nextTipCoordinates.x - box.width / 2,
+      y: () =>
+        app.joinInterestGroup.nextTipCoordinates.y + config.flow.arrowSize,
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      app.joinInterestGroup.nextTipCoordinates = returnValue.down;
     },
   });
 
@@ -99,11 +100,11 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.auction.nextTipCoordinates.x + 10,
-      y1: () => app.auction.nextTipCoordinates.y - 15,
+      x1: () => app.joinInterestGroup.nextTipCoordinates.x + 10,
+      y1: () => app.joinInterestGroup.nextTipCoordinates.y - 15,
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
+      app.joinInterestGroup.nextTipCoordinates = returnValue;
     },
   });
 
@@ -111,12 +112,12 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y - 10 - box.height,
+      x1: () => app.joinInterestGroup.nextTipCoordinates.x,
+      y1: () => app.joinInterestGroup.nextTipCoordinates.y - 10 - box.height,
       text: 'joinInterestGroup()',
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
+      app.joinInterestGroup.nextTipCoordinates = returnValue;
     },
   });
 
@@ -147,21 +148,6 @@ joinInterestGroup.draw = async (index) => {
   flow.clearBelowTimelineCircles();
 
   timeline.drawSmallCircles(index);
-};
-
-joinInterestGroup.remove = (index) => {
-  const { dspTags, dsp } = app.joinInterestGroup.joinings[index];
-  const x1 = dsp[0]?.box?.x - 10;
-  const y1 = dspTags[0]?.line?.y1;
-  const x2 = dspTags[0]?.box?.x + config.flow.box.width * 2;
-
-  const height =
-    config.flow.box.height +
-    config.flow.smallBox.height +
-    config.flow.lineWidth +
-    config.timeline.circleProps.diameter;
-
-  flow.createOverrideBox(x1, y1, x2, height);
 };
 
 export default joinInterestGroup;
