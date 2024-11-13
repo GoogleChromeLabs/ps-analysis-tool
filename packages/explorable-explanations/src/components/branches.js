@@ -21,7 +21,7 @@ import app from '../app';
 import config from '../config';
 import Box from './box';
 
-const LEFT_MARGIN = 50; // Margin from the left side of the canvas
+const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
 const EXPAND_ICON_SIZE = 20;
 
@@ -43,7 +43,7 @@ const Branches = async ({ x1, y1, branches }) => {
   endpoints = [];
 
   const y2 = y1 + 50;
-  spacing = (app.p.width - 2 * LEFT_MARGIN) / (branches.length - 1); // Calculate spacing based on canvas width
+  spacing = 300; // Calculate spacing based on canvas width
 
   await ProgressLine({
     x1: x1,
