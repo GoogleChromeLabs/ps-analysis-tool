@@ -156,4 +156,15 @@ flow.barrageAnimation = async (index) => {
   utils.drawPreviousCircles();
 };
 
+flow.clearBelowTimelineCircles = () => {
+  const { y } = flow.getTimelineCircleCoordinates(0);
+  const p = app.p;
+
+  p.push();
+  p.noStroke();
+  p.fill(config.canvas.background);
+  p.rect(0, y, p.width, p.height - y);
+  p.pop();
+};
+
 export default flow;

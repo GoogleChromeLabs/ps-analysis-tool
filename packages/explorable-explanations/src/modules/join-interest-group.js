@@ -144,7 +144,7 @@ joinInterestGroup.draw = async (index) => {
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
 
-  // auction.remove(index);
+  flow.clearBelowTimelineCircles();
 
   timeline.drawSmallCircles(index);
 };

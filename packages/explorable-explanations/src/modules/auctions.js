@@ -279,18 +279,7 @@ auction.draw = async (index) => {
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
 
-  // auction.remove(index);
-};
-
-auction.remove = (index) => {
-  const { y } = flow.getTimelineCircleCoordinates(index);
-  const p = app.p;
-
-  p.push();
-  p.noStroke();
-  p.fill(config.canvas.background);
-  p.rect(0, y, p.width, p.height - y);
-  p.pop();
+  flow.clearBelowTimelineCircles();
 };
 
 export default auction;
