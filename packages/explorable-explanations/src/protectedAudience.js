@@ -128,7 +128,10 @@ app.calculateCanvasDimensions = () => {
   const rippleRadius = maxRadius * 2 + (numRipples - 1) * 40;
   const maxHeightUsingBoxAndLine = lineWidth * 2 + boxHeight + smallBoxHeight;
   const height =
-    timelineY + circleSpace + Math.max(rippleRadius, maxHeightUsingBoxAndLine);
+    timelineY +
+    circleSpace +
+    Math.max(rippleRadius, maxHeightUsingBoxAndLine) +
+    500;
 
   const auctionBoxesWidth = boxWidth + mediumBoxWidth * 2 + lineWidth * 2;
   const interestGroupWidth = boxWidth;

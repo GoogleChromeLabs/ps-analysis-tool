@@ -25,6 +25,7 @@ import Box from '../components/box';
 import ProgressLine from '../components/progressLine';
 
 const joinInterestGroup = {};
+const ARROW_SIZE = 10;
 
 joinInterestGroup.setupJoinings = () => {
   config.timeline.circles.forEach((circle, index) => {
@@ -34,9 +35,8 @@ joinInterestGroup.setupJoinings = () => {
 
 joinInterestGroup.setUp = (index) => {
   const { circles } = config.timeline;
-  const { box, smallBox, lineHeight } = config.flow;
+  const { box } = config.flow;
   const currentCircle = circles[index];
-  const _joining = {};
 
   const { x, y } = flow.getTimelineCircleCoordinates(index);
 
@@ -45,141 +45,108 @@ joinInterestGroup.setUp = (index) => {
     return;
   }
 
-  // Setup DSP blocks
-  _joining.dspTags = [];
+  const steps = [];
 
-  _joining.dspTags.push({
-    name: 'DSP Tag',
-    box: {
-      x: x - box.width / 2,
-      y: y + box.height / 2 + 2,
-      width: box.width,
-      height: box.height,
-    },
-    line: {
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
       x1: x,
       y1: y,
-      x2: x,
-      y2: y + lineHeight,
-      speed: 0.6,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'DSP Tag',
+      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates.y + ARROW_SIZE,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
       direction: 'down',
+      x1: () => app.auction.nextTipCoordinates.x,
+      y1: () => app.auction.nextTipCoordinates.y + 40,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
     },
   });
 
-  _joining.dspTags.push({
-    name: 'DSP Tag',
-    line: {
-      x1: x + 10,
-      y1: y + lineHeight,
-      x2: x + 10,
-      y2: y,
-      speed: 0.6,
+  steps.push({
+    component: Box,
+    props: {
+      title: 'DSPs',
+      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
       direction: 'up',
-      text: 'joinInterestGroup()',
+      x1: () => app.auction.nextTipCoordinates.x + 10,
+      y1: () => app.auction.nextTipCoordinates.y - 15,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
     },
   });
 
-  // Setup DSP blocks
-  _joining.dsp = [];
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'up',
+      x1: () => app.auction.nextTipCoordinates.x,
+      y1: () => app.auction.nextTipCoordinates.y - 13 - box.height,
+      text: 'joinInterestGroup',
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
 
-  for (let i = 0; i <= 1; i++) {
-    const title = 'DSP ' + (i + 1);
-
-    const xForSmallBox = i % 2 === 0 ? x - box.width / 1.5 : x + box.width / 4;
-    const xForSmallBoxLine =
-      i % 2 === 0 ? x - box.width / 2 : x + box.width / 4;
-
-    _joining.dsp.push({
-      name: title,
-      box: {
-        x: xForSmallBox,
-        y: y + box.height + lineHeight * 2 + 7,
-        width: smallBox.width,
-        height: smallBox.height,
-      },
-      line: {
-        x1: xForSmallBoxLine + 20,
-        y1: y + box.height + lineHeight + 5,
-        x2: xForSmallBoxLine + 20,
-        y2: y + box.height + lineHeight * 2,
-        speed: 0.05,
-        direction: 'down',
-      },
-    });
-
-    _joining.dsp.push({
-      name: title,
-      line: {
-        x1: xForSmallBoxLine + 10,
-        y1: y + box.height + lineHeight * 2 + 7,
-        x2: xForSmallBoxLine + 10,
-        y2: y + box.height + lineHeight + 5,
-        speed: 0.05,
-        direction: 'up',
-      },
-    });
-  }
-
-  app.joinInterestGroup.joinings.push(_joining);
+  app.joinInterestGroup.joinings.push(steps);
 };
 
 joinInterestGroup.draw = async (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
-  const _joining = app.joinInterestGroup.joinings[index];
+  const steps = app.joinInterestGroup.joinings[index];
 
-  if (!_joining) {
+  if (!steps) {
     return;
   }
 
-  // Helper function to draw lines and boxes
-  const drawLineAndBox = async (item) => {
-    await drawLine(item);
-    await drawBox(item);
-  };
+  for (const step of steps) {
+    const { component, props, callBack } = step;
+    const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+    const delay = component === Box ? 1000 : 0;
 
-  const drawLine = async (item) => {
-    await ProgressLine({
-      x1: item.line.x1,
-      y1: item.line.y1,
-      x2: item.line.x2,
-      y2: item.line.y2,
-      direction: item.line?.direction,
-      text: item.line?.text,
-    });
-  };
-
-  const drawBox = (item) => {
-    if (item.box) {
-      Box({
-        title: item.name,
-        x: item.box.x,
-        y: item.box.y,
-        width: item.box.width,
-        height: item.box.height,
-      });
+    if (callBack) {
+      callBack(returnValue);
     }
-  };
 
-  // Draw DSP Tags box and line
-  await drawLineAndBox(_joining.dspTags[0]);
-
-  await utils.delay(500);
-
-  // Sequentially draw DSP boxes and lines
-  const dsp = _joining.dsp;
-  for (const dspItem of dsp) {
-    // eslint-disable-next-line no-await-in-loop
-    await drawLineAndBox(dspItem); // Sequential execution for DSP items
+    await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
 
-  await drawLine(_joining.dspTags[1]);
+  // auction.remove(index);
 
   timeline.drawSmallCircles(index);
-
-  await utils.delay(1500);
-
-  joinInterestGroup.remove(index);
 };
 
 joinInterestGroup.remove = (index) => {
