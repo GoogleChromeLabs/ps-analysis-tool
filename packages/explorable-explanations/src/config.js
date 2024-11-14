@@ -34,13 +34,6 @@ const config = {
     circles: [
       {
         type: 'advertiser',
-        website: 'adv1.com',
-        datetime: '2023-10-01 10:00',
-        igGroupsCount: 5,
-        interestGroups: ['shoes', 'heels', 'phones', 'laptops', 'blankets'],
-      },
-      {
-        type: 'advertiser',
         website: 'adv2.com',
         datetime: '2023-10-01 11:00',
         igGroupsCount: 7,

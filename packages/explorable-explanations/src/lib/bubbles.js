@@ -84,8 +84,8 @@ bubbles.generateBubbles = (recalculate = false) => {
     value: (d) => d.value,
     groupFn: (d) => d.group,
     title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: config.canvas.height,
-    height: config.canvas.height,
+    width: 640,
+    height: 640,
     margin: 4,
   });
 };
@@ -99,7 +99,12 @@ bubbles.barrageAnimation = async (index) => {
       circleProps: { diameter },
     },
   } = config;
-  const { bottomFlow } = app.auction.auctions[index];
+
+  const boxes = app.auction.auctions[index];
+  const loadInterestGroupBox = boxes.filter(
+    (box) => box?.props?.title === 'Load Interest Group'
+  )?.[0];
+
   const smallCircleDiameter = diameter / 5;
 
   // calculate the current position of the interest group bubbles.
@@ -110,10 +115,10 @@ bubbles.barrageAnimation = async (index) => {
 
     // calculate the target where the interest group bubbles have to land;
     const target = p.createVector(
-      bottomFlow[0]?.box?.x +
+      loadInterestGroupBox?.props?.x() +
         Math.floor(Math.random() * (1 - width / 2 + 1)) +
         width / 2,
-      bottomFlow[0]?.box?.y +
+      loadInterestGroupBox?.props?.y() +
         Math.floor(Math.random() * (1 - height / 2 + 1)) +
         height / 2
     );
@@ -189,7 +194,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const dspTags = app.joinInterestGroup.joinings[index][1];
   const igp = app.igp;
   const {
-    canvas: { height, width },
     bubbles: {
       isExpanded,
       minifiedBubbleX,
@@ -203,8 +207,10 @@ bubbles.reverseBarrageAnimation = async (index) => {
   } = config;
 
   const smallCircleDiameter = diameter / 5;
-  const midPointX = isExpanded ? width / 2 : minifiedBubbleX;
-  const midPointY = isExpanded ? height / 2 : minifiedBubbleY;
+  const midPointX = isExpanded
+    ? config.canvas.width / 4 + 320
+    : minifiedBubbleX;
+  const midPointY = isExpanded ? 320 : minifiedBubbleY;
 
   const positionsOfCircles = [];
   const currentIGGroupToBeAdded = circles[index]?.igGroupsCount ?? 0;
@@ -487,12 +493,12 @@ bubbles.clearAndRewriteBubbles = () => {
   if (!app.minifiedBubbleContainer) {
     return;
   }
-  const countDisplay =
-    app.minifiedBubbleContainer.querySelector('[id=count-display]');
+
   app.minifiedBubbleContainer.innerHTML = '';
 
   if (!config.bubbles.isExpanded) {
-    app.minifiedBubbleContainer.appendChild(countDisplay);
+    app.countDisplay.innerHTML = config.bubbles.interestGroupCounts;
+    app.minifiedBubbleContainer.appendChild(app.countDisplay);
   }
 };
 

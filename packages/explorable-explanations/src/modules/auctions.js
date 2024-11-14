@@ -21,6 +21,7 @@ import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine, Branches } from '../components';
+import bubbles from '../lib/bubbles';
 
 /**
  * @module Auction
@@ -301,6 +302,10 @@ auction.draw = async (index) => {
     const { component, props, callBack } = step;
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
     const delay = component === Box ? 1000 : 0;
+
+    if (props?.title === 'Load Interest Group') {
+      await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
+    }
 
     if (callBack) {
       callBack(returnValue);

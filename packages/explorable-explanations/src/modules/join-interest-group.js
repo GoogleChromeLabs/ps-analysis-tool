@@ -168,10 +168,6 @@ joinInterestGroup.draw = async (index) => {
 
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
-
-  await utils.delay(2000);
-  flow.clearBelowTimelineCircles();
-
   bubbles.generateBubbles();
 
   await bubbles.reverseBarrageAnimation(index);
@@ -184,6 +180,9 @@ joinInterestGroup.draw = async (index) => {
 
   config.bubbles.interestGroupCounts +=
     config.timeline.circles[index]?.igGroupsCount ?? 0;
+
+  await utils.delay(2000);
+  flow.clearBelowTimelineCircles();
 };
 
 export default joinInterestGroup;

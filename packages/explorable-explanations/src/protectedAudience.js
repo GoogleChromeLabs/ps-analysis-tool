@@ -117,6 +117,7 @@ app.drawFlows = async (index) => {
 app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
+
   document.getElementById('close-button').addEventListener('click', app.play);
   app.multSellerCheckBox = document.getElementById('multi-seller');
 
@@ -227,8 +228,9 @@ const interestGroupSketch = (p) => {
         document.getElementById('close-button').style.left = `${
           config.canvas.width - 100
         }px`;
-        document.styleSheets[0].cssRules[index].style.width = `${height}px`;
-        document.styleSheets[0].cssRules[index].style.height = `${height}px`;
+
+        document.styleSheets[0].cssRules[index].style.width = `640px`;
+        document.styleSheets[0].cssRules[index].style.height = `640px`;
       }
 
       if (rules.selectorText === '.minified-bubble-container') {
@@ -237,6 +239,8 @@ const interestGroupSketch = (p) => {
         ].style.top = `${config.bubbles.minifiedBubbleY}px`;
       }
     });
+
+    app.countDisplay = document.getElementById('count-display');
 
     app.minifiedBubbleContainer.addEventListener(
       'click',
