@@ -228,8 +228,17 @@ export function topicsAnimation(
             const dx = pos.x - randomX;
             const dy = pos.y - randomY;
             const distance = Math.sqrt(dx * dx + dy * dy);
+
             return distance < smallCircleDiameter;
           });
+
+          const circleCircleDistanceX = Math.abs(position.x - randomX);
+          const circleCircleDistanceY = Math.abs(position.y - randomY);
+
+          isOverlapping =
+            isOverlapping ||
+            circleCircleDistanceX <= smallCircleDiameter ||
+            circleCircleDistanceY <= smallCircleDiameter;
         } while (isOverlapping);
 
         smallCirclePositions.push({ x: randomX, y: randomY });
