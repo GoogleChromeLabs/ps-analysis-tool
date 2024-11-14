@@ -212,8 +212,8 @@ const interestGroupSketch = (p) => {
     p.textSize(config.canvas.fontSize);
     app.igpCanvas = overlayCanvas;
 
-    config.bubbles.minifiedBubbleX = 60;
-    config.bubbles.minifiedBubbleY = height - 50;
+    config.bubbles.minifiedBubbleX = 35;
+    config.bubbles.minifiedBubbleY = 35;
 
     app.minifiedBubbleContainer = document.getElementById(
       'minified-bubble-container'
@@ -234,9 +234,9 @@ const interestGroupSketch = (p) => {
       }
 
       if (rules.selectorText === '.minified-bubble-container') {
-        document.styleSheets[0].cssRules[
-          index
-        ].style.top = `${config.bubbles.minifiedBubbleY}px`;
+        document.styleSheets[0].cssRules[index].style.top = `${
+          config.bubbles.minifiedBubbleY - 25
+        }px`;
       }
     });
 
