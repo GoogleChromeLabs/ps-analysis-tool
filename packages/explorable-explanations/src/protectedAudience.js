@@ -117,9 +117,12 @@ app.drawFlows = async (index) => {
 app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
+  app.multSellerCheckBox = document.getElementById('multi-seller');
 
   document.getElementById('close-button').addEventListener('click', app.play);
-  app.multSellerCheckBox = document.getElementById('multi-seller');
+  document
+    .getElementById('open-button')
+    .addEventListener('click', app.minifiedBubbleClickListener);
 
   app.playButton.addEventListener('click', app.play);
   app.pauseButton.addEventListener('click', app.pause);
@@ -219,6 +222,9 @@ const interestGroupSketch = (p) => {
       'minified-bubble-container'
     );
 
+    document.getElementById('open-button').style.left = `50px`;
+    document.getElementById('open-button').style.top = `50px`;
+
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
         document.styleSheets[0].cssRules[index].style.left = `${
@@ -226,7 +232,7 @@ const interestGroupSketch = (p) => {
         }px`;
 
         document.getElementById('close-button').style.left = `${
-          config.canvas.width - 100
+          config.canvas.width / 4 + 640
         }px`;
 
         document.styleSheets[0].cssRules[index].style.width = `640px`;

@@ -309,6 +309,7 @@ bubbles.showExpandedBubbles = () => {
     .classList.toggle('expanded', true);
 
   document.getElementById('close-button').style.display = 'block';
+  document.getElementById('open-button').style.display = 'none';
 
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
@@ -322,6 +323,7 @@ bubbles.showMinifiedBubbles = () => {
     .classList.toggle('expanded', false);
 
   document.getElementById('close-button').style.display = 'none';
+  document.getElementById('open-button').style.display = 'block';
 
   bubbles.clearAndRewriteBubbles();
 

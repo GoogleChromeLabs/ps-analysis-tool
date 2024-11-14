@@ -84,7 +84,7 @@
             cursor: pointer;
         }
 
-        .text-class{
+        .text-class {
             pointer-events: none;
         }
 
@@ -92,7 +92,7 @@
             cursor: pointer;
         }
 
-        .circle-svg{
+        .circle-svg {
             transition: transform .2s;
         }
 
@@ -127,7 +127,10 @@
         #close-button {
             position: absolute;
             top: 10px;
-            transform: rotate(45deg);
+        }
+
+        #open-button {
+            position: absolute;
         }
 
         #count-display {
@@ -186,8 +189,18 @@
             <div id="minified-bubble-container" class="minified-bubble-container">
                 <p id="count-display"></p>
             </div>
-            <img id="close-button"
-                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguMDQ2MSAxMi45NTkxVjEuMDQwODlDOC4wNDYxIDAuNDY4NDAxIDcuNTc3NjkgMCA3LjAwNTIgMEM2LjQzMjcxIDAgNS45NjQzMSAwLjQ2ODQwMSA1Ljk2NDMxIDEuMDQwODlWMTIuOTU5MUM1Ljk2NDMxIDEzLjUzMTYgNi40MzI3MSAxNCA3LjAwNTIgMTRDNy41Nzc2OSAxNCA4LjA0NjEgMTMuNTMxNiA4LjA0NjEgMTIuOTU5MVpNMTQgNy4wMDUyQzE0IDYuNDMyNzEgMTMuNTMxNiA1Ljk2NDMxIDEyLjk1OTEgNS45NjQzMUgxLjA0MDg5QzAuNDY4NDAxIDUuOTY0MzEgMCA2LjQzMjcxIDAgNy4wMDUyQzAgNy41Nzc2OSAwLjQ2ODQwMSA4LjA0NjEgMS4wNDA4OSA4LjA0NjFIMTIuOTU5MUMxMy41MzE2IDguMDQ2MSAxNCA3LjU3NzY5IDE0IDcuMDA1MloiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgo8L3N2Zz4K" />
+            <div id="open-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="currentColor">
+                    <path d="M200-200v-240h80v160h160v80H200Zm480-320v-160H520v-80h240v240h-80Z" />
+                </svg>
+            </div>
+            <div id="close-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="currentColor">
+                    <path d="M440-440v240h-80v-160H200v-80h240Zm160-320v160h160v80H520v-240h80Z" />
+                </svg>
+            </div>
         </div>
         <div id="user-canvas"></div>
     </main>
