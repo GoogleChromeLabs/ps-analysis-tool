@@ -178,7 +178,8 @@ bubbles.barrageAnimation = async (index) => {
             Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
             Math.floor(circle.y) < Math.floor(circle.target.y + 4)
           );
-        })
+        }) ||
+        config.bubbles.isExpanded
       ) {
         clearInterval(app.flow.intervals['circleMovements']);
         resolve();
@@ -285,7 +286,8 @@ bubbles.reverseBarrageAnimation = async (index) => {
             Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
             Math.floor(circle.y) < Math.floor(circle.target.y + 4)
           );
-        })
+        }) ||
+        config.bubbles.isExpanded
       ) {
         clearInterval(app.flow.intervals['circleMovements']);
         resolve();
