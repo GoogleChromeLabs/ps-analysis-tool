@@ -77,6 +77,7 @@ const Topics = () => {
             githubUrl:
               'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
           },
+          className: 'overflow-hidden',
         },
       },
       {
@@ -89,6 +90,7 @@ const Topics = () => {
             githubUrl:
               'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
           },
+          className: 'overflow-hidden',
         },
       },
     ],
