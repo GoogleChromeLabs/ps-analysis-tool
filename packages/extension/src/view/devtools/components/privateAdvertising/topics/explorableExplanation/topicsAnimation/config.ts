@@ -19,7 +19,7 @@ export const config = {
     height: 500,
   },
   timeline: {
-    position: { x: 50, y: 120 },
+    position: { x: 0, y: 120 },
     circleProps: {
       diameter: 50,
       horizontalSpacing: 150,

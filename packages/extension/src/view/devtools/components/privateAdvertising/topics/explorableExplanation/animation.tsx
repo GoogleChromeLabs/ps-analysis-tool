@@ -24,9 +24,11 @@ import p5 from 'p5';
  * Internal dependencies.
  */
 import { topicsAnimation } from './topicsAnimation';
+import { noop } from '@google-psat/design-system';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
+  isAnimating: boolean;
   siteAdTechs: Record<string, string[]>;
   handleUserVisit: (visitIndex: number) => void;
   isPlaying: boolean;
@@ -36,6 +38,7 @@ interface AnimationProps {
 
 const Animation = ({
   epoch,
+  isAnimating,
   siteAdTechs,
   handleUserVisit,
   isPlaying,
@@ -48,14 +51,21 @@ const Animation = ({
   const [resetCallback, setResetCallback] = useState<() => void>();
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
+  const animationRef = useRef(isAnimating);
+
+  useEffect(() => {
+    // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
+    animationRef.current = isAnimating;
+  }, [isAnimating]);
 
   useEffect(() => {
     const tAnimation = (p: p5) => {
       const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
         p,
         epoch,
+        animationRef.current,
         siteAdTechs,
-        handleUserVisit
+        animationRef.current ? handleUserVisit : noop
       );
 
       setTogglePlayCallback(() => togglePlay);

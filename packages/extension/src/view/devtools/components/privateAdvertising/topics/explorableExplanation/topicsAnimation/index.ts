@@ -22,6 +22,7 @@ import { getAdtechsColors } from './utils';
  * Setup function for p5.js
  * @param p - p5.js instance
  * @param epoch - Array of objects containing datetime, website, and topics
+ * @param isAnimating - Boolean to tell if the animation should play
  * @param siteAdTechs - Object with websites as keys and adtechs as values
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
  * @returns Object with callbacks to control the animation
@@ -29,6 +30,7 @@ import { getAdtechsColors } from './utils';
 export function topicsAnimation(
   p: p5,
   epoch: { datetime: string; website: string; topics: string[] }[],
+  isAnimating: boolean,
   siteAdTechs: Record<string, string[]>,
   handleUserVisit: (visitIndex: number) => void
 ) {
@@ -165,6 +167,14 @@ export function topicsAnimation(
         app.userVisitDone(visitIndex - 1);
       }
 
+      if (visitIndex >= epoch.length) {
+        if (visitIndex === epoch.length) {
+          handleUserVisit(visitIndex);
+        }
+
+        return;
+      }
+
       const circlePosition = app.circlePositions[visitIndex];
 
       if (circlePosition === undefined) {
@@ -247,7 +257,7 @@ export function topicsAnimation(
         position.x,
         position.y + diameter / 2 + 150,
         280,
-        180,
+        160,
         10,
         10,
         10,
@@ -255,15 +265,15 @@ export function topicsAnimation(
       );
 
       p.fill(0);
-      p.textSize(16);
+      p.textSize(12);
       p.textAlign(p.LEFT, p.CENTER);
       p.textStyle(p.BOLD);
-      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 85);
+      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 95);
       p.textStyle(p.NORMAL);
       p.text(
         topics.join(', '),
-        position.x - 55,
-        position.y + diameter / 2 + 85
+        position.x - 70,
+        position.y + diameter / 2 + 95
       );
 
       const adTechs = siteAdTechs[currentSite];
@@ -273,7 +283,7 @@ export function topicsAnimation(
       p.text(
         'Observed-by context domains:',
         position.x - 120,
-        position.y + diameter / 2 + 130
+        position.y + diameter / 2 + 125
       );
       p.textStyle(p.NORMAL);
       for (let i = 0; i < numAdTechs; i++) {
@@ -284,14 +294,14 @@ export function topicsAnimation(
         p.fill(adTechColor);
         p.circle(
           position.x - 110,
-          position.y + diameter / 2 + 160 + i * 25,
+          position.y + diameter / 2 + 150 + i * 25,
           20
         );
         p.fill(0);
         p.text(
           adTech,
           position.x - 85,
-          position.y + diameter / 2 + 160 + 25 * i
+          position.y + diameter / 2 + 150 + 25 * i
         );
       }
 
@@ -329,6 +339,12 @@ export function topicsAnimation(
     p.textFont('sans-serif');
     app.drawTimelineLine(config.timeline.position);
     app.drawTimeline(config.timeline.position, epoch);
+
+    if (!isAnimating) {
+      while (app.visitIndex < epoch.length) {
+        app.play();
+      }
+    }
   };
 
   p.draw = () => {
