@@ -18,11 +18,19 @@
  */
 import config from '../config';
 import app from '../app';
-import utils from './utils';
-import bubbles from './bubbles';
+import utils from '../lib/utils';
+import bubbles from '../lib/bubbles';
 
+/**
+ * @module Timeline
+ * Handles the drawing and interaction of the timeline, including circles, lines, and user-related animations.
+ */
 const timeline = {};
 
+/**
+ * Initializes the timeline by setting up publisher indices, event listeners,
+ * and drawing the initial timeline and user icon.
+ */
 timeline.init = () => {
   config.timeline.circles.forEach((circle, index) => {
     if (circle.type === 'publisher') {
@@ -93,6 +101,11 @@ timeline.init = () => {
   app.timeline.drawTimeline(config.timeline);
 };
 
+/**
+ * Draws a vertical line above a timeline circle.
+ * @param {number} index - The index of the circle.
+ * @param {boolean} [completed] - Whether the line should be styled as completed.
+ */
 timeline.drawLineAboveCircle = (index, completed = false) => {
   const { position, colors } = config.timeline;
   const { diameter } = config.timeline.circleProps;
@@ -141,6 +154,9 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   });
 };
 
+/**
+ * Draws the horizontal timeline line.
+ */
 timeline.drawTimelineLine = () => {
   const { position, colors, circleProps } = config.timeline;
   const { diameter, verticalSpacing } = circleProps;

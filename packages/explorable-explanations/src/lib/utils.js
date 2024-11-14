@@ -19,6 +19,7 @@
 import config from '../config.js';
 import app from '../app.js';
 
+// @todo To be broken down into multipe functions.
 const utils = {};
 
 utils.requestInterval = (fn, delay) => {
@@ -153,6 +154,20 @@ utils.wipeAndRecreateUserCanvas = () => {
 
 utils.isInsideCircle = (x, y, x0, y0, r) => {
   return app.p.dist(x, y, x0, y0) <= r;
+};
+
+utils.drawText = (text, x, y) => {
+  const p = app.p;
+
+  if (text) {
+    p.push();
+    p.strokeWeight(0.1);
+    p.fill('#000');
+    p.textSize(config.canvas.fontSize - 2);
+    p.textFont('ui-sans-serif');
+    p.text(text, x, y);
+    p.pop();
+  }
 };
 
 export default utils;

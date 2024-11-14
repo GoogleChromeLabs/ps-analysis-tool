@@ -34,6 +34,7 @@ interface BodyRowProps {
   isRowFocused: boolean;
   getExtraClasses: () => string;
   hasVerticalBar: boolean;
+  verticalBarColorHash: string;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
@@ -41,6 +42,7 @@ interface BodyRowProps {
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow
   ) => void;
+  rowHeightClass?: string;
 }
 
 const BodyRow = ({
@@ -51,10 +53,12 @@ const BodyRow = ({
   isRowFocused,
   getExtraClasses,
   hasVerticalBar,
+  verticalBarColorHash,
   getRowObjectKey,
   onRowClick,
   onKeyDown,
   onRowContextMenu,
+  rowHeightClass,
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
@@ -97,7 +101,12 @@ const BodyRow = ({
     >
       {/* Vertical bar for for some indication, styles can also be made dynamic.*/}
       {hasVerticalBar && (
-        <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
+        <span
+          style={{
+            backgroundColor: verticalBarColorHash,
+          }}
+          className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark"
+        />
       )}
       {columns.map(
         (
@@ -123,6 +132,7 @@ const BodyRow = ({
               showBodyCellPrefixIcon ? showBodyCellPrefixIcon(row) : false
             }
             icon={bodyCellPrefixIcon ?? undefined}
+            rowHeightClass={rowHeightClass}
           />
         )
       )}

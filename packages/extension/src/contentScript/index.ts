@@ -89,6 +89,11 @@ class WebpageContentScript {
   isInspecting = false;
 
   /**
+   * If true, the page is currently being inspected.
+   */
+  mode = 'Cookies';
+
+  /**
    * If true, the mouse is currently hovering over the page.
    */
   isHoveringOverPage = false;
@@ -320,11 +325,18 @@ class WebpageContentScript {
    */
   onMessage = (response: ResponseType) => {
     this.isInspecting = response.isInspecting;
+    if (response?.selectedAdUnit) {
+      this.mode = 'PA';
+    }
 
     if (response.isInspecting) {
       this.removeEventListeners();
       this.addEventListeners();
-      toggleFrameHighlighting(true);
+      toggleFrameHighlighting(
+        true,
+        response?.selectedAdUnit,
+        this.mode === 'PA'
+      );
       this.insertPopovers(response);
     } else {
       this.abortInspection();
@@ -350,6 +362,78 @@ class WebpageContentScript {
     this.addEventListerOnScroll(updatePosition);
 
     return overlay;
+  }
+
+  /**
+   * Insert tooltip.
+   * @param {ResponseType} response Response.
+   * @returns {HTMLElement} Tooltip.
+   */
+  insertProtectedAudienceTooltip(response: ResponseType): HTMLElement | null {
+    if (!response.selectedAdUnit) {
+      return null;
+    }
+
+    const frame = document.getElementById(response.selectedAdUnit);
+
+    if (!frame) {
+      return null;
+    }
+    removeAllPopovers();
+    this.insertOverlay(frame);
+
+    const tooltip = addTooltip(frame, response, 0, 0);
+
+    const arrowElement = document.getElementById('ps-content-tooltip-arrow');
+
+    if (frame && tooltip && arrowElement) {
+      this.cleanup = autoUpdate(frame, tooltip, () => {
+        computePosition(frame, tooltip, {
+          platform: platform,
+          placement: 'top',
+          middleware: [
+            shift({
+              boundary: document.querySelector('body'),
+            }),
+            flip({
+              boundary: document.querySelector('body'),
+            }),
+            arrow({
+              element: arrowElement,
+            }),
+          ],
+        }).then(({ x, y, middlewareData, placement }) => {
+          Object.assign(tooltip.style, {
+            top: `${y}px`,
+            left: `${x}px`,
+          });
+          const side = placement.split('-')[0];
+
+          const staticSide = {
+            top: 'bottom',
+            right: 'left',
+            bottom: 'top',
+            left: 'right',
+          }[side];
+
+          if (middlewareData.arrow) {
+            const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+            Object.assign(arrowElement.style, {
+              left: arrowX ? `${arrowX - 15}px` : '',
+              top: arrowY ? `${arrowY}px` : '',
+              right: '',
+              bottom: '',
+              [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
+              transform: 'rotate(45deg)',
+            });
+          }
+          return tooltip;
+        });
+      });
+    }
+
+    return tooltip;
   }
 
   /**
@@ -477,6 +561,7 @@ class WebpageContentScript {
     this.port?.onMessage.removeListener(this.onMessage);
     this.port = null;
     this.abortInspection();
+    this.mode = 'Cookies';
   };
 
   /**
@@ -586,6 +671,12 @@ class WebpageContentScript {
    * @param {ResponseType} response - The incoming message/response from the port.
    */
   insertPopovers(response: ResponseType) {
+    if (response.isForProtectedAudience) {
+      const tooltip = this.insertProtectedAudienceTooltip(response);
+      tooltip?.scrollIntoView();
+      return;
+    }
+
     // If the no frame was selected in devtool.
     if (response.removeAllFramePopovers && !response.selectedFrame) {
       removeAllPopovers();
@@ -638,6 +729,10 @@ class WebpageContentScript {
    */
   // eslint-disable-next-line complexity
   handleHoverEvent = (event: MouseEvent) => {
+    if (this.mode === 'PA') {
+      return;
+    }
+
     const target = event.target as HTMLElement;
     const isNonIframeElement = target.tagName !== 'IFRAME';
     const isTooltipElement =

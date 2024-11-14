@@ -22,7 +22,12 @@ const chrome = require('sinon-chrome/extensions');
 /** @type {import('jest').Config} */
 module.exports = {
   rootDir: '../',
-  transformIgnorePatterns: ['node_modules/(?!(p-queue|p-timeout))'],
+  transform: {
+    '^.+\\.[tj]sx?$': 'babel-jest',
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(p-queue|p-timeout|d3(-.*)?|internmap|delaunator|robust-predicates|pretty-print-json)/)',
+  ],
   moduleNameMapper: {
     '^@google-psat\\/(.*)': '<rootDir>/packages/$1/src/',
     '\\.svg': join(__dirname, '/svgMock.cjs'),

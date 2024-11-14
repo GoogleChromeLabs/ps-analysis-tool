@@ -186,7 +186,7 @@ bubbles.barrageAnimation = async (index) => {
   utils.wipeAndRecreateInterestCanvas();
 };
 bubbles.reverseBarrageAnimation = async (index) => {
-  const { dspTags } = app.joinInterestGroup.joinings[index];
+  const dspTags = app.joinInterestGroup.joinings[index][1];
   const igp = app.igp;
   const {
     canvas: { height, width },
@@ -223,11 +223,11 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
     positionsOfCircles.push({
       x:
-        dspTags[0]?.box?.x +
+        dspTags?.props?.x() +
         Math.floor(Math.random() * (1 - flowBoxWidth / 2 + 1)) +
         flowBoxWidth / 2,
       y:
-        dspTags[0]?.box?.y +
+        dspTags?.props?.y() +
         Math.floor(Math.random() * (1 - flowBoxHeight / 2 + 1)) +
         flowBoxHeight / 2,
       color,
@@ -246,6 +246,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
         let { x, y } = positionsOfCircles[i];
         const { target, speed, color } = positionsOfCircles[i];
         const dir = p5.Vector.sub(target, igp.createVector(x, y));
+
         dir.normalize();
 
         //Only increment the coordinates if the the target is not reached.
