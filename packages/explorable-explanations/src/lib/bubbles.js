@@ -422,7 +422,7 @@ bubbles.bubbleChart = (
     .attr('stroke', stroke)
     .attr('stroke-width', strokeWidth)
     .attr('stroke-opacity', strokeOpacity)
-    .attr('class', 'svg overflowing-text')
+    .attr('class', 'svg overflowing-text circle-svg')
     .attr(
       'fill',
       groups
@@ -475,7 +475,7 @@ bubbles.bubbleChart = (
           'clip-path',
           (d) => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`
         )
-        .attr('class', 'svg')
+        .attr('class', 'svg text-class')
         .selectAll('tspan')
         .data((d) => `${labels[d.data]}`.split(/\n/g))
         .join('tspan')
