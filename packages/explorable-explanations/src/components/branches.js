@@ -1,0 +1,154 @@
+/*
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * Internal dependencies.
+ */
+import ProgressLine from './progressLine';
+import app from '../app';
+import config from '../config';
+import Box from './box';
+
+const LEFT_MARGIN = 70; // Margin from the left side of the canvas
+const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
+const EXPAND_ICON_SIZE = 20;
+
+let spacing, progress, interval, renderedBranchIds, endpoints;
+
+// @todo: Handle canvas width changes when the branches do not fit in the existing size.
+const Branches = async ({ x1, y1, branches }) => {
+  x1 = typeof x1 === 'function' ? x1() : x1;
+  y1 = typeof y1 === 'function' ? y1() : y1;
+
+  branches = branches.map((branch, index) => ({
+    ...branch,
+    id: index, // To prevent duplicate rendering
+  }));
+
+  progress = 0;
+  interval = null;
+  renderedBranchIds = [];
+  endpoints = [];
+
+  const y2 = y1 + 50;
+  spacing = 300; // Calculate spacing based on canvas width
+
+  await ProgressLine({
+    x1: x1,
+    y1: y1,
+    direction: 'down',
+    noArrow: true,
+  });
+
+  return new Promise((resolve) => {
+    interval = setInterval(async () => {
+      await drawAnimatedTimeline(LEFT_MARGIN, y2 - 9, branches);
+      resolve(endpoints);
+    }, 20);
+  });
+};
+
+const drawAnimatedTimeline = (x, y, branches) => {
+  const p = app.p;
+  const leftMargin = 15;
+  x = x + leftMargin;
+
+  p.stroke(0);
+  p.strokeWeight(1);
+
+  return new Promise((resolve) => {
+    // Draw the animated horizontal line
+    if (progress < (branches.length - 1) * spacing) {
+      progress += ANIMATION_SPEED; // Increase the length of the horizontal line
+    } else {
+      clearInterval(interval);
+      resolve();
+    }
+
+    p.line(x, y, x + progress, y);
+
+    // Draw each vertical line and label when the horizontal line reaches its position
+    for (let i = 0; i < branches.length; i++) {
+      const branchX = x + i * spacing;
+      const branch = branches[i];
+      let endpoint;
+
+      if (progress >= i * spacing && !(branch.id in renderedBranchIds)) {
+        // Start drawing each vertical line once the horizontal line reaches it
+        // Draw vertical line fully
+        p.stroke(0);
+        p.line(branchX, y, branchX, y + 20);
+
+        switch (branch.type) {
+          case 'datetime':
+            endpoint = drawDateTimeBranch(branchX, y, branch);
+            break;
+          case 'box':
+            endpoint = drawBoxesBranch(branchX, y, branch);
+            break;
+          default:
+            break;
+        }
+
+        // Store the endpoint coordinates for each branch
+        endpoints.push(endpoint);
+
+        renderedBranchIds.push(branch.id);
+      }
+    }
+  });
+};
+
+const drawDateTimeBranch = (x, y, branch) => {
+  const p = app.p;
+
+  p.noStroke();
+  p.fill(0);
+  p.textSize(config.canvas.fontSize);
+  p.text(`${branch.date}`, x, y + 35);
+  p.text(`${branch.time}`, x, y + 50);
+
+  p.image(
+    p.expandIcon,
+    x - EXPAND_ICON_SIZE / 2,
+    y + 65,
+    EXPAND_ICON_SIZE,
+    EXPAND_ICON_SIZE
+  );
+
+  return { x: x, y: y + 50 };
+};
+
+const drawBoxesBranch = (x, y, branch) => {
+  const p = app.p;
+
+  Box({
+    title: branch.title + ' ' + branch.content,
+    x: x - config.flow.box.width / 2,
+    y: y + 20,
+  });
+
+  p.image(
+    p.expandIcon,
+    x - EXPAND_ICON_SIZE / 2,
+    y + 80,
+    EXPAND_ICON_SIZE,
+    EXPAND_ICON_SIZE
+  );
+
+  return { x: x, y: y + EXPAND_ICON_SIZE * 3 + 5 };
+};
+
+export default Branches;
