@@ -318,6 +318,7 @@ bubbles.showMinifiedBubbles = () => {
   document.getElementById('close-button').style.display = 'none';
 
   bubbles.clearAndRewriteBubbles();
+
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
 
   document.getElementById('count-display').innerHTML =
@@ -489,7 +490,10 @@ bubbles.clearAndRewriteBubbles = () => {
   const countDisplay =
     app.minifiedBubbleContainer.querySelector('[id=count-display]');
   app.minifiedBubbleContainer.innerHTML = '';
-  app.minifiedBubbleContainer.appendChild(countDisplay);
+
+  if (!config.bubbles.isExpanded) {
+    app.minifiedBubbleContainer.appendChild(countDisplay);
+  }
 };
 
 export default bubbles;

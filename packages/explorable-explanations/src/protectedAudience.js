@@ -230,6 +230,12 @@ const interestGroupSketch = (p) => {
         document.styleSheets[0].cssRules[index].style.width = `${height}px`;
         document.styleSheets[0].cssRules[index].style.height = `${height}px`;
       }
+
+      if (rules.selectorText === '.minified-bubble-container') {
+        document.styleSheets[0].cssRules[
+          index
+        ].style.top = `${config.bubbles.minifiedBubbleY}px`;
+      }
     });
 
     app.minifiedBubbleContainer.addEventListener(
