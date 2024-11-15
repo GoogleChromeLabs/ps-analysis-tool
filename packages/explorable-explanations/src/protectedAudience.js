@@ -218,22 +218,32 @@ const interestGroupSketch = (p) => {
     config.bubbles.minifiedBubbleX = 35;
     config.bubbles.minifiedBubbleY = 35;
 
+    config.bubbles.expandedBubbleX = config.canvas.width / 4;
+    config.bubbles.expandedBubbleY = 0;
+
+    const angle = (305 * Math.PI) / 180;
+    const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX + 320;
+    const y = 335 * Math.sin(angle) + 320;
+
     app.minifiedBubbleContainer = document.getElementById(
       'minified-bubble-container'
     );
 
+    document.getElementById('close-button').style.left = `${x}px`;
+    document.getElementById('close-button').style.top = `${y}px`;
+
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
-        document.styleSheets[0].cssRules[index].style.left = `${
-          config.canvas.width / 4
-        }px`;
+        document.styleSheets[0].cssRules[
+          index
+        ].style.left = `${config.bubbles.expandedBubbleX}px`;
 
-        document.getElementById('close-button').style.left = `${
-          config.canvas.width / 4 + 640
-        }px`;
-
-        document.styleSheets[0].cssRules[index].style.width = `640px`;
-        document.styleSheets[0].cssRules[index].style.height = `640px`;
+        document.styleSheets[0].cssRules[
+          index
+        ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
+        document.styleSheets[0].cssRules[
+          index
+        ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
       }
 
       if (rules.selectorText === '.minified-bubble-container') {
