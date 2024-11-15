@@ -74,9 +74,9 @@ rippleEffect.create = (rippleX, rippleY) => {
   p.fill(config.canvas.background);
   p.noStroke();
   p.rect(
-    rippleX - clearWidth,
-    rippleY + clearHeight / 2 - 201,
-    clearWidth * 2,
+    rippleX - 1,
+    rippleY - clearHeight / 2 - 200,
+    clearWidth,
     clearHeight + 400
   );
   let allComplete = true;
@@ -104,8 +104,8 @@ rippleEffect.create = (rippleX, rippleY) => {
       0,
       (ripple.radius + i * spacing) * 2,
       (ripple.radius + i * spacing) * 2,
-      p.TWO_PI,
-      p.PI
+      -p.HALF_PI,
+      p.HALF_PI
     );
   }
 

@@ -20,6 +20,7 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
+import rippleEffect from '../lib/ripple-effect';
 import { Box, ProgressLine, Branches } from '../components';
 import bubbles from '../lib/bubbles';
 
@@ -305,6 +306,17 @@ auction.draw = async (index) => {
 
     if (props?.title === 'Load Interest Group') {
       await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
+    }
+
+    if (props?.title === 'generateBid()') {
+      const x = props.x();
+      const y = props.y();
+      rippleEffect.setUp();
+      // eslint-disable-next-line no-await-in-loop
+      await rippleEffect.start(
+        x + config.flow.box.width + 1,
+        y + config.flow.box.height / 2
+      );
     }
 
     if (callBack) {
