@@ -114,10 +114,17 @@ app.drawFlows = async (index) => {
   await app.auction.draw(index);
 };
 
+app.minifiedBubbleKeyPressListener = (event) => {
+  if (event.key === 'Escape' && config.bubbles.isExpanded) {
+    app.play();
+  }
+};
+
 app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
   app.multSellerCheckBox = document.getElementById('multi-seller');
+  document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
 
   document.getElementById('close-button').addEventListener('click', app.play);
   document
