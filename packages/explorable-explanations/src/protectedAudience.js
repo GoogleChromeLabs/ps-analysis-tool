@@ -25,7 +25,7 @@ import config from './config.js';
 import app from './app.js';
 import auctions from './modules/auctions.js';
 import flow from './modules/flow.js';
-import utils from './modules/utils.js';
+import utils from './lib/utils.js';
 import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
@@ -34,7 +34,7 @@ app.init = (p) => {
   app.p = p;
   app.setup();
 
-  app.handlePlayPauseButttons();
+  app.handleControls();
 
   timeline.init();
 
@@ -93,12 +93,19 @@ app.drawFlows = async (index) => {
   await app.auction.draw(index);
 };
 
-app.handlePlayPauseButttons = () => {
+app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
+  app.multSellerCheckBox = document.getElementById('multi-seller');
 
   app.playButton.addEventListener('click', app.play);
   app.pauseButton.addEventListener('click', app.pause);
+  app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
+};
+
+// Write a callback function to get the value of the checkbox.
+app.toggleMultSeller = (event) => {
+  app.isMultiSeller = event.target.checked;
 };
 
 app.calculateCanvasDimensions = () => {
@@ -121,7 +128,10 @@ app.calculateCanvasDimensions = () => {
   const rippleRadius = maxRadius * 2 + (numRipples - 1) * 40;
   const maxHeightUsingBoxAndLine = lineWidth * 2 + boxHeight + smallBoxHeight;
   const height =
-    timelineY + circleSpace + Math.max(rippleRadius, maxHeightUsingBoxAndLine);
+    timelineY +
+    circleSpace +
+    Math.max(rippleRadius, maxHeightUsingBoxAndLine) +
+    700; // @todo: 700 is a magic number and needs to be calculated based on the content.
 
   const auctionBoxesWidth = boxWidth + mediumBoxWidth * 2 + lineWidth * 2;
   const interestGroupWidth = boxWidth;
@@ -161,6 +171,8 @@ const sketch = (p) => {
     p.userIcon = p.loadImage(icons.user);
     p.playIcon = p.loadImage(icons.play);
     p.pauseIcon = p.loadImage(icons.pause);
+    p.expandIcon = p.loadImage(icons.expand);
+
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
 };

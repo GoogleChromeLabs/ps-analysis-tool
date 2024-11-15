@@ -23,9 +23,11 @@ const app = {
   },
   auction: {
     auctions: [],
+    nextTipCoordinates: { x: 0, y: 0 },
   },
   joinInterestGroup: {
     joinings: [],
+    nextTipCoordinates: { x: 0, y: 0 },
   },
   flow: {
     intervals: {},
@@ -34,6 +36,7 @@ const app = {
   p: null,
   igp: null,
   up: null,
+  isMultiSeller: false,
 };
 
 export default app;
