@@ -71,19 +71,19 @@ bubbles.barrageAnimation = async (index) => {
   } = config;
 
   const boxes = app.auction.auctions[index];
-  const loadInterestGroupBox = boxes.filter(
+  const loadInterestGroupBox = boxes.find(
     (box) => box?.props?.title === 'Load Interest Group'
-  )?.[0];
+  );
 
   const smallCircleDiameter = diameter / 5;
 
-  // calculate the current position of the interest group bubbles.
+  // Calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.bubbles.positions.map((data) => {
     const speed = 2;
     const width = config.flow.mediumBox.width;
     const height = config.flow.mediumBox.height;
 
-    // calculate the target where the interest group bubbles have to land;
+    // Calculate the target where the interest group bubbles have to land.
     const target = p.createVector(
       loadInterestGroupBox?.props?.x() +
         Math.floor(Math.random() * (1 - width / 2 + 1)) +
@@ -93,7 +93,7 @@ bubbles.barrageAnimation = async (index) => {
         height / 2
     );
 
-    // calculate the opacity of the interest group bubble which will be animated.
+    // Calculate the opacity of the interest group bubble which will be animated.
     const currentColor = p.color(data.color);
     const color = p.color(
       p.red(currentColor),
@@ -108,20 +108,21 @@ bubbles.barrageAnimation = async (index) => {
   });
 
   await new Promise((resolve) => {
-    app.flow.intervals['circleMovements'] = setInterval(() => {
+    const animate = () => {
       if (app.timeline.isPaused) {
+        requestAnimationFrame(animate); // Keep the animation loop alive but paused.
         return;
       }
+
       utils.wipeAndRecreateInterestCanvas();
 
-      //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
         let { x, y } = positionsOfCircles[i];
         const { target, speed, color } = positionsOfCircles[i];
         const dir = p5.Vector.sub(target, p.createVector(x, y));
         dir.normalize();
 
-        //Only increment the coordinates if the the target is not reached.
+        // Only increment the coordinates if the target is not reached.
         if (
           !(
             x < target.x + 4 &&
@@ -142,7 +143,7 @@ bubbles.barrageAnimation = async (index) => {
         positionsOfCircles[i] = { x, y, target, speed, color };
       }
 
-      //Resolve if all bubbles have reached the targets.
+      // Resolve if all bubbles have reached their targets.
       if (
         positionsOfCircles.every((circle) => {
           return (
@@ -153,16 +154,20 @@ bubbles.barrageAnimation = async (index) => {
           );
         })
       ) {
-        clearInterval(app.flow.intervals['circleMovements']);
         resolve();
+      } else {
+        requestAnimationFrame(animate); // Continue the animation.
       }
-    }, 10);
+    };
+
+    requestAnimationFrame(animate); // Start the animation loop.
   });
 
   await utils.delay(500);
 
   utils.wipeAndRecreateInterestCanvas();
 };
+
 bubbles.reverseBarrageAnimation = async (index) => {
   const dspTags = app.joinInterestGroup.joinings[index][1];
   const igp = app.igp;
@@ -187,6 +192,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   const positionsOfCircles = [];
   const currentIGGroupToBeAdded = circles[index]?.igGroupsCount ?? 0;
+
   for (let i = 0; i < interestGroupCounts + currentIGGroupToBeAdded; i++) {
     if (i < interestGroupCounts) {
       continue;
@@ -218,12 +224,14 @@ bubbles.reverseBarrageAnimation = async (index) => {
   document.getElementById('interest-canvas').style.zIndex = 4;
 
   await new Promise((resolve) => {
-    app.flow.intervals['circleMovements'] = setInterval(() => {
+    const animate = () => {
       if (app.timeline.isPaused) {
+        requestAnimationFrame(animate);
         return;
       }
+
       utils.wipeAndRecreateInterestCanvas();
-      //Run a loop over the position of the circles to move them according to the speed.
+
       for (let i = 0; i < positionsOfCircles.length; i++) {
         let { x, y } = positionsOfCircles[i];
         const { target, speed, color } = positionsOfCircles[i];
@@ -231,7 +239,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
         dir.normalize();
 
-        //Only increment the coordinates if the the target is not reached.
         if (
           !(
             x < target.x + 4 &&
@@ -249,10 +256,11 @@ bubbles.reverseBarrageAnimation = async (index) => {
         igp.fill(color);
         igp.circle(x, y, smallCircleDiameter);
         igp.pop();
+
         positionsOfCircles[i] = { x, y, target, speed, color };
       }
 
-      //Resolve if all bubbles have reached the targets.
+      // Resolve if all bubbles have reached the targets
       if (
         positionsOfCircles.every((circle) => {
           return (
@@ -263,14 +271,16 @@ bubbles.reverseBarrageAnimation = async (index) => {
           );
         })
       ) {
-        clearInterval(app.flow.intervals['circleMovements']);
         resolve();
+        document.getElementById('interest-canvas').style.zIndex = 2;
+        utils.wipeAndRecreateInterestCanvas();
+      } else {
+        requestAnimationFrame(animate);
       }
-    }, 10);
-  });
+    };
 
-  document.getElementById('interest-canvas').style.zIndex = 2;
-  utils.wipeAndRecreateInterestCanvas();
+    requestAnimationFrame(animate);
+  });
 };
 bubbles.showExpandedBubbles = () => {
   bubbles.clearAndRewriteBubbles();

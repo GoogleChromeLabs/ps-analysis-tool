@@ -20,14 +20,14 @@ import ProgressLine from './progressLine';
 import app from '../app';
 import config from '../config';
 import Box from './box';
+import utils from '../lib/utils';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
 const EXPAND_ICON_SIZE = 20;
 
-let spacing, progress, interval, renderedBranchIds, endpoints;
+let spacing, progress, renderedBranchIds, endpoints;
 
-// @todo: Handle canvas width changes when the branches do not fit in the existing size.
 const Branches = async ({ x1, y1, branches }) => {
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
@@ -38,7 +38,6 @@ const Branches = async ({ x1, y1, branches }) => {
   }));
 
   progress = 0;
-  interval = null;
   renderedBranchIds = [];
   endpoints = [];
 
@@ -53,10 +52,29 @@ const Branches = async ({ x1, y1, branches }) => {
   });
 
   return new Promise((resolve) => {
-    interval = setInterval(async () => {
-      await drawAnimatedTimeline(LEFT_MARGIN, y2 - 9, branches);
-      resolve(endpoints);
-    }, 20);
+    const animate = () => {
+      if (app.timeline.isPaused) {
+        requestAnimationFrame(animate); // Continue loop but remain paused
+        return;
+      }
+
+      // Clear canvas or update logic (if necessary)
+      utils.wipeAndRecreateInterestCanvas();
+
+      // Draw the animated timeline
+      drawAnimatedTimeline(LEFT_MARGIN, y2 - 9, branches).then(() => {
+        resolve(endpoints);
+      });
+
+      // Continue animation until progress completes
+      if (progress < (branches.length - 1) * spacing) {
+        progress += ANIMATION_SPEED;
+        requestAnimationFrame(animate);
+      }
+    };
+
+    // Start the animation loop
+    requestAnimationFrame(animate);
   });
 };
 
@@ -69,28 +87,17 @@ const drawAnimatedTimeline = (x, y, branches) => {
   p.strokeWeight(1);
 
   return new Promise((resolve) => {
-    if (app.timeline.isPaused) {
-      return;
-    }
-    // Draw the animated horizontal line
-    if (progress < (branches.length - 1) * spacing) {
-      progress += ANIMATION_SPEED; // Increase the length of the horizontal line
-    } else {
-      clearInterval(interval);
-      resolve();
-    }
-
+    // Draw the horizontal line
     p.line(x, y, x + progress, y);
 
-    // Draw each vertical line and label when the horizontal line reaches its position
+    // Draw vertical lines and labels as the horizontal line progresses
     for (let i = 0; i < branches.length; i++) {
       const branchX = x + i * spacing;
       const branch = branches[i];
       let endpoint;
 
-      if (progress >= i * spacing && !(branch.id in renderedBranchIds)) {
-        // Start drawing each vertical line once the horizontal line reaches it
-        // Draw vertical line fully
+      if (progress >= i * spacing && !renderedBranchIds.includes(branch.id)) {
+        // Draw vertical line once the horizontal line reaches its position
         p.stroke(0);
         p.line(branchX, y, branchX, y + 20);
 
@@ -110,6 +117,11 @@ const drawAnimatedTimeline = (x, y, branches) => {
 
         renderedBranchIds.push(branch.id);
       }
+    }
+
+    // Resolve if the progress exceeds the required length
+    if (progress >= (branches.length - 1) * spacing) {
+      resolve();
     }
   });
 };
