@@ -36,12 +36,6 @@
             pointer-events: none; 
         }
 
-        .play-pause-button {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-        }
-
         button {
             cursor: pointer;
             border: none;
@@ -58,6 +52,17 @@
             height: 100%;
             position: relative;
         }
+
+        .play-pause-button {
+            margin-right: 10px;
+        }
+
+        .controls {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            display: flex;
+        }
     </style>
 </head>
 
@@ -65,13 +70,21 @@
     <main>
         <div id="ps-canvas">
             <div id="canvas-container">
-                <div class="play-pause-button">
-                    <button id="play" class="hidden">
-                        <img src="./icons/play-button.png" alt="play" />
-                    </button>
-                    <button id="pause">
-                        <img src="./icons/pause-button.png" alt="pause" />
-                    </button>
+                <div class="controls">
+                    <div class="play-pause-button">
+                        <button id="play" class="hidden">
+                            <img src="./icons/play-button.png" alt="play" />
+                        </button>
+                        <button id="pause">
+                            <img src="./icons/pause-button.png" alt="pause" />
+                        </button>
+                    </div>
+                    <div>
+                        <label for="multi-seller">
+                            <input type="checkbox" name="multi-seller" id="multi-seller">
+                            Multi-Sellers
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,7 +92,7 @@
         <div id="user-canvas"></div>
     </main>
 
-    <script src="bundle.js"></script>
+    <script src="protected-audience.js"></script>
 </body>
 
 </html>

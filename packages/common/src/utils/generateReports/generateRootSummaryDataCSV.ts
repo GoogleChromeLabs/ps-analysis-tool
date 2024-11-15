@@ -126,20 +126,24 @@ export const generateRootSummaryDataCSV = (
   const headers = [
     'URL',
     'Total Cookies',
-    'First Party Cookies',
-    'Third Party Cookies',
-    'Analytics Cookies',
-    'Functional Cookies',
-    'Marketing Cookies',
-    'Uncategorised Cookies',
+    'First Party',
+    'Third Party',
+    'Analytics',
+    'Functional',
+    'Marketing',
+    'Uncategorised',
     'Total Cookies With Issues',
-    'Analytics Cookies With Issues',
-    'Functional Cookies With Issues',
-    'Marketing Cookies With Issues',
-    'Uncategorised Cookies With Issues',
+    'Analytics',
+    'Functional',
+    'Marketing',
+    'Uncategorised',
   ];
 
   let csvData = headers.join(',').concat('\r\n');
+
+  csvData = csvData
+    .concat('Aggregated,')
+    .concat(calculateCSVData(extractedData));
 
   siteMapAnalysisData.forEach((singleSiteData) => {
     const urlCookies = reshapeCookies(
@@ -150,10 +154,6 @@ export const generateRootSummaryDataCSV = (
       .concat(`${singleSiteData.pageUrl},`)
       .concat(calculateCSVData(urlCookies));
   });
-
-  csvData = csvData
-    .concat('Aggregated,')
-    .concat(calculateCSVData(extractedData));
 
   return csvData;
 };
