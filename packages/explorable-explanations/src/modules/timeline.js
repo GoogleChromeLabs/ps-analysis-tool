@@ -19,7 +19,6 @@
 import config from '../config';
 import app from '../app';
 import utils from '../lib/utils';
-import bubbles from '../lib/bubbles';
 
 /**
  * @module Timeline
@@ -77,25 +76,6 @@ timeline.init = () => {
     };
   } else {
     app.timeline.drawTimelineLine();
-    app.p.mouseClicked = (event) => {
-      const { x, y } = event;
-      if (!config.bubbles.isExpanded) {
-        if (
-          utils.isInsideCircle(
-            x,
-            y,
-            config.bubbles.minifiedBubbleX,
-            config.bubbles.minifiedBubbleY,
-            config.bubbles.minifiedCircleDiameter / 2
-          )
-        ) {
-          config.bubbles.isExpanded = true;
-          bubbles.generateBubbles(true);
-          app.pause();
-          return;
-        }
-      }
-    };
     app.timeline.renderUserIcon();
   }
   app.timeline.drawTimeline(config.timeline);
