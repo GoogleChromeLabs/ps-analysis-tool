@@ -24,9 +24,6 @@ export const story = `<!DOCTYPE html>
     <link href="https://cdn.ampproject.org/amp-story-player-v0.css" rel="stylesheet" type="text/css">
 
     <style>
-        .carousel-section {
-            margin-top: 44px;
-        }
 
         .carousel-container {
             position: relative;
@@ -80,7 +77,6 @@ export const story = `<!DOCTYPE html>
         }
 
         .carousel-cards-container {
-            border-top: 1px solid #cccccc;
             display: flex;
             position: relative;
             align-items: center;
@@ -665,3 +661,25 @@ body {
 </body>
 
 </html>`;
+
+export const cardBody = `
+<div class="entry-point-card-container">
+    <div class="background-cards">
+        <div class="background-card-1"></div>
+        <div class="background-card-2"></div>
+    </div>
+    <img src="https://assets.codepen.io/1780597/pizza.jpg" class="entry-point-card-img" alt="A cat">
+    <div class="author-container">
+        <div class="logo-container">
+            <div class="logo-ring"></div>
+            <img class="entry-point-card-logo"
+                src="https://assets.codepen.io/1780597/1pizza_logo.png" alt="Publisher logo">
+        </div>
+        <span class="entry-point-card-subtitle"> By John Wilson </span>
+        </div>
+
+        <div class="card-headline-container">
+            <span class="entry-point-card-headline"> A Taste Of New York Pizza History </span>
+        </div>
+                    </div>
+`;

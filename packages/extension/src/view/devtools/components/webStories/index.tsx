@@ -17,92 +17,19 @@
  * External dependencies.
  */
 import React from 'react';
+import { LandingPage } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
-import { story } from './story';
+import ContentPanel from './contentPanel';
 
 const WebStories = () => {
-  const domParser = new DOMParser();
-  const doc = domParser.parseFromString(story, 'text/html');
-  let parsedEmbeddedHtml = story;
-
-  Array.from(doc.scripts).forEach((script, index) => {
-    if (!script.src || !doc.scripts.item(index)) {
-      return;
-    }
-
-    switch (script.src) {
-      case 'https://cdn.ampproject.org/v0/amp-animation-0.1.js':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://cdn.ampproject.org/v0/amp-animation-0.1.js',
-          chrome.runtime.getURL('assets/data/amp-animation-0.1.js')
-        );
-        break;
-      case 'https://cdn.ampproject.org/v0/amp-video-0.1.js':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://cdn.ampproject.org/v0/amp-video-0.1.js',
-          chrome.runtime.getURL('assets/data/amp-video-0.1.js')
-        );
-        break;
-      case 'https://cdn.ampproject.org/amp4ads-v0.js':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://cdn.ampproject.org/amp4ads-v0.js',
-          chrome.runtime.getURL('assets/data/amp4ads-v0.js')
-        );
-        break;
-      case 'https://cdn.ampproject.org/amp-story-player-v0.js':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://cdn.ampproject.org/amp-story-player-v0.js',
-          chrome.runtime.getURL('assets/data/amp-story-player-v0.js')
-        );
-        break;
-      case 'https://cdn.ampproject.org/v0.js':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://cdn.ampproject.org/v0.js',
-          chrome.runtime.getURL('assets/data/v0.js')
-        );
-        break;
-      case 'https://cdn.ampproject.org/v0/amp-story-1.0.js':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://cdn.ampproject.org/v0/amp-story-1.0.js',
-          chrome.runtime.getURL('assets/data/amp-story-1.0.js')
-        );
-        break;
-      default:
-        if (script.src.endsWith('main.js')) {
-          parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-            'main.js',
-            chrome.runtime.getURL('assets/data/amp-player-main.js')
-          );
-        }
-        script.remove();
-        break;
-    }
-  });
-
-  Array.from(doc.querySelectorAll('a')).forEach(({ href }) => {
-    if (!href) {
-      return;
-    }
-
-    switch (href) {
-      case 'https://wsdemos.uc.r.appspot.com/animal-poll':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://wsdemos.uc.r.appspot.com/animal-poll',
-          chrome.runtime.getURL('assets/index.html')
-        );
-        break;
-      default:
-        break;
-    }
-  });
-
   return (
-    <iframe
-      srcDoc={parsedEmbeddedHtml}
-      style={{ width: '100%', height: '100vh', border: 'none' }}
-      title="Embedded AMP Content"
+    <LandingPage
+      title="Explorable Explanations"
+      contentPanel={<ContentPanel />}
+      showQuickLinks={false}
     />
   );
 };
