@@ -181,7 +181,6 @@ joinInterestGroup.draw = async (index) => {
   config.bubbles.interestGroupCounts +=
     config.timeline.circles[index]?.igGroupsCount ?? 0;
 
-  await utils.delay(2000);
   flow.clearBelowTimelineCircles();
 };
 
