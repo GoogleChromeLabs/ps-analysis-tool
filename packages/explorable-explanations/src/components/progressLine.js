@@ -51,6 +51,9 @@ const ProgressLine = ({
 
   return new Promise((resolve) => {
     app.flow.intervals['progressline'] = setInterval(() => {
+      if (app.timeline.isPaused) {
+        return;
+      }
       switch (direction) {
         case 'right':
           currentX += incrementBy;

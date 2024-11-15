@@ -119,6 +119,8 @@ const config = {
     expandedCircleDiameter: 640,
     minifiedCircleDiameter: 50,
     interestGroupCounts: 0,
+    expandedBubbleX: 0,
+    expandedBubbleY: 0,
   },
   isInteractiveMode: false,
   mouseX: 0,

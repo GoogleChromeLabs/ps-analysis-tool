@@ -139,6 +139,9 @@ bubbles.barrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
+      if (app.timeline.isPaused) {
+        return;
+      }
       utils.wipeAndRecreateInterestCanvas();
 
       //Run a loop over the position of the circles to move them according to the speed.
@@ -178,8 +181,7 @@ bubbles.barrageAnimation = async (index) => {
             Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
             Math.floor(circle.y) < Math.floor(circle.target.y + 4)
           );
-        }) ||
-        config.bubbles.isExpanded
+        })
       ) {
         clearInterval(app.flow.intervals['circleMovements']);
         resolve();
@@ -247,6 +249,9 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     app.flow.intervals['circleMovements'] = setInterval(() => {
+      if (app.timeline.isPaused) {
+        return;
+      }
       utils.wipeAndRecreateInterestCanvas();
       //Run a loop over the position of the circles to move them according to the speed.
       for (let i = 0; i < positionsOfCircles.length; i++) {
@@ -286,8 +291,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
             Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
             Math.floor(circle.y) < Math.floor(circle.target.y + 4)
           );
-        }) ||
-        config.bubbles.isExpanded
+        })
       ) {
         clearInterval(app.flow.intervals['circleMovements']);
         resolve();

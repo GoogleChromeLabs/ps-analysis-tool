@@ -69,6 +69,9 @@ const drawAnimatedTimeline = (x, y, branches) => {
   p.strokeWeight(1);
 
   return new Promise((resolve) => {
+    if (app.timeline.isPaused) {
+      return;
+    }
     // Draw the animated horizontal line
     if (progress < (branches.length - 1) * spacing) {
       progress += ANIMATION_SPEED; // Increase the length of the horizontal line

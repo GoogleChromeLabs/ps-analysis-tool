@@ -65,7 +65,7 @@ app.userInit = (p) => {
   app.setup();
 };
 
-app.play = () => {
+app.play = (resumed = false) => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
@@ -75,13 +75,30 @@ app.play = () => {
     bubbles.generateBubbles(true);
     bubbles.showMinifiedBubbles();
   }
-  app.setupLoop();
+  if (!resumed) {
+    app.setupLoop();
+  }
 };
 app.minifiedBubbleClickListener = () => {
   if (!config.bubbles.isExpanded) {
     config.bubbles.isExpanded = true;
     bubbles.showExpandedBubbles();
     app.pause();
+  }
+};
+
+app.clickedOutsideExpandedBubbleListener = (event) => {
+  if (
+    config.bubbles.isExpanded &&
+    !utils.isInsideCircle(
+      config.bubbles.expandedBubbleX,
+      config.bubbles.expandedBubbleY,
+      event.x,
+      event.y,
+      config.bubbles.expandedCircleDiameter / 2
+    )
+  ) {
+    app.play(true);
   }
 };
 
@@ -96,10 +113,10 @@ app.pause = () => {
 };
 
 app.setupLoop = async () => {
-  while (
-    !app.timeline.isPaused &&
-    app.timeline.currentIndex < config.timeline.circles.length
-  ) {
+  while (app.timeline.currentIndex < config.timeline.circles.length) {
+    if (app.timeline.isPaused) {
+      continue;
+    }
     bubbles.showMinifiedBubbles();
     app.timeline.renderUserIcon();
     // eslint-disable-next-line no-await-in-loop
@@ -116,7 +133,7 @@ app.drawFlows = async (index) => {
 
 app.minifiedBubbleKeyPressListener = (event) => {
   if (event.key === 'Escape' && config.bubbles.isExpanded) {
-    app.play();
+    app.play(true);
   }
 };
 
@@ -125,13 +142,28 @@ app.handleControls = () => {
   app.pauseButton = document.getElementById('pause');
   app.multSellerCheckBox = document.getElementById('multi-seller');
   document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
+  app.minifiedBubbleContainer = document.getElementById(
+    'minified-bubble-container'
+  );
 
-  document.getElementById('close-button').addEventListener('click', app.play);
+  document
+    .getElementById('bubble-container-div')
+    .addEventListener('click', app.clickedOutsideExpandedBubbleListener);
+
+  document.getElementById('close-button').addEventListener('click', () => {
+    app.play(true);
+  });
   document
     .getElementById('open-button')
     .addEventListener('click', app.minifiedBubbleClickListener);
 
-  app.playButton.addEventListener('click', app.play);
+  app.minifiedBubbleContainer.addEventListener(
+    'click',
+    app.minifiedBubbleClickListener
+  );
+  app.playButton.addEventListener('click', () => {
+    app.play(true);
+  });
   app.pauseButton.addEventListener('click', app.pause);
   app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
 };
@@ -195,10 +227,7 @@ const sketch = (p) => {
     canvas.style('z-index', 0);
     p.background(config.canvas.background);
     p.textSize(config.canvas.fontSize);
-
-    (async () => {
-      await app.init(p);
-    })();
+    app.init(p);
   };
 
   p.preload = () => {
@@ -232,9 +261,7 @@ const interestGroupSketch = (p) => {
     const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX + 320;
     const y = 335 * Math.sin(angle) + 320;
 
-    app.minifiedBubbleContainer = document.getElementById(
-      'minified-bubble-container'
-    );
+    //app.clickedOutsideExpandedBubbleListener
 
     document.getElementById('close-button').style.left = `${x}px`;
     document.getElementById('close-button').style.top = `${y}px`;
@@ -261,15 +288,7 @@ const interestGroupSketch = (p) => {
     });
 
     app.countDisplay = document.getElementById('count-display');
-
-    app.minifiedBubbleContainer.addEventListener(
-      'click',
-      app.minifiedBubbleClickListener
-    );
-
-    (async () => {
-      await app.interestGroupInit(p);
-    })();
+    app.interestGroupInit(p);
   };
 };
 

@@ -48,6 +48,9 @@ rippleEffect.start = (x = 0, y = 0) => {
     config.rippleEffect.rippled = true;
 
     const interval = setInterval(() => {
+      if (app.timeline.isPaused) {
+        return;
+      }
       if (totalTime > config.rippleEffect.time) {
         clearInterval(interval);
         resolve();
