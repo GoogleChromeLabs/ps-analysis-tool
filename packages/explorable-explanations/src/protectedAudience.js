@@ -222,9 +222,6 @@ const interestGroupSketch = (p) => {
       'minified-bubble-container'
     );
 
-    document.getElementById('open-button').style.left = `50px`;
-    document.getElementById('open-button').style.top = `50px`;
-
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
         document.styleSheets[0].cssRules[index].style.left = `${
