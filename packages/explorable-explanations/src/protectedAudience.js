@@ -259,7 +259,6 @@ const interestGroupSketch = (p) => {
       'click',
       app.minifiedBubbleClickListener
     );
-    app.minifiedBubbleContainer.style.zIndex = 3;
 
     (async () => {
       await app.interestGroupInit(p);
