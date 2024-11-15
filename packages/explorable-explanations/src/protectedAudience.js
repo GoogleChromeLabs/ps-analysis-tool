@@ -69,17 +69,31 @@ app.play = (resumed = false) => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
-  if (config.bubbles.isExpanded) {
-    config.bubbles.isExpanded = false;
-    utils.wipeAndRecreateInterestCanvas();
-    bubbles.generateBubbles(true);
-    bubbles.showMinifiedBubbles();
-  }
   if (!resumed) {
     app.setupLoop();
   }
 };
-app.minifiedBubbleClickListener = (event) => {
+
+app.pause = () => {
+  app.pauseButton.classList.add('hidden');
+  app.playButton.classList.remove('hidden');
+  app.timeline.isPaused = true;
+};
+
+app.minimiseBubbleActions = () => {
+  bubbles.generateBubbles(true);
+  config.bubbles.isExpanded = false;
+  bubbles.showMinifiedBubbles();
+  app.play(true);
+};
+
+app.expandBubbleActions = () => {
+  config.bubbles.isExpanded = true;
+  bubbles.showExpandedBubbles();
+  bubbles.generateBubbles(true);
+  app.pause();
+};
+app.minifiedBubbleClickListener = (event, expandOverride) => {
   const clickedInsideExpandedCircle = utils.isInsideCircle(
     config.bubbles.expandedBubbleX,
     config.bubbles.expandedBubbleY,
@@ -96,27 +110,19 @@ app.minifiedBubbleClickListener = (event) => {
     config.bubbles.minifiedCircleDiameter / 2
   );
 
-  if (!config.bubbles.isExpanded && clickedInsideMinifiedCircle) {
-    config.bubbles.isExpanded = true;
-    bubbles.showExpandedBubbles();
-    app.pause();
+  if (
+    (!config.bubbles.isExpanded && clickedInsideMinifiedCircle) ||
+    expandOverride
+  ) {
+    app.expandBubbleActions();
     event.stopPropagation();
     return;
   }
-  if (config.bubbles.isExpanded && !clickedInsideExpandedCircle) {
-    app.play(true);
-    event.stopPropagation();
-    return;
-  }
-};
 
-app.pause = () => {
-  app.pauseButton.classList.add('hidden');
-  app.playButton.classList.remove('hidden');
-  app.timeline.isPaused = true;
-  if (config.bubbles.isExpanded) {
-    bubbles.showExpandedBubbles();
-    bubbles.generateBubbles(true);
+  if (config.bubbles.isExpanded && !clickedInsideExpandedCircle) {
+    app.minimiseBubbleActions();
+    event.stopPropagation();
+    return;
   }
 };
 
@@ -141,7 +147,7 @@ app.drawFlows = async (index) => {
 
 app.minifiedBubbleKeyPressListener = (event) => {
   if (event.key === 'Escape' && config.bubbles.isExpanded) {
-    app.play(true);
+    app.minimiseBubbleActions();
   }
 };
 
@@ -158,12 +164,15 @@ app.handleControls = () => {
     .getElementById('bubble-container-div')
     .addEventListener('click', app.minifiedBubbleClickListener);
 
-  document.getElementById('close-button').addEventListener('click', () => {
-    app.play(true);
-  });
+  document
+    .getElementById('close-button')
+    .addEventListener('click', app.minimiseBubbleActions);
+
   document
     .getElementById('open-button')
-    .addEventListener('click', app.minifiedBubbleClickListener);
+    .addEventListener('click', (event) =>
+      app.minifiedBubbleClickListener(event, true)
+    );
 
   app.minifiedBubbleContainer.addEventListener(
     'click',

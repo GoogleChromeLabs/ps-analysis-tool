@@ -58,22 +58,6 @@ bubbles.generateBubbles = (recalculate = false) => {
       };
     });
   }
-
-  bubbles.bubbleChart(app.bubbles.positions, {
-    label: (d) =>
-      [
-        ...d.id
-          .split('.')
-          .pop()
-          .split(/(?=[A-Z][a-z])/g),
-      ].join('\n'),
-    value: (d) => d.value,
-    groupFn: (d) => d.group,
-    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: config.bubbles.minifiedCircleDiameter,
-    height: config.bubbles.minifiedCircleDiameter,
-    shouldCreateSVG: false,
-  });
 };
 
 bubbles.barrageAnimation = async (index) => {
@@ -291,6 +275,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 bubbles.showExpandedBubbles = () => {
   bubbles.clearAndRewriteBubbles();
   bubbles.generateBubbles(true);
+
   app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
       [
@@ -382,7 +367,6 @@ bubbles.bubbleChart = (
     stroke,
     strokeWidth,
     strokeOpacity,
-    shouldCreateSVG = true,
   } = {}
 ) => {
   const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
@@ -394,9 +378,11 @@ bubbles.bubbleChart = (
     }
     return false;
   });
+
   if (data.length === 0) {
     return null;
   }
+
   const values = d3.map(data, value);
   const groups = groupFn === null ? null : d3.map(data, groupFn);
   const groupIntervals = d3.range(values.length).filter((i) => values[i] > 0);
@@ -427,27 +413,13 @@ bubbles.bubbleChart = (
     .attr('fill', 'currentColor')
     .attr('font-size', 10)
     .attr('font-family', 'sans-serif')
-    .attr('text-anchor', 'middle')
-    .on(
-      'click',
-      !config.bubbles.isExpanded
-        ? () => {
-            config.bubbles.isExpanded = true;
-            bubbles.generateBubbles(true);
-            app.pause();
-          }
-        : null
-    );
+    .attr('text-anchor', 'middle');
 
   const leaf = svg
     .selectAll('a')
     .data(root.leaves())
     .join('a')
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
-
-  if (!shouldCreateSVG) {
-    return null;
-  }
 
   leaf
     .append('circle')
@@ -470,14 +442,8 @@ bubbles.bubbleChart = (
       !config.bubbles.isExpanded
         ? null
         : (event) => {
-            if (!config.bubbles.isExpanded) {
-              config.bubbles.isExpanded = true;
-              bubbles.generateBubbles(true);
-              app.pause();
-            } else {
-              // eslint-disable-next-line no-console
-              console.log(event);
-            }
+            // eslint-disable-next-line no-console
+            console.log(event);
           }
     )
     .attr('fill-opacity', fillOpacity)
