@@ -32,13 +32,6 @@ bubbles.init = () => {
   app.bubbles.positions = [];
 };
 bubbles.generateBubbles = (recalculate = false) => {
-  const igp = app.igp;
-  const color = igp.color(
-    igp.random(80, 255),
-    igp.random(140, 255),
-    igp.random(120, 255)
-  );
-
   const interestGroupsToBeAdded =
     config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
 
@@ -53,12 +46,20 @@ bubbles.generateBubbles = (recalculate = false) => {
             index
           ].length,
         group: config.timeline.circles[app.timeline.currentIndex].website,
-        color,
+        color: '',
       });
     }
+    const groups = d3.map(app.bubbles.positions, (d) => d.group);
+    const color = d3.scaleOrdinal(groups, d3.schemeTableau10);
+    app.bubbles.positions = app.bubbles.positions.map((_data, i) => {
+      return {
+        ..._data,
+        color: color(groups[i]),
+      };
+    });
   }
 
-  app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
+  bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
       [
         ...d.id
@@ -71,22 +72,7 @@ bubbles.generateBubbles = (recalculate = false) => {
     title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
     width: config.bubbles.minifiedCircleDiameter,
     height: config.bubbles.minifiedCircleDiameter,
-  });
-
-  app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
-    label: (d) =>
-      [
-        ...d.id
-          .split('.')
-          .pop()
-          .split(/(?=[A-Z][a-z])/g),
-      ].join('\n'),
-    value: (d) => d.value,
-    groupFn: (d) => d.group,
-    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: 640,
-    height: 640,
-    margin: 4,
+    shouldCreateSVG: false,
   });
 };
 
@@ -305,6 +291,21 @@ bubbles.reverseBarrageAnimation = async (index) => {
 bubbles.showExpandedBubbles = () => {
   bubbles.clearAndRewriteBubbles();
   bubbles.generateBubbles(true);
+  app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
+    label: (d) =>
+      [
+        ...d.id
+          .split('.')
+          .pop()
+          .split(/(?=[A-Z][a-z])/g),
+      ].join('\n'),
+    value: (d) => d.value,
+    groupFn: (d) => d.group,
+    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+    width: config.bubbles.expandedCircleDiameter,
+    height: config.bubbles.expandedCircleDiameter,
+    margin: 4,
+  });
 
   if (app.bubbles.expandedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.expandedSVG);
@@ -320,6 +321,21 @@ bubbles.showExpandedBubbles = () => {
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
 bubbles.showMinifiedBubbles = () => {
+  app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
+    label: (d) =>
+      [
+        ...d.id
+          .split('.')
+          .pop()
+          .split(/(?=[A-Z][a-z])/g),
+      ].join('\n'),
+    value: (d) => d.value,
+    groupFn: (d) => d.group,
+    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+    width: config.bubbles.minifiedCircleDiameter,
+    height: config.bubbles.minifiedCircleDiameter,
+  });
+
   if (config.bubbles.isExpanded) {
     return;
   }
@@ -367,8 +383,21 @@ bubbles.bubbleChart = (
     stroke,
     strokeWidth,
     strokeOpacity,
+    shouldCreateSVG = true,
   } = {}
 ) => {
+  const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
+    app.timeline.currentIndex
+  );
+  data = data.filter((_data, i) => {
+    if (i < totalBubbles) {
+      return true;
+    }
+    return false;
+  });
+  if (data.length === 0) {
+    return null;
+  }
   const values = d3.map(data, value);
   const groups = groupFn === null ? null : d3.map(data, groupFn);
   const groupIntervals = d3.range(values.length).filter((i) => values[i] > 0);
@@ -417,13 +446,9 @@ bubbles.bubbleChart = (
     .join('a')
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
-  app.bubbles.positions = app.bubbles.positions.map((_data, i) => {
-    const nodes = root.leaves();
-    return {
-      ..._data,
-      color: color(groups[nodes[i].data]),
-    };
-  });
+  if (!shouldCreateSVG) {
+    return null;
+  }
 
   leaf
     .append('circle')
@@ -508,6 +533,18 @@ bubbles.clearAndRewriteBubbles = () => {
     app.countDisplay.innerHTML = config.bubbles.interestGroupCounts;
     app.minifiedBubbleContainer.appendChild(app.countDisplay);
   }
+};
+
+bubbles.calculateTotalBubblesForAnimation = (index) => {
+  let bubblesCount = 0;
+
+  config.timeline.circles.forEach((circle, currIndex) => {
+    if (currIndex < index) {
+      bubblesCount += circle.igGroupsCount ?? 0;
+    }
+  });
+
+  return bubblesCount;
 };
 
 export default bubbles;
