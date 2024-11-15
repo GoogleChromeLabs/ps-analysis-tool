@@ -317,7 +317,6 @@ bubbles.showExpandedBubbles = () => {
 
   document.getElementById('close-button').style.display = 'block';
   document.getElementById('open-button').style.display = 'none';
-
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
 bubbles.showMinifiedBubbles = () => {

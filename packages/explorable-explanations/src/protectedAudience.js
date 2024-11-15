@@ -79,26 +79,34 @@ app.play = (resumed = false) => {
     app.setupLoop();
   }
 };
-app.minifiedBubbleClickListener = () => {
-  if (!config.bubbles.isExpanded) {
+app.minifiedBubbleClickListener = (event) => {
+  const clickedInsideExpandedCircle = utils.isInsideCircle(
+    config.bubbles.expandedBubbleX,
+    config.bubbles.expandedBubbleY,
+    event.x,
+    event.y,
+    config.bubbles.expandedCircleDiameter / 2
+  );
+
+  const clickedInsideMinifiedCircle = utils.isInsideCircle(
+    config.bubbles.minifiedBubbleX,
+    config.bubbles.minifiedBubbleY,
+    event.x,
+    event.y,
+    config.bubbles.minifiedCircleDiameter / 2
+  );
+
+  if (!config.bubbles.isExpanded && clickedInsideMinifiedCircle) {
     config.bubbles.isExpanded = true;
     bubbles.showExpandedBubbles();
     app.pause();
+    event.stopPropagation();
+    return;
   }
-};
-
-app.clickedOutsideExpandedBubbleListener = (event) => {
-  if (
-    config.bubbles.isExpanded &&
-    !utils.isInsideCircle(
-      config.bubbles.expandedBubbleX,
-      config.bubbles.expandedBubbleY,
-      event.x,
-      event.y,
-      config.bubbles.expandedCircleDiameter / 2
-    )
-  ) {
+  if (config.bubbles.isExpanded && !clickedInsideExpandedCircle) {
     app.play(true);
+    event.stopPropagation();
+    return;
   }
 };
 
@@ -148,7 +156,7 @@ app.handleControls = () => {
 
   document
     .getElementById('bubble-container-div')
-    .addEventListener('click', app.clickedOutsideExpandedBubbleListener);
+    .addEventListener('click', app.minifiedBubbleClickListener);
 
   document.getElementById('close-button').addEventListener('click', () => {
     app.play(true);
@@ -254,23 +262,21 @@ const interestGroupSketch = (p) => {
     config.bubbles.minifiedBubbleX = 35;
     config.bubbles.minifiedBubbleY = 35;
 
-    config.bubbles.expandedBubbleX = config.canvas.width / 4;
+    config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
     config.bubbles.expandedBubbleY = 0;
 
     const angle = (305 * Math.PI) / 180;
-    const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX + 320;
+    const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
     const y = 335 * Math.sin(angle) + 320;
-
-    //app.clickedOutsideExpandedBubbleListener
 
     document.getElementById('close-button').style.left = `${x}px`;
     document.getElementById('close-button').style.top = `${y}px`;
 
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
-        document.styleSheets[0].cssRules[
-          index
-        ].style.left = `${config.bubbles.expandedBubbleX}px`;
+        document.styleSheets[0].cssRules[index].style.left = `${
+          config.bubbles.expandedBubbleX - 320
+        }px`;
 
         document.styleSheets[0].cssRules[
           index
