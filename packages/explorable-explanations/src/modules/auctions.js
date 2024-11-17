@@ -314,7 +314,7 @@ auction.draw = async (index) => {
       rippleEffect.setUp();
       // eslint-disable-next-line no-await-in-loop
       await rippleEffect.start(
-        x + config.flow.box.width + 1,
+        x + config.flow.box.width + 2,
         y + config.flow.box.height / 2
       );
     }
