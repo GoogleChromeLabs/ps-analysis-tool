@@ -39,7 +39,7 @@ interface TaxonomyTreeProps {
 
 const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   const divRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [taxonomyArray, setTaxonomyArray] = useState<string[]>([]);
 
   useEffect(() => {
@@ -72,31 +72,32 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
 
   const nodeClickHandler = useCallback((value: string) => {
     const clicker = (id: string, nextId?: string) => {
-      if (nextId && document.getElementById(nextId)) {
-        return;
-      }
+      const shouldClick = Boolean(!(nextId && document.getElementById(nextId)));
 
       const svgGroup = document.getElementById(id);
 
       if (svgGroup) {
-        const clickEvent = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
+        if (shouldClick) {
+          const clickEvent = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+          });
 
-        svgGroup.dispatchEvent(clickEvent);
+          svgGroup.dispatchEvent(clickEvent);
+        }
 
         svgGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
         svgGroup.style.fill = 'orangered';
         svgGroup.style.transition = 'fill 1s';
 
-        timeoutRef.current = setTimeout(() => {
+        const timeout = setTimeout(() => {
           svgGroup.style.fill = '';
           svgGroup.style.fontWeight = '';
           svgGroup.style.transition = '';
         }, 3000);
+
+        timeoutRef.current.push(timeout);
       }
     };
 
@@ -106,20 +107,28 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
       const _id = id.trim().split(' ').join('');
       const nextId = nodeIds[idx + 1]?.trim().split(' ').join('');
 
-      clicker(_id, nextId);
+      if (idx !== 0 && _id === '') {
+        return;
+      }
+
+      clicker(_id || 'tax-tree-root-node', nextId); // if no id is provided it's the root of the tree
     });
   }, []);
 
   useEffect(() => {
+    const timeouts = timeoutRef.current;
+
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (timeouts) {
+        timeouts.forEach((timeout) => {
+          clearTimeout(timeout);
+        });
       }
     };
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative h-full flex flex-col">
       <SearchDropdown values={taxonomyArray} onSelect={nodeClickHandler} />
       <a
         href={githubUrl}
@@ -133,7 +142,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           width="14"
         />
       </a>
-      <div className="p-4" ref={divRef} />
+      <div className="p-4 overflow-auto" ref={divRef} />
     </div>
   );
 };
