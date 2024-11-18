@@ -142,6 +142,11 @@ bubbles.barrageAnimation = async (index) => {
         return;
       }
 
+      if (config.cancelPromise) {
+        resolve();
+        return;
+      }
+
       utils.wipeAndRecreateInterestCanvas();
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
@@ -263,6 +268,11 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const animate = () => {
       if (app.timeline.isPaused) {
         requestAnimationFrame(animate);
+        return;
+      }
+
+      if (config.cancelPromise) {
+        resolve();
         return;
       }
 

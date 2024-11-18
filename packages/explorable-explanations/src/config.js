@@ -88,6 +88,7 @@ const config = {
     colors: {
       visitedBlue: '#1A73E8',
       grey: '#808080',
+      black: '#000000',
     },
   },
   flow: {
@@ -122,7 +123,7 @@ const config = {
     expandedBubbleX: 0,
     expandedBubbleY: 0,
   },
-  isInteractiveMode: true,
+  isInteractiveMode: false,
   mouseX: 0,
   mouseY: 0,
   shouldRespondToClick: true,

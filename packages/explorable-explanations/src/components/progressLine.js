@@ -51,13 +51,20 @@ const ProgressLine = ({
 
   return new Promise((resolve) => {
     const animate = () => {
+      if (config.cancelPromise) {
+        resolve();
+        return;
+      }
+
       if (app.timeline.isPaused) {
         requestAnimationFrame(animate); // Keep the animation loop alive but paused
         return;
       }
 
+      p.push();
       p.stroke(0);
       p.strokeWeight(1);
+      p.pop();
 
       switch (direction) {
         case 'right':

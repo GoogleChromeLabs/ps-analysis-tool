@@ -51,6 +51,10 @@ timeline.init = () => {
     };
 
     app.p.mouseClicked = async () => {
+      if (!config.shouldRespondToClick) {
+        return;
+      }
+
       const { circlePositions } = app.timeline;
       let clickedIndex;
 
@@ -69,10 +73,12 @@ timeline.init = () => {
       });
 
       if (clickedIndex !== undefined) {
+        config.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
         await app.drawFlows(clickedIndex);
         bubbles.clearAndRewriteBubbles();
         bubbles.showMinifiedBubbles();
+        config.shouldRespondToClick = true;
       }
     };
   } else {
@@ -123,7 +129,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     p.pop();
 
     p.push();
-    p.stroke(0, 0, 0);
+    p.stroke(config.timeline.colors.black);
     p.textSize(12);
     p.strokeWeight(0.1);
     p.textFont('ui-sans-serif');

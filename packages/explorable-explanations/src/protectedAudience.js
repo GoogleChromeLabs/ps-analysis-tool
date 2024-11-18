@@ -31,16 +31,26 @@ import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
 import bubbles from './modules/bubbles.js';
 
-app.init = (p) => {
-  app.p = p;
-  app.setup();
+app.setUpTimeLine = () => {
+  app.auction.auctions = [];
+  app.joinInterestGroup.joinings = [];
+  app.timeline.circlePositions = [];
+  app.timeline.circlePublisherIndices = [];
+  app.bubbles.bubbles = [];
+  app.bubbles.minifiedSVG = null;
 
-  app.handleControls();
+  app.setup();
 
   timeline.init();
 
   app.auction.setupAuctions();
   app.joinInterestGroup.setupJoinings();
+};
+app.init = (p) => {
+  app.p = p;
+
+  app.setUpTimeLine();
+
   if (!config.isInteractiveMode) {
     app.play();
   }
@@ -57,12 +67,10 @@ app.setup = () => {
 
 app.interestGroupInit = (p) => {
   app.igp = p;
-  app.setup();
 };
 
 app.userInit = (p) => {
   app.up = p;
-  app.setup();
 };
 
 app.play = (resumed = false) => {
@@ -127,10 +135,14 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 };
 
 app.setupLoop = async () => {
-  while (app.timeline.currentIndex < config.timeline.circles.length) {
+  while (
+    app.timeline.currentIndex < config.timeline.circles.length &&
+    !config.isInteractiveMode
+  ) {
     if (app.timeline.isPaused) {
       continue;
     }
+
     bubbles.showMinifiedBubbles();
     app.timeline.renderUserIcon();
     // eslint-disable-next-line no-await-in-loop
@@ -192,6 +204,21 @@ app.handleControls = () => {
   });
   app.pauseButton.addEventListener('click', app.pause);
   app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
+  app.intreactiveModeCheckBox.addEventListener(
+    'change',
+    app.toggleInteractiveMode
+  );
+};
+
+app.toggleInteractiveMode = () => {
+  config.isInteractiveMode = !config.isInteractiveMode;
+  app.timeline.currentIndex = 0;
+  config.shouldRespondToClick = true;
+  config.bubbles.interestGroupCounts = 0;
+
+  utils.setupInterestGroupCanvas(app.igp);
+  utils.setupUserCanvas(app.up);
+  utils.setupMainCanvas(app.p);
 };
 
 // Write a callback function to get the value of the checkbox.
@@ -199,61 +226,10 @@ app.toggleMultSeller = (event) => {
   app.isMultiSeller = event.target.checked;
 };
 
-app.calculateCanvasDimensions = () => {
-  const {
-    timeline: {
-      circleProps: { verticalSpacing, diameter },
-      position: { x: timelineX, y: timelineY },
-      circles,
-    },
-    rippleEffect: { maxRadius, numRipples },
-    flow: {
-      lineWidth,
-      box: { height: boxHeight, width: boxWidth },
-      smallBox: { height: smallBoxHeight },
-      mediumBox: { width: mediumBoxWidth },
-    },
-  } = config;
-
-  const circleSpace = verticalSpacing + diameter;
-  const rippleRadius = maxRadius * 2 + (numRipples - 1) * 40;
-  const maxHeightUsingBoxAndLine = lineWidth * 2 + boxHeight + smallBoxHeight;
-  const height =
-    timelineY +
-    circleSpace +
-    Math.max(rippleRadius, maxHeightUsingBoxAndLine) +
-    700; // @todo: 700 is a magic number and needs to be calculated based on the content.
-
-  const auctionBoxesWidth = boxWidth + mediumBoxWidth * 2 + lineWidth * 2;
-  const interestGroupWidth = boxWidth;
-  let maxXposition = timelineX + circleSpace * circles.length;
-
-  circles.forEach((circle, index) => {
-    const xPos = timelineX + circleSpace * index;
-    maxXposition = Math.max(
-      maxXposition,
-      xPos +
-        (circle.type === 'publisher' ? auctionBoxesWidth : interestGroupWidth)
-    );
-  });
-  config.canvas.width = maxXposition;
-  config.canvas.height = height;
-  return {
-    height,
-    width: maxXposition,
-  };
-};
-
 // Define the sketch
 const sketch = (p) => {
   p.setup = () => {
-    const { height, width } = app.calculateCanvasDimensions();
-    const canvas = p.createCanvas(width, height);
-    canvas.parent('ps-canvas');
-    canvas.style('z-index', 0);
-    p.background(config.canvas.background);
-    p.textSize(config.canvas.fontSize);
-    app.init(p);
+    utils.setupMainCanvas(p);
   };
 
   p.preload = () => {
@@ -269,70 +245,18 @@ const sketch = (p) => {
 // Define the sketch
 const interestGroupSketch = (p) => {
   p.setup = () => {
-    const { height, width } = app.calculateCanvasDimensions();
-    const overlayCanvas = p.createCanvas(width, height);
-
-    overlayCanvas.parent('interest-canvas');
-    overlayCanvas.style('z-index', 2);
-    p.textSize(config.canvas.fontSize);
-    app.igpCanvas = overlayCanvas;
-
-    config.bubbles.minifiedBubbleX = 35;
-    config.bubbles.minifiedBubbleY = 35;
-
-    config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
-    config.bubbles.expandedBubbleY = 0;
-
-    // 335 is the angle where the close icon should be visible.
-    const angle = (305 * Math.PI) / 180;
-    // 335 is the radius + the size of icon so that icon is attached to the circle.
-    const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
-    const y = 335 * Math.sin(angle) + 320;
-
-    app.closeButton.style.left = `${x}px`;
-    app.closeButton.style.top = `${y}px`;
-
-    document.styleSheets[0].cssRules.forEach((rules, index) => {
-      if (rules.selectorText === '.minified-bubble-container.expanded') {
-        document.styleSheets[0].cssRules[index].style.left = `${
-          config.bubbles.expandedBubbleX - 320
-        }px`;
-
-        document.styleSheets[0].cssRules[
-          index
-        ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
-        document.styleSheets[0].cssRules[
-          index
-        ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
-      }
-
-      if (rules.selectorText === '.minified-bubble-container') {
-        document.styleSheets[0].cssRules[index].style.top = `${
-          config.bubbles.minifiedBubbleY - 25
-        }px`;
-      }
-    });
-
-    app.interestGroupInit(p);
+    utils.setupInterestGroupCanvas(p);
   };
 };
 
 // Define the sketch
 const userSketch = (p) => {
   p.setup = () => {
-    const { height, width } = app.calculateCanvasDimensions();
-    const overlayCanvas = p.createCanvas(width, height);
-
-    overlayCanvas.parent('user-canvas');
-    overlayCanvas.style('z-index', 1);
-    p.textSize(config.canvas.fontSize);
-
-    (async () => {
-      await app.userInit(p);
-    })();
+    utils.setupUserCanvas(p);
   };
 };
 
+app.handleControls();
 // eslint-disable-next-line no-new
 new p5(sketch);
 

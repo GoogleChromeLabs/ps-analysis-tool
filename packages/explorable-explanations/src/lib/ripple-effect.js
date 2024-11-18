@@ -46,6 +46,11 @@ rippleEffect.start = (x = 0, y = 0) => {
     config.rippleEffect.rippled = true;
 
     const animate = (timestamp) => {
+      if (config.cancelPromise) {
+        resolve();
+        return;
+      }
+
       if (app.timeline.isPaused) {
         requestAnimationFrame(animate); // Keep the loop alive but paused
         return;
@@ -104,8 +109,10 @@ rippleEffect.create = (rippleX, rippleY) => {
 
     // Black color with fading opacity
     const opacity = p.map(ripple.radius, 0, maxRadius, 255, 0);
+    p.push();
     p.stroke(0, opacity);
     p.noFill();
+    p.pop();
 
     // Increased spacing between ripples
     const spacing = 40;
