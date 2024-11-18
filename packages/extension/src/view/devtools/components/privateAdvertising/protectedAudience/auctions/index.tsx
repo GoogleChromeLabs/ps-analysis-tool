@@ -17,10 +17,6 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import type {
-  MultiSellerAuction,
-  singleAuctionEvent,
-} from '@google-psat/common';
 import {
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
@@ -29,20 +25,16 @@ import {
 /**
  * Internal dependencies.
  */
-import AuctionTable from './auctionTable';
-import MultiSellerAuctionTable from './mutliSellerAuctionTable';
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import Breakpoints from './breakpoints';
+import AuctionPanel from './panel';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState({});
 
-  const { auctionEvents, isMultiSellerAuction } = useProtectedAudience(
-    ({ state }) => ({
-      auctionEvents: state.auctionEvents ?? {},
-      isMultiSellerAuction: state.isMultiSellerAuction,
-    })
-  );
+  const { auctionEvents } = useProtectedAudience(({ state }) => ({
+    auctionEvents: state.auctionEvents ?? {},
+  }));
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
@@ -88,26 +80,12 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <Breakpoints />
       <div className="overflow-auto flex-1">
-        {!isMultiSellerAuction ? (
-          <AuctionTable
-            auctionEvents={
-              (Object.values(auctionEvents ?? {})?.[0] ??
-                []) as singleAuctionEvent[]
-            }
+        <SidebarProvider data={sidebarData}>
+          <AuctionPanel
+            setSidebarData={setSidebarData}
+            auctionEvents={auctionEvents}
           />
-        ) : (
-          <div className="w-full h-full">
-            <SidebarProvider
-              data={sidebarData}
-              defaultSelectedItemKey={Object.keys(auctionEvents)[0]}
-            >
-              <MultiSellerAuctionTable
-                auctionEvents={auctionEvents as MultiSellerAuction}
-                setSidebarData={setSidebarData}
-              />
-            </SidebarProvider>
-          </div>
-        )}
+        </SidebarProvider>
       </div>
     </div>
   );
