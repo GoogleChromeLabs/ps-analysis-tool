@@ -20,12 +20,14 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { story } from './story';
+import { getStoryMarkup } from './createStoryIframe';
+import { STORY_JSON } from './story';
 
 const WebStories = () => {
+  const storyMarkup = getStoryMarkup(STORY_JSON);
   const domParser = new DOMParser();
-  const doc = domParser.parseFromString(story, 'text/html');
-  let parsedEmbeddedHtml = story;
+  const doc = domParser.parseFromString(storyMarkup, 'text/html');
+  let parsedEmbeddedHtml = storyMarkup;
 
   Array.from(doc.scripts).forEach((script, index) => {
     if (!script.src || !doc.scripts.item(index)) {
@@ -81,29 +83,16 @@ const WebStories = () => {
     }
   });
 
-  Array.from(doc.querySelectorAll('a')).forEach(({ href }) => {
-    if (!href) {
-      return;
-    }
-
-    switch (href) {
-      case 'https://wsdemos.uc.r.appspot.com/animal-poll':
-        parsedEmbeddedHtml = parsedEmbeddedHtml.replace(
-          'https://wsdemos.uc.r.appspot.com/animal-poll',
-          chrome.runtime.getURL('assets/index.html')
-        );
-        break;
-      default:
-        break;
-    }
-  });
-
   return (
-    <iframe
-      srcDoc={parsedEmbeddedHtml}
-      style={{ width: '100%', height: '100vh', border: 'none' }}
-      title="Embedded AMP Content"
-    />
+    <div
+      data-testid="web-stories-content"
+      className="h-full w-full text-raisin-black dark:text-bright-gray px-2 overflow-y-auto"
+    >
+      <iframe
+        srcDoc={parsedEmbeddedHtml}
+        style={{ width: '100%', height: '100vh', border: 'none' }}
+      />
+    </div>
   );
 };
 

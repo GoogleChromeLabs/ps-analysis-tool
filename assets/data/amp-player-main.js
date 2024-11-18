@@ -196,7 +196,6 @@ export function initializeCards() {
       document.body.classList.toggle('lightbox-open');
       lightboxEl.classList.remove('closed');
       card.classList.add('hidden');
-
       resetStyles();
       player.play();
     });

@@ -26,11 +26,13 @@ import ContentPanel from './contentPanel';
 
 const WebStories = () => {
   return (
-    <LandingPage
-      title="Explorable Explanations"
-      contentPanel={<ContentPanel />}
-      showQuickLinks={false}
-    />
+    <div className="h-full w-full">
+      <LandingPage
+        title="Explorable Explanations"
+        contentPanel={<ContentPanel />}
+        showQuickLinks={false}
+      />
+    </div>
   );
 };
 
