@@ -160,24 +160,30 @@ app.handleControls = () => {
     'minified-bubble-container'
   );
 
-  document
-    .getElementById('bubble-container-div')
-    .addEventListener('click', app.minifiedBubbleClickListener);
-
-  document
-    .getElementById('close-button')
-    .addEventListener('click', app.minimiseBubbleActions);
-
-  document
-    .getElementById('open-button')
-    .addEventListener('click', (event) =>
-      app.minifiedBubbleClickListener(event, true)
+  if (!config.isInteractiveMode) {
+    app.minifiedBubbleContainer.addEventListener(
+      'click',
+      app.minifiedBubbleClickListener
     );
 
-  app.minifiedBubbleContainer.addEventListener(
-    'click',
-    app.minifiedBubbleClickListener
-  );
+    document
+      .getElementById('bubble-container-div')
+      .addEventListener('click', app.minifiedBubbleClickListener);
+
+    document
+      .getElementById('close-button')
+      .addEventListener('click', app.minimiseBubbleActions);
+
+    document
+      .getElementById('open-button')
+      .addEventListener('click', (event) =>
+        app.minifiedBubbleClickListener(event, true)
+      );
+  } else {
+    document.getElementById('open-button').style.cursor = 'default';
+    app.minifiedBubbleContainer.style.cursor = 'default';
+  }
+
   app.playButton.addEventListener('click', () => {
     app.play(true);
   });

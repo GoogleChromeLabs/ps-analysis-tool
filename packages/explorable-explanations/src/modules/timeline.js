@@ -19,6 +19,7 @@
 import config from '../config';
 import app from '../app';
 import utils from '../lib/utils';
+import bubbles from './bubbles';
 
 /**
  * @module Timeline
@@ -38,14 +39,13 @@ timeline.init = () => {
   });
 
   if (config.isInteractiveMode) {
+    bubbles.showMinifiedBubbles();
+
     app.p.mouseMoved = (event) => {
       const { x, y } = event;
 
       config.mouseX = x;
       config.mouseY = y;
-      if (config.shouldRespondToClick) {
-        utils.wipeAndRecreateInterestCanvas();
-      }
       utils.wipeAndRecreateUserCanvas();
       timeline.renderUserIcon(x, y);
     };
@@ -68,10 +68,11 @@ timeline.init = () => {
         }
       });
 
-      if (clickedIndex !== undefined && config.shouldRespondToClick) {
-        config.shouldRespondToClick = false;
+      if (clickedIndex !== undefined) {
+        app.timeline.currentIndex = clickedIndex;
         await app.drawFlows(clickedIndex);
-        config.shouldRespondToClick = true;
+        bubbles.clearAndRewriteBubbles();
+        bubbles.showMinifiedBubbles();
       }
     };
   } else {
@@ -203,7 +204,9 @@ timeline.renderUserIcon = () => {
   }
 
   const user = config.timeline.user;
-  timeline.eraseAndRedraw();
+  if (!config.isInteractiveMode) {
+    timeline.eraseAndRedraw();
+  }
   utils.wipeAndRecreateInterestCanvas();
 
   app.up.image(

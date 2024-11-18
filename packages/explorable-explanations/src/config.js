@@ -122,7 +122,7 @@ const config = {
     expandedBubbleX: 0,
     expandedBubbleY: 0,
   },
-  isInteractiveMode: false,
+  isInteractiveMode: true,
   mouseX: 0,
   mouseY: 0,
   shouldRespondToClick: true,

@@ -52,7 +52,6 @@ bubbles.init = () => {
 bubbles.generateBubbles = (recalculate = false) => {
   const interestGroupsToBeAdded =
     config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
-
   if (!recalculate) {
     for (let index = 0; index < interestGroupsToBeAdded; index++) {
       app.bubbles.positions.push({
@@ -240,7 +239,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const flowBoxHeight = config.flow.box.height;
     const speed = 1;
     const target = igp.createVector(midPointX, midPointY);
-
     const { color: currentColor } = app.bubbles.positions[i];
     const color = currentColor;
 
@@ -471,12 +469,21 @@ bubbles.bubbleChart = (
     .join('a')
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
+  const eventHandler = (event) => {
+    // eslint-disable-next-line no-console
+    console.log(event);
+    event.stopPropagation();
+  };
+
   leaf
     .append('circle')
     .attr('stroke', stroke)
     .attr('stroke-width', strokeWidth)
     .attr('stroke-opacity', strokeOpacity)
-    .attr('class', 'svg overflowing-text circle-svg')
+    .attr(
+      'class',
+      config.isInteractiveMode ? '' : 'svg overflowing-text circle-svg'
+    )
     .attr(
       'fill',
       groups
@@ -489,13 +496,9 @@ bubbles.bubbleChart = (
     )
     .on(
       'click',
-      !config.bubbles.isExpanded
+      config.isInteractiveMode && !config.bubbles.isExpanded
         ? null
-        : (event) => {
-            // eslint-disable-next-line no-console
-            console.log(event);
-            event.stopPropagation();
-          }
+        : eventHandler
     )
     .attr('fill-opacity', fillOpacity)
     .attr('r', (d) => {
@@ -510,7 +513,7 @@ bubbles.bubbleChart = (
       .append('clipPath')
       .attr('id', (d) => `${uid}-clip-${d.data}`)
       .append('circle')
-      .attr('class', 'svg overflowing-text')
+      .attr('class', config.isInteractiveMode ? '' : 'svg overflowing-text')
       .attr('r', (d) => d.r);
 
     if (config.bubbles.isExpanded) {
@@ -524,7 +527,7 @@ bubbles.bubbleChart = (
           'clip-path',
           (d) => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`
         )
-        .attr('class', 'svg text-class')
+        .attr('class', config.isInteractiveMode ? '' : 'svg text-class')
         .selectAll('tspan')
         .data((d) => `${labels[d.data]}`.split(/\n/g))
         .join('tspan')
@@ -555,7 +558,10 @@ bubbles.calculateTotalBubblesForAnimation = (index) => {
   let bubblesCount = 0;
 
   config.timeline.circles.forEach((circle, currIndex) => {
-    if (currIndex < index) {
+    if (
+      (currIndex < index && !config.isInteractiveMode) ||
+      (currIndex <= index && config.isInteractiveMode)
+    ) {
       bubblesCount += circle.igGroupsCount ?? 0;
     }
   });
