@@ -16,6 +16,7 @@
 const config = {
   canvas: {
     width: 700,
+    height: 500,
     background: 245,
     fontSize: 12,
   },
@@ -35,26 +36,38 @@ const config = {
         type: 'advertiser',
         website: 'adv1.com',
         datetime: '2023-10-01 10:00',
-        igGroupsCount: 1,
+        igGroupsCount: 5,
+        interestGroups: ['shoes', 'heels', 'phones', 'laptops', 'blankets'],
       },
       {
         type: 'advertiser',
         website: 'adv2.com',
         datetime: '2023-10-01 11:00',
-        igGroupsCount: 2,
+        igGroupsCount: 7,
+        interestGroups: [
+          'IGG22012',
+          'adidas.co.in',
+          'stilletos',
+          'shorts',
+          'slippers',
+          'spectacles',
+          'accessories',
+        ],
       },
       { type: 'publisher', website: 'pub1.com', datetime: '2023-10-01 12:00' },
       {
         type: 'advertiser',
         website: 'adv3.com',
         datetime: '2023-10-01 13:00',
-        igGroupsCount: 1,
+        igGroupsCount: 2,
+        interestGroups: ['bike', 'car'],
       },
       {
         type: 'advertiser',
         website: 'adv5.com',
         datetime: '2023-10-01 13:02',
-        igGroupsCount: 1,
+        igGroupsCount: 3,
+        interestGroups: ['football', 'basketball', 'baseball'],
       },
       { type: 'publisher', website: 'pub2.com', datetime: '2023-10-01 14:00' },
       {
@@ -62,12 +75,14 @@ const config = {
         website: 'adv6.com',
         datetime: '2023-10-01 14:01',
         igGroupsCount: 3,
+        interestGroups: ['movies', 'series', 'books'],
       },
       {
         type: 'advertiser',
         website: 'adv7.com',
         datetime: '2023-10-01 15:00',
-        igGroupsCount: 2,
+        igGroupsCount: 3,
+        interestGroups: ['IGG220', 'IGG201', 'IG225'],
       },
     ],
     colors: {
@@ -97,6 +112,20 @@ const config = {
     speed: 1,
     rippled: false,
   },
+  bubbles: {
+    minifiedBubbleX: 0,
+    minifiedBubbleY: 0,
+    isExpanded: false,
+    expandedCircleDiameter: 640,
+    minifiedCircleDiameter: 50,
+    interestGroupCounts: 0,
+    expandedBubbleX: 0,
+    expandedBubbleY: 0,
+  },
+  isInteractiveMode: false,
+  mouseX: 0,
+  mouseY: 0,
+  shouldRespondToClick: true,
 };
 
 export default config;

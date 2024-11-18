@@ -32,6 +32,11 @@ const app = {
   flow: {
     intervals: {},
   },
+  bubbles: {
+    positions: [],
+    minifiedSVG: null,
+    expandedSVG: null,
+  },
   utils: {},
   p: null,
   igp: null,

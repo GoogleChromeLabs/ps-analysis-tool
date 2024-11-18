@@ -11,6 +11,12 @@
             padding: 0;
         }
 
+        .overflowing-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .hidden {
             display: none;
         }
@@ -26,14 +32,14 @@
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         #user-canvas {
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         button {
@@ -47,10 +53,106 @@
             width: 20px;
             height: 20px;
         }
+
         #canvas-container {
             width: 100%;
             height: 100%;
             position: relative;
+        }
+
+        #bubble-container {
+            position: absolute;
+            pointer-events: none;
+            top: 0px;
+            left: 0px;
+        }
+
+        .minified-bubble-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid #808080;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+        }
+
+        .circle-svg:hover:active {
+            cursor: pointer;
+        }
+
+        .text-class {
+            pointer-events: none;
+        }
+
+        .svg {
+            cursor: pointer;
+        }
+
+        .circle-svg {
+            transition: transform .2s;
+        }
+
+        .circle-svg:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        text {
+            cursor: pointer;
+        }
+
+        .minified-bubble-container.expanded {
+            position: absolute;
+            display: block;
+            top: 0px;
+            height: 500px;
+            width: 500px;
+            border-radius: 50%;
+            border: 1px solid #808080;
+            backdrop-filter: blur(10px);
+        }
+
+        .bubble-container {
+            position: absolute;
+            pointer-events: auto;
+        }
+
+        .bubble-container.expanded {
+            backdrop-filter: blur(1px);
+            z-index: 4;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #close-button {
+            position: absolute;
+            top: 10px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #open-button {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #count-display {
+            font-size: 16px;
+            position: absolute;
+            margin: 0px;
+            backdrop-filter: blur(4px);
+            font-weight: bolder;
+            border-radius: 50%;
         }
 
         .play-pause-button {
@@ -89,6 +191,23 @@
             </div>
         </div>
         <div id="interest-canvas"></div>
+        <div id="bubble-container-div" class="bubble-container">
+            <div id="minified-bubble-container" class="minified-bubble-container">
+                <span id="count-display"></span>
+            </div>
+            <div id="open-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#808080">
+                    <path d="M200-200v-240h80v160h160v80H200Zm480-320v-160H520v-80h240v240h-80Z" />
+                </svg>
+            </div>
+            <div id="close-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="currentColor">
+                    <path d="M440-440v240h-80v-160H200v-80h240Zm160-320v160h160v80H520v-240h80Z" />
+                </svg>
+            </div>
+        </div>
         <div id="user-canvas"></div>
     </main>
 
