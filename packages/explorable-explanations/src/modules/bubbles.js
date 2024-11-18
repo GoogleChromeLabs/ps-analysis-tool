@@ -67,11 +67,13 @@ bubbles.generateBubbles = (recalculate = false) => {
         color: '',
       });
     }
+
     const groups = d3.map(app.bubbles.positions, (d) => d.group);
     const color = d3.scaleOrdinal(groups, d3.schemeTableau10);
-    app.bubbles.positions = app.bubbles.positions.map((_data, i) => {
+
+    app.bubbles.positions = app.bubbles.positions.map((data, i) => {
       return {
-        ..._data,
+        ...data,
         color: color(groups[i]),
       };
     });
@@ -318,6 +320,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
     requestAnimationFrame(animate);
   });
 };
+
 bubbles.showExpandedBubbles = () => {
   bubbles.clearAndRewriteBubbles();
   bubbles.generateBubbles(true);
@@ -390,6 +393,7 @@ bubbles.showMinifiedBubbles = () => {
 
   app.minifiedBubbleContainer.classList.toggle('expanded', false);
 };
+
 bubbles.bubbleChart = (
   data,
   {
