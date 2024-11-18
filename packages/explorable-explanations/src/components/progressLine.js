@@ -31,7 +31,7 @@ const ProgressLine = ({
 }) => {
   const width = config.flow.lineWidth - ARROW_SIZE;
   const height = config.flow.lineHeight - ARROW_SIZE;
-  const incrementBy = 1; // @todo Use it to control speed.
+  const incrementBy = 1; // Adjust to control speed
   const p = app.p;
 
   x1 = typeof x1 === 'function' ? x1() : x1;
@@ -50,16 +50,21 @@ const ProgressLine = ({
   };
 
   return new Promise((resolve) => {
-    app.flow.intervals['progressline'] = setInterval(() => {
+    const animate = () => {
+      if (app.timeline.isPaused) {
+        requestAnimationFrame(animate); // Keep the animation loop alive but paused
+        return;
+      }
+
+      p.stroke(0);
+      p.strokeWeight(1);
+
       switch (direction) {
         case 'right':
           currentX += incrementBy;
           if (currentX - x1 > width) {
-            clearInterval(app.flow.intervals['progressline']);
-            resolve({
-              x: currentX,
-              y: y2,
-            });
+            resolve({ x: currentX, y: y2 });
+            return;
           }
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1, direction);
@@ -68,12 +73,9 @@ const ProgressLine = ({
         case 'left':
           targetX -= incrementBy;
           if (x2 - targetX > width) {
-            clearInterval(app.flow.intervals['progressline']);
             utils.drawText(text, targetX + width / 2, y1 + height / 2);
-            resolve({
-              x: targetX,
-              y: y1 + 10,
-            });
+            resolve({ x: targetX, y: y1 + 10 });
+            return;
           }
           p.line(x2, y2 + 10, targetX, y1 + 10);
           drawArrow(targetX, y1 + 4, direction);
@@ -82,16 +84,13 @@ const ProgressLine = ({
         case 'down':
           currentY += incrementBy;
           if (currentY - y1 > height) {
-            clearInterval(app.flow.intervals['progressline']);
             utils.drawText(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
               y1 + height / 2
             );
-            resolve({
-              x: x2,
-              y: currentY,
-            });
+            resolve({ x: x2, y: currentY });
+            return;
           }
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);
@@ -100,26 +99,28 @@ const ProgressLine = ({
         case 'up':
           currentY -= incrementBy;
           if (y1 - currentY > height) {
-            clearInterval(app.flow.intervals['progressline']);
             utils.drawText(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),
               y1 - height / 2
             );
-            resolve({
-              x: x2,
-              y: currentY,
-            });
+            resolve({ x: x2, y: currentY });
+            return;
           }
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);
           break;
 
         default:
-          clearInterval(app.flow.intervals['progressline']);
           throw new Error(`Invalid direction: ${direction}`);
       }
-    }, 10);
+
+      // Continue the animation loop
+      requestAnimationFrame(animate);
+    };
+
+    // Start the animation loop
+    requestAnimationFrame(animate);
   });
 };
 

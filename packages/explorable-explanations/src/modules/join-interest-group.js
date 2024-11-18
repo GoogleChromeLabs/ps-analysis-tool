@@ -20,8 +20,8 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
-import timeline from './timeline';
 import { Box, ProgressLine } from '../components';
+import bubbles from './bubbles';
 
 /**
  * @module joinInterestGroup
@@ -168,11 +168,20 @@ joinInterestGroup.draw = async (index) => {
 
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
+  bubbles.generateBubbles();
 
-  await utils.delay(2000);
+  await bubbles.reverseBarrageAnimation(index);
+
+  if (config.bubbles.isExpanded) {
+    bubbles.showExpandedBubbles();
+  } else {
+    bubbles.showMinifiedBubbles();
+  }
+
+  config.bubbles.interestGroupCounts +=
+    config.timeline.circles[index]?.igGroupsCount ?? 0;
+
   flow.clearBelowTimelineCircles();
-
-  timeline.drawSmallCircles(index);
 };
 
 export default joinInterestGroup;

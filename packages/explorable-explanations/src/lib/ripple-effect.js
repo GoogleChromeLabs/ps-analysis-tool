@@ -35,27 +35,40 @@ rippleEffect.setUp = () => {
 };
 
 rippleEffect.start = (x = 0, y = 0) => {
-  // eslint-disable-next-line consistent-return
   return new Promise((resolve) => {
     if (config.rippleEffect.rippled) {
       resolve();
-      return false;
+      return;
     }
 
-    let totalTime = 0;
-    const runInternval = 20;
-
+    let startTime = null; // Tracks the start time of the animation
+    const duration = config.rippleEffect.time; // Total animation time
     config.rippleEffect.rippled = true;
 
-    const interval = setInterval(() => {
-      if (totalTime > config.rippleEffect.time) {
-        clearInterval(interval);
+    const animate = (timestamp) => {
+      if (app.timeline.isPaused) {
+        requestAnimationFrame(animate); // Keep the loop alive but paused
+        return;
+      }
+
+      if (!startTime) {
+        startTime = timestamp;
+      } // Set the initial timestamp
+      const elapsed = timestamp - startTime;
+
+      if (elapsed > duration) {
         resolve();
+        return;
       }
 
       rippleEffect.create(x, y);
-      totalTime = runInternval + totalTime;
-    }, runInternval);
+
+      // Continue the animation loop
+      requestAnimationFrame(animate);
+    };
+
+    // Start the animation loop
+    requestAnimationFrame(animate);
   });
 };
 
@@ -71,9 +84,9 @@ rippleEffect.create = (rippleX, rippleY) => {
   p.fill(config.canvas.background);
   p.noStroke();
   p.rect(
-    rippleX - clearWidth,
-    rippleY + clearHeight / 2 - 201,
-    clearWidth * 2,
+    rippleX - 1,
+    rippleY - clearHeight / 2 - 200,
+    clearWidth,
     clearHeight + 400
   );
   let allComplete = true;
@@ -101,8 +114,8 @@ rippleEffect.create = (rippleX, rippleY) => {
       0,
       (ripple.radius + i * spacing) * 2,
       (ripple.radius + i * spacing) * 2,
-      p.TWO_PI,
-      p.PI
+      -p.HALF_PI,
+      p.HALF_PI
     );
   }
 

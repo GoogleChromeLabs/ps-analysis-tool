@@ -29,6 +29,7 @@ import utils from './lib/utils.js';
 import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
+import bubbles from './modules/bubbles.js';
 
 app.init = (p) => {
   app.p = p;
@@ -40,8 +41,9 @@ app.init = (p) => {
 
   app.auction.setupAuctions();
   app.joinInterestGroup.setupJoinings();
-
-  app.play();
+  if (!config.isInteractiveMode) {
+    app.play();
+  }
 };
 
 app.setup = () => {
@@ -50,6 +52,7 @@ app.setup = () => {
   app.utils = { ...app.utils, ...utils };
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
+  app.bubbles = { ...app.bubbles, ...bubbles };
 };
 
 app.interestGroupInit = (p) => {
@@ -62,11 +65,13 @@ app.userInit = (p) => {
   app.setup();
 };
 
-app.play = () => {
+app.play = (resumed = false) => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
-  app.setupLoop();
+  if (!resumed) {
+    app.setupLoop();
+  }
 };
 
 app.pause = () => {
@@ -75,11 +80,58 @@ app.pause = () => {
   app.timeline.isPaused = true;
 };
 
-app.setupLoop = async () => {
-  while (
-    !app.timeline.isPaused &&
-    app.timeline.currentIndex < config.timeline.circles.length
+app.minimiseBubbleActions = () => {
+  bubbles.generateBubbles(true);
+  config.bubbles.isExpanded = false;
+  bubbles.showMinifiedBubbles();
+  app.play(true);
+};
+
+app.expandBubbleActions = () => {
+  config.bubbles.isExpanded = true;
+  bubbles.showExpandedBubbles();
+  bubbles.generateBubbles(true);
+  app.pause();
+};
+app.minifiedBubbleClickListener = (event, expandOverride) => {
+  const clickedInsideExpandedCircle = utils.isInsideCircle(
+    config.bubbles.expandedBubbleX,
+    config.bubbles.expandedBubbleY,
+    event.x,
+    event.y,
+    config.bubbles.expandedCircleDiameter / 2
+  );
+
+  const clickedInsideMinifiedCircle = utils.isInsideCircle(
+    config.bubbles.minifiedBubbleX,
+    config.bubbles.minifiedBubbleY,
+    event.x,
+    event.y,
+    config.bubbles.minifiedCircleDiameter / 2
+  );
+
+  if (
+    (!config.bubbles.isExpanded && clickedInsideMinifiedCircle) ||
+    expandOverride
   ) {
+    app.expandBubbleActions();
+    event.stopPropagation();
+    return;
+  }
+
+  if (config.bubbles.isExpanded && !clickedInsideExpandedCircle) {
+    app.minimiseBubbleActions();
+    event.stopPropagation();
+    return;
+  }
+};
+
+app.setupLoop = async () => {
+  while (app.timeline.currentIndex < config.timeline.circles.length) {
+    if (app.timeline.isPaused) {
+      continue;
+    }
+    bubbles.showMinifiedBubbles();
     app.timeline.renderUserIcon();
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);
@@ -93,12 +145,42 @@ app.drawFlows = async (index) => {
   await app.auction.draw(index);
 };
 
+app.minifiedBubbleKeyPressListener = (event) => {
+  if (event.key === 'Escape' && config.bubbles.isExpanded) {
+    app.minimiseBubbleActions();
+  }
+};
+
 app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
   app.multSellerCheckBox = document.getElementById('multi-seller');
+  document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
+  app.minifiedBubbleContainer = document.getElementById(
+    'minified-bubble-container'
+  );
 
-  app.playButton.addEventListener('click', app.play);
+  document
+    .getElementById('bubble-container-div')
+    .addEventListener('click', app.minifiedBubbleClickListener);
+
+  document
+    .getElementById('close-button')
+    .addEventListener('click', app.minimiseBubbleActions);
+
+  document
+    .getElementById('open-button')
+    .addEventListener('click', (event) =>
+      app.minifiedBubbleClickListener(event, true)
+    );
+
+  app.minifiedBubbleContainer.addEventListener(
+    'click',
+    app.minifiedBubbleClickListener
+  );
+  app.playButton.addEventListener('click', () => {
+    app.play(true);
+  });
   app.pauseButton.addEventListener('click', app.pause);
   app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
 };
@@ -145,7 +227,8 @@ app.calculateCanvasDimensions = () => {
         (circle.type === 'publisher' ? auctionBoxesWidth : interestGroupWidth)
     );
   });
-
+  config.canvas.width = maxXposition;
+  config.canvas.height = height;
   return {
     height,
     width: maxXposition,
@@ -161,10 +244,7 @@ const sketch = (p) => {
     canvas.style('z-index', 0);
     p.background(config.canvas.background);
     p.textSize(config.canvas.fontSize);
-
-    (async () => {
-      await app.init(p);
-    })();
+    app.init(p);
   };
 
   p.preload = () => {
@@ -186,10 +266,46 @@ const interestGroupSketch = (p) => {
     overlayCanvas.parent('interest-canvas');
     overlayCanvas.style('z-index', 2);
     p.textSize(config.canvas.fontSize);
+    app.igpCanvas = overlayCanvas;
 
-    (async () => {
-      await app.interestGroupInit(p);
-    })();
+    config.bubbles.minifiedBubbleX = 35;
+    config.bubbles.minifiedBubbleY = 35;
+
+    config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
+    config.bubbles.expandedBubbleY = 0;
+
+    // 335 is the angle where the close icon should be visible.
+    const angle = (305 * Math.PI) / 180;
+    // 335 is the radius + the size of icon so that icon is attached to the circle.
+    const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
+    const y = 335 * Math.sin(angle) + 320;
+
+    document.getElementById('close-button').style.left = `${x}px`;
+    document.getElementById('close-button').style.top = `${y}px`;
+
+    document.styleSheets[0].cssRules.forEach((rules, index) => {
+      if (rules.selectorText === '.minified-bubble-container.expanded') {
+        document.styleSheets[0].cssRules[index].style.left = `${
+          config.bubbles.expandedBubbleX - 320
+        }px`;
+
+        document.styleSheets[0].cssRules[
+          index
+        ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
+        document.styleSheets[0].cssRules[
+          index
+        ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
+      }
+
+      if (rules.selectorText === '.minified-bubble-container') {
+        document.styleSheets[0].cssRules[index].style.top = `${
+          config.bubbles.minifiedBubbleY - 25
+        }px`;
+      }
+    });
+
+    app.countDisplay = document.getElementById('count-display');
+    app.interestGroupInit(p);
   };
 };
 

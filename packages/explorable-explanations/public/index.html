@@ -5,65 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protected Audience</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #ps-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: auto;
-        }
-
-        #interest-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none; 
-        }
-
-        #user-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none; 
-        }
-
-        button {
-            cursor: pointer;
-            border: none;
-            background-color: transparent;
-            padding: 0;
-        }
-
-        button img {
-            width: 20px;
-            height: 20px;
-        }
-        #canvas-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .play-pause-button {
-            margin-right: 10px;
-        }
-
-        .controls {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            display: flex;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"/>
 </head>
 
 <body>
@@ -89,6 +31,23 @@
             </div>
         </div>
         <div id="interest-canvas"></div>
+        <div id="bubble-container-div" class="bubble-container">
+            <div id="minified-bubble-container" class="minified-bubble-container">
+                <span id="count-display"></span>
+            </div>
+            <div id="open-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#808080">
+                    <path d="M200-200v-240h80v160h160v80H200Zm480-320v-160H520v-80h240v240h-80Z" />
+                </svg>
+            </div>
+            <div id="close-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="currentColor">
+                    <path d="M440-440v240h-80v-160H200v-80h240Zm160-320v160h160v80H520v-240h80Z" />
+                </svg>
+            </div>
+        </div>
         <div id="user-canvas"></div>
     </main>
 

@@ -67,7 +67,7 @@ utils.drawArrow = (size, x, y, direction = 'right') => {
   }
 
   // Clear previous one.
-  utils.triangle(size + 1, _x, _y, direction, config.canvas.background);
+  utils.triangle(size + 2, _x, _y, direction, config.canvas.background);
 
   utils.triangle(size, x, y, direction, 'black');
 };
@@ -153,20 +153,7 @@ utils.wipeAndRecreateUserCanvas = () => {
 };
 
 utils.isInsideCircle = (x, y, x0, y0, r) => {
-  const distance = Math.sqrt((x - x0) ** 2 + (y - y0) ** 2);
-  return distance <= r;
-};
-
-utils.drawPreviousCircles = () => {
-  const p = app.igp;
-  const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
-  app.timeline.smallCirclePositions.forEach((data) => {
-    p.push();
-    p.noStroke();
-    p.fill(data.color);
-    p.circle(data.x, data.y, smallCircleDiameter);
-    p.pop();
-  });
+  return app.p.dist(x, y, x0, y0) <= r;
 };
 
 utils.drawText = (text, x, y) => {
