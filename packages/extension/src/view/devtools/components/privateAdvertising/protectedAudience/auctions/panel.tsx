@@ -73,6 +73,7 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
                   },
                 },
                 children: {},
+                dropdownOpen: false,
               };
 
               return acc;
@@ -96,12 +97,17 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
               },
             },
             children,
+            dropdownOpen: false,
           };
         });
 
         data[adUnit] = {
           title: adUnit,
+          panel: {
+            Element: undefined,
+          },
           children: adUnitChildren,
+          dropdownOpen: true,
         };
       });
 

@@ -97,6 +97,10 @@ const Provider = ({ children }: PropsWithChildren) => {
               events?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
             ).divId;
 
+            if (!adUnitCode) {
+              return;
+            }
+
             const time = new Date(events?.[0]?.time * 1000).toUTCString();
 
             reshapedAuctionEvents[adUnitCode] = {
@@ -134,9 +138,13 @@ const Provider = ({ children }: PropsWithChildren) => {
 
               adUnit = JSON.parse(
                 // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-                event?.[1]?.auctionConfig?.sellerSignals?.value
+                event?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
               ).divId;
             });
+
+            if (!adUnit) {
+              return;
+            }
 
             const time = new Date(
               events?.['0']?.[0]?.time * 1000
