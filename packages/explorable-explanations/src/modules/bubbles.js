@@ -24,13 +24,31 @@ import * as d3 from 'd3';
  */
 import app from '../app';
 import config from '../config';
-import utils from './utils';
+import utils from '../lib/utils';
 
+/**
+ * @module bubbles
+ * Handles interest group bubbles.
+ */
 const bubbles = {};
 
+/**
+ * Initializes the bubbles module by setting up the initial state.
+ *
+ * Resets the positions of the interest group bubbles in the `app.bubbles` object.
+ */
 bubbles.init = () => {
   app.bubbles.positions = [];
 };
+
+/**
+ * Generates interest group bubbles for the current timeline index.
+ *
+ * Populates the `app.bubbles.positions` array with data for each bubble, including its
+ * ID, value, group, and color. If recalculation is not needed, it maps the data
+ * to unique colors using D3.
+ * @param {boolean} [recalculate] - Whether to recalculate and regenerate all bubbles.
+ */
 bubbles.generateBubbles = (recalculate = false) => {
   const interestGroupsToBeAdded =
     config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
@@ -60,6 +78,15 @@ bubbles.generateBubbles = (recalculate = false) => {
   }
 };
 
+/**
+ * Animates the movement of interest group bubbles to their target positions.
+ *
+ * Simulates a "barrage" animation where bubbles move from their initial positions
+ * (minified or expanded) to specified target locations. The animation respects the
+ * `isPaused` state of the timeline.
+ * @param {number} index - The index of the timeline for which the animation is being run.
+ * @returns {Promise<void>} Resolves when all bubbles have reached their target positions.
+ */
 bubbles.barrageAnimation = async (index) => {
   const p = app.igp;
   const {
@@ -168,6 +195,15 @@ bubbles.barrageAnimation = async (index) => {
   utils.wipeAndRecreateInterestCanvas();
 };
 
+/**
+ * Animates the movement of interest group bubbles back to their initial positions.
+ *
+ * Simulates a "reverse barrage" animation where bubbles move from their target positions
+ * to a centralized location (minified or expanded). The animation respects the `isPaused`
+ * state of the timeline.
+ * @param {number} index - The index of the timeline from which the bubbles are being reversed.
+ * @returns {Promise<void>} Resolves when all bubbles have returned to their original positions.
+ */
 bubbles.reverseBarrageAnimation = async (index) => {
   const dspTags = app.joinInterestGroup.joinings[index][1];
   const igp = app.igp;

@@ -21,7 +21,7 @@ import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine } from '../components';
-import bubbles from '../lib/bubbles';
+import bubbles from './bubbles';
 
 /**
  * @module joinInterestGroup

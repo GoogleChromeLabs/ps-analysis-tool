@@ -22,7 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import rippleEffect from '../lib/ripple-effect';
 import { Box, ProgressLine, Branches } from '../components';
-import bubbles from '../lib/bubbles';
+import bubbles from './bubbles';
 
 /**
  * @module Auction

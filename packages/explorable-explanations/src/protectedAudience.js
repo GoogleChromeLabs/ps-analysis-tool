@@ -29,7 +29,7 @@ import utils from './lib/utils.js';
 import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
-import bubbles from './lib/bubbles.js';
+import bubbles from './modules/bubbles.js';
 
 app.init = (p) => {
   app.p = p;
