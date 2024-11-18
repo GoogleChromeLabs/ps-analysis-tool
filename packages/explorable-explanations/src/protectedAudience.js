@@ -38,6 +38,7 @@ app.setUpTimeLine = () => {
   app.timeline.circlePublisherIndices = [];
   app.bubbles.bubbles = [];
   app.bubbles.minifiedSVG = null;
+  app.timeline.currentIndex = 0;
 
   app.setup();
 
@@ -46,13 +47,13 @@ app.setUpTimeLine = () => {
   app.auction.setupAuctions();
   app.joinInterestGroup.setupJoinings();
 };
-app.init = (p) => {
+app.init = async (p) => {
   app.p = p;
 
   app.setUpTimeLine();
 
   if (!config.isInteractiveMode) {
-    app.play();
+    await app.play();
   }
 };
 
@@ -73,12 +74,12 @@ app.userInit = (p) => {
   app.up = p;
 };
 
-app.play = (resumed = false) => {
+app.play = async (resumed = false) => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
   if (!resumed) {
-    app.setupLoop();
+    await app.setupLoop();
   }
 };
 
@@ -139,6 +140,10 @@ app.setupLoop = async () => {
     app.timeline.currentIndex < config.timeline.circles.length &&
     !config.isInteractiveMode
   ) {
+    if (window.cancelPromise) {
+      return;
+    }
+
     if (app.timeline.isPaused) {
       continue;
     }
@@ -147,6 +152,7 @@ app.setupLoop = async () => {
     app.timeline.renderUserIcon();
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);
+
     app.timeline.currentIndex++;
   }
   app.timeline.eraseAndRedraw();
@@ -211,6 +217,7 @@ app.handleControls = () => {
 };
 
 app.toggleInteractiveMode = () => {
+  window.cancelPromise = true;
   config.isInteractiveMode = !config.isInteractiveMode;
   app.timeline.currentIndex = 0;
   config.shouldRespondToClick = true;
@@ -219,6 +226,9 @@ app.toggleInteractiveMode = () => {
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p);
+
+  window.cancelPromise = false;
+  app.timeline.eraseAndRedraw();
 };
 
 // Write a callback function to get the value of the checkbox.

@@ -300,7 +300,7 @@ auction.draw = async (index) => {
   }
 
   for (const step of steps) {
-    if (config.cancelPromise) {
+    if (window.cancelPromise) {
       return;
     }
 

@@ -142,7 +142,7 @@ bubbles.barrageAnimation = async (index) => {
         return;
       }
 
-      if (config.cancelPromise) {
+      if (window.cancelPromise) {
         resolve();
         return;
       }
@@ -271,7 +271,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
         return;
       }
 
-      if (config.cancelPromise) {
+      if (window.cancelPromise) {
         resolve();
         return;
       }

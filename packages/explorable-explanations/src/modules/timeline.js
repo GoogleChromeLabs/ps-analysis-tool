@@ -156,7 +156,7 @@ timeline.drawTimelineLine = () => {
   if (app.timeline.currentIndex === 0) {
     p.push();
     p.stroke(colors.grey);
-    app.p.line(
+    p.line(
       0,
       yPositonForLine,
       config.timeline.position.x +
@@ -225,6 +225,10 @@ timeline.renderUserIcon = () => {
 };
 
 timeline.eraseAndRedraw = () => {
+  if (config.isInteractiveMode) {
+    return;
+  }
+
   const currentIndex = app.timeline.currentIndex;
   const { colors } = config.timeline;
   utils.wipeAndRecreateUserCanvas();

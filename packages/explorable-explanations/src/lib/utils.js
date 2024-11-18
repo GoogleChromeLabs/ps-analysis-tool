@@ -177,7 +177,9 @@ utils.setupMainCanvas = (p) => {
   canvas.style('z-index', 0);
   p.background(config.canvas.background);
   p.textSize(config.canvas.fontSize);
-  app.init(p);
+  (async () => {
+    await app.init(p);
+  })();
 };
 
 utils.setupInterestGroupCanvas = (p) => {

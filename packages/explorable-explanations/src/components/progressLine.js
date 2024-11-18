@@ -51,7 +51,7 @@ const ProgressLine = ({
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (config.cancelPromise) {
+      if (window.cancelPromise) {
         resolve();
         return;
       }

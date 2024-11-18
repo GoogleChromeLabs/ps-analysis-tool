@@ -158,10 +158,9 @@ joinInterestGroup.draw = async (index) => {
   }
 
   for (const step of steps) {
-    if (config.cancelPromise) {
+    if (window.cancelPromise) {
       return;
     }
-
     const { component, props, callBack } = step;
 
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
