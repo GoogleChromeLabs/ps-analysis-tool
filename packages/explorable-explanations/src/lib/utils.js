@@ -135,15 +135,6 @@ utils.wipeAndRecreateInterestCanvas = () => {
   overlayCanvas.style('z-index', 2);
 };
 
-utils.wipeAndRecreateMainCanvas = () => {
-  const { height, width } = utils.calculateCanvasDimensions();
-  const canvas = app.p.createCanvas(width, height);
-  canvas.parent('ps-canvas');
-  canvas.style('z-index', 0);
-  app.p.background(config.canvas.background);
-  app.p.textSize(config.canvas.fontSize);
-};
-
 utils.wipeAndRecreateUserCanvas = () => {
   const { height, width } = utils.calculateCanvasDimensions();
   const canvas = app.up.createCanvas(width, height);

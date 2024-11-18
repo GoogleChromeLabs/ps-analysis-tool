@@ -129,7 +129,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     p.pop();
 
     p.push();
-    p.stroke(config.timeline.colors.black);
+    p.fill(config.timeline.colors.black);
     p.textSize(12);
     p.strokeWeight(0.1);
     p.textFont('ui-sans-serif');
