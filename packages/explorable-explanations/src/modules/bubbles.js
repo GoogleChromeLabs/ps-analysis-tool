@@ -494,6 +494,7 @@ bubbles.bubbleChart = (
         : (event) => {
             // eslint-disable-next-line no-console
             console.log(event);
+            event.stopPropagation();
           }
     )
     .attr('fill-opacity', fillOpacity)
