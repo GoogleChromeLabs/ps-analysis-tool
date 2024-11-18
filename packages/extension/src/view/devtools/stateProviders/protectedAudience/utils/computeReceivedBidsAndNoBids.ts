@@ -23,11 +23,6 @@ import type {
   SingleSellerAuction,
 } from '@google-psat/common';
 
-/**
- * Internal dependencies
- */
-import type { ProtectedAudienceContextType } from '../context';
-
 const BIDDING_TYPES = [
   'bid',
   'additionalBid',
@@ -42,7 +37,7 @@ const BIDDING_TYPES = [
  * @returns null | receivedBids array and noBids object.
  */
 function computeReceivedBidsAndNoBids(
-  _auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'],
+  _auctionEvents: SingleSellerAuction | MultiSellerAuction | null,
   _isMultiSellerAuction: boolean
 ) {
   if (
