@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 /**
- * Internal Dependencies.
+ * External dependencies.
  */
 import { I18n } from '@google-psat/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import { NUMBER_OF_ALLOWED_FEATURES_IN_COMPACT_VIEW } from '../constants';
+import type { ResponseType } from '../types';
 
 const getTooltipInfoData = (
   frameType: string,
@@ -94,6 +99,25 @@ const getTooltipInfoData = (
 
     info[I18n.getMessage('allowedFeatures')] = allowedFeaturesValue;
   }
+
+  return infoData;
+};
+
+export const getTooltipInfoDataForPA = (
+  data: ResponseType
+): { [key: string]: Record<string, string> } => {
+  const info: Record<string, string> = {};
+  const attr: Record<string, string> = {};
+  const infoData = {
+    info: info,
+    attr: attr,
+  };
+
+  info['bidders'] = data.bidders?.join(', ') ?? '';
+  info['winningBid'] = `${data.winningBid} ${data.bidCurrency}`;
+  info['numberOfBidders'] = `${data.numberOfBidders}`;
+  info['winningBidder'] = data.winningBidder ?? '';
+  info['selectedAdUnit'] = data.selectedAdUnit ?? '';
 
   return infoData;
 };

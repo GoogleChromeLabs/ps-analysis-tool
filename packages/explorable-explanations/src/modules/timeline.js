@@ -18,10 +18,18 @@
  */
 import config from '../config';
 import app from '../app';
-import utils from './utils';
+import utils from '../lib/utils';
 
+/**
+ * @module Timeline
+ * Handles the drawing and interaction of the timeline, including circles, lines, and user-related animations.
+ */
 const timeline = {};
 
+/**
+ * Initializes the timeline by setting up publisher indices, event listeners,
+ * and drawing the initial timeline and user icon.
+ */
 timeline.init = () => {
   config.timeline.circles.forEach((circle, index) => {
     if (circle.type === 'publisher') {
@@ -35,9 +43,11 @@ timeline.init = () => {
 
       config.mouseX = x;
       config.mouseY = y;
-      utils.wipeAndRecreateInterestCanvas();
+      if (config.shouldRespondToClick) {
+        utils.wipeAndRecreateInterestCanvas();
+      }
       utils.wipeAndRecreateUserCanvas();
-      timeline.renderUserIcon(x, y); // On first render.
+      timeline.renderUserIcon(x, y);
     };
 
     app.p.mouseClicked = async () => {
@@ -66,32 +76,16 @@ timeline.init = () => {
     };
   } else {
     app.timeline.drawTimelineLine();
-    app.p.mouseClicked = (event) => {
-      const { x, y } = event;
-      let clickedIndex;
-
-      app.timeline.smallCirclePositions.forEach((positions, index) => {
-        if (
-          utils.isInsideCircle(
-            x,
-            y,
-            positions.x,
-            positions.y,
-            config.timeline.circleProps.diameter / 5
-          )
-        ) {
-          clickedIndex = index;
-        }
-      });
-
-      // eslint-disable-next-line no-console
-      console.log(app.timeline.smallCirclePositions[clickedIndex]);
-    };
-    app.timeline.renderUserIcon(); // On first render.
+    app.timeline.renderUserIcon();
   }
   app.timeline.drawTimeline(config.timeline);
 };
 
+/**
+ * Draws a vertical line above a timeline circle.
+ * @param {number} index - The index of the circle.
+ * @param {boolean} [completed] - Whether the line should be styled as completed.
+ */
 timeline.drawLineAboveCircle = (index, completed = false) => {
   const { position, colors } = config.timeline;
   const { diameter } = config.timeline.circleProps;
@@ -140,6 +134,9 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   });
 };
 
+/**
+ * Draws the horizontal timeline line.
+ */
 timeline.drawTimelineLine = () => {
   const { position, colors, circleProps } = config.timeline;
   const { diameter, verticalSpacing } = circleProps;
@@ -195,119 +192,6 @@ timeline.drawCircle = (index, completed = false) => {
   }
 };
 
-timeline.drawSmallCircles = (index, numCircles) => {
-  const {
-    mouseX,
-    mouseY,
-    isInteractiveMode,
-    timeline: { circles, user, circleProps },
-  } = config;
-
-  const {
-    timeline: { circlePositions },
-    igp,
-  } = app;
-
-  const position = isInteractiveMode
-    ? { x: mouseX, y: mouseY }
-    : circlePositions[index];
-
-  const { diameter, verticalSpacing } = circleProps;
-  const smallCircleDiameter = diameter / 5;
-  const smallCircleRadius = smallCircleDiameter / 2;
-  let mainCircleRadius = user.width / 2;
-  const circleVerticalSpace = verticalSpacing + diameter;
-  const numSmallCircles = numCircles ?? circles[index].igGroupsCount ?? 0;
-  let accomodatingCircles = Math.round(
-    (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-  );
-  let angleStep = 360 / accomodatingCircles;
-  const maxLen = numCircles
-    ? numCircles
-    : app.timeline.smallCirclePositions.length + numSmallCircles;
-  let totalCircles = numCircles ? 0 : app.timeline.smallCirclePositions.length;
-
-  if (!app.timeline.smallCirclePositions) {
-    app.timeline.smallCirclePositions = [];
-  }
-
-  if (numCircles && !isInteractiveMode) {
-    app.timeline.smallCirclePositions = app.timeline.smallCirclePositions.map(
-      (data) => {
-        return {
-          ...data,
-          x: data.x + circleVerticalSpace,
-        };
-      }
-    );
-  }
-
-  for (
-    let i = numCircles ? 0 : app.timeline.smallCirclePositions.length;
-    totalCircles < maxLen;
-    i++
-  ) {
-    if (i > accomodatingCircles) {
-      mainCircleRadius += smallCircleDiameter;
-      i = i - accomodatingCircles;
-      accomodatingCircles = Math.round(
-        (2 * Math.PI * mainCircleRadius) / (2 * smallCircleRadius)
-      );
-      angleStep = 360 / accomodatingCircles;
-    }
-    if (numCircles) {
-      app.timeline.smallCirclePositions.forEach(({ x, y, color }) => {
-        igp.push();
-        igp.fill(color);
-        igp.circle(x, y, smallCircleDiameter);
-        igp.pop();
-      });
-      return;
-    }
-
-    const randomX =
-      position.x +
-      (smallCircleRadius + mainCircleRadius) *
-        Math.cos(igp.radians(i * angleStep));
-    const randomY =
-      position.y +
-      (smallCircleRadius + mainCircleRadius) *
-        Math.sin(igp.radians(i * angleStep));
-    const randomColor = igp.color(
-      igp.random(255),
-      igp.random(255),
-      igp.random(255)
-    );
-    totalCircles++;
-
-    if (numCircles && isInteractiveMode) {
-      app.timeline.smallCirclePositions[i] = {
-        ...app.timeline.smallCirclePositions[i],
-        x: randomX,
-        y: randomY,
-      };
-      igp.push();
-      igp.fill(app.timeline.smallCirclePositions[i]?.color);
-      igp.circle(randomX, randomY, smallCircleDiameter);
-      igp.pop();
-      continue;
-    }
-
-    igp.push();
-    igp.noStroke();
-    igp.fill(randomColor);
-    igp.circle(randomX, randomY, smallCircleDiameter);
-
-    if (!numCircles) {
-      app.timeline.smallCirclePositions.push({
-        x: randomX,
-        y: randomY,
-        color: randomColor,
-      });
-    }
-  }
-};
-
 timeline.renderUserIcon = () => {
   const { mouseX, mouseY } = config;
   const circlePosition = config.isInteractiveMode
@@ -320,11 +204,7 @@ timeline.renderUserIcon = () => {
 
   const user = config.timeline.user;
   timeline.eraseAndRedraw();
-
-  timeline.drawSmallCircles(
-    app.timeline.currentIndex,
-    app.timeline.smallCirclePositions.length
-  );
+  utils.wipeAndRecreateInterestCanvas();
 
   app.up.image(
     app.p.userIcon,
@@ -344,8 +224,6 @@ timeline.eraseAndRedraw = () => {
     timeline.drawTimelineLine();
     let i = 0;
     while (i < currentIndex) {
-      utils.wipeAndRecreateInterestCanvas();
-
       app.p.push();
       app.p.stroke(colors.visitedBlue);
       timeline.drawCircle(i, true);

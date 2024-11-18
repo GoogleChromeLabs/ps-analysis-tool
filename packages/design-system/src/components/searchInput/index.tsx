@@ -29,9 +29,15 @@ interface SearchInputProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   clearInput: () => void;
+  placeholder?: string;
 }
 
-const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
+const SearchInput = ({
+  value,
+  onChange,
+  clearInput,
+  placeholder,
+}: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -72,7 +78,7 @@ const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
         ref={inputRef}
         type="text"
         className="h-[14px] w-full outline-none bg-transparent"
-        placeholder={I18n.getMessage('search')}
+        placeholder={placeholder || I18n.getMessage('search')}
         value={value}
         onChange={onChange}
         onFocus={() => setIsFocused(true)}

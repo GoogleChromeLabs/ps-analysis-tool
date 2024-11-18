@@ -19,6 +19,7 @@
 import config from '../config.js';
 import app from '../app.js';
 
+// @todo To be broken down into multipe functions.
 const utils = {};
 
 utils.requestInterval = (fn, delay) => {
@@ -66,7 +67,7 @@ utils.drawArrow = (size, x, y, direction = 'right') => {
   }
 
   // Clear previous one.
-  utils.triangle(size + 1, _x, _y, direction, config.canvas.background);
+  utils.triangle(size + 2, _x, _y, direction, config.canvas.background);
 
   utils.triangle(size, x, y, direction, 'black');
 };
@@ -152,20 +153,21 @@ utils.wipeAndRecreateUserCanvas = () => {
 };
 
 utils.isInsideCircle = (x, y, x0, y0, r) => {
-  const distance = Math.sqrt((x - x0) ** 2 + (y - y0) ** 2);
-  return distance <= r;
+  return app.p.dist(x, y, x0, y0) <= r;
 };
 
-utils.drawPreviousCircles = () => {
-  const p = app.igp;
-  const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
-  app.timeline.smallCirclePositions.forEach((data) => {
+utils.drawText = (text, x, y) => {
+  const p = app.p;
+
+  if (text) {
     p.push();
-    p.noStroke();
-    p.fill(data.color);
-    p.circle(data.x, data.y, smallCircleDiameter);
+    p.strokeWeight(0.1);
+    p.fill('#000');
+    p.textSize(config.canvas.fontSize - 2);
+    p.textFont('ui-sans-serif');
+    p.text(text, x, y);
     p.pop();
-  });
+  }
 };
 
 export default utils;

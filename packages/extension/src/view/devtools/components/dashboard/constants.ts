@@ -24,6 +24,7 @@ import {
   SiteBoundariesIcon,
   SIDEBAR_ITEMS_KEYS,
   PrivateAdvertisingIcon,
+  TopicsIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -42,6 +43,11 @@ export const PINNED_ITEMS = [
     name: I18n.getMessage('rws'),
     icon: RelatedWebsiteSetsIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
+  },
+  {
+    name: I18n.getMessage('topics'),
+    icon: TopicsIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.TOPICS,
   },
 ];
 

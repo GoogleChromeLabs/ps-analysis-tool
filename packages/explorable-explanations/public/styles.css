@@ -1,0 +1,159 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.overflowing-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hidden {
+    display: none;
+}
+
+#ps-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+}
+
+#interest-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#user-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+button img {
+    width: 20px;
+    height: 20px;
+}
+
+#canvas-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#bubble-container {
+    position: absolute;
+    pointer-events: none;
+    top: 0px;
+    left: 0px;
+}
+
+.minified-bubble-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid #808080;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+}
+
+.circle-svg:hover:active {
+    cursor: pointer;
+}
+
+.text-class {
+    pointer-events: none;
+}
+
+.svg {
+    cursor: pointer;
+}
+
+.circle-svg {
+    transition: transform .2s;
+}
+
+.circle-svg:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+text {
+    cursor: pointer;
+}
+
+.minified-bubble-container.expanded {
+    position: absolute;
+    display: block;
+    top: 0px;
+    height: 500px;
+    width: 500px;
+    border-radius: 50%;
+    border: 1px solid #808080;
+    backdrop-filter: blur(10px);
+}
+
+.bubble-container {
+    position: absolute;
+    pointer-events: auto;
+}
+
+.bubble-container.expanded {
+    backdrop-filter: blur(1px);
+    z-index: 4;
+    height: 100vh;
+    width: 100vw;
+}
+
+#close-button {
+    position: absolute;
+    top: 10px;
+    cursor: pointer;
+    display: none;
+}
+
+#open-button {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    cursor: pointer;
+    display: none;
+}
+
+#count-display {
+    font-size: 16px;
+    position: absolute;
+    margin: 0px;
+    backdrop-filter: blur(4px);
+    font-weight: bolder;
+    border-radius: 50%;
+}
+
+.play-pause-button {
+    margin-right: 10px;
+}
+
+.controls {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+}
