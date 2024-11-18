@@ -347,8 +347,8 @@ bubbles.showExpandedBubbles = () => {
     .getElementById('bubble-container-div')
     .classList.toggle('expanded', true);
 
-  document.getElementById('close-button').style.display = 'block';
-  document.getElementById('open-button').style.display = 'none';
+  app.closeButton.style.display = 'block';
+  app.openButton.style.display = 'none';
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
 bubbles.showMinifiedBubbles = () => {
@@ -371,19 +371,16 @@ bubbles.showMinifiedBubbles = () => {
     return;
   }
 
-  document
-    .getElementById('bubble-container-div')
-    .classList.toggle('expanded', false);
+  app.bubbleContainerDiv.classList.toggle('expanded', false);
 
-  document.getElementById('close-button').style.display = 'none';
-  document.getElementById('open-button').style.display = 'block';
+  app.closeButton.style.display = 'none';
+  app.openButton.style.display = 'block';
 
   bubbles.clearAndRewriteBubbles();
 
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
 
-  document.getElementById('count-display').innerHTML =
-    config.bubbles.interestGroupCounts;
+  app.countDisplay.innerHTML = config.bubbles.interestGroupCounts;
 
   if (app.bubbles.minifiedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.minifiedSVG);

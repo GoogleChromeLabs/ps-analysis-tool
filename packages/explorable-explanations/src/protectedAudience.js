@@ -155,10 +155,16 @@ app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
   app.multSellerCheckBox = document.getElementById('multi-seller');
-  document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
+  app.intreactiveModeCheckBox = document.getElementById('interactive-mode');
+  app.bubbleContainerDiv = document.getElementById('bubble-container-div');
+  app.closeButton = document.getElementById('close-button');
+  app.openButton = document.getElementById('open-button');
+  app.countDisplay = document.getElementById('count-display');
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
+
+  document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
 
   if (!config.isInteractiveMode) {
     app.minifiedBubbleContainer.addEventListener(
@@ -166,21 +172,18 @@ app.handleControls = () => {
       app.minifiedBubbleClickListener
     );
 
-    document
-      .getElementById('bubble-container-div')
-      .addEventListener('click', app.minifiedBubbleClickListener);
+    app.bubbleContainerDiv.addEventListener(
+      'click',
+      app.minifiedBubbleClickListener
+    );
 
-    document
-      .getElementById('close-button')
-      .addEventListener('click', app.minimiseBubbleActions);
+    app.closeButton.addEventListener('click', app.minimiseBubbleActions);
 
-    document
-      .getElementById('open-button')
-      .addEventListener('click', (event) =>
-        app.minifiedBubbleClickListener(event, true)
-      );
+    app.openButton.addEventListener('click', (event) =>
+      app.minifiedBubbleClickListener(event, true)
+    );
   } else {
-    document.getElementById('open-button').style.cursor = 'default';
+    app.openButton.style.cursor = 'default';
     app.minifiedBubbleContainer.style.cursor = 'default';
   }
 
@@ -286,8 +289,8 @@ const interestGroupSketch = (p) => {
     const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
     const y = 335 * Math.sin(angle) + 320;
 
-    document.getElementById('close-button').style.left = `${x}px`;
-    document.getElementById('close-button').style.top = `${y}px`;
+    app.closeButton.style.left = `${x}px`;
+    app.closeButton.style.top = `${y}px`;
 
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
@@ -310,7 +313,6 @@ const interestGroupSketch = (p) => {
       }
     });
 
-    app.countDisplay = document.getElementById('count-display');
     app.interestGroupInit(p);
   };
 };
