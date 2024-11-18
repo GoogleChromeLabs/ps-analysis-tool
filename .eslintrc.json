@@ -43,6 +43,7 @@
     "**/dist-types/**",
     "out/**",
     "data/**",
+    "assets/**/*.js",
     "coverage/**"
   ],
   "rules": {
