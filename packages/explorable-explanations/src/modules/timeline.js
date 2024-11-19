@@ -42,12 +42,13 @@ timeline.init = () => {
     bubbles.showMinifiedBubbles();
 
     app.p.mouseMoved = (event) => {
-      const { x, y } = event;
+      const { pageX, pageY } = event;
 
-      config.mouseX = x;
-      config.mouseY = y;
+      config.mouseX = pageX;
+      config.mouseY = pageY;
+
       utils.wipeAndRecreateUserCanvas();
-      timeline.renderUserIcon(x, y);
+      timeline.renderUserIcon(pageX, pageY);
     };
 
     app.p.mouseClicked = async () => {
@@ -72,7 +73,10 @@ timeline.init = () => {
         }
       });
 
-      if (clickedIndex !== undefined) {
+      if (
+        clickedIndex !== undefined &&
+        !config.timeline.circles[clickedIndex].visited
+      ) {
         if (window.cancelPromise) {
           window.cancelPromise = null;
         }
@@ -233,6 +237,9 @@ timeline.renderUserIcon = () => {
 };
 
 timeline.eraseAndRedraw = () => {
+  const currentIndex = app.timeline.currentIndex;
+  const { colors } = config.timeline;
+
   if (config.isInteractiveMode) {
     config.timeline.circles.forEach((circle, index) => {
       if (circle.visited === true) {
@@ -245,8 +252,6 @@ timeline.eraseAndRedraw = () => {
     return;
   }
 
-  const currentIndex = app.timeline.currentIndex;
-  const { colors } = config.timeline;
   utils.wipeAndRecreateUserCanvas();
 
   if (currentIndex > 0) {
