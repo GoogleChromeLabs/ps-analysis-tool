@@ -32,14 +32,16 @@ import icons from './icons.json';
 import bubbles from './modules/bubbles.js';
 
 app.setUpTimeLine = () => {
-  app.auction.auctions = [];
-  app.joinInterestGroup.joinings = [];
-  app.timeline.circlePositions = [];
-  app.timeline.circlePublisherIndices = [];
-  app.bubbles.bubbles = [];
-  app.bubbles.minifiedSVG = null;
-  app.timeline.currentIndex = 0;
-  bubbles.clearAndRewriteBubbles();
+  if (config.isInteractiveMode) {
+    app.auction.auctions = [];
+    app.joinInterestGroup.joinings = [];
+    app.timeline.circlePositions = [];
+    app.timeline.circlePublisherIndices = [];
+    app.bubbles.bubbles = [];
+    app.bubbles.minifiedSVG = null;
+    app.timeline.currentIndex = 0;
+    bubbles.clearAndRewriteBubbles();
+  }
 
   app.setup();
 
