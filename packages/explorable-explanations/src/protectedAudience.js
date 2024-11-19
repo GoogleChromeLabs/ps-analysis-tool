@@ -37,12 +37,11 @@ app.setUpTimeLine = () => {
     app.joinInterestGroup.joinings = [];
     app.timeline.circlePositions = [];
     app.timeline.circlePublisherIndices = [];
-    app.bubbles.bubbles = [];
+    app.bubbles.positions = [];
     app.bubbles.minifiedSVG = null;
     app.timeline.currentIndex = 0;
-    bubbles.clearAndRewriteBubbles();
   }
-
+  bubbles.clearAndRewriteBubbles();
   app.setup();
 
   timeline.init();
