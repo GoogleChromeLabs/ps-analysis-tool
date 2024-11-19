@@ -143,8 +143,8 @@ export function topicsAnimation(
     },
 
     userVisitDone: (index: number) => {
-      app.drawCircle(index, true);
       app.resetInfoBox(index);
+      app.drawCircle(index, true);
 
       const position = app.circlePositions[index];
       const previousPosition =
@@ -314,6 +314,14 @@ export function topicsAnimation(
         );
       }
 
+      p.stroke(0);
+      p.line(
+        position.x,
+        position.y + diameter / 2,
+        position.x,
+        position.y + 95
+      );
+
       p.pop();
     },
 
@@ -326,6 +334,13 @@ export function topicsAnimation(
       p.stroke(255);
       p.rectMode(p.CENTER);
       p.rect(position.x, position.y + diameter / 2 + 150, 300, 200);
+      p.strokeWeight(5);
+      p.line(
+        position.x,
+        position.y + diameter / 2,
+        position.x,
+        position.y + 95
+      );
       p.pop();
     },
   };
