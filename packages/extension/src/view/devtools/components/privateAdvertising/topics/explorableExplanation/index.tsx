@@ -127,13 +127,13 @@ const ExplorableExplanation = () => {
   );
 
   const handleUserVisit = useCallback(
-    (visitIndex: number) => {
-      if (visitIndex < epochs[activeTab].webVisits.length) {
+    (visitIndex: number, updateTopics = true) => {
+      if (visitIndex < epochs[activeTab].webVisits.length && updateTopics) {
         handleTopicsCalculation(visitIndex);
       }
 
       if (visitIndex === epochs[activeTab].webVisits.length) {
-        if (activeTab < 3) {
+        if (activeTab < 3 && updateTopics) {
           setActiveTab(activeTab + 1);
         } else {
           setPlay(false);

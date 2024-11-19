@@ -24,13 +24,12 @@ import p5 from 'p5';
  * Internal dependencies.
  */
 import { topicsAnimation } from './topicsAnimation';
-import { noop } from '@google-psat/design-system';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
   isAnimating: boolean;
   siteAdTechs: Record<string, string[]>;
-  handleUserVisit: (visitIndex: number) => void;
+  handleUserVisit: (visitIndex: number, updateTopics?: boolean) => void;
   isPlaying: boolean;
   resetAnimation: boolean;
   speedMultiplier: number;
@@ -65,7 +64,9 @@ const Animation = ({
         epoch,
         animationRef.current,
         siteAdTechs,
-        animationRef.current ? handleUserVisit : noop
+        animationRef.current
+          ? handleUserVisit
+          : (idx: number) => handleUserVisit(idx, false)
       );
 
       setTogglePlayCallback(() => togglePlay);
