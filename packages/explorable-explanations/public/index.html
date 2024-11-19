@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protected Audience</title>
-    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
@@ -13,7 +13,7 @@
         <div id="ps-canvas">
             <div id="canvas-container">
                 <div class="controls">
-                    <div class="play-pause-button">
+                    <div class="play-pause-button" id="play-pause-button">
                         <button id="play" class="hidden">
                             <img src="./icons/play-button.png" alt="play" />
                         </button>
@@ -21,11 +21,13 @@
                             <img src="./icons/pause-button.png" alt="pause" />
                         </button>
                     </div>
-                    <div>
+                    <div id="interactive-mode-div">
                         <label for="interactive-mode">
                             <input type="checkbox" name="interactive-mode" id="interactive-mode">
                             Interactive Mode
                         </label>
+                    </div>
+                    <div id="multi-seller-div">
                         <label for="multi-seller">
                             <input type="checkbox" name="multi-seller" id="multi-seller">
                             Multi-Sellers
@@ -33,6 +35,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         <div id="interest-canvas"></div>
         <div id="bubble-container-div" class="bubble-container">

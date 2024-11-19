@@ -276,4 +276,60 @@ utils.calculateCanvasDimensions = () => {
   };
 };
 
+utils.isOverControls = (mouseX, mouseY) => {
+  const {
+    bubbles: { minifiedBubbleX, minifiedBubbleY, minifiedCircleDiameter },
+  } = config;
+  if (
+    utils.isInsideCircle(
+      minifiedBubbleX,
+      minifiedBubbleY,
+      mouseX,
+      mouseY,
+      minifiedCircleDiameter + 20
+    )
+  ) {
+    return true;
+  }
+
+  const controlButton = document
+    .getElementById('play-pause-button')
+    .getBoundingClientRect();
+  const interactiveModeDivStyles = document
+    .getElementById('interactive-mode-div')
+    .getBoundingClientRect();
+  const multiSellerDivStyles = document
+    .getElementById('multi-seller-div')
+    .getBoundingClientRect();
+
+  if (
+    mouseX >= controlButton.left &&
+    mouseX <= controlButton.right &&
+    mouseY >= controlButton.top &&
+    mouseY <= controlButton.bottom
+  ) {
+    return true;
+  }
+
+  if (
+    mouseX >= interactiveModeDivStyles.left &&
+    mouseX <= multiSellerDivStyles.right &&
+    mouseY >= interactiveModeDivStyles.top &&
+    mouseY <= multiSellerDivStyles.bottom
+  ) {
+    return true;
+  }
+
+  if (
+    mouseX >= multiSellerDivStyles.left &&
+    mouseX <= multiSellerDivStyles.right &&
+    mouseY >= multiSellerDivStyles.top &&
+    mouseY <= multiSellerDivStyles.bottom
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
 export default utils;

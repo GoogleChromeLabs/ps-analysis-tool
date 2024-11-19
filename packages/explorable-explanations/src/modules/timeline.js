@@ -44,11 +44,15 @@ timeline.init = () => {
     app.p.mouseMoved = (event) => {
       const { pageX, pageY } = event;
 
-      config.mouseX = pageX;
-      config.mouseY = pageY;
-
+      if (utils.isOverControls(pageX, pageY) || config.bubbles.isExpanded) {
+        config.mouseX = pageX + 50;
+        config.mouseY = pageY + 50;
+      } else {
+        config.mouseX = pageX;
+        config.mouseY = pageY;
+      }
       utils.wipeAndRecreateUserCanvas();
-      timeline.renderUserIcon(pageX, pageY);
+      timeline.renderUserIcon(config.mouseX, config.mouseY);
     };
 
     app.p.mouseClicked = async () => {
