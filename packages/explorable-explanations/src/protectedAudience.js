@@ -227,7 +227,6 @@ app.toggleInteractiveMode = () => {
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p);
 
-  window.cancelPromise = false;
   app.timeline.eraseAndRedraw();
 };
 

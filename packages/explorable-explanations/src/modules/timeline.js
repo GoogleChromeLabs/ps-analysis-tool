@@ -51,6 +51,10 @@ timeline.init = () => {
     };
 
     app.p.mouseClicked = async () => {
+      if (window.cancelPromise) {
+        window.cancelPromise = null;
+      }
+
       if (!config.shouldRespondToClick) {
         return;
       }
