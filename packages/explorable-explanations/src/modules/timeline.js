@@ -51,10 +51,6 @@ timeline.init = () => {
     };
 
     app.p.mouseClicked = async () => {
-      if (window.cancelPromise) {
-        window.cancelPromise = null;
-      }
-
       if (!config.shouldRespondToClick) {
         return;
       }
@@ -77,12 +73,16 @@ timeline.init = () => {
       });
 
       if (clickedIndex !== undefined) {
+        if (window.cancelPromise) {
+          window.cancelPromise = null;
+        }
         config.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
         await app.drawFlows(clickedIndex);
         bubbles.clearAndRewriteBubbles();
         bubbles.showMinifiedBubbles();
         config.shouldRespondToClick = true;
+        config.timeline.circles[clickedIndex].visited = true;
       }
     };
   } else {
@@ -102,7 +102,8 @@ timeline.drawLineAboveCircle = (index, completed = false) => {
   const { diameter } = config.timeline.circleProps;
   const p = app.p;
   const positions = app.timeline.circlePositions[index];
-  const strokeColor = completed ? colors.visitedBlue : colors.grey;
+  const strokeColor =
+    completed && !config.isInteractiveMode ? colors.visitedBlue : colors.grey;
 
   p.push();
   p.stroke(strokeColor);
@@ -149,6 +150,10 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
  * Draws the horizontal timeline line.
  */
 timeline.drawTimelineLine = () => {
+  if (config.isInteractiveMode) {
+    return;
+  }
+
   const { position, colors, circleProps } = config.timeline;
   const { diameter, verticalSpacing } = circleProps;
 
@@ -214,9 +219,8 @@ timeline.renderUserIcon = () => {
   }
 
   const user = config.timeline.user;
-  if (!config.isInteractiveMode) {
-    timeline.eraseAndRedraw();
-  }
+
+  timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
 
   app.up.image(
@@ -230,6 +234,14 @@ timeline.renderUserIcon = () => {
 
 timeline.eraseAndRedraw = () => {
   if (config.isInteractiveMode) {
+    config.timeline.circles.forEach((circle, index) => {
+      if (circle.visited === true) {
+        app.p.push();
+        app.p.stroke(colors.visitedBlue);
+        timeline.drawCircle(index, true);
+        app.p.pop();
+      }
+    });
     return;
   }
 

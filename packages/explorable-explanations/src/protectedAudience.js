@@ -39,6 +39,7 @@ app.setUpTimeLine = () => {
   app.bubbles.bubbles = [];
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
+  bubbles.clearAndRewriteBubbles();
 
   app.setup();
 
@@ -103,6 +104,10 @@ app.expandBubbleActions = () => {
   app.pause();
 };
 app.minifiedBubbleClickListener = (event, expandOverride) => {
+  if (config.isInteractiveMode) {
+    return;
+  }
+
   const clickedInsideExpandedCircle = utils.isInsideCircle(
     config.bubbles.expandedBubbleX,
     config.bubbles.expandedBubbleY,
@@ -136,17 +141,27 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 };
 
 app.setupLoop = async () => {
+  if (window.cancelPromise) {
+    window.cancelPromise = false;
+  }
+
   while (
     app.timeline.currentIndex < config.timeline.circles.length &&
     !config.isInteractiveMode
   ) {
     if (window.cancelPromise) {
+      config.timeline.circles = config.timeline.circles.map((circle) => {
+        circle.visited = false;
+        return circle;
+      });
       return;
     }
 
     if (app.timeline.isPaused) {
       continue;
     }
+
+    config.timeline.circles[app.timeline.currentIndex].visited = true;
 
     bubbles.showMinifiedBubbles();
     app.timeline.renderUserIcon();
@@ -181,29 +196,25 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
+  app.visitedSites = [];
 
   document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
 
-  if (!config.isInteractiveMode) {
-    app.minifiedBubbleContainer.addEventListener(
-      'click',
-      app.minifiedBubbleClickListener
-    );
+  app.minifiedBubbleContainer.addEventListener(
+    'click',
+    app.minifiedBubbleClickListener
+  );
 
-    app.bubbleContainerDiv.addEventListener(
-      'click',
-      app.minifiedBubbleClickListener
-    );
+  app.bubbleContainerDiv.addEventListener(
+    'click',
+    app.minifiedBubbleClickListener
+  );
 
-    app.closeButton.addEventListener('click', app.minimiseBubbleActions);
+  app.closeButton.addEventListener('click', app.minimiseBubbleActions);
 
-    app.openButton.addEventListener('click', (event) =>
-      app.minifiedBubbleClickListener(event, true)
-    );
-  } else {
-    app.openButton.style.cursor = 'default';
-    app.minifiedBubbleContainer.style.cursor = 'default';
-  }
+  app.openButton.addEventListener('click', (event) =>
+    app.minifiedBubbleClickListener(event, true)
+  );
 
   app.playButton.addEventListener('click', () => {
     app.play(true);
@@ -216,16 +227,48 @@ app.handleControls = () => {
   );
 };
 
+app.removeEventListeners = () => {
+  app.minifiedBubbleContainer.removeEventListener(
+    'click',
+    app.minifiedBubbleClickListener
+  );
+
+  app.bubbleContainerDiv.removeEventListener(
+    'click',
+    app.minifiedBubbleClickListener
+  );
+
+  app.closeButton.removeEventListener('click', app.minimiseBubbleActions);
+  app.openButton.removeEventListener('click', (event) => {
+    app.minifiedBubbleClickListener(event, true);
+  });
+  app.openButton.style.cursor = 'default';
+  app.minifiedBubbleContainer.style.cursor = 'default';
+};
+
 app.toggleInteractiveMode = () => {
   window.cancelPromise = true;
   config.isInteractiveMode = !config.isInteractiveMode;
   app.timeline.currentIndex = 0;
   config.shouldRespondToClick = true;
   config.bubbles.interestGroupCounts = 0;
+  app.bubbles.minifiedSVG = null;
+  app.bubbles.expandedSVG = null;
+
+  if (config.isInteractiveMode) {
+    app.removeEventListeners();
+  } else {
+    app.handleControls();
+  }
 
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p);
+
+  config.timeline.circles = config.timeline.circles.map((circle) => {
+    circle.visited = false;
+    return circle;
+  });
 
   app.timeline.eraseAndRedraw();
 };

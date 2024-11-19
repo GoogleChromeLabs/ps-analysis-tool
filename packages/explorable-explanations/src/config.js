@@ -38,6 +38,7 @@ const config = {
         datetime: '2023-10-01 10:00',
         igGroupsCount: 5,
         interestGroups: ['shoes', 'heels', 'phones', 'laptops', 'blankets'],
+        visited: false,
       },
       {
         type: 'advertiser',
@@ -53,14 +54,21 @@ const config = {
           'spectacles',
           'accessories',
         ],
+        visited: false,
       },
-      { type: 'publisher', website: 'pub1.com', datetime: '2023-10-01 12:00' },
+      {
+        type: 'publisher',
+        website: 'pub1.com',
+        datetime: '2023-10-01 12:00',
+        visited: false,
+      },
       {
         type: 'advertiser',
         website: 'adv3.com',
         datetime: '2023-10-01 13:00',
         igGroupsCount: 2,
         interestGroups: ['bike', 'car'],
+        visited: false,
       },
       {
         type: 'advertiser',
@@ -68,14 +76,21 @@ const config = {
         datetime: '2023-10-01 13:02',
         igGroupsCount: 3,
         interestGroups: ['football', 'basketball', 'baseball'],
+        visited: false,
       },
-      { type: 'publisher', website: 'pub2.com', datetime: '2023-10-01 14:00' },
+      {
+        type: 'publisher',
+        website: 'pub2.com',
+        datetime: '2023-10-01 14:00',
+        visited: false,
+      },
       {
         type: 'advertiser',
         website: 'adv6.com',
         datetime: '2023-10-01 14:01',
         igGroupsCount: 3,
         interestGroups: ['movies', 'series', 'books'],
+        visited: false,
       },
       {
         type: 'advertiser',
@@ -83,6 +98,7 @@ const config = {
         datetime: '2023-10-01 15:00',
         igGroupsCount: 3,
         interestGroups: ['IGG220', 'IGG201', 'IG225'],
+        visited: false,
       },
     ],
     colors: {
