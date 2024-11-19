@@ -487,10 +487,7 @@ bubbles.bubbleChart = (
     .attr('stroke', stroke)
     .attr('stroke-width', strokeWidth)
     .attr('stroke-opacity', strokeOpacity)
-    .attr(
-      'class',
-      config.isInteractiveMode ? '' : 'svg overflowing-text circle-svg'
-    )
+    .attr('class', 'svg overflowing-text circle-svg')
     .attr(
       'fill',
       groups
@@ -501,12 +498,7 @@ bubbles.bubbleChart = (
         ? 'none'
         : fill
     )
-    .on(
-      'click',
-      config.isInteractiveMode && !config.bubbles.isExpanded
-        ? null
-        : eventHandler
-    )
+    .on('click', !config.bubbles.isExpanded ? null : eventHandler)
     .attr('fill-opacity', fillOpacity)
     .attr('r', (d) => {
       return d.r;
@@ -520,7 +512,7 @@ bubbles.bubbleChart = (
       .append('clipPath')
       .attr('id', (d) => `${uid}-clip-${d.data}`)
       .append('circle')
-      .attr('class', config.isInteractiveMode ? '' : 'svg overflowing-text')
+      .attr('class', 'svg overflowing-text')
       .attr('r', (d) => d.r);
 
     if (config.bubbles.isExpanded) {
@@ -534,7 +526,7 @@ bubbles.bubbleChart = (
           'clip-path',
           (d) => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`
         )
-        .attr('class', config.isInteractiveMode ? '' : 'svg text-class')
+        .attr('class', 'svg text-class')
         .selectAll('tspan')
         .data((d) => `${labels[d.data]}`.split(/\n/g))
         .join('tspan')

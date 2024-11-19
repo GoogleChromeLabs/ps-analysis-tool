@@ -106,10 +106,6 @@ app.expandBubbleActions = () => {
   app.pause();
 };
 app.minifiedBubbleClickListener = (event, expandOverride) => {
-  if (config.isInteractiveMode) {
-    return;
-  }
-
   const clickedInsideExpandedCircle = utils.isInsideCircle(
     config.bubbles.expandedBubbleX,
     config.bubbles.expandedBubbleY,
@@ -229,25 +225,6 @@ app.handleControls = () => {
   );
 };
 
-app.removeEventListeners = () => {
-  app.minifiedBubbleContainer.removeEventListener(
-    'click',
-    app.minifiedBubbleClickListener
-  );
-
-  app.bubbleContainerDiv.removeEventListener(
-    'click',
-    app.minifiedBubbleClickListener
-  );
-
-  app.closeButton.removeEventListener('click', app.minimiseBubbleActions);
-  app.openButton.removeEventListener('click', (event) => {
-    app.minifiedBubbleClickListener(event, true);
-  });
-  app.openButton.style.cursor = 'default';
-  app.minifiedBubbleContainer.style.cursor = 'default';
-};
-
 app.toggleInteractiveMode = () => {
   window.cancelPromise = true;
   config.isInteractiveMode = !config.isInteractiveMode;
@@ -256,12 +233,6 @@ app.toggleInteractiveMode = () => {
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
-
-  if (config.isInteractiveMode) {
-    app.removeEventListeners();
-  } else {
-    app.handleControls();
-  }
 
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
