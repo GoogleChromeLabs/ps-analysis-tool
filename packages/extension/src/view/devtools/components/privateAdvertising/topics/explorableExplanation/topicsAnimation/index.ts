@@ -133,7 +133,7 @@ export function topicsAnimation(
     reset: () => {
       app.visitIndex = 0;
       app.speedMultiplier = 1;
-      p.clear();
+      p?.clear();
       app.drawTimelineLine(config.timeline.position);
       app.drawTimeline(config.timeline.position, epoch);
     },
@@ -277,12 +277,12 @@ export function topicsAnimation(
       p.textSize(12);
       p.textAlign(p.LEFT, p.CENTER);
       p.textStyle(p.BOLD);
-      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 95);
+      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 100);
       p.textStyle(p.NORMAL);
       p.text(
         topics.join(', '),
         position.x - 70,
-        position.y + diameter / 2 + 95
+        position.y + diameter / 2 + 100
       );
 
       const adTechs = siteAdTechs[currentSite];
@@ -303,14 +303,14 @@ export function topicsAnimation(
         p.fill(adTechColor);
         p.circle(
           position.x - 110,
-          position.y + diameter / 2 + 150 + i * 25,
-          20
+          position.y + diameter / 2 + 150 + i * 20,
+          15
         );
         p.fill(0);
         p.text(
           adTech,
           position.x - 85,
-          position.y + diameter / 2 + 150 + 25 * i
+          position.y + diameter / 2 + 150 + i * 20
         );
       }
 
