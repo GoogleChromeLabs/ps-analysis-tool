@@ -148,11 +148,19 @@ const ExplorableExplanation = () => {
     [activeTab, epochs, handleTopicsCalculation]
   );
 
+  const handlePlay = useCallback(() => {
+    if (activeTab === 3 && epochCompleted[activeTab]) {
+      setReset();
+    } else {
+      setPlay((prevPlay) => !prevPlay);
+    }
+  }, [activeTab, epochCompleted, setReset]);
+
   return (
     <div className="flex flex-col h-full">
       <Header
         play={play}
-        setPlay={setPlay}
+        setPlay={handlePlay}
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
         historyCount={epochs[activeTab].webVisits.length}

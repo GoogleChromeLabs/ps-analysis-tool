@@ -27,7 +27,7 @@ import Slider from './slider';
 
 interface HeaderProps {
   play: boolean;
-  setPlay: React.Dispatch<React.SetStateAction<boolean>>;
+  setPlay: () => void;
   reset: () => void;
   historyCount: number;
   sliderStep: number;
@@ -49,7 +49,7 @@ const Header = ({
       <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray">
         <button
           className="pr-2"
-          onClick={() => setPlay(!play)}
+          onClick={setPlay}
           title={play ? 'Pause' : 'Play'}
         >
           {play ? (
