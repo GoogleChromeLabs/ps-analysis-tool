@@ -52,7 +52,6 @@ bubbles.init = () => {
 bubbles.generateBubbles = (recalculate = false) => {
   const interestGroupsToBeAdded =
     config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
-
   if (!recalculate) {
     for (let index = 0; index < interestGroupsToBeAdded; index++) {
       app.bubbles.positions.push({
@@ -140,6 +139,11 @@ bubbles.barrageAnimation = async (index) => {
     const animate = () => {
       if (app.timeline.isPaused) {
         requestAnimationFrame(animate); // Keep the animation loop alive but paused.
+        return;
+      }
+
+      if (window.cancelPromise) {
+        resolve();
         return;
       }
 
@@ -240,7 +244,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const flowBoxHeight = config.flow.box.height;
     const speed = 1;
     const target = igp.createVector(midPointX, midPointY);
-
     const { color: currentColor } = app.bubbles.positions[i];
     const color = currentColor;
 
@@ -265,6 +268,11 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const animate = () => {
       if (app.timeline.isPaused) {
         requestAnimationFrame(animate);
+        return;
+      }
+
+      if (window.cancelPromise) {
+        resolve();
         return;
       }
 
@@ -349,8 +357,8 @@ bubbles.showExpandedBubbles = () => {
     .getElementById('bubble-container-div')
     .classList.toggle('expanded', true);
 
-  document.getElementById('close-button').style.display = 'block';
-  document.getElementById('open-button').style.display = 'none';
+  app.closeButton.style.display = 'block';
+  app.openButton.style.display = 'none';
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
 bubbles.showMinifiedBubbles = () => {
@@ -373,19 +381,16 @@ bubbles.showMinifiedBubbles = () => {
     return;
   }
 
-  document
-    .getElementById('bubble-container-div')
-    .classList.toggle('expanded', false);
+  app.bubbleContainerDiv.classList.toggle('expanded', false);
 
-  document.getElementById('close-button').style.display = 'none';
-  document.getElementById('open-button').style.display = 'block';
+  app.closeButton.style.display = 'none';
+  app.openButton.style.display = 'block';
 
   bubbles.clearAndRewriteBubbles();
 
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
 
-  document.getElementById('count-display').innerHTML =
-    config.bubbles.interestGroupCounts;
+  app.countDisplay.innerHTML = config.bubbles.interestGroupCounts;
 
   if (app.bubbles.minifiedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.minifiedSVG);
@@ -471,6 +476,12 @@ bubbles.bubbleChart = (
     .join('a')
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
+  const eventHandler = (event) => {
+    // eslint-disable-next-line no-console
+    console.log(event);
+    event.stopPropagation();
+  };
+
   leaf
     .append('circle')
     .attr('stroke', stroke)
@@ -487,16 +498,7 @@ bubbles.bubbleChart = (
         ? 'none'
         : fill
     )
-    .on(
-      'click',
-      !config.bubbles.isExpanded
-        ? null
-        : (event) => {
-            // eslint-disable-next-line no-console
-            console.log(event);
-            event.stopPropagation();
-          }
-    )
+    .on('click', !config.bubbles.isExpanded ? null : eventHandler)
     .attr('fill-opacity', fillOpacity)
     .attr('r', (d) => {
       return d.r;
@@ -555,7 +557,10 @@ bubbles.calculateTotalBubblesForAnimation = (index) => {
   let bubblesCount = 0;
 
   config.timeline.circles.forEach((circle, currIndex) => {
-    if (currIndex < index) {
+    if (
+      (currIndex < index && !config.isInteractiveMode) ||
+      (currIndex <= index && config.isInteractiveMode)
+    ) {
       bubblesCount += circle.igGroupsCount ?? 0;
     }
   });

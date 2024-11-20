@@ -128,24 +128,15 @@ utils.delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 utils.wipeAndRecreateInterestCanvas = () => {
-  const { height, width } = app.calculateCanvasDimensions();
+  const { height, width } = utils.calculateCanvasDimensions();
   const overlayCanvas = app.igp.createCanvas(width, height);
 
   overlayCanvas.parent('interest-canvas');
   overlayCanvas.style('z-index', 2);
 };
 
-utils.wipeAndRecreateMainCanvas = () => {
-  const { height, width } = app.calculateCanvasDimensions();
-  const canvas = app.p.createCanvas(width, height);
-  canvas.parent('ps-canvas');
-  canvas.style('z-index', 0);
-  app.p.background(config.canvas.background);
-  app.p.textSize(config.canvas.fontSize);
-};
-
 utils.wipeAndRecreateUserCanvas = () => {
-  const { height, width } = app.calculateCanvasDimensions();
+  const { height, width } = utils.calculateCanvasDimensions();
   const canvas = app.up.createCanvas(width, height);
 
   canvas.parent('user-canvas');
@@ -168,6 +159,177 @@ utils.drawText = (text, x, y) => {
     p.text(text, x, y);
     p.pop();
   }
+};
+
+utils.setupMainCanvas = (p) => {
+  const { height, width } = utils.calculateCanvasDimensions();
+  const canvas = p.createCanvas(width, height);
+  canvas.parent('ps-canvas');
+  canvas.style('z-index', 0);
+  p.background(config.canvas.background);
+  p.textSize(config.canvas.fontSize);
+  (async () => {
+    await app.init(p);
+  })();
+};
+
+utils.setupInterestGroupCanvas = (p) => {
+  const { height, width } = utils.calculateCanvasDimensions();
+  const overlayCanvas = p.createCanvas(width, height);
+
+  overlayCanvas.parent('interest-canvas');
+  overlayCanvas.style('z-index', 2);
+  p.textSize(config.canvas.fontSize);
+
+  config.bubbles.minifiedBubbleX = 35;
+  config.bubbles.minifiedBubbleY = 35;
+
+  config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
+  config.bubbles.expandedBubbleY = 0;
+
+  // 335 is the angle where the close icon should be visible.
+  const angle = (305 * Math.PI) / 180;
+  // 335 is the radius + the size of icon so that icon is attached to the circle.
+  const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
+  const y = 335 * Math.sin(angle) + 320;
+
+  app.closeButton.style.left = `${x}px`;
+  app.closeButton.style.top = `${y}px`;
+
+  document.styleSheets[0].cssRules.forEach((rules, index) => {
+    if (rules.selectorText === '.minified-bubble-container.expanded') {
+      document.styleSheets[0].cssRules[index].style.left = `${
+        config.bubbles.expandedBubbleX - 320
+      }px`;
+
+      document.styleSheets[0].cssRules[
+        index
+      ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
+      document.styleSheets[0].cssRules[
+        index
+      ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
+    }
+
+    if (rules.selectorText === '.minified-bubble-container') {
+      document.styleSheets[0].cssRules[index].style.top = `${
+        config.bubbles.minifiedBubbleY - 25
+      }px`;
+    }
+  });
+
+  app.interestGroupInit(p);
+};
+
+utils.setupUserCanvas = (p) => {
+  const { height, width } = utils.calculateCanvasDimensions();
+  const overlayCanvas = p.createCanvas(width, height);
+
+  overlayCanvas.parent('user-canvas');
+  overlayCanvas.style('z-index', 1);
+  p.textSize(config.canvas.fontSize);
+
+  app.userInit(p);
+};
+
+utils.calculateCanvasDimensions = () => {
+  const {
+    timeline: {
+      circleProps: { verticalSpacing, diameter },
+      position: { x: timelineX, y: timelineY },
+      circles,
+    },
+    rippleEffect: { maxRadius, numRipples },
+    flow: {
+      lineWidth,
+      box: { height: boxHeight, width: boxWidth },
+      smallBox: { height: smallBoxHeight },
+      mediumBox: { width: mediumBoxWidth },
+    },
+  } = config;
+
+  const circleSpace = verticalSpacing + diameter;
+  const rippleRadius = maxRadius * 2 + (numRipples - 1) * 40;
+  const maxHeightUsingBoxAndLine = lineWidth * 2 + boxHeight + smallBoxHeight;
+  const height =
+    timelineY +
+    circleSpace +
+    Math.max(rippleRadius, maxHeightUsingBoxAndLine) +
+    700; // @todo: 700 is a magic number and needs to be calculated based on the content.
+
+  const auctionBoxesWidth = boxWidth + mediumBoxWidth * 2 + lineWidth * 2;
+  const interestGroupWidth = boxWidth;
+  let maxXposition = timelineX + circleSpace * circles.length;
+
+  circles.forEach((circle, index) => {
+    const xPos = timelineX + circleSpace * index;
+    maxXposition = Math.max(
+      maxXposition,
+      xPos +
+        (circle.type === 'publisher' ? auctionBoxesWidth : interestGroupWidth)
+    );
+  });
+  config.canvas.width = maxXposition;
+  config.canvas.height = height;
+  return {
+    height,
+    width: maxXposition,
+  };
+};
+
+utils.isOverControls = (mouseX, mouseY) => {
+  const {
+    bubbles: { minifiedBubbleX, minifiedBubbleY, minifiedCircleDiameter },
+  } = config;
+  if (
+    utils.isInsideCircle(
+      minifiedBubbleX,
+      minifiedBubbleY,
+      mouseX,
+      mouseY,
+      minifiedCircleDiameter + 20
+    )
+  ) {
+    return true;
+  }
+
+  const controlButton = document
+    .getElementById('play-pause-button')
+    .getBoundingClientRect();
+  const interactiveModeDivStyles = document
+    .getElementById('interactive-mode-div')
+    .getBoundingClientRect();
+  const multiSellerDivStyles = document
+    .getElementById('multi-seller-div')
+    .getBoundingClientRect();
+
+  if (
+    mouseX >= controlButton.left &&
+    mouseX <= controlButton.right &&
+    mouseY >= controlButton.top &&
+    mouseY <= controlButton.bottom
+  ) {
+    return true;
+  }
+
+  if (
+    mouseX >= interactiveModeDivStyles.left &&
+    mouseX <= multiSellerDivStyles.right &&
+    mouseY >= interactiveModeDivStyles.top &&
+    mouseY <= multiSellerDivStyles.bottom
+  ) {
+    return true;
+  }
+
+  if (
+    mouseX >= multiSellerDivStyles.left &&
+    mouseX <= multiSellerDivStyles.right &&
+    mouseY >= multiSellerDivStyles.top &&
+    mouseY <= multiSellerDivStyles.bottom
+  ) {
+    return true;
+  }
+
+  return false;
 };
 
 export default utils;
