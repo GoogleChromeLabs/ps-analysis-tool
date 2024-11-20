@@ -158,7 +158,11 @@ joinInterestGroup.draw = async (index) => {
   }
 
   for (const step of steps) {
+    if (window.cancelPromise) {
+      return;
+    }
     const { component, props, callBack } = step;
+
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
     const delay = component === Box ? 1000 : 0;
 
@@ -168,6 +172,7 @@ joinInterestGroup.draw = async (index) => {
 
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
+
   bubbles.generateBubbles();
 
   await bubbles.reverseBarrageAnimation(index);

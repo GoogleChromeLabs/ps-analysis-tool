@@ -53,6 +53,11 @@ const Branches = async ({ x1, y1, branches }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
+      if (window.cancelPromise) {
+        resolve(endpoints);
+        return;
+      }
+
       if (app.timeline.isPaused) {
         requestAnimationFrame(animate); // Continue loop but remain paused
         return;
@@ -82,13 +87,19 @@ const drawAnimatedTimeline = (x, y, branches) => {
   const p = app.p;
   const leftMargin = 15;
   x = x + leftMargin;
-
+  p.push();
   p.stroke(0);
   p.strokeWeight(1);
+  p.pop();
 
   return new Promise((resolve) => {
     // Draw the horizontal line
     p.line(x, y, x + progress, y);
+
+    if (window.cancelPromise) {
+      resolve();
+      return;
+    }
 
     // Draw vertical lines and labels as the horizontal line progresses
     for (let i = 0; i < branches.length; i++) {
@@ -98,8 +109,10 @@ const drawAnimatedTimeline = (x, y, branches) => {
 
       if (progress >= i * spacing && !renderedBranchIds.includes(branch.id)) {
         // Draw vertical line once the horizontal line reaches its position
+        p.push();
         p.stroke(0);
         p.line(branchX, y, branchX, y + 20);
+        p.pop();
 
         switch (branch.type) {
           case 'datetime':
@@ -128,7 +141,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
 
 const drawDateTimeBranch = (x, y, branch) => {
   const p = app.p;
-
+  p.push();
   p.noStroke();
   p.fill(0);
   p.textSize(config.canvas.fontSize);
@@ -142,6 +155,7 @@ const drawDateTimeBranch = (x, y, branch) => {
     EXPAND_ICON_SIZE,
     EXPAND_ICON_SIZE
   );
+  p.pop();
 
   return { x: x, y: y + 50 };
 };

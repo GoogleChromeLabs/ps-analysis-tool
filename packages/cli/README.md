@@ -53,7 +53,7 @@ Options:
   -c, --concurrency <num>        Number of tabs to open in parallel during sitemap or CSV analysis (default: 3)
   -w, --wait <num>               Number of milliseconds to wait after the page is loaded before generating the report (default: 20000)
   -l, --locale <language>        Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR (default: "en")
-  -b, --button-selectors <path>  The path to a json file which contains selectors or button text to be used for GDPR banner acceptance
+  -b, --button-selectors <path>  The path to a JSON file that contains selectors or button text to be used for GDPR banner acceptance
   -h, --help                     Display help for command
 
 To learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.

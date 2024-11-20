@@ -19,6 +19,7 @@
 import config from '../config';
 import app from '../app';
 import utils from '../lib/utils';
+import bubbles from './bubbles';
 
 /**
  * @module Timeline
@@ -38,19 +39,30 @@ timeline.init = () => {
   });
 
   if (config.isInteractiveMode) {
-    app.p.mouseMoved = (event) => {
-      const { x, y } = event;
+    bubbles.showMinifiedBubbles();
 
-      config.mouseX = x;
-      config.mouseY = y;
-      if (config.shouldRespondToClick) {
-        utils.wipeAndRecreateInterestCanvas();
+    app.p.mouseMoved = (event) => {
+      const { pageX, pageY } = event;
+
+      if (utils.isOverControls(pageX, pageY) || config.bubbles.isExpanded) {
+        config.mouseX = pageX + 50;
+        config.mouseY = pageY + 50;
+      } else {
+        config.mouseX = pageX;
+        config.mouseY = pageY;
+      }
+      if (!config.shouldRespondToClick) {
+        return;
       }
       utils.wipeAndRecreateUserCanvas();
-      timeline.renderUserIcon(x, y);
+      timeline.renderUserIcon();
     };
 
     app.p.mouseClicked = async () => {
+      if (!config.shouldRespondToClick) {
+        return;
+      }
+
       const { circlePositions } = app.timeline;
       let clickedIndex;
 
@@ -68,10 +80,24 @@ timeline.init = () => {
         }
       });
 
-      if (clickedIndex !== undefined && config.shouldRespondToClick) {
+      if (
+        clickedIndex !== undefined &&
+        !config.timeline.circles[clickedIndex].visited
+      ) {
+        if (window.cancelPromise) {
+          window.cancelPromise = null;
+        }
         config.shouldRespondToClick = false;
+        app.timeline.currentIndex = clickedIndex;
+        utils.wipeAndRecreateUserCanvas();
+        timeline.renderUserIcon();
         await app.drawFlows(clickedIndex);
+        bubbles.clearAndRewriteBubbles();
+        bubbles.showMinifiedBubbles();
         config.shouldRespondToClick = true;
+        config.timeline.circles[clickedIndex].visited = true;
+        utils.wipeAndRecreateUserCanvas();
+        timeline.renderUserIcon();
       }
     };
   } else {
@@ -91,7 +117,8 @@ timeline.drawLineAboveCircle = (index, completed = false) => {
   const { diameter } = config.timeline.circleProps;
   const p = app.p;
   const positions = app.timeline.circlePositions[index];
-  const strokeColor = completed ? colors.visitedBlue : colors.grey;
+  const strokeColor =
+    completed && !config.isInteractiveMode ? colors.visitedBlue : colors.grey;
 
   p.push();
   p.stroke(strokeColor);
@@ -122,7 +149,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     p.pop();
 
     p.push();
-    p.stroke(0, 0, 0);
+    p.fill(config.timeline.colors.black);
     p.textSize(12);
     p.strokeWeight(0.1);
     p.textFont('ui-sans-serif');
@@ -138,6 +165,10 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
  * Draws the horizontal timeline line.
  */
 timeline.drawTimelineLine = () => {
+  if (config.isInteractiveMode) {
+    return;
+  }
+
   const { position, colors, circleProps } = config.timeline;
   const { diameter, verticalSpacing } = circleProps;
 
@@ -149,7 +180,7 @@ timeline.drawTimelineLine = () => {
   if (app.timeline.currentIndex === 0) {
     p.push();
     p.stroke(colors.grey);
-    app.p.line(
+    p.line(
       0,
       yPositonForLine,
       config.timeline.position.x +
@@ -194,15 +225,17 @@ timeline.drawCircle = (index, completed = false) => {
 
 timeline.renderUserIcon = () => {
   const { mouseX, mouseY } = config;
-  const circlePosition = config.isInteractiveMode
-    ? { x: mouseX, y: mouseY }
-    : app.timeline.circlePositions[app.timeline.currentIndex];
+  const circlePosition =
+    config.isInteractiveMode && config.shouldRespondToClick
+      ? { x: mouseX, y: mouseY }
+      : app.timeline.circlePositions[app.timeline.currentIndex];
 
   if (circlePosition === undefined) {
     return;
   }
 
   const user = config.timeline.user;
+
   timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
 
@@ -218,6 +251,19 @@ timeline.renderUserIcon = () => {
 timeline.eraseAndRedraw = () => {
   const currentIndex = app.timeline.currentIndex;
   const { colors } = config.timeline;
+
+  if (config.isInteractiveMode) {
+    config.timeline.circles.forEach((circle, index) => {
+      if (circle.visited === true) {
+        app.p.push();
+        app.p.stroke(colors.visitedBlue);
+        timeline.drawCircle(index, true);
+        app.p.pop();
+      }
+    });
+    return;
+  }
+
   utils.wipeAndRecreateUserCanvas();
 
   if (currentIndex > 0) {

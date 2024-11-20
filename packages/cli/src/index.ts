@@ -120,7 +120,7 @@ program
   )
   .option(
     '-b, --button-selectors <path>',
-    'The path to a json file which contains selectors or button text to be used for GDPR banner acceptance',
+    'The path to a JSON file that contains selectors or button text to be used for GDPR banner acceptance',
     (value) => filePathValidator(value, '-b')
   )
   .helpOption('-h, --help', 'Display help for command')
