@@ -153,7 +153,9 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     p.textSize(12);
     p.strokeWeight(0.1);
     p.textFont('ui-sans-serif');
-    p.text(circleItem.datetime, xPositionForCircle, position.y);
+    if (!config.isInteractiveMode) {
+      p.text(circleItem.datetime, xPositionForCircle, position.y);
+    }
     p.text(circleItem.website, xPositionForCircle, position.y + 20);
     p.pop();
 
