@@ -17,12 +17,13 @@
 /**
  * External dependencies.
  */
+import classNames from 'classnames';
 import React from 'react';
 
 interface TileProps {
   item: {
     name: string;
-    buttons: { name: string; onClick: () => void }[];
+    buttons: { name: string; onClick?: () => void }[];
     Icon: React.FC<React.SVGProps<SVGSVGElement>>;
   };
 }
@@ -43,9 +44,15 @@ const Tile = ({ item }: TileProps) => {
         {item.buttons &&
           item.buttons.map((button) => (
             <button
-              className="bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs hover:border-american-silver hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:scale-[1.03] transition-all duration-150 ease-in-out"
+              className={classNames(
+                'bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs',
+                {
+                  'hover:border-american-silver hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:scale-[1.03] transition-all duration-150 ease-in-out':
+                    button.onClick,
+                }
+              )}
               key={button.name}
-              onClick={button.onClick}
+              onClick={button?.onClick}
             >
               {button.name}
             </button>

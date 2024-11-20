@@ -26,20 +26,23 @@ import { FrameIcon, MoneyIcon, ScreenIcon } from '@google-psat/design-system';
 import Matrix from './matrix';
 import Tile from './tile';
 import { useCookie, useProtectedAudience } from '../../../../../stateProviders';
-import { noop } from 'lodash-es';
 
 interface AdunitPanelProps {
   adunit: string;
 }
 
 const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
-  const { setIsInspecting } = useCookie(({ actions }) => ({
+  const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
+    isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
   }));
 
-  const { adsAndBidders } = useProtectedAudience(({ state }) => ({
-    adsAndBidders: state.adsAndBidders,
-  }));
+  const { adsAndBidders, setSelectedAdUnit } = useProtectedAudience(
+    ({ state, actions }) => ({
+      adsAndBidders: state.adsAndBidders,
+      setSelectedAdUnit: actions.setSelectedAdUnit,
+    })
+  );
 
   const currentAd = adsAndBidders[adunit];
 
@@ -49,7 +52,18 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
         name: 'Ad Unit Code',
         Icon: FrameIcon,
         buttons: [
-          { name: adunit, onClick: () => setIsInspecting((prev) => !prev) },
+          {
+            name: adunit,
+            onClick: () => {
+              if (isInspecting) {
+                setIsInspecting(false);
+                setSelectedAdUnit(null);
+              } else {
+                setIsInspecting(true);
+                setSelectedAdUnit(adunit);
+              }
+            },
+          },
         ],
       },
       {
@@ -58,7 +72,6 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
         buttons: [
           ...(currentAd?.mediaContainerSize || []).map((size) => ({
             name: `${size[0]}x${size[1]}`,
-            onClick: noop,
           })),
         ],
       },
@@ -68,12 +81,18 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
         buttons: [
           ...(currentAd?.bidders || []).map((bidder) => ({
             name: bidder,
-            onClick: noop,
           })),
         ],
       },
     ],
-    [adunit, currentAd?.bidders, currentAd?.mediaContainerSize, setIsInspecting]
+    [
+      adunit,
+      currentAd?.bidders,
+      currentAd?.mediaContainerSize,
+      isInspecting,
+      setIsInspecting,
+      setSelectedAdUnit,
+    ]
   );
 
   return (
