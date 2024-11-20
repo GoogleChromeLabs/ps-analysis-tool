@@ -51,8 +51,11 @@ timeline.init = () => {
         config.mouseX = pageX;
         config.mouseY = pageY;
       }
+      if (!config.shouldRespondToClick) {
+        return;
+      }
       utils.wipeAndRecreateUserCanvas();
-      timeline.renderUserIcon(config.mouseX, config.mouseY);
+      timeline.renderUserIcon();
     };
 
     app.p.mouseClicked = async () => {
@@ -86,11 +89,15 @@ timeline.init = () => {
         }
         config.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
+        utils.wipeAndRecreateUserCanvas();
+        timeline.renderUserIcon();
         await app.drawFlows(clickedIndex);
         bubbles.clearAndRewriteBubbles();
         bubbles.showMinifiedBubbles();
         config.shouldRespondToClick = true;
         config.timeline.circles[clickedIndex].visited = true;
+        utils.wipeAndRecreateUserCanvas();
+        timeline.renderUserIcon();
       }
     };
   } else {
@@ -218,9 +225,10 @@ timeline.drawCircle = (index, completed = false) => {
 
 timeline.renderUserIcon = () => {
   const { mouseX, mouseY } = config;
-  const circlePosition = config.isInteractiveMode
-    ? { x: mouseX, y: mouseY }
-    : app.timeline.circlePositions[app.timeline.currentIndex];
+  const circlePosition =
+    config.isInteractiveMode && config.shouldRespondToClick
+      ? { x: mouseX, y: mouseY }
+      : app.timeline.circlePositions[app.timeline.currentIndex];
 
   if (circlePosition === undefined) {
     return;
