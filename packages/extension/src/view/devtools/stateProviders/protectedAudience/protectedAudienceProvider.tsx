@@ -331,14 +331,19 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    []
+    [reshapeAuctionEvents]
   );
   const onCommittedNavigationListener = useCallback(
     ({
       frameId,
       frameType,
+      tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameType !== 'outermost_frame' && frameId !== 0) {
+      if (
+        frameType !== 'outermost_frame' &&
+        frameId !== 0 &&
+        tabId !== chrome.devtools.inspectedWindow.tabId
+      ) {
         return;
       }
 
