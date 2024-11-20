@@ -30,9 +30,16 @@ import {
 } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 import { isOnRWS } from '../../../contentScript/utils';
+import highlightNode, {
+  highlightNodeWithCoordinates,
+} from '../../../utils/highlightNode';
 
 interface Response {
-  attributes: { iframeOrigin: string | null; setInPage?: boolean };
+  attributes: {
+    iframeOrigin: string | null;
+    setInPage?: boolean;
+    rect: DOMRect;
+  };
 }
 
 const useFrameOverlay = (
@@ -50,7 +57,9 @@ const useFrameOverlay = (
     tabFrames,
     setCanStartInspecting,
     canStartInspecting,
+    tabUrl,
   } = useCookie(({ state, actions }) => ({
+    tabUrl: state.tabUrl,
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
@@ -108,9 +117,28 @@ const useFrameOverlay = (
       name: portName,
     });
 
-    portRef.current.onMessage.addListener((response: Response) => {
+    portRef.current.onMessage.addListener(async (response: Response) => {
       if (selectedAdUnit) {
         return;
+      }
+
+      await chrome.debugger.sendCommand(
+        { tabId: chrome.devtools.inspectedWindow.tabId },
+        'Overlay.hideHighlight'
+      );
+
+      if (response.attributes.iframeOrigin === null) {
+        return;
+      }
+
+      if (response?.attributes?.rect) {
+        const rect = response.attributes.rect;
+        await highlightNodeWithCoordinates(
+          Math.floor(rect.x),
+          Math.floor(rect.y),
+          Math.floor(rect.width),
+          Math.floor(rect.height)
+        );
       }
       setSelectedFrame(response.attributes.iframeOrigin, true);
     });
@@ -377,6 +405,8 @@ const useFrameOverlay = (
             ? await isOnRWS(selectedFrame)
             : false;
 
+          await highlightNode(selectedFrame, tabUrl);
+
           portRef.current?.postMessage({
             selectedFrame,
             removeAllFramePopovers: isFrameSelectedFromDevTool,
@@ -403,6 +433,7 @@ const useFrameOverlay = (
     isInspecting,
     selectedFrame,
     tabFrames,
+    tabUrl,
   ]);
 };
 

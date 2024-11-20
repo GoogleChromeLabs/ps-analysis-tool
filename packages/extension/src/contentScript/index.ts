@@ -595,11 +595,6 @@ class WebpageContentScript {
 
     // All frames are visible.
     if (0 === hiddenIFrameCount) {
-      // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
-      frameElements.forEach((frame) => {
-        this.insertOverlay(frame);
-      });
-
       let iframeForTooltip = this.hoveredFrame
         ? this.hoveredFrame
         : frameElements[0];
@@ -628,7 +623,6 @@ class WebpageContentScript {
     if (0 === visibleIFrameCount) {
       const frame = frameElements[0];
 
-      this.insertOverlay(frame);
       this.insertTooltip(
         frame,
         visibleIFrameCount,
@@ -638,13 +632,6 @@ class WebpageContentScript {
 
       return popoverElement;
     }
-
-    // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
-    frameElements.forEach((frame) => {
-      if (!isFrameHidden(frame)) {
-        this.insertOverlay(frame);
-      }
-    });
 
     frameElements.forEach((frame, index) => {
       if (!isFrameHidden(frame)) {
@@ -752,22 +739,32 @@ class WebpageContentScript {
     this.isHoveringOverPage = true;
 
     if (
-      !this.bodyHoverStateSent &&
       this.isInspecting &&
-      isNonIframeElement &&
-      this.port
+      !isNonIframeElement &&
+      this.port &&
+      event.type === 'mouseout'
     ) {
+      removeAllPopovers();
+      if (chrome.runtime?.id) {
+        this.port.postMessage({
+          attributes: {
+            iframeOrigin: null,
+          },
+        });
+      }
+      return;
+    }
+
+    if (this.isInspecting && isNonIframeElement && this.port) {
       removeAllPopovers();
 
       if (chrome.runtime?.id) {
         this.port.postMessage({
           attributes: {
-            iframeOrigin: '',
+            iframeOrigin: null,
           },
         });
       }
-
-      this.bodyHoverStateSent = true;
     }
 
     if (!this.isInspecting || isNonIframeElement) {
@@ -790,8 +787,6 @@ class WebpageContentScript {
 
       this.removeAllPopovers();
 
-      this.insertOverlay(frame);
-
       this.insertTooltip(frame, visibleIFrameCount, hiddenIFrameCount, {
         isInspecting: true,
       });
@@ -813,6 +808,7 @@ class WebpageContentScript {
       if (chrome.runtime?.id) {
         this.port.postMessage({
           attributes: {
+            rect: frame.getBoundingClientRect(),
             iframeOrigin: url ? url.origin : '',
             isNullSetFromHover: url ? false : true,
           },
