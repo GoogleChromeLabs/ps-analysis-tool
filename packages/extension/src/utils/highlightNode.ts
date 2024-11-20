@@ -113,4 +113,49 @@ export const highlightNodeWithCoordinates = async (
     }
   );
 };
+
+export const highlightAdUnit = async (adUnit: string | null) => {
+  await chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'DOM.enable'
+  );
+  await chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'Overlay.enable'
+  );
+  await chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'Overlay.hideHighlight'
+  );
+
+  const { root } = await chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'DOM.getDocument'
+  );
+
+  const { nodeIds } = await chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'DOM.querySelectorAll',
+    {
+      nodeId: root.nodeId,
+      selector: `div[id="${adUnit}"]`,
+    }
+  );
+
+  await Promise.all(
+    nodeIds.map(async (id: number) => {
+      await chrome.debugger.sendCommand(
+        { tabId: chrome.devtools.inspectedWindow.tabId },
+        'Overlay.highlightNode',
+        {
+          highlightConfig: {
+            contentColor: { r: 9, g: 88, b: 230, a: 0.5 },
+          },
+          nodeId: id,
+          selector: `div[id="${adUnit}"]`,
+        }
+      );
+    })
+  );
+};
 export default highlightNode;

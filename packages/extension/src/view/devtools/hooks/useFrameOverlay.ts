@@ -31,6 +31,7 @@ import {
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 import { isOnRWS } from '../../../contentScript/utils';
 import highlightNode, {
+  highlightAdUnit,
   highlightNodeWithCoordinates,
 } from '../../../utils/highlightNode';
 
@@ -301,43 +302,47 @@ const useFrameOverlay = (
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
-    try {
-      if (selectedFrame) {
-        return;
-      }
+    (async () => {
+      try {
+        if (selectedFrame) {
+          return;
+        }
 
-      if (!selectedAdUnit) {
-        return;
-      }
+        if (!selectedAdUnit) {
+          return;
+        }
 
-      if (!connectedToPort && !canStartInspecting) {
-        connectToPort();
-      }
+        if (!connectedToPort && !canStartInspecting) {
+          connectToPort();
+        }
 
-      if (!isInspecting && portRef.current && canStartInspecting) {
-        portRef.current.postMessage({
-          isInspecting: false,
-        });
+        if (!isInspecting && portRef.current && canStartInspecting) {
+          portRef.current.postMessage({
+            isInspecting: false,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      if (chrome.runtime?.id && portRef.current && canStartInspecting) {
-        portRef.current?.postMessage({
-          isForProtectedAudience: true,
-          selectedAdUnit,
-          numberOfBidders: adsAndBidders[selectedAdUnit]?.bidders?.length,
-          bidders: adsAndBidders[selectedAdUnit]?.bidders,
-          winningBid: adsAndBidders[selectedAdUnit]?.winningBid,
-          bidCurrency: adsAndBidders[selectedAdUnit]?.bidCurrency,
-          winningBidder: adsAndBidders[selectedAdUnit]?.winningBidder,
-          isInspecting,
-        });
+        if (chrome.runtime?.id && portRef.current && canStartInspecting) {
+          await highlightAdUnit(selectedAdUnit);
+          portRef.current?.postMessage({
+            isForProtectedAudience: true,
+            selectedAdUnit,
+            numberOfBidders: adsAndBidders[selectedAdUnit]?.bidders?.length,
+            bidders: adsAndBidders[selectedAdUnit]?.bidders,
+            winningBid: adsAndBidders[selectedAdUnit]?.winningBid,
+            bidCurrency: adsAndBidders[selectedAdUnit]?.bidCurrency,
+            winningBidder: adsAndBidders[selectedAdUnit]?.winningBidder,
+            isInspecting,
+          });
+        }
+      } catch (error) {
+        // Silently fail.
       }
-    } catch (error) {
-      // Silently fail.
-    }
+    })();
   }, [
+    tabUrl,
     canStartInspecting,
     connectToPort,
     connectedToPort,

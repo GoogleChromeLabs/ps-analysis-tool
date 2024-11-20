@@ -33,8 +33,6 @@ import {
   findSelectedFrameElements,
   removeAllPopovers,
   toggleFrameHighlighting,
-  addOverlay,
-  setOverlayPosition,
   addTooltip,
 } from './popovers';
 import type { ResponseType } from './types';
@@ -344,27 +342,6 @@ class WebpageContentScript {
   };
 
   /**
-   * Inserts overlay
-   * @param frame Frame
-   * @returns {HTMLElement |null} Overlay
-   */
-  insertOverlay(frame: HTMLElement): HTMLElement | null {
-    const overlay = addOverlay(frame);
-
-    setOverlayPosition(overlay, frame);
-
-    const updatePosition = () => {
-      if (isElementVisibleInViewport(frame, true)) {
-        setOverlayPosition(overlay, frame);
-      }
-    };
-
-    this.addEventListerOnScroll(updatePosition);
-
-    return overlay;
-  }
-
-  /**
    * Insert tooltip.
    * @param {ResponseType} response Response.
    * @returns {HTMLElement} Tooltip.
@@ -380,7 +357,6 @@ class WebpageContentScript {
       return null;
     }
     removeAllPopovers();
-    this.insertOverlay(frame);
 
     const tooltip = addTooltip(frame, response, 0, 0);
 
