@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const highlightNode = async (
-  selectedFrame: string | null,
-  tabUrl: string | null
-) => {
+const enableDomainsAndGetDocument = async (
+  returnRoot = false
+): Promise<null | number> => {
   await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
     'DOM.enable'
@@ -25,7 +24,30 @@ export const highlightNode = async (
     { tabId: chrome.devtools.inspectedWindow.tabId },
     'Overlay.enable'
   );
-  if (selectedFrame === null || tabUrl === null) {
+  await chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'Overlay.hideHighlight'
+  );
+
+  if (!returnRoot) {
+    return Promise.resolve(null);
+  }
+
+  const { root } = await chrome.debugger.sendCommand(
+    { tabId: chrome.devtools.inspectedWindow.tabId },
+    'DOM.getDocument'
+  );
+
+  return root;
+};
+
+export const highlightNode = async (
+  selectedFrame: string | null,
+  tabUrl: string | null
+) => {
+  const root = enableDomainsAndGetDocument(true);
+
+  if (!selectedFrame || !tabUrl) {
     await chrome.debugger.sendCommand(
       { tabId: chrome.devtools.inspectedWindow.tabId },
       'Overlay.hideHighlight'
@@ -35,11 +57,6 @@ export const highlightNode = async (
 
   const selectedFrameUrl = new URL(selectedFrame);
   const tabUrlObj = new URL(tabUrl);
-
-  const { root } = await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'DOM.getDocument'
-  );
 
   const { nodeIds } = await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
@@ -87,19 +104,7 @@ export const highlightNodeWithCoordinates = async (
   width: number,
   height: number
 ) => {
-  await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'DOM.enable'
-  );
-  await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'Overlay.enable'
-  );
-
-  await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'Overlay.hideHighlight'
-  );
+  await enableDomainsAndGetDocument();
 
   await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
@@ -115,23 +120,7 @@ export const highlightNodeWithCoordinates = async (
 };
 
 export const highlightAdUnit = async (adUnit: string | null) => {
-  await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'DOM.enable'
-  );
-  await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'Overlay.enable'
-  );
-  await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'Overlay.hideHighlight'
-  );
-
-  const { root } = await chrome.debugger.sendCommand(
-    { tabId: chrome.devtools.inspectedWindow.tabId },
-    'DOM.getDocument'
-  );
+  const root = await enableDomainsAndGetDocument(true);
 
   const { nodeIds } = await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
