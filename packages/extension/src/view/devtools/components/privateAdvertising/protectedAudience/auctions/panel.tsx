@@ -30,6 +30,7 @@ import {
  */
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import AuctionTable from './auctionTable';
+import AdunitPanel from './adunitPanel';
 
 interface AuctionPanelProps {
   auctionEvents: AuctionEventsType;
@@ -104,7 +105,10 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
         data[adUnit] = {
           title: adUnit,
           panel: {
-            Element: undefined,
+            Element: AdunitPanel,
+            props: {
+              adunit: adUnit,
+            },
           },
           children: adUnitChildren,
           dropdownOpen: true,
