@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
@@ -43,6 +43,12 @@ const Auctions = () => {
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
+
+  useEffect(() => {
+    if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
+      setSidebarData({});
+    }
+  }, [auctionEvents]);
 
   if (!isUsingCDP) {
     return (
@@ -80,7 +86,10 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <Breakpoints />
       <div className="overflow-auto flex-1">
-        <SidebarProvider data={sidebarData}>
+        <SidebarProvider
+          data={sidebarData}
+          defaultSelectedItemKey={Object.keys(sidebarData)?.[0]}
+        >
           <AuctionPanel
             setSidebarData={setSidebarData}
             auctionEvents={auctionEvents}
