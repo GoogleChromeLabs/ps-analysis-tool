@@ -360,7 +360,7 @@ utils.disableButtons = () => {
       ? true
       : false;
   app.nextButton.style.cursor =
-    app.timeline.currentIndex === config.timeline.circles.length - 1
+    app.timeline.currentIndex >= config.timeline.circles.length - 1
       ? 'default'
       : 'pointer';
 };
