@@ -146,6 +146,7 @@ app.setupLoop = async () => {
     app.timeline.currentIndex < config.timeline.circles.length &&
     !config.isInteractiveMode
   ) {
+    utils.disableButtons();
     if (window.cancelPromise) {
       if (config.isInteractiveMode) {
         return;
