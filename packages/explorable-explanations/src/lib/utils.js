@@ -352,9 +352,15 @@ utils.markVisitedValue = (index, value) => {
 };
 
 utils.disableButtons = () => {
+  app.prevButton.style.cursor =
+    app.timeline.currentIndex > 0 ? 'pointer' : 'default';
   app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
   app.nextButton.disabled =
     app.timeline.currentIndex === config.timeline.circles.length ? true : false;
+  app.nextButton.style.cursor =
+    app.timeline.currentIndex === config.timeline.circles.length
+      ? 'default'
+      : 'pointer';
 };
 
 export default utils;

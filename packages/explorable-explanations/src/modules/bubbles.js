@@ -70,7 +70,6 @@ bubbles.generateBubbles = (recalculate = false) => {
 
     const groups = d3.map(app.bubbles.positions, (d) => d.group);
     const color = d3.scaleOrdinal(groups, d3.schemeTableau10);
-
     app.bubbles.positions = app.bubbles.positions.map((data, i) => {
       return {
         ...data,
@@ -143,7 +142,7 @@ bubbles.barrageAnimation = async (index) => {
         return;
       }
 
-      if (window.cancelPromise) {
+      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
         resolve();
         return;
       }
@@ -247,7 +246,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const target = igp.createVector(midPointX, midPointY);
     const { color: currentColor } = app.bubbles.positions[i];
     const color = currentColor;
-
     positionsOfCircles.push({
       x:
         dspTags?.props?.x() +
@@ -272,7 +270,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
         return;
       }
 
-      if (window.cancelPromise) {
+      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
         resolve();
         return;
       }
@@ -439,7 +437,7 @@ bubbles.bubbleChart = (
   if (data.length === 0) {
     return null;
   }
-
+  //console.log(data)
   const values = d3.map(data, value);
   const groups = groupFn === null ? null : d3.map(data, groupFn);
   const groupIntervals = d3.range(values.length).filter((i) => values[i] > 0);

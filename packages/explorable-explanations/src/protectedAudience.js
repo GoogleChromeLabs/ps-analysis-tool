@@ -146,13 +146,11 @@ app.setupLoop = async () => {
     app.timeline.currentIndex < config.timeline.circles.length &&
     !config.isInteractiveMode
   ) {
+    window.cancelPromiseForPreviousAndNext = false;
     utils.disableButtons();
     if (window.cancelPromise) {
-      if (config.isInteractiveMode) {
-        return;
-      }
       window.cancelPromise = false;
-      continue;
+      return;
     }
 
     if (app.timeline.isPaused) {
@@ -166,7 +164,7 @@ app.setupLoop = async () => {
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);
 
-    if (!window.cancelPromise && !config.isInteractiveMode) {
+    if (!window.cancelPromiseForPreviousAndNext) {
       app.timeline.currentIndex++;
     }
   }
@@ -189,7 +187,7 @@ app.handlePrevButton = () => {
     return;
   }
 
-  window.cancelPromise = true;
+  window.cancelPromiseForPreviousAndNext = true;
   app.timeline.currentIndex -= 1;
   app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
   utils.markVisitedValue(app.timeline.currentIndex, true);
@@ -208,10 +206,10 @@ app.handleNextButton = () => {
     return;
   }
 
-  window.cancelPromise = true;
-  bubbles.generateBubbles();
-  bubbles.showMinifiedBubbles();
+  window.cancelPromiseForPreviousAndNext = true;
   app.timeline.currentIndex += 1;
+  bubbles.generateBubbles(true);
+  bubbles.showMinifiedBubbles();
   utils.markVisitedValue(app.timeline.currentIndex, true);
   utils.wipeAndRecreateMainCanvas();
   timeline.drawTimelineLine();

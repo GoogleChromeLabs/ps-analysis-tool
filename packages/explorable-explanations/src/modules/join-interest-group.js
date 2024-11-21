@@ -158,7 +158,7 @@ joinInterestGroup.draw = async (index) => {
   }
 
   for (const step of steps) {
-    if (window.cancelPromise) {
+    if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
       return;
     }
 
@@ -184,10 +184,7 @@ joinInterestGroup.draw = async (index) => {
     bubbles.showMinifiedBubbles();
   }
 
-  if (window.cancelPromise && !config.isInteractiveMode) {
-    config.bubbles.interestGroupCounts =
-      bubbles.calculateTotalBubblesForAnimation(index);
-  } else {
+  if (!window.cancelPromiseForPreviousAndNext) {
     config.bubbles.interestGroupCounts +=
       config.timeline.circles[index]?.igGroupsCount ?? 0;
   }
