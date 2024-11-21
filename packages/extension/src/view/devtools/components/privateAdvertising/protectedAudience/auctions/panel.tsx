@@ -39,26 +39,14 @@ interface AuctionPanelProps {
 
 const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
   useEffect(() => {
-    setSidebarData((prev) => {
-      const data = { ...prev } as SidebarItems;
+    setSidebarData(() => {
+      const data = {} as SidebarItems;
 
       Object.keys(auctionEvents).forEach((adUnit) => {
-        const adUnitChildren = {
-          ...data[adUnit]?.children,
-        } as SidebarItems;
+        const adUnitChildren = {} as SidebarItems;
 
         Object.keys(auctionEvents[adUnit]).forEach((time) => {
-          if (
-            data[adUnit] &&
-            data[adUnit].children &&
-            data[adUnit].children[time]
-          ) {
-            return;
-          }
-
-          let children = {
-            ...adUnitChildren[time]?.children,
-          } as SidebarItems;
+          let children = {} as SidebarItems;
           const sellerUrl = Object.keys(auctionEvents[adUnit][time])[0];
 
           const entries = Object.entries(auctionEvents[adUnit][time][sellerUrl])

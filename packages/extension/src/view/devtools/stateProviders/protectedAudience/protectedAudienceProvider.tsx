@@ -69,10 +69,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['adsAndBidders']
   >({});
 
-  useEffect(() => {
-    setAuctionEvents(() => null);
-  }, [isMultiSellerAuction]);
-
   const reshapeAuctionEvents = useCallback(
     (
       auctionEventsToBeParsed: SingleSellerAuction | MultiSellerAuction | null,
@@ -173,6 +169,11 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         return reshapedAuctionEvents;
       };
+
+      if (Object.keys(auctionEventsToBeParsed || {}).length === 0) {
+        setAuctionEvents(() => null);
+        return true;
+      }
 
       setAuctionEvents((prevState) => {
         if (
