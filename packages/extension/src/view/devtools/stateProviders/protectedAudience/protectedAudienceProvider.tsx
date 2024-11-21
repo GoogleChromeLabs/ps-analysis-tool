@@ -341,8 +341,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        frameType !== 'outermost_frame' &&
-        frameId !== 0 &&
+        (frameType !== 'outermost_frame' && frameId !== 0) ||
         tabId !== chrome.devtools.inspectedWindow.tabId
       ) {
         return;
