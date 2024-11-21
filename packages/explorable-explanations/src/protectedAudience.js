@@ -183,7 +183,7 @@ app.minifiedBubbleKeyPressListener = (event) => {
 };
 
 app.handlePrevButton = () => {
-  if (config.bubbles.isExpanded) {
+  if (config.bubbles.isExpanded || config.isInteractiveMode) {
     return;
   }
 
@@ -211,7 +211,7 @@ app.handlePrevButton = () => {
 };
 
 app.handleNextButton = () => {
-  if (config.bubbles.isExpanded) {
+  if (config.bubbles.isExpanded || config.isInteractiveMode) {
     return;
   }
 
@@ -294,6 +294,13 @@ app.toggleInteractiveMode = () => {
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
+  if (config.isInteractiveMode) {
+    app.prevButton.style.display = 'none';
+    app.nextButton.style.display = 'none';
+  } else {
+    app.prevButton.style.display = 'block';
+    app.nextButton.style.display = 'block';
+  }
 
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
