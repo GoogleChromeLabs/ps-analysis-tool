@@ -46,8 +46,8 @@ app.setUpTimeLine = () => {
 
   timeline.init();
 
-  app.auction.setupAuctions();
-  app.joinInterestGroup.setupJoinings();
+  auctions.setupAuctions();
+  joinInterestGroup.setupJoinings();
 };
 app.init = async (p) => {
   app.p = p;
@@ -158,22 +158,15 @@ app.setupLoop = async () => {
       continue;
     }
 
-    config.timeline.circles[app.timeline.currentIndex].visited = true;
+    utils.markVisitedValue(app.timeline.currentIndex, true);
 
     bubbles.showMinifiedBubbles();
-    app.timeline.renderUserIcon();
+    timeline.renderUserIcon();
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);
 
     if (!window.cancelPromise && !config.isInteractiveMode) {
       app.timeline.currentIndex++;
-    }
-
-    if (app.timeline.currentIndex > 0) {
-      app.prevButton.disabled = false;
-    }
-    if (app.timeline.currentIndex === config.timeline.circles.length) {
-      app.nextButton.disabled = true;
     }
   }
   app.timeline.eraseAndRedraw();
@@ -194,22 +187,37 @@ app.handlePrevButton = () => {
   if (config.bubbles.isExpanded) {
     return;
   }
+
   window.cancelPromise = true;
   app.timeline.currentIndex -= 1;
-  flow.clearBelowTimelineCircles();
+  app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
+  utils.markVisitedValue(app.timeline.currentIndex, true);
+  bubbles.generateBubbles();
+  bubbles.showMinifiedBubbles();
+  config.bubbles.interestGroupCounts =
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+  utils.wipeAndRecreateMainCanvas();
+  timeline.drawTimelineLine();
+  timeline.drawTimeline(config.timeline);
+  utils.disableButtons();
 };
 
 app.handleNextButton = () => {
   if (config.bubbles.isExpanded) {
     return;
   }
+
   window.cancelPromise = true;
   bubbles.generateBubbles();
   bubbles.showMinifiedBubbles();
   app.timeline.currentIndex += 1;
+  utils.markVisitedValue(app.timeline.currentIndex, true);
+  utils.wipeAndRecreateMainCanvas();
+  timeline.drawTimelineLine();
+  timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-  flow.clearBelowTimelineCircles();
+  utils.disableButtons();
 };
 
 app.handleControls = () => {
@@ -273,11 +281,7 @@ app.toggleInteractiveMode = () => {
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p);
-
-  config.timeline.circles = config.timeline.circles.map((circle) => {
-    circle.visited = false;
-    return circle;
-  });
+  utils.markVisitedValue(config.timeline.circles.length, false);
 
   app.timeline.eraseAndRedraw();
 };

@@ -127,6 +127,16 @@ utils.triangle = (size, x, y, direction = 'right', color = 'black') => {
 utils.delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+utils.wipeAndRecreateMainCanvas = () => {
+  const { height, width } = utils.calculateCanvasDimensions();
+  const canvas = app.p.createCanvas(width, height);
+  canvas.parent('ps-canvas');
+  canvas.style('z-index', 0);
+  app.p.background(config.canvas.background);
+  app.p.textSize(config.canvas.fontSize);
+};
+
 utils.wipeAndRecreateInterestCanvas = () => {
   const { height, width } = utils.calculateCanvasDimensions();
   const overlayCanvas = app.igp.createCanvas(width, height);
@@ -330,6 +340,21 @@ utils.isOverControls = (mouseX, mouseY) => {
   }
 
   return false;
+};
+
+utils.markVisitedValue = (index, value) => {
+  config.timeline.circles = config.timeline.circles.map((circle, i) => {
+    if (i < index && index >= 0) {
+      circle.visited = value;
+    }
+    return circle;
+  });
+};
+
+utils.disableButtons = () => {
+  app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
+  app.nextButton.disabled =
+    app.timeline.currentIndex === config.timeline.circles.length ? true : false;
 };
 
 export default utils;

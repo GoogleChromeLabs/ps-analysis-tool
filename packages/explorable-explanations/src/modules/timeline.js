@@ -32,6 +32,7 @@ const timeline = {};
  * and drawing the initial timeline and user icon.
  */
 timeline.init = () => {
+  app.timeline.circlePublisherIndices = [];
   config.timeline.circles.forEach((circle, index) => {
     if (circle.type === 'publisher') {
       app.timeline.circlePublisherIndices.push(index);
@@ -179,19 +180,16 @@ timeline.drawTimelineLine = () => {
   const p = app.p;
   let x = 0;
 
-  if (app.timeline.currentIndex === 0) {
-    p.push();
-    p.stroke(colors.grey);
-    p.line(
-      0,
-      yPositonForLine,
-      config.timeline.position.x +
-        circleVerticalSpace * (config.timeline.circles.length - 1),
-      yPositonForLine
-    );
-    p.pop();
-    return;
-  }
+  p.push();
+  p.stroke(colors.grey);
+  p.line(
+    0,
+    yPositonForLine,
+    config.timeline.position.x +
+      circleVerticalSpace * (config.timeline.circles.length - 1),
+    yPositonForLine
+  );
+  p.pop();
 
   while (
     x <=
@@ -200,7 +198,7 @@ timeline.drawTimelineLine = () => {
     app.timeline.currentIndex < config.timeline.circles.length
   ) {
     p.push();
-    p.stroke(26, 115, 232);
+    p.stroke(colors.visitedBlue);
     p.line(0, yPositonForLine, x, yPositonForLine);
     p.pop();
     x = x + 1;
@@ -269,7 +267,6 @@ timeline.eraseAndRedraw = () => {
   utils.wipeAndRecreateUserCanvas();
 
   if (currentIndex > 0) {
-    timeline.drawTimelineLine();
     let i = 0;
     while (i < currentIndex) {
       app.p.push();
