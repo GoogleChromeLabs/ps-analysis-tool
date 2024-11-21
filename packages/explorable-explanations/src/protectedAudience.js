@@ -147,11 +147,11 @@ app.setupLoop = async () => {
     !config.isInteractiveMode
   ) {
     if (window.cancelPromise) {
-      config.timeline.circles = config.timeline.circles.map((circle) => {
-        circle.visited = false;
-        return circle;
-      });
-      return;
+      if (config.isInteractiveMode) {
+        return;
+      }
+      window.cancelPromise = false;
+      continue;
     }
 
     if (app.timeline.isPaused) {
@@ -165,7 +165,18 @@ app.setupLoop = async () => {
     // eslint-disable-next-line no-await-in-loop
     await app.drawFlows(app.timeline.currentIndex);
 
-    app.timeline.currentIndex++;
+    if (!window.cancelPromise && !config.isInteractiveMode) {
+      app.timeline.currentIndex++;
+      config.bubbles.interestGroupCounts =
+        bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+    }
+
+    if (app.timeline.currentIndex > 0) {
+      app.prevButton.disabled = false;
+    }
+    if (app.timeline.currentIndex === config.timeline.circles.length) {
+      app.nextButton.disabled = true;
+    }
   }
   app.timeline.eraseAndRedraw();
 };
@@ -181,6 +192,24 @@ app.minifiedBubbleKeyPressListener = (event) => {
   }
 };
 
+app.handlePrevButton = () => {
+  if (config.bubbles.isExpanded) {
+    return;
+  }
+  window.cancelPromise = true;
+  app.timeline.currentIndex -= 1;
+  flow.clearBelowTimelineCircles();
+};
+
+app.handleNextButton = () => {
+  if (config.bubbles.isExpanded) {
+    return;
+  }
+  window.cancelPromise = true;
+  app.timeline.currentIndex += 1;
+  flow.clearBelowTimelineCircles();
+};
+
 app.handleControls = () => {
   app.playButton = document.getElementById('play');
   app.pauseButton = document.getElementById('pause');
@@ -193,6 +222,9 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
+  app.nextButton = document.getElementById('next-div');
+  app.prevButton = document.getElementById('previous-div');
+
   app.visitedSites = [];
 
   document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
@@ -201,6 +233,9 @@ app.handleControls = () => {
     'click',
     app.minifiedBubbleClickListener
   );
+
+  app.prevButton.addEventListener('click', app.handlePrevButton);
+  app.nextButton.addEventListener('click', app.handleNextButton);
 
   app.bubbleContainerDiv.addEventListener(
     'click',

@@ -161,6 +161,7 @@ joinInterestGroup.draw = async (index) => {
     if (window.cancelPromise) {
       return;
     }
+
     const { component, props, callBack } = step;
 
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -183,8 +184,13 @@ joinInterestGroup.draw = async (index) => {
     bubbles.showMinifiedBubbles();
   }
 
-  config.bubbles.interestGroupCounts +=
-    config.timeline.circles[index]?.igGroupsCount ?? 0;
+  if (window.cancelPromise && !config.isInteractiveMode) {
+    config.bubbles.interestGroupCounts =
+      bubbles.calculateTotalBubblesForAnimation(index);
+  } else {
+    config.bubbles.interestGroupCounts +=
+      config.timeline.circles[index]?.igGroupsCount ?? 0;
+  }
 
   flow.clearBelowTimelineCircles();
 };
