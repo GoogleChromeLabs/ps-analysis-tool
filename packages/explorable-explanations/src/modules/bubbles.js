@@ -565,7 +565,7 @@ bubbles.calculateTotalBubblesForAnimation = (index) => {
   }
 
   config.timeline.circles.forEach((circle, currIndex) => {
-    if (currIndex < index && !config.isInteractiveMode) {
+    if (currIndex < index) {
       bubblesCount += circle.igGroupsCount ?? 0;
     }
   });
