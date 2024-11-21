@@ -192,6 +192,15 @@ app.handlePrevButton = () => {
   app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
   utils.markVisitedValue(app.timeline.currentIndex, true);
   bubbles.generateBubbles();
+  if (
+    app.bubbles.positions.length >
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex)
+  ) {
+    app.bubbles.positions = app.bubbles.positions.splice(
+      0,
+      bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex)
+    );
+  }
   bubbles.showMinifiedBubbles();
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
@@ -207,9 +216,18 @@ app.handleNextButton = () => {
   }
 
   window.cancelPromiseForPreviousAndNext = true;
-  app.timeline.currentIndex += 1;
-  bubbles.generateBubbles(true);
+  bubbles.generateBubbles();
   bubbles.showMinifiedBubbles();
+  if (
+    app.bubbles.positions.length >
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex + 1)
+  ) {
+    const endPosition =
+      app.bubbles.positions.length -
+      config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount;
+    app.bubbles.positions = app.bubbles.positions.slice(0, endPosition);
+  }
+  app.timeline.currentIndex += 1;
   utils.markVisitedValue(app.timeline.currentIndex, true);
   utils.wipeAndRecreateMainCanvas();
   timeline.drawTimelineLine();

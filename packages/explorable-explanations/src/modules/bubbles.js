@@ -437,7 +437,7 @@ bubbles.bubbleChart = (
   if (data.length === 0) {
     return null;
   }
-  //console.log(data)
+
   const values = d3.map(data, value);
   const groups = groupFn === null ? null : d3.map(data, groupFn);
   const groupIntervals = d3.range(values.length).filter((i) => values[i] > 0);
