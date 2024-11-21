@@ -52,6 +52,7 @@ bubbles.init = () => {
 bubbles.generateBubbles = (recalculate = false) => {
   const interestGroupsToBeAdded =
     config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+
   if (!recalculate) {
     for (let index = 0; index < interestGroupsToBeAdded; index++) {
       app.bubbles.positions.push({
@@ -427,6 +428,7 @@ bubbles.bubbleChart = (
   const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+
   data = data.filter((_data, i) => {
     if (i < totalBubbles) {
       return true;

@@ -167,8 +167,6 @@ app.setupLoop = async () => {
 
     if (!window.cancelPromise && !config.isInteractiveMode) {
       app.timeline.currentIndex++;
-      config.bubbles.interestGroupCounts =
-        bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
     }
 
     if (app.timeline.currentIndex > 0) {
@@ -206,7 +204,11 @@ app.handleNextButton = () => {
     return;
   }
   window.cancelPromise = true;
+  bubbles.generateBubbles();
+  bubbles.showMinifiedBubbles();
   app.timeline.currentIndex += 1;
+  config.bubbles.interestGroupCounts =
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
   flow.clearBelowTimelineCircles();
 };
 
