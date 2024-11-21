@@ -92,10 +92,10 @@ timeline.init = () => {
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         await app.drawFlows(clickedIndex);
+        config.timeline.circles[clickedIndex].visited = true;
         bubbles.clearAndRewriteBubbles();
         bubbles.showMinifiedBubbles();
         config.shouldRespondToClick = true;
-        config.timeline.circles[clickedIndex].visited = true;
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
       }

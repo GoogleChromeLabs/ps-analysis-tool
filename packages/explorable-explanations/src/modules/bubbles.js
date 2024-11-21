@@ -555,12 +555,17 @@ bubbles.clearAndRewriteBubbles = () => {
 
 bubbles.calculateTotalBubblesForAnimation = (index) => {
   let bubblesCount = 0;
+  if (config.isInteractiveMode) {
+    config.timeline.circles.forEach((circle) => {
+      if (circle.visited) {
+        bubblesCount += circle.igGroupsCount ?? 0;
+      }
+    });
+    return bubblesCount;
+  }
 
   config.timeline.circles.forEach((circle, currIndex) => {
-    if (
-      (currIndex < index && !config.isInteractiveMode) ||
-      (currIndex <= index && config.isInteractiveMode)
-    ) {
+    if (currIndex < index && !config.isInteractiveMode) {
       bubblesCount += circle.igGroupsCount ?? 0;
     }
   });
