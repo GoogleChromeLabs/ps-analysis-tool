@@ -29,7 +29,7 @@ const WebStories = () => {
   return (
     <div
       data-testid="web-stories-content"
-      className="h-full w-full text-raisin-black dark:text-bright-gray px-2 overflow-y-auto"
+      className="h-full w-full text-raisin-black dark:text-bright-gray overflow-y-auto"
     >
       <iframe
         srcDoc={storyMarkup}

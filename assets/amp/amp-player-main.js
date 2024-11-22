@@ -71,6 +71,9 @@ function initializeArrows() {
  * Closes the lightbox and resets the player and UI.
  */
 function closePlayer() {
+  const data = { storyOpened: false }
+  const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data })
+  window.parent.document.dispatchEvent(event)
   player.pause();
   document.body.classList.remove('lightbox-open');
   lightboxEl.classList.add('closed');
@@ -113,6 +116,10 @@ function initializeCards() {
   cards.forEach((card, idx) => {
     card.addEventListener('click', () => {
       player.show(stories[idx].href, null, { animate: false });
+      const data = { storyOpened: true }
+      const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data })
+      window.parent.document.dispatchEvent(event)
+
       document.body.classList.add('lightbox-open');
       lightboxEl.classList.remove('closed');
       card.classList.add('hidden');
