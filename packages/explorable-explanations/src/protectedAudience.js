@@ -202,6 +202,7 @@ app.handlePrevButton = () => {
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   utils.disableButtons();
+
   if (app.timeline.isPaused) {
     timeline.renderUserIcon();
   }
@@ -222,6 +223,7 @@ app.handleNextButton = () => {
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
   utils.disableButtons();
+
   if (app.timeline.isPaused) {
     timeline.renderUserIcon();
   }
