@@ -135,30 +135,37 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   p.textAlign(p.CENTER, p.CENTER);
   // Draw circles and text at the timeline position
   circles.forEach((circleItem, index) => {
-    const xPositionForCircle =
-      config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
-    const yPositionForCircle = position.y + circleVerticalSpace;
+    if (!window.cancelPromiseForPreviousAndNext) {
+      const xPositionForCircle =
+        config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
+      const yPositionForCircle = position.y + circleVerticalSpace;
 
-    app.timeline.circlePositions.push({
-      x: xPositionForCircle,
-      y: yPositionForCircle,
-    });
+      app.timeline.circlePositions.push({
+        x: xPositionForCircle,
+        y: yPositionForCircle,
+      });
 
-    p.push();
-    p.stroke(config.timeline.colors.grey);
-    timeline.drawCircle(index);
-    p.pop();
+      p.push();
+      p.stroke(config.timeline.colors.grey);
+      timeline.drawCircle(index);
+      p.pop();
 
-    p.push();
-    p.fill(config.timeline.colors.black);
-    p.textSize(12);
-    p.strokeWeight(0.1);
-    p.textFont('ui-sans-serif');
-    if (!config.isInteractiveMode) {
-      p.text(circleItem.datetime, xPositionForCircle, position.y);
+      p.push();
+      p.fill(config.timeline.colors.black);
+      p.textSize(12);
+      p.strokeWeight(0.1);
+      p.textFont('ui-sans-serif');
+      if (!config.isInteractiveMode) {
+        p.text(circleItem.datetime, xPositionForCircle, position.y);
+      }
+      p.text(circleItem.website, xPositionForCircle, position.y + 20);
+      p.pop();
+    } else {
+      p.push();
+      p.stroke(config.timeline.colors.grey);
+      timeline.drawCircle(index);
+      p.pop();
     }
-    p.text(circleItem.website, xPositionForCircle, position.y + 20);
-    p.pop();
 
     timeline.drawLineAboveCircle(index);
   });

@@ -191,20 +191,12 @@ app.handlePrevButton = () => {
   app.timeline.currentIndex -= 1;
   app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
   utils.markVisitedValue(app.timeline.currentIndex, true);
-  bubbles.generateBubbles();
-  if (
-    app.bubbles.positions.length >
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex)
-  ) {
-    app.bubbles.positions = app.bubbles.positions.splice(
-      0,
-      bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex)
-    );
-  }
-  bubbles.showMinifiedBubbles();
-  config.bubbles.interestGroupCounts =
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-  utils.wipeAndRecreateMainCanvas();
+  const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
+    app.timeline.currentIndex
+  );
+
+  config.bubbles.interestGroupCounts = totalBubbles;
+  flow.clearBelowTimelineCircles();
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   utils.disableButtons();
@@ -216,20 +208,10 @@ app.handleNextButton = () => {
   }
 
   window.cancelPromiseForPreviousAndNext = true;
-  bubbles.generateBubbles();
-  bubbles.showMinifiedBubbles();
-  if (
-    app.bubbles.positions.length >
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex + 1)
-  ) {
-    const endPosition =
-      app.bubbles.positions.length -
-      config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount;
-    app.bubbles.positions = app.bubbles.positions.slice(0, endPosition);
-  }
+
   app.timeline.currentIndex += 1;
   utils.markVisitedValue(app.timeline.currentIndex, true);
-  utils.wipeAndRecreateMainCanvas();
+  flow.clearBelowTimelineCircles();
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
@@ -294,6 +276,7 @@ app.toggleInteractiveMode = () => {
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
+
   if (config.isInteractiveMode) {
     app.prevButton.style.display = 'none';
     app.nextButton.style.display = 'none';
