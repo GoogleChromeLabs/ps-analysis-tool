@@ -37,8 +37,12 @@ const predefinedStoryHeader = `
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <script async src="main.js" type="module"></script>
-    <script async src="https://cdn.ampproject.org/amp-story-player-v0.js"></script>
+    <script async src="${chrome.runtime.getURL(
+      'assets/amp/amp-player-main.js'
+    )}" type="module"></script>
+    <script async src="${chrome.runtime.getURL(
+      'assets/amp/amp-story-player-v0.js'
+    )}"></script>
     <link href="https://cdn.ampproject.org/amp-story-player-v0.css" rel="stylesheet" type="text/css">
 
     <style>

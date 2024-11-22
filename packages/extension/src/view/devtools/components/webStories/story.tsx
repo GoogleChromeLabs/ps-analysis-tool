@@ -48,7 +48,8 @@ export const STORY_JSON = [
     publisherLogo: 'https://assets.codepen.io/1780597/6logo.png',
     publisherName: 'Jenny Wilson',
     storyTitle: 'A guide to shaping clay ',
-    storyUrl: 'https://wp.stories.google/stories/a-guide-to-shaping-clay/',
+    storyUrl:
+      'https://wp.stories.google/stories/a-guide-to-shaping-clay/#embedMode=2',
   },
   {
     heroImage: 'https://assets.codepen.io/1780597/animalpoll.jpg',
