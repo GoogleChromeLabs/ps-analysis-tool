@@ -137,13 +137,13 @@ bubbles.barrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (app.timeline.isPaused) {
-        requestAnimationFrame(animate); // Keep the animation loop alive but paused.
+      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+        resolve();
         return;
       }
 
-      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-        resolve();
+      if (app.timeline.isPaused) {
+        requestAnimationFrame(animate); // Keep the animation loop alive but paused.
         return;
       }
 
@@ -265,13 +265,13 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (app.timeline.isPaused) {
-        requestAnimationFrame(animate);
+      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+        resolve();
         return;
       }
 
-      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-        resolve();
+      if (app.timeline.isPaused) {
+        requestAnimationFrame(animate);
         return;
       }
 

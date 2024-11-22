@@ -76,12 +76,12 @@ app.userInit = (p) => {
   app.up = p;
 };
 
-app.play = async (resumed = false) => {
+app.play = (resumed = false) => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
   if (!resumed) {
-    await app.setupLoop();
+    app.setupLoop();
   }
 };
 
@@ -137,43 +137,45 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
   }
 };
 
-app.setupLoop = async () => {
+app.setupLoop = () => {
   if (window.cancelPromise) {
     window.cancelPromise = false;
   }
 
-  while (
-    app.timeline.currentIndex < config.timeline.circles.length &&
-    !config.isInteractiveMode
-  ) {
-    window.cancelPromiseForPreviousAndNext = false;
-    utils.disableButtons();
-    if (window.cancelPromise) {
-      window.cancelPromise = false;
+  const loop = async () => {
+    if (
+      window.cancelPromise ||
+      app.timeline.currentIndex >= config.timeline.circles.length
+    ) {
       return;
     }
 
-    if (app.timeline.isPaused) {
-      continue;
+    if (!app.timeline.isPaused) {
+      window.cancelPromiseForPreviousAndNext = false;
+      utils.disableButtons();
+
+      utils.markVisitedValue(app.timeline.currentIndex, true);
+      bubbles.showMinifiedBubbles();
+      timeline.renderUserIcon();
+
+      // Draw flows for the current index
+      await app.drawFlows(app.timeline.currentIndex);
+
+      if (!window.cancelPromiseForPreviousAndNext) {
+        app.timeline.currentIndex++;
+      }
+
+      app.timeline.eraseAndRedraw();
     }
+    setTimeout(loop, 100);
+  };
 
-    utils.markVisitedValue(app.timeline.currentIndex, true);
-
-    bubbles.showMinifiedBubbles();
-    timeline.renderUserIcon();
-    // eslint-disable-next-line no-await-in-loop
-    await app.drawFlows(app.timeline.currentIndex);
-
-    if (!window.cancelPromiseForPreviousAndNext) {
-      app.timeline.currentIndex++;
-    }
-  }
-  app.timeline.eraseAndRedraw();
+  loop();
 };
 
 app.drawFlows = async (index) => {
-  await app.joinInterestGroup.draw(index);
-  await app.auction.draw(index);
+  await joinInterestGroup.draw(index);
+  await auctions.draw(index);
 };
 
 app.minifiedBubbleKeyPressListener = (event) => {
@@ -200,6 +202,9 @@ app.handlePrevButton = () => {
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   utils.disableButtons();
+  if (app.timeline.isPaused) {
+    timeline.renderUserIcon();
+  }
 };
 
 app.handleNextButton = () => {
@@ -217,6 +222,9 @@ app.handleNextButton = () => {
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
   utils.disableButtons();
+  if (app.timeline.isPaused) {
+    timeline.renderUserIcon();
+  }
 };
 
 app.handleControls = () => {
