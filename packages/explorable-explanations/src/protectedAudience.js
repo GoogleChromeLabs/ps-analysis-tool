@@ -164,12 +164,13 @@ app.setupLoop = () => {
         app.timeline.currentIndex++;
       }
     }
-    setTimeout(loop, 100);
+
+    requestAnimationFrame(loop);
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
   };
 
-  loop();
+  requestAnimationFrame(loop);
 };
 
 app.drawFlows = async (index) => {
