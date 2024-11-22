@@ -20,28 +20,28 @@ export const STORY_JSON = [
     publisherName: 'John Wilson',
     storyTitle: 'A Taste Of New York Pizza History',
     storyUrl:
-      'https://wp.stories.google/stories/a-taste-of-new-york-pizza-history/',
+      'https://wp.stories.google/stories/a-taste-of-new-york-pizza-history/#embedMode=2',
   },
   {
     heroImage: 'https://assets.codepen.io/1780597/homewarrior.jpg',
     publisherLogo: 'https://assets.codepen.io/1780597/2logo.png',
     publisherName: 'Sean Dong',
     storyTitle: 'Home Warrior Pandemic Special',
-    storyUrl: 'https://wsdemos.uc.r.appspot.com/homewarrior',
+    storyUrl: 'https://wsdemos.uc.r.appspot.com/homewarrior#embedMode=2',
   },
   {
     heroImage: 'https://assets.codepen.io/1780597/chicken.jpg',
     publisherLogo: 'https://assets.codepen.io/1780597/4logo.png',
     publisherName: 'Jamie Leach',
     storyTitle: 'Crispy Chicken Thigh With Vegetables',
-    storyUrl: 'https://wsdemos.uc.r.appspot.com/kitchen',
+    storyUrl: 'https://wsdemos.uc.r.appspot.com/kitchen#embedMode=2',
   },
   {
     heroImage: 'https://assets.codepen.io/1780597/artquiz.jpg',
     publisherLogo: 'https://assets.codepen.io/1780597/5logo.png',
     publisherName: 'Hong Wei',
     storyTitle: 'The Ultimate Art Quiz',
-    storyUrl: 'https://wsdemos.uc.r.appspot.com/art-quiz',
+    storyUrl: 'https://wsdemos.uc.r.appspot.com/art-quiz#embedMode=2',
   },
   {
     heroImage: 'https://assets.codepen.io/1780597/clay.jpg',
@@ -56,6 +56,6 @@ export const STORY_JSON = [
     publisherLogo: 'https://assets.codepen.io/1780597/5logo.png',
     publisherName: 'Hong Wei',
     storyTitle: 'What Animal are you?',
-    storyUrl: 'https://wsdemos.uc.r.appspot.com/animal-poll',
+    storyUrl: 'https://wsdemos.uc.r.appspot.com/animal-poll#embedMode=2',
   },
 ];
