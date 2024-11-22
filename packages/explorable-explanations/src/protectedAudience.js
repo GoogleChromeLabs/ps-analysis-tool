@@ -147,7 +147,6 @@ app.setupLoop = () => {
       window.cancelPromise ||
       app.timeline.currentIndex >= config.timeline.circles.length
     ) {
-      timeline.eraseAndRedraw();
       return;
     }
 
@@ -164,10 +163,10 @@ app.setupLoop = () => {
       if (!window.cancelPromiseForPreviousAndNext) {
         app.timeline.currentIndex++;
       }
-
-      timeline.eraseAndRedraw();
     }
     setTimeout(loop, 100);
+    timeline.eraseAndRedraw();
+    timeline.renderUserIcon();
   };
 
   loop();
@@ -204,7 +203,8 @@ app.handlePrevButton = () => {
   utils.disableButtons();
 
   if (app.timeline.isPaused) {
-    timeline.renderUserIcon();
+    bubbles.generateBubbles();
+    bubbles.showMinifiedBubbles();
   }
 };
 
@@ -225,7 +225,8 @@ app.handleNextButton = () => {
   utils.disableButtons();
 
   if (app.timeline.isPaused) {
-    timeline.renderUserIcon();
+    bubbles.generateBubbles();
+    bubbles.showMinifiedBubbles();
   }
 };
 
@@ -300,7 +301,7 @@ app.toggleInteractiveMode = () => {
   utils.setupMainCanvas(app.p);
   utils.markVisitedValue(config.timeline.circles.length, false);
 
-  app.timeline.eraseAndRedraw();
+  timeline.eraseAndRedraw();
 };
 
 // Write a callback function to get the value of the checkbox.

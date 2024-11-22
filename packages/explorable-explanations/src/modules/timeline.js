@@ -102,10 +102,10 @@ timeline.init = () => {
       }
     };
   } else {
-    app.timeline.drawTimelineLine();
-    app.timeline.renderUserIcon();
+    timeline.drawTimelineLine();
+    timeline.renderUserIcon();
   }
-  app.timeline.drawTimeline(config.timeline);
+  timeline.drawTimeline(config.timeline);
 };
 
 /**
