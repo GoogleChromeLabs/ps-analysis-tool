@@ -242,7 +242,6 @@ timeline.renderUserIcon = () => {
   }
 
   const user = config.timeline.user;
-  utils.wipeAndRecreateUserCanvas();
   timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
 
@@ -270,6 +269,8 @@ timeline.eraseAndRedraw = () => {
     });
     return;
   }
+
+  utils.wipeAndRecreateUserCanvas();
 
   if (currentIndex > 0) {
     let i = 0;

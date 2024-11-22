@@ -147,6 +147,7 @@ app.setupLoop = () => {
       window.cancelPromise ||
       app.timeline.currentIndex >= config.timeline.circles.length
     ) {
+      timeline.eraseAndRedraw();
       return;
     }
 
@@ -158,14 +159,13 @@ app.setupLoop = () => {
       bubbles.showMinifiedBubbles();
       timeline.renderUserIcon();
 
-      // Draw flows for the current index
       await app.drawFlows(app.timeline.currentIndex);
 
       if (!window.cancelPromiseForPreviousAndNext) {
         app.timeline.currentIndex++;
       }
 
-      app.timeline.eraseAndRedraw();
+      timeline.eraseAndRedraw();
     }
     setTimeout(loop, 100);
   };

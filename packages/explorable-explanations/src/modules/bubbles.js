@@ -246,6 +246,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const target = igp.createVector(midPointX, midPointY);
     const { color: currentColor } = app.bubbles.positions[i];
     const color = currentColor;
+
     positionsOfCircles.push({
       x:
         dspTags?.props?.x() +
