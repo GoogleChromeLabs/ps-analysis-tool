@@ -19,6 +19,10 @@
  */
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
+
+/**
+ * Internal dependencies
+ */
 import { useTabs } from './useTabs';
 
 interface TabsProps {
