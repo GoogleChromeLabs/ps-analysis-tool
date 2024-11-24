@@ -92,7 +92,7 @@ bubbles.barrageAnimation = async (index) => {
   const p = app.igp;
   const {
     canvas: { height: canvasHeight, width: canvasWidth },
-    bubbles: { isExpanded, minifiedBubbleX, minifiedBubbleY },
+    bubbles: { isExpanded },
     timeline: {
       circleProps: { diameter },
     },
@@ -129,8 +129,8 @@ bubbles.barrageAnimation = async (index) => {
       p.blue(currentColor),
       200
     );
-    const x = isExpanded ? canvasWidth / 2 : minifiedBubbleX;
-    const y = isExpanded ? canvasHeight / 2 : minifiedBubbleY;
+    const x = isExpanded ? canvasWidth / 2 : 35;
+    const y = isExpanded ? canvasHeight / 2 : 35;
 
     return { x, y, color, speed, target };
   });
@@ -214,12 +214,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const dspTags = app.joinInterestGroup.joinings[index][1];
   const igp = app.igp;
   const {
-    bubbles: {
-      isExpanded,
-      minifiedBubbleX,
-      minifiedBubbleY,
-      interestGroupCounts,
-    },
+    bubbles: { isExpanded, interestGroupCounts },
     timeline: {
       circleProps: { diameter },
       circles,
@@ -227,10 +222,8 @@ bubbles.reverseBarrageAnimation = async (index) => {
   } = config;
 
   const smallCircleDiameter = diameter / 5;
-  const midPointX = isExpanded
-    ? config.canvas.width / 4 + 320
-    : minifiedBubbleX;
-  const midPointY = isExpanded ? 320 : minifiedBubbleY;
+  const midPointX = isExpanded ? config.canvas.width / 4 + 320 : 35;
+  const midPointY = isExpanded ? 320 : 35;
 
   const positionsOfCircles = [];
   const currentIGGroupToBeAdded = circles[index]?.igGroupsCount ?? 0;
@@ -477,6 +470,7 @@ bubbles.bubbleChart = (
   const eventHandler = (event) => {
     // eslint-disable-next-line no-console
     console.log(event);
+    app.igp.igClick();
     event.stopPropagation();
   };
 

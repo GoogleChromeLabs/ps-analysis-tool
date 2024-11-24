@@ -84,7 +84,7 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     config.bubbles.expandedBubbleY,
     event.x,
     event.y,
-    config.bubbles.expandedCircleDiameter / 2
+    config.bubbles.expandedCircleDiameter
   );
 
   const clickedInsideMinifiedCircle = utils.isInsideCircle(
@@ -92,7 +92,7 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     config.bubbles.minifiedBubbleY,
     event.x,
     event.y,
-    config.bubbles.minifiedCircleDiameter / 2
+    config.bubbles.minifiedCircleDiameter
   );
 
   if (
@@ -214,6 +214,11 @@ app.handleControls = () => {
     'minified-bubble-container'
   );
 
+  const minifiedBubbleContainerRect =
+    app.minifiedBubbleContainer.getBoundingClientRect();
+  config.bubbles.minifiedBubbleX = Math.floor(minifiedBubbleContainerRect.x);
+  config.bubbles.minifiedBubbleY = Math.floor(minifiedBubbleContainerRect.y);
+
   app.visitedSites = [];
 
   document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
@@ -278,6 +283,12 @@ export const sketch = (p) => {
 export const interestGroupSketch = (p) => {
   p.setup = () => {
     utils.setupInterestGroupCanvas(p);
+  };
+
+  p.updateWithProps = (props) => {
+    if (props.onClick) {
+      app.igp.igClick = props.onClick;
+    }
   };
 };
 

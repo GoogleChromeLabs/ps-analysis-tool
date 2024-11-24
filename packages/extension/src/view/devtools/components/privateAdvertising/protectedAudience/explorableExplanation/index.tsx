@@ -157,7 +157,11 @@ const ExplorableExplanation = () => {
         </main>
       </div>
       <ReactP5Wrapper sketch={sketch} />
-      <ReactP5Wrapper sketch={interestGroupSketch} />
+      <ReactP5Wrapper
+        sketch={interestGroupSketch}
+        // eslint-disable-next-line no-console
+        onClick={() => console.log('dole shole')}
+      />
       <ReactP5Wrapper sketch={userSketch} />
       <Resizable
         defaultSize={{

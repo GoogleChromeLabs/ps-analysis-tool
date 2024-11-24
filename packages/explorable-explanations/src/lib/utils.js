@@ -197,9 +197,6 @@ utils.setupInterestGroupCanvas = (p) => {
   overlayCanvas.style('z-index', 2);
   p.textSize(config.canvas.fontSize);
 
-  config.bubbles.minifiedBubbleX = 35;
-  config.bubbles.minifiedBubbleY = 35;
-
   config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
   config.bubbles.expandedBubbleY = 0;
 
