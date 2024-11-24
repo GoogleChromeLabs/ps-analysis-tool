@@ -46,8 +46,8 @@ app.setUpTimeLine = () => {
 
   timeline.init();
 
-  app.auction.setupAuctions();
-  app.joinInterestGroup.setupJoinings();
+  auctions.setupAuctions();
+  joinInterestGroup.setupJoinings();
 };
 app.init = async (p) => {
   app.p = p;
@@ -76,12 +76,12 @@ app.userInit = (p) => {
   app.up = p;
 };
 
-app.play = async (resumed = false) => {
+app.play = (resumed = false) => {
   app.playButton.classList.add('hidden');
   app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
   if (!resumed) {
-    await app.setupLoop();
+    app.setupLoop();
   }
 };
 
@@ -137,47 +137,97 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
   }
 };
 
-app.setupLoop = async () => {
+app.setupLoop = () => {
   if (window.cancelPromise) {
     window.cancelPromise = false;
   }
 
-  while (
-    app.timeline.currentIndex < config.timeline.circles.length &&
-    !config.isInteractiveMode
-  ) {
-    if (window.cancelPromise) {
-      config.timeline.circles = config.timeline.circles.map((circle) => {
-        circle.visited = false;
-        return circle;
-      });
+  const loop = async () => {
+    if (
+      window.cancelPromise ||
+      app.timeline.currentIndex >= config.timeline.circles.length
+    ) {
       return;
     }
 
-    if (app.timeline.isPaused) {
-      continue;
+    if (!app.timeline.isPaused) {
+      window.cancelPromiseForPreviousAndNext = false;
+      utils.disableButtons();
+
+      utils.markVisitedValue(app.timeline.currentIndex, true);
+      bubbles.showMinifiedBubbles();
+      timeline.renderUserIcon();
+
+      await app.drawFlows(app.timeline.currentIndex);
+
+      if (!window.cancelPromiseForPreviousAndNext) {
+        app.timeline.currentIndex++;
+      }
     }
 
-    config.timeline.circles[app.timeline.currentIndex].visited = true;
+    requestAnimationFrame(loop);
+    timeline.eraseAndRedraw();
+    timeline.renderUserIcon();
+  };
 
-    bubbles.showMinifiedBubbles();
-    app.timeline.renderUserIcon();
-    // eslint-disable-next-line no-await-in-loop
-    await app.drawFlows(app.timeline.currentIndex);
-
-    app.timeline.currentIndex++;
-  }
-  app.timeline.eraseAndRedraw();
+  requestAnimationFrame(loop);
 };
 
 app.drawFlows = async (index) => {
-  await app.joinInterestGroup.draw(index);
-  await app.auction.draw(index);
+  await joinInterestGroup.draw(index);
+  await auctions.draw(index);
 };
 
 app.minifiedBubbleKeyPressListener = (event) => {
   if (event.key === 'Escape' && config.bubbles.isExpanded) {
     app.minimiseBubbleActions();
+  }
+};
+
+app.handlePrevButton = () => {
+  if (config.bubbles.isExpanded || config.isInteractiveMode) {
+    return;
+  }
+
+  window.cancelPromiseForPreviousAndNext = true;
+  app.timeline.currentIndex -= 1;
+  app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
+  utils.markVisitedValue(app.timeline.currentIndex, true);
+  const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
+    app.timeline.currentIndex
+  );
+
+  config.bubbles.interestGroupCounts = totalBubbles;
+  flow.clearBelowTimelineCircles();
+  timeline.drawTimelineLine();
+  timeline.drawTimeline(config.timeline);
+  utils.disableButtons();
+
+  if (app.timeline.isPaused) {
+    bubbles.generateBubbles();
+    bubbles.showMinifiedBubbles();
+  }
+};
+
+app.handleNextButton = () => {
+  if (config.bubbles.isExpanded || config.isInteractiveMode) {
+    return;
+  }
+
+  window.cancelPromiseForPreviousAndNext = true;
+
+  app.timeline.currentIndex += 1;
+  utils.markVisitedValue(app.timeline.currentIndex, true);
+  flow.clearBelowTimelineCircles();
+  timeline.drawTimelineLine();
+  timeline.drawTimeline(config.timeline);
+  config.bubbles.interestGroupCounts =
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+  utils.disableButtons();
+
+  if (app.timeline.isPaused) {
+    bubbles.generateBubbles();
+    bubbles.showMinifiedBubbles();
   }
 };
 
@@ -193,6 +243,9 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
+  app.nextButton = document.getElementById('next-div');
+  app.prevButton = document.getElementById('previous-div');
+
   app.visitedSites = [];
 
   document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
@@ -201,6 +254,9 @@ app.handleControls = () => {
     'click',
     app.minifiedBubbleClickListener
   );
+
+  app.prevButton.addEventListener('click', app.handlePrevButton);
+  app.nextButton.addEventListener('click', app.handleNextButton);
 
   app.bubbleContainerDiv.addEventListener(
     'click',
@@ -233,16 +289,20 @@ app.toggleInteractiveMode = () => {
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
 
+  if (config.isInteractiveMode) {
+    app.prevButton.style.display = 'none';
+    app.nextButton.style.display = 'none';
+  } else {
+    app.prevButton.style.display = 'block';
+    app.nextButton.style.display = 'block';
+  }
+
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p);
+  utils.markVisitedValue(config.timeline.circles.length, false);
 
-  config.timeline.circles = config.timeline.circles.map((circle) => {
-    circle.visited = false;
-    return circle;
-  });
-
-  app.timeline.eraseAndRedraw();
+  timeline.eraseAndRedraw();
 };
 
 // Write a callback function to get the value of the checkbox.

@@ -150,7 +150,7 @@ joinInterestGroup.setUp = (index) => {
  */
 joinInterestGroup.draw = async (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
-
+  bubbles.generateBubbles();
   const steps = app.joinInterestGroup.joinings[index];
 
   if (!steps) {
@@ -158,9 +158,10 @@ joinInterestGroup.draw = async (index) => {
   }
 
   for (const step of steps) {
-    if (window.cancelPromise) {
+    if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
       return;
     }
+
     const { component, props, callBack } = step;
 
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -173,8 +174,6 @@ joinInterestGroup.draw = async (index) => {
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
 
-  bubbles.generateBubbles();
-
   await bubbles.reverseBarrageAnimation(index);
 
   if (config.bubbles.isExpanded) {
@@ -183,8 +182,10 @@ joinInterestGroup.draw = async (index) => {
     bubbles.showMinifiedBubbles();
   }
 
-  config.bubbles.interestGroupCounts +=
-    config.timeline.circles[index]?.igGroupsCount ?? 0;
+  if (!window.cancelPromiseForPreviousAndNext) {
+    config.bubbles.interestGroupCounts +=
+      config.timeline.circles[index]?.igGroupsCount ?? 0;
+  }
 
   flow.clearBelowTimelineCircles();
 };

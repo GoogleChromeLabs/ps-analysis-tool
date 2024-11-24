@@ -52,6 +52,7 @@ bubbles.init = () => {
 bubbles.generateBubbles = (recalculate = false) => {
   const interestGroupsToBeAdded =
     config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+
   if (!recalculate) {
     for (let index = 0; index < interestGroupsToBeAdded; index++) {
       app.bubbles.positions.push({
@@ -69,7 +70,6 @@ bubbles.generateBubbles = (recalculate = false) => {
 
     const groups = d3.map(app.bubbles.positions, (d) => d.group);
     const color = d3.scaleOrdinal(groups, d3.schemeTableau10);
-
     app.bubbles.positions = app.bubbles.positions.map((data, i) => {
       return {
         ...data,
@@ -137,13 +137,13 @@ bubbles.barrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (app.timeline.isPaused) {
-        requestAnimationFrame(animate); // Keep the animation loop alive but paused.
+      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+        resolve();
         return;
       }
 
-      if (window.cancelPromise) {
-        resolve();
+      if (app.timeline.isPaused) {
+        requestAnimationFrame(animate); // Keep the animation loop alive but paused.
         return;
       }
 
@@ -246,7 +246,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const target = igp.createVector(midPointX, midPointY);
     const { color: currentColor } = app.bubbles.positions[i];
     const color = currentColor;
-
     positionsOfCircles.push({
       x:
         dspTags?.props?.x() +
@@ -266,13 +265,13 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (app.timeline.isPaused) {
-        requestAnimationFrame(animate);
+      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+        resolve();
         return;
       }
 
-      if (window.cancelPromise) {
-        resolve();
+      if (app.timeline.isPaused) {
+        requestAnimationFrame(animate);
         return;
       }
 
@@ -427,6 +426,7 @@ bubbles.bubbleChart = (
   const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+
   data = data.filter((_data, i) => {
     if (i < totalBubbles) {
       return true;
@@ -555,12 +555,17 @@ bubbles.clearAndRewriteBubbles = () => {
 
 bubbles.calculateTotalBubblesForAnimation = (index) => {
   let bubblesCount = 0;
+  if (config.isInteractiveMode) {
+    config.timeline.circles.forEach((circle) => {
+      if (circle.visited) {
+        bubblesCount += circle.igGroupsCount ?? 0;
+      }
+    });
+    return bubblesCount;
+  }
 
   config.timeline.circles.forEach((circle, currIndex) => {
-    if (
-      (currIndex < index && !config.isInteractiveMode) ||
-      (currIndex <= index && config.isInteractiveMode)
-    ) {
+    if (currIndex < index) {
       bubblesCount += circle.igGroupsCount ?? 0;
     }
   });
