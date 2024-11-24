@@ -33,13 +33,14 @@ import { ReactP5Wrapper } from '@p5-wrapper/react';
  */
 import Header from '../../../explorableExplanation/header';
 import Tray from './tray';
+import { NextIcon, PreviousIcon } from '@google-psat/design-system';
 
 const ExplorableExplanation = () => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
-  const [interactiveMode, setInteractiveMode] = useState(false);
-  const [multiSeller, setMultiSeller] = useState(false);
+  const [interactiveMode, _setInteractiveMode] = useState(false);
+  const [multiSeller, _setMultiSeller] = useState(false);
   const historyCount = 10;
 
   const setPlaying = useCallback(() => {
@@ -53,13 +54,29 @@ const ExplorableExplanation = () => {
     });
   }, []);
 
+  const setInteractiveMode = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      _setInteractiveMode(event.target.checked);
+      app.toggleInteractiveMode();
+    },
+    []
+  );
+
+  const setMultiSellerMode = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      _setMultiSeller(event.target.checked);
+      app.toggleMultSeller();
+    },
+    []
+  );
+
   const extraInterface = (
     <div className="flex gap-2 items-center">
       <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
         <input
           type="checkbox"
           checked={interactiveMode}
-          onChange={(e) => setInteractiveMode(e.target.checked)}
+          onChange={setInteractiveMode}
         />
         Interactive Mode
       </label>
@@ -67,10 +84,25 @@ const ExplorableExplanation = () => {
         <input
           type="checkbox"
           checked={multiSeller}
-          onChange={(e) => setMultiSeller(e.target.checked)}
+          onChange={setMultiSellerMode}
         />
         Multi Seller
       </label>
+      <button
+        id="previous-div"
+        disabled
+        className="play-pause-button"
+        onClick={app.handlePrevButton}
+      >
+        <PreviousIcon />
+      </button>
+      <button
+        id="next-div"
+        className="play-pause-button"
+        onClick={app.handleNextButton}
+      >
+        <NextIcon />
+      </button>
     </div>
   );
 
@@ -86,58 +118,9 @@ const ExplorableExplanation = () => {
         extraInterface={extraInterface}
       />
       <div className="w-full h-full">
-        <main style={{ position: 'relative', height: '100%' }}>
+        <main className="h-full w-full overflow-auto relative">
           <div id="ps-canvas">
-            <div id="canvas-container">
-              <div className="controls">
-                <button
-                  id="previous-div"
-                  disabled
-                  className="play-pause-button"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20px"
-                    viewBox="0 -960 960 960"
-                    width="20px"
-                    fill="#808080"
-                  >
-                    <path d="M220-240v-480h80v480h-80Zm520 0L380-480l360-240v480Zm-80-240Zm0 90v-180l-136 90 136 90Z" />
-                  </svg>
-                </button>
-                <button id="next-div" className="play-pause-button">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20px"
-                    viewBox="0 -960 960 960"
-                    width="20px"
-                    fill="#808080"
-                  >
-                    <path d="M660-240v-480h80v480h-80Zm-440 0v-480l360 240-360 240Zm80-240Zm0 90 136-90-136-90v180Z" />
-                  </svg>
-                </button>
-                <div id="interactive-mode-div">
-                  <label htmlFor="interactive-mode">
-                    <input
-                      type="checkbox"
-                      name="interactive-mode"
-                      id="interactive-mode"
-                    />
-                    Interactive Mode
-                  </label>
-                </div>
-                <div id="multi-seller-div">
-                  <label htmlFor="multi-seller">
-                    <input
-                      type="checkbox"
-                      name="multi-seller"
-                      id="multi-seller"
-                    />
-                    Multi-Sellers
-                  </label>
-                </div>
-              </div>
-            </div>
+            <div id="canvas-container" />
           </div>
           <div id="interest-canvas"></div>
           <div id="bubble-container-div" className="bubble-container">

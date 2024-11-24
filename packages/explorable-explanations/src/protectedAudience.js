@@ -126,7 +126,6 @@ app.setupLoop = () => {
 
     if (!app.timeline.isPaused) {
       window.cancelPromiseForPreviousAndNext = false;
-      utils.disableButtons();
 
       utils.markVisitedValue(app.timeline.currentIndex, true);
       bubbles.showMinifiedBubbles();
@@ -175,7 +174,6 @@ app.handlePrevButton = () => {
   flow.clearBelowTimelineCircles();
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
-  utils.disableButtons();
 
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
@@ -189,7 +187,6 @@ app.handleNextButton = () => {
   }
 
   window.cancelPromiseForPreviousAndNext = true;
-
   app.timeline.currentIndex += 1;
   utils.markVisitedValue(app.timeline.currentIndex, true);
   flow.clearBelowTimelineCircles();
@@ -197,7 +194,6 @@ app.handleNextButton = () => {
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-  utils.disableButtons();
 
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
@@ -217,8 +213,6 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
-  app.nextButton = document.getElementById('next-div');
-  app.prevButton = document.getElementById('previous-div');
 
   app.visitedSites = [];
 
@@ -228,9 +222,6 @@ app.handleControls = () => {
     'click',
     app.minifiedBubbleClickListener
   );
-
-  app.prevButton.addEventListener('click', app.handlePrevButton);
-  app.nextButton.addEventListener('click', app.handleNextButton);
 
   app.bubbleContainerDiv.addEventListener(
     'click',
@@ -252,14 +243,6 @@ app.toggleInteractiveMode = () => {
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
-
-  if (config.isInteractiveMode) {
-    app.prevButton.style.display = 'none';
-    app.nextButton.style.display = 'none';
-  } else {
-    app.prevButton.style.display = 'block';
-    app.nextButton.style.display = 'block';
-  }
 
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
