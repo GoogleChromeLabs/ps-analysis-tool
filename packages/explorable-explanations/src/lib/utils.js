@@ -267,26 +267,6 @@ utils.calculateCanvasDimensions = () => {
   };
 };
 
-utils.isOverControls = (mouseX, mouseY) => {
-  const {
-    bubbles: { minifiedBubbleX, minifiedBubbleY, minifiedCircleDiameter },
-  } = config;
-
-  if (
-    utils.isInsideCircle(
-      minifiedBubbleX,
-      minifiedBubbleY,
-      mouseX,
-      mouseY,
-      minifiedCircleDiameter + 20
-    )
-  ) {
-    return true;
-  }
-
-  return false;
-};
-
 utils.markVisitedValue = (index, value) => {
   config.timeline.circles = config.timeline.circles.map((circle, i) => {
     if (i < index && index >= 0) {

@@ -37,7 +37,7 @@
 		"webpack:dev:ext": "npm run dev -w @google-psat/extension",
 		"dev:ext": "run-p dev:tsc-packages webpack:dev:ext",
 		"webpack:build:ext": "cross-env NODE_ENV=production npm run build -w @google-psat/extension",
-		"build:ext": "npm run build:tsc-packages && npm run webpack:build:ext",
+		"build:ext": "npm run build:tsc-packages && npm run build:ee:pa && npm run webpack:build:ext",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
 		"lint:types": "tsc ",

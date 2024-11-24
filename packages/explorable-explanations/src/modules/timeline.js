@@ -43,10 +43,16 @@ timeline.init = () => {
     bubbles.showMinifiedBubbles();
 
     app.p.mouseMoved = (event) => {
-      const { offsetX, offsetY } = event;
-      if (utils.isOverControls(offsetX, offsetY) || config.bubbles.isExpanded) {
-        config.mouseX = offsetX + 50;
-        config.mouseY = offsetY + 50;
+      const { target, offsetX, offsetY } = event;
+
+      if (
+        target === app.countDisplay ||
+        target === app.minifiedBubbleContainer ||
+        target?.parentNode === app.openButton ||
+        config.bubbles.isExpanded
+      ) {
+        config.mouseX = offsetX + 100;
+        config.mouseY = offsetY + 100;
       } else {
         config.mouseX = offsetX;
         config.mouseY = offsetY;

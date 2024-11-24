@@ -218,6 +218,7 @@ app.handleControls = () => {
 
   const minifiedBubbleContainerRect =
     app.minifiedBubbleContainer.getBoundingClientRect();
+
   config.bubbles.minifiedBubbleX = Math.floor(minifiedBubbleContainerRect.x);
   config.bubbles.minifiedBubbleY = Math.floor(minifiedBubbleContainerRect.y);
 
