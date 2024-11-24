@@ -45,6 +45,7 @@ jest.mock(
     useTablePersistentSettingsStore: jest.fn(),
   })
 );
+globalThis.chrome.runtime.getURL = () => '';
 
 const mockUseCookieStore = useCookie as jest.Mock;
 const mockUseTablePersistentSettingStore =
@@ -151,6 +152,16 @@ describe('App', () => {
             addListener: () => undefined,
           },
         }),
+      },
+      //@ts-ignore
+      runtime: {
+        getURL: () => 'amp/v0.js',
+        //@ts-ignore
+        onMessage: {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          addListener: () => undefined,
+          removeListener: () => undefined,
+        },
       },
     };
     global.ResizeObserver = class MockedResizeObserver {

@@ -48,6 +48,8 @@ import {
   WikiIconWhite,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
+  WebStoriesIcon,
+  WebStoriesIconWhite,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -74,6 +76,7 @@ import {
   ProtectedAudience,
   PrivateAggregation,
   Dashboard,
+  WebStories,
 } from './components';
 
 const TABS: SidebarItems = {
@@ -271,6 +274,20 @@ const TABS: SidebarItems = {
     },
     selectedIcon: {
       Element: DashboardIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
+  },
+  [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
+    title: () => 'Stories',
+    panel: {
+      Element: WebStories,
+    },
+    icon: {
+      Element: WebStoriesIcon,
+    },
+    selectedIcon: {
+      Element: WebStoriesIconWhite,
     },
     dropdownOpen: false,
     children: {},
