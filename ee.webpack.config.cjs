@@ -18,17 +18,20 @@
  */
 const path = require('path');
 
+const isProduction = process.env.NODE_ENV === 'production';
+const mode = isProduction ? 'production' : 'development';
+
 module.exports = {
   entry: {
-    'protected-audience': './src/protectedAudience.js',
+    'protected-audience': './src/index.js',
   },
   output: {
-    filename: '[name].js',
+    filename: 'index.js',
     path: path.resolve(__dirname, './packages/explorable-explanations/dist'),
     publicPath: '/', // Base path for all assets
   },
-  mode: 'development', // Set mode to development
-  devtool: 'source-map', // Enable source maps for easier debugging
+  mode, // Set mode to development
+  devtool: !isProduction ? 'source-map' : undefined,
   devServer: {
     static: {
       directory: path.resolve(
@@ -44,11 +47,23 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/, // Apply this rule to .js files
+        test: /\.jsx|tsx|js?$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader', // Optionally use Babel to transpile modern JS
+        resolve: {
+          fullySpecified: false,
+          fallback: {
+            fs: false,
+            path: false,
+          },
         },
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+            },
+          },
+        ],
       },
     ],
   },

@@ -31,6 +31,7 @@
 		"dev:report": "npm run dev -w @google-psat/report",
 		"dev:cli-dashboard": "npm run dev -w @google-psat/cli-dashboard",
 		"dev:ee:pa": "npm run dev -w @google-psat/explorable-explanations",
+		"build:ee:pa": "npm run build -w @google-psat/explorable-explanations",
 		"build:cli-dashboard": "cross-env NODE_ENV=production npm run build -w @google-psat/cli-dashboard",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
 		"webpack:dev:ext": "npm run dev -w @google-psat/extension",
@@ -133,8 +134,7 @@
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^5.1.0",
 		"webpack-node-externals": "^3.0.0",
-		"webpackbar": "^5.0.2",
-		"p5": "^1.11.0"
+		"webpackbar": "^5.0.2"
 	},
 	"lint-staged": {
 		"*.(cjs|js|ts|tsx)": [
