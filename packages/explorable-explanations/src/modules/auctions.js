@@ -20,8 +20,7 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
-import rippleEffect from '../lib/ripple-effect';
-import { Box, ProgressLine, Branches } from '../components';
+import { Box, ProgressLine, Branches, RippleEffect } from '../components';
 import bubbles from './bubbles';
 
 /**
@@ -315,12 +314,12 @@ auction.draw = async (index) => {
     if (props?.title === 'generateBid()') {
       const x = props.x();
       const y = props.y();
-      rippleEffect.setUp();
+
       // eslint-disable-next-line no-await-in-loop
-      await rippleEffect.start(
-        x + config.flow.box.width + 2,
-        y + config.flow.box.height / 2
-      );
+      await RippleEffect({
+        x: x + config.flow.box.width + 2,
+        y: y + config.flow.box.height / 2,
+      });
     }
 
     if (callBack) {

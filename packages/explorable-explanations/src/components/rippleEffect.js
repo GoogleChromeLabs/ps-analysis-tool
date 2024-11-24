@@ -19,6 +19,11 @@
 import app from '../app';
 import config from '../config';
 
+const RippleEffect = async ({ x, y }) => {
+  rippleEffect.setUp();
+  await rippleEffect.start(x, y);
+};
+
 // @todo To be moved to components.
 const rippleEffect = {};
 
@@ -127,4 +132,4 @@ rippleEffect.create = (rippleX, rippleY) => {
   p.pop(); // Restore the original transformation state
 };
 
-export default rippleEffect;
+export default RippleEffect;
