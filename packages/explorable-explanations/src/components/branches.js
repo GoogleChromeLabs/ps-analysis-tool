@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import ProgressLine from './progressLine';
-import app from '../app';
+import {app} from '..';
 import config from '../config';
 import Box from './box';
 import utils from '../lib/utils';

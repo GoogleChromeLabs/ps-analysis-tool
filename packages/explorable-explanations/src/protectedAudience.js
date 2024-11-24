@@ -32,6 +32,37 @@ import bubbles from './modules/bubbles.js';
 import app from './app.js';
 import PromiseQueue from './lib/PromiseQueue.js';
 
+const app = {
+  timeline: {
+    isPaused: false,
+    circlePositions: [],
+    smallCirclePositions: [],
+    circlePublisherIndices: [],
+    currentIndex: 0,
+  },
+  auction: {
+    auctions: [],
+    nextTipCoordinates: { x: 0, y: 0 },
+  },
+  joinInterestGroup: {
+    joinings: [],
+    nextTipCoordinates: { x: 0, y: 0 },
+  },
+  flow: {
+    intervals: {},
+  },
+  bubbles: {
+    positions: [],
+    minifiedSVG: null,
+    expandedSVG: null,
+  },
+  utils: {},
+  p: null,
+  igp: null,
+  up: null,
+  isMultiSeller: false,
+};
+
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
   app.joinInterestGroup.joinings = [];
