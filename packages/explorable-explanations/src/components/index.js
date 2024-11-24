@@ -16,3 +16,4 @@
 export { default as Box } from './box';
 export { default as Branches } from './branches';
 export { default as ProgressLine } from './progressLine';
+export { default as RippleEffect } from './rippleEffect';
