@@ -29,6 +29,12 @@ import AdUnits from '../adUnits';
 import Bids from '../bids';
 import Panel from './panel';
 
+declare module 'react' {
+  interface CSSProperties {
+    [key: `--${string}`]: string | number;
+  }
+}
+
 const ExplorableExplanation = () => {
   const tabItems = useMemo<TabItems>(
     () => [
