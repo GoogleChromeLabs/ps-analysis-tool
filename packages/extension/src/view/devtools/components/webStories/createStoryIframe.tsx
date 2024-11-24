@@ -30,17 +30,24 @@ export interface SingleStoryJSON {
   storyUrl: string;
 }
 
-const predefinedStoryHeader = `
+const getStoryAnchorTags = ({ storyUrl }: StoryAnchorProps) => {
+  return `
+        <a href="${storyUrl}" class="story"></a>
+    `;
+};
+
+export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
+  const predefinedStoryHeader = `
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <script async src="${chrome.runtime.getURL(
+    <script async src="${chrome?.runtime?.getURL(
       'assets/amp/amp-player-main.js'
     )}" type="module"></script>
-    <script async src="${chrome.runtime.getURL(
+    <script async src="${chrome?.runtime?.getURL(
       'assets/amp/amp-story-player-v0.js'
     )}"></script>
     <link href="https://cdn.ampproject.org/amp-story-player-v0.css" rel="stylesheet" type="text/css">
@@ -499,7 +506,7 @@ const predefinedStoryHeader = `
                 <div class="entry-points">
 `;
 
-const predefinedStoryEnder = `
+  const predefinedStoryEnder = `
                 </div>
             </div>
         </div>
@@ -525,13 +532,13 @@ const predefinedStoryEnder = `
       </script>
 `;
 
-const getCardHTML = ({
-  heroImage,
-  publisherLogo,
-  publisherName,
-  storyTitle,
-}: CardProps) => {
-  return `
+  const getCardHTML = ({
+    heroImage,
+    publisherLogo,
+    publisherName,
+    storyTitle,
+  }: CardProps) => {
+    return `
       <div class="entry-point-card-container">
       <div class="background-cards">
           <div class="background-card-1"></div>
@@ -552,9 +559,9 @@ const getCardHTML = ({
           </div>
       </div>
       `;
-};
+  };
 
-const enderTags = `
+  const enderTags = `
         </amp-story-player>
     </div>
 
@@ -562,14 +569,6 @@ const enderTags = `
 
 </html>
 `;
-
-const getStoryAnchorTags = ({ storyUrl }: StoryAnchorProps) => {
-  return `
-        <a href="${storyUrl}" class="story"></a>
-    `;
-};
-
-export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
   const cards = storyJson.map(getCardHTML);
   const storyAnchors = storyJson.map(getStoryAnchorTags);
 
