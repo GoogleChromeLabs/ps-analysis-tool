@@ -244,16 +244,36 @@ auction.setUp = (index) => {
   });
 
   const boxes = [
-    'Load Interest Group',
-    'Key/Value DSP Server',
-    'generateBid()',
-    'Key/Value SSP Server',
-    'scoreAd()',
-    'reportWin()',
-    'reportResult()',
+    {
+      title: 'Load Interest Group',
+    },
+    {
+      title: 'Key/Value Trusted',
+      description: 'DSP Server',
+    },
+    {
+      title: 'generateBid()',
+      description: '(from DSPs on dsp.js)',
+    },
+    {
+      title: 'Key/Value Trusted',
+      description: 'SSP Server',
+    },
+    {
+      title: 'scoreAd()',
+      description: '(by SSPs on ssp.js)',
+    },
+    {
+      title: 'reportWin()',
+      description: '(on dsp.js)',
+    },
+    {
+      title: 'reportResult()',
+      description: '(on ssp.js)',
+    },
   ];
 
-  boxes.forEach((title) => {
+  boxes.forEach(({ title, description }) => {
     steps.push({
       component: ProgressLine,
       props: {
@@ -272,6 +292,7 @@ auction.setUp = (index) => {
       component: Box,
       props: {
         title,
+        description,
         x: () => app.auction.nextTipCoordinates.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates.y + 10,
       },
