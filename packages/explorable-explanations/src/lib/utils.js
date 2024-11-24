@@ -17,7 +17,7 @@
  * Internal Dependencies
  */
 import config from '../config.js';
-import {app} from '../index.js';
+import app from '../app';
 
 // @todo To be broken down into multipe functions.
 const utils = {};
@@ -295,6 +295,7 @@ utils.isOverControls = (mouseX, mouseY) => {
   const {
     bubbles: { minifiedBubbleX, minifiedBubbleY, minifiedCircleDiameter },
   } = config;
+
   if (
     utils.isInsideCircle(
       minifiedBubbleX,
@@ -303,43 +304,6 @@ utils.isOverControls = (mouseX, mouseY) => {
       mouseY,
       minifiedCircleDiameter + 20
     )
-  ) {
-    return true;
-  }
-
-  const controlButton = document
-    .getElementById('play-pause-button')
-    .getBoundingClientRect();
-  const interactiveModeDivStyles = document
-    .getElementById('interactive-mode-div')
-    .getBoundingClientRect();
-  const multiSellerDivStyles = document
-    .getElementById('multi-seller-div')
-    .getBoundingClientRect();
-
-  if (
-    mouseX >= controlButton.left &&
-    mouseX <= controlButton.right &&
-    mouseY >= controlButton.top &&
-    mouseY <= controlButton.bottom
-  ) {
-    return true;
-  }
-
-  if (
-    mouseX >= interactiveModeDivStyles.left &&
-    mouseX <= multiSellerDivStyles.right &&
-    mouseY >= interactiveModeDivStyles.top &&
-    mouseY <= multiSellerDivStyles.bottom
-  ) {
-    return true;
-  }
-
-  if (
-    mouseX >= multiSellerDivStyles.left &&
-    mouseX <= multiSellerDivStyles.right &&
-    mouseY >= multiSellerDivStyles.top &&
-    mouseY <= multiSellerDivStyles.bottom
   ) {
     return true;
   }

@@ -24,37 +24,7 @@ import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
 import bubbles from './modules/bubbles.js';
-
-const app = {
-  timeline: {
-    isPaused: false,
-    circlePositions: [],
-    smallCirclePositions: [],
-    circlePublisherIndices: [],
-    currentIndex: 0,
-  },
-  auction: {
-    auctions: [],
-    nextTipCoordinates: { x: 0, y: 0 },
-  },
-  joinInterestGroup: {
-    joinings: [],
-    nextTipCoordinates: { x: 0, y: 0 },
-  },
-  flow: {
-    intervals: {},
-  },
-  bubbles: {
-    positions: [],
-    minifiedSVG: null,
-    expandedSVG: null,
-  },
-  utils: {},
-  p: null,
-  igp: null,
-  up: null,
-  isMultiSeller: false,
-};
+import app from './app.js';
 
 app.setUpTimeLine = () => {
   if (config.isInteractiveMode) {
@@ -271,11 +241,6 @@ app.handleControls = () => {
 
   app.openButton.addEventListener('click', (event) =>
     app.minifiedBubbleClickListener(event, true)
-  );
-  app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
-  app.intreactiveModeCheckBox.addEventListener(
-    'change',
-    app.toggleInteractiveMode
   );
 };
 

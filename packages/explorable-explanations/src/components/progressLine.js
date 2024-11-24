@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import config from '../config';
-import {app} from '..';
+import app from '../app';
 import utils from '../lib/utils';
 
 const ARROW_SIZE = 10;

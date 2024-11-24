@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import {app} from '..';
+import app from '../app';
 import config from '../config.js';
 
 /**

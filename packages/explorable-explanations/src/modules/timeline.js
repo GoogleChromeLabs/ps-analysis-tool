@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import config from '../config';
-import {app} from '..';
+import app from '../app';
 import utils from '../lib/utils';
 import bubbles from './bubbles';
 
@@ -43,15 +43,15 @@ timeline.init = () => {
     bubbles.showMinifiedBubbles();
 
     app.p.mouseMoved = (event) => {
-      const { pageX, pageY } = event;
-
-      if (utils.isOverControls(pageX, pageY) || config.bubbles.isExpanded) {
-        config.mouseX = pageX + 50;
-        config.mouseY = pageY + 50;
+      const { offsetX, offsetY } = event;
+      if (utils.isOverControls(offsetX, offsetY) || config.bubbles.isExpanded) {
+        config.mouseX = offsetX + 50;
+        config.mouseY = offsetY + 50;
       } else {
-        config.mouseX = pageX;
-        config.mouseY = pageY;
+        config.mouseX = offsetX;
+        config.mouseY = offsetY;
       }
+
       if (!config.shouldRespondToClick) {
         return;
       }
