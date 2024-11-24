@@ -36,7 +36,7 @@ const config = {
         type: 'advertiser',
         website: 'adv1.com',
         datetime: '2023-10-01 10:00',
-        igGroupsCount: 5,
+        igGroupsCount: 3,
         interestGroups: ['shoes', 'heels', 'phones', 'laptops', 'blankets'],
         visited: false,
       },
@@ -44,7 +44,7 @@ const config = {
         type: 'advertiser',
         website: 'adv2.com',
         datetime: '2023-10-01 11:00',
-        igGroupsCount: 7,
+        igGroupsCount: 2,
         interestGroups: [
           'IGG22012',
           'adidas.co.in',
