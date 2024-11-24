@@ -279,7 +279,7 @@ const TABS: SidebarItems = {
     children: {},
   },
   [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
-    title: () => 'Explorable Explanations',
+    title: () => 'Stories',
     panel: {
       Element: WebStories,
     },

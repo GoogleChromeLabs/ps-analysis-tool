@@ -28,7 +28,7 @@ const WebStories = () => {
   return (
     <div className="h-full w-full">
       <LandingPage
-        title="Explorable Explanations"
+        title="Stories"
         contentPanel={<ContentPanel />}
         showQuickLinks={false}
       />
