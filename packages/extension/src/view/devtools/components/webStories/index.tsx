@@ -59,7 +59,7 @@ const WebStories = () => {
                 className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
                 onClick={() => setOpen((prevOpen) => !prevOpen)}
               >
-                <h1 className="text-left">Explorable Explanation</h1>
+                <h1 className="text-left">Stories</h1>
                 <div>
                   <ArrowUp
                     className={classNames(open && 'rotate-180 -translate-y-1')}
