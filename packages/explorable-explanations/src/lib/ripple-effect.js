@@ -46,7 +46,7 @@ rippleEffect.start = (x = 0, y = 0) => {
     config.rippleEffect.rippled = true;
 
     const animate = (timestamp) => {
-      if (window.cancelPromise) {
+      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
         resolve();
         return;
       }

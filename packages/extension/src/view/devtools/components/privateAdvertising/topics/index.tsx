@@ -62,7 +62,7 @@ const Topics = () => {
         },
       },
       {
-        title: 'Explorable Explantion',
+        title: 'Explorable Explanation',
         content: {
           Element: ExplorableExplanation,
         },
