@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import flow from './flow';
-import app from '../app';
+import {app} from '..';
 import config from '../config';
 import utils from '../lib/utils';
 import rippleEffect from '../lib/ripple-effect';

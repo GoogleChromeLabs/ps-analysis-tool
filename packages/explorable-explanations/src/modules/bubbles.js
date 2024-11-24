@@ -22,7 +22,7 @@ import * as d3 from 'd3';
 /**
  * Internal dependencies.
  */
-import app from '../app';
+import { app } from '..';
 import config from '../config';
 import utils from '../lib/utils';
 
@@ -352,9 +352,7 @@ bubbles.showExpandedBubbles = () => {
     app.minifiedBubbleContainer.appendChild(app.bubbles.expandedSVG);
   }
 
-  document
-    .getElementById('bubble-container-div')
-    .classList.toggle('expanded', true);
+  app.bubbleContainerDiv.classList.toggle('expanded', true);
 
   app.closeButton.style.display = 'block';
   app.openButton.style.display = 'none';

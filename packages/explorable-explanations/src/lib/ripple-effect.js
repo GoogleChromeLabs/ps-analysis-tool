@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import app from '../app';
+import {app} from '..';
 import config from '../config';
 
 // @todo To be moved to components.

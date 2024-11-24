@@ -17,7 +17,7 @@
  * Internal Dependencies
  */
 import config from '../config.js';
-import app from '../app.js';
+import {app} from '../index.js';
 
 // @todo To be broken down into multipe functions.
 const utils = {};
@@ -133,6 +133,7 @@ utils.wipeAndRecreateMainCanvas = () => {
   const canvas = app.p.createCanvas(width, height);
   canvas.parent('ps-canvas');
   canvas.style('z-index', 0);
+  canvas.id('p5-canvas');
   app.p.background(config.canvas.background);
   app.p.textSize(config.canvas.fontSize);
 };
@@ -151,6 +152,7 @@ utils.wipeAndRecreateUserCanvas = () => {
 
   canvas.parent('user-canvas');
   canvas.style('z-index', 1);
+  canvas.id('user-canvas');
 };
 
 utils.isInsideCircle = (x, y, x0, y0, r) => {
@@ -171,16 +173,20 @@ utils.drawText = (text, x, y) => {
   }
 };
 
-utils.setupMainCanvas = (p) => {
+utils.setupMainCanvas = async (p) => {
   const { height, width } = utils.calculateCanvasDimensions();
   const canvas = p.createCanvas(width, height);
   canvas.parent('ps-canvas');
   canvas.style('z-index', 0);
   p.background(config.canvas.background);
   p.textSize(config.canvas.fontSize);
-  (async () => {
-    await app.init(p);
-  })();
+  app.p = p;
+
+  app.setUpTimeLine();
+
+  if (!config.isInteractiveMode) {
+    await app.play();
+  }
 };
 
 utils.setupInterestGroupCanvas = (p) => {
@@ -227,7 +233,7 @@ utils.setupInterestGroupCanvas = (p) => {
     }
   });
 
-  app.interestGroupInit(p);
+  app.igp = p;
 };
 
 utils.setupUserCanvas = (p) => {
@@ -237,8 +243,7 @@ utils.setupUserCanvas = (p) => {
   overlayCanvas.parent('user-canvas');
   overlayCanvas.style('z-index', 1);
   p.textSize(config.canvas.fontSize);
-
-  app.userInit(p);
+  app.up = p;
 };
 
 utils.calculateCanvasDimensions = () => {

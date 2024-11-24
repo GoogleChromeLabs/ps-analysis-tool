@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import p5 from 'p5';
-
-/**
  * Internal dependencies.
  */
 import config from './config.js';
-import app from './app.js';
 import auctions from './modules/auctions.js';
 import flow from './modules/flow.js';
 import utils from './lib/utils.js';
@@ -30,6 +24,37 @@ import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
 import bubbles from './modules/bubbles.js';
+
+const app = {
+  timeline: {
+    isPaused: false,
+    circlePositions: [],
+    smallCirclePositions: [],
+    circlePublisherIndices: [],
+    currentIndex: 0,
+  },
+  auction: {
+    auctions: [],
+    nextTipCoordinates: { x: 0, y: 0 },
+  },
+  joinInterestGroup: {
+    joinings: [],
+    nextTipCoordinates: { x: 0, y: 0 },
+  },
+  flow: {
+    intervals: {},
+  },
+  bubbles: {
+    positions: [],
+    minifiedSVG: null,
+    expandedSVG: null,
+  },
+  utils: {},
+  p: null,
+  igp: null,
+  up: null,
+  isMultiSeller: false,
+};
 
 app.setUpTimeLine = () => {
   if (config.isInteractiveMode) {
@@ -49,15 +74,6 @@ app.setUpTimeLine = () => {
   auctions.setupAuctions();
   joinInterestGroup.setupJoinings();
 };
-app.init = async (p) => {
-  app.p = p;
-
-  app.setUpTimeLine();
-
-  if (!config.isInteractiveMode) {
-    await app.play();
-  }
-};
 
 app.setup = () => {
   app.auction = { ...app.auction, ...auctions };
@@ -68,17 +84,7 @@ app.setup = () => {
   app.bubbles = { ...app.bubbles, ...bubbles };
 };
 
-app.interestGroupInit = (p) => {
-  app.igp = p;
-};
-
-app.userInit = (p) => {
-  app.up = p;
-};
-
 app.play = (resumed = false) => {
-  app.playButton.classList.add('hidden');
-  app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
   if (!resumed) {
     app.setupLoop();
@@ -86,8 +92,6 @@ app.play = (resumed = false) => {
 };
 
 app.pause = () => {
-  app.pauseButton.classList.add('hidden');
-  app.playButton.classList.remove('hidden');
   app.timeline.isPaused = true;
 };
 
@@ -268,11 +272,6 @@ app.handleControls = () => {
   app.openButton.addEventListener('click', (event) =>
     app.minifiedBubbleClickListener(event, true)
   );
-
-  app.playButton.addEventListener('click', () => {
-    app.play(true);
-  });
-  app.pauseButton.addEventListener('click', app.pause);
   app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
   app.intreactiveModeCheckBox.addEventListener(
     'change',
@@ -311,7 +310,8 @@ app.toggleMultSeller = (event) => {
 };
 
 // Define the sketch
-const sketch = (p) => {
+export const sketch = (p) => {
+  app.handleControls();
   p.setup = () => {
     utils.setupMainCanvas(p);
   };
@@ -327,25 +327,16 @@ const sketch = (p) => {
 };
 
 // Define the sketch
-const interestGroupSketch = (p) => {
+export const interestGroupSketch = (p) => {
   p.setup = () => {
     utils.setupInterestGroupCanvas(p);
   };
 };
 
 // Define the sketch
-const userSketch = (p) => {
+export const userSketch = (p) => {
   p.setup = () => {
     utils.setupUserCanvas(p);
   };
 };
-
-app.handleControls();
-// eslint-disable-next-line no-new
-new p5(sketch);
-
-// eslint-disable-next-line no-new
-new p5(interestGroupSketch);
-
-// eslint-disable-next-line no-new
-new p5(userSketch);
+export { app };
