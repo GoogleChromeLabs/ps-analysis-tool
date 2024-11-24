@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import config from '../config';
-import {app} from '..';
+import app from '../app';
 import utils from '../lib/utils';
 import bubbles from './bubbles';
 import PromiseQueue from '../lib/PromiseQueue';

@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import flow from './flow';
-import {app} from '..';
+import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine, Branches, RippleEffect } from '../components';

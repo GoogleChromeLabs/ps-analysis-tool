@@ -22,7 +22,7 @@ import * as d3 from 'd3';
 /**
  * Internal dependencies.
  */
-import { app } from '..';
+import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
 
