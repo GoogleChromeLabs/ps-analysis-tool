@@ -18,13 +18,14 @@
  * External dependencies.
  */
 import React, { useState, useCallback } from 'react';
-import { Resizable } from 're-resizable';
+// import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 import {
   app,
   userSketch,
   interestGroupSketch,
   sketch,
+  config,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
 
@@ -32,13 +33,19 @@ import { ReactP5Wrapper } from '@p5-wrapper/react';
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
-import Tray from './tray';
+//import Tray from './tray';
 import { NextIcon, PreviousIcon } from '@google-psat/design-system';
+
+declare module 'react' {
+  interface CSSProperties {
+    [key: `--${string}`]: string | number;
+  }
+}
 
 const ExplorableExplanation = () => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
-  const [activeTab, setActiveTab] = useState(0);
+  //const [activeTab, setActiveTab] = useState(0);
   const [interactiveMode, _setInteractiveMode] = useState(false);
   const [multiSeller, _setMultiSeller] = useState(false);
   const historyCount = 10;
@@ -107,7 +114,12 @@ const ExplorableExplanation = () => {
   );
 
   return (
-    <div className="flex flex-col h-full">
+    <div
+      className="flex flex-col h-full"
+      style={{
+        '--expandedBubbleWidth': `${config.bubbles.expandedBubbleX - 320}px`,
+      }}
+    >
       <Header
         play={play}
         setPlay={setPlaying}
@@ -163,7 +175,7 @@ const ExplorableExplanation = () => {
         onClick={() => console.log('dole shole')}
       />
       <ReactP5Wrapper sketch={userSketch} />
-      <Resizable
+      {/* <Resizable
         defaultSize={{
           width: '100%',
           height: '20%',
@@ -176,7 +188,7 @@ const ExplorableExplanation = () => {
         className="h-full flex"
       >
         <Tray activeTab={activeTab} setActiveTab={setActiveTab} />
-      </Resizable>
+      </Resizable> */}
     </div>
   );
 };

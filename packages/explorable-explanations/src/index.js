@@ -20,3 +20,4 @@ export {
   interestGroupSketch,
   sketch,
 } from './protectedAudience.js';
+export { default as config } from './config.js';

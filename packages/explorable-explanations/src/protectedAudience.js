@@ -79,20 +79,22 @@ app.expandBubbleActions = () => {
   app.pause();
 };
 app.minifiedBubbleClickListener = (event, expandOverride) => {
+  const rect = app.minifiedBubbleContainer.getBoundingClientRect();
+
   const clickedInsideExpandedCircle = utils.isInsideCircle(
-    config.bubbles.expandedBubbleX,
-    config.bubbles.expandedBubbleY,
+    rect.x + config.bubbles.expandedCircleDiameter / 2,
+    rect.y + config.bubbles.expandedCircleDiameter / 2,
     event.x,
     event.y,
-    config.bubbles.expandedCircleDiameter
+    config.bubbles.expandedCircleDiameter / 2
   );
 
   const clickedInsideMinifiedCircle = utils.isInsideCircle(
-    config.bubbles.minifiedBubbleX,
-    config.bubbles.minifiedBubbleY,
+    rect.x + config.bubbles.minifiedCircleDiameter / 2,
+    rect.y + config.bubbles.minifiedCircleDiameter / 2,
     event.x,
     event.y,
-    config.bubbles.minifiedCircleDiameter
+    config.bubbles.minifiedCircleDiameter / 2
   );
 
   if (

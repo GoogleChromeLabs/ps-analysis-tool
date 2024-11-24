@@ -212,11 +212,12 @@ text {
   position: absolute;
   display: block;
   top: 0px;
-  height: 500px;
-  width: 500px;
+  height: 640px;
+  width: 640px;
   border-radius: 50%;
   border: 1px solid #808080;
   backdrop-filter: blur(10px);
+  left: var(--expandedBubbleWidth)
 }
 
 .bubble-container {

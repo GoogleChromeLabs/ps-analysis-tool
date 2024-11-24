@@ -209,27 +209,6 @@ utils.setupInterestGroupCanvas = (p) => {
   app.closeButton.style.left = `${x}px`;
   app.closeButton.style.top = `${y}px`;
 
-  document.styleSheets[0].cssRules.forEach((rules, index) => {
-    if (rules.selectorText === '.minified-bubble-container.expanded') {
-      document.styleSheets[0].cssRules[index].style.left = `${
-        config.bubbles.expandedBubbleX - 320
-      }px`;
-
-      document.styleSheets[0].cssRules[
-        index
-      ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
-      document.styleSheets[0].cssRules[
-        index
-      ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
-    }
-
-    if (rules.selectorText === '.minified-bubble-container') {
-      document.styleSheets[0].cssRules[index].style.top = `${
-        config.bubbles.minifiedBubbleY - 25
-      }px`;
-    }
-  });
-
   app.igp = p;
 };
 
