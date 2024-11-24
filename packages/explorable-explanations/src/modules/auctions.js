@@ -20,8 +20,7 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
-import rippleEffect from '../lib/ripple-effect';
-import { Box, ProgressLine, Branches } from '../components';
+import { Box, ProgressLine, Branches, RippleEffect } from '../components';
 import bubbles from './bubbles';
 
 /**
@@ -68,17 +67,17 @@ auction.setUp = (index) => {
       branches: [
         {
           title: 'adunit-code',
-          content: 'div-200-1',
+          description: 'div-200-1',
           type: 'box',
         },
         {
           title: 'adunit-code',
-          content: 'div-200-1',
+          description: 'div-200-1',
           type: 'box',
         },
         {
           title: 'adunit-code',
-          content: 'div-200-1',
+          description: 'div-200-1',
           type: 'box',
         },
       ],
@@ -245,16 +244,36 @@ auction.setUp = (index) => {
   });
 
   const boxes = [
-    'Load Interest Group',
-    'Key/Value DSP Server',
-    'generateBid()',
-    'Key/Value SSP Server',
-    'scoreAd()',
-    'reportWin()',
-    'reportResult()',
+    {
+      title: 'Load Interest Group',
+    },
+    {
+      title: 'Key/Value Trusted',
+      description: 'DSP Server',
+    },
+    {
+      title: 'generateBid()',
+      description: '(from DSPs on dsp.js)',
+    },
+    {
+      title: 'Key/Value Trusted',
+      description: 'SSP Server',
+    },
+    {
+      title: 'scoreAd()',
+      description: '(by SSPs on ssp.js)',
+    },
+    {
+      title: 'reportWin()',
+      description: '(on dsp.js)',
+    },
+    {
+      title: 'reportResult()',
+      description: '(on ssp.js)',
+    },
   ];
 
-  boxes.forEach((title) => {
+  boxes.forEach(({ title, description }) => {
     steps.push({
       component: ProgressLine,
       props: {
@@ -273,6 +292,7 @@ auction.setUp = (index) => {
       component: Box,
       props: {
         title,
+        description,
         x: () => app.auction.nextTipCoordinates.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates.y + 10,
       },
@@ -315,12 +335,12 @@ auction.draw = async (index) => {
     if (props?.title === 'generateBid()') {
       const x = props.x();
       const y = props.y();
-      rippleEffect.setUp();
+
       // eslint-disable-next-line no-await-in-loop
-      await rippleEffect.start(
-        x + config.flow.box.width + 2,
-        y + config.flow.box.height / 2
-      );
+      await RippleEffect({
+        x: x + config.flow.box.width + 2,
+        y: y + config.flow.box.height / 2,
+      });
     }
 
     if (callBack) {

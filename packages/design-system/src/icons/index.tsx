@@ -92,3 +92,5 @@ export { default as PauseIcon } from './pause.svg';
 export { default as SupportIcon } from './support.svg';
 export { default as NextIcon } from './next.svg';
 export { default as PreviousIcon } from './previous.svg';
+export { default as WebStoriesIcon } from './web-stories.svg';
+export { default as WebStoriesIconWhite } from './web-stories-white.svg';

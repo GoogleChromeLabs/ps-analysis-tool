@@ -164,7 +164,8 @@ const drawBoxesBranch = (x, y, branch) => {
   const p = app.p;
 
   Box({
-    title: branch.title + ' ' + branch.content,
+    title: branch.title,
+    description: branch.description,
     x: x - config.flow.box.width / 2,
     y: y + 20,
   });
