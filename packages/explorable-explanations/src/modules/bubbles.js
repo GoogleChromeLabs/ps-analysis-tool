@@ -455,7 +455,12 @@ bubbles.bubbleChart = (
     .attr('width', width)
     .attr('height', height)
     .attr('viewBox', [-marginLeft, -marginTop, width, height])
-    .attr('style', 'max-width: 100%; height: auto; height: intrinsic;')
+    .attr(
+      'style',
+      `max-width: 100%; height: auto; height: intrinsic;${
+        !config.bubbles.isExpanded ? 'pointer-events: none;' : ''
+      }`
+    )
     .attr('fill', 'currentColor')
     .attr('font-size', 10)
     .attr('font-family', 'sans-serif')
@@ -465,6 +470,10 @@ bubbles.bubbleChart = (
     .selectAll('a')
     .data(root.leaves())
     .join('a')
+    .attr(
+      'style',
+      `${!config.bubbles.isExpanded ? 'pointer-events: none;' : ''}`
+    )
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
   const eventHandler = (event) => {
@@ -480,6 +489,10 @@ bubbles.bubbleChart = (
     .attr('stroke-width', strokeWidth)
     .attr('stroke-opacity', strokeOpacity)
     .attr('class', 'svg overflowing-text circle-svg')
+    .attr(
+      'style',
+      `${!config.bubbles.isExpanded ? 'pointer-events: none;' : ''}`
+    )
     .attr(
       'fill',
       groups
