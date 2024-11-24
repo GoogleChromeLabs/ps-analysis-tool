@@ -67,17 +67,17 @@ auction.setUp = (index) => {
       branches: [
         {
           title: 'adunit-code',
-          content: 'div-200-1',
+          description: 'div-200-1',
           type: 'box',
         },
         {
           title: 'adunit-code',
-          content: 'div-200-1',
+          description: 'div-200-1',
           type: 'box',
         },
         {
           title: 'adunit-code',
-          content: 'div-200-1',
+          description: 'div-200-1',
           type: 'box',
         },
       ],
