@@ -36,6 +36,7 @@ import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
 import AdUnits from './adUnits';
+import ExplorableExplanation from './explorableExplanation';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -89,6 +90,12 @@ const ProtectedAudience = () => {
         content: {
           Element: Bids,
           className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Explorable Explanations',
+        content: {
+          Element: ExplorableExplanation,
         },
       },
     ],
