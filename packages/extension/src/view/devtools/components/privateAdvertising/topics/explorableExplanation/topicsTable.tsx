@@ -72,7 +72,7 @@ const TopicsTable = ({ data }: TopicsTableProps) => {
   return (
     <TableProvider
       // @ts-ignore
-      data={data[activeTab]}
+      data={data[activeTab] ?? []}
       tableColumns={tableColumns}
       onRowClick={noop}
       onRowContextMenu={noop}
