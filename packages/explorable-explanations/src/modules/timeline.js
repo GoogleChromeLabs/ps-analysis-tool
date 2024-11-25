@@ -43,20 +43,15 @@ timeline.init = () => {
     bubbles.showMinifiedBubbles();
 
     app.p.mouseMoved = (event) => {
-      const { target, offsetX, offsetY } = event;
+      const { offsetX, offsetY } = event;
 
-      if (
-        target === app.countDisplay ||
-        target === app.minifiedBubbleContainer ||
-        target?.parentNode === app.openButton ||
-        config.bubbles.isExpanded
-      ) {
-        config.mouseX = offsetX + 100;
-        config.mouseY = offsetY + 100;
-      } else {
-        config.mouseX = offsetX;
-        config.mouseY = offsetY;
+      if (!config.startTrackingMouse) {
+        utils.wipeAndRecreateUserCanvas();
+        return;
       }
+
+      config.mouseX = offsetX;
+      config.mouseY = offsetY;
 
       if (!config.shouldRespondToClick) {
         return;

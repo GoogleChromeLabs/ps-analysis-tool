@@ -182,6 +182,13 @@ utils.setupMainCanvas = async (p) => {
   p.textSize(config.canvas.fontSize);
   app.p = p;
 
+  canvas.mouseOut(() => {
+    config.startTrackingMouse = false;
+  });
+
+  canvas.mouseOver(() => {
+    config.startTrackingMouse = true;
+  });
   app.setUpTimeLine();
 
   if (!config.isInteractiveMode) {
