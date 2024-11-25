@@ -13,7 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as Box } from './box';
-export { default as Branches } from './branches';
-export { default as ProgressLine } from './progressLine';
-export { default as RippleEffect } from './rippleEffect';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+/**
+ * Internal dependencies.
+ */
+import { getStoryMarkup } from './createStoryIframe';
+import { STORY_JSON } from './story';
+
+const WebStories = () => {
+  const storyMarkup = getStoryMarkup(STORY_JSON);
+
+  return (
+    <div
+      data-testid="web-stories-content"
+      className="h-full w-full text-raisin-black dark:text-bright-gray overflow-y-auto"
+    >
+      <iframe
+        srcDoc={storyMarkup}
+        style={{ width: '100%', height: '100vh', border: 'none' }}
+      />
+    </div>
+  );
+};
+
+export default WebStories;

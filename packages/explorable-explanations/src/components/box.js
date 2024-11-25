@@ -21,6 +21,7 @@ import config from '../config';
 
 const Box = ({
   title,
+  description,
   x,
   y,
   width = config.flow.box.width,
@@ -43,7 +44,14 @@ const Box = ({
   app.p.strokeWeight(0.1);
   app.p.fill(config.flow.colors.box.text);
   app.p.textFont('ui-sans-serif');
-  app.p.text(title, x + width / 2, y + height / 2);
+
+  if (description) {
+    app.p.text(title, x + width / 2, y + height / 2 - 5);
+    app.p.text(description, x + width / 2, y + height / 2 + 10);
+  } else {
+    app.p.text(title, x + width / 2, y + height / 2);
+  }
+
   app.p.pop();
 
   return nextTip;

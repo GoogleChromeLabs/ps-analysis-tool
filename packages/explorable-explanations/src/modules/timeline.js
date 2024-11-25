@@ -32,6 +32,7 @@ const timeline = {};
  * and drawing the initial timeline and user icon.
  */
 timeline.init = () => {
+  app.timeline.circlePublisherIndices = [];
   config.timeline.circles.forEach((circle, index) => {
     if (circle.type === 'publisher') {
       app.timeline.circlePublisherIndices.push(index);
@@ -92,19 +93,19 @@ timeline.init = () => {
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         await app.drawFlows(clickedIndex);
+        config.timeline.circles[clickedIndex].visited = true;
         bubbles.clearAndRewriteBubbles();
         bubbles.showMinifiedBubbles();
         config.shouldRespondToClick = true;
-        config.timeline.circles[clickedIndex].visited = true;
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
       }
     };
   } else {
-    app.timeline.drawTimelineLine();
-    app.timeline.renderUserIcon();
+    timeline.drawTimelineLine();
+    timeline.renderUserIcon();
   }
-  app.timeline.drawTimeline(config.timeline);
+  timeline.drawTimeline(config.timeline);
 };
 
 /**
@@ -134,28 +135,37 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   p.textAlign(p.CENTER, p.CENTER);
   // Draw circles and text at the timeline position
   circles.forEach((circleItem, index) => {
-    const xPositionForCircle =
-      config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
-    const yPositionForCircle = position.y + circleVerticalSpace;
+    if (!window.cancelPromiseForPreviousAndNext) {
+      const xPositionForCircle =
+        config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
+      const yPositionForCircle = position.y + circleVerticalSpace;
 
-    app.timeline.circlePositions.push({
-      x: xPositionForCircle,
-      y: yPositionForCircle,
-    });
+      app.timeline.circlePositions.push({
+        x: xPositionForCircle,
+        y: yPositionForCircle,
+      });
 
-    p.push();
-    p.stroke(config.timeline.colors.grey);
-    timeline.drawCircle(index);
-    p.pop();
+      p.push();
+      p.stroke(config.timeline.colors.grey);
+      timeline.drawCircle(index);
+      p.pop();
 
-    p.push();
-    p.fill(config.timeline.colors.black);
-    p.textSize(12);
-    p.strokeWeight(0.1);
-    p.textFont('ui-sans-serif');
-    p.text(circleItem.datetime, xPositionForCircle, position.y);
-    p.text(circleItem.website, xPositionForCircle, position.y + 20);
-    p.pop();
+      p.push();
+      p.fill(config.timeline.colors.black);
+      p.textSize(12);
+      p.strokeWeight(0.1);
+      p.textFont('ui-sans-serif');
+      if (!config.isInteractiveMode) {
+        p.text(circleItem.datetime, xPositionForCircle, position.y);
+      }
+      p.text(circleItem.website, xPositionForCircle, position.y + 20);
+      p.pop();
+    } else {
+      p.push();
+      p.stroke(config.timeline.colors.grey);
+      timeline.drawCircle(index);
+      p.pop();
+    }
 
     timeline.drawLineAboveCircle(index);
   });
@@ -177,19 +187,16 @@ timeline.drawTimelineLine = () => {
   const p = app.p;
   let x = 0;
 
-  if (app.timeline.currentIndex === 0) {
-    p.push();
-    p.stroke(colors.grey);
-    p.line(
-      0,
-      yPositonForLine,
-      config.timeline.position.x +
-        circleVerticalSpace * (config.timeline.circles.length - 1),
-      yPositonForLine
-    );
-    p.pop();
-    return;
-  }
+  p.push();
+  p.stroke(colors.grey);
+  p.line(
+    0,
+    yPositonForLine,
+    config.timeline.position.x +
+      circleVerticalSpace * (config.timeline.circles.length - 1),
+    yPositonForLine
+  );
+  p.pop();
 
   while (
     x <=
@@ -198,7 +205,7 @@ timeline.drawTimelineLine = () => {
     app.timeline.currentIndex < config.timeline.circles.length
   ) {
     p.push();
-    p.stroke(26, 115, 232);
+    p.stroke(colors.visitedBlue);
     p.line(0, yPositonForLine, x, yPositonForLine);
     p.pop();
     x = x + 1;
@@ -235,7 +242,6 @@ timeline.renderUserIcon = () => {
   }
 
   const user = config.timeline.user;
-
   timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
 
@@ -267,7 +273,6 @@ timeline.eraseAndRedraw = () => {
   utils.wipeAndRecreateUserCanvas();
 
   if (currentIndex > 0) {
-    timeline.drawTimelineLine();
     let i = 0;
     while (i < currentIndex) {
       app.p.push();
