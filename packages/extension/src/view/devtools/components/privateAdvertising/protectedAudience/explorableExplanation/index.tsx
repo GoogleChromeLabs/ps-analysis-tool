@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React, { useState, useCallback } from 'react';
-// import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 import {
   app,
@@ -28,13 +26,12 @@ import {
   config,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
+import { NextIcon, PreviousIcon } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
-//import Tray from './tray';
-import { NextIcon, PreviousIcon } from '@google-psat/design-system';
 
 declare module 'react' {
   interface CSSProperties {
@@ -79,7 +76,7 @@ const ExplorableExplanation = () => {
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
-      <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2">
         <input
           type="checkbox"
           checked={interactiveMode}
@@ -87,7 +84,7 @@ const ExplorableExplanation = () => {
         />
         Interactive Mode
       </label>
-      <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2">
         <input
           type="checkbox"
           checked={multiSeller}
