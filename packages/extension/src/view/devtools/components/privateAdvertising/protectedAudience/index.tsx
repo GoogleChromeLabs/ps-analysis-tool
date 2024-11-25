@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -32,11 +31,11 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
+import ExplorableExplanation from './explorableExplanation';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
-import Bids from './bids';
 import AdUnits from './adUnits';
-import ExplorableExplanation from './explorableExplanation';
+import Bids from './bids';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -65,6 +64,12 @@ const ProtectedAudience = () => {
         },
       },
       {
+        title: 'Explorable Explanations',
+        content: {
+          Element: ExplorableExplanation,
+        },
+      },
+      {
         title: 'Interest Groups',
         content: {
           Element: InterestGroups,
@@ -90,12 +95,6 @@ const ProtectedAudience = () => {
         content: {
           Element: Bids,
           className: 'overflow-hidden',
-        },
-      },
-      {
-        title: 'Explorable Explanations',
-        content: {
-          Element: ExplorableExplanation,
         },
       },
     ],
