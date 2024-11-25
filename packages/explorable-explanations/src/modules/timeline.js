@@ -45,11 +45,6 @@ timeline.init = () => {
     app.p.mouseMoved = (event) => {
       const { offsetX, offsetY } = event;
 
-      if (!config.startTrackingMouse) {
-        utils.wipeAndRecreateUserCanvas();
-        return;
-      }
-
       config.mouseX = offsetX;
       config.mouseY = offsetY;
 
@@ -246,13 +241,15 @@ timeline.renderUserIcon = () => {
   timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
 
-  app.up.image(
-    app.p.userIcon,
-    circlePosition.x - user.width / 2,
-    circlePosition.y - user.height / 2,
-    user.width,
-    user.height
-  );
+  if (config.startTrackingMouse) {
+    app.up.image(
+      app.p.userIcon,
+      circlePosition.x - user.width / 2,
+      circlePosition.y - user.height / 2,
+      user.width,
+      user.height
+    );
+  }
 };
 
 timeline.eraseAndRedraw = () => {
