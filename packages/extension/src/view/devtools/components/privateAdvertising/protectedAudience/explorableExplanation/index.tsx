@@ -128,6 +128,7 @@ const ExplorableExplanation = () => {
           type="checkbox"
           checked={interactiveMode}
           onChange={setInteractiveMode}
+          className="hover:cursor-pointer"
         />
         Interactive Mode
       </label>
