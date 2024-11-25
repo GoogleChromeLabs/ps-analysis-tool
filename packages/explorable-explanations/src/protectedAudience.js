@@ -112,6 +112,8 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 };
 
 app.setupLoop = () => {
+  document.getElementById('prevButton').disabled = true;
+
   const loop = async () => {
     if (
       window.cancelPromise ||
@@ -138,6 +140,18 @@ app.setupLoop = () => {
 
       if (!window.cancelPromiseForPreviousAndNext) {
         app.timeline.currentIndex++;
+        document.getElementById('prevButton').disabled =
+          app.timeline.currentIndex > 0;
+
+        document
+          .getElementById('prevButton')
+          .classList.toggle(
+            'disabled:pointer-events-none',
+            app.timeline.currentIndex > 0 ? true : false
+          );
+
+        document.getElementById('nextButton').disabled =
+          app.timeline.currentIndex === config.timeline.circles.length - 1;
       }
     }
 
@@ -167,11 +181,21 @@ app.handlePrevButton = () => {
 
   window.cancelPromiseForPreviousAndNext = true;
   app.timeline.currentIndex -= 1;
-  app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
   utils.markVisitedValue(app.timeline.currentIndex, true);
   const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+
+  document.getElementById('prevButton').disabled =
+    app.timeline.currentIndex > 0;
+  document
+    .getElementById('prevButton')
+    .classList.toggle(
+      'disabled:pointer-events-none',
+      app.timeline.currentIndex > 0 ? true : false
+    );
+  document.getElementById('nextButton').disabled =
+    app.timeline.currentIndex === config.timeline.circles.length - 1;
 
   config.bubbles.interestGroupCounts = totalBubbles;
   flow.clearBelowTimelineCircles();
@@ -197,6 +221,19 @@ app.handleNextButton = () => {
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+
+  document.getElementById('prevButton').disabled =
+    app.timeline.currentIndex > 0 ? false : true;
+
+  document
+    .getElementById('prevButton')
+    .classList.toggle(
+      'disabled:pointer-events-none',
+      app.timeline.currentIndex > 0 ? true : false
+    );
+
+  document.getElementById('nextButton').disabled =
+    app.timeline.currentIndex === config.timeline.circles.length - 1;
 
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
