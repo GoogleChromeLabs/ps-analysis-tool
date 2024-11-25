@@ -123,7 +123,7 @@ const ExplorableExplanation = () => {
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2">
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
           type="checkbox"
           checked={interactiveMode}
@@ -133,7 +133,11 @@ const ExplorableExplanation = () => {
       </label>
       {Boolean(!interactiveMode) && (
         <div className="flex gap-0.5">
-          <button disabled onClick={app.handlePrevButton}>
+          <button
+            disabled
+            onClick={app.handlePrevButton}
+            className="disabled:opacity-50 disabled:pointer-events-none"
+          >
             <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
           <button onClick={app.handleNextButton}>
