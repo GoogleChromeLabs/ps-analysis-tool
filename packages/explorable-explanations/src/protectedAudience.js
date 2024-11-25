@@ -291,6 +291,9 @@ export const interestGroupSketch = (p) => {
   p.updateWithProps = (props) => {
     if (props.onClick) {
       app.igp.igClick = props.onClick;
+      config.bubbles.expandedBubbleX = props.expandedBubbleX;
+      config.bubbles.expandedBubbleY = props.expandedBubbleY;
+      config.bubbles.expandedCircleDiameter = props.expandedBubbleWidth;
     }
   };
 };

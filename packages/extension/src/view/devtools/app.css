@@ -211,13 +211,13 @@ text {
 .minified-bubble-container.expanded {
   position: absolute;
   display: block;
-  top: 0px;
-  height: 640px;
-  width: 640px;
+  top: var(--expandedBubbleY);
+  height: var(--expandedBubbleWidth);
+  width: var(--expandedBubbleWidth);
   border-radius: 50%;
   border: 1px solid #808080;
   backdrop-filter: blur(10px);
-  left: var(--expandedBubbleWidth)
+  left: var(--expandedBubbleX)
 }
 
 .bubble-container {

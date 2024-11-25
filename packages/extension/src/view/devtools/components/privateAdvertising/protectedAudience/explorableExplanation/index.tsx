@@ -16,14 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { noop } from '@google-psat/common';
 import {
   app,
   userSketch,
   interestGroupSketch,
   sketch,
-  config,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { NextIcon, PreviousIcon } from '@google-psat/design-system';
@@ -45,6 +44,10 @@ const ExplorableExplanation = () => {
   //const [activeTab, setActiveTab] = useState(0);
   const [interactiveMode, _setInteractiveMode] = useState(false);
   const historyCount = 8;
+  const divRef = useRef<HTMLDivElement>(null);
+  const [expandedBubbleWidth, setBubbleWidth] = useState(0);
+  const [expandedBubbleX, setExpandedBubbleX] = useState(0);
+  const [expandedBubbleY, setExpandedBubbleY] = useState(0);
 
   const setPlaying = useCallback(() => {
     setPlay((prevState) => {
@@ -64,6 +67,15 @@ const ExplorableExplanation = () => {
     },
     []
   );
+  useEffect(() => {
+    if (divRef.current) {
+      const bubbleWidth =
+        Math.min(divRef.current.clientHeight, divRef.current.clientWidth) / 2;
+      setBubbleWidth(bubbleWidth);
+      setExpandedBubbleX(divRef.current.clientLeft + bubbleWidth / 2);
+      setExpandedBubbleY(divRef.current.clientTop + bubbleWidth / 2);
+    }
+  }, []);
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
@@ -92,7 +104,9 @@ const ExplorableExplanation = () => {
     <div
       className="flex flex-col h-full"
       style={{
-        '--expandedBubbleWidth': `${config.bubbles.expandedBubbleX - 320}px`,
+        '--expandedBubbleWidth': `${expandedBubbleWidth}px`,
+        '--expandedBubbleX': `${expandedBubbleX}px`,
+        '--expandedBubbleY': `${expandedBubbleY}px`,
       }}
     >
       <Header
@@ -105,7 +119,7 @@ const ExplorableExplanation = () => {
         extraInterface={extraInterface}
       />
       <div className="w-full h-full">
-        <main className="h-full w-full overflow-auto relative">
+        <main className="h-full w-full overflow-auto relative" ref={divRef}>
           <div id="ps-canvas">
             <div id="canvas-container" />
           </div>
@@ -148,6 +162,9 @@ const ExplorableExplanation = () => {
         sketch={interestGroupSketch}
         // eslint-disable-next-line no-console
         onClick={() => console.log('dole shole')}
+        expandedBubbleX={expandedBubbleX}
+        expandedBubbleY={expandedBubbleY}
+        expandedBubbleWidth={expandedBubbleWidth}
       />
       <ReactP5Wrapper sketch={userSketch} />
       {/* <Resizable
