@@ -183,12 +183,17 @@ utils.setupMainCanvas = async (p) => {
   app.p = p;
 
   canvas.mouseOut(() => {
-    config.startTrackingMouse = false;
+    if (config.isInteractiveMode) {
+      config.startTrackingMouse = false;
+    }
   });
 
   canvas.mouseOver(() => {
-    config.startTrackingMouse = true;
+    if (config.isInteractiveMode) {
+      config.startTrackingMouse = true;
+    }
   });
+
   app.setUpTimeLine();
 
   if (!config.isInteractiveMode) {

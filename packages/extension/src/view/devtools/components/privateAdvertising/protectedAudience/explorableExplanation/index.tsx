@@ -134,10 +134,10 @@ const ExplorableExplanation = () => {
       {Boolean(!interactiveMode) && (
         <div className="flex gap-0.5">
           <button disabled onClick={app.handlePrevButton}>
-            <PreviousIcon />
+            <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
           <button onClick={app.handleNextButton}>
-            <NextIcon />
+            <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
         </div>
       )}

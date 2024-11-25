@@ -27,15 +27,13 @@ import bubbles from './modules/bubbles.js';
 import app from './app.js';
 
 app.setUpTimeLine = () => {
-  if (config.isInteractiveMode) {
-    app.auction.auctions = [];
-    app.joinInterestGroup.joinings = [];
-    app.timeline.circlePositions = [];
-    app.timeline.circlePublisherIndices = [];
-    app.bubbles.positions = [];
-    app.bubbles.minifiedSVG = null;
-    app.timeline.currentIndex = 0;
-  }
+  app.auction.auctions = [];
+  app.joinInterestGroup.joinings = [];
+  app.timeline.circlePositions = [];
+  app.timeline.circlePublisherIndices = [];
+  app.bubbles.positions = [];
+  app.bubbles.minifiedSVG = null;
+  app.timeline.currentIndex = 0;
   bubbles.clearAndRewriteBubbles();
   app.setup();
 
@@ -114,15 +112,18 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 };
 
 app.setupLoop = () => {
-  if (window.cancelPromise) {
-    window.cancelPromise = false;
-  }
-
   const loop = async () => {
     if (
       window.cancelPromise ||
       app.timeline.currentIndex >= config.timeline.circles.length
     ) {
+      if (window.cancelPromise && !config.isInteractiveMode) {
+        window.cancelPromise = null;
+        config.startTrackingMouse = true;
+        requestAnimationFrame(loop);
+        timeline.eraseAndRedraw();
+        timeline.renderUserIcon();
+      }
       return;
     }
 
