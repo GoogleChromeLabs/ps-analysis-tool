@@ -29,13 +29,14 @@ import {
 /**
  * Internal dependencies.
  */
+import ExplorableExplanation from './explorableExplanation';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
 import Panel from './panel';
 import ExplorableExplanationPanel from './explorableExplanation/panel';
 import AdUnits from './adUnits';
-import ExplorableExplanation from './explorableExplanation';
+import Bids from './bids';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -93,12 +94,6 @@ const ProtectedAudience = () => {
         content: {
           Element: Bids,
           className: 'overflow-hidden',
-        },
-      },
-      {
-        title: 'Explorable Explanations',
-        content: {
-          Element: ExplorableExplanation,
         },
       },
     ],
