@@ -104,22 +104,19 @@ bubbles.barrageAnimation = async (index) => {
   );
 
   const smallCircleDiameter = diameter / 5;
+  const width = config.flow.mediumBox.width;
+  const height = config.flow.mediumBox.height;
 
   // Calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.bubbles.positions.map((data) => {
-    const speed = 2;
-    const width = config.flow.mediumBox.width;
-    const height = config.flow.mediumBox.height;
-
-    // Calculate the target where the interest group bubbles have to land.
-    const target = p.createVector(
+    const targetX =
       loadInterestGroupBox?.props?.x() +
-        Math.floor(Math.random() * (1 - width / 2 + 1)) +
-        width / 2,
+      p.random(smallCircleDiameter, width / 2);
+    const targetY =
       loadInterestGroupBox?.props?.y() +
-        Math.floor(Math.random() * (1 - height / 2 + 1)) +
-        height / 2
-    );
+      p.random(smallCircleDiameter, height / 2);
+    // Calculate the target where the interest group bubbles have to land.
+    const target = p.createVector(targetX, targetY);
 
     // Calculate the opacity of the interest group bubble which will be animated.
     const currentColor = p.color(data.color);
@@ -131,8 +128,10 @@ bubbles.barrageAnimation = async (index) => {
     );
     const x = isExpanded ? canvasWidth / 2 : 35;
     const y = isExpanded ? canvasHeight / 2 : 35;
+    const distance = p.dist(x, y, targetX, targetY);
+    const speedX = distance / 250;
 
-    return { x, y, color, speed, target };
+    return { x, y, color, speed: speedX, target };
   });
 
   await new Promise((resolve) => {
@@ -156,17 +155,8 @@ bubbles.barrageAnimation = async (index) => {
         dir.normalize();
 
         // Only increment the coordinates if the target is not reached.
-        if (
-          !(
-            x < target.x + 4 &&
-            x > target.x - 4 &&
-            y < target.y - 4 &&
-            y > target.y + 4
-          )
-        ) {
-          x += dir.x * speed;
-          y += dir.y * speed;
-        }
+        x += dir.x * speed;
+        y += dir.y * speed;
 
         p.push();
         p.noStroke();
@@ -179,11 +169,15 @@ bubbles.barrageAnimation = async (index) => {
       // Resolve if all bubbles have reached their targets.
       if (
         positionsOfCircles.every((circle) => {
+          const topOfBox = loadInterestGroupBox?.props?.y();
+          const leftOfBox = loadInterestGroupBox?.props?.x();
+          const x = Math.floor(circle.x);
+          const y = Math.floor(circle.y);
           return (
-            Math.floor(circle.x) < Math.floor(circle.target.x + 4) &&
-            Math.floor(circle.x) > Math.floor(circle.target.x - 4) &&
-            Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
-            Math.floor(circle.y) < Math.floor(circle.target.y + 4)
+            x > leftOfBox &&
+            x < leftOfBox + width &&
+            y > topOfBox &&
+            y < topOfBox + height
           );
         })
       ) {
@@ -235,10 +229,22 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
     const flowBoxWidth = config.flow.box.width;
     const flowBoxHeight = config.flow.box.height;
-    const speed = 1;
     const target = igp.createVector(midPointX, midPointY);
     const { color: currentColor } = app.bubbles.positions[i];
     const color = currentColor;
+    const x =
+      dspTags?.props?.x() +
+      Math.floor(Math.random() * (1 - flowBoxWidth / 2 + 1)) +
+      flowBoxWidth / 2;
+
+    const y =
+      dspTags?.props?.y() +
+      Math.floor(Math.random() * (1 - flowBoxHeight / 2 + 1)) +
+      flowBoxHeight / 2;
+
+    const distance = igp.dist(x, y, midPointX, midPointY);
+    const speedX = distance / 250;
+
     positionsOfCircles.push({
       x:
         dspTags?.props?.x() +
@@ -249,7 +255,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
         Math.floor(Math.random() * (1 - flowBoxHeight / 2 + 1)) +
         flowBoxHeight / 2,
       color,
-      speed,
+      speed: speedX,
       target,
     });
   }
@@ -277,17 +283,8 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
         dir.normalize();
 
-        if (
-          !(
-            x < target.x + 4 &&
-            x > target.x - 4 &&
-            y < target.y - 4 &&
-            y > target.y + 4
-          )
-        ) {
-          x += dir.x * speed;
-          y += dir.y * speed;
-        }
+        x += dir.x * speed;
+        y += dir.y * speed;
 
         igp.push();
         igp.noStroke();
@@ -302,10 +299,10 @@ bubbles.reverseBarrageAnimation = async (index) => {
       if (
         positionsOfCircles.every((circle) => {
           return (
-            Math.floor(circle.x) < Math.floor(circle.target.x + 4) &&
-            Math.floor(circle.x) > Math.floor(circle.target.x - 4) &&
-            Math.floor(circle.y) > Math.floor(circle.target.y - 4) &&
-            Math.floor(circle.y) < Math.floor(circle.target.y + 4)
+            Math.abs(circle.x - circle.target.x) <
+              config.bubbles.minifiedCircleDiameter / 2 &&
+            Math.abs(circle.y - circle.target.y) <
+              config.bubbles.minifiedCircleDiameter / 2
           );
         })
       ) {
