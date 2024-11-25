@@ -25,29 +25,24 @@ import '@testing-library/jest-dom';
  * Internal dependencies
  */
 import Tabs from '..';
+import { useTabs } from '../useTabs';
+
+jest.mock('../useTabs', () => ({
+  useTabs: jest.fn(),
+}));
+const mockUseTabs = useTabs as jest.Mock;
 
 describe('Tabs', () => {
-  const props = {
-    items: [
-      {
-        title: 'title1',
-        content: {
-          Element: () => <div>content1</div>,
-        },
-      },
-      {
-        title: 'title2',
-        content: {
-          Element: () => <div>content2</div>,
-        },
-      },
-    ],
-  };
-
   it('should render', () => {
     const setActiveTab = jest.fn();
 
-    render(<Tabs setActiveTab={setActiveTab} {...props} />);
+    mockUseTabs.mockReturnValue({
+      activeTab: 0,
+      titles: ['title1', 'title2'],
+      setActiveTab,
+    });
+
+    render(<Tabs />);
 
     expect(screen.getByText('title1')).toBeInTheDocument();
     expect(screen.getByText('title1')).toHaveClass('border-b-2');

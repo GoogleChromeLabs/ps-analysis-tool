@@ -13,26 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import { Tabs, useTabs } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+import classNames from 'classnames';
 import React from 'react';
 
-const TableTray = () => {
+const Panel = () => {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
-  const props = panel.props;
+  const { className, props } = panel;
 
   return (
-    <div className="w-full h-full">
-      <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-1.5">
-        <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
+    <div
+      data-testid="topics-content"
+      className="h-screen w-full flex flex-col overflow-hidden"
+    >
+      <div className="p-4">
+        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+          <h1 className="text-left">{I18n.getMessage('topics')}</h1>
+        </div>
       </div>
-      {ActiveTabContent && <ActiveTabContent {...props} />}
+      <Tabs />
+      <div
+        className={classNames('overflow-auto flex-1', className)}
+        style={{
+          minHeight: 'calc(100% - 93px)',
+        }}
+      >
+        {ActiveTabContent && <ActiveTabContent {...props} />}
+      </div>
     </div>
   );
 };
 
-export default TableTray;
+export default Panel;

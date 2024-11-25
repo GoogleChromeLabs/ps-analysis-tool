@@ -13,26 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import { Tabs, useTabs } from '@google-psat/design-system';
-import React from 'react';
-
-const TableTray = () => {
-  const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
-  const ActiveTabContent = panel.Element;
-  const props = panel.props;
-
-  return (
-    <div className="w-full h-full">
-      <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-1.5">
-        <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
-      </div>
-      {ActiveTabContent && <ActiveTabContent {...props} />}
-    </div>
-  );
-};
-
-export default TableTray;
+export * from './provider';
+export * from './types';
+export * from './useTabs';
