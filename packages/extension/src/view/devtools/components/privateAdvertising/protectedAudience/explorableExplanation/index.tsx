@@ -44,8 +44,7 @@ const ExplorableExplanation = () => {
   const [sliderStep, setSliderStep] = useState(1);
   //const [activeTab, setActiveTab] = useState(0);
   const [interactiveMode, _setInteractiveMode] = useState(false);
-  const [multiSeller, _setMultiSeller] = useState(false);
-  const historyCount = 10;
+  const historyCount = 8;
 
   const setPlaying = useCallback(() => {
     setPlay((prevState) => {
@@ -66,14 +65,6 @@ const ExplorableExplanation = () => {
     []
   );
 
-  const setMultiSellerMode = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      _setMultiSeller(event.target.checked);
-      app.toggleMultSeller();
-    },
-    []
-  );
-
   const extraInterface = (
     <div className="flex gap-2 items-center">
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2">
@@ -84,29 +75,16 @@ const ExplorableExplanation = () => {
         />
         Interactive Mode
       </label>
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={multiSeller}
-          onChange={setMultiSellerMode}
-        />
-        Multi Seller
-      </label>
-      <button
-        id="previous-div"
-        disabled
-        className="play-pause-button"
-        onClick={app.handlePrevButton}
-      >
-        <PreviousIcon />
-      </button>
-      <button
-        id="next-div"
-        className="play-pause-button"
-        onClick={app.handleNextButton}
-      >
-        <NextIcon />
-      </button>
+      {Boolean(!interactiveMode) && (
+        <div className="flex gap-0.5">
+          <button disabled onClick={app.handlePrevButton}>
+            <PreviousIcon />
+          </button>
+          <button onClick={app.handleNextButton}>
+            <NextIcon />
+          </button>
+        </div>
+      )}
     </div>
   );
 
