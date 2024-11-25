@@ -275,4 +275,21 @@ utils.markVisitedValue = (index, value) => {
     return circle;
   });
 };
+
+utils.setButtonsDisabilityState = () => {
+  if (config.isInteractiveMode) {
+    document.getElementById('prevButton').disabled =
+      app.timeline.currentIndex > 0 ? true : false;
+
+    document
+      .getElementById('prevButton')
+      .classList.toggle(
+        'disabled:pointer-events-none',
+        app.timeline.currentIndex > 0 ? true : false
+      );
+
+    document.getElementById('nextButton').disabled =
+      app.timeline.currentIndex === config.timeline.circles.length - 1;
+  }
+};
 export default utils;

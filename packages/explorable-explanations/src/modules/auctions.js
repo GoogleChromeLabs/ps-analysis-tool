@@ -91,8 +91,8 @@ auction.setUp = (index) => {
   steps.push({
     component: Branches,
     props: {
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
       branches: [
         {
           date: '2024-10-02',
@@ -120,8 +120,8 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
       noArrow: true,
     },
     callBack: (returnValue) => {
@@ -133,8 +133,8 @@ auction.setUp = (index) => {
     component: Box,
     props: {
       title: 'SSP Tag',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y,
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
@@ -145,8 +145,8 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -157,8 +157,8 @@ auction.setUp = (index) => {
     component: Box,
     props: {
       title: 'SSP',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
@@ -169,8 +169,8 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates.x,
-      y1: () => app.auction.nextTipCoordinates.y + 40,
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -181,8 +181,8 @@ auction.setUp = (index) => {
     component: Box,
     props: {
       title: 'DSPs',
-      x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates.y + config.flow.arrowSize,
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
@@ -193,9 +193,9 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.auction.nextTipCoordinates.x + 10,
+      x1: () => app.auction.nextTipCoordinates?.x + 10,
       y1: () => {
-        return app.auction.nextTipCoordinates.y - 15;
+        return app.auction.nextTipCoordinates?.y - 15;
       },
     },
     callBack: (returnValue) => {
@@ -207,9 +207,9 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.auction.nextTipCoordinates.x,
+      x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => {
-        return app.auction.nextTipCoordinates.y - box.height - 10;
+        return app.auction.nextTipCoordinates?.y - box.height - 10;
       },
     },
     callBack: (returnValue) => {
@@ -221,9 +221,9 @@ auction.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'right',
-      x1: () => app.auction.nextTipCoordinates.x - 10 + box.width / 2,
+      x1: () => app.auction.nextTipCoordinates?.x - 10 + box.width / 2,
       y1: () => {
-        return app.auction.nextTipCoordinates.y - 10 - box.height / 2;
+        return app.auction.nextTipCoordinates?.y - 10 - box.height / 2;
       },
     },
     callBack: (returnValue) => {
@@ -235,8 +235,8 @@ auction.setUp = (index) => {
     component: Box,
     props: {
       title: 'runAdAuction',
-      x: () => app.auction.nextTipCoordinates.x + 10,
-      y: () => app.auction.nextTipCoordinates.y - box.height / 2,
+      x: () => app.auction.nextTipCoordinates?.x + 10,
+      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
@@ -278,9 +278,9 @@ auction.setUp = (index) => {
       component: ProgressLine,
       props: {
         direction: 'down',
-        x1: () => app.auction.nextTipCoordinates.x,
+        x1: () => app.auction.nextTipCoordinates?.x,
         y1: () => {
-          return app.auction.nextTipCoordinates.y + box.height - 10;
+          return app.auction.nextTipCoordinates?.y + box.height - 10;
         },
       },
       callBack: (returnValue) => {
@@ -293,8 +293,8 @@ auction.setUp = (index) => {
       props: {
         title,
         description,
-        x: () => app.auction.nextTipCoordinates.x - box.width / 2,
-        y: () => app.auction.nextTipCoordinates.y + 10,
+        x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+        y: () => app.auction.nextTipCoordinates?.y + 10,
       },
       callBack: (returnValue) => {
         app.auction.nextTipCoordinates = returnValue.down;
@@ -311,6 +311,11 @@ auction.setUp = (index) => {
  * @param {number} index - The index of the auction steps to draw.
  */
 auction.draw = async (index) => {
+  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+    window.cancelPromise = null;
+    return;
+  }
+
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
   const steps = app.auction.auctions[index];
@@ -321,7 +326,7 @@ auction.draw = async (index) => {
 
   for (const step of steps) {
     if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-      return;
+      break;
     }
 
     const { component, props, callBack } = step;
@@ -330,6 +335,9 @@ auction.draw = async (index) => {
 
     if (props?.title === 'Load Interest Group') {
       await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
+      await utils.delay(500); // eslint-disable-line no-await-in-loop
+
+      utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
     }
 
     if (props?.title === 'generateBid()') {
@@ -348,7 +356,10 @@ auction.draw = async (index) => {
     }
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
-
+  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+    window.cancelPromise = null;
+    return;
+  }
   await utils.delay(2000);
   flow.clearBelowTimelineCircles();
 };

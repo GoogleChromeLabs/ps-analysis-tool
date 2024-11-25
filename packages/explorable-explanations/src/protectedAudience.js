@@ -112,17 +112,17 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 };
 
 app.setupLoop = () => {
-  document.getElementById('prevButton').disabled = true;
+  utils.setButtonsDisabilityState();
 
   const loop = async () => {
     if (
       window.cancelPromise ||
       app.timeline.currentIndex >= config.timeline.circles.length
     ) {
-      if (window.cancelPromise && !config.isInteractiveMode) {
-        window.cancelPromise = null;
-        config.startTrackingMouse = true;
+      if (!config.isInteractiveMode) {
+        app.timeline.currentIndex = 0;
         requestAnimationFrame(loop);
+        config.startTrackingMouse = true;
         timeline.eraseAndRedraw();
         timeline.renderUserIcon();
       }
@@ -135,23 +135,12 @@ app.setupLoop = () => {
       utils.markVisitedValue(app.timeline.currentIndex, true);
       bubbles.showMinifiedBubbles();
       timeline.renderUserIcon();
-
       await app.drawFlows(app.timeline.currentIndex);
 
       if (!window.cancelPromiseForPreviousAndNext) {
         app.timeline.currentIndex++;
-        document.getElementById('prevButton').disabled =
-          app.timeline.currentIndex > 0;
 
-        document
-          .getElementById('prevButton')
-          .classList.toggle(
-            'disabled:pointer-events-none',
-            app.timeline.currentIndex > 0 ? true : false
-          );
-
-        document.getElementById('nextButton').disabled =
-          app.timeline.currentIndex === config.timeline.circles.length - 1;
+        utils.setButtonsDisabilityState();
       }
     }
 
@@ -186,16 +175,7 @@ app.handlePrevButton = () => {
     app.timeline.currentIndex
   );
 
-  document.getElementById('prevButton').disabled =
-    app.timeline.currentIndex > 0;
-  document
-    .getElementById('prevButton')
-    .classList.toggle(
-      'disabled:pointer-events-none',
-      app.timeline.currentIndex > 0 ? true : false
-    );
-  document.getElementById('nextButton').disabled =
-    app.timeline.currentIndex === config.timeline.circles.length - 1;
+  utils.setButtonsDisabilityState();
 
   config.bubbles.interestGroupCounts = totalBubbles;
   flow.clearBelowTimelineCircles();
@@ -222,18 +202,7 @@ app.handleNextButton = () => {
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
 
-  document.getElementById('prevButton').disabled =
-    app.timeline.currentIndex > 0 ? false : true;
-
-  document
-    .getElementById('prevButton')
-    .classList.toggle(
-      'disabled:pointer-events-none',
-      app.timeline.currentIndex > 0 ? true : false
-    );
-
-  document.getElementById('nextButton').disabled =
-    app.timeline.currentIndex === config.timeline.circles.length - 1;
+  utils.setButtonsDisabilityState();
 
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
@@ -285,7 +254,11 @@ app.toggleInteractiveMode = () => {
   window.cancelPromise = true;
   config.isInteractiveMode = !config.isInteractiveMode;
   app.timeline.currentIndex = 0;
-  config.shouldRespondToClick = true;
+  if (config.shouldRespondToClick === true && !config.isInteractiveMode) {
+    window.cancelPromise = false;
+  } else {
+    config.shouldRespondToClick = true;
+  }
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;

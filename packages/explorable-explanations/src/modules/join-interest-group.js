@@ -78,8 +78,8 @@ joinInterestGroup.setUp = (index) => {
     component: Box,
     props: {
       title: 'DSP Tag',
-      x: () => app.joinInterestGroup.nextTipCoordinates.x - box.width / 2,
-      y: () => app.joinInterestGroup.nextTipCoordinates.y + ARROW_SIZE,
+      x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;
@@ -91,8 +91,8 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.joinInterestGroup.nextTipCoordinates.x,
-      y1: () => app.joinInterestGroup.nextTipCoordinates.y + 40,
+      x1: () => app.joinInterestGroup.nextTipCoordinates?.x,
+      y1: () => app.joinInterestGroup.nextTipCoordinates?.y + 40,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue;
@@ -104,9 +104,9 @@ joinInterestGroup.setUp = (index) => {
     component: Box,
     props: {
       title: 'DSPs',
-      x: () => app.joinInterestGroup.nextTipCoordinates.x - box.width / 2,
+      x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () =>
-        app.joinInterestGroup.nextTipCoordinates.y + config.flow.arrowSize,
+        app.joinInterestGroup.nextTipCoordinates?.y + config.flow.arrowSize,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;
@@ -118,8 +118,8 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.joinInterestGroup.nextTipCoordinates.x + 10,
-      y1: () => app.joinInterestGroup.nextTipCoordinates.y - 15,
+      x1: () => app.joinInterestGroup.nextTipCoordinates?.x + 10,
+      y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 15,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue;
@@ -131,8 +131,8 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.joinInterestGroup.nextTipCoordinates.x,
-      y1: () => app.joinInterestGroup.nextTipCoordinates.y - 10 - box.height,
+      x1: () => app.joinInterestGroup.nextTipCoordinates?.x,
+      y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 10 - box.height,
       text: 'joinInterestGroup()',
     },
     callBack: (returnValue) => {
@@ -149,6 +149,11 @@ joinInterestGroup.setUp = (index) => {
  * @param {number} index - The index of the circle in the timeline to draw.
  */
 joinInterestGroup.draw = async (index) => {
+  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+    window.cancelPromise = null;
+    return;
+  }
+
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
   bubbles.generateBubbles();
   const steps = app.joinInterestGroup.joinings[index];
@@ -165,6 +170,7 @@ joinInterestGroup.draw = async (index) => {
     const { component, props, callBack } = step;
 
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+
     const delay = component === Box ? 1000 : 0;
 
     if (callBack) {
@@ -172,6 +178,11 @@ joinInterestGroup.draw = async (index) => {
     }
 
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
+  }
+
+  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+    window.cancelPromise = null;
+    return;
   }
 
   await bubbles.reverseBarrageAnimation(index);
