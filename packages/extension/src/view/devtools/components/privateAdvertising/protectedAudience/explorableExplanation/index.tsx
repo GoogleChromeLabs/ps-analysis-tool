@@ -64,15 +64,52 @@ const ExplorableExplanation = () => {
     ],
     []
   );
+  const handleResizeCallback = useMemo(() => {
+    return new ResizeObserver(() => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const containerHeight = containerRef.current.offsetHeight;
+        const newSize = Math.min(containerWidth, containerHeight) / 2;
+        const centerX = (containerWidth - newSize) / 4;
+        const centerY = (containerHeight - newSize) / 4;
+
+        setBubbleWidth(newSize);
+        setExpandedBubbleX(centerX);
+        setExpandedBubbleY(centerY);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (divRef.current) {
-      const bubbleWidth =
-        Math.min(divRef.current.clientHeight, divRef.current.clientWidth) / 2;
-      setBubbleWidth(bubbleWidth);
-      setExpandedBubbleX(divRef.current.clientLeft + bubbleWidth / 2);
-      setExpandedBubbleY(divRef.current.clientTop + bubbleWidth / 2);
+      const divRect = divRef.current.getBoundingClientRect();
+      const visibleWidth = Math.max(
+        0,
+        Math.min(divRect.right, window.innerWidth) - Math.max(divRect.left, 0)
+      );
+      const visibleHeight = Math.max(
+        0,
+        Math.min(divRect.bottom, window.innerHeight) - Math.max(divRect.top, 0)
+      );
+
+      const newSize = Math.min(visibleWidth, visibleHeight) / 2;
+      const centerX = (visibleWidth - newSize) / 4;
+      const centerY = (visibleHeight - newSize) / 4;
+
+      setBubbleWidth(newSize);
+      setExpandedBubbleX(centerX);
+      setExpandedBubbleY(centerY);
     }
-  }, []);
+    if (containerRef.current) {
+      handleResizeCallback.observe(containerRef.current);
+    }
+    const containerRefCopy = containerRef;
+    return () => {
+      if (containerRefCopy.current) {
+        handleResizeCallback.unobserve(containerRefCopy.current);
+      }
+    };
+  }, [handleResizeCallback]);
 
   return (
     <TabsProvider items={tabItems}>
