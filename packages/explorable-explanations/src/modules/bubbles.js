@@ -449,6 +449,7 @@ bubbles.bubbleChart = (
 
   const svg = d3
     .create('svg')
+    .attr('id', !config.bubbles.isExpanded ? 'minimisedSVG' : 'expandedSVG')
     .attr('width', width)
     .attr('height', height)
     .attr('viewBox', [-marginLeft, -marginTop, width, height])

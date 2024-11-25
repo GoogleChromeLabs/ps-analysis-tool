@@ -307,6 +307,11 @@ export const interestGroupSketch = (p) => {
 
       app.closeButton.style.left = `${x}px`;
       app.closeButton.style.top = `${y}px`;
+      const expandedSVG = document.getElementById('expandedSVG');
+
+      if (expandedSVG) {
+        bubbles.showExpandedBubbles();
+      }
     }
   };
 };
