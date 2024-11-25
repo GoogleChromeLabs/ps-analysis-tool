@@ -204,18 +204,6 @@ utils.setupInterestGroupCanvas = (p) => {
   overlayCanvas.style('z-index', 2);
   p.textSize(config.canvas.fontSize);
 
-  config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
-  config.bubbles.expandedBubbleY = 0;
-
-  // 335 is the angle where the close icon should be visible.
-  const angle = (305 * Math.PI) / 180;
-  // 335 is the radius + the size of icon so that icon is attached to the circle.
-  const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
-  const y = 335 * Math.sin(angle) + 320;
-
-  app.closeButton.style.left = `${x}px`;
-  app.closeButton.style.top = `${y}px`;
-
   app.igp = p;
 };
 

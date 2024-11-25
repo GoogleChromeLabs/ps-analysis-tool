@@ -16,7 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+} from 'react';
 import { noop } from '@google-psat/common';
 import {
   app,
@@ -45,6 +51,7 @@ const ExplorableExplanation = () => {
   const [interactiveMode, _setInteractiveMode] = useState(false);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [expandedBubbleWidth, setBubbleWidth] = useState(0);
   const [expandedBubbleX, setExpandedBubbleX] = useState(0);
   const [expandedBubbleY, setExpandedBubbleY] = useState(0);
@@ -67,15 +74,52 @@ const ExplorableExplanation = () => {
     },
     []
   );
+  const handleResizeCallback = useMemo(() => {
+    return new ResizeObserver(() => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const containerHeight = containerRef.current.offsetHeight;
+        const newSize = Math.min(containerWidth, containerHeight) / 2;
+        const centerX = (containerWidth - newSize) / 4;
+        const centerY = (containerHeight - newSize) / 4;
+
+        setBubbleWidth(newSize);
+        setExpandedBubbleX(centerX);
+        setExpandedBubbleY(centerY);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (divRef.current) {
-      const bubbleWidth =
-        Math.min(divRef.current.clientHeight, divRef.current.clientWidth) / 2;
-      setBubbleWidth(bubbleWidth);
-      setExpandedBubbleX(divRef.current.clientLeft + bubbleWidth / 2);
-      setExpandedBubbleY(divRef.current.clientTop + bubbleWidth / 2);
+      const divRect = divRef.current.getBoundingClientRect();
+      const visibleWidth = Math.max(
+        0,
+        Math.min(divRect.right, window.innerWidth) - Math.max(divRect.left, 0)
+      );
+      const visibleHeight = Math.max(
+        0,
+        Math.min(divRect.bottom, window.innerHeight) - Math.max(divRect.top, 0)
+      );
+
+      const newSize = Math.min(visibleWidth, visibleHeight) / 2;
+      const centerX = (visibleWidth - newSize) / 4;
+      const centerY = (visibleHeight - newSize) / 4;
+
+      setBubbleWidth(newSize);
+      setExpandedBubbleX(centerX);
+      setExpandedBubbleY(centerY);
     }
-  }, []);
+    if (containerRef.current) {
+      handleResizeCallback.observe(containerRef.current);
+    }
+    const containerRefCopy = containerRef;
+    return () => {
+      if (containerRefCopy.current) {
+        handleResizeCallback.unobserve(containerRefCopy.current);
+      }
+    };
+  }, [handleResizeCallback]);
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
@@ -124,7 +168,11 @@ const ExplorableExplanation = () => {
             <div id="canvas-container" />
           </div>
           <div id="interest-canvas"></div>
-          <div id="bubble-container-div" className="bubble-container">
+          <div
+            id="bubble-container-div"
+            className="bubble-container"
+            ref={containerRef}
+          >
             <div
               id="minified-bubble-container"
               className="minified-bubble-container"

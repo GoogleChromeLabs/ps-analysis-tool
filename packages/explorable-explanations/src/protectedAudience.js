@@ -294,6 +294,18 @@ export const interestGroupSketch = (p) => {
       config.bubbles.expandedBubbleX = props.expandedBubbleX;
       config.bubbles.expandedBubbleY = props.expandedBubbleY;
       config.bubbles.expandedCircleDiameter = props.expandedBubbleWidth;
+      const radius = config.bubbles.expandedCircleDiameter / 2;
+      const totalRadius = radius + 24;
+      // 335 is the angle where the close icon should be visible.
+      const angle = (305 * Math.PI) / 180;
+      // 335 is the radius + the size of icon so that icon is attached to the circle.
+      const x =
+        totalRadius * Math.cos(angle) + config.bubbles.expandedBubbleX + radius;
+      const y =
+        totalRadius * Math.sin(angle) + config.bubbles.expandedBubbleY + radius;
+
+      app.closeButton.style.left = `${x}px`;
+      app.closeButton.style.top = `${y}px`;
     }
   };
 };
