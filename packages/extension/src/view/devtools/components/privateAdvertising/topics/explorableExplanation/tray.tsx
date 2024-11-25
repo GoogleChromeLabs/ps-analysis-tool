@@ -18,45 +18,33 @@
  * External dependencies.
  */
 import type { TabItems } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
  */
 import TableTray from '../../../explorableExplanation/tableTray';
-import TopicsTable from './topicsTable';
+import TopicsTable, { type TopicsTableType } from './topicsTable';
 
-const Tray = () => {
-  const [activeTab, setActiveTab] = useState(0);
+interface TrayProps {
+  activeTab: number;
+  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
+  topicsTableData: TopicsTableType[];
+}
 
+const Tray = ({ activeTab, setActiveTab, topicsTableData }: TrayProps) => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Epoch 1',
+    () =>
+      ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'].map((item) => ({
+        title: item,
         content: {
           Element: TopicsTable,
+          props: {
+            data: topicsTableData,
+          },
         },
-      },
-      {
-        title: 'Epoch 2',
-        content: {
-          Element: TopicsTable,
-        },
-      },
-      {
-        title: 'Epoch 3',
-        content: {
-          Element: TopicsTable,
-        },
-      },
-      {
-        title: 'Epoch 4',
-        content: {
-          Element: TopicsTable,
-        },
-      },
-    ],
-    []
+      })),
+    [topicsTableData]
   );
 
   return (

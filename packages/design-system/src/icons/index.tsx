@@ -91,3 +91,5 @@ export { default as RestartIcon } from './restart.svg';
 export { default as PauseIcon } from './pause.svg';
 export { default as SupportIcon } from './support.svg';
 export { default as MoneyIcon } from './money.svg';
+export { default as WebStoriesIcon } from './web-stories.svg';
+export { default as WebStoriesIconWhite } from './web-stories-white.svg';

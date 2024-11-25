@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Audience</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <main>
+        <div id="ps-canvas">
+            <div id="canvas-container">
+                <div class="controls">
+                    <button id="previous-div" disabled class="play-pause-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
+                            fill="#808080">
+                            <path
+                                d="M220-240v-480h80v480h-80Zm520 0L380-480l360-240v480Zm-80-240Zm0 90v-180l-136 90 136 90Z" />
+                        </svg>
+                    </button>
+                    <button id="next-div" class="play-pause-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
+                            fill="#808080">
+                            <path
+                                d="M660-240v-480h80v480h-80Zm-440 0v-480l360 240-360 240Zm80-240Zm0 90 136-90-136-90v180Z" />
+                        </svg>
+                    </button>
+                    <div class="play-pause-button" id="play-pause-button">
+                        <button id="play" class="hidden">
+                            <img src="./icons/play-button.png" alt="play" />
+                        </button>
+                        <button id="pause">
+                            <img src="./icons/pause-button.png" alt="pause" />
+                        </button>
+                    </div>
+                    <div id="interactive-mode-div">
+                        <label for="interactive-mode">
+                            <input type="checkbox" name="interactive-mode" id="interactive-mode">
+                            Interactive Mode
+                        </label>
+                    </div>
+                    <div id="multi-seller-div">
+                        <label for="multi-seller">
+                            <input type="checkbox" name="multi-seller" id="multi-seller">
+                            Multi-Sellers
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div id="interest-canvas"></div>
+        <div id="bubble-container-div" class="bubble-container">
+            <div id="minified-bubble-container" class="minified-bubble-container">
+                <span id="count-display"></span>
+            </div>
+            <div id="open-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#808080">
+                    <path d="M200-200v-240h80v160h160v80H200Zm480-320v-160H520v-80h240v240h-80Z" />
+                </svg>
+            </div>
+            <div id="close-button" style="color: black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="currentColor">
+                    <path d="M440-440v240h-80v-160H200v-80h240Zm160-320v160h160v80H520v-240h80Z" />
+                </svg>
+            </div>
+        </div>
+        <div id="user-canvas"></div>
+    </main>
+
+    <script src="protected-audience.js"></script>
+</body>
+
+</html>

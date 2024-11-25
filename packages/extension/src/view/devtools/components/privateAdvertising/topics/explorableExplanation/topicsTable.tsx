@@ -26,7 +26,17 @@ import {
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
 
-const TopicsTable = () => {
+export type TopicsTableType = {
+  topicName: string;
+  count: number;
+  observedByContextDomains: string[];
+};
+
+interface TopicsTableProps {
+  data: TopicsTableType[];
+}
+
+const TopicsTable = ({ data }: TopicsTableProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -34,21 +44,18 @@ const TopicsTable = () => {
         accessorKey: 'topicName',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        widthWeightagePercentage: 30,
+        widthWeightagePercentage: 20,
       },
       {
-        header: 'Count',
+        header: 'Access Count',
         accessorKey: 'count',
         cell: (info: InfoType) => info,
-        enableHiding: false,
-        widthWeightagePercentage: 10,
+        widthWeightagePercentage: 20,
       },
       {
-        header:
-          'Observed-by context domains (hashed if the original value is unavailable)',
+        header: 'Observed-by context domains',
         accessorKey: 'observedByContextDomains',
-        cell: (info: InfoType) => info,
-        enableHiding: false,
+        cell: (info: InfoType) => (info as string[]).join(' | '),
         widthWeightagePercentage: 60,
       },
     ],
@@ -59,11 +66,12 @@ const TopicsTable = () => {
 
   return (
     <TableProvider
-      data={[]}
+      // @ts-ignore
+      data={data}
       tableColumns={tableColumns}
       onRowClick={noop}
       onRowContextMenu={noop}
-      getRowObjectKey={() => ''}
+      getRowObjectKey={(row) => row.originalData.topicName}
       tablePersistentSettingsKey={tablePersistentSettingsKey}
     >
       <Table hideSearch hideFiltering selectedKey={''} hideTableTopBar />

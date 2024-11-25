@@ -13,20 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js', // Entry point for Webpack
+  entry: {
+    'protected-audience': './src/protectedAudience.js',
+  },
   output: {
-    filename: 'bundle.js', // Output bundle file
-    path: path.resolve(__dirname, 'dist'), // Output directory
+    filename: '[name].js',
+    path: path.resolve(__dirname, './packages/explorable-explanations/dist'),
     publicPath: '/', // Base path for all assets
   },
   mode: 'development', // Set mode to development
   devtool: 'source-map', // Enable source maps for easier debugging
   devServer: {
     static: {
-      directory: path.join(__dirname, 'public'), // Serve from 'dist' folder
+      directory: path.resolve(
+        __dirname,
+        './packages/explorable-explanations/public'
+      ),
     },
     compress: true, // Enable gzip compression
     port: 8080, // The port on which the server will run
