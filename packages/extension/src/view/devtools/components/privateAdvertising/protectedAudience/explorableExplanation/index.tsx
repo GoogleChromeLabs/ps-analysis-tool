@@ -64,6 +64,15 @@ const ExplorableExplanation = () => {
     ],
     []
   );
+  useEffect(() => {
+    if (divRef.current) {
+      const bubbleWidth =
+        Math.min(divRef.current.clientHeight, divRef.current.clientWidth) / 2;
+      setBubbleWidth(bubbleWidth);
+      setExpandedBubbleX(divRef.current.clientLeft + bubbleWidth / 2);
+      setExpandedBubbleY(divRef.current.clientTop + bubbleWidth / 2);
+    }
+  }, []);
 
   return (
     <TabsProvider items={tabItems}>
