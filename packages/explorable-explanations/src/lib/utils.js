@@ -335,23 +335,30 @@ utils.setButtonsDisabilityState = () => {
       );
 
     document.getElementById('nextButton').disabled =
-      app.timeline.currentIndex === config.timeline.circles.length - 1;
+      app.timeline.currentIndex >= config.timeline.circles.length - 1;
+
+    document
+      .getElementById('nextButton')
+      .classList.toggle(
+        'disabled:pointer-events-none',
+        app.timeline.currentIndex >= config.timeline.circles.length - 1
+          ? true
+          : false
+      );
   }
-};
 
-utils.setPrevButtonState = (state) => {
-  document.getElementById('prevButton').disabled = state;
+  if (app.timeline.currentIndex >= config.timeline.circles.length) {
+    document.getElementById('prevButton').disabled = true;
 
-  document
-    .getElementById('prevButton')
-    .classList.toggle('disabled:pointer-events-none', state);
-};
+    document
+      .getElementById('prevButton')
+      .classList.toggle('disabled:pointer-events-none', true);
 
-utils.setNextButtonState = (state) => {
-  document.getElementById('nextButton').disabled = state;
+    document.getElementById('nextButton').disabled = true;
 
-  document
-    .getElementById('nextButton')
-    .classList.toggle('disabled:pointer-events-none', state);
+    document
+      .getElementById('nextButton')
+      .classList.toggle('disabled:pointer-events-none', true);
+  }
 };
 export default utils;

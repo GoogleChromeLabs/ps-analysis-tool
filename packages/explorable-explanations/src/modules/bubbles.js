@@ -51,7 +51,6 @@ bubbles.init = () => {
  */
 bubbles.generateBubbles = (recalculate = false) => {
   const currIndex = app.timeline.currentIndex;
-
   if (currIndex >= config.timeline.circles.length) {
     return;
   }
