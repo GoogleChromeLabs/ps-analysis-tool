@@ -459,9 +459,10 @@ auction.draw = (index) => {
   }
 
   for (const step of steps) {
-    PromiseQueue.nextStepSkipIndex.push(PromiseQueue.queue.length - 1);
-    PromiseQueue.add(async () => {
-      const { component, props, callBack } = step;
+    if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+      window.cancelPromise = null;
+      break;
+    }
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
