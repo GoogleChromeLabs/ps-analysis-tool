@@ -293,6 +293,7 @@ app.toggleInteractiveMode = () => {
     config.shouldRespondToClick = true;
     config.isReset = false;
   } else {
+    config.isReset = false;
     config.startTrackingMouse = true;
     config.shouldRespondToClick = true;
   }
