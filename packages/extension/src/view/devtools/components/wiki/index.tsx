@@ -183,7 +183,7 @@ const Wiki = () => {
           className="markdown-body h-full w-full overflow-auto p-5 pb-10 dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
         >
           {!isLoading ? (
-            <div className="markdown-container min-w-[45rem]">
+            <div className="markdown-container min-w-[50rem]">
               <h2>
                 {currentSelectedPage
                   ? currentSelectedPage.replaceAll('-', ' ')
