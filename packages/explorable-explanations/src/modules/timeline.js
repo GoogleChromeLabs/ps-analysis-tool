@@ -164,7 +164,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
       p.fill(config.timeline.colors.black);
       p.textSize(12);
       p.strokeWeight(0.1);
-      p.textFont('ui-sans-serif');
+      p.textFont('sans-serif');
       if (!config.isInteractiveMode) {
         p.text(circleItem.datetime, xPositionForCircle, position.y);
       }

@@ -167,7 +167,7 @@ utils.drawText = (text, x, y) => {
     p.strokeWeight(0.1);
     p.fill('#000');
     p.textSize(config.canvas.fontSize - 2);
-    p.textFont('ui-sans-serif');
+    p.textFont('sans-serif');
     p.text(text, x, y);
     p.pop();
   }
