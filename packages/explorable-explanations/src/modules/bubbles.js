@@ -230,6 +230,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const flowBoxWidth = config.flow.box.width;
     const flowBoxHeight = config.flow.box.height;
     const target = igp.createVector(midPointX, midPointY);
+
     const { color: currentColor } = app.bubbles.positions[i];
     const color = currentColor;
     const x =

@@ -292,4 +292,20 @@ utils.setButtonsDisabilityState = () => {
       app.timeline.currentIndex === config.timeline.circles.length - 1;
   }
 };
+
+utils.setPrevButtonState = (state) => {
+  document.getElementById('prevButton').disabled = state;
+
+  document
+    .getElementById('prevButton')
+    .classList.toggle('disabled:pointer-events-none', state);
+};
+
+utils.setNextButtonState = (state) => {
+  document.getElementById('nextButton').disabled = state;
+
+  document
+    .getElementById('nextButton')
+    .classList.toggle('disabled:pointer-events-none', state);
+};
 export default utils;

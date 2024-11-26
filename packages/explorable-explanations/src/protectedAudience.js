@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import p5 from 'p5';
+/**
  * Internal dependencies.
  */
 import config from './config.js';
@@ -136,11 +140,10 @@ app.loop = async () => {
 
   if (!app.timeline.isPaused && !config.isInteractiveMode && !config.isReset) {
     window.cancelPromiseForPreviousAndNext = false;
-
+    bubbles.generateBubbles();
     utils.markVisitedValue(app.timeline.currentIndex, true);
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
-    bubbles.generateBubbles();
     await app.drawFlows(app.timeline.currentIndex);
 
     if (!window.cancelPromiseForPreviousAndNext) {
@@ -188,21 +191,22 @@ app.handlePrevButton = () => {
   if (config.bubbles.isExpanded || config.isInteractiveMode) {
     return;
   }
-
+  utils.setPrevButtonState(true);
+  utils.setNextButtonState(true);
   window.cancelPromiseForPreviousAndNext = true;
   app.timeline.currentIndex -= 1;
   utils.markVisitedValue(app.timeline.currentIndex, true);
   const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
-
   utils.setButtonsDisabilityState();
 
   config.bubbles.interestGroupCounts = totalBubbles;
   flow.clearBelowTimelineCircles();
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
-
+  utils.setPrevButtonState(false);
+  utils.setNextButtonState(false);
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
     bubbles.showMinifiedBubbles();
@@ -213,7 +217,8 @@ app.handleNextButton = () => {
   if (config.bubbles.isExpanded || config.isInteractiveMode) {
     return;
   }
-
+  utils.setPrevButtonState(true);
+  utils.setNextButtonState(true);
   window.cancelPromiseForPreviousAndNext = true;
   app.timeline.currentIndex += 1;
   utils.markVisitedValue(app.timeline.currentIndex, true);
@@ -224,7 +229,8 @@ app.handleNextButton = () => {
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
 
   utils.setButtonsDisabilityState();
-
+  utils.setPrevButtonState(false);
+  utils.setNextButtonState(false);
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
     bubbles.showMinifiedBubbles();
@@ -378,5 +384,36 @@ app.reset = () => {
   utils.markVisitedValue(config.timeline.circles.length, false);
 
   timeline.eraseAndRedraw();
+};
+app.startAnimation = (
+  expandedBubbleX,
+  expandedBubbleY,
+  expandedBubbleWidth,
+  onClick
+) => {
+  // eslint-disable-next-line no-new
+  new p5(sketch);
+
+  // eslint-disable-next-line no-new
+  new p5(interestGroupSketch);
+
+  // eslint-disable-next-line no-new
+  new p5(userSketch);
+  app.igp.igClick = onClick;
+  config.bubbles.expandedBubbleX = expandedBubbleX;
+  config.bubbles.expandedBubbleY = expandedBubbleY;
+  config.bubbles.expandedCircleDiameter = expandedBubbleWidth;
+  const radius = config.bubbles.expandedCircleDiameter / 2;
+  const totalRadius = radius + 24;
+  // 335 is the angle where the close icon should be visible.
+  const angle = (305 * Math.PI) / 180;
+  // 335 is the radius + the size of icon so that icon is attached to the circle.
+  const x =
+    totalRadius * Math.cos(angle) + config.bubbles.expandedBubbleX + radius;
+  const y =
+    totalRadius * Math.sin(angle) + config.bubbles.expandedBubbleY + radius;
+
+  app.closeButton.style.left = `${x}px`;
+  app.closeButton.style.top = `${y}px`;
 };
 export { app };

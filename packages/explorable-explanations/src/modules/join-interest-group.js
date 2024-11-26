@@ -153,7 +153,6 @@ joinInterestGroup.draw = async (index) => {
     window.cancelPromise = null;
     return;
   }
-
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
   const steps = app.joinInterestGroup.joinings[index];
