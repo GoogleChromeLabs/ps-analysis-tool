@@ -173,6 +173,7 @@ app.setupLoop = () => {
 };
 
 app.drawFlows = async (index) => {
+  bubbles.generateBubbles();
   await joinInterestGroup.draw(index);
   await auctions.draw(index);
 };

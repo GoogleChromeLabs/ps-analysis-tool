@@ -155,7 +155,7 @@ joinInterestGroup.draw = async (index) => {
   }
 
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
-  bubbles.generateBubbles();
+
   const steps = app.joinInterestGroup.joinings[index];
 
   if (!steps) {
