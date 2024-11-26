@@ -95,6 +95,7 @@ timeline.init = () => {
         app.timeline.currentIndex = clickedIndex;
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
+        bubbles.generateBubbles();
         await app.drawFlows(clickedIndex);
         if (config.isReset) {
           config.isReset = false;
