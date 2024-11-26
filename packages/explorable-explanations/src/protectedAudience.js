@@ -123,12 +123,13 @@ app.setupLoop = () => {
       ) {
         if (app.timeline.currentIndex >= config.timeline.circles.length) {
           bubbles.showMinifiedBubbles();
+          window.cancelPromise = null;
+          config.isReset = false;
           return;
         }
 
         if (!config.isInteractiveMode) {
           app.timeline.currentIndex = 0;
-          config.startTrackingMouse = true;
           requestAnimationFrame(loop);
           timeline.eraseAndRedraw();
           timeline.renderUserIcon();
@@ -159,11 +160,14 @@ app.setupLoop = () => {
       if (config.isReset) {
         app.timeline.currentIndex = 0;
         config.isReset = false;
+        config.startTrackingMouse = true;
+        window.cancelPromise = null;
         return;
       }
 
       requestAnimationFrame(loop);
       if (!config.isInteractiveMode) {
+        config.startTrackingMouse = true;
         timeline.eraseAndRedraw();
         timeline.renderUserIcon();
       }
@@ -275,13 +279,14 @@ app.handleControls = () => {
 
 app.toggleInteractiveMode = () => {
   window.cancelPromise = true;
-  config.isInteractiveMode = !config.isInteractiveMode;
-  app.timeline.currentIndex = 0;
-  if (config.shouldRespondToClick === true && !config.isInteractiveMode) {
+  if (config.shouldRespondToClick === true && config.isInteractiveMode) {
     window.cancelPromise = false;
   } else {
+    config.startTrackingMouse = true;
     config.shouldRespondToClick = true;
   }
+  config.isInteractiveMode = !config.isInteractiveMode;
+  app.timeline.currentIndex = 0;
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;

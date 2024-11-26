@@ -43,6 +43,9 @@ timeline.init = () => {
     bubbles.showMinifiedBubbles();
 
     app.p.mouseMoved = (event) => {
+      if (!config.isInteractiveMode) {
+        return;
+      }
       const { offsetX, offsetY } = event;
 
       config.mouseX = offsetX;
@@ -56,6 +59,9 @@ timeline.init = () => {
     };
 
     app.p.mouseClicked = async () => {
+      if (!config.isInteractiveMode) {
+        return;
+      }
       if (!config.shouldRespondToClick) {
         return;
       }
