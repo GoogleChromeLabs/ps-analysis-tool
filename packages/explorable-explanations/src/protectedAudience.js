@@ -112,44 +112,55 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 };
 
 app.setupLoop = () => {
-  utils.setButtonsDisabilityState();
+  try {
+    utils.setButtonsDisabilityState();
 
-  const loop = async () => {
-    if (
-      window.cancelPromise ||
-      app.timeline.currentIndex >= config.timeline.circles.length
-    ) {
+    const loop = async () => {
+      if (
+        window.cancelPromise ||
+        app.timeline.currentIndex >= config.timeline.circles.length ||
+        config.isInteractiveMode
+      ) {
+        if (app.timeline.currentIndex >= config.timeline.circles.length) {
+          return;
+        }
+        if (!config.isInteractiveMode) {
+          app.timeline.currentIndex = 0;
+          config.startTrackingMouse = true;
+          requestAnimationFrame(loop);
+          timeline.eraseAndRedraw();
+          timeline.renderUserIcon();
+        } else {
+          requestAnimationFrame(loop);
+        }
+        return;
+      }
+
+      if (!app.timeline.isPaused && !config.isInteractiveMode) {
+        window.cancelPromiseForPreviousAndNext = false;
+
+        utils.markVisitedValue(app.timeline.currentIndex, true);
+        bubbles.showMinifiedBubbles();
+        timeline.renderUserIcon();
+        await app.drawFlows(app.timeline.currentIndex);
+
+        if (!window.cancelPromiseForPreviousAndNext) {
+          app.timeline.currentIndex++;
+          utils.setButtonsDisabilityState();
+        }
+      }
+
+      requestAnimationFrame(loop);
       if (!config.isInteractiveMode) {
-        app.timeline.currentIndex = 0;
-        requestAnimationFrame(loop);
-        config.startTrackingMouse = true;
         timeline.eraseAndRedraw();
         timeline.renderUserIcon();
       }
-      return;
-    }
-
-    if (!app.timeline.isPaused) {
-      window.cancelPromiseForPreviousAndNext = false;
-
-      utils.markVisitedValue(app.timeline.currentIndex, true);
-      bubbles.showMinifiedBubbles();
-      timeline.renderUserIcon();
-      await app.drawFlows(app.timeline.currentIndex);
-
-      if (!window.cancelPromiseForPreviousAndNext) {
-        app.timeline.currentIndex++;
-
-        utils.setButtonsDisabilityState();
-      }
-    }
+    };
 
     requestAnimationFrame(loop);
-    timeline.eraseAndRedraw();
-    timeline.renderUserIcon();
-  };
-
-  requestAnimationFrame(loop);
+  } catch (error) {
+    //Silently fail.
+  }
 };
 
 app.drawFlows = async (index) => {

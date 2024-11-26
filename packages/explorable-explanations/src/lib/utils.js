@@ -277,7 +277,7 @@ utils.markVisitedValue = (index, value) => {
 };
 
 utils.setButtonsDisabilityState = () => {
-  if (config.isInteractiveMode) {
+  if (!config.isInteractiveMode) {
     document.getElementById('prevButton').disabled =
       app.timeline.currentIndex > 0 ? true : false;
 
