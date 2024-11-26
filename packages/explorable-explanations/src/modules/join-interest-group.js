@@ -179,7 +179,6 @@ joinInterestGroup.draw = async (index) => {
 
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
-
   if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
     window.cancelPromise = null;
     return;

@@ -110,79 +110,63 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     return;
   }
 };
+app.loop = async () => {
+  if (
+    window.cancelPromise ||
+    app.timeline.currentIndex >= config.timeline.circles.length ||
+    config.isInteractiveMode
+  ) {
+    if (app.timeline.currentIndex >= config.timeline.circles.length) {
+      bubbles.showMinifiedBubbles();
+      window.cancelPromise = null;
+      config.isReset = false;
+      return;
+    }
 
+    if (!config.isInteractiveMode) {
+      app.timeline.currentIndex = 0;
+      requestAnimationFrame(app.loop);
+      timeline.eraseAndRedraw();
+      timeline.renderUserIcon();
+    } else {
+      requestAnimationFrame(app.loop);
+    }
+    return;
+  }
+
+  if (!app.timeline.isPaused && !config.isInteractiveMode && !config.isReset) {
+    window.cancelPromiseForPreviousAndNext = false;
+
+    utils.markVisitedValue(app.timeline.currentIndex, true);
+    bubbles.showMinifiedBubbles();
+    timeline.renderUserIcon();
+    await app.drawFlows(app.timeline.currentIndex);
+
+    if (!window.cancelPromiseForPreviousAndNext) {
+      app.timeline.currentIndex++;
+      utils.setButtonsDisabilityState();
+    }
+  }
+
+  if (config.isReset) {
+    app.timeline.currentIndex = 0;
+    config.isReset = false;
+    config.startTrackingMouse = true;
+    return;
+  }
+
+  requestAnimationFrame(app.loop);
+  if (!config.isInteractiveMode) {
+    config.startTrackingMouse = true;
+    timeline.eraseAndRedraw();
+    timeline.renderUserIcon();
+  }
+};
 app.setupLoop = () => {
   try {
     utils.setButtonsDisabilityState();
 
-    const loop = async () => {
-      if (
-        window.cancelPromise ||
-        app.timeline.currentIndex >= config.timeline.circles.length ||
-        config.isInteractiveMode
-      ) {
-        if (config.isReset) {
-          app.timeline.currentIndex = 0;
-          config.isReset = false;
-          config.startTrackingMouse = true;
-          window.cancelPromise = null;
-          requestAnimationFrame(loop);
-          return;
-        }
-
-        if (app.timeline.currentIndex >= config.timeline.circles.length) {
-          bubbles.showMinifiedBubbles();
-          window.cancelPromise = null;
-          config.isReset = false;
-          return;
-        }
-
-        if (!config.isInteractiveMode) {
-          app.timeline.currentIndex = 0;
-          requestAnimationFrame(loop);
-          timeline.eraseAndRedraw();
-          timeline.renderUserIcon();
-        } else {
-          requestAnimationFrame(loop);
-        }
-        return;
-      }
-
-      if (
-        !app.timeline.isPaused &&
-        !config.isInteractiveMode &&
-        !config.isReset
-      ) {
-        window.cancelPromiseForPreviousAndNext = false;
-
-        utils.markVisitedValue(app.timeline.currentIndex, true);
-        bubbles.showMinifiedBubbles();
-        timeline.renderUserIcon();
-        await app.drawFlows(app.timeline.currentIndex);
-
-        if (!window.cancelPromiseForPreviousAndNext) {
-          app.timeline.currentIndex++;
-          utils.setButtonsDisabilityState();
-        }
-      }
-
-      if (config.isReset) {
-        app.timeline.currentIndex = 0;
-        config.isReset = false;
-        config.startTrackingMouse = true;
-        window.cancelPromise = null;
-        return;
-      }
-
-      requestAnimationFrame(loop);
-      if (!config.isInteractiveMode) {
-        config.startTrackingMouse = true;
-        timeline.eraseAndRedraw();
-        timeline.renderUserIcon();
-      }
-    };
-
-    requestAnimationFrame(loop);
+    requestAnimationFrame(app.loop);
   } catch (error) {
     //Silently fail.
   }
@@ -288,8 +272,11 @@ app.handleControls = () => {
 
 app.toggleInteractiveMode = () => {
   window.cancelPromise = true;
+
   if (config.shouldRespondToClick === true && config.isInteractiveMode) {
     window.cancelPromise = false;
+    config.startTrackingMouse = true;
+    config.shouldRespondToClick = true;
   } else {
     config.startTrackingMouse = true;
     config.shouldRespondToClick = true;
@@ -371,7 +358,11 @@ export const userSketch = (p) => {
 };
 
 app.reset = () => {
-  window.cancelPromise = true;
+  if (app.timeline.currentIndex < config.timeline.circles.length) {
+    window.cancelPromise = true;
+  } else {
+    requestAnimationFrame(app.loop);
+  }
   config.isReset = true;
   app.timeline.currentIndex = 0;
   config.bubbles.interestGroupCounts = 0;

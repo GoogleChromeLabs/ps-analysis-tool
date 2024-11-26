@@ -99,6 +99,7 @@ timeline.init = () => {
           config.isReset = false;
           utils.markVisitedValue(config.timeline.circles.length, false);
           config.shouldRespondToClick = true;
+          config.startTrackingMouse = true;
           timeline.eraseAndRedraw();
           return;
         }
