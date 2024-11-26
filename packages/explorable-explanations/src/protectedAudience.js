@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import p5 from 'p5';
+import * as d3 from 'd3';
 /**
  * Internal dependencies.
  */
@@ -54,6 +54,13 @@ app.setup = () => {
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
   app.bubbles = { ...app.bubbles, ...bubbles };
+  const groups = [];
+  config.timeline.circles.forEach((circle) => {
+    circle.interestGroups?.forEach(() => {
+      groups.push(circle.website);
+    });
+  });
+  app.color = d3.scaleOrdinal(groups, d3.schemeTableau10);
 };
 
 app.play = (resumed = false) => {
@@ -139,8 +146,10 @@ app.loop = async () => {
   }
 
   if (!app.timeline.isPaused && !config.isInteractiveMode && !config.isReset) {
-    window.cancelPromiseForPreviousAndNext = false;
+    window.cancelPromiseForPreviousAndNext = null;
     bubbles.generateBubbles();
+    utils.setNextButtonState(false);
+
     utils.markVisitedValue(app.timeline.currentIndex, true);
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
@@ -191,10 +200,10 @@ app.handlePrevButton = () => {
   if (config.bubbles.isExpanded || config.isInteractiveMode) {
     return;
   }
-  utils.setPrevButtonState(true);
-  utils.setNextButtonState(true);
+
   window.cancelPromiseForPreviousAndNext = true;
   app.timeline.currentIndex -= 1;
+  bubbles.generateBubbles();
   utils.markVisitedValue(app.timeline.currentIndex, true);
   const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
@@ -205,8 +214,7 @@ app.handlePrevButton = () => {
   flow.clearBelowTimelineCircles();
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
-  utils.setPrevButtonState(false);
-  utils.setNextButtonState(false);
+
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
     bubbles.showMinifiedBubbles();
@@ -217,8 +225,7 @@ app.handleNextButton = () => {
   if (config.bubbles.isExpanded || config.isInteractiveMode) {
     return;
   }
-  utils.setPrevButtonState(true);
-  utils.setNextButtonState(true);
+
   window.cancelPromiseForPreviousAndNext = true;
   app.timeline.currentIndex += 1;
   utils.markVisitedValue(app.timeline.currentIndex, true);
@@ -227,10 +234,9 @@ app.handleNextButton = () => {
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-
+  bubbles.generateBubbles();
   utils.setButtonsDisabilityState();
-  utils.setPrevButtonState(false);
-  utils.setNextButtonState(false);
+
   if (app.timeline.isPaused) {
     bubbles.generateBubbles();
     bubbles.showMinifiedBubbles();
@@ -385,35 +391,5 @@ app.reset = () => {
 
   timeline.eraseAndRedraw();
 };
-app.startAnimation = (
-  expandedBubbleX,
-  expandedBubbleY,
-  expandedBubbleWidth,
-  onClick
-) => {
-  // eslint-disable-next-line no-new
-  new p5(sketch);
 
-  // eslint-disable-next-line no-new
-  new p5(interestGroupSketch);
-
-  // eslint-disable-next-line no-new
-  new p5(userSketch);
-  app.igp.igClick = onClick;
-  config.bubbles.expandedBubbleX = expandedBubbleX;
-  config.bubbles.expandedBubbleY = expandedBubbleY;
-  config.bubbles.expandedCircleDiameter = expandedBubbleWidth;
-  const radius = config.bubbles.expandedCircleDiameter / 2;
-  const totalRadius = radius + 24;
-  // 335 is the angle where the close icon should be visible.
-  const angle = (305 * Math.PI) / 180;
-  // 335 is the radius + the size of icon so that icon is attached to the circle.
-  const x =
-    totalRadius * Math.cos(angle) + config.bubbles.expandedBubbleX + radius;
-  const y =
-    totalRadius * Math.sin(angle) + config.bubbles.expandedBubbleY + radius;
-
-  app.closeButton.style.left = `${x}px`;
-  app.closeButton.style.top = `${y}px`;
-};
 export { app };

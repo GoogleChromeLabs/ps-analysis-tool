@@ -21,6 +21,7 @@ const app = {
     circlePublisherIndices: [],
     currentIndex: 0,
   },
+  color: null,
   auction: {
     auctions: [],
     nextTipCoordinates: { x: 0, y: 0 },

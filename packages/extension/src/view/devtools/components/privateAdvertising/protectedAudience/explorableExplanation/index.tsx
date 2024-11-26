@@ -23,7 +23,13 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import { app } from '@google-psat/explorable-explanations';
+import {
+  app,
+  userSketch,
+  interestGroupSketch,
+  sketch,
+} from '@google-psat/explorable-explanations';
+import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { NextIcon, PreviousIcon } from '@google-psat/design-system';
 
 /**
@@ -84,12 +90,6 @@ const ExplorableExplanation = () => {
   }, []);
 
   useEffect(() => {
-    return () => {
-      app.pause();
-    };
-  }, []);
-
-  useEffect(() => {
     if (divRef.current) {
       const divRect = divRef.current.getBoundingClientRect();
       const visibleWidth = Math.max(
@@ -108,19 +108,12 @@ const ExplorableExplanation = () => {
       setBubbleWidth(newSize);
       setExpandedBubbleX(centerX);
       setExpandedBubbleY(centerY);
-      app.startAnimation(centerX, centerY, newSize, () =>
-        // eslint-disable-next-line no-console
-        console.log('dole shole')
-      );
     }
-
     if (containerRef.current) {
       handleResizeCallback.observe(containerRef.current);
     }
-
     const containerRefCopy = containerRef;
     return () => {
-      app.timeline.isPaused = true;
       if (containerRefCopy.current) {
         handleResizeCallback.unobserve(containerRefCopy.current);
       }
@@ -220,6 +213,16 @@ const ExplorableExplanation = () => {
           <div id="user-canvas"></div>
         </main>
       </div>
+      <ReactP5Wrapper sketch={sketch} />
+      <ReactP5Wrapper
+        sketch={interestGroupSketch}
+        // eslint-disable-next-line no-console
+        onClick={() => console.log('dole shole')}
+        expandedBubbleX={expandedBubbleX}
+        expandedBubbleY={expandedBubbleY}
+        expandedBubbleWidth={expandedBubbleWidth}
+      />
+      <ReactP5Wrapper sketch={userSketch} />
     </div>
   );
 };

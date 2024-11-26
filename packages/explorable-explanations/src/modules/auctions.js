@@ -313,6 +313,7 @@ auction.setUp = (index) => {
 auction.draw = async (index) => {
   if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
     window.cancelPromise = null;
+
     return;
   }
 
@@ -358,6 +359,7 @@ auction.draw = async (index) => {
   }
   if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
     window.cancelPromise = null;
+
     return;
   }
   await utils.delay(2000);

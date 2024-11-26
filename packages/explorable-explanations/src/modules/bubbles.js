@@ -50,31 +50,16 @@ bubbles.init = () => {
  * @param {boolean} [recalculate] - Whether to recalculate and regenerate all bubbles.
  */
 bubbles.generateBubbles = (recalculate = false) => {
-  const interestGroupsToBeAdded =
-    config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+  const currIndex = app.timeline.currentIndex;
 
   if (!recalculate) {
-    for (let index = 0; index < interestGroupsToBeAdded; index++) {
+    config.timeline.circles[currIndex].interestGroups?.forEach((igGroup) => {
       app.bubbles.positions.push({
-        id: config.timeline.circles[app.timeline.currentIndex].interestGroups[
-          index
-        ],
-        value:
-          config.timeline.circles[app.timeline.currentIndex].interestGroups[
-            index
-          ].length,
-        group: config.timeline.circles[app.timeline.currentIndex].website,
-        color: '',
+        id: igGroup,
+        value: igGroup.length,
+        group: config.timeline.circles[currIndex].website,
+        color: app.color(config.timeline.circles[currIndex].website),
       });
-    }
-
-    const groups = d3.map(app.bubbles.positions, (d) => d.group);
-    const color = d3.scaleOrdinal(groups, d3.schemeTableau10);
-    app.bubbles.positions = app.bubbles.positions.map((data, i) => {
-      return {
-        ...data,
-        color: color(groups[i]),
-      };
     });
   }
 };
@@ -404,7 +389,6 @@ bubbles.bubbleChart = (
     marginBottom = margin,
     marginLeft = margin,
     groupsParams,
-    colors = d3.schemeTableau10,
     fill = '#ccc',
     fillOpacity = 0.7,
     stroke,
@@ -436,7 +420,6 @@ bubbles.bubbleChart = (
   }
 
   groupsParams = groupFn && new d3.InternSet(groupsParams);
-  const color = groups && d3.scaleOrdinal(groups, colors);
   const labels = label === null ? null : d3.map(data, label);
   const titles =
     title === undefined ? labels : title === null ? null : d3.map(data, title);
@@ -496,7 +479,7 @@ bubbles.bubbleChart = (
       'fill',
       groups
         ? (d) => {
-            return color(groups[d.data]);
+            return app.color(groups[d.data]);
           }
         : fill === null
         ? 'none'
@@ -541,7 +524,7 @@ bubbles.bubbleChart = (
     }
   }
 
-  return Object.assign(svg.node(), { scales: { color } });
+  return Object.assign(svg.node(), { scales: { color: app.color } });
 };
 
 bubbles.clearAndRewriteBubbles = () => {
