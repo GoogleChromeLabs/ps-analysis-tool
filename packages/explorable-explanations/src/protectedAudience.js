@@ -88,13 +88,11 @@ app.setup = () => {
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
   app.bubbles = { ...app.bubbles, ...bubbles };
   const groups = [];
-
   config.timeline.circles.forEach((circle) => {
     circle.interestGroups?.forEach(() => {
       groups.push(circle.website);
     });
   });
-
   app.color = d3.scaleOrdinal(groups, d3.schemeTableau10);
 };
 
