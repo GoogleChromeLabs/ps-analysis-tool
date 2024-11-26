@@ -126,6 +126,7 @@ app.setupLoop = () => {
           config.isReset = false;
           config.startTrackingMouse = true;
           window.cancelPromise = null;
+          requestAnimationFrame(loop);
           return;
         }
 
