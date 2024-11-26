@@ -271,6 +271,12 @@ auction.setUp = (index) => {
       title: 'DSP 2',
     },
     {
+      title: 'DSP 1',
+    },
+    {
+      title: 'DSP 2',
+    },
+    {
       title: 'Key/Value Trusted',
       description: 'SSP Server',
     },
