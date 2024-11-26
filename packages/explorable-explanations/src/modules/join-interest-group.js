@@ -151,7 +151,6 @@ joinInterestGroup.setUp = (index) => {
 joinInterestGroup.draw = async (index) => {
   if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
     window.cancelPromise = null;
-
     return;
   }
 
@@ -165,9 +164,9 @@ joinInterestGroup.draw = async (index) => {
 
   for (const step of steps) {
     if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+      window.cancelPromise = null;
       return;
     }
-
     const { component, props, callBack } = step;
 
     const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -180,9 +179,9 @@ joinInterestGroup.draw = async (index) => {
 
     await utils.delay(delay); // eslint-disable-line no-await-in-loop
   }
+
   if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
     window.cancelPromise = null;
-
     return;
   }
 

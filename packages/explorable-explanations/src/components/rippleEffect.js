@@ -86,7 +86,7 @@ rippleEffect.create = (rippleX, rippleY) => {
   // Calculate the area to clear
   const { ripples, numRipples, speed, maxRadius } = config.rippleEffect;
   const clearWidth = maxRadius * 2 + (numRipples - 1) * 40;
-  const clearHeight = maxRadius * 2;
+  const clearHeight = maxRadius * 1.5;
   const p = app.p;
 
   p.push();

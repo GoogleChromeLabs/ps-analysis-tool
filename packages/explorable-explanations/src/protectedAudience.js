@@ -287,7 +287,7 @@ app.handleControls = () => {
 app.toggleInteractiveMode = () => {
   window.cancelPromise = true;
 
-  if (config.shouldRespondToClick === true && config.isInteractiveMode) {
+  if (!config.wasAnythingDoneInInteractiveMode && config.isInteractiveMode) {
     window.cancelPromise = false;
     config.startTrackingMouse = true;
     config.shouldRespondToClick = true;

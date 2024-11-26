@@ -90,6 +90,7 @@ timeline.init = () => {
         if (window.cancelPromise) {
           window.cancelPromise = null;
         }
+        config.wasAnythingDoneInInteractiveMode = true;
         config.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
         utils.wipeAndRecreateUserCanvas();

@@ -64,6 +64,7 @@ auction.setUp = (index) => {
     props: {
       x1: x,
       y1: y,
+      currIndex: index,
       branches: [
         {
           title: 'adunit-code',
@@ -93,6 +94,7 @@ auction.setUp = (index) => {
     props: {
       x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => app.auction.nextTipCoordinates?.y + 40,
+      currIndex: index,
       branches: [
         {
           date: '2024-10-02',
@@ -256,6 +258,12 @@ auction.setUp = (index) => {
       description: '(from DSPs on dsp.js)',
     },
     {
+      title: 'DSP 1',
+    },
+    {
+      title: 'DSP 2',
+    },
+    {
       title: 'Key/Value Trusted',
       description: 'SSP Server',
     },
@@ -274,6 +282,97 @@ auction.setUp = (index) => {
   ];
 
   boxes.forEach(({ title, description }) => {
+    if (title === 'DSP 1') {
+      steps.push({
+        component: ProgressLine,
+        props: {
+          direction: 'right',
+          x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
+          y1: () => {
+            return app.auction.nextTipCoordinates?.y - box.height / 2 + 15;
+          },
+        },
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = returnValue;
+        },
+      });
+
+      steps.push({
+        component: Box,
+        props: {
+          title,
+          x: () => app.auction.nextTipCoordinates?.x + 10,
+          y: () => app.auction.nextTipCoordinates?.y - box.height + 15,
+        },
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = returnValue.down;
+        },
+      });
+
+      steps.push({
+        component: ProgressLine,
+        props: {
+          direction: 'left',
+          text: '$20',
+          x1: () => app.auction.nextTipCoordinates?.x + box.width / 4 + 5,
+          y1: () => {
+            return app.auction.nextTipCoordinates?.y + 25;
+          },
+        },
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = returnValue;
+        },
+      });
+      return;
+    }
+
+    if (title === 'DSP 2') {
+      steps.push({
+        component: ProgressLine,
+        props: {
+          direction: 'right',
+          x1: () => app.auction.nextTipCoordinates?.x - 7,
+          y1: () => {
+            return app.auction.nextTipCoordinates?.y + box.height / 2 - 5;
+          },
+        },
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = returnValue;
+        },
+      });
+
+      steps.push({
+        component: Box,
+        props: {
+          title,
+          x: () => app.auction.nextTipCoordinates?.x + 10,
+          y: () => app.auction.nextTipCoordinates?.y,
+        },
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = returnValue.down;
+        },
+      });
+
+      steps.push({
+        component: ProgressLine,
+        props: {
+          direction: 'left',
+          text: '$10',
+          x1: () => app.auction.nextTipCoordinates?.x + box.width / 4 + 5,
+          y1: () => {
+            return app.auction.nextTipCoordinates?.y + 15 - box.height / 2;
+          },
+        },
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = {
+            x: returnValue.x - box.width / 2 - 10,
+            y: returnValue.y - (box.height / 4) * 3,
+          };
+        },
+      });
+      return;
+    }
+
     steps.push({
       component: ProgressLine,
       props: {
@@ -300,6 +399,32 @@ auction.setUp = (index) => {
         app.auction.nextTipCoordinates = returnValue.down;
       },
     });
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y + 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'Show Winning Ad',
+      x: () => app.auction.nextTipCoordinates?.x + 10,
+      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
   });
 
   app.auction.auctions.push(steps);

@@ -137,6 +137,7 @@ const config = {
   shouldRespondToClick: true,
   startTrackingMouse: true,
   isReset: false,
+  wasAnythingDoneInInteractiveMode: false,
 };
 
 export default config;
