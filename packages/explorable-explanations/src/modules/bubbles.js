@@ -51,7 +51,9 @@ bubbles.init = () => {
  */
 bubbles.generateBubbles = (recalculate = false) => {
   const currIndex = app.timeline.currentIndex;
-
+  if (currIndex >= config.timeline.circles.length) {
+    return;
+  }
   if (!recalculate) {
     config.timeline.circles[currIndex].interestGroups?.forEach((igGroup) => {
       app.bubbles.positions.push({

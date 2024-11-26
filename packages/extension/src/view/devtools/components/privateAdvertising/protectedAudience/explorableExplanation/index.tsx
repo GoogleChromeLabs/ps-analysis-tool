@@ -145,6 +145,7 @@ const ExplorableExplanation = () => {
             onClick={app.handleNextButton}
             id="nextButton"
             title="Next Node"
+            className="disabled:opacity-50 disabled:pointer-events-none"
           >
             <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>

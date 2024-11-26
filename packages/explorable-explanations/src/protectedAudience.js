@@ -55,11 +55,13 @@ app.setup = () => {
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
   app.bubbles = { ...app.bubbles, ...bubbles };
   const groups = [];
+
   config.timeline.circles.forEach((circle) => {
     circle.interestGroups?.forEach(() => {
       groups.push(circle.website);
     });
   });
+
   app.color = d3.scaleOrdinal(groups, d3.schemeTableau10);
 };
 
@@ -148,7 +150,6 @@ app.loop = async () => {
   if (!app.timeline.isPaused && !config.isInteractiveMode && !config.isReset) {
     window.cancelPromiseForPreviousAndNext = null;
     bubbles.generateBubbles();
-    utils.setNextButtonState(false);
 
     utils.markVisitedValue(app.timeline.currentIndex, true);
     bubbles.showMinifiedBubbles();
@@ -376,6 +377,8 @@ app.reset = () => {
   if (app.timeline.currentIndex < config.timeline.circles.length) {
     window.cancelPromise = true;
   } else {
+    utils.setButtonsDisabilityState();
+    window.cancelPromiseForPreviousAndNext = false;
     requestAnimationFrame(app.loop);
   }
   config.isReset = true;
