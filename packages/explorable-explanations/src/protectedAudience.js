@@ -121,6 +121,14 @@ app.setupLoop = () => {
         app.timeline.currentIndex >= config.timeline.circles.length ||
         config.isInteractiveMode
       ) {
+        if (config.isReset) {
+          app.timeline.currentIndex = 0;
+          config.isReset = false;
+          config.startTrackingMouse = true;
+          window.cancelPromise = null;
+          return;
+        }
+
         if (app.timeline.currentIndex >= config.timeline.circles.length) {
           bubbles.showMinifiedBubbles();
           window.cancelPromise = null;
