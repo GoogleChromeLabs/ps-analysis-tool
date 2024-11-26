@@ -89,6 +89,13 @@ timeline.init = () => {
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         await app.drawFlows(clickedIndex);
+        if (config.isReset) {
+          config.isReset = false;
+          utils.markVisitedValue(config.timeline.circles.length, false);
+          config.shouldRespondToClick = true;
+          timeline.eraseAndRedraw();
+          return;
+        }
         config.timeline.circles[clickedIndex].visited = true;
         bubbles.clearAndRewriteBubbles();
         bubbles.showMinifiedBubbles();

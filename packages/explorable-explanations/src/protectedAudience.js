@@ -122,8 +122,10 @@ app.setupLoop = () => {
         config.isInteractiveMode
       ) {
         if (app.timeline.currentIndex >= config.timeline.circles.length) {
+          bubbles.showMinifiedBubbles();
           return;
         }
+
         if (!config.isInteractiveMode) {
           app.timeline.currentIndex = 0;
           config.startTrackingMouse = true;
@@ -136,7 +138,11 @@ app.setupLoop = () => {
         return;
       }
 
-      if (!app.timeline.isPaused && !config.isInteractiveMode) {
+      if (
+        !app.timeline.isPaused &&
+        !config.isInteractiveMode &&
+        !config.isReset
+      ) {
         window.cancelPromiseForPreviousAndNext = false;
 
         utils.markVisitedValue(app.timeline.currentIndex, true);
@@ -148,6 +154,12 @@ app.setupLoop = () => {
           app.timeline.currentIndex++;
           utils.setButtonsDisabilityState();
         }
+      }
+
+      if (config.isReset) {
+        app.timeline.currentIndex = 0;
+        config.isReset = false;
+        return;
       }
 
       requestAnimationFrame(loop);
@@ -342,5 +354,21 @@ export const userSketch = (p) => {
   p.setup = () => {
     utils.setupUserCanvas(p);
   };
+};
+
+app.reset = () => {
+  window.cancelPromise = true;
+  config.isReset = true;
+  app.timeline.currentIndex = 0;
+  config.bubbles.interestGroupCounts = 0;
+  app.bubbles.minifiedSVG = null;
+  app.bubbles.expandedSVG = null;
+
+  utils.setupInterestGroupCanvas(app.igp);
+  utils.setupUserCanvas(app.up);
+  utils.setupMainCanvas(app.p);
+  utils.markVisitedValue(config.timeline.circles.length, false);
+
+  timeline.eraseAndRedraw();
 };
 export { app };

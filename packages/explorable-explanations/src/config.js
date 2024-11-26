@@ -131,12 +131,12 @@ const config = {
     expandedBubbleX: 0,
     expandedBubbleY: 0,
   },
-  cancelPromise: false,
   isInteractiveMode: false,
   mouseX: 0,
   mouseY: 0,
   shouldRespondToClick: true,
   startTrackingMouse: true,
+  isReset: false,
 };
 
 export default config;

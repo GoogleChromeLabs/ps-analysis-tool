@@ -23,7 +23,6 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import { noop } from '@google-psat/common';
 import {
   app,
   userSketch,
@@ -168,7 +167,7 @@ const ExplorableExplanation = () => {
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
         historyCount={historyCount}
-        reset={noop}
+        reset={app.reset}
         extraInterface={extraInterface}
       />
       <div className="w-full h-full">
