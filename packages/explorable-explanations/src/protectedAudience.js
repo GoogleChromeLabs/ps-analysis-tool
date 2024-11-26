@@ -140,6 +140,7 @@ app.loop = async () => {
     utils.markVisitedValue(app.timeline.currentIndex, true);
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    bubbles.generateBubbles();
     await app.drawFlows(app.timeline.currentIndex);
 
     if (!window.cancelPromiseForPreviousAndNext) {
@@ -173,7 +174,6 @@ app.setupLoop = () => {
 };
 
 app.drawFlows = async (index) => {
-  bubbles.generateBubbles();
   await joinInterestGroup.draw(index);
   await auctions.draw(index);
 };
@@ -278,10 +278,12 @@ app.toggleInteractiveMode = () => {
     window.cancelPromise = false;
     config.startTrackingMouse = true;
     config.shouldRespondToClick = true;
+    config.isReset = false;
   } else {
     config.startTrackingMouse = true;
     config.shouldRespondToClick = true;
   }
+
   config.isInteractiveMode = !config.isInteractiveMode;
   app.timeline.currentIndex = 0;
   config.bubbles.interestGroupCounts = 0;
