@@ -274,6 +274,10 @@ app.handleNextButton = () => {
     return;
   }
 
+  config.animationFrames.forEach((idx) => {
+    cancelAnimationFrame(idx);
+    config.animationFrames.pop();
+  });
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
