@@ -120,7 +120,6 @@ app.pause = () => {
     app.playButton.classList.remove('hidden');
   }
   app.timeline.isPaused = true;
-  PromiseQueue.stop();
 };
 
 app.minimiseBubbleActions = () => {
