@@ -20,6 +20,7 @@ import config from '../config';
 import app from '../app';
 import utils from '../lib/utils';
 import bubbles from './bubbles';
+import PromiseQueue from '../lib/PromiseQueue';
 
 /**
  * @module Timeline
@@ -87,30 +88,23 @@ timeline.init = () => {
         clickedIndex !== undefined &&
         !config.timeline.circles[clickedIndex].visited
       ) {
-        if (window.cancelPromise) {
-          window.cancelPromise = null;
-        }
-        config.wasAnythingDoneInInteractiveMode = true;
+        PromiseQueue.clear();
         config.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         bubbles.generateBubbles();
         await app.drawFlows(clickedIndex);
-        if (config.isReset) {
-          config.isReset = false;
-          utils.markVisitedValue(config.timeline.circles.length, false);
+        PromiseQueue.add(() => {
+          config.bubbles.interestGroupCounts +=
+            config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
+          config.timeline.circles[clickedIndex].visited = true;
+          bubbles.showMinifiedBubbles();
           config.shouldRespondToClick = true;
-          config.startTrackingMouse = true;
-          timeline.eraseAndRedraw();
-          return;
-        }
-        config.timeline.circles[clickedIndex].visited = true;
-        bubbles.clearAndRewriteBubbles();
-        bubbles.showMinifiedBubbles();
-        config.shouldRespondToClick = true;
-        utils.wipeAndRecreateUserCanvas();
-        timeline.renderUserIcon();
+          utils.wipeAndRecreateUserCanvas();
+          timeline.renderUserIcon();
+        });
+        PromiseQueue.start();
       }
     };
   } else {

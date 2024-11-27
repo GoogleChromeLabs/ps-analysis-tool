@@ -82,6 +82,7 @@ class PromiseQueue {
         await current();
         this.currentPromiseIndex++;
       } catch (error) {
+        this.currentPromiseIndex++;
         // eslint-disable-next-line no-console
         console.error('Error in promise execution:', error);
       }

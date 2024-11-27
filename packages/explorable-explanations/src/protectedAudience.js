@@ -280,32 +280,31 @@ app.handleControls = () => {
   );
 };
 
-app.toggleInteractiveMode = () => {
+app.toggleInteractiveMode = async () => {
+  PromiseQueue.stop();
   window.cancelPromise = true;
-
-  if (!config.wasAnythingDoneInInteractiveMode && config.isInteractiveMode) {
-    window.cancelPromise = false;
-    config.startTrackingMouse = true;
-    config.shouldRespondToClick = true;
-    config.isReset = false;
-  } else {
-    config.isReset = false;
-    config.startTrackingMouse = true;
-    config.shouldRespondToClick = true;
-  }
+  app.timeline.isPaused = true;
+  PromiseQueue.clear();
 
   config.isInteractiveMode = !config.isInteractiveMode;
   app.timeline.currentIndex = 0;
   config.bubbles.interestGroupCounts = 0;
+  app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
 
+  utils.markVisitedValue(config.timeline.circles.length, false);
+  timeline.eraseAndRedraw();
+  await utils.delay(1000);
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p);
-  utils.markVisitedValue(config.timeline.circles.length, false);
 
-  timeline.eraseAndRedraw();
+  app.timeline.isPaused = true;
+  window.cancelPromise = false;
+  PromiseQueue.skipTo(0);
+
+  app.timeline.isPaused = false;
 };
 
 // Write a callback function to get the value of the checkbox.
@@ -395,6 +394,8 @@ app.reset = async () => {
   PromiseQueue.skipTo(0);
 
   app.timeline.isPaused = false;
+  config.shouldRespondToClick = true;
+  config.startTrackingMouse = true;
 };
 
 export { app };
