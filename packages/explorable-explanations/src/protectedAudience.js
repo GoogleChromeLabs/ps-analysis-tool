@@ -186,8 +186,6 @@ app.setupLoop = (doNotPlay) => {
       });
 
       app.drawFlows(currentIndex);
-      PromiseQueue.nextNodeSkipIndex.push(PromiseQueue.queue.length);
-
       PromiseQueue.add(() => {
         app.bubbles.interestGroupCounts +=
           config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ??
@@ -273,10 +271,6 @@ app.handleNextButton = () => {
     return;
   }
 
-  config.animationFrames.forEach((idx) => {
-    cancelAnimationFrame(idx);
-    config.animationFrames.pop();
-  });
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
