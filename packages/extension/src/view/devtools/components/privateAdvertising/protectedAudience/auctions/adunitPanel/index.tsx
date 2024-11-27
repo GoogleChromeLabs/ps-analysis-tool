@@ -123,7 +123,7 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
 
   return (
     <>
-      <Matrix />
+      <Matrix adUnitCode={adunit} />
       <div className="p-4 flex gap-4 flex-wrap">
         {items.map((item) => (
           <Tile key={item.name} item={item} />
