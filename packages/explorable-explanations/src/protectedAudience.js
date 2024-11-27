@@ -293,6 +293,11 @@ app.toggleInteractiveMode = async () => {
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
 
+  if (!config.isInteractiveMode) {
+    config.shouldRespondToClick = true;
+    config.startTrackingMouse = true;
+  }
+
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(1000);
