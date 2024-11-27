@@ -59,6 +59,10 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
       }
 
       if (app.timeline.isPaused) {
+        if (window.cancelPromise) {
+          resolve(endpoints);
+          return;
+        }
         requestAnimationFrame(animate); // Continue loop but remain paused
         return;
       }

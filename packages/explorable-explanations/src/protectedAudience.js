@@ -270,6 +270,10 @@ app.handleNextButton = () => {
     return;
   }
 
+  if (app.timeline.currentIndex > config.timeline.circles.length - 1) {
+    return;
+  }
+
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
