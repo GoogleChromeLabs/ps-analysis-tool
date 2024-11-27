@@ -151,7 +151,7 @@ joinInterestGroup.setUp = (index) => {
  */
 joinInterestGroup.draw = (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
-
+  PromiseQueue.add(() => bubbles.generateBubbles());
   const steps = app.joinInterestGroup.joinings[index];
 
   if (!steps) {
