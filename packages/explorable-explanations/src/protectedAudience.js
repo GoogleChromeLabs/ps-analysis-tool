@@ -29,6 +29,7 @@ import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
 import bubbles from './modules/bubbles.js';
 import app from './app.js';
+import PromiseQueue from './lib/PromiseQueue.js';
 
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
@@ -69,11 +70,15 @@ app.play = (resumed = false) => {
   app.timeline.isPaused = false;
   if (!resumed) {
     app.setupLoop();
+    PromiseQueue.start();
+    return;
   }
+  PromiseQueue.resume();
 };
 
 app.pause = () => {
   app.timeline.isPaused = true;
+  PromiseQueue.stop();
 };
 
 app.minimiseBubbleActions = () => {
@@ -123,72 +128,37 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     return;
   }
 };
-app.loop = async () => {
-  if (
-    window.cancelPromise ||
-    app.timeline.currentIndex >= config.timeline.circles.length ||
-    config.isInteractiveMode
-  ) {
-    if (app.timeline.currentIndex >= config.timeline.circles.length) {
-      bubbles.showMinifiedBubbles();
-      window.cancelPromise = null;
-      config.isReset = false;
-      return;
-    }
 
-    if (!config.isInteractiveMode) {
-      app.timeline.currentIndex = 0;
-      requestAnimationFrame(app.loop);
-      timeline.eraseAndRedraw();
-      timeline.renderUserIcon();
-    } else {
-      requestAnimationFrame(app.loop);
-    }
-    return;
-  }
-
-  if (!app.timeline.isPaused && !config.isInteractiveMode && !config.isReset) {
-    window.cancelPromiseForPreviousAndNext = null;
-    bubbles.generateBubbles();
-
-    utils.markVisitedValue(app.timeline.currentIndex, true);
-    bubbles.showMinifiedBubbles();
-    timeline.renderUserIcon();
-    await app.drawFlows(app.timeline.currentIndex);
-
-    if (!window.cancelPromiseForPreviousAndNext) {
-      app.timeline.currentIndex++;
-      utils.setButtonsDisabilityState();
-    }
-  }
-
-  if (config.isReset) {
-    app.timeline.currentIndex = 0;
-    config.isReset = false;
-    config.startTrackingMouse = true;
-    return;
-  }
-
-  requestAnimationFrame(app.loop);
-  if (!config.isInteractiveMode) {
-    config.startTrackingMouse = true;
-    timeline.eraseAndRedraw();
-    timeline.renderUserIcon();
-  }
-};
 app.setupLoop = () => {
   try {
     utils.setButtonsDisabilityState();
-
-    requestAnimationFrame(app.loop);
+    let currentIndex = 0;
+    while (currentIndex < config.timeline.circles.length) {
+      PromiseQueue.add(() => {
+        utils.markVisitedValue(app.timeline.currentIndex, true);
+        bubbles.showMinifiedBubbles();
+        timeline.renderUserIcon();
+      });
+      app.drawFlows(currentIndex);
+      PromiseQueue.add(() => {
+        app.timeline.currentIndex++;
+      });
+      utils.setButtonsDisabilityState();
+      currentIndex++;
+    }
   } catch (error) {
     //Silently fail.
+    // eslint-disable-next-line no-console
+    console.log(error);
   }
+  timeline.eraseAndRedraw();
+  timeline.renderUserIcon();
+  utils.markVisitedValue(app.timeline.currentIndex, true);
 };
 
-app.drawFlows = async (index) => {
-  await joinInterestGroup.draw(index);
-  await auctions.draw(index);
+app.drawFlows = (index) => {
+  joinInterestGroup.draw(index);
+  auctions.draw(index);
 };
 
 app.minifiedBubbleKeyPressListener = (event) => {
@@ -380,7 +350,6 @@ app.reset = () => {
   } else {
     utils.setButtonsDisabilityState();
     window.cancelPromiseForPreviousAndNext = false;
-    requestAnimationFrame(app.loop);
   }
   config.isReset = true;
   app.timeline.currentIndex = 0;

@@ -22,6 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
+import PromiseQueue from '../lib/PromiseQueue';
 
 /**
  * @module joinInterestGroup
@@ -148,14 +149,9 @@ joinInterestGroup.setUp = (index) => {
  * Each step is rendered sequentially with delays.
  * @param {number} index - The index of the circle in the timeline to draw.
  */
-joinInterestGroup.draw = async (index) => {
-  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-    window.cancelPromise = null;
-    return;
-  }
-
+joinInterestGroup.draw = (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
-
+  PromiseQueue.add(() => bubbles.generateBubbles());
   const steps = app.joinInterestGroup.joinings[index];
 
   if (!steps) {
@@ -163,42 +159,33 @@ joinInterestGroup.draw = async (index) => {
   }
 
   for (const step of steps) {
-    if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-      window.cancelPromise = null;
-      return;
-    }
-    const { component, props, callBack } = step;
+    PromiseQueue.add(async () => {
+      const { component, props, callBack } = step;
 
-    const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+      const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
-    const delay = component === Box ? 1000 : 0;
+      const delay = component === Box ? 1000 : 0;
 
-    if (callBack) {
-      callBack(returnValue);
-    }
+      if (callBack) {
+        callBack(returnValue);
+      }
 
-    await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      await utils.delay(delay); // eslint-disable-line no-await-in-loop
+    });
   }
 
-  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-    window.cancelPromise = null;
-    return;
-  }
-
-  await bubbles.reverseBarrageAnimation(index);
-
-  if (config.bubbles.isExpanded) {
-    bubbles.showExpandedBubbles();
-  } else {
-    bubbles.showMinifiedBubbles();
-  }
-
-  if (!window.cancelPromiseForPreviousAndNext) {
+  PromiseQueue.add(async () => {
+    await bubbles.reverseBarrageAnimation(index);
     config.bubbles.interestGroupCounts +=
       config.timeline.circles[index]?.igGroupsCount ?? 0;
-  }
+    if (config.bubbles.isExpanded) {
+      bubbles.showExpandedBubbles();
+    } else {
+      bubbles.showMinifiedBubbles();
+    }
 
-  flow.clearBelowTimelineCircles();
+    flow.clearBelowTimelineCircles();
+  });
 };
 
 export default joinInterestGroup;

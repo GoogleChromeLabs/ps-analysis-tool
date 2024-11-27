@@ -22,6 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine, Branches, RippleEffect } from '../components';
 import bubbles from './bubbles';
+import PromiseQueue from '../lib/PromiseQueue';
 
 /**
  * @module Auction
@@ -435,13 +436,7 @@ auction.setUp = (index) => {
  * Each step is rendered sequentially with delays.
  * @param {number} index - The index of the auction steps to draw.
  */
-auction.draw = async (index) => {
-  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-    window.cancelPromise = null;
-
-    return;
-  }
-
+auction.draw = (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
   const steps = app.auction.auctions[index];
@@ -451,45 +446,39 @@ auction.draw = async (index) => {
   }
 
   for (const step of steps) {
-    if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-      window.cancelPromise = null;
-      break;
-    }
+    PromiseQueue.add(async () => {
+      const { component, props, callBack } = step;
+      const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+      const delay = component === Box ? 1000 : 0;
 
-    const { component, props, callBack } = step;
-    const returnValue = await component(props); // eslint-disable-line no-await-in-loop
-    const delay = component === Box ? 1000 : 0;
+      if (props?.title === 'Load Interest Group') {
+        await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
+        await utils.delay(500); // eslint-disable-line no-await-in-loop
 
-    if (props?.title === 'Load Interest Group') {
-      await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
-      await utils.delay(500); // eslint-disable-line no-await-in-loop
+        utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
+      }
 
-      utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
-    }
+      if (props?.title === 'generateBid()') {
+        const x = props.x();
+        const y = props.y();
 
-    if (props?.title === 'generateBid()') {
-      const x = props.x();
-      const y = props.y();
+        // eslint-disable-next-line no-await-in-loop
+        await RippleEffect({
+          x: x + config.flow.box.width + 2,
+          y: y + config.flow.box.height / 2,
+        });
+      }
 
-      // eslint-disable-next-line no-await-in-loop
-      await RippleEffect({
-        x: x + config.flow.box.width + 2,
-        y: y + config.flow.box.height / 2,
-      });
-    }
-
-    if (callBack) {
-      callBack(returnValue);
-    }
-    await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      if (callBack) {
+        callBack(returnValue);
+      }
+      await utils.delay(delay); // eslint-disable-line no-await-in-loop
+    });
   }
-  if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
-    window.cancelPromise = null;
-
-    return;
-  }
-  await utils.delay(2000);
-  flow.clearBelowTimelineCircles();
+  PromiseQueue.add(async () => {
+    await utils.delay(2000);
+    flow.clearBelowTimelineCircles();
+  });
 };
 
 export default auction;
