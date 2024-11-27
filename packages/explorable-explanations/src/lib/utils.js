@@ -323,6 +323,13 @@ utils.markVisitedValue = (index, value) => {
 };
 
 utils.setButtonsDisabilityState = () => {
+  if (
+    !document.getElementById('prevButton') &&
+    !document.getElementById('nextButton')
+  ) {
+    return;
+  }
+
   if (!config.isInteractiveMode) {
     document.getElementById('prevButton').disabled =
       app.timeline.currentIndex > 0 ? false : true;
@@ -360,5 +367,12 @@ utils.setButtonsDisabilityState = () => {
       .getElementById('nextButton')
       .classList.toggle('disabled:pointer-events-none', true);
   }
+};
+
+utils.clearAllAnimations = () => {
+  config.animationFrames.forEach((idx) => cancelAnimationFrame(idx));
+  config.animationFrames = [];
+  window.cancelPromise = true;
+  app.timeline.isPaused = true;
 };
 export default utils;

@@ -53,9 +53,6 @@ const ProgressLine = ({
     const animate = () => {
       if (app.cancelPromise) {
         resolve();
-        config.animationFrames.forEach((idx) => {
-          cancelAnimationFrame(idx);
-        });
         return;
       }
 
@@ -127,9 +124,6 @@ const ProgressLine = ({
 
       if (app.cancelPromise) {
         resolve();
-        config.animationFrames.forEach((idx) => {
-          cancelAnimationFrame(idx);
-        });
         return;
       }
       // Continue the animation loop

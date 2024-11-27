@@ -61,9 +61,6 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
       if (app.timeline.isPaused) {
         if (window.cancelPromise) {
           resolve(endpoints);
-          config.animationFrames.forEach((idx) => {
-            cancelAnimationFrame(idx);
-          });
           return;
         }
         config.animationFrames.push(requestAnimationFrame(animate)); // Continue loop but remain paused
@@ -150,9 +147,6 @@ const drawAnimatedTimeline = (x, y, branches) => {
     }
     if (app.cancelPromise) {
       resolve();
-      config.animationFrames.forEach((idx) => {
-        cancelAnimationFrame(idx);
-      });
       return;
     }
     // Resolve if the progress exceeds the required length
