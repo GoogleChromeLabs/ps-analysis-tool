@@ -365,6 +365,11 @@ app.toggleInteractiveMode = async () => {
   app.shouldRespondToClick = true;
   app.startTrackingMouse = true;
 
+  if (!config.isInteractiveMode) {
+    config.shouldRespondToClick = true;
+    config.startTrackingMouse = true;
+  }
+
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(100);
