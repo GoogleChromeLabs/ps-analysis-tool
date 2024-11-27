@@ -125,17 +125,7 @@ utils.triangle = (size, x, y, direction = 'right', color = 'black') => {
 };
 
 utils.delay = (ms) => {
-  let delayId;
-  return new Promise((resolve) => {
-    delayId = setTimeout(() => {
-      if (window.cancelPromise) {
-        clearTimeout(delayId);
-        resolve();
-        return;
-      }
-      resolve();
-    }, ms);
-  });
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 utils.wipeAndRecreateMainCanvas = () => {

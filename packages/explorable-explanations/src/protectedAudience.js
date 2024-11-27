@@ -133,6 +133,7 @@ app.setupLoop = () => {
   try {
     utils.setButtonsDisabilityState();
     let currentIndex = 0;
+    PromiseQueue.nextNodeSkipIndex.push(0);
     while (currentIndex < config.timeline.circles.length) {
       PromiseQueue.add(() => {
         utils.markVisitedValue(app.timeline.currentIndex, true);
@@ -140,10 +141,16 @@ app.setupLoop = () => {
         timeline.renderUserIcon();
       });
       app.drawFlows(currentIndex);
+      PromiseQueue.nextNodeSkipIndex.push(PromiseQueue.queue.length);
+
       PromiseQueue.add(() => {
-        app.timeline.currentIndex++;
+        config.bubbles.interestGroupCounts +=
+          config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ??
+          0;
+        app.timeline.currentIndex += 1;
+        utils.setButtonsDisabilityState();
       });
-      utils.setButtonsDisabilityState();
+
       currentIndex++;
     }
   } catch (error) {
@@ -172,24 +179,23 @@ app.handlePrevButton = () => {
     return;
   }
 
-  window.cancelPromiseForPreviousAndNext = true;
+  config.cancelPromise = true;
+  app.timeline.isPaused = true;
+  const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
-  bubbles.generateBubbles();
-  utils.markVisitedValue(app.timeline.currentIndex, true);
-  const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
-    app.timeline.currentIndex
-  );
-  utils.setButtonsDisabilityState();
-
-  config.bubbles.interestGroupCounts = totalBubbles;
+  const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
+  PromiseQueue.skipTo(nextIndex + 1);
   flow.clearBelowTimelineCircles();
+  utils.markVisitedValue(app.timeline.currentIndex, true);
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
-
-  if (app.timeline.isPaused) {
-    bubbles.generateBubbles();
-    bubbles.showMinifiedBubbles();
-  }
+  config.bubbles.interestGroupCounts =
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+  bubbles.generateBubbles();
+  bubbles.showMinifiedBubbles();
+  utils.setButtonsDisabilityState();
+  config.cancelPromise = false;
+  app.timeline.isPaused = false;
 };
 
 app.handleNextButton = () => {
@@ -197,21 +203,21 @@ app.handleNextButton = () => {
     return;
   }
 
-  window.cancelPromiseForPreviousAndNext = true;
-  app.timeline.currentIndex += 1;
-  utils.markVisitedValue(app.timeline.currentIndex, true);
+  app.timeline.isPaused = true;
+  config.cancelPromise = true;
+  const nextIndexPromiseGetter = app.timeline.currentIndex + 1;
+  const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
+  PromiseQueue.skipTo(nextIndex - 1);
   flow.clearBelowTimelineCircles();
+
+  utils.markVisitedValue(app.timeline.currentIndex, true);
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-  bubbles.generateBubbles();
-  utils.setButtonsDisabilityState();
 
-  if (app.timeline.isPaused) {
-    bubbles.generateBubbles();
-    bubbles.showMinifiedBubbles();
-  }
+  config.cancelPromise = false;
+  app.timeline.isPaused = false;
 };
 
 app.handleControls = () => {

@@ -18,7 +18,10 @@ class PromiseQueue {
     this.queue = [];
     this.isProcessing = false;
     this.isPaused = false;
-    this.skipToIndex = 0;
+    this.skipToIndex = -1;
+    this.nextNodeSkipIndex = [];
+    this.nextStepSkipIndex = [];
+    this.currentPromiseIndex = 0;
   }
 
   // Add a promise-returning function to the queue
@@ -63,21 +66,22 @@ class PromiseQueue {
       return;
     }
 
-    while (this.queue.length > 0) {
+    while (this.currentPromiseIndex < this.queue.length) {
       if (this.isPaused) {
         return;
       }
 
-      if (this.skipToIndex > 0) {
-        this.queue.shift(); // Skip promises
-        this.skipToIndex--;
+      if (this.skipToIndex > -1) {
+        this.currentPromiseIndex = this.skipToIndex;
+        this.skipToIndex = -1;
         continue;
       }
 
-      const current = this.queue.shift();
+      const current = this.queue[this.currentPromiseIndex];
       try {
         // eslint-disable-next-line no-await-in-loop
-        await current(); // Execute the promise function
+        await current();
+        this.currentPromiseIndex++;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Error in promise execution:', error);
@@ -90,9 +94,8 @@ class PromiseQueue {
   // Skip to a specific queue index
   skipTo(index) {
     if (index > this.queue.length) {
-      // eslint-disable-next-line no-console
-      console.warn('Skipping beyond queue size. Clearing queue.');
       this.clear();
+      this.currentPromiseIndex = 0;
     } else {
       this.skipToIndex = index;
     }

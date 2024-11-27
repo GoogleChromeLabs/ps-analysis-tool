@@ -53,7 +53,7 @@ const Branches = async ({ x1, y1, branches, currIndex }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+      if (config.cancelPromise) {
         resolve(endpoints);
         return;
       }
@@ -98,7 +98,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
     // Draw the horizontal line
     p.line(x, y, x + progress, y);
 
-    if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+    if (config.cancelPromise) {
       resolve();
       return;
     }

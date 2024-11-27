@@ -51,6 +51,7 @@ bubbles.init = () => {
  */
 bubbles.generateBubbles = (recalculate = false) => {
   const currIndex = app.timeline.currentIndex;
+
   if (currIndex >= config.timeline.circles.length) {
     return;
   }
@@ -123,7 +124,7 @@ bubbles.barrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+      if (config.cancelPromise) {
         resolve();
         return;
       }
@@ -252,7 +253,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+      if (config.cancelPromise) {
         resolve();
         return;
       }

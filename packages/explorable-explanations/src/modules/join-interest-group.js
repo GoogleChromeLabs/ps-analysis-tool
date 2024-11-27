@@ -159,6 +159,7 @@ joinInterestGroup.draw = (index) => {
   }
 
   for (const step of steps) {
+    PromiseQueue.nextStepSkipIndex.push(PromiseQueue.queue.length - 1);
     PromiseQueue.add(async () => {
       const { component, props, callBack } = step;
 
@@ -176,16 +177,15 @@ joinInterestGroup.draw = (index) => {
 
   PromiseQueue.add(async () => {
     await bubbles.reverseBarrageAnimation(index);
-    config.bubbles.interestGroupCounts +=
-      config.timeline.circles[index]?.igGroupsCount ?? 0;
+
     if (config.bubbles.isExpanded) {
       bubbles.showExpandedBubbles();
     } else {
       bubbles.showMinifiedBubbles();
     }
-
-    flow.clearBelowTimelineCircles();
   });
+
+  PromiseQueue.add(() => flow.clearBelowTimelineCircles());
 };
 
 export default joinInterestGroup;
