@@ -126,9 +126,6 @@ bubbles.barrageAnimation = async (index) => {
     const animate = () => {
       if (window.cancelPromise) {
         resolve();
-        config.animationFrames.forEach((idx) => {
-          cancelAnimationFrame(idx);
-        });
         return;
       }
 
@@ -258,9 +255,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const animate = () => {
       if (window.cancelPromise) {
         resolve();
-        config.animationFrames.forEach((idx) => {
-          cancelAnimationFrame(idx);
-        });
         return;
       }
 
@@ -302,9 +296,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
         })
       ) {
         resolve();
-        config.animationFrames.forEach((idx) => {
-          cancelAnimationFrame(idx);
-        });
         document.getElementById('interest-canvas').style.zIndex = 2;
         utils.wipeAndRecreateInterestCanvas();
       } else {

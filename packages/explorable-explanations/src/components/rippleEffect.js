@@ -53,9 +53,6 @@ rippleEffect.start = (x = 0, y = 0) => {
     const animate = (timestamp) => {
       if (window.cancelPromise) {
         resolve();
-        config.animationFrames.forEach((idx) => {
-          cancelAnimationFrame(idx);
-        });
         return;
       }
 
@@ -71,9 +68,6 @@ rippleEffect.start = (x = 0, y = 0) => {
 
       if (elapsed > duration) {
         resolve();
-        config.animationFrames.forEach((idx) => {
-          cancelAnimationFrame(idx);
-        });
         return;
       }
 

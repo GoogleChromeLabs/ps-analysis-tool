@@ -56,9 +56,6 @@ const Branches = async ({ x1, y1, branches, currIndex }) => {
       if (app.timeline.isPaused) {
         if (window.cancelPromise) {
           resolve(endpoints);
-          config.animationFrames.forEach((idx) => {
-            cancelAnimationFrame(idx);
-          });
           return;
         }
         config.animationFrames.push(requestAnimationFrame(animate)); // Continue loop but remain paused
@@ -97,9 +94,6 @@ const drawAnimatedTimeline = (x, y, branches) => {
   p.pop();
 
   if (window.cancelPromise) {
-    config.animationFrames.forEach((idx) => {
-      cancelAnimationFrame(idx);
-    });
     return new Promise((resolve) => resolve());
   }
 
@@ -148,17 +142,11 @@ const drawAnimatedTimeline = (x, y, branches) => {
     }
     if (window.cancelPromise) {
       resolve();
-      config.animationFrames.forEach((idx) => {
-        cancelAnimationFrame(idx);
-      });
       return;
     }
     // Resolve if the progress exceeds the required length
     if (progress >= (branches.length - 1) * spacing) {
       resolve();
-      config.animationFrames.forEach((idx) => {
-        cancelAnimationFrame(idx);
-      });
       return;
     }
   });
