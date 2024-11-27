@@ -187,6 +187,8 @@ app.setupLoop = (doNotPlay) => {
       });
 
       app.drawFlows(currentIndex);
+      PromiseQueue.nextNodeSkipIndex.push(PromiseQueue.queue.length);
+
       PromiseQueue.add(() => {
         app.bubbles.interestGroupCounts +=
           config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ??

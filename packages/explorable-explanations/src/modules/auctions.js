@@ -459,6 +459,7 @@ auction.draw = (index) => {
   }
 
   for (const step of steps) {
+    PromiseQueue.nextStepSkipIndex.push(PromiseQueue.queue.length - 1);
     PromiseQueue.add(async () => {
       const { component, props, callBack } = step;
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -492,6 +493,7 @@ auction.draw = (index) => {
       await utils.delay(delay); // eslint-disable-line no-await-in-loop
     });
   }
+
   PromiseQueue.add(async () => {
     await utils.delay(2000);
     flow.clearBelowTimelineCircles();
