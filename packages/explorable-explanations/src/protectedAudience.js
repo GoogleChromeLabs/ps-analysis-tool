@@ -70,7 +70,6 @@ app.play = (resumed = false) => {
   app.timeline.isPaused = false;
   if (!resumed) {
     app.setupLoop();
-    PromiseQueue.start();
     return;
   }
   PromiseQueue.resume();
@@ -78,7 +77,6 @@ app.play = (resumed = false) => {
 
 app.pause = () => {
   app.timeline.isPaused = true;
-  PromiseQueue.stop();
 };
 
 app.minimiseBubbleActions = () => {
@@ -136,6 +134,7 @@ app.setupLoop = () => {
     PromiseQueue.nextNodeSkipIndex.push(0);
     while (currentIndex < config.timeline.circles.length) {
       PromiseQueue.add(() => {
+        flow.clearBelowTimelineCircles();
         utils.markVisitedValue(app.timeline.currentIndex, true);
         bubbles.showMinifiedBubbles();
         timeline.renderUserIcon();
@@ -162,6 +161,7 @@ app.setupLoop = () => {
   timeline.eraseAndRedraw();
   timeline.renderUserIcon();
   utils.markVisitedValue(app.timeline.currentIndex, true);
+  PromiseQueue.start();
 };
 
 app.drawFlows = (index) => {
@@ -370,25 +370,31 @@ export const userSketch = (p) => {
   };
 };
 
-app.reset = () => {
-  if (app.timeline.currentIndex < config.timeline.circles.length) {
-    window.cancelPromise = true;
-  } else {
-    utils.setButtonsDisabilityState();
-    window.cancelPromiseForPreviousAndNext = false;
-  }
+app.reset = async () => {
+  PromiseQueue.stop();
+  window.cancelPromise = true;
+  app.timeline.isPaused = true;
+  PromiseQueue.clear();
+
   config.isReset = true;
   app.timeline.currentIndex = 0;
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
+  app.bubbles.positions = [];
 
+  utils.markVisitedValue(config.timeline.circles.length, false);
+  timeline.eraseAndRedraw();
+  await utils.delay(1000);
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p);
-  utils.markVisitedValue(config.timeline.circles.length, false);
 
-  timeline.eraseAndRedraw();
+  app.timeline.isPaused = true;
+  window.cancelPromise = false;
+  PromiseQueue.skipTo(0);
+
+  app.timeline.isPaused = false;
 };
 
 export { app };

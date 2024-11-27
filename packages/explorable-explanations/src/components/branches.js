@@ -100,7 +100,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
     config.animationFrames.forEach((idx) => {
       cancelAnimationFrame(idx);
     });
-    return new Promise.resolve();
+    return new Promise((resolve) => resolve());
   }
 
   return new Promise((resolve) => {

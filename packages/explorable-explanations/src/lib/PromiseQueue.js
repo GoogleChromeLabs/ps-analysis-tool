@@ -27,18 +27,17 @@ class PromiseQueue {
   // Add a promise-returning function to the queue
   add(promiseFn) {
     this.queue.push(promiseFn);
-    if (this.isProcessing && !this.isPaused) {
-      this.processQueue();
-    }
   }
 
   // Start processing the queue
-  start() {
+  start(resumed = false) {
     if (this.isProcessing) {
       return;
     }
     this.isProcessing = true;
-    this.processQueue();
+    if (!resumed) {
+      this.processQueue();
+    }
   }
 
   // Stop processing the queue
@@ -57,7 +56,6 @@ class PromiseQueue {
       return;
     }
     this.isPaused = false;
-    this.processQueue();
   }
 
   // Process the queue sequentially
@@ -68,7 +66,7 @@ class PromiseQueue {
 
     while (this.currentPromiseIndex < this.queue.length) {
       if (this.isPaused) {
-        return;
+        continue;
       }
 
       if (this.skipToIndex > -1) {
@@ -107,6 +105,9 @@ class PromiseQueue {
     this.queue = [];
     this.isProcessing = false;
     this.isPaused = false;
+    this.currentPromiseIndex = 0;
+    this.nextNodeSkipIndex = [];
+    this.nextStepSkipIndex = [];
   }
 }
 
