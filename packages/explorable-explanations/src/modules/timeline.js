@@ -141,37 +141,32 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   p.textAlign(p.CENTER, p.CENTER);
   // Draw circles and text at the timeline position
   circles.forEach((circleItem, index) => {
-    if (!window.cancelPromiseForPreviousAndNext) {
-      const xPositionForCircle =
-        config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
-      const yPositionForCircle = position.y + circleVerticalSpace;
+    const xPositionForCircle =
+      config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
+    const yPositionForCircle = position.y + circleVerticalSpace;
 
+    if (app.timeline.circlePositions.length < config.timeline.circles.length) {
       app.timeline.circlePositions.push({
         x: xPositionForCircle,
         y: yPositionForCircle,
       });
-
-      p.push();
-      p.stroke(config.timeline.colors.grey);
-      timeline.drawCircle(index);
-      p.pop();
-
-      p.push();
-      p.fill(config.timeline.colors.black);
-      p.textSize(12);
-      p.strokeWeight(0.1);
-      p.textFont('sans-serif');
-      if (!config.isInteractiveMode) {
-        p.text(circleItem.datetime, xPositionForCircle, position.y);
-      }
-      p.text(circleItem.website, xPositionForCircle, position.y + 20);
-      p.pop();
-    } else {
-      p.push();
-      p.stroke(config.timeline.colors.grey);
-      timeline.drawCircle(index);
-      p.pop();
     }
+
+    p.push();
+    p.stroke(config.timeline.colors.grey);
+    timeline.drawCircle(index);
+    p.pop();
+
+    p.push();
+    p.fill(config.timeline.colors.black);
+    p.textSize(12);
+    p.strokeWeight(0.1);
+    p.textFont('sans-serif');
+    if (!config.isInteractiveMode) {
+      p.text(circleItem.datetime, xPositionForCircle, position.y);
+    }
+    p.text(circleItem.website, xPositionForCircle, position.y + 20);
+    p.pop();
 
     timeline.drawLineAboveCircle(index);
   });
@@ -283,12 +278,9 @@ timeline.eraseAndRedraw = () => {
   if (currentIndex > 0) {
     let i = 0;
     while (i < currentIndex) {
-      app.p.push();
-      app.p.stroke(colors.visitedBlue);
-      timeline.drawCircle(i, true);
-      app.p.pop();
+      timeline.drawCircle(i, config.timeline.circles[i].visited);
 
-      timeline.drawLineAboveCircle(i, true);
+      timeline.drawLineAboveCircle(i, config.timeline.circles[i].visited);
       i = i + 1;
     }
   }

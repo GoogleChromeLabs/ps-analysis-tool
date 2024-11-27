@@ -173,7 +173,7 @@ utils.drawText = (text, x, y) => {
   }
 };
 
-utils.setupMainCanvas = async (p) => {
+utils.setupMainCanvas = async (p, doNotPlay = false) => {
   const { height, width } = utils.calculateCanvasDimensions();
   const canvas = p.createCanvas(width, height);
   canvas.parent('ps-canvas');
@@ -197,7 +197,7 @@ utils.setupMainCanvas = async (p) => {
   app.setUpTimeLine();
 
   if (!config.isInteractiveMode) {
-    await app.play();
+    await app.play(false, doNotPlay);
   }
 };
 

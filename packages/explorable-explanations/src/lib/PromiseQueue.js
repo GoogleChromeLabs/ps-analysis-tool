@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
+import flow from '../modules/flow';
+import app from '../app';
 class PromiseQueue {
   constructor() {
     this.queue = [];
@@ -81,6 +86,11 @@ class PromiseQueue {
         // eslint-disable-next-line no-await-in-loop
         await current();
         this.currentPromiseIndex++;
+        if (window.cancelPromise) {
+          flow.clearBelowTimelineCircles();
+          window.cancelPromise = false;
+          app.timeline.isPaused = false;
+        }
       } catch (error) {
         this.currentPromiseIndex++;
         // eslint-disable-next-line no-console
