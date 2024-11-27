@@ -53,12 +53,11 @@ const Branches = async ({ x1, y1, branches, currIndex }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (config.cancelPromise) {
-        resolve(endpoints);
-        return;
-      }
-
       if (app.timeline.isPaused) {
+        if (window.cancelPromise) {
+          resolve(endpoints);
+          return;
+        }
         requestAnimationFrame(animate); // Continue loop but remain paused
         return;
       }
@@ -94,11 +93,15 @@ const drawAnimatedTimeline = (x, y, branches) => {
   p.strokeWeight(1);
   p.pop();
 
+  if (window.cancelPromise) {
+    return new Promise.resolve();
+  }
+
   return new Promise((resolve) => {
     // Draw the horizontal line
     p.line(x, y, x + progress, y);
 
-    if (config.cancelPromise) {
+    if (window.cancelPromise) {
       resolve();
       return;
     }
@@ -108,6 +111,10 @@ const drawAnimatedTimeline = (x, y, branches) => {
       const branchX = x + i * spacing;
       const branch = branches[i];
       let endpoint;
+      if (window.cancelPromise) {
+        resolve();
+        return;
+      }
 
       if (progress >= i * spacing && !renderedBranchIds.includes(branch.id)) {
         // Draw vertical line once the horizontal line reaches its position
@@ -133,7 +140,10 @@ const drawAnimatedTimeline = (x, y, branches) => {
         renderedBranchIds.push(branch.id);
       }
     }
-
+    if (window.cancelPromise) {
+      resolve();
+      return;
+    }
     // Resolve if the progress exceeds the required length
     if (progress >= (branches.length - 1) * spacing) {
       resolve();

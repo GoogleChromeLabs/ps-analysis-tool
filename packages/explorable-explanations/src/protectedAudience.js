@@ -179,7 +179,11 @@ app.handlePrevButton = () => {
     return;
   }
 
-  config.cancelPromise = true;
+  if (app.timeline.currentIndex <= 0) {
+    return;
+  }
+
+  window.cancelPromise = true;
   app.timeline.isPaused = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
@@ -194,7 +198,7 @@ app.handlePrevButton = () => {
   bubbles.generateBubbles();
   bubbles.showMinifiedBubbles();
   utils.setButtonsDisabilityState();
-  config.cancelPromise = false;
+  window.cancelPromise = false;
   app.timeline.isPaused = false;
 };
 
@@ -203,21 +207,24 @@ app.handleNextButton = () => {
     return;
   }
 
+  if (app.timeline.currentIndex > config.timeline.circles.length - 1) {
+    return;
+  }
+
   app.timeline.isPaused = true;
-  config.cancelPromise = true;
+  window.cancelPromise = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex + 1;
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
   PromiseQueue.skipTo(nextIndex - 1);
   flow.clearBelowTimelineCircles();
-
   utils.markVisitedValue(app.timeline.currentIndex, true);
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
 
-  config.cancelPromise = false;
   app.timeline.isPaused = false;
+  window.cancelPromise = false;
 };
 
 app.handleControls = () => {

@@ -124,7 +124,7 @@ bubbles.barrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (config.cancelPromise) {
+      if (window.cancelPromise) {
         resolve();
         return;
       }
@@ -253,7 +253,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (config.cancelPromise) {
+      if (window.cancelPromise) {
         resolve();
         return;
       }
