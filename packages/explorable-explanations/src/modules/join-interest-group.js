@@ -77,7 +77,7 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSP Tag',
+      title: 'DSP Tags',
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
     },
