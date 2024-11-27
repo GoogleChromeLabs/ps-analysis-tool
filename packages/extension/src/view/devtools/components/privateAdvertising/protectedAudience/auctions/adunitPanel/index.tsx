@@ -17,8 +17,13 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
-import { FrameIcon, MoneyIcon, ScreenIcon } from '@google-psat/design-system';
+import React, { useEffect, useMemo } from 'react';
+import {
+  FrameIcon,
+  MoneyIcon,
+  ScreenIcon,
+  useTabs,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies
@@ -43,6 +48,11 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
       setSelectedAdUnit: actions.setSelectedAdUnit,
     })
   );
+
+  const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
+    setStorage: actions.setStorage,
+    setActiveTab: actions.setActiveTab,
+  }));
 
   const currentAd = adsAndBidders[adunit];
 
@@ -81,6 +91,15 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
         buttons: [
           ...(currentAd?.bidders || []).map((bidder) => ({
             name: bidder,
+            onClick: () => {
+              setStorage(
+                JSON.stringify({
+                  bidder,
+                  adUnitCode: adunit,
+                })
+              );
+              setActiveTab(4);
+            },
           })),
         ],
       },
@@ -90,10 +109,17 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
       currentAd?.bidders,
       currentAd?.mediaContainerSize,
       isInspecting,
+      setActiveTab,
       setIsInspecting,
       setSelectedAdUnit,
+      setStorage,
     ]
   );
+
+  useEffect(() => {
+    setIsInspecting(false);
+    setSelectedAdUnit(null);
+  }, [setIsInspecting, setSelectedAdUnit, adunit]);
 
   return (
     <>

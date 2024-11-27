@@ -64,7 +64,7 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
           const entries = Object.entries(auctionEvents[adUnit][time][sellerUrl])
             .filter(([url]) => url !== sellerUrl)
             .reduce<SidebarItems>((acc, [url, events]) => {
-              acc[url + time] = {
+              acc[url + time + adUnit] = {
                 title: events[0]?.auctionConfig?.seller,
                 panel: {
                   Element: AuctionTable,
@@ -85,7 +85,7 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
             ...entries,
           };
 
-          adUnitChildren[time] = {
+          adUnitChildren[time + adUnit] = {
             title: time,
             panel: {
               Element: AuctionTable,

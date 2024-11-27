@@ -35,7 +35,7 @@ export interface TabsStoreContext {
     storage: string[];
   };
   actions: {
-    setStorage: (data: string) => void;
+    setStorage: (data: string, index?: number) => void;
     setActiveTab: (tab: number) => void;
   };
 }

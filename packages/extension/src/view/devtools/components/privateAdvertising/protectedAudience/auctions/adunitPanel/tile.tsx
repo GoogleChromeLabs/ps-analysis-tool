@@ -49,6 +49,9 @@ const Tile = ({ item }: TileProps) => {
                 {
                   'hover:border-american-silver hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:scale-[1.03] transition-all duration-150 ease-in-out':
                     button.onClick,
+                },
+                {
+                  'cursor-default': !button.onClick,
                 }
               )}
               key={button.name}
