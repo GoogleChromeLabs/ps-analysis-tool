@@ -126,11 +126,14 @@ bubbles.barrageAnimation = async (index) => {
     const animate = () => {
       if (window.cancelPromise) {
         resolve();
+        config.animationFrames.forEach((idx) => {
+          cancelAnimationFrame(idx);
+        });
         return;
       }
 
       if (app.timeline.isPaused) {
-        requestAnimationFrame(animate); // Keep the animation loop alive but paused.
+        config.animationFrames.push(requestAnimationFrame(animate)); // Keep the animation loop alive but paused.
         return;
       }
 
@@ -171,11 +174,11 @@ bubbles.barrageAnimation = async (index) => {
       ) {
         resolve();
       } else {
-        requestAnimationFrame(animate); // Continue the animation.
+        config.animationFrames.push(requestAnimationFrame(animate)); // Continue the animation.
       }
     };
 
-    requestAnimationFrame(animate); // Start the animation loop.
+    config.animationFrames.push(requestAnimationFrame(animate)); // Start the animation loop.
   });
 
   await utils.delay(500);
@@ -255,11 +258,14 @@ bubbles.reverseBarrageAnimation = async (index) => {
     const animate = () => {
       if (window.cancelPromise) {
         resolve();
+        config.animationFrames.forEach((idx) => {
+          cancelAnimationFrame(idx);
+        });
         return;
       }
 
       if (app.timeline.isPaused) {
-        requestAnimationFrame(animate);
+        config.animationFrames.push(requestAnimationFrame(animate));
         return;
       }
 
@@ -296,14 +302,17 @@ bubbles.reverseBarrageAnimation = async (index) => {
         })
       ) {
         resolve();
+        config.animationFrames.forEach((idx) => {
+          cancelAnimationFrame(idx);
+        });
         document.getElementById('interest-canvas').style.zIndex = 2;
         utils.wipeAndRecreateInterestCanvas();
       } else {
-        requestAnimationFrame(animate);
+        config.animationFrames.push(requestAnimationFrame(animate));
       }
     };
 
-    requestAnimationFrame(animate);
+    config.animationFrames.push(requestAnimationFrame(animate));
   });
 };
 

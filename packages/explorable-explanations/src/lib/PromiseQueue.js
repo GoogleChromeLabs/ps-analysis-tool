@@ -78,6 +78,7 @@ class PromiseQueue {
       }
 
       const current = this.queue[this.currentPromiseIndex];
+
       try {
         // eslint-disable-next-line no-await-in-loop
         await current();

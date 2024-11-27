@@ -140,6 +140,7 @@ const config = {
   shouldRespondToClick: true,
   startTrackingMouse: true,
   isReset: false,
+  animationFrames: [],
   wasAnythingDoneInInteractiveMode: false,
 };
 

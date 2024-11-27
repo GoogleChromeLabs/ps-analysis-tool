@@ -53,11 +53,14 @@ rippleEffect.start = (x = 0, y = 0) => {
     const animate = (timestamp) => {
       if (window.cancelPromise) {
         resolve();
+        config.animationFrames.forEach((idx) => {
+          cancelAnimationFrame(idx);
+        });
         return;
       }
 
       if (app.timeline.isPaused) {
-        requestAnimationFrame(animate); // Keep the loop alive but paused
+        config.animationFrames.push(requestAnimationFrame(animate)); // Keep the loop alive but paused
         return;
       }
 
@@ -68,17 +71,20 @@ rippleEffect.start = (x = 0, y = 0) => {
 
       if (elapsed > duration) {
         resolve();
+        config.animationFrames.forEach((idx) => {
+          cancelAnimationFrame(idx);
+        });
         return;
       }
 
       rippleEffect.create(x, y);
 
       // Continue the animation loop
-      requestAnimationFrame(animate);
+      config.animationFrames.push(requestAnimationFrame(animate));
     };
 
     // Start the animation loop
-    requestAnimationFrame(animate);
+    config.animationFrames.push(requestAnimationFrame(animate));
   });
 };
 

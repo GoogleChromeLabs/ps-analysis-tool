@@ -53,11 +53,14 @@ const ProgressLine = ({
     const animate = () => {
       if (window.cancelPromise) {
         resolve();
+        config.animationFrames.forEach((idx) => {
+          cancelAnimationFrame(idx);
+        });
         return;
       }
 
       if (app.timeline.isPaused) {
-        requestAnimationFrame(animate); // Keep the animation loop alive but paused
+        config.animationFrames.push(requestAnimationFrame(animate)); // Keep the animation loop alive but paused
         return;
       }
 
@@ -121,16 +124,20 @@ const ProgressLine = ({
         default:
           throw new Error(`Invalid direction: ${direction}`);
       }
+
       if (window.cancelPromise) {
         resolve();
+        config.animationFrames.forEach((idx) => {
+          cancelAnimationFrame(idx);
+        });
         return;
       }
       // Continue the animation loop
-      requestAnimationFrame(animate);
+      config.animationFrames.push(requestAnimationFrame(animate));
     };
 
     // Start the animation loop
-    requestAnimationFrame(animate);
+    config.animationFrames.push(requestAnimationFrame(animate));
   });
 };
 

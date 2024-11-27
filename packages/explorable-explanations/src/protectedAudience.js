@@ -140,6 +140,7 @@ app.setupLoop = () => {
         bubbles.showMinifiedBubbles();
         timeline.renderUserIcon();
       });
+
       app.drawFlows(currentIndex);
       PromiseQueue.nextNodeSkipIndex.push(PromiseQueue.queue.length);
 
@@ -183,23 +184,28 @@ app.handlePrevButton = () => {
     return;
   }
 
+  config.animationFrames.forEach((idx) => {
+    cancelAnimationFrame(idx);
+    config.animationFrames.pop();
+  });
+
   window.cancelPromise = true;
   app.timeline.isPaused = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
   PromiseQueue.skipTo(nextIndex + 1);
-  flow.clearBelowTimelineCircles();
+
   utils.markVisitedValue(app.timeline.currentIndex, true);
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-  bubbles.generateBubbles();
-  bubbles.showMinifiedBubbles();
-  utils.setButtonsDisabilityState();
-  window.cancelPromise = false;
+
+  config.animationFrames = [];
   app.timeline.isPaused = false;
+  window.cancelPromise = false;
+  flow.clearBelowTimelineCircles();
 };
 
 app.handleNextButton = () => {
@@ -211,20 +217,27 @@ app.handleNextButton = () => {
     return;
   }
 
+  config.animationFrames.forEach((idx) => {
+    cancelAnimationFrame(idx);
+    config.animationFrames.pop();
+  });
   app.timeline.isPaused = true;
   window.cancelPromise = true;
+
   const nextIndexPromiseGetter = app.timeline.currentIndex + 1;
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
   PromiseQueue.skipTo(nextIndex - 1);
-  flow.clearBelowTimelineCircles();
+
   utils.markVisitedValue(app.timeline.currentIndex, true);
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+  config.animationFrames = [];
 
   app.timeline.isPaused = false;
   window.cancelPromise = false;
+  flow.clearBelowTimelineCircles();
 };
 
 app.handleControls = () => {
