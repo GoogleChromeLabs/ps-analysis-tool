@@ -117,8 +117,10 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
   );
 
   useEffect(() => {
-    setIsInspecting(false);
-    setSelectedAdUnit(null);
+    return () => {
+      setIsInspecting(false);
+      setSelectedAdUnit(null);
+    };
   }, [setIsInspecting, setSelectedAdUnit, adunit]);
 
   return (
