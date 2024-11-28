@@ -141,6 +141,7 @@ app.setupLoop = (doNotPlay) => {
       PromiseQueue.add(() => {
         flow.clearBelowTimelineCircles();
         utils.markVisitedValue(app.timeline.currentIndex, true);
+        bubbles.generateBubbles();
         bubbles.showMinifiedBubbles();
         timeline.eraseAndRedraw();
         timeline.renderUserIcon();
@@ -253,6 +254,7 @@ app.handleNextButton = () => {
 
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+
   config.animationFrames = [];
 };
 

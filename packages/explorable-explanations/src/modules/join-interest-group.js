@@ -157,7 +157,6 @@ joinInterestGroup.draw = (index) => {
   if (!steps) {
     return;
   }
-  PromiseQueue.add(() => bubbles.generateBubbles());
 
   for (const step of steps) {
     PromiseQueue.nextStepSkipIndex.push(PromiseQueue.queue.length - 1);
