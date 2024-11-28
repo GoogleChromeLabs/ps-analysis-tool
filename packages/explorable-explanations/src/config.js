@@ -139,9 +139,6 @@ const config = {
   prevNodeIndexTracker: 0,
   shouldRespondToClick: true,
   startTrackingMouse: true,
-  isReset: false,
-  animationFrames: [],
-  wasAnythingDoneInInteractiveMode: false,
 };
 
 export default config;

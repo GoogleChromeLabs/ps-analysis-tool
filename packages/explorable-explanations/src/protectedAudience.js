@@ -383,7 +383,6 @@ app.reset = async () => {
   app.timeline.isPaused = true;
   PromiseQueue.clear();
 
-  config.isReset = true;
   app.timeline.currentIndex = 0;
   config.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
