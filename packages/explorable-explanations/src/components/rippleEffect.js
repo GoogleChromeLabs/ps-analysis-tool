@@ -57,7 +57,7 @@ rippleEffect.start = (x = 0, y = 0) => {
       }
 
       if (app.timeline.isPaused) {
-        config.animationFrames.push(requestAnimationFrame(animate)); // Keep the loop alive but paused
+        requestAnimationFrame(animate); // Keep the loop alive but paused
         return;
       }
 
@@ -74,11 +74,11 @@ rippleEffect.start = (x = 0, y = 0) => {
       rippleEffect.create(x, y);
 
       // Continue the animation loop
-      config.animationFrames.push(requestAnimationFrame(animate));
+      requestAnimationFrame(animate);
     };
 
     // Start the animation loop
-    config.animationFrames.push(requestAnimationFrame(animate));
+    requestAnimationFrame(animate);
   });
 };
 

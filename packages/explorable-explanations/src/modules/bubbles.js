@@ -133,7 +133,7 @@ bubbles.barrageAnimation = async (index) => {
       }
 
       if (app.timeline.isPaused) {
-        config.animationFrames.push(requestAnimationFrame(animate)); // Keep the animation loop alive but paused.
+        requestAnimationFrame(animate); // Keep the animation loop alive but paused.
         return;
       }
 
@@ -174,11 +174,11 @@ bubbles.barrageAnimation = async (index) => {
       ) {
         resolve();
       } else {
-        config.animationFrames.push(requestAnimationFrame(animate)); // Continue the animation.
+        requestAnimationFrame(animate); // Continue the animation.
       }
     };
 
-    config.animationFrames.push(requestAnimationFrame(animate)); // Start the animation loop.
+    requestAnimationFrame(animate); // Start the animation loop.
   });
 
   await utils.delay(500);
@@ -265,7 +265,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
       }
 
       if (app.timeline.isPaused) {
-        config.animationFrames.push(requestAnimationFrame(animate));
+        requestAnimationFrame(animate);
         return;
       }
 
@@ -305,11 +305,11 @@ bubbles.reverseBarrageAnimation = async (index) => {
         document.getElementById('interest-canvas').style.zIndex = 2;
         utils.wipeAndRecreateInterestCanvas();
       } else {
-        config.animationFrames.push(requestAnimationFrame(animate));
+        requestAnimationFrame(animate);
       }
     };
 
-    config.animationFrames.push(requestAnimationFrame(animate));
+    requestAnimationFrame(animate);
   });
 };
 

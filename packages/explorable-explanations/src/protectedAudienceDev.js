@@ -220,7 +220,6 @@ app.handlePrevButton = () => {
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
   bubbles.showMinifiedBubbles();
-  config.animationFrames = [];
 };
 
 app.handleNextButton = () => {
@@ -254,8 +253,6 @@ app.handleNextButton = () => {
 
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-
-  config.animationFrames = [];
 };
 
 app.handleControls = () => {

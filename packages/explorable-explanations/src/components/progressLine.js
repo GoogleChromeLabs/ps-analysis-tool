@@ -57,7 +57,7 @@ const ProgressLine = ({
       }
 
       if (app.timeline.isPaused) {
-        config.animationFrames.push(requestAnimationFrame(animate)); // Keep the animation loop alive but paused
+        requestAnimationFrame(animate); // Keep the animation loop alive but paused
         return;
       }
 
@@ -127,11 +127,11 @@ const ProgressLine = ({
         return;
       }
       // Continue the animation loop
-      config.animationFrames.push(requestAnimationFrame(animate));
+      requestAnimationFrame(animate);
     };
 
     // Start the animation loop
-    config.animationFrames.push(requestAnimationFrame(animate));
+    requestAnimationFrame(animate);
   });
 };
 

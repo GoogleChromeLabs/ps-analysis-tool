@@ -464,6 +464,7 @@ auction.draw = (index) => {
       const { component, props, callBack } = step;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+
       const delay = component === Box ? 1000 : 0;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
