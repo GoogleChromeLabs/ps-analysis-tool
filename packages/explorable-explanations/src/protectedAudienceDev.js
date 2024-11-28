@@ -68,6 +68,8 @@ app.setup = () => {
 };
 
 app.play = (resumed = false, doNotPlay = false) => {
+  app.playButton.classList.add('hidden');
+  app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
   if (!resumed) {
     app.setupLoop(doNotPlay);
@@ -77,6 +79,8 @@ app.play = (resumed = false, doNotPlay = false) => {
 };
 
 app.pause = () => {
+  app.pauseButton.classList.add('hidden');
+  app.playButton.classList.remove('hidden');
   app.timeline.isPaused = true;
 };
 
@@ -194,7 +198,9 @@ app.handlePrevButton = () => {
   app.timeline.isPaused = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
+  app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
   utils.setButtonsDisabilityState();
+  utils.disableButtons();
 
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
 
@@ -212,7 +218,7 @@ app.handlePrevButton = () => {
 
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-
+  bubbles.showMinifiedBubbles();
   config.animationFrames = [];
 };
 
@@ -229,7 +235,7 @@ app.handleNextButton = () => {
   window.cancelPromise = true;
   app.timeline.currentIndex += 1;
   utils.setButtonsDisabilityState();
-
+  utils.disableButtons();
   const nextIndexPromiseGetter = app.timeline.currentIndex;
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
 
