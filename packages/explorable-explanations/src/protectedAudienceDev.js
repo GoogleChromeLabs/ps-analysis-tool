@@ -319,11 +319,11 @@ app.toggleInteractiveMode = async () => {
   config.startTrackingMouse = true;
 
   if (config.isInteractiveMode) {
-    app.prevButton.style.display = 'none';
-    app.nextButton.style.display = 'none';
+    app.prevButton.style.disabled = false;
+    app.nextButton.style.disabled = false;
   } else {
-    app.prevButton.style.display = 'block';
-    app.nextButton.style.display = 'block';
+    app.prevButton.style.disabled = true;
+    app.nextButton.style.disabled = false;
   }
 
   utils.markVisitedValue(config.timeline.circles.length, false);
