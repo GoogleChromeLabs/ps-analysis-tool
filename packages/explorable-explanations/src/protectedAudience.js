@@ -212,8 +212,6 @@ app.handlePrevButton = () => {
 
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-
-  config.animationFrames = [];
 };
 
 app.handleNextButton = () => {
@@ -247,7 +245,6 @@ app.handleNextButton = () => {
 
   config.bubbles.interestGroupCounts =
     bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-  config.animationFrames = [];
 };
 
 app.handleControls = () => {
@@ -312,8 +309,6 @@ app.toggleInteractiveMode = async () => {
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p, true);
   PromiseQueue.skipTo(0);
-  app.timeline.isPaused = false;
-  window.cancelPromise = false;
   if (config.isInteractiveMode) {
     return;
   }

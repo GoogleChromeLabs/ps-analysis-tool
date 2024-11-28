@@ -361,12 +361,6 @@ utils.setButtonsDisabilityState = () => {
   }
 };
 
-utils.clearAllAnimations = () => {
-  config.animationFrames.forEach((idx) => cancelAnimationFrame(idx));
-  config.animationFrames = [];
-  window.cancelPromise = true;
-  app.timeline.isPaused = true;
-};
 utils.disableButtons = () => {
   app.prevButton.style.cursor =
     app.timeline.currentIndex > 0 ? 'pointer' : 'default';

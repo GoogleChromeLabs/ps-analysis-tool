@@ -88,7 +88,6 @@ timeline.init = () => {
         clickedIndex !== undefined &&
         !config.timeline.circles[clickedIndex].visited
       ) {
-        PromiseQueue.clear();
         config.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
         utils.wipeAndRecreateUserCanvas();
@@ -104,7 +103,7 @@ timeline.init = () => {
           utils.wipeAndRecreateUserCanvas();
           timeline.renderUserIcon();
         });
-        PromiseQueue.start();
+        PromiseQueue.skipTo(0);
       }
     };
   } else {

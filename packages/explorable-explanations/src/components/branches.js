@@ -53,12 +53,13 @@ const Branches = async ({ x1, y1, branches, currIndex }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
+      if (window.cancelPromise) {
+        resolve(endpoints);
+        return;
+      }
+
       if (app.timeline.isPaused) {
-        if (window.cancelPromise) {
-          resolve(endpoints);
-          return;
-        }
-        config.animationFrames.push(requestAnimationFrame(animate)); // Continue loop but remain paused
+        requestAnimationFrame(animate); // Continue loop but remain paused
         return;
       }
 
@@ -75,12 +76,12 @@ const Branches = async ({ x1, y1, branches, currIndex }) => {
       // Continue animation until progress completes
       if (progress < (branches.length - 1) * spacing) {
         progress += ANIMATION_SPEED;
-        config.animationFrames.push(requestAnimationFrame(animate));
+        requestAnimationFrame(animate);
       }
     };
 
     // Start the animation loop
-    config.animationFrames.push(requestAnimationFrame(animate));
+    requestAnimationFrame(animate);
   });
 };
 
