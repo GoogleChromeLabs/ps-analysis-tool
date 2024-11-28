@@ -98,6 +98,9 @@ timeline.init = () => {
           app.bubbles.interestGroupCounts +=
             config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
           config.timeline.circles[clickedIndex].visited = true;
+          config.timeline.circles[clickedIndex].visitedIndex =
+            config.visitedIndexes;
+          config.visitedIndexes += 1;
           bubbles.showMinifiedBubbles();
           app.shouldRespondToClick = true;
           utils.wipeAndRecreateUserCanvas();
@@ -166,9 +169,9 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
       p.text(circleItem.datetime, xPositionForCircle, position.y);
     } else {
       p.text(
-        circleItem.visitedIndex ?? 'h',
+        circleItem.visitedIndex ?? '',
         xPositionForCircle,
-        yPositionForCircle + diameter / 2 - 12
+        yPositionForCircle - 5 + diameter / 2
       );
     }
     p.text(circleItem.website, xPositionForCircle, position.y + 20);
