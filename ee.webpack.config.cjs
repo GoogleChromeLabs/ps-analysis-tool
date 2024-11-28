@@ -23,10 +23,14 @@ const mode = isProduction ? 'production' : 'development';
 
 module.exports = {
   entry: {
-    'protected-audience': './src/index.js',
+    'protected-audience': isProduction
+      ? './src/index.js'
+      : './src/protectedAudienceDev.js',
   },
   output: {
-    filename: 'index.js',
+    filename: isProduction
+      ? './src/index.js'
+      : './src/protected-audience-dev.js',
     path: path.resolve(__dirname, './packages/explorable-explanations/dist'),
     publicPath: '/', // Base path for all assets
   },

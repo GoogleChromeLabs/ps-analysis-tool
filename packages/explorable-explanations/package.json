@@ -8,6 +8,11 @@
       "default": "./src/index.js"
     }
   },
+  "exports": {
+    ".": {
+      "default": "./src/protectedAudienceDev.js"
+    }
+  },
   "type": "module",
   "scripts": {
     "dev": "webpack serve --config ../../ee.webpack.config.cjs --open --mode development",
