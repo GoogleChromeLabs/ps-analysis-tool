@@ -30,6 +30,7 @@ export type SidebarItemValue = {
   icon?: SidebarComponent;
   selectedIcon?: SidebarComponent;
   isBlurred?: boolean;
+  sectionEnd?: boolean;
 };
 
 export type SidebarItems = {

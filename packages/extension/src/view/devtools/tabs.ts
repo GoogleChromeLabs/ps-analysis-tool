@@ -102,7 +102,7 @@ const TABS: SidebarItems = {
           Element: CookieIconWhite,
         },
         children: {},
-        dropdownOpen: true,
+        dropdownOpen: false,
       },
       [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
         title: () => I18n.getMessage('siteBoundaries'),
@@ -263,6 +263,7 @@ const TABS: SidebarItems = {
         },
       },
     },
+    sectionEnd: true,
   },
   [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
     title: () => 'Dashboard',
@@ -305,6 +306,7 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
+    sectionEnd: true,
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),

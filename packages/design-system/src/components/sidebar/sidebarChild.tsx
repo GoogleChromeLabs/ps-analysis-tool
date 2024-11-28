@@ -183,6 +183,9 @@ const SidebarChild = ({
             </>
           )}
       </>
+      {sidebarItem.sectionEnd && (
+        <div className="h-px bg-american-silver dark:bg-quartz my-1" />
+      )}
     </>
   );
 };
