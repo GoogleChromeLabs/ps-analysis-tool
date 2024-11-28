@@ -263,7 +263,7 @@ const TABS: SidebarItems = {
         },
       },
     },
-    sectionEnd: true,
+    addDivider: true,
   },
   [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
     title: () => 'Dashboard',
@@ -278,6 +278,7 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
+    containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
     title: () => 'Stories',
@@ -292,6 +293,7 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
+    containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.WIKI]: {
     title: () => I18n.getMessage('wiki'),
@@ -306,7 +308,9 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
-    sectionEnd: true,
+    addDivider: true,
+    addSpacer: true,
+    containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),
@@ -327,6 +331,7 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
+    containerClassName: 'h-6',
   },
 };
 

@@ -104,7 +104,9 @@ const SidebarChild = ({
               ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
               : 'bg-gainsboro dark:bg-outer-space'
             : 'bg-lotion dark:bg-raisin-black'
-        } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''}`}
+        } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''} ${
+          sidebarItem.containerClassName
+        }`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
         data-testid="sidebar-child"
       >
@@ -183,9 +185,10 @@ const SidebarChild = ({
             </>
           )}
       </>
-      {sidebarItem.sectionEnd && (
-        <div className="h-px bg-american-silver dark:bg-quartz my-1" />
+      {sidebarItem.addDivider && (
+        <div className="h-px bg-gray-200 dark:bg-quartz my-2" />
       )}
+      {sidebarItem.addSpacer && <div className="flex-1" />}
     </>
   );
 };
