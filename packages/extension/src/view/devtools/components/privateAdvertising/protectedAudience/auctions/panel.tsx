@@ -40,7 +40,8 @@ interface AuctionPanelProps {
 const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
   useEffect(() => {
     setSidebarData((prev) => {
-      const data = { ...prev } as SidebarItems;
+      const newData = { ...prev } as SidebarItems;
+      const data = newData['adunits']?.children ?? {};
 
       Object.keys(auctionEvents).forEach((adUnit) => {
         const adUnitChildren = {
@@ -115,7 +116,9 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
         };
       });
 
-      return data;
+      newData['adunits'].children = data;
+
+      return newData;
     });
   }, [auctionEvents, setSidebarData]);
 
@@ -129,7 +132,7 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
     <div className="w-full h-full flex border-t border-chinese-silver dark:border-quartz">
       <Resizable
         defaultSize={{
-          width: 250,
+          width: 200,
           height: '100%',
         }}
         minWidth={100}

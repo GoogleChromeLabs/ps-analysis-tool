@@ -33,7 +33,6 @@ import {
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
-import AdUnits from './adUnits';
 import Panel from './panel';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
@@ -64,13 +63,6 @@ const ProtectedAudience = () => {
         title: 'Interest Groups',
         content: {
           Element: InterestGroups,
-          className: 'overflow-hidden',
-        },
-      },
-      {
-        title: 'Ad Units',
-        content: {
-          Element: AdUnits,
           className: 'overflow-hidden',
         },
       },

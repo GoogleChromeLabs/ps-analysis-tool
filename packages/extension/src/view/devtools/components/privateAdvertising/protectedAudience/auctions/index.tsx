@@ -21,6 +21,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
   useSidebar,
+  type SidebarItems,
 } from '@google-psat/design-system';
 /**
  * Internal dependencies.
@@ -28,9 +29,20 @@ import {
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import Breakpoints from './breakpoints';
 import AuctionPanel from './panel';
+import AdUnits from '../adUnits';
 
 const Auctions = () => {
-  const [sidebarData, setSidebarData] = useState({});
+  const [sidebarData, setSidebarData] = useState<SidebarItems>({
+    adunits: {
+      title: 'Ad Units',
+      panel: {
+        Element: AdUnits,
+        props: {},
+      },
+      children: {},
+      dropdownOpen: true,
+    },
+  });
 
   const { auctionEvents } = useProtectedAudience(({ state }) => ({
     auctionEvents: state.auctionEvents ?? {},
