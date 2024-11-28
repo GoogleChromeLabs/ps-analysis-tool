@@ -105,6 +105,7 @@ timeline.init = () => {
           app.shouldRespondToClick = true;
           utils.wipeAndRecreateUserCanvas();
           timeline.renderUserIcon();
+          timeline.drawTimeline(config.timeline);
         });
         PromiseQueue.skipTo(0);
         PromiseQueue.start();
