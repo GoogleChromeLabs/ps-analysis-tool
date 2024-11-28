@@ -208,6 +208,44 @@ utils.setupInterestGroupCanvas = (p) => {
   overlayCanvas.parent('interest-canvas');
   overlayCanvas.style('z-index', 2);
   p.textSize(config.canvas.fontSize);
+  // eslint-disable-next-line no-undef
+  if (process.env.NODE_ENV !== 'production') {
+    config.bubbles.minifiedBubbleX = 35;
+    config.bubbles.minifiedBubbleY = 35;
+
+    config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
+    config.bubbles.expandedBubbleY = 0;
+
+    // 335 is the angle where the close icon should be visible.
+    const angle = (305 * Math.PI) / 180;
+    // 335 is the radius + the size of icon so that icon is attached to the circle.
+    const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
+    const y = 335 * Math.sin(angle) + 320;
+
+    app.closeButton.style.left = `${x}px`;
+    app.closeButton.style.top = `${y}px`;
+
+    document.styleSheets[0].cssRules.forEach((rules, index) => {
+      if (rules.selectorText === '.minified-bubble-container.expanded') {
+        document.styleSheets[0].cssRules[index].style.left = `${
+          config.bubbles.expandedBubbleX - 320
+        }px`;
+
+        document.styleSheets[0].cssRules[
+          index
+        ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
+        document.styleSheets[0].cssRules[
+          index
+        ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
+      }
+
+      if (rules.selectorText === '.minified-bubble-container') {
+        document.styleSheets[0].cssRules[index].style.top = `${
+          config.bubbles.minifiedBubbleY - 25
+        }px`;
+      }
+    });
+  }
 
   app.igp = p;
 };
