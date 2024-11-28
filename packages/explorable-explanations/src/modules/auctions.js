@@ -473,6 +473,11 @@ auction.draw = (index) => {
 
       if (props?.showBarrageAnimation) {
         await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
+
+        if (window.cancelPromise) {
+          return;
+        }
+
         await utils.delay(500); // eslint-disable-line no-await-in-loop
 
         utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
@@ -482,6 +487,9 @@ auction.draw = (index) => {
         const x = props.x();
         const y = props.y();
 
+        if (window.cancelPromise) {
+          return;
+        }
         // eslint-disable-next-line no-await-in-loop
         await RippleEffect({
           x: x + config.flow.box.width + 2,
@@ -492,12 +500,14 @@ auction.draw = (index) => {
       if (callBack) {
         callBack(returnValue);
       }
+      if (window.cancelPromise) {
+        return;
+      }
       await utils.delay(delay); // eslint-disable-line no-await-in-loop
     });
   }
 
-  PromiseQueue.add(async () => {
-    await utils.delay(2000);
+  PromiseQueue.add(() => {
     flow.clearBelowTimelineCircles();
   });
 };

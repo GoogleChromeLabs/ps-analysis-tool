@@ -348,7 +348,6 @@ app.toggleInteractiveMode = async () => {
   PromiseQueue.stop();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
-  PromiseQueue.clear();
 
   app.isInteractiveMode = !app.isInteractiveMode;
   app.timeline.currentIndex = 0;

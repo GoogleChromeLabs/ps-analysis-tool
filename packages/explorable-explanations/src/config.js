@@ -39,6 +39,7 @@ const config = {
         igGroupsCount: 3,
         interestGroups: ['shoes', 'heels', 'phones'],
         visited: false,
+        visitedIndex: null,
       },
       {
         type: 'advertiser',
@@ -47,12 +48,14 @@ const config = {
         igGroupsCount: 2,
         interestGroups: ['stilletos', 'shorts'],
         visited: false,
+        visitedIndex: null,
       },
       {
         type: 'publisher',
         website: 'pub1.com',
         datetime: '2023-10-01 12:00',
         visited: false,
+        visitedIndex: null,
       },
       {
         type: 'advertiser',
@@ -61,6 +64,7 @@ const config = {
         igGroupsCount: 2,
         interestGroups: ['bike', 'car'],
         visited: false,
+        visitedIndex: null,
       },
       {
         type: 'advertiser',
@@ -69,12 +73,14 @@ const config = {
         igGroupsCount: 3,
         interestGroups: ['football', 'basketball', 'baseball'],
         visited: false,
+        visitedIndex: null,
       },
       {
         type: 'publisher',
         website: 'pub2.com',
         datetime: '2023-10-01 14:00',
         visited: false,
+        visitedIndex: null,
       },
       {
         type: 'advertiser',
@@ -83,6 +89,7 @@ const config = {
         igGroupsCount: 3,
         interestGroups: ['movies', 'series', 'books'],
         visited: false,
+        visitedIndex: null,
       },
       {
         type: 'advertiser',
@@ -91,6 +98,7 @@ const config = {
         igGroupsCount: 3,
         interestGroups: ['IGG220', 'IGG201', 'IG225'],
         visited: false,
+        visitedIndex: null,
       },
     ],
     colors: {

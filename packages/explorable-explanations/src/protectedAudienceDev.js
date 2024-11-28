@@ -304,10 +304,9 @@ app.handleControls = () => {
 };
 
 app.toggleInteractiveMode = async () => {
-  PromiseQueue.stop();
+  PromiseQueue.clear();
   window.cancelPromise = true;
   app.timeline.isPaused = true;
-  PromiseQueue.clear();
 
   config.isInteractiveMode = !config.isInteractiveMode;
   app.timeline.currentIndex = 0;
@@ -333,8 +332,6 @@ app.toggleInteractiveMode = async () => {
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p, true);
   PromiseQueue.skipTo(0);
-  app.timeline.isPaused = false;
-  window.cancelPromise = false;
   if (config.isInteractiveMode) {
     return;
   }

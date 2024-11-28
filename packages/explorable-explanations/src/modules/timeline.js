@@ -104,6 +104,7 @@ timeline.init = () => {
           timeline.renderUserIcon();
         });
         PromiseQueue.skipTo(0);
+        PromiseQueue.start();
       }
     };
   } else {
@@ -163,6 +164,12 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     p.textFont('sans-serif');
     if (!app.isInteractiveMode) {
       p.text(circleItem.datetime, xPositionForCircle, position.y);
+    } else {
+      p.text(
+        circleItem.visitedIndex ?? 'h',
+        xPositionForCircle,
+        yPositionForCircle + diameter / 2 - 12
+      );
     }
     p.text(circleItem.website, xPositionForCircle, position.y + 20);
     p.pop();

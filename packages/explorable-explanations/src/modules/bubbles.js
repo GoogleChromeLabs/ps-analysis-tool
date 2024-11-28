@@ -140,6 +140,11 @@ bubbles.barrageAnimation = async (index) => {
       utils.wipeAndRecreateInterestCanvas();
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
+        if (window.cancelPromise) {
+          resolve();
+          return;
+        }
+
         let { x, y } = positionsOfCircles[i];
         const { target, speed, color } = positionsOfCircles[i];
         const dir = p5.Vector.sub(target, p.createVector(x, y));
@@ -272,6 +277,11 @@ bubbles.reverseBarrageAnimation = async (index) => {
       utils.wipeAndRecreateInterestCanvas();
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
+        if (window.cancelPromise) {
+          resolve();
+          return;
+        }
+
         let { x, y } = positionsOfCircles[i];
         const { target, speed, color } = positionsOfCircles[i];
         const dir = p5.Vector.sub(target, igp.createVector(x, y));
