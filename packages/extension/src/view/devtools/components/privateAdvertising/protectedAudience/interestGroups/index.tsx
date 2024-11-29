@@ -179,7 +179,7 @@ const InterestGroups = ({ filters }: InterestGroupsProps) => {
   }
 
   return (
-    <div className="w-full h-full text-outer-space-crayola mt-4 border-x border-t border-american-silver dark:border-quartz flex flex-col">
+    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
       <Resizable
         defaultSize={{
           width: '100%',
