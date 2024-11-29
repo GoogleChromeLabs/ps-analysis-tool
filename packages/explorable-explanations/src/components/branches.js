@@ -28,7 +28,7 @@ const EXPAND_ICON_SIZE = 20;
 
 let spacing, progress, renderedBranchIds, endpoints;
 
-const Branches = async ({ x1, y1, branches }) => {
+const Branches = async ({ x1, y1, branches, currentIndex }) => {
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
 
@@ -53,7 +53,7 @@ const Branches = async ({ x1, y1, branches }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+      if (app.cancelPromise) {
         resolve(endpoints);
         return;
       }
@@ -67,9 +67,11 @@ const Branches = async ({ x1, y1, branches }) => {
       utils.wipeAndRecreateInterestCanvas();
 
       // Draw the animated timeline
-      drawAnimatedTimeline(LEFT_MARGIN, y2 - 9, branches).then(() => {
-        resolve(endpoints);
-      });
+      drawAnimatedTimeline(currentIndex * LEFT_MARGIN, y2 - 9, branches).then(
+        () => {
+          resolve(endpoints);
+        }
+      );
 
       // Continue animation until progress completes
       if (progress < (branches.length - 1) * spacing) {
@@ -92,11 +94,15 @@ const drawAnimatedTimeline = (x, y, branches) => {
   p.strokeWeight(1);
   p.pop();
 
+  if (app.cancelPromise) {
+    return new Promise((resolve) => resolve());
+  }
+
   return new Promise((resolve) => {
     // Draw the horizontal line
     p.line(x, y, x + progress, y);
 
-    if (window.cancelPromise || window.cancelPromiseForPreviousAndNext) {
+    if (app.cancelPromise) {
       resolve();
       return;
     }
@@ -106,6 +112,10 @@ const drawAnimatedTimeline = (x, y, branches) => {
       const branchX = x + i * spacing;
       const branch = branches[i];
       let endpoint;
+      if (app.cancelPromise) {
+        resolve();
+        return;
+      }
 
       if (progress >= i * spacing && !renderedBranchIds.includes(branch.id)) {
         // Draw vertical line once the horizontal line reaches its position
@@ -131,10 +141,14 @@ const drawAnimatedTimeline = (x, y, branches) => {
         renderedBranchIds.push(branch.id);
       }
     }
-
+    if (app.cancelPromise) {
+      resolve();
+      return;
+    }
     // Resolve if the progress exceeds the required length
     if (progress >= (branches.length - 1) * spacing) {
       resolve();
+      return;
     }
   });
 };

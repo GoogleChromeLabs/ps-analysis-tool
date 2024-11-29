@@ -19,6 +19,7 @@ const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const commonConfig = require('./webpack.shared.cjs');
+const webpack = require('webpack');
 
 const root = {
   entry: {
@@ -68,6 +69,11 @@ const devTools = {
     },
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        IS_RUNNING_STANDALONE: false,
+      },
+    }),
     new WebpackBar({
       name: 'DevTools',
       color: '#357BB5',

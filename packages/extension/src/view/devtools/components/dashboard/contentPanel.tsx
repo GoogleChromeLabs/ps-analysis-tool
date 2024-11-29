@@ -59,9 +59,9 @@ const ContentPanel = () => {
   return (
     <div
       data-testid="dashboard-content"
-      className="h-full w-full text-raisin-black dark:text-bright-gray px-2 pb-14"
+      className="h-full w-full overflow-auto text-raisin-black dark:text-bright-gray px-2 pb-14"
     >
-      <div className="w-fit">
+      <div className="min-w-[45.75rem]">
         <section className="border-b border-hex-gray mb-5 pb-5">
           <h3 className="text-sm mb-2">Pinned</h3>
           <div className="flex gap-x-5 gap-y-4 flex-wrap">
@@ -71,7 +71,7 @@ const ContentPanel = () => {
               return (
                 <div
                   key={item.name}
-                  className="w-[380px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="w-[366px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <Icon width={20} height={20} className="fill-gray" />
@@ -94,7 +94,7 @@ const ContentPanel = () => {
               return (
                 <div
                   key={item.name}
-                  className="w-[380px] h-[206px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="w-[366px] h-[206px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
                   <div className="flex gap-2 justify-start mb-3">

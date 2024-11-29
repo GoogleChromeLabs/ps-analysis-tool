@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * External dependencies
  */
 import p5 from 'p5';
-
+import * as d3 from 'd3';
 /**
  * Internal dependencies.
  */
 import config from './config.js';
-import app from './app.js';
 import auctions from './modules/auctions.js';
 import flow from './modules/flow.js';
 import utils from './lib/utils.js';
@@ -30,17 +29,17 @@ import timeline from './modules/timeline.js';
 import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
 import bubbles from './modules/bubbles.js';
+import app from './app.js';
+import PromiseQueue from './lib/PromiseQueue.js';
 
 app.setUpTimeLine = () => {
-  if (config.isInteractiveMode) {
-    app.auction.auctions = [];
-    app.joinInterestGroup.joinings = [];
-    app.timeline.circlePositions = [];
-    app.timeline.circlePublisherIndices = [];
-    app.bubbles.positions = [];
-    app.bubbles.minifiedSVG = null;
-    app.timeline.currentIndex = 0;
-  }
+  app.auction.auctions = [];
+  app.joinInterestGroup.joinings = [];
+  app.timeline.circlePositions = [];
+  app.timeline.circlePublisherIndices = [];
+  app.bubbles.positions = [];
+  app.bubbles.minifiedSVG = null;
+  app.timeline.currentIndex = 0;
   bubbles.clearAndRewriteBubbles();
   app.setup();
 
@@ -48,15 +47,6 @@ app.setUpTimeLine = () => {
 
   auctions.setupAuctions();
   joinInterestGroup.setupJoinings();
-};
-app.init = async (p) => {
-  app.p = p;
-
-  app.setUpTimeLine();
-
-  if (!config.isInteractiveMode) {
-    await app.play();
-  }
 };
 
 app.setup = () => {
@@ -66,63 +56,75 @@ app.setup = () => {
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
   app.bubbles = { ...app.bubbles, ...bubbles };
+  const groups = [];
+
+  config.timeline.circles.forEach((circle) => {
+    circle.interestGroups?.forEach(() => {
+      groups.push(circle.website);
+    });
+  });
+
+  app.color = d3.scaleOrdinal(groups, d3.schemeTableau10);
 };
 
-app.interestGroupInit = (p) => {
-  app.igp = p;
-};
+app.play = (resumed = false, doNotPlay = false) => {
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.playButton.classList.add('hidden');
+    app.pauseButton.classList.remove('hidden');
+  }
 
-app.userInit = (p) => {
-  app.up = p;
-};
-
-app.play = (resumed = false) => {
-  app.playButton.classList.add('hidden');
-  app.pauseButton.classList.remove('hidden');
   app.timeline.isPaused = false;
   if (!resumed) {
-    app.setupLoop();
+    app.setupLoop(doNotPlay);
+    return;
   }
+  PromiseQueue.resume();
 };
 
 app.pause = () => {
-  app.pauseButton.classList.add('hidden');
-  app.playButton.classList.remove('hidden');
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.pauseButton.classList.add('hidden');
+    app.playButton.classList.remove('hidden');
+  }
   app.timeline.isPaused = true;
 };
 
 app.minimiseBubbleActions = () => {
   bubbles.generateBubbles(true);
-  config.bubbles.isExpanded = false;
+  app.bubbles.isExpanded = false;
   bubbles.showMinifiedBubbles();
   app.play(true);
 };
 
 app.expandBubbleActions = () => {
-  config.bubbles.isExpanded = true;
+  app.bubbles.isExpanded = true;
   bubbles.showExpandedBubbles();
   bubbles.generateBubbles(true);
   app.pause();
 };
 app.minifiedBubbleClickListener = (event, expandOverride) => {
+  const rect = app.minifiedBubbleContainer.getBoundingClientRect();
+
   const clickedInsideExpandedCircle = utils.isInsideCircle(
-    config.bubbles.expandedBubbleX,
-    config.bubbles.expandedBubbleY,
+    rect.x + app.bubbles.expandedCircleDiameter / 2,
+    rect.y + app.bubbles.expandedCircleDiameter / 2,
     event.x,
     event.y,
-    config.bubbles.expandedCircleDiameter / 2
+    app.bubbles.expandedCircleDiameter / 2
   );
 
   const clickedInsideMinifiedCircle = utils.isInsideCircle(
-    config.bubbles.minifiedBubbleX,
-    config.bubbles.minifiedBubbleY,
+    rect.x + app.bubbles.minifiedCircleDiameter / 2,
+    rect.y + app.bubbles.minifiedCircleDiameter / 2,
     event.x,
     event.y,
-    config.bubbles.minifiedCircleDiameter / 2
+    app.bubbles.minifiedCircleDiameter / 2
   );
 
   if (
-    (!config.bubbles.isExpanded && clickedInsideMinifiedCircle) ||
+    (!app.bubbles.isExpanded && clickedInsideMinifiedCircle) ||
     expandOverride
   ) {
     app.expandBubbleActions();
@@ -130,105 +132,133 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     return;
   }
 
-  if (config.bubbles.isExpanded && !clickedInsideExpandedCircle) {
+  if (app.bubbles.isExpanded && !clickedInsideExpandedCircle) {
     app.minimiseBubbleActions();
     event.stopPropagation();
     return;
   }
 };
 
-app.setupLoop = () => {
-  if (window.cancelPromise) {
-    window.cancelPromise = false;
+app.setupLoop = (doNotPlay) => {
+  try {
+    flow.setButtonsDisabilityState();
+    let currentIndex = 0;
+    PromiseQueue.nextNodeSkipIndex.push(0);
+    while (currentIndex < config.timeline.circles.length) {
+      PromiseQueue.add(() => {
+        flow.clearBelowTimelineCircles();
+        utils.markVisitedValue(app.timeline.currentIndex, true);
+        bubbles.generateBubbles();
+        bubbles.showMinifiedBubbles();
+        timeline.eraseAndRedraw();
+        timeline.renderUserIcon();
+      });
+
+      app.drawFlows(currentIndex);
+      PromiseQueue.add(() => {
+        app.bubbles.interestGroupCounts +=
+          config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ??
+          0;
+      });
+      PromiseQueue.nextNodeSkipIndex.push(PromiseQueue.queue.length);
+      PromiseQueue.add(() => {
+        app.timeline.currentIndex += 1;
+        flow.setButtonsDisabilityState();
+      });
+
+      currentIndex++;
+    }
+  } catch (error) {
+    //Silently fail.
+    // eslint-disable-next-line no-console
+    console.log(error);
   }
-
-  const loop = async () => {
-    if (
-      window.cancelPromise ||
-      app.timeline.currentIndex >= config.timeline.circles.length
-    ) {
-      return;
-    }
-
-    if (!app.timeline.isPaused) {
-      window.cancelPromiseForPreviousAndNext = false;
-      utils.disableButtons();
-
-      utils.markVisitedValue(app.timeline.currentIndex, true);
-      bubbles.showMinifiedBubbles();
-      timeline.renderUserIcon();
-
-      await app.drawFlows(app.timeline.currentIndex);
-
-      if (!window.cancelPromiseForPreviousAndNext) {
-        app.timeline.currentIndex++;
-      }
-    }
-
-    requestAnimationFrame(loop);
-    timeline.eraseAndRedraw();
-    timeline.renderUserIcon();
-  };
-
-  requestAnimationFrame(loop);
+  timeline.eraseAndRedraw();
+  timeline.renderUserIcon();
+  utils.markVisitedValue(app.timeline.currentIndex, true);
+  if (doNotPlay) {
+    return;
+  }
+  PromiseQueue.start();
 };
 
-app.drawFlows = async (index) => {
-  await joinInterestGroup.draw(index);
-  await auctions.draw(index);
+app.drawFlows = (index) => {
+  joinInterestGroup.draw(index);
+  auctions.draw(index);
 };
 
 app.minifiedBubbleKeyPressListener = (event) => {
-  if (event.key === 'Escape' && config.bubbles.isExpanded) {
+  if (event.key === 'Escape' && app.bubbles.isExpanded) {
     app.minimiseBubbleActions();
   }
 };
 
 app.handlePrevButton = () => {
-  if (config.bubbles.isExpanded || config.isInteractiveMode) {
+  if (app.bubbles.isExpanded || app.isInteractiveMode) {
     return;
   }
 
-  window.cancelPromiseForPreviousAndNext = true;
-  app.timeline.currentIndex -= 1;
-  app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
-  utils.markVisitedValue(app.timeline.currentIndex, true);
-  const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
-    app.timeline.currentIndex
-  );
+  if (app.timeline.currentIndex <= 0) {
+    return;
+  }
 
-  config.bubbles.interestGroupCounts = totalBubbles;
-  flow.clearBelowTimelineCircles();
+  app.cancelPromise = true;
+  app.timeline.isPaused = true;
+  const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
+  app.timeline.currentIndex -= 1;
+  flow.setButtonsDisabilityState();
+
+  const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
+
+  PromiseQueue.skipTo(nextIndex + 1);
+
+  utils.markVisitedValue(app.timeline.currentIndex, true);
+
+  app.p.clear();
+  app.p.background(config.canvas.background);
+
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
-  utils.disableButtons();
+  app.up.clear();
+  timeline.renderUserIcon();
 
-  if (app.timeline.isPaused) {
-    bubbles.generateBubbles();
-    bubbles.showMinifiedBubbles();
-  }
+  app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
+    app.timeline.currentIndex
+  );
 };
 
 app.handleNextButton = () => {
-  if (config.bubbles.isExpanded || config.isInteractiveMode) {
+  if (app.bubbles.isExpanded || app.isInteractiveMode) {
     return;
   }
 
-  window.cancelPromiseForPreviousAndNext = true;
+  if (app.timeline.currentIndex > config.timeline.circles.length - 1) {
+    return;
+  }
 
+  app.timeline.isPaused = true;
+  app.cancelPromise = true;
   app.timeline.currentIndex += 1;
+  flow.setButtonsDisabilityState();
+
+  const nextIndexPromiseGetter = app.timeline.currentIndex;
+  const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
+
+  PromiseQueue.skipTo(nextIndex + 1);
+
   utils.markVisitedValue(app.timeline.currentIndex, true);
-  flow.clearBelowTimelineCircles();
+
+  app.p.clear();
+  app.p.background(config.canvas.background);
+
   timeline.drawTimelineLine();
   timeline.drawTimeline(config.timeline);
-  config.bubbles.interestGroupCounts =
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
-  utils.disableButtons();
+  app.up.clear();
+  timeline.renderUserIcon();
 
-  if (app.timeline.isPaused) {
-    bubbles.generateBubbles();
-    bubbles.showMinifiedBubbles();
-  }
+  app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
+    app.timeline.currentIndex
+  );
 };
 
 app.handleControls = () => {
@@ -243,8 +273,20 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
-  app.nextButton = document.getElementById('next-div');
-  app.prevButton = document.getElementById('previous-div');
+
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.nextButton = document.getElementById('next-div');
+    app.prevButton = document.getElementById('previous-div');
+    app.prevButton.addEventListener('click', app.handlePrevButton);
+    app.nextButton.addEventListener('click', app.handleNextButton);
+  }
+
+  const minifiedBubbleContainerRect =
+    app.minifiedBubbleContainer.getBoundingClientRect();
+
+  app.bubbles.minifiedBubbleX = Math.floor(minifiedBubbleContainerRect.x);
+  app.bubbles.minifiedBubbleY = Math.floor(minifiedBubbleContainerRect.y);
 
   app.visitedSites = [];
 
@@ -254,9 +296,6 @@ app.handleControls = () => {
     'click',
     app.minifiedBubbleClickListener
   );
-
-  app.prevButton.addEventListener('click', app.handlePrevButton);
-  app.nextButton.addEventListener('click', app.handleNextButton);
 
   app.bubbleContainerDiv.addEventListener(
     'click',
@@ -268,41 +307,34 @@ app.handleControls = () => {
   app.openButton.addEventListener('click', (event) =>
     app.minifiedBubbleClickListener(event, true)
   );
-
-  app.playButton.addEventListener('click', () => {
-    app.play(true);
-  });
-  app.pauseButton.addEventListener('click', app.pause);
-  app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
-  app.intreactiveModeCheckBox.addEventListener(
-    'change',
-    app.toggleInteractiveMode
-  );
 };
 
-app.toggleInteractiveMode = () => {
-  window.cancelPromise = true;
-  config.isInteractiveMode = !config.isInteractiveMode;
+app.toggleInteractiveMode = async () => {
+  PromiseQueue.stop();
+  app.cancelPromise = true;
+  app.timeline.isPaused = true;
+  PromiseQueue.clear();
+
+  app.isInteractiveMode = !app.isInteractiveMode;
   app.timeline.currentIndex = 0;
-  config.shouldRespondToClick = true;
-  config.bubbles.interestGroupCounts = 0;
+  app.bubbles.interestGroupCounts = 0;
+  app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
+  app.shouldRespondToClick = true;
+  app.startTrackingMouse = true;
 
-  if (config.isInteractiveMode) {
-    app.prevButton.style.display = 'none';
-    app.nextButton.style.display = 'none';
-  } else {
-    app.prevButton.style.display = 'block';
-    app.nextButton.style.display = 'block';
-  }
-
+  utils.markVisitedValue(config.timeline.circles.length, false);
+  timeline.eraseAndRedraw();
+  await utils.delay(100);
   utils.setupInterestGroupCanvas(app.igp);
   utils.setupUserCanvas(app.up);
-  utils.setupMainCanvas(app.p);
-  utils.markVisitedValue(config.timeline.circles.length, false);
-
-  timeline.eraseAndRedraw();
+  utils.setupMainCanvas(app.p, true);
+  PromiseQueue.skipTo(0);
+  if (app.isInteractiveMode) {
+    return;
+  }
+  PromiseQueue.start();
 };
 
 // Write a callback function to get the value of the checkbox.
@@ -311,7 +343,8 @@ app.toggleMultSeller = (event) => {
 };
 
 // Define the sketch
-const sketch = (p) => {
+export const sketch = (p) => {
+  app.handleControls();
   p.setup = () => {
     utils.setupMainCanvas(p);
   };
@@ -327,25 +360,86 @@ const sketch = (p) => {
 };
 
 // Define the sketch
-const interestGroupSketch = (p) => {
+export const interestGroupSketch = (p) => {
   p.setup = () => {
     utils.setupInterestGroupCanvas(p);
+  };
+
+  p.updateWithProps = (props) => {
+    if (props.onClick) {
+      app.igp.igClick = props.onClick;
+      app.bubbles.expandedBubbleX = props.expandedBubbleX;
+      app.bubbles.expandedBubbleY = props.expandedBubbleY;
+      app.bubbles.expandedCircleDiameter = props.expandedBubbleWidth;
+      const radius = app.bubbles.expandedCircleDiameter / 2;
+      const totalRadius = radius + 24;
+      // 335 is the angle where the close icon should be visible.
+      const angle = (305 * Math.PI) / 180;
+      // 335 is the radius + the size of icon so that icon is attached to the circle.
+      const x =
+        totalRadius * Math.cos(angle) + app.bubbles.expandedBubbleX + radius;
+      const y =
+        totalRadius * Math.sin(angle) + app.bubbles.expandedBubbleY + radius;
+
+      app.closeButton.style.left = `${x}px`;
+      app.closeButton.style.top = `${y}px`;
+      const expandedSVG = document.getElementById('expandedSVG');
+
+      if (expandedSVG) {
+        bubbles.showExpandedBubbles();
+      }
+    }
   };
 };
 
 // Define the sketch
-const userSketch = (p) => {
+export const userSketch = (p) => {
   p.setup = () => {
     utils.setupUserCanvas(p);
   };
 };
 
-app.handleControls();
-// eslint-disable-next-line no-new
-new p5(sketch);
+app.reset = async () => {
+  PromiseQueue.stop();
+  app.cancelPromise = true;
+  app.timeline.isPaused = true;
+  PromiseQueue.clear();
 
-// eslint-disable-next-line no-new
-new p5(interestGroupSketch);
+  app.timeline.currentIndex = 0;
+  app.bubbles.interestGroupCounts = 0;
+  app.bubbles.minifiedSVG = null;
+  app.bubbles.expandedSVG = null;
+  app.bubbles.positions = [];
 
-// eslint-disable-next-line no-new
-new p5(userSketch);
+  utils.markVisitedValue(config.timeline.circles.length, false);
+  timeline.eraseAndRedraw();
+  await utils.delay(1000);
+  utils.setupInterestGroupCanvas(app.igp);
+  utils.setupUserCanvas(app.up);
+  utils.setupMainCanvas(app.p);
+
+  app.timeline.isPaused = true;
+  app.cancelPromise = false;
+  PromiseQueue.skipTo(0);
+
+  app.timeline.isPaused = false;
+  app.shouldRespondToClick = true;
+  app.startTrackingMouse = true;
+};
+
+app.createCanvas = () => {
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.handleControls();
+    // eslint-disable-next-line no-new
+    new p5(sketch);
+
+    // eslint-disable-next-line no-new
+    new p5(interestGroupSketch);
+    // eslint-disable-next-line no-new
+    new p5(userSketch);
+  }
+};
+app.createCanvas();
+
+export { app };
