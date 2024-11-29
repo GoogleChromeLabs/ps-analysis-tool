@@ -239,7 +239,7 @@ timeline.drawCircle = (index, completed = false) => {
       app.up.text(
         circles[app.timeline.currentIndex].visitedIndex ?? '',
         position.x - 5,
-        position.y - 5 + diameter / 2
+        position.y + diameter / 2
       );
     }
 
