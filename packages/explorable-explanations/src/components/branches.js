@@ -40,6 +40,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
   progress = 0;
   renderedBranchIds = [];
   endpoints = [];
+  const p = app.p;
 
   const y2 = y1 + 50;
   spacing = 300; // Calculate spacing based on canvas width
@@ -53,6 +54,45 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
+      if (app.isRevisitingNodeInInteractiveMode) {
+        const branchXEndpoint =
+          currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
+
+        branches.forEach(({ id, type }, index) => {
+          const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
+          const y = y2 - 9;
+          p.push();
+          p.stroke(0);
+          p.line(x, y, branchXEndpoint, y);
+          p.pop();
+
+          if (type === 'datetime') {
+            p.push();
+            p.stroke(0);
+            p.line(x, y, x, y + 20);
+            p.pop();
+
+            const endpoint = drawDateTimeBranch(x, y, branches[index]);
+            endpoints.push(endpoint);
+
+            renderedBranchIds.push(id);
+          }
+
+          if (type === 'box') {
+            p.push();
+            p.stroke(0);
+            p.line(x, y, x, y + 20);
+            p.pop();
+
+            const endpoint = drawBoxesBranch(x, y, branches[index]);
+            endpoints.push(endpoint);
+
+            renderedBranchIds.push(id);
+          }
+        });
+        resolve(endpoints);
+        return;
+      }
       if (app.cancelPromise) {
         resolve(endpoints);
         return;
@@ -74,10 +114,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
       );
 
       // Continue animation until progress completes
-      if (
-        progress < (branches.length - 1) * spacing ||
-        app.isRevisitingNodeInInteractiveMode
-      ) {
+      if (progress < (branches.length - 1) * spacing) {
         progress += ANIMATION_SPEED;
         requestAnimationFrame(animate);
       }
@@ -115,6 +152,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
       const branchX = x + i * spacing;
       const branch = branches[i];
       let endpoint;
+
       if (app.cancelPromise) {
         resolve();
         return;
@@ -149,10 +187,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
       return;
     }
     // Resolve if the progress exceeds the required length
-    if (
-      progress >= (branches.length - 1) * spacing ||
-      app.isRevisitingNodeInInteractiveMode
-    ) {
+    if (progress >= (branches.length - 1) * spacing) {
       resolve();
       return;
     }
@@ -161,6 +196,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
 
 const drawDateTimeBranch = (x, y, branch) => {
   const p = app.p;
+
   p.push();
   p.noStroke();
   p.fill(0);
