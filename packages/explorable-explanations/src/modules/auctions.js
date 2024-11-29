@@ -249,7 +249,7 @@ auction.setUp = (index) => {
   const boxes = [
     {
       title: 'Load Interest Group',
-      extras: {
+      extraProps: {
         showBarrageAnimation: true,
       },
     },
@@ -260,7 +260,7 @@ auction.setUp = (index) => {
     {
       title: 'generateBid()',
       description: '(from DSPs on dsp.js)',
-      extras: {
+      extraProps: {
         showRippleEffect: true,
       },
     },
@@ -288,7 +288,7 @@ auction.setUp = (index) => {
     },
   ];
 
-  boxes.forEach(({ title, description, extras = {} }) => {
+  boxes.forEach(({ title, description, extraProps = {} }) => {
     if (title === 'DSP 1') {
       steps.push({
         component: ProgressLine,
@@ -399,7 +399,7 @@ auction.setUp = (index) => {
       props: {
         title,
         description,
-        ...extras,
+        ...extraProps,
         x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates?.y + 10,
       },
