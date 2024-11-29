@@ -183,20 +183,20 @@ utils.setupMainCanvas = async (p, doNotPlay = false) => {
   app.p = p;
 
   canvas.mouseOut(() => {
-    if (config.isInteractiveMode) {
-      config.startTrackingMouse = false;
+    if (app.isInteractiveMode) {
+      app.startTrackingMouse = false;
     }
   });
 
   canvas.mouseOver(() => {
-    if (config.isInteractiveMode) {
-      config.startTrackingMouse = true;
+    if (app.isInteractiveMode) {
+      app.startTrackingMouse = true;
     }
   });
 
   app.setUpTimeLine();
 
-  if (!config.isInteractiveMode) {
+  if (!app.isInteractiveMode) {
     await app.play(false, doNotPlay);
   }
 };
@@ -210,16 +210,16 @@ utils.setupInterestGroupCanvas = (p) => {
   p.textSize(config.canvas.fontSize);
   // eslint-disable-next-line no-undef
   if (process.env.NODE_ENV !== 'production') {
-    config.bubbles.minifiedBubbleX = 35;
-    config.bubbles.minifiedBubbleY = 35;
+    app.bubbles.minifiedBubbleX = 35;
+    app.bubbles.minifiedBubbleY = 35;
 
-    config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
-    config.bubbles.expandedBubbleY = 0;
+    app.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
+    app.bubbles.expandedBubbleY = 0;
 
     // 335 is the angle where the close icon should be visible.
     const angle = (305 * Math.PI) / 180;
     // 335 is the radius + the size of icon so that icon is attached to the circle.
-    const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
+    const x = 335 * Math.cos(angle) + app.bubbles.expandedBubbleX;
     const y = 335 * Math.sin(angle) + 320;
 
     app.closeButton.style.left = `${x}px`;
@@ -228,20 +228,20 @@ utils.setupInterestGroupCanvas = (p) => {
     document.styleSheets[0].cssRules.forEach((rules, index) => {
       if (rules.selectorText === '.minified-bubble-container.expanded') {
         document.styleSheets[0].cssRules[index].style.left = `${
-          config.bubbles.expandedBubbleX - 320
+          app.bubbles.expandedBubbleX - 320
         }px`;
 
         document.styleSheets[0].cssRules[
           index
-        ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
+        ].style.width = `${app.bubbles.expandedCircleDiameter}px`;
         document.styleSheets[0].cssRules[
           index
-        ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
+        ].style.height = `${app.bubbles.expandedCircleDiameter}px`;
       }
 
       if (rules.selectorText === '.minified-bubble-container') {
         document.styleSheets[0].cssRules[index].style.top = `${
-          config.bubbles.minifiedBubbleY - 25
+          app.bubbles.minifiedBubbleY - 25
         }px`;
       }
     });
@@ -322,7 +322,7 @@ utils.setButtonsDisabilityState = () => {
     return;
   }
 
-  if (!config.isInteractiveMode) {
+  if (!app.isInteractiveMode) {
     document.getElementById('prevButton').disabled =
       app.timeline.currentIndex > 0 ? false : true;
 

@@ -51,7 +51,7 @@ const ProgressLine = ({
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise) {
+      if (app.cancelPromise) {
         resolve();
         return;
       }
@@ -122,7 +122,7 @@ const ProgressLine = ({
           throw new Error(`Invalid direction: ${direction}`);
       }
 
-      if (window.cancelPromise) {
+      if (app.cancelPromise) {
         resolve();
         return;
       }

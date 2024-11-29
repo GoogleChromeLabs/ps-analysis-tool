@@ -124,7 +124,7 @@ bubbles.barrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise) {
+      if (app.cancelPromise) {
         resolve();
         return;
       }
@@ -253,7 +253,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
   await new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise) {
+      if (app.cancelPromise) {
         resolve();
         return;
       }
@@ -289,9 +289,9 @@ bubbles.reverseBarrageAnimation = async (index) => {
         positionsOfCircles.every((circle) => {
           return (
             Math.abs(circle.x - circle.target.x) <
-              config.bubbles.minifiedCircleDiameter / 2 &&
+              app.bubbles.minifiedCircleDiameter / 2 &&
             Math.abs(circle.y - circle.target.y) <
-              config.bubbles.minifiedCircleDiameter / 2
+              app.bubbles.minifiedCircleDiameter / 2
           );
         })
       ) {
@@ -322,8 +322,8 @@ bubbles.showExpandedBubbles = () => {
     value: (d) => d.value,
     groupFn: (d) => d.group,
     title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: config.bubbles.expandedCircleDiameter,
-    height: config.bubbles.expandedCircleDiameter,
+    width: app.bubbles.expandedCircleDiameter,
+    height: app.bubbles.expandedCircleDiameter,
     margin: 4,
   });
 
@@ -349,11 +349,11 @@ bubbles.showMinifiedBubbles = () => {
     value: (d) => d.value,
     groupFn: (d) => d.group,
     title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: config.bubbles.minifiedCircleDiameter,
-    height: config.bubbles.minifiedCircleDiameter,
+    width: app.bubbles.minifiedCircleDiameter,
+    height: app.bubbles.minifiedCircleDiameter,
   });
 
-  if (config.bubbles.isExpanded) {
+  if (app.bubbles.isExpanded) {
     return;
   }
 
@@ -366,7 +366,7 @@ bubbles.showMinifiedBubbles = () => {
 
   app.minifiedBubbleContainer.style.backgroundColor = 'white';
 
-  app.countDisplay.innerHTML = config.bubbles.interestGroupCounts;
+  app.countDisplay.innerHTML = app.bubbles.interestGroupCounts;
 
   if (app.bubbles.minifiedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.minifiedSVG);
@@ -436,14 +436,14 @@ bubbles.bubbleChart = (
 
   const svg = d3
     .create('svg')
-    .attr('id', !config.bubbles.isExpanded ? 'minimisedSVG' : 'expandedSVG')
+    .attr('id', !app.bubbles.isExpanded ? 'minimisedSVG' : 'expandedSVG')
     .attr('width', width)
     .attr('height', height)
     .attr('viewBox', [-marginLeft, -marginTop, width, height])
     .attr(
       'style',
       `max-width: 100%; height: auto; height: intrinsic;${
-        !config.bubbles.isExpanded ? 'pointer-events: none;' : ''
+        !app.bubbles.isExpanded ? 'pointer-events: none;' : ''
       }`
     )
     .attr('fill', 'currentColor')
@@ -455,10 +455,7 @@ bubbles.bubbleChart = (
     .selectAll('a')
     .data(root.leaves())
     .join('a')
-    .attr(
-      'style',
-      `${!config.bubbles.isExpanded ? 'pointer-events: none;' : ''}`
-    )
+    .attr('style', `${!app.bubbles.isExpanded ? 'pointer-events: none;' : ''}`)
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
   const eventHandler = (event) => {
@@ -474,10 +471,7 @@ bubbles.bubbleChart = (
     .attr('stroke-width', strokeWidth)
     .attr('stroke-opacity', strokeOpacity)
     .attr('class', 'svg overflowing-text circle-svg')
-    .attr(
-      'style',
-      `${!config.bubbles.isExpanded ? 'pointer-events: none;' : ''}`
-    )
+    .attr('style', `${!app.bubbles.isExpanded ? 'pointer-events: none;' : ''}`)
     .attr(
       'fill',
       groups
@@ -488,7 +482,7 @@ bubbles.bubbleChart = (
         ? 'none'
         : fill
     )
-    .on('click', !config.bubbles.isExpanded ? null : eventHandler)
+    .on('click', !app.bubbles.isExpanded ? null : eventHandler)
     .attr('fill-opacity', fillOpacity)
     .attr('r', (d) => {
       return d.r;
@@ -505,7 +499,7 @@ bubbles.bubbleChart = (
       .attr('class', 'svg overflowing-text')
       .attr('r', (d) => d.r);
 
-    if (config.bubbles.isExpanded) {
+    if (app.bubbles.isExpanded) {
       if (titles) {
         leaf.append('title').text((d) => titles[d.data]);
       }
@@ -537,15 +531,15 @@ bubbles.clearAndRewriteBubbles = () => {
 
   app.minifiedBubbleContainer.innerHTML = '';
 
-  if (!config.bubbles.isExpanded) {
-    app.countDisplay.innerHTML = config.bubbles.interestGroupCounts;
+  if (!app.bubbles.isExpanded) {
+    app.countDisplay.innerHTML = app.bubbles.interestGroupCounts;
     app.minifiedBubbleContainer.appendChild(app.countDisplay);
   }
 };
 
 bubbles.calculateTotalBubblesForAnimation = (index) => {
   let bubblesCount = 0;
-  if (config.isInteractiveMode) {
+  if (app.isInteractiveMode) {
     config.timeline.circles.forEach((circle) => {
       if (circle.visited) {
         bubblesCount += circle.igGroupsCount ?? 0;

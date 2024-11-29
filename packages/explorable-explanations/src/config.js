@@ -121,24 +121,6 @@ const config = {
     speed: 1,
     rippled: false,
   },
-  bubbles: {
-    minifiedBubbleX: 0,
-    minifiedBubbleY: 0,
-    isExpanded: false,
-    expandedCircleDiameter: 640,
-    minifiedCircleDiameter: 50,
-    interestGroupCounts: 0,
-    expandedBubbleX: 0,
-    expandedBubbleY: 0,
-  },
-  cancelPromise: false,
-  isInteractiveMode: false,
-  mouseX: 0,
-  mouseY: 0,
-  nextNodeIndexTracker: 1,
-  prevNodeIndexTracker: 0,
-  shouldRespondToClick: true,
-  startTrackingMouse: true,
 };
 
 export default config;

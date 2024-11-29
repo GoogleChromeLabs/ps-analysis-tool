@@ -86,9 +86,9 @@ class PromiseQueue {
         // eslint-disable-next-line no-await-in-loop
         await current();
         this.currentPromiseIndex++;
-        if (window.cancelPromise) {
+        if (app.cancelPromise) {
           flow.clearBelowTimelineCircles();
-          window.cancelPromise = false;
+          app.cancelPromise = false;
           app.timeline.isPaused = false;
         }
       } catch (error) {

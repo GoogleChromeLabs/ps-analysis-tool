@@ -53,7 +53,7 @@ const Branches = async ({ x1, y1, branches, currIndex }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (window.cancelPromise) {
+      if (app.cancelPromise) {
         resolve(endpoints);
         return;
       }
@@ -94,7 +94,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
   p.strokeWeight(1);
   p.pop();
 
-  if (window.cancelPromise) {
+  if (app.cancelPromise) {
     return new Promise((resolve) => resolve());
   }
 
@@ -102,7 +102,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
     // Draw the horizontal line
     p.line(x, y, x + progress, y);
 
-    if (window.cancelPromise) {
+    if (app.cancelPromise) {
       resolve();
       return;
     }
@@ -112,7 +112,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
       const branchX = x + i * spacing;
       const branch = branches[i];
       let endpoint;
-      if (window.cancelPromise) {
+      if (app.cancelPromise) {
         resolve();
         return;
       }
@@ -141,7 +141,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
         renderedBranchIds.push(branch.id);
       }
     }
-    if (window.cancelPromise) {
+    if (app.cancelPromise) {
       resolve();
       return;
     }

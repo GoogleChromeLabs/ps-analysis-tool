@@ -178,7 +178,7 @@ joinInterestGroup.draw = (index) => {
   PromiseQueue.add(async () => {
     await bubbles.reverseBarrageAnimation(index);
 
-    if (config.bubbles.isExpanded) {
+    if (app.bubbles.isExpanded) {
       bubbles.showExpandedBubbles();
     } else {
       bubbles.showMinifiedBubbles();
