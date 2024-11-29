@@ -18,6 +18,7 @@
  */
 import flow from '../modules/flow';
 import app from '../app';
+
 class PromiseQueue {
   constructor() {
     this.queue = [];
@@ -30,8 +31,8 @@ class PromiseQueue {
   }
 
   // Add a promise-returning function to the queue
-  add(promiseFn) {
-    this.queue.push(promiseFn);
+  add(promiseFunction) {
+    this.queue.push(promiseFunction);
   }
 
   // Start processing the queue

@@ -22,12 +22,19 @@ import app from '../app';
 // @todo To be broken down into multipe functions.
 const utils = {};
 
+/**
+ * Creates a request-based interval function similar to `setInterval`,
+ * but uses `requestAnimationFrame` for better synchronization with the browser's refresh rate.
+ * @param fn {Function} callback - The function to execute at each interval.
+ * @param {number} delay - The interval duration in milliseconds.
+ * @returns {object} An object with an `id` property for managing the interval.
+ */
 utils.requestInterval = (fn, delay) => {
   let start = performance.now();
   const handle = { id: null };
 
   /**
-   *
+   * Loop function executed on each animation frame.
    */
   function loop() {
     const current = performance.now();
@@ -50,25 +57,26 @@ utils.clearRequestInterval = (handle) => {
 };
 
 utils.drawArrow = (size, x, y, direction = 'right') => {
-  let _x, _y;
+  // Determine offset based on direction
+  const directionOffsets = {
+    right: { _x: x - 1, _y: y },
+    left: { _x: x + 1, _y: y },
+    down: { _x: x, _y: y - 1 },
+    up: { _x: x, _y: y + 1 },
+  };
 
-  if (direction === 'right') {
-    _x = x - 1;
-    _y = y;
-  } else if (direction === 'left') {
-    _x = x + 1;
-    _y = y;
-  } else if (direction === 'down') {
-    _x = x;
-    _y = y - 1;
-  } else if (direction === 'up') {
-    _x = x;
-    _y = y + 1;
-  }
+  const offset = directionOffsets[direction] || directionOffsets['right'];
 
-  // Clear previous one.
-  utils.triangle(size + 2, _x, _y, direction, config.canvas.background);
+  // Clear the previous arrow
+  utils.triangle(
+    size + 2,
+    offset._x,
+    offset._y,
+    direction,
+    config.canvas.background
+  );
 
+  // Draw the new arrow
   utils.triangle(size, x, y, direction, 'black');
 };
 

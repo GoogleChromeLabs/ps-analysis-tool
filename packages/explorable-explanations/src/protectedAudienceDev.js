@@ -18,6 +18,7 @@
  */
 import p5 from 'p5';
 import * as d3 from 'd3';
+
 /**
  * Internal dependencies.
  */

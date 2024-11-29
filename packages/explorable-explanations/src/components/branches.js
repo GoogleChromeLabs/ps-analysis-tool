@@ -28,7 +28,7 @@ const EXPAND_ICON_SIZE = 20;
 
 let spacing, progress, renderedBranchIds, endpoints;
 
-const Branches = async ({ x1, y1, branches, currIndex }) => {
+const Branches = async ({ x1, y1, branches, currentIndex }) => {
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
 
@@ -67,7 +67,7 @@ const Branches = async ({ x1, y1, branches, currIndex }) => {
       utils.wipeAndRecreateInterestCanvas();
 
       // Draw the animated timeline
-      drawAnimatedTimeline(currIndex * LEFT_MARGIN, y2 - 9, branches).then(
+      drawAnimatedTimeline(currentIndex * LEFT_MARGIN, y2 - 9, branches).then(
         () => {
           resolve(endpoints);
         }
