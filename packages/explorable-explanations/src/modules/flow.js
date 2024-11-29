@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import app from '../app.js';
+import app from '../app';
 import config from '../config.js';
 
 /**
@@ -73,6 +73,53 @@ flow.clearBelowTimelineCircles = () => {
   p.fill(config.canvas.background);
   p.rect(0, y, p.width, p.height - y);
   p.pop();
+};
+
+/**
+ * Enables and disables the button opacity and cursor pointer.
+ */
+flow.setButtonsDisabilityState = () => {
+  const prevButton = document.getElementById('prevButton') ?? app.prevButton;
+  const nextButton = document.getElementById('nextButton') ?? app.nextButton;
+  // Exit early if buttons are not found
+  if (!prevButton || !nextButton) {
+    return;
+  }
+
+  const { currentIndex } = app.timeline;
+  const { circles } = config.timeline;
+  const isInteractiveMode = config.isInteractiveMode;
+
+  // Helper function to set button state
+  const setButtonState = (button, isDisabled) => {
+    button.disabled = isDisabled;
+    button.classList.toggle('disabled:pointer-events-none', isDisabled);
+  };
+
+  if (!isInteractiveMode) {
+    setButtonState(prevButton, currentIndex <= 0);
+    setButtonState(nextButton, currentIndex >= circles.length - 1);
+  }
+
+  // Additional state when the currentIndex exceeds the total circles
+  if (currentIndex >= circles.length) {
+    setButtonState(prevButton, true);
+    setButtonState(nextButton, true);
+  }
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.prevButton.style.cursor =
+      app.timeline.currentIndex > 0 ? 'pointer' : 'default';
+    app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
+    app.nextButton.disabled =
+      app.timeline.currentIndex === config.timeline.circles.length - 1
+        ? true
+        : false;
+    app.nextButton.style.cursor =
+      app.timeline.currentIndex >= config.timeline.circles.length - 1
+        ? 'default'
+        : 'pointer';
+  }
 };
 
 export default flow;
