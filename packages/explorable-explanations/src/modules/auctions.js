@@ -65,7 +65,7 @@ auction.setUp = (index) => {
     props: {
       x1: x,
       y1: y,
-      currIndex: index,
+      currentIndex: index,
       branches: [
         {
           title: 'adunit-code',
@@ -95,7 +95,7 @@ auction.setUp = (index) => {
     props: {
       x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => app.auction.nextTipCoordinates?.y + 40,
-      currIndex: index,
+      currentIndex: index,
       branches: [
         {
           date: '2024-10-02',
