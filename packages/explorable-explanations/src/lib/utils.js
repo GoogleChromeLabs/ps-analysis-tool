@@ -352,7 +352,7 @@ utils.setButtonsDisabilityState = () => {
     setButtonState(nextButton, true);
   }
 };
-
+// This is only called in the standalone canvas.
 utils.disableButtons = () => {
   app.prevButton.style.cursor =
     app.timeline.currentIndex > 0 ? 'pointer' : 'default';
