@@ -58,7 +58,11 @@ const Auctions = () => {
 
   useEffect(() => {
     if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
-      setSidebarData({});
+      setSidebarData((prev) => {
+        prev.adunits.children = {};
+
+        return { ...prev };
+      });
     }
   }, [auctionEvents]);
 
