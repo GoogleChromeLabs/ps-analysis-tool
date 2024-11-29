@@ -141,7 +141,7 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 
 app.setupLoop = (doNotPlay) => {
   try {
-    utils.setButtonsDisabilityState();
+    flow.setButtonsDisabilityState();
     let currentIndex = 0;
     PromiseQueue.nextNodeSkipIndex.push(0);
     while (currentIndex < config.timeline.circles.length) {
@@ -163,7 +163,7 @@ app.setupLoop = (doNotPlay) => {
       PromiseQueue.nextNodeSkipIndex.push(PromiseQueue.queue.length);
       PromiseQueue.add(() => {
         app.timeline.currentIndex += 1;
-        utils.setButtonsDisabilityState();
+        flow.setButtonsDisabilityState();
       });
 
       currentIndex++;
@@ -206,7 +206,7 @@ app.handlePrevButton = () => {
   app.timeline.isPaused = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
-  utils.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState();
 
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
 
@@ -239,7 +239,7 @@ app.handleNextButton = () => {
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
-  utils.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState();
 
   const nextIndexPromiseGetter = app.timeline.currentIndex;
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
