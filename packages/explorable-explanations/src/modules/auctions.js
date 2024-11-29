@@ -249,6 +249,9 @@ auction.setUp = (index) => {
   const boxes = [
     {
       title: 'Load Interest Group',
+      extras: {
+        showBarrageAnimation: true,
+      },
     },
     {
       title: 'Key/Value Trusted',
@@ -257,6 +260,9 @@ auction.setUp = (index) => {
     {
       title: 'generateBid()',
       description: '(from DSPs on dsp.js)',
+      extras: {
+        showRippleEffect: true,
+      },
     },
     {
       title: 'DSP 1',
@@ -282,7 +288,7 @@ auction.setUp = (index) => {
     },
   ];
 
-  boxes.forEach(({ title, description }) => {
+  boxes.forEach(({ title, description, extras = {} }) => {
     if (title === 'DSP 1') {
       steps.push({
         component: ProgressLine,
@@ -393,6 +399,7 @@ auction.setUp = (index) => {
       props: {
         title,
         description,
+        ...extras,
         x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates?.y + 10,
       },
@@ -454,14 +461,14 @@ auction.draw = (index) => {
 
       const delay = component === Box ? 1000 : 0;
 
-      if (props?.title === 'Load Interest Group') {
+      if (props?.showBarrageAnimation) {
         await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
         await utils.delay(500); // eslint-disable-line no-await-in-loop
 
         utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
       }
 
-      if (props?.title === 'generateBid()') {
+      if (props?.showRippleEffect) {
         const x = props.x();
         const y = props.y();
 
