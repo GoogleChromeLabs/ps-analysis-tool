@@ -231,7 +231,7 @@ timeline.drawCircle = (index, completed = false) => {
 };
 
 timeline.renderUserIcon = () => {
-  const { mouseX, mouseY } = config;
+  const { mouseX, mouseY } = app;
   const circlePosition =
     app.isInteractiveMode && app.shouldRespondToClick
       ? { x: mouseX, y: mouseY }

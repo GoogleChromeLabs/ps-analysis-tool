@@ -70,7 +70,9 @@ const devTools = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      IS_RUNNING_STANDALONE: false,
+      'process.env': {
+        IS_RUNNING_STANDALONE: false,
+      },
     }),
     new WebpackBar({
       name: 'DevTools',
