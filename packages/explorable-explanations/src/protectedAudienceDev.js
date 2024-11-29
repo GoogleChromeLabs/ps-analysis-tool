@@ -86,13 +86,13 @@ app.pause = () => {
 
 app.minimiseBubbleActions = () => {
   bubbles.generateBubbles(true);
-  config.bubbles.isExpanded = false;
+  app.bubbles.isExpanded = false;
   bubbles.showMinifiedBubbles();
   app.play(true);
 };
 
 app.expandBubbleActions = () => {
-  config.bubbles.isExpanded = true;
+  app.bubbles.isExpanded = true;
   bubbles.showExpandedBubbles();
   bubbles.generateBubbles(true);
   app.pause();
@@ -101,23 +101,23 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
   const rect = app.minifiedBubbleContainer.getBoundingClientRect();
 
   const clickedInsideExpandedCircle = utils.isInsideCircle(
-    rect.x + config.bubbles.expandedCircleDiameter / 2,
-    rect.y + config.bubbles.expandedCircleDiameter / 2,
+    rect.x + app.bubbles.expandedCircleDiameter / 2,
+    rect.y + app.bubbles.expandedCircleDiameter / 2,
     event.x,
     event.y,
-    config.bubbles.expandedCircleDiameter / 2
+    app.bubbles.expandedCircleDiameter / 2
   );
 
   const clickedInsideMinifiedCircle = utils.isInsideCircle(
-    rect.x + config.bubbles.minifiedCircleDiameter / 2,
-    rect.y + config.bubbles.minifiedCircleDiameter / 2,
+    rect.x + app.bubbles.minifiedCircleDiameter / 2,
+    rect.y + app.bubbles.minifiedCircleDiameter / 2,
     event.x,
     event.y,
-    config.bubbles.minifiedCircleDiameter / 2
+    app.bubbles.minifiedCircleDiameter / 2
   );
 
   if (
-    (!config.bubbles.isExpanded && clickedInsideMinifiedCircle) ||
+    (!app.bubbles.isExpanded && clickedInsideMinifiedCircle) ||
     expandOverride
   ) {
     app.expandBubbleActions();
@@ -125,7 +125,7 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     return;
   }
 
-  if (config.bubbles.isExpanded && !clickedInsideExpandedCircle) {
+  if (app.bubbles.isExpanded && !clickedInsideExpandedCircle) {
     app.minimiseBubbleActions();
     event.stopPropagation();
     return;
@@ -149,7 +149,7 @@ app.setupLoop = (doNotPlay) => {
 
       app.drawFlows(currentIndex);
       PromiseQueue.add(() => {
-        config.bubbles.interestGroupCounts +=
+        app.bubbles.interestGroupCounts +=
           config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ??
           0;
       });
@@ -181,13 +181,13 @@ app.drawFlows = (index) => {
 };
 
 app.minifiedBubbleKeyPressListener = (event) => {
-  if (event.key === 'Escape' && config.bubbles.isExpanded) {
+  if (event.key === 'Escape' && app.bubbles.isExpanded) {
     app.minimiseBubbleActions();
   }
 };
 
 app.handlePrevButton = () => {
-  if (config.bubbles.isExpanded || config.isInteractiveMode) {
+  if (app.bubbles.isExpanded || app.isInteractiveMode) {
     return;
   }
 
@@ -195,7 +195,7 @@ app.handlePrevButton = () => {
     return;
   }
 
-  window.cancelPromise = true;
+  app.cancelPromise = true;
   app.timeline.isPaused = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
@@ -217,13 +217,14 @@ app.handlePrevButton = () => {
   app.up.clear();
   timeline.renderUserIcon();
 
-  config.bubbles.interestGroupCounts =
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+  app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
+    app.timeline.currentIndex
+  );
   bubbles.showMinifiedBubbles();
 };
 
 app.handleNextButton = () => {
-  if (config.bubbles.isExpanded || config.isInteractiveMode) {
+  if (app.bubbles.isExpanded || app.isInteractiveMode) {
     return;
   }
 
@@ -232,7 +233,7 @@ app.handleNextButton = () => {
   }
 
   app.timeline.isPaused = true;
-  window.cancelPromise = true;
+  app.cancelPromise = true;
   app.timeline.currentIndex += 1;
   utils.setButtonsDisabilityState();
   utils.disableButtons();
@@ -251,8 +252,9 @@ app.handleNextButton = () => {
   app.up.clear();
   timeline.renderUserIcon();
 
-  config.bubbles.interestGroupCounts =
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex);
+  app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
+    app.timeline.currentIndex
+  );
 };
 
 app.handleControls = () => {
@@ -308,14 +310,14 @@ app.toggleInteractiveMode = async () => {
   window.cancelPromise = true;
   app.timeline.isPaused = true;
 
-  config.isInteractiveMode = !config.isInteractiveMode;
+  app.isInteractiveMode = !app.isInteractiveMode;
   app.timeline.currentIndex = 0;
-  config.bubbles.interestGroupCounts = 0;
+  app.bubbles.interestGroupCounts = 0;
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
-  config.shouldRespondToClick = true;
-  config.startTrackingMouse = true;
+  app.shouldRespondToClick = true;
+  app.startTrackingMouse = true;
 
   if (config.isInteractiveMode) {
     app.prevButton.style.disabled = false;
@@ -376,12 +378,12 @@ export const userSketch = (p) => {
 
 app.reset = async () => {
   PromiseQueue.stop();
-  window.cancelPromise = true;
+  app.cancelPromise = true;
   app.timeline.isPaused = true;
   PromiseQueue.clear();
 
   app.timeline.currentIndex = 0;
-  config.bubbles.interestGroupCounts = 0;
+  app.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
   app.bubbles.positions = [];
@@ -394,12 +396,12 @@ app.reset = async () => {
   utils.setupMainCanvas(app.p);
 
   app.timeline.isPaused = true;
-  window.cancelPromise = false;
+  app.cancelPromise = false;
   PromiseQueue.skipTo(0);
 
   app.timeline.isPaused = false;
-  config.shouldRespondToClick = true;
-  config.startTrackingMouse = true;
+  app.shouldRespondToClick = true;
+  app.startTrackingMouse = true;
 };
 
 app.handleControls();

@@ -330,7 +330,7 @@ utils.setButtonsDisabilityState = () => {
     return;
   }
 
-  if (!config.isInteractiveMode) {
+  if (!app.isInteractiveMode) {
     document.getElementById('prevButton').disabled =
       app.timeline.currentIndex > 0 ? false : true;
 
