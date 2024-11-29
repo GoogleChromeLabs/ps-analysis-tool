@@ -99,8 +99,8 @@ timeline.init = () => {
             config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
           config.timeline.circles[clickedIndex].visited = true;
           config.timeline.circles[clickedIndex].visitedIndex =
-            config.visitedIndexes;
-          config.visitedIndexes += 1;
+            app.visitedIndexes;
+          app.visitedIndexes += 1;
           bubbles.showMinifiedBubbles();
           app.shouldRespondToClick = true;
           utils.wipeAndRecreateUserCanvas();
