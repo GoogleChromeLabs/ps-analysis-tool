@@ -68,7 +68,7 @@ const ReceivedBidsTable = ({
     setStorage: actions.setStorage,
   }));
 
-  const auctionsTabData = JSON.parse(storage[3] || '{}');
+  const auctionsTabData = JSON.parse(storage[2] || '{}');
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -206,7 +206,7 @@ const ReceivedBidsTable = ({
 
   useEffect(() => {
     return () => {
-      setStorage('', 3);
+      setStorage('', 2);
     };
   }, [setStorage]);
 
