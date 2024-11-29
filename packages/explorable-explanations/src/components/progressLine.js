@@ -33,6 +33,7 @@ const ProgressLine = ({
   const height = config.flow.lineHeight - ARROW_SIZE;
   const incrementBy = 1; // Adjust to control speed
   const p = app.p;
+  const index = app.timeline.currentIndex;
 
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
@@ -50,6 +51,7 @@ const ProgressLine = ({
   };
 
   return new Promise((resolve) => {
+    // eslint-disable-next-line complexity
     const animate = () => {
       if (app.cancelPromise) {
         resolve();
@@ -69,7 +71,11 @@ const ProgressLine = ({
       switch (direction) {
         case 'right':
           currentX += incrementBy;
-          if (currentX - x1 > width) {
+          if (
+            currentX - x1 > width ||
+            (app.isInteractiveMode &&
+              config.timeline.circles[index].visited === true)
+          ) {
             resolve({ x: currentX, y: y2 });
             return;
           }
@@ -79,7 +85,11 @@ const ProgressLine = ({
 
         case 'left':
           targetX -= incrementBy;
-          if (x2 - targetX > width) {
+          if (
+            x2 - targetX > width ||
+            (app.isInteractiveMode &&
+              config.timeline.circles[index].visited === true)
+          ) {
             utils.drawText(text, targetX + width / 2, y1 + height / 2);
             resolve({ x: targetX, y: y1 + 10 });
             return;
@@ -90,7 +100,11 @@ const ProgressLine = ({
 
         case 'down':
           currentY += incrementBy;
-          if (currentY - y1 > height) {
+          if (
+            currentY - y1 > height ||
+            (app.isInteractiveMode &&
+              config.timeline.circles[index].visited === true)
+          ) {
             utils.drawText(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
@@ -105,7 +119,11 @@ const ProgressLine = ({
 
         case 'up':
           currentY -= incrementBy;
-          if (y1 - currentY > height) {
+          if (
+            y1 - currentY > height ||
+            (app.isInteractiveMode &&
+              config.timeline.circles[index].visited === true)
+          ) {
             utils.drawText(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),

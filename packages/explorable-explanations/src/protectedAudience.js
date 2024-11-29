@@ -315,6 +315,15 @@ app.handleControls = () => {
     app.prevButton = document.getElementById('previous-div');
     app.prevButton.addEventListener('click', app.handlePrevButton);
     app.nextButton.addEventListener('click', app.handleNextButton);
+    app.playButton.addEventListener('click', () => {
+      app.play(true);
+    });
+    app.pauseButton.addEventListener('click', app.pause);
+    app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
+    app.intreactiveModeCheckBox.addEventListener(
+      'change',
+      app.toggleInteractiveMode
+    );
   }
 
   const minifiedBubbleContainerRect =

@@ -472,6 +472,13 @@ auction.draw = (index) => {
       const delay = component === Box ? 1000 : 0;
 
       if (props?.showBarrageAnimation) {
+        if (
+          app.isInteractiveMode &&
+          config.timeline.circles[index].visited === true
+        ) {
+          return;
+        }
+
         await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
         if (window.cancelPromise) {
@@ -484,6 +491,13 @@ auction.draw = (index) => {
       }
 
       if (props?.showRippleEffect) {
+        if (
+          app.isInteractiveMode &&
+          config.timeline.circles[index].visited === true
+        ) {
+          return;
+        }
+
         const x = props.x();
         const y = props.y();
 

@@ -74,7 +74,11 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
       );
 
       // Continue animation until progress completes
-      if (progress < (branches.length - 1) * spacing) {
+      if (
+        progress < (branches.length - 1) * spacing ||
+        (app.isInteractiveMode &&
+          config.timeline.circles[currentIndex].visited === true)
+      ) {
         progress += ANIMATION_SPEED;
         requestAnimationFrame(animate);
       }
@@ -93,6 +97,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
   p.stroke(0);
   p.strokeWeight(1);
   p.pop();
+  const index = app.timeline.currentIndex;
 
   if (app.cancelPromise) {
     return new Promise((resolve) => resolve());
@@ -146,7 +151,10 @@ const drawAnimatedTimeline = (x, y, branches) => {
       return;
     }
     // Resolve if the progress exceeds the required length
-    if (progress >= (branches.length - 1) * spacing) {
+    if (
+      progress >= (branches.length - 1) * spacing ||
+      (app.isInteractiveMode && config.timeline.circles[index].visited === true)
+    ) {
       resolve();
       return;
     }
