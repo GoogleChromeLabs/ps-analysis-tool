@@ -323,9 +323,8 @@ utils.markVisitedValue = (index, value) => {
 };
 
 utils.setButtonsDisabilityState = () => {
-  const prevButton = document.getElementById('prevButton');
-  const nextButton = document.getElementById('nextButton');
-
+  const prevButton = document.getElementById('prevButton') ?? app.prevButton;
+  const nextButton = document.getElementById('nextButton') ?? app.nextButton;
   // Exit early if buttons are not found
   if (!prevButton || !nextButton) {
     return;
@@ -351,6 +350,10 @@ utils.setButtonsDisabilityState = () => {
       setButtonState(prevButton, true);
       setButtonState(nextButton, true);
     }
+  }
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    utils.disableButtons();
   }
 };
 // This is only called in the standalone canvas.
