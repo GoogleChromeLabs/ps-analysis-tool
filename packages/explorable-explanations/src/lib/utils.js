@@ -323,49 +323,33 @@ utils.markVisitedValue = (index, value) => {
 };
 
 utils.setButtonsDisabilityState = () => {
-  if (
-    !document.getElementById('prevButton') &&
-    !document.getElementById('nextButton')
-  ) {
+  const prevButton = document.getElementById('prevButton');
+  const nextButton = document.getElementById('nextButton');
+
+  // Exit early if buttons are not found
+  if (!prevButton || !nextButton) {
     return;
   }
 
-  if (!config.isInteractiveMode) {
-    document.getElementById('prevButton').disabled =
-      app.timeline.currentIndex > 0 ? false : true;
+  const { currentIndex } = app.timeline;
+  const { circles } = config.timeline;
+  const isInteractiveMode = config.isInteractiveMode;
 
-    document
-      .getElementById('prevButton')
-      .classList.toggle(
-        'disabled:pointer-events-none',
-        app.timeline.currentIndex > 0 ? true : false
-      );
+  // Helper function to set button state
+  const setButtonState = (button, isDisabled) => {
+    button.disabled = isDisabled;
+    button.classList.toggle('disabled:pointer-events-none', isDisabled);
+  };
 
-    document.getElementById('nextButton').disabled =
-      app.timeline.currentIndex >= config.timeline.circles.length - 1;
-
-    document
-      .getElementById('nextButton')
-      .classList.toggle(
-        'disabled:pointer-events-none',
-        app.timeline.currentIndex >= config.timeline.circles.length - 1
-          ? true
-          : false
-      );
+  if (!isInteractiveMode) {
+    setButtonState(prevButton, currentIndex <= 0);
+    setButtonState(nextButton, currentIndex >= circles.length - 1);
   }
 
-  if (app.timeline.currentIndex >= config.timeline.circles.length) {
-    document.getElementById('prevButton').disabled = true;
-
-    document
-      .getElementById('prevButton')
-      .classList.toggle('disabled:pointer-events-none', true);
-
-    document.getElementById('nextButton').disabled = true;
-
-    document
-      .getElementById('nextButton')
-      .classList.toggle('disabled:pointer-events-none', true);
+  // Additional state when the currentIndex exceeds the total circles
+  if (currentIndex >= circles.length) {
+    setButtonState(prevButton, true);
+    setButtonState(nextButton, true);
   }
 };
 
