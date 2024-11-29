@@ -33,7 +33,6 @@ const ProgressLine = ({
   const height = config.flow.lineHeight - ARROW_SIZE;
   const incrementBy = 1; // Adjust to control speed
   const p = app.p;
-  const index = app.timeline.currentIndex;
 
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
@@ -71,11 +70,14 @@ const ProgressLine = ({
       switch (direction) {
         case 'right':
           currentX += incrementBy;
-          if (
-            currentX - x1 > width ||
-            (app.isInteractiveMode &&
-              config.timeline.circles[index].visited === true)
-          ) {
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x1, y1, x1 + width, y2);
+            drawArrow(x1 + width, y1, direction);
+            resolve({ x: x1 + width, y: y2 });
+            return;
+          }
+
+          if (currentX - x1 > width) {
             resolve({ x: currentX, y: y2 });
             return;
           }
@@ -85,11 +87,15 @@ const ProgressLine = ({
 
         case 'left':
           targetX -= incrementBy;
-          if (
-            x2 - targetX > width ||
-            (app.isInteractiveMode &&
-              config.timeline.circles[index].visited === true)
-          ) {
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x2, y2 + 10, targetX - width, y1 + 10);
+            drawArrow(targetX - width, y1 + 4, direction);
+            utils.drawText(text, targetX + width / 2, y1 + height / 2);
+            resolve({ x: targetX - width, y: y1 + 10 });
+            return;
+          }
+
+          if (x2 - targetX > width) {
             utils.drawText(text, targetX + width / 2, y1 + height / 2);
             resolve({ x: targetX, y: y1 + 10 });
             return;
@@ -100,11 +106,19 @@ const ProgressLine = ({
 
         case 'down':
           currentY += incrementBy;
-          if (
-            currentY - y1 > height ||
-            (app.isInteractiveMode &&
-              config.timeline.circles[index].visited === true)
-          ) {
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x1, y1, x2, y1 + height);
+            drawArrow(x1, y1 + height, direction);
+            utils.drawText(
+              text,
+              x1 - (text.startsWith('$') ? 10 : width / 2),
+              y1 + height / 2
+            );
+            resolve({ x: x2, y: y1 + height });
+            return;
+          }
+
+          if (currentY - y1 > height) {
             utils.drawText(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
@@ -119,11 +133,19 @@ const ProgressLine = ({
 
         case 'up':
           currentY -= incrementBy;
-          if (
-            y1 - currentY > height ||
-            (app.isInteractiveMode &&
-              config.timeline.circles[index].visited === true)
-          ) {
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x1, y1, x2, y1 - height);
+            drawArrow(x1, y1 - height, direction);
+            utils.drawText(
+              text,
+              x1 + (text.startsWith('$') ? 10 : width / 2),
+              y1 - height / 2
+            );
+            resolve({ x: x2, y: y1 - height });
+            return;
+          }
+
+          if (y1 - currentY > height) {
             utils.drawText(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),

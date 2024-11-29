@@ -170,13 +170,16 @@ joinInterestGroup.draw = (index) => {
       if (callBack) {
         callBack(returnValue);
       }
-
-      await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      }
     });
   }
 
   PromiseQueue.add(async () => {
-    await bubbles.reverseBarrageAnimation(index);
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      await bubbles.reverseBarrageAnimation(index);
+    }
 
     if (app.bubbles.isExpanded) {
       bubbles.showExpandedBubbles();
@@ -185,7 +188,11 @@ joinInterestGroup.draw = (index) => {
     }
   });
 
-  PromiseQueue.add(() => flow.clearBelowTimelineCircles());
+  PromiseQueue.add(() => {
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      flow.clearBelowTimelineCircles();
+    }
+  });
 };
 
 export default joinInterestGroup;

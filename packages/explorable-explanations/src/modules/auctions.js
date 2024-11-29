@@ -466,6 +466,9 @@ auction.draw = (index) => {
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
       const delay = component === Box ? 1000 : 0;
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        if (props?.showBarrageAnimation) {
+          await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
@@ -479,50 +482,37 @@ auction.draw = (index) => {
           return;
         }
 
-        await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
+        if (props?.showRippleEffect) {
+          const x = props.x();
+          const y = props.y();
 
-        if (window.cancelPromise) {
-          return;
+          if (window.cancelPromise) {
+            return;
+          }
+          // eslint-disable-next-line no-await-in-loop
+          await RippleEffect({
+            x: x + config.flow.box.width + 2,
+            y: y + config.flow.box.height / 2,
+          });
         }
-
-        await utils.delay(500); // eslint-disable-line no-await-in-loop
-
-        utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
-      }
-
-      if (props?.showRippleEffect) {
-        if (
-          app.isInteractiveMode &&
-          config.timeline.circles[index].visited === true
-        ) {
-          return;
-        }
-
-        const x = props.x();
-        const y = props.y();
-
-        if (window.cancelPromise) {
-          return;
-        }
-        // eslint-disable-next-line no-await-in-loop
-        await RippleEffect({
-          x: x + config.flow.box.width + 2,
-          y: y + config.flow.box.height / 2,
-        });
       }
 
       if (callBack) {
         callBack(returnValue);
       }
-      if (window.cancelPromise) {
-        return;
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        if (window.cancelPromise) {
+          return;
+        }
+        await utils.delay(delay); // eslint-disable-line no-await-in-loop
       }
-      await utils.delay(delay); // eslint-disable-line no-await-in-loop
     });
   }
 
   PromiseQueue.add(() => {
-    flow.clearBelowTimelineCircles();
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      flow.clearBelowTimelineCircles();
+    }
   });
 };
 

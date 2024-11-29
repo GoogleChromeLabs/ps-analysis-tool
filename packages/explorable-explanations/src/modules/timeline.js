@@ -21,6 +21,7 @@ import app from '../app';
 import utils from '../lib/utils';
 import bubbles from './bubbles';
 import PromiseQueue from '../lib/PromiseQueue';
+import flow from './flow';
 
 /**
  * @module Timeline
@@ -81,6 +82,8 @@ timeline.init = () => {
           )
         ) {
           clickedIndex = index;
+          app.isRevisitingNodeInInteractiveMode =
+            app.isInteractiveMode && config.timeline.circles[index].visited;
         }
       });
 
@@ -95,6 +98,13 @@ timeline.init = () => {
         bubbles.generateBubbles();
         await app.drawFlows(clickedIndex);
         PromiseQueue.add(() => {
+          if (app.isRevisitingNodeInInteractiveMode) {
+            app.shouldRespondToClick = true;
+            utils.wipeAndRecreateUserCanvas();
+            timeline.renderUserIcon();
+            timeline.drawTimeline(config.timeline);
+            return;
+          }
           app.bubbles.interestGroupCounts +=
             config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
           config.timeline.circles[clickedIndex].visited = true;
@@ -168,12 +178,6 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     p.textFont('sans-serif');
     if (!app.isInteractiveMode) {
       p.text(circleItem.datetime, xPositionForCircle, position.y);
-    } else {
-      p.text(
-        circleItem.visitedIndex ?? '',
-        xPositionForCircle,
-        yPositionForCircle - 5 + diameter / 2
-      );
     }
     p.text(circleItem.website, xPositionForCircle, position.y + 20);
     p.pop();
@@ -224,13 +228,21 @@ timeline.drawTimelineLine = () => {
 };
 
 timeline.drawCircle = (index, completed = false) => {
-  const { circleProps, user } = config.timeline;
+  const { circleProps, user, circles } = config.timeline;
   const position = app.timeline.circlePositions[index];
   const { diameter } = circleProps;
 
   app.p.circle(position.x, position.y, diameter);
 
   if (completed) {
+    if (app.isInteractiveMode) {
+      app.up.text(
+        circles[app.timeline.currentIndex].visitedIndex ?? '',
+        position.x - 5,
+        position.y - 5 + diameter / 2
+      );
+    }
+
     app.up.image(
       app.p.completedCheckMark,
       position.x - user.width / 2,

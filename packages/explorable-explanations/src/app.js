@@ -58,6 +58,7 @@ const app = {
   shouldRespondToClick: true,
   startTrackingMouse: true,
   visitedIndexes: 1,
+  isRevisitingNodeInInteractiveMode: false,
 };
 
 export default app;
