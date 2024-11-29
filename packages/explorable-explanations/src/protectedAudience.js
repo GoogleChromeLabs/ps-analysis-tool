@@ -276,6 +276,10 @@ app.handleNextButton = () => {
   app.timeline.currentIndex += 1;
   flow.setButtonsDisabilityState();
 
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    utils.disableButtons();
+  }
   const nextIndexPromiseGetter = app.timeline.currentIndex;
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
 
