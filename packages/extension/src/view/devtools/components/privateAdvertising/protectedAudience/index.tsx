@@ -29,12 +29,12 @@ import {
 /**
  * Internal dependencies.
  */
-import ExplorableExplanation from './explorableExplanation';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import AdUnits from './adUnits';
 import Panel from './panel';
 import Bids from './bids';
+import ExplorableExplanationPanel from './explorableExplanation/panel';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -63,7 +63,7 @@ const ProtectedAudience = () => {
       {
         title: 'Explorable Explanations',
         content: {
-          Element: ExplorableExplanation,
+          Element: ExplorableExplanationPanel,
         },
       },
       {
