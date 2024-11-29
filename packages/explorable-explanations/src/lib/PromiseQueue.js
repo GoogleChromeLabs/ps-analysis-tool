@@ -18,6 +18,7 @@
  */
 import flow from '../modules/flow';
 import app from '../app';
+
 class PromiseQueue {
   constructor() {
     this.queue = [];
