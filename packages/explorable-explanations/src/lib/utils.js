@@ -209,7 +209,7 @@ utils.setupInterestGroupCanvas = (p) => {
   overlayCanvas.style('z-index', 2);
   p.textSize(config.canvas.fontSize);
   // eslint-disable-next-line no-undef
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.IS_RUNNING_STANDALONE) {
     app.bubbles.minifiedBubbleX = 35;
     app.bubbles.minifiedBubbleY = 35;
 

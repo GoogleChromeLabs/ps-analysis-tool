@@ -80,11 +80,14 @@ bubbles.barrageAnimation = async (index) => {
   const p = app.igp;
   const {
     canvas: { height: canvasHeight, width: canvasWidth },
-    bubbles: { isExpanded },
     timeline: {
       circleProps: { diameter },
     },
   } = config;
+
+  const {
+    bubbles: { isExpanded },
+  } = app;
 
   const boxes = app.auction.auctions[index];
   const loadInterestGroupBox = boxes.find(
@@ -196,12 +199,15 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const dspTags = app.joinInterestGroup.joinings[index][1];
   const igp = app.igp;
   const {
-    bubbles: { isExpanded, interestGroupCounts },
     timeline: {
       circleProps: { diameter },
       circles,
     },
   } = config;
+
+  const {
+    bubbles: { isExpanded, interestGroupCounts },
+  } = app;
 
   const smallCircleDiameter = diameter / 5;
   const midPointX = isExpanded ? config.canvas.width / 4 + 320 : 35;

@@ -16,6 +16,7 @@
 /**
  * External dependencies
  */
+import p5 from 'p5';
 import * as d3 from 'd3';
 /**
  * Internal dependencies.
@@ -67,6 +68,12 @@ app.setup = () => {
 };
 
 app.play = (resumed = false, doNotPlay = false) => {
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.playButton.classList.add('hidden');
+    app.pauseButton.classList.remove('hidden');
+  }
+
   app.timeline.isPaused = false;
   if (!resumed) {
     app.setupLoop(doNotPlay);
@@ -76,6 +83,11 @@ app.play = (resumed = false, doNotPlay = false) => {
 };
 
 app.pause = () => {
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.pauseButton.classList.add('hidden');
+    app.playButton.classList.remove('hidden');
+  }
   app.timeline.isPaused = true;
 };
 
@@ -229,6 +241,10 @@ app.handleNextButton = () => {
   app.timeline.currentIndex += 1;
   utils.setButtonsDisabilityState();
 
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    utils.disableButtons();
+  }
   const nextIndexPromiseGetter = app.timeline.currentIndex;
   const nextIndex = PromiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
 
@@ -261,6 +277,14 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
+
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.nextButton = document.getElementById('next-div');
+    app.prevButton = document.getElementById('previous-div');
+    app.prevButton.addEventListener('click', app.handlePrevButton);
+    app.nextButton.addEventListener('click', app.handleNextButton);
+  }
 
   const minifiedBubbleContainerRect =
     app.minifiedBubbleContainer.getBoundingClientRect();
@@ -406,5 +430,20 @@ app.reset = async () => {
   app.shouldRespondToClick = true;
   app.startTrackingMouse = true;
 };
+
+app.createCanvas = () => {
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.handleControls();
+    // eslint-disable-next-line no-new
+    new p5(sketch);
+
+    // eslint-disable-next-line no-new
+    new p5(interestGroupSketch);
+    // eslint-disable-next-line no-new
+    new p5(userSketch);
+  }
+};
+app.createCanvas();
 
 export { app };
