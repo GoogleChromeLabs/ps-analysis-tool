@@ -22,12 +22,19 @@ import app from '../app';
 // @todo To be broken down into multipe functions.
 const utils = {};
 
+/**
+ * Creates a request-based interval function similar to `setInterval`,
+ * but uses `requestAnimationFrame` for better synchronization with the browser's refresh rate.
+ * @param fn {Function} callback - The function to execute at each interval.
+ * @param {number} delay - The interval duration in milliseconds.
+ * @returns {object} An object with an `id` property for managing the interval.
+ */
 utils.requestInterval = (fn, delay) => {
   let start = performance.now();
   const handle = { id: null };
 
   /**
-   *
+   * Loop function executed on each animation frame.
    */
   function loop() {
     const current = performance.now();
@@ -50,25 +57,26 @@ utils.clearRequestInterval = (handle) => {
 };
 
 utils.drawArrow = (size, x, y, direction = 'right') => {
-  let _x, _y;
+  // Determine offset based on direction
+  const directionOffsets = {
+    right: { _x: x - 1, _y: y },
+    left: { _x: x + 1, _y: y },
+    down: { _x: x, _y: y - 1 },
+    up: { _x: x, _y: y + 1 },
+  };
 
-  if (direction === 'right') {
-    _x = x - 1;
-    _y = y;
-  } else if (direction === 'left') {
-    _x = x + 1;
-    _y = y;
-  } else if (direction === 'down') {
-    _x = x;
-    _y = y - 1;
-  } else if (direction === 'up') {
-    _x = x;
-    _y = y + 1;
-  }
+  const offset = directionOffsets[direction] || directionOffsets['right'];
 
-  // Clear previous one.
-  utils.triangle(size + 2, _x, _y, direction, config.canvas.background);
+  // Clear the previous arrow
+  utils.triangle(
+    size + 2,
+    offset._x,
+    offset._y,
+    direction,
+    config.canvas.background
+  );
 
+  // Draw the new arrow
   utils.triangle(size, x, y, direction, 'black');
 };
 
@@ -315,49 +323,33 @@ utils.markVisitedValue = (index, value) => {
 };
 
 utils.setButtonsDisabilityState = () => {
-  if (
-    !document.getElementById('prevButton') &&
-    !document.getElementById('nextButton')
-  ) {
+  const prevButton = document.getElementById('prevButton');
+  const nextButton = document.getElementById('nextButton');
+
+  // Exit early if buttons are not found
+  if (!prevButton || !nextButton) {
     return;
   }
 
-  if (!app.isInteractiveMode) {
-    document.getElementById('prevButton').disabled =
-      app.timeline.currentIndex > 0 ? false : true;
+  const { currentIndex } = app.timeline;
+  const { circles } = config.timeline;
+  const isInteractiveMode = config.isInteractiveMode;
 
-    document
-      .getElementById('prevButton')
-      .classList.toggle(
-        'disabled:pointer-events-none',
-        app.timeline.currentIndex > 0 ? true : false
-      );
+  // Helper function to set button state
+  const setButtonState = (button, isDisabled) => {
+    button.disabled = isDisabled;
+    button.classList.toggle('disabled:pointer-events-none', isDisabled);
+  };
 
-    document.getElementById('nextButton').disabled =
-      app.timeline.currentIndex >= config.timeline.circles.length - 1;
-
-    document
-      .getElementById('nextButton')
-      .classList.toggle(
-        'disabled:pointer-events-none',
-        app.timeline.currentIndex >= config.timeline.circles.length - 1
-          ? true
-          : false
-      );
+  if (!isInteractiveMode) {
+    setButtonState(prevButton, currentIndex <= 0);
+    setButtonState(nextButton, currentIndex >= circles.length - 1);
   }
 
-  if (app.timeline.currentIndex >= config.timeline.circles.length) {
-    document.getElementById('prevButton').disabled = true;
-
-    document
-      .getElementById('prevButton')
-      .classList.toggle('disabled:pointer-events-none', true);
-
-    document.getElementById('nextButton').disabled = true;
-
-    document
-      .getElementById('nextButton')
-      .classList.toggle('disabled:pointer-events-none', true);
+  // Additional state when the currentIndex exceeds the total circles
+  if (currentIndex >= circles.length) {
+    setButtonState(prevButton, true);
+    setButtonState(nextButton, true);
   }
 };
 
