@@ -57,6 +57,7 @@ const app = {
   mouseY: 0,
   shouldRespondToClick: true,
   startTrackingMouse: true,
+  visitedIndexes: 1,
 };
 
 export default app;
