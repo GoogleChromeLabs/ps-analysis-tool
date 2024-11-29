@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience.js';
-export { default as config } from './config.js';
+module.exports = function (api) {
+  const isProduction = api.env('production');
+
+  return {
+    presets: [
+      ['@babel/preset-env'],
+      [
+        '@babel/preset-react',
+        {
+          development: !isProduction,
+        },
+      ],
+    ],
+    plugins: [
+      ['@babel/plugin-transform-react-jsx'],
+      ['babel-plugin-styled-components'],
+    ],
+    sourceMaps: true,
+  };
+};
