@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import {
+  getValueByKey,
   noop,
   type NoBidsType,
   type singleAuctionEvent,
@@ -30,8 +31,13 @@ import {
   type InfoType,
   type TableColumn,
   type TableRow,
+  useTabs,
 } from '@google-psat/design-system';
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
 interface ReceivedBidsTableProps {
@@ -56,6 +62,13 @@ const ReceivedBidsTable = ({
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
+
+  const { storage, setStorage } = useTabs(({ state, actions }) => ({
+    storage: state.storage,
+    setStorage: actions.setStorage,
+  }));
+
+  const auctionsTabData = JSON.parse(storage[3] || '{}');
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -100,11 +113,42 @@ const ReceivedBidsTable = ({
     []
   );
 
+  const calculateFilters = useCallback(
+    (key: string, comparisonValue: string) => {
+      return receivedBids.reduce<
+        TableFilter[keyof TableFilter]['filterValues']
+      >((acc, bid) => {
+        const value = getValueByKey(key, bid);
+
+        if (!acc) {
+          acc = {};
+        }
+
+        if (value && !acc[value]) {
+          acc[value] = {
+            selected: false,
+          };
+        }
+
+        if (value && value === comparisonValue) {
+          acc[value].selected = true;
+        }
+
+        return acc;
+      }, {});
+    },
+    [receivedBids]
+  );
+
   const tableFilters = useMemo<TableFilter>(
     () => ({
       ownerOrigin: {
         title: 'Bidder',
         sortValues: true,
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('ownerOrigin', auctionsTabData.bidder),
+        useGenericPersistenceKey: true,
       },
       bid: {
         title: 'Bid',
@@ -148,10 +192,23 @@ const ReceivedBidsTable = ({
       adUnitCode: {
         title: 'Ad Unit Code',
         sortValues: true,
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters(
+          'adUnitCode',
+          auctionsTabData.adUnitCode
+        ),
+        useGenericPersistenceKey: true,
       },
     }),
-    []
+    [auctionsTabData.adUnitCode, auctionsTabData.bidder, calculateFilters]
   );
+
+  useEffect(() => {
+    return () => {
+      setStorage('', 3);
+    };
+  }, [setStorage]);
 
   if (!isUsingCDP) {
     return (
@@ -191,7 +248,7 @@ const ReceivedBidsTable = ({
       tableColumns={tableColumns}
       tableFilterData={tableFilters}
       tableSearchKeys={undefined}
-      tablePersistentSettingsKey="receivedBidsTable"
+      tablePersistentSettingsKey="bidsTable#received"
       onRowClick={(row) => {
         setSelectedRow(row as singleAuctionEvent);
       }}

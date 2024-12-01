@@ -19,17 +19,27 @@
 import React from 'react';
 import {
   createContext,
-  type AuctionEventsType,
   type InterestGroups,
   type ReceivedBids,
   type NoBidsType,
   type AdsAndBiddersType,
   noop,
+  type singleAuctionEvent,
 } from '@google-psat/common';
+
+export type AuctionEventsType = {
+  [adunit: string]: {
+    [time: string]: {
+      [sellerURL: string]: {
+        [auctionHostURL: string]: singleAuctionEvent[];
+      };
+    };
+  };
+};
 
 export interface ProtectedAudienceContextType {
   state: {
-    auctionEvents: AuctionEventsType;
+    auctionEvents: AuctionEventsType | null;
     interestGroupDetails: InterestGroups[];
     isMultiSellerAuction: boolean;
     receivedBids: ReceivedBids[];

@@ -47,10 +47,15 @@ export const TabsProvider = ({
   const panel = tabItems[activeTab].content;
 
   const setStorage = useCallback(
-    (data: string) => {
+    (data: string, index?: number) => {
       _setStorage((prev) => {
         const next = [...prev];
-        next[activeTab] = data;
+
+        if (!index) {
+          next[activeTab] = data;
+        } else {
+          next[index] = data;
+        }
 
         return next;
       });
