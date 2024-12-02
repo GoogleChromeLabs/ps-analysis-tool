@@ -321,7 +321,7 @@ timeline.drawTimelineLine = () => {
 };
 
 timeline.drawCircle = (index, completed = false) => {
-  const { circleProps, user, circles } = config.timeline;
+  const { circleProps, user } = config.timeline;
   const position = app.timeline.circlePositions[index];
   const { diameter } = circleProps;
 
@@ -329,19 +329,18 @@ timeline.drawCircle = (index, completed = false) => {
 
   if (completed) {
     if (app.isInteractiveMode) {
-      app.up.text(
-        circles[index].visitedIndex ?? '',
-        position.x - 5,
-        position.y + diameter / 2
-      );
-
-      app.up.image(
-        app.p.expandIcon,
-        position.x + diameter / 2,
-        position.y,
-        20,
-        20
-      );
+      // app.up.text(
+      //   circles[index].visitedIndex ?? '',
+      //   position.x - 5,
+      //   position.y + diameter / 2
+      // );
+      // app.up.image(
+      //   app.p.expandIcon,
+      //   position.x + diameter / 2,
+      //   position.y,
+      //   20,
+      //   20
+      // );
     }
 
     app.up.image(
