@@ -145,7 +145,7 @@ export const SidebarProvider = ({
           item.dropdownOpen = true;
         }
 
-        _items = item.children;
+        _items = item?.children || {};
       });
 
       return items;
