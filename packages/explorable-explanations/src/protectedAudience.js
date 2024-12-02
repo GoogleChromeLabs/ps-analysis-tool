@@ -250,7 +250,7 @@ app.handleNonInteractivePrev = () => {
   );
 };
 
-app.handleInteractivePrev = async () => {
+app.handleInteractivePrev = () => {
   if (app.visitedIndexOrder.length === 0) {
     return;
   }
@@ -266,23 +266,18 @@ app.handleInteractivePrev = async () => {
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
 
   config.timeline.circles[visitedIndex].visited = false;
-  app.bubbles.interestGroupCounts -=
-    config.timeline.circles[visitedIndex]?.igGroupsCount ?? 0;
 
-  app.bubbles.positions = app.bubbles.positions.splice(
-    -(config.timeline.circles[visitedIndex]?.igGroupsCount ?? 0)
-  );
-
-  bubbles.showMinifiedBubbles();
+  app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
-  bubbles.generateBubbles();
 
-  await app.drawFlows(visitedIndex);
+  app.drawFlows(visitedIndex);
 
   PromiseQueue.add(() => {
     app.shouldRespondToClick = true;
+    app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
+    timeline.renderUserIcon();
   });
 
   if (app.visitedIndexOrderTracker >= 0) {
@@ -382,19 +377,18 @@ app.handleInteravtiveNext = () => {
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
 
   config.timeline.circles[visitedIndex].visited = false;
-  config.timeline.circles[visitedIndex].visitedIndex = null;
-  app.bubbles.interestGroupCounts +=
-    config.timeline.circles[visitedIndex]?.igGroupsCount ?? 0;
 
-  bubbles.showMinifiedBubbles();
+  app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
-  bubbles.generateBubbles();
 
   app.drawFlows(visitedIndex);
 
   PromiseQueue.add(() => {
     app.shouldRespondToClick = true;
+    app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
+    bubbles.showMinifiedBubbles();
+    timeline.renderUserIcon();
   });
 
   flow.setButtonsDisabilityState();

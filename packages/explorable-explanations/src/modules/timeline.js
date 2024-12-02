@@ -94,26 +94,80 @@ timeline.init = () => {
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         bubbles.generateBubbles();
+        if (config.timeline.circles[clickedIndex].visited) {
+          PromiseQueue.add(() => {
+            utils.wipeAndRecreateUserCanvas();
+            utils.wipeAndRecreateMainCanvas();
+            app.p.push();
+            app.p.stroke(config.timeline.colors.grey);
+            config.timeline.circles.forEach((circle, index) => {
+              timeline.drawCircle(
+                index,
+                circle.visited && index !== clickedIndex ? true : false
+              );
+              if (circle.visited && index === clickedIndex) {
+                const position = circlePositions[clickedIndex];
+                const user = config.timeline.user;
+                app.up.image(
+                  app.p.userIcon,
+                  position.x - user.width / 2,
+                  position.y - user.height / 2,
+                  user.width,
+                  user.height
+                );
+              }
+            });
+            app.p.pop();
+          });
+        }
         app.drawFlows(clickedIndex);
         PromiseQueue.add(() => {
-          const positions = app.timeline.circlePositions[clickedIndex];
-          app.timeline.expandIconPositions.push({
-            x: positions.x + config.timeline.circleProps.diameter / 2,
-            y: positions.y,
-            index: clickedIndex,
-          });
+          if (config.timeline.circles[clickedIndex].visited) {
+            app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
+              if (indexes === clickedIndex) {
+                return false;
+              }
+              return true;
+            });
 
-          app.visitedIndexOrder.push(clickedIndex);
-          if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
-            app.visitedIndexOrderTracker++;
+            app.visitedIndexOrder.push(clickedIndex);
+
+            config.timeline.circles[clickedIndex].visitedIndex =
+              app.visitedIndexes;
+            app.visitedIndexes = 1;
+
+            app.visitedIndexOrder.forEach((idx) => {
+              config.timeline.circles[idx].visitedIndex = app.visitedIndexes;
+              app.visitedIndexes++;
+            });
+
+            app.bubbles.positions.splice(
+              -(config.timeline.circles[clickedIndex].igGroupsCount ?? 0)
+            );
+            app.shouldRespondToClick = true;
+            bubbles.showMinifiedBubbles();
+            timeline.renderUserIcon();
+            return;
+          } else {
+            const positions = app.timeline.circlePositions[clickedIndex];
+            app.timeline.expandIconPositions.push({
+              x: positions.x + config.timeline.circleProps.diameter / 2,
+              y: positions.y,
+              index: clickedIndex,
+            });
+
+            app.visitedIndexOrder.push(clickedIndex);
+            if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
+              app.visitedIndexOrderTracker = app.visitedIndexOrder.length - 1;
+            }
+
+            app.bubbles.interestGroupCounts +=
+              config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
+            config.timeline.circles[clickedIndex].visited = true;
+            config.timeline.circles[clickedIndex].visitedIndex =
+              app.visitedIndexes;
+            app.visitedIndexes += 1;
           }
-
-          app.bubbles.interestGroupCounts +=
-            config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
-          config.timeline.circles[clickedIndex].visited = true;
-          config.timeline.circles[clickedIndex].visitedIndex =
-            app.visitedIndexes;
-          app.visitedIndexes += 1;
           bubbles.showMinifiedBubbles();
           app.shouldRespondToClick = true;
           utils.wipeAndRecreateUserCanvas();
