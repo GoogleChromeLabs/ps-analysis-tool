@@ -22,7 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine, Branches, RippleEffect } from '../components';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue';
+import promiseQueue from '../lib/promiseQueue.js';
 
 /**
  * @module Auction

@@ -30,7 +30,7 @@ import joinInterestGroup from './modules/join-interest-group.js';
 import icons from './icons.json';
 import bubbles from './modules/bubbles.js';
 import app from './app.js';
-import promiseQueue from './lib/promiseQueue';
+import promiseQueue from './lib/promiseQueue.js';
 
 app.setUpTimeLine = () => {
   app.auction.auctions = [];

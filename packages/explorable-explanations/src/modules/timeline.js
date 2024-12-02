@@ -20,7 +20,7 @@ import config from '../config';
 import app from '../app';
 import utils from '../lib/utils';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue';
+import promiseQueue from '../lib/promiseQueue.js';
 import flow from './flow';
 
 /**
