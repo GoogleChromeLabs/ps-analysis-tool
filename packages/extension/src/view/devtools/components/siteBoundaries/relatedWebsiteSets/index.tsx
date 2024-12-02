@@ -16,31 +16,22 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
-  Breadcrumbs,
   InfoCard,
   PSInfoKey,
-  QuickLinksList,
-  Tabs,
   type TabItems,
-  useSidebar,
+  TabsProvider,
 } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
 import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
+import Panel from './panel';
 
 const RelatedWebsiteSets = () => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
-    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
-  }));
-
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -68,30 +59,10 @@ const RelatedWebsiteSets = () => {
     []
   );
 
-  const ActiveTabContent = tabItems[activeTab].content.Element;
-
   return (
-    <div data-testid="related-website-sets-content" className="h-full w-full">
-      <div className="p-4 flex flex-col gap-1 mb-2">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">{I18n.getMessage('rws')}</h1>
-        </div>
-        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
-      </div>
-      <Tabs
-        items={tabItems}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-      <div className="p-4 max-w-2xl">
-        {ActiveTabContent && (
-          <ActiveTabContent {...tabItems[activeTab].content.props} />
-        )}
-      </div>
-      <div className="mx-4 mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </div>
+    <TabsProvider items={tabItems}>
+      <Panel />
+    </TabsProvider>
   );
 };
 

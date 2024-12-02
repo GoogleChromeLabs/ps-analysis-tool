@@ -85,5 +85,3 @@ export type ReceivedBids = singleAuctionEvent & {
   adUnitCode?: string;
   mediaContainerSize?: number[];
 };
-
-export type AuctionEventsType = SingleSellerAuction | MultiSellerAuction | null;
