@@ -486,7 +486,7 @@ auction.draw = (index) => {
           const x = props.x();
           const y = props.y();
 
-          if (window.cancelPromise) {
+          if (app.cancelPromise) {
             return;
           }
           // eslint-disable-next-line no-await-in-loop
@@ -501,7 +501,7 @@ auction.draw = (index) => {
         callBack(returnValue);
       }
       if (!app.isRevisitingNodeInInteractiveMode) {
-        if (window.cancelPromise) {
+        if (app.cancelPromise) {
           return;
         }
         await utils.delay(delay); // eslint-disable-line no-await-in-loop

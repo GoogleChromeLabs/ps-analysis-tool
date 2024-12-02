@@ -140,7 +140,7 @@ bubbles.barrageAnimation = async (index) => {
       utils.wipeAndRecreateInterestCanvas();
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
-        if (window.cancelPromise) {
+        if (app.cancelPromise) {
           resolve();
           return;
         }
@@ -175,7 +175,8 @@ bubbles.barrageAnimation = async (index) => {
             y > topOfBox &&
             y < topOfBox + height
           );
-        })
+        }) ||
+        app.cancelPromise
       ) {
         resolve();
       } else {
@@ -277,7 +278,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
       utils.wipeAndRecreateInterestCanvas();
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
-        if (window.cancelPromise) {
+        if (app.cancelPromise) {
           resolve();
           return;
         }
@@ -309,7 +310,8 @@ bubbles.reverseBarrageAnimation = async (index) => {
             Math.abs(circle.y - circle.target.y) <
               app.bubbles.minifiedCircleDiameter / 2
           );
-        })
+        }) ||
+        app.cancelPromise
       ) {
         resolve();
         document.getElementById('interest-canvas').style.zIndex = 2;
