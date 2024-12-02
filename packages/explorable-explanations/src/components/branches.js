@@ -214,12 +214,14 @@ const drawDateTimeBranch = (x, y, branch) => {
 
 const drawBoxesBranch = (x, y, branch) => {
   const p = app.p;
+  const { flow } = config;
 
   Box({
     title: branch.title,
     description: branch.description,
-    x: x - config.flow.box.width / 2,
+    x: x - flow.box.width / 2,
     y: y + 20,
+    color: branch?.color || flow.colors.box.background,
   });
 
   p.image(

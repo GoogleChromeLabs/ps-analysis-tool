@@ -38,10 +38,10 @@ const Box = ({
     },
   };
 
+  app.p.push();
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
   app.p.fill(color);
   app.p.rect(x, y, width, height);
-  app.p.push();
   app.p.strokeWeight(0.1);
   app.p.fill(config.flow.colors.box.text);
   app.p.textFont('sans-serif');

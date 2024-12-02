@@ -47,7 +47,7 @@ auction.setupAuctions = () => {
  */
 auction.setUp = (index) => {
   const { circles } = config.timeline;
-  const { box } = config.flow;
+  const { box, colors } = config.flow;
   const currentCircle = circles[index];
 
   const { x, y } = flow.getTimelineCircleCoordinates(index);
@@ -71,16 +71,19 @@ auction.setUp = (index) => {
           title: 'adunit-code',
           description: 'div-200-1',
           type: 'box',
+          color: colors.box.browser,
         },
         {
           title: 'adunit-code',
           description: 'div-200-1',
           type: 'box',
+          color: colors.box.browser,
         },
         {
           title: 'adunit-code',
           description: 'div-200-1',
           type: 'box',
+          color: colors.box.browser,
         },
       ],
     },
