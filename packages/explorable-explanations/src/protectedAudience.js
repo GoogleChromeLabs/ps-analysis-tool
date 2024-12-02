@@ -220,11 +220,7 @@ app.handleNonInteractivePrev = () => {
 };
 
 app.handleInteractivePrev = () => {
-  if (app.visitedIndexOrder.length === 0) {
-    return;
-  }
-
-  if (app.visitedIndexOrderTracker < 0) {
+  if (app.visitedIndexOrder.length === 0 || app.visitedIndexOrderTracker < 0) {
     return;
   }
 
@@ -289,11 +285,10 @@ app.handleNextButton = () => {
 };
 
 app.handleNonInteravtiveNext = () => {
-  if (app.bubbles.isExpanded) {
-    return;
-  }
-
-  if (app.timeline.currentIndex > config.timeline.circles.length - 1) {
+  if (
+    app.bubbles.isExpanded ||
+    app.timeline.currentIndex > config.timeline.circles.length - 1
+  ) {
     return;
   }
 
@@ -319,11 +314,10 @@ app.handleNonInteravtiveNext = () => {
 };
 
 app.handleInteravtiveNext = () => {
-  if (app.visitedIndexOrder.length === 0) {
-    return;
-  }
-
-  if (app.visitedIndexOrderTracker === app.visitedIndexOrder.length) {
+  if (
+    app.visitedIndexOrder.length === 0 ||
+    app.visitedIndexOrderTracker === app.visitedIndexOrder.length
+  ) {
     return;
   }
 

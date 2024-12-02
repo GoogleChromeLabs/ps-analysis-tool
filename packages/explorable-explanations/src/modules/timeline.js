@@ -111,17 +111,20 @@ timeline.init = () => {
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         bubbles.generateBubbles();
+
         if (config.timeline.circles[clickedIndex].visited) {
           promiseQueue.add(() => {
             utils.wipeAndRecreateUserCanvas();
             utils.wipeAndRecreateMainCanvas();
             app.p.push();
             app.p.stroke(config.timeline.colors.grey);
+
             config.timeline.circles.forEach((circle, index) => {
               timeline.drawCircle(
                 index,
                 circle.visited && index !== clickedIndex ? true : false
               );
+
               if (circle.visited && index === clickedIndex) {
                 const position = circlePositions[clickedIndex];
                 const user = config.timeline.user;
@@ -134,10 +137,13 @@ timeline.init = () => {
                 );
               }
             });
+
             app.p.pop();
           });
         }
+
         app.drawFlows(clickedIndex);
+
         promiseQueue.add(() => {
           if (config.timeline.circles[clickedIndex].visited) {
             app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
@@ -161,6 +167,7 @@ timeline.init = () => {
             app.bubbles.positions.splice(
               -(config.timeline.circles[clickedIndex].igGroupsCount ?? 0)
             );
+
             app.shouldRespondToClick = true;
             bubbles.showMinifiedBubbles();
             timeline.renderUserIcon();
@@ -185,6 +192,7 @@ timeline.init = () => {
               app.visitedIndexes;
             app.visitedIndexes += 1;
           }
+
           bubbles.showMinifiedBubbles();
           app.shouldRespondToClick = true;
           utils.wipeAndRecreateUserCanvas();
@@ -192,6 +200,7 @@ timeline.init = () => {
           timeline.renderUserIcon();
           flow.setButtonsDisabilityState();
         });
+
         promiseQueue.skipTo(0);
         promiseQueue.start();
       } else if (
@@ -202,11 +211,13 @@ timeline.init = () => {
         flow.clearBelowTimelineCircles();
         app.shouldRespondToClick = false;
         app.drawFlows(clickedIndex);
+
         promiseQueue.add(() => {
           app.shouldRespondToClick = true;
           timeline.renderUserIcon();
           app.isRevisitingNodeInInteractiveMode = false;
         });
+
         promiseQueue.skipTo(0);
         promiseQueue.start();
         utils.wipeAndRecreateUserCanvas();
