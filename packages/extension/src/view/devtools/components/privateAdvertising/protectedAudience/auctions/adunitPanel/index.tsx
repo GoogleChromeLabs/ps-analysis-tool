@@ -98,7 +98,7 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
                   adUnitCode: adunit,
                 })
               );
-              setActiveTab(4);
+              setActiveTab(5);
             },
           })),
         ],
