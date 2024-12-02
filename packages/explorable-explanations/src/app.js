@@ -58,6 +58,8 @@ const app = {
   shouldRespondToClick: true,
   startTrackingMouse: true,
   visitedIndexes: 1,
+  visitedIndexOrder: [],
+  visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
 };
 

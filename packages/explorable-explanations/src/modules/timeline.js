@@ -49,13 +49,13 @@ timeline.init = () => {
         return;
       }
       const { offsetX, offsetY } = event;
-
       app.mouseX = offsetX;
       app.mouseY = offsetY;
 
       if (!app.shouldRespondToClick) {
         return;
       }
+
       utils.wipeAndRecreateUserCanvas();
       timeline.renderUserIcon();
     };
@@ -101,10 +101,15 @@ timeline.init = () => {
           if (app.isRevisitingNodeInInteractiveMode) {
             app.shouldRespondToClick = true;
             utils.wipeAndRecreateUserCanvas();
-            timeline.renderUserIcon();
-            timeline.drawTimeline(config.timeline);
+            utils.wipeAndRecreateMainCanvas();
             return;
           }
+
+          app.visitedIndexOrder.push(clickedIndex);
+          if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
+            app.visitedIndexOrderTracker++;
+          }
+
           app.bubbles.interestGroupCounts +=
             config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
           config.timeline.circles[clickedIndex].visited = true;
@@ -114,8 +119,9 @@ timeline.init = () => {
           bubbles.showMinifiedBubbles();
           app.shouldRespondToClick = true;
           utils.wipeAndRecreateUserCanvas();
+          utils.wipeAndRecreateMainCanvas();
           timeline.renderUserIcon();
-          timeline.drawTimeline(config.timeline);
+          flow.setButtonsDisabilityState();
         });
         PromiseQueue.skipTo(0);
         PromiseQueue.start();
@@ -237,7 +243,7 @@ timeline.drawCircle = (index, completed = false) => {
   if (completed) {
     if (app.isInteractiveMode) {
       app.up.text(
-        circles[app.timeline.currentIndex].visitedIndex ?? '',
+        circles[index].visitedIndex ?? '',
         position.x - 5,
         position.y + diameter / 2
       );

@@ -137,13 +137,11 @@ utils.delay = (ms) => {
 };
 
 utils.wipeAndRecreateMainCanvas = () => {
-  const { height, width } = utils.calculateCanvasDimensions();
-  const canvas = app.p.createCanvas(width, height);
-  canvas.parent('ps-canvas');
-  canvas.style('z-index', 0);
-  canvas.id('p5-canvas');
+  app.p.clear();
   app.p.background(config.canvas.background);
-  app.p.textSize(config.canvas.fontSize);
+
+  app.timeline.drawTimelineLine();
+  app.timeline.drawTimeline(config.timeline);
 };
 
 utils.wipeAndRecreateInterestCanvas = () => {

@@ -224,11 +224,7 @@ app.minifiedBubbleKeyPressListener = (event) => {
   }
 };
 
-app.handlePrevButton = () => {
-  if (app.bubbles.isExpanded || app.isInteractiveMode) {
-    return;
-  }
-
+app.handleNonInteractivePrev = () => {
   if (app.timeline.currentIndex <= 0) {
     return;
   }
@@ -245,11 +241,7 @@ app.handlePrevButton = () => {
 
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
-  app.p.clear();
-  app.p.background(config.canvas.background);
-
-  timeline.drawTimelineLine();
-  timeline.drawTimeline(config.timeline);
+  utils.wipeAndRecreateMainCanvas();
   app.up.clear();
   timeline.renderUserIcon();
 
@@ -258,8 +250,84 @@ app.handlePrevButton = () => {
   );
 };
 
+app.handleInteractivePrev = async () => {
+  if (app.visitedIndexOrder.length === 0) {
+    return;
+  }
+
+  if (app.visitedIndexOrderTracker < 0) {
+    return;
+  }
+
+  PromiseQueue.clear();
+  flow.setButtonsDisabilityState();
+  app.shouldRespondToClick = false;
+
+  const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
+
+  config.timeline.circles[visitedIndex].visited = false;
+  app.bubbles.interestGroupCounts -=
+    config.timeline.circles[visitedIndex]?.igGroupsCount ?? 0;
+
+  app.bubbles.positions = app.bubbles.positions.splice(
+    -(config.timeline.circles[visitedIndex]?.igGroupsCount ?? 0)
+  );
+
+  bubbles.showMinifiedBubbles();
+  app.isRevisitingNodeInInteractiveMode = true;
+  app.timeline.currentIndex = visitedIndex;
+  bubbles.generateBubbles();
+
+  await app.drawFlows(visitedIndex);
+
+  PromiseQueue.add(() => {
+    app.shouldRespondToClick = true;
+    app.isRevisitingNodeInInteractiveMode = false;
+    config.timeline.circles[visitedIndex].visited = true;
+    bubbles.showMinifiedBubbles();
+  });
+
+  if (app.visitedIndexOrderTracker >= 0) {
+    app.visitedIndexOrderTracker--;
+  }
+
+  flow.setButtonsDisabilityState();
+
+  utils.wipeAndRecreateMainCanvas();
+  app.up.clear();
+  timeline.renderUserIcon();
+  PromiseQueue.skipTo(0);
+  PromiseQueue.start();
+};
+
+app.handlePrevButton = () => {
+  if (app.bubbles.isExpanded) {
+    return;
+  }
+
+  if (app.isInteractiveMode) {
+    app.handleInteractivePrev();
+    return;
+  }
+
+  app.handleNonInteractivePrev();
+};
+
 app.handleNextButton = () => {
-  if (app.bubbles.isExpanded || app.isInteractiveMode) {
+  if (app.bubbles.isExpanded) {
+    return;
+  }
+
+  if (app.isInteractiveMode) {
+    app.handleInteravtiveNext();
+    return;
+  }
+
+  app.handleNonInteravtiveNext();
+};
+
+app.handleNonInteravtiveNext = () => {
+  if (app.bubbles.isExpanded) {
     return;
   }
 
@@ -283,17 +351,63 @@ app.handleNextButton = () => {
 
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
-  app.p.clear();
-  app.p.background(config.canvas.background);
-
-  timeline.drawTimelineLine();
-  timeline.drawTimeline(config.timeline);
+  utils.wipeAndRecreateMainCanvas();
   app.up.clear();
   timeline.renderUserIcon();
 
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+};
+
+app.handleInteravtiveNext = () => {
+  if (app.visitedIndexOrder.length === 0) {
+    return;
+  }
+
+  if (app.visitedIndexOrderTracker === app.visitedIndexOrder.length) {
+    return;
+  }
+
+  if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
+    if (app.visitedIndexOrderTracker < 0) {
+      app.visitedIndexOrderTracker += 2;
+    } else {
+      app.visitedIndexOrderTracker++;
+    }
+  }
+
+  PromiseQueue.clear();
+  flow.setButtonsDisabilityState();
+  app.shouldRespondToClick = false;
+
+  const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
+
+  config.timeline.circles[visitedIndex].visited = false;
+  config.timeline.circles[visitedIndex].visitedIndex = null;
+  app.bubbles.interestGroupCounts +=
+    config.timeline.circles[visitedIndex]?.igGroupsCount ?? 0;
+
+  bubbles.showMinifiedBubbles();
+  app.isRevisitingNodeInInteractiveMode = true;
+  app.timeline.currentIndex = visitedIndex;
+  bubbles.generateBubbles();
+
+  app.drawFlows(visitedIndex);
+
+  PromiseQueue.add(() => {
+    app.shouldRespondToClick = true;
+    app.isRevisitingNodeInInteractiveMode = false;
+    config.timeline.circles[visitedIndex].visited = true;
+  });
+
+  flow.setButtonsDisabilityState();
+
+  utils.wipeAndRecreateMainCanvas();
+  app.up.clear();
+  timeline.renderUserIcon();
+  PromiseQueue.skipTo(0);
+  PromiseQueue.start();
 };
 
 app.handleControls = () => {
@@ -379,7 +493,9 @@ app.toggleInteractiveMode = async () => {
   utils.setupUserCanvas(app.up);
   utils.setupMainCanvas(app.p, true);
   PromiseQueue.skipTo(0);
+
   if (app.isInteractiveMode) {
+    flow.setButtonsDisabilityState();
     return;
   }
   PromiseQueue.start();
