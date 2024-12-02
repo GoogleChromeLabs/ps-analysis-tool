@@ -32,37 +32,6 @@ import bubbles from './modules/bubbles.js';
 import app from './app.js';
 import PromiseQueue from './lib/PromiseQueue.js';
 
-const app = {
-  timeline: {
-    isPaused: false,
-    circlePositions: [],
-    smallCirclePositions: [],
-    circlePublisherIndices: [],
-    currentIndex: 0,
-  },
-  auction: {
-    auctions: [],
-    nextTipCoordinates: { x: 0, y: 0 },
-  },
-  joinInterestGroup: {
-    joinings: [],
-    nextTipCoordinates: { x: 0, y: 0 },
-  },
-  flow: {
-    intervals: {},
-  },
-  bubbles: {
-    positions: [],
-    minifiedSVG: null,
-    expandedSVG: null,
-  },
-  utils: {},
-  p: null,
-  igp: null,
-  up: null,
-  isMultiSeller: false,
-};
-
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
   app.joinInterestGroup.joinings = [];
@@ -328,10 +297,6 @@ app.handleNonInteravtiveNext = () => {
     return;
   }
 
-  if (app.timeline.currentIndex > config.timeline.circles.length - 1) {
-    return;
-  }
-
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
@@ -458,7 +423,7 @@ app.handleControls = () => {
 };
 
 app.toggleInteractiveMode = async () => {
-  PromiseQueue.stop();
+  PromiseQueue.clear();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
 
@@ -470,11 +435,6 @@ app.toggleInteractiveMode = async () => {
   app.bubbles.expandedSVG = null;
   app.shouldRespondToClick = true;
   app.startTrackingMouse = true;
-
-  if (!config.isInteractiveMode) {
-    config.shouldRespondToClick = true;
-    config.startTrackingMouse = true;
-  }
 
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();

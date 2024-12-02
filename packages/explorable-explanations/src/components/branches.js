@@ -152,6 +152,10 @@ const drawAnimatedTimeline = (x, y, branches) => {
       const branchX = x + i * spacing;
       const branch = branches[i];
       let endpoint;
+      if (app.cancelPromise) {
+        resolve();
+        return;
+      }
 
       if (app.cancelPromise) {
         resolve();

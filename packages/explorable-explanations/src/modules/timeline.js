@@ -85,10 +85,27 @@ timeline.init = () => {
         }
       });
 
+      expandIconPositions.forEach((positions) => {
+        if (
+          utils.isInsideCircle(
+            app.mouseX,
+            app.mouseY,
+            positions.x + config.timeline.circleProps.diameter / 2,
+            positions.y,
+            20
+          )
+        ) {
+          app.isRevisitingNodeInInteractiveMode = true;
+          clickedIndex = positions.index;
+        }
+      });
+
       if (
         clickedIndex !== undefined &&
-        !config.timeline.circles[clickedIndex].visited
+        !app.isRevisitingNodeInInteractiveMode
       ) {
+        PromiseQueue.clear();
+        flow.clearBelowTimelineCircles();
         app.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
         utils.wipeAndRecreateUserCanvas();

@@ -491,10 +491,6 @@ bubbles.bubbleChart = (
     .attr('class', 'svg overflowing-text circle-svg')
     .attr('style', `${!app.bubbles.isExpanded ? 'pointer-events: none;' : ''}`)
     .attr(
-      'style',
-      `${!config.bubbles.isExpanded ? 'pointer-events: none;' : ''}`
-    )
-    .attr(
       'fill',
       groups
         ? (d) => {

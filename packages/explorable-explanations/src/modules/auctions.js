@@ -271,12 +271,6 @@ auction.setUp = (index) => {
       title: 'DSP 2',
     },
     {
-      title: 'DSP 1',
-    },
-    {
-      title: 'DSP 2',
-    },
-    {
       title: 'Key/Value Trusted',
       description: 'SSP Server',
     },
@@ -470,16 +464,13 @@ auction.draw = (index) => {
         if (props?.showBarrageAnimation) {
           await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
-      const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+          if (app.cancelPromise) {
+            return;
+          }
 
-      const delay = component === Box ? 1000 : 0;
+          await utils.delay(500); // eslint-disable-line no-await-in-loop
 
-      if (props?.showBarrageAnimation) {
-        if (
-          app.isInteractiveMode &&
-          config.timeline.circles[index].visited === true
-        ) {
-          return;
+          utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
         }
 
         if (props?.showRippleEffect) {
