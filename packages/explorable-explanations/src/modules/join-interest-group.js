@@ -22,7 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import PromiseQueue from '../lib/PromiseQueue';
+import promiseQueue from '../lib/promiseQueue';
 
 /**
  * @module joinInterestGroup
@@ -159,8 +159,8 @@ joinInterestGroup.draw = (index) => {
   }
 
   for (const step of steps) {
-    PromiseQueue.nextStepSkipIndex.push(PromiseQueue.queue.length - 1);
-    PromiseQueue.add(async () => {
+    promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
+    promiseQueue.add(async () => {
       const { component, props, callBack } = step;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -176,7 +176,7 @@ joinInterestGroup.draw = (index) => {
     });
   }
 
-  PromiseQueue.add(async () => {
+  promiseQueue.add(async () => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       await bubbles.reverseBarrageAnimation(index);
     }
@@ -188,7 +188,7 @@ joinInterestGroup.draw = (index) => {
     }
   });
 
-  PromiseQueue.add(() => {
+  promiseQueue.add(() => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
     }

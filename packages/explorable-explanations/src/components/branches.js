@@ -61,34 +61,26 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
         branches.forEach(({ id, type }, index) => {
           const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
           const y = y2 - 9;
+          let endpoint;
           p.push();
           p.stroke(0);
           p.line(x, y, branchXEndpoint, y);
           p.pop();
-
+          p.push();
+          p.stroke(0);
+          p.line(x, y, x, y + 20);
+          p.pop();
           if (type === 'datetime') {
-            p.push();
-            p.stroke(0);
-            p.line(x, y, x, y + 20);
-            p.pop();
-
-            const endpoint = drawDateTimeBranch(x, y, branches[index]);
-            endpoints.push(endpoint);
-
-            renderedBranchIds.push(id);
+            endpoint = drawDateTimeBranch(x, y, branches[index]);
           }
 
           if (type === 'box') {
-            p.push();
-            p.stroke(0);
-            p.line(x, y, x, y + 20);
-            p.pop();
-
-            const endpoint = drawBoxesBranch(x, y, branches[index]);
-            endpoints.push(endpoint);
-
-            renderedBranchIds.push(id);
+            endpoint = drawBoxesBranch(x, y, branches[index]);
           }
+
+          endpoints.push(endpoint);
+
+          renderedBranchIds.push(id);
         });
         resolve(endpoints);
         return;

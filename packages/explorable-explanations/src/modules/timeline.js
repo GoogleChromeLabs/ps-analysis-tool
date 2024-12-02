@@ -20,7 +20,7 @@ import config from '../config';
 import app from '../app';
 import utils from '../lib/utils';
 import bubbles from './bubbles';
-import PromiseQueue from '../lib/PromiseQueue';
+import promiseQueue from '../lib/promiseQueue';
 import flow from './flow';
 
 /**
@@ -104,7 +104,7 @@ timeline.init = () => {
         clickedIndex !== undefined &&
         !app.isRevisitingNodeInInteractiveMode
       ) {
-        PromiseQueue.clear();
+        promiseQueue.clear();
         flow.clearBelowTimelineCircles();
         app.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
@@ -112,7 +112,7 @@ timeline.init = () => {
         timeline.renderUserIcon();
         bubbles.generateBubbles();
         if (config.timeline.circles[clickedIndex].visited) {
-          PromiseQueue.add(() => {
+          promiseQueue.add(() => {
             utils.wipeAndRecreateUserCanvas();
             utils.wipeAndRecreateMainCanvas();
             app.p.push();
@@ -138,7 +138,7 @@ timeline.init = () => {
           });
         }
         app.drawFlows(clickedIndex);
-        PromiseQueue.add(() => {
+        promiseQueue.add(() => {
           if (config.timeline.circles[clickedIndex].visited) {
             app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
               if (indexes === clickedIndex) {
@@ -192,23 +192,23 @@ timeline.init = () => {
           timeline.renderUserIcon();
           flow.setButtonsDisabilityState();
         });
-        PromiseQueue.skipTo(0);
-        PromiseQueue.start();
+        promiseQueue.skipTo(0);
+        promiseQueue.start();
       } else if (
         clickedIndex !== undefined &&
         app.isRevisitingNodeInInteractiveMode
       ) {
-        PromiseQueue.clear();
+        promiseQueue.clear();
         flow.clearBelowTimelineCircles();
         app.shouldRespondToClick = false;
         app.drawFlows(clickedIndex);
-        PromiseQueue.add(() => {
+        promiseQueue.add(() => {
           app.shouldRespondToClick = true;
           timeline.renderUserIcon();
           app.isRevisitingNodeInInteractiveMode = false;
         });
-        PromiseQueue.skipTo(0);
-        PromiseQueue.start();
+        promiseQueue.skipTo(0);
+        promiseQueue.start();
         utils.wipeAndRecreateUserCanvas();
         utils.wipeAndRecreateMainCanvas();
         return;
