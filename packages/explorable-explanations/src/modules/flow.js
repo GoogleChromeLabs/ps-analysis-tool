@@ -88,37 +88,38 @@ flow.setButtonsDisabilityState = () => {
 
   const { currentIndex } = app.timeline;
   const { circles } = config.timeline;
-  const isInteractiveMode = config.isInteractiveMode;
+  const isInteractiveMode = app.isInteractiveMode;
+  const { visitedIndexOrderTracker, visitedIndexOrder } = app;
 
   // Helper function to set button state
   const setButtonState = (button, isDisabled) => {
     button.disabled = isDisabled;
     button.classList.toggle('disabled:pointer-events-none', isDisabled);
+    // eslint-disable-next-line no-undef
+    if (process.env.IS_RUNNING_STANDALONE) {
+      button.style.cursor = isDisabled ? 'default' : 'pointer';
+    }
   };
 
   if (!isInteractiveMode) {
     setButtonState(prevButton, currentIndex <= 0);
     setButtonState(nextButton, currentIndex >= circles.length - 1);
+    return;
   }
 
   // Additional state when the currentIndex exceeds the total circles
-  if (currentIndex >= circles.length) {
-    setButtonState(prevButton, true);
-    setButtonState(nextButton, true);
-  }
-  // eslint-disable-next-line no-undef
-  if (process.env.IS_RUNNING_STANDALONE) {
-    app.prevButton.style.cursor =
-      app.timeline.currentIndex > 0 ? 'pointer' : 'default';
-    app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
-    app.nextButton.disabled =
-      app.timeline.currentIndex === config.timeline.circles.length - 1
-        ? true
-        : false;
-    app.nextButton.style.cursor =
-      app.timeline.currentIndex >= config.timeline.circles.length - 1
-        ? 'default'
-        : 'pointer';
+  if (isInteractiveMode) {
+    setButtonState(
+      prevButton,
+      !(visitedIndexOrderTracker >= 0 && visitedIndexOrder.length >= 2)
+    );
+    setButtonState(
+      nextButton,
+      !(
+        visitedIndexOrderTracker + 1 < visitedIndexOrder.length &&
+        visitedIndexOrder.length >= 2
+      )
+    );
   }
 };
 

@@ -19,6 +19,7 @@ const app = {
     circlePositions: [],
     smallCirclePositions: [],
     circlePublisherIndices: [],
+    expandIconPositions: [],
     currentIndex: 0,
   },
   color: null,
@@ -57,6 +58,10 @@ const app = {
   mouseY: 0,
   shouldRespondToClick: true,
   startTrackingMouse: true,
+  visitedIndexes: 1,
+  visitedIndexOrder: [],
+  visitedIndexOrderTracker: -1,
+  isRevisitingNodeInInteractiveMode: false,
 };
 
 export default app;
