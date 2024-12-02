@@ -60,7 +60,7 @@ timeline.init = () => {
       timeline.renderUserIcon();
     };
 
-    app.p.mouseClicked = async () => {
+    app.p.mouseClicked = () => {
       if (!app.isInteractiveMode) {
         return;
       }
@@ -68,7 +68,7 @@ timeline.init = () => {
         return;
       }
 
-      const { circlePositions } = app.timeline;
+      const { circlePositions, expandIconPositions } = app.timeline;
       let clickedIndex;
 
       circlePositions.forEach((positions, index) => {
@@ -82,8 +82,6 @@ timeline.init = () => {
           )
         ) {
           clickedIndex = index;
-          app.isRevisitingNodeInInteractiveMode =
-            app.isInteractiveMode && config.timeline.circles[index].visited;
         }
       });
 
@@ -96,14 +94,14 @@ timeline.init = () => {
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         bubbles.generateBubbles();
-        await app.drawFlows(clickedIndex);
+        app.drawFlows(clickedIndex);
         PromiseQueue.add(() => {
-          if (app.isRevisitingNodeInInteractiveMode) {
-            app.shouldRespondToClick = true;
-            utils.wipeAndRecreateUserCanvas();
-            utils.wipeAndRecreateMainCanvas();
-            return;
-          }
+          const positions = app.timeline.circlePositions[clickedIndex];
+          app.timeline.expandIconPositions.push({
+            x: positions.x + config.timeline.circleProps.diameter / 2,
+            y: positions.y,
+            index: clickedIndex,
+          });
 
           app.visitedIndexOrder.push(clickedIndex);
           if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
@@ -125,6 +123,24 @@ timeline.init = () => {
         });
         PromiseQueue.skipTo(0);
         PromiseQueue.start();
+      } else if (
+        clickedIndex !== undefined &&
+        app.isRevisitingNodeInInteractiveMode
+      ) {
+        PromiseQueue.clear();
+        flow.clearBelowTimelineCircles();
+        app.shouldRespondToClick = false;
+        app.drawFlows(clickedIndex);
+        PromiseQueue.add(() => {
+          app.shouldRespondToClick = true;
+          timeline.renderUserIcon();
+          app.isRevisitingNodeInInteractiveMode = false;
+        });
+        PromiseQueue.skipTo(0);
+        PromiseQueue.start();
+        utils.wipeAndRecreateUserCanvas();
+        utils.wipeAndRecreateMainCanvas();
+        return;
       }
     };
   } else {
@@ -246,6 +262,14 @@ timeline.drawCircle = (index, completed = false) => {
         circles[index].visitedIndex ?? '',
         position.x - 5,
         position.y + diameter / 2
+      );
+
+      app.up.image(
+        app.p.expandIcon,
+        position.x + diameter / 2,
+        position.y,
+        20,
+        20
       );
     }
 

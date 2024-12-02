@@ -19,6 +19,7 @@ const app = {
     circlePositions: [],
     smallCirclePositions: [],
     circlePublisherIndices: [],
+    expandIconPositions: [],
     currentIndex: 0,
   },
   color: null,
