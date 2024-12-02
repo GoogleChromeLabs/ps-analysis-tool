@@ -265,6 +265,7 @@ const ReceivedBidsTable = ({
           selectedRow?.time
         }
         hideSearch={true}
+        minWidth="50rem"
       />
     </TableProvider>
   );

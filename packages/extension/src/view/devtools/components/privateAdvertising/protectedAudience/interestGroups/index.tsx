@@ -213,6 +213,7 @@ const InterestGroups = ({ filters }: InterestGroupsProps) => {
               (selectedRow?.uniqueAuctionId ?? '') + String(selectedRow?.time)
             }
             hideSearch={true}
+            minWidth="50rem"
           />
         </TableProvider>
       </Resizable>
