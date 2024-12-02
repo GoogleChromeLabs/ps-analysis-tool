@@ -274,7 +274,6 @@ app.handleInteractivePrev = async () => {
   );
 
   bubbles.showMinifiedBubbles();
-  app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
   bubbles.generateBubbles();
 
@@ -282,7 +281,6 @@ app.handleInteractivePrev = async () => {
 
   PromiseQueue.add(() => {
     app.shouldRespondToClick = true;
-    app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
   });
@@ -389,7 +387,6 @@ app.handleInteravtiveNext = () => {
     config.timeline.circles[visitedIndex]?.igGroupsCount ?? 0;
 
   bubbles.showMinifiedBubbles();
-  app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
   bubbles.generateBubbles();
 
@@ -397,7 +394,6 @@ app.handleInteravtiveNext = () => {
 
   PromiseQueue.add(() => {
     app.shouldRespondToClick = true;
-    app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
   });
 
