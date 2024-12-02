@@ -29,14 +29,12 @@ import {
 /**
  * Internal dependencies.
  */
-import ExplorableExplanation from './explorableExplanation';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
 import Panel from './panel';
 import ExplorableExplanationPanel from './explorableExplanation/panel';
 import AdUnits from './adUnits';
-import Bids from './bids';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
