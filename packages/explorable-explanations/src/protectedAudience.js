@@ -179,6 +179,7 @@ app.setupLoop = (doNotPlay) => {
   if (doNotPlay) {
     return;
   }
+
   promiseQueue.start();
 };
 
@@ -418,6 +419,7 @@ app.handleControls = () => {
 
 app.toggleInteractiveMode = async () => {
   promiseQueue.clear();
+  promiseQueue.stop();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
 
@@ -442,6 +444,7 @@ app.toggleInteractiveMode = async () => {
     flow.setButtonsDisabilityState();
     return;
   }
+
   promiseQueue.start();
 };
 
