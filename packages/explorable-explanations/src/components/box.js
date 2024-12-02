@@ -26,6 +26,7 @@ const Box = ({
   y,
   width = config.flow.box.width,
   height = config.flow.box.height,
+  color = config.flow.colors.box.background,
 }) => {
   x = typeof x === 'function' ? x() : x;
   y = typeof y === 'function' ? y() : y;
@@ -38,7 +39,7 @@ const Box = ({
   };
 
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
-  app.p.fill(config.flow.colors.box.background);
+  app.p.fill(color);
   app.p.rect(x, y, width, height);
   app.p.push();
   app.p.strokeWeight(0.1);
