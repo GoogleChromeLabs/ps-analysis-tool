@@ -331,7 +331,7 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
-    containerClassName: 'h-6',
+    containerClassName: 'h-6 mb-2',
   },
 };
 
