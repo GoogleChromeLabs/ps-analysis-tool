@@ -17,31 +17,20 @@
 /**
  * External dependencies.
  */
-import { Tabs, type TabItems } from '@google-psat/design-system';
+import { Tabs, useTabs } from '@google-psat/design-system';
 import React from 'react';
 
-interface TableTrayProps {
-  tabItems: TabItems;
-  activeTab: number;
-  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const TableTray = ({ tabItems, activeTab, setActiveTab }: TableTrayProps) => {
-  const ActiveTabContent = tabItems[activeTab].content.Element;
-  const props = tabItems[activeTab].content.props;
+const TableTray = () => {
+  const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
+  const ActiveTabContent = panel.Element;
+  const props = panel.props;
 
   return (
     <div className="w-full h-full">
       <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-1.5">
-        <Tabs
-          items={tabItems}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          showBottomBorder={false}
-          fontSizeClass="text-xs"
-        />
+        <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
       </div>
-      <ActiveTabContent {...props} />
+      {ActiveTabContent && <ActiveTabContent {...props} />}
     </div>
   );
 };

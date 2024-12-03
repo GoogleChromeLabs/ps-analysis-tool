@@ -31,12 +31,13 @@
 		"dev:report": "npm run dev -w @google-psat/report",
 		"dev:cli-dashboard": "npm run dev -w @google-psat/cli-dashboard",
 		"dev:ee:pa": "npm run dev -w @google-psat/explorable-explanations",
+		"build:ee:pa": "npm run build -w @google-psat/explorable-explanations",
 		"build:cli-dashboard": "cross-env NODE_ENV=production npm run build -w @google-psat/cli-dashboard",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
 		"webpack:dev:ext": "npm run dev -w @google-psat/extension",
 		"dev:ext": "run-p dev:tsc-packages webpack:dev:ext",
 		"webpack:build:ext": "cross-env NODE_ENV=production npm run build -w @google-psat/extension",
-		"build:ext": "npm run build:tsc-packages && npm run webpack:build:ext",
+		"build:ext": "npm run build:tsc-packages && npm run build:ee:pa && npm run webpack:build:ext",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
 		"lint:types": "tsc ",
@@ -133,8 +134,7 @@
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^5.1.0",
 		"webpack-node-externals": "^3.0.0",
-		"webpackbar": "^5.0.2",
-		"p5": "^1.11.0"
+		"webpackbar": "^5.0.2"
 	},
 	"lint-staged": {
 		"*.(cjs|js|ts|tsx)": [

@@ -17,17 +17,24 @@
  * Internal Dependencies
  */
 import config from '../config.js';
-import app from '../app.js';
+import app from '../app';
 
 // @todo To be broken down into multipe functions.
 const utils = {};
 
+/**
+ * Creates a request-based interval function similar to `setInterval`,
+ * but uses `requestAnimationFrame` for better synchronization with the browser's refresh rate.
+ * @param fn {Function} callback - The function to execute at each interval.
+ * @param {number} delay - The interval duration in milliseconds.
+ * @returns {object} An object with an `id` property for managing the interval.
+ */
 utils.requestInterval = (fn, delay) => {
   let start = performance.now();
   const handle = { id: null };
 
   /**
-   *
+   * Loop function executed on each animation frame.
    */
   function loop() {
     const current = performance.now();
@@ -50,25 +57,26 @@ utils.clearRequestInterval = (handle) => {
 };
 
 utils.drawArrow = (size, x, y, direction = 'right') => {
-  let _x, _y;
+  // Determine offset based on direction
+  const directionOffsets = {
+    right: { _x: x - 1, _y: y },
+    left: { _x: x + 1, _y: y },
+    down: { _x: x, _y: y - 1 },
+    up: { _x: x, _y: y + 1 },
+  };
 
-  if (direction === 'right') {
-    _x = x - 1;
-    _y = y;
-  } else if (direction === 'left') {
-    _x = x + 1;
-    _y = y;
-  } else if (direction === 'down') {
-    _x = x;
-    _y = y - 1;
-  } else if (direction === 'up') {
-    _x = x;
-    _y = y + 1;
-  }
+  const offset = directionOffsets[direction] || directionOffsets['right'];
 
-  // Clear previous one.
-  utils.triangle(size + 2, _x, _y, direction, config.canvas.background);
+  // Clear the previous arrow
+  utils.triangle(
+    size + 2,
+    offset._x,
+    offset._y,
+    direction,
+    config.canvas.background
+  );
 
+  // Draw the new arrow
   utils.triangle(size, x, y, direction, 'black');
 };
 
@@ -129,12 +137,11 @@ utils.delay = (ms) => {
 };
 
 utils.wipeAndRecreateMainCanvas = () => {
-  const { height, width } = utils.calculateCanvasDimensions();
-  const canvas = app.p.createCanvas(width, height);
-  canvas.parent('ps-canvas');
-  canvas.style('z-index', 0);
+  app.p.clear();
   app.p.background(config.canvas.background);
-  app.p.textSize(config.canvas.fontSize);
+
+  app.timeline.drawTimelineLine();
+  app.timeline.drawTimeline(config.timeline);
 };
 
 utils.wipeAndRecreateInterestCanvas = () => {
@@ -151,6 +158,7 @@ utils.wipeAndRecreateUserCanvas = () => {
 
   canvas.parent('user-canvas');
   canvas.style('z-index', 1);
+  canvas.id('user-canvas');
 };
 
 utils.isInsideCircle = (x, y, x0, y0, r) => {
@@ -165,22 +173,38 @@ utils.drawText = (text, x, y) => {
     p.strokeWeight(0.1);
     p.fill('#000');
     p.textSize(config.canvas.fontSize - 2);
-    p.textFont('ui-sans-serif');
+    p.textFont('sans-serif');
     p.text(text, x, y);
     p.pop();
   }
 };
 
-utils.setupMainCanvas = (p) => {
+utils.setupMainCanvas = async (p, doNotPlay = false) => {
   const { height, width } = utils.calculateCanvasDimensions();
   const canvas = p.createCanvas(width, height);
   canvas.parent('ps-canvas');
   canvas.style('z-index', 0);
   p.background(config.canvas.background);
   p.textSize(config.canvas.fontSize);
-  (async () => {
-    await app.init(p);
-  })();
+  app.p = p;
+
+  canvas.mouseOut(() => {
+    if (app.isInteractiveMode) {
+      app.startTrackingMouse = false;
+    }
+  });
+
+  canvas.mouseOver(() => {
+    if (app.isInteractiveMode) {
+      app.startTrackingMouse = true;
+    }
+  });
+
+  app.setUpTimeLine();
+
+  if (!app.isInteractiveMode) {
+    await app.play(false, doNotPlay);
+  }
 };
 
 utils.setupInterestGroupCanvas = (p) => {
@@ -190,44 +214,46 @@ utils.setupInterestGroupCanvas = (p) => {
   overlayCanvas.parent('interest-canvas');
   overlayCanvas.style('z-index', 2);
   p.textSize(config.canvas.fontSize);
+  // eslint-disable-next-line no-undef
+  if (process.env.IS_RUNNING_STANDALONE) {
+    app.bubbles.minifiedBubbleX = 35;
+    app.bubbles.minifiedBubbleY = 35;
 
-  config.bubbles.minifiedBubbleX = 35;
-  config.bubbles.minifiedBubbleY = 35;
+    app.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
+    app.bubbles.expandedBubbleY = 0;
 
-  config.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
-  config.bubbles.expandedBubbleY = 0;
+    // 335 is the angle where the close icon should be visible.
+    const angle = (305 * Math.PI) / 180;
+    // 335 is the radius + the size of icon so that icon is attached to the circle.
+    const x = 335 * Math.cos(angle) + app.bubbles.expandedBubbleX;
+    const y = 335 * Math.sin(angle) + 320;
 
-  // 335 is the angle where the close icon should be visible.
-  const angle = (305 * Math.PI) / 180;
-  // 335 is the radius + the size of icon so that icon is attached to the circle.
-  const x = 335 * Math.cos(angle) + config.bubbles.expandedBubbleX;
-  const y = 335 * Math.sin(angle) + 320;
+    app.closeButton.style.left = `${x}px`;
+    app.closeButton.style.top = `${y}px`;
 
-  app.closeButton.style.left = `${x}px`;
-  app.closeButton.style.top = `${y}px`;
+    document.styleSheets[0].cssRules.forEach((rules, index) => {
+      if (rules.selectorText === '.minified-bubble-container.expanded') {
+        document.styleSheets[0].cssRules[index].style.left = `${
+          app.bubbles.expandedBubbleX - 320
+        }px`;
 
-  document.styleSheets[0].cssRules.forEach((rules, index) => {
-    if (rules.selectorText === '.minified-bubble-container.expanded') {
-      document.styleSheets[0].cssRules[index].style.left = `${
-        config.bubbles.expandedBubbleX - 320
-      }px`;
+        document.styleSheets[0].cssRules[
+          index
+        ].style.width = `${app.bubbles.expandedCircleDiameter}px`;
+        document.styleSheets[0].cssRules[
+          index
+        ].style.height = `${app.bubbles.expandedCircleDiameter}px`;
+      }
 
-      document.styleSheets[0].cssRules[
-        index
-      ].style.width = `${config.bubbles.expandedCircleDiameter}px`;
-      document.styleSheets[0].cssRules[
-        index
-      ].style.height = `${config.bubbles.expandedCircleDiameter}px`;
-    }
+      if (rules.selectorText === '.minified-bubble-container') {
+        document.styleSheets[0].cssRules[index].style.top = `${
+          app.bubbles.minifiedBubbleY - 25
+        }px`;
+      }
+    });
+  }
 
-    if (rules.selectorText === '.minified-bubble-container') {
-      document.styleSheets[0].cssRules[index].style.top = `${
-        config.bubbles.minifiedBubbleY - 25
-      }px`;
-    }
-  });
-
-  app.interestGroupInit(p);
+  app.igp = p;
 };
 
 utils.setupUserCanvas = (p) => {
@@ -237,8 +263,7 @@ utils.setupUserCanvas = (p) => {
   overlayCanvas.parent('user-canvas');
   overlayCanvas.style('z-index', 1);
   p.textSize(config.canvas.fontSize);
-
-  app.userInit(p);
+  app.up = p;
 };
 
 utils.calculateCanvasDimensions = () => {
@@ -286,62 +311,6 @@ utils.calculateCanvasDimensions = () => {
   };
 };
 
-utils.isOverControls = (mouseX, mouseY) => {
-  const {
-    bubbles: { minifiedBubbleX, minifiedBubbleY, minifiedCircleDiameter },
-  } = config;
-  if (
-    utils.isInsideCircle(
-      minifiedBubbleX,
-      minifiedBubbleY,
-      mouseX,
-      mouseY,
-      minifiedCircleDiameter + 20
-    )
-  ) {
-    return true;
-  }
-
-  const controlButton = document
-    .getElementById('play-pause-button')
-    .getBoundingClientRect();
-  const interactiveModeDivStyles = document
-    .getElementById('interactive-mode-div')
-    .getBoundingClientRect();
-  const multiSellerDivStyles = document
-    .getElementById('multi-seller-div')
-    .getBoundingClientRect();
-
-  if (
-    mouseX >= controlButton.left &&
-    mouseX <= controlButton.right &&
-    mouseY >= controlButton.top &&
-    mouseY <= controlButton.bottom
-  ) {
-    return true;
-  }
-
-  if (
-    mouseX >= interactiveModeDivStyles.left &&
-    mouseX <= multiSellerDivStyles.right &&
-    mouseY >= interactiveModeDivStyles.top &&
-    mouseY <= multiSellerDivStyles.bottom
-  ) {
-    return true;
-  }
-
-  if (
-    mouseX >= multiSellerDivStyles.left &&
-    mouseX <= multiSellerDivStyles.right &&
-    mouseY >= multiSellerDivStyles.top &&
-    mouseY <= multiSellerDivStyles.bottom
-  ) {
-    return true;
-  }
-
-  return false;
-};
-
 utils.markVisitedValue = (index, value) => {
   config.timeline.circles = config.timeline.circles.map((circle, i) => {
     if (i < index && index >= 0) {
@@ -349,20 +318,6 @@ utils.markVisitedValue = (index, value) => {
     }
     return circle;
   });
-};
-
-utils.disableButtons = () => {
-  app.prevButton.style.cursor =
-    app.timeline.currentIndex > 0 ? 'pointer' : 'default';
-  app.prevButton.disabled = app.timeline.currentIndex > 0 ? false : true;
-  app.nextButton.disabled =
-    app.timeline.currentIndex === config.timeline.circles.length - 1
-      ? true
-      : false;
-  app.nextButton.style.cursor =
-    app.timeline.currentIndex >= config.timeline.circles.length - 1
-      ? 'default'
-      : 'pointer';
 };
 
 export default utils;

@@ -20,6 +20,8 @@ import config from '../config';
 import app from '../app';
 import utils from '../lib/utils';
 import bubbles from './bubbles';
+import promiseQueue from '../lib/promiseQueue.js';
+import flow from './flow';
 
 /**
  * @module Timeline
@@ -39,39 +41,41 @@ timeline.init = () => {
     }
   });
 
-  if (config.isInteractiveMode) {
+  if (app.isInteractiveMode) {
     bubbles.showMinifiedBubbles();
 
     app.p.mouseMoved = (event) => {
-      const { pageX, pageY } = event;
-
-      if (utils.isOverControls(pageX, pageY) || config.bubbles.isExpanded) {
-        config.mouseX = pageX + 50;
-        config.mouseY = pageY + 50;
-      } else {
-        config.mouseX = pageX;
-        config.mouseY = pageY;
-      }
-      if (!config.shouldRespondToClick) {
+      if (!app.isInteractiveMode) {
         return;
       }
+      const { offsetX, offsetY } = event;
+      app.mouseX = offsetX;
+      app.mouseY = offsetY;
+
+      if (!app.shouldRespondToClick) {
+        return;
+      }
+
       utils.wipeAndRecreateUserCanvas();
       timeline.renderUserIcon();
     };
 
-    app.p.mouseClicked = async () => {
-      if (!config.shouldRespondToClick) {
+    app.p.mouseClicked = () => {
+      if (!app.isInteractiveMode) {
+        return;
+      }
+      if (!app.shouldRespondToClick) {
         return;
       }
 
-      const { circlePositions } = app.timeline;
+      const { circlePositions, expandIconPositions } = app.timeline;
       let clickedIndex;
 
       circlePositions.forEach((positions, index) => {
         if (
           utils.isInsideCircle(
-            config.mouseX,
-            config.mouseY,
+            app.mouseX,
+            app.mouseY,
             positions.x,
             positions.y,
             config.timeline.circleProps.diameter / 2
@@ -81,24 +85,144 @@ timeline.init = () => {
         }
       });
 
+      expandIconPositions.forEach((positions) => {
+        if (
+          utils.isInsideCircle(
+            app.mouseX,
+            app.mouseY,
+            positions.x + config.timeline.circleProps.diameter / 2,
+            positions.y,
+            20
+          )
+        ) {
+          app.isRevisitingNodeInInteractiveMode = true;
+          clickedIndex = positions.index;
+        }
+      });
+
       if (
         clickedIndex !== undefined &&
-        !config.timeline.circles[clickedIndex].visited
+        !app.isRevisitingNodeInInteractiveMode
       ) {
-        if (window.cancelPromise) {
-          window.cancelPromise = null;
-        }
-        config.shouldRespondToClick = false;
+        promiseQueue.clear();
+        flow.clearBelowTimelineCircles();
+        app.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
-        await app.drawFlows(clickedIndex);
-        config.timeline.circles[clickedIndex].visited = true;
-        bubbles.clearAndRewriteBubbles();
-        bubbles.showMinifiedBubbles();
-        config.shouldRespondToClick = true;
+        bubbles.generateBubbles();
+
+        if (config.timeline.circles[clickedIndex].visited) {
+          promiseQueue.add(() => {
+            utils.wipeAndRecreateUserCanvas();
+            utils.wipeAndRecreateMainCanvas();
+            app.p.push();
+            app.p.stroke(config.timeline.colors.grey);
+
+            config.timeline.circles.forEach((circle, index) => {
+              timeline.drawCircle(
+                index,
+                circle.visited && index !== clickedIndex ? true : false
+              );
+
+              if (circle.visited && index === clickedIndex) {
+                const position = circlePositions[clickedIndex];
+                const user = config.timeline.user;
+                app.up.image(
+                  app.p.userIcon,
+                  position.x - user.width / 2,
+                  position.y - user.height / 2,
+                  user.width,
+                  user.height
+                );
+              }
+            });
+
+            app.p.pop();
+          });
+        }
+
+        app.drawFlows(clickedIndex);
+
+        promiseQueue.add(() => {
+          if (config.timeline.circles[clickedIndex].visited) {
+            app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
+              if (indexes === clickedIndex) {
+                return false;
+              }
+              return true;
+            });
+
+            app.visitedIndexOrder.push(clickedIndex);
+
+            config.timeline.circles[clickedIndex].visitedIndex =
+              app.visitedIndexes;
+            app.visitedIndexes = 1;
+
+            app.visitedIndexOrder.forEach((idx) => {
+              config.timeline.circles[idx].visitedIndex = app.visitedIndexes;
+              app.visitedIndexes++;
+            });
+
+            app.bubbles.positions.splice(
+              -(config.timeline.circles[clickedIndex].igGroupsCount ?? 0)
+            );
+
+            app.shouldRespondToClick = true;
+            bubbles.showMinifiedBubbles();
+            timeline.renderUserIcon();
+            return;
+          } else {
+            const positions = app.timeline.circlePositions[clickedIndex];
+            app.timeline.expandIconPositions.push({
+              x: positions.x + config.timeline.circleProps.diameter / 2,
+              y: positions.y,
+              index: clickedIndex,
+            });
+
+            app.visitedIndexOrder.push(clickedIndex);
+            if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
+              app.visitedIndexOrderTracker = app.visitedIndexOrder.length - 1;
+            }
+
+            app.bubbles.interestGroupCounts +=
+              config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
+            config.timeline.circles[clickedIndex].visited = true;
+            config.timeline.circles[clickedIndex].visitedIndex =
+              app.visitedIndexes;
+            app.visitedIndexes += 1;
+          }
+
+          bubbles.showMinifiedBubbles();
+          app.shouldRespondToClick = true;
+          utils.wipeAndRecreateUserCanvas();
+          utils.wipeAndRecreateMainCanvas();
+          timeline.renderUserIcon();
+          flow.setButtonsDisabilityState();
+        });
+
+        promiseQueue.skipTo(0);
+        promiseQueue.start();
+      } else if (
+        clickedIndex !== undefined &&
+        app.isRevisitingNodeInInteractiveMode
+      ) {
+        promiseQueue.clear();
+        flow.clearBelowTimelineCircles();
+        app.shouldRespondToClick = false;
+        app.drawFlows(clickedIndex);
+
+        promiseQueue.add(() => {
+          app.shouldRespondToClick = true;
+          timeline.renderUserIcon();
+          app.isRevisitingNodeInInteractiveMode = false;
+        });
+
+        promiseQueue.skipTo(0);
+        promiseQueue.start();
         utils.wipeAndRecreateUserCanvas();
-        timeline.renderUserIcon();
+        utils.wipeAndRecreateMainCanvas();
+        return;
       }
     };
   } else {
@@ -119,7 +243,7 @@ timeline.drawLineAboveCircle = (index, completed = false) => {
   const p = app.p;
   const positions = app.timeline.circlePositions[index];
   const strokeColor =
-    completed && !config.isInteractiveMode ? colors.visitedBlue : colors.grey;
+    completed && !app.isInteractiveMode ? colors.visitedBlue : colors.grey;
 
   p.push();
   p.stroke(strokeColor);
@@ -135,37 +259,32 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
   p.textAlign(p.CENTER, p.CENTER);
   // Draw circles and text at the timeline position
   circles.forEach((circleItem, index) => {
-    if (!window.cancelPromiseForPreviousAndNext) {
-      const xPositionForCircle =
-        config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
-      const yPositionForCircle = position.y + circleVerticalSpace;
+    const xPositionForCircle =
+      config.timeline.position.x + diameter / 2 + circleVerticalSpace * index;
+    const yPositionForCircle = position.y + circleVerticalSpace;
 
+    if (app.timeline.circlePositions.length < config.timeline.circles.length) {
       app.timeline.circlePositions.push({
         x: xPositionForCircle,
         y: yPositionForCircle,
       });
-
-      p.push();
-      p.stroke(config.timeline.colors.grey);
-      timeline.drawCircle(index);
-      p.pop();
-
-      p.push();
-      p.fill(config.timeline.colors.black);
-      p.textSize(12);
-      p.strokeWeight(0.1);
-      p.textFont('ui-sans-serif');
-      if (!config.isInteractiveMode) {
-        p.text(circleItem.datetime, xPositionForCircle, position.y);
-      }
-      p.text(circleItem.website, xPositionForCircle, position.y + 20);
-      p.pop();
-    } else {
-      p.push();
-      p.stroke(config.timeline.colors.grey);
-      timeline.drawCircle(index);
-      p.pop();
     }
+
+    p.push();
+    p.stroke(config.timeline.colors.grey);
+    timeline.drawCircle(index);
+    p.pop();
+
+    p.push();
+    p.fill(config.timeline.colors.black);
+    p.textSize(12);
+    p.strokeWeight(0.1);
+    p.textFont('sans-serif');
+    if (!app.isInteractiveMode) {
+      p.text(circleItem.datetime, xPositionForCircle, position.y);
+    }
+    p.text(circleItem.website, xPositionForCircle, position.y + 20);
+    p.pop();
 
     timeline.drawLineAboveCircle(index);
   });
@@ -175,7 +294,7 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
  * Draws the horizontal timeline line.
  */
 timeline.drawTimelineLine = () => {
-  if (config.isInteractiveMode) {
+  if (app.isInteractiveMode) {
     return;
   }
 
@@ -220,6 +339,21 @@ timeline.drawCircle = (index, completed = false) => {
   app.p.circle(position.x, position.y, diameter);
 
   if (completed) {
+    if (app.isInteractiveMode) {
+      // app.up.text(
+      //   circles[index].visitedIndex ?? '',
+      //   position.x - 5,
+      //   position.y + diameter / 2
+      // );
+      // app.up.image(
+      //   app.p.expandIcon,
+      //   position.x + diameter / 2,
+      //   position.y,
+      //   20,
+      //   20
+      // );
+    }
+
     app.up.image(
       app.p.completedCheckMark,
       position.x - user.width / 2,
@@ -231,9 +365,9 @@ timeline.drawCircle = (index, completed = false) => {
 };
 
 timeline.renderUserIcon = () => {
-  const { mouseX, mouseY } = config;
+  const { mouseX, mouseY } = app;
   const circlePosition =
-    config.isInteractiveMode && config.shouldRespondToClick
+    app.isInteractiveMode && app.shouldRespondToClick
       ? { x: mouseX, y: mouseY }
       : app.timeline.circlePositions[app.timeline.currentIndex];
 
@@ -245,20 +379,22 @@ timeline.renderUserIcon = () => {
   timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
 
-  app.up.image(
-    app.p.userIcon,
-    circlePosition.x - user.width / 2,
-    circlePosition.y - user.height / 2,
-    user.width,
-    user.height
-  );
+  if (app.startTrackingMouse) {
+    app.up.image(
+      app.p.userIcon,
+      circlePosition.x - user.width / 2,
+      circlePosition.y - user.height / 2,
+      user.width,
+      user.height
+    );
+  }
 };
 
 timeline.eraseAndRedraw = () => {
   const currentIndex = app.timeline.currentIndex;
   const { colors } = config.timeline;
 
-  if (config.isInteractiveMode) {
+  if (app.isInteractiveMode) {
     config.timeline.circles.forEach((circle, index) => {
       if (circle.visited === true) {
         app.p.push();
@@ -275,12 +411,9 @@ timeline.eraseAndRedraw = () => {
   if (currentIndex > 0) {
     let i = 0;
     while (i < currentIndex) {
-      app.p.push();
-      app.p.stroke(colors.visitedBlue);
-      timeline.drawCircle(i, true);
-      app.p.pop();
+      timeline.drawCircle(i, config.timeline.circles[i].visited);
 
-      timeline.drawLineAboveCircle(i, true);
+      timeline.drawLineAboveCircle(i, config.timeline.circles[i].visited);
       i = i + 1;
     }
   }
