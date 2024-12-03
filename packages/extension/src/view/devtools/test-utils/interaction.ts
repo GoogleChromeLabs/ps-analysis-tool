@@ -85,6 +85,9 @@ export class Interaction {
       });
       const button = await frame.$(selectors.analyzeThisButtonSelector);
       await button?.click();
+
+      const dropdown = await frame.$('button[title="Cookies"]');
+      await dropdown?.click();
     }
 
     return frame;

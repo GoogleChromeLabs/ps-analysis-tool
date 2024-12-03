@@ -64,7 +64,7 @@ export class PuppeteerManagement {
 
   async setup(extraArgs?: string[], defaultViewport?: Viewport) {
     this.browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       args: [...puppeteerArgs, ...(extraArgs || [])],
       devtools: true,
       defaultViewport: defaultViewport || null,
