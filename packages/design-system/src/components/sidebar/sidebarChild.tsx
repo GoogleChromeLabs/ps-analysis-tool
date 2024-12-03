@@ -113,9 +113,9 @@ const SidebarChild = ({
         {Object.keys(sidebarItem.children)?.length !== 0 && (
           <button
             title={
-              typeof sidebarItem.title === 'string'
-                ? sidebarItem.title
-                : sidebarItem.title?.()
+              typeof sidebarItem.title === 'function'
+                ? sidebarItem.title()
+                : sidebarItem.title || ''
             }
             onClick={() => {
               toggleDropdown(!sidebarItem.dropdownOpen, itemKey);
