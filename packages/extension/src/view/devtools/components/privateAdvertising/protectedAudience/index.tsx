@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   InfoCard as InfoCardTemplate,
   PSInfoKey,
   QuickLinksList,
-  Tabs,
+  TabsProvider,
   type PSInfoKeyType,
   type TabItems,
 } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -35,6 +32,8 @@ import classNames from 'classnames';
 import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
+import Panel from './panel';
+import ExplorableExplanationPanel from './explorableExplanation/panel';
 import AdUnits from './adUnits';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
@@ -49,8 +48,6 @@ const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
 };
 
 const ProtectedAudience = () => {
-  const [activeTab, setActiveTab] = useState(0);
-
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -61,6 +58,12 @@ const ProtectedAudience = () => {
             infoKey: PSInfoKey.ProtectedAudience,
           },
           className: 'p-4',
+        },
+      },
+      {
+        title: 'Explorable Explanations',
+        content: {
+          Element: ExplorableExplanationPanel,
         },
       },
       {
@@ -95,37 +98,10 @@ const ProtectedAudience = () => {
     []
   );
 
-  const ActiveTabContent = tabItems[activeTab].content.Element;
-
   return (
-    <div
-      data-testid="protected-audience-content"
-      className="h-screen w-full flex flex-col overflow-hidden"
-    >
-      <div className="p-4">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">{I18n.getMessage('protectedAudience')}</h1>
-        </div>
-      </div>
-      <Tabs
-        items={tabItems}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-      <div
-        className={classNames(
-          'overflow-auto',
-          tabItems[activeTab].content.className
-        )}
-        style={{
-          minHeight: 'calc(100% - 93px)',
-        }}
-      >
-        {ActiveTabContent && (
-          <ActiveTabContent {...tabItems[activeTab].content.props} />
-        )}
-      </div>
-    </div>
+    <TabsProvider items={tabItems}>
+      <Panel />
+    </TabsProvider>
   );
 };
 

@@ -20,36 +20,30 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
 
-export type TabItems = Array<{
-  title: string;
-  content: {
-    Element: (props: any) => React.JSX.Element;
-    props?: Record<string, any>;
-    className?: string;
-  };
-}>;
+/**
+ * Internal dependencies
+ */
+import { useTabs } from './useTabs';
+
 interface TabsProps {
-  items: TabItems;
-  activeTab: number;
-  setActiveTab: React.Dispatch<React.SetStateAction<number>>;
   showBottomBorder?: boolean;
   fontSizeClass?: string;
 }
 
-const Tabs = ({
-  items,
-  activeTab,
-  setActiveTab,
-  showBottomBorder = true,
-  fontSizeClass,
-}: TabsProps) => {
+const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
+  const { activeTab, setActiveTab, titles } = useTabs(({ state, actions }) => ({
+    activeTab: state.activeTab,
+    setActiveTab: actions.setActiveTab,
+    titles: state.titles,
+  }));
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       event.preventDefault();
 
       if (event.key === 'Tab') {
         const nextIndex = activeTab + 1;
-        if (nextIndex < items.length) {
+        if (nextIndex < titles.length) {
           setActiveTab(nextIndex);
         } else {
           setActiveTab(0);
@@ -61,11 +55,11 @@ const Tabs = ({
         if (previousIndex >= 0) {
           setActiveTab(previousIndex);
         } else {
-          setActiveTab(items.length - 1);
+          setActiveTab(titles.length - 1);
         }
       }
     },
-    [activeTab, items.length, setActiveTab]
+    [activeTab, titles.length, setActiveTab]
   );
 
   return (
@@ -81,7 +75,7 @@ const Tabs = ({
           fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
-        {items.map((item, index) => (
+        {titles.map((title, index) => (
           <button
             key={index}
             onClick={() => setActiveTab(index)}
@@ -98,7 +92,7 @@ const Tabs = ({
               }
             )}
           >
-            {item.title}
+            {title}
           </button>
         ))}
       </div>

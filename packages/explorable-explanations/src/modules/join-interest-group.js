@@ -22,6 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
+import promiseQueue from '../lib/promiseQueue.js';
 
 /**
  * @module joinInterestGroup
@@ -77,9 +78,9 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSP Tag',
-      x: () => app.joinInterestGroup.nextTipCoordinates.x - box.width / 2,
-      y: () => app.joinInterestGroup.nextTipCoordinates.y + ARROW_SIZE,
+      title: 'DSP Tags',
+      x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;
@@ -91,8 +92,8 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.joinInterestGroup.nextTipCoordinates.x,
-      y1: () => app.joinInterestGroup.nextTipCoordinates.y + 40,
+      x1: () => app.joinInterestGroup.nextTipCoordinates?.x,
+      y1: () => app.joinInterestGroup.nextTipCoordinates?.y + 40,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue;
@@ -104,9 +105,9 @@ joinInterestGroup.setUp = (index) => {
     component: Box,
     props: {
       title: 'DSPs',
-      x: () => app.joinInterestGroup.nextTipCoordinates.x - box.width / 2,
+      x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () =>
-        app.joinInterestGroup.nextTipCoordinates.y + config.flow.arrowSize,
+        app.joinInterestGroup.nextTipCoordinates?.y + config.flow.arrowSize,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;
@@ -118,8 +119,8 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.joinInterestGroup.nextTipCoordinates.x + 10,
-      y1: () => app.joinInterestGroup.nextTipCoordinates.y - 15,
+      x1: () => app.joinInterestGroup.nextTipCoordinates?.x + 10,
+      y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 15,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue;
@@ -131,8 +132,8 @@ joinInterestGroup.setUp = (index) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.joinInterestGroup.nextTipCoordinates.x,
-      y1: () => app.joinInterestGroup.nextTipCoordinates.y - 10 - box.height,
+      x1: () => app.joinInterestGroup.nextTipCoordinates?.x,
+      y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 10 - box.height,
       text: 'joinInterestGroup()',
     },
     callBack: (returnValue) => {
@@ -148,7 +149,7 @@ joinInterestGroup.setUp = (index) => {
  * Each step is rendered sequentially with delays.
  * @param {number} index - The index of the circle in the timeline to draw.
  */
-joinInterestGroup.draw = async (index) => {
+joinInterestGroup.draw = (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
   const steps = app.joinInterestGroup.joinings[index];
@@ -158,35 +159,40 @@ joinInterestGroup.draw = async (index) => {
   }
 
   for (const step of steps) {
-    if (window.cancelPromise) {
-      return;
-    }
-    const { component, props, callBack } = step;
+    promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
+    promiseQueue.add(async () => {
+      const { component, props, callBack } = step;
 
-    const returnValue = await component(props); // eslint-disable-line no-await-in-loop
-    const delay = component === Box ? 1000 : 0;
+      const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
-    if (callBack) {
-      callBack(returnValue);
-    }
+      const delay = component === Box ? 1000 : 0;
 
-    await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      if (callBack) {
+        callBack(returnValue);
+      }
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      }
+    });
   }
 
-  bubbles.generateBubbles();
+  promiseQueue.add(async () => {
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      await bubbles.reverseBarrageAnimation(index);
+    }
 
-  await bubbles.reverseBarrageAnimation(index);
+    if (app.bubbles.isExpanded) {
+      bubbles.showExpandedBubbles();
+    } else {
+      bubbles.showMinifiedBubbles();
+    }
+  });
 
-  if (config.bubbles.isExpanded) {
-    bubbles.showExpandedBubbles();
-  } else {
-    bubbles.showMinifiedBubbles();
-  }
-
-  config.bubbles.interestGroupCounts +=
-    config.timeline.circles[index]?.igGroupsCount ?? 0;
-
-  flow.clearBelowTimelineCircles();
+  promiseQueue.add(() => {
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      flow.clearBelowTimelineCircles();
+    }
+  });
 };
 
 export default joinInterestGroup;

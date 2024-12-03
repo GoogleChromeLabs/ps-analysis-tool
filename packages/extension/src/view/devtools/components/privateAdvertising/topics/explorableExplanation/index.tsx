@@ -17,185 +17,40 @@
 /**
  * External dependencies.
  */
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { Resizable } from 're-resizable';
+import React, { useMemo, useState } from 'react';
+import { TabsProvider, type TabItems } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import Header from '../../../explorableExplanation/header';
-import Tray from './tray';
-import Animation from './animation';
-import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
-import type { TopicsTableType } from './topicsTable';
-import { adtechs, websites } from './topicsAnimation/data';
+import TopicsTable, { type TopicsTableType } from './topicsTable';
+import Panel from './panel';
 
 const ExplorableExplanation = () => {
-  const [play, setPlay] = useState(true);
-  const [reset, _setReset] = useState(false);
-  const [sliderStep, setSliderStep] = useState(1);
-  const [activeTab, setActiveTab] = useState(0);
   const [topicsTableData, setTopicsTableData] = useState<
     Record<number, TopicsTableType[]>
   >({});
-  const [epochCompleted, setEpochCompleted] = useState<Record<number, boolean>>(
-    {}
-  );
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const epochs = useMemo(() => createEpochs(), []);
-  const siteAdTechs = useMemo(() => {
-    return assignAdtechsToSites(websites, adtechs);
-  }, []);
-
-  const setReset = useCallback(() => {
-    setPlay(false);
-    _setReset(true);
-    setSliderStep(1);
-    setTopicsTableData({});
-    setActiveTab(0);
-    setEpochCompleted({});
-
-    timeoutRef.current = setTimeout(() => {
-      _setReset(false);
-      setPlay(true);
-    }, 0);
-  }, []);
-
-  useEffect(() => {
-    if (!epochCompleted[activeTab]) {
-      setTopicsTableData((prevTopicsTableData) => {
-        const newTopicsTableData = { ...prevTopicsTableData };
-        newTopicsTableData[activeTab] = [];
-        return newTopicsTableData;
-      });
-    }
-  }, [activeTab, epochCompleted]);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
-  const handleTopicsCalculation = useCallback(
-    (visitIndex: number) => {
-      setTopicsTableData((prevTopicsTableData) => {
-        const { topics, website } = epochs[activeTab].webVisits[visitIndex];
-        const topicsData = prevTopicsTableData[activeTab];
-        const newTopicsTableData = {
-          ...prevTopicsTableData,
-        };
-
-        const newTopicsData = topics.reduce(
-          (acc, topic) => {
-            const existingTopic = acc.find((t) => t.topicName === topic);
-            if (existingTopic) {
-              existingTopic.count += 1;
-              existingTopic.observedByContextDomains = [
-                ...new Set([
-                  ...existingTopic.observedByContextDomains,
-                  ...siteAdTechs[website],
-                ]),
-              ];
-            } else {
-              acc.push({
-                topicName: topic,
-                count: 1,
-                observedByContextDomains: siteAdTechs[website] || [],
-              });
-            }
-            return acc;
+  const tabItems = useMemo<TabItems>(
+    () =>
+      ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'].map((item) => ({
+        title: item,
+        content: {
+          Element: TopicsTable,
+          props: {
+            data: topicsTableData,
           },
-          [...(topicsData || [])]
-        );
-
-        newTopicsTableData[activeTab] = newTopicsData;
-
-        return newTopicsTableData;
-      });
-    },
-    [activeTab, epochs, siteAdTechs]
+        },
+      })),
+    [topicsTableData]
   );
-
-  const handleUserVisit = useCallback(
-    (visitIndex: number, updateTopics = true) => {
-      if (visitIndex < epochs[activeTab].webVisits.length && updateTopics) {
-        handleTopicsCalculation(visitIndex);
-      }
-
-      if (visitIndex === epochs[activeTab].webVisits.length) {
-        if (activeTab < 3 && updateTopics) {
-          setActiveTab(activeTab + 1);
-        } else {
-          setPlay(false);
-        }
-
-        setEpochCompleted((prevEpochCompleted) => ({
-          ...prevEpochCompleted,
-          [activeTab]: true,
-        }));
-      }
-    },
-    [activeTab, epochs, handleTopicsCalculation]
-  );
-
-  const handlePlay = useCallback(() => {
-    if (activeTab === 3 && epochCompleted[activeTab]) {
-      setReset();
-    } else {
-      setPlay((prevPlay) => !prevPlay);
-    }
-  }, [activeTab, epochCompleted, setReset]);
 
   return (
-    <div className="flex flex-col h-full">
-      <Header
-        play={play}
-        setPlay={handlePlay}
-        sliderStep={sliderStep}
-        setSliderStep={setSliderStep}
-        historyCount={epochs[activeTab].webVisits.length}
-        reset={setReset}
+    <TabsProvider items={tabItems}>
+      <Panel
+        topicsTableData={topicsTableData}
+        setTopicsTableData={setTopicsTableData}
       />
-      <div className="flex-1 overflow-auto">
-        <Animation
-          epoch={epochs[activeTab].webVisits}
-          isAnimating={!epochCompleted?.[activeTab]}
-          siteAdTechs={siteAdTechs}
-          isPlaying={play}
-          resetAnimation={reset}
-          speedMultiplier={sliderStep}
-          handleUserVisit={handleUserVisit}
-        />
-      </div>
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '20%',
-        }}
-        minHeight="15%"
-        maxHeight="95%"
-        enable={{
-          top: true,
-        }}
-        className="h-full flex"
-      >
-        <Tray
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          topicsTableData={topicsTableData[activeTab] || []}
-        />
-      </Resizable>
-    </div>
+    </TabsProvider>
   );
 };
 

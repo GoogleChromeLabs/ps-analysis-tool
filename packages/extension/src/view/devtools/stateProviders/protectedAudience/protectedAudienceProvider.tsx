@@ -28,6 +28,8 @@ import type {
   NoBidsType,
   singleAuctionEvent,
   ReceivedBids,
+  SingleSellerAuction,
+  MultiSellerAuction,
 } from '@google-psat/common';
 
 /**
@@ -67,13 +69,140 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['adsAndBidders']
   >({});
 
+  const reshapeAuctionEvents = useCallback(
+    (
+      auctionEventsToBeParsed: SingleSellerAuction | MultiSellerAuction | null,
+      isMultiSeller: boolean
+    ) => {
+      let didAuctionEventsChange = false;
+
+      const reshapeSingleSeller = (prevState: typeof auctionEvents) => {
+        const reshapedAuctionEvents: ProtectedAudienceContextType['state']['auctionEvents'] =
+          {
+            ...prevState,
+          };
+
+        if (!auctionEventsToBeParsed) {
+          return null;
+        }
+
+        Object.values(auctionEventsToBeParsed as SingleSellerAuction).forEach(
+          (events) => {
+            const adUnitCode = JSON.parse(
+              // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+              events?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+            ).divId;
+
+            if (!adUnitCode) {
+              return;
+            }
+
+            const time = new Date(events?.[0]?.time * 1000).toUTCString();
+
+            reshapedAuctionEvents[adUnitCode] = {
+              ...reshapedAuctionEvents[adUnitCode],
+              [time]: {
+                // @ts-ignore - seller is not defined in type, but it is in the data
+                [events?.[0]?.auctionConfig?.seller ?? '']: {
+                  // @ts-ignore - seller is not defined in type, but it is in the data
+                  [events?.[0]?.auctionConfig?.seller ?? '']: events,
+                },
+              },
+            };
+          }
+        );
+
+        return reshapedAuctionEvents;
+      };
+
+      const reshapeMultiSeller = (prevState: typeof auctionEvents) => {
+        const reshapedAuctionEvents: ProtectedAudienceContextType['state']['auctionEvents'] =
+          { ...prevState };
+
+        if (!auctionEventsToBeParsed) {
+          return null;
+        }
+
+        Object.values(auctionEventsToBeParsed as MultiSellerAuction).forEach(
+          (events) => {
+            let adUnit = '';
+
+            Object.values(events).forEach((event) => {
+              if (adUnit) {
+                return;
+              }
+
+              adUnit = JSON.parse(
+                // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                event?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+              ).divId;
+            });
+
+            if (!adUnit) {
+              return;
+            }
+
+            const time = new Date(
+              events?.['0']?.[0]?.time * 1000
+            ).toUTCString();
+
+            const sspEvents = Object.values(events).reduce((acc, event) => {
+              // @ts-ignore
+              const seller = event?.[0]?.auctionConfig?.seller ?? '';
+
+              acc[seller] = event;
+
+              return acc;
+            }, {} as Record<string, singleAuctionEvent[]>);
+
+            reshapedAuctionEvents[adUnit] = {
+              ...reshapedAuctionEvents[adUnit],
+              [time]: {
+                // @ts-ignore
+                [events?.['0']?.[0]?.auctionConfig?.seller ?? '']: {
+                  ...sspEvents,
+                },
+              },
+            };
+          }
+        );
+
+        return reshapedAuctionEvents;
+      };
+
+      if (Object.keys(auctionEventsToBeParsed || {}).length === 0) {
+        setAuctionEvents(() => null);
+        return true;
+      }
+
+      setAuctionEvents((prevState) => {
+        if (
+          auctionEventsToBeParsed &&
+          !isEqual(prevState || {}, auctionEventsToBeParsed)
+        ) {
+          didAuctionEventsChange = true;
+          const data = isMultiSeller
+            ? reshapeMultiSeller(prevState)
+            : reshapeSingleSeller(prevState);
+
+          return data;
+        }
+
+        return prevState;
+      });
+
+      return didAuctionEventsChange;
+    },
+    []
+  );
+
   const messagePassingListener = useCallback(
     // eslint-disable-next-line complexity
     async (message: {
       type: string;
       payload: {
         tabId: number;
-        auctionEvents: ProtectedAudienceContextType['state']['auctionEvents'];
+        auctionEvents: SingleSellerAuction | MultiSellerAuction | null;
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
@@ -95,23 +224,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         if (message.payload.tabId === tabId) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
 
-          setAuctionEvents((prevState) => {
-            if (!prevState && message.payload.auctionEvents) {
-              didAuctionEventsChange = true;
-              return message.payload.auctionEvents;
-            }
-
-            if (
-              prevState &&
-              message.payload.auctionEvents &&
-              !isEqual(prevState, message.payload.auctionEvents)
-            ) {
-              didAuctionEventsChange = true;
-              return message.payload.auctionEvents;
-            }
-
-            return prevState;
-          });
+          didAuctionEventsChange = reshapeAuctionEvents(
+            message.payload.auctionEvents,
+            message.payload.multiSellerAuction
+          );
 
           if (
             !didAuctionEventsChange &&
@@ -216,14 +332,18 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    []
+    [reshapeAuctionEvents]
   );
   const onCommittedNavigationListener = useCallback(
     ({
       frameId,
       frameType,
+      tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameType !== 'outermost_frame' && frameId !== 0) {
+      if (
+        (frameType !== 'outermost_frame' && frameId !== 0) ||
+        tabId !== chrome.devtools.inspectedWindow.tabId
+      ) {
         return;
       }
 

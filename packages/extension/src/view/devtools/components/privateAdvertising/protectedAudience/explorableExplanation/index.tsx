@@ -13,76 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-import { Resizable } from 're-resizable';
-import { noop } from '@google-psat/common';
+import { TabsProvider, type TabItems } from '@google-psat/design-system';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
  */
-import Header from '../../../explorableExplanation/header';
-import Tray from './tray';
+import InterestGroups from '../interestGroups';
+import Auctions from '../auctions';
+import AdUnits from '../adUnits';
+import Bids from '../bids';
+import Panel from './panel';
 
 const ExplorableExplanation = () => {
-  const [play, setPlay] = useState(false);
-  const [sliderStep, setSliderStep] = useState(1);
-  const [activeTab, setActiveTab] = useState(0);
-  const [interactiveMode, setInteractiveMode] = useState(false);
-  const [multiSeller, setMultiSeller] = useState(false);
-  const historyCount = 10;
-
-  const extraInterface = (
-    <div className="flex gap-2 items-center">
-      <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={interactiveMode}
-          onChange={(e) => setInteractiveMode(e.target.checked)}
-        />
-        Interactive Mode
-      </label>
-      <label className="text-raisin-black dark:text-bright-gray text-sm flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={multiSeller}
-          onChange={(e) => setMultiSeller(e.target.checked)}
-        />
-        Multi Seller
-      </label>
-    </div>
+  const tabItems = useMemo<TabItems>(
+    () => [
+      {
+        title: 'Interest Groups',
+        content: {
+          Element: InterestGroups,
+        },
+      },
+      {
+        title: 'Auctions',
+        content: {
+          Element: Auctions,
+        },
+      },
+      {
+        title: 'Ad Units',
+        content: {
+          Element: AdUnits,
+        },
+      },
+      {
+        title: 'Bids',
+        content: {
+          Element: Bids,
+        },
+      },
+    ],
+    []
   );
 
   return (
-    <div className="flex flex-col h-full">
-      <Header
-        play={play}
-        setPlay={setPlay}
-        sliderStep={sliderStep}
-        setSliderStep={setSliderStep}
-        historyCount={historyCount}
-        reset={noop}
-        extraInterface={extraInterface}
-      />
-      <div className="flex-1" />
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '20%',
-        }}
-        minHeight="15%"
-        maxHeight="95%"
-        enable={{
-          top: true,
-        }}
-        className="h-full flex"
-      >
-        <Tray activeTab={activeTab} setActiveTab={setActiveTab} />
-      </Resizable>
-    </div>
+    <TabsProvider items={tabItems}>
+      <Panel />
+    </TabsProvider>
   );
 };
 

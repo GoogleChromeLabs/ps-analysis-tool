@@ -22,3 +22,4 @@ export { default as Wiki } from './wiki';
 export { default as Settings } from './settings';
 export { default as Layout } from './layout';
 export { default as Dashboard } from './dashboard';
+export { default as WebStories } from './webStories';

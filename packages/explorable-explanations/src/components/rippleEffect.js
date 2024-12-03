@@ -19,6 +19,11 @@
 import app from '../app';
 import config from '../config';
 
+const RippleEffect = async ({ x, y }) => {
+  rippleEffect.setUp();
+  await rippleEffect.start(x, y);
+};
+
 // @todo To be moved to components.
 const rippleEffect = {};
 
@@ -46,7 +51,7 @@ rippleEffect.start = (x = 0, y = 0) => {
     config.rippleEffect.rippled = true;
 
     const animate = (timestamp) => {
-      if (window.cancelPromise) {
+      if (app.cancelPromise) {
         resolve();
         return;
       }
@@ -81,7 +86,7 @@ rippleEffect.create = (rippleX, rippleY) => {
   // Calculate the area to clear
   const { ripples, numRipples, speed, maxRadius } = config.rippleEffect;
   const clearWidth = maxRadius * 2 + (numRipples - 1) * 40;
-  const clearHeight = maxRadius * 2;
+  const clearHeight = maxRadius * 1.5;
   const p = app.p;
 
   p.push();
@@ -127,4 +132,4 @@ rippleEffect.create = (rippleX, rippleY) => {
   p.pop(); // Restore the original transformation state
 };
 
-export default rippleEffect;
+export default RippleEffect;

@@ -32,7 +32,10 @@ const SupportLink = () => {
       rel="noreferrer"
     >
       <span className="mt-[1px] mr-1">
-        <SupportIcon className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500" />
+        <SupportIcon
+          width="18"
+          className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+        />
       </span>
       <span>Support Forum</span>
       <span className="ml-[2px] inline-block">

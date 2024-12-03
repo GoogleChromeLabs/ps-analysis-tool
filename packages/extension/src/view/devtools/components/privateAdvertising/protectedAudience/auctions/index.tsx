@@ -16,33 +16,37 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-import type {
-  MultiSellerAuction,
-  singleAuctionEvent,
-} from '@google-psat/common';
+import React, { useEffect, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
   useSidebar,
+  type SidebarItems,
 } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import AuctionTable from './auctionTable';
-import MultiSellerAuctionTable from './mutliSellerAuctionTable';
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import Breakpoints from './breakpoints';
+import AuctionPanel from './panel';
+import AdUnits from '../adUnits';
 
 const Auctions = () => {
-  const [sidebarData, setSidebarData] = useState({});
+  const [sidebarData, setSidebarData] = useState<SidebarItems>({
+    adunits: {
+      title: 'Ad Units',
+      panel: {
+        Element: AdUnits,
+        props: {},
+      },
+      children: {},
+      dropdownOpen: true,
+    },
+  });
 
-  const { auctionEvents, isMultiSellerAuction } = useProtectedAudience(
-    ({ state }) => ({
-      auctionEvents: state.auctionEvents ?? {},
-      isMultiSellerAuction: state.isMultiSellerAuction,
-    })
-  );
+  const { auctionEvents } = useProtectedAudience(({ state }) => ({
+    auctionEvents: state.auctionEvents ?? {},
+  }));
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
@@ -51,6 +55,16 @@ const Auctions = () => {
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
+
+  useEffect(() => {
+    if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
+      setSidebarData((prev) => {
+        prev.adunits.children = {};
+
+        return { ...prev };
+      });
+    }
+  }, [auctionEvents]);
 
   if (!isUsingCDP) {
     return (
@@ -88,26 +102,15 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <Breakpoints />
       <div className="overflow-auto flex-1">
-        {!isMultiSellerAuction ? (
-          <AuctionTable
-            auctionEvents={
-              (Object.values(auctionEvents ?? {})?.[0] ??
-                []) as singleAuctionEvent[]
-            }
+        <SidebarProvider
+          data={sidebarData}
+          defaultSelectedItemKey={Object.keys(sidebarData)?.[0]}
+        >
+          <AuctionPanel
+            setSidebarData={setSidebarData}
+            auctionEvents={auctionEvents}
           />
-        ) : (
-          <div className="w-full h-full">
-            <SidebarProvider
-              data={sidebarData}
-              defaultSelectedItemKey={Object.keys(auctionEvents)[0]}
-            >
-              <MultiSellerAuctionTable
-                auctionEvents={auctionEvents as MultiSellerAuction}
-                setSidebarData={setSidebarData}
-              />
-            </SidebarProvider>
-          </div>
-        )}
+        </SidebarProvider>
       </div>
     </div>
   );

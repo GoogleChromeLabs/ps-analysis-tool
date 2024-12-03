@@ -14,3 +14,10 @@
  * limitations under the License.
  */
 export * from './components';
+export {
+  app,
+  userSketch,
+  interestGroupSketch,
+  sketch,
+} from './protectedAudience.js';
+export { default as config } from './config.js';

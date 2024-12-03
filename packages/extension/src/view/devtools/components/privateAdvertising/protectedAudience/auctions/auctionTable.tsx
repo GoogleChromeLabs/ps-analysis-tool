@@ -209,6 +209,7 @@ const AuctionTable = ({
                   selectedJSON?.time || ''
               }
               hideSearch={true}
+              minWidth="50rem"
             />
           </TableProvider>
         </div>

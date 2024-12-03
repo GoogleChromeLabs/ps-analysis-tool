@@ -21,6 +21,7 @@ import { noop } from '@google-psat/common';
 import {
   Table,
   TableProvider,
+  useTabs,
   type InfoType,
   type TableColumn,
 } from '@google-psat/design-system';
@@ -33,10 +34,14 @@ export type TopicsTableType = {
 };
 
 interface TopicsTableProps {
-  data: TopicsTableType[];
+  data: Record<number, TopicsTableType[]>;
 }
 
 const TopicsTable = ({ data }: TopicsTableProps) => {
+  const { activeTab } = useTabs(({ state }) => ({
+    activeTab: state.activeTab,
+  }));
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -67,7 +72,7 @@ const TopicsTable = ({ data }: TopicsTableProps) => {
   return (
     <TableProvider
       // @ts-ignore
-      data={data}
+      data={data[activeTab] ?? []}
       tableColumns={tableColumns}
       onRowClick={noop}
       onRowContextMenu={noop}

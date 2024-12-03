@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import app from '../app.js';
+import app from '../app';
 import config from '../config.js';
 
 /**
@@ -73,6 +73,54 @@ flow.clearBelowTimelineCircles = () => {
   p.fill(config.canvas.background);
   p.rect(0, y, p.width, p.height - y);
   p.pop();
+};
+
+/**
+ * Enables and disables the button opacity and cursor pointer.
+ */
+flow.setButtonsDisabilityState = () => {
+  const prevButton = document.getElementById('prevButton') ?? app.prevButton;
+  const nextButton = document.getElementById('nextButton') ?? app.nextButton;
+  // Exit early if buttons are not found
+  if (!prevButton || !nextButton) {
+    return;
+  }
+
+  const { currentIndex } = app.timeline;
+  const { circles } = config.timeline;
+  const isInteractiveMode = app.isInteractiveMode;
+  const { visitedIndexOrderTracker, visitedIndexOrder } = app;
+
+  // Helper function to set button state
+  const setButtonState = (button, isDisabled) => {
+    button.disabled = isDisabled;
+    button.classList.toggle('disabled:pointer-events-none', isDisabled);
+    // eslint-disable-next-line no-undef
+    if (process.env.IS_RUNNING_STANDALONE) {
+      button.style.cursor = isDisabled ? 'default' : 'pointer';
+    }
+  };
+
+  if (!isInteractiveMode) {
+    setButtonState(prevButton, currentIndex <= 0);
+    setButtonState(nextButton, currentIndex >= circles.length - 1);
+    return;
+  }
+
+  // Additional state when the currentIndex exceeds the total circles
+  if (isInteractiveMode) {
+    setButtonState(
+      prevButton,
+      !(visitedIndexOrderTracker >= 0 && visitedIndexOrder.length >= 2)
+    );
+    setButtonState(
+      nextButton,
+      !(
+        visitedIndexOrderTracker + 1 < visitedIndexOrder.length &&
+        visitedIndexOrder.length >= 2
+      )
+    );
+  }
 };
 
 export default flow;
