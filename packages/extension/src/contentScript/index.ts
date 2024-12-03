@@ -346,7 +346,9 @@ class WebpageContentScript {
    * @param {ResponseType} response Response.
    * @returns {HTMLElement} Tooltip.
    */
-  insertProtectedAudienceTooltip(response: ResponseType): HTMLElement | null {
+  insertProtectedAudienceTooltip(
+    response: ResponseType
+  ): Record<string, HTMLElement | null> | null {
     if (!response.selectedAdUnit) {
       return null;
     }
@@ -356,6 +358,7 @@ class WebpageContentScript {
     if (!frame) {
       return null;
     }
+
     removeAllPopovers();
 
     const tooltip = addTooltip(frame, response, 0, 0);
@@ -409,7 +412,10 @@ class WebpageContentScript {
       });
     }
 
-    return tooltip;
+    return {
+      htmlToolTip: tooltip,
+      htmlFrame: frame,
+    };
   }
 
   /**
@@ -635,8 +641,8 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     if (response.isForProtectedAudience) {
-      const tooltip = this.insertProtectedAudienceTooltip(response);
-      tooltip?.scrollIntoView();
+      const popOverElement = this.insertProtectedAudienceTooltip(response);
+      popOverElement?.htmlFrame?.scrollIntoView();
       return;
     }
 

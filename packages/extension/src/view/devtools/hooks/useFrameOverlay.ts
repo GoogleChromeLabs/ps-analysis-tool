@@ -31,7 +31,6 @@ import {
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 import { isOnRWS } from '../../../contentScript/utils';
 import highlightNode, {
-  highlightAdUnit,
   highlightNodeWithCoordinates,
 } from '../../../utils/highlightNode';
 
@@ -304,7 +303,7 @@ const useFrameOverlay = (
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
-    (async () => {
+    (() => {
       try {
         if (selectedFrame) {
           return;
@@ -327,7 +326,21 @@ const useFrameOverlay = (
         }
 
         if (chrome.runtime?.id && portRef.current && canStartInspecting) {
-          await highlightAdUnit(selectedAdUnit);
+          chrome.devtools.inspectedWindow.eval(
+            `JSON.stringify(document.getElementById('${selectedAdUnit}').getBoundingClientRect())`,
+            async (result, isException) => {
+              if (!isException && typeof result === 'string') {
+                const jsonCoordinates = JSON.parse(result);
+                await highlightNodeWithCoordinates(
+                  Math.floor(jsonCoordinates.x),
+                  Math.floor(jsonCoordinates.y),
+                  Math.floor(jsonCoordinates.width),
+                  Math.floor(jsonCoordinates.height)
+                );
+              }
+            }
+          );
+
           portRef.current?.postMessage({
             isForProtectedAudience: true,
             selectedAdUnit,

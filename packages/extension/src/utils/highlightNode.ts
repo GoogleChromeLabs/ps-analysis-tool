@@ -105,8 +105,6 @@ export const highlightNodeWithCoordinates = async (
   width: number,
   height: number
 ) => {
-  await enableDomainsAndGetDocument();
-
   await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
     'Overlay.highlightRect',
@@ -122,7 +120,8 @@ export const highlightNodeWithCoordinates = async (
 
 export const highlightAdUnit = async (adUnit: string | null) => {
   const root = await enableDomainsAndGetDocument(true);
-  if (!root) {
+
+  if (!root || (root && !root?.nodeId)) {
     return;
   }
 
@@ -131,7 +130,7 @@ export const highlightAdUnit = async (adUnit: string | null) => {
     'DOM.querySelectorAll',
     {
       nodeId: root.nodeId,
-      selector: `div[id="${adUnit}"]`,
+      selector: `div#${adUnit}`,
     }
   )) as Protocol.DOM.QuerySelectorAllResponse;
 
@@ -145,7 +144,7 @@ export const highlightAdUnit = async (adUnit: string | null) => {
             contentColor: { r: 9, g: 88, b: 230, a: 0.5 },
           },
           nodeId: id,
-          selector: `div[id="${adUnit}"]`,
+          selector: `div#${adUnit}`,
         }
       );
     })
