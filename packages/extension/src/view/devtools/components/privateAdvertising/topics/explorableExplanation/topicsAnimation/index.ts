@@ -67,12 +67,22 @@ export function topicsAnimation(
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(12);
 
-      circles.forEach((_, index) => {
+      circles.forEach((circleItem, index) => {
         const xPosition = horizontalSpacing + circleVerticalSpace * index;
 
         if (!app.circlePositions) {
           app.circlePositions = [];
         }
+
+        p.text(circleItem.datetime, xPosition, 30);
+        p.text(circleItem.website, xPosition, 50);
+
+        p.line(
+          xPosition,
+          position.y - diameter / 2,
+          xPosition,
+          position.y - 50
+        );
 
         app.circlePositions.push({ x: xPosition, y: position.y });
         app.drawCircle(index);
@@ -160,10 +170,6 @@ export function topicsAnimation(
       }
 
       const circlePosition = app.circlePositions[visitIndex];
-      const circleItem = epoch[visitIndex];
-      const { diameter, horizontalSpacing } = config.timeline.circleProps;
-      const circleVerticalSpace = horizontalSpacing - 30 + diameter;
-      const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
 
       if (circlePosition === undefined) {
         return;
@@ -177,16 +183,6 @@ export function topicsAnimation(
         circlePosition.y - user.height / 2,
         user.width,
         user.height
-      );
-
-      p.text(circleItem.datetime, xPosition, 30);
-      p.text(circleItem.website, xPosition, 50);
-
-      p.line(
-        xPosition,
-        circlePosition.y - diameter / 2,
-        xPosition,
-        circlePosition.y - 50
       );
 
       const position = app.circlePositions[visitIndex];
