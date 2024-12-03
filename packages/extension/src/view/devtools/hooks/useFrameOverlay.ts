@@ -123,16 +123,18 @@ const useFrameOverlay = (
         return;
       }
 
-      await chrome.debugger.sendCommand(
-        { tabId: chrome.devtools.inspectedWindow.tabId },
-        'Overlay.hideHighlight'
-      );
-
-      if (response.attributes.iframeOrigin === null) {
+      if (
+        !response?.attributes?.rect &&
+        response.attributes.iframeOrigin === null
+      ) {
+        await chrome.debugger.sendCommand(
+          { tabId: chrome.devtools.inspectedWindow.tabId },
+          'Overlay.hideHighlight'
+        );
         return;
       }
 
-      if (response?.attributes?.rect) {
+      if (response?.attributes?.rect && !response?.attributes.iframeOrigin) {
         const rect = response.attributes.rect;
         await highlightNodeWithCoordinates(
           Math.floor(rect.x),

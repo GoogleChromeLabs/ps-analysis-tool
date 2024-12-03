@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import Protocol from 'devtools-protocol';
+
 const enableDomainsAndGetDocument = async (
   returnRoot = false
-): Promise<null | number> => {
+): Promise<null | Protocol.DOM.Node> => {
   await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
     'DOM.enable'
@@ -33,10 +38,10 @@ const enableDomainsAndGetDocument = async (
     return Promise.resolve(null);
   }
 
-  const { root } = await chrome.debugger.sendCommand(
+  const { root } = (await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
     'DOM.getDocument'
-  );
+  )) as Protocol.DOM.GetDocumentResponse;
 
   return root;
 };
@@ -45,27 +50,23 @@ export const highlightNode = async (
   selectedFrame: string | null,
   tabUrl: string | null
 ) => {
-  const root = enableDomainsAndGetDocument(true);
+  const root = await enableDomainsAndGetDocument(true);
 
-  if (!selectedFrame || !tabUrl) {
-    await chrome.debugger.sendCommand(
-      { tabId: chrome.devtools.inspectedWindow.tabId },
-      'Overlay.hideHighlight'
-    );
+  if (!selectedFrame || !tabUrl || !root || (root && !root?.nodeId)) {
     return;
   }
 
   const selectedFrameUrl = new URL(selectedFrame);
   const tabUrlObj = new URL(tabUrl);
 
-  const { nodeIds } = await chrome.debugger.sendCommand(
+  const { nodeIds } = (await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
     'DOM.querySelectorAll',
     {
       nodeId: root.nodeId,
       selector: `iframe[src^="${selectedFrame}"]`,
     }
-  );
+  )) as Protocol.DOM.QuerySelectorAllResponse;
 
   if (tabUrlObj.hostname === selectedFrameUrl.hostname) {
     await chrome.debugger.sendCommand(
@@ -121,15 +122,18 @@ export const highlightNodeWithCoordinates = async (
 
 export const highlightAdUnit = async (adUnit: string | null) => {
   const root = await enableDomainsAndGetDocument(true);
+  if (!root) {
+    return;
+  }
 
-  const { nodeIds } = await chrome.debugger.sendCommand(
+  const { nodeIds } = (await chrome.debugger.sendCommand(
     { tabId: chrome.devtools.inspectedWindow.tabId },
     'DOM.querySelectorAll',
     {
       nodeId: root.nodeId,
       selector: `div[id="${adUnit}"]`,
     }
-  );
+  )) as Protocol.DOM.QuerySelectorAllResponse;
 
   await Promise.all(
     nodeIds.map(async (id: number) => {
