@@ -42,6 +42,8 @@ export function topicsAnimation(
     visitIndex: 0,
     playing: true,
     speedMultiplier: 1,
+    hoveredCircleIndex: -1,
+    canvas: null as p5.Renderer | null,
 
     drawTimelineLine: (position: { x: number; y: number }) => {
       const { diameter, horizontalSpacing } = config.timeline.circleProps;
@@ -128,6 +130,14 @@ export function topicsAnimation(
 
     togglePlay: (state: boolean) => {
       app.playing = state;
+
+      if (
+        !app.playing &&
+        app.visitIndex > 0 &&
+        app.visitIndex <= epoch.length
+      ) {
+        app.userVisitDone(app.visitIndex - 1);
+      }
     },
 
     reset: () => {
@@ -317,7 +327,7 @@ export function topicsAnimation(
       p.stroke(0);
       p.line(
         position.x,
-        position.y + diameter / 2,
+        position.y + diameter / 2 + 1,
         position.x,
         position.y + 95
       );
@@ -337,11 +347,42 @@ export function topicsAnimation(
       p.strokeWeight(5);
       p.line(
         position.x,
-        position.y + diameter / 2,
+        position.y + diameter / 2 + 3,
         position.x,
         position.y + 95
       );
       p.pop();
+    },
+
+    mouseMoved: () => {
+      if (app.playing) {
+        return;
+      }
+
+      const x = p.mouseX,
+        y = p.mouseY;
+
+      app.circlePositions.forEach((position, index) => {
+        const { diameter } = config.timeline.circleProps;
+        const { x: circleX, y: circleY } = position;
+
+        if (
+          x > circleX - diameter / 2 &&
+          x < circleX + diameter / 2 &&
+          y > circleY - diameter / 2 &&
+          y < circleY + diameter / 2
+        ) {
+          if (app.visitIndex <= index) {
+            return;
+          }
+
+          app.drawInfoBox(index, epoch[index].website);
+          app.hoveredCircleIndex = index;
+        } else if (app.hoveredCircleIndex === index) {
+          app.resetInfoBox(index);
+          app.hoveredCircleIndex = -1;
+        }
+      });
     },
   };
 
@@ -358,7 +399,11 @@ export function topicsAnimation(
     const circleHorizontalSpace =
       config.timeline.circleProps.horizontalSpacing +
       config.timeline.circleProps.diameter;
-    p.createCanvas(circleHorizontalSpace * 6, config.canvas.height);
+    app.canvas = p.createCanvas(
+      circleHorizontalSpace * 6,
+      config.canvas.height
+    );
+    app.canvas.mouseMoved(app.mouseMoved);
 
     p.textFont('sans-serif');
     app.drawTimelineLine(config.timeline.position);
