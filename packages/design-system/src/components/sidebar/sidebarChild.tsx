@@ -104,12 +104,19 @@ const SidebarChild = ({
               ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
               : 'bg-gainsboro dark:bg-outer-space'
             : 'bg-lotion dark:bg-raisin-black'
-        } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''}`}
+        } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''} ${
+          sidebarItem.containerClassName
+        }`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
         data-testid="sidebar-child"
       >
         {Object.keys(sidebarItem.children)?.length !== 0 && (
           <button
+            title={
+              typeof sidebarItem.title === 'function'
+                ? sidebarItem.title()
+                : sidebarItem.title || ''
+            }
             onClick={() => {
               toggleDropdown(!sidebarItem.dropdownOpen, itemKey);
             }}
@@ -183,6 +190,10 @@ const SidebarChild = ({
             </>
           )}
       </>
+      {sidebarItem.addDivider && (
+        <div className="h-px bg-gray-200 dark:bg-quartz my-2" />
+      )}
+      {sidebarItem.addSpacer && <div className="flex-1" />}
     </>
   );
 };
