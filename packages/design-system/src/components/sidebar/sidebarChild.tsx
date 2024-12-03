@@ -193,12 +193,7 @@ const SidebarChild = ({
       {sidebarItem.addDivider && (
         <div className="h-px bg-gray-200 dark:bg-quartz my-2" />
       )}
-      {sidebarItem.addSpacer && (
-        <>
-          <div className="flex-1" />
-          <div className="h-px bg-gray-200 dark:bg-quartz my-2" />
-        </>
-      )}
+      {sidebarItem.addSpacer && <div className="flex-1" />}
     </>
   );
 };
