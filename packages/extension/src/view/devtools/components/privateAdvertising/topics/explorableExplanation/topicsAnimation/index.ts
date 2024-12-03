@@ -67,7 +67,7 @@ export function topicsAnimation(
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(12);
 
-      circles.forEach((circleItem, index) => {
+      circles.forEach((_, index) => {
         const xPosition = horizontalSpacing + circleVerticalSpace * index;
 
         if (!app.circlePositions) {
@@ -76,17 +76,6 @@ export function topicsAnimation(
 
         app.circlePositions.push({ x: xPosition, y: position.y });
         app.drawCircle(index);
-
-        p.text(circleItem.datetime, xPosition, 20);
-        p.text(circleItem.website, xPosition, 40);
-        p.text(circleItem.topics.join(', '), xPosition, 60);
-
-        p.line(
-          xPosition,
-          position.y - diameter / 2,
-          xPosition,
-          position.y - 50
-        );
       });
     },
 
@@ -144,7 +133,7 @@ export function topicsAnimation(
       app.visitIndex = 0;
       app.speedMultiplier = 1;
       p?.clear();
-      app.drawTimelineLine(config.timeline.position);
+      // app.drawTimelineLine(config.timeline.position);
       app.drawTimeline(config.timeline.position, epoch);
     },
 
@@ -155,21 +144,6 @@ export function topicsAnimation(
     userVisitDone: (index: number) => {
       app.resetInfoBox(index);
       app.drawCircle(index, true);
-
-      const position = app.circlePositions[index];
-      const previousPosition =
-        app.circlePositions[index - 1] || config.timeline.position;
-      const circleDiameter = config.timeline.circleProps.diameter;
-
-      p.push();
-      p.stroke('#1A73E8');
-      p.line(
-        previousPosition.x + (index !== 0 ? circleDiameter / 2 : 0),
-        previousPosition.y,
-        position.x - circleDiameter / 2,
-        position.y
-      );
-      p.pop();
     },
 
     handleUserVisit: (visitIndex: number) => {
@@ -186,6 +160,10 @@ export function topicsAnimation(
       }
 
       const circlePosition = app.circlePositions[visitIndex];
+      const circleItem = epoch[visitIndex];
+      const { diameter, horizontalSpacing } = config.timeline.circleProps;
+      const circleVerticalSpace = horizontalSpacing - 30 + diameter;
+      const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
 
       if (circlePosition === undefined) {
         return;
@@ -200,6 +178,31 @@ export function topicsAnimation(
         user.width,
         user.height
       );
+
+      p.text(circleItem.datetime, xPosition, 30);
+      p.text(circleItem.website, xPosition, 50);
+
+      p.line(
+        xPosition,
+        circlePosition.y - diameter / 2,
+        xPosition,
+        circlePosition.y - 50
+      );
+
+      const position = app.circlePositions[visitIndex];
+      const previousPosition =
+        app.circlePositions?.[visitIndex - 1] || config.timeline.position;
+      const circleDiameter = config.timeline.circleProps.diameter;
+
+      p.push();
+      p.stroke('#1A73E8');
+      p.line(
+        previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
+        previousPosition.y,
+        position.x - circleDiameter / 2,
+        position.y
+      );
+      p.pop();
 
       const currentCircle = epoch[visitIndex];
       const currentSite = currentCircle.website;
@@ -311,12 +314,14 @@ export function topicsAnimation(
         const adTechColor = getAdtechsColors(p)[adTech];
 
         p.fill(adTechColor);
+        p.stroke(0);
         p.circle(
           position.x - 110,
           position.y + diameter / 2 + 150 + i * 20,
-          15
+          diameter / 5
         );
         p.fill(0);
+        p.stroke(255);
         p.text(
           adTech,
           position.x - 85,
@@ -406,7 +411,7 @@ export function topicsAnimation(
     app.canvas.mouseMoved(app.mouseMoved);
 
     p.textFont('sans-serif');
-    app.drawTimelineLine(config.timeline.position);
+    // app.drawTimelineLine(config.timeline.position);
     app.drawTimeline(config.timeline.position, epoch);
 
     if (!isAnimating) {
