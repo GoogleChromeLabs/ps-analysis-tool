@@ -16,15 +16,37 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { getStoryMarkup } from './createStoryIframe';
-import { STORY_JSON } from './story';
+import { getStoryMarkup, type SingleStoryJSON } from './createStoryIframe';
 
 const WebStories = () => {
-  const storyMarkup = getStoryMarkup(STORY_JSON);
+  const [storyMarkup, setStoryMarkup] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(
+        'https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/'
+      );
+
+      const responseJSON = await response.json();
+      const storyJSON: SingleStoryJSON[] = [];
+      responseJSON.forEach((singleResponse: any) => {
+        if (singleResponse?.status === 'publish') {
+          storyJSON.push({
+            heroImage: singleResponse?.story_poster?.url ?? '',
+            publisherLogo: 'https://assets.codepen.io/1780597/1pizza_logo.png',
+            publisherName: '',
+            storyTitle: singleResponse?.title?.rendered,
+            storyUrl: `${singleResponse?.link}#embedMode=2`,
+          });
+        }
+      });
+      setStoryMarkup(getStoryMarkup(storyJSON));
+    })();
+  }, []);
 
   return (
     <div
@@ -32,6 +54,7 @@ const WebStories = () => {
       className="h-full w-full text-raisin-black dark:text-bright-gray overflow-y-auto"
     >
       <iframe
+        scrolling="yes"
         srcDoc={storyMarkup}
         style={{ width: '100%', height: '100vh', border: 'none' }}
       />
