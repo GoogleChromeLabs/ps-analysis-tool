@@ -81,7 +81,6 @@ joinInterestGroup.setUp = (index) => {
       title: 'DSP Tags',
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
-      color: config.flow.colors.box.browser,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;
@@ -109,6 +108,7 @@ joinInterestGroup.setUp = (index) => {
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () =>
         app.joinInterestGroup.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: config.flow.colors.box.notBrowser,
     },
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;

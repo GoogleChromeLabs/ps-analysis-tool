@@ -117,7 +117,8 @@ const config = {
     colors: {
       box: {
         background: '255',
-        browser: '#ffec99',
+        notBrowser: '#ffec99',
+        noData: '#e9ecef',
         text: '#000',
       },
     },

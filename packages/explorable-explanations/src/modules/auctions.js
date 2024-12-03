@@ -165,6 +165,7 @@ auction.setUp = (index) => {
       title: 'SSP',
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: colors.box.noData,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
@@ -189,6 +190,7 @@ auction.setUp = (index) => {
       title: 'DSPs',
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: colors.box.noData,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
@@ -259,10 +261,12 @@ auction.setUp = (index) => {
     {
       title: 'Key/Value Trusted',
       description: 'DSP Server',
+      color: colors.box.notBrowser,
     },
     {
       title: 'generateBid()',
       description: '(from DSPs on dsp.js)',
+      color: colors.box.notBrowser,
       extraProps: {
         showRippleEffect: true,
       },
@@ -284,6 +288,7 @@ auction.setUp = (index) => {
     {
       title: 'reportWin()',
       description: '(on dsp.js)',
+      color: colors.box.notBrowser,
     },
     {
       title: 'reportResult()',
@@ -291,7 +296,7 @@ auction.setUp = (index) => {
     },
   ];
 
-  boxes.forEach(({ title, description, extraProps = {} }) => {
+  boxes.forEach(({ title, description, color, extraProps = {} }) => {
     if (title === 'DSP 1') {
       steps.push({
         component: ProgressLine,
@@ -313,6 +318,7 @@ auction.setUp = (index) => {
           title,
           x: () => app.auction.nextTipCoordinates?.x + 10,
           y: () => app.auction.nextTipCoordinates?.y - box.height + 15,
+          color,
         },
         callBack: (returnValue) => {
           app.auction.nextTipCoordinates = returnValue.down;
@@ -357,6 +363,7 @@ auction.setUp = (index) => {
           title,
           x: () => app.auction.nextTipCoordinates?.x + 10,
           y: () => app.auction.nextTipCoordinates?.y,
+          color,
         },
         callBack: (returnValue) => {
           app.auction.nextTipCoordinates = returnValue.down;
@@ -405,6 +412,7 @@ auction.setUp = (index) => {
         ...extraProps,
         x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates?.y + 10,
+        color,
       },
       callBack: (returnValue) => {
         app.auction.nextTipCoordinates = returnValue.down;

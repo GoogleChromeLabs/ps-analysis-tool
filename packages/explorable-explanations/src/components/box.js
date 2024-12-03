@@ -26,7 +26,7 @@ const Box = ({
   y,
   width = config.flow.box.width,
   height = config.flow.box.height,
-  color = config.flow.colors.box.background,
+  color,
 }) => {
   x = typeof x === 'function' ? x() : x;
   y = typeof y === 'function' ? y() : y;
@@ -40,7 +40,7 @@ const Box = ({
 
   app.p.push();
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
-  app.p.fill(color);
+  app.p.fill(color || config.flow.colors.box.background);
   app.p.rect(x, y, width, height);
   app.p.strokeWeight(0.1);
   app.p.fill(config.flow.colors.box.text);
