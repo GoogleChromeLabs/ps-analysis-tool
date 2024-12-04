@@ -28,6 +28,7 @@ const ProgressLine = ({
   direction = 'right',
   text = '',
   noArrow = false,
+  noAnimation = false,
 }) => {
   const width = config.flow.lineWidth - ARROW_SIZE;
   const height = config.flow.lineHeight - ARROW_SIZE;
@@ -39,18 +40,91 @@ const ProgressLine = ({
 
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction);
 
-  let currentX = x1; // For horizontal directions
-  let currentY = y1; // For vertical directions
-  let targetX = x2;
-
   const drawArrow = (x, y, dir) => {
     if (!noArrow) {
       utils.drawArrow(ARROW_SIZE, x, y, dir);
     }
   };
 
+  const draw = {
+    right: () => {
+      p.line(x1, y1, x1 + width, y2);
+      drawArrow(x1 + width, y1, direction);
+
+      return { x: x1 + width, y: y1 };
+    },
+    left: () => {
+      p.line(x2, y2 + 10, x2 - width, y1 + 10);
+      drawArrow(x2 - width, y1 + 4, direction);
+      utils.drawText(text, x2 - width / 2, y1 + height / 2);
+
+      return { x: x2 - width, y: y1 + 10 };
+    },
+    down: () => {
+      p.line(x1, y1, x2, y1 + height);
+      drawArrow(x1, y1 + height, direction);
+      utils.drawText(
+        text,
+        x1 - (text.startsWith('$') ? 10 : width / 2),
+        y1 + height / 2
+      );
+
+      return { x: x1, y: y1 + height };
+    },
+    up: () => {
+      p.line(x1, y1, x2, y1 - height);
+      drawArrow(x1, y1 - height, direction);
+      utils.drawText(
+        text,
+        x1 + (text.startsWith('$') ? 10 : width / 2),
+        y1 - height / 2
+      );
+
+      return { x: x1, y: y1 - height };
+    },
+  };
+
+  let returnCoordinates = { x: 0, y: 0 };
+
+  const drawInstantly = () => {
+    p.push();
+    p.stroke(0);
+    p.strokeWeight(1);
+    p.pop();
+
+    switch (direction) {
+      case 'right':
+        returnCoordinates = draw.right();
+        break;
+
+      case 'left':
+        returnCoordinates = draw.left();
+        break;
+
+      case 'down':
+        returnCoordinates = draw.down();
+        break;
+
+      case 'up':
+        returnCoordinates = draw.up();
+        break;
+
+      default:
+        throw new Error(`Invalid direction: ${direction}`);
+    }
+  };
+
+  let currentX = x1; // For horizontal directions
+  let currentY = y1; // For vertical directions
+  let targetX = x2;
+
   return new Promise((resolve) => {
-    // eslint-disable-next-line complexity
+    if (noAnimation) {
+      drawInstantly();
+      resolve(returnCoordinates);
+      return;
+    }
+
     const animate = () => {
       if (app.cancelPromise) {
         resolve();

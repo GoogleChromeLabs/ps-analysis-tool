@@ -23,7 +23,7 @@ import Box from './box';
 import utils from '../lib/utils';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
-const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
+const ANIMATION_SPEED = 10; // Controls the speed of the horizontal line drawing
 const EXPAND_ICON_SIZE = 20;
 
 let spacing, progress, renderedBranchIds, endpoints;
@@ -50,6 +50,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
     y1: y1,
     direction: 'down',
     noArrow: true,
+    noAnimation: true,
   });
 
   return new Promise((resolve) => {
