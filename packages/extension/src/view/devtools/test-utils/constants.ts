@@ -15,6 +15,8 @@
  */
 
 export const selectors = {
+  siteBoundariesSelector: 'button[title="Site Boundaries"]',
+  cookieDropDownSelector: 'button[title="Cookies"]',
   chromeExtensionUrl: 'chrome://extensions/',
   extensionPageErrorButton: 'cr-button#errors-button',
   devtoolIframeSelector: 'iframe.extension',

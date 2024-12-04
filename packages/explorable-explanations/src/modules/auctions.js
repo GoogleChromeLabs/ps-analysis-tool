@@ -22,7 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine, Branches, RippleEffect } from '../components';
 import bubbles from './bubbles';
-import PromiseQueue from '../lib/PromiseQueue';
+import promiseQueue from '../lib/promiseQueue.js';
 
 /**
  * @module Auction
@@ -453,42 +453,57 @@ auction.draw = (index) => {
   }
 
   for (const step of steps) {
-    PromiseQueue.nextStepSkipIndex.push(PromiseQueue.queue.length - 1);
-    PromiseQueue.add(async () => {
+    promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
+    promiseQueue.add(async () => {
       const { component, props, callBack } = step;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
       const delay = component === Box ? 1000 : 0;
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        if (props?.showBarrageAnimation) {
+          await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
-      if (props?.showBarrageAnimation) {
-        await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
-        await utils.delay(500); // eslint-disable-line no-await-in-loop
+          if (app.cancelPromise) {
+            return;
+          }
 
-        utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
-      }
+          await utils.delay(500); // eslint-disable-line no-await-in-loop
 
-      if (props?.showRippleEffect) {
-        const x = props.x();
-        const y = props.y();
+          utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
+        }
 
-        // eslint-disable-next-line no-await-in-loop
-        await RippleEffect({
-          x: x + config.flow.box.width + 2,
-          y: y + config.flow.box.height / 2,
-        });
+        if (props?.showRippleEffect) {
+          const x = props.x();
+          const y = props.y();
+
+          if (app.cancelPromise) {
+            return;
+          }
+          // eslint-disable-next-line no-await-in-loop
+          await RippleEffect({
+            x: x + config.flow.box.width + 2,
+            y: y + config.flow.box.height / 2,
+          });
+        }
       }
 
       if (callBack) {
         callBack(returnValue);
       }
-      await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        if (app.cancelPromise) {
+          return;
+        }
+        await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      }
     });
   }
 
-  PromiseQueue.add(async () => {
-    await utils.delay(2000);
-    flow.clearBelowTimelineCircles();
+  promiseQueue.add(() => {
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      flow.clearBelowTimelineCircles();
+    }
   });
 };
 

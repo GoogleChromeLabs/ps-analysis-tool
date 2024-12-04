@@ -79,10 +79,12 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
       ownerOrigin: {
         title: 'Bidder',
         sortValues: true,
+        useGenericPersistenceKey: true,
       },
       adUnitCode: {
         title: 'Ad Unit Code',
         sortValues: true,
+        useGenericPersistenceKey: true,
       },
     }),
     []
@@ -126,7 +128,7 @@ const NoBidsTable = ({ setSelectedRow, selectedRow }: NoBidsTableProps) => {
       tableColumns={tableColumns}
       tableFilterData={tableFilters}
       tableSearchKeys={undefined}
-      tablePersistentSettingsKey="noBidsTable"
+      tablePersistentSettingsKey="bidsTable#nobids"
       onRowClick={(row) => {
         setSelectedRow(row as NoBidsType[keyof NoBidsType]);
       }}

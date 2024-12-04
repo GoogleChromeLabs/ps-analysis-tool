@@ -22,7 +22,7 @@ import config from '../config';
 import utils from '../lib/utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import PromiseQueue from '../lib/PromiseQueue';
+import promiseQueue from '../lib/promiseQueue.js';
 
 /**
  * @module joinInterestGroup
@@ -159,8 +159,8 @@ joinInterestGroup.draw = (index) => {
   }
 
   for (const step of steps) {
-    PromiseQueue.nextStepSkipIndex.push(PromiseQueue.queue.length - 1);
-    PromiseQueue.add(async () => {
+    promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
+    promiseQueue.add(async () => {
       const { component, props, callBack } = step;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -170,13 +170,16 @@ joinInterestGroup.draw = (index) => {
       if (callBack) {
         callBack(returnValue);
       }
-
-      await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        await utils.delay(delay); // eslint-disable-line no-await-in-loop
+      }
     });
   }
 
-  PromiseQueue.add(async () => {
-    await bubbles.reverseBarrageAnimation(index);
+  promiseQueue.add(async () => {
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      await bubbles.reverseBarrageAnimation(index);
+    }
 
     if (app.bubbles.isExpanded) {
       bubbles.showExpandedBubbles();
@@ -185,7 +188,11 @@ joinInterestGroup.draw = (index) => {
     }
   });
 
-  PromiseQueue.add(() => flow.clearBelowTimelineCircles());
+  promiseQueue.add(() => {
+    if (!app.isRevisitingNodeInInteractiveMode) {
+      flow.clearBelowTimelineCircles();
+    }
+  });
 };
 
 export default joinInterestGroup;

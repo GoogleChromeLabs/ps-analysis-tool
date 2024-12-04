@@ -91,6 +91,9 @@ class PromiseQueue {
           flow.clearBelowTimelineCircles();
           app.cancelPromise = false;
           app.timeline.isPaused = false;
+          if (this.queue.length === 0) {
+            return;
+          }
         }
       } catch (error) {
         this.currentPromiseIndex++;
@@ -120,6 +123,7 @@ class PromiseQueue {
     this.currentPromiseIndex = 0;
     this.nextNodeSkipIndex = [];
     this.nextStepSkipIndex = [];
+    this.skipToIndex = -1;
   }
 }
 

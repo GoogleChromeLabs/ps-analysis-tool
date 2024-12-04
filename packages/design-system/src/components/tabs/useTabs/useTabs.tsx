@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import { Tabs, useTabs } from '@google-psat/design-system';
-import React from 'react';
+import { useContextSelector } from '@google-psat/common';
 
-const TableTray = () => {
-  const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
-  const ActiveTabContent = panel.Element;
-  const props = panel.props;
+/**
+ * Internal dependencies.
+ */
+import { TabsContext, TabsStoreContext } from './context';
 
-  return (
-    <div className="w-full h-full">
-      <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-1.5">
-        <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
-      </div>
-      {ActiveTabContent && <ActiveTabContent {...props} />}
-    </div>
-  );
-};
+export function useTabs(): TabsStoreContext;
+export function useTabs<T>(selector: (state: TabsStoreContext) => T): T;
 
-export default TableTray;
+/**
+ * Tabs store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useTabs<T>(
+  selector: (state: TabsStoreContext) => T | TabsStoreContext = (state) => state
+) {
+  return useContextSelector(TabsContext, selector);
+}

@@ -40,6 +40,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
   progress = 0;
   renderedBranchIds = [];
   endpoints = [];
+  const p = app.p;
 
   const y2 = y1 + 50;
   spacing = 300; // Calculate spacing based on canvas width
@@ -53,6 +54,37 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
 
   return new Promise((resolve) => {
     const animate = () => {
+      if (app.isRevisitingNodeInInteractiveMode) {
+        const branchXEndpoint =
+          currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
+
+        branches.forEach(({ id, type }, index) => {
+          const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
+          const y = y2 - 9;
+          let endpoint;
+          p.push();
+          p.stroke(0);
+          p.line(x, y, branchXEndpoint, y);
+          p.pop();
+          p.push();
+          p.stroke(0);
+          p.line(x, y, x, y + 20);
+          p.pop();
+          if (type === 'datetime') {
+            endpoint = drawDateTimeBranch(x, y, branches[index]);
+          }
+
+          if (type === 'box') {
+            endpoint = drawBoxesBranch(x, y, branches[index]);
+          }
+
+          endpoints.push(endpoint);
+
+          renderedBranchIds.push(id);
+        });
+        resolve(endpoints);
+        return;
+      }
       if (app.cancelPromise) {
         resolve(endpoints);
         return;
@@ -117,6 +149,11 @@ const drawAnimatedTimeline = (x, y, branches) => {
         return;
       }
 
+      if (app.cancelPromise) {
+        resolve();
+        return;
+      }
+
       if (progress >= i * spacing && !renderedBranchIds.includes(branch.id)) {
         // Draw vertical line once the horizontal line reaches its position
         p.push();
@@ -155,6 +192,7 @@ const drawAnimatedTimeline = (x, y, branches) => {
 
 const drawDateTimeBranch = (x, y, branch) => {
   const p = app.p;
+
   p.push();
   p.noStroke();
   p.fill(0);
