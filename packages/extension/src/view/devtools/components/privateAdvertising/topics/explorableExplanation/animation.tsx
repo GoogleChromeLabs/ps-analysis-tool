@@ -24,6 +24,7 @@ import p5 from 'p5';
  * Internal dependencies.
  */
 import { topicsAnimation } from './topicsAnimation';
+import { useTabs } from '@google-psat/design-system';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -51,6 +52,10 @@ const Animation = ({
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
   const animationRef = useRef(isAnimating);
+  const { setActiveTab, setStorage } = useTabs(({ actions }) => ({
+    setActiveTab: actions.setActiveTab,
+    setStorage: actions.setStorage,
+  }));
 
   useEffect(() => {
     // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
@@ -79,7 +84,7 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [epoch, handleUserVisit, siteAdTechs]);
+  }, [epoch, handleUserVisit, setActiveTab, setStorage, siteAdTechs]);
 
   useEffect(() => {
     togglePlayCallback?.(isPlaying);

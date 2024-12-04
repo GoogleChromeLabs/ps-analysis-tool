@@ -25,6 +25,7 @@ import { getAdtechsColors } from './utils';
  * @param isAnimating - Boolean to tell if the animation should play
  * @param siteAdTechs - Object with websites as keys and adtechs as values
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
+ * @param infoBoxDataClickHandler - Callback function for handling clicks on the info box data
  * @returns Object with callbacks to control the animation
  */
 export function topicsAnimation(
