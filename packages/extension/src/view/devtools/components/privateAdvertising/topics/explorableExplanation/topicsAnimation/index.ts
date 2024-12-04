@@ -136,12 +136,16 @@ export function topicsAnimation(
         app.visitIndex <= epoch.length
       ) {
         app.userVisitDone(app.visitIndex - 1);
+      } else if (app.playing && app.hoveredCircleIndex !== -1) {
+        app.resetInfoBox(app.hoveredCircleIndex);
+        app.hoveredCircleIndex = -1;
       }
     },
 
     reset: () => {
       app.visitIndex = 0;
       app.speedMultiplier = 1;
+      app.hoveredCircleIndex = -1;
       p?.clear();
       // app.drawTimelineLine(config.timeline.position);
       app.drawTimeline(config.timeline.position, epoch);
@@ -275,7 +279,7 @@ export function topicsAnimation(
         position.x,
         position.y + diameter / 2 + 150,
         280,
-        160,
+        180,
         10,
         10,
         10,
@@ -286,13 +290,13 @@ export function topicsAnimation(
       p.textSize(12);
       p.textAlign(p.LEFT, p.CENTER);
       p.textStyle(p.BOLD);
-      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 100);
+      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 90);
       p.textStyle(p.NORMAL);
-      p.text(
-        topics.join(', '),
-        position.x - 70,
-        position.y + diameter / 2 + 100
-      );
+      topics.forEach((topic, i) => {
+        p.text(topic, position.x - 70, position.y + diameter / 2 + 90 + i * 20);
+      });
+
+      const startingPointAdTechs = topics.length * 20;
 
       const adTechs = siteAdTechs[currentSite];
       const numAdTechs = adTechs.length;
@@ -301,7 +305,7 @@ export function topicsAnimation(
       p.text(
         'Observed-by context domains:',
         position.x - 120,
-        position.y + diameter / 2 + 125
+        position.y + diameter / 2 + 95 + startingPointAdTechs
       );
       p.textStyle(p.NORMAL);
       for (let i = 0; i < numAdTechs; i++) {
@@ -313,7 +317,7 @@ export function topicsAnimation(
         p.stroke(0);
         p.circle(
           position.x - 110,
-          position.y + diameter / 2 + 150 + i * 20,
+          position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs,
           diameter / 5
         );
         p.fill(0);
@@ -321,7 +325,7 @@ export function topicsAnimation(
         p.text(
           adTech,
           position.x - 85,
-          position.y + diameter / 2 + 150 + i * 20
+          position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs
         );
       }
 
@@ -330,7 +334,7 @@ export function topicsAnimation(
         position.x,
         position.y + diameter / 2 + 1,
         position.x,
-        position.y + 95
+        position.y + 85
       );
 
       p.pop();
@@ -344,7 +348,7 @@ export function topicsAnimation(
       p.fill(255);
       p.stroke(255);
       p.rectMode(p.CENTER);
-      p.rect(position.x, position.y + diameter / 2 + 150, 300, 200);
+      p.rect(position.x, position.y + diameter / 2 + 150, 300, 250);
       p.strokeWeight(5);
       p.line(
         position.x,
@@ -355,7 +359,7 @@ export function topicsAnimation(
       p.pop();
     },
 
-    mouseMoved: () => {
+    mouseClicked: () => {
       if (app.playing) {
         return;
       }
@@ -377,11 +381,17 @@ export function topicsAnimation(
             return;
           }
 
+          if (app.hoveredCircleIndex !== -1) {
+            app.resetInfoBox(app.hoveredCircleIndex);
+
+            if (app.hoveredCircleIndex === index) {
+              app.hoveredCircleIndex = -1;
+              return;
+            }
+          }
+
           app.drawInfoBox(index, epoch[index].website);
           app.hoveredCircleIndex = index;
-        } else if (app.hoveredCircleIndex === index) {
-          app.resetInfoBox(index);
-          app.hoveredCircleIndex = -1;
         }
       });
     },
@@ -404,7 +414,7 @@ export function topicsAnimation(
       circleHorizontalSpace * 6,
       config.canvas.height
     );
-    app.canvas.mouseMoved(app.mouseMoved);
+    app.canvas.mouseClicked(app.mouseClicked);
 
     p.textFont('sans-serif');
     // app.drawTimelineLine(config.timeline.position);
