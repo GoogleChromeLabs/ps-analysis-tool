@@ -45,18 +45,6 @@ export function topicsAnimation(
     hoveredCircleIndex: -1,
     canvas: null as p5.Renderer | null,
 
-    drawTimelineLine: (position: { x: number; y: number }) => {
-      const { diameter, horizontalSpacing } = config.timeline.circleProps;
-      const circleHorizontalSpace = horizontalSpacing + diameter + 100;
-
-      p.line(
-        position.x,
-        position.y,
-        position.x + circleHorizontalSpace * 8,
-        position.y
-      );
-    },
-
     drawTimeline: (
       position: { x: number; y: number },
       circles: { datetime: string; website: string; topics: string[] }[]
@@ -147,7 +135,6 @@ export function topicsAnimation(
       app.speedMultiplier = 1;
       app.hoveredCircleIndex = -1;
       p?.clear();
-      // app.drawTimelineLine(config.timeline.position);
       app.drawTimeline(config.timeline.position, epoch);
     },
 
@@ -417,7 +404,6 @@ export function topicsAnimation(
     app.canvas.mouseClicked(app.mouseClicked);
 
     p.textFont('sans-serif');
-    // app.drawTimelineLine(config.timeline.position);
     app.drawTimeline(config.timeline.position, epoch);
 
     if (!isAnimating) {
