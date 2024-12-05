@@ -19,6 +19,11 @@
 import config from '../config.js';
 import app from '../app';
 
+/**
+ * External dependencies.
+ */
+import throttle from 'just-throttle';
+
 // @todo To be broken down into multipe functions.
 const utils = {};
 
@@ -179,6 +184,7 @@ utils.drawText = (text, x, y) => {
   }
 };
 
+// TODO: Move from utils.
 utils.setupMainCanvas = async (p, doNotPlay = false) => {
   const { height, width } = utils.calculateCanvasDimensions();
   const canvas = p.createCanvas(width, height);
@@ -200,7 +206,7 @@ utils.setupMainCanvas = async (p, doNotPlay = false) => {
     }
   });
 
-  canvas.mouseMoved(() => {
+  const mouseMovedCallback = throttle(() => {
     const callbacks = app.canvasEventListerners.main.mouseMoved;
 
     Object.keys(callbacks).forEach((key) => {
@@ -210,7 +216,9 @@ utils.setupMainCanvas = async (p, doNotPlay = false) => {
         callback(p.mouseX, p.mouseY);
       }
     });
-  });
+  }, 500);
+
+  canvas.mouseMoved(mouseMovedCallback);
 
   app.setUpTimeLine();
 

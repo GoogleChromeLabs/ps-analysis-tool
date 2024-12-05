@@ -31,6 +31,8 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
+    "@google-psat/explorable-explanations": "^0.11.0-1",
+    "just-throttle": "^4.2.0",
     "p5": "^1.11.0"
   }
 }

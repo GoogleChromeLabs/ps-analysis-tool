@@ -74,6 +74,8 @@ const Box = ({
         mouseY <= iconY + INFO_ICON_SIZE
       ) {
         console.log('Hovering over'); // eslint-disable-line no-console
+      } else {
+        console.log('Not hovering over'); // eslint-disable-line no-console
       }
     };
 
