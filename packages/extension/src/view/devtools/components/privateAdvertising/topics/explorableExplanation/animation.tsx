@@ -35,6 +35,7 @@ interface AnimationProps {
   speedMultiplier: number;
   setPAActiveTab: (tabIndex: number) => void;
   setPAStorage: (content: string) => void;
+  setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Animation = ({
@@ -47,6 +48,7 @@ const Animation = ({
   speedMultiplier,
   setPAActiveTab,
   setPAStorage,
+  setHighlightAdTech,
 }: AnimationProps) => {
   const node = useRef(null);
   const [togglePlayCallback, setTogglePlayCallback] =
@@ -78,7 +80,8 @@ const Animation = ({
         animationRef.current
           ? handleUserVisit
           : (idx: number) => handleUserVisit(idx, false),
-        infoBoxDataClickHandler
+        infoBoxDataClickHandler,
+        setHighlightAdTech
       );
 
       setTogglePlayCallback(() => togglePlay);
@@ -91,7 +94,14 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [epoch, handleUserVisit, setPAActiveTab, setPAStorage, siteAdTechs]);
+  }, [
+    epoch,
+    handleUserVisit,
+    setHighlightAdTech,
+    setPAActiveTab,
+    setPAStorage,
+    siteAdTechs,
+  ]);
 
   useEffect(() => {
     togglePlayCallback?.(isPlaying);

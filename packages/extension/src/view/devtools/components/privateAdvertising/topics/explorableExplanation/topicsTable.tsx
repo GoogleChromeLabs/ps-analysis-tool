@@ -25,7 +25,7 @@ import {
   type InfoType,
   type TableColumn,
 } from '@google-psat/design-system';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 export type TopicsTableType = {
   topicName: string;
@@ -35,9 +35,60 @@ export type TopicsTableType = {
 
 interface TopicsTableProps {
   data: Record<number, TopicsTableType[]>;
+  highlightAdTech: string;
+  setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const TopicsTable = ({ data }: TopicsTableProps) => {
+const AdTechRow = ({
+  info,
+  highlightAdTech,
+  setHighlightAdTech,
+}: {
+  info: string[];
+  highlightAdTech: TopicsTableProps['highlightAdTech'];
+  setHighlightAdTech: TopicsTableProps['setHighlightAdTech'];
+}) => {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (highlightAdTech) {
+      timeoutRef.current = setTimeout(() => {
+        setHighlightAdTech(null);
+      }, 2000);
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [highlightAdTech, setHighlightAdTech]);
+
+  return (
+    <div>
+      {info.map((adTech, index) => (
+        <>
+          <span
+            key={adTech}
+            style={{
+              backgroundColor:
+                adTech === highlightAdTech ? 'yellow' : 'transparent',
+            }}
+          >
+            {adTech}
+          </span>
+          {index !== info.length - 1 ? ' | ' : ''}
+        </>
+      ))}
+    </div>
+  );
+};
+
+const TopicsTable = ({
+  data,
+  highlightAdTech,
+  setHighlightAdTech,
+}: TopicsTableProps) => {
   const { activeTab } = useTabs(({ state }) => ({
     activeTab: state.activeTab,
   }));
@@ -60,11 +111,17 @@ const TopicsTable = ({ data }: TopicsTableProps) => {
       {
         header: 'Observed-by context domains',
         accessorKey: 'observedByContextDomains',
-        cell: (info: InfoType) => (info as string[]).join(' | '),
+        cell: (info: InfoType) => (
+          <AdTechRow
+            info={info as string[]}
+            highlightAdTech={highlightAdTech}
+            setHighlightAdTech={setHighlightAdTech}
+          />
+        ),
         widthWeightagePercentage: 60,
       },
     ],
-    []
+    [highlightAdTech, setHighlightAdTech]
   );
 
   const tablePersistentSettingsKey = 'topicsTable';

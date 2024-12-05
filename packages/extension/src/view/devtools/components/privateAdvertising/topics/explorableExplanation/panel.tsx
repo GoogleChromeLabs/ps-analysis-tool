@@ -43,12 +43,14 @@ interface PanelProps {
   >;
   setPAActiveTab: (tabIndex: number) => void;
   setPAStorage: (content: string) => void;
+  setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Panel = ({
   setTopicsTableData,
   setPAActiveTab,
   setPAStorage,
+  setHighlightAdTech,
 }: PanelProps) => {
   const { activeTab, setActiveTab } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
@@ -191,6 +193,7 @@ const Panel = ({
           handleUserVisit={handleUserVisit}
           setPAActiveTab={setPAActiveTab}
           setPAStorage={setPAStorage}
+          setHighlightAdTech={setHighlightAdTech}
         />
       </div>
       <Resizable

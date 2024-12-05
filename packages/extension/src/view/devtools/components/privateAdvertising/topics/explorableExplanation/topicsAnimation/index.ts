@@ -26,6 +26,7 @@ import { getAdtechsColors } from './utils';
  * @param siteAdTechs - Object with websites as keys and adtechs as values
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
  * @param infoBoxDataClickHandler - Callback function for handling clicks on the info box data
+ * @param setHighlightAdTech - Callback function for setting the highlighted adtech
  * @returns Object with callbacks to control the animation
  */
 export function topicsAnimation(
@@ -34,7 +35,8 @@ export function topicsAnimation(
   isAnimating: boolean,
   siteAdTechs: Record<string, string[]>,
   handleUserVisit: (visitIndex: number) => void,
-  infoBoxDataClickHandler: (isTopic: boolean, content: string) => void
+  infoBoxDataClickHandler: (isTopic: boolean, content: string) => void,
+  setHighlightAdTech: (highlightAdTech: string | null) => void
 ) {
   const app = {
     userIcon: null as p5.Image | null,
@@ -429,6 +431,8 @@ export function topicsAnimation(
 
           if (isTopic) {
             infoBoxDataClickHandler(isTopic, position.content);
+          } else {
+            setHighlightAdTech(position.content);
           }
         }
       });

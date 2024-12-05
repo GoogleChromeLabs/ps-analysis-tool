@@ -34,6 +34,8 @@ const ExplorableExplanation = () => {
   const [topicsTableData, setTopicsTableData] = useState<
     Record<number, TopicsTableType[]>
   >({});
+  const [highlightAdTech, setHighlightAdTech] = useState<string | null>(null);
+
   const tabItems = useMemo<TabItems>(
     () =>
       ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'].map((item) => ({
@@ -42,10 +44,12 @@ const ExplorableExplanation = () => {
           Element: TopicsTable,
           props: {
             data: topicsTableData,
+            highlightAdTech,
+            setHighlightAdTech,
           },
         },
       })),
-    [topicsTableData]
+    [highlightAdTech, topicsTableData]
   );
 
   // These are the actions that are being used in the PA panel tabs provider not the animation component.
@@ -61,6 +65,7 @@ const ExplorableExplanation = () => {
         setTopicsTableData={setTopicsTableData}
         setPAActiveTab={setPAActiveTab}
         setPAStorage={setPAStorage}
+        setHighlightAdTech={setHighlightAdTech}
       />
     </TabsProvider>
   );
