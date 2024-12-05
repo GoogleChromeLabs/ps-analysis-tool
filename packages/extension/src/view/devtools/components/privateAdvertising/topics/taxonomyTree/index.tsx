@@ -115,10 +115,20 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
       }
 
       if (storageRef.current[1]) {
-        const topic = storageRef.current[1];
-        nodeClickHandler(topic);
+        const data = JSON.parse(storageRef.current[1] || '{}');
+        const topic = data?.taxonomy;
 
-        setStorage('', 1);
+        if (!topic) {
+          return;
+        }
+
+        nodeClickHandler(topic);
+        setStorage(
+          JSON.stringify({
+            taxonomy: '',
+          }),
+          1
+        );
       }
     })();
 

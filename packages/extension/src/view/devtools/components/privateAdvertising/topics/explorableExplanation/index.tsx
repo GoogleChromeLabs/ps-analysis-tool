@@ -53,16 +53,20 @@ const ExplorableExplanation = () => {
   );
 
   // These are the actions that are being used in the PA panel tabs provider not the animation component.
-  const { setPAActiveTab, setPAStorage } = useTabs(({ actions }) => ({
-    setPAActiveTab: actions.setActiveTab,
-    setPAStorage: actions.setStorage,
-  }));
+  const { PAstorage, setPAActiveTab, setPAStorage } = useTabs(
+    ({ state, actions }) => ({
+      PAstorage: state.storage,
+      setPAActiveTab: actions.setActiveTab,
+      setPAStorage: actions.setStorage,
+    })
+  );
 
   return (
     <TabsProvider items={tabItems}>
       <Panel
         topicsTableData={topicsTableData}
         setTopicsTableData={setTopicsTableData}
+        PAstorage={PAstorage}
         setPAActiveTab={setPAActiveTab}
         setPAStorage={setPAStorage}
         setHighlightAdTech={setHighlightAdTech}

@@ -41,6 +41,7 @@ interface PanelProps {
   setTopicsTableData: React.Dispatch<
     React.SetStateAction<Record<number, TopicsTableType[]>>
   >;
+  PAstorage: string[];
   setPAActiveTab: (tabIndex: number) => void;
   setPAStorage: (content: string) => void;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
@@ -48,6 +49,7 @@ interface PanelProps {
 
 const Panel = ({
   setTopicsTableData,
+  PAstorage,
   setPAActiveTab,
   setPAStorage,
   setHighlightAdTech,
@@ -65,7 +67,22 @@ const Panel = ({
   );
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const epochs = useMemo(() => createEpochs(), []);
+  const storageRef = useRef(PAstorage);
+  const epochs = useMemo(() => {
+    return (
+      (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
+        typeof createEpochs
+      >) ?? createEpochs()
+    );
+  }, []);
+  useEffect(() => {
+    setPAStorage(
+      JSON.stringify({
+        epochs,
+      })
+    );
+  }, [epochs, setPAStorage]);
+
   const siteAdTechs = useMemo(() => {
     return assignAdtechsToSites(websites, adtechs);
   }, []);

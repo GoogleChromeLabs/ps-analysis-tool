@@ -66,7 +66,11 @@ const Animation = ({
   useEffect(() => {
     const infoBoxDataClickHandler = (isTopic: boolean, content: string) => {
       if (isTopic) {
-        setPAStorage(content);
+        setPAStorage(
+          JSON.stringify({
+            taxonomy: content,
+          })
+        );
         setPAActiveTab(2);
       }
     };
