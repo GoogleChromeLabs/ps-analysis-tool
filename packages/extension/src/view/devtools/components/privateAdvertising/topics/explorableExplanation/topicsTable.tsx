@@ -98,7 +98,7 @@ const TopicsTable = ({
       {
         header: 'Topic Name',
         accessorKey: 'topicName',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) => (info as string).split('/').pop() ?? '',
         enableHiding: false,
         widthWeightagePercentage: 20,
       },
