@@ -200,6 +200,18 @@ utils.setupMainCanvas = async (p, doNotPlay = false) => {
     }
   });
 
+  canvas.mouseMoved(() => {
+    const callbacks = app.canvasEventListerners.main.mouseMoved;
+
+    Object.keys(callbacks).forEach((key) => {
+      const callback = callbacks[key];
+
+      if (typeof callback === 'function') {
+        callback(p.mouseX, p.mouseY);
+      }
+    });
+  });
+
   app.setUpTimeLine();
 
   if (!app.isInteractiveMode) {
@@ -318,6 +330,10 @@ utils.markVisitedValue = (index, value) => {
     }
     return circle;
   });
+};
+
+utils.addCanvasEventListener = (event, callback, key, canvasName = 'main') => {
+  app.canvasEventListerners[canvasName][event][key] = callback;
 };
 
 export default utils;

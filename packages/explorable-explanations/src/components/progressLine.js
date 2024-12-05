@@ -32,7 +32,7 @@ const ProgressLine = ({
 }) => {
   const width = config.flow.lineWidth - ARROW_SIZE;
   const height = config.flow.lineHeight - ARROW_SIZE;
-  const incrementBy = 1; // Adjust to control speed
+  const incrementBy = 5; // Adjust to control speed
   const p = app.p;
 
   x1 = typeof x1 === 'function' ? x1() : x1;

@@ -18,6 +18,7 @@
  */
 import app from '../app';
 import config from '../config';
+import utils from '../lib/utils';
 
 const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
@@ -60,13 +61,24 @@ const Box = ({
   }
 
   if (info) {
-    p.image(
-      p.infoIcon,
-      x + width - INFO_ICON_SIZE - INFO_ICON_SPACING,
-      y + INFO_ICON_SPACING,
-      INFO_ICON_SIZE,
-      INFO_ICON_SIZE
-    );
+    const iconX = x + width - INFO_ICON_SIZE - INFO_ICON_SPACING;
+    const iconY = y + INFO_ICON_SPACING;
+
+    p.image(p.infoIcon, iconX, iconY, INFO_ICON_SIZE, INFO_ICON_SIZE);
+
+    const callback = (mouseX, mouseY) => {
+      if (
+        mouseX >= iconX &&
+        mouseX <= iconX + INFO_ICON_SIZE &&
+        mouseY >= iconY &&
+        mouseY <= iconY + INFO_ICON_SIZE
+      ) {
+        console.log('Hovering over'); // eslint-disable-line no-console
+      }
+    };
+
+    const key = title + description + x + y;
+    utils.addCanvasEventListener('mouseMoved', callback, key);
   }
 
   p.pop();

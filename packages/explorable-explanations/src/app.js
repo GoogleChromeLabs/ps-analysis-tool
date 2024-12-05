@@ -62,6 +62,13 @@ const app = {
   visitedIndexOrder: [],
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
+  canvasEventListerners: {
+    main: {
+      mouseOver: {},
+      mouseOut: {},
+      mouseMoved: {},
+    },
+  },
 };
 
 export default app;
