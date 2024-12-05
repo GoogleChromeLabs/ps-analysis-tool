@@ -18,7 +18,11 @@
  * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
-import { TabsProvider, type TabItems } from '@google-psat/design-system';
+import {
+  TabsProvider,
+  useTabs,
+  type TabItems,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -44,11 +48,19 @@ const ExplorableExplanation = () => {
     [topicsTableData]
   );
 
+  // These are the actions that are being used in the PA panel tabs provider not the animation component.
+  const { setPAActiveTab, setPAStorage } = useTabs(({ actions }) => ({
+    setPAActiveTab: actions.setActiveTab,
+    setPAStorage: actions.setStorage,
+  }));
+
   return (
     <TabsProvider items={tabItems}>
       <Panel
         topicsTableData={topicsTableData}
         setTopicsTableData={setTopicsTableData}
+        setPAActiveTab={setPAActiveTab}
+        setPAStorage={setPAStorage}
       />
     </TabsProvider>
   );

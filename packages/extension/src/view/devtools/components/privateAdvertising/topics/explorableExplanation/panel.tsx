@@ -41,9 +41,15 @@ interface PanelProps {
   setTopicsTableData: React.Dispatch<
     React.SetStateAction<Record<number, TopicsTableType[]>>
   >;
+  setPAActiveTab: (tabIndex: number) => void;
+  setPAStorage: (content: string) => void;
 }
 
-const Panel = ({ setTopicsTableData }: PanelProps) => {
+const Panel = ({
+  setTopicsTableData,
+  setPAActiveTab,
+  setPAStorage,
+}: PanelProps) => {
   const { activeTab, setActiveTab } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     setActiveTab: actions.setActiveTab,
@@ -183,6 +189,8 @@ const Panel = ({ setTopicsTableData }: PanelProps) => {
           resetAnimation={reset}
           speedMultiplier={sliderStep}
           handleUserVisit={handleUserVisit}
+          setPAActiveTab={setPAActiveTab}
+          setPAStorage={setPAStorage}
         />
       </div>
       <Resizable

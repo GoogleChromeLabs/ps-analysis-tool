@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ExternalLinkBlack } from '@google-psat/design-system';
+import { ExternalLinkBlack, useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -42,33 +42,10 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [taxonomyArray, setTaxonomyArray] = useState<string[]>([]);
 
-  useEffect(() => {
-    const divContainer = divRef.current;
-
-    (async () => {
-      const taxonomy = await loadTaxonomy(taxonomyUrl);
-      const lines = taxonomy.trim().split('\n').slice(2);
-      const _taxonomyArray = lines.map((line) => line.split('|')[2].trim());
-
-      setTaxonomyArray(_taxonomyArray);
-
-      const treeConfig = {
-        width: 2000,
-      };
-
-      const chart = await Tree(taxonomy, treeConfig);
-
-      if (divContainer) {
-        divContainer.appendChild(chart);
-      }
-    })();
-
-    return () => {
-      if (divContainer) {
-        divContainer.innerHTML = '';
-      }
-    };
-  }, [taxonomyUrl]);
+  const { storage, setStorage } = useTabs(({ state, actions }) => ({
+    storage: state.storage,
+    setStorage: actions.setStorage,
+  }));
 
   const nodeClickHandler = useCallback((value: string) => {
     const clicker = (id: string, nextId?: string) => {
@@ -114,6 +91,43 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
       clicker(_id || 'tax-tree-root-node', nextId); // if no id is provided it's the root of the tree
     });
   }, []);
+
+  const storageRef = useRef(storage);
+
+  useEffect(() => {
+    const divContainer = divRef.current;
+
+    (async () => {
+      const taxonomy = await loadTaxonomy(taxonomyUrl);
+      const lines = taxonomy.trim().split('\n').slice(2);
+      const _taxonomyArray = lines.map((line) => line.split('|')[2].trim());
+
+      setTaxonomyArray(_taxonomyArray);
+
+      const treeConfig = {
+        width: 2000,
+      };
+
+      const chart = await Tree(taxonomy, treeConfig);
+
+      if (divContainer) {
+        divContainer.appendChild(chart);
+      }
+
+      if (storageRef.current[1]) {
+        const topic = storageRef.current[1];
+        nodeClickHandler(topic);
+
+        setStorage('', 1);
+      }
+    })();
+
+    return () => {
+      if (divContainer) {
+        divContainer.innerHTML = '';
+      }
+    };
+  }, [nodeClickHandler, setStorage, taxonomyUrl]);
 
   useEffect(() => {
     const timeouts = timeoutRef.current;

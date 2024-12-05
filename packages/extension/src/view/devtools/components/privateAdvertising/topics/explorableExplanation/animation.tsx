@@ -24,7 +24,6 @@ import p5 from 'p5';
  * Internal dependencies.
  */
 import { topicsAnimation } from './topicsAnimation';
-import { useTabs } from '@google-psat/design-system';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -34,6 +33,8 @@ interface AnimationProps {
   isPlaying: boolean;
   resetAnimation: boolean;
   speedMultiplier: number;
+  setPAActiveTab: (tabIndex: number) => void;
+  setPAStorage: (content: string) => void;
 }
 
 const Animation = ({
@@ -44,6 +45,8 @@ const Animation = ({
   isPlaying,
   resetAnimation,
   speedMultiplier,
+  setPAActiveTab,
+  setPAStorage,
 }: AnimationProps) => {
   const node = useRef(null);
   const [togglePlayCallback, setTogglePlayCallback] =
@@ -52,10 +55,6 @@ const Animation = ({
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
   const animationRef = useRef(isAnimating);
-  const { setActiveTab, setStorage } = useTabs(({ actions }) => ({
-    setActiveTab: actions.setActiveTab,
-    setStorage: actions.setStorage,
-  }));
 
   useEffect(() => {
     // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
@@ -63,6 +62,13 @@ const Animation = ({
   }, [isAnimating]);
 
   useEffect(() => {
+    const infoBoxDataClickHandler = (isTopic: boolean, content: string) => {
+      if (isTopic) {
+        setPAStorage(content);
+        setPAActiveTab(2);
+      }
+    };
+
     const tAnimation = (p: p5) => {
       const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
         p,
@@ -71,7 +77,8 @@ const Animation = ({
         siteAdTechs,
         animationRef.current
           ? handleUserVisit
-          : (idx: number) => handleUserVisit(idx, false)
+          : (idx: number) => handleUserVisit(idx, false),
+        infoBoxDataClickHandler
       );
 
       setTogglePlayCallback(() => togglePlay);
@@ -84,7 +91,7 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [epoch, handleUserVisit, setActiveTab, setStorage, siteAdTechs]);
+  }, [epoch, handleUserVisit, setPAActiveTab, setPAStorage, siteAdTechs]);
 
   useEffect(() => {
     togglePlayCallback?.(isPlaying);

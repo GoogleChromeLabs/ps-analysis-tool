@@ -33,7 +33,8 @@ export function topicsAnimation(
   epoch: { datetime: string; website: string; topics: string[] }[],
   isAnimating: boolean,
   siteAdTechs: Record<string, string[]>,
-  handleUserVisit: (visitIndex: number) => void
+  handleUserVisit: (visitIndex: number) => void,
+  infoBoxDataClickHandler: (isTopic: boolean, content: string) => void
 ) {
   const app = {
     userIcon: null as p5.Image | null,
@@ -43,7 +44,14 @@ export function topicsAnimation(
     visitIndex: 0,
     playing: true,
     speedMultiplier: 1,
-    hoveredCircleIndex: -1,
+    inspectedCircleIndex: -1,
+    inspectedCircleDataPositions: [] as {
+      x: number;
+      y: number;
+      length: number;
+      content: string;
+      isTopic?: boolean;
+    }[],
     canvas: null as p5.Renderer | null,
 
     drawTimeline: (
@@ -125,16 +133,18 @@ export function topicsAnimation(
         app.visitIndex <= epoch.length
       ) {
         app.userVisitDone(app.visitIndex - 1);
-      } else if (app.playing && app.hoveredCircleIndex !== -1) {
-        app.resetInfoBox(app.hoveredCircleIndex);
-        app.hoveredCircleIndex = -1;
+      } else if (app.playing && app.inspectedCircleIndex !== -1) {
+        app.resetInfoBox(app.inspectedCircleIndex);
+        app.inspectedCircleIndex = -1;
+        app.inspectedCircleDataPositions = [];
       }
     },
 
     reset: () => {
       app.visitIndex = 0;
       app.speedMultiplier = 1;
-      app.hoveredCircleIndex = -1;
+      app.inspectedCircleIndex = -1;
+      app.inspectedCircleDataPositions = [];
       p?.clear();
       app.drawTimeline(config.timeline.position, epoch);
     },
@@ -281,7 +291,19 @@ export function topicsAnimation(
       p.text('Topics:', position.x - 120, position.y + diameter / 2 + 90);
       p.textStyle(p.NORMAL);
       topics.forEach((topic, i) => {
-        p.text(topic, position.x - 70, position.y + diameter / 2 + 90 + i * 20);
+        const _topic = topic.split('/').slice(-1)[0];
+        p.text(
+          _topic,
+          position.x - 70,
+          position.y + diameter / 2 + 90 + i * 20
+        );
+        app.inspectedCircleDataPositions.push({
+          x: position.x - 70,
+          y: position.y + diameter / 2 + 90 + i * 20,
+          length: p.textWidth(_topic) + 10,
+          content: topic,
+          isTopic: true,
+        });
       });
 
       const startingPointAdTechs = topics.length * 20;
@@ -308,6 +330,13 @@ export function topicsAnimation(
           position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs,
           diameter / 5
         );
+        app.inspectedCircleDataPositions.push({
+          x: position.x - 110,
+          y: position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs,
+          length: diameter / 5 + p.textWidth(adTech) + 10,
+          content: adTech,
+        });
+
         p.fill(0);
         p.stroke(255);
         p.text(
@@ -369,17 +398,38 @@ export function topicsAnimation(
             return;
           }
 
-          if (app.hoveredCircleIndex !== -1) {
-            app.resetInfoBox(app.hoveredCircleIndex);
+          app.inspectedCircleDataPositions = [];
 
-            if (app.hoveredCircleIndex === index) {
-              app.hoveredCircleIndex = -1;
+          if (app.inspectedCircleIndex !== -1) {
+            app.resetInfoBox(app.inspectedCircleIndex);
+
+            if (app.inspectedCircleIndex === index) {
+              app.inspectedCircleIndex = -1;
               return;
             }
           }
 
           app.drawInfoBox(index, epoch[index].website);
-          app.hoveredCircleIndex = index;
+          app.inspectedCircleIndex = index;
+        }
+      });
+
+      app.inspectedCircleDataPositions.forEach((position, index) => {
+        const { x: positionX, y: positionY, length } = position;
+
+        if (
+          x > positionX &&
+          x < positionX + length &&
+          y > positionY - 10 &&
+          y < positionY + 10
+        ) {
+          const isTopic = Boolean(
+            app.inspectedCircleDataPositions[index].isTopic
+          );
+
+          if (isTopic) {
+            infoBoxDataClickHandler(isTopic, position.content);
+          }
         }
       });
     },
