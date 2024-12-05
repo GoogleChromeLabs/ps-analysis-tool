@@ -21,16 +21,16 @@ import * as d3 from 'd3';
 /**
  * Internal dependencies.
  */
-import config from './config.js';
-import auctions from './modules/auctions.js';
-import flow from './modules/flow.js';
-import utils from './lib/utils.js';
-import timeline from './modules/timeline.js';
-import joinInterestGroup from './modules/join-interest-group.js';
+import config from './config';
+import auctions from './modules/auctions';
+import flow from './modules/flow';
+import utils from './lib/utils';
+import timeline from './modules/timeline';
+import joinInterestGroup from './modules/joinInterestGroup';
 import icons from './icons.json';
-import bubbles from './modules/bubbles.js';
-import app from './app.js';
-import promiseQueue from './lib/promiseQueue.js';
+import bubbles from './modules/bubbles';
+import app from './app';
+import promiseQueue from './lib/promiseQueue';
 
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
