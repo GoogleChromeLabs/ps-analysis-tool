@@ -19,7 +19,7 @@
 import app from '../app';
 import config from '../config';
 
-const INFO_ICON_SIZE = 18;
+const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
 
 const Box = ({
