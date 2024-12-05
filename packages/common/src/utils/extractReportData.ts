@@ -17,13 +17,36 @@
 /**
  * Internal dependencies
  */
-import { CompleteJson, CookieFrameStorageType } from '../cookies.types';
+import {
+  CompleteJson,
+  CookieFrameStorageType,
+  ErroredOutUrlsData,
+} from '../cookies.types';
 import { LibraryData } from '../libraryDetection.types';
 import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
   const landingPageCookies = {};
+  const erroredOutUrlsData: ErroredOutUrlsData[] = [];
   const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
+
+  data.forEach(({ cookieData, pageUrl, libraryMatches, erroredOutUrls }) => {
+    erroredOutUrlsData.push(...(erroredOutUrls ?? []));
+
+    if (
+      erroredOutUrls &&
+      erroredOutUrls.filter(({ url }) => url === pageUrl).length > 0
+    ) {
+      return;
+    }
+
+    formatCookieData(
+      extractCookies(cookieData, pageUrl, true),
+      landingPageCookies
+    );
+
+    consolidatedLibraryMatches[pageUrl] = libraryMatches;
+  });
 
   data.forEach(({ cookieData, pageUrl, libraryMatches }) => {
     formatCookieData(
@@ -37,6 +60,7 @@ const extractReportData = (data: CompleteJson[]) => {
   return {
     landingPageCookies,
     consolidatedLibraryMatches,
+    erroredOutUrlsData,
   };
 };
 

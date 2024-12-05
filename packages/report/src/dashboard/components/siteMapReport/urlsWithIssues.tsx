@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import coffee from 'coffee';
+/**
+ * External dependencies.
+ */
+import type { ErroredOutUrlsData } from '@google-psat/common';
 
-xdescribe('CLI E2E Test', () => {
-  const cli = require.resolve('../../dist/main.js');
+/**
+ * Internal dependencies.
+ */
+import ErroredOutUrls from '../urlsWithIssues';
 
-  it('Should run site analysis', () => {
-    return coffee
-      .fork(cli, ['-u https://bbc.com', '-w 1000'])
-      .includes('stdout', '/out/bbc-com/report_')
-      .end();
-  }, 60000);
-});
+interface URLSWithIssuesProps {
+  erroredOutUrls: ErroredOutUrlsData[];
+}
+
+const URLSWithIssues = ({ erroredOutUrls }: URLSWithIssuesProps) => {
+  return <ErroredOutUrls erroredOutUrls={erroredOutUrls} />;
+};
+
+export default URLSWithIssues;
