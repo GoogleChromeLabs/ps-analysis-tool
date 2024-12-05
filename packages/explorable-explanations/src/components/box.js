@@ -19,6 +19,9 @@
 import app from '../app';
 import config from '../config';
 
+const INFO_ICON_SIZE = 18;
+const INFO_ICON_SPACING = 3;
+
 const Box = ({
   title,
   description,
@@ -27,6 +30,7 @@ const Box = ({
   width = config.flow.box.width,
   height = config.flow.box.height,
   color,
+  info = true,
 }) => {
   x = typeof x === 'function' ? x() : x;
   y = typeof y === 'function' ? y() : y;
@@ -38,22 +42,34 @@ const Box = ({
     },
   };
 
-  app.p.push();
-  app.p.textAlign(app.p.CENTER, app.p.CENTER);
-  app.p.fill(color || config.flow.colors.box.background);
-  app.p.rect(x, y, width, height);
-  app.p.strokeWeight(0.1);
-  app.p.fill(config.flow.colors.box.text);
-  app.p.textFont('sans-serif');
+  const p = app.p;
+
+  p.push();
+  p.textAlign(p.CENTER, p.CENTER);
+  p.fill(color || config.flow.colors.box.background);
+  p.rect(x, y, width, height);
+  p.strokeWeight(0.1);
+  p.fill(config.flow.colors.box.text);
+  p.textFont('sans-serif');
 
   if (description) {
-    app.p.text(title, x + width / 2, y + height / 2 - 5);
-    app.p.text(description, x + width / 2, y + height / 2 + 10);
+    p.text(title, x + width / 2, y + height / 2 - 5);
+    p.text(description, x + width / 2, y + height / 2 + 10);
   } else {
-    app.p.text(title, x + width / 2, y + height / 2);
+    p.text(title, x + width / 2, y + height / 2);
   }
 
-  app.p.pop();
+  if (info) {
+    p.image(
+      p.infoIcon,
+      x + width - INFO_ICON_SIZE - INFO_ICON_SPACING,
+      y + INFO_ICON_SPACING,
+      INFO_ICON_SIZE,
+      INFO_ICON_SIZE
+    );
+  }
+
+  p.pop();
 
   return nextTip;
 };

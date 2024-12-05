@@ -465,6 +465,7 @@ export const sketch = (p) => {
     p.playIcon = p.loadImage(icons.play);
     p.pauseIcon = p.loadImage(icons.pause);
     p.expandIcon = p.loadImage(icons.expand);
+    p.infoIcon = p.loadImage(icons.info);
 
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
