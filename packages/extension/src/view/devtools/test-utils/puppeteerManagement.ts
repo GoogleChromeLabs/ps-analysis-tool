@@ -20,12 +20,10 @@
 import fs from 'fs';
 import path from 'path';
 import { platform } from 'os';
-import puppeteer, {
-  Browser,
-  Page,
-  type Viewport,
-  type KeyInput,
-} from 'puppeteer';
+import { Browser, Page, type Viewport, type KeyInput } from 'puppeteer';
+import puppeteer from 'puppeteer-extra';
+//@ts-ignore
+import puppeteerPrefs from 'puppeteer-extra-plugin-user-preferences';
 import { USER_AGENT } from './constants';
 
 const currentScriptDirectory = process.cwd();
@@ -63,6 +61,18 @@ export class PuppeteerManagement {
   }
 
   async setup(extraArgs?: string[], defaultViewport?: Viewport) {
+    puppeteer.use(
+      puppeteerPrefs({
+        userPrefs: {
+          devtools: {
+            preferences: {
+              currentDockState: '"bottom"',
+            },
+          },
+        },
+      })
+    );
+
     this.browser = await puppeteer.launch({
       headless: true,
       args: [...puppeteerArgs, ...(extraArgs || [])],

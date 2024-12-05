@@ -85,6 +85,14 @@ export class Interaction {
       });
       const button = await frame.$(selectors.analyzeThisButtonSelector);
       await button?.click();
+
+      const dropdown = await frame.waitForSelector(
+        selectors.cookieDropDownSelector,
+        {
+          timeout: 10000,
+        }
+      );
+      await dropdown?.click();
     }
 
     return frame;

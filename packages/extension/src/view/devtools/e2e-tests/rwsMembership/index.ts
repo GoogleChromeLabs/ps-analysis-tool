@@ -25,6 +25,7 @@ import { Page } from 'puppeteer';
  */
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
+import { selectors } from '../../test-utils/constants';
 
 dotenv.config();
 
@@ -56,16 +57,17 @@ describe('RWS membership', () => {
       return;
     }
 
-    const elements = await frame.$$(
-      'button[data-testid="sidebar-child-dropdown"]'
-    );
+    const openSiteBoundariesTab = async () => {
+      const dropdown = await frame.waitForSelector(
+        selectors.siteBoundariesSelector,
+        {
+          timeout: 10000,
+        }
+      );
+      await dropdown?.click();
+    };
 
-    // Check if the siteboundries is present click on it.
-    if (elements.length >= 2) {
-      const secondElement = elements[1];
-      await secondElement.click();
-    }
-    await interaction.delay(3000);
+    await openSiteBoundariesTab();
 
     // Check if RWS is present and click on it.
     await interaction.clickMatchingElement(frame, 'p', 'Related Website Sets');
