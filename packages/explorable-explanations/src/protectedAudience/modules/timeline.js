@@ -48,12 +48,34 @@ timeline.init = () => {
       if (!app.isInteractiveMode) {
         return;
       }
+
       const { offsetX, offsetY } = event;
+      let hoveringOnExpandIconPositions = false;
+
+      app.timeline.expandIconPositions.forEach((positions) => {
+        if (
+          utils.isInsideCircle(
+            offsetX,
+            offsetY,
+            positions.x - 10,
+            positions.y + config.timeline.circleProps.diameter / 2,
+            20
+          )
+        ) {
+          hoveringOnExpandIconPositions = true;
+        }
+      });
+
       app.mouseX = offsetX;
       app.mouseY = offsetY;
 
       if (!app.shouldRespondToClick) {
         return;
+      }
+
+      if (hoveringOnExpandIconPositions) {
+        app.mouseX += 20;
+        app.mouseY += 20;
       }
 
       utils.wipeAndRecreateUserCanvas();
