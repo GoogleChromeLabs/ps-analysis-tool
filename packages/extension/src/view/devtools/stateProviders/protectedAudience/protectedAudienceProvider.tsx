@@ -370,7 +370,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     return {
       state: {
         auctionEvents,
-        interestGroupDetails,
+        interestGroupDetails: interestGroupDetails.filter(
+          (event) => event.type === 'leave' || event.type === 'join'
+        ),
         isMultiSellerAuction,
         receivedBids,
         noBids,
