@@ -16,9 +16,9 @@
 /**
  * Internal dependencies.
  */
-import config from '../config';
-import app from '../app';
-import utils from '../lib/utils';
+import config from '../protectedAudience/config';
+import app from '../protectedAudience/app';
+import utils from '../protectedAudience/lib/utils';
 
 const ARROW_SIZE = 10;
 

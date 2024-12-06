@@ -20,7 +20,7 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import utils from '../lib/utils';
-import { Box, ProgressLine, Branches, RippleEffect } from '../components';
+import { Box, ProgressLine, Branches, RippleEffect } from '../../components';
 import bubbles from './bubbles';
 import promiseQueue from '../lib/promiseQueue.js';
 

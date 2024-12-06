@@ -19,5 +19,5 @@ export {
   userSketch,
   interestGroupSketch,
   sketch,
-} from './protectedAudience.js';
-export { default as config } from './config.js';
+} from './protectedAudience';
+export { default as config } from './protectedAudience/config.js';

@@ -16,8 +16,8 @@
 /**
  * Internal dependencies.
  */
-import app from '../app';
-import config from '../config';
+import app from '../protectedAudience/app';
+import config from '../protectedAudience/config';
 
 const RippleEffect = async ({ x, y }) => {
   rippleEffect.setUp();

@@ -18,6 +18,7 @@
  */
 import p5 from 'p5';
 import * as d3 from 'd3';
+
 /**
  * Internal dependencies.
  */
@@ -27,7 +28,7 @@ import flow from './modules/flow';
 import utils from './lib/utils';
 import timeline from './modules/timeline';
 import joinInterestGroup from './modules/joinInterestGroup';
-import icons from './icons.json';
+import icons from '../icons.json';
 import bubbles from './modules/bubbles';
 import app from './app';
 import promiseQueue from './lib/promiseQueue';

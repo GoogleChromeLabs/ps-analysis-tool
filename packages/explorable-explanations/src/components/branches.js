@@ -17,10 +17,10 @@
  * Internal dependencies.
  */
 import ProgressLine from './progressLine';
-import app from '../app';
-import config from '../config';
+import app from '../protectedAudience/app';
+import config from '../protectedAudience/config';
 import Box from './box';
-import utils from '../lib/utils';
+import utils from '../protectedAudience/lib/utils';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 15; // Controls the speed of the horizontal line drawing
