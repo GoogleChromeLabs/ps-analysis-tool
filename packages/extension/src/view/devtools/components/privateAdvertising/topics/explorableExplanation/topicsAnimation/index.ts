@@ -272,7 +272,7 @@ export function topicsAnimation(
         position.x,
         position.y + diameter / 2 + 150,
         280,
-        180,
+        200,
         10,
         10,
         10,
@@ -283,27 +283,31 @@ export function topicsAnimation(
       p.textSize(12);
       p.textAlign(p.LEFT, p.CENTER);
       p.textStyle(p.BOLD);
-      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 90);
+      p.text(
+        'Topic(s) observed:',
+        position.x - 120,
+        position.y + diameter / 2 + 75
+      );
       p.textStyle(p.NORMAL);
       topics.forEach((topic, i) => {
         const _topic = topic.split('/').slice(-1)[0];
         p.text(
           _topic,
-          position.x - 70,
-          position.y + diameter / 2 + 90 + i * 20
+          position.x - 115,
+          position.y + diameter / 2 + 95 + i * 20
         );
       });
 
-      const startingPointAdTechs = topics.length * 20;
+      const startingPointAdTechs = topics.length * 20 + 20;
 
       const adTechs = siteAdTechs[currentSite];
       const numAdTechs = adTechs.length;
 
       p.textStyle(p.BOLD);
       p.text(
-        'Observed-by context domains:',
+        'Observed-by context domain(s):',
         position.x - 120,
-        position.y + diameter / 2 + 95 + startingPointAdTechs
+        position.y + diameter / 2 + 85 + startingPointAdTechs
       );
       p.textStyle(p.NORMAL);
       for (let i = 0; i < numAdTechs; i++) {
@@ -315,7 +319,7 @@ export function topicsAnimation(
         p.stroke(0);
         p.circle(
           position.x - 110,
-          position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs,
+          position.y + diameter / 2 + 105 + i * 20 + startingPointAdTechs,
           diameter / 5
         );
 
@@ -324,7 +328,7 @@ export function topicsAnimation(
         p.text(
           adTech,
           position.x - 85,
-          position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs
+          position.y + diameter / 2 + 105 + i * 20 + startingPointAdTechs
         );
       }
 
@@ -333,7 +337,7 @@ export function topicsAnimation(
         position.x,
         position.y + diameter / 2 + 1,
         position.x,
-        position.y + 85
+        position.y + 75
       );
 
       p.pop();
