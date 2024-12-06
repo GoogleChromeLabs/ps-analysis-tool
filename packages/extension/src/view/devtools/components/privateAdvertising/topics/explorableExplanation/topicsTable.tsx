@@ -37,6 +37,7 @@ interface TopicsTableProps {
   data: Record<number, TopicsTableType[]>;
   highlightAdTech: string;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
+  topicsNavigator: (topic: string) => void;
 }
 
 const AdTechRow = ({
@@ -67,9 +68,8 @@ const AdTechRow = ({
   return (
     <div>
       {info.map((adTech, index) => (
-        <>
+        <React.Fragment key={index}>
           <span
-            key={adTech}
             style={{
               backgroundColor:
                 adTech === highlightAdTech ? 'yellow' : 'transparent',
@@ -78,7 +78,7 @@ const AdTechRow = ({
             {adTech}
           </span>
           {index !== info.length - 1 ? ' | ' : ''}
-        </>
+        </React.Fragment>
       ))}
     </div>
   );
@@ -88,6 +88,7 @@ const TopicsTable = ({
   data,
   highlightAdTech,
   setHighlightAdTech,
+  topicsNavigator,
 }: TopicsTableProps) => {
   const { activeTab } = useTabs(({ state }) => ({
     activeTab: state.activeTab,
@@ -98,7 +99,14 @@ const TopicsTable = ({
       {
         header: 'Topic Name',
         accessorKey: 'topicName',
-        cell: (info: InfoType) => (info as string).split('/').pop() ?? '',
+        cell: (info: InfoType) => (
+          <button
+            className="hover:opacity-50"
+            onClick={() => topicsNavigator(info as string)}
+          >
+            {(info as string).split('/').pop() ?? ''}
+          </button>
+        ),
         enableHiding: false,
         widthWeightagePercentage: 20,
       },
@@ -121,7 +129,7 @@ const TopicsTable = ({
         widthWeightagePercentage: 60,
       },
     ],
-    [highlightAdTech, setHighlightAdTech]
+    [highlightAdTech, setHighlightAdTech, topicsNavigator]
   );
 
   const tablePersistentSettingsKey = 'topicsTable';

@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   TabsProvider,
   useTabs,
@@ -35,6 +35,26 @@ const ExplorableExplanation = () => {
     Record<number, TopicsTableType[]>
   >({});
   const [highlightAdTech, setHighlightAdTech] = useState<string | null>(null);
+  // These are the actions that are being used in the PA panel tabs provider not the animation component.
+  const { PAstorage, setPAActiveTab, setPAStorage } = useTabs(
+    ({ state, actions }) => ({
+      PAstorage: state.storage,
+      setPAActiveTab: actions.setActiveTab,
+      setPAStorage: actions.setStorage,
+    })
+  );
+
+  const topicsNavigator = useCallback(
+    (topic: string) => {
+      setPAStorage(
+        JSON.stringify({
+          taxonomy: topic,
+        })
+      );
+      setPAActiveTab(2);
+    },
+    [setPAActiveTab, setPAStorage]
+  );
 
   const tabItems = useMemo<TabItems>(
     () =>
@@ -46,19 +66,11 @@ const ExplorableExplanation = () => {
             data: topicsTableData,
             highlightAdTech,
             setHighlightAdTech,
+            topicsNavigator,
           },
         },
       })),
-    [highlightAdTech, topicsTableData]
-  );
-
-  // These are the actions that are being used in the PA panel tabs provider not the animation component.
-  const { PAstorage, setPAActiveTab, setPAStorage } = useTabs(
-    ({ state, actions }) => ({
-      PAstorage: state.storage,
-      setPAActiveTab: actions.setActiveTab,
-      setPAStorage: actions.setStorage,
-    })
+    [highlightAdTech, topicsNavigator, topicsTableData]
   );
 
   return (
