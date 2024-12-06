@@ -359,7 +359,7 @@ export class BrowserManagement {
           stackTrace: error?.stack ?? '',
           errorName: error?.name,
         });
-        console.log(JSON.stringify(error));
+
         if (error?.name === 'TimeoutError' || error?.name === 'i') {
           this.debugLog(
             `Navigation did not finish on URL ${url} in 10 seconds moving on to scrolling`
