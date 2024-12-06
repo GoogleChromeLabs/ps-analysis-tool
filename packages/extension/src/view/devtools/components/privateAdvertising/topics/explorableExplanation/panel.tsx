@@ -41,9 +41,20 @@ interface PanelProps {
   setTopicsTableData: React.Dispatch<
     React.SetStateAction<Record<number, TopicsTableType[]>>
   >;
+  PAstorage: string[];
+  setPAActiveTab: (tabIndex: number) => void;
+  setPAStorage: (content: string) => void;
+  setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const Panel = ({ setTopicsTableData }: PanelProps) => {
+const Panel = ({
+  topicsTableData,
+  setTopicsTableData,
+  PAstorage,
+  setPAActiveTab,
+  setPAStorage,
+  setHighlightAdTech,
+}: PanelProps) => {
   const { activeTab, setActiveTab } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     setActiveTab: actions.setActiveTab,
@@ -53,14 +64,61 @@ const Panel = ({ setTopicsTableData }: PanelProps) => {
   const [reset, _setReset] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [epochCompleted, setEpochCompleted] = useState<Record<number, boolean>>(
-    {}
+    PAstorage[1] ? JSON.parse(PAstorage[1])?.epochCompleted : {}
   );
+  const [currentVisitIndexCallback, setCurrentVisitIndexCallback] =
+    useState<() => number>();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const epochs = useMemo(() => createEpochs(), []);
+  const storageRef = useRef(PAstorage);
   const siteAdTechs = useMemo(() => {
-    return assignAdtechsToSites(websites, adtechs);
+    return storageRef.current[1]
+      ? JSON.parse(storageRef.current[1])?.siteAdTechs
+      : assignAdtechsToSites(websites, adtechs);
   }, []);
+  const epochs = useMemo(() => {
+    return (
+      (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
+        typeof createEpochs
+      >) ?? createEpochs()
+    );
+  }, []);
+  const [visitIndexStart, setVisitIndexStart] = useState(
+    JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndex ?? 0
+  );
+
+  useEffect(() => {
+    setTopicsTableData(
+      JSON.parse(storageRef.current[1] || '{}')?.topicsTableData || {}
+    );
+    setActiveTab(
+      JSON.parse(storageRef.current[1] || '{}')?.activeEpochTab || 0
+    );
+  }, [setTopicsTableData, setActiveTab]);
+
+  useEffect(() => {
+    const currentVisitIndex = currentVisitIndexCallback?.();
+
+    if (currentVisitIndex !== undefined) {
+      setPAStorage(
+        JSON.stringify({
+          currentVisitIndex,
+          epochCompleted,
+          topicsTableData,
+          siteAdTechs,
+          activeEpochTab: activeTab,
+          epochs,
+        })
+      );
+    }
+  }, [
+    activeTab,
+    currentVisitIndexCallback,
+    epochCompleted,
+    epochs,
+    setPAStorage,
+    siteAdTechs,
+    topicsTableData,
+  ]);
 
   const setReset = useCallback(() => {
     setPlay(false);
@@ -143,6 +201,7 @@ const Panel = ({ setTopicsTableData }: PanelProps) => {
       if (visitIndex === epochs[activeTab].webVisits.length) {
         if (activeTab < 3 && updateTopics) {
           setActiveTab(activeTab + 1);
+          setVisitIndexStart(0);
         } else {
           setPlay(false);
         }
@@ -179,10 +238,15 @@ const Panel = ({ setTopicsTableData }: PanelProps) => {
           epoch={epochs[activeTab].webVisits}
           isAnimating={!epochCompleted?.[activeTab]}
           siteAdTechs={siteAdTechs}
+          visitIndexStart={visitIndexStart}
           isPlaying={play}
           resetAnimation={reset}
           speedMultiplier={sliderStep}
           handleUserVisit={handleUserVisit}
+          setPAActiveTab={setPAActiveTab}
+          setPAStorage={setPAStorage}
+          setHighlightAdTech={setHighlightAdTech}
+          setCurrentVisitIndexCallback={setCurrentVisitIndexCallback}
         />
       </div>
       <Resizable
