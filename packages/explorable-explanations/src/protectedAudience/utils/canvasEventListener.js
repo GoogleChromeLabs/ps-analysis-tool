@@ -26,3 +26,7 @@ export const addCanvasEventListener = (
 ) => {
   app.canvasEventListerners[canvasName][event][key] = callback;
 };
+
+export const removeCanvasEventListener = (event, key, canvasName = 'main') => {
+  delete app.canvasEventListerners[canvasName][event][key];
+};
