@@ -61,10 +61,7 @@ timeline.init = () => {
     };
 
     app.p.mouseClicked = () => {
-      if (!app.isInteractiveMode) {
-        return;
-      }
-      if (!app.shouldRespondToClick) {
+      if (!app.isInteractiveMode || !app.shouldRespondToClick) {
         return;
       }
 
@@ -90,8 +87,8 @@ timeline.init = () => {
           utils.isInsideCircle(
             app.mouseX,
             app.mouseY,
-            positions.x + config.timeline.circleProps.diameter / 2,
-            positions.y,
+            positions.x - 10,
+            positions.y + config.timeline.circleProps.diameter / 2,
             20
           )
         ) {
@@ -209,6 +206,13 @@ timeline.init = () => {
       ) {
         promiseQueue.clear();
         flow.clearBelowTimelineCircles();
+
+        if (config.timeline.circles[clickedIndex].type === 'advertiser') {
+          app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
+        } else {
+          app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
+        }
+
         app.shouldRespondToClick = false;
         app.drawFlows(clickedIndex);
 
@@ -332,7 +336,7 @@ timeline.drawTimelineLine = () => {
 };
 
 timeline.drawCircle = (index, completed = false) => {
-  const { circleProps, user } = config.timeline;
+  const { circleProps, user, circles } = config.timeline;
   const position = app.timeline.circlePositions[index];
   const { diameter } = circleProps;
 
@@ -340,18 +344,23 @@ timeline.drawCircle = (index, completed = false) => {
 
   if (completed) {
     if (app.isInteractiveMode) {
-      // app.up.text(
-      //   circles[index].visitedIndex ?? '',
-      //   position.x - 5,
-      //   position.y + diameter / 2
-      // );
-      // app.up.image(
-      //   app.p.expandIcon,
-      //   position.x + diameter / 2,
-      //   position.y,
-      //   20,
-      //   20
-      // );
+      app.up.push();
+      app.up.textSize(14);
+      app.up.text(
+        circles[index].visitedIndex ?? '',
+        position.x - 5,
+        position.y + 7
+      );
+      app.up.pop();
+
+      app.up.image(
+        app.p.openWithoutAnimation,
+        position.x - 10,
+        position.y + diameter / 2,
+        20,
+        20
+      );
+      return;
     }
 
     app.up.image(

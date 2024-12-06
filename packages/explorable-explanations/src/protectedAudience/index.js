@@ -473,6 +473,7 @@ export const sketch = (p) => {
     p.pauseIcon = p.loadImage(icons.pause);
     p.expandIcon = p.loadImage(icons.expand);
     p.infoIcon = p.loadImage(icons.info);
+    p.openWithoutAnimation = p.loadImage(icons.openWithoutAnimation);
 
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };

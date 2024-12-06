@@ -36,6 +36,10 @@ flow.getTimelineCircleCoordinates = (index) => {
 
   const positions = app.timeline.circlePositions[index];
 
+  if (app.isRevisitingNodeInInteractiveMode) {
+    return { x: positions.x, y: positions.y + 20 + diameter / 2 };
+  }
+
   return { x: positions.x, y: positions.y + diameter / 2 };
 };
 
