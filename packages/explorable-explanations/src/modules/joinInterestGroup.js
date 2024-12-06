@@ -23,6 +23,7 @@ import utils from '../lib/utils.js';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles.js';
 import promiseQueue from '../lib/promiseQueue.js';
+import info from '../info.json';
 
 /**
  * @module joinInterestGroup
@@ -78,9 +79,10 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSP Tags',
+      title: info.joinInterestGroups[0].title,
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
+      info: info.joinInterestGroups[0].info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -105,11 +107,12 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSPs',
+      title: info.joinInterestGroups[1].title,
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () =>
         app.joinInterestGroup.nextTipCoordinates?.y + config.flow.arrowSize,
       color: config.flow.colors.box.notBrowser,
+      info: info.joinInterestGroups[1].info,
     },
     delay: 1000,
     callBack: (returnValue) => {
