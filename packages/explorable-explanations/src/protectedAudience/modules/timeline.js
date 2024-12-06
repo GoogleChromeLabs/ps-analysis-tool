@@ -16,12 +16,12 @@
 /**
  * Internal dependencies.
  */
-import config from '../config.js';
-import app from '../app.js';
+import config from '../config';
+import app from '../app';
 import * as utils from '../utils';
-import bubbles from './bubbles.js';
-import promiseQueue from '../lib/promiseQueue.js';
-import flow from './flow.js';
+import bubbles from './bubbles';
+import promiseQueue from '../lib/promiseQueue';
+import flow from './flow';
 
 /**
  * @module Timeline

@@ -16,13 +16,13 @@
 /**
  * Internal dependencies.
  */
-import flow from './flow.js';
-import app from '../app.js';
-import config from '../config.js';
+import flow from './flow';
+import app from '../app';
+import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine } from '../../components';
-import bubbles from './bubbles.js';
-import promiseQueue from '../lib/promiseQueue.js';
+import bubbles from './bubbles';
+import promiseQueue from '../lib/promiseQueue';
 import info from '../info.json';
 
 /**

@@ -25,7 +25,7 @@ export const drawText = (text, x, y) => {
   if (text) {
     p.push();
     p.strokeWeight(0.1);
-    p.fill('#000');
+    p.fill('#000'); // @todo Use color from config.
     p.textSize(config.canvas.fontSize - 2);
     p.textFont('sans-serif');
     p.text(text, x, y);
