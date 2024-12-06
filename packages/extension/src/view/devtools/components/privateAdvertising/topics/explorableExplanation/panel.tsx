@@ -48,6 +48,7 @@ interface PanelProps {
 }
 
 const Panel = ({
+  topicsTableData,
   setTopicsTableData,
   PAstorage,
   setPAActiveTab,
@@ -63,11 +64,45 @@ const Panel = ({
   const [reset, _setReset] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [epochCompleted, setEpochCompleted] = useState<Record<number, boolean>>(
-    {}
+    PAstorage[1] ? JSON.parse(PAstorage[1])?.epochCompleted : {}
   );
+  const [currentVisitIndexCallback, setCurrentVisitIndexCallback] =
+    useState<() => number>();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const storageRef = useRef(PAstorage);
+  const siteAdTechs = useMemo(() => {
+    return storageRef.current[1]
+      ? JSON.parse(storageRef.current[1])?.siteAdTechs
+      : assignAdtechsToSites(websites, adtechs);
+  }, []);
+
+  useEffect(() => {
+    setTopicsTableData(
+      JSON.parse(storageRef.current[1] || '{}')?.topicsTableData || {}
+    );
+  }, [setTopicsTableData]);
+
+  useEffect(() => {
+    const currentVisitIndex = currentVisitIndexCallback?.();
+
+    if (currentVisitIndex !== undefined) {
+      setPAStorage(
+        JSON.stringify({
+          currentVisitIndex,
+          epochCompleted,
+          topicsTableData,
+          siteAdTechs,
+        })
+      );
+    }
+  }, [
+    currentVisitIndexCallback,
+    epochCompleted,
+    setPAStorage,
+    siteAdTechs,
+    topicsTableData,
+  ]);
+
   const epochs = useMemo(() => {
     return (
       (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
@@ -82,10 +117,6 @@ const Panel = ({
       })
     );
   }, [epochs, setPAStorage]);
-
-  const siteAdTechs = useMemo(() => {
-    return assignAdtechsToSites(websites, adtechs);
-  }, []);
 
   const setReset = useCallback(() => {
     setPlay(false);
@@ -211,6 +242,7 @@ const Panel = ({
           setPAActiveTab={setPAActiveTab}
           setPAStorage={setPAStorage}
           setHighlightAdTech={setHighlightAdTech}
+          setCurrentVisitIndexCallback={setCurrentVisitIndexCallback}
         />
       </div>
       <Resizable

@@ -36,6 +36,9 @@ interface AnimationProps {
   setPAActiveTab: (tabIndex: number) => void;
   setPAStorage: (content: string) => void;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentVisitIndexCallback: React.Dispatch<
+    React.SetStateAction<(() => number) | undefined>
+  >;
 }
 
 const Animation = ({
@@ -49,6 +52,7 @@ const Animation = ({
   setPAActiveTab,
   setPAStorage,
   setHighlightAdTech,
+  setCurrentVisitIndexCallback,
 }: AnimationProps) => {
   const node = useRef(null);
   const [togglePlayCallback, setTogglePlayCallback] =
@@ -65,20 +69,22 @@ const Animation = ({
 
   useEffect(() => {
     const tAnimation = (p: p5) => {
-      const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
-        p,
-        epoch,
-        animationRef.current,
-        siteAdTechs,
-        animationRef.current
-          ? handleUserVisit
-          : (idx: number) => handleUserVisit(idx, false),
-        setHighlightAdTech
-      );
+      const { togglePlay, reset, updateSpeedMultiplier, getCurrentVisitIndex } =
+        topicsAnimation(
+          p,
+          epoch,
+          animationRef.current,
+          siteAdTechs,
+          animationRef.current
+            ? handleUserVisit
+            : (idx: number) => handleUserVisit(idx, false),
+          setHighlightAdTech
+        );
 
       setTogglePlayCallback(() => togglePlay);
       setResetCallback(() => reset);
       setSpeedMultiplierCallback(() => updateSpeedMultiplier);
+      setCurrentVisitIndexCallback(() => getCurrentVisitIndex);
     };
 
     const p = node.current ? new p5(tAnimation, node.current) : null;
@@ -89,6 +95,7 @@ const Animation = ({
   }, [
     epoch,
     handleUserVisit,
+    setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
     setPAStorage,
