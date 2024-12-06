@@ -18,7 +18,7 @@
  */
 import config from '../config';
 import app from '../app';
-import * as utils from '../utils';
+import { drawText, drawArrow as utilsDrawArrow } from '../utils';
 
 const ARROW_SIZE = 10;
 
@@ -28,11 +28,10 @@ const ProgressLine = ({
   direction = 'right',
   text = '',
   noArrow = false,
-  noAnimation = true,
 }) => {
   const width = config.flow.lineWidth - ARROW_SIZE;
   const height = config.flow.lineHeight - ARROW_SIZE;
-  const incrementBy = 5; // Adjust to control speed
+  const incrementBy = 1; // Adjust to control speed
   const p = app.p;
 
   x1 = typeof x1 === 'function' ? x1() : x1;
@@ -40,72 +39,18 @@ const ProgressLine = ({
 
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction);
 
-  const drawArrow = (x, y, dir) => {
-    if (!noArrow) {
-      utils.drawArrow(ARROW_SIZE, x, y, dir);
-    }
-  };
-
-  const draw = {
-    right: () => {
-      p.line(x1, y1, x1 + width, y2);
-      drawArrow(x1 + width, y1, direction);
-
-      return { x: x1 + width, y: y1 };
-    },
-    left: () => {
-      p.line(x2, y2 + 10, x2 - width, y1 + 10);
-      drawArrow(x2 - width, y1 + 4, direction);
-      utils.drawText(text, x2 - width / 2, y1 + height / 2);
-
-      return { x: x2 - width, y: y1 + 10 };
-    },
-    down: () => {
-      p.line(x1, y1, x2, y1 + height);
-      drawArrow(x1, y1 + height, direction);
-      utils.drawText(
-        text,
-        x1 - (text.startsWith('$') ? 10 : width / 2),
-        y1 + height / 2
-      );
-
-      return { x: x1, y: y1 + height };
-    },
-    up: () => {
-      p.line(x1, y1, x2, y1 - height);
-      drawArrow(x1, y1 - height, direction);
-      utils.drawText(
-        text,
-        x1 + (text.startsWith('$') ? 10 : width / 2),
-        y1 - height / 2
-      );
-
-      return { x: x1, y: y1 - height };
-    },
-  };
-
-  let returnCoordinates = { x: 0, y: 0 };
-
-  const drawInstantly = () => {
-    p.push();
-    p.stroke(0);
-    p.strokeWeight(1);
-    p.pop();
-
-    returnCoordinates = draw[direction]();
-  };
-
   let currentX = x1; // For horizontal directions
   let currentY = y1; // For vertical directions
   let targetX = x2;
 
-  return new Promise((resolve) => {
-    if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
-      drawInstantly();
-      resolve(returnCoordinates);
-      return;
+  const drawArrow = (x, y, dir) => {
+    if (!noArrow) {
+      utilsDrawArrow(ARROW_SIZE, x, y, dir);
     }
+  };
 
+  return new Promise((resolve) => {
+    // eslint-disable-next-line complexity
     const animate = () => {
       if (app.cancelPromise) {
         resolve();
@@ -125,6 +70,12 @@ const ProgressLine = ({
       switch (direction) {
         case 'right':
           currentX += incrementBy;
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x1, y1, x1 + width, y2);
+            drawArrow(x1 + width, y1, direction);
+            resolve({ x: x1 + width, y: y2 });
+            return;
+          }
 
           if (currentX - x1 > width) {
             resolve({ x: currentX, y: y2 });
@@ -136,9 +87,16 @@ const ProgressLine = ({
 
         case 'left':
           targetX -= incrementBy;
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x2, y2 + 10, targetX - width, y1 + 10);
+            drawArrow(targetX - width, y1 + 4, direction);
+            drawText(text, targetX + width / 2, y1 + height / 2);
+            resolve({ x: targetX - width, y: y1 + 10 });
+            return;
+          }
 
           if (x2 - targetX > width) {
-            utils.drawText(text, targetX + width / 2, y1 + height / 2);
+            drawText(text, targetX + width / 2, y1 + height / 2);
             resolve({ x: targetX, y: y1 + 10 });
             return;
           }
@@ -148,9 +106,20 @@ const ProgressLine = ({
 
         case 'down':
           currentY += incrementBy;
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x1, y1, x2, y1 + height);
+            drawArrow(x1, y1 + height, direction);
+            drawText(
+              text,
+              x1 - (text.startsWith('$') ? 10 : width / 2),
+              y1 + height / 2
+            );
+            resolve({ x: x2, y: y1 + height });
+            return;
+          }
 
           if (currentY - y1 > height) {
-            utils.drawText(
+            drawText(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
               y1 + height / 2
@@ -164,9 +133,20 @@ const ProgressLine = ({
 
         case 'up':
           currentY -= incrementBy;
+          if (app.isRevisitingNodeInInteractiveMode) {
+            p.line(x1, y1, x2, y1 - height);
+            drawArrow(x1, y1 - height, direction);
+            drawText(
+              text,
+              x1 + (text.startsWith('$') ? 10 : width / 2),
+              y1 - height / 2
+            );
+            resolve({ x: x2, y: y1 - height });
+            return;
+          }
 
           if (y1 - currentY > height) {
-            utils.drawText(
+            drawText(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),
               y1 - height / 2
