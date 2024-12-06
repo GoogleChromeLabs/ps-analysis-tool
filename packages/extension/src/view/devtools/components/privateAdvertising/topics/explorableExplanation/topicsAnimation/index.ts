@@ -24,6 +24,7 @@ import { getAdtechsColors } from './utils';
  * @param epoch - Array of objects containing datetime, website, and topics
  * @param isAnimating - Boolean to tell if the animation should play
  * @param siteAdTechs - Object with websites as keys and adtechs as values
+ * @param visitIndexStart - Index to start the animation from
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
  * @param setHighlightAdTech - Callback function for setting the highlighted adtech
  * @returns Object with callbacks to control the animation
@@ -33,6 +34,7 @@ export function topicsAnimation(
   epoch: { datetime: string; website: string; topics: string[] }[],
   isAnimating: boolean,
   siteAdTechs: Record<string, string[]>,
+  visitIndexStart: number,
   handleUserVisit: (visitIndex: number) => void,
   setHighlightAdTech: (highlightAdTech: string | null) => void
 ) {
@@ -458,6 +460,12 @@ export function topicsAnimation(
 
     if (!isAnimating) {
       while (app.visitIndex < epoch.length) {
+        app.play();
+      }
+    }
+
+    if (visitIndexStart > 0) {
+      while (app.visitIndex < visitIndexStart) {
         app.play();
       }
     }

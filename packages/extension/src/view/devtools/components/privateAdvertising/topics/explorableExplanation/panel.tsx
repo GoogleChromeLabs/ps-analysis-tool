@@ -75,12 +75,25 @@ const Panel = ({
       ? JSON.parse(storageRef.current[1])?.siteAdTechs
       : assignAdtechsToSites(websites, adtechs);
   }, []);
+  const epochs = useMemo(() => {
+    return (
+      (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
+        typeof createEpochs
+      >) ?? createEpochs()
+    );
+  }, []);
+  const [visitIndexStart, setVisitIndexStart] = useState(
+    JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndex ?? 0
+  );
 
   useEffect(() => {
     setTopicsTableData(
       JSON.parse(storageRef.current[1] || '{}')?.topicsTableData || {}
     );
-  }, [setTopicsTableData]);
+    setActiveTab(
+      JSON.parse(storageRef.current[1] || '{}')?.activeEpochTab || 0
+    );
+  }, [setTopicsTableData, setActiveTab]);
 
   useEffect(() => {
     const currentVisitIndex = currentVisitIndexCallback?.();
@@ -92,31 +105,20 @@ const Panel = ({
           epochCompleted,
           topicsTableData,
           siteAdTechs,
+          activeEpochTab: activeTab,
+          epochs,
         })
       );
     }
   }, [
+    activeTab,
     currentVisitIndexCallback,
     epochCompleted,
+    epochs,
     setPAStorage,
     siteAdTechs,
     topicsTableData,
   ]);
-
-  const epochs = useMemo(() => {
-    return (
-      (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
-        typeof createEpochs
-      >) ?? createEpochs()
-    );
-  }, []);
-  useEffect(() => {
-    setPAStorage(
-      JSON.stringify({
-        epochs,
-      })
-    );
-  }, [epochs, setPAStorage]);
 
   const setReset = useCallback(() => {
     setPlay(false);
@@ -199,6 +201,7 @@ const Panel = ({
       if (visitIndex === epochs[activeTab].webVisits.length) {
         if (activeTab < 3 && updateTopics) {
           setActiveTab(activeTab + 1);
+          setVisitIndexStart(0);
         } else {
           setPlay(false);
         }
@@ -235,6 +238,7 @@ const Panel = ({
           epoch={epochs[activeTab].webVisits}
           isAnimating={!epochCompleted?.[activeTab]}
           siteAdTechs={siteAdTechs}
+          visitIndexStart={visitIndexStart}
           isPlaying={play}
           resetAnimation={reset}
           speedMultiplier={sliderStep}
