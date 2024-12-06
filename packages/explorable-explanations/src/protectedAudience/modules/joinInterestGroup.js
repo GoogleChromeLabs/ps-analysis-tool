@@ -20,7 +20,7 @@ import flow from './flow';
 import app from '../app';
 import config from '../config';
 import * as utils from '../utils';
-import { Box, ProgressLine } from '../../components';
+import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
 import promiseQueue from '../lib/promiseQueue';
 import info from '../info.json';

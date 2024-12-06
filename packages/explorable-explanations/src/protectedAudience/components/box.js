@@ -16,9 +16,9 @@
 /**
  * Internal dependencies.
  */
-import app from '../protectedAudience/app'; // @todo Seperate for the protected audience.
-import config from '../protectedAudience/config';
-import { addCanvasEventListener } from '../protectedAudience/utils';
+import app from '../app';
+import config from '../config';
+import { addCanvasEventListener } from '../utils';
 
 const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
