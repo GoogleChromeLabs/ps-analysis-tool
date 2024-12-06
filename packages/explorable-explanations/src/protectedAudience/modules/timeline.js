@@ -139,10 +139,13 @@ timeline.init = () => {
             app.p.stroke(config.timeline.colors.grey);
 
             config.timeline.circles.forEach((circle, index) => {
+              app.p.push();
+              app.p.stroke(config.timeline.colors.grey);
               timeline.drawCircle(
                 index,
                 circle.visited && index !== clickedIndex ? true : false
               );
+              app.p.pop();
 
               if (circle.visited && index === clickedIndex) {
                 const position = circlePositions[clickedIndex];
