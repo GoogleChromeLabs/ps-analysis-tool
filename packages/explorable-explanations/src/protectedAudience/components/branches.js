@@ -20,10 +20,10 @@ import ProgressLine from './progressLine';
 import app from '../app';
 import config from '../config';
 import Box from './box';
-import utils from '../lib/utils';
+import { wipeAndRecreateInterestCanvas } from '../utils';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
-const ANIMATION_SPEED = 5; // Controls the speed of the horizontal line drawing
+const ANIMATION_SPEED = 15; // Controls the speed of the horizontal line drawing
 const EXPAND_ICON_SIZE = 20;
 
 let spacing, progress, renderedBranchIds, endpoints;
@@ -50,6 +50,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
     y1: y1,
     direction: 'down',
     noArrow: true,
+    noAnimation: true,
   });
 
   return new Promise((resolve) => {
@@ -96,7 +97,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
       }
 
       // Clear canvas or update logic (if necessary)
-      utils.wipeAndRecreateInterestCanvas();
+      wipeAndRecreateInterestCanvas();
 
       // Draw the animated timeline
       drawAnimatedTimeline(currentIndex * LEFT_MARGIN, y2 - 9, branches).then(
@@ -214,12 +215,14 @@ const drawDateTimeBranch = (x, y, branch) => {
 
 const drawBoxesBranch = (x, y, branch) => {
   const p = app.p;
+  const { flow } = config;
 
   Box({
     title: branch.title,
     description: branch.description,
-    x: x - config.flow.box.width / 2,
+    x: x - flow.box.width / 2,
     y: y + 20,
+    color: branch?.color || flow.colors.box.background,
   });
 
   p.image(

@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './protectedAudience/components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience';
-export { default as config } from './protectedAudience/config.js';
+export * from './setupInterestGroupCanvas';
+export * from './setupMainCanvas';
+export * from './setupUserCanvas';

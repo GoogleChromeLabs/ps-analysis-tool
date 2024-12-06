@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './protectedAudience/components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience';
-export { default as config } from './protectedAudience/config.js';
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
+import config from '../config';
+
+export const drawText = (text, x, y) => {
+  const p = app.p;
+
+  if (text) {
+    p.push();
+    p.strokeWeight(0.1);
+    p.fill('#000'); // @todo Use color from config.
+    p.textSize(config.canvas.fontSize - 2);
+    p.textFont('sans-serif');
+    p.text(text, x, y);
+    p.pop();
+  }
+};

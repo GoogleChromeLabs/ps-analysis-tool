@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './protectedAudience/components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience';
-export { default as config } from './protectedAudience/config.js';
+export * from './calculateCanvasDimensions';
+export * from './wipeAndRecreateCanvas';
+export * from './delay';
+export * from './drawArrow';
+export * from './drawText';
+export * from './isInsideCircle';
+export * from './canvasEventListener';
+export * from './markVisitedValue';
+export * from './requestInterval';

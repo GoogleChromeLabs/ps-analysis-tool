@@ -19,10 +19,11 @@
 import flow from './flow';
 import app from '../app';
 import config from '../config';
-import utils from '../lib/utils';
+import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue.js';
+import promiseQueue from '../lib/promiseQueue';
+import info from '../info.json';
 
 /**
  * @module joinInterestGroup
@@ -78,10 +79,12 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSP Tags',
+      title: info.joinInterestGroups[0].title,
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
+      info: info.joinInterestGroups[0].info,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;
     },
@@ -104,11 +107,14 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSPs',
+      title: info.joinInterestGroups[1].title,
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () =>
         app.joinInterestGroup.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: config.flow.colors.box.notBrowser,
+      info: info.joinInterestGroups[1].info,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue.down;
     },
@@ -122,6 +128,7 @@ joinInterestGroup.setUp = (index) => {
       x1: () => app.joinInterestGroup.nextTipCoordinates?.x + 10,
       y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 15,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue;
     },
@@ -136,6 +143,7 @@ joinInterestGroup.setUp = (index) => {
       y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 10 - box.height,
       text: 'joinInterestGroup()',
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.joinInterestGroup.nextTipCoordinates = returnValue;
     },
@@ -160,16 +168,15 @@ joinInterestGroup.draw = (index) => {
 
   for (const step of steps) {
     promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
+
     promiseQueue.add(async () => {
-      const { component, props, callBack } = step;
-
+      const { component, props, callBack, delay } = step;
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
-
-      const delay = component === Box ? 1000 : 0;
 
       if (callBack) {
         callBack(returnValue);
       }
+
       if (!app.isRevisitingNodeInInteractiveMode) {
         await utils.delay(delay); // eslint-disable-line no-await-in-loop
       }

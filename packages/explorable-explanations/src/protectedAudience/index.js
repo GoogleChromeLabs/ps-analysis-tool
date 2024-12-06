@@ -18,19 +18,25 @@
  */
 import p5 from 'p5';
 import * as d3 from 'd3';
+
 /**
  * Internal dependencies.
  */
-import config from './config.js';
-import auctions from './modules/auctions.js';
-import flow from './modules/flow.js';
-import utils from './lib/utils.js';
-import timeline from './modules/timeline.js';
-import joinInterestGroup from './modules/join-interest-group.js';
-import icons from './icons.json';
-import bubbles from './modules/bubbles.js';
-import app from './app.js';
-import promiseQueue from './lib/promiseQueue.js';
+import config from './config';
+import auctions from './modules/auctions';
+import flow from './modules/flow';
+import * as utils from './utils';
+import timeline from './modules/timeline';
+import joinInterestGroup from './modules/joinInterestGroup';
+import icons from '../icons.json';
+import bubbles from './modules/bubbles';
+import app from './app';
+import promiseQueue from './lib/promiseQueue';
+import {
+  setupInterestGroupCanvas,
+  setupMainCanvas,
+  setupUserCanvas,
+} from './canvas';
 
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
@@ -52,7 +58,6 @@ app.setUpTimeLine = () => {
 app.setup = () => {
   app.auction = { ...app.auction, ...auctions };
   app.flow = { ...app.flow, ...flow };
-  app.utils = { ...app.utils, ...utils };
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
   app.bubbles = { ...app.bubbles, ...bubbles };
@@ -435,9 +440,11 @@ app.toggleInteractiveMode = async () => {
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(100);
-  utils.setupInterestGroupCanvas(app.igp);
-  utils.setupUserCanvas(app.up);
-  utils.setupMainCanvas(app.p, true);
+
+  setupInterestGroupCanvas(app.igp);
+  setupUserCanvas(app.up);
+  setupMainCanvas(app.p, true);
+
   promiseQueue.skipTo(0);
 
   if (app.isInteractiveMode) {
@@ -457,7 +464,7 @@ app.toggleMultSeller = (event) => {
 export const sketch = (p) => {
   app.handleControls();
   p.setup = () => {
-    utils.setupMainCanvas(p);
+    setupMainCanvas(p);
   };
 
   p.preload = () => {
@@ -465,6 +472,7 @@ export const sketch = (p) => {
     p.playIcon = p.loadImage(icons.play);
     p.pauseIcon = p.loadImage(icons.pause);
     p.expandIcon = p.loadImage(icons.expand);
+    p.infoIcon = p.loadImage(icons.info);
 
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
@@ -473,7 +481,7 @@ export const sketch = (p) => {
 // Define the sketch
 export const interestGroupSketch = (p) => {
   p.setup = () => {
-    utils.setupInterestGroupCanvas(p);
+    setupInterestGroupCanvas(p);
   };
 
   p.updateWithProps = (props) => {
@@ -506,7 +514,7 @@ export const interestGroupSketch = (p) => {
 // Define the sketch
 export const userSketch = (p) => {
   p.setup = () => {
-    utils.setupUserCanvas(p);
+    setupUserCanvas(p);
   };
 };
 
@@ -525,9 +533,9 @@ app.reset = async () => {
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(1000);
-  utils.setupInterestGroupCanvas(app.igp);
-  utils.setupUserCanvas(app.up);
-  utils.setupMainCanvas(app.p);
+  setupInterestGroupCanvas(app.igp);
+  setupUserCanvas(app.up);
+  setupMainCanvas(app.p);
 
   app.timeline.isPaused = true;
   app.cancelPromise = false;

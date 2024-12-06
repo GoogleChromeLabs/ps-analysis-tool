@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './protectedAudience/components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience';
-export { default as config } from './protectedAudience/config.js';
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
+
+export const isInsideCircle = (x, y, x0, y0, r) => {
+  return app.p.dist(x, y, x0, y0) <= r;
+};

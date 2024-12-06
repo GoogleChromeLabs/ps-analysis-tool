@@ -24,7 +24,7 @@ import * as d3 from 'd3';
  */
 import app from '../app';
 import config from '../config';
-import utils from '../lib/utils';
+import * as utils from '../utils';
 
 /**
  * @module bubbles

@@ -18,9 +18,9 @@
  */
 import config from '../config';
 import app from '../app';
-import utils from '../lib/utils';
+import * as utils from '../utils';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue.js';
+import promiseQueue from '../lib/promiseQueue';
 import flow from './flow';
 
 /**

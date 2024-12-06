@@ -1,0 +1,52 @@
+{
+  "joinInterestGroups": [
+    {
+      "title": "DSP Tags",
+      "info": "Content for DSP Tags"
+    },
+    {
+      "title": "DSPs",
+      "info": "Content for DSPs"
+    }
+  ],
+  "auction": {
+    "singleSeller": [
+      [
+        {
+          "title": "adunit-code",
+          "description": "div-200-1",
+          "info": "Content for First Price Auction"
+        },
+        {
+          "title": "adunit-code",
+          "description": "div-200-2",
+          "info": "Content for First Price Auction"
+        },
+        {
+          "title": "adunit-code",
+          "description": "div-200-3",
+          "info": "Content for First Price Auction"
+        }
+      ],
+      [
+        {
+          "date": "2024-10-02",
+          "time": "10:00:22PM"
+        },
+        {
+          "date": "2024-10-3",
+          "time": "10:00:12PM"
+        },
+        {
+          "date": "2024-10-04",
+          "time": "10:10:22PM"
+        }
+      ],
+      {
+        "title": "SSP Tag",
+        "info": "Content for First Price Auction"
+      }
+    ],
+    "multiSeller": []
+  }
+}

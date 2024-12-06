@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './protectedAudience/components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience';
-export { default as config } from './protectedAudience/config.js';
+/**
+ * Internal dependencies.
+ */
+import config from '../config';
+
+export const markVisitedValue = (index, value) => {
+  config.timeline.circles = config.timeline.circles.map((circle, i) => {
+    if (i < index && index >= 0) {
+      circle.visited = value;
+    }
+    return circle;
+  });
+};

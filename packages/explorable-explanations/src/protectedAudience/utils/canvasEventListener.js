@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './protectedAudience/components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience';
-export { default as config } from './protectedAudience/config.js';
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
+
+export const addCanvasEventListener = (
+  event,
+  callback,
+  key,
+  canvasName = 'main'
+) => {
+  app.canvasEventListerners[canvasName][event][key] = callback;
+};
+
+export const removeCanvasEventListener = (event, key, canvasName = 'main') => {
+  delete app.canvasEventListerners[canvasName][event][key];
+};
