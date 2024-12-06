@@ -35,7 +35,6 @@ export function topicsAnimation(
   isAnimating: boolean,
   siteAdTechs: Record<string, string[]>,
   handleUserVisit: (visitIndex: number) => void,
-  infoBoxDataClickHandler: (isTopic: boolean, content: string) => void,
   setHighlightAdTech: (highlightAdTech: string | null) => void
 ) {
   const app = {
@@ -47,14 +46,8 @@ export function topicsAnimation(
     playing: true,
     speedMultiplier: 1,
     inspectedCircleIndex: -1,
-    inspectedCircleDataPositions: [] as {
-      x: number;
-      y: number;
-      length: number;
-      content: string;
-      isTopic?: boolean;
-    }[],
     canvas: null as p5.Renderer | null,
+    smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
 
     drawTimeline: (
       position: { x: number; y: number },
@@ -138,7 +131,6 @@ export function topicsAnimation(
       } else if (app.playing && app.inspectedCircleIndex !== -1) {
         app.resetInfoBox(app.inspectedCircleIndex);
         app.inspectedCircleIndex = -1;
-        app.inspectedCircleDataPositions = [];
       }
     },
 
@@ -146,7 +138,6 @@ export function topicsAnimation(
       app.visitIndex = 0;
       app.speedMultiplier = 1;
       app.inspectedCircleIndex = -1;
-      app.inspectedCircleDataPositions = [];
       p?.clear();
       app.drawTimeline(config.timeline.position, epoch);
     },
@@ -264,6 +255,8 @@ export function topicsAnimation(
         p.circle(randomX, randomY, smallCircleDiameter);
         p.pop();
       }
+
+      app.smallCirclePositions[index] = smallCirclePositions;
     },
 
     drawInfoBox: (index: number, currentSite: string) => {
@@ -299,13 +292,6 @@ export function topicsAnimation(
           position.x - 70,
           position.y + diameter / 2 + 90 + i * 20
         );
-        app.inspectedCircleDataPositions.push({
-          x: position.x - 70,
-          y: position.y + diameter / 2 + 90 + i * 20,
-          length: p.textWidth(_topic) + 10,
-          content: topic,
-          isTopic: true,
-        });
       });
 
       const startingPointAdTechs = topics.length * 20;
@@ -332,12 +318,6 @@ export function topicsAnimation(
           position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs,
           diameter / 5
         );
-        app.inspectedCircleDataPositions.push({
-          x: position.x - 110,
-          y: position.y + diameter / 2 + 115 + i * 20 + startingPointAdTechs,
-          length: diameter / 5 + p.textWidth(adTech) + 10,
-          content: adTech,
-        });
 
         p.fill(0);
         p.stroke(255);
@@ -378,7 +358,7 @@ export function topicsAnimation(
       p.pop();
     },
 
-    mouseClicked: () => {
+    mouseMoved: () => {
       if (app.playing) {
         return;
       }
@@ -396,46 +376,53 @@ export function topicsAnimation(
           y > circleY - diameter / 2 &&
           y < circleY + diameter / 2
         ) {
+          if (
+            app.inspectedCircleIndex !== -1 &&
+            app.inspectedCircleIndex !== index
+          ) {
+            app.resetInfoBox(app.inspectedCircleIndex);
+          }
+
           if (app.visitIndex <= index) {
+            app.inspectedCircleIndex = -1;
             return;
           }
 
-          app.inspectedCircleDataPositions = [];
-
-          if (app.inspectedCircleIndex !== -1) {
-            app.resetInfoBox(app.inspectedCircleIndex);
-
-            if (app.inspectedCircleIndex === index) {
-              app.inspectedCircleIndex = -1;
-              return;
-            }
+          if (app.inspectedCircleIndex === index) {
+            return;
           }
 
           app.drawInfoBox(index, epoch[index].website);
           app.inspectedCircleIndex = index;
         }
       });
+    },
 
-      app.inspectedCircleDataPositions.forEach((position, index) => {
-        const { x: positionX, y: positionY, length } = position;
+    mouseClicked: () => {
+      if (app.playing) {
+        return;
+      }
 
-        if (
-          x > positionX &&
-          x < positionX + length &&
-          y > positionY - 10 &&
-          y < positionY + 10
-        ) {
-          const isTopic = Boolean(
-            app.inspectedCircleDataPositions[index].isTopic
-          );
+      const x = p.mouseX,
+        y = p.mouseY;
 
-          if (isTopic) {
-            infoBoxDataClickHandler(isTopic, position.content);
-          } else {
-            setHighlightAdTech(position.content);
+      app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
+        (position, index) => {
+          const { x: smallCircleX, y: smallCircleY } = position;
+          const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
+
+          if (
+            x > smallCircleX - smallCircleDiameter / 2 &&
+            x < smallCircleX + smallCircleDiameter / 2 &&
+            y > smallCircleY - smallCircleDiameter / 2 &&
+            y < smallCircleY + smallCircleDiameter / 2
+          ) {
+            setHighlightAdTech(
+              siteAdTechs[epoch[app.inspectedCircleIndex].website][index]
+            );
           }
         }
-      });
+      );
     },
   };
 
@@ -456,6 +443,7 @@ export function topicsAnimation(
       circleHorizontalSpace * 6,
       config.canvas.height
     );
+    app.canvas.mouseMoved(app.mouseMoved);
     app.canvas.mouseClicked(app.mouseClicked);
 
     p.textFont('sans-serif');

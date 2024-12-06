@@ -64,17 +64,6 @@ const Animation = ({
   }, [isAnimating]);
 
   useEffect(() => {
-    const infoBoxDataClickHandler = (isTopic: boolean, content: string) => {
-      if (isTopic) {
-        setPAStorage(
-          JSON.stringify({
-            taxonomy: content,
-          })
-        );
-        setPAActiveTab(2);
-      }
-    };
-
     const tAnimation = (p: p5) => {
       const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
         p,
@@ -84,7 +73,6 @@ const Animation = ({
         animationRef.current
           ? handleUserVisit
           : (idx: number) => handleUserVisit(idx, false),
-        infoBoxDataClickHandler,
         setHighlightAdTech
       );
 
