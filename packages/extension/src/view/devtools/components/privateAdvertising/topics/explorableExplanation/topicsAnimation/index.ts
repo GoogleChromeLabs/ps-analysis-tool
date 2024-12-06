@@ -462,6 +462,7 @@ export function topicsAnimation(
       while (app.visitIndex < epoch.length) {
         app.play();
       }
+      app.userVisitDone(app.visitIndex - 1);
     }
 
     if (visitIndexStart > 0) {
