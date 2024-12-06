@@ -66,7 +66,6 @@ export function topicsAnimation(
           app.circlePositions = [];
         }
 
-        p.text(circleItem.datetime, xPosition, 30);
         p.text(circleItem.website, xPosition, 50);
 
         p.line(
@@ -184,8 +183,13 @@ export function topicsAnimation(
       const previousPosition =
         app.circlePositions?.[visitIndex - 1] || config.timeline.position;
       const circleDiameter = config.timeline.circleProps.diameter;
+      const { diameter, horizontalSpacing } = config.timeline.circleProps;
+      const circleVerticalSpace = horizontalSpacing - 30 + diameter;
+      const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
+      const currentCircle = epoch[visitIndex];
 
       p.push();
+      p.text(currentCircle.datetime, xPosition, 30);
       p.stroke('#1A73E8');
       p.line(
         previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
@@ -195,9 +199,7 @@ export function topicsAnimation(
       );
       p.pop();
 
-      const currentCircle = epoch[visitIndex];
       const currentSite = currentCircle.website;
-
       app.drawInfoBox(visitIndex, currentSite);
       app.drawSmallCircles(visitIndex, currentSite);
 
