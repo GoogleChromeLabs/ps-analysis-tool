@@ -20,7 +20,7 @@ import ProgressLine from './progressLine';
 import app from '../protectedAudience/app';
 import config from '../protectedAudience/config';
 import Box from './box';
-import utils from '../protectedAudience/lib/utils';
+import { wipeAndRecreateInterestCanvas } from '../protectedAudience/utils';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const ANIMATION_SPEED = 15; // Controls the speed of the horizontal line drawing
@@ -97,7 +97,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
       }
 
       // Clear canvas or update logic (if necessary)
-      utils.wipeAndRecreateInterestCanvas();
+      wipeAndRecreateInterestCanvas();
 
       // Draw the animated timeline
       drawAnimatedTimeline(currentIndex * LEFT_MARGIN, y2 - 9, branches).then(

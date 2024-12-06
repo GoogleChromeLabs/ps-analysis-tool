@@ -19,7 +19,7 @@
 import flow from './flow.js';
 import app from '../app.js';
 import config from '../config.js';
-import utils from '../lib/utils.js';
+import * as utils from '../utils';
 import { Box, ProgressLine } from '../../components';
 import bubbles from './bubbles.js';
 import promiseQueue from '../lib/promiseQueue.js';

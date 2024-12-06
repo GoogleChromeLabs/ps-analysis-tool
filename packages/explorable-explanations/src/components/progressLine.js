@@ -18,7 +18,7 @@
  */
 import config from '../protectedAudience/config';
 import app from '../protectedAudience/app';
-import utils from '../protectedAudience/lib/utils';
+import * as utils from '../protectedAudience/utils';
 
 const ARROW_SIZE = 10;
 
