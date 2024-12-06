@@ -19,16 +19,18 @@
  * @param spinnerName name of the spinner.
  * @param newSpinnerText The text to be added to the new spinner.
  * @param indent The indentation for the new text.
+ * @param failure This determines if updted spinner should show fail status.
  */
 export default function removeAndAddNewSpinnerText(
   spinnies: any,
   spinnerName: string,
   newSpinnerText: string,
-  indent = 0
+  indent = 0,
+  failure = false
 ) {
   spinnies.add(`${spinnerName}-succees`, {
     text: newSpinnerText,
-    status: 'succeed',
+    status: failure ? 'fail' : 'succeed',
     indent,
   });
 

@@ -20,9 +20,10 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import {
+  type CompleteJson,
   generateRootSummaryDataCSV,
   getCurrentDateAndTime,
-  type CompleteJson,
+  generateErrorLogFile,
 } from '@google-psat/common';
 import { type TableFilter } from '@google-psat/design-system';
 /**
@@ -60,6 +61,10 @@ const generateSiteMapReportandDownload = async (
 
   zip.file('report.html', report);
   zip.file('report.csv', rootSummaryData);
+
+  const errorLogs = generateErrorLogFile(JSONReport);
+
+  zip.file('error_logs.txt', errorLogs);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
