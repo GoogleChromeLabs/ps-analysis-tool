@@ -23,8 +23,8 @@ const validateUrl = (url: string) => {
   const message = I18n.getMessage('shouldMatchFormat');
   let _url;
 
-  if (url === null || url === undefined || typeof url !== 'string') {
-    return `URL ${message}`;
+  if (!url || typeof url !== 'string') {
+    return `Url ${message}`;
   }
 
   try {
@@ -33,10 +33,10 @@ const validateUrl = (url: string) => {
       return '';
     }
   } catch (err) {
-    return `URL ${message}.`;
+    return `Url ${message}`;
   }
 
-  return `URL ${message}.`;
+  return `Url ${message}`;
 };
 
 export default validateUrl;

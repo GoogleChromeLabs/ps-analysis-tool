@@ -16,7 +16,7 @@
 const validateRationale = (rationale: string) => {
   const message = "can't be blank";
 
-  if (rationale === null || rationale === undefined) {
+  if (!rationale) {
     return `Rationale ${message}`;
   }
 
