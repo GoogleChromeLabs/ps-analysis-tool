@@ -33,10 +33,10 @@ const validateUrl = (url: string) => {
       return '';
     }
   } catch (err) {
-    return `URL ${message}`;
+    return `URL ${message}.`;
   }
 
-  return `URL ${message}`;
+  return `URL ${message}.`;
 };
 
 export default validateUrl;
