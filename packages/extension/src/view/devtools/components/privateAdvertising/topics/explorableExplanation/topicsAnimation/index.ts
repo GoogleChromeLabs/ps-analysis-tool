@@ -271,7 +271,7 @@ export function topicsAnimation(
 
       p.push();
       p.rectMode(p.CENTER);
-      p.fill(245);
+      p.fill(225);
       p.stroke(255);
       p.rect(
         position.x,
@@ -353,8 +353,8 @@ export function topicsAnimation(
       const { diameter } = config.timeline.circleProps;
 
       p.push();
-      p.fill(255);
-      p.stroke(255);
+      p.fill(245);
+      p.stroke(245);
       p.rectMode(p.CENTER);
       p.rect(position.x, position.y + diameter / 2 + 150, 300, 250);
       p.strokeWeight(5);
@@ -452,6 +452,7 @@ export function topicsAnimation(
       circleHorizontalSpace * 6,
       config.canvas.height
     );
+    p.background(245);
     app.canvas.mouseMoved(app.mouseMoved);
     app.canvas.mouseClicked(app.mouseClicked);
 
