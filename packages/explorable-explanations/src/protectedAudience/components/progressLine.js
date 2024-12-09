@@ -100,13 +100,13 @@ const ProgressLine = ({
   let targetX = x2;
 
   return new Promise((resolve) => {
-    if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
-      drawInstantly();
-      resolve(returnCoordinates);
-      return;
-    }
-
     const animate = () => {
+      if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
+        drawInstantly();
+        resolve(returnCoordinates);
+        return;
+      }
+
       if (app.cancelPromise) {
         resolve();
         return;

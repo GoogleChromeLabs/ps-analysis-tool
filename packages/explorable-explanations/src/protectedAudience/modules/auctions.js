@@ -502,6 +502,7 @@ auction.draw = (index) => {
       if (callBack) {
         callBack(returnValue);
       }
+
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (app.cancelPromise) {
           return;
@@ -512,7 +513,7 @@ auction.draw = (index) => {
   }
 
   promiseQueue.add(() => {
-    if (!app.isRevisitingNodeInInteractiveMode) {
+    if (!app.isRevisitingNodeInInteractiveMode || !app.isInteractiveMode) {
       flow.clearBelowTimelineCircles();
     }
   });
