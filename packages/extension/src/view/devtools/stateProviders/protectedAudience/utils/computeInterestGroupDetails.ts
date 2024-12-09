@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies
  */
 import type { singleAuctionEvent } from '@google-psat/common';
 import type Protocol from 'devtools-protocol';
@@ -62,6 +62,7 @@ function computeInterestGroupDetails(
           //Fail silently.
           return {
             ...event,
+            details: {},
           };
         }
       })
