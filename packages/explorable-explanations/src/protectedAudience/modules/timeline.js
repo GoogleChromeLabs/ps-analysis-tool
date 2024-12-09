@@ -74,8 +74,9 @@ timeline.init = () => {
       }
 
       if (hoveringOnExpandIconPositions) {
-        app.mouseX += 20;
-        app.mouseY += 20;
+        app.startTrackingMouse = false;
+      } else {
+        app.startTrackingMouse = true;
       }
 
       utils.wipeAndRecreateUserCanvas();
@@ -367,35 +368,37 @@ timeline.drawCircle = (index, completed = false) => {
 
   app.p.circle(position.x, position.y, diameter);
 
-  if (completed) {
-    if (app.isInteractiveMode) {
-      app.up.push();
-      app.up.textSize(14);
-      app.up.text(
-        circles[index].visitedIndex ?? '',
-        position.x - 5,
-        position.y + 7
-      );
-      app.up.pop();
+  if (!completed) {
+    return;
+  }
 
-      app.up.image(
-        app.p.openWithoutAnimation,
-        position.x - 10,
-        position.y + diameter / 2,
-        20,
-        20
-      );
-      return;
-    }
+  if (app.isInteractiveMode) {
+    app.up.push();
+    app.up.textSize(14);
+    app.up.text(
+      circles[index].visitedIndex ?? '',
+      position.x - 5,
+      position.y + 7
+    );
+    app.up.pop();
 
     app.up.image(
-      app.p.completedCheckMark,
-      position.x - user.width / 2,
-      position.y - user.height / 2,
-      user.width,
-      user.height
+      app.p.openWithoutAnimation,
+      position.x - 10,
+      position.y + diameter / 2,
+      20,
+      20
     );
+    return;
   }
+
+  app.up.image(
+    app.p.completedCheckMark,
+    position.x - user.width / 2,
+    position.y - user.height / 2,
+    user.width,
+    user.height
+  );
 };
 
 timeline.renderUserIcon = () => {
@@ -413,15 +416,17 @@ timeline.renderUserIcon = () => {
   timeline.eraseAndRedraw();
   utils.wipeAndRecreateInterestCanvas();
 
-  if (app.startTrackingMouse) {
-    app.up.image(
-      app.p.userIcon,
-      circlePosition.x - user.width / 2,
-      circlePosition.y - user.height / 2,
-      user.width,
-      user.height
-    );
+  if (!app.startTrackingMouse) {
+    return;
   }
+
+  app.up.image(
+    app.p.userIcon,
+    circlePosition.x - user.width / 2,
+    circlePosition.y - user.height / 2,
+    user.width,
+    user.height
+  );
 };
 
 timeline.eraseAndRedraw = () => {
