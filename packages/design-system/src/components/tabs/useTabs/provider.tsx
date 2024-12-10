@@ -36,7 +36,9 @@ export const TabsProvider = ({
 }: PropsWithChildren<TabsProviderProps>) => {
   const [tabItems, setTabItems] = useState(items);
   const [activeTab, setActiveTab] = useState(0);
-  const [storage, _setStorage] = useState(Array(items.length).fill(''));
+  const [storage, _setStorage] = useState<string[]>(
+    Array(items.length).fill('')
+  );
 
   useEffect(() => {
     setTabItems(items);
@@ -50,11 +52,25 @@ export const TabsProvider = ({
     (data: string, index?: number) => {
       _setStorage((prev) => {
         const next = [...prev];
+        const _index = index ?? activeTab;
+        const currentData = next[_index].startsWith('{')
+          ? JSON.parse(next[_index])
+          : next[_index];
+        const incomingData = data.startsWith('{') ? JSON.parse(data) : data;
 
-        if (!index) {
-          next[activeTab] = data;
+        if (
+          typeof incomingData !== typeof currentData ||
+          typeof incomingData === 'string'
+        ) {
+          next[_index] =
+            typeof incomingData === 'string'
+              ? incomingData
+              : JSON.stringify(incomingData);
         } else {
-          next[index] = data;
+          next[_index] = JSON.stringify({
+            ...currentData,
+            ...incomingData,
+          });
         }
 
         return next;

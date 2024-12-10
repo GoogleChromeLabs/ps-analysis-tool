@@ -37,27 +37,55 @@ const websites = [
   'fun-zone.com',
 ];
 
-const websiteToTopicMapping: Record<string, string> = {
-  'example-news.com': 'news',
-  'tech-insights.com': 'technology',
-  'daily-sports.com': 'sports',
-  'health-today.com': 'health',
-  'travel-guide.com': 'travel',
-  'foodie-heaven.com': 'food',
-  'fashion-hub.com': 'fashion',
-  'business-world.com': 'business',
-  'education-portal.com': 'education',
-  'entertainment-zone.com': 'entertainment',
-  'global-news.com': 'news',
-  'tech-trends.com': 'technology',
-  'sports-daily.com': 'sports',
-  'wellness-today.com': 'health',
-  'world-traveler.com': 'travel',
-  'gourmet-paradise.com': 'food',
-  'style-hub.com': 'fashion',
-  'finance-world.com': 'business',
-  'learning-portal.com': 'education',
-  'fun-zone.com': 'entertainment',
+const websiteToTopicMapping: Record<string, string[]> = {
+  'example-news.com': [
+    '/News',
+    '/Arts & Entertainment',
+    '/Arts & Entertainment/Celebrities & Entertainment News',
+  ],
+  'tech-insights.com': [
+    '/Computers & Electronics',
+    '/Computers & Electronics/Consumer Electronics',
+  ],
+  'daily-sports.com': ['/Sports'],
+  'health-today.com': [
+    '/Finance',
+    '/Finance/Insurance',
+    '/Finance/Insurance/Health Insurance',
+  ],
+  'travel-guide.com': ['/Travel & Transportation'],
+  'foodie-heaven.com': ['/Food & Drink'],
+  'fashion-hub.com': ['/Beauty & Fitness', '/Beauty & Fitness/Fashion & Style'],
+  'business-world.com': ['/Business & Industrial'],
+  'education-portal.com': ['/Jobs & Education', '/Jobs & Education/Education'],
+  'entertainment-zone.com': ['/Arts & Entertainment'],
+  'global-news.com': ['/News', '/News/World News'],
+  'tech-trends.com': [
+    '/Computers & Electronics',
+    '/Computers & Electronics/Software',
+  ],
+  'sports-daily.com': ['/Sports'],
+  'wellness-today.com': [
+    '/Jobs & Education',
+    '/Jobs & Education/Education',
+    '/Jobs & Education/Education/Health Education & Medical Training',
+  ],
+  'world-traveler.com': [
+    '/Travel & Transportation',
+    '/Travel & Transportation/Travel Agencies & Services',
+  ],
+  'gourmet-paradise.com': [
+    '/Food & Drink',
+    '/Food & Drink/Food',
+    '/Food & Drink/Food/Gourmet & Specialty Foods',
+  ],
+  'style-hub.com': ['/Beauty & Fitness', '/Beauty & Fitness/Fashion & Style'],
+  'finance-world.com': ['/Finance'],
+  'learning-portal.com': ['/Jobs & Education'],
+  'fun-zone.com': [
+    '/Arts & Entertainment',
+    '/Arts & Entertainment/Comics & Animation',
+  ],
 };
 
 const adtechs = [

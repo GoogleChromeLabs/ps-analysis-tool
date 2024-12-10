@@ -17,7 +17,13 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { type CookieTableData } from '@google-psat/common';
 import {
   Sidebar,
@@ -84,6 +90,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     updateSelectedItemKey,
     isKeySelected,
     isCollapsed,
+    sidebarItems,
   } = useSidebar(({ state, actions }) => ({
     activePanel: state.activePanel,
     selectedItemKey: state.selectedItemKey,
@@ -92,6 +99,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     updateSelectedItemKey: actions.updateSelectedItemKey,
     isKeySelected: actions.isKeySelected,
     isCollapsed: state.isCollapsed,
+    sidebarItems: state.sidebarItems,
   }));
 
   const { Element: PanelElement, props } = activePanel.panel;
@@ -168,6 +176,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     }
   }, [currentItemKey, setSelectedFrame, tabFrames]);
 
+  const cookieDropdownOpen = useMemo(() => {
+    return (
+      sidebarItems[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]?.children?.[
+        SIDEBAR_ITEMS_KEYS.COOKIES
+      ]?.dropdownOpen ?? false
+    );
+  }, [sidebarItems]);
+
   useEffect(() => {
     (async () => {
       const tabId = await getCurrentTabId();
@@ -186,10 +202,11 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       data['sidebarCollapsedState#' + tabId] = isCollapsed
         ? 'collapsed'
         : 'expanded';
+      data['cookieDropdownOpen#' + tabId] = cookieDropdownOpen;
 
       await chrome.storage.session.set(data);
     })();
-  }, [selectedItemKey, isCollapsed]);
+  }, [selectedItemKey, isCollapsed, cookieDropdownOpen]);
 
   const lastUrl = useRef(tabUrl);
 

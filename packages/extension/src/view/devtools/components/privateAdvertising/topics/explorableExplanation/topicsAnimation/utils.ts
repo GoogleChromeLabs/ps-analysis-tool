@@ -59,7 +59,7 @@ export const getAdtechsColors = (p5: p5) => ({
 });
 
 export const getWebsiteToTopic = (website: string) => {
-  return [websiteToTopicMapping[website]];
+  return websiteToTopicMapping[website];
 };
 
 export const getIncrementalDateTime = (

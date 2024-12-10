@@ -75,6 +75,16 @@ const App: React.FC = () => {
       } else {
         setCollapsedState(false);
       }
+
+      if (data?.['cookieDropdownOpen#' + tabId]) {
+        setSidebarData((prev) => {
+          const newSidebarData = { ...prev };
+          newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
+            SIDEBAR_ITEMS_KEYS.COOKIES
+          ].dropdownOpen = data['cookieDropdownOpen#' + tabId];
+          return newSidebarData;
+        });
+      }
     })();
   }, []);
 
