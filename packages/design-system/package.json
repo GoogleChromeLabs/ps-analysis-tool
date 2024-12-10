@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/design-system",
-  "version": "0.11.0-1",
+  "version": "0.12.0",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",

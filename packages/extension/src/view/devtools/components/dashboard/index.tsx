@@ -28,6 +28,7 @@ const Dashboard = () => {
   return (
     <LandingPage
       title="Dashboard"
+      showSupportLink={true}
       contentPanel={<ContentPanel />}
       showQuickLinks={false}
     />

@@ -8174,12 +8174,6 @@
   "bounceTrackingMitigationsDescription": {
     "message": "コンテキストをまたいでユーザーを認識するバウンス トラッキングの機能を抑制または排除します。"
   },
-  "privacyBudget": {
-    "message": "プライバシー バジェット"
-  },
-  "privacyBudgetDescription": {
-    "message": "サイトに提供可能な個人ユーザー データの量を制限して、結果的に個人の追跡と識別を十分に行えないようにする提案です。"
-  },
   "userAgentReductionDescription": {
     "message": "パッシブ フィンガープリントに使用される可能性がある、User-Agent 文字列で共有される個人識別情報を最小限に抑えます。"
   },

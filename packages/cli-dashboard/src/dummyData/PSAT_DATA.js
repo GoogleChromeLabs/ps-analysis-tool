@@ -18,7 +18,7 @@ export default {
   json: [
     {
       pageUrl: 'https://blog.fellyph.com.br',
-      psatVersion: '0.11.0',
+      psatVersion: '0.12.0',
       cookieData: {
         'https://td.doubleclick.net': {
           frameCookies: {
@@ -208,7 +208,7 @@ export default {
     },
     {
       pageUrl: 'https://globo.com',
-      psatVersion: '0.11.0',
+      psatVersion: '0.12.0',
       cookieData: {
         'https://td.doubleclick.net': {
           frameCookies: {
@@ -2621,7 +2621,7 @@ export default {
     },
     {
       pageUrl: 'https://www.india.com',
-      psatVersion: '0.11.0',
+      psatVersion: '0.12.0',
       cookieData: {
         'https://www.india.com': {
           frameCookies: {
@@ -9798,7 +9798,7 @@ export default {
     },
     {
       pageUrl: 'https://uol.com.br',
-      psatVersion: '0.11.0',
+      psatVersion: '0.12.0',
       cookieData: {
         'https://www.uol.com.br': {
           frameCookies: {
@@ -26377,13 +26377,6 @@ export default {
       message:
         'Reduce or eliminate the ability of bounce tracking to recognize people across contexts.',
     },
-    privacyBudget: {
-      message: 'Privacy Budget',
-    },
-    privacyBudgetDescription: {
-      message:
-        'This proposal suggests a limit to the amount of individual user data that can be exposed to sites, so that in total it is insufficient to track and identify individuals.',
-    },
     userAgentReductionDescription: {
       message:
         'Minimize the identifying information shared in the User-Agent string, which may be used for passive fingerprinting.',
@@ -27736,5 +27729,5 @@ export default {
     },
   },
   dateTime: '09 September, 2024, 05:27:35pm Asia/Calcutta',
-  psatVersion: '0.11.0',
+  psatVersion: '0.12.0',
 };

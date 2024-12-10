@@ -994,6 +994,16 @@
       "rationaleBySite": {
         "https://drimer.travel": "RWS_rationale_https___drimer_travel"
       }
+    },
+    {
+      "contact": "homepage_migration_engineers@zoom.us",
+      "primary": "https://zoom.us",
+      "associatedSites": [
+        "https://zoom.com"
+      ],
+      "rationaleBySite": {
+        "https://zoom.com": "RWS_rationale_https___zoom_com"
+      }
     }
   ]
 }
