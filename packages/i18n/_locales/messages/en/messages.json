@@ -8177,12 +8177,6 @@
   "bounceTrackingMitigationsDescription": {
     "message": "Reduce or eliminate the ability of bounce tracking to recognize people across contexts."
   },
-  "privacyBudget": {
-    "message": "Privacy Budget"
-  },
-  "privacyBudgetDescription": {
-    "message": "This proposal suggests a limit to the amount of individual user data that can be exposed to sites, so that in total it is insufficient to track and identify individuals."
-  },
   "userAgentReductionDescription": {
     "message": "Minimize the identifying information shared in the User-Agent string, which may be used for passive fingerprinting."
   },
