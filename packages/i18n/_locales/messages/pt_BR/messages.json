@@ -8174,12 +8174,6 @@
   "bounceTrackingMitigationsDescription": {
     "message": "Reduzem ou eliminam a capacidade das mitigações de rastreio de reconhecer pessoas entre diferentes contextos."
   },
-  "privacyBudget": {
-    "message": "Orçamento de privacidade"
-  },
-  "privacyBudgetDescription": {
-    "message": "Esta proposta sugere um limite para quantos dados de um usuário podem ser expostos a sites para que o total não seja suficiente para rastrear e identificar os indivíduos."
-  },
   "userAgentReductionDescription": {
     "message": "Minimiza as informações de identificação compartilhadas na string \"User-Agent\" que podem ser usadas para técnicas de impressão digital passivas."
   },

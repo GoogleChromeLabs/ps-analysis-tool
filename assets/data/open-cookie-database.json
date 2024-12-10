@@ -194,6 +194,19 @@
       "wildcard": "0"
     }
   ],
+  "_gali": [
+    {
+      "platform": "Google Analytics",
+      "category": "Analytics",
+      "name": "_gali",
+      "domain": "",
+      "description": "OCD__gali_description",
+      "retention": "OCD_retention_30_seconds",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
   "_ga_*": [
     {
       "platform": "Google Analytics",
@@ -662,6 +675,19 @@
       "wildcard": "0"
     }
   ],
+  "_gcl_gs": [
+    {
+      "platform": "Google Ads",
+      "category": "Marketing",
+      "name": "_gcl_gs",
+      "domain": "",
+      "description": "OCD__gcl_gs_description",
+      "retention": "OCD_retention_90_Days",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
   "_gcl_gb": [
     {
       "platform": "Google Ads",
@@ -774,6 +800,121 @@
       "domain": "",
       "description": "OCD_ACLK_DATA_description",
       "retention": "OCD_retention_5_minutes",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_Secure-ENID": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "_Secure-ENID",
+      "domain": "",
+      "description": "OCD__Secure_ENID_description",
+      "retention": "OCD_retention_13_months",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "Secure-YEC": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "Secure-YEC",
+      "domain": "",
+      "description": "OCD_Secure_YEC_description",
+      "retention": "OCD_retention_13_months",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "CGIC": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "CGIC",
+      "domain": "",
+      "description": "OCD_CGIC_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_Secure-YEC": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "_Secure-YEC",
+      "domain": "",
+      "description": "OCD__Secure_YEC_description",
+      "retention": "OCD_retention_13_months",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "AdID": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "AdID",
+      "domain": "",
+      "description": "OCD_AdID_description",
+      "retention": "OCD_retention_2_weeks",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "DSID": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "DSID",
+      "domain": "",
+      "description": "OCD_DSID_description",
+      "retention": "OCD_retention_2_weeks",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    },
+    {
+      "platform": "DoubleClick/Google Marketing",
+      "category": "Marketing",
+      "name": "DSID",
+      "domain": "doubleclick.net (3rd party)",
+      "description": "This cookie is used for targeting, analyzing and optimisation of ad campaigns in DoubleClick/Google Marketing Suite",
+      "retention": "2 weeks",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "gcl": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "gcl",
+      "domain": "",
+      "description": "OCD_gcl_description",
+      "retention": "OCD_retention_90_days",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "gac": [
+    {
+      "platform": "Google",
+      "category": "Marketing",
+      "name": "gac",
+      "domain": "",
+      "description": "OCD_gac_description",
+      "retention": "OCD_retention_90_days",
       "dataController": "Google",
       "gdprUrl": "https://business.safety.google/privacy/",
       "wildcard": "0"
@@ -1073,6 +1214,19 @@
       "domain": "accounts.google.com",
       "description": "OCD_G_AUTHUSER_H_description",
       "retention": "OCD_retention_session",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "__Secure-ENID": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "__Secure-ENID",
+      "domain": ".google.com",
+      "description": "OCD___Secure_ENID_description",
+      "retention": "OCD_retention_11_Months",
       "dataController": "Google",
       "gdprUrl": "https://business.safety.google/privacy/",
       "wildcard": "0"
@@ -1489,19 +1643,6 @@
       "domain": "doubleclick.net (3rd party)",
       "description": "OCD_IDE_description",
       "retention": "OCD_retention_2_years",
-      "dataController": "Google",
-      "gdprUrl": "https://business.safety.google/privacy/",
-      "wildcard": "0"
-    }
-  ],
-  "DSID": [
-    {
-      "platform": "DoubleClick/Google Marketing",
-      "category": "Marketing",
-      "name": "DSID",
-      "domain": "doubleclick.net (3rd party)",
-      "description": "OCD_DSID_description",
-      "retention": "OCD_retention_2_weeks",
       "dataController": "Google",
       "gdprUrl": "https://business.safety.google/privacy/",
       "wildcard": "0"
@@ -10394,7 +10535,7 @@
       "description": "OCD_SSR_caching_description",
       "retention": "OCD_retention_session",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10407,7 +10548,7 @@
       "description": "OCD_smSession_description",
       "retention": "OCD_retention_2_weeks",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10420,7 +10561,7 @@
       "description": "OCD_svSession_description",
       "retention": "OCD_retention_2_years",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10433,7 +10574,7 @@
       "description": "OCD_ForceFlashSite_description",
       "retention": "OCD_retention_session",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10446,7 +10587,7 @@
       "description": "OCD_hs_description",
       "retention": "OCD_retention_session",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10459,7 +10600,7 @@
       "description": "OCD_bSession_description",
       "retention": "OCD_retention_30_minutes",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10472,7 +10613,7 @@
       "description": "OCD_TS01__description",
       "retention": "OCD_retention_session",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "1"
     }
   ],
@@ -10485,7 +10626,7 @@
       "description": "OCD_fedops_logger_sessionId_description",
       "retention": "OCD_retention_12_months",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10498,7 +10639,7 @@
       "description": "OCD_wixLanguage_description",
       "retention": "OCD_retention_12_months",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10511,7 +10652,7 @@
       "description": "OCD__wixCIDX_description",
       "retention": "OCD_retention_3_months",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10524,7 +10665,7 @@
       "description": "OCD__wix_browser_sess_description",
       "retention": "OCD_retention_session",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -10537,7 +10678,7 @@
       "description": "OCD_consent_policy_description",
       "retention": "OCD_retention_12_months",
       "dataController": "Wix.com",
-      "gdprUrl": "https://support.wix.com/erticle/cookies-and-your-wix-site",
+      "gdprUrl": "https://support.wix.com/article/cookies-and-your-wix-site",
       "wildcard": "0"
     }
   ],
@@ -28361,6 +28502,32 @@
       "dataController": "Command Act X",
       "gdprUrl": "https://www.commandersact.com/en/privacy-policy/",
       "wildcard": "1"
+    }
+  ],
+  "pxid": [
+    {
+      "platform": "Permutive",
+      "category": "Functional",
+      "name": "pxid",
+      "domain": "",
+      "description": "OCD_pxid_description",
+      "retention": "OCD_retention_89_Days",
+      "dataController": "Permutive",
+      "gdprUrl": "https://permutive.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "permutive-id": [
+    {
+      "platform": "Permutive",
+      "category": "Functional",
+      "name": "permutive-id",
+      "domain": "",
+      "description": "OCD_permutive_id_description",
+      "retention": "OCD_retention_1095_Days",
+      "dataController": "Permutive",
+      "gdprUrl": "https://permutive.com/privacy/",
+      "wildcard": "0"
     }
   ],
   "cs": [

@@ -21,6 +21,7 @@ import {
   type CompleteJson,
   type CookieFrameStorageType,
   type LibraryData,
+  type ErroredOutUrlsData,
   extractReportData,
   extractCookies,
 } from '@google-psat/common';
@@ -39,11 +40,17 @@ enum DisplayType {
 
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
+
   const [landingPageCookies, setLandingPageCookies] =
     useState<CookieFrameStorageType>({});
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
+
+  const [erroredOutUrls, setErroredOutUrls] = useState<ErroredOutUrlsData[]>(
+    []
+  );
+
   const [libraryMatches, setLibraryMatches] = useState<{
     [key: string]: LibraryData;
   } | null>(null);
@@ -104,6 +111,7 @@ const App = () => {
 
       _libraryMatches = extractedData.consolidatedLibraryMatches;
       setLandingPageCookies(extractedData.landingPageCookies);
+      setErroredOutUrls(extractedData.erroredOutUrlsData);
     } else {
       _cookies = extractCookies(data[0].cookieData, '', true);
       _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
@@ -116,6 +124,7 @@ const App = () => {
   if (type === DisplayType.SITEMAP) {
     return (
       <SiteMapReport
+        erroredOutUrls={erroredOutUrls}
         landingPageCookies={landingPageCookies}
         completeJson={completeJsonReport}
         // @ts-ignore

@@ -2126,7 +2126,7 @@
     "message": "This cookie is used for targeting, analyzing and optimisation of ad campaigns in DoubleClick/Google Marketing Suite"
   },
   "OCD_DSID_description": {
-    "message": "This cookie is used for targeting, analyzing and optimisation of ad campaigns in DoubleClick/Google Marketing Suite"
+    "message": "Identifies signed-in users on non-Google sites to respect ad personalization settings"
   },
   "OCD_retention_2_weeks": {
     "message": "2 weeks"
@@ -8177,12 +8177,6 @@
   "bounceTrackingMitigationsDescription": {
     "message": "Reduce or eliminate the ability of bounce tracking to recognize people across contexts."
   },
-  "privacyBudget": {
-    "message": "Privacy Budget"
-  },
-  "privacyBudgetDescription": {
-    "message": "This proposal suggests a limit to the amount of individual user data that can be exposed to sites, so that in total it is insufficient to track and identify individuals."
-  },
   "userAgentReductionDescription": {
     "message": "Minimize the identifying information shared in the User-Agent string, which may be used for passive fingerprinting."
   },
@@ -9370,5 +9364,53 @@
   },
   "RWS_rationale_https___drimer_travel": {
     "message": "The travel portal for Drimer"
+  },
+  "OCD__gali_description": {
+    "message": "Used by Google Analytics to determine which links on a page are being clicked"
+  },
+  "OCD__gcl_gs_description": {
+    "message": "Google uses cookies for advertising, including serving and rendering ads, personalizing ads (depending on your ad settings at g.co/adsettings), limiting the number of times an ad is shown to a user, muting ads you have chosen to stop seeing, and measuring the effectiveness of ads."
+  },
+  "OCD__Secure_ENID_description": {
+    "message": "Remembers user preferences like language, search results per page, and SafeSearch settings"
+  },
+  "OCD_Secure_YEC_description": {
+    "message": "Serve a similar purpose for YouTube, including detecting and resolving problems"
+  },
+  "OCD_CGIC_description": {
+    "message": "Improves search results delivery by autocompleting queries based on user input"
+  },
+  "OCD__Secure_YEC_description": {
+    "message": "Used to detect spam, fraud, and abuse to protect advertisers and YouTube creators"
+  },
+  "OCD_AdID_description": {
+    "message": "Show Google ads on non-Google sites and personalize ads based on user settings"
+  },
+  "OCD_gcl_description": {
+    "message": "Helps advertisers determine user actions on their site after clicking an ad"
+  },
+  "OCD_gac_description": {
+    "message": "Measure user activity and ad campaign performance for advertisers"
+  },
+  "OCD___Secure_ENID_description": {
+    "message": "Used by Google to prevent fraudulent login attempts. This also contains a Google user ID which can be used for statistics and marketing purposes following a successful login"
+  },
+  "OCD_retention_11_Months": {
+    "message": "11 Months"
+  },
+  "OCD_pxid_description": {
+    "message": "Typically, it is enabled when a Publisher owned multiple domains and has an interest in identifying their users consistently across their domains. The URL of the referrer header has to match a pre-configured list of domains (configured in the Permutive dashboard). We refer to this service as the “Secure Permutive 3P cookie”, and will not be shared between Publishers. This PXID 3P cookie varies Publisher by Publisher."
+  },
+  "OCD_retention_89_Days": {
+    "message": "89 Days"
+  },
+  "OCD_permutive_id_description": {
+    "message": "This ID is the same within a domain (not publisher-specific). The Permutive ID exists in all environments, including 3P cookie-blocked environments like Safari and Firefox. The ID is persistent for a user as long as the local storage isn’t refreshed on the user's device."
+  },
+  "OCD_retention_1095_Days": {
+    "message": "1095 Days"
+  },
+  "RWS_rationale_https___zoom_com": {
+    "message": "marketing new homepages for SEO purposes"
   }
 }

@@ -86,6 +86,14 @@ const useColumnSorting = (
         candidateB = candidateB.trim();
       }
 
+      if (candidateA === null || candidateA === undefined) {
+        candidateA = '';
+      }
+
+      if (candidateB === null || candidateB === undefined) {
+        candidateB = '';
+      }
+
       return (
         (candidateA === candidateB ? 0 : candidateA > candidateB ? 1 : -1) *
         (ascending ? 1 : -1)

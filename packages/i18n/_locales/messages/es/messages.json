@@ -8174,12 +8174,6 @@
   "bounceTrackingMitigationsDescription": {
     "message": "Reduce o elimina la capacidad del seguimiento de rebotes para reconocer personas en diferentes contextos."
   },
-  "privacyBudget": {
-    "message": "Presupuesto de privacidad"
-  },
-  "privacyBudgetDescription": {
-    "message": "Esta propuesta sugiere limitar la cantidad de datos de usuarios individuales que pueden exponerse en los sitios, de forma que, en total, estos datos sean insuficientes para monitorizar e identificar a personas concretas."
-  },
   "userAgentReductionDescription": {
     "message": "Minimiza la información de identificación que se comparte en la cadena User-Agent, que podría usarse para la recogida pasiva de huella digital."
   },
