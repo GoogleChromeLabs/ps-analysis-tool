@@ -22,11 +22,11 @@ import AdTable from './adTable';
 import AdMatrix from './adMatrix';
 import type { AdsAndBiddersType } from '@google-psat/common';
 
-interface PanelProps {
+interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
 }
 
-const Panel = ({ adsAndBidders }: PanelProps) => {
+const AdUnitsPanel = ({ adsAndBidders }: AdUnitsPanelProps) => {
   return (
     <div className="flex flex-col h-full w-full">
       {adsAndBidders && Object.keys(adsAndBidders).length > 0 ? (
@@ -45,4 +45,4 @@ const Panel = ({ adsAndBidders }: PanelProps) => {
   );
 };
 
-export default Panel;
+export default AdUnitsPanel;

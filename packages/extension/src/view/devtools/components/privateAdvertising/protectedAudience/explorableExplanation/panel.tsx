@@ -37,6 +37,8 @@ import { NextIcon, PreviousIcon } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
+import TableTray from '../../../explorableExplanation/tableTray';
+import { Resizable } from 're-resizable';
 
 declare module 'react' {
   interface CSSProperties {
@@ -226,6 +228,20 @@ const Panel = () => {
         expandedBubbleWidth={expandedBubbleWidth}
       />
       <ReactP5Wrapper sketch={userSketch} />
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '20%',
+        }}
+        minHeight="15%"
+        maxHeight="95%"
+        enable={{
+          top: true,
+        }}
+        className="h-full flex"
+      >
+        <TableTray />
+      </Resizable>
     </div>
   );
 };

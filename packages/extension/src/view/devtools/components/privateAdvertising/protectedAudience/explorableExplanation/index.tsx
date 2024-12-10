@@ -22,11 +22,9 @@ import React, { useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import InterestGroups from '../interestGroups';
-import Auctions from '../auctions';
-import AdUnits from '../adUnits';
-import Bids from '../bids';
 import Panel from './panel';
+import IGTable from '../interestGroups/table';
+import Auctions from './auctions';
 
 const ExplorableExplanation = () => {
   const tabItems = useMemo<TabItems>(
@@ -34,25 +32,19 @@ const ExplorableExplanation = () => {
       {
         title: 'Interest Groups',
         content: {
-          Element: InterestGroups,
+          Element: IGTable,
+          props: {
+            interestGroupDetails: [],
+          },
         },
       },
       {
         title: 'Auctions',
         content: {
           Element: Auctions,
-        },
-      },
-      {
-        title: 'Ad Units',
-        content: {
-          Element: AdUnits,
-        },
-      },
-      {
-        title: 'Bids',
-        content: {
-          Element: Bids,
+          props: {
+            auctionEvents: {},
+          },
         },
       },
     ],
