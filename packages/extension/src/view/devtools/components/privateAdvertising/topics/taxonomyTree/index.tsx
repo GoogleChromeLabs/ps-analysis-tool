@@ -166,7 +166,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           width="14"
         />
       </a>
-      <div className="p-4 overflow-auto" ref={divRef} />
+      <div className="m-4 overflow-auto bg-white" ref={divRef} />
     </div>
   );
 };
