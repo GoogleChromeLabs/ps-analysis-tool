@@ -23,7 +23,7 @@ import {
   calculateEffectiveExpiryDate,
   type CookieDatabase,
 } from '@google-psat/common';
-import { computePosition, flip, shift } from '@floating-ui/core';
+import { computePosition, autoPlacement } from '@floating-ui/core';
 import { autoUpdate, platform, arrow } from '@floating-ui/dom';
 
 /**
@@ -399,11 +399,8 @@ class WebpageContentScript {
           platform: platform,
           placement: 'top',
           middleware: [
-            shift({
-              boundary: document.querySelector('body'),
-            }),
-            flip({
-              boundary: document.querySelector('body'),
+            autoPlacement({
+              crossAxis: true,
             }),
             arrow({
               element: arrowElement,
