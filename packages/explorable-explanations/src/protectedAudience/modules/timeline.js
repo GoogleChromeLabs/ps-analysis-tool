@@ -384,6 +384,17 @@ timeline.drawCircle = (index, completed = false) => {
   }
 
   if (app.isInteractiveMode) {
+    if (app.usedNextOrPrev && app.timeline.currentIndex === index) {
+      app.up.image(
+        app.p.userIcon,
+        position.x - user.width / 2,
+        position.y - user.height / 2,
+        user.width,
+        user.height
+      );
+      return;
+    }
+
     app.up.push();
     app.up.textSize(16);
     app.up.fill(colors.visitedBlue);
@@ -392,10 +403,6 @@ timeline.drawCircle = (index, completed = false) => {
     app.up.textAlign(app.up.CENTER, app.up.CENTER);
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
-
-    if (app.usedNextOrPrev && app.timeline.currentIndex === index) {
-      return;
-    }
 
     app.up.image(
       app.p.openWithoutAnimation,
