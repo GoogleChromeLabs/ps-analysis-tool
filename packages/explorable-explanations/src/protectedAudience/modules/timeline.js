@@ -236,7 +236,7 @@ timeline.init = () => {
         if (config.timeline.circles[clickedIndex].type === 'advertiser') {
           app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
         } else {
-          app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
+          app.auction.auctions[clickedIndex][0].props.y1 += 20;
         }
 
         app.shouldRespondToClick = false;
