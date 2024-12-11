@@ -114,6 +114,7 @@ const Panel = () => {
     }
     const containerRefCopy = containerRef;
     return () => {
+      app.reset(true);
       if (containerRefCopy.current) {
         handleResizeCallback.unobserve(containerRefCopy.current);
       }

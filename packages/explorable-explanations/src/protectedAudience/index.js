@@ -519,7 +519,7 @@ export const userSketch = (p) => {
   };
 };
 
-app.reset = async () => {
+app.reset = async (callFromExtension = false) => {
   promiseQueue.stop();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
@@ -534,9 +534,11 @@ app.reset = async () => {
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(1000);
-  setupInterestGroupCanvas(app.igp);
-  setupUserCanvas(app.up);
-  setupMainCanvas(app.p);
+  if (!callFromExtension) {
+    setupInterestGroupCanvas(app.igp);
+    setupUserCanvas(app.up);
+    setupMainCanvas(app.p);
+  }
 
   app.timeline.isPaused = true;
   app.cancelPromise = false;
