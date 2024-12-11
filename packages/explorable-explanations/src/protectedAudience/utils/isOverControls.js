@@ -19,6 +19,11 @@
 import app from '../app';
 
 export const isOverControls = (mouseX, mouseY) => {
+  // eslint-disable-next-line no-undef
+  if (!process.env.IS_RUNNING_STANDALONE) {
+    return false;
+  }
+
   const controlsDivRect = document
     .getElementById('controls-div')
     .getBoundingClientRect();
