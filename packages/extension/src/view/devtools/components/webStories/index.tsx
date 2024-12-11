@@ -17,17 +17,17 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { ArrowUp } from '@google-psat/design-system';
+import { LandingPage, TableProvider } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import ContentPanel from './contentPanel';
-import classNames from 'classnames';
+import { noop } from '@google-psat/common';
 
 const WebStories = () => {
-  const [open, setOpen] = useState(true);
-  const [hideHeader, setHideHeader] = useState(false);
+  // const [open, setOpen] = useState(true);
+  const [, setHideHeader] = useState(false);
   //@ts-ignore since this is a custom event.
   const webStoriesLightBoxCallback = useCallback((event) => {
     setHideHeader(() => event.detail.storyOpened);
@@ -50,37 +50,25 @@ const WebStories = () => {
   }, [webStoriesLightBoxCallback]);
 
   return (
-    <div className="w-full h-full">
-      <div className="divide-y divide-hex-gray dark:divide-quartz">
-        {!hideHeader && (
-          <div className="flex justify-between">
-            <div className="p-4 flex flex-col gap-1">
-              <button
-                className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
-                onClick={() => setOpen((prevOpen) => !prevOpen)}
-              >
-                <h1 className="text-left">Stories</h1>
-                <div>
-                  <ArrowUp
-                    className={classNames(open && 'rotate-180 -translate-y-1')}
-                  />
-                </div>
-              </button>
-            </div>
-          </div>
-        )}
-        <div className={classNames({ hidden: !open })}>
-          <div
-            id="#__psat-main-content"
-            className={classNames(
-              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz',
-              { 'px-4 py-6': !hideHeader }
-            )}
+    <div className="w-full h-full overflow-hidden">
+      <LandingPage
+        title={'Stories'}
+        extraClasses="w-full !p-0"
+        contentPanel={
+          <TableProvider
+            data={[]}
+            tableColumns={[]}
+            tableFilterData={{}}
+            tableSearchKeys={[]}
+            onRowClick={noop}
+            onRowContextMenu={noop}
+            getRowObjectKey={() => ''}
           >
             <ContentPanel />
-          </div>
-        </div>
-      </div>
+          </TableProvider>
+        }
+        showQuickLinks={false}
+      />
     </div>
   );
 };

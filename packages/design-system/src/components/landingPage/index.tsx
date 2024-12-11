@@ -67,7 +67,7 @@ const LandingPage = ({
       <div
         className={classNames(
           { hidden: loading },
-          'divide-y divide-hex-gray dark:divide-quartz'
+          'divide-y divide-hex-gray dark:divide-quartz w-full h-full flex flex-col'
         )}
       >
         <div className="flex justify-between">
@@ -89,12 +89,12 @@ const LandingPage = ({
             {showSupportLink && <SupportLink />}
           </div>
         </div>
-        <div className={classNames({ hidden: !open && !children })}>
+        <div className={classNames({ hidden: !open && !children }, 'flex-1')}>
           <div
             id="#__psat-collapsible-content"
             className={classNames(
               { hidden: !open },
-              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
+              'h-full w-full flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
               {
                 'border-b border-american-silver dark:border-quartz': children,
               },
