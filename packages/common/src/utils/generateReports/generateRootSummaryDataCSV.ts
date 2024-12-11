@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import { I18n } from '@google-psat/i18n';
-/**
  * Internal dependencies
  */
 import type { CompleteJson, CookieTableData } from '../../cookies.types';
 import extractReportData from '../extractReportData';
 import reshapeCookies from '../reshapeCookies';
+import extractCookies from '../extractCookies';
 
-const generateRootSummaryDataCSV = (
-  siteMapAnalysisData: CompleteJson[]
-): string => {
-  const extractedData: { [key: string]: CookieTableData } = reshapeCookies(
-    extractReportData(siteMapAnalysisData).landingPageCookies
-  );
-
+const calculateCSVData = (cookies: {
+  [key: string]: CookieTableData;
+}): string => {
   let totalFirstPartyCookies = 0;
   let totalThirdPartyCookies = 0;
   let analyticsCookies = 0;
@@ -45,8 +38,8 @@ const generateRootSummaryDataCSV = (
   let totalCookies = 0;
 
   // eslint-disable-next-line complexity
-  Object.keys(extractedData).forEach((cookieKey) => {
-    const cookie = extractedData[cookieKey];
+  Object.keys(cookies).forEach((cookieKey) => {
+    const cookie = cookies[cookieKey];
 
     if (!cookie.analytics) {
       return;
@@ -107,27 +100,62 @@ const generateRootSummaryDataCSV = (
     totalCookies += 1;
   });
 
-  const summary = {
-    [I18n.getMessage('totalCookies')]: totalCookies,
-    [I18n.getMessage('totalFirstPartyCookies')]: totalFirstPartyCookies,
-    [I18n.getMessage('totalThirdPartyCookies')]: totalThirdPartyCookies,
-    [I18n.getMessage('analyticsCookies')]: analyticsCookies,
-    [I18n.getMessage('functionalCookies')]: functionalCookies,
-    [I18n.getMessage('marketingCookies')]: marketingCookies,
-    [I18n.getMessage('uncategorizedCookies')]: uncategorisedCookies,
-    [I18n.getMessage('cookiesWithIssues')]: cookiesWithIssues,
-    [I18n.getMessage('analyticsCookiesWithIssues')]: analyticsCookiesWithIssues,
-    [I18n.getMessage('functionalCookiesWithIssues')]:
-      functionalCookiesWithIssues,
-    [I18n.getMessage('marketingCookiesWithIssues')]: marketingCookiesWithIssues,
-    [I18n.getMessage('uncategorizedCookiesWithIssues')]:
-      uncategorisedCookiesWithIssues,
-  };
+  const summary = [
+    totalCookies,
+    totalFirstPartyCookies,
+    totalThirdPartyCookies,
+    analyticsCookies,
+    functionalCookies,
+    marketingCookies,
+    uncategorisedCookies,
+    cookiesWithIssues,
+    analyticsCookiesWithIssues,
+    functionalCookiesWithIssues,
+    marketingCookiesWithIssues,
+    uncategorisedCookiesWithIssues,
+  ];
 
-  return Object.entries(summary)
-    .map(([key, value]) => `${key}, ${value}`)
-    .join('\r\n')
-    .concat('\r\n');
+  return summary.join(',').concat('\r\n');
+};
+export const generateRootSummaryDataCSV = (
+  siteMapAnalysisData: CompleteJson[]
+) => {
+  const extractedData: { [key: string]: CookieTableData } = reshapeCookies(
+    extractReportData(siteMapAnalysisData).landingPageCookies
+  );
+  const headers = [
+    'URL',
+    'Total Cookies',
+    'First Party',
+    'Third Party',
+    'Analytics',
+    'Functional',
+    'Marketing',
+    'Uncategorised',
+    'Total Cookies With Issues',
+    'Analytics',
+    'Functional',
+    'Marketing',
+    'Uncategorised',
+  ];
+
+  let csvData = headers.join(',').concat('\r\n');
+
+  csvData = csvData
+    .concat('Aggregated,')
+    .concat(calculateCSVData(extractedData));
+
+  siteMapAnalysisData.forEach((singleSiteData) => {
+    const urlCookies = reshapeCookies(
+      extractCookies(singleSiteData.cookieData, '', false)
+    );
+
+    csvData = csvData
+      .concat(`${singleSiteData.pageUrl},`)
+      .concat(calculateCSVData(urlCookies));
+  });
+
+  return csvData;
 };
 
 export default generateRootSummaryDataCSV;

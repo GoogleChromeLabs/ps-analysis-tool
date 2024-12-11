@@ -86,6 +86,7 @@ export const runtimeOnMessageListener = async (request: any) => {
 
     const tabs = await chrome.tabs.query({});
     const targets = await chrome.debugger.getTargets();
+
     await Promise.all(
       tabs.map(async ({ id }) => {
         if (!id) {
@@ -105,11 +106,10 @@ export const runtimeOnMessageListener = async (request: any) => {
             '0'
           );
         }
+
         try {
           if (synchnorousCookieStore.globalIsUsingCDP) {
             await attachCDP({ tabId: id });
-          } else {
-            await chrome.debugger.detach({ tabId: id });
           }
         } catch (error) {
           //Fail silently
@@ -118,6 +118,7 @@ export const runtimeOnMessageListener = async (request: any) => {
         await reloadCurrentTab(id);
       })
     );
+
     await sendMessageWrapper(SERVICE_WORKER_RELOAD_MESSAGE, {
       actionsPerformed,
     });

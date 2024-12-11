@@ -16,9 +16,9 @@
 /**
  * External dependencies.
  */
-import type { CookieTableData } from '@google-psat/common';
+import type { CookieTableData, ErroredOutUrlsData } from '@google-psat/common';
 
-export type TableData = CookieTableData & {
+export type TableData = (CookieTableData | ErroredOutUrlsData) & {
   highlighted?: boolean;
 };
 

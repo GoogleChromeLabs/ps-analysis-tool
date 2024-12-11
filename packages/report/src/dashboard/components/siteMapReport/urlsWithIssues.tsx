@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,19 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
-import { LandingPage } from '@google-psat/design-system';
+import type { ErroredOutUrlsData } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import ContentPanel from './contentPanel';
+import ErroredOutUrls from '../urlsWithIssues';
 
-const PrivacySandbox = () => {
-  useEffect(() => {
-    (async () => {
-      await chrome.storage.sync.set({
-        psLandingPageViewed: true,
-      });
-    })();
-  }, []);
+interface URLSWithIssuesProps {
+  erroredOutUrls: ErroredOutUrlsData[];
+}
 
-  return (
-    <LandingPage
-      title="Privacy Sandbox"
-      showSupportLink={true}
-      contentPanel={<ContentPanel />}
-    />
-  );
+const URLSWithIssues = ({ erroredOutUrls }: URLSWithIssuesProps) => {
+  return <ErroredOutUrls erroredOutUrls={erroredOutUrls} />;
 };
 
-export default PrivacySandbox;
+export default URLSWithIssues;

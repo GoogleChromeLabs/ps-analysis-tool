@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import {
+  generateErrorLogFile,
   generateRootSummaryDataCSV,
   type CompleteJson,
 } from '@google-psat/common';
@@ -62,6 +63,11 @@ const saveReports = async (
     const rootSummaryData = generateRootSummaryDataCSV(result);
     await ensureFile(path.join(outDir, 'report.csv'));
     await writeFile(path.join(outDir, 'report.csv'), rootSummaryData);
+
+    const errorLogs = generateErrorLogFile(result);
+
+    await ensureFile(path.join(outDir, 'error_logs.txt'));
+    await writeFile(path.join(outDir, 'error_logs.txt'), errorLogs);
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {

@@ -22,6 +22,7 @@ import type {
   CookieFrameStorageType,
   CompleteJson,
   LibraryData,
+  ErroredOutUrlsData,
 } from '@google-psat/common';
 import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 
@@ -36,6 +37,7 @@ interface SiteMapReportProps {
   completeJson: CompleteJson[] | null;
   path: string;
   libraryMatches: { [url: string]: LibraryData } | null;
+  erroredOutUrls: ErroredOutUrlsData[];
 }
 
 const SiteMapReport = ({
@@ -43,12 +45,14 @@ const SiteMapReport = ({
   completeJson,
   path,
   libraryMatches,
+  erroredOutUrls,
 }: SiteMapReportProps) => {
   const [data, setData] = useState<SidebarItems>(sidebarData);
 
   return (
     <SidebarProvider data={data}>
       <Layout
+        erroredOutUrls={erroredOutUrls}
         landingPageCookies={landingPageCookies}
         completeJson={completeJson}
         sidebarData={data}

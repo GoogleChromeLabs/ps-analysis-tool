@@ -33,11 +33,6 @@ const content = [
     url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
   },
   {
-    title: () => I18n.getMessage('privacyBudget'),
-    description: () => I18n.getMessage('privacyBudgetDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/privacy-budget',
-  },
-  {
     title: () => I18n.getMessage('userAgentReduction'),
     description: () => I18n.getMessage('userAgentReductionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
