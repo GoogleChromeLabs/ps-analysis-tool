@@ -24,11 +24,15 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies.
  */
 import ExportButton from '../../../exportButton';
-import { useTable } from '../../useTable';
+import { TableRow } from '../../useTable';
 import { FilterIcon } from '../../../../icons';
 import SearchInput from '../../../searchInput';
 
 interface TableTopBarProps {
+  rows: TableRow[];
+  searchValue: string;
+  setSearchValue: (value: string) => void;
+  exportTableData?: (rows: TableRow[]) => void;
   showFilterSidebar: boolean;
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   hideFiltering?: boolean;
@@ -37,21 +41,16 @@ interface TableTopBarProps {
 }
 
 const TableTopBar = ({
+  rows,
+  searchValue,
+  setSearchValue,
+  exportTableData,
   showFilterSidebar,
   setShowFilterSidebar,
   hideFiltering = false,
   disableFiltering = false,
   extraInterface,
 }: TableTopBarProps) => {
-  const { rows, searchValue, setSearchValue, exportTableData } = useTable(
-    ({ state, actions }) => ({
-      rows: state.rows,
-      searchValue: state.searchValue,
-      setSearchValue: actions.setSearchValue,
-      exportTableData: actions.exportTableData,
-    })
-  );
-
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchValue(event.target.value);

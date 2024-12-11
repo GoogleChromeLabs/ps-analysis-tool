@@ -52,6 +52,10 @@ const Table = ({
     toggleSelectAllFilter,
     selectedFilters,
     resetFilters,
+    rows,
+    searchValue,
+    setSearchValue,
+    exportTableData,
   } = useTable(({ state, actions }) => ({
     tableContainerRef: state.tableContainerRef,
     filters: state.filters,
@@ -60,6 +64,10 @@ const Table = ({
     toggleSelectAllFilter: actions.toggleSelectAllFilter,
     selectedFilters: state.selectedFilters,
     resetFilters: actions.resetFilters,
+    rows: state.rows,
+    searchValue: state.searchValue,
+    setSearchValue: actions.setSearchValue,
+    exportTableData: actions.exportTableData,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -116,6 +124,10 @@ const Table = ({
         hideFiltering={hideFiltering}
         setShowFilterSidebar={setShowFilterSidebar}
         extraInterface={extraInterfaceToTopBar}
+        rows={rows}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        exportTableData={exportTableData}
       />
       <ChipsBar
         selectedFilters={selectedFilters}
