@@ -88,15 +88,20 @@ const InterestGroups = ({ filters }: InterestGroupsProps) => {
 
   const topBarExtraInterface = useCallback(() => {
     return (
-      <div className="flex items-center justify-center w-max gap-1">
-        <input
-          onChange={handleChange}
-          type="checkbox"
-          id="showAllEvents"
-          name="showAllEvents"
-          value="Show All Events"
-        />
-        <label htmlFor="showAllEvents">Show All Events</label>
+      <div className="h-full flex items-center justify-center w-max gap-1">
+        <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
+        <div className="flex items-center justify-center w-max gap-1">
+          <input
+            onChange={handleChange}
+            type="checkbox"
+            id="showAllEvents"
+            name="showAllEvents"
+            value="Show All Events"
+          />
+          <label htmlFor="showAllEvents" className="text-xs leading-none">
+            Show All Events
+          </label>
+        </div>
       </div>
     );
   }, [handleChange]);
