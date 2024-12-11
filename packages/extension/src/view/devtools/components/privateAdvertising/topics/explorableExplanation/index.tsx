@@ -17,8 +17,12 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
-import { TabsProvider, type TabItems } from '@google-psat/design-system';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  TabsProvider,
+  useTabs,
+  type TabItems,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -30,6 +34,28 @@ const ExplorableExplanation = () => {
   const [topicsTableData, setTopicsTableData] = useState<
     Record<number, TopicsTableType[]>
   >({});
+  const [highlightAdTech, setHighlightAdTech] = useState<string | null>(null);
+  // These are the actions that are being used in the PA panel tabs provider not the animation component.
+  const { PAstorage, setPAActiveTab, setPAStorage } = useTabs(
+    ({ state, actions }) => ({
+      PAstorage: state.storage,
+      setPAActiveTab: actions.setActiveTab,
+      setPAStorage: actions.setStorage,
+    })
+  );
+
+  const topicsNavigator = useCallback(
+    (topic: string) => {
+      setPAStorage(
+        JSON.stringify({
+          taxonomy: topic,
+        })
+      );
+      setPAActiveTab(2);
+    },
+    [setPAActiveTab, setPAStorage]
+  );
+
   const tabItems = useMemo<TabItems>(
     () =>
       ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'].map((item) => ({
@@ -38,10 +64,13 @@ const ExplorableExplanation = () => {
           Element: TopicsTable,
           props: {
             data: topicsTableData,
+            highlightAdTech,
+            setHighlightAdTech,
+            topicsNavigator,
           },
         },
       })),
-    [topicsTableData]
+    [highlightAdTech, topicsNavigator, topicsTableData]
   );
 
   return (
@@ -49,6 +78,10 @@ const ExplorableExplanation = () => {
       <Panel
         topicsTableData={topicsTableData}
         setTopicsTableData={setTopicsTableData}
+        PAstorage={PAstorage}
+        setPAActiveTab={setPAActiveTab}
+        setPAStorage={setPAStorage}
+        setHighlightAdTech={setHighlightAdTech}
       />
     </TabsProvider>
   );

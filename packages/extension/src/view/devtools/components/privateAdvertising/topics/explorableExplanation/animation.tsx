@@ -29,20 +29,32 @@ interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
   isAnimating: boolean;
   siteAdTechs: Record<string, string[]>;
+  visitIndexStart: number;
   handleUserVisit: (visitIndex: number, updateTopics?: boolean) => void;
   isPlaying: boolean;
   resetAnimation: boolean;
   speedMultiplier: number;
+  setPAActiveTab: (tabIndex: number) => void;
+  setPAStorage: (content: string) => void;
+  setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentVisitIndexCallback: React.Dispatch<
+    React.SetStateAction<(() => number) | undefined>
+  >;
 }
 
 const Animation = ({
   epoch,
   isAnimating,
   siteAdTechs,
+  visitIndexStart,
   handleUserVisit,
   isPlaying,
   resetAnimation,
   speedMultiplier,
+  setPAActiveTab,
+  setPAStorage,
+  setHighlightAdTech,
+  setCurrentVisitIndexCallback,
 }: AnimationProps) => {
   const node = useRef(null);
   const [togglePlayCallback, setTogglePlayCallback] =
@@ -51,27 +63,33 @@ const Animation = ({
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
   const animationRef = useRef(isAnimating);
+  const visitIndexStartRef = useRef(visitIndexStart);
 
   useEffect(() => {
     // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
     animationRef.current = isAnimating;
-  }, [isAnimating]);
+    visitIndexStartRef.current = visitIndexStart;
+  }, [isAnimating, visitIndexStart]);
 
   useEffect(() => {
     const tAnimation = (p: p5) => {
-      const { togglePlay, reset, updateSpeedMultiplier } = topicsAnimation(
-        p,
-        epoch,
-        animationRef.current,
-        siteAdTechs,
-        animationRef.current
-          ? handleUserVisit
-          : (idx: number) => handleUserVisit(idx, false)
-      );
+      const { togglePlay, reset, updateSpeedMultiplier, getCurrentVisitIndex } =
+        topicsAnimation(
+          p,
+          epoch,
+          animationRef.current,
+          siteAdTechs,
+          visitIndexStartRef.current,
+          animationRef.current
+            ? handleUserVisit
+            : (idx: number) => handleUserVisit(idx, false),
+          setHighlightAdTech
+        );
 
       setTogglePlayCallback(() => togglePlay);
       setResetCallback(() => reset);
       setSpeedMultiplierCallback(() => updateSpeedMultiplier);
+      setCurrentVisitIndexCallback(() => getCurrentVisitIndex);
     };
 
     const p = node.current ? new p5(tAnimation, node.current) : null;
@@ -79,7 +97,15 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [epoch, handleUserVisit, siteAdTechs]);
+  }, [
+    epoch,
+    handleUserVisit,
+    setCurrentVisitIndexCallback,
+    setHighlightAdTech,
+    setPAActiveTab,
+    setPAStorage,
+    siteAdTechs,
+  ]);
 
   useEffect(() => {
     togglePlayCallback?.(isPlaying);
