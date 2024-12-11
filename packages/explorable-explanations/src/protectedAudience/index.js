@@ -240,6 +240,7 @@ app.handleInteractivePrev = () => {
 
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
+  app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
 
@@ -258,7 +259,7 @@ app.handleInteractivePrev = () => {
   flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
-  app.up.clear();
+  utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
   promiseQueue.skipTo(0);
   promiseQueue.start();
@@ -345,6 +346,7 @@ app.handleInteravtiveNext = () => {
 
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
+  app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
 
@@ -359,7 +361,7 @@ app.handleInteravtiveNext = () => {
   flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
-  app.up.clear();
+  utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
   promiseQueue.skipTo(0);
   promiseQueue.start();

@@ -61,6 +61,7 @@ const app = {
   visitedIndexOrder: [],
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
+  usedNextOrPrev: false,
   canvasEventListerners: {
     main: {
       mouseOver: {},

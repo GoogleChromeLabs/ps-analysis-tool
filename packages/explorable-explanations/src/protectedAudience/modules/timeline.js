@@ -108,6 +108,8 @@ timeline.init = () => {
         }
       });
 
+      app.usedNextOrPrev = false;
+
       expandIconPositions.forEach((positions) => {
         if (
           utils.isInsideCircle(
@@ -390,6 +392,10 @@ timeline.drawCircle = (index, completed = false) => {
     app.up.textAlign(app.up.CENTER, app.up.CENTER);
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
+
+    if (app.usedNextOrPrev && app.timeline.currentIndex === index) {
+      return;
+    }
 
     app.up.image(
       app.p.openWithoutAnimation,
