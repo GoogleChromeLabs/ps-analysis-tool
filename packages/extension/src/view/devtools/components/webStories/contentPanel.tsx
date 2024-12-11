@@ -57,6 +57,16 @@ const WebStories = () => {
     toggleSelectAllFilter: actions.toggleSelectAllFilter,
   }));
 
+  const sortBy = () => (
+    <div className="flex">
+      <p>Sort by:</p>
+      <select>
+        <option value="Newest">Newest</option>
+        <option value="name">Name</option>
+      </select>
+    </div>
+  );
+
   return (
     <div className="h-full w-full flex flex-col">
       <TableTopBar
@@ -69,6 +79,7 @@ const WebStories = () => {
         hideFiltering={false}
         disableFiltering={false}
         hideSearch={false}
+        extraInterface={sortBy}
       />
       <ChipsBar
         selectedFilters={selectedFilters}
