@@ -240,6 +240,7 @@ app.handleInteractivePrev = () => {
 
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
+  app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
 
@@ -258,7 +259,7 @@ app.handleInteractivePrev = () => {
   flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
-  app.up.clear();
+  utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
   promiseQueue.skipTo(0);
   promiseQueue.start();
@@ -345,6 +346,7 @@ app.handleInteravtiveNext = () => {
 
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
+  app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
 
@@ -359,7 +361,7 @@ app.handleInteravtiveNext = () => {
   flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
-  app.up.clear();
+  utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
   promiseQueue.skipTo(0);
   promiseQueue.start();
@@ -380,6 +382,7 @@ app.handleControls = () => {
 
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
+    app.controlsDiv = document.getElementById('controls-div');
     app.nextButton = document.getElementById('next-div');
     app.prevButton = document.getElementById('previous-div');
     app.prevButton.addEventListener('click', app.handlePrevButton);
@@ -473,6 +476,7 @@ export const sketch = (p) => {
     p.pauseIcon = p.loadImage(icons.pause);
     p.expandIcon = p.loadImage(icons.expand);
     p.infoIcon = p.loadImage(icons.info);
+    p.openWithoutAnimation = p.loadImage(icons.openWithoutAnimation);
 
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
@@ -518,7 +522,7 @@ export const userSketch = (p) => {
   };
 };
 
-app.reset = async () => {
+app.reset = async (callFromExtension = false) => {
   promiseQueue.stop();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
@@ -533,9 +537,11 @@ app.reset = async () => {
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(1000);
-  setupInterestGroupCanvas(app.igp);
-  setupUserCanvas(app.up);
-  setupMainCanvas(app.p);
+  if (!callFromExtension) {
+    setupInterestGroupCanvas(app.igp);
+    setupUserCanvas(app.up);
+    setupMainCanvas(app.p);
+  }
 
   app.timeline.isPaused = true;
   app.cancelPromise = false;

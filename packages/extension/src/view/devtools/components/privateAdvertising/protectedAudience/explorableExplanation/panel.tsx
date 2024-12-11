@@ -47,7 +47,6 @@ declare module 'react' {
 const Panel = () => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
-  //const [activeTab, setActiveTab] = useState(0);
   const [interactiveMode, _setInteractiveMode] = useState(false);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
@@ -115,6 +114,7 @@ const Panel = () => {
     }
     const containerRefCopy = containerRef;
     return () => {
+      app.reset(true);
       if (containerRefCopy.current) {
         handleResizeCallback.unobserve(containerRefCopy.current);
       }
@@ -132,26 +132,24 @@ const Panel = () => {
         />
         Interactive Mode
       </label>
-      {Boolean(!interactiveMode) && (
-        <div className="flex gap-0.5">
-          <button
-            id="prevButton"
-            title="Previous Node"
-            onClick={app.handlePrevButton}
-            className="disabled:opacity-50 disabled:pointer-events-none"
-          >
-            <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-          </button>
-          <button
-            onClick={app.handleNextButton}
-            id="nextButton"
-            title="Next Node"
-            className="disabled:opacity-50 disabled:pointer-events-none"
-          >
-            <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-          </button>
-        </div>
-      )}
+      <div className="flex gap-0.5">
+        <button
+          id="prevButton"
+          title="Previous Node"
+          onClick={app.handlePrevButton}
+          className="disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+        </button>
+        <button
+          onClick={app.handleNextButton}
+          id="nextButton"
+          title="Next Node"
+          className="disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+        </button>
+      </div>
     </div>
   );
 
