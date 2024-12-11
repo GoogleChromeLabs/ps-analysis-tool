@@ -374,12 +374,10 @@ timeline.drawCircle = (index, completed = false) => {
 
   if (app.isInteractiveMode) {
     app.up.push();
-    app.up.textSize(14);
-    app.up.text(
-      circles[index].visitedIndex ?? '',
-      position.x - 5,
-      position.y + 7
-    );
+    app.up.textSize(16);
+    app.up.textStyle(app.up.BOLD);
+    app.up.textAlign(app.up.CENTER, app.up.CENTER);
+    app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
 
     app.up.image(
