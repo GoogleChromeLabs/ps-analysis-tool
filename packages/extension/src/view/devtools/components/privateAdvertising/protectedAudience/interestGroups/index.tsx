@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Table,
@@ -65,6 +65,7 @@ const InterestGroups = ({ filters }: InterestGroupsProps) => {
   // }, []);
 
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
+  const [filterData, setFilterData] = useState(false);
 
   const { interestGroupDetails } = useProtectedAudience(({ state }) => ({
     interestGroupDetails: state.interestGroupDetails,
@@ -77,6 +78,28 @@ const InterestGroups = ({ filters }: InterestGroupsProps) => {
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFilterData(event.target.checked);
+    },
+    []
+  );
+
+  const topBarExtraInterface = useCallback(() => {
+    return (
+      <div className="flex items-center justify-center w-max gap-1">
+        <input
+          onChange={handleChange}
+          type="checkbox"
+          id="showAllEvents"
+          name="showAllEvents"
+          value="Show All Events"
+        />
+        <label htmlFor="showAllEvents">Show All Events</label>
+      </div>
+    );
+  }, [handleChange]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -192,7 +215,13 @@ const InterestGroups = ({ filters }: InterestGroupsProps) => {
         }}
       >
         <TableProvider
-          data={interestGroupDetails}
+          data={
+            filterData
+              ? interestGroupDetails
+              : interestGroupDetails.filter(
+                  (event) => event.type === 'leave' || event.type === 'join'
+                )
+          }
           tableColumns={tableColumns}
           tableFilterData={tableFilters}
           tableSearchKeys={undefined}
@@ -209,6 +238,7 @@ const InterestGroups = ({ filters }: InterestGroupsProps) => {
           }}
         >
           <Table
+            extraInterfaceToTopBar={topBarExtraInterface}
             selectedKey={
               (selectedRow?.uniqueAuctionId ?? '') + String(selectedRow?.time)
             }
