@@ -380,6 +380,7 @@ app.handleControls = () => {
 
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
+    app.controlsDiv = document.getElementById('controls-div');
     app.nextButton = document.getElementById('next-div');
     app.prevButton = document.getElementById('previous-div');
     app.prevButton.addEventListener('click', app.handlePrevButton);

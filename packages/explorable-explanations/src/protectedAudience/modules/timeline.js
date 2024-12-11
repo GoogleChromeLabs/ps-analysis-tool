@@ -73,7 +73,10 @@ timeline.init = () => {
         return;
       }
 
-      if (hoveringOnExpandIconPositions) {
+      if (
+        hoveringOnExpandIconPositions ||
+        utils.isOverControls(event.clientX, event.clientY)
+      ) {
         app.startTrackingMouse = false;
       } else {
         app.startTrackingMouse = true;
@@ -246,10 +249,16 @@ timeline.init = () => {
           app.shouldRespondToClick = true;
           timeline.renderUserIcon();
           app.isRevisitingNodeInInteractiveMode = false;
+          if (config.timeline.circles[clickedIndex].type === 'advertiser') {
+            app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
+          } else {
+            app.auction.auctions[clickedIndex][0].props.y1 -= 20;
+          }
         });
 
         promiseQueue.skipTo(0);
         promiseQueue.start();
+
         utils.wipeAndRecreateUserCanvas();
         utils.wipeAndRecreateMainCanvas();
         return;
@@ -362,7 +371,7 @@ timeline.drawTimelineLine = () => {
 };
 
 timeline.drawCircle = (index, completed = false) => {
-  const { circleProps, user, circles } = config.timeline;
+  const { circleProps, user, circles, colors } = config.timeline;
   const position = app.timeline.circlePositions[index];
   const { diameter } = circleProps;
 
@@ -375,6 +384,8 @@ timeline.drawCircle = (index, completed = false) => {
   if (app.isInteractiveMode) {
     app.up.push();
     app.up.textSize(16);
+    app.up.fill(colors.visitedBlue);
+    app.up.stroke(colors.visitedBlue);
     app.up.textStyle(app.up.BOLD);
     app.up.textAlign(app.up.CENTER, app.up.CENTER);
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
