@@ -31,7 +31,7 @@ import {
   noop,
   type InterestGroups as InterestGroupsType,
 } from '@google-psat/common';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 
 interface InterestGroupsProps {
@@ -40,6 +40,7 @@ interface InterestGroupsProps {
 
 const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
+  const [filterData, setFilterData] = useState(false);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -109,6 +110,33 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
     []
   );
 
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFilterData(event.target.checked);
+    },
+    []
+  );
+
+  const topBarExtraInterface = useCallback(() => {
+    return (
+      <div className="h-full flex items-center justify-center w-max gap-1">
+        <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
+        <div className="flex items-center justify-center w-max gap-1">
+          <input
+            onChange={handleChange}
+            type="checkbox"
+            id="showAllEvents"
+            name="showAllEvents"
+            value="Show All Events"
+          />
+          <label htmlFor="showAllEvents" className="text-xs leading-none">
+            Show All Events
+          </label>
+        </div>
+      </div>
+    );
+  }, [handleChange]);
+
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
       <Resizable
@@ -123,7 +151,13 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
         }}
       >
         <TableProvider
-          data={interestGroupDetails}
+          data={
+            filterData
+              ? interestGroupDetails
+              : interestGroupDetails.filter(
+                  (event) => event.type === 'leave' || event.type === 'join'
+                )
+          }
           tableColumns={tableColumns}
           tableFilterData={tableFilters}
           tableSearchKeys={undefined}
@@ -140,6 +174,7 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
           }}
         >
           <Table
+            extraInterfaceToTopBar={topBarExtraInterface}
             selectedKey={
               (selectedRow?.uniqueAuctionId ?? '') + String(selectedRow?.time)
             }

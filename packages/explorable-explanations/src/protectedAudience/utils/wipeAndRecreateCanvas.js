@@ -18,7 +18,6 @@
  */
 import app from '../app';
 import config from '../config';
-import { calculateCanvasDimensions } from './calculateCanvasDimensions';
 
 export const wipeAndRecreateMainCanvas = () => {
   app.p.clear();
@@ -29,18 +28,9 @@ export const wipeAndRecreateMainCanvas = () => {
 };
 
 export const wipeAndRecreateInterestCanvas = () => {
-  const { height, width } = calculateCanvasDimensions();
-  const overlayCanvas = app.igp.createCanvas(width, height);
-
-  overlayCanvas.parent('interest-canvas');
-  overlayCanvas.style('z-index', 2);
+  app.igp.clear();
 };
 
 export const wipeAndRecreateUserCanvas = () => {
-  const { height, width } = calculateCanvasDimensions();
-  const canvas = app.up.createCanvas(width, height);
-
-  canvas.parent('user-canvas');
-  canvas.style('z-index', 1);
-  canvas.id('user-canvas');
+  app.up.clear();
 };
