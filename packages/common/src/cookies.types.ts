@@ -138,7 +138,6 @@ export type ErroredOutUrlsData = {
   stackTrace?: string;
   errorName: string;
 };
-
 export interface TabCookies {
   [key: string]: CookieTableData;
 }

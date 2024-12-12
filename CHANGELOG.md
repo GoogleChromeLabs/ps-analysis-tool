@@ -474,3 +474,16 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 
 ## Others
 * Resolve high and moderate vulnerabilities in package dependencies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/836
+
+
+#v0.12.0
+
+# Changelog
+
+## Extension
+
+- https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/848
+
+## CLI
+- https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/830
+- https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/849

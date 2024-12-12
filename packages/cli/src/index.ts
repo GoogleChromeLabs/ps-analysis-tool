@@ -47,9 +47,9 @@ import {
   getSiteReport,
   saveResultsAsHTML,
 } from './utils';
-import getSelectorsFromPath from './utils/getSelectorsFromPath';
-import checkLatestVersion from './utils/checkLatestVersion';
 import packageJson from '../package.json';
+import checkLatestVersion from './utils/checkLatestVersion';
+import getSelectorsFromPath from './utils/getSelectorsFromPath';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -276,8 +276,6 @@ program.parse();
     urlsToProcess,
     cookieAnalysisAndFetchedResourceData
   );
-
-  result['psatVersion'] = packageJson.version; // For adding in downloaded JSON file.
 
   I18n.loadCLIMessagesData(locale);
 
