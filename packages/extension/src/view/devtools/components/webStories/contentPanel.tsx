@@ -16,76 +16,46 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
+
 /**
  * Internal dependencies.
  */
 import { getStoryMarkup } from './createStoryIframe';
 import { STORY_JSON } from './story';
-import {
-  ChipsBar,
-  FiltersSidebar,
-  TableTopBar,
-  useTable,
-} from '@google-psat/design-system';
-import { noop } from '@google-psat/common';
+import { TopBar } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 
 const WebStories = () => {
   const storyMarkup = getStoryMarkup(STORY_JSON);
-  const {
-    rows,
-    searchValue,
-    setSearchValue,
-    exportTableData,
-    selectedFilters,
-    resetFilters,
-    toggleFilterSelection,
-    filters,
-    isSelectAllFilterSelected,
-    toggleSelectAllFilter,
-  } = useTable(({ state, actions }) => ({
-    rows: state.rows,
-    searchValue: state.searchValue,
-    setSearchValue: actions.setSearchValue,
-    exportTableData: actions.exportTableData,
-    selectedFilters: state.selectedFilters,
-    resetFilters: actions.resetFilters,
-    toggleFilterSelection: actions.toggleFilterSelection,
-    filters: state.filters,
-    isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
-    toggleSelectAllFilter: actions.toggleSelectAllFilter,
-  }));
-
-  const sortBy = () => (
-    <div className="flex">
-      <p>Sort by:</p>
-      <select>
-        <option value="Newest">Newest</option>
-        <option value="name">Name</option>
-      </select>
-    </div>
-  );
+  const [searchValue, setSearchValue] = useState('');
+  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
   return (
     <div className="h-full w-full flex flex-col">
-      <TableTopBar
-        rows={rows}
+      <TopBar
         searchValue={searchValue}
         setSearchValue={setSearchValue}
-        exportTableData={exportTableData}
-        showFilterSidebar={false}
-        setShowFilterSidebar={noop}
+        showFilterSidebar={showFilterSidebar}
+        setShowFilterSidebar={setShowFilterSidebar}
         hideFiltering={false}
         disableFiltering={false}
         hideSearch={false}
-        extraInterface={sortBy}
-      />
-      <ChipsBar
+        count={0} // TODO: Add count
+      >
+        <div className="flex">
+          <p>Sort by:</p>
+          <select>
+            <option value="Newest">Newest</option>
+            <option value="name">Name</option>
+          </select>
+        </div>
+      </TopBar>
+      {/* <ChipsBar
         selectedFilters={selectedFilters}
         resetFilters={resetFilters}
         toggleFilterSelection={toggleFilterSelection}
-      />
+      /> */}
       <div className="flex-1 w-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         <Resizable
           minWidth="100px"
@@ -94,7 +64,7 @@ const WebStories = () => {
             right: true,
           }}
         >
-          <FiltersSidebar
+          {/* <FiltersSidebar
             filters={{
               ...filters,
               category: {
@@ -137,7 +107,7 @@ const WebStories = () => {
             isSelectAllFilterSelected={isSelectAllFilterSelected}
             toggleFilterSelection={toggleFilterSelection}
             toggleSelectAllFilter={toggleSelectAllFilter}
-          />
+          /> */}
         </Resizable>
         <div
           data-testid="web-stories-content"

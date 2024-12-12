@@ -16,8 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
-import classNames from 'classnames';
+import React from 'react';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -25,8 +24,7 @@ import { I18n } from '@google-psat/i18n';
  */
 import ExportButton from '../../../exportButton';
 import { TableRow } from '../../useTable';
-import { FilterIcon } from '../../../../icons';
-import SearchInput from '../../../searchInput';
+import TopBar from '../../../topbar';
 
 interface TableTopBarProps {
   rows: TableRow[];
@@ -38,6 +36,7 @@ interface TableTopBarProps {
   hideFiltering?: boolean;
   disableFiltering?: boolean;
   extraInterface?: () => React.JSX.Element;
+  hideSearch?: boolean;
 }
 
 const TableTopBar = ({
@@ -50,58 +49,28 @@ const TableTopBar = ({
   hideFiltering = false,
   disableFiltering = false,
   extraInterface,
+  hideSearch = false,
 }: TableTopBarProps) => {
-  const handleInput = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchValue(event.target.value);
-    },
-    [setSearchValue]
-  );
-
   return (
-    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green">
-      {!hideFiltering && (
-        <button
-          className={classNames('w-3 h-3 mr-2', {
-            'opacity-20': disableFiltering,
-          })}
-          onClick={() => setShowFilterSidebar(!showFilterSidebar)}
-          disabled={disableFiltering}
-          title={I18n.getMessage('openFilterOptions')}
-        >
-          <FilterIcon
-            className={
-              showFilterSidebar && !disableFiltering
-                ? 'text-royal-blue dark:text-medium-persian-blue'
-                : 'text-mischka'
-            }
-          />
-        </button>
+    <TopBar
+      searchValue={searchValue}
+      setSearchValue={setSearchValue}
+      showFilterSidebar={showFilterSidebar}
+      setShowFilterSidebar={setShowFilterSidebar}
+      hideFiltering={hideFiltering}
+      disableFiltering={disableFiltering}
+      hideSearch={hideSearch}
+      count={rows.length}
+    >
+      {extraInterface?.()}
+      {exportTableData && (
+        <ExportButton
+          title={I18n.getMessage('exportTableData')}
+          disabled={rows.length === 0}
+          onClick={() => exportTableData(rows)}
+        />
       )}
-      <SearchInput
-        value={searchValue}
-        onChange={handleInput}
-        clearInput={() => {
-          setSearchValue('');
-        }}
-      />
-      <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
-
-      <div className="flex gap-3 justify-center items-center h-full">
-        {extraInterface?.()}
-        {exportTableData && (
-          <ExportButton
-            title={I18n.getMessage('exportTableData')}
-            disabled={rows.length === 0}
-            onClick={() => exportTableData(rows)}
-          />
-        )}
-      </div>
-
-      <div className="text-right w-full text-xxxs text-secondary dark:text-chinese-silver">
-        {I18n.getMessage('count')}: {rows.length ?? 0}
-      </div>
-    </div>
+    </TopBar>
   );
 };
 

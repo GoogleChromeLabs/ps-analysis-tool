@@ -56,3 +56,4 @@ export { default as Tabs } from './tabs';
 export { default as QuickLinksList } from './landingPage/quickLinksList';
 export { default as Breadcrumbs } from './breadcrumbs';
 export { default as InternalNavigationForAnchor } from './internalNavigationForAnchor';
+export { default as TopBar } from './topbar';
