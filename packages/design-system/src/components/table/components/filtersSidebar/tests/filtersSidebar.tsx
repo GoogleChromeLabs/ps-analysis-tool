@@ -20,7 +20,7 @@ import FiltersSidebar from '..';
 import '@testing-library/jest-dom';
 import { TableFilter } from '../../../useTable/types';
 import * as table from '../../../useTable/useTable';
-import ChipsBar from '../chips';
+import TableChipsBar from '../chips';
 import { I18n } from '@google-psat/i18n';
 
 describe('FiltersSidebar', () => {
@@ -405,7 +405,7 @@ describe('FiltersSidebar', () => {
 
     render(
       <>
-        <ChipsBar {...props} resetFilters={resetFilters} />
+        <TableChipsBar {...props} resetFilters={resetFilters} />
         <FiltersSidebar {...props} />
       </>
     );

@@ -25,7 +25,7 @@ import {
   type TabCookies,
 } from '@google-psat/common';
 import {
-  ChipsBar,
+  TableChipsBar,
   FilterIcon,
   FiltersSidebar,
   useGlobalFiltering,
@@ -80,7 +80,7 @@ const AssembledCookiesLanding = () => {
             }
           />
         </button>
-        <ChipsBar {...filter} />
+        <TableChipsBar {...filter} />
       </div>
       <div
         className="flex grow-0"

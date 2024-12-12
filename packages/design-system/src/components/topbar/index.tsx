@@ -82,7 +82,7 @@ const TopBar = ({
           />
         </button>
       )}
-      {hideSearch && (
+      {!hideSearch && (
         <>
           <SearchInput
             value={searchValue}

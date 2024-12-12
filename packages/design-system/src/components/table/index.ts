@@ -16,7 +16,7 @@
 
 export { default as Table } from './components';
 export { default as FiltersSidebar } from './components/filtersSidebar';
-export { default as ChipsBar } from './components/filtersSidebar/chips';
+export { default as TableChipsBar } from './components/filtersSidebar/chips';
 export { default as TableTopBar } from './components/tableTopBar';
 export { default as useFiltering } from './useTable/useFiltering';
 export { default as useSearch } from './useTable/useSearch';

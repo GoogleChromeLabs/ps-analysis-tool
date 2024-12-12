@@ -43,28 +43,29 @@ const WebStories = () => {
         hideSearch={false}
         count={0} // TODO: Add count
       >
-        <div className="flex">
+        <div className="flex justify-between min-w-28">
           <p>Sort by:</p>
           <select>
-            <option value="Newest">Newest</option>
-            <option value="name">Name</option>
+            <option value="Latest">Latest</option>
+            <option value="Oldest">Oldest</option>
           </select>
         </div>
       </TopBar>
-      {/* <ChipsBar
+      {/* <TableChipsBar
         selectedFilters={selectedFilters}
         resetFilters={resetFilters}
         toggleFilterSelection={toggleFilterSelection}
       /> */}
       <div className="flex-1 w-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
-        <Resizable
-          minWidth="100px"
-          maxWidth="50%"
-          enable={{
-            right: true,
-          }}
-        >
-          {/* <FiltersSidebar
+        {showFilterSidebar && (
+          <Resizable
+            minWidth="150px"
+            maxWidth="50%"
+            enable={{
+              right: true,
+            }}
+          >
+            {/* <FiltersSidebar
             filters={{
               ...filters,
               category: {
@@ -108,7 +109,8 @@ const WebStories = () => {
             toggleFilterSelection={toggleFilterSelection}
             toggleSelectAllFilter={toggleSelectAllFilter}
           /> */}
-        </Resizable>
+          </Resizable>
+        )}
         <div
           data-testid="web-stories-content"
           className="h-fit flex-1 text-raisin-black dark:text-bright-gray overflow-hidden"
