@@ -24,7 +24,9 @@ import { getAdtechsColors } from './utils';
  * @param epoch - Array of objects containing datetime, website, and topics
  * @param isAnimating - Boolean to tell if the animation should play
  * @param siteAdTechs - Object with websites as keys and adtechs as values
+ * @param visitIndexStart - Index to start the animation from
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
+ * @param setHighlightAdTech - Callback function for setting the highlighted adtech
  * @returns Object with callbacks to control the animation
  */
 export function topicsAnimation(
@@ -32,7 +34,9 @@ export function topicsAnimation(
   epoch: { datetime: string; website: string; topics: string[] }[],
   isAnimating: boolean,
   siteAdTechs: Record<string, string[]>,
-  handleUserVisit: (visitIndex: number) => void
+  visitIndexStart: number,
+  handleUserVisit: (visitIndex: number) => void,
+  setHighlightAdTech: (highlightAdTech: string | null) => void
 ) {
   const app = {
     userIcon: null as p5.Image | null,
@@ -42,18 +46,9 @@ export function topicsAnimation(
     visitIndex: 0,
     playing: true,
     speedMultiplier: 1,
-
-    drawTimelineLine: (position: { x: number; y: number }) => {
-      const { diameter, horizontalSpacing } = config.timeline.circleProps;
-      const circleHorizontalSpace = horizontalSpacing + diameter + 100;
-
-      p.line(
-        position.x,
-        position.y,
-        position.x + circleHorizontalSpace * 8,
-        position.y
-      );
-    },
+    inspectedCircleIndex: -1,
+    canvas: null as p5.Renderer | null,
+    smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
 
     drawTimeline: (
       position: { x: number; y: number },
@@ -72,12 +67,7 @@ export function topicsAnimation(
           app.circlePositions = [];
         }
 
-        app.circlePositions.push({ x: xPosition, y: position.y });
-        app.drawCircle(index);
-
-        p.text(circleItem.datetime, xPosition, 20);
-        p.text(circleItem.website, xPosition, 40);
-        p.text(circleItem.topics.join(', '), xPosition, 60);
+        p.text(circleItem.website, xPosition, 50);
 
         p.line(
           xPosition,
@@ -85,6 +75,9 @@ export function topicsAnimation(
           xPosition,
           position.y - 50
         );
+
+        app.circlePositions.push({ x: xPosition, y: position.y });
+        app.drawCircle(index);
       });
     },
 
@@ -128,15 +121,29 @@ export function topicsAnimation(
 
     togglePlay: (state: boolean) => {
       app.playing = state;
+
+      if (
+        !app.playing &&
+        app.visitIndex > 0 &&
+        app.visitIndex <= epoch.length
+      ) {
+        app.userVisitDone(app.visitIndex - 1);
+      } else if (app.playing && app.inspectedCircleIndex !== -1) {
+        app.resetInfoBox(app.inspectedCircleIndex);
+        app.inspectedCircleIndex = -1;
+      }
     },
 
     reset: () => {
       app.visitIndex = 0;
       app.speedMultiplier = 1;
+      app.inspectedCircleIndex = -1;
       p?.clear();
-      app.drawTimelineLine(config.timeline.position);
+      p.background(245);
       app.drawTimeline(config.timeline.position, epoch);
     },
+
+    getCurrentVisitIndex: () => app.visitIndex,
 
     updateSpeedMultiplier: (speedMultiplier: number) => {
       app.speedMultiplier = speedMultiplier;
@@ -145,21 +152,6 @@ export function topicsAnimation(
     userVisitDone: (index: number) => {
       app.resetInfoBox(index);
       app.drawCircle(index, true);
-
-      const position = app.circlePositions[index];
-      const previousPosition =
-        app.circlePositions[index - 1] || config.timeline.position;
-      const circleDiameter = config.timeline.circleProps.diameter;
-
-      p.push();
-      p.stroke('#1A73E8');
-      p.line(
-        previousPosition.x + (index !== 0 ? circleDiameter / 2 : 0),
-        previousPosition.y,
-        position.x - circleDiameter / 2,
-        position.y
-      );
-      p.pop();
     },
 
     handleUserVisit: (visitIndex: number) => {
@@ -191,9 +183,27 @@ export function topicsAnimation(
         user.height
       );
 
+      const position = app.circlePositions[visitIndex];
+      const previousPosition =
+        app.circlePositions?.[visitIndex - 1] || config.timeline.position;
+      const circleDiameter = config.timeline.circleProps.diameter;
+      const { diameter, horizontalSpacing } = config.timeline.circleProps;
+      const circleVerticalSpace = horizontalSpacing - 30 + diameter;
+      const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
       const currentCircle = epoch[visitIndex];
-      const currentSite = currentCircle.website;
 
+      p.push();
+      p.text(currentCircle.datetime, xPosition, 30);
+      p.stroke('#1A73E8');
+      p.line(
+        previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
+        previousPosition.y,
+        position.x - circleDiameter / 2,
+        position.y
+      );
+      p.pop();
+
+      const currentSite = currentCircle.website;
       app.drawInfoBox(visitIndex, currentSite);
       app.drawSmallCircles(visitIndex, currentSite);
 
@@ -251,6 +261,8 @@ export function topicsAnimation(
         p.circle(randomX, randomY, smallCircleDiameter);
         p.pop();
       }
+
+      app.smallCirclePositions[index] = smallCirclePositions;
     },
 
     drawInfoBox: (index: number, currentSite: string) => {
@@ -260,13 +272,13 @@ export function topicsAnimation(
 
       p.push();
       p.rectMode(p.CENTER);
-      p.fill(245);
+      p.fill(225);
       p.stroke(255);
       p.rect(
         position.x,
         position.y + diameter / 2 + 150,
         280,
-        160,
+        200,
         10,
         10,
         10,
@@ -277,22 +289,31 @@ export function topicsAnimation(
       p.textSize(12);
       p.textAlign(p.LEFT, p.CENTER);
       p.textStyle(p.BOLD);
-      p.text('Topics:', position.x - 120, position.y + diameter / 2 + 100);
-      p.textStyle(p.NORMAL);
       p.text(
-        topics.join(', '),
-        position.x - 70,
-        position.y + diameter / 2 + 100
+        'Topic(s) observed:',
+        position.x - 120,
+        position.y + diameter / 2 + 75
       );
+      p.textStyle(p.NORMAL);
+      topics.forEach((topic, i) => {
+        const _topic = topic.split('/').slice(-1)[0];
+        p.text(
+          _topic,
+          position.x - 115,
+          position.y + diameter / 2 + 95 + i * 20
+        );
+      });
+
+      const startingPointAdTechs = topics.length * 20 + 20;
 
       const adTechs = siteAdTechs[currentSite];
       const numAdTechs = adTechs.length;
 
       p.textStyle(p.BOLD);
       p.text(
-        'Observed-by context domains:',
+        'Observed-by context domain(s):',
         position.x - 120,
-        position.y + diameter / 2 + 125
+        position.y + diameter / 2 + 85 + startingPointAdTechs
       );
       p.textStyle(p.NORMAL);
       for (let i = 0; i < numAdTechs; i++) {
@@ -301,25 +322,28 @@ export function topicsAnimation(
         const adTechColor = getAdtechsColors(p)[adTech];
 
         p.fill(adTechColor);
+        p.stroke(0);
         p.circle(
           position.x - 110,
-          position.y + diameter / 2 + 150 + i * 20,
-          15
+          position.y + diameter / 2 + 105 + i * 20 + startingPointAdTechs,
+          diameter / 5
         );
+
         p.fill(0);
+        p.stroke(255);
         p.text(
           adTech,
           position.x - 85,
-          position.y + diameter / 2 + 150 + i * 20
+          position.y + diameter / 2 + 105 + i * 20 + startingPointAdTechs
         );
       }
 
       p.stroke(0);
       p.line(
         position.x,
-        position.y + diameter / 2,
+        position.y + diameter / 2 + 1,
         position.x,
-        position.y + 95
+        position.y + 75
       );
 
       p.pop();
@@ -330,18 +354,85 @@ export function topicsAnimation(
       const { diameter } = config.timeline.circleProps;
 
       p.push();
-      p.fill(255);
-      p.stroke(255);
+      p.fill(245);
+      p.stroke(245);
       p.rectMode(p.CENTER);
-      p.rect(position.x, position.y + diameter / 2 + 150, 300, 200);
+      p.rect(position.x, position.y + diameter / 2 + 150, 300, 250);
       p.strokeWeight(5);
       p.line(
         position.x,
-        position.y + diameter / 2,
+        position.y + diameter / 2 + 3,
         position.x,
         position.y + 95
       );
       p.pop();
+    },
+
+    mouseMoved: () => {
+      if (app.playing) {
+        return;
+      }
+
+      const x = p.mouseX,
+        y = p.mouseY;
+
+      app.circlePositions.forEach((position, index) => {
+        const { diameter } = config.timeline.circleProps;
+        const { x: circleX, y: circleY } = position;
+
+        if (
+          x > circleX - diameter / 2 &&
+          x < circleX + diameter / 2 &&
+          y > circleY - diameter / 2 &&
+          y < circleY + diameter / 2
+        ) {
+          if (
+            app.inspectedCircleIndex !== -1 &&
+            app.inspectedCircleIndex !== index
+          ) {
+            app.resetInfoBox(app.inspectedCircleIndex);
+          }
+
+          if (app.visitIndex <= index) {
+            app.inspectedCircleIndex = -1;
+            return;
+          }
+
+          if (app.inspectedCircleIndex === index) {
+            return;
+          }
+
+          app.drawInfoBox(index, epoch[index].website);
+          app.inspectedCircleIndex = index;
+        }
+      });
+    },
+
+    mouseClicked: () => {
+      if (app.playing) {
+        return;
+      }
+
+      const x = p.mouseX,
+        y = p.mouseY;
+
+      app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
+        (position, index) => {
+          const { x: smallCircleX, y: smallCircleY } = position;
+          const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
+
+          if (
+            x > smallCircleX - smallCircleDiameter / 2 &&
+            x < smallCircleX + smallCircleDiameter / 2 &&
+            y > smallCircleY - smallCircleDiameter / 2 &&
+            y < smallCircleY + smallCircleDiameter / 2
+          ) {
+            setHighlightAdTech(
+              siteAdTechs[epoch[app.inspectedCircleIndex].website][index]
+            );
+          }
+        }
+      );
     },
   };
 
@@ -358,14 +449,26 @@ export function topicsAnimation(
     const circleHorizontalSpace =
       config.timeline.circleProps.horizontalSpacing +
       config.timeline.circleProps.diameter;
-    p.createCanvas(circleHorizontalSpace * 6, config.canvas.height);
+    app.canvas = p.createCanvas(
+      circleHorizontalSpace * 6,
+      config.canvas.height
+    );
+    p.background(245);
+    app.canvas.mouseMoved(app.mouseMoved);
+    app.canvas.mouseClicked(app.mouseClicked);
 
     p.textFont('sans-serif');
-    app.drawTimelineLine(config.timeline.position);
     app.drawTimeline(config.timeline.position, epoch);
 
     if (!isAnimating) {
       while (app.visitIndex < epoch.length) {
+        app.play();
+      }
+      app.userVisitDone(app.visitIndex - 1);
+    }
+
+    if (visitIndexStart > 0) {
+      while (app.visitIndex < visitIndexStart) {
         app.play();
       }
     }
@@ -384,5 +487,6 @@ export function topicsAnimation(
     togglePlay: app.togglePlay,
     reset: app.reset,
     updateSpeedMultiplier: app.updateSpeedMultiplier,
+    getCurrentVisitIndex: app.getCurrentVisitIndex,
   };
 }

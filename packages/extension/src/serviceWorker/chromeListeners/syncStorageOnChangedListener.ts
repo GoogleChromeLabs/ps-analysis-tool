@@ -79,26 +79,25 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
   dataStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
 
   const tabs = await chrome.tabs.query({});
-  const debuggerTargets = await chrome.debugger.getTargets();
 
   if (!changes?.isUsingCDP?.newValue) {
-    await Promise.all(
-      debuggerTargets.map(async ({ id, tabId }) => {
-        if (!id) {
-          return;
-        }
+    if (!dataStore.globalIsUsingCDP) {
+      const targets = await chrome.debugger.getTargets();
+      await Promise.all(
+        targets.map(async ({ id, attached }) => {
+          try {
+            if (!id || !attached) {
+              return;
+            }
 
-        try {
-          await chrome.debugger.detach({ targetId: id });
-          if (tabId) {
-            dataStore?.sendUpdatedDataToPopupAndDevTools(tabId);
+            await chrome.debugger.detach({ targetId: id });
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log(error);
           }
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.warn(error);
-        }
-      })
-    );
+        })
+      );
+    }
   } else {
     tabs.forEach(({ id }) => {
       if (!id) {

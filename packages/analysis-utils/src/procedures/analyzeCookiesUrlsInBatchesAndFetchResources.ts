@@ -25,6 +25,7 @@ import {
   removeAndAddNewSpinnerText,
   type SingleURLError,
   type Selectors,
+  type SingleURLError,
 } from '@google-psat/common';
 
 /**

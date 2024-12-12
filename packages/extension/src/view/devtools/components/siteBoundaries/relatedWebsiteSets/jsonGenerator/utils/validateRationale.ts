@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import { validate } from 'validate.js';
-
 const validateRationale = (rationale: string) => {
-  const result = validate(
-    { rationale },
-    { rationale: { presence: { allowEmpty: false } } }
-  );
+  const message = "can't be blank";
 
-  if (result) {
-    return result.rationale[0];
+  if (!rationale) {
+    return `Rationale ${message}`;
   }
+
   return '';
 };
 
