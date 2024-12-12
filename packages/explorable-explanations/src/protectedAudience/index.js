@@ -46,6 +46,9 @@ app.setUpTimeLine = () => {
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
+  app.setCurrentSite(
+    config.timeline.circles[app.timeline.currentIndex].website
+  );
   bubbles.clearAndRewriteBubbles();
   app.setup();
 
@@ -168,6 +171,9 @@ app.setupLoop = (doNotPlay) => {
       promiseQueue.nextNodeSkipIndex.push(promiseQueue.queue.length);
       promiseQueue.add(() => {
         app.timeline.currentIndex += 1;
+        app.setCurrentSite(
+          config.timeline.circles[app.timeline.currentIndex].website
+        );
         flow.setButtonsDisabilityState();
       });
 
@@ -208,6 +214,9 @@ app.handleNonInteractivePrev = () => {
   app.timeline.isPaused = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
+  app.setCurrentSite(
+    config.timeline.circles[app.timeline.currentIndex].website
+  );
   flow.setButtonsDisabilityState();
 
   const nextIndex = promiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
@@ -302,6 +311,9 @@ app.handleNonInteravtiveNext = () => {
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
+  app.setCurrentSite(
+    config.timeline.circles[app.timeline.currentIndex].website
+  );
   flow.setButtonsDisabilityState();
 
   const nextIndexPromiseGetter = app.timeline.currentIndex;
@@ -433,6 +445,9 @@ app.toggleInteractiveMode = async () => {
 
   app.isInteractiveMode = !app.isInteractiveMode;
   app.timeline.currentIndex = 0;
+  app.setCurrentSite(
+    config.timeline.circles[app.timeline.currentIndex].website
+  );
   app.bubbles.interestGroupCounts = 0;
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
@@ -489,8 +504,11 @@ export const interestGroupSketch = (p) => {
   };
 
   p.updateWithProps = (props) => {
-    if (props.onClick) {
-      app.igp.igClick = props.onClick;
+    if (
+      props.expandedBubbleX &&
+      props.expandedBubbleY &&
+      props.expandedBubbleWidth
+    ) {
       app.bubbles.expandedBubbleX = props.expandedBubbleX;
       app.bubbles.expandedBubbleY = props.expandedBubbleY;
       app.bubbles.expandedCircleDiameter = props.expandedBubbleWidth;
@@ -512,6 +530,10 @@ export const interestGroupSketch = (p) => {
         bubbles.showExpandedBubbles();
       }
     }
+
+    if (props.setCurrentSite) {
+      app.setCurrentSite = props.setCurrentSite;
+    }
   };
 };
 
@@ -529,6 +551,9 @@ app.reset = async (callFromExtension = false) => {
   promiseQueue.clear();
 
   app.timeline.currentIndex = 0;
+  app.setCurrentSite(
+    config.timeline.circles[app.timeline.currentIndex].website
+  );
   app.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;

@@ -45,8 +45,11 @@ declare module 'react' {
     [key: `--${string}`]: string | number;
   }
 }
+interface PanelProps {
+  setCurrentSite: React.Dispatch<React.SetStateAction<string>>;
+}
 
-const Panel = () => {
+const Panel = ({ setCurrentSite }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
@@ -111,9 +114,11 @@ const Panel = () => {
       setExpandedBubbleX(centerX);
       setExpandedBubbleY(centerY);
     }
+
     if (containerRef.current) {
       handleResizeCallback.observe(containerRef.current);
     }
+
     const containerRefCopy = containerRef;
     return () => {
       app.reset(true);
@@ -219,11 +224,10 @@ const Panel = () => {
       <ReactP5Wrapper sketch={sketch} />
       <ReactP5Wrapper
         sketch={interestGroupSketch}
-        // eslint-disable-next-line no-console
-        onClick={() => console.log('dole shole')}
         expandedBubbleX={expandedBubbleX}
         expandedBubbleY={expandedBubbleY}
         expandedBubbleWidth={expandedBubbleWidth}
+        setCurrentSite={setCurrentSite}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <Resizable

@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -25,8 +25,42 @@ import React, { useMemo } from 'react';
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
 import Auctions from './auctions';
+import { SYNTHETIC_INTEREST_GROUPS } from './constants';
+import type { InterestGroups } from '@google-psat/common';
 
 const ExplorableExplanation = () => {
+  const [currentSite, setCurrentSite] = useState('');
+
+  const interestGroupData = useMemo(() => {
+    if (!currentSite) {
+      return [];
+    }
+
+    const perSiteInterestGroups: InterestGroups[] =
+      //@ts-ignore
+      SYNTHETIC_INTEREST_GROUPS[currentSite];
+
+    return perSiteInterestGroups?.map(
+      ({
+        formattedTime,
+        name,
+        type,
+        ownerOrigin,
+        details: { expirationTime },
+      }: InterestGroups) => {
+        return {
+          formattedTime,
+          type,
+          name,
+          details: {
+            expirationTime,
+          },
+          ownerOrigin,
+        };
+      }
+    );
+  }, [currentSite]);
+
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -34,7 +68,7 @@ const ExplorableExplanation = () => {
         content: {
           Element: IGTable,
           props: {
-            interestGroupDetails: [],
+            interestGroupDetails: [...interestGroupData],
           },
         },
       },
@@ -48,12 +82,12 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    []
+    [interestGroupData]
   );
 
   return (
     <TabsProvider items={tabItems}>
-      <Panel />
+      <Panel setCurrentSite={setCurrentSite} />
     </TabsProvider>
   );
 };
