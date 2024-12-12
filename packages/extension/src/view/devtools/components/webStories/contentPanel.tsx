@@ -17,19 +17,21 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import { ChipsBar, TopBar } from '@google-psat/design-system';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
 import { getStoryMarkup } from './createStoryIframe';
 import { STORY_JSON } from './story';
-import { TopBar } from '@google-psat/design-system';
-import { Resizable } from 're-resizable';
+import { noop } from '@google-psat/common';
 
 const WebStories = () => {
   const storyMarkup = getStoryMarkup(STORY_JSON);
   const [searchValue, setSearchValue] = useState('');
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -51,11 +53,11 @@ const WebStories = () => {
           </select>
         </div>
       </TopBar>
-      {/* <TableChipsBar
+      <ChipsBar
         selectedFilters={selectedFilters}
-        resetFilters={resetFilters}
-        toggleFilterSelection={toggleFilterSelection}
-      /> */}
+        toggleFilterSelection={noop} // TODO: Implement
+        resetFilters={() => setSelectedFilters([])}
+      />
       <div className="flex-1 w-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         {showFilterSidebar && (
           <Resizable
