@@ -16,10 +16,11 @@
 export const SYNTHETIC_INTEREST_GROUPS = {
   'adv1.com': [
     {
-      formattedTime: '123ms',
+      formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'shoes',
+      time: 1696154400.101,
       details: {
         ads: [
           {
@@ -40,7 +41,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1696156992.101,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'shoes',
@@ -58,10 +59,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'heels',
+      time: 1696154400.102,
       details: {
         ads: [
           {
@@ -82,7 +84,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1696156992.102,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'heels',
@@ -100,7 +102,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '103ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'phones',
@@ -124,7 +126,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1696156992.103,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'phones',
@@ -144,10 +146,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv2.com': [
     {
-      formattedTime: '123ms',
+      formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
       name: 'stilletos',
+      time: 1696157600.101,
       details: {
         ads: [
           {
@@ -168,7 +171,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698749600.101,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'stilletos',
@@ -186,10 +189,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
       name: 'shorts',
+      time: 1696157600.102,
       details: {
         ads: [
           {
@@ -210,7 +214,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698749600.102,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'shorts',
@@ -231,10 +235,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   'pub1.com': [],
   'adv3.com': [
     {
-      formattedTime: '123ms',
+      formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
       name: 'bike',
+      time: 1696161200.101,
       details: {
         ads: [
           {
@@ -255,7 +260,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698853200.101,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'bike',
@@ -273,10 +278,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
       name: 'car',
+      time: 1696161200.102,
       details: {
         ads: [
           {
@@ -297,7 +303,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698853200.102,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'car',
@@ -317,10 +323,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv4.com': [
     {
-      formattedTime: '123ms',
+      formattedTime: '90ms',
       type: 'join',
       ownerOrigin: 'https://www.adv4.com',
       name: 'football',
+      time: 1696161200.09,
       details: {
         ads: [
           {
@@ -341,7 +348,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698753200.09,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'football',
@@ -359,10 +366,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '95ms',
       type: 'join',
       ownerOrigin: 'https://www.adv4.com',
       name: 'basketball',
+      time: 1696161200.095,
       details: {
         ads: [
           {
@@ -383,7 +391,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698753200.095,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'basketball',
@@ -401,10 +409,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '98ms',
       type: 'join',
       ownerOrigin: 'https://www.adv4.com',
       name: 'baseball',
+      time: 1696161200.098,
       details: {
         ads: [
           {
@@ -425,7 +434,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698753200.098,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'baseball',
@@ -445,10 +454,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv5.com': [
     {
-      formattedTime: '123ms',
+      formattedTime: '80ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'football',
+      time: 1696161520.08,
       details: {
         ads: [
           {
@@ -469,7 +479,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698753520.08,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'football',
@@ -487,10 +497,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '81ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'basketball',
+      time: 1696161520.081,
       details: {
         ads: [
           {
@@ -511,7 +522,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698753520.081,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'basketball',
@@ -529,10 +540,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '88ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'baseball',
+      time: 1696161520.088,
       details: {
         ads: [
           {
@@ -553,7 +565,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698753520.088,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'baseball',
@@ -574,10 +586,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   'pub2.com': [],
   'adv6.com': [
     {
-      formattedTime: '123ms',
+      formattedTime: '67ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'movies',
+      time: 1696164860.067,
       details: {
         ads: [
           {
@@ -598,7 +611,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698756860.067,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'movies',
@@ -616,10 +629,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '69ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'series',
+      time: 1696164860.069,
       details: {
         ads: [
           {
@@ -640,7 +654,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698756860.069,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'series',
@@ -658,10 +672,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'books',
+      time: 1696164860.071,
       details: {
         ads: [
           {
@@ -682,7 +697,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698756860.071,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'books',
@@ -702,10 +717,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv7.com': [
     {
-      formattedTime: '123ms',
+      formattedTime: '71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IGG220',
+      time: 1696168400.071,
       details: {
         ads: [
           {
@@ -726,7 +742,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698760400.071,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'IGG220',
@@ -744,10 +760,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '76ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IGG201',
+      time: 1696168400.076,
       details: {
         ads: [
           {
@@ -768,7 +785,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698760400.076,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'IGG201',
@@ -786,10 +803,11 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
-      formattedTime: '123ms',
+      formattedTime: '151ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IG225',
+      time: 1696168400.151,
       details: {
         ads: [
           {
@@ -810,7 +828,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
           'https://privacysandboxdemos-buyer-1.domain-aaa.com/dsp/bidding-logic.js',
         enableBiddingSignalsPrioritization: false,
         executionMode: 'compatibility',
-        expirationTime: 1736593408.252279,
+        expirationTime: 1698760400.151,
         joiningOrigin: 'https://privacysandboxdemos.domain-aaa.com',
         maxTrustedBiddingSignalsURLLength: 0,
         name: 'IG225',

@@ -40,25 +40,7 @@ const ExplorableExplanation = () => {
       //@ts-ignore
       SYNTHETIC_INTEREST_GROUPS[currentSite];
 
-    return perSiteInterestGroups?.map(
-      ({
-        formattedTime,
-        name,
-        type,
-        ownerOrigin,
-        details: { expirationTime },
-      }: InterestGroups) => {
-        return {
-          formattedTime,
-          type,
-          name,
-          details: {
-            expirationTime,
-          },
-          ownerOrigin,
-        };
-      }
-    );
+    return perSiteInterestGroups;
   }, [currentSite]);
 
   const tabItems = useMemo<TabItems>(
