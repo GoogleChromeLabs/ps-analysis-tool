@@ -80,9 +80,16 @@ app.play = (resumed = false, doNotPlay = false) => {
   }
 
   app.timeline.isPaused = false;
+
   if (!resumed) {
     app.setupLoop(doNotPlay);
     return;
+  }
+
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    //Fail silently since this gives an error even after stopping the queue.
   }
 };
 
@@ -92,6 +99,7 @@ app.pause = () => {
     app.pauseButton.classList.add('hidden');
     app.playButton.classList.remove('hidden');
   }
+  app.promiseQueue.stop();
   app.timeline.isPaused = true;
 };
 
@@ -202,7 +210,7 @@ app.minifiedBubbleKeyPressListener = (event) => {
   }
 };
 
-app.handleNonInteractivePrev = () => {
+app.handleNonInteractivePrev = async () => {
   if (app.timeline.currentIndex <= 0) {
     return;
   }
@@ -210,12 +218,14 @@ app.handleNonInteractivePrev = () => {
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   app.timeline.currentIndex -= 1;
+  await utils.delay(100);
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
 
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
   utils.wipeAndRecreateMainCanvas();
+  utils.wipeAndRecreateInterestCanvas();
   app.up.clear();
   timeline.renderUserIcon();
 
@@ -292,30 +302,32 @@ app.handleNextButton = () => {
   app.handleNonInteravtiveNext();
 };
 
-app.handleNonInteravtiveNext = () => {
+app.handleNonInteravtiveNext = async () => {
   if (
     app.bubbles.isExpanded ||
     app.timeline.currentIndex > config.timeline.circles.length - 1
   ) {
     return;
   }
-
   app.promiseQueue.end();
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
+  await utils.delay(100);
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
 
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
   utils.wipeAndRecreateMainCanvas();
+  utils.wipeAndRecreateInterestCanvas();
   app.up.clear();
   timeline.renderUserIcon();
 
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+
   app.promiseQueue.start();
 };
 
@@ -532,6 +544,7 @@ app.reset = async (callFromExtension = false) => {
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(1000);
+
   if (!callFromExtension) {
     setupInterestGroupCanvas(app.igp);
     setupUserCanvas(app.up);
@@ -563,8 +576,8 @@ app.createCanvas = () => {
 app.createCanvas();
 app.promiseQueue = new Queue({ concurrency: 1, autostart: false, results: [] });
 app.promiseQueue.addEventListener('end', () => {
-  app.cancelPromise = false;
-  app.timeline.isPaused = false;
+  app.cancelPromise = true;
+  app.timeline.isPaused = true;
 });
 app.promiseQueue.addEventListener('start', () => {
   app.cancelPromise = false;
