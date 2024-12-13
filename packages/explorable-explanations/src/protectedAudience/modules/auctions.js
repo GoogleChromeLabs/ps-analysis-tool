@@ -55,6 +55,8 @@ auction.setUp = (index) => {
     return;
   }
 
+  app.isMultiSeller = true;
+
   auction.steps = [];
 
   const steps = auction.steps;

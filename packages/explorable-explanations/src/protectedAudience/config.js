@@ -17,7 +17,7 @@ const config = {
   canvas: {
     width: 700,
     height: 500,
-    background: 245,
+    background: '#fff',
     fontSize: 12,
   },
   timeline: {

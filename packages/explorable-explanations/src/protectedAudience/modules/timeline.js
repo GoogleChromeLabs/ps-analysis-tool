@@ -377,9 +377,9 @@ timeline.drawCircle = (index, completed = false) => {
   const position = app.timeline.circlePositions[index];
   const { diameter } = circleProps;
 
-  app.p.circle(position.x, position.y, diameter);
-
   if (!completed) {
+    app.p.circle(position.x, position.y, diameter);
+
     return;
   }
 
