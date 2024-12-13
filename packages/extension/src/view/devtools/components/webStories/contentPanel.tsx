@@ -33,7 +33,11 @@ import { noop } from '@google-psat/common';
 import { getStoryMarkup } from './createStoryIframe';
 import { STORY_JSON } from './story';
 
-const WebStories = () => {
+interface WebStoriesProps {
+  storyOpened: boolean;
+}
+
+const WebStories = ({ storyOpened }: WebStoriesProps) => {
   const storyMarkup = getStoryMarkup(STORY_JSON);
   const [searchValue, setSearchValue] = useState('');
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
@@ -125,36 +129,40 @@ const WebStories = () => {
 
   return (
     <div className="h-full w-full flex flex-col">
-      <TopBar
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        showFilterSidebar={showFilterSidebar}
-        setShowFilterSidebar={setShowFilterSidebar}
-        hideFiltering={false}
-        disableFiltering={false}
-        hideSearch={false}
-        count={0} // TODO: Add count
-      >
-        <div className="flex justify-between min-w-28">
-          <p>Sort by:</p>
-          <select
-            value={sortValue}
-            onChange={(e) =>
-              setSortValue(e.target.value as 'latest' | 'oldest')
-            }
+      {!storyOpened && (
+        <>
+          <TopBar
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            showFilterSidebar={showFilterSidebar}
+            setShowFilterSidebar={setShowFilterSidebar}
+            hideFiltering={false}
+            disableFiltering={false}
+            hideSearch={false}
+            count={0} // TODO: Add count
           >
-            <option value="Latest">Latest</option>
-            <option value="Oldest">Oldest</option>
-          </select>
-        </div>
-      </TopBar>
-      <ChipsBar
-        selectedFilters={selectedFilters}
-        toggleFilterSelection={toggleFilterSelection}
-        resetFilters={resetFilters}
-      />
+            <div className="flex justify-between min-w-28">
+              <p>Sort by:</p>
+              <select
+                value={sortValue}
+                onChange={(e) =>
+                  setSortValue(e.target.value as 'latest' | 'oldest')
+                }
+              >
+                <option value="Latest">Latest</option>
+                <option value="Oldest">Oldest</option>
+              </select>
+            </div>
+          </TopBar>
+          <ChipsBar
+            selectedFilters={selectedFilters}
+            toggleFilterSelection={toggleFilterSelection}
+            resetFilters={resetFilters}
+          />
+        </>
+      )}
       <div className="flex-1 w-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
-        {showFilterSidebar && (
+        {showFilterSidebar && !storyOpened && (
           <Resizable
             minWidth="150px"
             maxWidth="50%"
@@ -182,7 +190,6 @@ const WebStories = () => {
               height: '100vh',
               border: 'none',
               overflow: 'hidden',
-              padding: '1rem 0rem',
             }}
           />
         </div>

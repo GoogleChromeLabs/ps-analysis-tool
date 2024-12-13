@@ -17,20 +17,18 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { LandingPage, TableProvider } from '@google-psat/design-system';
+import { LandingPage } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import ContentPanel from './contentPanel';
-import { noop } from '@google-psat/common';
 
 const WebStories = () => {
-  // const [open, setOpen] = useState(true);
-  const [, setHideHeader] = useState(false);
+  const [storyOpened, setStoryOpened] = useState(false);
   //@ts-ignore since this is a custom event.
   const webStoriesLightBoxCallback = useCallback((event) => {
-    setHideHeader(() => event.detail.storyOpened);
+    setStoryOpened(() => event.detail.storyOpened);
   }, []);
 
   useEffect(() => {
@@ -53,20 +51,9 @@ const WebStories = () => {
     <div className="w-full h-full overflow-hidden">
       <LandingPage
         title={'Stories'}
+        hideTitle={storyOpened}
         extraClasses="w-full !p-0"
-        contentPanel={
-          <TableProvider
-            data={[]}
-            tableColumns={[]}
-            tableFilterData={{}}
-            tableSearchKeys={[]}
-            onRowClick={noop}
-            onRowContextMenu={noop}
-            getRowObjectKey={() => ''}
-          >
-            <ContentPanel />
-          </TableProvider>
-        }
+        contentPanel={<ContentPanel storyOpened={storyOpened} />}
         showQuickLinks={false}
       />
     </div>
