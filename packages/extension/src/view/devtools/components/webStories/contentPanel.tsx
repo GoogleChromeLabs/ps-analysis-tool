@@ -181,13 +181,13 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
         )}
         <div
           data-testid="web-stories-content"
-          className="h-fit flex-1 text-raisin-black dark:text-bright-gray overflow-hidden"
+          className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
           <iframe
             srcDoc={storyMarkup}
             style={{
               width: '100%',
-              height: '100vh',
+              height: '100%',
               border: 'none',
               overflow: 'hidden',
             }}
