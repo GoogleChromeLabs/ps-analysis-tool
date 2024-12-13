@@ -48,8 +48,6 @@ const ChipsBar = ({
   toggleFilterSelection,
   hideClearAll = false,
 }: ChipsBarProps) => {
-  console.log(selectedFilters);
-
   const appliedFiltersCount = selectedFilters.reduce((acc, filter) => {
     acc += filter.values.length;
     return acc;
