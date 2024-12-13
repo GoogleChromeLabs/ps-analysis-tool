@@ -169,9 +169,7 @@ app.setupLoop = (doNotPlay) => {
       promiseQueue.nextNodeSkipIndex.push(promiseQueue.queue.length);
       promiseQueue.add(() => {
         app.timeline.currentIndex += 1;
-        app.setCurrentSite(
-          config.timeline.circles[app.timeline.currentIndex].website
-        );
+        app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
         flow.setButtonsDisabilityState();
       });
 

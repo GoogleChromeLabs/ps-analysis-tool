@@ -39,6 +39,7 @@ import { NextIcon, PreviousIcon, useTabs } from '@google-psat/design-system';
 import Header from '../../../explorableExplanation/header';
 import TableTray from '../../../explorableExplanation/tableTray';
 import { Resizable } from 're-resizable';
+import type { CurrentSiteData } from '.';
 
 declare module 'react' {
   interface CSSProperties {
@@ -46,8 +47,8 @@ declare module 'react' {
   }
 }
 interface PanelProps {
-  setCurrentSite: React.Dispatch<React.SetStateAction<object | null>>;
-  currentSiteData: object | null;
+  setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
+  currentSiteData: CurrentSiteData | null;
 }
 
 const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {

@@ -25,14 +25,46 @@ import React, { useMemo, useState } from 'react';
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
 import Auctions from './auctions';
-import { SYNTHETIC_INTEREST_GROUPS } from './constants';
+import {
+  SYNTHETIC_AUCTION_EVENTS,
+  SYNTHETIC_INTEREST_GROUPS,
+} from './constants';
 import type { InterestGroups } from '@google-psat/common';
+import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
+
+export interface CurrentSiteData {
+  type: 'advertiser' | 'publisher';
+  website: string;
+  datetime: string;
+  igGroupsCount: number;
+  interestGroups: string[];
+  visited: boolean;
+  visitedIndex: boolean;
+}
 
 const ExplorableExplanation = () => {
-  const [currentSiteData, setCurrentSiteData] = useState<object | null>(null);
+  const [currentSiteData, setCurrentSiteData] =
+    useState<CurrentSiteData | null>(null);
+
+  const auctionsData = useMemo(() => {
+    if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+      return {};
+    }
+
+    return {
+      'div-200-1': {
+        [new Date(currentSiteData?.datetime).toUTCString()]: {
+          [`https://www.${currentSiteData?.website}`]: {
+            [`https://www.${currentSiteData?.website}`]:
+              SYNTHETIC_AUCTION_EVENTS[0],
+          },
+        },
+      },
+    };
+  }, [currentSiteData]);
 
   const interestGroupData = useMemo(() => {
-    if (!currentSiteData) {
+    if (!currentSiteData || currentSiteData?.type === 'publisher') {
       return [];
     }
 
@@ -50,7 +82,7 @@ const ExplorableExplanation = () => {
         content: {
           Element: IGTable,
           props: {
-            interestGroupDetails: [...interestGroupData],
+            interestGroupDetails: [...(interestGroupData as InterestGroups[])],
           },
         },
       },
@@ -59,12 +91,12 @@ const ExplorableExplanation = () => {
         content: {
           Element: Auctions,
           props: {
-            auctionEvents: {},
+            auctionEvents: auctionsData as AuctionEventsType,
           },
         },
       },
     ],
-    [interestGroupData]
+    [auctionsData, interestGroupData]
   );
 
   return (
