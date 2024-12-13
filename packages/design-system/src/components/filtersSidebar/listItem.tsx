@@ -22,12 +22,13 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies.
  */
+import { FilterSidebarValue } from '.';
+import { ArrowDown, InfoIcon } from '../../icons';
 import SubList from './subList';
-import { TableFilter } from '../../useTable';
-import { ArrowDown, InfoIcon } from '../../../../icons';
 
 interface ListItemProps {
-  filter: TableFilter[keyof TableFilter];
+  filter: FilterSidebarValue;
+  selectedFilterValues: string[];
   filterKey: string;
   expandAll: boolean;
   isSelectAllFilterSelected: boolean;
@@ -45,6 +46,7 @@ interface ListItemProps {
 
 const ListItem = ({
   filter,
+  selectedFilterValues,
   filterKey,
   expandAll,
   toggleFilterExpansion,
@@ -70,10 +72,7 @@ const ListItem = ({
     setShowSubList(expandAll);
   }, [expandAll]);
 
-  const isDisabled = useMemo(
-    () => Object.keys(filter.filterValues || {}).length === 0,
-    [filter.filterValues]
-  );
+  const isDisabled = useMemo(() => !filter.values.length, [filter.values]);
 
   useEffect(() => {
     if (isDisabled && showSubList) {
@@ -92,15 +91,16 @@ const ListItem = ({
       return;
     }
 
-    const areFiltersSelected = Object.values(filter.filterValues || {}).some(
-      (filterValue) => filterValue.selected
-    );
+    const areFiltersSelected =
+      filter.values?.some((filterValue) =>
+        selectedFilterValues?.includes(filterValue)
+      ) || false;
 
     if (areFiltersSelected) {
       setShowSubList(true);
       setHasScannedFiltersOnce(false);
     }
-  }, [filter.filterValues, hasScannedFiltersOnce]);
+  }, [filter.values, hasScannedFiltersOnce, selectedFilterValues]);
 
   return (
     <li className="py-[3px] text-xs">
@@ -127,16 +127,17 @@ const ListItem = ({
       {showSubList && (
         <>
           <SubList
-            filterValues={filter.filterValues}
+            filterValues={filter.values || []}
             filterKey={filterKey}
-            sort={!filter.hasStaticFilterValues || Boolean(filter.sortValues)}
+            sort={Boolean(filter.sortValues)}
+            selectedFilterValues={selectedFilterValues || []}
             isExpanded={isExpanded}
-            isSelectAllFilterEnabled={Boolean(filter.enableSelectAllOption)}
+            isSelectAllFilterEnabled={Boolean(filter.enableSelectAll)}
             isSelectAllFilterSelected={isSelectAllFilterSelected}
             toggleFilterSelection={toggleFilterSelection}
             toggleSelectAllFilter={toggleSelectAllFilter}
           />
-          {Number(Object.keys(filter.filterValues || {}).length) > 4 && (
+          {Number(filter.values?.length || 0) > 4 && (
             <a
               onClick={toggleShowMore}
               className="text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"

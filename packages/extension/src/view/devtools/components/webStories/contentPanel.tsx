@@ -16,115 +16,126 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
+import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
+import { Resizable } from 're-resizable';
+import { noop } from '@google-psat/common';
+
 /**
  * Internal dependencies.
  */
-import { getStoryMarkup, type SingleStoryJSON } from './createStoryIframe';
+import { getStoryMarkup } from './createStoryIframe';
+import { STORY_JSON } from './story';
+import { useStories } from '../../stateProviders';
 
-const WebStories = () => {
-  const [storyMarkup, setStoryMarkup] = useState('');
+interface WebStoriesProps {
+  storyOpened: boolean;
+}
 
-  const getAuthorsAndPublisherLogo = useCallback(
-    async (mediaAuthorSet: Record<number, string>) => {
-      const response = await fetch(
-        'https://privacysandbox-stories.com/wp-json/web-stories/v1/users'
-      );
-      const responseJSON = await response.json();
-      const transformedMediaAuthorMap: Record<
-        number,
-        Record<string, string>
-      > = {};
+const WebStories = ({ storyOpened }: WebStoriesProps) => {
+  const storyMarkup = getStoryMarkup(STORY_JSON);
 
-      const authorNameIdMap: Record<number, string> = {};
-
-      responseJSON.forEach((singleResponse: Record<string, any>) => {
-        authorNameIdMap[singleResponse.id] = singleResponse.name;
-      });
-
-      await Promise.all(
-        Object.keys(mediaAuthorSet).map(async (key: string) => {
-          const mediaResponse = await fetch(
-            'https://privacysandbox-stories.com/wp-json/web-stories/v1/media/' +
-              mediaAuthorSet[Number(key)]
-          );
-
-          //Check the media response and get the avif/webp image if available else use source_url.
-          const mediaResponseJSON = await mediaResponse.json();
-          const sourceUrl = mediaResponseJSON.source_url;
-          const splittedUrl = sourceUrl.split('/');
-          const urlWithoutName = sourceUrl.substring(
-            0,
-            sourceUrl.length - splittedUrl[splittedUrl.length - 1].length
-          );
-
-          const avifResource =
-            urlWithoutName +
-            mediaResponseJSON?.media_details?.sources?.['image/avif']?.file;
-          const webpResource =
-            urlWithoutName +
-            mediaResponseJSON?.media_details?.sources?.['image/webp']?.file;
-
-          transformedMediaAuthorMap[Number(key)] = {
-            name: authorNameIdMap[Number(key)],
-            publisherLogo: avifResource ?? webpResource ?? sourceUrl,
-          };
-        })
-      );
-      return transformedMediaAuthorMap;
-    },
-    []
-  );
-
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(
-        'https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/'
-      );
-
-      const responseJSON = await response.json();
-      let storyJSON: SingleStoryJSON[] = [];
-      const mediaAuthorSet: Record<number, string> = {};
-      responseJSON.forEach((singleResponse: any) => {
-        if (singleResponse?.status === 'publish') {
-          mediaAuthorSet[singleResponse.author] =
-            singleResponse?.meta?.web_stories_publisher_logo;
-
-          storyJSON.push({
-            heroImage: singleResponse?.story_poster?.url ?? '',
-            publisherLogo: singleResponse?.meta?.web_stories_publisher_logo,
-            publisherName: singleResponse?.author,
-            storyTitle: singleResponse?.title?.rendered,
-            storyUrl: `${singleResponse?.link}#embedMode=2`,
-          });
-        }
-      });
-
-      const authorsAndPublisherLogoMap = await getAuthorsAndPublisherLogo(
-        mediaAuthorSet
-      );
-
-      storyJSON = storyJSON.map((story) => {
-        const key = Number(story.publisherName);
-        story.publisherName = authorsAndPublisherLogoMap[key]?.name;
-        story.publisherLogo = authorsAndPublisherLogoMap[key]?.publisherLogo;
-        return story;
-      });
-
-      setStoryMarkup(getStoryMarkup(storyJSON));
-    })();
-  }, [getAuthorsAndPublisherLogo]);
+  const {
+    searchValue,
+    setSearchValue,
+    showFilterSidebar,
+    setShowFilterSidebar,
+    setSortValue,
+    sortValue,
+    selectedFilters,
+    toggleFilterSelection,
+    resetFilters,
+    selectedFilterValues,
+    filters,
+  } = useStories(({ state, actions }) => ({
+    searchValue: state.searchValue,
+    filters: state.filters,
+    sortValue: state.sortValue,
+    selectedFilterValues: state.selectedFilterValues,
+    setSearchValue: actions.setSearchValue,
+    showFilterSidebar: state.showFilterSidebar,
+    setShowFilterSidebar: actions.setShowFilterSidebar,
+    setSortValue: actions.setSortValue,
+    selectedFilters: state.selectedFilters,
+    toggleFilterSelection: actions.toggleFilterSelection,
+    resetFilters: actions.resetFilters,
+  }));
 
   return (
-    <div
-      data-testid="web-stories-content"
-      className="h-full w-full text-raisin-black dark:text-bright-gray overflow-y-auto"
-    >
-      <iframe
-        scrolling="yes"
-        srcDoc={storyMarkup}
-        style={{ width: '100%', height: '100vh', border: 'none' }}
-      />
+    <div className="h-full w-full flex flex-col">
+      {!storyOpened && (
+        <>
+          <TopBar
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            showFilterSidebar={showFilterSidebar}
+            setShowFilterSidebar={setShowFilterSidebar}
+            hideFiltering={false}
+            disableFiltering={false}
+            hideSearch={false}
+            count={0} // TODO: Add count
+          >
+            <div className="flex justify-between items-center min-w-[125px] text-raisin-black dark:text-bright-gray">
+              <p>Sort by:</p>
+              <select
+                value={sortValue}
+                onChange={(e) =>
+                  setSortValue(e.target.value as 'latest' | 'oldest')
+                }
+                className="hover:opacity-70 active:opacity-60 focus:bg-anti-flash-white
+								focus:dark:bg-quartz bg-transparent cursor-pointer rounded-sm px-2 py-[1px] pr-5 appearance-none bg-no-repeat bg-right
+								bg-[url(data:image/svg+xml;base64,Cjxzdmcgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im03IDkuNDUgMy44NS01LjZoLTcuNyIgZmlsbD0iIzAwMCIvPjwvc3ZnPgo=)]
+								dark:bg-[url(data:image/svg+xml;base64,Cjxzdmcgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im03IDkuNDUgMy44NS01LjZoLTcuNyIgZmlsbD0iI0MyQzdDOSIvPjwvc3ZnPgo=)]"
+                style={{
+                  backgroundPositionX: '100%',
+                  backgroundPositionY: '4px',
+                }}
+              >
+                <option value="Latest">Latest</option>
+                <option value="Oldest">Oldest</option>
+              </select>
+            </div>
+          </TopBar>
+          <ChipsBar
+            selectedFilters={selectedFilters}
+            toggleFilterSelection={toggleFilterSelection}
+            resetFilters={resetFilters}
+          />
+        </>
+      )}
+      <div className="flex-1 w-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
+        {showFilterSidebar && !storyOpened && (
+          <Resizable
+            minWidth="150px"
+            maxWidth="50%"
+            enable={{
+              right: true,
+            }}
+          >
+            <FiltersSidebar
+              filters={filters}
+              selectedFilterValues={selectedFilterValues}
+              toggleFilterSelection={toggleFilterSelection}
+              isSelectAllFilterSelected={() => false}
+              toggleSelectAllFilter={noop}
+            />
+          </Resizable>
+        )}
+        <div
+          data-testid="web-stories-content"
+          className="h-full flex-1 text-raisin-black dark:text-bright-gray"
+        >
+          <iframe
+            srcDoc={storyMarkup}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              overflow: 'hidden',
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

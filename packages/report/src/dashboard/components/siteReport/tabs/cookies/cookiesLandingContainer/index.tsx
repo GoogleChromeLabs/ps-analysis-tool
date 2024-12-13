@@ -28,8 +28,8 @@ import {
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
 import {
-  ChipsBar,
-  FiltersSidebar,
+  TableChipsBar,
+  TableFiltersSidebar,
   type TableFilter,
   useGlobalFiltering,
   FilterIcon,
@@ -127,7 +127,7 @@ const AssembledCookiesLanding = ({
             }
           />
         </button>
-        <ChipsBar
+        <TableChipsBar
           selectedFilters={filterOutput.selectedFilters}
           resetFilters={filterOutput.resetFilters}
           toggleFilterSelection={filterOutput.toggleFilterSelection}
@@ -148,7 +148,7 @@ const AssembledCookiesLanding = ({
             }}
             className="border border-r border-gray-300 dark:border-quartz"
           >
-            <FiltersSidebar
+            <TableFiltersSidebar
               filters={filterOutput.filters}
               toggleFilterSelection={filterOutput.toggleFilterSelection}
               toggleSelectAllFilter={filterOutput.toggleSelectAllFilter}

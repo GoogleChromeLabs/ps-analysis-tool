@@ -17,16 +17,13 @@
  * External dependencies.
  */
 import React from 'react';
-import { I18n } from '@google-psat/i18n';
-
 /**
  * Internal dependencies.
  */
-import ChipList from './chipList';
-import { StopIcon } from '../../../../../icons';
 import { TableFilter } from '../../../useTable';
+import ChipsBar from '../../../../chipsBar';
 
-interface ChipsBarProps {
+interface TableChipsBarProps {
   selectedFilters: TableFilter;
   resetFilters: () => void;
   toggleFilterSelection: (
@@ -37,45 +34,31 @@ interface ChipsBarProps {
   hideClearAll?: boolean;
 }
 
-const ChipsBar = ({
+const TableChipsBar = ({
   selectedFilters,
   resetFilters,
   toggleFilterSelection,
   hideClearAll = false,
-}: ChipsBarProps) => {
-  const appliedFiltersCount = Object.values(selectedFilters).reduce(
-    (acc, filter) => {
-      acc += Number(Object.keys(filter.filterValues || {}).length);
-      return acc;
+}: TableChipsBarProps) => {
+  const _selectedFilters = Object.entries(selectedFilters).map(
+    ([filterKey, filter]) => {
+      return {
+        key: filterKey,
+        title: filter.title,
+        values: Object.keys(filter.filterValues || {}),
+      };
     },
-    0
+    []
   );
 
   return (
-    <div
-      className={
-        'w-full h-6 px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black'
-      }
-    >
-      {appliedFiltersCount > 0 && !hideClearAll && (
-        <button
-          className="h-full flex items-center text-link text-xs whitespace-nowrap"
-          onClick={resetFilters}
-        >
-          <StopIcon className="text-gray min-w-[14px] min-h-[14px]" />
-          <span className="ml-1 mr-2 dark:text-bright-gray bg-transparent">
-            {I18n.getMessage('clearAll')}
-          </span>
-          <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
-        </button>
-      )}
-      <ChipList
-        selectedFilters={selectedFilters}
-        toggleFilterSelection={toggleFilterSelection}
-        hideCloseIcon={hideClearAll}
-      />
-    </div>
+    <ChipsBar
+      selectedFilters={_selectedFilters}
+      resetFilters={resetFilters}
+      toggleFilterSelection={toggleFilterSelection}
+      hideClearAll={hideClearAll}
+    />
   );
 };
 
-export default ChipsBar;
+export default TableChipsBar;

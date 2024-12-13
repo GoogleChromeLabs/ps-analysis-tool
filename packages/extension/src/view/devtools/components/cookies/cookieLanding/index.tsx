@@ -25,9 +25,9 @@ import {
   type TabCookies,
 } from '@google-psat/common';
 import {
-  ChipsBar,
+  TableChipsBar,
   FilterIcon,
-  FiltersSidebar,
+  TableFiltersSidebar,
   useGlobalFiltering,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
@@ -80,7 +80,7 @@ const AssembledCookiesLanding = () => {
             }
           />
         </button>
-        <ChipsBar {...filter} />
+        <TableChipsBar {...filter} />
       </div>
       <div
         className="flex grow-0"
@@ -97,7 +97,7 @@ const AssembledCookiesLanding = () => {
             }}
             className="border border-r border-gray-300 dark:border-quartz"
           >
-            <FiltersSidebar {...filter} />
+            <TableFiltersSidebar {...filter} />
           </Resizable>
         )}
         <div

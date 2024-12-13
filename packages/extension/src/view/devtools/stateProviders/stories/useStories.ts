@@ -16,31 +16,25 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
-import { LandingPage } from '@google-psat/design-system';
+import { useContextSelector } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import ContentPanel from './contentPanel';
+import Context, { type StoryContext } from './context';
 
-const PrivacySandbox = () => {
-  useEffect(() => {
-    (async () => {
-      await chrome.storage.sync.set({
-        psLandingPageViewed: true,
-      });
-    })();
-  }, []);
+export function useStories(): StoryContext;
+export function useStories<T>(selector: (state: StoryContext) => T): T;
 
-  return (
-    <LandingPage
-      title="Privacy Sandbox"
-      showSupportLink={true}
-      contentPanel={<ContentPanel />}
-      extraClasses="py-0"
-    />
-  );
-};
+/**
+ * Cookie store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useStories<T>(
+  selector: (state: StoryContext) => T | StoryContext = (state) => state
+) {
+  return useContextSelector(Context, selector);
+}
 
-export default PrivacySandbox;
+export default useStories;
