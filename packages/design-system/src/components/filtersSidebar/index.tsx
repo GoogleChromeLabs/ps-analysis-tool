@@ -18,11 +18,11 @@
  */
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
-import ListItem from './listItem';
 
 /**
  * Internal dependencies.
  */
+import ListItem from './listItem';
 
 export type FilterSidebarValue = {
   key: string;

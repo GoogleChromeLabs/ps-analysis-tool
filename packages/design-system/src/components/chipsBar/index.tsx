@@ -18,12 +18,12 @@
  */
 import React from 'react';
 import { I18n } from '@google-psat/i18n';
-import { StopIcon } from '../../icons';
-import ChipList from './chipsList';
 
 /**
  * Internal dependencies.
  */
+import { StopIcon } from '../../icons';
+import ChipList from './chipsList';
 
 export type ChipsFilter = {
   key: string;
