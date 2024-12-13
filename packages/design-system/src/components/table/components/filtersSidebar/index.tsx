@@ -66,7 +66,8 @@ const TableFiltersSidebar = ({
         acc[filterKey] = Object.keys(
           filters[filterKey].filterValues || {}
         ).filter(
-          (filterValue) => filters[filterKey].filterValues?.[filterValue]
+          (filterValue) =>
+            filters[filterKey].filterValues?.[filterValue].selected
         );
         return acc;
       }, {} as Record<string, string[]>),
