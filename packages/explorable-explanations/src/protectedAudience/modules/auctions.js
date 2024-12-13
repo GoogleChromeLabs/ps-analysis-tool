@@ -28,7 +28,9 @@ import promiseQueue from '../lib/promiseQueue.js';
  * @module Auction
  * Handles the setup and rendering of auction steps in a flowchart-like interface.
  */
-const auction = {};
+const auction = {
+  steps: [],
+};
 
 /**
  * Initializes auction setup for all circles defined in the configuration.
@@ -50,47 +52,14 @@ auction.setUp = (index) => {
   const { box, colors } = config.flow;
   const currentCircle = circles[index];
 
-  const { x, y } = flow.getTimelineCircleCoordinates(index);
-
   if (currentCircle.type !== 'publisher') {
     app.auction.auctions.push(null);
     return;
   }
 
-  const steps = [];
+  const steps = auction.steps;
 
-  // Setup Ad unit codes
-  steps.push({
-    component: Branches,
-    props: {
-      x1: x,
-      y1: y,
-      currentIndex: index,
-      branches: [
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-      ],
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue[1];
-    },
-  });
+  auction.setUpAdUnitCode(index);
 
   // Setup Branches
   steps.push({
@@ -446,7 +415,45 @@ auction.setUp = (index) => {
     },
   });
 
-  app.auction.auctions.push(steps);
+  app.auction.auctions.push(auction.steps);
+};
+
+auction.setUpAdUnitCode = (index) => {
+  const { colors } = config.flow;
+  const { x, y } = flow.getTimelineCircleCoordinates(index);
+
+  // Setup Ad unit codes
+  auction.steps.push({
+    component: Branches,
+    props: {
+      x1: x,
+      y1: y,
+      currentIndex: index,
+      branches: [
+        {
+          title: 'adunit-code',
+          description: 'div-200-1',
+          type: 'box',
+          color: colors.box.browser,
+        },
+        {
+          title: 'adunit-code',
+          description: 'div-200-1',
+          type: 'box',
+          color: colors.box.browser,
+        },
+        {
+          title: 'adunit-code',
+          description: 'div-200-1',
+          type: 'box',
+          color: colors.box.browser,
+        },
+      ],
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue[1];
+    },
+  });
 };
 
 /**
