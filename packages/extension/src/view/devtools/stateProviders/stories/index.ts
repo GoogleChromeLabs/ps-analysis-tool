@@ -13,6 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as storiesProvider } from './storiesProvider';
+export { default as StoriesProvider } from './storiesProvider';
 export { default as StoriesContext, type StoryContext } from './context';
 export { default as useStories } from './useStories';
