@@ -16,14 +16,14 @@
 
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import FiltersSidebar from '..';
+import TableFiltersSidebar from '..';
 import '@testing-library/jest-dom';
 import { TableFilter } from '../../../useTable/types';
 import * as table from '../../../useTable/useTable';
 import TableChipsBar from '../chips';
 import { I18n } from '@google-psat/i18n';
 
-describe('FiltersSidebar', () => {
+describe('TableFiltersSidebar', () => {
   const mockUseTable = jest.fn();
   jest.spyOn(table, 'useTable').mockImplementation(mockUseTable);
   globalThis.chrome.i18n = null;
@@ -111,7 +111,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: initialProps.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar {...props} />);
+    render(<TableFiltersSidebar {...props} />);
 
     const filtersSidebar = screen.queryByTestId('filters-sidebar');
 
@@ -126,7 +126,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar {...props} />);
+    render(<TableFiltersSidebar {...props} />);
 
     const filtersSidebar = screen.getByTestId('filters-sidebar');
     const filter1 = screen.getByText('Filter 1');
@@ -145,7 +145,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar {...props} />);
+    render(<TableFiltersSidebar {...props} />);
 
     const filter1 = screen.getByText('Filter 1');
     const filter2 = screen.getByText('Filter 2');
@@ -175,7 +175,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar {...props} />);
+    render(<TableFiltersSidebar {...props} />);
 
     const filtersSidebar = screen.getByTestId('filters-sidebar');
     const filter3 = screen.getByText('Filter 3');
@@ -193,7 +193,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    render(<FiltersSidebar {...props} />);
+    render(<TableFiltersSidebar {...props} />);
 
     await waitFor(() => {
       const list = screen.getAllByTestId('sub-list-item');
@@ -210,7 +210,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    const { rerender } = render(<FiltersSidebar {...props} />);
+    const { rerender } = render(<TableFiltersSidebar {...props} />);
 
     const expandAll = await screen.findByText('Expand All');
     act(() => {
@@ -266,7 +266,7 @@ describe('FiltersSidebar', () => {
     });
 
     rerender(
-      <FiltersSidebar
+      <TableFiltersSidebar
         {...props}
         filters={{
           ...props.filters,
@@ -303,7 +303,7 @@ describe('FiltersSidebar', () => {
       toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
 
-    rerender(<FiltersSidebar {...props} />);
+    rerender(<TableFiltersSidebar {...props} />);
 
     await waitFor(() => {
       expect(expandAll.innerHTML).not.toEqual('Expand All');
@@ -342,7 +342,7 @@ describe('FiltersSidebar', () => {
     });
 
     const { rerender } = render(
-      <FiltersSidebar
+      <TableFiltersSidebar
         {...props}
         toggleFilterSelection={toggleFilterSelection}
         toggleSelectAllFilter={toggleSelectAllFilter}
@@ -366,7 +366,7 @@ describe('FiltersSidebar', () => {
     });
 
     rerender(
-      <FiltersSidebar
+      <TableFiltersSidebar
         {...props}
         toggleFilterSelection={toggleFilterSelection}
         toggleSelectAllFilter={toggleSelectAllFilter}
@@ -406,7 +406,7 @@ describe('FiltersSidebar', () => {
     render(
       <>
         <TableChipsBar {...props} resetFilters={resetFilters} />
-        <FiltersSidebar {...props} />
+        <TableFiltersSidebar {...props} />
       </>
     );
 

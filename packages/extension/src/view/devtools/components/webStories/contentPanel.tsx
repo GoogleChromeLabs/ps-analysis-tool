@@ -67,7 +67,7 @@ const WebStories = () => {
               right: true,
             }}
           >
-            {/* <FiltersSidebar
+            {/* <TableFiltersSidebar
             filters={{
               ...filters,
               category: {

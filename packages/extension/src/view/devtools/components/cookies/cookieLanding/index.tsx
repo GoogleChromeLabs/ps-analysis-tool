@@ -27,7 +27,7 @@ import {
 import {
   TableChipsBar,
   FilterIcon,
-  FiltersSidebar,
+  TableFiltersSidebar,
   useGlobalFiltering,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
@@ -97,7 +97,7 @@ const AssembledCookiesLanding = () => {
             }}
             className="border border-r border-gray-300 dark:border-quartz"
           >
-            <FiltersSidebar {...filter} />
+            <TableFiltersSidebar {...filter} />
           </Resizable>
         )}
         <div
