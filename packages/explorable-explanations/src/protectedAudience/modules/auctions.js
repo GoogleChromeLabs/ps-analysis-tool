@@ -28,9 +28,7 @@ import promiseQueue from '../lib/promiseQueue.js';
  * @module Auction
  * Handles the setup and rendering of auction steps in a flowchart-like interface.
  */
-const auction = {
-  steps: [],
-};
+const auction = {};
 
 /**
  * Initializes auction setup for all circles defined in the configuration.
@@ -49,7 +47,7 @@ auction.setupAuctions = () => {
  */
 auction.setUp = (index) => {
   const { circles } = config.timeline;
-  const { box, colors } = config.flow;
+  const { box } = config.flow;
   const currentCircle = circles[index];
 
   if (currentCircle.type !== 'publisher') {
@@ -57,113 +55,13 @@ auction.setUp = (index) => {
     return;
   }
 
+  auction.steps = [];
+
   const steps = auction.steps;
 
   auction.setUpAdUnitCode(index);
   auction.setupBranches(index);
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
-      noArrow: true,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'SSP Tag',
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'SSP',
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
-      color: colors.box.noData,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'DSPs',
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
-      color: colors.box.noData,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'up',
-      x1: () => app.auction.nextTipCoordinates?.x + 10,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y - 15;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'up',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y - box.height - 10;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
+  auction.setUpfirstSSPTagFlow(index);
 
   steps.push({
     component: ProgressLine,
@@ -178,6 +76,217 @@ auction.setUp = (index) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
+
+  auction.setUpRunadAuction();
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y + 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'Show Winning Ad',
+      x: () => app.auction.nextTipCoordinates?.x + 10,
+      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  app.auction.auctions.push(auction.steps);
+};
+
+auction.setUpAdUnitCode = (index) => {
+  const { colors } = config.flow;
+  const { x, y } = flow.getTimelineCircleCoordinates(index);
+
+  // Setup Ad unit codes
+  auction.steps.push({
+    component: Branches,
+    props: {
+      x1: x,
+      y1: y,
+      currentIndex: index,
+      branches: [
+        {
+          title: 'adunit-code',
+          description: 'div-200-1',
+          type: 'box',
+          color: colors.box.browser,
+        },
+        {
+          title: 'adunit-code',
+          description: 'div-200-1',
+          type: 'box',
+          color: colors.box.browser,
+        },
+        {
+          title: 'adunit-code',
+          description: 'div-200-1',
+          type: 'box',
+          color: colors.box.browser,
+        },
+      ],
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue[1];
+    },
+  });
+};
+
+auction.setupBranches = (index) => {
+  auction.steps.push({
+    component: Branches,
+    props: {
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      currentIndex: index,
+      branches: [
+        {
+          date: '2024-10-02',
+          time: '10:00:22PM',
+          type: 'datetime',
+        },
+        {
+          date: '2024-10-03',
+          time: '11:00:22PM',
+          type: 'datetime',
+        },
+        {
+          date: '2024-10-03',
+          time: '11:00:22PM',
+          type: 'datetime',
+        },
+      ],
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue[1];
+    },
+  });
+};
+
+auction.setUpfirstSSPTagFlow = () => {
+  const { box, colors } = config.flow;
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'SSP Tag',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'SSP',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: colors.box.noData,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'DSPs',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: colors.box.noData,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'up',
+      x1: () => app.auction.nextTipCoordinates?.x + 10,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y - 15;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'up',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y - box.height - 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+};
+
+auction.setUpRunadAuction = () => {
+  const steps = auction.steps;
+  const { box, colors } = config.flow;
 
   steps.push({
     component: Box,
@@ -358,103 +467,6 @@ auction.setUp = (index) => {
         app.auction.nextTipCoordinates = returnValue.down;
       },
     });
-  });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y + 10;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'Show Winning Ad',
-      x: () => app.auction.nextTipCoordinates?.x + 10,
-      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  app.auction.auctions.push(auction.steps);
-};
-
-auction.setUpAdUnitCode = (index) => {
-  const { colors } = config.flow;
-  const { x, y } = flow.getTimelineCircleCoordinates(index);
-
-  // Setup Ad unit codes
-  auction.steps.push({
-    component: Branches,
-    props: {
-      x1: x,
-      y1: y,
-      currentIndex: index,
-      branches: [
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-      ],
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue[1];
-    },
-  });
-};
-
-auction.setupBranches = (index) => {
-  auction.steps.push({
-    component: Branches,
-    props: {
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
-      currentIndex: index,
-      branches: [
-        {
-          date: '2024-10-02',
-          time: '10:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
-      ],
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue[1];
-    },
   });
 };
 
