@@ -29,19 +29,19 @@ import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import type { InterestGroups } from '@google-psat/common';
 
 const ExplorableExplanation = () => {
-  const [currentSite, setCurrentSite] = useState('');
+  const [currentSiteData, setCurrentSiteData] = useState<object | null>(null);
 
   const interestGroupData = useMemo(() => {
-    if (!currentSite) {
+    if (!currentSiteData) {
       return [];
     }
 
     const perSiteInterestGroups: InterestGroups[] =
       //@ts-ignore
-      SYNTHETIC_INTEREST_GROUPS[currentSite];
+      SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website];
 
     return perSiteInterestGroups;
-  }, [currentSite]);
+  }, [currentSiteData]);
 
   const tabItems = useMemo<TabItems>(
     () => [
@@ -69,7 +69,10 @@ const ExplorableExplanation = () => {
 
   return (
     <TabsProvider items={tabItems}>
-      <Panel setCurrentSite={setCurrentSite} />
+      <Panel
+        currentSiteData={currentSiteData}
+        setCurrentSite={setCurrentSiteData}
+      />
     </TabsProvider>
   );
 };

@@ -46,9 +46,7 @@ app.setUpTimeLine = () => {
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
-  app.setCurrentSite(
-    config.timeline.circles[app.timeline.currentIndex].website
-  );
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
   bubbles.clearAndRewriteBubbles();
   app.setup();
 
@@ -214,9 +212,7 @@ app.handleNonInteractivePrev = () => {
   app.timeline.isPaused = true;
   const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
-  app.setCurrentSite(
-    config.timeline.circles[app.timeline.currentIndex].website
-  );
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
   flow.setButtonsDisabilityState();
 
   const nextIndex = promiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
@@ -311,9 +307,7 @@ app.handleNonInteravtiveNext = () => {
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
-  app.setCurrentSite(
-    config.timeline.circles[app.timeline.currentIndex].website
-  );
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
   flow.setButtonsDisabilityState();
 
   const nextIndexPromiseGetter = app.timeline.currentIndex;
@@ -445,9 +439,7 @@ app.toggleInteractiveMode = async () => {
 
   app.isInteractiveMode = !app.isInteractiveMode;
   app.timeline.currentIndex = 0;
-  app.setCurrentSite(
-    config.timeline.circles[app.timeline.currentIndex].website
-  );
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
   app.bubbles.interestGroupCounts = 0;
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
@@ -551,9 +543,7 @@ app.reset = async (callFromExtension = false) => {
   promiseQueue.clear();
 
   app.timeline.currentIndex = 0;
-  app.setCurrentSite(
-    config.timeline.circles[app.timeline.currentIndex].website
-  );
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
   app.bubbles.interestGroupCounts = 0;
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;

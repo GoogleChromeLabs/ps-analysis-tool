@@ -31,7 +31,7 @@ import {
   sketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
-import { NextIcon, PreviousIcon } from '@google-psat/design-system';
+import { NextIcon, PreviousIcon, useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -46,10 +46,11 @@ declare module 'react' {
   }
 }
 interface PanelProps {
-  setCurrentSite: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentSite: React.Dispatch<React.SetStateAction<object | null>>;
+  currentSiteData: object | null;
 }
 
-const Panel = ({ setCurrentSite }: PanelProps) => {
+const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
@@ -70,6 +71,23 @@ const Panel = ({ setCurrentSite }: PanelProps) => {
       return !prevState;
     });
   }, []);
+
+  const { setActiveTab } = useTabs(({ actions }) => ({
+    setActiveTab: actions.setActiveTab,
+  }));
+
+  useEffect(() => {
+    if (!currentSiteData) {
+      setActiveTab(0);
+      return;
+    }
+
+    if (currentSiteData?.type === 'advertiser') {
+      setActiveTab(0);
+    } else {
+      setActiveTab(1);
+    }
+  }, [currentSiteData, currentSiteData?.type, setActiveTab]);
 
   const setInteractiveMode = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
