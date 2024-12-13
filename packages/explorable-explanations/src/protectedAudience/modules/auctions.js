@@ -60,36 +60,7 @@ auction.setUp = (index) => {
   const steps = auction.steps;
 
   auction.setUpAdUnitCode(index);
-
-  // Setup Branches
-  steps.push({
-    component: Branches,
-    props: {
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
-      currentIndex: index,
-      branches: [
-        {
-          date: '2024-10-02',
-          time: '10:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
-      ],
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue[1];
-    },
-  });
+  auction.setupBranches(index);
 
   steps.push({
     component: ProgressLine,
@@ -447,6 +418,37 @@ auction.setUpAdUnitCode = (index) => {
           description: 'div-200-1',
           type: 'box',
           color: colors.box.browser,
+        },
+      ],
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue[1];
+    },
+  });
+};
+
+auction.setupBranches = (index) => {
+  auction.steps.push({
+    component: Branches,
+    props: {
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      currentIndex: index,
+      branches: [
+        {
+          date: '2024-10-02',
+          time: '10:00:22PM',
+          type: 'datetime',
+        },
+        {
+          date: '2024-10-03',
+          time: '11:00:22PM',
+          type: 'datetime',
+        },
+        {
+          date: '2024-10-03',
+          time: '11:00:22PM',
+          type: 'datetime',
         },
       ],
     },
