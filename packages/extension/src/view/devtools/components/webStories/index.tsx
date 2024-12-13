@@ -16,36 +16,19 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { LandingPage } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import ContentPanel from './contentPanel';
+import { useStories } from '../../stateProviders';
 
 const WebStories = () => {
-  const [storyOpened, setStoryOpened] = useState(false);
-  //@ts-ignore since this is a custom event.
-  const webStoriesLightBoxCallback = useCallback((event) => {
-    setStoryOpened(() => event.detail.storyOpened);
-  }, []);
-
-  useEffect(() => {
-    window.document.addEventListener(
-      'webStoriesLightBoxEvent',
-      webStoriesLightBoxCallback,
-      false
-    );
-
-    return () => {
-      window.document.removeEventListener(
-        'webStoriesLightBoxEvent',
-        webStoriesLightBoxCallback,
-        false
-      );
-    };
-  }, [webStoriesLightBoxCallback]);
+  const { storyOpened } = useStories(({ state }) => ({
+    storyOpened: state.storyOpened,
+  }));
 
   return (
     <div className="w-full h-full overflow-hidden">

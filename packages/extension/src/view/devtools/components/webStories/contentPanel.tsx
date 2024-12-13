@@ -16,14 +16,8 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ChipsBar,
-  FiltersSidebar,
-  TopBar,
-  type ChipsFilter,
-  type FilterSidebarValue,
-} from '@google-psat/design-system';
+import React from 'react';
+import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 
@@ -32,6 +26,7 @@ import { noop } from '@google-psat/common';
  */
 import { getStoryMarkup } from './createStoryIframe';
 import { STORY_JSON } from './story';
+import { useStories } from '../../stateProviders';
 
 interface WebStoriesProps {
   storyOpened: boolean;
@@ -39,93 +34,32 @@ interface WebStoriesProps {
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
   const storyMarkup = getStoryMarkup(STORY_JSON);
-  const [searchValue, setSearchValue] = useState('');
-  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
-  const [filters, setFilters] = useState<FilterSidebarValue[]>([]);
-  const [selectedFilters, setSelectedFilters] = useState<ChipsFilter[]>([]);
-  const [selectedFilterValues, setSelectedFilterValues] = useState<
-    Record<string, string[]>
-  >({});
-  const [sortValue, setSortValue] = useState<'latest' | 'oldest'>('latest');
 
-  useEffect(() => {
-    setFilters([
-      {
-        key: 'category',
-        title: 'Category',
-        values: ['Category 1', 'Category 2', 'Category 3'],
-        sortValues: true,
-      },
-      {
-        key: 'author',
-        title: 'Author',
-        values: ['Author 1', 'Author 2', 'Author 3'],
-        sortValues: true,
-      },
-      {
-        key: 'tag',
-        title: 'Tag',
-        values: ['Tag 1', 'Tag 2', 'Tag 3'],
-        sortValues: true,
-      },
-    ]);
-  }, []);
-
-  const toggleFilterSelection = useCallback(
-    (filterKey: string, filterValue: string) => {
-      setSelectedFilters((prevSelectedFilters) => {
-        const filterIndex = prevSelectedFilters.findIndex(
-          (filter) => filter.key === filterKey
-        );
-
-        if (filterIndex === -1) {
-          return [
-            ...prevSelectedFilters,
-            {
-              key: filterKey,
-              title:
-                filters.find((filter) => filter.key === filterKey)?.title || '',
-              values: [filterValue],
-            },
-          ];
-        }
-
-        const filter = prevSelectedFilters[filterIndex];
-        const newFilterValues = filter.values.includes(filterValue)
-          ? filter.values.filter((value) => value !== filterValue)
-          : [...filter.values, filterValue];
-
-        const newFilter = {
-          ...filter,
-          values: newFilterValues,
-        };
-
-        const newSelectedFilters = [...prevSelectedFilters];
-        newSelectedFilters[filterIndex] = newFilter;
-
-        return newSelectedFilters;
-      });
-
-      setSelectedFilterValues((prevSelectedFilterValues) => {
-        const filter = prevSelectedFilterValues[filterKey] || [];
-
-        const newSelectedFilterValues = {
-          ...prevSelectedFilterValues,
-          [filterKey]: filter.includes(filterValue)
-            ? filter.filter((value) => value !== filterValue)
-            : [...filter, filterValue],
-        };
-
-        return newSelectedFilterValues;
-      });
-    },
-    [filters]
-  );
-
-  const resetFilters = useCallback(() => {
-    setSelectedFilters([]);
-    setSelectedFilterValues({});
-  }, []);
+  const {
+    searchValue,
+    setSearchValue,
+    showFilterSidebar,
+    setShowFilterSidebar,
+    setSortValue,
+    sortValue,
+    selectedFilters,
+    toggleFilterSelection,
+    resetFilters,
+    selectedFilterValues,
+    filters,
+  } = useStories(({ state, actions }) => ({
+    searchValue: state.searchValue,
+    filters: state.filters,
+    sortValue: state.sortValue,
+    selectedFilterValues: state.selectedFilterValues,
+    setSearchValue: actions.setSearchValue,
+    showFilterSidebar: state.showFilterSidebar,
+    setShowFilterSidebar: actions.setShowFilterSidebar,
+    setSortValue: actions.setSortValue,
+    selectedFilters: state.selectedFilters,
+    toggleFilterSelection: actions.toggleFilterSelection,
+    resetFilters: actions.resetFilters,
+  }));
 
   return (
     <div className="h-full w-full flex flex-col">
