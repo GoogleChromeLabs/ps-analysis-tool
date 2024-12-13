@@ -56,10 +56,10 @@ const SubList = ({
 }: SubListProps) => {
   const sortedFilterValueKeys = useMemo(() => {
     if (!sort) {
-      return Object.keys(filterValues || {});
+      return filterValues || [];
     }
 
-    return Object.keys(filterValues || {}).sort((a, b) =>
+    return (filterValues || []).sort((a, b) =>
       String(a).localeCompare(String(b))
     );
   }, [filterValues, sort]);

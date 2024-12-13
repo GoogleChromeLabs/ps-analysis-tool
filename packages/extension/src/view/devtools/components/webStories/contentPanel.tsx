@@ -16,8 +16,14 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ChipsBar,
+  FiltersSidebar,
+  TopBar,
+  type ChipsFilter,
+  type FilterSidebarValue,
+} from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 
@@ -31,7 +37,91 @@ const WebStories = () => {
   const storyMarkup = getStoryMarkup(STORY_JSON);
   const [searchValue, setSearchValue] = useState('');
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [filters, setFilters] = useState<FilterSidebarValue[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<ChipsFilter[]>([]);
+  const [selectedFilterValues, setSelectedFilterValues] = useState<
+    Record<string, string[]>
+  >({});
+  const [sortValue, setSortValue] = useState<'latest' | 'oldest'>('latest');
+
+  useEffect(() => {
+    setFilters([
+      {
+        key: 'category',
+        title: 'Category',
+        values: ['Category 1', 'Category 2', 'Category 3'],
+        sortValues: true,
+      },
+      {
+        key: 'author',
+        title: 'Author',
+        values: ['Author 1', 'Author 2', 'Author 3'],
+        sortValues: true,
+      },
+      {
+        key: 'tag',
+        title: 'Tag',
+        values: ['Tag 1', 'Tag 2', 'Tag 3'],
+        sortValues: true,
+      },
+    ]);
+  }, []);
+
+  const toggleFilterSelection = useCallback(
+    (filterKey: string, filterValue: string) => {
+      setSelectedFilters((prevSelectedFilters) => {
+        const filterIndex = prevSelectedFilters.findIndex(
+          (filter) => filter.key === filterKey
+        );
+
+        if (filterIndex === -1) {
+          return [
+            ...prevSelectedFilters,
+            {
+              key: filterKey,
+              title:
+                filters.find((filter) => filter.key === filterKey)?.title || '',
+              values: [filterValue],
+            },
+          ];
+        }
+
+        const filter = prevSelectedFilters[filterIndex];
+        const newFilterValues = filter.values.includes(filterValue)
+          ? filter.values.filter((value) => value !== filterValue)
+          : [...filter.values, filterValue];
+
+        const newFilter = {
+          ...filter,
+          values: newFilterValues,
+        };
+
+        const newSelectedFilters = [...prevSelectedFilters];
+        newSelectedFilters[filterIndex] = newFilter;
+
+        return newSelectedFilters;
+      });
+
+      setSelectedFilterValues((prevSelectedFilterValues) => {
+        const filter = prevSelectedFilterValues[filterKey] || [];
+
+        const newSelectedFilterValues = {
+          ...prevSelectedFilterValues,
+          [filterKey]: filter.includes(filterValue)
+            ? filter.filter((value) => value !== filterValue)
+            : [...filter, filterValue],
+        };
+
+        return newSelectedFilterValues;
+      });
+    },
+    [filters]
+  );
+
+  const resetFilters = useCallback(() => {
+    setSelectedFilters([]);
+    setSelectedFilterValues({});
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -47,7 +137,12 @@ const WebStories = () => {
       >
         <div className="flex justify-between min-w-28">
           <p>Sort by:</p>
-          <select>
+          <select
+            value={sortValue}
+            onChange={(e) =>
+              setSortValue(e.target.value as 'latest' | 'oldest')
+            }
+          >
             <option value="Latest">Latest</option>
             <option value="Oldest">Oldest</option>
           </select>
@@ -55,8 +150,8 @@ const WebStories = () => {
       </TopBar>
       <ChipsBar
         selectedFilters={selectedFilters}
-        toggleFilterSelection={noop} // TODO: Implement
-        resetFilters={() => setSelectedFilters([])}
+        toggleFilterSelection={toggleFilterSelection}
+        resetFilters={resetFilters}
       />
       <div className="flex-1 w-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         {showFilterSidebar && (
@@ -67,11 +162,11 @@ const WebStories = () => {
               right: true,
             }}
           >
-            <FiltersSidebar // TODO: Add data
-              filters={[]}
-              selectedFilterValues={{}}
+            <FiltersSidebar
+              filters={filters}
+              selectedFilterValues={selectedFilterValues}
+              toggleFilterSelection={toggleFilterSelection}
               isSelectAllFilterSelected={() => false}
-              toggleFilterSelection={noop}
               toggleSelectAllFilter={noop}
             />
           </Resizable>

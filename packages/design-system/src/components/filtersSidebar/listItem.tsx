@@ -72,10 +72,7 @@ const ListItem = ({
     setShowSubList(expandAll);
   }, [expandAll]);
 
-  const isDisabled = useMemo(
-    () => Object.keys(filter.values || {}).length === 0,
-    [filter.values]
-  );
+  const isDisabled = useMemo(() => !filter.values.length, [filter.values]);
 
   useEffect(() => {
     if (isDisabled && showSubList) {
@@ -94,9 +91,10 @@ const ListItem = ({
       return;
     }
 
-    const areFiltersSelected = Object.values(filter.values || {}).some(
-      (filterValue) => selectedFilterValues.includes(filterValue)
-    );
+    const areFiltersSelected =
+      filter.values?.some((filterValue) =>
+        selectedFilterValues?.includes(filterValue)
+      ) || false;
 
     if (areFiltersSelected) {
       setShowSubList(true);
@@ -129,17 +127,17 @@ const ListItem = ({
       {showSubList && (
         <>
           <SubList
-            filterValues={filter.values}
+            filterValues={filter.values || []}
             filterKey={filterKey}
             sort={Boolean(filter.sortValues)}
-            selectedFilterValues={selectedFilterValues}
+            selectedFilterValues={selectedFilterValues || []}
             isExpanded={isExpanded}
             isSelectAllFilterEnabled={Boolean(filter.enableSelectAll)}
             isSelectAllFilterSelected={isSelectAllFilterSelected}
             toggleFilterSelection={toggleFilterSelection}
             toggleSelectAllFilter={toggleSelectAllFilter}
           />
-          {Number(Object.keys(filter.values || {}).length) > 4 && (
+          {Number(filter.values?.length || 0) > 4 && (
             <a
               onClick={toggleShowMore}
               className="text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"

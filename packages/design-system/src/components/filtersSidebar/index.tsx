@@ -59,7 +59,7 @@ const FiltersSidebar = ({
   const [expandAll, setExpandAll] = useState(false);
   const expandedFilters = useRef(new Set<string>());
   const filterKeys = useMemo(() => {
-    return Object.keys(filters);
+    return filters.map((filter) => filter.key);
   }, [filters]);
 
   const toggleFilterExpansion = useCallback(
@@ -117,15 +117,15 @@ const FiltersSidebar = ({
           : I18n.getMessage('expandAll')}
       </a>
       <ul>
-        {Object.entries(filters).map(([filterKey, filter]) => (
+        {filters.map((filter) => (
           <ListItem
-            key={filterKey}
+            key={filter.key}
             filter={filter}
-            selectedFilterValues={selectedFilterValues[filterKey]}
-            filterKey={filterKey}
+            selectedFilterValues={selectedFilterValues[filter.key] || []}
+            filterKey={filter.key}
             expandAll={expandAll}
             toggleFilterExpansion={toggleFilterExpansion}
-            isSelectAllFilterSelected={isSelectAllFilterSelected(filterKey)}
+            isSelectAllFilterSelected={isSelectAllFilterSelected(filter.key)}
             toggleFilterSelection={toggleFilterSelection}
             toggleSelectAllFilter={toggleSelectAllFilter}
           />
