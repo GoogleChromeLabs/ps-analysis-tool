@@ -169,7 +169,7 @@ joinInterestGroup.draw = (index) => {
   for (const step of steps) {
     promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
 
-    promiseQueue.add(async () => {
+    app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay } = step;
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
@@ -180,10 +180,11 @@ joinInterestGroup.draw = (index) => {
       if (!app.isRevisitingNodeInInteractiveMode) {
         await utils.delay(delay); // eslint-disable-line no-await-in-loop
       }
+      cb(null, true);
     });
   }
 
-  promiseQueue.add(async () => {
+  app.promiseQueue.push(async (cb) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       await bubbles.reverseBarrageAnimation(index);
     }
@@ -193,12 +194,14 @@ joinInterestGroup.draw = (index) => {
     } else {
       bubbles.showMinifiedBubbles();
     }
+    cb(null, true);
   });
 
-  promiseQueue.add(() => {
+  app.promiseQueue.push((cb) => {
     if (!app.isRevisitingNodeInInteractiveMode || !app.isInteractiveMode) {
       flow.clearBelowTimelineCircles();
     }
+    cb(null, true);
   });
 };
 

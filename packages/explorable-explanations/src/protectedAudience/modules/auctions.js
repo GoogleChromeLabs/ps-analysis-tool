@@ -465,7 +465,7 @@ auction.draw = (index) => {
 
   for (const step of steps) {
     promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
-    promiseQueue.add(async () => {
+    app.promiseQueue.push(async (cb) => {
       const { component, props, callBack } = step;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -509,13 +509,15 @@ auction.draw = (index) => {
         }
         await utils.delay(delay); // eslint-disable-line no-await-in-loop
       }
+      cb(null, true);
     });
   }
 
-  promiseQueue.add(() => {
+  app.promiseQueue.push((cb) => {
     if (!app.isRevisitingNodeInInteractiveMode || !app.isInteractiveMode) {
       flow.clearBelowTimelineCircles();
     }
+    cb(null, true);
   });
 };
 

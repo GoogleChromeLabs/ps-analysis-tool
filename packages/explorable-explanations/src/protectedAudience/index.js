@@ -18,6 +18,7 @@
  */
 import p5 from 'p5';
 import * as d3 from 'd3';
+import Queue from 'queue';
 
 /**
  * Internal dependencies.
@@ -150,25 +151,28 @@ app.setupLoop = (doNotPlay) => {
     let currentIndex = 0;
     promiseQueue.nextNodeSkipIndex.push(0);
     while (currentIndex < config.timeline.circles.length) {
-      promiseQueue.add(() => {
+      app.promiseQueue.push((cb) => {
         flow.clearBelowTimelineCircles();
         utils.markVisitedValue(app.timeline.currentIndex, true);
         bubbles.generateBubbles();
         bubbles.showMinifiedBubbles();
         timeline.eraseAndRedraw();
         timeline.renderUserIcon();
+        cb(null, true);
       });
 
       app.drawFlows(currentIndex);
-      promiseQueue.add(() => {
+      app.promiseQueue.push((cb) => {
         app.bubbles.interestGroupCounts +=
           config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ??
           0;
+        cb(null, true);
       });
       promiseQueue.nextNodeSkipIndex.push(promiseQueue.queue.length);
-      promiseQueue.add(() => {
+      app.promiseQueue.push((cb) => {
         app.timeline.currentIndex += 1;
         flow.setButtonsDisabilityState();
+        cb(null, true);
       });
 
       currentIndex++;
@@ -185,7 +189,7 @@ app.setupLoop = (doNotPlay) => {
     return;
   }
 
-  promiseQueue.start();
+  app.promiseQueue.start();
 };
 
 app.drawFlows = (index) => {
@@ -566,5 +570,5 @@ app.createCanvas = () => {
   }
 };
 app.createCanvas();
-
+app.promiseQueue = new Queue({ concurrency: 1, autostart: false, results: [] });
 export { app };
