@@ -17,15 +17,15 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import { ChipsBar, TopBar } from '@google-psat/design-system';
+import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
+import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import { getStoryMarkup } from './createStoryIframe';
 import { STORY_JSON } from './story';
-import { noop } from '@google-psat/common';
 
 const WebStories = () => {
   const storyMarkup = getStoryMarkup(STORY_JSON);
@@ -67,50 +67,13 @@ const WebStories = () => {
               right: true,
             }}
           >
-            {/* <TableFiltersSidebar
-            filters={{
-              ...filters,
-              category: {
-                title: 'Category',
-                filterValues: {
-                  category1: {
-                    selected: false,
-                  },
-                  category2: {
-                    selected: false,
-                  },
-                },
-                hasStaticFilterValues: true,
-              },
-              author: {
-                title: 'Author',
-                filterValues: {
-                  author1: {
-                    selected: false,
-                  },
-                  author2: {
-                    selected: false,
-                  },
-                },
-                hasStaticFilterValues: true,
-              },
-              tags: {
-                title: 'Tags',
-                filterValues: {
-                  tag1: {
-                    selected: false,
-                  },
-                  tag2: {
-                    selected: false,
-                  },
-                },
-                hasStaticFilterValues: true,
-              },
-            }}
-            isSelectAllFilterSelected={isSelectAllFilterSelected}
-            toggleFilterSelection={toggleFilterSelection}
-            toggleSelectAllFilter={toggleSelectAllFilter}
-          /> */}
+            <FiltersSidebar // TODO: Add data
+              filters={[]}
+              selectedFilterValues={{}}
+              isSelectAllFilterSelected={() => false}
+              toggleFilterSelection={noop}
+              toggleSelectAllFilter={noop}
+            />
           </Resizable>
         )}
         <div
