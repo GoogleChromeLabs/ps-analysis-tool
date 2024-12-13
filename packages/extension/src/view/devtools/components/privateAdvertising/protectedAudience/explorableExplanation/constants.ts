@@ -228,6 +228,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
   ],
+  'pub1.com': [],
   'adv3.com': [
     {
       formattedTime: '123ms',
@@ -570,6 +571,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
   ],
+  'pub2.com': [],
   'adv6.com': [
     {
       formattedTime: '123ms',
