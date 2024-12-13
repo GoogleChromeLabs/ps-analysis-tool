@@ -61,7 +61,7 @@ const TopBar = ({
       className={classNames(
         'w-full px-2 flex items-center border-american-silver dark:border-quartz bg-white dark:bg-charleston-green',
         { 'border-b': !hideFiltering },
-        hideSearch && hideFiltering ? 'h-[20px]' : 'h-[25px]'
+        hideSearch && hideFiltering ? 'h-[20px]' : 'h-[26px]'
       )}
     >
       {!hideFiltering && (
