@@ -22,7 +22,6 @@ import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine, Branches, RippleEffect } from '../components';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue.js';
 
 /**
  * @module Auction
@@ -464,7 +463,6 @@ auction.draw = (index) => {
   }
 
   for (const step of steps) {
-    promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack } = step;
 

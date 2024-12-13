@@ -22,7 +22,6 @@ import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue';
 import info from '../info.json';
 
 /**
@@ -167,8 +166,6 @@ joinInterestGroup.draw = (index) => {
   }
 
   for (const step of steps) {
-    promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
-
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay } = step;
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop

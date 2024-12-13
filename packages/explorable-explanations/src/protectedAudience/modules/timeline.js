@@ -20,7 +20,6 @@ import config from '../config';
 import app from '../app';
 import * as utils from '../utils';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue';
 import flow from './flow';
 
 /**
@@ -129,7 +128,7 @@ timeline.init = () => {
         clickedIndex !== undefined &&
         !app.isRevisitingNodeInInteractiveMode
       ) {
-        promiseQueue.clear();
+        app.promiseQueue.end();
         flow.clearBelowTimelineCircles();
         app.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
@@ -138,7 +137,7 @@ timeline.init = () => {
         bubbles.generateBubbles();
 
         if (config.timeline.circles[clickedIndex].visited) {
-          promiseQueue.add(() => {
+          app.promiseQueue.push((cb) => {
             utils.wipeAndRecreateUserCanvas();
             utils.wipeAndRecreateMainCanvas();
             app.p.push();
@@ -167,12 +166,13 @@ timeline.init = () => {
             });
 
             app.p.pop();
+            cb(null, true);
           });
         }
 
         app.drawFlows(clickedIndex);
 
-        promiseQueue.add(() => {
+        app.promiseQueue.push((cb) => {
           if (config.timeline.circles[clickedIndex].visited) {
             app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
               if (indexes === clickedIndex) {
@@ -227,15 +227,15 @@ timeline.init = () => {
           utils.wipeAndRecreateMainCanvas();
           timeline.renderUserIcon();
           flow.setButtonsDisabilityState();
+          cb(null, true);
         });
 
-        promiseQueue.skipTo(0);
-        promiseQueue.start();
+        app.promiseQueue.start();
       } else if (
         clickedIndex !== undefined &&
         app.isRevisitingNodeInInteractiveMode
       ) {
-        promiseQueue.clear();
+        app.promiseQueue.end();
         flow.clearBelowTimelineCircles();
 
         if (config.timeline.circles[clickedIndex].type === 'advertiser') {
@@ -247,7 +247,7 @@ timeline.init = () => {
         app.shouldRespondToClick = false;
         app.drawFlows(clickedIndex);
 
-        promiseQueue.add(() => {
+        app.promiseQueue.push((cb) => {
           app.shouldRespondToClick = true;
           timeline.renderUserIcon();
           app.isRevisitingNodeInInteractiveMode = false;
@@ -256,10 +256,10 @@ timeline.init = () => {
           } else {
             app.auction.auctions[clickedIndex][0].props.y1 -= 20;
           }
+          cb(null, true);
         });
 
-        promiseQueue.skipTo(0);
-        promiseQueue.start();
+        app.promiseQueue.start();
 
         utils.wipeAndRecreateUserCanvas();
         utils.wipeAndRecreateMainCanvas();

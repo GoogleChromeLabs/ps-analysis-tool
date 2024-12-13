@@ -32,7 +32,6 @@ import joinInterestGroup from './modules/joinInterestGroup';
 import icons from '../icons.json';
 import bubbles from './modules/bubbles';
 import app from './app';
-import promiseQueue from './lib/promiseQueue';
 import {
   setupInterestGroupCanvas,
   setupMainCanvas,
@@ -85,7 +84,6 @@ app.play = (resumed = false, doNotPlay = false) => {
     app.setupLoop(doNotPlay);
     return;
   }
-  promiseQueue.resume();
 };
 
 app.pause = () => {
@@ -144,39 +142,40 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     return;
   }
 };
+app.addToPromiseQueue = (indexToStartFrom) => {
+  let currentIndex = indexToStartFrom;
+  while (currentIndex < config.timeline.circles.length) {
+    app.promiseQueue.push((cb) => {
+      flow.clearBelowTimelineCircles();
+      utils.markVisitedValue(app.timeline.currentIndex, true);
+      bubbles.generateBubbles();
+      bubbles.showMinifiedBubbles();
+      timeline.eraseAndRedraw();
+      timeline.renderUserIcon();
+      cb(null, true);
+    });
+
+    app.drawFlows(currentIndex);
+    app.promiseQueue.push((cb) => {
+      app.bubbles.interestGroupCounts +=
+        config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+      cb(null, true);
+    });
+
+    app.promiseQueue.push((cb) => {
+      app.timeline.currentIndex += 1;
+      flow.setButtonsDisabilityState();
+      cb(null, true);
+    });
+
+    currentIndex++;
+  }
+};
 
 app.setupLoop = (doNotPlay) => {
   try {
     flow.setButtonsDisabilityState();
-    let currentIndex = 0;
-    promiseQueue.nextNodeSkipIndex.push(0);
-    while (currentIndex < config.timeline.circles.length) {
-      app.promiseQueue.push((cb) => {
-        flow.clearBelowTimelineCircles();
-        utils.markVisitedValue(app.timeline.currentIndex, true);
-        bubbles.generateBubbles();
-        bubbles.showMinifiedBubbles();
-        timeline.eraseAndRedraw();
-        timeline.renderUserIcon();
-        cb(null, true);
-      });
-
-      app.drawFlows(currentIndex);
-      app.promiseQueue.push((cb) => {
-        app.bubbles.interestGroupCounts +=
-          config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ??
-          0;
-        cb(null, true);
-      });
-      promiseQueue.nextNodeSkipIndex.push(promiseQueue.queue.length);
-      app.promiseQueue.push((cb) => {
-        app.timeline.currentIndex += 1;
-        flow.setButtonsDisabilityState();
-        cb(null, true);
-      });
-
-      currentIndex++;
-    }
+    app.addToPromiseQueue(0);
   } catch (error) {
     //Silently fail.
     // eslint-disable-next-line no-console
@@ -207,16 +206,12 @@ app.handleNonInteractivePrev = () => {
   if (app.timeline.currentIndex <= 0) {
     return;
   }
-
+  app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
-  const nextIndexPromiseGetter = app.timeline.currentIndex - 1;
   app.timeline.currentIndex -= 1;
+  app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
-
-  const nextIndex = promiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
-
-  promiseQueue.skipTo(nextIndex + 1);
 
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
@@ -227,6 +222,7 @@ app.handleNonInteractivePrev = () => {
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+  app.promiseQueue.start();
 };
 
 app.handleInteractivePrev = () => {
@@ -234,7 +230,7 @@ app.handleInteractivePrev = () => {
     return;
   }
 
-  promiseQueue.clear();
+  app.promiseQueue.end();
   flow.setButtonsDisabilityState();
   app.shouldRespondToClick = false;
 
@@ -248,12 +244,13 @@ app.handleInteractivePrev = () => {
 
   app.drawFlows(visitedIndex);
 
-  promiseQueue.add(() => {
+  app.promiseQueue.push((cb) => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    cb(null, true);
   });
 
   if (app.visitedIndexOrderTracker >= 0) {
@@ -265,8 +262,8 @@ app.handleInteractivePrev = () => {
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
-  promiseQueue.skipTo(0);
-  promiseQueue.start();
+
+  app.promiseQueue.start();
 };
 
 app.handlePrevButton = () => {
@@ -303,15 +300,12 @@ app.handleNonInteravtiveNext = () => {
     return;
   }
 
+  app.promiseQueue.end();
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
+  app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
-
-  const nextIndexPromiseGetter = app.timeline.currentIndex;
-  const nextIndex = promiseQueue.nextNodeSkipIndex[nextIndexPromiseGetter];
-
-  promiseQueue.skipTo(nextIndex + 1);
 
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
@@ -322,6 +316,7 @@ app.handleNonInteravtiveNext = () => {
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+  app.promiseQueue.start();
 };
 
 app.handleInteravtiveNext = () => {
@@ -340,7 +335,7 @@ app.handleInteravtiveNext = () => {
     }
   }
 
-  promiseQueue.clear();
+  app.promiseQueue.end();
   flow.setButtonsDisabilityState();
   app.shouldRespondToClick = false;
 
@@ -354,12 +349,13 @@ app.handleInteravtiveNext = () => {
 
   app.drawFlows(visitedIndex);
 
-  promiseQueue.add(() => {
+  app.promiseQueue.push((cb) => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    cb(null, true);
   });
 
   flow.setButtonsDisabilityState();
@@ -367,8 +363,7 @@ app.handleInteravtiveNext = () => {
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
-  promiseQueue.skipTo(0);
-  promiseQueue.start();
+  app.promiseQueue.start();
 };
 
 app.handleControls = () => {
@@ -430,8 +425,7 @@ app.handleControls = () => {
 };
 
 app.toggleInteractiveMode = async () => {
-  promiseQueue.clear();
-  promiseQueue.stop();
+  app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
 
@@ -452,14 +446,12 @@ app.toggleInteractiveMode = async () => {
   setupUserCanvas(app.up);
   setupMainCanvas(app.p, true);
 
-  promiseQueue.skipTo(0);
-
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
     return;
   }
 
-  promiseQueue.start();
+  app.promiseQueue.start();
 };
 
 // Write a callback function to get the value of the checkbox.
@@ -527,10 +519,9 @@ export const userSketch = (p) => {
 };
 
 app.reset = async (callFromExtension = false) => {
-  promiseQueue.stop();
+  app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
-  promiseQueue.clear();
 
   app.timeline.currentIndex = 0;
   app.bubbles.interestGroupCounts = 0;
@@ -549,7 +540,6 @@ app.reset = async (callFromExtension = false) => {
 
   app.timeline.isPaused = true;
   app.cancelPromise = false;
-  promiseQueue.skipTo(0);
 
   app.timeline.isPaused = false;
   app.shouldRespondToClick = true;
@@ -569,6 +559,15 @@ app.createCanvas = () => {
     new p5(userSketch);
   }
 };
+
 app.createCanvas();
 app.promiseQueue = new Queue({ concurrency: 1, autostart: false, results: [] });
+app.promiseQueue.addEventListener('end', () => {
+  app.cancelPromise = false;
+  app.timeline.isPaused = false;
+});
+app.promiseQueue.addEventListener('start', () => {
+  app.cancelPromise = false;
+  app.timeline.isPaused = false;
+});
 export { app };
