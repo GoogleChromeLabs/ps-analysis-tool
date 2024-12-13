@@ -51,7 +51,7 @@ const TableFiltersSidebar = ({
           key: filterKey,
           title: filter.title,
           values: Object.keys(filter.filterValues || {}),
-          sortValues: filter.sortValues,
+          sortValues: filter.sortValues || !filter.hasStaticFilterValues,
           description: filter.description,
           enableSelectAll: filter.enableSelectAllOption,
           isSelectAllFilterEnabled: filter.enableSelectAllOption,
