@@ -31,7 +31,7 @@ const Box = ({
   width = config.flow.box.width,
   height = config.flow.box.height,
   color,
-  info = true,
+  info = false,
 }) => {
   x = typeof x === 'function' ? x() : x;
   y = typeof y === 'function' ? y() : y;
@@ -73,9 +73,7 @@ const Box = ({
         mouseY >= iconY &&
         mouseY <= iconY + INFO_ICON_SIZE
       ) {
-        console.log('Hovering over'); // eslint-disable-line no-console
-      } else {
-        console.log('Not hovering over'); // eslint-disable-line no-console
+        console.log(info); // eslint-disable-line no-console
       }
     };
 
