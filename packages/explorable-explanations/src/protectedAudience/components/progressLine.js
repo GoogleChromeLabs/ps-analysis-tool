@@ -101,12 +101,6 @@ const ProgressLine = ({
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
-        drawInstantly();
-        resolve(returnCoordinates);
-        return;
-      }
-
       if (app.cancelPromise) {
         resolve();
         return;
@@ -114,6 +108,12 @@ const ProgressLine = ({
 
       if (app.timeline.isPaused) {
         requestAnimationFrame(animate); // Keep the animation loop alive but paused
+        return;
+      }
+
+      if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
+        drawInstantly();
+        resolve(returnCoordinates);
         return;
       }
 
