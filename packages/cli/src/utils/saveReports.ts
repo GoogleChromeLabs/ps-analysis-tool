@@ -61,15 +61,12 @@ const saveReports = async (
     );
 
     const errorLogs = generateErrorLogFile(result);
-
     await ensureFile(path.join(outDir, 'error_logs.txt'));
     await writeFile(path.join(outDir, 'error_logs.txt'), errorLogs);
 
     const rootSummaryData = generateRootSummaryDataCSV(result);
     await ensureFile(path.join(outDir, 'report.csv'));
     await writeFile(path.join(outDir, 'report.csv'), rootSummaryData);
-
-    const errorLogs = generateErrorLogFile(result);
 
     await ensureFile(path.join(outDir, 'error_logs.txt'));
     await writeFile(path.join(outDir, 'error_logs.txt'), errorLogs);
