@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { ClearIcon } from '../../../../../icons';
+import { ClearIcon } from '../../icons';
 
 interface ChipProps {
   filterTitle: string;

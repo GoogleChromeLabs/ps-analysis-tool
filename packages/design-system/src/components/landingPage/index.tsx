@@ -34,6 +34,7 @@ import { useSidebar } from '../sidebar';
 
 interface LandingPageProps {
   title?: string;
+  hideTitle?: boolean;
   children?: ReactNode;
   psInfoKey?: PSInfoKeyType;
   iframeSrc?: string;
@@ -46,6 +47,7 @@ interface LandingPageProps {
 
 const LandingPage = ({
   title,
+  hideTitle,
   psInfoKey,
   iframeSrc,
   iframeBorderClass,
@@ -67,34 +69,36 @@ const LandingPage = ({
       <div
         className={classNames(
           { hidden: loading },
-          'divide-y divide-hex-gray dark:divide-quartz'
+          'divide-y divide-hex-gray dark:divide-quartz w-full h-full flex flex-col'
         )}
       >
-        <div className="flex justify-between">
-          <div className="p-4 flex flex-col gap-1">
-            <button
-              className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
-              onClick={() => setOpen((prevOpen) => !prevOpen)}
-            >
-              {title && <h1 className="text-left">{title}</h1>}
-              <div>
-                <ArrowUp
-                  className={classNames(open && 'rotate-180 -translate-y-1')}
-                />
-              </div>
-            </button>
-            <Breadcrumbs items={extractSelectedItemKeyTitles()} />
+        {!hideTitle && (
+          <div className="flex justify-between">
+            <div className="p-4 flex flex-col gap-1">
+              <button
+                className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
+                onClick={() => setOpen((prevOpen) => !prevOpen)}
+              >
+                {title && <h1 className="text-left">{title}</h1>}
+                <div>
+                  <ArrowUp
+                    className={classNames(open && 'rotate-180 -translate-y-1')}
+                  />
+                </div>
+              </button>
+              <Breadcrumbs items={extractSelectedItemKeyTitles()} />
+            </div>
+            <div className="p-4 flex items-center">
+              {showSupportLink && <SupportLink />}
+            </div>
           </div>
-          <div className="p-4 flex items-center">
-            {showSupportLink && <SupportLink />}
-          </div>
-        </div>
-        <div className={classNames({ hidden: !open && !children })}>
+        )}
+        <div className={classNames({ hidden: !open && !children }, 'flex-1')}>
           <div
             id="#__psat-collapsible-content"
             className={classNames(
               { hidden: !open },
-              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
+              'h-full w-full flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
               {
                 'border-b border-american-silver dark:border-quartz': children,
               },

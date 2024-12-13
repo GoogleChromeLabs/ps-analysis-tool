@@ -33,6 +33,7 @@ import {
   CookieProvider,
   SettingsProvider,
   AllowedListProvider,
+  StoriesProvider,
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
@@ -48,7 +49,9 @@ if (root) {
           <TablePersistentSettingsProvider>
             <LibraryDetectionProvider>
               <AllowedListProvider>
-                <App />
+                <StoriesProvider>
+                  <App />
+                </StoriesProvider>
               </AllowedListProvider>
             </LibraryDetectionProvider>
           </TablePersistentSettingsProvider>
