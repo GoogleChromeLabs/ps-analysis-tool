@@ -82,8 +82,8 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
                 onChange={(e) =>
                   setSortValue(e.target.value as 'latest' | 'oldest')
                 }
-                className="hover:opacity-70 active:opacity-60 cursor-pointer bg-anti-flash-white
-								dark:bg-quartz rounded-sm px-2 py-[1px]"
+                className="hover:opacity-70 active:opacity-60 bg-transparent focus:bg-anti-flash-white
+								focus:dark:bg-quartz cursor-pointer  rounded-sm px-2 py-[1px]"
               >
                 <option value="Latest">Latest</option>
                 <option value="Oldest">Oldest</option>
