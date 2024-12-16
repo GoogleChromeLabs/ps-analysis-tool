@@ -47,6 +47,7 @@ export function topicsAnimation(
     playing: true,
     speedMultiplier: 1,
     inspectedCircleIndex: -1,
+    showHandCursor: false,
     canvas: null as p5.Renderer | null,
     smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
 
@@ -401,6 +402,28 @@ export function topicsAnimation(
           app.inspectedCircleIndex = index;
         }
       });
+
+      let isInspecting = false;
+      app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
+        (position) => {
+          const { x: smallCircleX, y: smallCircleY } = position;
+          const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
+
+          if (
+            x > smallCircleX - smallCircleDiameter / 2 &&
+            x < smallCircleX + smallCircleDiameter / 2 &&
+            y > smallCircleY - smallCircleDiameter / 2 &&
+            y < smallCircleY + smallCircleDiameter / 2
+          ) {
+            app.showHandCursor = true;
+            isInspecting = true;
+          }
+        }
+      );
+
+      if (!isInspecting) {
+        app.showHandCursor = false;
+      }
     },
 
     mouseClicked: () => {
@@ -472,6 +495,12 @@ export function topicsAnimation(
   p.draw = () => {
     const step = config.timeline.stepDelay / app.speedMultiplier;
     const delay = step / 10;
+
+    if (app.showHandCursor) {
+      p.cursor(p.HAND);
+    } else {
+      p.cursor(p.ARROW);
+    }
 
     if (p.frameCount % delay === 0 && app.playing) {
       app.play();
