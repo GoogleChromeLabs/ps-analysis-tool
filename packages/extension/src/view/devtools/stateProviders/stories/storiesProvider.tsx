@@ -297,13 +297,14 @@ const Provider = ({ children }: PropsWithChildren) => {
       selectedTagId.length > 0
         ? '&web_story_tag=' + selectedTagId.join(',')
         : ''
-    }`;
+    }${sortValue === 'latest' ? '&order=desc' : '&order=asc'}`;
   }, [
     authors,
     categories,
     selectedFilterValues?.author,
     selectedFilterValues?.category,
     selectedFilterValues?.tag,
+    sortValue,
     tags,
   ]);
 
@@ -315,6 +316,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     ) {
       return;
     }
+
     setLoadingState(true);
     const response = await fetch(
       `https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/?${queryParams}`

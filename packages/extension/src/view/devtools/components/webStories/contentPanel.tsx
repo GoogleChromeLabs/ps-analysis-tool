@@ -89,8 +89,8 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
                   backgroundPositionY: '4px',
                 }}
               >
-                <option value="Latest">Latest</option>
-                <option value="Oldest">Oldest</option>
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
               </select>
             </div>
           </TopBar>
