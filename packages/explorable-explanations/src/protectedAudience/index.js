@@ -572,13 +572,11 @@ app.createCanvas = () => {
 };
 
 app.createCanvas();
-if (!app.promiseQueue) {
-  app.promiseQueue = new Queue({
-    concurrency: 1,
-    autostart: false,
-    results: [],
-  });
-}
+app.promiseQueue = new Queue({
+  concurrency: 1,
+  autostart: false,
+  results: [],
+});
 app.promiseQueue.addEventListener('end', () => {
   app.cancelPromise = true;
   app.timeline.isPaused = true;
