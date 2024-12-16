@@ -25,12 +25,10 @@ import React, { useMemo, useState } from 'react';
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
 import Auctions from './auctions';
-import {
-  SYNTHETIC_AUCTION_EVENTS,
-  SYNTHETIC_INTEREST_GROUPS,
-} from './constants';
+import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import type { InterestGroups } from '@google-psat/common';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
+import { createAuctionEvents } from './auctionEventTransformers';
 
 export interface CurrentSiteData {
   type: 'advertiser' | 'publisher';
@@ -45,23 +43,37 @@ export interface CurrentSiteData {
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+  const [interestGroups, setInterestGroups] = useState<
+    {
+      interestGroupName: string;
+      ownerOrigin: string;
+    }[]
+  >([]);
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
       return {};
     }
 
+    const advertiserSet = new Set<string>();
+    interestGroups.forEach(({ ownerOrigin }) => {
+      advertiserSet.add(ownerOrigin);
+    });
+
     return {
       'div-200-1': {
         [new Date(currentSiteData?.datetime).toUTCString()]: {
           [`https://www.${currentSiteData?.website}`]: {
-            [`https://www.${currentSiteData?.website}`]:
-              SYNTHETIC_AUCTION_EVENTS[0],
+            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
+              interestGroups,
+              currentSiteData?.website,
+              Array.from(advertiserSet)
+            ),
           },
         },
       },
     };
-  }, [currentSiteData]);
+  }, [currentSiteData, interestGroups]);
 
   const interestGroupData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'publisher') {
@@ -71,6 +83,16 @@ const ExplorableExplanation = () => {
     const perSiteInterestGroups: InterestGroups[] =
       //@ts-ignore
       SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website];
+
+    setInterestGroups((prevState) => {
+      return [
+        ...prevState,
+        ...perSiteInterestGroups.map(({ name, ownerOrigin }) => ({
+          interestGroupName: name ?? '',
+          ownerOrigin: ownerOrigin ?? '',
+        })),
+      ];
+    });
 
     return perSiteInterestGroups;
   }, [currentSiteData]);
