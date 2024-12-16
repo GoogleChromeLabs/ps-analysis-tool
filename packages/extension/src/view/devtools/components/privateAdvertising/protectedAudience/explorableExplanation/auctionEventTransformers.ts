@@ -229,6 +229,7 @@ export const createAuctionEvents = (
 
     return event;
   });
+  flattenedEvents.sort((a, b) => a.time - b.time);
   return flattenedEvents;
 };
 
