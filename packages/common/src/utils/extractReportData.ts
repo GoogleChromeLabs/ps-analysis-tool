@@ -17,9 +17,9 @@
  * Internal dependencies
  */
 import {
-  ErroredOutUrlsData,
   CompleteJson,
   CookieFrameStorageType,
+  ErroredOutUrlsData,
 } from '../cookies.types';
 import { LibraryData } from '../libraryDetection.types';
 import extractCookies from './extractCookies';
@@ -31,6 +31,13 @@ const extractReportData = (data: CompleteJson[]) => {
 
   data.forEach(({ cookieData, pageUrl, libraryMatches, erroredOutUrls }) => {
     erroredOutUrlsData.push(...(erroredOutUrls ?? []));
+
+    if (
+      erroredOutUrls &&
+      erroredOutUrls.filter(({ url }) => url === pageUrl).length > 0
+    ) {
+      return;
+    }
 
     formatCookieData(
       extractCookies(cookieData, pageUrl, true),
