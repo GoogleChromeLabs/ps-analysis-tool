@@ -51,6 +51,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   >({});
   const [storyOpened, setStoryOpened] = useState(false);
   const [authors, setAuthors] = useState<Record<number, string>>({});
+  const [loadingState, setLoadingState] = useState<boolean>(false);
+  const [tags, setTags] = useState<Record<number, string>>({});
   const [categories, setCategories] = useState<Record<number, string>>({});
   const [sortValue, setSortValue] =
     useState<StoryContext['state']['sortValue']>('latest');
@@ -72,11 +74,11 @@ const Provider = ({ children }: PropsWithChildren) => {
       {
         key: 'tag',
         title: 'Tag',
-        values: ['Tag 1', 'Tag 2', 'Tag 3'],
+        values: Object.values(tags),
         sortValues: true,
       },
     ]);
-  }, [authors, categories]);
+  }, [authors, categories, tags]);
 
   //@ts-ignore since this is a custom event.
   const webStoriesLightBoxCallback = useCallback((event) => {
@@ -184,6 +186,22 @@ const Provider = ({ children }: PropsWithChildren) => {
     setAuthors(authorNameIdMap);
   }, []);
 
+  const fetchTags = useCallback(async () => {
+    const response = await fetch(
+      'https://privacysandbox-stories.com/wp-json/web-stories/v1/web_story_tag'
+    );
+
+    const responseJSON = await response.json();
+
+    const tagNameIdMap: Record<number, string> = {};
+
+    responseJSON.forEach((singleResponse: Record<string, any>) => {
+      tagNameIdMap[singleResponse.id] = singleResponse.name;
+    });
+
+    setTags(tagNameIdMap);
+  }, []);
+
   const getAuthorsAndPublisherLogo = useCallback(
     async (mediaAuthorSet: Record<number, string>) => {
       if (authors && Object.keys(authors).length === 0) {
@@ -244,6 +262,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const queryParams = useMemo(() => {
     const selectedAuthorsID: number[] = [];
     const selectedCategoriesId: number[] = [];
+    const selectedTagId: number[] = [];
 
     Object.keys(authors).forEach((key) => {
       const keyToUse = Number(key);
@@ -259,23 +278,44 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
     });
 
+    Object.keys(tags).forEach((key) => {
+      const keyToUse = Number(key);
+      if (selectedFilterValues?.tag?.includes(tags[keyToUse])) {
+        selectedTagId.push(keyToUse);
+      }
+    });
+
     return `${
       selectedAuthorsID.length > 0
         ? 'author=' + selectedAuthorsID.join(',')
         : ''
-    }&${
+    }${
       selectedCategoriesId.length > 0
-        ? 'web_story_category=' + selectedCategoriesId.join(',')
+        ? '&web_story_category=' + selectedCategoriesId.join(',')
+        : ''
+    }${
+      selectedTagId.length > 0
+        ? '&web_story_tag=' + selectedTagId.join(',')
         : ''
     }`;
   }, [
     authors,
     categories,
-    selectedFilterValues.author,
+    selectedFilterValues?.author,
     selectedFilterValues?.category,
+    selectedFilterValues?.tag,
+    tags,
   ]);
 
   const fetchStories = useCallback(async () => {
+    if (
+      Object.keys(tags).length === 0 ||
+      Object.keys(categories).length === 0 ||
+      Object.keys(authors).length === 0
+    ) {
+      return;
+    }
+    setLoadingState(true);
     const response = await fetch(
       `https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/?${queryParams}`
     );
@@ -311,12 +351,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     });
 
     setStoryMarkup(getStoryMarkup(storyJSON));
-  }, [queryParams, getAuthorsAndPublisherLogo]);
+    setLoadingState(false);
+  }, [tags, categories, authors, queryParams, getAuthorsAndPublisherLogo]);
 
   useEffect(() => {
     fetchAuthors();
     fetchCategories();
-  }, [fetchCategories, fetchAuthors]);
+    fetchTags();
+  }, [fetchCategories, fetchAuthors, fetchTags]);
 
   useEffect(() => {
     fetchStories();
@@ -333,6 +375,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         selectedFilterValues,
         sortValue,
         storyOpened,
+        loadingState,
       },
       actions: {
         resetFilters,
@@ -344,6 +387,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    loadingState,
     storyMarkup,
     filters,
     resetFilters,

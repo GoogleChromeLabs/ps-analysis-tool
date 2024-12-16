@@ -32,6 +32,7 @@ export interface StoryContext {
     selectedFilterValues: Record<string, string[]>;
     sortValue: 'latest' | 'oldest';
     storyOpened: boolean;
+    loadingState: boolean;
   };
   actions: {
     resetFilters: () => void;
@@ -55,6 +56,7 @@ const initialState: StoryContext = {
     selectedFilterValues: {},
     sortValue: 'latest',
     storyOpened: false,
+    loadingState: false,
   },
   actions: {
     resetFilters: noop,
