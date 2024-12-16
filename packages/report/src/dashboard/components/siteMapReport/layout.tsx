@@ -24,6 +24,7 @@ import {
   type CookieFrameStorageType,
   type CompleteJson,
   type LibraryData,
+  type ErroredOutUrlsData,
   noop,
   reshapeCookies,
 } from '@google-psat/common';

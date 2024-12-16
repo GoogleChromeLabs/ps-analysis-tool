@@ -22,6 +22,7 @@ import {
   type CookieDatabase,
   LibraryData,
   type LibraryMatchers,
+  type SingleURLError,
   removeAndAddNewSpinnerText,
   type Selectors,
 } from '@google-psat/common';
