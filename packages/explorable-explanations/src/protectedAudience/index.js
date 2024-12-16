@@ -186,8 +186,6 @@ app.setupLoop = (doNotPlay) => {
     app.addToPromiseQueue(0);
   } catch (error) {
     //Silently fail.
-    // eslint-disable-next-line no-console
-    console.log(error);
   }
   timeline.eraseAndRedraw();
   timeline.renderUserIcon();
@@ -574,7 +572,13 @@ app.createCanvas = () => {
 };
 
 app.createCanvas();
-app.promiseQueue = new Queue({ concurrency: 1, autostart: false, results: [] });
+if (!app.promiseQueue) {
+  app.promiseQueue = new Queue({
+    concurrency: 1,
+    autostart: false,
+    results: [],
+  });
+}
 app.promiseQueue.addEventListener('end', () => {
   app.cancelPromise = true;
   app.timeline.isPaused = true;
