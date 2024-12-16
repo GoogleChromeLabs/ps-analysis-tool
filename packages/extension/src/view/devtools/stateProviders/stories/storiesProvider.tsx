@@ -32,15 +32,26 @@ import type {
  * Internal dependencies.
  */
 import Context, { type StoryContext } from './context';
+import {
+  getStoryMarkup,
+  type SingleStoryJSON,
+} from '../../../../utils/createStoryIframe';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [searchValue, setSearchValue] = useState('');
+  const [storyMarkup, setStoryMarkup] = useState('');
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
   const [filters, setFilters] = useState<FilterSidebarValue[]>([]);
   const [selectedFilters, setSelectedFilters] = useState<ChipsFilter[]>([]);
   const [selectedFilterValues, setSelectedFilterValues] = useState<
     Record<string, string[]>
   >({});
+  const [authorPublisherLogo, setAuthorPublisherLogo] = useState<
+    Record<number, Record<string, string>>
+  >({});
+  const [storyOpened, setStoryOpened] = useState(false);
+  const [authors, setAuthors] = useState<Record<number, string>>({});
+  const [categories, setCategories] = useState<Record<number, string>>({});
   const [sortValue, setSortValue] =
     useState<StoryContext['state']['sortValue']>('latest');
 
@@ -49,13 +60,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       {
         key: 'category',
         title: 'Category',
-        values: ['Category 1', 'Category 2', 'Category 3'],
+        values: Object.values(categories),
         sortValues: true,
       },
       {
         key: 'author',
         title: 'Author',
-        values: ['Author 1', 'Author 2', 'Author 3'],
+        values: Object.values(authors),
         sortValues: true,
       },
       {
@@ -65,11 +76,9 @@ const Provider = ({ children }: PropsWithChildren) => {
         sortValues: true,
       },
     ]);
-  }, []);
+  }, [authors, categories]);
 
-  const [storyOpened, setStoryOpened] = useState(false);
   //@ts-ignore since this is a custom event.
-
   const webStoriesLightBoxCallback = useCallback((event) => {
     setStoryOpened(() => event.detail.storyOpened);
   }, []);
@@ -146,9 +155,177 @@ const Provider = ({ children }: PropsWithChildren) => {
     setSelectedFilterValues({});
   }, []);
 
+  const fetchCategories = useCallback(async () => {
+    const response = await fetch(
+      'https://privacysandbox-stories.com/wp-json/web-stories/v1/web_story_category'
+    );
+    const responseJson = await response.json();
+    const categoriesMap: Record<number, string> = {};
+    responseJson.forEach((category: any) => {
+      categoriesMap[category.id] = category.name;
+    });
+
+    setCategories(categoriesMap);
+  }, []);
+
+  const fetchAuthors = useCallback(async () => {
+    const response = await fetch(
+      'https://privacysandbox-stories.com/wp-json/web-stories/v1/users'
+    );
+
+    const responseJSON = await response.json();
+
+    const authorNameIdMap: Record<number, string> = {};
+
+    responseJSON.forEach((singleResponse: Record<string, any>) => {
+      authorNameIdMap[singleResponse.id] = singleResponse.name;
+    });
+
+    setAuthors(authorNameIdMap);
+  }, []);
+
+  const getAuthorsAndPublisherLogo = useCallback(
+    async (mediaAuthorSet: Record<number, string>) => {
+      if (authors && Object.keys(authors).length === 0) {
+        return {};
+      }
+
+      const mediaAuthorSetClone = mediaAuthorSet;
+      Object.keys(authorPublisherLogo).forEach((key) => {
+        if (authorPublisherLogo[Number(key)]) {
+          delete mediaAuthorSetClone[Number(key)];
+        }
+      });
+
+      if (Object.keys(mediaAuthorSet).length === 0) {
+        return authorPublisherLogo;
+      }
+
+      const transformedMediaAuthorMap: Record<
+        number,
+        Record<string, string>
+      > = {};
+
+      await Promise.all(
+        Object.keys(mediaAuthorSet).map(async (key: string) => {
+          const mediaResponse = await fetch(
+            'https://privacysandbox-stories.com/wp-json/web-stories/v1/media/' +
+              mediaAuthorSet[Number(key)]
+          );
+
+          //Check the media response and get the avif/webp image if available else use source_url.
+          const mediaResponseJSON = await mediaResponse.json();
+          const sourceUrl = mediaResponseJSON.source_url;
+          const splittedUrl = sourceUrl.split('/');
+          const urlWithoutName = sourceUrl.substring(
+            0,
+            sourceUrl.length - splittedUrl[splittedUrl.length - 1].length
+          );
+
+          const avifResource =
+            urlWithoutName +
+            mediaResponseJSON?.media_details?.sources?.['image/avif']?.file;
+          const webpResource =
+            urlWithoutName +
+            mediaResponseJSON?.media_details?.sources?.['image/webp']?.file;
+
+          transformedMediaAuthorMap[Number(key)] = {
+            name: authors[Number(key)],
+            publisherLogo: avifResource ?? webpResource ?? sourceUrl,
+          };
+        })
+      );
+      setAuthorPublisherLogo(transformedMediaAuthorMap);
+      return transformedMediaAuthorMap;
+    },
+    [authorPublisherLogo, authors]
+  );
+
+  const queryParams = useMemo(() => {
+    const selectedAuthorsID: number[] = [];
+    const selectedCategoriesId: number[] = [];
+
+    Object.keys(authors).forEach((key) => {
+      const keyToUse = Number(key);
+      if (selectedFilterValues?.author?.includes(authors[keyToUse])) {
+        selectedAuthorsID.push(keyToUse);
+      }
+    });
+
+    Object.keys(categories).forEach((key) => {
+      const keyToUse = Number(key);
+      if (selectedFilterValues?.category?.includes(categories[keyToUse])) {
+        selectedCategoriesId.push(keyToUse);
+      }
+    });
+
+    return `${
+      selectedAuthorsID.length > 0
+        ? 'author=' + selectedAuthorsID.join(',')
+        : ''
+    }&${
+      selectedCategoriesId.length > 0
+        ? 'web_story_category=' + selectedCategoriesId.join(',')
+        : ''
+    }`;
+  }, [
+    authors,
+    categories,
+    selectedFilterValues.author,
+    selectedFilterValues?.category,
+  ]);
+
+  const fetchStories = useCallback(async () => {
+    const response = await fetch(
+      `https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/?${queryParams}`
+    );
+
+    const responseJSON = await response.json();
+    let storyJSON: SingleStoryJSON[] = [];
+    const mediaAuthorSet: Record<number, string> = {};
+
+    responseJSON.forEach((singleResponse: any) => {
+      if (singleResponse?.status === 'publish') {
+        mediaAuthorSet[singleResponse.author] =
+          singleResponse?.meta?.web_stories_publisher_logo;
+
+        storyJSON.push({
+          heroImage: singleResponse?.story_poster?.url ?? '',
+          publisherLogo: singleResponse?.meta?.web_stories_publisher_logo,
+          publisherName: singleResponse?.author,
+          storyTitle: singleResponse?.title?.rendered,
+          storyUrl: `${singleResponse?.link}#embedMode=2`,
+        });
+      }
+    });
+
+    const authorsAndPublisherLogoMap = await getAuthorsAndPublisherLogo(
+      mediaAuthorSet
+    );
+
+    storyJSON = storyJSON.map((story) => {
+      const key = Number(story.publisherName);
+      story.publisherName = authorsAndPublisherLogoMap[key]?.name;
+      story.publisherLogo = authorsAndPublisherLogoMap[key]?.publisherLogo;
+      return story;
+    });
+
+    setStoryMarkup(getStoryMarkup(storyJSON));
+  }, [queryParams, getAuthorsAndPublisherLogo]);
+
+  useEffect(() => {
+    fetchAuthors();
+    fetchCategories();
+  }, [fetchCategories, fetchAuthors]);
+
+  useEffect(() => {
+    fetchStories();
+  }, [fetchStories]);
+
   const memoisedValue = useMemo(() => {
     return {
       state: {
+        storyMarkup,
         searchValue,
         showFilterSidebar,
         selectedFilters,
@@ -167,6 +344,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    storyMarkup,
     filters,
     resetFilters,
     searchValue,

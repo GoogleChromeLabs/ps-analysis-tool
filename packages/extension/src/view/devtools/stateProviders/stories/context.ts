@@ -24,6 +24,7 @@ import type {
 
 export interface StoryContext {
   state: {
+    storyMarkup: string;
     searchValue: string;
     showFilterSidebar: boolean;
     filters: FilterSidebarValue[];
@@ -46,6 +47,7 @@ export interface StoryContext {
 
 const initialState: StoryContext = {
   state: {
+    storyMarkup: '',
     searchValue: '',
     showFilterSidebar: false,
     selectedFilters: [],

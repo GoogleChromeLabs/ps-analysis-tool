@@ -24,8 +24,6 @@ import { noop } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { getStoryMarkup } from './createStoryIframe';
-import { STORY_JSON } from './story';
 import { useStories } from '../../stateProviders';
 
 interface WebStoriesProps {
@@ -33,9 +31,8 @@ interface WebStoriesProps {
 }
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
-  const storyMarkup = getStoryMarkup(STORY_JSON);
-
   const {
+    storyMarkup,
     searchValue,
     setSearchValue,
     showFilterSidebar,
@@ -48,6 +45,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     selectedFilterValues,
     filters,
   } = useStories(({ state, actions }) => ({
+    storyMarkup: state.storyMarkup,
     searchValue: state.searchValue,
     filters: state.filters,
     sortValue: state.sortValue,
