@@ -47,9 +47,8 @@ const TableTray = () => {
       enable={{
         top: true,
       }}
-      className="h-full flex"
     >
-      <div className="w-full h-full">
+      <div className="w-full h-full flex flex-col">
         <div className="bg-sky-100 dark:bg-sky-900 h-fit flex justify-between items-center">
           <div className="pt-1.5">
             <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
