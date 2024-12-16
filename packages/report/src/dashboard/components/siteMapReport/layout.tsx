@@ -26,7 +26,6 @@ import {
   type LibraryData,
   noop,
   reshapeCookies,
-  type ErroredOutUrlsData,
 } from '@google-psat/common';
 import {
   useSidebar,

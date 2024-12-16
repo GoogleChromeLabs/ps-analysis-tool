@@ -23,7 +23,6 @@ import {
   LibraryData,
   type LibraryMatchers,
   removeAndAddNewSpinnerText,
-  type SingleURLError,
   type Selectors,
 } from '@google-psat/common';
 

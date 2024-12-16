@@ -26,7 +26,7 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(p-queue|p-timeout|d3(-.*)?|internmap|delaunator|robust-predicates|pretty-print-json)/)',
+    'node_modules/(?!(p-queue|p-timeout|d3(-.*)?|internmap|delaunator|robust-predicates|pretty-print-json|queue)/)',
   ],
   moduleNameMapper: {
     '^@google-psat\\/(.*)': '<rootDir>/packages/$1/src/',

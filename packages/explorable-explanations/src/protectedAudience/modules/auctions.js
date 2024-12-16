@@ -22,7 +22,6 @@ import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine, Branches, RippleEffect } from '../components';
 import bubbles from './bubbles';
-import promiseQueue from '../lib/promiseQueue.js';
 
 /**
  * @module Auction
@@ -47,20 +46,75 @@ auction.setupAuctions = () => {
  */
 auction.setUp = (index) => {
   const { circles } = config.timeline;
-  const { box, colors } = config.flow;
+  const { box } = config.flow;
   const currentCircle = circles[index];
-
-  const { x, y } = flow.getTimelineCircleCoordinates(index);
 
   if (currentCircle.type !== 'publisher') {
     app.auction.auctions.push(null);
     return;
   }
 
-  const steps = [];
+  app.isMultiSeller = true;
+
+  auction.steps = [];
+
+  const steps = auction.steps;
+
+  auction.setUpAdUnitCode(index);
+  auction.setupBranches(index);
+  auction.setUpfirstSSPTagFlow(index);
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x - 10 + box.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y - 10 - box.height / 2;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.setUpRunadAuction();
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y + 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'Show Winning Ad',
+      x: () => app.auction.nextTipCoordinates?.x + 10,
+      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  app.auction.auctions.push(auction.steps);
+};
+
+auction.setUpAdUnitCode = (index) => {
+  const { colors } = config.flow;
+  const { x, y } = flow.getTimelineCircleCoordinates(index);
 
   // Setup Ad unit codes
-  steps.push({
+  auction.steps.push({
     component: Branches,
     props: {
       x1: x,
@@ -91,9 +145,10 @@ auction.setUp = (index) => {
       app.auction.nextTipCoordinates = returnValue[1];
     },
   });
+};
 
-  // Setup Branches
-  steps.push({
+auction.setupBranches = (index) => {
+  auction.steps.push({
     component: Branches,
     props: {
       x1: () => app.auction.nextTipCoordinates?.x,
@@ -121,8 +176,12 @@ auction.setUp = (index) => {
       app.auction.nextTipCoordinates = returnValue[1];
     },
   });
+};
 
-  steps.push({
+auction.setUpfirstSSPTagFlow = () => {
+  const { box, colors } = config.flow;
+
+  auction.steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -135,7 +194,7 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
+  auction.steps.push({
     component: Box,
     props: {
       title: 'SSP Tag',
@@ -147,7 +206,7 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
+  auction.steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -159,7 +218,7 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
+  auction.steps.push({
     component: Box,
     props: {
       title: 'SSP',
@@ -172,7 +231,7 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
+  auction.steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -184,7 +243,7 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
+  auction.steps.push({
     component: Box,
     props: {
       title: 'DSPs',
@@ -197,7 +256,7 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
+  auction.steps.push({
     component: ProgressLine,
     props: {
       direction: 'up',
@@ -211,7 +270,7 @@ auction.setUp = (index) => {
     },
   });
 
-  steps.push({
+  auction.steps.push({
     component: ProgressLine,
     props: {
       direction: 'up',
@@ -224,20 +283,11 @@ auction.setUp = (index) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
+};
 
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x - 10 + box.width / 2,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y - 10 - box.height / 2;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
+auction.setUpRunadAuction = () => {
+  const steps = auction.steps;
+  const { box, colors } = config.flow;
 
   steps.push({
     component: Box,
@@ -419,34 +469,6 @@ auction.setUp = (index) => {
       },
     });
   });
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y + 10;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'Show Winning Ad',
-      x: () => app.auction.nextTipCoordinates?.x + 10,
-      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
-
-  app.auction.auctions.push(steps);
 };
 
 /**
@@ -464,8 +486,7 @@ auction.draw = (index) => {
   }
 
   for (const step of steps) {
-    promiseQueue.nextStepSkipIndex.push(promiseQueue.queue.length - 1);
-    promiseQueue.add(async () => {
+    app.promiseQueue.push(async (cb) => {
       const { component, props, callBack } = step;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
@@ -509,13 +530,15 @@ auction.draw = (index) => {
         }
         await utils.delay(delay); // eslint-disable-line no-await-in-loop
       }
+      cb(null, true);
     });
   }
 
-  promiseQueue.add(() => {
+  app.promiseQueue.push((cb) => {
     if (!app.isRevisitingNodeInInteractiveMode || !app.isInteractiveMode) {
       flow.clearBelowTimelineCircles();
     }
+    cb(null, true);
   });
 };
 

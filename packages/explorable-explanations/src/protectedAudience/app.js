@@ -63,6 +63,7 @@ const app = {
   isRevisitingNodeInInteractiveMode: false,
   setCurrentSite: () => null,
   usedNextOrPrev: false,
+  promiseQueue: null,
   canvasEventListerners: {
     main: {
       mouseOver: {},

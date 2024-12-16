@@ -68,8 +68,6 @@ const saveReports = async (
     await ensureFile(path.join(outDir, 'report.csv'));
     await writeFile(path.join(outDir, 'report.csv'), rootSummaryData);
 
-    await ensureFile(path.join(outDir, 'error_logs.txt'));
-    await writeFile(path.join(outDir, 'error_logs.txt'), errorLogs);
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {
