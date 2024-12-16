@@ -471,7 +471,24 @@ app.toggleMultSeller = (event) => {
 
 // Define the sketch
 export const sketch = (p) => {
+  app.promiseQueue = new Queue({
+    concurrency: 1,
+    autostart: false,
+    results: [],
+  });
+
+  app.promiseQueue.addEventListener('end', () => {
+    app.cancelPromise = true;
+    app.timeline.isPaused = true;
+  });
+
+  app.promiseQueue.addEventListener('start', () => {
+    app.cancelPromise = false;
+    app.timeline.isPaused = false;
+  });
+
   app.handleControls();
+
   p.setup = () => {
     setupMainCanvas(p);
   };
@@ -572,17 +589,5 @@ app.createCanvas = () => {
 };
 
 app.createCanvas();
-app.promiseQueue = new Queue({
-  concurrency: 1,
-  autostart: false,
-  results: [],
-});
-app.promiseQueue.addEventListener('end', () => {
-  app.cancelPromise = true;
-  app.timeline.isPaused = true;
-});
-app.promiseQueue.addEventListener('start', () => {
-  app.cancelPromise = false;
-  app.timeline.isPaused = false;
-});
+
 export { app };
