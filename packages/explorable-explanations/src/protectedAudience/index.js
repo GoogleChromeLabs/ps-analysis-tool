@@ -150,6 +150,7 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
     return;
   }
 };
+
 app.addToPromiseQueue = (indexToStartFrom) => {
   let currentIndex = indexToStartFrom;
   while (currentIndex < config.timeline.circles.length) {
@@ -212,18 +213,20 @@ app.handleNonInteractivePrev = async () => {
   if (app.timeline.currentIndex <= 0) {
     return;
   }
+
   app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   app.timeline.currentIndex -= 1;
+
   await utils.delay(100);
+
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
 
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
   utils.wipeAndRecreateMainCanvas();
-  utils.wipeAndRecreateInterestCanvas();
   app.up.clear();
   timeline.renderUserIcon();
 
@@ -318,7 +321,6 @@ app.handleNonInteravtiveNext = async () => {
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
   utils.wipeAndRecreateMainCanvas();
-  utils.wipeAndRecreateInterestCanvas();
   app.up.clear();
   timeline.renderUserIcon();
 

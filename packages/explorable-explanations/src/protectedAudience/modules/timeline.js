@@ -130,8 +130,10 @@ timeline.init = () => {
       ) {
         app.promiseQueue.end();
         flow.clearBelowTimelineCircles();
+
         app.shouldRespondToClick = false;
         app.timeline.currentIndex = clickedIndex;
+
         utils.wipeAndRecreateUserCanvas();
         timeline.renderUserIcon();
         bubbles.generateBubbles();
@@ -140,6 +142,7 @@ timeline.init = () => {
           app.promiseQueue.push((cb) => {
             utils.wipeAndRecreateUserCanvas();
             utils.wipeAndRecreateMainCanvas();
+
             app.p.push();
             app.p.stroke(config.timeline.colors.grey);
 
@@ -223,6 +226,7 @@ timeline.init = () => {
 
           bubbles.showMinifiedBubbles();
           app.shouldRespondToClick = true;
+
           utils.wipeAndRecreateUserCanvas();
           utils.wipeAndRecreateMainCanvas();
           timeline.renderUserIcon();
