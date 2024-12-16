@@ -17,21 +17,49 @@
 /**
  * External dependencies.
  */
-import { Tabs, useTabs } from '@google-psat/design-system';
-import React from 'react';
+import { DoubleDownArrow, Tabs, useTabs } from '@google-psat/design-system';
+import { Resizable } from 're-resizable';
+import React, { useState } from 'react';
 
 const TableTray = () => {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
 
+  const [hidden, setHidden] = useState(false);
+
   return (
-    <div className="w-full h-full">
-      <div className="bg-sky-100 dark:bg-sky-900 h-fit pt-1.5">
-        <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
+    <Resizable
+      defaultSize={{
+        width: '100%',
+        height: '20%',
+      }}
+      size={
+        hidden
+          ? {
+              width: '100%',
+              height: '30px',
+            }
+          : undefined
+      }
+      minHeight="30px"
+      maxHeight="95%"
+      enable={{
+        top: true,
+      }}
+    >
+      <div className="w-full h-full flex flex-col">
+        <div className="bg-sky-100 dark:bg-sky-900 h-fit flex justify-between items-center">
+          <div className="pt-1.5">
+            <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
+          </div>
+          <button onClick={() => setHidden(!hidden)} className="pr-2">
+            <DoubleDownArrow className={hidden ? 'rotate-180' : 'rotate-0'} />
+          </button>
+        </div>
+        {!hidden && ActiveTabContent && <ActiveTabContent {...props} />}
       </div>
-      {ActiveTabContent && <ActiveTabContent {...props} />}
-    </div>
+    </Resizable>
   );
 };
 

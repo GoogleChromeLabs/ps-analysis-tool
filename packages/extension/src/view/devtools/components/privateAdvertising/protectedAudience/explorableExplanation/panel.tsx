@@ -38,7 +38,6 @@ import { NextIcon, PreviousIcon, useTabs } from '@google-psat/design-system';
  */
 import Header from '../../../explorableExplanation/header';
 import TableTray from '../../../explorableExplanation/tableTray';
-import { Resizable } from 're-resizable';
 import type { CurrentSiteData } from '.';
 
 declare module 'react' {
@@ -249,20 +248,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         setCurrentSite={setCurrentSite}
       />
       <ReactP5Wrapper sketch={userSketch} />
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '20%',
-        }}
-        minHeight="15%"
-        maxHeight="95%"
-        enable={{
-          top: true,
-        }}
-        className="h-full flex"
-      >
-        <TableTray />
-      </Resizable>
+      <TableTray />
     </div>
   );
 };

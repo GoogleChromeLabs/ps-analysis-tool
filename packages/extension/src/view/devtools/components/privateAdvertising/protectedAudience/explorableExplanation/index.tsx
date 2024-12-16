@@ -29,6 +29,7 @@ import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import type { InterestGroups } from '@google-psat/common';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
+import InfoPanel from './infoPanel';
 
 export interface CurrentSiteData {
   type: 'advertiser' | 'publisher';
@@ -115,6 +116,15 @@ const ExplorableExplanation = () => {
           Element: Auctions,
           props: {
             auctionEvents: auctionsData as AuctionEventsType,
+          },
+        },
+      },
+      {
+        title: 'Info',
+        content: {
+          Element: InfoPanel,
+          props: {
+            data: undefined,
           },
         },
       },
