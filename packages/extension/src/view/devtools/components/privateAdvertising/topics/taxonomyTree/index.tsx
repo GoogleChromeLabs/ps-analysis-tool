@@ -64,7 +64,6 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           svgGroup.dispatchEvent(clickEvent);
         }
 
-        svgGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
         svgGroup.style.fill = 'orangered';
         svgGroup.style.transition = 'fill 1s';
 
@@ -89,6 +88,11 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
       }
 
       clicker(_id || 'tax-tree-root-node', nextId); // if no id is provided it's the root of the tree
+
+      if (!nextId) {
+        const circle = document.getElementById(_id)?.querySelector('circle');
+        circle?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
   }, []);
 
@@ -122,7 +126,9 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           return;
         }
 
-        nodeClickHandler(topic);
+        setTimeout(() => {
+          nodeClickHandler(topic);
+        }, 200);
         setStorage(
           JSON.stringify({
             taxonomy: '',
