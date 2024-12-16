@@ -67,7 +67,8 @@ const ExplorableExplanation = () => {
             [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
               interestGroups,
               currentSiteData?.website,
-              Array.from(advertiserSet)
+              Array.from(advertiserSet),
+              new Date(currentSiteData?.datetime).getTime()
             ),
           },
         },

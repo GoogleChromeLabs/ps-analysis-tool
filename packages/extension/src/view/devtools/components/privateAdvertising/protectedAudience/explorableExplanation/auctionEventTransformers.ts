@@ -28,6 +28,18 @@ import {
   SYNTHETIC_AUCTION_EVENT_STARTED,
   SYNTHETIC_AUCTION_EVENTS_BID,
 } from './constants';
+import formatTime from '../../../../../../store/utils/formatTime';
+
+const getRandomisedNumbers = (count: number, min: number, max: number) => {
+  const randomNumbers = Array.from(
+    { length: count },
+    () => Math.floor(Math.random() * (max - min + 1)) + min
+  );
+
+  randomNumbers.sort((a, b) => a - b);
+
+  return randomNumbers;
+};
 
 export const transformAuctionConfig = (seller: string) => {
   const eventAuctionConfig = structuredClone(SYNTHETIC_AUCTION_CONFIG);
@@ -63,20 +75,28 @@ export const transformFetchingEvents = (
       const eventToModify: singleAuctionEvent = structuredClone(
         SYNTHETIC_AUCTION_EVENT_BIDDERJS
       ) as singleAuctionEvent;
+
       eventToModify.type = 'Finished Fetch ' + eventName;
       eventToModify.auctionConfig = transformAuctionConfig(seller);
+
       eventToModify.eventType = 'interestGroupAuctionNetworkRequestCompleted';
+
       fetchEventsToBeReturned.push(eventToModify);
     });
+
     return fetchEventsToBeReturned;
   } else {
     advertisers.forEach(() => {
       const eventToModify: singleAuctionEvent =
         SYNTHETIC_AUCTION_EVENT_BIDDERJS as singleAuctionEvent;
+
       eventToModify.type = 'Start Fetch ' + eventName;
+
       eventToModify.eventType = 'interestGroupAuctionNetworkRequestCreated';
+
       fetchEventsToBeReturned.push(eventToModify);
     });
+
     return fetchEventsToBeReturned;
   }
 };
@@ -131,6 +151,7 @@ export const transformBidEvent = (
     eventToModify.ownerOrigin = ownerOrigin;
     eventToModify.name = interestGroupName;
     eventToModify.bid = randomIntFromInterval(1, 100);
+
     bidEventsToBeReturned.push(eventToModify);
   });
 
@@ -143,23 +164,12 @@ export const createAuctionEvents = (
     ownerOrigin: string;
   }[],
   seller: string,
-  advertisers: string[]
+  advertisers: string[],
+  eventStartTime: number
 ) => {
   const bidEvents = transformBidEvent(interestGroups);
 
   bidEvents.sort((a, b) => (a?.bid ?? 0) - (b?.bid ?? 0));
-
-  const winEvent = {
-    uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-    name: bidEvents[bidEvents.length - 1].name,
-    ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
-    formattedTime: '629.06ms',
-    type: 'win',
-    time: 1734076670.129756,
-    bid: bidEvents[bidEvents.length - 1].bid,
-    bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
-    eventType: 'interestGroupAccessed',
-  };
 
   const events = [
     transformStartedEvent(seller),
@@ -187,7 +197,17 @@ export const createAuctionEvents = (
       seller,
       'sellerTrustedSignals'
     ),
-    winEvent,
+    {
+      formattedTime: '',
+      uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+      name: bidEvents[bidEvents.length - 1].name,
+      ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+      type: 'win',
+      time: 1734076670.129756,
+      bid: bidEvents[bidEvents.length - 1].bid,
+      bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+      eventType: 'interestGroupAccessed',
+    },
     transformFetchingEvents(
       advertisers,
       'finish',
@@ -195,7 +215,21 @@ export const createAuctionEvents = (
       'bidderTrustedSignals'
     ),
   ];
-  return events.flat();
+
+  const flattenedEvents = events.flat();
+
+  const randomNumbers = getRandomisedNumbers(flattenedEvents.length, 0, 1000);
+
+  flattenedEvents.map((event, index) => {
+    event.formattedTime = formatTime(
+      eventStartTime,
+      eventStartTime + randomNumbers[index] / 1000
+    );
+    event.time = eventStartTime + randomNumbers[index];
+
+    return event;
+  });
+  return flattenedEvents;
 };
 
 const randomIntFromInterval = (min: number, max: number) => {
