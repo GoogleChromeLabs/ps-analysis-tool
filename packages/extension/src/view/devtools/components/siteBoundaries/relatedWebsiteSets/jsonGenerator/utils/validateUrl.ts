@@ -18,25 +18,25 @@
  * External dependencies.
  */
 import { I18n } from '@google-psat/i18n';
-import { validate } from 'validate.js';
 
 const validateUrl = (url: string) => {
-  const result = validate(
-    { url },
-    {
-      url: {
-        url: {
-          message: I18n.getMessage('shouldMatchFormat'),
-          schemes: ['https'],
-        },
-      },
-    }
-  );
+  const message = I18n.getMessage('shouldMatchFormat');
+  let _url;
 
-  if (result) {
-    return result.url[0];
+  if (!url || typeof url !== 'string') {
+    return `Url ${message}`;
   }
-  return '';
+
+  try {
+    _url = new URL(url);
+    if (_url.protocol === 'https') {
+      return '';
+    }
+  } catch (err) {
+    return `Url ${message}`;
+  }
+
+  return `Url ${message}`;
 };
 
 export default validateUrl;

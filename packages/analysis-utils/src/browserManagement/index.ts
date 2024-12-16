@@ -87,13 +87,15 @@ export class BrowserManagement {
     this.indent = indent;
     this.erroredOutUrls = {};
     this.selectors = selectors;
+    this.erroredOutUrls = {};
   }
 
-  debugLog(msg: string) {
+  debugLog(msg: string, shouldShowWarning?: boolean) {
     if (this.shouldLogDebug && this.spinnies) {
       this.spinnies.add(msg, {
         text: msg,
-        succeedColor: 'white',
+        succeedColor: shouldShowWarning ? 'yellowBright' : 'white',
+        spinnerColor: shouldShowWarning ? 'yellowBright' : 'white',
         status: 'non-spinnable',
         indent: this.indent,
       });
@@ -122,20 +124,16 @@ export class BrowserManagement {
   async clickOnButtonUsingCMPSelectors(page: Page): Promise<boolean> {
     let clickedOnButton = false;
 
-    try {
-      await Promise.all(
-        CMP_SELECTORS.map(async (selector) => {
-          const buttonToClick = await page.$(selector);
-          if (buttonToClick) {
-            await buttonToClick.click();
-            clickedOnButton = true;
-          }
-        })
-      );
-      return clickedOnButton;
-    } catch (error) {
-      return clickedOnButton;
-    }
+    await Promise.all(
+      CMP_SELECTORS.map(async (selector) => {
+        const buttonToClick = await page.$(selector);
+        if (buttonToClick) {
+          await buttonToClick.click();
+          clickedOnButton = true;
+        }
+      })
+    );
+    return clickedOnButton;
   }
 
   async clickOnGDPRUsingTextSelectors(
@@ -146,46 +144,42 @@ export class BrowserManagement {
       return false;
     }
 
-    try {
-      const result = await page.evaluate((args: string[]) => {
-        const bannerNodes: Element[] = Array.from(
-          (document.querySelector('body')?.childNodes || []) as Element[]
-        )
-          ?.filter((node: Element) => node && node?.tagName === 'DIV')
-          ?.filter((node) => {
-            if (!node || !node?.textContent) {
-              return false;
+    const result = await page.evaluate((args: string[]) => {
+      const bannerNodes: Element[] = Array.from(
+        (document.querySelector('body')?.childNodes || []) as Element[]
+      )
+        ?.filter((node: Element) => node && node?.tagName === 'DIV')
+        ?.filter((node) => {
+          if (!node || !node?.textContent) {
+            return false;
+          }
+          const regex =
+            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences|cookies)\b/;
+
+          return regex.test(node.textContent.toLowerCase());
+        });
+
+      return bannerNodes?.some((node: Element) => {
+        const buttonNodes = Array.from(node?.getElementsByTagName('button'));
+
+        return buttonNodes?.some((cnode) => {
+          if (!cnode?.textContent) {
+            return false;
+          }
+
+          return args.some((text) => {
+            if (cnode?.textContent?.toLowerCase().includes(text)) {
+              cnode?.click();
+              return true;
             }
-            const regex =
-              /\b(consent|policy|cookie policy|privacy policy|personalize|preferences|cookies)\b/;
 
-            return regex.test(node.textContent.toLowerCase());
-          });
-
-        return bannerNodes?.some((node: Element) => {
-          const buttonNodes = Array.from(node?.getElementsByTagName('button'));
-
-          return buttonNodes?.some((cnode) => {
-            if (!cnode?.textContent) {
-              return false;
-            }
-
-            return args.some((text) => {
-              if (cnode?.textContent?.toLowerCase().includes(text)) {
-                cnode?.click();
-                return true;
-              }
-
-              return false;
-            });
+            return false;
           });
         });
-      }, textSelectors);
+      });
+    }, textSelectors);
 
-      return result;
-    } catch (error) {
-      return false;
-    }
+    return result;
   }
 
   async clickOnAcceptBanner(url: string) {
@@ -236,8 +230,6 @@ export class BrowserManagement {
           stackTrace: error?.stack ?? '',
           errorName: error?.name,
         });
-
-        throw error;
       }
     }
   }
@@ -249,60 +241,56 @@ export class BrowserManagement {
       return false;
     }
 
-    try {
-      await Promise.all(
-        this.selectors?.cssSelectors.map(async (selector) => {
-          const buttonToClick = await page.$(selector);
-          if (buttonToClick) {
-            clickedOnButton = true;
-            this.debugLog('GDPR banner found and accepted');
-            await buttonToClick.click();
-          }
-        })
-      );
+    await Promise.all(
+      this.selectors?.cssSelectors.map(async (selector) => {
+        const buttonToClick = await page.$(selector);
+        if (buttonToClick) {
+          clickedOnButton = true;
+          this.debugLog('GDPR banner found and accepted');
+          await buttonToClick.click();
+        }
+      })
+    );
 
-      if (clickedOnButton) {
-        return clickedOnButton;
+    if (clickedOnButton) {
+      return clickedOnButton;
+    }
+
+    clickedOnButton = await page.evaluate((xPaths: string[]) => {
+      const rootElement = document.querySelector('html');
+
+      if (!rootElement) {
+        return false;
       }
 
-      clickedOnButton = await page.evaluate((xPaths: string[]) => {
-        const rootElement = document.querySelector('html');
+      return xPaths.some((xPath) => {
+        const _acceptButton = document
+          .evaluate(xPath, rootElement)
+          .iterateNext();
 
-        if (!rootElement) {
+        if (!_acceptButton) {
           return false;
         }
 
-        return xPaths.some((xPath) => {
-          const _acceptButton = document
-            .evaluate(xPath, rootElement)
-            .iterateNext();
+        if (_acceptButton instanceof HTMLElement) {
+          _acceptButton?.click();
+          return true;
+        }
 
-          if (!_acceptButton) {
-            return false;
-          }
+        return false;
+      });
+    }, this.selectors?.xPath);
 
-          if (_acceptButton instanceof HTMLElement) {
-            _acceptButton?.click();
-            return true;
-          }
-
-          return false;
-        });
-      }, this.selectors?.xPath);
-
-      if (clickedOnButton) {
-        return clickedOnButton;
-      }
-
-      clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
-        page,
-        this.selectors?.textSelectors
-      );
-
-      return clickedOnButton;
-    } catch (error) {
+    if (clickedOnButton) {
       return clickedOnButton;
     }
+
+    clickedOnButton = await this.clickOnGDPRUsingTextSelectors(
+      page,
+      this.selectors?.textSelectors
+    );
+
+    return clickedOnButton;
   }
 
   async openPage(): Promise<Page> {
@@ -357,7 +345,7 @@ export class BrowserManagement {
           errorName: `INVALID_SERVER_RESPONSE`,
         });
 
-        this.debugLog(`Warning: Server error found in URL: ${url}`);
+        this.debugLog(`Warning: Server error found in URL: ${url}`, true);
 
         if (!this.isSiteMap) {
           throw new Error(`Invalid server response: ${response.status()}`);
@@ -373,7 +361,7 @@ export class BrowserManagement {
           errorName: error?.name,
         });
 
-        if (error?.name === 'TimeoutError') {
+        if (error?.name === 'TimeoutError' || error?.name === 'i') {
           this.debugLog(
             `Navigation did not finish on URL ${url} in 10 seconds moving on to scrolling`
           );

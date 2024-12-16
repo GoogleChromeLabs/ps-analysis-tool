@@ -68,6 +68,7 @@ const saveReports = async (
     const rootSummaryData = generateRootSummaryDataCSV(result);
     await ensureFile(path.join(outDir, 'report.csv'));
     await writeFile(path.join(outDir, 'report.csv'), rootSummaryData);
+
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {

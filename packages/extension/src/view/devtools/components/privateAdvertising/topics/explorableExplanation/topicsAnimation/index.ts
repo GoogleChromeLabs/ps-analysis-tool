@@ -139,6 +139,7 @@ export function topicsAnimation(
       app.speedMultiplier = 1;
       app.inspectedCircleIndex = -1;
       p?.clear();
+      p.background(245);
       app.drawTimeline(config.timeline.position, epoch);
     },
 
