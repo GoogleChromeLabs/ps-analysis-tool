@@ -377,11 +377,17 @@ timeline.drawCircle = (index, completed = false) => {
   const position = app.timeline.circlePositions[index];
   const { diameter } = circleProps;
 
-  app.p.circle(position.x, position.y, diameter);
+  app.p.push();
 
   if (!completed) {
+    app.p.circle(position.x, position.y, diameter);
     return;
   }
+
+  app.p.stroke(colors.visitedBlue);
+  app.p.circle(position.x, position.y, diameter);
+
+  app.p.pop();
 
   if (app.isInteractiveMode) {
     if (app.usedNextOrPrev && app.timeline.currentIndex === index) {

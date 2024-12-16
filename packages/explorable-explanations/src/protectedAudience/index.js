@@ -109,6 +109,7 @@ app.expandBubbleActions = () => {
   bubbles.generateBubbles(true);
   app.pause();
 };
+
 app.minifiedBubbleClickListener = (event, expandOverride) => {
   const rect = app.minifiedBubbleContainer.getBoundingClientRect();
 
@@ -466,6 +467,7 @@ app.toggleMultSeller = (event) => {
 // Define the sketch
 export const sketch = (p) => {
   app.handleControls();
+
   p.setup = () => {
     setupMainCanvas(p);
   };
@@ -537,6 +539,7 @@ app.reset = async (callFromExtension = false) => {
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
   await utils.delay(1000);
+
   if (!callFromExtension) {
     setupInterestGroupCanvas(app.igp);
     setupUserCanvas(app.up);
@@ -565,6 +568,7 @@ app.createCanvas = () => {
     new p5(userSketch);
   }
 };
+
 app.createCanvas();
 
 export { app };
