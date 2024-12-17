@@ -22,7 +22,7 @@ import type {
   FilterSidebarValue,
 } from '@google-psat/design-system';
 
-export interface StoryContext {
+export interface WebStoryContext {
   state: {
     storyMarkup: string;
     searchValue: string;
@@ -46,7 +46,7 @@ export interface StoryContext {
   };
 }
 
-const initialState: StoryContext = {
+const initialState: WebStoryContext = {
   state: {
     storyMarkup: '',
     searchValue: '',
@@ -68,4 +68,4 @@ const initialState: StoryContext = {
   },
 };
 
-export default createContext<StoryContext>(initialState);
+export default createContext<WebStoryContext>(initialState);

@@ -32,7 +32,7 @@ import { useDebounce } from 'use-debounce';
 /**
  * Internal dependencies.
  */
-import Context, { type StoryContext } from './context';
+import Context, { type WebStoryContext } from './context';
 import {
   getStoryMarkup,
   type SingleStoryJSON,
@@ -56,7 +56,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [tags, setTags] = useState<Record<number, string>>({});
   const [categories, setCategories] = useState<Record<number, string>>({});
   const [sortValue, setSortValue] =
-    useState<StoryContext['state']['sortValue']>('latest');
+    useState<WebStoryContext['state']['sortValue']>('latest');
 
   const [searchValue] = useDebounce(_searchValue, 500);
 
