@@ -41,7 +41,7 @@ export function topicsAnimation(
   const app = {
     userIcon: null as p5.Image | null,
     completedIcon: null as p5.Image | null,
-    circlePositions: [] as { x: number; y: number }[],
+    circlePositions: {} as Record<number, { x: number; y: number }>,
     siteAdTechs: {} as Record<string, string[]>,
     visitIndex: 0,
     playing: true,
@@ -65,7 +65,7 @@ export function topicsAnimation(
         const xPosition = horizontalSpacing + circleVerticalSpace * index;
 
         if (!app.circlePositions) {
-          app.circlePositions = [];
+          app.circlePositions = {};
         }
 
         p.text(circleItem.website, xPosition, 50);
@@ -77,7 +77,7 @@ export function topicsAnimation(
           position.y - 50
         );
 
-        app.circlePositions.push({ x: xPosition, y: position.y });
+        app.circlePositions[index] = { x: xPosition, y: position.y };
         app.drawCircle(index);
       });
     },
@@ -139,6 +139,8 @@ export function topicsAnimation(
       app.visitIndex = 0;
       app.speedMultiplier = 1;
       app.inspectedCircleIndex = -1;
+      app.circlePositions = {};
+      app.smallCirclePositions = {};
       p?.clear();
       p.background(255);
       app.drawTimeline(config.timeline.position, epoch);
@@ -374,10 +376,11 @@ export function topicsAnimation(
         return;
       }
 
+      let isInspecting = false;
       const x = p.mouseX,
         y = p.mouseY;
 
-      app.circlePositions.forEach((position, index) => {
+      Object.values(app.circlePositions).forEach((position, index) => {
         const { diameter } = config.timeline.circleProps;
         const { x: circleX, y: circleY } = position;
 
@@ -387,6 +390,11 @@ export function topicsAnimation(
           y > circleY - diameter / 2 &&
           y < circleY + diameter / 2
         ) {
+          if (app.visitIndex <= index) {
+            app.showHandCursor = true;
+            isInspecting = true;
+          }
+
           if (
             app.inspectedCircleIndex !== -1 &&
             app.inspectedCircleIndex !== index
@@ -403,7 +411,6 @@ export function topicsAnimation(
         }
       });
 
-      let isInspecting = false;
       app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
         (position) => {
           const { x: smallCircleX, y: smallCircleY } = position;
@@ -433,6 +440,24 @@ export function topicsAnimation(
 
       const x = p.mouseX,
         y = p.mouseY;
+
+      Object.values(app.circlePositions).forEach((position, index) => {
+        const { diameter } = config.timeline.circleProps;
+        const { x: circleX, y: circleY } = position;
+
+        if (
+          x > circleX - diameter / 2 &&
+          x < circleX + diameter / 2 &&
+          y > circleY - diameter / 2 &&
+          y < circleY + diameter / 2
+        ) {
+          if (app.visitIndex <= index) {
+            while (app.visitIndex <= index) {
+              app.play();
+            }
+          }
+        }
+      });
 
       app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
         (position, index) => {
