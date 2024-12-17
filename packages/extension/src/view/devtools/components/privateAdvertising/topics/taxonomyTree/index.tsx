@@ -126,9 +126,12 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           return;
         }
 
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           nodeClickHandler(topic);
         }, 200);
+
+        timeoutRef.current.push(timeout);
+
         setStorage(
           JSON.stringify({
             taxonomy: '',
