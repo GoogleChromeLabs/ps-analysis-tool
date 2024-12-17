@@ -46,7 +46,6 @@ app.setUpTimeLine = () => {
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
-  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
   bubbles.clearAndRewriteBubbles();
   app.setup();
 

@@ -44,6 +44,7 @@ export interface CurrentSiteData {
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+
   const [interestGroups, setInterestGroups] = useState<
     {
       interestGroupName: string;

@@ -139,12 +139,17 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
 
     const containerRefCopy = containerRef;
     return () => {
-      app.reset(true);
+      app.reset();
       if (containerRefCopy.current) {
         handleResizeCallback.unobserve(containerRefCopy.current);
       }
     };
   }, [handleResizeCallback]);
+
+  const resetHandler = useCallback(() => {
+    app.reset();
+    setCurrentSite(null);
+  }, [setCurrentSite]);
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
@@ -193,7 +198,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
         historyCount={historyCount}
-        reset={app.reset}
+        reset={resetHandler}
         extraInterface={extraInterface}
       />
       <div className="w-full h-full">
