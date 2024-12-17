@@ -17,25 +17,29 @@
  * External dependencies.
  */
 import React from 'react';
-import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
+import {
+  ChipsBar,
+  FiltersSidebar,
+  ProgressBar,
+  TopBar,
+} from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import { getStoryMarkup } from './createStoryIframe';
-import { STORY_JSON } from './story';
-import { useStories } from '../../stateProviders';
+import { useWebStories } from '../../stateProviders';
 
 interface WebStoriesProps {
   storyOpened: boolean;
 }
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
-  const storyMarkup = getStoryMarkup(STORY_JSON);
-
   const {
+    storyCount,
+    loadingState,
+    storyMarkup,
     searchValue,
     setSearchValue,
     showFilterSidebar,
@@ -47,7 +51,10 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     resetFilters,
     selectedFilterValues,
     filters,
-  } = useStories(({ state, actions }) => ({
+  } = useWebStories(({ state, actions }) => ({
+    storyCount: state.storyCount,
+    loadingState: state.loadingState,
+    storyMarkup: state.storyMarkup,
     searchValue: state.searchValue,
     filters: state.filters,
     sortValue: state.sortValue,
@@ -73,9 +80,9 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             hideFiltering={false}
             disableFiltering={false}
             hideSearch={false}
-            count={0} // TODO: Add count
+            count={storyCount}
           >
-            <div className="flex justify-between items-center min-w-[125px] text-raisin-black dark:text-bright-gray">
+            <div className="flex justify-between items-center min-w-[100px] text-raisin-black dark:text-bright-gray">
               <p>Sort by:</p>
               <select
                 value={sortValue}
@@ -91,8 +98,8 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
                   backgroundPositionY: '4px',
                 }}
               >
-                <option value="Latest">Latest</option>
-                <option value="Oldest">Oldest</option>
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
               </select>
             </div>
           </TopBar>
@@ -125,15 +132,21 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           data-testid="web-stories-content"
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
-          <iframe
-            srcDoc={storyMarkup}
-            style={{
-              width: '100%',
-              height: '100%',
-              border: 'none',
-              overflow: 'hidden',
-            }}
-          />
+          {loadingState ? (
+            <div className="h-full w-full flex">
+              <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
+            </div>
+          ) : (
+            <iframe
+              srcDoc={storyMarkup}
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                overflow: 'hidden',
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

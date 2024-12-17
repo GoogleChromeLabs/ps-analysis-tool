@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import type {
   FilterSidebarValue,
 } from '@google-psat/design-system';
 
-export interface StoryContext {
+export interface WebStoryContext {
   state: {
+    storyMarkup: string;
     searchValue: string;
     showFilterSidebar: boolean;
     filters: FilterSidebarValue[];
@@ -31,6 +32,8 @@ export interface StoryContext {
     selectedFilterValues: Record<string, string[]>;
     sortValue: 'latest' | 'oldest';
     storyOpened: boolean;
+    loadingState: boolean;
+    storyCount: number;
   };
   actions: {
     resetFilters: () => void;
@@ -44,8 +47,9 @@ export interface StoryContext {
   };
 }
 
-const initialState: StoryContext = {
+const initialState: WebStoryContext = {
   state: {
+    storyMarkup: '',
     searchValue: '',
     showFilterSidebar: false,
     selectedFilters: [],
@@ -53,6 +57,8 @@ const initialState: StoryContext = {
     selectedFilterValues: {},
     sortValue: 'latest',
     storyOpened: false,
+    loadingState: false,
+    storyCount: 0,
   },
   actions: {
     resetFilters: noop,
@@ -64,4 +70,4 @@ const initialState: StoryContext = {
   },
 };
 
-export default createContext<StoryContext>(initialState);
+export default createContext<WebStoryContext>(initialState);
