@@ -27,6 +27,7 @@ import type {
   ChipsFilter,
   FilterSidebarValue,
 } from '@google-psat/design-system';
+import { useDebounce } from 'use-debounce';
 
 /**
  * Internal dependencies.
@@ -38,7 +39,7 @@ import {
 } from '../../../../utils/createStoryIframe';
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [searchValue, setSearchValue] = useState('');
+  const [_searchValue, setSearchValue] = useState('');
   const [storyMarkup, setStoryMarkup] = useState('');
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
   const [filters, setFilters] = useState<FilterSidebarValue[]>([]);
@@ -56,6 +57,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [categories, setCategories] = useState<Record<number, string>>({});
   const [sortValue, setSortValue] =
     useState<StoryContext['state']['sortValue']>('latest');
+
+  const [searchValue] = useDebounce(_searchValue, 500);
 
   useEffect(() => {
     setFilters([
@@ -297,8 +300,11 @@ const Provider = ({ children }: PropsWithChildren) => {
       selectedTagId.length > 0
         ? '&web_story_tag=' + selectedTagId.join(',')
         : ''
-    }${sortValue === 'latest' ? '&order=desc' : '&order=asc'}`;
+    }${sortValue === 'latest' ? '&order=desc' : '&order=asc'}${
+      searchValue ? '&search="' + searchValue + '"' : ''
+    }`;
   }, [
+    searchValue,
     authors,
     categories,
     selectedFilterValues?.author,
@@ -370,7 +376,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     return {
       state: {
         storyMarkup,
-        searchValue,
+        searchValue: _searchValue,
         showFilterSidebar,
         selectedFilters,
         filters,
@@ -389,17 +395,18 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
-    loadingState,
     storyMarkup,
-    filters,
-    resetFilters,
-    searchValue,
-    selectedFilterValues,
-    selectedFilters,
+    _searchValue,
     showFilterSidebar,
+    selectedFilters,
+    filters,
+    selectedFilterValues,
     sortValue,
     storyOpened,
+    loadingState,
+    resetFilters,
     toggleFilterSelection,
+    setSearchValue,
   ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
