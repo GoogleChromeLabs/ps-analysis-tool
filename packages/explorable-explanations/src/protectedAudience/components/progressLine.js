@@ -90,9 +90,10 @@ const ProgressLine = ({
     p.push();
     p.stroke(0);
     p.strokeWeight(1);
-    p.pop();
 
     returnCoordinates = draw[direction]();
+
+    p.pop();
   };
 
   let currentX = x1; // For horizontal directions
@@ -101,12 +102,6 @@ const ProgressLine = ({
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
-        drawInstantly();
-        resolve(returnCoordinates);
-        return;
-      }
-
       if (app.cancelPromise) {
         resolve();
         return;
@@ -117,10 +112,15 @@ const ProgressLine = ({
         return;
       }
 
+      if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
+        drawInstantly();
+        resolve(returnCoordinates);
+        return;
+      }
+
       p.push();
       p.stroke(0);
       p.strokeWeight(1);
-      p.pop();
 
       switch (direction) {
         case 'right':
@@ -181,6 +181,8 @@ const ProgressLine = ({
         default:
           throw new Error(`Invalid direction: ${direction}`);
       }
+
+      p.pop();
 
       if (app.cancelPromise) {
         resolve();

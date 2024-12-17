@@ -150,11 +150,6 @@ const drawAnimatedTimeline = (x, y, branches) => {
         return;
       }
 
-      if (app.cancelPromise) {
-        resolve();
-        return;
-      }
-
       if (progress >= i * spacing && !renderedBranchIds.includes(branch.id)) {
         // Draw vertical line once the horizontal line reaches its position
         p.push();
