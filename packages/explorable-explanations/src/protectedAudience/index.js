@@ -181,6 +181,17 @@ app.addToPromiseQueue = (indexToStartFrom) => {
 
     currentIndex++;
   }
+
+  app.promiseQueue.push((cb) => {
+    app.bubbles.interestGroupCounts +=
+      config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+    bubbles.showMinifiedBubbles();
+    utils.markVisitedValue(app.timeline.currentIndex, true);
+    timeline.eraseAndRedraw();
+    timeline.renderUserIcon();
+    app.setCurrentSite(null);
+    cb(null, true);
+  });
 };
 
 app.setupLoop = (doNotPlay) => {
