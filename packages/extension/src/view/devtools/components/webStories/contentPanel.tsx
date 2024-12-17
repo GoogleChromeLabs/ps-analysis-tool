@@ -82,7 +82,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             hideSearch={false}
             count={storyCount}
           >
-            <div className="flex justify-between items-center min-w-[125px] text-raisin-black dark:text-bright-gray">
+            <div className="flex justify-between items-center min-w-[100px] text-raisin-black dark:text-bright-gray">
               <p>Sort by:</p>
               <select
                 value={sortValue}
