@@ -196,7 +196,7 @@ app.setupLoop = (doNotPlay) => {
   if (doNotPlay) {
     return;
   }
-
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -237,6 +237,7 @@ app.handleNonInteractivePrev = async () => {
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -277,7 +278,7 @@ app.handleInteractivePrev = () => {
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
-
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -334,7 +335,7 @@ app.handleNonInteravtiveNext = async () => {
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
-
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -382,6 +383,7 @@ app.handleInteravtiveNext = () => {
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -446,6 +448,7 @@ app.handleControls = () => {
 app.toggleInteractiveMode = async () => {
   app.isInteractiveMode = !app.isInteractiveMode;
   await app.reset();
+  app.setPlayState(true);
 
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
@@ -469,11 +472,13 @@ export const sketch = (p) => {
   app.promiseQueue.addEventListener('end', () => {
     app.cancelPromise = true;
     app.timeline.isPaused = true;
+    app.setPlayState(false);
   });
 
   app.promiseQueue.addEventListener('start', () => {
     app.cancelPromise = false;
     app.timeline.isPaused = false;
+    app.setPlayState(true);
   });
 
   app.handleControls();
@@ -531,6 +536,10 @@ export const interestGroupSketch = (p) => {
     if (props.setCurrentSite) {
       app.setCurrentSite = props.setCurrentSite;
     }
+
+    if (app.setPlayState) {
+      app.setPlayState = props.setPlayState;
+    }
   };
 };
 
@@ -560,7 +569,9 @@ app.reset = async () => {
 
   setupInterestGroupCanvas(app.igp);
   setupUserCanvas(app.up);
-  setupMainCanvas(app.p);
+  setupMainCanvas(app.p, true);
+  app.timeline.isPaused = true;
+  app.setPlayState(false);
 };
 
 app.createCanvas = () => {

@@ -251,6 +251,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         expandedBubbleY={expandedBubbleY}
         expandedBubbleWidth={expandedBubbleWidth}
         setCurrentSite={setCurrentSite}
+        setPlayState={setPlay}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <TableTray />
