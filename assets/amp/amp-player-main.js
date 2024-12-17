@@ -47,10 +47,6 @@ function setCardMargin(margin) {
  * Initializes arrows for horizontal scrolling on desktop.
  */
 function initializeArrows() {
-  if(!cards){
-    return;
-  }
-
   const scrollContainer = document.querySelector('.carousel-cards-container');
   const containerPadding =
     parseFloat(
@@ -111,10 +107,6 @@ function resetStyles() {
  * Initializes card click events and sets up their dimensions.
  */
 function initializeCards() {
-  if(!cards){
-    return;
-  }
-
   setCards(document.querySelectorAll('.entry-point-card-container'));
   setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
   setCardWidth(cardMargin + cards[0].offsetWidth);
