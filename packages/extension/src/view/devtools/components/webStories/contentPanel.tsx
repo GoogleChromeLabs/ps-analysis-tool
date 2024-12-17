@@ -17,7 +17,12 @@
  * External dependencies.
  */
 import React from 'react';
-import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
+import {
+  ChipsBar,
+  FiltersSidebar,
+  ProgressBar,
+  TopBar,
+} from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 
@@ -32,6 +37,7 @@ interface WebStoriesProps {
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
   const {
+    loadingState,
     storyMarkup,
     searchValue,
     setSearchValue,
@@ -45,6 +51,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     selectedFilterValues,
     filters,
   } = useStories(({ state, actions }) => ({
+    loadingState: state.loadingState,
     storyMarkup: state.storyMarkup,
     searchValue: state.searchValue,
     filters: state.filters,
@@ -123,15 +130,21 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           data-testid="web-stories-content"
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
-          <iframe
-            srcDoc={storyMarkup}
-            style={{
-              width: '100%',
-              height: '100%',
-              border: 'none',
-              overflow: 'hidden',
-            }}
-          />
+          {loadingState ? (
+            <div className="h-full w-full flex">
+              <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
+            </div>
+          ) : (
+            <iframe
+              srcDoc={storyMarkup}
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                overflow: 'hidden',
+              }}
+            />
+          )}
         </div>
       </div>
     </div>
