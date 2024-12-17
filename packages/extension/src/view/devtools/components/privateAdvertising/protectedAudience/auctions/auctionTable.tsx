@@ -50,8 +50,9 @@ const AuctionTable = ({
     () => [
       {
         header: 'Event Time',
-        accessorKey: 'formattedTime',
-        cell: (info) => info,
+        accessorKey: 'time',
+        cell: (_, details) =>
+          (details as singleAuctionEvent).formattedTime.toString(),
         enableHiding: false,
         widthWeightagePercentage: 10,
       },
