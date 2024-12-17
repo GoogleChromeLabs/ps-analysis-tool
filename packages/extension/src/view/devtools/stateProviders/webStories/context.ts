@@ -33,6 +33,7 @@ export interface WebStoryContext {
     sortValue: 'latest' | 'oldest';
     storyOpened: boolean;
     loadingState: boolean;
+    storyCount: number;
   };
   actions: {
     resetFilters: () => void;
@@ -57,6 +58,7 @@ const initialState: WebStoryContext = {
     sortValue: 'latest',
     storyOpened: false,
     loadingState: false,
+    storyCount: 0,
   },
   actions: {
     resetFilters: noop,

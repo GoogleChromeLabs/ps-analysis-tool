@@ -55,6 +55,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const [tags, setTags] = useState<Record<number, string>>({});
   const [categories, setCategories] = useState<Record<number, string>>({});
+  const [storyCount, setStoryCount] = useState<number>(0);
   const [sortValue, setSortValue] =
     useState<WebStoryContext['state']['sortValue']>('latest');
 
@@ -358,6 +359,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       return story;
     });
 
+    setStoryCount(storyJSON.length);
     setStoryMarkup(getStoryMarkup(storyJSON));
     setLoadingState(false);
   }, [tags, categories, authors, queryParams, getAuthorsAndPublisherLogo]);
@@ -384,6 +386,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         sortValue,
         storyOpened,
         loadingState,
+        storyCount,
       },
       actions: {
         resetFilters,
@@ -395,6 +398,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    storyCount,
     storyMarkup,
     _searchValue,
     showFilterSidebar,

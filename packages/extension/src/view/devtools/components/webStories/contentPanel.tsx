@@ -29,7 +29,7 @@ import { noop } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { useStories } from '../../stateProviders';
+import { useWebStories } from '../../stateProviders';
 
 interface WebStoriesProps {
   storyOpened: boolean;
@@ -37,6 +37,7 @@ interface WebStoriesProps {
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
   const {
+    storyCount,
     loadingState,
     storyMarkup,
     searchValue,
@@ -50,7 +51,8 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     resetFilters,
     selectedFilterValues,
     filters,
-  } = useStories(({ state, actions }) => ({
+  } = useWebStories(({ state, actions }) => ({
+    storyCount: state.storyCount,
     loadingState: state.loadingState,
     storyMarkup: state.storyMarkup,
     searchValue: state.searchValue,
@@ -78,7 +80,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             hideFiltering={false}
             disableFiltering={false}
             hideSearch={false}
-            count={0} // TODO: Add count
+            count={storyCount}
           >
             <div className="flex justify-between items-center min-w-[125px] text-raisin-black dark:text-bright-gray">
               <p>Sort by:</p>
