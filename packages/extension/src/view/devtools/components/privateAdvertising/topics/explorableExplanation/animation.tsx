@@ -63,12 +63,10 @@ const Animation = ({
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
   const animationRef = useRef(isAnimating);
-  const visitIndexStartRef = useRef(visitIndexStart);
 
   useEffect(() => {
     // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
     animationRef.current = isAnimating;
-    visitIndexStartRef.current = visitIndexStart;
   }, [isAnimating, visitIndexStart]);
 
   useEffect(() => {
@@ -79,7 +77,7 @@ const Animation = ({
           epoch,
           animationRef.current,
           siteAdTechs,
-          visitIndexStartRef.current,
+          visitIndexStart,
           animationRef.current
             ? handleUserVisit
             : (idx: number) => handleUserVisit(idx, false),
@@ -105,6 +103,7 @@ const Animation = ({
     setPAActiveTab,
     setPAStorage,
     siteAdTechs,
+    visitIndexStart,
   ]);
 
   useEffect(() => {
