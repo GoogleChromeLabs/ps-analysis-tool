@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   ChipsBar,
   FiltersSidebar,
@@ -30,16 +30,18 @@ import { noop } from '@google-psat/common';
  * Internal dependencies.
  */
 import { useWebStories } from '../../stateProviders';
+import { STORY_MARKUP } from '../../stateProviders/webStories/constants';
 
 interface WebStoriesProps {
   storyOpened: boolean;
 }
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const {
     storyCount,
     loadingState,
-    storyMarkup,
+    allStoryJSON,
     searchValue,
     setSearchValue,
     showFilterSidebar,
@@ -54,7 +56,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
   } = useWebStories(({ state, actions }) => ({
     storyCount: state.storyCount,
     loadingState: state.loadingState,
-    storyMarkup: state.storyMarkup,
+    allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
     filters: state.filters,
     sortValue: state.sortValue,
@@ -67,6 +69,18 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     toggleFilterSelection: actions.toggleFilterSelection,
     resetFilters: actions.resetFilters,
   }));
+
+  useEffect(() => {
+    if (!iframeRef.current) {
+      return;
+    }
+
+    if (loadingState) {
+      return;
+    }
+
+    iframeRef.current?.contentWindow?.postMessage(allStoryJSON, '*');
+  }, [allStoryJSON, loadingState]);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -132,21 +146,21 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           data-testid="web-stories-content"
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
-          {loadingState ? (
-            <div className="h-full w-full flex">
+          <div className="h-full w-full flex">
+            {loadingState && (
               <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
-            </div>
-          ) : (
+            )}
             <iframe
-              srcDoc={storyMarkup}
+              ref={iframeRef}
+              srcDoc={STORY_MARKUP}
               style={{
-                width: '100%',
-                height: '100%',
+                width: loadingState ? '0%' : '100%',
+                height: loadingState ? '0%' : '100%',
                 border: 'none',
                 overflow: 'hidden',
               }}
             />
-          )}
+          </div>
         </div>
       </div>
     </div>

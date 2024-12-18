@@ -22,6 +22,7 @@ import React, {
   useState,
   useCallback,
   useMemo,
+  useRef,
 } from 'react';
 import type {
   ChipsFilter,
@@ -33,29 +34,27 @@ import { useDebounce } from 'use-debounce';
  * Internal dependencies.
  */
 import Context, { type WebStoryContext } from './context';
-import {
-  getStoryMarkup,
-  type SingleStoryJSON,
-} from '../../../../utils/createStoryIframe';
+import { type SingleStoryJSON } from './constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [_searchValue, setSearchValue] = useState('');
-  const [storyMarkup, setStoryMarkup] = useState('');
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
   const [filters, setFilters] = useState<FilterSidebarValue[]>([]);
   const [selectedFilters, setSelectedFilters] = useState<ChipsFilter[]>([]);
   const [selectedFilterValues, setSelectedFilterValues] = useState<
     Record<string, string[]>
   >({});
-  const [authorPublisherLogo, setAuthorPublisherLogo] = useState<
-    Record<number, Record<string, string>>
-  >({});
+  const authorPublisherLogoRef = useRef<Record<number, Record<string, string>>>(
+    {}
+  );
   const [storyOpened, setStoryOpened] = useState(false);
   const [authors, setAuthors] = useState<Record<number, string>>({});
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const [tags, setTags] = useState<Record<number, string>>({});
   const [categories, setCategories] = useState<Record<number, string>>({});
   const [storyCount, setStoryCount] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [allStoryJSON, setAllStoryJSON] = useState<SingleStoryJSON[]>([]);
   const [sortValue, setSortValue] =
     useState<WebStoryContext['state']['sortValue']>('latest');
 
@@ -89,10 +88,19 @@ const Provider = ({ children }: PropsWithChildren) => {
     setStoryOpened(() => event.detail.storyOpened);
   }, []);
 
+  const webStoriesLoadMoreData = useCallback(() => {
+    setPageNumber((prevState) => prevState + 1);
+  }, []);
+
   useEffect(() => {
     window.document.addEventListener(
       'webStoriesLightBoxEvent',
       webStoriesLightBoxCallback,
+      false
+    );
+    window.document.addEventListener(
+      'loadMoreData',
+      webStoriesLoadMoreData,
       false
     );
 
@@ -102,8 +110,13 @@ const Provider = ({ children }: PropsWithChildren) => {
         webStoriesLightBoxCallback,
         false
       );
+      window.document.removeEventListener(
+        'loadMoreData',
+        webStoriesLoadMoreData,
+        false
+      );
     };
-  }, [webStoriesLightBoxCallback]);
+  }, [webStoriesLightBoxCallback, webStoriesLoadMoreData]);
 
   const toggleFilterSelection = useCallback(
     (filterKey: string, filterValue: string) => {
@@ -213,14 +226,14 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       const mediaAuthorSetClone = mediaAuthorSet;
-      Object.keys(authorPublisherLogo).forEach((key) => {
-        if (authorPublisherLogo[Number(key)]) {
+      Object.keys(authorPublisherLogoRef.current).forEach((key) => {
+        if (authorPublisherLogoRef.current[Number(key)]) {
           delete mediaAuthorSetClone[Number(key)];
         }
       });
 
       if (Object.keys(mediaAuthorSet).length === 0) {
-        return authorPublisherLogo;
+        return authorPublisherLogoRef.current;
       }
 
       const transformedMediaAuthorMap: Record<
@@ -257,10 +270,11 @@ const Provider = ({ children }: PropsWithChildren) => {
           };
         })
       );
-      setAuthorPublisherLogo(transformedMediaAuthorMap);
+
+      authorPublisherLogoRef.current = transformedMediaAuthorMap;
       return transformedMediaAuthorMap;
     },
-    [authorPublisherLogo, authors]
+    [authors]
   );
 
   const queryParams = useMemo(() => {
@@ -291,6 +305,9 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     const urlSearchParams = new URLSearchParams();
 
+    urlSearchParams.append('per_page', '4');
+    urlSearchParams.append('page', pageNumber.toString());
+
     if (selectedAuthorsID.length > 0) {
       urlSearchParams.append('author', selectedAuthorsID.join(','));
     }
@@ -311,6 +328,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     return urlSearchParams.toString();
   }, [
+    pageNumber,
     searchValue,
     authors,
     categories,
@@ -330,16 +348,22 @@ const Provider = ({ children }: PropsWithChildren) => {
       return;
     }
 
-    setLoadingState(true);
+    if (pageNumber === 1) {
+      setLoadingState(true);
+    }
+
     const response = await fetch(
       `https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/?${queryParams}`
     );
 
     const responseJSON = await response.json();
+    if (responseJSON?.data?.status === 400) {
+      return;
+    }
     let storyJSON: SingleStoryJSON[] = [];
     const mediaAuthorSet: Record<number, string> = {};
 
-    responseJSON.forEach((singleResponse: any) => {
+    responseJSON?.forEach((singleResponse: any) => {
       if (singleResponse?.status === 'publish') {
         mediaAuthorSet[singleResponse.author] =
           singleResponse?.meta?.web_stories_publisher_logo;
@@ -366,9 +390,16 @@ const Provider = ({ children }: PropsWithChildren) => {
     });
 
     setStoryCount(storyJSON.length);
-    setStoryMarkup(getStoryMarkup(storyJSON));
     setLoadingState(false);
-  }, [tags, categories, authors, queryParams, getAuthorsAndPublisherLogo]);
+    setAllStoryJSON((prevState) => [...prevState, ...storyJSON]);
+  }, [
+    tags,
+    categories,
+    authors,
+    pageNumber,
+    queryParams,
+    getAuthorsAndPublisherLogo,
+  ]);
 
   useEffect(() => {
     fetchAuthors();
@@ -383,7 +414,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const memoisedValue = useMemo(() => {
     return {
       state: {
-        storyMarkup,
+        allStoryJSON,
         searchValue: _searchValue,
         showFilterSidebar,
         selectedFilters,
@@ -404,8 +435,8 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    allStoryJSON,
     storyCount,
-    storyMarkup,
     _searchValue,
     showFilterSidebar,
     selectedFilters,

@@ -13,15 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-interface CardProps {
-  heroImage: string;
-  publisherLogo: string;
-  publisherName: string;
-  storyTitle: string;
-}
-interface StoryAnchorProps {
-  storyUrl: string;
-}
+
 export interface SingleStoryJSON {
   heroImage: string;
   publisherLogo: string;
@@ -30,14 +22,7 @@ export interface SingleStoryJSON {
   storyUrl: string;
 }
 
-const getStoryAnchorTags = ({ storyUrl }: StoryAnchorProps) => {
-  return `
-        <a href="${storyUrl}" class="story"></a>
-    `;
-};
-
-export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
-  const predefinedStoryHeader = `
+export const STORY_MARKUP = `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -503,10 +488,7 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
     <div class="carousel-section">
         <div class="carousel-container">
             <div class="carousel-cards-container">
-                <div class="entry-points">
-`;
-
-  const predefinedStoryEnder = `
+                <div class="entry-points" id="entry-points">
                 </div>
             </div>
         </div>
@@ -530,49 +512,12 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
           ]
         }
       </script>
-`;
-
-  const getCardHTML = ({
-    heroImage,
-    publisherLogo,
-    publisherName,
-    storyTitle,
-  }: CardProps) => {
-    return `
-      <div class="entry-point-card-container">
-      <div class="background-cards">
-          <div class="background-card-1"></div>
-          <div class="background-card-2"></div>
+      <div id="anchor-tags-container">
       </div>
-      <img src="${heroImage}" class="entry-point-card-img" alt="A cat">
-      <div class="author-container">
-          <div class="logo-container">
-              <div class="logo-ring"></div>
-              <img class="entry-point-card-logo"
-                  src="${publisherLogo}" alt="Publisher logo">
-          </div>
-          <span class="entry-point-card-subtitle"> By ${publisherName} </span>
-          </div>
-  
-          <div class="card-headline-container">
-              <span class="entry-point-card-headline"> ${storyTitle} </span>
-          </div>
-      </div>
-      `;
-  };
-
-  const enderTags = `
-        </amp-story-player>
+      </amp-story-player>
     </div>
 
 </body>
 
 </html>
 `;
-  const cards = storyJson.map(getCardHTML);
-  const storyAnchors = storyJson.map(getStoryAnchorTags);
-
-  return `${predefinedStoryHeader}${cards.join(
-    ''
-  )}${predefinedStoryEnder}${storyAnchors.join('')}${enderTags}`;
-};

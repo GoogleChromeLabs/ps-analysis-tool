@@ -47,26 +47,28 @@ function setCardMargin(margin) {
  * Initializes arrows for horizontal scrolling on desktop.
  */
 function initializeArrows() {
-  try{
+  try {
     const scrollContainer = document.querySelector('.carousel-cards-container');
-  const containerPadding =
-    parseFloat(
-      getComputedStyle(scrollContainer.firstElementChild).paddingLeft
-    ) +
-    parseFloat(
-      getComputedStyle(scrollContainer.firstElementChild).paddingRight
-    );
+    const containerPadding =
+      parseFloat(
+        getComputedStyle(scrollContainer.firstElementChild).paddingLeft
+      ) +
+      parseFloat(
+        getComputedStyle(scrollContainer.firstElementChild).paddingRight
+      );
 
-  maxScroll =
-    scrollContainer.offsetWidth -
-    containerPadding +
-    cardMargin -
-    cards.length * cardWidth;
+    maxScroll =
+      scrollContainer.offsetWidth -
+      containerPadding +
+      cardMargin -
+      cards.length * cardWidth;
 
-  if (maxScroll < 0) {
-    document.querySelector('.carousel-container').classList.add('overflow-right');
-  }
-  }catch(error){
+    if (maxScroll < 0) {
+      document
+        .querySelector('.carousel-container')
+        .classList.add('overflow-right');
+    }
+  } catch (error) {
     //Fail silently
   }
 }
@@ -75,9 +77,9 @@ function initializeArrows() {
  * Closes the lightbox and resets the player and UI.
  */
 function closePlayer() {
-  const data = { storyOpened: false }
-  const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data })
-  window.parent.document.dispatchEvent(event)
+  const data = { storyOpened: false };
+  const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data });
+  window.parent.document.dispatchEvent(event);
   player.pause();
   document.body.classList.remove('lightbox-open');
   lightboxEl.classList.add('closed');
@@ -111,28 +113,30 @@ function resetStyles() {
  * Initializes card click events and sets up their dimensions.
  */
 function initializeCards() {
-  try{
+  try {
     setCards(document.querySelectorAll('.entry-point-card-container'));
-  setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
-  setCardWidth(cardMargin + cards[0].offsetWidth);
+    setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
+    setCardWidth(cardMargin + cards[0].offsetWidth);
 
-  const stories = player.getStories();
+    const stories = player.getStories();
 
-  cards.forEach((card, idx) => {
-    card.addEventListener('click', () => {
-      player.show(stories[idx].href, null, { animate: false });
-      const data = { storyOpened: true }
-      const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data })
-      window.parent.document.dispatchEvent(event)
+    cards.forEach((card, idx) => {
+      card.addEventListener('click', () => {
+        player.show(stories[idx].href, null, { animate: false });
+        const data = { storyOpened: true };
+        const event = new CustomEvent('webStoriesLightBoxEvent', {
+          detail: data,
+        });
+        window.parent.document.dispatchEvent(event);
 
-      document.body.classList.add('lightbox-open');
-      lightboxEl.classList.remove('closed');
-      card.classList.add('hidden');
-      resetStyles();
-      player.play();
+        document.body.classList.add('lightbox-open');
+        lightboxEl.classList.remove('closed');
+        card.classList.add('hidden');
+        resetStyles();
+        player.play();
+      });
     });
-  });
-  }catch(error){
+  } catch (error) {
     //Fail silently
   }
 }
@@ -146,6 +150,7 @@ function initializeCarousel() {
 
   initializeCards();
   initializeArrows();
+  infiniteScroll();
 
   player.addEventListener('amp-story-player-close', closePlayer);
 }
@@ -178,5 +183,63 @@ function easeOutQuad(t) {
   return --t * t * t + 1;
 }
 
+function infiniteScroll() {
+  window.addEventListener('scroll', () => {
+    if (
+      window.scrollY + window.innerHeight >=
+      document.documentElement.scrollHeight
+    ) {
+      const event = new CustomEvent('loadMoreData');
+      window.parent.document.dispatchEvent(event);
+    }
+  });
+}
+
+const getCardHTML = ({
+  heroImage,
+  publisherLogo,
+  publisherName,
+  storyTitle,
+}) => {
+  return `
+    <div class="entry-point-card-container">
+    <div class="background-cards">
+        <div class="background-card-1"></div>
+        <div class="background-card-2"></div>
+    </div>
+    <img src="${heroImage}" class="entry-point-card-img" alt="A cat">
+    <div class="author-container">
+        <div class="logo-container">
+            <div class="logo-ring"></div>
+            <img class="entry-point-card-logo"
+                src="${publisherLogo}" alt="Publisher logo">
+        </div>
+        <span class="entry-point-card-subtitle"> By ${publisherName} </span>
+        </div>
+
+        <div class="card-headline-container">
+            <span class="entry-point-card-headline"> ${storyTitle} </span>
+        </div>
+    </div>
+    `;
+};
+
+const getStoryAnchorTags = ({ storyUrl }) => {
+  return `
+        <a href="${storyUrl}" class="story"></a>
+    `;
+};
+
+const infiniteScrollDataResponse = ({data}) => {
+  const totalAddedCards = document.querySelectorAll('.entry-point-card-container')?.length ?? 0;
+  const storiesToUse = data.slice(totalAddedCards)
+  console.log(storiesToUse)
+  const cards = storiesToUse.map(getCardHTML);
+  const storyAnchors = storiesToUse.map(getStoryAnchorTags);
+  document.getElementById('anchor-tags-container').innerHTML += storyAnchors;
+  document.getElementById('entry-points').innerHTML += cards;
+}
+
 // Initialize on window load.
 window.addEventListener('load', init);
+window.addEventListener('message', infiniteScrollDataResponse)

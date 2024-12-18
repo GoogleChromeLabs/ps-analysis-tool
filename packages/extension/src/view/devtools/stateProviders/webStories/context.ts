@@ -21,10 +21,11 @@ import type {
   ChipsFilter,
   FilterSidebarValue,
 } from '@google-psat/design-system';
+import type { SingleStoryJSON } from './constants';
 
 export interface WebStoryContext {
   state: {
-    storyMarkup: string;
+    allStoryJSON: SingleStoryJSON[];
     searchValue: string;
     showFilterSidebar: boolean;
     filters: FilterSidebarValue[];
@@ -49,7 +50,7 @@ export interface WebStoryContext {
 
 const initialState: WebStoryContext = {
   state: {
-    storyMarkup: '',
+    allStoryJSON: [],
     searchValue: '',
     showFilterSidebar: false,
     selectedFilters: [],
