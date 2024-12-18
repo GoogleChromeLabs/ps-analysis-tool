@@ -67,7 +67,6 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
             height: 488px;
             bottom: 0;
             right: 0;
-            background: linear-gradient(270deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0) 89.96%);
             background-attachment: local, local, scroll, scroll;
         }
 

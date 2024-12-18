@@ -47,7 +47,8 @@ function setCardMargin(margin) {
  * Initializes arrows for horizontal scrolling on desktop.
  */
 function initializeArrows() {
-  const scrollContainer = document.querySelector('.carousel-cards-container');
+  try{
+    const scrollContainer = document.querySelector('.carousel-cards-container');
   const containerPadding =
     parseFloat(
       getComputedStyle(scrollContainer.firstElementChild).paddingLeft
@@ -64,6 +65,9 @@ function initializeArrows() {
 
   if (maxScroll < 0) {
     document.querySelector('.carousel-container').classList.add('overflow-right');
+  }
+  }catch(error){
+    //Fail silently
   }
 }
 
@@ -107,7 +111,8 @@ function resetStyles() {
  * Initializes card click events and sets up their dimensions.
  */
 function initializeCards() {
-  setCards(document.querySelectorAll('.entry-point-card-container'));
+  try{
+    setCards(document.querySelectorAll('.entry-point-card-container'));
   setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
   setCardWidth(cardMargin + cards[0].offsetWidth);
 
@@ -127,6 +132,9 @@ function initializeCards() {
       player.play();
     });
   });
+  }catch(error){
+    //Fail silently
+  }
 }
 
 /**
