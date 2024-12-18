@@ -31,7 +31,7 @@ import {
   sketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
-import { NextIcon, PreviousIcon, useTabs } from '@google-psat/design-system';
+import { useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -162,24 +162,6 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         />
         Interactive Mode
       </label>
-      <div className="flex gap-0.5">
-        <button
-          id="prevButton"
-          title="Previous Node"
-          onClick={app.handlePrevButton}
-          className="disabled:opacity-50 disabled:pointer-events-none"
-        >
-          <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-        </button>
-        <button
-          onClick={app.handleNextButton}
-          id="nextButton"
-          title="Next Node"
-          className="disabled:opacity-50 disabled:pointer-events-none"
-        >
-          <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-        </button>
-      </div>
     </div>
   );
 
@@ -199,6 +181,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         setSliderStep={setSliderStep}
         historyCount={historyCount}
         reset={resetHandler}
+        showNextPrevButtons={true}
         extraInterface={extraInterface}
       />
       <div className="w-full h-full">
