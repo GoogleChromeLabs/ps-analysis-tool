@@ -289,21 +289,27 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
     });
 
-    return `${
-      selectedAuthorsID.length > 0
-        ? 'author=' + selectedAuthorsID.join(',')
-        : ''
-    }${
-      selectedCategoriesId.length > 0
-        ? '&web_story_category=' + selectedCategoriesId.join(',')
-        : ''
-    }${
-      selectedTagId.length > 0
-        ? '&web_story_tag=' + selectedTagId.join(',')
-        : ''
-    }${sortValue === 'latest' ? '&order=desc' : '&order=asc'}${
-      searchValue ? '&search="' + searchValue + '"' : ''
-    }`;
+    const urlSearchParams = new URLSearchParams();
+
+    if (selectedAuthorsID.length > 0) {
+      urlSearchParams.append('author', selectedAuthorsID.join(','));
+    }
+
+    if (selectedCategoriesId.length > 0) {
+      urlSearchParams.append('author', selectedCategoriesId.join(','));
+    }
+
+    if (selectedTagId.length > 0) {
+      urlSearchParams.append('author', selectedTagId.join(','));
+    }
+
+    urlSearchParams.append('order', sortValue === 'latest' ? 'desc' : 'asc');
+
+    if (searchValue) {
+      urlSearchParams.append('search', searchValue);
+    }
+
+    return urlSearchParams.toString();
   }, [
     searchValue,
     authors,
