@@ -459,7 +459,7 @@ app.handleControls = () => {
 app.toggleInteractiveMode = async () => {
   app.isInteractiveMode = !app.isInteractiveMode;
   await app.reset();
-  app.setPlayState(true);
+  app.setPlayState(false);
 
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
