@@ -305,7 +305,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     const urlSearchParams = new URLSearchParams();
 
-    urlSearchParams.append('per_page', '4');
+    urlSearchParams.append('per_page', '12');
     urlSearchParams.append('page', pageNumber.toString());
 
     if (selectedAuthorsID.length > 0) {
