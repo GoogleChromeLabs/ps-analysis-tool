@@ -50,7 +50,7 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
     y1: y1,
     direction: 'down',
     noArrow: true,
-    noAnimation: true,
+    noAnimation: false,
   });
 
   return new Promise((resolve) => {
