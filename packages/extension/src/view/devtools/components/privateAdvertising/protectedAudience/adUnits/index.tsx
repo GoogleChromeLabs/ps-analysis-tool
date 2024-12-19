@@ -22,9 +22,8 @@ import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import AdMatrix from './adMatrix';
-import AdTable from './adTable';
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import Panel from './panel';
 
 const AdUnits = () => {
   const { adsAndBidders, setSelectedAdUnit } = useProtectedAudience(
@@ -70,22 +69,7 @@ const AdUnits = () => {
     );
   }
 
-  return (
-    <div className="flex flex-col h-full w-full">
-      {adsAndBidders && Object.keys(adsAndBidders).length > 0 ? (
-        <>
-          <AdMatrix />
-          <AdTable />
-        </>
-      ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <p className="text-sm text-raisin-black dark:text-bright-gray">
-            No ad units were recorded.
-          </p>
-        </div>
-      )}
-    </div>
-  );
+  return <Panel adsAndBidders={adsAndBidders} />;
 };
 
 export default AdUnits;

@@ -19,7 +19,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
-  SidebarProvider,
   useSidebar,
   type SidebarItems,
 } from '@google-psat/design-system';
@@ -28,7 +27,7 @@ import {
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import Breakpoints from './breakpoints';
-import AuctionPanel from './panel';
+import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 
 const Auctions = () => {
@@ -48,14 +47,6 @@ const Auctions = () => {
     auctionEvents: state.auctionEvents ?? {},
   }));
 
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
-
   useEffect(() => {
     if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
       setSidebarData((prev) => {
@@ -65,6 +56,14 @@ const Auctions = () => {
       });
     }
   }, [auctionEvents]);
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
 
   if (!isUsingCDP) {
     return (
@@ -102,15 +101,11 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <Breakpoints />
       <div className="overflow-auto flex-1">
-        <SidebarProvider
-          data={sidebarData}
-          defaultSelectedItemKey={Object.keys(sidebarData)?.[0]}
-        >
-          <AuctionPanel
-            setSidebarData={setSidebarData}
-            auctionEvents={auctionEvents}
-          />
-        </SidebarProvider>
+        <AuctionsContainer
+          auctionEvents={auctionEvents}
+          sidebarData={sidebarData}
+          setSidebarData={setSidebarData}
+        />
       </div>
     </div>
   );

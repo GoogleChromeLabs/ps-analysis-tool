@@ -17,7 +17,14 @@
 /**
  * External dependencies.
  */
-import { PauseIcon, PlayIcon, RestartIcon } from '@google-psat/design-system';
+import {
+  PauseIcon,
+  PlayIcon,
+  RestartIcon,
+  NextIcon,
+  PreviousIcon,
+} from '@google-psat/design-system';
+import { app } from '@google-psat/explorable-explanations';
 import React from 'react';
 
 /**
@@ -32,6 +39,7 @@ interface HeaderProps {
   historyCount: number;
   sliderStep: number;
   setSliderStep: React.Dispatch<React.SetStateAction<number>>;
+  showNextPrevButtons: boolean;
   extraInterface?: React.ReactNode;
 }
 
@@ -42,6 +50,7 @@ const Header = ({
   historyCount,
   sliderStep,
   setSliderStep,
+  showNextPrevButtons,
   extraInterface,
 }: HeaderProps) => {
   return (
@@ -58,6 +67,26 @@ const Header = ({
             <PlayIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           )}
         </button>
+        {showNextPrevButtons && (
+          <div className="flex gap-1 px-2">
+            <button
+              id="prevButton"
+              title="Previous Node"
+              onClick={app.handlePrevButton}
+              className="disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+            </button>
+            <button
+              onClick={app.handleNextButton}
+              id="nextButton"
+              title="Next Node"
+              className="disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+            </button>
+          </div>
+        )}
         <button className="px-2" onClick={reset} title="Restart">
           <RestartIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
         </button>

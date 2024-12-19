@@ -17,51 +17,128 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
-import InterestGroups from '../interestGroups';
-import Auctions from '../auctions';
-import AdUnits from '../adUnits';
-import Bids from '../bids';
 import Panel from './panel';
+import IGTable from '../interestGroups/table';
+import Auctions from './auctions';
+import { SYNTHETIC_INTEREST_GROUPS } from './constants';
+import type { InterestGroups } from '@google-psat/common';
+import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
+import { createAuctionEvents } from './auctionEventTransformers';
+import InfoPanel from './infoPanel';
+
+export interface CurrentSiteData {
+  type: 'advertiser' | 'publisher';
+  website: string;
+  datetime: string;
+  igGroupsCount: number;
+  interestGroups: string[];
+  visited: boolean;
+  visitedIndex: boolean;
+}
 
 const ExplorableExplanation = () => {
+  const [currentSiteData, setCurrentSiteData] =
+    useState<CurrentSiteData | null>(null);
+
+  const [interestGroups, setInterestGroups] = useState<
+    {
+      interestGroupName: string;
+      ownerOrigin: string;
+    }[]
+  >([]);
+
+  const auctionsData = useMemo(() => {
+    if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+      return {};
+    }
+
+    const advertiserSet = new Set<string>();
+    interestGroups.forEach(({ ownerOrigin }) => {
+      advertiserSet.add(ownerOrigin);
+    });
+
+    return {
+      'div-200-1': {
+        [new Date(currentSiteData?.datetime).toUTCString()]: {
+          [`https://www.${currentSiteData?.website}`]: {
+            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
+              interestGroups,
+              currentSiteData?.website,
+              Array.from(advertiserSet),
+              new Date(currentSiteData?.datetime).getTime()
+            ),
+          },
+        },
+      },
+    };
+  }, [currentSiteData, interestGroups]);
+
+  const interestGroupData = useMemo(() => {
+    if (!currentSiteData || currentSiteData?.type === 'publisher') {
+      return [];
+    }
+
+    const perSiteInterestGroups: InterestGroups[] =
+      //@ts-ignore
+      SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website];
+
+    setInterestGroups((prevState) => {
+      return [
+        ...prevState,
+        ...perSiteInterestGroups.map(({ name, ownerOrigin }) => ({
+          interestGroupName: name ?? '',
+          ownerOrigin: ownerOrigin ?? '',
+        })),
+      ];
+    });
+
+    return perSiteInterestGroups;
+  }, [currentSiteData]);
+
   const tabItems = useMemo<TabItems>(
     () => [
       {
         title: 'Interest Groups',
         content: {
-          Element: InterestGroups,
+          Element: IGTable,
+          props: {
+            interestGroupDetails: [...(interestGroupData as InterestGroups[])],
+          },
         },
       },
       {
         title: 'Auctions',
         content: {
           Element: Auctions,
+          props: {
+            auctionEvents: auctionsData as AuctionEventsType,
+          },
         },
       },
       {
-        title: 'Ad Units',
+        title: 'Info',
         content: {
-          Element: AdUnits,
-        },
-      },
-      {
-        title: 'Bids',
-        content: {
-          Element: Bids,
+          Element: InfoPanel,
+          props: {
+            data: undefined,
+          },
         },
       },
     ],
-    []
+    [auctionsData, interestGroupData]
   );
 
   return (
     <TabsProvider items={tabItems}>
-      <Panel />
+      <Panel
+        currentSiteData={currentSiteData}
+        setCurrentSite={setCurrentSiteData}
+      />
     </TabsProvider>
   );
 };

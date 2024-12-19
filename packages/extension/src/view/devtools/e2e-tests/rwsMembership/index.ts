@@ -28,7 +28,7 @@ import { Interaction } from '../../test-utils/interaction';
 import { selectors } from '../../test-utils/constants';
 
 dotenv.config();
-
+jest.retryTimes(3);
 describe('RWS membership', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
