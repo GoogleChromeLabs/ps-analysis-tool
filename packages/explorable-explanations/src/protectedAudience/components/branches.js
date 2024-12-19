@@ -28,7 +28,13 @@ const EXPAND_ICON_SIZE = 20;
 
 let spacing, progress, renderedBranchIds, endpoints;
 
-const Branches = async ({ x1, y1, branches, currentIndex }) => {
+const Branches = async ({
+  x1,
+  y1,
+  branches,
+  currentIndex,
+  noAnimation = app.speedMultiplier === 4,
+}) => {
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
 
@@ -50,12 +56,12 @@ const Branches = async ({ x1, y1, branches, currentIndex }) => {
     y1: y1,
     direction: 'down',
     noArrow: true,
-    noAnimation: false,
+    noAnimation: app.speedMultiplier === 4,
   });
 
   return new Promise((resolve) => {
     const animate = () => {
-      if (app.isRevisitingNodeInInteractiveMode) {
+      if (app.isRevisitingNodeInInteractiveMode || noAnimation) {
         const branchXEndpoint =
           currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
 

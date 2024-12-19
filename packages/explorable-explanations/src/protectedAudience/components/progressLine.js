@@ -28,7 +28,7 @@ const ProgressLine = ({
   direction = 'right',
   text = '',
   noArrow = false,
-  noAnimation = false,
+  noAnimation = app.speedMultiplier === 4,
 }) => {
   const width = config.flow.lineWidth - ARROW_SIZE;
   const height = config.flow.lineHeight - ARROW_SIZE;
