@@ -19,13 +19,13 @@
 import app from '../app';
 import config from '../config';
 
-export const drawArrow = (size, x, y, speed = 1, direction = 'right') => {
+export const drawArrow = (size, x, y, direction = 'right') => {
   // Determine offset based on direction
   const directionOffsets = {
-    right: { _x: x - speed, _y: y },
-    left: { _x: x + speed, _y: y },
-    down: { _x: x, _y: y - speed },
-    up: { _x: x, _y: y + speed },
+    right: { _x: x - app.speedMultiplier, _y: y },
+    left: { _x: x + app.speedMultiplier, _y: y },
+    down: { _x: x, _y: y - app.speedMultiplier },
+    up: { _x: x, _y: y + app.speedMultiplier },
   };
 
   const offset = directionOffsets[direction] || directionOffsets['right'];
