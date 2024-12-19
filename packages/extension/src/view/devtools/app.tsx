@@ -31,6 +31,7 @@ import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './components';
 import useContextInvalidated from './hooks/useContextInvalidated';
+import { classifyText } from './topicsClassifier';
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
@@ -54,7 +55,7 @@ const App: React.FC = () => {
   useEffect(() => {
     (async () => {
       const tabId = chrome.devtools.inspectedWindow.tabId;
-
+      await classifyText();
       if (!tabId) {
         return;
       }
