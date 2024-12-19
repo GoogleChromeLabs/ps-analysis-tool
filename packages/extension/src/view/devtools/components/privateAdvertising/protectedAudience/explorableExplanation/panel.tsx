@@ -222,6 +222,7 @@ const Panel = () => {
         expandedBubbleX={expandedBubbleX}
         expandedBubbleY={expandedBubbleY}
         expandedBubbleWidth={expandedBubbleWidth}
+        speedMultiplier={2 * sliderStep}
       />
       <ReactP5Wrapper sketch={userSketch} />
     </div>
