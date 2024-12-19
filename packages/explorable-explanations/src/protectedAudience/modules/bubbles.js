@@ -120,7 +120,8 @@ bubbles.barrageAnimation = async (index) => {
     const x = isExpanded ? canvasWidth / 2 : 35;
     const y = isExpanded ? canvasHeight / 2 : 35;
     const distance = p.dist(x, y, targetX, targetY);
-    const speedX = distance / 250;
+    const calculatedSpeed = 250 / app.speedMultiplier;
+    const speedX = distance / calculatedSpeed;
 
     return { x, y, color, speed: speedX, target };
   });
@@ -244,7 +245,9 @@ bubbles.reverseBarrageAnimation = async (index) => {
       flowBoxHeight / 2;
 
     const distance = igp.dist(x, y, midPointX, midPointY);
-    const speedX = distance / 250;
+
+    const calculatedSpeed = 250 / app.speedMultiplier;
+    const speedX = distance / calculatedSpeed;
 
     positionsOfCircles.push({
       x:
