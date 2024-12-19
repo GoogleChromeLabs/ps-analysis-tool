@@ -45,7 +45,7 @@ const TableTray = () => {
       minHeight="30px"
       maxHeight="95%"
       enable={{
-        top: true,
+        top: !hidden,
       }}
     >
       <div className="w-full h-full flex flex-col">
