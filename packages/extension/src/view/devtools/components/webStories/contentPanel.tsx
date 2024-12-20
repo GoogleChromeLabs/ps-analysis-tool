@@ -39,7 +39,6 @@ interface WebStoriesProps {
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const {
-    storyCount,
     loadingState,
     allStoryJSON,
     searchValue,
@@ -54,9 +53,10 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     selectedFilterValues,
     filters,
     iframeLoaded,
+    pageNumber,
   } = useWebStories(({ state, actions }) => ({
     iframeLoaded: state.iframeLoaded,
-    storyCount: state.storyCount,
+    pageNumber: state.pageNumber,
     loadingState: state.loadingState,
     allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
@@ -81,8 +81,14 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
       return;
     }
 
-    iframeRef.current?.contentWindow?.postMessage(allStoryJSON, '*');
-  }, [allStoryJSON, loadingState, iframeLoaded]);
+    iframeRef.current?.contentWindow?.postMessage(
+      {
+        story: allStoryJSON,
+        infiniteScroll: pageNumber === 2,
+      },
+      '*'
+    );
+  }, [allStoryJSON, loadingState, iframeLoaded, pageNumber]);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -96,7 +102,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             hideFiltering={false}
             disableFiltering={false}
             hideSearch={false}
-            count={storyCount}
+            count={allStoryJSON.length}
           >
             <div className="flex justify-between items-center min-w-[100px] text-raisin-black dark:text-bright-gray">
               <p className="min-w-fit">Sort by:</p>

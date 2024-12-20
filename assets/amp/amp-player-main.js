@@ -22,6 +22,7 @@ let maxScroll;
 let scaleVal = 1;
 let scalingDown = false;
 let deltaY = 0;
+let previousStories = [];
 
 function setPlayer(playerEl) {
   player = playerEl;
@@ -229,14 +230,17 @@ const getCardHTML = ({
 };
 
 
-const infiniteScrollDataResponse = ({data}) => {
-  const totalAddedCards = document.querySelectorAll('.entry-point-card-container')?.length ?? 0;
-  const storiesToUse = data.slice(totalAddedCards)
+const infiniteScrollDataResponse = ({data: {story}}) => {
+  const cards = story.map(getCardHTML).join('');
+  const storyAnchors = story.map(({storyUrl}) => ({href: storyUrl}) );
 
-  const cards = storiesToUse.map(getCardHTML).join('');
-  const storyAnchors = storiesToUse.map(({storyUrl}) => ({href: storyUrl}) );
+  if(JSON.stringify(story) === JSON.stringify(previousStories)){
+    return;
+  }
 
-  document.getElementById('entry-points').innerHTML += cards;
+  document.getElementById('entry-points').innerHTML = cards;
+
+  previousStories = story;
   player.add(storyAnchors)
 
   initializeCards();

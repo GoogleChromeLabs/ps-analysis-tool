@@ -53,8 +53,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [iframeLoaded, setIframeLoaded] = useState<boolean>(false);
   const [tags, setTags] = useState<Record<number, string>>({});
   const [categories, setCategories] = useState<Record<number, string>>({});
-  const [storyCount, setStoryCount] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [doesHaveMorePages, setDoesHaveMorePages] = useState<boolean>(true);
   const [allStoryJSON, setAllStoryJSON] = useState<SingleStoryJSON[]>([]);
   const [sortValue, setSortValue] =
     useState<WebStoryContext['state']['sortValue']>('latest');
@@ -90,8 +90,12 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const webStoriesLoadMoreData = useCallback(() => {
-    setPageNumber((prevState) => prevState + 1);
-  }, []);
+    if (!doesHaveMorePages) {
+      return;
+    }
+
+    setPageNumber(pageNumber + 1);
+  }, [pageNumber, doesHaveMorePages]);
 
   const iframeLoadedCallback = useCallback(() => {
     setIframeLoaded(true);
@@ -135,7 +139,11 @@ const Provider = ({ children }: PropsWithChildren) => {
         false
       );
     };
-  }, [webStoriesLightBoxCallback, webStoriesLoadMoreData]);
+  }, [
+    iframeLoadedCallback,
+    webStoriesLightBoxCallback,
+    webStoriesLoadMoreData,
+  ]);
 
   const toggleFilterSelection = useCallback(
     (filterKey: string, filterValue: string) => {
@@ -184,6 +192,8 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         return newSelectedFilterValues;
       });
+
+      setPageNumber(1);
     },
     [filters]
   );
@@ -191,6 +201,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const resetFilters = useCallback(() => {
     setSelectedFilters([]);
     setSelectedFilterValues({});
+    setPageNumber(1);
   }, []);
 
   const fetchCategories = useCallback(async () => {
@@ -324,7 +335,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     const urlSearchParams = new URLSearchParams();
 
-    urlSearchParams.append('per_page', '12');
+    urlSearchParams.append('per_page', '4');
     urlSearchParams.append('page', pageNumber.toString());
 
     if (selectedAuthorsID.length > 0) {
@@ -376,9 +387,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     );
 
     const responseJSON = await response.json();
+    const totalPages = Number(response.headers.get('X-Wp-Totalpages'));
+
+    setDoesHaveMorePages(pageNumber <= totalPages);
+
     if (responseJSON?.data?.status === 400) {
       return;
     }
+
     let storyJSON: SingleStoryJSON[] = [];
     const mediaAuthorSet: Record<number, string> = {};
 
@@ -408,9 +424,14 @@ const Provider = ({ children }: PropsWithChildren) => {
       return story;
     });
 
-    setStoryCount(storyJSON.length);
     setLoadingState(false);
-    setAllStoryJSON((prevState) => [...prevState, ...storyJSON]);
+    setAllStoryJSON((prevState) => {
+      if (pageNumber === 1) {
+        return [...storyJSON];
+      } else {
+        return [...prevState, ...storyJSON];
+      }
+    });
   }, [
     tags,
     categories,
@@ -442,8 +463,8 @@ const Provider = ({ children }: PropsWithChildren) => {
         sortValue,
         storyOpened,
         loadingState,
-        storyCount,
         iframeLoaded,
+        pageNumber,
       },
       actions: {
         resetFilters,
@@ -455,9 +476,9 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    pageNumber,
     iframeLoaded,
     allStoryJSON,
-    storyCount,
     _searchValue,
     showFilterSidebar,
     selectedFilters,

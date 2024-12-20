@@ -34,7 +34,7 @@ export interface WebStoryContext {
     sortValue: 'latest' | 'oldest';
     storyOpened: boolean;
     loadingState: boolean;
-    storyCount: number;
+    pageNumber: number;
     iframeLoaded: boolean;
   };
   actions: {
@@ -61,7 +61,7 @@ const initialState: WebStoryContext = {
     storyOpened: false,
     loadingState: true,
     iframeLoaded: false,
-    storyCount: 0,
+    pageNumber: 1,
   },
   actions: {
     resetFilters: noop,
