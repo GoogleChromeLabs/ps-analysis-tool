@@ -82,8 +82,22 @@ const Panel = ({
     );
   }, []);
   const [visitIndexStart, setVisitIndexStart] = useState(
-    JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndex ?? 0
+    JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
+      activeTab
+    ] ?? 0
   );
+
+  useEffect(() => {
+    storageRef.current = PAstorage;
+  }, [PAstorage]);
+
+  useEffect(() => {
+    setVisitIndexStart(
+      JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
+        activeTab
+      ] ?? 0
+    );
+  }, [activeTab]);
 
   useEffect(() => {
     setTopicsTableData(
@@ -97,10 +111,14 @@ const Panel = ({
   useEffect(() => {
     const currentVisitIndex = currentVisitIndexCallback?.();
 
+    const visitIndexes =
+      JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes || [];
+    visitIndexes[activeTab] = currentVisitIndex;
+
     if (currentVisitIndex !== undefined) {
       setPAStorage(
         JSON.stringify({
-          currentVisitIndex,
+          currentVisitIndexes: visitIndexes,
           epochCompleted,
           topicsTableData,
           siteAdTechs,
