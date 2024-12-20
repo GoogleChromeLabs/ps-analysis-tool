@@ -35,6 +35,7 @@ export interface WebStoryContext {
     storyOpened: boolean;
     loadingState: boolean;
     storyCount: number;
+    iframeLoaded: boolean;
   };
   actions: {
     resetFilters: () => void;
@@ -58,7 +59,8 @@ const initialState: WebStoryContext = {
     selectedFilterValues: {},
     sortValue: 'latest',
     storyOpened: false,
-    loadingState: false,
+    loadingState: true,
+    iframeLoaded: false,
     storyCount: 0,
   },
   actions: {

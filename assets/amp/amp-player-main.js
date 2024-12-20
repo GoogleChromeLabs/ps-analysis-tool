@@ -138,6 +138,7 @@ function initializeCards() {
     });
   } catch (error) {
     //Fail silently
+    console.log(error);
   }
 }
 
@@ -151,6 +152,9 @@ function initializeCarousel() {
   initializeCards();
   initializeArrows();
   infiniteScroll();
+
+  const event = new CustomEvent('iframeLoaded');
+  window.parent.document.dispatchEvent(event);
 
   player.addEventListener('amp-story-player-close', closePlayer);
 }
@@ -224,20 +228,20 @@ const getCardHTML = ({
     `;
 };
 
-const getStoryAnchorTags = ({ storyUrl }) => {
-  return `
-        <a href="${storyUrl}" class="story"></a>
-    `;
-};
 
 const infiniteScrollDataResponse = ({data}) => {
   const totalAddedCards = document.querySelectorAll('.entry-point-card-container')?.length ?? 0;
   const storiesToUse = data.slice(totalAddedCards)
-  console.log(storiesToUse)
-  const cards = storiesToUse.map(getCardHTML);
-  const storyAnchors = storiesToUse.map(getStoryAnchorTags);
-  document.getElementById('anchor-tags-container').innerHTML += storyAnchors;
+
+  const cards = storiesToUse.map(getCardHTML).join('');
+  const storyAnchors = storiesToUse.map(({storyUrl}) => ({href: storyUrl}) );
+
   document.getElementById('entry-points').innerHTML += cards;
+  player.add(storyAnchors)
+
+  initializeCards();
+  initializeArrows();
+  infiniteScroll();
 }
 
 // Initialize on window load.

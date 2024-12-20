@@ -49,7 +49,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
   const [storyOpened, setStoryOpened] = useState(false);
   const [authors, setAuthors] = useState<Record<number, string>>({});
-  const [loadingState, setLoadingState] = useState<boolean>(false);
+  const [loadingState, setLoadingState] = useState<boolean>(true);
+  const [iframeLoaded, setIframeLoaded] = useState<boolean>(false);
   const [tags, setTags] = useState<Record<number, string>>({});
   const [categories, setCategories] = useState<Record<number, string>>({});
   const [storyCount, setStoryCount] = useState<number>(0);
@@ -92,12 +93,23 @@ const Provider = ({ children }: PropsWithChildren) => {
     setPageNumber((prevState) => prevState + 1);
   }, []);
 
+  const iframeLoadedCallback = useCallback(() => {
+    setIframeLoaded(true);
+  }, []);
+
   useEffect(() => {
     window.document.addEventListener(
       'webStoriesLightBoxEvent',
       webStoriesLightBoxCallback,
       false
     );
+
+    window.document.addEventListener(
+      'iframeLoaded',
+      iframeLoadedCallback,
+      false
+    );
+
     window.document.addEventListener(
       'loadMoreData',
       webStoriesLoadMoreData,
@@ -106,10 +118,17 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     return () => {
       window.document.removeEventListener(
+        'iframeLoaded',
+        iframeLoadedCallback,
+        false
+      );
+
+      window.document.removeEventListener(
         'webStoriesLightBoxEvent',
         webStoriesLightBoxCallback,
         false
       );
+
       window.document.removeEventListener(
         'loadMoreData',
         webStoriesLoadMoreData,
@@ -424,6 +443,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         storyOpened,
         loadingState,
         storyCount,
+        iframeLoaded,
       },
       actions: {
         resetFilters,
@@ -435,6 +455,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    iframeLoaded,
     allStoryJSON,
     storyCount,
     _searchValue,

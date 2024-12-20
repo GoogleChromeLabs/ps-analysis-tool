@@ -512,8 +512,7 @@ export const STORY_MARKUP = `
           ]
         }
       </script>
-      <div id="anchor-tags-container">
-      </div>
+
       </amp-story-player>
     </div>
 

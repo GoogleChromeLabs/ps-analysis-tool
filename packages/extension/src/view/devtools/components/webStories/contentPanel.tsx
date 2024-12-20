@@ -53,7 +53,9 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     resetFilters,
     selectedFilterValues,
     filters,
+    iframeLoaded,
   } = useWebStories(({ state, actions }) => ({
+    iframeLoaded: state.iframeLoaded,
     storyCount: state.storyCount,
     loadingState: state.loadingState,
     allStoryJSON: state.allStoryJSON,
@@ -75,12 +77,12 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
       return;
     }
 
-    if (loadingState) {
+    if (loadingState || !iframeLoaded) {
       return;
     }
 
     iframeRef.current?.contentWindow?.postMessage(allStoryJSON, '*');
-  }, [allStoryJSON, loadingState]);
+  }, [allStoryJSON, loadingState, iframeLoaded]);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -147,7 +149,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
           <div className="h-full w-full flex">
-            {loadingState && (
+            {loadingState && !iframeLoaded && (
               <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
             )}
             <iframe
