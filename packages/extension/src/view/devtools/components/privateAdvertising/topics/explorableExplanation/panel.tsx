@@ -23,7 +23,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -249,20 +248,7 @@ const Panel = ({
           setCurrentVisitIndexCallback={setCurrentVisitIndexCallback}
         />
       </div>
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '20%',
-        }}
-        minHeight="15%"
-        maxHeight="95%"
-        enable={{
-          top: true,
-        }}
-        className="h-full flex"
-      >
-        <TableTray />
-      </Resizable>
+      <TableTray />
     </div>
   );
 };
