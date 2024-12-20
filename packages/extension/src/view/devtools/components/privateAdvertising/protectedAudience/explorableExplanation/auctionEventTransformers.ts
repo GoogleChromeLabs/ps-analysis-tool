@@ -42,19 +42,24 @@ const getRandomisedNumbers = (count: number, min: number, max: number) => {
 };
 
 export const transformAuctionConfig = (seller: string) => {
+  //Using structured clone since it was seen while using normal assignment it didnt change the object properties.
   const eventAuctionConfig = structuredClone(SYNTHETIC_AUCTION_CONFIG);
+
   eventAuctionConfig.decisionLogicURL.replace(
     'privacysandboxdemos-seller.domain-aaa',
     seller
   );
+
   eventAuctionConfig.seller.replace(
     'privacysandboxdemos-seller.domain-aaa',
     seller
   );
+
   eventAuctionConfig.trustedScoringSignalsURL.replace(
     'privacysandboxdemos-seller.domain-aaa',
     seller
   );
+
   return eventAuctionConfig;
 };
 
@@ -127,6 +132,7 @@ export const transformLoadedEvent = (
     const eventToModify: singleAuctionEvent = structuredClone(
       SYNTHETIC_AUCTION_EVENT_LOADED
     ) as singleAuctionEvent;
+
     eventToModify.ownerOrigin = ownerOrigin;
     eventToModify.name = interestGroupName;
 
@@ -148,6 +154,7 @@ export const transformBidEvent = (
     const eventToModify: singleAuctionEvent = structuredClone(
       SYNTHETIC_AUCTION_EVENTS_BID
     ) as singleAuctionEvent;
+
     eventToModify.ownerOrigin = ownerOrigin;
     eventToModify.name = interestGroupName;
     eventToModify.bid = randomIntFromInterval(1, 100);
@@ -229,11 +236,11 @@ export const createAuctionEvents = (
 
     return event;
   });
+
   flattenedEvents.sort((a, b) => a.time - b.time);
   return flattenedEvents;
 };
 
 const randomIntFromInterval = (min: number, max: number) => {
-  // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 };

@@ -233,6 +233,7 @@ timeline.init = () => {
           utils.wipeAndRecreateMainCanvas();
           timeline.renderUserIcon();
           flow.setButtonsDisabilityState();
+
           cb(null, true);
         });
 
@@ -265,6 +266,7 @@ timeline.init = () => {
           }
 
           app.setCurrentSite(config.timeline.circles[clickedIndex]);
+
           cb(null, true);
         });
 

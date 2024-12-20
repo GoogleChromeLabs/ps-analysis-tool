@@ -99,6 +99,7 @@ app.pause = () => {
     app.pauseButton.classList.add('hidden');
     app.playButton.classList.remove('hidden');
   }
+
   app.promiseQueue.stop();
   app.timeline.isPaused = true;
 };
@@ -162,6 +163,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
       bubbles.showMinifiedBubbles();
       timeline.eraseAndRedraw();
       timeline.renderUserIcon();
+
       cb(null, true);
     });
 
@@ -170,18 +172,21 @@ app.addToPromiseQueue = (indexToStartFrom) => {
       app.bubbles.interestGroupCounts +=
         config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
       app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+
       cb(null, true);
     });
 
     app.promiseQueue.push((cb) => {
       app.timeline.currentIndex += 1;
       flow.setButtonsDisabilityState();
+
       cb(null, true);
     });
 
     currentIndex++;
   }
 
+  //This is to add check mark for the last circle.
   app.promiseQueue.push((cb) => {
     app.bubbles.interestGroupCounts +=
       config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
@@ -190,6 +195,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
     app.setCurrentSite(null);
+
     cb(null, true);
   });
 };
@@ -201,12 +207,15 @@ app.setupLoop = (doNotPlay) => {
   } catch (error) {
     //Silently fail.
   }
+
   timeline.eraseAndRedraw();
   timeline.renderUserIcon();
   utils.markVisitedValue(app.timeline.currentIndex, true);
+
   if (doNotPlay) {
     return;
   }
+
   app.setPlayState(true);
   app.promiseQueue.start();
 };
@@ -248,6 +257,7 @@ app.handleNonInteractivePrev = async () => {
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+
   app.setPlayState(true);
   app.promiseQueue.start();
 };
@@ -277,6 +287,7 @@ app.handleInteractivePrev = () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+
     cb(null, true);
   });
 
@@ -289,6 +300,7 @@ app.handleInteractivePrev = () => {
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
+
   app.setPlayState(true);
   app.promiseQueue.start();
 };
@@ -346,6 +358,7 @@ app.handleNonInteravtiveNext = async () => {
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+
   app.setPlayState(true);
   app.promiseQueue.start();
 };
@@ -386,6 +399,7 @@ app.handleInteravtiveNext = () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+
     cb(null, true);
   });
 
@@ -394,6 +408,7 @@ app.handleInteravtiveNext = () => {
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
+
   app.setPlayState(true);
   app.promiseQueue.start();
 };
@@ -581,6 +596,7 @@ app.reset = async () => {
   setupInterestGroupCanvas(app.igp);
   setupUserCanvas(app.up);
   setupMainCanvas(app.p, true);
+
   app.timeline.isPaused = true;
   app.setPlayState(false);
 };
