@@ -491,7 +491,7 @@ auction.draw = (index) => {
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
-      const delay = component === Box ? 1000 : 0;
+      const delay = component === Box ? 1000 / app.speedMultiplier : 0;
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (props?.showBarrageAnimation) {
           await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
@@ -500,7 +500,7 @@ auction.draw = (index) => {
             return;
           }
 
-          await utils.delay(500); // eslint-disable-line no-await-in-loop
+          await utils.delay(500 / app.speedMultiplier); // eslint-disable-line no-await-in-loop
 
           utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
         }
