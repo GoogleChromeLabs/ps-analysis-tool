@@ -26,14 +26,14 @@ class Main {
   snapshot: Figure[] = [];
 
   constructor() {
-    this.p5 = new p5(this.init);
+    this.p5 = new p5(this.init.bind(this));
   }
 
   private init(p: p5) {
-    p.setup = this.setUp;
-    p.draw = this.draw;
-    p.mouseMoved = this.onHover;
-    p.mouseClicked = this.onClick;
+    p.setup = this.setUp.bind(this);
+    p.draw = this.draw.bind(this);
+    p.mouseMoved = this.onHover.bind(this);
+    p.mouseClicked = this.onClick.bind(this);
   }
 
   private setUp() {
@@ -55,12 +55,18 @@ class Main {
       firstObject.draw();
       if (!firstObject.throw) {
         this.snapshot.push(firstObject);
+        firstObject.throw = true;
       }
     }
 
     if (this.instantQueue.length > 0) {
       this.instantQueue.forEach((object) => {
         object.draw();
+
+        if (!object.throw) {
+          this.snapshot.push(object);
+          object.throw = true;
+        }
       });
       this.instantQueue = [];
     }
@@ -70,6 +76,8 @@ class Main {
     this.snapshot.forEach((object) => {
       if (object.isHovering()) {
         object.onHover();
+      } else {
+        object.onLeave();
       }
     });
   }
