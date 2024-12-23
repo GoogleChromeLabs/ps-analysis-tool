@@ -39,6 +39,7 @@ const puppeteerArgs = [
   '--disable-features=DialMediaRouteProvider',
   '--auto-open-devtools-for-tabs',
   '--start-maximized',
+  '--no-sandbox',
 ];
 
 /**
