@@ -78,4 +78,12 @@ export default class Circle extends Figure {
       this.diameter / 2
     );
   }
+
+  remove() {
+    this.p5?.push();
+    this.p5?.fill(main.backgroundColor);
+    this.p5?.stroke(main.backgroundColor);
+    this.p5?.circle(this.x, this.y, this.diameter + 1);
+    this.p5?.pop();
+  }
 }

@@ -72,4 +72,11 @@ export default class Line extends Figure {
   isHovering(): boolean {
     return false; // TODO: Implement if line hover is needed
   }
+
+  remove() {
+    this.p5?.push();
+    this.p5?.stroke(main.backgroundColor);
+    this.p5?.line(this.x, this.y, this.endX, this.endY);
+    this.p5?.pop();
+  }
 }

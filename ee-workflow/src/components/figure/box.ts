@@ -83,4 +83,12 @@ export default class Box extends Figure {
       this.p5?.mouseY < this.y + this.height
     );
   }
+
+  remove() {
+    this.p5?.push();
+    this.p5?.fill(main.backgroundColor);
+    this.p5?.stroke(main.backgroundColor);
+    this.p5?.rect(this.x, this.y, this.width, this.height);
+    this.p5?.pop();
+  }
 }

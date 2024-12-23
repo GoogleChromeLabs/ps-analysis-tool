@@ -18,6 +18,7 @@ import p5 from 'p5';
 
 export default abstract class Figure {
   p5: p5 | null = null;
+  uid = '';
   x = 0;
   y = 0;
   fill = 'black';
@@ -26,15 +27,25 @@ export default abstract class Figure {
   previousStroke = '';
   throw?: boolean; // Property to determine if the object should be added to the snapshot
 
+  static objectCount = 0;
+
+  constructor() {
+    Figure.objectCount++;
+    this.uid =
+      `object-${Figure.objectCount}` + Math.random().toString(36).slice(2, 9);
+  }
+
   abstract draw(): void;
 
   abstract onHover(): void;
+
+  abstract onLeave(): void;
 
   abstract onClick(): void;
 
   abstract isHovering(): boolean;
 
-  abstract onLeave(): void;
+  abstract remove(): void;
 
   savePreviousColors() {
     if (this.previousFill === this.fill) {

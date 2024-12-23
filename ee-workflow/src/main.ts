@@ -24,6 +24,7 @@ class Main {
   delay = 50;
   pause = false;
   snapshot: Figure[] = [];
+  backgroundColor = 245;
 
   constructor() {
     this.p5 = new p5(this.init.bind(this));
@@ -38,7 +39,7 @@ class Main {
 
   private setUp() {
     this.p5.createCanvas(1600, 1600);
-    this.p5.background(245);
+    this.p5.background(this.backgroundColor);
   }
 
   private draw() {
@@ -100,7 +101,7 @@ class Main {
     }
 
     this.p5.clear();
-    this.p5.background(245);
+    this.p5.background(this.backgroundColor);
     this.stepsQueue = [];
     this.instantQueue = [];
     this.snapshot.forEach((figure) => {
@@ -118,6 +119,11 @@ class Main {
 
   togglePause() {
     this.pause = !this.pause;
+  }
+
+  removeFigure(figure: Figure) {
+    this.snapshot = this.snapshot.filter((f) => f.uid !== figure.uid);
+    this.reDrawAll();
   }
 }
 
