@@ -188,16 +188,14 @@ function easeOutQuad(t) {
   return --t * t * t + 1;
 }
 
-function infiniteScroll() {
-  window.addEventListener('scroll', () => {
-    if (
-      window.scrollY + window.innerHeight >=
-      document.documentElement.scrollHeight
-    ) {
-      const event = new CustomEvent('loadMoreData');
-      window.parent.document.dispatchEvent(event);
-    }
-  });
+function scrollListner() {
+  if (
+    window.scrollY + window.innerHeight >=
+    document.documentElement.scrollHeight
+  ) {
+    const event = new CustomEvent('loadMoreData');
+    window.parent.document.dispatchEvent(event);
+  }
 }
 
 const getCardHTML = ({
@@ -229,7 +227,7 @@ const getCardHTML = ({
     `;
 };
 
-const infiniteScrollDataResponse = ({ data: { story } }) => {
+const messageListener = ({ data: { story } }) => {
   try {
     const cards = story.map(getCardHTML).join('');
     const storyAnchors = story.map(({ storyUrl }) => ({ href: storyUrl }));
@@ -253,4 +251,5 @@ const infiniteScrollDataResponse = ({ data: { story } }) => {
 
 // Initialize on window load.
 window.addEventListener('load', init);
-window.addEventListener('message', infiniteScrollDataResponse);
+window.addEventListener('scroll', scrollListner);
+window.addEventListener('message', messageListener);
