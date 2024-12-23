@@ -17,47 +17,38 @@
 import Figure from '.';
 import main from '../../main';
 
-export default class Box extends Figure {
-  width: number;
-  height: number;
+export default class Text extends Figure {
+  str: string;
+  size: number;
 
   constructor(
     x: number,
     y: number,
-    width: number,
-    height: number,
+    str: string,
+    size?: number,
     fill?: string,
     stroke?: string
   ) {
     super(x, y, fill, stroke);
-    this.width = width;
-    this.height = height;
+    this.str = str;
+    this.size = size || 16;
   }
 
   draw() {
     this.p5?.push();
     this.p5?.fill(this.fill);
     this.p5?.stroke(this.stroke);
-    this.p5?.rect(this.x, this.y, this.width, this.height);
+    this.p5?.textSize(this.size);
+    this.p5?.text(this.str, this.x, this.y);
     this.p5?.pop();
   }
 
   onHover() {
-    this.savePreviousColors();
-    this.fill = 'red'; // TODO: Discuss the function
-    main.addFigure(this, true);
+    return;
   }
 
   onLeave() {
-    if (
-      this.fill === this.previousFill &&
-      this.stroke === this.previousStroke
-    ) {
-      return;
-    }
-
-    this.reApplyPreviousColors();
-    main.addFigure(this, true);
+    return;
   }
 
   onClick() {
@@ -65,23 +56,15 @@ export default class Box extends Figure {
   }
 
   isHovering(): boolean {
-    if (this.p5?.mouseX === undefined || this.p5?.mouseY === undefined) {
-      return false;
-    }
-
-    return (
-      this.p5?.mouseX > this.x &&
-      this.p5?.mouseX < this.x + this.width &&
-      this.p5?.mouseY > this.y &&
-      this.p5?.mouseY < this.y + this.height
-    );
+    return false;
   }
 
   remove() {
     this.p5?.push();
     this.p5?.fill(main.backgroundColor);
     this.p5?.stroke(main.backgroundColor);
-    this.p5?.rect(this.x, this.y, this.width, this.height);
+    this.p5?.textSize(this.size);
+    this.p5?.text(this.str, this.x, this.y);
     this.p5?.pop();
   }
 }

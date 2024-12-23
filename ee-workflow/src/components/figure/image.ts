@@ -14,50 +14,39 @@
  * limitations under the License.
  */
 
+import p5 from 'p5';
 import Figure from '.';
-import main from '../../main';
 
-export default class Box extends Figure {
+export default class Image extends Figure {
+  image: p5.Image;
   width: number;
   height: number;
 
   constructor(
     x: number,
     y: number,
+    image: p5.Image,
     width: number,
-    height: number,
-    fill?: string,
-    stroke?: string
+    height: number
   ) {
-    super(x, y, fill, stroke);
+    super(x, y);
+    this.image = image;
     this.width = width;
     this.height = height;
   }
 
   draw() {
     this.p5?.push();
-    this.p5?.fill(this.fill);
-    this.p5?.stroke(this.stroke);
-    this.p5?.rect(this.x, this.y, this.width, this.height);
+    this.p5?.image(this.image, this.x, this.y, this.width, this.height);
     this.p5?.pop();
   }
 
   onHover() {
-    this.savePreviousColors();
-    this.fill = 'red'; // TODO: Discuss the function
-    main.addFigure(this, true);
+    return;
   }
 
   onLeave() {
-    if (
-      this.fill === this.previousFill &&
-      this.stroke === this.previousStroke
-    ) {
-      return;
-    }
-
-    this.reApplyPreviousColors();
-    main.addFigure(this, true);
+    return;
   }
 
   onClick() {
@@ -65,23 +54,19 @@ export default class Box extends Figure {
   }
 
   isHovering(): boolean {
-    if (this.p5?.mouseX === undefined || this.p5?.mouseY === undefined) {
-      return false;
-    }
-
-    return (
-      this.p5?.mouseX > this.x &&
-      this.p5?.mouseX < this.x + this.width &&
-      this.p5?.mouseY > this.y &&
-      this.p5?.mouseY < this.y + this.height
-    );
+    return false;
   }
 
   remove() {
+    const whiteImage = this.p5?.createImage(
+      this.width,
+      this.height
+    ) as p5.Image;
+
+    whiteImage.set(this.x, this.y, this.p5?.color(255) as p5.Color);
+
     this.p5?.push();
-    this.p5?.fill(main.backgroundColor);
-    this.p5?.stroke(main.backgroundColor);
-    this.p5?.rect(this.x, this.y, this.width, this.height);
+    this.p5?.image(whiteImage, this.x, this.y, this.width, this.height);
     this.p5?.pop();
   }
 }

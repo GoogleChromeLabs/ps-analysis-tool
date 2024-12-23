@@ -27,15 +27,8 @@ export default class Circle extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    super();
-    this.p5 = main.getP5Instance();
-    this.x = x;
-    this.y = y;
+    super(x, y, fill, stroke);
     this.diameter = diameter;
-    this.fill = fill || 'black';
-    this.stroke = stroke || 'black';
-    this.previousFill = this.fill;
-    this.previousStroke = this.stroke;
   }
 
   draw() {

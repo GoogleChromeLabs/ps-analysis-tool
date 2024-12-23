@@ -28,16 +28,9 @@ export default class Line extends Figure {
     endY: number,
     stroke?: string
   ) {
-    super();
-    this.p5 = main.getP5Instance();
-    this.x = x;
-    this.y = y;
+    super(x, y, undefined, stroke);
     this.endX = endX;
     this.endY = endY;
-    this.stroke = stroke || 'black';
-    this.fill = 'black'; // Line doesn't have fill
-    this.previousFill = this.fill;
-    this.previousStroke = this.stroke;
   }
 
   draw() {

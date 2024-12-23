@@ -15,6 +15,7 @@
  */
 
 import p5 from 'p5';
+import main from '../../main';
 
 export default abstract class Figure {
   p5: p5 | null = null;
@@ -29,10 +30,17 @@ export default abstract class Figure {
 
   static objectCount = 0;
 
-  constructor() {
+  constructor(x: number, y: number, fill?: string, stroke?: string) {
     Figure.objectCount++;
     this.uid =
       `object-${Figure.objectCount}` + Math.random().toString(36).slice(2, 9);
+    this.p5 = main.getP5Instance();
+    this.x = x;
+    this.y = y;
+    this.fill = fill || 'black';
+    this.stroke = stroke || 'black';
+    this.previousFill = this.fill;
+    this.previousStroke = this.stroke;
   }
 
   abstract draw(): void;
