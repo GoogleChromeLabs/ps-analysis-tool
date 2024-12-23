@@ -44,8 +44,7 @@
     "out/**",
     "data/**",
     "assets/**/*.js",
-    "coverage/**",
-    "ee-workflow/**"
+    "coverage/**"
   ],
   "rules": {
     "array-callback-return": "error",
