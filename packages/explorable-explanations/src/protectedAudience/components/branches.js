@@ -59,36 +59,40 @@ const Branches = async ({
     noAnimation: app.speedMultiplier === 4,
   });
 
+  const drawInstantly = () => {
+    const branchXEndpoint =
+      currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
+
+    branches.forEach(({ id, type }, index) => {
+      const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
+      const y = y2 - 9;
+      let endpoint;
+      p.push();
+      p.stroke(0);
+      p.line(x, y, branchXEndpoint, y);
+      p.pop();
+      p.push();
+      p.stroke(0);
+      p.line(x, y, x, y + 20);
+      p.pop();
+      if (type === 'datetime') {
+        endpoint = drawDateTimeBranch(x, y, branches[index]);
+      }
+
+      if (type === 'box') {
+        endpoint = drawBoxesBranch(x, y, branches[index]);
+      }
+
+      endpoints.push(endpoint);
+
+      renderedBranchIds.push(id);
+    });
+  };
+
   return new Promise((resolve) => {
     const animate = () => {
       if (app.isRevisitingNodeInInteractiveMode || noAnimation) {
-        const branchXEndpoint =
-          currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
-
-        branches.forEach(({ id, type }, index) => {
-          const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
-          const y = y2 - 9;
-          let endpoint;
-          p.push();
-          p.stroke(0);
-          p.line(x, y, branchXEndpoint, y);
-          p.pop();
-          p.push();
-          p.stroke(0);
-          p.line(x, y, x, y + 20);
-          p.pop();
-          if (type === 'datetime') {
-            endpoint = drawDateTimeBranch(x, y, branches[index]);
-          }
-
-          if (type === 'box') {
-            endpoint = drawBoxesBranch(x, y, branches[index]);
-          }
-
-          endpoints.push(endpoint);
-
-          renderedBranchIds.push(id);
-        });
+        drawInstantly();
         resolve(endpoints);
         return;
       }
