@@ -14,7 +14,6 @@ on:
       - develop
       - main
       - release/*
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -66,8 +65,3 @@ jobs:
       - name: Run the tests
         run: |
           npm run test:extension:e2e
-      - name: Archive build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: cd tests/e2e-test/utils/
