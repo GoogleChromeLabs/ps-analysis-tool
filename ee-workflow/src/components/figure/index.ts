@@ -20,7 +20,10 @@ export default abstract class Figure {
   p5: p5 | null = null;
   x = 0;
   y = 0;
-  color = 'black';
+  fill = 'black';
+  stroke = 'black';
+  previousFill = '';
+  previousStroke = '';
   throw?: boolean; // Property to determine if the object should be added to the snapshot
 
   abstract draw(): void;
@@ -30,4 +33,23 @@ export default abstract class Figure {
   abstract onClick(): void;
 
   abstract isHovering(): boolean;
+
+  abstract onLeave(): void;
+
+  savePreviousColors() {
+    if (this.previousFill === this.fill) {
+      this.previousFill = this.fill;
+    }
+
+    if (this.previousStroke === this.stroke) {
+      this.previousStroke = this.stroke;
+    }
+  }
+
+  reApplyPreviousColors() {
+    this.fill = this.previousFill;
+    this.previousFill = this.fill;
+    this.stroke = this.previousStroke;
+    this.previousStroke = this.stroke;
+  }
 }

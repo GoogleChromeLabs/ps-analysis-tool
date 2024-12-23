@@ -20,28 +20,52 @@ import main from '../../main';
 export default class Circle extends Figure {
   diameter: number;
 
-  constructor(x: number, y: number, color: string, diameter: number) {
+  constructor(
+    x: number,
+    y: number,
+    diameter: number,
+    fill?: string,
+    stroke?: string
+  ) {
     super();
     this.p5 = main.getP5Instance();
     this.x = x;
     this.y = y;
-    this.color = color;
     this.diameter = diameter;
+    this.fill = fill || 'black';
+    this.stroke = stroke || 'black';
+    this.previousFill = this.fill;
+    this.previousStroke = this.stroke;
   }
 
   draw() {
-    this.p5?.fill(this.color);
+    this.p5?.push();
+    this.p5?.fill(this.fill);
+    this.p5?.stroke(this.stroke);
     this.p5?.circle(this.x, this.y, this.diameter);
+    this.p5?.pop();
   }
 
   onHover() {
-    this.color = 'red'; // TODO: Discuss the function
+    this.savePreviousColors();
+    this.fill = 'red'; // TODO: Discuss the function
+    main.addFigure(this, true);
+  }
+
+  onLeave() {
+    if (
+      this.fill === this.previousFill &&
+      this.stroke === this.previousStroke
+    ) {
+      return;
+    }
+
+    this.reApplyPreviousColors();
     main.addFigure(this, true);
   }
 
   onClick() {
-    this.color = 'blue'; // TODO: Discuss the function
-    main.addFigure(this, true);
+    // TODO: Discuss the function
   }
 
   isHovering(): boolean {

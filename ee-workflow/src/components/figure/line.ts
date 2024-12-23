@@ -21,29 +21,52 @@ export default class Line extends Figure {
   endX: number;
   endY: number;
 
-  constructor(x: number, y: number, color: string, endX: number, endY: number) {
+  constructor(
+    x: number,
+    y: number,
+    endX: number,
+    endY: number,
+    stroke?: string
+  ) {
     super();
     this.p5 = main.getP5Instance();
     this.x = x;
     this.y = y;
-    this.color = color;
     this.endX = endX;
     this.endY = endY;
+    this.stroke = stroke || 'black';
+    this.fill = 'black'; // Line doesn't have fill
+    this.previousFill = this.fill;
+    this.previousStroke = this.stroke;
   }
 
   draw() {
-    this.p5?.fill(this.color);
+    this.p5?.push();
+    this.p5?.stroke(this.stroke);
     this.p5?.line(this.x, this.y, this.endX, this.endY);
+    this.p5?.pop();
   }
 
   onHover() {
-    this.color = 'red'; // TODO: Discuss the function
+    this.savePreviousColors();
+    this.stroke = 'red'; // TODO: Discuss the function
+    main.addFigure(this, true);
+  }
+
+  onLeave() {
+    if (
+      this.fill === this.previousFill &&
+      this.stroke === this.previousStroke
+    ) {
+      return;
+    }
+
+    this.reApplyPreviousColors();
     main.addFigure(this, true);
   }
 
   onClick() {
-    this.color = 'blue'; // TODO: Discuss the function
-    main.addFigure(this, true);
+    // TODO: Discuss the function
   }
 
   isHovering(): boolean {
