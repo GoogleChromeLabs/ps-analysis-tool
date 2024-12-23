@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-import p5 from 'p5';
 import Figure from '.';
 import main from '../../main';
 
 export default class Circle extends Figure {
   diameter: number;
 
-  constructor(
-    p5Instance: p5,
-    x: number,
-    y: number,
-    color: string,
-    diameter: number
-  ) {
+  constructor(x: number, y: number, color: string, diameter: number) {
     super();
-    this.p5 = p5Instance;
+    this.p5 = main.getP5Instance();
     this.x = x;
     this.y = y;
     this.color = color;
@@ -49,5 +42,16 @@ export default class Circle extends Figure {
   onClick() {
     this.color = 'blue'; // TODO: Discuss the function
     main.addFigure(this, true);
+  }
+
+  isHovering(): boolean {
+    if (this.p5?.mouseX === undefined || this.p5?.mouseY === undefined) {
+      return false;
+    }
+
+    return (
+      this.p5?.dist(this.x, this.y, this.p5.mouseX, this.p5.mouseY) <
+      this.diameter / 2
+    );
   }
 }

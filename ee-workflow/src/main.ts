@@ -29,17 +29,19 @@ class Main {
     this.p5 = new p5(this.init);
   }
 
-  private init = (p: p5) => {
+  private init(p: p5) {
     p.setup = this.setUp;
     p.draw = this.draw;
-  };
+    p.mouseMoved = this.onHover;
+    p.mouseClicked = this.onClick;
+  }
 
-  private setUp = () => {
+  private setUp() {
     this.p5.createCanvas(1600, 1600);
     this.p5.background(245);
-  };
+  }
 
-  private draw = () => {
+  private draw() {
     if (this.pause) {
       return;
     }
@@ -62,9 +64,29 @@ class Main {
       });
       this.instantQueue = [];
     }
-  };
+  }
 
-  reDrawAll = () => {
+  private onHover() {
+    this.snapshot.forEach((object) => {
+      if (object.isHovering()) {
+        object.onHover();
+      }
+    });
+  }
+
+  private onClick() {
+    this.snapshot.forEach((object) => {
+      if (object.isHovering()) {
+        object.onClick();
+      }
+    });
+  }
+
+  getP5Instance() {
+    return this.p5;
+  }
+
+  reDrawAll() {
     if (this.pause) {
       return;
     }
@@ -76,19 +98,19 @@ class Main {
     this.snapshot.forEach((figure) => {
       this.instantQueue.push(figure);
     });
-  };
+  }
 
-  addFigure = (figure: Figure, instant = false) => {
+  addFigure(figure: Figure, instant = false) {
     if (instant) {
       this.instantQueue.push(figure);
     } else {
       this.stepsQueue.push(figure);
     }
-  };
+  }
 
-  togglePause = () => {
+  togglePause() {
     this.pause = !this.pause;
-  };
+  }
 }
 
 export default new Main();

@@ -28,4 +28,6 @@ export default abstract class Figure {
   abstract onHover(): void;
 
   abstract onClick(): void;
+
+  abstract isHovering(): boolean;
 }

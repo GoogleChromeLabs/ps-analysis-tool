@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import p5 from 'p5';
 import Figure from '.';
 import main from '../../main';
 
@@ -23,7 +22,6 @@ export default class Box extends Figure {
   height: number;
 
   constructor(
-    p5Instance: p5,
     x: number,
     y: number,
     color: string,
@@ -31,7 +29,7 @@ export default class Box extends Figure {
     height: number
   ) {
     super();
-    this.p5 = p5Instance;
+    this.p5 = main.getP5Instance();
     this.x = x;
     this.y = y;
     this.color = color;
@@ -52,5 +50,18 @@ export default class Box extends Figure {
   onClick() {
     this.color = 'blue'; // TODO: Discuss the function
     main.addFigure(this, true);
+  }
+
+  isHovering(): boolean {
+    if (this.p5?.mouseX === undefined || this.p5?.mouseY === undefined) {
+      return false;
+    }
+
+    return (
+      this.p5?.mouseX > this.x &&
+      this.p5?.mouseX < this.x + this.width &&
+      this.p5?.mouseY > this.y &&
+      this.p5?.mouseY < this.y + this.height
+    );
   }
 }
