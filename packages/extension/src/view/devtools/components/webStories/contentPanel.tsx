@@ -53,10 +53,8 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     selectedFilterValues,
     filters,
     iframeLoaded,
-    pageNumber,
   } = useWebStories(({ state, actions }) => ({
     iframeLoaded: state.iframeLoaded,
-    pageNumber: state.pageNumber,
     loadingState: state.loadingState,
     allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
@@ -77,18 +75,17 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
       return;
     }
 
-    if (loadingState || !iframeLoaded) {
+    if (loadingState || !iframeLoaded || !allStoryJSON) {
       return;
     }
 
     iframeRef.current?.contentWindow?.postMessage(
       {
         story: allStoryJSON,
-        infiniteScroll: pageNumber === 2,
       },
       '*'
     );
-  }, [allStoryJSON, loadingState, iframeLoaded, pageNumber]);
+  }, [allStoryJSON, loadingState, iframeLoaded]);
 
   return (
     <div className="h-full w-full flex flex-col">

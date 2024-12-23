@@ -229,25 +229,28 @@ const getCardHTML = ({
     `;
 };
 
+const infiniteScrollDataResponse = ({ data: { story } }) => {
+  try {
+    const cards = story.map(getCardHTML).join('');
+    const storyAnchors = story.map(({ storyUrl }) => ({ href: storyUrl }));
 
-const infiniteScrollDataResponse = ({data: {story}}) => {
-  const cards = story.map(getCardHTML).join('');
-  const storyAnchors = story.map(({storyUrl}) => ({href: storyUrl}) );
+    if (JSON.stringify(story) === JSON.stringify(previousStories)) {
+      return;
+    }
 
-  if(JSON.stringify(story) === JSON.stringify(previousStories)){
-    return;
+    document.getElementById('entry-points').innerHTML = cards;
+
+    previousStories = story;
+    player.add(storyAnchors);
+
+    initializeCards();
+    initializeArrows();
+    infiniteScroll();
+  } catch (error) {
+    //Fail silently
   }
-
-  document.getElementById('entry-points').innerHTML = cards;
-
-  previousStories = story;
-  player.add(storyAnchors)
-
-  initializeCards();
-  initializeArrows();
-  infiniteScroll();
-}
+};
 
 // Initialize on window load.
 window.addEventListener('load', init);
-window.addEventListener('message', infiniteScrollDataResponse)
+window.addEventListener('message', infiniteScrollDataResponse);

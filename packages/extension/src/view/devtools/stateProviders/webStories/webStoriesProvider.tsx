@@ -343,11 +343,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
 
     if (selectedCategoriesId.length > 0) {
-      urlSearchParams.append('author', selectedCategoriesId.join(','));
+      urlSearchParams.append(
+        'web_story_category',
+        selectedCategoriesId.join(',')
+      );
     }
 
     if (selectedTagId.length > 0) {
-      urlSearchParams.append('author', selectedTagId.join(','));
+      urlSearchParams.append('web_story_tag', selectedTagId.join(','));
     }
 
     urlSearchParams.append('order', sortValue === 'latest' ? 'desc' : 'asc');
@@ -392,6 +395,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     doesHaveMorePagesRef.current = pageNumber < totalPages;
 
     if (responseJSON?.data?.status === 400) {
+      setLoadingState(false);
       return;
     }
 
