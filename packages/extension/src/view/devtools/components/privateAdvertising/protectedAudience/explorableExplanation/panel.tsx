@@ -109,10 +109,13 @@ const Panel = () => {
       setExpandedBubbleX(centerX);
       setExpandedBubbleY(centerY);
     }
+
     if (containerRef.current) {
       handleResizeCallback.observe(containerRef.current);
     }
+
     const containerRefCopy = containerRef;
+
     return () => {
       app.reset(true);
       if (containerRefCopy.current) {
