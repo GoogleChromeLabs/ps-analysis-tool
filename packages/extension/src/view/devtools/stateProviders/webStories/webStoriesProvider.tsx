@@ -54,7 +54,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [tags, setTags] = useState<Record<number, string>>({});
   const [categories, setCategories] = useState<Record<number, string>>({});
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [doesHaveMorePages, setDoesHaveMorePages] = useState<boolean>(true);
+  const doesHaveMorePagesRef = useRef<boolean>(true);
   const [allStoryJSON, setAllStoryJSON] = useState<SingleStoryJSON[]>([]);
   const [sortValue, setSortValue] =
     useState<WebStoryContext['state']['sortValue']>('latest');
@@ -90,12 +90,12 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const webStoriesLoadMoreData = useCallback(() => {
-    if (!doesHaveMorePages) {
+    if (!doesHaveMorePagesRef.current) {
       return;
     }
 
     setPageNumber(pageNumber + 1);
-  }, [pageNumber, doesHaveMorePages]);
+  }, [pageNumber]);
 
   const iframeLoadedCallback = useCallback(() => {
     setIframeLoaded(true);
@@ -389,7 +389,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     const responseJSON = await response.json();
     const totalPages = Number(response.headers.get('X-Wp-Totalpages'));
 
-    setDoesHaveMorePages(pageNumber <= totalPages);
+    doesHaveMorePagesRef.current = pageNumber < totalPages;
 
     if (responseJSON?.data?.status === 400) {
       return;
