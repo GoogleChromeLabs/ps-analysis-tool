@@ -21,8 +21,8 @@ export interface SingleStoryJSON {
   storyTitle: string;
   storyUrl: string;
 }
-
-export const STORY_MARKUP = `
+export const getStaticStoryMarkup = () => {
+  return `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -520,3 +520,4 @@ export const STORY_MARKUP = `
 
 </html>
 `;
+};

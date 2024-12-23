@@ -30,7 +30,7 @@ import { noop } from '@google-psat/common';
  * Internal dependencies.
  */
 import { useWebStories } from '../../stateProviders';
-import { STORY_MARKUP } from '../../stateProviders/webStories/constants';
+import { getStaticStoryMarkup } from '../../stateProviders/webStories/getStaticStoryMarkup';
 
 interface WebStoriesProps {
   storyOpened: boolean;
@@ -157,7 +157,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             )}
             <iframe
               ref={iframeRef}
-              srcDoc={STORY_MARKUP}
+              srcDoc={getStaticStoryMarkup()}
               style={{
                 width: loadingState ? '0%' : '100%',
                 height: loadingState ? '0%' : '100%',

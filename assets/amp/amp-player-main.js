@@ -152,7 +152,6 @@ function initializeCarousel() {
 
   initializeCards();
   initializeArrows();
-  infiniteScroll();
 
   const event = new CustomEvent('iframeLoaded');
   window.parent.document.dispatchEvent(event);
@@ -243,7 +242,6 @@ const messageListener = ({ data: { story } }) => {
 
     initializeCards();
     initializeArrows();
-    infiniteScroll();
   } catch (error) {
     //Fail silently
   }

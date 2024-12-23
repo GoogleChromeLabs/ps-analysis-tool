@@ -34,7 +34,7 @@ import { useDebounce } from 'use-debounce';
  * Internal dependencies.
  */
 import Context, { type WebStoryContext } from './context';
-import { type SingleStoryJSON } from './constants';
+import { type SingleStoryJSON } from './getStaticStoryMarkup';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [_searchValue, setSearchValue] = useState('');
@@ -335,7 +335,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     const urlSearchParams = new URLSearchParams();
 
-    urlSearchParams.append('per_page', '4');
+    urlSearchParams.append('per_page', '12');
     urlSearchParams.append('page', pageNumber.toString());
 
     if (selectedAuthorsID.length > 0) {
