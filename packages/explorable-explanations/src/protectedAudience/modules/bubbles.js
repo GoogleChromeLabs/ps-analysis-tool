@@ -123,7 +123,7 @@ bubbles.barrageAnimation = async (index) => {
     const calculatedSpeed = 250 / app.speedMultiplier;
     const speedX = distance / calculatedSpeed;
 
-    return { x, y, color, speed: speedX, target };
+    return { x, y, color, speed: speedX, target, distance };
   });
 
   await new Promise((resolve) => {
@@ -147,7 +147,10 @@ bubbles.barrageAnimation = async (index) => {
         }
 
         let { x, y } = positionsOfCircles[i];
-        const { target, speed, color } = positionsOfCircles[i];
+        const { target, distance, color } = positionsOfCircles[i];
+
+        const speed = bubbles.speedCalculator(distance);
+
         const dir = p5.Vector.sub(target, p.createVector(x, y));
         dir.normalize();
 
@@ -160,7 +163,7 @@ bubbles.barrageAnimation = async (index) => {
         p.fill(color);
         p.circle(x, y, smallCircleDiameter);
         p.pop();
-        positionsOfCircles[i] = { x, y, target, speed, color };
+        positionsOfCircles[i] = { x, y, target, speed, color, distance };
       }
 
       // Resolve if all bubbles have reached their targets.
@@ -261,6 +264,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
       color,
       speed: speedX,
       target,
+      distance,
     });
   }
 
@@ -287,7 +291,10 @@ bubbles.reverseBarrageAnimation = async (index) => {
         }
 
         let { x, y } = positionsOfCircles[i];
-        const { target, speed, color } = positionsOfCircles[i];
+        const { target, color, distance } = positionsOfCircles[i];
+
+        const speed = bubbles.speedCalculator(distance);
+
         const dir = p5.Vector.sub(target, igp.createVector(x, y));
 
         dir.normalize();
@@ -301,7 +308,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
         igp.circle(x, y, smallCircleDiameter);
         igp.pop();
 
-        positionsOfCircles[i] = { x, y, target, speed, color };
+        positionsOfCircles[i] = { x, y, target, speed, color, distance };
       }
 
       // Resolve if all bubbles have reached the targets
@@ -576,6 +583,13 @@ bubbles.calculateTotalBubblesForAnimation = (index) => {
   });
 
   return bubblesCount;
+};
+
+bubbles.speedCalculator = (distance) => {
+  const calculatedSpeed = 250 / app.speedMultiplier;
+  const speedX = distance / calculatedSpeed;
+
+  return speedX;
 };
 
 export default bubbles;
