@@ -31,20 +31,26 @@ import {
   sketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
-import { NextIcon, PreviousIcon } from '@google-psat/design-system';
+import { useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
+import TableTray from '../../../explorableExplanation/tableTray';
+import type { CurrentSiteData } from '.';
 
 declare module 'react' {
   interface CSSProperties {
     [key: `--${string}`]: string | number;
   }
 }
+interface PanelProps {
+  setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
+  currentSiteData: CurrentSiteData | null;
+}
 
-const Panel = () => {
+const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
@@ -65,6 +71,23 @@ const Panel = () => {
       return !prevState;
     });
   }, []);
+
+  const { setActiveTab } = useTabs(({ actions }) => ({
+    setActiveTab: actions.setActiveTab,
+  }));
+
+  useEffect(() => {
+    if (!currentSiteData) {
+      setActiveTab(0);
+      return;
+    }
+
+    if (currentSiteData?.type === 'advertiser') {
+      setActiveTab(0);
+    } else {
+      setActiveTab(1);
+    }
+  }, [currentSiteData, currentSiteData?.type, setActiveTab]);
 
   const setInteractiveMode = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,12 +140,17 @@ const Panel = () => {
     const containerRefCopy = containerRef;
 
     return () => {
-      app.reset(true);
+      app.reset();
       if (containerRefCopy.current) {
         handleResizeCallback.unobserve(containerRefCopy.current);
       }
     };
   }, [handleResizeCallback]);
+
+  const resetHandler = useCallback(() => {
+    app.reset();
+    setCurrentSite(null);
+  }, [setCurrentSite]);
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
@@ -135,24 +163,6 @@ const Panel = () => {
         />
         Interactive Mode
       </label>
-      <div className="flex gap-0.5">
-        <button
-          id="prevButton"
-          title="Previous Node"
-          onClick={app.handlePrevButton}
-          className="disabled:opacity-50 disabled:pointer-events-none"
-        >
-          <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-        </button>
-        <button
-          onClick={app.handleNextButton}
-          id="nextButton"
-          title="Next Node"
-          className="disabled:opacity-50 disabled:pointer-events-none"
-        >
-          <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-        </button>
-      </div>
     </div>
   );
 
@@ -171,7 +181,8 @@ const Panel = () => {
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
         historyCount={historyCount}
-        reset={app.reset}
+        reset={resetHandler}
+        showNextPrevButtons={true}
         extraInterface={extraInterface}
       />
       <div className="w-full h-full">
@@ -220,13 +231,14 @@ const Panel = () => {
       <ReactP5Wrapper sketch={sketch} />
       <ReactP5Wrapper
         sketch={interestGroupSketch}
-        // eslint-disable-next-line no-console
-        onClick={() => console.log('dole shole')}
         expandedBubbleX={expandedBubbleX}
         expandedBubbleY={expandedBubbleY}
         expandedBubbleWidth={expandedBubbleWidth}
+        setCurrentSite={setCurrentSite}
+        setPlayState={setPlay}
       />
       <ReactP5Wrapper sketch={userSketch} />
+      <TableTray />
     </div>
   );
 };

@@ -61,6 +61,8 @@ const app = {
   visitedIndexOrder: [],
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
+  setCurrentSite: () => null,
+  setPlayState: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
   canvasEventListerners: {

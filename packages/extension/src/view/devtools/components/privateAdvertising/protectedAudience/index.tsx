@@ -33,8 +33,8 @@ import InterestGroups from './interestGroups';
 import Auctions from './auctions';
 import Bids from './bids';
 import Panel from './panel';
-import ExplorableExplanationPanel from './explorableExplanation/panel';
 import AdUnits from './adUnits';
+import ExplorableExplanation from './explorableExplanation';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -63,7 +63,7 @@ const ProtectedAudience = () => {
       {
         title: 'Explorable Explanations',
         content: {
-          Element: ExplorableExplanationPanel,
+          Element: ExplorableExplanation,
         },
       },
       {
