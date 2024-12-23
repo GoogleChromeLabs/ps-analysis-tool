@@ -23,10 +23,9 @@ import Box from './box';
 import { wipeAndRecreateInterestCanvas } from '../utils';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
-const ANIMATION_SPEED = app.speedMultiplier * 5; // Controls the speed of the horizontal line drawing
 const EXPAND_ICON_SIZE = 20;
 
-let spacing, progress, renderedBranchIds, endpoints;
+let spacing, renderedBranchIds, endpoints;
 
 const Branches = async ({
   x1,
@@ -43,7 +42,6 @@ const Branches = async ({
     id: index, // To prevent duplicate rendering
   }));
 
-  progress = 0;
   renderedBranchIds = [];
   endpoints = [];
   const p = app.p;
@@ -90,109 +88,63 @@ const Branches = async ({
   };
 
   return new Promise((resolve) => {
-    const animate = () => {
+    (async () => {
       if (app.isRevisitingNodeInInteractiveMode || noAnimation) {
         drawInstantly();
         resolve(endpoints);
         return;
       }
+
       if (app.cancelPromise) {
         resolve(endpoints);
-        return;
-      }
-
-      if (app.timeline.isPaused) {
-        requestAnimationFrame(animate); // Continue loop but remain paused
         return;
       }
 
       // Clear canvas or update logic (if necessary)
       wipeAndRecreateInterestCanvas();
 
-      // Draw the animated timeline
-      drawAnimatedTimeline(currentIndex * LEFT_MARGIN, y2 - 9, branches).then(
-        () => {
-          resolve(endpoints);
-        }
-      );
+      const branchXEndpoint =
+        currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
+      const branchXStartpoint = currentIndex * LEFT_MARGIN + 15;
 
-      // Continue animation until progress completes
-      if (progress < (branches.length - 1) * spacing) {
-        progress += ANIMATION_SPEED;
-        requestAnimationFrame(animate);
-      }
-    };
+      await ProgressLine({
+        x1: branchXStartpoint,
+        y1: y2 - 9,
+        customWidth: branchXEndpoint - branchXStartpoint,
+        direction: 'right',
+        noArrow: true,
+        noAnimation: app.speedMultiplier === 4,
+      });
 
-    // Start the animation loop
-    requestAnimationFrame(animate);
-  });
-};
+      branches.forEach(async ({ id, type }, index) => {
+        const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
+        const y = y2 - 9;
+        let endpoint;
 
-const drawAnimatedTimeline = (x, y, branches) => {
-  const p = app.p;
-  const leftMargin = 15;
-  x = x + leftMargin;
-  p.push();
-  p.stroke(0);
-  p.strokeWeight(1);
-  p.pop();
+        await ProgressLine({
+          x1: x,
+          y1: y,
+          customHeight: 20,
+          direction: 'down',
+          noArrow: true,
+          noAnimation: app.speedMultiplier === 4,
+        });
 
-  if (app.cancelPromise) {
-    return new Promise((resolve) => resolve());
-  }
-
-  return new Promise((resolve) => {
-    // Draw the horizontal line
-    p.line(x, y, x + progress, y);
-
-    if (app.cancelPromise) {
-      resolve();
-      return;
-    }
-
-    // Draw vertical lines and labels as the horizontal line progresses
-    for (let i = 0; i < branches.length; i++) {
-      const branchX = x + i * spacing;
-      const branch = branches[i];
-      let endpoint;
-      if (app.cancelPromise) {
-        resolve();
-        return;
-      }
-
-      if (progress >= i * spacing && !renderedBranchIds.includes(branch.id)) {
-        // Draw vertical line once the horizontal line reaches its position
-        p.push();
-        p.stroke(0);
-        p.line(branchX, y, branchX, y + 20);
-        p.pop();
-
-        switch (branch.type) {
-          case 'datetime':
-            endpoint = drawDateTimeBranch(branchX, y, branch);
-            break;
-          case 'box':
-            endpoint = drawBoxesBranch(branchX, y, branch);
-            break;
-          default:
-            break;
+        if (type === 'datetime') {
+          endpoint = drawDateTimeBranch(x, y, branches[index]);
         }
 
-        // Store the endpoint coordinates for each branch
+        if (type === 'box') {
+          endpoint = drawBoxesBranch(x, y, branches[index]);
+        }
+
         endpoints.push(endpoint);
 
-        renderedBranchIds.push(branch.id);
-      }
-    }
-    if (app.cancelPromise) {
-      resolve();
+        renderedBranchIds.push(id);
+      });
+      resolve(endpoints);
       return;
-    }
-    // Resolve if the progress exceeds the required length
-    if (progress >= (branches.length - 1) * spacing) {
-      resolve();
-      return;
-    }
+    })();
   });
 };
 

@@ -25,13 +25,15 @@ const ARROW_SIZE = 10;
 const ProgressLine = ({
   x1,
   y1,
+  customWidth,
+  customHeight,
   direction = 'right',
   text = '',
   noArrow = false,
   noAnimation = app.speedMultiplier === 4,
 }) => {
-  const width = config.flow.lineWidth - ARROW_SIZE;
-  const height = config.flow.lineHeight - ARROW_SIZE;
+  const width = customWidth ?? config.flow.lineWidth - ARROW_SIZE;
+  const height = customHeight ?? config.flow.lineHeight - ARROW_SIZE;
   const incrementBy = app.speedMultiplier; // Adjust to control speed
   const p = app.p;
 
@@ -90,7 +92,6 @@ const ProgressLine = ({
     p.push();
     p.stroke(0);
     p.strokeWeight(1);
-
     returnCoordinates = draw[direction]();
 
     p.pop();
@@ -112,7 +113,11 @@ const ProgressLine = ({
         return;
       }
 
-      if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
+      if (
+        noAnimation ||
+        app.isRevisitingNodeInInteractiveMode ||
+        app.speedMultiplier === 4
+      ) {
         drawInstantly();
         resolve(returnCoordinates);
         return;
