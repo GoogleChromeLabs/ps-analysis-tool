@@ -57,7 +57,6 @@ export default abstract class Figure {
   abstract remove(): void;
 
   setGid(gid: string) {
-    ``;
     this.gid = gid;
   }
 
