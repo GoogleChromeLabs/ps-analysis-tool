@@ -75,8 +75,79 @@ const ExplorableExplanation = () => {
           },
         },
       },
+      'div-200-2': {
+        [new Date(currentSiteData?.datetime).toUTCString()]: {
+          [`https://www.${currentSiteData?.website}`]: {
+            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
+              interestGroups,
+              currentSiteData?.website,
+              Array.from(advertiserSet),
+              new Date(currentSiteData?.datetime).getTime()
+            ),
+          },
+        },
+      },
+      'div-200-3': {
+        [new Date(currentSiteData?.datetime).toUTCString()]: {
+          [`https://www.${currentSiteData?.website}`]: {
+            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
+              interestGroups,
+              currentSiteData?.website,
+              Array.from(advertiserSet),
+              new Date(currentSiteData?.datetime).getTime()
+            ),
+          },
+        },
+      },
     };
   }, [currentSiteData, interestGroups]);
+
+  const customAdsAndBidders = useMemo(() => {
+    if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+      return {};
+    }
+
+    const currentWebsite = `https://www.${currentSiteData?.website}`;
+
+    return {
+      'div-200-1': {
+        adUnitCode: 'div-200-1',
+        bidders: ['DSP 1', 'DSP 2'],
+        mediaContainerSize: [[320, 320]],
+        winningBid: auctionsData?.['div-200-1']?.[
+          new Date(currentSiteData?.datetime).toUTCString()
+        ]?.[currentWebsite]?.[currentWebsite].filter(
+          ({ type }) => type === 'win'
+        )?.[0]?.bid,
+        bidCurrency: 'USD',
+        winningBidder: 'DSP 1',
+      },
+      'div-200-2': {
+        adUnitCode: 'div-200-2',
+        bidders: ['DSP 1', 'DSP 2'],
+        mediaContainerSize: [[320, 320]],
+        winningBid: auctionsData?.['div-200-2']?.[
+          new Date(currentSiteData?.datetime).toUTCString()
+        ]?.[currentWebsite]?.[currentWebsite].filter(
+          ({ type }) => type === 'win'
+        )?.[0]?.bid,
+        bidCurrency: 'USD',
+        winningBidder: 'DSP 1',
+      },
+      'div-200-3': {
+        adUnitCode: 'div-200-3',
+        bidders: ['DSP 1', 'DSP 2'],
+        mediaContainerSize: [[320, 320]],
+        winningBid: auctionsData?.['div-200-3']?.[
+          new Date(currentSiteData?.datetime).toUTCString()
+        ]?.[currentWebsite]?.[currentWebsite].filter(
+          ({ type }) => type === 'win'
+        )?.[0]?.bid,
+        bidCurrency: 'USD',
+        winningBidder: 'DSP 2',
+      },
+    };
+  }, [auctionsData, currentSiteData]);
 
   const interestGroupData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'publisher') {
@@ -117,6 +188,7 @@ const ExplorableExplanation = () => {
           Element: Auctions,
           props: {
             auctionEvents: auctionsData as AuctionEventsType,
+            customAdsAndBidders: customAdsAndBidders,
           },
         },
       },
@@ -130,7 +202,7 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [auctionsData, interestGroupData]
+    [auctionsData, customAdsAndBidders, interestGroupData]
   );
 
   return (

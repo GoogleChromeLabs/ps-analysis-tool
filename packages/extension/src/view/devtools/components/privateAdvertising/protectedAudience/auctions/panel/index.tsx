@@ -24,6 +24,7 @@ import {
   useSidebar,
   type SidebarItems,
 } from '@google-psat/design-system';
+import type { AdsAndBiddersType } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -34,10 +35,15 @@ import AdunitPanel from '../adunitPanel';
 
 interface AuctionPanelProps {
   auctionEvents: AuctionEventsType;
+  customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
 }
 
-const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
+const AuctionPanel = ({
+  auctionEvents,
+  setSidebarData,
+  customAdsAndBidders,
+}: AuctionPanelProps) => {
   useEffect(() => {
     setSidebarData((prev) => {
       const newData = { ...prev } as SidebarItems;
@@ -109,6 +115,7 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
             Element: AdunitPanel,
             props: {
               adunit: adUnit,
+              customAdsAndBidders: customAdsAndBidders,
             },
           },
           children: adUnitChildren,
@@ -120,7 +127,7 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
 
       return newData;
     });
-  }, [auctionEvents, setSidebarData]);
+  }, [auctionEvents, setSidebarData, customAdsAndBidders]);
 
   const { activePanel } = useSidebar(({ state }) => ({
     activePanel: state.activePanel,

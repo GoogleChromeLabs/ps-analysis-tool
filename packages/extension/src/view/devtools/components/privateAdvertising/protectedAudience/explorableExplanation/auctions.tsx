@@ -26,12 +26,14 @@ import React, { useEffect, useState } from 'react';
 import AdUnitsPanel from '../adUnits/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from '../auctions/container';
+import type { AdsAndBiddersType } from '@google-psat/common';
 
 interface AuctionsProps {
   auctionEvents: AuctionEventsType;
+  customAdsAndBidders?: AdsAndBiddersType;
 }
 
-const Auctions = ({ auctionEvents }: AuctionsProps) => {
+const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
@@ -60,6 +62,7 @@ const Auctions = ({ auctionEvents }: AuctionsProps) => {
     <AuctionsContainer
       auctionEvents={auctionEvents}
       sidebarData={sidebarData}
+      customAdsAndBidders={customAdsAndBidders}
       setSidebarData={setSidebarData}
     />
   );

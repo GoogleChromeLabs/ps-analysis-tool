@@ -24,6 +24,7 @@ import {
   ScreenIcon,
   useTabs,
 } from '@google-psat/design-system';
+import type { AdsAndBiddersType } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -34,9 +35,10 @@ import { useCookie, useProtectedAudience } from '../../../../../stateProviders';
 
 interface AdunitPanelProps {
   adunit: string;
+  customAdsAndBidders?: AdsAndBiddersType;
 }
 
-const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
+const AdunitPanel = ({ adunit, customAdsAndBidders }: AdunitPanelProps) => {
   const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
@@ -54,7 +56,7 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
     setActiveTab: actions.setActiveTab,
   }));
 
-  const currentAd = adsAndBidders[adunit];
+  const currentAd = customAdsAndBidders?.[adunit] ?? adsAndBidders[adunit];
 
   const items = useMemo(
     () => [
