@@ -489,7 +489,6 @@ bubbles.bubbleChart = (
   const eventHandler = (event) => {
     // eslint-disable-next-line no-console
     console.log(event);
-    app.igp.igClick();
     event.stopPropagation();
   };
 

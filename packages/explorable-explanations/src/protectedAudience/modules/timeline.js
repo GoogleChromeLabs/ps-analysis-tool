@@ -195,6 +195,7 @@ timeline.init = () => {
               app.visitedIndexes++;
             });
 
+            app.setCurrentSite(config.timeline.circles[clickedIndex]);
             app.bubbles.positions.splice(
               -(config.timeline.circles[clickedIndex].igGroupsCount ?? 0)
             );
@@ -222,6 +223,7 @@ timeline.init = () => {
             config.timeline.circles[clickedIndex].visitedIndex =
               app.visitedIndexes;
             app.visitedIndexes += 1;
+            app.setCurrentSite(config.timeline.circles[clickedIndex]);
           }
 
           bubbles.showMinifiedBubbles();
@@ -231,6 +233,7 @@ timeline.init = () => {
           utils.wipeAndRecreateMainCanvas();
           timeline.renderUserIcon();
           flow.setButtonsDisabilityState();
+
           cb(null, true);
         });
 
@@ -255,11 +258,15 @@ timeline.init = () => {
           app.shouldRespondToClick = true;
           timeline.renderUserIcon();
           app.isRevisitingNodeInInteractiveMode = false;
+
           if (config.timeline.circles[clickedIndex].type === 'advertiser') {
             app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
           } else {
             app.auction.auctions[clickedIndex][0].props.y1 -= 20;
           }
+
+          app.setCurrentSite(config.timeline.circles[clickedIndex]);
+
           cb(null, true);
         });
 
