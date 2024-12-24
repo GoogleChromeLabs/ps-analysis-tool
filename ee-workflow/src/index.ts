@@ -18,7 +18,7 @@ import Circle from './components/figure/circle';
 import Line from './components/figure/line';
 import main from './main';
 
-const timeline = new Line(0, 200, 1000, 200, 'black');
+const timeline = new Line(0, 200, 1000, 200, 'black', true);
 main.addFigure(timeline, true);
 
 const circles = [

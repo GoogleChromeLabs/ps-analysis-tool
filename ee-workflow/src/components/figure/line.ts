@@ -20,23 +20,39 @@ import main from '../../main';
 export default class Line extends Figure {
   endX: number;
   endY: number;
+  hasArrow: boolean;
 
   constructor(
     x: number,
     y: number,
     endX: number,
     endY: number,
-    stroke?: string
+    stroke?: string,
+    hasArrow?: boolean
   ) {
     super(x, y, undefined, stroke);
     this.endX = endX;
     this.endY = endY;
+    this.hasArrow = hasArrow ?? false;
   }
 
   draw() {
     this.p5?.push();
     this.p5?.stroke(this.stroke);
     this.p5?.line(this.x, this.y, this.endX, this.endY);
+    if (this.hasArrow) {
+      const angle = <number>(
+        this.p5?.atan2(this.y - this.endY, this.x - this.endX)
+      );
+      this.p5?.translate(this.endX, this.endY);
+      this.p5?.rotate(angle - this.p5?.HALF_PI);
+      this.p5?.fill(this.stroke);
+      this.p5?.beginShape();
+      this.p5?.vertex(0, 0);
+      this.p5?.vertex(-5, 10);
+      this.p5?.vertex(5, 10);
+      this.p5?.endShape(this.p5?.CLOSE);
+    }
     this.p5?.pop();
   }
 
