@@ -13,15 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-interface CardProps {
-  heroImage: string;
-  publisherLogo: string;
-  publisherName: string;
-  storyTitle: string;
-}
-interface StoryAnchorProps {
-  storyUrl: string;
-}
+
 export interface SingleStoryJSON {
   heroImage: string;
   publisherLogo: string;
@@ -29,15 +21,8 @@ export interface SingleStoryJSON {
   storyTitle: string;
   storyUrl: string;
 }
-
-const getStoryAnchorTags = ({ storyUrl }: StoryAnchorProps) => {
+export const getStaticStoryMarkup = () => {
   return `
-        <a href="${storyUrl}" class="story"></a>
-    `;
-};
-
-export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
-  const predefinedStoryHeader = `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,6 +38,31 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
     <link href="https://cdn.ampproject.org/amp-story-player-v0.css" rel="stylesheet" type="text/css">
 
     <style>
+        .arrow {
+            left: calc(100% - 30px);
+            position: sticky;
+            bottom: 50px;
+            width: fit-content;
+        }
+        
+        .bounce {
+            -moz-animation: bounce 2s infinite;
+            -webkit-animation: bounce 2s infinite;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
         .carousel-container {
             position: relative;
 						padding: 16px 0;
@@ -67,7 +77,6 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
             height: 488px;
             bottom: 0;
             right: 0;
-            background: linear-gradient(270deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0) 89.96%);
             background-attachment: local, local, scroll, scroll;
         }
 
@@ -232,8 +241,8 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
 
         amp-story-player.my-player {
             /*   width: 360px;
-  height: 600px;
-  margin: 70px auto; */
+            height: 600px;
+            margin: 70px auto; */
             width: 100%;
             height: 100%;
 
@@ -504,10 +513,7 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
     <div class="carousel-section">
         <div class="carousel-container">
             <div class="carousel-cards-container">
-                <div class="entry-points">
-`;
-
-  const predefinedStoryEnder = `
+                <div class="entry-points" id="entry-points">
                 </div>
             </div>
         </div>
@@ -531,49 +537,17 @@ export const getStoryMarkup = (storyJson: SingleStoryJSON[]) => {
           ]
         }
       </script>
-`;
 
-  const getCardHTML = ({
-    heroImage,
-    publisherLogo,
-    publisherName,
-    storyTitle,
-  }: CardProps) => {
-    return `
-      <div class="entry-point-card-container">
-      <div class="background-cards">
-          <div class="background-card-1"></div>
-          <div class="background-card-2"></div>
-      </div>
-      <img src="${heroImage}" class="entry-point-card-img" alt="A cat">
-      <div class="author-container">
-          <div class="logo-container">
-              <div class="logo-ring"></div>
-              <img class="entry-point-card-logo"
-                  src="${publisherLogo}" alt="Publisher logo">
-          </div>
-          <span class="entry-point-card-subtitle"> By ${publisherName} </span>
-          </div>
-  
-          <div class="card-headline-container">
-              <span class="entry-point-card-headline"> ${storyTitle} </span>
-          </div>
-      </div>
-      `;
-  };
-
-  const enderTags = `
-        </amp-story-player>
+      </amp-story-player>
+    </div>
+    <div id="show-more-indicator" class="arrow">
+        <svg width="14" height="14" viewBox="0 0 7 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.59998 0H0.0999756L3.59998 5L6.59998 0Z" fill="#6E6E6E"/>
+        </svg>
     </div>
 
 </body>
 
 </html>
 `;
-  const cards = storyJson.map(getCardHTML);
-  const storyAnchors = storyJson.map(getStoryAnchorTags);
-
-  return `${predefinedStoryHeader}${cards.join(
-    ''
-  )}${predefinedStoryEnder}${storyAnchors.join('')}${enderTags}`;
 };

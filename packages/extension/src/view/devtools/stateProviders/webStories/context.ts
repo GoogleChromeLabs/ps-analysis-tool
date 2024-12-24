@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,11 @@ import type {
   ChipsFilter,
   FilterSidebarValue,
 } from '@google-psat/design-system';
+import type { SingleStoryJSON } from './getStaticStoryMarkup';
 
-export interface StoryContext {
+export interface WebStoryContext {
   state: {
+    allStoryJSON: SingleStoryJSON[];
     searchValue: string;
     showFilterSidebar: boolean;
     filters: FilterSidebarValue[];
@@ -31,6 +33,10 @@ export interface StoryContext {
     selectedFilterValues: Record<string, string[]>;
     sortValue: 'latest' | 'oldest';
     storyOpened: boolean;
+    loadingState: boolean;
+    pageNumber: number;
+    iframeLoaded: boolean;
+    doesHaveMorePages: boolean;
   };
   actions: {
     resetFilters: () => void;
@@ -44,8 +50,9 @@ export interface StoryContext {
   };
 }
 
-const initialState: StoryContext = {
+const initialState: WebStoryContext = {
   state: {
+    allStoryJSON: [],
     searchValue: '',
     showFilterSidebar: false,
     selectedFilters: [],
@@ -53,6 +60,10 @@ const initialState: StoryContext = {
     selectedFilterValues: {},
     sortValue: 'latest',
     storyOpened: false,
+    loadingState: true,
+    iframeLoaded: false,
+    pageNumber: 1,
+    doesHaveMorePages: true,
   },
   actions: {
     resetFilters: noop,
@@ -64,4 +75,4 @@ const initialState: StoryContext = {
   },
 };
 
-export default createContext<StoryContext>(initialState);
+export default createContext<WebStoryContext>(initialState);

@@ -16,26 +16,32 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
+import React, { useEffect, useRef } from 'react';
+import {
+  ChipsBar,
+  FiltersSidebar,
+  ProgressBar,
+  TopBar,
+} from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import { getStoryMarkup } from './createStoryIframe';
-import { STORY_JSON } from './story';
-import { useStories } from '../../stateProviders';
+import { useWebStories } from '../../stateProviders';
+import { getStaticStoryMarkup } from '../../stateProviders/webStories/getStaticStoryMarkup';
 
 interface WebStoriesProps {
   storyOpened: boolean;
 }
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
-  const storyMarkup = getStoryMarkup(STORY_JSON);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const {
+    loadingState,
+    allStoryJSON,
     searchValue,
     setSearchValue,
     showFilterSidebar,
@@ -47,7 +53,13 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     resetFilters,
     selectedFilterValues,
     filters,
-  } = useStories(({ state, actions }) => ({
+    iframeLoaded,
+    doesHaveMorePages,
+  } = useWebStories(({ state, actions }) => ({
+    iframeLoaded: state.iframeLoaded,
+    loadingState: state.loadingState,
+    doesHaveMorePages: state.doesHaveMorePages,
+    allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
     filters: state.filters,
     sortValue: state.sortValue,
@@ -61,6 +73,24 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     resetFilters: actions.resetFilters,
   }));
 
+  useEffect(() => {
+    if (!iframeRef.current) {
+      return;
+    }
+
+    if (loadingState || !iframeLoaded || !allStoryJSON) {
+      return;
+    }
+
+    iframeRef.current?.contentWindow?.postMessage(
+      {
+        story: allStoryJSON,
+        doesHaveMorePages,
+      },
+      '*'
+    );
+  }, [allStoryJSON, loadingState, iframeLoaded, doesHaveMorePages]);
+
   return (
     <div className="h-full w-full flex flex-col">
       {!storyOpened && (
@@ -73,10 +103,10 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             hideFiltering={false}
             disableFiltering={false}
             hideSearch={false}
-            count={0} // TODO: Add count
+            count={allStoryJSON.length}
           >
-            <div className="flex justify-between items-center min-w-[125px] text-raisin-black dark:text-bright-gray">
-              <p>Sort by:</p>
+            <div className="flex justify-between items-center min-w-[100px] text-raisin-black dark:text-bright-gray">
+              <p className="min-w-fit">Sort by:</p>
               <select
                 value={sortValue}
                 onChange={(e) =>
@@ -91,8 +121,8 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
                   backgroundPositionY: '4px',
                 }}
               >
-                <option value="Latest">Latest</option>
-                <option value="Oldest">Oldest</option>
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
               </select>
             </div>
           </TopBar>
@@ -125,15 +155,21 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           data-testid="web-stories-content"
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
-          <iframe
-            srcDoc={storyMarkup}
-            style={{
-              width: '100%',
-              height: '100%',
-              border: 'none',
-              overflow: 'hidden',
-            }}
-          />
+          <div className="h-full w-full flex">
+            {loadingState && (
+              <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
+            )}
+            <iframe
+              ref={iframeRef}
+              srcDoc={getStaticStoryMarkup()}
+              style={{
+                width: loadingState ? '0%' : '100%',
+                height: loadingState ? '0%' : '100%',
+                border: 'none',
+                overflow: 'hidden',
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

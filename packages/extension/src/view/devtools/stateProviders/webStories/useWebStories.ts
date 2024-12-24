@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,20 +21,20 @@ import { useContextSelector } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import Context, { type StoryContext } from './context';
+import Context, { type WebStoryContext } from './context';
 
-export function useStories(): StoryContext;
-export function useStories<T>(selector: (state: StoryContext) => T): T;
+export function useWebStories(): WebStoryContext;
+export function useWebStories<T>(selector: (state: WebStoryContext) => T): T;
 
 /**
  * Cookie store hook.
  * @param selector Selector function to partially select state.
  * @returns selected part of the state
  */
-export function useStories<T>(
-  selector: (state: StoryContext) => T | StoryContext = (state) => state
+export function useWebStories<T>(
+  selector: (state: WebStoryContext) => T | WebStoryContext = (state) => state
 ) {
   return useContextSelector(Context, selector);
 }
 
-export default useStories;
+export default useWebStories;

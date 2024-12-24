@@ -22,6 +22,8 @@ let maxScroll;
 let scaleVal = 1;
 let scalingDown = false;
 let deltaY = 0;
+let previousStories = [];
+let doesHaveMorePages = false;
 
 function setPlayer(playerEl) {
   player = playerEl;
@@ -47,23 +49,29 @@ function setCardMargin(margin) {
  * Initializes arrows for horizontal scrolling on desktop.
  */
 function initializeArrows() {
-  const scrollContainer = document.querySelector('.carousel-cards-container');
-  const containerPadding =
-    parseFloat(
-      getComputedStyle(scrollContainer.firstElementChild).paddingLeft
-    ) +
-    parseFloat(
-      getComputedStyle(scrollContainer.firstElementChild).paddingRight
-    );
+  try {
+    const scrollContainer = document.querySelector('.carousel-cards-container');
+    const containerPadding =
+      parseFloat(
+        getComputedStyle(scrollContainer.firstElementChild).paddingLeft
+      ) +
+      parseFloat(
+        getComputedStyle(scrollContainer.firstElementChild).paddingRight
+      );
 
-  maxScroll =
-    scrollContainer.offsetWidth -
-    containerPadding +
-    cardMargin -
-    cards.length * cardWidth;
+    maxScroll =
+      scrollContainer.offsetWidth -
+      containerPadding +
+      cardMargin -
+      cards.length * cardWidth;
 
-  if (maxScroll < 0) {
-    document.querySelector('.carousel-container').classList.add('overflow-right');
+    if (maxScroll < 0) {
+      document
+        .querySelector('.carousel-container')
+        .classList.add('overflow-right');
+    }
+  } catch (error) {
+    //Fail silently
   }
 }
 
@@ -71,9 +79,9 @@ function initializeArrows() {
  * Closes the lightbox and resets the player and UI.
  */
 function closePlayer() {
-  const data = { storyOpened: false }
-  const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data })
-  window.parent.document.dispatchEvent(event)
+  const data = { storyOpened: false };
+  const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data });
+  window.parent.document.dispatchEvent(event);
   player.pause();
   document.body.classList.remove('lightbox-open');
   lightboxEl.classList.add('closed');
@@ -107,26 +115,33 @@ function resetStyles() {
  * Initializes card click events and sets up their dimensions.
  */
 function initializeCards() {
-  setCards(document.querySelectorAll('.entry-point-card-container'));
-  setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
-  setCardWidth(cardMargin + cards[0].offsetWidth);
+  try {
+    setCards(document.querySelectorAll('.entry-point-card-container'));
+    setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
+    setCardWidth(cardMargin + cards[0].offsetWidth);
 
-  const stories = player.getStories();
+    const stories = player.getStories();
 
-  cards.forEach((card, idx) => {
-    card.addEventListener('click', () => {
-      player.show(stories[idx].href, null, { animate: false });
-      const data = { storyOpened: true }
-      const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data })
-      window.parent.document.dispatchEvent(event)
+    cards.forEach((card, idx) => {
+      card.addEventListener('click', () => {
+        player.show(stories[idx].href, null, { animate: false });
+        const data = { storyOpened: true };
+        const event = new CustomEvent('webStoriesLightBoxEvent', {
+          detail: data,
+        });
+        window.parent.document.dispatchEvent(event);
 
-      document.body.classList.add('lightbox-open');
-      lightboxEl.classList.remove('closed');
-      card.classList.add('hidden');
-      resetStyles();
-      player.play();
+        document.body.classList.add('lightbox-open');
+        lightboxEl.classList.remove('closed');
+        card.classList.add('hidden');
+        resetStyles();
+        player.play();
+      });
     });
-  });
+  } catch (error) {
+    //Fail silently
+    console.log(error);
+  }
 }
 
 /**
@@ -138,6 +153,9 @@ function initializeCarousel() {
 
   initializeCards();
   initializeArrows();
+
+  const event = new CustomEvent('iframeLoaded');
+  window.parent.document.dispatchEvent(event);
 
   player.addEventListener('amp-story-player-close', closePlayer);
 }
@@ -170,5 +188,77 @@ function easeOutQuad(t) {
   return --t * t * t + 1;
 }
 
+function scrollListner() {
+  if (
+    window.scrollY + window.innerHeight >=
+    document.documentElement.scrollHeight
+  ) {
+    if(!doesHaveMorePages) {
+      document.getElementById('show-more-indicator').style.rotate = '180deg';
+    }
+    const event = new CustomEvent('loadMoreData');
+    window.parent.document.dispatchEvent(event);
+  }
+}
+
+const getCardHTML = ({
+  heroImage,
+  publisherLogo,
+  publisherName,
+  storyTitle,
+}) => {
+  return `
+    <div class="entry-point-card-container">
+    <div class="background-cards">
+        <div class="background-card-1"></div>
+        <div class="background-card-2"></div>
+    </div>
+    <img src="${heroImage}" class="entry-point-card-img" alt="A cat">
+    <div class="author-container">
+        <div class="logo-container">
+            <div class="logo-ring"></div>
+            <img class="entry-point-card-logo"
+                src="${publisherLogo}" alt="Publisher logo">
+        </div>
+        <span class="entry-point-card-subtitle"> By ${publisherName} </span>
+        </div>
+
+        <div class="card-headline-container">
+            <span class="entry-point-card-headline"> ${storyTitle} </span>
+        </div>
+    </div>
+    `;
+};
+
+const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages } }) => {
+  try {
+    const cards = story.map(getCardHTML).join('');
+    const storyAnchors = story.map(({ storyUrl }) => ({ href: storyUrl }));
+
+    if (JSON.stringify(story) === JSON.stringify(previousStories)) {
+      return;
+    }
+
+    document.getElementById('entry-points').innerHTML = cards;
+
+    previousStories = story;
+    player.add(storyAnchors);
+
+    initializeCards();
+    initializeArrows();
+    doesHaveMorePages = _doesHaveMorePages;
+
+    document.getElementById('show-more-indicator').classList.add('bounce');
+
+    setTimeout(() => {
+      document.getElementById('show-more-indicator').classList.remove('bounce');
+    }, 2000);
+  } catch (error) {
+    //Fail silently
+  }
+};
+
 // Initialize on window load.
 window.addEventListener('load', init);
+window.addEventListener('scroll', scrollListner);
+window.addEventListener('message', messageListener);
