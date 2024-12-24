@@ -23,6 +23,7 @@ let scaleVal = 1;
 let scalingDown = false;
 let deltaY = 0;
 let previousStories = [];
+let doesHaveMorePages = false;
 
 function setPlayer(playerEl) {
   player = playerEl;
@@ -192,6 +193,9 @@ function scrollListner() {
     window.scrollY + window.innerHeight >=
     document.documentElement.scrollHeight
   ) {
+    if(!doesHaveMorePages) {
+      document.getElementById('show-more-indicator').style.rotate = '180deg';
+    }
     const event = new CustomEvent('loadMoreData');
     window.parent.document.dispatchEvent(event);
   }
@@ -226,7 +230,7 @@ const getCardHTML = ({
     `;
 };
 
-const messageListener = ({ data: { story } }) => {
+const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages } }) => {
   try {
     const cards = story.map(getCardHTML).join('');
     const storyAnchors = story.map(({ storyUrl }) => ({ href: storyUrl }));
@@ -242,6 +246,13 @@ const messageListener = ({ data: { story } }) => {
 
     initializeCards();
     initializeArrows();
+    doesHaveMorePages = _doesHaveMorePages;
+
+    document.getElementById('show-more-indicator').classList.add('bounce');
+
+    setTimeout(() => {
+      document.getElementById('show-more-indicator').classList.remove('bounce');
+    }, 2000);
   } catch (error) {
     //Fail silently
   }

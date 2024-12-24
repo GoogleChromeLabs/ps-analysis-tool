@@ -38,6 +38,7 @@ interface WebStoriesProps {
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
   const {
     loadingState,
     allStoryJSON,
@@ -53,9 +54,11 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     selectedFilterValues,
     filters,
     iframeLoaded,
+    doesHaveMorePages,
   } = useWebStories(({ state, actions }) => ({
     iframeLoaded: state.iframeLoaded,
     loadingState: state.loadingState,
+    doesHaveMorePages: state.doesHaveMorePages,
     allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
     filters: state.filters,
@@ -82,10 +85,11 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     iframeRef.current?.contentWindow?.postMessage(
       {
         story: allStoryJSON,
+        doesHaveMorePages,
       },
       '*'
     );
-  }, [allStoryJSON, loadingState, iframeLoaded]);
+  }, [allStoryJSON, loadingState, iframeLoaded, doesHaveMorePages]);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -152,7 +156,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
           <div className="h-full w-full flex">
-            {loadingState && !iframeLoaded && (
+            {loadingState && (
               <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
             )}
             <iframe

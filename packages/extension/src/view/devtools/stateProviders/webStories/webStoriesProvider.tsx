@@ -335,7 +335,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     const urlSearchParams = new URLSearchParams();
 
-    urlSearchParams.append('per_page', '12');
+    urlSearchParams.append('per_page', '4');
     urlSearchParams.append('page', pageNumber.toString());
 
     if (selectedAuthorsID.length > 0) {
@@ -469,6 +469,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         loadingState,
         iframeLoaded,
         pageNumber,
+        doesHaveMorePages: doesHaveMorePagesRef.current,
       },
       actions: {
         resetFilters,

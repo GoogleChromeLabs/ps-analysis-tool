@@ -36,6 +36,7 @@ export interface WebStoryContext {
     loadingState: boolean;
     pageNumber: number;
     iframeLoaded: boolean;
+    doesHaveMorePages: boolean;
   };
   actions: {
     resetFilters: () => void;
@@ -62,6 +63,7 @@ const initialState: WebStoryContext = {
     loadingState: true,
     iframeLoaded: false,
     pageNumber: 1,
+    doesHaveMorePages: true,
   },
   actions: {
     resetFilters: noop,

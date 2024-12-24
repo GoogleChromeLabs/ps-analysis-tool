@@ -38,6 +38,31 @@ export const getStaticStoryMarkup = () => {
     <link href="https://cdn.ampproject.org/amp-story-player-v0.css" rel="stylesheet" type="text/css">
 
     <style>
+        .arrow {
+            left: calc(100% - 30px);
+            position: sticky;
+            bottom: 50px;
+            width: fit-content;
+        }
+        
+        .bounce {
+            -moz-animation: bounce 2s infinite;
+            -webkit-animation: bounce 2s infinite;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
         .carousel-container {
             position: relative;
 						padding: 16px 0;
@@ -216,8 +241,8 @@ export const getStaticStoryMarkup = () => {
 
         amp-story-player.my-player {
             /*   width: 360px;
-  height: 600px;
-  margin: 70px auto; */
+            height: 600px;
+            margin: 70px auto; */
             width: 100%;
             height: 100%;
 
@@ -514,6 +539,11 @@ export const getStaticStoryMarkup = () => {
       </script>
 
       </amp-story-player>
+    </div>
+    <div id="show-more-indicator" class="arrow">
+        <svg width="14" height="14" viewBox="0 0 7 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.59998 0H0.0999756L3.59998 5L6.59998 0Z" fill="#6E6E6E"/>
+        </svg>
     </div>
 
 </body>
