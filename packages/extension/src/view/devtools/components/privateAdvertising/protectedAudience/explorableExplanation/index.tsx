@@ -45,21 +45,25 @@ const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
 
-  const [interestGroups, setInterestGroups] = useState<
-    {
-      interestGroupName: string;
-      ownerOrigin: string;
-    }[]
-  >([]);
+  const [sitesVisited, setSitesVisited] = useState<string[]>([]);
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
       return {};
     }
 
-    const advertiserSet = new Set<string>();
-    interestGroups.forEach(({ ownerOrigin }) => {
-      advertiserSet.add(ownerOrigin);
+    //@ts-ignore since SYNTHETIC_INTEREST_GROUPS is a constant and type is not defined.
+    const advertiserSet = sitesVisited.filter(
+      (site) => Object.keys(SYNTHETIC_INTEREST_GROUPS[site]).length > 0
+    );
+
+    const interestGroups = advertiserSet.map((advertiser) => {
+      return SYNTHETIC_INTEREST_GROUPS[advertiser].map((interestGroup) => {
+        return {
+          interestGroupName: interestGroup.name as string,
+          ownerOrigin: interestGroup.ownerOrigin as string,
+        };
+      });
     });
 
     return {
@@ -67,7 +71,7 @@ const ExplorableExplanation = () => {
         [new Date(currentSiteData?.datetime).toUTCString()]: {
           [`https://www.${currentSiteData?.website}`]: {
             [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
-              interestGroups,
+              interestGroups.flat(),
               currentSiteData?.website,
               Array.from(advertiserSet),
               new Date(currentSiteData?.datetime).getTime()
@@ -79,7 +83,7 @@ const ExplorableExplanation = () => {
         [new Date(currentSiteData?.datetime).toUTCString()]: {
           [`https://www.${currentSiteData?.website}`]: {
             [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
-              interestGroups,
+              interestGroups.flat(),
               currentSiteData?.website,
               Array.from(advertiserSet),
               new Date(currentSiteData?.datetime).getTime()
@@ -91,7 +95,7 @@ const ExplorableExplanation = () => {
         [new Date(currentSiteData?.datetime).toUTCString()]: {
           [`https://www.${currentSiteData?.website}`]: {
             [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
-              interestGroups,
+              interestGroups.flat(),
               currentSiteData?.website,
               Array.from(advertiserSet),
               new Date(currentSiteData?.datetime).getTime()
@@ -100,7 +104,7 @@ const ExplorableExplanation = () => {
         },
       },
     };
-  }, [currentSiteData, interestGroups]);
+  }, [currentSiteData, sitesVisited]);
 
   const customAdsAndBidders = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
@@ -158,14 +162,11 @@ const ExplorableExplanation = () => {
       //@ts-ignore
       SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website];
 
-    setInterestGroups((prevState) => {
-      return [
-        ...prevState,
-        ...perSiteInterestGroups.map(({ name, ownerOrigin }) => ({
-          interestGroupName: name ?? '',
-          ownerOrigin: ownerOrigin ?? '',
-        })),
-      ];
+    setSitesVisited((prevState) => {
+      const set = new Set<string>();
+      prevState.forEach((site) => set.add(site));
+      set.add(currentSiteData?.website);
+      return Array.from(set);
     });
 
     return perSiteInterestGroups;
