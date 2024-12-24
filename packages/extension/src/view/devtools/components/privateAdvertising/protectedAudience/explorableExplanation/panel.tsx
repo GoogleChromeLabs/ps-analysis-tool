@@ -233,6 +233,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         expandedBubbleX={expandedBubbleX}
         expandedBubbleY={expandedBubbleY}
         expandedBubbleWidth={expandedBubbleWidth}
+        speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}
         setPlayState={setPlay}
       />

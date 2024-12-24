@@ -175,7 +175,7 @@ joinInterestGroup.draw = (index) => {
       }
 
       if (!app.isRevisitingNodeInInteractiveMode) {
-        await utils.delay(delay); // eslint-disable-line no-await-in-loop
+        await utils.delay(delay / app.speedMultiplier); // eslint-disable-line no-await-in-loop
       }
       cb(null, true);
     });

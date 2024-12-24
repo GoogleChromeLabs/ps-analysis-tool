@@ -25,14 +25,17 @@ const ARROW_SIZE = 10;
 const ProgressLine = ({
   x1,
   y1,
+  customWidth,
+  customHeight,
   direction = 'right',
   text = '',
   noArrow = false,
-  noAnimation = true,
+  noAnimation = app.speedMultiplier === 4,
+  isBranch = false,
 }) => {
-  const width = config.flow.lineWidth - ARROW_SIZE;
-  const height = config.flow.lineHeight - ARROW_SIZE;
-  const incrementBy = 5; // Adjust to control speed
+  const width = customWidth ?? config.flow.lineWidth - ARROW_SIZE;
+  const height = customHeight ?? config.flow.lineHeight - ARROW_SIZE;
+  const incrementBy = isBranch ? 15 : app.speedMultiplier; // Adjust to control speed
   const p = app.p;
 
   x1 = typeof x1 === 'function' ? x1() : x1;
@@ -48,12 +51,24 @@ const ProgressLine = ({
 
   const draw = {
     right: () => {
+      p.push();
+      p.noStroke();
+      p.fill(config.flow.colors.box.background);
+      p.rect(x1, y1, width, ARROW_SIZE);
+      p.pop();
+
       p.line(x1, y1, x1 + width, y2);
       drawArrow(x1 + width, y1, direction);
 
       return { x: x1 + width, y: y1 };
     },
     left: () => {
+      p.push();
+      p.noStroke();
+      p.fill(config.flow.colors.box.background);
+      p.rect(x2, y2 + 10, -width, ARROW_SIZE);
+      p.pop();
+
       p.line(x2, y2 + 10, x2 - width, y1 + 10);
       drawArrow(x2 - width, y1 + 4, direction);
       utils.drawText(text, x2 - width / 2, y1 + height / 2);
@@ -61,6 +76,12 @@ const ProgressLine = ({
       return { x: x2 - width, y: y1 + 10 };
     },
     down: () => {
+      p.push();
+      p.noStroke();
+      p.fill(config.flow.colors.box.background);
+      p.rect(x1 - 5, y1, ARROW_SIZE, height);
+      p.pop();
+
       p.line(x1, y1, x2, y1 + height);
       drawArrow(x1, y1 + height, direction);
       utils.drawText(
@@ -72,6 +93,12 @@ const ProgressLine = ({
       return { x: x1, y: y1 + height };
     },
     up: () => {
+      p.push();
+      p.noStroke();
+      p.fill(config.flow.colors.box.background);
+      p.rect(x1 - 5, y1, ARROW_SIZE, -height);
+      p.pop();
+
       p.line(x1, y1, x2, y1 - height);
       drawArrow(x1, y1 - height, direction);
       utils.drawText(
@@ -90,7 +117,6 @@ const ProgressLine = ({
     p.push();
     p.stroke(0);
     p.strokeWeight(1);
-
     returnCoordinates = draw[direction]();
 
     p.pop();
@@ -112,7 +138,11 @@ const ProgressLine = ({
         return;
       }
 
-      if (noAnimation || app.isRevisitingNodeInInteractiveMode) {
+      if (
+        noAnimation ||
+        app.isRevisitingNodeInInteractiveMode ||
+        app.speedMultiplier === 4
+      ) {
         drawInstantly();
         resolve(returnCoordinates);
         return;
