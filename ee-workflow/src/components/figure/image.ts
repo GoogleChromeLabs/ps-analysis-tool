@@ -16,6 +16,7 @@
 
 import p5 from 'p5';
 import Figure from '.';
+import main from '../../main';
 
 export default class Image extends Figure {
   image: p5.Image;
@@ -68,5 +69,21 @@ export default class Image extends Figure {
     this.p5?.push();
     this.p5?.image(whiteImage, this.x, this.y, this.width, this.height);
     this.p5?.pop();
+  }
+
+  reDraw(
+    x?: number,
+    y?: number,
+    image?: p5.Image,
+    width?: number,
+    height?: number
+  ) {
+    this.remove();
+    this.x = x ?? this.x;
+    this.y = y ?? this.y;
+    this.image = image || this.image;
+    this.width = width ?? this.width;
+    this.height = height ?? this.height;
+    main.reDrawAll();
   }
 }

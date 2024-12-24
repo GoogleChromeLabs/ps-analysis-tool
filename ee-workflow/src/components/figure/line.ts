@@ -72,4 +72,20 @@ export default class Line extends Figure {
     this.p5?.line(this.x, this.y, this.endX, this.endY);
     this.p5?.pop();
   }
+
+  reDraw(
+    x?: number,
+    y?: number,
+    endX?: number,
+    endY?: number,
+    stroke?: string
+  ) {
+    this.remove();
+    this.x = x ?? this.x;
+    this.y = y ?? this.y;
+    this.endX = endX ?? this.endX;
+    this.endY = endY ?? this.endY;
+    this.stroke = stroke || this.stroke;
+    main.reDrawAll();
+  }
 }

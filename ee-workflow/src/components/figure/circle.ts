@@ -79,4 +79,20 @@ export default class Circle extends Figure {
     this.p5?.circle(this.x, this.y, this.diameter + 1);
     this.p5?.pop();
   }
+
+  reDraw(
+    x?: number,
+    y?: number,
+    diameter?: number,
+    fill?: string,
+    stroke?: string
+  ) {
+    this.remove();
+    this.x = x ?? this.x;
+    this.y = y ?? this.y;
+    this.diameter = diameter ?? this.diameter;
+    this.fill = fill || this.fill;
+    this.stroke = stroke || this.stroke;
+    main.reDrawAll();
+  }
 }

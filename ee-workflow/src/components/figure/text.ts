@@ -67,4 +67,22 @@ export default class Text extends Figure {
     this.p5?.text(this.str, this.x, this.y);
     this.p5?.pop();
   }
+
+  reDraw(
+    x?: number,
+    y?: number,
+    str?: string,
+    size?: number,
+    fill?: string,
+    stroke?: string
+  ) {
+    this.remove();
+    this.x = x ?? this.x;
+    this.y = y ?? this.y;
+    this.str = str || this.str;
+    this.size = size ?? this.size;
+    this.fill = fill || this.fill;
+    this.stroke = stroke || this.stroke;
+    main.reDrawAll();
+  }
 }

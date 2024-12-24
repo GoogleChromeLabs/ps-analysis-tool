@@ -44,6 +44,7 @@ class Main {
     this.p5.createCanvas(1600, 1600);
     this.p5.background(this.backgroundColor);
   }
+
   private saveToSnapshot(object: Figure) {
     this.snapshot.push(object);
     object.throw = true;

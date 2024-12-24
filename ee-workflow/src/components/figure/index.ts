@@ -56,6 +56,8 @@ export default abstract class Figure {
 
   abstract remove(): void;
 
+  abstract reDraw(...params: Array<any>): void;
+
   setGid(gid: string) {
     this.gid = gid;
   }

@@ -84,4 +84,22 @@ export default class Box extends Figure {
     this.p5?.rect(this.x, this.y, this.width, this.height);
     this.p5?.pop();
   }
+
+  reDraw(
+    x?: number,
+    y?: number,
+    width?: number,
+    height?: number,
+    fill?: string,
+    stroke?: string
+  ) {
+    this.remove();
+    this.x = x ?? this.x;
+    this.y = y ?? this.y;
+    this.width = width ?? this.width;
+    this.height = height ?? this.height;
+    this.fill = fill || this.fill;
+    this.stroke = stroke || this.stroke;
+    main.reDrawAll();
+  }
 }
