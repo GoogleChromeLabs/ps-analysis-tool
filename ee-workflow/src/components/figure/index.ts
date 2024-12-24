@@ -19,7 +19,8 @@ import main from '../../main';
 
 export default abstract class Figure {
   p5: p5 | null = null;
-  uid = '';
+  id = '';
+  gid = '';
   x = 0;
   y = 0;
   fill = 'black';
@@ -32,7 +33,7 @@ export default abstract class Figure {
 
   constructor(x: number, y: number, fill?: string, stroke?: string) {
     Figure.objectCount++;
-    this.uid =
+    this.id =
       `object-${Figure.objectCount}` + Math.random().toString(36).slice(2, 9);
     this.p5 = main.getP5Instance();
     this.x = x;
@@ -54,6 +55,11 @@ export default abstract class Figure {
   abstract isHovering(): boolean;
 
   abstract remove(): void;
+
+  setGid(gid: string) {
+    ``;
+    this.gid = gid;
+  }
 
   savePreviousColors() {
     if (this.previousFill === this.fill) {

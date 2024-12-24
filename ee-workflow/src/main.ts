@@ -16,14 +16,17 @@
 
 import p5 from 'p5';
 import Figure from './components/figure';
+import Group from './components/group';
 
 class Main {
   p5: p5;
   stepsQueue: Figure[] = [];
+  groupStepsQueue: Group[] = [];
   instantQueue: Figure[] = [];
   delay = 50;
   pause = false;
   snapshot: Figure[] = [];
+  groupSnapshot: Group[] = [];
   backgroundColor = 245;
 
   constructor() {
@@ -41,6 +44,10 @@ class Main {
     this.p5.createCanvas(1600, 1600);
     this.p5.background(this.backgroundColor);
   }
+  private saveToSnapshot(object: Figure) {
+    this.snapshot.push(object);
+    object.throw = true;
+  }
 
   private draw() {
     if (this.pause) {
@@ -48,15 +55,25 @@ class Main {
     }
 
     if (this.p5.frameCount % this.delay === 0) {
-      const firstObject = this.stepsQueue.shift();
-      if (firstObject === undefined) {
-        return;
+      if (this.stepsQueue.length > 0) {
+        const firstObject = <Figure>this.stepsQueue.shift();
+
+        firstObject.draw();
+        if (!firstObject.throw) {
+          this.saveToSnapshot(firstObject);
+        }
       }
 
-      firstObject.draw();
-      if (!firstObject.throw) {
-        this.snapshot.push(firstObject);
-        firstObject.throw = true;
+      if (this.groupStepsQueue.length > 0) {
+        const firstGroup = <Group>this.groupStepsQueue.shift();
+
+        firstGroup.draw();
+        if (!firstGroup.throw) {
+          firstGroup.figures.forEach((object) => this.saveToSnapshot(object));
+
+          this.groupSnapshot.push(firstGroup);
+          firstGroup.throw = true;
+        }
       }
     }
 
@@ -73,20 +90,34 @@ class Main {
     }
   }
 
+  private isGrouped(object: Figure): Group | undefined {
+    if (!object.gid) {
+      return undefined;
+    }
+
+    return this.groupSnapshot.find((group) => group.id === object.gid);
+  }
+
   private onHover() {
     this.snapshot.forEach((object) => {
-      if (object.isHovering()) {
-        object.onHover();
+      const isHovering = object.isHovering();
+      const _object = this.isGrouped(object) || object;
+
+      if (isHovering) {
+        _object.onHover();
       } else {
-        object.onLeave();
+        _object.onLeave();
       }
     });
   }
 
   private onClick() {
     this.snapshot.forEach((object) => {
-      if (object.isHovering()) {
-        object.onClick();
+      const isHovering = object.isHovering();
+      if (isHovering) {
+        const _object = this.isGrouped(object) || object;
+
+        _object.onClick();
       }
     });
   }
@@ -117,13 +148,36 @@ class Main {
     }
   }
 
+  addGroup(group: Group, instant = false) {
+    if (instant) {
+      group.figures.forEach((figure) => this.instantQueue.push(figure));
+    } else {
+      this.groupStepsQueue.push(group);
+    }
+  }
+
   togglePause() {
     this.pause = !this.pause;
   }
 
   removeFigure(figure: Figure) {
-    this.snapshot = this.snapshot.filter((f) => f.uid !== figure.uid);
+    this.snapshot = this.snapshot.filter((f) => f.id !== figure.id);
     this.reDrawAll();
+  }
+
+  removeGroup(group: Group) {
+    let toRemove = <Group | null>null;
+
+    this.groupSnapshot = this.groupSnapshot.filter((g) => {
+      if (g.id === group.id) {
+        toRemove = g;
+        return false;
+      }
+
+      return true;
+    });
+
+    toRemove?.figures.forEach((g) => this.removeFigure(g));
   }
 }
 
