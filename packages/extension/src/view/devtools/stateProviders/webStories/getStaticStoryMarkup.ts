@@ -22,6 +22,7 @@ export interface SingleStoryJSON {
   storyUrl: string;
 }
 export const getStaticStoryMarkup = () => {
+  const isDark = document.body.classList.contains('dark');
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -541,8 +542,10 @@ export const getStaticStoryMarkup = () => {
       </amp-story-player>
     </div>
     <div id="show-more-indicator" class="arrow">
-        <svg width="14" height="14" viewBox="0 0 7 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.59998 0H0.0999756L3.59998 5L6.59998 0Z" fill="#6E6E6E"/>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="${
+          isDark ? '#E8EAED' : '#6E6E6E'
+        }">
+            <path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/>
         </svg>
     </div>
 

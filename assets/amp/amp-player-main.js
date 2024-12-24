@@ -193,6 +193,7 @@ function scrollListner() {
     window.scrollY + window.innerHeight >=
     document.documentElement.scrollHeight
   ) {
+
     if(!doesHaveMorePages) {
       document.getElementById('show-more-indicator').style.rotate = '180deg';
     }
