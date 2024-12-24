@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
+import Animator from './components/animator';
+import Box from './components/figure/box';
 import Circle from './components/figure/circle';
 import Line from './components/figure/line';
+import Text from './components/figure/text';
+import Group from './components/group';
 import main from './main';
 
-const timeline = new Line(0, 200, 1000, 200, 'black', true);
+const timeline = new Line(0, 200, 1000, 200, 'black');
 main.addFigure(timeline, true);
 
 const circles = [
@@ -27,5 +31,41 @@ const circles = [
   new Circle(500, 200, 75, 'gray'),
   new Circle(700, 200, 75, 'gray'),
 ];
-
 circles.forEach((circle) => main.addFigure(circle, true));
+
+const textonCircles = [
+  new Text(100, 75, '2024-01-01'),
+  new Text(100, 100, 'adv1.com'),
+  new Text(300, 75, '2024-01-02'),
+  new Text(300, 100, 'adv2.com'),
+  new Text(500, 75, '2024-01-03'),
+  new Text(500, 100, 'adv3.com'),
+  new Text(700, 75, '2024-01-04'),
+  new Text(700, 100, 'adv4.com'),
+];
+textonCircles.forEach((text) => main.addFigure(text, true));
+
+const circleToTextLine = [
+  new Line(100, 163, 100, 110, 'black'),
+  new Line(300, 163, 300, 110, 'black'),
+  new Line(500, 163, 500, 110, 'black'),
+  new Line(700, 163, 700, 110, 'black'),
+];
+circleToTextLine.forEach((line) => main.addFigure(line, true));
+
+const firstCircleAnimations = [
+  new Line(95, 237, 95, 300, 'black', true),
+  new Group([
+    new Box(50, 300, 100, 50, 'gray'),
+    new Text(100, 325, 'DSP tags'),
+  ]),
+  new Line(95, 350, 95, 413, 'black', true),
+  new Group([new Box(50, 413, 100, 50, 'gray'), new Text(100, 438, 'DSPs')]),
+  new Line(105, 413, 105, 350, 'black', true),
+  new Line(105, 300, 105, 237, 'black', true),
+  new Text(170, 270, 'joinInterestGroup()', 12),
+];
+
+main.addAnimator(new Animator(firstCircleAnimations));
+
+main.addFigure(new Line(0, 0, 0, 0));

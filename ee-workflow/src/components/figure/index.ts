@@ -21,6 +21,7 @@ export default abstract class Figure {
   p5: p5 | null = null;
   id = '';
   gid = '';
+  aid = '';
   x = 0;
   y = 0;
   fill = 'black';
@@ -60,6 +61,10 @@ export default abstract class Figure {
 
   setGid(gid: string) {
     this.gid = gid;
+  }
+
+  setAid(aid: string) {
+    this.aid = aid;
   }
 
   savePreviousColors() {

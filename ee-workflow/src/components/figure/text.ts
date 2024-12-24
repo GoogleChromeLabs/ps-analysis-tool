@@ -21,15 +21,8 @@ export default class Text extends Figure {
   str: string;
   size: number;
 
-  constructor(
-    x: number,
-    y: number,
-    str: string,
-    size?: number,
-    fill?: string,
-    stroke?: string
-  ) {
-    super(x, y, fill, stroke);
+  constructor(x: number, y: number, str: string, size?: number, fill?: string) {
+    super(x, y, fill);
     this.str = str;
     this.size = size || 16;
   }
@@ -37,8 +30,8 @@ export default class Text extends Figure {
   draw() {
     this.p5?.push();
     this.p5?.fill(this.fill);
-    this.p5?.stroke(this.stroke);
     this.p5?.textSize(this.size);
+    this.p5?.textAlign(this.p5.CENTER, this.p5.CENTER);
     this.p5?.text(this.str, this.x, this.y);
     this.p5?.pop();
   }

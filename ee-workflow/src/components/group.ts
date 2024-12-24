@@ -19,6 +19,7 @@ import Figure from './figure';
 export default class Group {
   figures: Figure[];
   id: string;
+  aid = '';
   throw = false;
 
   static groupCount = 0;
@@ -53,5 +54,10 @@ export default class Group {
     this.figures.forEach((figure) => {
       figure.onClick();
     });
+  }
+
+  setAid(aid: string) {
+    this.aid = aid;
+    this.figures.forEach((figure) => figure.setAid(aid));
   }
 }
