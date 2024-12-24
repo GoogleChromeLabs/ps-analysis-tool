@@ -20,7 +20,7 @@ import ProgressLine from './progressLine';
 import app from '../app';
 import config from '../config';
 import Box from './box';
-import { wipeAndRecreateInterestCanvas } from '../utils';
+import { delay, wipeAndRecreateInterestCanvas } from '../utils';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const EXPAND_ICON_SIZE = 20;
@@ -87,65 +87,62 @@ const Branches = async ({
     });
   };
 
-  return new Promise((resolve) => {
-    (async () => {
-      if (app.isRevisitingNodeInInteractiveMode || noAnimation) {
-        drawInstantly();
-        resolve(endpoints);
-        return;
-      }
+  if (app.isRevisitingNodeInInteractiveMode || noAnimation) {
+    drawInstantly();
+    await delay(noAnimation ? 1000 : 0);
+    return endpoints;
+  }
 
-      if (app.cancelPromise) {
-        resolve(endpoints);
-        return;
-      }
+  if (app.cancelPromise) {
+    return endpoints;
+  }
 
-      // Clear canvas or update logic (if necessary)
-      wipeAndRecreateInterestCanvas();
+  // Clear canvas or update logic (if necessary)
+  wipeAndRecreateInterestCanvas();
 
-      const branchXEndpoint =
-        currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
-      const branchXStartpoint = currentIndex * LEFT_MARGIN + 15;
+  const branchXEndpoint =
+    currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
+  const branchXStartpoint = currentIndex * LEFT_MARGIN + 15;
+
+  await ProgressLine({
+    x1: branchXStartpoint,
+    y1: y2 - 9,
+    customWidth: branchXEndpoint - branchXStartpoint,
+    direction: 'right',
+    noArrow: true,
+    noAnimation: app.speedMultiplier === 4,
+    isBranch: true,
+  });
+
+  await Promise.all(
+    branches.map(async ({ id, type }, index) => {
+      const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
+      const y = y2 - 9;
+      let endpoint;
 
       await ProgressLine({
-        x1: branchXStartpoint,
-        y1: y2 - 9,
-        customWidth: branchXEndpoint - branchXStartpoint,
-        direction: 'right',
+        x1: x,
+        y1: y,
+        customHeight: 20,
+        direction: 'down',
         noArrow: true,
         noAnimation: app.speedMultiplier === 4,
       });
 
-      branches.forEach(async ({ id, type }, index) => {
-        const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
-        const y = y2 - 9;
-        let endpoint;
+      if (type === 'datetime') {
+        endpoint = drawDateTimeBranch(x, y, branches[index]);
+      }
 
-        await ProgressLine({
-          x1: x,
-          y1: y,
-          customHeight: 20,
-          direction: 'down',
-          noArrow: true,
-          noAnimation: app.speedMultiplier === 4,
-        });
+      if (type === 'box') {
+        endpoint = drawBoxesBranch(x, y, branches[index]);
+      }
 
-        if (type === 'datetime') {
-          endpoint = drawDateTimeBranch(x, y, branches[index]);
-        }
+      endpoints.push(endpoint);
+      renderedBranchIds.push(id);
+    })
+  );
 
-        if (type === 'box') {
-          endpoint = drawBoxesBranch(x, y, branches[index]);
-        }
-
-        endpoints.push(endpoint);
-
-        renderedBranchIds.push(id);
-      });
-      resolve(endpoints);
-      return;
-    })();
-  });
+  return endpoints;
 };
 
 const drawDateTimeBranch = (x, y, branch) => {

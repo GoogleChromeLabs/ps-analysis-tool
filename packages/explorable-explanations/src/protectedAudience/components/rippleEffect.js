@@ -47,7 +47,7 @@ rippleEffect.start = (x = 0, y = 0) => {
     }
 
     let startTime = null; // Tracks the start time of the animation
-    const duration = config.rippleEffect.time / app.speedMultiplier; // Total animation time
+    const duration = config.rippleEffect.time / (app.speedMultiplier / 2); // Total animation time
     config.rippleEffect.rippled = true;
 
     const animate = (timestamp) => {
@@ -63,7 +63,8 @@ rippleEffect.start = (x = 0, y = 0) => {
 
       if (!startTime) {
         startTime = timestamp;
-      } // Set the initial timestamp
+      }
+
       const elapsed = timestamp - startTime;
 
       if (elapsed > duration) {
@@ -105,7 +106,7 @@ rippleEffect.create = (rippleX, rippleY) => {
   for (let i = 0; i < ripples.length; i++) {
     const ripple = ripples[i];
     if (ripple.radius < maxRadius) {
-      ripple.radius += ripple.baseSpeed * speed + app.speedMultiplier;
+      ripple.radius += ripple.baseSpeed * (speed + app.speedMultiplier);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       allComplete = false;
     } else {

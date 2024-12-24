@@ -492,6 +492,7 @@ auction.draw = (index) => {
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
       const delay = component === Box ? 1000 / app.speedMultiplier : 0;
+
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (props?.showBarrageAnimation) {
           await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
