@@ -188,6 +188,11 @@ function easeOutQuad(t) {
   return --t * t * t + 1;
 }
 
+const sendEventToParent = () => {
+  const event = new CustomEvent('loadMoreData');
+  window.parent.document.dispatchEvent(event);
+}
+
 function scrollListner() {
   if (
     window.scrollY + window.innerHeight >=
@@ -196,9 +201,12 @@ function scrollListner() {
 
     if(!doesHaveMorePages) {
       document.getElementById('show-more-indicator').style.rotate = '180deg';
+      document.getElementById('show-more-indicator').onclick = () => {
+        document.body.scrollIntoView();
+      }
+      return;
     }
-    const event = new CustomEvent('loadMoreData');
-    window.parent.document.dispatchEvent(event);
+    sendEventToParent();
   }
 }
 
@@ -250,6 +258,9 @@ const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages 
     doesHaveMorePages = _doesHaveMorePages;
 
     document.getElementById('show-more-indicator').classList.add('bounce');
+    document.getElementById('show-more-indicator').onclick = () => {
+      sendEventToParent();
+    }
 
     setTimeout(() => {
       document.getElementById('show-more-indicator').classList.remove('bounce');

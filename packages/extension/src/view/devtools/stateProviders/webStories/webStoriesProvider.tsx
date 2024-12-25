@@ -335,7 +335,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     const urlSearchParams = new URLSearchParams();
 
-    urlSearchParams.append('per_page', '4');
+    urlSearchParams.append('per_page', '8');
     urlSearchParams.append('page', pageNumber.toString());
 
     if (selectedAuthorsID.length > 0) {
@@ -401,6 +401,12 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     let storyJSON: SingleStoryJSON[] = [];
     const mediaAuthorSet: Record<number, string> = {};
+
+    if (responseJSON.length === 0 && pageNumber === 1) {
+      setLoadingState(false);
+      setAllStoryJSON([]);
+      return;
+    }
 
     responseJSON?.forEach((singleResponse: any) => {
       if (singleResponse?.status === 'publish') {

@@ -40,6 +40,7 @@ export const getStaticStoryMarkup = () => {
 
     <style>
         .arrow {
+            cursor: pointer;
             left: calc(100% - 30px);
             position: sticky;
             bottom: 50px;
