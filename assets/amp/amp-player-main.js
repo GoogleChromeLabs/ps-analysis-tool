@@ -124,7 +124,7 @@ function initializeCards() {
 
     cards.forEach((card, idx) => {
       card.addEventListener('click', () => {
-        player.show(stories[idx].href, null, { animate: false });
+        player.show(card.dataset.storyUrl, null, { animate: false });
         const data = { storyOpened: true };
         const event = new CustomEvent('webStoriesLightBoxEvent', {
           detail: data,
@@ -166,6 +166,7 @@ function initializeCarousel() {
 function init() {
   const playerEl = document.body.querySelector('amp-story-player');
   setPlayer(playerEl);
+  previousStories = [];
 
   if (player.isReady) {
     initializeCarousel();
@@ -215,9 +216,10 @@ const getCardHTML = ({
   publisherLogo,
   publisherName,
   storyTitle,
+  storyUrl
 }) => {
   return `
-    <div class="entry-point-card-container">
+    <div class="entry-point-card-container" data-story-url="${storyUrl}">
     <div class="background-cards">
         <div class="background-card-1"></div>
         <div class="background-card-2"></div>

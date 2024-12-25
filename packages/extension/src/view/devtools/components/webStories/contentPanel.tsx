@@ -159,21 +159,22 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             {loadingState ? (
               <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
             ) : allStoryJSON.length > 0 ? (
-              <iframe
-                ref={iframeRef}
-                srcDoc={getStaticStoryMarkup()}
-                style={{
-                  width: loadingState ? '0%' : '100%',
-                  height: loadingState ? '0%' : '100%',
-                  border: 'none',
-                  overflow: 'hidden',
-                }}
-              />
+              <></>
             ) : (
               <div className="flex-1 flex items-center justify-center text-raisin-black dark:text-bright-gray">
                 No stories found with given filters.
               </div>
             )}
+            <iframe
+              ref={iframeRef}
+              srcDoc={getStaticStoryMarkup()}
+              style={{
+                width: loadingState ? '0%' : '100%',
+                height: loadingState ? '0%' : '100%',
+                border: 'none',
+                overflow: 'hidden',
+              }}
+            />
           </div>
         </div>
       </div>

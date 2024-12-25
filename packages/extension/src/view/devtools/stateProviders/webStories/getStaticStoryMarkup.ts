@@ -520,27 +520,25 @@ export const getStaticStoryMarkup = () => {
             </div>
         </div>
     </div>
-        <div class="lightbox closed">
+    <div class="lightbox closed">
         <amp-story-player class="my-player">
             <script type="application/json">
-        {
-          "behavior": {
-            "pageScroll": false,
-            "autoplay": false,
-            "action": "circular-wrapping"
-          },
-          "controls": [{
-              "name": "close",
-              "position": "start"
-            },
-            {
-              "name": "skip-to-next"
-            }
-          ]
-        }
-      </script>
-
-      </amp-story-player>
+                {
+                    "behavior": {
+                        "pageScroll": false,
+                        "autoplay": false,
+                        "action": "circular-wrapping"
+                    },
+                    "controls": [{
+                        "name": "close",
+                        "position": "start"
+                    },
+                    {
+                        "name": "skip-to-next"
+                    }]
+                }
+            </script>
+        </amp-story-player>
     </div>
     <div id="show-more-indicator" class="arrow">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="${
