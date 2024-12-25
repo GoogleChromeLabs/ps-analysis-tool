@@ -46,8 +46,14 @@ rippleEffect.start = (x = 0, y = 0) => {
       return;
     }
 
+    let baseSpeed = 1;
+
+    if (app.speedMultiplier > 2) {
+      baseSpeed = app.speedMultiplier / 2;
+    }
+
     let startTime = null; // Tracks the start time of the animation
-    const duration = config.rippleEffect.time / (app.speedMultiplier / 2); // Total animation time
+    const duration = config.rippleEffect.time / baseSpeed; // Total animation time
     config.rippleEffect.rippled = true;
 
     const animate = (timestamp) => {
@@ -72,7 +78,7 @@ rippleEffect.start = (x = 0, y = 0) => {
         return;
       }
 
-      rippleEffect.create(x, y);
+      rippleEffect.create(x, y, baseSpeed);
 
       // Continue the animation loop
       requestAnimationFrame(animate);
@@ -83,9 +89,9 @@ rippleEffect.start = (x = 0, y = 0) => {
   });
 };
 
-rippleEffect.create = (rippleX, rippleY) => {
+rippleEffect.create = (rippleX, rippleY, speed) => {
   // Calculate the area to clear
-  const { ripples, numRipples, speed, maxRadius } = config.rippleEffect;
+  const { ripples, numRipples, maxRadius } = config.rippleEffect;
   const clearWidth = maxRadius * 2 + (numRipples - 1) * 40;
   const clearHeight = maxRadius * 1.5;
   const p = app.p;
@@ -106,7 +112,7 @@ rippleEffect.create = (rippleX, rippleY) => {
   for (let i = 0; i < ripples.length; i++) {
     const ripple = ripples[i];
     if (ripple.radius < maxRadius) {
-      ripple.radius += ripple.baseSpeed * (speed + app.speedMultiplier);
+      ripple.radius += ripple.baseSpeed * speed;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       allComplete = false;
     } else {
