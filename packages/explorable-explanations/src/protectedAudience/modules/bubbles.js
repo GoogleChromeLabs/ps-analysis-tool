@@ -55,7 +55,12 @@ bubbles.generateBubbles = (recalculate = false) => {
   if (currIndex >= config.timeline.circles.length) {
     return;
   }
+
   if (!recalculate) {
+    const totalInterestGroups = bubbles.calculateTotalBubblesForAnimation(
+      currIndex + 1
+    );
+
     config.timeline.circles[currIndex].interestGroups?.forEach((igGroup) => {
       app.bubbles.positions.push({
         id: igGroup,
@@ -64,6 +69,13 @@ bubbles.generateBubbles = (recalculate = false) => {
         color: app.color(config.timeline.circles[currIndex].website),
       });
     });
+
+    if (totalInterestGroups < app.bubbles.positions.length) {
+      app.bubbles.positions = app.bubbles.positions.slice(
+        0,
+        totalInterestGroups
+      );
+    }
   }
 };
 
