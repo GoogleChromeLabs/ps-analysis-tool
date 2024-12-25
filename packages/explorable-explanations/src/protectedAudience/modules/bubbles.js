@@ -55,7 +55,12 @@ bubbles.generateBubbles = (recalculate = false) => {
   if (currIndex >= config.timeline.circles.length) {
     return;
   }
+
   if (!recalculate) {
+    const totalInterestGroups = bubbles.calculateTotalBubblesForAnimation(
+      currIndex + 1
+    );
+
     config.timeline.circles[currIndex].interestGroups?.forEach((igGroup) => {
       app.bubbles.positions.push({
         id: igGroup,
@@ -64,6 +69,13 @@ bubbles.generateBubbles = (recalculate = false) => {
         color: app.color(config.timeline.circles[currIndex].website),
       });
     });
+
+    if (totalInterestGroups < app.bubbles.positions.length) {
+      app.bubbles.positions = app.bubbles.positions.slice(
+        0,
+        totalInterestGroups
+      );
+    }
   }
 };
 
@@ -120,9 +132,8 @@ bubbles.barrageAnimation = async (index) => {
     const x = isExpanded ? canvasWidth / 2 : 35;
     const y = isExpanded ? canvasHeight / 2 : 35;
     const distance = p.dist(x, y, targetX, targetY);
-    const speedX = distance / 250;
 
-    return { x, y, color, speed: speedX, target };
+    return { x, y, color, target, distance };
   });
 
   await new Promise((resolve) => {
@@ -146,7 +157,10 @@ bubbles.barrageAnimation = async (index) => {
         }
 
         let { x, y } = positionsOfCircles[i];
-        const { target, speed, color } = positionsOfCircles[i];
+        const { target, distance, color } = positionsOfCircles[i];
+
+        const speed = bubbles.speedCalculator(distance);
+
         const dir = p5.Vector.sub(target, p.createVector(x, y));
         dir.normalize();
 
@@ -159,7 +173,7 @@ bubbles.barrageAnimation = async (index) => {
         p.fill(color);
         p.circle(x, y, smallCircleDiameter);
         p.pop();
-        positionsOfCircles[i] = { x, y, target, speed, color };
+        positionsOfCircles[i] = { x, y, target, speed, color, distance };
       }
 
       // Resolve if all bubbles have reached their targets.
@@ -244,7 +258,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
       flowBoxHeight / 2;
 
     const distance = igp.dist(x, y, midPointX, midPointY);
-    const speedX = distance / 250;
 
     positionsOfCircles.push({
       x:
@@ -256,8 +269,8 @@ bubbles.reverseBarrageAnimation = async (index) => {
         Math.floor(Math.random() * (1 - flowBoxHeight / 2 + 1)) +
         flowBoxHeight / 2,
       color,
-      speed: speedX,
       target,
+      distance,
     });
   }
 
@@ -284,7 +297,10 @@ bubbles.reverseBarrageAnimation = async (index) => {
         }
 
         let { x, y } = positionsOfCircles[i];
-        const { target, speed, color } = positionsOfCircles[i];
+        const { target, color, distance } = positionsOfCircles[i];
+
+        const speed = bubbles.speedCalculator(distance);
+
         const dir = p5.Vector.sub(target, igp.createVector(x, y));
 
         dir.normalize();
@@ -298,7 +314,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
         igp.circle(x, y, smallCircleDiameter);
         igp.pop();
 
-        positionsOfCircles[i] = { x, y, target, speed, color };
+        positionsOfCircles[i] = { x, y, target, speed, color, distance };
       }
 
       // Resolve if all bubbles have reached the targets
@@ -479,7 +495,6 @@ bubbles.bubbleChart = (
   const eventHandler = (event) => {
     // eslint-disable-next-line no-console
     console.log(event);
-    app.igp.igClick();
     event.stopPropagation();
   };
 
@@ -573,6 +588,19 @@ bubbles.calculateTotalBubblesForAnimation = (index) => {
   });
 
   return bubblesCount;
+};
+
+bubbles.speedCalculator = (distance) => {
+  let baseSpeed = 1;
+
+  if (app.speedMultiplier > 2) {
+    baseSpeed = app.speedMultiplier;
+  }
+
+  const calculatedSpeed = 250 / baseSpeed;
+  const speedX = distance / calculatedSpeed;
+
+  return speedX;
 };
 
 export default bubbles;

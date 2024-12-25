@@ -532,6 +532,10 @@ export const interestGroupSketch = (p) => {
   };
 
   p.updateWithProps = (props) => {
+    if (props.speedMultiplier) {
+      app.speedMultiplier = props.speedMultiplier;
+    }
+
     if (
       props.expandedBubbleX &&
       props.expandedBubbleY &&
