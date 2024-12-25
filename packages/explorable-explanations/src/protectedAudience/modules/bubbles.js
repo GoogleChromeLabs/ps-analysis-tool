@@ -597,7 +597,7 @@ bubbles.calculateTotalBubblesForAnimation = (index) => {
 };
 
 bubbles.speedCalculator = (distance) => {
-  let baseSpeed = 2;
+  let baseSpeed = 1;
 
   if (app.speedMultiplier > 2) {
     baseSpeed = app.speedMultiplier;
