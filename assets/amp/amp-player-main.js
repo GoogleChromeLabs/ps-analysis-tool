@@ -257,7 +257,11 @@ const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages 
     initializeArrows();
     doesHaveMorePages = _doesHaveMorePages;
 
+    const entryPointRect = document.getElementById('entry-points').getBoundingClientRect()
+
     document.getElementById('show-more-indicator').classList.add('bounce');
+
+    document.getElementById('show-more-indicator').style.left = `${entryPointRect.right - 72}px`;
     document.getElementById('show-more-indicator').onclick = () => {
       sendEventToParent();
     }
