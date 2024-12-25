@@ -51,6 +51,7 @@ const ProgressLine = ({
 
   const draw = {
     right: () => {
+      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
       p.push();
       p.noStroke();
       p.fill(config.flow.colors.box.background);
@@ -63,6 +64,7 @@ const ProgressLine = ({
       return { x: x1 + width, y: y1 };
     },
     left: () => {
+      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
       p.push();
       p.noStroke();
       p.fill(config.flow.colors.box.background);
@@ -76,6 +78,7 @@ const ProgressLine = ({
       return { x: x2 - width, y: y1 + 10 };
     },
     down: () => {
+      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
       p.push();
       p.noStroke();
       p.fill(config.flow.colors.box.background);
@@ -93,6 +96,7 @@ const ProgressLine = ({
       return { x: x1, y: y1 + height };
     },
     up: () => {
+      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
       p.push();
       p.noStroke();
       p.fill(config.flow.colors.box.background);
@@ -138,6 +142,7 @@ const ProgressLine = ({
         return;
       }
 
+      //Redundant condition to handle case when animation has started and someone has switched to fastest speed.
       if (
         noAnimation ||
         app.isRevisitingNodeInInteractiveMode ||

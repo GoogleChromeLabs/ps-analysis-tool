@@ -132,10 +132,8 @@ bubbles.barrageAnimation = async (index) => {
     const x = isExpanded ? canvasWidth / 2 : 35;
     const y = isExpanded ? canvasHeight / 2 : 35;
     const distance = p.dist(x, y, targetX, targetY);
-    const calculatedSpeed = 250 / app.speedMultiplier;
-    const speedX = distance / calculatedSpeed;
 
-    return { x, y, color, speed: speedX, target, distance };
+    return { x, y, color, target, distance };
   });
 
   await new Promise((resolve) => {
@@ -261,9 +259,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
     const distance = igp.dist(x, y, midPointX, midPointY);
 
-    const calculatedSpeed = 250 / app.speedMultiplier;
-    const speedX = distance / calculatedSpeed;
-
     positionsOfCircles.push({
       x:
         dspTags?.props?.x() +
@@ -274,7 +269,6 @@ bubbles.reverseBarrageAnimation = async (index) => {
         Math.floor(Math.random() * (1 - flowBoxHeight / 2 + 1)) +
         flowBoxHeight / 2,
       color,
-      speed: speedX,
       target,
       distance,
     });
