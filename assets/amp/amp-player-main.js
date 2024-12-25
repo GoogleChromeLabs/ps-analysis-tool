@@ -193,7 +193,7 @@ const sendEventToParent = () => {
   window.parent.document.dispatchEvent(event);
 }
 
-function scrollListner() {
+function scrollListener() {
   if (
     window.scrollY + window.innerHeight >=
     document.documentElement.scrollHeight
@@ -260,7 +260,6 @@ const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages 
     const entryPointRect = document.getElementById('entry-points').getBoundingClientRect()
 
     document.getElementById('show-more-indicator').classList.add('bounce');
-
     document.getElementById('show-more-indicator').style.left = `${entryPointRect.right - 72}px`;
     document.getElementById('show-more-indicator').onclick = () => {
       sendEventToParent();
@@ -276,5 +275,5 @@ const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages 
 
 // Initialize on window load.
 window.addEventListener('load', init);
-window.addEventListener('scroll', scrollListner);
+window.addEventListener('scroll', scrollListener);
 window.addEventListener('message', messageListener);
