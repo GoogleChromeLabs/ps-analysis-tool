@@ -202,7 +202,7 @@ function scrollListener() {
     if (!doesHaveMorePages) {
       document.getElementById('show-more-indicator').style.rotate = '180deg';
       document.getElementById('show-more-indicator').onclick = () => {
-        document.body.scrollIntoView();
+        document.body.scrollIntoView({behavior: 'smooth'});
         document.getElementById('show-more-indicator').style.cursor = 'default';
       };
       return;
@@ -210,11 +210,11 @@ function scrollListener() {
     sendEventToParent();
   }
 
-  if(window.scrollY > 0){
+  if(window.scrollY > 0 && !doesHaveMorePages){
     document.getElementById('show-more-indicator').style.display = 'block';
   }
 
-  if(window.scrollY === 0){
+  if(window.scrollY === 0 && !doesHaveMorePages){
     document.getElementById('show-more-indicator').style.display = 'none';
   }
 }
@@ -267,7 +267,7 @@ const messageListener = ({
     initializeArrows();
     doesHaveMorePages = _doesHaveMorePages;
 
-    cards[scrollToNext].scrollIntoView()
+    cards[scrollToNext].scrollIntoView({behavior: 'smooth'});
 
     document.getElementById('show-more-indicator').classList.add('bounce');
     const distanceToRight = calculateDistanceBetweenLastItemAndBox();
