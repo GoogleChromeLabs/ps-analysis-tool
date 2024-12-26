@@ -68,7 +68,7 @@ class Main {
   /**
    * Delay between each frame in milliseconds.
    */
-  delay = 100;
+  delay = 50;
 
   /**
    * Flag to pause the drawing process.
@@ -322,8 +322,18 @@ class Main {
           this.addAnimator(animator, true);
         }
 
-        const toRemoveCount = (animator?.objects.length || 1) - 1;
-        i += toRemoveCount;
+        const toRemoveCount =
+          animator?.objects.reduce((acc, object) => {
+            if (object instanceof Figure) {
+              acc++;
+            } else {
+              acc += object.figures.length;
+            }
+
+            return acc;
+          }, 0) || 1;
+
+        i += toRemoveCount - 1;
       } else if (figure.gid) {
         const group = this.groupSnapshot.find((g) => g.id === figure.gid);
 

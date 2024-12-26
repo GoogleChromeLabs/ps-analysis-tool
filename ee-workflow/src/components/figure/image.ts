@@ -48,18 +48,19 @@ export default class Image extends Figure {
   constructor(
     x: number,
     y: number,
-    image: p5.Image,
+    imageData: string,
     width: number,
     height: number
   ) {
     super(x, y);
-    this.image = image;
+    this.image = <p5.Image>this.p5?.loadImage(imageData);
     this.width = width;
     this.height = height;
   }
 
   draw() {
     this.p5?.push();
+    this.p5?.imageMode(this.p5?.CENTER);
     this.p5?.image(this.image, this.x, this.y, this.width, this.height);
     this.p5?.pop();
   }
