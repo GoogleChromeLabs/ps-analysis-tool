@@ -59,6 +59,12 @@ export const MainContentContainer = () => {
     );
   }, [allStoryJSON, loadingState, iframeLoaded, doesHaveMorePages]);
 
+  useEffect(() => {
+    return () => {
+      setIframeLoaded(false);
+    };
+  }, [setIframeLoaded]);
+
   if (loadingState && allStoryJSON.length === 0) {
     return <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />;
   } else if (allStoryJSON.length > 0) {
