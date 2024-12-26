@@ -195,6 +195,7 @@ class Main {
           if (isDone) {
             this.animatorSnapshot.push(animator);
             animatorQueue.shift();
+            this.runner(useInstantQueue);
             this.reDrawAll();
           }
         }
