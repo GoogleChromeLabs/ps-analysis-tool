@@ -382,6 +382,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
 
     if (pageNumber === 1) {
+      setIframeLoaded(false);
       setLoadingState(true);
     }
 
@@ -403,8 +404,8 @@ const Provider = ({ children }: PropsWithChildren) => {
     const mediaAuthorSet: Record<number, string> = {};
 
     if (responseJSON.length === 0 && pageNumber === 1) {
-      setLoadingState(false);
       setAllStoryJSON([]);
+      setLoadingState(false);
       return;
     }
 
@@ -478,6 +479,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         doesHaveMorePages: doesHaveMorePagesRef.current,
       },
       actions: {
+        setIframeLoaded,
         resetFilters,
         toggleFilterSelection,
         setSearchValue,

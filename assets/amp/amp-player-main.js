@@ -192,19 +192,22 @@ function easeOutQuad(t) {
 const sendEventToParent = () => {
   const event = new CustomEvent('loadMoreData');
   window.parent.document.dispatchEvent(event);
-}
+};
 
 function scrollListener() {
   if (
     window.scrollY + window.innerHeight >=
     document.documentElement.scrollHeight
   ) {
-
-    if(!doesHaveMorePages) {
+    if (!doesHaveMorePages) {
+      if(window.scrollY > 0){
+        document.getElementById('show-more-indicator').style.cursor = 'pointer';
+      }
       document.getElementById('show-more-indicator').style.rotate = '180deg';
       document.getElementById('show-more-indicator').onclick = () => {
         document.body.scrollIntoView();
-      }
+        document.getElementById('show-more-indicator').style.cursor = 'default';
+      };
       return;
     }
     sendEventToParent();
@@ -216,42 +219,42 @@ const getCardHTML = ({
   publisherLogo,
   publisherName,
   storyTitle,
-  storyUrl
+  storyUrl,
 }) => {
   return `
     <div class="entry-point-card-container" data-story-url="${storyUrl}">
-    <div class="background-cards">
+      <div class="background-cards">
         <div class="background-card-1"></div>
         <div class="background-card-2"></div>
-    </div>
-    <img src="${heroImage}" class="entry-point-card-img" alt="A cat">
-    <div class="author-container">
+      </div>
+      <img src="${heroImage}" class="entry-point-card-img" alt="A cat">
+      <div class="author-container">
         <div class="logo-container">
             <div class="logo-ring"></div>
-            <img class="entry-point-card-logo"
-                src="${publisherLogo}" alt="Publisher logo">
+            <img class="entry-point-card-logo" src="${publisherLogo}" alt="Publisher logo">
         </div>
         <span class="entry-point-card-subtitle"> By ${publisherName} </span>
-        </div>
-
-        <div class="card-headline-container">
-            <span class="entry-point-card-headline"> ${storyTitle} </span>
-        </div>
+      </div>
+      <div class="card-headline-container">
+          <span class="entry-point-card-headline"> ${storyTitle} </span>
+      </div>
     </div>
     `;
 };
 
-const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages } }) => {
+const messageListener = ({
+  data: { story, doesHaveMorePages: _doesHaveMorePages },
+}) => {
   try {
-    const cards = story.map(getCardHTML).join('');
+    const _cards = story.map(getCardHTML).join('');
     const storyAnchors = story.map(({ storyUrl }) => ({ href: storyUrl }));
 
     if (JSON.stringify(story) === JSON.stringify(previousStories)) {
       return;
     }
 
-    document.getElementById('entry-points').innerHTML = cards;
-
+    document.getElementById('entry-points').innerHTML = _cards;
+    const scrollToNext = previousStories.length;
     previousStories = story;
     player.add(storyAnchors);
 
@@ -259,13 +262,16 @@ const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages 
     initializeArrows();
     doesHaveMorePages = _doesHaveMorePages;
 
-    const entryPointRect = document.getElementById('entry-points').getBoundingClientRect()
+    cards[scrollToNext].scrollIntoView()
 
     document.getElementById('show-more-indicator').classList.add('bounce');
-    document.getElementById('show-more-indicator').style.left = `${entryPointRect.right - 72}px`;
+    const distanceToRight = calculateDistanceBetweenLastItemAndBox();
+    document.getElementById('show-more-indicator').style.left = `calc(100% - ${
+      distanceToRight / 2
+    }px)`;
     document.getElementById('show-more-indicator').onclick = () => {
       sendEventToParent();
-    }
+    };
 
     setTimeout(() => {
       document.getElementById('show-more-indicator').classList.remove('bounce');
@@ -273,6 +279,40 @@ const messageListener = ({ data: { story, doesHaveMorePages: _doesHaveMorePages 
   } catch (error) {
     //Fail silently
   }
+};
+
+const calculateDistanceBetweenLastItemAndBox = () => {
+  const flexContainer = document.querySelector('.entry-points');
+  const flexItems = Array.from(flexContainer.children);
+
+  let lastItemFirstRow = null;
+
+  let firstRowBottom = 0;
+
+  for (let i = 0; i < flexItems.length; i++) {
+    const itemRect = flexItems[i].getBoundingClientRect();
+
+    if (i === 0) {
+      firstRowBottom = itemRect.bottom;
+    }
+
+    if (itemRect.bottom <= firstRowBottom) {
+      lastItemFirstRow = flexItems[i];
+    } else {
+      break;
+    }
+  }
+
+  // Get the position of the container
+  const containerRect = flexContainer.getBoundingClientRect();
+
+  // Calculate the distance from the rightmost part of the container to the last item in the first row
+  if (lastItemFirstRow) {
+    const lastItemRect = lastItemFirstRow.getBoundingClientRect();
+    const distanceToRight = containerRect.right - lastItemRect.right;
+    return distanceToRight + 36;
+  }
+  return null;
 };
 
 // Initialize on window load.

@@ -39,6 +39,7 @@ export interface WebStoryContext {
     doesHaveMorePages: boolean;
   };
   actions: {
+    setIframeLoaded: React.Dispatch<React.SetStateAction<boolean>>;
     resetFilters: () => void;
     toggleFilterSelection: (filterKey: string, filterValue: string) => void;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -66,6 +67,7 @@ const initialState: WebStoryContext = {
     doesHaveMorePages: true,
   },
   actions: {
+    setIframeLoaded: noop,
     resetFilters: noop,
     toggleFilterSelection: noop,
     setSearchValue: noop,
