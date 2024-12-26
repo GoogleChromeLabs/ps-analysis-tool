@@ -200,9 +200,6 @@ function scrollListener() {
     document.documentElement.scrollHeight
   ) {
     if (!doesHaveMorePages) {
-      if(window.scrollY > 0){
-        document.getElementById('show-more-indicator').style.cursor = 'pointer';
-      }
       document.getElementById('show-more-indicator').style.rotate = '180deg';
       document.getElementById('show-more-indicator').onclick = () => {
         document.body.scrollIntoView();
@@ -211,6 +208,14 @@ function scrollListener() {
       return;
     }
     sendEventToParent();
+  }
+
+  if(window.scrollY > 0){
+    document.getElementById('show-more-indicator').style.display = 'block';
+  }
+
+  if(window.scrollY === 0){
+    document.getElementById('show-more-indicator').style.display = 'none';
   }
 }
 
