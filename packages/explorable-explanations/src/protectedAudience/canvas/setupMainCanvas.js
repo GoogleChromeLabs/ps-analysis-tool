@@ -48,6 +48,18 @@ export const setupMainCanvas = async (p, doNotPlay = false) => {
     }
   });
 
+  canvas.mouseClicked(() => {
+    const callbacks = app.canvasEventListerners.main.mouseClicked;
+
+    Object.keys(callbacks).forEach((key) => {
+      const callback = callbacks[key];
+
+      if (typeof callback === 'function') {
+        callback(p.mouseX, p.mouseY);
+      }
+    });
+  });
+
   const mouseMovedCallback = throttle(() => {
     const callbacks = app.canvasEventListerners.main.mouseMoved;
 

@@ -78,7 +78,7 @@ const Box = ({
     };
 
     const key = title + description + x + y;
-    addCanvasEventListener('mouseMoved', callback, key);
+    addCanvasEventListener('mouseClicked', callback, key);
   }
 
   p.pop();

@@ -71,6 +71,7 @@ const app = {
       mouseOver: {},
       mouseOut: {},
       mouseMoved: {},
+      mouseClicked: {},
     },
   },
 };
