@@ -297,6 +297,7 @@ class Main {
     this.stepsQueue = [];
     this.instantQueue = [];
     this.snapshot.forEach((figure) => {
+      // Fix
       if (!(figure instanceof Animator)) {
         this.instantQueue.push(figure);
       }

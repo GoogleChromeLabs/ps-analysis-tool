@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import main from '../main';
 import Figure from './figure';
+import Line from './figure/line';
 import Group from './group';
 
 export default class Animator {
@@ -30,18 +32,22 @@ export default class Animator {
     this.id =
       `animation-${Animator.animationCounter}` +
       Math.random().toString(36).slice(2, 9);
-    this.objects = objects;
+    this.objects = [
+      ...objects,
+      new Line(0, 0, 0, 0, main.backgroundColor.toString()), // last dummy object acts as a placeholder for the end of the animation
+    ];
     this.objects.forEach((object) => object.setAid(this.id));
   }
 
   draw(): boolean {
-    if (this.index >= this.objects.length) {
+    this.objects[this.index].draw();
+    this.index++;
+
+    if (this.index === this.objects.length) {
       this.index = 0;
       return true;
     }
 
-    this.objects[this.index].draw();
-    this.index++;
     return false;
   }
 }
