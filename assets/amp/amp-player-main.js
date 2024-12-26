@@ -203,7 +203,6 @@ function scrollListener() {
       document.getElementById('show-more-indicator').style.rotate = '180deg';
       document.getElementById('show-more-indicator').onclick = () => {
         document.body.scrollIntoView({behavior: 'smooth'});
-        document.getElementById('show-more-indicator').style.cursor = 'default';
       };
       return;
     }
@@ -279,6 +278,9 @@ const messageListener = ({
     };
 
     setTimeout(() => {
+      if(!doesHaveMorePages){
+        document.getElementById('show-more-indicator').style.rotate = '180deg';
+      }
       document.getElementById('show-more-indicator').classList.remove('bounce');
     }, 2000);
   } catch (error) {

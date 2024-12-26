@@ -383,6 +383,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (pageNumber === 1) {
       setIframeLoaded(false);
+      setAllStoryJSON([]);
     }
 
     setLoadingState(true);

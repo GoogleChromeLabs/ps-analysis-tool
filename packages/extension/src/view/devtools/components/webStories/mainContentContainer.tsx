@@ -63,20 +63,18 @@ export const MainContentContainer = () => {
     return <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />;
   } else if (allStoryJSON.length > 0) {
     return (
-      <div className="flex-1 h-full w-full flex-col">
+      <div className="flex-1 h-full w-full relative">
         {loadingState && allStoryJSON.length > 0 && (
-          <ProgressBar additionalStyles="w-full mx-auto" />
+          <ProgressBar
+            additionalStyles="z-20 w-full mx-auto absolute top-0"
+            barAdditionalStyles="dark:bg-raisin-black"
+          />
         )}
         <iframe
           ref={iframeRef}
           onLoad={() => setIframeLoaded(true)}
           srcDoc={getStaticStoryMarkup()}
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 'none',
-            overflow: 'hidden',
-          }}
+          className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
         />
       </div>
     );
