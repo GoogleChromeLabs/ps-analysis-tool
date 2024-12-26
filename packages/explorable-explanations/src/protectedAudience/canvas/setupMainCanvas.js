@@ -25,7 +25,7 @@ import { calculateCanvasDimensions } from '../utils';
  */
 import throttle from 'just-throttle';
 
-export const setupMainCanvas = async (p, doNotPlay = false) => {
+export const setupMainCanvas = async (p, pause = false) => {
   const { height, width } = calculateCanvasDimensions();
   const canvas = p.createCanvas(width, height);
 
@@ -77,6 +77,6 @@ export const setupMainCanvas = async (p, doNotPlay = false) => {
   app.setUpTimeLine();
 
   if (!app.isInteractiveMode) {
-    await app.play(false, doNotPlay);
+    await app.play(false, pause);
   }
 };
