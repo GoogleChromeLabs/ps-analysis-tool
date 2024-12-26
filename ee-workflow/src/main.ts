@@ -285,23 +285,58 @@ class Main {
   }
 
   /**
-   * Redraws all figures on the canvas.
+   * Resets the queues and redraws all figures on the canvas.
    */
-  reDrawAll() {
+  resetAndReDrawAll() {
+    if (this.pause) {
+      return;
+    }
+
+    this.stepsQueue = [];
+    this.instantQueue = [];
+    this.groupStepsQueue = [];
+    this.groupInstantQueue = [];
+    this.animatorStepsQueue = [];
+    this.animatorInstantQueue = [];
+    this.reDrawAll();
+  }
+
+  /**
+   * Redraws all figures on the canvas.
+   * @param animatorIdToDraw - The ID of the animator to draw.
+   */
+  reDrawAll(animatorIdToDraw?: string) {
     if (this.pause) {
       return;
     }
 
     this.p5.clear();
     this.p5.background(this.backgroundColor);
-    this.stepsQueue = [];
-    this.instantQueue = [];
-    this.snapshot.forEach((figure) => {
-      // Fix
-      if (!(figure instanceof Animator)) {
-        this.instantQueue.push(figure);
+    for (let i = 0; i < this.snapshot.length; i++) {
+      const figure = this.snapshot[i];
+
+      if (figure.aid) {
+        const animator = this.animatorSnapshot.find((a) => a.id === figure.aid);
+
+        if (animator && animatorIdToDraw === animator.id) {
+          this.addAnimator(animator, true);
+        }
+
+        const toRemoveCount = (animator?.objects.length || 1) - 1;
+        i += toRemoveCount;
+      } else if (figure.gid) {
+        const group = this.groupSnapshot.find((g) => g.id === figure.gid);
+
+        if (group) {
+          this.addGroup(group, true);
+        }
+
+        const toRemoveCount = (group?.figures.length || 1) - 1;
+        i += toRemoveCount;
+      } else {
+        this.addFigure(figure, true);
       }
-    });
+    }
   }
 
   /**

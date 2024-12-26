@@ -72,4 +72,5 @@ circleToTextLine.forEach((line) => main.addFigure(line, true));
 
 // Setup flow.
 main.addAnimator(new Animator(advertiserFlow));
-main.addFigure(new Line(0, 0, 0, 0));
+
+main.addGroup(new Group([new Line(200, 200, 300, 200, 'black')]));
