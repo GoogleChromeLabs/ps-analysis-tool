@@ -14,11 +14,26 @@
  * limitations under the License.
  */
 
+/**
+ * Internal dependencies.
+ */
 import Figure from '.';
 import main from '../../main';
 
+/**
+ * Class for creating a box figure.
+ * Contains the properties and methods that a box should have.
+ * Extends the Figure class to inherit the basic properties and methods.
+ */
 export default class Box extends Figure {
+  /**
+   * Width of the box.
+   */
   width: number;
+
+  /**
+   * Height of the box.
+   */
   height: number;
 
   constructor(

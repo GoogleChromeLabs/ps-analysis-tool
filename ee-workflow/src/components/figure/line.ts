@@ -13,13 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Internal dependencies.
+ */
 import Figure from '.';
 import main from '../../main';
 
+/**
+ * Class for creating line figures.
+ * Contains the properties and methods that a line should have.
+ * Extends the Figure class to inherit the basic properties and methods.
+ */
 export default class Line extends Figure {
+  /**
+   * End x coordinate of the line.
+   */
   endX: number;
+
+  /**
+   * End y coordinate of the line.
+   */
   endY: number;
+
+  /**
+   * Whether the line has an arrow at the end.
+   */
   hasArrow: boolean;
 
   constructor(

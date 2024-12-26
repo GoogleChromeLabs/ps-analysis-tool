@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
+/**
+ * Internal dependencies.
+ */
 import Figure from '.';
 import main from '../../main';
 
+/**
+ * Class for creating a circle figure.
+ * Contains the properties and methods that a circle should have.
+ * Extends the Figure class to inherit the basic properties and methods.
+ */
 export default class Circle extends Figure {
+  /**
+   * Diameter of the circle.
+   */
   diameter: number;
 
   constructor(

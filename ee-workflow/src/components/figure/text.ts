@@ -14,11 +14,26 @@
  * limitations under the License.
  */
 
+/**
+ * Internal dependencies.
+ */
 import Figure from '.';
 import main from '../../main';
 
+/**
+ * Class for creating text figures.
+ * Contains the properties and methods that a text should have.
+ * Extends the Figure class to inherit the basic properties and methods.
+ */
 export default class Text extends Figure {
+  /**
+   * Text to be displayed.
+   */
   str: string;
+
+  /**
+   * Font size of the text.
+   */
   size: number;
 
   constructor(x: number, y: number, str: string, size?: number, fill?: string) {

@@ -14,14 +14,39 @@
  * limitations under the License.
  */
 
+/**
+ * Internal dependencies.
+ */
 import Figure from './figure';
 
+/**
+ * Class for creating a group of figures.
+ */
 export default class Group {
+  /**
+   * Figures in the group.
+   */
   figures: Figure[];
+
+  /**
+   * Unique id of the group.
+   */
   id: string;
+
+  /**
+   * Animator id of the group if it belongs to an animator.
+   */
   aid = '';
+
+  /**
+   * Property to check if the group should be saved in groupSnapshot.
+   * If true, the group will NOT be saved in groupSnapshot.
+   */
   throw = false;
 
+  /**
+   * Counter for the number of groups created.
+   */
   static groupCount = 0;
 
   constructor(figures: Figure[]) {
@@ -32,30 +57,46 @@ export default class Group {
     this.figures.forEach((figure) => figure.setGid(this.id));
   }
 
+  /**
+   * Method to draw the group. Calls the draw method of each figure in the group.
+   */
   draw() {
     this.figures.forEach((figure) => {
       figure.draw();
     });
   }
 
+  /**
+   * Method to handle hover event. Calls the onHover method of each figure in the group.
+   */
   onHover() {
     this.figures.forEach((figure) => {
       figure.onHover();
     });
   }
 
+  /**
+   * Method to handle leave event. Calls the onLeave method of each figure in the group.
+   */
   onLeave() {
     this.figures.forEach((figure) => {
       figure.onLeave();
     });
   }
 
+  /**
+   * Method to handle click event. Calls the onClick method of each figure in the group.
+   */
   onClick() {
     this.figures.forEach((figure) => {
       figure.onClick();
     });
   }
 
+  /**
+   * Method to set the animator id to the group and its figures.
+   * @param aid - The animator id of the group.
+   */
   setAid(aid: string) {
     this.aid = aid;
     this.figures.forEach((figure) => figure.setAid(aid));

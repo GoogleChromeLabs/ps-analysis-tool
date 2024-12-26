@@ -13,14 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
 import p5 from 'p5';
+
+/**
+ * Internal dependencies.
+ */
 import Figure from '.';
 import main from '../../main';
 
+/**
+ * Class for creating image figures.
+ * Contains the properties and methods that an image should have.
+ * Extends the Figure class to inherit the basic properties and methods.
+ */
 export default class Image extends Figure {
+  /**
+   * Image to be displayed.
+   */
   image: p5.Image;
+
+  /**
+   * Width of the image.
+   */
   width: number;
+
+  /**
+   * Height of the image.
+   */
   height: number;
 
   constructor(

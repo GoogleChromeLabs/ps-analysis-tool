@@ -13,23 +13,80 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
 import p5 from 'p5';
+
+/**
+ * Internal dependencies.
+ */
 import main from '../../main';
 
+/**
+ * Abstract class for creating figures.
+ * Contains the basic properties and methods that all figures should have.
+ */
 export default abstract class Figure {
+  /**
+   * p5 instance.
+   */
   p5: p5 | null = null;
-  id = '';
-  gid = '';
-  aid = '';
-  x = 0;
-  y = 0;
-  fill = 'black';
-  stroke = 'black';
-  previousFill = '';
-  previousStroke = '';
-  throw?: boolean; // Property to determine if the object should be added to the snapshot
 
+  /**
+   * Unique id of the figure.
+   */
+  id = '';
+
+  /**
+   * Group id of the figure if it belongs to a group.
+   */
+  gid = '';
+
+  /**
+   * Animator id of the figure if it belongs to an animator.
+   */
+  aid = '';
+
+  /**
+   * x coordinate of the figure.
+   */
+  x = 0;
+
+  /**
+   * y coordinate of the figure.
+   */
+  y = 0;
+
+  /**
+   * Fill color of the figure.
+   */
+  fill = 'black';
+
+  /**
+   * Stroke color of the figure.
+   */
+  stroke = 'black';
+
+  /**
+   * Previous fill color of the figure to be used when the figure is unhovered.
+   */
+  previousFill = '';
+
+  /**
+   * Previous stroke color of the figure to be used when the figure is unhovered.
+   */
+  previousStroke = '';
+
+  /**
+   * Property to determine if the object should be added to the snapshot.
+   * If true, the object will not be added to the snapshot.
+   */
+  throw?: boolean;
+
+  /**
+   * The number of objects created.
+   */
   static objectCount = 0;
 
   constructor(x: number, y: number, fill?: string, stroke?: string) {
@@ -45,28 +102,61 @@ export default abstract class Figure {
     this.previousStroke = this.stroke;
   }
 
+  /**
+   * Method to draw the figure.
+   */
   abstract draw(): void;
 
+  /**
+   * Method to handle the hover event.
+   */
   abstract onHover(): void;
 
+  /**
+   * Method to handle the leave event.
+   */
   abstract onLeave(): void;
 
+  /**
+   * Method to handle the click event.
+   */
   abstract onClick(): void;
 
+  /**
+   * Method to check if the figure is being hovered.
+   */
   abstract isHovering(): boolean;
 
+  /**
+   * Method to remove the figure.
+   */
   abstract remove(): void;
 
+  /**
+   * Method to redraw the figure.
+   * @param params - The parameters to redraw the figure with.
+   */
   abstract reDraw(...params: Array<any>): void;
 
+  /**
+   * Set the group id of the figure.
+   * @param gid - The group id to set.
+   */
   setGid(gid: string) {
     this.gid = gid;
   }
 
+  /**
+   * Set the animator id of the figure.
+   * @param aid - The animator id to set.
+   */
   setAid(aid: string) {
     this.aid = aid;
   }
 
+  /**
+   * Save the previous fill and stroke colors.
+   */
   savePreviousColors() {
     if (this.previousFill === this.fill) {
       this.previousFill = this.fill;
@@ -77,6 +167,9 @@ export default abstract class Figure {
     }
   }
 
+  /**
+   * Reapply the previous fill and stroke colors.
+   */
   reApplyPreviousColors() {
     this.fill = this.previousFill;
     this.previousFill = this.fill;
