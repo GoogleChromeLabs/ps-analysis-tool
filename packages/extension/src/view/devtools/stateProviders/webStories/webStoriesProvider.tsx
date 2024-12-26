@@ -383,8 +383,9 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (pageNumber === 1) {
       setIframeLoaded(false);
-      setLoadingState(true);
     }
+
+    setLoadingState(true);
 
     const response = await fetch(
       `https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/?${queryParams}`

@@ -16,13 +16,8 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef } from 'react';
-import {
-  ChipsBar,
-  FiltersSidebar,
-  ProgressBar,
-  TopBar,
-} from '@google-psat/design-system';
+import React from 'react';
+import { ChipsBar, FiltersSidebar, TopBar } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { noop } from '@google-psat/common';
 
@@ -30,17 +25,14 @@ import { noop } from '@google-psat/common';
  * Internal dependencies.
  */
 import { useWebStories } from '../../stateProviders';
-import { getStaticStoryMarkup } from '../../stateProviders/webStories/getStaticStoryMarkup';
+import { MainContentContainer } from './mainContentContainer';
 
 interface WebStoriesProps {
   storyOpened: boolean;
 }
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-
   const {
-    loadingState,
     allStoryJSON,
     searchValue,
     showFilterSidebar,
@@ -48,18 +40,12 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     selectedFilters,
     selectedFilterValues,
     filters,
-    iframeLoaded,
-    doesHaveMorePages,
     setSearchValue,
     setShowFilterSidebar,
     setSortValue,
     toggleFilterSelection,
     resetFilters,
-    setIframeLoaded,
   } = useWebStories(({ state, actions }) => ({
-    iframeLoaded: state.iframeLoaded,
-    loadingState: state.loadingState,
-    doesHaveMorePages: state.doesHaveMorePages,
     allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
     filters: state.filters,
@@ -68,30 +54,11 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     showFilterSidebar: state.showFilterSidebar,
     selectedFilters: state.selectedFilters,
     setSearchValue: actions.setSearchValue,
-    setIframeLoaded: actions.setIframeLoaded,
     setShowFilterSidebar: actions.setShowFilterSidebar,
     setSortValue: actions.setSortValue,
     toggleFilterSelection: actions.toggleFilterSelection,
     resetFilters: actions.resetFilters,
   }));
-
-  useEffect(() => {
-    if (!iframeRef.current) {
-      return;
-    }
-
-    if (loadingState || !iframeLoaded || !allStoryJSON) {
-      return;
-    }
-
-    iframeRef.current?.contentWindow?.postMessage(
-      {
-        story: allStoryJSON,
-        doesHaveMorePages,
-      },
-      '*'
-    );
-  }, [allStoryJSON, loadingState, iframeLoaded, doesHaveMorePages]);
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -158,25 +125,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
           <div className="h-full w-full flex">
-            {loadingState ? (
-              <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
-            ) : allStoryJSON.length > 0 ? (
-              <iframe
-                ref={iframeRef}
-                onLoad={() => setIframeLoaded(true)}
-                srcDoc={getStaticStoryMarkup()}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  overflow: 'hidden',
-                }}
-              />
-            ) : (
-              <div className="flex-1 h-full w-full flex items-center justify-center text-raisin-black dark:text-bright-gray">
-                No stories found with given filters.
-              </div>
-            )}
+            <MainContentContainer />
           </div>
         </div>
       </div>
