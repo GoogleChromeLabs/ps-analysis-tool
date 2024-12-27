@@ -372,7 +372,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     apiDataFetcher('/users', setAuthors);
     apiDataFetcher('/web_story_category', setCategories);
-    apiDataFetcher('/web-story_tag', setTags);
+    apiDataFetcher('/web_story_tag', setTags);
   }, []);
 
   useEffect(() => {
