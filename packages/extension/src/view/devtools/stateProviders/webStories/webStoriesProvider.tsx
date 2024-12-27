@@ -62,6 +62,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [searchValue] = useDebounce(_searchValue, 500);
 
   useEffect(() => {
+    setPageNumber(1);
+  }, [searchValue]);
+
+  useEffect(() => {
     setFilters([
       {
         key: 'category',
