@@ -442,6 +442,11 @@ app.handleControls = () => {
       'change',
       app.toggleInteractiveMode
     );
+    document
+      .getElementById('auto-expand')
+      .addEventListener('change', (event) => {
+        app.isAutoExpand = event.target.checked;
+      });
   }
 
   const minifiedBubbleContainerRect =

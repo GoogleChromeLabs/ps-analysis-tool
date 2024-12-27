@@ -143,6 +143,10 @@ const Branches = async ({
     })
   );
 
+  if (app.isAutoExpand) {
+    return endpoints[1];
+  }
+
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
   });
