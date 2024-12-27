@@ -22,7 +22,7 @@ import React, { useEffect, useRef } from 'react';
  * Internal dependencies
  */
 import { useWebStories } from '../../stateProviders';
-import { getStaticStoryMarkup } from '../../stateProviders/webStories/getStaticStoryMarkup';
+import { getStaticStoryMarkup } from '../../../../utils/getStaticStoryMarkup';
 
 export const MainContentContainer = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);

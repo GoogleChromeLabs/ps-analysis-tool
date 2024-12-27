@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies
  */
-import { BASE_API_URL } from './constants';
+import { BASE_API_URL } from '../constants';
 
 export const apiDataFetcher = async (
   endpoint: string,

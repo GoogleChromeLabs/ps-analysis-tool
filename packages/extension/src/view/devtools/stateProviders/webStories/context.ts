@@ -21,7 +21,10 @@ import type {
   ChipsFilter,
   FilterSidebarValue,
 } from '@google-psat/design-system';
-import type { SingleStoryJSON } from './getStaticStoryMarkup';
+/**
+ * Internal dependencies.
+ */
+import type { SingleStoryJSON } from './types';
 
 export interface WebStoryContext {
   state: {

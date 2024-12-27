@@ -13,14 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export interface SingleStoryJSON {
-  heroImage: string;
-  publisherLogo: string;
-  publisherName: string;
-  storyTitle: string;
-  storyUrl: string;
-}
 export const getStaticStoryMarkup = () => {
   const isDark = document.body.classList.contains('dark');
   return `

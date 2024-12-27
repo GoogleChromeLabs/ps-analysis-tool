@@ -34,9 +34,10 @@ import { useDebounce } from 'use-debounce';
  * Internal dependencies.
  */
 import Context, { type WebStoryContext } from './context';
-import { type SingleStoryJSON } from './getStaticStoryMarkup';
-import { apiDataFetcher, getMediaUrl } from './apiFetchers';
+import type { SingleStoryJSON } from './types';
+import { apiDataFetcher, getMediaUrl } from './utils/apiFetchers';
 import { BASE_API_URL } from './constants';
+import { createQueryParams } from './utils/createQueryParams';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [_searchValue, setSearchValue] = useState('');
@@ -221,70 +222,27 @@ const Provider = ({ children }: PropsWithChildren) => {
     [authors]
   );
 
-  const queryParams = useMemo(() => {
-    const selectedAuthorsID: number[] = [];
-    const selectedCategoriesId: number[] = [];
-    const selectedTagId: number[] = [];
-
-    Object.keys(authors).forEach((key) => {
-      const keyToUse = Number(key);
-      if (selectedFilterValues?.author?.includes(authors[keyToUse])) {
-        selectedAuthorsID.push(keyToUse);
-      }
-    });
-
-    Object.keys(categories).forEach((key) => {
-      const keyToUse = Number(key);
-      if (selectedFilterValues?.category?.includes(categories[keyToUse])) {
-        selectedCategoriesId.push(keyToUse);
-      }
-    });
-
-    Object.keys(tags).forEach((key) => {
-      const keyToUse = Number(key);
-      if (selectedFilterValues?.tag?.includes(tags[keyToUse])) {
-        selectedTagId.push(keyToUse);
-      }
-    });
-
-    const urlSearchParams = new URLSearchParams();
-
-    urlSearchParams.append('per_page', '8');
-    urlSearchParams.append('page', pageNumber.toString());
-
-    if (selectedAuthorsID.length > 0) {
-      urlSearchParams.append('author', selectedAuthorsID.join(','));
-    }
-
-    if (selectedCategoriesId.length > 0) {
-      urlSearchParams.append(
-        'web_story_category',
-        selectedCategoriesId.join(',')
-      );
-    }
-
-    if (selectedTagId.length > 0) {
-      urlSearchParams.append('web_story_tag', selectedTagId.join(','));
-    }
-
-    urlSearchParams.append('order', sortValue === 'latest' ? 'desc' : 'asc');
-
-    if (searchValue) {
-      urlSearchParams.append('search', searchValue);
-    }
-
-    return urlSearchParams.toString();
-  }, [
-    pageNumber,
-    searchValue,
-    authors,
-    categories,
-    selectedFilterValues?.author,
-    selectedFilterValues?.category,
-    selectedFilterValues?.tag,
-    sortValue,
-    tags,
-  ]);
+  const queryParams = useMemo(
+    () =>
+      createQueryParams(
+        selectedFilterValues,
+        authors,
+        categories,
+        tags,
+        searchValue,
+        pageNumber,
+        sortValue
+      ),
+    [
+      pageNumber,
+      searchValue,
+      authors,
+      categories,
+      selectedFilterValues,
+      sortValue,
+      tags,
+    ]
+  );
 
   const fetchStories = useCallback(async () => {
     if (
