@@ -13,36 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-let cards;
-let cardMargin;
-let cardWidth;
-let player;
-let lightboxEl;
-let maxScroll;
-let scaleVal = 1;
-let scalingDown = false;
-let deltaY = 0;
-let previousStories = [];
-let doesHaveMorePages = false;
+let stateObject = {
+  cards: null,
+  cardMargin: null,
+  cardWidth: null,
+  player: null,
+  lightboxEl: null,
+  maxScroll: null,
+  scaleVal: 1,
+  scalingDown: false,
+  deltaY: 0,
+  doesHaveMorePages: false,
+  previousStories: [],
+};
 
 function setPlayer(playerEl) {
-  player = playerEl;
+  stateObject.player = playerEl;
 }
 
 function setLightbox(lightbox) {
-  lightboxEl = lightbox;
+  stateObject.lightboxEl = lightbox;
 }
 
 function setCards(cardEls) {
-  cards = cardEls;
+  stateObjectcards = cardEls;
 }
 
 function setCardWidth(width) {
-  cardWidth = width;
+  stateObject.cardWidth = width;
 }
 
 function setCardMargin(margin) {
-  cardMargin = margin;
+  stateObject.cardMargin = margin;
 }
 
 /**
@@ -59,13 +61,13 @@ function initializeArrows() {
         getComputedStyle(scrollContainer.firstElementChild).paddingRight
       );
 
-    maxScroll =
+    stateObject.maxScroll =
       scrollContainer.offsetWidth -
       containerPadding +
-      cardMargin -
-      cards.length * cardWidth;
+      stateObject.cardMargin -
+      stateObject.cards.length * stateObject.cardWidth;
 
-    if (maxScroll < 0) {
+    if (stateObject.maxScroll < 0) {
       document
         .querySelector('.carousel-container')
         .classList.add('overflow-right');
@@ -82,10 +84,12 @@ function closePlayer() {
   const data = { storyOpened: false };
   const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data });
   window.parent.document.dispatchEvent(event);
+
   player.pause();
+
   document.body.classList.remove('lightbox-open');
-  lightboxEl.classList.add('closed');
-  cards.forEach((card) => card.classList.remove('hidden'));
+  stateObject.lightboxEl.classList.add('closed');
+  stateObject.cards.forEach((card) => card.classList.remove('hidden'));
 }
 
 /**
@@ -93,8 +97,8 @@ function closePlayer() {
  */
 function animateScale(val) {
   if (val < 1 && scalingDown) {
-    scaleVal = lerp(easeOutQuad(val), 1, 0.95);
-    lightboxEl.style.transform = `translate3d(0px, ${Math.pow(
+    stateObject.scaleVal = lerp(easeOutQuad(val), 1, 0.95);
+    stateObject.lightboxEl.style.transform = `translate3d(0px, ${Math.pow(
       -deltaY,
       0.6
     )}px, 0) scale3d(${scaleVal}, ${scaleVal}, 1)`;
@@ -106,9 +110,9 @@ function animateScale(val) {
  * Resets scaling animation styles.
  */
 function resetStyles() {
-  scalingDown = false;
-  scaleVal = 1;
-  lightboxEl.style.transform = `translate3d(0, 0, 0) scale3d(1, 1, 1)`;
+  stateObject.scalingDown = false;
+  stateObject.scaleVal = 1;
+  stateObject.lightboxEl.style.transform = `translate3d(0, 0, 0) scale3d(1, 1, 1)`;
 }
 
 /**
@@ -117,10 +121,12 @@ function resetStyles() {
 function initializeCards() {
   try {
     setCards(document.querySelectorAll('.entry-point-card-container'));
-    setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
-    setCardWidth(cardMargin + cards[0].offsetWidth);
+    setCardMargin(
+      parseFloat(getComputedStyle(stateObject.cards[0]).marginRight)
+    );
+    setCardWidth(stateObject.cardMargin + stateObject.cards[0].offsetWidth);
 
-    cards.forEach((card, idx) => {
+    stateObject.cards.forEach((card) => {
       card.addEventListener('click', () => {
         player.show(card.dataset.storyUrl, null, { animate: false });
         const data = { storyOpened: true };
@@ -130,10 +136,10 @@ function initializeCards() {
         window.parent.document.dispatchEvent(event);
 
         document.body.classList.add('lightbox-open');
-        lightboxEl.classList.remove('closed');
+        stateObject.lightboxEl.classList.remove('closed');
         card.classList.add('hidden');
         resetStyles();
-        player.play();
+        stateObject.player.play();
       });
     });
   } catch (error) {
@@ -155,7 +161,7 @@ function initializeCarousel() {
   const event = new CustomEvent('iframeLoaded');
   window.parent.document.dispatchEvent(event);
 
-  player.addEventListener('amp-story-player-close', closePlayer);
+  stateObject.player.addEventListener('amp-story-player-close', closePlayer);
 }
 
 /**
@@ -164,12 +170,12 @@ function initializeCarousel() {
 function init() {
   const playerEl = document.body.querySelector('amp-story-player');
   setPlayer(playerEl);
-  previousStories = [];
+  stateObject.previousStories = [];
 
-  if (player.isReady) {
+  if (stateObject.player.isReady) {
     initializeCarousel();
   } else {
-    player.addEventListener('ready', initializeCarousel);
+    stateObject.player.addEventListener('ready', initializeCarousel);
   }
 }
 
@@ -200,15 +206,15 @@ function scrollListener() {
     sendEventToParent();
   }
 
-  if(window.scrollY > 0 && !doesHaveMorePages){
+  if (window.scrollY > 0 && !stateObject.doesHaveMorePages) {
     document.getElementById('show-more-indicator').style.display = 'block';
     document.getElementById('show-more-indicator').style.rotate = '180deg';
     document.getElementById('show-more-indicator').onclick = () => {
-      document.body.scrollIntoView({behavior: 'smooth'});
+      document.body.scrollIntoView({ behavior: 'smooth' });
     };
   }
 
-  if(window.scrollY === 0 && !doesHaveMorePages){
+  if (window.scrollY === 0 && !stateObject.doesHaveMorePages) {
     document.getElementById('show-more-indicator').style.display = 'none';
   }
 }
@@ -248,39 +254,41 @@ const messageListener = ({
     const _cards = story.map(getCardHTML).join('');
     const storyAnchors = story.map(({ storyUrl }) => ({ href: storyUrl }));
 
-    if (JSON.stringify(story) === JSON.stringify(previousStories)) {
+    if (JSON.stringify(story) === JSON.stringify(stateObject.previousStories)) {
       return;
     }
 
     document.getElementById('entry-points').innerHTML = _cards;
-    const scrollToNext = previousStories.length;
-    previousStories = story;
-    player.add(storyAnchors);
+    const scrollToNext = stateObject.previousStories.length;
+    stateObject.previousStories = story;
+    stateObject.player.add(storyAnchors);
 
     initializeCards();
     initializeArrows();
-    doesHaveMorePages = _doesHaveMorePages;
+    stateObject.doesHaveMorePages = _doesHaveMorePages;
 
-    cards[scrollToNext].scrollIntoView({behavior: 'smooth'});
+    stateObject.cards[scrollToNext].scrollIntoView({ behavior: 'smooth' });
 
     const distanceToRight = calculateDistanceBetweenLastItemAndBox();
     document.getElementById('show-more-indicator').style.left = `calc(100% - ${
       distanceToRight / 2
     }px)`;
-  
-    if(!doesHaveMorePages){
-      if(window.scrollY > 0){
+
+    if (!stateObject.doesHaveMorePages) {
+      if (window.scrollY > 0) {
         document.getElementById('show-more-indicator').style.rotate = '180deg';
-      }else{
+      } else {
         document.getElementById('show-more-indicator').style.display = 'none';
       }
-    }else{
+    } else {
       document.getElementById('show-more-indicator').classList.add('bounce');
       document.getElementById('show-more-indicator').onclick = () => {
         sendEventToParent();
       };
       setTimeout(() => {
-        document.getElementById('show-more-indicator').classList.remove('bounce');
+        document
+          .getElementById('show-more-indicator')
+          .classList.remove('bounce');
       }, 2000);
     }
   } catch (error) {
