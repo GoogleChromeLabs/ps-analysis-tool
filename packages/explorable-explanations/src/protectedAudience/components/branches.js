@@ -144,7 +144,6 @@ const Branches = async ({
   );
 
   const nextTip = await FlowExpander({
-    branchType: branches[0].type,
     nextTipCoordinates: endpoints,
   });
 
