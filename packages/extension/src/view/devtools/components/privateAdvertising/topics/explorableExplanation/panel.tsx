@@ -23,7 +23,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Resizable } from 're-resizable';
 import { useTabs } from '@google-psat/design-system';
 
 /**
@@ -271,6 +270,7 @@ const Panel = ({
         historyCount={epochs[activeTab].webVisits.length}
         reset={setReset}
         extraInterface={extraInterface}
+        showNextPrevButtons={false}
       />
       <div className="flex-1 overflow-auto">
         <Animation
@@ -289,20 +289,7 @@ const Panel = ({
           isInteractive={isInteractiveModeOn}
         />
       </div>
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '20%',
-        }}
-        minHeight="15%"
-        maxHeight="95%"
-        enable={{
-          top: true,
-        }}
-        className="h-full flex"
-      >
-        <TableTray />
-      </Resizable>
+      <TableTray />
     </div>
   );
 };

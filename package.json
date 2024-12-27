@@ -52,7 +52,8 @@
 		"test:cli:e2e": "jest --config=tests/cliE2E.jest.config.cjs --runInBand",
 		"test:extension:e2e": "jest --config=tests/extensionE2E.jest.config.cjs --runInBand",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
-		"serve": "webpack serve"
+		"serve": "webpack serve",
+		"start": "npm i && npm run dev:ext"
 	},
 	"repository": {
 		"type": "git",

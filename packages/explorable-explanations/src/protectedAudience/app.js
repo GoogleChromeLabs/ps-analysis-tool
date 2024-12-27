@@ -47,6 +47,7 @@ const app = {
     expandedCircleDiameter: 640,
     minifiedCircleDiameter: 50,
   },
+  speedMultiplier: 1,
   p: null,
   igp: null,
   up: null,
@@ -61,6 +62,8 @@ const app = {
   visitedIndexOrder: [],
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
+  setCurrentSite: () => null,
+  setPlayState: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
   canvasEventListerners: {

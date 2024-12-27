@@ -99,6 +99,7 @@ app.pause = () => {
     app.pauseButton.classList.add('hidden');
     app.playButton.classList.remove('hidden');
   }
+
   app.promiseQueue.stop();
   app.timeline.isPaused = true;
 };
@@ -162,6 +163,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
       bubbles.showMinifiedBubbles();
       timeline.eraseAndRedraw();
       timeline.renderUserIcon();
+
       cb(null, true);
     });
 
@@ -169,17 +171,33 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     app.promiseQueue.push((cb) => {
       app.bubbles.interestGroupCounts +=
         config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+      app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+
       cb(null, true);
     });
 
     app.promiseQueue.push((cb) => {
       app.timeline.currentIndex += 1;
       flow.setButtonsDisabilityState();
+
       cb(null, true);
     });
 
     currentIndex++;
   }
+
+  //This is to add check mark for the last circle.
+  app.promiseQueue.push((cb) => {
+    app.bubbles.interestGroupCounts +=
+      config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+    bubbles.showMinifiedBubbles();
+    utils.markVisitedValue(app.timeline.currentIndex, true);
+    timeline.eraseAndRedraw();
+    timeline.renderUserIcon();
+    app.setCurrentSite(null);
+
+    cb(null, true);
+  });
 };
 
 app.setupLoop = (doNotPlay) => {
@@ -189,13 +207,16 @@ app.setupLoop = (doNotPlay) => {
   } catch (error) {
     //Silently fail.
   }
+
   timeline.eraseAndRedraw();
   timeline.renderUserIcon();
   utils.markVisitedValue(app.timeline.currentIndex, true);
+
   if (doNotPlay) {
     return;
   }
 
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -220,6 +241,8 @@ app.handleNonInteractivePrev = async () => {
   app.timeline.isPaused = true;
   app.timeline.currentIndex -= 1;
 
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+
   await utils.delay(100);
 
   app.addToPromiseQueue(app.timeline.currentIndex);
@@ -234,6 +257,8 @@ app.handleNonInteractivePrev = async () => {
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
     app.timeline.currentIndex
   );
+
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -262,6 +287,7 @@ app.handleInteractivePrev = () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+
     cb(null, true);
   });
 
@@ -275,6 +301,7 @@ app.handleInteractivePrev = () => {
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
 
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -315,6 +342,9 @@ app.handleNonInteravtiveNext = async () => {
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   app.timeline.currentIndex += 1;
+
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+
   await utils.delay(100);
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
@@ -329,6 +359,7 @@ app.handleNonInteravtiveNext = async () => {
     app.timeline.currentIndex
   );
 
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -368,6 +399,7 @@ app.handleInteravtiveNext = () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+
     cb(null, true);
   });
 
@@ -376,6 +408,8 @@ app.handleInteravtiveNext = () => {
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
   timeline.renderUserIcon();
+
+  app.setPlayState(true);
   app.promiseQueue.start();
 };
 
@@ -438,33 +472,14 @@ app.handleControls = () => {
 };
 
 app.toggleInteractiveMode = async () => {
-  app.promiseQueue.end();
-  app.cancelPromise = true;
-  app.timeline.isPaused = true;
-
   app.isInteractiveMode = !app.isInteractiveMode;
-  app.timeline.currentIndex = 0;
-  app.bubbles.interestGroupCounts = 0;
-  app.bubbles.positions = [];
-  app.bubbles.minifiedSVG = null;
-  app.bubbles.expandedSVG = null;
-  app.shouldRespondToClick = true;
-  app.startTrackingMouse = true;
-
-  utils.markVisitedValue(config.timeline.circles.length, false);
-  timeline.eraseAndRedraw();
-  await utils.delay(100);
-
-  setupInterestGroupCanvas(app.igp);
-  setupUserCanvas(app.up);
-  setupMainCanvas(app.p, true);
+  await app.reset();
+  app.setPlayState(false);
 
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
     return;
   }
-
-  app.promiseQueue.start();
 };
 
 // Write a callback function to get the value of the checkbox.
@@ -483,11 +498,13 @@ export const sketch = (p) => {
   app.promiseQueue.addEventListener('end', () => {
     app.cancelPromise = true;
     app.timeline.isPaused = true;
+    app.setPlayState(false);
   });
 
   app.promiseQueue.addEventListener('start', () => {
     app.cancelPromise = false;
     app.timeline.isPaused = false;
+    app.setPlayState(true);
   });
 
   app.handleControls();
@@ -515,8 +532,15 @@ export const interestGroupSketch = (p) => {
   };
 
   p.updateWithProps = (props) => {
-    if (props.onClick) {
-      app.igp.igClick = props.onClick;
+    if (props.speedMultiplier) {
+      app.speedMultiplier = props.speedMultiplier;
+    }
+
+    if (
+      props.expandedBubbleX &&
+      props.expandedBubbleY &&
+      props.expandedBubbleWidth
+    ) {
       app.bubbles.expandedBubbleX = props.expandedBubbleX;
       app.bubbles.expandedBubbleY = props.expandedBubbleY;
       app.bubbles.expandedCircleDiameter = props.expandedBubbleWidth;
@@ -538,6 +562,14 @@ export const interestGroupSketch = (p) => {
         bubbles.showExpandedBubbles();
       }
     }
+
+    if (props.setCurrentSite) {
+      app.setCurrentSite = props.setCurrentSite;
+    }
+
+    if (app.setPlayState) {
+      app.setPlayState = props.setPlayState;
+    }
   };
 };
 
@@ -548,33 +580,29 @@ export const userSketch = (p) => {
   };
 };
 
-app.reset = async (callFromExtension = false) => {
+app.reset = async () => {
   app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
 
   app.timeline.currentIndex = 0;
   app.bubbles.interestGroupCounts = 0;
+  app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.bubbles.expandedSVG = null;
-  app.bubbles.positions = [];
+  app.shouldRespondToClick = true;
+  app.startTrackingMouse = true;
 
   utils.markVisitedValue(config.timeline.circles.length, false);
   timeline.eraseAndRedraw();
-  await utils.delay(1000);
+  await utils.delay(100);
 
-  if (!callFromExtension) {
-    setupInterestGroupCanvas(app.igp);
-    setupUserCanvas(app.up);
-    setupMainCanvas(app.p);
-  }
+  setupInterestGroupCanvas(app.igp);
+  setupUserCanvas(app.up);
+  setupMainCanvas(app.p, true);
 
   app.timeline.isPaused = true;
-  app.cancelPromise = false;
-
-  app.timeline.isPaused = false;
-  app.shouldRespondToClick = true;
-  app.startTrackingMouse = true;
+  app.setPlayState(false);
 };
 
 app.createCanvas = () => {

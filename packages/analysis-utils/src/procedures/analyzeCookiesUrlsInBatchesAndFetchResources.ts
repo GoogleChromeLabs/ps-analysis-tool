@@ -22,9 +22,9 @@ import {
   type CookieDatabase,
   LibraryData,
   type LibraryMatchers,
+  type SingleURLError,
   removeAndAddNewSpinnerText,
   type Selectors,
-  type SingleURLError,
 } from '@google-psat/common';
 
 /**

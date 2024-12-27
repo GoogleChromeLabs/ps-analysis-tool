@@ -28,9 +28,9 @@ import {
 /**
  * Internal dependencies.
  */
-import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
-import AuctionTable from './auctionTable';
-import AdunitPanel from './adunitPanel';
+import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
+import AuctionTable from '../table';
+import AdunitPanel from '../adunitPanel';
 
 interface AuctionPanelProps {
   auctionEvents: AuctionEventsType;
