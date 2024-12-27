@@ -36,7 +36,7 @@ function setLightbox(lightbox) {
 }
 
 function setCards(cardEls) {
-  stateObjectcards = cardEls;
+  stateObject.cards = cardEls;
 }
 
 function setCardWidth(width) {

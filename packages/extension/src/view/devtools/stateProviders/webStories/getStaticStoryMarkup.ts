@@ -31,7 +31,7 @@ export const getStaticStoryMarkup = () => {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script async src="${chrome?.runtime?.getURL(
-      'assets/amp/amp-player-main.js'
+      'assets/amp/custom-scripts/amp-player-main.js'
     )}" type="module"></script>
     <script async src="${chrome?.runtime?.getURL(
       'assets/amp/amp-story-player-v0.js'
