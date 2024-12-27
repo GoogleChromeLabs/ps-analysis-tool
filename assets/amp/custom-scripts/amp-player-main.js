@@ -200,7 +200,7 @@ const sendEventToParent = () => {
 
 function scrollListener() {
   if (
-    window.scrollY + window.innerHeight >=
+    Math.ceil(window.scrollY + window.innerHeight) >=
     document.documentElement.scrollHeight
   ) {
     sendEventToParent();
