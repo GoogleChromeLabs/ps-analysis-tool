@@ -120,8 +120,6 @@ function initializeCards() {
     setCardMargin(parseFloat(getComputedStyle(cards[0]).marginRight));
     setCardWidth(cardMargin + cards[0].offsetWidth);
 
-    const stories = player.getStories();
-
     cards.forEach((card, idx) => {
       card.addEventListener('click', () => {
         player.show(card.dataset.storyUrl, null, { animate: false });
@@ -199,18 +197,15 @@ function scrollListener() {
     window.scrollY + window.innerHeight >=
     document.documentElement.scrollHeight
   ) {
-    if (!doesHaveMorePages) {
-      document.getElementById('show-more-indicator').style.rotate = '180deg';
-      document.getElementById('show-more-indicator').onclick = () => {
-        document.body.scrollIntoView({behavior: 'smooth'});
-      };
-      return;
-    }
     sendEventToParent();
   }
 
   if(window.scrollY > 0 && !doesHaveMorePages){
     document.getElementById('show-more-indicator').style.display = 'block';
+    document.getElementById('show-more-indicator').style.rotate = '180deg';
+    document.getElementById('show-more-indicator').onclick = () => {
+      document.body.scrollIntoView({behavior: 'smooth'});
+    };
   }
 
   if(window.scrollY === 0 && !doesHaveMorePages){
@@ -268,21 +263,26 @@ const messageListener = ({
 
     cards[scrollToNext].scrollIntoView({behavior: 'smooth'});
 
-    document.getElementById('show-more-indicator').classList.add('bounce');
     const distanceToRight = calculateDistanceBetweenLastItemAndBox();
     document.getElementById('show-more-indicator').style.left = `calc(100% - ${
       distanceToRight / 2
     }px)`;
-    document.getElementById('show-more-indicator').onclick = () => {
-      sendEventToParent();
-    };
-
-    setTimeout(() => {
-      if(!doesHaveMorePages){
+  
+    if(!doesHaveMorePages){
+      if(window.scrollY > 0){
         document.getElementById('show-more-indicator').style.rotate = '180deg';
+      }else{
+        document.getElementById('show-more-indicator').style.display = 'none';
       }
-      document.getElementById('show-more-indicator').classList.remove('bounce');
-    }, 2000);
+    }else{
+      document.getElementById('show-more-indicator').classList.add('bounce');
+      document.getElementById('show-more-indicator').onclick = () => {
+        sendEventToParent();
+      };
+      setTimeout(() => {
+        document.getElementById('show-more-indicator').classList.remove('bounce');
+      }, 2000);
+    }
   } catch (error) {
     //Fail silently
   }
