@@ -35,6 +35,7 @@ import { useDebounce } from 'use-debounce';
  */
 import Context, { type WebStoryContext } from './context';
 import { type SingleStoryJSON } from './getStaticStoryMarkup';
+import { apiDataFetcher, BASE_API_URL, getMediaUrl } from './apiFetchers';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [_searchValue, setSearchValue] = useState('');
@@ -88,11 +89,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     ]);
   }, [authors, categories, tags]);
 
-  //@ts-ignore since this is a custom event.
-  const webStoriesLightBoxCallback = useCallback((event) => {
-    setStoryOpened(() => event.detail.storyOpened);
-  }, []);
-
   const webStoriesLoadMoreData = useCallback(() => {
     if (!doesHaveMorePagesRef.current) {
       return;
@@ -101,20 +97,17 @@ const Provider = ({ children }: PropsWithChildren) => {
     setPageNumber(pageNumber + 1);
   }, [pageNumber]);
 
-  const iframeLoadedCallback = useCallback(() => {
-    setIframeLoaded(true);
-  }, []);
-
   useEffect(() => {
     window.document.addEventListener(
       'webStoriesLightBoxEvent',
-      webStoriesLightBoxCallback,
+      //@ts-ignore since this is a custom event.
+      (event) => setStoryOpened(event.detail.storyOpened),
       false
     );
 
     window.document.addEventListener(
       'iframeLoaded',
-      iframeLoadedCallback,
+      () => setIframeLoaded(true),
       false
     );
 
@@ -127,13 +120,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     return () => {
       window.document.removeEventListener(
         'iframeLoaded',
-        iframeLoadedCallback,
+        () => setIframeLoaded(true),
         false
       );
 
       window.document.removeEventListener(
         'webStoriesLightBoxEvent',
-        webStoriesLightBoxCallback,
+        //@ts-ignore since this is a custom event.
+        (event) => setStoryOpened(event.detail.storyOpened),
         false
       );
 
@@ -143,11 +137,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         false
       );
     };
-  }, [
-    iframeLoadedCallback,
-    webStoriesLightBoxCallback,
-    webStoriesLoadMoreData,
-  ]);
+  }, [webStoriesLoadMoreData]);
 
   const toggleFilterSelection = useCallback(
     (filterKey: string, filterValue: string) => {
@@ -208,51 +198,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     setPageNumber(1);
   }, []);
 
-  const fetchCategories = useCallback(async () => {
-    const response = await fetch(
-      'https://privacysandbox-stories.com/wp-json/web-stories/v1/web_story_category'
-    );
-    const responseJson = await response.json();
-    const categoriesMap: Record<number, string> = {};
-    responseJson.forEach((category: any) => {
-      categoriesMap[category.id] = category.name;
-    });
-
-    setCategories(categoriesMap);
-  }, []);
-
-  const fetchAuthors = useCallback(async () => {
-    const response = await fetch(
-      'https://privacysandbox-stories.com/wp-json/web-stories/v1/users'
-    );
-
-    const responseJSON = await response.json();
-
-    const authorNameIdMap: Record<number, string> = {};
-
-    responseJSON.forEach((singleResponse: Record<string, any>) => {
-      authorNameIdMap[singleResponse.id] = singleResponse.name;
-    });
-
-    setAuthors(authorNameIdMap);
-  }, []);
-
-  const fetchTags = useCallback(async () => {
-    const response = await fetch(
-      'https://privacysandbox-stories.com/wp-json/web-stories/v1/web_story_tag'
-    );
-
-    const responseJSON = await response.json();
-
-    const tagNameIdMap: Record<number, string> = {};
-
-    responseJSON.forEach((singleResponse: Record<string, any>) => {
-      tagNameIdMap[singleResponse.id] = singleResponse.name;
-    });
-
-    setTags(tagNameIdMap);
-  }, []);
-
   const getAuthorsAndPublisherLogo = useCallback(
     async (mediaAuthorSet: Record<number, string>) => {
       if (authors && Object.keys(authors).length === 0) {
@@ -270,43 +215,11 @@ const Provider = ({ children }: PropsWithChildren) => {
         return authorPublisherLogoRef.current;
       }
 
-      const transformedMediaAuthorMap: Record<
-        number,
-        Record<string, string>
-      > = {};
-
-      await Promise.all(
-        Object.keys(mediaAuthorSet).map(async (key: string) => {
-          const mediaResponse = await fetch(
-            'https://privacysandbox-stories.com/wp-json/web-stories/v1/media/' +
-              mediaAuthorSet[Number(key)]
-          );
-
-          //Check the media response and get the avif/webp image if available else use source_url.
-          const mediaResponseJSON = await mediaResponse.json();
-          const sourceUrl = mediaResponseJSON.source_url;
-          const splittedUrl = sourceUrl.split('/');
-          const urlWithoutName = sourceUrl.substring(
-            0,
-            sourceUrl.length - splittedUrl[splittedUrl.length - 1].length
-          );
-
-          const avifResource =
-            urlWithoutName +
-            mediaResponseJSON?.media_details?.sources?.['image/avif']?.file;
-          const webpResource =
-            urlWithoutName +
-            mediaResponseJSON?.media_details?.sources?.['image/webp']?.file;
-
-          transformedMediaAuthorMap[Number(key)] = {
-            name: authors[Number(key)],
-            publisherLogo: avifResource ?? webpResource ?? sourceUrl,
-          };
-        })
+      authorPublisherLogoRef.current = await getMediaUrl(
+        mediaAuthorSet,
+        authors
       );
-
-      authorPublisherLogoRef.current = transformedMediaAuthorMap;
-      return transformedMediaAuthorMap;
+      return authorPublisherLogoRef.current;
     },
     [authors]
   );
@@ -392,9 +305,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     setLoadingState(true);
 
-    const response = await fetch(
-      `https://privacysandbox-stories.com/wp-json/web-stories/v1/web-story/?${queryParams}`
-    );
+    const response = await fetch(`${BASE_API_URL}/web-story/?${queryParams}`);
 
     const responseJSON = await response.json();
     const totalPages = Number(response.headers.get('X-Wp-Totalpages'));
@@ -459,10 +370,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   ]);
 
   useEffect(() => {
-    fetchAuthors();
-    fetchCategories();
-    fetchTags();
-  }, [fetchCategories, fetchAuthors, fetchTags]);
+    apiDataFetcher('/users', setAuthors);
+    apiDataFetcher('/web_story_category', setCategories);
+    apiDataFetcher('/web-story_tag', setTags);
+  }, []);
 
   useEffect(() => {
     fetchStories();
