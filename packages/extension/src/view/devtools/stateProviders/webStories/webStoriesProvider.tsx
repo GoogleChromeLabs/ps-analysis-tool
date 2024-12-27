@@ -99,40 +99,36 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [pageNumber]);
 
   useEffect(() => {
-    window.document.addEventListener(
+    document.addEventListener(
       'webStoriesLightBoxEvent',
       //@ts-ignore since this is a custom event.
       (event) => setStoryOpened(event.detail.storyOpened),
       false
     );
 
-    window.document.addEventListener(
+    document.addEventListener(
       'iframeLoaded',
       () => setIframeLoaded(true),
       false
     );
 
-    window.document.addEventListener(
-      'loadMoreData',
-      webStoriesLoadMoreData,
-      false
-    );
+    document.addEventListener('loadMoreData', webStoriesLoadMoreData, false);
 
     return () => {
-      window.document.removeEventListener(
+      document.removeEventListener(
         'iframeLoaded',
         () => setIframeLoaded(true),
         false
       );
 
-      window.document.removeEventListener(
+      document.removeEventListener(
         'webStoriesLightBoxEvent',
         //@ts-ignore since this is a custom event.
         (event) => setStoryOpened(event.detail.storyOpened),
         false
       );
 
-      window.document.removeEventListener(
+      document.removeEventListener(
         'loadMoreData',
         webStoriesLoadMoreData,
         false
