@@ -18,8 +18,10 @@
  */
 import React from 'react';
 
-export const BASE_API_URL =
-  'https://privacysandbox-stories.com/wp-json/web-stories/v1';
+/**
+ * Internal dependencies
+ */
+import { BASE_API_URL } from './constants';
 
 export const apiDataFetcher = async (
   endpoint: string,

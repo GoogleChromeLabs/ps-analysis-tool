@@ -35,7 +35,8 @@ import { useDebounce } from 'use-debounce';
  */
 import Context, { type WebStoryContext } from './context';
 import { type SingleStoryJSON } from './getStaticStoryMarkup';
-import { apiDataFetcher, BASE_API_URL, getMediaUrl } from './apiFetchers';
+import { apiDataFetcher, getMediaUrl } from './apiFetchers';
+import { BASE_API_URL } from './constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [_searchValue, setSearchValue] = useState('');
