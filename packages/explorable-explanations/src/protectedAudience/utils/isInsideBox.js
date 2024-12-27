@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './calculateCanvasDimensions';
-export * from './wipeAndRecreateCanvas';
-export * from './delay';
-export * from './drawArrow';
-export * from './drawText';
-export * from './isInsideCircle';
-export * from './canvasEventListener';
-export * from './markVisitedValue';
-export * from './requestInterval';
-export * from './isOverControls';
-export * from './isInsideBox';
+export const isInsideBox = (mouseX, mouseY, boxX, boxY, height) => {
+  return (
+    mouseX >= boxX &&
+    mouseX <= boxX + height &&
+    mouseY >= boxY &&
+    mouseY <= boxY + height
+  );
+};

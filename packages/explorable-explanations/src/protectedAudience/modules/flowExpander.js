@@ -20,21 +20,53 @@ import app from '../app';
 import config from '../config';
 import { isInsideCircle } from '../utils';
 
-const FlowExpander = ({ nextTipCoordinates }) => {
+const FlowExpander = async ({ nextTipCoordinates }) => {
   const p = app.p;
   const iconSize = config.timeline.expandIconSize;
+  const iconRadius = iconSize / 2;
 
-  return new Promise((resolve) => {
-    p.mouseClicked = (event) => {
+  p.mouseMoved = ({ offsetX, offsetY }) => {
+    let hoveringOverSomething = false;
+    nextTipCoordinates.forEach(({ x, y }) => {
+      if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
+        hoveringOverSomething = true;
+      }
+    });
+    if (hoveringOverSomething) {
+      p.cursor('pointer');
+    } else {
+      p.cursor('default');
+    }
+  };
+
+  const endpoint = await new Promise((resolve) => {
+    p.mouseClicked = ({ offsetX, offsetY }) => {
       nextTipCoordinates.forEach(({ x, y }) => {
-        const updatedX = x + iconSize / 2;
-        const updatedY = y + iconSize / 2;
-        if (isInsideCircle(event.x, event.y, updatedX, updatedY, iconSize)) {
+        if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
+          p.mouseClicked(false);
+          p.mouseMoved(false);
           resolve({ x, y });
+          return;
         }
       });
     };
   });
+
+  nextTipCoordinates.forEach(({ x, y }) => {
+    if (endpoint.x !== x) {
+      p.push();
+      p.noStroke();
+      p.circle(x, y + 27, 25);
+      p.pop();
+
+      p.push();
+      p.tint(255, 90);
+      p.image(p.expandIcon, x - iconRadius, y + 17, iconSize, iconSize);
+      p.pop();
+    }
+  });
+
+  return endpoint;
 };
 
 export default FlowExpander;
