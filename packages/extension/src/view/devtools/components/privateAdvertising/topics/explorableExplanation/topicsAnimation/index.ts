@@ -27,6 +27,7 @@ import { getAdtechsColors } from './utils';
  * @param visitIndexStart - Index to start the animation from
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
  * @param setHighlightAdTech - Callback function for setting the highlighted adtech
+ * @param isInteractive - Boolean to tell if the animation should be interactive
  * @returns Object with callbacks to control the animation
  */
 export function topicsAnimation(
@@ -36,7 +37,8 @@ export function topicsAnimation(
   siteAdTechs: Record<string, string[]>,
   visitIndexStart: number,
   handleUserVisit: (visitIndex: number) => void,
-  setHighlightAdTech: (highlightAdTech: string | null) => void
+  setHighlightAdTech: (highlightAdTech: string | null) => void,
+  isInteractive: boolean
 ) {
   const app = {
     userIcon: null as p5.Image | null,
@@ -47,6 +49,7 @@ export function topicsAnimation(
     playing: true,
     speedMultiplier: 1,
     inspectedCircleIndex: -1,
+    prevVisitedCircleIndex: -1,
     showHandCursor: false,
     canvas: null as p5.Renderer | null,
     smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
@@ -158,7 +161,7 @@ export function topicsAnimation(
     },
 
     handleUserVisit: (visitIndex: number) => {
-      if (visitIndex > 0) {
+      if (visitIndex > 0 && !isInteractive) {
         app.userVisitDone(visitIndex - 1);
       }
 
@@ -195,16 +198,18 @@ export function topicsAnimation(
       const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
       const currentCircle = epoch[visitIndex];
 
-      p.push();
-      p.text(currentCircle.datetime, xPosition, 30);
-      p.stroke('#1A73E8');
-      p.line(
-        previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
-        previousPosition.y,
-        position.x - circleDiameter / 2,
-        position.y
-      );
-      p.pop();
+      if (!isInteractive) {
+        p.push();
+        p.text(currentCircle.datetime, xPosition, 30);
+        p.stroke('#1A73E8');
+        p.line(
+          previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
+          previousPosition.y,
+          position.x - circleDiameter / 2,
+          position.y
+        );
+        p.pop();
+      }
 
       const currentSite = currentCircle.website;
       app.drawInfoBox(visitIndex, currentSite);
@@ -391,8 +396,17 @@ export function topicsAnimation(
           y < circleY + diameter / 2
         ) {
           if (app.visitIndex <= index) {
-            app.showHandCursor = true;
-            isInspecting = true;
+            if (isInteractive) {
+              app.showHandCursor = true;
+              isInspecting = true;
+            }
+
+            if (app.inspectedCircleIndex !== -1) {
+              app.resetInfoBox(app.inspectedCircleIndex);
+              app.inspectedCircleIndex = -1;
+            }
+
+            return;
           }
 
           if (
@@ -441,23 +455,28 @@ export function topicsAnimation(
       const x = p.mouseX,
         y = p.mouseY;
 
-      Object.values(app.circlePositions).forEach((position, index) => {
-        const { diameter } = config.timeline.circleProps;
-        const { x: circleX, y: circleY } = position;
+      if (isInteractive) {
+        Object.values(app.circlePositions).forEach((position, index) => {
+          const { diameter } = config.timeline.circleProps;
+          const { x: circleX, y: circleY } = position;
 
-        if (
-          x > circleX - diameter / 2 &&
-          x < circleX + diameter / 2 &&
-          y > circleY - diameter / 2 &&
-          y < circleY + diameter / 2
-        ) {
-          if (app.visitIndex <= index) {
-            while (app.visitIndex <= index) {
-              app.play();
+          if (
+            x > circleX - diameter / 2 &&
+            x < circleX + diameter / 2 &&
+            y > circleY - diameter / 2 &&
+            y < circleY + diameter / 2
+          ) {
+            if (app.prevVisitedCircleIndex !== -1) {
+              app.userVisitDone(app.prevVisitedCircleIndex);
+            }
+
+            if (app.smallCirclePositions[index] === undefined) {
+              app.handleUserVisit(index);
+              app.prevVisitedCircleIndex = index;
             }
           }
-        }
-      });
+        });
+      }
 
       app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
         (position, index) => {
@@ -527,8 +546,12 @@ export function topicsAnimation(
       p.cursor(p.ARROW);
     }
 
-    if (p.frameCount % delay === 0 && app.playing) {
+    if (p.frameCount % delay === 0 && app.playing && !isInteractive) {
       app.play();
+    }
+
+    if (isInteractive && app.playing) {
+      app.playing = false;
     }
   };
 
