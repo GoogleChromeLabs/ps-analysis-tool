@@ -567,6 +567,10 @@ export const interestGroupSketch = (p) => {
       app.setCurrentSite = props.setCurrentSite;
     }
 
+    if (props.setInfo) {
+      app.setInfo = props.setInfo;
+    }
+
     if (app.setPlayState) {
       app.setPlayState = props.setPlayState;
     }

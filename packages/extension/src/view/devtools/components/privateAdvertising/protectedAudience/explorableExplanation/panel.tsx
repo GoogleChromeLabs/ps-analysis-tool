@@ -47,10 +47,17 @@ declare module 'react' {
 }
 interface PanelProps {
   setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
+  setInfo: React.Dispatch<React.SetStateAction<string | null>>;
+  info: string | null;
   currentSiteData: CurrentSiteData | null;
 }
 
-const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
+const Panel = ({
+  currentSiteData,
+  setCurrentSite,
+  info,
+  setInfo,
+}: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
@@ -106,6 +113,12 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
       setActiveTab(1);
     }
   }, [currentSiteData, currentSiteData?.type, setActiveTab]);
+
+  useEffect(() => {
+    if (info) {
+      setActiveTab(3);
+    }
+  }, [info, setActiveTab]);
 
   const setInteractiveMode = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -253,6 +266,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         expandedBubbleWidth={expandedBubbleWidth}
         speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}
+        setInfo={setInfo}
         setPlayState={setPlay}
       />
       <ReactP5Wrapper sketch={userSketch} />

@@ -45,6 +45,7 @@ export interface CurrentSiteData {
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
 
   const [interestGroups, setInterestGroups] = useState<
     {
@@ -135,12 +136,12 @@ const ExplorableExplanation = () => {
         content: {
           Element: Info,
           props: {
-            data: undefined,
+            data: info,
           },
         },
       },
     ],
-    [auctionsData, interestGroupData]
+    [auctionsData, interestGroupData, info]
   );
 
   return (
@@ -148,6 +149,8 @@ const ExplorableExplanation = () => {
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={setCurrentSiteData}
+        info={info}
+        setInfo={setInfo}
       />
     </TabsProvider>
   );

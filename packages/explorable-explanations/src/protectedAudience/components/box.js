@@ -73,7 +73,7 @@ const Box = ({
         mouseY >= iconY &&
         mouseY <= iconY + INFO_ICON_SIZE
       ) {
-        console.log(info); // eslint-disable-line no-console
+        app.setInfo(info);
       }
     };
 
