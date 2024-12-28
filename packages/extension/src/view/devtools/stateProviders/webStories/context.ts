@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,14 @@ import type {
   ChipsFilter,
   FilterSidebarValue,
 } from '@google-psat/design-system';
+/**
+ * Internal dependencies.
+ */
+import type { SingleStoryJSON } from './types';
 
-export interface StoryContext {
+export interface WebStoryContext {
   state: {
+    allStoryJSON: SingleStoryJSON[];
     searchValue: string;
     showFilterSidebar: boolean;
     filters: FilterSidebarValue[];
@@ -31,8 +36,13 @@ export interface StoryContext {
     selectedFilterValues: Record<string, string[]>;
     sortValue: 'latest' | 'oldest';
     storyOpened: boolean;
+    loadingState: boolean;
+    pageNumber: number;
+    iframeLoaded: boolean;
+    doesHaveMorePages: boolean;
   };
   actions: {
+    setIframeLoaded: React.Dispatch<React.SetStateAction<boolean>>;
     resetFilters: () => void;
     toggleFilterSelection: (filterKey: string, filterValue: string) => void;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -44,8 +54,9 @@ export interface StoryContext {
   };
 }
 
-const initialState: StoryContext = {
+const initialState: WebStoryContext = {
   state: {
+    allStoryJSON: [],
     searchValue: '',
     showFilterSidebar: false,
     selectedFilters: [],
@@ -53,8 +64,13 @@ const initialState: StoryContext = {
     selectedFilterValues: {},
     sortValue: 'latest',
     storyOpened: false,
+    loadingState: true,
+    iframeLoaded: false,
+    pageNumber: 1,
+    doesHaveMorePages: true,
   },
   actions: {
+    setIframeLoaded: noop,
     resetFilters: noop,
     toggleFilterSelection: noop,
     setSearchValue: noop,
@@ -64,4 +80,4 @@ const initialState: StoryContext = {
   },
 };
 
-export default createContext<StoryContext>(initialState);
+export default createContext<WebStoryContext>(initialState);

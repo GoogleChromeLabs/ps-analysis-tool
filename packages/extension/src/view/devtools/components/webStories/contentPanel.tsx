@@ -24,39 +24,38 @@ import { noop } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { getStoryMarkup } from './createStoryIframe';
-import { STORY_JSON } from './story';
-import { useStories } from '../../stateProviders';
+import { useWebStories } from '../../stateProviders';
+import { MainContentContainer } from './mainContentContainer';
 
 interface WebStoriesProps {
   storyOpened: boolean;
 }
 
 const WebStories = ({ storyOpened }: WebStoriesProps) => {
-  const storyMarkup = getStoryMarkup(STORY_JSON);
-
   const {
+    allStoryJSON,
     searchValue,
-    setSearchValue,
     showFilterSidebar,
-    setShowFilterSidebar,
-    setSortValue,
     sortValue,
     selectedFilters,
-    toggleFilterSelection,
-    resetFilters,
     selectedFilterValues,
     filters,
-  } = useStories(({ state, actions }) => ({
+    setSearchValue,
+    setShowFilterSidebar,
+    setSortValue,
+    toggleFilterSelection,
+    resetFilters,
+  } = useWebStories(({ state, actions }) => ({
+    allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
     filters: state.filters,
     sortValue: state.sortValue,
     selectedFilterValues: state.selectedFilterValues,
-    setSearchValue: actions.setSearchValue,
     showFilterSidebar: state.showFilterSidebar,
+    selectedFilters: state.selectedFilters,
+    setSearchValue: actions.setSearchValue,
     setShowFilterSidebar: actions.setShowFilterSidebar,
     setSortValue: actions.setSortValue,
-    selectedFilters: state.selectedFilters,
     toggleFilterSelection: actions.toggleFilterSelection,
     resetFilters: actions.resetFilters,
   }));
@@ -73,10 +72,10 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
             hideFiltering={false}
             disableFiltering={false}
             hideSearch={false}
-            count={0} // TODO: Add count
+            count={allStoryJSON.length}
           >
-            <div className="flex justify-between items-center min-w-[125px] text-raisin-black dark:text-bright-gray">
-              <p>Sort by:</p>
+            <div className="flex justify-between items-center min-w-[100px] text-raisin-black dark:text-bright-gray">
+              <p className="min-w-fit">Sort by:</p>
               <select
                 value={sortValue}
                 onChange={(e) =>
@@ -91,8 +90,8 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
                   backgroundPositionY: '4px',
                 }}
               >
-                <option value="Latest">Latest</option>
-                <option value="Oldest">Oldest</option>
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
               </select>
             </div>
           </TopBar>
@@ -125,15 +124,9 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
           data-testid="web-stories-content"
           className="h-full flex-1 text-raisin-black dark:text-bright-gray"
         >
-          <iframe
-            srcDoc={storyMarkup}
-            style={{
-              width: '100%',
-              height: '100%',
-              border: 'none',
-              overflow: 'hidden',
-            }}
-          />
+          <div className="h-full w-full flex">
+            <MainContentContainer />
+          </div>
         </div>
       </div>
     </div>

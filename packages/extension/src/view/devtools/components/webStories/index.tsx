@@ -23,10 +23,10 @@ import { LandingPage } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import ContentPanel from './contentPanel';
-import { useStories } from '../../stateProviders';
+import { useWebStories } from '../../stateProviders';
 
 const WebStories = () => {
-  const { storyOpened } = useStories(({ state }) => ({
+  const { storyOpened } = useWebStories(({ state }) => ({
     storyOpened: state.storyOpened,
   }));
 
