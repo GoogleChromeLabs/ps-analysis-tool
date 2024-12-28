@@ -28,7 +28,7 @@ import {
   app,
   userSketch,
   interestGroupSketch,
-  sketch,
+  sketch as mainSketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { useTabs } from '@google-psat/design-system';
@@ -245,7 +245,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
           <div id="user-canvas"></div>
         </main>
       </div>
-      <ReactP5Wrapper sketch={sketch} />
+      <ReactP5Wrapper sketch={mainSketch} />
       <ReactP5Wrapper
         sketch={interestGroupSketch}
         expandedBubbleX={expandedBubbleX}
