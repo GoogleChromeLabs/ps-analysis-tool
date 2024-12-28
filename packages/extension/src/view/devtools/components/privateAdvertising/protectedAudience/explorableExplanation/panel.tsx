@@ -72,9 +72,27 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
     });
   }, []);
 
+  const tooglePlayOnKeydown = useCallback(
+    (event: KeyboardEvent) => {
+      // Check if the pressed key is the spacebar
+      if (event.code === 'Space') {
+        setPlaying();
+      }
+    },
+    [setPlaying]
+  );
+
   const { setActiveTab } = useTabs(({ actions }) => ({
     setActiveTab: actions.setActiveTab,
   }));
+
+  useEffect(() => {
+    document.addEventListener('keydown', tooglePlayOnKeydown);
+
+    return () => {
+      document.removeEventListener('keydown', tooglePlayOnKeydown);
+    };
+  }, [tooglePlayOnKeydown]);
 
   useEffect(() => {
     if (!currentSiteData) {
