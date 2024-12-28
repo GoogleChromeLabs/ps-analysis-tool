@@ -122,18 +122,18 @@ const ExplorableExplanation = () => {
         },
       },
       {
-        title: 'Info',
+        title: 'Bids',
         content: {
-          Element: Info,
+          Element: Bids,
           props: {
             data: undefined,
           },
         },
       },
       {
-        title: 'Bids',
+        title: 'Info',
         content: {
-          Element: Bids,
+          Element: Info,
           props: {
             data: undefined,
           },
