@@ -73,7 +73,10 @@ const Box = ({
         mouseY >= iconY &&
         mouseY <= iconY + INFO_ICON_SIZE
       ) {
-        app.setInfo(info);
+        app.setInfo({
+          info,
+          key: Date.now(), // To force change the state, so that the info modal is shown in case of same value.
+        });
       }
     };
 
