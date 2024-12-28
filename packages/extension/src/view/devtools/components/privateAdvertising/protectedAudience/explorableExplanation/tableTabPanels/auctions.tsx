@@ -23,9 +23,9 @@ import React, { useEffect, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import AdUnitsPanel from '../adUnits/panel';
-import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
-import AuctionsContainer from '../auctions/container';
+import AdUnitsPanel from '../../adUnits/panel';
+import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
+import AuctionsContainer from '../../auctions/container';
 
 interface AuctionsProps {
   auctionEvents: AuctionEventsType;

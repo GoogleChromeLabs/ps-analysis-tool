@@ -16,20 +16,20 @@
 /**
  * External dependencies.
  */
-import { TabsProvider, type TabItems } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
+import { TabsProvider, type TabItems } from '@google-psat/design-system';
+import type { InterestGroups } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
-import Auctions from './auctions';
+import Auctions from './tableTabPanels/auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
-import type { InterestGroups } from '@google-psat/common';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
-import InfoPanel from './infoPanel';
+import InfoPanel from './tableTabPanels/infoPanel';
 
 export interface CurrentSiteData {
   type: 'advertiser' | 'publisher';
@@ -122,6 +122,15 @@ const ExplorableExplanation = () => {
       },
       {
         title: 'Info',
+        content: {
+          Element: InfoPanel,
+          props: {
+            data: undefined,
+          },
+        },
+      },
+      {
+        title: 'Bids',
         content: {
           Element: InfoPanel,
           props: {
