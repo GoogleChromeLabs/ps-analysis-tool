@@ -20,11 +20,11 @@
 import { prettyPrintJson } from 'pretty-print-json';
 import React from 'react';
 
-interface InfoPanelProps {
+interface InfoProps {
   data: any;
 }
 
-const InfoPanel = ({ data }: InfoPanelProps) => {
+const Info = ({ data }: InfoProps) => {
   return (
     <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full w-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
       {data ? (
@@ -49,4 +49,4 @@ const InfoPanel = ({ data }: InfoPanelProps) => {
   );
 };
 
-export default InfoPanel;
+export default Info;

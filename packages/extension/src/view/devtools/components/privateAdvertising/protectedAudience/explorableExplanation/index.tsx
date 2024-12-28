@@ -26,10 +26,11 @@ import type { InterestGroups } from '@google-psat/common';
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
 import Auctions from './tableTabPanels/auctions';
+import Info from './tableTabPanels/info';
+import Bids from './tableTabPanels/bids';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
-import InfoPanel from './tableTabPanels/infoPanel';
 
 export interface CurrentSiteData {
   type: 'advertiser' | 'publisher';
@@ -123,7 +124,7 @@ const ExplorableExplanation = () => {
       {
         title: 'Info',
         content: {
-          Element: InfoPanel,
+          Element: Info,
           props: {
             data: undefined,
           },
@@ -132,7 +133,7 @@ const ExplorableExplanation = () => {
       {
         title: 'Bids',
         content: {
-          Element: InfoPanel,
+          Element: Bids,
           props: {
             data: undefined,
           },
