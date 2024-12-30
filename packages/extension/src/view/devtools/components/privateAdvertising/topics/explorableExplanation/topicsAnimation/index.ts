@@ -416,17 +416,13 @@ export function topicsAnimation(
             app.resetInfoBox(app.inspectedCircleIndex);
           }
 
-          if (app.inspectedCircleIndex === index) {
-            return;
-          }
-
           app.drawInfoBox(index, epoch[index].website);
           app.inspectedCircleIndex = index;
         }
       });
 
-      app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
-        (position) => {
+      Object.values(app.smallCirclePositions).forEach((smallCircles) => {
+        smallCircles?.forEach((position) => {
           const { x: smallCircleX, y: smallCircleY } = position;
           const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
 
@@ -439,8 +435,8 @@ export function topicsAnimation(
             app.showHandCursor = true;
             isInspecting = true;
           }
-        }
-      );
+        });
+      });
 
       if (!isInspecting) {
         app.showHandCursor = false;
@@ -466,6 +462,10 @@ export function topicsAnimation(
             y > circleY - diameter / 2 &&
             y < circleY + diameter / 2
           ) {
+            if (app.prevVisitedCircleIndex === index) {
+              return;
+            }
+
             if (app.prevVisitedCircleIndex !== -1) {
               app.userVisitDone(app.prevVisitedCircleIndex);
             }
@@ -473,13 +473,16 @@ export function topicsAnimation(
             if (app.smallCirclePositions[index] === undefined) {
               app.handleUserVisit(index);
               app.prevVisitedCircleIndex = index;
+            } else {
+              app.drawInfoBox(index, epoch[index].website);
+              app.prevVisitedCircleIndex = index;
             }
           }
         });
       }
 
-      app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
-        (position, index) => {
+      Object.values(app.smallCirclePositions).forEach((smallCircles) => {
+        smallCircles?.forEach((position, index) => {
           const { x: smallCircleX, y: smallCircleY } = position;
           const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
 
@@ -490,11 +493,11 @@ export function topicsAnimation(
             y < smallCircleY + smallCircleDiameter / 2
           ) {
             setHighlightAdTech(
-              siteAdTechs[epoch[app.inspectedCircleIndex].website][index]
+              siteAdTechs[epoch[app.prevVisitedCircleIndex].website][index]
             );
           }
-        }
-      );
+        });
+      });
     },
   };
 

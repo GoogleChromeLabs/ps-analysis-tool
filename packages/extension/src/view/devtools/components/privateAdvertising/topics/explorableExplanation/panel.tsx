@@ -244,7 +244,10 @@ const Panel = ({
 
   useEffect(() => {
     setTopicsTableData({});
-  }, [isInteractiveModeOn, setTopicsTableData]);
+    setActiveTab(0);
+    setEpochCompleted({});
+    setPAStorage('');
+  }, [isInteractiveModeOn, setActiveTab, setPAStorage, setTopicsTableData]);
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
