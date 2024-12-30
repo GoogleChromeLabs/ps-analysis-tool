@@ -541,6 +541,8 @@ export const interestGroupSketch = (p) => {
       app.speedMultiplier = props.speedMultiplier;
     }
 
+    app.isAutoExpand = props.autoExpand;
+
     if (
       props.expandedBubbleX &&
       props.expandedBubbleY &&
