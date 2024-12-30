@@ -30,6 +30,7 @@ import type { InterestGroups } from '@google-psat/common';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
 import InfoPanel from './infoPanel';
+import BidsPanel from '../bids/panel';
 
 export interface CurrentSiteData {
   type: 'advertiser' | 'publisher';
@@ -190,6 +191,17 @@ const ExplorableExplanation = () => {
           props: {
             auctionEvents: auctionsData as AuctionEventsType,
             customAdsAndBidders: customAdsAndBidders,
+          },
+        },
+      },
+      {
+        title: 'Bids',
+        content: {
+          Element: BidsPanel,
+          props: {
+            receivedBids: [],
+            noBids: {},
+            // Add props
           },
         },
       },
