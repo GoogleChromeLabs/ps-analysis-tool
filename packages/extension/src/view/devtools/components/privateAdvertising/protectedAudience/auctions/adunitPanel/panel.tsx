@@ -29,12 +29,12 @@ import Tile from './tile';
 
 interface PanelProps {
   adunit: string;
+  adsAndBidders: AdsAndBiddersType;
   isInspecting?: boolean;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
-  adsAndBidders: AdsAndBiddersType;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
-  setStorage: (data: string, index?: number) => void;
-  setActiveTab: (tab: number) => void;
+  setStorage?: (data: string, index?: number) => void;
+  setActiveTab?: (tab: number) => void;
 }
 
 const Panel = ({
@@ -84,13 +84,13 @@ const Panel = ({
           ...(currentAd?.bidders || []).map((bidder) => ({
             name: bidder,
             onClick: () => {
-              setStorage(
+              setStorage?.(
                 JSON.stringify({
                   bidder,
                   adUnitCode: adunit,
                 })
               );
-              setActiveTab(5);
+              setActiveTab?.(5);
             },
           })),
         ],

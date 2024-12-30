@@ -31,7 +31,8 @@ import type { AdsAndBiddersType } from '@google-psat/common';
  */
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionTable from '../table';
-import AdunitPanel from '../adunitPanel/panel';
+import AdunitPanel from '../adunitPanel';
+import AdunitSubPanel from '../adunitPanel/panel';
 
 interface AuctionPanelProps {
   auctionEvents: AuctionEventsType;
@@ -45,6 +46,8 @@ const AuctionPanel = ({
   customAdsAndBidders,
 }: AuctionPanelProps) => {
   useEffect(() => {
+    const Panel = customAdsAndBidders ? AdunitSubPanel : AdunitPanel;
+
     setSidebarData((prev) => {
       const newData = { ...prev } as SidebarItems;
       const data = newData['adunits']?.children ?? {};
@@ -112,10 +115,10 @@ const AuctionPanel = ({
         data[adUnit] = {
           title: adUnit,
           panel: {
-            Element: AdunitPanel,
+            Element: Panel,
             props: {
               adunit: adUnit,
-              // Add props
+              adsAndBidders: customAdsAndBidders,
             },
           },
           children: adUnitChildren,
