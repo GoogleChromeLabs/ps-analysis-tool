@@ -164,6 +164,11 @@ const drawDateTimeBranch = (x, y, branch) => {
   p.text(`${branch.date}`, x, y + 35);
   p.text(`${branch.time}`, x, y + 50);
 
+  if (app.isAutoExpand) {
+    p.pop();
+    return { x: x, y: y + 30 };
+  }
+
   p.image(
     p.expandIcon,
     x - EXPAND_ICON_SIZE / 2,
@@ -187,6 +192,10 @@ const drawBoxesBranch = (x, y, branch) => {
     y: y + 20,
     color: branch?.color || flow.colors.box.background,
   });
+
+  if (app.isAutoExpand) {
+    return { x: x, y: y + 30 };
+  }
 
   p.image(
     p.expandIcon,
