@@ -31,7 +31,7 @@ import type { AdsAndBiddersType } from '@google-psat/common';
  */
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionTable from '../table';
-import AdunitPanel from '../adunitPanel';
+import AdunitPanel from '../adunitPanel/panel';
 
 interface AuctionPanelProps {
   auctionEvents: AuctionEventsType;
@@ -115,7 +115,7 @@ const AuctionPanel = ({
             Element: AdunitPanel,
             props: {
               adunit: adUnit,
-              customAdsAndBidders: customAdsAndBidders,
+              // Add props
             },
           },
           children: adUnitChildren,

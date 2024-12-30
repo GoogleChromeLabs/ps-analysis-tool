@@ -19,6 +19,7 @@
  */
 import type { SidebarItems } from '@google-psat/design-system';
 import React, { useEffect, useState } from 'react';
+import type { AdsAndBiddersType } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -26,7 +27,6 @@ import React, { useEffect, useState } from 'react';
 import AdUnitsPanel from '../adUnits/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from '../auctions/container';
-import type { AdsAndBiddersType } from '@google-psat/common';
 
 interface AuctionsProps {
   auctionEvents: AuctionEventsType;
@@ -41,6 +41,9 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
         Element: AdUnitsPanel,
         props: {
           adsAndBidders: {},
+          receivedBids: [],
+          noBids: {},
+          // Add props
         },
       },
       children: {},

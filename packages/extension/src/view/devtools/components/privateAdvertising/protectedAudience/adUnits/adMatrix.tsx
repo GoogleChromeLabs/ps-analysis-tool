@@ -19,21 +19,19 @@
  */
 import React, { useMemo } from 'react';
 import { MatrixComponent } from '@google-psat/design-system';
+import type {
+  AdsAndBiddersType,
+  NoBidsType,
+  ReceivedBids,
+} from '@google-psat/common';
 
-/**
- * Internal dependencies.
- */
-import { useProtectedAudience } from '../../../../stateProviders';
+interface AdMatrixProps {
+  adsAndBidders: AdsAndBiddersType;
+  receivedBids: ReceivedBids[];
+  noBids: NoBidsType;
+}
 
-const AdMatrix = () => {
-  const { adsAndBidders, receivedBids, noBids } = useProtectedAudience(
-    ({ state }) => ({
-      adsAndBidders: state.adsAndBidders,
-      receivedBids: state.receivedBids,
-      noBids: state.noBids,
-    })
-  );
-
+const AdMatrix = ({ adsAndBidders, receivedBids, noBids }: AdMatrixProps) => {
   const biddersCount = useMemo(() => {
     const bidders = Object.values(adsAndBidders).reduce((acc, ad) => {
       if (ad.bidders) {
