@@ -481,23 +481,26 @@ export function topicsAnimation(
         });
       }
 
-      Object.values(app.smallCirclePositions).forEach((smallCircles) => {
-        smallCircles?.forEach((position, index) => {
-          const { x: smallCircleX, y: smallCircleY } = position;
-          const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
+      Object.entries(app.smallCirclePositions).forEach(
+        ([circleIndex, smallCircles]) => {
+          smallCircles?.forEach((position, index) => {
+            const { x: smallCircleX, y: smallCircleY } = position;
+            const smallCircleDiameter =
+              config.timeline.circleProps.diameter / 5;
 
-          if (
-            x > smallCircleX - smallCircleDiameter / 2 &&
-            x < smallCircleX + smallCircleDiameter / 2 &&
-            y > smallCircleY - smallCircleDiameter / 2 &&
-            y < smallCircleY + smallCircleDiameter / 2
-          ) {
-            setHighlightAdTech(
-              siteAdTechs[epoch[app.prevVisitedCircleIndex].website][index]
-            );
-          }
-        });
-      });
+            if (
+              x > smallCircleX - smallCircleDiameter / 2 &&
+              x < smallCircleX + smallCircleDiameter / 2 &&
+              y > smallCircleY - smallCircleDiameter / 2 &&
+              y < smallCircleY + smallCircleDiameter / 2
+            ) {
+              setHighlightAdTech(
+                siteAdTechs[epoch[Number(circleIndex)].website][index]
+              );
+            }
+          });
+        }
+      );
     },
   };
 
