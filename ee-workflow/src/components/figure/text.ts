@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating text figures.
@@ -36,8 +36,15 @@ export default class Text extends Figure {
    */
   size: number;
 
-  constructor(x: number, y: number, str: string, size?: number, fill?: string) {
-    super(x, y, fill);
+  constructor(
+    canvasRunnner: Main,
+    x: number,
+    y: number,
+    str: string,
+    size?: number,
+    fill?: string
+  ) {
+    super(canvasRunnner, x, y, fill);
     this.str = str;
     this.size = size || 16;
   }
@@ -69,8 +76,8 @@ export default class Text extends Figure {
 
   remove() {
     this.p5?.push();
-    this.p5?.fill(main.backgroundColor);
-    this.p5?.stroke(main.backgroundColor);
+    this.p5?.fill(this.canvasRunner.backgroundColor);
+    this.p5?.stroke(this.canvasRunner.backgroundColor);
     this.p5?.textSize(this.size);
     this.p5?.text(this.str, this.x, this.y);
     this.p5?.pop();
@@ -91,6 +98,6 @@ export default class Text extends Figure {
     this.size = size ?? this.size;
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
   }
 }

@@ -96,10 +96,17 @@ class Main {
   backgroundColor = 245;
 
   /**
-   * Creates an instance of Main and initializes the p5 instance.
+   * Whether to keep previous steps on the canvas.
    */
-  constructor() {
+  keepPrevious = true;
+
+  /**
+   * Creates an instance of Main and initializes the p5 instance.
+   * @param keepPrevious - Whether to keep previous figures on the canvas.
+   */
+  constructor(keepPrevious?: boolean) {
     this.p5 = new p5(this.init.bind(this));
+    this.keepPrevious = keepPrevious ?? true;
   }
 
   /**
@@ -117,8 +124,7 @@ class Main {
    * Sets up the canvas.
    */
   private setUp() {
-    this.p5.createCanvas(1600, 1600);
-    this.p5.background(this.backgroundColor);
+    this.p5.createCanvas(1600, 1600).position(0, 0);
   }
 
   /**
@@ -167,6 +173,10 @@ class Main {
    * @param useInstantQueue - Whether to use the instant queue.
    */
   private runner(useInstantQueue = false) {
+    if (this.pause) {
+      return;
+    }
+
     const queue = useInstantQueue ? this.instantQueue : this.stepsQueue;
     const groupQueue = useInstantQueue
       ? this.groupInstantQueue
@@ -219,6 +229,9 @@ class Main {
     }
 
     if (this.p5.frameCount % this.delay === 0) {
+      if (!this.keepPrevious) {
+        this.reDrawAll();
+      }
       this.runner();
     }
 
@@ -283,6 +296,12 @@ class Main {
    */
   togglePause() {
     this.pause = !this.pause;
+
+    if (this.pause) {
+      this.p5.noLoop();
+    } else {
+      this.p5.loop();
+    }
   }
 
   /**
@@ -312,7 +331,7 @@ class Main {
     }
 
     this.p5.clear();
-    this.p5.background(this.backgroundColor);
+    // this.p5.background(this.backgroundColor);
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
 
@@ -459,4 +478,4 @@ class Main {
   }
 }
 
-export default new Main();
+export default Main;

@@ -17,9 +17,8 @@
 /**
  * Internal dependencies.
  */
-import main from '../main';
 import Figure from './figure';
-import Line from './figure/line';
+import FigureFactory from './figure/figureFactory';
 import Group from './group';
 
 /**
@@ -50,18 +49,23 @@ export default class Animator {
   throw = false;
 
   /**
+   * Function to be executed when the animation ends.
+   */
+  sideEffectOnEnd: (() => void) | undefined;
+
+  /**
    * Counter for the number of animations created.
    */
   static animationCounter = 0;
 
-  constructor(objects: Array<Figure | Group>) {
+  constructor(objects: Array<Figure | Group>, figureFactory: FigureFactory) {
     Animator.animationCounter++;
     this.id =
       `animation-${Animator.animationCounter}` +
       Math.random().toString(36).slice(2, 9);
     this.objects = [
       ...objects,
-      new Line(0, 0, 0, 0, main.backgroundColor.toString()), // last dummy object acts as a placeholder for the end of the animation
+      figureFactory.line(0, 0, 0, 0), // last dummy object acts as a placeholder for the end of the animation
     ];
     this.objects.forEach((object) => object.setAid(this.id));
   }
@@ -72,14 +76,23 @@ export default class Animator {
    * @returns boolean indicating if the animation has finished
    */
   draw(): boolean {
-    this.objects[this.index].draw();
-    this.index++;
-
-    if (this.index === this.objects.length) {
+    if (this.index === this.objects.length - 1) {
       this.index = 0;
+      this.sideEffectOnEnd?.();
       return true;
     }
 
+    this.objects[this.index].draw();
+    this.index++;
+
     return false;
+  }
+
+  /**
+   * Sets a side effect to be executed when the animation ends
+   * @param sideEffect - function to be executed when the animation ends
+   */
+  setSideEffectOnEnd(sideEffect: () => void) {
+    this.sideEffectOnEnd = sideEffect;
   }
 }

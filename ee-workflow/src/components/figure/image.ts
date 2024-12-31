@@ -22,7 +22,7 @@ import p5 from 'p5';
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating image figures.
@@ -46,13 +46,14 @@ export default class Image extends Figure {
   height: number;
 
   constructor(
+    canvasRunner: Main,
     x: number,
     y: number,
     imageData: string,
     width: number,
     height: number
   ) {
-    super(x, y);
+    super(canvasRunner, x, y);
     this.image = <p5.Image>this.p5?.loadImage(imageData);
     this.width = width;
     this.height = height;
@@ -107,6 +108,6 @@ export default class Image extends Figure {
     this.image = image || this.image;
     this.width = width ?? this.width;
     this.height = height ?? this.height;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
   }
 }

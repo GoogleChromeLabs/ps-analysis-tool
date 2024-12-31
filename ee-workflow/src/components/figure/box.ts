@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating a box figure.
@@ -37,6 +37,7 @@ export default class Box extends Figure {
   height: number;
 
   constructor(
+    canvasRuuner: Main,
     x: number,
     y: number,
     width: number,
@@ -44,7 +45,7 @@ export default class Box extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    super(x, y, fill, stroke);
+    super(canvasRuuner, x, y, fill, stroke);
     this.width = width;
     this.height = height;
   }
@@ -60,7 +61,7 @@ export default class Box extends Figure {
   onHover() {
     this.savePreviousColors();
     this.fill = 'red'; // TODO: Discuss the function
-    main.addFigure(this, true);
+    this.canvasRunner.addFigure(this, true);
   }
 
   onLeave() {
@@ -72,7 +73,7 @@ export default class Box extends Figure {
     }
 
     this.reApplyPreviousColors();
-    main.addFigure(this, true);
+    this.canvasRunner.addFigure(this, true);
   }
 
   onClick() {
@@ -94,8 +95,8 @@ export default class Box extends Figure {
 
   remove() {
     this.p5?.push();
-    this.p5?.fill(main.backgroundColor);
-    this.p5?.stroke(main.backgroundColor);
+    this.p5?.fill(this.canvasRunner.backgroundColor);
+    this.p5?.stroke(this.canvasRunner.backgroundColor);
     this.p5?.rect(this.x, this.y, this.width, this.height);
     this.p5?.pop();
   }
@@ -115,6 +116,6 @@ export default class Box extends Figure {
     this.height = height ?? this.height;
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
   }
 }

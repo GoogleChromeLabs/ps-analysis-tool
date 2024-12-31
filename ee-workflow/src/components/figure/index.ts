@@ -21,7 +21,7 @@ import p5 from 'p5';
 /**
  * Internal dependencies.
  */
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Abstract class for creating figures.
@@ -32,6 +32,11 @@ export default abstract class Figure {
    * p5 instance.
    */
   p5: p5 | null = null;
+
+  /**
+   * Main class object that runs the canvas.
+   */
+  canvasRunner: Main;
 
   /**
    * Unique id of the figure.
@@ -89,11 +94,18 @@ export default abstract class Figure {
    */
   static objectCount = 0;
 
-  constructor(x: number, y: number, fill?: string, stroke?: string) {
+  constructor(
+    canvasRunner: Main,
+    x: number,
+    y: number,
+    fill?: string,
+    stroke?: string
+  ) {
     Figure.objectCount++;
     this.id =
       `object-${Figure.objectCount}` + Math.random().toString(36).slice(2, 9);
-    this.p5 = main.getP5Instance();
+    this.canvasRunner = canvasRunner;
+    this.p5 = this.canvasRunner.getP5Instance();
     this.x = x;
     this.y = y;
     this.fill = fill || 'black';
