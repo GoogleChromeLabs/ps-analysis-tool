@@ -18,7 +18,7 @@
  * External Dependencies
  */
 import React from 'react';
-import { ContentPanel, LandingPage } from '@google-psat/design-system';
+import { LandingPageContainer } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 const content = [
@@ -26,37 +26,41 @@ const content = [
     title: () => I18n.getMessage('ipProtection'),
     description: () => I18n.getMessage('ipProtectionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('bounceTrackingMitigations'),
     description: () => I18n.getMessage('bounceTrackingMitigationsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('userAgentReduction'),
     description: () => I18n.getMessage('userAgentReductionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('privateStateTokens'),
     description: () => I18n.getMessage('privateStateTokensDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
 ];
 
 const AntiCovertTracking = () => {
   return (
-    <LandingPage
+    <LandingPageContainer
       title={I18n.getMessage('trackingProtection')}
       extraClasses="min-h-[78vh] w-full"
-      contentPanel={
-        <ContentPanel
-          title={I18n.getMessage('antiCovertTrackingDescription')}
-          content={content}
-          counterStyles="bg-yellow-500"
-          titleStyles="text-yellow-500"
-        />
-      }
+      contentPanelTitle={I18n.getMessage('antiCovertTrackingDescription')}
+      content={content}
+      counterStyles="bg-yellow-500"
+      titleStyles="text-yellow-500"
     />
   );
 };
