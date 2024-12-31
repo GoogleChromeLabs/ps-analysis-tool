@@ -85,7 +85,7 @@ function closePlayer() {
   const event = new CustomEvent('webStoriesLightBoxEvent', { detail: data });
   window.parent.document.dispatchEvent(event);
 
-  player.pause();
+  stateObject.player.pause();
 
   document.body.classList.remove('lightbox-open');
   stateObject.lightboxEl.classList.add('closed');
@@ -128,7 +128,7 @@ function initializeCards() {
 
     stateObject.cards.forEach((card) => {
       card.addEventListener('click', () => {
-        player.show(card.dataset.storyUrl, null, { animate: false });
+        stateObject.player.show(card.dataset.storyUrl, null, { animate: false });
         const data = { storyOpened: true };
         const event = new CustomEvent('webStoriesLightBoxEvent', {
           detail: data,
