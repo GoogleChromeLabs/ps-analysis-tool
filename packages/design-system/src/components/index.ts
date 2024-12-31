@@ -33,6 +33,7 @@ export { default as CookieDetails } from './cookieDetails';
 export { default as Details } from './cookieDetails/details';
 export { default as CookieTable } from './cookieTable';
 export { default as LandingPageContainer } from './landingPage';
+export { default as LandingPage } from './landingPage/LandingPage';
 export { default as InfoCard } from './landingPage/infoCard';
 export { default as ContentPanel } from './landingPage/contentPanel';
 export * from './landingPage/infoCard/fetchPSInfo';
