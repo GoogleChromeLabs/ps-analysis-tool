@@ -19,7 +19,6 @@
  */
 import React from 'react';
 import { useTabs } from '@google-psat/design-system';
-import type { AdsAndBiddersType } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -29,10 +28,9 @@ import Panel from './panel';
 
 interface AdunitPanelProps {
   adunit: string;
-  customAdsAndBidders?: AdsAndBiddersType;
 }
 
-const AdunitPanel = ({ adunit, customAdsAndBidders }: AdunitPanelProps) => {
+const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
   const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
@@ -55,7 +53,7 @@ const AdunitPanel = ({ adunit, customAdsAndBidders }: AdunitPanelProps) => {
       adunit={adunit}
       isInspecting={isInspecting}
       setIsInspecting={setIsInspecting}
-      adsAndBidders={customAdsAndBidders || adsAndBidders}
+      adsAndBidders={adsAndBidders}
       setSelectedAdUnit={setSelectedAdUnit}
       setStorage={setStorage}
       setActiveTab={setActiveTab}
