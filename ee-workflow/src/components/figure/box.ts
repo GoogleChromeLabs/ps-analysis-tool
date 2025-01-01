@@ -29,12 +29,12 @@ export default class Box extends Figure {
   /**
    * Width of the box.
    */
-  width: number;
+  private width: number;
 
   /**
    * Height of the box.
    */
-  height: number;
+  private height: number;
 
   constructor(
     canvasRuuner: Main,
@@ -93,14 +93,6 @@ export default class Box extends Figure {
     );
   }
 
-  remove() {
-    this.p5?.push();
-    this.p5?.fill(this.canvasRunner.backgroundColor);
-    this.p5?.stroke(this.canvasRunner.backgroundColor);
-    this.p5?.rect(this.x, this.y, this.width, this.height);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -109,7 +101,6 @@ export default class Box extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.width = width ?? this.width;

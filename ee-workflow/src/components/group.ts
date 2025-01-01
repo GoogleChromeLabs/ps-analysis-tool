@@ -26,23 +26,23 @@ export default class Group {
   /**
    * Figures in the group.
    */
-  figures: Figure[];
+  private figures: Figure[];
 
   /**
    * Unique id of the group.
    */
-  id: string;
+  private id: string;
 
   /**
    * Animator id of the group if it belongs to an animator.
    */
-  aid = '';
+  private aid = '';
 
   /**
    * Property to check if the group should be saved in groupSnapshot.
    * If true, the group will NOT be saved in groupSnapshot.
    */
-  throw = false;
+  private throw = false;
 
   /**
    * Counter for the number of groups created.
@@ -94,11 +94,62 @@ export default class Group {
   }
 
   /**
+   * Method to get the id of the group.
+   * @returns The id of the group.
+   */
+  getId() {
+    return this.id;
+  }
+
+  /**
+   * Method to get the animator id of the group.
+   * @returns The animator id of the group.
+   */
+  getAid() {
+    return this.aid;
+  }
+
+  /**
    * Method to set the animator id to the group and its figures.
    * @param aid - The animator id of the group.
    */
   setAid(aid: string) {
     this.aid = aid;
     this.figures.forEach((figure) => figure.setAid(aid));
+  }
+
+  /**
+   * Method to get throw property of the group.
+   * @returns The throw property of the group.
+   */
+  getThrow() {
+    return this.throw;
+  }
+
+  /**
+   * Method to set throw property of the group.
+   * @param throwFlag - The throw property of the group.
+   */
+  setThrow(throwFlag: boolean) {
+    this.throw = throwFlag;
+  }
+
+  /**
+   * Method to get the figures in the group.
+   * @returns The figures in the group.
+   */
+  getFigures() {
+    return this.figures;
+  }
+
+  /**
+   * Method to remove a figure from the group.
+   * @param figure - The figure to remove from the group.
+   */
+  removeFigure(figure: Figure) {
+    const index = this.figures.indexOf(figure);
+    if (index > -1) {
+      this.figures.splice(index, 1);
+    }
   }
 }

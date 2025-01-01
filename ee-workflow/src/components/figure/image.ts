@@ -33,17 +33,17 @@ export default class Image extends Figure {
   /**
    * Image to be displayed.
    */
-  image: p5.Image;
+  private image: p5.Image;
 
   /**
    * Width of the image.
    */
-  width: number;
+  private width: number;
 
   /**
    * Height of the image.
    */
-  height: number;
+  private height: number;
 
   constructor(
     canvasRunner: Main,
@@ -82,19 +82,6 @@ export default class Image extends Figure {
     return false;
   }
 
-  remove() {
-    const whiteImage = this.p5?.createImage(
-      this.width,
-      this.height
-    ) as p5.Image;
-
-    whiteImage.set(this.x, this.y, this.p5?.color(255) as p5.Color);
-
-    this.p5?.push();
-    this.p5?.image(whiteImage, this.x, this.y, this.width, this.height);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -102,7 +89,6 @@ export default class Image extends Figure {
     width?: number,
     height?: number
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.image = image || this.image;

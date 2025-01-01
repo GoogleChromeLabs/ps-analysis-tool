@@ -29,7 +29,7 @@ export default class Circle extends Figure {
   /**
    * Diameter of the circle.
    */
-  diameter: number;
+  private diameter: number;
 
   constructor(
     canvasRunner: Main,
@@ -84,14 +84,6 @@ export default class Circle extends Figure {
     );
   }
 
-  remove() {
-    this.p5?.push();
-    this.p5?.fill(this.canvasRunner.backgroundColor);
-    this.p5?.stroke(this.canvasRunner.backgroundColor);
-    this.p5?.circle(this.x, this.y, this.diameter + 1);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -99,7 +91,6 @@ export default class Circle extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.diameter = diameter ?? this.diameter;

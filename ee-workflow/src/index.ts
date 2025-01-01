@@ -23,7 +23,7 @@ const mainCanvas = new Main();
 const mainFF = new FigureFactory(mainCanvas);
 
 const IGCanvas = new Main(false);
-IGCanvas.delay = 1;
+IGCanvas.setDelay(1);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 

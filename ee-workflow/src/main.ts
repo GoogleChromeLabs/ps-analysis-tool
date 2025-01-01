@@ -33,80 +33,74 @@ class Main {
   /**
    * p5 instance for rendering.
    */
-  p5: p5;
+  private p5: p5;
 
   /**
    * Queue for steps to be processed.
    */
-  stepsQueue: Figure[] = [];
+  private stepsQueue: Figure[] = [];
 
   /**
    * Queue for group steps to be processed.
    */
-  groupStepsQueue: Group[] = [];
+  private groupStepsQueue: Group[] = [];
 
   /**
    * Queue for animator steps to be processed.
    */
-  animatorStepsQueue: Animator[] = [];
+  private animatorStepsQueue: Animator[] = [];
 
   /**
    * Queue for instant steps to be processed.
    */
-  instantQueue: Figure[] = [];
+  private instantQueue: Figure[] = [];
 
   /**
    * Queue for instant group steps to be processed.
    */
-  groupInstantQueue: Group[] = [];
+  private groupInstantQueue: Group[] = [];
 
   /**
    * Queue for instant animator steps to be processed.
    */
-  animatorInstantQueue: Animator[] = [];
+  private animatorInstantQueue: Animator[] = [];
 
   /**
    * Delay between each frame in milliseconds.
    */
-  delay = 50;
+  private delay = 50;
 
   /**
    * Flag to pause the drawing process.
    */
-  pause = false;
+  private pause = false;
 
   /**
    * Snapshot of figures that have been drawn.
    */
-  snapshot: Figure[] = [];
+  private snapshot: Figure[] = [];
 
   /**
    * Snapshot of groups that have been drawn.
    */
-  groupSnapshot: Group[] = [];
+  private groupSnapshot: Group[] = [];
 
   /**
    * Snapshot of animators that have been drawn.
    */
-  animatorSnapshot: Animator[] = [];
+  private animatorSnapshot: Animator[] = [];
 
   /**
    * Background color of the canvas.
    */
-  backgroundColor = 245;
+  private backgroundColor = 255;
 
   /**
-   * Whether to keep previous steps on the canvas.
+   * Main constructor.
+   * @param clearOnEachStep - Whether to clear the canvas on each step (default: true).
    */
-  keepPrevious = true;
-
-  /**
-   * Creates an instance of Main and initializes the p5 instance.
-   * @param keepPrevious - Whether to keep previous figures on the canvas.
-   */
-  constructor(keepPrevious?: boolean) {
+  constructor(private clearOnEachStep: boolean = true) {
     this.p5 = new p5(this.init.bind(this));
-    this.keepPrevious = keepPrevious ?? true;
   }
 
   /**
@@ -133,7 +127,7 @@ class Main {
    */
   private saveToSnapshot(object: Figure) {
     this.snapshot.push(object);
-    object.throw = true;
+    object.setThrow(true);
   }
 
   /**
@@ -154,16 +148,16 @@ class Main {
         group.draw();
       }
 
-      let toRemoveCount = group.figures.length - 1;
+      let toRemoveCount = group.getFigures().length - 1;
       while (toRemoveCount > 0) {
         queue.shift();
         toRemoveCount--;
       }
 
-      if (!group.throw) {
-        group.figures.forEach((object) => this.saveToSnapshot(object));
+      if (!group.getThrow()) {
+        group.getFigures().forEach((object) => this.saveToSnapshot(object));
         this.groupSnapshot.push(group);
-        group.throw = true;
+        group.setThrow(true);
       }
     }
   }
@@ -188,16 +182,16 @@ class Main {
     if (queue.length > 0) {
       const firstObject = <Figure>queue.shift();
 
-      if (firstObject.aid) {
+      if (firstObject.getAid()) {
         const animator = animatorQueue[0];
 
         if (animator) {
           const isDone = animator.draw();
 
-          if (firstObject.gid) {
+          if (firstObject.getGid()) {
             this.processGroup(queue, groupQueue, false);
           } else {
-            if (!firstObject.throw) {
+            if (!firstObject.getThrow()) {
               this.saveToSnapshot(firstObject);
             }
           }
@@ -209,11 +203,11 @@ class Main {
             this.reDrawAll();
           }
         }
-      } else if (firstObject.gid) {
+      } else if (firstObject.getGid()) {
         this.processGroup(queue, groupQueue);
       } else {
         firstObject.draw();
-        if (!firstObject.throw) {
+        if (!firstObject.getThrow()) {
           this.saveToSnapshot(firstObject);
         }
       }
@@ -229,8 +223,8 @@ class Main {
     }
 
     if (this.p5.frameCount % this.delay === 0) {
-      if (!this.keepPrevious) {
-        this.reDrawAll();
+      if (!this.clearOnEachStep) {
+        this.p5.clear();
       }
       this.runner();
     }
@@ -246,11 +240,13 @@ class Main {
    * @returns The group the figure belongs to, or undefined.
    */
   private isGrouped(object: Figure): Group | undefined {
-    if (!object.gid) {
+    if (!object.getGid()) {
       return undefined;
     }
 
-    return this.groupSnapshot.find((group) => group.id === object.gid);
+    return this.groupSnapshot.find(
+      (group) => group.getId() === object.getGid()
+    );
   }
 
   /**
@@ -305,6 +301,46 @@ class Main {
   }
 
   /**
+   * Checks if the drawing process is paused.
+   * @returns Whether the drawing process is paused.
+   */
+  isPaused() {
+    return this.pause;
+  }
+
+  /**
+   * Gets the delay between each frame.
+   * @returns The delay.
+   */
+  getDelay() {
+    return this.delay;
+  }
+
+  /**
+   * Sets the delay between each frame.
+   * @param delay - The delay to set.
+   */
+  setDelay(delay: number) {
+    this.delay = delay;
+  }
+
+  /**
+   * Gets the background color of the canvas.
+   * @returns - The background color.
+   */
+  getBackgroundColor() {
+    return this.backgroundColor;
+  }
+
+  /**
+   * Sets the background color of the canvas.
+   * @param color - The color to set.
+   */
+  setBackgroundColor(color: number) {
+    this.backgroundColor = color;
+  }
+
+  /**
    * Resets the queues and redraws all figures on the canvas.
    */
   resetAndReDrawAll() {
@@ -335,33 +371,37 @@ class Main {
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
 
-      if (figure.aid) {
-        const animator = this.animatorSnapshot.find((a) => a.id === figure.aid);
+      if (figure.getAid()) {
+        const animator = this.animatorSnapshot.find(
+          (a) => a.getId() === figure.getAid()
+        );
 
-        if (animator && animatorIdToDraw === animator.id) {
+        if (animator && animatorIdToDraw === animator.getId()) {
           this.addAnimator(animator, true);
         }
 
         const toRemoveCount =
-          animator?.objects.reduce((acc, object) => {
+          animator?.getObjects().reduce((acc, object) => {
             if (object instanceof Figure) {
               acc++;
             } else {
-              acc += object.figures.length;
+              acc += object.getFigures().length;
             }
 
             return acc;
           }, 0) || 1;
 
         i += toRemoveCount - 1;
-      } else if (figure.gid) {
-        const group = this.groupSnapshot.find((g) => g.id === figure.gid);
+      } else if (figure.getGid()) {
+        const group = this.groupSnapshot.find(
+          (g) => g.getId() === figure.getGid()
+        );
 
         if (group) {
           this.addGroup(group, true);
         }
 
-        const toRemoveCount = (group?.figures.length || 1) - 1;
+        const toRemoveCount = (group?.getFigures().length || 1) - 1;
         i += toRemoveCount;
       } else {
         this.addFigure(figure, true);
@@ -390,10 +430,10 @@ class Main {
   addGroup(group: Group, instant = false) {
     if (instant) {
       this.groupInstantQueue.push(group);
-      group.figures.forEach((figure) => this.addFigure(figure, instant));
+      group.getFigures().forEach((figure) => this.addFigure(figure, instant));
     } else {
       this.groupStepsQueue.push(group);
-      group.figures.forEach((figure) => this.addFigure(figure, instant));
+      group.getFigures().forEach((figure) => this.addFigure(figure, instant));
     }
   }
 
@@ -405,7 +445,7 @@ class Main {
   addAnimator(animator: Animator, instant = false) {
     if (instant) {
       this.animatorInstantQueue.push(animator);
-      animator.objects.forEach((object) => {
+      animator.getObjects().forEach((object) => {
         if (object instanceof Figure) {
           this.addFigure(object, instant);
         } else {
@@ -414,7 +454,7 @@ class Main {
       });
     } else {
       this.animatorStepsQueue.push(animator);
-      animator.objects.forEach((object) => {
+      animator.getObjects().forEach((object) => {
         if (object instanceof Figure) {
           this.addFigure(object, instant);
         } else {
@@ -429,7 +469,22 @@ class Main {
    * @param figure - The figure to remove.
    */
   removeFigure(figure: Figure) {
-    this.snapshot = this.snapshot.filter((f) => f.id !== figure.id);
+    this.snapshot = this.snapshot.filter((f) => f.getId() !== figure.getId());
+
+    if (figure.getAid()) {
+      const animator = this.animatorSnapshot.find(
+        (a) => a.getId() !== figure.getAid()
+      );
+      animator?.removeObject(figure);
+    }
+
+    if (figure.getGid()) {
+      const group = this.groupSnapshot.find(
+        (g) => g.getId() === figure.getGid()
+      );
+      group?.removeFigure(figure);
+    }
+
     this.reDrawAll();
   }
 
@@ -441,7 +496,7 @@ class Main {
     let toRemove = <Group | null>null;
 
     this.groupSnapshot = this.groupSnapshot.filter((g) => {
-      if (g.id === group.id) {
+      if (g.getId() === group.getId()) {
         toRemove = g;
         return false;
       }
@@ -449,7 +504,10 @@ class Main {
       return true;
     });
 
-    toRemove?.figures.forEach((g) => this.removeFigure(g));
+    toRemove?.getFigures().forEach((figure) => {
+      figure.setGid('');
+      this.removeFigure(figure);
+    });
   }
 
   /**
@@ -460,7 +518,7 @@ class Main {
     let toRemove = <Animator | null>null;
 
     this.animatorSnapshot = this.animatorSnapshot.filter((a) => {
-      if (a.id === animator.id) {
+      if (a.getId() === animator.getId()) {
         toRemove = a;
         return false;
       }
@@ -468,7 +526,9 @@ class Main {
       return true;
     });
 
-    toRemove?.objects.forEach((object) => {
+    toRemove?.getObjects().forEach((object) => {
+      object.setAid('');
+
       if (object instanceof Figure) {
         this.removeFigure(object);
       } else {

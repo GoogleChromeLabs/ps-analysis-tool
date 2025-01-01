@@ -31,85 +31,64 @@ export default abstract class Figure {
   /**
    * p5 instance.
    */
-  p5: p5 | null = null;
-
-  /**
-   * Main class object that runs the canvas.
-   */
-  canvasRunner: Main;
+  protected p5: p5 | null = null;
 
   /**
    * Unique id of the figure.
    */
-  id = '';
+  protected id = '';
 
   /**
    * Group id of the figure if it belongs to a group.
    */
-  gid = '';
+  protected gid = '';
 
   /**
    * Animator id of the figure if it belongs to an animator.
    */
-  aid = '';
-
-  /**
-   * x coordinate of the figure.
-   */
-  x = 0;
-
-  /**
-   * y coordinate of the figure.
-   */
-  y = 0;
-
-  /**
-   * Fill color of the figure.
-   */
-  fill = 'black';
-
-  /**
-   * Stroke color of the figure.
-   */
-  stroke = 'black';
+  protected aid = '';
 
   /**
    * Previous fill color of the figure to be used when the figure is unhovered.
    */
-  previousFill = '';
+  protected previousFill = '';
 
   /**
    * Previous stroke color of the figure to be used when the figure is unhovered.
    */
-  previousStroke = '';
+  protected previousStroke = '';
 
   /**
    * Property to determine if the object should be added to the snapshot.
    * If true, the object will not be added to the snapshot.
    */
-  throw?: boolean;
+  protected throw = false;
 
   /**
    * The number of objects created.
    */
   static objectCount = 0;
 
+  /**
+   * Constructor for the figure.
+   * @param canvasRunner - The canvas runner instance.
+   * @param x - The x coordinate of the figure.
+   * @param y - The y coordinate of the figure.
+   * @param fill - The fill color of the figure.
+   * @param stroke - The stroke color of the figure.
+   */
   constructor(
-    canvasRunner: Main,
-    x: number,
-    y: number,
-    fill?: string,
-    stroke?: string
+    protected canvasRunner: Main,
+    protected x: number,
+    protected y: number,
+    protected fill: string = 'black',
+    protected stroke: string = 'black'
   ) {
     Figure.objectCount++;
     this.id =
       `object-${Figure.objectCount}` + Math.random().toString(36).slice(2, 9);
     this.canvasRunner = canvasRunner;
     this.p5 = this.canvasRunner.getP5Instance();
-    this.x = x;
-    this.y = y;
-    this.fill = fill || 'black';
-    this.stroke = stroke || 'black';
     this.previousFill = this.fill;
     this.previousStroke = this.stroke;
   }
@@ -142,13 +121,31 @@ export default abstract class Figure {
   /**
    * Method to remove the figure.
    */
-  abstract remove(): void;
+  remove() {
+    this.canvasRunner.removeFigure(this);
+  }
 
   /**
    * Method to redraw the figure.
    * @param params - The parameters to redraw the figure with.
    */
   abstract reDraw(...params: Array<any>): void;
+
+  /**
+   * Get the unique id of the figure.
+   * @returns The unique id of the figure.
+   */
+  getId(): string {
+    return this.id;
+  }
+
+  /**
+   * Get the group id of the figure.
+   * @returns The group id of the figure.
+   */
+  getGid(): string {
+    return this.gid;
+  }
 
   /**
    * Set the group id of the figure.
@@ -159,11 +156,36 @@ export default abstract class Figure {
   }
 
   /**
+   * Get the animator id of the figure.
+   * @returns The animator id of the
+   */
+  getAid(): string {
+    return this.aid;
+  }
+
+  /**
    * Set the animator id of the figure.
    * @param aid - The animator id to set.
    */
   setAid(aid: string) {
     this.aid = aid;
+  }
+
+  /**
+   * Get the throw flag.
+   * @returns true if the figure will NOT be saved in snapshot.
+   */
+  getThrow(): boolean {
+    return this.throw;
+  }
+
+  /**
+   * Set the throw flag to true.
+   * If true, the figure will NOT be saved in snapshot.
+   * @param throwFlag - boolean indicating if the figure should be saved in snapshot.
+   */
+  setThrow(throwFlag: boolean) {
+    this.throw = throwFlag;
   }
 
   /**

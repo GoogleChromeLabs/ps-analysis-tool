@@ -28,17 +28,17 @@ export default class Line extends Figure {
   /**
    * End x coordinate of the line.
    */
-  endX: number;
+  private endX: number;
 
   /**
    * End y coordinate of the line.
    */
-  endY: number;
+  private endY: number;
 
   /**
    * Whether the line has an arrow at the end.
    */
-  hasArrow: boolean;
+  private hasArrow: boolean;
 
   constructor(
     canvasRunner: Main,
@@ -101,13 +101,6 @@ export default class Line extends Figure {
     return false; // TODO: Implement if line hover is needed
   }
 
-  remove() {
-    this.p5?.push();
-    this.p5?.stroke(this.canvasRunner.backgroundColor);
-    this.p5?.line(this.x, this.y, this.endX, this.endY);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -115,7 +108,6 @@ export default class Line extends Figure {
     endY?: number,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.endX = endX ?? this.endX;

@@ -29,29 +29,29 @@ export default class Animator {
   /**
    * Unique id of the animator.
    */
-  id: string;
+  private id: string;
 
   /**
    * Array of objects to be animated. Can be figures or groups.
    * The last object in the array is a dummy object that acts as a placeholder for the end of the animation.
    */
-  objects: Array<Figure | Group> = [];
+  private objects: Array<Figure | Group> = [];
 
   /**
    * Index of the current object being animated.
    */
-  index = 0;
+  private index = 0;
 
   /**
    * Flag to indicate if the animation should be saved in animatorSnapshot.
    * If true, the animation will NOT be saved in animatorSnapshot.
    */
-  throw = false;
+  private throw = false;
 
   /**
    * Function to be executed when the animation ends.
    */
-  sideEffectOnEnd: (() => void) | undefined;
+  private sideEffectOnEnd: (() => void) | undefined;
 
   /**
    * Counter for the number of animations created.
@@ -94,5 +94,41 @@ export default class Animator {
    */
   setSideEffectOnEnd(sideEffect: () => void) {
     this.sideEffectOnEnd = sideEffect;
+  }
+
+  /**
+   * Gets the unique id of the animator.
+   * @returns unique id of the animator
+   */
+  getId(): string {
+    return this.id;
+  }
+
+  /**
+   * Gets the throw flag.
+   * @returns true if the animation will NOT be saved in animatorSnapshot.
+   */
+  getThrow(): boolean {
+    return this.throw;
+  }
+
+  /**
+   * Sets the throw flag to true.
+   * If true, the animation will NOT be saved in animatorSnapshot.
+   * @param throwFlag - boolean indicating if the animation should be saved in animatorSnapshot
+   */
+  setThrow(throwFlag: boolean) {
+    this.throw = throwFlag;
+  }
+
+  getObjects(): Array<Figure | Group> {
+    return this.objects;
+  }
+
+  removeObject(object: Figure | Group) {
+    const index = this.objects.indexOf(object);
+    if (index > -1) {
+      this.objects.splice(index, 1);
+    }
   }
 }

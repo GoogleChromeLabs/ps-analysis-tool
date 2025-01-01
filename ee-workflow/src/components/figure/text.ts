@@ -29,12 +29,12 @@ export default class Text extends Figure {
   /**
    * Text to be displayed.
    */
-  str: string;
+  private str: string;
 
   /**
    * Font size of the text.
    */
-  size: number;
+  private size: number;
 
   constructor(
     canvasRunnner: Main,
@@ -74,15 +74,6 @@ export default class Text extends Figure {
     return false;
   }
 
-  remove() {
-    this.p5?.push();
-    this.p5?.fill(this.canvasRunner.backgroundColor);
-    this.p5?.stroke(this.canvasRunner.backgroundColor);
-    this.p5?.textSize(this.size);
-    this.p5?.text(this.str, this.x, this.y);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -91,7 +82,6 @@ export default class Text extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.str = str || this.str;
