@@ -29,15 +29,15 @@ import type {
  * Internal dependencies
  */
 import Tile from './tile';
-import PresentationalMatrix from './presentationalMatrix';
 import type { AdUnitLiteral } from '../../explorableExplanation';
+import MatrixHOC from './matrixContainer';
 
 interface PanelProps {
   adunit: string;
   adsAndBidders: AdsAndBiddersType;
   isInspecting?: boolean;
-  receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
-  noBids: NoBidsType;
+  receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
+  noBids?: NoBidsType;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   setStorage?: (data: string, index?: number) => void;
@@ -126,10 +126,10 @@ const Panel = ({
 
   return (
     <>
-      <PresentationalMatrix
+      <MatrixHOC
         adUnitCode={adunit}
         adsAndBidders={adsAndBidders}
-        receivedBids={receivedBids[adunit as AdUnitLiteral]}
+        receivedBids={receivedBids?.[adunit as AdUnitLiteral]}
         noBids={noBids}
       />
       <div className="p-4 flex gap-4 flex-wrap">
