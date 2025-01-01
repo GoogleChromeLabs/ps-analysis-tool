@@ -101,6 +101,7 @@ auction.setUp = (index) => {
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
     },
@@ -201,6 +202,7 @@ auction.setUpfirstSSPTagFlow = () => {
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
     },
@@ -226,6 +228,7 @@ auction.setUpfirstSSPTagFlow = () => {
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
       color: colors.box.noData,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
     },
@@ -251,6 +254,7 @@ auction.setUpfirstSSPTagFlow = () => {
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
       color: colors.box.noData,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
     },
@@ -296,6 +300,7 @@ auction.setUpRunadAuction = () => {
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
     },
+    delay: 1000,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
     },
@@ -370,6 +375,7 @@ auction.setUpRunadAuction = () => {
           y: () => app.auction.nextTipCoordinates?.y - box.height + 15,
           color,
         },
+        delay: 1000,
         callBack: (returnValue) => {
           app.auction.nextTipCoordinates = returnValue.down;
         },
@@ -415,6 +421,7 @@ auction.setUpRunadAuction = () => {
           y: () => app.auction.nextTipCoordinates?.y,
           color,
         },
+        delay: 1000,
         callBack: (returnValue) => {
           app.auction.nextTipCoordinates = returnValue.down;
         },
@@ -464,6 +471,7 @@ auction.setUpRunadAuction = () => {
         y: () => app.auction.nextTipCoordinates?.y + 10,
         color,
       },
+      delay: 1000,
       callBack: (returnValue) => {
         app.auction.nextTipCoordinates = returnValue.down;
       },
@@ -487,11 +495,10 @@ auction.draw = (index) => {
 
   for (const step of steps) {
     app.promiseQueue.push(async (cb) => {
-      const { component, props, callBack } = step;
+      const { component, props, callBack, delay = 0 } = step;
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
-      const delay = component === Box ? 1000 : 0;
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (props?.showBarrageAnimation) {
           await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
@@ -500,7 +507,7 @@ auction.draw = (index) => {
             return;
           }
 
-          await utils.delay(500); // eslint-disable-line no-await-in-loop
+          await utils.delay(500 / app.speedMultiplier); // eslint-disable-line no-await-in-loop
 
           utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
         }
@@ -528,7 +535,8 @@ auction.draw = (index) => {
         if (app.cancelPromise) {
           return;
         }
-        await utils.delay(delay); // eslint-disable-line no-await-in-loop
+
+        await utils.delay(delay / app.speedMultiplier); // eslint-disable-line no-await-in-loop
       }
       cb(null, true);
     });
