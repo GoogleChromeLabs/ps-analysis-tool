@@ -53,15 +53,20 @@ const FlowExpander = async ({ nextTipCoordinates }) => {
   });
 
   nextTipCoordinates.forEach(({ x, y }) => {
-    if (endpoint.x !== x) {
-      p.push();
-      p.noStroke();
-      p.circle(x, y + 27, 25);
-      p.pop();
+    p.push();
+    p.noStroke();
+    p.circle(x, y + 27, 25);
+    p.pop();
 
+    if (endpoint.x !== x) {
       p.push();
       p.tint(255, 90);
       p.image(p.expandIcon, x - iconRadius, y + 17, iconSize, iconSize);
+      p.pop();
+    } else {
+      p.push();
+      p.rotate(p.TWO_PI / 2, [1, 1, 0]);
+      p.image(p.expandIcon, -x - iconRadius, -y - 35, iconSize, iconSize);
       p.pop();
     }
   });
