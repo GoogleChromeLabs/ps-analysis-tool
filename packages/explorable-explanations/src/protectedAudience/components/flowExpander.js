@@ -22,10 +22,11 @@ import { isInsideCircle } from '../utils';
 
 const FlowExpander = async ({ nextTipCoordinates }) => {
   const p = app.p;
+  const igp = app.igp;
   const iconSize = config.timeline.expandIconSize;
   const iconRadius = iconSize / 2;
 
-  p.mouseMoved = ({ offsetX, offsetY }) => {
+  igp.mouseMoved = ({ offsetX, offsetY }) => {
     let hoveringOverSomething = false;
     nextTipCoordinates.forEach(({ x, y }) => {
       if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
@@ -40,11 +41,11 @@ const FlowExpander = async ({ nextTipCoordinates }) => {
   };
 
   const endpoint = await new Promise((resolve) => {
-    p.mouseClicked = ({ offsetX, offsetY }) => {
+    igp.mouseClicked = ({ offsetX, offsetY }) => {
       nextTipCoordinates.forEach(({ x, y }) => {
         if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
-          p.mouseClicked(false);
-          p.mouseMoved(false);
+          igp.mouseClicked(false);
+          igp.mouseMoved(false);
           resolve({ x, y });
           return;
         }

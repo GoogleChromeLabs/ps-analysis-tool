@@ -335,7 +335,7 @@ timeline.mouseClickedInInteractiveModeCallback = () => {
     user,
   } = config.timeline;
 
-  let clickedIndex;
+  let clickedIndex = -1;
 
   circlePositions.forEach(({ x, y }, index) => {
     if (isInsideCircle(mouseX, mouseY, x, y, diameter / 2)) {
@@ -351,8 +351,7 @@ timeline.mouseClickedInInteractiveModeCallback = () => {
       clickedIndex = index;
     }
   });
-
-  if (clickedIndex && !app.isRevisitingNodeInInteractiveMode) {
+  if (clickedIndex > -1 && !app.isRevisitingNodeInInteractiveMode) {
     app.promiseQueue.end();
     flow.clearBelowTimelineCircles();
 
@@ -460,7 +459,7 @@ timeline.mouseClickedInInteractiveModeCallback = () => {
     });
 
     app.promiseQueue.start();
-  } else if (clickedIndex && app.isRevisitingNodeInInteractiveMode) {
+  } else if (clickedIndex > -1 && app.isRevisitingNodeInInteractiveMode) {
     app.promiseQueue.end();
     flow.clearBelowTimelineCircles();
 
