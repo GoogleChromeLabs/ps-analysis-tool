@@ -41,7 +41,7 @@ import type { AdUnitLiteral } from '../../explorableExplanation';
 interface AuctionPanelProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
   };
   customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -129,7 +129,7 @@ const AuctionPanel = ({
             props: {
               adunit: adUnit,
               adsAndBidders: customAdsAndBidders,
-              receivedBids: auctionEvents.receivedBids,
+              receivedBids: auctionEvents?.receivedBids ?? {},
               noBids: {},
             },
           },

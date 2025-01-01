@@ -34,7 +34,7 @@ import type { AdUnitLiteral } from '../explorableExplanation';
 interface AuctionsContainerProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
   };
   sidebarData: SidebarItems;
   customAdsAndBidders?: AdsAndBiddersType;
