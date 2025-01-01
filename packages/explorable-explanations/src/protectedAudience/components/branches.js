@@ -21,7 +21,7 @@ import app from '../app';
 import config from '../config';
 import Box from './box';
 import { delay, wipeAndRecreateInterestCanvas } from '../utils';
-import FlowExpander from '../modules/flowExpander';
+import FlowExpander from './flowExpander';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
