@@ -18,7 +18,7 @@
  */
 import app from '../app';
 import config from '../config';
-import { addCanvasEventListener } from '../utils';
+import { addCanvasEventListener, isInsideBox } from '../utils';
 
 const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
@@ -66,13 +66,17 @@ const Box = ({
 
     p.image(p.infoIcon, iconX, iconY, INFO_ICON_SIZE, INFO_ICON_SIZE);
 
-    const callback = (mouseX, mouseY) => {
-      if (
-        mouseX >= iconX &&
-        mouseX <= iconX + INFO_ICON_SIZE &&
-        mouseY >= iconY &&
-        mouseY <= iconY + INFO_ICON_SIZE
-      ) {
+    const mouseMovedCallback = (mouseX, mouseY) => {
+      if (isInsideBox(mouseX, mouseY, iconX, iconY, INFO_ICON_SIZE)) {
+        app.p.cursor('pointer');
+        console.log(info); // eslint-disable-line no-console
+      } else {
+        app.p.cursor('default');
+      }
+    };
+
+    const mouseClickedCallback = (mouseX, mouseY) => {
+      if (isInsideBox(mouseX, mouseY, iconX, iconY, INFO_ICON_SIZE)) {
         app.setInfo({
           info,
           key: Date.now(), // To force change the state, so that the info modal is shown in case of same value.
@@ -81,7 +85,8 @@ const Box = ({
     };
 
     const key = title + description + x + y;
-    addCanvasEventListener('mouseClicked', callback, key);
+    addCanvasEventListener('mouseMoved', mouseMovedCallback, key);
+    addCanvasEventListener('mouseClicked', mouseClickedCallback, key);
   }
 
   p.pop();

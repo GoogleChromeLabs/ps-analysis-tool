@@ -21,9 +21,10 @@ import app from '../app';
 import config from '../config';
 import Box from './box';
 import { delay, wipeAndRecreateInterestCanvas } from '../utils';
+import FlowExpander from './flowExpander';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
-const EXPAND_ICON_SIZE = 20;
+const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
 let spacing, renderedBranchIds, endpoints;
 
@@ -142,7 +143,15 @@ const Branches = async ({
     })
   );
 
-  return endpoints;
+  if (app.isAutoExpand) {
+    return endpoints[1];
+  }
+
+  const nextTip = await FlowExpander({
+    nextTipCoordinates: endpoints,
+  });
+
+  return nextTip;
 };
 
 const drawDateTimeBranch = (x, y, branch) => {
@@ -154,6 +163,11 @@ const drawDateTimeBranch = (x, y, branch) => {
   p.textSize(config.canvas.fontSize);
   p.text(`${branch.date}`, x, y + 35);
   p.text(`${branch.time}`, x, y + 50);
+
+  if (app.isAutoExpand) {
+    p.pop();
+    return { x: x, y: y + 30 };
+  }
 
   p.image(
     p.expandIcon,
@@ -178,6 +192,10 @@ const drawBoxesBranch = (x, y, branch) => {
     y: y + 20,
     color: branch?.color || flow.colors.box.background,
   });
+
+  if (app.isAutoExpand) {
+    return { x: x, y: y + 30 };
+  }
 
   p.image(
     p.expandIcon,
