@@ -54,6 +54,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
+  const [autoExpand, setAutoExpand] = useState(true);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -114,6 +115,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
     },
     []
   );
+
   const handleResizeCallback = useMemo(() => {
     return new ResizeObserver(() => {
       if (containerRef.current) {
@@ -179,6 +181,15 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
           className="hover:cursor-pointer"
         />
         Interactive Mode
+      </label>
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          type="checkbox"
+          checked={autoExpand}
+          onChange={(event) => setAutoExpand(event.target.checked)}
+          className="hover:cursor-pointer"
+        />
+        Auto Expand
       </label>
     </div>
   );
@@ -247,6 +258,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
       </div>
       <ReactP5Wrapper sketch={sketch} />
       <ReactP5Wrapper
+        autoExpand={autoExpand}
         sketch={interestGroupSketch}
         expandedBubbleX={expandedBubbleX}
         expandedBubbleY={expandedBubbleY}

@@ -18,7 +18,13 @@
  */
 import config from '../config';
 import app from '../app';
-import * as utils from '../utils';
+import {
+  isInsideCircle,
+  wipeAndRecreateInterestCanvas,
+  wipeAndRecreateUserCanvas,
+  isOverControls,
+  wipeAndRecreateMainCanvas,
+} from '../utils';
 import bubbles from './bubbles';
 import flow from './flow';
 
@@ -44,238 +50,11 @@ timeline.init = () => {
     bubbles.showMinifiedBubbles();
 
     app.p.mouseMoved = (event) => {
-      if (!app.isInteractiveMode) {
-        return;
-      }
-
-      const { offsetX, offsetY } = event;
-      let hoveringOnExpandIconPositions = false;
-
-      app.timeline.expandIconPositions.forEach((positions) => {
-        if (
-          utils.isInsideCircle(
-            offsetX,
-            offsetY,
-            positions.x - 10,
-            positions.y + config.timeline.circleProps.diameter / 2,
-            20
-          )
-        ) {
-          hoveringOnExpandIconPositions = true;
-        }
-      });
-
-      app.mouseX = offsetX;
-      app.mouseY = offsetY;
-
-      if (!app.shouldRespondToClick) {
-        return;
-      }
-
-      if (
-        hoveringOnExpandIconPositions ||
-        utils.isOverControls(event.clientX, event.clientY)
-      ) {
-        app.startTrackingMouse = false;
-      } else {
-        app.startTrackingMouse = true;
-      }
-
-      utils.wipeAndRecreateUserCanvas();
-      timeline.renderUserIcon();
+      timeline.mouseMovedInInteractiveModeCallback(event);
     };
 
     app.p.mouseClicked = () => {
-      if (!app.isInteractiveMode || !app.shouldRespondToClick) {
-        return;
-      }
-
-      const { circlePositions, expandIconPositions } = app.timeline;
-      let clickedIndex;
-
-      circlePositions.forEach((positions, index) => {
-        if (
-          utils.isInsideCircle(
-            app.mouseX,
-            app.mouseY,
-            positions.x,
-            positions.y,
-            config.timeline.circleProps.diameter / 2
-          )
-        ) {
-          clickedIndex = index;
-        }
-      });
-
-      app.usedNextOrPrev = false;
-
-      expandIconPositions.forEach((positions) => {
-        if (
-          utils.isInsideCircle(
-            app.mouseX,
-            app.mouseY,
-            positions.x - 10,
-            positions.y + config.timeline.circleProps.diameter / 2,
-            20
-          )
-        ) {
-          app.isRevisitingNodeInInteractiveMode = true;
-          clickedIndex = positions.index;
-        }
-      });
-
-      if (
-        clickedIndex !== undefined &&
-        !app.isRevisitingNodeInInteractiveMode
-      ) {
-        app.promiseQueue.end();
-        flow.clearBelowTimelineCircles();
-
-        app.shouldRespondToClick = false;
-        app.timeline.currentIndex = clickedIndex;
-
-        utils.wipeAndRecreateUserCanvas();
-        timeline.renderUserIcon();
-        bubbles.generateBubbles();
-
-        if (config.timeline.circles[clickedIndex].visited) {
-          app.promiseQueue.push((cb) => {
-            utils.wipeAndRecreateUserCanvas();
-            utils.wipeAndRecreateMainCanvas();
-
-            app.p.push();
-            app.p.stroke(config.timeline.colors.grey);
-
-            config.timeline.circles.forEach((circle, index) => {
-              app.p.push();
-              app.p.stroke(config.timeline.colors.grey);
-              timeline.drawCircle(
-                index,
-                circle.visited && index !== clickedIndex ? true : false
-              );
-              app.p.pop();
-
-              if (circle.visited && index === clickedIndex) {
-                const position = circlePositions[clickedIndex];
-                const user = config.timeline.user;
-                app.up.image(
-                  app.p.userIcon,
-                  position.x - user.width / 2,
-                  position.y - user.height / 2,
-                  user.width,
-                  user.height
-                );
-              }
-            });
-
-            app.p.pop();
-            cb(null, true);
-          });
-        }
-
-        app.drawFlows(clickedIndex);
-
-        app.promiseQueue.push((cb) => {
-          if (config.timeline.circles[clickedIndex].visited) {
-            app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
-              if (indexes === clickedIndex) {
-                return false;
-              }
-              return true;
-            });
-
-            app.visitedIndexOrder.push(clickedIndex);
-
-            config.timeline.circles[clickedIndex].visitedIndex =
-              app.visitedIndexes;
-            app.visitedIndexes = 1;
-
-            app.visitedIndexOrder.forEach((idx) => {
-              config.timeline.circles[idx].visitedIndex = app.visitedIndexes;
-              app.visitedIndexes++;
-            });
-
-            app.setCurrentSite(config.timeline.circles[clickedIndex]);
-            app.bubbles.positions.splice(
-              -(config.timeline.circles[clickedIndex].igGroupsCount ?? 0)
-            );
-
-            app.shouldRespondToClick = true;
-            bubbles.showMinifiedBubbles();
-            timeline.renderUserIcon();
-            return;
-          } else {
-            const positions = app.timeline.circlePositions[clickedIndex];
-            app.timeline.expandIconPositions.push({
-              x: positions.x + config.timeline.circleProps.diameter / 2,
-              y: positions.y,
-              index: clickedIndex,
-            });
-
-            app.visitedIndexOrder.push(clickedIndex);
-            if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
-              app.visitedIndexOrderTracker = app.visitedIndexOrder.length - 1;
-            }
-
-            app.bubbles.interestGroupCounts +=
-              config.timeline.circles[clickedIndex]?.igGroupsCount ?? 0;
-            config.timeline.circles[clickedIndex].visited = true;
-            config.timeline.circles[clickedIndex].visitedIndex =
-              app.visitedIndexes;
-            app.visitedIndexes += 1;
-            app.setCurrentSite(config.timeline.circles[clickedIndex]);
-          }
-
-          bubbles.showMinifiedBubbles();
-          app.shouldRespondToClick = true;
-
-          utils.wipeAndRecreateUserCanvas();
-          utils.wipeAndRecreateMainCanvas();
-          timeline.renderUserIcon();
-          flow.setButtonsDisabilityState();
-
-          cb(null, true);
-        });
-
-        app.promiseQueue.start();
-      } else if (
-        clickedIndex !== undefined &&
-        app.isRevisitingNodeInInteractiveMode
-      ) {
-        app.promiseQueue.end();
-        flow.clearBelowTimelineCircles();
-
-        if (config.timeline.circles[clickedIndex].type === 'advertiser') {
-          app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
-        } else {
-          app.auction.auctions[clickedIndex][0].props.y1 += 20;
-        }
-
-        app.shouldRespondToClick = false;
-        app.drawFlows(clickedIndex);
-
-        app.promiseQueue.push((cb) => {
-          app.shouldRespondToClick = true;
-          timeline.renderUserIcon();
-          app.isRevisitingNodeInInteractiveMode = false;
-
-          if (config.timeline.circles[clickedIndex].type === 'advertiser') {
-            app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
-          } else {
-            app.auction.auctions[clickedIndex][0].props.y1 -= 20;
-          }
-
-          app.setCurrentSite(config.timeline.circles[clickedIndex]);
-
-          cb(null, true);
-        });
-
-        app.promiseQueue.start();
-
-        utils.wipeAndRecreateUserCanvas();
-        utils.wipeAndRecreateMainCanvas();
-        return;
-      }
+      timeline.mouseClickedInInteractiveModeCallback();
     };
   } else {
     timeline.drawTimelineLine();
@@ -453,7 +232,7 @@ timeline.renderUserIcon = () => {
 
   const user = config.timeline.user;
   timeline.eraseAndRedraw();
-  utils.wipeAndRecreateInterestCanvas();
+  wipeAndRecreateInterestCanvas();
 
   if (!app.startTrackingMouse) {
     return;
@@ -484,7 +263,7 @@ timeline.eraseAndRedraw = () => {
     return;
   }
 
-  utils.wipeAndRecreateUserCanvas();
+  wipeAndRecreateUserCanvas();
 
   if (currentIndex > 0) {
     let i = 0;
@@ -494,6 +273,226 @@ timeline.eraseAndRedraw = () => {
       timeline.drawLineAboveCircle(i, config.timeline.circles[i].visited);
       i = i + 1;
     }
+  }
+};
+
+timeline.mouseMovedInInteractiveModeCallback = (event) => {
+  if (!app.isInteractiveMode) {
+    return;
+  }
+
+  const { offsetX, offsetY } = event;
+  let hoveringOnExpandIconPositions = false;
+
+  app.timeline.expandIconPositions.forEach((positions) => {
+    if (
+      isInsideCircle(
+        offsetX,
+        offsetY,
+        positions.x - 10,
+        positions.y + config.timeline.circleProps.diameter / 2,
+        20
+      )
+    ) {
+      hoveringOnExpandIconPositions = true;
+    }
+  });
+
+  app.mouseX = offsetX;
+  app.mouseY = offsetY;
+
+  if (!app.shouldRespondToClick) {
+    return;
+  }
+
+  if (
+    hoveringOnExpandIconPositions ||
+    isOverControls(event.clientX, event.clientY)
+  ) {
+    app.startTrackingMouse = false;
+  } else {
+    app.startTrackingMouse = true;
+  }
+
+  wipeAndRecreateUserCanvas();
+  timeline.renderUserIcon();
+};
+
+timeline.mouseClickedInInteractiveModeCallback = () => {
+  const { mouseX, mouseY, isInteractiveMode, shouldRespondToClick } = app;
+  const p = app.p;
+  const up = app.up;
+
+  if (!isInteractiveMode || !shouldRespondToClick) {
+    return;
+  }
+
+  const { circlePositions, expandIconPositions } = app.timeline;
+  const {
+    circleProps: { diameter },
+    circles,
+    colors,
+    user,
+  } = config.timeline;
+
+  let clickedIndex = -1;
+
+  circlePositions.forEach(({ x, y }, index) => {
+    if (isInsideCircle(mouseX, mouseY, x, y, diameter / 2)) {
+      clickedIndex = index;
+    }
+  });
+
+  app.usedNextOrPrev = false;
+
+  expandIconPositions.forEach(({ x, y, index }) => {
+    if (isInsideCircle(mouseX, mouseY, x - 10, y + diameter / 2, 20)) {
+      app.isRevisitingNodeInInteractiveMode = true;
+      clickedIndex = index;
+    }
+  });
+  if (clickedIndex > -1 && !app.isRevisitingNodeInInteractiveMode) {
+    app.promiseQueue.end();
+    flow.clearBelowTimelineCircles();
+
+    app.shouldRespondToClick = false;
+    app.timeline.currentIndex = clickedIndex;
+
+    wipeAndRecreateUserCanvas();
+    timeline.renderUserIcon();
+    bubbles.generateBubbles();
+
+    if (circles[clickedIndex].visited) {
+      app.promiseQueue.push((cb) => {
+        wipeAndRecreateUserCanvas();
+        wipeAndRecreateMainCanvas();
+
+        p.push();
+        p.stroke(colors.grey);
+
+        circles.forEach((circle, index) => {
+          p.push();
+          p.stroke(colors.grey);
+          timeline.drawCircle(
+            index,
+            circle.visited && index !== clickedIndex ? true : false
+          );
+          p.pop();
+
+          if (circle.visited && index === clickedIndex) {
+            const position = circlePositions[clickedIndex];
+            up.image(
+              p.userIcon,
+              position.x - user.width / 2,
+              position.y - user.height / 2,
+              user.width,
+              user.height
+            );
+          }
+        });
+
+        p.pop();
+        cb(null, true);
+      });
+    }
+
+    app.drawFlows(clickedIndex);
+
+    app.promiseQueue.push((cb) => {
+      if (config.timeline.circles[clickedIndex].visited) {
+        app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
+          if (indexes === clickedIndex) {
+            return false;
+          }
+          return true;
+        });
+
+        app.visitedIndexOrder.push(clickedIndex);
+
+        config.timeline.circles[clickedIndex].visitedIndex = app.visitedIndexes;
+        app.visitedIndexes = 1;
+
+        app.visitedIndexOrder.forEach((idx) => {
+          config.timeline.circles[idx].visitedIndex = app.visitedIndexes;
+          app.visitedIndexes++;
+        });
+
+        app.setCurrentSite(circles[clickedIndex]);
+        app.bubbles.positions.splice(
+          -(circles[clickedIndex].igGroupsCount ?? 0)
+        );
+
+        app.shouldRespondToClick = true;
+        bubbles.showMinifiedBubbles();
+        timeline.renderUserIcon();
+        return;
+      } else {
+        const positions = app.timeline.circlePositions[clickedIndex];
+        app.timeline.expandIconPositions.push({
+          x: positions.x + diameter / 2,
+          y: positions.y,
+          index: clickedIndex,
+        });
+
+        app.visitedIndexOrder.push(clickedIndex);
+        if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
+          app.visitedIndexOrderTracker = app.visitedIndexOrder.length - 1;
+        }
+
+        app.bubbles.interestGroupCounts +=
+          circles[clickedIndex]?.igGroupsCount ?? 0;
+        config.timeline.circles[clickedIndex].visited = true;
+        config.timeline.circles[clickedIndex].visitedIndex = app.visitedIndexes;
+        app.visitedIndexes += 1;
+        app.setCurrentSite(circles[clickedIndex]);
+      }
+
+      bubbles.showMinifiedBubbles();
+      app.shouldRespondToClick = true;
+
+      wipeAndRecreateUserCanvas();
+      wipeAndRecreateMainCanvas();
+      timeline.renderUserIcon();
+      flow.setButtonsDisabilityState();
+
+      cb(null, true);
+    });
+
+    app.promiseQueue.start();
+  } else if (clickedIndex > -1 && app.isRevisitingNodeInInteractiveMode) {
+    app.promiseQueue.end();
+    flow.clearBelowTimelineCircles();
+
+    if (circles[clickedIndex].type === 'advertiser') {
+      app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
+    } else {
+      app.auction.auctions[clickedIndex][0].props.y1 += 20;
+    }
+
+    app.shouldRespondToClick = false;
+    app.drawFlows(clickedIndex);
+
+    app.promiseQueue.push((cb) => {
+      app.shouldRespondToClick = true;
+      timeline.renderUserIcon();
+      app.isRevisitingNodeInInteractiveMode = false;
+
+      if (circles[clickedIndex].type === 'advertiser') {
+        app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
+      } else {
+        app.auction.auctions[clickedIndex][0].props.y1 -= 20;
+      }
+
+      app.setCurrentSite(circles[clickedIndex]);
+
+      cb(null, true);
+    });
+
+    app.promiseQueue.start();
+
+    wipeAndRecreateUserCanvas();
+    wipeAndRecreateMainCanvas();
+    return;
   }
 };
 

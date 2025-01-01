@@ -70,7 +70,10 @@ bubbles.generateBubbles = (recalculate = false) => {
       });
     });
 
-    if (totalInterestGroups < app.bubbles.positions.length) {
+    if (
+      totalInterestGroups < app.bubbles.positions.length &&
+      !app.isInteractiveMode
+    ) {
       app.bubbles.positions = app.bubbles.positions.slice(
         0,
         totalInterestGroups
