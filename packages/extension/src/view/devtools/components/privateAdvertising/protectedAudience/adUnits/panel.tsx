@@ -25,10 +25,11 @@ import type {
   NoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
+import type { AdUnitLiteral } from '../explorableExplanation';
 
 interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
-  receivedBids: ReceivedBids[];
+  receivedBids: Record<AdUnitLiteral, ReceivedBids[]>;
   noBids: NoBidsType;
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit: string | null;
@@ -49,7 +50,9 @@ const AdUnitsPanel = ({
         <>
           <AdMatrix
             adsAndBidders={adsAndBidders}
-            receivedBids={receivedBids}
+            receivedBids={Object.keys(receivedBids ?? {})
+              .map((key: string) => receivedBids?.[key as AdUnitLiteral] ?? [])
+              .flat()}
             noBids={noBids}
           />
           <AdTable

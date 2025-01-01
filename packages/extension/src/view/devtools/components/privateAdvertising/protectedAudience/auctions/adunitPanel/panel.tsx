@@ -19,18 +19,25 @@
  */
 import React, { useEffect, useMemo } from 'react';
 import { FrameIcon, MoneyIcon, ScreenIcon } from '@google-psat/design-system';
-import type { AdsAndBiddersType } from '@google-psat/common';
+import type {
+  AdsAndBiddersType,
+  NoBidsType,
+  singleAuctionEvent,
+} from '@google-psat/common';
 
 /**
  * Internal dependencies
  */
-import Matrix from './matrix';
 import Tile from './tile';
+import PresentationalMatrix from './presentationalMatrix';
+import type { AdUnitLiteral } from '../../explorableExplanation';
 
 interface PanelProps {
   adunit: string;
   adsAndBidders: AdsAndBiddersType;
   isInspecting?: boolean;
+  receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+  noBids: NoBidsType;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   setStorage?: (data: string, index?: number) => void;
@@ -42,6 +49,8 @@ const Panel = ({
   isInspecting,
   setIsInspecting,
   adsAndBidders,
+  receivedBids,
+  noBids,
   setSelectedAdUnit,
   setStorage,
   setActiveTab,
@@ -117,7 +126,12 @@ const Panel = ({
 
   return (
     <>
-      <Matrix adUnitCode={adunit} />
+      <PresentationalMatrix
+        adUnitCode={adunit}
+        adsAndBidders={adsAndBidders}
+        receivedBids={receivedBids[adunit as AdUnitLiteral]}
+        noBids={noBids}
+      />
       <div className="p-4 flex gap-4 flex-wrap">
         {items.map((item) => (
           <Tile key={item.name} item={item} />

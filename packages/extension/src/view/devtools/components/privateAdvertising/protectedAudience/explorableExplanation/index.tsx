@@ -27,7 +27,6 @@ import IGTable from '../interestGroups/table';
 import Auctions from './auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import type { InterestGroups } from '@google-psat/common';
-import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
 import InfoPanel from './infoPanel';
 import BidsPanel from '../bids/panel';
@@ -41,6 +40,7 @@ export interface CurrentSiteData {
   visited: boolean;
   visitedIndex: boolean;
 }
+export type AdUnitLiteral = 'div-200-1' | 'div-200-2' | 'div-200-3';
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
@@ -67,11 +67,14 @@ const ExplorableExplanation = () => {
       });
     });
 
-    return {
+    const dateTimeString = new Date(currentSiteData?.datetime).toUTCString();
+    const websiteString = `https://www.${currentSiteData?.website}`;
+
+    const auctionData = {
       'div-200-1': {
-        [new Date(currentSiteData?.datetime).toUTCString()]: {
-          [`https://www.${currentSiteData?.website}`]: {
-            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
+        [dateTimeString]: {
+          [websiteString]: {
+            [websiteString]: createAuctionEvents(
               interestGroups.flat(),
               currentSiteData?.website,
               Array.from(advertiserSet),
@@ -81,9 +84,9 @@ const ExplorableExplanation = () => {
         },
       },
       'div-200-2': {
-        [new Date(currentSiteData?.datetime).toUTCString()]: {
-          [`https://www.${currentSiteData?.website}`]: {
-            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
+        [dateTimeString]: {
+          [websiteString]: {
+            [websiteString]: createAuctionEvents(
               interestGroups.flat(),
               currentSiteData?.website,
               Array.from(advertiserSet),
@@ -93,9 +96,9 @@ const ExplorableExplanation = () => {
         },
       },
       'div-200-3': {
-        [new Date(currentSiteData?.datetime).toUTCString()]: {
-          [`https://www.${currentSiteData?.website}`]: {
-            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
+        [dateTimeString]: {
+          [websiteString]: {
+            [websiteString]: createAuctionEvents(
               interestGroups.flat(),
               currentSiteData?.website,
               Array.from(advertiserSet),
@@ -103,6 +106,24 @@ const ExplorableExplanation = () => {
             ),
           },
         },
+      },
+    };
+
+    return {
+      auctionData,
+      receivedBids: {
+        'div-200-1':
+          auctionData['div-200-1']?.[dateTimeString]?.[websiteString]?.[
+            websiteString
+          ].filter((event) => event.type === 'bid') ?? [],
+        'div-200-2':
+          auctionData['div-200-2']?.[dateTimeString]?.[websiteString]?.[
+            websiteString
+          ].filter((event) => event.type === 'bid') ?? [],
+        'div-200-3':
+          auctionData['div-200-3']?.[dateTimeString]?.[websiteString]?.[
+            websiteString
+          ].filter((event) => event.type === 'bid') ?? [],
       },
     };
   }, [currentSiteData, sitesVisited]);
@@ -119,7 +140,7 @@ const ExplorableExplanation = () => {
         adUnitCode: 'div-200-1',
         bidders: ['DSP 1', 'DSP 2'],
         mediaContainerSize: [[320, 320]],
-        winningBid: auctionsData?.['div-200-1']?.[
+        winningBid: auctionsData.auctionData?.['div-200-1']?.[
           new Date(currentSiteData?.datetime).toUTCString()
         ]?.[currentWebsite]?.[currentWebsite].filter(
           ({ type }) => type === 'win'
@@ -131,7 +152,7 @@ const ExplorableExplanation = () => {
         adUnitCode: 'div-200-2',
         bidders: ['DSP 1', 'DSP 2'],
         mediaContainerSize: [[320, 320]],
-        winningBid: auctionsData?.['div-200-2']?.[
+        winningBid: auctionsData.auctionData?.['div-200-2']?.[
           new Date(currentSiteData?.datetime).toUTCString()
         ]?.[currentWebsite]?.[currentWebsite].filter(
           ({ type }) => type === 'win'
@@ -143,7 +164,7 @@ const ExplorableExplanation = () => {
         adUnitCode: 'div-200-3',
         bidders: ['DSP 1', 'DSP 2'],
         mediaContainerSize: [[320, 320]],
-        winningBid: auctionsData?.['div-200-3']?.[
+        winningBid: auctionsData.auctionData?.['div-200-3']?.[
           new Date(currentSiteData?.datetime).toUTCString()
         ]?.[currentWebsite]?.[currentWebsite].filter(
           ({ type }) => type === 'win'
@@ -189,7 +210,9 @@ const ExplorableExplanation = () => {
         content: {
           Element: Auctions,
           props: {
-            auctionEvents: auctionsData as AuctionEventsType,
+            auctionEvents: {
+              ...auctionsData,
+            },
             customAdsAndBidders: customAdsAndBidders,
           },
         },
@@ -199,9 +222,13 @@ const ExplorableExplanation = () => {
         content: {
           Element: BidsPanel,
           props: {
-            receivedBids: [],
+            receivedBids: Object.keys(auctionsData.receivedBids ?? {})
+              .map(
+                (key: string) =>
+                  auctionsData?.receivedBids?.[key as AdUnitLiteral] ?? []
+              )
+              .flat(),
             noBids: {},
-            // Add props
           },
         },
       },
