@@ -46,16 +46,104 @@ timeline.init = () => {
     }
   });
 
+  app.p.mouseMoved = (event) => {
+    const { offsetX, offsetY } = event;
+
+    app.mouseX = offsetX;
+    app.mouseY = offsetY;
+
+    if (app.isInteractiveMode) {
+      timeline.mouseMovedInInteractiveModeCallback(event);
+    } else {
+      let hoveringOnExpandIconPositions = false;
+      if (!config.timeline.circles.every(({ visited }) => visited === true)) {
+        return;
+      }
+      app.timeline.expandIconPositions.forEach((positions) => {
+        if (
+          isInsideCircle(
+            offsetX,
+            offsetY,
+            positions.x,
+            positions.y + config.timeline.circleProps.diameter / 2,
+            20
+          )
+        ) {
+          hoveringOnExpandIconPositions = true;
+        }
+      });
+
+      if (hoveringOnExpandIconPositions) {
+        app.p.cursor('pointer');
+      } else {
+        app.p.cursor('default');
+      }
+    }
+  };
+
+  app.p.mouseClicked = () => {
+    if (app.isInteractiveMode) {
+      timeline.mouseClickedInInteractiveModeCallback();
+    } else {
+      const {
+        circleProps: { diameter },
+        circles,
+      } = config.timeline;
+
+      if (!circles.every(({ visited }) => visited === true)) {
+        return;
+      }
+
+      let clickedIndex = -1;
+      app.timeline.expandIconPositions.forEach((positions) => {
+        if (
+          isInsideCircle(
+            app.mouseX,
+            app.mouseY,
+            positions.x,
+            positions.y + diameter / 2,
+            20
+          )
+        ) {
+          clickedIndex = positions.index;
+        }
+      });
+
+      if (clickedIndex === -1) {
+        return;
+      }
+
+      flow.clearBelowTimelineCircles();
+
+      if (circles[clickedIndex].type === 'advertiser') {
+        app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
+      } else {
+        app.auction.auctions[clickedIndex][0].props.y1 += 20;
+      }
+
+      app.isRevisitingNodeInInteractiveMode = true;
+      app.drawFlows(clickedIndex);
+
+      app.promiseQueue.push((cb) => {
+        app.shouldRespondToClick = true;
+        timeline.renderUserIcon();
+        app.isRevisitingNodeInInteractiveMode = false;
+
+        if (circles[clickedIndex].type === 'advertiser') {
+          app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
+        } else {
+          app.auction.auctions[clickedIndex][0].props.y1 -= 20;
+        }
+
+        cb(null, true);
+      });
+
+      app.promiseQueue.start();
+    }
+  };
+
   if (app.isInteractiveMode) {
     bubbles.showMinifiedBubbles();
-
-    app.p.mouseMoved = (event) => {
-      timeline.mouseMovedInInteractiveModeCallback(event);
-    };
-
-    app.p.mouseClicked = () => {
-      timeline.mouseClickedInInteractiveModeCallback();
-    };
   } else {
     timeline.drawTimelineLine();
     timeline.renderUserIcon();
@@ -179,6 +267,14 @@ timeline.drawCircle = (index, completed = false) => {
 
   app.p.pop();
 
+  app.up.image(
+    app.p.openWithoutAnimation,
+    position.x - 10,
+    position.y + diameter / 2,
+    20,
+    20
+  );
+
   if (app.isInteractiveMode) {
     if (app.usedNextOrPrev && app.timeline.currentIndex === index) {
       app.up.image(
@@ -200,13 +296,6 @@ timeline.drawCircle = (index, completed = false) => {
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
 
-    app.up.image(
-      app.p.openWithoutAnimation,
-      position.x - 10,
-      position.y + diameter / 2,
-      20,
-      20
-    );
     return;
   }
 
@@ -277,11 +366,12 @@ timeline.eraseAndRedraw = () => {
 };
 
 timeline.mouseMovedInInteractiveModeCallback = (event) => {
+  const { offsetX, offsetY } = event;
+
   if (!app.isInteractiveMode) {
     return;
   }
 
-  const { offsetX, offsetY } = event;
   let hoveringOnExpandIconPositions = false;
 
   app.timeline.expandIconPositions.forEach((positions) => {
@@ -295,11 +385,11 @@ timeline.mouseMovedInInteractiveModeCallback = (event) => {
       )
     ) {
       hoveringOnExpandIconPositions = true;
+      app.p.cursor('pointer');
+    } else {
+      app.p.cursor('default');
     }
   });
-
-  app.mouseX = offsetX;
-  app.mouseY = offsetY;
 
   if (!app.shouldRespondToClick) {
     return;
@@ -351,6 +441,7 @@ timeline.mouseClickedInInteractiveModeCallback = () => {
       clickedIndex = index;
     }
   });
+
   if (clickedIndex > -1 && !app.isRevisitingNodeInInteractiveMode) {
     app.promiseQueue.end();
     flow.clearBelowTimelineCircles();
