@@ -91,11 +91,28 @@ const Branches = async ({
   if (app.isRevisitingNodeInInteractiveMode || noAnimation) {
     drawInstantly();
     await delay(noAnimation ? 1000 : 0);
-    return endpoints;
+
+    if (app.isAutoExpand) {
+      return endpoints[1];
+    } else {
+      const nextTip = await FlowExpander({
+        nextTipCoordinates: endpoints,
+      });
+
+      return nextTip;
+    }
   }
 
   if (app.cancelPromise) {
-    return endpoints;
+    if (app.isAutoExpand) {
+      return endpoints[1];
+    } else {
+      const nextTip = await FlowExpander({
+        nextTipCoordinates: endpoints,
+      });
+
+      return nextTip;
+    }
   }
 
   // Clear canvas or update logic (if necessary)
