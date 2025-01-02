@@ -46,7 +46,6 @@ auction.setupAuctions = () => {
  */
 auction.setUp = (index) => {
   const { circles } = config.timeline;
-  const { box } = config.flow;
   const currentCircle = circles[index];
 
   if (currentCircle.type !== 'publisher') {
@@ -58,45 +57,18 @@ auction.setUp = (index) => {
 
   auction.steps = [];
 
-  const steps = auction.steps;
-
   auction.setUpAdUnitCode(index);
   auction.setupBranches(index);
 
   if (app.isMultiSeller) {
-    auction.setUpMultiSellerFirstSSPTagFlow(index);
+    auction.setUpMultiSellerFirstSSPTagFlow();
+    auction.setUpPublisherAdServerFlow();
   } else {
-    auction.setUpSingleSellerFirstSSPTagFlow(index);
+    auction.setUpSingleSellerFirstSSPTagFlow();
   }
 
   auction.setUpRunadAuction();
-
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y + 10;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'Show Winning Ad',
-      x: () => app.auction.nextTipCoordinates?.x + 10,
-      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
-    },
-    delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
+  auction.setupShowWinningAd();
 
   app.auction.auctions.push(auction.steps);
 };
@@ -419,6 +391,24 @@ auction.setUpMultiSellerFirstSSPTagFlow = () => {
   });
 };
 
+auction.setUpPublisherAdServerFlow = () => {
+  const { box } = config.flow;
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'Publisher',
+      description: 'Ad server tag',
+      x: () => app.auction.nextTipCoordinates?.x + 10,
+      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+};
+
 auction.setUpRunadAuction = () => {
   const steps = auction.steps;
   const { box, colors } = config.flow;
@@ -606,6 +596,37 @@ auction.setUpRunadAuction = () => {
         app.auction.nextTipCoordinates = returnValue.down;
       },
     });
+  });
+};
+
+auction.setupShowWinningAd = () => {
+  const { box } = config.flow;
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y + 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'Show Winning Ad',
+      x: () => app.auction.nextTipCoordinates?.x + 10,
+      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
   });
 };
 
