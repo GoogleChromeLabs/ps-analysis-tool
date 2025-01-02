@@ -64,6 +64,7 @@ const app = {
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
   setCurrentSite: () => null,
+  setInfo: () => null,
   setPlayState: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
@@ -72,6 +73,7 @@ const app = {
       mouseOver: {},
       mouseOut: {},
       mouseMoved: {},
+      mouseClicked: {},
     },
   },
 };

@@ -16,20 +16,21 @@
 /**
  * External dependencies.
  */
-import { TabsProvider, type TabItems } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
+import { TabsProvider, type TabItems } from '@google-psat/design-system';
+import type { InterestGroups } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
-import Auctions from './auctions';
+import Auctions from './tableTabPanels/auctions';
+import Info from './tableTabPanels/info';
+import Bids from './tableTabPanels/bids';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
-import type { InterestGroups } from '@google-psat/common';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
-import InfoPanel from './infoPanel';
 
 export interface CurrentSiteData {
   type: 'advertiser' | 'publisher';
@@ -44,6 +45,7 @@ export interface CurrentSiteData {
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
 
   const [interestGroups, setInterestGroups] = useState<
     {
@@ -121,16 +123,25 @@ const ExplorableExplanation = () => {
         },
       },
       {
-        title: 'Info',
+        title: 'Bids',
         content: {
-          Element: InfoPanel,
+          Element: Bids,
           props: {
             data: undefined,
           },
         },
       },
+      {
+        title: 'Info',
+        content: {
+          Element: Info,
+          props: {
+            data: info,
+          },
+        },
+      },
     ],
-    [auctionsData, interestGroupData]
+    [auctionsData, interestGroupData, info]
   );
 
   return (
@@ -138,6 +149,8 @@ const ExplorableExplanation = () => {
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={setCurrentSiteData}
+        info={info}
+        setInfo={setInfo}
       />
     </TabsProvider>
   );

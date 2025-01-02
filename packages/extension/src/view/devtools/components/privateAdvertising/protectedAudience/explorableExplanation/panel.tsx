@@ -28,7 +28,7 @@ import {
   app,
   userSketch,
   interestGroupSketch,
-  sketch,
+  sketch as mainSketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { useTabs } from '@google-psat/design-system';
@@ -47,10 +47,17 @@ declare module 'react' {
 }
 interface PanelProps {
   setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
+  setInfo: React.Dispatch<React.SetStateAction<string | null>>;
+  info: string | null;
   currentSiteData: CurrentSiteData | null;
 }
 
-const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
+const Panel = ({
+  currentSiteData,
+  setCurrentSite,
+  info,
+  setInfo,
+}: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
@@ -107,6 +114,12 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
       setActiveTab(1);
     }
   }, [currentSiteData, currentSiteData?.type, setActiveTab]);
+
+  useEffect(() => {
+    if (info) {
+      setActiveTab(3);
+    }
+  }, [info, setActiveTab]);
 
   const setInteractiveMode = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -256,7 +269,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
           <div id="user-canvas"></div>
         </main>
       </div>
-      <ReactP5Wrapper sketch={sketch} />
+      <ReactP5Wrapper sketch={mainSketch} />
       <ReactP5Wrapper
         autoExpand={autoExpand}
         sketch={interestGroupSketch}
@@ -265,6 +278,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         expandedBubbleWidth={expandedBubbleWidth}
         speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}
+        setInfo={setInfo}
         setPlayState={setPlay}
       />
       <ReactP5Wrapper sketch={userSketch} />
