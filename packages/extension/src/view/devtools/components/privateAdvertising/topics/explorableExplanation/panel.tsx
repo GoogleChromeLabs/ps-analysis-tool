@@ -23,6 +23,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -32,7 +33,6 @@ import Animation from './animation';
 import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
 import { adtechs, websites } from './topicsAnimation/data';
 import type { TopicsTableType } from './topicsTable';
-import { useTabs } from '@google-psat/design-system';
 import TableTray from '../../../explorableExplanation/tableTray';
 
 interface PanelProps {
@@ -82,8 +82,22 @@ const Panel = ({
     );
   }, []);
   const [visitIndexStart, setVisitIndexStart] = useState(
-    JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndex ?? 0
+    JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
+      activeTab
+    ] ?? 0
   );
+
+  useEffect(() => {
+    storageRef.current = PAstorage;
+  }, [PAstorage]);
+
+  useEffect(() => {
+    setVisitIndexStart(
+      JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
+        activeTab
+      ] ?? 0
+    );
+  }, [activeTab]);
 
   useEffect(() => {
     setTopicsTableData(
@@ -97,10 +111,14 @@ const Panel = ({
   useEffect(() => {
     const currentVisitIndex = currentVisitIndexCallback?.();
 
+    const visitIndexes =
+      JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes || [];
+    visitIndexes[activeTab] = currentVisitIndex;
+
     if (currentVisitIndex !== undefined) {
       setPAStorage(
         JSON.stringify({
-          currentVisitIndex,
+          currentVisitIndexes: visitIndexes,
           epochCompleted,
           topicsTableData,
           siteAdTechs,
@@ -222,6 +240,29 @@ const Panel = ({
     }
   }, [activeTab, epochCompleted, setReset]);
 
+  const [isInteractiveModeOn, setIsInteractiveModeOn] = useState(false);
+
+  useEffect(() => {
+    setTopicsTableData({});
+    setActiveTab(0);
+    setEpochCompleted({});
+    setPAStorage('');
+  }, [isInteractiveModeOn, setActiveTab, setPAStorage, setTopicsTableData]);
+
+  const extraInterface = (
+    <div className="flex gap-2 items-center">
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          type="checkbox"
+          className="hover:cursor-pointer"
+          checked={isInteractiveModeOn}
+          onChange={() => setIsInteractiveModeOn((prev) => !prev)}
+        />
+        Interactive Mode
+      </label>
+    </div>
+  );
+
   return (
     <div className="flex flex-col h-full">
       <Header
@@ -231,6 +272,8 @@ const Panel = ({
         setSliderStep={setSliderStep}
         historyCount={epochs[activeTab].webVisits.length}
         reset={setReset}
+        extraInterface={extraInterface}
+        showNextPrevButtons={false}
       />
       <div className="flex-1 overflow-auto">
         <Animation
@@ -246,6 +289,7 @@ const Panel = ({
           setPAStorage={setPAStorage}
           setHighlightAdTech={setHighlightAdTech}
           setCurrentVisitIndexCallback={setCurrentVisitIndexCallback}
+          isInteractive={isInteractiveModeOn}
         />
       </div>
       <TableTray />
