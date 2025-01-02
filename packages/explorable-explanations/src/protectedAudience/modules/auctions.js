@@ -69,20 +69,6 @@ auction.setUp = (index) => {
     auction.setUpSingleSellerFirstSSPTagFlow(index);
   }
 
-  steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x - 10 + box.width / 2,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y - 10 - box.height / 2;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
   auction.setUpRunadAuction();
 
   steps.push({
@@ -292,6 +278,20 @@ auction.setUpSingleSellerFirstSSPTagFlow = () => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x - 10 + box.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y - 10 - box.height / 2;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
 };
 
 auction.setUpMultiSellerFirstSSPTagFlow = () => {
@@ -313,7 +313,8 @@ auction.setUpMultiSellerFirstSSPTagFlow = () => {
   auction.steps.push({
     component: Box,
     props: {
-      title: 'SSP Tag',
+      title: 'SSP Adapter',
+      description: 'header-bidding lib',
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y,
     },
@@ -338,7 +339,7 @@ auction.setUpMultiSellerFirstSSPTagFlow = () => {
   auction.steps.push({
     component: Box,
     props: {
-      title: 'SSP',
+      title: 'SSPs',
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
       color: colors.box.noData,
@@ -396,6 +397,20 @@ auction.setUpMultiSellerFirstSSPTagFlow = () => {
       x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => {
         return app.auction.nextTipCoordinates?.y - box.height - 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x - 10 + box.width / 2,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y - 10 - box.height / 2;
       },
     },
     callBack: (returnValue) => {
