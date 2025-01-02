@@ -62,7 +62,12 @@ auction.setUp = (index) => {
 
   auction.setUpAdUnitCode(index);
   auction.setupBranches(index);
-  auction.setUpfirstSSPTagFlow(index);
+
+  if (app.isMultiSeller) {
+    auction.setUpMultiSellerFirstSSPTagFlow(index);
+  } else {
+    auction.setUpSingleSellerFirstSSPTagFlow(index);
+  }
 
   steps.push({
     component: ProgressLine,
@@ -179,7 +184,117 @@ auction.setupBranches = (index) => {
   });
 };
 
-auction.setUpfirstSSPTagFlow = () => {
+auction.setUpSingleSellerFirstSSPTagFlow = () => {
+  const { box, colors } = config.flow;
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'SSP Tag',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'SSP',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: colors.box.noData,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + 40,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'DSPs',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      color: colors.box.noData,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'up',
+      x1: () => app.auction.nextTipCoordinates?.x + 10,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y - 15;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'up',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => {
+        return app.auction.nextTipCoordinates?.y - box.height - 10;
+      },
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+};
+
+auction.setUpMultiSellerFirstSSPTagFlow = () => {
   const { box, colors } = config.flow;
 
   auction.steps.push({

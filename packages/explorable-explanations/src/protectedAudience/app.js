@@ -47,7 +47,7 @@ const app = {
     expandedCircleDiameter: 640,
     minifiedCircleDiameter: 50,
   },
-  speedMultiplier: 1,
+  speedMultiplier: 4,
   p: null,
   igp: null,
   up: null,
