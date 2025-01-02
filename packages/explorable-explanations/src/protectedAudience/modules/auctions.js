@@ -465,9 +465,70 @@ auction.setUpPublisherAdServerFlow = () => {
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + box.height / 4,
     },
-    delay: 1111000,
+    delay: 1000,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  const CUSTOM_HEIGHT = 150;
+  const CUSTOM_WIDTH = 400;
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + box.height - 10,
+      customHeight: CUSTOM_HEIGHT,
+      noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.coordinates.temp = returnValue;
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y,
+      customWidth: CUSTOM_WIDTH,
+      noArrow: true,
+    },
+    callBack: () => {
+      app.auction.nextTipCoordinates = app.auction.coordinates.temp;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'left',
+      x1: () => app.auction.nextTipCoordinates?.x + CUSTOM_HEIGHT,
+      y1: () => app.auction.nextTipCoordinates?.y - 10,
+      customWidth: CUSTOM_WIDTH,
+      noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y,
+      customHeight: 400,
+      noArrow: true,
+    },
+    delay: 1111000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
     },
   });
 };
