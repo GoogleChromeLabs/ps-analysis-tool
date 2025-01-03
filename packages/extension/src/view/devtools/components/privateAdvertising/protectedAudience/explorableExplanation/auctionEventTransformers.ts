@@ -92,8 +92,9 @@ export const transformFetchingEvents = (
     return fetchEventsToBeReturned;
   } else {
     advertisers.forEach(() => {
-      const eventToModify: singleAuctionEvent =
-        SYNTHETIC_AUCTION_EVENT_BIDDERJS as singleAuctionEvent;
+      const eventToModify: singleAuctionEvent = structuredClone(
+        SYNTHETIC_AUCTION_EVENT_BIDDERJS
+      ) as singleAuctionEvent;
 
       eventToModify.type = 'Start Fetch ' + eventName;
 

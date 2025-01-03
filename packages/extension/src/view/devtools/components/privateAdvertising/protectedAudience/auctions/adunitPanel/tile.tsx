@@ -36,7 +36,7 @@ const Tile = ({ item }: TileProps) => {
       key={item.name}
       className="min-w-72 h-fit border border-chinese-silver px-3 py-4 rounded"
     >
-      <div className="flex gap-2 justify-start items-center mb-3 text-base">
+      <div className="flex gap-2 justify-start items-center mb-3 text-base text-raisin-black dark:text-bright-gray">
         {Icon && <Icon width={20} height={20} className="fill-gray" />}
         <h4>{item.name}</h4>
       </div>

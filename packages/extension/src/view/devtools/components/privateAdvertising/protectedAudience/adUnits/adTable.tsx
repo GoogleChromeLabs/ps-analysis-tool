@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
-import { noop } from '@google-psat/common';
+import { noop, type AdsAndBiddersType } from '@google-psat/common';
 import {
   FrameIcon,
   Pill,
@@ -34,23 +34,19 @@ import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
 import { prettyPrintJson } from 'pretty-print-json';
 
-/**
- * Internal dependencies.
- */
-import { useCookie, useProtectedAudience } from '../../../../stateProviders';
+interface AdTableProps {
+  adsAndBidders: AdsAndBiddersType;
+  setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
+  selectedAdUnit?: string | null;
+  setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const AdTable = () => {
-  const { adsAndBidders, setSelectedAdUnit, selectedAdUnit } =
-    useProtectedAudience(({ state, actions }) => ({
-      adsAndBidders: state.adsAndBidders,
-      setSelectedAdUnit: actions.setSelectedAdUnit,
-      selectedAdUnit: state.selectedAdUnit,
-    }));
-
-  const { setIsInspecting } = useCookie(({ actions }) => ({
-    setIsInspecting: actions.setIsInspecting,
-  }));
-
+const AdTable = ({
+  adsAndBidders,
+  setSelectedAdUnit,
+  selectedAdUnit,
+  setIsInspecting,
+}: AdTableProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -63,11 +59,11 @@ const AdTable = () => {
             className="w-full flex gap-2 items-center"
             onClick={() => {
               if (selectedAdUnit === info) {
-                setSelectedAdUnit(null);
-                setIsInspecting(false);
+                setSelectedAdUnit?.(null);
+                setIsInspecting?.(false);
               } else {
-                setIsInspecting(true);
-                setSelectedAdUnit(info as string);
+                setIsInspecting?.(true);
+                setSelectedAdUnit?.(info as string);
               }
             }}
           >

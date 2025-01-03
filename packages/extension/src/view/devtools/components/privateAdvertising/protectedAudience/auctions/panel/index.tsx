@@ -24,6 +24,10 @@ import {
   useSidebar,
   type SidebarItems,
 } from '@google-psat/design-system';
+import type {
+  AdsAndBiddersType,
+  singleAuctionEvent,
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -31,24 +35,37 @@ import {
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionTable from '../table';
 import AdunitPanel from '../adunitPanel';
+import AdunitSubPanel from '../adunitPanel/panel';
+import type { AdUnitLiteral } from '../../explorableExplanation';
 
 interface AuctionPanelProps {
-  auctionEvents: AuctionEventsType;
+  auctionEvents: {
+    auctionData: AuctionEventsType;
+    receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
+  };
+  customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
 }
 
-const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
+const AuctionPanel = ({
+  auctionEvents,
+  setSidebarData,
+  customAdsAndBidders,
+}: AuctionPanelProps) => {
   useEffect(() => {
+    const Panel = customAdsAndBidders ? AdunitSubPanel : AdunitPanel;
+
     setSidebarData((prev) => {
       const newData = { ...prev } as SidebarItems;
       const data = newData['adunits']?.children ?? {};
+      const auctionEventsData = auctionEvents?.auctionData ?? {};
 
-      Object.keys(auctionEvents).forEach((adUnit) => {
+      Object.keys(auctionEventsData).forEach((adUnit) => {
         const adUnitChildren = {
           ...data[adUnit]?.children,
         } as SidebarItems;
 
-        Object.keys(auctionEvents[adUnit]).forEach((time) => {
+        Object.keys(auctionEventsData[adUnit]).forEach((time) => {
           if (
             data[adUnit] &&
             data[adUnit].children &&
@@ -60,9 +77,11 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
           let children = {
             ...adUnitChildren[time]?.children,
           } as SidebarItems;
-          const sellerUrl = Object.keys(auctionEvents[adUnit][time])[0];
+          const sellerUrl = Object.keys(auctionEventsData[adUnit][time])[0];
 
-          const entries = Object.entries(auctionEvents[adUnit][time][sellerUrl])
+          const entries = Object.entries(
+            auctionEventsData[adUnit][time][sellerUrl]
+          )
             .filter(([url]) => url !== sellerUrl)
             .reduce<SidebarItems>((acc, [url, events]) => {
               acc[url + time + adUnit] = {
@@ -92,9 +111,9 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
               Element: AuctionTable,
               props: {
                 auctionEvents:
-                  auctionEvents[adUnit][time][sellerUrl][sellerUrl],
+                  auctionEventsData[adUnit][time][sellerUrl][sellerUrl],
                 parentOrigin:
-                  auctionEvents[adUnit][time][sellerUrl][sellerUrl][0]
+                  auctionEventsData[adUnit][time][sellerUrl][sellerUrl][0]
                     ?.auctionConfig?.seller,
               },
             },
@@ -106,9 +125,12 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
         data[adUnit] = {
           title: adUnit,
           panel: {
-            Element: AdunitPanel,
+            Element: Panel,
             props: {
               adunit: adUnit,
+              adsAndBidders: customAdsAndBidders,
+              receivedBids: auctionEvents?.receivedBids ?? {},
+              noBids: {},
             },
           },
           children: adUnitChildren,
@@ -120,7 +142,7 @@ const AuctionPanel = ({ auctionEvents, setSidebarData }: AuctionPanelProps) => {
 
       return newData;
     });
-  }, [auctionEvents, setSidebarData]);
+  }, [auctionEvents, setSidebarData, customAdsAndBidders]);
 
   const { activePanel } = useSidebar(({ state }) => ({
     activePanel: state.activePanel,

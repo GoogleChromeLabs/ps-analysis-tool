@@ -102,7 +102,9 @@ const Auctions = () => {
       <Breakpoints />
       <div className="overflow-auto flex-1">
         <AuctionsContainer
-          auctionEvents={auctionEvents}
+          auctionEvents={{
+            auctionData: auctionEvents,
+          }}
           sidebarData={sidebarData}
           setSidebarData={setSidebarData}
         />

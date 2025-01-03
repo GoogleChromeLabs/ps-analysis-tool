@@ -22,16 +22,31 @@ import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import {
+  useCookie,
+  useProtectedAudience,
+  useSettings,
+} from '../../../../stateProviders';
 import Panel from './panel';
 
 const AdUnits = () => {
-  const { adsAndBidders, setSelectedAdUnit } = useProtectedAudience(
-    ({ state, actions }) => ({
-      adsAndBidders: state.adsAndBidders,
-      setSelectedAdUnit: actions.setSelectedAdUnit,
-    })
-  );
+  const {
+    adsAndBidders,
+    setSelectedAdUnit,
+    receivedBids,
+    noBids,
+    selectedAdUnit,
+  } = useProtectedAudience(({ state, actions }) => ({
+    adsAndBidders: state.adsAndBidders,
+    setSelectedAdUnit: actions.setSelectedAdUnit,
+    receivedBids: state.receivedBids,
+    noBids: state.noBids,
+    selectedAdUnit: state.selectedAdUnit,
+  }));
+
+  const { setIsInspecting } = useCookie(({ actions }) => ({
+    setIsInspecting: actions.setIsInspecting,
+  }));
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
@@ -69,7 +84,16 @@ const AdUnits = () => {
     );
   }
 
-  return <Panel adsAndBidders={adsAndBidders} />;
+  return (
+    <Panel
+      adsAndBidders={adsAndBidders}
+      receivedBids={receivedBids}
+      noBids={noBids}
+      setSelectedAdUnit={setSelectedAdUnit}
+      selectedAdUnit={selectedAdUnit}
+      setIsInspecting={setIsInspecting}
+    />
+  );
 };
 
 export default AdUnits;

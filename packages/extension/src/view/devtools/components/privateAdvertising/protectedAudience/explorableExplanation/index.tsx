@@ -27,9 +27,9 @@ import IGTable from '../interestGroups/table';
 import Auctions from './auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import type { InterestGroups } from '@google-psat/common';
-import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
 import InfoPanel from './infoPanel';
+import BidsPanel from '../bids/panel';
 
 export interface CurrentSiteData {
   type: 'advertiser' | 'publisher';
@@ -40,34 +40,66 @@ export interface CurrentSiteData {
   visited: boolean;
   visitedIndex: boolean;
 }
+export type AdUnitLiteral = 'div-200-1' | 'div-200-2' | 'div-200-3';
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
 
-  const [interestGroups, setInterestGroups] = useState<
-    {
-      interestGroupName: string;
-      ownerOrigin: string;
-    }[]
-  >([]);
+  const [sitesVisited, setSitesVisited] = useState<string[]>([]);
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
       return {};
     }
 
-    const advertiserSet = new Set<string>();
-    interestGroups.forEach(({ ownerOrigin }) => {
-      advertiserSet.add(ownerOrigin);
+    //@ts-ignore since SYNTHETIC_INTEREST_GROUPS is a constant and type is not defined.
+    const advertiserSet = sitesVisited.filter(
+      (site) => Object.keys(SYNTHETIC_INTEREST_GROUPS[site]).length > 0
+    );
+
+    const interestGroups = advertiserSet.map((advertiser) => {
+      return SYNTHETIC_INTEREST_GROUPS[advertiser].map((interestGroup) => {
+        return {
+          interestGroupName: interestGroup.name as string,
+          ownerOrigin: interestGroup.ownerOrigin as string,
+        };
+      });
     });
 
-    return {
+    const dateTimeString = new Date(currentSiteData?.datetime).toUTCString();
+    const websiteString = `https://www.${currentSiteData?.website}`;
+
+    const auctionData = {
       'div-200-1': {
-        [new Date(currentSiteData?.datetime).toUTCString()]: {
-          [`https://www.${currentSiteData?.website}`]: {
-            [`https://www.${currentSiteData?.website}`]: createAuctionEvents(
-              interestGroups,
+        [dateTimeString]: {
+          [websiteString]: {
+            [websiteString]: createAuctionEvents(
+              interestGroups.flat(),
+              currentSiteData?.website,
+              Array.from(advertiserSet),
+              new Date(currentSiteData?.datetime).getTime()
+            ),
+          },
+        },
+      },
+      'div-200-2': {
+        [dateTimeString]: {
+          [websiteString]: {
+            [websiteString]: createAuctionEvents(
+              interestGroups.flat(),
+              currentSiteData?.website,
+              Array.from(advertiserSet),
+              new Date(currentSiteData?.datetime).getTime()
+            ),
+          },
+        },
+      },
+      'div-200-3': {
+        [dateTimeString]: {
+          [websiteString]: {
+            [websiteString]: createAuctionEvents(
+              interestGroups.flat(),
               currentSiteData?.website,
               Array.from(advertiserSet),
               new Date(currentSiteData?.datetime).getTime()
@@ -76,7 +108,72 @@ const ExplorableExplanation = () => {
         },
       },
     };
-  }, [currentSiteData, interestGroups]);
+
+    return {
+      auctionData,
+      receivedBids: {
+        'div-200-1':
+          auctionData['div-200-1']?.[dateTimeString]?.[websiteString]?.[
+            websiteString
+          ].filter((event) => event.type === 'bid') ?? [],
+        'div-200-2':
+          auctionData['div-200-2']?.[dateTimeString]?.[websiteString]?.[
+            websiteString
+          ].filter((event) => event.type === 'bid') ?? [],
+        'div-200-3':
+          auctionData['div-200-3']?.[dateTimeString]?.[websiteString]?.[
+            websiteString
+          ].filter((event) => event.type === 'bid') ?? [],
+      },
+    };
+  }, [currentSiteData, sitesVisited]);
+
+  const customAdsAndBidders = useMemo(() => {
+    if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+      return {};
+    }
+
+    const currentWebsite = `https://www.${currentSiteData?.website}`;
+
+    return {
+      'div-200-1': {
+        adUnitCode: 'div-200-1',
+        bidders: ['DSP 1', 'DSP 2'],
+        mediaContainerSize: [[320, 320]],
+        winningBid: auctionsData.auctionData?.['div-200-1']?.[
+          new Date(currentSiteData?.datetime).toUTCString()
+        ]?.[currentWebsite]?.[currentWebsite].filter(
+          ({ type }) => type === 'win'
+        )?.[0]?.bid,
+        bidCurrency: 'USD',
+        winningBidder: 'DSP 1',
+      },
+      'div-200-2': {
+        adUnitCode: 'div-200-2',
+        bidders: ['DSP 1', 'DSP 2'],
+        mediaContainerSize: [[320, 320]],
+        winningBid: auctionsData.auctionData?.['div-200-2']?.[
+          new Date(currentSiteData?.datetime).toUTCString()
+        ]?.[currentWebsite]?.[currentWebsite].filter(
+          ({ type }) => type === 'win'
+        )?.[0]?.bid,
+        bidCurrency: 'USD',
+        winningBidder: 'DSP 1',
+      },
+      'div-200-3': {
+        adUnitCode: 'div-200-3',
+        bidders: ['DSP 1', 'DSP 2'],
+        mediaContainerSize: [[320, 320]],
+        winningBid: auctionsData.auctionData?.['div-200-3']?.[
+          new Date(currentSiteData?.datetime).toUTCString()
+        ]?.[currentWebsite]?.[currentWebsite].filter(
+          ({ type }) => type === 'win'
+        )?.[0]?.bid,
+        bidCurrency: 'USD',
+        winningBidder: 'DSP 2',
+      },
+    };
+  }, [auctionsData, currentSiteData]);
 
   const interestGroupData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'publisher') {
@@ -87,14 +184,11 @@ const ExplorableExplanation = () => {
       //@ts-ignore
       SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website];
 
-    setInterestGroups((prevState) => {
-      return [
-        ...prevState,
-        ...perSiteInterestGroups.map(({ name, ownerOrigin }) => ({
-          interestGroupName: name ?? '',
-          ownerOrigin: ownerOrigin ?? '',
-        })),
-      ];
+    setSitesVisited((prevState) => {
+      const set = new Set<string>();
+      prevState.forEach((site) => set.add(site));
+      set.add(currentSiteData?.website);
+      return Array.from(set);
     });
 
     return perSiteInterestGroups;
@@ -116,7 +210,26 @@ const ExplorableExplanation = () => {
         content: {
           Element: Auctions,
           props: {
-            auctionEvents: auctionsData as AuctionEventsType,
+            auctionEvents: {
+              ...auctionsData,
+            },
+            customAdsAndBidders: customAdsAndBidders,
+          },
+        },
+      },
+      {
+        title: 'Bids',
+        content: {
+          Element: BidsPanel,
+          props: {
+            receivedBids: Object.keys(auctionsData.receivedBids ?? {})
+              .map(
+                (key: string) =>
+                  auctionsData?.receivedBids?.[key as AdUnitLiteral] ?? []
+              )
+              .flat(),
+            noBids: {},
+            eeAnimatedTab: true,
           },
         },
       },
@@ -130,7 +243,7 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [auctionsData, interestGroupData]
+    [auctionsData, customAdsAndBidders, interestGroupData]
   );
 
   return (

@@ -17,20 +17,14 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useMemo } from 'react';
-import {
-  FrameIcon,
-  MoneyIcon,
-  ScreenIcon,
-  useTabs,
-} from '@google-psat/design-system';
+import React from 'react';
+import { useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies
  */
-import Matrix from './matrix';
-import Tile from './tile';
 import { useCookie, useProtectedAudience } from '../../../../../stateProviders';
+import Panel from './panel';
 
 interface AdunitPanelProps {
   adunit: string;
@@ -54,84 +48,16 @@ const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
     setActiveTab: actions.setActiveTab,
   }));
 
-  const currentAd = adsAndBidders[adunit];
-
-  const items = useMemo(
-    () => [
-      {
-        name: 'Ad Unit Code',
-        Icon: FrameIcon,
-        buttons: [
-          {
-            name: adunit,
-            onClick: () => {
-              if (isInspecting) {
-                setIsInspecting(false);
-                setSelectedAdUnit(null);
-              } else {
-                setIsInspecting(true);
-                setSelectedAdUnit(adunit);
-              }
-            },
-          },
-        ],
-      },
-      {
-        name: 'Ad Container Sizes',
-        Icon: ScreenIcon,
-        buttons: [
-          ...(currentAd?.mediaContainerSize || []).map((size) => ({
-            name: `${size[0]}x${size[1]}`,
-          })),
-        ],
-      },
-      {
-        name: 'Bidders',
-        Icon: MoneyIcon,
-        buttons: [
-          ...(currentAd?.bidders || []).map((bidder) => ({
-            name: bidder,
-            onClick: () => {
-              setStorage(
-                JSON.stringify({
-                  bidder,
-                  adUnitCode: adunit,
-                })
-              );
-              setActiveTab(5);
-            },
-          })),
-        ],
-      },
-    ],
-    [
-      adunit,
-      currentAd?.bidders,
-      currentAd?.mediaContainerSize,
-      isInspecting,
-      setActiveTab,
-      setIsInspecting,
-      setSelectedAdUnit,
-      setStorage,
-    ]
-  );
-
-  useEffect(() => {
-    return () => {
-      setIsInspecting(false);
-      setSelectedAdUnit(null);
-    };
-  }, [setIsInspecting, setSelectedAdUnit, adunit]);
-
   return (
-    <>
-      <Matrix adUnitCode={adunit} />
-      <div className="p-4 flex gap-4 flex-wrap">
-        {items.map((item) => (
-          <Tile key={item.name} item={item} />
-        ))}
-      </div>
-    </>
+    <Panel
+      adunit={adunit}
+      isInspecting={isInspecting}
+      setIsInspecting={setIsInspecting}
+      adsAndBidders={adsAndBidders}
+      setSelectedAdUnit={setSelectedAdUnit}
+      setStorage={setStorage}
+      setActiveTab={setActiveTab}
+    />
   );
 };
 

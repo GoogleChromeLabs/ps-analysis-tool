@@ -24,6 +24,7 @@ interface PillToggleProps {
   secondOption: string;
   pillToggle: string;
   setPillToggle: (value: string) => void;
+  eeAnimatedTab: boolean;
 }
 
 const PillToggle = ({
@@ -31,6 +32,7 @@ const PillToggle = ({
   secondOption,
   pillToggle,
   setPillToggle,
+  eeAnimatedTab,
 }: PillToggleProps) => {
   return (
     <div className="w-80 h-8 rounded-full border border-gray-300 dark:border-quartz text-sm">
@@ -40,6 +42,7 @@ const PillToggle = ({
           {
             'bg-gray-200 dark:bg-gray-500 ': pillToggle === firstOption,
             'bg-transparent': pillToggle !== firstOption,
+            'text-xs': eeAnimatedTab,
           }
         )}
         onClick={() => setPillToggle(firstOption)}
@@ -52,6 +55,7 @@ const PillToggle = ({
           {
             'bg-gray-200 dark:bg-gray-500': pillToggle === secondOption,
             'bg-transparent': pillToggle !== secondOption,
+            'text-xs': eeAnimatedTab,
           }
         )}
         onClick={() => setPillToggle(secondOption)}

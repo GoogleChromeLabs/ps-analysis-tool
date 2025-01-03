@@ -184,6 +184,7 @@ joinInterestGroup.draw = (index) => {
   app.promiseQueue.push(async (cb) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       await bubbles.reverseBarrageAnimation(index);
+      app.setCurrentSite(config.timeline.circles[index]);
     }
 
     if (app.bubbles.isExpanded) {

@@ -20,19 +20,47 @@
 import React from 'react';
 import AdTable from './adTable';
 import AdMatrix from './adMatrix';
-import type { AdsAndBiddersType } from '@google-psat/common';
+import type {
+  AdsAndBiddersType,
+  NoBidsType,
+  ReceivedBids,
+} from '@google-psat/common';
+import type { AdUnitLiteral } from '../explorableExplanation';
 
 interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
+  receivedBids: Record<AdUnitLiteral, ReceivedBids[]>;
+  noBids: NoBidsType;
+  setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
+  selectedAdUnit: string | null;
+  setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AdUnitsPanel = ({ adsAndBidders }: AdUnitsPanelProps) => {
+const AdUnitsPanel = ({
+  adsAndBidders,
+  receivedBids,
+  noBids,
+  setSelectedAdUnit,
+  selectedAdUnit,
+  setIsInspecting,
+}: AdUnitsPanelProps) => {
   return (
     <div className="flex flex-col h-full w-full">
       {adsAndBidders && Object.keys(adsAndBidders).length > 0 ? (
         <>
-          <AdMatrix />
-          <AdTable />
+          <AdMatrix
+            adsAndBidders={adsAndBidders}
+            receivedBids={Object.keys(receivedBids ?? {})
+              .map((key: string) => receivedBids?.[key as AdUnitLiteral] ?? [])
+              .flat()}
+            noBids={noBids}
+          />
+          <AdTable
+            adsAndBidders={adsAndBidders}
+            setSelectedAdUnit={setSelectedAdUnit}
+            selectedAdUnit={selectedAdUnit}
+            setIsInspecting={setIsInspecting}
+          />
         </>
       ) : (
         <div className="w-full h-full flex items-center justify-center">
