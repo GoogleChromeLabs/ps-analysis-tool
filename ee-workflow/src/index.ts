@@ -62,18 +62,18 @@ const completedIcon =
 
 const advertiserFlow = [
   mainFF.image(100, 200, userIcon, 50, 50),
-  mainFF.line(95, 237, 95, 300, 'black', true),
+  mainFF.line(95, 237, 95, 300, 'black', true, true),
   new Group([
     mainFF.box(50, 300, 100, 50, '#EDF2EF'),
     mainFF.text(100, 325, 'DSP tags'),
   ]),
-  mainFF.line(95, 350, 95, 413, 'black', true),
+  mainFF.line(95, 350, 95, 413, 'black', true, true),
   new Group([
     mainFF.box(50, 413, 100, 50, '#EDF2EF'),
     mainFF.text(100, 438, 'DSPs'),
   ]),
-  mainFF.line(105, 413, 105, 350, 'black', true),
-  mainFF.line(105, 300, 105, 237, 'black', true),
+  mainFF.line(105, 413, 105, 350, 'black', true, true),
+  mainFF.line(105, 300, 105, 237, 'black', true, true),
   mainFF.text(170, 270, 'joinInterestGroup()', 12),
 ];
 
@@ -121,20 +121,23 @@ mainCanvas.addGroup(
   ])
 );
 
+const travellerLine = mainFF.line(0, 400, 1000, 600, 'red', false, true);
+mainCanvas.addFigure(travellerLine);
+
 const secondCircleAnimations = [
   mainFF.image(300, 200, userIcon, 50, 50),
-  mainFF.line(295, 237, 295, 300, 'black', true),
+  mainFF.line(295, 237, 295, 300, 'black', true, true),
   new Group([
     mainFF.box(250, 300, 100, 50, '#EDF2EF'),
     mainFF.text(300, 325, 'DSP tags'),
   ]),
-  mainFF.line(295, 350, 295, 413, 'black', true),
+  mainFF.line(295, 350, 295, 413, 'black', true, true),
   new Group([
     mainFF.box(250, 413, 100, 50, '#EDF2EF'),
     mainFF.text(300, 438, 'DSPs'),
   ]),
-  mainFF.line(305, 413, 305, 350, 'black', true),
-  mainFF.line(305, 300, 305, 237, 'black', true),
+  mainFF.line(305, 413, 305, 350, 'black', true, true),
+  mainFF.line(305, 300, 305, 237, 'black', true, true),
   mainFF.text(370, 270, 'joinInterestGroup()', 12),
 ];
 
@@ -172,56 +175,56 @@ mainCanvas.addGroup(
   ])
 );
 
-const thirdCircleAnimations = [
-  mainFF.image(500, 200, userIcon, 50, 50),
-  mainFF.line(495, 237, 495, 300, 'black', true),
-  new Group([
-    mainFF.box(450, 300, 100, 50, '#EDF2EF'),
-    mainFF.text(500, 325, 'DSP tags'),
-  ]),
-  mainFF.line(495, 350, 495, 413, 'black', true),
-  new Group([
-    mainFF.box(450, 413, 100, 50, '#EDF2EF'),
-    mainFF.text(500, 438, 'DSPs'),
-  ]),
-  mainFF.line(505, 413, 505, 350, 'black', true),
-  mainFF.line(505, 300, 505, 237, 'black', true),
-  mainFF.text(570, 270, 'joinInterestGroup()', 12),
-];
+// const thirdCircleAnimations = [
+//   mainFF.image(500, 200, userIcon, 50, 50),
+//   mainFF.line(495, 237, 495, 300, 'black', true),
+//   new Group([
+//     mainFF.box(450, 300, 100, 50, '#EDF2EF'),
+//     mainFF.text(500, 325, 'DSP tags'),
+//   ]),
+//   mainFF.line(495, 350, 495, 413, 'black', true),
+//   new Group([
+//     mainFF.box(450, 413, 100, 50, '#EDF2EF'),
+//     mainFF.text(500, 438, 'DSPs'),
+//   ]),
+//   mainFF.line(505, 413, 505, 350, 'black', true),
+//   mainFF.line(505, 300, 505, 237, 'black', true),
+//   mainFF.text(570, 270, 'joinInterestGroup()', 12),
+// ];
 
-mainCanvas.addAnimator(new Animator(thirdCircleAnimations, mainFF));
+// mainCanvas.addAnimator(new Animator(thirdCircleAnimations, mainFF));
 
-mainCanvas.addGroup(
-  new Group([
-    mainFF.line(337, 200, 463, 200, 'blue'),
-    mainFF.circle(500, 200, 75, '#EDF2EF', 'blue'),
-    mainFF.image(500, 200, completedIcon, 50, 50),
-  ])
-);
+// mainCanvas.addGroup(
+//   new Group([
+//     mainFF.line(337, 200, 463, 200, 'blue'),
+//     mainFF.circle(500, 200, 75, '#EDF2EF', 'blue'),
+//     mainFF.image(500, 200, completedIcon, 50, 50),
+//   ])
+// );
 
-const fourthCircleAnimations = [
-  mainFF.image(700, 200, userIcon, 50, 50),
-  mainFF.line(695, 237, 695, 300, 'black', true),
-  new Group([
-    mainFF.box(650, 300, 100, 50, '#EDF2EF'),
-    mainFF.text(700, 325, 'DSP tags'),
-  ]),
-  mainFF.line(695, 350, 695, 413, 'black', true),
-  new Group([
-    mainFF.box(650, 413, 100, 50, '#EDF2EF'),
-    mainFF.text(700, 438, 'DSPs'),
-  ]),
-  mainFF.line(705, 413, 705, 350, 'black', true),
-  mainFF.line(705, 300, 705, 237, 'black', true),
-  mainFF.text(770, 270, 'joinInterestGroup()', 12),
-];
+// const fourthCircleAnimations = [
+//   mainFF.image(700, 200, userIcon, 50, 50),
+//   mainFF.line(695, 237, 695, 300, 'black', true),
+//   new Group([
+//     mainFF.box(650, 300, 100, 50, '#EDF2EF'),
+//     mainFF.text(700, 325, 'DSP tags'),
+//   ]),
+//   mainFF.line(695, 350, 695, 413, 'black', true),
+//   new Group([
+//     mainFF.box(650, 413, 100, 50, '#EDF2EF'),
+//     mainFF.text(700, 438, 'DSPs'),
+//   ]),
+//   mainFF.line(705, 413, 705, 350, 'black', true),
+//   mainFF.line(705, 300, 705, 237, 'black', true),
+//   mainFF.text(770, 270, 'joinInterestGroup()', 12),
+// ];
 
-mainCanvas.addAnimator(new Animator(fourthCircleAnimations, mainFF));
+// mainCanvas.addAnimator(new Animator(fourthCircleAnimations, mainFF));
 
-mainCanvas.addGroup(
-  new Group([
-    mainFF.line(537, 200, 663, 200, 'blue'),
-    mainFF.circle(700, 200, 75, '#EDF2EF', 'blue'),
-    mainFF.image(700, 200, completedIcon, 50, 50),
-  ])
-);
+// mainCanvas.addGroup(
+//   new Group([
+//     mainFF.line(537, 200, 663, 200, 'blue'),
+//     mainFF.circle(700, 200, 75, '#EDF2EF', 'blue'),
+//     mainFF.image(700, 200, completedIcon, 50, 50),
+//   ])
+// );

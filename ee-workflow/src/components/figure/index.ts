@@ -65,6 +65,17 @@ export default abstract class Figure {
   protected throw = false;
 
   /**
+   * Property to determine if the object should travel.
+   * If true, the object will travel to the end coordinates.
+   */
+  protected shouldTravel = false;
+
+  /**
+   * Function to be executed when the object has to travel.
+   */
+  protected traveller: ((figure: Figure) => boolean) | undefined;
+
+  /**
    * The number of objects created.
    */
   static objectCount = 0;
@@ -119,6 +130,24 @@ export default abstract class Figure {
   abstract isHovering(): boolean;
 
   /**
+   * Method to redraw the figure.
+   * @param params - The parameters to redraw the figure with.
+   */
+  abstract reDraw(...params: Array<any>): void;
+
+  getP5(): p5 | null {
+    return this.p5;
+  }
+
+  getX(): number {
+    return this.x;
+  }
+
+  getY(): number {
+    return this.y;
+  }
+
+  /**
    * Method to remove the figure.
    */
   remove() {
@@ -126,10 +155,40 @@ export default abstract class Figure {
   }
 
   /**
-   * Method to redraw the figure.
-   * @param params - The parameters to redraw the figure with.
+   * Method to get the shouldTravel property.
+   * @returns boolean indicating if the figure should travel.
    */
-  abstract reDraw(...params: Array<any>): void;
+  getShouldTravel(): boolean {
+    return this.shouldTravel;
+  }
+
+  /**
+   * Method to set shouldTravel property.
+   * @param shouldTravel - boolean indicating if the figure should travel.
+   */
+  setShouldTravel(shouldTravel: boolean) {
+    this.shouldTravel = shouldTravel;
+  }
+
+  /**
+   * Method to run the traveller function.
+   * @returns boolean indicating if the traveller function was executed
+   */
+  runTraveller(): boolean {
+    if (this.traveller) {
+      return this.traveller(this);
+    }
+
+    return true;
+  }
+
+  /**
+   * Method to set the traveller function.
+   * @param traveller - The traveller function to set.
+   */
+  setTraveller(traveller: (figure: Figure) => boolean) {
+    this.traveller = traveller;
+  }
 
   /**
    * Get the unique id of the figure.

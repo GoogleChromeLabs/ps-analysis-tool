@@ -55,24 +55,46 @@ export default class Line extends Figure {
     this.hasArrow = hasArrow ?? false;
   }
 
+  private drawArrow(size = 5) {
+    const angle = <number>(
+      this.p5?.atan2(this.y - this.endY, this.x - this.endX)
+    );
+    this.p5?.translate(this.endX, this.endY);
+    this.p5?.rotate(angle - this.p5?.HALF_PI);
+    this.p5?.fill(this.stroke);
+    this.p5?.stroke(255);
+    this.p5?.beginShape();
+    this.p5?.vertex(0, 0);
+    this.p5?.vertex(-size, size * 2);
+    this.p5?.vertex(size, size * 2);
+    this.p5?.endShape(this.p5?.CLOSE);
+  }
+
   draw() {
     this.p5?.push();
     this.p5?.stroke(this.stroke);
     this.p5?.line(this.x, this.y, this.endX, this.endY);
-    if (this.hasArrow) {
-      const angle = <number>(
-        this.p5?.atan2(this.y - this.endY, this.x - this.endX)
-      );
-      this.p5?.translate(this.endX, this.endY);
-      this.p5?.rotate(angle - this.p5?.HALF_PI);
-      this.p5?.fill(this.stroke);
-      this.p5?.beginShape();
-      this.p5?.vertex(0, 0);
-      this.p5?.vertex(-5, 10);
-      this.p5?.vertex(5, 10);
-      this.p5?.endShape(this.p5?.CLOSE);
+    const dist = this.p5?.dist(this.x, this.y, this.endX, this.endY) ?? 0;
+    if (this.hasArrow && dist > 10) {
+      this.drawArrow();
     }
     this.p5?.pop();
+  }
+
+  getEndX(): number {
+    return this.endX;
+  }
+
+  setEndX(endX: number) {
+    this.endX = endX;
+  }
+
+  getEndY(): number {
+    return this.endY;
+  }
+
+  setEndY(endY: number) {
+    this.endY = endY;
   }
 
   onHover() {
@@ -99,6 +121,15 @@ export default class Line extends Figure {
 
   isHovering(): boolean {
     return false; // TODO: Implement if line hover is needed
+  }
+
+  remove() {
+    const previousStroke = this.stroke;
+    this.stroke = this.canvasRunner.getBackgroundColor().toString();
+
+    this.draw();
+
+    this.stroke = previousStroke;
   }
 
   reDraw(

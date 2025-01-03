@@ -24,6 +24,7 @@ import p5 from 'p5';
 import Figure from './components/figure';
 import Group from './components/group';
 import Animator from './components/animator';
+import Traveller from './components/traveller';
 
 /**
  * Main class responsible for managing the rendering and interaction of figures,
@@ -94,6 +95,10 @@ class Main {
    * Background color of the canvas.
    */
   private backgroundColor = 255;
+
+  private isTravelling = false;
+
+  private traveller: Traveller | null = null;
 
   /**
    * Main constructor.
@@ -182,6 +187,14 @@ class Main {
     if (queue.length > 0) {
       const firstObject = <Figure>queue.shift();
 
+      if (firstObject.getShouldTravel() && !useInstantQueue) {
+        this.isTravelling = true;
+        this.traveller = new Traveller(firstObject);
+        firstObject.setShouldTravel(false);
+
+        return;
+      }
+
       if (firstObject.getAid()) {
         const animator = animatorQueue[0];
 
@@ -218,6 +231,22 @@ class Main {
    * Draws the current frame, processing the queues.
    */
   private draw() {
+    if (this.isTravelling) {
+      const done = this.traveller?.draw();
+
+      if (done) {
+        this.isTravelling = false;
+        const figure = <Figure>this.traveller?.getFigure();
+
+        this.stepsQueue.unshift(figure);
+
+        this.traveller = null;
+        this.runner();
+      }
+
+      return;
+    }
+
     if (this.pause) {
       return;
     }

@@ -17,6 +17,7 @@
 /**
  * Internal dependencies.
  */
+import Figure from '.';
 import Main from '../../main';
 import Box from './box';
 import Circle from './circle';
@@ -68,9 +69,52 @@ export default class FigureFactory {
     endX: number,
     endY: number,
     stroke?: string,
-    hasArrow?: boolean
+    hasArrow?: boolean,
+    shouldTravel?: boolean
   ): Line {
-    return new Line(this.canvasRunner, x, y, endX, endY, stroke, hasArrow);
+    const line = new Line(
+      this.canvasRunner,
+      x,
+      y,
+      endX,
+      endY,
+      stroke,
+      hasArrow
+    );
+
+    if (shouldTravel) {
+      let currentX = x;
+      let currentY = y;
+      line.setShouldTravel(shouldTravel);
+      line.setEndX(currentX);
+      line.setEndY(currentY);
+
+      const traveller = (figure: Figure) => {
+        const _figure = <Line>figure;
+        const p5 = _figure.getP5();
+
+        if (hasArrow) {
+          _figure.remove();
+        }
+
+        currentX = p5?.lerp(currentX, endX, 0.1) ?? endX;
+        currentY = p5?.lerp(currentY, endY, 0.1) ?? endY;
+
+        _figure.setEndX(currentX);
+        _figure.setEndY(currentY);
+        _figure.draw();
+
+        if (Math.round(currentX) === endX && Math.round(currentY) === endY) {
+          return true;
+        }
+
+        return false;
+      };
+
+      line.setTraveller(traveller);
+    }
+
+    return line;
   }
 
   text(x: number, y: number, text: string, size?: number, fill?: string): Text {
