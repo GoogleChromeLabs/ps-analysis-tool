@@ -46,6 +46,7 @@ app.setUpTimeLine = () => {
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
+  app.timeline.expandIconPositions = [];
   bubbles.clearAndRewriteBubbles();
   app.setup();
 
