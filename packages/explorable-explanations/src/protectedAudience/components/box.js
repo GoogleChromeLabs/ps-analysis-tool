@@ -18,7 +18,7 @@
  */
 import app from '../app';
 import config from '../config';
-import { addCanvasEventListener } from '../utils';
+import { addCanvasEventListener, isInsideBox } from '../utils';
 
 const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
@@ -67,13 +67,11 @@ const Box = ({
     p.image(p.infoIcon, iconX, iconY, INFO_ICON_SIZE, INFO_ICON_SIZE);
 
     const callback = (mouseX, mouseY) => {
-      if (
-        mouseX >= iconX &&
-        mouseX <= iconX + INFO_ICON_SIZE &&
-        mouseY >= iconY &&
-        mouseY <= iconY + INFO_ICON_SIZE
-      ) {
+      if (isInsideBox(mouseX, mouseY, iconX, iconY, INFO_ICON_SIZE)) {
+        app.p.cursor('pointer');
         console.log(info); // eslint-disable-line no-console
+      } else {
+        app.p.cursor('default');
       }
     };
 

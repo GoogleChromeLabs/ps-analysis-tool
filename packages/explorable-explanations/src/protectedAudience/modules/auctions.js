@@ -143,7 +143,7 @@ auction.setUpAdUnitCode = (index) => {
       ],
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue[1];
+      app.auction.nextTipCoordinates = returnValue;
     },
   });
 };
@@ -174,7 +174,7 @@ auction.setupBranches = (index) => {
       ],
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue[1];
+      app.auction.nextTipCoordinates = returnValue;
     },
   });
 };

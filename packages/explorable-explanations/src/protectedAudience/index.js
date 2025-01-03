@@ -448,6 +448,11 @@ app.handleControls = () => {
       'change',
       app.toggleInteractiveMode
     );
+    document
+      .getElementById('auto-expand')
+      .addEventListener('change', (event) => {
+        app.isAutoExpand = event.target.checked;
+      });
   }
 
   const minifiedBubbleContainerRect =
@@ -541,6 +546,8 @@ export const interestGroupSketch = (p) => {
     if (props.speedMultiplier) {
       app.speedMultiplier = props.speedMultiplier;
     }
+
+    app.isAutoExpand = props.autoExpand;
 
     if (
       props.expandedBubbleX &&

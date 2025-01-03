@@ -51,6 +51,7 @@ const app = {
   p: null,
   igp: null,
   up: null,
+  isAutoExpand: true,
   isMultiSeller: false,
   cancelPromise: false,
   isInteractiveMode: false,

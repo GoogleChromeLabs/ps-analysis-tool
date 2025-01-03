@@ -34,6 +34,7 @@ interface AnimationProps {
   isPlaying: boolean;
   resetAnimation: boolean;
   speedMultiplier: number;
+  isInteractive: boolean;
   setPAActiveTab: (tabIndex: number) => void;
   setPAStorage: (content: string) => void;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
@@ -51,6 +52,7 @@ const Animation = ({
   isPlaying,
   resetAnimation,
   speedMultiplier,
+  isInteractive,
   setPAActiveTab,
   setPAStorage,
   setHighlightAdTech,
@@ -63,12 +65,10 @@ const Animation = ({
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
   const animationRef = useRef(isAnimating);
-  const visitIndexStartRef = useRef(visitIndexStart);
 
   useEffect(() => {
     // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
     animationRef.current = isAnimating;
-    visitIndexStartRef.current = visitIndexStart;
   }, [isAnimating, visitIndexStart]);
 
   useEffect(() => {
@@ -79,11 +79,12 @@ const Animation = ({
           epoch,
           animationRef.current,
           siteAdTechs,
-          visitIndexStartRef.current,
+          visitIndexStart,
           animationRef.current
             ? handleUserVisit
             : (idx: number) => handleUserVisit(idx, false),
-          setHighlightAdTech
+          setHighlightAdTech,
+          isInteractive
         );
 
       setTogglePlayCallback(() => togglePlay);
@@ -100,11 +101,13 @@ const Animation = ({
   }, [
     epoch,
     handleUserVisit,
+    isInteractive,
     setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
     setPAStorage,
     siteAdTechs,
+    visitIndexStart,
   ]);
 
   useEffect(() => {
