@@ -40,7 +40,7 @@ flow.getTimelineCircleCoordinates = (index) => {
     return { x: positions.x, y: positions.y + 20 + diameter / 2 };
   }
 
-  return { x: positions.x, y: positions.y + diameter / 2 };
+  return { x: positions.x, y: positions.y + 1.5 + diameter / 2 };
 };
 
 /**

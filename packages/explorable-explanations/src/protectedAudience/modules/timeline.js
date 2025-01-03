@@ -192,14 +192,6 @@ timeline.drawCircle = (index, completed = false) => {
 
   app.p.pop();
 
-  app.up.image(
-    app.p.openWithoutAnimation,
-    position.x - 10,
-    position.y + diameter / 2,
-    20,
-    20
-  );
-
   if (app.isInteractiveMode) {
     if (app.usedNextOrPrev && app.timeline.currentIndex === index) {
       app.up.image(
@@ -221,8 +213,27 @@ timeline.drawCircle = (index, completed = false) => {
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
 
+    app.p.image(
+      app.p.openWithoutAnimation,
+      position.x - 10,
+      position.y + diameter / 2,
+      20,
+      20
+    );
+
     return;
   }
+
+  app.p.push();
+  app.p.tint(255, 90);
+  app.p.image(
+    app.p.openWithoutAnimation,
+    position.x - 10,
+    position.y + diameter / 2,
+    20,
+    20
+  );
+  app.p.pop();
 
   app.up.image(
     app.p.completedCheckMark,
