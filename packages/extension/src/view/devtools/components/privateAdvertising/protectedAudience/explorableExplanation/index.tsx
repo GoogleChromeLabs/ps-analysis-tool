@@ -229,6 +229,7 @@ const ExplorableExplanation = () => {
               )
               .flat(),
             noBids: {},
+            eeAnimatedTab: true,
           },
         },
       },

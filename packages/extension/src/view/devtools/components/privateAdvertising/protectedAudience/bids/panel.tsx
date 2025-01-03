@@ -41,9 +41,16 @@ interface PanelProps {
   noBids: NoBidsType;
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
+  eeAnimatedTab?: boolean;
 }
 
-const Panel = ({ receivedBids, noBids, storage, setStorage }: PanelProps) => {
+const Panel = ({
+  receivedBids,
+  noBids,
+  storage,
+  setStorage,
+  eeAnimatedTab = false,
+}: PanelProps) => {
   const [selectedRow, setSelectedRow] = useState<
     ReceivedBids | NoBidsType[keyof NoBidsType] | null
   >(null);
@@ -67,6 +74,7 @@ const Panel = ({ receivedBids, noBids, storage, setStorage }: PanelProps) => {
           secondOption={PillToggleOptions.NoBids}
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
+          eeAnimatedTab={eeAnimatedTab}
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
