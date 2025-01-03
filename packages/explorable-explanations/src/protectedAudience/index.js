@@ -171,7 +171,6 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     app.promiseQueue.push((cb) => {
       app.bubbles.interestGroupCounts +=
         config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
-      app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
       cb(null, true);
     });
