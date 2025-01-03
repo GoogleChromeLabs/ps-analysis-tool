@@ -126,6 +126,7 @@ const LandingPageContainer = ({
         srcDoc={getStoryPlayerMarkup({ independentStory })}
         style={{
           display: independentStory ? 'block' : 'none',
+          position: 'fixed',
         }}
         className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
       />

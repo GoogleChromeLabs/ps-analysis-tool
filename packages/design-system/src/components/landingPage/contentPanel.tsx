@@ -52,7 +52,7 @@ const ContentPanel = ({
       <div className="flex gap-5 flex-wrap">
         {content.map((item, index) => (
           <div
-            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5"
+            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
             key={index}
           >
             <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
@@ -84,14 +84,19 @@ const ContentPanel = ({
                   />
                 </a>
               </div>
-              <div className="w-4 h-4 cursor-pointer" onClick={item.onClick}>
+            </div>
+            {item.onClick && item.storyUrl && (
+              <div
+                className="w-4 top-5 right-2.5 absolute h-4 cursor-pointer"
+                onClick={item.onClick}
+              >
                 <WebStoriesIcon
                   className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
                   height="16"
                   width="16"
                 />
               </div>
-            </div>
+            )}
           </div>
         ))}
       </div>
