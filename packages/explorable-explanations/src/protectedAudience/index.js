@@ -46,6 +46,7 @@ app.setUpTimeLine = () => {
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
+  app.timeline.expandIconPositions = [];
   bubbles.clearAndRewriteBubbles();
   app.setup();
 
@@ -155,10 +156,24 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 
 app.addToPromiseQueue = (indexToStartFrom) => {
   let currentIndex = indexToStartFrom;
+
   while (currentIndex < config.timeline.circles.length) {
     app.promiseQueue.push((cb) => {
+      const { currentIndex: _currentIndex, circlePositions } = app.timeline;
+      const {
+        circleProps: { diameter },
+        circles,
+      } = config.timeline;
+
+      if (!circles.every(({ visited }) => visited === true)) {
+        app.timeline.expandIconPositions.push({
+          x: circlePositions[_currentIndex].x - 10,
+          y: circlePositions[_currentIndex].y + diameter / 2,
+          index: _currentIndex,
+        });
+      }
       flow.clearBelowTimelineCircles();
-      utils.markVisitedValue(app.timeline.currentIndex, true);
+      utils.markVisitedValue(_currentIndex, true);
       bubbles.generateBubbles();
       bubbles.showMinifiedBubbles();
       timeline.eraseAndRedraw();
@@ -169,9 +184,12 @@ app.addToPromiseQueue = (indexToStartFrom) => {
 
     app.drawFlows(currentIndex);
     app.promiseQueue.push((cb) => {
+      const { currentIndex: _currentIndex } = app.timeline;
+      const { circles } = config.timeline;
+
       app.bubbles.interestGroupCounts +=
-        config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
-      app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+        circles[_currentIndex]?.igGroupsCount ?? 0;
+      app.setCurrentSite(circles[_currentIndex]);
 
       cb(null, true);
     });
@@ -194,6 +212,10 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     utils.markVisitedValue(app.timeline.currentIndex, true);
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
+    flow.clearBelowTimelineCircles();
+    app.timeline.expandIconPositions.forEach((position) => {
+      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
+    });
     app.setCurrentSite(null);
 
     cb(null, true);
