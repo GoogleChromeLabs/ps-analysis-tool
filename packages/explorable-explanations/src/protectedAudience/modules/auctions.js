@@ -556,6 +556,20 @@ auction.componentAuction = () => {
     },
   });
 
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y,
+      customHeight: BORDER_HEIGHT,
+      noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
   auction.setUpRunadAuction();
 
   auction.steps.push({
