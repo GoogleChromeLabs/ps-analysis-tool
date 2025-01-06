@@ -189,7 +189,6 @@ app.addToPromiseQueue = (indexToStartFrom) => {
 
       app.bubbles.interestGroupCounts +=
         circles[_currentIndex]?.igGroupsCount ?? 0;
-      app.setCurrentSite(circles[_currentIndex]);
 
       cb(null, true);
     });
@@ -261,6 +260,10 @@ app.handleNonInteractivePrev = async () => {
   app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
+  //This is to set the data for previous site in react as well.
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+  await utils.delay(100);
+
   app.timeline.currentIndex -= 1;
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
@@ -346,14 +349,14 @@ app.handleNextButton = () => {
   }
 
   if (app.isInteractiveMode) {
-    app.handleInteravtiveNext();
+    app.handleInteractiveNext();
     return;
   }
 
-  app.handleNonInteravtiveNext();
+  app.handleNonInteractiveNext();
 };
 
-app.handleNonInteravtiveNext = async () => {
+app.handleNonInteractiveNext = async () => {
   if (
     app.bubbles.isExpanded ||
     app.timeline.currentIndex > config.timeline.circles.length - 1
@@ -363,6 +366,9 @@ app.handleNonInteravtiveNext = async () => {
   app.promiseQueue.end();
   app.timeline.isPaused = true;
   app.cancelPromise = true;
+  //This is to set the data for previous site in react as well.
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+  await utils.delay(100);
   app.timeline.currentIndex += 1;
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
@@ -385,7 +391,7 @@ app.handleNonInteravtiveNext = async () => {
   app.promiseQueue.start();
 };
 
-app.handleInteravtiveNext = () => {
+app.handleInteractiveNext = () => {
   if (
     app.visitedIndexOrder.length === 0 ||
     app.visitedIndexOrderTracker === app.visitedIndexOrder.length

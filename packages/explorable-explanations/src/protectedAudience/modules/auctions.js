@@ -493,6 +493,12 @@ auction.draw = (index) => {
     return;
   }
 
+  app.promiseQueue.push((cb) => {
+    app.setCurrentSite(config.timeline.circles[index]);
+
+    cb(null, true);
+  });
+
   for (const step of steps) {
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay = 0 } = step;

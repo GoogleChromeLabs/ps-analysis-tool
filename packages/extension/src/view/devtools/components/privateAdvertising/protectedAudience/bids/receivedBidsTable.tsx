@@ -20,25 +20,18 @@ import {
   getValueByKey,
   noop,
   type NoBidsType,
+  type ReceivedBids,
   type singleAuctionEvent,
 } from '@google-psat/common';
 import {
-  SIDEBAR_ITEMS_KEYS,
   Table,
   type TableFilter,
   TableProvider,
-  useSidebar,
   type InfoType,
   type TableColumn,
   type TableRow,
-  useTabs,
 } from '@google-psat/design-system';
 import React, { useCallback, useEffect, useMemo } from 'react';
-
-/**
- * Internal dependencies.
- */
-import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 
 interface ReceivedBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -47,28 +40,19 @@ interface ReceivedBidsTableProps {
     >
   >;
   selectedRow: singleAuctionEvent | NoBidsType[keyof NoBidsType] | null;
+  receivedBids: ReceivedBids[];
+  storage?: string[];
+  setStorage?: (data: string, index: number) => void;
 }
 
 const ReceivedBidsTable = ({
   setSelectedRow,
   selectedRow,
+  receivedBids,
+  storage,
+  setStorage,
 }: ReceivedBidsTableProps) => {
-  const receivedBids = useProtectedAudience(({ state }) => state.receivedBids);
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
-
-  const { storage, setStorage } = useTabs(({ state, actions }) => ({
-    storage: state.storage,
-    setStorage: actions.setStorage,
-  }));
-
-  const auctionsTabData = JSON.parse(storage[4] || '{}');
+  const auctionsTabData = JSON.parse(storage?.[4] || '{}');
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -206,31 +190,9 @@ const ReceivedBidsTable = ({
 
   useEffect(() => {
     return () => {
-      setStorage('', 4);
+      setStorage?.('', 4);
     };
   }, [setStorage]);
-
-  if (!isUsingCDP) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view bids data, enable PSAT to use CDP via the{' '}
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={() => {
-              document
-                .getElementById('cookies-landing-scroll-container')
-                ?.scrollTo(0, 0);
-              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-            }}
-          >
-            Settings Page
-          </button>
-          .
-        </p>
-      </div>
-    );
-  }
 
   if (!receivedBids || receivedBids.length === 0) {
     return (
