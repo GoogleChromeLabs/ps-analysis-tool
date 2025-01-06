@@ -158,6 +158,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
     }
 
     const containerRefCopy = containerRef;
+
     return () => {
       app.reset();
       if (containerRefCopy.current) {
