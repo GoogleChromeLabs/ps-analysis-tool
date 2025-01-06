@@ -13,9 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const SYNTHETIC_INTEREST_GROUPS = {
+/**
+ * External dependencies
+ */
+import type { InterestGroups } from '@google-psat/common';
+
+interface WebsiteInterestGroup {
+  [websiteName: string]: InterestGroups[];
+}
+export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv1.com': [
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
@@ -59,6 +68,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
@@ -102,10 +112,12 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '103ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'phones',
+      time: 1696154400.103,
       details: {
         ads: [
           {
@@ -146,6 +158,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv2.com': [
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
@@ -189,6 +202,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
@@ -235,6 +249,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   'pub1.com': [],
   'adv3.com': [
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
@@ -278,6 +293,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
@@ -323,6 +339,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv4.com': [
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '90ms',
       type: 'join',
       ownerOrigin: 'https://www.adv4.com',
@@ -366,6 +383,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '95ms',
       type: 'join',
       ownerOrigin: 'https://www.adv4.com',
@@ -409,6 +427,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '98ms',
       type: 'join',
       ownerOrigin: 'https://www.adv4.com',
@@ -454,6 +473,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv5.com': [
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '80ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
@@ -497,6 +517,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '81ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
@@ -540,6 +561,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '88ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
@@ -586,6 +608,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   'pub2.com': [],
   'adv6.com': [
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '67ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
@@ -629,6 +652,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '69ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
@@ -672,6 +696,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
@@ -717,6 +742,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
   ],
   'adv7.com': [
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
@@ -760,6 +786,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '76ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
@@ -803,6 +830,7 @@ export const SYNTHETIC_INTEREST_GROUPS = {
       },
     },
     {
+      eventType: 'interestGroupAccessed',
       formattedTime: '151ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
