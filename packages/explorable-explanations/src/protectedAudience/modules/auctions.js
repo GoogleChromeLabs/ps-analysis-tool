@@ -63,6 +63,7 @@ auction.setUp = (index) => {
   if (app.isMultiSeller) {
     auction.setUpMultiSellerFirstSSPTagFlow();
     auction.setUpPublisherAdServerFlow();
+    auction.componentAuction();
   } else {
     auction.setUpSingleSellerFirstSSPTagFlow();
   }
@@ -470,9 +471,14 @@ auction.setUpPublisherAdServerFlow = () => {
       app.auction.nextTipCoordinates = returnValue.down;
     },
   });
+};
 
-  const CUSTOM_HEIGHT = 150;
-  const CUSTOM_WIDTH = 400;
+auction.componentAuction = () => {
+  const { box } = config.flow;
+
+  const BORDER_WIDTH = 400;
+  const BORDER_HEIGHT = BORDER_WIDTH;
+  const BORDER_BOX_MARGIN = 50;
 
   auction.steps.push({
     component: ProgressLine,
@@ -480,7 +486,7 @@ auction.setUpPublisherAdServerFlow = () => {
       direction: 'down',
       x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => app.auction.nextTipCoordinates?.y + box.height - 10,
-      customHeight: CUSTOM_HEIGHT,
+      customHeight: 150,
       noArrow: true,
     },
     callBack: (returnValue) => {
@@ -495,7 +501,7 @@ auction.setUpPublisherAdServerFlow = () => {
       direction: 'right',
       x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => app.auction.nextTipCoordinates?.y,
-      customWidth: CUSTOM_WIDTH,
+      customWidth: BORDER_WIDTH,
       noArrow: true,
     },
     callBack: () => {
@@ -507,9 +513,9 @@ auction.setUpPublisherAdServerFlow = () => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x + CUSTOM_HEIGHT,
+      x1: () => app.auction.nextTipCoordinates?.x + 150,
       y1: () => app.auction.nextTipCoordinates?.y - 10,
-      customWidth: CUSTOM_WIDTH,
+      customWidth: BORDER_WIDTH,
       noArrow: true,
     },
     callBack: (returnValue) => {
@@ -523,10 +529,45 @@ auction.setUpPublisherAdServerFlow = () => {
       direction: 'down',
       x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => app.auction.nextTipCoordinates?.y,
-      customHeight: 400,
+      customHeight: BORDER_HEIGHT,
       noArrow: true,
     },
-    delay: 1111000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  auction.steps.push({
+    component: Box,
+    props: {
+      title: 'SSP A',
+      x: () => app.auction.nextTipCoordinates?.x + BORDER_BOX_MARGIN,
+      y: () =>
+        app.auction.nextTipCoordinates?.y - BORDER_HEIGHT + BORDER_BOX_MARGIN,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      const val = returnValue.down;
+
+      val.x = val.x - box.width / 2 - 10;
+      val.y = val.y + box.height * 2;
+
+      app.auction.nextTipCoordinates = val;
+    },
+  });
+
+  auction.setUpRunadAuction();
+
+  auction.steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y,
+      customHeight: BORDER_HEIGHT,
+      noArrow: true,
+    },
+    delay: 11111111111,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
     },
