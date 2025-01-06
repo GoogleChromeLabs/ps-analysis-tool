@@ -27,6 +27,11 @@ import {
 } from '../utils';
 import bubbles from './bubbles';
 import flow from './flow';
+import {
+  mouseClickedInInteractiveModeCallback,
+  mouseClickedInNonInteractiveModeCallback,
+  mouseMovedInTimeline,
+} from '../utils/mouseHandlers';
 
 /**
  * @module Timeline
@@ -52,18 +57,17 @@ timeline.init = () => {
     app.mouseX = offsetX;
     app.mouseY = offsetY;
 
-    if (app.isInteractiveMode) {
-      timeline.mouseMovedInInteractiveModeCallback(event);
-    } else {
-      timeline.mouseMovedInNonInteractiveModeCallback(event);
-    }
+    mouseMovedInTimeline(event);
   };
 
   app.p.mouseClicked = () => {
     if (app.isInteractiveMode) {
-      timeline.mouseClickedInInteractiveModeCallback();
+      mouseClickedInInteractiveModeCallback(
+        timeline.drawCircle,
+        timeline.renderUserIcon
+      );
     } else {
-      timeline.mouseClickedInNonInteractiveModeCallback();
+      mouseClickedInNonInteractiveModeCallback(timeline.renderUserIcon);
     }
   };
 
@@ -521,94 +525,6 @@ timeline.mouseClickedInInteractiveModeCallback = () => {
     wipeAndRecreateMainCanvas();
     return;
   }
-};
-
-timeline.mouseMovedInNonInteractiveModeCallback = () => {
-  const { offsetX, offsetY } = event;
-
-  app.mouseX = offsetX;
-  app.mouseY = offsetY;
-
-  let hoveringOnExpandIconPositions = false;
-  if (!config.timeline.circles.every(({ visited }) => visited === true)) {
-    return;
-  }
-  app.timeline.expandIconPositions.forEach((positions) => {
-    if (
-      isInsideCircle(
-        offsetX,
-        offsetY,
-        positions.x,
-        positions.y + config.timeline.circleProps.diameter / 2,
-        20
-      )
-    ) {
-      hoveringOnExpandIconPositions = true;
-    }
-  });
-
-  if (hoveringOnExpandIconPositions) {
-    app.p.cursor('pointer');
-  } else {
-    app.p.cursor('default');
-  }
-};
-
-timeline.mouseClickedInNonInteractiveModeCallback = () => {
-  const {
-    circleProps: { diameter },
-    circles,
-  } = config.timeline;
-
-  if (!circles.every(({ visited }) => visited === true)) {
-    return;
-  }
-
-  let clickedIndex = -1;
-  app.timeline.expandIconPositions.forEach((positions) => {
-    if (
-      isInsideCircle(
-        app.mouseX,
-        app.mouseY,
-        positions.x,
-        positions.y + diameter / 2,
-        20
-      )
-    ) {
-      clickedIndex = positions.index;
-    }
-  });
-
-  if (clickedIndex === -1) {
-    return;
-  }
-
-  flow.clearBelowTimelineCircles();
-
-  if (circles[clickedIndex].type === 'advertiser') {
-    app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
-  } else {
-    app.auction.auctions[clickedIndex][0].props.y1 += 20;
-  }
-
-  app.isRevisitingNodeInInteractiveMode = true;
-  app.drawFlows(clickedIndex);
-
-  app.promiseQueue.push((cb) => {
-    app.shouldRespondToClick = true;
-    timeline.renderUserIcon();
-    app.isRevisitingNodeInInteractiveMode = false;
-
-    if (circles[clickedIndex].type === 'advertiser') {
-      app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
-    } else {
-      app.auction.auctions[clickedIndex][0].props.y1 -= 20;
-    }
-
-    cb(null, true);
-  });
-
-  app.promiseQueue.start();
 };
 
 export default timeline;
