@@ -122,7 +122,13 @@ mainCanvas.addGroup(
 );
 
 const travellerLine = mainFF.line(0, 400, 1000, 600, 'red', false, true);
-mainCanvas.addFigure(travellerLine);
+const travellerGroup = new Group([
+  mainFF.line(0, 600, 1000, 800, 'blue', false),
+  mainFF.line(0, 450, 1000, 900, 'green', false, true),
+  mainFF.line(0, 500, 1000, 700, 'yellow', false, true),
+]);
+
+mainCanvas.addAnimator(new Animator([travellerLine, travellerGroup], mainFF));
 
 const secondCircleAnimations = [
   mainFF.image(300, 200, userIcon, 50, 50),

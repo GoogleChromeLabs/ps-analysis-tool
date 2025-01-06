@@ -152,4 +152,12 @@ export default class Group {
       this.figures.splice(index, 1);
     }
   }
+
+  /**
+   * Method to get detail if any figure in the group should travel.
+   * @returns boolean indicating if any figure in the group should travel.
+   */
+  getShouldTravel() {
+    return this.figures.some((figure) => figure.getShouldTravel());
+  }
 }

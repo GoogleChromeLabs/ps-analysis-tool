@@ -187,8 +187,19 @@ class Main {
     if (queue.length > 0) {
       const firstObject = <Figure>queue.shift();
 
-      if (firstObject.getShouldTravel() && !useInstantQueue) {
+      if (
+        (firstObject.getShouldTravel() ||
+          (firstObject.getGid() && groupQueue[0].getShouldTravel())) &&
+        !useInstantQueue
+      ) {
         this.isTravelling = true;
+
+        if (firstObject.getGid()) {
+          this.traveller = new Traveller(groupQueue[0]);
+
+          return;
+        }
+
         this.traveller = new Traveller(firstObject);
         firstObject.setShouldTravel(false);
 
@@ -236,9 +247,13 @@ class Main {
 
       if (done) {
         this.isTravelling = false;
-        const figure = <Figure>this.traveller?.getFigure();
+        const object = this.traveller?.getObject();
 
-        this.stepsQueue.unshift(figure);
+        if (object instanceof Figure) {
+          this.stepsQueue.unshift(object);
+        } else if (object?.getFigures().length) {
+          this.stepsQueue.unshift(object.getFigures()[0]);
+        }
 
         this.traveller = null;
         this.runner();

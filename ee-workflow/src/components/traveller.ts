@@ -18,27 +18,82 @@
  * Internal dependencies.
  */
 import Figure from './figure';
+import Group from './group';
 
 export default class Traveller {
-  private figure: Figure | null = null;
+  /**
+   * Object to be drawn. Can be a figure or a group.
+   */
+  private object: Figure | Group | null = null;
 
-  constructor(figure: Figure) {
-    this.figure = figure;
+  /**
+   * Array to store the ids of the group objects that have completed travelling.
+   */
+  private groupObjectsCompleted: string[] = [];
+
+  constructor(object: Figure | Group) {
+    this.object = object;
   }
 
+  /**
+   * Function to manage the drawing of a group with travelling figures.
+   * @returns boolean indicating if the group has completed travelling.
+   */
+  private drawGroup() {
+    const object = <Group>this.object;
+
+    const nonTravellingFigures = object
+      .getFigures()
+      .filter((figure) => figure.getShouldTravel() === false);
+
+    const travellingFigures = object
+      .getFigures()
+      .filter((figure) => figure.getShouldTravel() === true);
+
+    nonTravellingFigures.forEach((figure) => figure.draw());
+
+    travellingFigures.forEach((figure) => {
+      if (this.groupObjectsCompleted.includes(figure.getId())) {
+        return;
+      }
+
+      if (figure.runTraveller()) {
+        this.groupObjectsCompleted.push(figure.getId());
+        figure.setShouldTravel(false);
+      }
+    });
+
+    if (this.groupObjectsCompleted.length !== travellingFigures.length) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Function to draw the object.
+   * @returns boolean indicating if the object has completed travelling.
+   */
   draw() {
-    if (!this.figure) {
+    if (!this.object) {
       return true;
     }
 
-    if (this.figure.runTraveller()) {
+    if (this.object instanceof Group) {
+      return this.drawGroup();
+    } else if (this.object.runTraveller()) {
+      this.object.setShouldTravel(false);
       return true;
     }
 
     return false;
   }
 
-  getFigure() {
-    return this.figure;
+  /**
+   * Function to get the object.
+   * @returns The object to be drawn.
+   */
+  getObject() {
+    return this.object;
   }
 }
