@@ -223,7 +223,6 @@ class Main {
           if (isDone) {
             this.animatorSnapshot.push(animator);
             animatorQueue.shift();
-            this.runner(useInstantQueue);
             this.reDrawAll();
           }
         }
@@ -410,8 +409,6 @@ class Main {
       return;
     }
 
-    this.p5.clear();
-    // this.p5.background(this.backgroundColor);
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
 
@@ -451,6 +448,8 @@ class Main {
         this.addFigure(figure, true);
       }
     }
+
+    this.p5.clear();
   }
 
   /**
