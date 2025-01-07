@@ -96,8 +96,14 @@ class Main {
    */
   private backgroundColor = 255;
 
+  /**
+   * Flag to indicate if the canvas is drawing a figure as an animation.
+   */
   private isTravelling = false;
 
+  /**
+   * Traveller object to manage the animation of a figure.
+   */
   private traveller: Traveller | null = null;
 
   /**
