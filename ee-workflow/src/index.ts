@@ -27,31 +27,113 @@ IGCanvas.setDelay(1);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 
-const timeline = mainFF.line(0, 200, 1000, 200, 'black');
+const timeline = mainFF.line({
+  x: 0,
+  y: 200,
+  endX: 1000,
+  endY: 200,
+  stroke: 'black',
+});
 
 const circles = [
-  mainFF.circle(100, 200, 75, '#EDF2EF'),
-  mainFF.circle(300, 200, 75, '#EDF2EF'),
-  mainFF.circle(500, 200, 75, '#EDF2EF'),
-  mainFF.circle(700, 200, 75, '#EDF2EF'),
+  mainFF.circle({
+    x: 100,
+    y: 200,
+    diameter: 75,
+    fill: '#EDF2EF',
+  }),
+  mainFF.circle({
+    x: 300,
+    y: 200,
+    diameter: 75,
+    fill: '#EDF2EF',
+  }),
+  mainFF.circle({
+    x: 500,
+    y: 200,
+    diameter: 75,
+    fill: '#EDF2EF',
+  }),
+  mainFF.circle({
+    x: 700,
+    y: 200,
+    diameter: 75,
+    fill: '#EDF2EF',
+  }),
 ];
 
 const textonCircles = [
-  mainFF.text(100, 75, '2024-01-01'),
-  mainFF.text(100, 100, 'adv1.com'),
-  mainFF.text(300, 75, '2024-01-02'),
-  mainFF.text(300, 100, 'adv2.com'),
-  mainFF.text(500, 75, '2024-01-03'),
-  mainFF.text(500, 100, 'adv3.com'),
-  mainFF.text(700, 75, '2024-01-04'),
-  mainFF.text(700, 100, 'adv4.com'),
+  mainFF.text({
+    x: 100,
+    y: 75,
+    text: '2024-01-01',
+  }),
+  mainFF.text({
+    x: 100,
+    y: 100,
+    text: 'adv1.com',
+  }),
+  mainFF.text({
+    x: 300,
+    y: 75,
+    text: '2024-01-02',
+  }),
+  mainFF.text({
+    x: 300,
+    y: 100,
+    text: 'adv2.com',
+  }),
+  mainFF.text({
+    x: 500,
+    y: 75,
+    text: '2024-01-03',
+  }),
+  mainFF.text({
+    x: 500,
+    y: 100,
+    text: 'adv3.com',
+  }),
+  mainFF.text({
+    x: 700,
+    y: 75,
+    text: '2024-01-04',
+  }),
+  mainFF.text({
+    x: 700,
+    y: 100,
+    text: 'adv4.com',
+  }),
 ];
 
 const circleToTextLine = [
-  mainFF.line(100, 163, 100, 110, 'black'),
-  mainFF.line(300, 163, 300, 110, 'black'),
-  mainFF.line(500, 163, 500, 110, 'black'),
-  mainFF.line(700, 163, 700, 110, 'black'),
+  mainFF.line({
+    x: 100,
+    y: 163,
+    endX: 100,
+    endY: 110,
+    stroke: 'black',
+  }),
+  mainFF.line({
+    x: 300,
+    y: 163,
+    endX: 300,
+    endY: 110,
+    stroke: 'black',
+  }),
+  mainFF.line({
+    x: 500,
+    y: 163,
+    endX: 500,
+    endY: 110,
+    stroke: 'black',
+  }),
+  mainFF.line({
+    x: 700,
+    y: 163,
+    endX: 700,
+    endY: 110,
+    stroke: 'black',
+  }),
 ];
 
 const userIcon =
@@ -61,20 +143,83 @@ const completedIcon =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNTk4NUUxIj48cGF0aCBkPSJNNDgwLTgwcS04NSAwLTE1OC0zMC41VDE5NS0xOTVxLTU0LTU0LTg0LjUtMTI3VDgwLTQ4MHEwLTg0IDMwLjUtMTU3VDE5NS03NjRxNTQtNTQgMTI3LTg1dDE1OC0zMXE3NSAwIDE0MCAyNHQxMTcgNjZsLTQzIDQzcS00NC0zNS05OC01NHQtMTE2LTE5cS0xNDUgMC0yNDIuNSA5Ny41VDE0MC00ODBxMCAxNDUgOTcuNSAyNDIuNVQ0ODAtMTQwcTE0NSAwIDI0Mi41LTk3LjVUODIwLTQ4MHEwLTMwLTQuNS01OC41VDgwMi01OTRsNDYtNDZxMTYgMzcgMjQgNzd0OCA4M3EwIDg1LTMxIDE1OHQtODUgMTI3cS01NCA1NC0xMjcgODQuNVQ0ODAtODBabS01OS0yMThMMjU2LTQ2NGw0NS00NSAxMjAgMTIwIDQxNC00MTQgNDYgNDUtNDYwIDQ2MFoiLz48L3N2Zz4=';
 
 const advertiserFlow = [
-  mainFF.image(100, 200, userIcon, 50, 50),
-  mainFF.line(95, 237, 95, 300, 'black', true, true),
+  mainFF.image({
+    x: 100,
+    y: 200,
+    imageData: userIcon,
+    width: 50,
+    height: 50,
+  }),
+  mainFF.line({
+    x: 95,
+    y: 237,
+    endX: 95,
+    endY: 300,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
   new Group([
-    mainFF.box(50, 300, 100, 50, '#EDF2EF'),
-    mainFF.text(100, 325, 'DSP tags'),
+    mainFF.box({
+      x: 50,
+      y: 300,
+      width: 100,
+      height: 50,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 100,
+      y: 325,
+      text: 'DSP tags',
+    }),
   ]),
-  mainFF.line(95, 350, 95, 413, 'black', true, true),
+  mainFF.line({
+    x: 95,
+    y: 350,
+    endX: 95,
+    endY: 413,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
   new Group([
-    mainFF.box(50, 413, 100, 50, '#EDF2EF'),
-    mainFF.text(100, 438, 'DSPs'),
+    mainFF.box({
+      x: 50,
+      y: 413,
+      width: 100,
+      height: 50,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 100,
+      y: 438,
+      text: 'DSPs',
+    }),
   ]),
-  mainFF.line(105, 413, 105, 350, 'black', true, true),
-  mainFF.line(105, 300, 105, 237, 'black', true, true),
-  mainFF.text(170, 270, 'joinInterestGroup()', 12),
+  mainFF.line({
+    x: 105,
+    y: 413,
+    endX: 105,
+    endY: 350,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
+  mainFF.line({
+    x: 105,
+    y: 300,
+    endX: 105,
+    endY: 237,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
+  mainFF.text({
+    x: 170,
+    y: 270,
+    text: 'joinInterestGroup()',
+    size: 12,
+  }),
 ];
 
 // Setup timeline.
@@ -91,7 +236,13 @@ let startX = 170;
 let startY = 270;
 let lerpSpeed = 0.01;
 while (Math.floor(startX) > 0 && Math.floor(startY) > 0) {
-  const circle = IGFF.circle(startX, startY, 10, 'orange', 'black');
+  const circle = IGFF.circle({
+    x: startX,
+    y: startY,
+    diameter: 10,
+    fill: 'orange',
+    stroke: 'black',
+  });
   bubbles.push(circle);
   startX = IGCanvas.getP5Instance().lerp(startX, 0, lerpSpeed);
   startY = IGCanvas.getP5Instance().lerp(startY, 0, lerpSpeed);
@@ -117,36 +268,144 @@ mainCanvas.addAnimator(flow);
 
 mainCanvas.addGroup(
   new Group([
-    mainFF.line(0, 200, 63, 200, 'blue'),
-    mainFF.circle(100, 200, 75, '#EDF2EF', 'blue'),
-    mainFF.image(100, 200, completedIcon, 50, 50),
+    mainFF.line({
+      x: 0,
+      y: 200,
+      endX: 63,
+      endY: 200,
+      stroke: 'blue',
+    }),
+    mainFF.circle({
+      x: 100,
+      y: 200,
+      diameter: 75,
+      fill: '#EDF2EF',
+      stroke: 'blue',
+    }),
+    mainFF.image({
+      x: 100,
+      y: 200,
+      imageData: completedIcon,
+      width: 50,
+      height: 50,
+    }),
   ])
 );
 
-const travellerLine = mainFF.line(0, 400, 1000, 600, 'red', false, true);
+const travellerLine = mainFF.line({
+  x: 0,
+  y: 400,
+  endX: 1000,
+  endY: 400,
+  stroke: 'red',
+  shouldTravel: true,
+});
 const travellerGroup = new Group([
-  mainFF.line(0, 600, 1000, 800, 'blue', false),
-  mainFF.line(0, 450, 1000, 900, 'green', false, true),
-  mainFF.line(0, 500, 1000, 700, 'yellow', false, true),
+  mainFF.line({
+    x: 0,
+    y: 600,
+    endX: 1000,
+    endY: 800,
+    stroke: 'blue',
+  }),
+  mainFF.line({
+    x: 0,
+    y: 450,
+    endX: 1000,
+    endY: 900,
+    stroke: 'green',
+    shouldTravel: true,
+  }),
+  mainFF.line({
+    x: 0,
+    y: 500,
+    endX: 1000,
+    endY: 700,
+    stroke: 'yellow',
+    shouldTravel: true,
+  }),
 ]);
 
 mainCanvas.addAnimator(new Animator([travellerLine, travellerGroup], mainFF));
 
 const secondCircleAnimations = [
-  mainFF.image(300, 200, userIcon, 50, 50),
-  mainFF.line(295, 237, 295, 300, 'black', true, true),
+  mainFF.image({
+    x: 300,
+    y: 200,
+    imageData: userIcon,
+    width: 50,
+    height: 50,
+  }),
+  mainFF.line({
+    x: 295,
+    y: 237,
+    endX: 295,
+    endY: 300,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
   new Group([
-    mainFF.box(250, 300, 100, 50, '#EDF2EF'),
-    mainFF.text(300, 325, 'DSP tags'),
+    mainFF.box({
+      x: 250,
+      y: 300,
+      width: 100,
+      height: 50,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 300,
+      y: 325,
+      text: 'DSP tags',
+    }),
   ]),
-  mainFF.line(295, 350, 295, 413, 'black', true, true),
+  mainFF.line({
+    x: 295,
+    y: 350,
+    endX: 295,
+    endY: 413,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
   new Group([
-    mainFF.box(250, 413, 100, 50, '#EDF2EF'),
-    mainFF.text(300, 438, 'DSPs'),
+    mainFF.box({
+      x: 250,
+      y: 413,
+      width: 100,
+      height: 50,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 300,
+      y: 438,
+      text: 'DSPs',
+    }),
   ]),
-  mainFF.line(305, 413, 305, 350, 'black', true, true),
-  mainFF.line(305, 300, 305, 237, 'black', true, true),
-  mainFF.text(370, 270, 'joinInterestGroup()', 12),
+  mainFF.line({
+    x: 305,
+    y: 413,
+    endX: 305,
+    endY: 350,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
+  mainFF.line({
+    x: 305,
+    y: 300,
+    endX: 305,
+    endY: 237,
+    stroke: 'black',
+    hasArrow: true,
+    shouldTravel: true,
+  }),
+  mainFF.text({
+    x: 370,
+    y: 270,
+    text: 'joinInterestGroup()',
+    size: 12,
+  }),
 ];
 
 const secondBubbles = [];
@@ -154,7 +413,14 @@ let secondStartX = 370;
 let secondStartY = 270;
 lerpSpeed = 0.01;
 while (Math.floor(secondStartX) > 0 && Math.floor(secondStartY) > 0) {
-  const circle = IGFF.circle(secondStartX, secondStartY, 10, 'orange', 'black');
+  const circle = IGFF.circle({
+    x: secondStartX,
+    y: secondStartY,
+    diameter: 10,
+    fill: 'orange',
+    stroke: 'black',
+  });
+
   secondBubbles.push(circle);
   secondStartX = IGCanvas.getP5Instance().lerp(secondStartX, 0, lerpSpeed);
   secondStartY = IGCanvas.getP5Instance().lerp(secondStartY, 0, lerpSpeed);
@@ -179,62 +445,26 @@ mainCanvas.addAnimator(secondFlow);
 
 mainCanvas.addGroup(
   new Group([
-    mainFF.line(137, 200, 263, 200, 'blue'),
-    mainFF.circle(300, 200, 75, '#EDF2EF', 'blue'),
-    mainFF.image(300, 200, completedIcon, 50, 50),
+    mainFF.line({
+      x: 137,
+      y: 200,
+      endX: 263,
+      endY: 200,
+      stroke: 'blue',
+    }),
+    mainFF.circle({
+      x: 300,
+      y: 200,
+      diameter: 75,
+      fill: '#EDF2EF',
+      stroke: 'blue',
+    }),
+    mainFF.image({
+      x: 300,
+      y: 200,
+      imageData: completedIcon,
+      width: 50,
+      height: 50,
+    }),
   ])
 );
-
-// const thirdCircleAnimations = [
-//   mainFF.image(500, 200, userIcon, 50, 50),
-//   mainFF.line(495, 237, 495, 300, 'black', true),
-//   new Group([
-//     mainFF.box(450, 300, 100, 50, '#EDF2EF'),
-//     mainFF.text(500, 325, 'DSP tags'),
-//   ]),
-//   mainFF.line(495, 350, 495, 413, 'black', true),
-//   new Group([
-//     mainFF.box(450, 413, 100, 50, '#EDF2EF'),
-//     mainFF.text(500, 438, 'DSPs'),
-//   ]),
-//   mainFF.line(505, 413, 505, 350, 'black', true),
-//   mainFF.line(505, 300, 505, 237, 'black', true),
-//   mainFF.text(570, 270, 'joinInterestGroup()', 12),
-// ];
-
-// mainCanvas.addAnimator(new Animator(thirdCircleAnimations, mainFF));
-
-// mainCanvas.addGroup(
-//   new Group([
-//     mainFF.line(337, 200, 463, 200, 'blue'),
-//     mainFF.circle(500, 200, 75, '#EDF2EF', 'blue'),
-//     mainFF.image(500, 200, completedIcon, 50, 50),
-//   ])
-// );
-
-// const fourthCircleAnimations = [
-//   mainFF.image(700, 200, userIcon, 50, 50),
-//   mainFF.line(695, 237, 695, 300, 'black', true),
-//   new Group([
-//     mainFF.box(650, 300, 100, 50, '#EDF2EF'),
-//     mainFF.text(700, 325, 'DSP tags'),
-//   ]),
-//   mainFF.line(695, 350, 695, 413, 'black', true),
-//   new Group([
-//     mainFF.box(650, 413, 100, 50, '#EDF2EF'),
-//     mainFF.text(700, 438, 'DSPs'),
-//   ]),
-//   mainFF.line(705, 413, 705, 350, 'black', true),
-//   mainFF.line(705, 300, 705, 237, 'black', true),
-//   mainFF.text(770, 270, 'joinInterestGroup()', 12),
-// ];
-
-// mainCanvas.addAnimator(new Animator(fourthCircleAnimations, mainFF));
-
-// mainCanvas.addGroup(
-//   new Group([
-//     mainFF.line(537, 200, 663, 200, 'blue'),
-//     mainFF.circle(700, 200, 75, '#EDF2EF', 'blue'),
-//     mainFF.image(700, 200, completedIcon, 50, 50),
-//   ])
-// );

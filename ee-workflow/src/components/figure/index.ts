@@ -85,6 +85,7 @@ export default abstract class Figure {
    * @param canvasRunner - The canvas runner instance.
    * @param x - The x coordinate of the figure.
    * @param y - The y coordinate of the figure.
+   * @param id - The unique id of the figure.
    * @param fill - The fill color of the figure.
    * @param stroke - The stroke color of the figure.
    */
@@ -92,12 +93,12 @@ export default abstract class Figure {
     protected canvasRunner: Main,
     protected x: number,
     protected y: number,
+    id?: string,
     protected fill: string = 'black',
     protected stroke: string = 'black'
   ) {
     Figure.objectCount++;
-    this.id =
-      `object-${Figure.objectCount}` + Math.random().toString(36).slice(2, 9);
+    this.id = id || `object-${Figure.objectCount}`;
     this.canvasRunner = canvasRunner;
     this.p5 = this.canvasRunner.getP5Instance();
     this.previousFill = this.fill;

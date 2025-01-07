@@ -65,7 +65,12 @@ export default class Animator {
       Math.random().toString(36).slice(2, 9);
     this.objects = [
       ...objects,
-      figureFactory.line(0, 0, 0, 0), // last dummy object acts as a placeholder for the end of the animation
+      figureFactory.line({
+        x: 0,
+        y: 0,
+        endX: 0,
+        endY: 0,
+      }), // last dummy object acts as a placeholder for the end of the animation
     ];
     this.objects.forEach((object) => object.setAid(this.id));
   }

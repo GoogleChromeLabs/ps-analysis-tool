@@ -46,10 +46,11 @@ export default class Line extends Figure {
     y: number,
     endX: number,
     endY: number,
+    id?: string,
     stroke?: string,
     hasArrow?: boolean
   ) {
-    super(canvasRunner, x, y, undefined, stroke);
+    super(canvasRunner, x, y, id, undefined, stroke);
     this.endX = endX;
     this.endY = endY;
     this.hasArrow = hasArrow ?? false;

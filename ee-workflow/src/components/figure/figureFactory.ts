@@ -32,52 +32,88 @@ export default class FigureFactory {
     this.canvasRunner = canvasRunner;
   }
 
-  box(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    fill?: string,
-    stroke?: string
-  ): Box {
-    return new Box(this.canvasRunner, x, y, width, height, fill, stroke);
+  box({
+    id,
+    x,
+    y,
+    width,
+    height,
+    fill,
+    stroke,
+  }: {
+    id?: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    fill?: string;
+    stroke?: string;
+  }): Box {
+    return new Box(this.canvasRunner, x, y, width, height, id, fill, stroke);
   }
 
-  circle(
-    x: number,
-    y: number,
-    diameter: number,
-    fill?: string,
-    stroke?: string
-  ): Circle {
-    return new Circle(this.canvasRunner, x, y, diameter, fill, stroke);
+  circle({
+    id,
+    x,
+    y,
+    diameter,
+    fill,
+    stroke,
+  }: {
+    id?: string;
+    x: number;
+    y: number;
+    diameter: number;
+    fill?: string;
+    stroke?: string;
+  }): Circle {
+    return new Circle(this.canvasRunner, x, y, diameter, id, fill, stroke);
   }
 
-  image(
-    x: number,
-    y: number,
-    imageData: string,
-    width: number,
-    height: number
-  ): Image {
-    return new Image(this.canvasRunner, x, y, imageData, width, height);
+  image({
+    id,
+    x,
+    y,
+    imageData,
+    width,
+    height,
+  }: {
+    id?: string;
+    x: number;
+    y: number;
+    imageData: string;
+    width: number;
+    height: number;
+  }): Image {
+    return new Image(this.canvasRunner, x, y, imageData, width, height, id);
   }
 
-  line(
-    x: number,
-    y: number,
-    endX: number,
-    endY: number,
-    stroke?: string,
-    hasArrow?: boolean,
-    shouldTravel?: boolean
-  ): Line {
+  line({
+    id,
+    x,
+    y,
+    endX,
+    endY,
+    stroke,
+    hasArrow,
+    shouldTravel,
+  }: {
+    id?: string;
+    x: number;
+    y: number;
+    endX: number;
+    endY: number;
+    stroke?: string;
+    hasArrow?: boolean;
+    shouldTravel?: boolean;
+  }): Line {
     const line = new Line(
       this.canvasRunner,
       x,
       y,
       endX,
       endY,
+      id,
       stroke,
       hasArrow
     );
@@ -117,7 +153,21 @@ export default class FigureFactory {
     return line;
   }
 
-  text(x: number, y: number, text: string, size?: number, fill?: string): Text {
-    return new Text(this.canvasRunner, x, y, text, size, fill);
+  text({
+    id,
+    x,
+    y,
+    text,
+    size,
+    fill,
+  }: {
+    id?: string;
+    x: number;
+    y: number;
+    text: string;
+    size?: number;
+    fill?: string;
+  }): Text {
+    return new Text(this.canvasRunner, x, y, text, id, size, fill);
   }
 }

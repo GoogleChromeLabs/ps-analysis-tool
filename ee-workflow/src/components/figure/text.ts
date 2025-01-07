@@ -41,10 +41,11 @@ export default class Text extends Figure {
     x: number,
     y: number,
     str: string,
+    id?: string,
     size?: number,
     fill?: string
   ) {
-    super(canvasRunnner, x, y, fill);
+    super(canvasRunnner, x, y, id, fill);
     this.str = str;
     this.size = size || 16;
   }

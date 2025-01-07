@@ -51,9 +51,10 @@ export default class Image extends Figure {
     y: number,
     imageData: string,
     width: number,
-    height: number
+    height: number,
+    id?: string
   ) {
-    super(canvasRunner, x, y);
+    super(canvasRunner, x, y, id);
     this.image = <p5.Image>this.p5?.loadImage(imageData);
     this.width = width;
     this.height = height;
