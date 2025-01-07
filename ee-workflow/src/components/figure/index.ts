@@ -41,12 +41,12 @@ export default abstract class Figure {
   /**
    * Group id of the figure if it belongs to a group.
    */
-  protected gid = '';
+  protected groupId = '';
 
   /**
    * Animator id of the figure if it belongs to an animator.
    */
-  protected aid = '';
+  protected animatorId = '';
 
   /**
    * Previous fill color of the figure to be used when the figure is unhovered.
@@ -203,32 +203,32 @@ export default abstract class Figure {
    * Get the group id of the figure.
    * @returns The group id of the figure.
    */
-  getGid(): string {
-    return this.gid;
+  getGroupId(): string {
+    return this.groupId;
   }
 
   /**
    * Set the group id of the figure.
-   * @param gid - The group id to set.
+   * @param groupId - The group id to set.
    */
-  setGid(gid: string) {
-    this.gid = gid;
+  setGroupId(groupId: string) {
+    this.groupId = groupId;
   }
 
   /**
    * Get the animator id of the figure.
    * @returns The animator id of the
    */
-  getAid(): string {
-    return this.aid;
+  getAnimatorId(): string {
+    return this.animatorId;
   }
 
   /**
    * Set the animator id of the figure.
-   * @param aid - The animator id to set.
+   * @param animatorId - The animator id to set.
    */
-  setAid(aid: string) {
-    this.aid = aid;
+  setAnimatorId(animatorId: string) {
+    this.animatorId = animatorId;
   }
 
   /**

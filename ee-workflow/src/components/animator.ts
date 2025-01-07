@@ -77,7 +77,7 @@ export default class Animator {
         endY: 0,
       }), // last dummy object acts as a placeholder for the end of the animation
     ];
-    this.objects.forEach((object) => object.setAid(this.id));
+    this.objects.forEach((object) => object.setAnimatorId(this.id));
   }
 
   /**

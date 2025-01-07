@@ -195,12 +195,12 @@ class Main {
 
       if (
         (firstObject.getShouldTravel() ||
-          (firstObject.getGid() && groupQueue[0].getShouldTravel())) &&
+          (firstObject.getGroupId() && groupQueue[0].getShouldTravel())) &&
         !useInstantQueue
       ) {
         this.isTravelling = true;
 
-        if (firstObject.getGid()) {
+        if (firstObject.getGroupId()) {
           this.traveller = new Traveller(groupQueue[0]);
 
           return;
@@ -212,13 +212,13 @@ class Main {
         return;
       }
 
-      if (firstObject.getAid()) {
+      if (firstObject.getAnimatorId()) {
         const animator = animatorQueue[0];
 
         if (animator) {
           const isDone = animator.draw();
 
-          if (firstObject.getGid()) {
+          if (firstObject.getGroupId()) {
             this.processGroup(queue, groupQueue, false);
           } else {
             if (!firstObject.getThrow()) {
@@ -232,7 +232,7 @@ class Main {
             this.reDrawAll();
           }
         }
-      } else if (firstObject.getGid()) {
+      } else if (firstObject.getGroupId()) {
         this.processGroup(queue, groupQueue);
       } else {
         firstObject.draw();
@@ -289,12 +289,12 @@ class Main {
    * @returns The group the figure belongs to, or undefined.
    */
   private isGrouped(object: Figure): Group | undefined {
-    if (!object.getGid()) {
+    if (!object.getGroupId()) {
       return undefined;
     }
 
     return this.groupSnapshot.find(
-      (group) => group.getId() === object.getGid()
+      (group) => group.getId() === object.getGroupId()
     );
   }
 
@@ -418,9 +418,9 @@ class Main {
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
 
-      if (figure.getAid()) {
+      if (figure.getAnimatorId()) {
         const animator = this.animatorSnapshot.find(
-          (a) => a.getId() === figure.getAid()
+          (a) => a.getId() === figure.getAnimatorId()
         );
 
         if (animator && animatorIdToDraw === animator.getId()) {
@@ -439,9 +439,9 @@ class Main {
           }, 0) || 1;
 
         i += toRemoveCount - 1;
-      } else if (figure.getGid()) {
+      } else if (figure.getGroupId()) {
         const group = this.groupSnapshot.find(
-          (g) => g.getId() === figure.getGid()
+          (g) => g.getId() === figure.getGroupId()
         );
 
         if (group) {
@@ -520,16 +520,16 @@ class Main {
   removeFigure(figure: Figure) {
     this.snapshot = this.snapshot.filter((f) => f.getId() !== figure.getId());
 
-    if (figure.getAid()) {
+    if (figure.getAnimatorId()) {
       const animator = this.animatorSnapshot.find(
-        (a) => a.getId() !== figure.getAid()
+        (a) => a.getId() !== figure.getAnimatorId()
       );
       animator?.removeObject(figure);
     }
 
-    if (figure.getGid()) {
+    if (figure.getGroupId()) {
       const group = this.groupSnapshot.find(
-        (g) => g.getId() === figure.getGid()
+        (g) => g.getId() === figure.getGroupId()
       );
       group?.removeFigure(figure);
     }
@@ -554,7 +554,7 @@ class Main {
     });
 
     toRemove?.getFigures().forEach((figure) => {
-      figure.setGid('');
+      figure.setGroupId('');
       this.removeFigure(figure);
     });
   }
@@ -576,7 +576,7 @@ class Main {
     });
 
     toRemove?.getObjects().forEach((object) => {
-      object.setAid('');
+      object.setAnimatorId('');
 
       if (object instanceof Figure) {
         this.removeFigure(object);

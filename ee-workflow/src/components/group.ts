@@ -36,7 +36,7 @@ export default class Group {
   /**
    * Animator id of the group if it belongs to an animator.
    */
-  private aid = '';
+  private animatorId = '';
 
   /**
    * Property to check if the group should be saved in groupSnapshot.
@@ -55,7 +55,7 @@ export default class Group {
       id ||
       `group-${Group.groupCount}` + Math.random().toString(36).slice(2, 9);
     this.figures = figures;
-    this.figures.forEach((figure) => figure.setGid(this.id));
+    this.figures.forEach((figure) => figure.setGroupId(this.id));
   }
 
   /**
@@ -106,17 +106,17 @@ export default class Group {
    * Method to get the animator id of the group.
    * @returns The animator id of the group.
    */
-  getAid() {
-    return this.aid;
+  getAnimatorId() {
+    return this.animatorId;
   }
 
   /**
    * Method to set the animator id to the group and its figures.
-   * @param aid - The animator id of the group.
+   * @param animatorId - The animator id of the group.
    */
-  setAid(aid: string) {
-    this.aid = aid;
-    this.figures.forEach((figure) => figure.setAid(aid));
+  setAnimatorId(animatorId: string) {
+    this.animatorId = animatorId;
+    this.figures.forEach((figure) => figure.setAnimatorId(animatorId));
   }
 
   /**
