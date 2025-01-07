@@ -16,12 +16,12 @@
 /**
  * Internal dependencies.
  */
-import flow from './flow';
-import app from '../app';
-import config from '../config';
-import * as utils from '../utils';
-import { Box, ProgressLine, Branches, RippleEffect } from '../components';
-import bubbles from './bubbles';
+import flow from '../flow';
+import app from '../../app';
+import config from '../../config';
+import * as utils from '../../utils';
+import { Box, ProgressLine, Branches, RippleEffect } from '../../components';
+import bubbles from '../bubbles';
 
 /**
  * @module Auction
