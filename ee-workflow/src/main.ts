@@ -194,9 +194,9 @@ class Main {
       const firstObject = <Figure>queue.shift();
 
       if (
+        !useInstantQueue &&
         (firstObject.getShouldTravel() ||
-          (firstObject.getGroupId() && groupQueue[0].getShouldTravel())) &&
-        !useInstantQueue
+          (firstObject.getGroupId() && groupQueue?.[0]?.getShouldTravel()))
       ) {
         this.isTravelling = true;
 
