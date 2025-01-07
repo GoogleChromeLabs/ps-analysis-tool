@@ -21,10 +21,9 @@ import config from '../../config';
 import { Box, ProgressLine } from '../../components';
 
 const setUpRunadAuction = (auction) => {
-  const steps = auction.steps;
   const { box, colors } = config.flow;
 
-  steps.push({
+  auction.steps.push({
     component: Box,
     props: {
       title: 'runAdAuction',
@@ -84,7 +83,7 @@ const setUpRunadAuction = (auction) => {
 
   boxes.forEach(({ title, description, color, extraProps = {} }) => {
     if (title === 'DSP 1') {
-      steps.push({
+      auction.steps.push({
         component: ProgressLine,
         props: {
           direction: 'right',
@@ -98,7 +97,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      steps.push({
+      auction.steps.push({
         component: Box,
         props: {
           title,
@@ -112,7 +111,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      steps.push({
+      auction.steps.push({
         component: ProgressLine,
         props: {
           direction: 'left',
@@ -130,7 +129,7 @@ const setUpRunadAuction = (auction) => {
     }
 
     if (title === 'DSP 2') {
-      steps.push({
+      auction.steps.push({
         component: ProgressLine,
         props: {
           direction: 'right',
@@ -144,7 +143,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      steps.push({
+      auction.steps.push({
         component: Box,
         props: {
           title,
@@ -158,7 +157,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      steps.push({
+      auction.steps.push({
         component: ProgressLine,
         props: {
           direction: 'left',
@@ -178,7 +177,7 @@ const setUpRunadAuction = (auction) => {
       return;
     }
 
-    steps.push({
+    auction.steps.push({
       component: ProgressLine,
       props: {
         direction: 'down',
@@ -192,7 +191,7 @@ const setUpRunadAuction = (auction) => {
       },
     });
 
-    steps.push({
+    auction.steps.push({
       component: Box,
       props: {
         title,

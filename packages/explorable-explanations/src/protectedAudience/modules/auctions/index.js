@@ -26,7 +26,6 @@ import setUpSingleSellerFirstSSPTagFlow from './single-seller/setupFirstSSPTagFl
 import setUpMultiSellerFirstSSPTagFlow from './multi-seller/setUpFirstSSPTagFlow';
 import setUpPublisherAdServerFlow from './multi-seller/setUpPublisherAdServerFlow';
 import setUpComponentAuction from './multi-seller/setUpComponentAuction';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import setUpRunadAuction from './setUpRunadAuction';
 
 /**
@@ -72,10 +71,9 @@ auction.setUp = (index) => {
     setUpComponentAuction(auction);
   } else {
     setUpSingleSellerFirstSSPTagFlow(auction);
+    setUpRunadAuction(auction);
+    auction.setupShowWinningAd();
   }
-
-  // setUpRunadAuction(auction);
-  // auction.setupShowWinningAd();
 
   app.auction.auctions.push(auction.steps);
 };
