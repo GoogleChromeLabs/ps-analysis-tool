@@ -89,11 +89,13 @@ circleToTextLine.forEach((line) => mainCanvas.addFigure(line, true));
 const bubbles = [];
 let startX = 170;
 let startY = 270;
-while (startX > 0 && startY > 0) {
+let lerpSpeed = 0.01;
+while (Math.floor(startX) > 0 && Math.floor(startY) > 0) {
   const circle = IGFF.circle(startX, startY, 10, 'orange', 'black');
   bubbles.push(circle);
-  startX -= 1;
-  startY -= 1;
+  startX = IGCanvas.getP5Instance().lerp(startX, 0, lerpSpeed);
+  startY = IGCanvas.getP5Instance().lerp(startY, 0, lerpSpeed);
+  lerpSpeed += 0.0003;
 }
 
 const bubbleFlow = new Animator(bubbles, mainFF);
@@ -150,11 +152,13 @@ const secondCircleAnimations = [
 const secondBubbles = [];
 let secondStartX = 370;
 let secondStartY = 270;
-while (secondStartX > 0 && secondStartY > 0) {
+lerpSpeed = 0.01;
+while (Math.floor(secondStartX) > 0 && Math.floor(secondStartY) > 0) {
   const circle = IGFF.circle(secondStartX, secondStartY, 10, 'orange', 'black');
   secondBubbles.push(circle);
-  secondStartX -= 1;
-  secondStartY -= 1;
+  secondStartX = IGCanvas.getP5Instance().lerp(secondStartX, 0, lerpSpeed);
+  secondStartY = IGCanvas.getP5Instance().lerp(secondStartY, 0, lerpSpeed);
+  lerpSpeed += 0.0003;
 }
 
 const secondBubbleFlow = new Animator(secondBubbles, mainFF);

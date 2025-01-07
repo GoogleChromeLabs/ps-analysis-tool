@@ -242,6 +242,10 @@ class Main {
    * Draws the current frame, processing the queues.
    */
   private draw() {
+    if (this.pause) {
+      return;
+    }
+
     if (this.isTravelling) {
       const done = this.traveller?.draw();
 
@@ -259,10 +263,6 @@ class Main {
         this.runner();
       }
 
-      return;
-    }
-
-    if (this.pause) {
       return;
     }
 
