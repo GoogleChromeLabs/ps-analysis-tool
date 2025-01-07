@@ -67,11 +67,11 @@ export default class Group {
   }
 
   /**
-   * Method to handle hover event. Calls the onHover method of each figure in the group.
+   * Method to handle hover event. Calls the mouseMoved method of each figure in the group.
    */
-  onHover() {
+  mouseMoved() {
     this.figures.forEach((figure) => {
-      figure.onHover();
+      figure.mouseMoved();
     });
   }
 
@@ -85,11 +85,11 @@ export default class Group {
   }
 
   /**
-   * Method to handle click event. Calls the onClick method of each figure in the group.
+   * Method to handle click event. Calls the mouseClicked method of each figure in the group.
    */
-  onClick() {
+  mouseClicked() {
     this.figures.forEach((figure) => {
-      figure.onClick();
+      figure.mouseClicked();
     });
   }
 

@@ -97,7 +97,7 @@ export default class Line extends Figure {
     this.endY = endY;
   }
 
-  onHover() {
+  mouseMoved() {
     this.savePreviousColors();
     this.stroke = 'red'; // TODO: Discuss the function
     this.canvasRunner.addFigure(this, true);
@@ -115,7 +115,7 @@ export default class Line extends Figure {
     this.canvasRunner.addFigure(this, true);
   }
 
-  onClick() {
+  mouseClicked() {
     // TODO: Discuss the function
   }
 

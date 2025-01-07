@@ -121,8 +121,8 @@ class Main {
   private init(p: p5) {
     p.setup = this.setUp.bind(this);
     p.draw = this.draw.bind(this);
-    p.mouseMoved = this.onHover.bind(this);
-    p.mouseClicked = this.onClick.bind(this);
+    p.mouseMoved = this.mouseMoved.bind(this);
+    p.mouseClicked = this.mouseClicked.bind(this);
   }
 
   /**
@@ -301,13 +301,13 @@ class Main {
   /**
    * Handles hover events for figures.
    */
-  private onHover() {
+  private mouseMoved() {
     this.snapshot.forEach((object) => {
       const isHovering = object.isHovering();
       const _object = this.isGrouped(object) || object;
 
       if (isHovering) {
-        _object.onHover();
+        _object.mouseMoved();
       } else {
         _object.onLeave();
       }
@@ -317,13 +317,13 @@ class Main {
   /**
    * Handles click events for figures.
    */
-  private onClick() {
+  private mouseClicked() {
     this.snapshot.forEach((object) => {
       const isHovering = object.isHovering();
       if (isHovering) {
         const _object = this.isGrouped(object) || object;
 
-        _object.onClick();
+        _object.mouseClicked();
       }
     });
   }

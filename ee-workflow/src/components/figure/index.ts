@@ -112,7 +112,7 @@ export default abstract class Figure {
   /**
    * Method to handle the hover event.
    */
-  abstract onHover(): void;
+  abstract mouseMoved(): void;
 
   /**
    * Method to handle the leave event.
@@ -122,7 +122,7 @@ export default abstract class Figure {
   /**
    * Method to handle the click event.
    */
-  abstract onClick(): void;
+  abstract mouseClicked(): void;
 
   /**
    * Method to check if the figure is being hovered.

@@ -51,7 +51,7 @@ export default class Circle extends Figure {
     this.p5?.pop();
   }
 
-  onHover() {
+  mouseMoved() {
     this.savePreviousColors();
     this.fill = 'red'; // TODO: Discuss the function
     this.canvasRunner.addFigure(this, true);
@@ -69,7 +69,7 @@ export default class Circle extends Figure {
     this.canvasRunner.addFigure(this, true);
   }
 
-  onClick() {
+  mouseClicked() {
     // TODO: Discuss the function
   }
 

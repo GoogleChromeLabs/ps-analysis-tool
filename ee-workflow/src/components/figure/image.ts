@@ -66,7 +66,7 @@ export default class Image extends Figure {
     this.p5?.pop();
   }
 
-  onHover() {
+  mouseMoved() {
     return;
   }
 
@@ -74,7 +74,7 @@ export default class Image extends Figure {
     return;
   }
 
-  onClick() {
+  mouseClicked() {
     // TODO: Discuss the function
   }
 
