@@ -58,11 +58,16 @@ export default class Animator {
    */
   static animationCounter = 0;
 
-  constructor(objects: Array<Figure | Group>, figureFactory: FigureFactory) {
+  constructor(
+    objects: Array<Figure | Group>,
+    figureFactory: FigureFactory,
+    id?: string
+  ) {
     Animator.animationCounter++;
     this.id =
+      id ||
       `animation-${Animator.animationCounter}` +
-      Math.random().toString(36).slice(2, 9);
+        Math.random().toString(36).slice(2, 9);
     this.objects = [
       ...objects,
       figureFactory.line({

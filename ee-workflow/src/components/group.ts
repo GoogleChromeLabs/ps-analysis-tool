@@ -49,9 +49,10 @@ export default class Group {
    */
   static groupCount = 0;
 
-  constructor(figures: Figure[]) {
+  constructor(figures: Figure[], id?: string) {
     Group.groupCount++;
     this.id =
+      id ||
       `group-${Group.groupCount}` + Math.random().toString(36).slice(2, 9);
     this.figures = figures;
     this.figures.forEach((figure) => figure.setGid(this.id));
