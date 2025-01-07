@@ -17,6 +17,7 @@ const config = {
   canvas: {
     width: 700,
     height: 500,
+    extraHeight: 1200, // @todo: 700 is a magic number and needs to be calculated based on the content.
     background: '#fff',
     fontSize: 12,
   },

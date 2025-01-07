@@ -41,7 +41,7 @@ export const calculateCanvasDimensions = () => {
     timelineY +
     circleSpace +
     Math.max(rippleRadius, maxHeightUsingBoxAndLine) +
-    700; // @todo: 700 is a magic number and needs to be calculated based on the content.
+    config.canvas.extraHeight;
 
   const auctionBoxesWidth = boxWidth + mediumBoxWidth * 2 + lineWidth * 2;
   const interestGroupWidth = boxWidth;
