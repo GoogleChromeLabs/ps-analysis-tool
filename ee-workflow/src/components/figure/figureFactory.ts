@@ -25,6 +25,15 @@ import Image from './image';
 import Line from './line';
 import Text from './text';
 
+type FigureParams = {
+  id?: string;
+  x: number;
+  y: number;
+  fill?: string;
+  stroke?: string;
+  tags?: string[];
+};
+
 export default class FigureFactory {
   private canvasRunner: Main;
 
@@ -40,16 +49,22 @@ export default class FigureFactory {
     height,
     fill,
     stroke,
-  }: {
-    id?: string;
-    x: number;
-    y: number;
+    tags,
+  }: FigureParams & {
     width: number;
     height: number;
-    fill?: string;
-    stroke?: string;
   }): Box {
-    return new Box(this.canvasRunner, x, y, width, height, id, fill, stroke);
+    return new Box(
+      this.canvasRunner,
+      x,
+      y,
+      width,
+      height,
+      id,
+      fill,
+      stroke,
+      tags
+    );
   }
 
   circle({
@@ -59,15 +74,20 @@ export default class FigureFactory {
     diameter,
     fill,
     stroke,
-  }: {
-    id?: string;
-    x: number;
-    y: number;
+    tags,
+  }: FigureParams & {
     diameter: number;
-    fill?: string;
-    stroke?: string;
   }): Circle {
-    return new Circle(this.canvasRunner, x, y, diameter, id, fill, stroke);
+    return new Circle(
+      this.canvasRunner,
+      x,
+      y,
+      diameter,
+      id,
+      fill,
+      stroke,
+      tags
+    );
   }
 
   image({
@@ -77,15 +97,22 @@ export default class FigureFactory {
     imageData,
     width,
     height,
-  }: {
-    id?: string;
-    x: number;
-    y: number;
+    tags,
+  }: FigureParams & {
     imageData: string;
     width: number;
     height: number;
   }): Image {
-    return new Image(this.canvasRunner, x, y, imageData, width, height, id);
+    return new Image(
+      this.canvasRunner,
+      x,
+      y,
+      imageData,
+      width,
+      height,
+      id,
+      tags
+    );
   }
 
   line({
@@ -97,13 +124,10 @@ export default class FigureFactory {
     stroke,
     hasArrow,
     shouldTravel,
-  }: {
-    id?: string;
-    x: number;
-    y: number;
+    tags,
+  }: FigureParams & {
     endX: number;
     endY: number;
-    stroke?: string;
     hasArrow?: boolean;
     shouldTravel?: boolean;
   }): Line {
@@ -115,7 +139,8 @@ export default class FigureFactory {
       endY,
       id,
       stroke,
-      hasArrow
+      hasArrow,
+      tags
     );
 
     if (shouldTravel) {
@@ -160,14 +185,11 @@ export default class FigureFactory {
     text,
     size,
     fill,
-  }: {
-    id?: string;
-    x: number;
-    y: number;
+    tags,
+  }: FigureParams & {
     text: string;
     size?: number;
-    fill?: string;
   }): Text {
-    return new Text(this.canvasRunner, x, y, text, id, size, fill);
+    return new Text(this.canvasRunner, x, y, text, id, size, fill, tags);
   }
 }

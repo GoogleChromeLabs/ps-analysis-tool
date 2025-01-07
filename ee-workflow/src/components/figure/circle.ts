@@ -38,9 +38,10 @@ export default class Circle extends Figure {
     diameter: number,
     id?: string,
     fill?: string,
-    stroke?: string
+    stroke?: string,
+    tags?: string[]
   ) {
-    super(canvasRunner, x, y, id, fill, stroke);
+    super(canvasRunner, x, y, id, fill, stroke, tags);
     this.diameter = diameter;
   }
 

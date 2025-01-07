@@ -44,9 +44,10 @@ export default class Box extends Figure {
     height: number,
     id?: string,
     fill?: string,
-    stroke?: string
+    stroke?: string,
+    tags?: string[]
   ) {
-    super(canvasRuuner, x, y, id, fill, stroke);
+    super(canvasRuuner, x, y, id, fill, stroke, tags);
     this.width = width;
     this.height = height;
   }

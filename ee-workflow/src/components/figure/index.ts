@@ -88,6 +88,7 @@ export default abstract class Figure {
    * @param id - The unique id of the figure.
    * @param fill - The fill color of the figure.
    * @param stroke - The stroke color of the figure.
+   * @param tags - The tags of the figure for bucketing.
    */
   constructor(
     protected canvasRunner: Main,
@@ -95,7 +96,8 @@ export default abstract class Figure {
     protected y: number,
     id?: string,
     protected fill: string = 'black',
-    protected stroke: string = 'black'
+    protected stroke: string = 'black',
+    protected tags: string[] = []
   ) {
     Figure.objectCount++;
     this.id = id || `object-${Figure.objectCount}`;
@@ -246,6 +248,40 @@ export default abstract class Figure {
    */
   setThrow(throwFlag: boolean) {
     this.throw = throwFlag;
+  }
+
+  /**
+   * Get the tags of the figure.
+   * @returns The tags of the figure.
+   */
+  getTags(): string[] {
+    return this.tags;
+  }
+
+  /**
+   * Set the tags of the figure.
+   * @param tags - The tags to set.
+   */
+  setTags(tags: string[]) {
+    this.tags = tags;
+  }
+
+  /**
+   * Add a tag to the figure.
+   * @param tag - The tag to add.
+   */
+  addTag(tag: string) {
+    if (!this.tags.includes(tag)) {
+      this.tags.push(tag);
+    }
+  }
+
+  /**
+   * Remove a tag from the figure.
+   * @param tag - The tag to remove.
+   */
+  removeTag(tag: string) {
+    this.tags = this.tags.filter((t) => t !== tag);
   }
 
   /**
