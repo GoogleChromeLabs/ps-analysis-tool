@@ -20,10 +20,10 @@ import app from '../../app';
 import config from '../../config';
 import { Box, ProgressLine } from '../../components';
 
-const setUpRunadAuction = (auction) => {
+const setUpRunadAuction = (steps) => {
   const { box, colors } = config.flow;
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'runAdAuction',
@@ -83,7 +83,7 @@ const setUpRunadAuction = (auction) => {
 
   boxes.forEach(({ title, description, color, extraProps = {} }) => {
     if (title === 'DSP 1') {
-      auction.steps.push({
+      steps.push({
         component: ProgressLine,
         props: {
           direction: 'right',
@@ -97,7 +97,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      auction.steps.push({
+      steps.push({
         component: Box,
         props: {
           title,
@@ -111,7 +111,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      auction.steps.push({
+      steps.push({
         component: ProgressLine,
         props: {
           direction: 'left',
@@ -129,7 +129,7 @@ const setUpRunadAuction = (auction) => {
     }
 
     if (title === 'DSP 2') {
-      auction.steps.push({
+      steps.push({
         component: ProgressLine,
         props: {
           direction: 'right',
@@ -143,7 +143,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      auction.steps.push({
+      steps.push({
         component: Box,
         props: {
           title,
@@ -157,7 +157,7 @@ const setUpRunadAuction = (auction) => {
         },
       });
 
-      auction.steps.push({
+      steps.push({
         component: ProgressLine,
         props: {
           direction: 'left',
@@ -177,7 +177,7 @@ const setUpRunadAuction = (auction) => {
       return;
     }
 
-    auction.steps.push({
+    steps.push({
       component: ProgressLine,
       props: {
         direction: 'down',
@@ -191,7 +191,7 @@ const setUpRunadAuction = (auction) => {
       },
     });
 
-    auction.steps.push({
+    steps.push({
       component: Box,
       props: {
         title,

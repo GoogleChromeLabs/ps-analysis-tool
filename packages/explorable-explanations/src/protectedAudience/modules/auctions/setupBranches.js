@@ -19,8 +19,8 @@
 import app from '../../app';
 import { Branches } from '../../components';
 
-const setupBranches = (auction, index) => {
-  auction.steps.push({
+const setupBranches = (steps, index) => {
+  steps.push({
     component: Branches,
     props: {
       x1: () => app.auction.nextTipCoordinates?.x,

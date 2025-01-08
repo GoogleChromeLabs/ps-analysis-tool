@@ -63,22 +63,22 @@ auction.setUp = (index) => {
 
   app.isMultiSeller = true;
 
-  auction.steps = [];
+  const steps = [];
 
-  setUpAdUnitCode(auction, index);
-  setupBranches(auction, index);
+  setUpAdUnitCode(steps, index);
+  setupBranches(steps, index);
 
   if (app.isMultiSeller) {
-    setUpMultiSellerFirstSSPTagFlow(auction);
-    setUpPublisherAdServerFlow(auction);
-    setUpComponentAuction(auction);
+    setUpMultiSellerFirstSSPTagFlow(steps);
+    setUpPublisherAdServerFlow(steps);
+    setUpComponentAuction(steps);
   } else {
-    setUpSingleSellerFirstSSPTagFlow(auction);
-    setUpRunadAuction(auction);
-    setupShowWinningAd();
+    setUpSingleSellerFirstSSPTagFlow(steps);
+    setUpRunadAuction(steps);
+    setupShowWinningAd(steps);
   }
 
-  app.auction.auctions.push(auction.steps);
+  app.auction.auctions.push(steps);
 };
 
 /**

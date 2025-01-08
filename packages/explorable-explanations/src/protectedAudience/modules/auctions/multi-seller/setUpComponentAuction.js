@@ -21,14 +21,14 @@ import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 
-const setUpComponentAuction = (auction) => {
+const setUpComponentAuction = (steps) => {
   const { box } = config.flow;
   const BORDER_BOX_MARGIN = 50;
   const BOX_WIDTH = 800;
   const BOX_HEIGHT = 800;
   const FIRST_LINE_HEIGHT = 150;
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -42,7 +42,7 @@ const setUpComponentAuction = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: '',
@@ -57,7 +57,7 @@ const setUpComponentAuction = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'SSP A',
@@ -71,9 +71,9 @@ const setUpComponentAuction = (auction) => {
     },
   });
 
-  setUpRunadAuction(auction);
+  setUpRunadAuction(steps);
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: '',

@@ -20,10 +20,10 @@ import app from '../../app';
 import config from '../../config';
 import { ProgressLine, Box } from '../../components';
 
-const setupShowWinningAd = (auction) => {
+const setupShowWinningAd = (steps) => {
   const { box } = config.flow;
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'right',
@@ -37,7 +37,7 @@ const setupShowWinningAd = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'Show Winning Ad',

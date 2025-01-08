@@ -21,12 +21,12 @@ import config from '../../config';
 import flow from '../flow';
 import { Branches } from '../../components';
 
-const setUpAdUnitCode = (auction, index) => {
+const setUpAdUnitCode = (steps, index) => {
   const { colors } = config.flow;
   const { x, y } = flow.getTimelineCircleCoordinates(index);
 
   // Setup Ad unit codes
-  auction.steps.push({
+  steps.push({
     component: Branches,
     props: {
       x1: x,

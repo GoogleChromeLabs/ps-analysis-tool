@@ -20,10 +20,10 @@ import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
 
-const setUpSingleSellerFirstSSPTagFlow = (auction) => {
+const setUpSingleSellerFirstSSPTagFlow = (steps) => {
   const { box, colors } = config.flow;
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -36,7 +36,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'SSP Tag',
@@ -49,7 +49,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -61,7 +61,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'SSP',
@@ -75,7 +75,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -87,7 +87,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'DSPs',
@@ -101,7 +101,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'up',
@@ -115,7 +115,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'up',
@@ -129,7 +129,7 @@ const setUpSingleSellerFirstSSPTagFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'right',

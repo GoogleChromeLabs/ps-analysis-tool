@@ -20,10 +20,10 @@ import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
 
-const setUpPublisherAdServerFlow = (auction) => {
+const setUpPublisherAdServerFlow = (steps) => {
   const { box } = config.flow;
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'Publisher',
@@ -37,7 +37,7 @@ const setUpPublisherAdServerFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'right',
@@ -49,7 +49,7 @@ const setUpPublisherAdServerFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'Publisher',
@@ -63,7 +63,7 @@ const setUpPublisherAdServerFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'left',
@@ -75,7 +75,7 @@ const setUpPublisherAdServerFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: ProgressLine,
     props: {
       direction: 'down',
@@ -87,7 +87,7 @@ const setUpPublisherAdServerFlow = (auction) => {
     },
   });
 
-  auction.steps.push({
+  steps.push({
     component: Box,
     props: {
       title: 'runAdAuction',
