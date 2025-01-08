@@ -18,7 +18,7 @@ const config = {
     width: 700,
     height: 500,
     extraHeight: 1400, // @todo: 1400 is a magic number and needs to be calculated based on the content.
-    extraWidth: 400, // @todo: Remove after calculating the width.
+    extraWidth: 450, // @todo: Remove after calculating the width.
     background: '#fff',
     fontSize: 12,
   },

@@ -25,6 +25,9 @@ const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
 const FIRST_LINE_HEIGHT = 150;
 const BORDER_BOX_MARGIN = 50;
+const BOX_COLUMN_MARGIN = 390;
+
+const boxCordinates = {};
 
 const setUpComponentAuctions = (steps) => {
   const { box, arrowSize } = config.flow;
@@ -49,8 +52,14 @@ const setUpComponentAuctions = (steps) => {
       title: '',
       width: BOX_WIDTH,
       height: BOX_HEIGHT,
-      x: () => app.auction.nextTipCoordinates?.x - BOX_WIDTH / 2,
-      y: () => app.auction.nextTipCoordinates?.y,
+      x: () => {
+        boxCordinates.x = app.auction.nextTipCoordinates?.x - BOX_WIDTH / 2;
+        return boxCordinates.x;
+      },
+      y: () => {
+        boxCordinates.y = app.auction.nextTipCoordinates?.y;
+        return boxCordinates.y;
+      },
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -58,75 +67,71 @@ const setUpComponentAuctions = (steps) => {
     },
   });
 
-  steps.push({
-    component: Text,
-    props: {
-      text: 'Component Auction',
+  const componentAuctions = [
+    {
+      title: 'Component Auction',
       x: () =>
         app.auction.nextTipCoordinates?.x -
         BOX_WIDTH / 2 +
         BORDER_BOX_MARGIN * 2 +
         20,
       y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
+      ssp: 'SSP A',
     },
-    delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  steps.push({
-    component: Box,
-    props: {
-      title: 'SSP A',
-      x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 15,
-      y: () => app.auction.nextTipCoordinates?.y + 20,
-    },
-    delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = {
-        x: returnValue.down.x,
-        y: returnValue.down.y + box.height - arrowSize,
-      };
-    },
-  });
-
-  setUpComponentAuction(steps);
-
-  steps.push({
-    component: Text,
-    props: {
-      text: 'Component Auction',
-      x: () => app.auction.nextTipCoordinates?.x + 390,
+    {
+      title: 'Component Auction',
+      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN,
       y: () =>
         app.auction.nextTipCoordinates?.y -
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         10,
+      ssp: 'SSP B',
     },
-    delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
+    {
+      title: 'Component Auction',
+      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN,
+      y: () =>
+        app.auction.nextTipCoordinates?.y -
+        BOX_HEIGHT +
+        BORDER_BOX_MARGIN * 2 +
+        10,
+      ssp: 'SSP C',
     },
-  });
+  ];
 
-  steps.push({
-    component: Box,
-    props: {
-      title: 'SSP B',
-      x: () => app.auction.nextTipCoordinates?.x - 60,
-      y: () => app.auction.nextTipCoordinates?.y + 20,
-    },
-    delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = {
-        x: returnValue.down.x,
-        y: returnValue.down.y + box.height - arrowSize,
-      };
-    },
-  });
+  componentAuctions.forEach((componentAuction) => {
+    steps.push({
+      component: Text,
+      props: {
+        text: componentAuction.title,
+        x: componentAuction.x,
+        y: componentAuction.y,
+      },
+      delay: 1000,
+      callBack: (returnValue) => {
+        app.auction.nextTipCoordinates = returnValue;
+      },
+    });
 
-  setUpComponentAuction(steps);
+    steps.push({
+      component: Box,
+      props: {
+        title: componentAuction.ssp,
+        x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 15,
+        y: () => app.auction.nextTipCoordinates?.y + 20,
+      },
+      delay: 1000,
+      callBack: (returnValue) => {
+        app.auction.nextTipCoordinates = {
+          x: returnValue.down.x,
+          y: returnValue.down.y + box.height - arrowSize,
+        };
+      },
+    });
+
+    setUpComponentAuction(steps);
+  });
 
   steps.push({
     component: Text,
