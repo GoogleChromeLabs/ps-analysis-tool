@@ -13,9 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as Box } from './box';
-export { default as Branches } from './branches';
-export { default as ProgressLine } from './progressLine';
-export { default as RippleEffect } from './rippleEffect';
-export { default as FlowExpander } from './flowExpander';
-export { default as Text } from './text';
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
+import config from '../config';
+
+const Text = ({ text, x, y }) => {
+  x = typeof x === 'function' ? x() : x;
+  y = typeof y === 'function' ? y() : y;
+
+  const nextTip = {
+    x: x,
+    y: y,
+  };
+
+  const p = app.p;
+
+  p.push();
+  p.textAlign(p.CENTER, p.CENTER);
+  p.fill(config.flow.colors.box.text);
+  p.textFont('sans-serif');
+  p.text(text, x, y);
+  p.pop();
+
+  return nextTip;
+};
+
+export default Text;

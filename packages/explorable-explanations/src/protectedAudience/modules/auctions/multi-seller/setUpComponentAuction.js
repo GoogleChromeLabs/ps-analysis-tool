@@ -18,7 +18,7 @@
  */
 import app from '../../../app';
 import config from '../../../config';
-import { Box, ProgressLine } from '../../../components';
+import { Box, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 
 const setUpComponentAuction = (steps) => {
@@ -106,13 +106,11 @@ const setUpComponentAuction = (steps) => {
   });
 
   steps.push({
-    component: Box,
+    component: Text,
     props: {
-      title: '',
-      width: 1,
-      height: 1,
+      text: '$10',
       x: () => app.auction.nextTipCoordinates?.x,
-      y: () => app.auction.nextTipCoordinates?.y,
+      y: () => app.auction.nextTipCoordinates?.y + 15,
     },
     delay: 11111111,
     callBack: (returnValue) => {
