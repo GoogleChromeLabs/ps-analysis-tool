@@ -86,6 +86,7 @@ function closePlayer() {
   window.parent.document.dispatchEvent(event);
 
   stateObject.player.pause();
+  stateObject.player.rewind();
 
   document.body.classList.remove('lightbox-open');
   stateObject.lightboxEl.classList.add('closed');

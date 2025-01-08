@@ -39,6 +39,7 @@ function closePlayer() {
   window.parent.document.dispatchEvent(event);
 
   stateObject.player.pause();
+  stateObject.player.rewind();
 
   document.body.classList.remove('lightbox-open');
   stateObject.lightboxEl.classList.add('closed');
@@ -114,6 +115,7 @@ const messageListener = ({ data: { storyUrl } }) => {
     stateObject.player.show(storyUrl + '#embedmode=2', null, {
       animate: false,
     });
+
     const data = { storyOpened: true };
     const event = new CustomEvent('webStoriesLightBoxEvent', {
       detail: data,
