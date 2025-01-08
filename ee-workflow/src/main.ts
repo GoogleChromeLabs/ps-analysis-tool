@@ -392,7 +392,7 @@ class Main {
   /**
    * Resets the queues and redraws all figures on the canvas.
    */
-  resetAndReDrawAll() {
+  resetQueuesAndReDrawAll() {
     if (this.pause) {
       return;
     }

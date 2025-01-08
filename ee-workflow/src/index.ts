@@ -251,7 +251,7 @@ while (Math.floor(startX) > 0 && Math.floor(startY) > 0) {
 
 const bubbleFlow = new Animator(bubbles, mainFF);
 bubbleFlow.setSideEffectOnEnd(() => {
-  IGCanvas.resetAndReDrawAll();
+  IGCanvas.resetQueuesAndReDrawAll();
   IGCanvas.togglePause();
   mainCanvas.togglePause();
   mainCanvas.reDrawAll();
@@ -429,7 +429,7 @@ while (Math.floor(secondStartX) > 0 && Math.floor(secondStartY) > 0) {
 
 const secondBubbleFlow = new Animator(secondBubbles, mainFF);
 secondBubbleFlow.setSideEffectOnEnd(() => {
-  IGCanvas.resetAndReDrawAll();
+  IGCanvas.resetQueuesAndReDrawAll();
   IGCanvas.togglePause();
   mainCanvas.togglePause();
   mainCanvas.reDrawAll();
