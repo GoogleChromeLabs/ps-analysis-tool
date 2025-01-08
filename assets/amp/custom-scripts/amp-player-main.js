@@ -129,13 +129,12 @@ function initializeCards() {
 
     stateObject.cards.forEach((card) => {
       card.addEventListener('click', () => {
-        stateObject.player.show(card.dataset.storyUrl, null, { animate: false });
         const data = { storyOpened: true };
         const event = new CustomEvent('webStoriesLightBoxEvent', {
           detail: data,
         });
         window.parent.document.dispatchEvent(event);
-
+        stateObject.player.show(card.dataset.storyUrl, null, { animate: false });
         document.body.classList.add('lightbox-open');
         stateObject.lightboxEl.classList.remove('closed');
         card.classList.add('hidden');

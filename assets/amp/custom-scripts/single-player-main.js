@@ -111,16 +111,16 @@ const messageListener = ({ data: { storyUrl } }) => {
     if(!storyUrl){
       return;
     }
-    stateObject.player.add([{href: storyUrl + '#embedmode=2'}])
-    stateObject.player.show(storyUrl + '#embedmode=2', null, {
-      animate: false,
-    });
 
+    stateObject.player.add([{href: storyUrl + '#embedmode=2'}])
     const data = { storyOpened: true };
     const event = new CustomEvent('webStoriesLightBoxEvent', {
       detail: data,
     });
     window.parent.document.dispatchEvent(event);
+    stateObject.player.show(storyUrl + '#embedmode=2', null, {
+      animate: false,
+    });
 
     document.body.classList.add('lightbox-open');
     stateObject.lightboxEl.classList.remove('closed');
