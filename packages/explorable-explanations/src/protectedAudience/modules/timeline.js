@@ -27,6 +27,11 @@ import {
 } from '../utils';
 import bubbles from './bubbles';
 import flow from './flow';
+import {
+  mouseClickedInInteractiveModeCallback,
+  mouseClickedInNonInteractiveModeCallback,
+  mouseMovedInTimeline,
+} from '../utils/mouseHandlers';
 
 /**
  * @module Timeline
@@ -46,16 +51,28 @@ timeline.init = () => {
     }
   });
 
+  app.p.mouseMoved = (event) => {
+    const { offsetX, offsetY } = event;
+
+    app.mouseX = offsetX;
+    app.mouseY = offsetY;
+
+    mouseMovedInTimeline(event);
+  };
+
+  app.p.mouseClicked = () => {
+    if (app.isInteractiveMode) {
+      mouseClickedInInteractiveModeCallback(
+        timeline.drawCircle,
+        timeline.renderUserIcon
+      );
+    } else {
+      mouseClickedInNonInteractiveModeCallback(timeline.renderUserIcon);
+    }
+  };
+
   if (app.isInteractiveMode) {
     bubbles.showMinifiedBubbles();
-
-    app.p.mouseMoved = (event) => {
-      timeline.mouseMovedInInteractiveModeCallback(event);
-    };
-
-    app.p.mouseClicked = () => {
-      timeline.mouseClickedInInteractiveModeCallback();
-    };
   } else {
     timeline.drawTimelineLine();
     timeline.renderUserIcon();
@@ -200,15 +217,27 @@ timeline.drawCircle = (index, completed = false) => {
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
 
-    app.up.image(
+    app.p.image(
       app.p.openWithoutAnimation,
       position.x - 10,
       position.y + diameter / 2,
       20,
       20
     );
+
     return;
   }
+
+  app.p.push();
+  app.p.tint(255, 90);
+  app.p.image(
+    app.p.openWithoutAnimation,
+    position.x - 10,
+    position.y + diameter / 2,
+    20,
+    20
+  );
+  app.p.pop();
 
   app.up.image(
     app.p.completedCheckMark,
@@ -277,11 +306,12 @@ timeline.eraseAndRedraw = () => {
 };
 
 timeline.mouseMovedInInteractiveModeCallback = (event) => {
+  const { offsetX, offsetY } = event;
+
   if (!app.isInteractiveMode) {
     return;
   }
 
-  const { offsetX, offsetY } = event;
   let hoveringOnExpandIconPositions = false;
 
   app.timeline.expandIconPositions.forEach((positions) => {
@@ -295,11 +325,11 @@ timeline.mouseMovedInInteractiveModeCallback = (event) => {
       )
     ) {
       hoveringOnExpandIconPositions = true;
+      app.p.cursor('pointer');
+    } else {
+      app.p.cursor('default');
     }
   });
-
-  app.mouseX = offsetX;
-  app.mouseY = offsetY;
 
   if (!app.shouldRespondToClick) {
     return;
@@ -351,6 +381,7 @@ timeline.mouseClickedInInteractiveModeCallback = () => {
       clickedIndex = index;
     }
   });
+
   if (clickedIndex > -1 && !app.isRevisitingNodeInInteractiveMode) {
     app.promiseQueue.end();
     flow.clearBelowTimelineCircles();
