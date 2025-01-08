@@ -107,7 +107,11 @@ function easeOutQuad(t) {
 
 const messageListener = ({ data: { storyUrl } }) => {
   try {
-    stateObject.player.show(storyUrl, null, {
+    if(!storyUrl){
+      return;
+    }
+    stateObject.player.add([{href: storyUrl + '#embedmode=2'}])
+    stateObject.player.show(storyUrl + '#embedmode=2', null, {
       animate: false,
     });
     const data = { storyOpened: true };

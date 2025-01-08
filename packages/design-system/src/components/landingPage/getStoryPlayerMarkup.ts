@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-interface GetStoryPlayerMarkupProps {
-  independentStory: string;
-}
-export const getStoryPlayerMarkup = ({
-  independentStory,
-}: GetStoryPlayerMarkupProps) => {
+
+export const getStoryPlayerMarkup = () => {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -69,21 +65,20 @@ export const getStoryPlayerMarkup = ({
         </head>
         <body>
             <div class="lightbox closed">
-            <amp-story-player class="my-player">
-                <script type="application/json">
-                    {
-                        "behavior": {
-                            "pageScroll": false,
-                            "autoplay": false,
-                            "action": "circular-wrapping"
-                        },
-                        "controls": [{
-                                "name": "close",
-                                "position": "start"
-                        }]
-                    }
+                <amp-story-player class="my-player">
+                    <script type="application/json">
+                        {
+                            "behavior": {
+                                "pageScroll": false,
+                                "autoplay": false,
+                                "action": "circular-wrapping"
+                            },
+                            "controls": [{
+                                    "name": "close",
+                                    "position": "start"
+                            }]
+                        }
                     </script>
-                    <a href="${independentStory}" />
                 </amp-story-player>
             </div>
         </body>

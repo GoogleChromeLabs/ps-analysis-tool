@@ -123,9 +123,11 @@ const LandingPageContainer = ({
       </LandingPage>
       <iframe
         ref={iframeRef}
-        srcDoc={getStoryPlayerMarkup({ independentStory })}
+        srcDoc={getStoryPlayerMarkup()}
         style={{
           display: independentStory ? 'block' : 'none',
+          height: independentStory ? '100%' : '0%',
+          width: independentStory ? '100%' : '0%',
           position: 'fixed',
         }}
         className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
