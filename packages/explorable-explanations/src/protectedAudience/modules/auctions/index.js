@@ -25,7 +25,7 @@ import bubbles from '../bubbles';
 import setUpSingleSellerFirstSSPTagFlow from './single-seller/setupFirstSSPTagFlow';
 import setUpMultiSellerFirstSSPTagFlow from './multi-seller/setUpFirstSSPTagFlow';
 import setUpPublisherAdServerFlow from './multi-seller/setUpPublisherAdServerFlow';
-import setUpComponentAuction from './multi-seller/setUpComponentAuction';
+import setUpComponentAuctions from './multi-seller/setUpComponentAuctions';
 import setUpRunadAuction from './setUpRunadAuction';
 import setUpAdUnitCode from './setUpAdUnitCode';
 import setupBranches from './setupBranches';
@@ -71,7 +71,7 @@ auction.setUp = (index) => {
   if (app.isMultiSeller) {
     setUpMultiSellerFirstSSPTagFlow(steps);
     setUpPublisherAdServerFlow(steps);
-    setUpComponentAuction(steps);
+    setUpComponentAuctions(steps);
   } else {
     setUpSingleSellerFirstSSPTagFlow(steps);
     setUpRunadAuction(steps);

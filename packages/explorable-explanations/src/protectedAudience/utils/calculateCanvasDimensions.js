@@ -56,6 +56,8 @@ export const calculateCanvasDimensions = () => {
     );
   });
 
+  maxXposition = maxXposition + config.canvas.extraWidth;
+
   config.canvas.width = maxXposition;
   config.canvas.height = height;
 
