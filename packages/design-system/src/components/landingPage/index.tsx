@@ -37,23 +37,11 @@ type LandingPageContainerProps = LandingPageProps & {
   titleStyles: string;
 };
 
-const LandingPageContainer = ({
-  title,
-  hideTitle,
-  psInfoKey,
-  iframeSrc,
-  iframeBorderClass,
-  children,
-  contentPanelTitle,
-  extraClasses,
-  content,
-  counterStyles,
-  titleStyles,
-  showQuickLinks = true,
-  showSupportLink = false,
-}: LandingPageContainerProps) => {
+const LandingPageContainer = (props: LandingPageContainerProps) => {
   const [independentStory, setIndependentStory] = useState<string>('');
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const { children, contentPanelTitle, content, counterStyles, titleStyles } =
+    props;
 
   useEffect(() => {
     if (!independentStory || !iframeRef.current) {
@@ -96,6 +84,7 @@ const LandingPageContainer = ({
   return (
     <>
       <LandingPage
+        {...props}
         containerStyles={independentStory ? 'z-0 absolute top-0 ' : ''}
         contentPanel={
           <ContentPanel
@@ -110,14 +99,6 @@ const LandingPageContainer = ({
             titleStyles={titleStyles}
           />
         }
-        extraClasses={extraClasses}
-        title={title}
-        hideTitle={hideTitle}
-        psInfoKey={psInfoKey}
-        iframeSrc={iframeSrc}
-        iframeBorderClass={iframeBorderClass}
-        showQuickLinks={showQuickLinks}
-        showSupportLink={showSupportLink}
       >
         {children}
       </LandingPage>
