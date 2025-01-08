@@ -20,13 +20,16 @@ import flow from '../flow';
 import app from '../../app';
 import config from '../../config';
 import * as utils from '../../utils';
-import { Box, ProgressLine, Branches, RippleEffect } from '../../components';
+import { RippleEffect } from '../../components';
 import bubbles from '../bubbles';
 import setUpSingleSellerFirstSSPTagFlow from './single-seller/setupFirstSSPTagFlow';
 import setUpMultiSellerFirstSSPTagFlow from './multi-seller/setUpFirstSSPTagFlow';
 import setUpPublisherAdServerFlow from './multi-seller/setUpPublisherAdServerFlow';
 import setUpComponentAuction from './multi-seller/setUpComponentAuction';
 import setUpRunadAuction from './setUpRunadAuction';
+import setUpAdUnitCode from './setUpAdUnitCode';
+import setupBranches from './setupBranches';
+import setupShowWinningAd from './setupShowWinningAd';
 
 /**
  * @module Auction
@@ -62,8 +65,8 @@ auction.setUp = (index) => {
 
   auction.steps = [];
 
-  auction.setUpAdUnitCode(index);
-  auction.setupBranches(index);
+  setUpAdUnitCode(auction, index);
+  setupBranches(auction, index);
 
   if (app.isMultiSeller) {
     setUpMultiSellerFirstSSPTagFlow(auction);
@@ -72,110 +75,10 @@ auction.setUp = (index) => {
   } else {
     setUpSingleSellerFirstSSPTagFlow(auction);
     setUpRunadAuction(auction);
-    auction.setupShowWinningAd();
+    setupShowWinningAd();
   }
 
   app.auction.auctions.push(auction.steps);
-};
-
-auction.setUpAdUnitCode = (index) => {
-  const { colors } = config.flow;
-  const { x, y } = flow.getTimelineCircleCoordinates(index);
-
-  // Setup Ad unit codes
-  auction.steps.push({
-    component: Branches,
-    props: {
-      x1: x,
-      y1: y,
-      currentIndex: index,
-      branches: [
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-        {
-          title: 'adunit-code',
-          description: 'div-200-1',
-          type: 'box',
-          color: colors.box.browser,
-        },
-      ],
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-};
-
-auction.setupBranches = (index) => {
-  auction.steps.push({
-    component: Branches,
-    props: {
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
-      currentIndex: index,
-      branches: [
-        {
-          date: '2024-10-02',
-          time: '10:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
-        {
-          date: '2024-10-03',
-          time: '11:00:22PM',
-          type: 'datetime',
-        },
-      ],
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-};
-
-auction.setupShowWinningAd = () => {
-  const { box } = config.flow;
-
-  auction.steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
-      y1: () => {
-        return app.auction.nextTipCoordinates?.y + 10;
-      },
-    },
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
-
-  auction.steps.push({
-    component: Box,
-    props: {
-      title: 'Show Winning Ad',
-      x: () => app.auction.nextTipCoordinates?.x + 10,
-      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
-    },
-    delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
-    },
-  });
 };
 
 /**

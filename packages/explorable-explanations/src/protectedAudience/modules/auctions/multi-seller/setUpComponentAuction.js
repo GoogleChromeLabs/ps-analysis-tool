@@ -23,12 +23,10 @@ import setUpRunadAuction from '../setUpRunadAuction';
 
 const setUpComponentAuction = (auction) => {
   const { box } = config.flow;
-
-  const BORDER_WIDTH = 400;
-  const BORDER_HEIGHT = BORDER_WIDTH;
   const BORDER_BOX_MARGIN = 50;
   const BOX_WIDTH = 800;
   const BOX_HEIGHT = 800;
+  const FIRST_LINE_HEIGHT = 150;
 
   auction.steps.push({
     component: ProgressLine,
@@ -36,11 +34,10 @@ const setUpComponentAuction = (auction) => {
       direction: 'down',
       x1: () => app.auction.nextTipCoordinates?.x,
       y1: () => app.auction.nextTipCoordinates?.y + box.height - 10,
-      customHeight: 150,
+      customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
     },
     callBack: (returnValue) => {
-      app.auction.coordinates.temp = returnValue;
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -54,11 +51,9 @@ const setUpComponentAuction = (auction) => {
       x: () => app.auction.nextTipCoordinates?.x - BOX_WIDTH / 2,
       y: () => app.auction.nextTipCoordinates?.y,
     },
-    delay: 1111111,
+    delay: 1000,
     callBack: (returnValue) => {
-      const val = returnValue.down;
-
-      app.auction.nextTipCoordinates = val;
+      app.auction.nextTipCoordinates = returnValue.down;
     },
   });
 
@@ -66,30 +61,11 @@ const setUpComponentAuction = (auction) => {
     component: Box,
     props: {
       title: 'SSP A',
-      x: () => app.auction.nextTipCoordinates?.x + BORDER_BOX_MARGIN,
-      y: () =>
-        app.auction.nextTipCoordinates?.y - BORDER_HEIGHT + BORDER_BOX_MARGIN,
+      x: () =>
+        app.auction.nextTipCoordinates?.x - BOX_WIDTH / 2 + BORDER_BOX_MARGIN,
+      y: () => app.auction.nextTipCoordinates?.y - FIRST_LINE_HEIGHT,
     },
     delay: 1000,
-    callBack: (returnValue) => {
-      const val = returnValue.down;
-
-      val.x = val.x - box.width / 2 - 10;
-      val.y = val.y + box.height * 2;
-
-      app.auction.nextTipCoordinates = val;
-    },
-  });
-
-  auction.steps.push({
-    component: ProgressLine,
-    props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y,
-      customHeight: BORDER_HEIGHT,
-      noArrow: true,
-    },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
     },
@@ -98,15 +74,15 @@ const setUpComponentAuction = (auction) => {
   setUpRunadAuction(auction);
 
   auction.steps.push({
-    component: ProgressLine,
+    component: Box,
     props: {
-      direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y,
-      customHeight: BORDER_HEIGHT,
-      noArrow: true,
+      title: '',
+      width: 1,
+      height: 1,
+      x: () => app.auction.nextTipCoordinates?.x,
+      y: () => app.auction.nextTipCoordinates?.y,
     },
-    delay: 11111111111,
+    delay: 11111111,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
     },
