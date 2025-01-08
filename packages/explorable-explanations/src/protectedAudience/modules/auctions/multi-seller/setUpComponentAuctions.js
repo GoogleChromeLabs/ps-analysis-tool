@@ -77,6 +77,9 @@ const setUpComponentAuctions = (steps) => {
         20,
       y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
       ssp: 'SSP A',
+      config: {
+        bidValue: '$10',
+      },
     },
     {
       title: 'Component Auction',
@@ -87,6 +90,9 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         10,
       ssp: 'SSP B',
+      config: {
+        bidValue: '$8',
+      },
     },
     {
       title: 'Component Auction',
@@ -97,6 +103,9 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         10,
       ssp: 'SSP C',
+      config: {
+        bidValue: '$6',
+      },
     },
   ];
 
@@ -130,7 +139,7 @@ const setUpComponentAuctions = (steps) => {
       },
     });
 
-    setUpComponentAuction(steps);
+    setUpComponentAuction(steps, componentAuction.config);
   });
 
   steps.push({
@@ -147,7 +156,7 @@ const setUpComponentAuctions = (steps) => {
   });
 };
 
-const setUpComponentAuction = (steps) => {
+const setUpComponentAuction = (steps, { bidValue }) => {
   const { box, arrowSize } = config.flow;
 
   steps.push({
@@ -184,7 +193,7 @@ const setUpComponentAuction = (steps) => {
   steps.push({
     component: Text,
     props: {
-      text: '$10',
+      text: bidValue,
       x: () => app.auction.nextTipCoordinates?.x,
       y: () => app.auction.nextTipCoordinates?.y + 15,
     },
