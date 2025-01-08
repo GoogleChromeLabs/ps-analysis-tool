@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 /**
- * External Dependencies
+ * External dependencies
  */
 import React, { useEffect, useState, useRef } from 'react';
 
 /**
- * Internal Dependencies
+ * Internal dependencies
  */
 import { getStoryPlayerMarkup } from './getStoryPlayerMarkup';
 import LandingPage, { LandingPageProps } from './LandingPage';
