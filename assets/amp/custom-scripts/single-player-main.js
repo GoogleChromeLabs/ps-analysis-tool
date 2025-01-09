@@ -112,12 +112,15 @@ const messageListener = ({ data: { storyUrl } }) => {
       return;
     }
 
-    stateObject.player.add([{href: storyUrl + '#embedmode=2'}])
+    stateObject.player.add([{href: storyUrl + '#embedmode=2'}]);
+
     const data = { storyOpened: true };
     const event = new CustomEvent('webStoriesLightBoxEvent', {
       detail: data,
     });
+
     window.parent.document.dispatchEvent(event);
+  
     stateObject.player.show(storyUrl + '#embedmode=2', null, {
       animate: false,
     });
@@ -125,6 +128,7 @@ const messageListener = ({ data: { storyUrl } }) => {
     document.body.classList.add('lightbox-open');
     stateObject.lightboxEl.classList.remove('closed');
     resetStyles();
+  
     stateObject.player.play();
   } catch (error) {
     //Fail silently
