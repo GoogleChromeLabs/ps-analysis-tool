@@ -22,10 +22,7 @@ import flow from '../../modules/flow';
 import { isInsideCircle } from '../isInsideCircle';
 
 //Need to pass this from the caller to avoid circular dependencies
-const mouseClickedInNonInteractiveModeCallback = (
-  renderUserIcon,
-  drawCircle
-) => {
+const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
   const {
     circleProps: { diameter },
     circles,
@@ -69,8 +66,8 @@ const mouseClickedInNonInteractiveModeCallback = (
     app.shouldRespondToClick = true;
     renderUserIcon();
 
-    circles.forEach((_, index) => {
-      drawCircle(index, true);
+    app.timeline.expandIconPositions.forEach((position) => {
+      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
     });
 
     app.isRevisitingNodeInInteractiveMode = false;

@@ -63,10 +63,7 @@ timeline.init = () => {
         timeline.renderUserIcon
       );
     } else {
-      mouseClickedInNonInteractiveModeCallback(
-        timeline.renderUserIcon,
-        timeline.drawCircle
-      );
+      mouseClickedInNonInteractiveModeCallback(timeline.renderUserIcon);
     }
   };
 
