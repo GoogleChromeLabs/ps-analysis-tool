@@ -20,9 +20,20 @@
 import React from 'react';
 import { addUTMParams } from '@google-psat/common';
 
-interface ContentPanelProps {
+/**
+ * Internal dependencies.
+ */
+import { ExternalLinkBlack, WebStoriesIcon } from '../../icons';
+
+export interface ContentPanelProps {
   title: string;
-  content: { title: () => string; description: () => string; url: string }[];
+  content: {
+    title: () => string;
+    description: () => string;
+    url: string;
+    storyUrl: string;
+    onClick: () => void;
+  }[];
   titleStyles?: string;
   counterStyles?: string;
 }
@@ -40,12 +51,9 @@ const ContentPanel = ({
       </h3>
       <div className="flex gap-5 flex-wrap">
         {content.map((item, index) => (
-          <a
+          <div
+            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
             key={index}
-            href={addUTMParams(item.url)}
-            target="_blank"
-            rel="noreferrer"
-            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out "
           >
             <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
               <div
@@ -59,10 +67,37 @@ const ContentPanel = ({
             <h3 className={`text-lg font-medium mb-5 ${titleStyles}`}>
               {item.title()}
             </h3>
-            <p className="text-base text-raisin-black dark:text-bright-gray">
+            <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
               {item.description()}
             </p>
-          </a>
+            <div className="flex flex-row align-center gap-2">
+              <div className="w-4 h-4">
+                <a
+                  href={addUTMParams(item.url)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <ExternalLinkBlack
+                    height="16"
+                    width="16"
+                    className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+                  />
+                </a>
+              </div>
+            </div>
+            {item.onClick && item.storyUrl && (
+              <div
+                className="w-4 top-5 right-2.5 absolute h-4 cursor-pointer"
+                onClick={item.onClick}
+              >
+                <WebStoriesIcon
+                  className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+                  height="16"
+                  width="16"
+                />
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </div>
