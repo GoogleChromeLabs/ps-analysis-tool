@@ -28,9 +28,13 @@ import useCanShowAnalyzeTabButton from '../../hooks/useCanShowAnalyzeTabButton';
 
 interface CookiesProps {
   children: React.ReactNode;
+  customMessaging?: React.ReactNode;
 }
 
-const SingleTabAnalysisBanner = ({ children }: CookiesProps) => {
+const SingleTabAnalysisBanner = ({
+  children,
+  customMessaging,
+}: CookiesProps) => {
   const {
     isCurrentTabBeingListenedTo,
     loading,
@@ -70,10 +74,14 @@ const SingleTabAnalysisBanner = ({ children }: CookiesProps) => {
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-col items-center justify-center">
-        <Button
-          onClick={changeListeningToThisTab}
-          text={I18n.getMessage('analyzeThisTab')}
-        />
+        {customMessaging ? (
+          customMessaging
+        ) : (
+          <Button
+            onClick={changeListeningToThisTab}
+            text={I18n.getMessage('analyzeThisTab')}
+          />
+        )}
       </div>
     </div>
   );

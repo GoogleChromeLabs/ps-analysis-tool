@@ -17,7 +17,13 @@
 /**
  * External dependencies
  */
-import { Tabs, useTabs } from '@google-psat/design-system';
+import {
+  InternalNavigationForAnchor,
+  SIDEBAR_ITEMS_KEYS,
+  Tabs,
+  useSidebar,
+  useTabs,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
@@ -32,23 +38,56 @@ const Panel = () => {
     titles: state.titles,
     activeTab: state.activeTab,
   }));
+
+  const updateSelectedItemKey = useSidebar(
+    ({ actions }) => actions.updateSelectedItemKey
+  );
+
   const { className, props } = panel;
 
   const tabToBeShown = useMemo(() => {
     const ActiveTabContent = panel.Element;
+
     if (!ActiveTabContent) {
       return <></>;
     }
+
+    const customMessaging = (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <div className="flex w-full items-center justify-center">
+          Enable multi-tab debugging for enhanced analysis of the Protected
+          Audience API.&nbsp;
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={() => {
+              document
+                .getElementById('cookies-landing-scroll-container')
+                ?.scrollTo(0, 0);
+              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+            }}
+          >
+            {I18n.getMessage('settingsPage')}.
+          </button>
+        </div>
+        <div className="flex w-full items-center justify-center">
+          {I18n.getMessage('visitPSAT')}&nbsp;
+          <InternalNavigationForAnchor
+            text={'<a>' + I18n.getMessage('wiki') + '.</a>'}
+            to={[SIDEBAR_ITEMS_KEYS.WIKI]}
+          />
+        </div>
+      </div>
+    );
 
     if (titles[activeTab] === 'Overview') {
       return <ActiveTabContent {...props} />;
     }
     return (
-      <SingleTabAnalysisBanner>
+      <SingleTabAnalysisBanner customMessaging={customMessaging}>
         <ActiveTabContent {...props} />
       </SingleTabAnalysisBanner>
     );
-  }, [activeTab, panel.Element, props, titles]);
+  }, [activeTab, panel.Element, props, titles, updateSelectedItemKey]);
 
   return (
     <div
