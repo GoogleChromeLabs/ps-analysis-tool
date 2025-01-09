@@ -99,6 +99,13 @@ export default class Animator {
   }
 
   /**
+   * Resets the index of the animator to 0.
+   */
+  resetIndex() {
+    this.index = 0;
+  }
+
+  /**
    * Sets a side effect to be executed when the animation ends
    * @param sideEffect - function to be executed when the animation ends
    */

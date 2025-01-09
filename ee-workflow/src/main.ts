@@ -92,6 +92,11 @@ class Main {
   private animatorSnapshot: Animator[] = [];
 
   /**
+   * Set of checkpoints to be used for save points that can be loaded.
+   */
+  private checkpoints: Set<string> = new Set();
+
+  /**
    * Background color of the canvas.
    */
   private backgroundColor = 255;
@@ -178,10 +183,6 @@ class Main {
    * @param useInstantQueue - Whether to use the instant queue.
    */
   private runner(useInstantQueue = false) {
-    if (this.pause) {
-      return;
-    }
-
     const queue = useInstantQueue ? this.instantQueue : this.stepsQueue;
     const groupQueue = useInstantQueue
       ? this.groupInstantQueue
@@ -240,7 +241,28 @@ class Main {
           this.saveToSnapshot(firstObject);
         }
       }
+
+      if (firstObject.getIsCheckpoint()) {
+        this.checkpoints.add(firstObject.getId());
+      }
     }
+  }
+
+  private runTraveller() {
+    const done = this.traveller?.draw();
+
+    if (done) {
+      this.isTravelling = false;
+      const object = this.traveller?.getObject();
+
+      if (object instanceof Figure) {
+        this.stepsQueue.unshift(object);
+      } else if (object?.getFigures().length) {
+        this.stepsQueue.unshift(object.getFigures()[0]);
+      }
+    }
+
+    return done;
   }
 
   /**
@@ -252,26 +274,11 @@ class Main {
     }
 
     if (this.isTravelling) {
-      const done = this.traveller?.draw();
-
-      if (done) {
-        this.isTravelling = false;
-        const object = this.traveller?.getObject();
-
-        if (object instanceof Figure) {
-          this.stepsQueue.unshift(object);
-        } else if (object?.getFigures().length) {
-          this.stepsQueue.unshift(object.getFigures()[0]);
-        }
-
+      if (this.runTraveller()) {
         this.traveller = null;
         this.runner();
       }
-
-      return;
-    }
-
-    if (this.p5.frameCount % this.delay === 0) {
+    } else if (this.p5.frameCount % this.delay === 0) {
       if (!this.clearOnEachStep) {
         this.p5.clear();
       }
@@ -355,6 +362,197 @@ class Main {
    */
   isPaused() {
     return this.pause;
+  }
+
+  /**
+   * If a animator is still rendering, it will be reset and the already rendered figures/group will be removed from the snapshot and readded to the queue.
+   * @param checkpoint - The checkpoint to load.
+   * @returns - Whether the checkpoint was part of the animator.
+   */
+  private handleAnimatorOnPreviousCheckpointLoad(checkpoint: string): boolean {
+    if (this.snapshot.length === 0) {
+      return false;
+    }
+
+    const lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+
+    if (!lastSnapshotObject.getAnimatorId()) {
+      return false;
+    }
+
+    const animatorInSnapshot = this.animatorSnapshot.find(
+      (animator) => animator.getId() === lastSnapshotObject.getAnimatorId()
+    );
+
+    if (animatorInSnapshot) {
+      return false;
+    }
+
+    let isCheckpointLoaded = false;
+    const toBeLoadedFigures = [];
+    let found = false;
+
+    while (!found && this.snapshot.length) {
+      const figure = this.snapshot.pop();
+
+      if (
+        figure &&
+        figure.getAnimatorId() !== lastSnapshotObject.getAnimatorId()
+      ) {
+        this.snapshot.push(figure);
+        found = true;
+        break;
+      }
+
+      if (figure) {
+        toBeLoadedFigures.push(figure);
+        figure.setThrow(false);
+
+        if (figure.getCanTravel()) {
+          figure.setShouldTravel(true);
+          figure.resetTraveller();
+        }
+
+        if (figure.getId()) {
+          isCheckpointLoaded = figure.getId() === checkpoint;
+        }
+      }
+    }
+
+    const toBeLoadedGroups = [];
+    found = false;
+
+    while (!found && this.groupSnapshot.length) {
+      const group = this.groupSnapshot.pop();
+
+      if (
+        group &&
+        group.getAnimatorId() !== lastSnapshotObject.getAnimatorId()
+      ) {
+        this.groupSnapshot.push(group);
+        found = true;
+        break;
+      }
+
+      if (group) {
+        toBeLoadedGroups.push(group);
+        group.setThrow(false);
+      }
+    }
+
+    this.stepsQueue.unshift(...toBeLoadedFigures.reverse());
+    this.groupStepsQueue.unshift(...toBeLoadedGroups.reverse());
+    this.animatorStepsQueue?.[0].resetIndex();
+
+    return isCheckpointLoaded;
+  }
+
+  /**
+   * Loads the previous checkpoint. This will re-render instantly all figures up to the previous checkpoint and start the queue from there.
+   */
+  loadPreviousCheckpoint() {
+    const checkpoint = Array.from(this.checkpoints).pop();
+
+    if (!checkpoint) {
+      return;
+    }
+
+    this.checkpoints.delete(checkpoint);
+    this.togglePause();
+
+    while (this.instantQueue.length) {
+      this.runner(true);
+    }
+
+    if (this.isTravelling) {
+      while (this.isTravelling) {
+        this.runTraveller();
+      }
+
+      const object = this.traveller?.getObject();
+
+      if (object instanceof Group) {
+        object?.getFigures().forEach((figure) => {
+          if (figure.getCanTravel()) {
+            figure?.resetTraveller();
+            figure?.setShouldTravel(true);
+          }
+        });
+      } else {
+        object?.resetTraveller();
+        object?.setShouldTravel(true);
+      }
+
+      this.traveller = null;
+    }
+
+    if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
+      this.togglePause();
+      this.reDrawAll();
+      return;
+    }
+
+    const toBeLoadedObjects = [];
+    const toCheckGroups = new Set<string>();
+    const toCheckAnimators = new Set<string>();
+    let found = false;
+
+    while (!found && this.snapshot.length) {
+      const figure = this.snapshot.pop();
+
+      if (figure?.getId() === checkpoint) {
+        found = true;
+      }
+
+      if (figure) {
+        toBeLoadedObjects.push(figure);
+        figure.setThrow(false);
+
+        if (figure.getCanTravel()) {
+          figure.setShouldTravel(true);
+          figure.resetTraveller();
+        }
+
+        if (figure.getGroupId()) {
+          toCheckGroups.add(figure.getGroupId());
+        }
+
+        if (figure.getAnimatorId()) {
+          toCheckAnimators.add(figure.getAnimatorId());
+        }
+      }
+    }
+
+    const toBeLoadedGroups = [];
+
+    while (this.groupSnapshot.length && toCheckGroups.size) {
+      const group = this.groupSnapshot.pop();
+
+      if (group) {
+        toCheckGroups.delete(group?.getId());
+        toBeLoadedGroups.push(group);
+        group.setThrow(false);
+      }
+    }
+
+    const toBeLoadedAnimators = [];
+
+    while (this.animatorSnapshot.length && toCheckAnimators.size) {
+      const animator = this.animatorSnapshot.pop();
+
+      if (animator) {
+        toCheckAnimators.delete(animator?.getId());
+        toBeLoadedAnimators.push(animator);
+        animator.setThrow(false);
+      }
+    }
+
+    this.stepsQueue.unshift(...toBeLoadedObjects.reverse());
+    this.groupStepsQueue.unshift(...toBeLoadedGroups.reverse());
+    this.animatorStepsQueue.unshift(...toBeLoadedAnimators.reverse());
+
+    this.togglePause();
+    this.reDrawAll();
   }
 
   /**
@@ -462,8 +660,13 @@ class Main {
    * Adds a figure to the queue.
    * @param figure - The figure to add.
    * @param instant - Whether to add to the instant queue.
+   * @param isCheckpoint - Whether to add as a checkpoint.
    */
-  addFigure(figure: Figure, instant = false) {
+  addFigure(figure: Figure, instant = false, isCheckpoint = false) {
+    if (isCheckpoint) {
+      figure.setCheckpoint(true);
+    }
+
     if (instant) {
       this.instantQueue.push(figure);
     } else {
@@ -475,14 +678,23 @@ class Main {
    * Adds a group to the queue.
    * @param group - The group to add.
    * @param instant - Whether to add to the instant queue.
+   * @param isCheckpoint - Whether to add as a checkpoint.
    */
-  addGroup(group: Group, instant = false) {
+  addGroup(group: Group, instant = false, isCheckpoint = false) {
     if (instant) {
       this.groupInstantQueue.push(group);
-      group.getFigures().forEach((figure) => this.addFigure(figure, instant));
+      group
+        .getFigures()
+        .forEach((figure, index) =>
+          this.addFigure(figure, instant, index === 0 ? isCheckpoint : false)
+        );
     } else {
       this.groupStepsQueue.push(group);
-      group.getFigures().forEach((figure) => this.addFigure(figure, instant));
+      group
+        .getFigures()
+        .forEach((figure, index) =>
+          this.addFigure(figure, instant, index === 0 ? isCheckpoint : false)
+        );
     }
   }
 
@@ -490,24 +702,29 @@ class Main {
    * Adds an animator to the queue.
    * @param animator - The animator to add.
    * @param instant - Whether to add to the instant queue.
+   * @param isCheckpoint - Whether to add as a checkpoint.
    */
-  addAnimator(animator: Animator, instant = false) {
+  addAnimator(animator: Animator, instant = false, isCheckpoint = false) {
     if (instant) {
       this.animatorInstantQueue.push(animator);
-      animator.getObjects().forEach((object) => {
+      animator.getObjects().forEach((object, index) => {
+        const _isCheckpoint = isCheckpoint && index === 0;
+
         if (object instanceof Figure) {
-          this.addFigure(object, instant);
+          this.addFigure(object, instant, _isCheckpoint);
         } else {
-          this.addGroup(object as Group, instant);
+          this.addGroup(object as Group, instant, _isCheckpoint);
         }
       });
     } else {
       this.animatorStepsQueue.push(animator);
-      animator.getObjects().forEach((object) => {
+      animator.getObjects().forEach((object, index) => {
+        const _isCheckpoint = isCheckpoint && index === 0;
+
         if (object instanceof Figure) {
-          this.addFigure(object, instant);
+          this.addFigure(object, instant, _isCheckpoint);
         } else {
-          this.addGroup(object as Group, instant);
+          this.addGroup(object as Group, instant, _isCheckpoint);
         }
       });
     }

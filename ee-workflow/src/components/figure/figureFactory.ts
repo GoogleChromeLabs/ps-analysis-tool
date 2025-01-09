@@ -32,6 +32,7 @@ type FigureParams = {
   fill?: string;
   stroke?: string;
   tags?: string[];
+  mouseClicked?: () => void;
 };
 
 export default class FigureFactory {
@@ -50,6 +51,7 @@ export default class FigureFactory {
     fill,
     stroke,
     tags,
+    mouseClicked,
   }: FigureParams & {
     width: number;
     height: number;
@@ -63,7 +65,8 @@ export default class FigureFactory {
       id,
       fill,
       stroke,
-      tags
+      tags,
+      mouseClicked
     );
   }
 
@@ -172,7 +175,16 @@ export default class FigureFactory {
         return false;
       };
 
+      const resetTravel = (figure: Figure) => {
+        const _figure = <Line>figure;
+        currentX = x;
+        currentY = y;
+        _figure.setEndX(currentX);
+        _figure.setEndY(currentY);
+      };
+
       line.setTraveller(traveller);
+      line.setResetTravel(resetTravel);
     }
 
     return line;

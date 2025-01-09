@@ -36,6 +36,11 @@ export default class Box extends Figure {
    */
   private height: number;
 
+  /**
+   * Callback defined by the user to be executed when the box is clicked.
+   */
+  private customMouseClicked: (() => void) | undefined;
+
   constructor(
     canvasRuuner: Main,
     x: number,
@@ -45,11 +50,13 @@ export default class Box extends Figure {
     id?: string,
     fill?: string,
     stroke?: string,
-    tags?: string[]
+    tags?: string[],
+    mouseClicked?: () => void
   ) {
     super(canvasRuuner, x, y, id, fill, stroke, tags);
     this.width = width;
     this.height = height;
+    this.customMouseClicked = mouseClicked;
   }
 
   draw() {
@@ -80,6 +87,7 @@ export default class Box extends Figure {
 
   mouseClicked() {
     // TODO: Discuss the function
+    this.customMouseClicked?.();
   }
 
   isHovering(): boolean {

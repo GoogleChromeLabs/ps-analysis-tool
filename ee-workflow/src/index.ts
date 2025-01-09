@@ -27,113 +27,130 @@ IGCanvas.setDelay(1);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 
+const button = mainFF.box({
+  x: 10,
+  y: 10,
+  width: 100,
+  height: 50,
+  fill: 'blue',
+  stroke: 'black',
+  mouseClicked: () => {
+    mainCanvas.loadPreviousCheckpoint();
+  },
+});
+
+mainCanvas.addFigure(button);
+
 const timeline = mainFF.line({
   x: 0,
   y: 200,
   endX: 1000,
   endY: 200,
   stroke: 'black',
+  shouldTravel: true,
 });
 
 const circles = [
-  mainFF.circle({
-    x: 100,
-    y: 200,
-    diameter: 75,
-    fill: '#EDF2EF',
-  }),
-  mainFF.circle({
-    x: 300,
-    y: 200,
-    diameter: 75,
-    fill: '#EDF2EF',
-  }),
-  mainFF.circle({
-    x: 500,
-    y: 200,
-    diameter: 75,
-    fill: '#EDF2EF',
-  }),
-  mainFF.circle({
-    x: 700,
-    y: 200,
-    diameter: 75,
-    fill: '#EDF2EF',
-  }),
-];
-
-const textonCircles = [
-  mainFF.text({
-    x: 100,
-    y: 75,
-    text: '2024-01-01',
-  }),
-  mainFF.text({
-    x: 100,
-    y: 100,
-    text: 'adv1.com',
-  }),
-  mainFF.text({
-    x: 300,
-    y: 75,
-    text: '2024-01-02',
-  }),
-  mainFF.text({
-    x: 300,
-    y: 100,
-    text: 'adv2.com',
-  }),
-  mainFF.text({
-    x: 500,
-    y: 75,
-    text: '2024-01-03',
-  }),
-  mainFF.text({
-    x: 500,
-    y: 100,
-    text: 'adv3.com',
-  }),
-  mainFF.text({
-    x: 700,
-    y: 75,
-    text: '2024-01-04',
-  }),
-  mainFF.text({
-    x: 700,
-    y: 100,
-    text: 'adv4.com',
-  }),
-];
-
-const circleToTextLine = [
-  mainFF.line({
-    x: 100,
-    y: 163,
-    endX: 100,
-    endY: 110,
-    stroke: 'black',
-  }),
-  mainFF.line({
-    x: 300,
-    y: 163,
-    endX: 300,
-    endY: 110,
-    stroke: 'black',
-  }),
-  mainFF.line({
-    x: 500,
-    y: 163,
-    endX: 500,
-    endY: 110,
-    stroke: 'black',
-  }),
-  mainFF.line({
-    x: 700,
-    y: 163,
-    endX: 700,
-    endY: 110,
-    stroke: 'black',
-  }),
+  new Group([
+    mainFF.circle({
+      x: 100,
+      y: 200,
+      diameter: 75,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 100,
+      y: 75,
+      text: '2024-01-01',
+    }),
+    mainFF.text({
+      x: 100,
+      y: 100,
+      text: 'adv1.com',
+    }),
+    mainFF.line({
+      x: 100,
+      y: 163,
+      endX: 100,
+      endY: 110,
+      stroke: 'black',
+    }),
+  ]),
+  new Group([
+    mainFF.circle({
+      x: 300,
+      y: 200,
+      diameter: 75,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 300,
+      y: 75,
+      text: '2024-01-02',
+    }),
+    mainFF.text({
+      x: 300,
+      y: 100,
+      text: 'adv2.com',
+    }),
+    mainFF.line({
+      x: 300,
+      y: 163,
+      endX: 300,
+      endY: 110,
+      stroke: 'black',
+    }),
+  ]),
+  new Group([
+    mainFF.circle({
+      x: 500,
+      y: 200,
+      diameter: 75,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 500,
+      y: 75,
+      text: '2024-01-03',
+    }),
+    mainFF.text({
+      x: 500,
+      y: 100,
+      text: 'adv3.com',
+    }),
+    mainFF.line({
+      x: 500,
+      y: 163,
+      endX: 500,
+      endY: 110,
+      stroke: 'black',
+    }),
+  ]),
+  new Group([
+    mainFF.circle({
+      x: 700,
+      y: 200,
+      diameter: 75,
+      fill: '#EDF2EF',
+    }),
+    mainFF.text({
+      x: 700,
+      y: 75,
+      text: '2024-01-04',
+    }),
+    mainFF.text({
+      x: 700,
+      y: 100,
+      text: 'adv4.com',
+    }),
+    mainFF.line({
+      x: 700,
+      y: 163,
+      endX: 700,
+      endY: 110,
+      stroke: 'black',
+    }),
+  ]),
 ];
 
 const userIcon =
@@ -223,10 +240,8 @@ const advertiserFlow = [
 ];
 
 // Setup timeline.
-mainCanvas.addFigure(timeline, true);
-circles.forEach((circle) => mainCanvas.addFigure(circle, true));
-textonCircles.forEach((text) => mainCanvas.addFigure(text, true));
-circleToTextLine.forEach((line) => mainCanvas.addFigure(line, true));
+mainCanvas.addFigure(timeline);
+circles.forEach((circle) => mainCanvas.addGroup(circle));
 
 // add IG bubble canvas here
 // pause the main canvas operations
@@ -264,7 +279,7 @@ flow.setSideEffectOnEnd(() => {
   mainCanvas.togglePause();
   IGCanvas.togglePause();
 });
-mainCanvas.addAnimator(flow);
+mainCanvas.addAnimator(flow, false, true);
 
 mainCanvas.addGroup(
   new Group([
@@ -289,7 +304,8 @@ mainCanvas.addGroup(
       width: 50,
       height: 50,
     }),
-  ])
+  ]),
+  false
 );
 
 const travellerLine = mainFF.line({
@@ -300,6 +316,7 @@ const travellerLine = mainFF.line({
   stroke: 'red',
   shouldTravel: true,
 });
+
 const travellerGroup = new Group([
   mainFF.line({
     x: 0,
@@ -326,7 +343,11 @@ const travellerGroup = new Group([
   }),
 ]);
 
-mainCanvas.addAnimator(new Animator([travellerLine, travellerGroup], mainFF));
+mainCanvas.addAnimator(
+  new Animator([travellerLine, travellerGroup], mainFF),
+  false,
+  true
+);
 
 const secondCircleAnimations = [
   mainFF.image({
@@ -441,7 +462,7 @@ secondFlow.setSideEffectOnEnd(() => {
   IGCanvas.togglePause();
   mainCanvas.togglePause();
 });
-mainCanvas.addAnimator(secondFlow);
+mainCanvas.addAnimator(secondFlow, false, true);
 
 mainCanvas.addGroup(
   new Group([
@@ -466,5 +487,6 @@ mainCanvas.addGroup(
       width: 50,
       height: 50,
     }),
-  ])
+  ]),
+  false
 );

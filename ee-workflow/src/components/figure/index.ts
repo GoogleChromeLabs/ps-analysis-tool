@@ -76,6 +76,13 @@ export default abstract class Figure {
   protected traveller: ((figure: Figure) => boolean) | undefined;
 
   /**
+   * Function to be executed when the object has to reset travel.
+   */
+  protected resetTravel: ((figure: Figure) => void) | undefined;
+
+  protected isCheckpoint = false;
+
+  /**
    * The number of objects created.
    */
   static objectCount = 0;
@@ -158,6 +165,14 @@ export default abstract class Figure {
   }
 
   /**
+   * Method to get whether the figure have traveller function.
+   * @returns boolean indicating if the figure have traveller function.
+   */
+  getCanTravel(): boolean {
+    return this.traveller !== undefined;
+  }
+
+  /**
    * Method to get the shouldTravel property.
    * @returns boolean indicating if the figure should travel.
    */
@@ -186,11 +201,28 @@ export default abstract class Figure {
   }
 
   /**
+   * Method to call the reset traveller function.
+   */
+  resetTraveller() {
+    if (this.resetTravel) {
+      this.resetTravel(this);
+    }
+  }
+
+  /**
    * Method to set the traveller function.
    * @param traveller - The traveller function to set.
    */
   setTraveller(traveller: (figure: Figure) => boolean) {
     this.traveller = traveller;
+  }
+
+  /**
+   * Method to set the reset traveller function.
+   * @param resetTravel - The reset traveller function to set.
+   */
+  setResetTravel(resetTravel: (figure: Figure) => void) {
+    this.resetTravel = resetTravel;
   }
 
   /**
@@ -282,6 +314,22 @@ export default abstract class Figure {
    */
   removeTag(tag: string) {
     this.tags = this.tags.filter((t) => t !== tag);
+  }
+
+  /**
+   * Set the figure as a checkpoint.
+   * @param isCheckpoint - boolean indicating if the figure is a checkpoint.
+   */
+  setCheckpoint(isCheckpoint: boolean) {
+    this.isCheckpoint = isCheckpoint;
+  }
+
+  /**
+   * Get whether the figure is a checkpoint.
+   * @returns - boolean indicating if the figure is a checkpoint.
+   */
+  getIsCheckpoint() {
+    return this.isCheckpoint;
   }
 
   /**
