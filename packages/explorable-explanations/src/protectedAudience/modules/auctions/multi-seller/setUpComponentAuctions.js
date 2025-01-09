@@ -113,6 +113,10 @@ const setUpComponentAuctions = (steps) => {
     setUpComponentAuction(steps, componentAuction, componentAuction.config);
   });
 
+  setUpTPoint(steps);
+
+  setupAfterComponentAuctionFlow(steps);
+
   steps.push({
     component: Text,
     props: {
@@ -200,6 +204,119 @@ const setUpComponentAuction = (steps, { title, x, y, ssp }, { bidValue }) => {
     delay: 1000,
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+};
+
+const setUpTPoint = (steps) => {
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'left',
+      x1: () => app.auction.nextTipCoordinates?.x + 70,
+      y1: () => app.auction.nextTipCoordinates?.y - 10,
+      customWidth: BOX_COLUMN_MARGIN - 55,
+      noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'left',
+      x1: () => app.auction.nextTipCoordinates?.x + 50,
+      y1: () => app.auction.nextTipCoordinates?.y - 10,
+      customWidth: BOX_COLUMN_MARGIN - 55,
+      noArrow: true,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN - 28,
+      y1: () => app.auction.nextTipCoordinates?.y + 20,
+      customHeight: 100,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+};
+
+const setupAfterComponentAuctionFlow = (steps) => {
+  const { box, arrowSize } = config.flow;
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'scoreAd()',
+      description: '(by SSPs)',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + box.height - arrowSize,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'reportWin()',
+      description: '(on dsp.js)',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'down',
+      x1: () => app.auction.nextTipCoordinates?.x,
+      y1: () => app.auction.nextTipCoordinates?.y + box.height - arrowSize,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'reportResult()',
+      description: '(on ssp.js)',
+      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
     },
   });
 };
