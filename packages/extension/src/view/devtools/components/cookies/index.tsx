@@ -17,63 +17,28 @@
  * External dependencies.
  */
 import React, { memo } from 'react';
-import {
-  Button,
-  CookiesLanding,
-  ProgressBar,
-} from '@google-psat/design-system';
+import { CookiesLanding } from '@google-psat/design-system';
 import { type CookieTableData } from '@google-psat/common';
-import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
  */
-import { useCookie, useSettings } from '../../stateProviders';
-import useCanShowAnalyzeTabButton from '../../hooks/useCanShowAnalyzeTabButton';
+import { useCookie } from '../../stateProviders';
 import CookiesListing from './cookiesListing';
 import AssembledCookiesLanding from './cookieLanding';
+import SingleTabAnalysisBanner from '../singleTabAnalysisBanner';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const Cookies = ({ setFilteredCookies }: CookiesProps) => {
-  const {
-    isCurrentTabBeingListenedTo,
-    loading,
-    selectedFrame,
-    tabToRead,
-    changeListeningToThisTab,
-  } = useCookie(({ state, actions }) => ({
-    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
-    loading: state.loading,
+  const { selectedFrame } = useCookie(({ state }) => ({
     selectedFrame: state.selectedFrame,
-    tabToRead: state.tabToRead,
-    changeListeningToThisTab: actions.changeListeningToThisTab,
-  }));
-  const canShowAnalyzeTabButton = useCanShowAnalyzeTabButton();
-
-  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
-  if (
-    loading ||
-    (loading &&
-      tabToRead &&
-      isCurrentTabBeingListenedTo &&
-      allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single')
-  ) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-raisin-black">
-        <ProgressBar additionalStyles="w-full" />
-      </div>
-    );
-  }
-
-  if (canShowAnalyzeTabButton) {
-    return (
+  return (
+    <SingleTabAnalysisBanner>
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
         data-testid="cookies-content"
@@ -86,18 +51,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
           </CookiesLanding>
         )}
       </div>
-    );
-  }
-
-  return (
-    <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        <Button
-          onClick={changeListeningToThisTab}
-          text={I18n.getMessage('analyzeThisTab')}
-        />
-      </div>
-    </div>
+    </SingleTabAnalysisBanner>
   );
 };
 

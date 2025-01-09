@@ -20,15 +20,35 @@
 import { Tabs, useTabs } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
-import React from 'react';
+import React, { useMemo } from 'react';
+/**
+ * Internal dependencies
+ */
+import SingleTabAnalysisBanner from '../../singleTabAnalysisBanner';
 
 const Panel = () => {
-  const { panel } = useTabs(({ state }) => ({
+  const { panel, titles, activeTab } = useTabs(({ state }) => ({
     panel: state.panel,
+    titles: state.titles,
+    activeTab: state.activeTab,
   }));
-
-  const ActiveTabContent = panel.Element;
   const { className, props } = panel;
+
+  const tabToBeShown = useMemo(() => {
+    const ActiveTabContent = panel.Element;
+    if (!ActiveTabContent) {
+      return <></>;
+    }
+
+    if (titles[activeTab] === 'Overview') {
+      return <ActiveTabContent {...props} />;
+    }
+    return (
+      <SingleTabAnalysisBanner>
+        <ActiveTabContent {...props} />
+      </SingleTabAnalysisBanner>
+    );
+  }, [activeTab, panel.Element, props, titles]);
 
   return (
     <div
@@ -47,7 +67,7 @@ const Panel = () => {
           minHeight: 'calc(100% - 93px)',
         }}
       >
-        {ActiveTabContent && <ActiveTabContent {...props} />}
+        {tabToBeShown}
       </div>
     </div>
   );
