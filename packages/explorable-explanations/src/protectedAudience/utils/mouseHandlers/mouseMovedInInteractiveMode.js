@@ -19,22 +19,22 @@
 import app from '../../app';
 import config from '../../config';
 import { isInsideCircle } from '../isInsideCircle';
-const mouseMovedInNonInteractiveModeCallback = (event) => {
-  const { offsetX, offsetY } = event;
-
-  app.mouseX = offsetX;
-  app.mouseY = offsetY;
-
-  let hoveringOnExpandIconPositions = false;
-  if (!config.timeline.circles.every(({ visited }) => visited === true)) {
+import { isOverControls } from '../isOverControls';
+import { wipeAndRecreateUserCanvas } from '../wipeAndRecreateCanvas';
+const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
+  if (!app.isInteractiveMode) {
     return;
   }
+
+  const { offsetX, offsetY } = event;
+  let hoveringOnExpandIconPositions = false;
+
   app.timeline.expandIconPositions.forEach((positions) => {
     if (
       isInsideCircle(
         offsetX,
         offsetY,
-        positions.x,
+        positions.x - 10,
         positions.y + config.timeline.circleProps.diameter / 2,
         20
       )
@@ -43,11 +43,24 @@ const mouseMovedInNonInteractiveModeCallback = (event) => {
     }
   });
 
-  if (hoveringOnExpandIconPositions) {
-    app.p.cursor('pointer');
-  } else {
-    app.p.cursor('default');
+  app.mouseX = offsetX;
+  app.mouseY = offsetY;
+
+  if (!app.shouldRespondToClick) {
+    return;
   }
+
+  if (
+    hoveringOnExpandIconPositions ||
+    isOverControls(event.clientX, event.clientY)
+  ) {
+    app.startTrackingMouse = false;
+  } else {
+    app.startTrackingMouse = true;
+  }
+
+  wipeAndRecreateUserCanvas();
+  renderUserIcon();
 };
 
-export default mouseMovedInNonInteractiveModeCallback;
+export default mouseMovedInInteractiveMode;

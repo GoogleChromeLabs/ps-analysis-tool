@@ -238,7 +238,11 @@ app.setupLoop = (doNotPlay) => {
   }
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.drawFlows = (index) => {
@@ -262,13 +266,13 @@ app.handleNonInteractivePrev = async () => {
   app.timeline.isPaused = true;
   //This is to set the data for previous site in react as well.
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
-  await utils.delay(100);
+  await utils.delay(10);
 
   app.timeline.currentIndex -= 1;
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
-  await utils.delay(100);
+  await utils.delay(10);
 
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
@@ -284,7 +288,11 @@ app.handleNonInteractivePrev = async () => {
   );
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.handleInteractivePrev = () => {
@@ -327,7 +335,11 @@ app.handleInteractivePrev = () => {
   timeline.renderUserIcon();
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.handlePrevButton = () => {
@@ -368,12 +380,12 @@ app.handleNonInteractiveNext = async () => {
   app.cancelPromise = true;
   //This is to set the data for previous site in react as well.
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
-  await utils.delay(100);
+  await utils.delay(10);
   app.timeline.currentIndex += 1;
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
-  await utils.delay(100);
+  await utils.delay(10);
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
 
@@ -388,7 +400,11 @@ app.handleNonInteractiveNext = async () => {
   );
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.handleInteractiveNext = () => {
@@ -438,7 +454,11 @@ app.handleInteractiveNext = () => {
   timeline.renderUserIcon();
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.handleControls = () => {

@@ -22,7 +22,10 @@ import flow from '../../modules/flow';
 import { isInsideCircle } from '../isInsideCircle';
 
 //Need to pass this from the caller to avoid circular dependencies
-const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
+const mouseClickedInNonInteractiveModeCallback = (
+  renderUserIcon,
+  drawCircle
+) => {
   const {
     circleProps: { diameter },
     circles,
@@ -65,6 +68,11 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
   app.promiseQueue.push((cb) => {
     app.shouldRespondToClick = true;
     renderUserIcon();
+
+    circles.forEach((_, index) => {
+      drawCircle(index, true);
+    });
+
     app.isRevisitingNodeInInteractiveMode = false;
 
     if (circles[clickedIndex].type === 'advertiser') {

@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { default as mouseClickedInInteractiveModeCallback } from './mouseClickedInInteractiveModeCallback';
-export { default as mouseClickedInNonInteractiveModeCallback } from './mouseClickedInInteractiveModeCallback';
-export { default as mouseMovedInTimeline } from './mouseMovedInTimeline';
+export { default as mouseClickedInNonInteractiveModeCallback } from './mouseClickedInNonInteractiveModeCallback';
+export { default as mouseMovedInInteractiveMode } from './mouseMovedInInteractiveMode';
+export { default as mouseMovedInNonInteractiveMode } from './mouseMovedInNonInteractiveMode';
