@@ -452,16 +452,37 @@ class Main {
   }
 
   /**
+   * Pops the previous checkpoint from the stack.
+   * @returns The previous checkpoint.
+   */
+  private popPreviousCheckpoint(): string | undefined {
+    let checkpoint = Array.from(this.checkpoints).pop();
+
+    if (!checkpoint) {
+      return undefined;
+    }
+
+    this.checkpoints.delete(checkpoint);
+
+    if (checkpoint === this.snapshot?.[this.snapshot.length - 1]?.getId()) {
+      checkpoint = this.popPreviousCheckpoint();
+    }
+
+    return checkpoint;
+  }
+
+  /**
    * Loads the previous checkpoint. This will re-render instantly all figures up to the previous checkpoint and start the queue from there.
    */
   loadPreviousCheckpoint() {
-    const checkpoint = Array.from(this.checkpoints).pop();
+    const checkpoint = this.popPreviousCheckpoint();
 
     if (!checkpoint) {
       return;
     }
 
     this.checkpoints.delete(checkpoint);
+
     this.togglePause();
 
     while (this.instantQueue.length) {
