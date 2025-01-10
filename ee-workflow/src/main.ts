@@ -369,6 +369,15 @@ class Main {
   }
 
   /**
+   * Resets the drawing process to the first checkpoint.
+   */
+  reset() {
+    while (this.checkpoints.size) {
+      this.loadPreviousCheckpoint();
+    }
+  }
+
+  /**
    * If a animator is still rendering, it will be reset and the already rendered figures/group will be removed from the snapshot and readded to the queue.
    * @param checkpoint - The checkpoint to load.
    * @returns - Whether the checkpoint was part of the animator.
@@ -480,8 +489,6 @@ class Main {
     if (!checkpoint) {
       return;
     }
-
-    this.checkpoints.delete(checkpoint);
 
     this.togglePause();
 

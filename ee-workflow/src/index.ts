@@ -27,46 +27,45 @@ IGCanvas.setDelay(1);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 
-const prevbutton = new Group([
-  mainFF.box({
-    x: 10,
-    y: 10,
-    width: 100,
-    height: 50,
-    fill: 'blue',
-    stroke: 'black',
-    mouseClicked: () => {
-      mainCanvas.loadPreviousCheckpoint();
-    },
-  }),
-  mainFF.text({
-    x: 60,
-    y: 40,
-    text: 'Previous',
-  }),
-]);
+const prevbutton = mainFF.box({
+  x: 10,
+  y: 10,
+  width: 100,
+  height: 50,
+  fill: 'blue',
+  stroke: 'black',
+  mouseClicked: () => {
+    mainCanvas.loadPreviousCheckpoint();
+  },
+});
 
-const nextbutton = new Group([
-  mainFF.box({
-    x: 150,
-    y: 10,
-    width: 100,
-    height: 50,
-    fill: 'blue',
-    stroke: 'black',
-    mouseClicked: () => {
-      mainCanvas.loadNextCheckpoint();
-    },
-  }),
-  mainFF.text({
-    x: 200,
-    y: 40,
-    text: 'Next',
-  }),
-]);
+const nextbutton = mainFF.box({
+  x: 150,
+  y: 10,
+  width: 100,
+  height: 50,
+  fill: 'blue',
+  stroke: 'black',
+  mouseClicked: () => {
+    mainCanvas.loadNextCheckpoint();
+  },
+});
 
-mainCanvas.addGroup(prevbutton);
-mainCanvas.addGroup(nextbutton);
+const reset = mainFF.box({
+  x: 290,
+  y: 10,
+  width: 100,
+  height: 50,
+  fill: 'blue',
+  stroke: 'black',
+  mouseClicked: () => {
+    mainCanvas.reset();
+  },
+});
+
+mainCanvas.addFigure(reset, false, true);
+mainCanvas.addFigure(prevbutton);
+mainCanvas.addFigure(nextbutton);
 
 const timeline = mainFF.line({
   x: 0,
