@@ -96,4 +96,24 @@ export default class Traveller {
   getObject() {
     return this.object;
   }
+
+  /**
+   * Function to complete the travelling of the object.
+   * @param skipDraw - boolean indicating if the draw function should be skipped
+   */
+  completeTravelling(skipDraw = false) {
+    if (!this.object) {
+      return;
+    }
+
+    if (this.object instanceof Group) {
+      this.object.getFigures().forEach((figure) => {
+        figure.completeTraveller(skipDraw);
+        figure.setShouldTravel(false);
+      });
+    } else {
+      this.object?.completeTraveller(skipDraw);
+      this.object?.setShouldTravel(false);
+    }
+  }
 }

@@ -183,8 +183,19 @@ export default class FigureFactory {
         _figure.setEndY(currentY);
       };
 
+      const completeTravel = (figure: Figure, skipDraw: boolean) => {
+        const _figure = <Line>figure;
+        _figure.setEndX(endX);
+        _figure.setEndY(endY);
+
+        if (!skipDraw) {
+          _figure.draw();
+        }
+      };
+
       line.setTraveller(traveller);
       line.setResetTravel(resetTravel);
+      line.setCompleteTravel(completeTravel);
     }
 
     return line;

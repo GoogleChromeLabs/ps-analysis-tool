@@ -83,16 +83,24 @@ export default class Animator {
   /**
    * Draws the current object in the animation sequence, and increments the index.
    * If the index reaches the end of the sequence, it resets the index to 0.
+   * @param skipDraw - boolean indicating if the draw function should be skipped
    * @returns boolean indicating if the animation has finished
    */
-  draw(): boolean {
+  draw(skipDraw = false): boolean {
     if (this.index === this.objects.length - 1) {
       this.index = 0;
-      this.sideEffectOnEnd?.();
+
+      if (!skipDraw) {
+        this.sideEffectOnEnd?.();
+      }
+
       return true;
     }
 
-    this.objects[this.index].draw();
+    if (!skipDraw) {
+      this.objects[this.index].draw();
+    }
+
     this.index++;
 
     return false;

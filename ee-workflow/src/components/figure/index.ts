@@ -80,6 +80,16 @@ export default abstract class Figure {
    */
   protected resetTravel: ((figure: Figure) => void) | undefined;
 
+  /**
+   * Function to complete the travel of the object to the end coordinates at once.
+   */
+  protected completeTravel:
+    | ((figure: Figure, skipDraw: boolean) => void)
+    | undefined;
+
+  /**
+   * Whether the figure is a checkpoint.
+   */
   protected isCheckpoint = false;
 
   /**
@@ -210,6 +220,16 @@ export default abstract class Figure {
   }
 
   /**
+   * Method to call the complete traveller function.
+   * @param skipDraw - boolean indicating if the draw function should be skipped
+   */
+  completeTraveller(skipDraw = false) {
+    if (this.completeTravel) {
+      this.completeTravel(this, skipDraw);
+    }
+  }
+
+  /**
    * Method to set the traveller function.
    * @param traveller - The traveller function to set.
    */
@@ -223,6 +243,16 @@ export default abstract class Figure {
    */
   setResetTravel(resetTravel: (figure: Figure) => void) {
     this.resetTravel = resetTravel;
+  }
+
+  /**
+   * Method to set the complete traveller function.
+   * @param completeTravel - The complete traveller function to set.
+   */
+  setCompleteTravel(
+    completeTravel: (figure: Figure, skipDraw: boolean) => void
+  ) {
+    this.completeTravel = completeTravel;
   }
 
   /**

@@ -181,8 +181,9 @@ class Main {
   /**
    * Runs the drawing process for the current queue.
    * @param useInstantQueue - Whether to use the instant queue.
+   * @param skipDraw - Whether to skip drawing.
    */
-  private runner(useInstantQueue = false) {
+  private runner(useInstantQueue = false, skipDraw = false) {
     const queue = useInstantQueue ? this.instantQueue : this.stepsQueue;
     const groupQueue = useInstantQueue
       ? this.groupInstantQueue
@@ -195,32 +196,31 @@ class Main {
       const firstObject = <Figure>queue.shift();
 
       if (
-        !useInstantQueue &&
-        (firstObject.getShouldTravel() ||
-          (firstObject.getGroupId() && groupQueue?.[0]?.getShouldTravel()))
+        firstObject.getShouldTravel() ||
+        (firstObject.getGroupId() && groupQueue?.[0]?.getShouldTravel())
       ) {
         this.isTravelling = true;
+        this.traveller = new Traveller(
+          firstObject.getGroupId() ? groupQueue[0] : firstObject
+        );
 
-        if (firstObject.getGroupId()) {
-          this.traveller = new Traveller(groupQueue[0]);
-
+        if (skipDraw || useInstantQueue) {
+          this.traveller.completeTravelling(skipDraw);
+          this.traveller = null;
+          this.isTravelling = false;
+        } else {
           return;
         }
-
-        this.traveller = new Traveller(firstObject);
-        firstObject.setShouldTravel(false);
-
-        return;
       }
 
       if (firstObject.getAnimatorId()) {
         const animator = animatorQueue[0];
 
         if (animator) {
-          const isDone = animator.draw();
+          const isDone = animator.draw(skipDraw);
 
           if (firstObject.getGroupId()) {
-            this.processGroup(queue, groupQueue, false);
+            this.processGroup(queue, groupQueue, !skipDraw);
           } else {
             if (!firstObject.getThrow()) {
               this.saveToSnapshot(firstObject);
@@ -234,9 +234,12 @@ class Main {
           }
         }
       } else if (firstObject.getGroupId()) {
-        this.processGroup(queue, groupQueue);
+        this.processGroup(queue, groupQueue, !skipDraw);
       } else {
-        firstObject.draw();
+        if (!skipDraw) {
+          firstObject.draw();
+        }
+
         if (!firstObject.getThrow()) {
           this.saveToSnapshot(firstObject);
         }
@@ -282,6 +285,7 @@ class Main {
       if (!this.clearOnEachStep) {
         this.p5.clear();
       }
+
       this.runner();
     }
 
@@ -550,6 +554,30 @@ class Main {
     this.stepsQueue.unshift(...toBeLoadedObjects.reverse());
     this.groupStepsQueue.unshift(...toBeLoadedGroups.reverse());
     this.animatorStepsQueue.unshift(...toBeLoadedAnimators.reverse());
+
+    this.togglePause();
+    this.reDrawAll();
+  }
+
+  loadNextCheckpoint() {
+    this.togglePause();
+
+    while (this.instantQueue.length) {
+      this.runner(true);
+    }
+
+    if (this.isTravelling) {
+      while (this.isTravelling) {
+        this.runTraveller();
+      }
+
+      this.traveller = null;
+      this.runner(false, true);
+    }
+
+    while (this.stepsQueue.length && !this.stepsQueue[0].getIsCheckpoint()) {
+      this.runner(false, true);
+    }
 
     this.togglePause();
     this.reDrawAll();
