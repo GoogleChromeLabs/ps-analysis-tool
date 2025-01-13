@@ -65,6 +65,11 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
   app.promiseQueue.push((cb) => {
     app.shouldRespondToClick = true;
     renderUserIcon();
+
+    app.timeline.expandIconPositions.forEach((position) => {
+      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
+    });
+
     app.isRevisitingNodeInInteractiveMode = false;
 
     if (circles[clickedIndex].type === 'advertiser') {
