@@ -196,7 +196,7 @@ joinInterestGroup.draw = (index) => {
   });
 
   app.promiseQueue.push((cb) => {
-    if (!app.isRevisitingNodeInInteractiveMode || !app.isInteractiveMode) {
+    if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
     }
     cb(null, true);
