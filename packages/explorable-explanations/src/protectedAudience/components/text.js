@@ -33,6 +33,7 @@ const Text = ({ text, x, y }) => {
   p.push();
   p.textAlign(p.CENTER, p.CENTER);
   p.fill(config.flow.colors.box.text);
+  p.strokeWeight(0);
   p.textFont('sans-serif');
   p.text(text, x, y);
   p.pop();
