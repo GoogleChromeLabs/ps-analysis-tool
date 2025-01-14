@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -47,6 +47,14 @@ const ExplorableExplanation = () => {
     useState<CurrentSiteData | null>(null);
 
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
+
+  const interestGroupsRef = useRef<InterestGroups[]>([]);
+
+  useEffect(() => {
+    if (!currentSiteData) {
+      interestGroupsRef.current = [];
+    }
+  }, [currentSiteData]);
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
@@ -177,12 +185,12 @@ const ExplorableExplanation = () => {
 
   const interestGroupData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'publisher') {
-      return [];
+      return interestGroupsRef.current;
     }
 
-    const perSiteInterestGroups: InterestGroups[] =
-      //@ts-ignore
-      SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website];
+    interestGroupsRef.current.push(
+      ...SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website]
+    );
 
     setSitesVisited((prevState) => {
       const set = new Set<string>();
@@ -191,7 +199,7 @@ const ExplorableExplanation = () => {
       return Array.from(set);
     });
 
-    return perSiteInterestGroups;
+    return interestGroupsRef.current;
   }, [currentSiteData]);
 
   const tabItems = useMemo<TabItems>(
