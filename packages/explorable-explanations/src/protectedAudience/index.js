@@ -543,11 +543,11 @@ app.toggleMultSeller = (event) => {
 // Define the sketch
 export const sketch = (p) => {
   p.updateWithProps = (props) => {
-    app.isMultiSeller = props.isMultiSeller;
-
-    if (app.isMultiSeller) {
-      auctions.setupAuctions();
+    if (app.isMultiSeller !== props.isMultiSeller) {
+      app.reset();
     }
+
+    app.isMultiSeller = props.isMultiSeller;
   };
 
   app.promiseQueue = new Queue({
