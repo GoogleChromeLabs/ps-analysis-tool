@@ -88,7 +88,7 @@ const setUpComponentAuctions = (steps) => {
         app.auction.nextTipCoordinates?.y -
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
-        10,
+        15,
       ssp: 'SSP B',
       config: {
         bidValue: '$8',
@@ -101,7 +101,7 @@ const setUpComponentAuctions = (steps) => {
         app.auction.nextTipCoordinates?.y -
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
-        10,
+        15,
       ssp: 'SSP C',
       config: {
         bidValue: '$6',
