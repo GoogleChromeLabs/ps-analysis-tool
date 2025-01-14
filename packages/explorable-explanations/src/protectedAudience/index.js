@@ -545,6 +545,9 @@ export const sketch = (p) => {
   p.updateWithProps = (props) => {
     if (app.isMultiSeller !== props.isMultiSeller) {
       app.reset();
+      setTimeout(() => {
+        app.play(true);
+      }, 500);
     }
 
     app.isMultiSeller = props.isMultiSeller;
