@@ -18,7 +18,7 @@
  */
 import app from '../../../app';
 import config from '../../../config';
-import { Box, ProgressLine, Text } from '../../../components';
+import { Box, ProgressLine, Text, Custom } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 
 const BOX_WIDTH = 1200;
@@ -109,8 +109,13 @@ const setUpComponentAuctions = (steps) => {
     },
   ];
 
-  componentAuctions.forEach((componentAuction) => {
-    setUpComponentAuction(steps, componentAuction, componentAuction.config);
+  componentAuctions.forEach((componentAuction, index) => {
+    setUpComponentAuction(
+      steps,
+      componentAuction,
+      componentAuction.config,
+      index
+    );
   });
 
   setUpTPoint(steps);
@@ -131,7 +136,12 @@ const setUpComponentAuctions = (steps) => {
   });
 };
 
-const setUpComponentAuction = (steps, { title, x, y, ssp }, { bidValue }) => {
+const setUpComponentAuction = (
+  steps,
+  { title, x, y, ssp },
+  { bidValue },
+  index
+) => {
   const { box, arrowSize } = config.flow;
 
   steps.push({
@@ -178,7 +188,32 @@ const setUpComponentAuction = (steps, { title, x, y, ssp }, { bidValue }) => {
     },
   });
 
-  setUpRunadAuction(steps);
+  setUpRunadAuction(steps, () => {
+    return {
+      component: Custom,
+      props: {
+        render: () => {
+          const p = app.p;
+
+          if (index === 2) {
+            p.push();
+            p.noFill();
+            p.rect(boxCordinates.x, boxCordinates.y, BOX_WIDTH, BOX_HEIGHT);
+            p.strokeWeight(0.1);
+            p.pop();
+          }
+
+          return {
+            down: app.auction.nextTipCoordinates,
+          };
+        },
+      },
+      delay: 1000,
+      callBack: (returnValue) => {
+        app.auction.nextTipCoordinates = returnValue.down;
+      },
+    };
+  });
 
   steps.push({
     component: ProgressLine,

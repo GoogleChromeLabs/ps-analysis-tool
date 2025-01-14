@@ -20,7 +20,7 @@ import app from '../../app';
 import config from '../../config';
 import { Box, ProgressLine } from '../../components';
 
-const setUpRunadAuction = (steps) => {
+const setUpRunadAuction = (steps, afterRippleStep = null) => {
   const { box, colors } = config.flow;
 
   steps.push({
@@ -83,6 +83,10 @@ const setUpRunadAuction = (steps) => {
 
   boxes.forEach(({ title, description, color, extraProps = {} }) => {
     if (title === 'DSP 1') {
+      if (afterRippleStep) {
+        steps.push(afterRippleStep());
+      }
+
       steps.push({
         component: ProgressLine,
         props: {
