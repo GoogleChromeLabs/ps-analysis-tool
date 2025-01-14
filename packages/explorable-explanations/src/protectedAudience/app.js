@@ -26,7 +26,6 @@ const app = {
   auction: {
     auctions: [],
     nextTipCoordinates: { x: 0, y: 0 },
-    coordinates: {},
   },
   joinInterestGroup: {
     joinings: [],
@@ -48,7 +47,7 @@ const app = {
     expandedCircleDiameter: 640,
     minifiedCircleDiameter: 50,
   },
-  speedMultiplier: 4,
+  speedMultiplier: 1,
   p: null,
   igp: null,
   up: null,
