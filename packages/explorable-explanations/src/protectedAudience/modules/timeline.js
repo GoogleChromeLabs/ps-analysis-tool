@@ -20,6 +20,7 @@ import config from '../config';
 import app from '../app';
 import {
   wipeAndRecreateInterestCanvas,
+  wipeAndRecreateMainCanvas,
   wipeAndRecreateUserCanvas,
 } from '../utils';
 import bubbles from './bubbles';
@@ -275,6 +276,8 @@ timeline.renderUserIcon = () => {
 timeline.eraseAndRedraw = () => {
   const currentIndex = app.timeline.currentIndex;
   const { colors } = config.timeline;
+
+  wipeAndRecreateMainCanvas();
 
   if (app.isInteractiveMode) {
     config.timeline.circles.forEach((circle, index) => {
