@@ -122,18 +122,18 @@ const setUpComponentAuctions = (steps) => {
 
   setupAfterComponentAuctionFlow(steps);
 
-  steps.push({
-    component: Text,
-    props: {
-      text: '.',
-      x: () => app.auction.nextTipCoordinates?.x,
-      y: () => app.auction.nextTipCoordinates?.y + 15,
-    },
-    delay: 11111111,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue;
-    },
-  });
+  // steps.push({
+  //   component: Text,
+  //   props: {
+  //     text: '.',
+  //     x: () => app.auction.nextTipCoordinates?.x,
+  //     y: () => app.auction.nextTipCoordinates?.y + 15,
+  //   },
+  //   delay: 11111111,
+  //   callBack: (returnValue) => {
+  //     app.auction.nextTipCoordinates = returnValue;
+  //   },
+  // });
 };
 
 const setUpComponentAuction = (
