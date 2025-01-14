@@ -43,8 +43,10 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
     }
   });
 
-  app.mouseX = offsetX;
-  app.mouseY = offsetY;
+  if (event.pageY > 120 && event.pageY < 490 && event.pageX > 40) {
+    app.mouseX = offsetX;
+    app.mouseY = offsetY;
+  }
 
   if (!app.shouldRespondToClick) {
     return;
