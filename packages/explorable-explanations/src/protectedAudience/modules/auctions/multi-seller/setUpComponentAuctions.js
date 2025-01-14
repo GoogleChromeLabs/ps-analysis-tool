@@ -354,6 +354,31 @@ const setupAfterComponentAuctionFlow = (steps) => {
       app.auction.nextTipCoordinates = returnValue.down;
     },
   });
+
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2 + 1,
+      y1: () => app.auction.nextTipCoordinates?.y + arrowSize,
+    },
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue;
+    },
+  });
+
+  steps.push({
+    component: Box,
+    props: {
+      title: 'Show Winning Ad',
+      x: () => app.auction.nextTipCoordinates?.x + arrowSize,
+      y: () => app.auction.nextTipCoordinates?.y - box.height / 2 + 1,
+    },
+    delay: 1000,
+    callBack: (returnValue) => {
+      app.auction.nextTipCoordinates = returnValue.down;
+    },
+  });
 };
 
 export default setUpComponentAuctions;
