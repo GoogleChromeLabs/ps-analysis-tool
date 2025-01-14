@@ -529,8 +529,13 @@ app.toggleInteractiveMode = async () => {
   await app.reset();
   app.setPlayState(false);
 
+  if (app.bubbles.isExpanded) {
+    app.minimiseBubbleActions();
+  }
+
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
+
     return;
   }
 };
