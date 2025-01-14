@@ -542,6 +542,14 @@ app.toggleMultSeller = (event) => {
 
 // Define the sketch
 export const sketch = (p) => {
+  p.updateWithProps = (props) => {
+    app.isMultiSeller = props.isMultiSeller;
+
+    if (app.isMultiSeller) {
+      auctions.setupAuctions();
+    }
+  };
+
   app.promiseQueue = new Queue({
     concurrency: 1,
     autostart: false,

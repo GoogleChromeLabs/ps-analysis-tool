@@ -42,6 +42,7 @@ const auction = {};
  * Loops through each circle and sets up the auction steps.
  */
 auction.setupAuctions = () => {
+  app.auction.auctions = [];
   config.timeline.circles.forEach((circle, index) => {
     auction.setUp(index);
   });
@@ -60,8 +61,6 @@ auction.setUp = (index) => {
     app.auction.auctions.push(null);
     return;
   }
-
-  app.isMultiSeller = true;
 
   const steps = [];
 

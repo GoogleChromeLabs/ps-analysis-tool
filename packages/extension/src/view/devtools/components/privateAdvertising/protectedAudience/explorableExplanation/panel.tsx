@@ -267,7 +267,9 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
           <div id="user-canvas"></div>
         </main>
       </div>
-      <ReactP5Wrapper sketch={sketch} />
+      {/* Main Canvas */}
+      <ReactP5Wrapper sketch={sketch} isMultiSeller={isMultiSeller} />
+      {/* Interest Group Canvas */}
       <ReactP5Wrapper
         autoExpand={autoExpand}
         sketch={interestGroupSketch}
