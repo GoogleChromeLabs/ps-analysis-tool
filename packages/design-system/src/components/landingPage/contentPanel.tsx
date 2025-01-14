@@ -23,7 +23,7 @@ import { addUTMParams } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { ExternalLinkBlack, WebStoriesIcon } from '../../icons';
+import { DescriptionIcon, WebStoriesIcon } from '../../icons';
 
 export interface ContentPanelProps {
   title: string;
@@ -70,33 +70,30 @@ const ContentPanel = ({
             <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
               {item.description()}
             </p>
-            <div className="flex flex-row align-center gap-2">
+            <div className="absolute top-10 right-2.5 flex gap-2">
               <div className="w-4 h-4">
                 <a
                   href={addUTMParams(item.url)}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <ExternalLinkBlack
+                  <DescriptionIcon
                     height="16"
                     width="16"
                     className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
                   />
                 </a>
               </div>
+              {item.onClick && item.storyUrl && (
+                <div className="w-4 h-4 cursor-pointer" onClick={item.onClick}>
+                  <WebStoriesIcon
+                    className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+                    height="16"
+                    width="16"
+                  />
+                </div>
+              )}
             </div>
-            {item.onClick && item.storyUrl && (
-              <div
-                className="w-4 top-5 right-2.5 absolute h-4 cursor-pointer"
-                onClick={item.onClick}
-              >
-                <WebStoriesIcon
-                  className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
-                  height="16"
-                  width="16"
-                />
-              </div>
-            )}
           </div>
         ))}
       </div>

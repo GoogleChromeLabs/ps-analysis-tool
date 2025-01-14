@@ -85,3 +85,4 @@ export { default as MenuOpenIcon } from './menu-open-icon.svg';
 export { default as SupportIcon } from './support.svg';
 export { default as WebStoriesIcon } from './web-stories.svg';
 export { default as WebStoriesIconWhite } from './web-stories-white.svg';
+export { default as DescriptionIcon } from './description.svg';
