@@ -655,6 +655,9 @@ app.reset = async () => {
   app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
+  app.visitedIndexOrder = [];
+  app.visitedIndexes = 1;
+  app.visitedIndexOrderTracker = -1;
 
   app.timeline.currentIndex = 0;
   app.bubbles.interestGroupCounts = 0;
