@@ -46,7 +46,7 @@ declare module 'react' {
   }
 }
 interface PanelProps {
-  setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
+  setCurrentSite: (siteData: CurrentSiteData | null) => void;
   currentSiteData: CurrentSiteData | null;
 }
 

@@ -17,7 +17,8 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import type { InterestGroups } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -26,7 +27,6 @@ import Panel from './panel';
 import IGTable from '../interestGroups/table';
 import Auctions from './auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
-import type { InterestGroups } from '@google-psat/common';
 import { createAuctionEvents } from './auctionEventTransformers';
 import InfoPanel from './infoPanel';
 import BidsPanel from '../bids/panel';
@@ -45,16 +45,40 @@ export type AdUnitLiteral = 'div-200-1' | 'div-200-2' | 'div-200-3';
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+  const [interestGroupsData, setInterestGroupsData] = useState<
+    InterestGroups[]
+  >([]);
+
+  const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
+    setCurrentSiteData(() => siteData);
+    setInterestGroupsData((prev) => getInterestGroupData([...prev], siteData));
+  };
 
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
 
-  const interestGroupsRef = useRef<InterestGroups[]>([]);
+  const getInterestGroupData = useCallback(
+    (data: InterestGroups[], siteData: typeof currentSiteData) => {
+      if (!siteData) {
+        return [];
+      }
 
-  useEffect(() => {
-    if (!currentSiteData) {
-      interestGroupsRef.current = [];
-    }
-  }, [currentSiteData]);
+      if (siteData?.type === 'publisher') {
+        return data;
+      }
+
+      data.push(...SYNTHETIC_INTEREST_GROUPS[siteData?.website]);
+
+      setSitesVisited((prevState) => {
+        const set = new Set<string>();
+        prevState.forEach((site) => set.add(site));
+        set.add(siteData?.website);
+        return Array.from(set);
+      });
+
+      return data;
+    },
+    []
+  );
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
@@ -183,25 +207,6 @@ const ExplorableExplanation = () => {
     };
   }, [auctionsData, currentSiteData]);
 
-  const interestGroupData = useMemo(() => {
-    if (!currentSiteData || currentSiteData?.type === 'publisher') {
-      return interestGroupsRef.current;
-    }
-
-    interestGroupsRef.current.push(
-      ...SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website]
-    );
-
-    setSitesVisited((prevState) => {
-      const set = new Set<string>();
-      prevState.forEach((site) => set.add(site));
-      set.add(currentSiteData?.website);
-      return Array.from(set);
-    });
-
-    return interestGroupsRef.current;
-  }, [currentSiteData]);
-
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -209,7 +214,7 @@ const ExplorableExplanation = () => {
         content: {
           Element: IGTable,
           props: {
-            interestGroupDetails: [...(interestGroupData as InterestGroups[])],
+            interestGroupDetails: [...(interestGroupsData as InterestGroups[])],
           },
         },
       },
@@ -251,14 +256,14 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [auctionsData, customAdsAndBidders, interestGroupData]
+    [auctionsData, customAdsAndBidders, interestGroupsData]
   );
 
   return (
     <TabsProvider items={tabItems}>
       <Panel
         currentSiteData={currentSiteData}
-        setCurrentSite={setCurrentSiteData}
+        setCurrentSite={_setCurrentSiteData}
       />
     </TabsProvider>
   );
