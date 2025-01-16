@@ -124,8 +124,6 @@ const BodyRow = ({
             onRowClick={onRowClick}
             cell={row[accessorKey]?.value}
             width={width || 0}
-            isHighlighted={isHighlighted}
-            isRowFocused={rowKey === selectedKey}
             row={row}
             hasIcon={enableBodyCellPrefixIcon}
             showIcon={
