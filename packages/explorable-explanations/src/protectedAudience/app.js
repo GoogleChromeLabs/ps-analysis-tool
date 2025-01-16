@@ -64,6 +64,7 @@ const app = {
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
   setCurrentSite: () => null,
+  setHighlightedInterestGroup: () => null,
   setPlayState: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
