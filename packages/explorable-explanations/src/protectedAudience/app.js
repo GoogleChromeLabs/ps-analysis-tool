@@ -21,6 +21,7 @@ const app = {
     circlePublisherIndices: [],
     expandIconPositions: [],
     currentIndex: 0,
+    pausedReason: '',
   },
   color: null,
   auction: {
@@ -65,6 +66,7 @@ const app = {
   isRevisitingNodeInInteractiveMode: false,
   setCurrentSite: () => null,
   setPlayState: () => null,
+  getPlayState: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
   canvasEventListerners: {

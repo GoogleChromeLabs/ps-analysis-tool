@@ -81,6 +81,7 @@ app.play = (resumed = false, doNotPlay = false) => {
   }
 
   app.timeline.isPaused = false;
+  app.timeline.pausedReason = '';
 
   if (!resumed) {
     app.setupLoop(doNotPlay);
@@ -100,7 +101,9 @@ app.pause = () => {
     app.pauseButton.classList.add('hidden');
     app.playButton.classList.remove('hidden');
   }
-
+  if (!app.timeline.pausedReason) {
+    app.timeline.pausedReason = 'userClick';
+  }
   app.promiseQueue.stop();
   app.timeline.isPaused = true;
 };
@@ -109,6 +112,9 @@ app.minimiseBubbleActions = () => {
   bubbles.generateBubbles(true);
   app.bubbles.isExpanded = false;
   bubbles.showMinifiedBubbles();
+  if (app.timeline.pausedReason === 'userClick') {
+    return;
+  }
   app.play(true);
 };
 
@@ -116,7 +122,11 @@ app.expandBubbleActions = () => {
   app.bubbles.isExpanded = true;
   bubbles.showExpandedBubbles();
   bubbles.generateBubbles(true);
+  if (!app.timeline.pausedReason) {
+    app.timeline.pausedReason = 'bubble';
+  }
   app.pause();
+  app.setPlayState(false);
 };
 
 app.minifiedBubbleClickListener = (event, expandOverride) => {
