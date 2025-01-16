@@ -51,31 +51,38 @@ const ExplorableExplanation = () => {
 
   const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
     setCurrentSiteData(() => siteData);
-    setInterestGroupsData((prev) => getInterestGroupData([...prev], siteData));
+    setInterestGroupsData(() => getInterestGroupData(siteData));
   };
 
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
 
   const getInterestGroupData = useCallback(
-    (data: InterestGroups[], siteData: typeof currentSiteData) => {
+    (siteData: typeof currentSiteData) => {
       if (!siteData) {
         return [];
       }
 
-      if (siteData?.type === 'publisher') {
-        return data;
-      }
+      let hasReached = -1;
+      const requiredIG = Object.keys(SYNTHETIC_INTEREST_GROUPS)
+        .map((site, index) => {
+          if (hasReached !== -1) {
+            return null;
+          }
 
-      data.push(...SYNTHETIC_INTEREST_GROUPS[siteData?.website]);
+          if (site === siteData?.website) {
+            hasReached = index;
+          }
 
-      setSitesVisited((prevState) => {
-        const set = new Set<string>();
-        prevState.forEach((site) => set.add(site));
-        set.add(siteData?.website);
-        return Array.from(set);
-      });
+          return SYNTHETIC_INTEREST_GROUPS[site];
+        })
+        .filter((_data) => _data !== null)
+        .flat();
 
-      return data;
+      setSitesVisited(() =>
+        Object.keys(SYNTHETIC_INTEREST_GROUPS).slice(0, hasReached + 1)
+      );
+
+      return requiredIG;
     },
     []
   );

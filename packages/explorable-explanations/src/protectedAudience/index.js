@@ -661,6 +661,7 @@ app.reset = async () => {
 
   app.timeline.isPaused = true;
   app.setPlayState(false);
+  app.setCurrentSite(null);
 };
 
 app.createCanvas = () => {
