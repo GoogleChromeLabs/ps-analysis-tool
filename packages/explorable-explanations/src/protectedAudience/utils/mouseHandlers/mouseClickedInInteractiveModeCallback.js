@@ -192,8 +192,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         app.auction.auctions[clickedIndex][0].props.y1 -= 20;
       }
 
-      app.setCurrentSite(circles[clickedIndex]);
-
       cb(null, true);
     });
 

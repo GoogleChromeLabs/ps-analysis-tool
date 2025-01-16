@@ -28,18 +28,32 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
 
   const { offsetX, offsetY } = event;
   let hoveringOnExpandIconPositions = false;
+  let hoveringOnCircles = false;
 
-  app.timeline.expandIconPositions.forEach((positions) => {
+  const { circlePositions, expandIconPositions } = app.timeline;
+  const {
+    circleProps: { diameter },
+  } = config.timeline;
+
+  expandIconPositions.forEach((positions) => {
     if (
       isInsideCircle(
         offsetX,
         offsetY,
         positions.x - 10,
-        positions.y + config.timeline.circleProps.diameter / 2,
+        positions.y + diameter / 2,
         20
       )
     ) {
       hoveringOnExpandIconPositions = true;
+    }
+  });
+
+  circlePositions.forEach((positions) => {
+    if (
+      isInsideCircle(offsetX, offsetY, positions.x, positions.y, diameter / 2)
+    ) {
+      hoveringOnCircles = true;
     }
   });
 
@@ -48,6 +62,12 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
 
   if (!app.shouldRespondToClick) {
     return;
+  }
+
+  if (hoveringOnExpandIconPositions || hoveringOnCircles) {
+    app.p.cursor('pointer');
+  } else {
+    app.p.cursor('default');
   }
 
   if (

@@ -20,7 +20,6 @@ import config from '../config';
 import app from '../app';
 import {
   wipeAndRecreateInterestCanvas,
-  wipeAndRecreateMainCanvas,
   wipeAndRecreateUserCanvas,
 } from '../utils';
 import bubbles from './bubbles';
@@ -214,7 +213,7 @@ timeline.drawCircle = (index, completed = false) => {
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
 
-    app.p.image(
+    app.up.image(
       app.p.openWithoutAnimation,
       position.x - 10,
       position.y + diameter / 2,
@@ -276,8 +275,6 @@ timeline.renderUserIcon = () => {
 timeline.eraseAndRedraw = () => {
   const currentIndex = app.timeline.currentIndex;
   const { colors } = config.timeline;
-
-  wipeAndRecreateMainCanvas();
 
   if (app.isInteractiveMode) {
     config.timeline.circles.forEach((circle, index) => {
