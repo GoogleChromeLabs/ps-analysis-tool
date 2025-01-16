@@ -126,7 +126,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
           app.visitedIndexes++;
         });
 
-        app.setCurrentSite(circles[clickedIndex]);
         app.bubbles.positions.splice(
           -(circles[clickedIndex].igGroupsCount ?? 0)
         );
@@ -153,7 +152,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         config.timeline.circles[clickedIndex].visited = true;
         config.timeline.circles[clickedIndex].visitedIndex = app.visitedIndexes;
         app.visitedIndexes += 1;
-        app.setCurrentSite(circles[clickedIndex]);
       }
 
       bubbles.showMinifiedBubbles();
