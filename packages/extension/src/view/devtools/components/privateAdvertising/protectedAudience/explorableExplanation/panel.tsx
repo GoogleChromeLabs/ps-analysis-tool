@@ -48,9 +48,16 @@ declare module 'react' {
 interface PanelProps {
   setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
   currentSiteData: CurrentSiteData | null;
+  setHighlightedInterestGroup: React.Dispatch<
+    React.SetStateAction<string | null>
+  >;
 }
 
-const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
+const Panel = ({
+  currentSiteData,
+  setCurrentSite,
+  setHighlightedInterestGroup,
+}: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
@@ -279,6 +286,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
         speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}
         setPlayState={setPlay}
+        setHighlightedInterestGroup={setHighlightedInterestGroup}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <TableTray />

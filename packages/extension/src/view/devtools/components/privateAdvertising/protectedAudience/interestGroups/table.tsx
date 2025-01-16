@@ -36,9 +36,13 @@ import { prettyPrintJson } from 'pretty-print-json';
 
 interface InterestGroupsProps {
   interestGroupDetails: InterestGroupsType[];
+  highlightedInterestGroup?: string;
 }
 
-const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
+const IGTable = ({
+  interestGroupDetails,
+  highlightedInterestGroup,
+}: InterestGroupsProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
   const [filterData, setFilterData] = useState(false);
 
@@ -110,6 +114,32 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
     []
   );
 
+  const modifiedInterestGroupDetails = useMemo(() => {
+    return interestGroupDetails.map((interestGroup) => {
+      const isHighlighted = interestGroup.name === highlightedInterestGroup;
+
+      return {
+        ...interestGroup,
+        highlighted: isHighlighted,
+      };
+    });
+  }, [interestGroupDetails, highlightedInterestGroup]);
+
+  const conditionalTableRowClassesHandler = useCallback(
+    (row: TableRow, isRowFocused: boolean) => {
+      const isHighlighted = (row?.originalData as InterestGroupsType)
+        .highlighted;
+      const tableRowClassName = isHighlighted
+        ? isRowFocused
+          ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light text-black transition-colors'
+          : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+        : '';
+
+      return tableRowClassName;
+    },
+    []
+  );
+
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setFilterData(event.target.checked);
@@ -153,8 +183,8 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
         <TableProvider
           data={
             filterData
-              ? interestGroupDetails
-              : interestGroupDetails.filter(
+              ? modifiedInterestGroupDetails
+              : modifiedInterestGroupDetails.filter(
                   (event) => event.type === 'leave' || event.type === 'join'
                 )
           }
@@ -162,6 +192,7 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
           tableFilterData={tableFilters}
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="interestGroupsTable"
+          conditionalTableRowClassesHandler={conditionalTableRowClassesHandler}
           onRowClick={(row) => {
             setSelectedRow(row as InterestGroupsType);
           }}

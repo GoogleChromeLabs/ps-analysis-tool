@@ -202,6 +202,24 @@ const ExplorableExplanation = () => {
     return interestGroupsRef.current;
   }, [currentSiteData]);
 
+  const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<
+    string | null
+  >(null);
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setHighlightedInterestGroup(null);
+    }, 1500);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [highlightedInterestGroup]);
+
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -210,6 +228,7 @@ const ExplorableExplanation = () => {
           Element: IGTable,
           props: {
             interestGroupDetails: [...(interestGroupData as InterestGroups[])],
+            highlightedInterestGroup,
           },
         },
       },
@@ -251,7 +270,12 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [auctionsData, customAdsAndBidders, interestGroupData]
+    [
+      auctionsData,
+      customAdsAndBidders,
+      highlightedInterestGroup,
+      interestGroupData,
+    ]
   );
 
   return (
@@ -259,6 +283,7 @@ const ExplorableExplanation = () => {
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={setCurrentSiteData}
+        setHighlightedInterestGroup={setHighlightedInterestGroup}
       />
     </TabsProvider>
   );
