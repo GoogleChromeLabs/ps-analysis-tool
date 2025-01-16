@@ -43,6 +43,22 @@ const Box = ({
     },
   };
 
+  const rect = document
+    .querySelector('#ps-canvas')
+    .parentElement.getBoundingClientRect();
+
+  let finalX = x - rect.left,
+    finalY = y - rect.top;
+  if (finalX < 0) {
+    finalX = rect.left - x;
+  }
+
+  if (finalY < 0) {
+    finalY = rect.top - y;
+  }
+
+  document.querySelector('#ps-canvas').parentElement.scrollTo(finalX, finalY);
+
   const p = app.p;
 
   p.push();
