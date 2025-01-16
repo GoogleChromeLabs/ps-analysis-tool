@@ -57,7 +57,11 @@ const Box = ({
     finalY = rect.top - y;
   }
 
-  document.querySelector('#ps-canvas').parentElement.scrollTo(finalX, finalY);
+  document.querySelector('#ps-canvas').parentElement.scrollTo({
+    left: finalX,
+    top: finalY,
+    behavior: 'smooth',
+  });
 
   const p = app.p;
 
