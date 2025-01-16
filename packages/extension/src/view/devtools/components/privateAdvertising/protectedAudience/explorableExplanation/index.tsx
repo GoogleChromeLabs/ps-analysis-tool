@@ -27,7 +27,6 @@ import Panel from './panel';
 import IGTable from '../interestGroups/table';
 import Auctions from './tableTabPanels/auctions';
 import Info from './tableTabPanels/info';
-import Bids from './tableTabPanels/bids';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import { createAuctionEvents } from './auctionEventTransformers';
@@ -119,15 +118,6 @@ const ExplorableExplanation = () => {
           Element: Auctions,
           props: {
             auctionEvents: auctionsData as AuctionEventsType,
-          },
-        },
-      },
-      {
-        title: 'Bids',
-        content: {
-          Element: Bids,
-          props: {
-            data: undefined,
           },
         },
       },
