@@ -38,7 +38,7 @@ import { useTabs } from '@google-psat/design-system';
  */
 import Header from '../../../explorableExplanation/header';
 import TableTray from '../../../explorableExplanation/tableTray';
-import type { CurrentSiteData } from '.';
+import type { CurrentSiteData } from './auctionEventTransformers';
 
 declare module 'react' {
   interface CSSProperties {

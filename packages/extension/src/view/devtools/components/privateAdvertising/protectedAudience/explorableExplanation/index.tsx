@@ -73,7 +73,7 @@ const ExplorableExplanation = () => {
     const { auctionData, receivedBids, winningBids } = configuredAuctionEvents(
       interestGroups.flat(),
       Array.from(advertiserSet),
-      true,
+      isMultiSeller,
       currentSiteData
     );
 
@@ -82,7 +82,7 @@ const ExplorableExplanation = () => {
       receivedBids,
       winningBids,
     };
-  }, [currentSiteData, sitesVisited]);
+  }, [currentSiteData, sitesVisited, isMultiSeller]);
 
   const interestGroupData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'publisher') {
