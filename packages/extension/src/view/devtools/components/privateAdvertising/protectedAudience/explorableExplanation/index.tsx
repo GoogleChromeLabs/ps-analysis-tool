@@ -46,6 +46,8 @@ const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
 
+  const [isMultiSeller, setIsMultiSeller] = useState(false);
+
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
 
   const interestGroupsRef = useRef<InterestGroups[]>([]);
@@ -259,6 +261,8 @@ const ExplorableExplanation = () => {
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={setCurrentSiteData}
+        isMultiSeller={isMultiSeller}
+        setIsMultiSeller={setIsMultiSeller}
       />
     </TabsProvider>
   );

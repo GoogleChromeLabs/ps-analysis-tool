@@ -48,14 +48,20 @@ declare module 'react' {
 interface PanelProps {
   setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
   currentSiteData: CurrentSiteData | null;
+  isMultiSeller: boolean;
+  setIsMultiSeller: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
+const Panel = ({
+  currentSiteData,
+  setCurrentSite,
+  isMultiSeller,
+  setIsMultiSeller,
+}: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
   const [autoExpand, setAutoExpand] = useState(true);
-  const [isMultiSeller, setIsMultiSeller] = useState(false);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
