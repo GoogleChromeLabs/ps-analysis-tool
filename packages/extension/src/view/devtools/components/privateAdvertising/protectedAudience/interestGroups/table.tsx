@@ -36,7 +36,7 @@ import { prettyPrintJson } from 'pretty-print-json';
 
 interface InterestGroupsProps {
   interestGroupDetails: InterestGroupsType[];
-  highlightedInterestGroup: {
+  highlightedInterestGroup?: {
     interestGroupName: string;
     color: string;
   } | null;
@@ -118,9 +118,13 @@ const IGTable = ({
   );
 
   const modifiedInterestGroupDetails = useMemo(() => {
+    if (!highlightedInterestGroup) {
+      return interestGroupDetails;
+    }
+
     return interestGroupDetails.map((interestGroup) => {
       const isHighlighted =
-        interestGroup.name === highlightedInterestGroup?.interestGroupName;
+        interestGroup.name === highlightedInterestGroup.interestGroupName;
 
       return {
         ...interestGroup,
