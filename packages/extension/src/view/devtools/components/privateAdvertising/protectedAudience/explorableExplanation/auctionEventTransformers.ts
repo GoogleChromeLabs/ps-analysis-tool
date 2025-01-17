@@ -163,7 +163,8 @@ export const transformBidEvent = (
   interestGroups: {
     interestGroupName: string;
     ownerOrigin: string;
-  }[]
+  }[],
+  isTopLevel: boolean
 ) => {
   const bidEventsToBeReturned: singleAuctionEvent[] = [];
 
@@ -175,6 +176,10 @@ export const transformBidEvent = (
     eventToModify.ownerOrigin = ownerOrigin;
     eventToModify.name = interestGroupName;
     eventToModify.bid = randomIntFromInterval(1, 100);
+
+    if (isTopLevel) {
+      eventToModify.type = 'topLevelBid';
+    }
 
     bidEventsToBeReturned.push(eventToModify);
   });
@@ -189,9 +194,10 @@ export const createAuctionEvents = (
   }[],
   seller: string,
   advertisers: string[],
-  eventStartTime: number
+  eventStartTime: number,
+  isTopLevelBid: boolean
 ) => {
-  const bidEvents = transformBidEvent(interestGroups);
+  const bidEvents = transformBidEvent(interestGroups, isTopLevelBid);
 
   bidEvents.sort((a, b) => (a?.bid ?? 0) - (b?.bid ?? 0));
 
@@ -284,16 +290,19 @@ const getFlattenedAuctionEvents = (
     interestGroupName: string;
     ownerOrigin: string;
   }[],
-  advertisers: string[]
+  advertisers: string[],
+  isMultiSeller: boolean
 ) => {
   const events: { [key: string]: singleAuctionEvent[] } = {};
+  const host = new URL(`https://www.${currentSiteData?.website}`).host;
 
   sellersArray.forEach((seller) => {
     events[seller] = createAuctionEvents(
       interestGroups,
-      seller,
+      new URL(seller).host,
       advertisers,
-      new Date(currentSiteData?.datetime).getTime()
+      new Date(currentSiteData?.datetime).getTime(),
+      new URL(seller).host === host && isMultiSeller
     );
   });
 
@@ -315,6 +324,7 @@ export const configuredAuctionEvents = (
 
   if (isMultiSeller) {
     sellersArray.push(
+      websiteString,
       'https://ssp-a.com',
       'https://ssp-b.com',
       'https://ssp-c.com'
@@ -330,7 +340,8 @@ export const configuredAuctionEvents = (
           sellersArray,
           currentSiteData,
           interestGroups,
-          advertisers
+          advertisers,
+          isMultiSeller
         ),
       },
     },
@@ -340,7 +351,8 @@ export const configuredAuctionEvents = (
           sellersArray,
           currentSiteData,
           interestGroups,
-          advertisers
+          advertisers,
+          isMultiSeller
         ),
       },
     },
@@ -350,7 +362,8 @@ export const configuredAuctionEvents = (
           sellersArray,
           currentSiteData,
           interestGroups,
-          advertisers
+          advertisers,
+          isMultiSeller
         ),
       },
     },
@@ -371,11 +384,45 @@ export const configuredAuctionEvents = (
     ),
   };
 
-  const winningBids = {};
+  const adsAndBidders = {
+    'div-200-1': {
+      adUnitCode: 'div-200-1',
+      bidders: sellersArray,
+      mediaContainerSize: [[320, 320]],
+      winningBid: getBidData(
+        auctionData['div-200-1']?.[dateTimeString]?.[websiteString],
+        sellersArray
+      ).filter(({ type }) => type === 'win')?.[0]?.bid,
+      bidCurrency: 'USD',
+      winningBidder: 'DSP 1',
+    },
+    'div-200-2': {
+      adUnitCode: 'div-200-2',
+      bidders: sellersArray,
+      mediaContainerSize: [[320, 320]],
+      winningBid: getBidData(
+        auctionData['div-200-2']?.[dateTimeString]?.[websiteString],
+        sellersArray
+      ).filter(({ type }) => type === 'win')?.[0]?.bid,
+      bidCurrency: 'USD',
+      winningBidder: 'DSP 1',
+    },
+    'div-200-3': {
+      adUnitCode: 'div-200-2',
+      bidders: sellersArray,
+      mediaContainerSize: [[320, 320]],
+      winningBid: getBidData(
+        auctionData['div-200-3']?.[dateTimeString]?.[websiteString],
+        sellersArray
+      ).filter(({ type }) => type === 'win')?.[0]?.bid,
+      bidCurrency: 'USD',
+      winningBidder: 'DSP 1',
+    },
+  };
 
   return {
     auctionData,
     receivedBids,
-    winningBids,
+    adsAndBidders,
   };
 };

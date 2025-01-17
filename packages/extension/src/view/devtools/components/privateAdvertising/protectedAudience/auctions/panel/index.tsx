@@ -36,7 +36,7 @@ import type { AuctionEventsType } from '../../../../../stateProviders/protectedA
 import AuctionTable from '../table';
 import AdunitPanel from '../adunitPanel';
 import AdunitSubPanel from '../adunitPanel/panel';
-import type { AdUnitLiteral } from '../../explorableExplanation';
+import type { AdUnitLiteral } from '../../explorableExplanation/auctionEventTransformers';
 
 interface AuctionPanelProps {
   auctionEvents: {

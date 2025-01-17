@@ -70,17 +70,18 @@ const ExplorableExplanation = () => {
       });
     });
 
-    const { auctionData, receivedBids, winningBids } = configuredAuctionEvents(
-      interestGroups.flat(),
-      Array.from(advertiserSet),
-      isMultiSeller,
-      currentSiteData
-    );
+    const { auctionData, receivedBids, adsAndBidders } =
+      configuredAuctionEvents(
+        interestGroups.flat(),
+        Array.from(advertiserSet),
+        isMultiSeller,
+        currentSiteData
+      );
 
     return {
       auctionData,
       receivedBids,
-      winningBids,
+      adsAndBidders,
     };
   }, [currentSiteData, sitesVisited, isMultiSeller]);
 
@@ -122,7 +123,7 @@ const ExplorableExplanation = () => {
             auctionEvents: {
               ...auctionsData,
             },
-            customAdsAndBidders: auctionsData.winningBids,
+            customAdsAndBidders: auctionsData.adsAndBidders,
           },
         },
       },
