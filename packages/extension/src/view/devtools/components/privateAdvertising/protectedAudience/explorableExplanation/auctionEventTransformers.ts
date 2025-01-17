@@ -45,20 +45,22 @@ export const transformAuctionConfig = (seller: string) => {
   //Using structured clone since it was seen while using normal assignment it didnt change the object properties.
   const eventAuctionConfig = structuredClone(SYNTHETIC_AUCTION_CONFIG);
 
-  eventAuctionConfig.decisionLogicURL.replace(
-    'privacysandboxdemos-seller.domain-aaa',
+  eventAuctionConfig.decisionLogicURL =
+    eventAuctionConfig.decisionLogicURL.replace(
+      'privacysandboxdemos-seller.domain-aaa.com',
+      seller
+    );
+
+  eventAuctionConfig.seller = eventAuctionConfig.seller.replace(
+    'privacysandboxdemos-seller.domain-aaa.com',
     seller
   );
 
-  eventAuctionConfig.seller.replace(
-    'privacysandboxdemos-seller.domain-aaa',
-    seller
-  );
-
-  eventAuctionConfig.trustedScoringSignalsURL.replace(
-    'privacysandboxdemos-seller.domain-aaa',
-    seller
-  );
+  eventAuctionConfig.trustedScoringSignalsURL =
+    eventAuctionConfig.trustedScoringSignalsURL.replace(
+      'privacysandboxdemos-seller.domain-aaa.com',
+      seller
+    );
 
   return eventAuctionConfig;
 };
