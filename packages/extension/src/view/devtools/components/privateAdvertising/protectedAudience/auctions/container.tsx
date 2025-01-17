@@ -29,7 +29,7 @@ import React from 'react';
  */
 import AuctionPanel from './panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
-import type { AdUnitLiteral } from '../explorableExplanation';
+import type { AdUnitLiteral } from '../explorableExplanation/auctionEventTransformers';
 
 interface AuctionsContainerProps {
   auctionEvents: {

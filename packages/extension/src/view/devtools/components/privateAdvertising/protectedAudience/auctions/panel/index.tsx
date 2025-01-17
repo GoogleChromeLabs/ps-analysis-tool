@@ -78,7 +78,6 @@ const AuctionPanel = ({
             ...adUnitChildren[time]?.children,
           } as SidebarItems;
           const sellerUrl = Object.keys(auctionEventsData[adUnit][time])[0];
-
           const entries = Object.entries(
             auctionEventsData[adUnit][time][sellerUrl]
           )

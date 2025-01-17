@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { InterestGroups } from '@google-psat/common';
+import type { InterestGroups, singleAuctionEvent } from '@google-psat/common';
 
 interface WebsiteInterestGroup {
   [websiteName: string]: InterestGroups[];
@@ -876,14 +876,14 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   ],
 };
 
-export const SYNTHETIC_AUCTION_EVENT_STARTED = {
+export const SYNTHETIC_AUCTION_EVENT_STARTED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   type: 'started',
   formattedTime: '0 ms',
   time: 1734076669.500694,
   eventType: 'interestGroupAuctionEventOccurred',
 };
-export const SYNTHETIC_AUCTION_EVENT_CONFIG_RESOLVED = {
+export const SYNTHETIC_AUCTION_EVENT_CONFIG_RESOLVED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   type: 'configResolved',
   formattedTime: '0.75ms',
@@ -891,7 +891,7 @@ export const SYNTHETIC_AUCTION_EVENT_CONFIG_RESOLVED = {
   eventType: 'interestGroupAuctionEventOccurred',
 };
 
-export const SYNTHETIC_AUCTION_EVENT_LOADED = {
+export const SYNTHETIC_AUCTION_EVENT_LOADED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
@@ -901,7 +901,7 @@ export const SYNTHETIC_AUCTION_EVENT_LOADED = {
   eventType: 'interestGroupAccessed',
 };
 
-export const SYNTHETIC_AUCTION_EVENT_BIDDERJS = {
+export const SYNTHETIC_AUCTION_EVENT_BIDDERJS: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   formattedTime: '77.17ms',
   type: 'Start fetch bidderJs',
@@ -909,7 +909,7 @@ export const SYNTHETIC_AUCTION_EVENT_BIDDERJS = {
   eventType: 'interestGroupAuctionNetworkRequestCreated',
 };
 
-export const SYNTHETIC_AUCTION_EVENTS_BID = {
+export const SYNTHETIC_AUCTION_EVENTS_BID: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
@@ -921,7 +921,7 @@ export const SYNTHETIC_AUCTION_EVENTS_BID = {
   bidCurrency: 'USD',
 };
 
-export const SYNTHETIC_AUCTION_EVENTS_WIN = {
+export const SYNTHETIC_AUCTION_EVENTS_WIN: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
