@@ -151,6 +151,7 @@ bubbles.barrageAnimation = async (index) => {
         return;
       }
 
+      utils.scrollToCoordinates(0, 0, true);
       utils.wipeAndRecreateInterestCanvas();
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
@@ -278,6 +279,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
   }
 
   document.getElementById('interest-canvas').style.zIndex = 4;
+  utils.scrollToCoordinates(0, 0, true);
 
   await new Promise((resolve) => {
     const animate = () => {

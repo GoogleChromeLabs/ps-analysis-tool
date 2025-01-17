@@ -18,7 +18,11 @@
  */
 import app from '../app';
 import config from '../config';
-import { addCanvasEventListener, isInsideBox } from '../utils';
+import {
+  addCanvasEventListener,
+  isInsideBox,
+  scrollToCoordinates,
+} from '../utils';
 
 const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
@@ -43,25 +47,7 @@ const Box = ({
     },
   };
 
-  const rect = document
-    .querySelector('#ps-canvas')
-    .parentElement.getBoundingClientRect();
-
-  let finalX = x - rect.left,
-    finalY = y - rect.top;
-  if (finalX < 0) {
-    finalX = rect.left - x;
-  }
-
-  if (finalY < 0) {
-    finalY = rect.top - y;
-  }
-
-  document.querySelector('#ps-canvas').parentElement.scrollTo({
-    left: finalX,
-    top: finalY,
-    behavior: 'smooth',
-  });
+  scrollToCoordinates(x, y);
 
   const p = app.p;
 

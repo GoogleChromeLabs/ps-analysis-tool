@@ -198,6 +198,7 @@ const ProgressLine = ({
           break;
 
         case 'up':
+          utils.scrollToCoordinates(x1, currentY);
           currentY -= incrementBy;
 
           if (y1 - currentY > height) {
