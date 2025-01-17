@@ -49,7 +49,10 @@ interface PanelProps {
   setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
   currentSiteData: CurrentSiteData | null;
   setHighlightedInterestGroup: React.Dispatch<
-    React.SetStateAction<string | null>
+    React.SetStateAction<{
+      interestGroupName: string;
+      color: string;
+    } | null>
   >;
 }
 

@@ -36,7 +36,10 @@ import { prettyPrintJson } from 'pretty-print-json';
 
 interface InterestGroupsProps {
   interestGroupDetails: InterestGroupsType[];
-  highlightedInterestGroup?: string;
+  highlightedInterestGroup: {
+    interestGroupName: string;
+    color: string;
+  } | null;
 }
 
 const IGTable = ({
@@ -116,7 +119,8 @@ const IGTable = ({
 
   const modifiedInterestGroupDetails = useMemo(() => {
     return interestGroupDetails.map((interestGroup) => {
-      const isHighlighted = interestGroup.name === highlightedInterestGroup;
+      const isHighlighted =
+        interestGroup.name === highlightedInterestGroup?.interestGroupName;
 
       return {
         ...interestGroup,
@@ -125,10 +129,22 @@ const IGTable = ({
     });
   }, [interestGroupDetails, highlightedInterestGroup]);
 
+  const hasVerticalBar = useCallback((row: TableRow) => {
+    return Boolean(row.originalData.highlighted);
+  }, []);
+
+  const getVerticalBarColorHash = useCallback(
+    (row: TableRow) => {
+      return row.originalData.highlighted
+        ? highlightedInterestGroup?.color ?? ''
+        : '';
+    },
+    [highlightedInterestGroup?.color]
+  );
+
   const conditionalTableRowClassesHandler = useCallback(
     (row: TableRow, isRowFocused: boolean) => {
-      const isHighlighted = (row?.originalData as InterestGroupsType)
-        .highlighted;
+      const isHighlighted = row?.originalData?.highlighted;
       const tableRowClassName = isHighlighted
         ? isRowFocused
           ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light text-black transition-colors'
@@ -193,6 +209,8 @@ const IGTable = ({
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="interestGroupsTable"
           conditionalTableRowClassesHandler={conditionalTableRowClassesHandler}
+          getVerticalBarColorHash={getVerticalBarColorHash}
+          hasVerticalBar={hasVerticalBar}
           onRowClick={(row) => {
             setSelectedRow(row as InterestGroupsType);
           }}

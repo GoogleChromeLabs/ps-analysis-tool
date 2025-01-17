@@ -499,7 +499,10 @@ bubbles.bubbleChart = (
   const eventHandler = (event, d) => {
     // eslint-disable-next-line no-console
     console.log(event);
-    app.setHighlightedInterestGroup(titles[d.data].split('\n')[0]);
+    app.setHighlightedInterestGroup({
+      interestGroupName: titles[d.data].split('\n')[0],
+      color: app.color(groups[d.data]),
+    });
     event.stopPropagation();
   };
 

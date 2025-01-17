@@ -202,9 +202,10 @@ const ExplorableExplanation = () => {
     return interestGroupsRef.current;
   }, [currentSiteData]);
 
-  const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<
-    string | null
-  >(null);
+  const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
+    interestGroupName: string;
+    color: string;
+  } | null>(null);
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

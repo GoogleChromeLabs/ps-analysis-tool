@@ -42,6 +42,7 @@ export const TableProvider = ({
   conditionalTableRowClassesHandler,
   exportTableData,
   hasVerticalBar,
+  getVerticalBarColorHash,
   isRowSelected,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
@@ -167,6 +168,7 @@ export const TableProvider = ({
           conditionalTableRowClassesHandler,
           exportTableData,
           hasVerticalBar,
+          getVerticalBarColorHash,
         },
       }}
     >
