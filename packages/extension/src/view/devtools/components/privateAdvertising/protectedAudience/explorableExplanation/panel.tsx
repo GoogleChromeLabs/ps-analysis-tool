@@ -55,6 +55,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
   const [autoExpand, setAutoExpand] = useState(true);
+  const [isMultiSeller, setIsMultiSeller] = useState(false);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -173,7 +174,7 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
   }, [setCurrentSite]);
 
   const extraInterface = (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-3 items-center">
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
           type="checkbox"
@@ -182,6 +183,15 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
           className="hover:cursor-pointer"
         />
         Interactive Mode
+      </label>
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          type="checkbox"
+          checked={isMultiSeller}
+          onChange={(event) => setIsMultiSeller(event.target.checked)}
+          className="hover:cursor-pointer"
+        />
+        Multi Seller
       </label>
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
@@ -257,7 +267,9 @@ const Panel = ({ currentSiteData, setCurrentSite }: PanelProps) => {
           <div id="user-canvas"></div>
         </main>
       </div>
-      <ReactP5Wrapper sketch={sketch} />
+      {/* Main Canvas */}
+      <ReactP5Wrapper sketch={sketch} isMultiSeller={isMultiSeller} />
+      {/* Interest Group Canvas */}
       <ReactP5Wrapper
         autoExpand={autoExpand}
         sketch={interestGroupSketch}

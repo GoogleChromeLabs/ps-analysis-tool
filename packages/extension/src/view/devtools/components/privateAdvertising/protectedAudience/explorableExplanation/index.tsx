@@ -17,8 +17,8 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import React, { useCallback, useMemo, useState } from 'react';
 import type { InterestGroups } from '@google-psat/common';
+import React, { useMemo, useState, useCallback } from 'react';
 
 /**
  * Internal dependencies.

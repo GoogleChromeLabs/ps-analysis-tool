@@ -17,6 +17,8 @@ const config = {
   canvas: {
     width: 700,
     height: 500,
+    extraHeight: 1600, // @todo: It needs to be calculated based on the content.
+    extraWidth: 450, // @todo: It needs to be calculated based on the content.
     background: '#fff',
     fontSize: 12,
   },

@@ -26,7 +26,7 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
     return;
   }
 
-  const { offsetX, offsetY } = event;
+  const { offsetX, offsetY, pageY, pageX } = event;
   let hoveringOnExpandIconPositions = false;
   let hoveringOnCircles = false;
 
@@ -57,8 +57,10 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
     }
   });
 
-  app.mouseX = offsetX;
-  app.mouseY = offsetY;
+  if (pageY > 120 && pageY < 490 && pageX > 40) {
+    app.mouseX = offsetX;
+    app.mouseY = offsetY;
+  }
 
   if (!app.shouldRespondToClick) {
     return;

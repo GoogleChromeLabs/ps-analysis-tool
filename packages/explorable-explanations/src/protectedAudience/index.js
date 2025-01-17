@@ -539,8 +539,13 @@ app.toggleInteractiveMode = async () => {
   await app.reset();
   app.setPlayState(false);
 
+  if (app.bubbles.isExpanded) {
+    app.minimiseBubbleActions();
+  }
+
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
+
     return;
   }
 };
@@ -552,6 +557,17 @@ app.toggleMultSeller = (event) => {
 
 // Define the sketch
 export const sketch = (p) => {
+  p.updateWithProps = (props) => {
+    if (app.isMultiSeller !== props.isMultiSeller) {
+      app.reset();
+      setTimeout(() => {
+        app.play(true);
+      }, 500);
+    }
+
+    app.isMultiSeller = props.isMultiSeller;
+  };
+
   app.promiseQueue = new Queue({
     concurrency: 1,
     autostart: false,
