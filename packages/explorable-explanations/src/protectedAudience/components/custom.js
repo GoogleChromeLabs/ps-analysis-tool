@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as Box } from './box';
-export { default as Branches } from './branches';
-export { default as ProgressLine } from './progressLine';
-export { default as RippleEffect } from './rippleEffect';
-export { default as FlowExpander } from './flowExpander';
-export { default as Text } from './text';
-export { default as Custom } from './custom';
+/**
+ * Custom component to allow rendering any shape which are used in only some specific cases and are not resuable
+ * as the flow relies on a component to be used for each step.
+ * @param {object} props Component props
+ * @param props.render Render fuction to execute inside the Custom function.
+ * @returns {any} Return anything that render function wants to return, mostly nextTip object.
+ */
+const Custom = ({ render }) => {
+  return render();
+};
+
+export default Custom;

@@ -240,7 +240,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const currentIGGroupToBeAdded = circles[index]?.igGroupsCount ?? 0;
 
   for (let i = 0; i < interestGroupCounts + currentIGGroupToBeAdded; i++) {
-    if (i < interestGroupCounts) {
+    if (i < interestGroupCounts || i >= app.bubbles.positions.length) {
       continue;
     }
 

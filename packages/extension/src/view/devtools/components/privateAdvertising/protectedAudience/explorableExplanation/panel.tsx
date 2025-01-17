@@ -47,9 +47,9 @@ declare module 'react' {
 }
 interface PanelProps {
   setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
+  currentSiteData: CurrentSiteData | null;
   setInfo: React.Dispatch<React.SetStateAction<string | null>>;
   info: string | null;
-  currentSiteData: CurrentSiteData | null;
 }
 
 const Panel = ({
@@ -62,6 +62,7 @@ const Panel = ({
   const [sliderStep, setSliderStep] = useState(1);
   const [interactiveMode, _setInteractiveMode] = useState(false);
   const [autoExpand, setAutoExpand] = useState(true);
+  const [isMultiSeller, setIsMultiSeller] = useState(false);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -171,6 +172,7 @@ const Panel = ({
     }
 
     const containerRefCopy = containerRef;
+
     return () => {
       app.reset();
       if (containerRefCopy.current) {
@@ -185,7 +187,7 @@ const Panel = ({
   }, [setCurrentSite]);
 
   const extraInterface = (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-3 items-center">
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
           type="checkbox"
@@ -194,6 +196,15 @@ const Panel = ({
           className="hover:cursor-pointer"
         />
         Interactive Mode
+      </label>
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          type="checkbox"
+          checked={isMultiSeller}
+          onChange={(event) => setIsMultiSeller(event.target.checked)}
+          className="hover:cursor-pointer"
+        />
+        Multi Seller
       </label>
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
@@ -269,7 +280,9 @@ const Panel = ({
           <div id="user-canvas"></div>
         </main>
       </div>
-      <ReactP5Wrapper sketch={mainSketch} />
+      {/* Main Canvas */}
+      <ReactP5Wrapper sketch={mainSketch} isMultiSeller={isMultiSeller} />
+      {/* Interest Group Canvas */}
       <ReactP5Wrapper
         autoExpand={autoExpand}
         sketch={interestGroupSketch}
@@ -278,8 +291,8 @@ const Panel = ({
         expandedBubbleWidth={expandedBubbleWidth}
         speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}
-        setInfo={setInfo}
         setPlayState={setPlay}
+        setInfo={setInfo}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <TableTray />

@@ -19,6 +19,10 @@
  */
 import type { SidebarItems } from '@google-psat/design-system';
 import React, { useEffect, useState } from 'react';
+import type {
+  AdsAndBiddersType,
+  singleAuctionEvent,
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -26,19 +30,26 @@ import React, { useEffect, useState } from 'react';
 import AdUnitsPanel from '../../adUnits/panel';
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from '../../auctions/container';
+import type { AdUnitLiteral } from '..';
 
 interface AuctionsProps {
-  auctionEvents: AuctionEventsType;
+  auctionEvents: {
+    auctionData: AuctionEventsType;
+    receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+  };
+  customAdsAndBidders?: AdsAndBiddersType;
 }
 
-const Auctions = ({ auctionEvents }: AuctionsProps) => {
+const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
       panel: {
         Element: AdUnitsPanel,
         props: {
-          adsAndBidders: {},
+          adsAndBidders: customAdsAndBidders,
+          receivedBids: auctionEvents.receivedBids,
+          noBids: {},
         },
       },
       children: {},
@@ -47,19 +58,23 @@ const Auctions = ({ auctionEvents }: AuctionsProps) => {
   });
 
   useEffect(() => {
-    if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
+    if (
+      !auctionEvents.auctionData ||
+      Object.keys(auctionEvents.auctionData).length === 0
+    ) {
       setSidebarData((prev) => {
         prev.adunits.children = {};
 
         return { ...prev };
       });
     }
-  }, [auctionEvents]);
+  }, [auctionEvents.auctionData]);
 
   return (
     <AuctionsContainer
       auctionEvents={auctionEvents}
       sidebarData={sidebarData}
+      customAdsAndBidders={customAdsAndBidders}
       setSidebarData={setSidebarData}
     />
   );

@@ -46,6 +46,7 @@ app.setUpTimeLine = () => {
   app.bubbles.positions = [];
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
+  app.timeline.expandIconPositions = [];
   bubbles.clearAndRewriteBubbles();
   app.setup();
 
@@ -155,10 +156,24 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
 
 app.addToPromiseQueue = (indexToStartFrom) => {
   let currentIndex = indexToStartFrom;
+
   while (currentIndex < config.timeline.circles.length) {
     app.promiseQueue.push((cb) => {
+      const { currentIndex: _currentIndex, circlePositions } = app.timeline;
+      const {
+        circleProps: { diameter },
+        circles,
+      } = config.timeline;
+
+      if (!circles.every(({ visited }) => visited === true)) {
+        app.timeline.expandIconPositions.push({
+          x: circlePositions[_currentIndex].x - 10,
+          y: circlePositions[_currentIndex].y + diameter / 2,
+          index: _currentIndex,
+        });
+      }
       flow.clearBelowTimelineCircles();
-      utils.markVisitedValue(app.timeline.currentIndex, true);
+      utils.markVisitedValue(_currentIndex, true);
       bubbles.generateBubbles();
       bubbles.showMinifiedBubbles();
       timeline.eraseAndRedraw();
@@ -169,9 +184,11 @@ app.addToPromiseQueue = (indexToStartFrom) => {
 
     app.drawFlows(currentIndex);
     app.promiseQueue.push((cb) => {
+      const { currentIndex: _currentIndex } = app.timeline;
+      const { circles } = config.timeline;
+
       app.bubbles.interestGroupCounts +=
-        config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
-      app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+        circles[_currentIndex]?.igGroupsCount ?? 0;
 
       cb(null, true);
     });
@@ -194,6 +211,10 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     utils.markVisitedValue(app.timeline.currentIndex, true);
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
+    flow.clearBelowTimelineCircles();
+    app.timeline.expandIconPositions.forEach((position) => {
+      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
+    });
     app.setCurrentSite(null);
 
     cb(null, true);
@@ -217,7 +238,11 @@ app.setupLoop = (doNotPlay) => {
   }
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.drawFlows = (index) => {
@@ -239,11 +264,15 @@ app.handleNonInteractivePrev = async () => {
   app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
+  //This is to set the data for previous site in react as well.
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+  await utils.delay(10);
+
   app.timeline.currentIndex -= 1;
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
-  await utils.delay(100);
+  await utils.delay(10);
 
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
@@ -259,7 +288,11 @@ app.handleNonInteractivePrev = async () => {
   );
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.handleInteractivePrev = () => {
@@ -302,7 +335,11 @@ app.handleInteractivePrev = () => {
   timeline.renderUserIcon();
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.handlePrevButton = () => {
@@ -324,14 +361,14 @@ app.handleNextButton = () => {
   }
 
   if (app.isInteractiveMode) {
-    app.handleInteravtiveNext();
+    app.handleInteractiveNext();
     return;
   }
 
-  app.handleNonInteravtiveNext();
+  app.handleNonInteractiveNext();
 };
 
-app.handleNonInteravtiveNext = async () => {
+app.handleNonInteractiveNext = async () => {
   if (
     app.bubbles.isExpanded ||
     app.timeline.currentIndex > config.timeline.circles.length - 1
@@ -341,11 +378,14 @@ app.handleNonInteravtiveNext = async () => {
   app.promiseQueue.end();
   app.timeline.isPaused = true;
   app.cancelPromise = true;
+  //This is to set the data for previous site in react as well.
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+  await utils.delay(10);
   app.timeline.currentIndex += 1;
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
-  await utils.delay(100);
+  await utils.delay(10);
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
 
@@ -360,10 +400,14 @@ app.handleNonInteravtiveNext = async () => {
   );
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
-app.handleInteravtiveNext = () => {
+app.handleInteractiveNext = () => {
   if (
     app.visitedIndexOrder.length === 0 ||
     app.visitedIndexOrderTracker === app.visitedIndexOrder.length
@@ -410,7 +454,11 @@ app.handleInteravtiveNext = () => {
   timeline.renderUserIcon();
 
   app.setPlayState(true);
-  app.promiseQueue.start();
+  try {
+    app.promiseQueue.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 app.handleControls = () => {
@@ -481,8 +529,13 @@ app.toggleInteractiveMode = async () => {
   await app.reset();
   app.setPlayState(false);
 
+  if (app.bubbles.isExpanded) {
+    app.minimiseBubbleActions();
+  }
+
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
+
     return;
   }
 };
@@ -494,6 +547,17 @@ app.toggleMultSeller = (event) => {
 
 // Define the sketch
 export const sketch = (p) => {
+  p.updateWithProps = (props) => {
+    if (app.isMultiSeller !== props.isMultiSeller) {
+      app.reset();
+      setTimeout(() => {
+        app.play(true);
+      }, 500);
+    }
+
+    app.isMultiSeller = props.isMultiSeller;
+  };
+
   app.promiseQueue = new Queue({
     concurrency: 1,
     autostart: false,
@@ -595,6 +659,9 @@ app.reset = async () => {
   app.promiseQueue.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
+  app.visitedIndexOrder = [];
+  app.visitedIndexes = 1;
+  app.visitedIndexOrderTracker = -1;
 
   app.timeline.currentIndex = 0;
   app.bubbles.interestGroupCounts = 0;

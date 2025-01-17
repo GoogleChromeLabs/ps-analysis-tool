@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * External dependencies.
+ * External dependencies
  */
 import React, { useMemo } from 'react';
 import { MatrixComponent } from '@google-psat/design-system';
@@ -25,15 +25,25 @@ import type {
   ReceivedBids,
 } from '@google-psat/common';
 
-interface AdMatrixProps {
+interface MatrixData {
+  adUnitCode: string;
   adsAndBidders: AdsAndBiddersType;
   receivedBids: ReceivedBids[];
   noBids: NoBidsType;
 }
 
-const AdMatrix = ({ adsAndBidders, receivedBids, noBids }: AdMatrixProps) => {
+const PresentationalMatrix = ({
+  adUnitCode,
+  adsAndBidders,
+  receivedBids,
+  noBids,
+}: MatrixData) => {
   const biddersCount = useMemo(() => {
     const bidders = Object.values(adsAndBidders).reduce((acc, ad) => {
+      if (adUnitCode !== ad.adUnitCode) {
+        return acc;
+      }
+
       if (ad.bidders) {
         ad.bidders.forEach((bidder) => {
           acc.add(bidder);
@@ -43,17 +53,10 @@ const AdMatrix = ({ adsAndBidders, receivedBids, noBids }: AdMatrixProps) => {
     }, new Set());
 
     return bidders.size;
-  }, [adsAndBidders]);
+  }, [adUnitCode, adsAndBidders]);
 
   const matrixData = useMemo(
     () => [
-      {
-        title: 'Ad Units',
-        count: Object.values(adsAndBidders).length,
-        color: '#5CC971',
-        description: 'Placeholder',
-        countClassName: 'text-[#5CC971]',
-      },
       {
         title: 'Bidders',
         count: biddersCount,
@@ -70,13 +73,15 @@ const AdMatrix = ({ adsAndBidders, receivedBids, noBids }: AdMatrixProps) => {
       },
       {
         title: 'No Bids',
-        count: Object.values(noBids).length,
+        count: Object.values(noBids).filter(
+          (bid) => bid.adUnitCode === adUnitCode
+        ).length,
         color: '#EC7159',
         description: 'Placeholder',
         countClassName: 'text-[#EC7159]',
       },
     ],
-    [adsAndBidders, biddersCount, noBids, receivedBids.length]
+    [adUnitCode, biddersCount, noBids, receivedBids]
   );
 
   return (
@@ -103,4 +108,4 @@ const AdMatrix = ({ adsAndBidders, receivedBids, noBids }: AdMatrixProps) => {
   );
 };
 
-export default AdMatrix;
+export default PresentationalMatrix;

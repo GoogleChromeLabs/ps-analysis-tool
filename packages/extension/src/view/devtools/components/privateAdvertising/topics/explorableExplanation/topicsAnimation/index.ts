@@ -27,6 +27,7 @@ import { getAdtechsColors } from './utils';
  * @param visitIndexStart - Index to start the animation from
  * @param handleUserVisit - Callback function for letting the parent component know when a user visit is happening
  * @param setHighlightAdTech - Callback function for setting the highlighted adtech
+ * @param isInteractive - Boolean to tell if the animation should be interactive
  * @returns Object with callbacks to control the animation
  */
 export function topicsAnimation(
@@ -36,17 +37,20 @@ export function topicsAnimation(
   siteAdTechs: Record<string, string[]>,
   visitIndexStart: number,
   handleUserVisit: (visitIndex: number) => void,
-  setHighlightAdTech: (highlightAdTech: string | null) => void
+  setHighlightAdTech: (highlightAdTech: string | null) => void,
+  isInteractive: boolean
 ) {
   const app = {
     userIcon: null as p5.Image | null,
     completedIcon: null as p5.Image | null,
-    circlePositions: [] as { x: number; y: number }[],
+    circlePositions: {} as Record<number, { x: number; y: number }>,
     siteAdTechs: {} as Record<string, string[]>,
     visitIndex: 0,
     playing: true,
     speedMultiplier: 1,
     inspectedCircleIndex: -1,
+    prevVisitedCircleIndex: -1,
+    showHandCursor: false,
     canvas: null as p5.Renderer | null,
     smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
 
@@ -64,7 +68,7 @@ export function topicsAnimation(
         const xPosition = horizontalSpacing + circleVerticalSpace * index;
 
         if (!app.circlePositions) {
-          app.circlePositions = [];
+          app.circlePositions = {};
         }
 
         p.text(circleItem.website, xPosition, 50);
@@ -76,7 +80,7 @@ export function topicsAnimation(
           position.y - 50
         );
 
-        app.circlePositions.push({ x: xPosition, y: position.y });
+        app.circlePositions[index] = { x: xPosition, y: position.y };
         app.drawCircle(index);
       });
     },
@@ -138,8 +142,10 @@ export function topicsAnimation(
       app.visitIndex = 0;
       app.speedMultiplier = 1;
       app.inspectedCircleIndex = -1;
+      app.circlePositions = {};
+      app.smallCirclePositions = {};
       p?.clear();
-      p.background(245);
+      p.background(255);
       app.drawTimeline(config.timeline.position, epoch);
     },
 
@@ -155,7 +161,7 @@ export function topicsAnimation(
     },
 
     handleUserVisit: (visitIndex: number) => {
-      if (visitIndex > 0) {
+      if (visitIndex > 0 && !isInteractive) {
         app.userVisitDone(visitIndex - 1);
       }
 
@@ -192,16 +198,18 @@ export function topicsAnimation(
       const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
       const currentCircle = epoch[visitIndex];
 
-      p.push();
-      p.text(currentCircle.datetime, xPosition, 30);
-      p.stroke('#1A73E8');
-      p.line(
-        previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
-        previousPosition.y,
-        position.x - circleDiameter / 2,
-        position.y
-      );
-      p.pop();
+      if (!isInteractive) {
+        p.push();
+        p.text(currentCircle.datetime, xPosition, 30);
+        p.stroke('#1A73E8');
+        p.line(
+          previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
+          previousPosition.y,
+          position.x - circleDiameter / 2,
+          position.y
+        );
+        p.pop();
+      }
 
       const currentSite = currentCircle.website;
       app.drawInfoBox(visitIndex, currentSite);
@@ -272,7 +280,7 @@ export function topicsAnimation(
 
       p.push();
       p.rectMode(p.CENTER);
-      p.fill(225);
+      p.fill(245);
       p.stroke(255);
       p.rect(
         position.x,
@@ -354,8 +362,8 @@ export function topicsAnimation(
       const { diameter } = config.timeline.circleProps;
 
       p.push();
-      p.fill(245);
-      p.stroke(245);
+      p.fill(255);
+      p.stroke(255);
       p.rectMode(p.CENTER);
       p.rect(position.x, position.y + diameter / 2 + 150, 300, 250);
       p.strokeWeight(5);
@@ -373,10 +381,11 @@ export function topicsAnimation(
         return;
       }
 
+      let isInspecting = false;
       const x = p.mouseX,
         y = p.mouseY;
 
-      app.circlePositions.forEach((position, index) => {
+      Object.values(app.circlePositions).forEach((position, index) => {
         const { diameter } = config.timeline.circleProps;
         const { x: circleX, y: circleY } = position;
 
@@ -386,6 +395,20 @@ export function topicsAnimation(
           y > circleY - diameter / 2 &&
           y < circleY + diameter / 2
         ) {
+          if (app.visitIndex <= index) {
+            if (isInteractive) {
+              app.showHandCursor = true;
+              isInspecting = true;
+            }
+
+            if (app.inspectedCircleIndex !== -1) {
+              app.resetInfoBox(app.inspectedCircleIndex);
+              app.inspectedCircleIndex = -1;
+            }
+
+            return;
+          }
+
           if (
             app.inspectedCircleIndex !== -1 &&
             app.inspectedCircleIndex !== index
@@ -393,19 +416,31 @@ export function topicsAnimation(
             app.resetInfoBox(app.inspectedCircleIndex);
           }
 
-          if (app.visitIndex <= index) {
-            app.inspectedCircleIndex = -1;
-            return;
-          }
-
-          if (app.inspectedCircleIndex === index) {
-            return;
-          }
-
           app.drawInfoBox(index, epoch[index].website);
           app.inspectedCircleIndex = index;
         }
       });
+
+      Object.values(app.smallCirclePositions).forEach((smallCircles) => {
+        smallCircles?.forEach((position) => {
+          const { x: smallCircleX, y: smallCircleY } = position;
+          const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
+
+          if (
+            x > smallCircleX - smallCircleDiameter / 2 &&
+            x < smallCircleX + smallCircleDiameter / 2 &&
+            y > smallCircleY - smallCircleDiameter / 2 &&
+            y < smallCircleY + smallCircleDiameter / 2
+          ) {
+            app.showHandCursor = true;
+            isInspecting = true;
+          }
+        });
+      });
+
+      if (!isInspecting) {
+        app.showHandCursor = false;
+      }
     },
 
     mouseClicked: () => {
@@ -416,21 +451,54 @@ export function topicsAnimation(
       const x = p.mouseX,
         y = p.mouseY;
 
-      app.smallCirclePositions[app.inspectedCircleIndex]?.forEach(
-        (position, index) => {
-          const { x: smallCircleX, y: smallCircleY } = position;
-          const smallCircleDiameter = config.timeline.circleProps.diameter / 5;
+      if (isInteractive) {
+        Object.values(app.circlePositions).forEach((position, index) => {
+          const { diameter } = config.timeline.circleProps;
+          const { x: circleX, y: circleY } = position;
 
           if (
-            x > smallCircleX - smallCircleDiameter / 2 &&
-            x < smallCircleX + smallCircleDiameter / 2 &&
-            y > smallCircleY - smallCircleDiameter / 2 &&
-            y < smallCircleY + smallCircleDiameter / 2
+            x > circleX - diameter / 2 &&
+            x < circleX + diameter / 2 &&
+            y > circleY - diameter / 2 &&
+            y < circleY + diameter / 2
           ) {
-            setHighlightAdTech(
-              siteAdTechs[epoch[app.inspectedCircleIndex].website][index]
-            );
+            if (app.prevVisitedCircleIndex === index) {
+              return;
+            }
+
+            if (app.prevVisitedCircleIndex !== -1) {
+              app.userVisitDone(app.prevVisitedCircleIndex);
+            }
+
+            if (app.smallCirclePositions[index] === undefined) {
+              app.handleUserVisit(index);
+              app.prevVisitedCircleIndex = index;
+            } else {
+              app.drawInfoBox(index, epoch[index].website);
+              app.prevVisitedCircleIndex = index;
+            }
           }
+        });
+      }
+
+      Object.entries(app.smallCirclePositions).forEach(
+        ([circleIndex, smallCircles]) => {
+          smallCircles?.forEach((position, index) => {
+            const { x: smallCircleX, y: smallCircleY } = position;
+            const smallCircleDiameter =
+              config.timeline.circleProps.diameter / 5;
+
+            if (
+              x > smallCircleX - smallCircleDiameter / 2 &&
+              x < smallCircleX + smallCircleDiameter / 2 &&
+              y > smallCircleY - smallCircleDiameter / 2 &&
+              y < smallCircleY + smallCircleDiameter / 2
+            ) {
+              setHighlightAdTech(
+                siteAdTechs[epoch[Number(circleIndex)].website][index]
+              );
+            }
+          });
         }
       );
     },
@@ -453,7 +521,7 @@ export function topicsAnimation(
       circleHorizontalSpace * 6,
       config.canvas.height
     );
-    p.background(245);
+    p.background(255);
     app.canvas.mouseMoved(app.mouseMoved);
     app.canvas.mouseClicked(app.mouseClicked);
 
@@ -478,8 +546,18 @@ export function topicsAnimation(
     const step = config.timeline.stepDelay / app.speedMultiplier;
     const delay = step / 10;
 
-    if (p.frameCount % delay === 0 && app.playing) {
+    if (app.showHandCursor) {
+      p.cursor(p.HAND);
+    } else {
+      p.cursor(p.ARROW);
+    }
+
+    if (p.frameCount % delay === 0 && app.playing && !isInteractive) {
       app.play();
+    }
+
+    if (isInteractive && app.playing) {
+      app.playing = false;
     }
   };
 

@@ -18,6 +18,10 @@
  * External dependencies.
  */
 import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
+import type {
+  AdsAndBiddersType,
+  singleAuctionEvent,
+} from '@google-psat/common';
 import React from 'react';
 
 /**
@@ -25,16 +29,22 @@ import React from 'react';
  */
 import AuctionPanel from './panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
+import type { AdUnitLiteral } from '../explorableExplanation';
 
 interface AuctionsContainerProps {
-  auctionEvents: AuctionEventsType;
+  auctionEvents: {
+    auctionData: AuctionEventsType;
+    receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
+  };
   sidebarData: SidebarItems;
+  customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
 }
 
 const AuctionsContainer = ({
   auctionEvents,
   sidebarData,
+  customAdsAndBidders,
   setSidebarData,
 }: AuctionsContainerProps) => {
   return (
@@ -43,6 +53,7 @@ const AuctionsContainer = ({
       defaultSelectedItemKey={Object.keys(sidebarData)?.[0]}
     >
       <AuctionPanel
+        customAdsAndBidders={customAdsAndBidders}
         setSidebarData={setSidebarData}
         auctionEvents={auctionEvents}
       />
