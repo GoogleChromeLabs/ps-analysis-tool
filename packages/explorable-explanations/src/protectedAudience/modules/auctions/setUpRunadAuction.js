@@ -19,6 +19,7 @@
 import app from '../../app';
 import config from '../../config';
 import { Box, ProgressLine } from '../../components';
+import { SINGLE_SELLER_CONFIG } from '../flowConfig';
 
 const setUpRunadAuction = (steps, afterRippleStep = null) => {
   const { box, colors } = config.flow;
@@ -26,7 +27,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
   steps.push({
     component: Box,
     props: {
-      title: 'runAdAuction',
+      title: SINGLE_SELLER_CONFIG.RUN_AD_AUCTION.title,
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
     },
@@ -38,23 +39,26 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
 
   const boxes = [
     {
-      title: 'Load Interest Group',
+      title: SINGLE_SELLER_CONFIG.LOAD_INTEREST_GROUP.title,
       extraProps: {
         showBarrageAnimation: true,
       },
+      info: SINGLE_SELLER_CONFIG.LOAD_INTEREST_GROUP.info,
     },
     {
-      title: 'Key/Value Trusted',
-      description: 'DSP Server',
+      title: SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.title,
+      description: SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.description,
       color: colors.box.notBrowser,
+      info: SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.info,
     },
     {
-      title: 'generateBid()',
-      description: '(from DSPs on dsp.js)',
+      title: SINGLE_SELLER_CONFIG.GENERATE_BID.title,
+      description: SINGLE_SELLER_CONFIG.GENERATE_BID.description,
       color: colors.box.notBrowser,
       extraProps: {
         showRippleEffect: true,
       },
+      info: SINGLE_SELLER_CONFIG.GENERATE_BID.info,
     },
     {
       title: 'DSP 1',
@@ -63,25 +67,29 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
       title: 'DSP 2',
     },
     {
-      title: 'Key/Value Trusted',
-      description: 'SSP Server',
+      title: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.title,
+      description: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.description,
+      info: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.info,
     },
     {
-      title: 'scoreAd()',
-      description: '(by SSPs on ssp.js)',
+      title: SINGLE_SELLER_CONFIG.SCORE_AD.title,
+      description: SINGLE_SELLER_CONFIG.SCORE_AD.description,
+      info: SINGLE_SELLER_CONFIG.SCORE_AD.info,
     },
     {
-      title: 'reportWin()',
-      description: '(on dsp.js)',
+      title: SINGLE_SELLER_CONFIG.REPORT_WIN.title,
+      description: SINGLE_SELLER_CONFIG.REPORT_WIN.description,
       color: colors.box.notBrowser,
+      info: SINGLE_SELLER_CONFIG.REPORT_WIN.info,
     },
     {
-      title: 'reportResult()',
-      description: '(on ssp.js)',
+      title: SINGLE_SELLER_CONFIG.REPORT_RESULT.title,
+      description: SINGLE_SELLER_CONFIG.REPORT_RESULT.description,
+      info: SINGLE_SELLER_CONFIG.REPORT_RESULT.info,
     },
   ];
 
-  boxes.forEach(({ title, description, color, extraProps = {} }) => {
+  boxes.forEach(({ title, description, color, info, extraProps = {} }) => {
     if (title === 'DSP 1') {
       if (afterRippleStep) {
         steps.push(afterRippleStep());
@@ -108,6 +116,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
           x: () => app.auction.nextTipCoordinates?.x + 10,
           y: () => app.auction.nextTipCoordinates?.y - box.height + 15,
           color,
+          info,
         },
         delay: 1000,
         callBack: (returnValue) => {
@@ -154,6 +163,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
           x: () => app.auction.nextTipCoordinates?.x + 10,
           y: () => app.auction.nextTipCoordinates?.y,
           color,
+          info,
         },
         delay: 1000,
         callBack: (returnValue) => {
@@ -204,6 +214,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
         x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates?.y + 10,
         color,
+        info,
       },
       delay: 1000,
       callBack: (returnValue) => {

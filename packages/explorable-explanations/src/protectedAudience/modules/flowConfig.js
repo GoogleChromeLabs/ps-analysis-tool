@@ -60,6 +60,9 @@ export const SINGLE_SELLER_CONFIG = {
     <p>The DSP server evaluates bid requests in real time, using signals such as interest groups, contextual relevance, and advertiser budgets to decide whether to bid.</p>
   `,
   },
+  RUN_AD_AUCTION: {
+    title: 'runAdAuction',
+  },
   LOAD_INTEREST_GROUP: {
     title: 'Load Interest Group',
     info: `
@@ -68,8 +71,8 @@ export const SINGLE_SELLER_CONFIG = {
   `,
   },
   KEY_VALUE_DSP_SERVER: {
-    title: 'Key/Value Trusted',
-    description: 'DSP Server',
+    title: 'Key/Value',
+    description: 'Trusted DSP Server',
     info: `
     <p>A secure DSP-side server that handles bid generation using key/value pairs for interest group and contextual data.</p>
     <p>It ensures data processing aligns with privacy requirements, creating competitive bids based on predefined values.</p>
@@ -84,8 +87,8 @@ export const SINGLE_SELLER_CONFIG = {
   `,
   },
   KEY_VALUE_SSP_SERVER: {
-    title: 'Key/Value Trusted',
-    description: 'SSP Server',
+    title: 'Key/Value',
+    description: 'Trusted SSP Server',
     info: `
     <p>A secure SSP-side server responsible for ad scoring and auction facilitation.</p>
     <p>It uses key/value pairs to evaluate bids and ensures data privacy and compliance during ad auctions.</p>
