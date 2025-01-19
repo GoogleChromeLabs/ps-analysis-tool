@@ -19,6 +19,7 @@
 import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
+import { SINGLE_SELLER_CONFIG } from '../../flowConfig';
 
 const setUpSingleSellerFirstSSPTagFlow = (steps) => {
   const { box, colors } = config.flow;
@@ -39,9 +40,10 @@ const setUpSingleSellerFirstSSPTagFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'SSP Tag',
+      title: SINGLE_SELLER_CONFIG.SSP_TAG.title,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y,
+      info: SINGLE_SELLER_CONFIG.SSP_TAG.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -64,10 +66,11 @@ const setUpSingleSellerFirstSSPTagFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'SSP',
+      title: SINGLE_SELLER_CONFIG.SSP.title,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
       color: colors.box.noData,
+      info: SINGLE_SELLER_CONFIG.SSP.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -90,10 +93,11 @@ const setUpSingleSellerFirstSSPTagFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSPs',
+      title: SINGLE_SELLER_CONFIG.DSPS.title,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
       color: colors.box.noData,
+      info: SINGLE_SELLER_CONFIG.DSPS.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
