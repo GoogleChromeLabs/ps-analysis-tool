@@ -32,17 +32,33 @@ type FigureParams = {
   fill?: string;
   stroke?: string;
   tags?: string[];
+  nextTipHelper: (x: number, y: number, ...args: any) => void;
   mouseClicked?: () => void;
-  nextTipDirection?: 'up' | 'down' | 'left' | 'right';
 };
 
 export default class FigureFactory {
   private canvasRunner: Main;
 
-  private nextCoordinates: { x: number; y: number } = { x: 0, y: 0 };
+  private nextCoordinates: {
+    left: { x: number; y: number };
+    right: { x: number; y: number };
+    up: { x: number; y: number };
+    down: { x: number; y: number };
+    middle: { x: number; y: number };
+  };
 
   constructor(canvasRunner: Main) {
     this.canvasRunner = canvasRunner;
+  }
+
+  private boxNextTips(x: number, y: number, width: number, height: number) {
+    this.nextCoordinates = {
+      left: { x, y: height / 2 },
+      right: { x: width, y: height / 2 },
+      up: { x: width / 2, y },
+      down: { x: width / 2, y: height },
+      middle: { x: x + width / 2, y: y + height / 2 },
+    };
   }
 
   box({
@@ -54,32 +70,12 @@ export default class FigureFactory {
     fill,
     stroke,
     tags,
-    nextTipDirection,
     mouseClicked,
   }: FigureParams & {
     width: number;
     height: number;
   }): Box {
-    if (nextTipDirection) {
-      const newX =
-        x +
-        (nextTipDirection === 'left'
-          ? 0
-          : nextTipDirection === 'right'
-          ? width
-          : width / 2);
-      const newY =
-        y +
-        (nextTipDirection === 'up'
-          ? 0
-          : nextTipDirection === 'down'
-          ? height
-          : height / 2);
-
-      this.nextCoordinates = { x: newX, y: newY };
-    } else {
-      this.nextCoordinates = { x: x + width / 2, y: y + height / 2 };
-    }
+    this.boxNextTips(x, y, width, height);
 
     return new Box(
       this.canvasRunner,
@@ -95,6 +91,16 @@ export default class FigureFactory {
     );
   }
 
+  private circleNextTips(x: number, y: number, diameter: number) {
+    this.nextCoordinates = {
+      left: { x: x - diameter / 2, y },
+      right: { x: x + diameter / 2, y },
+      up: { x, y: y - diameter / 2 },
+      down: { x, y: y + diameter / 2 },
+      middle: { x, y },
+    };
+  }
+
   circle({
     id,
     x,
@@ -103,30 +109,10 @@ export default class FigureFactory {
     fill,
     stroke,
     tags,
-    nextTipDirection,
   }: FigureParams & {
     diameter: number;
   }): Circle {
-    if (nextTipDirection) {
-      const newX =
-        x +
-        (nextTipDirection === 'left'
-          ? -diameter / 2
-          : nextTipDirection === 'right'
-          ? diameter / 2
-          : 0);
-      const newY =
-        y +
-        (nextTipDirection === 'up'
-          ? -diameter / 2
-          : nextTipDirection === 'down'
-          ? diameter / 2
-          : 0);
-
-      this.nextCoordinates = { x: newX, y: newY };
-    } else {
-      this.nextCoordinates = { x: x, y: y };
-    }
+    this.circleNextTips(x, y, diameter);
 
     return new Circle(
       this.canvasRunner,
@@ -140,6 +126,16 @@ export default class FigureFactory {
     );
   }
 
+  private imageNextTips(x: number, y: number, width: number, height: number) {
+    this.nextCoordinates = {
+      left: { x: x - width / 2, y },
+      right: { x: x + width / 2, y },
+      up: { x, y: y - height / 2 },
+      down: { x, y: y + height / 2 },
+      middle: { x, y },
+    };
+  }
+
   image({
     id,
     x,
@@ -148,32 +144,12 @@ export default class FigureFactory {
     width,
     height,
     tags,
-    nextTipDirection,
   }: FigureParams & {
     imageData: string;
     width: number;
     height: number;
   }): Image {
-    if (nextTipDirection) {
-      const newX =
-        x +
-        (nextTipDirection === 'left'
-          ? -width / 2
-          : nextTipDirection === 'right'
-          ? width / 2
-          : 0);
-      const newY =
-        y +
-        (nextTipDirection === 'up'
-          ? -height / 2
-          : nextTipDirection === 'down'
-          ? height / 2
-          : 0);
-
-      this.nextCoordinates = { x: newX, y: newY };
-    } else {
-      this.nextCoordinates = { x: x, y: y };
-    }
+    this.imageNextTips(x, y, width, height);
 
     return new Image(
       this.canvasRunner,
@@ -187,6 +163,16 @@ export default class FigureFactory {
     );
   }
 
+  private lineNextTips(x: number, y: number, endX: number, endY: number) {
+    this.nextCoordinates = {
+      left: { x, y },
+      right: { x: endX, y: endY },
+      up: { x, y },
+      down: { x: endX, y: endY },
+      middle: { x: (x + endX) / 2, y: (y + endY) / 2 },
+    };
+  }
+
   line({
     id,
     x,
@@ -197,33 +183,13 @@ export default class FigureFactory {
     hasArrow,
     shouldTravel,
     tags,
-    nextTipDirection,
   }: FigureParams & {
     endX: number;
     endY: number;
     hasArrow?: boolean;
     shouldTravel?: boolean;
   }): Line {
-    if (nextTipDirection) {
-      const newX =
-        x +
-        (nextTipDirection === 'left'
-          ? 0
-          : nextTipDirection === 'right'
-          ? endX - x
-          : (endX - x) / 2);
-      const newY =
-        y +
-        (nextTipDirection === 'up'
-          ? 0
-          : nextTipDirection === 'down'
-          ? endY - y
-          : (endY - y) / 2);
-
-      this.nextCoordinates = { x: newX, y: newY };
-    } else {
-      this.nextCoordinates = { x: endX, y: endY };
-    }
+    this.lineNextTips(x, y, endX, endY);
 
     const line = new Line(
       this.canvasRunner,
@@ -292,6 +258,17 @@ export default class FigureFactory {
     return line;
   }
 
+  private textNextTips(x: number, y: number) {
+    // p5.textWidth is giving error, so for now everything has same points
+    this.nextCoordinates = {
+      left: { x, y },
+      right: { x, y },
+      up: { x, y },
+      down: { x, y },
+      middle: { x, y },
+    };
+  }
+
   text({
     id,
     x,
@@ -300,34 +277,11 @@ export default class FigureFactory {
     size,
     fill,
     tags,
-    nextTipDirection,
   }: FigureParams & {
     text: string;
     size?: number;
   }): Text {
-    const textLength = this.canvasRunner.getP5Instance().textWidth(text);
-    const textHeight = size ?? 16;
-    if (nextTipDirection) {
-      const newX =
-        x +
-        (nextTipDirection === 'left'
-          ? -textLength / 2
-          : nextTipDirection === 'right'
-          ? textLength / 2
-          : 0);
-
-      const newY =
-        y +
-        (nextTipDirection === 'up'
-          ? -textHeight / 2
-          : nextTipDirection === 'down'
-          ? textHeight / 2
-          : 0);
-
-      this.nextCoordinates = { x: newX, y: newY };
-    } else {
-      this.nextCoordinates = { x: x + textLength / 2, y: y + textHeight / 2 };
-    }
+    this.textNextTips(x, y);
 
     return new Text(this.canvasRunner, x, y, text, id, size, fill, tags);
   }
