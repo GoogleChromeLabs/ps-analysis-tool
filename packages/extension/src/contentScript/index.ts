@@ -24,7 +24,7 @@ import {
   type CookieDatabase,
 } from '@google-psat/common';
 import { computePosition, autoPlacement } from '@floating-ui/core';
-import { autoUpdate, platform, arrow } from '@floating-ui/dom';
+import { autoUpdate, platform, arrow, shift, flip } from '@floating-ui/dom';
 
 /**
  * Internal dependencies.
@@ -393,10 +393,10 @@ class WebpageContentScript {
           placement: 'top',
           middleware: [
             shift({
-              boundary: document.querySelector('body'),
+              boundary: document.body,
             }),
             flip({
-              boundary: document.querySelector('body'),
+              boundary: document.body,
             }),
             arrow({
               element: arrowElement,
@@ -569,6 +569,7 @@ class WebpageContentScript {
     removeAllPopovers();
     toggleFrameHighlighting(false);
     this.isInspecting = false;
+    this.mode = 'Cookies';
   };
 
   /**

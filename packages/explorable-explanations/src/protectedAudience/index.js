@@ -80,7 +80,12 @@ app.play = (resumed = false, doNotPlay = false) => {
     app.pauseButton.classList.remove('hidden');
   }
 
+  if (app.bubbles.isExpanded) {
+    app.minimiseBubbleActions();
+  }
+
   app.timeline.isPaused = false;
+  app.timeline.pausedReason = '';
 
   if (!resumed) {
     app.setupLoop(doNotPlay);
@@ -100,7 +105,9 @@ app.pause = () => {
     app.pauseButton.classList.add('hidden');
     app.playButton.classList.remove('hidden');
   }
-
+  if (!app.timeline.pausedReason) {
+    app.timeline.pausedReason = 'userClick';
+  }
   app.promiseQueue.stop();
   app.timeline.isPaused = true;
 };
@@ -109,6 +116,10 @@ app.minimiseBubbleActions = () => {
   bubbles.generateBubbles(true);
   app.bubbles.isExpanded = false;
   bubbles.showMinifiedBubbles();
+  app.timeline.pausedReason;
+  if (app.timeline.pausedReason === 'userClick') {
+    return;
+  }
   app.play(true);
 };
 
@@ -116,7 +127,11 @@ app.expandBubbleActions = () => {
   app.bubbles.isExpanded = true;
   bubbles.showExpandedBubbles();
   bubbles.generateBubbles(true);
+  if (!app.timeline.pausedReason) {
+    app.timeline.pausedReason = 'bubble';
+  }
   app.pause();
+  app.setPlayState(false);
 };
 
 app.minifiedBubbleClickListener = (event, expandOverride) => {
@@ -215,7 +230,6 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     app.timeline.expandIconPositions.forEach((position) => {
       app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
     });
-    app.setCurrentSite(null);
 
     cb(null, true);
   });
@@ -380,6 +394,15 @@ app.handleNonInteractiveNext = async () => {
   app.cancelPromise = true;
   //This is to set the data for previous site in react as well.
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+
+  if (
+    app.bubbles.positions.length <
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex + 1)
+  ) {
+    bubbles.generateBubbles();
+    bubbles.showMinifiedBubbles();
+  }
+
   await utils.delay(10);
   app.timeline.currentIndex += 1;
 
@@ -677,6 +700,7 @@ app.reset = async () => {
 
   app.timeline.isPaused = true;
   app.setPlayState(false);
+  app.setCurrentSite(null);
 };
 
 app.createCanvas = () => {

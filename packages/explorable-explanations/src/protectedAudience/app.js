@@ -21,6 +21,7 @@ const app = {
     circlePublisherIndices: [],
     expandIconPositions: [],
     currentIndex: 0,
+    pausedReason: '',
   },
   color: null,
   auction: {
@@ -47,6 +48,7 @@ const app = {
     expandedCircleDiameter: 640,
     minifiedCircleDiameter: 50,
   },
+  mouseOutOfDiv: false,
   speedMultiplier: 1,
   p: null,
   igp: null,
@@ -65,6 +67,7 @@ const app = {
   isRevisitingNodeInInteractiveMode: false,
   setCurrentSite: () => null,
   setPlayState: () => null,
+  getPlayState: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
   canvasEventListerners: {
