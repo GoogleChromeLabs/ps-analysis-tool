@@ -181,7 +181,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
     app.promiseQueue.push((cb) => {
       app.shouldRespondToClick = true;
-      renderUserIcon();
       app.isRevisitingNodeInInteractiveMode = false;
 
       if (circles[clickedIndex].type === 'advertiser') {
@@ -195,8 +194,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
     app.promiseQueue.start();
 
-    wipeAndRecreateUserCanvas();
-    wipeAndRecreateMainCanvas();
     return;
   }
 };
