@@ -230,7 +230,6 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     app.timeline.expandIconPositions.forEach((position) => {
       app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
     });
-    app.setCurrentSite(null);
 
     cb(null, true);
   });
