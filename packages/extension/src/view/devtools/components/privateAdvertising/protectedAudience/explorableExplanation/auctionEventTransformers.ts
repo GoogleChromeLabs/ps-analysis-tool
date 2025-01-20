@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { singleAuctionEvent } from '@google-psat/common';
+import type { ReceivedBids, singleAuctionEvent } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -270,13 +270,24 @@ const randomIntFromInterval = (min: number, max: number) => {
 
 const getBidData = (
   auctionData: { [key: string]: singleAuctionEvent[] },
-  sellers: string[]
+  sellers: string[],
+  adUnitCode: string
 ) => {
-  const bidsArray: singleAuctionEvent[] = [];
+  const bidsArray: ReceivedBids[] = [];
 
   sellers.forEach((seller) => {
+    const filteredBidEvents =
+      auctionData[seller]?.filter((event) => event.type === 'bid') ?? [];
+
     bidsArray.push(
-      ...(auctionData[seller]?.filter((event) => event.type === 'bid') ?? [])
+      ...filteredBidEvents.map((event) => {
+        return {
+          ...event,
+          adUnitCode,
+          adContainerSize: [[320, 320]],
+          mediaType: 'video',
+        };
+      })
     );
   });
 
@@ -372,15 +383,18 @@ export const configuredAuctionEvents = (
   const receivedBids = {
     'div-200-1': getBidData(
       auctionData['div-200-1']?.[dateTimeString]?.[websiteString],
-      sellersArray
+      sellersArray,
+      'div-200-1'
     ),
     'div-200-2': getBidData(
       auctionData['div-200-2']?.[dateTimeString]?.[websiteString],
-      sellersArray
+      sellersArray,
+      'div-200-2'
     ),
     'div-200-3': getBidData(
       auctionData['div-200-3']?.[dateTimeString]?.[websiteString],
-      sellersArray
+      sellersArray,
+      'div-200-3'
     ),
   };
 
@@ -391,7 +405,8 @@ export const configuredAuctionEvents = (
       mediaContainerSize: [[320, 320]],
       winningBid: getBidData(
         auctionData['div-200-1']?.[dateTimeString]?.[websiteString],
-        sellersArray
+        sellersArray,
+        'div-200-1'
       ).filter(({ type }) => type === 'win')?.[0]?.bid,
       bidCurrency: 'USD',
       winningBidder: 'DSP 1',
@@ -402,7 +417,8 @@ export const configuredAuctionEvents = (
       mediaContainerSize: [[320, 320]],
       winningBid: getBidData(
         auctionData['div-200-2']?.[dateTimeString]?.[websiteString],
-        sellersArray
+        sellersArray,
+        'div-200-2'
       ).filter(({ type }) => type === 'win')?.[0]?.bid,
       bidCurrency: 'USD',
       winningBidder: 'DSP 1',
@@ -413,7 +429,8 @@ export const configuredAuctionEvents = (
       mediaContainerSize: [[320, 320]],
       winningBid: getBidData(
         auctionData['div-200-3']?.[dateTimeString]?.[websiteString],
-        sellersArray
+        sellersArray,
+        'div-200-3'
       ).filter(({ type }) => type === 'win')?.[0]?.bid,
       bidCurrency: 'USD',
       winningBidder: 'DSP 1',
