@@ -18,7 +18,7 @@
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
 import type { InterestGroups } from '@google-psat/common';
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { app, config } from '@google-psat/explorable-explanations';
 
 /**
@@ -61,6 +61,19 @@ const ExplorableExplanation = () => {
     },
     []
   );
+
+  useEffect(() => {
+    if (interactiveMode !== app.isInteractiveMode) {
+      app.toggleInteractiveMode();
+      setSitesVisited([]);
+    }
+  }, [interactiveMode]);
+
+  useEffect(() => {
+    return () => {
+      app.isInteractiveMode = false;
+    };
+  }, [interactiveMode]);
 
   const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
     setCurrentSiteData(() => siteData);

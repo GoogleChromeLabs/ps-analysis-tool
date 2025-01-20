@@ -213,7 +213,6 @@ const Panel = ({
       }}
     >
       <Header
-        disabled={app.bubbles.isExpanded}
         play={play}
         setPlay={setPlaying}
         sliderStep={sliderStep}
