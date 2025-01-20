@@ -72,8 +72,10 @@ const ExplorableExplanation = () => {
   useEffect(() => {
     return () => {
       app.isInteractiveMode = false;
+      app.isMultiSeller = false;
+      app.isAutoExpand = true;
     };
-  }, [interactiveMode]);
+  }, []);
 
   const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
     setCurrentSiteData(() => siteData);
