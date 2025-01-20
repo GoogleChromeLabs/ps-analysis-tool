@@ -19,6 +19,7 @@
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
 import type { InterestGroups } from '@google-psat/common';
 import React, { useMemo, useState, useCallback } from 'react';
+import { app, config } from '@google-psat/explorable-explanations';
 
 /**
  * Internal dependencies.
@@ -48,18 +49,42 @@ const ExplorableExplanation = () => {
   const [interestGroupsData, setInterestGroupsData] = useState<
     InterestGroups[]
   >([]);
+  const [sitesVisited, setSitesVisited] = useState<string[]>([]);
+
+  const [interactiveMode, _setInteractiveMode] = useState(false);
+
+  const setInteractiveMode = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSitesVisited([]);
+      _setInteractiveMode(event.target.checked);
+      app.toggleInteractiveMode();
+    },
+    []
+  );
 
   const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
     setCurrentSiteData(() => siteData);
     setInterestGroupsData(() => getInterestGroupData(siteData));
   };
 
-  const [sitesVisited, setSitesVisited] = useState<string[]>([]);
-
   const getInterestGroupData = useCallback(
     (siteData: typeof currentSiteData) => {
       if (!siteData) {
         return [];
+      }
+
+      if (app.isInteractiveMode) {
+        const _sitesVisited: string[] = [];
+        const requiredIG: InterestGroups[] = [];
+
+        app.visitedIndexOrder.forEach((index: number) => {
+          const website = config.timeline.circles[index].website;
+          _sitesVisited.push(website);
+          requiredIG.push(...SYNTHETIC_INTEREST_GROUPS[website]);
+        });
+
+        setSitesVisited(() => _sitesVisited);
+        return requiredIG;
       }
 
       let hasReached = -1;
@@ -271,6 +296,8 @@ const ExplorableExplanation = () => {
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={_setCurrentSiteData}
+        setInteractiveMode={setInteractiveMode}
+        interactiveMode={interactiveMode}
       />
     </TabsProvider>
   );
