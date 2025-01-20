@@ -18,11 +18,7 @@
  */
 import app from '../app';
 import config from '../config';
-import {
-  addCanvasEventListener,
-  isInsideBox,
-  scrollToCoordinates,
-} from '../utils';
+import { addCanvasEventListener, isInsideBox } from '../utils';
 
 const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
@@ -46,8 +42,6 @@ const Box = ({
       y: y + height / 4,
     },
   };
-
-  scrollToCoordinates(x, y);
 
   const p = app.p;
 
