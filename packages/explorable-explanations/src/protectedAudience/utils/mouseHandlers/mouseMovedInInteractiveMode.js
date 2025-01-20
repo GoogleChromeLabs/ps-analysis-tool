@@ -22,11 +22,14 @@ import { isInsideCircle } from '../isInsideCircle';
 import { isOverControls } from '../isOverControls';
 import { wipeAndRecreateUserCanvas } from '../wipeAndRecreateCanvas';
 const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
-  if (!app.isInteractiveMode || !app.startTrackingMouse) {
+  const { offsetX, offsetY } = event;
+  app.mouseX = offsetX;
+  app.mouseY = offsetY;
+
+  if (!app.isInteractiveMode || app.mouseOutOfDiv) {
     return;
   }
 
-  const { offsetX, offsetY } = event;
   let hoveringOnExpandIconPositions = false;
   let hoveringOnCircles = false;
 
@@ -56,9 +59,6 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
       hoveringOnCircles = true;
     }
   });
-
-  app.mouseX = offsetX;
-  app.mouseY = offsetY;
 
   if (!app.shouldRespondToClick) {
     return;

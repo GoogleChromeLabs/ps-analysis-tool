@@ -39,13 +39,13 @@ export const setupMainCanvas = async (p, doNotPlay = false) => {
 
     canvas.mouseOut(() => {
       if (app.isInteractiveMode) {
-        app.startTrackingMouse = false;
+        app.mouseOutOfDiv = true;
       }
     });
 
     canvas.mouseOver(() => {
       if (app.isInteractiveMode) {
-        app.startTrackingMouse = true;
+        app.mouseOutOfDiv = false;
       }
     });
 
