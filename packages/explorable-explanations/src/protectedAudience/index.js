@@ -80,6 +80,11 @@ app.play = (resumed = false, doNotPlay = false) => {
     app.pauseButton.classList.remove('hidden');
   }
 
+  if (app.bubbles.isExpanded) {
+    app.minimiseBubbleActions();
+    return;
+  }
+
   app.timeline.isPaused = false;
   app.timeline.pausedReason = '';
 
