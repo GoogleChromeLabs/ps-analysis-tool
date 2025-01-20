@@ -82,7 +82,6 @@ app.play = (resumed = false, doNotPlay = false) => {
 
   if (app.bubbles.isExpanded) {
     app.minimiseBubbleActions();
-    return;
   }
 
   app.timeline.isPaused = false;
@@ -117,6 +116,7 @@ app.minimiseBubbleActions = () => {
   bubbles.generateBubbles(true);
   app.bubbles.isExpanded = false;
   bubbles.showMinifiedBubbles();
+  app.timeline.pausedReason;
   if (app.timeline.pausedReason === 'userClick') {
     return;
   }
