@@ -395,6 +395,15 @@ app.handleNonInteractiveNext = async () => {
   app.cancelPromise = true;
   //This is to set the data for previous site in react as well.
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+
+  if (
+    app.bubbles.positions.length <
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex + 1)
+  ) {
+    bubbles.generateBubbles();
+    bubbles.showMinifiedBubbles();
+  }
+
   await utils.delay(10);
   app.timeline.currentIndex += 1;
 
