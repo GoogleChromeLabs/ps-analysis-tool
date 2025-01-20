@@ -26,45 +26,50 @@ import { calculateCanvasDimensions } from '../utils';
 import throttle from 'just-throttle';
 
 export const setupMainCanvas = async (p, doNotPlay = false) => {
-  const { height, width } = calculateCanvasDimensions();
-  const canvas = p.createCanvas(width, height);
+  try {
+    const { height, width } = calculateCanvasDimensions();
+    const canvas = p.createCanvas(width, height);
 
-  p.smooth();
-  canvas.parent('ps-canvas');
-  canvas.style('z-index', 0);
-  p.background(config.canvas.background);
-  p.textSize(config.canvas.fontSize);
-  app.p = p;
+    p.smooth();
+    canvas.parent('ps-canvas');
+    canvas.style('z-index', 0);
+    p.background(config.canvas.background);
+    p.textSize(config.canvas.fontSize);
+    app.p = p;
 
-  canvas.mouseOut(() => {
-    if (app.isInteractiveMode) {
-      app.startTrackingMouse = false;
-    }
-  });
-
-  canvas.mouseOver(() => {
-    if (app.isInteractiveMode) {
-      app.startTrackingMouse = true;
-    }
-  });
-
-  const mouseMovedCallback = throttle(() => {
-    const callbacks = app.canvasEventListerners.main.mouseMoved;
-
-    Object.keys(callbacks).forEach((key) => {
-      const callback = callbacks[key];
-
-      if (typeof callback === 'function') {
-        callback(p.mouseX, p.mouseY);
+    canvas.mouseOut(() => {
+      if (app.isInteractiveMode) {
+        app.startTrackingMouse = false;
       }
     });
-  }, 500);
 
-  canvas.mouseMoved(mouseMovedCallback);
+    canvas.mouseOver(() => {
+      if (app.isInteractiveMode) {
+        app.startTrackingMouse = true;
+      }
+    });
 
-  app.setUpTimeLine();
+    const mouseMovedCallback = throttle(() => {
+      const callbacks = app.canvasEventListerners.main.mouseMoved;
 
-  if (!app.isInteractiveMode) {
-    await app.play(false, doNotPlay);
+      Object.keys(callbacks).forEach((key) => {
+        const callback = callbacks[key];
+
+        if (typeof callback === 'function') {
+          callback(p.mouseX, p.mouseY);
+        }
+      });
+    }, 500);
+
+    canvas.mouseMoved(mouseMovedCallback);
+
+    app.setUpTimeLine();
+
+    if (!app.isInteractiveMode) {
+      await app.play(false, doNotPlay);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console -- We should know the error and let it fail silently since it doesnt break anything.
+    console.log(error);
   }
 };
