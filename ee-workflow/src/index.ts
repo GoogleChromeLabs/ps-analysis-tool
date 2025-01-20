@@ -77,7 +77,7 @@ const timeline = mainFF.line({
 });
 
 const circles = [
-  new Group([
+  new Group(mainCanvas, [
     mainFF.circle({
       x: 100,
       y: 200,
@@ -102,7 +102,7 @@ const circles = [
       stroke: 'black',
     }),
   ]),
-  new Group([
+  new Group(mainCanvas, [
     mainFF.circle({
       x: 300,
       y: 200,
@@ -127,7 +127,7 @@ const circles = [
       stroke: 'black',
     }),
   ]),
-  new Group([
+  new Group(mainCanvas, [
     mainFF.circle({
       x: 500,
       y: 200,
@@ -152,7 +152,7 @@ const circles = [
       stroke: 'black',
     }),
   ]),
-  new Group([
+  new Group(mainCanvas, [
     mainFF.circle({
       x: 700,
       y: 200,
@@ -202,7 +202,7 @@ const advertiserFlow = [
     hasArrow: true,
     shouldTravel: true,
   }),
-  new Group([
+  new Group(mainCanvas, [
     mainFF.box({
       x: 50,
       y: 300,
@@ -225,7 +225,7 @@ const advertiserFlow = [
     hasArrow: true,
     shouldTravel: true,
   }),
-  new Group([
+  new Group(mainCanvas, [
     mainFF.box({
       x: 50,
       y: 413,
@@ -308,7 +308,7 @@ flow.setSideEffectOnEnd(() => {
 mainCanvas.addAnimator(flow, false, true);
 
 mainCanvas.addGroup(
-  new Group([
+  new Group(mainCanvas, [
     mainFF.line({
       x: 0,
       y: 200,
@@ -343,7 +343,7 @@ const travellerLine = mainFF.line({
   shouldTravel: true,
 });
 
-const travellerGroup = new Group([
+const travellerGroup = new Group(mainCanvas, [
   mainFF.line({
     x: 0,
     y: 600,
@@ -392,7 +392,7 @@ const secondCircleAnimations = [
     hasArrow: true,
     shouldTravel: true,
   }),
-  new Group([
+  new Group(mainCanvas, [
     mainFF.box({
       x: 250,
       y: 300,
@@ -415,7 +415,7 @@ const secondCircleAnimations = [
     hasArrow: true,
     shouldTravel: true,
   }),
-  new Group([
+  new Group(mainCanvas, [
     mainFF.box({
       x: 250,
       y: 413,
@@ -491,7 +491,7 @@ secondFlow.setSideEffectOnEnd(() => {
 mainCanvas.addAnimator(secondFlow, false, true);
 
 mainCanvas.addGroup(
-  new Group([
+  new Group(mainCanvas, [
     mainFF.line({
       x: 137,
       y: 200,

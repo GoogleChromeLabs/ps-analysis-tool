@@ -112,6 +112,16 @@ class Main {
   private traveller: Traveller | null = null;
 
   /**
+   * Last hovered group.
+   */
+  private hoveredGroup: Group | null = null;
+
+  /**
+   * Last hovered figure.
+   */
+  private hoveredFigure: Figure | null = null;
+
+  /**
    * Main constructor.
    * @param clearOnEachStep - Whether to clear the canvas on each step (default: true).
    */
@@ -314,13 +324,47 @@ class Main {
    */
   private mouseMoved() {
     this.snapshot.forEach((object) => {
+      if (object.getAnimatorId()) {
+        return;
+      }
+
       const isHovering = object.isHovering();
+
+      if (!isHovering) {
+        if (this.hoveredFigure?.getId() === object.getId()) {
+          this.hoveredFigure.onLeave();
+          this.hoveredFigure = null;
+
+          if (this.hoveredGroup) {
+            this.hoveredGroup.onLeave();
+            this.hoveredGroup = null;
+          }
+        }
+
+        return;
+      }
+
+      if (isHovering && this.hoveredFigure?.getId() === object.getId()) {
+        return;
+      }
+
       const _object = this.isGrouped(object) || object;
 
+      if (
+        isHovering &&
+        _object instanceof Group &&
+        this.hoveredGroup?.getId() === _object.getId()
+      ) {
+        this.hoveredFigure = object;
+        return;
+      }
+
       if (isHovering) {
-        _object.mouseMoved();
-      } else {
-        _object.onLeave();
+        this.hoveredFigure = object;
+        this.hoveredGroup = _object instanceof Group ? _object : null;
+
+        this.hoveredFigure?.mouseMoved();
+        this.hoveredGroup?.mouseMoved();
       }
     });
   }

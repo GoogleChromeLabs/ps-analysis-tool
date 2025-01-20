@@ -17,6 +17,7 @@
 /**
  * Internal dependencies.
  */
+import Main from '../main';
 import Figure from './figure';
 
 /**
@@ -39,6 +40,11 @@ export default class Group {
   private animatorId = '';
 
   /**
+   * Canvas runner instance.
+   */
+  private canvasRunner: Main;
+
+  /**
    * Property to check if the group should be saved in groupSnapshot.
    * If true, the group will NOT be saved in groupSnapshot.
    */
@@ -49,8 +55,9 @@ export default class Group {
    */
   static groupCount = 0;
 
-  constructor(figures: Figure[], id?: string) {
+  constructor(canvasRunner: Main, figures: Figure[], id?: string) {
     Group.groupCount++;
+    this.canvasRunner = canvasRunner;
     this.id =
       id ||
       `group-${Group.groupCount}` + Math.random().toString(36).slice(2, 9);
@@ -74,6 +81,7 @@ export default class Group {
     this.figures.forEach((figure) => {
       figure.mouseMoved();
     });
+    this.canvasRunner.addGroup(this, true);
   }
 
   /**
@@ -83,6 +91,7 @@ export default class Group {
     this.figures.forEach((figure) => {
       figure.onLeave();
     });
+    this.canvasRunner.addGroup(this, true);
   }
 
   /**
