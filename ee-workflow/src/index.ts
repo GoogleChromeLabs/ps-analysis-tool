@@ -40,14 +40,15 @@ const prevbutton = mainFF.box({
 });
 
 const nextbutton = mainFF.box({
-  x: 150,
-  y: 10,
   width: 100,
   height: 50,
   fill: 'blue',
   stroke: 'black',
   mouseClicked: () => {
     mainCanvas.loadNextCheckpoint();
+  },
+  nextTipHelper: (nextCoordinates) => {
+    return { x: nextCoordinates.right.x + 40, y: nextCoordinates.up.y };
   },
 });
 

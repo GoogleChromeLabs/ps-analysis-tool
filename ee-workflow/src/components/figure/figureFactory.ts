@@ -25,30 +25,61 @@ import Image from './image';
 import Line from './line';
 import Text from './text';
 
+type NextCoordinates = {
+  left: { x: number; y: number };
+  right: { x: number; y: number };
+  up: { x: number; y: number };
+  down: { x: number; y: number };
+  middle: { x: number; y: number };
+};
+
 type FigureParams = {
   id?: string;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
   fill?: string;
   stroke?: string;
   tags?: string[];
-  nextTipHelper: (x: number, y: number, ...args: any) => void;
+  nextTipHelper?: (
+    nextCoordinates: NextCoordinates,
+    ...args: any
+  ) => { x: number; y: number };
   mouseClicked?: () => void;
 };
 
 export default class FigureFactory {
   private canvasRunner: Main;
 
-  private nextCoordinates: {
-    left: { x: number; y: number };
-    right: { x: number; y: number };
-    up: { x: number; y: number };
-    down: { x: number; y: number };
-    middle: { x: number; y: number };
+  private nextCoordinates: NextCoordinates = {
+    left: { x: 0, y: 0 },
+    right: { x: 0, y: 0 },
+    up: { x: 0, y: 0 },
+    down: { x: 0, y: 0 },
+    middle: { x: 0, y: 0 },
   };
 
   constructor(canvasRunner: Main) {
     this.canvasRunner = canvasRunner;
+  }
+
+  private nextTip(
+    x?: number,
+    y?: number,
+    nextTipHelper?: FigureParams['nextTipHelper']
+  ) {
+    const possibleX = x ?? 0;
+    const possibleY = y ?? 0;
+
+    if (x === undefined || y === undefined) {
+      if (!nextTipHelper) {
+        throw new Error('x and y are required for figure');
+      }
+
+      const coordinates = nextTipHelper(this.nextCoordinates);
+      return { possibleX: coordinates.x, possibleY: coordinates.y };
+    }
+
+    return { possibleX, possibleY };
   }
 
   private boxNextTips(x: number, y: number, width: number, height: number) {
@@ -70,17 +101,19 @@ export default class FigureFactory {
     fill,
     stroke,
     tags,
+    nextTipHelper,
     mouseClicked,
   }: FigureParams & {
     width: number;
     height: number;
   }): Box {
-    this.boxNextTips(x, y, width, height);
+    const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
+    this.boxNextTips(possibleX, possibleY, width, height);
 
     return new Box(
       this.canvasRunner,
-      x,
-      y,
+      possibleX,
+      possibleY,
       width,
       height,
       id,
@@ -109,15 +142,18 @@ export default class FigureFactory {
     fill,
     stroke,
     tags,
+    nextTipHelper,
   }: FigureParams & {
     diameter: number;
   }): Circle {
-    this.circleNextTips(x, y, diameter);
+    const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
+
+    this.circleNextTips(possibleX, possibleY, diameter);
 
     return new Circle(
       this.canvasRunner,
-      x,
-      y,
+      possibleX,
+      possibleY,
       diameter,
       id,
       fill,
@@ -144,17 +180,20 @@ export default class FigureFactory {
     width,
     height,
     tags,
+    nextTipHelper,
   }: FigureParams & {
     imageData: string;
     width: number;
     height: number;
   }): Image {
-    this.imageNextTips(x, y, width, height);
+    const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
+
+    this.imageNextTips(possibleX, possibleY, width, height);
 
     return new Image(
       this.canvasRunner,
-      x,
-      y,
+      possibleX,
+      possibleY,
       imageData,
       width,
       height,
@@ -183,18 +222,21 @@ export default class FigureFactory {
     hasArrow,
     shouldTravel,
     tags,
+    nextTipHelper,
   }: FigureParams & {
     endX: number;
     endY: number;
     hasArrow?: boolean;
     shouldTravel?: boolean;
   }): Line {
-    this.lineNextTips(x, y, endX, endY);
+    const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
+
+    this.lineNextTips(possibleX, possibleY, endX, endY);
 
     const line = new Line(
       this.canvasRunner,
-      x,
-      y,
+      possibleX,
+      possibleY,
       endX,
       endY,
       id,
@@ -204,8 +246,8 @@ export default class FigureFactory {
     );
 
     if (shouldTravel) {
-      let currentX = x;
-      let currentY = y;
+      let currentX = possibleX;
+      let currentY = possibleY;
       line.setShouldTravel(shouldTravel);
       line.setEndX(currentX);
       line.setEndY(currentY);
@@ -234,8 +276,8 @@ export default class FigureFactory {
 
       const resetTravel = (figure: Figure) => {
         const _figure = <Line>figure;
-        currentX = x;
-        currentY = y;
+        currentX = possibleX;
+        currentY = possibleY;
         _figure.setEndX(currentX);
         _figure.setEndY(currentY);
       };
@@ -277,12 +319,24 @@ export default class FigureFactory {
     size,
     fill,
     tags,
+    nextTipHelper,
   }: FigureParams & {
     text: string;
     size?: number;
   }): Text {
-    this.textNextTips(x, y);
+    const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
 
-    return new Text(this.canvasRunner, x, y, text, id, size, fill, tags);
+    this.textNextTips(possibleX, possibleY);
+
+    return new Text(
+      this.canvasRunner,
+      possibleX,
+      possibleY,
+      text,
+      id,
+      size,
+      fill,
+      tags
+    );
   }
 }
