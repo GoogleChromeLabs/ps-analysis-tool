@@ -152,6 +152,7 @@ auction.draw = (index) => {
   app.promiseQueue.push((cb) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
+      app.timeline.infoIconsPositions = [];
     }
     cb(null, true);
   });

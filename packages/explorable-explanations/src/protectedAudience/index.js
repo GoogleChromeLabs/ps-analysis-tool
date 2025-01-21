@@ -661,6 +661,10 @@ export const interestGroupSketch = (p) => {
       app.setCurrentSite = props.setCurrentSite;
     }
 
+    if (props.setInfo) {
+      app.setInfo = props.setInfo;
+    }
+
     if (props.setHighlightedInterestGroup) {
       app.setHighlightedInterestGroup = props.setHighlightedInterestGroup;
     }
@@ -705,6 +709,7 @@ app.reset = async () => {
   app.timeline.isPaused = true;
   app.setPlayState(false);
   app.setCurrentSite(null);
+  app.setInfo({});
 };
 
 app.createCanvas = () => {

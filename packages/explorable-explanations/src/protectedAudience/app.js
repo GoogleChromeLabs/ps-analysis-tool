@@ -22,6 +22,7 @@ const app = {
     expandIconPositions: [],
     currentIndex: 0,
     pausedReason: '',
+    infoIconsPositions: [],
   },
   color: null,
   auction: {
@@ -66,6 +67,7 @@ const app = {
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
   setCurrentSite: () => null,
+  setInfo: () => null,
   setHighlightedInterestGroup: () => null,
   setPlayState: () => null,
   getPlayState: () => null,
@@ -76,6 +78,7 @@ const app = {
       mouseOver: {},
       mouseOut: {},
       mouseMoved: {},
+      mouseClicked: {},
     },
   },
 };

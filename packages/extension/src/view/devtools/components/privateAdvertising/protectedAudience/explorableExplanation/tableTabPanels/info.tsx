@@ -13,35 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import { prettyPrintJson } from 'pretty-print-json';
 import React from 'react';
 
-interface InfoPanelProps {
-  data: any;
+interface InfoProps {
+  data: {
+    title: string;
+    description?: string;
+    info: string;
+    key: number;
+  };
 }
 
-const InfoPanel = ({ data }: InfoPanelProps) => {
+const Info = ({ data }: InfoProps) => {
+  const { title, description, info } = data;
+
   return (
     <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full w-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-      {data ? (
-        <div className="text-xs py-1 px-1.5">
-          <pre>
-            <div
-              className="json-container"
-              dangerouslySetInnerHTML={{
-                __html: prettyPrintJson.toHtml(data),
-              }}
-            />
-          </pre>
+      {info ? (
+        <div className="p-2">
+          <h3 className="text-sm font-medium">
+            {title + ' ' + (description || '')}
+          </h3>
+          <div className="text-[12.5px] mt-1">{info}</div>
         </div>
       ) : (
         <div className="h-full box-border p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-            No data available
+            No information available
           </p>
         </div>
       )}
@@ -49,4 +50,4 @@ const InfoPanel = ({ data }: InfoPanelProps) => {
   );
 };
 
-export default InfoPanel;
+export default Info;

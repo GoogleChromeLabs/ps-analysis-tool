@@ -32,14 +32,14 @@ import { app, config } from '@google-psat/explorable-explanations';
  */
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
-import Auctions from './auctions';
+import Auctions from '../auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
+import Info from './tableTabPanels/info';
 import {
   configuredAuctionEvents,
   type CurrentSiteData,
   type AdUnitLiteral,
 } from './auctionEventTransformers';
-import InfoPanel from './infoPanel';
 import BidsPanel from '../bids/panel';
 
 const ExplorableExplanation = () => {
@@ -52,6 +52,7 @@ const ExplorableExplanation = () => {
     InterestGroups[]
   >([]);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
+  const [info, setInfo] = useState<string | null>(null);
 
   const [interactiveMode, _setInteractiveMode] = useState(false);
 
@@ -225,14 +226,14 @@ const ExplorableExplanation = () => {
       {
         title: 'Info',
         content: {
-          Element: InfoPanel,
+          Element: Info,
           props: {
-            data: undefined,
+            data: info,
           },
         },
       },
     ],
-    [auctionsData, highlightedInterestGroup, interestGroupsData]
+    [auctionsData, highlightedInterestGroup, interestGroupsData, info]
   );
 
   return (
@@ -242,6 +243,8 @@ const ExplorableExplanation = () => {
         setCurrentSite={_setCurrentSiteData}
         setInteractiveMode={setInteractiveMode}
         interactiveMode={interactiveMode}
+        info={info}
+        setInfo={setInfo}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}

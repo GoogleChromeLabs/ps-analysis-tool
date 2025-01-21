@@ -22,7 +22,7 @@ import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import info from '../info.json';
+import { ADVERTIZER_CONFIG } from './flowConfig.jsx';
 
 /**
  * @module joinInterestGroup
@@ -78,10 +78,10 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: info.joinInterestGroups[0].title,
+      title: ADVERTIZER_CONFIG.DSP_TAGS.title,
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
-      info: info.joinInterestGroups[0].info,
+      info: ADVERTIZER_CONFIG.DSP_TAGS.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -106,12 +106,12 @@ joinInterestGroup.setUp = (index) => {
   steps.push({
     component: Box,
     props: {
-      title: info.joinInterestGroups[1].title,
+      title: ADVERTIZER_CONFIG.DSPS.title,
       x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
       y: () =>
         app.joinInterestGroup.nextTipCoordinates?.y + config.flow.arrowSize,
       color: config.flow.colors.box.notBrowser,
-      info: info.joinInterestGroups[1].info,
+      info: ADVERTIZER_CONFIG.DSPS.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -206,6 +206,7 @@ joinInterestGroup.draw = (index) => {
   app.promiseQueue.push((cb) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
+      app.timeline.infoIconsPositions = [];
     }
     cb(null, true);
   });

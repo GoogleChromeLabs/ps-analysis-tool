@@ -28,7 +28,7 @@ import {
   app,
   userSketch,
   interestGroupSketch,
-  sketch,
+  sketch as mainSketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { useTabs } from '@google-psat/design-system';
@@ -58,6 +58,8 @@ interface PanelProps {
   setIsMultiSeller: React.Dispatch<React.SetStateAction<boolean>>;
   interactiveMode: boolean;
   setInteractiveMode: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setInfo: React.Dispatch<React.SetStateAction<string | null>>;
+  info: string | null;
 }
 
 const Panel = ({
@@ -68,6 +70,8 @@ const Panel = ({
   setIsMultiSeller,
   interactiveMode,
   setInteractiveMode,
+  info,
+  setInfo,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -103,6 +107,12 @@ const Panel = ({
   const { setActiveTab } = useTabs(({ actions }) => ({
     setActiveTab: actions.setActiveTab,
   }));
+
+  useEffect(() => {
+    if (info) {
+      setActiveTab(3);
+    }
+  }, [info, setActiveTab]);
 
   useEffect(() => {
     document.addEventListener('keydown', tooglePlayOnKeydown);
@@ -276,7 +286,7 @@ const Panel = ({
         </main>
       </div>
       {/* Main Canvas */}
-      <ReactP5Wrapper sketch={sketch} isMultiSeller={isMultiSeller} />
+      <ReactP5Wrapper sketch={mainSketch} isMultiSeller={isMultiSeller} />
       {/* Interest Group Canvas */}
       <ReactP5Wrapper
         autoExpand={autoExpand}
@@ -287,6 +297,7 @@ const Panel = ({
         speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}
         setPlayState={setPlay}
+        setInfo={setInfo}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
       />
       <ReactP5Wrapper sketch={userSketch} />
