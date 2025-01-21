@@ -48,6 +48,12 @@ declare module 'react' {
 interface PanelProps {
   setCurrentSite: (siteData: CurrentSiteData | null) => void;
   currentSiteData: CurrentSiteData | null;
+  setHighlightedInterestGroup: React.Dispatch<
+    React.SetStateAction<{
+      interestGroupName: string;
+      color: string;
+    } | null>
+  >;
   isMultiSeller: boolean;
   setIsMultiSeller: React.Dispatch<React.SetStateAction<boolean>>;
   interactiveMode: boolean;
@@ -57,6 +63,7 @@ interface PanelProps {
 const Panel = ({
   currentSiteData,
   setCurrentSite,
+  setHighlightedInterestGroup,
   isMultiSeller,
   setIsMultiSeller,
   interactiveMode,
@@ -280,6 +287,7 @@ const Panel = ({
         speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}
         setPlayState={setPlay}
+        setHighlightedInterestGroup={setHighlightedInterestGroup}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <TableTray />

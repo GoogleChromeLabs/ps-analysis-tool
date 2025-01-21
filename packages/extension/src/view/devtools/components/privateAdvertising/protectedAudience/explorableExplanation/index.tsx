@@ -18,7 +18,13 @@
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
 import type { InterestGroups } from '@google-psat/common';
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react';
 import { app, config } from '@google-psat/explorable-explanations';
 
 /**
@@ -157,6 +163,25 @@ const ExplorableExplanation = () => {
     };
   }, [currentSiteData, sitesVisited, isMultiSeller]);
 
+  const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
+    interestGroupName: string;
+    color: string;
+  } | null>(null);
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setHighlightedInterestGroup(null);
+    }, 1500);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [highlightedInterestGroup]);
+
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -165,6 +190,7 @@ const ExplorableExplanation = () => {
           Element: IGTable,
           props: {
             interestGroupDetails: [...(interestGroupsData as InterestGroups[])],
+            highlightedInterestGroup,
           },
         },
       },
@@ -206,7 +232,7 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [auctionsData, interestGroupsData]
+    [auctionsData, highlightedInterestGroup, interestGroupsData]
   );
 
   return (
@@ -216,6 +242,7 @@ const ExplorableExplanation = () => {
         setCurrentSite={_setCurrentSiteData}
         setInteractiveMode={setInteractiveMode}
         interactiveMode={interactiveMode}
+        setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}
       />

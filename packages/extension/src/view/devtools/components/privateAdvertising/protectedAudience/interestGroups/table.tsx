@@ -36,9 +36,16 @@ import { prettyPrintJson } from 'pretty-print-json';
 
 interface InterestGroupsProps {
   interestGroupDetails: InterestGroupsType[];
+  highlightedInterestGroup?: {
+    interestGroupName: string;
+    color: string;
+  } | null;
 }
 
-const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
+const IGTable = ({
+  interestGroupDetails,
+  highlightedInterestGroup,
+}: InterestGroupsProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
   const [filterData, setFilterData] = useState(false);
 
@@ -110,6 +117,49 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
     []
   );
 
+  const modifiedInterestGroupDetails = useMemo(() => {
+    if (!highlightedInterestGroup) {
+      return interestGroupDetails;
+    }
+
+    return interestGroupDetails.map((interestGroup) => {
+      const isHighlighted =
+        interestGroup.name === highlightedInterestGroup.interestGroupName;
+
+      return {
+        ...interestGroup,
+        highlighted: isHighlighted,
+      };
+    });
+  }, [interestGroupDetails, highlightedInterestGroup]);
+
+  const hasVerticalBar = useCallback((row: TableRow) => {
+    return Boolean(row.originalData.highlighted);
+  }, []);
+
+  const getVerticalBarColorHash = useCallback(
+    (row: TableRow) => {
+      return row.originalData.highlighted
+        ? highlightedInterestGroup?.color ?? ''
+        : '';
+    },
+    [highlightedInterestGroup?.color]
+  );
+
+  const conditionalTableRowClassesHandler = useCallback(
+    (row: TableRow, isRowFocused: boolean) => {
+      const isHighlighted = row?.originalData?.highlighted;
+      const tableRowClassName = isHighlighted
+        ? isRowFocused
+          ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light text-black transition-colors'
+          : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+        : '';
+
+      return tableRowClassName;
+    },
+    []
+  );
+
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setFilterData(event.target.checked);
@@ -153,8 +203,8 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
         <TableProvider
           data={
             filterData
-              ? interestGroupDetails
-              : interestGroupDetails.filter(
+              ? modifiedInterestGroupDetails
+              : modifiedInterestGroupDetails.filter(
                   (event) => event.type === 'leave' || event.type === 'join'
                 )
           }
@@ -162,6 +212,9 @@ const IGTable = ({ interestGroupDetails }: InterestGroupsProps) => {
           tableFilterData={tableFilters}
           tableSearchKeys={undefined}
           tablePersistentSettingsKey="interestGroupsTable"
+          conditionalTableRowClassesHandler={conditionalTableRowClassesHandler}
+          getVerticalBarColorHash={getVerticalBarColorHash}
+          hasVerticalBar={hasVerticalBar}
           onRowClick={(row) => {
             setSelectedRow(row as InterestGroupsType);
           }}
