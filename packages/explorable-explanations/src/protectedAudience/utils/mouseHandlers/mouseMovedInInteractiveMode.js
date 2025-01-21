@@ -18,6 +18,7 @@
  */
 import app from '../../app';
 import config from '../../config';
+import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
 import { isOverControls } from '../isOverControls';
 import { wipeAndRecreateUserCanvas } from '../wipeAndRecreateCanvas';
@@ -32,11 +33,25 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
 
   let hoveringOnExpandIconPositions = false;
   let hoveringOnCircles = false;
+  let hoveredOverIcons = false;
 
   const { circlePositions, expandIconPositions } = app.timeline;
   const {
     circleProps: { diameter },
+    infoIconSize,
   } = config.timeline;
+
+  app.timeline.infoIconsPositions.forEach(({ x: _x, y: _y }) => {
+    if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, infoIconSize)) {
+      hoveredOverIcons = true;
+    }
+  });
+
+  if (hoveredOverIcons) {
+    app.p.cursor('pointer');
+  } else {
+    app.p.cursor('default');
+  }
 
   expandIconPositions.forEach((positions) => {
     if (

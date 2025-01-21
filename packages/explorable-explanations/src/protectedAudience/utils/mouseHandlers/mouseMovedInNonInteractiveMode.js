@@ -18,7 +18,10 @@
  */
 import app from '../../app';
 import config from '../../config';
+import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
+
+const INFO_ICON_SIZE = 16;
 
 const mouseMovedInNonInteractiveMode = (event) => {
   const { offsetX, offsetY } = event;
@@ -26,27 +29,31 @@ const mouseMovedInNonInteractiveMode = (event) => {
   app.mouseX = offsetX;
   app.mouseY = offsetY;
 
-  let hoveringOnExpandIconPositions = false;
+  let hoveredOverIcons = false;
 
-  if (!config.timeline.circles.every(({ visited }) => visited === true)) {
-    return;
-  }
-
-  app.timeline.expandIconPositions.forEach((positions) => {
-    if (
-      isInsideCircle(
-        offsetX,
-        offsetY,
-        positions.x,
-        positions.y + config.timeline.circleProps.diameter / 2,
-        20
-      )
-    ) {
-      hoveringOnExpandIconPositions = true;
+  app.timeline.infoIconsPositions.forEach(({ x: _x, y: _y }) => {
+    if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, INFO_ICON_SIZE)) {
+      hoveredOverIcons = true;
     }
   });
 
-  if (hoveringOnExpandIconPositions) {
+  if (config.timeline.circles.every(({ visited }) => visited === true)) {
+    app.timeline.expandIconPositions.forEach((positions) => {
+      if (
+        isInsideCircle(
+          offsetX,
+          offsetY,
+          positions.x,
+          positions.y + config.timeline.circleProps.diameter / 2,
+          20
+        )
+      ) {
+        hoveredOverIcons = true;
+      }
+    });
+  }
+
+  if (hoveredOverIcons) {
     app.p.cursor('pointer');
   } else {
     app.p.cursor('default');

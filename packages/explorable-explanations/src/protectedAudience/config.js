@@ -34,6 +34,7 @@ const config = {
       height: 30,
     },
     expandIconSize: 20,
+    infoIconSize: 16,
     circles: [
       {
         type: 'advertiser',

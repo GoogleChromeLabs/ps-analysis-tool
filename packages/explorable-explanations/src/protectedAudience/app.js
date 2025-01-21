@@ -22,6 +22,7 @@ const app = {
     expandIconPositions: [],
     currentIndex: 0,
     pausedReason: '',
+    infoIconsPositions: [],
   },
   color: null,
   auction: {

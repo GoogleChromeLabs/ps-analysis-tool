@@ -20,7 +20,6 @@ import app from '../app';
 import config from '../config';
 import { addCanvasEventListener, isInsideBox } from '../utils';
 
-const INFO_ICON_SIZE = 16;
 const INFO_ICON_SPACING = 3;
 
 const Box = ({
@@ -43,14 +42,23 @@ const Box = ({
     },
   };
 
+  const {
+    flow: {
+      colors: {
+        box: { background, text },
+      },
+    },
+    timeline: { infoIconSize },
+  } = config;
+
   const p = app.p;
 
   p.push();
   p.textAlign(p.CENTER, p.CENTER);
-  p.fill(color || config.flow.colors.box.background);
+  p.fill(color || background);
   p.rect(x, y, width, height);
   p.strokeWeight(0.1);
-  p.fill(config.flow.colors.box.text);
+  p.fill(text);
   p.textFont('sans-serif');
 
   if (description) {
@@ -61,22 +69,14 @@ const Box = ({
   }
 
   if (info) {
-    const iconX = x + width - INFO_ICON_SIZE - INFO_ICON_SPACING;
+    const iconX = x + width - infoIconSize - INFO_ICON_SPACING;
     const iconY = y + INFO_ICON_SPACING;
+    app.timeline.infoIconsPositions.push({ x: iconX, y: iconY });
 
-    p.image(p.infoIcon, iconX, iconY, INFO_ICON_SIZE, INFO_ICON_SIZE);
-
-    const mouseMovedCallback = (mouseX, mouseY) => {
-      if (isInsideBox(mouseX, mouseY, iconX, iconY, INFO_ICON_SIZE)) {
-        app.p.cursor('pointer');
-        console.log(info); // eslint-disable-line no-console
-      } else {
-        app.p.cursor('default');
-      }
-    };
+    p.image(p.infoIcon, iconX, iconY, infoIconSize, infoIconSize);
 
     const mouseClickedCallback = (mouseX, mouseY) => {
-      if (isInsideBox(mouseX, mouseY, iconX, iconY, INFO_ICON_SIZE)) {
+      if (isInsideBox(mouseX, mouseY, iconX, iconY, infoIconSize)) {
         app.setInfo({
           title,
           description,
@@ -87,7 +87,6 @@ const Box = ({
     };
 
     const key = title + description + x + y;
-    addCanvasEventListener('mouseMoved', mouseMovedCallback, key);
     addCanvasEventListener('mouseClicked', mouseClickedCallback, key);
   }
 
