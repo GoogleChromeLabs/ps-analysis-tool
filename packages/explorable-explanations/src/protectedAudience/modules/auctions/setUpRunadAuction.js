@@ -19,7 +19,7 @@
 import app from '../../app';
 import config from '../../config';
 import { Box, ProgressLine } from '../../components';
-import { SINGLE_SELLER_CONFIG } from '../flowConfig';
+import { SINGLE_SELLER_CONFIG } from '../flowConfig.jsx';
 
 const setUpRunadAuction = (steps, afterRippleStep = null) => {
   const { box, colors } = config.flow;

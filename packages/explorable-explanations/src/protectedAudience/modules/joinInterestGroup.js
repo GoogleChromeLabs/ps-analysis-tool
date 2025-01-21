@@ -22,7 +22,7 @@ import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import { ADVERTIZER_CONFIG } from './flowConfig';
+import { ADVERTIZER_CONFIG } from './flowConfig.jsx';
 
 /**
  * @module joinInterestGroup

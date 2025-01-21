@@ -29,14 +29,7 @@ const Info = ({ data }: InfoProps) => {
   return (
     <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full w-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
       {data ? (
-        <div className="text-xs py-1 px-1.5">
-          <div
-            className="json-container"
-            dangerouslySetInnerHTML={{
-              __html: data ? data?.info : '',
-            }}
-          />
-        </div>
+        <div className="text-xs p-3">{data ? data?.info : ''}</div>
       ) : (
         <div className="h-full box-border p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
