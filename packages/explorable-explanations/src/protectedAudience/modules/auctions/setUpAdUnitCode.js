@@ -41,13 +41,13 @@ const setUpAdUnitCode = (steps, index) => {
         },
         {
           title: 'adunit-code',
-          description: 'div-200-1',
+          description: 'div-200-2',
           type: 'box',
           color: colors.box.browser,
         },
         {
           title: 'adunit-code',
-          description: 'div-200-1',
+          description: 'div-200-3',
           type: 'box',
           color: colors.box.browser,
         },

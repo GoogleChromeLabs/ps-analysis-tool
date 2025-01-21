@@ -34,24 +34,20 @@ import Panel from './panel';
 import IGTable from '../interestGroups/table';
 import Auctions from './auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
-import { createAuctionEvents } from './auctionEventTransformers';
+import {
+  configuredAuctionEvents,
+  type CurrentSiteData,
+  type AdUnitLiteral,
+} from './auctionEventTransformers';
 import InfoPanel from './infoPanel';
 import BidsPanel from '../bids/panel';
-
-export interface CurrentSiteData {
-  type: 'advertiser' | 'publisher';
-  website: string;
-  datetime: string;
-  igGroupsCount: number;
-  interestGroups: string[];
-  visited: boolean;
-  visitedIndex: boolean;
-}
-export type AdUnitLiteral = 'div-200-1' | 'div-200-2' | 'div-200-3';
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+
+  const [isMultiSeller, setIsMultiSeller] = useState(false);
+
   const [interestGroupsData, setInterestGroupsData] = useState<
     InterestGroups[]
   >([]);
@@ -152,113 +148,20 @@ const ExplorableExplanation = () => {
       });
     });
 
-    const dateTimeString = new Date(currentSiteData?.datetime).toUTCString();
-    const websiteString = `https://www.${currentSiteData?.website}`;
-
-    const auctionData = {
-      'div-200-1': {
-        [dateTimeString]: {
-          [websiteString]: {
-            [websiteString]: createAuctionEvents(
-              interestGroups.flat(),
-              currentSiteData?.website,
-              Array.from(advertiserSet),
-              new Date(currentSiteData?.datetime).getTime()
-            ),
-          },
-        },
-      },
-      'div-200-2': {
-        [dateTimeString]: {
-          [websiteString]: {
-            [websiteString]: createAuctionEvents(
-              interestGroups.flat(),
-              currentSiteData?.website,
-              Array.from(advertiserSet),
-              new Date(currentSiteData?.datetime).getTime()
-            ),
-          },
-        },
-      },
-      'div-200-3': {
-        [dateTimeString]: {
-          [websiteString]: {
-            [websiteString]: createAuctionEvents(
-              interestGroups.flat(),
-              currentSiteData?.website,
-              Array.from(advertiserSet),
-              new Date(currentSiteData?.datetime).getTime()
-            ),
-          },
-        },
-      },
-    };
+    const { auctionData, receivedBids, adsAndBidders } =
+      configuredAuctionEvents(
+        interestGroups.flat(),
+        Array.from(advertiserSet),
+        isMultiSeller,
+        currentSiteData
+      );
 
     return {
       auctionData,
-      receivedBids: {
-        'div-200-1':
-          auctionData['div-200-1']?.[dateTimeString]?.[websiteString]?.[
-            websiteString
-          ].filter((event) => event.type === 'bid') ?? [],
-        'div-200-2':
-          auctionData['div-200-2']?.[dateTimeString]?.[websiteString]?.[
-            websiteString
-          ].filter((event) => event.type === 'bid') ?? [],
-        'div-200-3':
-          auctionData['div-200-3']?.[dateTimeString]?.[websiteString]?.[
-            websiteString
-          ].filter((event) => event.type === 'bid') ?? [],
-      },
+      receivedBids,
+      adsAndBidders,
     };
-  }, [currentSiteData, sitesVisited]);
-
-  const customAdsAndBidders = useMemo(() => {
-    if (!currentSiteData || currentSiteData?.type === 'advertiser') {
-      return {};
-    }
-
-    const currentWebsite = `https://www.${currentSiteData?.website}`;
-
-    return {
-      'div-200-1': {
-        adUnitCode: 'div-200-1',
-        bidders: ['DSP 1', 'DSP 2'],
-        mediaContainerSize: [[320, 320]],
-        winningBid: auctionsData.auctionData?.['div-200-1']?.[
-          new Date(currentSiteData?.datetime).toUTCString()
-        ]?.[currentWebsite]?.[currentWebsite].filter(
-          ({ type }) => type === 'win'
-        )?.[0]?.bid,
-        bidCurrency: 'USD',
-        winningBidder: 'DSP 1',
-      },
-      'div-200-2': {
-        adUnitCode: 'div-200-2',
-        bidders: ['DSP 1', 'DSP 2'],
-        mediaContainerSize: [[320, 320]],
-        winningBid: auctionsData.auctionData?.['div-200-2']?.[
-          new Date(currentSiteData?.datetime).toUTCString()
-        ]?.[currentWebsite]?.[currentWebsite].filter(
-          ({ type }) => type === 'win'
-        )?.[0]?.bid,
-        bidCurrency: 'USD',
-        winningBidder: 'DSP 1',
-      },
-      'div-200-3': {
-        adUnitCode: 'div-200-3',
-        bidders: ['DSP 1', 'DSP 2'],
-        mediaContainerSize: [[320, 320]],
-        winningBid: auctionsData.auctionData?.['div-200-3']?.[
-          new Date(currentSiteData?.datetime).toUTCString()
-        ]?.[currentWebsite]?.[currentWebsite].filter(
-          ({ type }) => type === 'win'
-        )?.[0]?.bid,
-        bidCurrency: 'USD',
-        winningBidder: 'DSP 2',
-      },
-    };
-  }, [auctionsData, currentSiteData]);
+  }, [currentSiteData, sitesVisited, isMultiSeller]);
 
   const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
     interestGroupName: string;
@@ -299,7 +202,7 @@ const ExplorableExplanation = () => {
             auctionEvents: {
               ...auctionsData,
             },
-            customAdsAndBidders: customAdsAndBidders,
+            customAdsAndBidders: auctionsData.adsAndBidders,
           },
         },
       },
@@ -329,12 +232,7 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [
-      auctionsData,
-      customAdsAndBidders,
-      highlightedInterestGroup,
-      interestGroupsData,
-    ]
+    [auctionsData, highlightedInterestGroup, interestGroupsData]
   );
 
   return (
@@ -345,6 +243,8 @@ const ExplorableExplanation = () => {
         setInteractiveMode={setInteractiveMode}
         interactiveMode={interactiveMode}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
+        isMultiSeller={isMultiSeller}
+        setIsMultiSeller={setIsMultiSeller}
       />
     </TabsProvider>
   );
