@@ -42,7 +42,7 @@ const Info = ({ data }: InfoProps) => {
       ) : (
         <div className="h-full box-border p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-            No iformation available
+            No information available
           </p>
         </div>
       )}
