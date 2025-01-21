@@ -78,6 +78,8 @@ const Box = ({
     const mouseClickedCallback = (mouseX, mouseY) => {
       if (isInsideBox(mouseX, mouseY, iconX, iconY, INFO_ICON_SIZE)) {
         app.setInfo({
+          title,
+          description,
           info,
           key: Date.now(), // To force change the state, so that the info modal is shown in case of same value.
         });

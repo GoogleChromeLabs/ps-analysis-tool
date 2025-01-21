@@ -19,21 +19,30 @@
 import React from 'react';
 
 interface InfoProps {
-  data?: {
+  data: {
+    title: string;
+    description?: string;
     info: string;
     key: number;
   };
 }
 
 const Info = ({ data }: InfoProps) => {
+  const { title, description, info } = data;
+
   return (
     <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full w-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-      {data ? (
-        <div className="text-xs p-3">{data ? data?.info : ''}</div>
+      {info ? (
+        <div className="p-2">
+          <h3 className="text-sm font-medium">
+            {title + ' ' + (description || '')}
+          </h3>
+          <div className="text-xs mt-1">{info}</div>
+        </div>
       ) : (
         <div className="h-full box-border p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-            No data available
+            No iformation available
           </p>
         </div>
       )}
