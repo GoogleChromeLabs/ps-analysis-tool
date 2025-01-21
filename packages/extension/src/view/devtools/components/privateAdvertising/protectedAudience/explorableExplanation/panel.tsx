@@ -38,7 +38,7 @@ import { useTabs } from '@google-psat/design-system';
  */
 import Header from '../../../explorableExplanation/header';
 import TableTray from '../../../explorableExplanation/tableTray';
-import type { CurrentSiteData } from '.';
+import type { CurrentSiteData } from './auctionEventTransformers';
 
 declare module 'react' {
   interface CSSProperties {
@@ -48,6 +48,8 @@ declare module 'react' {
 interface PanelProps {
   setCurrentSite: (siteData: CurrentSiteData | null) => void;
   currentSiteData: CurrentSiteData | null;
+  isMultiSeller: boolean;
+  setIsMultiSeller: React.Dispatch<React.SetStateAction<boolean>>;
   interactiveMode: boolean;
   setInteractiveMode: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -55,13 +57,14 @@ interface PanelProps {
 const Panel = ({
   currentSiteData,
   setCurrentSite,
+  isMultiSeller,
+  setIsMultiSeller,
   interactiveMode,
   setInteractiveMode,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [autoExpand, setAutoExpand] = useState(true);
-  const [isMultiSeller, setIsMultiSeller] = useState(false);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
