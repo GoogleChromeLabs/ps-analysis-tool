@@ -22,20 +22,29 @@ import { isInsideCircle } from '../isInsideCircle';
 import { isOverControls } from '../isOverControls';
 import { wipeAndRecreateUserCanvas } from '../wipeAndRecreateCanvas';
 const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
-  if (!app.isInteractiveMode) {
+  const { offsetX, offsetY } = event;
+  app.mouseX = offsetX;
+  app.mouseY = offsetY;
+
+  if (!app.isInteractiveMode || app.mouseOutOfDiv) {
     return;
   }
 
-  const { offsetX, offsetY } = event;
   let hoveringOnExpandIconPositions = false;
+  let hoveringOnCircles = false;
 
-  app.timeline.expandIconPositions.forEach((positions) => {
+  const { circlePositions, expandIconPositions } = app.timeline;
+  const {
+    circleProps: { diameter },
+  } = config.timeline;
+
+  expandIconPositions.forEach((positions) => {
     if (
       isInsideCircle(
         offsetX,
         offsetY,
         positions.x - 10,
-        positions.y + config.timeline.circleProps.diameter / 2,
+        positions.y + diameter / 2,
         20
       )
     ) {
@@ -43,13 +52,22 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
     }
   });
 
-  if (event.pageY > 120 && event.pageY < 490 && event.pageX > 40) {
-    app.mouseX = offsetX;
-    app.mouseY = offsetY;
-  }
+  circlePositions.forEach((positions) => {
+    if (
+      isInsideCircle(offsetX, offsetY, positions.x, positions.y, diameter / 2)
+    ) {
+      hoveringOnCircles = true;
+    }
+  });
 
   if (!app.shouldRespondToClick) {
     return;
+  }
+
+  if (hoveringOnExpandIconPositions || hoveringOnCircles) {
+    app.p.cursor('pointer');
+  } else {
+    app.p.cursor('default');
   }
 
   if (

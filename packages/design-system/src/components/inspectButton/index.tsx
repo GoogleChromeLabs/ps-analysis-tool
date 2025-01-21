@@ -26,12 +26,14 @@ import { InspectActiveIcon, InspectIcon, InspectWhiteIcon } from '../../icons';
 
 interface InspectButtonProps {
   isInspecting: boolean;
+  selectedAdUnit: string | null;
   setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
   isTabFocused: boolean;
 }
 
 const InspectButton = ({
   isInspecting,
+  selectedAdUnit,
   setIsInspecting,
   isTabFocused,
 }: InspectButtonProps) => {
@@ -44,7 +46,11 @@ const InspectButton = ({
         setIsInspecting(!isInspecting);
       }}
     >
-      {isInspecting ? <InspectActiveIcon /> : <InactiveInspectIcon />}
+      {isInspecting && !selectedAdUnit ? (
+        <InspectActiveIcon />
+      ) : (
+        <InactiveInspectIcon />
+      )}
     </span>
   );
 };

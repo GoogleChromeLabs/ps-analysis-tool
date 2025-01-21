@@ -126,7 +126,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
           app.visitedIndexes++;
         });
 
-        app.setCurrentSite(circles[clickedIndex]);
         app.bubbles.positions.splice(
           -(circles[clickedIndex].igGroupsCount ?? 0)
         );
@@ -153,7 +152,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         config.timeline.circles[clickedIndex].visited = true;
         config.timeline.circles[clickedIndex].visitedIndex = app.visitedIndexes;
         app.visitedIndexes += 1;
-        app.setCurrentSite(circles[clickedIndex]);
       }
 
       bubbles.showMinifiedBubbles();
@@ -183,7 +181,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
     app.promiseQueue.push((cb) => {
       app.shouldRespondToClick = true;
-      renderUserIcon();
       app.isRevisitingNodeInInteractiveMode = false;
 
       if (circles[clickedIndex].type === 'advertiser') {
@@ -192,15 +189,11 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         app.auction.auctions[clickedIndex][0].props.y1 -= 20;
       }
 
-      app.setCurrentSite(circles[clickedIndex]);
-
       cb(null, true);
     });
 
     app.promiseQueue.start();
 
-    wipeAndRecreateUserCanvas();
-    wipeAndRecreateMainCanvas();
     return;
   }
 };

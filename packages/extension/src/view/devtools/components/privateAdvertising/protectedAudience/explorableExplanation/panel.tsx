@@ -46,10 +46,12 @@ declare module 'react' {
   }
 }
 interface PanelProps {
-  setCurrentSite: React.Dispatch<React.SetStateAction<CurrentSiteData | null>>;
+  setCurrentSite: (siteData: CurrentSiteData | null) => void;
   currentSiteData: CurrentSiteData | null;
   isMultiSeller: boolean;
   setIsMultiSeller: React.Dispatch<React.SetStateAction<boolean>>;
+  interactiveMode: boolean;
+  setInteractiveMode: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Panel = ({
@@ -57,10 +59,11 @@ const Panel = ({
   setCurrentSite,
   isMultiSeller,
   setIsMultiSeller,
+  interactiveMode,
+  setInteractiveMode,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
-  const [interactiveMode, _setInteractiveMode] = useState(false);
   const [autoExpand, setAutoExpand] = useState(true);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
@@ -114,14 +117,6 @@ const Panel = ({
       setActiveTab(1);
     }
   }, [currentSiteData, currentSiteData?.type, setActiveTab]);
-
-  const setInteractiveMode = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      _setInteractiveMode(event.target.checked);
-      app.toggleInteractiveMode();
-    },
-    []
-  );
 
   const handleResizeCallback = useMemo(() => {
     return new ResizeObserver(() => {
