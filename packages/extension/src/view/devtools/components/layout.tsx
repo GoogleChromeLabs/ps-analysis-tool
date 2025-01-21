@@ -44,7 +44,11 @@ import classNames from 'classnames';
  */
 import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
-import { useCookie, useSettings } from '../stateProviders';
+import {
+  useCookie,
+  useProtectedAudience,
+  useSettings,
+} from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface LayoutProps {
@@ -54,6 +58,10 @@ interface LayoutProps {
 const Layout = ({ setSidebarData }: LayoutProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const mainRef = useRef<HTMLElement>(null);
+
+  const { selectedAdUnit } = useProtectedAudience(({ state }) => ({
+    selectedAdUnit: state.selectedAdUnit,
+  }));
 
   const { settingsChanged, handleSettingsChange } = useSettings(
     ({ state, actions }) => ({
@@ -146,6 +154,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           Element: InspectButton,
           props: {
             isInspecting,
+            selectedAdUnit,
             setIsInspecting,
             isTabFocused:
               isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES),
@@ -158,6 +167,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       return data;
     });
   }, [
+    selectedAdUnit,
     canStartInspecting,
     frameHasCookies,
     isInspecting,

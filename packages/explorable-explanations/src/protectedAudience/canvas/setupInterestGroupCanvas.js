@@ -21,50 +21,55 @@ import app from '../app.js';
 import { calculateCanvasDimensions } from '../utils';
 
 export const setupInterestGroupCanvas = (p) => {
-  const { height, width } = calculateCanvasDimensions();
-  const overlayCanvas = p.createCanvas(width, height);
+  try {
+    const { height, width } = calculateCanvasDimensions();
+    const overlayCanvas = p.createCanvas(width, height);
 
-  overlayCanvas.parent('interest-canvas');
-  overlayCanvas.style('z-index', 2);
-  p.textSize(config.canvas.fontSize);
-  // eslint-disable-next-line no-undef
-  if (process.env.IS_RUNNING_STANDALONE) {
-    app.bubbles.minifiedBubbleX = 35;
-    app.bubbles.minifiedBubbleY = 35;
+    overlayCanvas.parent('interest-canvas');
+    overlayCanvas.style('z-index', 2);
+    p.textSize(config.canvas.fontSize);
+    // eslint-disable-next-line no-undef
+    if (process.env.IS_RUNNING_STANDALONE) {
+      app.bubbles.minifiedBubbleX = 35;
+      app.bubbles.minifiedBubbleY = 35;
 
-    app.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
-    app.bubbles.expandedBubbleY = 0;
+      app.bubbles.expandedBubbleX = config.canvas.width / 4 + 320;
+      app.bubbles.expandedBubbleY = 0;
 
-    // 335 is the angle where the close icon should be visible.
-    const angle = (305 * Math.PI) / 180;
-    // 335 is the radius + the size of icon so that icon is attached to the circle.
-    const x = 335 * Math.cos(angle) + app.bubbles.expandedBubbleX;
-    const y = 335 * Math.sin(angle) + 320;
+      // 335 is the angle where the close icon should be visible.
+      const angle = (305 * Math.PI) / 180;
+      // 335 is the radius + the size of icon so that icon is attached to the circle.
+      const x = 335 * Math.cos(angle) + app.bubbles.expandedBubbleX;
+      const y = 335 * Math.sin(angle) + 320;
 
-    app.closeButton.style.left = `${x}px`;
-    app.closeButton.style.top = `${y}px`;
+      app.closeButton.style.left = `${x}px`;
+      app.closeButton.style.top = `${y}px`;
 
-    document.styleSheets[0].cssRules.forEach((rules, index) => {
-      if (rules.selectorText === '.minified-bubble-container.expanded') {
-        document.styleSheets[0].cssRules[index].style.left = `${
-          app.bubbles.expandedBubbleX - 320
-        }px`;
+      document.styleSheets[0].cssRules.forEach((rules, index) => {
+        if (rules.selectorText === '.minified-bubble-container.expanded') {
+          document.styleSheets[0].cssRules[index].style.left = `${
+            app.bubbles.expandedBubbleX - 320
+          }px`;
 
-        document.styleSheets[0].cssRules[
-          index
-        ].style.width = `${app.bubbles.expandedCircleDiameter}px`;
-        document.styleSheets[0].cssRules[
-          index
-        ].style.height = `${app.bubbles.expandedCircleDiameter}px`;
-      }
+          document.styleSheets[0].cssRules[
+            index
+          ].style.width = `${app.bubbles.expandedCircleDiameter}px`;
+          document.styleSheets[0].cssRules[
+            index
+          ].style.height = `${app.bubbles.expandedCircleDiameter}px`;
+        }
 
-      if (rules.selectorText === '.minified-bubble-container') {
-        document.styleSheets[0].cssRules[index].style.top = `${
-          app.bubbles.minifiedBubbleY - 25
-        }px`;
-      }
-    });
+        if (rules.selectorText === '.minified-bubble-container') {
+          document.styleSheets[0].cssRules[index].style.top = `${
+            app.bubbles.minifiedBubbleY - 25
+          }px`;
+        }
+      });
+    }
+
+    app.igp = p;
+  } catch (error) {
+    // eslint-disable-next-line no-console -- We should know the error and let it fail silently since it doesnt break anything.
+    console.log(error);
   }
-
-  app.igp = p;
 };
