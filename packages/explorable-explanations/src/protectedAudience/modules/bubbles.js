@@ -497,8 +497,6 @@ bubbles.bubbleChart = (
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
   const eventHandler = (event, d) => {
-    // eslint-disable-next-line no-console
-    console.log(event);
     app.setHighlightedInterestGroup({
       interestGroupName: titles[d.data].split('\n')[0],
       color: app.color(groups[d.data]),
