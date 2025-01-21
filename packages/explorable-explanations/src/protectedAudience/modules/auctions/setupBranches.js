@@ -28,18 +28,18 @@ const setupBranches = (steps, index) => {
       currentIndex: index,
       branches: [
         {
-          date: '2024-10-02',
-          time: '10:00:22PM',
+          date: 'Sun, 01 October 2023',
+          time: '6:30:00 GMT',
           type: 'datetime',
         },
         {
-          date: '2024-10-03',
-          time: '11:00:22PM',
+          date: 'Sun, 01 October 2023',
+          time: '6:31:00 GMT',
           type: 'datetime',
         },
         {
-          date: '2024-10-03',
-          time: '11:00:22PM',
+          date: 'Sun, 01 October 2023',
+          time: '6:32:00 GMT',
           type: 'datetime',
         },
       ],

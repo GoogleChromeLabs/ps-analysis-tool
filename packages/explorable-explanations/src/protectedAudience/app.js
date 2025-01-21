@@ -68,6 +68,7 @@ const app = {
   isRevisitingNodeInInteractiveMode: false,
   setCurrentSite: () => null,
   setInfo: () => null,
+  setHighlightedInterestGroup: () => null,
   setPlayState: () => null,
   getPlayState: () => null,
   usedNextOrPrev: false,

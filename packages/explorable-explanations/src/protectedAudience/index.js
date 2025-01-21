@@ -665,6 +665,10 @@ export const interestGroupSketch = (p) => {
       app.setInfo = props.setInfo;
     }
 
+    if (props.setHighlightedInterestGroup) {
+      app.setHighlightedInterestGroup = props.setHighlightedInterestGroup;
+    }
+
     if (app.setPlayState) {
       app.setPlayState = props.setPlayState;
     }

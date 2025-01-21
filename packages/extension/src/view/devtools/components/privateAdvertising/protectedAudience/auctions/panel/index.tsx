@@ -36,7 +36,7 @@ import type { AuctionEventsType } from '../../../../../stateProviders/protectedA
 import AuctionTable from '../table';
 import AdunitPanel from '../adunitPanel';
 import AdunitSubPanel from '../adunitPanel/panel';
-import type { AdUnitLiteral } from '../../explorableExplanation';
+import type { AdUnitLiteral } from '../../explorableExplanation/auctionEventTransformers';
 
 interface AuctionPanelProps {
   auctionEvents: {
@@ -78,7 +78,6 @@ const AuctionPanel = ({
             ...adUnitChildren[time]?.children,
           } as SidebarItems;
           const sellerUrl = Object.keys(auctionEventsData[adUnit][time])[0];
-
           const entries = Object.entries(
             auctionEventsData[adUnit][time][sellerUrl]
           )

@@ -374,6 +374,7 @@ bubbles.showExpandedBubbles = () => {
   app.openButton.style.display = 'none';
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
 };
+
 bubbles.showMinifiedBubbles = () => {
   app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
@@ -495,9 +496,11 @@ bubbles.bubbleChart = (
     .attr('style', `${!app.bubbles.isExpanded ? 'pointer-events: none;' : ''}`)
     .attr('transform', (d) => `translate(${d.x},${d.y})`);
 
-  const eventHandler = (event) => {
-    // eslint-disable-next-line no-console
-    console.log(event);
+  const eventHandler = (event, d) => {
+    app.setHighlightedInterestGroup({
+      interestGroupName: titles[d.data].split('\n')[0],
+      color: app.color(groups[d.data]),
+    });
     event.stopPropagation();
   };
 
@@ -518,7 +521,10 @@ bubbles.bubbleChart = (
         ? 'none'
         : fill
     )
-    .on('click', !app.bubbles.isExpanded ? null : eventHandler)
+    .on(
+      'click',
+      !app.bubbles.isExpanded ? null : (event, d) => eventHandler(event, d)
+    )
     .attr('fill-opacity', fillOpacity)
     .attr('r', (d) => {
       return d.r;

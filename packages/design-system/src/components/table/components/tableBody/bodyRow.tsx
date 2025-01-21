@@ -105,7 +105,7 @@ const BodyRow = ({
           style={{
             backgroundColor: verticalBarColorHash,
           }}
-          className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark"
+          className="absolute block top-0 bottom-0 left-0 w-1 h-full"
         />
       )}
       {columns.map(
@@ -124,8 +124,6 @@ const BodyRow = ({
             onRowClick={onRowClick}
             cell={row[accessorKey]?.value}
             width={width || 0}
-            isHighlighted={isHighlighted}
-            isRowFocused={rowKey === selectedKey}
             row={row}
             hasIcon={enableBodyCellPrefixIcon}
             showIcon={

@@ -30,7 +30,7 @@ import type {
 import AdUnitsPanel from '../../adUnits/panel';
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from '../../auctions/container';
-import type { AdUnitLiteral } from '..';
+import type { AdUnitLiteral } from '../auctionEventTransformers';
 
 interface AuctionsProps {
   auctionEvents: {
