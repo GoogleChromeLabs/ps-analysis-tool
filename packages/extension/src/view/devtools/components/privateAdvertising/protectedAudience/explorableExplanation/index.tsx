@@ -17,8 +17,9 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { InterestGroups } from '@google-psat/common';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { app, config } from '@google-psat/explorable-explanations';
 
 /**
  * Internal dependencies.
@@ -45,17 +46,87 @@ export type AdUnitLiteral = 'div-200-1' | 'div-200-2' | 'div-200-3';
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+  const [interestGroupsData, setInterestGroupsData] = useState<
+    InterestGroups[]
+  >([]);
+  const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
 
-  const [sitesVisited, setSitesVisited] = useState<string[]>([]);
+  const [interactiveMode, _setInteractiveMode] = useState(false);
 
-  const interestGroupsRef = useRef<InterestGroups[]>([]);
+  const setInteractiveMode = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSitesVisited([]);
+      _setInteractiveMode(event.target.checked);
+      app.toggleInteractiveMode();
+    },
+    []
+  );
 
   useEffect(() => {
-    if (!currentSiteData) {
-      interestGroupsRef.current = [];
+    if (interactiveMode !== app.isInteractiveMode) {
+      app.toggleInteractiveMode();
+      setSitesVisited([]);
     }
-  }, [currentSiteData]);
+  }, [interactiveMode]);
+
+  useEffect(() => {
+    return () => {
+      app.isInteractiveMode = false;
+      app.isMultiSeller = false;
+      app.isAutoExpand = true;
+    };
+  }, []);
+
+  const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
+    setCurrentSiteData(() => siteData);
+    setInterestGroupsData(() => getInterestGroupData(siteData));
+  };
+
+  const getInterestGroupData = useCallback(
+    (siteData: typeof currentSiteData) => {
+      if (!siteData) {
+        return [];
+      }
+
+      if (app.isInteractiveMode) {
+        const _sitesVisited: string[] = [];
+        const requiredIG: InterestGroups[] = [];
+
+        app.visitedIndexOrder.forEach((index: number) => {
+          const website = config.timeline.circles[index].website;
+          _sitesVisited.push(website);
+          requiredIG.push(...SYNTHETIC_INTEREST_GROUPS[website]);
+        });
+
+        setSitesVisited(() => _sitesVisited);
+        return requiredIG;
+      }
+
+      let hasReached = -1;
+      const requiredIG = Object.keys(SYNTHETIC_INTEREST_GROUPS)
+        .map((site, index) => {
+          if (hasReached !== -1) {
+            return null;
+          }
+
+          if (site === siteData?.website) {
+            hasReached = index;
+          }
+
+          return SYNTHETIC_INTEREST_GROUPS[site];
+        })
+        .filter((_data) => _data !== null)
+        .flat();
+
+      setSitesVisited(() =>
+        Object.keys(SYNTHETIC_INTEREST_GROUPS).slice(0, hasReached + 1)
+      );
+
+      return requiredIG;
+    },
+    []
+  );
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
@@ -184,25 +255,6 @@ const ExplorableExplanation = () => {
     };
   }, [auctionsData, currentSiteData]);
 
-  const interestGroupData = useMemo(() => {
-    if (!currentSiteData || currentSiteData?.type === 'publisher') {
-      return interestGroupsRef.current;
-    }
-
-    interestGroupsRef.current.push(
-      ...SYNTHETIC_INTEREST_GROUPS[currentSiteData?.website]
-    );
-
-    setSitesVisited((prevState) => {
-      const set = new Set<string>();
-      prevState.forEach((site) => set.add(site));
-      set.add(currentSiteData?.website);
-      return Array.from(set);
-    });
-
-    return interestGroupsRef.current;
-  }, [currentSiteData]);
-
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -210,7 +262,7 @@ const ExplorableExplanation = () => {
         content: {
           Element: IGTable,
           props: {
-            interestGroupDetails: [...(interestGroupData as InterestGroups[])],
+            interestGroupDetails: [...(interestGroupsData as InterestGroups[])],
           },
         },
       },
@@ -252,14 +304,16 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [auctionsData, customAdsAndBidders, interestGroupData, info]
+    [auctionsData, customAdsAndBidders, interestGroupsData, info]
   );
 
   return (
     <TabsProvider items={tabItems}>
       <Panel
         currentSiteData={currentSiteData}
-        setCurrentSite={setCurrentSiteData}
+        setCurrentSite={_setCurrentSiteData}
+        setInteractiveMode={setInteractiveMode}
+        interactiveMode={interactiveMode}
         info={info}
         setInfo={setInfo}
       />

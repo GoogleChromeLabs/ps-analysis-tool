@@ -165,6 +165,14 @@ joinInterestGroup.draw = (index) => {
     return;
   }
 
+  app.promiseQueue.push((cb) => {
+    if (index > 1 && config.timeline.circles[index - 1].type === 'publisher') {
+      app.setCurrentSite(config.timeline.circles[index - 2]);
+    }
+
+    cb(null, true);
+  });
+
   for (const step of steps) {
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay } = step;

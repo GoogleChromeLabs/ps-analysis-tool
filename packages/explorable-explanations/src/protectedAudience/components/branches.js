@@ -88,7 +88,21 @@ const Branches = async ({
     });
   };
 
-  if (app.isRevisitingNodeInInteractiveMode || noAnimation) {
+  if (app.isRevisitingNodeInInteractiveMode) {
+    drawInstantly();
+
+    if (app.isAutoExpand) {
+      return endpoints[1];
+    } else {
+      const nextTip = await FlowExpander({
+        nextTipCoordinates: endpoints,
+      });
+
+      return nextTip;
+    }
+  }
+
+  if (noAnimation) {
     drawInstantly();
     await delay(noAnimation ? 1000 : 0);
 

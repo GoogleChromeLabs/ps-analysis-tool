@@ -26,57 +26,62 @@ import { calculateCanvasDimensions } from '../utils';
 import throttle from 'just-throttle';
 
 export const setupMainCanvas = async (p, pause = false) => {
-  const { height, width } = calculateCanvasDimensions();
-  const canvas = p.createCanvas(width, height);
+  try {
+    const { height, width } = calculateCanvasDimensions();
+    const canvas = p.createCanvas(width, height);
 
-  p.smooth();
-  canvas.parent('ps-canvas');
-  canvas.style('z-index', 0);
-  p.background(config.canvas.background);
-  p.textSize(config.canvas.fontSize);
-  app.p = p;
+    p.smooth();
+    canvas.parent('ps-canvas');
+    canvas.style('z-index', 0);
+    p.background(config.canvas.background);
+    p.textSize(config.canvas.fontSize);
+    app.p = p;
 
-  canvas.mouseOut(() => {
-    if (app.isInteractiveMode) {
-      app.startTrackingMouse = false;
-    }
-  });
-
-  canvas.mouseOver(() => {
-    if (app.isInteractiveMode) {
-      app.startTrackingMouse = true;
-    }
-  });
-
-  canvas.mouseClicked(() => {
-    const callbacks = app.canvasEventListerners.main.mouseClicked;
-
-    Object.keys(callbacks).forEach((key) => {
-      const callback = callbacks[key];
-
-      if (typeof callback === 'function') {
-        callback(p.mouseX, p.mouseY);
+    canvas.mouseOut(() => {
+      if (app.isInteractiveMode) {
+        app.mouseOutOfDiv = true;
       }
     });
-  });
 
-  const mouseMovedCallback = throttle(() => {
-    const callbacks = app.canvasEventListerners.main.mouseMoved;
-
-    Object.keys(callbacks).forEach((key) => {
-      const callback = callbacks[key];
-
-      if (typeof callback === 'function') {
-        callback(p.mouseX, p.mouseY);
+    canvas.mouseOver(() => {
+      if (app.isInteractiveMode) {
+        app.mouseOutOfDiv = false;
       }
     });
-  }, 500);
 
-  canvas.mouseMoved(mouseMovedCallback);
+    canvas.mouseClicked(() => {
+      const callbacks = app.canvasEventListerners.main.mouseClicked;
 
-  app.setUpTimeLine();
+      Object.keys(callbacks).forEach((key) => {
+        const callback = callbacks[key];
 
-  if (!app.isInteractiveMode) {
-    await app.play(false, pause);
+        if (typeof callback === 'function') {
+          callback(p.mouseX, p.mouseY);
+        }
+      });
+    });
+
+    const mouseMovedCallback = throttle(() => {
+      const callbacks = app.canvasEventListerners.main.mouseMoved;
+
+      Object.keys(callbacks).forEach((key) => {
+        const callback = callbacks[key];
+
+        if (typeof callback === 'function') {
+          callback(p.mouseX, p.mouseY);
+        }
+      });
+    }, 500);
+
+    canvas.mouseMoved(mouseMovedCallback);
+
+    app.setUpTimeLine();
+
+    if (!app.isInteractiveMode) {
+      await app.play(false, pause);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console -- We should know the error and let it fail silently since it doesnt break anything.
+    console.log(error);
   }
 };

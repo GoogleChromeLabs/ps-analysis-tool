@@ -21,11 +21,16 @@ import app from '../app.js';
 import { calculateCanvasDimensions } from '../utils';
 
 export const setupUserCanvas = (p) => {
-  const { height, width } = calculateCanvasDimensions();
-  const overlayCanvas = p.createCanvas(width, height);
+  try {
+    const { height, width } = calculateCanvasDimensions();
+    const overlayCanvas = p.createCanvas(width, height);
 
-  overlayCanvas.parent('user-canvas');
-  overlayCanvas.style('z-index', 1);
-  p.textSize(config.canvas.fontSize);
-  app.up = p;
+    overlayCanvas.parent('user-canvas');
+    overlayCanvas.style('z-index', 1);
+    p.textSize(config.canvas.fontSize);
+    app.up = p;
+  } catch (error) {
+    // eslint-disable-next-line no-console -- We should know the error and let it fail silently since it doesnt break anything.
+    console.log(error);
+  }
 };
