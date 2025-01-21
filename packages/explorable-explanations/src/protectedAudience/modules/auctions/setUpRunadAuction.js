@@ -30,6 +30,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
       title: SINGLE_SELLER_CONFIG.RUN_AD_AUCTION.title,
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+      info: SINGLE_SELLER_CONFIG.RUN_AD_AUCTION.info,
     },
     delay: 1000,
     callBack: (returnValue) => {

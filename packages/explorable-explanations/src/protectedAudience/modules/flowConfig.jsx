@@ -98,7 +98,16 @@ export const SINGLE_SELLER_CONFIG = {
     ),
   },
   RUN_AD_AUCTION: {
-    title: 'runAdAuction',
+    title: 'runAdAuction()',
+    info: (
+      <>
+        <p>
+          SSP ad tag initiates on-device auction by calling{' '}
+          <code className="text-upsed-tomato">runAdAuction()</code>, passing in
+          signals from DSP's openRTB bid response.
+        </p>
+      </>
+    ),
   },
   LOAD_INTEREST_GROUP: {
     title: 'Load Interest Group',
