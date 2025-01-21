@@ -37,7 +37,7 @@ const Info = ({ data }: InfoProps) => {
           <h3 className="text-sm font-medium">
             {title + ' ' + (description || '')}
           </h3>
-          <div className="text-xs mt-1">{info}</div>
+          <div className="text-[12.5px] mt-1">{info}</div>
         </div>
       ) : (
         <div className="h-full box-border p-8 flex items-center">
