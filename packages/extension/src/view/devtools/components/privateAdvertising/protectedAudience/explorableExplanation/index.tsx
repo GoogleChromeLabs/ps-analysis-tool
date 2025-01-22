@@ -32,7 +32,6 @@ import { app, config } from '@google-psat/explorable-explanations';
  */
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
-import Auctions from '../auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import Info from './tableTabPanels/info';
 import {
@@ -41,6 +40,7 @@ import {
   type AdUnitLiteral,
 } from './auctionEventTransformers';
 import BidsPanel from '../bids/panel';
+import Auctions from './tableTabPanels/auctions';
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
