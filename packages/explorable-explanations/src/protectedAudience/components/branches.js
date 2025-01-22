@@ -20,7 +20,11 @@ import ProgressLine from './progressLine';
 import app from '../app';
 import config from '../config';
 import Box from './box';
-import { delay, wipeAndRecreateInterestCanvas } from '../utils';
+import {
+  delay,
+  scrollToCoordinates,
+  wipeAndRecreateInterestCanvas,
+} from '../utils';
 import FlowExpander from './flowExpander';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
@@ -92,12 +96,13 @@ const Branches = async ({
     drawInstantly();
 
     if (app.isAutoExpand) {
+      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-
+      scrollToCoordinates(nextTip.x, nextTip.y);
       return nextTip;
     }
   }
@@ -107,11 +112,13 @@ const Branches = async ({
     await delay(noAnimation ? 1000 : 0);
 
     if (app.isAutoExpand) {
+      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
+      scrollToCoordinates(nextTip.x, nextTip.y);
 
       return nextTip;
     }
@@ -119,12 +126,13 @@ const Branches = async ({
 
   if (app.cancelPromise) {
     if (app.isAutoExpand) {
+      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-
+      scrollToCoordinates(nextTip.x, nextTip.y);
       return nextTip;
     }
   }
@@ -175,12 +183,14 @@ const Branches = async ({
   );
 
   if (app.isAutoExpand) {
+    scrollToCoordinates(endpoints[1].x, endpoints[1].y);
     return endpoints[1];
   }
 
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
   });
+  scrollToCoordinates(nextTip.x, nextTip.y);
 
   return nextTip;
 };
@@ -222,6 +232,7 @@ const drawBoxesBranch = (x, y, branch) => {
     x: x - flow.box.width / 2,
     y: y + 20,
     color: branch?.color || flow.colors.box.background,
+    isBranchComponent: true,
   });
 
   if (app.isAutoExpand) {

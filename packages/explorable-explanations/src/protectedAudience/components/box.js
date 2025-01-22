@@ -18,7 +18,11 @@
  */
 import app from '../app';
 import config from '../config';
-import { addCanvasEventListener, isInsideBox } from '../utils';
+import {
+  addCanvasEventListener,
+  isInsideBox,
+  scrollToCoordinates,
+} from '../utils';
 
 const INFO_ICON_SPACING = 3;
 
@@ -31,6 +35,7 @@ const Box = ({
   height = config.flow.box.height,
   color,
   info = false,
+  isBranchComponent = false,
 }) => {
   x = typeof x === 'function' ? x() : x;
   y = typeof y === 'function' ? y() : y;
@@ -52,6 +57,9 @@ const Box = ({
   } = config;
 
   const p = app.p;
+  if (!isBranchComponent) {
+    scrollToCoordinates(x, y);
+  }
 
   p.push();
   p.textAlign(p.CENTER, p.CENTER);
