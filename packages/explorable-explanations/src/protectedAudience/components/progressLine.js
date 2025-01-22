@@ -130,6 +130,8 @@ const ProgressLine = ({
   let currentY = y1; // For vertical directions
   let targetX = x2;
 
+  utils.scrollToCoordinates(x1, y1 - height);
+
   return new Promise((resolve) => {
     const animate = () => {
       if (app.cancelPromise) {
@@ -159,6 +161,7 @@ const ProgressLine = ({
 
       switch (direction) {
         case 'right':
+          utils.scrollToCoordinates(currentX + width, y2);
           currentX += incrementBy;
 
           if (currentX - x1 > width) {
@@ -170,6 +173,7 @@ const ProgressLine = ({
           break;
 
         case 'left':
+          utils.scrollToCoordinates(targetX, y1);
           targetX -= incrementBy;
 
           if (x2 - targetX > width) {
@@ -182,6 +186,7 @@ const ProgressLine = ({
           break;
 
         case 'down':
+          utils.scrollToCoordinates(x1, y1 + height);
           currentY += incrementBy;
 
           if (currentY - y1 > height) {
@@ -198,6 +203,7 @@ const ProgressLine = ({
           break;
 
         case 'up':
+          utils.scrollToCoordinates(x1, y1 - height);
           currentY -= incrementBy;
 
           if (y1 - currentY > height) {

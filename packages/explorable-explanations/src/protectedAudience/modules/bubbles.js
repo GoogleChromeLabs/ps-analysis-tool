@@ -139,6 +139,8 @@ bubbles.barrageAnimation = async (index) => {
     return { x, y, color, target, distance };
   });
 
+  utils.scrollToCoordinates(0, 0, true);
+
   await new Promise((resolve) => {
     const animate = () => {
       if (app.cancelPromise) {
@@ -276,6 +278,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
       distance,
     });
   }
+  utils.scrollToCoordinates(0, 0, true);
 
   document.getElementById('interest-canvas').style.zIndex = 4;
 
