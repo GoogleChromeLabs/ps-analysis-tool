@@ -657,7 +657,7 @@ export const interestGroupSketch = (p) => {
       }
     }
 
-    if (props.autoScroll) {
+    if (typeof props.autoScroll !== 'undefined') {
       app.autoScroll = props.autoScroll;
     }
 
