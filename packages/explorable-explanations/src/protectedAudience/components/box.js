@@ -57,8 +57,9 @@ const Box = ({
   } = config;
 
   const p = app.p;
+
   if (!isBranchComponent) {
-    scrollToCoordinates(x, y);
+    scrollToCoordinates(x, y - height / 2);
   }
 
   p.push();

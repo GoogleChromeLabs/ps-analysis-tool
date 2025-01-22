@@ -27,15 +27,8 @@ export const scrollToCoordinates = (x, y, override = false) => {
     .querySelector('#ps-canvas')
     .parentElement.getBoundingClientRect();
 
-  let finalX = x - rect.left,
+  const finalX = x - rect.left,
     finalY = y - rect.top;
-  if (finalX < 0) {
-    finalX = rect.left - x;
-  }
-
-  if (finalY < 0) {
-    finalY = rect.top - y;
-  }
 
   document.querySelector('#ps-canvas').parentElement.scrollTo({
     left: finalX,

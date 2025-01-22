@@ -60,6 +60,7 @@ const Branches = async ({
     direction: 'down',
     noArrow: true,
     noAnimation: app.speedMultiplier === 4,
+    isForBranches: true,
   });
 
   const drawInstantly = () => {
@@ -102,7 +103,7 @@ const Branches = async ({
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-      scrollToCoordinates(nextTip.x, nextTip.y);
+
       return nextTip;
     }
   }
@@ -118,7 +119,6 @@ const Branches = async ({
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-      scrollToCoordinates(nextTip.x, nextTip.y);
 
       return nextTip;
     }
@@ -132,7 +132,6 @@ const Branches = async ({
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-      scrollToCoordinates(nextTip.x, nextTip.y);
       return nextTip;
     }
   }
@@ -152,6 +151,7 @@ const Branches = async ({
     noArrow: true,
     noAnimation: app.speedMultiplier === 4,
     isBranch: true,
+    isForBranches: true,
   });
 
   await Promise.all(
@@ -167,6 +167,7 @@ const Branches = async ({
         direction: 'down',
         noArrow: true,
         noAnimation: app.speedMultiplier === 4,
+        isForBranches: true,
       });
 
       if (type === 'datetime') {
@@ -190,7 +191,6 @@ const Branches = async ({
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
   });
-  scrollToCoordinates(nextTip.x, nextTip.y);
 
   return nextTip;
 };
