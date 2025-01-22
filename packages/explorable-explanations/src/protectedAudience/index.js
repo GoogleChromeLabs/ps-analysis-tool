@@ -657,6 +657,10 @@ export const interestGroupSketch = (p) => {
       }
     }
 
+    if (props.autoScroll) {
+      app.autoScroll = props.autoScroll;
+    }
+
     if (props.setCurrentSite) {
       app.setCurrentSite = props.setCurrentSite;
     }

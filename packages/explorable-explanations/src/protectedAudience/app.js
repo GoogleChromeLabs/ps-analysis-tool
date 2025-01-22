@@ -49,6 +49,7 @@ const app = {
     expandedCircleDiameter: 640,
     minifiedCircleDiameter: 50,
   },
+  autoScroll: true,
   mouseOutOfDiv: false,
   speedMultiplier: 1,
   p: null,

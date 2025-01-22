@@ -13,7 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
+import app from '../app';
 export const scrollToCoordinates = (x, y, override = false) => {
+  if (!app.autoScroll) {
+    return;
+  }
+
   if (override) {
     document.querySelector('#ps-canvas').parentElement.scrollTo({
       left: 0,
