@@ -137,8 +137,8 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       } else {
         const positions = app.timeline.circlePositions[clickedIndex];
         app.timeline.expandIconPositions.push({
-          x: positions.x + diameter / 2,
-          y: positions.y,
+          x: positions.x,
+          y: positions.y + diameter / 2,
           index: clickedIndex,
         });
 

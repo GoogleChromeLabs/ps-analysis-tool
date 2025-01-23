@@ -182,7 +182,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
 
       if (!circles.every(({ visited }) => visited === true)) {
         app.timeline.expandIconPositions.push({
-          x: circlePositions[_currentIndex].x - 10,
+          x: circlePositions[_currentIndex].x,
           y: circlePositions[_currentIndex].y + diameter / 2,
           index: _currentIndex,
         });
@@ -228,7 +228,13 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     timeline.renderUserIcon();
     flow.clearBelowTimelineCircles();
     app.timeline.expandIconPositions.forEach((position) => {
-      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
+      app.p.image(
+        app.p.openWithoutAnimation,
+        position.x - 10,
+        position.y,
+        20,
+        20
+      );
     });
 
     cb(null, true);
