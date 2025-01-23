@@ -51,6 +51,7 @@ interface PanelProps {
   setHighlightedInterestGroup: React.Dispatch<
     React.SetStateAction<{
       interestGroupName: string;
+      interestGroupOwner: string;
       color: string;
     } | null>
   >;
