@@ -17,15 +17,9 @@
  * Internal dependencies.
  */
 import app from '../../app';
-import config from '../../config';
+import config, { publisherData } from '../../config';
 import flow from '../flow';
 import { Branches } from '../../components';
-
-export const adunitData = {
-  'pub1.com': ['div-200-1', 'div-200-2', 'div-200-3'],
-  'pub2.com': ['div-400-1', 'div-400-2', 'div-400-3'],
-  'pub3.com': ['div-600-1', 'div-600-2', 'div-600-3'],
-};
 
 const setUpAdUnitCode = (steps, index) => {
   const { colors } = config.flow;
@@ -42,19 +36,19 @@ const setUpAdUnitCode = (steps, index) => {
       branches: [
         {
           title: 'adunit-code',
-          description: adunitData[publisher][0],
+          description: publisherData[publisher].adunits[0],
           type: 'box',
           color: colors.box.browser,
         },
         {
           title: 'adunit-code',
-          description: adunitData[publisher][1],
+          description: publisherData[publisher].adunits[1],
           type: 'box',
           color: colors.box.browser,
         },
         {
           title: 'adunit-code',
-          description: adunitData[publisher][2],
+          description: publisherData[publisher].adunits[2],
           type: 'box',
           color: colors.box.browser,
         },

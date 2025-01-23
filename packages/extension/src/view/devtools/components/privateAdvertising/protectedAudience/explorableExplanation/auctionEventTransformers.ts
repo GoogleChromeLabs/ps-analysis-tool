@@ -17,11 +17,7 @@
  * External dependencies
  */
 import type { ReceivedBids, singleAuctionEvent } from '@google-psat/common';
-import {
-  adunitData,
-  branchesData,
-  sspUrls,
-} from '@google-psat/explorable-explanations';
+import { publisherData } from '@google-psat/explorable-explanations';
 /**
  * Internal dependencies
  */
@@ -340,15 +336,17 @@ export const configuredAuctionEvents = (
   if (isMultiSeller) {
     sellersArray.push(
       websiteString,
-      ...sspUrls[currentSiteData?.website].map((data) => data[1])
+      ...publisherData[currentSiteData?.website].ssps.map(
+        (data: string[]) => data[1]
+      )
     );
   } else {
     sellersArray.push(websiteString);
   }
 
-  const adunits = adunitData[currentSiteData?.website];
-  const dates = branchesData[currentSiteData?.website].map(
-    (branch) => branch.date + ' ' + branch.time
+  const adunits = publisherData[currentSiteData?.website].adunits;
+  const dates = publisherData[currentSiteData?.website].branches.map(
+    (branch: { date: string; time: string }) => branch.date + ' ' + branch.time
   );
 
   const auctionData = {

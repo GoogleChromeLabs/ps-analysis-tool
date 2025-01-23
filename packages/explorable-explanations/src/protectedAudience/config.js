@@ -145,3 +145,45 @@ const config = {
 };
 
 export default config;
+
+export const publisherData = {
+  'pub1.com': {
+    branches: [
+      { date: 'Sun, 01 October 2023', time: '12:00:00 GMT', type: 'datetime' },
+      { date: 'Sun, 01 October 2023', time: '12:01:00 GMT', type: 'datetime' },
+      { date: 'Sun, 01 October 2023', time: '12:02:00 GMT', type: 'datetime' },
+    ],
+    adunits: ['div-200-1', 'div-200-2', 'div-200-3'],
+    ssps: [
+      ['SSP A', 'https://ssp-a.com'],
+      ['SSP B', 'https://ssp-b.com'],
+      ['SSP C', 'https://ssp-c.com'],
+    ],
+  },
+  'pub2.com': {
+    branches: [
+      { date: 'Sun, 01 October 2023', time: '14:00:00 GMT', type: 'datetime' },
+      { date: 'Sun, 01 October 2023', time: '14:01:00 GMT', type: 'datetime' },
+      { date: 'Sun, 01 October 2023', time: '14:02:00 GMT', type: 'datetime' },
+    ],
+    adunits: ['div-400-1', 'div-400-2', 'div-400-3'],
+    ssps: [
+      ['SSP D', 'https://ssp-d.com'],
+      ['SSP E', 'https://ssp-e.com'],
+      ['SSP F', 'https://ssp-f.com'],
+    ],
+  },
+  'pub3.com': {
+    branches: [
+      { date: 'Sun, 01 October 2023', time: '16:00:00 GMT', type: 'datetime' },
+      { date: 'Sun, 01 October 2023', time: '16:01:00 GMT', type: 'datetime' },
+      { date: 'Sun, 01 October 2023', time: '16:02:00 GMT', type: 'datetime' },
+    ],
+    adunits: ['div-600-1', 'div-600-2', 'div-600-3'],
+    ssps: [
+      ['SSP G', 'https://ssp-g.com'],
+      ['SSP H', 'https://ssp-h.com'],
+      ['SSP I', 'https://ssp-i.com'],
+    ],
+  },
+};
