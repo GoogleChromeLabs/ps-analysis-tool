@@ -116,4 +116,29 @@ describe('BodyRow', () => {
     expect(BodyRowProp.onRowClick).toHaveBeenCalled();
     expect(BodyRowProp.isRowFocused).toBe(true);
   });
+
+  it('should autoscroll to the highlighted row', () => {
+    globalThis.document.getElementById = jest.fn(() => ({
+      scrollIntoView: jest.fn(),
+    }));
+
+    BodyRowProp.row.originalData.highlighted = true;
+
+    render(
+      <BodyRow
+        index={0}
+        // @ts-ignore
+        row={BodyRowProp.row}
+        columns={BodyRowProp.columns}
+        selectedKey={BodyRowProp.selectedKey}
+        getRowObjectKey={BodyRowProp.getRowObjectKey}
+        getExtraClasses={() => ''}
+        isRowFocused={BodyRowProp.isRowFocused}
+        onRowClick={BodyRowProp.onRowClick}
+        onKeyDown={BodyRowProp.onKeyDown}
+      />
+    );
+
+    expect(globalThis.document.getElementById).toHaveBeenCalled();
+  });
 });

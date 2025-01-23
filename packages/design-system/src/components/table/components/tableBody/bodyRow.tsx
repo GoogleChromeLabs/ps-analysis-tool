@@ -85,7 +85,7 @@ const BodyRow = ({
   useEffect(() => {
     if (isHighlighted) {
       const element = document.getElementById(index.toString());
-      element?.scrollIntoView({
+      element?.scrollIntoView?.({
         behavior: 'smooth',
         block: 'center',
         inline: 'start',

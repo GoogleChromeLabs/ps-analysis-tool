@@ -55,7 +55,7 @@ export const originalData = [
     // @ts-ignore
     isCookieSet: false,
     frameUrls: 'https://psanalysis.rt.gw',
-    highlighted: true,
+    highlighted: false,
   },
   {
     parsedCookie: {
