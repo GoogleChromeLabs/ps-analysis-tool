@@ -22,4 +22,5 @@ export {
 } from './protectedAudience';
 export { branchesData } from './protectedAudience/modules/auctions/setupBranches.js';
 export { adunitData } from './protectedAudience/modules/auctions/setUpAdUnitCode.js';
+export { sspUrls } from './protectedAudience/modules/auctions/multi-seller/setUpComponentAuctions.js';
 export { default as config } from './protectedAudience/config.js';

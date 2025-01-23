@@ -70,7 +70,7 @@ auction.setUp = (index) => {
   if (app.isMultiSeller) {
     setUpMultiSellerFirstSSPTagFlow(steps);
     setUpPublisherAdServerFlow(steps);
-    setUpComponentAuctions(steps);
+    setUpComponentAuctions(steps, index);
   } else {
     setUpSingleSellerFirstSSPTagFlow(steps);
     setUpRunadAuction(steps);

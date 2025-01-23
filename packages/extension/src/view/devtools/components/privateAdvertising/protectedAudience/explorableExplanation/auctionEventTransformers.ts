@@ -17,7 +17,11 @@
  * External dependencies
  */
 import type { ReceivedBids, singleAuctionEvent } from '@google-psat/common';
-import { adunitData, branchesData } from '@google-psat/explorable-explanations';
+import {
+  adunitData,
+  branchesData,
+  sspUrls,
+} from '@google-psat/explorable-explanations';
 /**
  * Internal dependencies
  */
@@ -336,9 +340,7 @@ export const configuredAuctionEvents = (
   if (isMultiSeller) {
     sellersArray.push(
       websiteString,
-      'https://ssp-a.com',
-      'https://ssp-b.com',
-      'https://ssp-c.com'
+      ...sspUrls[currentSiteData?.website].map((data) => data[1])
     );
   } else {
     sellersArray.push(websiteString);

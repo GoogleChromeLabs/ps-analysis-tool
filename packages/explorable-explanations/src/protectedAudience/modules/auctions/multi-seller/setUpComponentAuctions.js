@@ -21,6 +21,24 @@ import config from '../../../config';
 import { Box, ProgressLine, Text, Custom } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 
+export const sspUrls = {
+  'pub1.com': [
+    ['SSP A', 'https://ssp-a.com'],
+    ['SSP B', 'https://ssp-b.com'],
+    ['SSP C', 'https://ssp-c.com'],
+  ],
+  'pub2.com': [
+    ['SSP D', 'https://ssp-d.com'],
+    ['SSP E', 'https://ssp-e.com'],
+    ['SSP F', 'https://ssp-f.com'],
+  ],
+  'pub3.com': [
+    ['SSP G', 'https://ssp-g.com'],
+    ['SSP H', 'https://ssp-h.com'],
+    ['SSP I', 'https://ssp-i.com'],
+  ],
+};
+
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
 const FIRST_LINE_HEIGHT = 150;
@@ -29,8 +47,9 @@ const BOX_COLUMN_MARGIN = 390;
 
 const boxCordinates = {};
 
-const setUpComponentAuctions = (steps) => {
+const setUpComponentAuctions = (steps, index) => {
   const { box } = config.flow;
+  const publisher = config.timeline.circles[index].website;
 
   steps.push({
     component: ProgressLine,
@@ -76,7 +95,7 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         20,
       y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
-      ssp: 'SSP A',
+      ssp: sspUrls[publisher][0][0],
       config: {
         bidValue: '$10',
       },
@@ -89,7 +108,7 @@ const setUpComponentAuctions = (steps) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
-      ssp: 'SSP B',
+      ssp: sspUrls[publisher][1][0],
       config: {
         bidValue: '$8',
       },
@@ -102,19 +121,19 @@ const setUpComponentAuctions = (steps) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
-      ssp: 'SSP C',
+      ssp: sspUrls[publisher][2][0],
       config: {
         bidValue: '$6',
       },
     },
   ];
 
-  componentAuctions.forEach((componentAuction, index) => {
+  componentAuctions.forEach((componentAuction, idx) => {
     setUpComponentAuction(
       steps,
       componentAuction,
       componentAuction.config,
-      index
+      idx
     );
   });
 
