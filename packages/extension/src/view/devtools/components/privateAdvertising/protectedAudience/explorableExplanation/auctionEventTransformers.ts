@@ -17,6 +17,7 @@
  * External dependencies
  */
 import type { ReceivedBids, singleAuctionEvent } from '@google-psat/common';
+import { adunitData, branchesData } from '@google-psat/explorable-explanations';
 /**
  * Internal dependencies
  */
@@ -329,7 +330,6 @@ export const configuredAuctionEvents = (
   isMultiSeller: boolean,
   currentSiteData: CurrentSiteData
 ) => {
-  const dateTimeString = new Date(currentSiteData?.datetime).toUTCString();
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
 
@@ -344,9 +344,14 @@ export const configuredAuctionEvents = (
     sellersArray.push(websiteString);
   }
 
+  const adunits = adunitData[currentSiteData?.website];
+  const dates = branchesData[currentSiteData?.website].map(
+    (branch) => branch.date + ' ' + branch.time
+  );
+
   const auctionData = {
-    'div-200-1': {
-      [dateTimeString]: {
+    [adunits[0]]: {
+      [dates[0]]: {
         [websiteString]: getFlattenedAuctionEvents(
           sellersArray,
           currentSiteData,
@@ -356,8 +361,8 @@ export const configuredAuctionEvents = (
         ),
       },
     },
-    'div-200-2': {
-      [dateTimeString]: {
+    [adunits[1]]: {
+      [dates[1]]: {
         [websiteString]: getFlattenedAuctionEvents(
           sellersArray,
           currentSiteData,
@@ -367,8 +372,8 @@ export const configuredAuctionEvents = (
         ),
       },
     },
-    'div-200-3': {
-      [dateTimeString]: {
+    [adunits[2]]: {
+      [dates[2]]: {
         [websiteString]: getFlattenedAuctionEvents(
           sellersArray,
           currentSiteData,
@@ -381,56 +386,56 @@ export const configuredAuctionEvents = (
   };
 
   const receivedBids = {
-    'div-200-1': getBidData(
-      auctionData['div-200-1']?.[dateTimeString]?.[websiteString],
+    [adunits[0]]: getBidData(
+      auctionData[adunits[0]]?.[dates[0]]?.[websiteString],
       sellersArray,
-      'div-200-1'
+      adunits[0]
     ),
-    'div-200-2': getBidData(
-      auctionData['div-200-2']?.[dateTimeString]?.[websiteString],
+    [adunits[1]]: getBidData(
+      auctionData[adunits[1]]?.[dates[1]]?.[websiteString],
       sellersArray,
-      'div-200-2'
+      adunits[1]
     ),
-    'div-200-3': getBidData(
-      auctionData['div-200-3']?.[dateTimeString]?.[websiteString],
+    [adunits[2]]: getBidData(
+      auctionData[adunits[2]]?.[dates[2]]?.[websiteString],
       sellersArray,
-      'div-200-3'
+      adunits[2]
     ),
   };
 
   const adsAndBidders = {
-    'div-200-1': {
-      adUnitCode: 'div-200-1',
+    [adunits[0]]: {
+      adUnitCode: adunits[0],
       bidders: sellersArray,
       mediaContainerSize: [[320, 320]],
       winningBid: getBidData(
-        auctionData['div-200-1']?.[dateTimeString]?.[websiteString],
+        auctionData[adunits[0]]?.[dates[0]]?.[websiteString],
         sellersArray,
-        'div-200-1'
+        adunits[0]
       ).filter(({ type }) => type === 'win')?.[0]?.bid,
       bidCurrency: 'USD',
       winningBidder: 'DSP 1',
     },
-    'div-200-2': {
-      adUnitCode: 'div-200-2',
+    [adunits[1]]: {
+      adUnitCode: adunits[1],
       bidders: sellersArray,
       mediaContainerSize: [[320, 320]],
       winningBid: getBidData(
-        auctionData['div-200-2']?.[dateTimeString]?.[websiteString],
+        auctionData[adunits[1]]?.[dates[1]]?.[websiteString],
         sellersArray,
-        'div-200-2'
+        adunits[1]
       ).filter(({ type }) => type === 'win')?.[0]?.bid,
       bidCurrency: 'USD',
       winningBidder: 'DSP 1',
     },
-    'div-200-3': {
-      adUnitCode: 'div-200-2',
+    [adunits[2]]: {
+      adUnitCode: adunits[2],
       bidders: sellersArray,
       mediaContainerSize: [[320, 320]],
       winningBid: getBidData(
-        auctionData['div-200-3']?.[dateTimeString]?.[websiteString],
+        auctionData[adunits[2]]?.[dates[2]]?.[websiteString],
         sellersArray,
-        'div-200-3'
+        adunits[2]
       ).filter(({ type }) => type === 'win')?.[0]?.bid,
       bidCurrency: 'USD',
       winningBidder: 'DSP 1',

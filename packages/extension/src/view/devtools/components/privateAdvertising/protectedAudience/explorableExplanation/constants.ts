@@ -740,6 +740,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
+  'pub3.com': [],
 };
 
 export const SYNTHETIC_AUCTION_EVENT_STARTED: singleAuctionEvent = {
