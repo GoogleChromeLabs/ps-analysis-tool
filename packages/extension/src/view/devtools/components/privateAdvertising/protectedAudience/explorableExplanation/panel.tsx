@@ -60,6 +60,7 @@ interface PanelProps {
   setInteractiveMode: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setInfo: React.Dispatch<React.SetStateAction<string | null>>;
   info: string | null;
+  setCurrentStep: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Panel = ({
@@ -72,6 +73,7 @@ const Panel = ({
   setInteractiveMode,
   info,
   setInfo,
+  setCurrentStep,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -298,6 +300,7 @@ const Panel = ({
         setCurrentSite={setCurrentSite}
         setPlayState={setPlay}
         setInfo={setInfo}
+        setCurrentStep={setCurrentStep}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
       />
       <ReactP5Wrapper sketch={userSketch} />

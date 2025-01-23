@@ -657,6 +657,10 @@ export const interestGroupSketch = (p) => {
       }
     }
 
+    if (props.setCurrentStep) {
+      app.setCurrentStep = props.setCurrentStep;
+    }
+
     if (props.setCurrentSite) {
       app.setCurrentSite = props.setCurrentSite;
     }

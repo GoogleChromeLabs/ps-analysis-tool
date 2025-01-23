@@ -195,56 +195,150 @@ export const createAuctionEvents = (
   seller: string,
   advertisers: string[],
   eventStartTime: number,
-  isTopLevelBid: boolean
+  isTopLevelBid: boolean,
+  currentStep: string | null
 ) => {
   const bidEvents = transformBidEvent(interestGroups, isTopLevelBid);
 
   bidEvents.sort((a, b) => (a?.bid ?? 0) - (b?.bid ?? 0));
+  const events: singleAuctionEvent[] = [];
 
-  const events = [
-    transformStartedEvent(seller),
-    transformConfigResolvedEvent(seller),
-    transformLoadedEvent(interestGroups),
-    transformFetchingEvents(
-      advertisers,
-      'start',
-      seller,
-      'bidderTrustedSignals'
-    ),
-    transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
-    transformFetchingEvents(advertisers, 'start', seller, 'sellerJS'),
-    transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS'),
-    transformFetchingEvents(
-      advertisers,
-      'start',
-      seller,
-      'sellerTrustedSignals'
-    ),
-    bidEvents,
-    transformFetchingEvents(
-      advertisers,
-      'finish',
-      seller,
-      'sellerTrustedSignals'
-    ),
-    {
-      formattedTime: '',
-      uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-      name: bidEvents[bidEvents.length - 1].name,
-      ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
-      type: 'win',
-      time: 1734076670.129756,
-      bid: bidEvents[bidEvents.length - 1].bid,
-      bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
-      eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
-    },
-    transformFetchingEvents(
-      advertisers,
-      'finish',
-      seller,
-      'bidderTrustedSignals'
-    ),
-  ];
+  if (currentStep === null) {
+    return events;
+  } else if (currentStep === 'runAdAuction()') {
+    events.push(
+      transformStartedEvent(seller),
+      transformConfigResolvedEvent(seller)
+    );
+  } else if (currentStep === 'Load Interest Group') {
+    events.push(
+      transformStartedEvent(seller),
+      transformConfigResolvedEvent(seller),
+      ...transformLoadedEvent(interestGroups)
+    );
+  } else if (currentStep === 'Key/Value') {
+    events.push(
+      transformStartedEvent(seller),
+      transformConfigResolvedEvent(seller),
+      ...transformLoadedEvent(interestGroups),
+      ...transformFetchingEvents(
+        advertisers,
+        'start',
+        seller,
+        'bidderTrustedSignals'
+      ),
+      ...transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
+      ...transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS'),
+      ...transformFetchingEvents(
+        advertisers,
+        'finish',
+        seller,
+        'bidderTrustedSignals'
+      )
+    );
+  } else if (currentStep === 'generateBid()') {
+    events.push(
+      transformStartedEvent(seller),
+      transformConfigResolvedEvent(seller),
+      ...transformLoadedEvent(interestGroups),
+      ...transformFetchingEvents(
+        advertisers,
+        'start',
+        seller,
+        'bidderTrustedSignals'
+      ),
+      ...transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
+      ...transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS'),
+      ...transformFetchingEvents(
+        advertisers,
+        'finish',
+        seller,
+        'bidderTrustedSignals'
+      ),
+      ...bidEvents
+    );
+  } else if (currentStep === 'Key/Values') {
+    events.push(
+      transformStartedEvent(seller),
+      transformConfigResolvedEvent(seller),
+      ...transformLoadedEvent(interestGroups),
+      ...transformFetchingEvents(
+        advertisers,
+        'start',
+        seller,
+        'bidderTrustedSignals'
+      ),
+      ...transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
+      ...transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS'),
+      ...transformFetchingEvents(
+        advertisers,
+        'finish',
+        seller,
+        'bidderTrustedSignals'
+      ),
+      ...bidEvents,
+      ...transformFetchingEvents(advertisers, 'start', seller, 'sellerJS'),
+      ...transformFetchingEvents(
+        advertisers,
+        'start',
+        seller,
+        'sellerTrustedSignals'
+      ),
+      ...transformFetchingEvents(
+        advertisers,
+        'finish',
+        seller,
+        'sellerTrustedSignals'
+      ),
+      ...transformFetchingEvents(advertisers, 'finish', seller, 'sellerJS')
+    );
+  } else if (currentStep === 'scroreAd()') {
+    events.push(
+      transformStartedEvent(seller),
+      transformConfigResolvedEvent(seller),
+      ...transformLoadedEvent(interestGroups),
+      ...transformFetchingEvents(
+        advertisers,
+        'start',
+        seller,
+        'bidderTrustedSignals'
+      ),
+      ...transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
+      ...transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS'),
+      ...transformFetchingEvents(
+        advertisers,
+        'finish',
+        seller,
+        'bidderTrustedSignals'
+      ),
+      ...bidEvents,
+      ...transformFetchingEvents(advertisers, 'start', seller, 'sellerJS'),
+      ...transformFetchingEvents(
+        advertisers,
+        'start',
+        seller,
+        'sellerTrustedSignals'
+      ),
+      ...transformFetchingEvents(
+        advertisers,
+        'finish',
+        seller,
+        'sellerTrustedSignals'
+      ),
+      ...transformFetchingEvents(advertisers, 'finish', seller, 'sellerJS'),
+      {
+        formattedTime: '',
+        uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+        name: bidEvents[bidEvents.length - 1].name,
+        ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+        type: 'win',
+        time: 1734076670.129756,
+        bid: bidEvents[bidEvents.length - 1].bid,
+        bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+        eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
+      }
+    );
+  }
 
   const flattenedEvents = events.flat();
 
@@ -261,6 +355,7 @@ export const createAuctionEvents = (
   });
 
   flattenedEvents.sort((a, b) => a.time - b.time);
+
   return flattenedEvents;
 };
 
@@ -302,9 +397,11 @@ const getFlattenedAuctionEvents = (
     ownerOrigin: string;
   }[],
   advertisers: string[],
-  isMultiSeller: boolean
+  isMultiSeller: boolean,
+  currentStep: string | null
 ) => {
   const events: { [key: string]: singleAuctionEvent[] } = {};
+
   const host = new URL(`https://www.${currentSiteData?.website}`).host;
 
   sellersArray.forEach((seller) => {
@@ -313,7 +410,8 @@ const getFlattenedAuctionEvents = (
       new URL(seller).host,
       advertisers,
       new Date(currentSiteData?.datetime).getTime(),
-      new URL(seller).host === host && isMultiSeller
+      new URL(seller).host === host && isMultiSeller,
+      currentStep
     );
   });
 
@@ -327,7 +425,8 @@ export const configuredAuctionEvents = (
   }[],
   advertisers: string[],
   isMultiSeller: boolean,
-  currentSiteData: CurrentSiteData
+  currentSiteData: CurrentSiteData,
+  currentStep: string | null
 ) => {
   const dateTimeString = new Date(currentSiteData?.datetime).toUTCString();
   const websiteString = `https://www.${currentSiteData?.website}`;
@@ -352,7 +451,8 @@ export const configuredAuctionEvents = (
           currentSiteData,
           interestGroups,
           advertisers,
-          isMultiSeller
+          isMultiSeller,
+          currentStep
         ),
       },
     },
@@ -363,7 +463,8 @@ export const configuredAuctionEvents = (
           currentSiteData,
           interestGroups,
           advertisers,
-          isMultiSeller
+          isMultiSeller,
+          currentStep
         ),
       },
     },
@@ -374,7 +475,8 @@ export const configuredAuctionEvents = (
           currentSiteData,
           interestGroups,
           advertisers,
-          isMultiSeller
+          isMultiSeller,
+          currentStep
         ),
       },
     },

@@ -104,6 +104,10 @@ auction.draw = (index) => {
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay = 0 } = step;
 
+      if (props?.title) {
+        app.setCurrentStep(props.title);
+      }
+
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
       if (!app.isRevisitingNodeInInteractiveMode) {

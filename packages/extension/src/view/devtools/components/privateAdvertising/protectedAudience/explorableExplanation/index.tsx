@@ -32,7 +32,7 @@ import { app, config } from '@google-psat/explorable-explanations';
  */
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
-import Auctions from '../auctions';
+import Auctions from './tableTabPanels/auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import Info from './tableTabPanels/info';
 import {
@@ -51,6 +51,7 @@ const ExplorableExplanation = () => {
   const [interestGroupsData, setInterestGroupsData] = useState<
     InterestGroups[]
   >([]);
+  const [currentStep, setCurrentStep] = useState<string | null>(null);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
 
@@ -154,7 +155,8 @@ const ExplorableExplanation = () => {
         interestGroups.flat(),
         Array.from(advertiserSet),
         isMultiSeller,
-        currentSiteData
+        currentSiteData,
+        currentStep
       );
 
     return {
@@ -162,7 +164,7 @@ const ExplorableExplanation = () => {
       receivedBids,
       adsAndBidders,
     };
-  }, [currentSiteData, sitesVisited, isMultiSeller]);
+  }, [currentSiteData, sitesVisited, isMultiSeller, currentStep]);
 
   const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
     interestGroupName: string;
@@ -248,6 +250,7 @@ const ExplorableExplanation = () => {
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}
+        setCurrentStep={setCurrentStep}
       />
     </TabsProvider>
   );
