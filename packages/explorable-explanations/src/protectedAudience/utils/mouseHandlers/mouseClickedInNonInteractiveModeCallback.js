@@ -66,8 +66,27 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     app.shouldRespondToClick = true;
     renderUserIcon();
 
-    app.timeline.expandIconPositions.forEach((position) => {
-      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
+    app.timeline.expandIconPositions.forEach((position, index) => {
+      app.p.push();
+      if (index === clickedIndex) {
+        app.p.rotate(app.p.TWO_PI / 2);
+        app.p.image(
+          app.p.openWithoutAnimation,
+          -position.x - 10,
+          -position.y - 20,
+          20,
+          20
+        );
+      } else {
+        app.p.image(
+          app.p.openWithoutAnimation,
+          position.x - 10,
+          position.y,
+          20,
+          20
+        );
+      }
+      app.p.pop();
     });
 
     app.isRevisitingNodeInInteractiveMode = false;
