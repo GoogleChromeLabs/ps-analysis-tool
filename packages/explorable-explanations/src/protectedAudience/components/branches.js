@@ -100,6 +100,7 @@ const Branches = async ({
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
+      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
@@ -116,6 +117,7 @@ const Branches = async ({
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
+      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
@@ -129,6 +131,7 @@ const Branches = async ({
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
+      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
@@ -187,6 +190,8 @@ const Branches = async ({
     scrollToCoordinates(endpoints[1].x, endpoints[1].y);
     return endpoints[1];
   }
+
+  scrollToCoordinates(endpoints[0].x, endpoints[0].y);
 
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
