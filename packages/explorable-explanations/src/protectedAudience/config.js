@@ -104,6 +104,13 @@ const config = {
         visited: false,
         visitedIndex: null,
       },
+      {
+        type: 'publisher',
+        website: 'pub3.com',
+        datetime: '2023-10-01 16:00',
+        visited: false,
+        visitedIndex: null,
+      },
     ],
     colors: {
       visitedBlue: '#1A73E8',

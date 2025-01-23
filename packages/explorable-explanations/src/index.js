@@ -20,4 +20,6 @@ export {
   interestGroupSketch,
   sketch,
 } from './protectedAudience';
+export { branchesData } from './protectedAudience/modules/auctions/setupBranches.js';
+export { adunitData } from './protectedAudience/modules/auctions/setUpAdUnitCode.js';
 export { default as config } from './protectedAudience/config.js';
