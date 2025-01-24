@@ -19,6 +19,7 @@
 import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
 
 const setUpPublisherAdServerFlow = (steps) => {
   const { box } = config.flow;
@@ -26,10 +27,11 @@ const setUpPublisherAdServerFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'Publisher',
-      description: 'Ad server tag',
+      title: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER_TAG.title,
+      description: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER_TAG.description,
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+      info: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER_TAG.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -52,10 +54,11 @@ const setUpPublisherAdServerFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'Publisher',
-      description: 'Ad server',
+      title: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.title,
+      description: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.description,
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - 23,
+      info: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -90,9 +93,10 @@ const setUpPublisherAdServerFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'runAdAuction',
+      title: MULTI_SELLER_CONFIG.RUN_AD_AUCTION.title,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + box.height / 4,
+      info: MULTI_SELLER_CONFIG.RUN_AD_AUCTION.info,
     },
     delay: 1000,
     callBack: (returnValue) => {

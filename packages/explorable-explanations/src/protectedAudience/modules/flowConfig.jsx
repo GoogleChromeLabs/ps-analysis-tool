@@ -211,7 +211,7 @@ export const SINGLE_SELLER_CONFIG = {
 };
 
 export const MULTI_SELLER_CONFIG = {
-  SSP_HEADER_BIDDING_TAG: {
+  SSP_ADAPTER_HEADER_BIDDING: {
     title: 'SSP Adapter',
     description: 'header-bidding lib',
     info: (
