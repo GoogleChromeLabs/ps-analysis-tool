@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import React from 'react';
 
 export const ADVERTIZER_CONFIG = {
@@ -208,6 +211,118 @@ export const SINGLE_SELLER_CONFIG = {
 };
 
 export const MULTI_SELLER_CONFIG = {
+  SSP_HEADER_BIDDING_TAG: {
+    title: 'SSP Adapter',
+    description: 'header-bidding lib',
+    info: (
+      <>
+        <p>
+          The AdServer Tag loads on the browser and initiates the header bidding
+          process using libraries like Pre-bid or Amazon TAM.
+        </p>
+        <p> This maximizes competition and potentially increases revenue.</p>
+      </>
+    ),
+  },
+  SSPs: SINGLE_SELLER_CONFIG.SSP,
+  DSPs: SINGLE_SELLER_CONFIG.DSPS,
+  PUBLISHER_ADSERVER_TAG: {
+    title: 'Publisher',
+    description: 'Ad Server Tag',
+    info: (
+      <>
+        <p>
+          These are script tags embedded in the advertiser's webpage that enable
+          communication with publisher ad tag webpage
+        </p>
+        <p>
+          When a user visits a webpage with an ad tag, the tag signals to the
+          publisher's ad server that there's an opportunity to show an ad.
+        </p>
+        <p>The ad tag contains key information about the ad space, such as:</p>
+        <ul>
+          <li>
+            <strong>Ad unit ID:</strong> This identifies the specific ad slot on
+            the page.
+          </li>
+          <li>
+            <strong>Ad size:</strong> Specifies the dimensions of the ad slot
+            (e.g., 300x250 pixels).
+          </li>
+          <li>
+            <strong>Page context:</strong> May include information about the
+            webpage content, user demographics, or other targeting parameters.
+          </li>
+        </ul>
+        <p>
+          These tags are crucial for the ad delivery process, ensuring that the
+          right ads are shown to the right users at the right time.
+        </p>
+      </>
+    ),
+  },
+  PUBLISHER_ADSERVER: {
+    title: 'Publisher',
+    description: 'Ad Server',
+    info: (
+      <>
+        <p>
+          The publisher ad server is the central hub that controls and manages
+          the entire ad serving process on a publisher's website or app
+        </p>
+        <p>
+          It also does couple of other tasks like Delivers and optimizes ads,
+          tracks performance and generates reports, integrates with other ad
+          tech platforms
+        </p>
+        `,
+      </>
+    ),
+  },
+  RUN_AD_AUCTION: {
+    title: 'runAdAuction()',
+    info: (
+      <>
+        <p>
+          A multi-seller auction involves multiple sellers offering their
+          inventory simultaneously, enabling multiple buyers (advertisers or
+          DSPs) to bid on available items. The auction typically takes place on
+          a shared platform (e.g., an SSP or ad exchange), where all sellers'
+          inventories are pooled for bidding.
+        </p>
+        <p>
+          Each seller conducts a component auction, selecting a winner to
+          represent them in the top-level auction. The top-level auction
+          determines the overall winner, whose ad gets displayed. This structure
+          optimizes revenue for sellers while ensuring fair competition among
+          buyers.
+        </p>
+      </>
+    ),
+  },
+  SSP_X: {
+    title: 'SSP A',
+    info: (
+      <>
+        <p>
+          An SSP is a platform that helps publishers manage, sell, and optimize
+          their ad inventory programmatically.
+        </p>
+        <p>
+          It connects publishers with multiple demand sources like DSPs,
+          advertisers, and ad exchanges to facilitate real-time bidding (RTB)
+          auctions.
+        </p>
+        <p>Example: Google Ad Manager, Magnite.</p>
+        <p>In this case it conducts an sub auction</p>
+        <p>
+          The winner of the auction is selected and they are allowed to bid
+          again on the top level auction
+        </p>
+        <p>The winner of the top level auction gets to display ad.</p>
+      </>
+    ),
+  },
   COMPONENT_AUCTION: {
     title: '',
     info: (
@@ -231,27 +346,6 @@ export const MULTI_SELLER_CONFIG = {
         >
           Read more
         </a>
-      </>
-    ),
-  },
-  MULTI_SELLER_AUCTION: {
-    title: '',
-    info: (
-      <>
-        <p>
-          A multi-seller auction involves multiple sellers offering their
-          inventory simultaneously, enabling multiple buyers (advertisers or
-          DSPs) to bid on available items. The auction typically takes place on
-          a shared platform (e.g., an SSP or ad exchange), where all sellers'
-          inventories are pooled for bidding.
-        </p>
-        <p>
-          Each seller conducts a component auction, selecting a winner to
-          represent them in the top-level auction. The top-level auction
-          determines the overall winner, whose ad gets displayed. This structure
-          optimizes revenue for sellers while ensuring fair competition among
-          buyers.
-        </p>
       </>
     ),
   },
