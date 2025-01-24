@@ -246,6 +246,7 @@ const ExplorableExplanation = () => {
         interactiveMode={interactiveMode}
         info={info}
         setInfo={setInfo}
+        highlightedInterestGroup={highlightedInterestGroup}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}

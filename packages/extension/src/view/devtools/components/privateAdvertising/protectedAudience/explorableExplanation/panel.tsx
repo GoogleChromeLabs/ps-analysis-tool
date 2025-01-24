@@ -48,6 +48,11 @@ declare module 'react' {
 interface PanelProps {
   setCurrentSite: (siteData: CurrentSiteData | null) => void;
   currentSiteData: CurrentSiteData | null;
+  highlightedInterestGroup: {
+    interestGroupName: string;
+    interestGroupOwner: string;
+    color: string;
+  } | null;
   setHighlightedInterestGroup: React.Dispatch<
     React.SetStateAction<{
       interestGroupName: string;
@@ -66,6 +71,7 @@ interface PanelProps {
 const Panel = ({
   currentSiteData,
   setCurrentSite,
+  highlightedInterestGroup,
   setHighlightedInterestGroup,
   isMultiSeller,
   setIsMultiSeller,
@@ -108,6 +114,12 @@ const Panel = ({
   const { setActiveTab } = useTabs(({ actions }) => ({
     setActiveTab: actions.setActiveTab,
   }));
+
+  useEffect(() => {
+    if (highlightedInterestGroup) {
+      setActiveTab(0);
+    }
+  }, [highlightedInterestGroup, setActiveTab]);
 
   useEffect(() => {
     if (info) {
