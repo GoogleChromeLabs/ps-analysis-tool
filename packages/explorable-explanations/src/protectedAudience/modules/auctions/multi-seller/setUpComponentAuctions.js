@@ -20,6 +20,7 @@ import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine, Text, Custom } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -76,6 +77,7 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         20,
       y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
+      info: MULTI_SELLER_CONFIG.SSP_X.info,
       ssp: 'SSP A',
       config: {
         bidValue: '$10',
@@ -89,6 +91,7 @@ const setUpComponentAuctions = (steps) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
+      info: MULTI_SELLER_CONFIG.SSP_X.info,
       ssp: 'SSP B',
       config: {
         bidValue: '$8',
@@ -102,6 +105,7 @@ const setUpComponentAuctions = (steps) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
+      info: MULTI_SELLER_CONFIG.SSP_X.info,
       ssp: 'SSP C',
       config: {
         bidValue: '$6',
@@ -138,7 +142,7 @@ const setUpComponentAuctions = (steps) => {
 
 const setUpComponentAuction = (
   steps,
-  { title, x, y, ssp },
+  { title, x, y, ssp, info },
   { bidValue },
   index
 ) => {
@@ -163,6 +167,7 @@ const setUpComponentAuction = (
       title: ssp,
       x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 15,
       y: () => app.auction.nextTipCoordinates?.y + 20,
+      info,
     },
     delay: 1000,
     callBack: (returnValue) => {
