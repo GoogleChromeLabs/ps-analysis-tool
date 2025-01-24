@@ -118,7 +118,7 @@ const Table = ({
   );
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col text-raisin-black dark:text-bright-gray">
       {!hideTableTopBar && (
         <>
           <TableTopBar
