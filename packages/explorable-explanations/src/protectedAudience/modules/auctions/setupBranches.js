@@ -18,8 +18,11 @@
  */
 import app from '../../app';
 import { Branches } from '../../components';
+import config, { publisherData } from '../../config';
 
 const setupBranches = (steps, index) => {
+  const publisher = config.timeline.circles[index].website;
+
   steps.push({
     component: Branches,
     props: {
@@ -28,18 +31,18 @@ const setupBranches = (steps, index) => {
       currentIndex: index,
       branches: [
         {
-          date: 'Sun, 01 October 2023',
-          time: '6:30:00 GMT',
+          date: publisherData[publisher].branches[0].date,
+          time: publisherData[publisher].branches[0].time,
           type: 'datetime',
         },
         {
-          date: 'Sun, 01 October 2023',
-          time: '6:31:00 GMT',
+          date: publisherData[publisher].branches[1].date,
+          time: publisherData[publisher].branches[1].time,
           type: 'datetime',
         },
         {
-          date: 'Sun, 01 October 2023',
-          time: '6:32:00 GMT',
+          date: publisherData[publisher].branches[2].date,
+          time: publisherData[publisher].branches[2].time,
           type: 'datetime',
         },
       ],

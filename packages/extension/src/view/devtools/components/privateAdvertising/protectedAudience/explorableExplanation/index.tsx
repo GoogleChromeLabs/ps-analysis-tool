@@ -32,7 +32,6 @@ import { app, config } from '@google-psat/explorable-explanations';
  */
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
-import Auctions from '../auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import Info from './tableTabPanels/info';
 import {
@@ -41,6 +40,7 @@ import {
   type AdUnitLiteral,
 } from './auctionEventTransformers';
 import BidsPanel from '../bids/panel';
+import Auctions from './tableTabPanels/auctions';
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
@@ -166,6 +166,7 @@ const ExplorableExplanation = () => {
 
   const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
     interestGroupName: string;
+    interestGroupOwner: string;
     color: string;
   } | null>(null);
 
@@ -200,9 +201,7 @@ const ExplorableExplanation = () => {
         content: {
           Element: Auctions,
           props: {
-            auctionEvents: {
-              ...auctionsData,
-            },
+            auctionEvents: auctionsData,
             customAdsAndBidders: auctionsData.adsAndBidders,
           },
         },
@@ -245,6 +244,7 @@ const ExplorableExplanation = () => {
         interactiveMode={interactiveMode}
         info={info}
         setInfo={setInfo}
+        highlightedInterestGroup={highlightedInterestGroup}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}

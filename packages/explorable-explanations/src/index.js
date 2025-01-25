@@ -20,4 +20,7 @@ export {
   interestGroupSketch,
   sketch,
 } from './protectedAudience';
-export { default as config } from './protectedAudience/config.js';
+export {
+  default as config,
+  publisherData,
+} from './protectedAudience/config.js';

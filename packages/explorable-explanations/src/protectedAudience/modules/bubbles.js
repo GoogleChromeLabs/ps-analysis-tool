@@ -507,6 +507,7 @@ bubbles.bubbleChart = (
   const eventHandler = (event, d) => {
     app.setHighlightedInterestGroup({
       interestGroupName: titles[d.data].split('\n')[0],
+      interestGroupOwner: 'https://www.' + groups[d.data],
       color: app.color(groups[d.data]),
     });
     event.stopPropagation();
