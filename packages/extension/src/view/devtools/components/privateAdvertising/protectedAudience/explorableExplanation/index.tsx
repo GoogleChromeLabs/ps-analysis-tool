@@ -166,6 +166,7 @@ const ExplorableExplanation = () => {
 
   const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
     interestGroupName: string;
+    interestGroupOwner: string;
     color: string;
   } | null>(null);
 
@@ -245,6 +246,7 @@ const ExplorableExplanation = () => {
         interactiveMode={interactiveMode}
         info={info}
         setInfo={setInfo}
+        highlightedInterestGroup={highlightedInterestGroup}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}

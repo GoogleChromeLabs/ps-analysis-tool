@@ -38,6 +38,7 @@ interface InterestGroupsProps {
   interestGroupDetails: InterestGroupsType[];
   highlightedInterestGroup?: {
     interestGroupName: string;
+    interestGroupOwner: string;
     color: string;
   } | null;
 }
@@ -124,7 +125,9 @@ const IGTable = ({
 
     return interestGroupDetails.map((interestGroup) => {
       const isHighlighted =
-        interestGroup.name === highlightedInterestGroup.interestGroupName;
+        interestGroup.name === highlightedInterestGroup.interestGroupName &&
+        new URL(interestGroup?.ownerOrigin || '').host ===
+          new URL(highlightedInterestGroup?.interestGroupOwner || '').host;
 
       return {
         ...interestGroup,
