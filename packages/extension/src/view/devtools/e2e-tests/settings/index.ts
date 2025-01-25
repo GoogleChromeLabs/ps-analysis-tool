@@ -34,7 +34,7 @@ describe('Settings Page', () => {
 
     beforeEach(async () => {
       puppeteer = new PuppeteerManagement();
-      await puppeteer.setup();
+      await puppeteer.setup(['--no-sandbox', '--disable-setuid-sandbox']);
       page = await puppeteer.openPage();
       browser = page.browser();
     }, 40000);
