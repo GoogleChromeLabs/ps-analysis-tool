@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 
 /**
@@ -81,6 +81,17 @@ const BodyRow = ({
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
+
+  useEffect(() => {
+    if (isHighlighted) {
+      const element = document.getElementById(index.toString());
+      element?.scrollIntoView?.({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'start',
+      });
+    }
+  }, [index, isHighlighted]);
 
   return (
     <div
