@@ -26,6 +26,7 @@ import type {
   ReceivedBids,
 } from '@google-psat/common';
 import type { AdUnitLiteral } from '../explorableExplanation';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
 interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
@@ -63,10 +64,11 @@ const AdUnitsPanel = ({
           />
         </>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full flex flex-col items-center justify-center">
           <p className="text-sm text-raisin-black dark:text-bright-gray">
             No ad units were recorded.
           </p>
+          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units." />
         </div>
       )}
     </div>

@@ -29,6 +29,7 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
 interface NoBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -84,6 +85,7 @@ const NoBidsTable = ({
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No bids data was recorded.
         </p>
+        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
       </div>
     );
   }
