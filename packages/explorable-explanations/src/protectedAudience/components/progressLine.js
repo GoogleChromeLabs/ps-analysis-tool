@@ -194,9 +194,6 @@ const ProgressLine = ({
           break;
 
         case 'down':
-          if (!isForBranches) {
-            utils.scrollToCoordinates(x1 - scrollAdjuster, y1 + height);
-          }
           currentY += incrementBy;
 
           if (currentY - y1 > height) {

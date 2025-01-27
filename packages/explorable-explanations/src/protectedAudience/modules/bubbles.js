@@ -286,6 +286,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
   }
 
   document.getElementById('interest-canvas').style.zIndex = 4;
+  document.getElementById('bubble-container-div').style.zIndex = 2;
 
   await new Promise((resolve) => {
     const animate = () => {
@@ -342,6 +343,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
       ) {
         resolve();
         document.getElementById('interest-canvas').style.zIndex = 2;
+        document.getElementById('bubble-container-div').style.zIndex = 4;
         utils.wipeAndRecreateInterestCanvas();
       } else {
         requestAnimationFrame(animate);
