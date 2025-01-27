@@ -38,7 +38,7 @@ import { useTabs } from '@google-psat/design-system';
  */
 import Header from '../../../explorableExplanation/header';
 import TableTray from '../../../explorableExplanation/tableTray';
-import type { CurrentSiteData } from './auctionEventTransformers';
+import type { CurrentSiteData, StepType } from './auctionEventTransformers';
 
 declare module 'react' {
   interface CSSProperties {
@@ -60,7 +60,7 @@ interface PanelProps {
   setInteractiveMode: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setInfo: React.Dispatch<React.SetStateAction<string | null>>;
   info: string | null;
-  setCurrentStep: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<StepType>>;
 }
 
 const Panel = ({

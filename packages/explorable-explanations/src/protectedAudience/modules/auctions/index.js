@@ -105,7 +105,12 @@ auction.draw = (index) => {
       const { component, props, callBack, delay = 0 } = step;
 
       if (props?.title) {
-        app.setCurrentStep(props.title);
+        const deciderObject = {
+          title: props.title,
+          description: props.description,
+          ssp: props?.ssp ?? '',
+        };
+        app.setCurrentStep(deciderObject);
       }
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop

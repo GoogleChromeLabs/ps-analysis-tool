@@ -25,11 +25,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv1.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '101ms',
+      formattedTime: '-101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'shoes',
-      time: 1696154400.101,
+      time: -1696154400.101,
       details: {
         ads: [
           {
@@ -69,11 +69,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '102ms',
+      formattedTime: '-102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'heels',
-      time: 1696154400.102,
+      time: -1696154400.102,
       details: {
         ads: [
           {
@@ -113,11 +113,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '103ms',
+      formattedTime: '-103ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'phones',
-      time: 1696154400.103,
+      time: -1696154400.103,
       details: {
         ads: [
           {
@@ -159,11 +159,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv2.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '101ms',
+      formattedTime: '-101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
       name: 'stilletos',
-      time: 1696157600.101,
+      time: -1696157600.101,
       details: {
         ads: [
           {
@@ -203,11 +203,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '102ms',
+      formattedTime: '-102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
       name: 'shorts',
-      time: 1696157600.102,
+      time: -1696157600.102,
       details: {
         ads: [
           {
@@ -250,11 +250,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv3.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '101ms',
+      formattedTime: '-101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
       name: 'bike',
-      time: 1696161200.101,
+      time: -1696161200.101,
       details: {
         ads: [
           {
@@ -294,11 +294,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '102ms',
+      formattedTime: '-102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
       name: 'car',
-      time: 1696161200.102,
+      time: -1696161200.102,
       details: {
         ads: [
           {
@@ -340,11 +340,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv5.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '80ms',
+      formattedTime: '-80ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'football',
-      time: 1696161520.08,
+      time: -1696161520.08,
       details: {
         ads: [
           {
@@ -384,11 +384,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '81ms',
+      formattedTime: '-81ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'basketball',
-      time: 1696161520.081,
+      time: -1696161520.081,
       details: {
         ads: [
           {
@@ -428,11 +428,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '88ms',
+      formattedTime: '-88ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'baseball',
-      time: 1696161520.088,
+      time: -1696161520.088,
       details: {
         ads: [
           {
@@ -475,11 +475,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv6.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '67ms',
+      formattedTime: '-67ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'movies',
-      time: 1696164860.067,
+      time: -1696164860.067,
       details: {
         ads: [
           {
@@ -519,11 +519,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '69ms',
+      formattedTime: '-69ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'series',
-      time: 1696164860.069,
+      time: -1696164860.069,
       details: {
         ads: [
           {
@@ -563,11 +563,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '71ms',
+      formattedTime: '-71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'books',
-      time: 1696164860.071,
+      time: -1696164860.071,
       details: {
         ads: [
           {
@@ -609,11 +609,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv7.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '71ms',
+      formattedTime: '-71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IGG220',
-      time: 1696168400.071,
+      time: -1696168400.071,
       details: {
         ads: [
           {
@@ -653,11 +653,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '76ms',
+      formattedTime: '-76ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IGG201',
-      time: 1696168400.076,
+      time: -1696168400.076,
       details: {
         ads: [
           {
@@ -697,11 +697,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '151ms',
+      formattedTime: '-151ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IG225',
-      time: 1696168400.151,
+      time: -1696168400.151,
       details: {
         ads: [
           {
@@ -745,15 +745,15 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
 export const SYNTHETIC_AUCTION_EVENT_STARTED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   type: 'started',
-  formattedTime: '0 ms',
-  time: 1734076669.500694,
+  formattedTime: '-0 ms',
+  time: -1734076669.500694,
   eventType: 'interestGroupAuctionEventOccurred',
 };
 export const SYNTHETIC_AUCTION_EVENT_CONFIG_RESOLVED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   type: 'configResolved',
-  formattedTime: '0.75ms',
-  time: 1734076669.501441,
+  formattedTime: '-0.75ms',
+  time: -1734076669.501441,
   eventType: 'interestGroupAuctionEventOccurred',
 };
 
@@ -761,17 +761,17 @@ export const SYNTHETIC_AUCTION_EVENT_LOADED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-  formattedTime: '2.16ms',
+  formattedTime: '-2.16ms',
   type: 'loaded',
-  time: 1734076669.502853,
+  time: -1734076669.502853,
   eventType: 'interestGroupAccessed',
 };
 
 export const SYNTHETIC_AUCTION_EVENT_BIDDERJS: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-  formattedTime: '77.17ms',
+  formattedTime: '-77.17ms',
   type: 'Start fetch bidderJs',
-  time: 1734076669.577862,
+  time: -1734076669.577862,
   eventType: 'interestGroupAuctionNetworkRequestCreated',
 };
 
@@ -779,9 +779,9 @@ export const SYNTHETIC_AUCTION_EVENTS_BID: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-  formattedTime: '472.61ms',
+  formattedTime: '-472.61ms',
   type: 'bid',
-  time: 1734076669.973304,
+  time: -1734076669.973304,
   eventType: 'interestGroupAccessed',
   bid: 24,
   bidCurrency: 'USD',
@@ -791,9 +791,9 @@ export const SYNTHETIC_AUCTION_EVENTS_WIN: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-  formattedTime: '629.06ms',
+  formattedTime: '-629.06ms',
   type: 'win',
-  time: 1734076670.129756,
+  time: -1734076670.129756,
   eventType: 'interestGroupAccessed',
 };
 

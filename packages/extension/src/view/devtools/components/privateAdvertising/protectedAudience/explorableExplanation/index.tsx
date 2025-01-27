@@ -39,19 +39,22 @@ import {
   configuredAuctionEvents,
   type CurrentSiteData,
   type AdUnitLiteral,
+  type StepType,
 } from './auctionEventTransformers';
 import BidsPanel from '../bids/panel';
+import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
 
   const [isMultiSeller, setIsMultiSeller] = useState(false);
+  const previousAuctionData = useRef<AuctionEventsType | null>(null);
 
   const [interestGroupsData, setInterestGroupsData] = useState<
     InterestGroups[]
   >([]);
-  const [currentStep, setCurrentStep] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<StepType>({} as StepType);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
 
@@ -136,7 +139,6 @@ const ExplorableExplanation = () => {
       return {};
     }
 
-    //@ts-ignore since SYNTHETIC_INTEREST_GROUPS is a constant and type is not defined.
     const advertiserSet = sitesVisited.filter(
       (site) => Object.keys(SYNTHETIC_INTEREST_GROUPS[site]).length > 0
     );
@@ -156,8 +158,11 @@ const ExplorableExplanation = () => {
         Array.from(advertiserSet),
         isMultiSeller,
         currentSiteData,
-        currentStep
+        currentStep,
+        previousAuctionData.current
       );
+
+    previousAuctionData.current = auctionData;
 
     return {
       auctionData,

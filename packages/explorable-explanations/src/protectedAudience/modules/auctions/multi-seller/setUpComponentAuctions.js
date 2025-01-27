@@ -161,6 +161,7 @@ const setUpComponentAuction = (
     component: Box,
     props: {
       title: ssp,
+      ssp,
       x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 15,
       y: () => app.auction.nextTipCoordinates?.y + 20,
     },
