@@ -36,11 +36,13 @@ import BottomTray from './bottomTray';
 interface AuctionTableProps {
   auctionEvents: singleAuctionEvent[];
   parentOrigin?: string;
+  startDate?: string;
 }
 
 const AuctionTable = ({
   auctionEvents,
   parentOrigin = '',
+  startDate = '',
 }: AuctionTableProps) => {
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
     null
@@ -179,7 +181,11 @@ const AuctionTable = ({
       >
         <div className="flex justify-between items-center p-2">
           <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
-          <p>{new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}</p>
+          <p>
+            {startDate
+              ? startDate
+              : new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
+          </p>
         </div>
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider

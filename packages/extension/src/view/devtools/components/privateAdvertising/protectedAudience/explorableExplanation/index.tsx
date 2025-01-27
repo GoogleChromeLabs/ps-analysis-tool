@@ -32,17 +32,16 @@ import { app, config } from '@google-psat/explorable-explanations';
  */
 import Panel from './panel';
 import IGTable from '../interestGroups/table';
-import Auctions from './tableTabPanels/auctions';
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 import Info from './tableTabPanels/info';
 import {
   configuredAuctionEvents,
   type CurrentSiteData,
-  type AdUnitLiteral,
   type StepType,
 } from './auctionEventTransformers';
 import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
+import Auctions from './tableTabPanels/auctions';
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
@@ -173,6 +172,7 @@ const ExplorableExplanation = () => {
 
   const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
     interestGroupName: string;
+    interestGroupOwner: string;
     color: string;
   } | null>(null);
 
@@ -207,9 +207,7 @@ const ExplorableExplanation = () => {
         content: {
           Element: Auctions,
           props: {
-            auctionEvents: {
-              ...auctionsData,
-            },
+            auctionEvents: auctionsData,
             customAdsAndBidders: auctionsData.adsAndBidders,
           },
         },
@@ -220,10 +218,7 @@ const ExplorableExplanation = () => {
           Element: BidsPanel,
           props: {
             receivedBids: Object.keys(auctionsData.receivedBids ?? {})
-              .map(
-                (key: string) =>
-                  auctionsData?.receivedBids?.[key as AdUnitLiteral] ?? []
-              )
+              .map((key: string) => auctionsData?.receivedBids?.[key] ?? [])
               .flat(),
             noBids: {},
             eeAnimatedTab: true,
@@ -252,6 +247,7 @@ const ExplorableExplanation = () => {
         interactiveMode={interactiveMode}
         info={info}
         setInfo={setInfo}
+        highlightedInterestGroup={highlightedInterestGroup}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}

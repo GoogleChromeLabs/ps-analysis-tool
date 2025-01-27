@@ -24,20 +24,18 @@ interface InfoProps {
     description?: string;
     info: string;
     key: number;
-  };
+  } | null;
 }
 
 const Info = ({ data }: InfoProps) => {
-  const { title, description, info } = data;
-
   return (
     <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full w-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-      {info ? (
+      {data?.info ? (
         <div className="p-2">
           <h3 className="text-sm font-medium">
-            {title + ' ' + (description || '')}
+            {data?.title + ' ' + (data?.description || '')}
           </h3>
-          <div className="text-[12.5px] mt-1">{info}</div>
+          <div className="text-[12.5px] mt-1">{data?.info}</div>
         </div>
       ) : (
         <div className="h-full box-border p-8 flex items-center">

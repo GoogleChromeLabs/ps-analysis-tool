@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import app from '../../../app';
-import config from '../../../config';
+import config, { publisherData } from '../../../config';
 import { Box, ProgressLine, Text, Custom } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 
@@ -29,8 +29,9 @@ const BOX_COLUMN_MARGIN = 390;
 
 const boxCordinates = {};
 
-const setUpComponentAuctions = (steps) => {
+const setUpComponentAuctions = (steps, index) => {
   const { box } = config.flow;
+  const publisher = config.timeline.circles[index].website;
 
   steps.push({
     component: ProgressLine,
@@ -76,8 +77,8 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         20,
       y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
-      ssp: 'SSP A',
       sspWebsite: 'https://ssp-a.com',
+      ssp: publisherData[publisher].ssps[0][0],
       config: {
         bidValue: '$10',
       },
@@ -90,8 +91,8 @@ const setUpComponentAuctions = (steps) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
-      ssp: 'SSP B',
       sspWebsite: 'https://ssp-b.com',
+      ssp: publisherData[publisher].ssps[1][0],
       config: {
         bidValue: '$8',
       },
@@ -104,20 +105,20 @@ const setUpComponentAuctions = (steps) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
-      ssp: 'SSP C',
       sspWebsite: 'https://ssp-c.com',
+      ssp: publisherData[publisher].ssps[2][0],
       config: {
         bidValue: '$6',
       },
     },
   ];
 
-  componentAuctions.forEach((componentAuction, index) => {
+  componentAuctions.forEach((componentAuction, idx) => {
     setUpComponentAuction(
       steps,
       componentAuction,
       componentAuction.config,
-      index
+      idx
     );
   });
 
