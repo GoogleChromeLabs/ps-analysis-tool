@@ -84,7 +84,7 @@ const AuctionPanel = ({
             .filter(([url]) => url !== sellerUrl)
             .reduce<SidebarItems>((acc, [url, events]) => {
               acc[url + time + adUnit] = {
-                title: events[0]?.auctionConfig?.seller,
+                title: events[0]?.auctionConfig?.seller ?? url,
                 panel: {
                   Element: AuctionTable,
                   props: {

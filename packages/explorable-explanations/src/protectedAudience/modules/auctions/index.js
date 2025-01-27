@@ -108,7 +108,11 @@ auction.draw = (index) => {
         const deciderObject = {
           title: props.title,
           description: props.description,
-          ssp: props?.ssp ?? '',
+          ssp: props?.ssp
+            ? props.ssp
+            : app.isMultiSeller && props.title === 'scoreAd()'
+            ? 'https://www.' + config.timeline.circles[index].website
+            : '',
         };
         app.setCurrentStep(deciderObject);
       }

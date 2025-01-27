@@ -77,6 +77,7 @@ const setUpComponentAuctions = (steps) => {
         20,
       y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
       ssp: 'SSP A',
+      sspWebsite: 'https://ssp-a.com',
       config: {
         bidValue: '$10',
       },
@@ -90,6 +91,7 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         15,
       ssp: 'SSP B',
+      sspWebsite: 'https://ssp-b.com',
       config: {
         bidValue: '$8',
       },
@@ -103,6 +105,7 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         15,
       ssp: 'SSP C',
+      sspWebsite: 'https://ssp-c.com',
       config: {
         bidValue: '$6',
       },
@@ -121,24 +124,11 @@ const setUpComponentAuctions = (steps) => {
   setUpTPoint(steps);
 
   setupAfterComponentAuctionFlow(steps);
-
-  // steps.push({
-  //   component: Text,
-  //   props: {
-  //     text: '.',
-  //     x: () => app.auction.nextTipCoordinates?.x,
-  //     y: () => app.auction.nextTipCoordinates?.y + 15,
-  //   },
-  //   delay: 11111111,
-  //   callBack: (returnValue) => {
-  //     app.auction.nextTipCoordinates = returnValue;
-  //   },
-  // });
 };
 
 const setUpComponentAuction = (
   steps,
-  { title, x, y, ssp },
+  { title, x, y, ssp, sspWebsite },
   { bidValue },
   index
 ) => {
@@ -161,7 +151,7 @@ const setUpComponentAuction = (
     component: Box,
     props: {
       title: ssp,
-      ssp,
+      ssp: sspWebsite,
       x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 15,
       y: () => app.auction.nextTipCoordinates?.y + 20,
     },
@@ -189,32 +179,36 @@ const setUpComponentAuction = (
     },
   });
 
-  setUpRunadAuction(steps, () => {
-    return {
-      component: Custom,
-      props: {
-        render: () => {
-          const p = app.p;
+  setUpRunadAuction(
+    steps,
+    () => {
+      return {
+        component: Custom,
+        props: {
+          render: () => {
+            const p = app.p;
 
-          if (index === 2) {
-            p.push();
-            p.noFill();
-            p.rect(boxCordinates.x, boxCordinates.y, BOX_WIDTH, BOX_HEIGHT);
-            p.strokeWeight(0.1);
-            p.pop();
-          }
+            if (index === 2) {
+              p.push();
+              p.noFill();
+              p.rect(boxCordinates.x, boxCordinates.y, BOX_WIDTH, BOX_HEIGHT);
+              p.strokeWeight(0.1);
+              p.pop();
+            }
 
-          return {
-            down: app.auction.nextTipCoordinates,
-          };
+            return {
+              down: app.auction.nextTipCoordinates,
+            };
+          },
         },
-      },
-      delay: 1000,
-      callBack: (returnValue) => {
-        app.auction.nextTipCoordinates = returnValue.down;
-      },
-    };
-  });
+        delay: 1000,
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = returnValue.down;
+        },
+      };
+    },
+    sspWebsite
+  );
 
   steps.push({
     component: ProgressLine,

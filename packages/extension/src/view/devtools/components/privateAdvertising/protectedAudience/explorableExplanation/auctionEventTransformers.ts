@@ -204,7 +204,8 @@ export const createAuctionEvents = (
   eventStartTime: number,
   isTopLevelBid: boolean,
   currentStep: StepType | null,
-  previousEvents: singleAuctionEvent[] | null
+  previousEvents: singleAuctionEvent[] | null,
+  isMultiSeller = false
 ) => {
   const bidEvents = transformBidEvent(interestGroups, isTopLevelBid);
 
@@ -219,7 +220,9 @@ export const createAuctionEvents = (
       );
       break;
     case 'Load Interest Group':
-      events.push(...transformLoadedEvent(interestGroups));
+      if (!isMultiSeller) {
+        events.push(...transformLoadedEvent(interestGroups));
+      }
       break;
     case 'Key/Value':
       if (currentStep.description === 'Trusted DSP Server') {
@@ -261,18 +264,55 @@ export const createAuctionEvents = (
     case 'generateBid()':
       events.push(...bidEvents);
       break;
-    case 'scroreAd()':
-      events.push({
-        formattedTime: '',
-        uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-        name: bidEvents[bidEvents.length - 1].name,
-        ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
-        type: 'win',
-        time: -1734076670.129756,
-        bid: bidEvents[bidEvents.length - 1].bid,
-        bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
-        eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
-      });
+    case 'scoreAd()':
+      if (isMultiSeller) {
+        events.push(
+          transformStartedEvent(seller),
+          transformConfigResolvedEvent(seller)
+        );
+        events.push(
+          ...transformFetchingEvents(advertisers, 'start', seller, 'sellerJS'),
+          ...transformFetchingEvents(
+            advertisers,
+            'start',
+            seller,
+            'sellerTrustedSignals'
+          ),
+          ...transformFetchingEvents(
+            advertisers,
+            'finish',
+            seller,
+            'sellerTrustedSignals'
+          ),
+          ...transformFetchingEvents(advertisers, 'finish', seller, 'sellerJS'),
+          ...transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
+          ...transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS')
+        );
+        events.push(...bidEvents);
+        events.push({
+          formattedTime: '',
+          uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+          name: bidEvents[bidEvents.length - 1].name,
+          ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+          type: 'win',
+          time: -1734076670.129756,
+          bid: bidEvents[bidEvents.length - 1].bid,
+          bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+          eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
+        });
+      } else {
+        events.push({
+          formattedTime: '',
+          uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+          name: bidEvents[bidEvents.length - 1].name,
+          ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+          type: 'win',
+          time: -1734076670.129756,
+          bid: bidEvents[bidEvents.length - 1].bid,
+          bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+          eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
+        });
+      }
       break;
     default:
       return events;
@@ -353,17 +393,42 @@ const getFlattenedAuctionEvents = (
 
   const host = new URL(`https://www.${currentSiteData?.website}`).host;
 
-  sellersArray.forEach((seller) => {
-    events[seller] = createAuctionEvents(
-      interestGroups,
-      new URL(seller).host,
-      advertisers,
-      new Date(currentSiteData?.datetime).getTime(),
-      new URL(seller).host === host && isMultiSeller,
-      currentStep,
-      previousEvents?.[seller] ?? []
+  if (isMultiSeller) {
+    const [firstElement, ...restOfArray] = sellersArray;
+    const newSellersArray = [...restOfArray, firstElement];
+    const sellerIndexToBeProcessed = newSellersArray.indexOf(
+      currentStep?.ssp ?? ''
     );
-  });
+
+    newSellersArray.forEach((seller, index) => {
+      if (index <= sellerIndexToBeProcessed) {
+        events[seller] = createAuctionEvents(
+          interestGroups,
+          new URL(seller).host,
+          advertisers,
+          new Date(currentSiteData?.datetime).getTime(),
+          new URL(seller).host === host && isMultiSeller,
+          currentStep,
+          previousEvents?.[seller] ?? [],
+          isMultiSeller
+        );
+      } else {
+        events[seller] = previousEvents?.[seller] ?? [];
+      }
+    });
+  } else {
+    sellersArray.forEach((seller) => {
+      events[seller] = createAuctionEvents(
+        interestGroups,
+        new URL(seller).host,
+        advertisers,
+        new Date(currentSiteData?.datetime).getTime(),
+        new URL(seller).host === host && isMultiSeller,
+        currentStep,
+        previousEvents?.[seller] ?? []
+      );
+    });
+  }
 
   return events;
 };
@@ -417,7 +482,7 @@ export const configuredAuctionEvents = (
           advertisers,
           isMultiSeller,
           currentStep,
-          previousEvents?.['div-200-1']?.[dateTimeString]?.[websiteString] ?? {}
+          previousEvents?.['div-200-2']?.[dateTimeString]?.[websiteString] ?? {}
         ),
       },
     },
@@ -430,7 +495,7 @@ export const configuredAuctionEvents = (
           advertisers,
           isMultiSeller,
           currentStep,
-          previousEvents?.['div-200-1']?.[dateTimeString]?.[websiteString] ?? {}
+          previousEvents?.['div-200-3']?.[dateTimeString]?.[websiteString] ?? {}
         ),
       },
     },
