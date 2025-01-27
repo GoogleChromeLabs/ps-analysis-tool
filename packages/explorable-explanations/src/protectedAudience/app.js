@@ -67,6 +67,7 @@ const app = {
   visitedIndexOrder: [],
   visitedIndexOrderTracker: -1,
   isRevisitingNodeInInteractiveMode: false,
+  nodeIndexRevisited: -1,
   setCurrentSite: () => null,
   setInfo: () => null,
   setHighlightedInterestGroup: () => null,
