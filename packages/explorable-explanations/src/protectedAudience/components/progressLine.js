@@ -109,7 +109,7 @@ const ProgressLine = ({
           drawArrow(currentX, y1 - 5, direction);
 
           if (currentX === x2) {
-            utils.drawText(text, currentX + width / 2, y1 + height / 2);
+            utils.drawText(text, currentX + width / 2, y1 + height / 2 - 10);
             resolve({ x: x2, y: y2 });
             return;
           }
