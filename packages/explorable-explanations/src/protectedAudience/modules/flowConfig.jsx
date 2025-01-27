@@ -349,4 +349,57 @@ export const MULTI_SELLER_CONFIG = {
       </>
     ),
   },
+  SCORE_AD: {
+    title: 'Score Ad',
+    info: (
+      <>
+        <p>
+          The scoreAd() function evaluates and ranks bids during an ad auction
+          based on price, relevance, and publisher-defined criteria. The
+          function outputs a ranked list of bids, selecting the top bid as the
+          winner for ad display.
+        </p>
+        <p>
+          The scoreAd() function is implemented by the SSP or publisher, and
+          called by the SSPs to determine the winning bid.
+        </p>
+        <p>
+          The scoreAd() function in multi-seller configuration ranks bids from
+          the component auctions.
+        </p>
+      </>
+    ),
+  },
+  REPORT_WIN: {
+    title: 'reportWin()',
+    description: '(on dsp.js)',
+    info: (
+      <>
+        <p>
+          The reportWin() function sends report to the winning DSP to log
+          auction details.
+        </p>
+        <p>
+          The reportWin() function is implemented by the DSPs, and called by the
+          SSPs or adServer to log the auction details.
+        </p>
+      </>
+    ),
+  },
+  REPORT_RESULT: {
+    title: 'reportResult()',
+    description: '(on ssp.js)',
+    info: (
+      <>
+        <p>
+          The reportResult() function sends report to the all the SSP's to log
+          the winner and all the other details to log the auction details.
+        </p>
+        <p>
+          The reportResult() function is implemented by the SSP's, and called by
+          the adServer at the end of top-level auction.
+        </p>
+      </>
+    ),
+  },
 };

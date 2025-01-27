@@ -298,10 +298,11 @@ const setupAfterComponentAuctionFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'scoreAd()',
+      title: MULTI_SELLER_CONFIG.SCORE_AD.title,
       description: '(by SSPs)',
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+      info: MULTI_SELLER_CONFIG.SCORE_AD.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -324,8 +325,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'reportWin()',
-      description: '(on dsp.js)',
+      title: MULTI_SELLER_CONFIG.REPORT_WIN.title,
+      info: MULTI_SELLER_CONFIG.REPORT_WIN.info,
+      description: MULTI_SELLER_CONFIG.REPORT_WIN.description,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
     },
@@ -350,8 +352,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'reportResult()',
-      description: '(on ssp.js)',
+      title: MULTI_SELLER_CONFIG.REPORT_WIN.title,
+      info: MULTI_SELLER_CONFIG.REPORT_WIN.info,
+      description: MULTI_SELLER_CONFIG.REPORT_WIN.description,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
     },
