@@ -266,53 +266,77 @@ export const createAuctionEvents = (
       events.push(...bidEvents);
       break;
     case 'scoreAd()':
-      if (isMultiSeller) {
-        events.push(
-          transformStartedEvent(seller),
-          transformConfigResolvedEvent(seller)
-        );
-        events.push(
-          ...transformFetchingEvents(advertisers, 'start', seller, 'sellerJS'),
-          ...transformFetchingEvents(
-            advertisers,
-            'start',
-            seller,
-            'sellerTrustedSignals'
-          ),
-          ...transformFetchingEvents(
-            advertisers,
-            'finish',
-            seller,
-            'sellerTrustedSignals'
-          ),
-          ...transformFetchingEvents(advertisers, 'finish', seller, 'sellerJS'),
-          ...transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
-          ...transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS')
-        );
-        events.push(...bidEvents);
-        events.push({
-          formattedTime: '',
-          uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-          name: bidEvents[bidEvents.length - 1].name,
-          ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
-          type: 'win',
-          time: -1734076670.129756,
-          bid: bidEvents[bidEvents.length - 1].bid,
-          bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
-          eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
-        });
+      if (bidEvents.length > 0) {
+        if (isMultiSeller) {
+          events.push(
+            transformStartedEvent(seller),
+            transformConfigResolvedEvent(seller),
+            ...transformFetchingEvents(
+              advertisers,
+              'start',
+              seller,
+              'sellerJS'
+            ),
+            ...transformFetchingEvents(
+              advertisers,
+              'start',
+              seller,
+              'sellerTrustedSignals'
+            ),
+            ...transformFetchingEvents(
+              advertisers,
+              'finish',
+              seller,
+              'sellerTrustedSignals'
+            ),
+            ...transformFetchingEvents(
+              advertisers,
+              'finish',
+              seller,
+              'sellerJS'
+            ),
+            ...transformFetchingEvents(
+              advertisers,
+              'start',
+              seller,
+              'bidderJS'
+            ),
+            ...transformFetchingEvents(
+              advertisers,
+              'finish',
+              seller,
+              'bidderJS'
+            ),
+            ...bidEvents,
+            {
+              formattedTime: '',
+              uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+              name: bidEvents[bidEvents.length - 1].name,
+              ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+              type: 'win',
+              time: -1734076670.129756,
+              bid: bidEvents[bidEvents.length - 1].bid,
+              bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+              eventType:
+                'interestGroupAccessed' as singleAuctionEvent['eventType'],
+            }
+          );
+        }
       } else {
-        events.push({
-          formattedTime: '',
-          uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-          name: bidEvents[bidEvents.length - 1].name,
-          ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
-          type: 'win',
-          time: -1734076670.129756,
-          bid: bidEvents[bidEvents.length - 1].bid,
-          bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
-          eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
-        });
+        if (bidEvents.length > 0) {
+          events.push({
+            formattedTime: '',
+            uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+            name: bidEvents[bidEvents.length - 1].name,
+            ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+            type: 'win',
+            time: -1734076670.129756,
+            bid: bidEvents[bidEvents.length - 1].bid,
+            bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+            eventType:
+              'interestGroupAccessed' as singleAuctionEvent['eventType'],
+          });
+        }
       }
       break;
     default:
