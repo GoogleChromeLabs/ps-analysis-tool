@@ -114,6 +114,7 @@ text {
 .bubble-container {
     position: absolute;
     pointer-events: auto;
+    z-index: 4;
 }
 
 .bubble-container.expanded {
