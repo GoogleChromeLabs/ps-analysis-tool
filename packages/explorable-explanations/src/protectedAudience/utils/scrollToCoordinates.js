@@ -18,7 +18,7 @@
  */
 import app from '../app';
 export const scrollToCoordinates = (x, y, override = false) => {
-  if (!app.autoScroll) {
+  if (!app.autoScroll || !app.isRevisitingNodeInInteractiveMode) {
     return;
   }
 
