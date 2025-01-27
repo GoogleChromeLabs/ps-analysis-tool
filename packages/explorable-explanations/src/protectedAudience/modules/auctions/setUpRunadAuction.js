@@ -130,9 +130,9 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
         props: {
           direction: 'left',
           text: '$20',
-          x1: () => app.auction.nextTipCoordinates?.x + box.width / 4 + 5,
+          x1: () => app.auction.nextTipCoordinates?.x - box.width / 2,
           y1: () => {
-            return app.auction.nextTipCoordinates?.y + 25;
+            return app.auction.nextTipCoordinates?.y + 35;
           },
         },
         callBack: (returnValue) => {
@@ -177,9 +177,9 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
         props: {
           direction: 'left',
           text: '$10',
-          x1: () => app.auction.nextTipCoordinates?.x + box.width / 4 + 5,
+          x1: () => app.auction.nextTipCoordinates?.x - box.width / 2,
           y1: () => {
-            return app.auction.nextTipCoordinates?.y + 15 - box.height / 2;
+            return app.auction.nextTipCoordinates?.y + 25 - box.height / 2;
           },
         },
         callBack: (returnValue) => {
