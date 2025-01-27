@@ -106,7 +106,7 @@ const ProgressLine = ({
           }
 
           p.line(x1, y1, currentX, y2);
-          drawArrow(currentX, y1, direction);
+          drawArrow(currentX, y1 - 5, direction);
 
           if (currentX === x2) {
             utils.drawText(text, currentX + width / 2, y1 + height / 2);
