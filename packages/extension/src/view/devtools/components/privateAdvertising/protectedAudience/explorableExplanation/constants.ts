@@ -25,11 +25,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv1.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-101ms',
+      formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'shoes',
-      time: -1696154400.101,
+      time: 1696154400.101,
       details: {
         ads: [
           {
@@ -69,11 +69,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-102ms',
+      formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'heels',
-      time: -1696154400.102,
+      time: 1696154400.102,
       details: {
         ads: [
           {
@@ -113,11 +113,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-103ms',
+      formattedTime: '103ms',
       type: 'join',
       ownerOrigin: 'https://www.adv1.com',
       name: 'phones',
-      time: -1696154400.103,
+      time: 1696154400.103,
       details: {
         ads: [
           {
@@ -159,11 +159,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv2.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-101ms',
+      formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
       name: 'stilletos',
-      time: -1696157600.101,
+      time: 1696157600.101,
       details: {
         ads: [
           {
@@ -203,11 +203,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-102ms',
+      formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv2.com',
       name: 'shorts',
-      time: -1696157600.102,
+      time: 1696157600.102,
       details: {
         ads: [
           {
@@ -250,11 +250,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv3.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-101ms',
+      formattedTime: '101ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
       name: 'bike',
-      time: -1696161200.101,
+      time: 1696161200.101,
       details: {
         ads: [
           {
@@ -294,11 +294,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-102ms',
+      formattedTime: '102ms',
       type: 'join',
       ownerOrigin: 'https://www.adv3.com',
       name: 'car',
-      time: -1696161200.102,
+      time: 1696161200.102,
       details: {
         ads: [
           {
@@ -340,11 +340,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv5.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-80ms',
+      formattedTime: '80ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'football',
-      time: -1696161520.08,
+      time: 1696161520.08,
       details: {
         ads: [
           {
@@ -384,11 +384,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-81ms',
+      formattedTime: '81ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'basketball',
-      time: -1696161520.081,
+      time: 1696161520.081,
       details: {
         ads: [
           {
@@ -428,11 +428,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-88ms',
+      formattedTime: '88ms',
       type: 'join',
       ownerOrigin: 'https://www.adv5.com',
       name: 'baseball',
-      time: -1696161520.088,
+      time: 1696161520.088,
       details: {
         ads: [
           {
@@ -475,11 +475,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv6.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-67ms',
+      formattedTime: '67ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'movies',
-      time: -1696164860.067,
+      time: 1696164860.067,
       details: {
         ads: [
           {
@@ -519,11 +519,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-69ms',
+      formattedTime: '69ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'series',
-      time: -1696164860.069,
+      time: 1696164860.069,
       details: {
         ads: [
           {
@@ -563,11 +563,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-71ms',
+      formattedTime: '71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv6.com',
       name: 'books',
-      time: -1696164860.071,
+      time: 1696164860.071,
       details: {
         ads: [
           {
@@ -609,11 +609,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
   'adv7.com': [
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-71ms',
+      formattedTime: '71ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IGG220',
-      time: -1696168400.071,
+      time: 1696168400.071,
       details: {
         ads: [
           {
@@ -653,11 +653,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-76ms',
+      formattedTime: '76ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IGG201',
-      time: -1696168400.076,
+      time: 1696168400.076,
       details: {
         ads: [
           {
@@ -697,11 +697,11 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
     },
     {
       eventType: 'interestGroupAccessed',
-      formattedTime: '-151ms',
+      formattedTime: '151ms',
       type: 'join',
       ownerOrigin: 'https://www.adv7.com',
       name: 'IG225',
-      time: -1696168400.151,
+      time: 1696168400.151,
       details: {
         ads: [
           {
