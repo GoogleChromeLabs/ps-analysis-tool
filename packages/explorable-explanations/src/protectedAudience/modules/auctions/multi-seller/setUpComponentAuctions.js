@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import app from '../../../app';
-import config from '../../../config';
+import config, { publisherData } from '../../../config';
 import { Box, ProgressLine, Text, Custom } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
@@ -30,8 +30,9 @@ const BOX_COLUMN_MARGIN = 390;
 
 const boxCordinates = {};
 
-const setUpComponentAuctions = (steps) => {
+const setUpComponentAuctions = (steps, index) => {
   const { box } = config.flow;
+  const publisher = config.timeline.circles[index].website;
 
   steps.push({
     component: ProgressLine,
@@ -78,7 +79,7 @@ const setUpComponentAuctions = (steps) => {
         20,
       y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
       info: MULTI_SELLER_CONFIG.SSP_X.info,
-      ssp: 'SSP A',
+      ssp: publisherData[publisher].ssps[0][0],
       config: {
         bidValue: '$10',
       },
@@ -92,7 +93,7 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         15,
       info: MULTI_SELLER_CONFIG.SSP_X.info,
-      ssp: 'SSP B',
+      ssp: publisherData[publisher].ssps[1][0],
       config: {
         bidValue: '$8',
       },
@@ -106,19 +107,19 @@ const setUpComponentAuctions = (steps) => {
         BORDER_BOX_MARGIN * 2 +
         15,
       info: MULTI_SELLER_CONFIG.SSP_X.info,
-      ssp: 'SSP C',
+      ssp: publisherData[publisher].ssps[2][0],
       config: {
         bidValue: '$6',
       },
     },
   ];
 
-  componentAuctions.forEach((componentAuction, index) => {
+  componentAuctions.forEach((componentAuction, idx) => {
     setUpComponentAuction(
       steps,
       componentAuction,
       componentAuction.config,
-      index
+      idx
     );
   });
 

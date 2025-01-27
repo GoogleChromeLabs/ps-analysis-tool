@@ -90,6 +90,7 @@ const AuctionPanel = ({
                   props: {
                     auctionEvents: events,
                     parentOrigin: events[0]?.auctionConfig?.seller,
+                    startDate: time,
                   },
                 },
                 children: {},
@@ -114,6 +115,7 @@ const AuctionPanel = ({
                 parentOrigin:
                   auctionEventsData[adUnit][time][sellerUrl][sellerUrl][0]
                     ?.auctionConfig?.seller,
+                startDate: time,
               },
             },
             children,

@@ -17,13 +17,14 @@
  * Internal dependencies.
  */
 import app from '../../app';
-import config from '../../config';
+import config, { publisherData } from '../../config';
 import flow from '../flow';
 import { Branches } from '../../components';
 
 const setUpAdUnitCode = (steps, index) => {
   const { colors } = config.flow;
   const { x, y } = flow.getTimelineCircleCoordinates(index);
+  const publisher = config.timeline.circles[index].website;
 
   // Setup Ad unit codes
   steps.push({
@@ -35,19 +36,19 @@ const setUpAdUnitCode = (steps, index) => {
       branches: [
         {
           title: 'adunit-code',
-          description: 'div-200-1',
+          description: publisherData[publisher].adunits[0],
           type: 'box',
           color: colors.box.browser,
         },
         {
           title: 'adunit-code',
-          description: 'div-200-2',
+          description: publisherData[publisher].adunits[1],
           type: 'box',
           color: colors.box.browser,
         },
         {
           title: 'adunit-code',
-          description: 'div-200-3',
+          description: publisherData[publisher].adunits[2],
           type: 'box',
           color: colors.box.browser,
         },
