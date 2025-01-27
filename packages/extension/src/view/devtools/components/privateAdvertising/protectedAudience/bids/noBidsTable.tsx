@@ -39,12 +39,14 @@ interface NoBidsTableProps {
   >;
   selectedRow: singleAuctionEvent | NoBidsType[keyof NoBidsType] | null;
   noBids: NoBidsType;
+  showEvaluationPlaceholder?: boolean;
 }
 
 const NoBidsTable = ({
   noBids,
   setSelectedRow,
   selectedRow,
+  showEvaluationPlaceholder,
 }: NoBidsTableProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -85,7 +87,9 @@ const NoBidsTable = ({
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No bids data was recorded.
         </p>
-        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
+        {showEvaluationPlaceholder && (
+          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
+        )}
       </div>
     );
   }

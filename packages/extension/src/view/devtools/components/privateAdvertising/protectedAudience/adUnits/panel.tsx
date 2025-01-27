@@ -35,6 +35,7 @@ interface AdUnitsPanelProps {
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
+  showEvaluationPlaceholder?: boolean;
 }
 
 const AdUnitsPanel = ({
@@ -44,6 +45,7 @@ const AdUnitsPanel = ({
   setSelectedAdUnit,
   selectedAdUnit,
   setIsInspecting,
+  showEvaluationPlaceholder = true,
 }: AdUnitsPanelProps) => {
   return (
     <div className="flex flex-col h-full w-full">
@@ -68,7 +70,9 @@ const AdUnitsPanel = ({
           <p className="text-sm text-raisin-black dark:text-bright-gray">
             No ad units were recorded.
           </p>
-          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units." />
+          {showEvaluationPlaceholder && (
+            <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units." />
+          )}
         </div>
       )}
     </div>

@@ -44,6 +44,7 @@ interface ReceivedBidsTableProps {
   receivedBids: ReceivedBids[];
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
+  showEvaluationPlaceholder?: boolean;
 }
 
 const ReceivedBidsTable = ({
@@ -52,6 +53,7 @@ const ReceivedBidsTable = ({
   receivedBids,
   storage,
   setStorage,
+  showEvaluationPlaceholder = true,
 }: ReceivedBidsTableProps) => {
   const auctionsTabData = JSON.parse(storage?.[4] || '{}');
 
@@ -201,7 +203,9 @@ const ReceivedBidsTable = ({
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No bids data was recorded.
         </p>
-        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
+        {showEvaluationPlaceholder && (
+          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
+        )}
       </div>
     );
   }

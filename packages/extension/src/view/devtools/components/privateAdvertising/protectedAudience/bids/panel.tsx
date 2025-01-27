@@ -86,6 +86,7 @@ const Panel = ({
               receivedBids={receivedBids}
               storage={storage}
               setStorage={setStorage}
+              showEvaluationPlaceholder={!eeAnimatedTab}
             />
           </div>
         ) : (
@@ -99,6 +100,7 @@ const Panel = ({
               setSelectedRow={setSelectedRow}
               selectedRow={selectedRow}
               noBids={noBids}
+              showEvaluationPlaceholder={!eeAnimatedTab}
             />
           </div>
         )}
