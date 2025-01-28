@@ -160,7 +160,6 @@ const ExplorableExplanation = () => {
         currentStep,
         previousAuctionData.current
       );
-
     previousAuctionData.current = auctionData;
 
     return {

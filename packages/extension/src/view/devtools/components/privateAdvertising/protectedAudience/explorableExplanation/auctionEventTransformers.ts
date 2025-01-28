@@ -340,7 +340,7 @@ export const createAuctionEvents = (
       }
       break;
     default:
-      return events;
+      break;
   }
 
   const flattenedEvents = events.flat();
@@ -426,7 +426,7 @@ const getFlattenedAuctionEvents = (
     );
 
     newSellersArray.forEach((seller, index) => {
-      if (index <= sellerIndexToBeProcessed) {
+      if (index === sellerIndexToBeProcessed) {
         events[seller] = createAuctionEvents(
           interestGroups,
           new URL(seller).host,
@@ -437,10 +437,15 @@ const getFlattenedAuctionEvents = (
           previousEvents?.[seller] ?? [],
           isMultiSeller
         );
-      } else {
+      }
+      if (index < sellerIndexToBeProcessed) {
         events[seller] = previousEvents?.[seller] ?? [];
       }
     });
+
+    if (!events?.[`https://www.${currentSiteData?.website}`]) {
+      events[`https://www.${currentSiteData?.website}`] = [];
+    }
   } else {
     sellersArray.forEach((seller) => {
       events[seller] = createAuctionEvents(
@@ -498,7 +503,7 @@ export const configuredAuctionEvents = (
           advertisers,
           isMultiSeller,
           currentStep,
-          previousEvents?.['div-200-1']?.[dates[0]]?.[websiteString] ?? {}
+          previousEvents?.[adunits[0]]?.[dates[0]]?.[websiteString] ?? {}
         ),
       },
     },
@@ -511,7 +516,7 @@ export const configuredAuctionEvents = (
           advertisers,
           isMultiSeller,
           currentStep,
-          previousEvents?.['div-200-2']?.[dates[0]]?.[websiteString] ?? {}
+          previousEvents?.[adunits[1]]?.[dates[1]]?.[websiteString] ?? {}
         ),
       },
     },
@@ -524,7 +529,7 @@ export const configuredAuctionEvents = (
           advertisers,
           isMultiSeller,
           currentStep,
-          previousEvents?.['div-200-3']?.[dates[0]]?.[websiteString] ?? {}
+          previousEvents?.[adunits[2]]?.[dates[2]]?.[websiteString] ?? {}
         ),
       },
     },
