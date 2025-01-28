@@ -43,6 +43,8 @@ export const ADVERTIZER_CONFIG = {
           and decide if the user should be added to specific interest groups
           using the{' '}
           <code className="text-upsed-tomato">joinAdInterestGroup()</code> API.
+        </p>
+        <p>
           These interest groups are added to the user's browser which are shown
           with small bubbles here. They store user profiles based on
           demographics, location, and behavior while ensuring compliance with
