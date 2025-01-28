@@ -45,7 +45,7 @@ const ProgressLine = ({
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
 
-  const { x2, y2 } = getEndpointCoordinates(x1, y1, direction);
+  const { x2, y2 } = getEndpointCoordinates(x1, y1, direction, width, height);
 
   const drawArrow = (x, y, dir) => {
     if (!noArrow) {
@@ -53,86 +53,16 @@ const ProgressLine = ({
     }
   };
 
-  const draw = {
-    right: () => {
-      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
-      p.push();
-      p.noStroke();
-      p.fill(config.flow.colors.box.background);
-      p.rect(x1, y1, width, ARROW_SIZE);
-      p.pop();
+  const getRectSize = () => {
+    if (noArrow) {
+      return 0;
+    }
 
-      p.line(x1, y1, x1 + width, y2);
-      drawArrow(x1 + width, y1, direction);
-
-      return { x: x1 + width, y: y1 };
-    },
-    left: () => {
-      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
-      p.push();
-      p.noStroke();
-      p.fill(config.flow.colors.box.background);
-      p.rect(x2, y2 + 10, -width, ARROW_SIZE);
-      p.pop();
-
-      p.line(x2, y2 + 10, x2 - width, y1 + 10);
-      drawArrow(x2 - width, y1 + 4, direction);
-      utils.drawText(text, x2 - width / 2, y1 + height / 2);
-
-      return { x: x2 - width, y: y1 + 10 };
-    },
-    down: () => {
-      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
-      p.push();
-      p.noStroke();
-      p.fill(config.flow.colors.box.background);
-      p.rect(x1 - 5, y1, ARROW_SIZE, height);
-      p.pop();
-
-      p.line(x1, y1, x2, y1 + height);
-      drawArrow(x1, y1 + height, direction);
-      utils.drawText(
-        text,
-        x1 - (text.startsWith('$') ? 10 : width / 2),
-        y1 + height / 2
-      );
-
-      return { x: x1, y: y1 + height };
-    },
-    up: () => {
-      //Doing this since it was noticed that drawing switching to fastest mode in mid animation still shows the arrow
-      p.push();
-      p.noStroke();
-      p.fill(config.flow.colors.box.background);
-      p.rect(x1 - 5, y1, ARROW_SIZE, -height);
-      p.pop();
-
-      p.line(x1, y1, x2, y1 - height);
-      drawArrow(x1, y1 - height, direction);
-      utils.drawText(
-        text,
-        x1 + (text.startsWith('$') ? 10 : width / 2),
-        y1 - height / 2
-      );
-
-      return { x: x1, y: y1 - height };
-    },
-  };
-
-  let returnCoordinates = { x: 0, y: 0 };
-
-  const drawInstantly = () => {
-    p.push();
-    p.stroke(0);
-    p.strokeWeight(1);
-    returnCoordinates = draw[direction]();
-
-    p.pop();
+    return 10;
   };
 
   let currentX = x1; // For horizontal directions
   let currentY = y1; // For vertical directions
-  let targetX = x2;
 
   return new Promise((resolve) => {
     // eslint-disable-next-line complexity
@@ -148,55 +78,91 @@ const ProgressLine = ({
       }
 
       //Redundant condition to handle case when animation has started and someone has switched to fastest speed.
+      let drawInstantlyFlag = false;
+
       if (
         noAnimation ||
         app.isRevisitingNodeInInteractiveMode ||
         app.speedMultiplier === 4
       ) {
-        drawInstantly();
-        resolve(returnCoordinates);
-        return;
+        drawInstantlyFlag = true;
       }
 
+      const size = getRectSize();
       p.push();
       p.stroke(0);
       p.strokeWeight(1);
 
       switch (direction) {
         case 'right':
+          currentX += Math.min(incrementBy, x2 - currentX);
           if (!isForBranches) {
             utils.scrollToCoordinates(currentX + width, y2 - scrollAdjuster);
           }
 
-          currentX += incrementBy;
-
-          if (currentX - x1 > width) {
-            resolve({ x: currentX, y: y2 });
-            return;
+          if (drawInstantlyFlag) {
+            currentX = x2;
           }
+
+          p.push();
+          p.noStroke();
+
+          p.rect(x1 + 1, y1 - size / 2, width, size + 1);
+          p.pop();
+
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1, direction);
+
+          if (currentX === x2) {
+            resolve({ x: x2, y: y2 });
+            return;
+          }
+
           break;
 
         case 'left':
-          if (!isForBranches) {
-            utils.scrollToCoordinates(targetX, y1 - scrollAdjuster);
-          }
-          targetX -= incrementBy;
+          currentX -= Math.min(incrementBy, currentX - x2);
 
-          if (x2 - targetX > width) {
-            utils.drawText(text, targetX + width / 2, y1 + height / 2);
-            resolve({ x: targetX, y: y1 + 10 });
+          if (!isForBranches) {
+            utils.scrollToCoordinates(currentX, y1 - scrollAdjuster);
+          }
+
+          if (drawInstantlyFlag) {
+            currentX = x2;
+          }
+
+          p.push();
+          p.noStroke();
+          p.rect(x2, y1 - size / 2, width - 1, size + 1);
+          p.pop();
+
+          p.line(x1, y1, currentX, y2);
+          drawArrow(currentX, y1 - 5, direction);
+
+          if (currentX === x2) {
+            utils.drawText(text, currentX + width / 2, y1 + height / 2 - 10);
+            resolve({ x: x2, y: y2 });
             return;
           }
-          p.line(x2, y2 + 10, targetX, y1 + 10);
-          drawArrow(targetX, y1 + 4, direction);
+
           break;
 
         case 'down':
-          currentY += incrementBy;
+          currentY += Math.min(incrementBy, y2 - currentY);
 
-          if (currentY - y1 > height) {
+          if (drawInstantlyFlag) {
+            currentY = y2;
+          }
+
+          p.push();
+          p.noStroke();
+          p.rect(x1 - size / 2, y1 + 1, size + 1, height);
+          p.pop();
+
+          p.line(x1, y1, x2, currentY);
+          drawArrow(x1, currentY, direction);
+
+          if (currentY === y2) {
             utils.drawText(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
@@ -205,17 +171,28 @@ const ProgressLine = ({
             resolve({ x: x2, y: currentY });
             return;
           }
-          p.line(x1, y1, x2, currentY);
-          drawArrow(x1, currentY, direction);
+
           break;
 
         case 'up':
+          currentY -= Math.min(incrementBy, currentY - y2);
           if (!isForBranches) {
             utils.scrollToCoordinates(x1 - scrollAdjuster, y1 - height);
           }
-          currentY -= incrementBy;
 
-          if (y1 - currentY > height) {
+          if (drawInstantlyFlag) {
+            currentY = y2;
+          }
+
+          p.push();
+          p.noStroke();
+          p.rect(x1 - size / 2, y2, size + 1, height - 1);
+          p.pop();
+
+          p.line(x1, y1, x2, currentY);
+          drawArrow(x1, currentY, direction);
+
+          if (currentY === y2) {
             utils.drawText(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),
@@ -224,8 +201,7 @@ const ProgressLine = ({
             resolve({ x: x2, y: currentY });
             return;
           }
-          p.line(x1, y1, x2, currentY);
-          drawArrow(x1, currentY, direction);
+
           break;
 
         default:
@@ -252,26 +228,26 @@ const ProgressLine = ({
  * @param {number} x1 - The starting x-coordinate.
  * @param {number} y1 - The starting y-coordinate.
  * @param {string} direction - The direction of the line ('down', 'right', 'left', 'up').
+ * @param width - The width of the line.
+ * @param height - The height of the line.
  * @returns {{x2: number, y2: number}} The endpoint coordinates.
  */
-const getEndpointCoordinates = (x1, y1, direction) => {
-  const { lineHeight, lineWidth } = config.flow;
+const getEndpointCoordinates = (x1, y1, direction, width, height) => {
   let x2 = x1;
   let y2 = y1;
 
   switch (direction) {
     case 'down':
-      y2 += lineHeight;
+      y2 += height;
       break;
     case 'right':
-      x2 += lineWidth;
+      x2 += width;
       break;
     case 'left':
-      x2 -= lineWidth;
-      x2 = x2 < lineWidth ? lineWidth : x2;
+      x2 -= width;
       break;
     case 'up':
-      y2 -= lineHeight;
+      y2 -= height;
       break;
     default:
       throw new Error(`Invalid direction: ${direction}`);
