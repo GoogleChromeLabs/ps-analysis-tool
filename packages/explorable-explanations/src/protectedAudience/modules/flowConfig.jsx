@@ -193,8 +193,9 @@ export const SINGLE_SELLER_CONFIG = {
         <p>
           Chrome calls{' '}
           <a
+            className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#31-fetching-real-time-data-from-a-trusted-server"
-            target="_balnk"
+            target="_blank"
             rel="noreferrer"
           >
             Key/Value trusted DSP bidding server
@@ -219,10 +220,23 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A DSP-side function that generates a bid for an auction based on
-          interest group data, contextual signals, and advertiser preferences.
-          Outputs include bid amount, ad creative, and metadata, ensuring
-          relevance and competitiveness in the auction.
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#32-on-device-bidding"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <code className="text-upsed-tomato">generateBid()</code>
+          </a>{' '}
+          DSP JavaScript function for each participating interest group.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>A DSP-side function
+          that generates a bid for an auction based on interest group data,
+          contextual signals, and advertiser preferences. Outputs include bid
+          amount, ad creative, and metadata, ensuring relevance and
+          competitiveness in the auction.
         </p>
       </>
     ),
@@ -233,9 +247,22 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A secure SSP-side server responsible for ad scoring and auction
-          facilitation. It uses key/value pairs to evaluate bids and ensures
-          data privacy and compliance during ad auctions.
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#25-additional-trusted-signals-directfromsellersignals"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Key/Value trusted SSP scoring server
+          </a>{' '}
+          to fetch real-time scoring signals.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>A secure SSP-side
+          server responsible for ad scoring and auction facilitation. It uses
+          key/value pairs to evaluate bids and ensures data privacy and
+          compliance during ad auctions.
         </p>
       </>
     ),
@@ -246,14 +273,29 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          An SSP-side function that evaluates and ranks bids during an ad
-          auction based on price, relevance, and publisher-defined criteria.
-          Outputs a ranked list of bids, selecting the top bid as the winner for
-          ad display.
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#23-scoring-bids"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <code className="text-upsed-tomato">scoreAd()</code>
+          </a>{' '}
+          SSP JavaScript function for each participating interest group.
         </p>
-        <p>
-          Any bid which is less than the contextual bid passed by the SSP tag
-          while calling the runAdAuction is rejected.
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            An SSP-side function that evaluates and ranks bids during an ad
+            auction based on price, relevance, and publisher-defined criteria.
+            Outputs a ranked list of bids, selecting the top bid as the winner
+            for ad display.
+          </p>
+          <p>
+            Any bid which is less than the contextual bid passed by the SSP tag
+            while calling the runAdAuction is rejected.
+          </p>
         </p>
       </>
     ),
@@ -264,10 +306,22 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A function executed by the winning DSP to log auction details,
-          including bid price and ad performance, for reporting and
-          optimization. It ensures transparency for campaign performance and
-          provides data for analytics and billing.
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#52-buyer-reporting-on-render-and-ad-events"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <code className="text-upsed-tomato">reportWin()</code>
+          </a>{' '}
+          DSP JavaScript function to report winner to DSP.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>A function executed by
+          the winning DSP to log auction details, including bid price and ad
+          performance, for reporting and optimization. It ensures transparency
+          for campaign performance and provides data for analytics and billing.
         </p>
       </>
     ),
@@ -278,9 +332,22 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A function executed by the SSP or publisher to log auction results,
-          providing transparency and analytics to all parties. It tracks metrics
-          such as winning bids, auction details, and ad performance.
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#51-seller-reporting-on-render"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <code className="text-upsed-tomato">reportResult()</code>
+          </a>{' '}
+          SSP JavaScript function to report winner to SSP.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>A function executed by
+          the SSP or publisher to log auction results, providing transparency
+          and analytics to all parties. It tracks metrics such as winning bids,
+          auction details, and ad performance.
         </p>
       </>
     ),
@@ -294,10 +361,17 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The header bidding tag loads on the browser and initiates the header
-          bidding process using libraries like Pre-bid or Amazon TAM.
+          SSP adapter sends ad request to SSP server indicating that the browser
+          supports Protected Audience API.
         </p>
-        <p> This maximizes competition and potentially increases revenue.</p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            The header bidding tag loads on the browser and initiates the header
+            bidding process using libraries like Pre-bid or Amazon TAM.
+          </p>
+          <p> This maximizes competition and potentially increases revenue.</p>
+        </p>
       </>
     ),
   },
@@ -309,32 +383,48 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          These are script tags embedded in the advertiser's webpage that enable
-          communication with publisher ad tag webpage
+          Publisher Ad Server tag sends ad request to Publisher Ad Server
+          server.
         </p>
         <p>
-          When a user visits a webpage with an ad tag, the tag signals along
-          with header bidding winner to the publisher's ad server that there's
-          an opportunity to show an ad.
+          Publisher Ad Server tag initiates on-device auction by calling
+          <a href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#21-initiating-an-on-device-auction">
+            <code className="text-upsed-tomato">runAdAuction()</code>
+          </a>{' '}
+          API.
         </p>
-        <p>The ad tag contains key information about the ad space, such as:</p>
-        <ul>
-          <li>
-            <strong>Ad unit ID:</strong> This identifies the specific ad slot on
-            the page.
-          </li>
-          <li>
-            <strong>Ad size:</strong> Specifies the dimensions of the ad slot
-            (e.g., 300x250 pixels).
-          </li>
-          <li>
-            <strong>Page context:</strong> May include information about the
-            webpage content, user demographics, or other targeting parameters.
-          </li>
-        </ul>
-        <p>
-          These tags are crucial for the ad delivery process, ensuring that the
-          right ads are shown to the right users at the right time.
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            These are script tags embedded in the advertiser's webpage that
+            enable communication with publisher ad tag webpage
+          </p>
+          <p>
+            When a user visits a webpage with an ad tag, the tag signals along
+            with header bidding winner to the publisher's ad server that there's
+            an opportunity to show an ad.
+          </p>
+          <p>
+            The ad tag contains key information about the ad space, such as:
+          </p>
+          <ul>
+            <li>
+              <strong>Ad unit ID:</strong> This identifies the specific ad slot
+              on the page.
+            </li>
+            <li>
+              <strong>Ad size:</strong> Specifies the dimensions of the ad slot
+              (e.g., 300x250 pixels).
+            </li>
+            <li>
+              <strong>Page context:</strong> May include information about the
+              webpage content, user demographics, or other targeting parameters.
+            </li>
+          </ul>
+          <p>
+            These tags are crucial for the ad delivery process, ensuring that
+            the right ads are shown to the right users at the right time.
+          </p>
         </p>
       </>
     ),
@@ -429,6 +519,7 @@ export const MULTI_SELLER_CONFIG = {
           outlined in the <em>Bidding and Auction Services Design</em>.
         </p>
         <a
+          className="text-bright-navy-blue"
           href="https://github.com/privacysandbox/protected-auction-services-docs/blob/main/bidding_auction_services_multi_seller_auctions.md#component-auction"
           target="_blank"
           rel="noreferrer"
