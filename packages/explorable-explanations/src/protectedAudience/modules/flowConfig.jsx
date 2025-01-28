@@ -457,7 +457,6 @@ export const MULTI_SELLER_CONFIG = {
           <code className="text-upsed-tomato">scoreAd()</code> function in
           Protected Audience API.
         </p>
-        `,
       </>
     ),
   },
