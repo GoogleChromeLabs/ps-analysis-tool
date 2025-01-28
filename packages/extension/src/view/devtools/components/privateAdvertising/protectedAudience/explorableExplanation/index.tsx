@@ -164,6 +164,7 @@ const ExplorableExplanation = () => {
         selectedAdUnit,
         selectedDateTime
       );
+
     previousAuctionData.current = auctionData;
 
     return {

@@ -16,7 +16,12 @@
 /**
  * External dependencies
  */
-import type { ReceivedBids, singleAuctionEvent } from '@google-psat/common';
+import type {
+  AdsAndBiddersType,
+  ReceivedBids,
+  singleAuctionEvent,
+  AdsAndBiddersTypeData,
+} from '@google-psat/common';
 import { publisherData } from '@google-psat/explorable-explanations';
 /**
  * Internal dependencies
@@ -495,7 +500,29 @@ export const configuredAuctionEvents = (
     (branch: { date: string; time: string }) => branch.date + ' ' + branch.time
   ) as string[];
 
-  const auctionData: AuctionEventsType = {};
+  const auctionData: AuctionEventsType = {
+    [adunits[0]]: {
+      [dates[0]]: {
+        [websiteString]: {
+          [websiteString]: [],
+        },
+      },
+    },
+    [adunits[1]]: {
+      [dates[1]]: {
+        [websiteString]: {
+          [websiteString]: [],
+        },
+      },
+    },
+    [adunits[2]]: {
+      [dates[2]]: {
+        [websiteString]: {
+          [websiteString]: [],
+        },
+      },
+    },
+  };
 
   if (!selectedAdUnit) {
     return {
@@ -504,18 +531,19 @@ export const configuredAuctionEvents = (
       adsAndBidders: null,
     };
   }
-  auctionData[selectedAdUnit] = {};
 
   if (!selectedDateTime) {
     return {
-      auctionData: { [selectedAdUnit]: {} },
+      auctionData: auctionData,
       receivedBids: null,
       adsAndBidders: null,
     };
   }
 
   auctionData[selectedAdUnit][selectedDateTime] = {
-    [websiteString]: {},
+    [websiteString]: {
+      [websiteString]: [],
+    },
   };
 
   auctionData[selectedAdUnit][selectedDateTime][websiteString] =
@@ -530,62 +558,36 @@ export const configuredAuctionEvents = (
         {}
     );
 
-  const receivedBids = {
-    [adunits[0]]: getBidData(
+  const receivedBids: { [key: string]: ReceivedBids[] } = {
+    [adunits[0]]: [] as ReceivedBids[],
+    [adunits[1]]: [] as ReceivedBids[],
+    [adunits[2]]: [] as ReceivedBids[],
+  };
+
+  receivedBids[selectedAdUnit] = getBidData(
+    auctionData[selectedAdUnit]?.[selectedDateTime]?.[websiteString],
+    sellersArray,
+    selectedAdUnit
+  );
+
+  const adsAndBidders: AdsAndBiddersType = {
+    [adunits[0]]: {} as AdsAndBiddersTypeData,
+    [adunits[1]]: {} as AdsAndBiddersTypeData,
+    [adunits[2]]: {} as AdsAndBiddersTypeData,
+  };
+
+  adsAndBidders[selectedAdUnit] = {
+    adUnitCode: selectedAdUnit,
+    bidders: sellersArray,
+    mediaContainerSize: [[320, 320]],
+    winningBid: getBidData(
       auctionData[adunits[0]]?.[dates[0]]?.[websiteString],
       sellersArray,
       adunits[0]
-    ),
-    [adunits[1]]: getBidData(
-      auctionData[adunits[1]]?.[dates[1]]?.[websiteString],
-      sellersArray,
-      adunits[1]
-    ),
-    [adunits[2]]: getBidData(
-      auctionData[adunits[2]]?.[dates[2]]?.[websiteString],
-      sellersArray,
-      adunits[2]
-    ),
-  };
-
-  const adsAndBidders = {
-    [adunits[0]]: {
-      adUnitCode: adunits[0],
-      bidders: sellersArray,
-      mediaContainerSize: [[320, 320]],
-      winningBid: getBidData(
-        auctionData[adunits[0]]?.[dates[0]]?.[websiteString],
-        sellersArray,
-        adunits[0]
-      ).filter(({ type }) => type === 'win')?.[0]?.bid,
-      bidCurrency: 'USD',
-      winningBidder: 'DSP 1',
-    },
-    [adunits[1]]: {
-      adUnitCode: adunits[1],
-      bidders: sellersArray,
-      mediaContainerSize: [[320, 320]],
-      winningBid: getBidData(
-        auctionData[adunits[1]]?.[dates[1]]?.[websiteString],
-        sellersArray,
-        adunits[1]
-      ).filter(({ type }) => type === 'win')?.[0]?.bid,
-      bidCurrency: 'USD',
-      winningBidder: 'DSP 1',
-    },
-    [adunits[2]]: {
-      adUnitCode: adunits[2],
-      bidders: sellersArray,
-      mediaContainerSize: [[320, 320]],
-      winningBid: getBidData(
-        auctionData[adunits[2]]?.[dates[2]]?.[websiteString],
-        sellersArray,
-        adunits[2]
-      ).filter(({ type }) => type === 'win')?.[0]?.bid,
-      bidCurrency: 'USD',
-      winningBidder: 'DSP 1',
-    },
-  };
+    ).filter(({ type }) => type === 'win')?.[0]?.bid,
+    bidCurrency: 'USD',
+    winningBidder: 'DSP 1',
+  } as AdsAndBiddersTypeData;
 
   return {
     auctionData,
