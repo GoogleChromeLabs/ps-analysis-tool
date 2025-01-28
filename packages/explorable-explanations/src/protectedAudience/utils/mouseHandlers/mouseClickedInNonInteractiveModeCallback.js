@@ -51,6 +51,37 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     return;
   }
 
+  if (app.nodeIndexRevisited !== clickedIndex) {
+    app.nodeIndexRevisited = clickedIndex;
+  } else {
+    flow.clearBelowTimelineCircles();
+    clickedIndex = -1;
+    app.nodeIndexRevisited = -1;
+    app.timeline.expandIconPositions.forEach((position, index) => {
+      app.p.push();
+      if (index === clickedIndex) {
+        app.p.rotate(app.p.TWO_PI / 2);
+        app.p.image(
+          app.p.openWithoutAnimation,
+          -position.x - 10,
+          -position.y - 20,
+          20,
+          20
+        );
+      } else {
+        app.p.image(
+          app.p.openWithoutAnimation,
+          position.x - 10,
+          position.y,
+          20,
+          20
+        );
+      }
+      app.p.pop();
+    });
+    return;
+  }
+
   flow.clearBelowTimelineCircles();
 
   if (circles[clickedIndex].type === 'advertiser') {
@@ -66,8 +97,27 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     app.shouldRespondToClick = true;
     renderUserIcon();
 
-    app.timeline.expandIconPositions.forEach((position) => {
-      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
+    app.timeline.expandIconPositions.forEach((position, index) => {
+      app.p.push();
+      if (index === clickedIndex) {
+        app.p.rotate(app.p.TWO_PI / 2);
+        app.p.image(
+          app.p.openWithoutAnimation,
+          -position.x - 10,
+          -position.y - 20,
+          20,
+          20
+        );
+      } else {
+        app.p.image(
+          app.p.openWithoutAnimation,
+          position.x - 10,
+          position.y,
+          20,
+          20
+        );
+      }
+      app.p.pop();
     });
 
     app.isRevisitingNodeInInteractiveMode = false;

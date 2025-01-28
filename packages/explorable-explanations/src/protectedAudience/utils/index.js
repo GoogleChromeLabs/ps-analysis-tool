@@ -24,3 +24,4 @@ export * from './markVisitedValue';
 export * from './requestInterval';
 export * from './isOverControls';
 export * from './isInsideBox';
+export * from './scrollToCoordinates';
