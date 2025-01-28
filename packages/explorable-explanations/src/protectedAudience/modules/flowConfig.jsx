@@ -268,14 +268,11 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           The publisher ad server is the central hub that controls and manages
-          the entire ad serving process on a publisher's website or app
+          the entire ad serving process on a publisher's website or app. It also
+          does couple of other tasks like Delivers and optimizes ads, tracks
+          performance and generates reports, integrates with other ad tech
+          platforms
         </p>
-        <p>
-          It also does couple of other tasks like Delivers and optimizes ads,
-          tracks performance and generates reports, integrates with other ad
-          tech platforms
-        </p>
-        `,
       </>
     ),
   },
