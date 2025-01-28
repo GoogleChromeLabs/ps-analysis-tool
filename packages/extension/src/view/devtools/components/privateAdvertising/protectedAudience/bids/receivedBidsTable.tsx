@@ -32,6 +32,7 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useCallback, useEffect, useMemo } from 'react';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
 interface ReceivedBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -43,6 +44,7 @@ interface ReceivedBidsTableProps {
   receivedBids: ReceivedBids[];
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
+  showEvaluationPlaceholder?: boolean;
 }
 
 const ReceivedBidsTable = ({
@@ -51,6 +53,7 @@ const ReceivedBidsTable = ({
   receivedBids,
   storage,
   setStorage,
+  showEvaluationPlaceholder = true,
 }: ReceivedBidsTableProps) => {
   const auctionsTabData = JSON.parse(storage?.[4] || '{}');
 
@@ -196,10 +199,13 @@ const ReceivedBidsTable = ({
 
   if (!receivedBids || receivedBids.length === 0) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-full flex flex-col items-center justify-center">
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No bids data was recorded.
         </p>
+        {showEvaluationPlaceholder && (
+          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
+        )}
       </div>
     );
   }

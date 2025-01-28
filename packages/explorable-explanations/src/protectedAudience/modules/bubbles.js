@@ -113,6 +113,13 @@ bubbles.barrageAnimation = async (index) => {
   const width = config.flow.mediumBox.width;
   const height = config.flow.mediumBox.height;
 
+  const startingX = isExpanded
+    ? canvasWidth / 2
+    : app.bubbleContainerDiv.offsetLeft + 17;
+  const startingY = isExpanded
+    ? canvasHeight / 2
+    : app.bubbleContainerDiv.offsetTop + 17;
+
   // Calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.bubbles.positions.map((data) => {
     const targetX =
@@ -132,11 +139,10 @@ bubbles.barrageAnimation = async (index) => {
       p.blue(currentColor),
       200
     );
-    const x = isExpanded ? canvasWidth / 2 : 35;
-    const y = isExpanded ? canvasHeight / 2 : 35;
-    const distance = p.dist(x, y, targetX, targetY);
 
-    return { x, y, color, target, distance };
+    const distance = p.dist(startingX, startingY, targetX, targetY);
+
+    return { x: startingX, y: startingY, color, target, distance };
   });
 
   await new Promise((resolve) => {
@@ -233,8 +239,10 @@ bubbles.reverseBarrageAnimation = async (index) => {
   } = app;
 
   const smallCircleDiameter = diameter / 5;
-  const midPointX = isExpanded ? config.canvas.width / 4 + 320 : 35;
-  const midPointY = isExpanded ? 320 : 35;
+  const midPointX = isExpanded
+    ? config.canvas.width / 4 + 320
+    : app.bubbleContainerDiv.offsetLeft + 17;
+  const midPointY = isExpanded ? 320 : app.bubbleContainerDiv.offsetTop + 17;
 
   const positionsOfCircles = [];
   const currentIGGroupToBeAdded = circles[index]?.igGroupsCount ?? 0;
@@ -278,6 +286,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
   }
 
   document.getElementById('interest-canvas').style.zIndex = 4;
+  document.getElementById('bubble-container-div').style.zIndex = 2;
 
   await new Promise((resolve) => {
     const animate = () => {
@@ -334,6 +343,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
       ) {
         resolve();
         document.getElementById('interest-canvas').style.zIndex = 2;
+        document.getElementById('bubble-container-div').style.zIndex = 4;
         utils.wipeAndRecreateInterestCanvas();
       } else {
         requestAnimationFrame(animate);
