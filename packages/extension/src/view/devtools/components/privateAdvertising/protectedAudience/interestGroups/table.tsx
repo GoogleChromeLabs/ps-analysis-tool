@@ -41,11 +41,13 @@ interface InterestGroupsProps {
     interestGroupOwner: string;
     color: string;
   } | null;
+  isEE?: boolean;
 }
 
 const IGTable = ({
   interestGroupDetails,
   highlightedInterestGroup,
+  isEE = false,
 }: InterestGroupsProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
   const [filterData, setFilterData] = useState(false);
@@ -171,6 +173,10 @@ const IGTable = ({
   );
 
   const topBarExtraInterface = useCallback(() => {
+    if (isEE) {
+      return null;
+    }
+
     return (
       <div className="h-full flex items-center justify-center w-max gap-1">
         <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
@@ -188,7 +194,7 @@ const IGTable = ({
         </div>
       </div>
     );
-  }, [handleChange]);
+  }, [handleChange, isEE]);
 
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
