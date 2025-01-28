@@ -534,23 +534,38 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The scoreAd() function evaluates and ranks bids during an ad auction
-          based on price, relevance, and publisher-defined criteria. The
-          function outputs a ranked list of bids, selecting the top bid as the
-          winner for ad display.It is implemented by the SSP or publisher, and
-          called by the SSPs to determine the winning bid. It ranks bids from
-          the component auctions.
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#23-scoring-bids"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <code className="text-upsed-tomato">scoreAd()</code>
+          </a>{' '}
+          SSP JavaScript function for each participating interest group.
         </p>
-        <p>
-          The scoreAd() function is implemented by the SSP or publisher, and
-          called by the SSPs to determine the winning bid.
-        </p>
-        <p>
-          The scoreAd() function in multi-seller configuration ranks bids from
-          the component auctions and compares with the contextual bid winner
-          passed during the start of the runAdAunction. Any bid less than the
-          contextual bid winner is rejected and bids higher than contextual bid
-          winner are accepted for comparison.
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            The scoreAd() function evaluates and ranks bids during an ad auction
+            based on price, relevance, and publisher-defined criteria. The
+            function outputs a ranked list of bids, selecting the top bid as the
+            winner for ad display.It is implemented by the SSP or publisher, and
+            called by the SSPs to determine the winning bid. It ranks bids from
+            the component auctions.
+          </p>
+          <p>
+            The scoreAd() function is implemented by the SSP or publisher, and
+            called by the SSPs to determine the winning bid.
+          </p>
+          <p>
+            The scoreAd() function in multi-seller configuration ranks bids from
+            the component auctions and compares with the contextual bid winner
+            passed during the start of the runAdAunction. Any bid less than the
+            contextual bid winner is rejected and bids higher than contextual
+            bid winner are accepted for comparison.
+          </p>
         </p>
       </>
     ),
@@ -561,6 +576,19 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#52-buyer-reporting-on-render-and-ad-events"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <code className="text-upsed-tomato">reportWin()</code>
+          </a>{' '}
+          DSP JavaScript function to report winner to DSP.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
           The reportWin() function sends report to the winning DSP to log
           auction details. It implemented by the DSPs, and called by the SSPs or
           adServer to log the auction details.
@@ -574,6 +602,19 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
+          Chrome calls{' '}
+          <a
+            className="text-bright-navy-blue"
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#51-seller-reporting-on-render"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <code className="text-upsed-tomato">reportResult()</code>
+          </a>{' '}
+          SSP JavaScript function to report winner to SSP.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
           The reportResult() function sends report to the all the SSP's to log
           the winner and all the other details to log the auction details. It is
           implemented by the SSP's, and called by the adServer at the end of
