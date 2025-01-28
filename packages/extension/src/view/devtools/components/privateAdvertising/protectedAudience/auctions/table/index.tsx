@@ -179,47 +179,59 @@ const AuctionTable = ({
         maxHeight="90%"
         className="w-full flex flex-col"
       >
-        <div className="flex justify-between items-center p-2">
-          <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
-          <p>
-            {startDate
-              ? startDate
-              : new Date(auctionEvents?.[0]?.time * 1000 || '').toUTCString()}
-          </p>
-        </div>
-        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
-          <TableProvider
-            data={auctionEvents}
-            tableColumns={tableColumns}
-            tableFilterData={tableFilters}
-            tableSearchKeys={undefined}
-            tablePersistentSettingsKey={
-              'adtable' +
-              auctionEvents?.[0]?.auctionConfig?.seller +
-              parentOrigin
-            }
-            onRowContextMenu={noop}
-            onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
-            getRowObjectKey={(row: TableRow) => {
-              return (
-                // @ts-ignore
-                ((row.originalData as singleAuctionEvent).auctionConfig
-                  ?.seller || '') +
-                (row.originalData as singleAuctionEvent).time
-              );
-            }}
-          >
-            <Table
-              selectedKey={
-                // @ts-ignore
-                (selectedJSON?.auctionConfig?.seller || '') +
-                  selectedJSON?.time || ''
-              }
-              hideSearch={true}
-              minWidth="50rem"
-            />
-          </TableProvider>
-        </div>
+        {auctionEvents.length > 0 ? (
+          <>
+            <div className="flex justify-between items-center p-2">
+              <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
+              <p>
+                {startDate
+                  ? startDate
+                  : new Date(
+                      auctionEvents?.[0]?.time * 1000 || ''
+                    ).toUTCString()}
+              </p>
+            </div>
+            <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
+              <TableProvider
+                data={auctionEvents}
+                tableColumns={tableColumns}
+                tableFilterData={tableFilters}
+                tableSearchKeys={undefined}
+                tablePersistentSettingsKey={
+                  'adtable' +
+                  auctionEvents?.[0]?.auctionConfig?.seller +
+                  parentOrigin
+                }
+                onRowContextMenu={noop}
+                onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
+                getRowObjectKey={(row: TableRow) => {
+                  return (
+                    // @ts-ignore
+                    ((row.originalData as singleAuctionEvent).auctionConfig
+                      ?.seller || '') +
+                    (row.originalData as singleAuctionEvent).time
+                  );
+                }}
+              >
+                <Table
+                  selectedKey={
+                    // @ts-ignore
+                    (selectedJSON?.auctionConfig?.seller || '') +
+                      selectedJSON?.time || ''
+                  }
+                  hideSearch={true}
+                  minWidth="50rem"
+                />
+              </TableProvider>
+            </div>
+          </>
+        ) : (
+          <div className="h-full p-8 flex items-center justify-center">
+            <p className="text-center text-lg">
+              Auction Events yet to be recorded.
+            </p>
+          </div>
+        )}
       </Resizable>
       <BottomTray selectedJSON={selectedJSON} />
     </div>

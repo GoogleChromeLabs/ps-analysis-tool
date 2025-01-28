@@ -170,7 +170,7 @@ const ExplorableExplanation = () => {
         selectedDateTime
       );
 
-    previousAuctionData.current = structuredClone(auctionData);
+    previousAuctionData.current = auctionData;
 
     return {
       auctionData,
