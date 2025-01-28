@@ -18,7 +18,7 @@
  */
 import app from '../app';
 import config, { publisherData } from '../config';
-import { isInsideCircle } from '../utils';
+import { isInsideCircle, scrollToCoordinates } from '../utils';
 
 const FlowExpander = async ({ nextTipCoordinates, typeOfBranches }) => {
   const p = app.p;
@@ -80,6 +80,7 @@ const FlowExpander = async ({ nextTipCoordinates, typeOfBranches }) => {
       p.pop();
     }
   });
+  scrollToCoordinates(endpoint.x, endpoint.y);
 
   return endpoint;
 };

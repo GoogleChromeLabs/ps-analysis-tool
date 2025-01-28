@@ -20,7 +20,11 @@ import ProgressLine from './progressLine';
 import app from '../app';
 import config, { publisherData } from '../config';
 import Box from './box';
-import { delay, wipeAndRecreateInterestCanvas } from '../utils';
+import {
+  delay,
+  scrollToCoordinates,
+  wipeAndRecreateInterestCanvas,
+} from '../utils';
 import FlowExpander from './flowExpander';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
@@ -59,6 +63,7 @@ const Branches = async ({
     direction: 'down',
     noArrow: true,
     noAnimation: app.speedMultiplier === 4,
+    isForBranches: true,
   });
 
   const drawInstantly = () => {
@@ -102,8 +107,10 @@ const Branches = async ({
       } else {
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
+      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
+      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
@@ -124,8 +131,10 @@ const Branches = async ({
       } else {
         app.setSelectedDateTime(publisherData[currentSite].adunits[1]);
       }
+      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
+      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
         typeOfBranches,
@@ -144,12 +153,13 @@ const Branches = async ({
       } else {
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
+      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       return endpoints[1];
     } else {
+      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-
       return nextTip;
     }
   }
@@ -169,6 +179,7 @@ const Branches = async ({
     noArrow: true,
     noAnimation: app.speedMultiplier === 4,
     isBranch: true,
+    isForBranches: true,
   });
 
   await Promise.all(
@@ -184,6 +195,7 @@ const Branches = async ({
         direction: 'down',
         noArrow: true,
         noAnimation: app.speedMultiplier === 4,
+        isForBranches: true,
       });
 
       if (type === 'datetime') {
@@ -207,8 +219,11 @@ const Branches = async ({
     } else {
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
+    scrollToCoordinates(endpoints[1].x, endpoints[1].y);
     return endpoints[1];
   }
+
+  scrollToCoordinates(endpoints[0].x, endpoints[0].y);
 
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
@@ -254,6 +269,7 @@ const drawBoxesBranch = (x, y, branch) => {
     x: x - flow.box.width / 2,
     y: y + 20,
     color: branch?.color || flow.colors.box.background,
+    isBranchComponent: true,
   });
 
   if (app.isAutoExpand) {

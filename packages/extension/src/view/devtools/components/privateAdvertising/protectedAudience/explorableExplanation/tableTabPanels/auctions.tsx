@@ -50,6 +50,7 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
           adsAndBidders: customAdsAndBidders,
           receivedBids: auctionEvents.receivedBids,
           noBids: {},
+          showEvaluationPlaceholder: Boolean(customAdsAndBidders),
         },
       },
       children: {},

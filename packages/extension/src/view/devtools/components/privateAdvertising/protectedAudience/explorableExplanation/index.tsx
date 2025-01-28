@@ -210,6 +210,7 @@ const ExplorableExplanation = () => {
           props: {
             interestGroupDetails: [...(interestGroupsData as InterestGroups[])],
             highlightedInterestGroup,
+            isEE: true,
           },
         },
       },

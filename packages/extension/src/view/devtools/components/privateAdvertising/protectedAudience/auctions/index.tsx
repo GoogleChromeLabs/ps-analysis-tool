@@ -29,6 +29,7 @@ import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import Breakpoints from './breakpoints';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
@@ -95,10 +96,11 @@ const Auctions = () => {
 
   if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-full flex flex-col items-center justify-center">
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No auction events were recorded.
         </p>
+        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the auction events." />
       </div>
     );
   }

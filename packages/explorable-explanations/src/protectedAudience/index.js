@@ -182,7 +182,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
 
       if (!circles.every(({ visited }) => visited === true)) {
         app.timeline.expandIconPositions.push({
-          x: circlePositions[_currentIndex].x - 10,
+          x: circlePositions[_currentIndex].x,
           y: circlePositions[_currentIndex].y + diameter / 2,
           index: _currentIndex,
         });
@@ -222,13 +222,20 @@ app.addToPromiseQueue = (indexToStartFrom) => {
   app.promiseQueue.push((cb) => {
     app.bubbles.interestGroupCounts +=
       config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
+    utils.scrollToCoordinates(0, 0, true);
     bubbles.showMinifiedBubbles();
     utils.markVisitedValue(app.timeline.currentIndex, true);
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
     flow.clearBelowTimelineCircles();
     app.timeline.expandIconPositions.forEach((position) => {
-      app.p.image(app.p.openWithoutAnimation, position.x, position.y, 20, 20);
+      app.p.image(
+        app.p.openWithoutAnimation,
+        position.x - 10,
+        position.y,
+        20,
+        20
+      );
     });
 
     cb(null, true);
@@ -496,6 +503,7 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
+  app.canvasParentElement = document.querySelector('#ps-canvas').parentElement;
 
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
@@ -667,6 +675,10 @@ export const interestGroupSketch = (p) => {
 
     if (props.setCurrentStep) {
       app.setCurrentStep = props.setCurrentStep;
+    }
+
+    if (typeof props.autoScroll !== 'undefined') {
+      app.autoScroll = props.autoScroll;
     }
 
     if (props.setCurrentSite) {
