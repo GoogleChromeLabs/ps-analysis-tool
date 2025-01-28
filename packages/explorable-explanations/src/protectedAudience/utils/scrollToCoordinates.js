@@ -23,7 +23,7 @@ export const scrollToCoordinates = (x, y, override = false) => {
   }
 
   if (override) {
-    document.querySelector('#ps-canvas').parentElement.scrollTo({
+    app.canvasParentElement.scrollTo({
       left: 0,
       top: 0,
       behavior: 'smooth',
@@ -38,7 +38,7 @@ export const scrollToCoordinates = (x, y, override = false) => {
   const finalX = x - rect.left,
     finalY = y - rect.top;
 
-  document.querySelector('#ps-canvas').parentElement.scrollTo({
+  app.canvasParentElement.scrollTo({
     left: finalX,
     top: finalY,
     behavior: 'smooth',

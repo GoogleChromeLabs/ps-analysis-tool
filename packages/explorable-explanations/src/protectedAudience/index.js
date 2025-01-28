@@ -503,6 +503,7 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
+  app.canvasParentElement = document.querySelector('#ps-canvas').parentElement;
 
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
