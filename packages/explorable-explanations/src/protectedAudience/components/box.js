@@ -36,6 +36,7 @@ const Box = ({
   color,
   info = false,
   isBranchComponent = false,
+  borderStroke = config.flow.colors.box.borderStroke,
 }) => {
   x = typeof x === 'function' ? x() : x;
   y = typeof y === 'function' ? y() : y;
@@ -65,6 +66,7 @@ const Box = ({
   p.push();
   p.textAlign(p.CENTER, p.CENTER);
   p.fill(color || background);
+  p.stroke(...borderStroke);
   p.rect(x, y, width, height);
   p.strokeWeight(0.1);
   p.fill(text);

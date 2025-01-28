@@ -61,6 +61,7 @@ const setUpComponentAuctions = (steps, index) => {
         boxCordinates.y = app.auction.nextTipCoordinates?.y;
         return boxCordinates.y;
       },
+      borderStroke: [0, 0, 0, 0],
     },
     delay: 1000,
     callBack: (returnValue) => {
