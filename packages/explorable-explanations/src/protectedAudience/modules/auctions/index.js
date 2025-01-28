@@ -166,6 +166,8 @@ auction.draw = (index) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
       app.timeline.infoIconsPositions = [];
+      app.setSelectedAdUnit(null);
+      app.setSelectedDateTime(null);
     }
     cb(null, true);
   });

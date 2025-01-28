@@ -86,6 +86,10 @@ const ExplorableExplanation = () => {
   }, []);
 
   const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
+    previousAuctionData.current = null;
+    setCurrentStep({} as StepType);
+    setSelectedAdUnit(null);
+    setSelectedDateTime(null);
     setCurrentSiteData(() => siteData);
     setInterestGroupsData(() => getInterestGroupData(siteData));
   };
@@ -137,6 +141,7 @@ const ExplorableExplanation = () => {
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+      previousAuctionData.current = null;
       return {};
     }
 
@@ -165,7 +170,7 @@ const ExplorableExplanation = () => {
         selectedDateTime
       );
 
-    previousAuctionData.current = auctionData;
+    previousAuctionData.current = structuredClone(auctionData);
 
     return {
       auctionData,

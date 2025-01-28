@@ -121,7 +121,6 @@ const Branches = async ({
 
   if (noAnimation) {
     drawInstantly();
-    await delay(noAnimation ? 1000 : 0);
 
     if (app.isAutoExpand) {
       if (typeOfBranches === 'datetime') {
@@ -131,15 +130,19 @@ const Branches = async ({
       } else {
         app.setSelectedDateTime(publisherData[currentSite].adunits[1]);
       }
+
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+      await delay(1000);
       return endpoints[1];
     } else {
       scrollToCoordinates(endpoints[0].x, endpoints[0].y);
+
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
         typeOfBranches,
       });
 
+      await delay(1000);
       return nextTip;
     }
   }

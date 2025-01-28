@@ -532,7 +532,25 @@ export const configuredAuctionEvents = (
     };
   }
 
+  if (!adunits.find((adUnit) => adUnit === selectedAdUnit)) {
+    return {
+      auctionData: null,
+      receivedBids: null,
+      adsAndBidders: null,
+    };
+  }
+
+  auctionData[selectedAdUnit] = {};
+
   if (!selectedDateTime) {
+    return {
+      auctionData: auctionData,
+      receivedBids: null,
+      adsAndBidders: null,
+    };
+  }
+
+  if (!dates.find((date) => date === selectedDateTime)) {
     return {
       auctionData: auctionData,
       receivedBids: null,
@@ -571,9 +589,21 @@ export const configuredAuctionEvents = (
   );
 
   const adsAndBidders: AdsAndBiddersType = {
-    [adunits[0]]: {} as AdsAndBiddersTypeData,
-    [adunits[1]]: {} as AdsAndBiddersTypeData,
-    [adunits[2]]: {} as AdsAndBiddersTypeData,
+    [adunits[0]]: {
+      adUnitCode: adunits[0],
+      bidders: [] as string[],
+      mediaContainerSize: [[320, 320]],
+    } as AdsAndBiddersTypeData,
+    [adunits[1]]: {
+      adUnitCode: adunits[1],
+      bidders: [] as string[],
+      mediaContainerSize: [[320, 320]],
+    } as AdsAndBiddersTypeData,
+    [adunits[2]]: {
+      adUnitCode: adunits[2],
+      bidders: [] as string[],
+      mediaContainerSize: [[320, 320]],
+    } as AdsAndBiddersTypeData,
   };
 
   adsAndBidders[selectedAdUnit] = {
