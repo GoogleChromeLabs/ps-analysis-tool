@@ -29,6 +29,7 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
 interface NoBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -38,12 +39,14 @@ interface NoBidsTableProps {
   >;
   selectedRow: singleAuctionEvent | NoBidsType[keyof NoBidsType] | null;
   noBids: NoBidsType;
+  showEvaluationPlaceholder?: boolean;
 }
 
 const NoBidsTable = ({
   noBids,
   setSelectedRow,
   selectedRow,
+  showEvaluationPlaceholder,
 }: NoBidsTableProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -80,10 +83,13 @@ const NoBidsTable = ({
 
   if (!noBids || Object.keys(noBids).length === 0) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-full flex flex-col items-center justify-center">
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No bids data was recorded.
         </p>
+        {showEvaluationPlaceholder && (
+          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
+        )}
       </div>
     );
   }

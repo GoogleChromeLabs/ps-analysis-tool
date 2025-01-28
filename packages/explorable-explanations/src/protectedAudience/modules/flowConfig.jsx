@@ -42,12 +42,14 @@ export const ADVERTIZER_CONFIG = {
           processing, and interest group management. They process user behavior
           and decide if the user should be added to specific interest groups
           using the{' '}
-          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API
-          (called from the DSP Tag). These interest groups are added to the
-          user's browser which are shown with small bubbles here. They store
-          user profiles based on demographics, location, and behavior while
-          ensuring compliance with privacy standards like the Protected Audience
-          API.
+          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API.
+          (called from the DSP Tag).
+        </p>
+        <p>
+          These interest groups are added to the user's browser which are shown
+          with small bubbles here. They store user profiles based on
+          demographics, location, and behavior while ensuring compliance with
+          privacy standards like the Protected Audience API.
         </p>
       </>
     ),
@@ -291,7 +293,10 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           The publisher ad server is the central hub that controls and manages
-          the entire ad serving process on a publisher's website or app
+          the entire ad serving process on a publisher's website or app. It also
+          does couple of other tasks like Delivers and optimizes ads, tracks
+          performance and generates reports, integrates with other ad tech
+          platforms
         </p>
         <p>
           It also does couple of other tasks like Delivers and optimizes ads,
@@ -340,20 +345,17 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           An SSP is a platform that helps publishers manage, sell, and optimize
-          their ad inventory programmatically.
-        </p>
-        <p>
-          It connects publishers with multiple demand sources like DSPs,
-          advertisers, and ad exchanges to facilitate real-time bidding (RTB)
-          auctions.
+          their ad inventory programmatically. It connects publishers with
+          multiple demand sources like DSPs, advertisers, and ad exchanges to
+          facilitate real-time bidding (RTB) auctions.
         </p>
         <p>Example: Google Ad Manager, Magnite.</p>
         <p>In this case it conducts an sub auction</p>
         <p>
           The winner of the auction is selected and they are allowed to bid
-          again on the top level auction
+          again on the top level auction. The winner of the top level auction
+          gets to display ad.
         </p>
-        <p>The winner of the top level auction gets to display ad.</p>
       </>
     ),
   },
@@ -391,7 +393,9 @@ export const MULTI_SELLER_CONFIG = {
           The scoreAd() function evaluates and ranks bids during an ad auction
           based on price, relevance, and publisher-defined criteria. The
           function outputs a ranked list of bids, selecting the top bid as the
-          winner for ad display.
+          winner for ad display.It is implemented by the SSP or publisher, and
+          called by the SSPs to determine the winning bid. It ranks bids from
+          the component auctions.
         </p>
         <p>
           The scoreAd() function is implemented by the SSP or publisher, and
@@ -414,11 +418,8 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           The reportWin() function sends report to the winning DSP to log
-          auction details.
-        </p>
-        <p>
-          The reportWin() function is implemented by the DSPs, and called by the
-          SSPs or adServer to log the auction details.
+          auction details. It implemented by the DSPs, and called by the SSPs or
+          adServer to log the auction details.
         </p>
       </>
     ),
@@ -430,11 +431,9 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           The reportResult() function sends report to the all the SSP's to log
-          the winner and all the other details to log the auction details.
-        </p>
-        <p>
-          The reportResult() function is implemented by the SSP's, and called by
-          the adServer at the end of top-level auction.
+          the winner and all the other details to log the auction details. It is
+          implemented by the SSP's, and called by the adServer at the end of
+          top-level auction.
         </p>
       </>
     ),

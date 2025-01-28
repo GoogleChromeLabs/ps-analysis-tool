@@ -137,8 +137,8 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       } else {
         const positions = app.timeline.circlePositions[clickedIndex];
         app.timeline.expandIconPositions.push({
-          x: positions.x + diameter / 2,
-          y: positions.y,
+          x: positions.x,
+          y: positions.y + diameter / 2,
           index: clickedIndex,
         });
 
@@ -167,6 +167,13 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
     app.promiseQueue.start();
   } else if (clickedIndex > -1 && app.isRevisitingNodeInInteractiveMode) {
+    if (app.nodeIndexRevisited !== clickedIndex) {
+      app.nodeIndexRevisited = clickedIndex;
+    } else {
+      app.isRevisitingNodeInInteractiveMode = false;
+      flow.clearBelowTimelineCircles();
+      return;
+    }
     app.promiseQueue.end();
     flow.clearBelowTimelineCircles();
 

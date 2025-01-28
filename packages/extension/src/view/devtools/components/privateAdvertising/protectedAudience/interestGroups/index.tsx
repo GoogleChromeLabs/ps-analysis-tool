@@ -25,6 +25,7 @@ import { useSidebar, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import IGTable from './table';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
 const InterestGroups = () => {
   const { interestGroupDetails } = useProtectedAudience(({ state }) => ({
@@ -63,10 +64,11 @@ const InterestGroups = () => {
 
   if (!interestGroupDetails || interestGroupDetails.length === 0) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="w-full h-full flex flex-col items-center justify-center">
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No interests group events recorded.
         </p>
+        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the interest group events." />
       </div>
     );
   }

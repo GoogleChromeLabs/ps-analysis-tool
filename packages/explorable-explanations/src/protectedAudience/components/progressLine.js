@@ -32,11 +32,15 @@ const ProgressLine = ({
   noArrow = false,
   noAnimation = app.speedMultiplier === 4,
   isBranch = false,
+  isForBranches = false,
 }) => {
   const width = customWidth ?? config.flow.lineWidth - ARROW_SIZE;
   const height = customHeight ?? config.flow.lineHeight - ARROW_SIZE;
   const incrementBy = isBranch ? 15 : app.speedMultiplier; // Adjust to control speed
   const p = app.p;
+  const scrollAdjuster =
+    (direction === 'right' ? config.flow.box.height : config.flow.box.width) /
+    2;
 
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
@@ -131,6 +135,7 @@ const ProgressLine = ({
   let targetX = x2;
 
   return new Promise((resolve) => {
+    // eslint-disable-next-line complexity
     const animate = () => {
       if (app.cancelPromise) {
         resolve();
@@ -159,6 +164,10 @@ const ProgressLine = ({
 
       switch (direction) {
         case 'right':
+          if (!isForBranches) {
+            utils.scrollToCoordinates(currentX + width, y2 - scrollAdjuster);
+          }
+
           currentX += incrementBy;
 
           if (currentX - x1 > width) {
@@ -170,6 +179,9 @@ const ProgressLine = ({
           break;
 
         case 'left':
+          if (!isForBranches) {
+            utils.scrollToCoordinates(targetX, y1 - scrollAdjuster);
+          }
           targetX -= incrementBy;
 
           if (x2 - targetX > width) {
@@ -198,6 +210,9 @@ const ProgressLine = ({
           break;
 
         case 'up':
+          if (!isForBranches) {
+            utils.scrollToCoordinates(x1 - scrollAdjuster, y1 - height);
+          }
           currentY -= incrementBy;
 
           if (y1 - currentY > height) {

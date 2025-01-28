@@ -26,6 +26,7 @@ import type {
   ReceivedBids,
 } from '@google-psat/common';
 import type { AdUnitLiteral } from '../explorableExplanation';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
 interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
@@ -34,6 +35,7 @@ interface AdUnitsPanelProps {
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
+  showEvaluationPlaceholder?: boolean;
 }
 
 const AdUnitsPanel = ({
@@ -43,6 +45,7 @@ const AdUnitsPanel = ({
   setSelectedAdUnit,
   selectedAdUnit,
   setIsInspecting,
+  showEvaluationPlaceholder = true,
 }: AdUnitsPanelProps) => {
   return (
     <div className="flex flex-col h-full w-full">
@@ -63,10 +66,13 @@ const AdUnitsPanel = ({
           />
         </>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full flex flex-col items-center justify-center">
           <p className="text-sm text-raisin-black dark:text-bright-gray">
             No ad units were recorded.
           </p>
+          {showEvaluationPlaceholder && (
+            <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units." />
+          )}
         </div>
       )}
     </div>

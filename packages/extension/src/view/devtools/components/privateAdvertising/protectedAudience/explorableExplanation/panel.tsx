@@ -83,6 +83,7 @@ const Panel = ({
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [autoExpand, setAutoExpand] = useState(true);
+  const [autoScroll, setAutoScroll] = useState(true);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -233,6 +234,15 @@ const Panel = ({
         />
         Auto Expand
       </label>
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          type="checkbox"
+          checked={autoScroll}
+          onChange={(event) => setAutoScroll(event.target.checked)}
+          className="hover:cursor-pointer"
+        />
+        AutoScroll
+      </label>
     </div>
   );
 
@@ -311,6 +321,7 @@ const Panel = ({
         setCurrentSite={setCurrentSite}
         setPlayState={setPlay}
         setInfo={setInfo}
+        autoScroll={autoScroll}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
       />
       <ReactP5Wrapper sketch={userSketch} />
