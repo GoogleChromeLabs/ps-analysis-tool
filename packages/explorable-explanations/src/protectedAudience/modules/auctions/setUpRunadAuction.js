@@ -198,7 +198,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
         direction: 'down',
         x1: () => app.auction.nextTipCoordinates?.x,
         y1: () => {
-          return app.auction.nextTipCoordinates?.y + box.height - 10;
+          return app.auction.nextTipCoordinates?.y + box.height - 8;
         },
       },
       callBack: (returnValue) => {

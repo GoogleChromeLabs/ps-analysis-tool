@@ -38,7 +38,7 @@ const setUpComponentAuctions = (steps, index) => {
     props: {
       direction: 'down',
       x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + box.height - 10,
+      y1: () => app.auction.nextTipCoordinates?.y + box.height - 12,
       customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
     },
