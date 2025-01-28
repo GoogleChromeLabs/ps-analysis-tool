@@ -74,18 +74,27 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          An SSP tag is a script placed on the publisher's page that enables the
-          SSP to initiate ad requests and pass them to DSPs. It does the
-          following:
+          SSP ad tag sends ad request to SSP server indicating that the browser
+          supports Protected Audience API. It also returns contextual auction
+          response to <code className="text-upsed-tomato">runAdAuction()</code>{' '}
+          function.
         </p>
-        <ul className="list-disc ml-3 mt-1">
-          <li>Collects contextual data about the page and user.</li>
-          <li>
-            Sends ad requests to SSP server which then forward those data to
-            DSPs via RTB protocols.
-          </li>
-          <li>Returns the RTB responses from SSP server to the SSP tag.</li>
-        </ul>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            An SSP tag is a script placed on the publisher's page that enables
+            the SSP to initiate ad requests and pass them to DSPs. It does the
+            following:
+          </p>
+          <ul className="list-disc ml-3 mt-1">
+            <li>Collects contextual data about the page and user.</li>
+            <li>
+              Sends ad requests to SSP server which then forward those data to
+              DSPs via RTB protocols.
+            </li>
+            <li>Returns the RTB responses from SSP server to the SSP tag.</li>
+          </ul>
+        </p>
       </>
     ),
   },
@@ -94,20 +103,30 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          An SSP is a platform that helps publishers manage, sell, and optimize
-          their ad inventory programmatically. It connects publishers with
-          multiple demand sources like DSPs, advertisers, and ad exchanges to
-          facilitate real-time bidding (RTB) auctions.
+          SSP server sends contextual OpenRTB bid request to DSP indicating that
+          the browser supports Protected Audience API. It also runs contextual
+          auction and returns the winner along with auction configuration to SSP
+          tags.
         </p>
-        <p>
-          The SSP server sends ad requests received from the SSP Tag to the DSPs
-          who bid on the ad space via RTB.
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            An SSP is a platform that helps publishers manage, sell, and
+            optimize their ad inventory programmatically. It connects publishers
+            with multiple demand sources like DSPs, advertisers, and ad
+            exchanges to facilitate real-time bidding (RTB) auctions.
+          </p>
+          <p>
+            The SSP server sends ad requests received from the SSP Tag to the
+            DSPs who bid on the ad space via RTB.
+          </p>
+          <p>
+            It also returns the winning ad creative which is used to while
+            scoring the ad in{' '}
+            <code className="text-upsed-tomato">scoreAd()</code>.
+          </p>
+          <p>Example: Google Ad Manager, Magnite.</p>
         </p>
-        <p>
-          It also returns the winning ad creative which is used to while scoring
-          the ad in <code className="text-upsed-tomato">scoreAd()</code>.
-        </p>
-        <p>Example: Google Ad Manager, Magnite.</p>
       </>
     ),
   },
@@ -116,17 +135,25 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          On the publisher side, DSP servers process ad requests, evaluate bids,
-          and serve ads based on campaign targeting and bidding strategies. They
-          handle bid generation, ad selection, and reporting during ad auctions
-          initiated by SSPs. The DSP server evaluates bid requests in real time,
-          using signals such as interest groups, contextual relevance, and
-          advertiser budgets to decide whether to bid.
+          DSP responds with an OpenRTB bid response containing signals for the
+          on-device auction.
         </p>
-        <p>
-          When contacted by SSP during contextual auction they respond with bids
-          based on the results calculated on the basis of ad requests received
-          via SSP. The DSPs and SSP communicate using RTB protocols.
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            On the publisher side, DSP servers process ad requests, evaluate
+            bids, and serve ads based on campaign targeting and bidding
+            strategies. They handle bid generation, ad selection, and reporting
+            during ad auctions initiated by SSPs. The DSP server evaluates bid
+            requests in real time, using signals such as interest groups,
+            contextual relevance, and advertiser budgets to decide whether to
+            bid.
+          </p>
+          <p>
+            When contacted by SSP during contextual auction they respond with
+            bids based on the results calculated on the basis of ad requests
+            received via SSP. The DSPs and SSP communicate using RTB protocols.
+          </p>
         </p>
       </>
     ),
@@ -164,10 +191,24 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A secure DSP-side server that handles bid generation using key/value
-          pairs for interest group and contextual data. It ensures data
-          processing aligns with privacy requirements, creating competitive bids
-          based on predefined values.
+          Chrome calls{' '}
+          <a
+            href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#31-fetching-real-time-data-from-a-trusted-server"
+            target="_balnk"
+            rel="noreferrer"
+          >
+            Key/Value trusted DSP bidding server
+          </a>{' '}
+          to fetch real-time bidding signals.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            A secure DSP-side server that handles bid generation using key/value
+            pairs for interest group and contextual data. It ensures data
+            processing aligns with privacy requirements, creating competitive
+            bids based on predefined values.
+          </p>
         </p>
       </>
     ),
