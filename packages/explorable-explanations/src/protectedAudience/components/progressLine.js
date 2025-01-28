@@ -49,6 +49,14 @@ const ProgressLine = ({
     }
   };
 
+  const getRectSize = () => {
+    if (noArrow) {
+      return 0;
+    }
+
+    return 10;
+  };
+
   let currentX = x1; // For horizontal directions
   let currentY = y1; // For vertical directions
 
@@ -76,6 +84,7 @@ const ProgressLine = ({
         drawInstantlyFlag = true;
       }
 
+      const size = getRectSize();
       p.push();
       p.stroke(0);
       p.strokeWeight(1);
@@ -90,7 +99,8 @@ const ProgressLine = ({
 
           p.push();
           p.noStroke();
-          p.rect(x1 + 1, y1 - 5, width, 11);
+
+          p.rect(x1 + 1, y1 - size / 2, width, size + 1);
           p.pop();
 
           p.line(x1, y1, currentX, y2);
@@ -112,7 +122,7 @@ const ProgressLine = ({
 
           p.push();
           p.noStroke();
-          p.rect(x2, y1 - 5, width - 1, 11);
+          p.rect(x2, y1 - size / 2, width - 1, size + 1);
           p.pop();
 
           p.line(x1, y1, currentX, y2);
@@ -135,7 +145,7 @@ const ProgressLine = ({
 
           p.push();
           p.noStroke();
-          p.rect(x1 - 5, y1 + 1, 11, height);
+          p.rect(x1 - size / 2, y1 + 1, size + 1, height);
           p.pop();
 
           p.line(x1, y1, x2, currentY);
@@ -162,7 +172,7 @@ const ProgressLine = ({
 
           p.push();
           p.noStroke();
-          p.rect(x1 - 5, y2, 11, height - 1);
+          p.rect(x1 - size / 2, y2, size + 1, height - 1);
           p.pop();
 
           p.line(x1, y1, x2, currentY);
