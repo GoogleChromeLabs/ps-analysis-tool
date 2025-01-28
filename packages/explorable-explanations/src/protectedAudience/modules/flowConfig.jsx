@@ -24,11 +24,18 @@ export const ADVERTIZER_CONFIG = {
     info: (
       <>
         <p>
+          They collect user data, which is sent to DSP servers for processing
+          (see the next DSPs box) and the received JSON response from DSP
+          servers is passed as a parameter to{' '}
+          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API
+          to join interest groups.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
           These are script tags embedded in the advertiser's webpage that enable
-          communication with DSP servers. They collect user activity data, which
-          is sent to DSP servers for processing (see the next DSPs box). DSP
-          tags help associate users with interest groups for retargeting and
-          audience building in future ad campaigns.
+          communication with DSP servers. DSP tags help associate users with
+          interest groups for retargeting and audience building in future ad
+          campaigns.
         </p>
       </>
     ),
@@ -38,18 +45,23 @@ export const ADVERTIZER_CONFIG = {
     info: (
       <>
         <p>
-          DSP servers on the advertiser's side handle user tracking, data
-          processing, and interest group management. They process user behavior
-          and decide if the user should be added to specific interest groups
-          using the{' '}
-          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API.
-          (called from the DSP Tag).
+          It recieves the user data from the DSP tags, processes it and send
+          JSON response to the DSP tags for joining interest groups (see DSP
+          Tags box).
         </p>
         <p>
-          These interest groups are added to the user's browser which are shown
-          with small bubbles here. They store user profiles based on
-          demographics, location, and behavior while ensuring compliance with
-          privacy standards like the Protected Audience API.
+          These <strong>interest groups</strong> are added to the user's browser
+          which are shown with small bubbles here. They store user profiles
+          based on demographics, location, and behavior while ensuring
+          compliance with privacy standards like the Protected Audience API.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          DSP servers on the advertiser's side handle user tracking, data
+          processing, and interest group management. They process user behavior
+          and decide if the user should be added to specific interest groups.
+          (called from the DSP Tag). DSPs are the owners of the interest groups
+          that the user joins.
         </p>
       </>
     ),
