@@ -67,6 +67,8 @@ interface PanelProps {
   setInfo: React.Dispatch<React.SetStateAction<string | null>>;
   info: string | null;
   setCurrentStep: React.Dispatch<React.SetStateAction<StepType>>;
+  setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedDateTime: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Panel = ({
@@ -81,6 +83,8 @@ const Panel = ({
   info,
   setInfo,
   setCurrentStep,
+  setSelectedAdUnit,
+  setSelectedDateTime,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -315,6 +319,8 @@ const Panel = ({
         setInfo={setInfo}
         setCurrentStep={setCurrentStep}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
+        setSelectedAdUnit={setSelectedAdUnit}
+        setSelectedDateTime={setSelectedDateTime}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <TableTray />

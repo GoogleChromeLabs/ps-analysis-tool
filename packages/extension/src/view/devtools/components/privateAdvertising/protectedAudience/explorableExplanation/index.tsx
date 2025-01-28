@@ -48,6 +48,8 @@ const ExplorableExplanation = () => {
     useState<CurrentSiteData | null>(null);
 
   const [isMultiSeller, setIsMultiSeller] = useState(false);
+  const [selectedAdUnit, setSelectedAdUnit] = useState<string | null>(null);
+  const [selectedDateTime, setSelectedDateTime] = useState<string | null>(null);
   const previousAuctionData = useRef<AuctionEventsType | null>(null);
 
   const [interestGroupsData, setInterestGroupsData] = useState<
@@ -158,7 +160,9 @@ const ExplorableExplanation = () => {
         isMultiSeller,
         currentSiteData,
         currentStep,
-        previousAuctionData.current
+        previousAuctionData.current,
+        selectedAdUnit,
+        selectedDateTime
       );
     previousAuctionData.current = auctionData;
 
@@ -167,7 +171,14 @@ const ExplorableExplanation = () => {
       receivedBids,
       adsAndBidders,
     };
-  }, [currentSiteData, sitesVisited, isMultiSeller, currentStep]);
+  }, [
+    currentSiteData,
+    sitesVisited,
+    isMultiSeller,
+    currentStep,
+    selectedAdUnit,
+    selectedDateTime,
+  ]);
 
   const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
     interestGroupName: string;
@@ -251,6 +262,8 @@ const ExplorableExplanation = () => {
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}
         setCurrentStep={setCurrentStep}
+        setSelectedAdUnit={setSelectedAdUnit}
+        setSelectedDateTime={setSelectedDateTime}
       />
     </TabsProvider>
   );

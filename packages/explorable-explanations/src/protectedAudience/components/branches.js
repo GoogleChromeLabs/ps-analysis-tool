@@ -18,7 +18,7 @@
  */
 import ProgressLine from './progressLine';
 import app from '../app';
-import config from '../config';
+import config, { publisherData } from '../config';
 import Box from './box';
 import { delay, wipeAndRecreateInterestCanvas } from '../utils';
 import FlowExpander from './flowExpander';
@@ -37,6 +37,9 @@ const Branches = async ({
 }) => {
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
+  const currentSite =
+    config.timeline.circles[app.timeline.currentIndex].website;
+  const typeOfBranches = branches[0].type;
 
   branches = branches.map((branch, index) => ({
     ...branch,
@@ -92,6 +95,13 @@ const Branches = async ({
     drawInstantly();
 
     if (app.isAutoExpand) {
+      if (typeOfBranches === 'datetime') {
+        app.setSelectedDateTime(
+          `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
+        );
+      } else {
+        app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
+      }
       return endpoints[1];
     } else {
       const nextTip = await FlowExpander({
@@ -107,10 +117,18 @@ const Branches = async ({
     await delay(noAnimation ? 1000 : 0);
 
     if (app.isAutoExpand) {
+      if (typeOfBranches === 'datetime') {
+        app.setSelectedDateTime(
+          `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
+        );
+      } else {
+        app.setSelectedDateTime(publisherData[currentSite].adunits[1]);
+      }
       return endpoints[1];
     } else {
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
+        typeOfBranches,
       });
 
       return nextTip;
@@ -119,6 +137,13 @@ const Branches = async ({
 
   if (app.cancelPromise) {
     if (app.isAutoExpand) {
+      if (typeOfBranches === 'datetime') {
+        app.setSelectedDateTime(
+          `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
+        );
+      } else {
+        app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
+      }
       return endpoints[1];
     } else {
       const nextTip = await FlowExpander({
@@ -175,6 +200,13 @@ const Branches = async ({
   );
 
   if (app.isAutoExpand) {
+    if (typeOfBranches === 'datetime') {
+      app.setSelectedDateTime(
+        `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
+      );
+    } else {
+      app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
+    }
     return endpoints[1];
   }
 

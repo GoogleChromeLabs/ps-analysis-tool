@@ -385,7 +385,7 @@ const getBidData = (
 
   sellers.forEach((seller) => {
     const filteredBidEvents =
-      auctionData[seller]?.filter((event) => event.type === 'bid') ?? [];
+      auctionData?.[seller]?.filter((event) => event.type === 'bid') ?? [];
 
     bidsArray.push(
       ...filteredBidEvents.map((event) => {
@@ -472,7 +472,9 @@ export const configuredAuctionEvents = (
   isMultiSeller: boolean,
   currentSiteData: CurrentSiteData,
   currentStep: StepType | null,
-  previousEvents: AuctionEventsType | null
+  previousEvents: AuctionEventsType | null,
+  selectedAdUnit: string | null,
+  selectedDateTime: string | null
 ) => {
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
@@ -491,49 +493,42 @@ export const configuredAuctionEvents = (
   const adunits = publisherData[currentSiteData?.website].adunits as string[];
   const dates = publisherData[currentSiteData?.website].branches.map(
     (branch: { date: string; time: string }) => branch.date + ' ' + branch.time
-  );
+  ) as string[];
 
-  const auctionData = {
-    [adunits[0]]: {
-      [dates[0]]: {
-        [websiteString]: getFlattenedAuctionEvents(
-          sellersArray,
-          currentSiteData,
-          interestGroups,
-          advertisers,
-          isMultiSeller,
-          currentStep,
-          previousEvents?.[adunits[0]]?.[dates[0]]?.[websiteString] ?? {}
-        ),
-      },
-    },
-    [adunits[1]]: {
-      [dates[1]]: {
-        [websiteString]: getFlattenedAuctionEvents(
-          sellersArray,
-          currentSiteData,
-          interestGroups,
-          advertisers,
-          isMultiSeller,
-          currentStep,
-          previousEvents?.[adunits[1]]?.[dates[1]]?.[websiteString] ?? {}
-        ),
-      },
-    },
-    [adunits[2]]: {
-      [dates[2]]: {
-        [websiteString]: getFlattenedAuctionEvents(
-          sellersArray,
-          currentSiteData,
-          interestGroups,
-          advertisers,
-          isMultiSeller,
-          currentStep,
-          previousEvents?.[adunits[2]]?.[dates[2]]?.[websiteString] ?? {}
-        ),
-      },
-    },
+  const auctionData: AuctionEventsType = {};
+
+  if (!selectedAdUnit) {
+    return {
+      auctionData: null,
+      receivedBids: null,
+      adsAndBidders: null,
+    };
+  }
+  auctionData[selectedAdUnit] = {};
+
+  if (!selectedDateTime) {
+    return {
+      auctionData: { [selectedAdUnit]: {} },
+      receivedBids: null,
+      adsAndBidders: null,
+    };
+  }
+
+  auctionData[selectedAdUnit][selectedDateTime] = {
+    [websiteString]: {},
   };
+
+  auctionData[selectedAdUnit][selectedDateTime][websiteString] =
+    getFlattenedAuctionEvents(
+      sellersArray,
+      currentSiteData,
+      interestGroups,
+      advertisers,
+      isMultiSeller,
+      currentStep,
+      previousEvents?.[selectedAdUnit]?.[selectedDateTime]?.[websiteString] ??
+        {}
+    );
 
   const receivedBids = {
     [adunits[0]]: getBidData(

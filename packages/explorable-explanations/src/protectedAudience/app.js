@@ -72,6 +72,9 @@ const app = {
   setHighlightedInterestGroup: () => null,
   setPlayState: () => null,
   getPlayState: () => null,
+  setSelectedExpandedFlow: () => null,
+  setSelectedAdUnit: () => null,
+  setSelectedDateTime: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
   canvasEventListerners: {
