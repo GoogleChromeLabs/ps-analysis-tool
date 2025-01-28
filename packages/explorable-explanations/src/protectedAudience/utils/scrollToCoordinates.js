@@ -31,9 +31,7 @@ export const scrollToCoordinates = (x, y, override = false) => {
     return;
   }
 
-  const rect = document
-    .querySelector('#ps-canvas')
-    .parentElement.getBoundingClientRect();
+  const rect = app.canvasParentElement.getBoundingClientRect();
 
   const finalX = x - rect.left,
     finalY = y - rect.top;
