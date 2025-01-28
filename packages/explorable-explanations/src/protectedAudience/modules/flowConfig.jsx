@@ -42,11 +42,12 @@ export const ADVERTIZER_CONFIG = {
           processing, and interest group management. They process user behavior
           and decide if the user should be added to specific interest groups
           using the{' '}
-          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API.
-          These interest groups are added to the user's browser which are shown
-          with small bubbles here. They store user profiles based on
-          demographics, location, and behavior while ensuring compliance with
-          privacy standards like the Protected Audience API.
+          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API
+          (called from the DSP Tag). These interest groups are added to the
+          user's browser which are shown with small bubbles here. They store
+          user profiles based on demographics, location, and behavior while
+          ensuring compliance with privacy standards like the Protected Audience
+          API.
         </p>
       </>
     ),
@@ -65,8 +66,11 @@ export const SINGLE_SELLER_CONFIG = {
         </p>
         <ul className="list-disc ml-3 mt-1">
           <li>Collects contextual data about the page and user.</li>
-          <li>Sends ad requests to DSPs via RTB protocols.</li>
-          <li>Returns the winning ad creative to be displayed on the page.</li>
+          <li>
+            Sends ad requests to SSP server which then forward those data to
+            DSPs via RTB protocols.
+          </li>
+          <li>Returns the RTB responses from SSP server to the SSP tag.</li>
         </ul>
       </>
     ),
@@ -80,6 +84,14 @@ export const SINGLE_SELLER_CONFIG = {
           their ad inventory programmatically. It connects publishers with
           multiple demand sources like DSPs, advertisers, and ad exchanges to
           facilitate real-time bidding (RTB) auctions.
+        </p>
+        <p>
+          The SSP server sends ad requests received from the SSP Tag to the DSPs
+          who bid on the ad space via RTB.
+        </p>
+        <p>
+          It also returns the winning ad creative which is used to while scoring
+          the ad in <code className="text-upsed-tomato">scoreAd()</code>.
         </p>
         <p>Example: Google Ad Manager, Magnite.</p>
       </>
@@ -97,6 +109,11 @@ export const SINGLE_SELLER_CONFIG = {
           using signals such as interest groups, contextual relevance, and
           advertiser budgets to decide whether to bid.
         </p>
+        <p>
+          When contacted by SSP during contextual auction they respond with bids
+          based on the results calculated on the basis of ad requests received
+          via SSP. The DSPs and SSP communicate using RTB protocols.
+        </p>
       </>
     ),
   },
@@ -107,7 +124,8 @@ export const SINGLE_SELLER_CONFIG = {
         <p>
           SSP ad tag initiates on-device auction by calling{' '}
           <code className="text-upsed-tomato">runAdAuction()</code>, passing in
-          signals from DSP's openRTB bid response.
+          signals and contextual ad winner from DSP's openRTB bid response which
+          was sent by the SSP server.
         </p>
       </>
     ),
@@ -178,6 +196,10 @@ export const SINGLE_SELLER_CONFIG = {
           Outputs a ranked list of bids, selecting the top bid as the winner for
           ad display.
         </p>
+        <p>
+          Any bid which is less than the contextual bid passed by the SSP tag
+          while calling the runAdAuction is rejected.
+        </p>
       </>
     ),
   },
@@ -217,8 +239,8 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The AdServer Tag loads on the browser and initiates the header bidding
-          process using libraries like Pre-bid or Amazon TAM.
+          The header bidding tag loads on the browser and initiates the header
+          bidding process using libraries like Pre-bid or Amazon TAM.
         </p>
         <p> This maximizes competition and potentially increases revenue.</p>
       </>
@@ -236,8 +258,9 @@ export const MULTI_SELLER_CONFIG = {
           communication with publisher ad tag webpage
         </p>
         <p>
-          When a user visits a webpage with an ad tag, the tag signals to the
-          publisher's ad server that there's an opportunity to show an ad.
+          When a user visits a webpage with an ad tag, the tag signals along
+          with header bidding winner to the publisher's ad server that there's
+          an opportunity to show an ad.
         </p>
         <p>The ad tag contains key information about the ad space, such as:</p>
         <ul>
@@ -274,6 +297,17 @@ export const MULTI_SELLER_CONFIG = {
           It also does couple of other tasks like Delivers and optimizes ads,
           tracks performance and generates reports, integrates with other ad
           tech platforms
+        </p>
+        <p>
+          The publisher ad server will also run a contextual auction with the
+          data from header bidding as a comparison source.
+        </p>
+        <p>
+          Any bid that is higher than the header bidding winner will be accepted
+          for comparison other bids will be rejected. The winning bid is sent to
+          the Publisher Ad Tag as the contextual ad winner which will be used in
+          <code className="text-upsed-tomato">scoreAd()</code> function in
+          Protected Audience API.
         </p>
         `,
       </>
@@ -365,7 +399,10 @@ export const MULTI_SELLER_CONFIG = {
         </p>
         <p>
           The scoreAd() function in multi-seller configuration ranks bids from
-          the component auctions.
+          the component auctions and compares with the contextual bid winner
+          passed during the start of the runAdAunction. Any bid less than the
+          contextual bid winner is rejected and bids higher than contextual bid
+          winner are accepted for comparison.
         </p>
       </>
     ),
