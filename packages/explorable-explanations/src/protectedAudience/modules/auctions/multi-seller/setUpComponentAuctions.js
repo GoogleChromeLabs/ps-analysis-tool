@@ -352,9 +352,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: MULTI_SELLER_CONFIG.REPORT_WIN.title,
-      info: MULTI_SELLER_CONFIG.REPORT_WIN.info,
-      description: MULTI_SELLER_CONFIG.REPORT_WIN.description,
+      title: MULTI_SELLER_CONFIG.REPORT_RESULT.title,
+      info: MULTI_SELLER_CONFIG.REPORT_RESULT.info,
+      description: MULTI_SELLER_CONFIG.REPORT_RESULT.description,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
     },
