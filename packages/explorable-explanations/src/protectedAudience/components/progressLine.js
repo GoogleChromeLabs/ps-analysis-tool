@@ -88,6 +88,11 @@ const ProgressLine = ({
             currentX = x2;
           }
 
+          p.push();
+          p.noStroke();
+          p.rect(x1 + 1, y1 - 5, width, 11);
+          p.pop();
+
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1, direction);
 
@@ -104,6 +109,11 @@ const ProgressLine = ({
           if (drawInstantlyFlag) {
             currentX = x2;
           }
+
+          p.push();
+          p.noStroke();
+          p.rect(x2, y1 - 5, width - 1, 11);
+          p.pop();
 
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1 - 5, direction);
@@ -122,6 +132,11 @@ const ProgressLine = ({
           if (drawInstantlyFlag) {
             currentY = y2;
           }
+
+          p.push();
+          p.noStroke();
+          p.rect(x1 - 5, y1 + 1, 11, height);
+          p.pop();
 
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);
@@ -144,6 +159,11 @@ const ProgressLine = ({
           if (drawInstantlyFlag) {
             currentY = y2;
           }
+
+          p.push();
+          p.noStroke();
+          p.rect(x1 - 5, y2, 11, height - 1);
+          p.pop();
 
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);
