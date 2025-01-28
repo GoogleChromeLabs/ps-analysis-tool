@@ -149,14 +149,14 @@ body {
 }
 
 #bubble-container {
-  position: absolute;
+  position: sticky;
   pointer-events: none;
   top: 0px;
   left: 0px;
 }
 
 .minified-bubble-container {
-  position: absolute;
+  position: sticky;
   top: 10px;
   left: 10px;
   height: 50px;
@@ -209,7 +209,7 @@ text {
 }
 
 .bubble-container {
-  position: absolute;
+  position: sticky;
   pointer-events: auto;
 }
 
@@ -258,4 +258,5 @@ text {
 #bubble-container-div {
   top: 0px;
   left: 0px;
+  z-index: 4;
 }

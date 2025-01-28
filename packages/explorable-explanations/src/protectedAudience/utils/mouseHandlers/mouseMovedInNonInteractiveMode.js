@@ -21,33 +21,25 @@ import config from '../../config';
 import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
 
-const INFO_ICON_SIZE = 16;
-
 const mouseMovedInNonInteractiveMode = (event) => {
   const { offsetX, offsetY } = event;
 
   app.mouseX = offsetX;
   app.mouseY = offsetY;
 
+  const { infoIconSize } = config.timeline;
+
   let hoveredOverIcons = false;
 
   app.timeline.infoIconsPositions.forEach(({ x: _x, y: _y }) => {
-    if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, INFO_ICON_SIZE)) {
+    if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, infoIconSize)) {
       hoveredOverIcons = true;
     }
   });
 
   if (config.timeline.circles.every(({ visited }) => visited === true)) {
     app.timeline.expandIconPositions.forEach((positions) => {
-      if (
-        isInsideCircle(
-          offsetX,
-          offsetY,
-          positions.x,
-          positions.y + config.timeline.circleProps.diameter / 2,
-          20
-        )
-      ) {
+      if (isInsideCircle(offsetX, offsetY, positions.x, positions.y + 10, 10)) {
         hoveredOverIcons = true;
       }
     });

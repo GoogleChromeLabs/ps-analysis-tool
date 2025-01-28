@@ -32,11 +32,15 @@ const ProgressLine = ({
   noArrow = false,
   noAnimation = app.speedMultiplier === 4,
   isBranch = false,
+  isForBranches = false,
 }) => {
   const width = customWidth ?? config.flow.lineWidth - ARROW_SIZE;
   const height = customHeight ?? config.flow.lineHeight - ARROW_SIZE;
   const incrementBy = isBranch ? 15 : app.speedMultiplier; // Adjust to control speed
   const p = app.p;
+  const scrollAdjuster =
+    (direction === 'right' ? config.flow.box.height : config.flow.box.width) /
+    2;
 
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
@@ -92,6 +96,9 @@ const ProgressLine = ({
       switch (direction) {
         case 'right':
           currentX += Math.min(incrementBy, x2 - currentX);
+          if (!isForBranches) {
+            utils.scrollToCoordinates(currentX + width, y2 - scrollAdjuster);
+          }
 
           if (drawInstantlyFlag) {
             currentX = x2;
@@ -115,6 +122,10 @@ const ProgressLine = ({
 
         case 'left':
           currentX -= Math.min(incrementBy, currentX - x2);
+
+          if (!isForBranches) {
+            utils.scrollToCoordinates(currentX, y1 - scrollAdjuster);
+          }
 
           if (drawInstantlyFlag) {
             currentX = x2;
@@ -165,6 +176,9 @@ const ProgressLine = ({
 
         case 'up':
           currentY -= Math.min(incrementBy, currentY - y2);
+          if (!isForBranches) {
+            utils.scrollToCoordinates(x1 - scrollAdjuster, y1 - height);
+          }
 
           if (drawInstantlyFlag) {
             currentY = y2;
