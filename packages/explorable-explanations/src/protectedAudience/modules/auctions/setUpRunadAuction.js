@@ -56,7 +56,6 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
     {
       title: SINGLE_SELLER_CONFIG.GENERATE_BID.title,
       description: SINGLE_SELLER_CONFIG.GENERATE_BID.description,
-      color: colors.box.notBrowser,
       extraProps: {
         showRippleEffect: true,
       },
@@ -65,15 +64,18 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
     {
       title: 'DSP 1',
       info: SINGLE_SELLER_CONFIG.DSP_X.info,
+      color: colors.box.notBrowser,
     },
     {
       title: 'DSP 2',
       info: SINGLE_SELLER_CONFIG.DSP_X.info,
+      color: colors.box.notBrowser,
     },
     {
       title: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.title,
       description: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.description,
       info: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.info,
+      color: colors.box.notBrowser,
     },
     {
       title: SINGLE_SELLER_CONFIG.SCORE_AD.title,
@@ -83,7 +85,6 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
     {
       title: SINGLE_SELLER_CONFIG.REPORT_WIN.title,
       description: SINGLE_SELLER_CONFIG.REPORT_WIN.description,
-      color: colors.box.notBrowser,
       info: SINGLE_SELLER_CONFIG.REPORT_WIN.info,
     },
     {
