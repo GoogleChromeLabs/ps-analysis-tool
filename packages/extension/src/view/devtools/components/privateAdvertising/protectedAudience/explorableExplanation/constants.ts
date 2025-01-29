@@ -746,15 +746,15 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
 export const SYNTHETIC_AUCTION_EVENT_STARTED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   type: 'started',
-  formattedTime: '0 ms',
-  time: 1734076669.500694,
+  formattedTime: '-0 ms',
+  time: -1734076669.500694,
   eventType: 'interestGroupAuctionEventOccurred',
 };
 export const SYNTHETIC_AUCTION_EVENT_CONFIG_RESOLVED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   type: 'configResolved',
-  formattedTime: '0.75ms',
-  time: 1734076669.501441,
+  formattedTime: '-0.75ms',
+  time: -1734076669.501441,
   eventType: 'interestGroupAuctionEventOccurred',
 };
 
@@ -762,17 +762,17 @@ export const SYNTHETIC_AUCTION_EVENT_LOADED: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-  formattedTime: '2.16ms',
+  formattedTime: '-2.16ms',
   type: 'loaded',
-  time: 1734076669.502853,
+  time: -1734076669.502853,
   eventType: 'interestGroupAccessed',
 };
 
 export const SYNTHETIC_AUCTION_EVENT_BIDDERJS: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-  formattedTime: '77.17ms',
+  formattedTime: '-77.17ms',
   type: 'Start fetch bidderJs',
-  time: 1734076669.577862,
+  time: -1734076669.577862,
   eventType: 'interestGroupAuctionNetworkRequestCreated',
 };
 
@@ -780,9 +780,9 @@ export const SYNTHETIC_AUCTION_EVENTS_BID: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-  formattedTime: '472.61ms',
+  formattedTime: '-472.61ms',
   type: 'bid',
-  time: 1734076669.973304,
+  time: -1734076669.973304,
   eventType: 'interestGroupAccessed',
   bid: 24,
   bidCurrency: 'USD',
@@ -792,9 +792,9 @@ export const SYNTHETIC_AUCTION_EVENTS_WIN: singleAuctionEvent = {
   uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
   name: 'shoes',
   ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-  formattedTime: '629.06ms',
+  formattedTime: '-629.06ms',
   type: 'win',
-  time: 1734076670.129756,
+  time: -1734076670.129756,
   eventType: 'interestGroupAccessed',
 };
 

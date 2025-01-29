@@ -38,7 +38,7 @@ import { useTabs } from '@google-psat/design-system';
  */
 import Header from '../../../explorableExplanation/header';
 import TableTray from '../../../explorableExplanation/tableTray';
-import type { CurrentSiteData } from './auctionEventTransformers';
+import type { CurrentSiteData, StepType } from './auctionEventTransformers';
 
 declare module 'react' {
   interface CSSProperties {
@@ -66,6 +66,9 @@ interface PanelProps {
   setInteractiveMode: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setInfo: React.Dispatch<React.SetStateAction<string | null>>;
   info: string | null;
+  setCurrentStep: React.Dispatch<React.SetStateAction<StepType>>;
+  setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedDateTime: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Panel = ({
@@ -79,6 +82,9 @@ const Panel = ({
   setInteractiveMode,
   info,
   setInfo,
+  setCurrentStep,
+  setSelectedAdUnit,
+  setSelectedDateTime,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -322,8 +328,11 @@ const Panel = ({
         setCurrentSite={setCurrentSite}
         setPlayState={setPlay}
         setInfo={setInfo}
+        setCurrentStep={setCurrentStep}
         autoScroll={autoScroll}
         setHighlightedInterestGroup={setHighlightedInterestGroup}
+        setSelectedAdUnit={setSelectedAdUnit}
+        setSelectedDateTime={setSelectedDateTime}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <TableTray />

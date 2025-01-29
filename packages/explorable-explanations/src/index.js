@@ -24,3 +24,4 @@ export {
   default as config,
   publisherData,
 } from './protectedAudience/config.js';
+export * from './protectedAudience/modules/flowConfig.jsx';
