@@ -70,8 +70,8 @@ const setUpPublisherAdServerFlow = (steps) => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 4 + 6,
-      y1: () => app.auction.nextTipCoordinates?.y + 10,
+      x1: () => app.auction.nextTipCoordinates?.x - box.width / 2,
+      y1: () => app.auction.nextTipCoordinates?.y + 20,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;

@@ -39,7 +39,7 @@ const setUpComponentAuctions = (steps, index) => {
     props: {
       direction: 'down',
       x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + box.height - 10,
+      y1: () => app.auction.nextTipCoordinates?.y + box.height - 12,
       customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
     },
@@ -254,8 +254,8 @@ const setUpTPoint = (steps) => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x + 70,
-      y1: () => app.auction.nextTipCoordinates?.y - 10,
+      x1: () => app.auction.nextTipCoordinates?.x - 25,
+      y1: () => app.auction.nextTipCoordinates?.y,
       customWidth: BOX_COLUMN_MARGIN - 55,
       noArrow: true,
     },
@@ -268,8 +268,8 @@ const setUpTPoint = (steps) => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x + 50,
-      y1: () => app.auction.nextTipCoordinates?.y - 10,
+      x1: () => app.auction.nextTipCoordinates?.x - 55,
+      y1: () => app.auction.nextTipCoordinates?.y,
       customWidth: BOX_COLUMN_MARGIN - 55,
       noArrow: true,
     },
