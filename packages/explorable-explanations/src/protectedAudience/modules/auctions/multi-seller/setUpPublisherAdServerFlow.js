@@ -22,7 +22,7 @@ import { Box, ProgressLine } from '../../../components';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
 
 const setUpPublisherAdServerFlow = (steps) => {
-  const { box } = config.flow;
+  const { box, colors } = config.flow;
 
   steps.push({
     component: Box,
@@ -56,6 +56,7 @@ const setUpPublisherAdServerFlow = (steps) => {
     props: {
       title: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.title,
       description: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.description,
+      color: colors.box.notBrowser,
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - 23,
       info: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.info,

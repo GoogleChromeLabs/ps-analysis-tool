@@ -294,7 +294,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
     component: Box,
     props: {
       title: MULTI_SELLER_CONFIG.SCORE_AD.title,
-      description: '(by SSPs)',
+      description: '(by Pub AdServer)',
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
       info: MULTI_SELLER_CONFIG.SCORE_AD.info,
