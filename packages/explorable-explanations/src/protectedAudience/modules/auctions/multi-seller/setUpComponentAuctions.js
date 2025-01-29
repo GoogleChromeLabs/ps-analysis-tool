@@ -18,7 +18,7 @@
  */
 import app from '../../../app';
 import config, { publisherData } from '../../../config';
-import { Box, ProgressLine, Text, Custom } from '../../../components';
+import { Box, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 
 const BOX_WIDTH = 1200;
@@ -75,9 +75,8 @@ const setUpComponentAuctions = (steps, index) => {
       x: () =>
         app.auction.nextTipCoordinates?.x -
         BOX_WIDTH / 2 +
-        BORDER_BOX_MARGIN * 2 +
-        20,
-      y: () => app.auction.nextTipCoordinates?.y - 225 - 15,
+        BORDER_BOX_MARGIN * 2,
+      y: () => app.auction.nextTipCoordinates?.y - 240,
       ssp: publisherData[publisher].ssps[0][0],
       config: {
         bidValue: '$10',
@@ -85,7 +84,7 @@ const setUpComponentAuctions = (steps, index) => {
     },
     {
       title: 'Component Auction',
-      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN,
+      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN + 106.5,
       y: () =>
         app.auction.nextTipCoordinates?.y -
         BOX_HEIGHT +
@@ -98,7 +97,7 @@ const setUpComponentAuctions = (steps, index) => {
     },
     {
       title: 'Component Auction',
-      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN,
+      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN + 106.5,
       y: () =>
         app.auction.nextTipCoordinates?.y -
         BOX_HEIGHT +
@@ -110,6 +109,8 @@ const setUpComponentAuctions = (steps, index) => {
       },
     },
   ];
+
+  setUpComponentAuctionStarter(componentAuctions, steps);
 
   componentAuctions.forEach((componentAuction, idx) => {
     setUpComponentAuction(
@@ -138,12 +139,87 @@ const setUpComponentAuctions = (steps, index) => {
   // });
 };
 
-const setUpComponentAuction = (
-  steps,
-  { title, x, y, ssp },
-  { bidValue },
-  index
-) => {
+const setUpComponentAuctionStarter = (componentAuctions, steps) => {
+  // This callback does not update the app.auction.nextTipCoordinates.
+  // TODO: Update the return value callbacks in this function, this change will affect the whole flow coordinates. So recalculate the coordinates.
+
+  let returnCoordinates = {};
+
+  const getStartingCoordinates = (index) => {
+    if (index === 0) {
+      return app.auction.nextTipCoordinates;
+    }
+
+    return returnCoordinates;
+  };
+
+  const renderBoxes = ({ title, ssp }, index) => {
+    steps.push({
+      component: ProgressLine,
+      props: {
+        direction: 'down',
+        x1: () =>
+          getStartingCoordinates(index).x -
+          BOX_WIDTH / 2 +
+          BORDER_BOX_MARGIN * 2,
+        y1: () => getStartingCoordinates(index).y - 275,
+        customHeight: 20,
+        noArrow: true,
+      },
+    });
+
+    steps.push({
+      component: Text,
+      props: {
+        text: title,
+        x: () =>
+          getStartingCoordinates(index).x -
+          BOX_WIDTH / 2 +
+          BORDER_BOX_MARGIN * 2,
+        y: () => getStartingCoordinates(index).y - 240,
+      },
+      delay: 1000,
+      callBack: (returnValue) => {
+        returnCoordinates = returnValue;
+      },
+    });
+
+    steps.push({
+      component: Box,
+      props: {
+        title: ssp,
+        x: () => returnCoordinates?.x - BORDER_BOX_MARGIN - 12,
+        y: () => returnCoordinates?.y + 20,
+      },
+      delay: 1000,
+      callBack: () => {
+        returnCoordinates = {
+          x: app.auction.nextTipCoordinates?.x + 500 * (index + 1),
+          y: app.auction.nextTipCoordinates?.y,
+        };
+      },
+    });
+  };
+
+  // Create a line that span over the boxes
+  steps.push({
+    component: ProgressLine,
+    props: {
+      direction: 'right',
+      x1: () => app.auction.nextTipCoordinates?.x - 500,
+      y1: () => app.auction.nextTipCoordinates?.y - 275,
+      customWidth: 1000,
+      noArrow: true,
+      isBranch: true,
+    },
+  });
+
+  componentAuctions.forEach((componentAuction, index) => {
+    renderBoxes(componentAuction, index);
+  });
+};
+
+const setUpComponentAuction = (steps, { title, x, y, ssp }, { bidValue }) => {
   const { box, arrowSize } = config.flow;
 
   steps.push({
@@ -163,7 +239,7 @@ const setUpComponentAuction = (
     component: Box,
     props: {
       title: ssp,
-      x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 15,
+      x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 12,
       y: () => app.auction.nextTipCoordinates?.y + 20,
     },
     delay: 1000,
@@ -190,32 +266,7 @@ const setUpComponentAuction = (
     },
   });
 
-  setUpRunadAuction(steps, () => {
-    return {
-      component: Custom,
-      props: {
-        render: () => {
-          const p = app.p;
-
-          if (index === 2) {
-            p.push();
-            p.noFill();
-            p.rect(boxCordinates.x, boxCordinates.y, BOX_WIDTH, BOX_HEIGHT);
-            p.strokeWeight(0.1);
-            p.pop();
-          }
-
-          return {
-            down: app.auction.nextTipCoordinates,
-          };
-        },
-      },
-      delay: 1000,
-      callBack: (returnValue) => {
-        app.auction.nextTipCoordinates = returnValue.down;
-      },
-    };
-  });
+  setUpRunadAuction(steps);
 
   steps.push({
     component: ProgressLine,
@@ -252,7 +303,7 @@ const setUpTPoint = (steps) => {
       direction: 'left',
       x1: () => app.auction.nextTipCoordinates?.x - 25,
       y1: () => app.auction.nextTipCoordinates?.y,
-      customWidth: BOX_COLUMN_MARGIN - 55,
+      customWidth: BOX_COLUMN_MARGIN + 60,
       noArrow: true,
     },
     callBack: (returnValue) => {
@@ -264,9 +315,9 @@ const setUpTPoint = (steps) => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x - 55,
+      x1: () => app.auction.nextTipCoordinates?.x - 50,
       y1: () => app.auction.nextTipCoordinates?.y,
-      customWidth: BOX_COLUMN_MARGIN - 55,
+      customWidth: BOX_COLUMN_MARGIN + 60,
       noArrow: true,
     },
     callBack: (returnValue) => {
@@ -278,7 +329,7 @@ const setUpTPoint = (steps) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN - 28,
+      x1: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN + 85,
       y1: () => app.auction.nextTipCoordinates?.y + 20,
       customHeight: 100,
     },
