@@ -19,6 +19,7 @@
 import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
 
 const setUpMultiSellerFirstSSPTagFlow = (steps) => {
   const { box, colors } = config.flow;
@@ -39,10 +40,11 @@ const setUpMultiSellerFirstSSPTagFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'SSP Adapter',
-      description: 'header-bidding lib',
+      title: MULTI_SELLER_CONFIG.SSP_ADAPTER_HEADER_BIDDING.title,
+      description: MULTI_SELLER_CONFIG.SSP_ADAPTER_HEADER_BIDDING.description,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y,
+      info: MULTI_SELLER_CONFIG.SSP_ADAPTER_HEADER_BIDDING.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -65,10 +67,11 @@ const setUpMultiSellerFirstSSPTagFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'SSPs',
+      title: MULTI_SELLER_CONFIG.SSPs.title,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
       color: colors.box.noData,
+      info: MULTI_SELLER_CONFIG.SSPs.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -91,10 +94,11 @@ const setUpMultiSellerFirstSSPTagFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'DSPs',
+      title: MULTI_SELLER_CONFIG.DSPs.title,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
       color: colors.box.noData,
+      info: MULTI_SELLER_CONFIG.DSPs.info,
     },
     delay: 1000,
     callBack: (returnValue) => {

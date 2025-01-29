@@ -20,6 +20,7 @@ import app from '../../../app';
 import config, { publisherData } from '../../../config';
 import { Box, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -77,6 +78,7 @@ const setUpComponentAuctions = (steps, index) => {
         BOX_WIDTH / 2 +
         BORDER_BOX_MARGIN * 2,
       y: () => app.auction.nextTipCoordinates?.y - 240,
+      info: MULTI_SELLER_CONFIG.SSP_X.info,
       sspWebsite: publisherData[publisher].ssps[0][1],
       ssp: publisherData[publisher].ssps[0][0],
       config: {
@@ -92,6 +94,7 @@ const setUpComponentAuctions = (steps, index) => {
         BORDER_BOX_MARGIN * 2 +
         15,
       sspWebsite: publisherData[publisher].ssps[1][1],
+      info: MULTI_SELLER_CONFIG.SSP_X.info,
       ssp: publisherData[publisher].ssps[1][0],
       config: {
         bidValue: '$8',
@@ -106,6 +109,7 @@ const setUpComponentAuctions = (steps, index) => {
         BORDER_BOX_MARGIN * 2 +
         15,
       sspWebsite: publisherData[publisher].ssps[2][1],
+      info: MULTI_SELLER_CONFIG.SSP_X.info,
       ssp: publisherData[publisher].ssps[2][0],
       config: {
         bidValue: '$6',
@@ -209,7 +213,11 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
   });
 };
 
-const setUpComponentAuction = (steps, { title, x, y, ssp }, { bidValue }) => {
+const setUpComponentAuction = (
+  steps,
+  { title, x, y, ssp, info },
+  { bidValue }
+) => {
   const { box, arrowSize } = config.flow;
 
   steps.push({
@@ -231,6 +239,7 @@ const setUpComponentAuction = (steps, { title, x, y, ssp }, { bidValue }) => {
       title: ssp,
       x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 12,
       y: () => app.auction.nextTipCoordinates?.y + 20,
+      info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -335,10 +344,11 @@ const setupAfterComponentAuctionFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'scoreAd()',
+      title: MULTI_SELLER_CONFIG.SCORE_AD.title,
       description: '(by SSPs)',
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+      info: MULTI_SELLER_CONFIG.SCORE_AD.info,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -361,8 +371,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'reportWin()',
-      description: '(on dsp.js)',
+      title: MULTI_SELLER_CONFIG.REPORT_WIN.title,
+      info: MULTI_SELLER_CONFIG.REPORT_WIN.info,
+      description: MULTI_SELLER_CONFIG.REPORT_WIN.description,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
     },
@@ -387,8 +398,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
   steps.push({
     component: Box,
     props: {
-      title: 'reportResult()',
-      description: '(on ssp.js)',
+      title: MULTI_SELLER_CONFIG.REPORT_RESULT.title,
+      info: MULTI_SELLER_CONFIG.REPORT_RESULT.info,
+      description: MULTI_SELLER_CONFIG.REPORT_RESULT.description,
       x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
       y: () => app.auction.nextTipCoordinates?.y + arrowSize,
     },
