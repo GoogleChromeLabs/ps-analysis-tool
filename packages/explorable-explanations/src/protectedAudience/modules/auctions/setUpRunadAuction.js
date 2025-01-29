@@ -198,7 +198,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
         direction: 'down',
         x1: () => app.auction.nextTipCoordinates?.x,
         y1: () => {
-          return app.auction.nextTipCoordinates?.y + box.height - 10;
+          return app.auction.nextTipCoordinates?.y + box.height - 10; // @todo ty coordinate change must not affect the component boxes in multi seller.
         },
       },
       callBack: (returnValue) => {
