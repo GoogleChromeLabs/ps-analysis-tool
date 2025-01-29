@@ -41,8 +41,8 @@ const Branches = async ({
 }) => {
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
-  const currentSite =
-    config.timeline.circles[app.timeline.currentIndex].website;
+
+  const currentSite = config.timeline.circles[currentIndex].website;
   const typeOfBranches = branches[0].type;
 
   branches = branches.map((branch, index) => ({

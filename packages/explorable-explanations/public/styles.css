@@ -133,7 +133,7 @@ text {
 
 #open-button {
     position: absolute;
-    top: 50px;
+    top: 35px;
     left: 50px;
     cursor: pointer;
     display: none;

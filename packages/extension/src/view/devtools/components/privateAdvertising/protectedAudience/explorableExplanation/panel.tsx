@@ -248,7 +248,7 @@ const Panel = ({
           onChange={(event) => setAutoScroll(event.target.checked)}
           className="hover:cursor-pointer"
         />
-        AutoScroll
+        Auto Scroll
       </label>
     </div>
   );
