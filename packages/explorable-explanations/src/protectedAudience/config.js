@@ -131,6 +131,7 @@ const config = {
         notBrowser: '#ffec99',
         noData: '#e9ecef',
         text: '#000',
+        borderStroke: [0, 0, 0],
       },
     },
   },

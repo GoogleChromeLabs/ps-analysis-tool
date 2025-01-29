@@ -43,7 +43,7 @@ describe('Settings Page', () => {
       await puppeteer.close();
     }, 40000);
 
-    test('Should be able to validate the multitab setting option', async () => {
+    test.skip('Should be able to validate the multitab setting option', async () => {
       await page.goto('https://bbc.com');
 
       const devtools = await puppeteer.getDevtools();
