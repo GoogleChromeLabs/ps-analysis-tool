@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,127 +13,108 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import React, { useEffect, useState, useRef } from 'react';
 
 /**
- * External dependencies.
+ * Internal dependencies
  */
-import React, { ReactNode, useState } from 'react';
-import classNames from 'classnames';
+import { getStoryPlayerMarkup } from './getStoryPlayerMarkup';
+import LandingPage, { LandingPageProps } from './LandingPage';
+import ContentPanel from './contentPanel';
 
-/**
- * Internal dependencies.
- */
-import { ArrowUp } from '../../icons';
-import ProgressBar from '../progressBar';
-import SupportLink from './supportLink';
-import QuickLinksList from './quickLinksList';
-import { PSInfoKeyType } from './infoCard/fetchPSInfo';
-import InfoCard from './infoCard';
-import Breadcrumbs from '../breadcrumbs';
-import { useSidebar } from '../sidebar';
+type LandingPageContainerProps = LandingPageProps & {
+  contentPanelTitle: string;
+  content: {
+    title: () => string;
+    description: () => string;
+    url: string;
+    storyUrl: string;
+  }[];
+  counterStyles: string;
+  titleStyles: string;
+};
 
-interface LandingPageProps {
-  title?: string;
-  children?: ReactNode;
-  psInfoKey?: PSInfoKeyType;
-  iframeSrc?: string;
-  contentPanel?: ReactNode;
-  iframeBorderClass?: string;
-  extraClasses?: string;
-  showQuickLinks?: boolean;
-  showSupportLink?: boolean;
-}
+const LandingPageContainer = (props: LandingPageContainerProps) => {
+  const [independentStory, setIndependentStory] = useState<string>('');
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const { children, contentPanelTitle, content, counterStyles, titleStyles } =
+    props;
 
-const LandingPage = ({
-  title,
-  psInfoKey,
-  iframeSrc,
-  iframeBorderClass,
-  children,
-  extraClasses,
-  contentPanel,
-  showQuickLinks = true,
-  showSupportLink = false,
-}: LandingPageProps) => {
-  const [loading, setLoading] = useState(iframeSrc ? true : false);
-  const [open, setOpen] = useState(true);
-  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
-    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
-  }));
+  useEffect(() => {
+    if (!independentStory || !iframeRef.current) {
+      return;
+    }
+
+    iframeRef.current.contentWindow?.postMessage({
+      storyUrl: independentStory,
+    });
+  }, [independentStory]);
+
+  useEffect(() => {
+    document.addEventListener(
+      'webStoriesLightBoxEvent',
+      //@ts-ignore since this is a custom event.
+      (event) => {
+        //@ts-ignore since this is a custom data.
+        if (event?.detail?.storyOpened === false) {
+          setIndependentStory('');
+        }
+      },
+      false
+    );
+
+    return () => {
+      document.removeEventListener(
+        'webStoriesLightBoxEvent',
+        //@ts-ignore since this is a custom event.
+        (event) => {
+          //@ts-ignore since this is a custom data.
+          if (event?.detail?.storyOpened === false) {
+            setIndependentStory('');
+          }
+        },
+        false
+      );
+    };
+  }, []);
 
   return (
-    <div className="w-full h-full">
-      {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
-      <div
-        className={classNames(
-          { hidden: loading },
-          'divide-y divide-hex-gray dark:divide-quartz'
-        )}
+    <>
+      <LandingPage
+        {...props}
+        containerStyles={independentStory ? 'z-0 absolute top-0 ' : ''}
+        contentPanel={
+          <ContentPanel
+            title={contentPanelTitle}
+            content={content.map((data) => {
+              return {
+                ...data,
+                onClick: () => setIndependentStory(data.storyUrl),
+              };
+            })}
+            counterStyles={counterStyles}
+            titleStyles={titleStyles}
+          />
+        }
       >
-        <div className="flex justify-between">
-          <div className="p-4 flex flex-col gap-1">
-            <button
-              className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
-              onClick={() => setOpen((prevOpen) => !prevOpen)}
-            >
-              {title && <h1 className="text-left">{title}</h1>}
-              <div>
-                <ArrowUp
-                  className={classNames(open && 'rotate-180 -translate-y-1')}
-                />
-              </div>
-            </button>
-            <Breadcrumbs items={extractSelectedItemKeyTitles()} />
-          </div>
-          <div className="p-4 flex items-center">
-            {showSupportLink && <SupportLink />}
-          </div>
-        </div>
-        <div className={classNames({ hidden: !open && !children })}>
-          <div
-            id="#__psat-collapsible-content"
-            className={classNames(
-              { hidden: !open },
-              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
-              {
-                'border-b border-american-silver dark:border-quartz': children,
-              },
-              extraClasses
-            )}
-          >
-            {iframeSrc && (
-              <iframe
-                src={iframeSrc}
-                height="100%"
-                onLoad={() => {
-                  setLoading(false);
-                }}
-                className={classNames(
-                  'w-full md:w-[95%] md:m-auto rounded-xl',
-                  iframeBorderClass
-                )}
-              />
-            )}
-            {psInfoKey && <InfoCard infoKey={psInfoKey} />}
-            {contentPanel && <>{contentPanel}</>}
-          </div>
-
-          {children && (
-            <div
-              id="#__psat-main-content"
-              className={classNames(
-                'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
-                extraClasses
-              )}
-            >
-              {children}
-            </div>
-          )}
-        </div>
-        {showQuickLinks && <QuickLinksList />}
-      </div>
-    </div>
+        {children}
+      </LandingPage>
+      <iframe
+        ref={iframeRef}
+        srcDoc={getStoryPlayerMarkup()}
+        style={{
+          display: independentStory ? 'block' : 'none',
+          height: independentStory ? '100%' : '0%',
+          width: independentStory ? '100%' : '0%',
+          position: 'fixed',
+        }}
+        className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
+      />
+    </>
   );
 };
 
-export default LandingPage;
+export default LandingPageContainer;

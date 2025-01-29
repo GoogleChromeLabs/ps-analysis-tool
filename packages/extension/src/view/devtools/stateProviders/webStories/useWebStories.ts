@@ -16,31 +16,25 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage } from '@google-psat/design-system';
+import { useContextSelector } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import ContentPanel from './contentPanel';
-import { useWebStories } from '../../stateProviders';
+import Context, { type WebStoryContext } from './context';
 
-const WebStories = () => {
-  const { storyOpened } = useWebStories(({ state }) => ({
-    storyOpened: state.storyOpened,
-  }));
+export function useWebStories(): WebStoryContext;
+export function useWebStories<T>(selector: (state: WebStoryContext) => T): T;
 
-  return (
-    <div className="w-full h-full overflow-hidden">
-      <LandingPage
-        title={'Stories'}
-        hideTitle={storyOpened}
-        extraClasses="w-full !p-0"
-        contentPanel={<ContentPanel storyOpened={storyOpened} />}
-        showQuickLinks={false}
-      />
-    </div>
-  );
-};
+/**
+ * Cookie store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useWebStories<T>(
+  selector: (state: WebStoryContext) => T | WebStoryContext = (state) => state
+) {
+  return useContextSelector(Context, selector);
+}
 
-export default WebStories;
+export default useWebStories;

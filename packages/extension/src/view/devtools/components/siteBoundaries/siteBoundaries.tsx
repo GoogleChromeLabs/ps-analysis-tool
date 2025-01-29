@@ -17,7 +17,7 @@
  * External Dependencies
  */
 import React from 'react';
-import { ContentPanel, LandingPage } from '@google-psat/design-system';
+import { LandingPageContainer } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 const content = [
@@ -25,38 +25,44 @@ const content = [
     title: () => I18n.getMessage('chips'),
     description: () => I18n.getMessage('chipsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('storageAccessAPI'),
     description: () => I18n.getMessage('storageAccessAPIDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('rws'),
     description: () => I18n.getMessage('rwsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('fedcm'),
     description: () => I18n.getMessage('fedcmDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
 ];
 
 const SiteBoundaries = () => {
   return (
-    <LandingPage
-      title={I18n.getMessage('siteBoundaries')}
-      contentPanel={
-        <ContentPanel
-          title={I18n.getMessage('siteBoundariesDescription')}
-          content={content}
-          counterStyles="bg-green-700"
-          titleStyles="text-green-700"
-        />
-      }
-      extraClasses="min-h-[78vh] w-full"
-    />
+    <>
+      <LandingPageContainer
+        title={I18n.getMessage('siteBoundaries')}
+        contentPanelTitle={I18n.getMessage('siteBoundariesDescription')}
+        content={content}
+        counterStyles="bg-green-700"
+        titleStyles="text-green-700"
+        extraClasses="min-h-[78vh] w-full"
+      />
+    </>
   );
 };
 

@@ -21,11 +21,11 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
+import { ChipsFilter } from '.';
 import Chip from './chip';
-import { TableFilter } from '../../../useTable';
 
 interface ChipListProps {
-  selectedFilters: TableFilter;
+  selectedFilters: ChipsFilter[];
   toggleFilterSelection: (
     filterKey: string,
     filterValue: string,
@@ -41,14 +41,14 @@ const ChipList = ({
 }: ChipListProps) => {
   return (
     <div className="flex flex-nowrap max-w-full">
-      {Object.entries(selectedFilters).map(([filterKey, filter]) => {
-        return Object.keys(filter.filterValues || {}).map((filterValue) => (
+      {selectedFilters.map((filter) => {
+        return filter.values.map((value) => (
           <Chip
-            key={filterValue}
+            key={value}
             filterTitle={filter.title}
-            value={filterValue}
+            value={value}
             toggleFilterSelection={() => {
-              toggleFilterSelection(filterKey, filterValue, true);
+              toggleFilterSelection(filter.key, value, true);
             }}
             hideCloseIcon={hideCloseIcon}
           />

@@ -18,15 +18,15 @@
  */
 import React, { useMemo } from 'react';
 import { I18n } from '@google-psat/i18n';
+import Option from './option';
 
 /**
  * Internal dependencies.
  */
-import { type TableFilter } from '../../useTable';
-import Option from './option';
 
 interface SubListProps {
-  filterValues: TableFilter[keyof TableFilter]['filterValues'];
+  filterValues: string[];
+  selectedFilterValues: string[];
   filterKey: string;
   sort: boolean;
   isExpanded: boolean;
@@ -45,6 +45,7 @@ interface SubListProps {
 
 const SubList = ({
   filterValues,
+  selectedFilterValues,
   filterKey,
   sort,
   isExpanded,
@@ -55,10 +56,10 @@ const SubList = ({
 }: SubListProps) => {
   const sortedFilterValueKeys = useMemo(() => {
     if (!sort) {
-      return Object.keys(filterValues || {});
+      return filterValues || [];
     }
 
-    return Object.keys(filterValues || {}).sort((a, b) =>
+    return (filterValues || []).sort((a, b) =>
       String(a).localeCompare(String(b))
     );
   }, [filterValues, sort]);
@@ -80,7 +81,11 @@ const SubList = ({
             filterKey={filterKey}
             filterValue={filterValue}
             selected={
-              Boolean(filterValues?.[filterValue].selected) &&
+              Boolean(
+                selectedFilterValues.find(
+                  (selectedFilterValue) => selectedFilterValue === filterValue
+                )
+              ) &&
               (isSelectAllFilterEnabled ? !isSelectAllFilterSelected : true)
             }
             toggleFilterSelection={toggleFilterSelection}

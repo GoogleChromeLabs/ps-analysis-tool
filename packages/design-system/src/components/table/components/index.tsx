@@ -28,8 +28,8 @@ import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
 import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
-import ChipsBar from './filtersSidebar/chips';
-import FiltersSidebar from './filtersSidebar';
+import TableChipsBar from './filtersSidebar/chips';
+import TableFiltersSidebar from './filtersSidebar';
 
 interface TableProps {
   selectedKey: string | undefined | null;
@@ -60,6 +60,10 @@ const Table = ({
     toggleSelectAllFilter,
     selectedFilters,
     resetFilters,
+    rows,
+    searchValue,
+    setSearchValue,
+    exportTableData,
   } = useTable(({ state, actions }) => ({
     tableContainerRef: state.tableContainerRef,
     filters: state.filters,
@@ -68,6 +72,10 @@ const Table = ({
     toggleSelectAllFilter: actions.toggleSelectAllFilter,
     selectedFilters: state.selectedFilters,
     resetFilters: actions.resetFilters,
+    rows: state.rows,
+    searchValue: state.searchValue,
+    setSearchValue: actions.setSearchValue,
+    exportTableData: actions.exportTableData,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -127,9 +135,13 @@ const Table = ({
             setShowFilterSidebar={setShowFilterSidebar}
             extraInterface={extraInterfaceToTopBar}
             hideSearch={hideSearch}
+            rows={rows}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            exportTableData={exportTableData}
           />
           {!hideFiltering && (
-            <ChipsBar
+            <TableChipsBar
               selectedFilters={selectedFilters}
               resetFilters={resetFilters}
               toggleFilterSelection={toggleFilterSelection}
@@ -147,7 +159,7 @@ const Table = ({
             }}
             className="overflow-auto h-full"
           >
-            <FiltersSidebar
+            <TableFiltersSidebar
               filters={filters}
               isSelectAllFilterSelected={isSelectAllFilterSelected}
               toggleFilterSelection={toggleFilterSelection}

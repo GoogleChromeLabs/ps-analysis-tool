@@ -295,6 +295,20 @@ const TABS: SidebarItems = {
     children: {},
     containerClassName: 'h-6',
   },
+  [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
+    title: () => 'Stories',
+    panel: {
+      Element: WebStories,
+    },
+    icon: {
+      Element: WebStoriesIcon,
+    },
+    selectedIcon: {
+      Element: WebStoriesIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
+  },
   [SIDEBAR_ITEMS_KEYS.WIKI]: {
     title: () => I18n.getMessage('wiki'),
     panel: {
