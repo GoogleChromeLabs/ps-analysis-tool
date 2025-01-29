@@ -26,9 +26,9 @@ export const ADVERTIZER_CONFIG = {
         <p>
           They collect user data, which is sent to DSP servers for processing
           (see the next DSPs box) and the received JSON response from DSP
-          servers is passed as a parameter to{' '}
-          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API
-          to join interest groups.
+          servers is passed as a parameter to the{' '}
+          <code className="text-upsed-tomato">joinAdInterestGroup()</code>{' '}
+          function to join interest groups.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
@@ -45,15 +45,15 @@ export const ADVERTIZER_CONFIG = {
     info: (
       <>
         <p>
-          It recieves the user data from the DSP tags, processes it and send
-          JSON response to the DSP tags for joining interest groups (see DSP
+          It receives the user data from the DSP tags, processes it, and sends
+          JSON responses to the DSP tags for joining interest groups (see DSP
           Tags box).
         </p>
         <p>
           These <strong>interest groups</strong> are added to the user's browser
-          which are shown with small bubbles here. They store user profiles
-          based on demographics, location, and behavior while ensuring
-          compliance with privacy standards like the Protected Audience API.
+          and are shown with small bubbles here. They store user profiles based
+          on demographics, location, and behavior while ensuring compliance with
+          privacy standards like the Protected Audience API.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
@@ -74,10 +74,10 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          SSP ad tag sends ad request to SSP server indicating that the browser
-          supports Protected Audience API. It also returns contextual auction
-          response to <code className="text-upsed-tomato">runAdAuction()</code>{' '}
-          function.
+          The SSP ad tag sends an ad request to the SSP server indicating that
+          the browser supports Protected Audience API. It also returns
+          contextual auction responses to the{' '}
+          <code className="text-upsed-tomato">runAdAuction()</code> function.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
@@ -89,10 +89,12 @@ export const SINGLE_SELLER_CONFIG = {
           <ul className="list-disc ml-3 mt-1">
             <li>Collects contextual data about the page and user.</li>
             <li>
-              Sends ad requests to SSP server which then forward those data to
+              Sends ad requests to SSP server which then forwards those data to
               DSPs via RTB protocols.
             </li>
-            <li>Returns the RTB responses from SSP server to the SSP tag.</li>
+            <li>
+              Returns the RTB responses from the SSP server to the SSP tag.
+            </li>
           </ul>
         </p>
       </>
@@ -103,10 +105,10 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          SSP server sends contextual OpenRTB bid request to DSP indicating that
-          the browser supports Protected Audience API. It also runs contextual
-          auction and returns the winner along with auction configuration to SSP
-          tags.
+          SSP server sends contextual OpenRTB bid requests to DSP indicating
+          that the browser supports Protected Audience API. It also runs
+          contextual auction and returns the winner along with auctions
+          configuration to SSP tags.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
@@ -121,9 +123,8 @@ export const SINGLE_SELLER_CONFIG = {
             DSPs who bid on the ad space via RTB.
           </p>
           <p>
-            It also returns the winning ad creative which is used to while
-            scoring the ad in{' '}
-            <code className="text-upsed-tomato">scoreAd()</code>.
+            It also returns the winning ad creative that is used while scoring
+            the ad in <code className="text-upsed-tomato">scoreAd()</code>.
           </p>
           <p>Example: Google Ad Manager, Magnite.</p>
         </p>
@@ -145,14 +146,15 @@ export const SINGLE_SELLER_CONFIG = {
             bids, and serve ads based on campaign targeting and bidding
             strategies. They handle bid generation, ad selection, and reporting
             during ad auctions initiated by SSPs. The DSP server evaluates bid
-            requests in real time, using signals such as interest groups,
+            requests in real-time, using signals such as interest groups,
             contextual relevance, and advertiser budgets to decide whether to
             bid.
           </p>
           <p>
             When contacted by SSP during contextual auction they respond with
             bids based on the results calculated on the basis of ad requests
-            received via SSP. The DSPs and SSP communicate using RTB protocols.
+            received via SSP. The DSPs and the SSP communicate using RTB
+            protocols.
           </p>
         </p>
       </>
@@ -163,7 +165,7 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          SSP ad tag initiates on-device auction by calling{' '}
+          SSP ad tag initiates the on-device auction by calling{' '}
           <code className="text-upsed-tomato">runAdAuction()</code>, passing in
           signals and contextual ad winner from DSP's openRTB bid response which
           was sent by the SSP server.
@@ -293,7 +295,7 @@ export const SINGLE_SELLER_CONFIG = {
             for ad display.
           </p>
           <p>
-            Any bid which is less than the contextual bid passed by the SSP tag
+            Any bid that is less than the contextual bid passed by the SSP tag
             while calling the runAdAuction is rejected.
           </p>
         </p>
@@ -315,7 +317,7 @@ export const SINGLE_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">reportWin()</code>
           </a>{' '}
-          DSP JavaScript function to report winner to DSP.
+          DSP JavaScript function to report the winner to DSP.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>A function executed by
@@ -341,7 +343,7 @@ export const SINGLE_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">reportResult()</code>
           </a>{' '}
-          SSP JavaScript function to report winner to SSP.
+          SSP JavaScript function to report the winner to SSP.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>A function executed by
@@ -361,8 +363,8 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          SSP adapter sends ad request to SSP server indicating that the browser
-          supports Protected Audience API.
+          The SSP adapter sends ad requests to the SSP server indicating that
+          the browser supports Protected Audience API.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
@@ -383,15 +385,12 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          Publisher Ad Server tag sends ad request to Publisher Ad Server
-          server.
-        </p>
-        <p>
-          Publisher Ad Server tag initiates on-device auction by calling
+          The Publisher Ad Server tag sends an ad request to the Publisher Ad
+          Server. It initiates on-device auction by calling{' '}
           <a href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#21-initiating-an-on-device-auction">
             <code className="text-upsed-tomato">runAdAuction()</code>
           </a>{' '}
-          API.
+          function.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
@@ -436,19 +435,14 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           The publisher ad server is the central hub that controls and manages
-          the entire ad serving process on a publisher's website or app. It also
-          does couple of other tasks like Delivers and optimizes ads, tracks
-          performance and generates reports, integrates with other ad tech
-          platforms
-        </p>
-        <p>
-          It also does couple of other tasks like Delivers and optimizes ads,
-          tracks performance and generates reports, integrates with other ad
-          tech platforms
-        </p>
-        <p>
-          The publisher ad server will also run a contextual auction with the
-          data from header bidding as a comparison source.
+          the entire ad-serving process on a publisher's website or app. It also
+          does a couple of other tasks like delivering and optimizing ads,
+          tracking performance, and generating reports, and integrates with
+          other ad tech platforms. It also does a couple of other tasks like
+          delivering and optimizing ads, tracks performance and generating
+          reports, and integrating with other ad tech platforms. The publisher
+          ad server will also run a contextual auction with the data from header
+          bidding as a comparison source.
         </p>
         <p>
           Any bid that is higher than the header bidding winner will be accepted
@@ -614,9 +608,9 @@ export const MULTI_SELLER_CONFIG = {
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
-          The reportResult() function sends report to the all the SSP's to log
-          the winner and all the other details to log the auction details. It is
-          implemented by the SSP's, and called by the adServer at the end of
+          The reportResult() function sends report to all the SSPs to log the
+          winner and all the other details to log the auction details. It is
+          implemented by the SSPs, and called by the adServer at the end of
           top-level auction.
         </p>
       </>
