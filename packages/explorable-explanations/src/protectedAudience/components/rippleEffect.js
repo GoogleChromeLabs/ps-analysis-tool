@@ -74,6 +74,7 @@ rippleEffect.start = (x = 0, y = 0) => {
       const elapsed = timestamp - startTime;
 
       if (elapsed > duration) {
+        clearArea(x, y);
         resolve();
         return;
       }
@@ -89,23 +90,26 @@ rippleEffect.start = (x = 0, y = 0) => {
   });
 };
 
-rippleEffect.create = (rippleX, rippleY, speed) => {
-  // Calculate the area to clear
-  const { ripples, numRipples, maxRadius } = config.rippleEffect;
+const clearArea = (x, y) => {
+  const { numRipples, maxRadius } = config.rippleEffect;
   const clearWidth = maxRadius * 2 + (numRipples - 1) * 40;
   const clearHeight = maxRadius * 1.5;
+
+  app.p.push();
+  app.p.fill(config.canvas.background);
+  app.p.noStroke();
+  app.p.rect(x - 1, y - clearHeight / 2 - 200, clearWidth, clearHeight + 400);
+  app.p.pop();
+};
+
+rippleEffect.create = (rippleX, rippleY, speed) => {
+  // Calculate the area to clear
+  const { ripples, maxRadius } = config.rippleEffect;
   const p = app.p;
 
   p.push();
   // Clear only the area used by the ripples
-  p.fill(config.canvas.background);
-  p.noStroke();
-  p.rect(
-    rippleX - 1,
-    rippleY - clearHeight / 2 - 200,
-    clearWidth,
-    clearHeight + 400
-  );
+  clearArea(rippleX, rippleY);
   let allComplete = true;
   p.translate(rippleX, rippleY);
 
