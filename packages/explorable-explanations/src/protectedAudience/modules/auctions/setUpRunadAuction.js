@@ -64,9 +64,11 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
     },
     {
       title: 'DSP 1',
+      info: SINGLE_SELLER_CONFIG.DSP_X.info,
     },
     {
       title: 'DSP 2',
+      info: SINGLE_SELLER_CONFIG.DSP_X.info,
     },
     {
       title: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.title,
