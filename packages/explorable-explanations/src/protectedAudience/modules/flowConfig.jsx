@@ -248,8 +248,9 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          DSP responds with an OpenRTB bid response containing signals and a bid
-          amount for the on-device auction.
+          DSPs respond with a bidding logic that is run in the protected
+          audience auction that decides how much to bid for a particular ad
+          space.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
