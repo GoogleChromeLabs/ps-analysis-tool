@@ -64,8 +64,6 @@ auction.setUp = (index) => {
 
   const steps = [];
 
-  app.isMultiSeller = true;
-
   setUpAdUnitCode(steps, index);
   setupBranches(steps, index);
 
