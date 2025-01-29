@@ -248,9 +248,9 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          DSPs respond with a bidding logic that is run in the protected
-          audience auction that decides how much to bid for a particular ad
-          space.
+          DSP responds with a bid when{' '}
+          <code className="text-upsed-tomato">generateBid()</code> function is
+          called from their respective DSP tags.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>

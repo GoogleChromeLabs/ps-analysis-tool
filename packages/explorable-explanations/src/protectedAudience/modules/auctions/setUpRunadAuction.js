@@ -133,6 +133,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
         component: ProgressLine,
         props: {
           direction: 'left',
+          text: '$20',
           x1: () => app.auction.nextTipCoordinates?.x - box.width / 2,
           y1: () => {
             return app.auction.nextTipCoordinates?.y + 35;
@@ -180,6 +181,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
         component: ProgressLine,
         props: {
           direction: 'left',
+          text: '$10',
           x1: () => app.auction.nextTipCoordinates?.x - box.width / 2,
           y1: () => {
             return app.auction.nextTipCoordinates?.y + 25 - box.height / 2;
