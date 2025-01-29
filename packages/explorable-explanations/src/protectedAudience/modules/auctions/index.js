@@ -103,18 +103,24 @@ auction.draw = (index) => {
   for (const step of steps) {
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay = 0 } = step;
+      let ssp = '';
 
       if (props?.title) {
-        const deciderObject = {
+        if (props?.ssp) {
+          ssp = props.ssp;
+        } else {
+          if (app.isMultiSeller && props.title === 'scoreAd()') {
+            ssp = 'https://www.' + config.timeline.circles[index].website;
+          }
+        }
+
+        const stepInformation = {
           title: props.title,
           description: props.description,
-          ssp: props?.ssp
-            ? props.ssp
-            : app.isMultiSeller && props.title === 'scoreAd()'
-            ? 'https://www.' + config.timeline.circles[index].website
-            : '',
+          ssp,
         };
-        app.setCurrentStep(deciderObject);
+
+        app.setCurrentStep(stepInformation);
       }
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop

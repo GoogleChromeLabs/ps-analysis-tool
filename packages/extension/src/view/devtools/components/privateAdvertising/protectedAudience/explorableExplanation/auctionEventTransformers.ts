@@ -22,7 +22,10 @@ import type {
   singleAuctionEvent,
   AdsAndBiddersTypeData,
 } from '@google-psat/common';
-import { publisherData } from '@google-psat/explorable-explanations';
+import {
+  publisherData,
+  SINGLE_SELLER_CONFIG,
+} from '@google-psat/explorable-explanations';
 /**
  * Internal dependencies
  */
@@ -219,19 +222,22 @@ export const createAuctionEvents = (
   const events: singleAuctionEvent[] = [...(previousEvents ?? [])];
 
   switch (currentStep?.title) {
-    case 'runAdAuction()':
+    case SINGLE_SELLER_CONFIG.RUN_AD_AUCTION.title:
       events.push(
         transformStartedEvent(seller),
         transformConfigResolvedEvent(seller)
       );
       break;
-    case 'Load Interest Group':
+    case SINGLE_SELLER_CONFIG.LOAD_INTEREST_GROUP.title:
       if (!isMultiSeller) {
         events.push(...transformLoadedEvent(interestGroups));
       }
       break;
-    case 'Key/Value':
-      if (currentStep.description === 'Trusted DSP Server') {
+    case SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.title:
+      if (
+        currentStep.description ===
+        SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.description
+      ) {
         events.push(
           ...transformFetchingEvents(
             advertisers,
@@ -267,10 +273,10 @@ export const createAuctionEvents = (
         );
       }
       break;
-    case 'generateBid()':
+    case SINGLE_SELLER_CONFIG.GENERATE_BID.title:
       events.push(...bidEvents);
       break;
-    case 'scoreAd()':
+    case SINGLE_SELLER_CONFIG.SCORE_AD.title:
       if (bidEvents.length > 0) {
         if (isMultiSeller) {
           events.push(
