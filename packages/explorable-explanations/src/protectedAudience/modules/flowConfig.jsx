@@ -243,6 +243,35 @@ export const SINGLE_SELLER_CONFIG = {
       </>
     ),
   },
+  DSP_X: {
+    title: 'DSP 1',
+    info: (
+      <>
+        <p>
+          DSP responds with an OpenRTB bid response containing signals and a bid
+          amount for the on-device auction.
+        </p>
+        <p className="mt-2">
+          <strong className="block">General Use:</strong>
+          <p>
+            On the publisher side, DSP servers process ad requests, evaluate
+            bids, and serve ads based on campaign targeting and bidding
+            strategies. They handle bid generation, ad selection, and reporting
+            during ad auctions initiated by SSPs. The DSP server evaluates bid
+            requests in real-time, using signals such as interest groups,
+            contextual relevance, and advertiser budgets to decide whether to
+            bid.
+          </p>
+          <p>
+            When contacted by SSP during contextual auction they respond with
+            bids based on the results calculated on the basis of ad requests
+            received via SSP. The DSPs and the SSP communicate using RTB
+            protocols.
+          </p>
+        </p>
+      </>
+    ),
+  },
   KEY_VALUE_SSP_SERVER: {
     title: 'Key/Value',
     description: 'Trusted SSP Server',
