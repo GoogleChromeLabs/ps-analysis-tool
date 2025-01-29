@@ -21,13 +21,14 @@ import config from '../../config';
 import { Box, ProgressLine } from '../../components';
 import { SINGLE_SELLER_CONFIG } from '../flowConfig.jsx';
 
-const setUpRunadAuction = (steps, afterRippleStep = null) => {
+const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
   const { box, colors } = config.flow;
 
   steps.push({
     component: Box,
     props: {
       title: SINGLE_SELLER_CONFIG.RUN_AD_AUCTION.title,
+      ssp,
       x: () => app.auction.nextTipCoordinates?.x + 10,
       y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
       info: SINGLE_SELLER_CONFIG.RUN_AD_AUCTION.info,
@@ -114,6 +115,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
         component: Box,
         props: {
           title,
+          ssp,
           x: () => app.auction.nextTipCoordinates?.x + 10,
           y: () => app.auction.nextTipCoordinates?.y - box.height + 15,
           color,
@@ -161,6 +163,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
         component: Box,
         props: {
           title,
+          ssp,
           x: () => app.auction.nextTipCoordinates?.x + 10,
           y: () => app.auction.nextTipCoordinates?.y,
           color,
@@ -211,6 +214,7 @@ const setUpRunadAuction = (steps, afterRippleStep = null) => {
       props: {
         title,
         description,
+        ssp,
         ...extraProps,
         x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates?.y + 10,

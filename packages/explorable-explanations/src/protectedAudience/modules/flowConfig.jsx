@@ -268,7 +268,7 @@ export const SINGLE_SELLER_CONFIG = {
     ),
   },
   SCORE_AD: {
-    title: 'scroreAd()',
+    title: 'scoreAd()',
     description: '(from SSPs on ssp.js)',
     info: (
       <>

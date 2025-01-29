@@ -82,8 +82,8 @@ const AdTable = ({
             <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
             <p className="truncate">
               {(info as number[][])
-                .map((size: number[]) => `${size[0]}x${size[1]}`)
-                .join(' | ')}
+                ?.map((size: number[]) => `${size[0]}x${size[1]}`)
+                ?.join(' | ')}
             </p>
           </div>
         ),
@@ -104,7 +104,7 @@ const AdTable = ({
         accessorKey: 'bidders',
         cell: (info) => (
           <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
-            {(info as string[]).map((bidder: string, idx: number) => (
+            {(info as string[])?.map((bidder: string, idx: number) => (
               <div key={idx}>{<Pill title={bidder} />}</div>
             ))}
           </div>
@@ -132,6 +132,10 @@ const AdTable = ({
 
           if (!acc) {
             acc = {};
+          }
+
+          if (!bidders) {
+            return acc;
           }
 
           bidders.forEach((_bidder) => {

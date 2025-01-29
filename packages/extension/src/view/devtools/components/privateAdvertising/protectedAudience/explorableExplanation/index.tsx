@@ -37,9 +37,10 @@ import Info from './tableTabPanels/info';
 import {
   configuredAuctionEvents,
   type CurrentSiteData,
-  type AdUnitLiteral,
+  type StepType,
 } from './auctionEventTransformers';
 import BidsPanel from '../bids/panel';
+import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
 
 const ExplorableExplanation = () => {
@@ -47,10 +48,14 @@ const ExplorableExplanation = () => {
     useState<CurrentSiteData | null>(null);
 
   const [isMultiSeller, setIsMultiSeller] = useState(false);
+  const [selectedAdUnit, setSelectedAdUnit] = useState<string | null>(null);
+  const [selectedDateTime, setSelectedDateTime] = useState<string | null>(null);
+  const previousAuctionData = useRef<AuctionEventsType | null>(null);
 
   const [interestGroupsData, setInterestGroupsData] = useState<
     InterestGroups[]
   >([]);
+  const [currentStep, setCurrentStep] = useState<StepType>({} as StepType);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
 
@@ -81,6 +86,10 @@ const ExplorableExplanation = () => {
   }, []);
 
   const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
+    previousAuctionData.current = null;
+    setCurrentStep({} as StepType);
+    setSelectedAdUnit(null);
+    setSelectedDateTime(null);
     setCurrentSiteData(() => siteData);
     setInterestGroupsData(() => getInterestGroupData(siteData));
   };
@@ -132,10 +141,10 @@ const ExplorableExplanation = () => {
 
   const auctionsData = useMemo(() => {
     if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+      previousAuctionData.current = null;
       return {};
     }
 
-    //@ts-ignore since SYNTHETIC_INTEREST_GROUPS is a constant and type is not defined.
     const advertiserSet = sitesVisited.filter(
       (site) => Object.keys(SYNTHETIC_INTEREST_GROUPS[site]).length > 0
     );
@@ -154,15 +163,28 @@ const ExplorableExplanation = () => {
         interestGroups.flat(),
         Array.from(advertiserSet),
         isMultiSeller,
-        currentSiteData
+        currentSiteData,
+        currentStep,
+        previousAuctionData.current,
+        selectedAdUnit,
+        selectedDateTime
       );
+
+    previousAuctionData.current = auctionData;
 
     return {
       auctionData,
       receivedBids,
       adsAndBidders,
     };
-  }, [currentSiteData, sitesVisited, isMultiSeller]);
+  }, [
+    currentSiteData,
+    sitesVisited,
+    isMultiSeller,
+    currentStep,
+    selectedAdUnit,
+    selectedDateTime,
+  ]);
 
   const [highlightedInterestGroup, setHighlightedInterestGroup] = useState<{
     interestGroupName: string;
@@ -213,10 +235,7 @@ const ExplorableExplanation = () => {
           Element: BidsPanel,
           props: {
             receivedBids: Object.keys(auctionsData.receivedBids ?? {})
-              .map(
-                (key: string) =>
-                  auctionsData?.receivedBids?.[key as AdUnitLiteral] ?? []
-              )
+              .map((key: string) => auctionsData?.receivedBids?.[key] ?? [])
               .flat(),
             noBids: {},
             eeAnimatedTab: true,
@@ -249,6 +268,9 @@ const ExplorableExplanation = () => {
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         isMultiSeller={isMultiSeller}
         setIsMultiSeller={setIsMultiSeller}
+        setCurrentStep={setCurrentStep}
+        setSelectedAdUnit={setSelectedAdUnit}
+        setSelectedDateTime={setSelectedDateTime}
       />
     </TabsProvider>
   );
