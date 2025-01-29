@@ -636,6 +636,14 @@ export const interestGroupSketch = (p) => {
       app.speedMultiplier = props.speedMultiplier;
     }
 
+    if (props.setSelectedDateTime) {
+      app.setSelectedDateTime = props.setSelectedDateTime;
+    }
+
+    if (props.setSelectedAdUnit) {
+      app.setSelectedAdUnit = props.setSelectedAdUnit;
+    }
+
     app.isAutoExpand = props.autoExpand;
 
     if (
@@ -663,6 +671,10 @@ export const interestGroupSketch = (p) => {
       if (expandedSVG) {
         bubbles.showExpandedBubbles();
       }
+    }
+
+    if (props.setCurrentStep) {
+      app.setCurrentStep = props.setCurrentStep;
     }
 
     if (typeof props.autoScroll !== 'undefined') {

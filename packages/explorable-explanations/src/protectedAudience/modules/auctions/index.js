@@ -103,6 +103,25 @@ auction.draw = (index) => {
   for (const step of steps) {
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay = 0 } = step;
+      let ssp = '';
+
+      if (props?.title) {
+        if (props?.ssp) {
+          ssp = props.ssp;
+        } else {
+          if (app.isMultiSeller && props.title === 'scoreAd()') {
+            ssp = 'https://www.' + config.timeline.circles[index].website;
+          }
+        }
+
+        const stepInformation = {
+          title: props.title,
+          description: props.description,
+          ssp,
+        };
+
+        app.setCurrentStep(stepInformation);
+      }
 
       const returnValue = await component(props); // eslint-disable-line no-await-in-loop
 
@@ -153,6 +172,8 @@ auction.draw = (index) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
       app.timeline.infoIconsPositions = [];
+      app.setSelectedAdUnit(null);
+      app.setSelectedDateTime(null);
     }
     cb(null, true);
   });

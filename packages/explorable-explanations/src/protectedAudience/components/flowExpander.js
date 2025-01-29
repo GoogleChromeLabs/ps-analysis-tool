@@ -17,14 +17,16 @@
  * Internal dependencies
  */
 import app from '../app';
-import config from '../config';
+import config, { publisherData } from '../config';
 import { isInsideCircle, scrollToCoordinates } from '../utils';
 
-const FlowExpander = async ({ nextTipCoordinates }) => {
+const FlowExpander = async ({ nextTipCoordinates, typeOfBranches }) => {
   const p = app.p;
   const igp = app.igp;
   const iconSize = config.timeline.expandIconSize;
   const iconRadius = iconSize / 2;
+  const currentSite =
+    config.timeline.circles[app.timeline.currentIndex].website;
 
   igp.mouseMoved = ({ offsetX, offsetY }) => {
     let hoveringOverSomething = false;
@@ -42,10 +44,17 @@ const FlowExpander = async ({ nextTipCoordinates }) => {
 
   const endpoint = await new Promise((resolve) => {
     igp.mouseClicked = ({ offsetX, offsetY }) => {
-      nextTipCoordinates.forEach(({ x, y }) => {
+      nextTipCoordinates.forEach(({ x, y }, index) => {
         if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
           igp.mouseClicked(false);
           igp.mouseMoved(false);
+          if (typeOfBranches === 'datetime') {
+            app.setSelectedDateTime(
+              `${publisherData[currentSite].branches[index].date} ${publisherData[currentSite].branches[index].time}`
+            );
+          } else {
+            app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
+          }
           resolve({ x, y });
           return;
         }

@@ -77,6 +77,7 @@ const setUpComponentAuctions = (steps, index) => {
         BOX_WIDTH / 2 +
         BORDER_BOX_MARGIN * 2,
       y: () => app.auction.nextTipCoordinates?.y - 240,
+      sspWebsite: publisherData[publisher].ssps[0][1],
       ssp: publisherData[publisher].ssps[0][0],
       config: {
         bidValue: '$10',
@@ -90,6 +91,7 @@ const setUpComponentAuctions = (steps, index) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
+      sspWebsite: publisherData[publisher].ssps[1][1],
       ssp: publisherData[publisher].ssps[1][0],
       config: {
         bidValue: '$8',
@@ -103,6 +105,7 @@ const setUpComponentAuctions = (steps, index) => {
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
+      sspWebsite: publisherData[publisher].ssps[2][1],
       ssp: publisherData[publisher].ssps[2][0],
       config: {
         bidValue: '$6',
@@ -124,19 +127,6 @@ const setUpComponentAuctions = (steps, index) => {
   setUpTPoint(steps);
 
   setupAfterComponentAuctionFlow(steps);
-
-  // steps.push({
-  //   component: Text,
-  //   props: {
-  //     text: '.',
-  //     x: () => app.auction.nextTipCoordinates?.x,
-  //     y: () => app.auction.nextTipCoordinates?.y + 15,
-  //   },
-  //   delay: 11111111,
-  //   callBack: (returnValue) => {
-  //     app.auction.nextTipCoordinates = returnValue;
-  //   },
-  // });
 };
 
 const setUpComponentAuctionStarter = (componentAuctions, steps) => {
