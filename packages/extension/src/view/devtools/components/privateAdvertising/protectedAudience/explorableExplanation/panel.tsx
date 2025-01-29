@@ -106,6 +106,7 @@ const Panel = ({
     (event: KeyboardEvent) => {
       // Check if the pressed key is the spacebar
       if (event.code === 'Space') {
+        event.preventDefault();
         setPlaying();
       }
     },
