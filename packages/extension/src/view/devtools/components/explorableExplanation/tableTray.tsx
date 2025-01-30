@@ -18,7 +18,7 @@
  */
 import { DoubleDownArrow, Tabs, useTabs } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TableTrayProps {
   initialCollapsed?: boolean;
@@ -31,20 +31,27 @@ const TableTray = ({ initialCollapsed = false }: TableTrayProps) => {
 
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
+  const [height, setHeight] = useState<string | undefined>('20%');
+
+  useEffect(() => {
+    if (!isCollapsed) {
+      setHeight('20%');
+    }
+  }, [isCollapsed]);
+
   return (
     <Resizable
       defaultSize={{
         width: '100%',
         height: '20%',
       }}
-      size={
-        isCollapsed
-          ? {
-              width: '100%',
-              height: '30px',
-            }
-          : undefined
-      }
+      onResizeStop={(_, __, ___, d) => {
+        setHeight(() => `calc(${height} + ${d.height}px)`);
+      }}
+      size={{
+        width: '100%',
+        height: isCollapsed ? '30px' : height,
+      }}
       minHeight="30px"
       maxHeight="95%"
       enable={{
