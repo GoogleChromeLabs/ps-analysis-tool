@@ -20,12 +20,31 @@
 import React from 'react';
 import { BreakpointIcon, InfoIcon } from '@google-psat/design-system';
 
-const Breakpoints = () => {
+export interface InfoState {
+  title?: string;
+  info?: string | React.ReactElement;
+}
+
+interface BreakpointsProps {
+  setInfo: React.Dispatch<React.SetStateAction<InfoState>>;
+}
+
+const Breakpoints = ({ setInfo }: BreakpointsProps) => {
+  const breakpointInfo = <p>Some info</p>;
+
   return (
     <div className="flex gap-4 text-raisin-black dark:text-bright-gray p-4">
       <div className="flex gap-2 justify-center items-center">
         <BreakpointIcon className="fill-granite-gray" />
-        Ad Worklet Breakpoints <InfoIcon className="cursor-pointer" />
+        Ad Worklet Breakpoints{' '}
+        <InfoIcon
+          className="cursor-pointer"
+          onClick={() => {
+            setInfo({
+              info: breakpointInfo,
+            });
+          }}
+        />
       </div>
       <div className="flex gap-2 justify-center items-center">
         <input type="checkbox" />

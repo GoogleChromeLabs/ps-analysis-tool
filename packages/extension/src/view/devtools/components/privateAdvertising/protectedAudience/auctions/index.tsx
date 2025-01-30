@@ -29,7 +29,7 @@ import {
  * Internal dependencies.
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
-import Breakpoints from './breakpoints';
+import Breakpoints, { type InfoState } from './breakpoints';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
@@ -37,6 +37,7 @@ import Info from './tableTabPanels/info';
 import TableTray from '../../../explorableExplanation/tableTray';
 
 const Auctions = () => {
+  const [info, setInfo] = useState<InfoState>({});
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
@@ -84,12 +85,12 @@ const Auctions = () => {
         content: {
           Element: Info,
           props: {
-            data: '',
+            data: info,
           },
         },
       },
     ],
-    []
+    [info]
   );
 
   if (!isUsingCDP) {
@@ -128,7 +129,7 @@ const Auctions = () => {
   return (
     <TabsProvider items={tabItems}>
       <div className="w-full h-full flex flex-col">
-        <Breakpoints />
+        <Breakpoints setInfo={setInfo} />
         <div className="overflow-auto flex-1">
           <AuctionsContainer
             auctionEvents={auctionData}
