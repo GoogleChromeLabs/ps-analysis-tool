@@ -20,8 +20,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
+  TabsProvider,
   type SidebarItems,
+  type TabItems,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
@@ -30,6 +33,8 @@ import Breakpoints from './breakpoints';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
+import Info from './tableTabPanels/info';
+import TableTray from '../../../explorableExplanation/tableTray';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
@@ -72,6 +77,21 @@ const Auctions = () => {
     };
   }, [auctionEvents]);
 
+  const tabItems = useMemo<TabItems>(
+    () => [
+      {
+        title: 'Info',
+        content: {
+          Element: Info,
+          props: {
+            data: '',
+          },
+        },
+      },
+    ],
+    []
+  );
+
   if (!isUsingCDP) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -106,16 +126,19 @@ const Auctions = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <Breakpoints />
-      <div className="overflow-auto flex-1">
-        <AuctionsContainer
-          auctionEvents={auctionData}
-          sidebarData={sidebarData}
-          setSidebarData={setSidebarData}
-        />
+    <TabsProvider items={tabItems}>
+      <div className="w-full h-full flex flex-col">
+        <Breakpoints />
+        <div className="overflow-auto flex-1">
+          <AuctionsContainer
+            auctionEvents={auctionData}
+            sidebarData={sidebarData}
+            setSidebarData={setSidebarData}
+          />
+        </div>
+        <TableTray />
       </div>
-    </div>
+    </TabsProvider>
   );
 };
 
