@@ -386,6 +386,7 @@ bubbles.showExpandedBubbles = () => {
 };
 
 bubbles.showMinifiedBubbles = () => {
+  app.setHighlightedInterestGroup(null);
   app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
       [
