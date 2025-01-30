@@ -31,12 +31,22 @@ interface BreakpointsProps {
 
 const Breakpoints = ({ setInfo }: BreakpointsProps) => {
   const breakpointInfo = (
-    <p>
-      Use event listener breakpoints when you want to pause on the event
-      listener code that runs after an event is fired from Sources tab in
-      DevTools. You can select specific events, such as click, or categories of
-      events, such as all mouse events.
-    </p>
+    <>
+      <p>
+        Use event listener breakpoints when you want to pause on the event
+        listener code that runs after an event is fired.
+      </p>
+      <p>
+        It can be used for the following events from Sources tab in DevTools
+        under &quot;Event Listener Breakpoints&quot;:
+      </p>
+      <ul className="mt-2 list-disc">
+        <li>Bidder Bidding Phase Start</li>
+        <li>Bidder Reporting Phase Start</li>
+        <li>Seller Scoring Phase Start</li>
+        <li>Seller Reporting Phase Start</li>
+      </ul>
+    </>
   );
 
   return (
@@ -48,6 +58,7 @@ const Breakpoints = ({ setInfo }: BreakpointsProps) => {
           className="cursor-pointer"
           onClick={() => {
             setInfo({
+              title: 'Ad Worklet Breakpoints',
               info: breakpointInfo,
             });
           }}
