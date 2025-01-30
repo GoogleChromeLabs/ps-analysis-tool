@@ -26,6 +26,7 @@ import {
  * Internal dependencies.
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import Breakpoints from './breakpoints';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
@@ -99,14 +100,14 @@ const Auctions = () => {
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No auction events were recorded.
         </p>
-        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the auction events if you haven’t already." />
+        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the auction events." />
       </div>
     );
   }
 
   return (
     <div className="w-full h-full flex flex-col">
-      {/* <Breakpoints /> -- To be added in the upcoming version */}
+      <Breakpoints />
       <div className="overflow-auto flex-1">
         <AuctionsContainer
           auctionEvents={auctionData}
