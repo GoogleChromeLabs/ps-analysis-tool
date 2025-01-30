@@ -295,20 +295,6 @@ const TABS: SidebarItems = {
     children: {},
     containerClassName: 'h-6',
   },
-  [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
-    title: () => 'Stories',
-    panel: {
-      Element: WebStories,
-    },
-    icon: {
-      Element: WebStoriesIcon,
-    },
-    selectedIcon: {
-      Element: WebStoriesIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-  },
   [SIDEBAR_ITEMS_KEYS.WIKI]: {
     title: () => I18n.getMessage('wiki'),
     panel: {
@@ -322,7 +308,7 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
-    addSpacer: true,
+    addSpacer: false,
     containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
@@ -333,7 +319,7 @@ const TABS: SidebarItems = {
     icon: {
       Element: SettingsIcon,
       props: {
-        className: 'fill-gray w-4 h-4',
+        className: 'fill-granite-gray dark:fill-bright-gray w-4 h-4',
       },
     },
     selectedIcon: {
@@ -343,6 +329,7 @@ const TABS: SidebarItems = {
       },
     },
     dropdownOpen: false,
+    addSpacer: true,
     children: {},
     containerClassName: 'h-6 mb-2',
   },
@@ -351,15 +338,5 @@ const TABS: SidebarItems = {
 export default TABS;
 
 export const collapsedSidebarData: CollapsedSidebarItems = {
-  footerElements: {
-    [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
-      icon: {
-        Element: SettingsIcon,
-        props: {
-          className: 'fill-granite-gray dark:fill-bright-gray',
-        },
-      },
-      title: () => I18n.getMessage('settings'),
-    },
-  },
+  footerElements: {},
 };
