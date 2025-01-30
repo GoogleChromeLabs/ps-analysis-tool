@@ -213,6 +213,12 @@ timeline.drawCircle = (index, completed = false) => {
     app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
     app.up.pop();
 
+    return;
+  }
+
+  app.up.push();
+  app.up.tint(255, 90);
+  if (app.nodeIndexRevisited === -1) {
     app.up.image(
       app.p.openWithoutAnimation,
       position.x - 10,
@@ -220,20 +226,8 @@ timeline.drawCircle = (index, completed = false) => {
       20,
       20
     );
-
-    return;
   }
-
-  app.p.push();
-  app.p.tint(255, 90);
-  app.p.image(
-    app.p.openWithoutAnimation,
-    position.x - 10,
-    position.y + diameter / 2,
-    20,
-    20
-  );
-  app.p.pop();
+  app.up.pop();
 
   app.up.image(
     app.p.completedCheckMark,
