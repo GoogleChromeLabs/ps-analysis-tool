@@ -18,14 +18,14 @@
  * External dependencies.
  */
 import React from 'react';
-import { BreakpointIcon } from '@google-psat/design-system';
+import { BreakpointIcon, InfoIcon } from '@google-psat/design-system';
 
 const Breakpoints = () => {
   return (
     <div className="flex gap-4 text-raisin-black dark:text-bright-gray p-4">
       <div className="flex gap-2 justify-center items-center">
         <BreakpointIcon className="fill-granite-gray" />
-        Ad Worklet Breakpoints
+        Ad Worklet Breakpoints <InfoIcon className="cursor-pointer" />
       </div>
       <div className="flex gap-2 justify-center items-center">
         <input type="checkbox" />
