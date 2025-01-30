@@ -23,6 +23,7 @@ import {
   TabsProvider,
   type SidebarItems,
   type TabItems,
+  DraggableTray,
 } from '@google-psat/design-system';
 
 /**
@@ -34,7 +35,6 @@ import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
 import Info from './tableTabPanels/info';
-import TableTray from '../../../explorableExplanation/tableTray';
 
 const Auctions = () => {
   const [info, setInfo] = useState<InfoState>({});
@@ -137,7 +137,7 @@ const Auctions = () => {
             setSidebarData={setSidebarData}
           />
         </div>
-        <TableTray initialCollapsed={true} />
+        <DraggableTray initialCollapsed={true} />
       </div>
     </TabsProvider>
   );

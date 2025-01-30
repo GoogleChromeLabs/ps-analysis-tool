@@ -67,3 +67,4 @@ export { default as ChipsBar } from './chipsBar';
 export * from './chipsBar';
 export { default as FiltersSidebar } from './filtersSidebar';
 export * from './filtersSidebar';
+export { default as DraggableTray } from './draggableTray';

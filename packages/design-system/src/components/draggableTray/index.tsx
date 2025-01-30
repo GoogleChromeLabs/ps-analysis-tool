@@ -16,15 +16,25 @@
 /**
  * External dependencies.
  */
-import { DoubleDownArrow, Tabs, useTabs } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import { useTabs } from '../tabs/useTabs';
+import { DoubleDownArrow } from '../../icons';
+import Tabs from '../tabs';
+
 interface TableTrayProps {
   initialCollapsed?: boolean;
+  toggleCollapse?: boolean;
 }
 
-const TableTray = ({ initialCollapsed = false }: TableTrayProps) => {
+const TableTray = ({
+  initialCollapsed = false,
+  toggleCollapse = false,
+}: TableTrayProps) => {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
@@ -32,6 +42,12 @@ const TableTray = ({ initialCollapsed = false }: TableTrayProps) => {
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
   const [height, setHeight] = useState<string | undefined>('20%');
+
+  useEffect(() => {
+    if (toggleCollapse) {
+      setIsCollapsed((prev) => !prev);
+    }
+  }, [toggleCollapse]);
 
   useEffect(() => {
     if (!isCollapsed) {
