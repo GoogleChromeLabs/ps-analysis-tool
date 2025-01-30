@@ -87,7 +87,9 @@ const Breakpoints = ({ setInfo, setIsCollapsed = noop }: BreakpointsProps) => {
           </p>
         </li>
       </ul>
-      <img src={screenshot} alt="Ad Auction Worklet Breakpoint" />
+      <div className="flex justify-center">
+        <img src={screenshot} alt="Ad Auction Worklet Breakpoint" />
+      </div>
       <p className="mb-5 italic">
         <strong>Note</strong> that currently, these breakpoints are only
         informational in PSAT, pointing users to use them via the DevTools
