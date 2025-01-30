@@ -25,6 +25,7 @@ import {
   wipeAndRecreateUserCanvas,
 } from '../../utils';
 import flow from '../flow';
+import { SINGLE_SELLER_CONFIG } from '../flowConfig.jsx';
 
 export const showWinningAdDirectly = (
   cb,
@@ -65,7 +66,8 @@ export const showWinningAdDirectly = (
     app.auction.auctions[index].push({
       component: Box,
       props: {
-        title: 'Show Winning Ad',
+        title: SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.title,
+        info: SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.info,
         x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
         y: () => app.auction.nextTipCoordinates?.y + 10,
       },
