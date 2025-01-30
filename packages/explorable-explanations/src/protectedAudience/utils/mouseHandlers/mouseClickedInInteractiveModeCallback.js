@@ -172,6 +172,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
     } else {
       app.isRevisitingNodeInInteractiveMode = false;
       flow.clearBelowTimelineCircles();
+      app.nodeIndexRevisited = -1;
       return;
     }
     app.promiseQueue.end();

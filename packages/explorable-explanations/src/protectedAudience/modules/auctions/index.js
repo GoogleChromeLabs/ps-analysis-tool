@@ -20,7 +20,7 @@ import flow from '../flow';
 import app from '../../app';
 import config from '../../config';
 import * as utils from '../../utils';
-import { RippleEffect } from '../../components';
+import { Box, ProgressLine, RippleEffect } from '../../components';
 import bubbles from '../bubbles';
 import setUpSingleSellerFirstSSPTagFlow from './single-seller/setupFirstSSPTagFlow';
 import setUpMultiSellerFirstSSPTagFlow from './multi-seller/setUpFirstSSPTagFlow';
@@ -88,9 +88,13 @@ auction.setUp = (index) => {
 auction.draw = (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
-  const steps = app.auction.auctions[index];
+  const { box, arrowSize } = config.flow;
+  const {
+    circleProps: { diameter },
+    circles,
+  } = config.timeline;
 
-  if (!steps) {
+  if (!app.auction.auctions[index]) {
     return;
   }
 
@@ -100,7 +104,7 @@ auction.draw = (index) => {
     cb(null, true);
   });
 
-  for (const step of steps) {
+  for (const step of app.auction.auctions[index]) {
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay = 0 } = step;
       let ssp = '';
@@ -130,6 +134,7 @@ auction.draw = (index) => {
           await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
           if (app.cancelPromise) {
+            cb(null, true);
             return;
           }
 
@@ -143,6 +148,7 @@ auction.draw = (index) => {
           const y = props.y();
 
           if (app.cancelPromise) {
+            cb(null, true);
             return;
           }
           // eslint-disable-next-line no-await-in-loop
@@ -159,10 +165,131 @@ auction.draw = (index) => {
 
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (app.cancelPromise) {
+          cb(null, true);
           return;
         }
 
         await utils.delay(delay / app.speedMultiplier); // eslint-disable-line no-await-in-loop
+      }
+
+      if (
+        props.title === 'runAdAuction()' &&
+        app.bubbles.interestGroupCounts === 0
+      ) {
+        app.auction.auctions[index] = [];
+        app.promiseQueue.end();
+
+        app.auction.auctions[index].push({
+          component: ProgressLine,
+          props: {
+            direction: 'right',
+            x1: () => app.auction.nextTipCoordinates?.x + box.width / 2 + 1,
+            y1: () => app.auction.nextTipCoordinates?.y + arrowSize,
+          },
+          callBack: (_returnValue) => {
+            app.auction.nextTipCoordinates = _returnValue;
+          },
+        });
+
+        app.auction.auctions[index].push({
+          component: Box,
+          props: {
+            title: 'Show Winning Ad',
+            x: () => app.auction.nextTipCoordinates?.x + arrowSize,
+            y: () => app.auction.nextTipCoordinates?.y - box.height / 2 + 1,
+          },
+          delay: 1000,
+          callBack: (_returnValue) => {
+            app.auction.nextTipCoordinates = _returnValue.down;
+          },
+        });
+
+        auction.draw(index);
+
+        app.promiseQueue.push((_cb) => {
+          if (app.isRevisitingNodeInInteractiveMode) {
+            app.promiseQueue.push((__cb) => {
+              app.shouldRespondToClick = true;
+              app.isRevisitingNodeInInteractiveMode = false;
+
+              if (circles[index].type === 'advertiser') {
+                app.joinInterestGroup.joinings[index][0].props.y1 -= 20;
+              } else {
+                app.auction.auctions[index][0].props.y1 -= 20;
+              }
+
+              auction.setupAuctions();
+              __cb(null, true);
+            });
+          } else {
+            if (config.timeline.circles[index].visited) {
+              app.visitedIndexOrder = app.visitedIndexOrder.filter(
+                (indexes) => {
+                  if (indexes === index) {
+                    return false;
+                  }
+                  return true;
+                }
+              );
+
+              app.visitedIndexOrder.push(index);
+
+              config.timeline.circles[index].visitedIndex = app.visitedIndexes;
+              app.visitedIndexes = 1;
+
+              app.visitedIndexOrder.forEach((idx) => {
+                config.timeline.circles[idx].visitedIndex = app.visitedIndexes;
+                app.visitedIndexes++;
+              });
+
+              app.bubbles.positions.splice(
+                -(circles[index].igGroupsCount ?? 0)
+              );
+
+              app.shouldRespondToClick = true;
+              bubbles.showMinifiedBubbles();
+              app.timeline.renderUserIcon();
+              auction.setupAuctions();
+              return;
+            } else {
+              const positions = app.timeline.circlePositions[index];
+              app.timeline.expandIconPositions.push({
+                x: positions.x,
+                y: positions.y + diameter / 2,
+                index: index,
+              });
+
+              app.visitedIndexOrder.push(index);
+              if (app.visitedIndexOrderTracker < app.visitedIndexOrder.length) {
+                app.visitedIndexOrderTracker = app.visitedIndexOrder.length - 1;
+              }
+
+              app.bubbles.interestGroupCounts +=
+                circles[index]?.igGroupsCount ?? 0;
+              config.timeline.circles[index].visited = true;
+              config.timeline.circles[index].visitedIndex = app.visitedIndexes;
+              app.visitedIndexes += 1;
+            }
+
+            bubbles.showMinifiedBubbles();
+            app.shouldRespondToClick = true;
+
+            utils.wipeAndRecreateUserCanvas();
+            utils.wipeAndRecreateMainCanvas();
+            app.timeline.renderUserIcon();
+            flow.setButtonsDisabilityState();
+            auction.setupAuctions();
+          }
+          _cb(null, true);
+        });
+
+        try {
+          app.promiseQueue.start();
+        } catch (error) {
+          // Fail silently
+        }
+        cb(null, true);
+        return;
       }
       cb(null, true);
     });
