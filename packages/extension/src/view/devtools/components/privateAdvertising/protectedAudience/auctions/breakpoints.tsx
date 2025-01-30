@@ -24,6 +24,7 @@ import { noop } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
+// eslint-disable-next-line import/no-unresolved
 import screenshot from '../../../../../../../images/ad-auction-worklet-breakpoints.png';
 
 export interface InfoState {
