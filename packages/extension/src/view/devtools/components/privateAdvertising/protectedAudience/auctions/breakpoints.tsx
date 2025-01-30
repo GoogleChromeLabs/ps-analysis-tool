@@ -30,7 +30,14 @@ interface BreakpointsProps {
 }
 
 const Breakpoints = ({ setInfo }: BreakpointsProps) => {
-  const breakpointInfo = <p>Some info</p>;
+  const breakpointInfo = (
+    <p>
+      Use event listener breakpoints when you want to pause on the event
+      listener code that runs after an event is fired from Sources tab in
+      DevTools. You can select specific events, such as click, or categories of
+      events, such as all mouse events.
+    </p>
+  );
 
   return (
     <div className="flex gap-4 text-raisin-black dark:text-bright-gray p-4">
