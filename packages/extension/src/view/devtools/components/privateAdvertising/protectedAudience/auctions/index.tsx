@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
@@ -71,6 +71,10 @@ const Auctions = () => {
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
+
+  const draggableTrayRef = useRef<React.ElementRef<
+    typeof DraggableTray
+  > | null>(null);
 
   const auctionData = useMemo(() => {
     return {
@@ -137,7 +141,7 @@ const Auctions = () => {
             setSidebarData={setSidebarData}
           />
         </div>
-        <DraggableTray initialCollapsed={true} />
+        <DraggableTray initialCollapsed={true} ref={draggableTrayRef} />
       </div>
     </TabsProvider>
   );
