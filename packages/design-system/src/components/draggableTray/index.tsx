@@ -16,9 +16,15 @@
 /**
  * External dependencies.
  */
-import { DoubleDownArrow, Tabs, useTabs } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { useTabs } from '../tabs/useTabs';
+import { DoubleDownArrow } from '../../icons';
+import Tabs from '../tabs';
 
 interface TableTrayProps {
   initialCollapsed?: boolean;

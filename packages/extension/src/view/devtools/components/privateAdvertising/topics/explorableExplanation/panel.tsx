@@ -23,7 +23,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useTabs } from '@google-psat/design-system';
+import { DraggableTray, useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -33,7 +33,6 @@ import Animation from './animation';
 import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
 import { adtechs, websites } from './topicsAnimation/data';
 import type { TopicsTableType } from './topicsTable';
-import TableTray from '../../../explorableExplanation/tableTray';
 
 interface PanelProps {
   topicsTableData: Record<number, TopicsTableType[]>;
@@ -292,7 +291,7 @@ const Panel = ({
           isInteractive={isInteractiveModeOn}
         />
       </div>
-      <TableTray />
+      <DraggableTray />
     </div>
   );
 };
