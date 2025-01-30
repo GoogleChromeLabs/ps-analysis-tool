@@ -71,7 +71,7 @@ const AdUnitsPanel = ({
             No ad units were recorded.
           </p>
           {showEvaluationPlaceholder && (
-            <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units." />
+            <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
           )}
         </div>
       )}

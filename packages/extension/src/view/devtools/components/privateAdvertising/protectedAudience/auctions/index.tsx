@@ -99,7 +99,7 @@ const Auctions = () => {
         <p className="text-sm text-raisin-black dark:text-bright-gray">
           No auction events were recorded.
         </p>
-        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the auction events." />
+        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the auction events if you haven’t already." />
       </div>
     );
   }

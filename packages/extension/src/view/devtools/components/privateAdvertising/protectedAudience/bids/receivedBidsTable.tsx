@@ -204,7 +204,7 @@ const ReceivedBidsTable = ({
           No bids data was recorded.
         </p>
         {showEvaluationPlaceholder && (
-          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids." />
+          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids if you haven’t already." />
         )}
       </div>
     );
