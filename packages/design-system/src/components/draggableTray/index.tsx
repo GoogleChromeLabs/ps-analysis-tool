@@ -17,7 +17,12 @@
  * External dependencies.
  */
 import { Resizable } from 're-resizable';
-import React, { useEffect, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 
 /**
  * Internal dependencies.
@@ -26,15 +31,20 @@ import { useTabs } from '../tabs/useTabs';
 import { DoubleDownArrow } from '../../icons';
 import Tabs from '../tabs';
 
-interface TableTrayProps {
+interface DraggableTrayProps {
   initialCollapsed?: boolean;
-  toggleCollapse?: boolean;
 }
 
-const TableTray = ({
-  initialCollapsed = false,
-  toggleCollapse = false,
-}: TableTrayProps) => {
+const DraggableTray = forwardRef<
+  {
+    isCollapsed: boolean;
+    setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  },
+  DraggableTrayProps
+>(function DraggableTray(
+  { initialCollapsed = false }: DraggableTrayProps,
+  ref
+) {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
@@ -44,16 +54,19 @@ const TableTray = ({
   const [height, setHeight] = useState<string | undefined>('20%');
 
   useEffect(() => {
-    if (toggleCollapse) {
-      setIsCollapsed((prev) => !prev);
-    }
-  }, [toggleCollapse]);
-
-  useEffect(() => {
     if (!isCollapsed) {
       setHeight('20%');
     }
   }, [isCollapsed]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      isCollapsed,
+      setIsCollapsed,
+    }),
+    [isCollapsed]
+  );
 
   return (
     <Resizable
@@ -89,6 +102,6 @@ const TableTray = ({
       </div>
     </Resizable>
   );
-};
+});
 
-export default TableTray;
+export default DraggableTray;
