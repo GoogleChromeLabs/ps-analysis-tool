@@ -26,15 +26,15 @@ import { useTabs } from '../tabs/useTabs';
 import { DoubleDownArrow } from '../../icons';
 import Tabs from '../tabs';
 
-interface TableTrayProps {
+interface DraggableTrayProps {
   initialCollapsed?: boolean;
   toggleCollapse?: boolean;
 }
 
-const TableTray = ({
+const DraggableTray = ({
   initialCollapsed = false,
   toggleCollapse = false,
-}: TableTrayProps) => {
+}: DraggableTrayProps) => {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
@@ -91,4 +91,4 @@ const TableTray = ({
   );
 };
 
-export default TableTray;
+export default DraggableTray;
