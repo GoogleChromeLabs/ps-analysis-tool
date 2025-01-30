@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { BreakpointIcon, InfoIcon } from '@google-psat/design-system';
+import { noop } from '@google-psat/common';
 
 export interface InfoState {
   title?: string;
@@ -27,9 +28,10 @@ export interface InfoState {
 
 interface BreakpointsProps {
   setInfo: React.Dispatch<React.SetStateAction<InfoState>>;
+  setIsCollapsed?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Breakpoints = ({ setInfo }: BreakpointsProps) => {
+const Breakpoints = ({ setInfo, setIsCollapsed = noop }: BreakpointsProps) => {
   const breakpointInfo = (
     <>
       <p>
@@ -57,6 +59,7 @@ const Breakpoints = ({ setInfo }: BreakpointsProps) => {
         <InfoIcon
           className="cursor-pointer"
           onClick={() => {
+            setIsCollapsed(false);
             setInfo({
               title: 'Ad Worklet Breakpoints',
               info: breakpointInfo,

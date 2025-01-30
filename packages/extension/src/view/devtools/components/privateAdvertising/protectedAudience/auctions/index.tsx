@@ -133,7 +133,10 @@ const Auctions = () => {
   return (
     <TabsProvider items={tabItems}>
       <div className="w-full h-full flex flex-col">
-        <Breakpoints setInfo={setInfo} />
+        <Breakpoints
+          setInfo={setInfo}
+          setIsCollapsed={draggableTrayRef.current?.setIsCollapsed}
+        />
         <div className="overflow-auto flex-1">
           <AuctionsContainer
             auctionEvents={auctionData}
