@@ -41,20 +41,58 @@ const Breakpoints = ({ setInfo, setIsCollapsed = noop }: BreakpointsProps) => {
   const breakpointInfo = (
     <>
       <p>
-        Use event listener breakpoints when you want to pause on the event
-        listener code that runs after an event is fired.
+        Use event listener breakpoints to pause on an event listener code that
+        runs after an event is fired for an ad auction.
       </p>
       <p>
-        It can be used for the following events from Sources tab in DevTools
-        under &quot;Event Listener Breakpoints&quot;:
+        It can be used for the following events from &quot;Sources&quot; tab in
+        DevTools under &quot;Event Listener Breakpoints&quot;:
       </p>
       <ul className="mt-2 list-disc ml-3">
-        <li>Bidder Bidding Phase Start</li>
-        <li>Bidder Reporting Phase Start</li>
-        <li>Seller Scoring Phase Start</li>
-        <li>Seller Reporting Phase Start</li>
+        <li>
+          <p>
+            <strong>Bidder Bidding Phase Start: </strong>
+            refers to the moment when a participating advertiser (bidder) is
+            signaled by the browser to begin calculating and submitting their
+            bid for an ad impression, all happening directly on the user&apos;s
+            device during a privacy-focused auction process, where user data is
+            protected and not shared across websites
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Bidder Reporting Phase Start: </strong>
+            refers to the point in an online ad auction where the winning bidder
+            is determined and the relevant information about the auction
+            results, such as the winning bid and other details, are sent back to
+            the participating buyers (bidders) as a report, all while
+            maintaining user privacy within the Privacy Sandbox framework
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Seller Scoring Phase Start: </strong>
+            refers to the point in an online ad auction where all the bidders
+            have bid for an adSpace and the seller has now started scoring the
+            bids according to the criteria&apos;s set by the seller.
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Seller Reporting Phase Start: </strong>
+            refers to the point in an online ad auction where all the bidders
+            have bid for an adSpace and the seller has scored and found a
+            winning bids now all the bidders are reported the results of the
+            auctions.
+          </p>
+        </li>
       </ul>
-      <img src={screenshot} alt="" />
+      <img src={screenshot} alt="Ad Auction Worklet Breakpoint" />
+      <p className="mb-5 italic">
+        <strong>Note</strong> that currently, these breakpoints are only
+        informational in PSAT, pointing users to use them via the DevTools
+        interface. They may become functional in the upcoming PSAT versions.
+      </p>
     </>
   );
 
