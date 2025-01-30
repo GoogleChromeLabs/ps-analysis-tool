@@ -39,7 +39,7 @@ export const showWinningAdDirectly = (
     circles,
   } = config.timeline;
 
-  if (app.isInteractiveMode) {
+  if (!app.isInteractiveMode) {
     return;
   }
 
