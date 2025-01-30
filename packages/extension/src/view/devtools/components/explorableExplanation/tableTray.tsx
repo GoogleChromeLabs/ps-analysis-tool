@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -21,12 +20,16 @@ import { DoubleDownArrow, Tabs, useTabs } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useState } from 'react';
 
-const TableTray = () => {
+interface TableTrayProps {
+  initialCollapsed?: boolean;
+}
+
+const TableTray = ({ initialCollapsed = false }: TableTrayProps) => {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
 
-  const [hidden, setHidden] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
   return (
     <Resizable
@@ -35,7 +38,7 @@ const TableTray = () => {
         height: '20%',
       }}
       size={
-        hidden
+        isCollapsed
           ? {
               width: '100%',
               height: '30px',
@@ -45,7 +48,7 @@ const TableTray = () => {
       minHeight="30px"
       maxHeight="95%"
       enable={{
-        top: !hidden,
+        top: !isCollapsed,
       }}
     >
       <div className="w-full h-full flex flex-col">
@@ -53,11 +56,13 @@ const TableTray = () => {
           <div className="pt-1.5">
             <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
           </div>
-          <button onClick={() => setHidden(!hidden)} className="pr-2">
-            <DoubleDownArrow className={hidden ? 'rotate-180' : 'rotate-0'} />
+          <button onClick={() => setIsCollapsed(!isCollapsed)} className="pr-2">
+            <DoubleDownArrow
+              className={isCollapsed ? 'rotate-180' : 'rotate-0'}
+            />
           </button>
         </div>
-        {!hidden && ActiveTabContent && <ActiveTabContent {...props} />}
+        {!isCollapsed && ActiveTabContent && <ActiveTabContent {...props} />}
       </div>
     </Resizable>
   );

@@ -136,7 +136,7 @@ const Auctions = () => {
             setSidebarData={setSidebarData}
           />
         </div>
-        <TableTray />
+        <TableTray initialCollapsed={true} />
       </div>
     </TabsProvider>
   );
