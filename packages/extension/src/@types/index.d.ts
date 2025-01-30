@@ -19,6 +19,12 @@ declare module '*.svg' {
   export default ReactComponent;
 }
 
+declare module '*.png' {
+  const value: string;
+
+  export default value;
+}
+
 export type RelatedWebsiteSetType = {
   primary: string;
   contact: string;

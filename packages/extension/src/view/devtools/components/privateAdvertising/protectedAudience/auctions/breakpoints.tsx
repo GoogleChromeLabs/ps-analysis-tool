@@ -21,6 +21,11 @@ import React from 'react';
 import { BreakpointIcon, InfoIcon } from '@google-psat/design-system';
 import { noop } from '@google-psat/common';
 
+/**
+ * Internal dependencies.
+ */
+import screenshot from '../../../../../../../images/ad-auction-worklet-breakpoints.png';
+
 export interface InfoState {
   title?: string;
   info?: string | React.ReactElement;
@@ -42,12 +47,13 @@ const Breakpoints = ({ setInfo, setIsCollapsed = noop }: BreakpointsProps) => {
         It can be used for the following events from Sources tab in DevTools
         under &quot;Event Listener Breakpoints&quot;:
       </p>
-      <ul className="mt-2 list-disc">
+      <ul className="mt-2 list-disc ml-3">
         <li>Bidder Bidding Phase Start</li>
         <li>Bidder Reporting Phase Start</li>
         <li>Seller Scoring Phase Start</li>
         <li>Seller Reporting Phase Start</li>
       </ul>
+      <img src={screenshot} alt="" />
     </>
   );
 
