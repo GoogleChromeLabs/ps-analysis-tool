@@ -16,28 +16,23 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
-  TabsProvider,
   type SidebarItems,
-  type TabItems,
-  DraggableTray,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
-import Breakpoints, { type InfoState } from './breakpoints';
+import Breakpoints from './breakpoints';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
-import Info from './tableTabPanels/info';
 
 const Auctions = () => {
-  const [info, setInfo] = useState<InfoState>({});
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
@@ -72,30 +67,11 @@ const Auctions = () => {
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
 
-  const draggableTrayRef = useRef<React.ElementRef<
-    typeof DraggableTray
-  > | null>(null);
-
   const auctionData = useMemo(() => {
     return {
       auctionData: auctionEvents,
     };
   }, [auctionEvents]);
-
-  const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Info',
-        content: {
-          Element: Info,
-          props: {
-            data: info,
-          },
-        },
-      },
-    ],
-    [info]
-  );
 
   if (!isUsingCDP) {
     return (
@@ -131,22 +107,16 @@ const Auctions = () => {
   }
 
   return (
-    <TabsProvider items={tabItems}>
-      <div className="w-full h-full flex flex-col">
-        <Breakpoints
-          setInfo={setInfo}
-          setIsCollapsed={draggableTrayRef.current?.setIsCollapsed}
+    <div className="w-full h-full flex flex-col">
+      <Breakpoints />
+      <div className="overflow-auto flex-1">
+        <AuctionsContainer
+          auctionEvents={auctionData}
+          sidebarData={sidebarData}
+          setSidebarData={setSidebarData}
         />
-        <div className="overflow-auto flex-1">
-          <AuctionsContainer
-            auctionEvents={auctionData}
-            sidebarData={sidebarData}
-            setSidebarData={setSidebarData}
-          />
-        </div>
-        <DraggableTray initialCollapsed={true} ref={draggableTrayRef} />
       </div>
-    </TabsProvider>
+    </div>
   );
 };
 
