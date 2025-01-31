@@ -27,7 +27,6 @@ import {
  * Internal dependencies.
  */
 import { useProtectedAudience, useSettings } from '../../../../stateProviders';
-import Breakpoints from './breakpoints';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
@@ -108,7 +107,6 @@ const Auctions = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <Breakpoints />
       <div className="overflow-auto flex-1">
         <AuctionsContainer
           auctionEvents={auctionData}

@@ -33,19 +33,19 @@ const Breakpoints = () => {
         Ad Worklet Breakpoints{' '}
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Bidder Bidding Phase Start
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Bidder Reporting Phase Start
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Seller Scoring Phase Start
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Seller Reporting Phase Start
       </div>
     </div>
