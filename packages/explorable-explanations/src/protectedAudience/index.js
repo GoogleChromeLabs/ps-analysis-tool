@@ -673,6 +673,10 @@ export const interestGroupSketch = (p) => {
       }
     }
 
+    if (props.setIsBubbleExpanded) {
+      app.setIsBubbleExpanded = props.setIsBubbleExpanded;
+    }
+
     if (props.setCurrentStep) {
       app.setCurrentStep = props.setCurrentStep;
     }
