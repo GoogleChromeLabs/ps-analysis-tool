@@ -49,7 +49,7 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import useSessionStorage from '../hooks/useSessionStorage';
+import { updateSessionStorage } from '../../../utils/sessionStorage';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -194,11 +194,18 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     );
   }, [sidebarItems]);
 
-  useSessionStorage({
-    selectedSidebarItem: selectedItemKey,
-    sidebarCollapsedState: isCollapsed,
-    cookieDropdownOpen: cookieDropdownOpen,
-  });
+  useEffect(() => {
+    (async () => {
+      await updateSessionStorage(
+        {
+          selectedSidebarItem: selectedItemKey,
+          sidebarCollapsedState: isCollapsed,
+          cookieDropdownOpen: cookieDropdownOpen,
+        },
+        'persistentSetting'
+      );
+    })();
+  }, [selectedItemKey, isCollapsed, cookieDropdownOpen]);
 
   const lastUrl = useRef(tabUrl);
 
