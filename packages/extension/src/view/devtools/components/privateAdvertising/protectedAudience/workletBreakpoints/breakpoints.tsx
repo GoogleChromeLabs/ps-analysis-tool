@@ -20,11 +20,6 @@
 import React from 'react';
 import { BreakpointIcon } from '@google-psat/design-system';
 
-export interface InfoState {
-  title?: string;
-  info?: string | React.ReactElement;
-}
-
 const Breakpoints = () => {
   return (
     <div className="flex gap-4 text-raisin-black dark:text-bright-gray p-4">
