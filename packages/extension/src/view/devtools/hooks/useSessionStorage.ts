@@ -25,6 +25,11 @@ import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 type SessionData = Record<string, unknown> | undefined;
 
+/**
+ * Custom hook to manage session storage.
+ * @param {SessionData} items - The session data to be stored.
+ * @returns sessionData - The session data stored in session storage.
+ */
 const useSessionStorage = (items: SessionData) => {
   const tabId = useRef<string | undefined>(undefined);
   const [sessionData, setSessionData] = useState<SessionData>({});

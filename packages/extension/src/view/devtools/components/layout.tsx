@@ -49,7 +49,6 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 import useSessionStorage from '../hooks/useSessionStorage';
 
 interface LayoutProps {
@@ -195,35 +194,11 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     );
   }, [sidebarItems]);
 
-  // useSessionStorage({
-  //   selectedSidebarItem: selectedItemKey,
-  //   sidebarCollapsedState: isCollapsed,
-  //   cookieDropdownOpen: cookieDropdownOpen,
-  // });
-
-  useEffect(() => {
-    (async () => {
-      const tabId = await getCurrentTabId();
-
-      if (!tabId) {
-        return;
-      }
-
-      let data = await chrome.storage.session.get();
-
-      if (!data) {
-        data = {};
-      }
-
-      data['selectedSidebarItem#' + tabId] = selectedItemKey;
-      data['sidebarCollapsedState#' + tabId] = isCollapsed
-        ? 'collapsed'
-        : 'expanded';
-      data['cookieDropdownOpen#' + tabId] = cookieDropdownOpen;
-
-      await chrome.storage.session.set(data);
-    })();
-  }, [selectedItemKey, isCollapsed, cookieDropdownOpen]);
+  useSessionStorage({
+    selectedSidebarItem: selectedItemKey,
+    sidebarCollapsedState: isCollapsed,
+    cookieDropdownOpen: cookieDropdownOpen,
+  });
 
   const lastUrl = useRef(tabUrl);
 
