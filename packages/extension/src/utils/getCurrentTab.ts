@@ -25,9 +25,3 @@ export const getCurrentTab = async () => {
   }
   return Promise.resolve(undefined);
 };
-
-export const getCurrentTabId = async (tab = null) => {
-  const _tab = tab || (await getCurrentTab());
-
-  return _tab?.[0]?.id ? _tab[0].id.toString() : undefined;
-};

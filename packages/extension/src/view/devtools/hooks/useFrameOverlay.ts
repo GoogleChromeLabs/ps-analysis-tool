@@ -28,7 +28,6 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -128,13 +127,13 @@ const useFrameOverlay = (
   }, [canStartInspecting, setSelectedFrame, setIsInspecting, selectedAdUnit]);
 
   const listenIfContentScriptSet = useCallback(
-    async (
+    (
       request: { [key: string]: boolean },
       sender: chrome.runtime.MessageSender
     ) => {
-      const tabId = await getCurrentTabId();
+      const tabId = chrome.devtools.inspectedWindow.tabId;
 
-      if (request.setInPage && tabId === sender?.tab?.id?.toString()) {
+      if (request.setInPage && tabId === sender?.tab?.id) {
         setCanStartInspecting(true);
       }
     },
