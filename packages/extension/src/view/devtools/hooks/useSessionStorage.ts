@@ -16,12 +16,7 @@
 /**
  * External dependencies.
  */
-import { useEffect, useState, useRef } from 'react';
-
-/**
- * Internal dependencies.
- */
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import { useEffect, useState } from 'react';
 
 type SessionData = Record<string, unknown> | undefined;
 
@@ -31,14 +26,13 @@ type SessionData = Record<string, unknown> | undefined;
  * @returns sessionData - The session data stored in session storage.
  */
 const useSessionStorage = (items: SessionData) => {
-  const tabId = useRef<string | undefined>(undefined);
   const [sessionData, setSessionData] = useState<SessionData>({});
 
   useEffect(() => {
     const updateSessionStorage = async () => {
-      tabId.current = tabId.current || (await getCurrentTabId());
+      const tabId = chrome.devtools.inspectedWindow.tabId;
 
-      if (!tabId.current) {
+      if (!tabId) {
         return;
       }
 
@@ -56,7 +50,7 @@ const useSessionStorage = (items: SessionData) => {
           ...data,
           ...Object.fromEntries(
             Object.entries(items).map(([key, value]) => [
-              `${key}#${tabId.current}`,
+              `${key}#${tabId}`,
               value,
             ])
           ),
