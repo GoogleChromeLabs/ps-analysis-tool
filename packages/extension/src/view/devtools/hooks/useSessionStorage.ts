@@ -18,7 +18,12 @@
  */
 import { useEffect, useState } from 'react';
 
-type SessionData = Record<string, unknown> | undefined;
+/**
+ * Internal dependencies.
+ */
+import updateSessionStorage, {
+  type SessionData,
+} from '../../../utils/udpateSessionStorage';
 
 /**
  * Custom hook to manage session storage.
@@ -29,40 +34,11 @@ const useSessionStorage = (items: SessionData) => {
   const [sessionData, setSessionData] = useState<SessionData>({});
 
   useEffect(() => {
-    const updateSessionStorage = async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId;
-
-      if (!tabId) {
-        return;
-      }
-
-      let data = await chrome.storage.session.get();
-
-      if (!data) {
-        data = {};
-      }
-
-      let updatedData: SessionData = undefined;
-
-      if (items) {
-        // Merge new items with tab-specific keys
-        updatedData = {
-          ...data,
-          ...Object.fromEntries(
-            Object.entries(items).map(([key, value]) => [
-              `${key}#${tabId}`,
-              value,
-            ])
-          ),
-        };
-
-        await chrome.storage.session.set(updatedData);
-      }
-
-      setSessionData(updatedData || data); // Update local state
+    const _updateSessionStorage = async () => {
+      const updatedData = await updateSessionStorage(items);
+      setSessionData(updatedData);
     };
-
-    updateSessionStorage();
+    _updateSessionStorage();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- For deep comparison and memoization.
   }, [JSON.stringify(items)]);
 
