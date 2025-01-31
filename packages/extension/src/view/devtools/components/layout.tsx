@@ -50,6 +50,7 @@ import {
   useSettings,
 } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import useSessionStorage from '../hooks/useSessionStorage';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -193,6 +194,12 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       ]?.dropdownOpen ?? false
     );
   }, [sidebarItems]);
+
+  // useSessionStorage({
+  //   selectedSidebarItem: selectedItemKey,
+  //   sidebarCollapsedState: isCollapsed,
+  //   cookieDropdownOpen: cookieDropdownOpen,
+  // });
 
   useEffect(() => {
     (async () => {
