@@ -31,13 +31,12 @@ import {
   sketch as mainSketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
-import { useTabs } from '@google-psat/design-system';
+import { DraggableTray, useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
-import TableTray from '../../../explorableExplanation/tableTray';
 import type { CurrentSiteData, StepType } from './auctionEventTransformers';
 
 declare module 'react' {
@@ -335,7 +334,7 @@ const Panel = ({
         setSelectedDateTime={setSelectedDateTime}
       />
       <ReactP5Wrapper sketch={userSketch} />
-      <TableTray />
+      <DraggableTray />
     </div>
   );
 };
