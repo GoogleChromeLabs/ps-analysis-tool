@@ -58,13 +58,17 @@
 }
 
 .markdown-body {
-
   --bgColor-default: #ffffff;
   --bgColor-muted: #fbfbfb;
   --fgColor-default: #000000;
   --bgColor-neutral-muted: #fbfbfb;
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     scroll-margin-top: 20px;
   }
 
@@ -103,7 +107,6 @@
   h6 {
     font-size: 12px;
   }
-
 }
 
 body {
@@ -184,7 +187,7 @@ body {
 }
 
 .circle-svg {
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
 
 .circle-svg:hover {
@@ -200,12 +203,12 @@ text {
   position: absolute;
   display: block;
   top: var(--expandedBubbleY);
+  left: var(--expandedBubbleX);
   height: var(--expandedBubbleWidth);
   width: var(--expandedBubbleWidth);
   border-radius: 50%;
   border: 1px solid #808080;
   backdrop-filter: blur(10px);
-  left: var(--expandedBubbleX)
 }
 
 .bubble-container {
@@ -214,6 +217,7 @@ text {
 }
 
 .bubble-container.expanded {
+  position: absolute;
   backdrop-filter: blur(1px);
   z-index: 4;
   height: 100vh;
