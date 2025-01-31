@@ -192,20 +192,6 @@ const ExplorableExplanation = () => {
     color: string;
   } | null>(null);
 
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setHighlightedInterestGroup(null);
-    }, 1500);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [highlightedInterestGroup]);
-
   const tabItems = useMemo<TabItems>(
     () => [
       {

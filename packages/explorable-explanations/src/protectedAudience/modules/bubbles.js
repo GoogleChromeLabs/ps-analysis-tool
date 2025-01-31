@@ -39,6 +39,7 @@ const bubbles = {};
  */
 bubbles.init = () => {
   app.bubbles.positions = [];
+  app.bubbles.highlightedInterestGroup = null;
 };
 
 /**
@@ -386,6 +387,8 @@ bubbles.showExpandedBubbles = () => {
 };
 
 bubbles.showMinifiedBubbles = () => {
+  app.setHighlightedInterestGroup(null);
+  app.bubbles.highlightedInterestGroup = null;
   app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
       [
@@ -512,13 +515,26 @@ bubbles.bubbleChart = (
       interestGroupOwner: 'https://www.' + groups[d.data],
       color: app.color(groups[d.data]),
     });
+    app.bubbles.highlightedInterestGroup = titles[d.data];
     event.stopPropagation();
   };
 
   leaf
     .append('circle')
-    .attr('stroke', stroke)
-    .attr('stroke-width', strokeWidth)
+    .attr('stroke', (d) => {
+      if (app.bubbles.highlightedInterestGroup === titles[d.data]) {
+        return '#dbdb48';
+      }
+
+      return stroke === null ? 'none' : stroke;
+    })
+    .attr('stroke-width', (d) => {
+      if (app.bubbles.highlightedInterestGroup === titles[d.data]) {
+        return 5;
+      }
+
+      return strokeWidth === null ? 0 : strokeWidth;
+    })
     .attr('stroke-opacity', strokeOpacity)
     .attr('class', 'svg overflowing-text circle-svg')
     .attr('style', `${!app.bubbles.isExpanded ? 'pointer-events: none;' : ''}`)
