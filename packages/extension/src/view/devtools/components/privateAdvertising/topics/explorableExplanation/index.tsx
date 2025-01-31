@@ -74,7 +74,7 @@ const ExplorableExplanation = () => {
   );
 
   return (
-    <TabsProvider items={tabItems}>
+    <TabsProvider items={tabItems} name="topics-ee">
       <Panel
         topicsTableData={topicsTableData}
         setTopicsTableData={setTopicsTableData}

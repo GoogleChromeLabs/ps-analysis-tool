@@ -23,6 +23,7 @@ import {
   SidebarProvider,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { getSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -31,7 +32,6 @@ import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './components';
 import useContextInvalidated from './hooks/useContextInvalidated';
-import { getSessionStorage } from '../../utils/sessionStorage';
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);

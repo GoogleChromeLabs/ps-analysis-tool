@@ -256,7 +256,7 @@ const ExplorableExplanation = () => {
   );
 
   return (
-    <TabsProvider items={tabItems}>
+    <TabsProvider items={tabItems} name="explorableExplanation">
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={_setCurrentSiteData}

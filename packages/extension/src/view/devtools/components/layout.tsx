@@ -24,7 +24,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { type CookieTableData } from '@google-psat/common';
+import {
+  type CookieTableData,
+  updateSessionStorage,
+} from '@google-psat/common';
 import {
   Sidebar,
   useSidebar,
@@ -49,7 +52,6 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import { updateSessionStorage } from '../../../utils/sessionStorage';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
