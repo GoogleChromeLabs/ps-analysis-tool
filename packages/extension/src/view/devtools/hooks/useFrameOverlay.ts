@@ -158,12 +158,20 @@ const useFrameOverlay = (
           return;
         }
 
-        if (changes && Object.keys(changes).includes(currentTabId.toString())) {
-          if (!changes[currentTabId].newValue && portRef.current) {
+        const privacySandboxPanelVisibleKey = `${currentTabId}-privacySandboxPanelVisible`;
+
+        if (
+          changes &&
+          Object.keys(changes).includes(privacySandboxPanelVisibleKey)
+        ) {
+          const privacySandboxPanelVisible =
+            changes[privacySandboxPanelVisibleKey].newValue;
+
+          if (!privacySandboxPanelVisible && portRef.current) {
             setIsInspecting(false);
           }
 
-          if (!changes[currentTabId].newValue) {
+          if (!privacySandboxPanelVisible) {
             chrome.tabs.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
@@ -178,7 +186,7 @@ const useFrameOverlay = (
               }
             );
           }
-          if (changes[currentTabId].newValue) {
+          if (privacySandboxPanelVisible) {
             chrome.tabs.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
