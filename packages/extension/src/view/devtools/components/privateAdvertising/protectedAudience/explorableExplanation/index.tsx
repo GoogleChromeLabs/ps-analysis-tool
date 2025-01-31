@@ -158,7 +158,7 @@ const ExplorableExplanation = () => {
       });
     });
 
-    const { auctionData, receivedBids, adsAndBidders } =
+    const { auctionData, receivedBids, adsAndBidders, noBids } =
       configuredAuctionEvents(
         interestGroups.flat(),
         Array.from(advertiserSet),
@@ -176,6 +176,7 @@ const ExplorableExplanation = () => {
       auctionData,
       receivedBids,
       adsAndBidders,
+      noBids,
     };
   }, [
     currentSiteData,
@@ -237,7 +238,7 @@ const ExplorableExplanation = () => {
             receivedBids: Object.keys(auctionsData.receivedBids ?? {})
               .map((key: string) => auctionsData?.receivedBids?.[key] ?? [])
               .flat(),
-            noBids: {},
+            noBids: auctionsData.noBids ?? {},
             eeAnimatedTab: true,
           },
         },
