@@ -102,7 +102,7 @@ export const TabsProvider = ({
       ...(unhighlightTabTimeoutsRef.current ?? []),
       setTimeout(() => {
         setHighlightedTabs((prev) => prev.filter((i) => i !== tab));
-      }, 1000),
+      }, 5000),
     ];
   }, []);
 
