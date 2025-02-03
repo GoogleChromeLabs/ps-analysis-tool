@@ -37,6 +37,7 @@ export const TabsProvider = ({
 }: PropsWithChildren<TabsProviderProps>) => {
   const [tabItems, setTabItems] = useState(items);
   const [activeTab, setActiveTab] = useState(0);
+  const activeTabRef = useRef(activeTab);
   const [storage, _setStorage] = useState<string[]>(
     Array(items.length).fill('')
   );
@@ -44,6 +45,10 @@ export const TabsProvider = ({
   const unhighlightTabTimeoutsRef = useRef<
     ReturnType<typeof setTimeout>[] | null
   >(null);
+
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
 
   useEffect(() => {
     const timeouts = unhighlightTabTimeoutsRef.current;
@@ -96,22 +101,19 @@ export const TabsProvider = ({
     [activeTab]
   );
 
-  const highlightTab = useCallback(
-    (tab: number) => {
-      if (tab === activeTab) {
-        return;
-      }
+  const highlightTab = useCallback((tab: number) => {
+    if (tab === activeTabRef.current) {
+      return;
+    }
 
-      setHighlightedTabs((prev) => [...prev, tab]);
-      unhighlightTabTimeoutsRef.current = [
-        ...(unhighlightTabTimeoutsRef.current ?? []),
-        setTimeout(() => {
-          setHighlightedTabs((prev) => prev.filter((i) => i !== tab));
-        }, 10000),
-      ];
-    },
-    [activeTab]
-  );
+    setHighlightedTabs((prev) => [...prev, tab]);
+    unhighlightTabTimeoutsRef.current = [
+      ...(unhighlightTabTimeoutsRef.current ?? []),
+      setTimeout(() => {
+        setHighlightedTabs((prev) => prev.filter((i) => i !== tab));
+      }, 10000),
+    ];
+  }, []);
 
   const isTabHighlighted = useCallback(
     (tab: number) => {
