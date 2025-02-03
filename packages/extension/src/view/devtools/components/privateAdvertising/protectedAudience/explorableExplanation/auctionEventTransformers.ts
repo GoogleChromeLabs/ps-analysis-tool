@@ -184,7 +184,13 @@ export const transformBidEvent = (
   isTopLevel: boolean
 ) => {
   const bidEventsToBeReturned: singleAuctionEvent[] = [];
-  const randomIndex = randomIntFromInterval(0, interestGroups.length);
+
+  if (interestGroups.length === 0) {
+    return bidEventsToBeReturned;
+  }
+
+  const randomIndex = randomIntFromInterval(0, interestGroups.length - 1);
+
   const ownerOriginToSkip = interestGroups[randomIndex].ownerOrigin;
 
   interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
