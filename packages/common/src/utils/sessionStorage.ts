@@ -87,5 +87,5 @@ export const getSessionStorage = async (
 
   const tabId = chrome.devtools.inspectedWindow.tabId;
 
-  return groupedData[tabId];
+  return groupedData[tabId] || {};
 };
