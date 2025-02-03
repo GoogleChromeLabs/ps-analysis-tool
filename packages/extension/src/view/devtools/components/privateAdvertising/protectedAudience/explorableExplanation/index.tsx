@@ -69,6 +69,7 @@ const ExplorableExplanation = () => {
   const [currentStep, setCurrentStep] = useState<StepType>({} as StepType);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
+  const hasDataBeenFetchedFromSessionStorage = useRef<boolean>(false);
 
   const [interactiveMode, _setInteractiveMode] = useState(false);
 
@@ -83,6 +84,10 @@ const ExplorableExplanation = () => {
 
   useEffect(() => {
     (async () => {
+      if (!hasDataBeenFetchedFromSessionStorage.current) {
+        return;
+      }
+
       await updateSessionStorage(
         { interactiveMode, isMultiSeller },
         STORAGE_KEY
@@ -100,7 +105,6 @@ const ExplorableExplanation = () => {
   useEffect(() => {
     (async () => {
       const data = (await getSessionStorage(STORAGE_KEY)) || {};
-
       if (Object.prototype.hasOwnProperty.call(data, 'interactiveMode')) {
         _setInteractiveMode(data.interactiveMode);
       }
@@ -108,6 +112,8 @@ const ExplorableExplanation = () => {
       if (Object.prototype.hasOwnProperty.call(data, 'isMultiSeller')) {
         setIsMultiSeller(data.isMultiSeller);
       }
+
+      hasDataBeenFetchedFromSessionStorage.current = true;
     })();
 
     return () => {
