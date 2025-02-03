@@ -20,8 +20,13 @@ import app from '../../app';
 import config from '../../config';
 import { Box, ProgressLine } from '../../components';
 import { SINGLE_SELLER_CONFIG } from '../flowConfig.jsx';
+import { AuctionStep } from '../../../types';
 
-const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
+const setUpRunadAuction = (
+  steps: AuctionStep[],
+  afterRippleStep: (() => AuctionStep) | null = null,
+  ssp = ''
+) => {
   const { box, colors } = config.flow;
 
   steps.push({
@@ -35,7 +40,9 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -126,7 +133,9 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
         },
         delay: 1000,
         callBack: (returnValue) => {
-          app.auction.nextTipCoordinates = returnValue.down;
+          if (returnValue.down) {
+            app.auction.nextTipCoordinates = returnValue.down;
+          }
         },
       });
 
@@ -174,7 +183,9 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
         },
         delay: 1000,
         callBack: (returnValue) => {
-          app.auction.nextTipCoordinates = returnValue.down;
+          if (returnValue.down) {
+            app.auction.nextTipCoordinates = returnValue.down;
+          }
         },
       });
 
@@ -226,7 +237,9 @@ const setUpRunadAuction = (steps, afterRippleStep = null, ssp = '') => {
       },
       delay: 1000,
       callBack: (returnValue) => {
-        app.auction.nextTipCoordinates = returnValue.down;
+        if (returnValue.down) {
+          app.auction.nextTipCoordinates = returnValue.down;
+        }
       },
     });
   });

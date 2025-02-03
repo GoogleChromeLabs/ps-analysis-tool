@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Internal dependencies.
  */
 import app from '../../app';
 import config from '../../config';
 import { ProgressLine, Box } from '../../components';
+import { AuctionStep } from '../../../types';
 
-const setupShowWinningAd = (steps) => {
+const setupShowWinningAd = (steps: AuctionStep[]) => {
   const { box } = config.flow;
 
   steps.push({
@@ -46,7 +48,9 @@ const setupShowWinningAd = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 };

@@ -32,10 +32,10 @@ export const ADVERTIZER_CONFIG = {
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
-          These are script tags embedded in the advertiser's webpage that enable
-          communication with DSP servers. DSP tags help associate users with
-          interest groups for retargeting and audience building in future ad
-          campaigns.
+          These are script tags embedded in the advertiser&apos;s webpage that
+          enable communication with DSP servers. DSP tags help associate users
+          with interest groups for retargeting and audience building in future
+          ad campaigns.
         </p>
       </>
     ),
@@ -50,14 +50,14 @@ export const ADVERTIZER_CONFIG = {
           Tags box).
         </p>
         <p>
-          These <strong>interest groups</strong> are added to the user's browser
-          and are shown with small bubbles here. They store user profiles based
-          on demographics, location, and behavior while ensuring compliance with
-          privacy standards like the Protected Audience API.
+          These <strong>interest groups</strong> are added to the user&apos;s
+          browser and are shown with small bubbles here. They store user
+          profiles based on demographics, location, and behavior while ensuring
+          compliance with privacy standards like the Protected Audience API.
         </p>
         <p className="mt-2">
           <strong className="block">General Use:</strong>
-          DSP servers on the advertiser's side handle user tracking, data
+          DSP servers on the advertiser&apos;s side handle user tracking, data
           processing, and interest group management. They process user behavior
           and decide if the user should be added to specific interest groups.
           (called from the DSP Tag). DSPs are the owners of the interest groups
@@ -82,9 +82,9 @@ export const SINGLE_SELLER_CONFIG = {
         <p className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
-            An SSP tag is a script placed on the publisher's page that enables
-            the SSP to initiate ad requests and pass them to DSPs. It does the
-            following:
+            An SSP tag is a script placed on the publisher&apos;s page that
+            enables the SSP to initiate ad requests and pass them to DSPs. It
+            does the following:
           </p>
           <ul className="list-disc ml-3 mt-1">
             <li>Collects contextual data about the page and user.</li>
@@ -167,8 +167,8 @@ export const SINGLE_SELLER_CONFIG = {
         <p>
           SSP ad tag initiates the on-device auction by calling{' '}
           <code className="text-upsed-tomato">runAdAuction()</code>, passing in
-          signals and contextual ad winner from DSP's openRTB bid response which
-          was sent by the SSP server.
+          signals and contextual ad winner from DSP&apos;s openRTB bid response
+          which was sent by the SSP server.
         </p>
       </>
     ),
@@ -439,13 +439,13 @@ export const MULTI_SELLER_CONFIG = {
         <p className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
-            These are script tags embedded in the advertiser's webpage that
+            These are script tags embedded in the advertiser&apos;s webpage that
             enable communication with publisher ad tag webpage
           </p>
           <p>
             When a user visits a webpage with an ad tag, the tag signals along
-            with header bidding winner to the publisher's ad server that there's
-            an opportunity to show an ad.
+            with header bidding winner to the publisher&apos;s ad server that
+            there&apos;s an opportunity to show an ad.
           </p>
           <p>
             The ad tag contains key information about the ad space, such as:
@@ -479,14 +479,14 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           The publisher ad server is the central hub that controls and manages
-          the entire ad-serving process on a publisher's website or app. It also
-          does a couple of other tasks like delivering and optimizing ads,
+          the entire ad-serving process on a publisher&apos;s website or app. It
+          also does a couple of other tasks like delivering and optimizing ads,
           tracking performance, and generating reports, and integrates with
           other ad tech platforms. It also does a couple of other tasks like
           delivering and optimizing ads, tracks performance and generating
           reports, and integrating with other ad tech platforms. The publisher
           ad server will also run a contextual auction with the data from header
-          bidding as a comparison source.
+          bidding as a bidding as a comparison source.
         </p>
         <p>
           Any bid that is higher than the header bidding winner will be accepted
@@ -506,8 +506,8 @@ export const MULTI_SELLER_CONFIG = {
           A multi-seller auction involves multiple sellers offering their
           inventory simultaneously, enabling multiple buyers (advertisers or
           DSPs) to bid on available items. The auction typically takes place on
-          a shared platform (e.g., an SSP or ad exchange), where all sellers'
-          inventories are pooled for bidding.
+          a shared platform (e.g., an SSP or ad exchange), where all
+          sellers&apos; inventories are pooled for bidding.
         </p>
         <p>
           Each seller conducts a component auction, selecting a winner to

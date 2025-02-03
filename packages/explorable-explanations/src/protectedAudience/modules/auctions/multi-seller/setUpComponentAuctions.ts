@@ -21,6 +21,7 @@ import config, { publisherData } from '../../../config';
 import { Box, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
+import { AuctionStep, Coordinates } from '../../../../types';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -28,7 +29,10 @@ const FIRST_LINE_HEIGHT = 150;
 const BORDER_BOX_MARGIN = 50;
 const BOX_COLUMN_MARGIN = 390;
 
-const boxCordinates = {};
+const boxCordinates: Coordinates = {
+  x: 0,
+  y: 0,
+};
 
 const setUpComponentAuctions = (steps, index) => {
   const { box } = config.flow;
@@ -119,13 +123,8 @@ const setUpComponentAuctions = (steps, index) => {
 
   setUpComponentAuctionStarter(componentAuctions, steps);
 
-  componentAuctions.forEach((componentAuction, idx) => {
-    setUpComponentAuction(
-      steps,
-      componentAuction,
-      componentAuction.config,
-      idx
-    );
+  componentAuctions.forEach((componentAuction) => {
+    setUpComponentAuction(steps, componentAuction, componentAuction.config);
   });
 
   setUpTPoint(steps);
@@ -137,9 +136,9 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
   // This callback does not update the app.auction.nextTipCoordinates.
   // TODO: Update the return value callbacks in this function, this change will affect the whole flow coordinates. So recalculate the coordinates.
 
-  let returnCoordinates = {};
+  let returnCoordinates: Coordinates;
 
-  const getStartingCoordinates = (index) => {
+  const getStartingCoordinates = (index: number): Coordinates => {
     if (index === 0) {
       return app.auction.nextTipCoordinates;
     }
@@ -295,7 +294,7 @@ const setUpComponentAuction = (
   });
 };
 
-const setUpTPoint = (steps) => {
+const setUpTPoint = (steps: AuctionStep[]) => {
   steps.push({
     component: ProgressLine,
     props: {
@@ -379,7 +378,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -431,7 +432,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 };

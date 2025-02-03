@@ -20,8 +20,9 @@ import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
+import { AuctionStep } from '../../../../types';
 
-const setUpMultiSellerFirstSSPTagFlow = (steps) => {
+const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
   const { box, colors } = config.flow;
 
   steps.push({
@@ -48,7 +49,9 @@ const setUpMultiSellerFirstSSPTagFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -75,7 +78,9 @@ const setUpMultiSellerFirstSSPTagFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -102,7 +107,9 @@ const setUpMultiSellerFirstSSPTagFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 

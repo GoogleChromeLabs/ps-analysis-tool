@@ -37,6 +37,7 @@ import {
   setupMainCanvas,
   setupUserCanvas,
 } from './canvas';
+import { type P5, type Circle } from '../types';
 
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
@@ -49,10 +50,8 @@ app.setUpTimeLine = () => {
   app.timeline.expandIconPositions = [];
   bubbles.clearAndRewriteBubbles();
   app.setup();
-
   timeline.init();
-
-  auctions.setupAuctions();
+  auctions.setupAuctions?.();
   joinInterestGroup.setupJoinings();
 };
 
@@ -62,9 +61,9 @@ app.setup = () => {
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
   app.bubbles = { ...app.bubbles, ...bubbles };
-  const groups = [];
+  const groups: string[] = [];
 
-  config.timeline.circles.forEach((circle) => {
+  config.timeline.circles.forEach((circle: Circle) => {
     circle.interestGroups?.forEach(() => {
       groups.push(circle.website);
     });
@@ -76,8 +75,8 @@ app.setup = () => {
 app.play = (resumed = false, doNotPlay = false) => {
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
-    app.playButton.classList.add('hidden');
-    app.pauseButton.classList.remove('hidden');
+    app.playButton?.classList.add('hidden');
+    app.pauseButton?.classList.remove('hidden');
   }
 
   if (app.bubbles.isExpanded) {
@@ -93,7 +92,7 @@ app.play = (resumed = false, doNotPlay = false) => {
   }
 
   try {
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
   } catch (error) {
     //Fail silently since this gives an error even after stopping the queue.
   }
@@ -102,13 +101,13 @@ app.play = (resumed = false, doNotPlay = false) => {
 app.pause = () => {
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
-    app.pauseButton.classList.add('hidden');
-    app.playButton.classList.remove('hidden');
+    app.pauseButton?.classList.add('hidden');
+    app.playButton?.classList.remove('hidden');
   }
   if (!app.timeline.pausedReason) {
     app.timeline.pausedReason = 'userClick';
   }
-  app.promiseQueue.stop();
+  app.promiseQueue?.stop();
   app.timeline.isPaused = true;
 };
 
@@ -120,7 +119,7 @@ app.minimiseBubbleActions = () => {
   if (app.timeline.pausedReason === 'userClick') {
     return;
   }
-  app.play(true);
+  app.play(true, false);
 };
 
 app.expandBubbleActions = () => {
@@ -134,8 +133,15 @@ app.expandBubbleActions = () => {
   app.setPlayState(false);
 };
 
-app.minifiedBubbleClickListener = (event, expandOverride) => {
-  const rect = app.minifiedBubbleContainer.getBoundingClientRect();
+app.minifiedBubbleClickListener = (
+  event: MouseEvent,
+  expandOverride?: boolean
+) => {
+  const rect = app.minifiedBubbleContainer?.getBoundingClientRect();
+
+  if (!rect) {
+    return;
+  }
 
   const clickedInsideExpandedCircle = utils.isInsideCircle(
     rect.x + app.bubbles.expandedCircleDiameter / 2,
@@ -169,8 +175,12 @@ app.minifiedBubbleClickListener = (event, expandOverride) => {
   }
 };
 
-app.addToPromiseQueue = (indexToStartFrom) => {
+app.addToPromiseQueue = (indexToStartFrom: number) => {
   let currentIndex = indexToStartFrom;
+
+  if (!app.promiseQueue) {
+    return;
+  }
 
   while (currentIndex < config.timeline.circles.length) {
     app.promiseQueue.push((cb) => {
@@ -194,7 +204,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
       timeline.eraseAndRedraw();
       timeline.renderUserIcon();
 
-      cb(null, true);
+      cb?.(undefined, true);
     });
 
     app.drawFlows(currentIndex);
@@ -205,20 +215,20 @@ app.addToPromiseQueue = (indexToStartFrom) => {
       app.bubbles.interestGroupCounts +=
         circles[_currentIndex]?.igGroupsCount ?? 0;
 
-      cb(null, true);
+      cb?.(undefined, true);
     });
 
     app.promiseQueue.push((cb) => {
       app.timeline.currentIndex += 1;
       flow.setButtonsDisabilityState();
 
-      cb(null, true);
+      cb?.(undefined, true);
     });
 
     currentIndex++;
   }
 
-  //This is to add check mark for the last circle.
+  // This is to add check mark for the last circle.
   app.promiseQueue.push((cb) => {
     app.bubbles.interestGroupCounts +=
       config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
@@ -233,28 +243,32 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     const { circlePositions } = app.timeline;
     const p = app.p;
     const up = app.up;
+
     utils.wipeAndRecreateUserCanvas();
-    circles.forEach((circle, index) => {
-      p.push();
-      p.stroke(colors.visitedBlue);
+
+    circles.forEach((__, index) => {
+      p?.push();
+      p?.stroke(colors.visitedBlue);
       const position = circlePositions[index];
-      up.image(
-        app.p.completedCheckMark,
-        position.x - user.width / 2,
-        position.y - user.height / 2,
-        user.width,
-        user.height
-      );
-      p.pop();
+      if (p?.completedCheckMark) {
+        up?.image(
+          p?.completedCheckMark,
+          position.x - user.width / 2,
+          position.y - user.height / 2,
+          user.width,
+          user.height
+        );
+      }
+      p?.pop();
     });
 
     utils.drawOpenArrowWithoutAnimationIcon();
 
-    cb(null, true);
+    cb?.(undefined, true);
   });
 };
 
-app.setupLoop = (doNotPlay) => {
+app.setupLoop = (doNotPlay: boolean) => {
   try {
     flow.setButtonsDisabilityState();
     app.addToPromiseQueue(0);
@@ -272,15 +286,15 @@ app.setupLoop = (doNotPlay) => {
 
   app.setPlayState(true);
   try {
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
 };
 
-app.drawFlows = (index) => {
+app.drawFlows = (index: number) => {
   joinInterestGroup.draw(index);
-  auctions.draw(index);
+  auctions.draw?.(index);
 };
 
 app.minifiedBubbleKeyPressListener = (event) => {
@@ -294,7 +308,7 @@ app.handleNonInteractivePrev = async () => {
     return;
   }
 
-  app.promiseQueue.end();
+  app.promiseQueue?.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   //This is to set the data for previous site in react as well.
@@ -313,7 +327,7 @@ app.handleNonInteractivePrev = async () => {
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
   utils.wipeAndRecreateMainCanvas();
-  app.up.clear();
+  app.up?.clear();
   timeline.renderUserIcon();
 
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
@@ -322,7 +336,7 @@ app.handleNonInteractivePrev = async () => {
 
   app.setPlayState(true);
   try {
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
@@ -333,7 +347,7 @@ app.handleInteractivePrev = () => {
     return;
   }
 
-  app.promiseQueue.end();
+  app.promiseQueue?.end();
   flow.setButtonsDisabilityState();
   app.shouldRespondToClick = false;
 
@@ -347,14 +361,14 @@ app.handleInteractivePrev = () => {
 
   app.drawFlows(visitedIndex);
 
-  app.promiseQueue.push((cb) => {
+  app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
 
-    cb(null, true);
+    cb?.(undefined, true);
   });
 
   if (app.visitedIndexOrderTracker >= 0) {
@@ -369,7 +383,7 @@ app.handleInteractivePrev = () => {
 
   app.setPlayState(true);
   try {
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
@@ -408,7 +422,7 @@ app.handleNonInteractiveNext = async () => {
   ) {
     return;
   }
-  app.promiseQueue.end();
+  app.promiseQueue?.end();
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   //This is to set the data for previous site in react as well.
@@ -434,7 +448,7 @@ app.handleNonInteractiveNext = async () => {
   utils.markVisitedValue(app.timeline.currentIndex, true);
 
   utils.wipeAndRecreateMainCanvas();
-  app.up.clear();
+  app.up?.clear();
   timeline.renderUserIcon();
 
   app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
@@ -443,7 +457,7 @@ app.handleNonInteractiveNext = async () => {
 
   app.setPlayState(true);
   try {
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
@@ -465,7 +479,7 @@ app.handleInteractiveNext = () => {
     }
   }
 
-  app.promiseQueue.end();
+  app.promiseQueue?.end();
   flow.setButtonsDisabilityState();
   app.shouldRespondToClick = false;
 
@@ -479,14 +493,14 @@ app.handleInteractiveNext = () => {
 
   app.drawFlows(visitedIndex);
 
-  app.promiseQueue.push((cb) => {
+  app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
 
-    cb(null, true);
+    cb?.(undefined, true);
   });
 
   flow.setButtonsDisabilityState();
@@ -497,7 +511,7 @@ app.handleInteractiveNext = () => {
 
   app.setPlayState(true);
   try {
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
@@ -515,54 +529,54 @@ app.handleControls = () => {
   app.minifiedBubbleContainer = document.getElementById(
     'minified-bubble-container'
   );
-  app.canvasParentElement = document.querySelector('#ps-canvas').parentElement;
+  app.canvasParentElement = document.querySelector('#ps-canvas')?.parentElement;
 
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
     app.controlsDiv = document.getElementById('controls-div');
     app.nextButton = document.getElementById('next-div');
     app.prevButton = document.getElementById('previous-div');
-    app.prevButton.addEventListener('click', app.handlePrevButton);
-    app.nextButton.addEventListener('click', app.handleNextButton);
-    app.playButton.addEventListener('click', () => {
+    app.prevButton?.addEventListener('click', app.handlePrevButton);
+    app.nextButton?.addEventListener('click', app.handleNextButton);
+    app.playButton?.addEventListener('click', () => {
       app.play(true);
     });
-    app.pauseButton.addEventListener('click', app.pause);
-    app.multSellerCheckBox.addEventListener('change', app.toggleMultSeller);
-    app.intreactiveModeCheckBox.addEventListener(
+    app.pauseButton?.addEventListener('click', app.pause);
+    app.multSellerCheckBox?.addEventListener('change', app.toggleMultSeller);
+    app.intreactiveModeCheckBox?.addEventListener(
       'change',
       app.toggleInteractiveMode
     );
     document
-      .getElementById('auto-expand')
-      .addEventListener('change', (event) => {
-        app.isAutoExpand = event.target.checked;
+      ?.getElementById('auto-expand')
+      ?.addEventListener('change', (event) => {
+        app.isAutoExpand = (event.target as HTMLInputElement).checked;
       });
   }
 
   const minifiedBubbleContainerRect =
-    app.minifiedBubbleContainer.getBoundingClientRect();
+    app.minifiedBubbleContainer?.getBoundingClientRect();
 
-  app.bubbles.minifiedBubbleX = Math.floor(minifiedBubbleContainerRect.x);
-  app.bubbles.minifiedBubbleY = Math.floor(minifiedBubbleContainerRect.y);
+  app.bubbles.minifiedBubbleX = Math.floor(minifiedBubbleContainerRect?.x ?? 0);
+  app.bubbles.minifiedBubbleY = Math.floor(minifiedBubbleContainerRect?.y ?? 0);
 
   app.visitedSites = [];
 
   document.addEventListener('keyup', app.minifiedBubbleKeyPressListener);
 
-  app.minifiedBubbleContainer.addEventListener(
+  app.minifiedBubbleContainer?.addEventListener(
     'click',
     app.minifiedBubbleClickListener
   );
 
-  app.bubbleContainerDiv.addEventListener(
+  app.bubbleContainerDiv?.addEventListener(
     'click',
     app.minifiedBubbleClickListener
   );
 
-  app.closeButton.addEventListener('click', app.minimiseBubbleActions);
+  app.closeButton?.addEventListener('click', app.minimiseBubbleActions);
 
-  app.openButton.addEventListener('click', (event) =>
+  app.openButton?.addEventListener('click', (event: MouseEvent) =>
     app.minifiedBubbleClickListener(event, true)
   );
 };
@@ -584,12 +598,12 @@ app.toggleInteractiveMode = async () => {
 };
 
 // Write a callback function to get the value of the checkbox.
-app.toggleMultSeller = (event) => {
-  app.isMultiSeller = event.target.checked;
+app.toggleMultSeller = (event: Event) => {
+  app.isMultiSeller = (event.target as HTMLInputElement).checked;
 };
 
 // Define the sketch
-export const sketch = (p) => {
+export const sketch = (p: P5) => {
   p.updateWithProps = (props) => {
     if (app.isMultiSeller !== props.isMultiSeller) {
       app.reset();
@@ -619,7 +633,7 @@ export const sketch = (p) => {
     app.setPlayState(true);
   });
 
-  app.handleControls();
+  app.handleControls?.();
 
   p.setup = () => {
     setupMainCanvas(p);
@@ -632,13 +646,12 @@ export const sketch = (p) => {
     p.expandIcon = p.loadImage(icons.expand);
     p.infoIcon = p.loadImage(icons.info);
     p.openWithoutAnimation = p.loadImage(icons.openWithoutAnimation);
-
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
 };
 
 // Define the sketch
-export const interestGroupSketch = (p) => {
+export const interestGroupSketch = (p: P5) => {
   p.setup = () => {
     setupInterestGroupCanvas(p);
   };
@@ -676,8 +689,10 @@ export const interestGroupSketch = (p) => {
       const y =
         totalRadius * Math.sin(angle) + app.bubbles.expandedBubbleY + radius;
 
-      app.closeButton.style.left = `${x}px`;
-      app.closeButton.style.top = `${y}px`;
+      if (app.closeButton) {
+        app.closeButton.style.left = `${x}px`;
+        app.closeButton.style.top = `${y}px`;
+      }
       const expandedSVG = document.getElementById('expandedSVG');
 
       if (expandedSVG) {
@@ -716,14 +731,14 @@ export const interestGroupSketch = (p) => {
 };
 
 // Define the sketch
-export const userSketch = (p) => {
+export const userSketch = (p: P5) => {
   p.setup = () => {
     setupUserCanvas(p);
   };
 };
 
 app.reset = async () => {
-  app.promiseQueue.end();
+  app.promiseQueue?.end();
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   app.visitedIndexOrder = [];
@@ -742,20 +757,28 @@ app.reset = async () => {
   timeline.eraseAndRedraw();
   await utils.delay(100);
 
-  setupInterestGroupCanvas(app.igp);
-  setupUserCanvas(app.up);
-  setupMainCanvas(app.p, true);
+  if (app.igp) {
+    setupInterestGroupCanvas(app.igp);
+  }
+
+  if (app.up) {
+    setupUserCanvas(app.up);
+  }
+
+  if (app.p) {
+    setupMainCanvas(app.p, true);
+  }
 
   app.timeline.isPaused = true;
   app.setPlayState(false);
-  app.setCurrentSite(null);
-  app.setInfo({});
+  app.setCurrentSite?.(null);
+  app.setInfo?.(null);
 };
 
 app.createCanvas = () => {
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
-    app.handleControls();
+    app.handleControls?.();
     // eslint-disable-next-line no-new
     new p5(sketch);
 

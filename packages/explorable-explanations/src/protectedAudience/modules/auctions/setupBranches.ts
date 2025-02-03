@@ -19,8 +19,9 @@
 import app from '../../app';
 import { Branches } from '../../components';
 import config, { publisherData } from '../../config';
+import { AuctionStep } from '../../../types';
 
-const setupBranches = (steps, index) => {
+const setupBranches = (steps: AuctionStep[], index: number) => {
   const publisher = config.timeline.circles[index].website;
 
   steps.push({

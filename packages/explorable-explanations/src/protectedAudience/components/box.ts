@@ -26,6 +26,19 @@ import {
 
 const INFO_ICON_SPACING = 3;
 
+type BoxProps = {
+  title: string;
+  description: string;
+  x: number | (() => number);
+  y: number | (() => number);
+  width?: number;
+  height?: number;
+  color?: string;
+  info?: boolean;
+  isBranchComponent?: boolean;
+  borderStroke?: number[];
+};
+
 const Box = ({
   title,
   description,
@@ -37,7 +50,7 @@ const Box = ({
   info = false,
   isBranchComponent = false,
   borderStroke = config.flow.colors.box.borderStroke,
-}) => {
+}: BoxProps) => {
   x = typeof x === 'function' ? x() : x;
   y = typeof y === 'function' ? y() : y;
 
@@ -59,6 +72,10 @@ const Box = ({
 
   const p = app.p;
 
+  if (!p) {
+    return nextTip;
+  }
+
   if (!isBranchComponent) {
     scrollToCoordinates(x, y - height / 2);
   }
@@ -66,7 +83,7 @@ const Box = ({
   p.push();
   p.textAlign(p.CENTER, p.CENTER);
   p.fill(color || background);
-  p.stroke(...borderStroke);
+  p.stroke(...(borderStroke as [number, number, number, number]));
   p.rect(x, y, width, height);
   p.strokeWeight(0.1);
   p.fill(text);
@@ -102,7 +119,6 @@ const Box = ({
   }
 
   p.pop();
-
   return nextTip;
 };
 

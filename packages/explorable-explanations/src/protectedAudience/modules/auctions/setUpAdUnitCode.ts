@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Internal dependencies.
  */
@@ -20,8 +21,9 @@ import app from '../../app';
 import config, { publisherData } from '../../config';
 import flow from '../flow';
 import { Branches } from '../../components';
+import { AuctionStep } from '../../../types';
 
-const setUpAdUnitCode = (steps, index) => {
+const setUpAdUnitCode = (steps: AuctionStep[], index: number) => {
   const { colors } = config.flow;
   const { x, y } = flow.getTimelineCircleCoordinates(index);
   const publisher = config.timeline.circles[index].website;

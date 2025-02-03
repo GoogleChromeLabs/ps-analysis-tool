@@ -14,31 +14,15 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * Custom component to allow rendering any shape which are used in only some specific cases and are not resuable
+ * as the flow relies on a component to be used for each step.
+ * @param {object} props Component props
+ * @param props.render Render fuction to execute inside the Custom function.
+ * @returns {any} Return anything that render function wants to return, mostly nextTip object.
  */
-import app from '../app';
-import config from '../config';
-
-const Text = ({ text, x, y }) => {
-  x = typeof x === 'function' ? x() : x;
-  y = typeof y === 'function' ? y() : y;
-
-  const nextTip = {
-    x: x,
-    y: y,
-  };
-
-  const p = app.p;
-
-  p.push();
-  p.textAlign(p.CENTER, p.CENTER);
-  p.fill(config.flow.colors.box.text);
-  p.strokeWeight(0);
-  p.textFont('sans-serif');
-  p.text(text, x, y);
-  p.pop();
-
-  return nextTip;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Custom = ({ render }: { render: () => void }): any => {
+  return render();
 };
 
-export default Text;
+export default Custom;

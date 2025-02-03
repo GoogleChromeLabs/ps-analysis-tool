@@ -13,7 +13,75 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const config = {
+
+/**
+ * Internal dependencies.
+ */
+import { Circle } from '../types';
+
+type Ripple = {
+  radius: number;
+  baseSpeed: number;
+};
+
+type Config = {
+  canvas: {
+    width: number;
+    height: number;
+    extraHeight: number;
+    extraWidth: number;
+    background: string;
+    fontSize: number;
+  };
+  timeline: {
+    position: { x: number; y: number };
+    circleProps: {
+      diameter: number;
+      verticalSpacing: number;
+    };
+    stepDelay: number;
+    user: {
+      width: number;
+      height: number;
+    };
+    expandIconSize: number;
+    infoIconSize: number;
+    circles: Circle[];
+    colors: {
+      visitedBlue: string;
+      grey: string;
+      black: string;
+    };
+  };
+  flow: {
+    box: { width: number; height: number };
+    smallBox: { width: number; height: number };
+    mediumBox: { width: number; height: number };
+    lineWidth: number;
+    lineHeight: number;
+    arrowSize: number;
+    colors: {
+      box: {
+        background: string;
+        notBrowser: string;
+        noData: string;
+        text: string;
+        borderStroke: number[];
+        browser: string;
+      };
+    };
+  };
+  rippleEffect: {
+    ripples: Ripple[];
+    numRipples: number;
+    maxRadius: number;
+    time: number;
+    speed: number;
+    rippled: boolean;
+  };
+};
+
+const config: Config = {
   canvas: {
     width: 700,
     height: 500,
@@ -132,11 +200,12 @@ const config = {
         noData: '#e9ecef',
         text: '#000',
         borderStroke: [0, 0, 0],
+        browser: '#000',
       },
     },
   },
   rippleEffect: {
-    ripples: [],
+    ripples: [] as Ripple[],
     numRipples: 3,
     maxRadius: 200,
     time: 4000,

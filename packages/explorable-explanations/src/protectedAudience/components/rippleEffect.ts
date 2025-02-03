@@ -18,14 +18,25 @@
  */
 import app from '../app';
 import config from '../config';
+import { Coordinates } from '../../types';
 
-const RippleEffect = async ({ x, y }) => {
-  rippleEffect.setUp();
-  await rippleEffect.start(x, y);
+type RippleEffect = {
+  setUp?: () => void;
+  start?: (x: number, y: number) => Promise<void>;
+  create?: (x: number, y: number, speed: number) => void;
 };
 
 // @todo To be moved to components.
-const rippleEffect = {};
+const rippleEffect: RippleEffect = {};
+
+const RippleEffect = async ({ x, y }: Coordinates) => {
+  if (!rippleEffect.setUp || !rippleEffect.start) {
+    return;
+  }
+
+  rippleEffect.setUp();
+  await rippleEffect.start(x, y);
+};
 
 rippleEffect.setUp = () => {
   config.rippleEffect.rippled = false;
@@ -52,11 +63,11 @@ rippleEffect.start = (x = 0, y = 0) => {
       baseSpeed = app.speedMultiplier / 2;
     }
 
-    let startTime = null; // Tracks the start time of the animation
+    let startTime: number | null = null; // Tracks the start time of the animation
     const duration = config.rippleEffect.time / baseSpeed; // Total animation time
     config.rippleEffect.rippled = true;
 
-    const animate = (timestamp) => {
+    const animate = (timestamp: number) => {
       if (app.cancelPromise) {
         resolve();
         return;
@@ -79,7 +90,7 @@ rippleEffect.start = (x = 0, y = 0) => {
         return;
       }
 
-      rippleEffect.create(x, y, baseSpeed);
+      rippleEffect.create?.(x, y, baseSpeed);
 
       // Continue the animation loop
       requestAnimationFrame(animate);
@@ -90,7 +101,11 @@ rippleEffect.start = (x = 0, y = 0) => {
   });
 };
 
-const clearArea = (x, y) => {
+const clearArea = (x: number, y: number) => {
+  if (!app.p) {
+    return;
+  }
+
   const { numRipples, maxRadius } = config.rippleEffect;
   const clearWidth = maxRadius * 2 + (numRipples - 1) * 40;
   const clearHeight = maxRadius * 1.5;
@@ -106,6 +121,10 @@ rippleEffect.create = (rippleX, rippleY, speed) => {
   // Calculate the area to clear
   const { ripples, maxRadius } = config.rippleEffect;
   const p = app.p;
+
+  if (!p) {
+    return;
+  }
 
   p.push();
   // Clear only the area used by the ripples

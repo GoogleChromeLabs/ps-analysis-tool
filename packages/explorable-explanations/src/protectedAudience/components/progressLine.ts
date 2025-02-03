@@ -22,6 +22,19 @@ import * as utils from '../utils';
 
 const ARROW_SIZE = 10;
 
+type ProgressLineProps = {
+  x1: number | (() => number);
+  y1: number | (() => number);
+  customWidth?: number;
+  customHeight?: number;
+  direction: string;
+  text?: string;
+  noArrow?: boolean;
+  noAnimation?: boolean;
+  isBranch?: boolean;
+  isForBranches?: boolean;
+};
+
 const ProgressLine = ({
   x1,
   y1,
@@ -33,11 +46,14 @@ const ProgressLine = ({
   noAnimation = app.speedMultiplier === 4,
   isBranch = false,
   isForBranches = false,
-}) => {
+}: ProgressLineProps) => {
+  const p = app.p;
+  if (!p) {
+    return Promise.resolve(null);
+  }
   const width = customWidth ?? config.flow.lineWidth - ARROW_SIZE;
   const height = customHeight ?? config.flow.lineHeight - ARROW_SIZE;
   const incrementBy = isBranch ? 15 : app.speedMultiplier; // Adjust to control speed
-  const p = app.p;
   const scrollAdjuster =
     (direction === 'right' ? config.flow.box.height : config.flow.box.width) /
     2;
@@ -68,7 +84,7 @@ const ProgressLine = ({
     // eslint-disable-next-line complexity
     const animate = () => {
       if (app.cancelPromise) {
-        resolve();
+        resolve(null);
         return;
       }
 
@@ -211,7 +227,7 @@ const ProgressLine = ({
       p.pop();
 
       if (app.cancelPromise) {
-        resolve();
+        resolve(null);
         return;
       }
       // Continue the animation loop
@@ -232,7 +248,13 @@ const ProgressLine = ({
  * @param height - The height of the line.
  * @returns {{x2: number, y2: number}} The endpoint coordinates.
  */
-const getEndpointCoordinates = (x1, y1, direction, width, height) => {
+const getEndpointCoordinates = (
+  x1: number,
+  y1: number,
+  direction: string,
+  width: number,
+  height: number
+): { x2: number; y2: number } => {
   let x2 = x1;
   let y2 = y1;
 

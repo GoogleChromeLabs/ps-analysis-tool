@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 /**
- * Internal Dependencies
- */
-import config from '../config.js';
-import app from '../app.js';
-import { calculateCanvasDimensions } from '../utils';
-
-/**
  * External dependencies.
  */
 import throttle from 'just-throttle';
 
-export const setupMainCanvas = async (p, pause = false) => {
+/**
+ * Internal Dependencies
+ */
+import config from '../config';
+import app from '../app';
+import { calculateCanvasDimensions } from '../utils';
+import { P5 } from '../../types';
+
+export const setupMainCanvas = (p: P5, pause = false) => {
   try {
     const { height, width } = calculateCanvasDimensions();
     const canvas = p.createCanvas(width, height);
 
     p.smooth();
     canvas.parent('ps-canvas');
-    canvas.style('z-index', 0);
+    canvas.style('z-index', '0');
     p.background(config.canvas.background);
     p.textSize(config.canvas.fontSize);
     app.p = p;
@@ -75,10 +76,10 @@ export const setupMainCanvas = async (p, pause = false) => {
 
     canvas.mouseMoved(mouseMovedCallback);
 
-    app.setUpTimeLine();
+    app.setUpTimeLine?.();
 
     if (!app.isInteractiveMode) {
-      await app.play(false, pause);
+      app.play(false, pause);
     }
   } catch (error) {
     // eslint-disable-next-line no-console -- We should know the error and let it fail silently since it doesnt break anything.

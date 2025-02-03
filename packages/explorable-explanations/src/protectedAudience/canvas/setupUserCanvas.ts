@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Internal Dependencies
  */
-import config from '../config.js';
-import app from '../app.js';
+import config from '../config';
+import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
+import { P5 } from '../../types';
 
-export const setupUserCanvas = (p) => {
+export const setupUserCanvas = (p: P5) => {
   try {
     const { height, width } = calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
-
     overlayCanvas.parent('user-canvas');
-    overlayCanvas.style('z-index', 1);
+    overlayCanvas.style('z-index', '1');
     p.textSize(config.canvas.fontSize);
     app.up = p;
   } catch (error) {

@@ -16,19 +16,19 @@
 /**
  * Internal Dependencies
  */
-import config from '../config.js';
-import app from '../app.js';
+import config from '../config';
+import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
+import { P5 } from '../../types';
 
-export const setupInterestGroupCanvas = (p) => {
+export const setupInterestGroupCanvas = (p: P5) => {
   try {
     const { height, width } = calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
 
     overlayCanvas.parent('interest-canvas');
-    overlayCanvas.style('z-index', 2);
+    overlayCanvas.style('z-index', '2');
     p.textSize(config.canvas.fontSize);
-    // eslint-disable-next-line no-undef
     if (process.env.IS_RUNNING_STANDALONE) {
       app.bubbles.minifiedBubbleX = 35;
       app.bubbles.minifiedBubbleY = 35;
@@ -42,27 +42,26 @@ export const setupInterestGroupCanvas = (p) => {
       const x = 335 * Math.cos(angle) + app.bubbles.expandedBubbleX;
       const y = 335 * Math.sin(angle) + 320;
 
-      app.closeButton.style.left = `${x}px`;
-      app.closeButton.style.top = `${y}px`;
+      if (app.closeButton) {
+        app.closeButton.style.left = `${x}px`;
+        app.closeButton.style.top = `${y}px`;
+      }
 
-      document.styleSheets[0].cssRules.forEach((rules, index) => {
-        if (rules.selectorText === '.minified-bubble-container.expanded') {
-          document.styleSheets[0].cssRules[index].style.left = `${
-            app.bubbles.expandedBubbleX - 320
-          }px`;
+      Array.from(document.styleSheets[0].cssRules).forEach((rules, index) => {
+        const styleRule = rules as CSSStyleRule;
+        const documentStyleRule = (
+          document.styleSheets[0].cssRules[index] as CSSStyleRule
+        ).style;
 
-          document.styleSheets[0].cssRules[
-            index
-          ].style.width = `${app.bubbles.expandedCircleDiameter}px`;
-          document.styleSheets[0].cssRules[
-            index
-          ].style.height = `${app.bubbles.expandedCircleDiameter}px`;
+        if (styleRule.selectorText === '.minified-bubble-container.expanded') {
+          documentStyleRule.left = `${app.bubbles.expandedBubbleX - 320}px`;
+
+          documentStyleRule.width = `${app.bubbles.expandedCircleDiameter}px`;
+          documentStyleRule.height = `${app.bubbles.expandedCircleDiameter}px`;
         }
 
-        if (rules.selectorText === '.minified-bubble-container') {
-          document.styleSheets[0].cssRules[index].style.top = `${
-            app.bubbles.minifiedBubbleY - 25
-          }px`;
+        if (styleRule.selectorText === '.minified-bubble-container') {
+          documentStyleRule.top = `${app.bubbles.minifiedBubbleY - 25}px`;
         }
       });
     }

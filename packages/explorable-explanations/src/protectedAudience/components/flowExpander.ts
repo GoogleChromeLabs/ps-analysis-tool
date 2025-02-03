@@ -20,15 +20,34 @@ import app from '../app';
 import config, { publisherData } from '../config';
 import { isInsideCircle, scrollToCoordinates } from '../utils';
 
-const FlowExpander = async ({ nextTipCoordinates, typeOfBranches }) => {
+type FlowExpanderProps = {
+  nextTipCoordinates: { x: number; y: number }[];
+  typeOfBranches?: string;
+};
+
+const FlowExpander = async ({
+  nextTipCoordinates,
+  typeOfBranches,
+}: FlowExpanderProps) => {
   const p = app.p;
   const igp = app.igp;
+
+  if (!p || !igp) {
+    return;
+  }
+
   const iconSize = config.timeline.expandIconSize;
   const iconRadius = iconSize / 2;
   const currentSite =
     config.timeline.circles[app.timeline.currentIndex].website;
 
-  igp.mouseMoved = ({ offsetX, offsetY }) => {
+  igp.mouseMoved = ({
+    offsetX,
+    offsetY,
+  }: {
+    offsetX: number;
+    offsetY: number;
+  }) => {
     let hoveringOverSomething = false;
     nextTipCoordinates.forEach(({ x, y }) => {
       if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
@@ -40,14 +59,21 @@ const FlowExpander = async ({ nextTipCoordinates, typeOfBranches }) => {
     } else {
       p.cursor('default');
     }
+    return false;
   };
 
-  const endpoint = await new Promise((resolve) => {
-    igp.mouseClicked = ({ offsetX, offsetY }) => {
+  const endpoint = await new Promise<{ x: number; y: number }>((resolve) => {
+    igp.mouseClicked = ({
+      offsetX,
+      offsetY,
+    }: {
+      offsetX: number;
+      offsetY: number;
+    }) => {
       nextTipCoordinates.forEach(({ x, y }, index) => {
         if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
-          igp.mouseClicked(false);
-          igp.mouseMoved(false);
+          igp.mouseClicked();
+          igp.mouseMoved();
           if (typeOfBranches === 'datetime') {
             app.setSelectedDateTime(
               `${publisherData[currentSite].branches[index].date} ${publisherData[currentSite].branches[index].time}`
@@ -81,8 +107,6 @@ const FlowExpander = async ({ nextTipCoordinates, typeOfBranches }) => {
     }
   });
   scrollToCoordinates(endpoint.x, endpoint.y);
-
-  return endpoint;
 };
 
 export default FlowExpander;

@@ -20,8 +20,5 @@ export {
   interestGroupSketch,
   sketch,
 } from './protectedAudience';
-export {
-  default as config,
-  publisherData,
-} from './protectedAudience/config.js';
+export { default as config, publisherData } from './protectedAudience/config';
 export * from './protectedAudience/modules/flowConfig.jsx';

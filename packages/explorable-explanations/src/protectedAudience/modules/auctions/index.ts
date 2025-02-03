@@ -31,12 +31,24 @@ import setUpAdUnitCode from './setUpAdUnitCode';
 import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
+import { noop } from '@google-psat/common';
+import { AuctionStep, Step } from '../../../types';
+
+type Auction = {
+  setupAuctions?: () => void;
+  setUp?: (index: number) => void;
+  draw?: (index: number) => void;
+};
 
 /**
  * @module Auction
  * Handles the setup and rendering of auction steps in a flowchart-like interface.
  */
-const auction = {};
+const auction: Auction = {
+  setupAuctions: noop,
+  setUp: noop,
+  draw: noop,
+};
 
 /**
  * Initializes auction setup for all circles defined in the configuration.
@@ -44,8 +56,8 @@ const auction = {};
  */
 auction.setupAuctions = () => {
   app.auction.auctions = [];
-  config.timeline.circles.forEach((circle, index) => {
-    auction.setUp(index);
+  config.timeline.circles.forEach((___, index) => {
+    auction.setUp?.(index);
   });
 };
 
@@ -54,16 +66,16 @@ auction.setupAuctions = () => {
  * Adds steps and coordinates for rendering components like Boxes, ProgressLines, and Branches.
  * @param {number} index - The index of the circle to set up.
  */
-auction.setUp = (index) => {
+auction.setUp = (index: number) => {
   const { circles } = config.timeline;
   const currentCircle = circles[index];
 
   if (currentCircle.type !== 'publisher') {
-    app.auction.auctions.push(null);
+    app.auction.auctions?.push([]);
     return;
   }
 
-  const steps = [];
+  const steps: AuctionStep[] = [];
 
   setUpAdUnitCode(steps, index);
   setupBranches(steps, index);
@@ -86,17 +98,24 @@ auction.setUp = (index) => {
  * Each step is rendered sequentially with delays.
  * @param {number} index - The index of the auction steps to draw.
  */
-auction.draw = (index) => {
+auction.draw = (index: number) => {
+  if (!app.p) {
+    return;
+  }
+
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
   if (!app.auction.auctions[index]) {
     return;
   }
 
+  if (!app.promiseQueue) {
+    return;
+  }
+
   app.promiseQueue.push((cb) => {
     app.setCurrentSite(config.timeline.circles[index]);
-
-    cb(null, true);
+    cb?.(undefined, true);
   });
 
   for (const step of app.auction.auctions[index]) {
@@ -113,23 +132,23 @@ auction.draw = (index) => {
           }
         }
 
-        const stepInformation = {
+        const stepInformation: Step = {
           title: props.title,
-          description: props.description,
+          description: props.description || '',
           ssp,
         };
 
         app.setCurrentStep(stepInformation);
       }
 
-      const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+      const returnValue = await component?.(props); // eslint-disable-line no-await-in-loop
 
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (props?.showBarrageAnimation) {
           await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
           if (app.cancelPromise) {
-            cb(null, true);
+            cb?.(undefined, true);
             return;
           }
 
@@ -139,11 +158,15 @@ auction.draw = (index) => {
         }
 
         if (props?.showRippleEffect) {
-          const x = props.x();
-          const y = props.y();
+          const x = typeof props.x === 'function' ? props.x() : props.x;
+          const y = typeof props.y === 'function' ? props.y() : props.y;
+
+          if (!x || !y) {
+            return;
+          }
 
           if (app.cancelPromise) {
-            cb(null, true);
+            cb?.(undefined, true);
             return;
           }
           // eslint-disable-next-line no-await-in-loop
@@ -160,7 +183,7 @@ auction.draw = (index) => {
 
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (app.cancelPromise) {
-          cb(null, true);
+          cb?.(undefined, true);
           return;
         }
 
@@ -174,7 +197,7 @@ auction.draw = (index) => {
         auction.draw,
         auction.setupAuctions
       );
-      cb(null, true);
+      cb?.(undefined, true);
     });
   }
 
@@ -182,10 +205,10 @@ auction.draw = (index) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
       app.timeline.infoIconsPositions = [];
-      app.setSelectedAdUnit(null);
-      app.setSelectedDateTime(null);
+      app.setSelectedAdUnit('');
+      app.setSelectedDateTime('');
     }
-    cb(null, true);
+    cb?.(undefined, true);
   });
 };
 

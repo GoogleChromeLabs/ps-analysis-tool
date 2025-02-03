@@ -32,13 +32,22 @@ const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
 let spacing, renderedBranchIds, endpoints;
 
+type BranchesProps = {
+  x1: number | (() => number);
+  y1: number | (() => number);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  branches: any[];
+  currentIndex: number;
+  noAnimation: boolean;
+};
+
 const Branches = async ({
   x1,
   y1,
   branches,
   currentIndex,
   noAnimation = app.speedMultiplier === 4,
-}) => {
+}: BranchesProps) => {
   x1 = typeof x1 === 'function' ? x1() : x1;
   y1 = typeof y1 === 'function' ? y1() : y1;
 
@@ -53,6 +62,9 @@ const Branches = async ({
   renderedBranchIds = [];
   endpoints = [];
   const p = app.p;
+  if (!p) {
+    return;
+  }
 
   const y2 = y1 + 50;
   spacing = 300; // Calculate spacing based on canvas width
@@ -108,14 +120,11 @@ const Branches = async ({
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
-      return endpoints[1];
     } else {
       scrollToCoordinates(endpoints[0].x, endpoints[0].y);
-      const nextTip = await FlowExpander({
+      await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-
-      return nextTip;
     }
   }
 
@@ -133,17 +142,16 @@ const Branches = async ({
 
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       await delay(1000);
-      return endpoints[1];
+      // return endpoints[1];
     } else {
       scrollToCoordinates(endpoints[0].x, endpoints[0].y);
 
-      const nextTip = await FlowExpander({
+      await FlowExpander({
         nextTipCoordinates: endpoints,
         typeOfBranches,
       });
 
       await delay(1000);
-      return nextTip;
     }
   }
 
@@ -157,13 +165,11 @@ const Branches = async ({
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
-      return endpoints[1];
     } else {
       scrollToCoordinates(endpoints[0].x, endpoints[0].y);
-      const nextTip = await FlowExpander({
+      await FlowExpander({
         nextTipCoordinates: endpoints,
       });
-      return nextTip;
     }
   }
 
@@ -223,20 +229,25 @@ const Branches = async ({
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
     scrollToCoordinates(endpoints[1].x, endpoints[1].y);
-    return endpoints[1];
   }
 
   scrollToCoordinates(endpoints[0].x, endpoints[0].y);
 
-  const nextTip = await FlowExpander({
+  await FlowExpander({
     nextTipCoordinates: endpoints,
   });
-
-  return nextTip;
 };
 
-const drawDateTimeBranch = (x, y, branch) => {
+const drawDateTimeBranch = (
+  x: number,
+  y: number,
+  branch: { date: string; time: string }
+): { x: number; y: number } => {
   const p = app.p;
+
+  if (!p) {
+    return { x, y };
+  }
 
   p.push();
   p.noStroke();
@@ -262,8 +273,17 @@ const drawDateTimeBranch = (x, y, branch) => {
   return { x: x, y: y + 50 };
 };
 
-const drawBoxesBranch = (x, y, branch) => {
+const drawBoxesBranch = (
+  x: number,
+  y: number,
+  branch: { title: string; description: string; color?: string }
+): { x: number; y: number } => {
   const p = app.p;
+
+  if (!p) {
+    return { x, y };
+  }
+
   const { flow } = config;
 
   Box({
