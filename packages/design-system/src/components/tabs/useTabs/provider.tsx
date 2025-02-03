@@ -23,7 +23,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -34,34 +33,12 @@ import { TabsContext } from './context';
 export const TabsProvider = ({
   children,
   items,
-  name,
 }: PropsWithChildren<TabsProviderProps>) => {
   const [tabItems, setTabItems] = useState(items);
   const [activeTab, setActiveTab] = useState(0);
   const [storage, _setStorage] = useState<string[]>(
     Array(items.length).fill('')
   );
-
-  useEffect(() => {
-    (async () => {
-      const settings = await getSessionStorage('persistentSettingsTabs');
-
-      if (settings && settings[name]) {
-        setActiveTab(settings[name]);
-      }
-    })();
-  }, [name]);
-
-  useEffect(() => {
-    (async () => {
-      await updateSessionStorage(
-        {
-          [name]: activeTab,
-        },
-        'persistentSettingsTabs'
-      );
-    })();
-  }, [activeTab, name]);
 
   useEffect(() => {
     setTabItems(items);

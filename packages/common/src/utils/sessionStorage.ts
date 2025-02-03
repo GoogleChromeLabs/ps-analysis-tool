@@ -38,7 +38,6 @@ export const updateSessionStorage = async (
   let updatedData: SessionData = undefined;
 
   if (items) {
-    // Merge new items with tab-specific keys
     updatedData = {
       ...data,
       ...Object.fromEntries(
@@ -69,18 +68,17 @@ export const getSessionStorage = async (
   const groupedData: Record<string, any> = {};
 
   Object.entries(data).forEach(([key, value]) => {
-    const match = key.match(new RegExp(`^(\\d+)-${name}-(.+)$`)); // Extract tab ID dynamically
+    const match = key.match(new RegExp(`^(\\d+)-${name}-(.+)$`));
 
     if (match) {
-      const tabId = match[1]; // Get tab ID
-      const originalKey = match[2]; // Extract the actual key
+      const tabId = match[1];
+      const originalKey = match[2];
 
       if (!groupedData[tabId]) {
         groupedData[tabId] = {};
       }
       groupedData[tabId][originalKey] = value;
     } else {
-      // Global data (not associated with any tab)
       groupedData[key] = value;
     }
   });
