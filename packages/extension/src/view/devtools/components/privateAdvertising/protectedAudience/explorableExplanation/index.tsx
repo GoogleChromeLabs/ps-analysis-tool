@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import type { InterestGroups } from '@google-psat/common';
+import {
+  type InterestGroups,
+  updateSessionStorage,
+  getSessionStorage,
+} from '@google-psat/common';
 import React, {
   useMemo,
   useState,
@@ -42,6 +46,13 @@ import {
 import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
+
+const STORAGE_KEY = 'paExplorableExplanation';
+const DEFAULT_SETTINGS = {
+  isInteractiveMode: false,
+  isMultiSeller: false,
+  isAutoExpand: true,
+};
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
@@ -71,6 +82,15 @@ const ExplorableExplanation = () => {
   );
 
   useEffect(() => {
+    (async () => {
+      await updateSessionStorage(
+        { interactiveMode, isMultiSeller },
+        STORAGE_KEY
+      );
+    })();
+  }, [interactiveMode, isMultiSeller]);
+
+  useEffect(() => {
     if (interactiveMode !== app.isInteractiveMode) {
       app.toggleInteractiveMode();
       setSitesVisited([]);
@@ -78,10 +98,22 @@ const ExplorableExplanation = () => {
   }, [interactiveMode]);
 
   useEffect(() => {
+    (async () => {
+      const data = (await getSessionStorage(STORAGE_KEY)) || {};
+
+      if (Object.prototype.hasOwnProperty.call(data, 'interactiveMode')) {
+        _setInteractiveMode(data.interactiveMode);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(data, 'isMultiSeller')) {
+        setIsMultiSeller(data.isMultiSeller);
+      }
+    })();
+
     return () => {
-      app.isInteractiveMode = false;
-      app.isMultiSeller = false;
-      app.isAutoExpand = true;
+      app.isInteractiveMode = DEFAULT_SETTINGS.isInteractiveMode;
+      app.isMultiSeller = DEFAULT_SETTINGS.isMultiSeller;
+      app.isAutoExpand = DEFAULT_SETTINGS.isAutoExpand;
     };
   }, []);
 
