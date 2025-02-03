@@ -43,7 +43,12 @@ describe('Session Storage Utilities', () => {
   });
 
   test('updateSessionStorage should store data with tab-specific keys', async () => {
-    const mockStorageData: SessionData = { theme: 'dark', sidebar: 'open' };
+    const mockStorageData: SessionData = {
+      theme: 'dark',
+      sidebar: 'open',
+      selectedSidebarItem:
+        'privacy-sandbox#private-advertising#protected-audience',
+    };
 
     (chrome.storage.session.get as jest.Mock).mockResolvedValue({});
 
@@ -52,6 +57,8 @@ describe('Session Storage Utilities', () => {
     expect(chrome.storage.session.set).toHaveBeenCalledWith({
       '123-persistentSetting-theme': 'dark',
       '123-persistentSetting-sidebar': 'open',
+      '123-persistentSetting-selectedSidebarItem':
+        'privacy-sandbox#private-advertising#protected-audience',
     });
   });
 
@@ -73,6 +80,8 @@ describe('Session Storage Utilities', () => {
     (chrome.storage.session.get as jest.Mock).mockResolvedValue({
       '123-persistentSetting-theme': 'dark',
       '123-persistentSetting-sidebar': 'open',
+      '123-persistentSetting-selectedSidebarItem':
+        'privacy-sandbox#private-advertising#protected-audience',
       globalSetting: 'enabled',
     });
 
@@ -81,6 +90,8 @@ describe('Session Storage Utilities', () => {
     expect(result).toEqual({
       theme: 'dark',
       sidebar: 'open',
+      selectedSidebarItem:
+        'privacy-sandbox#private-advertising#protected-audience',
     });
   });
 
