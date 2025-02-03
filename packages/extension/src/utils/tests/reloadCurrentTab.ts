@@ -57,7 +57,7 @@ describe('reloadCurrentTab : ', () => {
   });
 
   it('should be called if tabId is not passed passed', () => {
-    reloadCurrentTab();
+    reloadCurrentTab(40245632);
     expect(globalThis.chrome.tabs.reload).toHaveBeenLastCalledWith(40245632, {
       bypassCache: true,
     });

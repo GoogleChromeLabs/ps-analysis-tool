@@ -33,25 +33,20 @@ export const updateSessionStorage = async (
     return {};
   }
 
-  const data = (await chrome.storage.session.get()) || {};
-
-  let updatedData: SessionData = undefined;
+  let newData: SessionData = undefined;
 
   if (items) {
-    updatedData = {
-      ...data,
-      ...Object.fromEntries(
-        Object.entries(items).map(([key, value]) => [
-          `${tabId}-${name}-${key}`,
-          value,
-        ])
-      ),
-    };
+    newData = Object.fromEntries(
+      Object.entries(items).map(([key, value]) => [
+        `${tabId}-${name}-${key}`,
+        value,
+      ])
+    );
 
-    await chrome.storage.session.set(updatedData);
+    await chrome.storage.session.set(newData);
   }
 
-  return updatedData || data;
+  return newData;
 };
 
 /**
