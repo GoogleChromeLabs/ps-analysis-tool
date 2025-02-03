@@ -181,7 +181,8 @@ export const transformBidEvent = (
     interestGroupName: string;
     ownerOrigin: string;
   }[],
-  isTopLevel: boolean
+  isTopLevel: boolean,
+  currentStep: StepType | null
 ) => {
   const bidEventsToBeReturned: singleAuctionEvent[] = [];
 
@@ -191,7 +192,10 @@ export const transformBidEvent = (
 
   const randomIndex = randomIntFromInterval(0, interestGroups.length - 1);
 
-  const ownerOriginToSkip = interestGroups[randomIndex].ownerOrigin;
+  const ownerOriginToSkip =
+    currentStep?.title === SINGLE_SELLER_CONFIG.GENERATE_BID.title
+      ? interestGroups[randomIndex].ownerOrigin
+      : '';
 
   interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
     if (ownerOriginToSkip === ownerOrigin) {
@@ -229,7 +233,11 @@ export const createAuctionEvents = (
   previousEvents: singleAuctionEvent[] | null,
   isMultiSeller = false
 ) => {
-  const bidEvents = transformBidEvent(interestGroups, isTopLevelBid);
+  const bidEvents = transformBidEvent(
+    interestGroups,
+    isTopLevelBid,
+    currentStep
+  );
 
   bidEvents.sort((a, b) => (a?.bid ?? 0) - (b?.bid ?? 0));
   const events: singleAuctionEvent[] = [...(previousEvents ?? [])];
