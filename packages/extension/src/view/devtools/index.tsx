@@ -45,35 +45,11 @@ const classes = isDarkMode ? ['dark', 'dark-mode'] : ['light'];
 document.body.classList.add(...classes);
 
 const root = document.getElementById('root');
-const BLOCKED_EVENTS = ['devicemotion', 'deviceorientation'];
 
-//@ts-ignore - This is done to avoid multiple calls to same function in line 57.
-window.oldEventListener = window.addEventListener;
-
-/**
- * This has been done to avoid multiple calls to devicemotion and deviceorientation
- * since these are blocked in the extension due to permission policy.
- * @param eventName The event name passed to the global event listener.
- * @param listener The listener callback passed to the global event listener
- * @param options The options passed to the global event listener
- */
-function wrappedEventListener<K extends keyof WindowEventMap>(
-  eventName: string,
-  listener:
-    | EventListener
-    | EventListenerObject
-    | ((this: Window, ev: WindowEventMap[K]) => any),
-  options?: boolean | AddEventListenerOptions
-) {
-  if (BLOCKED_EVENTS.includes(eventName)) {
-    return;
-  }
-
-  //@ts-ignore - Check line 50 of this file.
-  window.oldEventListener(eventName, listener, options);
-}
-
-window.addEventListener = wrappedEventListener;
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceMotionEvent = null;
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceOrientationEvent = null;
 
 if (root) {
   createRoot(root).render(
