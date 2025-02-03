@@ -31,6 +31,7 @@ import {
   sketch as mainSketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
+import classNames from 'classnames';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
 
 /**
@@ -95,6 +96,7 @@ const Panel = ({
   const [expandedBubbleWidth, setBubbleWidth] = useState(0);
   const [expandedBubbleX, setExpandedBubbleX] = useState(0);
   const [expandedBubbleY, setExpandedBubbleY] = useState(0);
+  const [isBubbleExpanded, setIsBubbleExpanded] = useState(false);
 
   const setPlaying = useCallback(() => {
     setPlay((prevState) => {
@@ -161,35 +163,44 @@ const Panel = ({
         const containerWidth = containerRef.current.offsetWidth;
         const containerHeight = containerRef.current.offsetHeight;
         const newSize = Math.min(containerWidth, containerHeight) / 2;
-        const centerX = (containerWidth - newSize) / 4;
-        const centerY = (containerHeight - newSize) / 4;
 
         setBubbleWidth(newSize);
-        setExpandedBubbleX(centerX);
-        setExpandedBubbleY(centerY);
       }
     });
   }, []);
 
+  const getDivDimensions = useCallback(() => {
+    if (!divRef.current) {
+      return {
+        visibleWidth: 0,
+        visibleHeight: 0,
+        newSize: 0,
+      };
+    }
+
+    const divRect = divRef.current.getBoundingClientRect();
+    const visibleWidth = Math.max(
+      0,
+      Math.min(divRect.right, window.innerWidth) - Math.max(divRect.left, 0)
+    );
+    const visibleHeight = Math.max(
+      0,
+      Math.min(divRect.bottom, window.innerHeight) - Math.max(divRect.top, 0)
+    );
+    const newSize = Math.min(visibleWidth, visibleHeight) / 2;
+
+    return {
+      visibleWidth,
+      visibleHeight,
+      newSize,
+    };
+  }, []);
+
   useEffect(() => {
     if (divRef.current) {
-      const divRect = divRef.current.getBoundingClientRect();
-      const visibleWidth = Math.max(
-        0,
-        Math.min(divRect.right, window.innerWidth) - Math.max(divRect.left, 0)
-      );
-      const visibleHeight = Math.max(
-        0,
-        Math.min(divRect.bottom, window.innerHeight) - Math.max(divRect.top, 0)
-      );
-
-      const newSize = Math.min(visibleWidth, visibleHeight) / 2;
-      const centerX = (visibleWidth - newSize) / 4;
-      const centerY = (visibleHeight - newSize) / 4;
+      const { newSize } = getDivDimensions();
 
       setBubbleWidth(newSize);
-      setExpandedBubbleX(centerX);
-      setExpandedBubbleY(centerY);
     }
 
     if (containerRef.current) {
@@ -204,7 +215,22 @@ const Panel = ({
         handleResizeCallback.unobserve(containerRefCopy.current);
       }
     };
-  }, [handleResizeCallback]);
+  }, [getDivDimensions, handleResizeCallback]);
+
+  useEffect(() => {
+    if (isBubbleExpanded) {
+      const div = divRef.current;
+
+      if (div) {
+        const { visibleWidth, visibleHeight, newSize } = getDivDimensions();
+        const centerX = visibleWidth / 2 - newSize;
+        const centerY = visibleHeight / 4 - newSize / 4;
+
+        setExpandedBubbleX(div.scrollLeft + centerX);
+        setExpandedBubbleY(div.scrollTop + centerY);
+      }
+    }
+  }, [getDivDimensions, isBubbleExpanded]);
 
   const resetHandler = useCallback(() => {
     app.reset();
@@ -272,7 +298,13 @@ const Panel = ({
         extraInterface={extraInterface}
       />
       <div className="w-full h-full">
-        <main className="h-full w-full overflow-auto relative" ref={divRef}>
+        <main
+          className={classNames('h-full w-full relative', {
+            'overflow-hidden': isBubbleExpanded,
+            'overflow-auto': !isBubbleExpanded,
+          })}
+          ref={divRef}
+        >
           <div id="ps-canvas">
             <div id="canvas-container" />
           </div>
@@ -322,6 +354,7 @@ const Panel = ({
         sketch={interestGroupSketch}
         expandedBubbleX={expandedBubbleX}
         expandedBubbleY={expandedBubbleY}
+        setIsBubbleExpanded={setIsBubbleExpanded}
         expandedBubbleWidth={expandedBubbleWidth}
         speedMultiplier={2 * sliderStep}
         setCurrentSite={setCurrentSite}

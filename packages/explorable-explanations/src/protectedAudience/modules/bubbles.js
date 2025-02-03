@@ -358,6 +358,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 bubbles.showExpandedBubbles = () => {
   bubbles.clearAndRewriteBubbles();
   bubbles.generateBubbles(true);
+  app.setIsBubbleExpanded(true);
 
   app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
@@ -389,6 +390,8 @@ bubbles.showExpandedBubbles = () => {
 bubbles.showMinifiedBubbles = () => {
   app.setHighlightedInterestGroup(null);
   app.bubbles.highlightedInterestGroup = null;
+  app.setIsBubbleExpanded(false);
+
   app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
       [
