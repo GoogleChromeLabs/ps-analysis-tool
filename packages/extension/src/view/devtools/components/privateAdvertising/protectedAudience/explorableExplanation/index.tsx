@@ -158,7 +158,7 @@ const ExplorableExplanation = () => {
       });
     });
 
-    const { auctionData, receivedBids, adsAndBidders } =
+    const { auctionData, receivedBids, adsAndBidders, noBids } =
       configuredAuctionEvents(
         interestGroups.flat(),
         Array.from(advertiserSet),
@@ -176,6 +176,7 @@ const ExplorableExplanation = () => {
       auctionData,
       receivedBids,
       adsAndBidders,
+      noBids,
     };
   }, [
     currentSiteData,
@@ -191,20 +192,6 @@ const ExplorableExplanation = () => {
     interestGroupOwner: string;
     color: string;
   } | null>(null);
-
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setHighlightedInterestGroup(null);
-    }, 1500);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [highlightedInterestGroup]);
 
   const tabItems = useMemo<TabItems>(
     () => [
@@ -237,7 +224,7 @@ const ExplorableExplanation = () => {
             receivedBids: Object.keys(auctionsData.receivedBids ?? {})
               .map((key: string) => auctionsData?.receivedBids?.[key] ?? [])
               .flat(),
-            noBids: {},
+            noBids: auctionsData.noBids ?? {},
             eeAnimatedTab: true,
           },
         },

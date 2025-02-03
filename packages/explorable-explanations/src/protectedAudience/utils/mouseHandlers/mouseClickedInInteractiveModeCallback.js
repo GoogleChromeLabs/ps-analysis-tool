@@ -20,6 +20,7 @@ import app from '../../app';
 import config from '../../config';
 import bubbles from '../../modules/bubbles';
 import flow from '../../modules/flow';
+import { drawOpenArrowWithoutAnimationIcon } from '../drawOpenArrowWithoutAnimationIcon';
 import { isInsideCircle } from '../isInsideCircle';
 import {
   wipeAndRecreateMainCanvas,
@@ -133,6 +134,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         app.shouldRespondToClick = true;
         bubbles.showMinifiedBubbles();
         renderUserIcon();
+        drawOpenArrowWithoutAnimationIcon();
         return;
       } else {
         const positions = app.timeline.circlePositions[clickedIndex];
@@ -160,6 +162,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       wipeAndRecreateUserCanvas();
       wipeAndRecreateMainCanvas();
       renderUserIcon();
+      drawOpenArrowWithoutAnimationIcon();
       flow.setButtonsDisabilityState();
 
       cb(null, true);
@@ -173,6 +176,9 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       app.isRevisitingNodeInInteractiveMode = false;
       flow.clearBelowTimelineCircles();
       app.nodeIndexRevisited = -1;
+      wipeAndRecreateUserCanvas();
+      renderUserIcon();
+      drawOpenArrowWithoutAnimationIcon();
       return;
     }
     app.promiseQueue.end();
@@ -201,6 +207,9 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
     });
 
     app.promiseQueue.start();
+    wipeAndRecreateUserCanvas();
+    renderUserIcon();
+    drawOpenArrowWithoutAnimationIcon();
 
     return;
   }

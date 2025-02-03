@@ -25,22 +25,22 @@ const Breakpoints = () => {
     <div className="flex gap-4 text-raisin-black dark:text-bright-gray p-4">
       <div className="flex gap-2 justify-center items-center">
         <BreakpointIcon className="fill-granite-gray" />
-        Ad Worklet Breakpoints
+        Ad Worklet Breakpoints{' '}
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Bidder Bidding Phase Start
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Bidder Reporting Phase Start
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Seller Scoring Phase Start
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <input type="checkbox" />
+        <input type="checkbox" disabled />
         Seller Reporting Phase Start
       </div>
     </div>

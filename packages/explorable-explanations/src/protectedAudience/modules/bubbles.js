@@ -39,6 +39,7 @@ const bubbles = {};
  */
 bubbles.init = () => {
   app.bubbles.positions = [];
+  app.bubbles.highlightedInterestGroup = null;
 };
 
 /**
@@ -357,6 +358,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 bubbles.showExpandedBubbles = () => {
   bubbles.clearAndRewriteBubbles();
   bubbles.generateBubbles(true);
+  app.setIsBubbleExpanded(true);
 
   app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
@@ -379,6 +381,7 @@ bubbles.showExpandedBubbles = () => {
   }
 
   app.bubbleContainerDiv.classList.toggle('expanded', true);
+  app.bubbleContainerDiv.style.width = '100%';
 
   app.closeButton.style.display = 'block';
   app.openButton.style.display = 'none';
@@ -386,6 +389,10 @@ bubbles.showExpandedBubbles = () => {
 };
 
 bubbles.showMinifiedBubbles = () => {
+  app.setHighlightedInterestGroup(null);
+  app.bubbles.highlightedInterestGroup = null;
+  app.setIsBubbleExpanded(false);
+
   app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
       [
@@ -406,6 +413,7 @@ bubbles.showMinifiedBubbles = () => {
   }
 
   app.bubbleContainerDiv.classList.toggle('expanded', false);
+  app.bubbleContainerDiv.style.width = 'fit-content';
 
   app.closeButton.style.display = 'none';
   app.openButton.style.display = 'block';
@@ -512,13 +520,26 @@ bubbles.bubbleChart = (
       interestGroupOwner: 'https://www.' + groups[d.data],
       color: app.color(groups[d.data]),
     });
+    app.bubbles.highlightedInterestGroup = titles[d.data];
     event.stopPropagation();
   };
 
   leaf
     .append('circle')
-    .attr('stroke', stroke)
-    .attr('stroke-width', strokeWidth)
+    .attr('stroke', (d) => {
+      if (app.bubbles.highlightedInterestGroup === titles[d.data]) {
+        return '#dbdb48';
+      }
+
+      return stroke === null ? 'none' : stroke;
+    })
+    .attr('stroke-width', (d) => {
+      if (app.bubbles.highlightedInterestGroup === titles[d.data]) {
+        return 5;
+      }
+
+      return strokeWidth === null ? 0 : strokeWidth;
+    })
     .attr('stroke-opacity', strokeOpacity)
     .attr('class', 'svg overflowing-text circle-svg')
     .attr('style', `${!app.bubbles.isExpanded ? 'pointer-events: none;' : ''}`)
