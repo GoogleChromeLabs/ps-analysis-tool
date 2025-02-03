@@ -380,6 +380,7 @@ bubbles.showExpandedBubbles = () => {
 
   app.bubbleContainerDiv.classList.toggle('expanded', true);
   app.bubbleContainerDiv.style.width = '100%';
+
   app.closeButton.style.display = 'block';
   app.openButton.style.display = 'none';
   app.minifiedBubbleContainer.classList.toggle('expanded', true);
@@ -407,6 +408,7 @@ bubbles.showMinifiedBubbles = () => {
 
   app.bubbleContainerDiv.classList.toggle('expanded', false);
   app.bubbleContainerDiv.style.width = 'fit-content';
+
   app.closeButton.style.display = 'none';
   app.openButton.style.display = 'block';
 

@@ -228,6 +228,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
     flow.clearBelowTimelineCircles();
+
     const { circles, colors, user } = config.timeline;
     const { circlePositions } = app.timeline;
     const p = app.p;
@@ -246,6 +247,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
       );
       p.pop();
     });
+
     utils.drawOpenArrowWithoutAnimationIcon();
 
     cb(null, true);

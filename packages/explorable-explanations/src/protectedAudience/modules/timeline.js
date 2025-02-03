@@ -218,6 +218,7 @@ timeline.drawCircle = (index, completed = false) => {
 
   app.up.push();
   app.up.tint(255, 90);
+
   if (app.nodeIndexRevisited === -1) {
     app.up.image(
       app.p.openWithoutAnimation,
@@ -227,6 +228,7 @@ timeline.drawCircle = (index, completed = false) => {
       20
     );
   }
+
   app.up.pop();
 
   app.up.image(

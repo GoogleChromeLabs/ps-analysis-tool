@@ -65,6 +65,7 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     clickedIndex = -1;
     app.nodeIndexRevisited = -1;
     wipeAndRecreateUserCanvas();
+
     circles.forEach((circle, index) => {
       p.push();
       p.stroke(colors.visitedBlue);
