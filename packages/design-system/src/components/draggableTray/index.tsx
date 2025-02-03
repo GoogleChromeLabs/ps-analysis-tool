@@ -51,11 +51,11 @@ const DraggableTray = forwardRef<
 
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
-  const [height, setHeight] = useState<string | undefined>('20%');
+  const [height, setHeight] = useState<string | undefined>('30%');
 
   useEffect(() => {
     if (!isCollapsed) {
-      setHeight('20%');
+      setHeight('30%');
     }
   }, [isCollapsed]);
 
@@ -72,7 +72,7 @@ const DraggableTray = forwardRef<
     <Resizable
       defaultSize={{
         width: '100%',
-        height: '20%',
+        height: '30%',
       }}
       onResizeStop={(_, __, ___, d) => {
         setHeight(() => `calc(${height} + ${d.height}px)`);
@@ -98,7 +98,13 @@ const DraggableTray = forwardRef<
             />
           </button>
         </div>
-        {!isCollapsed && ActiveTabContent && <ActiveTabContent {...props} />}
+        <div
+          style={{
+            height: isCollapsed ? '0px' : 'calc(100% - 30px)',
+          }}
+        >
+          {ActiveTabContent && <ActiveTabContent {...props} />}
+        </div>
       </div>
     </Resizable>
   );
