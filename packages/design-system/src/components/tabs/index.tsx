@@ -80,9 +80,17 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       >
         {titles.map((title, index) => (
           <div className="flex" key={index}>
-            {isTabHighlighted(index) && (
-              <span className="h-1.5 w-1.5 rounded-full bg-[#FDCA40] animate-ping" />
-            )}
+            <span
+              className={classNames(
+                'h-2 w-2 rounded-full animate-ping',
+                {
+                  'bg-transparent': !isTabHighlighted(index),
+                },
+                {
+                  'bg-[#FDCA40]': isTabHighlighted(index),
+                }
+              )}
+            />
             <button
               onClick={() => setActiveTab(index)}
               onKeyDown={handleKeyDown}
