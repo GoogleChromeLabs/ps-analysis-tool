@@ -95,7 +95,7 @@ const Header = ({
         </div>
         {extraInterface && <div className="px-2">{extraInterface}</div>}
       </div>
-      <p className="text-raisin-black dark:text-bright-gray">
+      <p className="text-raisin-black dark:text-bright-gray whitespace-nowrap">
         History count: {historyCount}
       </p>
     </div>
