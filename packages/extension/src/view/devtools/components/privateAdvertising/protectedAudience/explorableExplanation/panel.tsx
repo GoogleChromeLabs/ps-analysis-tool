@@ -153,6 +153,7 @@ const Panel = ({
       highlightTab(0);
     } else {
       highlightTab(1);
+      highlightTab(2);
     }
   }, [currentSiteData, currentSiteData?.type, highlightTab, setActiveTab]);
 
