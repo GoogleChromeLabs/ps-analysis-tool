@@ -223,8 +223,8 @@ const Panel = ({
 
       if (div) {
         const { visibleWidth, visibleHeight, newSize } = getDivDimensions();
-        const centerX = (visibleWidth - newSize) / 4;
-        const centerY = (visibleHeight - newSize) / 4;
+        const centerX = visibleWidth / 2 - newSize;
+        const centerY = visibleHeight / 4 - newSize / 4;
 
         setExpandedBubbleX(div.scrollLeft + centerX);
         setExpandedBubbleY(div.scrollTop + centerY);
