@@ -96,15 +96,22 @@ export const TabsProvider = ({
     [activeTab]
   );
 
-  const highlightTab = useCallback((tab: number) => {
-    setHighlightedTabs((prev) => [...prev, tab]);
-    unhighlightTabTimeoutsRef.current = [
-      ...(unhighlightTabTimeoutsRef.current ?? []),
-      setTimeout(() => {
-        setHighlightedTabs((prev) => prev.filter((i) => i !== tab));
-      }, 5000),
-    ];
-  }, []);
+  const highlightTab = useCallback(
+    (tab: number) => {
+      if (tab === activeTab) {
+        return;
+      }
+
+      setHighlightedTabs((prev) => [...prev, tab]);
+      unhighlightTabTimeoutsRef.current = [
+        ...(unhighlightTabTimeoutsRef.current ?? []),
+        setTimeout(() => {
+          setHighlightedTabs((prev) => prev.filter((i) => i !== tab));
+        }, 10000),
+      ];
+    },
+    [activeTab]
+  );
 
   const isTabHighlighted = useCallback(
     (tab: number) => {
@@ -112,6 +119,12 @@ export const TabsProvider = ({
     },
     [highlightedTabs]
   );
+
+  useEffect(() => {
+    if (highlightedTabs.includes(activeTab)) {
+      setHighlightedTabs((prev) => prev.filter((i) => i !== activeTab));
+    }
+  }, [activeTab, highlightedTabs]);
 
   return (
     <TabsContext.Provider
