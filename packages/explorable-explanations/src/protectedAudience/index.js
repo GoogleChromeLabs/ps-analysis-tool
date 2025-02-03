@@ -228,15 +228,27 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
     flow.clearBelowTimelineCircles();
-    app.timeline.expandIconPositions.forEach((position) => {
-      app.p.image(
-        app.p.openWithoutAnimation,
-        position.x - 10,
-        position.y,
-        20,
-        20
+
+    const { circles, colors, user } = config.timeline;
+    const { circlePositions } = app.timeline;
+    const p = app.p;
+    const up = app.up;
+    utils.wipeAndRecreateUserCanvas();
+    circles.forEach((circle, index) => {
+      p.push();
+      p.stroke(colors.visitedBlue);
+      const position = circlePositions[index];
+      up.image(
+        app.p.completedCheckMark,
+        position.x - user.width / 2,
+        position.y - user.height / 2,
+        user.width,
+        user.height
       );
+      p.pop();
     });
+
+    utils.drawOpenArrowWithoutAnimationIcon();
 
     cb(null, true);
   });

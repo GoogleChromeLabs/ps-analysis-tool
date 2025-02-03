@@ -246,7 +246,7 @@ const Panel = ({
           onChange={setInteractiveMode}
           className="hover:cursor-pointer"
         />
-        Interactive Mode
+        <span className="whitespace-nowrap">Interactive Mode</span>
       </label>
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
@@ -255,7 +255,7 @@ const Panel = ({
           onChange={(event) => setIsMultiSeller(event.target.checked)}
           className="hover:cursor-pointer"
         />
-        Multi Seller
+        <span className="whitespace-nowrap">Multi Seller</span>
       </label>
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
@@ -264,7 +264,7 @@ const Panel = ({
           onChange={(event) => setAutoExpand(event.target.checked)}
           className="hover:cursor-pointer"
         />
-        Auto Expand
+        <span className="whitespace-nowrap">Auto Expand</span>
       </label>
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
@@ -273,7 +273,7 @@ const Panel = ({
           onChange={(event) => setAutoScroll(event.target.checked)}
           className="hover:cursor-pointer"
         />
-        Auto Scroll
+        <span className="whitespace-nowrap">Auto Scroll</span>
       </label>
     </div>
   );

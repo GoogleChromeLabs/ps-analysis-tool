@@ -21,6 +21,7 @@ import type {
   ReceivedBids,
   singleAuctionEvent,
   AdsAndBiddersTypeData,
+  NoBidsType,
 } from '@google-psat/common';
 import {
   publisherData,
@@ -180,11 +181,27 @@ export const transformBidEvent = (
     interestGroupName: string;
     ownerOrigin: string;
   }[],
-  isTopLevel: boolean
+  isTopLevel: boolean,
+  currentStep: StepType | null
 ) => {
   const bidEventsToBeReturned: singleAuctionEvent[] = [];
 
+  if (interestGroups.length === 0) {
+    return bidEventsToBeReturned;
+  }
+
+  const randomIndex = randomIntFromInterval(0, interestGroups.length - 1);
+
+  const ownerOriginToSkip =
+    currentStep?.title === SINGLE_SELLER_CONFIG.GENERATE_BID.title
+      ? interestGroups[randomIndex].ownerOrigin
+      : '';
+
   interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
+    if (ownerOriginToSkip === ownerOrigin) {
+      return;
+    }
+
     const eventToModify: singleAuctionEvent = structuredClone(
       SYNTHETIC_AUCTION_EVENTS_BID
     ) as singleAuctionEvent;
@@ -216,7 +233,11 @@ export const createAuctionEvents = (
   previousEvents: singleAuctionEvent[] | null,
   isMultiSeller = false
 ) => {
-  const bidEvents = transformBidEvent(interestGroups, isTopLevelBid);
+  const bidEvents = transformBidEvent(
+    interestGroups,
+    isTopLevelBid,
+    currentStep
+  );
 
   bidEvents.sort((a, b) => (a?.bid ?? 0) - (b?.bid ?? 0));
   const events: singleAuctionEvent[] = [...(previousEvents ?? [])];
@@ -594,6 +615,41 @@ export const configuredAuctionEvents = (
     selectedAdUnit
   );
 
+  const bidderData = getBidData(
+    auctionData[selectedAdUnit]?.[selectedDateTime]?.[websiteString],
+    sellersArray,
+    selectedAdUnit
+  );
+
+  const noBidders: {
+    interestGroupName: string;
+    ownerOrigin: string;
+  }[] = [];
+
+  const biddingOwners = new Set<string>();
+
+  bidderData.forEach((bidder) => {
+    biddingOwners.add(bidder.ownerOrigin ?? '');
+  });
+
+  interestGroups.forEach(({ ownerOrigin, interestGroupName }) => {
+    if (!biddingOwners.has(ownerOrigin)) {
+      noBidders.push({ ownerOrigin: ownerOrigin, interestGroupName });
+    }
+  });
+
+  const noBids: NoBidsType = {};
+
+  noBidders.forEach((bidder) => {
+    noBids['27A93A016A30D0A5FB7B8C8779D98AF8'] = {
+      uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+      adUnitCode: selectedAdUnit,
+      mediaContainerSize: [[320, 320]],
+      name: bidder.interestGroupName,
+      ownerOrigin: bidder.ownerOrigin,
+    };
+  });
+
   const adsAndBidders: AdsAndBiddersType = {
     [adunits[0]]: {
       adUnitCode: adunits[0],
@@ -617,9 +673,9 @@ export const configuredAuctionEvents = (
     bidders: sellersArray,
     mediaContainerSize: [[320, 320]],
     winningBid: getBidData(
-      auctionData[adunits[0]]?.[dates[0]]?.[websiteString],
+      auctionData[selectedAdUnit]?.[selectedDateTime]?.[websiteString],
       sellersArray,
-      adunits[0]
+      selectedAdUnit
     ).filter(({ type }) => type === 'win')?.[0]?.bid,
     bidCurrency: 'USD',
     winningBidder: 'DSP 1',
@@ -629,5 +685,6 @@ export const configuredAuctionEvents = (
     auctionData,
     receivedBids,
     adsAndBidders,
+    noBids,
   };
 };
