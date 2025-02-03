@@ -31,11 +31,14 @@ interface TabsProps {
 }
 
 const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
-  const { activeTab, setActiveTab, titles } = useTabs(({ state, actions }) => ({
-    activeTab: state.activeTab,
-    setActiveTab: actions.setActiveTab,
-    titles: state.titles,
-  }));
+  const { activeTab, setActiveTab, titles, isTabHighlighted } = useTabs(
+    ({ state, actions }) => ({
+      activeTab: state.activeTab,
+      setActiveTab: actions.setActiveTab,
+      titles: state.titles,
+      isTabHighlighted: actions.isTabHighlighted,
+    })
+  );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -76,24 +79,28 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         )}
       >
         {titles.map((title, index) => (
-          <button
-            key={index}
-            onClick={() => setActiveTab(index)}
-            onKeyDown={handleKeyDown}
-            className={classNames(
-              'pb-1.5 px-2 border-b-2 hover:opacity-80 outline-none text-nowrap',
-              {
-                'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
-                  index === activeTab,
-              },
-              {
-                'border-transparent text-raisin-black dark:text-bright-gray':
-                  index !== activeTab,
-              }
+          <div className="flex" key={index}>
+            {isTabHighlighted(index) && (
+              <span className="h-1.5 w-1.5 rounded-full bg-[#FDCA40] animate-ping" />
             )}
-          >
-            {title}
-          </button>
+            <button
+              onClick={() => setActiveTab(index)}
+              onKeyDown={handleKeyDown}
+              className={classNames(
+                'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
+                {
+                  'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
+                    index === activeTab,
+                },
+                {
+                  'border-transparent text-raisin-black dark:text-bright-gray':
+                    index !== activeTab,
+                }
+              )}
+            >
+              <span>{title}</span>
+            </button>
+          </div>
         ))}
       </div>
     </div>
