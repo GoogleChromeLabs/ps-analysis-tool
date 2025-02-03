@@ -21,6 +21,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -39,6 +40,22 @@ export const TabsProvider = ({
   const [storage, _setStorage] = useState<string[]>(
     Array(items.length).fill('')
   );
+  const [highlightedTabs, setHighlightedTabs] = useState<number[]>([]);
+  const unhighlightTabTimeoutsRef = useRef<
+    ReturnType<typeof setTimeout>[] | null
+  >(null);
+
+  useEffect(() => {
+    const timeouts = unhighlightTabTimeoutsRef.current;
+
+    return () => {
+      if (timeouts) {
+        timeouts.forEach((timeout) => {
+          clearTimeout(timeout);
+        });
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setTabItems(items);
@@ -79,6 +96,23 @@ export const TabsProvider = ({
     [activeTab]
   );
 
+  const highlightTab = useCallback((tab: number) => {
+    setHighlightedTabs((prev) => [...prev, tab]);
+    unhighlightTabTimeoutsRef.current = [
+      ...(unhighlightTabTimeoutsRef.current ?? []),
+      setTimeout(() => {
+        setHighlightedTabs((prev) => prev.filter((i) => i !== tab));
+      }, 1000),
+    ];
+  }, []);
+
+  const isTabHighlighted = useCallback(
+    (tab: number) => {
+      return highlightedTabs.includes(tab);
+    },
+    [highlightedTabs]
+  );
+
   return (
     <TabsContext.Provider
       value={{
@@ -91,6 +125,8 @@ export const TabsProvider = ({
         actions: {
           setStorage,
           setActiveTab,
+          highlightTab,
+          isTabHighlighted,
         },
       }}
     >
