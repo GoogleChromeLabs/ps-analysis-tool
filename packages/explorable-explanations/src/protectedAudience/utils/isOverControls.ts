@@ -18,7 +18,7 @@
  */
 import app from '../app';
 
-export const isOverControls = (mouseX, mouseY) => {
+export const isOverControls = (mouseX: number, mouseY: number) => {
   // eslint-disable-next-line no-undef
   if (!process.env.IS_RUNNING_STANDALONE) {
     return false;

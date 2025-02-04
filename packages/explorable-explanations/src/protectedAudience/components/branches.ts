@@ -26,15 +26,16 @@ import {
   wipeAndRecreateInterestCanvas,
 } from '../utils';
 import FlowExpander from './flowExpander';
+import { Coordinates, CoordinateValue } from '../../types';
 
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
-let spacing, renderedBranchIds, endpoints;
+let spacing: number, renderedBranchIds: number[], endpoints: Coordinates[];
 
 type BranchesProps = {
-  x1: number | (() => number);
-  y1: number | (() => number);
+  x1: CoordinateValue;
+  y1: CoordinateValue;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   branches: any[];
   currentIndex: number;

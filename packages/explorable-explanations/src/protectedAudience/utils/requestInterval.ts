@@ -20,7 +20,7 @@
  * @param {number} delay - The interval duration in milliseconds.
  * @returns {object} An object with an `id` property for managing the interval.
  */
-export const requestInterval = (fn, delay) => {
+export const requestInterval = (fn: () => void, delay: number): object => {
   let start = performance.now();
   const handle: { id: number | null } = { id: null };
 

@@ -20,10 +20,8 @@ import app from '../app';
 import config from '../config';
 import { Coordinates } from '../../types';
 
-type CoordinatesWithText = {
+type CoordinatesWithText = Coordinates & {
   text: string;
-  x: number | (() => number);
-  y: number | (() => number);
 };
 
 const Text = ({ text, x, y }: CoordinatesWithText): Coordinates => {

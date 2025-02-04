@@ -23,14 +23,14 @@ import {
   isInsideBox,
   scrollToCoordinates,
 } from '../utils';
-
+import { CoordinateValue } from '../../types';
 const INFO_ICON_SPACING = 3;
 
 type BoxProps = {
   title: string;
   description: string;
-  x: number | (() => number);
-  y: number | (() => number);
+  x: CoordinateValue;
+  y: CoordinateValue;
   width?: number;
   height?: number;
   color?: string;
@@ -103,7 +103,7 @@ const Box = ({
 
     p.image(p.infoIcon, iconX, iconY, infoIconSize, infoIconSize);
 
-    const mouseClickedCallback = (mouseX, mouseY) => {
+    const mouseClickedCallback = (mouseX: number, mouseY: number) => {
       if (isInsideBox(mouseX, mouseY, iconX, iconY, infoIconSize)) {
         app.setInfo({
           title,

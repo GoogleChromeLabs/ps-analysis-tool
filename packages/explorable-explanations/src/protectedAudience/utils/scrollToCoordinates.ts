@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import app from '../app';
-export const scrollToCoordinates = (x, y, override = false) => {
+export const scrollToCoordinates = (x: number, y: number, override = false) => {
   if (!app.autoScroll || app.isRevisitingNodeInInteractiveMode) {
     return;
   }

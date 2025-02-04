@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const isInsideBox = (mouseX, mouseY, boxX, boxY, height) => {
+export const isInsideBox = (
+  mouseX: number,
+  mouseY: number,
+  boxX: number,
+  boxY: number,
+  height: number
+) => {
   return (
     mouseX >= boxX &&
     mouseX <= boxX + height &&

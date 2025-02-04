@@ -37,7 +37,13 @@ export const drawArrow = (size, x, y, direction = 'right') => {
   triangle(size, x, y, direction, 'black');
 };
 
-export const triangle = (size, x, y, direction = 'right', color = 'black') => {
+export const triangle = (
+  size: number,
+  x: number,
+  y: number,
+  direction = 'right',
+  color = 'black'
+) => {
   const p = app.p;
 
   if (!p) {
@@ -45,7 +51,7 @@ export const triangle = (size, x, y, direction = 'right', color = 'black') => {
   }
 
   const height = (p.sqrt(3) / 2) * size; // Height of an equilateral triangle
-  let angle;
+  let angle = 0;
 
   // Determine the angle of rotation based on the direction
   if (direction === 'right') {

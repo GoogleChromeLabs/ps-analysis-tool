@@ -19,12 +19,13 @@
 import config from '../config';
 import app from '../app';
 import * as utils from '../utils';
+import { CoordinateValue } from '../../types';
 
 const ARROW_SIZE = 10;
 
 type ProgressLineProps = {
-  x1: number | (() => number);
-  y1: number | (() => number);
+  x1: CoordinateValue;
+  y1: CoordinateValue;
   customWidth?: number;
   customHeight?: number;
   direction: string;

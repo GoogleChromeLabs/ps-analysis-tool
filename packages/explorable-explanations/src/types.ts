@@ -92,15 +92,17 @@ export type Circle = {
   visitedIndex: number | null;
 };
 
+export type CoordinateValue = number | (() => number);
+
 export type AuctionStep = {
   // component could be any function with an arbitrary number of arguments and return type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component?: (...args: any[]) => any;
   props?: {
-    x?: number | (() => number);
-    y?: number | (() => number);
-    x1?: number | (() => number);
-    y1?: number | (() => number);
+    x?: CoordinateValue;
+    y?: CoordinateValue;
+    x1?: CoordinateValue;
+    y1?: CoordinateValue;
     currentIndex?: number;
     branches?: {
       title?: string;
