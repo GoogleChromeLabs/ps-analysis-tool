@@ -211,7 +211,7 @@ const app: App = {
   },
   autoScroll: true,
   mouseOutOfDiv: false,
-  speedMultiplier: 3,
+  speedMultiplier: 1,
   p: null,
   igp: null,
   up: null,
