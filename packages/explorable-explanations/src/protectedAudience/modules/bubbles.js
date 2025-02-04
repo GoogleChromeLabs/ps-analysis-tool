@@ -358,6 +358,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 bubbles.showExpandedBubbles = () => {
   bubbles.clearAndRewriteBubbles();
   bubbles.generateBubbles(true);
+  app.setIsBubbleExpanded(true);
 
   app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
@@ -380,6 +381,7 @@ bubbles.showExpandedBubbles = () => {
   }
 
   app.bubbleContainerDiv.classList.toggle('expanded', true);
+  app.bubbleContainerDiv.style.width = '100%';
 
   app.closeButton.style.display = 'block';
   app.openButton.style.display = 'none';
@@ -389,6 +391,8 @@ bubbles.showExpandedBubbles = () => {
 bubbles.showMinifiedBubbles = () => {
   app.setHighlightedInterestGroup(null);
   app.bubbles.highlightedInterestGroup = null;
+  app.setIsBubbleExpanded(false);
+
   app.bubbles.minifiedSVG = bubbles.bubbleChart(app.bubbles.positions, {
     label: (d) =>
       [
@@ -409,6 +413,7 @@ bubbles.showMinifiedBubbles = () => {
   }
 
   app.bubbleContainerDiv.classList.toggle('expanded', false);
+  app.bubbleContainerDiv.style.width = 'fit-content';
 
   app.closeButton.style.display = 'none';
   app.openButton.style.display = 'block';
