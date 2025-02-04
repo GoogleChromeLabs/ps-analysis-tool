@@ -39,6 +39,11 @@ export const drawArrow = (size, x, y, direction = 'right') => {
 
 export const triangle = (size, x, y, direction = 'right', color = 'black') => {
   const p = app.p;
+
+  if (!p) {
+    return;
+  }
+
   const height = (p.sqrt(3) / 2) * size; // Height of an equilateral triangle
   let angle;
 

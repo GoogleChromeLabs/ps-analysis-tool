@@ -23,7 +23,7 @@ export const scrollToCoordinates = (x, y, override = false) => {
   }
 
   if (override) {
-    app.canvasParentElement.scrollTo({
+    app.canvasParentElement?.scrollTo({
       left: 0,
       top: 0,
       behavior: 'smooth',
@@ -31,12 +31,16 @@ export const scrollToCoordinates = (x, y, override = false) => {
     return;
   }
 
-  const rect = app.canvasParentElement.getBoundingClientRect();
+  const rect = app.canvasParentElement?.getBoundingClientRect();
+
+  if (!rect) {
+    return;
+  }
 
   const finalX = x - rect.left,
     finalY = y - rect.top;
 
-  app.canvasParentElement.scrollTo({
+  app.canvasParentElement?.scrollTo({
     left: finalX,
     top: finalY,
     behavior: 'smooth',

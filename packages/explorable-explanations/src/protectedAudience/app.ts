@@ -62,13 +62,8 @@ import type * as d3 from 'd3';
 /**
  * Internal dependencies
  */
-import {
-  AuctionStep,
-  Circle,
-  type Coordinates,
-  type P5,
-  type Bubble,
-} from '../types';
+import { AuctionStep, Circle, Coordinates, P5, Bubble, Step } from '../types';
+import { Config } from './config';
 
 type CoordinatesWithIndex = Coordinates & {
   index: number;
@@ -85,6 +80,8 @@ export type App = {
     pausedReason: string;
     infoIconsPositions: Record<string, unknown>[];
     renderUserIcon: () => void;
+    drawTimelineLine: () => void;
+    drawTimeline: (timeline: Config['timeline']) => void;
   };
   color: d3.ScaleOrdinal<string, string> | null;
   auction: {
@@ -199,7 +196,7 @@ export type App = {
   handleControls?: () => void;
   setIsBubbleExpanded: (isExpanded: boolean) => void;
   visitedSites: string[];
-  setCurrentStep: (step: number) => void;
+  setCurrentStep: (step: number | Step) => void;
 };
 
 // App defaults
@@ -214,6 +211,8 @@ const app: App = {
     pausedReason: '',
     infoIconsPositions: [],
     renderUserIcon: noop,
+    drawTimelineLine: noop,
+    drawTimeline: noop,
   },
   closeButton: null,
   color: null,
@@ -252,7 +251,7 @@ const app: App = {
   },
   autoScroll: true,
   mouseOutOfDiv: false,
-  speedMultiplier: 5,
+  speedMultiplier: 3,
   p: null,
   igp: null,
   up: null,

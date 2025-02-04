@@ -62,7 +62,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
   });
 
   if (clickedIndex > -1 && !app.isRevisitingNodeInInteractiveMode) {
-    app.promiseQueue.end();
+    app.promiseQueue?.end();
     flow.clearBelowTimelineCircles();
 
     app.shouldRespondToClick = false;
@@ -70,12 +70,16 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
     wipeAndRecreateUserCanvas();
     renderUserIcon();
-    bubbles.generateBubbles();
+    bubbles.generateBubbles?.();
 
     if (circles[clickedIndex].visited) {
-      app.promiseQueue.push((cb) => {
+      app.promiseQueue?.push((cb) => {
         wipeAndRecreateUserCanvas();
         wipeAndRecreateMainCanvas();
+
+        if (!p) {
+          return;
+        }
 
         p.push();
         p.stroke(colors.grey);
@@ -89,7 +93,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
           );
           p.pop();
 
-          if (circle.visited && index === clickedIndex) {
+          if (circle.visited && index === clickedIndex && up) {
             const position = circlePositions[clickedIndex];
             up.image(
               p.userIcon,
@@ -102,13 +106,13 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         });
 
         p.pop();
-        cb(null, true);
+        cb?.(undefined, true);
       });
     }
 
     app.drawFlows(clickedIndex);
 
-    app.promiseQueue.push((cb) => {
+    app.promiseQueue?.push((cb) => {
       if (config.timeline.circles[clickedIndex].visited) {
         app.visitedIndexOrder = app.visitedIndexOrder.filter((indexes) => {
           if (indexes === clickedIndex) {
@@ -165,10 +169,10 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       drawOpenArrowWithoutAnimationIcon();
       flow.setButtonsDisabilityState();
 
-      cb(null, true);
+      cb?.(undefined, true);
     });
 
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
   } else if (clickedIndex > -1 && app.isRevisitingNodeInInteractiveMode) {
     if (app.nodeIndexRevisited !== clickedIndex) {
       app.nodeIndexRevisited = clickedIndex;
@@ -181,32 +185,36 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       drawOpenArrowWithoutAnimationIcon();
       return;
     }
-    app.promiseQueue.end();
+    app.promiseQueue?.end();
     flow.clearBelowTimelineCircles();
 
     if (circles[clickedIndex].type === 'advertiser') {
+      // @ts-ignore
       app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
     } else {
+      // @ts-ignore
       app.auction.auctions[clickedIndex][0].props.y1 += 20;
     }
 
     app.shouldRespondToClick = false;
     app.drawFlows(clickedIndex);
 
-    app.promiseQueue.push((cb) => {
+    app.promiseQueue?.push((cb) => {
       app.shouldRespondToClick = true;
       app.isRevisitingNodeInInteractiveMode = false;
 
       if (circles[clickedIndex].type === 'advertiser') {
+        // @ts-ignore
         app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
       } else {
+        // @ts-ignore
         app.auction.auctions[clickedIndex][0].props.y1 -= 20;
       }
 
-      cb(null, true);
+      cb?.(undefined, true);
     });
 
-    app.promiseQueue.start();
+    app.promiseQueue?.start();
     wipeAndRecreateUserCanvas();
     renderUserIcon();
     drawOpenArrowWithoutAnimationIcon();

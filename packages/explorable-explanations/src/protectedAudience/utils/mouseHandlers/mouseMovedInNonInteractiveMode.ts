@@ -32,6 +32,9 @@ const mouseMovedInNonInteractiveMode = (event) => {
   let hoveredOverIcons = false;
 
   app.timeline.infoIconsPositions.forEach(({ x: _x, y: _y }) => {
+    if (!app.p) {
+      return;
+    }
     if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, infoIconSize)) {
       hoveredOverIcons = true;
     }
@@ -43,6 +46,10 @@ const mouseMovedInNonInteractiveMode = (event) => {
         hoveredOverIcons = true;
       }
     });
+  }
+
+  if (!app.p) {
+    return;
   }
 
   if (hoveredOverIcons) {

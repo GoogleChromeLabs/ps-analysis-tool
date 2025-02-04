@@ -22,7 +22,7 @@
  */
 export const requestInterval = (fn, delay) => {
   let start = performance.now();
-  const handle = { id: null };
+  const handle: { id: number | null } = { id: null };
 
   /**
    * Loop function executed on each animation frame.

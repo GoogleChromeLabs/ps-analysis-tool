@@ -41,7 +41,14 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
     infoIconSize,
   } = config.timeline;
 
+  if (!app.p) {
+    return;
+  }
+
   app.timeline.infoIconsPositions.forEach(({ x: _x, y: _y }) => {
+    if (!app.p) {
+      return;
+    }
     if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, infoIconSize)) {
       hoveredOverIcons = true;
     }
@@ -90,6 +97,9 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
   wipeAndRecreateUserCanvas();
 
   app.timeline.expandIconPositions.forEach((position, index) => {
+    if (!app.up || !app.p) {
+      return;
+    }
     app.up.push();
     if (index === app.nodeIndexRevisited) {
       app.up.rotate(app.p.TWO_PI / 2);

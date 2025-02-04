@@ -13,24 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependecies.
- */
-import app from '../app';
-import config from '../config';
-
-export const wipeAndRecreateMainCanvas = () => {
-  app.p.clear();
-  app.p.background(config.canvas.background);
-
-  app.timeline.drawTimelineLine();
-  app.timeline.drawTimeline(config.timeline);
-};
-
-export const wipeAndRecreateInterestCanvas = () => {
-  app.igp.clear();
-};
-
-export const wipeAndRecreateUserCanvas = () => {
-  app.up.clear();
+export const delay = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };

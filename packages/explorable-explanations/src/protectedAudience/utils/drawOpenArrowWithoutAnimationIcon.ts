@@ -19,6 +19,9 @@
 import app from '../app';
 export const drawOpenArrowWithoutAnimationIcon = () => {
   app.timeline.expandIconPositions.forEach((position, index) => {
+    if (!app.up || !app.p) {
+      return;
+    }
     app.up.push();
     if (index === app.nodeIndexRevisited) {
       app.up.rotate(app.p.TWO_PI / 2);

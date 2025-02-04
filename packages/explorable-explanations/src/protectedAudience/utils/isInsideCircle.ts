@@ -17,18 +17,16 @@
  * Internal dependencies.
  */
 import app from '../app';
-import config from '../config';
 
-export const drawText = (text, x, y) => {
-  const p = app.p;
-
-  if (text) {
-    p.push();
-    p.strokeWeight(0.1);
-    p.fill('#000'); // @todo Use color from config.
-    p.textSize(config.canvas.fontSize - 2);
-    p.textFont('sans-serif');
-    p.text(text, x, y);
-    p.pop();
+export const isInsideCircle = (
+  x: number,
+  y: number,
+  x0: number,
+  y0: number,
+  r: number
+) => {
+  if (!app.p) {
+    return false;
   }
+  return app.p.dist(x, y, x0, y0) <= r;
 };

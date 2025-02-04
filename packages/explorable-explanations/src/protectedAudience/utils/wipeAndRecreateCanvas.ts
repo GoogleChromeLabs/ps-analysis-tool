@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * Internal dependecies.
  */
+import app from '../app';
 import config from '../config';
 
-export const markVisitedValue = (index, value) => {
-  config.timeline.circles = config.timeline.circles.map((circle, i) => {
-    if (i < index && index >= 0) {
-      circle.visited = value;
-    }
-    return circle;
-  });
+export const wipeAndRecreateMainCanvas = () => {
+  if (!app.p) {
+    return;
+  }
+
+  app.p.clear();
+  app.p.background(config.canvas.background);
+
+  app.timeline?.drawTimelineLine?.();
+  app.timeline?.drawTimeline?.(config.timeline);
+};
+
+export const wipeAndRecreateInterestCanvas = () => {
+  app.igp?.clear();
+};
+
+export const wipeAndRecreateUserCanvas = () => {
+  app.up?.clear();
 };

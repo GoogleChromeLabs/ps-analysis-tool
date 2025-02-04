@@ -24,9 +24,12 @@ export const isOverControls = (mouseX, mouseY) => {
     return false;
   }
 
-  const controlsDivRect = document
-    .getElementById('controls-div')
-    .getBoundingClientRect();
+  const controlsDiv = document.getElementById('controls-div');
+  const controlsDivRect = controlsDiv?.getBoundingClientRect();
+
+  if (!controlsDivRect) {
+    return false;
+  }
 
   if (
     mouseX > controlsDivRect.left &&
@@ -37,7 +40,11 @@ export const isOverControls = (mouseX, mouseY) => {
     return true;
   }
 
-  const bubbleRect = app.minifiedBubbleContainer.getBoundingClientRect();
+  const bubbleRect = app.minifiedBubbleContainer?.getBoundingClientRect();
+
+  if (!bubbleRect) {
+    return false;
+  }
 
   if (
     mouseX > bubbleRect.left &&
@@ -48,7 +55,11 @@ export const isOverControls = (mouseX, mouseY) => {
     return true;
   }
 
-  const closeButton = app.closeButton.getBoundingClientRect();
+  const closeButton = app.closeButton?.getBoundingClientRect();
+
+  if (!closeButton) {
+    return false;
+  }
 
   if (
     mouseX > closeButton.left &&

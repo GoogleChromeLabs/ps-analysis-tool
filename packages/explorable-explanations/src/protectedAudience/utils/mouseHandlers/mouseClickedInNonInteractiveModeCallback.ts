@@ -66,12 +66,15 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     app.nodeIndexRevisited = -1;
     wipeAndRecreateUserCanvas();
 
-    circles.forEach((circle, index) => {
+    circles.forEach((__, index) => {
+      if (!p) {
+        return;
+      }
       p.push();
       p.stroke(colors.visitedBlue);
       const position = circlePositions[index];
-      up.image(
-        app.p.completedCheckMark,
+      up?.image(
+        p.completedCheckMark,
         position.x - user.width / 2,
         position.y - user.height / 2,
         user.width,
@@ -86,38 +89,45 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
   flow.clearBelowTimelineCircles();
 
   if (circles[clickedIndex].type === 'advertiser') {
+    // @ts-ignore
     app.joinInterestGroup.joinings[clickedIndex][0].props.y1 += 20;
   } else {
+    // @ts-ignore
     app.auction.auctions[clickedIndex][0].props.y1 += 20;
   }
 
   app.isRevisitingNodeInInteractiveMode = true;
   app.drawFlows(clickedIndex);
 
-  app.promiseQueue.push((cb) => {
+  app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
     renderUserIcon();
 
     app.isRevisitingNodeInInteractiveMode = false;
 
     if (circles[clickedIndex].type === 'advertiser') {
+      // @ts-ignore
       app.joinInterestGroup.joinings[clickedIndex][0].props.y1 -= 20;
     } else {
+      // @ts-ignore
       app.auction.auctions[clickedIndex][0].props.y1 -= 20;
     }
 
-    cb(null, true);
+    cb?.(undefined, true);
   });
 
-  app.promiseQueue.start();
+  app.promiseQueue?.start();
   wipeAndRecreateUserCanvas();
 
-  circles.forEach((circle, index) => {
-    app.p.push();
-    app.p.stroke(colors.visitedBlue);
+  circles.forEach((__, index) => {
+    if (!p) {
+      return;
+    }
+    p.push();
+    p.stroke(colors.visitedBlue);
     const position = circlePositions[index];
-    up.image(
-      app.p.completedCheckMark,
+    up?.image(
+      p.completedCheckMark,
       position.x - user.width / 2,
       position.y - user.height / 2,
       user.width,

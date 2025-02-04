@@ -13,6 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const delay = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
+import config from '../config';
+
+export const drawText = (text, x, y) => {
+  const p = app.p;
+
+  if (!p) {
+    return;
+  }
+
+  if (text) {
+    p.push();
+    p.strokeWeight(0.1);
+    p.fill('#000'); // @todo Use color from config.
+    p.textSize(config.canvas.fontSize - 2);
+    p.textFont('sans-serif');
+    p.text(text, x, y);
+    p.pop();
+  }
 };

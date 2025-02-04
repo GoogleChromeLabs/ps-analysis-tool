@@ -16,8 +16,13 @@
 /**
  * Internal dependencies.
  */
-import app from '../app';
+import config from '../config';
 
-export const isInsideCircle = (x, y, x0, y0, r) => {
-  return app.p.dist(x, y, x0, y0) <= r;
+export const markVisitedValue = (index: number, value: boolean) => {
+  config.timeline.circles = config.timeline.circles.map((circle, i) => {
+    if (i < index && index >= 0) {
+      circle.visited = value;
+    }
+    return circle;
+  });
 };
