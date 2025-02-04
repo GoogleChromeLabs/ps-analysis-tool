@@ -78,40 +78,48 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
           fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
-        {titles.map((title, index) => (
-          <div className="flex" key={index}>
-            <button
-              onClick={() => setActiveTab(index)}
-              onKeyDown={handleKeyDown}
-              className={classNames(
-                'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
-                {
-                  'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
-                    index === activeTab,
-                },
-                {
-                  'border-transparent text-raisin-black dark:text-bright-gray':
-                    index !== activeTab,
-                }
-              )}
-            >
-              <span>{title}</span>
-            </button>
-            <div
-              className={classNames(
-                'h-4 w-4 rounded-full text-center text-xxxs font-bold text-bright-gray',
-                {
-                  'bg-transparent': !isTabHighlighted(index),
-                },
-                {
-                  'bg-[#cc3300]': isTabHighlighted(index),
-                }
-              )}
-            >
-              {isTabHighlighted(index) && 1}
+        {titles.map((title, index) => {
+          const isHighlighted = isTabHighlighted(index);
+          const isNumber = typeof isHighlighted === 'number';
+
+          return (
+            <div className="flex" key={index}>
+              <button
+                onClick={() => setActiveTab(index)}
+                onKeyDown={handleKeyDown}
+                className={classNames(
+                  'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
+                  {
+                    'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
+                      index === activeTab,
+                  },
+                  {
+                    'border-transparent text-raisin-black dark:text-bright-gray':
+                      index !== activeTab,
+                  }
+                )}
+              >
+                <span>{title}</span>
+              </button>
+              <div
+                className={classNames(
+                  'h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
+                  {
+                    'bg-transparent': !isHighlighted,
+                  },
+                  {
+                    'bg-mahogany': isHighlighted,
+                  },
+                  {
+                    'h-4 w-4': isNumber,
+                  }
+                )}
+              >
+                {isNumber ? isHighlighted : ''}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

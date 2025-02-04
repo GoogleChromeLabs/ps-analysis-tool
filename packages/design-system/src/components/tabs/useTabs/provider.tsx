@@ -41,7 +41,9 @@ export const TabsProvider = ({
   const [storage, _setStorage] = useState<string[]>(
     Array(items.length).fill('')
   );
-  const [highlightedTabs, setHighlightedTabs] = useState<number[]>([]);
+  const [highlightedTabs, setHighlightedTabs] = useState<
+    Record<number, number | boolean>
+  >({});
 
   useEffect(() => {
     activeTabRef.current = activeTab;
@@ -86,26 +88,37 @@ export const TabsProvider = ({
     [activeTab]
   );
 
-  const highlightTab = useCallback((tab: number) => {
-    if (tab === activeTabRef.current) {
-      return;
-    }
+  const highlightTab = useCallback(
+    (tab: number, count: number | boolean = true) => {
+      if (tab === activeTabRef.current) {
+        return;
+      }
 
-    setHighlightedTabs((prev) => [...prev, tab]);
-  }, []);
+      setHighlightedTabs((prev) => {
+        const next = { ...prev };
+        next[tab] = count;
+        return next;
+      });
+    },
+    []
+  );
 
   const isTabHighlighted = useCallback(
     (tab: number) => {
-      return highlightedTabs.includes(tab);
+      return highlightedTabs?.[tab] ?? false;
     },
     [highlightedTabs]
   );
 
   useEffect(() => {
-    if (highlightedTabs.includes(activeTab)) {
-      setHighlightedTabs((prev) => prev.filter((i) => i !== activeTab));
+    if (highlightedTabs[activeTabRef.current]) {
+      setHighlightedTabs((prev) => {
+        const next = { ...prev };
+        next[activeTabRef.current] = false;
+        return next;
+      });
     }
-  }, [activeTab, highlightedTabs]);
+  }, [activeTab, highlightTab, highlightedTabs]);
 
   return (
     <TabsContext.Provider

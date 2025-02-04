@@ -37,8 +37,8 @@ export interface TabsStoreContext {
   actions: {
     setStorage: (data: string, index?: number) => void;
     setActiveTab: (tab: number) => void;
-    highlightTab: (tab: number) => void;
-    isTabHighlighted: (tab: number) => boolean;
+    highlightTab: (tab: number, count?: boolean | number) => void;
+    isTabHighlighted: (tab: number) => boolean | number;
   };
 }
 
