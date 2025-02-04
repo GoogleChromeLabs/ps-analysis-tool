@@ -89,14 +89,16 @@ export const TabsProvider = ({
   );
 
   const highlightTab = useCallback(
-    (tab: number, count: number | boolean = true) => {
+    (tab: number, count: number | boolean = true, increment = false) => {
       if (tab === activeTabRef.current) {
         return;
       }
 
       setHighlightedTabs((prev) => {
         const next = { ...prev };
-        next[tab] = count;
+        const prevCount = typeof next[tab] === 'number' ? next[tab] : 0;
+
+        next[tab] = increment ? prevCount + 1 : count;
         return next;
       });
     },
