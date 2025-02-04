@@ -40,6 +40,7 @@ describe('Tabs', () => {
       activeTab: 0,
       titles: ['title1', 'title2'],
       setActiveTab,
+      isTabHighlighted: jest.fn(() => false),
     });
 
     render(<Tabs />);

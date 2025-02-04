@@ -99,7 +99,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                   }
                 )}
               >
-                <span>{title}</span>
+                {title}
               </button>
               <div
                 className={classNames(
