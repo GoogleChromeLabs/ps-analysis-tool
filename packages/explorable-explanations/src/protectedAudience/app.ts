@@ -14,44 +14,6 @@
  * limitations under the License.
  */
 
-// infoIcon: p5.Image;
-//   expandIcon: p5.Image;
-//   openWithoutAnimation: p5.Image;
-//   userIcon: p5.Image;
-//   playIcon: p5.Image;
-//   pauseIcon: p5.Image;
-//   completedCheckMark: p5.Image;
-//   isMultiSeller: boolean;
-//   isInteractiveMode: boolean;
-//   autoScroll: boolean;
-//   speedMultiplier: number;
-//   expandedBubbleX: number;
-//   expandedBubbleY: number;
-//   expandedBubbleWidth: number;
-//   expandedBubbleHeight: number;
-//   minifiedBubbleX: number;
-//   minifiedBubbleY: number;
-//   minifiedBubbleWidth: number;
-//   minifiedBubbleHeight: number;
-//   autoExpand: boolean;
-//   setSelectedDateTime: (time: string) => void;
-//   setSelectedAdUnit: (adUnit: string) => void;
-//   setCurrentStep: (step: number) => void;
-//   setCurrentSite: (site: Circle | null) => void;
-//   setInfo: (
-//     info: {
-//       title: string;
-//       description: string;
-//       info: string | boolean;
-//       key: number;
-//     } | null
-//   ) => void;
-//   setHighlightedInterestGroup: () => void;
-//   setPlayState: (play: boolean) => void;
-//   getPlayState: () => void;
-//   setSelectedExpandedFlow: () => void;
-//   setIsBubbleExpanded: (isExpanded: boolean) => void;
-
 /**
  * External dependencies
  */
@@ -62,8 +24,26 @@ import type * as d3 from 'd3';
 /**
  * Internal dependencies
  */
-import { AuctionStep, Circle, Coordinates, P5, Bubble, Step } from '../types';
+import { AuctionStep, Coordinates, P5, Bubble, SketchProps } from '../types';
 import { Config } from './config';
+
+type SketchSharedProps = Pick<
+  SketchProps,
+  | 'setIsBubbleExpanded'
+  | 'setSelectedExpandedFlow'
+  | 'setPlayState'
+  | 'getPlayState'
+  | 'setHighlightedInterestGroup'
+  | 'setInfo'
+  | 'setCurrentSite'
+  | 'setCurrentStep'
+  | 'setSelectedAdUnit'
+  | 'setSelectedDateTime'
+  | 'speedMultiplier'
+  | 'autoScroll'
+  | 'isInteractiveMode'
+  | 'isMultiSeller'
+>;
 
 type CoordinatesWithIndex = Coordinates & {
   index: number;
@@ -110,16 +90,13 @@ export type App = {
     highlightedInterestGroup: string | null;
   };
   bubblesContainerDiv: HTMLElement | null;
-  autoScroll: boolean;
   mouseOutOfDiv: boolean;
-  speedMultiplier: number;
   p: P5 | null;
   igp: P5 | null;
   up: P5 | null;
   isAutoExpand: boolean;
   isMultiSeller: boolean;
   cancelPromise: boolean;
-  isInteractiveMode: boolean;
   mouseX: number;
   mouseY: number;
   shouldRespondToClick: boolean;
@@ -129,27 +106,13 @@ export type App = {
   visitedIndexOrderTracker: number;
   isRevisitingNodeInInteractiveMode: boolean;
   nodeIndexRevisited: number;
-  setInfo: (
-    info: {
-      title: string;
-      description: string;
-      info: string | boolean;
-      key: number;
-    } | null
-  ) => void;
   createCanvas: () => void;
-  setHighlightedInterestGroup: () => void;
-  getPlayState: () => void;
-  setSelectedExpandedFlow: () => void;
-  setSelectedAdUnit: (adUnit: string) => void;
-  setSelectedDateTime: (time: string) => void;
   setUpTimeLine: () => void;
   setup: () => void;
   play: (play: boolean, pause?: boolean) => void;
   expandBubbleActions: () => void;
   minimiseBubbleActions: () => void;
   pause: () => void;
-  setPlayState: (play: boolean) => void;
   setPauseState: (pause: boolean) => void;
   setPauseReason: (pauseReason: string) => void;
   setupLoop: (doNotPlay: boolean) => void;
@@ -190,14 +153,11 @@ export type App = {
   handleNonInteractiveNext: () => Promise<void> | void;
   handleInteractivePrev: () => Promise<void> | void;
   handleInteractiveNext: () => Promise<void> | void;
-  setCurrentSite: (site: Circle | null) => void;
   handlePrevButton: () => void;
   handleNextButton: () => void;
   handleControls?: () => void;
-  setIsBubbleExpanded: (isExpanded: boolean) => void;
   visitedSites: string[];
-  setCurrentStep: (step: number | Step) => void;
-};
+} & SketchSharedProps;
 
 // App defaults
 const app: App = {
