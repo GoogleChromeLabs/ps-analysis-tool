@@ -19,7 +19,7 @@
 import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
-import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
 import { AuctionStep } from '../../../../types.js';
 
 const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {

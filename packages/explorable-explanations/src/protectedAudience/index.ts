@@ -60,7 +60,6 @@ app.setup = () => {
   app.flow = { ...app.flow, ...flow };
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
-  // @ts-expect-error - bubbles is not defined in the app object
   app.bubbles = { ...app.bubbles, ...bubbles };
   const groups: string[] = [];
 

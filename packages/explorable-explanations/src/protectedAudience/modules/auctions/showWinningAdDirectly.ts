@@ -25,7 +25,7 @@ import {
   wipeAndRecreateUserCanvas,
 } from '../../utils';
 import flow from '../flow';
-import { SINGLE_SELLER_CONFIG } from '../flowConfig.jsx';
+import { SINGLE_SELLER_CONFIG } from '../flowConfig.tsx';
 import { AuctionStep } from '../../../types';
 import { Auction } from '.';
 

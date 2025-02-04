@@ -19,7 +19,7 @@
 import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
-import { SINGLE_SELLER_CONFIG } from '../../flowConfig.jsx';
+import { SINGLE_SELLER_CONFIG } from '../../flowConfig.tsx';
 import { AuctionStep } from '../../../../types';
 
 const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {

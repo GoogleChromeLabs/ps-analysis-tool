@@ -77,8 +77,8 @@ export type App = {
   };
   bubbles: {
     positions: Bubble[];
-    minifiedSVG: null;
-    expandedSVG: null;
+    minifiedSVG: SVGElement | null;
+    expandedSVG: SVGElement | null;
     interestGroupCounts: number;
     minifiedBubbleX: number;
     minifiedBubbleY: number;

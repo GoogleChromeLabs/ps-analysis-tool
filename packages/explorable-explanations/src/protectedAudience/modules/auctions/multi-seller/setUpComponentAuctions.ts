@@ -20,7 +20,7 @@ import app from '../../../app';
 import config, { publisherData } from '../../../config';
 import { Box, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
-import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
 import { AuctionStep, Coordinates } from '../../../../types';
 
 const BOX_WIDTH = 1200;

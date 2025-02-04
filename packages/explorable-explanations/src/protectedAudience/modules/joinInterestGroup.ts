@@ -22,7 +22,7 @@ import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import { ADVERTIZER_CONFIG } from './flowConfig.jsx';
+import { ADVERTIZER_CONFIG } from './flowConfig.tsx';
 import { AuctionStep } from '../../types';
 import { noop } from '@google-psat/common';
 type JoinInterestGroup = {
