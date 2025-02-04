@@ -25,12 +25,58 @@ import * as d3 from 'd3';
 import app from '../app';
 import config from '../config';
 import * as utils from '../utils';
+import { noop } from '@google-psat/common';
+
+type Bubble = {
+  id?: string;
+  value?: number;
+  group?: string;
+  color?: string;
+  init?: () => void;
+  generateBubbles?: (recalculate?: boolean) => void;
+  bubbleChart?: (
+    data: Bubble[],
+    options: {
+      name?: (d: Bubble) => string;
+      label?: (d: Bubble) => string;
+      value?: (d: Bubble) => number;
+    }
+  ) => SVGElement | null;
+  clearAndRewriteBubbles?: () => void;
+  calculateTotalBubblesForAnimation?: (index: number) => number;
+  speedCalculator?: (distance: number) => number;
+  showExpandedBubbles: () => void;
+  showMinifiedBubbles: () => void;
+  reverseBarrageAnimation?: (index: number) => Promise<void>;
+  barrageAnimation?: (index: number) => Promise<void>;
+  expandedSVG: SVGElement | null;
+  minifiedSVG: SVGElement | null;
+};
+
+type PositionOfCircle = {
+  x: number;
+  y: number;
+  color?: string;
+  target: p5.Vector;
+  distance: number;
+};
 
 /**
  * @module bubbles
  * Handles interest group bubbles.
  */
-const bubbles = {};
+const bubbles: Bubble = {
+  init: noop,
+  generateBubbles: noop,
+  bubbleChart: () => null,
+  clearAndRewriteBubbles: noop,
+  calculateTotalBubblesForAnimation: () => 0,
+  speedCalculator: () => 0,
+  showExpandedBubbles: noop,
+  showMinifiedBubbles: noop,
+  expandedSVG: null,
+  minifiedSVG: null,
+};
 
 /**
  * Initializes the bubbles module by setting up the initial state.
@@ -58,7 +104,7 @@ bubbles.generateBubbles = (recalculate = false) => {
   }
 
   if (!recalculate) {
-    const totalInterestGroups = bubbles.calculateTotalBubblesForAnimation(
+    const totalInterestGroups = bubbles.calculateTotalBubblesForAnimation?.(
       currIndex + 1
     );
 
@@ -67,11 +113,12 @@ bubbles.generateBubbles = (recalculate = false) => {
         id: igGroup,
         value: igGroup.length,
         group: config.timeline.circles[currIndex].website,
-        color: app.color(config.timeline.circles[currIndex].website),
+        color: app.color?.(config.timeline.circles[currIndex].website),
       });
     });
 
     if (
+      totalInterestGroups &&
       totalInterestGroups < app.bubbles.positions.length &&
       !app.isInteractiveMode
     ) {
@@ -94,6 +141,11 @@ bubbles.generateBubbles = (recalculate = false) => {
  */
 bubbles.barrageAnimation = async (index) => {
   const p = app.igp;
+
+  if (!p) {
+    return;
+  }
+
   const {
     canvas: { height: canvasHeight, width: canvasWidth },
     timeline: {
@@ -114,12 +166,18 @@ bubbles.barrageAnimation = async (index) => {
   const width = config.flow.mediumBox.width;
   const height = config.flow.mediumBox.height;
 
-  const startingX = isExpanded
-    ? canvasWidth / 2
-    : app.bubbleContainerDiv.offsetLeft + 17;
-  const startingY = isExpanded
-    ? canvasHeight / 2
-    : app.bubbleContainerDiv.offsetTop + 17;
+  let startingX = 0;
+  let startingY = 0;
+
+  if (app.bubblesContainerDiv) {
+    startingX = isExpanded
+      ? canvasWidth / 2
+      : app.bubblesContainerDiv?.offsetLeft + 17;
+
+    startingY = isExpanded
+      ? canvasHeight / 2
+      : app.bubblesContainerDiv?.offsetTop + 17;
+  }
 
   // Calculate the current position of the interest group bubbles.
   const positionsOfCircles = app.bubbles.positions.map((data) => {
@@ -142,14 +200,14 @@ bubbles.barrageAnimation = async (index) => {
     );
 
     const distance = p.dist(startingX, startingY, targetX, targetY);
-
-    return { x: startingX, y: startingY, color, target, distance };
+    const speed = bubbles.speedCalculator?.(distance) ?? 0;
+    return { x: startingX, y: startingY, color, target, distance, speed };
   });
 
   await new Promise((resolve) => {
     const animate = () => {
       if (app.cancelPromise) {
-        resolve();
+        resolve(null);
         return;
       }
 
@@ -162,14 +220,14 @@ bubbles.barrageAnimation = async (index) => {
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
         if (app.cancelPromise) {
-          resolve();
+          resolve(null);
           return;
         }
 
         let { x, y } = positionsOfCircles[i];
         const { target, distance, color } = positionsOfCircles[i];
 
-        const speed = bubbles.speedCalculator(distance);
+        const speed = bubbles.speedCalculator?.(distance) ?? 0;
 
         const dir = p5.Vector.sub(target, p.createVector(x, y));
         dir.normalize();
@@ -202,7 +260,7 @@ bubbles.barrageAnimation = async (index) => {
         }) ||
         app.cancelPromise
       ) {
-        resolve();
+        resolve(null);
       } else {
         requestAnimationFrame(animate); // Continue the animation.
       }
@@ -225,9 +283,14 @@ bubbles.barrageAnimation = async (index) => {
  * @param {number} index - The index of the timeline from which the bubbles are being reversed.
  * @returns {Promise<void>} Resolves when all bubbles have returned to their original positions.
  */
-bubbles.reverseBarrageAnimation = async (index) => {
+bubbles.reverseBarrageAnimation = async (index: number): Promise<void> => {
   const dspTags = app.joinInterestGroup.joinings[index][1];
   const igp = app.igp;
+
+  if (!dspTags || !igp) {
+    return;
+  }
+
   const {
     timeline: {
       circleProps: { diameter },
@@ -242,10 +305,12 @@ bubbles.reverseBarrageAnimation = async (index) => {
   const smallCircleDiameter = diameter / 5;
   const midPointX = isExpanded
     ? config.canvas.width / 4 + 320
-    : app.bubbleContainerDiv.offsetLeft + 17;
-  const midPointY = isExpanded ? 320 : app.bubbleContainerDiv.offsetTop + 17;
+    : (app.bubblesContainerDiv?.offsetLeft ?? 0) + 17;
+  const midPointY = isExpanded
+    ? 320
+    : (app.bubblesContainerDiv?.offsetTop ?? 0) + 17;
 
-  const positionsOfCircles = [];
+  const positionsOfCircles: PositionOfCircle[] = [];
   const currentIGGroupToBeAdded = circles[index]?.igGroupsCount ?? 0;
 
   for (let i = 0; i < interestGroupCounts + currentIGGroupToBeAdded; i++) {
@@ -292,7 +357,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
   await new Promise((resolve) => {
     const animate = () => {
       if (app.cancelPromise) {
-        resolve();
+        resolve(null);
         return;
       }
 
@@ -305,14 +370,14 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
       for (let i = 0; i < positionsOfCircles.length; i++) {
         if (app.cancelPromise) {
-          resolve();
+          resolve(null);
           return;
         }
 
         let { x, y } = positionsOfCircles[i];
         const { target, color, distance } = positionsOfCircles[i];
 
-        const speed = bubbles.speedCalculator(distance);
+        const speed = bubbles.speedCalculator?.(distance) ?? 0;
 
         const dir = p5.Vector.sub(target, igp.createVector(x, y));
 
@@ -323,6 +388,7 @@ bubbles.reverseBarrageAnimation = async (index) => {
 
         igp.push();
         igp.noStroke();
+        // @ts-expect-error - p5 type does not accept a string as a color
         igp.fill(color);
         igp.circle(x, y, smallCircleDiameter);
         igp.pop();
@@ -342,9 +408,20 @@ bubbles.reverseBarrageAnimation = async (index) => {
         }) ||
         app.cancelPromise
       ) {
-        resolve();
-        document.getElementById('interest-canvas').style.zIndex = 2;
-        document.getElementById('bubble-container-div').style.zIndex = 4;
+        resolve(null);
+        const interestCanvas = document.getElementById('interest-canvas');
+        const bubbleContainerDiv = document.getElementById(
+          'bubble-container-div'
+        );
+
+        if (interestCanvas) {
+          interestCanvas.style.zIndex = '2';
+        }
+
+        if (bubbleContainerDiv) {
+          bubbleContainerDiv.style.zIndex = '4';
+        }
+
         utils.wipeAndRecreateInterestCanvas();
       } else {
         requestAnimationFrame(animate);
@@ -356,25 +433,26 @@ bubbles.reverseBarrageAnimation = async (index) => {
 };
 
 bubbles.showExpandedBubbles = () => {
-  bubbles.clearAndRewriteBubbles();
-  bubbles.generateBubbles(true);
+  bubbles.clearAndRewriteBubbles?.();
+  bubbles.generateBubbles?.(true);
   app.setIsBubbleExpanded(true);
 
-  app.bubbles.expandedSVG = bubbles.bubbleChart(app.bubbles.positions, {
-    label: (d) =>
-      [
-        ...d.id
-          .split('.')
-          .pop()
-          .split(/(?=[A-Z][a-z])/g),
-      ].join('\n'),
-    value: (d) => d.value,
-    groupFn: (d) => d.group,
-    title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
-    width: app.bubbles.expandedCircleDiameter,
-    height: app.bubbles.expandedCircleDiameter,
-    margin: 4,
-  });
+  app.bubbles.expandedSVG =
+    bubbles.bubbleChart?.(app.bubbles.positions, {
+      label: (d) =>
+        [
+          ...d.id
+            .split('.')
+            .pop()
+            .split(/(?=[A-Z][a-z])/g),
+        ].join('\n'),
+      value: (d) => d.value,
+      groupFn: (d) => d.group,
+      title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+      width: app.bubbles.expandedCircleDiameter,
+      height: app.bubbles.expandedCircleDiameter,
+      margin: 4,
+    }) || null;
 
   if (app.bubbles.expandedSVG) {
     app.minifiedBubbleContainer.appendChild(app.bubbles.expandedSVG);
@@ -606,8 +684,10 @@ bubbles.clearAndRewriteBubbles = () => {
   app.minifiedBubbleContainer.innerHTML = '';
 
   if (!app.bubbles.isExpanded) {
-    app.countDisplay.innerHTML = app.bubbles.interestGroupCounts;
-    app.minifiedBubbleContainer.appendChild(app.countDisplay);
+    if (app.countDisplay?.innerHTML) {
+      app.countDisplay.innerHTML = String(app.bubbles.interestGroupCounts);
+      app.minifiedBubbleContainer.appendChild(app.countDisplay);
+    }
   }
 };
 

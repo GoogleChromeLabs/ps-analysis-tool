@@ -120,11 +120,15 @@ const Branches = async ({
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+      // eslint-disable-next-line consistent-return
+      return endpoints[1];
     } else {
       scrollToCoordinates(endpoints[0].x, endpoints[0].y);
-      await FlowExpander({
+      const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
+      // eslint-disable-next-line consistent-return
+      return nextTip;
     }
   }
 
@@ -142,16 +146,19 @@ const Branches = async ({
 
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
       await delay(1000);
-      // return endpoints[1];
+      // eslint-disable-next-line consistent-return
+      return endpoints[1];
     } else {
       scrollToCoordinates(endpoints[0].x, endpoints[0].y);
 
-      await FlowExpander({
+      const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
         typeOfBranches,
       });
 
       await delay(1000);
+      // eslint-disable-next-line consistent-return
+      return nextTip;
     }
   }
 
@@ -165,11 +172,15 @@ const Branches = async ({
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+      // eslint-disable-next-line consistent-return
+      return endpoints[1];
     } else {
       scrollToCoordinates(endpoints[0].x, endpoints[0].y);
-      await FlowExpander({
+      const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
+      // eslint-disable-next-line consistent-return
+      return nextTip;
     }
   }
 
@@ -229,20 +240,20 @@ const Branches = async ({
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
     scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+    // eslint-disable-next-line consistent-return
+    return endpoints[1];
   }
 
   scrollToCoordinates(endpoints[0].x, endpoints[0].y);
 
-  await FlowExpander({
+  const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
   });
+  // eslint-disable-next-line consistent-return
+  return nextTip;
 };
 
-const drawDateTimeBranch = (
-  x: number,
-  y: number,
-  branch: { date: string; time: string }
-): { x: number; y: number } => {
+const drawDateTimeBranch = (x, y, branch) => {
   const p = app.p;
 
   if (!p) {
@@ -273,11 +284,7 @@ const drawDateTimeBranch = (
   return { x: x, y: y + 50 };
 };
 
-const drawBoxesBranch = (
-  x: number,
-  y: number,
-  branch: { title: string; description: string; color?: string }
-): { x: number; y: number } => {
+const drawBoxesBranch = (x, y, branch) => {
   const p = app.p;
 
   if (!p) {

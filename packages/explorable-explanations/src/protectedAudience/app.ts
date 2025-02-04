@@ -62,7 +62,13 @@ import type * as d3 from 'd3';
 /**
  * Internal dependencies
  */
-import { AuctionStep, Circle, type Coordinates, type P5 } from '../types';
+import {
+  AuctionStep,
+  Circle,
+  type Coordinates,
+  type P5,
+  type Bubble,
+} from '../types';
 
 type CoordinatesWithIndex = Coordinates & {
   index: number;
@@ -78,6 +84,7 @@ export type App = {
     currentIndex: number;
     pausedReason: string;
     infoIconsPositions: Record<string, unknown>[];
+    renderUserIcon: () => void;
   };
   color: d3.ScaleOrdinal<string, string> | null;
   auction: {
@@ -85,14 +92,14 @@ export type App = {
     nextTipCoordinates: Coordinates;
   };
   joinInterestGroup: {
-    joinings: [];
+    joinings: AuctionStep[][];
     nextTipCoordinates: Coordinates;
   };
   flow: {
     intervals: Record<string, unknown>;
   };
   bubbles: {
-    positions: [];
+    positions: Bubble[];
     minifiedSVG: null;
     expandedSVG: null;
     interestGroupCounts: number;
@@ -103,7 +110,9 @@ export type App = {
     expandedBubbleY: number;
     expandedCircleDiameter: number;
     minifiedCircleDiameter: number;
+    highlightedInterestGroup: string | null;
   };
+  bubblesContainerDiv: HTMLElement | null;
   autoScroll: boolean;
   mouseOutOfDiv: boolean;
   speedMultiplier: number;
@@ -190,7 +199,8 @@ export type App = {
   handleControls?: () => void;
   setIsBubbleExpanded: (isExpanded: boolean) => void;
   visitedSites: string[];
-} & Pick<P5, 'setCurrentStep'>;
+  setCurrentStep: (step: number) => void;
+};
 
 // App defaults
 const app: App = {
@@ -203,6 +213,7 @@ const app: App = {
     currentIndex: 0,
     pausedReason: '',
     infoIconsPositions: [],
+    renderUserIcon: noop,
   },
   closeButton: null,
   color: null,
@@ -237,10 +248,11 @@ const app: App = {
     expandedBubbleY: 0,
     expandedCircleDiameter: 640,
     minifiedCircleDiameter: 50,
+    highlightedInterestGroup: null,
   },
   autoScroll: true,
   mouseOutOfDiv: false,
-  speedMultiplier: 1,
+  speedMultiplier: 5,
   p: null,
   igp: null,
   up: null,
@@ -296,6 +308,7 @@ const app: App = {
   openButton: null,
   usedNextOrPrev: false,
   promiseQueue: null,
+  bubblesContainerDiv: null,
   canvasEventListerners: {
     main: {
       mouseOver: {},

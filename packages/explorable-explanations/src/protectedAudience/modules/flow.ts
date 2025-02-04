@@ -18,12 +18,31 @@
  */
 import app from '../app';
 import config from '../config';
+import { noop } from '@google-psat/common';
+
+type Flow = {
+  getTimelineCircleCoordinates: (index: number) => { x: number; y: number };
+  createOverrideBox: (
+    x1: number,
+    y1: number,
+    x2: number,
+    height: number
+  ) => void;
+  clearBelowTimelineCircles: () => void;
+  setButtonsDisabilityState: () => void;
+};
 
 /**
  * @module Flow
  * Handles animations, coordinate calculations, and visual effects for the timeline and interest groups.
  */
-const flow = {};
+
+const flow: Flow = {
+  getTimelineCircleCoordinates: () => ({ x: 0, y: 0 }),
+  createOverrideBox: noop,
+  clearBelowTimelineCircles: noop,
+  setButtonsDisabilityState: noop,
+};
 
 /**
  * Gets the coordinates of a timeline circle based on its index.
@@ -52,6 +71,11 @@ flow.getTimelineCircleCoordinates = (index) => {
  */
 flow.createOverrideBox = (x1, y1, x2, height) => {
   const p = app.p;
+
+  if (!p) {
+    return;
+  }
+
   const paddingLeft = 1;
 
   const width = x2 - x1;
@@ -71,6 +95,10 @@ flow.createOverrideBox = (x1, y1, x2, height) => {
 flow.clearBelowTimelineCircles = () => {
   const { y } = flow.getTimelineCircleCoordinates(0);
   const p = app.p;
+
+  if (!p) {
+    return;
+  }
 
   p.push();
   p.noStroke();

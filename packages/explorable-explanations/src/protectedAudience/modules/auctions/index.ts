@@ -34,7 +34,7 @@ import { showWinningAdDirectly } from './showWinningAdDirectly';
 import { noop } from '@google-psat/common';
 import { AuctionStep, Step } from '../../../types';
 
-type Auction = {
+export type Auction = {
   setupAuctions?: () => void;
   setUp?: (index: number) => void;
   draw?: (index: number) => void;
@@ -114,6 +114,7 @@ auction.draw = (index: number) => {
   }
 
   app.promiseQueue.push((cb) => {
+    // @ts-ignore
     app.setCurrentSite(config.timeline.circles[index]);
     cb?.(undefined, true);
   });
@@ -145,7 +146,7 @@ auction.draw = (index: number) => {
 
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (props?.showBarrageAnimation) {
-          await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
+          await bubbles.barrageAnimation?.(index); // eslint-disable-line no-await-in-loop
 
           if (app.cancelPromise) {
             cb?.(undefined, true);
@@ -191,7 +192,7 @@ auction.draw = (index: number) => {
       }
 
       showWinningAdDirectly(
-        cb,
+        cb as (error: Error | null, success: boolean) => void,
         props,
         index,
         auction.draw,

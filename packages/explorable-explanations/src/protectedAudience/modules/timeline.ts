@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import config from '../config';
+import config, { Config } from '../config';
 import app from '../app';
 import {
   wipeAndRecreateInterestCanvas,
@@ -29,12 +29,30 @@ import {
   mouseMovedInInteractiveMode,
   mouseMovedInNonInteractiveMode,
 } from '../utils/mouseHandlers';
+import { noop } from '@google-psat/common';
+type Timeline = {
+  init: () => void;
+  drawLineAboveCircle: (index: number, completed?: boolean) => void;
+  drawTimeline: (timeline: Config['timeline']) => void;
+  drawTimelineLine: () => void;
+  drawCircle: (index: number, completed?: boolean) => void;
+  renderUserIcon: () => void;
+  eraseAndRedraw: () => void;
+};
 
 /**
  * @module Timeline
  * Handles the drawing and interaction of the timeline, including circles, lines, and user-related animations.
  */
-const timeline = {};
+const timeline: Timeline = {
+  init: noop,
+  drawLineAboveCircle: noop,
+  drawTimeline: noop,
+  drawTimelineLine: noop,
+  drawCircle: noop,
+  renderUserIcon: noop,
+  eraseAndRedraw: noop,
+};
 
 /**
  * Initializes the timeline by setting up publisher indices, event listeners,
@@ -47,6 +65,10 @@ timeline.init = () => {
       app.timeline.circlePublisherIndices.push(index);
     }
   });
+
+  if (!app.p) {
+    return;
+  }
 
   app.p.mouseMoved = (event) => {
     if (app.isInteractiveMode) {
@@ -82,9 +104,14 @@ timeline.init = () => {
  * @param {boolean} [completed] - Whether the line should be styled as completed.
  */
 timeline.drawLineAboveCircle = (index, completed = false) => {
+  const p = app.p;
+
+  if (!p) {
+    return;
+  }
+
   const { position, colors } = config.timeline;
   const { diameter } = config.timeline.circleProps;
-  const p = app.p;
   const positions = app.timeline.circlePositions[index];
   const strokeColor =
     completed && !app.isInteractiveMode ? colors.visitedBlue : colors.grey;
@@ -96,9 +123,14 @@ timeline.drawLineAboveCircle = (index, completed = false) => {
 };
 
 timeline.drawTimeline = ({ position, circleProps, circles }) => {
+  const p = app.p;
+
+  if (!p) {
+    return;
+  }
+
   const { diameter, verticalSpacing } = circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
-  const p = app.p;
 
   p.textAlign(p.CENTER, p.CENTER);
   // Draw circles and text at the timeline position
@@ -148,6 +180,11 @@ timeline.drawTimelineLine = () => {
   const circleVerticalSpace = verticalSpacing + diameter;
   const yPositonForLine = position.y + circleVerticalSpace;
   const p = app.p;
+
+  if (!p) {
+    return;
+  }
+
   let x = 0;
 
   p.push();
@@ -179,6 +216,11 @@ timeline.drawCircle = (index, completed = false) => {
   const { circleProps, user, circles, colors } = config.timeline;
   const position = app.timeline.circlePositions[index];
   const { diameter } = circleProps;
+  // const p = app.p;
+
+  if (!app.p || !app.up) {
+    return;
+  }
 
   app.p.push();
 
@@ -259,6 +301,10 @@ timeline.renderUserIcon = () => {
     return;
   }
 
+  if (!app.p || !app.up) {
+    return;
+  }
+
   app.up.image(
     app.p.userIcon,
     circlePosition.x - user.width / 2,
@@ -274,6 +320,10 @@ timeline.eraseAndRedraw = () => {
 
   if (app.isInteractiveMode) {
     config.timeline.circles.forEach((circle, index) => {
+      if (!app.p) {
+        return;
+      }
+
       if (circle.visited === true) {
         app.p.push();
         app.p.stroke(colors.visitedBlue);

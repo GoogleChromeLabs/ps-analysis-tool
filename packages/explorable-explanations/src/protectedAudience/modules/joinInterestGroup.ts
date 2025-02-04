@@ -23,12 +23,25 @@ import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
 import { ADVERTIZER_CONFIG } from './flowConfig.jsx';
+import { AuctionStep } from '../../types';
+import { noop } from '@google-psat/common';
+type JoinInterestGroup = {
+  joinings: AuctionStep[][];
+  setupJoinings: () => void;
+  setUp: (index: number) => void;
+  draw: (index: number) => void;
+};
 
 /**
  * @module joinInterestGroup
  * Handles the setup and rendering of joining steps for advertisers in a flowchart-like interface.
  */
-const joinInterestGroup = {};
+const joinInterestGroup: JoinInterestGroup = {
+  joinings: [],
+  setupJoinings: noop,
+  setUp: noop,
+  draw: noop,
+};
 
 const ARROW_SIZE = 10;
 
@@ -37,7 +50,7 @@ const ARROW_SIZE = 10;
  * Loops through each circle and sets up joining steps.
  */
 joinInterestGroup.setupJoinings = () => {
-  config.timeline.circles.forEach((circle, index) => {
+  config.timeline.circles.forEach((__, index) => {
     joinInterestGroup.setUp(index);
   });
 };
@@ -47,7 +60,7 @@ joinInterestGroup.setupJoinings = () => {
  * Adds steps and coordinates for rendering components like Boxes and ProgressLines.
  * @param {number} index - The index of the circle in the timeline to set up.
  */
-joinInterestGroup.setUp = (index) => {
+joinInterestGroup.setUp = (index: number) => {
   const { circles } = config.timeline;
   const { box } = config.flow;
   const currentCircle = circles[index];
@@ -55,11 +68,11 @@ joinInterestGroup.setUp = (index) => {
   const { x, y } = flow.getTimelineCircleCoordinates(index);
 
   if (currentCircle.type !== 'advertiser') {
-    app.joinInterestGroup.joinings.push(null);
+    app.joinInterestGroup.joinings.push([]);
     return;
   }
 
-  const steps = [];
+  const steps: AuctionStep[] = [];
 
   // Add a downward progress line
   steps.push({
@@ -85,7 +98,9 @@ joinInterestGroup.setUp = (index) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.joinInterestGroup.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.joinInterestGroup.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -115,7 +130,9 @@ joinInterestGroup.setUp = (index) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.joinInterestGroup.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.joinInterestGroup.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -156,7 +173,11 @@ joinInterestGroup.setUp = (index) => {
  * Each step is rendered sequentially with delays.
  * @param {number} index - The index of the circle in the timeline to draw.
  */
-joinInterestGroup.draw = (index) => {
+joinInterestGroup.draw = (index: number) => {
+  if (!app.p) {
+    return;
+  }
+
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
   const steps = app.joinInterestGroup.joinings[index];
@@ -165,50 +186,50 @@ joinInterestGroup.draw = (index) => {
     return;
   }
 
-  app.promiseQueue.push((cb) => {
+  app.promiseQueue?.push((cb) => {
     if (index > 1 && config.timeline.circles[index - 1].type === 'publisher') {
       app.setCurrentSite(config.timeline.circles[index - 2]);
     }
 
-    cb(null, true);
+    cb?.(undefined, true);
   });
 
   for (const step of steps) {
-    app.promiseQueue.push(async (cb) => {
+    app.promiseQueue?.push(async (cb) => {
       const { component, props, callBack, delay } = step;
-      const returnValue = await component(props); // eslint-disable-line no-await-in-loop
+      const returnValue = await component?.(props); // eslint-disable-line no-await-in-loop
 
       if (callBack) {
         callBack(returnValue);
       }
 
-      if (!app.isRevisitingNodeInInteractiveMode) {
+      if (!app.isRevisitingNodeInInteractiveMode && delay) {
         await utils.delay(delay / app.speedMultiplier); // eslint-disable-line no-await-in-loop
       }
-      cb(null, true);
+      cb?.(undefined, true);
     });
   }
 
-  app.promiseQueue.push(async (cb) => {
+  app.promiseQueue?.push(async (cb) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
-      await bubbles.reverseBarrageAnimation(index);
+      await bubbles.reverseBarrageAnimation?.(index);
       app.setCurrentSite(config.timeline.circles[index]);
     }
 
     if (app.bubbles.isExpanded) {
-      bubbles.showExpandedBubbles();
+      bubbles.showExpandedBubbles?.();
     } else {
-      bubbles.showMinifiedBubbles();
+      bubbles.showMinifiedBubbles?.();
     }
-    cb(null, true);
+    cb?.(undefined, true);
   });
 
-  app.promiseQueue.push((cb) => {
+  app.promiseQueue?.push((cb) => {
     if (!app.isRevisitingNodeInInteractiveMode) {
       flow.clearBelowTimelineCircles();
       app.timeline.infoIconsPositions = [];
     }
-    cb(null, true);
+    cb?.(undefined, true);
   });
 };
 

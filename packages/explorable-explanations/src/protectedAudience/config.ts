@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
@@ -24,7 +23,7 @@ type Ripple = {
   baseSpeed: number;
 };
 
-type Config = {
+export type Config = {
   canvas: {
     width: number;
     height: number;
@@ -64,10 +63,9 @@ type Config = {
       box: {
         background: string;
         notBrowser: string;
-        noData: string;
         text: string;
         borderStroke: number[];
-        browser: string;
+        noData: string;
       };
     };
   };
@@ -200,12 +198,11 @@ const config: Config = {
         noData: '#e9ecef',
         text: '#000',
         borderStroke: [0, 0, 0],
-        browser: '#000',
       },
     },
   },
   rippleEffect: {
-    ripples: [] as Ripple[],
+    ripples: [],
     numRipples: 3,
     maxRadius: 200,
     time: 4000,

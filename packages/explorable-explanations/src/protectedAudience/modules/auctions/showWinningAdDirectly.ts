@@ -26,13 +26,15 @@ import {
 } from '../../utils';
 import flow from '../flow';
 import { SINGLE_SELLER_CONFIG } from '../flowConfig.jsx';
+import { AuctionStep } from '../../../types';
+import { Auction } from '.';
 
 export const showWinningAdDirectly = (
-  cb,
-  props,
-  index,
-  auctionDraw,
-  setupAuctions
+  cb: (error: Error | null, success: boolean) => void,
+  props: AuctionStep['props'],
+  index: number,
+  auctionDraw: Auction['draw'],
+  setupAuctions: Auction['setupAuctions']
 ) => {
   const { box } = config.flow;
   const {
@@ -45,11 +47,11 @@ export const showWinningAdDirectly = (
   }
 
   if (
-    props.title === 'runAdAuction()' &&
+    props?.title === 'runAdAuction()' &&
     app.bubbles.interestGroupCounts === 0
   ) {
     app.auction.auctions[index] = [];
-    app.promiseQueue.end();
+    app.promiseQueue?.end();
 
     app.auction.auctions[index].push({
       component: ProgressLine,
@@ -73,26 +75,33 @@ export const showWinningAdDirectly = (
       },
       delay: 1000,
       callBack: (_returnValue) => {
-        app.auction.nextTipCoordinates = _returnValue.down;
+        if (_returnValue.down) {
+          app.auction.nextTipCoordinates = _returnValue.down;
+        }
       },
     });
 
-    auctionDraw(index);
+    auctionDraw?.(index);
 
-    app.promiseQueue.push((_cb) => {
+    app.promiseQueue?.push((_cb) => {
       if (app.isRevisitingNodeInInteractiveMode) {
-        app.promiseQueue.push((__cb) => {
+        app.promiseQueue?.push((__cb) => {
           app.shouldRespondToClick = true;
           app.isRevisitingNodeInInteractiveMode = false;
 
           if (circles[index].type === 'advertiser') {
+            // @ts-expect-error - TODO: fix this
             app.joinInterestGroup.joinings[index][0].props.y1 -= 20;
-          } else {
-            app.auction.auctions[index][0].props.y1 -= 20;
+          } else if (app.auction.auctions[index][0].props?.y1) {
+            let y1 = app.auction.auctions[index][0].props.y1;
+            if (typeof y1 === 'number') {
+              y1 -= 20;
+              app.auction.auctions[index][0].props.y1 = y1;
+            }
           }
 
-          setupAuctions();
-          __cb(null, true);
+          setupAuctions?.();
+          __cb?.(undefined, true);
         });
       } else {
         if (config.timeline.circles[index].visited) {
@@ -116,9 +125,9 @@ export const showWinningAdDirectly = (
           app.bubbles.positions.splice(-(circles[index].igGroupsCount ?? 0));
 
           app.shouldRespondToClick = true;
-          bubbles.showMinifiedBubbles();
+          bubbles.showMinifiedBubbles?.();
           app.timeline.renderUserIcon();
-          setupAuctions();
+          setupAuctions?.();
           return;
         } else {
           const positions = app.timeline.circlePositions[index];
@@ -139,20 +148,20 @@ export const showWinningAdDirectly = (
           app.visitedIndexes += 1;
         }
 
-        bubbles.showMinifiedBubbles();
+        bubbles.showMinifiedBubbles?.();
         app.shouldRespondToClick = true;
 
         wipeAndRecreateUserCanvas();
         wipeAndRecreateMainCanvas();
         app.timeline.renderUserIcon();
         flow.setButtonsDisabilityState();
-        setupAuctions();
+        setupAuctions?.();
       }
-      _cb(null, true);
+      _cb?.(undefined, true);
     });
 
     try {
-      app.promiseQueue.start();
+      app.promiseQueue?.start();
     } catch (error) {
       // Fail silently
     }

@@ -19,6 +19,13 @@
  */
 import type p5 from 'p5';
 
+export type Bubble = {
+  id?: string;
+  value?: number;
+  group?: string;
+  color?: string;
+};
+
 export type Step = {
   title: string;
   description: string;

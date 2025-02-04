@@ -48,7 +48,7 @@ app.setUpTimeLine = () => {
   app.bubbles.minifiedSVG = null;
   app.timeline.currentIndex = 0;
   app.timeline.expandIconPositions = [];
-  bubbles.clearAndRewriteBubbles();
+  bubbles.clearAndRewriteBubbles?.();
   app.setup();
   timeline.init();
   auctions.setupAuctions?.();
@@ -60,6 +60,7 @@ app.setup = () => {
   app.flow = { ...app.flow, ...flow };
   app.timeline = { ...app.timeline, ...timeline };
   app.joinInterestGroup = { ...app.joinInterestGroup, ...joinInterestGroup };
+  // @ts-expect-error - bubbles is not defined in the app object
   app.bubbles = { ...app.bubbles, ...bubbles };
   const groups: string[] = [];
 
@@ -112,7 +113,7 @@ app.pause = () => {
 };
 
 app.minimiseBubbleActions = () => {
-  bubbles.generateBubbles(true);
+  bubbles.generateBubbles?.(true);
   app.bubbles.isExpanded = false;
   bubbles.showMinifiedBubbles();
   app.timeline.pausedReason;
@@ -125,7 +126,7 @@ app.minimiseBubbleActions = () => {
 app.expandBubbleActions = () => {
   app.bubbles.isExpanded = true;
   bubbles.showExpandedBubbles();
-  bubbles.generateBubbles(true);
+  bubbles.generateBubbles?.(true);
   if (!app.timeline.pausedReason) {
     app.timeline.pausedReason = 'bubble';
   }
@@ -199,7 +200,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       }
       flow.clearBelowTimelineCircles();
       utils.markVisitedValue(_currentIndex, true);
-      bubbles.generateBubbles();
+      bubbles.generateBubbles?.();
       bubbles.showMinifiedBubbles();
       timeline.eraseAndRedraw();
       timeline.renderUserIcon();
@@ -330,9 +331,8 @@ app.handleNonInteractivePrev = async () => {
   app.up?.clear();
   timeline.renderUserIcon();
 
-  app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
-    app.timeline.currentIndex
-  );
+  app.bubbles.interestGroupCounts =
+    bubbles.calculateTotalBubblesForAnimation?.(app.timeline.currentIndex) ?? 0;
 
   app.setPlayState(true);
   try {
@@ -428,11 +428,12 @@ app.handleNonInteractiveNext = async () => {
   //This is to set the data for previous site in react as well.
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
-  if (
-    app.bubbles.positions.length <
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex + 1)
-  ) {
-    bubbles.generateBubbles();
+  const totalBubbles = bubbles.calculateTotalBubblesForAnimation?.(
+    app.timeline.currentIndex + 1
+  );
+
+  if (totalBubbles && app.bubbles.positions.length < totalBubbles) {
+    bubbles.generateBubbles?.();
     bubbles.showMinifiedBubbles();
   }
 
@@ -451,9 +452,8 @@ app.handleNonInteractiveNext = async () => {
   app.up?.clear();
   timeline.renderUserIcon();
 
-  app.bubbles.interestGroupCounts = bubbles.calculateTotalBubblesForAnimation(
-    app.timeline.currentIndex
-  );
+  app.bubbles.interestGroupCounts =
+    bubbles.calculateTotalBubblesForAnimation?.(app.timeline.currentIndex) ?? 0;
 
   app.setPlayState(true);
   try {
