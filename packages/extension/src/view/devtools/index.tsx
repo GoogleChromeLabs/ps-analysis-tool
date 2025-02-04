@@ -46,6 +46,11 @@ document.body.classList.add(...classes);
 
 const root = document.getElementById('root');
 
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceMotionEvent = null;
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceOrientationEvent = null;
+
 if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>

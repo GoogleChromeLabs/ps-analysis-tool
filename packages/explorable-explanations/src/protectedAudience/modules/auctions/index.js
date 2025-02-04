@@ -30,6 +30,7 @@ import setUpRunadAuction from './setUpRunadAuction';
 import setUpAdUnitCode from './setUpAdUnitCode';
 import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
+import { showWinningAdDirectly } from './showWinningAdDirectly';
 
 /**
  * @module Auction
@@ -88,9 +89,7 @@ auction.setUp = (index) => {
 auction.draw = (index) => {
   app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
-  const steps = app.auction.auctions[index];
-
-  if (!steps) {
+  if (!app.auction.auctions[index]) {
     return;
   }
 
@@ -100,7 +99,7 @@ auction.draw = (index) => {
     cb(null, true);
   });
 
-  for (const step of steps) {
+  for (const step of app.auction.auctions[index]) {
     app.promiseQueue.push(async (cb) => {
       const { component, props, callBack, delay = 0 } = step;
       let ssp = '';
@@ -130,6 +129,7 @@ auction.draw = (index) => {
           await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
           if (app.cancelPromise) {
+            cb(null, true);
             return;
           }
 
@@ -143,6 +143,7 @@ auction.draw = (index) => {
           const y = props.y();
 
           if (app.cancelPromise) {
+            cb(null, true);
             return;
           }
           // eslint-disable-next-line no-await-in-loop
@@ -159,11 +160,20 @@ auction.draw = (index) => {
 
       if (!app.isRevisitingNodeInInteractiveMode) {
         if (app.cancelPromise) {
+          cb(null, true);
           return;
         }
 
         await utils.delay(delay / app.speedMultiplier); // eslint-disable-line no-await-in-loop
       }
+
+      showWinningAdDirectly(
+        cb,
+        props,
+        index,
+        auction.draw,
+        auction.setupAuctions
+      );
       cb(null, true);
     });
   }

@@ -35,6 +35,7 @@ import Bids from './bids';
 import Panel from './panel';
 import AdUnits from './adUnits';
 import ExplorableExplanation from './explorableExplanation';
+import WorkletBreakpoints from './workletBreakpoints';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -64,6 +65,7 @@ const ProtectedAudience = () => {
         title: 'Explorable Explanations',
         content: {
           Element: ExplorableExplanation,
+          className: 'overflow-hidden',
         },
       },
       {
@@ -92,6 +94,12 @@ const ProtectedAudience = () => {
         content: {
           Element: Bids,
           className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Worklet Breakpoints',
+        content: {
+          Element: WorkletBreakpoints,
         },
       },
     ],

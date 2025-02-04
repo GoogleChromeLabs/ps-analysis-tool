@@ -71,7 +71,7 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
     return;
   }
 
-  if (hoveringOnExpandIconPositions || hoveringOnCircles) {
+  if (hoveringOnExpandIconPositions || hoveringOnCircles || hoveredOverIcons) {
     app.p.cursor('pointer');
   } else {
     app.p.cursor('default');
@@ -79,7 +79,8 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
 
   if (
     hoveringOnExpandIconPositions ||
-    isOverControls(event.clientX, event.clientY)
+    isOverControls(event.clientX, event.clientY) ||
+    hoveredOverIcons
   ) {
     app.startTrackingMouse = false;
   } else {
@@ -87,6 +88,29 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
   }
 
   wipeAndRecreateUserCanvas();
+
+  app.timeline.expandIconPositions.forEach((position, index) => {
+    app.up.push();
+    if (index === app.nodeIndexRevisited) {
+      app.up.rotate(app.p.TWO_PI / 2);
+      app.up.image(
+        app.p.openWithoutAnimation,
+        -position.x - 10,
+        -position.y - 20,
+        20,
+        20
+      );
+    } else {
+      app.up.image(
+        app.p.openWithoutAnimation,
+        position.x - 10,
+        position.y,
+        20,
+        20
+      );
+    }
+    app.up.pop();
+  });
   renderUserIcon();
 };
 
