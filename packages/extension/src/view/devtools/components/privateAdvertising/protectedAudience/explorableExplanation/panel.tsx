@@ -150,6 +150,8 @@ const Panel = ({
     }
 
     if (currentSiteData?.type === 'advertiser') {
+      highlightTab(1, false);
+      highlightTab(2, false);
       highlightTab(0);
     } else {
       highlightTab(1);
