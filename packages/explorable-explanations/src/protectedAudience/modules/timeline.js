@@ -95,7 +95,7 @@ timeline.drawLineAboveCircle = (index, completed = false) => {
   p.pop();
 };
 
-timeline.drawTimeline = ({ position, circleProps, circles }) => {
+timeline.drawTimeline = ({ position, circleProps, circles, user }) => {
   const { diameter, verticalSpacing } = circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
   const p = app.p;
@@ -117,6 +117,17 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     p.push();
     p.stroke(config.timeline.colors.grey);
     timeline.drawCircle(index);
+    const host = circles[index].website.split('.')[0];
+
+    if (app.p[host]) {
+      p.image(
+        app.p[host],
+        xPositionForCircle - user.width / 2,
+        yPositionForCircle - user.height / 2,
+        user.width,
+        user.height
+      );
+    }
     p.pop();
 
     p.push();

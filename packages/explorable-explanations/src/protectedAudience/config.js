@@ -148,7 +148,7 @@ const config = {
 export default config;
 
 export const publisherData = {
-  'pub1.com': {
+  'newyorktimes.com': {
     branches: [
       { date: 'Sun, 01 October 2023', time: '12:00:00 GMT', type: 'datetime' },
       { date: 'Sun, 01 October 2023', time: '12:01:00 GMT', type: 'datetime' },
@@ -161,7 +161,7 @@ export const publisherData = {
       ['SSP C', 'https://ssp-c.com'],
     ],
   },
-  'pub2.com': {
+  'cnn.com': {
     branches: [
       { date: 'Sun, 01 October 2023', time: '14:00:00 GMT', type: 'datetime' },
       { date: 'Sun, 01 October 2023', time: '14:01:00 GMT', type: 'datetime' },
@@ -174,7 +174,7 @@ export const publisherData = {
       ['SSP F', 'https://ssp-f.com'],
     ],
   },
-  'pub3.com': {
+  'aljazeera.com': {
     branches: [
       { date: 'Sun, 01 October 2023', time: '16:00:00 GMT', type: 'datetime' },
       { date: 'Sun, 01 October 2023', time: '16:01:00 GMT', type: 'datetime' },
