@@ -51,7 +51,6 @@ const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
   isInteractiveMode: false,
   isMultiSeller: false,
-  isAutoExpand: true,
 };
 
 const ExplorableExplanation = () => {
@@ -119,7 +118,6 @@ const ExplorableExplanation = () => {
     return () => {
       app.isInteractiveMode = DEFAULT_SETTINGS.isInteractiveMode;
       app.isMultiSeller = DEFAULT_SETTINGS.isMultiSeller;
-      app.isAutoExpand = DEFAULT_SETTINGS.isAutoExpand;
     };
   }, []);
 
