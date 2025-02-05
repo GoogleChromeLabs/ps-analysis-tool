@@ -116,7 +116,6 @@ app.minimiseBubbleActions = () => {
   bubbles.generateBubbles(true);
   app.bubbles.isExpanded = false;
   bubbles.showMinifiedBubbles();
-  app.timeline.pausedReason;
   if (app.timeline.pausedReason === 'userClick') {
     return;
   }
@@ -747,6 +746,7 @@ app.reset = async () => {
   setupMainCanvas(app.p, true);
 
   app.timeline.isPaused = true;
+  app.timeline.pausedReason = 'userClick';
   app.setPlayState(false);
   app.setCurrentSite(null);
   app.setInfo({});
