@@ -140,7 +140,10 @@ const ExplorableExplanation = () => {
   }, []);
 
   const getInterestGroupData = useCallback(
-    (siteData: typeof currentSiteData) => {
+    (
+      siteData: typeof currentSiteData,
+      prevInterestGroupsData: InterestGroups[]
+    ) => {
       if (!siteData) {
         return [];
       }
@@ -180,7 +183,13 @@ const ExplorableExplanation = () => {
       );
 
       if (siteData?.type !== 'publisher') {
-        setInterestGroupUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
+        const isDataEqual = isEqual(requiredIG, prevInterestGroupsData);
+
+        if (!isDataEqual) {
+          setInterestGroupUpdateIndicator(
+            (prev) => (prev === -1 ? 0 : prev) ^ 1
+          );
+        }
       }
 
       return requiredIG;
@@ -195,7 +204,7 @@ const ExplorableExplanation = () => {
       setSelectedAdUnit(null);
       setSelectedDateTime(null);
       setCurrentSiteData(() => siteData);
-      setInterestGroupsData(() => getInterestGroupData(siteData));
+      setInterestGroupsData((prev) => getInterestGroupData(siteData, prev));
     },
     [getInterestGroupData]
   );

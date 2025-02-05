@@ -71,7 +71,7 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
         return { ...prev };
       });
     }
-  }, [auctionEvents.auctionData]);
+  }, [auctionEvents?.auctionData]);
 
   return (
     <AuctionsContainer
