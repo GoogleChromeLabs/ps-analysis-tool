@@ -19,21 +19,28 @@
 import app from '../../app';
 import config from '../../config';
 import flow from '../../modules/flow';
+import { drawOpenArrowWithoutAnimationIcon } from '../drawOpenArrowWithoutAnimationIcon';
 import { isInsideCircle } from '../isInsideCircle';
+import { wipeAndRecreateUserCanvas } from '../wipeAndRecreateCanvas';
 
 //Need to pass this from the caller to avoid circular dependencies
 const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
   const {
     circleProps: { diameter },
     circles,
+    colors,
+    user,
   } = config.timeline;
+  const { circlePositions, expandIconPositions } = app.timeline;
+  const p = app.p;
+  const up = app.up;
 
   if (!circles.every(({ visited }) => visited === true)) {
     return;
   }
 
   let clickedIndex = -1;
-  app.timeline.expandIconPositions.forEach((positions) => {
+  expandIconPositions.forEach((positions) => {
     if (
       isInsideCircle(
         app.mouseX,
@@ -57,28 +64,22 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     flow.clearBelowTimelineCircles();
     clickedIndex = -1;
     app.nodeIndexRevisited = -1;
-    app.timeline.expandIconPositions.forEach((position, index) => {
-      app.p.push();
-      if (index === clickedIndex) {
-        app.p.rotate(app.p.TWO_PI / 2);
-        app.p.image(
-          app.p.openWithoutAnimation,
-          -position.x - 10,
-          -position.y - 20,
-          20,
-          20
-        );
-      } else {
-        app.p.image(
-          app.p.openWithoutAnimation,
-          position.x - 10,
-          position.y,
-          20,
-          20
-        );
-      }
-      app.p.pop();
+    wipeAndRecreateUserCanvas();
+
+    circles.forEach((circle, index) => {
+      p.push();
+      p.stroke(colors.visitedBlue);
+      const position = circlePositions[index];
+      up.image(
+        app.p.completedCheckMark,
+        position.x - user.width / 2,
+        position.y - user.height / 2,
+        user.width,
+        user.height
+      );
+      p.pop();
     });
+    drawOpenArrowWithoutAnimationIcon();
     return;
   }
 
@@ -97,29 +98,6 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     app.shouldRespondToClick = true;
     renderUserIcon();
 
-    app.timeline.expandIconPositions.forEach((position, index) => {
-      app.p.push();
-      if (index === clickedIndex) {
-        app.p.rotate(app.p.TWO_PI / 2);
-        app.p.image(
-          app.p.openWithoutAnimation,
-          -position.x - 10,
-          -position.y - 20,
-          20,
-          20
-        );
-      } else {
-        app.p.image(
-          app.p.openWithoutAnimation,
-          position.x - 10,
-          position.y,
-          20,
-          20
-        );
-      }
-      app.p.pop();
-    });
-
     app.isRevisitingNodeInInteractiveMode = false;
 
     if (circles[clickedIndex].type === 'advertiser') {
@@ -132,6 +110,22 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
   });
 
   app.promiseQueue.start();
+  wipeAndRecreateUserCanvas();
+
+  circles.forEach((circle, index) => {
+    app.p.push();
+    app.p.stroke(colors.visitedBlue);
+    const position = circlePositions[index];
+    up.image(
+      app.p.completedCheckMark,
+      position.x - user.width / 2,
+      position.y - user.height / 2,
+      user.width,
+      user.height
+    );
+    p.pop();
+  });
+  drawOpenArrowWithoutAnimationIcon();
 };
 
 export default mouseClickedInNonInteractiveModeCallback;

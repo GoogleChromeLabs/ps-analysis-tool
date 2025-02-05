@@ -384,6 +384,20 @@ export const SINGLE_SELLER_CONFIG = {
       </>
     ),
   },
+  SHOW_WINNING_AD: {
+    title: 'Show Winning Ad',
+    info: (
+      <>
+        <p>
+          The winning ad is displayed after the protected audience auction is
+          completed. In case where there is no winning bid or no interest group
+          bids then the contextual ad which was sent in{' '}
+          <code className="text-upsed-tomato">runAdAuction()</code> function
+          will be shown to the user.
+        </p>
+      </>
+    ),
+  },
 };
 
 export const MULTI_SELLER_CONFIG = {
