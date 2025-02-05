@@ -94,7 +94,7 @@ const Topics = () => {
   );
 
   return (
-    <TabsProvider items={tabItems}>
+    <TabsProvider items={tabItems} name="topics">
       <Panel />
     </TabsProvider>
   );

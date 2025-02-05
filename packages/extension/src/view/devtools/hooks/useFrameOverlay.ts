@@ -28,7 +28,6 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -128,13 +127,13 @@ const useFrameOverlay = (
   }, [canStartInspecting, setSelectedFrame, setIsInspecting, selectedAdUnit]);
 
   const listenIfContentScriptSet = useCallback(
-    async (
+    (
       request: { [key: string]: boolean },
       sender: chrome.runtime.MessageSender
     ) => {
-      const tabId = await getCurrentTabId();
+      const tabId = chrome.devtools.inspectedWindow.tabId;
 
-      if (request.setInPage && tabId === sender?.tab?.id?.toString()) {
+      if (request.setInPage && tabId === sender?.tab?.id) {
         setCanStartInspecting(true);
       }
     },
@@ -158,12 +157,20 @@ const useFrameOverlay = (
           return;
         }
 
-        if (changes && Object.keys(changes).includes(currentTabId.toString())) {
-          if (!changes[currentTabId].newValue && portRef.current) {
+        const privacySandboxPanelVisibleKey = `${currentTabId}-privacySandboxPanelVisible`;
+
+        if (
+          changes &&
+          Object.keys(changes).includes(privacySandboxPanelVisibleKey)
+        ) {
+          const privacySandboxPanelVisible =
+            changes[privacySandboxPanelVisibleKey].newValue;
+
+          if (!privacySandboxPanelVisible && portRef.current) {
             setIsInspecting(false);
           }
 
-          if (!changes[currentTabId].newValue) {
+          if (!privacySandboxPanelVisible) {
             chrome.tabs.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
@@ -178,7 +185,7 @@ const useFrameOverlay = (
               }
             );
           }
-          if (changes[currentTabId].newValue) {
+          if (privacySandboxPanelVisible) {
             chrome.tabs.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {

@@ -15,19 +15,10 @@
  */
 export const getCurrentTab = async () => {
   try {
-    const tab = await chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
+    const tab = await chrome.tabs.get(chrome.devtools.inspectedWindow.tabId);
     return tab;
   } catch (error) {
     //do nothing in this error
   }
   return Promise.resolve(undefined);
-};
-
-export const getCurrentTabId = async (tab = null) => {
-  const _tab = tab || (await getCurrentTab());
-
-  return _tab?.[0]?.id ? _tab[0].id.toString() : undefined;
 };

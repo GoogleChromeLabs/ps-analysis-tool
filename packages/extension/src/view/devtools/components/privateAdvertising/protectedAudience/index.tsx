@@ -107,7 +107,7 @@ const ProtectedAudience = () => {
   );
 
   return (
-    <TabsProvider items={tabItems}>
+    <TabsProvider items={tabItems} name="protectedAudience">
       <Panel />
     </TabsProvider>
   );

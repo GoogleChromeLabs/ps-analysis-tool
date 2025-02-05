@@ -31,14 +31,22 @@ import {
   sketch as mainSketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
-import classNames from 'classnames';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
 import type { CurrentSiteData, StepType } from './auctionEventTransformers';
+
+const STORAGE_KEY = 'paExplorableExplanation';
+const DEFAULT_SETTINGS = {
+  isAutoScroll: true,
+  isAutoExpand: true,
+  speedMultiplier: 1,
+};
 
 declare module 'react' {
   interface CSSProperties {
@@ -97,6 +105,45 @@ const Panel = ({
   const [expandedBubbleX, setExpandedBubbleX] = useState(0);
   const [expandedBubbleY, setExpandedBubbleY] = useState(0);
   const [isBubbleExpanded, setIsBubbleExpanded] = useState(false);
+  const hasDataBeenFetchedFromSessionStorage = useRef<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      if (!hasDataBeenFetchedFromSessionStorage.current) {
+        return;
+      }
+
+      await updateSessionStorage(
+        { autoExpand, autoScroll, sliderStep },
+        STORAGE_KEY
+      );
+    })();
+  }, [autoExpand, autoScroll, sliderStep]);
+
+  useEffect(() => {
+    (async () => {
+      const data = (await getSessionStorage(STORAGE_KEY)) || {};
+      if (Object.prototype.hasOwnProperty.call(data, 'autoExpand')) {
+        setAutoExpand(data.autoExpand);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(data, 'autoScroll')) {
+        setAutoScroll(data.autoScroll);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(data, 'sliderStep')) {
+        setSliderStep(data.sliderStep);
+      }
+
+      hasDataBeenFetchedFromSessionStorage.current = true;
+    })();
+
+    return () => {
+      app.isAutoExpand = DEFAULT_SETTINGS.isAutoExpand;
+      app.autoScroll = DEFAULT_SETTINGS.isAutoScroll;
+      app.speedMultiplier = DEFAULT_SETTINGS.speedMultiplier;
+    };
+  }, []);
 
   const setPlaying = useCallback(() => {
     setPlay((prevState) => {
