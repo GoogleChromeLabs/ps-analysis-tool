@@ -176,7 +176,7 @@ const app: App = {
   prevButton: null,
   autoScroll: true,
   mouseOutOfDiv: false,
-  speedMultiplier: 1,
+  speedMultiplier: 5,
   isAutoExpand: true,
   isMultiSeller: false,
   cancelPromise: false,

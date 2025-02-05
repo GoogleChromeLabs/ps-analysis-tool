@@ -33,11 +33,19 @@ const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
 let spacing: number, renderedBranchIds: number[], endpoints: Coordinates[];
 
+type Branch = {
+  id: number;
+  type: string;
+  date: string;
+  time: string;
+  title: string;
+  description: string;
+};
+
 type BranchesProps = {
   x1: CoordinateValue;
   y1: CoordinateValue;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  branches: any[];
+  branches: Branch[];
   currentIndex: number;
   noAnimation: boolean;
 };
