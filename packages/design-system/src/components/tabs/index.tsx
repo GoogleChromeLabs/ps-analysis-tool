@@ -81,11 +81,11 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         {titles.map((title, index) => {
           const isHighlighted = isTabHighlighted(index);
           const isNumber = typeof isHighlighted === 'number';
-          const count = isNumber
-            ? isHighlighted > 9
-              ? '9+'
-              : isHighlighted
-            : '';
+          let count: string | number = '';
+
+          if (isNumber) {
+            count = isHighlighted > 9 ? '9+' : isHighlighted;
+          }
 
           return (
             <div className="flex" key={index}>
