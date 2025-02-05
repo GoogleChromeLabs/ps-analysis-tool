@@ -577,7 +577,6 @@ app.toggleInteractiveMode = async () => {
 
   if (app.isInteractiveMode) {
     flow.setButtonsDisabilityState();
-
     return;
   }
 };
@@ -590,14 +589,9 @@ app.toggleMultSeller = (event) => {
 // Define the sketch
 export const sketch = (p) => {
   p.updateWithProps = (props) => {
-    if (app.isMultiSeller !== props.isMultiSeller) {
-      app.reset();
-      setTimeout(() => {
-        app.play(true);
-      }, 500);
+    if (Object.prototype.hasOwnProperty.call(props, 'isMultiSeller')) {
+      app.isMultiSeller = props.isMultiSeller;
     }
-
-    app.isMultiSeller = props.isMultiSeller;
   };
 
   app.promiseQueue = new Queue({
