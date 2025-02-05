@@ -115,7 +115,8 @@ describe('App', () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           get: (_, __) =>
             Promise.resolve({
-              ['selectedSidebarItem#' + 40245632]: 'privacySandbox#cookies',
+              [40245632 + '-persistentSetting-selectedSidebarItem']:
+                'privacySandbox#cookies',
             }),
           set: () => Promise.resolve(),
           //@ts-ignore
@@ -213,14 +214,17 @@ describe('App', () => {
       isCurrentTabBeingListenedTo: true,
       tabToRead: '40245632',
     });
+
     mockUseProtectedAudienceStore.mockReturnValue({
       auctionEvents: {},
       interestGroupDetails: [],
     });
+
     mockUseTablePersistentSettingStore.mockReturnValue({
       getPreferences: () => '',
       setPreferences: noop,
     });
+
     mockUseSettingsStore.mockReturnValue({
       allowedNumberOfTabs: 'single',
     });

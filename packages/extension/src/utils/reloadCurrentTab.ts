@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import { getCurrentTabId } from './getCurrentTabId';
-
-const reloadCurrentTab = async (tabId: number | undefined = undefined) => {
+const reloadCurrentTab = (tabId: number | undefined = undefined) => {
   const currentTabId: number | string | undefined =
-    tabId || (await getCurrentTabId());
+    tabId || chrome.devtools.inspectedWindow.tabId;
 
   const _currentTabId = Number(currentTabId);
 

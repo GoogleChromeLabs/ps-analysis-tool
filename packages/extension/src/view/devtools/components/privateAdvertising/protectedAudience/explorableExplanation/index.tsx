@@ -17,11 +17,13 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import type {
-  AdsAndBiddersType,
-  InterestGroups,
-  NoBidsType,
-  ReceivedBids,
+import {
+  type AdsAndBiddersType,
+  type NoBidsType,
+  type ReceivedBids,
+  type InterestGroups,
+  updateSessionStorage,
+  getSessionStorage,
 } from '@google-psat/common';
 import React, {
   useMemo,
@@ -49,6 +51,12 @@ import type { AuctionEventsType } from '../../../../stateProviders/protectedAudi
 import Auctions from './tableTabPanels/auctions';
 import { isEqual } from 'lodash-es';
 
+const STORAGE_KEY = 'paExplorableExplanation';
+const DEFAULT_SETTINGS = {
+  isInteractiveMode: false,
+  isMultiSeller: false,
+};
+
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
@@ -64,6 +72,8 @@ const ExplorableExplanation = () => {
   const [currentStep, setCurrentStep] = useState<StepType>({} as StepType);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
+  const hasDataBeenFetchedFromSessionStorage = useRef<boolean>(false);
+
   const [interactiveMode, _setInteractiveMode] = useState(false);
 
   const [interestGroupUpdateIndicator, setInterestGroupUpdateIndicator] =
@@ -82,6 +92,19 @@ const ExplorableExplanation = () => {
   );
 
   useEffect(() => {
+    (async () => {
+      if (!hasDataBeenFetchedFromSessionStorage.current) {
+        return;
+      }
+
+      await updateSessionStorage(
+        { interactiveMode, isMultiSeller },
+        STORAGE_KEY
+      );
+    })();
+  }, [interactiveMode, isMultiSeller]);
+
+  useEffect(() => {
     if (currentSiteData === null) {
       setInterestGroupUpdateIndicator(-1);
       setAuctionUpdateIndicator(-1);
@@ -97,10 +120,22 @@ const ExplorableExplanation = () => {
   }, [interactiveMode]);
 
   useEffect(() => {
+    (async () => {
+      const data = (await getSessionStorage(STORAGE_KEY)) || {};
+      if (Object.prototype.hasOwnProperty.call(data, 'interactiveMode')) {
+        _setInteractiveMode(data.interactiveMode);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(data, 'isMultiSeller')) {
+        setIsMultiSeller(data.isMultiSeller);
+      }
+
+      hasDataBeenFetchedFromSessionStorage.current = true;
+    })();
+
     return () => {
-      app.isInteractiveMode = false;
-      app.isMultiSeller = false;
-      app.isAutoExpand = true;
+      app.isInteractiveMode = DEFAULT_SETTINGS.isInteractiveMode;
+      app.isMultiSeller = DEFAULT_SETTINGS.isMultiSeller;
     };
   }, []);
 
@@ -300,7 +335,7 @@ const ExplorableExplanation = () => {
   );
 
   return (
-    <TabsProvider items={tabItems}>
+    <TabsProvider items={tabItems} name="explorableExplanation">
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={_setCurrentSiteData}
