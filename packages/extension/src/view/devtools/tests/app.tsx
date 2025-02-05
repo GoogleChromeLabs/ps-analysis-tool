@@ -50,6 +50,7 @@ jest.mock(
     useTablePersistentSettingsStore: jest.fn(),
   })
 );
+globalThis.chrome.runtime.getURL = () => '';
 
 const mockUseCookieStore = useCookie as jest.Mock;
 const mockUseTablePersistentSettingStore =
