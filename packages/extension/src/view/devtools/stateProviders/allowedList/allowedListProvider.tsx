@@ -27,7 +27,7 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import { getCurrentTab } from '../../../../utils/getCurrentTab';
 import { useCookie } from '../cookie';
 import setDomainsInAllowList from './utils/setDomainsInAllowList';
 import getDotPrefixedDomain from './utils/getDotPrefixedDomain';

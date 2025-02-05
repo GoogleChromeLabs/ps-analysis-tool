@@ -217,6 +217,7 @@ module.exports = {
       'selection-yellow-light': '#8b8f18',
       'selection-yellow-dark': '#dbdb48',
       'cultured-grey': '#F7F7F7',
+      mahogany: '#CC3300',
     },
     borderColor: {
       ...colors,

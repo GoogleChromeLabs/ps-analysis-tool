@@ -21,6 +21,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -36,9 +37,17 @@ export const TabsProvider = ({
 }: PropsWithChildren<TabsProviderProps>) => {
   const [tabItems, setTabItems] = useState(items);
   const [activeTab, setActiveTab] = useState(0);
+  const activeTabRef = useRef(activeTab);
   const [storage, _setStorage] = useState<string[]>(
     Array(items.length).fill('')
   );
+  const [highlightedTabs, setHighlightedTabs] = useState<
+    Record<number, number | boolean>
+  >({});
+
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
 
   useEffect(() => {
     setTabItems(items);
@@ -79,6 +88,40 @@ export const TabsProvider = ({
     [activeTab]
   );
 
+  const highlightTab = useCallback(
+    (tab: number, count: number | boolean = true, increment = false) => {
+      if (tab === activeTabRef.current) {
+        return;
+      }
+
+      setHighlightedTabs((prev) => {
+        const next = { ...prev };
+        const prevCount = typeof next[tab] === 'number' ? next[tab] : 0;
+
+        next[tab] = increment ? prevCount + 1 : count;
+        return next;
+      });
+    },
+    []
+  );
+
+  const isTabHighlighted = useCallback(
+    (tab: number) => {
+      return highlightedTabs?.[tab] ?? false;
+    },
+    [highlightedTabs]
+  );
+
+  useEffect(() => {
+    if (highlightedTabs[activeTabRef.current]) {
+      setHighlightedTabs((prev) => {
+        const next = { ...prev };
+        next[activeTabRef.current] = false;
+        return next;
+      });
+    }
+  }, [activeTab, highlightTab, highlightedTabs]);
+
   return (
     <TabsContext.Provider
       value={{
@@ -91,6 +134,8 @@ export const TabsProvider = ({
         actions: {
           setStorage,
           setActiveTab,
+          highlightTab,
+          isTabHighlighted,
         },
       }}
     >
