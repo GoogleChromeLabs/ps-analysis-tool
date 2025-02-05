@@ -22,13 +22,13 @@ interface WebsiteInterestGroup {
   [websiteName: string]: InterestGroups[];
 }
 export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
-  'adv1.com': [
+  'apple.com': [
     {
       eventType: 'interestGroupAccessed',
       formattedTime: '101ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv1.com',
-      name: 'shoes',
+      ownerOrigin: 'https://www.apple.com',
+      name: 'laptops',
       time: 1696154400.101,
       details: {
         ads: [
@@ -71,8 +71,8 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '102ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv1.com',
-      name: 'heels',
+      ownerOrigin: 'https://www.apple.com',
+      name: 'headphones',
       time: 1696154400.102,
       details: {
         ads: [
@@ -115,7 +115,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '103ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv1.com',
+      ownerOrigin: 'https://www.apple.com',
       name: 'phones',
       time: 1696154400.103,
       details: {
@@ -156,12 +156,12 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
-  'adv2.com': [
+  'myntra.com': [
     {
       eventType: 'interestGroupAccessed',
       formattedTime: '101ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv2.com',
+      ownerOrigin: 'https://www.myntra.com',
       name: 'stilletos',
       time: 1696157600.101,
       details: {
@@ -205,7 +205,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '102ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv2.com',
+      ownerOrigin: 'https://www.myntra.com',
       name: 'shorts',
       time: 1696157600.102,
       details: {
@@ -246,14 +246,14 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
-  'pub1.com': [],
-  'adv3.com': [
+  'newyorktimes.com': [],
+  'amazon.com': [
     {
       eventType: 'interestGroupAccessed',
       formattedTime: '101ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv3.com',
-      name: 'bike',
+      ownerOrigin: 'https://www.amazon.com',
+      name: 'pillows',
       time: 1696161200.101,
       details: {
         ads: [
@@ -296,8 +296,8 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '102ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv3.com',
-      name: 'car',
+      ownerOrigin: 'https://www.amazon.com',
+      name: 'bedsheets',
       time: 1696161200.102,
       details: {
         ads: [
@@ -337,12 +337,12 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
-  'adv5.com': [
+  'adidas.com': [
     {
       eventType: 'interestGroupAccessed',
       formattedTime: '80ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv5.com',
+      ownerOrigin: 'https://www.adidas.com',
       name: 'football',
       time: 1696161520.08,
       details: {
@@ -386,7 +386,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '81ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv5.com',
+      ownerOrigin: 'https://www.adidas.com',
       name: 'basketball',
       time: 1696161520.081,
       details: {
@@ -430,7 +430,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '88ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv5.com',
+      ownerOrigin: 'https://www.adidas.com',
       name: 'baseball',
       time: 1696161520.088,
       details: {
@@ -471,13 +471,13 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
-  'pub2.com': [],
-  'adv6.com': [
+  'cnn.com': [],
+  'netflix.com': [
     {
       eventType: 'interestGroupAccessed',
       formattedTime: '67ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv6.com',
+      ownerOrigin: 'https://www.netflix.com',
       name: 'movies',
       time: 1696164860.067,
       details: {
@@ -521,7 +521,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '69ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv6.com',
+      ownerOrigin: 'https://www.netflix.com',
       name: 'series',
       time: 1696164860.069,
       details: {
@@ -565,8 +565,8 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '71ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv6.com',
-      name: 'books',
+      ownerOrigin: 'https://www.netflix.com',
+      name: 'games',
       time: 1696164860.071,
       details: {
         ads: [
@@ -606,12 +606,12 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
-  'adv7.com': [
+  'cocacola.com': [
     {
       eventType: 'interestGroupAccessed',
       formattedTime: '71ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv7.com',
+      ownerOrigin: 'https://www.cocacola.com',
       name: 'IGG220',
       time: 1696168400.071,
       details: {
@@ -655,7 +655,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '76ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv7.com',
+      ownerOrigin: 'https://www.cocacola.com',
       name: 'IGG201',
       time: 1696168400.076,
       details: {
@@ -699,7 +699,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '151ms',
       type: 'join',
-      ownerOrigin: 'https://www.adv7.com',
+      ownerOrigin: 'https://www.cocacola.com',
       name: 'IG225',
       time: 1696168400.151,
       details: {
@@ -740,7 +740,7 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
-  'pub3.com': [],
+  'aljazeera.com': [],
 };
 
 export const SYNTHETIC_AUCTION_EVENT_STARTED: singleAuctionEvent = {
