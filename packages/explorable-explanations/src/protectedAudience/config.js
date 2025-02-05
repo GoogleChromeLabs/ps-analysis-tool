@@ -26,7 +26,7 @@ const config = {
     position: { x: 100, y: 50 },
     circleProps: {
       diameter: 50,
-      verticalSpacing: 70,
+      verticalSpacing: 130,
     },
     stepDelay: 1500,
     user: {

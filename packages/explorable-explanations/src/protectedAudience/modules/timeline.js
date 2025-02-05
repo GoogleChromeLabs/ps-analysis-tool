@@ -91,7 +91,7 @@ timeline.drawLineAboveCircle = (index, completed = false) => {
 
   p.push();
   p.stroke(strokeColor);
-  p.line(positions.x, positions.y - diameter / 2, positions.x, position.y + 37);
+  p.line(positions.x, positions.y - diameter / 2, positions.x, position.y + 97);
   p.pop();
 };
 
@@ -113,21 +113,11 @@ timeline.drawTimeline = ({ position, circleProps, circles, user }) => {
         y: yPositionForCircle,
       });
     }
+    const host = circleItem.website.split('.')[0];
 
     p.push();
     p.stroke(config.timeline.colors.grey);
     timeline.drawCircle(index);
-    const host = circles[index].website.split('.')[0];
-
-    if (app.p[host]) {
-      p.image(
-        app.p[host],
-        xPositionForCircle - user.width / 2,
-        yPositionForCircle - user.height / 2,
-        user.width,
-        user.height
-      );
-    }
     p.pop();
 
     p.push();
@@ -138,7 +128,15 @@ timeline.drawTimeline = ({ position, circleProps, circles, user }) => {
     if (!app.isInteractiveMode) {
       p.text(circleItem.datetime, xPositionForCircle, position.y);
     }
-    p.text(circleItem.website, xPositionForCircle, position.y + 20);
+    app.p.image(
+      app.p[host],
+      xPositionForCircle - user.width / 2,
+      position.y + 20,
+      user.width,
+      user.height
+    );
+    p.text(circleItem.website, xPositionForCircle, position.y + 70);
+    p.text(circleItem.type, xPositionForCircle, position.y + 90);
     p.pop();
 
     timeline.drawLineAboveCircle(index);
