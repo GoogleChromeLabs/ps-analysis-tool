@@ -120,8 +120,9 @@ const Panel = ({
     [setPlaying]
   );
 
-  const { setActiveTab } = useTabs(({ actions }) => ({
+  const { setActiveTab, highlightTab } = useTabs(({ actions }) => ({
     setActiveTab: actions.setActiveTab,
+    highlightTab: actions.highlightTab,
   }));
 
   useEffect(() => {
@@ -151,11 +152,14 @@ const Panel = ({
     }
 
     if (currentSiteData?.type === 'advertiser') {
-      setActiveTab(0);
+      highlightTab(1, false);
+      highlightTab(2, false);
+      highlightTab(0);
     } else {
-      setActiveTab(1);
+      highlightTab(1);
+      highlightTab(2);
     }
-  }, [currentSiteData, currentSiteData?.type, setActiveTab]);
+  }, [currentSiteData, currentSiteData?.type, highlightTab, setActiveTab]);
 
   const handleResizeCallback = useMemo(() => {
     return new ResizeObserver(() => {
