@@ -69,10 +69,12 @@ interface PanelProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<StepType>>;
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   setSelectedDateTime: React.Dispatch<React.SetStateAction<string | null>>;
+  interestGroupUpdateIndicator: number;
+  auctionUpdateIndicator: number;
+  bidsUpdateIndicator: number;
 }
 
 const Panel = ({
-  currentSiteData,
   setCurrentSite,
   highlightedInterestGroup,
   setHighlightedInterestGroup,
@@ -85,6 +87,9 @@ const Panel = ({
   setCurrentStep,
   setSelectedAdUnit,
   setSelectedDateTime,
+  interestGroupUpdateIndicator,
+  auctionUpdateIndicator,
+  bidsUpdateIndicator,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -146,20 +151,24 @@ const Panel = ({
   }, [tooglePlayOnKeydown]);
 
   useEffect(() => {
-    if (!currentSiteData) {
-      setActiveTab(0);
-      return;
-    }
-
-    if (currentSiteData?.type === 'advertiser') {
+    if (interestGroupUpdateIndicator !== -1) {
       highlightTab(1, false);
       highlightTab(2, false);
       highlightTab(0);
-    } else {
+    }
+  }, [interestGroupUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (auctionUpdateIndicator !== -1) {
       highlightTab(1);
+    }
+  }, [auctionUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (bidsUpdateIndicator !== -1) {
       highlightTab(2);
     }
-  }, [currentSiteData, currentSiteData?.type, highlightTab, setActiveTab]);
+  }, [bidsUpdateIndicator, highlightTab]);
 
   const handleResizeCallback = useMemo(() => {
     return new ResizeObserver(() => {
