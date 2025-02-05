@@ -95,7 +95,7 @@ timeline.drawLineAboveCircle = (index, completed = false) => {
   p.pop();
 };
 
-timeline.drawTimeline = ({ position, circleProps, circles, user }) => {
+timeline.drawTimeline = ({ position, circleProps, circles }) => {
   const { diameter, verticalSpacing } = circleProps;
   const circleVerticalSpace = verticalSpacing + diameter;
   const p = app.p;
@@ -128,15 +128,10 @@ timeline.drawTimeline = ({ position, circleProps, circles, user }) => {
     if (!app.isInteractiveMode) {
       p.text(circleItem.datetime, xPositionForCircle, position.y);
     }
-    app.p.image(
-      app.p[host],
-      xPositionForCircle - user.width / 2,
-      position.y + 20,
-      user.width,
-      user.height
-    );
-    p.text(circleItem.website, xPositionForCircle, position.y + 70);
-    p.text(circleItem.type, xPositionForCircle, position.y + 90);
+    app.p.image(app.p[host], xPositionForCircle - 10, position.y + 20, 20, 20);
+    p.text(circleItem.website, xPositionForCircle, position.y + 60);
+    p.fill(config.timeline.colors.grey);
+    p.text(circleItem.type, xPositionForCircle, position.y + 80);
     p.pop();
 
     timeline.drawLineAboveCircle(index);
