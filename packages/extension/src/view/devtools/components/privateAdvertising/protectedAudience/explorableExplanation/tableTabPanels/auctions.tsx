@@ -62,8 +62,8 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
 
   useEffect(() => {
     if (
-      !auctionEvents.auctionData ||
-      Object.keys(auctionEvents.auctionData).length === 0
+      !auctionEvents?.auctionData ||
+      Object.keys(auctionEvents?.auctionData || {}).length === 0
     ) {
       setSidebarData((prev) => {
         prev.adunits.children = {};
