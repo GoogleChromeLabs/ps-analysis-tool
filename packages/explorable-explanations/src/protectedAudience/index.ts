@@ -37,7 +37,7 @@ import {
   setupMainCanvas,
   setupUserCanvas,
 } from './canvas';
-import { type P5, type Circle } from '../types';
+import { P5, Circle } from '../types';
 
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
@@ -114,7 +114,7 @@ app.pause = () => {
 app.minimiseBubbleActions = () => {
   bubbles.generateBubbles?.(true);
   app.bubbles.isExpanded = false;
-  bubbles.showMinifiedBubbles();
+  bubbles.showMinifiedBubbles?.();
   app.timeline.pausedReason;
   if (app.timeline.pausedReason === 'userClick') {
     return;
@@ -124,7 +124,7 @@ app.minimiseBubbleActions = () => {
 
 app.expandBubbleActions = () => {
   app.bubbles.isExpanded = true;
-  bubbles.showExpandedBubbles();
+  bubbles.showExpandedBubbles?.();
   bubbles.generateBubbles?.(true);
   if (!app.timeline.pausedReason) {
     app.timeline.pausedReason = 'bubble';
@@ -200,9 +200,9 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       flow.clearBelowTimelineCircles();
       utils.markVisitedValue(_currentIndex, true);
       bubbles.generateBubbles?.();
-      bubbles.showMinifiedBubbles();
-      timeline.eraseAndRedraw();
-      timeline.renderUserIcon();
+      bubbles.showMinifiedBubbles?.();
+      timeline.eraseAndRedraw?.();
+      timeline.renderUserIcon?.();
 
       cb?.(undefined, true);
     });
@@ -233,7 +233,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
     app.bubbles.interestGroupCounts +=
       config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
     utils.scrollToCoordinates(0, 0, true);
-    bubbles.showMinifiedBubbles();
+    bubbles.showMinifiedBubbles?.();
     utils.markVisitedValue(app.timeline.currentIndex, true);
     timeline.eraseAndRedraw();
     timeline.renderUserIcon();
@@ -364,8 +364,8 @@ app.handleInteractivePrev = () => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
-    bubbles.showMinifiedBubbles();
-    timeline.renderUserIcon();
+    bubbles.showMinifiedBubbles?.();
+    timeline.renderUserIcon?.();
 
     cb?.(undefined, true);
   });
@@ -433,7 +433,7 @@ app.handleNonInteractiveNext = async () => {
 
   if (totalBubbles && app.bubbles.positions.length < totalBubbles) {
     bubbles.generateBubbles?.();
-    bubbles.showMinifiedBubbles();
+    bubbles.showMinifiedBubbles?.();
   }
 
   await utils.delay(10);
@@ -496,8 +496,8 @@ app.handleInteractiveNext = () => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
-    bubbles.showMinifiedBubbles();
-    timeline.renderUserIcon();
+    bubbles.showMinifiedBubbles?.();
+    timeline.renderUserIcon?.();
 
     cb?.(undefined, true);
   });
@@ -695,7 +695,7 @@ export const interestGroupSketch = (p: P5) => {
       const expandedSVG = document.getElementById('expandedSVG');
 
       if (expandedSVG) {
-        bubbles.showExpandedBubbles();
+        bubbles.showExpandedBubbles?.();
       }
     }
 

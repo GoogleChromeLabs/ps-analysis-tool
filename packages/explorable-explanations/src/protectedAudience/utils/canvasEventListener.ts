@@ -19,14 +19,18 @@
 import app from '../app';
 
 export const addCanvasEventListener = (
-  event,
-  callback,
-  key,
+  event: string,
+  callback: (mouseX: number, mouseY: number) => void,
+  key: string,
   canvasName = 'main'
 ) => {
   app.canvasEventListerners[canvasName][event][key] = callback;
 };
 
-export const removeCanvasEventListener = (event, key, canvasName = 'main') => {
+export const removeCanvasEventListener = (
+  event: string | number,
+  key: string | number,
+  canvasName = 'main'
+) => {
   delete app.canvasEventListerners[canvasName][event][key];
 };

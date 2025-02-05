@@ -65,7 +65,11 @@ export type SketchProps = {
       key: number;
     } | null
   ) => void;
-  setHighlightedInterestGroup: () => void;
+  setHighlightedInterestGroup: (params?: {
+    interestGroupName: string;
+    interestGroupOwner: string;
+    color: string;
+  }) => void;
   setPlayState: (play: boolean) => void;
   getPlayState: () => void;
   setSelectedExpandedFlow: () => void;
