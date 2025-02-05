@@ -606,13 +606,13 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       },
     },
   ],
-  'cocacola.com': [
+  'kawasaki.com': [
     {
       eventType: 'interestGroupAccessed',
       formattedTime: '71ms',
       type: 'join',
-      ownerOrigin: 'https://www.cocacola.com',
-      name: 'IGG220',
+      ownerOrigin: 'https://www.kawasaki.com',
+      name: 'bikes',
       time: 1696168400.071,
       details: {
         ads: [
@@ -655,8 +655,8 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '76ms',
       type: 'join',
-      ownerOrigin: 'https://www.cocacola.com',
-      name: 'IGG201',
+      ownerOrigin: 'https://www.kawasaki.com',
+      name: 'superbikes',
       time: 1696168400.076,
       details: {
         ads: [
@@ -699,8 +699,8 @@ export const SYNTHETIC_INTEREST_GROUPS: WebsiteInterestGroup = {
       eventType: 'interestGroupAccessed',
       formattedTime: '151ms',
       type: 'join',
-      ownerOrigin: 'https://www.cocacola.com',
-      name: 'IG225',
+      ownerOrigin: 'https://www.kawasaki.com',
+      name: 'bicycles',
       time: 1696168400.151,
       details: {
         ads: [

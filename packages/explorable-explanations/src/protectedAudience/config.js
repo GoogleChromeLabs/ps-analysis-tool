@@ -97,10 +97,10 @@ const config = {
       },
       {
         type: 'advertiser',
-        website: 'cocacola.com',
+        website: 'kawasaki.com',
         datetime: '2023-10-01 15:00',
         igGroupsCount: 3,
-        interestGroups: ['IGG220', 'IGG201', 'IG225'],
+        interestGroups: ['bikes', 'superbikes', 'bicycles'],
         visited: false,
         visitedIndex: null,
       },
