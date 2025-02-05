@@ -64,17 +64,30 @@ const ExplorableExplanation = () => {
   const [currentStep, setCurrentStep] = useState<StepType>({} as StepType);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
-
   const [interactiveMode, _setInteractiveMode] = useState(false);
+
+  const [interestGroupUpdateIndicator, setInterestGroupUpdateIndicator] =
+    useState(-1);
+  const [auctionUpdateIndicator, setAuctionUpdateIndicator] = useState(-1);
+  const [bidsUpdateIndicator, setBidsUpdateIndicator] = useState(-1);
 
   const setInteractiveMode = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSitesVisited([]);
       _setInteractiveMode(event.target.checked);
       app.toggleInteractiveMode();
+      setCurrentSiteData(null);
     },
     []
   );
+
+  useEffect(() => {
+    if (currentSiteData === null) {
+      setInterestGroupUpdateIndicator(-1);
+      setAuctionUpdateIndicator(-1);
+      setBidsUpdateIndicator(-1);
+    }
+  }, [currentSiteData]);
 
   useEffect(() => {
     if (interactiveMode !== app.isInteractiveMode) {
@@ -90,9 +103,6 @@ const ExplorableExplanation = () => {
       app.isAutoExpand = true;
     };
   }, []);
-
-  const [interestGroupUpdateIndicator, setInterestGroupUpdateIndicator] =
-    useState(-1);
 
   const getInterestGroupData = useCallback(
     (siteData: typeof currentSiteData) => {
@@ -154,9 +164,6 @@ const ExplorableExplanation = () => {
     },
     [getInterestGroupData]
   );
-
-  const [auctionUpdateIndicator, setAuctionUpdateIndicator] = useState(-1);
-  const [bidsUpdateIndicator, setBidsUpdateIndicator] = useState(-1);
 
   const [auctionsData, setAuctionsData] = useState<{
     auctionData: AuctionEventsType | null;

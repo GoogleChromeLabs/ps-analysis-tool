@@ -155,18 +155,24 @@ const Panel = ({
       highlightTab(1, false);
       highlightTab(2, false);
       highlightTab(0);
+    } else {
+      highlightTab(0, false);
     }
   }, [interestGroupUpdateIndicator, highlightTab]);
 
   useEffect(() => {
     if (auctionUpdateIndicator !== -1) {
       highlightTab(1);
+    } else {
+      highlightTab(1, false);
     }
   }, [auctionUpdateIndicator, highlightTab]);
 
   useEffect(() => {
     if (bidsUpdateIndicator !== -1) {
       highlightTab(2);
+    } else {
+      highlightTab(2, false);
     }
   }, [bidsUpdateIndicator, highlightTab]);
 
