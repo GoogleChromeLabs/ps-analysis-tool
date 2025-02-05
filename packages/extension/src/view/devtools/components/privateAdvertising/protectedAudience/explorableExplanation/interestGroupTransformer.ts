@@ -18,6 +18,10 @@
  */
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
 
+interface SingleAd {
+  renderURL: string;
+  metadata: string;
+}
 export const transformInterestGroup = (site: string) => {
   let interestGroups = SYNTHETIC_INTEREST_GROUPS[site];
   interestGroups = interestGroups.map((interestGroup) => {
@@ -37,13 +41,15 @@ export const transformInterestGroup = (site: string) => {
         interestGroup.ownerOrigin
       );
 
-    interestGroup.details.ads = interestGroup.details.ads.map((ad) => {
-      ad.renderURL = ad.renderURL.replace(
-        'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-        interestGroup.ownerOrigin
-      );
-      return ad;
-    });
+    interestGroup.details.ads = interestGroup.details.ads.map(
+      (ad: SingleAd) => {
+        ad.renderURL = ad.renderURL.replace(
+          'https://privacysandboxdemos-buyer-1.domain-aaa.com',
+          interestGroup.ownerOrigin ?? ''
+        );
+        return ad;
+      }
+    );
 
     return interestGroup;
   });
