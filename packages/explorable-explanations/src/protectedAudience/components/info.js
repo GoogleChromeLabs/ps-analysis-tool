@@ -20,18 +20,18 @@ import { addCanvasEventListener, isInsideBox } from '../utils';
 import config from '../config';
 import app from '../app';
 
-const Info = ({ iconX, iconY, title, info, description }) => {
+const Info = ({ x, y, title, info, description }) => {
   const {
     timeline: { infoIconSize },
   } = config;
   const p = app.p;
 
-  app.timeline.infoIconsPositions.push({ x: iconX, y: iconY });
+  app.timeline.infoIconsPositions.push({ x, y });
 
-  p.image(p.infoIcon, iconX, iconY, infoIconSize, infoIconSize);
+  p.image(p.infoIcon, x, y, infoIconSize, infoIconSize);
 
   const mouseClickedCallback = (mouseX, mouseY) => {
-    if (isInsideBox(mouseX, mouseY, iconX, iconY, infoIconSize)) {
+    if (isInsideBox(mouseX, mouseY, x, y, infoIconSize)) {
       app.setInfo({
         title,
         description,
@@ -41,7 +41,7 @@ const Info = ({ iconX, iconY, title, info, description }) => {
     }
   };
 
-  const key = title + description + iconX + iconY;
+  const key = title + description + x + y;
   addCanvasEventListener('mouseClicked', mouseClickedCallback, key);
 };
 
