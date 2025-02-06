@@ -227,6 +227,8 @@ const ExplorableExplanation = () => {
     setAuctionsData((prevData) => {
       if (!currentSiteData || currentSiteData?.type === 'advertiser') {
         previousAuctionData.current = null;
+        setAuctionUpdateIndicator(-1);
+        setBidsUpdateIndicator(-1);
         return null;
       }
 
