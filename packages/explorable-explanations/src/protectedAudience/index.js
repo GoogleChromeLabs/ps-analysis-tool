@@ -210,7 +210,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
     app.promiseQueue.push((cb) => {
       app.timeline.currentIndex += 1;
       flow.setButtonsDisabilityState();
-
+      utils.drawOpenArrowWithoutAnimationIcon();
       cb(null, true);
     });
 
@@ -717,6 +717,7 @@ export const userSketch = (p) => {
 
 app.reset = async () => {
   app.promiseQueue.end();
+  app.nodeIndexRevisited = -1;
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   app.visitedIndexOrder = [];

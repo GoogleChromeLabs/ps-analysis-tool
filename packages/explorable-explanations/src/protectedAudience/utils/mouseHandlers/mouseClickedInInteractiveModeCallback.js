@@ -71,10 +71,12 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
     wipeAndRecreateUserCanvas();
     renderUserIcon();
     bubbles.generateBubbles();
+    drawOpenArrowWithoutAnimationIcon();
 
     if (circles[clickedIndex].visited) {
       app.promiseQueue.push((cb) => {
         wipeAndRecreateUserCanvas();
+        drawOpenArrowWithoutAnimationIcon();
         wipeAndRecreateMainCanvas();
 
         p.push();
@@ -160,7 +162,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       app.shouldRespondToClick = true;
 
       wipeAndRecreateUserCanvas();
-      wipeAndRecreateMainCanvas();
       renderUserIcon();
       drawOpenArrowWithoutAnimationIcon();
       flow.setButtonsDisabilityState();
