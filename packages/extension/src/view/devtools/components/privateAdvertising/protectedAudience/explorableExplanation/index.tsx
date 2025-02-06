@@ -204,13 +204,19 @@ const ExplorableExplanation = () => {
     []
   );
 
+  const lastVisitedNode = useRef<string | undefined>(undefined);
+
   const _setCurrentSiteData = useCallback(
     (siteData: typeof currentSiteData) => {
       previousAuctionData.current = null;
       setCurrentStep({} as StepType);
       setSelectedAdUnit(null);
       setSelectedDateTime(null);
-      setCurrentSiteData(() => siteData);
+      setCurrentSiteData((prev) => {
+        lastVisitedNode.current = prev?.website;
+
+        return siteData;
+      });
       setInterestGroupsData((prev) => getInterestGroupData(siteData, prev));
     },
     [getInterestGroupData]
@@ -230,6 +236,12 @@ const ExplorableExplanation = () => {
         setAuctionUpdateIndicator(-1);
         setBidsUpdateIndicator(-1);
         return null;
+      }
+
+      if (lastVisitedNode.current !== currentSiteData.website) {
+        setAuctionUpdateIndicator(-1);
+        setBidsUpdateIndicator(-1);
+        lastVisitedNode.current = currentSiteData.website;
       }
 
       const advertiserSet = sitesVisited.filter(
