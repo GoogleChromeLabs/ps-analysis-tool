@@ -93,7 +93,7 @@ export type App = {
     expandIconPositions: CoordinatesWithIndex[];
     currentIndex: number;
     pausedReason: string;
-    infoIconsPositions: Record<string, unknown>[];
+    infoIconsPositions: Record<string, number>[];
     renderUserIcon: () => void;
     drawTimelineLine: () => void;
     drawTimeline: (timeline: Config['timeline']) => void;
