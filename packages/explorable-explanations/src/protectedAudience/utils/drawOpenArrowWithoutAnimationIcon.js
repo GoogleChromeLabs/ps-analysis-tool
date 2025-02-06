@@ -18,9 +18,17 @@
  */
 import app from '../app';
 export const drawOpenArrowWithoutAnimationIcon = () => {
-  app.timeline.expandIconPositions.forEach((position, index) => {
+  app.timeline.expandIconPositions.forEach((position) => {
+    if (
+      app.isInteractiveMode &&
+      position.index === app.timeline.currentIndex &&
+      app.nodeIndexRevisited === -1
+    ) {
+      return;
+    }
+
     app.up.push();
-    if (index === app.nodeIndexRevisited) {
+    if (position.index === app.nodeIndexRevisited) {
       app.up.rotate(app.p.TWO_PI / 2);
       app.up.image(
         app.p.openWithoutAnimation,

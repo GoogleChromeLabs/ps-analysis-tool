@@ -71,6 +71,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
     wipeAndRecreateUserCanvas();
     renderUserIcon();
     bubbles.generateBubbles();
+    app.nodeIndexRevisited = -1;
     drawOpenArrowWithoutAnimationIcon();
 
     if (circles[clickedIndex].visited) {
@@ -135,6 +136,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
         app.shouldRespondToClick = true;
         bubbles.showMinifiedBubbles();
+        wipeAndRecreateUserCanvas();
         renderUserIcon();
         drawOpenArrowWithoutAnimationIcon();
         return;
