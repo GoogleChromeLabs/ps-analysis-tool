@@ -185,9 +185,7 @@ const ExplorableExplanation = () => {
       );
 
       if (siteData?.type !== 'publisher') {
-        const isDataEqual = isEqual(requiredIG, prevInterestGroupsData);
-
-        if (!isDataEqual) {
+        if (requiredIG.length > prevInterestGroupsData.length) {
           setInterestGroupUpdateIndicator(
             (prev) => (prev === -1 ? 0 : prev) ^ 1
           );

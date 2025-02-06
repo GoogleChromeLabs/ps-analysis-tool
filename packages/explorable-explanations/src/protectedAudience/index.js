@@ -307,6 +307,7 @@ app.handleNonInteractivePrev = async () => {
   await utils.delay(10);
 
   app.timeline.currentIndex -= 1;
+  app.setHasLastNodeVisited(false);
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
