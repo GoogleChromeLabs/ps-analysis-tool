@@ -66,6 +66,7 @@ export type Config = {
         text: string;
         borderStroke: number[];
         noData: string;
+        browser: string;
       };
     };
   };
@@ -198,6 +199,7 @@ const config: Config = {
         noData: '#e9ecef',
         text: '#000',
         borderStroke: [0, 0, 0],
+        browser: '#000',
       },
     },
   },

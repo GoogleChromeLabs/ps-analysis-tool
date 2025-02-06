@@ -119,6 +119,9 @@ export type AuctionStep = {
     direction?: string;
     noArrow?: boolean;
     title?: string;
+    width?: number;
+    height?: number;
+    borderStroke?: number[];
     info?: React.ReactNode;
     color?: string;
     customWidth?: number;

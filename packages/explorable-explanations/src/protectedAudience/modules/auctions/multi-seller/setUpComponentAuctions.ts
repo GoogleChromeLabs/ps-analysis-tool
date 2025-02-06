@@ -34,7 +34,7 @@ const boxCordinates: Coordinates = {
   y: 0,
 };
 
-const setUpComponentAuctions = (steps, index) => {
+const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
   const { box } = config.flow;
   const publisher = config.timeline.circles[index].website;
 
@@ -70,7 +70,9 @@ const setUpComponentAuctions = (steps, index) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -337,7 +339,7 @@ const setUpTPoint = (steps: AuctionStep[]) => {
   });
 };
 
-const setupAfterComponentAuctionFlow = (steps) => {
+const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
   const { box, arrowSize } = config.flow;
 
   steps.push({
@@ -351,7 +353,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -407,7 +411,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 

@@ -31,13 +31,12 @@ import setUpAdUnitCode from './setUpAdUnitCode';
 import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
-import { noop } from '@google-psat/common';
 import { AuctionStep, Step } from '../../../types';
 
 export type Auction = {
-  setupAuctions?: () => void;
-  setUp?: (index: number) => void;
-  draw?: (index: number) => void;
+  setupAuctions: () => void;
+  setUp: (index: number) => void;
+  draw: (index: number) => void;
 };
 
 /**
@@ -45,172 +44,168 @@ export type Auction = {
  * Handles the setup and rendering of auction steps in a flowchart-like interface.
  */
 const auction: Auction = {
-  setupAuctions: noop,
-  setUp: noop,
-  draw: noop,
-};
+  /**
+   * Initializes auction setup for all circles defined in the configuration.
+   * Loops through each circle and sets up the auction steps.
+   */
+  setupAuctions: () => {
+    app.auction.auctions = [];
+    config.timeline.circles.forEach((___, index) => {
+      auction.setUp?.(index);
+    });
+  },
 
-/**
- * Initializes auction setup for all circles defined in the configuration.
- * Loops through each circle and sets up the auction steps.
- */
-auction.setupAuctions = () => {
-  app.auction.auctions = [];
-  config.timeline.circles.forEach((___, index) => {
-    auction.setUp?.(index);
-  });
-};
+  /**
+   * Sets up the auction steps for a specific circle index.
+   * Adds steps and coordinates for rendering components like Boxes, ProgressLines, and Branches.
+   * @param {number} index - The index of the circle to set up.
+   */
+  setUp: (index: number) => {
+    const { circles } = config.timeline;
+    const currentCircle = circles[index];
 
-/**
- * Sets up the auction steps for a specific circle index.
- * Adds steps and coordinates for rendering components like Boxes, ProgressLines, and Branches.
- * @param {number} index - The index of the circle to set up.
- */
-auction.setUp = (index: number) => {
-  const { circles } = config.timeline;
-  const currentCircle = circles[index];
+    if (currentCircle.type !== 'publisher') {
+      app.auction.auctions?.push([]);
+      return;
+    }
 
-  if (currentCircle.type !== 'publisher') {
-    app.auction.auctions?.push([]);
-    return;
-  }
+    const steps: AuctionStep[] = [];
 
-  const steps: AuctionStep[] = [];
+    setUpAdUnitCode(steps, index);
+    setupBranches(steps, index);
 
-  setUpAdUnitCode(steps, index);
-  setupBranches(steps, index);
+    if (app.isMultiSeller) {
+      setUpMultiSellerFirstSSPTagFlow(steps);
+      setUpPublisherAdServerFlow(steps);
+      setUpComponentAuctions(steps, index);
+    } else {
+      setUpSingleSellerFirstSSPTagFlow(steps);
+      setUpRunadAuction(steps);
+      setupShowWinningAd(steps);
+    }
 
-  if (app.isMultiSeller) {
-    setUpMultiSellerFirstSSPTagFlow(steps);
-    setUpPublisherAdServerFlow(steps);
-    setUpComponentAuctions(steps, index);
-  } else {
-    setUpSingleSellerFirstSSPTagFlow(steps);
-    setUpRunadAuction(steps);
-    setupShowWinningAd(steps);
-  }
+    app.auction.auctions.push(steps);
+  },
 
-  app.auction.auctions.push(steps);
-};
+  /**
+   * Draws the auction steps for a specific index asynchronously.
+   * Each step is rendered sequentially with delays.
+   * @param {number} index - The index of the auction steps to draw.
+   */
+  draw: (index: number) => {
+    if (!app.p) {
+      return;
+    }
 
-/**
- * Draws the auction steps for a specific index asynchronously.
- * Each step is rendered sequentially with delays.
- * @param {number} index - The index of the auction steps to draw.
- */
-auction.draw = (index: number) => {
-  if (!app.p) {
-    return;
-  }
+    app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
-  app.p.textAlign(app.p.CENTER, app.p.CENTER);
+    if (!app.auction.auctions[index]) {
+      return;
+    }
 
-  if (!app.auction.auctions[index]) {
-    return;
-  }
+    if (!app.promiseQueue) {
+      return;
+    }
 
-  if (!app.promiseQueue) {
-    return;
-  }
-
-  app.promiseQueue.push((cb) => {
-    // @ts-ignore
-    app.setCurrentSite(config.timeline.circles[index]);
-    cb?.(undefined, true);
-  });
-
-  for (const step of app.auction.auctions[index]) {
-    app.promiseQueue.push(async (cb) => {
-      const { component, props, callBack, delay = 0 } = step;
-      let ssp = '';
-
-      if (props?.title) {
-        if (props?.ssp) {
-          ssp = props.ssp;
-        } else {
-          if (app.isMultiSeller && props.title === 'scoreAd()') {
-            ssp = 'https://www.' + config.timeline.circles[index].website;
-          }
-        }
-
-        const stepInformation: Step = {
-          title: props.title,
-          description: props.description || '',
-          ssp,
-        };
-
-        app.setCurrentStep(stepInformation);
-      }
-
-      const returnValue = await component?.(props); // eslint-disable-line no-await-in-loop
-
-      if (!app.isRevisitingNodeInInteractiveMode) {
-        if (props?.showBarrageAnimation) {
-          await bubbles.barrageAnimation?.(index); // eslint-disable-line no-await-in-loop
-
-          if (app.cancelPromise) {
-            cb?.(undefined, true);
-            return;
-          }
-
-          await utils.delay(500 / app.speedMultiplier); // eslint-disable-line no-await-in-loop
-
-          utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
-        }
-
-        if (props?.showRippleEffect) {
-          const x = typeof props.x === 'function' ? props.x() : props.x;
-          const y = typeof props.y === 'function' ? props.y() : props.y;
-
-          if (!x || !y) {
-            return;
-          }
-
-          if (app.cancelPromise) {
-            cb?.(undefined, true);
-            return;
-          }
-          // eslint-disable-next-line no-await-in-loop
-          await RippleEffect({
-            x: x + config.flow.box.width + 2,
-            y: y + config.flow.box.height / 2,
-          });
-        }
-      }
-
-      if (callBack) {
-        callBack(returnValue);
-      }
-
-      if (!app.isRevisitingNodeInInteractiveMode) {
-        if (app.cancelPromise) {
-          cb?.(undefined, true);
-          return;
-        }
-
-        await utils.delay(delay / app.speedMultiplier); // eslint-disable-line no-await-in-loop
-      }
-
-      showWinningAdDirectly(
-        cb as (error: Error | null, success: boolean) => void,
-        props,
-        index,
-        auction.draw,
-        auction.setupAuctions
-      );
+    app.promiseQueue.push((cb) => {
+      // @ts-ignore
+      app.setCurrentSite(config.timeline.circles[index]);
       cb?.(undefined, true);
     });
-  }
 
-  app.promiseQueue.push((cb) => {
-    if (!app.isRevisitingNodeInInteractiveMode) {
-      flow.clearBelowTimelineCircles();
-      app.timeline.infoIconsPositions = [];
-      app.setSelectedAdUnit('');
-      app.setSelectedDateTime('');
+    for (const step of app.auction.auctions[index]) {
+      app.promiseQueue.push(async (cb) => {
+        const { component, props, callBack, delay = 0 } = step;
+        let ssp = '';
+
+        if (props?.title) {
+          if (props?.ssp) {
+            ssp = props.ssp;
+          } else {
+            if (app.isMultiSeller && props.title === 'scoreAd()') {
+              ssp = 'https://www.' + config.timeline.circles[index].website;
+            }
+          }
+
+          const stepInformation: Step = {
+            title: props.title,
+            description: props.description || '',
+            ssp,
+          };
+
+          app.setCurrentStep(stepInformation);
+        }
+
+        const returnValue = await component?.(props); // eslint-disable-line no-await-in-loop
+
+        if (!app.isRevisitingNodeInInteractiveMode) {
+          if (props?.showBarrageAnimation) {
+            await bubbles.barrageAnimation?.(index); // eslint-disable-line no-await-in-loop
+
+            if (app.cancelPromise) {
+              cb?.(undefined, true);
+              return;
+            }
+
+            await utils.delay(500 / app.speedMultiplier); // eslint-disable-line no-await-in-loop
+
+            utils.wipeAndRecreateInterestCanvas(); // eslint-disable-line no-await-in-loop
+          }
+
+          if (props?.showRippleEffect) {
+            const x = typeof props.x === 'function' ? props.x() : props.x;
+            const y = typeof props.y === 'function' ? props.y() : props.y;
+
+            if (!x || !y) {
+              return;
+            }
+
+            if (app.cancelPromise) {
+              cb?.(undefined, true);
+              return;
+            }
+            // eslint-disable-next-line no-await-in-loop
+            await RippleEffect({
+              x: x + config.flow.box.width + 2,
+              y: y + config.flow.box.height / 2,
+            });
+          }
+        }
+
+        if (callBack) {
+          callBack(returnValue);
+        }
+
+        if (!app.isRevisitingNodeInInteractiveMode) {
+          if (app.cancelPromise) {
+            cb?.(undefined, true);
+            return;
+          }
+
+          await utils.delay(delay / app.speedMultiplier); // eslint-disable-line no-await-in-loop
+        }
+
+        showWinningAdDirectly(
+          cb as (error: Error | null, success: boolean) => void,
+          props,
+          index,
+          auction.draw,
+          auction.setupAuctions
+        );
+        cb?.(undefined, true);
+      });
     }
-    cb?.(undefined, true);
-  });
+
+    app.promiseQueue.push((cb) => {
+      if (!app.isRevisitingNodeInInteractiveMode) {
+        flow.clearBelowTimelineCircles();
+        app.timeline.infoIconsPositions = [];
+        app.setSelectedAdUnit('');
+        app.setSelectedDateTime('');
+      }
+      cb?.(undefined, true);
+    });
+  },
 };
 
 export default auction;

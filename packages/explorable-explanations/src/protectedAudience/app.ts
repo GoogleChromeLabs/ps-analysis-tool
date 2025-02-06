@@ -50,6 +50,8 @@ type CoordinatesWithIndex = Coordinates & {
   index: number;
 };
 
+type MouseCallback = (mouseX: number, mouseY: number) => void;
+
 export type App = {
   p: P5 | null;
   igp: P5 | null;
@@ -124,10 +126,10 @@ export type App = {
   };
   canvasEventListerners: {
     main: {
-      mouseOver: Record<string, unknown>;
-      mouseOut: Record<string, unknown>;
-      mouseMoved: Record<string, unknown>;
-      mouseClicked: Record<string, unknown>;
+      mouseOver: Record<string, MouseCallback>;
+      mouseOut: Record<string, MouseCallback>;
+      mouseMoved: Record<string, MouseCallback>;
+      mouseClicked: Record<string, MouseCallback>;
     };
   };
   createCanvas: () => void;
