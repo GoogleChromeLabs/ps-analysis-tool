@@ -210,6 +210,11 @@ app.addToPromiseQueue = (indexToStartFrom) => {
 
     app.promiseQueue.push((cb) => {
       app.timeline.currentIndex += 1;
+
+      if (app.timeline.currentIndex === config.timeline.circles.length) {
+        app.setHasLastNodeVisited(true);
+      }
+
       flow.setButtonsDisabilityState();
 
       cb(null, true);
@@ -424,6 +429,10 @@ app.handleNonInteractiveNext = async () => {
 
   await utils.delay(10);
   app.timeline.currentIndex += 1;
+
+  if (app.timeline.currentIndex === config.timeline.circles.length) {
+    app.setHasLastNodeVisited(true);
+  }
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
@@ -691,6 +700,10 @@ export const interestGroupSketch = (p) => {
 
     if (props.setCurrentStep) {
       app.setCurrentStep = props.setCurrentStep;
+    }
+
+    if (props.setHasLastNodeVisited) {
+      app.setHasLastNodeVisited = props.setHasLastNodeVisited;
     }
 
     if (typeof props.autoScroll !== 'undefined') {

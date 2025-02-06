@@ -77,6 +77,7 @@ const app = {
   setSelectedExpandedFlow: () => null,
   setSelectedAdUnit: () => null,
   setSelectedDateTime: () => null,
+  setHasLastNodeVisited: () => null,
   usedNextOrPrev: false,
   promiseQueue: null,
   canvasEventListerners: {

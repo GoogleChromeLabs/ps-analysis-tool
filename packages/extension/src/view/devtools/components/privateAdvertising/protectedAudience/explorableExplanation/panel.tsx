@@ -80,6 +80,7 @@ interface PanelProps {
   interestGroupUpdateIndicator: number;
   auctionUpdateIndicator: number;
   bidsUpdateIndicator: number;
+  setHasLastNodeVisited: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Panel = ({
@@ -98,6 +99,7 @@ const Panel = ({
   interestGroupUpdateIndicator,
   auctionUpdateIndicator,
   bidsUpdateIndicator,
+  setHasLastNodeVisited,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -300,8 +302,9 @@ const Panel = ({
 
   const resetHandler = useCallback(() => {
     app.reset();
+    setHasLastNodeVisited(false);
     setCurrentSite(null);
-  }, [setCurrentSite]);
+  }, [setCurrentSite, setHasLastNodeVisited]);
 
   const extraInterface = (
     <div className="flex gap-3 items-center">
@@ -431,6 +434,7 @@ const Panel = ({
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         setSelectedAdUnit={setSelectedAdUnit}
         setSelectedDateTime={setSelectedDateTime}
+        setHasLastNodeVisited={setHasLastNodeVisited}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <DraggableTray />

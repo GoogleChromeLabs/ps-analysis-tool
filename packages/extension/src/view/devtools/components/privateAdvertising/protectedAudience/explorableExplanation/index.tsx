@@ -60,6 +60,7 @@ const DEFAULT_SETTINGS = {
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+  const [hasLastNodeVisited, setHasLastNodeVisited] = useState(false);
 
   const [isMultiSeller, setIsMultiSeller] = useState(false);
   const [selectedAdUnit, setSelectedAdUnit] = useState<string | null>(null);
@@ -85,6 +86,7 @@ const ExplorableExplanation = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSitesVisited([]);
       _setInteractiveMode(event.target.checked);
+      setHasLastNodeVisited(false);
       app.toggleInteractiveMode();
       setCurrentSiteData(null);
     },
@@ -105,12 +107,12 @@ const ExplorableExplanation = () => {
   }, [interactiveMode, isMultiSeller]);
 
   useEffect(() => {
-    if (currentSiteData === null) {
+    if (currentSiteData === null || hasLastNodeVisited) {
       setInterestGroupUpdateIndicator(-1);
       setAuctionUpdateIndicator(-1);
       setBidsUpdateIndicator(-1);
     }
-  }, [currentSiteData]);
+  }, [currentSiteData, hasLastNodeVisited]);
 
   useEffect(() => {
     if (interactiveMode !== app.isInteractiveMode) {
@@ -362,6 +364,7 @@ const ExplorableExplanation = () => {
         interestGroupUpdateIndicator={interestGroupUpdateIndicator}
         auctionUpdateIndicator={auctionUpdateIndicator}
         bidsUpdateIndicator={bidsUpdateIndicator}
+        setHasLastNodeVisited={setHasLastNodeVisited}
       />
     </TabsProvider>
   );
