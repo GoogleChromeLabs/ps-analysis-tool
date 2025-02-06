@@ -21,6 +21,7 @@ import type { SidebarItems } from '@google-psat/design-system';
 import React, { useEffect, useState } from 'react';
 import type {
   AdsAndBiddersType,
+  NoBidsType,
   singleAuctionEvent,
 } from '@google-psat/common';
 
@@ -36,6 +37,7 @@ interface AuctionsProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
     receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;
 }
@@ -49,7 +51,7 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
         props: {
           adsAndBidders: customAdsAndBidders,
           receivedBids: auctionEvents.receivedBids,
-          noBids: {},
+          noBids: auctionEvents.noBids,
           showEvaluationPlaceholder: Boolean(customAdsAndBidders),
         },
       },
@@ -57,6 +59,22 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
       dropdownOpen: true,
     },
   });
+
+  useEffect(() => {
+    setSidebarData((prevData: SidebarItems) => {
+      if (!prevData?.adunits?.panel) {
+        return prevData;
+      }
+
+      prevData.adunits.panel.props = {
+        adsAndBidders: customAdsAndBidders,
+        receivedBids: auctionEvents.receivedBids,
+        noBids: auctionEvents.noBids,
+        showEvaluationPlaceholder: Boolean(customAdsAndBidders),
+      };
+      return prevData;
+    });
+  }, [auctionEvents.noBids, auctionEvents.receivedBids, customAdsAndBidders]);
 
   useEffect(() => {
     if (

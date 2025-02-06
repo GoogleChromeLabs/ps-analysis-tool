@@ -213,6 +213,7 @@ const ExplorableExplanation = () => {
           props: {
             auctionEvents: auctionsData,
             customAdsAndBidders: auctionsData.adsAndBidders,
+            noBids: auctionsData.noBids ?? {},
           },
         },
       },
