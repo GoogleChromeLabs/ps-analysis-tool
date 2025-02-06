@@ -161,6 +161,13 @@ const ExplorableExplanation = () => {
         });
 
         setSitesVisited(() => _sitesVisited);
+
+        if (requiredIG.length > prevInterestGroupsData.length) {
+          setInterestGroupUpdateIndicator(
+            (prev) => (prev === -1 ? 0 : prev) ^ 1
+          );
+        }
+
         return requiredIG;
       }
 
