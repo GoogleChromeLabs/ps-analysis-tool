@@ -27,6 +27,7 @@ import type * as d3 from 'd3';
 import { AuctionStep, Coordinates, P5, Bubble, SketchProps } from '../types';
 import { Config } from './config';
 
+// Sketch props added to the app object during initialization
 type SketchSharedProps = Pick<
   SketchProps,
   | 'setIsBubbleExpanded'
@@ -50,6 +51,38 @@ type CoordinatesWithIndex = Coordinates & {
 };
 
 export type App = {
+  p: P5 | null;
+  igp: P5 | null;
+  up: P5 | null;
+  isAutoExpand: boolean;
+  isMultiSeller: boolean;
+  cancelPromise: boolean;
+  mouseOutOfDiv: boolean;
+  mouseX: number;
+  mouseY: number;
+  shouldRespondToClick: boolean;
+  startTrackingMouse: boolean;
+  visitedIndexes: number;
+  visitedIndexOrder: number[];
+  visitedIndexOrderTracker: number;
+  isRevisitingNodeInInteractiveMode: boolean;
+  nodeIndexRevisited: number;
+  usedNextOrPrev: boolean;
+  promiseQueue: Queue | null;
+  closeButton: HTMLElement | null;
+  minifiedBubbleContainer: HTMLElement | null;
+  openButton: HTMLElement | null;
+  playButton: HTMLElement | null;
+  pauseButton: HTMLElement | null;
+  multSellerCheckBox: HTMLElement | null;
+  intreactiveModeCheckBox: HTMLElement | null;
+  countDisplay: HTMLElement | null;
+  bubbleContainerDiv: HTMLElement | null;
+  canvasParentElement?: HTMLElement | null;
+  controlsDiv: HTMLElement | null;
+  nextButton: HTMLElement | null;
+  prevButton: HTMLElement | null;
+  bubblesContainerDiv: HTMLElement | null;
   timeline: {
     isPaused: boolean;
     circlePositions: Coordinates[];
@@ -89,23 +122,14 @@ export type App = {
     minifiedCircleDiameter: number;
     highlightedInterestGroup: string | null;
   };
-  bubblesContainerDiv: HTMLElement | null;
-  mouseOutOfDiv: boolean;
-  p: P5 | null;
-  igp: P5 | null;
-  up: P5 | null;
-  isAutoExpand: boolean;
-  isMultiSeller: boolean;
-  cancelPromise: boolean;
-  mouseX: number;
-  mouseY: number;
-  shouldRespondToClick: boolean;
-  startTrackingMouse: boolean;
-  visitedIndexes: number;
-  visitedIndexOrder: number[];
-  visitedIndexOrderTracker: number;
-  isRevisitingNodeInInteractiveMode: boolean;
-  nodeIndexRevisited: number;
+  canvasEventListerners: {
+    main: {
+      mouseOver: Record<string, unknown>;
+      mouseOut: Record<string, unknown>;
+      mouseMoved: Record<string, unknown>;
+      mouseClicked: Record<string, unknown>;
+    };
+  };
   createCanvas: () => void;
   setUpTimeLine: () => void;
   setup: () => void;
@@ -123,29 +147,6 @@ export type App = {
     event: MouseEvent,
     expandOverride?: boolean
   ) => void;
-  usedNextOrPrev: boolean;
-  promiseQueue: Queue | null;
-  canvasEventListerners: {
-    main: {
-      mouseOver: Record<string, unknown>;
-      mouseOut: Record<string, unknown>;
-      mouseMoved: Record<string, unknown>;
-      mouseClicked: Record<string, unknown>;
-    };
-  };
-  closeButton: HTMLElement | null;
-  minifiedBubbleContainer: HTMLElement | null;
-  openButton: HTMLElement | null;
-  playButton: HTMLElement | null;
-  pauseButton: HTMLElement | null;
-  multSellerCheckBox: HTMLElement | null;
-  intreactiveModeCheckBox: HTMLElement | null;
-  countDisplay: HTMLElement | null;
-  bubbleContainerDiv: HTMLElement | null;
-  canvasParentElement?: HTMLElement | null;
-  controlsDiv: HTMLElement | null;
-  nextButton: HTMLElement | null;
-  prevButton: HTMLElement | null;
   addToPromiseQueue: (indexToStartFrom: number) => void;
   drawFlows: (index: number) => void;
   minifiedBubbleKeyPressListener: (event: KeyboardEvent) => void;
@@ -176,7 +177,7 @@ const app: App = {
   prevButton: null,
   autoScroll: true,
   mouseOutOfDiv: false,
-  speedMultiplier: 5,
+  speedMultiplier: 1,
   isAutoExpand: true,
   isMultiSeller: false,
   cancelPromise: false,

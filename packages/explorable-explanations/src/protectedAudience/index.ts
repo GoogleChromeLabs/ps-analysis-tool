@@ -40,14 +40,6 @@ import {
 import { P5, Circle } from '../types';
 
 app.setUpTimeLine = () => {
-  app.auction.auctions = [];
-  app.joinInterestGroup.joinings = [];
-  app.timeline.circlePositions = [];
-  app.timeline.circlePublisherIndices = [];
-  app.bubbles.positions = [];
-  app.bubbles.minifiedSVG = null;
-  app.timeline.currentIndex = 0;
-  app.timeline.expandIconPositions = [];
   bubbles.clearAndRewriteBubbles?.();
   app.setup();
   timeline.init();
