@@ -302,7 +302,7 @@ app.handleNonInteractivePrev = async () => {
 
   app.timeline.currentIndex -= 1;
 
-  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex - 1]);
 
   await utils.delay(10);
 
@@ -415,18 +415,14 @@ app.handleNonInteractiveNext = async () => {
 
   if (
     app.bubbles.positions.length <
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex + 1)
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex)
   ) {
     bubbles.generateBubbles();
     bubbles.showMinifiedBubbles();
   }
-
-  await utils.delay(10);
   app.timeline.currentIndex += 1;
-
-  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
-
   await utils.delay(10);
+
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
 
