@@ -128,7 +128,7 @@ const Branches = async ({
           `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
         );
       } else {
-        app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
+        app.setSelectedDateTime(publisherData[currentSite].adunits[1]);
       }
 
       scrollToCoordinates(endpoints[1].x, endpoints[1].y);

@@ -589,9 +589,14 @@ app.toggleMultSeller = (event) => {
 // Define the sketch
 export const sketch = (p) => {
   p.updateWithProps = (props) => {
-    if (Object.prototype.hasOwnProperty.call(props, 'isMultiSeller')) {
-      app.isMultiSeller = props.isMultiSeller;
+    if (app.isMultiSeller !== props.isMultiSeller) {
+      app.reset();
+      setTimeout(() => {
+        app.play(true);
+      }, 500);
     }
+
+    app.isMultiSeller = props.isMultiSeller;
   };
 
   app.promiseQueue = new Queue({
@@ -750,7 +755,6 @@ app.reset = async () => {
   setupMainCanvas(app.p, true);
 
   app.timeline.isPaused = true;
-  app.timeline.pausedReason = 'userClick';
   app.setPlayState(false);
   app.setCurrentSite(null);
   app.setInfo({});
