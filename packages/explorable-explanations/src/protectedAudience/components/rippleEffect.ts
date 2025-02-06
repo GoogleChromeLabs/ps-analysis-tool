@@ -19,7 +19,7 @@
 import app from '../app';
 import config from '../config';
 import { Coordinates } from '../../types';
-
+import { getCoordinateValues } from '../utils/getCoordinateValues';
 type RippleEffect = {
   setUp?: () => void;
   start?: (x: number, y: number) => Promise<void>;
@@ -29,7 +29,8 @@ type RippleEffect = {
 // @todo To be moved to components.
 const rippleEffect: RippleEffect = {};
 
-const RippleEffect = async ({ x, y }: Coordinates) => {
+const RippleEffect = async (coordinates: Coordinates) => {
+  const { x, y } = getCoordinateValues(coordinates);
   if (!rippleEffect.setUp || !rippleEffect.start) {
     return;
   }

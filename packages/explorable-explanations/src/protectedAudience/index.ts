@@ -38,7 +38,7 @@ import {
   setupUserCanvas,
 } from './canvas';
 import { P5, Circle } from '../types';
-
+import { getCoordinateValues } from './utils/getCoordinateValues.ts';
 app.setUpTimeLine = () => {
   bubbles.clearAndRewriteBubbles?.();
   app.setup();
@@ -177,6 +177,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
   while (currentIndex < config.timeline.circles.length) {
     app.promiseQueue.push((cb) => {
       const { currentIndex: _currentIndex, circlePositions } = app.timeline;
+      const { x, y } = getCoordinateValues(circlePositions[_currentIndex]);
       const {
         circleProps: { diameter },
         circles,
@@ -184,8 +185,8 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
 
       if (!circles.every(({ visited }) => visited === true)) {
         app.timeline.expandIconPositions.push({
-          x: circlePositions[_currentIndex].x,
-          y: circlePositions[_currentIndex].y + diameter / 2,
+          x: x,
+          y: y + diameter / 2,
           index: _currentIndex,
         });
       }
@@ -241,12 +242,13 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
     circles.forEach((__, index) => {
       p?.push();
       p?.stroke(colors.visitedBlue);
-      const position = circlePositions[index];
+      const { x, y } = getCoordinateValues(circlePositions[index]);
+
       if (p?.completedCheckMark) {
         up?.image(
           p?.completedCheckMark,
-          position.x - user.width / 2,
-          position.y - user.height / 2,
+          x - user.width / 2,
+          y - user.height / 2,
           user.width,
           user.height
         );

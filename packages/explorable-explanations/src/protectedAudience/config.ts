@@ -199,7 +199,7 @@ const config: Config = {
         noData: '#e9ecef',
         text: '#000',
         borderStroke: [0, 0, 0],
-        browser: '#000',
+        browser: '#FFF',
       },
     },
   },

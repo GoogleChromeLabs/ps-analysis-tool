@@ -28,6 +28,7 @@ import flow from '../flow';
 import { SINGLE_SELLER_CONFIG } from '../flowConfig.tsx';
 import { AuctionStep } from '../../../types';
 import { Auction } from '.';
+import { getCoordinateValues } from '../../utils/getCoordinateValues.ts';
 
 export const showWinningAdDirectly = (
   cb: (error: Error | null, success: boolean) => void,
@@ -57,8 +58,8 @@ export const showWinningAdDirectly = (
       component: ProgressLine,
       props: {
         direction: 'down',
-        x1: () => app.auction.nextTipCoordinates?.x + 1,
-        y1: () => app.auction.nextTipCoordinates?.y + 40,
+        x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 1,
+        y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
       },
       callBack: (_returnValue) => {
         app.auction.nextTipCoordinates = _returnValue;
@@ -70,8 +71,9 @@ export const showWinningAdDirectly = (
       props: {
         title: SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.title,
         info: SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.info,
-        x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-        y: () => app.auction.nextTipCoordinates?.y + 10,
+        x: () =>
+          getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+        y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 10,
       },
       delay: 1000,
       callBack: (_returnValue) => {
@@ -131,10 +133,11 @@ export const showWinningAdDirectly = (
           return;
         } else {
           const positions = app.timeline.circlePositions[index];
+          const { x, y } = getCoordinateValues(positions);
           app.timeline.expandIconPositions.push({
-            x: positions.x,
-            y: positions.y + diameter / 2,
-            index: index,
+            x,
+            y: y + diameter / 2,
+            index,
           });
 
           app.visitedIndexOrder.push(index);

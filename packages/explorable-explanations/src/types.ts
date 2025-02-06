@@ -80,9 +80,11 @@ export type P5 = p5 & {
   updateWithProps?: (props: SketchProps) => void;
 } & SketchProps;
 
+export type CoordinateValue = number | (() => number);
+
 export type Coordinates = {
-  x: number;
-  y: number;
+  x: CoordinateValue;
+  y: CoordinateValue;
   down?: Coordinates;
 };
 
@@ -95,8 +97,6 @@ export type Circle = {
   visited: boolean;
   visitedIndex: number | null;
 };
-
-export type CoordinateValue = number | (() => number);
 
 export type AuctionStep = {
   // component could be any function with an arbitrary number of arguments and return type

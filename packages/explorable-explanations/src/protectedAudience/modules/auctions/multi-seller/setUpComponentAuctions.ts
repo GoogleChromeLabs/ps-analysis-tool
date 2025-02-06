@@ -22,6 +22,7 @@ import { Box, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
 import { AuctionStep, Coordinates } from '../../../../types';
+import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -42,8 +43,9 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + box.height - 12,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y + box.height - 12,
       customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
     },
@@ -59,11 +61,12 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
       width: BOX_WIDTH,
       height: BOX_HEIGHT,
       x: () => {
-        boxCordinates.x = app.auction.nextTipCoordinates?.x - BOX_WIDTH / 2;
+        boxCordinates.x =
+          getCoordinateValues(app.auction.nextTipCoordinates).x - BOX_WIDTH / 2;
         return boxCordinates.x;
       },
       y: () => {
-        boxCordinates.y = app.auction.nextTipCoordinates?.y;
+        boxCordinates.y = getCoordinateValues(app.auction.nextTipCoordinates).y;
         return boxCordinates.y;
       },
       borderStroke: [0, 0, 0, 0],
@@ -80,10 +83,10 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
     {
       title: 'Component Auction',
       x: () =>
-        app.auction.nextTipCoordinates?.x -
+        getCoordinateValues(app.auction.nextTipCoordinates).x -
         BOX_WIDTH / 2 +
         BORDER_BOX_MARGIN * 2,
-      y: () => app.auction.nextTipCoordinates?.y - 240,
+      y: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 240,
       info: MULTI_SELLER_CONFIG.SSP_X.info,
       sspWebsite: publisherData[publisher].ssps[0][1],
       ssp: publisherData[publisher].ssps[0][0],
@@ -93,9 +96,12 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
     },
     {
       title: 'Component Auction',
-      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN + 106.5,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x +
+        BOX_COLUMN_MARGIN +
+        106.5,
       y: () =>
-        app.auction.nextTipCoordinates?.y -
+        getCoordinateValues(app.auction.nextTipCoordinates).y -
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
@@ -108,9 +114,12 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
     },
     {
       title: 'Component Auction',
-      x: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN + 106.5,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x +
+        BOX_COLUMN_MARGIN +
+        106.5,
       y: () =>
-        app.auction.nextTipCoordinates?.y -
+        getCoordinateValues(app.auction.nextTipCoordinates).y -
         BOX_HEIGHT +
         BORDER_BOX_MARGIN * 2 +
         15,
@@ -154,10 +163,10 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
       props: {
         direction: 'down',
         x1: () =>
-          getStartingCoordinates(index).x -
+          getCoordinateValues(getStartingCoordinates(index)).x -
           BOX_WIDTH / 2 +
           BORDER_BOX_MARGIN * 2,
-        y1: () => getStartingCoordinates(index).y - 275,
+        y1: () => getCoordinateValues(getStartingCoordinates(index)).y - 275,
         customHeight: 20,
         noArrow: true,
       },
@@ -168,10 +177,10 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
       props: {
         text: title,
         x: () =>
-          getStartingCoordinates(index).x -
+          getCoordinateValues(getStartingCoordinates(index)).x -
           BOX_WIDTH / 2 +
           BORDER_BOX_MARGIN * 2,
-        y: () => getStartingCoordinates(index).y - 240,
+        y: () => getCoordinateValues(getStartingCoordinates(index)).y - 240,
       },
       delay: 1000,
       callBack: (returnValue) => {
@@ -183,14 +192,17 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
       component: Box,
       props: {
         title: ssp,
-        x: () => returnCoordinates?.x - BORDER_BOX_MARGIN - 12,
-        y: () => returnCoordinates?.y + 20,
+        x: () =>
+          getCoordinateValues(returnCoordinates).x - BORDER_BOX_MARGIN - 12,
+        y: () => getCoordinateValues(returnCoordinates).y + 20,
       },
       delay: 1000,
       callBack: () => {
         returnCoordinates = {
-          x: app.auction.nextTipCoordinates?.x + 500 * (index + 1),
-          y: app.auction.nextTipCoordinates?.y,
+          x:
+            getCoordinateValues(app.auction.nextTipCoordinates).x +
+            500 * (index + 1),
+          y: getCoordinateValues(app.auction.nextTipCoordinates).y,
         };
       },
     });
@@ -201,8 +213,8 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
     component: ProgressLine,
     props: {
       direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x - 500,
-      y1: () => app.auction.nextTipCoordinates?.y - 275,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x - 500,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 275,
       customWidth: 1000,
       noArrow: true,
       isBranch: true,
@@ -238,8 +250,11 @@ const setUpComponentAuction = (
     component: Box,
     props: {
       title: ssp,
-      x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 12,
-      y: () => app.auction.nextTipCoordinates?.y + 20,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x -
+        BORDER_BOX_MARGIN -
+        12,
+      y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 20,
       info,
     },
     delay: 1000,
@@ -255,8 +270,8 @@ const setUpComponentAuction = (
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = {
@@ -272,8 +287,11 @@ const setUpComponentAuction = (
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + box.height - arrowSize,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y +
+        box.height -
+        arrowSize,
       customHeight: 80,
       noArrow: true,
     },
@@ -286,8 +304,8 @@ const setUpComponentAuction = (
     component: Text,
     props: {
       text: bidValue,
-      x: () => app.auction.nextTipCoordinates?.x,
-      y: () => app.auction.nextTipCoordinates?.y + 15,
+      x: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 15,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -301,8 +319,8 @@ const setUpTPoint = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x - 25,
-      y1: () => app.auction.nextTipCoordinates?.y,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x - 25,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
       customWidth: BOX_COLUMN_MARGIN + 60,
       noArrow: true,
     },
@@ -315,8 +333,8 @@ const setUpTPoint = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x - 50,
-      y1: () => app.auction.nextTipCoordinates?.y,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x - 50,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
       customWidth: BOX_COLUMN_MARGIN + 60,
       noArrow: true,
     },
@@ -329,8 +347,11 @@ const setUpTPoint = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x + BOX_COLUMN_MARGIN + 85,
-      y1: () => app.auction.nextTipCoordinates?.y + 20,
+      x1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x +
+        BOX_COLUMN_MARGIN +
+        85,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 20,
       customHeight: 100,
     },
     callBack: (returnValue) => {
@@ -347,8 +368,10 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     props: {
       title: MULTI_SELLER_CONFIG.SCORE_AD.title,
       description: '(by Pub AdServer)',
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
       info: MULTI_SELLER_CONFIG.SCORE_AD.info,
     },
     delay: 1000,
@@ -363,8 +386,11 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + box.height - arrowSize,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y +
+        box.height -
+        arrowSize,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -377,8 +403,10 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
       title: MULTI_SELLER_CONFIG.REPORT_WIN.title,
       info: MULTI_SELLER_CONFIG.REPORT_WIN.info,
       description: MULTI_SELLER_CONFIG.REPORT_WIN.description,
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -392,8 +420,11 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + box.height - arrowSize,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y +
+        box.height -
+        arrowSize,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -406,8 +437,10 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
       title: MULTI_SELLER_CONFIG.REPORT_RESULT.title,
       info: MULTI_SELLER_CONFIG.REPORT_RESULT.info,
       description: MULTI_SELLER_CONFIG.REPORT_RESULT.description,
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + arrowSize,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -421,8 +454,12 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2 + 1,
-      y1: () => app.auction.nextTipCoordinates?.y + arrowSize,
+      x1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x +
+        box.width / 2 +
+        1,
+      y1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -433,8 +470,12 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     component: Box,
     props: {
       title: 'Show Winning Ad',
-      x: () => app.auction.nextTipCoordinates?.x + arrowSize,
-      y: () => app.auction.nextTipCoordinates?.y - box.height / 2 + 1,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x + arrowSize,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y -
+        box.height / 2 +
+        1,
     },
     delay: 1000,
     callBack: (returnValue) => {

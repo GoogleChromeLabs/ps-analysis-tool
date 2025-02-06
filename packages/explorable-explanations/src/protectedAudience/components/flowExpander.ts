@@ -19,9 +19,10 @@
 import app from '../app';
 import config, { publisherData } from '../config';
 import { isInsideCircle, scrollToCoordinates } from '../utils';
-
+import { Coordinates } from '../../types';
+import { getCoordinateValues } from '../utils/getCoordinateValues';
 type FlowExpanderProps = {
-  nextTipCoordinates: { x: number; y: number }[];
+  nextTipCoordinates: Coordinates[];
   typeOfBranches?: string;
 };
 
@@ -49,7 +50,8 @@ const FlowExpander = async ({
     offsetY: number;
   }) => {
     let hoveringOverSomething = false;
-    nextTipCoordinates.forEach(({ x, y }) => {
+    nextTipCoordinates.forEach((coordinates) => {
+      const { x, y } = getCoordinateValues(coordinates);
       if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
         hoveringOverSomething = true;
       }
@@ -70,7 +72,8 @@ const FlowExpander = async ({
       offsetX: number;
       offsetY: number;
     }) => {
-      nextTipCoordinates.forEach(({ x, y }, index) => {
+      nextTipCoordinates.forEach((coordinates, index) => {
+        const { x, y } = getCoordinateValues(coordinates);
         if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
           igp.mouseClicked();
           igp.mouseMoved();
@@ -88,7 +91,8 @@ const FlowExpander = async ({
     };
   });
 
-  nextTipCoordinates.forEach(({ x, y }) => {
+  nextTipCoordinates.forEach((coordinates) => {
+    const { x, y } = getCoordinateValues(coordinates);
     p.push();
     p.noStroke();
     p.circle(x, y + 27, 25);

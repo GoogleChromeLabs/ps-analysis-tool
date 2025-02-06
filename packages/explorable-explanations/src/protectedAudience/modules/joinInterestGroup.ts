@@ -24,6 +24,7 @@ import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
 import { ADVERTIZER_CONFIG } from './flowConfig.tsx';
 import { AuctionStep } from '../../types';
+import { getCoordinateValues } from '../utils/getCoordinateValues.ts';
 
 type JoinInterestGroup = {
   joinings: AuctionStep[][];
@@ -88,8 +89,12 @@ const joinInterestGroup: JoinInterestGroup = {
       component: Box,
       props: {
         title: ADVERTIZER_CONFIG.DSP_TAGS.title,
-        x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
-        y: () => app.joinInterestGroup.nextTipCoordinates?.y + ARROW_SIZE,
+        x: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x -
+          box.width / 2,
+        y: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y +
+          ARROW_SIZE,
         info: ADVERTIZER_CONFIG.DSP_TAGS.info,
       },
       delay: 1000,
@@ -105,8 +110,10 @@ const joinInterestGroup: JoinInterestGroup = {
       component: ProgressLine,
       props: {
         direction: 'down',
-        x1: () => app.joinInterestGroup.nextTipCoordinates?.x,
-        y1: () => app.joinInterestGroup.nextTipCoordinates?.y + 40,
+        x1: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x,
+        y1: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y + 40,
       },
       callBack: (returnValue) => {
         app.joinInterestGroup.nextTipCoordinates = returnValue;
@@ -118,9 +125,12 @@ const joinInterestGroup: JoinInterestGroup = {
       component: Box,
       props: {
         title: ADVERTIZER_CONFIG.DSPS.title,
-        x: () => app.joinInterestGroup.nextTipCoordinates?.x - box.width / 2,
+        x: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x -
+          box.width / 2,
         y: () =>
-          app.joinInterestGroup.nextTipCoordinates?.y + config.flow.arrowSize,
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y +
+          config.flow.arrowSize,
         color: config.flow.colors.box.notBrowser,
         info: ADVERTIZER_CONFIG.DSPS.info,
       },
@@ -137,8 +147,10 @@ const joinInterestGroup: JoinInterestGroup = {
       component: ProgressLine,
       props: {
         direction: 'up',
-        x1: () => app.joinInterestGroup.nextTipCoordinates?.x + 10,
-        y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 15,
+        x1: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x + 10,
+        y1: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y - 15,
       },
       delay: 1000,
       callBack: (returnValue) => {
@@ -151,8 +163,12 @@ const joinInterestGroup: JoinInterestGroup = {
       component: ProgressLine,
       props: {
         direction: 'up',
-        x1: () => app.joinInterestGroup.nextTipCoordinates?.x,
-        y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 10 - box.height,
+        x1: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x,
+        y1: () =>
+          getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y -
+          10 -
+          box.height,
         text: 'joinInterestGroup()',
       },
       delay: 1000,

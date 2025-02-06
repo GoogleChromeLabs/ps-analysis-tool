@@ -21,6 +21,7 @@ import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
 import { AuctionStep } from '../../../../types.js';
+import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
 
 const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
   const { box, colors } = config.flow;
@@ -30,8 +31,9 @@ const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
     props: {
       title: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER_TAG.title,
       description: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER_TAG.description,
-      x: () => app.auction.nextTipCoordinates?.x + 10,
-      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+      x: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y - box.height / 2,
       info: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER_TAG.info,
     },
     delay: 1000,
@@ -46,8 +48,9 @@ const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
-      y1: () => app.auction.nextTipCoordinates?.y + 10,
+      x1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x + box.width / 2,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 10,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -60,8 +63,8 @@ const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
       title: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.title,
       description: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.description,
       color: colors.box.notBrowser,
-      x: () => app.auction.nextTipCoordinates?.x + 10,
-      y: () => app.auction.nextTipCoordinates?.y - 23,
+      x: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
+      y: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 23,
       info: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.info,
     },
     delay: 1000,
@@ -76,8 +79,9 @@ const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'left',
-      x1: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y1: () => app.auction.nextTipCoordinates?.y + 20,
+      x1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 20,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -88,8 +92,14 @@ const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x - box.width / 2 - 10,
-      y1: () => app.auction.nextTipCoordinates?.y + box.height / 2 - 5,
+      x1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x -
+        box.width / 2 -
+        10,
+      y1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y +
+        box.height / 2 -
+        5,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -100,8 +110,10 @@ const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
     component: Box,
     props: {
       title: MULTI_SELLER_CONFIG.RUN_AD_AUCTION.title,
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + box.height / 4,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y + box.height / 4,
       info: MULTI_SELLER_CONFIG.RUN_AD_AUCTION.info,
     },
     delay: 1000,

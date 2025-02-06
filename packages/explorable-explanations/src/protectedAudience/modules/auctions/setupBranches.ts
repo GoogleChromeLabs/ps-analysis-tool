@@ -20,6 +20,7 @@ import app from '../../app';
 import { Branches } from '../../components';
 import config, { publisherData } from '../../config';
 import { AuctionStep } from '../../../types';
+import { getCoordinateValues } from '../../utils/getCoordinateValues';
 
 const setupBranches = (steps: AuctionStep[], index: number) => {
   const publisher = config.timeline.circles[index].website;
@@ -27,8 +28,8 @@ const setupBranches = (steps: AuctionStep[], index: number) => {
   steps.push({
     component: Branches,
     props: {
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
       currentIndex: index,
       branches: [
         {

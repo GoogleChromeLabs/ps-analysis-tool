@@ -27,7 +27,7 @@ import {
 } from '../utils';
 import FlowExpander from './flowExpander';
 import { Coordinates, CoordinateValue } from '../../types';
-
+import { getCoordinateValues } from '../utils/getCoordinateValues';
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
@@ -128,11 +128,13 @@ const Branches = async ({
       } else {
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
-      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+      const { x, y } = getCoordinateValues(endpoints[1]);
+      scrollToCoordinates(x, y);
       // eslint-disable-next-line consistent-return
       return endpoints[1];
     } else {
-      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
+      const { x, y } = getCoordinateValues(endpoints[0]);
+      scrollToCoordinates(x, y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
@@ -153,12 +155,14 @@ const Branches = async ({
         app.setSelectedDateTime(publisherData[currentSite].adunits[1]);
       }
 
-      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+      const { x, y } = getCoordinateValues(endpoints[1]);
+      scrollToCoordinates(x, y);
       await delay(1000);
       // eslint-disable-next-line consistent-return
       return endpoints[1];
     } else {
-      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
+      const { x, y } = getCoordinateValues(endpoints[0]);
+      scrollToCoordinates(x, y);
 
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
@@ -180,11 +184,13 @@ const Branches = async ({
       } else {
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
-      scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+      const { x, y } = getCoordinateValues(endpoints[1]);
+      scrollToCoordinates(x, y);
       // eslint-disable-next-line consistent-return
       return endpoints[1];
     } else {
-      scrollToCoordinates(endpoints[0].x, endpoints[0].y);
+      const { x, y } = getCoordinateValues(endpoints[0]);
+      scrollToCoordinates(x, y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
       });
@@ -248,12 +254,14 @@ const Branches = async ({
     } else {
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
-    scrollToCoordinates(endpoints[1].x, endpoints[1].y);
+    const { x, y } = getCoordinateValues(endpoints[1]);
+    scrollToCoordinates(x, y);
     // eslint-disable-next-line consistent-return
     return endpoints[1];
   }
 
-  scrollToCoordinates(endpoints[0].x, endpoints[0].y);
+  const { x, y } = getCoordinateValues(endpoints[0]);
+  scrollToCoordinates(x, y);
 
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,

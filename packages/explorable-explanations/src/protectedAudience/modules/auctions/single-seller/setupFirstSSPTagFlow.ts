@@ -21,6 +21,7 @@ import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
 import { SINGLE_SELLER_CONFIG } from '../../flowConfig.tsx';
 import { AuctionStep } from '../../../../types';
+import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
 
 const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
   const { box, colors } = config.flow;
@@ -29,8 +30,8 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
       noArrow: true,
     },
     callBack: (returnValue) => {
@@ -42,8 +43,9 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: Box,
     props: {
       title: SINGLE_SELLER_CONFIG.SSP_TAG.title,
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
       info: SINGLE_SELLER_CONFIG.SSP_TAG.info,
     },
     delay: 1000,
@@ -58,8 +60,8 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -70,8 +72,11 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: Box,
     props: {
       title: SINGLE_SELLER_CONFIG.SSP.title,
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y +
+        config.flow.arrowSize,
       color: colors.box.notBrowser,
       info: SINGLE_SELLER_CONFIG.SSP.info,
     },
@@ -87,8 +92,8 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'down',
-      x1: () => app.auction.nextTipCoordinates?.x,
-      y1: () => app.auction.nextTipCoordinates?.y + 40,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
+      y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -99,8 +104,11 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: Box,
     props: {
       title: SINGLE_SELLER_CONFIG.DSPS.title,
-      x: () => app.auction.nextTipCoordinates?.x - box.width / 2,
-      y: () => app.auction.nextTipCoordinates?.y + config.flow.arrowSize,
+      x: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y +
+        config.flow.arrowSize,
       color: colors.box.notBrowser,
       info: SINGLE_SELLER_CONFIG.DSPS.info,
     },
@@ -116,9 +124,9 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.auction.nextTipCoordinates?.x + 10,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
       y1: () => {
-        return app.auction.nextTipCoordinates?.y - 15;
+        return getCoordinateValues(app.auction.nextTipCoordinates).y - 15;
       },
     },
     callBack: (returnValue) => {
@@ -130,9 +138,13 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'up',
-      x1: () => app.auction.nextTipCoordinates?.x,
+      x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
       y1: () => {
-        return app.auction.nextTipCoordinates?.y - box.height - 10;
+        return (
+          getCoordinateValues(app.auction.nextTipCoordinates).y -
+          box.height -
+          10
+        );
       },
     },
     callBack: (returnValue) => {
@@ -144,9 +156,16 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x - 10 + box.width / 2,
+      x1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x -
+        10 +
+        box.width / 2,
       y1: () => {
-        return app.auction.nextTipCoordinates?.y - 10 - box.height / 2;
+        return (
+          getCoordinateValues(app.auction.nextTipCoordinates).y -
+          10 -
+          box.height / 2
+        );
       },
     },
     callBack: (returnValue) => {

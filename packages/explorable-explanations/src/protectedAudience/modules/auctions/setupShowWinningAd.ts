@@ -21,6 +21,7 @@ import app from '../../app';
 import config from '../../config';
 import { ProgressLine, Box } from '../../components';
 import { AuctionStep } from '../../../types';
+import { getCoordinateValues } from '../../utils/getCoordinateValues';
 
 const setupShowWinningAd = (steps: AuctionStep[]) => {
   const { box } = config.flow;
@@ -29,9 +30,10 @@ const setupShowWinningAd = (steps: AuctionStep[]) => {
     component: ProgressLine,
     props: {
       direction: 'right',
-      x1: () => app.auction.nextTipCoordinates?.x + box.width / 2,
+      x1: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).x + box.width / 2,
       y1: () => {
-        return app.auction.nextTipCoordinates?.y + 10;
+        return getCoordinateValues(app.auction.nextTipCoordinates).y + 10;
       },
     },
     callBack: (returnValue) => {
@@ -43,8 +45,9 @@ const setupShowWinningAd = (steps: AuctionStep[]) => {
     component: Box,
     props: {
       title: 'Show Winning Ad',
-      x: () => app.auction.nextTipCoordinates?.x + 10,
-      y: () => app.auction.nextTipCoordinates?.y - box.height / 2,
+      x: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
+      y: () =>
+        getCoordinateValues(app.auction.nextTipCoordinates).y - box.height / 2,
     },
     delay: 1000,
     callBack: (returnValue) => {
