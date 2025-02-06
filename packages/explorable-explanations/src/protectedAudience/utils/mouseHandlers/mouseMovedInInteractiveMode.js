@@ -55,7 +55,10 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
   }
 
   expandIconPositions.forEach((positions) => {
-    if (isInsideCircle(offsetX, offsetY, positions.x, positions.y + 10, 10)) {
+    if (
+      isInsideCircle(offsetX, offsetY, positions.x, positions.y + 10, 10) &&
+      app.timeline.currentIndex !== positions.index
+    ) {
       hoveringOnExpandIconPositions = true;
     }
   });
