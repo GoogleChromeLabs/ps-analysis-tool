@@ -55,7 +55,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
   app.usedNextOrPrev = false;
 
   expandIconPositions.forEach(({ x, y, index }) => {
-    if (isInsideCircle(mouseX, mouseY, x - 10, y + diameter / 2, 20)) {
+    if (isInsideCircle(mouseX, mouseY, x, y + 10, 10)) {
       app.isRevisitingNodeInInteractiveMode = true;
       clickedIndex = index;
     }
