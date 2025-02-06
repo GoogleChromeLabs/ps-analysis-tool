@@ -19,7 +19,8 @@
 import config from '../config';
 import app from '../app';
 import * as utils from '../utils';
-import { CoordinateValue } from '../../types';
+import { getCoordinateValues } from '../utils/getCoordinateValues';
+import type { CoordinateValue, Coordinates } from '../types';
 
 const ARROW_SIZE = 10;
 
@@ -37,8 +38,8 @@ type ProgressLineProps = {
 };
 
 const ProgressLine = ({
-  x1,
-  y1,
+  x1: x1Value,
+  y1: y1Value,
   customWidth,
   customHeight,
   direction = 'right',
@@ -47,7 +48,7 @@ const ProgressLine = ({
   noAnimation = app.speedMultiplier === 4,
   isBranch = false,
   isForBranches = false,
-}: ProgressLineProps) => {
+}: ProgressLineProps): Promise<Coordinates | null> => {
   const p = app.p;
   if (!p) {
     return Promise.resolve(null);
@@ -58,13 +59,10 @@ const ProgressLine = ({
   const scrollAdjuster =
     (direction === 'right' ? config.flow.box.height : config.flow.box.width) /
     2;
-
-  x1 = typeof x1 === 'function' ? x1() : x1;
-  y1 = typeof y1 === 'function' ? y1() : y1;
-
+  const { x: x1, y: y1 } = getCoordinateValues({ x: x1Value, y: y1Value });
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction, width, height);
 
-  const drawArrow = (x, y, dir) => {
+  const drawArrow = (x: number, y: number, dir: string) => {
     if (!noArrow) {
       utils.drawArrow(ARROW_SIZE, x, y, dir);
     }

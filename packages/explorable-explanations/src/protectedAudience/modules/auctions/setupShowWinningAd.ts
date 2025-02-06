@@ -20,7 +20,7 @@
 import app from '../../app';
 import config from '../../config';
 import { ProgressLine, Box } from '../../components';
-import { AuctionStep } from '../../../types';
+import type { AuctionStep } from '../../types';
 import { getCoordinateValues } from '../../utils/getCoordinateValues';
 
 const setupShowWinningAd = (steps: AuctionStep[]) => {

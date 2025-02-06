@@ -24,7 +24,7 @@ import throttle from 'just-throttle';
 import config from '../config';
 import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
-import { P5 } from '../../types';
+import type { P5 } from '../types';
 
 export const setupMainCanvas = (p: P5, pause = false) => {
   try {

@@ -18,7 +18,7 @@
  */
 import app from '../app';
 import config from '../config';
-import { Coordinates } from '../../types';
+import type { Coordinates } from '../types';
 
 type CoordinatesWithText = Coordinates & {
   text: string;

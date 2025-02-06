@@ -19,7 +19,7 @@
 import config from '../config';
 import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
-import { P5 } from '../../types';
+import type { P5 } from '../types';
 
 export const setupInterestGroupCanvas = (p: P5) => {
   try {

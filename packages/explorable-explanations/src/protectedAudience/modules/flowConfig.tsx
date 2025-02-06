@@ -486,7 +486,7 @@ export const MULTI_SELLER_CONFIG = {
           delivering and optimizing ads, tracks performance and generating
           reports, and integrating with other ad tech platforms. The publisher
           ad server will also run a contextual auction with the data from header
-          bidding as a bidding as a comparison source.
+          bidding as a comparison source.
         </p>
         <p>
           Any bid that is higher than the header bidding winner will be accepted

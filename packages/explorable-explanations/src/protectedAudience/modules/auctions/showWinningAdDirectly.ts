@@ -26,9 +26,9 @@ import {
 } from '../../utils';
 import flow from '../flow';
 import { SINGLE_SELLER_CONFIG } from '../flowConfig.tsx';
-import { AuctionStep } from '../../../types';
-import { Auction } from '.';
 import { getCoordinateValues } from '../../utils/getCoordinateValues.ts';
+import type { AuctionStep } from '../../types.ts';
+import type { Auction } from '.';
 
 export const showWinningAdDirectly = (
   cb: (error: Error | null, success: boolean) => void,

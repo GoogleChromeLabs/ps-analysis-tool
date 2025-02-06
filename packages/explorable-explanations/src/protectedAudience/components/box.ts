@@ -23,7 +23,9 @@ import {
   isInsideBox,
   scrollToCoordinates,
 } from '../utils';
-import { CoordinateValue } from '../../types';
+import { getCoordinateValues } from '../utils/getCoordinateValues';
+import type { CoordinateValue, Coordinates } from '../types';
+
 const INFO_ICON_SPACING = 3;
 
 type BoxProps = {
@@ -39,20 +41,23 @@ type BoxProps = {
   borderStroke?: number[];
 };
 
+type BoxReturn = {
+  down: Coordinates;
+};
+
 const Box = ({
   title,
   description,
-  x,
-  y,
+  x: xValue,
+  y: yValue,
   width = config.flow.box.width,
   height = config.flow.box.height,
   color,
   info = false,
   isBranchComponent = false,
   borderStroke = config.flow.colors.box.borderStroke,
-}: BoxProps) => {
-  x = typeof x === 'function' ? x() : x;
-  y = typeof y === 'function' ? y() : y;
+}: BoxProps): BoxReturn => {
+  const { x, y } = getCoordinateValues({ x: xValue, y: yValue });
 
   const nextTip = {
     down: {

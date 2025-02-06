@@ -23,7 +23,7 @@ import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
 import { ADVERTIZER_CONFIG } from './flowConfig.tsx';
-import { AuctionStep } from '../../types';
+import type { AuctionStep } from '../types.ts';
 import { getCoordinateValues } from '../utils/getCoordinateValues.ts';
 
 type JoinInterestGroup = {

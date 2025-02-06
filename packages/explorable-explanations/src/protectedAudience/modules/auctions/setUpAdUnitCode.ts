@@ -21,7 +21,7 @@ import app from '../../app';
 import config, { publisherData } from '../../config';
 import flow from '../flow';
 import { Branches } from '../../components';
-import { AuctionStep } from '../../../types';
+import type { AuctionStep } from '../../types';
 
 const setUpAdUnitCode = (steps: AuctionStep[], index: number) => {
   const { colors } = config.flow;

@@ -20,8 +20,8 @@ import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
-import { AuctionStep } from '../../../../types';
 import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
+import type { AuctionStep } from '../../../types.ts';
 
 const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
   const { box, colors } = config.flow;

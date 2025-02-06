@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Coordinates } from '../../types';
+import type { Coordinates } from '../types';
 
 const getCoordinateValues = (coordinates: Coordinates) => {
   return {

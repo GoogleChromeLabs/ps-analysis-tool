@@ -31,7 +31,7 @@ import setUpAdUnitCode from './setUpAdUnitCode';
 import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
-import { AuctionStep, Step } from '../../../types';
+import type { AuctionStep, Step } from '../../types';
 
 export type Auction = {
   setupAuctions: () => void;

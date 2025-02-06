@@ -20,7 +20,7 @@
 import config from '../config';
 import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
-import { P5 } from '../../types';
+import type { P5 } from '../types';
 
 export const setupUserCanvas = (p: P5) => {
   try {

@@ -18,8 +18,8 @@
  */
 import app from '../app';
 import config from '../config';
-import { Coordinates } from '../../types';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
+import type { Coordinates } from '../types';
 
 type RippleEffect = {
   setUp: () => void;

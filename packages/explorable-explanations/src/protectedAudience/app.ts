@@ -24,7 +24,13 @@ import type * as d3 from 'd3';
 /**
  * Internal dependencies
  */
-import { AuctionStep, Coordinates, P5, Bubble, SketchProps } from '../types';
+import type {
+  AuctionStep,
+  Coordinates,
+  P5,
+  Bubble,
+  SketchProps,
+} from './types';
 import { Config } from './config';
 
 // Sketch props added to the app object during initialization
@@ -147,7 +153,7 @@ export type App = {
   reset: () => void;
   minifiedBubbleClickListener: (
     event: MouseEvent,
-    expandOverride?: boolean
+    expandOverride: boolean
   ) => void;
   addToPromiseQueue: (indexToStartFrom: number) => void;
   drawFlows: (index: number) => void;

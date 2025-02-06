@@ -37,7 +37,7 @@ import {
   setupMainCanvas,
   setupUserCanvas,
 } from './canvas';
-import type { P5, Circle } from '../types';
+import type { P5, Circle } from './types.ts';
 import { getCoordinateValues } from './utils/getCoordinateValues.ts';
 app.setUpTimeLine = () => {
   app.auction.auctions = [];

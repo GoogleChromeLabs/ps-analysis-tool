@@ -26,8 +26,9 @@ import {
   wipeAndRecreateInterestCanvas,
 } from '../utils';
 import FlowExpander from './flowExpander';
-import { Coordinates, CoordinateValue } from '../../types';
+import type { Coordinates, CoordinateValue } from '../types';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
+
 const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
@@ -51,14 +52,13 @@ type BranchesProps = {
 };
 
 const Branches = async ({
-  x1,
-  y1,
+  x1: x1Value,
+  y1: y1Value,
   branches,
   currentIndex,
   noAnimation = app.speedMultiplier === 4,
-}: BranchesProps) => {
-  x1 = typeof x1 === 'function' ? x1() : x1;
-  y1 = typeof y1 === 'function' ? y1() : y1;
+}: BranchesProps): Promise<void | Coordinates> => {
+  const { x: x1, y: y1 } = getCoordinateValues({ x: x1Value, y: y1Value });
 
   const currentSite = config.timeline.circles[currentIndex].website;
   const typeOfBranches = branches[0].type;

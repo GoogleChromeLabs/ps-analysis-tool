@@ -22,9 +22,12 @@ import flow from '../../modules/flow';
 import { drawOpenArrowWithoutAnimationIcon } from '../drawOpenArrowWithoutAnimationIcon';
 import { isInsideCircle } from '../isInsideCircle';
 import { wipeAndRecreateUserCanvas } from '../wipeAndRecreateCanvas';
+import { getCoordinateValues } from '../getCoordinateValues';
 
 //Need to pass this from the caller to avoid circular dependencies
-const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
+const mouseClickedInNonInteractiveModeCallback = (
+  renderUserIcon: () => void
+) => {
   const {
     circleProps: { diameter },
     circles,
@@ -41,15 +44,8 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
 
   let clickedIndex = -1;
   expandIconPositions.forEach((positions) => {
-    if (
-      isInsideCircle(
-        app.mouseX,
-        app.mouseY,
-        positions.x,
-        positions.y + diameter / 2,
-        20
-      )
-    ) {
+    const { x, y } = getCoordinateValues(positions);
+    if (isInsideCircle(app.mouseX, app.mouseY, x, y + diameter / 2, 20)) {
       clickedIndex = positions.index;
     }
   });
@@ -67,16 +63,17 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
     wipeAndRecreateUserCanvas();
 
     circles.forEach((__, index) => {
-      if (!p) {
+      if (!p || !up) {
         return;
       }
       p.push();
       p.stroke(colors.visitedBlue);
       const position = circlePositions[index];
-      up?.image(
+      const { x, y } = getCoordinateValues(position);
+      up.image(
         p.completedCheckMark,
-        position.x - user.width / 2,
-        position.y - user.height / 2,
+        x - user.width / 2,
+        y - user.height / 2,
         user.width,
         user.height
       );
@@ -120,16 +117,17 @@ const mouseClickedInNonInteractiveModeCallback = (renderUserIcon) => {
   wipeAndRecreateUserCanvas();
 
   circles.forEach((__, index) => {
-    if (!p) {
+    if (!p || !up) {
       return;
     }
     p.push();
     p.stroke(colors.visitedBlue);
     const position = circlePositions[index];
-    up?.image(
+    const { x, y } = getCoordinateValues(position);
+    up.image(
       p.completedCheckMark,
-      position.x - user.width / 2,
-      position.y - user.height / 2,
+      x - user.width / 2,
+      y - user.height / 2,
       user.width,
       user.height
     );

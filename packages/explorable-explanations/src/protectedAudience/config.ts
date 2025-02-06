@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { Circle } from '../types';
+import type { Circle } from './types';
 
 type Ripple = {
   radius: number;

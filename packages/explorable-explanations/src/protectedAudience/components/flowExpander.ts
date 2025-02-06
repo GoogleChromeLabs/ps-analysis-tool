@@ -19,8 +19,9 @@
 import app from '../app';
 import config, { publisherData } from '../config';
 import { isInsideCircle, scrollToCoordinates } from '../utils';
-import { Coordinates } from '../../types';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
+import type { Coordinates } from '../types';
+
 type FlowExpanderProps = {
   nextTipCoordinates: Coordinates[];
   typeOfBranches?: string;
@@ -29,7 +30,7 @@ type FlowExpanderProps = {
 const FlowExpander = async ({
   nextTipCoordinates,
   typeOfBranches,
-}: FlowExpanderProps) => {
+}: FlowExpanderProps): Promise<Coordinates | void> => {
   const p = app.p;
   const igp = app.igp;
 

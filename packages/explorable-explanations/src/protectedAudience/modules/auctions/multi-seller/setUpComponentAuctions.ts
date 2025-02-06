@@ -21,8 +21,8 @@ import config, { publisherData } from '../../../config';
 import { Box, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
-import { AuctionStep, Coordinates } from '../../../../types';
 import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
+import type { AuctionStep, Coordinates } from '../../../types.ts';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -139,7 +139,6 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
   });
 
   setUpTPoint(steps);
-
   setupAfterComponentAuctionFlow(steps);
 };
 
