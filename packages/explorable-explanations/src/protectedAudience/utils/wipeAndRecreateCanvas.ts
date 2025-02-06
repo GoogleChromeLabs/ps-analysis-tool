@@ -27,8 +27,8 @@ export const wipeAndRecreateMainCanvas = () => {
   app.p.clear();
   app.p.background(config.canvas.background);
 
-  app.timeline?.drawTimelineLine?.();
-  app.timeline?.drawTimeline?.(config.timeline);
+  app.timeline.drawTimelineLine();
+  app.timeline.drawTimeline(config.timeline);
 };
 
 export const wipeAndRecreateInterestCanvas = () => {

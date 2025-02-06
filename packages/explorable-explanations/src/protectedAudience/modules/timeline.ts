@@ -29,6 +29,7 @@ import {
   mouseMovedInInteractiveMode,
   mouseMovedInNonInteractiveMode,
 } from '../utils/mouseHandlers';
+import { getCoordinateValues } from '../utils/getCoordinateValues';
 
 type Timeline = {
   init: () => void;
@@ -81,12 +82,12 @@ const timeline: Timeline = {
     };
 
     if (app.isInteractiveMode) {
-      bubbles.showMinifiedBubbles?.();
+      bubbles.showMinifiedBubbles();
     } else {
-      timeline.drawTimelineLine?.();
-      timeline.renderUserIcon?.();
+      timeline.drawTimelineLine();
+      timeline.renderUserIcon();
     }
-    timeline.drawTimeline?.(config.timeline);
+    timeline.drawTimeline(config.timeline);
   },
 
   /**
@@ -107,14 +108,11 @@ const timeline: Timeline = {
     const strokeColor =
       completed && !app.isInteractiveMode ? colors.visitedBlue : colors.grey;
 
+    const { x, y } = getCoordinateValues(positions);
+
     p.push();
     p.stroke(strokeColor);
-    p.line(
-      positions.x,
-      positions.y - diameter / 2,
-      positions.x,
-      position.y + 37
-    );
+    p.line(x, y - diameter / 2, x, position.y + 37);
     p.pop();
   },
 
@@ -150,7 +148,7 @@ const timeline: Timeline = {
 
       p.push();
       p.stroke(config.timeline.colors.grey);
-      timeline.drawCircle?.(index);
+      timeline.drawCircle(index);
       p.pop();
 
       p.push();
@@ -164,7 +162,7 @@ const timeline: Timeline = {
       p.text(circleItem.website, xPositionForCircle, position.y + 20);
       p.pop();
 
-      timeline.drawLineAboveCircle?.(index);
+      timeline.drawLineAboveCircle(index);
     });
   },
   /**
@@ -303,7 +301,7 @@ const timeline: Timeline = {
     }
 
     const user = config.timeline.user;
-    timeline.eraseAndRedraw?.();
+    timeline.eraseAndRedraw();
     wipeAndRecreateInterestCanvas();
 
     if (!app.startTrackingMouse) {
@@ -314,10 +312,12 @@ const timeline: Timeline = {
       return;
     }
 
+    const { x, y } = getCoordinateValues(circlePosition);
+
     app.up.image(
       app.p.userIcon,
-      circlePosition.x - user.width / 2,
-      circlePosition.y - user.height / 2,
+      x - user.width / 2,
+      y - user.height / 2,
       user.width,
       user.height
     );
@@ -339,7 +339,7 @@ const timeline: Timeline = {
         if (circle.visited === true) {
           app.p.push();
           app.p.stroke(colors.visitedBlue);
-          timeline.drawCircle?.(index, true);
+          timeline.drawCircle(index, true);
           app.p.pop();
         }
       });
@@ -351,8 +351,8 @@ const timeline: Timeline = {
     if (currentIndex > 0) {
       let i = 0;
       while (i < currentIndex) {
-        timeline.drawCircle?.(i, config.timeline.circles[i].visited);
-        timeline.drawLineAboveCircle?.(i, config.timeline.circles[i].visited);
+        timeline.drawCircle(i, config.timeline.circles[i].visited);
+        timeline.drawLineAboveCircle(i, config.timeline.circles[i].visited);
         i = i + 1;
       }
     }

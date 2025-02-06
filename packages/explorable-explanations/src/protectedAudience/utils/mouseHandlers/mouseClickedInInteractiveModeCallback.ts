@@ -26,7 +26,7 @@ import {
   wipeAndRecreateMainCanvas,
   wipeAndRecreateUserCanvas,
 } from '../wipeAndRecreateCanvas';
-
+import { getCoordinateValues } from '../getCoordinateValues';
 const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
   const { mouseX, mouseY, isInteractiveMode, shouldRespondToClick } = app;
   const p = app.p;
@@ -47,7 +47,8 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
   let clickedIndex = -1;
 
   circlePositions.forEach(({ x, y }, index) => {
-    if (isInsideCircle(mouseX, mouseY, x, y, diameter / 2)) {
+    const { x: xValue, y: yValue } = getCoordinateValues({ x, y });
+    if (isInsideCircle(mouseX, mouseY, xValue, yValue, diameter / 2)) {
       clickedIndex = index;
     }
   });
@@ -55,7 +56,10 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
   app.usedNextOrPrev = false;
 
   expandIconPositions.forEach(({ x, y, index }) => {
-    if (isInsideCircle(mouseX, mouseY, x - 10, y + diameter / 2, 20)) {
+    const { x: xValue, y: yValue } = getCoordinateValues({ x, y });
+    if (
+      isInsideCircle(mouseX, mouseY, xValue - 10, yValue + diameter / 2, 20)
+    ) {
       app.isRevisitingNodeInInteractiveMode = true;
       clickedIndex = index;
     }
@@ -70,7 +74,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
     wipeAndRecreateUserCanvas();
     renderUserIcon();
-    bubbles.generateBubbles?.();
+    bubbles.generateBubbles();
 
     if (circles[clickedIndex].visited) {
       app.promiseQueue?.push((cb) => {
@@ -95,10 +99,11 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
           if (circle.visited && index === clickedIndex && up) {
             const position = circlePositions[clickedIndex];
+            const { x, y } = getCoordinateValues(position);
             up.image(
               p.userIcon,
-              position.x - user.width / 2,
-              position.y - user.height / 2,
+              x - user.width / 2,
+              y - user.height / 2,
               user.width,
               user.height
             );
@@ -142,9 +147,10 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         return;
       } else {
         const positions = app.timeline.circlePositions[clickedIndex];
+        const { x, y } = getCoordinateValues(positions);
         app.timeline.expandIconPositions.push({
-          x: positions.x,
-          y: positions.y + diameter / 2,
+          x,
+          y: y + diameter / 2,
           index: clickedIndex,
         });
 

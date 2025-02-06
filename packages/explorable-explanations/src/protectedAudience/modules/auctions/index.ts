@@ -51,7 +51,7 @@ const auction: Auction = {
   setupAuctions: () => {
     app.auction.auctions = [];
     config.timeline.circles.forEach((___, index) => {
-      auction.setUp?.(index);
+      auction.setUp(index);
     });
   },
 
@@ -140,7 +140,7 @@ const auction: Auction = {
 
         if (!app.isRevisitingNodeInInteractiveMode) {
           if (props?.showBarrageAnimation) {
-            await bubbles.barrageAnimation?.(index); // eslint-disable-line no-await-in-loop
+            await bubbles.barrageAnimation(index); // eslint-disable-line no-await-in-loop
 
             if (app.cancelPromise) {
               cb?.(undefined, true);

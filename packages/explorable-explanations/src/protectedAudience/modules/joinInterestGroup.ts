@@ -227,14 +227,14 @@ const joinInterestGroup: JoinInterestGroup = {
 
     app.promiseQueue?.push(async (cb) => {
       if (!app.isRevisitingNodeInInteractiveMode) {
-        await bubbles.reverseBarrageAnimation?.(index);
+        await bubbles.reverseBarrageAnimation(index);
         app.setCurrentSite(config.timeline.circles[index]);
       }
 
       if (app.bubbles.isExpanded) {
-        bubbles.showExpandedBubbles?.();
+        bubbles.showExpandedBubbles();
       } else {
-        bubbles.showMinifiedBubbles?.();
+        bubbles.showMinifiedBubbles();
       }
       cb?.(undefined, true);
     });

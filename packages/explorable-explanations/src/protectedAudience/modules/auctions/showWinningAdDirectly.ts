@@ -83,7 +83,7 @@ export const showWinningAdDirectly = (
       },
     });
 
-    auctionDraw?.(index);
+    auctionDraw(index);
 
     app.promiseQueue?.push((_cb) => {
       if (app.isRevisitingNodeInInteractiveMode) {
@@ -102,7 +102,7 @@ export const showWinningAdDirectly = (
             }
           }
 
-          setupAuctions?.();
+          setupAuctions();
           __cb?.(undefined, true);
         });
       } else {
@@ -127,9 +127,9 @@ export const showWinningAdDirectly = (
           app.bubbles.positions.splice(-(circles[index].igGroupsCount ?? 0));
 
           app.shouldRespondToClick = true;
-          bubbles.showMinifiedBubbles?.();
+          bubbles.showMinifiedBubbles();
           app.timeline.renderUserIcon();
-          setupAuctions?.();
+          setupAuctions();
           return;
         } else {
           const positions = app.timeline.circlePositions[index];
@@ -151,14 +151,14 @@ export const showWinningAdDirectly = (
           app.visitedIndexes += 1;
         }
 
-        bubbles.showMinifiedBubbles?.();
+        bubbles.showMinifiedBubbles();
         app.shouldRespondToClick = true;
 
         wipeAndRecreateUserCanvas();
         wipeAndRecreateMainCanvas();
         app.timeline.renderUserIcon();
         flow.setButtonsDisabilityState();
-        setupAuctions?.();
+        setupAuctions();
       }
       _cb?.(undefined, true);
     });

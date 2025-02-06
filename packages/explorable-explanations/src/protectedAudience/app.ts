@@ -158,7 +158,7 @@ export type App = {
   handleInteractiveNext: () => Promise<void> | void;
   handlePrevButton: () => void;
   handleNextButton: () => void;
-  handleControls?: () => void;
+  handleControls: () => void;
   visitedSites: string[];
 } & SketchSharedProps;
 

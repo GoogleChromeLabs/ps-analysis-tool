@@ -80,7 +80,7 @@ const bubbles: Bubbles = {
     }
 
     if (!recalculate) {
-      const totalInterestGroups = bubbles.calculateTotalBubblesForAnimation?.(
+      const totalInterestGroups = bubbles.calculateTotalBubblesForAnimation(
         currIndex + 1
       );
 
@@ -173,7 +173,7 @@ const bubbles: Bubbles = {
           );
 
           const distance = p.dist(startingX, startingY, targetX, targetY);
-          const speed = bubbles.speedCalculator?.(distance) || 0;
+          const speed = bubbles.speedCalculator(distance) || 0;
 
           return { x: startingX, y: startingY, color, target, distance, speed };
         })
@@ -202,7 +202,7 @@ const bubbles: Bubbles = {
           let { x, y } = positionsOfCircles[i];
           const { target, distance, color } = positionsOfCircles[i];
 
-          const speed = bubbles.speedCalculator?.(distance) || 0;
+          const speed = bubbles.speedCalculator(distance) || 0;
 
           const dir = p5.Vector.sub(target, p.createVector(x, y));
           dir.normalize();
@@ -387,7 +387,7 @@ const bubbles: Bubbles = {
             continue;
           }
 
-          const speed = bubbles.speedCalculator?.(distance) || 0;
+          const speed = bubbles.speedCalculator(distance) || 0;
           const dir = p5.Vector.sub(target, igp.createVector(x, y));
 
           dir.normalize();
@@ -444,11 +444,11 @@ const bubbles: Bubbles = {
   },
 
   showExpandedBubbles: () => {
-    bubbles.clearAndRewriteBubbles?.();
-    bubbles.generateBubbles?.(true);
+    bubbles.clearAndRewriteBubbles();
+    bubbles.generateBubbles(true);
     app.setIsBubbleExpanded(true);
 
-    const svg = bubbles.bubbleChart?.(app.bubbles.positions, {
+    const svg = bubbles.bubbleChart(app.bubbles.positions, {
       label: (d) =>
         [
           ...d.id
@@ -489,11 +489,11 @@ const bubbles: Bubbles = {
   },
 
   showMinifiedBubbles: () => {
-    app.setHighlightedInterestGroup?.();
+    app.setHighlightedInterestGroup();
     app.bubbles.highlightedInterestGroup = null;
     app.setIsBubbleExpanded(false);
 
-    const svg = bubbles.bubbleChart?.(app.bubbles.positions, {
+    const svg = bubbles.bubbleChart(app.bubbles.positions, {
       label: (d) =>
         [
           ...d.id
@@ -527,7 +527,7 @@ const bubbles: Bubbles = {
       app.openButton.style.display = 'block';
     }
 
-    bubbles.clearAndRewriteBubbles?.();
+    bubbles.clearAndRewriteBubbles();
 
     if (app.minifiedBubbleContainer) {
       app.minifiedBubbleContainer.style.backgroundColor = 'white';
@@ -570,7 +570,7 @@ const bubbles: Bubbles = {
       strokeOpacity,
     } = {}
   ) => {
-    const totalBubbles = bubbles.calculateTotalBubblesForAnimation?.(
+    const totalBubbles = bubbles.calculateTotalBubblesForAnimation(
       app.timeline.currentIndex
     );
 

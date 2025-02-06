@@ -76,7 +76,7 @@ export const setupMainCanvas = (p: P5, pause = false) => {
 
     canvas.mouseMoved(mouseMovedCallback);
 
-    app.setUpTimeLine?.();
+    app.setUpTimeLine();
 
     if (!app.isInteractiveMode) {
       app.play(false, pause);
