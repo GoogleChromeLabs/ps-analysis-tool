@@ -114,6 +114,15 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
       });
     }
     const host = circleItem.website.split('.')[0];
+    p.push();
+    p.image(
+      p[host],
+      xPositionForCircle - circleItem.logoSize.width / 2,
+      position.y + 20,
+      circleItem.logoSize.width,
+      circleItem.logoSize.height
+    );
+    p.pop();
 
     p.push();
     p.stroke(config.timeline.colors.grey);
@@ -128,13 +137,6 @@ timeline.drawTimeline = ({ position, circleProps, circles }) => {
     if (!app.isInteractiveMode) {
       p.text(circleItem.datetime, xPositionForCircle, position.y);
     }
-    p.image(
-      app.p[host],
-      xPositionForCircle - circleItem.logoSize.width / 2,
-      position.y + 20,
-      circleItem.logoSize.width,
-      circleItem.logoSize.height
-    );
     p.text(circleItem.website, xPositionForCircle, position.y + 60);
     p.fill(config.timeline.colors.grey);
     p.text(circleItem.type, xPositionForCircle, position.y + 80);
