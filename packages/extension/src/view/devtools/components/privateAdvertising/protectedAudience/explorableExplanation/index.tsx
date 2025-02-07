@@ -334,6 +334,7 @@ const ExplorableExplanation = () => {
           Element: Auctions,
           props: {
             auctionEvents: auctionsData,
+            noBids: auctionsData?.noBids ?? {},
             customAdsAndBidders: auctionsData?.adsAndBidders,
           },
         },
