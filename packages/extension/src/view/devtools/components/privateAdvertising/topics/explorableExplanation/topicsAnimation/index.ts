@@ -559,6 +559,10 @@ export function topicsAnimation(
     if (isInteractive && app.playing) {
       app.playing = false;
     }
+
+    if (isInteractive) {
+      p.cursor('../assets/images/userIcon.png', 16, 16);
+    }
   };
 
   return {
