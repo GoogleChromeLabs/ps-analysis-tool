@@ -180,6 +180,10 @@ const Panel = ({
   }));
 
   useEffect(() => {
+    setActiveTab(4);
+  }, [setActiveTab]);
+
+  useEffect(() => {
     if (highlightedInterestGroup) {
       setActiveTab(0);
     }

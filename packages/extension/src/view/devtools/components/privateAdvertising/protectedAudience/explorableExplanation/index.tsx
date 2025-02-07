@@ -50,6 +50,7 @@ import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
 import { isEqual } from 'lodash-es';
+import Legend from './tableTabPanels/legend';
 
 const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
@@ -364,7 +365,7 @@ const ExplorableExplanation = () => {
       {
         title: 'Legend',
         content: {
-          Element: () => <div>Legend</div>,
+          Element: Legend,
         },
       },
     ],
