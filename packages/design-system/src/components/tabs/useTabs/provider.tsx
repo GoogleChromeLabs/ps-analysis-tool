@@ -122,6 +122,13 @@ export const TabsProvider = ({
     }
   }, [activeTab, highlightTab, highlightedTabs]);
 
+  const shouldAddSpacer = useCallback(
+    (index: number) => {
+      return Boolean(tabItems[index].addSpacer);
+    },
+    [tabItems]
+  );
+
   return (
     <TabsContext.Provider
       value={{
@@ -136,6 +143,7 @@ export const TabsProvider = ({
           setActiveTab,
           highlightTab,
           isTabHighlighted,
+          shouldAddSpacer,
         },
       }}
     >
