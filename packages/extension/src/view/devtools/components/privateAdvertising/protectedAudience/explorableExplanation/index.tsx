@@ -359,6 +359,13 @@ const ExplorableExplanation = () => {
             data: info,
           },
         },
+        addSpacer: true,
+      },
+      {
+        title: 'Legend',
+        content: {
+          Element: () => <div>Legend</div>,
+        },
       },
     ],
     [auctionsData, highlightedInterestGroup, interestGroupsData, info]
