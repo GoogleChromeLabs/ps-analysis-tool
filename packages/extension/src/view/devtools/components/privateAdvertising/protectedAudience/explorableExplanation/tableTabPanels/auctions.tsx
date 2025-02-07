@@ -61,6 +61,22 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
   });
 
   useEffect(() => {
+    setSidebarData((prevData: SidebarItems) => {
+      if (!prevData?.adunits?.panel) {
+        return prevData;
+      }
+
+      prevData.adunits.panel.props = {
+        adsAndBidders: customAdsAndBidders,
+        receivedBids: auctionEvents.receivedBids,
+        noBids: auctionEvents.noBids,
+        showEvaluationPlaceholder: Boolean(customAdsAndBidders),
+      };
+      return prevData;
+    });
+  }, [auctionEvents.noBids, auctionEvents.receivedBids, customAdsAndBidders]);
+
+  useEffect(() => {
     if (
       !auctionEvents?.auctionData ||
       Object.keys(auctionEvents?.auctionData || {}).length === 0

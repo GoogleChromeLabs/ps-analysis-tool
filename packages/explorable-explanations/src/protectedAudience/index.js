@@ -215,7 +215,7 @@ app.addToPromiseQueue = (indexToStartFrom) => {
       }
 
       flow.setButtonsDisabilityState();
-
+      utils.drawOpenArrowWithoutAnimationIcon();
       cb(null, true);
     });
 
@@ -308,7 +308,7 @@ app.handleNonInteractivePrev = async () => {
   app.timeline.currentIndex -= 1;
   app.setHasLastNodeVisited(false);
 
-  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
+  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex - 1]);
 
   await utils.delay(10);
 
@@ -421,22 +421,18 @@ app.handleNonInteractiveNext = async () => {
 
   if (
     app.bubbles.positions.length <
-    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex + 1)
+    bubbles.calculateTotalBubblesForAnimation(app.timeline.currentIndex)
   ) {
     bubbles.generateBubbles();
     bubbles.showMinifiedBubbles();
   }
-
-  await utils.delay(10);
   app.timeline.currentIndex += 1;
 
   if (app.timeline.currentIndex === config.timeline.circles.length) {
     app.setHasLastNodeVisited(true);
   }
-
-  app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
-
   await utils.delay(10);
+
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
 
@@ -599,14 +595,9 @@ app.toggleMultSeller = (event) => {
 // Define the sketch
 export const sketch = (p) => {
   p.updateWithProps = (props) => {
-    if (app.isMultiSeller !== props.isMultiSeller) {
-      app.reset();
-      setTimeout(() => {
-        app.play(true);
-      }, 500);
+    if (Object.prototype.hasOwnProperty.call(props, 'isMultiSeller')) {
+      app.isMultiSeller = props.isMultiSeller;
     }
-
-    app.isMultiSeller = props.isMultiSeller;
   };
 
   app.promiseQueue = new Queue({
@@ -746,6 +737,7 @@ export const userSketch = (p) => {
 
 app.reset = async () => {
   app.promiseQueue.end();
+  app.nodeIndexRevisited = -1;
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   app.visitedIndexOrder = [];
@@ -769,6 +761,7 @@ app.reset = async () => {
   setupMainCanvas(app.p, true);
 
   app.timeline.isPaused = true;
+  app.timeline.pausedReason = 'userClick';
   app.setPlayState(false);
   app.setCurrentSite(null);
   app.setInfo({});
