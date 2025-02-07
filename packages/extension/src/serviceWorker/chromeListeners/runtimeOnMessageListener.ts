@@ -56,7 +56,7 @@ export const runtimeOnMessageListener = async (request: any) => {
       await attachCDP({ tabId: Number(newTab) });
     }
 
-    await reloadCurrentTab(Number(newTab));
+    reloadCurrentTab(Number(newTab));
   }
 
   if (SERVICE_WORKER_TABS_RELOAD_COMMAND === incomingMessageType) {
@@ -116,7 +116,7 @@ export const runtimeOnMessageListener = async (request: any) => {
           //Fail silently
         }
 
-        await reloadCurrentTab(id);
+        reloadCurrentTab(id);
       })
     );
 

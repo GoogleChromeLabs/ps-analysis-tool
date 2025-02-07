@@ -31,14 +31,22 @@ import {
   sketch as mainSketch,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
-import classNames from 'classnames';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
 import type { CurrentSiteData, StepType } from './auctionEventTransformers';
+
+const STORAGE_KEY = 'paExplorableExplanation';
+const DEFAULT_SETTINGS = {
+  isAutoScroll: true,
+  isAutoExpand: true,
+  speedMultiplier: 1,
+};
 
 declare module 'react' {
   interface CSSProperties {
@@ -69,10 +77,13 @@ interface PanelProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<StepType>>;
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   setSelectedDateTime: React.Dispatch<React.SetStateAction<string | null>>;
+  interestGroupUpdateIndicator: number;
+  auctionUpdateIndicator: number;
+  bidsUpdateIndicator: number;
+  setHasLastNodeVisited: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Panel = ({
-  currentSiteData,
   setCurrentSite,
   highlightedInterestGroup,
   setHighlightedInterestGroup,
@@ -85,6 +96,10 @@ const Panel = ({
   setCurrentStep,
   setSelectedAdUnit,
   setSelectedDateTime,
+  interestGroupUpdateIndicator,
+  auctionUpdateIndicator,
+  bidsUpdateIndicator,
+  setHasLastNodeVisited,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -97,6 +112,45 @@ const Panel = ({
   const [expandedBubbleX, setExpandedBubbleX] = useState(0);
   const [expandedBubbleY, setExpandedBubbleY] = useState(0);
   const [isBubbleExpanded, setIsBubbleExpanded] = useState(false);
+  const hasDataBeenFetchedFromSessionStorage = useRef<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      if (!hasDataBeenFetchedFromSessionStorage.current) {
+        return;
+      }
+
+      await updateSessionStorage(
+        { autoExpand, autoScroll, sliderStep },
+        STORAGE_KEY
+      );
+    })();
+  }, [autoExpand, autoScroll, sliderStep]);
+
+  useEffect(() => {
+    (async () => {
+      const data = (await getSessionStorage(STORAGE_KEY)) || {};
+      if (Object.prototype.hasOwnProperty.call(data, 'autoExpand')) {
+        setAutoExpand(data.autoExpand);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(data, 'autoScroll')) {
+        setAutoScroll(data.autoScroll);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(data, 'sliderStep')) {
+        setSliderStep(data.sliderStep);
+      }
+
+      hasDataBeenFetchedFromSessionStorage.current = true;
+    })();
+
+    return () => {
+      app.isAutoExpand = DEFAULT_SETTINGS.isAutoExpand;
+      app.autoScroll = DEFAULT_SETTINGS.isAutoScroll;
+      app.speedMultiplier = DEFAULT_SETTINGS.speedMultiplier;
+    };
+  }, []);
 
   const setPlaying = useCallback(() => {
     setPlay((prevState) => {
@@ -120,8 +174,9 @@ const Panel = ({
     [setPlaying]
   );
 
-  const { setActiveTab } = useTabs(({ actions }) => ({
+  const { setActiveTab, highlightTab } = useTabs(({ actions }) => ({
     setActiveTab: actions.setActiveTab,
+    highlightTab: actions.highlightTab,
   }));
 
   useEffect(() => {
@@ -145,17 +200,30 @@ const Panel = ({
   }, [tooglePlayOnKeydown]);
 
   useEffect(() => {
-    if (!currentSiteData) {
-      setActiveTab(0);
-      return;
-    }
-
-    if (currentSiteData?.type === 'advertiser') {
-      setActiveTab(0);
+    if (interestGroupUpdateIndicator !== -1) {
+      highlightTab(1, false);
+      highlightTab(2, false);
+      highlightTab(0);
     } else {
-      setActiveTab(1);
+      highlightTab(0, false);
     }
-  }, [currentSiteData, currentSiteData?.type, setActiveTab]);
+  }, [interestGroupUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (auctionUpdateIndicator !== -1) {
+      highlightTab(1);
+    } else {
+      highlightTab(1, false);
+    }
+  }, [auctionUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (bidsUpdateIndicator !== -1) {
+      highlightTab(2);
+    } else {
+      highlightTab(2, false);
+    }
+  }, [bidsUpdateIndicator, highlightTab]);
 
   const handleResizeCallback = useMemo(() => {
     return new ResizeObserver(() => {
@@ -234,8 +302,9 @@ const Panel = ({
 
   const resetHandler = useCallback(() => {
     app.reset();
+    setHasLastNodeVisited(false);
     setCurrentSite(null);
-  }, [setCurrentSite]);
+  }, [setCurrentSite, setHasLastNodeVisited]);
 
   const extraInterface = (
     <div className="flex gap-3 items-center">
@@ -365,6 +434,7 @@ const Panel = ({
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         setSelectedAdUnit={setSelectedAdUnit}
         setSelectedDateTime={setSelectedDateTime}
+        setHasLastNodeVisited={setHasLastNodeVisited}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <DraggableTray />

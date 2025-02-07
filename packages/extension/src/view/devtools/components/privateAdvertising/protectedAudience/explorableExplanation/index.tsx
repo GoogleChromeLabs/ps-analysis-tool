@@ -17,7 +17,14 @@
  * External dependencies.
  */
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
-import type { InterestGroups } from '@google-psat/common';
+import {
+  type AdsAndBiddersType,
+  type NoBidsType,
+  type ReceivedBids,
+  type InterestGroups,
+  updateSessionStorage,
+  getSessionStorage,
+} from '@google-psat/common';
 import React, {
   useMemo,
   useState,
@@ -42,10 +49,18 @@ import {
 import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
+import { isEqual } from 'lodash-es';
+
+const STORAGE_KEY = 'paExplorableExplanation';
+const DEFAULT_SETTINGS = {
+  isInteractiveMode: false,
+  isMultiSeller: false,
+};
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
     useState<CurrentSiteData | null>(null);
+  const [hasLastNodeVisited, setHasLastNodeVisited] = useState(false);
 
   const [isMultiSeller, setIsMultiSeller] = useState(false);
   const [selectedAdUnit, setSelectedAdUnit] = useState<string | null>(null);
@@ -58,17 +73,46 @@ const ExplorableExplanation = () => {
   const [currentStep, setCurrentStep] = useState<StepType>({} as StepType);
   const [sitesVisited, setSitesVisited] = useState<string[]>([]);
   const [info, setInfo] = useState<string | null>(null);
+  const hasDataBeenFetchedFromSessionStorage = useRef<boolean>(false);
 
   const [interactiveMode, _setInteractiveMode] = useState(false);
+
+  const [interestGroupUpdateIndicator, setInterestGroupUpdateIndicator] =
+    useState(-1);
+  const [auctionUpdateIndicator, setAuctionUpdateIndicator] = useState(-1);
+  const [bidsUpdateIndicator, setBidsUpdateIndicator] = useState(-1);
 
   const setInteractiveMode = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSitesVisited([]);
       _setInteractiveMode(event.target.checked);
+      setHasLastNodeVisited(false);
       app.toggleInteractiveMode();
+      setCurrentSiteData(null);
     },
     []
   );
+
+  useEffect(() => {
+    (async () => {
+      if (!hasDataBeenFetchedFromSessionStorage.current) {
+        return;
+      }
+
+      await updateSessionStorage(
+        { interactiveMode, isMultiSeller },
+        STORAGE_KEY
+      );
+    })();
+  }, [interactiveMode, isMultiSeller]);
+
+  useEffect(() => {
+    if (currentSiteData === null || hasLastNodeVisited) {
+      setInterestGroupUpdateIndicator(-1);
+      setAuctionUpdateIndicator(-1);
+      setBidsUpdateIndicator(-1);
+    }
+  }, [currentSiteData, hasLastNodeVisited]);
 
   useEffect(() => {
     if (interactiveMode !== app.isInteractiveMode) {
@@ -78,24 +122,30 @@ const ExplorableExplanation = () => {
   }, [interactiveMode]);
 
   useEffect(() => {
+    (async () => {
+      const data = (await getSessionStorage(STORAGE_KEY)) || {};
+      if (Object.prototype.hasOwnProperty.call(data, 'interactiveMode')) {
+        _setInteractiveMode(data.interactiveMode);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(data, 'isMultiSeller')) {
+        setIsMultiSeller(data.isMultiSeller);
+      }
+
+      hasDataBeenFetchedFromSessionStorage.current = true;
+    })();
+
     return () => {
-      app.isInteractiveMode = false;
-      app.isMultiSeller = false;
-      app.isAutoExpand = true;
+      app.isInteractiveMode = DEFAULT_SETTINGS.isInteractiveMode;
+      app.isMultiSeller = DEFAULT_SETTINGS.isMultiSeller;
     };
   }, []);
 
-  const _setCurrentSiteData = (siteData: typeof currentSiteData) => {
-    previousAuctionData.current = null;
-    setCurrentStep({} as StepType);
-    setSelectedAdUnit(null);
-    setSelectedDateTime(null);
-    setCurrentSiteData(() => siteData);
-    setInterestGroupsData(() => getInterestGroupData(siteData));
-  };
-
   const getInterestGroupData = useCallback(
-    (siteData: typeof currentSiteData) => {
+    (
+      siteData: typeof currentSiteData,
+      prevInterestGroupsData: InterestGroups[]
+    ) => {
       if (!siteData) {
         return [];
       }
@@ -111,6 +161,13 @@ const ExplorableExplanation = () => {
         });
 
         setSitesVisited(() => _sitesVisited);
+
+        if (requiredIG.length > prevInterestGroupsData.length) {
+          setInterestGroupUpdateIndicator(
+            (prev) => (prev === -1 ? 0 : prev) ^ 1
+          );
+        }
+
         return requiredIG;
       }
 
@@ -134,50 +191,115 @@ const ExplorableExplanation = () => {
         Object.keys(SYNTHETIC_INTEREST_GROUPS).slice(0, hasReached + 1)
       );
 
+      if (siteData?.type !== 'publisher') {
+        if (requiredIG.length > prevInterestGroupsData.length) {
+          setInterestGroupUpdateIndicator(
+            (prev) => (prev === -1 ? 0 : prev) ^ 1
+          );
+        }
+      }
+
       return requiredIG;
     },
     []
   );
 
-  const auctionsData = useMemo(() => {
-    if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+  const lastVisitedNode = useRef<string | undefined>(undefined);
+
+  const _setCurrentSiteData = useCallback(
+    (siteData: typeof currentSiteData) => {
       previousAuctionData.current = null;
-      return {};
-    }
+      setCurrentStep({} as StepType);
+      setSelectedAdUnit(null);
+      setSelectedDateTime(null);
+      setCurrentSiteData((prev) => {
+        lastVisitedNode.current = prev?.website;
 
-    const advertiserSet = sitesVisited.filter(
-      (site) => Object.keys(SYNTHETIC_INTEREST_GROUPS[site]).length > 0
-    );
-
-    const interestGroups = advertiserSet.map((advertiser) => {
-      return SYNTHETIC_INTEREST_GROUPS[advertiser].map((interestGroup) => {
-        return {
-          interestGroupName: interestGroup.name as string,
-          ownerOrigin: interestGroup.ownerOrigin as string,
-        };
+        return siteData;
       });
-    });
+      setInterestGroupsData((prev) => getInterestGroupData(siteData, prev));
+    },
+    [getInterestGroupData]
+  );
 
-    const { auctionData, receivedBids, adsAndBidders, noBids } =
-      configuredAuctionEvents(
-        interestGroups.flat(),
-        Array.from(advertiserSet),
-        isMultiSeller,
-        currentSiteData,
-        currentStep,
-        previousAuctionData.current,
-        selectedAdUnit,
-        selectedDateTime
+  const [auctionsData, setAuctionsData] = useState<{
+    auctionData: AuctionEventsType | null;
+    receivedBids: Record<string, ReceivedBids[]> | null;
+    adsAndBidders: AdsAndBiddersType | null;
+    noBids?: NoBidsType;
+  } | null>(null);
+
+  useEffect(() => {
+    setAuctionsData((prevData) => {
+      if (!currentSiteData || currentSiteData?.type === 'advertiser') {
+        previousAuctionData.current = null;
+        setAuctionUpdateIndicator(-1);
+        setBidsUpdateIndicator(-1);
+        return null;
+      }
+
+      if (lastVisitedNode.current !== currentSiteData.website) {
+        setAuctionUpdateIndicator(-1);
+        setBidsUpdateIndicator(-1);
+        lastVisitedNode.current = currentSiteData.website;
+      }
+
+      const advertiserSet = sitesVisited.filter(
+        (site) => Object.keys(SYNTHETIC_INTEREST_GROUPS[site]).length > 0
       );
 
-    previousAuctionData.current = auctionData;
+      const interestGroups = advertiserSet.map((advertiser) => {
+        return SYNTHETIC_INTEREST_GROUPS[advertiser].map((interestGroup) => {
+          return {
+            interestGroupName: interestGroup.name as string,
+            ownerOrigin: interestGroup.ownerOrigin as string,
+          };
+        });
+      });
 
-    return {
-      auctionData,
-      receivedBids,
-      adsAndBidders,
-      noBids,
-    };
+      const { auctionData, receivedBids, adsAndBidders, noBids } =
+        configuredAuctionEvents(
+          interestGroups.flat(),
+          Array.from(advertiserSet),
+          isMultiSeller,
+          currentSiteData,
+          currentStep,
+          previousAuctionData.current,
+          selectedAdUnit,
+          selectedDateTime
+        );
+
+      previousAuctionData.current = auctionData;
+
+      if (auctionData) {
+        const isDataEqual = isEqual(auctionData, prevData?.auctionData);
+
+        if (!isDataEqual) {
+          setAuctionUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
+        }
+      }
+
+      if (receivedBids || noBids) {
+        const isDataEqual = isEqual(
+          { receivedBids, noBids },
+          {
+            receivedBids: prevData?.receivedBids,
+            noBids: prevData?.noBids,
+          }
+        );
+
+        if (!isDataEqual) {
+          setBidsUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
+        }
+      }
+
+      return {
+        auctionData,
+        receivedBids,
+        adsAndBidders,
+        noBids,
+      };
+    });
   }, [
     currentSiteData,
     sitesVisited,
@@ -212,8 +334,8 @@ const ExplorableExplanation = () => {
           Element: Auctions,
           props: {
             auctionEvents: auctionsData,
-            customAdsAndBidders: auctionsData.adsAndBidders,
-            noBids: auctionsData.noBids ?? {},
+            noBids: auctionsData?.noBids ?? {},
+            customAdsAndBidders: auctionsData?.adsAndBidders,
           },
         },
       },
@@ -222,10 +344,10 @@ const ExplorableExplanation = () => {
         content: {
           Element: BidsPanel,
           props: {
-            receivedBids: Object.keys(auctionsData.receivedBids ?? {})
+            receivedBids: Object.keys(auctionsData?.receivedBids ?? {})
               .map((key: string) => auctionsData?.receivedBids?.[key] ?? [])
               .flat(),
-            noBids: auctionsData.noBids ?? {},
+            noBids: auctionsData?.noBids ?? {},
             eeAnimatedTab: true,
           },
         },
@@ -244,7 +366,7 @@ const ExplorableExplanation = () => {
   );
 
   return (
-    <TabsProvider items={tabItems}>
+    <TabsProvider items={tabItems} name="explorableExplanation">
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={_setCurrentSiteData}
@@ -259,6 +381,10 @@ const ExplorableExplanation = () => {
         setCurrentStep={setCurrentStep}
         setSelectedAdUnit={setSelectedAdUnit}
         setSelectedDateTime={setSelectedDateTime}
+        interestGroupUpdateIndicator={interestGroupUpdateIndicator}
+        auctionUpdateIndicator={auctionUpdateIndicator}
+        bidsUpdateIndicator={bidsUpdateIndicator}
+        setHasLastNodeVisited={setHasLastNodeVisited}
       />
     </TabsProvider>
   );

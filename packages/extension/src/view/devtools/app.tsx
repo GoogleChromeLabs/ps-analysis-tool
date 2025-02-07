@@ -23,6 +23,7 @@ import {
   SidebarProvider,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { getSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -53,35 +54,31 @@ const App: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId;
-
-      if (!tabId) {
+      if (!chrome.devtools.inspectedWindow.tabId) {
         return;
       }
 
-      const data = await chrome.storage.session.get();
+      const data = await getSessionStorage('persistentSetting');
       const syncData = await chrome.storage.sync.get();
 
-      if (data?.['selectedSidebarItem#' + tabId]) {
-        setDefaultSelectedItemKey(data['selectedSidebarItem#' + tabId]);
+      if (data?.selectedSidebarItem) {
+        setDefaultSelectedItemKey(data?.selectedSidebarItem);
       } else if (syncData?.psLandingPageViewed) {
         setDefaultSelectedItemKey(SIDEBAR_ITEMS_KEYS.DASHBOARD);
       }
 
-      if (data?.['sidebarCollapsedState#' + tabId]) {
-        setCollapsedState(
-          data?.['sidebarCollapsedState#' + tabId] === 'collapsed'
-        );
+      if (data?.sidebarCollapsedState) {
+        setCollapsedState(data?.sidebarCollapsedState === true);
       } else {
         setCollapsedState(false);
       }
 
-      if (data?.['cookieDropdownOpen#' + tabId]) {
+      if (data?.cookieDropdownOpen) {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
           newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
             SIDEBAR_ITEMS_KEYS.COOKIES
-          ].dropdownOpen = data['cookieDropdownOpen#' + tabId];
+          ].dropdownOpen = data?.cookieDropdownOpen;
           return newSidebarData;
         });
       }

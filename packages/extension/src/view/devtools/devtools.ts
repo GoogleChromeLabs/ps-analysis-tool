@@ -25,7 +25,8 @@ const callback = (panel: {
     }
 
     await chrome.storage.session.set({
-      [chrome.devtools.inspectedWindow.tabId]: true,
+      [chrome.devtools.inspectedWindow.tabId + '-privacySandboxPanelVisible']:
+        true,
     });
   });
 
@@ -35,7 +36,8 @@ const callback = (panel: {
     }
 
     await chrome.storage.session.set({
-      [chrome.devtools.inspectedWindow.tabId]: false,
+      [chrome.devtools.inspectedWindow.tabId + '-privacySandboxPanelVisible']:
+        false,
     });
   });
 };

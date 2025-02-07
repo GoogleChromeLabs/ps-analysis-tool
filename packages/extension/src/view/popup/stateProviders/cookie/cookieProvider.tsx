@@ -30,7 +30,7 @@ import { type CookieData } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import { getCurrentTab } from '../../../../utils/getCurrentTab';
 import {
   ALLOWED_NUMBER_OF_TABS,
   INITIAL_SYNC,
