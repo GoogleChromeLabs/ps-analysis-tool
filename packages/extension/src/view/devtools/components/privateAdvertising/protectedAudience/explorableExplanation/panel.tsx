@@ -77,10 +77,13 @@ interface PanelProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<StepType>>;
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   setSelectedDateTime: React.Dispatch<React.SetStateAction<string | null>>;
+  interestGroupUpdateIndicator: number;
+  auctionUpdateIndicator: number;
+  bidsUpdateIndicator: number;
+  setHasLastNodeVisited: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Panel = ({
-  currentSiteData,
   setCurrentSite,
   highlightedInterestGroup,
   setHighlightedInterestGroup,
@@ -93,6 +96,10 @@ const Panel = ({
   setCurrentStep,
   setSelectedAdUnit,
   setSelectedDateTime,
+  interestGroupUpdateIndicator,
+  auctionUpdateIndicator,
+  bidsUpdateIndicator,
+  setHasLastNodeVisited,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
@@ -193,20 +200,30 @@ const Panel = ({
   }, [tooglePlayOnKeydown]);
 
   useEffect(() => {
-    if (!currentSiteData) {
-      setActiveTab(0);
-      return;
-    }
-
-    if (currentSiteData?.type === 'advertiser') {
+    if (interestGroupUpdateIndicator !== -1) {
       highlightTab(1, false);
       highlightTab(2, false);
       highlightTab(0);
     } else {
-      highlightTab(1);
-      highlightTab(2);
+      highlightTab(0, false);
     }
-  }, [currentSiteData, currentSiteData?.type, highlightTab, setActiveTab]);
+  }, [interestGroupUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (auctionUpdateIndicator !== -1) {
+      highlightTab(1);
+    } else {
+      highlightTab(1, false);
+    }
+  }, [auctionUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (bidsUpdateIndicator !== -1) {
+      highlightTab(2);
+    } else {
+      highlightTab(2, false);
+    }
+  }, [bidsUpdateIndicator, highlightTab]);
 
   const handleResizeCallback = useMemo(() => {
     return new ResizeObserver(() => {
@@ -285,8 +302,9 @@ const Panel = ({
 
   const resetHandler = useCallback(() => {
     app.reset();
+    setHasLastNodeVisited(false);
     setCurrentSite(null);
-  }, [setCurrentSite]);
+  }, [setCurrentSite, setHasLastNodeVisited]);
 
   const extraInterface = (
     <div className="flex gap-3 items-center">
@@ -416,6 +434,7 @@ const Panel = ({
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         setSelectedAdUnit={setSelectedAdUnit}
         setSelectedDateTime={setSelectedDateTime}
+        setHasLastNodeVisited={setHasLastNodeVisited}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <DraggableTray />
