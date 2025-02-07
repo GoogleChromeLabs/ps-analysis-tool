@@ -470,6 +470,7 @@ const getFlattenedAuctionEvents = (
           isMultiSeller
         );
       }
+
       if (index < sellerIndexToBeProcessed) {
         events[seller] = previousEvents?.[seller] ?? [];
       }
@@ -510,7 +511,6 @@ export const configuredAuctionEvents = (
 ) => {
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
-
   if (isMultiSeller) {
     sellersArray.push(
       websiteString,

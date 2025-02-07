@@ -18,7 +18,7 @@
  */
 import app from '../../../app';
 import config, { publisherData } from '../../../config';
-import { Box, ProgressLine, Text } from '../../../components';
+import { Box, Custom, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.jsx';
 
@@ -215,8 +215,9 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
 
 const setUpComponentAuction = (
   steps,
-  { title, x, y, ssp, info },
-  { bidValue }
+  { title, x, y, ssp, info, sspWebsite },
+  { bidValue },
+  index
 ) => {
   const { box, arrowSize } = config.flow;
 
@@ -224,6 +225,7 @@ const setUpComponentAuction = (
     component: Text,
     props: {
       text: title,
+      ssp: sspWebsite,
       x: x,
       y: y,
     },
@@ -237,6 +239,7 @@ const setUpComponentAuction = (
     component: Box,
     props: {
       title: ssp,
+      ssp: sspWebsite,
       x: () => app.auction.nextTipCoordinates?.x - BORDER_BOX_MARGIN - 12,
       y: () => app.auction.nextTipCoordinates?.y + 20,
       info,
@@ -265,7 +268,36 @@ const setUpComponentAuction = (
     },
   });
 
-  setUpRunadAuction(steps);
+  setUpRunadAuction(
+    steps,
+    () => {
+      return {
+        component: Custom,
+        props: {
+          render: () => {
+            const p = app.p;
+
+            if (index === 2) {
+              p.push();
+              p.noFill();
+              p.rect(boxCordinates.x, boxCordinates.y, BOX_WIDTH, BOX_HEIGHT);
+              p.strokeWeight(0.1);
+              p.pop();
+            }
+
+            return {
+              down: app.auction.nextTipCoordinates,
+            };
+          },
+        },
+        delay: 1000,
+        callBack: (returnValue) => {
+          app.auction.nextTipCoordinates = returnValue.down;
+        },
+      };
+    },
+    sspWebsite
+  );
 
   steps.push({
     component: ProgressLine,
