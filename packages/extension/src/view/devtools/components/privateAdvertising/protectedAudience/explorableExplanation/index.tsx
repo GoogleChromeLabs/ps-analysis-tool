@@ -57,6 +57,12 @@ const DEFAULT_SETTINGS = {
   isInteractiveMode: false,
   isMultiSeller: false,
 };
+const INIT_STATE = {
+  auctionData: {},
+  receivedBids: {},
+  adsAndBidders: {},
+  noBids: {},
+};
 
 const ExplorableExplanation = () => {
   const [currentSiteData, setCurrentSiteData] =
@@ -116,11 +122,29 @@ const ExplorableExplanation = () => {
   }, [currentSiteData, hasLastNodeVisited]);
 
   useEffect(() => {
-    if (interactiveMode !== app.isInteractiveMode) {
-      app.toggleInteractiveMode();
-      setSitesVisited([]);
+    if (!hasDataBeenFetchedFromSessionStorage.current) {
+      return;
     }
+
+    app.toggleInteractiveMode();
+    setSitesVisited([]);
   }, [interactiveMode]);
+
+  useEffect(() => {
+    if (!hasDataBeenFetchedFromSessionStorage.current) {
+      return;
+    }
+
+    setTimeout(() => {
+      app.reset();
+    }, 100);
+
+    setTimeout(() => {
+      app.play(true);
+    }, 300);
+
+    setSitesVisited([]);
+  }, [isMultiSeller]);
 
   useEffect(() => {
     (async () => {
@@ -228,7 +252,7 @@ const ExplorableExplanation = () => {
     receivedBids: Record<string, ReceivedBids[]> | null;
     adsAndBidders: AdsAndBiddersType | null;
     noBids?: NoBidsType;
-  } | null>(null);
+  } | null>(INIT_STATE);
 
   useEffect(() => {
     setAuctionsData((prevData) => {
@@ -236,7 +260,7 @@ const ExplorableExplanation = () => {
         previousAuctionData.current = null;
         setAuctionUpdateIndicator(-1);
         setBidsUpdateIndicator(-1);
-        return null;
+        return INIT_STATE;
       }
 
       if (lastVisitedNode.current !== currentSiteData.website) {
@@ -295,10 +319,10 @@ const ExplorableExplanation = () => {
       }
 
       return {
-        auctionData,
-        receivedBids,
-        adsAndBidders,
-        noBids,
+        auctionData: auctionData ?? {},
+        receivedBids: receivedBids ?? {},
+        adsAndBidders: adsAndBidders ?? {},
+        noBids: noBids ?? {},
       };
     });
   }, [
