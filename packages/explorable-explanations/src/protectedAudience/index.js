@@ -632,6 +632,16 @@ export const sketch = (p) => {
     p.infoIcon = p.loadImage(icons.info);
     p.openWithoutAnimation = p.loadImage(icons.openWithoutAnimation);
 
+    p.kawasaki = p.loadImage(icons.kawasaki);
+    p.cnn = p.loadImage(icons.cnn);
+    p.aljazeera = p.loadImage(icons.aljazeera);
+    p.newyorktimes = p.loadImage(icons.newyorktimes);
+    p.myntra = p.loadImage(icons.myntra);
+    p.amazon = p.loadImage(icons.amazon);
+    p.adidas = p.loadImage(icons.adidas);
+    p.netflix = p.loadImage(icons.netflix);
+    p.apple = p.loadImage(icons.apple);
+
     p.completedCheckMark = p.loadImage(icons.completedCheckMark);
   };
 };

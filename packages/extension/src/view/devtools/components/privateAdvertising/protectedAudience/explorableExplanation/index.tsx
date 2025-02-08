@@ -50,6 +50,7 @@ import {
 import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
+import { transformInterestGroup } from './interestGroupTransformer';
 
 const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
@@ -181,7 +182,7 @@ const ExplorableExplanation = () => {
         app.visitedIndexOrder.forEach((index: number) => {
           const website = config.timeline.circles[index].website;
           _sitesVisited.push(website);
-          requiredIG.push(...SYNTHETIC_INTEREST_GROUPS[website]);
+          requiredIG.push(...transformInterestGroup(website));
         });
 
         setSitesVisited(() => _sitesVisited);
@@ -206,7 +207,7 @@ const ExplorableExplanation = () => {
             hasReached = index;
           }
 
-          return SYNTHETIC_INTEREST_GROUPS[site];
+          return transformInterestGroup(site);
         })
         .filter((_data) => _data !== null)
         .flat();
