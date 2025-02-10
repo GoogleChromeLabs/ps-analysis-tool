@@ -22,7 +22,6 @@ import { useCallback, useEffect, type MutableRefObject } from 'react';
  * Internal dependencies.
  */
 import { useCookie, useSettings } from '../stateProviders';
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 const useContextInvalidated = (
   contextInvalidatedRef: MutableRefObject<boolean | null>
@@ -65,7 +64,7 @@ const useContextInvalidated = (
         localStorageFlag === 'true' &&
         allowedNumberOfTabs === 'unlimited'
       ) {
-        const tabId = await getCurrentTabId();
+        const tabId = chrome.devtools.inspectedWindow.tabId;
 
         if (tabId) {
           chrome.tabs.reload(Number(tabId));

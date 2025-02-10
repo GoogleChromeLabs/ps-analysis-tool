@@ -150,7 +150,7 @@ const RowContextMenu = forwardRef<
         setDomainsInAllowListCallback
       );
       setContextMenuOpen(false);
-      await reloadCurrentTab(chrome.devtools.inspectedWindow.tabId);
+      reloadCurrentTab(chrome.devtools.inspectedWindow.tabId);
     },
     [
       dotPrefixedDomain,
@@ -176,7 +176,7 @@ const RowContextMenu = forwardRef<
         setDomainsInAllowListCallback
       );
       setContextMenuOpen(false);
-      await reloadCurrentTab(chrome.devtools.inspectedWindow.tabId);
+      reloadCurrentTab(chrome.devtools.inspectedWindow.tabId);
     },
     [
       domainsInAllowList,

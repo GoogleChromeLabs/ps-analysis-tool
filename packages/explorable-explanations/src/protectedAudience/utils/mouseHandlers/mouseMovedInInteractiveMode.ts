@@ -18,6 +18,8 @@
  */
 import app from '../../app';
 import config from '../../config';
+import { drawOpenArrowWithoutAnimationIcon } from '../drawOpenArrowWithoutAnimationIcon';
+import { getCoordinateValues } from '../getCoordinateValues';
 import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
 import { isOverControls } from '../isOverControls';
@@ -49,7 +51,8 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
     if (!app.p) {
       return;
     }
-    if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, infoIconSize)) {
+    const { x, y } = getCoordinateValues({ x: _x, y: _y });
+    if (isInsideBox(app.p.mouseX, app.p.mouseY, x, y, infoIconSize)) {
       hoveredOverIcons = true;
     }
   });
@@ -61,15 +64,18 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
   }
 
   expandIconPositions.forEach((positions) => {
-    if (isInsideCircle(offsetX, offsetY, positions.x, positions.y + 10, 10)) {
+    const { x, y } = getCoordinateValues(positions);
+    if (
+      isInsideCircle(offsetX, offsetY, x, y + 10, 10) &&
+      app.timeline.currentIndex !== positions.index
+    ) {
       hoveringOnExpandIconPositions = true;
     }
   });
 
   circlePositions.forEach((positions) => {
-    if (
-      isInsideCircle(offsetX, offsetY, positions.x, positions.y, diameter / 2)
-    ) {
+    const { x, y } = getCoordinateValues(positions);
+    if (isInsideCircle(offsetX, offsetY, x, y, diameter / 2)) {
       hoveringOnCircles = true;
     }
   });
@@ -96,31 +102,7 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
 
   wipeAndRecreateUserCanvas();
 
-  app.timeline.expandIconPositions.forEach((position, index) => {
-    if (!app.up || !app.p) {
-      return;
-    }
-    app.up.push();
-    if (index === app.nodeIndexRevisited) {
-      app.up.rotate(app.p.TWO_PI / 2);
-      app.up.image(
-        app.p.openWithoutAnimation,
-        -position.x - 10,
-        -position.y - 20,
-        20,
-        20
-      );
-    } else {
-      app.up.image(
-        app.p.openWithoutAnimation,
-        position.x - 10,
-        position.y,
-        20,
-        20
-      );
-    }
-    app.up.pop();
-  });
+  drawOpenArrowWithoutAnimationIcon();
   renderUserIcon();
 };
 

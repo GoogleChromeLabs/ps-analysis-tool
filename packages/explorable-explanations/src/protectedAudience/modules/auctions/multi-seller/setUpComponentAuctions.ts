@@ -18,11 +18,15 @@
  */
 import app from '../../../app';
 import config, { publisherData } from '../../../config';
-import { Box, ProgressLine, Text } from '../../../components';
+import { Box, Custom, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
 import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
-import type { AuctionStep, Coordinates } from '../../../types.ts';
+import type {
+  AuctionStep,
+  Coordinates,
+  CoordinateValue,
+} from '../../../types.ts';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -226,9 +230,24 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
 };
 
 const setUpComponentAuction = (
-  steps,
-  { title, x, y, ssp, info },
-  { bidValue }
+  steps: AuctionStep[],
+  {
+    title,
+    x,
+    y,
+    ssp,
+    info,
+    sspWebsite,
+  }: {
+    title: string;
+    x: CoordinateValue;
+    y: CoordinateValue;
+    ssp: string;
+    info: React.JSX.Element;
+    sspWebsite: string;
+  },
+  { bidValue }: { bidValue: string },
+  index?: number
 ) => {
   const { box, arrowSize } = config.flow;
 
@@ -236,6 +255,7 @@ const setUpComponentAuction = (
     component: Text,
     props: {
       text: title,
+      ssp: sspWebsite,
       x: x,
       y: y,
     },
@@ -249,6 +269,7 @@ const setUpComponentAuction = (
     component: Box,
     props: {
       title: ssp,
+      ssp: sspWebsite,
       x: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).x -
         BORDER_BOX_MARGIN -
@@ -258,10 +279,13 @@ const setUpComponentAuction = (
     },
     delay: 1000,
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = {
-        x: returnValue.down.x,
-        y: returnValue.down.y + box.height - arrowSize,
-      };
+      if (returnValue.down) {
+        const { x: xValue, y: yValue } = getCoordinateValues(returnValue.down);
+        app.auction.nextTipCoordinates = {
+          x: xValue,
+          y: yValue + box.height - arrowSize,
+        };
+      }
     },
   });
 
@@ -273,14 +297,56 @@ const setUpComponentAuction = (
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
     },
     callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = {
-        x: returnValue.x - box.width / 2 - 10,
-        y: returnValue.y + box.height / 2 + arrowSize,
-      };
+      if (returnValue.down) {
+        const { x: xValue, y: yValue } = getCoordinateValues(returnValue.down);
+        app.auction.nextTipCoordinates = {
+          x: xValue - box.width / 2 - 10,
+          y: yValue + box.height / 2 + arrowSize,
+        };
+      }
     },
   });
 
-  setUpRunadAuction(steps);
+  setUpRunadAuction(
+    steps,
+    () => {
+      return {
+        component: Custom,
+        props: {
+          render: () => {
+            const p = app.p;
+
+            if (index === 2 && p) {
+              const { x: xValue, y: yValue } =
+                getCoordinateValues(boxCordinates);
+              p.push();
+              p.noFill();
+              p.rect(xValue, yValue, BOX_WIDTH, BOX_HEIGHT);
+              p.strokeWeight(0.1);
+              p.pop();
+            }
+
+            return {
+              down: app.auction.nextTipCoordinates,
+            };
+          },
+        },
+        delay: 1000,
+        callBack: (returnValue) => {
+          if (returnValue.down) {
+            const { x: xValue, y: yValue } = getCoordinateValues(
+              returnValue.down
+            );
+            app.auction.nextTipCoordinates = {
+              x: xValue,
+              y: yValue + box.height - arrowSize,
+            };
+          }
+        },
+      } as AuctionStep;
+    },
+    sspWebsite
+  );
 
   steps.push({
     component: ProgressLine,

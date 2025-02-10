@@ -152,7 +152,7 @@ const Branches = async ({
           `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
         );
       } else {
-        app.setSelectedDateTime(publisherData[currentSite].adunits[1]);
+        app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
 
       const { x, y } = getCoordinateValues(endpoints[1]);
@@ -175,30 +175,6 @@ const Branches = async ({
     }
   }
 
-  if (app.cancelPromise) {
-    if (app.isAutoExpand) {
-      if (typeOfBranches === 'datetime') {
-        app.setSelectedDateTime(
-          `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
-        );
-      } else {
-        app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
-      }
-      const { x, y } = getCoordinateValues(endpoints[1]);
-      scrollToCoordinates(x, y);
-      // eslint-disable-next-line consistent-return
-      return endpoints[1];
-    } else {
-      const { x, y } = getCoordinateValues(endpoints[0]);
-      scrollToCoordinates(x, y);
-      const nextTip = await FlowExpander({
-        nextTipCoordinates: endpoints,
-      });
-      // eslint-disable-next-line consistent-return
-      return nextTip;
-    }
-  }
-
   // Clear canvas or update logic (if necessary)
   wipeAndRecreateInterestCanvas();
 
@@ -216,6 +192,20 @@ const Branches = async ({
     isBranch: true,
     isForBranches: true,
   });
+
+  if (app.cancelPromise) {
+    if (typeOfBranches === 'datetime') {
+      app.setSelectedDateTime(
+        `${publisherData[currentSite].branches[1].date} ${publisherData[currentSite].branches[1].time}`
+      );
+    } else {
+      app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
+    }
+    const { x, y } = getCoordinateValues(endpoints[1]);
+    scrollToCoordinates(x, y);
+    // eslint-disable-next-line consistent-return
+    return endpoints[1];
+  }
 
   await Promise.all(
     branches.map(async ({ id, type }, index) => {

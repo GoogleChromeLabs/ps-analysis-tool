@@ -40,6 +40,15 @@ export type SketchProps = {
   playIcon: p5.Image;
   pauseIcon: p5.Image;
   completedCheckMark: p5.Image;
+  kawasaki: p5.Image;
+  cnn: p5.Image;
+  aljazeera: p5.Image;
+  newyorktimes: p5.Image;
+  myntra: p5.Image;
+  amazon: p5.Image;
+  adidas: p5.Image;
+  netflix: p5.Image;
+  apple: p5.Image;
   isMultiSeller: boolean;
   isInteractiveMode: boolean;
   autoScroll: boolean;
@@ -74,6 +83,7 @@ export type SketchProps = {
   getPlayState: () => void;
   setSelectedExpandedFlow: () => void;
   setIsBubbleExpanded: (isExpanded: boolean) => void;
+  setHasLastNodeVisited: (hasLastNodeVisited: boolean) => void;
 };
 
 export type P5 = p5 & {
@@ -96,6 +106,7 @@ export type Circle = {
   interestGroups?: string[];
   visited: boolean;
   visitedIndex: number | null;
+  logoSize?: { width: number; height: number };
 };
 
 export type AuctionStep = {

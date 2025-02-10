@@ -50,6 +50,7 @@ type SketchSharedProps = Pick<
   | 'autoScroll'
   | 'isInteractiveMode'
   | 'isMultiSeller'
+  | 'setHasLastNodeVisited'
 >;
 
 type CoordinatesWithIndex = Coordinates & {
@@ -99,7 +100,7 @@ export type App = {
     expandIconPositions: CoordinatesWithIndex[];
     currentIndex: number;
     pausedReason: string;
-    infoIconsPositions: Record<string, number>[];
+    infoIconsPositions: CoordinatesWithIndex[];
     renderUserIcon: () => void;
     drawTimelineLine: () => void;
     drawTimeline: (timeline: Config['timeline']) => void;
@@ -287,6 +288,7 @@ const app: App = {
   toggleMultSeller: noop,
   reset: noop,
   createCanvas: noop,
+  setHasLastNodeVisited: noop,
 };
 
 export default app;

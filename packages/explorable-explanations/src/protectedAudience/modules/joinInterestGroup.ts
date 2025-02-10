@@ -240,7 +240,7 @@ const joinInterestGroup: JoinInterestGroup = {
     });
 
     app.promiseQueue?.push((cb) => {
-      if (!app.isRevisitingNodeInInteractiveMode) {
+      if (!app.isRevisitingNodeInInteractiveMode && !app.isInteractiveMode) {
         flow.clearBelowTimelineCircles();
         app.timeline.infoIconsPositions = [];
       }

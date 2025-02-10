@@ -51,13 +51,13 @@ describe('reloadCurrentTab : ', () => {
     } as unknown as typeof fetch;
   });
 
-  it('should be called if tabId is passed', async () => {
-    await reloadCurrentTab(123);
+  it('should be called if tabId is passed', () => {
+    reloadCurrentTab(123);
     expect(globalThis.chrome.tabs.reload).toHaveBeenCalled();
   });
 
-  it('should be called if tabId is not passed passed', async () => {
-    await reloadCurrentTab();
+  it('should be called if tabId is not passed passed', () => {
+    reloadCurrentTab(40245632);
     expect(globalThis.chrome.tabs.reload).toHaveBeenLastCalledWith(40245632, {
       bypassCache: true,
     });

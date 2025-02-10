@@ -31,8 +31,7 @@ import setUpAdUnitCode from './setUpAdUnitCode';
 import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
-import type { AuctionStep, Step } from '../../types';
-
+import { getCoordinateValues } from '../../utils/getCoordinateValues';
 export type Auction = {
   setupAuctions: () => void;
   setUp: (index: number) => void;
@@ -50,7 +49,7 @@ const auction: Auction = {
    */
   setupAuctions: () => {
     app.auction.auctions = [];
-    config.timeline.circles.forEach((___, index) => {
+    config.timeline.circles.forEach((circle, index) => {
       auction.setUp(index);
     });
   },
@@ -65,11 +64,11 @@ const auction: Auction = {
     const currentCircle = circles[index];
 
     if (currentCircle.type !== 'publisher') {
-      app.auction.auctions?.push([]);
+      app.auction.auctions.push([]);
       return;
     }
 
-    const steps: AuctionStep[] = [];
+    const steps = [];
 
     setUpAdUnitCode(steps, index);
     setupBranches(steps, index);
@@ -103,18 +102,14 @@ const auction: Auction = {
       return;
     }
 
-    if (!app.promiseQueue) {
-      return;
-    }
-
-    app.promiseQueue.push((cb) => {
-      // @ts-ignore
+    app.promiseQueue?.push((cb) => {
       app.setCurrentSite(config.timeline.circles[index]);
+
       cb?.(undefined, true);
     });
 
     for (const step of app.auction.auctions[index]) {
-      app.promiseQueue.push(async (cb) => {
+      app.promiseQueue?.push(async (cb) => {
         const { component, props, callBack, delay = 0 } = step;
         let ssp = '';
 
@@ -127,7 +122,7 @@ const auction: Auction = {
             }
           }
 
-          const stepInformation: Step = {
+          const stepInformation = {
             title: props.title,
             description: props.description || '',
             ssp,
@@ -153,12 +148,7 @@ const auction: Auction = {
           }
 
           if (props?.showRippleEffect) {
-            const x = typeof props.x === 'function' ? props.x() : props.x;
-            const y = typeof props.y === 'function' ? props.y() : props.y;
-
-            if (!x || !y) {
-              return;
-            }
+            const { x, y } = getCoordinateValues(returnValue);
 
             if (app.cancelPromise) {
               cb?.(undefined, true);
@@ -196,8 +186,8 @@ const auction: Auction = {
       });
     }
 
-    app.promiseQueue.push((cb) => {
-      if (!app.isRevisitingNodeInInteractiveMode) {
+    app.promiseQueue?.push((cb) => {
+      if (!app.isRevisitingNodeInInteractiveMode && !app.isInteractiveMode) {
         flow.clearBelowTimelineCircles();
         app.timeline.infoIconsPositions = [];
         app.setSelectedAdUnit('');

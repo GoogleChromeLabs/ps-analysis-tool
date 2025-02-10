@@ -60,7 +60,7 @@ const RelatedWebsiteSets = () => {
   );
 
   return (
-    <TabsProvider items={tabItems}>
+    <TabsProvider items={tabItems} name="relatedWebsiteSets">
       <Panel />
     </TabsProvider>
   );

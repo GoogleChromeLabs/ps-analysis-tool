@@ -17,29 +17,30 @@
  * Internal dependencies
  */
 import app from '../app';
+import { getCoordinateValues } from './getCoordinateValues';
+
 export const drawOpenArrowWithoutAnimationIcon = () => {
-  app.timeline.expandIconPositions.forEach((position, index) => {
+  app.timeline.expandIconPositions.forEach((position) => {
     if (!app.up || !app.p) {
       return;
     }
+
+    const { x, y } = getCoordinateValues(position);
+
+    if (
+      app.isInteractiveMode &&
+      position.index === app.timeline.currentIndex &&
+      app.nodeIndexRevisited === -1
+    ) {
+      return;
+    }
+
     app.up.push();
-    if (index === app.nodeIndexRevisited) {
+    if (position.index === app.nodeIndexRevisited) {
       app.up.rotate(app.p.TWO_PI / 2);
-      app.up.image(
-        app.p.openWithoutAnimation,
-        -position.x - 10,
-        -position.y - 20,
-        20,
-        20
-      );
+      app.up.image(app.p.openWithoutAnimation, -x - 10, -y - 20, 20, 20);
     } else {
-      app.up.image(
-        app.p.openWithoutAnimation,
-        position.x - 10,
-        position.y,
-        20,
-        20
-      );
+      app.up.image(app.p.openWithoutAnimation, x - 10, y, 20, 20);
     }
     app.up.pop();
   });

@@ -24,7 +24,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { type CookieTableData } from '@google-psat/common';
+import {
+  type CookieTableData,
+  updateSessionStorage,
+} from '@google-psat/common';
 import {
   Sidebar,
   useSidebar,
@@ -49,7 +52,6 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -196,25 +198,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useEffect(() => {
     (async () => {
-      const tabId = await getCurrentTabId();
-
-      if (!tabId) {
-        return;
-      }
-
-      let data = await chrome.storage.session.get();
-
-      if (!data) {
-        data = {};
-      }
-
-      data['selectedSidebarItem#' + tabId] = selectedItemKey;
-      data['sidebarCollapsedState#' + tabId] = isCollapsed
-        ? 'collapsed'
-        : 'expanded';
-      data['cookieDropdownOpen#' + tabId] = cookieDropdownOpen;
-
-      await chrome.storage.session.set(data);
+      await updateSessionStorage(
+        {
+          selectedSidebarItem: selectedItemKey,
+          sidebarCollapsedState: isCollapsed,
+          cookieDropdownOpen: cookieDropdownOpen,
+        },
+        'persistentSetting'
+      );
     })();
   }, [selectedItemKey, isCollapsed, cookieDropdownOpen]);
 

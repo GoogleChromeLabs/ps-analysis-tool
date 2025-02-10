@@ -18,8 +18,8 @@
  */
 import app from '../app';
 import config from '../config';
+import { Coordinates } from '../types';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
-import type { Coordinates } from '../types';
 
 type Flow = {
   getTimelineCircleCoordinates: (index: number) => Coordinates;
@@ -37,7 +37,6 @@ type Flow = {
  * @module Flow
  * Handles animations, coordinate calculations, and visual effects for the timeline and interest groups.
  */
-
 const flow: Flow = {
   /**
    * Gets the coordinates of a timeline circle based on its index.
@@ -50,10 +49,6 @@ const flow: Flow = {
 
     const positions = app.timeline.circlePositions[index];
     const { x, y } = getCoordinateValues({ x: positions.x, y: positions.y });
-
-    if (app.isRevisitingNodeInInteractiveMode) {
-      return { x: x, y: y + 20 + diameter / 2 };
-    }
 
     return { x: x, y: y + 1.5 + diameter / 2 };
   },
@@ -73,7 +68,6 @@ const flow: Flow = {
     }
 
     const paddingLeft = 1;
-
     const width = x2 - x1;
     const topY = y1;
 

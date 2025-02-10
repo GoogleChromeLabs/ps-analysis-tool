@@ -95,15 +95,15 @@ const timeline: Timeline = {
    * @param {number} index - The index of the circle.
    * @param {boolean} [completed] - Whether the line should be styled as completed.
    */
-  drawLineAboveCircle: (index: number, completed = false) => {
+  drawLineAboveCircle: (index, completed = false) => {
+    const { position, colors } = config.timeline;
+    const { diameter } = config.timeline.circleProps;
     const p = app.p;
 
     if (!p) {
       return;
     }
 
-    const { position, colors } = config.timeline;
-    const { diameter } = config.timeline.circleProps;
     const positions = app.timeline.circlePositions[index];
     const strokeColor =
       completed && !app.isInteractiveMode ? colors.visitedBlue : colors.grey;
@@ -112,23 +112,18 @@ const timeline: Timeline = {
 
     p.push();
     p.stroke(strokeColor);
-    p.line(x, y - diameter / 2, x, position.y + 37);
+    p.line(x, y - diameter / 2, x, position.y + 97);
     p.pop();
   },
 
-  // eslint-disable-next-line jsdoc/require-param
-  /**
-   * Draws the horizontal timeline line.
-   */
   drawTimeline: ({ position, circleProps, circles }) => {
-    const p = app.p;
-
-    if (!p) {
+    if (!app.p) {
       return;
     }
 
     const { diameter, verticalSpacing } = circleProps;
     const circleVerticalSpace = verticalSpacing + diameter;
+    const p = app.p;
 
     p.textAlign(p.CENTER, p.CENTER);
     // Draw circles and text at the timeline position
@@ -145,6 +140,17 @@ const timeline: Timeline = {
           y: yPositionForCircle,
         });
       }
+      const host = circleItem.website.split('.')[0];
+      const logoSize = circleItem.logoSize ?? { width: 0, height: 0 };
+      p.push();
+      p.image(
+        p[host],
+        xPositionForCircle - logoSize.width / 2,
+        position.y + 20,
+        logoSize.width,
+        logoSize.height
+      );
+      p.pop();
 
       p.push();
       p.stroke(config.timeline.colors.grey);
@@ -159,12 +165,15 @@ const timeline: Timeline = {
       if (!app.isInteractiveMode) {
         p.text(circleItem.datetime, xPositionForCircle, position.y);
       }
-      p.text(circleItem.website, xPositionForCircle, position.y + 20);
+      p.text(circleItem.website, xPositionForCircle, position.y + 60);
+      p.fill(config.timeline.colors.grey);
+      p.text(circleItem.type, xPositionForCircle, position.y + 80);
       p.pop();
 
       timeline.drawLineAboveCircle(index);
     });
   },
+
   /**
    * Draws the horizontal timeline line.
    */
@@ -179,12 +188,11 @@ const timeline: Timeline = {
     const circleVerticalSpace = verticalSpacing + diameter;
     const yPositonForLine = position.y + circleVerticalSpace;
     const p = app.p;
+    let x = 0;
 
     if (!p) {
       return;
     }
-
-    let x = 0;
 
     p.push();
     p.stroke(colors.grey);
@@ -211,16 +219,10 @@ const timeline: Timeline = {
     }
   },
 
-  /**
-   * Draws a circle at a given index.
-   * @param {number} index - The index of the circle.
-   * @param {boolean} [completed] - Whether the circle should be styled as completed.
-   */
-  drawCircle: (index: number, completed = false) => {
+  drawCircle: (index, completed = false) => {
     const { circleProps, user, circles, colors } = config.timeline;
     const position = app.timeline.circlePositions[index];
     const { diameter } = circleProps;
-    // const p = app.p;
 
     if (!app.p || !app.up) {
       return;
@@ -228,13 +230,15 @@ const timeline: Timeline = {
 
     app.p.push();
 
+    const { x, y } = getCoordinateValues(position);
+
     if (!completed) {
-      app.p.circle(position.x, position.y, diameter);
+      app.p.circle(x, y, diameter);
       return;
     }
 
     app.p.stroke(colors.visitedBlue);
-    app.p.circle(position.x, position.y, diameter);
+    app.p.circle(x, y, diameter);
 
     app.p.pop();
 
@@ -242,8 +246,8 @@ const timeline: Timeline = {
       if (app.usedNextOrPrev && app.timeline.currentIndex === index) {
         app.up.image(
           app.p.userIcon,
-          position.x - user.width / 2,
-          position.y - user.height / 2,
+          x - user.width / 2,
+          y - user.height / 2,
           user.width,
           user.height
         );
@@ -256,7 +260,7 @@ const timeline: Timeline = {
       app.up.stroke(colors.visitedBlue);
       app.up.textStyle(app.up.BOLD);
       app.up.textAlign(app.up.CENTER, app.up.CENTER);
-      app.up.text(circles[index].visitedIndex ?? '', position.x, position.y);
+      app.up.text(circles[index].visitedIndex ?? '', x, y);
       app.up.pop();
 
       return;
@@ -268,8 +272,8 @@ const timeline: Timeline = {
     if (app.nodeIndexRevisited === -1) {
       app.up.image(
         app.p.openWithoutAnimation,
-        position.x - 10,
-        position.y + diameter / 2,
+        x - 10,
+        y + diameter / 2,
         20,
         20
       );
@@ -279,16 +283,13 @@ const timeline: Timeline = {
 
     app.up.image(
       app.p.completedCheckMark,
-      position.x - user.width / 2,
-      position.y - user.height / 2,
+      x - user.width / 2,
+      y - user.height / 2,
       user.width,
       user.height
     );
   },
 
-  /**
-   * Renders the user icon.
-   */
   renderUserIcon: () => {
     const { mouseX, mouseY } = app;
     const circlePosition =
@@ -308,11 +309,11 @@ const timeline: Timeline = {
       return;
     }
 
+    const { x, y } = getCoordinateValues(circlePosition);
+
     if (!app.p || !app.up) {
       return;
     }
-
-    const { x, y } = getCoordinateValues(circlePosition);
 
     app.up.image(
       app.p.userIcon,
@@ -323,9 +324,6 @@ const timeline: Timeline = {
     );
   },
 
-  /**
-   * Erases and redraws the timeline.
-   */
   eraseAndRedraw: () => {
     const currentIndex = app.timeline.currentIndex;
     const { colors } = config.timeline;
@@ -335,7 +333,6 @@ const timeline: Timeline = {
         if (!app.p) {
           return;
         }
-
         if (circle.visited === true) {
           app.p.push();
           app.p.stroke(colors.visitedBlue);

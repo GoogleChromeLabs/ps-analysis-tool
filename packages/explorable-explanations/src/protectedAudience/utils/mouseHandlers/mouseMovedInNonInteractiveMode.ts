@@ -20,6 +20,7 @@ import app from '../../app';
 import config from '../../config';
 import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
+import { getCoordinateValues } from '../getCoordinateValues';
 
 const mouseMovedInNonInteractiveMode = (event) => {
   const { offsetX, offsetY } = event;
@@ -35,14 +36,16 @@ const mouseMovedInNonInteractiveMode = (event) => {
     if (!app.p) {
       return;
     }
-    if (isInsideBox(app.p.mouseX, app.p.mouseY, _x, _y, infoIconSize)) {
+    const { x, y } = getCoordinateValues({ x: _x, y: _y });
+    if (isInsideBox(app.p.mouseX, app.p.mouseY, x, y, infoIconSize)) {
       hoveredOverIcons = true;
     }
   });
 
   if (config.timeline.circles.every(({ visited }) => visited === true)) {
     app.timeline.expandIconPositions.forEach((positions) => {
-      if (isInsideCircle(offsetX, offsetY, positions.x, positions.y + 10, 10)) {
+      const { x, y } = getCoordinateValues(positions);
+      if (isInsideCircle(offsetX, offsetY, x, y + 10, 10)) {
         hoveredOverIcons = true;
       }
     });

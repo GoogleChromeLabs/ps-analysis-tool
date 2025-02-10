@@ -58,7 +58,8 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
   expandIconPositions.forEach(({ x, y, index }) => {
     const { x: xValue, y: yValue } = getCoordinateValues({ x, y });
     if (
-      isInsideCircle(mouseX, mouseY, xValue - 10, yValue + diameter / 2, 20)
+      isInsideCircle(mouseX, mouseY, xValue, yValue + 10, 10) &&
+      app.timeline.currentIndex !== index
     ) {
       app.isRevisitingNodeInInteractiveMode = true;
       clickedIndex = index;
@@ -75,10 +76,13 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
     wipeAndRecreateUserCanvas();
     renderUserIcon();
     bubbles.generateBubbles();
+    app.nodeIndexRevisited = -1;
+    drawOpenArrowWithoutAnimationIcon();
 
     if (circles[clickedIndex].visited) {
       app.promiseQueue?.push((cb) => {
         wipeAndRecreateUserCanvas();
+        drawOpenArrowWithoutAnimationIcon();
         wipeAndRecreateMainCanvas();
 
         if (!p) {
@@ -142,6 +146,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
 
         app.shouldRespondToClick = true;
         bubbles.showMinifiedBubbles();
+        wipeAndRecreateUserCanvas();
         renderUserIcon();
         drawOpenArrowWithoutAnimationIcon();
         return;
@@ -170,7 +175,6 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
       app.shouldRespondToClick = true;
 
       wipeAndRecreateUserCanvas();
-      wipeAndRecreateMainCanvas();
       renderUserIcon();
       drawOpenArrowWithoutAnimationIcon();
       flow.setButtonsDisabilityState();
@@ -182,6 +186,8 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
   } else if (clickedIndex > -1 && app.isRevisitingNodeInInteractiveMode) {
     if (app.nodeIndexRevisited !== clickedIndex) {
       app.nodeIndexRevisited = clickedIndex;
+      app.timeline.currentIndex = -1;
+      renderUserIcon();
     } else {
       app.isRevisitingNodeInInteractiveMode = false;
       flow.clearBelowTimelineCircles();
@@ -216,7 +222,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
         // @ts-ignore
         app.auction.auctions[clickedIndex][0].props.y1 -= 20;
       }
-
+      renderUserIcon();
       cb?.(undefined, true);
     });
 
