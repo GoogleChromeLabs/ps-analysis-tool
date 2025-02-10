@@ -30,7 +30,7 @@ type FlowExpanderProps = {
 const FlowExpander = async ({
   nextTipCoordinates,
   typeOfBranches,
-}: FlowExpanderProps): Promise<Coordinates | void> => {
+}: FlowExpanderProps): Promise<void | { x: number; y: number }> => {
   const p = app.p;
   const igp = app.igp;
 
@@ -112,6 +112,8 @@ const FlowExpander = async ({
     }
   });
   scrollToCoordinates(endpoint.x, endpoint.y);
+  // eslint-disable-next-line consistent-return
+  return endpoint;
 };
 
 export default FlowExpander;
