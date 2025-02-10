@@ -32,6 +32,9 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useCallback, useEffect, useMemo } from 'react';
+/**
+ * Internal dependencies.
+ */
 import EvaluationEnvironment from '../evaluationEnvironment';
 
 interface ReceivedBidsTableProps {
@@ -86,8 +89,15 @@ const ReceivedBidsTable = ({
       },
       {
         header: 'Ad Container Size',
-        accessorKey: 'adContainerSize',
-        cell: (info) => info,
+        accessorKey: 'mediaContainerSize',
+        cell: (info) => {
+          const _info = info as number[];
+          return (
+            <div className="flex gap-2 items-center">
+              <p className="truncate">{`${_info[0]}x${_info[1]}`}</p>
+            </div>
+          );
+        },
         widthWeightagePercentage: 16,
       },
       {
