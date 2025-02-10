@@ -31,7 +31,7 @@ export interface ContentPanelProps {
     title: () => string;
     description: () => string;
     url: string;
-    storyUrl: string;
+    storyUrl?: string;
     onClick: () => void;
   }[];
   titleStyles?: string;
@@ -71,7 +71,7 @@ const ContentPanel = ({
               {item.description()}
             </p>
             <div className="absolute top-10 right-2.5 flex gap-2">
-              <div className="w-4 h-4">
+              <div className="w-4 h-4" title="Check Documentation">
                 <a
                   href={addUTMParams(item.url)}
                   target="_blank"
@@ -84,8 +84,12 @@ const ContentPanel = ({
                   />
                 </a>
               </div>
-              {item.onClick && item.storyUrl && (
-                <div className="w-4 h-4 cursor-pointer" onClick={item.onClick}>
+              {item.onClick && item?.storyUrl && (
+                <div
+                  className="w-4 h-4 cursor-pointer"
+                  title="View Story"
+                  onClick={item.onClick}
+                >
                   <WebStoriesIcon
                     className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
                     height="16"
