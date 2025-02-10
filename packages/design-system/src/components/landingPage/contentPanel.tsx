@@ -71,7 +71,7 @@ const ContentPanel = ({
               {item.description()}
             </p>
             <div className="absolute top-10 right-2.5 flex gap-2">
-              <div className="w-4 h-4" title="Check Documentation">
+              <div className="w-4 h-4" title="View Documentation">
                 <a
                   href={addUTMParams(item.url)}
                   target="_blank"
