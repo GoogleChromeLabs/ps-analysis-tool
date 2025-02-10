@@ -80,7 +80,7 @@ const ContentPanel = ({
                   <DescriptionIcon
                     height="16"
                     width="16"
-                    className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
                   />
                 </a>
               </div>
@@ -91,7 +91,7 @@ const ContentPanel = ({
                   onClick={item.onClick}
                 >
                   <WebStoriesIcon
-                    className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
                     height="16"
                     width="16"
                   />
