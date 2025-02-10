@@ -31,6 +31,7 @@ export const setupMainCanvas = async (p, pause = false) => {
     const canvas = p.createCanvas(width, height);
 
     p.smooth();
+    p.pixelDensity(2);
     canvas.parent('ps-canvas');
     canvas.style('z-index', 0);
     p.background(config.canvas.background);

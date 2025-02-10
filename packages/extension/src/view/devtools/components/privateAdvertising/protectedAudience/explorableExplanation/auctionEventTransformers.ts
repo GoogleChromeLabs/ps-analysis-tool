@@ -80,6 +80,12 @@ export const transformAuctionConfig = (seller: string) => {
       seller
     );
 
+  eventAuctionConfig.trustedScoringSignalsURL =
+    eventAuctionConfig.trustedScoringSignalsURL.replace(
+      'privacysandboxdemos-seller.domain-aaa.com',
+      seller
+    );
+
   eventAuctionConfig.seller = eventAuctionConfig.seller.replace(
     'privacysandboxdemos-seller.domain-aaa.com',
     seller
@@ -470,6 +476,7 @@ const getFlattenedAuctionEvents = (
           isMultiSeller
         );
       }
+
       if (index < sellerIndexToBeProcessed) {
         events[seller] = previousEvents?.[seller] ?? [];
       }
@@ -510,7 +517,6 @@ export const configuredAuctionEvents = (
 ) => {
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
-
   if (isMultiSeller) {
     sellersArray.push(
       websiteString,

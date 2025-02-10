@@ -25,6 +25,7 @@ export const setupInterestGroupCanvas = (p) => {
     const { height, width } = calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
 
+    p.pixelDensity(2);
     overlayCanvas.parent('interest-canvas');
     overlayCanvas.style('z-index', 2);
     p.textSize(config.canvas.fontSize);
