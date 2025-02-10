@@ -98,7 +98,7 @@ export function topicsAnimation(
           p.image(
             app[circleItem.website],
             xPosition - diameter / 4,
-            position.y - 80,
+            position.y - 85,
             diameter / 2,
             diameter / 2
           );
