@@ -33,6 +33,9 @@ import Animation from './animation';
 import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
 import { adtechs, websites } from './topicsAnimation/data';
 import type { TopicsTableType } from './topicsTable';
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
+
+const STORAGE_KEY = 'topicsExplorableExplanation';
 
 interface PanelProps {
   topicsTableData: Record<number, TopicsTableType[]>;
@@ -247,6 +250,36 @@ const Panel = ({
     setEpochCompleted({});
     setPAStorage('');
   }, [isInteractiveModeOn, setActiveTab, setPAStorage, setTopicsTableData]);
+
+  const hasDataBeenFetchedFromSessionStorage = useRef<boolean>(false);
+  useEffect(() => {
+    (async () => {
+      if (!hasDataBeenFetchedFromSessionStorage.current) {
+        return;
+      }
+
+      await updateSessionStorage(
+        { isInteractiveModeOn, sliderStep },
+        STORAGE_KEY
+      );
+    })();
+  }, [isInteractiveModeOn, sliderStep]);
+
+  useEffect(() => {
+    (async () => {
+      const data = (await getSessionStorage(STORAGE_KEY)) || {};
+
+      if (data?.isInteractiveModeOn) {
+        setIsInteractiveModeOn(data.isInteractiveModeOn);
+      }
+
+      if (data?.sliderStep) {
+        setSliderStep(data.sliderStep);
+      }
+
+      hasDataBeenFetchedFromSessionStorage.current = true;
+    })();
+  }, []);
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
