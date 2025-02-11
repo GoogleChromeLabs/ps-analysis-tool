@@ -83,6 +83,7 @@ const Panel = ({
       >) ?? createEpochs()
     );
   }, []);
+
   const [visitIndexStart, setVisitIndexStart] = useState(
     JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
       activeTab
@@ -146,6 +147,7 @@ const Panel = ({
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
+    setVisitIndexStart(0);
 
     timeoutRef.current = setTimeout(() => {
       _setReset(false);
@@ -248,6 +250,7 @@ const Panel = ({
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
+    setVisitIndexStart(0);
     setPAStorage('');
   }, [isInteractiveModeOn, setActiveTab, setPAStorage, setTopicsTableData]);
 
