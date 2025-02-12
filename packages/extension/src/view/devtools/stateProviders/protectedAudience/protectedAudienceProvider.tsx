@@ -210,6 +210,10 @@ const Provider = ({ children }: PropsWithChildren) => {
     }) => {
       let didAuctionEventsChange = false;
 
+      if (!['AUCTION_EVENTS'].includes(message.type)) {
+        return;
+      }
+
       if (!message.type) {
         return;
       }

@@ -73,6 +73,7 @@ const AdTechRow = ({
             style={{
               backgroundColor:
                 adTech === highlightAdTech ? 'yellow' : 'transparent',
+              color: adTech === highlightAdTech ? 'black' : 'inherit',
             }}
           >
             {adTech}

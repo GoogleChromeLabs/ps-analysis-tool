@@ -84,7 +84,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, 100);
 
   const intitialSync = useCallback(async () => {
-    const tab = await getCurrentTab();
+    const tab = await getCurrentTab(true);
 
     const availableTabs = await chrome.tabs.query({});
 
@@ -97,17 +97,17 @@ const Provider = ({ children }: PropsWithChildren) => {
       setReturningToSingleTab(true);
     }
 
-    if (!tab || !tab[0].id || !tab[0].url) {
+    if (!tab || !tab.id || !tab.url) {
       return;
     }
 
-    if (tab[0].url.startsWith('chrome:')) {
+    if (tab.url.startsWith('chrome:')) {
       setOnChromeUrl(true);
     } else {
       setOnChromeUrl(false);
     }
 
-    setTabId(tab[0].id);
+    setTabId(tab.id);
   }, [tabToRead]);
 
   useEffect(() => {
