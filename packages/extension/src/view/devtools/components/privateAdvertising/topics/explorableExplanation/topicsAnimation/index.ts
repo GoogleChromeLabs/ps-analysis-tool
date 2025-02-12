@@ -92,17 +92,17 @@ export function topicsAnimation(
           app.circlePositions = {};
         }
 
-        p.text(circleItem.website, xPosition, 50);
-
         if (app?.[circleItem.website]) {
           p.image(
             app[circleItem.website],
-            xPosition - diameter / 4,
-            position.y - 85,
-            diameter / 2,
-            diameter / 2
+            xPosition - diameter / 4 - 3,
+            30,
+            diameter / 2 + 6,
+            diameter / 2 + 6
           );
         }
+
+        p.text(circleItem.website, xPosition, position.y - 70);
 
         p.line(xPosition, position.y - 50, xPosition, position.y);
 
