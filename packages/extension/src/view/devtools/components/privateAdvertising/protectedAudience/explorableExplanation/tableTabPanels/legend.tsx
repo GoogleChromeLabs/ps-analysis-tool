@@ -21,9 +21,15 @@ import React from 'react';
 
 const Legend = () => {
   return (
-    <div className="p-2">
-      <p>Yellow figures signify components running out of browser context.</p>
-      <p>White figures signify components running inside browser context.</p>
+    <div className="p-4 flex flex-col gap-3 text-sm">
+      <div className="flex gap-3 items-center">
+        <div className="bg-yellow-400 w-4 h-4 border border-black" />
+        <p>Yellow figures signify process running out of browser context.</p>
+      </div>
+      <div className="flex gap-3 items-center">
+        <div className="bg-white w-4 h-4 border border-black" />
+        <p>White figures signify process running inside browser context.</p>
+      </div>
     </div>
   );
 };

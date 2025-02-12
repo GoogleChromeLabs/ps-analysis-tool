@@ -386,7 +386,6 @@ const ExplorableExplanation = () => {
             data: info,
           },
         },
-        addSpacer: true,
       },
       {
         title: 'Legend',
