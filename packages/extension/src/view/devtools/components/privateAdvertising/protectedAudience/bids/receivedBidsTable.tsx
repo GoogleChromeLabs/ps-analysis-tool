@@ -92,6 +92,9 @@ const ReceivedBidsTable = ({
         accessorKey: 'mediaContainerSize',
         cell: (info) => {
           const _info = info as number[];
+          if (!_info || _info.length < 2) {
+            return <></>;
+          }
           return (
             <div className="flex gap-2 items-center">
               <p className="truncate">{`${_info[0]}x${_info[1]}`}</p>
