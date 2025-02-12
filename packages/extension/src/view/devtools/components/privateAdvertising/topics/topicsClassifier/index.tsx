@@ -115,7 +115,7 @@ const TopicsClassifier = () => {
 
   return (
     <div className="relative h-full flex flex-col">
-      <div className="flex-1 p-4 h-full w-full flex flex-col">
+      <div className="flex-1 p-4 w-full flex flex-col">
         <textarea
           placeholder={`One host per line. For example: \n\ngoogle.com \nyoutube.com`}
           className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3"
@@ -133,15 +133,21 @@ const TopicsClassifier = () => {
         </button>
       </div>
       {classificationResult?.length > 0 && (
-        <TableProvider
-          data={classificationResult}
-          tableColumns={tableColumns}
-          onRowClick={onRowClick}
-          getRowObjectKey={getRowObjectKey}
-          onRowContextMenu={noop}
-        >
-          <Table selectedKey={selectedKey} />
-        </TableProvider>
+        <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz">
+          <TableProvider
+            data={classificationResult}
+            tableColumns={tableColumns}
+            onRowClick={onRowClick}
+            getRowObjectKey={getRowObjectKey}
+            onRowContextMenu={noop}
+          >
+            <Table
+              hideTableTopBar={true}
+              selectedKey={selectedKey}
+              hideFiltering={true}
+            />
+          </TableProvider>
+        </div>
       )}
     </div>
   );
