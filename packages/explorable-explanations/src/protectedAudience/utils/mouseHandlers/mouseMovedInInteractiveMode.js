@@ -18,6 +18,7 @@
  */
 import app from '../../app';
 import config from '../../config';
+import { drawOpenArrowWithoutAnimationIcon } from '../drawOpenArrowWithoutAnimationIcon';
 import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
 import { isOverControls } from '../isOverControls';
@@ -54,7 +55,10 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
   }
 
   expandIconPositions.forEach((positions) => {
-    if (isInsideCircle(offsetX, offsetY, positions.x, positions.y + 10, 10)) {
+    if (
+      isInsideCircle(offsetX, offsetY, positions.x, positions.y + 10, 10) &&
+      app.timeline.currentIndex !== positions.index
+    ) {
       hoveringOnExpandIconPositions = true;
     }
   });
@@ -89,28 +93,7 @@ const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
 
   wipeAndRecreateUserCanvas();
 
-  app.timeline.expandIconPositions.forEach((position, index) => {
-    app.up.push();
-    if (index === app.nodeIndexRevisited) {
-      app.up.rotate(app.p.TWO_PI / 2);
-      app.up.image(
-        app.p.openWithoutAnimation,
-        -position.x - 10,
-        -position.y - 20,
-        20,
-        20
-      );
-    } else {
-      app.up.image(
-        app.p.openWithoutAnimation,
-        position.x - 10,
-        position.y,
-        20,
-        20
-      );
-    }
-    app.up.pop();
-  });
+  drawOpenArrowWithoutAnimationIcon();
   renderUserIcon();
 };
 

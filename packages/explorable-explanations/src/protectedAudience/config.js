@@ -26,7 +26,7 @@ const config = {
     position: { x: 100, y: 50 },
     circleProps: {
       diameter: 50,
-      verticalSpacing: 70,
+      verticalSpacing: 130,
     },
     stepDelay: 1500,
     user: {
@@ -38,76 +38,85 @@ const config = {
     circles: [
       {
         type: 'advertiser',
-        website: 'adv1.com',
+        website: 'apple.com',
         datetime: '2023-10-01 10:00',
         igGroupsCount: 3,
-        interestGroups: ['shoes', 'heels', 'phones'],
+        interestGroups: ['laptops', 'headphones', 'phones'],
+        logoSize: { width: 25, height: 25 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'advertiser',
-        website: 'adv2.com',
+        website: 'myntra.com',
         datetime: '2023-10-01 11:00',
         igGroupsCount: 2,
         interestGroups: ['stilletos', 'shorts'],
+        logoSize: { width: 35, height: 25 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'publisher',
-        website: 'pub1.com',
+        website: 'newyorktimes.com',
         datetime: '2023-10-01 12:00',
+        logoSize: { width: 25, height: 25 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'advertiser',
-        website: 'adv3.com',
+        website: 'amazon.com',
         datetime: '2023-10-01 13:00',
         igGroupsCount: 2,
-        interestGroups: ['bike', 'car'],
+        interestGroups: ['bedsheets', 'pillows'],
+        logoSize: { width: 30, height: 30 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'advertiser',
-        website: 'adv5.com',
+        website: 'adidas.com',
         datetime: '2023-10-01 13:02',
         igGroupsCount: 3,
         interestGroups: ['football', 'basketball', 'baseball'],
+        logoSize: { width: 30, height: 30 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'publisher',
-        website: 'pub2.com',
+        website: 'cnn.com',
         datetime: '2023-10-01 14:00',
+        logoSize: { width: 35, height: 35 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'advertiser',
-        website: 'adv6.com',
+        website: 'netflix.com',
         datetime: '2023-10-01 14:01',
         igGroupsCount: 3,
-        interestGroups: ['movies', 'series', 'books'],
+        interestGroups: ['movies', 'series', 'games'],
+        logoSize: { width: 25, height: 25 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'advertiser',
-        website: 'adv7.com',
+        website: 'kawasaki.com',
         datetime: '2023-10-01 15:00',
         igGroupsCount: 3,
-        interestGroups: ['IGG220', 'IGG201', 'IG225'],
+        interestGroups: ['bikes', 'superbikes', 'bicycles'],
+        logoSize: { width: 30, height: 30 },
         visited: false,
         visitedIndex: null,
       },
       {
         type: 'publisher',
-        website: 'pub3.com',
+        website: 'aljazeera.com',
         datetime: '2023-10-01 16:00',
+        logoSize: { width: 30, height: 30 },
         visited: false,
         visitedIndex: null,
       },
@@ -148,7 +157,7 @@ const config = {
 export default config;
 
 export const publisherData = {
-  'pub1.com': {
+  'newyorktimes.com': {
     branches: [
       { date: 'Sun, 01 October 2023', time: '12:00:00 GMT', type: 'datetime' },
       { date: 'Sun, 01 October 2023', time: '12:01:00 GMT', type: 'datetime' },
@@ -161,7 +170,7 @@ export const publisherData = {
       ['SSP C', 'https://ssp-c.com'],
     ],
   },
-  'pub2.com': {
+  'cnn.com': {
     branches: [
       { date: 'Sun, 01 October 2023', time: '14:00:00 GMT', type: 'datetime' },
       { date: 'Sun, 01 October 2023', time: '14:01:00 GMT', type: 'datetime' },
@@ -174,7 +183,7 @@ export const publisherData = {
       ['SSP F', 'https://ssp-f.com'],
     ],
   },
-  'pub3.com': {
+  'aljazeera.com': {
     branches: [
       { date: 'Sun, 01 October 2023', time: '16:00:00 GMT', type: 'datetime' },
       { date: 'Sun, 01 October 2023', time: '16:01:00 GMT', type: 'datetime' },

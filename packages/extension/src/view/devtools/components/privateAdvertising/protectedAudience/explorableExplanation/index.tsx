@@ -33,6 +33,7 @@ import React, {
   useRef,
 } from 'react';
 import { app, config } from '@google-psat/explorable-explanations';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -49,13 +50,19 @@ import {
 import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
-import { isEqual } from 'lodash-es';
 import Legend from './tableTabPanels/legend';
+import { transformInterestGroup } from './interestGroupTransformer';
 
 const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
   isInteractiveMode: false,
   isMultiSeller: false,
+};
+const INIT_STATE = {
+  auctionData: {},
+  receivedBids: {},
+  adsAndBidders: {},
+  noBids: {},
 };
 
 const ExplorableExplanation = () => {
@@ -116,11 +123,29 @@ const ExplorableExplanation = () => {
   }, [currentSiteData, hasLastNodeVisited]);
 
   useEffect(() => {
-    if (interactiveMode !== app.isInteractiveMode) {
-      app.toggleInteractiveMode();
-      setSitesVisited([]);
+    if (!hasDataBeenFetchedFromSessionStorage.current) {
+      return;
     }
+
+    app.toggleInteractiveMode();
+    setSitesVisited([]);
   }, [interactiveMode]);
+
+  useEffect(() => {
+    if (!hasDataBeenFetchedFromSessionStorage.current) {
+      return;
+    }
+
+    setTimeout(() => {
+      app.reset();
+    }, 100);
+
+    setTimeout(() => {
+      app.play(true);
+    }, 300);
+
+    setSitesVisited([]);
+  }, [isMultiSeller]);
 
   useEffect(() => {
     (async () => {
@@ -158,7 +183,7 @@ const ExplorableExplanation = () => {
         app.visitedIndexOrder.forEach((index: number) => {
           const website = config.timeline.circles[index].website;
           _sitesVisited.push(website);
-          requiredIG.push(...SYNTHETIC_INTEREST_GROUPS[website]);
+          requiredIG.push(...transformInterestGroup(website));
         });
 
         setSitesVisited(() => _sitesVisited);
@@ -183,7 +208,7 @@ const ExplorableExplanation = () => {
             hasReached = index;
           }
 
-          return SYNTHETIC_INTEREST_GROUPS[site];
+          return transformInterestGroup(site);
         })
         .filter((_data) => _data !== null)
         .flat();
@@ -228,7 +253,7 @@ const ExplorableExplanation = () => {
     receivedBids: Record<string, ReceivedBids[]> | null;
     adsAndBidders: AdsAndBiddersType | null;
     noBids?: NoBidsType;
-  } | null>(null);
+  } | null>(INIT_STATE);
 
   useEffect(() => {
     setAuctionsData((prevData) => {
@@ -236,7 +261,7 @@ const ExplorableExplanation = () => {
         previousAuctionData.current = null;
         setAuctionUpdateIndicator(-1);
         setBidsUpdateIndicator(-1);
-        return null;
+        return INIT_STATE;
       }
 
       if (lastVisitedNode.current !== currentSiteData.website) {
@@ -295,10 +320,10 @@ const ExplorableExplanation = () => {
       }
 
       return {
-        auctionData,
-        receivedBids,
-        adsAndBidders,
-        noBids,
+        auctionData: auctionData ?? {},
+        receivedBids: receivedBids ?? {},
+        adsAndBidders: adsAndBidders ?? {},
+        noBids: noBids ?? {},
       };
     });
   }, [
@@ -335,6 +360,7 @@ const ExplorableExplanation = () => {
           Element: Auctions,
           props: {
             auctionEvents: auctionsData,
+            noBids: auctionsData?.noBids ?? {},
             customAdsAndBidders: auctionsData?.adsAndBidders,
           },
         },
