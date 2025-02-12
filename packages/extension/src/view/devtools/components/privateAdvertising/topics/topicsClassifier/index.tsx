@@ -28,16 +28,16 @@ import {
 import { noop } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
 
-/**
- * Internal dependencies.
- */
+type ClassificationResultIndex = ClassificationResult & {
+  index: number;
+};
 
 const TopicsClassifier = () => {
   const [websites, setWebsites] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [validationErrors, setInputValidationErrors] = useState<string[]>([]);
   const [classificationResult, setClassificationResult] = useState<
-    ClassificationResult[]
+    ClassificationResultIndex[]
   >([]);
   const [selectedKey, setSelectedKey] = useState<string>('');
 
@@ -77,7 +77,21 @@ const TopicsClassifier = () => {
           },
         }
       );
-      const jsonResponse = await response.json();
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      let jsonResponse = await response.json();
+      jsonResponse = jsonResponse.map(
+        (res: ClassificationResult, index: number) => {
+          return {
+            ...res,
+            index: index,
+          };
+        }
+      );
+
       setClassificationResult(jsonResponse);
     }
   }, [websites]);
@@ -104,14 +118,20 @@ const TopicsClassifier = () => {
       return;
     }
 
-    setSelectedKey((data as ClassificationResult).domain);
+    setSelectedKey(
+      `
+      ${(data as ClassificationResult).domain}
+        ${(data as ClassificationResultIndex).index}
+    `
+    );
   }, []);
 
-  const getRowObjectKey = useCallback(
-    (row: TableRow) =>
-      (row?.originalData as ClassificationResult).domain as string,
-    []
-  );
+  const getRowObjectKey = useCallback((row: TableRow) => {
+    return `
+      ${(row?.originalData as ClassificationResult).domain}
+        ${(row?.originalData as ClassificationResultIndex).index}
+    `;
+  }, []);
 
   return (
     <div className="relative h-full flex flex-col">
