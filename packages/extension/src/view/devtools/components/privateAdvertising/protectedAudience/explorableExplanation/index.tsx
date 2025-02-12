@@ -94,7 +94,6 @@ const ExplorableExplanation = () => {
       setSitesVisited([]);
       _setInteractiveMode(event.target.checked);
       setHasLastNodeVisited(false);
-      app.toggleInteractiveMode();
       setCurrentSiteData(null);
     },
     []

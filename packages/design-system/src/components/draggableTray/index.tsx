@@ -94,7 +94,9 @@ const DraggableTray = forwardRef<
           </div>
           <button onClick={() => setIsCollapsed(!isCollapsed)} className="pr-2">
             <DoubleDownArrow
-              className={isCollapsed ? 'rotate-180' : 'rotate-0'}
+              className={`text-raisin-black dark:text-bright-gray ${
+                isCollapsed ? 'rotate-180' : 'rotate-0'
+              }`}
             />
           </button>
         </div>
