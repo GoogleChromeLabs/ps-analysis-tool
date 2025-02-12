@@ -19,22 +19,26 @@
 import app from '../app';
 import config from '../config';
 import type { Coordinates } from '../types';
+import { getCoordinateValues } from '../utils/getCoordinateValues';
 
 type CoordinatesWithText = Coordinates & {
   text: string;
 };
 
-const Text = ({ text, x, y }: CoordinatesWithText): Coordinates => {
-  if (!y || !x) {
+const Text = ({
+  text,
+  x: xValue,
+  y: yValue,
+}: CoordinatesWithText): Coordinates => {
+  if (!yValue || !xValue) {
     return { x: 0, y: 0 };
   }
 
-  x = typeof x === 'function' ? x() : x;
-  y = typeof y === 'function' ? y() : y;
+  const { x, y } = getCoordinateValues({ x: xValue, y: yValue });
 
   const nextTip = {
-    x: x,
-    y: y,
+    x,
+    y,
   };
 
   const p = app.p;

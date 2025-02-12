@@ -102,9 +102,10 @@ const Box = ({
   }
 
   if (info) {
-    const iconX = x + width - infoIconSize - INFO_ICON_SPACING;
-    const iconY = y + INFO_ICON_SPACING;
-    app.timeline.infoIconsPositions.push({ x: iconX, y: iconY });
+    const { x: xCoordinate, y: yCoordinate } = getCoordinateValues({ x, y });
+    const iconX = xCoordinate + width - infoIconSize - INFO_ICON_SPACING;
+    const iconY = yCoordinate + INFO_ICON_SPACING;
+    app.timeline.infoIconsPositions.push({ x: iconX, y: iconY, index: 0 });
 
     p.image(p.infoIcon, iconX, iconY, infoIconSize, infoIconSize);
 
