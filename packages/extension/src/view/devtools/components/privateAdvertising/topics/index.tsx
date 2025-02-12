@@ -32,6 +32,7 @@ import {
 import ExplorableExplanation from './explorableExplanation';
 import TaxonomyTree from './taxonomyTree';
 import Panel from './panel';
+import TopicsClassifier from './topicsClassifier';
 
 const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
@@ -86,6 +87,13 @@ const Topics = () => {
             githubUrl:
               'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
           },
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Topics Classifier',
+        content: {
+          Element: TopicsClassifier,
           className: 'overflow-hidden',
         },
       },
