@@ -132,7 +132,7 @@ const TopicsClassifier = () => {
           Classify
         </button>
       </div>
-      {classificationResult && (
+      {classificationResult?.length > 0 && (
         <TableProvider
           data={classificationResult}
           tableColumns={tableColumns}
