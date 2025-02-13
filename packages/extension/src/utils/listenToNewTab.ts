@@ -17,11 +17,14 @@
  * Internal dependencies
  */
 import dataStore from '../store/dataStore';
+import { getCurrentTab } from './getCurrentTab';
 import { getTab } from './getTab';
 
 const listenToNewTab = async (tabId?: number) => {
   const newTabId =
-    tabId?.toString() || chrome.devtools.inspectedWindow.tabId.toString();
+    tabId?.toString() ||
+    chrome?.devtools?.inspectedWindow?.tabId?.toString() ||
+    (await getCurrentTab(true))?.id?.toString();
   tabId;
 
   if (!newTabId) {

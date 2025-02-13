@@ -43,6 +43,7 @@ export interface TabsStoreContext {
       increment?: boolean
     ) => void;
     isTabHighlighted: (tab: number) => boolean | number;
+    shouldAddSpacer: (tab: number) => boolean;
   };
 }
 
@@ -61,6 +62,7 @@ const initialState: TabsStoreContext = {
     setActiveTab: noop,
     highlightTab: noop,
     isTabHighlighted: () => false,
+    shouldAddSpacer: () => false,
   },
 };
 

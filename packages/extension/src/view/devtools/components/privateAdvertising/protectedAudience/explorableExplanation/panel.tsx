@@ -179,6 +179,10 @@ const Panel = ({
     highlightTab: actions.highlightTab,
   }));
 
+  // useEffect(() => {
+  //   setActiveTab(4);
+  // }, [setActiveTab]);
+
   useEffect(() => {
     if (highlightedInterestGroup) {
       setActiveTab(0);
