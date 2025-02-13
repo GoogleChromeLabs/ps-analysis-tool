@@ -89,12 +89,14 @@ const DraggableTray = forwardRef<
     >
       <div className="w-full h-full flex flex-col">
         <div className="bg-sky-100 dark:bg-sky-900 h-fit flex justify-between items-center">
-          <div className="pt-1.5">
+          <div className="pt-1.5 w-full">
             <Tabs showBottomBorder={false} fontSizeClass="text-xs" />
           </div>
-          <button onClick={() => setIsCollapsed(!isCollapsed)} className="pr-2">
+          <button onClick={() => setIsCollapsed(!isCollapsed)} className="px-2">
             <DoubleDownArrow
-              className={isCollapsed ? 'rotate-180' : 'rotate-0'}
+              className={`text-raisin-black dark:text-bright-gray ${
+                isCollapsed ? 'rotate-180' : 'rotate-0'
+              }`}
             />
           </button>
         </div>

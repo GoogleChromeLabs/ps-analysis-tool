@@ -50,6 +50,7 @@ import {
 import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
+import Legend from './tableTabPanels/legend';
 import { transformInterestGroup } from './interestGroupTransformer';
 
 const STORAGE_KEY = 'paExplorableExplanation';
@@ -94,7 +95,6 @@ const ExplorableExplanation = () => {
       setSitesVisited([]);
       _setInteractiveMode(event.target.checked);
       setHasLastNodeVisited(false);
-      app.toggleInteractiveMode();
       setCurrentSiteData(null);
     },
     []
@@ -384,6 +384,12 @@ const ExplorableExplanation = () => {
           props: {
             data: info,
           },
+        },
+      },
+      {
+        title: 'Legend',
+        content: {
+          Element: Legend,
         },
       },
     ],

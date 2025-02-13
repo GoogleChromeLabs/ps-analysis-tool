@@ -95,6 +95,7 @@ const AuctionPanel = ({
                     auctionEvents: events,
                     parentOrigin: events[0]?.auctionConfig?.seller,
                     startDate: actualTime,
+                    isBlurred: events.length === 0,
                   },
                 },
                 children: {},
@@ -124,6 +125,9 @@ const AuctionPanel = ({
             },
             children,
             dropdownOpen: false,
+            isBlurred:
+              auctionEventsData[adUnit][time][sellerUrl][sellerUrl].length ===
+              0,
           };
         });
 

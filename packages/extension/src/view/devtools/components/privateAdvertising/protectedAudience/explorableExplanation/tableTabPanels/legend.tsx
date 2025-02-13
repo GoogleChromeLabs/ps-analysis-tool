@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type TabsProviderProps = {
-  children: React.ReactNode;
-  items: TabItems;
-  name: string;
+
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+const Legend = () => {
+  return (
+    <div className="p-4 flex flex-col gap-3">
+      <div className="flex gap-2 items-center">
+        <div className="bg-yellow-400 w-4 h-4 border border-black" />
+        <p>Yellow boxes signify processes running out of browser context.</p>
+      </div>
+      <div className="flex gap-2 items-center">
+        <div className="bg-white w-4 h-4 border border-black" />
+        <p>White boxes signify processes running inside browser context.</p>
+      </div>
+    </div>
+  );
 };
 
-export type TabItems = Array<{
-  title: string;
-  content: {
-    Element: (props: any) => React.JSX.Element;
-    props?: Record<string, any>;
-    className?: string;
-  };
-  addSpacer?: boolean;
-}>;
+export default Legend;

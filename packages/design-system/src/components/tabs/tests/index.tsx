@@ -41,6 +41,7 @@ describe('Tabs', () => {
       titles: ['title1', 'title2'],
       setActiveTab,
       isTabHighlighted: jest.fn((tab: number) => (tab === 0 ? 1 : 99)),
+      shouldAddSpacer: jest.fn(() => false),
     });
 
     render(<Tabs />);
