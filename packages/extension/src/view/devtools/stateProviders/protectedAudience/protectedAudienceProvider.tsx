@@ -158,7 +158,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             reshapedAuctionEvents[adUnit] = {
               ...reshapedAuctionEvents[adUnit],
               // @ts-ignore
-              [time + '||' + events?.[0]?.uniqueAuctionId]: {
+              [time + '||' + events?.['0']?.[0].uniqueAuctionId]: {
                 // @ts-ignore
                 [events?.['0']?.[0]?.auctionConfig?.seller ?? '']: {
                   ...sspEvents,
