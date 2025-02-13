@@ -44,26 +44,26 @@ export function topicsAnimation(
   const app = {
     userIcon: null as p5.Image | null,
     completedIcon: null as p5.Image | null,
-    'eonline.com': null as p5.Image | null,
-    'gadgets360.com': null as p5.Image | null,
+    'tmz.com': null as p5.Image | null,
+    'cnet.com': null as p5.Image | null,
     'espn.com': null as p5.Image | null,
-    'insurancebusinessmag.com': null as p5.Image | null,
-    'lonelyplanet.com': null as p5.Image | null,
-    'tasteatlas.com': null as p5.Image | null,
-    'fendi.com': null as p5.Image | null,
+    'investopedia.com': null as p5.Image | null,
+    'tripadvisor.com': null as p5.Image | null,
+    'allrecipes.com': null as p5.Image | null,
+    'vogue.com': null as p5.Image | null,
     'bloomberg.com': null as p5.Image | null,
-    'codecademy.com': null as p5.Image | null,
-    'usmagazine.com': null as p5.Image | null,
-    'globalnews.ca': null as p5.Image | null,
-    'infoq.com': null as p5.Image | null,
-    'dailysports.net': null as p5.Image | null,
+    'linkedin.com': null as p5.Image | null,
+    'rollingstone.com': null as p5.Image | null,
+    'cnn.com': null as p5.Image | null,
+    'techcrunch.com': null as p5.Image | null,
+    'cbssports.com': null as p5.Image | null,
     'healthline.com': null as p5.Image | null,
-    'worldtraveler.travel': null as p5.Image | null,
-    'thegourmetjar.com': null as p5.Image | null,
-    'asos.com': null as p5.Image | null,
-    'thefinanceworld.com': null as p5.Image | null,
-    'usa.generation.org': null as p5.Image | null,
-    'globalcomix.com': null as p5.Image | null,
+    'expedia.com': null as p5.Image | null,
+    'foodnetwork.com': null as p5.Image | null,
+    'cosmopolitan.com': null as p5.Image | null,
+    'nerdwallet.com': null as p5.Image | null,
+    'indeed.com': null as p5.Image | null,
+    'crunchyroll.com': null as p5.Image | null,
     circlePositions: {} as Record<number, { x: number; y: number }>,
     siteAdTechs: {} as Record<string, string[]>,
     visitIndex: 0,
@@ -539,51 +539,45 @@ export function topicsAnimation(
       'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNTk4NUUxIj48cGF0aCBkPSJNNDgwLTgwcS04NSAwLTE1OC0zMC41VDE5NS0xOTVxLTU0LTU0LTg0LjUtMTI3VDgwLTQ4MHEwLTg0IDMwLjUtMTU3VDE5NS03NjRxNTQtNTQgMTI3LTg1dDE1OC0zMXE3NSAwIDE0MCAyNHQxMTcgNjZsLTQzIDQzcS00NC0zNS05OC01NHQtMTE2LTE5cS0xNDUgMC0yNDIuNSA5Ny41VDE0MC00ODBxMCAxNDUgOTcuNSAyNDIuNVQ0ODAtMTQwcTE0NSAwIDI0Mi41LTk3LjVUODIwLTQ4MHEwLTMwLTQuNS01OC41VDgwMi01OTRsNDYtNDZxMTYgMzcgMjQgNzd0OCA4M3EwIDg1LTMxIDE1OHQtODUgMTI3cS01NCA1NC0xMjcgODQuNVQ0ODAtODBabS01OS0yMThMMjU2LTQ2NGw0NS00NSAxMjAgMTIwIDQxNC00MTQgNDYgNDUtNDYwIDQ2MFoiLz48L3N2Zz4='
     );
 
-    app['eonline.com'] = p.loadImage(websitesToIconsMapping['eonline.com']);
-    app['gadgets360.com'] = p.loadImage(
-      websitesToIconsMapping['gadgets360.com']
-    );
+    app['tmz.com'] = p.loadImage(websitesToIconsMapping['tmz.com']);
+    app['cnet.com'] = p.loadImage(websitesToIconsMapping['cnet.com']);
     app['espn.com'] = p.loadImage(websitesToIconsMapping['espn.com']);
-    app['insurancebusinessmag.com'] = p.loadImage(
-      websitesToIconsMapping['insurancebusinessmag.com']
+    app['investopedia.com'] = p.loadImage(
+      websitesToIconsMapping['investopedia.com']
     );
-    app['lonelyplanet.com'] = p.loadImage(
-      websitesToIconsMapping['lonelyplanet.com']
+    app['tripadvisor.com'] = p.loadImage(
+      websitesToIconsMapping['tripadvisor.com']
     );
-    app['tasteatlas.com'] = p.loadImage(
-      websitesToIconsMapping['tasteatlas.com']
+    app['allrecipes.com'] = p.loadImage(
+      websitesToIconsMapping['allrecipes.com']
     );
-    app['fendi.com'] = p.loadImage(websitesToIconsMapping['fendi.com']);
+    app['vogue.com'] = p.loadImage(websitesToIconsMapping['vogue.com']);
     app['bloomberg.com'] = p.loadImage(websitesToIconsMapping['bloomberg.com']);
-    app['codecademy.com'] = p.loadImage(
-      websitesToIconsMapping['codecademy.com']
+    app['linkedin.com'] = p.loadImage(websitesToIconsMapping['linkedin.com']);
+    app['rollingstone.com'] = p.loadImage(
+      websitesToIconsMapping['rollingstone.com']
     );
-    app['usmagazine.com'] = p.loadImage(
-      websitesToIconsMapping['usmagazine.com']
+    app['cnn.com'] = p.loadImage(websitesToIconsMapping['cnn.com']);
+    app['techcrunch.com'] = p.loadImage(
+      websitesToIconsMapping['techcrunch.com']
     );
-    app['globalnews.ca'] = p.loadImage(websitesToIconsMapping['globalnews.ca']);
-    app['infoq.com'] = p.loadImage(websitesToIconsMapping['infoq.com']);
-    app['dailysports.net'] = p.loadImage(
-      websitesToIconsMapping['dailysports.net']
-    );
+    app['cbssports.com'] = p.loadImage(websitesToIconsMapping['cbssports.com']);
     app['healthline.com'] = p.loadImage(
       websitesToIconsMapping['healthline.com']
     );
-    app['worldtraveler.travel'] = p.loadImage(
-      websitesToIconsMapping['worldtraveler.travel']
+    app['expedia.com'] = p.loadImage(websitesToIconsMapping['expedia.com']);
+    app['foodnetwork.com'] = p.loadImage(
+      websitesToIconsMapping['foodnetwork.com']
     );
-    app['thegourmetjar.com'] = p.loadImage(
-      websitesToIconsMapping['thegourmetjar.com']
+    app['cosmopolitan.com'] = p.loadImage(
+      websitesToIconsMapping['cosmopolitan.com']
     );
-    app['asos.com'] = p.loadImage(websitesToIconsMapping['asos.com']);
-    app['thefinanceworld.com'] = p.loadImage(
-      websitesToIconsMapping['thefinanceworld.com']
+    app['nerdwallet.com'] = p.loadImage(
+      websitesToIconsMapping['nerdwallet.com']
     );
-    app['usa.generation.org'] = p.loadImage(
-      websitesToIconsMapping['usa.generation.org']
-    );
-    app['globalcomix.com'] = p.loadImage(
-      websitesToIconsMapping['globalcomix.com']
+    app['indeed.com'] = p.loadImage(websitesToIconsMapping['indeed.com']);
+    app['crunchyroll.com'] = p.loadImage(
+      websitesToIconsMapping['crunchyroll.com']
     );
   };
 
