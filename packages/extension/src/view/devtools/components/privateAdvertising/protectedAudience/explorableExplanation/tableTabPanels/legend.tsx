@@ -18,27 +18,20 @@
  * External dependencies.
  */
 import React from 'react';
+import { Link } from '@google-psat/design-system';
 
 const Legend = () => {
   return (
     <div className="p-3 text-[12.5px] dark:text-bright-gray">
       <p>
         This{' '}
-        <a
-          target="__blank"
-          className="text-bright-navy-blue"
-          href="https://en.wikipedia.org/wiki/Explorable_explanation"
-        >
+        <Link href="https://en.wikipedia.org/wiki/Explorable_explanation">
           explorable explanation
-        </a>{' '}
+        </Link>{' '}
         illustrates the generic flow outlined in the{' '}
-        <a
-          target="__blank"
-          className="text-bright-navy-blue"
-          href="https://developers.google.com/display-video/protected-audience/ssp-guide"
-        >
+        <Link href="https://developers.google.com/display-video/protected-audience/ssp-guide">
           ssp-guide
-        </a>{' '}
+        </Link>{' '}
         diagrams using synthetic data for both single and multi-seller auctions.
         The timeline follows a user’s journey from visiting advertiser websites,
         where interest groups are added, to publisher websites, where auctions
