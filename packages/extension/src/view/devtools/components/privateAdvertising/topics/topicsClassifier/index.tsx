@@ -24,9 +24,11 @@ import {
   Table,
   type ClassificationResult,
   type TableData,
+  ErrorMessage,
 } from '@google-psat/design-system';
 import { noop } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
+import isValidURL from '../../../../../../utils/isValidURL';
 
 type ClassificationResultIndex = ClassificationResult & {
   index: number;
@@ -45,20 +47,24 @@ const TopicsClassifier = () => {
     const hosts = websites.split('\n');
     const preprocessedHosts: string[] = [];
     const inputValidationErrors: string[] = [];
+    setInputValidationErrors([]);
 
     hosts.forEach((host) => {
       const trimmedHost = host.trim();
       if (trimmedHost === '') {
         return;
       }
+
       preprocessedHosts.push(trimmedHost);
     });
 
     preprocessedHosts.forEach((host) => {
-      if (host.includes('/')) {
-        inputValidationErrors.push(
-          'Host "' + host + '" contains invalid character: "/"'
-        );
+      if (!isValidURL(host)) {
+        inputValidationErrors.push('Host "' + host + '" is invalid.');
+      } else {
+        if (!new URL(host).hostname) {
+          inputValidationErrors.push('Host "' + host + '" is invalid.');
+        }
       }
     });
 
@@ -77,10 +83,6 @@ const TopicsClassifier = () => {
           },
         }
       );
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
 
       let jsonResponse = await response.json();
       jsonResponse = jsonResponse.map(
@@ -135,7 +137,7 @@ const TopicsClassifier = () => {
 
   return (
     <div className="relative h-full flex flex-col">
-      <div className="flex-1 p-4 w-full flex flex-col">
+      <div className="flex p-4 w-full flex flex-col">
         <textarea
           placeholder={`One host per line. For example: \n\ngoogle.com \nyoutube.com`}
           className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3"
@@ -152,6 +154,13 @@ const TopicsClassifier = () => {
           Classify
         </button>
       </div>
+      {validationErrors.length > 0 && (
+        <div className="flex p-4 w-full flex flex-col">
+          {validationErrors.map((error, index) => (
+            <ErrorMessage message={error} typeOfMessage="Error" key={index} />
+          ))}
+        </div>
+      )}
       {classificationResult?.length > 0 && (
         <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz">
           <TableProvider
