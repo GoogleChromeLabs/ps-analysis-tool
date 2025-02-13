@@ -21,7 +21,7 @@ import React from 'react';
 
 const Legend = () => {
   return (
-    <div className="p-3 text-[12.5px]">
+    <div className="p-3 text-[12.5px] dark:text-bright-gray">
       <p>
         This{' '}
         <a
@@ -31,7 +31,7 @@ const Legend = () => {
         >
           explorable explanation
         </a>{' '}
-        explains the generic flow outlined in the{' '}
+        illustrates the generic flow outlined in the{' '}
         <a
           target="__blank"
           className="text-bright-navy-blue"
@@ -52,7 +52,9 @@ const Legend = () => {
         </div>
         <div className="flex gap-2 items-center">
           <div className="bg-white w-4 h-4 border border-black" />
-          <p>White boxes signify processes running inside browser context.</p>
+          <p>
+            White boxes signify processes running inside the browser context.
+          </p>
         </div>
         <div className="flex gap-2 items-center">
           <div className="w-4 h-4">
