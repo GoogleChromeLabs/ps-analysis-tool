@@ -597,14 +597,14 @@ export function topicsAnimation(
     p.textFont('sans-serif');
     app.drawTimeline(config.timeline.position, epoch);
 
-    if (!isAnimating) {
+    if (!isAnimating && !isInteractive) {
       while (app.visitIndex < epoch.length) {
         app.play();
       }
       app.userVisitDone(app.visitIndex - 1);
     }
 
-    if (visitIndexStart > 0) {
+    if (visitIndexStart > 0 && !isInteractive) {
       while (app.visitIndex < visitIndexStart) {
         app.play();
       }

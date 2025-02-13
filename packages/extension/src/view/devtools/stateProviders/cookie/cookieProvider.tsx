@@ -255,6 +255,18 @@ const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
+      if (
+        ![
+          'SERVICE_WORKER_SLEPT',
+          SET_TAB_TO_READ,
+          INITIAL_SYNC,
+          NEW_COOKIE_DATA,
+          SERVICE_WORKER_RELOAD_MESSAGE,
+        ].includes(message.type)
+      ) {
+        return;
+      }
+
       const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
 

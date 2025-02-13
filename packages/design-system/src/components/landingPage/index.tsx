@@ -31,7 +31,7 @@ type LandingPageContainerProps = LandingPageProps & {
     title: () => string;
     description: () => string;
     url: string;
-    storyUrl: string;
+    storyUrl?: string;
   }[];
   counterStyles: string;
   titleStyles: string;
@@ -92,7 +92,7 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
             content={content.map((data) => {
               return {
                 ...data,
-                onClick: () => setIndependentStory(data.storyUrl),
+                onClick: () => setIndependentStory(data?.storyUrl ?? ''),
               };
             })}
             counterStyles={counterStyles}

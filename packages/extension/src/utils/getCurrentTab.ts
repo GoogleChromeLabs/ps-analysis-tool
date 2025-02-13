@@ -13,8 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const getCurrentTab = async () => {
+export const getCurrentTab = async (popupOrServiceWorker = false) => {
   try {
+    if (popupOrServiceWorker) {
+      const tab = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+      });
+
+      return tab[0];
+    }
     const tab = await chrome.tabs.get(chrome.devtools.inspectedWindow.tabId);
     return tab;
   } catch (error) {

@@ -144,7 +144,6 @@ function initializeCards() {
     });
   } catch (error) {
     //Fail silently
-    console.log(error);
   }
 }
 
@@ -251,8 +250,12 @@ const messageListener = ({
   data: { story, doesHaveMorePages: _doesHaveMorePages },
 }) => {
   try {
-    const _cards = story.map(getCardHTML).join('');
-    const storyAnchors = story.map(({ storyUrl }) => ({ href: storyUrl }));
+    if(!story){
+      return;
+    }
+
+    const _cards = story?.map(getCardHTML).join('');
+    const storyAnchors = story?.map(({ storyUrl }) => ({ href: storyUrl }));
 
     if (JSON.stringify(story) === JSON.stringify(stateObject.previousStories)) {
       return;
@@ -281,10 +284,12 @@ const messageListener = ({
         document.getElementById('show-more-indicator').style.display = 'none';
       }
     } else {
+      window.scrollTo({ top: 0, left: 0 });
       document.getElementById('show-more-indicator').classList.add('bounce');
       document.getElementById('show-more-indicator').onclick = () => {
         sendEventToParent();
       };
+
       setTimeout(() => {
         document
           .getElementById('show-more-indicator')
