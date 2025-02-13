@@ -24,10 +24,13 @@ import {
   Table,
   type ClassificationResult,
   type TableData,
-  ErrorMessage,
 } from '@google-psat/design-system';
-import { noop } from 'lodash-es';
+import { noop } from '@google-psat/common';
 import React, { useCallback, useMemo, useState } from 'react';
+
+/**
+ * Internal dependencies
+ */
 import isValidURL from '../../../../../../utils/isValidURL';
 
 type ClassificationResultIndex = ClassificationResult & {
@@ -139,8 +142,8 @@ const TopicsClassifier = () => {
     <div className="relative h-full flex flex-col">
       <div className="flex p-4 w-full flex flex-col">
         <textarea
-          placeholder={`One host per line. For example: \n\ngoogle.com \nyoutube.com`}
-          className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3"
+          placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
+          className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray"
           cols={50}
           value={websites}
           onChange={(e) => setWebsites(e.target.value)}
@@ -157,7 +160,12 @@ const TopicsClassifier = () => {
       {validationErrors.length > 0 && (
         <div className="flex p-4 w-full flex flex-col">
           {validationErrors.map((error, index) => (
-            <ErrorMessage message={error} typeOfMessage="Error" key={index} />
+            <div
+              className="text-xs p-1 rounded-sm dark:bg-tomato-red bg-baby-pink dark:text-bright-gray font-medium"
+              key={index}
+            >
+              {error}
+            </div>
           ))}
         </div>
       )}

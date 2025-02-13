@@ -164,6 +164,8 @@ module.exports = {
     backgroundColor: {
       ...colors,
       primary: '#FFF',
+      'tomato-red': '#ED4E4C',
+      'baby-pink': '#EC928E',
       'google-blue': '#8AB4F8',
       'smurf-blue': '#1967D2',
       beteleguese: '#4285F4',

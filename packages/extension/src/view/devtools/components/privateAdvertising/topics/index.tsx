@@ -91,7 +91,7 @@ const Topics = () => {
         },
       },
       {
-        title: 'Topics Classifier',
+        title: 'Classifier',
         content: {
           Element: TopicsClassifier,
           className: 'overflow-hidden',
