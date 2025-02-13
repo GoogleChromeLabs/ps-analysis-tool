@@ -30,6 +30,18 @@ const Legend = () => {
         <div className="bg-white w-4 h-4 border border-black" />
         <p>White boxes signify processes running inside browser context.</p>
       </div>
+      <div className="flex gap-2 items-center">
+        <div className="w-4 h-4">
+          <div className="flex justify-center w-4">
+            <div className="rounded-full w-2 h-2 bg-[#4e79a7]"></div>
+          </div>
+          <div className="flex">
+            <div className="rounded-full w-2 h-2 bg-[#e15759]"></div>
+            <div className="rounded-full w-2 h-2 bg-[#f28e2c]"></div>
+          </div>
+        </div>
+        <p>Small bubbles indicate interest groups.</p>
+      </div>
     </div>
   );
 };
