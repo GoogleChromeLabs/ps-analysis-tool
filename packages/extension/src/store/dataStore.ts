@@ -541,7 +541,7 @@ class DataStore {
           : 'javascript',
       };
     });
-    this.tabs[tabId].newUpdatesCA = 0;
+
     await chrome.runtime.sendMessage({
       type: NEW_COOKIE_DATA,
       payload: {
@@ -552,6 +552,8 @@ class DataStore {
         },
       },
     });
+
+    this.tabs[tabId].newUpdatesCA = 0;
   }
 
   /**
@@ -625,6 +627,7 @@ class DataStore {
         globalEvents: globalEvents ?? [],
       },
     });
+    this.tabs[tabId].newUpdatesPA = 0;
   }
 
   /**
