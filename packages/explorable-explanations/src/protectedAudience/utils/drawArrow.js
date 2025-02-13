@@ -31,7 +31,7 @@ export const drawArrow = (size, x, y, direction = 'right') => {
   const offset = directionOffsets[direction] || directionOffsets['right'];
 
   // Clear the previous arrow
-  triangle(size + 2, offset._x, offset._y, direction, config.canvas.background);
+  triangle(size, offset._x, offset._y, direction, config.canvas.background);
 
   // Draw the new arrow
   triangle(size, x, y, direction, 'black');
@@ -72,7 +72,7 @@ export const triangle = (size, x, y, direction = 'right', color = 'black') => {
     p.translate(x - spacing, y + spacing);
   } else if (direction === 'down') {
     p.translate(x, y + spacing);
-  } else {
+  } else if (direction === 'up') {
     p.translate(x, y - spacing);
   }
 

@@ -189,7 +189,7 @@ const ProgressLine = ({
           p.rect(x1 - size / 2, y2, size + 1, height - 1);
           p.pop();
 
-          p.line(x1, y1, x2, currentY);
+          p.line(x1, y1, x2, currentY + 1);
           drawArrow(x1, currentY, direction);
 
           if (currentY === y2) {
