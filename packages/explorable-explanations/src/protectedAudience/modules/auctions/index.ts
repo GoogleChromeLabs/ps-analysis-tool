@@ -148,7 +148,8 @@ const auction: Auction = {
           }
 
           if (props?.showRippleEffect) {
-            const { x, y } = getCoordinateValues(returnValue);
+            const value = returnValue.down ? returnValue.down : returnValue;
+            const { x, y } = getCoordinateValues(value);
 
             if (app.cancelPromise) {
               cb?.(undefined, true);
