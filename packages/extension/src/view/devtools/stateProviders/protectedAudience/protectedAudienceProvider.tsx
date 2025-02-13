@@ -88,9 +88,13 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         Object.values(auctionEventsToBeParsed as SingleSellerAuction).forEach(
           (events) => {
+            const configResolvedEvent = events.filter(
+              (event) => event.type === 'configResolved'
+            );
+
             const adUnitCode = JSON.parse(
               // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-              events?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+              configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
             ).divId;
 
             if (!adUnitCode) {
@@ -132,9 +136,13 @@ const Provider = ({ children }: PropsWithChildren) => {
                 return;
               }
 
+              const configResolvedEvent = event.filter(
+                (_event) => _event.type === 'configResolved'
+              );
+
               adUnit = JSON.parse(
                 // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-                event?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+                configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
               ).divId;
             });
 
@@ -170,11 +178,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         return reshapedAuctionEvents;
       };
-
-      if (Object.keys(auctionEventsToBeParsed || {}).length === 0) {
-        setAuctionEvents(() => null);
-        return true;
-      }
 
       setAuctionEvents((prevState) => {
         if (
