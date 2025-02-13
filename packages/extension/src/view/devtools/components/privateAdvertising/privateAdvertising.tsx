@@ -26,16 +26,22 @@ const content = [
     title: () => I18n.getMessage('topics'),
     description: () => I18n.getMessage('topicsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('protectedAudience'),
     description: () => I18n.getMessage('protectedAudienceDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('attributionReporting'),
     description: () => I18n.getMessage('attributionReportingDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
   },
   {
     title: () => I18n.getMessage('privateAggregation'),
