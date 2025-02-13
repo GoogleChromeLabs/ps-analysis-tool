@@ -101,7 +101,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             reshapedAuctionEvents[adUnitCode] = {
               ...reshapedAuctionEvents[adUnitCode],
-              [time]: {
+              [time + '||' + events?.[0]?.uniqueAuctionId]: {
                 // @ts-ignore - seller is not defined in type, but it is in the data
                 [events?.[0]?.auctionConfig?.seller ?? '']: {
                   // @ts-ignore - seller is not defined in type, but it is in the data
@@ -157,7 +157,8 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             reshapedAuctionEvents[adUnit] = {
               ...reshapedAuctionEvents[adUnit],
-              [time]: {
+              // @ts-ignore
+              [time + '||' + events?.[0]?.uniqueAuctionId]: {
                 // @ts-ignore
                 [events?.['0']?.[0]?.auctionConfig?.seller ?? '']: {
                   ...sspEvents,
