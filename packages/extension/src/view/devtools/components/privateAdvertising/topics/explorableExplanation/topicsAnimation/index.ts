@@ -17,6 +17,7 @@
 import type p5 from 'p5';
 import { config } from './config';
 import { getAdtechsColors } from './utils';
+import { websitesToIconsMapping } from './data';
 
 /**
  * Setup function for p5.js
@@ -43,6 +44,26 @@ export function topicsAnimation(
   const app = {
     userIcon: null as p5.Image | null,
     completedIcon: null as p5.Image | null,
+    'tmz.com': null as p5.Image | null,
+    'cnet.com': null as p5.Image | null,
+    'espn.com': null as p5.Image | null,
+    'investopedia.com': null as p5.Image | null,
+    'tripadvisor.com': null as p5.Image | null,
+    'allrecipes.com': null as p5.Image | null,
+    'vogue.com': null as p5.Image | null,
+    'bloomberg.com': null as p5.Image | null,
+    'linkedin.com': null as p5.Image | null,
+    'rollingstone.com': null as p5.Image | null,
+    'cnn.com': null as p5.Image | null,
+    'techcrunch.com': null as p5.Image | null,
+    'cbssports.com': null as p5.Image | null,
+    'healthline.com': null as p5.Image | null,
+    'expedia.com': null as p5.Image | null,
+    'foodnetwork.com': null as p5.Image | null,
+    'cosmopolitan.com': null as p5.Image | null,
+    'nerdwallet.com': null as p5.Image | null,
+    'indeed.com': null as p5.Image | null,
+    'crunchyroll.com': null as p5.Image | null,
     circlePositions: {} as Record<number, { x: number; y: number }>,
     siteAdTechs: {} as Record<string, string[]>,
     visitIndex: 0,
@@ -71,14 +92,19 @@ export function topicsAnimation(
           app.circlePositions = {};
         }
 
-        p.text(circleItem.website, xPosition, 50);
+        if (app?.[circleItem.website]) {
+          p.image(
+            app[circleItem.website],
+            xPosition - diameter / 4 - 3,
+            55,
+            diameter / 2 + 6,
+            diameter / 2 + 6
+          );
+        }
 
-        p.line(
-          xPosition,
-          position.y - diameter / 2,
-          xPosition,
-          position.y - 50
-        );
+        p.text(circleItem.website, xPosition, position.y - 70);
+
+        p.line(xPosition, position.y - 50, xPosition, position.y);
 
         app.circlePositions[index] = { x: xPosition, y: position.y };
         app.drawCircle(index);
@@ -146,6 +172,7 @@ export function topicsAnimation(
       app.smallCirclePositions = {};
       p?.clear();
       p.background(255);
+      p.pixelDensity(2);
       app.drawTimeline(config.timeline.position, epoch);
     },
 
@@ -200,7 +227,7 @@ export function topicsAnimation(
 
       if (!isInteractive) {
         p.push();
-        p.text(currentCircle.datetime, xPosition, 30);
+        p.text(currentCircle.datetime, xPosition, 35);
         p.stroke('#1A73E8');
         p.line(
           previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
@@ -511,6 +538,47 @@ export function topicsAnimation(
     app.completedIcon = p.loadImage(
       'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNTk4NUUxIj48cGF0aCBkPSJNNDgwLTgwcS04NSAwLTE1OC0zMC41VDE5NS0xOTVxLTU0LTU0LTg0LjUtMTI3VDgwLTQ4MHEwLTg0IDMwLjUtMTU3VDE5NS03NjRxNTQtNTQgMTI3LTg1dDE1OC0zMXE3NSAwIDE0MCAyNHQxMTcgNjZsLTQzIDQzcS00NC0zNS05OC01NHQtMTE2LTE5cS0xNDUgMC0yNDIuNSA5Ny41VDE0MC00ODBxMCAxNDUgOTcuNSAyNDIuNVQ0ODAtMTQwcTE0NSAwIDI0Mi41LTk3LjVUODIwLTQ4MHEwLTMwLTQuNS01OC41VDgwMi01OTRsNDYtNDZxMTYgMzcgMjQgNzd0OCA4M3EwIDg1LTMxIDE1OHQtODUgMTI3cS01NCA1NC0xMjcgODQuNVQ0ODAtODBabS01OS0yMThMMjU2LTQ2NGw0NS00NSAxMjAgMTIwIDQxNC00MTQgNDYgNDUtNDYwIDQ2MFoiLz48L3N2Zz4='
     );
+
+    app['tmz.com'] = p.loadImage(websitesToIconsMapping['tmz.com']);
+    app['cnet.com'] = p.loadImage(websitesToIconsMapping['cnet.com']);
+    app['espn.com'] = p.loadImage(websitesToIconsMapping['espn.com']);
+    app['investopedia.com'] = p.loadImage(
+      websitesToIconsMapping['investopedia.com']
+    );
+    app['tripadvisor.com'] = p.loadImage(
+      websitesToIconsMapping['tripadvisor.com']
+    );
+    app['allrecipes.com'] = p.loadImage(
+      websitesToIconsMapping['allrecipes.com']
+    );
+    app['vogue.com'] = p.loadImage(websitesToIconsMapping['vogue.com']);
+    app['bloomberg.com'] = p.loadImage(websitesToIconsMapping['bloomberg.com']);
+    app['linkedin.com'] = p.loadImage(websitesToIconsMapping['linkedin.com']);
+    app['rollingstone.com'] = p.loadImage(
+      websitesToIconsMapping['rollingstone.com']
+    );
+    app['cnn.com'] = p.loadImage(websitesToIconsMapping['cnn.com']);
+    app['techcrunch.com'] = p.loadImage(
+      websitesToIconsMapping['techcrunch.com']
+    );
+    app['cbssports.com'] = p.loadImage(websitesToIconsMapping['cbssports.com']);
+    app['healthline.com'] = p.loadImage(
+      websitesToIconsMapping['healthline.com']
+    );
+    app['expedia.com'] = p.loadImage(websitesToIconsMapping['expedia.com']);
+    app['foodnetwork.com'] = p.loadImage(
+      websitesToIconsMapping['foodnetwork.com']
+    );
+    app['cosmopolitan.com'] = p.loadImage(
+      websitesToIconsMapping['cosmopolitan.com']
+    );
+    app['nerdwallet.com'] = p.loadImage(
+      websitesToIconsMapping['nerdwallet.com']
+    );
+    app['indeed.com'] = p.loadImage(websitesToIconsMapping['indeed.com']);
+    app['crunchyroll.com'] = p.loadImage(
+      websitesToIconsMapping['crunchyroll.com']
+    );
   };
 
   p.setup = () => {
@@ -522,6 +590,7 @@ export function topicsAnimation(
       config.canvas.height
     );
     p.background(255);
+    p.pixelDensity(2);
     app.canvas.mouseMoved(app.mouseMoved);
     app.canvas.mouseClicked(app.mouseClicked);
 
