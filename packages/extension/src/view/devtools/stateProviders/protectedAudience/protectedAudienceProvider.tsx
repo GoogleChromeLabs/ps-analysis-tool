@@ -90,7 +90,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           (events) => {
             const configResolvedEvent = events.filter(
               (event) => event.type === 'configResolved'
-            );
+            )?.[0];
 
             const adUnitCode = JSON.parse(
               // @ts-ignore - sellerSignals is not defined in type, but it is in the data
@@ -107,9 +107,9 @@ const Provider = ({ children }: PropsWithChildren) => {
               ...reshapedAuctionEvents[adUnitCode],
               [time + '||' + events?.[0]?.uniqueAuctionId]: {
                 // @ts-ignore - seller is not defined in type, but it is in the data
-                [events?.[0]?.auctionConfig?.seller ?? '']: {
+                [configResolvedEvent.auctionConfig?.seller ?? '']: {
                   // @ts-ignore - seller is not defined in type, but it is in the data
-                  [events?.[0]?.auctionConfig?.seller ?? '']: events,
+                  [configResolvedEvent.auctionConfig?.seller ?? '']: events,
                 },
               },
             };
@@ -138,7 +138,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
               const configResolvedEvent = event.filter(
                 (_event) => _event.type === 'configResolved'
-              );
+              )?.[0];
 
               adUnit = JSON.parse(
                 // @ts-ignore - sellerSignals is not defined in type, but it is in the data
