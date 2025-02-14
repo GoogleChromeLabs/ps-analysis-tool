@@ -189,8 +189,8 @@ const ProgressLine = ({
           p.rect(x1 - size / 2, y2, size + 1, height - 1);
           p.pop();
 
-          p.line(x1, y1, x2, currentY + 2);
-          drawArrow(x1, currentY + 2, direction);
+          p.line(x1, y1, x2, currentY);
+          drawArrow(x1, currentY, direction);
 
           if (currentY === y2) {
             utils.drawText(

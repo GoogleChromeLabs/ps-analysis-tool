@@ -22,10 +22,10 @@ import config from '../config';
 export const drawArrow = (size, x, y, direction = 'right') => {
   // Determine offset based on direction
   const directionOffsets = {
-    right: { _x: -x, _y: y },
-    left: { _x: x, _y: y },
-    down: { _x: x, _y: -y },
-    up: { _x: x, _y: y },
+    right: { _x: x - 2, _y: y },
+    left: { _x: x + 2, _y: y },
+    down: { _x: x, _y: y - 2 },
+    up: { _x: x, _y: y + 2 },
   };
 
   const offset = directionOffsets[direction] || directionOffsets['right'];
