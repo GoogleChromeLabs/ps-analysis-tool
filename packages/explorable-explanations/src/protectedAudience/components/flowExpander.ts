@@ -48,17 +48,19 @@ const FlowExpander = async ({
   const currentSite =
     config.timeline.circles[app.timeline.currentIndex].website;
 
-  igp.mouseMoved = ({
-    offsetX,
-    offsetY,
-  }: {
-    offsetX: number;
-    offsetY: number;
-  }) => {
+  igp.mouseMoved = (event: MouseEvent | undefined) => {
     let hoveringOverSomething = false;
     nextTipCoordinates.forEach((coordinates) => {
       const { x, y } = getCoordinateValues(coordinates);
-      if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
+      if (
+        isInsideCircle(
+          event?.offsetX ?? 0,
+          event?.offsetY ?? 0,
+          x,
+          y + 27,
+          iconRadius
+        )
+      ) {
         hoveringOverSomething = true;
       }
     });
