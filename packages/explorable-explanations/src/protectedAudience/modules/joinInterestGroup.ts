@@ -22,9 +22,9 @@ import config from '../config';
 import * as utils from '../utils';
 import { Box, ProgressLine } from '../components';
 import bubbles from './bubbles';
-import { ADVERTIZER_CONFIG } from './flowConfig.tsx';
-import type { AuctionStep } from '../types.ts';
-import { getCoordinateValues } from '../utils/getCoordinateValues.ts';
+import { ADVERTIZER_CONFIG } from './flowConfig';
+import { AuctionStep } from '../types';
+import { getCoordinateValues } from '../utils/getCoordinateValues';
 
 type JoinInterestGroup = {
   joinings: AuctionStep[][];
@@ -41,13 +41,12 @@ const ARROW_SIZE = 10;
  */
 const joinInterestGroup: JoinInterestGroup = {
   joinings: [],
-
   /**
    * Initializes the joining setup for all circles in the timeline.
    * Loops through each circle and sets up joining steps.
    */
   setupJoinings: () => {
-    config.timeline.circles.forEach((__, index) => {
+    config.timeline.circles.forEach((circle, index) => {
       joinInterestGroup.setUp(index);
     });
   },
@@ -167,7 +166,7 @@ const joinInterestGroup: JoinInterestGroup = {
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x,
         y1: () =>
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y -
-          10 -
+          12 -
           box.height,
         text: 'joinInterestGroup()',
       },
@@ -189,7 +188,6 @@ const joinInterestGroup: JoinInterestGroup = {
     if (!app.p) {
       return;
     }
-
     app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
     const steps = app.joinInterestGroup.joinings[index];
