@@ -30,13 +30,13 @@ export const ADVERTIZER_CONFIG = {
           <code className="text-upsed-tomato">joinAdInterestGroup()</code>{' '}
           function to join interest groups.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           These are script tags embedded in the advertiser&apos;s webpage that
           enable communication with DSP servers. DSP tags help associate users
           with interest groups for retargeting and audience building in future
           ad campaigns.
-        </p>
+        </div>
       </>
     ),
   },
@@ -55,14 +55,14 @@ export const ADVERTIZER_CONFIG = {
           profiles based on demographics, location, and behavior while ensuring
           compliance with privacy standards like the Protected Audience API.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           DSP servers on the advertiser&apos;s side handle user tracking, data
           processing, and interest group management. They process user behavior
           and decide if the user should be added to specific interest groups.
           (called from the DSP Tag). DSPs are the owners of the interest groups
           that the user joins.
-        </p>
+        </div>
       </>
     ),
   },
@@ -79,7 +79,7 @@ export const SINGLE_SELLER_CONFIG = {
           contextual auction responses to the{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             An SSP tag is a script placed on the publisher&apos;s page that
@@ -96,7 +96,7 @@ export const SINGLE_SELLER_CONFIG = {
               Returns the RTB responses from the SSP server to the SSP tag.
             </li>
           </ul>
-        </p>
+        </div>
       </>
     ),
   },
@@ -110,7 +110,7 @@ export const SINGLE_SELLER_CONFIG = {
           contextual auction and returns the winner along with auctions
           configuration to SSP tags.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             An SSP is a platform that helps publishers manage, sell, and
@@ -127,7 +127,7 @@ export const SINGLE_SELLER_CONFIG = {
             the ad in <code className="text-upsed-tomato">scoreAd()</code>.
           </p>
           <p>Example: Google Ad Manager, Magnite.</p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -139,7 +139,7 @@ export const SINGLE_SELLER_CONFIG = {
           DSP responds with an OpenRTB bid response containing signals for the
           on-device auction.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             On the publisher side, DSP servers process ad requests, evaluate
@@ -156,7 +156,7 @@ export const SINGLE_SELLER_CONFIG = {
             received via SSP. The DSPs and the SSP communicate using RTB
             protocols.
           </p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -204,7 +204,7 @@ export const SINGLE_SELLER_CONFIG = {
           </a>{' '}
           to fetch real-time bidding signals.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             A secure DSP-side server that handles bid generation using key/value
@@ -212,7 +212,7 @@ export const SINGLE_SELLER_CONFIG = {
             processing aligns with privacy requirements, creating competitive
             bids based on predefined values.
           </p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -233,13 +233,13 @@ export const SINGLE_SELLER_CONFIG = {
           </a>{' '}
           DSP JavaScript function for each participating interest group.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>A DSP-side function
           that generates a bid for an auction based on interest group data,
           contextual signals, and advertiser preferences. Outputs include bid
           amount, ad creative, and metadata, ensuring relevance and
           competitiveness in the auction.
-        </p>
+        </div>
       </>
     ),
   },
@@ -252,7 +252,7 @@ export const SINGLE_SELLER_CONFIG = {
           <code className="text-upsed-tomato">generateBid()</code> function is
           called from their respective DSP tags.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             On the publisher side, DSP servers process ad requests, evaluate
@@ -269,7 +269,7 @@ export const SINGLE_SELLER_CONFIG = {
             received via SSP. The DSPs and the SSP communicate using RTB
             protocols.
           </p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -290,12 +290,12 @@ export const SINGLE_SELLER_CONFIG = {
           </a>{' '}
           to fetch real-time scoring signals.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>A secure SSP-side
           server responsible for ad scoring and auction facilitation. It uses
           key/value pairs to evaluate bids and ensures data privacy and
           compliance during ad auctions.
-        </p>
+        </div>
       </>
     ),
   },
@@ -316,7 +316,7 @@ export const SINGLE_SELLER_CONFIG = {
           </a>{' '}
           SSP JavaScript function for each participating interest group.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             An SSP-side function that evaluates and ranks bids during an ad
@@ -328,7 +328,7 @@ export const SINGLE_SELLER_CONFIG = {
             Any bid that is less than the contextual bid passed by the SSP tag
             while calling the runAdAuction is rejected.
           </p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -349,12 +349,12 @@ export const SINGLE_SELLER_CONFIG = {
           </a>{' '}
           DSP JavaScript function to report the winner to DSP.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>A function executed by
           the winning DSP to log auction details, including bid price and ad
           performance, for reporting and optimization. It ensures transparency
           for campaign performance and provides data for analytics and billing.
-        </p>
+        </div>
       </>
     ),
   },
@@ -375,12 +375,12 @@ export const SINGLE_SELLER_CONFIG = {
           </a>{' '}
           SSP JavaScript function to report the winner to SSP.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>A function executed by
           the SSP or publisher to log auction results, providing transparency
           and analytics to all parties. It tracks metrics such as winning bids,
           auction details, and ad performance.
-        </p>
+        </div>
       </>
     ),
   },
@@ -410,14 +410,14 @@ export const MULTI_SELLER_CONFIG = {
           The SSP adapter sends ad requests to the SSP server indicating that
           the browser supports Protected Audience API.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             The header bidding tag loads on the browser and initiates the header
             bidding process using libraries like Pre-bid or Amazon TAM.
           </p>
           <p> This maximizes competition and potentially increases revenue.</p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -436,7 +436,7 @@ export const MULTI_SELLER_CONFIG = {
           </a>{' '}
           function.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             These are script tags embedded in the advertiser&apos;s webpage that
@@ -468,7 +468,7 @@ export const MULTI_SELLER_CONFIG = {
             These tags are crucial for the ad delivery process, ensuring that
             the right ads are shown to the right users at the right time.
           </p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -582,7 +582,7 @@ export const MULTI_SELLER_CONFIG = {
           </a>{' '}
           SSP JavaScript function for each participating interest group.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           <p>
             The scoreAd() function evaluates and ranks bids during an ad auction
@@ -603,7 +603,7 @@ export const MULTI_SELLER_CONFIG = {
             contextual bid winner is rejected and bids higher than contextual
             bid winner are accepted for comparison.
           </p>
-        </p>
+        </div>
       </>
     ),
   },
@@ -624,12 +624,12 @@ export const MULTI_SELLER_CONFIG = {
           </a>{' '}
           DSP JavaScript function to report winner to DSP.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           The reportWin() function sends report to the winning DSP to log
           auction details. It implemented by the DSPs, and called by the SSPs or
           adServer to log the auction details.
-        </p>
+        </div>
       </>
     ),
   },
@@ -650,13 +650,13 @@ export const MULTI_SELLER_CONFIG = {
           </a>{' '}
           SSP JavaScript function to report winner to SSP.
         </p>
-        <p className="mt-2">
+        <div className="mt-2">
           <strong className="block">General Use:</strong>
           The reportResult() function sends report to all the SSPs to log the
           winner and all the other details to log the auction details. It is
           implemented by the SSPs, and called by the adServer at the end of
           top-level auction.
-        </p>
+        </div>
       </>
     ),
   },

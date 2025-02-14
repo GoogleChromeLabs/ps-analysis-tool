@@ -22,7 +22,7 @@
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Custom = ({ render }: { render: () => void }): any => {
-  return render();
+  return render?.();
 };
 
 export default Custom;

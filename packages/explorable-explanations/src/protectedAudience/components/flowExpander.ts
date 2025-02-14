@@ -27,6 +27,11 @@ type FlowExpanderProps = {
   typeOfBranches?: string;
 };
 
+type MouseEvent = {
+  offsetX: number;
+  offsetY: number;
+};
+
 const FlowExpander = async ({
   nextTipCoordinates,
   typeOfBranches,
@@ -66,15 +71,11 @@ const FlowExpander = async ({
   };
 
   const endpoint = await new Promise<{ x: number; y: number }>((resolve) => {
-    igp.mouseClicked = ({
-      offsetX,
-      offsetY,
-    }: {
-      offsetX: number;
-      offsetY: number;
-    }) => {
+    igp.mouseClicked = (event: MouseEvent | undefined) => {
       nextTipCoordinates.forEach((coordinates, index) => {
         const { x, y } = getCoordinateValues(coordinates);
+        const offsetX = event?.offsetX ?? 0;
+        const offsetY = event?.offsetY ?? 0;
         if (isInsideCircle(offsetX, offsetY, x, y + 27, iconRadius)) {
           igp.mouseClicked();
           igp.mouseMoved();

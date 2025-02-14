@@ -109,41 +109,45 @@ export type Circle = {
   logoSize?: { width: number; height: number };
 };
 
+export type AuctionStepProps = {
+  x?: CoordinateValue;
+  y?: CoordinateValue;
+  x1?: CoordinateValue;
+  y1?: CoordinateValue;
+  currentIndex?: number;
+  down?: Coordinates;
+  branches?: {
+    title?: string;
+    description?: string;
+    type?: string;
+    color?: string;
+    date?: string;
+    time?: string;
+  }[];
+  direction?: string;
+  noArrow?: boolean;
+  isBranch?: boolean;
+  title?: string;
+  width?: number;
+  height?: number;
+  borderStroke?: number[];
+  info?: React.ReactNode;
+  color?: string;
+  customWidth?: number;
+  customHeight?: number;
+  ssp?: string;
+  text?: string;
+  description?: string;
+  showBarrageAnimation?: boolean;
+  showWinningAd?: boolean;
+  showRippleEffect?: boolean;
+};
+
 export type AuctionStep = {
   // component could be any function with an arbitrary number of arguments and return type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component?: (...args: any[]) => any;
-  props?: {
-    x?: CoordinateValue;
-    y?: CoordinateValue;
-    x1?: CoordinateValue;
-    y1?: CoordinateValue;
-    currentIndex?: number;
-    branches?: {
-      title?: string;
-      description?: string;
-      type?: string;
-      color?: string;
-      date?: string;
-      time?: string;
-    }[];
-    direction?: string;
-    noArrow?: boolean;
-    title?: string;
-    width?: number;
-    height?: number;
-    borderStroke?: number[];
-    info?: React.ReactNode;
-    color?: string;
-    customWidth?: number;
-    customHeight?: number;
-    ssp?: string;
-    text?: string;
-    description?: string;
-    showBarrageAnimation?: boolean;
-    showWinningAd?: boolean;
-    showRippleEffect?: boolean;
-  };
+  props?: AuctionStepProps;
   callBack?: (returnValue: Coordinates) => void;
   delay?: number;
 };

@@ -20,13 +20,9 @@ import app from '../../../app';
 import config, { publisherData } from '../../../config';
 import { Box, Custom, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
-import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
-import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
-import type {
-  AuctionStep,
-  Coordinates,
-  CoordinateValue,
-} from '../../../types.ts';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig';
+import { AuctionStep, Coordinates, AuctionStepProps } from '../../../types';
+import { getCoordinateValues } from '../../../utils/getCoordinateValues';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -78,7 +74,7 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
     delay: 1000,
     callBack: (returnValue) => {
       if (returnValue.down) {
-        app.auction.nextTipCoordinates = returnValue.down;
+        app.auction.nextTipCoordinates = getCoordinateValues(returnValue.down);
       }
     },
   });
@@ -138,21 +134,42 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
 
   setUpComponentAuctionStarter(componentAuctions, steps);
 
-  componentAuctions.forEach((componentAuction) => {
-    setUpComponentAuction(steps, componentAuction, componentAuction.config);
+  componentAuctions.forEach((componentAuction, idx) => {
+    setUpComponentAuction(
+      steps,
+      componentAuction,
+      componentAuction.config,
+      idx
+    );
   });
 
   setUpTPoint(steps);
+
   setupAfterComponentAuctionFlow(steps);
 };
 
-const setUpComponentAuctionStarter = (componentAuctions, steps) => {
+type ComponentAuction = {
+  title: string;
+  x: () => number;
+  y: () => number;
+  info: React.JSX.Element;
+  sspWebsite: string;
+  ssp: string;
+};
+
+const setUpComponentAuctionStarter = (
+  componentAuctions: ComponentAuction[],
+  steps: AuctionStep[]
+) => {
   // This callback does not update the app.auction.nextTipCoordinates.
   // TODO: Update the return value callbacks in this function, this change will affect the whole flow coordinates. So recalculate the coordinates.
 
-  let returnCoordinates: Coordinates;
+  let returnCoordinates: Coordinates = {
+    x: 0,
+    y: 0,
+  };
 
-  const getStartingCoordinates = (index: number): Coordinates => {
+  const getStartingCoordinates = (index: number) => {
     if (index === 0) {
       return app.auction.nextTipCoordinates;
     }
@@ -160,7 +177,7 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
     return returnCoordinates;
   };
 
-  const renderBoxes = ({ title, ssp }, index) => {
+  const renderBoxes = (componentAuction: ComponentAuction, index: number) => {
     steps.push({
       component: ProgressLine,
       props: {
@@ -178,7 +195,7 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
     steps.push({
       component: Text,
       props: {
-        text: title,
+        text: componentAuction.title,
         x: () =>
           getCoordinateValues(getStartingCoordinates(index)).x -
           BOX_WIDTH / 2 +
@@ -194,7 +211,7 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
     steps.push({
       component: Box,
       props: {
-        title: ssp,
+        title: componentAuction.ssp,
         x: () =>
           getCoordinateValues(returnCoordinates).x - BORDER_BOX_MARGIN - 12,
         y: () => getCoordinateValues(returnCoordinates).y + 20,
@@ -230,24 +247,10 @@ const setUpComponentAuctionStarter = (componentAuctions, steps) => {
 };
 
 const setUpComponentAuction = (
-  steps: AuctionStep[],
-  {
-    title,
-    x,
-    y,
-    ssp,
-    info,
-    sspWebsite,
-  }: {
-    title: string;
-    x: CoordinateValue;
-    y: CoordinateValue;
-    ssp: string;
-    info: React.JSX.Element;
-    sspWebsite: string;
-  },
-  { bidValue }: { bidValue: string },
-  index?: number
+  steps,
+  { title, x, y, ssp, info, sspWebsite },
+  { bidValue },
+  index
 ) => {
   const { box, arrowSize } = config.flow;
 
@@ -278,14 +281,13 @@ const setUpComponentAuction = (
       info,
     },
     delay: 1000,
-    callBack: (returnValue) => {
-      if (returnValue.down) {
-        const { x: xValue, y: yValue } = getCoordinateValues(returnValue.down);
-        app.auction.nextTipCoordinates = {
-          x: xValue,
-          y: yValue + box.height - arrowSize,
-        };
-      }
+    callBack: (returnValue: Coordinates) => {
+      app.auction.nextTipCoordinates = returnValue.down
+        ? {
+            x: getCoordinateValues(returnValue.down).x,
+            y: getCoordinateValues(returnValue.down).y + box.height - arrowSize,
+          }
+        : returnValue;
     },
   });
 
@@ -296,57 +298,46 @@ const setUpComponentAuction = (
       x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
     },
-    callBack: (returnValue) => {
-      if (returnValue.down) {
-        const { x: xValue, y: yValue } = getCoordinateValues(returnValue.down);
-        app.auction.nextTipCoordinates = {
-          x: xValue - box.width / 2 - 10,
-          y: yValue + box.height / 2 + arrowSize,
-        };
-      }
+    callBack: (returnValue: Coordinates) => {
+      app.auction.nextTipCoordinates = {
+        x: getCoordinateValues(returnValue).x - box.width / 2 - 10,
+        y: getCoordinateValues(returnValue).y + box.height / 2 + arrowSize,
+      };
     },
   });
 
-  setUpRunadAuction(
-    steps,
-    () => {
-      return {
-        component: Custom,
-        props: {
-          render: () => {
-            const p = app.p;
+  setUpRunadAuction(steps, () => {
+    return {
+      // TODO: add type to component and make sure it has a consistent return type
+      component: Custom,
+      props: {
+        render: () => {
+          const p = app.p;
 
-            if (index === 2 && p) {
-              const { x: xValue, y: yValue } =
-                getCoordinateValues(boxCordinates);
-              p.push();
-              p.noFill();
-              p.rect(xValue, yValue, BOX_WIDTH, BOX_HEIGHT);
-              p.strokeWeight(0.1);
-              p.pop();
-            }
-
-            return {
-              down: app.auction.nextTipCoordinates,
-            };
-          },
-        },
-        delay: 1000,
-        callBack: (returnValue) => {
-          if (returnValue.down) {
-            const { x: xValue, y: yValue } = getCoordinateValues(
-              returnValue.down
-            );
-            app.auction.nextTipCoordinates = {
-              x: xValue,
-              y: yValue + box.height - arrowSize,
-            };
+          if (index === 2 && p) {
+            const { x: boxX, y: boxY } = getCoordinateValues(boxCordinates);
+            p.push();
+            p.noFill();
+            p.rect(boxX, boxY, BOX_WIDTH, BOX_HEIGHT);
+            p.strokeWeight(0.1);
+            p.pop();
           }
+
+          return {
+            down: getCoordinateValues(app.auction.nextTipCoordinates),
+          };
         },
-      } as AuctionStep;
-    },
-    sspWebsite
-  );
+      } as AuctionStepProps,
+      delay: 1000,
+      callBack: (returnValue: Coordinates) => {
+        if (returnValue?.down) {
+          app.auction.nextTipCoordinates = getCoordinateValues(
+            returnValue.down
+          );
+        }
+      },
+    };
+  });
 
   steps.push({
     component: ProgressLine,
@@ -379,7 +370,7 @@ const setUpComponentAuction = (
   });
 };
 
-const setUpTPoint = (steps: AuctionStep[]) => {
+const setUpTPoint = (steps) => {
   steps.push({
     component: ProgressLine,
     props: {
@@ -425,7 +416,7 @@ const setUpTPoint = (steps: AuctionStep[]) => {
   });
 };
 
-const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
+const setupAfterComponentAuctionFlow = (steps) => {
   const { box, arrowSize } = config.flow;
 
   steps.push({
@@ -441,9 +432,7 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      if (returnValue.down) {
-        app.auction.nextTipCoordinates = returnValue.down;
-      }
+      app.auction.nextTipCoordinates = returnValue.down;
     },
   });
 
@@ -475,9 +464,7 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      if (returnValue.down) {
-        app.auction.nextTipCoordinates = returnValue.down;
-      }
+      app.auction.nextTipCoordinates = returnValue.down;
     },
   });
 
@@ -509,9 +496,7 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      if (returnValue.down) {
-        app.auction.nextTipCoordinates = returnValue.down;
-      }
+      app.auction.nextTipCoordinates = returnValue.down;
     },
   });
 
@@ -544,9 +529,7 @@ const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
-      if (returnValue.down) {
-        app.auction.nextTipCoordinates = returnValue.down;
-      }
+      app.auction.nextTipCoordinates = returnValue.down;
     },
   });
 };
