@@ -69,7 +69,7 @@ export const SINGLE_SELLER_CONFIG = {
     title: 'SSP Tag',
     info: (
       <>
-        <p>
+        <div>
           <p>
             An SSP tag is a script placed on the publisher&apos;s page that
             enables the SSP to initiate ad requests and pass them to DSPs. It
@@ -85,7 +85,7 @@ export const SINGLE_SELLER_CONFIG = {
               Returns the RTB responses from the SSP server to the SSP tag.
             </li>
           </ul>
-        </p>
+        </div>
         <p className="mt-1">
           The SSP ad tag sends an ad request to the SSP server indicating that
           the browser supports Protected Audience API. It also returns
