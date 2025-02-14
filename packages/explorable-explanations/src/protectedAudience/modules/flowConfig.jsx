@@ -399,8 +399,10 @@ export const MULTI_SELLER_CONFIG = {
           winner to the publisher's ad server that there's an opportunity to
           show an ad.
         </p>
-        <p>The ad tag contains key information about the ad space, such as:</p>
-        <ul>
+        <p className="mt-1">
+          The ad tag contains key information about the ad space, such as:
+        </p>
+        <ul className="list-disc ml-4 mt-1">
           <li>
             <strong>Ad unit ID:</strong> This identifies the specific ad slot on
             the page.
@@ -414,7 +416,7 @@ export const MULTI_SELLER_CONFIG = {
             webpage content, user demographics, or other targeting parameters.
           </li>
         </ul>
-        <p>
+        <p className="mt-2">
           These tags are crucial for the ad delivery process, ensuring that the
           right ads are shown to the right users at the right time.
         </p>

@@ -61,6 +61,18 @@ const Legend = () => {
           </div>
           <p>Small bubbles represent interest groups.</p>
         </div>
+        <div className="mt-2">
+          <p>
+            <strong>Single-Seller: </strong>A single seller refers to a
+            situation where the auction is managed and controlled by one entity,
+            typically an SSP (Supply-Side Platform) or the publisher directly.
+          </p>
+          <p className="mt-1">
+            <strong>Multi-Seller: </strong>A multi-seller setup involves
+            multiple SSPs or exchanges participating in the auction
+            simultaneously.
+          </p>
+        </div>
       </div>
     </div>
   );
