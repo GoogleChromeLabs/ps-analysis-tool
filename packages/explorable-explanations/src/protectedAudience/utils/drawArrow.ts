@@ -22,16 +22,16 @@ import config from '../config';
 export const drawArrow = (size, x, y, direction = 'right') => {
   // Determine offset based on direction
   const directionOffsets = {
-    right: { _x: x - app.speedMultiplier, _y: y },
-    left: { _x: x + app.speedMultiplier, _y: y },
-    down: { _x: x, _y: y - app.speedMultiplier },
-    up: { _x: x, _y: y + app.speedMultiplier },
+    right: { _x: x - 2, _y: y },
+    left: { _x: x + 2, _y: y },
+    down: { _x: x, _y: y - 2 },
+    up: { _x: x, _y: y + 2 },
   };
 
   const offset = directionOffsets[direction] || directionOffsets['right'];
 
   // Clear the previous arrow
-  triangle(size + 2, offset._x, offset._y, direction, config.canvas.background);
+  triangle(size, offset._x, offset._y, direction, config.canvas.background);
 
   // Draw the new arrow
   triangle(size, x, y, direction, 'black');
@@ -83,7 +83,7 @@ export const triangle = (
     p.translate(x - spacing, y + spacing);
   } else if (direction === 'down') {
     p.translate(x, y + spacing);
-  } else {
+  } else if (direction === 'up') {
     p.translate(x, y - spacing);
   }
 
