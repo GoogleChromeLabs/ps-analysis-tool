@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import config from '../config';
+import config, { publisherData } from '../config';
 import app from '../app';
 import {
   wipeAndRecreateInterestCanvas,
@@ -331,7 +331,25 @@ timeline.calculateDateTime = () => {
     circle.datetime = `${year}-${month}-${day} ${
       randomHours < 10 ? `0${randomHours}` : randomHours
     }:${randomMinutes < 10 ? `0${randomMinutes}` : randomMinutes}`;
+
     dayCount++;
+
+    if (circle.type === 'publisher') {
+      const pData = publisherData[circle.website];
+
+      if (pData) {
+        pData.branches.forEach((branch, index) => {
+          branch.date = newDate.toDateString();
+          branch.time = `${
+            randomHours < 10 ? `0${randomHours}` : randomHours
+          }:${
+            randomMinutes + index < 10
+              ? `0${randomMinutes + index}`
+              : randomMinutes + index
+          }:00 GMT`;
+        });
+      }
+    }
   });
 };
 
