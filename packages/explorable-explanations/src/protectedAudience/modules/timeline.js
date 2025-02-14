@@ -319,12 +319,18 @@ timeline.calculateDateTime = () => {
   circles.forEach((circle) => {
     const newDate = new Date(date.getTime() + dayCount * 24 * 60 * 60 * 1000);
 
-    const day = newDate.getDate();
-    const month = newDate.getMonth() + 1;
+    const day =
+      newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
+    const month =
+      newDate.getMonth() + 1 < 10
+        ? `0${newDate.getMonth() + 1}`
+        : newDate.getMonth() + 1;
     const year = newDate.getFullYear();
     const randomHours = Math.floor(Math.random() * 24);
     const randomMinutes = Math.floor(Math.random() * 60);
-    circle.datetime = `${year}-${month}-${day} ${randomHours}:${randomMinutes}`;
+    circle.datetime = `${year}-${month}-${day} ${
+      randomHours < 10 ? `0${randomHours}` : randomHours
+    }:${randomMinutes < 10 ? `0${randomMinutes}` : randomMinutes}`;
     dayCount++;
   });
 };
