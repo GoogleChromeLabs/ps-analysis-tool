@@ -73,6 +73,8 @@ timeline.init = () => {
     timeline.drawTimelineLine();
     timeline.renderUserIcon();
   }
+
+  timeline.calculateDateTime();
   timeline.drawTimeline(config.timeline);
 };
 
@@ -307,6 +309,24 @@ timeline.eraseAndRedraw = () => {
       i = i + 1;
     }
   }
+};
+
+timeline.calculateDateTime = () => {
+  const { circles } = config.timeline;
+  const date = new Date();
+  let dayCount = 0;
+
+  circles.forEach((circle) => {
+    const newDate = new Date(date.getTime() + dayCount * 24 * 60 * 60 * 1000);
+
+    const day = newDate.getDate();
+    const month = newDate.getMonth() + 1;
+    const year = newDate.getFullYear();
+    const randomHours = Math.floor(Math.random() * 24);
+    const randomMinutes = Math.floor(Math.random() * 60);
+    circle.datetime = `${year}-${month}-${day} ${randomHours}:${randomMinutes}`;
+    dayCount++;
+  });
 };
 
 export default timeline;
