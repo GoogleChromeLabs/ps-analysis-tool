@@ -66,6 +66,8 @@ const AuctionPanel = ({
         } as SidebarItems;
 
         Object.keys(auctionEventsData[adUnit]).forEach((time) => {
+          const actualTime = time.split('||')[0];
+
           if (
             data[adUnit] &&
             data[adUnit].children &&
@@ -77,7 +79,9 @@ const AuctionPanel = ({
           let children = {
             ...adUnitChildren[time]?.children,
           } as SidebarItems;
+
           const sellerUrl = Object.keys(auctionEventsData[adUnit][time])[0];
+
           const entries = Object.entries(
             auctionEventsData[adUnit][time][sellerUrl]
           )
@@ -90,7 +94,7 @@ const AuctionPanel = ({
                   props: {
                     auctionEvents: events,
                     parentOrigin: events[0]?.auctionConfig?.seller,
-                    startDate: time,
+                    startDate: actualTime,
                     isBlurred: events.length === 0,
                   },
                 },
@@ -107,7 +111,7 @@ const AuctionPanel = ({
           };
 
           adUnitChildren[time + adUnit] = {
-            title: time,
+            title: actualTime,
             panel: {
               Element: AuctionTable,
               props: {
@@ -116,7 +120,7 @@ const AuctionPanel = ({
                 parentOrigin:
                   auctionEventsData[adUnit][time][sellerUrl][sellerUrl][0]
                     ?.auctionConfig?.seller,
-                startDate: time,
+                startDate: actualTime,
               },
             },
             children,
