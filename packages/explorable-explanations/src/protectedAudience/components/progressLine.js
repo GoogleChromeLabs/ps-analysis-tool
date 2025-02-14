@@ -160,7 +160,7 @@ const ProgressLine = ({
           p.pop();
 
           p.line(x1, y1, x2, currentY);
-          drawArrow(x1, currentY, direction);
+          drawArrow(x1, currentY - 2, direction);
 
           if (currentY === y2) {
             utils.drawText(

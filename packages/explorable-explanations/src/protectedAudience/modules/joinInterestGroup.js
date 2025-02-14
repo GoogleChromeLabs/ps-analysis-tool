@@ -139,7 +139,7 @@ joinInterestGroup.setUp = (index) => {
     props: {
       direction: 'up',
       x1: () => app.joinInterestGroup.nextTipCoordinates?.x,
-      y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 10 - box.height,
+      y1: () => app.joinInterestGroup.nextTipCoordinates?.y - 12 - box.height,
       text: 'joinInterestGroup()',
     },
     delay: 1000,
