@@ -89,8 +89,8 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
           }
 
           return (
-            <>
-              <div className="flex" key={index}>
+            <React.Fragment key={index}>
+              <div className="flex">
                 <button
                   onClick={() => setActiveTab(index)}
                   onKeyDown={handleKeyDown}
@@ -126,7 +126,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                 </div>
               </div>
               {addSpacer && <div className="flex-1" />}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
