@@ -50,6 +50,7 @@ import {
   Settings as SettingsIcon,
   WebStoriesIcon,
   WebStoriesIconWhite,
+  Help,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -333,10 +334,16 @@ const TABS: SidebarItems = {
           href: 'https://support.google.com/privacysandbox',
         },
         icon: {
-          Element: WikiIcon,
+          Element: Help,
+          props: {
+            className: 'fill-granite-gray',
+          },
         },
         selectedIcon: {
-          Element: WikiIconWhite,
+          Element: Help,
+          props: {
+            className: 'fill-bright-gray',
+          },
         },
         dropdownOpen: false,
         children: {},
