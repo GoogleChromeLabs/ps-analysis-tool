@@ -16,10 +16,193 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+/**
+ * External dependencies.
+ */
+import React, { useMemo, useState } from 'react';
+import { noop, type singleAuctionEvent } from '@google-psat/common';
+import {
+  Table,
+  TableProvider,
+  type TableFilter,
+  type TableRow,
+  type TableColumn,
+  type InfoType,
+} from '@google-psat/design-system';
+import { Resizable } from 're-resizable';
+
+/**
+ * Internal dependencies.
+ */
+import dummyData from './dummyData.json';
 
 const ActiveSources = () => {
-  return <div>Active Sources</div>;
+  const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
+    null
+  );
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Event Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          (details as singleAuctionEvent).formattedTime.toString(),
+        enableHiding: false,
+        widthWeightagePercentage: 10,
+      },
+      {
+        header: 'Event',
+        accessorKey: 'type',
+        cell: (info) => info,
+        sortingComparator: (a, b) => {
+          const aString = (a as string).toLowerCase().trim();
+          const bString = (b as string).toLowerCase().trim();
+
+          return aString > bString ? 1 : -1;
+        },
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Interest Group Origin',
+        accessorKey: 'ownerOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Interest Group Name',
+        accessorKey: 'name',
+        cell: (info) => info,
+        widthWeightagePercentage: 17,
+      },
+      {
+        header: 'Bid',
+        accessorKey: 'bid',
+        cell: (info) => info,
+        widthWeightagePercentage: 5,
+      },
+      {
+        header: 'Bid Currency',
+        accessorKey: 'bidCurrency',
+        cell: (info) => info,
+        widthWeightagePercentage: 8,
+      },
+      {
+        header: 'Component Seller',
+        accessorKey: 'componentSellerOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
+      },
+    ],
+    []
+  );
+
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      type: {
+        title: 'Event',
+        sortValues: true,
+      },
+      ownerOrigin: {
+        title: 'Interest Group Origin',
+        sortValues: true,
+      },
+      name: {
+        title: 'Interest Group Name',
+        sortValues: true,
+      },
+      bid: {
+        title: 'Bid',
+        hasStaticFilterValues: true,
+        filterValues: {
+          ['0 - 20']: {
+            selected: false,
+          },
+          ['20 - 40']: {
+            selected: false,
+          },
+          ['40 - 60']: {
+            selected: false,
+          },
+          ['60 - 80']: {
+            selected: false,
+          },
+          ['80 - 100']: {
+            selected: false,
+          },
+          ['100+']: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const bid = value as number;
+
+          if (filterValue === '100+') {
+            return bid > 100;
+          }
+
+          const [min, max] = filterValue.split(' - ').map(Number);
+
+          return bid >= min && bid <= max;
+        },
+      },
+      bidCurrency: {
+        title: 'Bid Currency',
+        sortValues: true,
+      },
+      componentSellerOrigin: {
+        title: 'Component Seller',
+        sortValues: true,
+      },
+    }),
+    []
+  );
+
+  return (
+    <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '80%',
+        }}
+        enable={{
+          bottom: true,
+        }}
+        minHeight="20%"
+        maxHeight="90%"
+        className="w-full flex flex-col"
+      >
+        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
+          <TableProvider
+            data={dummyData}
+            tableColumns={tableColumns}
+            tableFilterData={tableFilters}
+            tableSearchKeys={undefined}
+            onRowContextMenu={noop}
+            onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
+            getRowObjectKey={(row: TableRow) => {
+              return (
+                // @ts-ignore
+                ((row.originalData as singleAuctionEvent).auctionConfig
+                  ?.seller || '') +
+                (row.originalData as singleAuctionEvent).time
+              );
+            }}
+          >
+            <Table
+              selectedKey={
+                // @ts-ignore
+                (selectedJSON?.auctionConfig?.seller || '') +
+                  selectedJSON?.time || ''
+              }
+              hideSearch={true}
+              minWidth="50rem"
+            />
+          </TableProvider>
+        </div>
+      </Resizable>
+    </div>
+  );
 };
 
 export default ActiveSources;

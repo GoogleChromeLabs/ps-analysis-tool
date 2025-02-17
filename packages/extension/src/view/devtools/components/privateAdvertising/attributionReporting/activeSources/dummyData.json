@@ -1,0 +1,500 @@
+[
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "type": "started",
+    "formattedTime": "0 ms",
+    "time": 1739774687.919193,
+    "auctionConfig": {
+      "auctionSignals": {
+        "pending": true
+      },
+      "decisionLogicURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/decision-logic.js",
+      "deprecatedRenderURLReplacements": {
+        "pending": false,
+        "value": []
+      },
+      "expectsAdditionalBids": false,
+      "expectsDirectFromSellerSignalsHeaderAdSlot": false,
+      "interestGroupBuyers": [
+        "https://privacysandboxdemos-buyer-1.domain-aaa.com"
+      ],
+      "maxTrustedScoringSignalsURLLength": 0,
+      "perBuyerCumulativeTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerCurrencies": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerExperimentGroupIds": {},
+      "perBuyerGroupLimits": {
+        "*": 65535
+      },
+      "perBuyerMultiBidLimit": {
+        "*": 0
+      },
+      "perBuyerPrioritySignals": {},
+      "perBuyerSignals": {
+        "pending": true
+      },
+      "perBuyerTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "requiredSellerCapabilities": [],
+      "seller": "https://privacysandboxdemos-seller.domain-aaa.com",
+      "sellerSignals": {
+        "pending": true
+      },
+      "trustedScoringSignalsURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/kv.json"
+    },
+    "eventType": "interestGroupAuctionEventOccurred"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "type": "configResolved",
+    "formattedTime": "1.15ms",
+    "time": 1739774687.920339,
+    "auctionConfig": {
+      "auctionSignals": {
+        "pending": false,
+        "value": "{\"auction_signals\":\"auction_signals\"}"
+      },
+      "decisionLogicURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/decision-logic.js",
+      "deprecatedRenderURLReplacements": {
+        "pending": false,
+        "value": []
+      },
+      "expectsAdditionalBids": false,
+      "expectsDirectFromSellerSignalsHeaderAdSlot": false,
+      "interestGroupBuyers": [
+        "https://privacysandboxdemos-buyer-1.domain-aaa.com"
+      ],
+      "maxTrustedScoringSignalsURLLength": 0,
+      "perBuyerCumulativeTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerCurrencies": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerExperimentGroupIds": {},
+      "perBuyerGroupLimits": {
+        "*": 65535
+      },
+      "perBuyerMultiBidLimit": {
+        "*": 0
+      },
+      "perBuyerPrioritySignals": {},
+      "perBuyerSignals": {
+        "pending": false,
+        "value": {
+          "https://privacysandboxdemos-buyer-1.domain-aaa.com": "{\"buyerdata\":\"per_buyer_signals\"}"
+        }
+      },
+      "perBuyerTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "requiredSellerCapabilities": [],
+      "seller": "https://privacysandboxdemos-seller.domain-aaa.com",
+      "sellerSignals": {
+        "pending": false,
+        "value": "{\"bidFloor\":7,\"floor\":7,\"auctionID\":\"id_767440\",\"divId\":\"ad-container\",\"type\":\"image\",\"size\":[300,250],\"isFencedFrame\":true}"
+      },
+      "trustedScoringSignalsURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/kv.json"
+    },
+    "eventType": "interestGroupAuctionEventOccurred"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "name": "books",
+    "ownerOrigin": "https://privacysandboxdemos-buyer-1.domain-aaa.com",
+    "formattedTime": "1.24ms",
+    "type": "loaded",
+    "time": 1739774687.920433,
+    "eventType": "interestGroupAccessed"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "name": "shoes",
+    "ownerOrigin": "https://privacysandboxdemos-buyer-1.domain-aaa.com",
+    "formattedTime": "1.28ms",
+    "type": "loaded",
+    "time": 1739774687.920471,
+    "eventType": "interestGroupAccessed"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "formattedTime": "53.50ms",
+    "type": "Start fetch bidderTrustedSignals",
+    "time": 1739774687.972689,
+    "eventType": "interestGroupAuctionNetworkRequestCreated"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "formattedTime": "55.02ms",
+    "type": "Start fetch bidderJs",
+    "time": 1739774687.974212,
+    "eventType": "interestGroupAuctionNetworkRequestCreated"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "formattedTime": "55.37ms",
+    "type": "Start fetch sellerJs",
+    "time": 1739774687.974565,
+    "eventType": "interestGroupAuctionNetworkRequestCreated"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "bidCurrency": "",
+    "bid": null,
+    "name": "",
+    "ownerOrigin": "",
+    "type": "Finished FetchbidderJs",
+    "formattedTime": "56.52ms",
+    "time": 1739774687.975715,
+    "auctionConfig": {
+      "auctionSignals": {
+        "pending": false,
+        "value": "{\"auction_signals\":\"auction_signals\"}"
+      },
+      "decisionLogicURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/decision-logic.js",
+      "deprecatedRenderURLReplacements": {
+        "pending": false,
+        "value": []
+      },
+      "expectsAdditionalBids": false,
+      "expectsDirectFromSellerSignalsHeaderAdSlot": false,
+      "interestGroupBuyers": [
+        "https://privacysandboxdemos-buyer-1.domain-aaa.com"
+      ],
+      "maxTrustedScoringSignalsURLLength": 0,
+      "perBuyerCumulativeTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerCurrencies": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerExperimentGroupIds": {},
+      "perBuyerGroupLimits": {
+        "*": 65535
+      },
+      "perBuyerMultiBidLimit": {
+        "*": 0
+      },
+      "perBuyerPrioritySignals": {},
+      "perBuyerSignals": {
+        "pending": false,
+        "value": {
+          "https://privacysandboxdemos-buyer-1.domain-aaa.com": "{\"buyerdata\":\"per_buyer_signals\"}"
+        }
+      },
+      "perBuyerTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "requiredSellerCapabilities": [],
+      "seller": "https://privacysandboxdemos-seller.domain-aaa.com",
+      "sellerSignals": {
+        "pending": false,
+        "value": "{\"bidFloor\":7,\"floor\":7,\"auctionID\":\"id_767440\",\"divId\":\"ad-container\",\"type\":\"image\",\"size\":[300,250],\"isFencedFrame\":true}"
+      },
+      "trustedScoringSignalsURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/kv.json"
+    },
+    "eventType": "interestGroupAuctionNetworkRequestCompleted"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "bidCurrency": "",
+    "bid": null,
+    "name": "",
+    "ownerOrigin": "",
+    "type": "Finished FetchsellerJs",
+    "formattedTime": "57.70ms",
+    "time": 1739774687.9768941,
+    "auctionConfig": {
+      "auctionSignals": {
+        "pending": false,
+        "value": "{\"auction_signals\":\"auction_signals\"}"
+      },
+      "decisionLogicURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/decision-logic.js",
+      "deprecatedRenderURLReplacements": {
+        "pending": false,
+        "value": []
+      },
+      "expectsAdditionalBids": false,
+      "expectsDirectFromSellerSignalsHeaderAdSlot": false,
+      "interestGroupBuyers": [
+        "https://privacysandboxdemos-buyer-1.domain-aaa.com"
+      ],
+      "maxTrustedScoringSignalsURLLength": 0,
+      "perBuyerCumulativeTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerCurrencies": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerExperimentGroupIds": {},
+      "perBuyerGroupLimits": {
+        "*": 65535
+      },
+      "perBuyerMultiBidLimit": {
+        "*": 0
+      },
+      "perBuyerPrioritySignals": {},
+      "perBuyerSignals": {
+        "pending": false,
+        "value": {
+          "https://privacysandboxdemos-buyer-1.domain-aaa.com": "{\"buyerdata\":\"per_buyer_signals\"}"
+        }
+      },
+      "perBuyerTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "requiredSellerCapabilities": [],
+      "seller": "https://privacysandboxdemos-seller.domain-aaa.com",
+      "sellerSignals": {
+        "pending": false,
+        "value": "{\"bidFloor\":7,\"floor\":7,\"auctionID\":\"id_767440\",\"divId\":\"ad-container\",\"type\":\"image\",\"size\":[300,250],\"isFencedFrame\":true}"
+      },
+      "trustedScoringSignalsURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/kv.json"
+    },
+    "eventType": "interestGroupAuctionNetworkRequestCompleted"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "bidCurrency": "",
+    "bid": null,
+    "name": "",
+    "ownerOrigin": "",
+    "type": "Finished FetchbidderTrustedSignals",
+    "formattedTime": "501.37ms",
+    "time": 1739774688.420559,
+    "auctionConfig": {
+      "auctionSignals": {
+        "pending": false,
+        "value": "{\"auction_signals\":\"auction_signals\"}"
+      },
+      "decisionLogicURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/decision-logic.js",
+      "deprecatedRenderURLReplacements": {
+        "pending": false,
+        "value": []
+      },
+      "expectsAdditionalBids": false,
+      "expectsDirectFromSellerSignalsHeaderAdSlot": false,
+      "interestGroupBuyers": [
+        "https://privacysandboxdemos-buyer-1.domain-aaa.com"
+      ],
+      "maxTrustedScoringSignalsURLLength": 0,
+      "perBuyerCumulativeTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerCurrencies": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerExperimentGroupIds": {},
+      "perBuyerGroupLimits": {
+        "*": 65535
+      },
+      "perBuyerMultiBidLimit": {
+        "*": 0
+      },
+      "perBuyerPrioritySignals": {},
+      "perBuyerSignals": {
+        "pending": false,
+        "value": {
+          "https://privacysandboxdemos-buyer-1.domain-aaa.com": "{\"buyerdata\":\"per_buyer_signals\"}"
+        }
+      },
+      "perBuyerTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "requiredSellerCapabilities": [],
+      "seller": "https://privacysandboxdemos-seller.domain-aaa.com",
+      "sellerSignals": {
+        "pending": false,
+        "value": "{\"bidFloor\":7,\"floor\":7,\"auctionID\":\"id_767440\",\"divId\":\"ad-container\",\"type\":\"image\",\"size\":[300,250],\"isFencedFrame\":true}"
+      },
+      "trustedScoringSignalsURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/kv.json"
+    },
+    "eventType": "interestGroupAuctionNetworkRequestCompleted"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "name": "books",
+    "ownerOrigin": "https://privacysandboxdemos-buyer-1.domain-aaa.com",
+    "formattedTime": "508.41ms",
+    "type": "bid",
+    "time": 1739774688.427607,
+    "eventType": "interestGroupAccessed",
+    "bid": 94,
+    "bidCurrency": "USD"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "name": "shoes",
+    "ownerOrigin": "https://privacysandboxdemos-buyer-1.domain-aaa.com",
+    "formattedTime": "513.67ms",
+    "type": "bid",
+    "time": 1739774688.43286,
+    "eventType": "interestGroupAccessed",
+    "bid": 72,
+    "bidCurrency": "USD"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "formattedTime": "515.19ms",
+    "type": "Start fetch sellerTrustedSignals",
+    "time": 1739774688.434387,
+    "eventType": "interestGroupAuctionNetworkRequestCreated"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "bidCurrency": "",
+    "bid": null,
+    "name": "",
+    "ownerOrigin": "",
+    "type": "Finished FetchsellerTrustedSignals",
+    "formattedTime": "659.03ms",
+    "time": 1739774688.578221,
+    "auctionConfig": {
+      "auctionSignals": {
+        "pending": false,
+        "value": "{\"auction_signals\":\"auction_signals\"}"
+      },
+      "decisionLogicURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/decision-logic.js",
+      "deprecatedRenderURLReplacements": {
+        "pending": false,
+        "value": []
+      },
+      "expectsAdditionalBids": false,
+      "expectsDirectFromSellerSignalsHeaderAdSlot": false,
+      "interestGroupBuyers": [
+        "https://privacysandboxdemos-buyer-1.domain-aaa.com"
+      ],
+      "maxTrustedScoringSignalsURLLength": 0,
+      "perBuyerCumulativeTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerCurrencies": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerExperimentGroupIds": {},
+      "perBuyerGroupLimits": {
+        "*": 65535
+      },
+      "perBuyerMultiBidLimit": {
+        "*": 0
+      },
+      "perBuyerPrioritySignals": {},
+      "perBuyerSignals": {
+        "pending": false,
+        "value": {
+          "https://privacysandboxdemos-buyer-1.domain-aaa.com": "{\"buyerdata\":\"per_buyer_signals\"}"
+        }
+      },
+      "perBuyerTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "requiredSellerCapabilities": [],
+      "seller": "https://privacysandboxdemos-seller.domain-aaa.com",
+      "sellerSignals": {
+        "pending": false,
+        "value": "{\"bidFloor\":7,\"floor\":7,\"auctionID\":\"id_767440\",\"divId\":\"ad-container\",\"type\":\"image\",\"size\":[300,250],\"isFencedFrame\":true}"
+      },
+      "trustedScoringSignalsURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/kv.json"
+    },
+    "eventType": "interestGroupAuctionNetworkRequestCompleted"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "name": "books",
+    "ownerOrigin": "https://privacysandboxdemos-buyer-1.domain-aaa.com",
+    "formattedTime": "670.50ms",
+    "type": "win",
+    "time": 1739774688.589693,
+    "eventType": "interestGroupAccessed"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "formattedTime": "726.49ms",
+    "type": "Start fetch bidderJs",
+    "time": 1739774688.64568,
+    "eventType": "interestGroupAuctionNetworkRequestCreated"
+  },
+  {
+    "uniqueAuctionId": "190323AC3AD6942F89D57BB8ECC22AD5",
+    "bidCurrency": "",
+    "bid": null,
+    "name": "",
+    "ownerOrigin": "",
+    "type": "Finished FetchbidderJs",
+    "formattedTime": "727.71ms",
+    "time": 1739774688.6469018,
+    "auctionConfig": {
+      "auctionSignals": {
+        "pending": false,
+        "value": "{\"auction_signals\":\"auction_signals\"}"
+      },
+      "decisionLogicURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/decision-logic.js",
+      "deprecatedRenderURLReplacements": {
+        "pending": false,
+        "value": []
+      },
+      "expectsAdditionalBids": false,
+      "expectsDirectFromSellerSignalsHeaderAdSlot": false,
+      "interestGroupBuyers": [
+        "https://privacysandboxdemos-buyer-1.domain-aaa.com"
+      ],
+      "maxTrustedScoringSignalsURLLength": 0,
+      "perBuyerCumulativeTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerCurrencies": {
+        "pending": false,
+        "value": {}
+      },
+      "perBuyerExperimentGroupIds": {},
+      "perBuyerGroupLimits": {
+        "*": 65535
+      },
+      "perBuyerMultiBidLimit": {
+        "*": 0
+      },
+      "perBuyerPrioritySignals": {},
+      "perBuyerSignals": {
+        "pending": false,
+        "value": {
+          "https://privacysandboxdemos-buyer-1.domain-aaa.com": "{\"buyerdata\":\"per_buyer_signals\"}"
+        }
+      },
+      "perBuyerTimeouts": {
+        "pending": false,
+        "value": {}
+      },
+      "requiredSellerCapabilities": [],
+      "seller": "https://privacysandboxdemos-seller.domain-aaa.com",
+      "sellerSignals": {
+        "pending": false,
+        "value": "{\"bidFloor\":7,\"floor\":7,\"auctionID\":\"id_767440\",\"divId\":\"ad-container\",\"type\":\"image\",\"size\":[300,250],\"isFencedFrame\":true}"
+      },
+      "trustedScoringSignalsURL": "https://privacysandboxdemos-seller.domain-aaa.com/ssp/kv.json"
+    },
+    "eventType": "interestGroupAuctionNetworkRequestCompleted"
+  }
+]
