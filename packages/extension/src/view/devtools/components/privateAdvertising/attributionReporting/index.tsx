@@ -18,29 +18,16 @@
  */
 import React, { useMemo } from 'react';
 import {
-  InfoCard as InfoCardTemplate,
-  QuickLinksList,
   PSInfoKey,
   TabsProvider,
   type TabItems,
-  type PSInfoKeyType,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import Panel from './panel';
-
-const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
-  return (
-    <>
-      <InfoCardTemplate infoKey={infoKey} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </>
-  );
-};
+import Overview from './overview';
 
 const AttributionReporting = () => {
   const tabItems = useMemo<TabItems>(
@@ -48,7 +35,7 @@ const AttributionReporting = () => {
       {
         title: 'Overview',
         content: {
-          Element: InfoCard,
+          Element: Overview,
           props: {
             infoKey: PSInfoKey.AttributionReporting,
           },

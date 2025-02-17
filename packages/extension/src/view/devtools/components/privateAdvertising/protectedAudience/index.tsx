@@ -18,11 +18,8 @@
  */
 import React, { useMemo } from 'react';
 import {
-  InfoCard as InfoCardTemplate,
   PSInfoKey,
-  QuickLinksList,
   TabsProvider,
-  type PSInfoKeyType,
   type TabItems,
 } from '@google-psat/design-system';
 
@@ -36,17 +33,7 @@ import Panel from './panel';
 import AdUnits from './adUnits';
 import ExplorableExplanation from './explorableExplanation';
 import WorkletBreakpoints from './workletBreakpoints';
-
-const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
-  return (
-    <>
-      <InfoCardTemplate infoKey={infoKey} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </>
-  );
-};
+import Overview from './overview';
 
 const ProtectedAudience = () => {
   const tabItems = useMemo<TabItems>(
@@ -54,7 +41,7 @@ const ProtectedAudience = () => {
       {
         title: 'Overview',
         content: {
-          Element: InfoCard,
+          Element: Overview,
           props: {
             infoKey: PSInfoKey.ProtectedAudience,
           },
