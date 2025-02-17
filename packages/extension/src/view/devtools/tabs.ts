@@ -51,6 +51,7 @@ import {
   WebStoriesIcon,
   WebStoriesIconWhite,
   Help,
+  LearningIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -289,10 +290,16 @@ const TABS: SidebarItems = {
       Element: Learning,
     },
     icon: {
-      Element: WikiIcon,
+      Element: LearningIcon,
+      props: {
+        className: 'fill-granite-gray',
+      },
     },
     selectedIcon: {
-      Element: WikiIconWhite,
+      Element: LearningIcon,
+      props: {
+        className: 'fill-bright-gray',
+      },
     },
     dropdownOpen: false,
     children: {

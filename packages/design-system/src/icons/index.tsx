@@ -98,3 +98,4 @@ export { default as WebStoriesIconWhite } from './web-stories-white.svg';
 export { default as DoubleDownArrow } from './double-down-arrow.svg';
 export { default as DescriptionIcon } from './description.svg';
 export { default as Help } from './help.svg';
+export { default as LearningIcon } from './learning-icon.svg';
