@@ -23,7 +23,10 @@ const HelpCenter = () => {
   return (
     <div className="w-full h-full overflow-hidden">
       <div className="w-full h-full flex justify-center items-center">
-        <h1 className="text-2xl">Help Center</h1>
+        <p className="text-center text-lg">
+          Please refer to the help center opened in the current browser tab for
+          more information.
+        </p>
       </div>
     </div>
   );
