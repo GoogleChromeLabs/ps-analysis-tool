@@ -39,9 +39,18 @@ interface AuctionsProps {
     noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;
+  isMultiSeller?: boolean;
+  selectedAdUnit?: string;
+  selectedDateTime?: string;
 }
 
-const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
+const Auctions = ({
+  auctionEvents,
+  customAdsAndBidders,
+  isMultiSeller = false,
+  selectedAdUnit,
+  selectedDateTime,
+}: AuctionsProps) => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
@@ -90,6 +99,9 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
 
   return (
     <AuctionsContainer
+      selectedAdUnit={selectedAdUnit}
+      selectedDateTime={selectedDateTime}
+      isMultiSeller={isMultiSeller}
       auctionEvents={auctionEvents}
       sidebarData={sidebarData}
       customAdsAndBidders={customAdsAndBidders}

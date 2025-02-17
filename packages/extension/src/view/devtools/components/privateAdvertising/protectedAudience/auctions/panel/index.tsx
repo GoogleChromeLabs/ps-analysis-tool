@@ -46,12 +46,18 @@ interface AuctionPanelProps {
   };
   customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
+  isMultiSeller?: boolean;
+  selectedAdUnit?: string;
+  selectedDateTime?: string;
 }
 
 const AuctionPanel = ({
   auctionEvents,
   setSidebarData,
   customAdsAndBidders,
+  isMultiSeller = false,
+  selectedAdUnit,
+  selectedDateTime,
 }: AuctionPanelProps) => {
   useEffect(() => {
     const Panel = customAdsAndBidders ? AdunitSubPanel : AdunitPanel;
@@ -111,6 +117,18 @@ const AuctionPanel = ({
             ...entries,
           };
 
+          let shouldBeBlurred = true;
+
+          if (isMultiSeller) {
+            shouldBeBlurred = !(
+              selectedAdUnit === adUnit && selectedDateTime === selectedDateTime
+            );
+          } else {
+            shouldBeBlurred =
+              auctionEventsData[adUnit][time][sellerUrl][sellerUrl].length ===
+              0;
+          }
+
           adUnitChildren[time + adUnit] = {
             title: actualTime,
             panel: {
@@ -125,10 +143,8 @@ const AuctionPanel = ({
               },
             },
             children,
-            dropdownOpen: false,
-            isBlurred:
-              auctionEventsData[adUnit][time][sellerUrl][sellerUrl].length ===
-              0,
+            dropdownOpen: isMultiSeller,
+            isBlurred: shouldBeBlurred,
           };
         });
 

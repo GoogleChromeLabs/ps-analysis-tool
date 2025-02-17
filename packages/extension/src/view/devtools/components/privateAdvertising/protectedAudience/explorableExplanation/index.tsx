@@ -361,6 +361,9 @@ const ExplorableExplanation = () => {
             auctionEvents: auctionsData,
             noBids: auctionsData?.noBids ?? {},
             customAdsAndBidders: auctionsData?.adsAndBidders,
+            isMultiSeller,
+            selectedAdUnit,
+            selectedDateTime,
           },
         },
       },
@@ -393,7 +396,13 @@ const ExplorableExplanation = () => {
         },
       },
     ],
-    [auctionsData, highlightedInterestGroup, interestGroupsData, info]
+    [
+      interestGroupsData,
+      highlightedInterestGroup,
+      auctionsData,
+      isMultiSeller,
+      info,
+    ]
   );
 
   return (
