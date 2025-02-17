@@ -26,6 +26,7 @@ import {
 } from '@google-psat/design-system';
 import type {
   AdsAndBiddersType,
+  NoBidsType,
   singleAuctionEvent,
 } from '@google-psat/common';
 
@@ -36,12 +37,12 @@ import type { AuctionEventsType } from '../../../../../stateProviders/protectedA
 import AuctionTable from '../table';
 import AdunitPanel from '../adunitPanel';
 import AdunitSubPanel from '../adunitPanel/panel';
-import type { AdUnitLiteral } from '../../explorableExplanation/auctionEventTransformers';
 
 interface AuctionPanelProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids?: Record<string, singleAuctionEvent[]>;
+    noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -139,7 +140,7 @@ const AuctionPanel = ({
               adunit: adUnit,
               adsAndBidders: customAdsAndBidders,
               receivedBids: auctionEvents?.receivedBids ?? {},
-              noBids: {},
+              noBids: auctionEvents?.noBids ?? {},
             },
           },
           children: adUnitChildren,

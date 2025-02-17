@@ -20,6 +20,7 @@
 import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 import type {
   AdsAndBiddersType,
+  NoBidsType,
   singleAuctionEvent,
 } from '@google-psat/common';
 import React from 'react';
@@ -29,12 +30,12 @@ import React from 'react';
  */
 import AuctionPanel from './panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
-import type { AdUnitLiteral } from '../explorableExplanation/auctionEventTransformers';
 
 interface AuctionsContainerProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids?: Record<string, singleAuctionEvent[]>;
+    noBids: NoBidsType;
   };
   sidebarData: SidebarItems;
   customAdsAndBidders?: AdsAndBiddersType;

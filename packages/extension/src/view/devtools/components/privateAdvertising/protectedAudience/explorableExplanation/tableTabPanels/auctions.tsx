@@ -31,12 +31,11 @@ import type {
 import AdUnitsPanel from '../../adUnits/panel';
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from '../../auctions/container';
-import type { AdUnitLiteral } from '../auctionEventTransformers';
 
 interface AuctionsProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids: Record<string, singleAuctionEvent[]>;
     noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;

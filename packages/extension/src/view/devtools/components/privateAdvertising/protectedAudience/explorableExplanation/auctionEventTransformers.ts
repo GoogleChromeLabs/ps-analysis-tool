@@ -202,13 +202,12 @@ export const transformBidEvent = (
   const randomIndex = randomIntFromInterval(0, interestGroups.length - 1);
 
   const ownerOriginToSkip =
-    currentStep?.title === SINGLE_SELLER_CONFIG.GENERATE_BID.title &&
-    uniqueOwnerOrigins.size > 1
+    currentStep?.title === SINGLE_SELLER_CONFIG.GENERATE_BID.title
       ? interestGroups[randomIndex].ownerOrigin
       : '';
 
   interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
-    if (ownerOriginToSkip === ownerOrigin) {
+    if (ownerOriginToSkip === ownerOrigin && uniqueOwnerOrigins.size > 1) {
       return;
     }
 
@@ -521,6 +520,7 @@ export const configuredAuctionEvents = (
 ) => {
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
+
   if (isMultiSeller) {
     sellersArray.push(
       websiteString,
