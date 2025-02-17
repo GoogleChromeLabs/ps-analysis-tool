@@ -28,6 +28,9 @@ import {
  */
 import Panel from './panel';
 import Overview from './overview';
+import ActiveSources from './activeSources';
+import SourceRegistrations from './sourceRegistrations';
+import TriggerRegistrations from './triggerRegistrations';
 
 const AttributionReporting = () => {
   const tabItems = useMemo<TabItems>(
@@ -40,6 +43,27 @@ const AttributionReporting = () => {
             infoKey: PSInfoKey.AttributionReporting,
           },
           className: 'p-4',
+        },
+      },
+      {
+        title: 'Active Sources',
+        content: {
+          Element: ActiveSources,
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Source Registrations',
+        content: {
+          Element: SourceRegistrations,
+          className: 'overflow-hidden',
+        },
+      },
+      {
+        title: 'Trigger Registrations',
+        content: {
+          Element: TriggerRegistrations,
+          className: 'overflow-hidden',
         },
       },
     ],
