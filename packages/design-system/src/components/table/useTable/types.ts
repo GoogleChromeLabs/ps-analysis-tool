@@ -39,7 +39,8 @@ export type TableData = (
 
 export interface ClassificationResult {
   domain: string;
-  categories: string[];
+  categories?: string[];
+  error?: string;
 }
 
 export type InfoType = number | string | boolean | Array<string | number> | [];

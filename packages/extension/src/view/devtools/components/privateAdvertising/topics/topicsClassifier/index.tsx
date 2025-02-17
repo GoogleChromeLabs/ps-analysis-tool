@@ -24,14 +24,10 @@ import {
   Table,
   type ClassificationResult,
   type TableData,
+  CancelIcon,
 } from '@google-psat/design-system';
 import { noop } from '@google-psat/common';
 import React, { useCallback, useMemo, useState } from 'react';
-
-/**
- * Internal dependencies
- */
-import isValidURL from '../../../../../../utils/isValidURL';
 
 type ClassificationResultIndex = ClassificationResult & {
   index: number;
@@ -62,17 +58,15 @@ const TopicsClassifier = () => {
     });
 
     preprocessedHosts.forEach((host) => {
-      if (!isValidURL(host)) {
+      const hostnameRegex = /^(?!:\/\/)([a-zA-Z0-9-_]{1,63}\.)+[a-zA-Z]{2,63}$/;
+      if (hostnameRegex.test(host)) {
         inputValidationErrors.push('Host "' + host + '" is invalid.');
-      } else {
-        if (!new URL(host).hostname) {
-          inputValidationErrors.push('Host "' + host + '" is invalid.');
-        }
       }
     });
 
     if (inputValidationErrors.length > 0) {
       setInputValidationErrors(inputValidationErrors);
+      return;
     } else {
       const response = await fetch(
         'https://topics.privacysandbox.report/classify',
@@ -95,6 +89,18 @@ const TopicsClassifier = () => {
             index: index,
           };
         }
+      );
+
+      jsonResponse.forEach((classifiedCategories: ClassificationResult) => {
+        if (classifiedCategories?.error) {
+          inputValidationErrors.push(classifiedCategories.error);
+        }
+      });
+      setInputValidationErrors(inputValidationErrors);
+
+      jsonResponse = jsonResponse.filter(
+        (classifiedCategories: ClassificationResult) =>
+          classifiedCategories?.categories
       );
 
       setClassificationResult(jsonResponse);
@@ -161,10 +167,13 @@ const TopicsClassifier = () => {
         <div className="flex p-4 w-full flex flex-col">
           {validationErrors.map((error, index) => (
             <div
-              className="text-xs p-1 rounded-sm dark:bg-tomato-red bg-baby-pink dark:text-bright-gray font-medium"
               key={index}
+              className="flex flex-row w-full dark:bg-tomato-red bg-baby-pink m-0.25"
             >
-              {error}
+              <CancelIcon className="text-xs dark:fill-blood-red fill-bright-red font-medium" />
+              <div className="text-xs p-1 rounded-sm dark:text-bright-gray font-medium">
+                {error}
+              </div>
             </div>
           ))}
         </div>

@@ -97,3 +97,4 @@ export { default as WebStoriesIcon } from './web-stories.svg';
 export { default as WebStoriesIconWhite } from './web-stories-white.svg';
 export { default as DoubleDownArrow } from './double-down-arrow.svg';
 export { default as DescriptionIcon } from './description.svg';
+export { default as CancelIcon } from './cancel.svg';
