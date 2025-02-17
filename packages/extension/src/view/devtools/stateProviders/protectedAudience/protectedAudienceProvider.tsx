@@ -88,9 +88,13 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         Object.values(auctionEventsToBeParsed as SingleSellerAuction).forEach(
           (events) => {
+            const configResolvedEvent = events.filter(
+              (event) => event.type === 'configResolved'
+            )?.[0];
+
             const adUnitCode = JSON.parse(
               // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-              events?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+              configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
             ).divId;
 
             if (!adUnitCode) {
@@ -101,11 +105,11 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             reshapedAuctionEvents[adUnitCode] = {
               ...reshapedAuctionEvents[adUnitCode],
-              [time]: {
+              [time + '||' + events?.[0]?.uniqueAuctionId]: {
                 // @ts-ignore - seller is not defined in type, but it is in the data
-                [events?.[0]?.auctionConfig?.seller ?? '']: {
+                [configResolvedEvent.auctionConfig?.seller ?? '']: {
                   // @ts-ignore - seller is not defined in type, but it is in the data
-                  [events?.[0]?.auctionConfig?.seller ?? '']: events,
+                  [configResolvedEvent.auctionConfig?.seller ?? '']: events,
                 },
               },
             };
@@ -132,9 +136,13 @@ const Provider = ({ children }: PropsWithChildren) => {
                 return;
               }
 
+              const configResolvedEvent = event.filter(
+                (_event) => _event.type === 'configResolved'
+              )?.[0];
+
               adUnit = JSON.parse(
                 // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-                event?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+                configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
               ).divId;
             });
 
@@ -157,7 +165,8 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             reshapedAuctionEvents[adUnit] = {
               ...reshapedAuctionEvents[adUnit],
-              [time]: {
+              // @ts-ignore
+              [time + '||' + events?.['0']?.[0].uniqueAuctionId]: {
                 // @ts-ignore
                 [events?.['0']?.[0]?.auctionConfig?.seller ?? '']: {
                   ...sspEvents,
@@ -169,11 +178,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         return reshapedAuctionEvents;
       };
-
-      if (Object.keys(auctionEventsToBeParsed || {}).length === 0) {
-        setAuctionEvents(() => null);
-        return true;
-      }
 
       setAuctionEvents((prevState) => {
         if (

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = function (api) {
-  const isProduction = api.env('production');
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
+import config from '../config';
 
-  return {
-    presets: [
-      ['@babel/preset-env'],
-      [
-        '@babel/preset-react',
-        {
-          development: !isProduction,
-        },
-      ],
-      '@babel/preset-typescript',
-    ],
-    plugins: [
-      ['@babel/plugin-transform-react-jsx'],
-      ['babel-plugin-styled-components'],
-    ],
-    sourceMaps: true,
-  };
+export const drawText = (text, x, y) => {
+  const p = app.p;
+
+  if (!p) {
+    return;
+  }
+
+  if (text) {
+    p.push();
+    p.strokeWeight(0.1);
+    p.fill('#000'); // @todo Use color from config.
+    p.textSize(config.canvas.fontSize - 2);
+    p.textFont('sans-serif');
+    p.text(text, x, y);
+    p.pop();
+  }
 };
