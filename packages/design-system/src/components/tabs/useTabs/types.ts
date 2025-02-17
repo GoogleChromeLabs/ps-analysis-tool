@@ -26,4 +26,5 @@ export type TabItems = Array<{
     props?: Record<string, any>;
     className?: string;
   };
+  addSpacer?: boolean;
 }>;
