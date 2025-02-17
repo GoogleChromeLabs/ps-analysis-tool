@@ -71,6 +71,16 @@ const Panel = ({
     useState<() => number>();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const storageRef = useRef(PAstorage);
+  const activeTabRef = useRef(activeTab);
+
+  useEffect(() => {
+    if (activeTab === 4) {
+      return;
+    }
+
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
+
   const siteAdTechs = useMemo(() => {
     return storageRef.current[1]
       ? JSON.parse(storageRef.current[1])?.siteAdTechs
@@ -86,7 +96,7 @@ const Panel = ({
 
   const [visitIndexStart, setVisitIndexStart] = useState(
     JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
-      activeTab
+      activeTabRef.current
     ] ?? 0
   );
 
@@ -97,7 +107,7 @@ const Panel = ({
   useEffect(() => {
     setVisitIndexStart(
       JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
-        activeTab
+        activeTabRef.current
       ] ?? 0
     );
   }, [activeTab]);
@@ -116,7 +126,7 @@ const Panel = ({
 
     const visitIndexes =
       JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes || [];
-    visitIndexes[activeTab] = currentVisitIndex;
+    visitIndexes[activeTabRef.current] = currentVisitIndex;
 
     if (currentVisitIndex !== undefined) {
       setPAStorage(
@@ -125,7 +135,7 @@ const Panel = ({
           epochCompleted,
           topicsTableData,
           siteAdTechs,
-          activeEpochTab: activeTab,
+          activeEpochTab: activeTabRef.current,
           epochs,
         })
       );
@@ -156,10 +166,10 @@ const Panel = ({
   }, [setActiveTab, setTopicsTableData]);
 
   useEffect(() => {
-    if (!epochCompleted[activeTab]) {
+    if (!epochCompleted[activeTabRef.current]) {
       setTopicsTableData((prevTopicsTableData) => {
         const newTopicsTableData = { ...prevTopicsTableData };
-        newTopicsTableData[activeTab] = [];
+        newTopicsTableData[activeTabRef.current] = [];
         return newTopicsTableData;
       });
     }
@@ -176,8 +186,9 @@ const Panel = ({
   const handleTopicsCalculation = useCallback(
     (visitIndex: number) => {
       setTopicsTableData((prevTopicsTableData) => {
-        const { topics, website } = epochs[activeTab].webVisits[visitIndex];
-        const topicsData = prevTopicsTableData[activeTab];
+        const { topics, website } =
+          epochs[activeTabRef.current].webVisits[visitIndex];
+        const topicsData = prevTopicsTableData[activeTabRef.current];
         const newTopicsTableData = {
           ...prevTopicsTableData,
         };
@@ -205,23 +216,26 @@ const Panel = ({
           [...(topicsData || [])]
         );
 
-        newTopicsTableData[activeTab] = newTopicsData;
+        newTopicsTableData[activeTabRef.current] = newTopicsData;
 
         return newTopicsTableData;
       });
     },
-    [activeTab, epochs, setTopicsTableData, siteAdTechs]
+    [epochs, setTopicsTableData, siteAdTechs]
   );
 
   const handleUserVisit = useCallback(
     (visitIndex: number, updateTopics = true) => {
-      if (visitIndex < epochs[activeTab].webVisits.length && updateTopics) {
+      if (
+        visitIndex < epochs[activeTabRef.current].webVisits.length &&
+        updateTopics
+      ) {
         handleTopicsCalculation(visitIndex);
       }
 
-      if (visitIndex === epochs[activeTab].webVisits.length) {
-        if (activeTab < 3 && updateTopics) {
-          setActiveTab(activeTab + 1);
+      if (visitIndex === epochs[activeTabRef.current].webVisits.length) {
+        if (activeTabRef.current < 3 && updateTopics) {
+          setActiveTab(activeTabRef.current + 1);
           setVisitIndexStart(0);
         } else {
           setPlay(false);
@@ -229,20 +243,20 @@ const Panel = ({
 
         setEpochCompleted((prevEpochCompleted) => ({
           ...prevEpochCompleted,
-          [activeTab]: true,
+          [activeTabRef.current]: true,
         }));
       }
     },
-    [activeTab, epochs, handleTopicsCalculation, setActiveTab]
+    [epochs, handleTopicsCalculation, setActiveTab]
   );
 
   const handlePlay = useCallback(() => {
-    if (activeTab === 3 && epochCompleted[activeTab]) {
+    if (activeTabRef.current === 3 && epochCompleted[activeTabRef.current]) {
       setReset();
     } else {
       setPlay((prevPlay) => !prevPlay);
     }
-  }, [activeTab, epochCompleted, setReset]);
+  }, [epochCompleted, setReset]);
 
   const [isInteractiveModeOn, setIsInteractiveModeOn] = useState(false);
 
@@ -305,15 +319,15 @@ const Panel = ({
         setPlay={handlePlay}
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
-        historyCount={epochs[activeTab].webVisits.length}
+        historyCount={epochs[activeTabRef.current]?.webVisits.length || 0}
         reset={setReset}
         extraInterface={extraInterface}
         showNextPrevButtons={false}
       />
       <div className="flex-1 overflow-auto">
         <Animation
-          epoch={epochs[activeTab].webVisits}
-          isAnimating={!epochCompleted?.[activeTab]}
+          epoch={epochs[activeTabRef.current]?.webVisits || []}
+          isAnimating={!epochCompleted?.[activeTabRef.current]}
           siteAdTechs={siteAdTechs}
           visitIndexStart={visitIndexStart}
           isPlaying={play}

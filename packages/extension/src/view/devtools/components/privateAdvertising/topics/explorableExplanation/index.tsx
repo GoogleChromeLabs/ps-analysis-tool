@@ -29,6 +29,7 @@ import {
  */
 import TopicsTable, { type TopicsTableType } from './topicsTable';
 import Panel from './panel';
+import Legend from './legend';
 
 const ExplorableExplanation = () => {
   const [topicsTableData, setTopicsTableData] = useState<
@@ -56,9 +57,9 @@ const ExplorableExplanation = () => {
     [setPAActiveTab, setPAStorage]
   );
 
-  const tabItems = useMemo<TabItems>(
-    () =>
-      ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'].map((item) => ({
+  const tabItems = useMemo<TabItems>(() => {
+    const items: TabItems = ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'].map(
+      (item) => ({
         title: item,
         content: {
           Element: TopicsTable,
@@ -69,9 +70,18 @@ const ExplorableExplanation = () => {
             topicsNavigator,
           },
         },
-      })),
-    [highlightAdTech, topicsNavigator, topicsTableData]
-  );
+      })
+    );
+
+    items.push({
+      title: 'Legend',
+      content: {
+        Element: Legend,
+      },
+    });
+
+    return items;
+  }, [highlightAdTech, topicsNavigator, topicsTableData]);
 
   return (
     <TabsProvider items={tabItems} name="topics-ee">
