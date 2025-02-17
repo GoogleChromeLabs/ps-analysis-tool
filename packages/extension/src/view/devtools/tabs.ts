@@ -77,6 +77,10 @@ import {
   PrivateAggregation,
   Dashboard,
   WebStories,
+  StorageAccess,
+  FederatedCredential,
+  IPProtection,
+  PrivateStateTokens,
 } from './components';
 
 const TABS: SidebarItems = {
@@ -129,10 +133,36 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+          [SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS]: {
+            title: () => I18n.getMessage('storageAccessAPI'),
+            panel: {
+              Element: StorageAccess,
+            },
+            icon: {
+              Element: ChipsIcon,
+            },
+            selectedIcon: {
+              Element: ChipsIconWhite,
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
             title: () => I18n.getMessage('rws'),
             panel: {
               Element: RelatedWebsiteSets,
+            },
+            icon: {
+              Element: RelatedWebsiteSetsIcon,
+            },
+            selectedIcon: {
+              Element: RelatedWebsiteSetsIconWhite,
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL]: {
+            title: () => I18n.getMessage('fedcm'),
+            panel: {
+              Element: FederatedCredential,
             },
             icon: {
               Element: RelatedWebsiteSetsIcon,
@@ -234,6 +264,19 @@ const TABS: SidebarItems = {
           Element: AntiCovertTrackingIconWhite,
         },
         children: {
+          [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
+            title: () => I18n.getMessage('ipProtection'),
+            panel: {
+              Element: IPProtection,
+            },
+            icon: {
+              Element: FingerPrintingIcon,
+            },
+            selectedIcon: {
+              Element: FingerPrintingIconWhite,
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
             title: () => I18n.getMessage('bounceTracking'),
             panel: {
@@ -251,6 +294,20 @@ const TABS: SidebarItems = {
             title: () => I18n.getMessage('fingerprinting'),
             panel: {
               Element: Fingerprinting,
+            },
+            icon: {
+              Element: FingerPrintingIcon,
+            },
+            selectedIcon: {
+              Element: FingerPrintingIconWhite,
+            },
+            children: {},
+          },
+
+          [SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS]: {
+            title: () => I18n.getMessage('privateStateTokens'),
+            panel: {
+              Element: PrivateStateTokens,
             },
             icon: {
               Element: FingerPrintingIcon,

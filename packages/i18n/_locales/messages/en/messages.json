@@ -1406,6 +1406,9 @@
   "PSChips": {
     "message": "A new way to enable 3rd party developers to access cookies on sites where their services are embedded on a per-site basis (meaning a different cookie on each site), restricting the ability to track users across sites."
   },
+  "StorageAccess": {
+    "message": "A new way to enable 3rd party developers to access cookies on sites where their services are embedded on a per-site basis (meaning a different cookie on each site), restricting the ability to track users across sites."
+  },
   "PSFencedFrames": {
     "message": "A fenced frame (<fencedframe>) is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context."
   },
@@ -8235,7 +8238,7 @@
     "message": "The new cookie attribute, Partitioned, allows developers to opt a cookie into partitioned storage, with separate cookie jars per top-level site."
   },
   "storageAccessAPI": {
-    "message": "Storage Access API"
+    "message": "Storage Access"
   },
   "storageAccessAPIDescription": {
     "message": "Storage Access API allows iframes to request storage access permissions when access would otherwise be denied by browser settings."
