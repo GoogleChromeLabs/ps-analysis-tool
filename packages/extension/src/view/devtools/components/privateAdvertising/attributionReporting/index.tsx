@@ -16,19 +16,53 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
+import React, { useMemo } from 'react';
+import {
+  InfoCard as InfoCardTemplate,
+  QuickLinksList,
+  PSInfoKey,
+  TabsProvider,
+  type TabItems,
+  type PSInfoKeyType,
+} from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import Panel from './panel';
+
+const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
+  return (
+    <>
+      <InfoCardTemplate infoKey={infoKey} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
+    </>
+  );
+};
 
 const AttributionReporting = () => {
+  const tabItems = useMemo<TabItems>(
+    () => [
+      {
+        title: 'Overview',
+        content: {
+          Element: InfoCard,
+          props: {
+            infoKey: PSInfoKey.AttributionReporting,
+          },
+          className: 'p-4',
+        },
+      },
+    ],
+    []
+  );
+
   return (
-    <div data-testid="attribution-content" className="h-full w-full">
-      <LandingPage
-        title={I18n.getMessage('attributionReporting')}
-        psInfoKey={PSInfoKey.AttributionReporting}
-        extraClasses="max-w-2xl h-fit"
-      />
-    </div>
+    <TabsProvider items={tabItems} name="attribution-reporting">
+      <Panel />
+    </TabsProvider>
   );
 };
 
