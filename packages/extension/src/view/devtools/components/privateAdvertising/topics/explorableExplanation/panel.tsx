@@ -86,6 +86,7 @@ const Panel = ({
       ? JSON.parse(storageRef.current[1])?.siteAdTechs
       : assignAdtechsToSites(websites, adtechs);
   }, []);
+
   const epochs = useMemo(() => {
     return (
       (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
@@ -105,6 +106,10 @@ const Panel = ({
   }, [PAstorage]);
 
   useEffect(() => {
+    if (activeTab === 4) {
+      return;
+    }
+
     setVisitIndexStart(
       JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
         activeTabRef.current
@@ -166,6 +171,10 @@ const Panel = ({
   }, [setActiveTab, setTopicsTableData]);
 
   useEffect(() => {
+    if (activeTab === 4) {
+      return;
+    }
+
     if (!epochCompleted[activeTabRef.current]) {
       setTopicsTableData((prevTopicsTableData) => {
         const newTopicsTableData = { ...prevTopicsTableData };
