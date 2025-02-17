@@ -67,7 +67,7 @@ import {
   PrivateAdvertising,
   AntiCovertTracking,
   Topics,
-  Attribution,
+  AttributionReporting,
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
@@ -191,7 +191,7 @@ const TABS: SidebarItems = {
           [SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING]: {
             title: () => I18n.getMessage('attributionReporting'),
             panel: {
-              Element: Attribution,
+              Element: AttributionReporting,
             },
             icon: {
               Element: AttributionIcon,

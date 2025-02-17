@@ -20,7 +20,7 @@ import React from 'react';
 import { LandingPage, PSInfoKey } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const Attribution = () => {
+const AttributionReporting = () => {
   return (
     <div data-testid="attribution-content" className="h-full w-full">
       <LandingPage
@@ -32,4 +32,4 @@ const Attribution = () => {
   );
 };
 
-export default Attribution;
+export default AttributionReporting;
