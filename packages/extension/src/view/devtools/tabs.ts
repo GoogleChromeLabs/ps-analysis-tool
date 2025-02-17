@@ -77,7 +77,9 @@ import {
   PrivateAggregation,
   Dashboard,
   WebStories,
+  Learning,
 } from './components';
+import HelpCenter from './components/learning/helpCenter';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -280,25 +282,10 @@ const TABS: SidebarItems = {
     children: {},
     containerClassName: 'h-6',
   },
-  [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
-    title: () => 'Stories',
+  [SIDEBAR_ITEMS_KEYS.LEARNING]: {
+    title: () => 'Learning',
     panel: {
-      Element: WebStories,
-    },
-    icon: {
-      Element: WebStoriesIcon,
-    },
-    selectedIcon: {
-      Element: WebStoriesIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-    containerClassName: 'h-6',
-  },
-  [SIDEBAR_ITEMS_KEYS.WIKI]: {
-    title: () => I18n.getMessage('wiki'),
-    panel: {
-      Element: Wiki,
+      Element: Learning,
     },
     icon: {
       Element: WikiIcon,
@@ -307,8 +294,54 @@ const TABS: SidebarItems = {
       Element: WikiIconWhite,
     },
     dropdownOpen: false,
-    children: {},
-    addSpacer: false,
+    children: {
+      [SIDEBAR_ITEMS_KEYS.WIKI]: {
+        title: () => I18n.getMessage('wiki'),
+        panel: {
+          Element: Wiki,
+        },
+        icon: {
+          Element: WikiIcon,
+        },
+        selectedIcon: {
+          Element: WikiIconWhite,
+        },
+        dropdownOpen: false,
+        children: {},
+        addSpacer: false,
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
+        title: () => 'Stories',
+        panel: {
+          Element: WebStories,
+        },
+        icon: {
+          Element: WebStoriesIcon,
+        },
+        selectedIcon: {
+          Element: WebStoriesIconWhite,
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.HELP_CENTER]: {
+        title: () => 'Help Center',
+        panel: {
+          Element: HelpCenter,
+        },
+        icon: {
+          Element: WikiIcon,
+        },
+        selectedIcon: {
+          Element: WikiIconWhite,
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+    },
     containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {

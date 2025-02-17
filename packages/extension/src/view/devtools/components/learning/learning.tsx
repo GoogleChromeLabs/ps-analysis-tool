@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export * from './learning';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Settings } from './settings';
-export { default as Layout } from './layout';
-export { default as Dashboard } from './dashboard';
+
+/**
+ * External dependencies
+ */
+import React from 'react';
+
+const Learning = () => {
+  return (
+    <div className="w-full h-full overflow-hidden">
+      <div className="w-full h-full flex justify-center items-center">
+        <h1 className="text-2xl">Learning</h1>
+      </div>
+    </div>
+  );
+};
+
+export default Learning;

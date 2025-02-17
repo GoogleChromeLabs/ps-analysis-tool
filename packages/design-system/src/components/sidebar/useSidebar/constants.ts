@@ -35,4 +35,6 @@ export enum SIDEBAR_ITEMS_KEYS {
   FACILITATED_TESTING = 'facilitated-testing',
   WIKI = 'wiki',
   SETTINGS = 'settings',
+  LEARNING = 'learning',
+  HELP_CENTER = 'help-center',
 }
