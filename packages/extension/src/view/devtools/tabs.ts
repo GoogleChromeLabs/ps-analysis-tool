@@ -330,6 +330,7 @@ const TABS: SidebarItems = {
         title: () => 'Help Center',
         panel: {
           Element: HelpCenter,
+          href: 'https://support.google.com/privacysandbox',
         },
         icon: {
           Element: WikiIcon,

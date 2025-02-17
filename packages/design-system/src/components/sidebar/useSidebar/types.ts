@@ -16,6 +16,7 @@
 
 export type SidebarComponent = {
   Element?: (props: any) => React.JSX.Element;
+  href?: string;
   props?: Record<string, unknown>;
 };
 
