@@ -86,7 +86,7 @@ const FlowExpander = async ({
               `${publisherData[currentSite].branches[index].date} ${publisherData[currentSite].branches[index].time}`
             );
           } else {
-            app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
+            app.setSelectedAdUnit(publisherData[currentSite].adunits[index]);
           }
           resolve({ x, y });
           return;

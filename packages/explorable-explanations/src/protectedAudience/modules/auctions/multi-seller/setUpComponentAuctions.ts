@@ -306,38 +306,42 @@ const setUpComponentAuction = (
     },
   });
 
-  setUpRunadAuction(steps, () => {
-    return {
-      // TODO: add type to component and make sure it has a consistent return type
-      component: Custom,
-      props: {
-        render: () => {
-          const p = app.p;
+  setUpRunadAuction(
+    steps,
+    () => {
+      return {
+        // TODO: add type to component and make sure it has a consistent return type
+        component: Custom,
+        props: {
+          render: () => {
+            const p = app.p;
 
-          if (index === 2 && p) {
-            const { x: boxX, y: boxY } = getCoordinateValues(boxCordinates);
-            p.push();
-            p.noFill();
-            p.rect(boxX, boxY, BOX_WIDTH, BOX_HEIGHT);
-            p.strokeWeight(0.1);
-            p.pop();
+            if (index === 2 && p) {
+              const { x: boxX, y: boxY } = getCoordinateValues(boxCordinates);
+              p.push();
+              p.noFill();
+              p.rect(boxX, boxY, BOX_WIDTH, BOX_HEIGHT);
+              p.strokeWeight(0.1);
+              p.pop();
+            }
+
+            return {
+              down: getCoordinateValues(app.auction.nextTipCoordinates),
+            };
+          },
+        } as AuctionStepProps,
+        delay: 1000,
+        callBack: (returnValue: Coordinates) => {
+          if (returnValue?.down) {
+            app.auction.nextTipCoordinates = getCoordinateValues(
+              returnValue.down
+            );
           }
-
-          return {
-            down: getCoordinateValues(app.auction.nextTipCoordinates),
-          };
         },
-      } as AuctionStepProps,
-      delay: 1000,
-      callBack: (returnValue: Coordinates) => {
-        if (returnValue?.down) {
-          app.auction.nextTipCoordinates = getCoordinateValues(
-            returnValue.down
-          );
-        }
-      },
-    };
-  });
+      };
+    },
+    sspWebsite
+  );
 
   steps.push({
     component: ProgressLine,

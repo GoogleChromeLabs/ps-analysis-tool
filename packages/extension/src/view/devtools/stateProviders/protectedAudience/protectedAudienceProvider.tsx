@@ -261,31 +261,45 @@ const Provider = ({ children }: PropsWithChildren) => {
             message.payload.multiSellerAuction
           );
 
+          const keys = Object.keys(message.payload.auctionEvents ?? {});
+          const latestAuctionId = keys[keys.length - 1];
+
           if (computedBids) {
             const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
               {};
+            const uniqueAuctionIDToBids: { [key: string]: ReceivedBids[] } = {};
+
+            computedBids.receivedBids.forEach((bids) => {
+              const { uniqueAuctionId } = bids;
+
+              if (!uniqueAuctionId) {
+                return;
+              }
+
+              if (!uniqueAuctionIDToBids[uniqueAuctionId]) {
+                uniqueAuctionIDToBids[uniqueAuctionId] = [bids];
+              } else {
+                uniqueAuctionIDToBids[uniqueAuctionId].push(bids);
+              }
+
+              uniqueAuctionIDToBids[uniqueAuctionId].sort((a, b) => {
+                if (!a?.bid || !b?.bid) {
+                  return 0;
+                }
+                return b.bid - a.bid;
+              });
+            });
+
+            const highestBidData = uniqueAuctionIDToBids[latestAuctionId][0];
             computedBids.receivedBids.forEach(
               ({
                 adUnitCode,
                 ownerOrigin,
                 mediaContainerSize,
-                bid,
                 bidCurrency,
               }) => {
                 if (!adUnitCode) {
                   return;
-                }
-
-                let winningBid = bid ?? 0;
-                let winningBidder = ownerOrigin ?? '';
-
-                if (
-                  winningBid &&
-                  winningBid < adUnitCodeToBidders[adUnitCode]?.winningBid
-                ) {
-                  winningBid = adUnitCodeToBidders[adUnitCode]?.winningBid;
-                  winningBidder =
-                    adUnitCodeToBidders[adUnitCode]?.winningBidder;
                 }
 
                 adUnitCodeToBidders[adUnitCode] = {
@@ -307,8 +321,8 @@ const Provider = ({ children }: PropsWithChildren) => {
                     ),
                   ],
                   bidCurrency: bidCurrency ?? '',
-                  winningBid,
-                  winningBidder,
+                  winningBid: highestBidData.bid ?? 0,
+                  winningBidder: highestBidData.ownerOrigin ?? '',
                 };
               }
             );
