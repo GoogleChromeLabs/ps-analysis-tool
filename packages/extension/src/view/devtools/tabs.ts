@@ -52,6 +52,7 @@ import {
   WebStoriesIconWhite,
   Help,
   LearningIcon,
+  DevGuideIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -80,6 +81,7 @@ import {
   Dashboard,
   WebStories,
   Learning,
+  DevSite,
 } from './components';
 import HelpCenter from './components/learning/helpCenter';
 
@@ -348,6 +350,28 @@ const TABS: SidebarItems = {
         },
         selectedIcon: {
           Element: Help,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.DEV_SITE]: {
+        title: () => 'Dev Site',
+        panel: {
+          Element: DevSite,
+          href: 'https://developers.chrome.com/privacy-sandbox',
+        },
+        icon: {
+          Element: DevGuideIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: DevGuideIcon,
           props: {
             className: 'fill-bright-gray',
           },

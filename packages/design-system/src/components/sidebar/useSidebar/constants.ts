@@ -37,4 +37,5 @@ export enum SIDEBAR_ITEMS_KEYS {
   SETTINGS = 'settings',
   LEARNING = 'learning',
   HELP_CENTER = 'help-center',
+  DEV_SITE = 'dev-site',
 }

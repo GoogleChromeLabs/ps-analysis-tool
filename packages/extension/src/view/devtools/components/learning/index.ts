@@ -19,3 +19,4 @@ export { default as WebStories } from './webStories';
 export { default as Wiki } from './wiki';
 export * from './wiki';
 export { default as Learning } from './learning';
+export { default as DevSite } from './devSite';

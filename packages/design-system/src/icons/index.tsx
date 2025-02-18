@@ -99,3 +99,4 @@ export { default as DoubleDownArrow } from './double-down-arrow.svg';
 export { default as DescriptionIcon } from './description.svg';
 export { default as Help } from './help.svg';
 export { default as LearningIcon } from './learning-icon.svg';
+export { default as DevGuideIcon } from './dev-guide-icon.svg';
