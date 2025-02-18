@@ -24,8 +24,8 @@ const HelpCenter = () => {
   return (
     <div className="w-full h-full overflow-hidden">
       <div className="w-full h-full flex justify-center items-center">
-        <p className="text-center text-lg flex items-center gap-2">
-          <Help className="w-6 h-6 fill-granite-gray dark:fill-bright-gray" />
+        <p className="text-center text-lg flex flex-col items-center gap-2">
+          <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
           Please refer to the help center opened in the current browser tab.
         </p>
       </div>
