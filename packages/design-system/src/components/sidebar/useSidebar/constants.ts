@@ -38,4 +38,8 @@ export enum SIDEBAR_ITEMS_KEYS {
   LEARNING = 'learning',
   HELP_CENTER = 'help-center',
   DEV_SITE = 'dev-site',
+  STORAGE_ACCESS = 'storage-access',
+  FEDERATED_CREDENTIAL = 'federated-credential',
+  IP_PROTECTION = 'ip-protection',
+  PRIVATE_STATE_TOKENS = 'private-state-tokens',
 }

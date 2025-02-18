@@ -53,6 +53,10 @@ import {
   Help,
   LearningIcon,
   DevGuideIcon,
+  TokenIcon,
+  FederatedIcon,
+  StorageIcon,
+  ProtectionIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -82,6 +86,10 @@ import {
   WebStories,
   Learning,
   DevSite,
+  StorageAccess,
+  FederatedCredential,
+  IPProtection,
+  PrivateStateTokens,
 } from './components';
 import HelpCenter from './components/learning/helpCenter';
 
@@ -135,6 +143,25 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+          [SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS]: {
+            title: () => I18n.getMessage('storageAccessAPI'),
+            panel: {
+              Element: StorageAccess,
+            },
+            icon: {
+              Element: StorageIcon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: StorageIcon,
+              props: {
+                className: 'fill-white',
+              },
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
             title: () => I18n.getMessage('rws'),
             panel: {
@@ -145,6 +172,25 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: RelatedWebsiteSetsIconWhite,
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL]: {
+            title: () => I18n.getMessage('fedcm'),
+            panel: {
+              Element: FederatedCredential,
+            },
+            icon: {
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-white',
+              },
             },
             children: {},
           },
@@ -240,6 +286,25 @@ const TABS: SidebarItems = {
           Element: AntiCovertTrackingIconWhite,
         },
         children: {
+          [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
+            title: () => I18n.getMessage('ipProtection'),
+            panel: {
+              Element: IPProtection,
+            },
+            icon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-white relative right-[3px]',
+              },
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
             title: () => I18n.getMessage('bounceTracking'),
             panel: {
@@ -263,6 +328,26 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: FingerPrintingIconWhite,
+            },
+            children: {},
+          },
+
+          [SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS]: {
+            title: () => I18n.getMessage('privateStateTokens'),
+            panel: {
+              Element: PrivateStateTokens,
+            },
+            icon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-white relative right-[3px]',
+              },
             },
             children: {},
           },

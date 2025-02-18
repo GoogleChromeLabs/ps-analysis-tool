@@ -32,6 +32,8 @@ import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { act } from 'react-dom/test-utils';
 import { I18n } from '@google-psat/i18n';
 import { useSidebar } from '@google-psat/design-system';
+import IPProtection from '../ipProtection';
+import PrivateStateTokens from '../privateStateTokens';
 
 jest.mock(
   '../../../../../../../design-system/src/components/sidebar/useSidebar',
@@ -89,6 +91,24 @@ describe('AntiCovertTracking Landing Pages', () => {
     });
     expect(
       await screen.findByText(I18n.getMessage('trackingProtection'))
+    ).toBeInTheDocument();
+  });
+
+  it('should render IPProtection', async () => {
+    act(() => {
+      render(<IPProtection />);
+    });
+    expect(
+      await screen.findByTestId('ip-protection-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should render PrivateStateTokens', async () => {
+    act(() => {
+      render(<PrivateStateTokens />);
+    });
+    expect(
+      await screen.findByTestId('private-state-tokens-content')
     ).toBeInTheDocument();
   });
 });

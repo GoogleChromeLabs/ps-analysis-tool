@@ -100,4 +100,8 @@ export { default as DescriptionIcon } from './description.svg';
 export { default as Help } from './help.svg';
 export { default as LearningIcon } from './learning-icon.svg';
 export { default as DevGuideIcon } from './dev-guide-icon.svg';
+export { default as TokenIcon } from './token.svg';
+export { default as FederatedIcon } from './federated.svg';
+export { default as StorageIcon } from './storage.svg';
+export { default as ProtectionIcon } from './protection.svg';
 export { default as CancelIcon } from './cancel.svg';
