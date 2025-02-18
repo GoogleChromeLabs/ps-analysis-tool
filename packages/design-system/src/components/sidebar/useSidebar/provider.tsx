@@ -166,6 +166,11 @@ export const SidebarProvider = ({
         return;
       }
 
+      const item = findItem(sidebarItems, key);
+      if (item?.panel?.href) {
+        chrome?.tabs?.update({ url: item.panel.href });
+      }
+
       setSelectedItemKey(keyPath.join('#'));
       setQuery(queryString);
     },

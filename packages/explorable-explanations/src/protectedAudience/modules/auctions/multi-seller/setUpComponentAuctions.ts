@@ -134,13 +134,8 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
 
   setUpComponentAuctionStarter(componentAuctions, steps);
 
-  componentAuctions.forEach((componentAuction, idx) => {
-    setUpComponentAuction(
-      steps,
-      componentAuction,
-      componentAuction.config,
-      idx
-    );
+  componentAuctions.forEach((componentAuction) => {
+    setUpComponentAuction(steps, componentAuction, componentAuction.config);
   });
 
   setUpTPoint(steps);
@@ -249,8 +244,7 @@ const setUpComponentAuctionStarter = (
 const setUpComponentAuction = (
   steps,
   { title, x, y, ssp, info, sspWebsite },
-  { bidValue },
-  index
+  { bidValue }
 ) => {
   const { box, arrowSize } = config.flow;
 
@@ -314,17 +308,6 @@ const setUpComponentAuction = (
         component: Custom,
         props: {
           render: () => {
-            const p = app.p;
-
-            if (index === 2 && p) {
-              const { x: boxX, y: boxY } = getCoordinateValues(boxCordinates);
-              p.push();
-              p.noFill();
-              p.rect(boxX, boxY, BOX_WIDTH, BOX_HEIGHT);
-              p.strokeWeight(0.1);
-              p.pop();
-            }
-
             return {
               down: getCoordinateValues(app.auction.nextTipCoordinates),
             };

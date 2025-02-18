@@ -34,9 +34,16 @@ export type TableData = (
   | AdsAndBiddersType[keyof AdsAndBiddersType]
   | ErroredOutUrlsData
   | SourcesData
+  | ClassificationResult
 ) & {
   highlighted?: boolean;
 };
+
+export interface ClassificationResult {
+  domain: string;
+  categories?: string[];
+  error?: string;
+}
 
 export type InfoType = number | string | boolean | Array<string | number> | [];
 

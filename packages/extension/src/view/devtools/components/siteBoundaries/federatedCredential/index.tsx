@@ -13,12 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export * from './learning';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Settings } from './settings';
-export { default as Layout } from './layout';
-export { default as Dashboard } from './dashboard';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+
+const FederatedCredential = () => {
+  return (
+    <div data-testid="federated-credential-content" className="h-full w-full">
+      <LandingPage
+        title={I18n.getMessage('fedcm')}
+        psInfoKey={PSInfoKey.FedCM}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
+  );
+};
+
+export default FederatedCredential;

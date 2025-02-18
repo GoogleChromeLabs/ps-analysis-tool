@@ -14,5 +14,7 @@
  * limitations under the License.
  */
 export { default as Chips } from './chips';
+export { default as StorageAccess } from './storageAccess';
 export { default as RelatedWebsiteSets } from './relatedWebsiteSets';
 export { default as SiteBoundaries } from './siteBoundaries';
+export { default as FederatedCredential } from './federatedCredential';

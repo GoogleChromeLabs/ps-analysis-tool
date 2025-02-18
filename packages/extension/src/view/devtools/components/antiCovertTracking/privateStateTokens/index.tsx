@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,19 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage } from '@google-psat/design-system';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
 
-/**
- * Internal dependencies.
- */
-import ContentPanel from './contentPanel';
-import { useWebStories } from '../../stateProviders';
-
-const WebStories = () => {
-  const { storyOpened } = useWebStories(({ state }) => ({
-    storyOpened: state.storyOpened,
-  }));
-
+const PrivateStateTokens = () => {
   return (
-    <div className="w-full h-full overflow-hidden">
+    <div data-testid="private-state-tokens-content" className="h-full w-full">
       <LandingPage
-        title={'Stories'}
-        hideTitle={storyOpened}
-        extraClasses="w-full !p-0"
-        contentPanel={<ContentPanel storyOpened={storyOpened} />}
-        showQuickLinks={false}
+        title={I18n.getMessage('privateStateTokens')}
+        psInfoKey={PSInfoKey.PrivateStateTokens}
+        extraClasses="max-w-2xl h-fit"
       />
     </div>
   );
 };
 
-export default WebStories;
+export default PrivateStateTokens;

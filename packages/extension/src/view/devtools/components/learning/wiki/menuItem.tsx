@@ -21,8 +21,8 @@ import React, { type Dispatch, type SetStateAction } from 'react';
 /**
  * Internal dependencies.
  */
-import extractWikiPage from '../../../../utils/extractWikiPage';
 import Link, { type MenuItemType } from './link';
+import extractWikiPage from '../../../../../utils/extractWikiPage';
 
 interface MenuItemProps {
   menuItem: MenuItemType;

@@ -50,6 +50,13 @@ import {
   Settings as SettingsIcon,
   WebStoriesIcon,
   WebStoriesIconWhite,
+  Help,
+  LearningIcon,
+  DevGuideIcon,
+  TokenIcon,
+  FederatedIcon,
+  StorageIcon,
+  ProtectionIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -77,7 +84,14 @@ import {
   PrivateAggregation,
   Dashboard,
   WebStories,
+  Learning,
+  DevSite,
+  StorageAccess,
+  FederatedCredential,
+  IPProtection,
+  PrivateStateTokens,
 } from './components';
+import HelpCenter from './components/learning/helpCenter';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -129,6 +143,25 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+          [SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS]: {
+            title: () => I18n.getMessage('storageAccessAPI'),
+            panel: {
+              Element: StorageAccess,
+            },
+            icon: {
+              Element: StorageIcon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: StorageIcon,
+              props: {
+                className: 'fill-white',
+              },
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
             title: () => I18n.getMessage('rws'),
             panel: {
@@ -139,6 +172,25 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: RelatedWebsiteSetsIconWhite,
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL]: {
+            title: () => I18n.getMessage('fedcm'),
+            panel: {
+              Element: FederatedCredential,
+            },
+            icon: {
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-gray',
+              },
+            },
+            selectedIcon: {
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-white',
+              },
             },
             children: {},
           },
@@ -234,6 +286,25 @@ const TABS: SidebarItems = {
           Element: AntiCovertTrackingIconWhite,
         },
         children: {
+          [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
+            title: () => I18n.getMessage('ipProtection'),
+            panel: {
+              Element: IPProtection,
+            },
+            icon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-white relative right-[3px]',
+              },
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
             title: () => I18n.getMessage('bounceTracking'),
             panel: {
@@ -260,9 +331,127 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+
+          [SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS]: {
+            title: () => I18n.getMessage('privateStateTokens'),
+            panel: {
+              Element: PrivateStateTokens,
+            },
+            icon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-white relative right-[3px]',
+              },
+            },
+            children: {},
+          },
         },
       },
     },
+    addDivider: true,
+  },
+  [SIDEBAR_ITEMS_KEYS.LEARNING]: {
+    title: () => 'Learning',
+    panel: {
+      Element: Learning,
+    },
+    icon: {
+      Element: LearningIcon,
+      props: {
+        className: 'fill-granite-gray dark:fill-bright-gray',
+      },
+    },
+    selectedIcon: {
+      Element: LearningIcon,
+      props: {
+        className: 'fill-bright-gray',
+      },
+    },
+    dropdownOpen: false,
+    children: {
+      [SIDEBAR_ITEMS_KEYS.WIKI]: {
+        title: () => I18n.getMessage('wiki'),
+        panel: {
+          Element: Wiki,
+        },
+        icon: {
+          Element: WikiIcon,
+        },
+        selectedIcon: {
+          Element: WikiIconWhite,
+        },
+        dropdownOpen: false,
+        children: {},
+        addSpacer: false,
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
+        title: () => 'Stories',
+        panel: {
+          Element: WebStories,
+        },
+        icon: {
+          Element: WebStoriesIcon,
+        },
+        selectedIcon: {
+          Element: WebStoriesIconWhite,
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.HELP_CENTER]: {
+        title: () => 'Help Center',
+        panel: {
+          Element: HelpCenter,
+          href: 'https://support.google.com/privacysandbox',
+        },
+        icon: {
+          Element: Help,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: Help,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.DEV_SITE]: {
+        title: () => 'Dev Site',
+        panel: {
+          Element: DevSite,
+          href: 'https://developers.chrome.com/privacy-sandbox',
+        },
+        icon: {
+          Element: DevGuideIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: DevGuideIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+    },
+    containerClassName: 'h-6',
     addDivider: true,
   },
   [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
@@ -278,37 +467,6 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: false,
     children: {},
-    containerClassName: 'h-6',
-  },
-  [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
-    title: () => 'Stories',
-    panel: {
-      Element: WebStories,
-    },
-    icon: {
-      Element: WebStoriesIcon,
-    },
-    selectedIcon: {
-      Element: WebStoriesIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-    containerClassName: 'h-6',
-  },
-  [SIDEBAR_ITEMS_KEYS.WIKI]: {
-    title: () => I18n.getMessage('wiki'),
-    panel: {
-      Element: Wiki,
-    },
-    icon: {
-      Element: WikiIcon,
-    },
-    selectedIcon: {
-      Element: WikiIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-    addSpacer: false,
     containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {

@@ -34,7 +34,7 @@ import type { TabCookies } from '@google-psat/common';
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
-import { NAVIGATION_TAGS } from '../../wiki';
+import { NAVIGATION_TAGS } from '../../learning';
 
 interface CookiesSectionProps {
   tabCookies: TabCookies;
