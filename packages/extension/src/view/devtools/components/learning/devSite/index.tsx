@@ -24,8 +24,7 @@ const DevSite = () => {
     <div className="w-full h-full overflow-hidden">
       <div className="w-full h-full flex justify-center items-center">
         <p className="text-center text-lg">
-          Please refer to the developer site opened in the current browser tab
-          for more information.
+          Please refer to the developer site opened in the current browser tab.
         </p>
       </div>
     </div>
