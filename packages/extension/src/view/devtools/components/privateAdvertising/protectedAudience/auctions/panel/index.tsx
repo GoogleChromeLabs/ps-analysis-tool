@@ -26,6 +26,7 @@ import {
 } from '@google-psat/design-system';
 import type {
   AdsAndBiddersType,
+  NoBidsType,
   singleAuctionEvent,
 } from '@google-psat/common';
 
@@ -36,21 +37,27 @@ import type { AuctionEventsType } from '../../../../../stateProviders/protectedA
 import AuctionTable from '../table';
 import AdunitPanel from '../adunitPanel';
 import AdunitSubPanel from '../adunitPanel/panel';
-import type { AdUnitLiteral } from '../../explorableExplanation/auctionEventTransformers';
 
 interface AuctionPanelProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids?: Record<string, singleAuctionEvent[]>;
+    noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
+  isMultiSeller?: boolean;
+  selectedAdUnit?: string;
+  selectedDateTime?: string;
 }
 
 const AuctionPanel = ({
   auctionEvents,
   setSidebarData,
   customAdsAndBidders,
+  isMultiSeller = false,
+  selectedAdUnit,
+  selectedDateTime,
 }: AuctionPanelProps) => {
   useEffect(() => {
     const Panel = customAdsAndBidders ? AdunitSubPanel : AdunitPanel;
@@ -110,6 +117,18 @@ const AuctionPanel = ({
             ...entries,
           };
 
+          let shouldBeBlurred = true;
+
+          if (isMultiSeller) {
+            shouldBeBlurred = !(
+              selectedAdUnit === adUnit && selectedDateTime === selectedDateTime
+            );
+          } else {
+            shouldBeBlurred =
+              auctionEventsData[adUnit][time][sellerUrl][sellerUrl].length ===
+              0;
+          }
+
           adUnitChildren[time + adUnit] = {
             title: actualTime,
             panel: {
@@ -124,10 +143,8 @@ const AuctionPanel = ({
               },
             },
             children,
-            dropdownOpen: false,
-            isBlurred:
-              auctionEventsData[adUnit][time][sellerUrl][sellerUrl].length ===
-              0,
+            dropdownOpen: isMultiSeller,
+            isBlurred: shouldBeBlurred,
           };
         });
 
@@ -139,7 +156,7 @@ const AuctionPanel = ({
               adunit: adUnit,
               adsAndBidders: customAdsAndBidders,
               receivedBids: auctionEvents?.receivedBids ?? {},
-              noBids: {},
+              noBids: auctionEvents?.noBids ?? {},
             },
           },
           children: adUnitChildren,

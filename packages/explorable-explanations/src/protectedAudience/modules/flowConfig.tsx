@@ -451,7 +451,7 @@ export const MULTI_SELLER_CONFIG = {
         <p>
           Any bid that is higher than the header bidding winner will be accepted
           for comparison other bids will be rejected. The winning bid is sent to
-          the Publisher Ad Tag as the contextual ad winner which will be used in
+          the Publisher Ad Tag as the contextual ad winner which will be used in{' '}
           <code className="text-upsed-tomato">scoreAd()</code> function in
           Protected Audience API.
         </p>

@@ -20,10 +20,7 @@ import { Box, ProgressLine } from '../../components';
 import app from '../../app';
 import config from '../../config';
 import bubbles from '../bubbles';
-import {
-  wipeAndRecreateMainCanvas,
-  wipeAndRecreateUserCanvas,
-} from '../../utils';
+import { wipeAndRecreateUserCanvas } from '../../utils';
 import flow from '../flow';
 import { SINGLE_SELLER_CONFIG } from '../flowConfig.tsx';
 import { getCoordinateValues } from '../../utils/getCoordinateValues.ts';
@@ -155,7 +152,6 @@ export const showWinningAdDirectly = (
         app.shouldRespondToClick = true;
 
         wipeAndRecreateUserCanvas();
-        wipeAndRecreateMainCanvas();
         app.timeline.renderUserIcon();
         flow.setButtonsDisabilityState();
         setupAuctions();

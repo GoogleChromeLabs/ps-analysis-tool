@@ -221,7 +221,6 @@ function scrollListener() {
 const getCardHTML = ({
   heroImage,
   publisherLogo,
-  publisherName,
   storyTitle,
   storyUrl,
 }) => {
@@ -237,7 +236,6 @@ const getCardHTML = ({
             <div class="logo-ring"></div>
             <img class="entry-point-card-logo" src="${publisherLogo}" alt="Publisher logo">
         </div>
-        <span class="entry-point-card-subtitle"> By ${publisherName} </span>
       </div>
       <div class="card-headline-container">
           <span class="entry-point-card-headline"> ${storyTitle} </span>

@@ -52,6 +52,12 @@ const AdUnits = () => {
     isUsingCDP: state.isUsingCDP,
   }));
 
+  useEffect(() => {
+    return () => {
+      setIsInspecting(false);
+    };
+  }, [setIsInspecting]);
+
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
