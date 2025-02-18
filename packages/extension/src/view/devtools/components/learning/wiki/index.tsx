@@ -23,10 +23,10 @@ import { ProgressBar, useSidebar } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import Sidebar, { type SidebarMenuItem } from './sidebar';
-import parseMenuMarkDown from '../../../../utils/parseMenuMarkDown';
-import convertMarkdownToHTML from '../../../../utils/convertMarkdownToHTML';
-import extractWikiPage from '../../../../utils/extractWikiPage';
-import convertTitleToHash from '../../../../utils/convertTitleToHash';
+import parseMenuMarkDown from '../../../../../utils/parseMenuMarkDown';
+import convertTitleToHash from '../../../../../utils/convertTitleToHash';
+import convertMarkdownToHTML from '../../../../../utils/convertMarkdownToHTML';
+import extractWikiPage from '../../../../../utils/extractWikiPage';
 
 const GITHUB_URL =
   'https://raw.githubusercontent.com/wiki/GoogleChromeLabs/ps-analysis-tool';

@@ -28,7 +28,7 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
-import { NAVIGATION_TAGS } from '../../wiki';
+import { NAVIGATION_TAGS } from '../../learning';
 
 interface settingsToReturnObject {
   id: string;

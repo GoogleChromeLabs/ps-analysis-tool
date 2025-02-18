@@ -24,8 +24,8 @@ import { noop } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { useWebStories } from '../../stateProviders';
 import { MainContentContainer } from './mainContentContainer';
+import { useWebStories } from '../../../stateProviders';
 
 interface WebStoriesProps {
   storyOpened: boolean;
