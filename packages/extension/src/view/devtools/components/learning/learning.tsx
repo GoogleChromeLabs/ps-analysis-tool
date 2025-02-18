@@ -17,15 +17,22 @@
 /**
  * External dependencies
  */
+import { LandingPage } from '@google-psat/design-system';
 import React from 'react';
+
+/**
+ * Internal dependencies
+ */
+import ContentPanel from './contentPanel';
 
 const Learning = () => {
   return (
-    <div className="w-full h-full overflow-hidden">
-      <div className="w-full h-full flex justify-center items-center">
-        <h1 className="text-2xl">Learning</h1>
-      </div>
-    </div>
+    <LandingPage
+      title="Learning"
+      showSupportLink={true}
+      contentPanel={<ContentPanel />}
+      showQuickLinks={false}
+    />
   );
 };
 
