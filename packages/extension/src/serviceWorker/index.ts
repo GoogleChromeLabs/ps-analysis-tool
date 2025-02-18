@@ -529,7 +529,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
-      if (method === 'Storage.attributionReportingSourceRegistered' && params) {
+      if (
+        method === 'Storage.attributionReportingSourceRegistered' &&
+        params &&
+        source.tabId
+      ) {
         ARAStore.processARASourcesRegistered(
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent,
           tabId
@@ -537,7 +541,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
       if (
         method === 'Storage.attributionReportingTriggerRegistered' &&
-        params
+        params &&
+        source.tabId
       ) {
         ARAStore.processARATriggerRegistered(
           params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent,

@@ -65,8 +65,9 @@ class ARAStore {
         ...params.registration,
         aggregatable: params.aggregatable,
         eventLevel: params.eventLevel,
-        index: dataStore.sources[tabId].sourceRegistration.length,
+        index: dataStore.sources[tabId].triggerRegistration.length,
         time: Date.now(),
+        destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
       });
     } else {
       dataStore.sources[tabId].triggerRegistration = [
@@ -76,6 +77,7 @@ class ARAStore {
           eventLevel: params.eventLevel,
           index: 0,
           time: Date.now(),
+          destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
         },
       ];
     }

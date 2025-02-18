@@ -42,7 +42,7 @@ const TriggerRegistrations = () => {
     () => [
       {
         header: 'Destination',
-        accessorKey: 'sourceOrigin',
+        accessorKey: 'destination',
         cell: (info) => info,
         widthWeightagePercentage: 15,
       },

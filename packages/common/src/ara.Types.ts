@@ -31,5 +31,6 @@ export type TriggerRegistration =
     aggregatable: Protocol.Storage.AttributionReportingAggregatableResult;
     index: number;
     time: number;
+    destination?: string;
   };
 export type SourcesData = SourcesRegistration | TriggerRegistration;
