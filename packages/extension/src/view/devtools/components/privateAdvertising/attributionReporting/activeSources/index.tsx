@@ -24,10 +24,8 @@ import { noop, type singleAuctionEvent } from '@google-psat/common';
 import {
   Table,
   TableProvider,
-  type TableFilter,
   type TableRow,
   type TableColumn,
-  type InfoType,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 
@@ -35,6 +33,27 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import dummyData from './dummyData.json';
+
+const calculateRegistrationDate = (timeStamp: number) => {
+  const date = new Date(timeStamp * 1000); // Convert to milliseconds.
+
+  const formattedDate = date.toLocaleString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+
+  return formattedDate;
+};
+
+const calculateExpiryDate = (registrationTime: number, expiryTime: number) => {
+  const expiryTimestamp = registrationTime + expiryTime; // Add expiry duration
+  return calculateRegistrationDate(expiryTimestamp);
+};
 
 const ActiveSources = () => {
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
@@ -44,117 +63,64 @@ const ActiveSources = () => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
-        header: 'Event Time',
-        accessorKey: 'time',
-        cell: (_, details) =>
-          (details as singleAuctionEvent).formattedTime.toString(),
-        enableHiding: false,
-        widthWeightagePercentage: 10,
+        header: 'Source Event ID',
+        accessorKey: 'eventId',
+        cell: (info) => info,
+        widthWeightagePercentage: 12,
       },
       {
-        header: 'Event',
-        accessorKey: 'type',
+        header: 'Source Origin',
+        accessorKey: 'sourceOrigin',
         cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Destinations',
+        accessorKey: 'destinationSites',
+        cell: (info) => info.join(' '),
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Reporting Origin',
+        accessorKey: 'reportingOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Registration Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          calculateRegistrationDate((details as singleAuctionEvent)?.time),
+        enableHiding: false,
+        widthWeightagePercentage: 12,
+      },
+      {
+        header: 'Expiry',
+        accessorKey: 'expiry',
+        cell: (info, details) => {
+          return calculateExpiryDate(details?.time, info);
+        },
         sortingComparator: (a, b) => {
           const aString = (a as string).toLowerCase().trim();
           const bString = (b as string).toLowerCase().trim();
 
           return aString > bString ? 1 : -1;
         },
-        widthWeightagePercentage: 20,
+        widthWeightagePercentage: 12,
       },
       {
-        header: 'Interest Group Origin',
-        accessorKey: 'ownerOrigin',
-        cell: (info) => info,
-        widthWeightagePercentage: 20,
-      },
-      {
-        header: 'Interest Group Name',
-        accessorKey: 'name',
-        cell: (info) => info,
-        widthWeightagePercentage: 17,
-      },
-      {
-        header: 'Bid',
-        accessorKey: 'bid',
+        header: 'Source Type',
+        accessorKey: 'type',
         cell: (info) => info,
         widthWeightagePercentage: 5,
       },
       {
-        header: 'Bid Currency',
-        accessorKey: 'bidCurrency',
+        header: 'Debug Key',
+        accessorKey: 'debugKey',
         cell: (info) => info,
-        widthWeightagePercentage: 8,
-      },
-      {
-        header: 'Component Seller',
-        accessorKey: 'componentSellerOrigin',
-        cell: (info) => info,
-        widthWeightagePercentage: 20,
+        widthWeightagePercentage: 12,
       },
     ],
-    []
-  );
-
-  const tableFilters = useMemo<TableFilter>(
-    () => ({
-      type: {
-        title: 'Event',
-        sortValues: true,
-      },
-      ownerOrigin: {
-        title: 'Interest Group Origin',
-        sortValues: true,
-      },
-      name: {
-        title: 'Interest Group Name',
-        sortValues: true,
-      },
-      bid: {
-        title: 'Bid',
-        hasStaticFilterValues: true,
-        filterValues: {
-          ['0 - 20']: {
-            selected: false,
-          },
-          ['20 - 40']: {
-            selected: false,
-          },
-          ['40 - 60']: {
-            selected: false,
-          },
-          ['60 - 80']: {
-            selected: false,
-          },
-          ['80 - 100']: {
-            selected: false,
-          },
-          ['100+']: {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          const bid = value as number;
-
-          if (filterValue === '100+') {
-            return bid > 100;
-          }
-
-          const [min, max] = filterValue.split(' - ').map(Number);
-
-          return bid >= min && bid <= max;
-        },
-      },
-      bidCurrency: {
-        title: 'Bid Currency',
-        sortValues: true,
-      },
-      componentSellerOrigin: {
-        title: 'Component Seller',
-        sortValues: true,
-      },
-    }),
     []
   );
 
@@ -176,18 +142,10 @@ const ActiveSources = () => {
           <TableProvider
             data={dummyData}
             tableColumns={tableColumns}
-            tableFilterData={tableFilters}
             tableSearchKeys={undefined}
             onRowContextMenu={noop}
             onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
-            getRowObjectKey={(row: TableRow) => {
-              return (
-                // @ts-ignore
-                ((row.originalData as singleAuctionEvent).auctionConfig
-                  ?.seller || '') +
-                (row.originalData as singleAuctionEvent).time
-              );
-            }}
+            getRowObjectKey={(row: TableRow) => row.originalData.eventId}
           >
             <Table
               selectedKey={
