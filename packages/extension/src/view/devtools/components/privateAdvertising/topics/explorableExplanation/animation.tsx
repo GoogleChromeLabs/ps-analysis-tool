@@ -124,7 +124,7 @@ const Animation = ({
     speedMultiplierCallback?.(speedMultiplier);
   }, [speedMultiplier, speedMultiplierCallback]);
 
-  return <div ref={node} className="overflow-auto" />;
+  return <div ref={node} className="overflow-auto bg-white" />;
 };
 
 export default Animation;

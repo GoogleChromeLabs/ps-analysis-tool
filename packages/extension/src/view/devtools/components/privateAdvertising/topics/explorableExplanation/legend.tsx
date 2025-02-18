@@ -21,7 +21,7 @@ import React from 'react';
 
 const Legend = () => {
   return (
-    <div className="p-3 text-[12.5px]">
+    <div className="p-3 text-[12.5px] text-raisin-black dark:text-bright-gray">
       <p>
         This explorable explanation shows user journeys on the web. Each site
         has topics describing its content, adtech companies extract these topics
