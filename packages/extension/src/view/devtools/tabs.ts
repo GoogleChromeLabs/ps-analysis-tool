@@ -288,13 +288,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: ProtectionIcon,
               props: {
-                className: 'fill-gray relative right-[2px]',
+                className: 'fill-gray relative right-[3px]',
               },
             },
             selectedIcon: {
               Element: ProtectionIcon,
               props: {
-                className: 'fill-white relative right-[2px]',
+                className: 'fill-white relative right-[3px]',
               },
             },
             children: {},

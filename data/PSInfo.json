@@ -100,7 +100,7 @@
     "proposal": "https://privacycg.github.io/storage-access/",
     "publicDiscussion": "https://github.com/privacycg/storage-access/issues",
     "videoOverview": "https://www.youtube.com/watch?v=rGqr2gc6Vow",
-    "devDocumentation": "https://developer.mozilla.org/docs/Web/API/Storage_Access_API"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/3pcd/storage-access-api"
   },
   "ip-protection": {
     "name": "IP Protection",
@@ -113,9 +113,9 @@
   "private-state-tokens": {
     "name": "Private State Tokens",
     "description": "PrivateStateTokensDescription",
-    "proposal": "https://github.com/privacycg/private-state-tokens",
-    "publicDiscussion": "https://github.com/privacycg/private-state-tokens/issues",
-    "videoOverview": "",
+    "proposal": "https://github.com/WICG/trust-token-api",
+    "publicDiscussion": "https://github.com/WICG/trust-token-api/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=jrMCjyUY4Ts",
     "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/private-state-tokens"
   }
 }
