@@ -89,10 +89,10 @@ const Branches = async ({
 
   const drawInstantly = () => {
     const branchXEndpoint =
-      currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
+      x1 + ((branches.length + 1) / 2) * spacing - LEFT_MARGIN * 4 - 20;
 
     branches.forEach(({ id, type }, index) => {
-      const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
+      const x = x1 + (index - (branches.length - 1) / 2) * spacing;
       const y = y2 - 9;
       let endpoint;
       p.push();
@@ -179,9 +179,10 @@ const Branches = async ({
   // Clear canvas or update logic (if necessary)
   wipeAndRecreateInterestCanvas();
 
+  const branchXStartpoint =
+    x1 - (branches.length / 2) * spacing + LEFT_MARGIN * 2 + 10;
   const branchXEndpoint =
-    currentIndex * LEFT_MARGIN + 15 + (branches.length - 1) * spacing;
-  const branchXStartpoint = currentIndex * LEFT_MARGIN + 15;
+    x1 + ((branches.length + 1) / 2) * spacing - LEFT_MARGIN * 4 - 20;
 
   await ProgressLine({
     x1: branchXStartpoint,
@@ -210,7 +211,7 @@ const Branches = async ({
 
   await Promise.all(
     branches.map(async ({ id, type }, index) => {
-      const x = currentIndex * LEFT_MARGIN + 15 + index * spacing;
+      const x = x1 + (index - (branches.length - 1) / 2) * spacing;
       const y = y2 - 9;
       let endpoint;
 
