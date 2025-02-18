@@ -78,12 +78,6 @@ const SidebarChild = ({
   const Icon = sidebarItem.icon?.Element;
   const ExtraInterfaceToTitle = sidebarItem.extraInterfaceToTitle?.Element;
 
-  useEffect(() => {
-    if (sidebarItem.panel?.href && isKeySelected(itemKey)) {
-      chrome.tabs.update({ url: sidebarItem.panel.href });
-    }
-  }, [isKeySelected, itemKey, sidebarItem?.panel?.href]);
-
   return (
     <>
       {/* SidebarItem */}
