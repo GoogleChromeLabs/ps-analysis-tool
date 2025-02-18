@@ -35,4 +35,8 @@ export enum SIDEBAR_ITEMS_KEYS {
   FACILITATED_TESTING = 'facilitated-testing',
   WIKI = 'wiki',
   SETTINGS = 'settings',
+  STORAGE_ACCESS = 'storage-access',
+  FEDERATED_CREDENTIAL = 'federated-credential',
+  IP_PROTECTION = 'ip-protection',
+  PRIVATE_STATE_TOKENS = 'private-state-tokens',
 }

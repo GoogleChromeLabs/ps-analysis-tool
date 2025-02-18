@@ -13,8 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as BounceTracking } from './bounceTracking';
-export { default as Fingerprinting } from './fingerprinting';
-export { default as IPProtection } from './ipProtection';
-export { default as PrivateStateTokens } from './privateStateTokens';
-export { default as AntiCovertTracking } from './antiCovertTracking';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+
+const StorageAccess = () => {
+  return (
+    <div data-testid="storage-access-content" className="h-full w-full">
+      <LandingPage
+        title={I18n.getMessage('storageAccessAPI')}
+        psInfoKey={PSInfoKey.StorageAccess}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
+  );
+};
+
+export default StorageAccess;
