@@ -42,6 +42,8 @@ const ALLOWED_EVENTS = [
   'Page.frameAttached',
   'Page.frameNavigated',
   'Target.attachedToTarget',
+  'Storage.attributionReportingSourceRegistered',
+  'Storage.attributionReportingTriggerRegistered',
 ];
 
 let targets: chrome.debugger.TargetInfo[] = [];
@@ -85,6 +87,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             await chrome.debugger.sendCommand(
               childDebuggee,
               'Storage.setInterestGroupAuctionTracking',
+              { enable: true }
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Storage.setAttributionReportingTracking',
               { enable: true }
             );
 
