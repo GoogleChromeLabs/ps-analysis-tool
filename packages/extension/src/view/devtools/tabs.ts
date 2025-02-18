@@ -271,21 +271,6 @@ const TABS: SidebarItems = {
     },
     addDivider: true,
   },
-  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
-    title: () => 'Dashboard',
-    panel: {
-      Element: Dashboard,
-    },
-    icon: {
-      Element: DashboardIcon,
-    },
-    selectedIcon: {
-      Element: DashboardIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-    containerClassName: 'h-6',
-  },
   [SIDEBAR_ITEMS_KEYS.LEARNING]: {
     title: () => 'Learning',
     panel: {
@@ -381,6 +366,22 @@ const TABS: SidebarItems = {
         containerClassName: 'h-6',
       },
     },
+    containerClassName: 'h-6',
+    addDivider: true,
+  },
+  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
+    title: () => 'Dashboard',
+    panel: {
+      Element: Dashboard,
+    },
+    icon: {
+      Element: DashboardIcon,
+    },
+    selectedIcon: {
+      Element: DashboardIconWhite,
+    },
+    dropdownOpen: false,
+    children: {},
     containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
