@@ -33,6 +33,12 @@ import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
 
+type SourcesData =
+  | Protocol.Storage.AttributionReportingSourceRegistration
+  | Protocol.Storage.AttributionReportingTriggerRegistration;
+
+type Event = 'sourceRegistration' | 'triggerRegistration';
+
 class DataStore {
   /**
    * The cookie data of the tabs.
@@ -42,6 +48,11 @@ class DataStore {
       [cookieKey: string]: CookieData;
     };
   } = {};
+
+  /**
+   * The Attribution Reporting sources for the tab.
+   */
+  sources: Record<string, Record<Event, SourcesData[]>> = {};
 
   /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
@@ -166,6 +177,7 @@ class DataStore {
       popupOpenState: boolean;
       newUpdatesCA: number;
       newUpdatesPA: number;
+      newUpdatesARA: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
@@ -305,12 +317,14 @@ class DataStore {
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
+    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdatesCA: 0,
       newUpdatesPA: 0,
+      newUpdatesARA: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
@@ -464,6 +478,7 @@ class DataStore {
     delete this.tabs[tabId];
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
+    delete this.sources[tabId];
   }
 
   /**
@@ -501,6 +516,7 @@ class DataStore {
       ) {
         await this.processAndSendCookieData(tabId, overrideForInitialSync);
         await this.processAndSendAuctionData(tabId, overrideForInitialSync);
+        await this.processAndSendARAData(tabId, overrideForInitialSync);
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -628,6 +644,27 @@ class DataStore {
       },
     });
     this.tabs[tabId].newUpdatesPA = 0;
+  }
+
+  /**
+   * Processes and sends auction message to the extension for the specified tabId
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {boolean | undefined} overrideForInitialSync Override the condition.
+   */
+  async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
+    if (this.tabs[tabId].newUpdatesARA <= 0 && !overrideForInitialSync) {
+      return;
+    }
+
+    await chrome.runtime.sendMessage({
+      type: 'ARA_EVENTS',
+      payload: {
+        souresRegistration: this.sources[tabId].sourceRegistration,
+        triggerRegisteration: this.sources[tabId].triggerRegistration,
+        tabId,
+      },
+    });
+    this.tabs[tabId].newUpdatesARA = 0;
   }
 
   /**

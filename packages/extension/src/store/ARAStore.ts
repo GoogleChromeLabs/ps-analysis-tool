@@ -17,46 +17,34 @@
  * External dependencies
  */
 import Protocol from 'devtools-protocol';
+/**
+ * Internal dependencies
+ */
+import dataStore from './dataStore';
 
-type SourcesData =
-  | Protocol.Storage.AttributionReportingSourceRegistration
-  | Protocol.Storage.AttributionReportingTriggerRegistration;
-
-type Event = 'sourceRegistration' | 'triggerRegistration';
 class ARAStore {
-  sources: Record<string, Record<Event, SourcesData[]>>;
-
-  constructor() {
-    this.sources = {};
-  }
   processARASourcesRegistered(
     params: Protocol.Storage.AttributionReportingSourceRegistration,
     tabId: string
   ) {
-    if (!this.sources[tabId]) {
-      this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
-    }
-
-    if (this.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
-      this.sources[tabId]['sourceRegistration'].push(params);
+    if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
+      dataStore.sources[tabId].sourceRegistration.push(params);
     } else {
-      this.sources[tabId]['sourceRegistration'] = [params];
+      dataStore.sources[tabId].sourceRegistration = [params];
     }
+    dataStore.tabs[Number(tabId)].newUpdatesARA++;
   }
 
   processARATriggerRegistered(
     params: Protocol.Storage.AttributionReportingTriggerRegistration,
     tabId: string
   ) {
-    if (!this.sources[tabId]) {
-      this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
-    }
-
-    if (this.sources?.[tabId]?.['triggerRegistration']?.length > 0) {
-      this.sources[tabId]['triggerRegistration'].push(params);
+    if (dataStore.sources?.[tabId]?.triggerRegistration?.length > 0) {
+      dataStore.sources[tabId].triggerRegistration.push(params);
     } else {
-      this.sources[tabId]['triggerRegistration'] = [params];
+      dataStore.sources[tabId].triggerRegistration = [params];
     }
+    dataStore.tabs[Number(tabId)].newUpdatesARA++;
   }
 }
 
