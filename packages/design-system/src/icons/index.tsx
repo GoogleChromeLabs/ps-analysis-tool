@@ -100,3 +100,4 @@ export { default as DescriptionIcon } from './description.svg';
 export { default as Help } from './help.svg';
 export { default as LearningIcon } from './learning-icon.svg';
 export { default as DevGuideIcon } from './dev-guide-icon.svg';
+export { default as CancelIcon } from './cancel.svg';

@@ -32,9 +32,16 @@ export type TableData = (
   | NoBidsType[keyof NoBidsType]
   | AdsAndBiddersType[keyof AdsAndBiddersType]
   | ErroredOutUrlsData
+  | ClassificationResult
 ) & {
   highlighted?: boolean;
 };
+
+export interface ClassificationResult {
+  domain: string;
+  categories?: string[];
+  error?: string;
+}
 
 export type InfoType = number | string | boolean | Array<string | number> | [];
 

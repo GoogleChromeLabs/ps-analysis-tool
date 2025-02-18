@@ -57,8 +57,6 @@ export interface CurrentSiteData {
   visitedIndex: boolean;
 }
 
-export type AdUnitLiteral = 'div-200-1' | 'div-200-2' | 'div-200-3';
-
 const getRandomisedNumbers = (count: number, min: number, max: number) => {
   const randomNumbers = Array.from(
     { length: count },
@@ -196,6 +194,11 @@ export const transformBidEvent = (
     return bidEventsToBeReturned;
   }
 
+  const uniqueOwnerOrigins = new Set<string>();
+  interestGroups.forEach((interestGroup) => {
+    uniqueOwnerOrigins.add(interestGroup.ownerOrigin);
+  });
+
   const randomIndex = randomIntFromInterval(0, interestGroups.length - 1);
 
   const ownerOriginToSkip =
@@ -204,7 +207,7 @@ export const transformBidEvent = (
       : '';
 
   interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
-    if (ownerOriginToSkip === ownerOrigin) {
+    if (ownerOriginToSkip === ownerOrigin && uniqueOwnerOrigins.size > 1) {
       return;
     }
 
@@ -517,6 +520,7 @@ export const configuredAuctionEvents = (
 ) => {
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
+
   if (isMultiSeller) {
     sellersArray.push(
       websiteString,
@@ -687,6 +691,8 @@ export const configuredAuctionEvents = (
     bidCurrency: 'USD',
     winningBidder: 'DSP 1',
   } as AdsAndBiddersTypeData;
+
+  //console.log(receivedBids)
 
   return {
     auctionData,

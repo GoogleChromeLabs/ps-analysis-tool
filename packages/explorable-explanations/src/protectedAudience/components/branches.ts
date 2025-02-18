@@ -137,6 +137,7 @@ const Branches = async ({
       scrollToCoordinates(x, y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
+        typeOfBranches,
       });
       // eslint-disable-next-line consistent-return
       return nextTip;
@@ -255,6 +256,7 @@ const Branches = async ({
 
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
+    typeOfBranches,
   });
   // eslint-disable-next-line consistent-return
   return nextTip;

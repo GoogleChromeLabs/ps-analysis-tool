@@ -164,6 +164,8 @@ module.exports = {
     backgroundColor: {
       ...colors,
       primary: '#FFF',
+      'tomato-red': '#4E3534',
+      'baby-pink': '#FCEBEB',
       'google-blue': '#8AB4F8',
       'smurf-blue': '#1967D2',
       beteleguese: '#4285F4',
@@ -252,6 +254,8 @@ module.exports = {
       'charleston-green': '#292A2D',
       'outer-space': '#303942',
       'granite-gray': '#5F6369',
+      'blood-red': '#DE3730',
+      'bright-red': '#FF5449',
       gray: '#6E6E6E',
       'dark-charcoal': '#323232',
       'bright-navy-blue': '#1A73E8',
