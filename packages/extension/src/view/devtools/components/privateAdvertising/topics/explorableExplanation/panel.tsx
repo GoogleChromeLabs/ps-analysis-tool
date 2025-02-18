@@ -72,10 +72,17 @@ const Panel = ({
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const storageRef = useRef(PAstorage);
   const activeTabRef = useRef(activeTab);
+  const wasPreviousTabLegend = useRef(false);
 
   useEffect(() => {
     if (activeTab === 4) {
       return;
+    }
+
+    if (activeTabRef.current === activeTab) {
+      wasPreviousTabLegend.current = true;
+    } else {
+      wasPreviousTabLegend.current = false;
     }
 
     activeTabRef.current = activeTab;
@@ -106,7 +113,7 @@ const Panel = ({
   }, [PAstorage]);
 
   useEffect(() => {
-    if (activeTab === 4) {
+    if (activeTab === 4 || wasPreviousTabLegend.current) {
       return;
     }
 
@@ -171,7 +178,7 @@ const Panel = ({
   }, [setActiveTab, setTopicsTableData]);
 
   useEffect(() => {
-    if (activeTab === 4) {
+    if (activeTab === 4 || wasPreviousTabLegend.current) {
       return;
     }
 
