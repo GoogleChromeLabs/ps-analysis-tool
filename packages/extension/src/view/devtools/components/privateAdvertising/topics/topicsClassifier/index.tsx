@@ -59,7 +59,7 @@ const TopicsClassifier = () => {
 
     preprocessedHosts.forEach((host) => {
       const hostnameRegex = /^(?!:\/\/)([a-zA-Z0-9-_]{1,63}\.)+[a-zA-Z]{2,63}$/;
-      if (hostnameRegex.test(host)) {
+      if (!hostnameRegex.test(host)) {
         inputValidationErrors.push('Host "' + host + '" is invalid.');
       }
     });
