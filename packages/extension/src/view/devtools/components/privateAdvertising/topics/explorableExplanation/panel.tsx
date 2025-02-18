@@ -76,6 +76,7 @@ const Panel = ({
 
   useEffect(() => {
     if (activeTab === 4) {
+      setPlay(false);
       return;
     }
 
