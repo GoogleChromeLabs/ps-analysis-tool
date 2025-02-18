@@ -8238,7 +8238,7 @@
     "message": "The new cookie attribute, Partitioned, allows developers to opt a cookie into partitioned storage, with separate cookie jars per top-level site."
   },
   "storageAccessAPI": {
-    "message": "Storage Access"
+    "message": "Storage Access API"
   },
   "storageAccessAPIDescription": {
     "message": "Storage Access API allows iframes to request storage access permissions when access would otherwise be denied by browser settings."

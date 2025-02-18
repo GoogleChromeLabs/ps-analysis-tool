@@ -50,6 +50,10 @@ import {
   Settings as SettingsIcon,
   WebStoriesIcon,
   WebStoriesIconWhite,
+  TokenIcon,
+  FederatedIcon,
+  StorageIcon,
+  ProtectionIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -139,10 +143,16 @@ const TABS: SidebarItems = {
               Element: StorageAccess,
             },
             icon: {
-              Element: ChipsIcon,
+              Element: StorageIcon,
+              props: {
+                className: 'fill-gray',
+              },
             },
             selectedIcon: {
-              Element: ChipsIconWhite,
+              Element: StorageIcon,
+              props: {
+                className: 'fill-white',
+              },
             },
             children: {},
           },
@@ -165,10 +175,16 @@ const TABS: SidebarItems = {
               Element: FederatedCredential,
             },
             icon: {
-              Element: RelatedWebsiteSetsIcon,
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-gray',
+              },
             },
             selectedIcon: {
-              Element: RelatedWebsiteSetsIconWhite,
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-white',
+              },
             },
             children: {},
           },
@@ -270,10 +286,16 @@ const TABS: SidebarItems = {
               Element: IPProtection,
             },
             icon: {
-              Element: FingerPrintingIcon,
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-gray relative right-[2px]',
+              },
             },
             selectedIcon: {
-              Element: FingerPrintingIconWhite,
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-white relative right-[2px]',
+              },
             },
             children: {},
           },
@@ -310,10 +332,16 @@ const TABS: SidebarItems = {
               Element: PrivateStateTokens,
             },
             icon: {
-              Element: FingerPrintingIcon,
+              Element: TokenIcon,
+              props: {
+                className: 'fill-gray relative right-[3px]',
+              },
             },
             selectedIcon: {
-              Element: FingerPrintingIconWhite,
+              Element: TokenIcon,
+              props: {
+                className: 'fill-white relative right-[3px]',
+              },
             },
             children: {},
           },
