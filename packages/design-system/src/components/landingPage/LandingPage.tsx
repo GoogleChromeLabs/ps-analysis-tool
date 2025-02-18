@@ -44,6 +44,7 @@ export interface LandingPageProps {
   extraClasses?: string;
   showQuickLinks?: boolean;
   showSupportLink?: boolean;
+  storyUrl?: string;
 }
 
 const LandingPage = ({

@@ -26,29 +26,28 @@ const content = [
     title: () => I18n.getMessage('topics'),
     description: () => I18n.getMessage('topicsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+    storyUrl: 'https://privacysandbox-stories.com/web-stories/the-topics-api/',
   },
   {
     title: () => I18n.getMessage('protectedAudience'),
     description: () => I18n.getMessage('protectedAudienceDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/the-protected-audience-api/',
   },
   {
     title: () => I18n.getMessage('attributionReporting'),
     description: () => I18n.getMessage('attributionReportingDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/the-attribution-reporting-api/',
   },
   {
     title: () => I18n.getMessage('privateAggregation'),
     description: () => I18n.getMessage('privateAggregationDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/private-aggregation-api/',
   },
 ];
 

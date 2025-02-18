@@ -41,14 +41,14 @@ const content = [
     description: () => I18n.getMessage('userAgentReductionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/user-agent-reduction/',
   },
   {
     title: () => I18n.getMessage('privateStateTokens'),
     description: () => I18n.getMessage('privateStateTokensDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/private-state-tokens/',
   },
 ];
 
