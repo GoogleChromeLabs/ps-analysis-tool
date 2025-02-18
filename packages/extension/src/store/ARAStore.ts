@@ -17,6 +17,7 @@
  * External dependencies
  */
 import Protocol from 'devtools-protocol';
+import type { SourcesRegistration } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -28,6 +29,20 @@ class ARAStore {
     tabId: string
   ) {
     if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
+      let eventFired = false;
+
+      dataStore.sources[tabId].sourceRegistration.forEach((event) => {
+        if (
+          (event as SourcesRegistration).eventId === params.registration.eventId
+        ) {
+          eventFired = true;
+        }
+      });
+
+      if (eventFired) {
+        return;
+      }
+
       dataStore.sources[tabId].sourceRegistration.push({
         ...params.registration,
         result: params.result,
