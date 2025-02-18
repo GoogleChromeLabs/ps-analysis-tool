@@ -279,7 +279,7 @@ const TABS: SidebarItems = {
     icon: {
       Element: LearningIcon,
       props: {
-        className: 'fill-granite-gray',
+        className: 'fill-granite-gray dark:fill-bright-gray',
       },
     },
     selectedIcon: {
