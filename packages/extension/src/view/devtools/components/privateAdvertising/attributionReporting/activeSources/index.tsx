@@ -16,9 +16,6 @@
 /**
  * External dependencies.
  */
-/**
- * External dependencies.
- */
 import React, { useMemo, useState } from 'react';
 import { noop, type singleAuctionEvent } from '@google-psat/common';
 import {
@@ -32,7 +29,7 @@ import { Resizable } from 're-resizable';
 /**
  * Internal dependencies.
  */
-import dummyData from './dummyData.json';
+import { useAttributionReporting } from '../../../../stateProviders/attributionReporting';
 
 const calculateRegistrationDate = (timeStamp: number) => {
   const date = new Date(timeStamp * 1000); // Convert to milliseconds.
@@ -77,7 +74,7 @@ const ActiveSources = () => {
       {
         header: 'Destinations',
         accessorKey: 'destinationSites',
-        cell: (info) => info.join(' '),
+        cell: (info) => info?.join(' '),
         widthWeightagePercentage: 20,
       },
       {
@@ -124,6 +121,10 @@ const ActiveSources = () => {
     []
   );
 
+  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
+    sourcesRegistration: state.sourcesRegistration,
+  }));
+
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -140,18 +141,17 @@ const ActiveSources = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
-            data={dummyData}
+            data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={noop}
             onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
-            getRowObjectKey={(row: TableRow) => row.originalData.eventId}
+            getRowObjectKey={(row: TableRow) => row.originalData.index}
           >
             <Table
               selectedKey={
                 // @ts-ignore
-                (selectedJSON?.auctionConfig?.seller || '') +
-                  selectedJSON?.time || ''
+                selectedJSON?.index
               }
               hideSearch={true}
               minWidth="50rem"

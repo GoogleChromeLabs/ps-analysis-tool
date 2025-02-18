@@ -24,25 +24,43 @@ import dataStore from './dataStore';
 
 class ARAStore {
   processARASourcesRegistered(
-    params: Protocol.Storage.AttributionReportingSourceRegistration,
+    params: Protocol.Storage.AttributionReportingSourceRegisteredEvent,
     tabId: string
   ) {
     if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
-      dataStore.sources[tabId].sourceRegistration.push(params);
+      dataStore.sources[tabId].sourceRegistration.push({
+        ...params.registration,
+        result: params.result,
+        index: dataStore.sources[tabId].sourceRegistration.length,
+      });
     } else {
-      dataStore.sources[tabId].sourceRegistration = [params];
+      dataStore.sources[tabId].sourceRegistration = [
+        { ...params.registration, result: params.result, index: 0 },
+      ];
     }
     dataStore.tabs[Number(tabId)].newUpdatesARA++;
   }
 
   processARATriggerRegistered(
-    params: Protocol.Storage.AttributionReportingTriggerRegistration,
+    params: Protocol.Storage.AttributionReportingTriggerRegisteredEvent,
     tabId: string
   ) {
     if (dataStore.sources?.[tabId]?.triggerRegistration?.length > 0) {
-      dataStore.sources[tabId].triggerRegistration.push(params);
+      dataStore.sources[tabId].triggerRegistration.push({
+        ...params.registration,
+        aggregatable: params.aggregatable,
+        eventLevel: params.eventLevel,
+        index: dataStore.sources[tabId].sourceRegistration.length,
+      });
     } else {
-      dataStore.sources[tabId].triggerRegistration = [params];
+      dataStore.sources[tabId].triggerRegistration = [
+        {
+          ...params.registration,
+          aggregatable: params.aggregatable,
+          eventLevel: params.eventLevel,
+          index: 0,
+        },
+      ];
     }
     dataStore.tabs[Number(tabId)].newUpdatesARA++;
   }

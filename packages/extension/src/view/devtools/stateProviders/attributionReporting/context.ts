@@ -16,13 +16,16 @@
 /**
  * External dependencies.
  */
-import { createContext } from '@google-psat/common';
-import type Protocol from 'devtools-protocol';
+import {
+  createContext,
+  type SourcesRegistration,
+  type TrrigerRegistration,
+} from '@google-psat/common';
 
 export interface AttributionReportingContextType {
   state: {
-    sourcesRegistration: Protocol.Storage.AttributionReportingSourceRegistration[];
-    triggerRegistration: Protocol.Storage.AttributionReportingTriggerRegistration[];
+    sourcesRegistration: SourcesRegistration[];
+    triggerRegistration: TrrigerRegistration[];
   };
 }
 

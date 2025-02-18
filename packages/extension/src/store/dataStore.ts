@@ -21,6 +21,8 @@ import type {
   CookieDatabase,
   singleAuctionEvent,
   auctionData,
+  Event,
+  SourcesData,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -32,12 +34,6 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
-
-type SourcesData =
-  | Protocol.Storage.AttributionReportingSourceRegistration
-  | Protocol.Storage.AttributionReportingTriggerRegistration;
-
-type Event = 'sourceRegistration' | 'triggerRegistration';
 
 class DataStore {
   /**
@@ -313,6 +309,7 @@ class DataStore {
       tabsData: this.tabsData,
       tabs: this.tabs,
       auctionEvents: this.auctionEvents,
+      sources: this.sources,
     };
 
     this.tabsData[tabId] = {};
@@ -660,7 +657,7 @@ class DataStore {
       type: 'ARA_EVENTS',
       payload: {
         souresRegistration: this.sources[tabId].sourceRegistration,
-        triggerRegisteration: this.sources[tabId].triggerRegistration,
+        triggerRegistration: this.sources[tabId].triggerRegistration,
         tabId,
       },
     });

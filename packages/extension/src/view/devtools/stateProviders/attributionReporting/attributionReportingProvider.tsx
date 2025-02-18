@@ -23,12 +23,12 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
  */
 import Context, { type AttributionReportingContextType } from './context';
-import { isEqual } from 'lodash-es';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [sourcesRegistration, setSourcesRegistration] = useState<
@@ -44,7 +44,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       type: string;
       payload: {
         tabId: number;
-        sourcesRegistration: AttributionReportingContextType['state']['sourcesRegistration'];
+        souresRegistration: AttributionReportingContextType['state']['sourcesRegistration'];
         triggerRegistration: AttributionReportingContextType['state']['triggerRegistration'];
       };
     }) => {
@@ -65,20 +65,33 @@ const Provider = ({ children }: PropsWithChildren) => {
       const incomingMessageType = message.type;
 
       if (incomingMessageType === 'ARA_EVENTS') {
-        if (message.payload.sourcesRegistration) {
+        if (message.payload.souresRegistration) {
           setSourcesRegistration((prevState) => {
-            if (isEqual(prevState, message.payload.sourcesRegistration)) {
+            if (isEqual(prevState, message.payload.souresRegistration)) {
               return prevState;
             }
-            return [...prevState, ...message.payload.sourcesRegistration];
+
+            const dataToBeReturned = [
+              ...prevState,
+              ...message.payload.souresRegistration,
+            ];
+
+            return dataToBeReturned;
           });
         }
+
         if (message.payload.triggerRegistration) {
           setTriggerRegistration((prevState) => {
             if (isEqual(prevState, message.payload.triggerRegistration)) {
               return prevState;
             }
-            return [...prevState, ...message.payload.triggerRegistration];
+
+            const dataToBeReturned = [
+              ...prevState,
+              ...message.payload.triggerRegistration,
+            ];
+
+            return dataToBeReturned;
           });
         }
       }
