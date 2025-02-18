@@ -71,12 +71,7 @@ const Provider = ({ children }: PropsWithChildren) => {
               return prevState;
             }
 
-            const dataToBeReturned = [
-              ...prevState,
-              ...message.payload.souresRegistration,
-            ];
-
-            return dataToBeReturned;
+            return message.payload.souresRegistration;
           });
         }
 
@@ -86,12 +81,7 @@ const Provider = ({ children }: PropsWithChildren) => {
               return prevState;
             }
 
-            const dataToBeReturned = [
-              ...prevState,
-              ...message.payload.triggerRegistration,
-            ];
-
-            return dataToBeReturned;
+            return message.payload.triggerRegistration;
           });
         }
       }
