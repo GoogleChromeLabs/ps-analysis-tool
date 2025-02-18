@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
-import { noop, type singleAuctionEvent } from '@google-psat/common';
+import {
+  noop,
+  type singleAuctionEvent,
+  type SourcesRegistration,
+} from '@google-psat/common';
 import {
   Table,
   TableProvider,
@@ -53,7 +57,7 @@ const calculateExpiryDate = (registrationTime: number, expiryTime: number) => {
 };
 
 const ActiveSources = () => {
-  const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
+  const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
 
@@ -74,7 +78,7 @@ const ActiveSources = () => {
       {
         header: 'Destinations',
         accessorKey: 'destinationSites',
-        cell: (info) => info?.join(' '),
+        cell: (info) => (info as string[])?.join(' '),
         widthWeightagePercentage: 20,
       },
       {
@@ -95,7 +99,10 @@ const ActiveSources = () => {
         header: 'Expiry',
         accessorKey: 'expiry',
         cell: (info, details) => {
-          return calculateExpiryDate(details?.time, info);
+          return calculateExpiryDate(
+            (details as SourcesRegistration)?.time,
+            Number(info)
+          );
         },
         sortingComparator: (a, b) => {
           const aString = (a as string).toLowerCase().trim();
@@ -145,14 +152,13 @@ const ActiveSources = () => {
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={noop}
-            onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
-            getRowObjectKey={(row: TableRow) => row.originalData.index}
+            onRowClick={(row) => setSelectedJSON(row as SourcesRegistration)}
+            getRowObjectKey={(row: TableRow) =>
+              (row.originalData as SourcesRegistration).index.toString()
+            }
           >
             <Table
-              selectedKey={
-                // @ts-ignore
-                selectedJSON?.index
-              }
+              selectedKey={selectedJSON?.index.toString()}
               hideSearch={true}
               minWidth="50rem"
             />
