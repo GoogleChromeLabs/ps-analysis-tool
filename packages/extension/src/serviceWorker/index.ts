@@ -27,6 +27,7 @@ import './chromeListeners';
 import dataStore from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
+import ARAStore from '../store/ARAStore';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -106,6 +107,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               childDebuggee,
               'Audits.enable',
               {}
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Storage.setAttributionReportingLocalTestingMode',
+              {
+                enabled: true,
+              }
             );
 
             await chrome.debugger.sendCommand(childDebuggee, 'Page.enable', {});
@@ -518,6 +527,22 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
         }
         return;
+      }
+
+      if (method === 'Storage.attributionReportingSourceRegistered' && params) {
+        ARAStore.processARASourcesRegistered(
+          params as Protocol.Storage.AttributionReportingSourceRegistration,
+          tabId
+        );
+      }
+      if (
+        method === 'Storage.attributionReportingTriggerRegistered' &&
+        params
+      ) {
+        ARAStore.processARATriggerRegistered(
+          params as Protocol.Storage.AttributionReportingTriggerRegistration,
+          tabId
+        );
       }
     } catch (error) {
       //Fail silently.

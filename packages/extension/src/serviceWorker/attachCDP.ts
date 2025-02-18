@@ -54,6 +54,14 @@ export default function attachCDP(target: { [key: string]: number | string }) {
         }
       );
 
+      await chrome.debugger.sendCommand(
+        target,
+        'Storage.setAttributionReportingLocalTestingMode',
+        {
+          enabled: true,
+        }
+      );
+
       await chrome.debugger.sendCommand(target, 'Page.enable');
 
       await chrome.debugger.sendCommand(target, 'Network.enable');
