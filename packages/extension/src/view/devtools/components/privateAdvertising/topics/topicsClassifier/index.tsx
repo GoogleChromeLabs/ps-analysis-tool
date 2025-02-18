@@ -118,7 +118,7 @@ const TopicsClassifier = () => {
       {
         header: 'Categories',
         accessorKey: 'categories',
-        cell: (info) => (info as string[]).join(','),
+        cell: (info) => (info as string[]).join(', '),
       },
     ],
     []
