@@ -16,10 +16,111 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import type { TriggerRegistration } from '@google-psat/common';
+import {
+  type TableColumn,
+  TableProvider,
+  type TableRow,
+  Table,
+} from '@google-psat/design-system';
+import { noop } from 'lodash-es';
+import { Resizable } from 're-resizable';
+import React, { useMemo, useState } from 'react';
+
+/**
+ * Internal dependencies
+ */
+import { useAttributionReporting } from '../../../../stateProviders';
+import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 
 const TriggerRegistrations = () => {
-  return <div></div>;
+  const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
+    null
+  );
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Destination',
+        accessorKey: 'sourceOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Reporting Origin',
+        accessorKey: 'reportingOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Registration Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          calculateRegistrationDate((details as TriggerRegistration)?.time),
+        enableHiding: false,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Source Type',
+        accessorKey: 'type',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Event Level Result',
+        accessorKey: 'eventLevel',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Aggregetable Result',
+        accessorKey: 'aggregatable',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+    ],
+    []
+  );
+
+  const { triggerRegistration } = useAttributionReporting(({ state }) => ({
+    triggerRegistration: state.triggerRegistration,
+  }));
+
+  return (
+    <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '80%',
+        }}
+        enable={{
+          bottom: true,
+        }}
+        minHeight="20%"
+        maxHeight="90%"
+        className="w-full flex flex-col"
+      >
+        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
+          <TableProvider
+            data={triggerRegistration}
+            tableColumns={tableColumns}
+            tableSearchKeys={undefined}
+            onRowContextMenu={noop}
+            onRowClick={(row) => setSelectedJSON(row as TriggerRegistration)}
+            getRowObjectKey={(row: TableRow) =>
+              (row.originalData as TriggerRegistration).index.toString()
+            }
+          >
+            <Table
+              selectedKey={selectedJSON?.index.toString()}
+              hideSearch={true}
+              minWidth="50rem"
+            />
+          </TableProvider>
+        </div>
+      </Resizable>
+    </div>
+  );
 };
 
 export default TriggerRegistrations;

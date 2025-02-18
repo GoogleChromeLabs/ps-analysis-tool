@@ -34,22 +34,7 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import { useAttributionReporting } from '../../../../stateProviders/attributionReporting';
-
-const calculateRegistrationDate = (timeStamp: number) => {
-  const date = new Date(timeStamp * 1000); // Convert to milliseconds.
-
-  const formattedDate = date.toLocaleString('en-US', {
-    month: '2-digit',
-    day: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  });
-
-  return formattedDate;
-};
+import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 
 const calculateExpiryDate = (registrationTime: number, expiryTime: number) => {
   const expiryTimestamp = registrationTime + expiryTime; // Add expiry duration

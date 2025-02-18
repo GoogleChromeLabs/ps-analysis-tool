@@ -25,10 +25,11 @@ export type SourcesRegistration =
     result: string;
     index: number;
   };
-export type TrrigerRegistration =
+export type TriggerRegistration =
   Protocol.Storage.AttributionReportingTriggerRegistration & {
     eventLevel: Protocol.Storage.AttributionReportingEventLevelResult;
     aggregatable: Protocol.Storage.AttributionReportingAggregatableResult;
     index: number;
+    time: number;
   };
-export type SourcesData = SourcesRegistration | TrrigerRegistration;
+export type SourcesData = SourcesRegistration | TriggerRegistration;

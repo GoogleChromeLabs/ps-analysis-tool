@@ -16,10 +16,7 @@
 /**
  * External dependencies.
  */
-import type {
-  singleAuctionEvent,
-  SourcesRegistration,
-} from '@google-psat/common';
+import type { SourcesRegistration } from '@google-psat/common';
 import {
   type TableColumn,
   TableProvider,
@@ -34,22 +31,7 @@ import React, { useMemo, useState } from 'react';
  * Internal dependencies
  */
 import { useAttributionReporting } from '../../../../stateProviders';
-
-const calculateRegistrationDate = (timeStamp: number) => {
-  const date = new Date(timeStamp * 1000); // Convert to milliseconds.
-
-  const formattedDate = date.toLocaleString('en-US', {
-    month: '2-digit',
-    day: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  });
-
-  return formattedDate;
-};
+import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 
 const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
@@ -74,7 +56,7 @@ const SourceRegistrations = () => {
         header: 'Registration Time',
         accessorKey: 'time',
         cell: (_, details) =>
-          calculateRegistrationDate((details as singleAuctionEvent)?.time),
+          calculateRegistrationDate((details as SourcesRegistration)?.time),
         enableHiding: false,
         widthWeightagePercentage: 15,
       },
