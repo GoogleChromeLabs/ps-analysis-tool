@@ -1406,9 +1406,6 @@
   "PSChips": {
     "message": "A new way to enable 3rd party developers to access cookies on sites where their services are embedded on a per-site basis (meaning a different cookie on each site), restricting the ability to track users across sites."
   },
-  "StorageAccess": {
-    "message": "A new way to enable 3rd party developers to access cookies on sites where their services are embedded on a per-site basis (meaning a different cookie on each site), restricting the ability to track users across sites."
-  },
   "PSFencedFrames": {
     "message": "A fenced frame (<fencedframe>) is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context."
   },
