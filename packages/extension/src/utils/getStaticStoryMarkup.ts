@@ -411,7 +411,6 @@ export const getStaticStoryMarkup = () => {
             color: #fff;
             font-weight: 700;
             font-family: "Poppins", sans-serif;
-            text-transform: uppercase;
             font-size: 24px;
             line-height: 26px;
         }

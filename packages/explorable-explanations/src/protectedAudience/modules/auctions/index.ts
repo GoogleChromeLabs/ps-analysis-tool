@@ -32,6 +32,7 @@ import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
 import { getCoordinateValues } from '../../utils/getCoordinateValues';
+import { MULTI_SELLER_CONFIG } from '../flowConfig';
 export type Auction = {
   setupAuctions: () => void;
   setUp: (index: number) => void;
@@ -117,7 +118,14 @@ const auction: Auction = {
           if (props?.ssp) {
             ssp = props.ssp;
           } else {
-            if (app.isMultiSeller && props.title === 'scoreAd()') {
+            if (
+              app.isMultiSeller &&
+              [
+                MULTI_SELLER_CONFIG.SCORE_AD.title,
+                MULTI_SELLER_CONFIG.REPORT_WIN.title,
+                MULTI_SELLER_CONFIG.REPORT_RESULT.title,
+              ].includes(props.title)
+            ) {
               ssp = 'https://www.' + config.timeline.circles[index].website;
             }
           }

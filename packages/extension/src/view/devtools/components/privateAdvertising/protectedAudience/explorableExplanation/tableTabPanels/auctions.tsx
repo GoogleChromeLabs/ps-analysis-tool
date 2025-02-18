@@ -31,18 +31,26 @@ import type {
 import AdUnitsPanel from '../../adUnits/panel';
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from '../../auctions/container';
-import type { AdUnitLiteral } from '../auctionEventTransformers';
 
 interface AuctionsProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids: Record<string, singleAuctionEvent[]>;
     noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;
+  isMultiSeller?: boolean;
+  selectedAdUnit?: string;
+  selectedDateTime?: string;
 }
 
-const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
+const Auctions = ({
+  auctionEvents,
+  customAdsAndBidders,
+  isMultiSeller = false,
+  selectedAdUnit,
+  selectedDateTime,
+}: AuctionsProps) => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
@@ -91,6 +99,9 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
 
   return (
     <AuctionsContainer
+      selectedAdUnit={selectedAdUnit}
+      selectedDateTime={selectedDateTime}
+      isMultiSeller={isMultiSeller}
       auctionEvents={auctionEvents}
       sidebarData={sidebarData}
       customAdsAndBidders={customAdsAndBidders}
