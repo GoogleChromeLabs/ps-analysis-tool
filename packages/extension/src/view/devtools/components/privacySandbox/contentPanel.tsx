@@ -64,7 +64,6 @@ const ContentPanel = () => {
             <div className="flex gap-6 justify-center mt-5">
               <Link
                 href={addUTMParams('https://privacysandbox.com')}
-                target="__blank"
                 className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex"
               >
                 <span>Learn More</span>
