@@ -151,17 +151,27 @@ body {
   position: relative;
 }
 
-#bubble-container {
+/* bubble wrapper */
+#bubble-container-div {
   position: sticky;
+  top: 5px;
+  left: 5px;
+  z-index: 4;
+  height: 100%;
+  width: 100%;
   pointer-events: none;
-  top: 0px;
-  left: 0px;
 }
 
-.minified-bubble-container {
-  position: sticky;
-  top: 10px;
-  left: 10px;
+#bubble-container-div.expanded {
+  backdrop-filter: blur(1px);
+  z-index: 4;
+}
+
+/* bubble element */
+#minified-bubble-container {
+  position: absolute;
+  top: 5px;
+  left: 5px;
   height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -172,34 +182,10 @@ body {
   align-items: center;
   justify-content: center;
   transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+  pointer-events: auto;
 }
 
-.circle-svg:hover:active {
-  cursor: pointer;
-}
-
-.text-class {
-  pointer-events: none;
-}
-
-.svg {
-  cursor: pointer;
-}
-
-.circle-svg {
-  transition: transform 0.2s;
-}
-
-.circle-svg:hover {
-  transform: scale(1.05);
-  cursor: pointer;
-}
-
-text {
-  cursor: pointer;
-}
-
-.minified-bubble-container.expanded {
+#minified-bubble-container.expanded {
   position: absolute;
   display: block;
   top: var(--expandedBubbleY);
@@ -248,17 +234,27 @@ text {
   display: flex;
 }
 
-#bubble-container-div {
-  position: sticky;
-  top: 5px;
-  left: 5px;
-  z-index: 4;
-  pointer-events: none;
-  height: 100%;
-  width: 100%;
+.circle-svg:hover:active {
+  cursor: pointer;
 }
 
-#bubble-container-div.bubble-container.expanded {
-  backdrop-filter: blur(1px);
-  z-index: 4;
+.text-class {
+  pointer-events: none;
+}
+
+.svg {
+  cursor: pointer;
+}
+
+.circle-svg {
+  transition: transform 0.2s;
+}
+
+.circle-svg:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+text {
+  cursor: pointer;
 }

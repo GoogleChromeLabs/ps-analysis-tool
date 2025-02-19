@@ -295,8 +295,8 @@ const Panel = ({
 
       if (div) {
         const { visibleWidth, visibleHeight, newSize } = getDivDimensions();
-        const centerX = visibleWidth / 2 - newSize;
-        const centerY = visibleHeight / 4 - newSize / 4;
+        const centerX = visibleWidth / 2 - newSize / 2;
+        const centerY = visibleHeight / 2 - newSize / 2;
 
         setExpandedBubbleX(centerX);
         setExpandedBubbleY(centerY);
