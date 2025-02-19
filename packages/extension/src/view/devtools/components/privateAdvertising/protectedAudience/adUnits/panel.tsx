@@ -25,12 +25,17 @@ import type {
   NoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
-import type { AdUnitLiteral } from '../explorableExplanation';
+
+/**
+ * Internal dependencies.
+ */
 import EvaluationEnvironment from '../evaluationEnvironment';
+
+type DummyReceivedBids = Record<string, ReceivedBids[]>;
 
 interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
-  receivedBids: Record<AdUnitLiteral, ReceivedBids[]>;
+  receivedBids: DummyReceivedBids | ReceivedBids[];
   noBids: NoBidsType;
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit: string | null;
@@ -54,7 +59,10 @@ const AdUnitsPanel = ({
           <AdMatrix
             adsAndBidders={adsAndBidders}
             receivedBids={Object.keys(receivedBids ?? {})
-              .map((key: string) => receivedBids?.[key as AdUnitLiteral] ?? [])
+              .map(
+                (key: string) =>
+                  (receivedBids as DummyReceivedBids)?.[key as string] ?? []
+              )
               .flat()}
             noBids={noBids}
           />

@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "customExports": {
     ".": {
-      "default": "./src/index.js"
+      "default": "./src/index.ts"
     }
   },
   "exports": {
@@ -34,5 +34,9 @@
     "just-throttle": "^4.2.0",
     "p5": "^1.11.0",
     "queue": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/p5": "^1.7.6"
   }
 }

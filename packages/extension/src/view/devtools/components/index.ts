@@ -16,10 +16,9 @@
 export * from './antiCovertTracking';
 export * from './privateAdvertising';
 export * from './siteBoundaries';
+export * from './learning';
 export { default as Cookies } from './cookies';
 export { default as PrivacySandbox } from './privacySandbox';
-export { default as Wiki } from './wiki';
 export { default as Settings } from './settings';
 export { default as Layout } from './layout';
 export { default as Dashboard } from './dashboard';
-export { default as WebStories } from './webStories';

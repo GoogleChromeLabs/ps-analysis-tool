@@ -105,6 +105,7 @@ const LearnMoreDropdown = ({
                 key={index}
                 link={
                   value?.startsWith('https://developers.google.com') ||
+                  value?.startsWith('https://developer.mozilla.org') ||
                   value?.startsWith('https://www.youtube.com') ||
                   value?.startsWith('https://youtu.be/')
                     ? addUTMParams(value)

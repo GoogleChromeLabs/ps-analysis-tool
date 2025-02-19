@@ -27,6 +27,10 @@ export enum PSInfoKey {
   'RelatedWebsiteSets' = 'related-website-sets',
   'Chips' = 'chips',
   'PrivateAggregation' = 'private-aggregation',
+  'StorageAccess' = 'storage-access',
+  'FedCM' = 'fedcm',
+  'IPProtection' = 'ip-protection',
+  'PrivateStateTokens' = 'private-state-tokens',
 }
 
 export type PSInfoKeyType = (typeof PSInfoKey)[keyof typeof PSInfoKey];
