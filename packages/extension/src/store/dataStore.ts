@@ -360,6 +360,7 @@ class DataStore {
     delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
+    delete this.sources[tabId];
   }
 
   /**
@@ -430,6 +431,7 @@ class DataStore {
     this.requestIdToCDPURLMapping[tabId] = {};
     this.frameIdToResourceMap[tabId] = {};
     this.unParsedRequestHeadersForPA[tabId] = {};
+    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
     //@ts-ignore
     globalThis.PSATAdditionalData = {
       unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,

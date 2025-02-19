@@ -17,40 +17,34 @@
  * External dependencies
  */
 import Protocol from 'devtools-protocol';
-import type { SourcesRegistration } from '@google-psat/common';
 /**
  * Internal dependencies
  */
 import dataStore from './dataStore';
+import convertKeysToCamelCase from './utils/convertKeysToCamelCase';
 
 class ARAStore {
   processARASourcesRegistered(
     params: Protocol.Storage.AttributionReportingSourceRegisteredEvent,
     tabId: string
   ) {
+    const sourceRegistrationData = convertKeysToCamelCase(
+      params
+    ) as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
+
     if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
-      let eventFired = false;
-
-      dataStore.sources[tabId].sourceRegistration.forEach((event) => {
-        if (
-          (event as SourcesRegistration).eventId === params.registration.eventId
-        ) {
-          eventFired = true;
-        }
-      });
-
-      if (eventFired) {
-        return;
-      }
-
       dataStore.sources[tabId].sourceRegistration.push({
-        ...params.registration,
-        result: params.result,
+        ...sourceRegistrationData.registration,
+        result: sourceRegistrationData.result,
         index: dataStore.sources[tabId].sourceRegistration.length,
       });
     } else {
       dataStore.sources[tabId].sourceRegistration = [
-        { ...params.registration, result: params.result, index: 0 },
+        {
+          ...sourceRegistrationData.registration,
+          result: sourceRegistrationData.result,
+          index: 0,
+        },
       ];
     }
     dataStore.tabs[Number(tabId)].newUpdatesARA++;
@@ -60,9 +54,15 @@ class ARAStore {
     params: Protocol.Storage.AttributionReportingTriggerRegisteredEvent,
     tabId: string
   ) {
+    const triggerRegistrationData = this.addNecessaryFields(
+      convertKeysToCamelCase(
+        params.registration
+      ) as Protocol.Storage.AttributionReportingTriggerRegistration
+    );
+
     if (dataStore.sources?.[tabId]?.triggerRegistration?.length > 0) {
       dataStore.sources[tabId].triggerRegistration.push({
-        ...params.registration,
+        ...triggerRegistrationData,
         aggregatable: params.aggregatable,
         eventLevel: params.eventLevel,
         index: dataStore.sources[tabId].triggerRegistration.length,
@@ -72,7 +72,7 @@ class ARAStore {
     } else {
       dataStore.sources[tabId].triggerRegistration = [
         {
-          ...params.registration,
+          ...triggerRegistrationData,
           aggregatable: params.aggregatable,
           eventLevel: params.eventLevel,
           index: 0,
@@ -82,6 +82,31 @@ class ARAStore {
       ];
     }
     dataStore.tabs[Number(tabId)].newUpdatesARA++;
+  }
+
+  addNecessaryFields(
+    triggerRegistrationData: Protocol.Storage.AttributionReportingTriggerRegistration
+  ): Protocol.Storage.AttributionReportingTriggerRegistration {
+    const reformedData = triggerRegistrationData;
+    if (!triggerRegistrationData) {
+      return reformedData;
+    }
+    if (!reformedData?.aggregatableDebugReportingConfig) {
+      reformedData.aggregatableDebugReportingConfig = {
+        keyPiece: '0X0',
+        debugData: [],
+      };
+      reformedData.debugReporting = false;
+    }
+    if (!reformedData?.aggregatableFilteringIdMaxBytes) {
+      reformedData.aggregatableFilteringIdMaxBytes = 1;
+    }
+
+    if (!reformedData?.aggregatableFilteringIdMaxBytes) {
+      reformedData.aggregatableFilteringIdMaxBytes = 1;
+    }
+
+    return reformedData;
   }
 }
 
