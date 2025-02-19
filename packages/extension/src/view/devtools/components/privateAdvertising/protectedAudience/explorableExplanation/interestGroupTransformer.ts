@@ -64,7 +64,7 @@ export const transformInterestGroup = (site: string) => {
 
     interestGroup.details.expirationTime =
       new Date(
-        interestGroup.time + 10 * 60 * 60 * 1000 + index * 1000
+        interestGroup.time * 1000 + 10 * 60 * 60 * 1000 + index * 1000
       ).getTime() / 1000;
 
     return interestGroup;
