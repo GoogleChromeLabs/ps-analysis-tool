@@ -18,7 +18,7 @@
  */
 import React, { useCallback } from 'react';
 
-interface LinkProps {
+interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
   children: React.ReactElement | string;
 }
