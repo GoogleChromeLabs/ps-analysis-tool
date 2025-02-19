@@ -472,7 +472,7 @@ const bubbles: Bubbles = {
 
     if (app.bubbleContainerDiv) {
       app.bubbleContainerDiv.classList.toggle('expanded', true);
-      app.bubbleContainerDiv.style.width = '100%';
+      // app.bubbleContainerDiv.style.width = '100%';
     }
 
     if (app.closeButton) {
@@ -516,7 +516,7 @@ const bubbles: Bubbles = {
 
     if (app.bubbleContainerDiv) {
       app.bubbleContainerDiv.classList.toggle('expanded', false);
-      app.bubbleContainerDiv.style.width = 'fit-content';
+      // app.bubbleContainerDiv.style.width = 'fit-content';
     }
 
     if (app.closeButton) {

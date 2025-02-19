@@ -211,24 +211,12 @@ text {
   backdrop-filter: blur(10px);
 }
 
-.bubble-container {
-  position: sticky;
-  pointer-events: auto;
-}
-
-.bubble-container.expanded {
-  position: absolute;
-  backdrop-filter: blur(1px);
-  z-index: 4;
-  height: 100vh;
-  width: 100vw;
-}
-
 #close-button {
   position: absolute;
   top: 10px;
   cursor: pointer;
   display: none;
+  pointer-events: auto;
 }
 
 #open-button {
@@ -237,6 +225,7 @@ text {
   left: 50px;
   cursor: pointer;
   display: none;
+  pointer-events: auto;
 }
 
 #count-display {
@@ -260,7 +249,16 @@ text {
 }
 
 #bubble-container-div {
-  top: 0px;
-  left: 0px;
+  position: sticky;
+  top: 5px;
+  left: 5px;
+  z-index: 4;
+  pointer-events: none;
+  height: 100%;
+  width: 100%;
+}
+
+#bubble-container-div.bubble-container.expanded {
+  backdrop-filter: blur(1px);
   z-index: 4;
 }

@@ -298,8 +298,8 @@ const Panel = ({
         const centerX = visibleWidth / 2 - newSize;
         const centerY = visibleHeight / 4 - newSize / 4;
 
-        setExpandedBubbleX(div.scrollLeft + centerX);
-        setExpandedBubbleY(div.scrollTop + centerY);
+        setExpandedBubbleX(centerX);
+        setExpandedBubbleY(centerY);
       }
     }
   }, [getDivDimensions, isBubbleExpanded]);
