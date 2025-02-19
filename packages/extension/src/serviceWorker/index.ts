@@ -415,9 +415,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             },
             tabId
           );
-          dataStore.sources[tabId].sourceRegistration.push(
-            JSON.parse(headers?.['attribution-reporting-register-source'])
-          );
         }
 
         let finalFrameId = frameId;

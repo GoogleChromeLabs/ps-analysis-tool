@@ -29,20 +29,20 @@ class ARAStore {
     tabId: string
   ) {
     const sourceRegistrationData = convertKeysToCamelCase(
-      params
-    ) as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
+      params.registration
+    ) as Protocol.Storage.AttributionReportingSourceRegistration;
 
     if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
       dataStore.sources[tabId].sourceRegistration.push({
-        ...sourceRegistrationData.registration,
-        result: sourceRegistrationData.result,
+        ...sourceRegistrationData,
+        result: params.result,
         index: dataStore.sources[tabId].sourceRegistration.length,
       });
     } else {
       dataStore.sources[tabId].sourceRegistration = [
         {
-          ...sourceRegistrationData.registration,
-          result: sourceRegistrationData.result,
+          ...sourceRegistrationData,
+          result: params.result,
           index: 0,
         },
       ];
