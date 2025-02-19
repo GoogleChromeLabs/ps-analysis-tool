@@ -389,10 +389,8 @@ const timeline: Timeline = {
             branch.time = `${
               randomHours < 10 ? `0${randomHours}` : randomHours
             }:${
-              randomMinutes + index < 10
-                ? `0${randomMinutes + index}`
-                : randomMinutes + index
-            }:00 GMT`;
+              randomMinutes + index < 10 ? `0${randomMinutes}` : randomMinutes
+            }:0${index}GMT`;
           });
         }
       }
