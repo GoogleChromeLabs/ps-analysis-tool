@@ -234,7 +234,7 @@ const Panel = ({
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
         const containerHeight = containerRef.current.offsetHeight;
-        const newSize = Math.min(containerWidth, containerHeight) / 2;
+        const newSize = Math.min(containerWidth, containerHeight) * 0.8;
 
         setBubbleWidth(newSize);
       }
@@ -295,8 +295,8 @@ const Panel = ({
 
       if (div) {
         const { visibleWidth, visibleHeight, newSize } = getDivDimensions();
-        const centerX = visibleWidth / 2 - newSize / 2;
-        const centerY = visibleHeight / 2 - newSize / 2;
+        const centerX = visibleWidth / 2 - newSize;
+        const centerY = visibleHeight / 4 - newSize / 4;
 
         setExpandedBubbleX(centerX);
         setExpandedBubbleY(centerY);

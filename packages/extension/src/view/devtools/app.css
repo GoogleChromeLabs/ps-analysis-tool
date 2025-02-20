@@ -165,6 +165,7 @@ body {
 #bubble-container-div.expanded {
   backdrop-filter: blur(1px);
   z-index: 4;
+  pointer-events: auto;
 }
 
 /* bubble element */
