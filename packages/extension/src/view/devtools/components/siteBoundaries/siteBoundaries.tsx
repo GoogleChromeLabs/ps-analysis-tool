@@ -25,29 +25,28 @@ const content = [
     title: () => I18n.getMessage('chips'),
     description: () => I18n.getMessage('chipsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+    storyUrl: 'https://privacysandbox-stories.com/web-stories/chips/',
   },
   {
     title: () => I18n.getMessage('storageAccessAPI'),
     description: () => I18n.getMessage('storageAccessAPIDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/storage-access-api/',
   },
   {
     title: () => I18n.getMessage('rws'),
     description: () => I18n.getMessage('rwsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/related-website-sets/',
   },
   {
     title: () => I18n.getMessage('fedcm'),
     description: () => I18n.getMessage('fedcmDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/federated-credential-management-api/',
   },
 ];
 
