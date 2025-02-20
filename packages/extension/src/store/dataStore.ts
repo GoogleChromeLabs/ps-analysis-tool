@@ -51,6 +51,18 @@ class DataStore {
   sources: Record<string, Record<Event, SourcesData[]>> = {};
 
   /**
+   * The Attribution Reporting sources for the tab.
+   */
+  eventTypeToRequestMap: {
+    [tabId: number]: {
+      [requestId: string]: {
+        attributionReportingSupport?: string;
+        attributionReportingEligible?: string;
+      };
+    };
+  } = {};
+
+  /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
    */
   auctionEvents: {

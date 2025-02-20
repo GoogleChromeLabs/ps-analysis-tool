@@ -257,11 +257,30 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.requestWillBeSent' && params) {
         const {
           requestId,
-          request: { url: requestUrl },
+          request: { url: requestUrl, headers },
           frameId = '',
           timestamp,
           wallTime,
         } = params as Protocol.Network.RequestWillBeSentEvent;
+
+        if (headers?.['attribution-reporting-eligible']) {
+          dataStore.eventTypeToRequestMap[Number(tabId)] = {
+            ...dataStore.eventTypeToRequestMap[Number(tabId)],
+            [requestId]: {
+              attributionReportingEligible:
+                headers?.['attribution-reporting-eligible'],
+            },
+          };
+        }
+        if (headers?.['attribution-reporting-support']) {
+          dataStore.eventTypeToRequestMap[Number(tabId)] = {
+            ...dataStore.eventTypeToRequestMap[Number(tabId)],
+            [requestId]: {
+              attributionReportingSupport:
+                headers?.['attribution-reporting-support'],
+            },
+          };
+        }
 
         let finalFrameId = frameId;
 
@@ -412,6 +431,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 reportingOrigin: requestUrl,
                 sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
                 time: Date.now(),
+                eventType:
+                  dataStore.eventTypeToRequestMap[Number(tabId)][requestId]
+                    .attributionReportingEligible,
+                platform:
+                  dataStore.eventTypeToRequestMap[Number(tabId)][requestId]
+                    .attributionReportingSupport,
               } as Protocol.Storage.AttributionReportingSourceRegistration,
               result:
                 'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
