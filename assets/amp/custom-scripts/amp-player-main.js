@@ -275,8 +275,6 @@ const messageListener = ({
     initializeArrows();
     stateObject.doesHaveMorePages = _doesHaveMorePages;
 
-    stateObject.cards[scrollToNext].scrollIntoView({ behavior: 'smooth' });
-
     const distanceToRight = calculateDistanceBetweenLastItemAndBox();
     document.getElementById('show-more-indicator').style.left = `calc(100% - ${
       distanceToRight / 2
@@ -301,6 +299,7 @@ const messageListener = ({
           .classList.remove('bounce');
       }, 2000);
     }
+    stateObject.cards[scrollToNext].scrollIntoView({ behavior: 'smooth' });
   } catch (error) {
     //Fail silently
   }
