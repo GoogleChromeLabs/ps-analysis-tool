@@ -134,7 +134,9 @@ function initializeCards() {
           detail: data,
         });
         window.parent.document.dispatchEvent(event);
-        stateObject.player.show(card.dataset.storyUrl, null, { animate: false });
+        stateObject.player.show(card.dataset.storyUrl, null, {
+          animate: false,
+        });
         document.body.classList.add('lightbox-open');
         stateObject.lightboxEl.classList.remove('closed');
         card.classList.add('hidden');
@@ -223,6 +225,7 @@ const getCardHTML = ({
   publisherLogo,
   storyTitle,
   storyUrl,
+  shouldPublisherLogo,
 }) => {
   return `
     <div class="entry-point-card-container" data-story-url="${storyUrl}">
@@ -231,12 +234,16 @@ const getCardHTML = ({
         <div class="background-card-2"></div>
       </div>
       <img src="${heroImage}" class="entry-point-card-img" alt="A cat">
-      <div class="author-container">
+     ${
+       shouldPublisherLogo
+         ? ` <div class="author-container">
         <div class="logo-container">
             <div class="logo-ring"></div>
             <img class="entry-point-card-logo" src="${publisherLogo}" alt="Publisher logo">
         </div>
-      </div>
+      </div>`
+         : ''
+     }
       <div class="card-headline-container">
           <span class="entry-point-card-headline"> ${storyTitle} </span>
       </div>
@@ -248,11 +255,11 @@ const messageListener = ({
   data: { story, doesHaveMorePages: _doesHaveMorePages },
 }) => {
   try {
-    if(!story){
+    if (!story) {
       return;
     }
 
-    const _cards = story?.map(getCardHTML).join('');
+    const _cards = story?.map((singleStory) => getCardHTML({...singleStory, shouldPublisherLogo: false})).join('');
     const storyAnchors = story?.map(({ storyUrl }) => ({ href: storyUrl }));
 
     if (JSON.stringify(story) === JSON.stringify(stateObject.previousStories)) {
@@ -267,8 +274,6 @@ const messageListener = ({
     initializeCards();
     initializeArrows();
     stateObject.doesHaveMorePages = _doesHaveMorePages;
-
-    stateObject.cards[scrollToNext].scrollIntoView({ behavior: 'smooth' });
 
     const distanceToRight = calculateDistanceBetweenLastItemAndBox();
     document.getElementById('show-more-indicator').style.left = `calc(100% - ${
@@ -294,6 +299,7 @@ const messageListener = ({
           .classList.remove('bounce');
       }, 2000);
     }
+    stateObject.cards[scrollToNext].scrollIntoView({ behavior: 'smooth' });
   } catch (error) {
     //Fail silently
   }
