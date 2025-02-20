@@ -331,14 +331,16 @@ app.calculateDateTime = (index: number) => {
     const date = new Date();
 
     circle.datetime =
-      date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+      new Date(date.toLocaleDateString()).toISOString().split('T')[0] +
+      ' ' +
+      date.toLocaleTimeString();
 
     if (circle.type === 'publisher') {
       const data = publisherData[circle.website];
 
       if (data) {
         data.branches.forEach((branch) => {
-          branch.date = date.toLocaleDateString();
+          branch.date = new Date(date.toLocaleDateString()).toDateString();
           branch.time = date.toLocaleTimeString();
         });
       }
