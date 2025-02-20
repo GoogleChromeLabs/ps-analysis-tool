@@ -24,6 +24,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { getStoryPlayerMarkup } from './getStoryPlayerMarkup';
 import LandingPage, { LandingPageProps } from './LandingPage';
 import ContentPanel from './contentPanel';
+import { fetchPageAssets } from '@google-psat/common';
 
 type LandingPageContainerProps = LandingPageProps & {
   contentPanelTitle: string;
@@ -42,6 +43,21 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { children, contentPanelTitle, content, counterStyles, titleStyles } =
     props;
+
+  const prefetchAssets = (storyUrl: string) => {
+    if (!storyUrl) {
+      return;
+    }
+
+    fetchPageAssets(storyUrl, {
+      resourceType: ['script'],
+      getAssetsUrl: (doc) => {
+        return Array.from(doc.getElementsByTagName('amp-img')).map(
+          (img) => img.getAttribute('src') ?? ''
+        );
+      },
+    });
+  };
 
   useEffect(() => {
     if (!independentStory || !iframeRef.current) {
@@ -93,6 +109,7 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
               return {
                 ...data,
                 onClick: () => setIndependentStory(data?.storyUrl ?? ''),
+                onMouseEnter: () => prefetchAssets(data?.storyUrl ?? ''),
               };
             })}
             counterStyles={counterStyles}

@@ -33,6 +33,7 @@ export interface ContentPanelProps {
     url: string;
     storyUrl?: string;
     onClick: () => void;
+    onMouseEnter: () => void;
   }[];
   titleStyles?: string;
   counterStyles?: string;
@@ -54,6 +55,7 @@ const ContentPanel = ({
           <div
             className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
             key={index}
+            onMouseEnter={item.onMouseEnter}
           >
             <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
               <div
