@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import config, { Config, publisherData } from '../config';
+import config, { Config } from '../config';
 import app from '../app';
 import {
   wipeAndRecreateInterestCanvas,
@@ -39,7 +39,6 @@ type Timeline = {
   drawCircle: (index: number, completed?: boolean) => void;
   renderUserIcon: () => void;
   eraseAndRedraw: () => void;
-  calculateDateTime: () => void;
 };
 
 /**
@@ -89,7 +88,6 @@ const timeline: Timeline = {
       timeline.renderUserIcon();
     }
 
-    timeline.calculateDateTime();
     timeline.drawTimeline(config.timeline);
   },
 
@@ -165,9 +163,6 @@ const timeline: Timeline = {
       p.textSize(12);
       p.strokeWeight(0.1);
       p.textFont('sans-serif');
-      if (!app.isInteractiveMode) {
-        p.text(circleItem.datetime, xPositionForCircle, position.y);
-      }
       p.text(circleItem.website, xPositionForCircle, position.y + 60);
       p.fill(config.timeline.colors.grey);
       p.text(circleItem.type, xPositionForCircle, position.y + 80);
@@ -356,45 +351,6 @@ const timeline: Timeline = {
         i = i + 1;
       }
     }
-  },
-  calculateDateTime: () => {
-    const { circles } = config.timeline;
-    const date = new Date();
-    let dayCount = 0;
-
-    circles.forEach((circle) => {
-      const newDate = new Date(date.getTime() + dayCount * 24 * 60 * 60 * 1000);
-
-      const day =
-        newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
-      const month =
-        newDate.getMonth() + 1 < 10
-          ? `0${newDate.getMonth() + 1}`
-          : newDate.getMonth() + 1;
-      const year = newDate.getFullYear();
-      const randomHours = Math.floor(Math.random() * 24);
-      const randomMinutes = Math.floor(Math.random() * 60);
-      circle.datetime = `${year}-${month}-${day} ${
-        randomHours < 10 ? `0${randomHours}` : randomHours
-      }:${randomMinutes < 10 ? `0${randomMinutes}` : randomMinutes}`;
-
-      dayCount++;
-
-      if (circle.type === 'publisher') {
-        const pData = publisherData[circle.website];
-
-        if (pData) {
-          pData.branches.forEach((branch, index) => {
-            branch.date = newDate.toDateString();
-            branch.time = `${
-              randomHours < 10 ? `0${randomHours}` : randomHours
-            }:${
-              randomMinutes + index < 10 ? `0${randomMinutes}` : randomMinutes
-            }:0${index}GMT`;
-          });
-        }
-      }
-    });
   },
 };
 

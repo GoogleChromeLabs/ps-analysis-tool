@@ -23,7 +23,7 @@ import Queue from 'queue';
 /**
  * Internal dependencies.
  */
-import config from './config';
+import config, { publisherData } from './config';
 import auctions from './modules/auctions';
 import flow from './modules/flow';
 import * as utils from './utils';
@@ -207,6 +207,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       cb?.(undefined, true);
     });
 
+    app.calculateDateTime(currentIndex);
     app.drawFlows(currentIndex);
     app.promiseQueue.push((cb) => {
       const { currentIndex: _currentIndex } = app.timeline;
@@ -296,6 +297,29 @@ app.setupLoop = (doNotPlay: boolean) => {
   } catch (error) {
     // Fail silently
   }
+};
+
+app.calculateDateTime = (index: number) => {
+  app.promiseQueue?.push((cb) => {
+    const circle = config.timeline.circles[index];
+    const date = new Date();
+
+    circle.datetime =
+      date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
+    if (circle.type === 'publisher') {
+      const data = publisherData[circle.website];
+
+      if (data) {
+        data.branches.forEach((branch) => {
+          branch.date = date.toLocaleDateString();
+          branch.time = date.toLocaleTimeString();
+        });
+      }
+    }
+
+    cb?.(undefined, true);
+  });
 };
 
 app.drawFlows = (index: number) => {

@@ -37,8 +37,8 @@ let spacing: number, renderedBranchIds: number[], endpoints: Coordinates[];
 type Branch = {
   id: number;
   type: string;
-  date: string;
-  time: string;
+  date: string | (() => string);
+  time: string | (() => string);
   title: string;
   description: string;
 };
@@ -66,6 +66,8 @@ const Branches = async ({
   branches = branches.map((branch, index) => ({
     ...branch,
     id: index, // To prevent duplicate rendering
+    date: typeof branch.date === 'function' ? branch.date() : branch.date,
+    time: typeof branch.time === 'function' ? branch.time() : branch.time,
   }));
 
   renderedBranchIds = [];
