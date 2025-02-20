@@ -391,6 +391,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                   headers?.['attribution-reporting-register-trigger']
                 ),
                 reportingOrigin: requestUrl,
+                time: Date.now(),
               } as Protocol.Storage.AttributionReportingTriggerRegistration,
               eventLevel:
                 '' as Protocol.Storage.AttributionReportingEventLevelResult,
@@ -409,6 +410,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                   headers?.['attribution-reporting-register-source']
                 ),
                 reportingOrigin: requestUrl,
+                sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
+                time: Date.now(),
               } as Protocol.Storage.AttributionReportingSourceRegistration,
               result:
                 'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,

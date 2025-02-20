@@ -50,7 +50,7 @@ const ActiveSources = () => {
     () => [
       {
         header: 'Source Event ID',
-        accessorKey: 'eventId',
+        accessorKey: 'sourceEventId',
         cell: (info) => info,
         widthWeightagePercentage: 12,
       },
@@ -62,7 +62,7 @@ const ActiveSources = () => {
       },
       {
         header: 'Destinations',
-        accessorKey: 'destinationSites',
+        accessorKey: 'destination',
         cell: (info) => (info as string[])?.join(' '),
         widthWeightagePercentage: 20,
       },
