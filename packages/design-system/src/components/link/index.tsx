@@ -26,8 +26,10 @@ interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 const Link = ({ href, children, ...rest }: LinkProps) => {
   const onClick = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      event.preventDefault();
-      chrome.tabs.update({ url: href });
+      if (chrome?.tabs) {
+        event.preventDefault();
+        chrome.tabs.update({ url: href });
+      }
     },
     [href]
   );
@@ -36,7 +38,7 @@ const Link = ({ href, children, ...rest }: LinkProps) => {
     <a
       onClick={onClick}
       href={href}
-      className="text-bright-navy-blue"
+      className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
       {...rest}
     >
       {children}

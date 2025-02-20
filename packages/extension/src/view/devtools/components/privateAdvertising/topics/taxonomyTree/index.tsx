@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ExternalLinkBlack, useTabs } from '@google-psat/design-system';
+import { ExternalLinkBlack, Link, useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -163,10 +163,8 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   return (
     <div className="relative h-full flex flex-col">
       <SearchDropdown values={taxonomyArray} onSelect={nodeClickHandler} />
-      <a
+      <Link
         href={githubUrl}
-        target="_blank"
-        rel="noreferrer"
         className="absolute right-2 top-0"
         title="View on GitHub"
       >
@@ -174,7 +172,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
           width="14"
         />
-      </a>
+      </Link>
       <div className="m-4 overflow-auto bg-white" ref={divRef} />
     </div>
   );

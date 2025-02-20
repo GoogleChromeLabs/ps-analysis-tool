@@ -28,6 +28,7 @@ import checkURLInRWS, {
   type CheckURLInRWSOutputType,
 } from './utils/checkURLInRWS';
 import SitesList from './sitesList';
+import { Link } from '@google-psat/design-system';
 
 const Insights = () => {
   const [insightsData, setInsightsData] =
@@ -96,30 +97,28 @@ const Insights = () => {
               </p>
               <p className="text-sm">
                 {I18n.getMessage('primaryDomain')}:{' '}
-                <a
-                  href={insightsData.relatedWebsiteSet?.primary}
-                  target="_blank"
+                <Link
+                  href={insightsData.relatedWebsiteSet?.primary || ''}
                   referrerPolicy="no-referrer"
                   className="cursor-pointer hover:opacity-80 text-blue-500 underline dark:text-blue-400"
                   rel="noreferrer"
                 >
-                  {insightsData.relatedWebsiteSet?.primary}
-                </a>
+                  <>{insightsData.relatedWebsiteSet?.primary}</>
+                </Link>
               </p>
               {!insightsData.primary ? (
                 <>
                   {insightsData.isccTLD ? (
                     <p className="text-sm">
                       {I18n.getMessage('siteccTldOf')}
-                      <a
-                        href={insightsData.relatedWebsiteSet?.ccTLDParent}
-                        target="_blank"
+                      <Link
+                        href={insightsData.relatedWebsiteSet?.ccTLDParent || ''}
                         referrerPolicy="no-referrer"
                         className="cursor-pointer hover:opacity-80 text-blue-500 underline dark:text-blue-400"
                         rel="noreferrer"
                       >
-                        {insightsData.relatedWebsiteSet?.ccTLDParent}
-                      </a>
+                        <>{insightsData.relatedWebsiteSet?.ccTLDParent}</>
+                      </Link>
                     </p>
                   ) : (
                     <>

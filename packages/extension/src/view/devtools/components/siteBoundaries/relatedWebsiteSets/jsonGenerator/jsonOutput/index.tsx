@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef } from 'react';
-import { ArrowRight, Button } from '@google-psat/design-system';
+import { ArrowRight, Button, Link } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -80,15 +80,14 @@ const JsonOutput = ({
           />
           <PullRequestOutput primaryWellKnownOutput={primaryWellKnownOutput} />
           <div className="flex justify-between items-center py-4">
-            <a
+            <Link
               title="https://github.com/GoogleChrome/related-website-sets/pulls"
               href="https://github.com/GoogleChrome/related-website-sets/pulls"
-              target="_blank"
               rel="noreferrer"
             >
               <Button text={I18n.getMessage('createPR')} />
-            </a>
-            <a
+            </Link>
+            <Link
               title="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
               href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
               target="_blank"
@@ -105,7 +104,7 @@ const JsonOutput = ({
                 }
                 variant="secondary"
               />
-            </a>
+            </Link>
           </div>
         </div>
       )}

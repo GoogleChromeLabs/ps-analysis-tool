@@ -17,6 +17,7 @@
 /**
  * Internal dependencies.
  */
+import { Link } from '@google-psat/design-system';
 import type { DetectedSignature } from '../../types';
 
 interface FeatureListProps {
@@ -37,14 +38,13 @@ const FeatureList = ({ matches }: FeatureListProps) => {
 
         return (
           <li key={feature.text}>
-            <a
+            <Link
               className="text-bright-navy-blue dark:text-jordy-blue"
-              target="_blank"
               href={feature.url}
               rel="noreferrer"
             >
               {feature.text}
-            </a>
+            </Link>
           </li>
         );
       })}
