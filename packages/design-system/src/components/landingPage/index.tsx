@@ -24,7 +24,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { getStoryPlayerMarkup } from './getStoryPlayerMarkup';
 import LandingPage, { LandingPageProps } from './LandingPage';
 import ContentPanel from './contentPanel';
-import { fetchPageAssets } from '@google-psat/common';
+import { prefetchPageAssets } from '@google-psat/common';
 
 type LandingPageContainerProps = LandingPageProps & {
   contentPanelTitle: string;
@@ -49,7 +49,7 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
       return;
     }
 
-    fetchPageAssets(storyUrl, {
+    prefetchPageAssets(storyUrl, {
       resourceType: ['script'],
       getAssetsUrl: (doc) => {
         return Array.from(doc.getElementsByTagName('amp-img')).map(

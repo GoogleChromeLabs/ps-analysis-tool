@@ -48,7 +48,7 @@ export { default as getLegendDescription } from './utils/getLegendDescription';
 export { default as extractCookies } from './utils/extractCookies';
 export { default as extractReportData } from './utils/extractReportData';
 export { default as reshapeCookies } from './utils/reshapeCookies';
-export { default as fetchPageAssets } from './utils/fetchPageAssets';
+export { default as prefetchPageAssets } from './utils/prefetchPageAssets';
 export * from './utils/sessionStorage';
 export * from './worker/enums';
 export * from './utils/generateReports';

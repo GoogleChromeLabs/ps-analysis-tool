@@ -25,43 +25,48 @@ const resourceMapper = {
     Array.from(doc.getElementsByTagName('img')).map((img) => img.src),
 };
 
-const fetchPageAssets = async (
+const prefetchPageAssets = async (
   pageUrl: string,
   options: {
     resourceType?: ('script' | 'stylesheet' | 'image')[];
     getAssetsUrl?: (doc: Document) => string[];
   }
 ): Promise<void> => {
-  const response = await fetch(pageUrl);
-  const html = await response.text();
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
+  try {
+    const response = await fetch(pageUrl);
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
 
-  if (!doc) {
-    return;
+    if (!doc) {
+      return;
+    }
+
+    let allResources = options.resourceType
+      ? options.resourceType
+          .map((resourceType) => {
+            const assetsGetter = resourceMapper[resourceType];
+            return assetsGetter ? assetsGetter(doc) : [];
+          })
+          .flat()
+      : [];
+
+    if (options.getAssetsUrl) {
+      allResources = [...allResources, ...options.getAssetsUrl(doc)];
+    }
+
+    const assetPromises = allResources
+      .filter((assetUrl) => assetUrl && !fetchedAssets.has(assetUrl))
+      .map((assetUrl) => {
+        fetchedAssets.add(assetUrl);
+        return fetch(assetUrl);
+      });
+
+    await Promise.all(assetPromises);
+  } catch (error) {
+    // it should not throw error
+    console.error('Error prefetching page assets:', error);
   }
-
-  let allResources = options.resourceType
-    ? options.resourceType
-        .map((resourceType) => {
-          const assetsGetter = resourceMapper[resourceType];
-          return assetsGetter ? assetsGetter(doc) : [];
-        })
-        .flat()
-    : [];
-
-  if (options.getAssetsUrl) {
-    allResources = [...allResources, ...options.getAssetsUrl(doc)];
-  }
-
-  const assetPromises = allResources
-    .filter((assetUrl) => assetUrl && !fetchedAssets.has(assetUrl))
-    .map((assetUrl) => {
-      fetchedAssets.add(assetUrl);
-      return fetch(assetUrl);
-    });
-
-  await Promise.all(assetPromises);
 };
 
-export default fetchPageAssets;
+export default prefetchPageAssets;
