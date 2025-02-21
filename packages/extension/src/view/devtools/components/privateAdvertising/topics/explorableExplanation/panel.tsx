@@ -275,9 +275,15 @@ const Panel = ({
     }
   }, [epochCompleted, setReset]);
 
-  const [isInteractiveModeOn, setIsInteractiveModeOn] = useState(false);
+  const [isInteractiveModeOn, setIsInteractiveModeOn] = useState<
+    boolean | null
+  >(null);
 
   useEffect(() => {
+    if (isInteractiveModeOn === null) {
+      return;
+    }
+
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
@@ -293,7 +299,7 @@ const Panel = ({
       }
 
       await updateSessionStorage(
-        { isInteractiveModeOn, sliderStep },
+        { isInteractiveModeOn: Boolean(isInteractiveModeOn), sliderStep },
         STORAGE_KEY
       );
     })();
@@ -321,7 +327,7 @@ const Panel = ({
         <input
           type="checkbox"
           className="hover:cursor-pointer"
-          checked={isInteractiveModeOn}
+          checked={Boolean(isInteractiveModeOn)}
           onChange={() => setIsInteractiveModeOn((prev) => !prev)}
         />
         Interactive Mode
@@ -352,10 +358,9 @@ const Panel = ({
           speedMultiplier={sliderStep}
           handleUserVisit={handleUserVisit}
           setPAActiveTab={setPAActiveTab}
-          setPAStorage={setPAStorage}
           setHighlightAdTech={setHighlightAdTech}
           setCurrentVisitIndexCallback={setCurrentVisitIndexCallback}
-          isInteractive={isInteractiveModeOn}
+          isInteractive={Boolean(isInteractiveModeOn)}
         />
       </div>
       <DraggableTray />
