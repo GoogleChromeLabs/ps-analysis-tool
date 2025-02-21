@@ -53,12 +53,11 @@ describe('prefetchPageAssets', () => {
     };
     mockParseFromString.mockReturnValue(mockDoc);
 
-    await prefetchPageAssets('https://example.com', {
+    await prefetchPageAssets('https://example.com/1', {
       resourceType: ['script', 'stylesheet', 'image'],
     });
 
-    expect(mockFetch).toHaveBeenCalledWith('https://example.com');
-
+    expect(mockFetch).toHaveBeenCalledWith('https://example.com/1');
     expect(mockFetch).toHaveBeenCalledWith('https://example.com/script.js');
     expect(mockFetch).toHaveBeenCalledWith('https://example.com/style.css');
     expect(mockFetch).toHaveBeenCalledWith('https://example.com/image.jpg');
@@ -78,11 +77,11 @@ describe('prefetchPageAssets', () => {
       'https://example.com/custom1.js',
       'https://example.com/custom2.css',
     ];
-    await prefetchPageAssets('https://example.com', {
+    await prefetchPageAssets('https://example.com/2', {
       getAssetsUrl: () => customAssetUrls,
     });
 
-    expect(mockFetch).toHaveBeenCalledWith('https://example.com');
+    expect(mockFetch).toHaveBeenCalledWith('https://example.com/2');
     expect(mockFetch).toHaveBeenCalledWith('https://example.com/custom1.js');
     expect(mockFetch).toHaveBeenCalledWith('https://example.com/custom2.css');
     expect(mockFetch).toHaveBeenCalledTimes(3);
@@ -99,10 +98,10 @@ describe('prefetchPageAssets', () => {
     };
     mockParseFromString.mockReturnValue(mockDoc);
 
-    await prefetchPageAssets('https://example.com', {
+    await prefetchPageAssets('https://example.com/3', {
       resourceType: ['script'],
     });
-    await prefetchPageAssets('https://example.com', {
+    await prefetchPageAssets('https://example.com/4', {
       resourceType: ['script'],
     });
 
