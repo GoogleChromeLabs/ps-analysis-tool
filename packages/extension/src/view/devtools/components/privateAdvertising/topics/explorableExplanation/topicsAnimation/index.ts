@@ -227,12 +227,7 @@ export function topicsAnimation(
 
       if (!isInteractive) {
         p.push();
-        const date = new Date(new Date().toLocaleString());
-        p.text(
-          date.toISOString().split('T')[0] + ' ' + date.toLocaleTimeString(),
-          xPosition,
-          35
-        );
+        p.text(currentCircle.datetime, xPosition, 35);
         p.stroke('#1A73E8');
         p.line(
           previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
