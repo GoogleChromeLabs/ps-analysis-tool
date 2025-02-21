@@ -51,18 +51,6 @@ class DataStore {
   sources: Record<string, Record<Event, SourcesData[]>> = {};
 
   /**
-   * The Attribution Reporting sources for the tab.
-   */
-  eventTypeToRequestMap: {
-    [tabId: number]: {
-      [requestId: string]: {
-        attributionReportingSupport?: string;
-        attributionReportingEligible?: string;
-      };
-    };
-  } = {};
-
-  /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
    */
   auctionEvents: {
@@ -322,13 +310,11 @@ class DataStore {
       tabs: this.tabs,
       auctionEvents: this.auctionEvents,
       sources: this.sources,
-      eventTypeToRequestMap: this.eventTypeToRequestMap,
     };
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
     this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
-    this.eventTypeToRequestMap[tabId] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -375,7 +361,6 @@ class DataStore {
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
     delete this.sources[tabId];
-    delete this.eventTypeToRequestMap[Number(tabId)];
   }
 
   /**
@@ -447,7 +432,6 @@ class DataStore {
     this.frameIdToResourceMap[tabId] = {};
     this.unParsedRequestHeadersForPA[tabId] = {};
     this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
-    this.eventTypeToRequestMap[Number(tabId)] = {};
     //@ts-ignore
     globalThis.PSATAdditionalData = {
       unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
@@ -494,7 +478,6 @@ class DataStore {
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
     delete this.sources[tabId];
-    delete this.eventTypeToRequestMap[tabId];
   }
 
   /**
