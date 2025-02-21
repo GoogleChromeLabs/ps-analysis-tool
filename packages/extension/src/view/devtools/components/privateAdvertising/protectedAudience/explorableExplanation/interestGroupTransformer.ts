@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import { getCircleDatetime } from '@google-psat/explorable-explanations';
+
+/**
  * Internal dependencies
  */
 import { SYNTHETIC_INTEREST_GROUPS } from './constants';
@@ -24,7 +29,8 @@ interface SingleAd {
 }
 export const transformInterestGroup = (site: string) => {
   let interestGroups = SYNTHETIC_INTEREST_GROUPS[site];
-  interestGroups = interestGroups.map((interestGroup) => {
+
+  interestGroups = interestGroups.map((interestGroup, index) => {
     interestGroup.details.biddingLogicURL =
       interestGroup.details.biddingLogicURL.replace(
         'https://privacysandboxdemos-buyer-1.domain-aaa.com',
@@ -50,6 +56,16 @@ export const transformInterestGroup = (site: string) => {
         return ad;
       }
     );
+
+    const circleDateTime = getCircleDatetime(site);
+    const date = new Date(circleDateTime.replace('T', ' ').replace('-', '/'));
+
+    interestGroup.time = (date.getTime() + index * 100) / 1000;
+
+    interestGroup.details.expirationTime =
+      new Date(
+        interestGroup.time * 1000 + 10 * 60 * 60 * 1000 + index * 1000
+      ).getTime() / 1000;
 
     return interestGroup;
   });

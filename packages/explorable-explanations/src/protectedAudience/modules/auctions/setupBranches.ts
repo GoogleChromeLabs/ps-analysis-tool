@@ -33,18 +33,18 @@ const setupBranches = (steps: AuctionStep[], index: number) => {
       currentIndex: index,
       branches: [
         {
-          date: publisherData[publisher].branches[0].date,
-          time: publisherData[publisher].branches[0].time,
+          date: () => publisherData[publisher].branches[0].date,
+          time: () => publisherData[publisher].branches[0].time,
           type: 'datetime',
         },
         {
-          date: publisherData[publisher].branches[1].date,
-          time: publisherData[publisher].branches[1].time,
+          date: () => publisherData[publisher].branches[1].date,
+          time: () => publisherData[publisher].branches[1].time,
           type: 'datetime',
         },
         {
-          date: publisherData[publisher].branches[2].date,
-          time: publisherData[publisher].branches[2].time,
+          date: () => publisherData[publisher].branches[2].date,
+          time: () => publisherData[publisher].branches[2].time,
           type: 'datetime',
         },
       ],

@@ -109,6 +109,32 @@ const auction: Auction = {
       cb?.(undefined, true);
     });
 
+    app.promiseQueue?.push((cb) => {
+      if (app.p && !app.isInteractiveMode) {
+        const circleItem = config.timeline.circles[index];
+        const { diameter, verticalSpacing } = config.timeline.circleProps;
+        const circleVerticalSpace = verticalSpacing + diameter;
+        const xPositionForCircle =
+          config.timeline.position.x +
+          diameter / 2 +
+          circleVerticalSpace * index;
+
+        app.p.push();
+        app.p.fill(config.timeline.colors.black);
+        app.p.textSize(12);
+        app.p.strokeWeight(0.1);
+        app.p.textFont('sans-serif');
+        app.p.text(
+          circleItem.datetime,
+          xPositionForCircle,
+          config.timeline.position.y
+        );
+        app.p.pop();
+      }
+
+      cb?.(undefined, true);
+    });
+
     for (const step of app.auction.auctions[index]) {
       app.promiseQueue?.push(async (cb) => {
         const { component, props, callBack, delay = 0 } = step;

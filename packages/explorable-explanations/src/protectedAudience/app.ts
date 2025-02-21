@@ -157,6 +157,7 @@ export type App = {
     expandOverride: boolean
   ) => void;
   addToPromiseQueue: (indexToStartFrom: number) => void;
+  calculateDateTime: (index: number) => void;
   drawFlows: (index: number) => void;
   minifiedBubbleKeyPressListener: (event: KeyboardEvent) => void;
   handleNonInteractivePrev: () => Promise<void> | void;
@@ -274,6 +275,7 @@ const app: App = {
   setPauseReason: noop,
   setupLoop: noop,
   addToPromiseQueue: noop,
+  calculateDateTime: noop,
   drawFlows: noop,
   setIsBubbleExpanded: noop,
   minifiedBubbleKeyPressListener: noop,

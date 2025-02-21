@@ -20,5 +20,6 @@ export {
   interestGroupSketch,
   sketch,
 } from './protectedAudience';
+export { getCircleDatetime } from './protectedAudience/utils';
 export { default as config, publisherData } from './protectedAudience/config';
 export * from './protectedAudience/modules/flowConfig.tsx';

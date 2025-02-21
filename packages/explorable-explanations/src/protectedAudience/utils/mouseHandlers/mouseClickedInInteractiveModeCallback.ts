@@ -74,6 +74,7 @@ const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
     app.timeline.currentIndex = clickedIndex;
 
     wipeAndRecreateUserCanvas();
+    app.calculateDateTime(clickedIndex);
     renderUserIcon();
     bubbles.generateBubbles();
     app.nodeIndexRevisited = -1;
