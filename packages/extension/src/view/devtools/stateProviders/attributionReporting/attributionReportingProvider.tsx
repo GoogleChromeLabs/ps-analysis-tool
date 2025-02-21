@@ -44,7 +44,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       type: string;
       payload: {
         tabId: number;
-        souresRegistration: AttributionReportingContextType['state']['sourcesRegistration'];
+        sourcesRegistration: AttributionReportingContextType['state']['sourcesRegistration'];
         triggerRegistration: AttributionReportingContextType['state']['triggerRegistration'];
       };
     }) => {
@@ -65,13 +65,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       const incomingMessageType = message.type;
 
       if (incomingMessageType === 'ARA_EVENTS') {
-        if (message.payload.souresRegistration) {
+        if (message.payload.sourcesRegistration) {
           setSourcesRegistration((prevState) => {
-            if (isEqual(prevState, message.payload.souresRegistration)) {
+            if (isEqual(prevState, message.payload.sourcesRegistration)) {
               return prevState;
             }
 
-            return message.payload.souresRegistration;
+            return message.payload.sourcesRegistration;
           });
         }
 

@@ -257,30 +257,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.requestWillBeSent' && params) {
         const {
           requestId,
-          request: { url: requestUrl, headers },
+          request: { url: requestUrl },
           frameId = '',
           timestamp,
           wallTime,
         } = params as Protocol.Network.RequestWillBeSentEvent;
-
-        if (headers?.['attribution-reporting-eligible']) {
-          dataStore.eventTypeToRequestMap[Number(tabId)] = {
-            ...dataStore.eventTypeToRequestMap[Number(tabId)],
-            [requestId]: {
-              attributionReportingEligible:
-                headers?.['attribution-reporting-eligible'],
-            },
-          };
-        }
-        if (headers?.['attribution-reporting-support']) {
-          dataStore.eventTypeToRequestMap[Number(tabId)] = {
-            ...dataStore.eventTypeToRequestMap[Number(tabId)],
-            [requestId]: {
-              attributionReportingSupport:
-                headers?.['attribution-reporting-support'],
-            },
-          };
-        }
 
         let finalFrameId = frameId;
 
@@ -368,8 +349,31 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       if (method === 'Network.requestWillBeSentExtraInfo') {
-        const { requestId } =
+        const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
+
+        if (headers?.['attribution-reporting-eligible']) {
+          dataStore.eventTypeToRequestMap[Number(tabId)] = {
+            ...dataStore.eventTypeToRequestMap[Number(tabId)],
+            [requestId]: {
+              ...(dataStore.eventTypeToRequestMap[Number(tabId)]?.[requestId] ??
+                {}),
+              attributionReportingEligible:
+                headers?.['attribution-reporting-eligible'],
+            },
+          };
+        }
+        if (headers?.['attribution-reporting-support']) {
+          dataStore.eventTypeToRequestMap[Number(tabId)] = {
+            ...dataStore.eventTypeToRequestMap[Number(tabId)],
+            [requestId]: {
+              ...(dataStore.eventTypeToRequestMap[Number(tabId)]?.[requestId] ??
+                {}),
+              attributionReportingSupport:
+                headers?.['attribution-reporting-support'],
+            },
+          };
+        }
 
         if (dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           cookieStore.parseRequestHeadersForCA(
