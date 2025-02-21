@@ -165,7 +165,7 @@ const auction: Auction = {
             }
             // eslint-disable-next-line no-await-in-loop
             await RippleEffect({
-              x: x + config.flow.box.width + 2,
+              x: x + config.flow.box.width / 2 + 10,
               y: y + config.flow.box.height / 2,
             });
           }

@@ -26,29 +26,28 @@ const content = [
     title: () => I18n.getMessage('ipProtection'),
     description: () => I18n.getMessage('ipProtectionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+    storyUrl: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
   },
   {
     title: () => I18n.getMessage('bounceTrackingMitigations'),
     description: () => I18n.getMessage('bounceTrackingMitigationsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/bounce-tracking-mitigations/',
   },
   {
     title: () => I18n.getMessage('userAgentReduction'),
     description: () => I18n.getMessage('userAgentReductionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/user-agent-reduction/',
   },
   {
     title: () => I18n.getMessage('privateStateTokens'),
     description: () => I18n.getMessage('privateStateTokensDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
     storyUrl:
-      'https://privacysandbox-stories.com/web-stories/a-new-path-for-privacy-sandbox-on-the-web/',
+      'https://privacysandbox-stories.com/web-stories/private-state-tokens/',
   },
 ];
 
