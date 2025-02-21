@@ -33,10 +33,17 @@ const prefetchPageAssets = async (
   }
 ): Promise<void> => {
   try {
+    const hasFetchedPage = fetchedAssets.has(pageUrl);
+    if (hasFetchedPage) {
+      return;
+    }
+
     const response = await fetch(pageUrl);
     const html = await response.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
+
+    fetchedAssets.add(pageUrl);
 
     if (!doc) {
       return;
