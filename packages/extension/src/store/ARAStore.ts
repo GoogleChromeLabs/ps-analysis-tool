@@ -35,7 +35,6 @@ class ARAStore {
     if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
       dataStore.sources[tabId].sourceRegistration.push({
         ...sourceRegistrationData,
-        type: this.parseTypeOfAttribution(sourceRegistrationData?.eventType),
         result: params.result,
         index: dataStore.sources[tabId].sourceRegistration.length,
       });
@@ -108,18 +107,6 @@ class ARAStore {
     }
 
     return reformedData;
-  }
-
-  parseTypeOfAttribution(
-    headerLine: string
-  ): Protocol.Storage.AttributionReportingSourceType {
-    if (new RegExp('\\event-source\\b', 'i').test(headerLine)) {
-      return 'event';
-    }
-    if (new RegExp('\\navigation-source\\b', 'i').test(headerLine)) {
-      return 'navigation';
-    }
-    return 'event';
   }
 }
 

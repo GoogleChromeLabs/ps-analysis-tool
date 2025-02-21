@@ -17,12 +17,11 @@
  * External dependencies.
  */
 import { Protocol } from 'devtools-protocol';
-
+import type { TriggerRegistration } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
-
 import './chromeListeners';
 import dataStore from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
@@ -43,6 +42,8 @@ const ALLOWED_EVENTS = [
   'Page.frameAttached',
   'Page.frameNavigated',
   'Target.attachedToTarget',
+  'Storage.attributionReportingSourceRegistered',
+  'Storage.attributionReportingTriggerRegistered',
 ];
 
 let targets: chrome.debugger.TargetInfo[] = [];
@@ -349,31 +350,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       if (method === 'Network.requestWillBeSentExtraInfo') {
-        const { requestId, headers } =
+        const { requestId } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
-
-        if (headers?.['attribution-reporting-eligible']) {
-          dataStore.eventTypeToRequestMap[Number(tabId)] = {
-            ...dataStore.eventTypeToRequestMap[Number(tabId)],
-            [requestId]: {
-              ...(dataStore.eventTypeToRequestMap[Number(tabId)]?.[requestId] ??
-                {}),
-              attributionReportingEligible:
-                headers?.['attribution-reporting-eligible'],
-            },
-          };
-        }
-        if (headers?.['attribution-reporting-support']) {
-          dataStore.eventTypeToRequestMap[Number(tabId)] = {
-            ...dataStore.eventTypeToRequestMap[Number(tabId)],
-            [requestId]: {
-              ...(dataStore.eventTypeToRequestMap[Number(tabId)]?.[requestId] ??
-                {}),
-              attributionReportingSupport:
-                headers?.['attribution-reporting-support'],
-            },
-          };
-        }
 
         if (dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           cookieStore.parseRequestHeadersForCA(
@@ -413,7 +391,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 ...JSON.parse(
                   headers?.['attribution-reporting-register-trigger']
                 ),
-                reportingOrigin: requestUrl,
+                reportingOrigin: new URL(requestUrl).origin,
                 time: Date.now(),
               } as Protocol.Storage.AttributionReportingTriggerRegistration,
               eventLevel:
@@ -432,15 +410,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 ...JSON.parse(
                   headers?.['attribution-reporting-register-source']
                 ),
-                reportingOrigin: requestUrl,
+                reportingOrigin: new URL(requestUrl).origin,
                 sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
                 time: Date.now(),
-                eventType:
-                  dataStore.eventTypeToRequestMap[Number(tabId)][requestId]
-                    .attributionReportingEligible,
-                platform:
-                  dataStore.eventTypeToRequestMap[Number(tabId)][requestId]
-                    .attributionReportingSupport,
               } as Protocol.Storage.AttributionReportingSourceRegistration,
               result:
                 'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
@@ -591,6 +563,54 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
         }
         return;
+      }
+
+      if (
+        method === 'Storage.attributionReportingSourceRegistered' &&
+        params &&
+        source.tabId
+      ) {
+        const { registration, result } =
+          params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
+        dataStore.sources[tabId].sourceRegistration = dataStore.sources[
+          tabId
+        ].sourceRegistration.map((singleSource) => {
+          if (singleSource?.sourceEventId === registration.eventId) {
+            singleSource.result = result;
+            singleSource.type = registration.type;
+          }
+          return singleSource;
+        });
+      }
+
+      if (
+        method === 'Storage.attributionReportingTriggerRegistered' &&
+        params &&
+        source.tabId
+      ) {
+        const { registration, eventLevel, aggregatable } =
+          params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
+        dataStore.sources[tabId].triggerRegistration.forEach(
+          (trigger, index) => {
+            const { eventTriggerData } = trigger as TriggerRegistration;
+
+            if (
+              registration.eventTriggerData.every((eventData, _index) => {
+                return (
+                  eventData?.data === eventTriggerData[_index]?.triggerData &&
+                  eventData?.priority === eventTriggerData[_index]?.priority
+                );
+              })
+            ) {
+              dataStore.sources[tabId].triggerRegistration[index] = {
+                ...dataStore.sources[tabId].triggerRegistration[index],
+                eventLevel,
+                aggregatable,
+                ...registration,
+              };
+            }
+          }
+        );
       }
     } catch (error) {
       //Fail silently.
