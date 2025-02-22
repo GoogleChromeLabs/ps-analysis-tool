@@ -27,6 +27,7 @@ import './chromeListeners';
 import dataStore from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
+import ARAStore from '../store/ARAStore';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -42,6 +43,8 @@ const ALLOWED_EVENTS = [
   'Page.frameAttached',
   'Page.frameNavigated',
   'Target.attachedToTarget',
+  'Storage.attributionReportingSourceRegistered',
+  'Storage.attributionReportingTriggerRegistered',
 ];
 
 let targets: chrome.debugger.TargetInfo[] = [];
@@ -90,6 +93,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
             await chrome.debugger.sendCommand(
               childDebuggee,
+              'Storage.setAttributionReportingTracking',
+              { enable: true }
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
               'Network.enable',
               {}
             );
@@ -98,6 +107,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               childDebuggee,
               'Audits.enable',
               {}
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Storage.setAttributionReportingLocalTestingMode',
+              {
+                enabled: true,
+              }
             );
 
             await chrome.debugger.sendCommand(childDebuggee, 'Page.enable', {});
@@ -510,6 +527,27 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
         }
         return;
+      }
+
+      if (
+        method === 'Storage.attributionReportingSourceRegistered' &&
+        params &&
+        source.tabId
+      ) {
+        ARAStore.processARASourcesRegistered(
+          params as Protocol.Storage.AttributionReportingSourceRegisteredEvent,
+          tabId
+        );
+      }
+      if (
+        method === 'Storage.attributionReportingTriggerRegistered' &&
+        params &&
+        source.tabId
+      ) {
+        ARAStore.processARATriggerRegistered(
+          params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent,
+          tabId
+        );
       }
     } catch (error) {
       //Fail silently.

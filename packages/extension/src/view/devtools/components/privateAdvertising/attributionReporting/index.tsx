@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,13 @@ import {
 /**
  * Internal dependencies.
  */
-import InterestGroups from './interestGroups';
-import Auctions from './auctions';
-import Bids from './bids';
 import Panel from './panel';
-import AdUnits from './adUnits';
-import ExplorableExplanation from './explorableExplanation';
-import WorkletBreakpoints from './workletBreakpoints';
 import Overview from './overview';
+import ActiveSources from './activeSources';
+import SourceRegistrations from './sourceRegistrations';
+import TriggerRegistrations from './triggerRegistrations';
 
-const ProtectedAudience = () => {
+const AttributionReporting = () => {
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -43,50 +40,30 @@ const ProtectedAudience = () => {
         content: {
           Element: Overview,
           props: {
-            infoKey: PSInfoKey.ProtectedAudience,
+            infoKey: PSInfoKey.AttributionReporting,
           },
           className: 'p-4',
         },
       },
       {
-        title: 'Explorable Explanation',
+        title: 'Active Sources',
         content: {
-          Element: ExplorableExplanation,
+          Element: ActiveSources,
           className: 'overflow-hidden',
         },
       },
       {
-        title: 'Interest Groups',
+        title: 'Source Registrations',
         content: {
-          Element: InterestGroups,
+          Element: SourceRegistrations,
           className: 'overflow-hidden',
         },
       },
       {
-        title: 'Ad Units',
+        title: 'Trigger Registrations',
         content: {
-          Element: AdUnits,
+          Element: TriggerRegistrations,
           className: 'overflow-hidden',
-        },
-      },
-      {
-        title: 'Auctions',
-        content: {
-          Element: Auctions,
-          className: 'overflow-hidden',
-        },
-      },
-      {
-        title: 'Bids',
-        content: {
-          Element: Bids,
-          className: 'overflow-hidden',
-        },
-      },
-      {
-        title: 'Worklet Breakpoints',
-        content: {
-          Element: WorkletBreakpoints,
         },
       },
     ],
@@ -94,10 +71,10 @@ const ProtectedAudience = () => {
   );
 
   return (
-    <TabsProvider items={tabItems} name="protectedAudience">
+    <TabsProvider items={tabItems} name="attribution-reporting">
       <Panel />
     </TabsProvider>
   );
 };
 
-export default ProtectedAudience;
+export default AttributionReporting;

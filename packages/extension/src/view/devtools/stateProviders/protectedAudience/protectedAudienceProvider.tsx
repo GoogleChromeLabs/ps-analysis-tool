@@ -290,7 +290,7 @@ const Provider = ({ children }: PropsWithChildren) => {
               });
             });
 
-            const highestBidData = uniqueAuctionIDToBids[latestAuctionId][0];
+            const highestBidData = uniqueAuctionIDToBids[latestAuctionId]?.[0];
             computedBids.receivedBids.forEach(
               ({
                 adUnitCode,
