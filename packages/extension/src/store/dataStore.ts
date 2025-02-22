@@ -658,7 +658,7 @@ class DataStore {
     await chrome.runtime.sendMessage({
       type: 'ARA_EVENTS',
       payload: {
-        souresRegistration: this.sources[tabId].sourceRegistration,
+        sourcesRegistration: this.sources[tabId].sourceRegistration,
         triggerRegistration: this.sources[tabId].triggerRegistration,
         tabId,
       },
