@@ -63,7 +63,15 @@ const ActiveSources = () => {
       {
         header: 'Destinations',
         accessorKey: 'destination',
-        cell: (info) => (info as string[])?.join(' '),
+        cell: (info) => {
+          if (!info) {
+            return '';
+          }
+          if (Array.isArray(info)) {
+            return info.join(', ');
+          }
+          return info;
+        },
         widthWeightagePercentage: 20,
       },
       {
