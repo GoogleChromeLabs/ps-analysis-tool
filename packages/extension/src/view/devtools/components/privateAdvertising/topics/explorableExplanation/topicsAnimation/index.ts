@@ -625,7 +625,11 @@ export function topicsAnimation(
       p.cursor(p.ARROW);
     }
 
-    if (p.frameCount % delay === 0 && app.playing && !isInteractive) {
+    if (
+      (p.frameCount % delay === 0 || app.visitIndex === 0) &&
+      app.playing &&
+      !isInteractive
+    ) {
       app.play();
     }
 
