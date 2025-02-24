@@ -51,6 +51,7 @@ export interface WebStoryContext {
     setSelectedFilterValues: React.Dispatch<
       React.SetStateAction<Record<string, string[]>>
     >;
+    setPageNumber: React.Dispatch<React.SetStateAction<number>>;
   };
 }
 
@@ -77,6 +78,7 @@ const initialState: WebStoryContext = {
     setShowFilterSidebar: noop,
     setSortValue: noop,
     setSelectedFilterValues: noop,
+    setPageNumber: noop,
   },
 };
 

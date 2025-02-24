@@ -45,6 +45,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     setSortValue,
     toggleFilterSelection,
     resetFilters,
+    setPageNumber,
   } = useWebStories(({ state, actions }) => ({
     allStoryJSON: state.allStoryJSON,
     searchValue: state.searchValue,
@@ -53,6 +54,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
     selectedFilterValues: state.selectedFilterValues,
     showFilterSidebar: state.showFilterSidebar,
     selectedFilters: state.selectedFilters,
+    setPageNumber: actions.setPageNumber,
     setSearchValue: actions.setSearchValue,
     setShowFilterSidebar: actions.setShowFilterSidebar,
     setSortValue: actions.setSortValue,
@@ -78,9 +80,10 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
               <p className="min-w-fit">Sort by:</p>
               <select
                 value={sortValue}
-                onChange={(e) =>
-                  setSortValue(e.target.value as 'latest' | 'oldest')
-                }
+                onChange={(e) => {
+                  setPageNumber(1);
+                  setSortValue(e.target.value as 'latest' | 'oldest');
+                }}
                 className="hover:opacity-70 active:opacity-60 focus:bg-anti-flash-white
 								focus:dark:bg-quartz bg-transparent cursor-pointer rounded-sm px-2 py-[1px] pr-5 appearance-none bg-no-repeat bg-right
 								bg-[url(data:image/svg+xml;base64,Cjxzdmcgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im03IDkuNDUgMy44NS01LjZoLTcuNyIgZmlsbD0iIzAwMCIvPjwvc3ZnPgo=)]
