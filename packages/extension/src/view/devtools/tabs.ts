@@ -373,7 +373,7 @@ const TABS: SidebarItems = {
         className: 'fill-bright-gray',
       },
     },
-    dropdownOpen: false,
+    dropdownOpen: true,
     children: {
       [SIDEBAR_ITEMS_KEYS.WIKI]: {
         title: () => I18n.getMessage('wiki'),
