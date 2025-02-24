@@ -24,6 +24,7 @@ import { addUTMParams } from '@google-psat/common';
  * Internal dependencies.
  */
 import { DescriptionIcon, WebStoriesIcon } from '../../icons';
+import Link from '../link';
 
 export interface ContentPanelProps {
   title: string;
@@ -72,17 +73,13 @@ const ContentPanel = ({
             </p>
             <div className="absolute top-10 right-2.5 flex gap-2">
               <div className="w-4 h-4" title="View Documentation">
-                <a
-                  href={addUTMParams(item.url)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <Link href={addUTMParams(item.url)} rel="noreferer">
                   <DescriptionIcon
                     height="16"
                     width="16"
                     className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
                   />
-                </a>
+                </Link>
               </div>
               {item.onClick && item?.storyUrl && (
                 <div
