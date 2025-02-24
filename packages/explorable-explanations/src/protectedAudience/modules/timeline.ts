@@ -87,6 +87,7 @@ const timeline: Timeline = {
       timeline.drawTimelineLine();
       timeline.renderUserIcon();
     }
+
     timeline.drawTimeline(config.timeline);
   },
 
@@ -162,9 +163,6 @@ const timeline: Timeline = {
       p.textSize(12);
       p.strokeWeight(0.1);
       p.textFont('sans-serif');
-      if (!app.isInteractiveMode) {
-        p.text(circleItem.datetime, xPositionForCircle, position.y);
-      }
       p.text(circleItem.website, xPositionForCircle, position.y + 60);
       p.fill(config.timeline.colors.grey);
       p.text(circleItem.type, xPositionForCircle, position.y + 80);
