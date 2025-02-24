@@ -59,7 +59,7 @@ export const getStaticStoryMarkup = () => {
 
         .carousel-container {
             position: relative;
-						padding: 16px 0;
+		    padding: 16px 0;
         }
 
         .carousel-container::after {
@@ -116,32 +116,6 @@ export const getStaticStoryMarkup = () => {
             overflow-x: scroll;
         }
 
-
-        /* Mobile CSS rules here*/
-        @media only screen and (hover: none) and (pointer: coarse) {
-            .carousel-header {
-                padding-left: 24px;
-            }
-
-            .carousel-container {
-                margin: 0px 13px;
-            }
-
-            .carousel-cards-container {
-                border: 1px solid #cccccc;
-            }
-
-            .carousel-container::after {
-                width: 180px;
-                height: 349px;
-            }
-
-            .carousel-container::before {
-                width: 180px;
-                height: 349px;
-            }
-        }
-
         body h1 {
             font-weight: 600;
             font-size: 18px;
@@ -173,15 +147,6 @@ export const getStaticStoryMarkup = () => {
             height: 800px;
             background-color: #202029;
             overflow: hidden;
-        }
-
-        @media (max-width: 410px) {
-            .viewport {
-                width: 100%;
-                border-radius: 0px;
-                padding: 0px;
-                /*     overflow-x: hidden; */
-            }
         }
 
         .lightbox {
@@ -234,9 +199,6 @@ export const getStaticStoryMarkup = () => {
         }
 
         amp-story-player.my-player {
-            /*   width: 360px;
-            height: 600px;
-            margin: 70px auto; */
             width: 100%;
             height: 100%;
 
@@ -345,8 +307,8 @@ export const getStaticStoryMarkup = () => {
             cursor: pointer;
             position: relative;
             margin-right: 24px;
-            width: 240px;
-            height: 400px;
+            width: 206px;
+            height: 309px;
             opacity: 1;
             transform: scale(1);
             visibility: visible;
@@ -378,7 +340,7 @@ export const getStaticStoryMarkup = () => {
             background: #000000;
             margin: 0px 2px;
             width: 10px;
-            height: 368px;
+            height: 277px;
             border-top-right-radius: 16px;
             border-bottom-right-radius: 16px;
         }
@@ -386,7 +348,7 @@ export const getStaticStoryMarkup = () => {
         .background-card-2 {
             background: #4d4d4d;
             width: 10px;
-            height: 336px;
+            height: 245px;
             border-top-right-radius: 16px;
             border-bottom-right-radius: 16px;
         }
@@ -409,11 +371,10 @@ export const getStaticStoryMarkup = () => {
 
         .entry-point-card-headline {
             color: #fff;
-            font-weight: 700;
-            font-family: "Poppins", sans-serif;
-            text-transform: uppercase;
-            font-size: 24px;
-            line-height: 26px;
+            font-weight: 500;
+            font-family: "Google Sans", sans-serif;
+            font-size: 20px;
+            line-height: 24px;
         }
 
         .entry-point-card-subtitle {
@@ -448,52 +409,6 @@ export const getStaticStoryMarkup = () => {
             width: 38px;
             height: 38px;
             filter: drop-shadow(0px 0px 20px rgba(255, 255, 255, 0.25));
-        }
-
-        /* Mobile CSS rules here*/
-        @media only screen and (hover: none) and (pointer: coarse) {
-            .entry-point-card-container {
-                width: 180px;
-                height: 300px;
-            }
-
-            .entry-point-card-container.hidden {
-                transform: scale(1.2);
-            }
-
-            .author-container {
-                top: 16px;
-                left: 16px;
-            }
-
-            .logo-container,
-            .entry-point-card-logo {
-                width: 20px;
-                height: 20px;
-            }
-
-            .logo-ring {
-                width: 26px;
-                height: 26px;
-            }
-
-            .entry-point-card-subtitle {
-                font-size: 10px;
-                line-height: 14px;
-            }
-
-            .entry-point-card-headline {
-                font-size: 18px;
-                line-height: 20px;
-            }
-
-            .card-headline-container {
-                padding: 16px;
-            }
-
-            .background-cards {
-                display: none;
-            }
         }
     </style>
 

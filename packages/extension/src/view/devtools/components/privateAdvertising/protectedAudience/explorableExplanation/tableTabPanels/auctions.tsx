@@ -21,6 +21,7 @@ import type { SidebarItems } from '@google-psat/design-system';
 import React, { useEffect, useState } from 'react';
 import type {
   AdsAndBiddersType,
+  NoBidsType,
   singleAuctionEvent,
 } from '@google-psat/common';
 
@@ -30,17 +31,26 @@ import type {
 import AdUnitsPanel from '../../adUnits/panel';
 import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from '../../auctions/container';
-import type { AdUnitLiteral } from '../auctionEventTransformers';
 
 interface AuctionsProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids: Record<AdUnitLiteral, singleAuctionEvent[]>;
+    receivedBids: Record<string, singleAuctionEvent[]>;
+    noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;
+  isMultiSeller?: boolean;
+  selectedAdUnit?: string;
+  selectedDateTime?: string;
 }
 
-const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
+const Auctions = ({
+  auctionEvents,
+  customAdsAndBidders,
+  isMultiSeller = false,
+  selectedAdUnit,
+  selectedDateTime,
+}: AuctionsProps) => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
@@ -48,8 +58,8 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
         Element: AdUnitsPanel,
         props: {
           adsAndBidders: customAdsAndBidders,
-          receivedBids: auctionEvents.receivedBids,
-          noBids: {},
+          receivedBids: auctionEvents?.receivedBids || {},
+          noBids: auctionEvents?.noBids || {},
           showEvaluationPlaceholder: Boolean(customAdsAndBidders),
         },
       },
@@ -59,9 +69,25 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
   });
 
   useEffect(() => {
+    setSidebarData((prevData: SidebarItems) => {
+      if (!prevData?.adunits?.panel) {
+        return prevData;
+      }
+
+      prevData.adunits.panel.props = {
+        adsAndBidders: customAdsAndBidders,
+        receivedBids: auctionEvents.receivedBids,
+        noBids: auctionEvents.noBids,
+        showEvaluationPlaceholder: Boolean(customAdsAndBidders),
+      };
+      return prevData;
+    });
+  }, [auctionEvents.noBids, auctionEvents.receivedBids, customAdsAndBidders]);
+
+  useEffect(() => {
     if (
-      !auctionEvents.auctionData ||
-      Object.keys(auctionEvents.auctionData).length === 0
+      !auctionEvents?.auctionData ||
+      Object.keys(auctionEvents?.auctionData || {}).length === 0
     ) {
       setSidebarData((prev) => {
         prev.adunits.children = {};
@@ -69,10 +95,13 @@ const Auctions = ({ auctionEvents, customAdsAndBidders }: AuctionsProps) => {
         return { ...prev };
       });
     }
-  }, [auctionEvents.auctionData]);
+  }, [auctionEvents?.auctionData]);
 
   return (
     <AuctionsContainer
+      selectedAdUnit={selectedAdUnit}
+      selectedDateTime={selectedDateTime}
+      isMultiSeller={isMultiSeller}
       auctionEvents={auctionEvents}
       sidebarData={sidebarData}
       customAdsAndBidders={customAdsAndBidders}

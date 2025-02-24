@@ -27,7 +27,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { NAVIGATION_TAGS } from '../../wiki';
+import { NAVIGATION_TAGS } from '../../learning';
 
 interface EvaluationEnvironmentProps {
   text: string;

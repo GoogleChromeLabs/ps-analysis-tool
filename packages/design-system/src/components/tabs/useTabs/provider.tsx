@@ -89,7 +89,7 @@ export const TabsProvider = ({
   );
 
   const highlightTab = useCallback(
-    (tab: number, count: number | boolean = true, increment = false) => {
+    (tab: number, update: number | boolean = true, increment = false) => {
       if (tab === activeTabRef.current) {
         return;
       }
@@ -98,7 +98,7 @@ export const TabsProvider = ({
         const next = { ...prev };
         const prevCount = typeof next[tab] === 'number' ? next[tab] : 0;
 
-        next[tab] = increment ? prevCount + 1 : count;
+        next[tab] = increment ? prevCount + 1 : update;
         return next;
       });
     },
@@ -122,6 +122,13 @@ export const TabsProvider = ({
     }
   }, [activeTab, highlightTab, highlightedTabs]);
 
+  const shouldAddSpacer = useCallback(
+    (index: number) => {
+      return Boolean(tabItems[index].addSpacer);
+    },
+    [tabItems]
+  );
+
   return (
     <TabsContext.Provider
       value={{
@@ -136,6 +143,7 @@ export const TabsProvider = ({
           setActiveTab,
           highlightTab,
           isTabHighlighted,
+          shouldAddSpacer,
         },
       }}
     >

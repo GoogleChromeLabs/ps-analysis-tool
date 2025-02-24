@@ -15,4 +15,6 @@
  */
 export { default as BounceTracking } from './bounceTracking';
 export { default as Fingerprinting } from './fingerprinting';
+export { default as IPProtection } from './ipProtection';
+export { default as PrivateStateTokens } from './privateStateTokens';
 export { default as AntiCovertTracking } from './antiCovertTracking';

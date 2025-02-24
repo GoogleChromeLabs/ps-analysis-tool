@@ -29,7 +29,8 @@ import RelatedWebsiteSets from '../relatedWebsiteSets';
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { useSidebar } from '@google-psat/design-system';
-
+import StorageAccess from '../storageAccess';
+import FederatedCredential from '../federatedCredential';
 jest.mock(
   '../../../../../../../design-system/src/components/sidebar/useSidebar',
   () => ({
@@ -69,5 +70,25 @@ describe('Private advertising Landing Pages', () => {
     });
 
     expect(await screen.findByTestId('chips-content')).toBeInTheDocument();
+  });
+
+  it('should render StorageAccess', async () => {
+    act(() => {
+      render(<StorageAccess />);
+    });
+
+    expect(
+      await screen.findByTestId('storage-access-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should render FederatedCredential', async () => {
+    act(() => {
+      render(<FederatedCredential />);
+    });
+
+    expect(
+      await screen.findByTestId('federated-credential-content')
+    ).toBeInTheDocument();
   });
 });

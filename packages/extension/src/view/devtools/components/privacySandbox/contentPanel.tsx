@@ -19,9 +19,9 @@
 import React from 'react';
 import {
   PrivacySandboxColoredIcon,
-  ExternalLinkBlack,
   useSidebar,
   SIDEBAR_ITEMS_KEYS,
+  Link,
 } from '@google-psat/design-system';
 import { addUTMParams } from '@google-psat/common';
 import { Resizable } from 're-resizable';
@@ -62,18 +62,12 @@ const ContentPanel = () => {
               keep online content and services free for all.
             </p>
             <div className="flex gap-6 justify-center mt-5">
-              <a
+              <Link
                 href={addUTMParams('https://privacysandbox.com')}
-                target="__blank"
                 className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex"
               >
                 <span>Learn More</span>
-                <ExternalLinkBlack
-                  width="16"
-                  height="16"
-                  className="mt-1 ml-1"
-                />
-              </a>
+              </Link>
               <button
                 onClick={() => navigateTo(SIDEBAR_ITEMS_KEYS.DASHBOARD)}
                 className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver"

@@ -77,10 +77,13 @@ interface PanelProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<StepType>>;
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   setSelectedDateTime: React.Dispatch<React.SetStateAction<string | null>>;
+  interestGroupUpdateIndicator: number;
+  auctionUpdateIndicator: number;
+  bidsUpdateIndicator: number;
+  setHasLastNodeVisited: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Panel = ({
-  currentSiteData,
   setCurrentSite,
   highlightedInterestGroup,
   setHighlightedInterestGroup,
@@ -93,11 +96,15 @@ const Panel = ({
   setCurrentStep,
   setSelectedAdUnit,
   setSelectedDateTime,
+  interestGroupUpdateIndicator,
+  auctionUpdateIndicator,
+  bidsUpdateIndicator,
+  setHasLastNodeVisited,
 }: PanelProps) => {
   const [play, setPlay] = useState(true);
   const [sliderStep, setSliderStep] = useState(1);
   const [autoExpand, setAutoExpand] = useState(true);
-  const [autoScroll, setAutoScroll] = useState(true);
+  const [autoScroll, setAutoScroll] = useState(false);
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -172,6 +179,10 @@ const Panel = ({
     highlightTab: actions.highlightTab,
   }));
 
+  // useEffect(() => {
+  //   setActiveTab(4);
+  // }, [setActiveTab]);
+
   useEffect(() => {
     if (highlightedInterestGroup) {
       setActiveTab(0);
@@ -193,27 +204,37 @@ const Panel = ({
   }, [tooglePlayOnKeydown]);
 
   useEffect(() => {
-    if (!currentSiteData) {
-      setActiveTab(0);
-      return;
-    }
-
-    if (currentSiteData?.type === 'advertiser') {
+    if (interestGroupUpdateIndicator !== -1) {
       highlightTab(1, false);
       highlightTab(2, false);
       highlightTab(0);
     } else {
-      highlightTab(1);
-      highlightTab(2);
+      highlightTab(0, false);
     }
-  }, [currentSiteData, currentSiteData?.type, highlightTab, setActiveTab]);
+  }, [interestGroupUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (auctionUpdateIndicator !== -1) {
+      highlightTab(1);
+    } else {
+      highlightTab(1, false);
+    }
+  }, [auctionUpdateIndicator, highlightTab]);
+
+  useEffect(() => {
+    if (bidsUpdateIndicator !== -1) {
+      highlightTab(2);
+    } else {
+      highlightTab(2, false);
+    }
+  }, [bidsUpdateIndicator, highlightTab]);
 
   const handleResizeCallback = useMemo(() => {
     return new ResizeObserver(() => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
         const containerHeight = containerRef.current.offsetHeight;
-        const newSize = Math.min(containerWidth, containerHeight) / 2;
+        const newSize = Math.min(containerWidth, containerHeight) * 0.8;
 
         setBubbleWidth(newSize);
       }
@@ -277,16 +298,17 @@ const Panel = ({
         const centerX = visibleWidth / 2 - newSize;
         const centerY = visibleHeight / 4 - newSize / 4;
 
-        setExpandedBubbleX(div.scrollLeft + centerX);
-        setExpandedBubbleY(div.scrollTop + centerY);
+        setExpandedBubbleX(centerX);
+        setExpandedBubbleY(centerY);
       }
     }
   }, [getDivDimensions, isBubbleExpanded]);
 
   const resetHandler = useCallback(() => {
     app.reset();
+    setHasLastNodeVisited(false);
     setCurrentSite(null);
-  }, [setCurrentSite]);
+  }, [setCurrentSite, setHasLastNodeVisited]);
 
   const extraInterface = (
     <div className="flex gap-3 items-center">
@@ -416,6 +438,7 @@ const Panel = ({
         setHighlightedInterestGroup={setHighlightedInterestGroup}
         setSelectedAdUnit={setSelectedAdUnit}
         setSelectedDateTime={setSelectedDateTime}
+        setHasLastNodeVisited={setHasLastNodeVisited}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <DraggableTray />

@@ -57,8 +57,6 @@ export interface CurrentSiteData {
   visitedIndex: boolean;
 }
 
-export type AdUnitLiteral = 'div-200-1' | 'div-200-2' | 'div-200-3';
-
 const getRandomisedNumbers = (count: number, min: number, max: number) => {
   const randomNumbers = Array.from(
     { length: count },
@@ -76,6 +74,12 @@ export const transformAuctionConfig = (seller: string) => {
 
   eventAuctionConfig.decisionLogicURL =
     eventAuctionConfig.decisionLogicURL.replace(
+      'privacysandboxdemos-seller.domain-aaa.com',
+      seller
+    );
+
+  eventAuctionConfig.trustedScoringSignalsURL =
+    eventAuctionConfig.trustedScoringSignalsURL.replace(
       'privacysandboxdemos-seller.domain-aaa.com',
       seller
     );
@@ -190,6 +194,11 @@ export const transformBidEvent = (
     return bidEventsToBeReturned;
   }
 
+  const uniqueOwnerOrigins = new Set<string>();
+  interestGroups.forEach((interestGroup) => {
+    uniqueOwnerOrigins.add(interestGroup.ownerOrigin);
+  });
+
   const randomIndex = randomIntFromInterval(0, interestGroups.length - 1);
 
   const ownerOriginToSkip =
@@ -198,7 +207,7 @@ export const transformBidEvent = (
       : '';
 
   interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
-    if (ownerOriginToSkip === ownerOrigin) {
+    if (ownerOriginToSkip === ownerOrigin && uniqueOwnerOrigins.size > 1) {
       return;
     }
 
@@ -424,7 +433,7 @@ const getBidData = (
         return {
           ...event,
           adUnitCode,
-          adContainerSize: [[320, 320]],
+          mediaContainerSize: [[320, 320]],
           mediaType: 'video',
         };
       })
@@ -470,6 +479,7 @@ const getFlattenedAuctionEvents = (
           isMultiSeller
         );
       }
+
       if (index < sellerIndexToBeProcessed) {
         events[seller] = previousEvents?.[seller] ?? [];
       }
@@ -639,16 +649,17 @@ export const configuredAuctionEvents = (
   });
 
   const noBids: NoBidsType = {};
-
-  noBidders.forEach((bidder) => {
-    noBids['27A93A016A30D0A5FB7B8C8779D98AF8'] = {
-      uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-      adUnitCode: selectedAdUnit,
-      mediaContainerSize: [[320, 320]],
-      name: bidder.interestGroupName,
-      ownerOrigin: bidder.ownerOrigin,
-    };
-  });
+  if (receivedBids[selectedAdUnit].length !== 0) {
+    noBidders.forEach((bidder) => {
+      noBids['27A93A016A30D0A5FB7B8C8779D98AF8'] = {
+        uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+        adUnitCode: selectedAdUnit,
+        mediaContainerSize: [[320, 320]],
+        name: bidder.interestGroupName,
+        ownerOrigin: bidder.ownerOrigin,
+      };
+    });
+  }
 
   const adsAndBidders: AdsAndBiddersType = {
     [adunits[0]]: {
@@ -680,6 +691,8 @@ export const configuredAuctionEvents = (
     bidCurrency: 'USD',
     winningBidder: 'DSP 1',
   } as AdsAndBiddersTypeData;
+
+  //console.log(receivedBids)
 
   return {
     auctionData,

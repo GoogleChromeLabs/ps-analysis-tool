@@ -88,9 +88,13 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         Object.values(auctionEventsToBeParsed as SingleSellerAuction).forEach(
           (events) => {
+            const configResolvedEvent = events.filter(
+              (event) => event.type === 'configResolved'
+            )?.[0];
+
             const adUnitCode = JSON.parse(
               // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-              events?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+              configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
             ).divId;
 
             if (!adUnitCode) {
@@ -101,11 +105,11 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             reshapedAuctionEvents[adUnitCode] = {
               ...reshapedAuctionEvents[adUnitCode],
-              [time]: {
+              [time + '||' + events?.[0]?.uniqueAuctionId]: {
                 // @ts-ignore - seller is not defined in type, but it is in the data
-                [events?.[0]?.auctionConfig?.seller ?? '']: {
+                [configResolvedEvent.auctionConfig?.seller ?? '']: {
                   // @ts-ignore - seller is not defined in type, but it is in the data
-                  [events?.[0]?.auctionConfig?.seller ?? '']: events,
+                  [configResolvedEvent.auctionConfig?.seller ?? '']: events,
                 },
               },
             };
@@ -132,9 +136,13 @@ const Provider = ({ children }: PropsWithChildren) => {
                 return;
               }
 
+              const configResolvedEvent = event.filter(
+                (_event) => _event.type === 'configResolved'
+              )?.[0];
+
               adUnit = JSON.parse(
                 // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-                event?.[1]?.auctionConfig?.sellerSignals?.value ?? '{}'
+                configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
               ).divId;
             });
 
@@ -157,7 +165,8 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             reshapedAuctionEvents[adUnit] = {
               ...reshapedAuctionEvents[adUnit],
-              [time]: {
+              // @ts-ignore
+              [time + '||' + events?.['0']?.[0].uniqueAuctionId]: {
                 // @ts-ignore
                 [events?.['0']?.[0]?.auctionConfig?.seller ?? '']: {
                   ...sspEvents,
@@ -169,11 +178,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
         return reshapedAuctionEvents;
       };
-
-      if (Object.keys(auctionEventsToBeParsed || {}).length === 0) {
-        setAuctionEvents(() => null);
-        return true;
-      }
 
       setAuctionEvents((prevState) => {
         if (
@@ -209,6 +213,10 @@ const Provider = ({ children }: PropsWithChildren) => {
       };
     }) => {
       let didAuctionEventsChange = false;
+
+      if (!['AUCTION_EVENTS'].includes(message.type)) {
+        return;
+      }
 
       if (!message.type) {
         return;
@@ -253,31 +261,45 @@ const Provider = ({ children }: PropsWithChildren) => {
             message.payload.multiSellerAuction
           );
 
+          const keys = Object.keys(message.payload.auctionEvents ?? {});
+          const latestAuctionId = keys[keys.length - 1];
+
           if (computedBids) {
             const adUnitCodeToBidders: ProtectedAudienceContextType['state']['adsAndBidders'] =
               {};
+            const uniqueAuctionIDToBids: { [key: string]: ReceivedBids[] } = {};
+
+            computedBids.receivedBids.forEach((bids) => {
+              const { uniqueAuctionId } = bids;
+
+              if (!uniqueAuctionId) {
+                return;
+              }
+
+              if (!uniqueAuctionIDToBids[uniqueAuctionId]) {
+                uniqueAuctionIDToBids[uniqueAuctionId] = [bids];
+              } else {
+                uniqueAuctionIDToBids[uniqueAuctionId].push(bids);
+              }
+
+              uniqueAuctionIDToBids[uniqueAuctionId].sort((a, b) => {
+                if (!a?.bid || !b?.bid) {
+                  return 0;
+                }
+                return b.bid - a.bid;
+              });
+            });
+
+            const highestBidData = uniqueAuctionIDToBids[latestAuctionId][0];
             computedBids.receivedBids.forEach(
               ({
                 adUnitCode,
                 ownerOrigin,
                 mediaContainerSize,
-                bid,
                 bidCurrency,
               }) => {
                 if (!adUnitCode) {
                   return;
-                }
-
-                let winningBid = bid ?? 0;
-                let winningBidder = ownerOrigin ?? '';
-
-                if (
-                  winningBid &&
-                  winningBid < adUnitCodeToBidders[adUnitCode]?.winningBid
-                ) {
-                  winningBid = adUnitCodeToBidders[adUnitCode]?.winningBid;
-                  winningBidder =
-                    adUnitCodeToBidders[adUnitCode]?.winningBidder;
                 }
 
                 adUnitCodeToBidders[adUnitCode] = {
@@ -299,8 +321,8 @@ const Provider = ({ children }: PropsWithChildren) => {
                     ),
                   ],
                   bidCurrency: bidCurrency ?? '',
-                  winningBid,
-                  winningBidder,
+                  winningBid: highestBidData.bid ?? 0,
+                  winningBidder: highestBidData.ownerOrigin ?? '',
                 };
               }
             );

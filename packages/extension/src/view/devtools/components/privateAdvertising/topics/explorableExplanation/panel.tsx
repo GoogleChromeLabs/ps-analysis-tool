@@ -33,6 +33,9 @@ import Animation from './animation';
 import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
 import { adtechs, websites } from './topicsAnimation/data';
 import type { TopicsTableType } from './topicsTable';
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
+
+const STORAGE_KEY = 'topicsExplorableExplanation';
 
 interface PanelProps {
   topicsTableData: Record<number, TopicsTableType[]>;
@@ -68,11 +71,30 @@ const Panel = ({
     useState<() => number>();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const storageRef = useRef(PAstorage);
+  const activeTabRef = useRef(activeTab);
+  const wasPreviousTabLegend = useRef(false);
+
+  useEffect(() => {
+    if (activeTab === 4) {
+      setPlay(false);
+      return;
+    }
+
+    if (activeTabRef.current === activeTab) {
+      wasPreviousTabLegend.current = true;
+    } else {
+      wasPreviousTabLegend.current = false;
+    }
+
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
+
   const siteAdTechs = useMemo(() => {
     return storageRef.current[1]
       ? JSON.parse(storageRef.current[1])?.siteAdTechs
       : assignAdtechsToSites(websites, adtechs);
   }, []);
+
   const epochs = useMemo(() => {
     return (
       (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
@@ -80,9 +102,10 @@ const Panel = ({
       >) ?? createEpochs()
     );
   }, []);
+
   const [visitIndexStart, setVisitIndexStart] = useState(
     JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
-      activeTab
+      activeTabRef.current
     ] ?? 0
   );
 
@@ -91,9 +114,13 @@ const Panel = ({
   }, [PAstorage]);
 
   useEffect(() => {
+    if (activeTab === 4 || wasPreviousTabLegend.current) {
+      return;
+    }
+
     setVisitIndexStart(
       JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes?.[
-        activeTab
+        activeTabRef.current
       ] ?? 0
     );
   }, [activeTab]);
@@ -112,7 +139,7 @@ const Panel = ({
 
     const visitIndexes =
       JSON.parse(storageRef.current[1] || '{}')?.currentVisitIndexes || [];
-    visitIndexes[activeTab] = currentVisitIndex;
+    visitIndexes[activeTabRef.current] = currentVisitIndex;
 
     if (currentVisitIndex !== undefined) {
       setPAStorage(
@@ -121,7 +148,7 @@ const Panel = ({
           epochCompleted,
           topicsTableData,
           siteAdTechs,
-          activeEpochTab: activeTab,
+          activeEpochTab: activeTabRef.current,
           epochs,
         })
       );
@@ -143,6 +170,7 @@ const Panel = ({
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
+    setVisitIndexStart(0);
 
     timeoutRef.current = setTimeout(() => {
       _setReset(false);
@@ -151,10 +179,14 @@ const Panel = ({
   }, [setActiveTab, setTopicsTableData]);
 
   useEffect(() => {
-    if (!epochCompleted[activeTab]) {
+    if (activeTab === 4 || wasPreviousTabLegend.current) {
+      return;
+    }
+
+    if (!epochCompleted[activeTabRef.current]) {
       setTopicsTableData((prevTopicsTableData) => {
         const newTopicsTableData = { ...prevTopicsTableData };
-        newTopicsTableData[activeTab] = [];
+        newTopicsTableData[activeTabRef.current] = [];
         return newTopicsTableData;
       });
     }
@@ -171,8 +203,9 @@ const Panel = ({
   const handleTopicsCalculation = useCallback(
     (visitIndex: number) => {
       setTopicsTableData((prevTopicsTableData) => {
-        const { topics, website } = epochs[activeTab].webVisits[visitIndex];
-        const topicsData = prevTopicsTableData[activeTab];
+        const { topics, website } =
+          epochs[activeTabRef.current].webVisits[visitIndex];
+        const topicsData = prevTopicsTableData[activeTabRef.current];
         const newTopicsTableData = {
           ...prevTopicsTableData,
         };
@@ -200,23 +233,26 @@ const Panel = ({
           [...(topicsData || [])]
         );
 
-        newTopicsTableData[activeTab] = newTopicsData;
+        newTopicsTableData[activeTabRef.current] = newTopicsData;
 
         return newTopicsTableData;
       });
     },
-    [activeTab, epochs, setTopicsTableData, siteAdTechs]
+    [epochs, setTopicsTableData, siteAdTechs]
   );
 
   const handleUserVisit = useCallback(
     (visitIndex: number, updateTopics = true) => {
-      if (visitIndex < epochs[activeTab].webVisits.length && updateTopics) {
+      if (
+        visitIndex < epochs[activeTabRef.current].webVisits.length &&
+        updateTopics
+      ) {
         handleTopicsCalculation(visitIndex);
       }
 
-      if (visitIndex === epochs[activeTab].webVisits.length) {
-        if (activeTab < 3 && updateTopics) {
-          setActiveTab(activeTab + 1);
+      if (visitIndex === epochs[activeTabRef.current].webVisits.length) {
+        if (activeTabRef.current < 3 && updateTopics) {
+          setActiveTab(activeTabRef.current + 1);
           setVisitIndexStart(0);
         } else {
           setPlay(false);
@@ -224,20 +260,20 @@ const Panel = ({
 
         setEpochCompleted((prevEpochCompleted) => ({
           ...prevEpochCompleted,
-          [activeTab]: true,
+          [activeTabRef.current]: true,
         }));
       }
     },
-    [activeTab, epochs, handleTopicsCalculation, setActiveTab]
+    [epochs, handleTopicsCalculation, setActiveTab]
   );
 
   const handlePlay = useCallback(() => {
-    if (activeTab === 3 && epochCompleted[activeTab]) {
+    if (activeTabRef.current === 3 && epochCompleted[activeTabRef.current]) {
       setReset();
     } else {
       setPlay((prevPlay) => !prevPlay);
     }
-  }, [activeTab, epochCompleted, setReset]);
+  }, [epochCompleted, setReset]);
 
   const [isInteractiveModeOn, setIsInteractiveModeOn] = useState(false);
 
@@ -245,8 +281,39 @@ const Panel = ({
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
+    setVisitIndexStart(0);
     setPAStorage('');
   }, [isInteractiveModeOn, setActiveTab, setPAStorage, setTopicsTableData]);
+
+  const hasDataBeenFetchedFromSessionStorage = useRef<boolean>(false);
+  useEffect(() => {
+    (async () => {
+      if (!hasDataBeenFetchedFromSessionStorage.current) {
+        return;
+      }
+
+      await updateSessionStorage(
+        { isInteractiveModeOn, sliderStep },
+        STORAGE_KEY
+      );
+    })();
+  }, [isInteractiveModeOn, sliderStep]);
+
+  useEffect(() => {
+    (async () => {
+      const data = (await getSessionStorage(STORAGE_KEY)) || {};
+
+      if (data?.isInteractiveModeOn) {
+        setIsInteractiveModeOn(data.isInteractiveModeOn);
+      }
+
+      if (data?.sliderStep) {
+        setSliderStep(data.sliderStep);
+      }
+
+      hasDataBeenFetchedFromSessionStorage.current = true;
+    })();
+  }, []);
 
   const extraInterface = (
     <div className="flex gap-2 items-center">
@@ -269,15 +336,15 @@ const Panel = ({
         setPlay={handlePlay}
         sliderStep={sliderStep}
         setSliderStep={setSliderStep}
-        historyCount={epochs[activeTab].webVisits.length}
+        historyCount={epochs[activeTabRef.current]?.webVisits.length || 0}
         reset={setReset}
         extraInterface={extraInterface}
         showNextPrevButtons={false}
       />
       <div className="flex-1 overflow-auto">
         <Animation
-          epoch={epochs[activeTab].webVisits}
-          isAnimating={!epochCompleted?.[activeTab]}
+          epoch={epochs[activeTabRef.current]?.webVisits || []}
+          isAnimating={!epochCompleted?.[activeTabRef.current]}
           siteAdTechs={siteAdTechs}
           visitIndexStart={visitIndexStart}
           isPlaying={play}
