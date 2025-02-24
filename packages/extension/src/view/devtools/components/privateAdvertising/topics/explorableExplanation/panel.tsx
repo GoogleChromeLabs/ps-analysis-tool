@@ -44,7 +44,7 @@ interface PanelProps {
   >;
   PAstorage: string[];
   setPAActiveTab: (tabIndex: number) => void;
-  setPAStorage: (content: string) => void;
+  setPAStorage: (content: string, index?: number) => void;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
@@ -179,6 +179,7 @@ const Panel = ({
   const setReset = useCallback(() => {
     setPlay(false);
     _setReset(true);
+    setPAStorage('', 1);
     setSliderStep(1);
     setTopicsTableData({});
     setActiveTab(0);
@@ -189,7 +190,7 @@ const Panel = ({
       _setReset(false);
       setPlay(true);
     }, 0);
-  }, [setActiveTab, setTopicsTableData]);
+  }, [setActiveTab, setPAStorage, setTopicsTableData]);
 
   useEffect(() => {
     if (activeTab === 4 || wasPreviousTabLegend.current) {
