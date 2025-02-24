@@ -29,7 +29,6 @@ import FlowExpander from './flowExpander';
 import type { Coordinates, CoordinateValue } from '../types';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
 
-const LEFT_MARGIN = 70; // Margin from the left side of the canvas
 const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
 let spacing: number, renderedBranchIds: number[], endpoints: Coordinates[];
@@ -79,6 +78,8 @@ const Branches = async ({
 
   const y2 = y1 + 50;
   spacing = 300; // Calculate spacing based on canvas width
+  const branchXEndpoint = x1 > spacing ? x1 + spacing : x1 + spacing * 2;
+  const branchXStartpoint = x1 > spacing ? x1 - spacing : x1;
 
   await ProgressLine({
     x1: x1,
@@ -90,11 +91,8 @@ const Branches = async ({
   });
 
   const drawInstantly = () => {
-    const branchXEndpoint =
-      x1 + ((branches.length + 1) / 2) * spacing - LEFT_MARGIN * 4 - 20;
-
     branches.forEach(({ id, type }, index) => {
-      const x = x1 + (index - (branches.length - 1) / 2) * spacing;
+      const x = branchXStartpoint + index * spacing;
       const y = y2 - 9;
       let endpoint;
       p.push();
@@ -181,11 +179,6 @@ const Branches = async ({
   // Clear canvas or update logic (if necessary)
   wipeAndRecreateInterestCanvas();
 
-  const branchXStartpoint =
-    x1 - (branches.length / 2) * spacing + LEFT_MARGIN * 2 + 10;
-  const branchXEndpoint =
-    x1 + ((branches.length + 1) / 2) * spacing - LEFT_MARGIN * 4 - 20;
-
   await ProgressLine({
     x1: branchXStartpoint,
     y1: y2 - 9,
@@ -213,7 +206,7 @@ const Branches = async ({
 
   await Promise.all(
     branches.map(async ({ id, type }, index) => {
-      const x = x1 + (index - (branches.length - 1) / 2) * spacing;
+      const x = branchXStartpoint + index * spacing;
       const y = y2 - 9;
       let endpoint;
 
