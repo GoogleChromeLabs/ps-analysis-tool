@@ -151,17 +151,28 @@ body {
   position: relative;
 }
 
-#bubble-container {
+/* bubble wrapper */
+#bubble-container-div {
   position: sticky;
+  top: 5px;
+  left: 5px;
+  z-index: 4;
+  height: 100%;
+  width: 100%;
   pointer-events: none;
-  top: 0px;
-  left: 0px;
 }
 
-.minified-bubble-container {
-  position: sticky;
-  top: 10px;
-  left: 10px;
+#bubble-container-div.expanded {
+  backdrop-filter: blur(1px);
+  z-index: 4;
+  pointer-events: auto;
+}
+
+/* bubble element */
+#minified-bubble-container {
+  position: absolute;
+  top: 5px;
+  left: 5px;
   height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -172,6 +183,56 @@ body {
   align-items: center;
   justify-content: center;
   transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+  pointer-events: auto;
+}
+
+#minified-bubble-container.expanded {
+  position: absolute;
+  display: block;
+  top: var(--expandedBubbleY);
+  left: var(--expandedBubbleX);
+  height: var(--expandedBubbleWidth);
+  width: var(--expandedBubbleWidth);
+  border-radius: 50%;
+  border: 1px solid #808080;
+  backdrop-filter: blur(10px);
+}
+
+#close-button {
+  position: absolute;
+  top: 10px;
+  cursor: pointer;
+  display: none;
+  pointer-events: auto;
+}
+
+#open-button {
+  position: absolute;
+  top: 35px;
+  left: 50px;
+  cursor: pointer;
+  display: none;
+  pointer-events: auto;
+}
+
+#count-display {
+  font-size: 16px;
+  position: absolute;
+  margin: 0px;
+  backdrop-filter: blur(4px);
+  font-weight: bolder;
+  border-radius: 50%;
+}
+
+.play-pause-button {
+  margin-right: 10px;
+}
+
+.controls {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
 }
 
 .circle-svg:hover:active {
@@ -197,70 +258,4 @@ body {
 
 text {
   cursor: pointer;
-}
-
-.minified-bubble-container.expanded {
-  position: absolute;
-  display: block;
-  top: var(--expandedBubbleY);
-  left: var(--expandedBubbleX);
-  height: var(--expandedBubbleWidth);
-  width: var(--expandedBubbleWidth);
-  border-radius: 50%;
-  border: 1px solid #808080;
-  backdrop-filter: blur(10px);
-}
-
-.bubble-container {
-  position: sticky;
-  pointer-events: auto;
-}
-
-.bubble-container.expanded {
-  position: absolute;
-  backdrop-filter: blur(1px);
-  z-index: 4;
-  height: 100vh;
-  width: 100vw;
-}
-
-#close-button {
-  position: absolute;
-  top: 10px;
-  cursor: pointer;
-  display: none;
-}
-
-#open-button {
-  position: absolute;
-  top: 35px;
-  left: 50px;
-  cursor: pointer;
-  display: none;
-}
-
-#count-display {
-  font-size: 16px;
-  position: absolute;
-  margin: 0px;
-  backdrop-filter: blur(4px);
-  font-weight: bolder;
-  border-radius: 50%;
-}
-
-.play-pause-button {
-  margin-right: 10px;
-}
-
-.controls {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  display: flex;
-}
-
-#bubble-container-div {
-  top: 0px;
-  left: 0px;
-  z-index: 4;
 }
