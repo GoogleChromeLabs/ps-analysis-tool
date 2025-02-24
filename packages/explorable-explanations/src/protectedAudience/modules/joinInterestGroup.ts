@@ -192,7 +192,7 @@ const joinInterestGroup: JoinInterestGroup = {
 
     const steps = app.joinInterestGroup.joinings[index];
 
-    if (!steps) {
+    if (!steps.length) {
       return;
     }
 
