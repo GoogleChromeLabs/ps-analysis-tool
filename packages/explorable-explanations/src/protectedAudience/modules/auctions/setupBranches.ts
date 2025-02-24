@@ -27,7 +27,7 @@ const setupBranches = (steps: AuctionStep[], index: number) => {
 
   const info = {
     title: 'Auction Time',
-    info: 'Multiple auctions can occur at different times based on various events. For example, an auction may take place when a page is loaded or reloaded, an ad slot is refreshed, or an ad rotation is triggered.',
+    info: 'Multiple auctions can occur at different times based on various events, such as when a page is loaded or reloaded, an ad slot is refreshed, or an ad rotation is triggered. The timing refers to when the entire auction flow begins (not when runAdAuction is called).',
   };
 
   steps.push({
