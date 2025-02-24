@@ -106,13 +106,19 @@ function easeOutQuad(t) {
   return --t * t * t + 1;
 }
 
-const messageListener = ({ data: { storyUrl } }) => {
+const messageListener = ({ data: { storyUrl, preload } }) => {
   try {
-    if(!storyUrl){
+    if (preload) {
+      // load the story in the player so it fetches all assets
+      stateObject.player.add([{ href: storyUrl + '#embedmode=2' }]);
       return;
     }
 
-    stateObject.player.add([{href: storyUrl + '#embedmode=2'}]);
+    if (!storyUrl) {
+      return;
+    }
+
+    stateObject.player.add([{ href: storyUrl + '#embedmode=2' }]);
 
     const data = { storyOpened: true };
     const event = new CustomEvent('webStoriesLightBoxEvent', {
@@ -120,7 +126,7 @@ const messageListener = ({ data: { storyUrl } }) => {
     });
 
     window.parent.document.dispatchEvent(event);
-  
+
     stateObject.player.show(storyUrl + '#embedmode=2', null, {
       animate: false,
     });
@@ -128,7 +134,7 @@ const messageListener = ({ data: { storyUrl } }) => {
     document.body.classList.add('lightbox-open');
     stateObject.lightboxEl.classList.remove('closed');
     resetStyles();
-  
+
     stateObject.player.play();
   } catch (error) {
     //Fail silently

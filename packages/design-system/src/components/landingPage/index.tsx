@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -24,7 +24,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { getStoryPlayerMarkup } from './getStoryPlayerMarkup';
 import LandingPage, { LandingPageProps } from './LandingPage';
 import ContentPanel from './contentPanel';
-import { prefetchPageAssets } from '@google-psat/common';
 
 type LandingPageContainerProps = LandingPageProps & {
   contentPanelTitle: string;
@@ -40,58 +39,45 @@ type LandingPageContainerProps = LandingPageProps & {
 
 const LandingPageContainer = (props: LandingPageContainerProps) => {
   const [independentStory, setIndependentStory] = useState<string>('');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [isPageReady, setIsPageReady] = useState<boolean>(false);
   const { children, contentPanelTitle, content, counterStyles, titleStyles } =
     props;
 
-  const prefetchAssets = (storyUrl: string) => {
-    if (!storyUrl) {
-      return;
-    }
-
-    prefetchPageAssets(storyUrl, {
-      resourceType: ['script'],
-      getAssetsUrl: (doc) => {
-        return Array.from(doc.getElementsByTagName('amp-img')).map(
-          (img) => img.getAttribute('src') ?? ''
-        );
-      },
-    });
-  };
+  useEffect(() => {
+    setIsPageReady(true);
+    return () => {
+      setIsPageReady(false);
+    };
+  }, []);
 
   useEffect(() => {
-    if (!independentStory || !iframeRef.current) {
+    if (!independentStory) {
       return;
     }
-
-    iframeRef.current.contentWindow?.postMessage({
-      storyUrl: independentStory,
-    });
+    // send message to the right iframe
+    const iframe = document.getElementById(independentStory);
+    if (iframe) {
+      (iframe as HTMLIFrameElement).contentWindow?.postMessage({
+        storyUrl: independentStory,
+      });
+    }
   }, [independentStory]);
 
   useEffect(() => {
-    document.addEventListener(
-      'webStoriesLightBoxEvent',
-      //@ts-ignore since this is a custom event.
-      (event) => {
-        //@ts-ignore since this is a custom data.
-        if (event?.detail?.storyOpened === false) {
-          setIndependentStory('');
-        }
-      },
-      false
-    );
+    const eventListener = (event: CustomEvent) => {
+      if (event?.detail?.storyOpened === false) {
+        setIndependentStory('');
+      }
+    };
+
+    // @ts-ignore since this is a custom event.
+    document.addEventListener('webStoriesLightBoxEvent', eventListener, false);
 
     return () => {
+      // @ts-ignore since this is a custom event.
       document.removeEventListener(
         'webStoriesLightBoxEvent',
-        //@ts-ignore since this is a custom event.
-        (event) => {
-          //@ts-ignore since this is a custom data.
-          if (event?.detail?.storyOpened === false) {
-            setIndependentStory('');
-          }
-        },
+        eventListener,
         false
       );
     };
@@ -109,7 +95,6 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
               return {
                 ...data,
                 onClick: () => setIndependentStory(data?.storyUrl ?? ''),
-                onMouseEnter: () => prefetchAssets(data?.storyUrl ?? ''),
               };
             })}
             counterStyles={counterStyles}
@@ -119,17 +104,33 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
       >
         {children}
       </LandingPage>
-      <iframe
-        ref={iframeRef}
-        srcDoc={getStoryPlayerMarkup()}
-        style={{
-          display: independentStory ? 'block' : 'none',
-          height: independentStory ? '100%' : '0%',
-          width: independentStory ? '100%' : '0%',
-          position: 'fixed',
-        }}
-        className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
-      />
+      {isPageReady &&
+        // we need to create a new iframe for each story in order to preload the story
+        content.map((data) => {
+          return (
+            <iframe
+              id={data.storyUrl}
+              key={data.storyUrl}
+              onLoad={(event: React.SyntheticEvent<HTMLIFrameElement>) => {
+                (event.target as HTMLIFrameElement).contentWindow?.postMessage(
+                  {
+                    storyUrl: data.storyUrl,
+                    preload: true,
+                  },
+                  '*'
+                );
+              }}
+              srcDoc={getStoryPlayerMarkup()}
+              style={{
+                display: data.storyUrl === independentStory ? 'block' : 'none',
+                height: data.storyUrl === independentStory ? '100%' : '0%',
+                width: data.storyUrl === independentStory ? '100%' : '0%',
+                position: 'fixed',
+              }}
+              className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
+            />
+          );
+        })}
     </>
   );
 };
