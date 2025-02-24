@@ -45,7 +45,6 @@ const DraggableTray = forwardRef<
   { initialCollapsed = false }: DraggableTrayProps,
   ref
 ) {
-  console.log(ref);
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
