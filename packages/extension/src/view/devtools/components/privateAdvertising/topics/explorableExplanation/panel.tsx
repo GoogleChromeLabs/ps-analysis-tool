@@ -95,12 +95,25 @@ const Panel = ({
       : assignAdtechsToSites(websites, adtechs);
   }, []);
 
-  const epochs = useMemo(() => {
-    return (
-      (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
-        typeof createEpochs
-      >) ?? createEpochs()
-    );
+  const [epochs, setEpochs] = useState<
+    {
+      webVisits: { website: string; datetime: string; topics: string[] }[];
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const storedData = JSON.parse(storageRef.current[1] || '{}');
+
+    if (storedData?.epochs) {
+      setEpochs(storedData.epochs);
+      return;
+    }
+
+    (async () => {
+      const data = await createEpochs();
+
+      setEpochs(data);
+    })();
   }, []);
 
   const [visitIndexStart, setVisitIndexStart] = useState(

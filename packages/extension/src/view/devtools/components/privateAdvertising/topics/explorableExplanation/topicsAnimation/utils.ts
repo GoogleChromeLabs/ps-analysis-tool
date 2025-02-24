@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
+/**
+ * External dependencies.
+ */
 import type p5 from 'p5';
+import type { ClassificationResult } from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
 import { websites, websiteToTopicMapping } from './data';
 
 export const assignAdtechsToSites = (sites: string[], adTechs: string[]) => {
@@ -58,6 +66,25 @@ export const getAdtechsColors = (p5: p5) => ({
   LiveRamp: p5.color(0, 128, 128), // Teal
 });
 
+const fetchWebsiteToTopic = async () => {
+  const response = await fetch(
+    'https://topics.privacysandbox.report/classify',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        domains: websites,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  const jsonResponse = await response.json();
+
+  return jsonResponse;
+};
+
 export const getWebsiteToTopic = (website: string) => {
   return websiteToTopicMapping[website];
 };
@@ -91,7 +118,7 @@ export const generateTimelineVisits = (
   return visits;
 };
 
-export const createEpochs = () => {
+export const createEpochs = async () => {
   const epochs: {
     webVisits: { website: string; datetime: string; topics: string[] }[];
   }[] = [];
@@ -99,6 +126,12 @@ export const createEpochs = () => {
   const numEpochs = 4;
   const numVisitsPerEpoch = 6;
   const startDate = new Date();
+
+  const sitesTopics = await fetchWebsiteToTopic();
+
+  sitesTopics.forEach((siteTopic: ClassificationResult) => {
+    websiteToTopicMapping[siteTopic.domain] = siteTopic.categories ?? [];
+  });
 
   for (let epoch = 0; epoch < numEpochs; epoch++) {
     const webVisits = generateTimelineVisits(numVisitsPerEpoch, startDate);
