@@ -23,7 +23,7 @@ import Queue from 'queue';
 /**
  * Internal dependencies.
  */
-import config from './config';
+import config, { publisherData } from './config';
 import auctions from './modules/auctions';
 import flow from './modules/flow';
 import * as utils from './utils';
@@ -181,6 +181,32 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
     return;
   }
 
+  for (let i = 0; i < currentIndex; i++) {
+    app.promiseQueue?.push((cb) => {
+      if (app.p && !app.isInteractiveMode) {
+        const circleItem = config.timeline.circles[i];
+        const { diameter, verticalSpacing } = config.timeline.circleProps;
+        const circleVerticalSpace = verticalSpacing + diameter;
+        const xPositionForCircle =
+          config.timeline.position.x + diameter / 2 + circleVerticalSpace * i;
+
+        app.p.push();
+        app.p.fill(config.timeline.colors.black);
+        app.p.textSize(12);
+        app.p.strokeWeight(0.1);
+        app.p.textFont('sans-serif');
+        app.p.text(
+          circleItem.datetime,
+          xPositionForCircle,
+          config.timeline.position.y
+        );
+        app.p.pop();
+      }
+
+      cb?.(undefined, true);
+    });
+  }
+
   while (currentIndex < config.timeline.circles.length) {
     app.promiseQueue.push((cb) => {
       const { currentIndex: _currentIndex, circlePositions } = app.timeline;
@@ -207,6 +233,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       cb?.(undefined, true);
     });
 
+    app.calculateDateTime(currentIndex);
     app.drawFlows(currentIndex);
     app.promiseQueue.push((cb) => {
       const { currentIndex: _currentIndex } = app.timeline;
@@ -296,6 +323,31 @@ app.setupLoop = (doNotPlay: boolean) => {
   } catch (error) {
     // Fail silently
   }
+};
+
+app.calculateDateTime = (index: number) => {
+  app.promiseQueue?.push((cb) => {
+    const circle = config.timeline.circles[index];
+    const date = new Date();
+
+    circle.datetime =
+      date.toISOString().split('T')[0] +
+      ' ' +
+      date.toTimeString().split(' ')[0];
+
+    if (circle.type === 'publisher') {
+      const data = publisherData[circle.website];
+
+      if (data) {
+        data.branches.forEach((branch) => {
+          branch.date = date.toDateString();
+          branch.time = date.toTimeString().split(' ')[0];
+        });
+      }
+    }
+
+    cb?.(undefined, true);
+  });
 };
 
 app.drawFlows = (index: number) => {

@@ -90,7 +90,7 @@ const config: Config = {
     fontSize: 12,
   },
   timeline: {
-    position: { x: 100, y: 50 },
+    position: { x: 120, y: 50 },
     circleProps: {
       diameter: 50,
       verticalSpacing: 130,

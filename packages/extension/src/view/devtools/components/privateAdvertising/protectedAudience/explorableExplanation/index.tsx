@@ -401,6 +401,8 @@ const ExplorableExplanation = () => {
       highlightedInterestGroup,
       auctionsData,
       isMultiSeller,
+      selectedAdUnit,
+      selectedDateTime,
       info,
     ]
   );

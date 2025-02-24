@@ -121,8 +121,8 @@ export type AuctionStepProps = {
     description?: string;
     type?: string;
     color?: string;
-    date?: string;
-    time?: string;
+    date?: string | (() => string);
+    time?: string | (() => string);
   }[];
   direction?: string;
   noArrow?: boolean;
