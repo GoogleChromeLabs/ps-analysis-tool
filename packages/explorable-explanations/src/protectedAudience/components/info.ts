@@ -20,7 +20,15 @@ import { addCanvasEventListener, isInsideBox } from '../utils';
 import config from '../config';
 import app from '../app';
 
-const Info = ({ x, y, title, info, description = '' }) => {
+interface InfoProps {
+  x: number;
+  y: number;
+  title: string;
+  info: string;
+  description?: string;
+}
+
+const Info = ({ x, y, title, info, description = '' }: InfoProps) => {
   const {
     timeline: { infoIconSize },
   } = config;
