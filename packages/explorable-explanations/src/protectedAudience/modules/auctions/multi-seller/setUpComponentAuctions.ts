@@ -61,6 +61,15 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
       width: BOX_WIDTH,
       height: BOX_HEIGHT,
       x: () => {
+        if (
+          getCoordinateValues(app.auction.nextTipCoordinates).x -
+            BOX_WIDTH / 2 <
+          0
+        ) {
+          boxCordinates.x = 100;
+          return boxCordinates.x;
+        }
+
         boxCordinates.x =
           getCoordinateValues(app.auction.nextTipCoordinates).x - BOX_WIDTH / 2;
         return boxCordinates.x;
