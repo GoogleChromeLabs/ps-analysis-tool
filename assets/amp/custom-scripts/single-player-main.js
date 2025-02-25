@@ -108,13 +108,13 @@ function easeOutQuad(t) {
 
 const messageListener = ({ data: { storyUrl, preload } }) => {
   try {
-    if (preload) {
-      // load the story in the player so it fetches all assets
-      stateObject.player.add([{ href: storyUrl + '#embedmode=2' }]);
+    if (!storyUrl) {
       return;
     }
 
-    if (!storyUrl) {
+    if (preload) {
+      // load the story in the player so it fetches all assets
+      stateObject.player.add([{ href: storyUrl + '#embedmode=2' }]);
       return;
     }
 
