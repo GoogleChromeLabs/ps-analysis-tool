@@ -79,6 +79,7 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
         return boxCordinates.y;
       },
       borderStroke: [0, 0, 0, 0],
+      isBranchComponent: true,
     },
     delay: 1000,
     callBack: (returnValue) => {

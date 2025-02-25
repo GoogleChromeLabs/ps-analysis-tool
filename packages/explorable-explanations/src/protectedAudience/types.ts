@@ -141,6 +141,7 @@ export type AuctionStepProps = {
   showBarrageAnimation?: boolean;
   showWinningAd?: boolean;
   showRippleEffect?: boolean;
+  isBranchComponent?: boolean;
 };
 
 export type AuctionStep = {

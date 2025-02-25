@@ -251,6 +251,11 @@ const joinInterestGroup: JoinInterestGroup = {
 
     app.promiseQueue?.push(async (cb) => {
       if (!app.isRevisitingNodeInInteractiveMode) {
+        const { x, y } =
+          app.timeline.circlePositions[app.timeline.currentIndex];
+
+        utils.scrollToCoordinates(x as number, y as number);
+
         await bubbles.reverseBarrageAnimation(index);
         app.setCurrentSite(config.timeline.circles[index]);
       }
