@@ -25,6 +25,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   PrivateAdvertisingIcon,
   TopicsIcon,
+  AttributionIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -35,6 +36,16 @@ export const PINNED_ITEMS = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
   },
   {
+    name: I18n.getMessage('attributionReporting'),
+    icon: AttributionIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
+  },
+  {
+    name: I18n.getMessage('topics'),
+    icon: TopicsIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.TOPICS,
+  },
+  {
     name: I18n.getMessage('cookies'),
     icon: CookieIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
@@ -43,11 +54,6 @@ export const PINNED_ITEMS = [
     name: I18n.getMessage('rws'),
     icon: RelatedWebsiteSetsIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
-  },
-  {
-    name: I18n.getMessage('topics'),
-    icon: TopicsIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.TOPICS,
   },
 ];
 
