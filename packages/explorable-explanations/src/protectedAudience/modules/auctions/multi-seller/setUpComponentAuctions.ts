@@ -242,7 +242,6 @@ const setUpComponentAuctionStarter = (
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 275,
       customWidth: 1000,
       noArrow: true,
-      isBranch: true,
     },
   });
 
