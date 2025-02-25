@@ -81,26 +81,53 @@ const websitesToIconsMapping: Record<string, string> = {
 };
 
 const websiteToTopicMapping: Record<string, string[]> = {
-  'tmz.com': [],
-  'cnet.com': [],
-  'espn.com': [],
-  'investopedia.com': [],
-  'tripadvisor.com': [],
-  'allrecipes.com': [],
-  'vogue.com': [],
-  'bloomberg.com': [],
-  'linkedin.com': [],
-  'rollingstone.com': [],
-  'cnn.com': [],
-  'techcrunch.com': [],
-  'cbssports.com': [],
-  'healthline.com': [],
-  'expedia.com': [],
-  'foodnetwork.com': [],
-  'cosmopolitan.com': [],
-  'nerdwallet.com': [],
-  'indeed.com': [],
-  'crunchyroll.com': [],
+  'tmz.com': [
+    '/News',
+    '/Arts & Entertainment',
+    '/Arts & Entertainment/Celebrities & Entertainment News',
+  ],
+  'cnet.com': [
+    '/Computers & Electronics',
+    '/Computers & Electronics/Consumer Electronics',
+  ],
+  'espn.com': ['/Sports'],
+  'investopedia.com': ['/Finance', '/Finance/Investing'],
+  'tripadvisor.com': ['/Travel & Transportation'],
+  'allrecipes.com': ['/Food & Drink'],
+  'vogue.com': ['/Beauty & Fitness', '/Beauty & Fitness/Fashion & Style'],
+  'bloomberg.com': ['/Business & Industrial'],
+  'linkedin.com': ['/Jobs & Education', '/Jobs & Education/Education'],
+  'rollingstone.com': ['/Arts & Entertainment'],
+  'cnn.com': ['/News', '/News/World News'],
+  'techcrunch.com': [
+    '/Computers & Electronics',
+    '/Computers & Electronics/Software',
+  ],
+  'cbssports.com': ['/Sports'],
+  'healthline.com': [
+    '/Jobs & Education',
+    '/Jobs & Education/Education',
+    '/Jobs & Education/Education/Health Education & Medical Training',
+  ],
+  'expedia.com': [
+    '/Travel & Transportation',
+    '/Travel & Transportation/Travel Agencies & Services',
+  ],
+  'foodnetwork.com': [
+    '/Food & Drink',
+    '/Food & Drink/Food',
+    '/Food & Drink/Food/Gourmet & Specialty Foods',
+  ],
+  'cosmopolitan.com': [
+    '/Beauty & Fitness',
+    '/Beauty & Fitness/Fashion & Style',
+  ],
+  'nerdwallet.com': ['/Finance'],
+  'indeed.com': ['/Jobs & Education'],
+  'crunchyroll.com': [
+    '/Arts & Entertainment',
+    '/Arts & Entertainment/Comics & Animation',
+  ],
 };
 
 const adtechs = [

@@ -127,7 +127,13 @@ export const createEpochs = async () => {
   const numVisitsPerEpoch = 6;
   const startDate = new Date();
 
-  const sitesTopics = await fetchWebsiteToTopic();
+  let sitesTopics: ClassificationResult[] = [];
+
+  try {
+    sitesTopics = await fetchWebsiteToTopic();
+  } catch (error) {
+    // Fail silently
+  }
 
   sitesTopics.forEach((siteTopic: ClassificationResult) => {
     websiteToTopicMapping[siteTopic.domain] = siteTopic.categories ?? [];
