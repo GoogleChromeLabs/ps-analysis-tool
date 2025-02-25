@@ -19,11 +19,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
-
-/**
- * Internal dependencies.
- */
-import { topicsAnimation } from './topicsAnimation';
+import { topicsAnimation } from '@google-psat/explorable-explanations';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
