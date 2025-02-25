@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
+import Link from '../../link';
 
 interface RenderLinkProps {
   label: string;
@@ -34,15 +35,14 @@ const RenderLink = ({ label, link, linkLabel }: RenderLinkProps) => (
             <p className="text-sm font-medium text-raisin-black dark:text-bright-gray truncate capitalize">
               {label}
             </p>
-            <a
+            <Link
               title={link}
               href={link}
               className="text-xs text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
-              target="_blank"
               rel="noreferrer"
             >
               {linkLabel}
-            </a>
+            </Link>
           </div>
         </div>
       </li>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './calculateCanvasDimensions';
-export * from './wipeAndRecreateCanvas';
-export * from './delay';
-export * from './drawArrow';
-export * from './drawText';
-export * from './isInsideCircle';
-export * from './canvasEventListener';
-export * from './markVisitedValue';
-export * from './isOverControls';
-export * from './isInsideBox';
-export * from './scrollToCoordinates';
-export * from './drawOpenArrowWithoutAnimationIcon';
-export * from './getCircleDatetime';
+
+/**
+ * Internal dependencies
+ */
+import config from '../config';
+
+export const getCircleDatetime = (site: string) => {
+  const siteData = config.timeline.circles.find(
+    (circle) => circle.website === site
+  );
+
+  return siteData?.datetime || '';
+};

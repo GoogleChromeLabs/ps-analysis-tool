@@ -75,7 +75,7 @@ const AdUnitsPanel = ({
         </>
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center">
-          <p className="text-sm text-raisin-black dark:text-bright-gray">
+          <p className="text-lg text-raisin-black dark:text-bright-gray">
             No ad units were recorded.
           </p>
           {showEvaluationPlaceholder && (
