@@ -17,13 +17,18 @@
  * Internal dependencies
  */
 import app from '../app';
+import { isPointInViewport } from './isPointInViewport';
 export const scrollToCoordinates = (x: number, y: number, override = false) => {
-  if (!app.autoScroll || app.isRevisitingNodeInInteractiveMode) {
+  if (
+    !app.autoScroll ||
+    app.isRevisitingNodeInInteractiveMode ||
+    !app.canvasParentElement
+  ) {
     return;
   }
 
   if (override) {
-    app.canvasParentElement?.scrollTo({
+    app.canvasParentElement.scrollTo({
       left: 0,
       top: 0,
       behavior: 'smooth',
@@ -31,18 +36,13 @@ export const scrollToCoordinates = (x: number, y: number, override = false) => {
     return;
   }
 
-  const rect = app.canvasParentElement?.getBoundingClientRect();
-
-  if (!rect) {
+  if (isPointInViewport(x, y)) {
     return;
   }
 
-  const finalX = x - rect.left,
-    finalY = y - rect.top;
-
-  app.canvasParentElement?.scrollTo({
-    left: finalX,
-    top: finalY,
+  app.canvasParentElement.scrollTo({
+    left: x - 50,
+    top: y - 50,
     behavior: 'smooth',
   });
 };
