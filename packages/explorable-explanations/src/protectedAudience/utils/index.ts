@@ -26,3 +26,5 @@ export * from './isInsideBox';
 export * from './scrollToCoordinates';
 export * from './drawOpenArrowWithoutAnimationIcon';
 export * from './getCircleDatetime';
+export * from './isCoordinateInView';
+export * from './getCoordinateValues';

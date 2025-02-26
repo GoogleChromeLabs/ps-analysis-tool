@@ -17,17 +17,24 @@
  * Internal dependencies
  */
 import app from '../app';
+import throttle from 'just-throttle';
+import { isCoordinateInView } from './isCoordinateInView';
+
+const scrollTo = throttle((x: number, y: number) => {
+  app.canvasParentElement?.scrollTo({
+    left: x,
+    top: y,
+    behavior: 'smooth',
+  });
+}, 1000);
+
 export const scrollToCoordinates = (x: number, y: number, override = false) => {
   if (!app.autoScroll || app.isRevisitingNodeInInteractiveMode) {
     return;
   }
 
   if (override) {
-    app.canvasParentElement?.scrollTo({
-      left: 0,
-      top: 0,
-      behavior: 'smooth',
-    });
+    scrollTo(0, 0);
     return;
   }
 
@@ -40,9 +47,11 @@ export const scrollToCoordinates = (x: number, y: number, override = false) => {
   const finalX = x - rect.left,
     finalY = y - rect.top;
 
-  app.canvasParentElement?.scrollTo({
-    left: finalX,
-    top: finalY,
-    behavior: 'smooth',
-  });
+  scrollTo(finalX, finalY);
+};
+
+export const scrollToCoordinatesIfNotInView = (x: number, y: number) => {
+  if (!isCoordinateInView(x, y)) {
+    scrollToCoordinates(x, y);
+  }
 };

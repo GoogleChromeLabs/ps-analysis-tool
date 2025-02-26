@@ -20,6 +20,7 @@ import app from '../app';
 import config from '../config';
 import { scrollToCoordinates } from '../utils';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
+import { isCoordinateInView } from '../utils/isCoordinateInView';
 import type { CoordinateValue, Coordinates } from '../types';
 import Info from './info';
 
@@ -33,7 +34,7 @@ type BoxProps = {
   width?: number;
   height?: number;
   color?: string;
-  info?: boolean;
+  info?: boolean | string;
   isBranchComponent?: boolean;
   borderStroke?: number[];
 };
@@ -78,8 +79,8 @@ const Box = ({
     return nextTip;
   }
 
-  if (!isBranchComponent) {
-    scrollToCoordinates(x, y - height / 2);
+  if (!isBranchComponent && !isCoordinateInView(x + width, y + height)) {
+    scrollToCoordinates(x + width / 2, y + height / 2);
   }
 
   p.push();
@@ -98,7 +99,7 @@ const Box = ({
     p.text(title, x + width / 2, y + height / 2);
   }
 
-  if (info) {
+  if (info && typeof info === 'string') {
     const { x: xCoordinate, y: yCoordinate } = getCoordinateValues({ x, y });
     const iconX = xCoordinate + width - infoIconSize - INFO_ICON_SPACING;
     const iconY = yCoordinate + INFO_ICON_SPACING;

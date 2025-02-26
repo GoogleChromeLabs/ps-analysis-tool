@@ -19,7 +19,6 @@
 import config from '../config';
 import app from '../app';
 import * as utils from '../utils';
-import { getCoordinateValues } from '../utils/getCoordinateValues';
 import type { CoordinateValue, Coordinates } from '../types';
 
 const ARROW_SIZE = 10;
@@ -59,7 +58,10 @@ const ProgressLine = ({
   const scrollAdjuster =
     (direction === 'right' ? config.flow.box.height : config.flow.box.width) /
     2;
-  const { x: x1, y: y1 } = getCoordinateValues({ x: x1Value, y: y1Value });
+  const { x: x1, y: y1 } = utils.getCoordinateValues({
+    x: x1Value,
+    y: y1Value,
+  });
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction, width, height);
 
   const drawArrow = (x: number, y: number, dir: string) => {
@@ -108,10 +110,12 @@ const ProgressLine = ({
       p.stroke(0);
       p.strokeWeight(1);
 
+      const isInView = utils.isCoordinateInView(x2, y2);
+
       switch (direction) {
         case 'right':
           currentX += Math.min(incrementBy, x2 - currentX);
-          if (!isForBranches) {
+          if (!isForBranches && !isInView) {
             utils.scrollToCoordinates(currentX + width, y2 - scrollAdjuster);
           }
 
@@ -138,7 +142,7 @@ const ProgressLine = ({
         case 'left':
           currentX -= Math.min(incrementBy, currentX - x2);
 
-          if (!isForBranches) {
+          if (!isForBranches && !isInView) {
             utils.scrollToCoordinates(currentX, y1 - scrollAdjuster);
           }
 
@@ -164,6 +168,9 @@ const ProgressLine = ({
 
         case 'down':
           currentY += Math.min(incrementBy, y2 - currentY);
+          if (!isForBranches && !isInView) {
+            utils.scrollToCoordinates(x1 - scrollAdjuster, currentY + height);
+          }
 
           if (drawInstantlyFlag) {
             currentY = y2;
@@ -191,7 +198,7 @@ const ProgressLine = ({
 
         case 'up':
           currentY -= Math.min(incrementBy, currentY - y2);
-          if (!isForBranches) {
+          if (!isForBranches && !isInView) {
             utils.scrollToCoordinates(x1 - scrollAdjuster, y1 - height);
           }
 

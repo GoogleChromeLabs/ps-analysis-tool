@@ -22,7 +22,7 @@ import config, { publisherData } from '../config';
 import Box from './box';
 import {
   delay,
-  scrollToCoordinates,
+  scrollToCoordinatesIfNotInView,
   wipeAndRecreateInterestCanvas,
 } from '../utils';
 import FlowExpander from './flowExpander';
@@ -42,10 +42,13 @@ type Branch = {
   time: string | (() => string);
   title: string;
   description: string;
-  info?: {
-    title: string;
-    info: string;
-  };
+  info:
+    | {
+        title: string;
+        info: string;
+      }
+    | string;
+  color?: string;
 };
 
 type BranchesProps = {
@@ -137,12 +140,12 @@ const Branches = async ({
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
       const { x, y } = getCoordinateValues(endpoints[1]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinatesIfNotInView(x, y);
       // eslint-disable-next-line consistent-return
       return endpoints[1];
     } else {
       const { x, y } = getCoordinateValues(endpoints[0]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinatesIfNotInView(x, y);
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
         typeOfBranches,
@@ -165,13 +168,13 @@ const Branches = async ({
       }
 
       const { x, y } = getCoordinateValues(endpoints[1]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinatesIfNotInView(x, y);
       await delay(1000);
       // eslint-disable-next-line consistent-return
       return endpoints[1];
     } else {
       const { x, y } = getCoordinateValues(endpoints[0]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinatesIfNotInView(x, y);
 
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
@@ -212,7 +215,7 @@ const Branches = async ({
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
     const { x, y } = getCoordinateValues(endpoints[1]);
-    scrollToCoordinates(x, y);
+    scrollToCoordinatesIfNotInView(x, y);
     // eslint-disable-next-line consistent-return
     return endpoints[1];
   }
@@ -221,7 +224,7 @@ const Branches = async ({
     branches.map(async ({ id, type, info }, index) => {
       const x = x1 + (index - (branches.length - 1) / 2) * spacing;
       const y = y2 - 9;
-      let endpoint;
+      let endpoint: Coordinates = { x, y };
 
       await ProgressLine({
         x1: x,
@@ -255,13 +258,14 @@ const Branches = async ({
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
     const { x, y } = getCoordinateValues(endpoints[1]);
-    scrollToCoordinates(x, y);
+    scrollToCoordinatesIfNotInView(x, y);
     // eslint-disable-next-line consistent-return
     return endpoints[1];
   }
 
   const { x, y } = getCoordinateValues(endpoints[0]);
-  scrollToCoordinates(x, y);
+
+  scrollToCoordinatesIfNotInView(x, y);
 
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,
@@ -271,7 +275,12 @@ const Branches = async ({
   return nextTip;
 };
 
-const drawDateTimeBranch = (x, y, branch, info) => {
+const drawDateTimeBranch = (
+  x: number,
+  y: number,
+  branch: Branch,
+  info: string | { title: string; info: string }
+) => {
   const p = app.p;
 
   if (!p) {
@@ -285,7 +294,7 @@ const drawDateTimeBranch = (x, y, branch, info) => {
   p.text(`${branch.date}`, x, y + 35);
   p.text(`${branch.time}`, x, y + 50);
 
-  if (info) {
+  if (info && typeof info === 'object') {
     Info({
       x: x + 31,
       y: y + 42,
@@ -311,7 +320,7 @@ const drawDateTimeBranch = (x, y, branch, info) => {
   return { x: x, y: y + 50 };
 };
 
-const drawBoxesBranch = (x, y, branch) => {
+const drawBoxesBranch = (x: number, y: number, branch: Branch) => {
   const p = app.p;
 
   if (!p) {

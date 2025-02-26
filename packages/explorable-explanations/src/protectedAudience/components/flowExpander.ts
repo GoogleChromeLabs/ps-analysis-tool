@@ -18,7 +18,7 @@
  */
 import app from '../app';
 import config, { publisherData } from '../config';
-import { isInsideCircle, scrollToCoordinates } from '../utils';
+import { isInsideCircle } from '../utils';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
 import type { Coordinates } from '../types';
 
@@ -35,7 +35,7 @@ type MouseEvent = {
 const FlowExpander = async ({
   nextTipCoordinates,
   typeOfBranches,
-}: FlowExpanderProps): Promise<void | { x: number; y: number }> => {
+}: FlowExpanderProps): Promise<void | Coordinates> => {
   const p = app.p;
   const igp = app.igp;
 
@@ -114,7 +114,6 @@ const FlowExpander = async ({
       p.pop();
     }
   });
-  scrollToCoordinates(endpoint.x, endpoint.y);
   // eslint-disable-next-line consistent-return
   return endpoint;
 };
