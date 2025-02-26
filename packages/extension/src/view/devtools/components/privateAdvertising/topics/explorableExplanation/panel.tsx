@@ -24,14 +24,18 @@ import React, {
   useState,
 } from 'react';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
+import {
+  assignAdtechsToSites,
+  createEpochs,
+  adtechs,
+  websites,
+} from '@google-psat/explorable-explanations';
 
 /**
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
 import Animation from './animation';
-import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
-import { adtechs, websites } from './topicsAnimation/data';
 import type { TopicsTableType } from './topicsTable';
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
