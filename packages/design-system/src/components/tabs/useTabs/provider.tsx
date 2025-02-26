@@ -36,7 +36,7 @@ export const TabsProvider = ({
   items,
 }: PropsWithChildren<TabsProviderProps>) => {
   const [tabItems, setTabItems] = useState(items);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, _setActiveTab] = useState(0);
   const activeTabRef = useRef(activeTab);
   const [storage, _setStorage] = useState<string[]>(
     Array(items.length).fill('')
@@ -127,6 +127,17 @@ export const TabsProvider = ({
       return Boolean(tabItems[index].addSpacer);
     },
     [tabItems]
+  );
+
+  const setActiveTab = useCallback(
+    (index: number, storageData?: string) => {
+      if (storageData) {
+        setStorage(storageData, index);
+      }
+
+      _setActiveTab(index);
+    },
+    [setStorage]
   );
 
   return (
