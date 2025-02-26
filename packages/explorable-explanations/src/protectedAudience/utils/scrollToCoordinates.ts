@@ -36,7 +36,7 @@ export const scrollToCoordinates = (x: number, y: number, override = false) => {
     return;
   }
 
-  if (isPointInViewport(x - 50, y + 50)) {
+  if (isPointInViewport(x, y)) {
     return;
   }
 
