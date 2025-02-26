@@ -62,6 +62,8 @@ describe('Private advertising Landing Pages', () => {
       },
     });
 
+    globalThis.requestIdleCallback = jest.fn();
+
     mockUseSidebar.mockReturnValue({ extractSelectedItemKeyTitles: () => [] });
   });
 
