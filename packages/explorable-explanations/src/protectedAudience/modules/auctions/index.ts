@@ -99,7 +99,7 @@ const auction: Auction = {
 
     app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
-    if (!app.auction.auctions[index]) {
+    if (!app.auction.auctions[index].length) {
       return;
     }
 
