@@ -68,42 +68,46 @@ const TopicsClassifier = () => {
       setInputValidationErrors(inputValidationErrors);
       return;
     } else {
-      const response = await fetch(
-        'https://topics.privacysandbox.report/classify',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            domains: preprocessedHosts,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      try {
+        const response = await fetch(
+          'https://topics.privacysandbox.report/classify',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              domains: preprocessedHosts,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
-      let jsonResponse = await response.json();
-      jsonResponse = jsonResponse.map(
-        (res: ClassificationResult, index: number) => {
-          return {
-            ...res,
-            index: index,
-          };
-        }
-      );
+        let jsonResponse = await response.json();
+        jsonResponse = jsonResponse.map(
+          (res: ClassificationResult, index: number) => {
+            return {
+              ...res,
+              index: index,
+            };
+          }
+        );
 
-      jsonResponse.forEach((classifiedCategories: ClassificationResult) => {
-        if (classifiedCategories?.error) {
-          inputValidationErrors.push(classifiedCategories.error);
-        }
-      });
-      setInputValidationErrors(inputValidationErrors);
+        jsonResponse.forEach((classifiedCategories: ClassificationResult) => {
+          if (classifiedCategories?.error) {
+            inputValidationErrors.push(classifiedCategories.error);
+          }
+        });
+        setInputValidationErrors(inputValidationErrors);
 
-      jsonResponse = jsonResponse.filter(
-        (classifiedCategories: ClassificationResult) =>
-          classifiedCategories?.categories
-      );
+        jsonResponse = jsonResponse.filter(
+          (classifiedCategories: ClassificationResult) =>
+            classifiedCategories?.categories
+        );
 
-      setClassificationResult(jsonResponse);
+        setClassificationResult(jsonResponse);
+      } catch (err) {
+        setInputValidationErrors(['Error: Failed to classify websites']);
+      }
     }
   }, [websites]);
 
