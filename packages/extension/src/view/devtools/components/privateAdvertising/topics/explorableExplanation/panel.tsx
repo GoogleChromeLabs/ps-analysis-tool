@@ -113,11 +113,8 @@ const Panel = ({
       return;
     }
 
-    (async () => {
-      const data = await createEpochs();
-
-      setEpochs(data);
-    })();
+    const data = createEpochs();
+    setEpochs(data);
   }, []);
 
   const [visitIndexStart, setVisitIndexStart] = useState(
