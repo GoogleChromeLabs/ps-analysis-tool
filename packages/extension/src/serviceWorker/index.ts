@@ -27,6 +27,7 @@ import dataStore from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
 import ARAStore from '../store/ARAStore';
+import attachCDP from './attachCDP';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -45,7 +46,7 @@ const ALLOWED_EVENTS = [
   'Storage.attributionReportingSourceRegistered',
   'Storage.attributionReportingTriggerRegistered',
 ];
-
+const attachedSet = new Set<string>();
 let targets: chrome.debugger.TargetInfo[] = [];
 
 /**
@@ -71,6 +72,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       targets = await chrome.debugger.getTargets();
 
+      targets.forEach((target) => {
+        if (target.url.startsWith('https://') && !attachedSet.has(target.id)) {
+          attachCDP({ targetId: target.id });
+          attachedSet.add(target.id);
+        }
+      });
+
       // This is to get a list of all targets being attached to the main frame.
       if (method === 'Target.attachedToTarget' && params) {
         const {
@@ -83,6 +91,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             // eslint-disable-next-line no-console
             console.warn(chrome.runtime.lastError);
           }
+
           try {
             await chrome.debugger.sendCommand(
               childDebuggee,
@@ -106,6 +115,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               childDebuggee,
               'Audits.enable',
               {}
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Storage.setAttributionReportingTracking',
+              {
+                enable: true,
+              }
             );
 
             await chrome.debugger.sendCommand(
@@ -385,12 +402,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         } = params as Protocol.Network.ResponseReceivedEvent;
 
         if (headers?.['attribution-reporting-register-trigger']) {
+          const triggerRegistration =
+            headers?.['attribution-reporting-register-trigger'] ??
+            headers?.['Attribution-Reporting-Register-Trigger'];
           ARAStore.processARATriggerRegistered(
             {
               registration: {
-                ...JSON.parse(
-                  headers?.['attribution-reporting-register-trigger']
-                ),
+                ...JSON.parse(triggerRegistration),
                 reportingOrigin: new URL(requestUrl).origin,
                 time: Date.now(),
               } as Protocol.Storage.AttributionReportingTriggerRegistration,
@@ -403,13 +421,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           );
         }
 
-        if (headers?.['attribution-reporting-register-source']) {
+        if (
+          headers?.['attribution-reporting-register-source'] ||
+          headers?.['Attribution-Reporting-Register-Source']
+        ) {
+          const sourceRegistration =
+            headers?.['attribution-reporting-register-source'] ??
+            headers?.['Attribution-Reporting-Register-Source'];
           ARAStore.processARASourcesRegistered(
             {
               registration: {
-                ...JSON.parse(
-                  headers?.['attribution-reporting-register-source']
-                ),
+                ...JSON.parse(sourceRegistration),
                 reportingOrigin: new URL(requestUrl).origin,
                 sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
                 time: Date.now(),
@@ -487,7 +509,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.responseReceivedExtraInfo') {
         const { headers, requestId } =
           params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-
         // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
         if (!headers['set-cookie'] && !headers['Set-Cookie']) {
           return;
