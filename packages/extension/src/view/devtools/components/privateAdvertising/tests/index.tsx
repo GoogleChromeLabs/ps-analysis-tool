@@ -71,7 +71,7 @@ describe('Private advertising Landing Pages', () => {
     });
 
     expect(
-      await screen.findByTestId('attribution-content')
+      await screen.findByTestId('attribution-reporting-content')
     ).toBeInTheDocument();
   });
 

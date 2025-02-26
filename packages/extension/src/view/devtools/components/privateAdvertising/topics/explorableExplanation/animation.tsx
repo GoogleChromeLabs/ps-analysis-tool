@@ -19,11 +19,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
-
-/**
- * Internal dependencies.
- */
-import { topicsAnimation } from './topicsAnimation';
+import { topicsAnimation } from '@google-psat/explorable-explanations';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -36,7 +32,6 @@ interface AnimationProps {
   speedMultiplier: number;
   isInteractive: boolean;
   setPAActiveTab: (tabIndex: number) => void;
-  setPAStorage: (content: string) => void;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
   setCurrentVisitIndexCallback: React.Dispatch<
     React.SetStateAction<(() => number) | undefined>
@@ -54,7 +49,6 @@ const Animation = ({
   speedMultiplier,
   isInteractive,
   setPAActiveTab,
-  setPAStorage,
   setHighlightAdTech,
   setCurrentVisitIndexCallback,
 }: AnimationProps) => {
@@ -105,7 +99,6 @@ const Animation = ({
     setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
-    setPAStorage,
     siteAdTechs,
     visitIndexStart,
   ]);

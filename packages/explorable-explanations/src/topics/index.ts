@@ -157,7 +157,9 @@ export function topicsAnimation(
         app.visitIndex > 0 &&
         app.visitIndex <= epoch.length
       ) {
-        app.userVisitDone(app.visitIndex - 1);
+        app.drawCircle(app.visitIndex - 1, true);
+        app.drawInfoBox(app.visitIndex - 1, epoch[app.visitIndex - 1].website);
+        app.inspectedCircleIndex = app.visitIndex - 1;
       } else if (app.playing && app.inspectedCircleIndex !== -1) {
         app.resetInfoBox(app.inspectedCircleIndex);
         app.inspectedCircleIndex = -1;
@@ -602,6 +604,8 @@ export function topicsAnimation(
         app.play();
       }
       app.userVisitDone(app.visitIndex - 1);
+      app.inspectedCircleIndex = app.visitIndex - 1;
+      app.drawInfoBox(app.visitIndex - 1, epoch[app.visitIndex - 1].website);
     }
 
     if (visitIndexStart > 0 && !isInteractive) {
@@ -621,7 +625,11 @@ export function topicsAnimation(
       p.cursor(p.ARROW);
     }
 
-    if (p.frameCount % delay === 0 && app.playing && !isInteractive) {
+    if (
+      (p.frameCount % delay === 0 || app.visitIndex === 0) &&
+      app.playing &&
+      !isInteractive
+    ) {
       app.play();
     }
 
