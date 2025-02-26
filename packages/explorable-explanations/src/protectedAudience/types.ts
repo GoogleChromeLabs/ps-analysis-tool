@@ -123,6 +123,10 @@ export type AuctionStepProps = {
     color?: string;
     date?: string | (() => string);
     time?: string | (() => string);
+    info?: {
+      title: string;
+      info: string;
+    };
   }[];
   direction?: string;
   noArrow?: boolean;
