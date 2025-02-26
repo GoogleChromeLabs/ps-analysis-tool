@@ -25,6 +25,7 @@ import {
   type ClassificationResult,
   type TableData,
   CancelIcon,
+  useTabs,
 } from '@google-psat/design-system';
 import { noop } from '@google-psat/common';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -41,6 +42,21 @@ const TopicsClassifier = () => {
     ClassificationResultIndex[]
   >([]);
   const [selectedKey, setSelectedKey] = useState<string>('');
+  const { setActiveTab } = useTabs(({ actions }) => ({
+    setActiveTab: actions.setActiveTab,
+  }));
+
+  const topicsNavigator = useCallback(
+    (topic: string) => {
+      setActiveTab(
+        2,
+        JSON.stringify({
+          taxonomy: topic,
+        })
+      );
+    },
+    [setActiveTab]
+  );
 
   const handleClick = useCallback(async () => {
     const hosts = websites.split('\n');
@@ -121,7 +137,11 @@ const TopicsClassifier = () => {
         cell: (info) => (
           <div>
             {(info as string[]).map((category, index) => (
-              <div key={index} className="p-1 text-xs">
+              <div
+                key={index}
+                className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
+                onClick={() => topicsNavigator(category)}
+              >
                 {category}
               </div>
             ))}
