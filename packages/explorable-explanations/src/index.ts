@@ -23,3 +23,6 @@ export {
 export { getCircleDatetime } from './protectedAudience/utils';
 export { default as config, publisherData } from './protectedAudience/config';
 export * from './protectedAudience/modules/flowConfig.tsx';
+export * from './topics/data.ts';
+export * from './topics/utils.ts';
+export * from './topics/index.ts';

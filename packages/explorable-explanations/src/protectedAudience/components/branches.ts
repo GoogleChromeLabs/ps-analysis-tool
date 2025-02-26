@@ -28,6 +28,7 @@ import {
 import FlowExpander from './flowExpander';
 import type { Coordinates, CoordinateValue } from '../types';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
+import Info from './info';
 
 const EXPAND_ICON_SIZE = config.timeline.expandIconSize;
 
@@ -40,6 +41,10 @@ type Branch = {
   time: string | (() => string);
   title: string;
   description: string;
+  info?: {
+    title: string;
+    info: string;
+  };
 };
 
 type BranchesProps = {
@@ -67,6 +72,7 @@ const Branches = async ({
     id: index, // To prevent duplicate rendering
     date: typeof branch.date === 'function' ? branch.date() : branch.date,
     time: typeof branch.time === 'function' ? branch.time() : branch.time,
+    info: branch?.info,
   }));
 
   renderedBranchIds = [];
@@ -91,7 +97,7 @@ const Branches = async ({
   });
 
   const drawInstantly = () => {
-    branches.forEach(({ id, type }, index) => {
+    branches.forEach(({ id, type, info }, index) => {
       const x = branchXStartpoint + index * spacing;
       const y = y2 - 9;
       let endpoint;
@@ -104,7 +110,7 @@ const Branches = async ({
       p.line(x, y, x, y + 20);
       p.pop();
       if (type === 'datetime') {
-        endpoint = drawDateTimeBranch(x, y, branches[index]);
+        endpoint = drawDateTimeBranch(x, y, branches[index], info);
       }
 
       if (type === 'box') {
@@ -205,7 +211,7 @@ const Branches = async ({
   }
 
   await Promise.all(
-    branches.map(async ({ id, type }, index) => {
+    branches.map(async ({ id, type, info }, index) => {
       const x = branchXStartpoint + index * spacing;
       const y = y2 - 9;
       let endpoint;
@@ -221,7 +227,7 @@ const Branches = async ({
       });
 
       if (type === 'datetime') {
-        endpoint = drawDateTimeBranch(x, y, branches[index]);
+        endpoint = drawDateTimeBranch(x, y, branches[index], info);
       }
 
       if (type === 'box') {
@@ -258,7 +264,7 @@ const Branches = async ({
   return nextTip;
 };
 
-const drawDateTimeBranch = (x, y, branch) => {
+const drawDateTimeBranch = (x, y, branch, info) => {
   const p = app.p;
 
   if (!p) {
@@ -271,6 +277,15 @@ const drawDateTimeBranch = (x, y, branch) => {
   p.textSize(config.canvas.fontSize);
   p.text(`${branch.date}`, x, y + 35);
   p.text(`${branch.time}`, x, y + 50);
+
+  if (info) {
+    Info({
+      x: x + 31,
+      y: y + 42,
+      title: info.title,
+      info: info.info,
+    });
+  }
 
   if (app.isAutoExpand) {
     p.pop();
