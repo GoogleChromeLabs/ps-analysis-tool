@@ -192,7 +192,6 @@ const Branches = async ({
     direction: 'right',
     noArrow: true,
     noAnimation: app.speedMultiplier === 4,
-    isBranch: true,
     isForBranches: true,
   });
 

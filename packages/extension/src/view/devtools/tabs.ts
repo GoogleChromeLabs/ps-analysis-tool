@@ -432,7 +432,7 @@ const TABS: SidebarItems = {
         title: () => 'Dev Site',
         panel: {
           Element: DevSite,
-          href: 'https://developers.chrome.com/privacy-sandbox',
+          href: 'https://developers.google.com/privacy-sandbox',
         },
         icon: {
           Element: DevGuideIcon,

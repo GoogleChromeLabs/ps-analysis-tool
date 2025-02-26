@@ -26,6 +26,7 @@ import {
 } from '@google-psat/design-system';
 import { app } from '@google-psat/explorable-explanations';
 import React from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -41,6 +42,7 @@ interface HeaderProps {
   setSliderStep: React.Dispatch<React.SetStateAction<number>>;
   showNextPrevButtons: boolean;
   extraInterface?: React.ReactNode;
+  disablePlayButton?: boolean;
 }
 
 const Header = ({
@@ -52,19 +54,23 @@ const Header = ({
   setSliderStep,
   showNextPrevButtons,
   extraInterface,
+  disablePlayButton = false,
 }: HeaderProps) => {
   return (
     <div className="w-full px-2 flex items-center justify-between border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px] min-w-[900px]">
       <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray">
         <button
-          className="pr-2"
+          className={classNames('pr-2', {
+            'hover:opacity-70 active:opacity-50': !disablePlayButton,
+          })}
           onClick={setPlay}
           title={play ? 'Pause' : 'Play'}
+          disabled={disablePlayButton}
         >
           {play ? (
-            <PauseIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+            <PauseIcon className="h-5 w-5" />
           ) : (
-            <PlayIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+            <PlayIcon className="h-5 w-5" />
           )}
         </button>
         {showNextPrevButtons && (

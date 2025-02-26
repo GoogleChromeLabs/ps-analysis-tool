@@ -364,6 +364,7 @@ const Panel = ({
         reset={setReset}
         extraInterface={extraInterface}
         showNextPrevButtons={false}
+        disablePlayButton={Boolean(isInteractiveModeOn)}
       />
       <div className="flex-1 overflow-auto">
         <Animation
