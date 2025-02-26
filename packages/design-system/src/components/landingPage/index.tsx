@@ -83,6 +83,25 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
     };
   }, []);
 
+  const onIframeLoad = (
+    event: React.SyntheticEvent<HTMLIFrameElement>,
+    storyUrl: string
+  ) => {
+    // fetch iframe in idle time
+    requestIdleCallback(
+      () => {
+        (event.target as HTMLIFrameElement).contentWindow?.postMessage(
+          {
+            storyUrl: storyUrl,
+            preload: true,
+          },
+          '*'
+        );
+      },
+      { timeout: 1000 }
+    );
+  };
+
   return (
     <>
       <LandingPage
@@ -111,15 +130,7 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
             <iframe
               id={data.storyUrl}
               key={data.storyUrl}
-              onLoad={(event: React.SyntheticEvent<HTMLIFrameElement>) => {
-                (event.target as HTMLIFrameElement).contentWindow?.postMessage(
-                  {
-                    storyUrl: data.storyUrl,
-                    preload: true,
-                  },
-                  '*'
-                );
-              }}
+              onLoad={(event) => onIframeLoad(event, data?.storyUrl ?? '')}
               srcDoc={getStoryPlayerMarkup()}
               style={{
                 display: data.storyUrl === independentStory ? 'block' : 'none',
