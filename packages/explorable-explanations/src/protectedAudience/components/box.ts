@@ -18,13 +18,10 @@
  */
 import app from '../app';
 import config from '../config';
-import {
-  addCanvasEventListener,
-  isInsideBox,
-  scrollToCoordinates,
-} from '../utils';
+import { scrollToCoordinates } from '../utils';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
 import type { CoordinateValue, Coordinates } from '../types';
+import Info from './info';
 
 const INFO_ICON_SPACING = 3;
 
@@ -105,23 +102,14 @@ const Box = ({
     const { x: xCoordinate, y: yCoordinate } = getCoordinateValues({ x, y });
     const iconX = xCoordinate + width - infoIconSize - INFO_ICON_SPACING;
     const iconY = yCoordinate + INFO_ICON_SPACING;
-    app.timeline.infoIconsPositions.push({ x: iconX, y: iconY, index: 0 });
 
-    p.image(p.infoIcon, iconX, iconY, infoIconSize, infoIconSize);
-
-    const mouseClickedCallback = (mouseX: number, mouseY: number) => {
-      if (isInsideBox(mouseX, mouseY, iconX, iconY, infoIconSize)) {
-        app.setInfo({
-          title,
-          description,
-          info,
-          key: Date.now(), // To force change the state, so that the info modal is shown in case of same value.
-        });
-      }
-    };
-
-    const key = title + description + x + y;
-    addCanvasEventListener('mouseClicked', mouseClickedCallback, key);
+    Info({
+      x: iconX,
+      y: iconY,
+      title,
+      info,
+      description,
+    });
   }
 
   p.pop();

@@ -99,12 +99,38 @@ const auction: Auction = {
 
     app.p.textAlign(app.p.CENTER, app.p.CENTER);
 
-    if (!app.auction.auctions[index]) {
+    if (!app.auction.auctions[index].length) {
       return;
     }
 
     app.promiseQueue?.push((cb) => {
       app.setCurrentSite(config.timeline.circles[index]);
+
+      cb?.(undefined, true);
+    });
+
+    app.promiseQueue?.push((cb) => {
+      if (app.p && !app.isInteractiveMode) {
+        const circleItem = config.timeline.circles[index];
+        const { diameter, verticalSpacing } = config.timeline.circleProps;
+        const circleVerticalSpace = verticalSpacing + diameter;
+        const xPositionForCircle =
+          config.timeline.position.x +
+          diameter / 2 +
+          circleVerticalSpace * index;
+
+        app.p.push();
+        app.p.fill(config.timeline.colors.black);
+        app.p.textSize(12);
+        app.p.strokeWeight(0.1);
+        app.p.textFont('sans-serif');
+        app.p.text(
+          circleItem.datetime,
+          xPositionForCircle,
+          config.timeline.position.y
+        );
+        app.p.pop();
+      }
 
       cb?.(undefined, true);
     });

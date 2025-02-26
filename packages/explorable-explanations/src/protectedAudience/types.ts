@@ -121,8 +121,12 @@ export type AuctionStepProps = {
     description?: string;
     type?: string;
     color?: string;
-    date?: string;
-    time?: string;
+    date?: string | (() => string);
+    time?: string | (() => string);
+    info?: {
+      title: string;
+      info: string;
+    };
   }[];
   direction?: string;
   noArrow?: boolean;
@@ -141,6 +145,8 @@ export type AuctionStepProps = {
   showBarrageAnimation?: boolean;
   showWinningAd?: boolean;
   showRippleEffect?: boolean;
+  isBranchComponent?: boolean;
+  isForBranches?: boolean;
 };
 
 export type AuctionStep = {

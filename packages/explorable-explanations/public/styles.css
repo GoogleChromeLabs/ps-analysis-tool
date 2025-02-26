@@ -157,4 +157,5 @@ text {
     right: 10px;
     top: 10px;
     display: flex;
+    width: fit-content;
 }

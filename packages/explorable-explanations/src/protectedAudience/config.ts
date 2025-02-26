@@ -85,12 +85,12 @@ const config: Config = {
     width: 700,
     height: 500,
     extraHeight: 1600, // @todo: It needs to be calculated based on the content.
-    extraWidth: 500, // @todo: It needs to be calculated based on the content.
+    extraWidth: 1100, // @todo: It needs to be calculated based on the content.
     background: '#fff',
     fontSize: 12,
   },
   timeline: {
-    position: { x: 100, y: 50 },
+    position: { x: 120, y: 50 },
     circleProps: {
       diameter: 50,
       verticalSpacing: 130,

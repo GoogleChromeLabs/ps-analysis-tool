@@ -373,7 +373,7 @@ const TABS: SidebarItems = {
         className: 'fill-bright-gray',
       },
     },
-    dropdownOpen: false,
+    dropdownOpen: true,
     children: {
       [SIDEBAR_ITEMS_KEYS.WIKI]: {
         title: () => I18n.getMessage('wiki'),
@@ -432,7 +432,7 @@ const TABS: SidebarItems = {
         title: () => 'Dev Site',
         panel: {
           Element: DevSite,
-          href: 'https://developers.chrome.com/privacy-sandbox',
+          href: 'https://developers.google.com/privacy-sandbox',
         },
         icon: {
           Element: DevGuideIcon,

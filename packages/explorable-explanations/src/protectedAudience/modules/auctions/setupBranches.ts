@@ -25,6 +25,11 @@ import { getCoordinateValues } from '../../utils/getCoordinateValues';
 const setupBranches = (steps: AuctionStep[], index: number) => {
   const publisher = config.timeline.circles[index].website;
 
+  const info = {
+    title: 'Auction Time',
+    info: 'Multiple auctions can occur at different times based on various events, such as when a page is loaded or reloaded, an ad slot is refreshed, or an ad rotation is triggered. The timing refers to when the entire auction flow begins (not when runAdAuction is called).',
+  };
+
   steps.push({
     component: Branches,
     props: {
@@ -33,18 +38,21 @@ const setupBranches = (steps: AuctionStep[], index: number) => {
       currentIndex: index,
       branches: [
         {
-          date: publisherData[publisher].branches[0].date,
-          time: publisherData[publisher].branches[0].time,
+          date: () => publisherData[publisher].branches[0].date,
+          time: () => publisherData[publisher].branches[0].time,
+          info,
           type: 'datetime',
         },
         {
-          date: publisherData[publisher].branches[1].date,
-          time: publisherData[publisher].branches[1].time,
+          date: () => publisherData[publisher].branches[1].date,
+          time: () => publisherData[publisher].branches[1].time,
+          info,
           type: 'datetime',
         },
         {
-          date: publisherData[publisher].branches[2].date,
-          time: publisherData[publisher].branches[2].time,
+          date: () => publisherData[publisher].branches[2].date,
+          time: () => publisherData[publisher].branches[2].time,
+          info,
           type: 'datetime',
         },
       ],

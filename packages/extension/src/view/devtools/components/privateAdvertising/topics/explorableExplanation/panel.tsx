@@ -24,14 +24,18 @@ import React, {
   useState,
 } from 'react';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
+import {
+  assignAdtechsToSites,
+  createEpochs,
+  adtechs,
+  websites,
+} from '@google-psat/explorable-explanations';
 
 /**
  * Internal dependencies.
  */
 import Header from '../../../explorableExplanation/header';
 import Animation from './animation';
-import { assignAdtechsToSites, createEpochs } from './topicsAnimation/utils';
-import { adtechs, websites } from './topicsAnimation/data';
 import type { TopicsTableType } from './topicsTable';
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
@@ -44,7 +48,7 @@ interface PanelProps {
   >;
   PAstorage: string[];
   setPAActiveTab: (tabIndex: number) => void;
-  setPAStorage: (content: string) => void;
+  setPAStorage: (content: string, index?: number) => void;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
@@ -95,12 +99,25 @@ const Panel = ({
       : assignAdtechsToSites(websites, adtechs);
   }, []);
 
-  const epochs = useMemo(() => {
-    return (
-      (JSON.parse(storageRef.current[1] || '{}')?.epochs as ReturnType<
-        typeof createEpochs
-      >) ?? createEpochs()
-    );
+  const [epochs, setEpochs] = useState<
+    {
+      webVisits: { website: string; datetime: string; topics: string[] }[];
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const storedData = JSON.parse(storageRef.current[1] || '{}');
+
+    if (storedData?.epochs) {
+      setEpochs(storedData.epochs);
+      return;
+    }
+
+    (async () => {
+      const data = await createEpochs();
+
+      setEpochs(data);
+    })();
   }, []);
 
   const [visitIndexStart, setVisitIndexStart] = useState(
@@ -166,6 +183,7 @@ const Panel = ({
   const setReset = useCallback(() => {
     setPlay(false);
     _setReset(true);
+    setPAStorage('', 1);
     setSliderStep(1);
     setTopicsTableData({});
     setActiveTab(0);
@@ -176,7 +194,7 @@ const Panel = ({
       _setReset(false);
       setPlay(true);
     }, 0);
-  }, [setActiveTab, setTopicsTableData]);
+  }, [setActiveTab, setPAStorage, setTopicsTableData]);
 
   useEffect(() => {
     if (activeTab === 4 || wasPreviousTabLegend.current) {
@@ -275,9 +293,15 @@ const Panel = ({
     }
   }, [epochCompleted, setReset]);
 
-  const [isInteractiveModeOn, setIsInteractiveModeOn] = useState(false);
+  const [isInteractiveModeOn, setIsInteractiveModeOn] = useState<
+    boolean | null
+  >(null);
 
   useEffect(() => {
+    if (isInteractiveModeOn === null) {
+      return;
+    }
+
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
@@ -293,7 +317,7 @@ const Panel = ({
       }
 
       await updateSessionStorage(
-        { isInteractiveModeOn, sliderStep },
+        { isInteractiveModeOn: Boolean(isInteractiveModeOn), sliderStep },
         STORAGE_KEY
       );
     })();
@@ -321,7 +345,7 @@ const Panel = ({
         <input
           type="checkbox"
           className="hover:cursor-pointer"
-          checked={isInteractiveModeOn}
+          checked={Boolean(isInteractiveModeOn)}
           onChange={() => setIsInteractiveModeOn((prev) => !prev)}
         />
         Interactive Mode
@@ -340,6 +364,7 @@ const Panel = ({
         reset={setReset}
         extraInterface={extraInterface}
         showNextPrevButtons={false}
+        disablePlayButton={Boolean(isInteractiveModeOn)}
       />
       <div className="flex-1 overflow-auto">
         <Animation
@@ -352,10 +377,9 @@ const Panel = ({
           speedMultiplier={sliderStep}
           handleUserVisit={handleUserVisit}
           setPAActiveTab={setPAActiveTab}
-          setPAStorage={setPAStorage}
           setHighlightAdTech={setHighlightAdTech}
           setCurrentVisitIndexCallback={setCurrentVisitIndexCallback}
-          isInteractive={isInteractiveModeOn}
+          isInteractive={Boolean(isInteractiveModeOn)}
         />
       </div>
       <DraggableTray />

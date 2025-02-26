@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './protectedAudience/components';
-export {
-  app,
-  userSketch,
-  interestGroupSketch,
-  sketch,
-} from './protectedAudience';
-export { getCircleDatetime } from './protectedAudience/utils';
-export { default as config, publisherData } from './protectedAudience/config';
-export * from './protectedAudience/modules/flowConfig.tsx';
-export * from './topics/data.ts';
-export * from './topics/utils.ts';
-export * from './topics/index.ts';
+
+/**
+ * Internal dependencies
+ */
+import config from '../config';
+
+export const getCircleDatetime = (site: string) => {
+  const siteData = config.timeline.circles.find(
+    (circle) => circle.website === site
+  );
+
+  return siteData?.datetime || '';
+};

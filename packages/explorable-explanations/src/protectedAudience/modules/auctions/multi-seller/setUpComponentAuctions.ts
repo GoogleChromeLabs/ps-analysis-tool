@@ -48,6 +48,7 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
         getCoordinateValues(app.auction.nextTipCoordinates).y + box.height - 12,
       customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
+      isForBranches: true,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -61,6 +62,15 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
       width: BOX_WIDTH,
       height: BOX_HEIGHT,
       x: () => {
+        if (
+          getCoordinateValues(app.auction.nextTipCoordinates).x -
+            BOX_WIDTH / 2 <
+          0
+        ) {
+          boxCordinates.x = 100;
+          return boxCordinates.x;
+        }
+
         boxCordinates.x =
           getCoordinateValues(app.auction.nextTipCoordinates).x - BOX_WIDTH / 2;
         return boxCordinates.x;
@@ -70,6 +80,7 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
         return boxCordinates.y;
       },
       borderStroke: [0, 0, 0, 0],
+      isBranchComponent: true,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -232,7 +243,7 @@ const setUpComponentAuctionStarter = (
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 275,
       customWidth: 1000,
       noArrow: true,
-      isBranch: true,
+      isForBranches: true,
     },
   });
 
