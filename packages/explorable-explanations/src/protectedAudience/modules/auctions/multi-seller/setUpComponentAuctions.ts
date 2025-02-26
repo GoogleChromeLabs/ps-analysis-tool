@@ -48,6 +48,7 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
         getCoordinateValues(app.auction.nextTipCoordinates).y + box.height - 12,
       customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
+      isForBranches: true,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -243,6 +244,7 @@ const setUpComponentAuctionStarter = (
       customWidth: 1000,
       noArrow: true,
       isBranch: true,
+      isForBranches: true,
     },
   });
 
