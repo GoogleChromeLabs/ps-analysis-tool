@@ -118,7 +118,15 @@ const TopicsClassifier = () => {
       {
         header: 'Categories',
         accessorKey: 'categories',
-        cell: (info) => (info as string[]).join(', '),
+        cell: (info) => (
+          <div>
+            {(info as string[]).map((category, index) => (
+              <div key={index} className="p-1 text-xs">
+                {category}
+              </div>
+            ))}
+          </div>
+        ),
       },
     ],
     []
