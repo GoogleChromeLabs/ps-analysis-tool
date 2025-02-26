@@ -15,7 +15,7 @@
  */
 
 const calculateRegistrationDate = (timeStamp: number) => {
-  const date = new Date(timeStamp * 1000); // Convert to milliseconds.
+  const date = new Date(timeStamp); // Convert to milliseconds.
 
   const formattedDate = date.toLocaleString('en-US', {
     month: '2-digit',

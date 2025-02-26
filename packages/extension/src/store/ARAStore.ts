@@ -22,14 +22,16 @@ import Protocol from 'devtools-protocol';
  */
 import dataStore from './dataStore';
 import convertKeysToCamelCase from './utils/convertKeysToCamelCase';
+import transformNestedObject from './utils/transformObject';
+import isEqual from 'lodash-es/isEqual';
 
 class ARAStore {
   processARASourcesRegistered(
     params: Protocol.Storage.AttributionReportingSourceRegisteredEvent,
     tabId: string
   ) {
-    const sourceRegistrationData = convertKeysToCamelCase(
-      params.registration
+    const sourceRegistrationData = transformNestedObject(
+      convertKeysToCamelCase(params.registration)
     ) as Protocol.Storage.AttributionReportingSourceRegistration;
 
     if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
@@ -55,11 +57,8 @@ class ARAStore {
     tabId: string
   ) {
     const triggerRegistrationData = this.addNecessaryFields(
-      convertKeysToCamelCase(
-        params.registration
-      ) as Protocol.Storage.AttributionReportingTriggerRegistration
+      convertKeysToCamelCase(params.registration)
     );
-
     if (dataStore.sources?.[tabId]?.triggerRegistration?.length > 0) {
       dataStore.sources[tabId].triggerRegistration.push({
         ...triggerRegistrationData,
@@ -107,6 +106,36 @@ class ARAStore {
     }
 
     return reformedData;
+  }
+
+  matchTriggerData(
+    registrationData: any,
+    triggerData: any,
+    key: string
+  ): boolean {
+    if (key === 'aggregatableValues') {
+      return registrationData[key].values.every(
+        (value: Record<string, number | string>, index: number) =>
+          isEqual(value?.value, triggerData[key][index].value) &&
+          isEqual(value?.key, triggerData[key][index].key)
+      );
+    }
+
+    if (key === 'eventTriggerData') {
+      return isEqual(registrationData[key].values, triggerData[key].values);
+    }
+
+    if (key === 'aggregatableTriggerData') {
+      return registrationData[key].every((value: any, index: number) => {
+        return (
+          BigInt(value?.keyPiece) ===
+            BigInt(triggerData[key][index]?.keyPiece) &&
+          isEqual(value?.sourceKeys, triggerData[key][index]?.sourceKeys)
+        );
+      });
+    }
+
+    return false;
   }
 }
 

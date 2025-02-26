@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import { Protocol } from 'devtools-protocol';
-import type { TriggerRegistration } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -401,7 +400,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           response: { url: requestUrl, headers },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
-        if (headers?.['attribution-reporting-register-trigger']) {
+        if (
+          headers?.['attribution-reporting-register-trigger'] ||
+          headers?.['Attribution-Reporting-Register-Trigger']
+        ) {
           const triggerRegistration =
             headers?.['attribution-reporting-register-trigger'] ??
             headers?.['Attribution-Reporting-Register-Trigger'];
@@ -611,18 +613,54 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       ) {
         const { registration, eventLevel, aggregatable } =
           params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
+
         dataStore.sources[tabId].triggerRegistration.forEach(
           (trigger, index) => {
-            const { eventTriggerData } = trigger as TriggerRegistration;
+            const registrationKeys = new Set<string>();
+            Object.keys(registration).forEach((key) =>
+              registrationKeys.add(key)
+            );
+
+            const triggerKeys = new Set<string>();
+            Object.keys(trigger).forEach((key) => triggerKeys.add(key));
+            let match = false;
 
             if (
-              registration.eventTriggerData.every((eventData, _index) => {
-                return (
-                  eventData?.data === eventTriggerData[_index]?.triggerData &&
-                  eventData?.priority === eventTriggerData[_index]?.priority
-                );
-              })
+              registrationKeys
+                .intersection(triggerKeys)
+                .has('aggregatableTriggerData') &&
+              !match
             ) {
+              match = ARAStore.matchTriggerData(
+                registration,
+                trigger,
+                'aggregatableTriggerData'
+              );
+            } else if (
+              registrationKeys
+                .intersection(triggerKeys)
+                .has('aggregatableValues') &&
+              !match
+            ) {
+              match = ARAStore.matchTriggerData(
+                registration,
+                trigger,
+                'aggregatableValues'
+              );
+            } else if (
+              registrationKeys
+                .intersection(triggerKeys)
+                .has('eventTriggerData') &&
+              !match
+            ) {
+              match = ARAStore.matchTriggerData(
+                registration,
+                trigger,
+                'eventTriggerData'
+              );
+            }
+
+            if (match) {
               dataStore.sources[tabId].triggerRegistration[index] = {
                 ...dataStore.sources[tabId].triggerRegistration[index],
                 eventLevel,

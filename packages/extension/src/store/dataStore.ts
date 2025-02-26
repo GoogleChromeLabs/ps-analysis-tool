@@ -477,7 +477,6 @@ class DataStore {
     delete this.tabs[tabId];
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
-    delete this.sources[tabId];
   }
 
   /**
