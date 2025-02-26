@@ -62,6 +62,7 @@ const Header = ({
         <button
           className={classNames('pr-2', {
             'hover:opacity-70 active:opacity-50': !disablePlayButton,
+            'opacity-50 pointer-events-none': disablePlayButton,
           })}
           onClick={setPlay}
           title={play ? 'Pause' : 'Play'}
