@@ -62,14 +62,16 @@ const ContentPanel = ({
             className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
             key={index}
           >
-            <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
+            <div
+              className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5 cursor-pointer"
+              onClick={() =>
+                item.sidebarItemKey
+                  ? updateSelectedItemKey(item.sidebarItemKey)
+                  : null
+              }
+            >
               <div
-                className={`w-9 h-9 flex justify-center items-center rounded-md cursor-pointer ${counterStyles}`}
-                onClick={() =>
-                  item.sidebarItemKey
-                    ? updateSelectedItemKey(item.sidebarItemKey)
-                    : null
-                }
+                className={`w-9 h-9 flex justify-center items-center rounded-md ${counterStyles}`}
               >
                 <span className="text-xxl text-white dark:black font-extrabold">
                   {index + 1}
@@ -77,7 +79,7 @@ const ContentPanel = ({
               </div>
             </div>
             <h3
-              className={`text-lg font-medium mb-5 cursor-pointer ${titleStyles}`}
+              className={`text-lg inline-block font-medium mb-5 cursor-pointer ${titleStyles}`}
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)
