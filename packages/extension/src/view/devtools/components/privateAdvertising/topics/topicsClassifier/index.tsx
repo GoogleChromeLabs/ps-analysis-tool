@@ -42,20 +42,23 @@ const TopicsClassifier = () => {
     ClassificationResultIndex[]
   >([]);
   const [selectedKey, setSelectedKey] = useState<string>('');
-  const { setActiveTab } = useTabs(({ actions }) => ({
+  const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
+    setStorage: actions.setStorage,
     setActiveTab: actions.setActiveTab,
   }));
 
   const topicsNavigator = useCallback(
     (topic: string) => {
-      setActiveTab(
-        2,
+      setStorage(
         JSON.stringify({
           taxonomy: topic,
-        })
+        }),
+        2
       );
+
+      setActiveTab(2);
     },
-    [setActiveTab]
+    [setActiveTab, setStorage]
   );
 
   const handleClick = useCallback(async () => {

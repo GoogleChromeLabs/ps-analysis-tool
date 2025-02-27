@@ -47,14 +47,16 @@ const ExplorableExplanation = () => {
 
   const topicsNavigator = useCallback(
     (topic: string) => {
-      setPAActiveTab(
-        2,
+      setPAStorage(
         JSON.stringify({
           taxonomy: topic,
-        })
+        }),
+        2
       );
+
+      setPAActiveTab(2);
     },
-    [setPAActiveTab]
+    [setPAActiveTab, setPAStorage]
   );
 
   const tabItems = useMemo<TabItems>(() => {
