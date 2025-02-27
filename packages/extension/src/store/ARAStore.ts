@@ -17,21 +17,21 @@
  * External dependencies
  */
 import Protocol from 'devtools-protocol';
+import isEqual from 'lodash-es/isEqual';
 /**
  * Internal dependencies
  */
 import dataStore from './dataStore';
 import convertKeysToCamelCase from './utils/convertKeysToCamelCase';
 import transformNestedObject from './utils/transformObject';
-import isEqual from 'lodash-es/isEqual';
 
 class ARAStore {
   processARASourcesRegistered(
     params: Protocol.Storage.AttributionReportingSourceRegisteredEvent,
     tabId: string
   ) {
-    const sourceRegistrationData = transformNestedObject(
-      convertKeysToCamelCase(params.registration)
+    const sourceRegistrationData = convertKeysToCamelCase(
+      params.registration
     ) as Protocol.Storage.AttributionReportingSourceRegistration;
 
     if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
@@ -56,9 +56,10 @@ class ARAStore {
     params: Protocol.Storage.AttributionReportingTriggerRegisteredEvent,
     tabId: string
   ) {
-    const triggerRegistrationData = this.addNecessaryFields(
-      convertKeysToCamelCase(params.registration)
+    const triggerRegistrationData = transformNestedObject(
+      this.addNecessaryFields(convertKeysToCamelCase(params.registration))
     );
+
     if (dataStore.sources?.[tabId]?.triggerRegistration?.length > 0) {
       dataStore.sources[tabId].triggerRegistration.push({
         ...triggerRegistrationData,

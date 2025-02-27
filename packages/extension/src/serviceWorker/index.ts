@@ -118,14 +118,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
             await chrome.debugger.sendCommand(
               childDebuggee,
-              'Storage.setAttributionReportingTracking',
-              {
-                enable: true,
-              }
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
               'Storage.setAttributionReportingLocalTestingMode',
               {
                 enabled: true,
