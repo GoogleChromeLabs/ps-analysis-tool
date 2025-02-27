@@ -26,26 +26,34 @@ import {
   WikiIcon,
 } from '@google-psat/design-system';
 
-const ITEMS = [
+export const ITEMS = [
   {
     name: 'Wiki',
     icon: WikiIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
+    description:
+      'Learn about the PSAT extension, its features, and usage through detailed documentation in the official Wiki.',
   },
   {
     name: 'Stories',
     icon: WebStoriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS,
+    description:
+      'Explore interactive web stories that simplify key concepts of the Privacy Sandbox API and its impact on the web.',
   },
   {
     name: 'Help Center',
     icon: Help,
     sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
+    description:
+      'Find answers to common questions, troubleshooting guides, and official support at the Privacy Sandbox Help Center',
   },
   {
     name: 'Dev Site',
     icon: DevGuideIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
+    description:
+      'Access technical documentation, API references, and implementation guides on the Privacy Sandbox Developer Site',
   },
 ];
 
@@ -58,19 +66,23 @@ const ContentPanel = () => {
       className="h-full w-full overflow-auto text-raisin-black dark:text-bright-gray px-2 pb-14"
     >
       <div className="min-w-[45.75rem]">
-        <section className="mb-5 pb-5">
-          <div className="flex gap-x-5 gap-y-4 flex-wrap">
+        <section>
+          <h3 className="text-sm mb-2">Features</h3>
+          <div className="flex gap-5 flex-wrap">
             {ITEMS.map((item) => {
               const Icon = item.icon;
 
               return (
                 <div
                   key={item.name}
-                  className="w-[366px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                  className="w-[366px] h-[auto] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
-                  <Icon width={20} height={20} className="fill-gray" />
-                  <span className="text-sm">{item.name}</span>
+                  <div className="flex gap-2 justify-start mb-3">
+                    <Icon width={20} height={20} className="fill-gray" />
+                    <h4 className="text-sm">{item.name}</h4>
+                  </div>
+                  <p>{item.description}</p>
                 </div>
               );
             })}
