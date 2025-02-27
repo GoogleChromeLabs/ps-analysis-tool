@@ -35,7 +35,7 @@ const ITEMS = [
   {
     name: 'Stories',
     icon: WebStoriesIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
   },
   {
     name: 'Help Center',

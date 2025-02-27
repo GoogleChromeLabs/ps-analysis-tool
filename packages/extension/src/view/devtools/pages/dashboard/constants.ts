@@ -25,6 +25,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   PrivateAdvertisingIcon,
   TopicsIcon,
+  LearningIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -117,7 +118,7 @@ export const FEATURE_LIST = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description: I18n.getMessage('siteBoundariesDescription'),
     colorClasses: {
-      heading: 'text-green-700',
+      heading: 'text-red-700',
     },
     buttons: [
       {
@@ -127,6 +128,34 @@ export const FEATURE_LIST = [
       {
         name: I18n.getMessage('rws'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
+      },
+    ],
+  },
+  {
+    name: 'Learning',
+    icon: LearningIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
+    description:
+      'Explore the Privacy Sandbox API with documentation, interactive stories, and a help center. Dive into the Wiki to learn about PSAT and access developer resources.',
+    colorClasses: {
+      heading: 'text-green-700',
+    },
+    buttons: [
+      {
+        name: 'Wiki',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
+      },
+      {
+        name: 'Stories',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
+      },
+      {
+        name: 'Help Center',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
+      },
+      {
+        name: 'Dev Site',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
       },
     ],
   },
