@@ -149,7 +149,7 @@ const TopicsClassifier = () => {
         ),
       },
     ],
-    []
+    [topicsNavigator]
   );
 
   const onRowClick = useCallback((data: TableData | null) => {
@@ -174,7 +174,7 @@ const TopicsClassifier = () => {
 
   return (
     <div className="relative h-full flex flex-col">
-      <div className="flex p-4 w-full flex flex-col">
+      <div className="flex p-4 w-full flex-col">
         <textarea
           placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
           className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray"
@@ -192,7 +192,7 @@ const TopicsClassifier = () => {
         </button>
       </div>
       {validationErrors.length > 0 && (
-        <div className="flex p-4 w-full flex flex-col">
+        <div className="flex p-4 w-full flex-col">
           {validationErrors.map((error, index) => (
             <div
               key={index}
