@@ -24,7 +24,7 @@ import { useSidebar } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
-import Attribution from '../attributionReporting';
+import Attribution from '../attribution';
 import Topics from '../topics';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved

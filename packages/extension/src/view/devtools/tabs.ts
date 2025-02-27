@@ -90,8 +90,8 @@ import {
   FederatedCredential,
   IPProtection,
   PrivateStateTokens,
-} from './components';
-import HelpCenter from './components/learning/helpCenter';
+} from './pages';
+import HelpCenter from './pages/learning/helpCenter';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
