@@ -25,6 +25,7 @@ import { addUTMParams } from '@google-psat/common';
  */
 import { DescriptionIcon, WebStoriesIcon } from '../../icons';
 import Link from '../link';
+import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
 export interface ContentPanelProps {
   title: string;
@@ -45,6 +46,10 @@ const ContentPanel = ({
   titleStyles = '',
   counterStyles = '',
 }: ContentPanelProps) => {
+  const updateSelectedItemKey = useSidebar(
+    ({ actions }) => actions.updateSelectedItemKey
+  );
+
   return (
     <div className="px-2">
       <h3 className="text-base text-raisin-black dark:text-bright-gray mb-7">
@@ -58,14 +63,18 @@ const ContentPanel = ({
           >
             <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
               <div
-                className={`w-9 h-9 flex justify-center items-center rounded-md ${counterStyles}`}
+                className={`w-9 h-9 flex justify-center items-center rounded-md cursor-pointer ${counterStyles}`}
+                onClick={() => updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.WIKI)}
               >
                 <span className="text-xxl text-white dark:black font-extrabold">
                   {index + 1}
                 </span>
               </div>
             </div>
-            <h3 className={`text-lg font-medium mb-5 ${titleStyles}`}>
+            <h3
+              className={`text-lg font-medium mb-5 cursor-pointer ${titleStyles}`}
+              onClick={() => updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.WIKI)}
+            >
               {item.title()}
             </h3>
             <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
