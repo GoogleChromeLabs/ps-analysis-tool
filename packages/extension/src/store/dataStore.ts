@@ -360,7 +360,6 @@ class DataStore {
     delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
-    delete this.sources[tabId];
   }
 
   /**
