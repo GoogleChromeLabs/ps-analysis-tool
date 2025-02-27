@@ -57,7 +57,8 @@ class ARAStore {
     tabId: string
   ) {
     const triggerRegistrationData = transformNestedObject(
-      this.addNecessaryFields(convertKeysToCamelCase(params.registration))
+      this.addNecessaryFields(convertKeysToCamelCase(params.registration)),
+      ['aggregatableDebugReportingConfig']
     );
 
     if (dataStore.sources?.[tabId]?.triggerRegistration?.length > 0) {

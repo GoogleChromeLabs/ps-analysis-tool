@@ -21,9 +21,13 @@ type TransformedValue = { key: string; value: any } | any;
  * - Arrays are transformed into objects with `{ key: index, value: element }`.
  * - Primitive values remain unchanged.
  * @param obj - The input object to transform.
+ * @param excludeKeys - An array of keys to exclude from transformation.
  * @returns A new object where only the nested values are transformed.
  */
-function transformNestedObject<T extends Record<string, any>>(obj: T): T {
+function transformNestedObject<T extends Record<string, any>>(
+  obj: T,
+  excludeKeys: string[]
+): T {
   if (typeof obj !== 'object' || obj === null) {
     return obj; // If it's not an object, return as is
   }
@@ -31,7 +35,7 @@ function transformNestedObject<T extends Record<string, any>>(obj: T): T {
   const transformedObj: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(obj)) {
-    transformedObj[key] = processValue(value); // Only transform values
+    transformedObj[key] = processValue(value, excludeKeys); // Only transform values
   }
 
   return transformedObj as T;
@@ -42,21 +46,28 @@ function transformNestedObject<T extends Record<string, any>>(obj: T): T {
  * - Arrays are converted into objects with `{ key: index, value: element }`.
  * - Objects are converted into arrays of `{ key, value }` pairs.
  * @param value - The value to transform.
+ * @param excludeKeys - An array of keys to exclude from transformation.
  * @returns The transformed value.
  */
-function processValue(value: any): TransformedValue {
+function processValue(value: any, excludeKeys: string[]): TransformedValue {
   if (typeof value !== 'object' || value === null) {
     return value; // Base case: return primitive values as-is
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => transformNestedObject(item));
+    return value.map((item) => transformNestedObject(item, excludeKeys));
   }
 
-  return Object.entries(value).map(([key, val]) => ({
-    key: key,
-    value: processValue(val),
-  }));
+  return Object.entries(value).map(([key, val]) => {
+    if (excludeKeys.includes(key)) {
+      return { key: key, value: value };
+    }
+
+    return {
+      key: key,
+      value: processValue(val, excludeKeys),
+    };
+  });
 }
 
 export default transformNestedObject;
