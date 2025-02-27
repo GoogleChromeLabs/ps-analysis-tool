@@ -35,6 +35,7 @@ export interface ContentPanelProps {
     url: string;
     storyUrl?: string;
     onClick: () => void;
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS;
   }[];
   titleStyles?: string;
   counterStyles?: string;
@@ -64,7 +65,7 @@ const ContentPanel = ({
             <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
               <div
                 className={`w-9 h-9 flex justify-center items-center rounded-md cursor-pointer ${counterStyles}`}
-                onClick={() => updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.WIKI)}
+                onClick={() => updateSelectedItemKey(item.sidebarItemKey)}
               >
                 <span className="text-xxl text-white dark:black font-extrabold">
                   {index + 1}
@@ -73,7 +74,7 @@ const ContentPanel = ({
             </div>
             <h3
               className={`text-lg font-medium mb-5 cursor-pointer ${titleStyles}`}
-              onClick={() => updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.WIKI)}
+              onClick={() => updateSelectedItemKey(item.sidebarItemKey)}
             >
               {item.title()}
             </h3>
