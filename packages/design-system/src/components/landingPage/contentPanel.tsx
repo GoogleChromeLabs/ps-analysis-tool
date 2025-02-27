@@ -35,7 +35,7 @@ export interface ContentPanelProps {
     url: string;
     storyUrl?: string;
     onClick: () => void;
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS;
+    sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
   titleStyles?: string;
   counterStyles?: string;
