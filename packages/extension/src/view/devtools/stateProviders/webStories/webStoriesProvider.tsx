@@ -222,27 +222,25 @@ const Provider = ({ children }: PropsWithChildren) => {
     [authors]
   );
 
-  const queryParams = useMemo(
-    () =>
-      createQueryParams(
-        selectedFilterValues,
-        authors,
-        categories,
-        tags,
-        searchValue,
-        pageNumber,
-        sortValue
-      ),
-    [
-      pageNumber,
-      searchValue,
+  const queryParams = useMemo(() => {
+    return createQueryParams(
+      selectedFilterValues,
       authors,
       categories,
-      selectedFilterValues,
-      sortValue,
       tags,
-    ]
-  );
+      searchValue,
+      pageNumber,
+      sortValue
+    );
+  }, [
+    pageNumber,
+    searchValue,
+    authors,
+    categories,
+    selectedFilterValues,
+    sortValue,
+    tags,
+  ]);
 
   const fetchStories = useCallback(async () => {
     if (
@@ -269,6 +267,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (responseJSON?.data?.status === 400) {
       setLoadingState(false);
+      setAllStoryJSON([]);
       return;
     }
 
@@ -358,6 +357,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         setShowFilterSidebar,
         setSortValue,
         setSelectedFilterValues,
+        setPageNumber,
       },
     };
   }, [

@@ -158,7 +158,7 @@ export const SidebarProvider = ({
    * @param queryString Query string to pass to the new panel.
    */
   const updateSelectedItemKey = useCallback(
-    (key: string | null, queryString = '') => {
+    async (key: string | null, queryString = '') => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
@@ -168,7 +168,15 @@ export const SidebarProvider = ({
 
       const item = findItem(sidebarItems, key);
       if (item?.panel?.href) {
-        chrome?.tabs?.update({ url: item.panel.href });
+        const tab = await chrome?.tabs?.query({
+          active: true,
+          currentWindow: true,
+        });
+
+        const url = tab[0].url?.split('#')[0].split('?')[0];
+        if (url !== item.panel.href) {
+          chrome?.tabs?.update({ url: item.panel.href });
+        }
       }
 
       setSelectedItemKey(keyPath.join('#'));
