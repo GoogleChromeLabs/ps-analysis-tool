@@ -50,8 +50,10 @@ const ExplorableExplanation = () => {
       setPAStorage(
         JSON.stringify({
           taxonomy: topic,
-        })
+        }),
+        2
       );
+
       setPAActiveTab(2);
     },
     [setPAActiveTab, setPAStorage]
