@@ -25,6 +25,7 @@ import {
   type ClassificationResult,
   type TableData,
   CancelIcon,
+  useTabs,
 } from '@google-psat/design-system';
 import { noop } from '@google-psat/common';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -41,6 +42,24 @@ const TopicsClassifier = () => {
     ClassificationResultIndex[]
   >([]);
   const [selectedKey, setSelectedKey] = useState<string>('');
+  const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
+    setStorage: actions.setStorage,
+    setActiveTab: actions.setActiveTab,
+  }));
+
+  const topicsNavigator = useCallback(
+    (topic: string) => {
+      setStorage(
+        JSON.stringify({
+          taxonomy: topic,
+        }),
+        2
+      );
+
+      setActiveTab(2);
+    },
+    [setActiveTab, setStorage]
+  );
 
   const handleClick = useCallback(async () => {
     const hosts = websites.split('\n');
@@ -118,10 +137,22 @@ const TopicsClassifier = () => {
       {
         header: 'Categories',
         accessorKey: 'categories',
-        cell: (info) => (info as string[]).join(', '),
+        cell: (info) => (
+          <div>
+            {(info as string[]).map((category, index) => (
+              <div
+                key={index}
+                className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
+                onClick={() => topicsNavigator(category)}
+              >
+                {category}
+              </div>
+            ))}
+          </div>
+        ),
       },
     ],
-    []
+    [topicsNavigator]
   );
 
   const onRowClick = useCallback((data: TableData | null) => {
@@ -146,7 +177,7 @@ const TopicsClassifier = () => {
 
   return (
     <div className="relative h-full flex flex-col">
-      <div className="flex p-4 w-full flex flex-col">
+      <div className="flex p-4 w-full flex-col">
         <textarea
           placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
           className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray"
@@ -164,7 +195,7 @@ const TopicsClassifier = () => {
         </button>
       </div>
       {validationErrors.length > 0 && (
-        <div className="flex p-4 w-full flex flex-col">
+        <div className="flex p-4 w-full flex-col">
           {validationErrors.map((error, index) => (
             <div
               key={index}
@@ -179,7 +210,7 @@ const TopicsClassifier = () => {
         </div>
       )}
       {classificationResult?.length > 0 && (
-        <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz">
+        <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             data={classificationResult}
             tableColumns={tableColumns}

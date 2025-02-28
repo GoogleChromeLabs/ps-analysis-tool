@@ -82,51 +82,58 @@ const websitesToIconsMapping: Record<string, string> = {
 
 const websiteToTopicMapping: Record<string, string[]> = {
   'tmz.com': [
-    '/News',
-    '/Arts & Entertainment',
     '/Arts & Entertainment/Celebrities & Entertainment News',
+    '/News',
   ],
   'cnet.com': [
+    '/Shopping/Product Reviews & Price Comparisons',
     '/Computers & Electronics',
     '/Computers & Electronics/Consumer Electronics',
+    '/News',
   ],
-  'espn.com': ['/Sports'],
-  'investopedia.com': ['/Finance', '/Finance/Investing'],
-  'tripadvisor.com': ['/Travel & Transportation'],
-  'allrecipes.com': ['/Food & Drink'],
-  'vogue.com': ['/Beauty & Fitness', '/Beauty & Fitness/Fashion & Style'],
-  'bloomberg.com': ['/Business & Industrial'],
-  'linkedin.com': ['/Jobs & Education', '/Jobs & Education/Education'],
-  'rollingstone.com': ['/Arts & Entertainment'],
-  'cnn.com': ['/News', '/News/World News'],
-  'techcrunch.com': [
-    '/Computers & Electronics',
-    '/Computers & Electronics/Software',
-  ],
-  'cbssports.com': ['/Sports'],
-  'healthline.com': [
-    '/Jobs & Education',
-    '/Jobs & Education/Education',
-    '/Jobs & Education/Education/Health Education & Medical Training',
-  ],
-  'expedia.com': [
-    '/Travel & Transportation',
+  'espn.com': ['/Sports', '/Arts & Entertainment/TV & Video', '/News'],
+  'investopedia.com': ['/Finance/Investing'],
+  'tripadvisor.com': [
     '/Travel & Transportation/Travel Agencies & Services',
+    '/Travel & Transportation',
   ],
-  'foodnetwork.com': [
-    '/Food & Drink',
-    '/Food & Drink/Food',
-    '/Food & Drink/Food/Gourmet & Specialty Foods',
-  ],
-  'cosmopolitan.com': [
-    '/Beauty & Fitness',
+  'allrecipes.com': ['/Food & Drink/Cooking & Recipes'],
+  'vogue.com': [
     '/Beauty & Fitness/Fashion & Style',
+    '/Books & Literature/Magazines',
   ],
-  'nerdwallet.com': ['/Finance'],
-  'indeed.com': ['/Jobs & Education'],
+  'bloomberg.com': ['/News/Business News'],
+  'linkedin.com': ['/Online Communities/Social Networks', '/Jobs & Education'],
+  'rollingstone.com': [
+    '/Arts & Entertainment/Celebrities & Entertainment News',
+    '/Books & Literature/Magazines',
+    '/Arts & Entertainment/Music & Audio',
+  ],
+  'cnn.com': ['/News'],
+  'techcrunch.com': [
+    '/News/Business News',
+    '/Computers & Electronics',
+    '/News',
+  ],
+  'cbssports.com': ['/Sports', '/News'],
+  'healthline.com': ['/News'],
+  'expedia.com': [
+    '/Travel & Transportation/Travel Agencies & Services',
+    '/Travel & Transportation/Air Travel',
+  ],
+  'foodnetwork.com': ['/Food & Drink/Cooking & Recipes'],
+  'cosmopolitan.com': ['/People & Society', '/Books & Literature/Magazines'],
+  'nerdwallet.com': [
+    '/Finance/Investing',
+    '/Finance/Financial Planning & Management',
+    '/Finance/Banking',
+    '/Finance/Credit & Lending',
+  ],
+  'indeed.com': ['/Jobs & Education/Jobs'],
   'crunchyroll.com': [
-    '/Arts & Entertainment',
+    '/Arts & Entertainment/TV & Video',
     '/Arts & Entertainment/Comics & Animation',
+    '/Arts & Entertainment',
   ],
 };
 

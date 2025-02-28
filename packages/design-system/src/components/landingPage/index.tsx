@@ -24,6 +24,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { getStoryPlayerMarkup } from './getStoryPlayerMarkup';
 import LandingPage, { LandingPageProps } from './LandingPage';
 import ContentPanel from './contentPanel';
+import { SIDEBAR_ITEMS_KEYS } from '../sidebar';
 
 type LandingPageContainerProps = LandingPageProps & {
   contentPanelTitle: string;
@@ -32,6 +33,7 @@ type LandingPageContainerProps = LandingPageProps & {
     description: () => string;
     url: string;
     storyUrl?: string;
+    sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
   counterStyles: string;
   titleStyles: string;

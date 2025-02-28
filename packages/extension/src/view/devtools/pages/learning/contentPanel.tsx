@@ -37,7 +37,7 @@ export const ITEMS = [
   {
     name: 'Stories',
     icon: WebStoriesIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
     description:
       'Explore interactive web stories that simplify key concepts of the Privacy Sandbox API and its impact on the web.',
   },
@@ -46,14 +46,14 @@ export const ITEMS = [
     icon: Help,
     sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
     description:
-      'Find answers to common questions, troubleshooting guides, and official support at the Privacy Sandbox Help Center',
+      'Find answers to common questions, troubleshooting guides, and official support at the Privacy Sandbox Help Center.',
   },
   {
     name: 'Dev Site',
     icon: DevGuideIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
     description:
-      'Access technical documentation, API references, and implementation guides on the Privacy Sandbox Developer Site',
+      'Access technical documentation, API references, and implementation guides on the Privacy Sandbox Developer Site.',
   },
 ];
 
