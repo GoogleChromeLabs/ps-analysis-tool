@@ -108,6 +108,11 @@ const Panel = ({
   const historyCount = 8;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
   const [expandedBubbleWidth, setBubbleWidth] = useState(0);
   const [expandedBubbleX, setExpandedBubbleX] = useState(0);
   const [expandedBubbleY, setExpandedBubbleY] = useState(0);
@@ -126,6 +131,20 @@ const Panel = ({
       );
     })();
   }, [autoExpand, autoScroll, sliderStep]);
+
+  const _setHighLightedInterestGroup = useCallback(
+    (
+      value: {
+        interestGroupName: string;
+        interestGroupOwner: string;
+        color: string;
+      } | null
+    ) => {
+      draggableTrayRef.current.setIsCollapsed(false);
+      setHighlightedInterestGroup(value);
+    },
+    [setHighlightedInterestGroup]
+  );
 
   useEffect(() => {
     (async () => {
@@ -178,10 +197,6 @@ const Panel = ({
     setActiveTab: actions.setActiveTab,
     highlightTab: actions.highlightTab,
   }));
-
-  // useEffect(() => {
-  //   setActiveTab(4);
-  // }, [setActiveTab]);
 
   useEffect(() => {
     if (highlightedInterestGroup) {
@@ -435,13 +450,13 @@ const Panel = ({
         setInfo={setInfo}
         setCurrentStep={setCurrentStep}
         autoScroll={autoScroll}
-        setHighlightedInterestGroup={setHighlightedInterestGroup}
+        setHighlightedInterestGroup={_setHighLightedInterestGroup}
         setSelectedAdUnit={setSelectedAdUnit}
         setSelectedDateTime={setSelectedDateTime}
         setHasLastNodeVisited={setHasLastNodeVisited}
       />
       <ReactP5Wrapper sketch={userSketch} />
-      <DraggableTray />
+      <DraggableTray ref={draggableTrayRef} />
     </div>
   );
 };

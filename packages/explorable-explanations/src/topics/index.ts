@@ -327,7 +327,7 @@ export function topicsAnimation(
       p.textAlign(p.LEFT, p.CENTER);
       p.textStyle(p.BOLD);
       p.text(
-        'Topic(s) observed:',
+        'Topic(s) Observed:',
         position.x - 120,
         position.y + diameter / 2 + 75
       );
@@ -348,7 +348,7 @@ export function topicsAnimation(
 
       p.textStyle(p.BOLD);
       p.text(
-        'Observed-by context domain(s):',
+        'Observed-by Context Domain(s):',
         position.x - 120,
         position.y + diameter / 2 + 85 + startingPointAdTechs
       );

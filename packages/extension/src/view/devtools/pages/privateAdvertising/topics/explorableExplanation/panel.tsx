@@ -113,11 +113,8 @@ const Panel = ({
       return;
     }
 
-    (async () => {
-      const data = await createEpochs();
-
-      setEpochs(data);
-    })();
+    const data = createEpochs();
+    setEpochs(data);
   }, []);
 
   const [visitIndexStart, setVisitIndexStart] = useState(
@@ -364,6 +361,7 @@ const Panel = ({
         reset={setReset}
         extraInterface={extraInterface}
         showNextPrevButtons={false}
+        disablePlayButton={Boolean(isInteractiveModeOn)}
       />
       <div className="flex-1 overflow-auto">
         <Animation

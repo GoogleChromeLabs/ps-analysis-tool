@@ -33,7 +33,6 @@ type ProgressLineProps = {
   text?: string;
   noArrow?: boolean;
   noAnimation?: boolean;
-  isBranch?: boolean;
   isForBranches?: boolean;
 };
 
@@ -46,7 +45,6 @@ const ProgressLine = ({
   text = '',
   noArrow = false,
   noAnimation = app.speedMultiplier === 4,
-  isBranch = false,
   isForBranches = false,
 }: ProgressLineProps): Promise<Coordinates | null> => {
   const p = app.p;
@@ -55,10 +53,6 @@ const ProgressLine = ({
   }
   const width = customWidth ?? config.flow.lineWidth - ARROW_SIZE;
   const height = customHeight ?? config.flow.lineHeight - ARROW_SIZE;
-  const incrementBy = isBranch ? 15 : app.speedMultiplier; // Adjust to control speed
-  const scrollAdjuster =
-    (direction === 'right' ? config.flow.box.height : config.flow.box.width) /
-    2;
   const { x: x1, y: y1 } = getCoordinateValues({ x: x1Value, y: y1Value });
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction, width, height);
 
@@ -94,6 +88,7 @@ const ProgressLine = ({
 
       //Redundant condition to handle case when animation has started and someone has switched to fastest speed.
       let drawInstantlyFlag = false;
+      let isEnding = false;
 
       if (
         noAnimation ||
@@ -110,12 +105,10 @@ const ProgressLine = ({
 
       switch (direction) {
         case 'right':
-          currentX += Math.min(incrementBy, x2 - currentX);
-          if (!isForBranches) {
-            utils.scrollToCoordinates(currentX + width, y2 - scrollAdjuster);
-          }
+          currentX = p.lerp(currentX, Math.round(x2), app.speedMultiplier / 15);
+          isEnding = Math.round(currentX) === Math.round(x2);
 
-          if (drawInstantlyFlag) {
+          if (drawInstantlyFlag || isEnding) {
             currentX = x2;
           }
 
@@ -128,7 +121,10 @@ const ProgressLine = ({
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1, direction);
 
-          if (currentX === x2) {
+          if (isEnding) {
+            if (!isForBranches) {
+              utils.scrollToCoordinates(x2, y2);
+            }
             resolve({ x: x2, y: y2 });
             return;
           }
@@ -136,13 +132,10 @@ const ProgressLine = ({
           break;
 
         case 'left':
-          currentX -= Math.min(incrementBy, currentX - x2);
+          currentX = p.lerp(currentX, Math.round(x2), app.speedMultiplier / 15);
+          isEnding = Math.round(currentX) === Math.round(x2);
 
-          if (!isForBranches) {
-            utils.scrollToCoordinates(currentX, y1 - scrollAdjuster);
-          }
-
-          if (drawInstantlyFlag) {
+          if (drawInstantlyFlag || isEnding) {
             currentX = x2;
           }
 
@@ -154,7 +147,10 @@ const ProgressLine = ({
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1 - 5, direction);
 
-          if (currentX === x2) {
+          if (isEnding) {
+            if (!isForBranches) {
+              utils.scrollToCoordinates(x2, y2);
+            }
             utils.drawText(text, currentX + width / 2, y1 + height / 2 - 10);
             resolve({ x: x2, y: y2 });
             return;
@@ -163,9 +159,10 @@ const ProgressLine = ({
           break;
 
         case 'down':
-          currentY += Math.min(incrementBy, y2 - currentY);
+          currentY = p.lerp(currentY, Math.round(y2), app.speedMultiplier / 15);
+          isEnding = Math.round(currentY) === Math.round(y2);
 
-          if (drawInstantlyFlag) {
+          if (drawInstantlyFlag || isEnding) {
             currentY = y2;
           }
 
@@ -177,7 +174,11 @@ const ProgressLine = ({
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY - 2, direction);
 
-          if (currentY === y2) {
+          if (isEnding) {
+            if (!isForBranches) {
+              utils.scrollToCoordinates(x2, currentY);
+            }
+
             utils.drawText(
               text,
               x1 - (text.startsWith('$') ? 10 : width / 2),
@@ -190,12 +191,10 @@ const ProgressLine = ({
           break;
 
         case 'up':
-          currentY -= Math.min(incrementBy, currentY - y2);
-          if (!isForBranches) {
-            utils.scrollToCoordinates(x1 - scrollAdjuster, y1 - height);
-          }
+          currentY = p.lerp(currentY, Math.round(y2), app.speedMultiplier / 15);
+          isEnding = Math.round(currentY) === Math.round(y2);
 
-          if (drawInstantlyFlag) {
+          if (drawInstantlyFlag || isEnding) {
             currentY = y2;
           }
 
@@ -207,7 +206,11 @@ const ProgressLine = ({
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);
 
-          if (currentY === y2) {
+          if (isEnding) {
+            if (!isForBranches) {
+              utils.scrollToCoordinates(x2, currentY);
+            }
+
             utils.drawText(
               text,
               x1 + (text.startsWith('$') ? 10 : width / 2),

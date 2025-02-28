@@ -90,8 +90,8 @@ import {
   FederatedCredential,
   IPProtection,
   PrivateStateTokens,
-} from './components';
-import HelpCenter from './components/learning/helpCenter';
+} from './pages';
+import HelpCenter from './pages/learning/helpCenter';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -391,7 +391,7 @@ const TABS: SidebarItems = {
         addSpacer: false,
         containerClassName: 'h-6',
       },
-      [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
+      [SIDEBAR_ITEMS_KEYS.STORIES]: {
         title: () => 'Stories',
         panel: {
           Element: WebStories,
@@ -432,7 +432,7 @@ const TABS: SidebarItems = {
         title: () => 'Dev Site',
         panel: {
           Element: DevSite,
-          href: 'https://developers.chrome.com/privacy-sandbox',
+          href: 'https://developers.google.com/privacy-sandbox',
         },
         icon: {
           Element: DevGuideIcon,

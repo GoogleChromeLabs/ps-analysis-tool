@@ -17,7 +17,10 @@
  * External Dependencies
  */
 import React from 'react';
-import { LandingPageContainer } from '@google-psat/design-system';
+import {
+  LandingPageContainer,
+  SIDEBAR_ITEMS_KEYS,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 const content = [
@@ -26,6 +29,7 @@ const content = [
     description: () => I18n.getMessage('chipsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
     storyUrl: 'https://privacysandbox-stories.com/web-stories/chips/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.CHIPS,
   },
   {
     title: () => I18n.getMessage('storageAccessAPI'),
@@ -33,6 +37,7 @@ const content = [
     url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/storage-access-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS,
   },
   {
     title: () => I18n.getMessage('rws'),
@@ -40,6 +45,7 @@ const content = [
     url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/related-website-sets/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
   },
   {
     title: () => I18n.getMessage('fedcm'),
@@ -47,6 +53,7 @@ const content = [
     url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/federated-credential-management-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL,
   },
 ];
 

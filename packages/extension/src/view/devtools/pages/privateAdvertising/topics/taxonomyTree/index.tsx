@@ -118,8 +118,8 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
         divContainer.appendChild(chart);
       }
 
-      if (storageRef.current[1]) {
-        const data = JSON.parse(storageRef.current[1] || '{}');
+      if (storageRef.current[2]) {
+        const data = JSON.parse(storageRef.current[2] || '{}');
         const topic = data?.taxonomy;
 
         if (!topic) {
@@ -136,7 +136,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           JSON.stringify({
             taxonomy: '',
           }),
-          1
+          2
         );
       }
     })();

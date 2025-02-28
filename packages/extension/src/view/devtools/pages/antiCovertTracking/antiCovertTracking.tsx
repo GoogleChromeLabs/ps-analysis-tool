@@ -18,7 +18,10 @@
  * External Dependencies
  */
 import React from 'react';
-import { LandingPageContainer } from '@google-psat/design-system';
+import {
+  LandingPageContainer,
+  SIDEBAR_ITEMS_KEYS,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
 const content = [
@@ -27,6 +30,7 @@ const content = [
     description: () => I18n.getMessage('ipProtectionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
     storyUrl: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
   },
   {
     title: () => I18n.getMessage('bounceTrackingMitigations'),
@@ -34,6 +38,7 @@ const content = [
     url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/bounce-tracking-mitigations/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
   },
   {
     title: () => I18n.getMessage('userAgentReduction'),
@@ -41,6 +46,7 @@ const content = [
     url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/user-agent-reduction/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
   },
   {
     title: () => I18n.getMessage('privateStateTokens'),
@@ -48,6 +54,7 @@ const content = [
     url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/private-state-tokens/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
   },
 ];
 
