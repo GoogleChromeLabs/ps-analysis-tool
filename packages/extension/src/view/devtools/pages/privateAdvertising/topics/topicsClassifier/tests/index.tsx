@@ -18,6 +18,9 @@
  */
 import React, { act } from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
+/**
+ * Internal dependencies
+ */
 import TopicsClassifier from '..';
 
 describe('Topics UI Classifier', () => {
