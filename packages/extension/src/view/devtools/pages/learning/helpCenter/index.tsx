@@ -17,8 +17,8 @@
 /**
  * External dependencies.
  */
-import { Help, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
 import React from 'react';
+import { Help, SIDEBAR_ITEMS_KEYS, TabIcon } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -40,8 +40,9 @@ const HelpCenter = () => {
               {description}
             </p>
           )}
-          <p className="text-sm">
+          <p className="text-sm flex items-center gap-1">
             Please refer to the help center opened in the current browser tab.
+            <TabIcon className="w-4 h-4 fill-granite-gray dark:fill-bright-gray" />
           </p>
         </p>
       </div>

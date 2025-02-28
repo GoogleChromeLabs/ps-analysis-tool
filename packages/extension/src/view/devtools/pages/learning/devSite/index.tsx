@@ -17,7 +17,11 @@
 /**
  * External dependencies.
  */
-import { DevGuideIcon, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
+import {
+  DevGuideIcon,
+  SIDEBAR_ITEMS_KEYS,
+  TabIcon,
+} from '@google-psat/design-system';
 import React from 'react';
 
 /**
@@ -40,9 +44,9 @@ const DevSite = () => {
               {description}
             </p>
           )}
-          <p className="text-sm">
-            Please refer to the developer site opened in the current browser
-            tab.
+          <p className="text-sm flex items-center gap-1">
+            Please refer to the help center opened in the current browser tab.
+            <TabIcon className="w-4 h-4 fill-granite-gray dark:fill-bright-gray" />
           </p>
         </p>
       </div>
