@@ -30,7 +30,7 @@ import { getSessionStorage } from '@google-psat/common';
  */
 import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
-import { Layout } from './components';
+import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
 
 const App: React.FC = () => {

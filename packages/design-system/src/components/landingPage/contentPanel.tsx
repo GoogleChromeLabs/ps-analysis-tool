@@ -25,6 +25,7 @@ import { addUTMParams } from '@google-psat/common';
  */
 import { DescriptionIcon, WebStoriesIcon } from '../../icons';
 import Link from '../link';
+import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
 export interface ContentPanelProps {
   title: string;
@@ -34,6 +35,7 @@ export interface ContentPanelProps {
     url: string;
     storyUrl?: string;
     onClick: () => void;
+    sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
   titleStyles?: string;
   counterStyles?: string;
@@ -45,6 +47,10 @@ const ContentPanel = ({
   titleStyles = '',
   counterStyles = '',
 }: ContentPanelProps) => {
+  const updateSelectedItemKey = useSidebar(
+    ({ actions }) => actions.updateSelectedItemKey
+  );
+
   return (
     <div className="px-2">
       <h3 className="text-base text-raisin-black dark:text-bright-gray mb-7">
@@ -56,7 +62,14 @@ const ContentPanel = ({
             className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
             key={index}
           >
-            <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
+            <div
+              className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5 cursor-pointer"
+              onClick={() =>
+                item.sidebarItemKey
+                  ? updateSelectedItemKey(item.sidebarItemKey)
+                  : null
+              }
+            >
               <div
                 className={`w-9 h-9 flex justify-center items-center rounded-md ${counterStyles}`}
               >
@@ -65,7 +78,14 @@ const ContentPanel = ({
                 </span>
               </div>
             </div>
-            <h3 className={`text-lg font-medium mb-5 ${titleStyles}`}>
+            <h3
+              className={`text-lg inline-block font-medium mb-5 cursor-pointer ${titleStyles}`}
+              onClick={() =>
+                item.sidebarItemKey
+                  ? updateSelectedItemKey(item.sidebarItemKey)
+                  : null
+              }
+            >
               {item.title()}
             </h3>
             <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
