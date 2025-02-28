@@ -88,36 +88,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
-  const onCommittedNavigationListener = useCallback(
-    ({
-      frameId,
-      frameType,
-      tabId,
-    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (
-        (frameType !== 'outermost_frame' && frameId !== 0) ||
-        tabId !== chrome.devtools.inspectedWindow.tabId
-      ) {
-        return;
-      }
-
-      setTriggerRegistration([]);
-      setSourcesRegistration([]);
-    },
-    []
-  );
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(messagePassingListener);
-    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
     return () => {
       chrome.runtime.onMessage.removeListener(messagePassingListener);
-      chrome.webNavigation.onCommitted.removeListener(
-        onCommittedNavigationListener
-      );
     };
-  }, [messagePassingListener, onCommittedNavigationListener]);
+  }, [messagePassingListener]);
 
   const memoisedValue: AttributionReportingContextType = useMemo(() => {
     return {

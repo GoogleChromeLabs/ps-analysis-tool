@@ -63,12 +63,6 @@ const TriggerRegistrations = () => {
         widthWeightagePercentage: 15,
       },
       {
-        header: 'Source Type',
-        accessorKey: 'type',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-      {
         header: 'Event Level Result',
         accessorKey: 'eventLevel',
         cell: (info) => info,
