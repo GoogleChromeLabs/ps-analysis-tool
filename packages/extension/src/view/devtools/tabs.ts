@@ -391,7 +391,7 @@ const TABS: SidebarItems = {
         addSpacer: false,
         containerClassName: 'h-6',
       },
-      [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
+      [SIDEBAR_ITEMS_KEYS.STORIES]: {
         title: () => 'Stories',
         panel: {
           Element: WebStories,

@@ -66,7 +66,7 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`flex box-border outline-0 px-1 py-px text-xs cursor-default flex-1 ${
+      className={`flex box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
         rowHeightClass ?? 'h-5'
       }`}
     >
@@ -82,7 +82,7 @@ const BodyCell = ({
         </div>
       )}
       <div
-        className="truncate"
+        className="truncate min-h-fit"
         title={typeof cellValue === 'string' ? cellValue : ''}
       >
         {cellValue}
