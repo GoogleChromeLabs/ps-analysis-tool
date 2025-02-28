@@ -206,7 +206,7 @@ const TopicsClassifier = () => {
               className="flex items-center gap-2 w-full dark:bg-tomato-red bg-baby-pink m-0.25 px-2 py-1 rounded"
             >
               <CancelIcon className="w-4 h-4 dark:fill-blood-red fill-bright-red" />
-              <div className="text-sm rounded-sm dark:text-bright-gray">
+              <div className="text-xs rounded-sm dark:text-bright-gray">
                 {error}
               </div>
             </div>
