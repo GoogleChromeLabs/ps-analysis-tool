@@ -25,6 +25,7 @@ export type SourcesRegistration =
     result: string;
     index: number;
   };
+
 export type TriggerRegistration =
   Protocol.Storage.AttributionReportingTriggerRegistration & {
     eventLevel: Protocol.Storage.AttributionReportingEventLevelResult;
@@ -33,4 +34,5 @@ export type TriggerRegistration =
     time: number;
     destination?: string;
   };
+
 export type SourcesData = SourcesRegistration | TriggerRegistration;
