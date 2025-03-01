@@ -54,4 +54,4 @@ export * from './utils/generateReports';
 export * from './cookies.types';
 export * from './libraryDetection.types';
 export * from './protectedAudience.types';
-export * from './ara.types';
+export * from './attributionReporting.types';
