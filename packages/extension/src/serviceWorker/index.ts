@@ -392,13 +392,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           response: { url: requestUrl, headers },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
-        if (
-          headers?.['attribution-reporting-register-trigger'] ||
-          headers?.['Attribution-Reporting-Register-Trigger']
-        ) {
-          const triggerRegistration =
-            headers?.['attribution-reporting-register-trigger'] ??
-            headers?.['Attribution-Reporting-Register-Trigger'];
+        const extractHeader = (header: string) =>
+          headers?.[header.toLowerCase()] ?? headers?.[header];
+
+        const triggerRegistration = extractHeader(
+          'Attribution-Reporting-Register-Trigger'
+        );
+
+        if (triggerRegistration) {
           ARAStore.processARATriggerRegistered(
             {
               registration: {
@@ -415,13 +416,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           );
         }
 
-        if (
-          headers?.['attribution-reporting-register-source'] ||
-          headers?.['Attribution-Reporting-Register-Source']
-        ) {
-          const sourceRegistration =
-            headers?.['attribution-reporting-register-source'] ??
-            headers?.['Attribution-Reporting-Register-Source'];
+        const sourceRegistration = extractHeader(
+          'Attribution-Reporting-Register-Source'
+        );
+
+        if (sourceRegistration) {
           ARAStore.processARASourcesRegistered(
             {
               registration: {
