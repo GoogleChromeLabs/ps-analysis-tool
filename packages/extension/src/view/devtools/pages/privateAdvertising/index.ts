@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as AttributionReporting } from './attribution';
+export { default as AttributionReporting } from './attributionReporting';
 export { default as Topics } from './topics';
 export { default as PrivateAdvertising } from './privateAdvertising';
 export { default as ProtectedAudience } from './protectedAudience';
