@@ -18,6 +18,7 @@
  */
 import Protocol from 'devtools-protocol';
 import isEqual from 'lodash-es/isEqual';
+
 /**
  * Internal dependencies
  */
@@ -25,7 +26,15 @@ import dataStore from './dataStore';
 import convertKeysToCamelCase from './utils/convertKeysToCamelCase';
 import transformNestedObject from './utils/transformObject';
 
+/**
+ * Class responsible for managing Attribution Reporting API (ARA) data storage and processing.
+ */
 class ARAStore {
+  /**
+   * Processes the Attribution Reporting Source Registered event.
+   * @param {Protocol.Storage.AttributionReportingSourceRegisteredEvent} params - The event parameters.
+   * @param {string} tabId - The ID of the tab where the event occurred.
+   */
   processARASourcesRegistered(
     params: Protocol.Storage.AttributionReportingSourceRegisteredEvent,
     tabId: string
@@ -49,9 +58,15 @@ class ARAStore {
         },
       ];
     }
+
     dataStore.tabs[Number(tabId)].newUpdatesARA++;
   }
 
+  /**
+   * Processes the Attribution Reporting Trigger Registered event.
+   * @param {Protocol.Storage.AttributionReportingTriggerRegisteredEvent} params - The event parameters.
+   * @param {string} tabId - The ID of the tab where the event occurred.
+   */
   processARATriggerRegistered(
     params: Protocol.Storage.AttributionReportingTriggerRegisteredEvent,
     tabId: string
@@ -82,9 +97,15 @@ class ARAStore {
         },
       ];
     }
+
     dataStore.tabs[Number(tabId)].newUpdatesARA++;
   }
 
+  /**
+   * Adds necessary fields to the trigger registration data if they are missing.
+   * @param {Protocol.Storage.AttributionReportingTriggerRegistration} triggerRegistrationData - The trigger registration data.
+   * @returns {Protocol.Storage.AttributionReportingTriggerRegistration} The updated trigger registration data.
+   */
   addNecessaryFields(
     triggerRegistrationData: Protocol.Storage.AttributionReportingTriggerRegistration
   ): Protocol.Storage.AttributionReportingTriggerRegistration {
@@ -110,6 +131,13 @@ class ARAStore {
     return reformedData;
   }
 
+  /**
+   * Matches the trigger data with the registration data based on the specified key.
+   * @param {any} registrationData - The registration data.
+   * @param {any} triggerData - The trigger data.
+   * @param {string} key - The key to match the data.
+   * @returns {boolean} True if the data matches, false otherwise.
+   */
   matchTriggerData(
     registrationData: any,
     triggerData: any,
