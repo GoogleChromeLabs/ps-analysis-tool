@@ -135,12 +135,12 @@ const Branches = async ({
         app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
       }
       const { x, y } = getCoordinateValues(endpoints[1]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinates({ x, y });
       // eslint-disable-next-line consistent-return
       return endpoints[1];
     } else {
       const { x, y } = getCoordinateValues(endpoints[0]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinates({ x, y });
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
         typeOfBranches,
@@ -163,13 +163,13 @@ const Branches = async ({
       }
 
       const { x, y } = getCoordinateValues(endpoints[1]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinates({ x, y });
       await delay(1000);
       // eslint-disable-next-line consistent-return
       return endpoints[1];
     } else {
       const { x, y } = getCoordinateValues(endpoints[0]);
-      scrollToCoordinates(x, y);
+      scrollToCoordinates({ x, y });
 
       const nextTip = await FlowExpander({
         nextTipCoordinates: endpoints,
@@ -204,7 +204,7 @@ const Branches = async ({
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
     const { x, y } = getCoordinateValues(endpoints[1]);
-    scrollToCoordinates(x, y);
+    scrollToCoordinates({ x, y });
     // eslint-disable-next-line consistent-return
     return endpoints[1];
   }
@@ -247,13 +247,13 @@ const Branches = async ({
       app.setSelectedAdUnit(publisherData[currentSite].adunits[1]);
     }
     const { x, y } = getCoordinateValues(endpoints[1]);
-    scrollToCoordinates(x, y);
+    scrollToCoordinates({ x, y });
     // eslint-disable-next-line consistent-return
     return endpoints[1];
   }
 
   const { x, y } = getCoordinateValues(endpoints[0]);
-  scrollToCoordinates(x, y);
+  scrollToCoordinates({ x, y });
 
   const nextTip = await FlowExpander({
     nextTipCoordinates: endpoints,

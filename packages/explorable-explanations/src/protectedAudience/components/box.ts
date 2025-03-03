@@ -22,6 +22,7 @@ import { scrollToCoordinates } from '../utils';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
 import type { CoordinateValue, Coordinates } from '../types';
 import Info from './info';
+import { isPointInViewport } from '../utils/isPointInViewport';
 
 const INFO_ICON_SPACING = 3;
 
@@ -33,7 +34,7 @@ type BoxProps = {
   width?: number;
   height?: number;
   color?: string;
-  info?: boolean;
+  info?: boolean | string;
   isBranchComponent?: boolean;
   borderStroke?: number[];
 };
@@ -78,10 +79,6 @@ const Box = ({
     return nextTip;
   }
 
-  if (!isBranchComponent) {
-    scrollToCoordinates(x, y - height / 2);
-  }
-
   p.push();
   p.textAlign(p.CENTER, p.CENTER);
   p.fill(color || background);
@@ -91,6 +88,10 @@ const Box = ({
   p.fill(text);
   p.textFont('sans-serif');
 
+  if (!isBranchComponent && !isPointInViewport(x + width, y + height)) {
+    scrollToCoordinates({ x: x + width / 2, y: y + height / 2 });
+  }
+
   if (description) {
     p.text(title, x + width / 2, y + height / 2 - 5);
     p.text(description, x + width / 2, y + height / 2 + 10);
@@ -98,7 +99,7 @@ const Box = ({
     p.text(title, x + width / 2, y + height / 2);
   }
 
-  if (info) {
+  if (info && typeof info === 'string') {
     const { x: xCoordinate, y: yCoordinate } = getCoordinateValues({ x, y });
     const iconX = xCoordinate + width - infoIconSize - INFO_ICON_SPACING;
     const iconY = yCoordinate + INFO_ICON_SPACING;

@@ -18,8 +18,37 @@
  */
 import app from '../app';
 import { isPointInViewport } from './isPointInViewport';
-export const scrollToCoordinates = (x: number, y: number, override = false) => {
+import throttle from 'just-throttle';
+
+const SCROLL_THRESHOLD = 50;
+
+type ScrollCoordinate = {
+  x: number;
+  y: number;
+};
+
+// throttled scroll to avoid performance issues
+const scrollTo = throttle(({ x, y }: ScrollCoordinate) => {
+  app.canvasParentElement?.scrollTo({
+    left: x,
+    top: y,
+    behavior: 'smooth',
+  });
+}, 1000);
+
+type ScrollToCoordinatesProps = ScrollCoordinate & {
+  override?: boolean;
+};
+
+export const scrollToCoordinates = ({
+  x,
+  y,
+  override = false,
+}: ScrollToCoordinatesProps) => {
+  const rect = app.canvasParentElement?.getBoundingClientRect();
+
   if (
+    !rect ||
     !app.autoScroll ||
     app.isRevisitingNodeInInteractiveMode ||
     !app.canvasParentElement
@@ -28,21 +57,16 @@ export const scrollToCoordinates = (x: number, y: number, override = false) => {
   }
 
   if (override) {
-    app.canvasParentElement.scrollTo({
-      left: 0,
-      top: 0,
-      behavior: 'smooth',
-    });
+    scrollTo({ x: 0, y: 0 });
     return;
   }
 
-  if (isPointInViewport(x, y)) {
+  if (isPointInViewport(x, y, SCROLL_THRESHOLD)) {
     return;
   }
 
-  app.canvasParentElement.scrollTo({
-    left: x - 50,
-    top: y - 50,
-    behavior: 'smooth',
-  });
+  const finalX = x - rect.left;
+  const finalY = y - rect.top;
+
+  scrollTo({ x: finalX, y: finalY });
 };
