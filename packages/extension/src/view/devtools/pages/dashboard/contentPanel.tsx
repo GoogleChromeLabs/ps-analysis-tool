@@ -27,7 +27,7 @@ import { useCookie } from '../../stateProviders';
 import useCanShowAnalyzeTabButton from '../../hooks/useCanShowAnalyzeTabButton';
 import CardsPanel from '../shared/cardsPanel';
 
-const DashboardPanel = () => {
+const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
@@ -66,4 +66,4 @@ const DashboardPanel = () => {
   );
 };
 
-export default DashboardPanel;
+export default ContentPanel;
