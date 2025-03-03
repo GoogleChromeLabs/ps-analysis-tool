@@ -69,3 +69,4 @@ export { default as FiltersSidebar } from './filtersSidebar';
 export * from './filtersSidebar';
 export { default as DraggableTray } from './draggableTray';
 export { default as Link } from './link';
+export { default as GutenbergEmbed } from './gutenbergEmbed';
