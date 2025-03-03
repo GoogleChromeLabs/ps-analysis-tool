@@ -18,28 +18,20 @@
  */
 import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
-  type TableColumn,
   TableProvider,
   type TableRow,
   Table,
-  type TableFilter,
-  type InfoType,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState, useCallback, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
-import Protocol from 'devtools-protocol';
 
 /**
  * Internal dependencies
  */
-import { useAttributionReporting } from '../../../../stateProviders';
-import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 import RowContextMenuForARA from '../rowContextMenu';
-
-type SourcesKeys =
-  keyof Protocol.Storage.AttributionReportingSourceRegistration;
+import useAttributionReportingListing from '../useAttributionReportingListing';
 
 const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
@@ -49,157 +41,8 @@ const SourceRegistrations = () => {
     typeof RowContextMenuForARA
   > | null>(null);
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
-
-  const calculateFilters = useCallback(
-    (key: SourcesKeys) => {
-      const filters: { [key: string]: Record<'selected', boolean> } = {};
-      sourcesRegistration.forEach((sources) => {
-        if (key === 'destinationSites') {
-          if (Array.isArray(sources[key])) {
-            sources[key].forEach((site) => {
-              filters[site] = {
-                selected: false,
-              };
-            });
-          } else {
-            filters[sources[key]] = {
-              selected: false,
-            };
-          }
-        } else {
-          const _key = sources[key] as SourcesKeys;
-          filters[_key] = {
-            selected: false,
-          };
-        }
-      });
-      return filters;
-    },
-    [sourcesRegistration]
-  );
-
-  const tableFilters = useMemo<TableFilter>(
-    () => ({
-      sourceOrigin: {
-        title: 'Source Origin',
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: calculateFilters('sourceOrigin'),
-      },
-      reportingOrigin: {
-        title: 'Reporting Origin',
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: calculateFilters('reportingOrigin'),
-      },
-      destination: {
-        title: 'Destination Sites',
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: calculateFilters('destinationSites'),
-      },
-      type: {
-        title: 'Event Type',
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues: calculateFilters('type'),
-      },
-      expiry: {
-        title: 'Expiry',
-        hasStaticFilterValues: true,
-        filterValues: {
-          [I18n.getMessage('session')]: {
-            selected: false,
-          },
-          [I18n.getMessage('shortTerm')]: {
-            selected: false,
-          },
-          [I18n.getMessage('mediumTerm')]: {
-            selected: false,
-          },
-          [I18n.getMessage('longTerm')]: {
-            selected: false,
-          },
-          [I18n.getMessage('extentedTerm')]: {
-            selected: false,
-          },
-        },
-        useGenericPersistenceKey: true,
-        comparator: (value: InfoType, filterValue: string) => {
-          let diff = 0;
-          const val = value as number;
-          switch (filterValue) {
-            case I18n.getMessage('shortTerm'):
-              diff = val - Date.now();
-              return diff < 86400000;
-
-            case I18n.getMessage('mediumTerm'):
-              diff = val - Date.now();
-              return diff >= 86400000 && diff < 604800000;
-
-            case I18n.getMessage('longTerm'):
-              diff = val - Date.now();
-              return diff >= 604800000 && diff < 2629743833;
-
-            case I18n.getMessage('extentedTerm'):
-              diff = val - Date.now();
-              return diff >= 2629743833;
-
-            default:
-              return false;
-          }
-        },
-      },
-    }),
-    [calculateFilters]
-  );
-
-  const tableColumns = useMemo<TableColumn[]>(
-    () => [
-      {
-        header: 'Source Origin',
-        accessorKey: 'sourceOrigin',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-      {
-        header: 'Reporting Origin',
-        accessorKey: 'reportingOrigin',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-      {
-        header: 'Registration Time',
-        accessorKey: 'time',
-        cell: (_, details) =>
-          calculateRegistrationDate((details as SourcesRegistration)?.time),
-        enableHiding: false,
-        widthWeightagePercentage: 15,
-      },
-      {
-        header: 'Source Type',
-        accessorKey: 'type',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-      {
-        header: 'Status',
-        accessorKey: 'result',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-      {
-        header: 'Debug Key',
-        accessorKey: 'debugKey',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-    ],
-    []
-  );
+  const { tableFilters, tableColumns, data } =
+    useAttributionReportingListing('sources');
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
@@ -218,7 +61,7 @@ const SourceRegistrations = () => {
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             tableFilterData={tableFilters}
-            data={sourcesRegistration}
+            data={data}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={
