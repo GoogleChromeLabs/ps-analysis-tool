@@ -24,7 +24,7 @@ import classNames from 'classnames';
  */
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
-export type Item = {
+type PinnedItem = {
   name: string;
   icon: React.ComponentType<{
     width: number;
@@ -32,10 +32,13 @@ export type Item = {
     className?: string;
   }>;
   sidebarKey: SIDEBAR_ITEMS_KEYS;
+};
+
+type FeatureItem = PinnedItem & {
+  description: string;
   colorClasses?: {
     heading?: string;
   };
-  description?: string;
   buttons?: {
     name: string;
     sidebarKey: SIDEBAR_ITEMS_KEYS;
@@ -43,8 +46,9 @@ export type Item = {
 };
 
 type Props = {
-  pinnedItems?: Item[];
-  featuredItems: Item[];
+  pinnedItems?: PinnedItem[];
+  featuredItems: FeatureItem[];
+  hasTitle?: boolean;
   onFeaturedButtonClick: (
     event: React.MouseEvent,
     sidebarKey: SIDEBAR_ITEMS_KEYS
@@ -54,6 +58,7 @@ type Props = {
 const CardsPanel = ({
   pinnedItems,
   featuredItems,
+  hasTitle = true,
   onFeaturedButtonClick,
 }: Props) => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
@@ -66,7 +71,7 @@ const CardsPanel = ({
       <div className="min-w-[45.75rem]">
         {pinnedItems && pinnedItems.length > 0 && (
           <section className="border-b border-hex-gray mb-5 pb-5">
-            <h3 className="text-sm mb-2">Pinned</h3>
+            {hasTitle && <h3 className="text-sm mb-2">Pinned</h3>}
             <div className="flex gap-x-5 gap-y-4 flex-wrap">
               {pinnedItems.map((item) => {
                 const Icon = item.icon;
@@ -87,7 +92,7 @@ const CardsPanel = ({
         )}
         {featuredItems.length > 0 && (
           <section>
-            <h3 className="text-sm mb-2">Features</h3>
+            {hasTitle && <h3 className="text-sm mb-2">Features</h3>}
             <div className="flex gap-5 flex-wrap">
               {featuredItems.map((item) => {
                 const Icon = item.icon;

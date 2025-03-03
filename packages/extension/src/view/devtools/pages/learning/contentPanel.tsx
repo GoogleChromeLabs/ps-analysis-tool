@@ -44,6 +44,7 @@ const ContentPanel = () => {
     <CardsPanel
       featuredItems={FEATURED_ITEMS}
       onFeaturedButtonClick={onButtonClick}
+      hasTitle={false}
     />
   );
 };
