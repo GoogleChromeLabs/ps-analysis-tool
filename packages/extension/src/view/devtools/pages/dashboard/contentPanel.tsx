@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect } from 'react';
-import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
+import {
+  CardsPanel,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -25,7 +29,6 @@ import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 import { PINNED_ITEMS, FEATURE_LIST } from './constants';
 import { useCookie } from '../../stateProviders';
 import useCanShowAnalyzeTabButton from '../../hooks/useCanShowAnalyzeTabButton';
-import CardsPanel from '../shared/cardsPanel';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);

@@ -18,13 +18,16 @@
  * External dependencies.
  */
 import React from 'react';
-import { Help, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
+import {
+  ExternalLinkPanel,
+  Help,
+  SIDEBAR_ITEMS_KEYS,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import { FEATURED_ITEMS } from '../constants';
-import ExternalLinkPanel from '../../shared/externalLinkPanel';
 
 const HelpCenter = () => {
   const description =
@@ -32,14 +35,11 @@ const HelpCenter = () => {
       (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.HELP_CENTER
     )?.description ?? '';
 
-  return (
-    <ExternalLinkPanel
-      description={description}
-      icon={
-        <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
-      }
-    />
+  const helpIcon = (
+    <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
   );
+
+  return <ExternalLinkPanel description={description} icon={helpIcon} />;
 };
 
 export default HelpCenter;

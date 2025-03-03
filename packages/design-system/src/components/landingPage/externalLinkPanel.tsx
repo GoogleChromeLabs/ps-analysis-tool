@@ -18,15 +18,18 @@
  * External dependencies.
  */
 import React from 'react';
-import { TabIcon } from '@google-psat/design-system';
 
-const ExternalLinkPanel = ({
-  description,
-  icon,
-}: {
+/**
+ * Internal dependencies.
+ */
+import { TabIcon } from '../../icons';
+
+interface ExternalLinkPanelProps {
   description: string;
   icon: React.JSX.Element;
-}) => {
+}
+
+const ExternalLinkPanel = ({ description, icon }: ExternalLinkPanelProps) => {
   return (
     <div className="w-full h-full overflow-hidden">
       <div className="w-full h-full flex justify-center items-center">

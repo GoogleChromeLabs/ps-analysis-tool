@@ -17,14 +17,24 @@
  * External dependencies.
  */
 import React from 'react';
-import { useSidebar } from '@google-psat/design-system';
-import CardsPanel from '../shared/cardsPanel';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
+  CardsPanel,
+} from '@google-psat/design-system';
+
+/**
+ * Internal dependencies
+ */
 import { FEATURED_ITEMS } from './constants';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
 
-  const onButtonClick = (event: React.MouseEvent, sidebarKey: string) => {
+  const onButtonClick = (
+    event: React.MouseEvent,
+    sidebarKey: SIDEBAR_ITEMS_KEYS
+  ) => {
     event.preventDefault();
     event.stopPropagation();
     navigateTo(sidebarKey);

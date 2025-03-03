@@ -48,6 +48,6 @@ export const FEATURED_ITEMS = [
     icon: DevGuideIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
     description:
-      'Access documentation, API references, and implementation guides on the Privacy Sandbox Developer Site.',
+      'Access documentation, API references, and implementation guides on the Privacy Sandbox Developer site.',
   },
 ];

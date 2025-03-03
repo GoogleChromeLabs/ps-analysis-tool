@@ -17,27 +17,38 @@
  * External dependencies.
  */
 import React from 'react';
-import { useSidebar } from '@google-psat/design-system';
 import classNames from 'classnames';
+
+/**
+ * Internal dependencies.
+ */
+import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
 export type Item = {
   name: string;
-  icon: React.ComponentType<{ width: number; height: number }>;
-  sidebarKey: string;
+  icon: React.ComponentType<{
+    width: number;
+    height: number;
+    className?: string;
+  }>;
+  sidebarKey: SIDEBAR_ITEMS_KEYS;
   colorClasses?: {
     heading?: string;
   };
   description?: string;
   buttons?: {
     name: string;
-    sidebarKey: string;
+    sidebarKey: SIDEBAR_ITEMS_KEYS;
   }[];
 };
 
 type Props = {
   pinnedItems?: Item[];
   featuredItems: Item[];
-  onFeaturedButtonClick: (event: React.MouseEvent, sidebarKey: string) => void;
+  onFeaturedButtonClick: (
+    event: React.MouseEvent,
+    sidebarKey: SIDEBAR_ITEMS_KEYS
+  ) => void;
 };
 
 const CardsPanel = ({
@@ -49,7 +60,7 @@ const CardsPanel = ({
 
   return (
     <div
-      data-testid="dashboard-content"
+      data-testid="cards-panel"
       className="h-full w-full overflow-auto text-raisin-black dark:text-bright-gray px-2 pb-14"
     >
       <div className="min-w-[45.75rem]">
@@ -66,7 +77,6 @@ const CardsPanel = ({
                     className="w-[366px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
-                    {/* @ts-ignore ignore classname warning */}
                     <Icon width={20} height={20} className="fill-gray" />
                     <span className="text-sm">{item.name}</span>
                   </div>
@@ -93,7 +103,6 @@ const CardsPanel = ({
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <div className="flex gap-2 justify-start mb-3">
-                      {/* @ts-ignore ignore classname warning*/}
                       <Icon width={20} height={20} className="fill-gray" />
                       <h4 className={headingClasses}>{item.name}</h4>
                     </div>

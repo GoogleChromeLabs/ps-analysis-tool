@@ -173,9 +173,12 @@ export const SidebarProvider = ({
           currentWindow: true,
         });
 
-        const url = tab[0].url?.split('#')[0].split('?')[0];
-        if (url !== item.panel.href) {
-          chrome?.tabs?.update({ url: item.panel.href });
+        // only open if an active tab is found
+        if (tab.length) {
+          const url = tab[0].url?.split('#')[0].split('?')[0];
+          if (url !== item.panel.href) {
+            chrome?.tabs?.update({ url: item.panel.href });
+          }
         }
       }
 
