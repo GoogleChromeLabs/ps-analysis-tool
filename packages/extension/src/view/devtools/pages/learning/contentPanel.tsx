@@ -30,15 +30,14 @@ import { FEATURED_ITEMS } from './constants';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
-
-  const onButtonClick = (
-    event: React.MouseEvent,
-    sidebarKey: SIDEBAR_ITEMS_KEYS
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-    navigateTo(sidebarKey);
-  };
+  const onButtonClick = React.useCallback(
+    (event: React.MouseEvent, sidebarKey: SIDEBAR_ITEMS_KEYS) => {
+      event.preventDefault();
+      event.stopPropagation();
+      navigateTo(sidebarKey);
+    },
+    [navigateTo]
+  );
 
   return (
     <CardsPanel
