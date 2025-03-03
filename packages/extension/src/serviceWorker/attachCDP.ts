@@ -16,19 +16,25 @@
 /**
  * This function will attach the debugger to the given target.
  * @param {{ [key: string]: number | string }} target The target where debugger needs to be attached.
+ * @param {boolean} childDebuggee If the target is a child debuggee.
  */
-export default function attachCDP(target: { [key: string]: number | string }) {
+export default function attachCDP(
+  target: { [key: string]: number | string },
+  childDebuggee = false
+) {
   chrome.debugger.attach(target, '1.3', async () => {
     if (chrome.runtime.lastError) {
       // eslint-disable-next-line no-console
       console.warn(chrome.runtime.lastError);
     }
     try {
-      await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
-        autoAttach: true,
-        flatten: false,
-        waitForDebuggerOnStart: true,
-      });
+      if (!childDebuggee) {
+        await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
+          autoAttach: true,
+          flatten: false,
+          waitForDebuggerOnStart: true,
+        });
+      }
 
       await chrome.debugger.sendCommand(
         target,
@@ -65,6 +71,22 @@ export default function attachCDP(target: { [key: string]: number | string }) {
       await chrome.debugger.sendCommand(target, 'Page.enable');
 
       await chrome.debugger.sendCommand(target, 'Network.enable');
+      if (childDebuggee) {
+        const message = {
+          id: 0,
+          method: 'Runtime.runIfWaitingForDebugger',
+          params: {},
+        };
+
+        await chrome.debugger.sendCommand(
+          target,
+          'Target.sendMessageToTarget',
+          {
+            message: JSON.stringify(message),
+            target,
+          }
+        );
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(error);

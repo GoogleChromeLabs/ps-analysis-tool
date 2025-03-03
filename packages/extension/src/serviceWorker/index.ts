@@ -85,66 +85,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         } = params as Protocol.Target.AttachedToTargetEvent;
 
         const childDebuggee = { targetId };
-        chrome.debugger.attach(childDebuggee, '1.3', async () => {
-          if (chrome.runtime.lastError) {
-            // eslint-disable-next-line no-console
-            console.warn(chrome.runtime.lastError);
-          }
-
-          try {
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Storage.setInterestGroupAuctionTracking',
-              { enable: true }
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Storage.setAttributionReportingTracking',
-              { enable: true }
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Network.enable',
-              {}
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Audits.enable',
-              {}
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Storage.setAttributionReportingLocalTestingMode',
-              {
-                enabled: true,
-              }
-            );
-
-            await chrome.debugger.sendCommand(childDebuggee, 'Page.enable', {});
-
-            const message = {
-              id: 0,
-              method: 'Runtime.runIfWaitingForDebugger',
-              params: {},
-            };
-
-            await chrome.debugger.sendCommand(
-              source,
-              'Target.sendMessageToTarget',
-              {
-                message: JSON.stringify(message),
-                targetId: targetId,
-              }
-            );
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.warn(error);
-          }
-        });
+        attachCDP(childDebuggee, true);
 
         targets = await chrome.debugger.getTargets();
         const parentFrameId = targets.filter(
