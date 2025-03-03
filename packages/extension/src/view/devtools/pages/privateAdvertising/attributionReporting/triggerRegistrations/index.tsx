@@ -22,9 +22,10 @@ import {
   TableProvider,
   type TableRow,
   Table,
+  type TableFilter,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
@@ -35,6 +36,8 @@ import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 import RowContextMenuForARA from '../rowContextMenu';
 
+type TriggerKeys = keyof TriggerRegistration;
+
 const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
@@ -43,6 +46,52 @@ const TriggerRegistrations = () => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
+
+  const { triggerRegistration } = useAttributionReporting(({ state }) => ({
+    triggerRegistration: state.triggerRegistration,
+  }));
+
+  const calculateFilters = useCallback(
+    (key: TriggerKeys) => {
+      const filters: { [key: string]: Record<'selected', boolean> } = {};
+      triggerRegistration.forEach((trigger) => {
+        if (key === 'destination') {
+          if (!trigger[key]) {
+            return;
+          }
+
+          filters[trigger[key]] = {
+            selected: false,
+          };
+        } else {
+          const _key = trigger[key] as TriggerKeys;
+          filters[_key] = {
+            selected: false,
+          };
+        }
+      });
+      return filters;
+    },
+    [triggerRegistration]
+  );
+
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('reportingOrigin'),
+      },
+      destination: {
+        title: 'Destination Sites',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('destination'),
+      },
+    }),
+    [calculateFilters]
+  );
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -82,10 +131,6 @@ const TriggerRegistrations = () => {
     []
   );
 
-  const { triggerRegistration } = useAttributionReporting(({ state }) => ({
-    triggerRegistration: state.triggerRegistration,
-  }));
-
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -102,6 +147,7 @@ const TriggerRegistrations = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
+            tableFilterData={tableFilters}
             data={triggerRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
