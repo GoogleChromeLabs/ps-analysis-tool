@@ -88,6 +88,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         if (!attachedSet.has(targetId)) {
           attachCDP(childDebuggee, true);
+          attachedSet.add(targetId);
           const message = {
             id: 0,
             method: 'Runtime.runIfWaitingForDebugger',
@@ -95,11 +96,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
 
           await chrome.debugger.sendCommand(
-            childDebuggee,
+            source,
             'Target.sendMessageToTarget',
             {
               message: JSON.stringify(message),
-              targetId,
+              targetId: targetId,
             }
           );
         }
@@ -551,19 +552,22 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           //@ts-ignore
           if (singleSource?.sourceEventId === registration.eventId) {
             dataStore.tabs[Number(tabId)].newUpdatesARA++;
+            const time = registration.time.toString().includes('.')
+              ? registration.time * 1000
+              : registration.time;
 
             const combinedData = {
               ...singleSource,
               ...registration,
-              time: registration.time.toString().includes('.')
-                ? registration.time * 1000
-                : registration.time,
+              time,
+              expiry: registration.expiry + time,
               result,
             };
             //@ts-ignore
             delete combinedData.sourceEventId;
             //@ts-ignore
             delete combinedData.destination;
+            return combinedData;
           }
           return singleSource;
         });

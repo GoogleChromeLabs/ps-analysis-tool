@@ -16,21 +16,20 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
-import {
-  noop,
-  type singleAuctionEvent,
-  type SourcesRegistration,
-} from '@google-psat/common';
+import React, { useMemo, useState, useCallback } from 'react';
+import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
   Table,
   TableProvider,
   type TableRow,
   type TableColumn,
+  type TableFilter,
+  type InfoType,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
+import type { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
@@ -38,21 +37,127 @@ import { I18n } from '@google-psat/i18n';
 import { useAttributionReporting } from '../../../../stateProviders/attributionReporting';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 
-const calculateExpiryDate = (registrationTime: number, expiryTime: number) => {
-  const expiryTimestamp = registrationTime + expiryTime; // Add expiry duration
-  return calculateRegistrationDate(expiryTimestamp);
-};
+type SourcesKeys =
+  keyof Protocol.Storage.AttributionReportingSourceRegistration;
 
 const ActiveSources = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
 
+  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
+    sourcesRegistration: state.sourcesRegistration,
+  }));
+
+  const calculateFilters = useCallback(
+    (key: SourcesKeys) => {
+      const filters: { [key: string]: Record<'selected', boolean> } = {};
+      sourcesRegistration.forEach((sources) => {
+        if (key === 'destinationSites') {
+          if (Array.isArray(sources[key])) {
+            sources[key].forEach((site) => {
+              filters[site] = {
+                selected: false,
+              };
+            });
+          } else {
+            filters[sources[key]] = {
+              selected: false,
+            };
+          }
+        } else {
+          const _key = sources[key] as SourcesKeys;
+          filters[_key] = {
+            selected: false,
+          };
+        }
+      });
+      return filters;
+    },
+    [sourcesRegistration]
+  );
+
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      sourceOrigin: {
+        title: 'Source Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('sourceOrigin'),
+      },
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('reportingOrigin'),
+      },
+      destination: {
+        title: 'Destination Sites',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('destinationSites'),
+      },
+      type: {
+        title: 'Event Type',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('type'),
+      },
+      expiry: {
+        title: 'Expiry',
+        hasStaticFilterValues: true,
+        filterValues: {
+          [I18n.getMessage('session')]: {
+            selected: false,
+          },
+          [I18n.getMessage('shortTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('mediumTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('longTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('extentedTerm')]: {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          let diff = 0;
+          const val = value as number;
+          switch (filterValue) {
+            case I18n.getMessage('shortTerm'):
+              diff = val - Date.now();
+              return diff < 86400000;
+
+            case I18n.getMessage('mediumTerm'):
+              diff = val - Date.now();
+              return diff >= 86400000 && diff < 604800000;
+
+            case I18n.getMessage('longTerm'):
+              diff = val - Date.now();
+              return diff >= 604800000 && diff < 2629743833;
+
+            case I18n.getMessage('extentedTerm'):
+              diff = val - Date.now();
+              return diff >= 2629743833;
+
+            default:
+              return false;
+          }
+        },
+      },
+    }),
+    [calculateFilters]
+  );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Source Event ID',
-        accessorKey: 'sourceEventId',
+        accessorKey: 'eventId',
         cell: (info) => info,
         widthWeightagePercentage: 12,
       },
@@ -64,7 +169,7 @@ const ActiveSources = () => {
       },
       {
         header: 'Destinations',
-        accessorKey: 'destination',
+        accessorKey: 'destinationSites',
         cell: (info) => {
           if (!info) {
             return '';
@@ -86,19 +191,15 @@ const ActiveSources = () => {
         header: 'Registration Time',
         accessorKey: 'time',
         cell: (_, details) =>
-          calculateRegistrationDate((details as singleAuctionEvent)?.time),
+          calculateRegistrationDate((details as SourcesRegistration)?.time),
         enableHiding: false,
         widthWeightagePercentage: 12,
       },
       {
         header: 'Expiry',
         accessorKey: 'expiry',
-        cell: (info, details) => {
-          return calculateExpiryDate(
-            (details as SourcesRegistration)?.time,
-            Number(info)
-          );
-        },
+        cell: (_, details) =>
+          calculateRegistrationDate((details as SourcesRegistration)?.expiry),
         sortingComparator: (a, b) => {
           const aString = (a as string).toLowerCase().trim();
           const bString = (b as string).toLowerCase().trim();
@@ -123,10 +224,6 @@ const ActiveSources = () => {
     []
   );
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
-
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -143,6 +240,7 @@ const ActiveSources = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
+            tableFilterData={tableFilters}
             data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}

@@ -23,6 +23,7 @@ import {
   type TableRow,
   Table,
   type TableFilter,
+  type InfoType,
 } from '@google-psat/design-system';
 import { noop } from 'lodash-es';
 import { Resizable } from 're-resizable';
@@ -101,7 +102,53 @@ const SourceRegistrations = () => {
         title: 'Event Type',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFilters('destinationSites'),
+        filterValues: calculateFilters('type'),
+      },
+      expiry: {
+        title: 'Expiry',
+        hasStaticFilterValues: true,
+        filterValues: {
+          [I18n.getMessage('session')]: {
+            selected: false,
+          },
+          [I18n.getMessage('shortTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('mediumTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('longTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('extentedTerm')]: {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          let diff = 0;
+          const val = value as number;
+          switch (filterValue) {
+            case I18n.getMessage('shortTerm'):
+              diff = val - Date.now();
+              return diff < 86400000;
+
+            case I18n.getMessage('mediumTerm'):
+              diff = val - Date.now();
+              return diff >= 86400000 && diff < 604800000;
+
+            case I18n.getMessage('longTerm'):
+              diff = val - Date.now();
+              return diff >= 604800000 && diff < 2629743833;
+
+            case I18n.getMessage('extentedTerm'):
+              diff = val - Date.now();
+              return diff >= 2629743833;
+
+            default:
+              return false;
+          }
+        },
       },
     }),
     [calculateFilters]
