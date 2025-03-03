@@ -33,7 +33,7 @@ export default function attachCDP(
         await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
           autoAttach: true,
           flatten: false,
-          waitForDebuggerOnStart: true,
+          waitForDebuggerOnStart: false,
         });
       }
 

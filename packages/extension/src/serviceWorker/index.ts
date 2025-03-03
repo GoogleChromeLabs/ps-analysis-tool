@@ -72,7 +72,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       targets = await chrome.debugger.getTargets();
 
       targets.forEach((target) => {
-        if (target.url.startsWith('https://') && !attachedSet.has(target.id)) {
+        if (
+          !target.url.startsWith('devtools://') &&
+          !target.url.startsWith('chrome://') &&
+          !attachedSet.has(target.id)
+        ) {
           attachCDP({ targetId: target.id });
           attachedSet.add(target.id);
         }
@@ -364,6 +368,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               registration: {
                 ...JSON.parse(triggerRegistration),
                 reportingOrigin: new URL(requestUrl).origin,
+                requestUrl: requestUrl,
                 time: Date.now(),
               } as Protocol.Storage.AttributionReportingTriggerRegistration,
               eventLevel:
@@ -385,6 +390,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               registration: {
                 ...JSON.parse(sourceRegistration),
                 reportingOrigin: new URL(requestUrl).origin,
+                requestUrl: requestUrl,
                 sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
                 time: Date.now(),
               } as Protocol.Storage.AttributionReportingSourceRegistration,

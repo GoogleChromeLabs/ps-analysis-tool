@@ -652,15 +652,30 @@ class DataStore {
     if (this.tabs[tabId].newUpdatesARA <= 0 && !overrideForInitialSync) {
       return;
     }
+    const sourceRegistrations: SourcesData[] = [];
+    const triggerRegistrations: SourcesData[] = [];
 
-    await chrome.runtime.sendMessage({
-      type: 'ARA_EVENTS',
-      payload: {
-        sourcesRegistration: this.sources[tabId].sourceRegistration,
-        triggerRegistration: this.sources[tabId].triggerRegistration,
-        tabId,
-      },
+    Object.keys(this.sources).forEach((key) => {
+      const sourceData = this.sources[key].sourceRegistration;
+      sourceRegistrations.push(...sourceData);
+
+      const triggerRegistration = this.sources[key].triggerRegistration;
+      triggerRegistrations.push(...triggerRegistration);
     });
+
+    await Promise.all(
+      Object.keys(this.sources).map(async (key) => {
+        await chrome.runtime.sendMessage({
+          type: 'ARA_EVENTS',
+          payload: {
+            sourcesRegistration: sourceRegistrations,
+            triggerRegistration: triggerRegistrations,
+            tabId: Number(key),
+          },
+        });
+      })
+    );
+
     this.tabs[tabId].newUpdatesARA = 0;
   }
 
