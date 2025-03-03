@@ -87,7 +87,7 @@ const CardsPanel = ({
         )}
         {featuredItems.length > 0 && (
           <section>
-            <h3 className="text-sm mb-2">featuredItems</h3>
+            <h3 className="text-sm mb-2">Features</h3>
             <div className="flex gap-5 flex-wrap">
               {featuredItems.map((item) => {
                 const Icon = item.icon;
