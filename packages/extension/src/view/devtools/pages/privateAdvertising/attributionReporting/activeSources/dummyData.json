@@ -1,0 +1,188 @@
+[
+  {
+    "time": 1739539650.691879,
+    "expiry": 2592000,
+    "triggerSpecs": [
+      {
+        "triggerData": [0, 1],
+        "eventReportWindows": {
+          "start": 0,
+          "ends": [86400, 345600]
+        }
+      }
+    ],
+    "aggregatableReportWindow": 2592000,
+    "type": "event",
+    "sourceOrigin": "https://www.india.com",
+    "reportingOrigin": "https://ad.doubleclick.net",
+    "destinationSites": [
+      "https://debugconversiondomain1.com",
+      "https://sqsp.net",
+      "https://squarespace.com"
+    ],
+    "eventId": "14710292819879173622",
+    "priority": "0",
+    "filterData": [
+      {
+        "key": "14",
+        "values": ["8918805"]
+      },
+      {
+        "key": "21",
+        "values": []
+      },
+      {
+        "key": "23",
+        "values": []
+      },
+      {
+        "key": "24",
+        "values": []
+      },
+      {
+        "key": "25",
+        "values": []
+      },
+      {
+        "key": "26",
+        "values": []
+      },
+      {
+        "key": "27",
+        "values": []
+      },
+      {
+        "key": "28",
+        "values": []
+      },
+      {
+        "key": "29",
+        "values": []
+      },
+      {
+        "key": "8",
+        "values": ["8103537"]
+      }
+    ],
+    "aggregationKeys": [
+      {
+        "key": "628537840",
+        "value": "0x316c06c8f9c5e7f30000000000000000"
+      },
+      {
+        "key": "628537841",
+        "value": "0x57f382d35fc2c5500000000000000000"
+      },
+      {
+        "key": "628537842",
+        "value": "0xb92aaad98a61ea990000000000000000"
+      },
+      {
+        "key": "628537843",
+        "value": "0x56761933049594240000000000000000"
+      }
+    ],
+    "debugKey": "3060592938131749969",
+    "triggerDataMatching": "modulus",
+    "destinationLimitPriority": "0",
+    "aggregatableDebugReportingConfig": {
+      "budget": 0,
+      "keyPiece": "0x0",
+      "debugData": []
+    },
+    "maxEventLevelReports": 2
+  },
+  {
+    "time": 1739539650.691879,
+    "expiry": 2592000,
+    "triggerSpecs": [
+      {
+        "triggerData": [0, 1],
+        "eventReportWindows": {
+          "start": 0,
+          "ends": [86400, 345600]
+        }
+      }
+    ],
+    "aggregatableReportWindow": 2592000,
+    "type": "event",
+    "sourceOrigin": "https://www.india.com",
+    "reportingOrigin": "https://ad.doubleclick.net",
+    "destinationSites": [
+      "https://debugconversiondomain1.com",
+      "https://sqsp.net",
+      "https://squarespace.com"
+    ],
+    "eventId": "14710292819879173627",
+    "priority": "0",
+    "filterData": [
+      {
+        "key": "14",
+        "values": ["8918805"]
+      },
+      {
+        "key": "21",
+        "values": []
+      },
+      {
+        "key": "23",
+        "values": []
+      },
+      {
+        "key": "24",
+        "values": []
+      },
+      {
+        "key": "25",
+        "values": []
+      },
+      {
+        "key": "26",
+        "values": []
+      },
+      {
+        "key": "27",
+        "values": []
+      },
+      {
+        "key": "28",
+        "values": []
+      },
+      {
+        "key": "29",
+        "values": []
+      },
+      {
+        "key": "8",
+        "values": ["8103537"]
+      }
+    ],
+    "aggregationKeys": [
+      {
+        "key": "628537840",
+        "value": "0x316c06c8f9c5e7f30000000000000000"
+      },
+      {
+        "key": "628537841",
+        "value": "0x57f382d35fc2c5500000000000000000"
+      },
+      {
+        "key": "628537842",
+        "value": "0xb92aaad98a61ea990000000000000000"
+      },
+      {
+        "key": "628537843",
+        "value": "0x56761933049594240000000000000000"
+      }
+    ],
+    "debugKey": "3060592938131749969",
+    "triggerDataMatching": "modulus",
+    "destinationLimitPriority": "0",
+    "aggregatableDebugReportingConfig": {
+      "budget": 0,
+      "keyPiece": "0x0",
+      "debugData": []
+    },
+    "maxEventLevelReports": 2
+  }
+]

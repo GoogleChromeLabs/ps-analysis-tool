@@ -17,16 +17,16 @@
  * External dependencies.
  */
 import { Protocol } from 'devtools-protocol';
-
 /**
  * Internal dependencies.
  */
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
-
 import './chromeListeners';
 import dataStore from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
+import ARAStore from '../store/ARAStore';
+import attachCDP from './attachCDP';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -42,8 +42,10 @@ const ALLOWED_EVENTS = [
   'Page.frameAttached',
   'Page.frameNavigated',
   'Target.attachedToTarget',
+  'Storage.attributionReportingSourceRegistered',
+  'Storage.attributionReportingTriggerRegistered',
 ];
-
+const attachedSet = new Set<string>();
 let targets: chrome.debugger.TargetInfo[] = [];
 
 /**
@@ -69,6 +71,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       targets = await chrome.debugger.getTargets();
 
+      targets.forEach((target) => {
+        if (target.url.startsWith('https://') && !attachedSet.has(target.id)) {
+          attachCDP({ targetId: target.id });
+          attachedSet.add(target.id);
+        }
+      });
+
       // This is to get a list of all targets being attached to the main frame.
       if (method === 'Target.attachedToTarget' && params) {
         const {
@@ -81,10 +90,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             // eslint-disable-next-line no-console
             console.warn(chrome.runtime.lastError);
           }
+
           try {
             await chrome.debugger.sendCommand(
               childDebuggee,
               'Storage.setInterestGroupAuctionTracking',
+              { enable: true }
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Storage.setAttributionReportingTracking',
               { enable: true }
             );
 
@@ -98,6 +114,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               childDebuggee,
               'Audits.enable',
               {}
+            );
+
+            await chrome.debugger.sendCommand(
+              childDebuggee,
+              'Storage.setAttributionReportingLocalTestingMode',
+              {
+                enabled: true,
+              }
             );
 
             await chrome.debugger.sendCommand(childDebuggee, 'Page.enable', {});
@@ -365,8 +389,52 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const {
           frameId = '',
           requestId,
-          response: { url: requestUrl },
+          response: { url: requestUrl, headers },
         } = params as Protocol.Network.ResponseReceivedEvent;
+
+        const extractHeader = (header: string) =>
+          headers?.[header.toLowerCase()] ?? headers?.[header];
+
+        const triggerRegistration = extractHeader(
+          'Attribution-Reporting-Register-Trigger'
+        );
+
+        if (triggerRegistration) {
+          ARAStore.processARATriggerRegistered(
+            {
+              registration: {
+                ...JSON.parse(triggerRegistration),
+                reportingOrigin: new URL(requestUrl).origin,
+                time: Date.now(),
+              } as Protocol.Storage.AttributionReportingTriggerRegistration,
+              eventLevel:
+                '' as Protocol.Storage.AttributionReportingEventLevelResult,
+              aggregatable:
+                '' as Protocol.Storage.AttributionReportingAggregatableResult,
+            },
+            tabId
+          );
+        }
+
+        const sourceRegistration = extractHeader(
+          'Attribution-Reporting-Register-Source'
+        );
+
+        if (sourceRegistration) {
+          ARAStore.processARASourcesRegistered(
+            {
+              registration: {
+                ...JSON.parse(sourceRegistration),
+                reportingOrigin: new URL(requestUrl).origin,
+                sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
+                time: Date.now(),
+              } as Protocol.Storage.AttributionReportingSourceRegistration,
+              result:
+                'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
+            },
+            tabId
+          );
+        }
 
         let finalFrameId = frameId;
 
@@ -434,7 +502,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.responseReceivedExtraInfo') {
         const { headers, requestId } =
           params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-
         // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
         if (!headers['set-cookie'] && !headers['Set-Cookie']) {
           return;
@@ -510,6 +577,90 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
         }
         return;
+      }
+
+      if (
+        method === 'Storage.attributionReportingSourceRegistered' &&
+        params &&
+        source.tabId
+      ) {
+        const { registration, result } =
+          params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
+        dataStore.sources[tabId].sourceRegistration = dataStore.sources[
+          tabId
+        ].sourceRegistration.map((singleSource) => {
+          if (singleSource?.sourceEventId === registration.eventId) {
+            singleSource.result = result;
+            singleSource.type = registration.type;
+          }
+          return singleSource;
+        });
+      }
+
+      if (
+        method === 'Storage.attributionReportingTriggerRegistered' &&
+        params &&
+        source.tabId
+      ) {
+        const { registration, eventLevel, aggregatable } =
+          params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
+
+        dataStore.sources[tabId].triggerRegistration.forEach(
+          (trigger, index) => {
+            const registrationKeys = new Set<string>();
+            Object.keys(registration).forEach((key) =>
+              registrationKeys.add(key)
+            );
+
+            const triggerKeys = new Set<string>();
+            Object.keys(trigger).forEach((key) => triggerKeys.add(key));
+            let match = false;
+
+            if (
+              registrationKeys
+                .intersection(triggerKeys)
+                .has('aggregatableTriggerData') &&
+              !match
+            ) {
+              match = ARAStore.matchTriggerData(
+                registration,
+                trigger,
+                'aggregatableTriggerData'
+              );
+            } else if (
+              registrationKeys
+                .intersection(triggerKeys)
+                .has('aggregatableValues') &&
+              !match
+            ) {
+              match = ARAStore.matchTriggerData(
+                registration,
+                trigger,
+                'aggregatableValues'
+              );
+            } else if (
+              registrationKeys
+                .intersection(triggerKeys)
+                .has('eventTriggerData') &&
+              !match
+            ) {
+              match = ARAStore.matchTriggerData(
+                registration,
+                trigger,
+                'eventTriggerData'
+              );
+            }
+
+            if (match) {
+              dataStore.sources[tabId].triggerRegistration[index] = {
+                ...dataStore.sources[tabId].triggerRegistration[index],
+                eventLevel,
+                aggregatable,
+                ...registration,
+              };
+            }
+          }
+        );
       }
     } catch (error) {
       //Fail silently.

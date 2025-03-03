@@ -16,20 +16,24 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
+import {
+  createContext,
+  type SourcesRegistration,
+  type TriggerRegistration,
+} from '@google-psat/common';
 
-const Attribution = () => {
-  return (
-    <div data-testid="attribution-content" className="h-full w-full">
-      <LandingPage
-        title={I18n.getMessage('attributionReporting')}
-        psInfoKey={PSInfoKey.AttributionReporting}
-        extraClasses="max-w-2xl h-fit"
-      />
-    </div>
-  );
+export interface AttributionReportingContextType {
+  state: {
+    sourcesRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  };
+}
+
+const initialState: AttributionReportingContextType = {
+  state: {
+    triggerRegistration: [],
+    sourcesRegistration: [],
+  },
 };
 
-export default Attribution;
+export default createContext<AttributionReportingContextType>(initialState);
