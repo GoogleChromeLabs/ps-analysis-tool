@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
-export * from './protectedAudience';
-export * from './webStories';
-export * from './attributionReporting';
+
+const calculateRegistrationDate = (timeStamp: number) => {
+  const date = new Date(timeStamp); // Convert to milliseconds.
+
+  const formattedDate = date.toLocaleString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+
+  return formattedDate;
+};
+
+export default calculateRegistrationDate;

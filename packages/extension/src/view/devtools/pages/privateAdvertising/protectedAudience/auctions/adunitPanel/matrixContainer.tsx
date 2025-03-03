@@ -22,6 +22,10 @@ import type {
   NoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
+
+/**
+ * Internal dependencies.
+ */
 import PresentationalMatrix from './presentationalMatrix';
 import Matrix from './matrix';
 
