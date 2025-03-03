@@ -13,19 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies
+ */
+import throttle from 'just-throttle';
+
 /**
  * Internal dependencies
  */
 import app from '../app';
 import { isPointInViewport } from './isPointInViewport';
-import throttle from 'just-throttle';
-
-const SCROLL_THRESHOLD = 50;
 
 type ScrollCoordinate = {
   x: number;
   y: number;
 };
+
+type ScrollToCoordinatesProps = ScrollCoordinate & {
+  override?: boolean;
+  force?: boolean;
+};
+
+// threshold to avoid scrolling when the element is close to the viewport
+const SCROLL_THRESHOLD = 50;
 
 // throttled scroll to avoid performance issues
 const scrollTo = throttle(({ x, y }: ScrollCoordinate) => {
@@ -35,11 +46,6 @@ const scrollTo = throttle(({ x, y }: ScrollCoordinate) => {
     behavior: 'smooth',
   });
 }, 1000);
-
-type ScrollToCoordinatesProps = ScrollCoordinate & {
-  override?: boolean;
-  force?: boolean;
-};
 
 export const scrollToCoordinates = ({
   x,
@@ -67,8 +73,8 @@ export const scrollToCoordinates = ({
     return;
   }
 
-  const finalX = x - rect.left;
-  const finalY = y - rect.top;
+  const finalX = x - rect.width / 2;
+  const finalY = y - rect.height / 2;
 
   scrollTo({ x: finalX, y: finalY });
 };

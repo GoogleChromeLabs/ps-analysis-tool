@@ -88,7 +88,7 @@ const Box = ({
   p.fill(text);
   p.textFont('sans-serif');
 
-  if (!isBranchComponent && !isPointInViewport(x + width, y + height + 25)) {
+  if (!isBranchComponent && !isPointInViewport(x + width * 2, y + height * 2)) {
     scrollToCoordinates({ x: x + width / 2, y: y + height / 2, force: true });
   }
 
