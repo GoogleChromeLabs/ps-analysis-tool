@@ -39,9 +39,5 @@ export function isPointInViewport(x: number, y: number, offset = 0): boolean {
   const left = scrollLeft + offset;
   const right = scrollLeft + rect.width - offset;
 
-  if (x < left || x > right || y < top || y > bottom) {
-    return false;
-  }
-
-  return true;
+  return x >= left && x <= right && y >= top && y <= bottom;
 }

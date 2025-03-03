@@ -38,12 +38,14 @@ const scrollTo = throttle(({ x, y }: ScrollCoordinate) => {
 
 type ScrollToCoordinatesProps = ScrollCoordinate & {
   override?: boolean;
+  force?: boolean;
 };
 
 export const scrollToCoordinates = ({
   x,
   y,
   override = false,
+  force = false,
 }: ScrollToCoordinatesProps) => {
   const rect = app.canvasParentElement?.getBoundingClientRect();
 
@@ -61,7 +63,7 @@ export const scrollToCoordinates = ({
     return;
   }
 
-  if (isPointInViewport(x, y, SCROLL_THRESHOLD)) {
+  if (isPointInViewport(x, y, SCROLL_THRESHOLD) && !force) {
     return;
   }
 

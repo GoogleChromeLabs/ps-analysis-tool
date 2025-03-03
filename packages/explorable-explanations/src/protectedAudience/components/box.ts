@@ -88,8 +88,8 @@ const Box = ({
   p.fill(text);
   p.textFont('sans-serif');
 
-  if (!isBranchComponent && !isPointInViewport(x + width, y + height)) {
-    scrollToCoordinates({ x: x + width / 2, y: y + height / 2 });
+  if (!isBranchComponent && !isPointInViewport(x + width, y + height + 25)) {
+    scrollToCoordinates({ x: x + width / 2, y: y + height / 2, force: true });
   }
 
   if (description) {
