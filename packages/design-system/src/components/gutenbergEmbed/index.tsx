@@ -22,30 +22,57 @@ interface GutenbergEmbedProps {
   url: string;
 }
 
-const STYLE_URL =
-  'https://psat-landing-pages.rt.gw/wp-includes/css/dist/block-library/style.min.css';
+const STYLE_URLS = [
+  'https://psat-landing-pages.rt.gw/wp-includes/css/dist/block-library/style.min.css',
+  'https://psat-landing-pages.rt.gw/wp-includes/css/dist/block-library/theme.min.css',
+  'https://psat-landing-pages.rt.gw/wp-content/themes/amp-wp-org-theme/assets/build/css/main.css?ver=1739290079',
+];
+
+const fixRelativeUrls = (cssText: string, cssUrl: string) => {
+  const baseUrl =
+    new URL(cssUrl).origin + new URL(cssUrl).pathname.replace(/\/[^/]*$/, '/');
+
+  return cssText.replace(
+    /url\((['"]?)(\.\.\/[^)]+)\1\)/g,
+    (match, quote, relativePath) => {
+      const absoluteUrl = new URL(relativePath, baseUrl).href;
+      return `url(${quote || ''}${absoluteUrl}${quote || ''})`;
+    }
+  );
+};
 
 const GutenbergEmbed = ({ url }: GutenbergEmbedProps) => {
   const shadowHostRef = useRef<HTMLDivElement>(null);
   const [htmlContent, setHtmlContent] = useState('');
-  const [styles, setStyles] = useState('');
+  const [styles, setStyles] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
-        setHtmlContent(data.content.rendered || '');
+        setHtmlContent(data.content.rendered || '<p>Error loading content</p>');
       } catch (error) {
         console.error('Error fetching content:', error);
+        setHtmlContent(
+          '<p>Failed to load content. Please try again later.</p>'
+        );
       }
     };
 
     const fetchStyles = async () => {
       try {
-        const response = await fetch(STYLE_URL);
-        const cssText = await response.text();
-        setStyles(cssText);
+        const cssResponses = await Promise.all(
+          STYLE_URLS.map(async (cssUrl) => {
+            const response = await fetch(cssUrl);
+            const cssText = await response.text();
+            return fixRelativeUrls(cssText, cssUrl);
+          })
+        );
+        setStyles(cssResponses);
       } catch (error) {
         console.error('Error fetching styles:', error);
       }
@@ -58,14 +85,16 @@ const GutenbergEmbed = ({ url }: GutenbergEmbedProps) => {
   useEffect(() => {
     if (shadowHostRef.current && htmlContent) {
       const shadowRoot = shadowHostRef.current.attachShadow({ mode: 'open' });
+      shadowRoot.innerHTML = ''; // Clear existing content before re-rendering
 
-      const styleElement = document.createElement('style');
-      styleElement.textContent = styles;
+      styles.forEach((cssText) => {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = cssText;
+        shadowRoot.appendChild(styleElement);
+      });
 
       const contentWrapper = document.createElement('div');
       contentWrapper.innerHTML = htmlContent;
-
-      shadowRoot.appendChild(styleElement);
       shadowRoot.appendChild(contentWrapper);
     }
   }, [htmlContent, styles]);
