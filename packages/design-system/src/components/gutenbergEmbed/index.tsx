@@ -32,13 +32,19 @@ const fixRelativeUrls = (cssText: string, cssUrl: string) => {
   const baseUrl =
     new URL(cssUrl).origin + new URL(cssUrl).pathname.replace(/\/[^/]*$/, '/');
 
-  return cssText.replace(
-    /url\((['"]?)(\.\.\/[^)]+)\1\)/g,
+  // Convert relative URLs to absolute URLs
+  cssText = cssText.replace(
+    /url\((['"]?)(\.{1,2}\/[^)]+)\1\)/g,
     (match, quote, relativePath) => {
       const absoluteUrl = new URL(relativePath, baseUrl).href;
       return `url(${quote || ''}${absoluteUrl}${quote || ''})`;
     }
   );
+
+  // Convert global body/html styles to apply inside the Shadow DOM
+  cssText = cssText.replace(/html|body/g, ':host');
+
+  return cssText;
 };
 
 const GutenbergEmbed = ({ url }: GutenbergEmbedProps) => {
