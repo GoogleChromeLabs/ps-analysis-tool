@@ -16,16 +16,15 @@
 /**
  * External dependencies.
  */
-import type { TriggerRegistration } from '@google-psat/common';
+import { noop, type TriggerRegistration } from '@google-psat/common';
 import {
   type TableColumn,
   TableProvider,
   type TableRow,
   Table,
 } from '@google-psat/design-system';
-import { noop } from 'lodash-es';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
@@ -34,11 +33,16 @@ import { I18n } from '@google-psat/i18n';
  */
 import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
+import RowContextMenuForARA from '../rowContextMenu';
 
 const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
   );
+
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForARA
+  > | null>(null);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -101,7 +105,11 @@ const TriggerRegistrations = () => {
             data={triggerRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
-            onRowContextMenu={noop}
+            onRowContextMenu={
+              rowContextMenuRef.current
+                ? rowContextMenuRef.current?.onRowContextMenu
+                : noop
+            }
             onRowClick={(row) => setSelectedJSON(row as TriggerRegistration)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as TriggerRegistration).index.toString()
@@ -135,6 +143,7 @@ const TriggerRegistrations = () => {
           </div>
         )}
       </div>
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };

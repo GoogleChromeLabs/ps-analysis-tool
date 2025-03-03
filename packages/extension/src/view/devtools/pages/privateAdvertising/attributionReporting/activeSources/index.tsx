@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
 import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
   Table,
@@ -36,6 +36,7 @@ import type { Protocol } from 'devtools-protocol';
  */
 import { useAttributionReporting } from '../../../../stateProviders/attributionReporting';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
+import RowContextMenuForARA from '../rowContextMenu';
 
 type SourcesKeys =
   keyof Protocol.Storage.AttributionReportingSourceRegistration;
@@ -44,6 +45,10 @@ const ActiveSources = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
+
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForARA
+  > | null>(null);
 
   const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
     sourcesRegistration: state.sourcesRegistration,
@@ -244,7 +249,11 @@ const ActiveSources = () => {
             data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
-            onRowContextMenu={noop}
+            onRowContextMenu={
+              rowContextMenuRef.current
+                ? rowContextMenuRef.current?.onRowContextMenu
+                : noop
+            }
             onRowClick={(row) => setSelectedJSON(row as SourcesRegistration)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as SourcesRegistration).index.toString()
@@ -278,6 +287,7 @@ const ActiveSources = () => {
           </div>
         )}
       </div>
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };

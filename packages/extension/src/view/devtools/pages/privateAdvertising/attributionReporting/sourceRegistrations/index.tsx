@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import type { SourcesRegistration } from '@google-psat/common';
+import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
   type TableColumn,
   TableProvider,
@@ -25,9 +25,8 @@ import {
   type TableFilter,
   type InfoType,
 } from '@google-psat/design-system';
-import { noop } from 'lodash-es';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 import Protocol from 'devtools-protocol';
@@ -37,6 +36,7 @@ import Protocol from 'devtools-protocol';
  */
 import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
+import RowContextMenuForARA from '../rowContextMenu';
 
 type SourcesKeys =
   keyof Protocol.Storage.AttributionReportingSourceRegistration;
@@ -45,6 +45,9 @@ const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForARA
+  > | null>(null);
 
   const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
     sourcesRegistration: state.sourcesRegistration,
@@ -218,7 +221,11 @@ const SourceRegistrations = () => {
             data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
-            onRowContextMenu={noop}
+            onRowContextMenu={
+              rowContextMenuRef.current
+                ? rowContextMenuRef.current?.onRowContextMenu
+                : noop
+            }
             onRowClick={(row) => setSelectedJSON(row as SourcesRegistration)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as SourcesRegistration).index.toString()
@@ -252,6 +259,7 @@ const SourceRegistrations = () => {
           </div>
         )}
       </div>
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };
