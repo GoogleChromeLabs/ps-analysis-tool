@@ -22,12 +22,14 @@ import {
   TableProvider,
   type TableRow,
   Table,
+  type TableFilter,
 } from '@google-psat/design-system';
 import { noop } from 'lodash-es';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
+import Protocol from 'devtools-protocol';
 
 /**
  * Internal dependencies
@@ -35,9 +37,74 @@ import { I18n } from '@google-psat/i18n';
 import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 
+type SourcesKeys =
+  keyof Protocol.Storage.AttributionReportingSourceRegistration;
+
 const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
+  );
+
+  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
+    sourcesRegistration: state.sourcesRegistration,
+  }));
+
+  const calculateFilters = useCallback(
+    (key: SourcesKeys) => {
+      const filters: { [key: string]: Record<'selected', boolean> } = {};
+      sourcesRegistration.forEach((sources) => {
+        if (key === 'destinationSites') {
+          if (Array.isArray(sources[key])) {
+            sources[key].forEach((site) => {
+              filters[site] = {
+                selected: false,
+              };
+            });
+          } else {
+            filters[sources[key]] = {
+              selected: false,
+            };
+          }
+        } else {
+          const _key = sources[key] as SourcesKeys;
+          filters[_key] = {
+            selected: false,
+          };
+        }
+      });
+      return filters;
+    },
+    [sourcesRegistration]
+  );
+
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      sourceOrigin: {
+        title: 'Source Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('sourceOrigin'),
+      },
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('reportingOrigin'),
+      },
+      destination: {
+        title: 'Destination Sites',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('destinationSites'),
+      },
+      type: {
+        title: 'Event Type',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters('destinationSites'),
+      },
+    }),
+    [calculateFilters]
   );
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -84,10 +151,6 @@ const SourceRegistrations = () => {
     []
   );
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
-
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -104,6 +167,7 @@ const SourceRegistrations = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
+            tableFilterData={tableFilters}
             data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}

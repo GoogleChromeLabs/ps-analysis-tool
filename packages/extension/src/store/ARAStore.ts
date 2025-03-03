@@ -43,7 +43,7 @@ class ARAStore {
       params.registration
     ) as Protocol.Storage.AttributionReportingSourceRegistration;
 
-    if (dataStore.sources?.[tabId]?.['sourceRegistration']?.length > 0) {
+    if (dataStore.sources?.[tabId]?.sourceRegistration?.length > 0) {
       dataStore.sources[tabId].sourceRegistration.push({
         ...sourceRegistrationData,
         result: params.result,

@@ -27,6 +27,7 @@ export default function attachCDP(
       // eslint-disable-next-line no-console
       console.warn(chrome.runtime.lastError);
     }
+
     try {
       if (!childDebuggee) {
         await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
@@ -71,22 +72,6 @@ export default function attachCDP(
       await chrome.debugger.sendCommand(target, 'Page.enable');
 
       await chrome.debugger.sendCommand(target, 'Network.enable');
-      if (childDebuggee) {
-        const message = {
-          id: 0,
-          method: 'Runtime.runIfWaitingForDebugger',
-          params: {},
-        };
-
-        await chrome.debugger.sendCommand(
-          target,
-          'Target.sendMessageToTarget',
-          {
-            message: JSON.stringify(message),
-            target,
-          }
-        );
-      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(error);

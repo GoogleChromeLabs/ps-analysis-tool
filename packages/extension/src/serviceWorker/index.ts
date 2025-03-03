@@ -85,7 +85,24 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         } = params as Protocol.Target.AttachedToTargetEvent;
 
         const childDebuggee = { targetId };
-        attachCDP(childDebuggee, true);
+
+        if (!attachedSet.has(targetId)) {
+          attachCDP(childDebuggee, true);
+          const message = {
+            id: 0,
+            method: 'Runtime.runIfWaitingForDebugger',
+            params: {},
+          };
+
+          await chrome.debugger.sendCommand(
+            childDebuggee,
+            'Target.sendMessageToTarget',
+            {
+              message: JSON.stringify(message),
+              targetId,
+            }
+          );
+        }
 
         targets = await chrome.debugger.getTargets();
         const parentFrameId = targets.filter(
@@ -527,12 +544,26 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       ) {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
+
         dataStore.sources[tabId].sourceRegistration = dataStore.sources[
           tabId
         ].sourceRegistration.map((singleSource) => {
+          //@ts-ignore
           if (singleSource?.sourceEventId === registration.eventId) {
-            singleSource.result = result;
-            singleSource.type = registration.type;
+            dataStore.tabs[Number(tabId)].newUpdatesARA++;
+
+            const combinedData = {
+              ...singleSource,
+              ...registration,
+              time: registration.time.toString().includes('.')
+                ? registration.time * 1000
+                : registration.time,
+              result,
+            };
+            //@ts-ignore
+            delete combinedData.sourceEventId;
+            //@ts-ignore
+            delete combinedData.destination;
           }
           return singleSource;
         });
@@ -593,6 +624,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             }
 
             if (match) {
+              dataStore.tabs[Number(tabId)].newUpdatesARA++;
+
               dataStore.sources[tabId].triggerRegistration[index] = {
                 ...dataStore.sources[tabId].triggerRegistration[index],
                 eventLevel,
