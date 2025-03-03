@@ -18,35 +18,27 @@
  * External dependencies.
  */
 import React from 'react';
-import { Help, SIDEBAR_ITEMS_KEYS, TabIcon } from '@google-psat/design-system';
+import { Help, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { ITEMS } from '../contentPanel';
+import { FEATURED_ITEMS } from '../constants';
+import ExternalLinkPanel from '../../shared/externalLinkPanel';
 
 const HelpCenter = () => {
   const description =
-    ITEMS.find((item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.HELP_CENTER)
-      ?.description ?? '';
+    FEATURED_ITEMS.find(
+      (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.HELP_CENTER
+    )?.description ?? '';
 
   return (
-    <div className="w-full h-full overflow-hidden">
-      <div className="w-full h-full flex justify-center items-center">
-        <p className="text-center text-lg flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-          <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
-          {description && (
-            <p className="border-b border-bright-gray dark:border-quartz font-semibold p-b-2 m-b-1">
-              {description}
-            </p>
-          )}
-          <p className="text-sm flex items-center gap-1">
-            Please refer to the help center opened in the current browser tab.
-            <TabIcon className="w-4 h-4 fill-granite-gray dark:fill-bright-gray" />
-          </p>
-        </p>
-      </div>
-    </div>
+    <ExternalLinkPanel
+      description={description}
+      icon={
+        <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
+      }
+    />
   );
 };
 
