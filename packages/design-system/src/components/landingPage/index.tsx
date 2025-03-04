@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -41,47 +41,68 @@ type LandingPageContainerProps = LandingPageProps & {
 
 const LandingPageContainer = (props: LandingPageContainerProps) => {
   const [independentStory, setIndependentStory] = useState<string>('');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [isPageReady, setIsPageReady] = useState<boolean>(false);
   const { children, contentPanelTitle, content, counterStyles, titleStyles } =
     props;
 
   useEffect(() => {
-    if (!independentStory || !iframeRef.current) {
+    setIsPageReady(true);
+    return () => {
+      setIsPageReady(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!independentStory) {
       return;
     }
-
-    iframeRef.current.contentWindow?.postMessage({
-      storyUrl: independentStory,
-    });
+    // send message to the right iframe
+    const iframe = document.getElementById(independentStory);
+    if (iframe) {
+      (iframe as HTMLIFrameElement).contentWindow?.postMessage({
+        storyUrl: independentStory,
+      });
+    }
   }, [independentStory]);
 
   useEffect(() => {
-    document.addEventListener(
-      'webStoriesLightBoxEvent',
-      //@ts-ignore since this is a custom event.
-      (event) => {
-        //@ts-ignore since this is a custom data.
-        if (event?.detail?.storyOpened === false) {
-          setIndependentStory('');
-        }
-      },
-      false
-    );
+    const eventListener = (event: CustomEvent) => {
+      if (event?.detail?.storyOpened === false) {
+        setIndependentStory('');
+      }
+    };
+
+    // @ts-ignore since this is a custom event.
+    document.addEventListener('webStoriesLightBoxEvent', eventListener, false);
 
     return () => {
+      // @ts-ignore since this is a custom event.
       document.removeEventListener(
         'webStoriesLightBoxEvent',
-        //@ts-ignore since this is a custom event.
-        (event) => {
-          //@ts-ignore since this is a custom data.
-          if (event?.detail?.storyOpened === false) {
-            setIndependentStory('');
-          }
-        },
+        eventListener,
         false
       );
     };
   }, []);
+
+  const onIframeLoad = (
+    event: React.SyntheticEvent<HTMLIFrameElement>,
+    storyUrl: string
+  ) => {
+    // fetch iframe in idle time
+    requestIdleCallback(
+      () => {
+        (event.target as HTMLIFrameElement).contentWindow?.postMessage(
+          {
+            storyUrl: storyUrl,
+            preload: true,
+          },
+          '*'
+        );
+      },
+      { timeout: 1000 }
+    );
+  };
 
   return (
     <>
@@ -104,17 +125,25 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
       >
         {children}
       </LandingPage>
-      <iframe
-        ref={iframeRef}
-        srcDoc={getStoryPlayerMarkup()}
-        style={{
-          display: independentStory ? 'block' : 'none',
-          height: independentStory ? '100%' : '0%',
-          width: independentStory ? '100%' : '0%',
-          position: 'fixed',
-        }}
-        className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
-      />
+      {isPageReady &&
+        // we need to create a new iframe for each story in order to preload the story
+        content.map((data) => {
+          return (
+            <iframe
+              id={data.storyUrl}
+              key={data.storyUrl}
+              onLoad={(event) => onIframeLoad(event, data?.storyUrl ?? '')}
+              srcDoc={getStoryPlayerMarkup()}
+              style={{
+                display: data.storyUrl === independentStory ? 'block' : 'none',
+                height: data.storyUrl === independentStory ? '100%' : '0%',
+                width: data.storyUrl === independentStory ? '100%' : '0%',
+                position: 'fixed',
+              }}
+              className="w-full h-full overflow-hidden absolute top-0 border-none z-10"
+            />
+          );
+        })}
     </>
   );
 };

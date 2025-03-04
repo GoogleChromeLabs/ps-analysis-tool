@@ -63,6 +63,8 @@ describe('AntiCovertTracking Landing Pages', () => {
       },
     });
 
+    globalThis.requestIdleCallback = jest.fn();
+
     mockUseSidebar.mockReturnValue({ extractSelectedItemKeyTitles: () => [] });
   });
 
