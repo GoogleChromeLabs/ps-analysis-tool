@@ -430,7 +430,6 @@ class DataStore {
     this.requestIdToCDPURLMapping[tabId] = {};
     this.frameIdToResourceMap[tabId] = {};
     this.unParsedRequestHeadersForPA[tabId] = {};
-    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
     //@ts-ignore
     globalThis.PSATAdditionalData = {
       unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
