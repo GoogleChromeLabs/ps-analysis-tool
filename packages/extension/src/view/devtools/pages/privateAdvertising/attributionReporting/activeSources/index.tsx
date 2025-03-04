@@ -86,6 +86,54 @@ const ActiveSources = () => {
           'reportingOrigin'
         ),
       },
+      time: {
+        title: 'Registration Time',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Today: {
+            selected: false,
+          },
+          Yesterday: {
+            selected: false,
+          },
+          'Last 7 Days': {
+            selected: false,
+          },
+          'Last 30 Days': {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = new Date(value as number);
+
+          const today = new Date();
+          const yesterday = new Date();
+          yesterday.setDate(today.getDate() - 1);
+
+          const last7Days = new Date();
+          last7Days.setDate(today.getDate() - 7);
+
+          const last30Days = new Date();
+          last30Days.setDate(today.getDate() - 30);
+          switch (filterValue) {
+            case 'Today':
+              return new Date().toDateString() === val.toDateString();
+
+            case 'Yesterday':
+              return val >= yesterday && val <= today;
+
+            case 'Last 7 Days':
+              return val >= last7Days && val <= today;
+
+            case 'Last 30 Days':
+              return val >= last30Days && val <= today;
+
+            default:
+              return false;
+          }
+        },
+      },
       expiry: {
         title: 'Expiry',
         hasStaticFilterValues: true,
@@ -119,10 +167,6 @@ const ActiveSources = () => {
             case I18n.getMessage('longTerm'):
               diff = val - Date.now();
               return diff >= 604800000 && diff < 2629743833;
-
-            case I18n.getMessage('extentedTerm'):
-              diff = val - Date.now();
-              return diff >= 2629743833;
 
             default:
               return false;

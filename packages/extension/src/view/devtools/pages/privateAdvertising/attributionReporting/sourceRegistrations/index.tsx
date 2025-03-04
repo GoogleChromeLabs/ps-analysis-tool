@@ -23,6 +23,7 @@ import {
   Table,
   type TableFilter,
   type TableColumn,
+  type InfoType,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useState, useRef, useMemo } from 'react';
@@ -95,6 +96,54 @@ const SourceRegistrations = () => {
 
   const tableFilters = useMemo<TableFilter>(
     () => ({
+      time: {
+        title: 'Registration Time',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Today: {
+            selected: false,
+          },
+          Yesterday: {
+            selected: false,
+          },
+          'Last 7 Days': {
+            selected: false,
+          },
+          'Last 30 Days': {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = new Date(value as number);
+
+          const today = new Date();
+          const yesterday = new Date();
+          yesterday.setDate(today.getDate() - 1);
+
+          const last7Days = new Date();
+          last7Days.setDate(today.getDate() - 7);
+
+          const last30Days = new Date();
+          last30Days.setDate(today.getDate() - 30);
+          switch (filterValue) {
+            case 'Today':
+              return new Date().toDateString() === val.toDateString();
+
+            case 'Yesterday':
+              return val >= yesterday && val <= today;
+
+            case 'Last 7 Days':
+              return val >= last7Days && val <= today;
+
+            case 'Last 30 Days':
+              return val >= last30Days && val <= today;
+
+            default:
+              return false;
+          }
+        },
+      },
       sourceOrigin: {
         title: 'Source Origin',
         hasStaticFilterValues: true,
