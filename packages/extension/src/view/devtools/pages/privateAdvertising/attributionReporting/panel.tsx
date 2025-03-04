@@ -49,15 +49,25 @@ const Panel = () => {
 
   useEffect(() => {
     if (!isEqual(sourcesRegistration, sourcesRegistrationRef.current)) {
-      highlightTab(1);
-      highlightTab(2);
+      if (!sourcesRegistration.length) {
+        highlightTab(1, false);
+        highlightTab(2, false);
+      } else {
+        highlightTab(1);
+        highlightTab(2);
+      }
+
       sourcesRegistrationRef.current = sourcesRegistration;
     }
   }, [sourcesRegistration, highlightTab]);
 
   useEffect(() => {
     if (!isEqual(triggerRegistration, triggerRegistrationRef.current)) {
-      highlightTab(3);
+      if (!triggerRegistration.length) {
+        highlightTab(3, false);
+      } else {
+        highlightTab(3);
+      }
       triggerRegistrationRef.current = triggerRegistration;
     }
   }, [triggerRegistration, highlightTab]);
