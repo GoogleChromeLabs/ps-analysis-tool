@@ -69,7 +69,11 @@ const ContentPanel = () => {
                   className="w-[366px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                   onClick={() => navigateTo(item.sidebarKey)}
                 >
-                  <Icon width={20} height={20} className="fill-gray" />
+                  <Icon
+                    width={20}
+                    height={20}
+                    className="fill-gray dark:fill-bright-gray"
+                  />
                   <span className="text-sm">{item.name}</span>
                 </div>
               );
