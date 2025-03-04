@@ -33,7 +33,7 @@ const ExternalLinkPanel = ({ description, icon }: ExternalLinkPanelProps) => {
   return (
     <div className="w-full h-full overflow-hidden">
       <div className="w-full h-full flex justify-center items-center">
-        <p className="text-center text-lg flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
+        <div className="text-center text-lg flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
           {icon}
           {description && (
             <p className="border-b border-bright-gray dark:border-quartz font-semibold p-b-2 m-b-1">
@@ -44,7 +44,7 @@ const ExternalLinkPanel = ({ description, icon }: ExternalLinkPanelProps) => {
             Please refer to the help center opened in the current browser tab.
             <TabIcon className="w-4 h-4 fill-granite-gray dark:fill-bright-gray" />
           </p>
-        </p>
+        </div>
       </div>
     </div>
   );
