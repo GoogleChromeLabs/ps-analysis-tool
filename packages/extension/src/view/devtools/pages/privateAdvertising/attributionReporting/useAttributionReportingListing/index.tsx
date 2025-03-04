@@ -22,7 +22,7 @@ import type {
   SourcesRegistration,
   TriggerRegistration,
 } from '@google-psat/common';
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import type {
   TableFilter,
   InfoType,
@@ -141,9 +141,6 @@ function useAttributionReportingListing(tab: string): ReturnType {
         title: 'Expiry',
         hasStaticFilterValues: true,
         filterValues: {
-          [I18n.getMessage('session')]: {
-            selected: false,
-          },
           [I18n.getMessage('shortTerm')]: {
             selected: false,
           },
@@ -295,10 +292,18 @@ function useAttributionReportingListing(tab: string): ReturnType {
             if (!info) {
               return '';
             }
-            if (Array.isArray(info)) {
-              return info.join(', ');
+            if (Array.isArray(info) && info.length > 1) {
+              return (
+                <div>
+                  {(info as string[]).map((_info, index) => (
+                    <div key={index} className="p-1 text-xs">
+                      {_info}
+                    </div>
+                  ))}
+                </div>
+              );
             }
-            return info;
+            return Array.isArray(info) && info.length === 1 ? info[0] : info;
           },
           widthWeightagePercentage: isActiveSouresTab ? 20 : 15,
         },
