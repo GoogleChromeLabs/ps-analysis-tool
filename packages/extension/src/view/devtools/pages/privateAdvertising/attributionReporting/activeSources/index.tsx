@@ -16,11 +16,14 @@
 /**
  * External dependencies.
  */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
   Table,
   TableProvider,
+  type InfoType,
+  type TableColumn,
+  type TableFilter,
   type TableRow,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
@@ -31,19 +34,189 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies.
  */
 import RowContextMenuForARA from '../rowContextMenu';
-import useAttributionReportingListing from '../useAttributionReportingListing';
+import calculateRegistrationDate from '../utils/calculateRegistrationDate';
+import { useAttributionReporting } from '../../../../stateProviders';
+import calculateFiltersForSources from '../utils/calculateFiltersForSources';
 
 const ActiveSources = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
 
+  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
+    sourcesRegistration: state.sourcesRegistration,
+  }));
+
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
 
-  const { tableFilters, tableColumns, data } =
-    useAttributionReportingListing('activeSources');
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      sourceOrigin: {
+        title: 'Source Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'sourceOrigin'
+        ),
+      },
+      destinationSites: {
+        title: 'Destination Sites',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'destinationSites'
+        ),
+        comparator: (value: InfoType, filterValue: string) => {
+          if (Array.isArray(value)) {
+            return (value as string[]).includes(filterValue);
+          }
+          return value === filterValue;
+        },
+      },
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'reportingOrigin'
+        ),
+      },
+      expiry: {
+        title: 'Expiry',
+        hasStaticFilterValues: true,
+        filterValues: {
+          [I18n.getMessage('shortTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('mediumTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('longTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('extentedTerm')]: {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          let diff = 0;
+          const val = value as number;
+          switch (filterValue) {
+            case I18n.getMessage('shortTerm'):
+              diff = val - Date.now();
+              return diff < 86400000;
+
+            case I18n.getMessage('mediumTerm'):
+              diff = val - Date.now();
+              return diff >= 86400000 && diff < 604800000;
+
+            case I18n.getMessage('longTerm'):
+              diff = val - Date.now();
+              return diff >= 604800000 && diff < 2629743833;
+
+            case I18n.getMessage('extentedTerm'):
+              diff = val - Date.now();
+              return diff >= 2629743833;
+
+            default:
+              return false;
+          }
+        },
+      },
+      type: {
+        title: 'Source Type',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(sourcesRegistration, 'type'),
+      },
+    }),
+    [sourcesRegistration]
+  );
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Source Event ID',
+        accessorKey: 'eventId',
+        cell: (info) => info,
+        widthWeightagePercentage: 12,
+      },
+      {
+        header: 'Source Origin',
+        accessorKey: 'sourceOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Destinations',
+        accessorKey: 'destinationSites',
+        cell: (info) => {
+          if (!info) {
+            return '';
+          }
+          if (Array.isArray(info) && info.length > 1) {
+            return (
+              <div>
+                {(info as string[]).map((_info, index) => (
+                  <div key={index} className="p-1 text-xs">
+                    {_info}
+                  </div>
+                ))}
+              </div>
+            );
+          }
+          return Array.isArray(info) && info.length === 1 ? info[0] : info;
+        },
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Reporting Origin',
+        accessorKey: 'reportingOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Registration Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          calculateRegistrationDate((details as SourcesRegistration)?.time),
+        enableHiding: false,
+        widthWeightagePercentage: 12,
+      },
+      {
+        header: 'Expiry',
+        accessorKey: 'expiry',
+        cell: (_, details) =>
+          calculateRegistrationDate((details as SourcesRegistration)?.expiry),
+        sortingComparator: (a, b) => {
+          const aString = (a as string).toLowerCase().trim();
+          const bString = (b as string).toLowerCase().trim();
+
+          return aString > bString ? 1 : -1;
+        },
+        widthWeightagePercentage: 12,
+      },
+      {
+        header: 'Source Type',
+        accessorKey: 'type',
+        cell: (info) => info,
+        widthWeightagePercentage: 5,
+      },
+      {
+        header: 'Debug Key',
+        accessorKey: 'debugKey',
+        cell: (info) => info,
+        widthWeightagePercentage: 12,
+      },
+    ],
+    []
+  );
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
@@ -62,7 +235,7 @@ const ActiveSources = () => {
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             tableFilterData={tableFilters}
-            data={data}
+            data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={

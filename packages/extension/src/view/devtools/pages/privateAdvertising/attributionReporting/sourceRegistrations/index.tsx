@@ -21,9 +21,11 @@ import {
   TableProvider,
   type TableRow,
   Table,
+  type TableFilter,
+  type TableColumn,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
@@ -31,7 +33,9 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies
  */
 import RowContextMenuForARA from '../rowContextMenu';
-import useAttributionReportingListing from '../useAttributionReportingListing';
+import calculateFiltersForSources from '../utils/calculateFiltersForSources';
+import { useAttributionReporting } from '../../../../stateProviders';
+import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 
 const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
@@ -41,8 +45,83 @@ const SourceRegistrations = () => {
     typeof RowContextMenuForARA
   > | null>(null);
 
-  const { tableFilters, tableColumns, data } =
-    useAttributionReportingListing('sources');
+  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
+    sourcesRegistration: state.sourcesRegistration,
+  }));
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Registration Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          calculateRegistrationDate((details as SourcesRegistration)?.time),
+        enableHiding: false,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Source Origin',
+        accessorKey: 'sourceOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Reporting Origin',
+        accessorKey: 'reportingOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Cleared Debug Key',
+        accessorKey: 'debugKey',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Source Type',
+        accessorKey: 'type',
+        cell: (info) => info,
+        widthWeightagePercentage: 10,
+      },
+      {
+        header: 'Status',
+        accessorKey: 'result',
+        cell: (info) => info,
+        widthWeightagePercentage: 10,
+      },
+    ],
+    []
+  );
+
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      sourceOrigin: {
+        title: 'Source Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'sourceOrigin'
+        ),
+      },
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'reportingOrigin'
+        ),
+      },
+      type: {
+        title: 'Type',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(sourcesRegistration, 'type'),
+      },
+    }),
+    [sourcesRegistration]
+  );
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
@@ -61,7 +140,7 @@ const SourceRegistrations = () => {
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             tableFilterData={tableFilters}
-            data={data}
+            data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={

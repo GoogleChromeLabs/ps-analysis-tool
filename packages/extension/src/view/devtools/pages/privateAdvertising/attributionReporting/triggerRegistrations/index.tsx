@@ -21,9 +21,11 @@ import {
   TableProvider,
   type TableRow,
   Table,
+  type TableColumn,
+  type TableFilter,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
@@ -31,19 +33,102 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies
  */
 import RowContextMenuForARA from '../rowContextMenu';
-import useAttributionReportingListing from '../useAttributionReportingListing';
+import { useAttributionReporting } from '../../../../stateProviders';
+import calculateRegistrationDate from '../utils/calculateRegistrationDate';
+import calculateFiltersForTrigger from '../utils/calculateFiltersForTriggers';
 
 const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
   );
 
+  const { triggerRegistration } = useAttributionReporting(({ state }) => ({
+    triggerRegistration: state.triggerRegistration,
+  }));
+
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
 
-  const { tableFilters, tableColumns, data } =
-    useAttributionReportingListing('triggers');
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'reportingOrigin'
+        ),
+      },
+      destination: {
+        title: 'Destination Sites',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'destination'
+        ),
+      },
+      eventLevel: {
+        title: 'Event Level Result',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'eventLevel'
+        ),
+      },
+      aggregatable: {
+        title: 'Aggregatable Result',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'aggregatable'
+        ),
+      },
+    }),
+    [triggerRegistration]
+  );
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Destination',
+        accessorKey: 'destination',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Reporting Origin',
+        accessorKey: 'reportingOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Registration Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          calculateRegistrationDate((details as TriggerRegistration)?.time),
+        enableHiding: false,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Event Level Result',
+        accessorKey: 'eventLevel',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+      {
+        header: 'Aggregetable Result',
+        accessorKey: 'aggregatable',
+        cell: (info) => info,
+        widthWeightagePercentage: 15,
+      },
+    ],
+    []
+  );
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
@@ -62,7 +147,7 @@ const TriggerRegistrations = () => {
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             tableFilterData={tableFilters}
-            data={data}
+            data={triggerRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={
