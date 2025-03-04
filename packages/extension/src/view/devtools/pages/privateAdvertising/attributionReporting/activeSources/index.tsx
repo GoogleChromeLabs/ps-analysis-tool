@@ -93,7 +93,7 @@ const ActiveSources = () => {
           Today: {
             selected: false,
           },
-          Yesterday: {
+          'Since Yesterday': {
             selected: false,
           },
           'Last 7 Days': {
@@ -120,7 +120,7 @@ const ActiveSources = () => {
             case 'Today':
               return new Date().toDateString() === val.toDateString();
 
-            case 'Yesterday':
+            case 'Since Yesterday':
               return val >= yesterday && val <= today;
 
             case 'Last 7 Days':
