@@ -172,7 +172,6 @@ export const SidebarProvider = ({
           chrome.devtools.inspectedWindow.tabId
         );
 
-        // only open if an active tab is found
         if (tab) {
           const url = tab.url?.split('#')[0].split('?')[0] || '';
           const tabUrl = new URL(url);
