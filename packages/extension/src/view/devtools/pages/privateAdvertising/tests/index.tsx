@@ -24,7 +24,7 @@ import { useSidebar } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
-import Attribution from '../attribution';
+import Attribution from '../attributionReporting';
 import Topics from '../topics';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -71,7 +71,7 @@ describe('Private advertising Landing Pages', () => {
     });
 
     expect(
-      await screen.findByTestId('attribution-content')
+      await screen.findByTestId('attribution-reporting-content')
     ).toBeInTheDocument();
   });
 

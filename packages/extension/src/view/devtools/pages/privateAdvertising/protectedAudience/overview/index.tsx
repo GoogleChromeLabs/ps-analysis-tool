@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
-export * from './protectedAudience';
-export * from './webStories';
-export * from './attributionReporting';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import {
+  InfoCard as InfoCardTemplate,
+  QuickLinksList,
+  type PSInfoKeyType,
+} from '@google-psat/design-system';
+
+const Overview = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
+  return (
+    <>
+      <InfoCardTemplate infoKey={infoKey} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
+    </>
+  );
+};
+
+export default Overview;

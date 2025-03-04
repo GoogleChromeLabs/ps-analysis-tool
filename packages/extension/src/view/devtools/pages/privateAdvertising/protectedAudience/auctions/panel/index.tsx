@@ -168,7 +168,14 @@ const AuctionPanel = ({
 
       return newData;
     });
-  }, [auctionEvents, setSidebarData, customAdsAndBidders]);
+  }, [
+    auctionEvents,
+    setSidebarData,
+    customAdsAndBidders,
+    isMultiSeller,
+    selectedAdUnit,
+    selectedDateTime,
+  ]);
 
   const { activePanel } = useSidebar(({ state }) => ({
     activePanel: state.activePanel,
