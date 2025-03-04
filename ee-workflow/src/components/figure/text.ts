@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating text figures.
@@ -29,15 +29,24 @@ export default class Text extends Figure {
   /**
    * Text to be displayed.
    */
-  str: string;
+  private str: string;
 
   /**
    * Font size of the text.
    */
-  size: number;
+  private size: number;
 
-  constructor(x: number, y: number, str: string, size?: number, fill?: string) {
-    super(x, y, fill);
+  constructor(
+    canvasRunnner: Main,
+    x: number,
+    y: number,
+    str: string,
+    id?: string,
+    size?: number,
+    fill?: string,
+    tags?: string[]
+  ) {
+    super(canvasRunnner, x, y, id, fill, undefined, tags);
     this.str = str;
     this.size = size || 16;
   }
@@ -51,7 +60,7 @@ export default class Text extends Figure {
     this.p5?.pop();
   }
 
-  onHover() {
+  mouseMoved() {
     return;
   }
 
@@ -59,21 +68,12 @@ export default class Text extends Figure {
     return;
   }
 
-  onClick() {
+  mouseClicked() {
     // TODO: Discuss the function
   }
 
   isHovering(): boolean {
     return false;
-  }
-
-  remove() {
-    this.p5?.push();
-    this.p5?.fill(main.backgroundColor);
-    this.p5?.stroke(main.backgroundColor);
-    this.p5?.textSize(this.size);
-    this.p5?.text(this.str, this.x, this.y);
-    this.p5?.pop();
   }
 
   reDraw(
@@ -84,13 +84,12 @@ export default class Text extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.str = str || this.str;
     this.size = size ?? this.size;
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
   }
 }
