@@ -44,24 +44,21 @@ const Panel = () => {
     })
   );
 
-  const sourcesRegistrationRef = useRef(sourcesRegistration);
-  const triggerRegistrationRef = useRef(triggerRegistration);
-
-  useEffect(() => {
-    sourcesRegistrationRef.current = sourcesRegistration;
-    triggerRegistrationRef.current = triggerRegistration;
-  }, [sourcesRegistration, triggerRegistration]);
+  const sourcesRegistrationRef = useRef<typeof sourcesRegistration>([]);
+  const triggerRegistrationRef = useRef<typeof triggerRegistration>([]);
 
   useEffect(() => {
     if (!isEqual(sourcesRegistration, sourcesRegistrationRef.current)) {
       highlightTab(1);
       highlightTab(2);
+      sourcesRegistrationRef.current = sourcesRegistration;
     }
   }, [sourcesRegistration, highlightTab]);
 
   useEffect(() => {
-    if (isEqual(triggerRegistration, triggerRegistrationRef.current)) {
+    if (!isEqual(triggerRegistration, triggerRegistrationRef.current)) {
       highlightTab(3);
+      triggerRegistrationRef.current = triggerRegistration;
     }
   }, [triggerRegistration, highlightTab]);
 
