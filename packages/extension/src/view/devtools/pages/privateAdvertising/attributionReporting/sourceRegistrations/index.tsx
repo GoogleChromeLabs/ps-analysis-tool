@@ -73,7 +73,7 @@ const SourceRegistrations = () => {
       },
       {
         header: 'Cleared Debug Key',
-        accessorKey: 'debugKey',
+        accessorKey: 'clearedDebugKey',
         cell: (info) => info,
         widthWeightagePercentage: 20,
       },
