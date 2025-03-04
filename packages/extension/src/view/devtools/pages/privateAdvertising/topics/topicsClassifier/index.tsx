@@ -149,7 +149,7 @@ const TopicsClassifier = () => {
                 className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
                 onClick={() => topicsNavigator(category)}
               >
-                {`${category.split('/').pop()}`}
+                {category.split('/').pop()}
               </div>
             ))}
           </div>
