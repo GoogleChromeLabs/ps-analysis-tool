@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { ComponentType, SVGProps } from 'react';
 import classNames from 'classnames';
 
 /**
@@ -26,11 +26,7 @@ import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
 type PinnedItem = {
   name: string;
-  icon: React.ComponentType<{
-    width: number;
-    height: number;
-    className?: string;
-  }>;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
   sidebarKey: SIDEBAR_ITEMS_KEYS;
 };
 
@@ -45,7 +41,7 @@ type FeatureItem = PinnedItem & {
   }[];
 };
 
-type Props = {
+type CardsPanelProps = {
   pinnedItems?: PinnedItem[];
   featuredItems: FeatureItem[];
   hasTitle?: boolean;
@@ -60,7 +56,7 @@ const CardsPanel = ({
   featuredItems,
   hasTitle = true,
   onFeaturedButtonClick,
-}: Props) => {
+}: CardsPanelProps) => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
 
   return (
