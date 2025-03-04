@@ -33,24 +33,22 @@ class ARAStore {
   /**
    * Processes the Attribution Reporting Source Registered event.
    * @param {Protocol.Storage.AttributionReportingSourceRegisteredEvent} params - The event parameters.
-   * @param {string} tabId - The ID of the tab where the event occurred.
    */
   processARASourcesRegistered(
-    params: Protocol.Storage.AttributionReportingSourceRegisteredEvent,
-    tabId: string
+    params: Protocol.Storage.AttributionReportingSourceRegisteredEvent
   ) {
     const sourceRegistrationData = convertKeysToCamelCase(
       params.registration
     ) as Protocol.Storage.AttributionReportingSourceRegistration;
 
-    if (dataStore.sources?.[tabId]?.sourceRegistration?.length > 0) {
-      dataStore.sources[tabId].sourceRegistration.push({
+    if (dataStore.sources?.sourceRegistration?.length > 0) {
+      dataStore.sources.sourceRegistration.push({
         ...sourceRegistrationData,
         result: params.result,
-        index: dataStore.sources[tabId].sourceRegistration.length,
+        index: dataStore.sources.sourceRegistration.length,
       });
     } else {
-      dataStore.sources[tabId].sourceRegistration = [
+      dataStore.sources.sourceRegistration = [
         {
           ...sourceRegistrationData,
           result: params.result,
@@ -59,7 +57,7 @@ class ARAStore {
       ];
     }
 
-    dataStore.tabs[Number(tabId)].newUpdatesARA++;
+    dataStore.newUpdatesARA++;
   }
 
   /**
@@ -76,17 +74,17 @@ class ARAStore {
       ['aggregatableDebugReportingConfig']
     );
 
-    if (dataStore.sources?.[tabId]?.triggerRegistration?.length > 0) {
-      dataStore.sources[tabId].triggerRegistration.push({
+    if (dataStore.sources?.triggerRegistration?.length > 0) {
+      dataStore.sources.triggerRegistration.push({
         ...triggerRegistrationData,
         aggregatable: params.aggregatable,
         eventLevel: params.eventLevel,
-        index: dataStore.sources[tabId].triggerRegistration.length,
+        index: dataStore.sources.triggerRegistration.length,
         time: Date.now(),
         destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
       });
     } else {
-      dataStore.sources[tabId].triggerRegistration = [
+      dataStore.sources.triggerRegistration = [
         {
           ...triggerRegistrationData,
           aggregatable: params.aggregatable,
@@ -98,7 +96,7 @@ class ARAStore {
       ];
     }
 
-    dataStore.tabs[Number(tabId)].newUpdatesARA++;
+    dataStore.newUpdatesARA++;
   }
 
   /**

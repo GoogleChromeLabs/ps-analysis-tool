@@ -48,7 +48,15 @@ class DataStore {
   /**
    * The Attribution Reporting sources for the tab.
    */
-  sources: Record<string, Record<Event, SourcesData[]>> = {};
+  sources: Record<Event, SourcesData[]> = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting sources updates tracker.
+   */
+  newUpdatesARA = 0;
 
   /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
@@ -173,7 +181,6 @@ class DataStore {
       popupOpenState: boolean;
       newUpdatesCA: number;
       newUpdatesPA: number;
-      newUpdatesARA: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
@@ -314,14 +321,12 @@ class DataStore {
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
-    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdatesCA: 0,
       newUpdatesPA: 0,
-      newUpdatesARA: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
@@ -648,34 +653,20 @@ class DataStore {
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
   async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
-    if (this.tabs[tabId].newUpdatesARA <= 0 && !overrideForInitialSync) {
+    if (this.newUpdatesARA <= 0 && !overrideForInitialSync) {
       return;
     }
-    const sourceRegistrations: SourcesData[] = [];
-    const triggerRegistrations: SourcesData[] = [];
 
-    Object.keys(this.sources).forEach((key) => {
-      const sourceData = this.sources[key].sourceRegistration;
-      sourceRegistrations.push(...sourceData);
-
-      const triggerRegistration = this.sources[key].triggerRegistration;
-      triggerRegistrations.push(...triggerRegistration);
+    await chrome.runtime.sendMessage({
+      type: 'ARA_EVENTS',
+      payload: {
+        sourcesRegistration: this.sources.sourceRegistration,
+        triggerRegistration: this.sources.triggerRegistration,
+        tabId: Number(tabId),
+      },
     });
 
-    await Promise.all(
-      Object.keys(this.sources).map(async (key) => {
-        await chrome.runtime.sendMessage({
-          type: 'ARA_EVENTS',
-          payload: {
-            sourcesRegistration: sourceRegistrations,
-            triggerRegistration: triggerRegistrations,
-            tabId: Number(key),
-          },
-        });
-      })
-    );
-
-    this.tabs[tabId].newUpdatesARA = 0;
+    this.newUpdatesARA = 0;
   }
 
   /**

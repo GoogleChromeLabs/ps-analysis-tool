@@ -389,20 +389,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
 
         if (sourceRegistration) {
-          ARAStore.processARASourcesRegistered(
-            {
-              registration: {
-                ...JSON.parse(sourceRegistration),
-                reportingOrigin: new URL(requestUrl).origin,
-                requestUrl: requestUrl,
-                sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
-                time: Date.now(),
-              } as Protocol.Storage.AttributionReportingSourceRegistration,
-              result:
-                'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
-            },
-            tabId
-          );
+          ARAStore.processARASourcesRegistered({
+            registration: {
+              ...JSON.parse(sourceRegistration),
+              reportingOrigin: new URL(requestUrl).origin,
+              requestUrl: requestUrl,
+              sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
+              time: Date.now(),
+            } as Protocol.Storage.AttributionReportingSourceRegistration,
+            result:
+              'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
+          });
         }
 
         let finalFrameId = frameId;
@@ -556,31 +553,30 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
 
-        dataStore.sources[tabId].sourceRegistration = dataStore.sources[
-          tabId
-        ].sourceRegistration.map((singleSource) => {
-          //@ts-ignore
-          if (singleSource?.sourceEventId === registration.eventId) {
-            dataStore.tabs[Number(tabId)].newUpdatesARA++;
-            const time = registration.time.toString().includes('.')
-              ? registration.time * 1000
-              : registration.time;
+        dataStore.sources.sourceRegistration =
+          dataStore.sources.sourceRegistration.map((singleSource) => {
+            //@ts-ignore
+            if (singleSource?.sourceEventId === registration.eventId) {
+              dataStore.newUpdatesARA++;
+              const time = registration.time.toString().includes('.')
+                ? registration.time * 1000
+                : registration.time;
 
-            const combinedData = {
-              ...singleSource,
-              ...registration,
-              time,
-              expiry: registration.expiry + time,
-              result,
-            };
-            //@ts-ignore
-            delete combinedData.sourceEventId;
-            //@ts-ignore
-            delete combinedData.destination;
-            return combinedData;
-          }
-          return singleSource;
-        });
+              const combinedData = {
+                ...singleSource,
+                ...registration,
+                time,
+                expiry: registration.expiry + time,
+                result,
+              };
+              //@ts-ignore
+              delete combinedData.sourceEventId;
+              //@ts-ignore
+              delete combinedData.destination;
+              return combinedData;
+            }
+            return singleSource;
+          });
       }
 
       if (
@@ -591,64 +587,60 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { registration, eventLevel, aggregatable } =
           params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
 
-        dataStore.sources[tabId].triggerRegistration.forEach(
-          (trigger, index) => {
-            const registrationKeys = new Set<string>();
-            Object.keys(registration).forEach((key) =>
-              registrationKeys.add(key)
+        dataStore.sources.triggerRegistration.forEach((trigger, index) => {
+          const registrationKeys = new Set<string>();
+          Object.keys(registration).forEach((key) => registrationKeys.add(key));
+
+          const triggerKeys = new Set<string>();
+          Object.keys(trigger).forEach((key) => triggerKeys.add(key));
+          let match = false;
+
+          if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('aggregatableTriggerData') &&
+            !match
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'aggregatableTriggerData'
             );
-
-            const triggerKeys = new Set<string>();
-            Object.keys(trigger).forEach((key) => triggerKeys.add(key));
-            let match = false;
-
-            if (
-              registrationKeys
-                .intersection(triggerKeys)
-                .has('aggregatableTriggerData') &&
-              !match
-            ) {
-              match = ARAStore.matchTriggerData(
-                registration,
-                trigger,
-                'aggregatableTriggerData'
-              );
-            } else if (
-              registrationKeys
-                .intersection(triggerKeys)
-                .has('aggregatableValues') &&
-              !match
-            ) {
-              match = ARAStore.matchTriggerData(
-                registration,
-                trigger,
-                'aggregatableValues'
-              );
-            } else if (
-              registrationKeys
-                .intersection(triggerKeys)
-                .has('eventTriggerData') &&
-              !match
-            ) {
-              match = ARAStore.matchTriggerData(
-                registration,
-                trigger,
-                'eventTriggerData'
-              );
-            }
-
-            if (match) {
-              dataStore.tabs[Number(tabId)].newUpdatesARA++;
-
-              dataStore.sources[tabId].triggerRegistration[index] = {
-                ...dataStore.sources[tabId].triggerRegistration[index],
-                eventLevel,
-                aggregatable,
-                ...registration,
-              };
-            }
+          } else if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('aggregatableValues') &&
+            !match
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'aggregatableValues'
+            );
+          } else if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('eventTriggerData') &&
+            !match
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'eventTriggerData'
+            );
           }
-        );
+
+          if (match) {
+            dataStore.newUpdatesARA++;
+
+            dataStore.sources.triggerRegistration[index] = {
+              ...dataStore.sources.triggerRegistration[index],
+              eventLevel,
+              aggregatable,
+              ...registration,
+            };
+          }
+        });
       }
     } catch (error) {
       //Fail silently.
