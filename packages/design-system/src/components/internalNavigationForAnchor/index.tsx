@@ -43,11 +43,13 @@ const InternalNavigationForAnchor = ({
 
   const navigateTo = useCallback(
     (
-      event: React.MouseEvent<HTMLButtonElement>,
+      event: React.MouseEvent<HTMLAnchorElement>,
       key: string,
       query: string,
       link: string
     ) => {
+      event.preventDefault();
+
       if (event.ctrlKey || event.metaKey) {
         if (link) {
           chrome?.tabs.create({
@@ -85,7 +87,8 @@ const InternalNavigationForAnchor = ({
           } else {
             const idx = anchorIdxToNavigate;
             const button = (
-              <button
+              <a
+                href={links?.[idx] || '#'}
                 onClick={(event) =>
                   navigateTo(
                     event,
@@ -97,7 +100,7 @@ const InternalNavigationForAnchor = ({
                 className="text-bright-navy-blue dark:text-jordy-blue"
               >
                 {textToProcess.slice(stringStart, stringEnd)}
-              </button>
+              </a>
             );
 
             elements.push(button);
