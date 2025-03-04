@@ -513,12 +513,6 @@ const TABS: SidebarItems = {
         className: 'fill-bright-gray',
       },
     },
-    // collapsedIcon: {
-    //   Element: DashboardIcon,
-    //   props: {
-    //     className: 'fill-granite-gray dark:fill-bright-gray',
-    //   },
-    // },
     dropdownOpen: false,
     children: {},
     containerClassName: 'h-6',
