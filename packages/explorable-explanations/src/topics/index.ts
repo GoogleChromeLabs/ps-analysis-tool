@@ -175,6 +175,7 @@ export function topicsAnimation(
       app.smallCirclePositions = {};
       app.counter = 0;
       app.lastFrameCount = 0;
+      app.prevVisitedCircleIndex = -1;
       p?.clear();
       p.background(255);
       p.pixelDensity(2);
