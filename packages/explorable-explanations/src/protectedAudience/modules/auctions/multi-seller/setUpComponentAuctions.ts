@@ -49,6 +49,7 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
       customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
       isForBranches: true,
+      forceScroll: true,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;

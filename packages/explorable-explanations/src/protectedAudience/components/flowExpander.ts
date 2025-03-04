@@ -114,7 +114,7 @@ const FlowExpander = async ({
       p.pop();
     }
   });
-  scrollToCoordinates(endpoint.x, endpoint.y);
+  scrollToCoordinates({ x: endpoint.x, y: endpoint.y });
   // eslint-disable-next-line consistent-return
   return endpoint;
 };

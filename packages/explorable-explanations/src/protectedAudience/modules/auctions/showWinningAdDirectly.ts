@@ -57,6 +57,7 @@ export const showWinningAdDirectly = (
         direction: 'down',
         x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 1,
         y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
+        forceScroll: true,
       },
       callBack: (_returnValue) => {
         app.auction.nextTipCoordinates = _returnValue;
