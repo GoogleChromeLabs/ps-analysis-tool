@@ -45,6 +45,11 @@ const calculateFiltersForSources = (
       }
     } else {
       const _key = sources[key] as SourcesKeys;
+
+      if (!_key) {
+        return;
+      }
+
       filters[_key] = {
         selected: false,
       };

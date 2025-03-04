@@ -41,6 +41,11 @@ const calculateFiltersForTrigger = (
       };
     } else {
       const _key = trigger[key] as TriggerKeys;
+
+      if (!_key) {
+        return;
+      }
+
       filters[_key] = {
         selected: false,
       };
