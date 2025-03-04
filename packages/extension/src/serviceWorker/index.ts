@@ -195,7 +195,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
-      if (method === 'Storage.interestGroupAccessed' && params) {
+      if (
+        method === 'Storage.interestGroupAccessed' &&
+        params &&
+        source.tabId
+      ) {
         const interestGroupAccessedParams =
           params as Protocol.Storage.InterestGroupAccessedEvent;
 
