@@ -74,6 +74,8 @@ export function topicsAnimation(
     showHandCursor: false,
     canvas: null as p5.Renderer | null,
     smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
+    counter: 0,
+    lastFrameCount: 0,
 
     drawTimeline: (
       position: { x: number; y: number },
@@ -168,10 +170,11 @@ export function topicsAnimation(
 
     reset: () => {
       app.visitIndex = 0;
-      app.speedMultiplier = 1;
       app.inspectedCircleIndex = -1;
       app.circlePositions = {};
       app.smallCirclePositions = {};
+      app.counter = 0;
+      app.lastFrameCount = 0;
       p?.clear();
       p.background(255);
       p.pixelDensity(2);
@@ -616,6 +619,12 @@ export function topicsAnimation(
   };
 
   p.draw = () => {
+    if (app.counter < 50) {
+      app.counter++;
+      app.lastFrameCount = p.frameCount;
+      return;
+    }
+
     const step = config.timeline.stepDelay / app.speedMultiplier;
     const delay = step / 10;
 
@@ -626,7 +635,8 @@ export function topicsAnimation(
     }
 
     if (
-      (p.frameCount % delay === 0 || app.visitIndex === 0) &&
+      ((p.frameCount - app.lastFrameCount) % delay === 0 ||
+        app.visitIndex === 0) &&
       app.playing &&
       !isInteractive
     ) {
