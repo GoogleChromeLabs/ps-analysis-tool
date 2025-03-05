@@ -149,6 +149,7 @@ export type AuctionStepProps = {
   showRippleEffect?: boolean;
   isBranchComponent?: boolean;
   isForBranches?: boolean;
+  forceScroll?: boolean;
 };
 
 export type AuctionStep = {

@@ -19,7 +19,6 @@
 import config from '../config';
 import app from '../app';
 import * as utils from '../utils';
-import { getCoordinateValues } from '../utils/getCoordinateValues';
 import type { CoordinateValue, Coordinates } from '../types';
 
 const ARROW_SIZE = 10;
@@ -34,6 +33,7 @@ type ProgressLineProps = {
   noArrow?: boolean;
   noAnimation?: boolean;
   isForBranches?: boolean;
+  forceScroll?: boolean;
 };
 
 const ProgressLine = ({
@@ -46,6 +46,7 @@ const ProgressLine = ({
   noArrow = false,
   noAnimation = app.speedMultiplier === 4,
   isForBranches = false,
+  forceScroll = false,
 }: ProgressLineProps): Promise<Coordinates | null> => {
   const p = app.p;
   if (!p) {
@@ -53,7 +54,10 @@ const ProgressLine = ({
   }
   const width = customWidth ?? config.flow.lineWidth - ARROW_SIZE;
   const height = customHeight ?? config.flow.lineHeight - ARROW_SIZE;
-  const { x: x1, y: y1 } = getCoordinateValues({ x: x1Value, y: y1Value });
+  const { x: x1, y: y1 } = utils.getCoordinateValues({
+    x: x1Value,
+    y: y1Value,
+  });
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction, width, height);
 
   const drawArrow = (x: number, y: number, dir: string) => {
@@ -121,9 +125,13 @@ const ProgressLine = ({
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1, direction);
 
+          if (forceScroll) {
+            utils.scrollToCoordinates({ x: currentX, y: y2 });
+          }
+
           if (isEnding) {
             if (!isForBranches) {
-              utils.scrollToCoordinates(x2, y2);
+              utils.scrollToCoordinates({ x: currentX, y: y2 });
             }
             resolve({ x: x2, y: y2 });
             return;
@@ -147,9 +155,13 @@ const ProgressLine = ({
           p.line(x1, y1, currentX, y2);
           drawArrow(currentX, y1 - 5, direction);
 
+          if (forceScroll) {
+            utils.scrollToCoordinates({ x: currentX, y: y2 });
+          }
+
           if (isEnding) {
             if (!isForBranches) {
-              utils.scrollToCoordinates(x2, y2);
+              utils.scrollToCoordinates({ x: currentX, y: y2 });
             }
             utils.drawText(text, currentX + width / 2, y1 + height / 2 - 10);
             resolve({ x: x2, y: y2 });
@@ -173,10 +185,13 @@ const ProgressLine = ({
 
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY - 2, direction);
+          if (forceScroll) {
+            utils.scrollToCoordinates({ x: currentX, y: y2 });
+          }
 
           if (isEnding) {
             if (!isForBranches) {
-              utils.scrollToCoordinates(x2, currentY);
+              utils.scrollToCoordinates({ x: x2, y: currentY });
             }
 
             utils.drawText(
@@ -206,9 +221,16 @@ const ProgressLine = ({
           p.line(x1, y1, x2, currentY);
           drawArrow(x1, currentY, direction);
 
+          if (forceScroll) {
+            utils.scrollToCoordinates({ x: x2, y: currentY });
+          }
+
           if (isEnding) {
             if (!isForBranches) {
-              utils.scrollToCoordinates(x2, currentY);
+              utils.scrollToCoordinates({
+                x: x2,
+                y: currentY,
+              });
             }
 
             utils.drawText(

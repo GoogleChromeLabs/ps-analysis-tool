@@ -43,6 +43,7 @@ class ARAStore {
 
     if (dataStore.sources?.sourceRegistration?.length > 0) {
       dataStore.sources.sourceRegistration.push({
+        requestUrl: '',
         ...sourceRegistrationData,
         result: params.result,
         index: dataStore.sources.sourceRegistration.length,
@@ -50,14 +51,13 @@ class ARAStore {
     } else {
       dataStore.sources.sourceRegistration = [
         {
+          requestUrl: '',
           ...sourceRegistrationData,
           result: params.result,
           index: 0,
         },
       ];
     }
-
-    dataStore.newUpdatesARA++;
   }
 
   /**
@@ -76,6 +76,7 @@ class ARAStore {
 
     if (dataStore.sources?.triggerRegistration?.length > 0) {
       dataStore.sources.triggerRegistration.push({
+        requestUrl: '',
         ...triggerRegistrationData,
         aggregatable: params.aggregatable,
         eventLevel: params.eventLevel,
@@ -86,6 +87,7 @@ class ARAStore {
     } else {
       dataStore.sources.triggerRegistration = [
         {
+          requestUrl: '',
           ...triggerRegistrationData,
           aggregatable: params.aggregatable,
           eventLevel: params.eventLevel,
@@ -95,8 +97,6 @@ class ARAStore {
         },
       ];
     }
-
-    dataStore.newUpdatesARA++;
   }
 
   /**
@@ -156,6 +156,10 @@ class ARAStore {
     if (key === 'aggregatableTriggerData') {
       return registrationData[key].every((value: any, index: number) => {
         return (
+          value?.sourceKeys &&
+          triggerData?.[key]?.[index]?.sourceKeys &&
+          value?.keyPiece &&
+          triggerData?.[key]?.[index]?.keyPiece &&
           BigInt(value?.keyPiece) ===
             BigInt(triggerData[key][index]?.keyPiece) &&
           isEqual(value?.sourceKeys, triggerData[key][index]?.sourceKeys)
