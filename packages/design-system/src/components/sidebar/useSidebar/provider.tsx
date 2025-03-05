@@ -168,14 +168,20 @@ export const SidebarProvider = ({
 
       const item = findItem(sidebarItems, key);
       if (item?.panel?.href) {
-        const tab = await chrome?.tabs?.query({
-          active: true,
-          currentWindow: true,
-        });
+        const tab = await chrome.tabs.get(
+          chrome.devtools.inspectedWindow.tabId
+        );
 
-        const url = tab[0].url?.split('#')[0].split('?')[0];
-        if (url !== item.panel.href) {
-          chrome?.tabs?.update({ url: item.panel.href });
+        if (tab) {
+          const url = tab.url?.split('#')[0].split('?')[0] || '';
+          const tabUrl = new URL(url);
+          const panelUrl = new URL(item.panel.href);
+
+          if (tabUrl.href !== panelUrl.href) {
+            chrome.tabs.update(chrome.devtools.inspectedWindow.tabId, {
+              url: panelUrl.href,
+            });
+          }
         }
       }
 

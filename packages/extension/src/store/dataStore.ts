@@ -48,7 +48,15 @@ class DataStore {
   /**
    * The Attribution Reporting sources for the tab.
    */
-  sources: Record<string, Record<Event, SourcesData[]>> = {};
+  sources: Record<Event, SourcesData[]> = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting sources updates tracker.
+   */
+  newUpdatesARA = 0;
 
   /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
@@ -173,7 +181,6 @@ class DataStore {
       popupOpenState: boolean;
       newUpdatesCA: number;
       newUpdatesPA: number;
-      newUpdatesARA: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
@@ -314,14 +321,12 @@ class DataStore {
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
-    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdatesCA: 0,
       newUpdatesPA: 0,
-      newUpdatesARA: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
@@ -430,7 +435,6 @@ class DataStore {
     this.requestIdToCDPURLMapping[tabId] = {};
     this.frameIdToResourceMap[tabId] = {};
     this.unParsedRequestHeadersForPA[tabId] = {};
-    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
     //@ts-ignore
     globalThis.PSATAdditionalData = {
       unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
@@ -649,19 +653,20 @@ class DataStore {
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
   async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
-    if (this.tabs[tabId].newUpdatesARA <= 0 && !overrideForInitialSync) {
+    if (this.newUpdatesARA <= 0 && !overrideForInitialSync) {
       return;
     }
 
     await chrome.runtime.sendMessage({
       type: 'ARA_EVENTS',
       payload: {
-        sourcesRegistration: this.sources[tabId].sourceRegistration,
-        triggerRegistration: this.sources[tabId].triggerRegistration,
-        tabId,
+        sourcesRegistration: this.sources.sourceRegistration,
+        triggerRegistration: this.sources.triggerRegistration,
+        tabId: Number(tabId),
       },
     });
-    this.tabs[tabId].newUpdatesARA = 0;
+
+    this.newUpdatesARA = 0;
   }
 
   /**

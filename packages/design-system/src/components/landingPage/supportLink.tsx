@@ -22,29 +22,32 @@ import React from 'react';
  * Internal dependencies.
  */
 import { SupportIcon, ExternalLinkBlack } from '../../icons';
+import Link from '../link';
 
 const SupportLink = () => {
   return (
-    <a
+    <Link
       className="group dark:text-bright-gray flex items-center hover:text-blue-500 hover:dark:text-blue-400"
       target="_blank"
       href="https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions/categories/support-forum"
       rel="noreferrer"
     >
-      <span className="mt-[1px] mr-1">
-        <SupportIcon
-          width="18"
-          className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
-        />
-      </span>
-      <span>Support Forum</span>
-      <span className="ml-[2px] inline-block">
-        <ExternalLinkBlack
-          className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
-          width="14"
-        />
-      </span>
-    </a>
+      <>
+        <span className="mt-[1px] mr-1">
+          <SupportIcon
+            width="18"
+            className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+          />
+        </span>
+        <span>Support Forum</span>
+        <span className="ml-[2px] inline-block">
+          <ExternalLinkBlack
+            className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+            width="14"
+          />
+        </span>
+      </>
+    </Link>
   );
 };
 

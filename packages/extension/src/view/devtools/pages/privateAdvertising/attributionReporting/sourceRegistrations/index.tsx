@@ -16,22 +16,25 @@
 /**
  * External dependencies.
  */
-import type { SourcesRegistration } from '@google-psat/common';
+import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
-  type TableColumn,
   TableProvider,
   type TableRow,
   Table,
+  type TableFilter,
+  type TableColumn,
+  type InfoType,
 } from '@google-psat/design-system';
-import { noop } from 'lodash-es';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
  */
+import RowContextMenuForARA from '../rowContextMenu';
+import calculateFiltersForSources from '../utils/calculateFiltersForSources';
 import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 
@@ -39,54 +42,135 @@ const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForARA
+  > | null>(null);
+
+  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
+    sourcesRegistration: state.sourcesRegistration,
+  }));
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
-      {
-        header: 'Source Origin',
-        accessorKey: 'sourceOrigin',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-      {
-        header: 'Reporting Origin',
-        accessorKey: 'reportingOrigin',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
       {
         header: 'Registration Time',
         accessorKey: 'time',
         cell: (_, details) =>
           calculateRegistrationDate((details as SourcesRegistration)?.time),
         enableHiding: false,
-        widthWeightagePercentage: 15,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Source Origin',
+        accessorKey: 'sourceOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Reporting Origin',
+        accessorKey: 'reportingOrigin',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
+      },
+      {
+        header: 'Cleared Debug Key',
+        accessorKey: 'clearedDebugKey',
+        cell: (info) => info,
+        widthWeightagePercentage: 20,
       },
       {
         header: 'Source Type',
         accessorKey: 'type',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'Status',
         accessorKey: 'result',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
-      },
-      {
-        header: 'Debug Key',
-        accessorKey: 'debugKey',
-        cell: (info) => info,
-        widthWeightagePercentage: 15,
+        widthWeightagePercentage: 10,
       },
     ],
     []
   );
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      time: {
+        title: 'Registration Time',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Today: {
+            selected: false,
+          },
+          'Since Yesterday': {
+            selected: false,
+          },
+          'Last 7 Days': {
+            selected: false,
+          },
+          'Last 30 Days': {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = new Date(value as number);
+
+          const today = new Date();
+          const yesterday = new Date();
+          yesterday.setDate(today.getDate() - 1);
+
+          const last7Days = new Date();
+          last7Days.setDate(today.getDate() - 7);
+
+          const last30Days = new Date();
+          last30Days.setDate(today.getDate() - 30);
+          switch (filterValue) {
+            case 'Today':
+              return new Date().toDateString() === val.toDateString();
+
+            case 'Since Yesterday':
+              return val >= yesterday && val <= today;
+
+            case 'Last 7 Days':
+              return val >= last7Days && val <= today;
+
+            case 'Last 30 Days':
+              return val >= last30Days && val <= today;
+
+            default:
+              return false;
+          }
+        },
+      },
+      sourceOrigin: {
+        title: 'Source Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'sourceOrigin'
+        ),
+      },
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'reportingOrigin'
+        ),
+      },
+      type: {
+        title: 'Type',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(sourcesRegistration, 'type'),
+      },
+    }),
+    [sourcesRegistration]
+  );
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
@@ -104,10 +188,15 @@ const SourceRegistrations = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
+            tableFilterData={tableFilters}
             data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
-            onRowContextMenu={noop}
+            onRowContextMenu={
+              rowContextMenuRef.current
+                ? rowContextMenuRef.current?.onRowContextMenu
+                : noop
+            }
             onRowClick={(row) => setSelectedJSON(row as SourcesRegistration)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as SourcesRegistration).index.toString()
@@ -141,6 +230,7 @@ const SourceRegistrations = () => {
           </div>
         )}
       </div>
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };
