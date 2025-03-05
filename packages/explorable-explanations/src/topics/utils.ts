@@ -88,7 +88,15 @@ export const generateTimelineVisits = (
   const incrementMinutes = (7 * 24 * 60) / numVisitsPerEpoch; // Total minutes in a week divided by visits per epoch
 
   for (let visit = 0; visit < numVisitsPerEpoch; visit++) {
-    const website = websites[Math.floor(Math.random() * websites.length)];
+    let website = websites[Math.floor(Math.random() * websites.length)];
+    let isDuplicate = visits.find((v) => v.website === website);
+
+    while (isDuplicate) {
+      website = websites[Math.floor(Math.random() * websites.length)];
+      // eslint-disable-next-line no-loop-func
+      isDuplicate = visits.find((v) => v.website === website);
+    }
+
     const datetime = getIncrementalDateTime(currentDateTime, incrementMinutes);
     const topics = getWebsiteToTopic(website);
     visits.push({ website, datetime, topics });
