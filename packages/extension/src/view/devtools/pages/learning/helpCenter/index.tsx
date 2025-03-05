@@ -17,20 +17,29 @@
 /**
  * External dependencies.
  */
-import { Help } from '@google-psat/design-system';
 import React from 'react';
+import {
+  ExternalLinkPanel,
+  Help,
+  SIDEBAR_ITEMS_KEYS,
+} from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import { FEATURED_ITEMS } from '../constants';
 
 const HelpCenter = () => {
-  return (
-    <div className="w-full h-full overflow-hidden">
-      <div className="w-full h-full flex justify-center items-center">
-        <p className="text-center text-lg flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-          <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
-          Please refer to the help center opened in the current browser tab.
-        </p>
-      </div>
-    </div>
+  const description =
+    FEATURED_ITEMS.find(
+      (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.HELP_CENTER
+    )?.description ?? '';
+
+  const helpIcon = (
+    <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
   );
+
+  return <ExternalLinkPanel description={description} icon={helpIcon} />;
 };
 
 export default HelpCenter;
