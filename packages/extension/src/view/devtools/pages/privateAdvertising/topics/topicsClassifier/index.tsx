@@ -26,21 +26,34 @@ import {
   type TableData,
   CancelIcon,
   useTabs,
+  Button,
 } from '@google-psat/design-system';
 import { noop } from '@google-psat/common';
 import React, { useCallback, useMemo, useState } from 'react';
+/**
+ * Internal dependency
+ */
+import { useTopicsClassifier } from '../../../../stateProviders';
 
 type ClassificationResultIndex = ClassificationResult & {
   index: number;
 };
 
 const TopicsClassifier = () => {
-  const [websites, setWebsites] = useState<string>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [validationErrors, setInputValidationErrors] = useState<string[]>([]);
-  const [classificationResult, setClassificationResult] = useState<
-    ClassificationResultIndex[]
-  >([]);
+  const {
+    setWebsites,
+    handleClassification,
+    validationErrors,
+    websites,
+    classificationResult,
+  } = useTopicsClassifier(({ state, actions }) => ({
+    websites: state.websites,
+    validationErrors: state.validationErrors,
+    classificationResult: state.classificationResult,
+    setWebsites: actions.setWebsites,
+    handleClassification: actions.handleClassification,
+  }));
+
   const [selectedKey, setSelectedKey] = useState<string>('');
   const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
     setStorage: actions.setStorage,
@@ -61,71 +74,6 @@ const TopicsClassifier = () => {
     [setActiveTab, setStorage]
   );
 
-  const handleClick = useCallback(async () => {
-    const hosts = websites.split('\n');
-    const preprocessedHosts: string[] = [];
-    const inputValidationErrors: string[] = [];
-    setInputValidationErrors([]);
-
-    hosts.forEach((host) => {
-      const trimmedHost = host.trim();
-      if (trimmedHost === '') {
-        return;
-      }
-
-      preprocessedHosts.push(trimmedHost);
-    });
-
-    preprocessedHosts.forEach((host) => {
-      const hostnameRegex = /^(?!:\/\/)([a-zA-Z0-9-_]{1,63}\.)+[a-zA-Z]{2,63}$/;
-      if (!hostnameRegex.test(host)) {
-        inputValidationErrors.push('Host "' + host + '" is invalid.');
-      }
-    });
-
-    if (inputValidationErrors.length > 0) {
-      setInputValidationErrors(inputValidationErrors);
-      return;
-    } else {
-      const response = await fetch(
-        'https://topics.privacysandbox.report/classify',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            domains: preprocessedHosts,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      let jsonResponse = await response.json();
-      jsonResponse = jsonResponse.map(
-        (res: ClassificationResult, index: number) => {
-          return {
-            ...res,
-            index: index,
-          };
-        }
-      );
-
-      jsonResponse.forEach((classifiedCategories: ClassificationResult) => {
-        if (classifiedCategories?.error) {
-          inputValidationErrors.push(classifiedCategories.error);
-        }
-      });
-      setInputValidationErrors(inputValidationErrors);
-
-      jsonResponse = jsonResponse.filter(
-        (classifiedCategories: ClassificationResult) =>
-          classifiedCategories?.categories
-      );
-
-      setClassificationResult(jsonResponse);
-    }
-  }, [websites]);
-
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -135,21 +83,33 @@ const TopicsClassifier = () => {
         enableHiding: false,
       },
       {
-        header: 'Categories',
+        header: 'Topics',
         accessorKey: 'categories',
         cell: (info) => (
           <div>
-            {(info as string[]).map((category, index) => (
-              <div
-                key={index}
-                className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
-                onClick={() => topicsNavigator(category)}
-              >
-                {category}
-              </div>
-            ))}
+            {((info as ClassificationResult['categories']) ?? []).map(
+              ({ id, name }, index) => (
+                <div
+                  key={index}
+                  className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
+                  onClick={() => topicsNavigator(name)}
+                >
+                  {`${id}. ${name.split('/').pop()}`}
+                </div>
+              )
+            )}
           </div>
         ),
+        sortingComparator: (a, b) => {
+          const aTopics = ((a as ClassificationResult['categories']) ?? [])
+            .map((topic) => topic.name.split('/').pop())
+            .join(', ');
+          const bTopics = ((b as ClassificationResult['categories']) ?? [])
+            .map((topic) => topic.name.split('/').pop())
+            .join(', ');
+
+          return aTopics.localeCompare(bTopics);
+        },
       },
     ],
     [topicsNavigator]
@@ -175,34 +135,42 @@ const TopicsClassifier = () => {
     `;
   }, []);
 
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        handleClassification();
+      }
+    },
+    [handleClassification]
+  );
+
   return (
     <div className="relative h-full flex flex-col">
-      <div className="flex p-4 w-full flex-col">
+      <div className="flex p-4 w-full flex-col gap-4">
         <textarea
           placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
-          className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray"
+          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue"
           cols={50}
           value={websites}
           onChange={(e) => setWebsites(e.target.value)}
           rows={5}
+          onKeyDown={onKeyDown}
         />
-        <button
-          disabled={websites.length === 0}
-          className="h-fit w-fit rounded-lg bg-gainsboro p-3"
-          onClick={handleClick}
-        >
-          Classify
-        </button>
+        <Button
+          onClick={handleClassification}
+          text={'Classify'}
+          extraClasses="w-16 h-8 text-center justify-center text-xs"
+        />
       </div>
       {validationErrors.length > 0 && (
         <div className="flex p-4 w-full flex-col">
           {validationErrors.map((error, index) => (
             <div
               key={index}
-              className="flex flex-row w-full dark:bg-tomato-red bg-baby-pink m-0.25"
+              className="flex items-center gap-2 w-full dark:bg-tomato-red bg-baby-pink m-0.25 px-2 py-1 rounded"
             >
-              <CancelIcon className="text-xs dark:fill-blood-red fill-bright-red font-medium" />
-              <div className="text-xs p-1 rounded-sm dark:text-bright-gray font-medium">
+              <CancelIcon className="w-4 h-4 dark:fill-blood-red fill-bright-red" />
+              <div className="text-xs rounded-sm dark:text-bright-gray">
                 {error}
               </div>
             </div>
@@ -210,7 +178,7 @@ const TopicsClassifier = () => {
         </div>
       )}
       {classificationResult?.length > 0 && (
-        <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz overflow-auto">
+        <div className="flex-1 w-fit flex flex-col border border-american-silver dark:border-quartz border-t-0 border-l-0 overflow-auto mt-6">
           <TableProvider
             data={classificationResult}
             tableColumns={tableColumns}
