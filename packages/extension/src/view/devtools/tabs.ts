@@ -415,6 +415,7 @@ const TABS: SidebarItems = {
         title: () => I18n.getMessage('wiki'),
         panel: {
           Element: Wiki,
+          href: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
         },
         icon: {
           Element: WikiIcon,
