@@ -101,11 +101,11 @@ const TopicsClassifier = () => {
           </div>
         ),
         sortingComparator: (a, b) => {
-          const aTopics = (a as string[])
-            .map((topic) => topic.split('/').pop())
+          const aTopics = ((a as ClassificationResult['categories']) ?? [])
+            .map((topic) => topic.name.split('/').pop())
             .join(', ');
-          const bTopics = (b as string[])
-            .map((topic) => topic.split('/').pop())
+          const bTopics = ((b as ClassificationResult['categories']) ?? [])
+            .map((topic) => topic.name.split('/').pop())
             .join(', ');
 
           return aTopics.localeCompare(bTopics);
