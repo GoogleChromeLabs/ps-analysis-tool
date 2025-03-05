@@ -80,7 +80,8 @@ const Provider = ({ children }: PropsWithChildren) => {
             };
           })
           .map((classification: ClassificationResult) => {
-            let modifiedCategories: ClassificationResult['categories'] = [];
+            let modifiedCategories: ClassificationResult['categories'] =
+              classification.categories;
 
             if (!classification.categories) {
               return classification;
@@ -93,7 +94,10 @@ const Provider = ({ children }: PropsWithChildren) => {
               );
             } else {
               if (classification.categories[0].name === 'Unknown') {
-                return null;
+                return {
+                  ...classification,
+                  categories: [],
+                };
               }
             }
 
@@ -102,7 +106,7 @@ const Provider = ({ children }: PropsWithChildren) => {
               categories: modifiedCategories,
             };
           });
-
+        jsonResponse;
         jsonResponse.forEach((classifiedCategories: ClassificationResult) => {
           if (classifiedCategories?.error) {
             inputValidationErrors.push(classifiedCategories.error);
