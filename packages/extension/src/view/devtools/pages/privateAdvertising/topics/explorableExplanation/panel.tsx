@@ -181,7 +181,6 @@ const Panel = ({
     setPlay(false);
     _setReset(true);
     setPAStorage('', 1);
-    setSliderStep(1);
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
