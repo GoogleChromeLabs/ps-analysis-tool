@@ -18,34 +18,25 @@
  */
 import {
   CookieIcon,
-  CookieIconWhite,
   SiteBoundariesIcon,
-  SiteBoundariesIconWhite,
   ChipsIcon,
   ChipsIconWhite,
   RelatedWebsiteSetsIcon,
-  RelatedWebsiteSetsIconWhite,
   PrivateAdvertisingIcon,
-  PrivateAdvertisingIconWhite,
   AntiCovertTrackingIcon,
-  AntiCovertTrackingIconWhite,
   AttributionIcon,
-  AttributionIconWhite,
   BounceTrackingIcon,
   BounceTrackingIconWhite,
   FingerPrintingIcon,
   FingerPrintingIconWhite,
   TopicsIcon,
-  TopicsIconWhite,
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
   DashboardIcon,
-  DashboardIconWhite,
   WikiIcon,
-  WikiIconWhite,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
   WebStoriesIcon,
@@ -57,6 +48,7 @@ import {
   FederatedIcon,
   StorageIcon,
   ProtectionIcon,
+  SiteBoundariesIconWhite,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -111,9 +103,15 @@ const TABS: SidebarItems = {
         title: () => I18n.getMessage('cookies'),
         icon: {
           Element: CookieIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
         },
         selectedIcon: {
-          Element: CookieIconWhite,
+          Element: CookieIcon,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
         },
         children: {},
         dropdownOpen: false,
@@ -125,9 +123,15 @@ const TABS: SidebarItems = {
         },
         icon: {
           Element: SiteBoundariesIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
         },
         selectedIcon: {
           Element: SiteBoundariesIconWhite,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.CHIPS]: {
@@ -151,13 +155,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: StorageIcon,
               props: {
-                className: 'fill-gray',
+                className: 'fill-granite-gray',
               },
             },
             selectedIcon: {
               Element: StorageIcon,
               props: {
-                className: 'fill-white',
+                className: 'fill-bright-gray',
               },
             },
             children: {},
@@ -169,9 +173,17 @@ const TABS: SidebarItems = {
             },
             icon: {
               Element: RelatedWebsiteSetsIcon,
+              props: {
+                className:
+                  '[&_path]:stroke-granite-gray [&_path]:fill-granite-gray',
+              },
             },
             selectedIcon: {
-              Element: RelatedWebsiteSetsIconWhite,
+              Element: RelatedWebsiteSetsIcon,
+              props: {
+                className:
+                  '[&_path]:stroke-bright-gray [&_path]:fill-bright-gray',
+              },
             },
             children: {},
           },
@@ -183,13 +195,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: FederatedIcon,
               props: {
-                className: 'fill-gray',
+                className: 'fill-granite-gray',
               },
             },
             selectedIcon: {
               Element: FederatedIcon,
               props: {
-                className: 'fill-white',
+                className: 'fill-bright-gray',
               },
             },
             children: {},
@@ -203,9 +215,15 @@ const TABS: SidebarItems = {
         },
         icon: {
           Element: PrivateAdvertisingIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
         },
         selectedIcon: {
-          Element: PrivateAdvertisingIconWhite,
+          Element: PrivateAdvertisingIcon,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.TOPICS]: {
@@ -215,9 +233,15 @@ const TABS: SidebarItems = {
             },
             icon: {
               Element: TopicsIcon,
+              props: {
+                className: '[&_path]:fill-granite-gray h-4',
+              },
             },
             selectedIcon: {
-              Element: TopicsIconWhite,
+              Element: TopicsIcon,
+              props: {
+                className: '[&_path]:fill-bright-gray h-4',
+              },
             },
             children: {},
           },
@@ -229,13 +253,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: GroupsIcon,
               props: {
-                className: 'fill-gray',
+                className: 'fill-granite-gray',
               },
             },
             selectedIcon: {
               Element: GroupsIcon,
               props: {
-                className: 'fill-white',
+                className: 'fill-bright-gray',
               },
             },
             children: {},
@@ -247,9 +271,15 @@ const TABS: SidebarItems = {
             },
             icon: {
               Element: AttributionIcon,
+              props: {
+                className: '[&_path]:fill-granite-gray',
+              },
             },
             selectedIcon: {
-              Element: AttributionIconWhite,
+              Element: AttributionIcon,
+              props: {
+                className: '[&_path]:fill-bright-gray',
+              },
             },
             children: {},
           },
@@ -261,13 +291,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: PrivateAggregationicon,
               props: {
-                className: 'fill-gray',
+                className: 'fill-granite-gray',
               },
             },
             selectedIcon: {
               Element: PrivateAggregationicon,
               props: {
-                className: 'fill-white',
+                className: 'fill-bright-gray',
               },
             },
             children: {},
@@ -281,9 +311,15 @@ const TABS: SidebarItems = {
         },
         icon: {
           Element: AntiCovertTrackingIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
         },
         selectedIcon: {
-          Element: AntiCovertTrackingIconWhite,
+          Element: AntiCovertTrackingIcon,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
@@ -294,13 +330,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: ProtectionIcon,
               props: {
-                className: 'fill-gray relative right-[3px]',
+                className: 'fill-granite-gray relative right-[3px]',
               },
             },
             selectedIcon: {
               Element: ProtectionIcon,
               props: {
-                className: 'fill-white relative right-[3px]',
+                className: 'fill-bright-gray relative right-[3px]',
               },
             },
             children: {},
@@ -340,13 +376,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: TokenIcon,
               props: {
-                className: 'fill-gray relative right-[3px]',
+                className: 'fill-granite-gray relative right-[3px]',
               },
             },
             selectedIcon: {
               Element: TokenIcon,
               props: {
-                className: 'fill-white relative right-[3px]',
+                className: 'fill-bright-gray relative right-[3px]',
               },
             },
             children: {},
@@ -364,7 +400,7 @@ const TABS: SidebarItems = {
     icon: {
       Element: LearningIcon,
       props: {
-        className: 'fill-granite-gray dark:fill-bright-gray',
+        className: 'fill-granite-gray',
       },
     },
     selectedIcon: {
@@ -382,9 +418,15 @@ const TABS: SidebarItems = {
         },
         icon: {
           Element: WikiIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
         },
         selectedIcon: {
-          Element: WikiIconWhite,
+          Element: WikiIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
         },
         dropdownOpen: false,
         children: {},
@@ -461,9 +503,15 @@ const TABS: SidebarItems = {
     },
     icon: {
       Element: DashboardIcon,
+      props: {
+        className: 'fill-granite-gray',
+      },
     },
     selectedIcon: {
-      Element: DashboardIconWhite,
+      Element: DashboardIcon,
+      props: {
+        className: 'fill-bright-gray',
+      },
     },
     dropdownOpen: false,
     children: {},
@@ -477,13 +525,13 @@ const TABS: SidebarItems = {
     icon: {
       Element: SettingsIcon,
       props: {
-        className: 'fill-granite-gray dark:fill-bright-gray w-4 h-4',
+        className: 'fill-granite-gray w-4 h-4',
       },
     },
     selectedIcon: {
       Element: SettingsIcon,
       props: {
-        className: 'fill-white w-4 h-4',
+        className: 'fill-bright-gray w-4 h-4',
       },
     },
     dropdownOpen: false,
