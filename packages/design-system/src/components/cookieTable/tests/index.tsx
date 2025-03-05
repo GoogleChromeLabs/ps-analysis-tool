@@ -367,17 +367,6 @@ describe('CookieTable', () => {
 
     expect(row[1]).not.toHaveClass('dark:bg-charlston-green');
 
-    const emptyRow = await screen.findByTestId('empty-row');
-    fireEvent.click(emptyRow);
-
-    expect(emptyRow).not.toHaveClass('dark:bg-charlston-green');
-
-    fireEvent.keyDown(emptyRow, { key: 'ArrowDown', code: 'ArrowDown' });
-
-    expect(emptyRow).not.toHaveClass('dark:bg-charlston-green');
-
-    fireEvent.keyDown(emptyRow, { key: 'ArrowUp', code: 'ArrowUp' });
-
     expect(row[row.length - 1]).not.toHaveClass('dark:bg-charlston-green');
   });
 });

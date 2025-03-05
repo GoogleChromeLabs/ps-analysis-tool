@@ -99,8 +99,8 @@ export function topicsAnimation(
             app[circleItem.website],
             xPosition - diameter / 4 - 3,
             55,
-            diameter / 2 + 6,
-            diameter / 2 + 6
+            diameter / 2 + 8,
+            diameter / 2 + 8
           );
         }
 
