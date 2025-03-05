@@ -77,19 +77,13 @@ const Provider = ({ children }: PropsWithChildren) => {
         sortValues: true,
       },
       {
-        key: 'author',
-        title: 'Author',
-        values: Object.values(authors),
-        sortValues: true,
-      },
-      {
         key: 'tag',
         title: 'Tag',
         values: Object.values(tags),
         sortValues: true,
       },
     ]);
-  }, [authors, categories, tags]);
+  }, [categories, tags]);
 
   const webStoriesLoadMoreData = useCallback(() => {
     if (!doesHaveMorePagesRef.current) {
@@ -267,7 +261,9 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (responseJSON?.data?.status === 400) {
       setLoadingState(false);
-      setAllStoryJSON([]);
+      if (pageNumber === 1) {
+        setAllStoryJSON([]);
+      }
       return;
     }
 
