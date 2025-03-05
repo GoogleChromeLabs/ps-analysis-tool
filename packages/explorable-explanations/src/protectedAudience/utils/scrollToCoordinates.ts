@@ -45,7 +45,7 @@ const scrollTo = throttle(({ x, y }: ScrollCoordinate) => {
     top: y,
     behavior: 'smooth',
   });
-}, 500);
+}, 300);
 
 export const scrollToCoordinates = ({
   x,
@@ -73,8 +73,8 @@ export const scrollToCoordinates = ({
     return;
   }
 
-  const finalX = x - rect.width / 2;
-  const finalY = y - rect.height / 2;
+  const finalX = x - rect.width / 2 + 50;
+  const finalY = y - rect.height / 2 + 50;
 
   scrollTo({ x: finalX, y: finalY });
 };
