@@ -29,7 +29,7 @@ import { CookieDetails, CookieTable } from '@google-psat/design-system';
  */
 import { useCookie, useSettings } from '../../../stateProviders';
 import useCookieListing from './useCookieListing';
-import RowContextMenu from './rowContextMenu';
+import RowContextMenuForCookies from './rowContextMenu';
 import { useAllowedList } from '../../../stateProviders/allowedList';
 
 interface CookiesListingProps {
@@ -71,7 +71,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     null
   );
   const rowContextMenuRef = useRef<React.ElementRef<
-    typeof RowContextMenu
+    typeof RowContextMenuForCookies
   > | null>(null);
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         isUsingCDP={isUsingCDP}
         selectedFrameCookie={selectedFrameCookie}
       />
-      <RowContextMenu
+      <RowContextMenuForCookies
         domainsInAllowList={domainsInAllowList}
         isIncognito={isIncognito}
         tabUrl={tabUrl || ''}

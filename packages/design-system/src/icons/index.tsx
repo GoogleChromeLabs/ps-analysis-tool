@@ -105,3 +105,4 @@ export { default as FederatedIcon } from './federated.svg';
 export { default as StorageIcon } from './storage.svg';
 export { default as ProtectionIcon } from './protection.svg';
 export { default as CancelIcon } from './cancel.svg';
+export { default as TabIcon } from './tab.svg';
