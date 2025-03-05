@@ -49,6 +49,7 @@ const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
       customHeight: FIRST_LINE_HEIGHT,
       noArrow: true,
       isForBranches: true,
+      forceScroll: true,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -368,7 +369,7 @@ const setUpComponentAuction = (
   });
 };
 
-const setUpTPoint = (steps) => {
+const setUpTPoint = (steps: AuctionStep[]) => {
   steps.push({
     component: ProgressLine,
     props: {
@@ -377,6 +378,7 @@ const setUpTPoint = (steps) => {
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
       customWidth: BOX_COLUMN_MARGIN + 60,
       noArrow: true,
+      forceScroll: true,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -391,6 +393,7 @@ const setUpTPoint = (steps) => {
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
       customWidth: BOX_COLUMN_MARGIN + 60,
       noArrow: true,
+      isForBranches: true,
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -427,6 +430,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
       y: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
       info: MULTI_SELLER_CONFIG.SCORE_AD.info,
+      forceScroll: true,
     },
     delay: 1000,
     callBack: (returnValue) => {
