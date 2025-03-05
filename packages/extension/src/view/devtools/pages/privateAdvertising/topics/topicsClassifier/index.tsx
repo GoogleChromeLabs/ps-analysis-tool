@@ -140,7 +140,7 @@ const TopicsClassifier = () => {
         enableHiding: false,
       },
       {
-        header: 'Categories',
+        header: 'Topics',
         accessorKey: 'categories',
         cell: (info) => (
           <div>
