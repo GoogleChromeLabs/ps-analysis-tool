@@ -178,7 +178,7 @@ const TopicsClassifier = () => {
         </div>
       )}
       {classificationResult?.length > 0 && (
-        <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz border-t-0 border-l-0 overflow-auto mt-6">
+        <div className="flex-1 w-fit flex flex-col border border-american-silver dark:border-quartz border-t-0 border-l-0 mt-6">
           <TableProvider
             data={classificationResult}
             tableColumns={tableColumns}
