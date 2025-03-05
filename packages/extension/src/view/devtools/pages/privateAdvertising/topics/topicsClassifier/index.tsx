@@ -155,6 +155,16 @@ const TopicsClassifier = () => {
             ))}
           </div>
         ),
+        sortingComparator: (a, b) => {
+          const aTopics = (a as string[])
+            .map((topic) => topic.split('/').pop())
+            .join(', ');
+          const bTopics = (b as string[])
+            .map((topic) => topic.split('/').pop())
+            .join(', ');
+
+          return aTopics.localeCompare(bTopics);
+        },
       },
     ],
     [topicsNavigator]
