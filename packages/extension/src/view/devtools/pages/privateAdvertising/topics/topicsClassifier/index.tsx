@@ -26,6 +26,7 @@ import {
   type TableData,
   CancelIcon,
   useTabs,
+  Button,
 } from '@google-psat/design-system';
 import { noop } from '@google-psat/common';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -139,7 +140,7 @@ const TopicsClassifier = () => {
         enableHiding: false,
       },
       {
-        header: 'Categories',
+        header: 'Topics',
         accessorKey: 'categories',
         cell: (info) => (
           <div>
@@ -154,6 +155,16 @@ const TopicsClassifier = () => {
             ))}
           </div>
         ),
+        sortingComparator: (a, b) => {
+          const aTopics = (a as string[])
+            .map((topic) => topic.split('/').pop())
+            .join(', ');
+          const bTopics = (b as string[])
+            .map((topic) => topic.split('/').pop())
+            .join(', ');
+
+          return aTopics.localeCompare(bTopics);
+        },
       },
     ],
     [topicsNavigator]
@@ -179,24 +190,32 @@ const TopicsClassifier = () => {
     `;
   }, []);
 
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        handleClick();
+      }
+    },
+    [handleClick]
+  );
+
   return (
     <div className="relative h-full flex flex-col">
-      <div className="flex p-4 w-full flex-col">
+      <div className="flex p-4 w-full flex-col gap-4">
         <textarea
           placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
-          className="p-2.5 leading-5 border border-american-silver dark:border-quartz mb-3 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray"
+          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue"
           cols={50}
           value={websites}
           onChange={(e) => setWebsites(e.target.value)}
           rows={5}
+          onKeyDown={onKeyDown}
         />
-        <button
-          disabled={websites.length === 0}
-          className="h-fit w-fit rounded-lg bg-gainsboro p-3"
+        <Button
           onClick={handleClick}
-        >
-          Classify
-        </button>
+          text={'Classify'}
+          extraClasses="w-16 h-8 text-center justify-center text-xs"
+        />
       </div>
       {validationErrors.length > 0 && (
         <div className="flex p-4 w-full flex-col">
@@ -214,7 +233,7 @@ const TopicsClassifier = () => {
         </div>
       )}
       {classificationResult?.length > 0 && (
-        <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz overflow-auto">
+        <div className="flex-1 w-full flex flex-col border border-american-silver dark:border-quartz border-t-0 border-l-0 overflow-auto mt-6">
           <TableProvider
             data={classificationResult}
             tableColumns={tableColumns}
