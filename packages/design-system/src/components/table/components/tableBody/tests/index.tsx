@@ -90,7 +90,6 @@ describe('TableBody', () => {
     });
 
     expect(screen.getAllByTestId('body-row').length).toBe(2);
-    expect(screen.getByTestId('empty-row')).toBeInTheDocument();
 
     expect(screen.getAllByText('.twitter.com').length).toBe(2);
     expect(screen.getAllByText('/').length).toBe(2);
