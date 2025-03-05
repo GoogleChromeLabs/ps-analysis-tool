@@ -30,7 +30,7 @@ const calculateFiltersForSources = (
   key: SourcesKeys
 ) => {
   const filters: { [key: string]: Record<'selected', boolean> } = {};
-  sourcesRegistration.forEach((sources) => {
+  sourcesRegistration.forEach((sources: SourcesRegistration) => {
     if (key === 'destinationSites') {
       if (Array.isArray(sources[key])) {
         sources[key].forEach((site) => {

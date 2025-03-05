@@ -21,8 +21,8 @@ import type {
   CookieDatabase,
   singleAuctionEvent,
   auctionData,
-  Event,
-  SourcesData,
+  SourcesRegistration,
+  TriggerRegistration,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -34,6 +34,7 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
+import { isEqual } from 'lodash-es';
 
 class DataStore {
   /**
@@ -48,15 +49,36 @@ class DataStore {
   /**
    * The Attribution Reporting sources for the tab.
    */
-  sources: Record<Event, SourcesData[]> = {
+  sources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
     sourceRegistration: [],
     triggerRegistration: [],
   };
 
   /**
-   * The Attribution Reporting sources updates tracker.
+   * The Attribution Reporting sources for the tab.
    */
-  newUpdatesARA = 0;
+  oldSources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting headers for the tab.
+   */
+  headersForARA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        url: string;
+        headers: Protocol.Network.Headers;
+      };
+    };
+  } = {};
 
   /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
@@ -317,10 +339,12 @@ class DataStore {
       tabs: this.tabs,
       auctionEvents: this.auctionEvents,
       sources: this.sources,
+      headersForARA: this.headersForARA,
     };
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
+    this.headersForARA[tabId.toString()] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -365,6 +389,7 @@ class DataStore {
     delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
+    delete this.headersForARA[tabId];
   }
 
   /**
@@ -480,6 +505,7 @@ class DataStore {
     delete this.tabs[tabId];
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
+    delete this.headersForARA[tabId.toString()];
   }
 
   /**
@@ -653,7 +679,7 @@ class DataStore {
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
   async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
-    if (this.newUpdatesARA <= 0 && !overrideForInitialSync) {
+    if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
       return;
     }
 
@@ -666,7 +692,7 @@ class DataStore {
       },
     });
 
-    this.newUpdatesARA = 0;
+    this.oldSources = { ...this.sources };
   }
 
   /**

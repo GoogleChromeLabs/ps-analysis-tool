@@ -166,7 +166,7 @@ const joinInterestGroup: JoinInterestGroup = {
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x,
         y1: () =>
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y -
-          12 -
+          10 -
           box.height,
         text: 'joinInterestGroup()',
       },

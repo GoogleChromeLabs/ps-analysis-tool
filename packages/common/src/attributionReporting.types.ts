@@ -22,12 +22,14 @@ export type Event = 'sourceRegistration' | 'triggerRegistration';
 
 export type SourcesRegistration =
   Protocol.Storage.AttributionReportingSourceRegistration & {
+    requestUrl: string;
     result: string;
     index: number;
   };
 
 export type TriggerRegistration =
   Protocol.Storage.AttributionReportingTriggerRegistration & {
+    requestUrl: string;
     eventLevel: Protocol.Storage.AttributionReportingEventLevelResult;
     aggregatable: Protocol.Storage.AttributionReportingAggregatableResult;
     index: number;
