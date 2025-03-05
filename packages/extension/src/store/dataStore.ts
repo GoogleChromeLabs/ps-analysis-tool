@@ -34,6 +34,7 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
+import { isEqual } from 'lodash-es';
 
 class DataStore {
   /**
@@ -57,6 +58,17 @@ class DataStore {
   };
 
   /**
+   * The Attribution Reporting sources for the tab.
+   */
+  oldSources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
    * The Attribution Reporting headers for the tab.
    */
   headersForARA: {
@@ -67,11 +79,6 @@ class DataStore {
       };
     };
   } = {};
-
-  /**
-   * The Attribution Reporting sources updates tracker.
-   */
-  newUpdatesARA = 0;
 
   /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
@@ -672,7 +679,7 @@ class DataStore {
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
   async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
-    if (this.newUpdatesARA <= 0 && !overrideForInitialSync) {
+    if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
       return;
     }
 
@@ -685,7 +692,7 @@ class DataStore {
       },
     });
 
-    this.newUpdatesARA = 0;
+    this.oldSources = { ...this.sources };
   }
 
   /**

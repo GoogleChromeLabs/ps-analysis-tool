@@ -58,8 +58,6 @@ class ARAStore {
         },
       ];
     }
-
-    dataStore.newUpdatesARA++;
   }
 
   /**
@@ -99,8 +97,6 @@ class ARAStore {
         },
       ];
     }
-
-    dataStore.newUpdatesARA++;
   }
 
   /**

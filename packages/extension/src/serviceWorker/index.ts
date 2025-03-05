@@ -606,7 +606,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           dataStore.sources.sourceRegistration.map((singleSource) => {
             //@ts-ignore
             if (singleSource?.sourceEventId === registration.eventId) {
-              dataStore.newUpdatesARA++;
               const time = registration.time.toString().includes('.')
                 ? registration.time * 1000
                 : registration.time;
@@ -647,7 +646,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             registrationKeys
               .intersection(triggerKeys)
               .has('aggregatableTriggerData') &&
-            !match
+            !match &&
+            registration['aggregatableTriggerData'].length > 0
           ) {
             match = ARAStore.matchTriggerData(
               registration,
@@ -658,7 +658,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             registrationKeys
               .intersection(triggerKeys)
               .has('aggregatableValues') &&
-            !match
+            !match &&
+            registration['aggregatableValues'].length > 0
           ) {
             match = ARAStore.matchTriggerData(
               registration,
@@ -679,8 +680,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
 
           if (match) {
-            dataStore.newUpdatesARA++;
-
             dataStore.sources.triggerRegistration[index] = {
               ...dataStore.sources.triggerRegistration[index],
               eventLevel,
