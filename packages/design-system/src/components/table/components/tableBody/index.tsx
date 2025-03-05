@@ -76,6 +76,10 @@ const TableBody = ({
       } else if (event.key === 'ArrowDown') {
         rowElement = currentRow?.nextElementSibling;
         newRowId = rowElement?.id;
+
+        if (rows.length === index + 1) {
+          return;
+        }
       }
 
       if (!rowElement) {
