@@ -21,8 +21,8 @@ import type {
   CookieDatabase,
   singleAuctionEvent,
   auctionData,
-  Event,
-  SourcesData,
+  SourcesRegistration,
+  TriggerRegistration,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -48,10 +48,25 @@ class DataStore {
   /**
    * The Attribution Reporting sources for the tab.
    */
-  sources: Record<Event, SourcesData[]> = {
+  sources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
     sourceRegistration: [],
     triggerRegistration: [],
   };
+
+  /**
+   * The Attribution Reporting headers for the tab.
+   */
+  headersForARA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        url: string;
+        headers: Protocol.Network.Headers;
+      };
+    };
+  } = {};
 
   /**
    * The Attribution Reporting sources updates tracker.
@@ -317,10 +332,12 @@ class DataStore {
       tabs: this.tabs,
       auctionEvents: this.auctionEvents,
       sources: this.sources,
+      headersForARA: this.headersForARA,
     };
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
+    this.headersForARA[tabId.toString()] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -365,6 +382,7 @@ class DataStore {
     delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
+    delete this.headersForARA[tabId];
   }
 
   /**
@@ -480,6 +498,7 @@ class DataStore {
     delete this.tabs[tabId];
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
+    delete this.headersForARA[tabId.toString()];
   }
 
   /**
