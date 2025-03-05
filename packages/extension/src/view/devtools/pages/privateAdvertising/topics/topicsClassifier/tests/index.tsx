@@ -16,13 +16,29 @@
 /**
  * External dependencies
  */
-import React, { act } from 'react';
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 /**
  * Internal dependencies
  */
 import TopicsClassifier from '..';
+import { useTopicsClassifier } from '../../../../../stateProviders';
 
+jest.mock('../../../../../stateProviders', () => ({
+  useTopicsClassifier: jest.fn(),
+}));
+const CLASSIFICATION_RESULT = [
+  {
+    domain: 'google.com',
+    categories: [{ id: 1, name: 'Category1' }],
+  },
+  {
+    domain: 'yahoo.com',
+    categories: [{ id: 2, name: 'Category2' }],
+  },
+];
+
+const mockUseTopicsClassifierStore = useTopicsClassifier as jest.Mock;
 describe('Topics UI Classifier', () => {
   global.ResizeObserver = jest.fn().mockImplementation(() => ({
     observe: jest.fn(),
@@ -39,7 +55,18 @@ describe('Topics UI Classifier', () => {
     global.fetch = undefined;
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Should validate website URLs correctly', async () => {
+    mockUseTopicsClassifierStore.mockReturnValue({
+      websites: 'google.com\ninvalid_url',
+      classificationResult: [],
+      validationErrors: ['Host "invalid_url" is invalid.'],
+      setWebsites: () => null,
+      handleClassification: () => null,
+    });
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
     const inputElement = getByPlaceholderText(/One host per line/i);
@@ -49,6 +76,7 @@ describe('Topics UI Classifier', () => {
 
     const classifyButton = getByText(/Classify/i);
     fireEvent.click(classifyButton);
+
     const invalidUrlError = await screen.findByText(
       'Host "invalid_url" is invalid.'
     );
@@ -57,6 +85,14 @@ describe('Topics UI Classifier', () => {
   });
 
   test('Should handle invalid URLs gracefully', async () => {
+    mockUseTopicsClassifierStore.mockReturnValue({
+      websites: 'google.com\ninvalid_url',
+      classificationResult: [],
+      validationErrors: ['Host "invalid_url" is invalid.'],
+      setWebsites: () => null,
+      handleClassification: () => null,
+    });
+
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
     const inputElement = getByPlaceholderText(/One host per line/i);
@@ -75,24 +111,15 @@ describe('Topics UI Classifier', () => {
   });
 
   test('Should classify websites correctly', async () => {
-    fetchMock.mockResolvedValueOnce({
-      json: () =>
-        Promise.resolve([
-          {
-            domain: 'google.com',
-            categories: ['Category1'],
-          },
-          {
-            domain: 'yahoo.com',
-            categories: ['Category2'],
-          },
-        ]),
-      ok: true,
+    mockUseTopicsClassifierStore.mockReturnValue({
+      websites: 'google.com\nyahoo.com',
+      classificationResult: CLASSIFICATION_RESULT,
+      validationErrors: [],
+      setWebsites: () => null,
+      handleClassification: () => null,
     });
 
-    const { getByPlaceholderText, getByText } = await act(() =>
-      render(<TopicsClassifier />)
-    );
+    const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
     const inputElement = getByPlaceholderText(/One host per line/i);
     fireEvent.change(inputElement, {
@@ -110,7 +137,7 @@ describe('Topics UI Classifier', () => {
       })
     );
 
-    const categories = ['Category1', 'Category2'];
+    const categories = ['1. Category1', '2. Category2'];
     await Promise.all(
       categories.map(async (category) => {
         const definedCateogry = await screen.findByText(category);
@@ -120,7 +147,13 @@ describe('Topics UI Classifier', () => {
   });
 
   test('Should handle classification errors gracefully', async () => {
-    fetchMock.mockRejectedValue(new Error('Failed to classify websites'));
+    mockUseTopicsClassifierStore.mockReturnValueOnce({
+      websites: 'google.com',
+      classificationResult: [],
+      validationErrors: [],
+      setWebsites: () => null,
+      handleClassification: () => null,
+    });
 
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
@@ -129,6 +162,16 @@ describe('Topics UI Classifier', () => {
 
     const classifyButton = getByText(/Classify/i);
     fireEvent.click(classifyButton);
+
+    mockUseTopicsClassifierStore.mockReturnValue({
+      websites: 'google.com',
+      classificationResult: [],
+      validationErrors: ['Error: Failed to classify websites'],
+      setWebsites: () => null,
+      handleClassification: () => null,
+    });
+
+    render(<TopicsClassifier />);
 
     expect(
       await screen.findByText(/Error: Failed to classify websites/i)
@@ -136,7 +179,13 @@ describe('Topics UI Classifier', () => {
   });
 
   test('Should handle network errors gracefully', async () => {
-    fetchMock.mockRejectedValue(new Error('Network error'));
+    mockUseTopicsClassifierStore.mockReturnValueOnce({
+      websites: 'google.com',
+      classificationResult: [],
+      validationErrors: [],
+      setWebsites: () => null,
+      handleClassification: () => null,
+    });
 
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
@@ -145,6 +194,16 @@ describe('Topics UI Classifier', () => {
 
     const classifyButton = getByText(/Classify/i);
     fireEvent.click(classifyButton);
+
+    mockUseTopicsClassifierStore.mockReturnValue({
+      websites: 'google.com',
+      classificationResult: [],
+      validationErrors: ['Error: Failed to classify websites'],
+      setWebsites: () => null,
+      handleClassification: () => null,
+    });
+
+    render(<TopicsClassifier />);
 
     expect(
       await screen.findByText(/Error: Failed to classify websites/i)
