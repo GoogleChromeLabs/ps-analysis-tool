@@ -34,12 +34,20 @@ const ListRow = ({ row }: Props) => {
 
   const handleClick = useCallback(
     (event: React.MouseEvent) => {
+      event.preventDefault();
+
       if (row?.sidebarKey) {
         navigateTo(row.sidebarKey);
-        event.preventDefault();
+        return;
+      }
+
+      if (chrome?.tabs) {
+        chrome.tabs.update({
+          url: row.link,
+        });
       }
     },
-    [navigateTo, row?.sidebarKey]
+    [navigateTo, row.link, row.sidebarKey]
   );
 
   return (
@@ -51,9 +59,7 @@ const ListRow = ({ row }: Props) => {
         <a
           title={row.link}
           href={row.link}
-          target="_blank"
           onClick={handleClick}
-          rel="noreferrer"
           className="text-sm text-bright-navy-blue dark:text-jordy-blue font-medium leading-6"
         >
           {row.title}

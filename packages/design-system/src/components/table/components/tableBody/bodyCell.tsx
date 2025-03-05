@@ -67,7 +67,7 @@ const BodyCell = ({
         }
       }}
       className={`flex box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
-        rowHeightClass ?? 'h-5'
+        rowHeightClass ?? 'min-h-5'
       }`}
     >
       {hasIcon && (

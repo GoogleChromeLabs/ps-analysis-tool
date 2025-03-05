@@ -16,18 +16,61 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Tabs, useTabs } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
+import { isEqual } from 'lodash-es';
+
+/**
+ * Internal dependencies
+ */
+import { useAttributionReporting } from '../../../stateProviders';
 
 const Panel = () => {
-  const { panel } = useTabs(({ state }) => ({
+  const { panel, highlightTab } = useTabs(({ state, actions }) => ({
     panel: state.panel,
+    highlightTab: actions.highlightTab,
+    activeTab: state.activeTab,
   }));
 
   const ActiveTabContent = panel.Element;
   const { className, props } = panel;
+
+  const { sourcesRegistration, triggerRegistration } = useAttributionReporting(
+    ({ state }) => ({
+      sourcesRegistration: state.sourcesRegistration,
+      triggerRegistration: state.triggerRegistration,
+    })
+  );
+
+  const sourcesRegistrationRef = useRef<typeof sourcesRegistration>([]);
+  const triggerRegistrationRef = useRef<typeof triggerRegistration>([]);
+
+  useEffect(() => {
+    if (!isEqual(sourcesRegistration, sourcesRegistrationRef.current)) {
+      if (!sourcesRegistration.length) {
+        highlightTab(1, false);
+        highlightTab(2, false);
+      } else {
+        highlightTab(1);
+        highlightTab(2);
+      }
+
+      sourcesRegistrationRef.current = sourcesRegistration;
+    }
+  }, [sourcesRegistration, highlightTab]);
+
+  useEffect(() => {
+    if (!isEqual(triggerRegistration, triggerRegistrationRef.current)) {
+      if (!triggerRegistration.length) {
+        highlightTab(3, false);
+      } else {
+        highlightTab(3);
+      }
+      triggerRegistrationRef.current = triggerRegistration;
+    }
+  }, [triggerRegistration, highlightTab]);
 
   return (
     <div

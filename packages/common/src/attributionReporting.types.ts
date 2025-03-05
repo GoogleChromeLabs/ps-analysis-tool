@@ -33,6 +33,7 @@ export type TriggerRegistration =
     index: number;
     time: number;
     destination?: string;
+    reportingOrigin?: string;
   };
 
 export type SourcesData = SourcesRegistration | TriggerRegistration;
