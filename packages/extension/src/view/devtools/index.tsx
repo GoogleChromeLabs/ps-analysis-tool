@@ -38,6 +38,7 @@ import {
   ProtectedAudienceContextProvider,
   WebStoriesProvider,
   AttributionReportingProvider,
+  TopicsClassifierProvider,
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
@@ -63,7 +64,9 @@ if (root) {
                 <AllowedListProvider>
                   <WebStoriesProvider>
                     <AttributionReportingProvider>
-                      <App />
+                      <TopicsClassifierProvider>
+                        <App />
+                      </TopicsClassifierProvider>
                     </AttributionReportingProvider>
                   </WebStoriesProvider>
                 </AllowedListProvider>

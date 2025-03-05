@@ -30,18 +30,30 @@ import {
 } from '@google-psat/design-system';
 import { noop } from '@google-psat/common';
 import React, { useCallback, useMemo, useState } from 'react';
+/**
+ * Internal dependency
+ */
+import { useTopicsClassifier } from '../../../../stateProviders';
 
 type ClassificationResultIndex = ClassificationResult & {
   index: number;
 };
 
 const TopicsClassifier = () => {
-  const [websites, setWebsites] = useState<string>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [validationErrors, setInputValidationErrors] = useState<string[]>([]);
-  const [classificationResult, setClassificationResult] = useState<
-    ClassificationResultIndex[]
-  >([]);
+  const {
+    setWebsites,
+    handleClassification,
+    validationErrors,
+    websites,
+    classificationResult,
+  } = useTopicsClassifier(({ state, actions }) => ({
+    websites: state.websites,
+    validationErrors: state.validationErrors,
+    classificationResult: state.classificationResult,
+    setWebsites: actions.setWebsites,
+    handleClassification: actions.handleClassification,
+  }));
+
   const [selectedKey, setSelectedKey] = useState<string>('');
   const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
     setStorage: actions.setStorage,
@@ -62,75 +74,6 @@ const TopicsClassifier = () => {
     [setActiveTab, setStorage]
   );
 
-  const handleClick = useCallback(async () => {
-    const hosts = websites.split('\n');
-    const preprocessedHosts: string[] = [];
-    const inputValidationErrors: string[] = [];
-    setInputValidationErrors([]);
-
-    hosts.forEach((host) => {
-      const trimmedHost = host.trim();
-      if (trimmedHost === '') {
-        return;
-      }
-
-      preprocessedHosts.push(trimmedHost);
-    });
-
-    preprocessedHosts.forEach((host) => {
-      const hostnameRegex = /^(?!:\/\/)([a-zA-Z0-9-_]{1,63}\.)+[a-zA-Z]{2,63}$/;
-      if (!hostnameRegex.test(host)) {
-        inputValidationErrors.push('Host "' + host + '" is invalid.');
-      }
-    });
-
-    if (inputValidationErrors.length > 0) {
-      setInputValidationErrors(inputValidationErrors);
-      return;
-    } else {
-      try {
-        const response = await fetch(
-          'https://topics.privacysandbox.report/classify',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              domains: preprocessedHosts,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        let jsonResponse = await response.json();
-        jsonResponse = jsonResponse.map(
-          (res: ClassificationResult, index: number) => {
-            return {
-              ...res,
-              index: index,
-            };
-          }
-        );
-
-        jsonResponse.forEach((classifiedCategories: ClassificationResult) => {
-          if (classifiedCategories?.error) {
-            inputValidationErrors.push(classifiedCategories.error);
-          }
-        });
-        setInputValidationErrors(inputValidationErrors);
-
-        jsonResponse = jsonResponse.filter(
-          (classifiedCategories: ClassificationResult) =>
-            classifiedCategories?.categories
-        );
-
-        setClassificationResult(jsonResponse);
-      } catch (err) {
-        setInputValidationErrors(['Error: Failed to classify websites']);
-      }
-    }
-  }, [websites]);
-
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -144,15 +87,17 @@ const TopicsClassifier = () => {
         accessorKey: 'categories',
         cell: (info) => (
           <div>
-            {(info as string[]).map((category, index) => (
-              <div
-                key={index}
-                className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
-                onClick={() => topicsNavigator(category)}
-              >
-                {category.split('/').pop()}
-              </div>
-            ))}
+            {((info as ClassificationResult['categories']) ?? []).map(
+              ({ id, name }, index) => (
+                <div
+                  key={index}
+                  className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
+                  onClick={() => topicsNavigator(name)}
+                >
+                  {`${id}. ${name.split('/').pop()}`}
+                </div>
+              )
+            )}
           </div>
         ),
         sortingComparator: (a, b) => {
@@ -193,10 +138,10 @@ const TopicsClassifier = () => {
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-        handleClick();
+        handleClassification();
       }
     },
-    [handleClick]
+    [handleClassification]
   );
 
   return (
@@ -212,7 +157,7 @@ const TopicsClassifier = () => {
           onKeyDown={onKeyDown}
         />
         <Button
-          onClick={handleClick}
+          onClick={handleClassification}
           text={'Classify'}
           extraClasses="w-16 h-8 text-center justify-center text-xs"
         />

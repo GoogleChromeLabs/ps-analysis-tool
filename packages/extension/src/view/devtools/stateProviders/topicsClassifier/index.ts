@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
-export * from './protectedAudience';
-export * from './webStories';
-export * from './attributionReporting';
-export * from './topicsClassifier';
+export { default as TopicsClassifierProvider } from './topicsClassifierProvider';
+export { default as TopicsClassifierContext } from './context';
+export { default as useTopicsClassifier } from './useTopicsClassifier';
