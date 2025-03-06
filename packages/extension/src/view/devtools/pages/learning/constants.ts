@@ -49,7 +49,7 @@ export const FEATURED_ITEMS = [
     icon: WebStoriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
     description:
-      'Explore interactive web stories that simplify key concepts of the Privacy Sandbox API and its impact on the web.',
+      'Explore interactive web stories to grasp the fundamental concepts of the Privacy Sandbox and its impact on the web.',
   },
   {
     name: 'Demo Centre',
