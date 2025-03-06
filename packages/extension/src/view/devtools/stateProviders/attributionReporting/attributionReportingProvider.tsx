@@ -56,12 +56,6 @@ const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
-      const tabId = chrome.devtools.inspectedWindow.tabId;
-
-      if (message.payload.tabId.toString() !== tabId.toString()) {
-        return;
-      }
-
       const incomingMessageType = message.type;
 
       if (incomingMessageType === 'ARA_EVENTS') {
