@@ -265,7 +265,7 @@ const SourceRegistrations = () => {
           </div>
         )}
       </div>
-      <RowContextMenuForARA ref={rowContextMenuRef} filteredData={filterData} />
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };
