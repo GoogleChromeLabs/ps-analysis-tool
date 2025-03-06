@@ -35,6 +35,7 @@ interface LinkProcessorProps {
 
 /**
  * LinkProcessor Component
+ * @todo This component props are getting too complex. Consider refactoring it.
  *
  * This component processes a text string containing anchor placeholders (`<a>`)
  * and replaces them with interactive links. It enables navigation within a sidebar
