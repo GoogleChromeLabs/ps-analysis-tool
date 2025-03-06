@@ -115,7 +115,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                       'bg-transparent': !isHighlighted,
                     },
                     {
-                      'bg-mahogany': isHighlighted,
+                      'bg-dark-blue': isHighlighted,
                     },
                     {
                       'h-4 w-4': isNumber,
