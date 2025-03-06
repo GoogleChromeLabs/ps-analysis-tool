@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
+/**
+ * External dependencies
+ */
 import type p5 from 'p5';
+
+/**
+ * Internal dependencies
+ */
 import { config } from './config';
 import { getAdtechsColors } from './utils';
 import { websitesToIconsMapping } from './data';
+import icons from '../icons.json';
+import throttle from 'just-throttle';
 
 /**
  * Setup function for p5.js
@@ -247,24 +256,53 @@ export function topicsAnimation(
       const currentSite = currentCircle.website;
       app.drawInfoBox(visitIndex, currentSite);
       app.drawSmallCircles(visitIndex, currentSite);
-
       handleUserVisit(visitIndex);
     },
 
+    _drawSmallCircle: (
+      smallCirclePosition: { x: number; y: number },
+      adTechColor: string,
+      smallCircleDiameter: number
+    ) => {
+      p.push();
+      p.fill(adTechColor);
+      p.circle(
+        smallCirclePosition.x,
+        smallCirclePosition.y,
+        smallCircleDiameter
+      );
+      p.pop();
+    },
+
     drawSmallCircles: (index: number, currentSite: string) => {
-      const position = app.circlePositions[index];
       const { diameter } = config.timeline.circleProps;
       const smallCircleDiameter = diameter / 5;
-
-      const distanceFromEdge = 6;
-
       const adTechs = siteAdTechs[currentSite];
+
+      const appSmallCirclePositions = app.smallCirclePositions[index];
+
+      // if circle already has small circles, draw them
+      if (appSmallCirclePositions) {
+        for (let i = 0; i < appSmallCirclePositions.length; i++) {
+          const smallCirclePosition = appSmallCirclePositions[i];
+          const adTechColor = getAdtechsColors(p)[adTechs[i]];
+
+          app._drawSmallCircle(
+            smallCirclePosition,
+            adTechColor,
+            smallCircleDiameter
+          );
+        }
+        return;
+      }
+
+      const position = app.circlePositions[index];
+      const smallCirclePositions: { x: number; y: number }[] = [];
+      const distanceFromEdge = 6;
       const numSmallCircles = adTechs.length;
 
-      const smallCirclePositions = [];
-
       for (let i = 0; i < numSmallCircles; i++) {
-        let randomX: number, randomY: number, isOverlapping;
+        let randomX: number, randomY: number, isOverlapping: boolean;
 
         do {
           const angle = Math.random() * 2 * Math.PI;
@@ -294,13 +332,13 @@ export function topicsAnimation(
 
         smallCirclePositions.push({ x: randomX, y: randomY });
 
-        // @ts-ignore
         const adTechColor = getAdtechsColors(p)[adTechs[i]];
 
-        p.push();
-        p.fill(adTechColor);
-        p.circle(randomX, randomY, smallCircleDiameter);
-        p.pop();
+        app._drawSmallCircle(
+          { x: randomX, y: randomY },
+          adTechColor,
+          smallCircleDiameter
+        );
       }
 
       app.smallCirclePositions[index] = smallCirclePositions;
@@ -414,9 +452,37 @@ export function topicsAnimation(
         return;
       }
 
+      const x = p.mouseX;
+      const y = p.mouseY;
+
+      if (isInteractive) {
+        const user = config.timeline.user;
+        p.clear();
+        p.push();
+
+        app.drawTimeline(config.timeline.position, epoch);
+        const index = app.prevVisitedCircleIndex;
+        if (index !== -1) {
+          for (let i = index; i >= 0; i--) {
+            app.userVisitDone(i);
+            app.drawSmallCircles(i, epoch[i].website);
+          }
+          app.drawInfoBox(index, epoch[index].website);
+        }
+
+        p.image(
+          app.userIcon as p5.Image,
+          x - user.width / 2,
+          y - user.height / 2,
+          user.width,
+          user.height
+        );
+
+        p.pop();
+        return;
+      }
+
       let isInspecting = false;
-      const x = p.mouseX,
-        y = p.mouseY;
 
       Object.values(app.circlePositions).forEach((position, index) => {
         const { diameter } = config.timeline.circleProps;
@@ -481,8 +547,8 @@ export function topicsAnimation(
         return;
       }
 
-      const x = p.mouseX,
-        y = p.mouseY;
+      const x = p.mouseX;
+      const y = p.mouseY;
 
       if (isInteractive) {
         Object.values(app.circlePositions).forEach((position, index) => {
@@ -538,12 +604,8 @@ export function topicsAnimation(
   };
 
   p.preload = () => {
-    app.userIcon = p.loadImage(
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAn9JREFUeF7tmktywjAMhp2TFU4CM7DILUpvkQXMwEmanixFnZgmxi85knAbsQQntj79kmWZxqz806zcfqMAVAErJ6AhsHIBaBLUENAQWDkBDYFXCmB/bDfXc9e/cg3iCtgf29MwmDdjzMYxvG8a83U9dydJIGIAwNvDYN49hj/Z2zTmQwqECIDR62B89kcKAjuAEuMtJQkI7AB2h3YIuH2a/Nx88Hjknhe2nImSFUDI+z7PRpTS3y7dNjt2kANZAfi8H5P1mCg/XRtul45tnWwv9hmTE9O7QwsAZiHBGQacAGC/n2X+HAABcGx5QBpA0pBS5SBD/zfJlj6Yeq7Uk75kmKOc1HpCv3MqACo/N6ElM3oAQFI51QGABRXsAk95A97zJ3cBWDhFHcApf1gjWwhYSfq2NfcUGDsgcXpfBECouMmJWW7viwCIhUIMgoTxYgCsoZknQ2iMQD9ApFPEngNcLwME+M7pCv10g+65oJcy/HHkzonF/zxGXAG1wVQAUh6B7dDu92P8z6Yec4D9TiwXsClg0gUGo4Itr4QDbHI0XF1iUgBERgeZcNQGJAAwPX+KkKMEsRhARq1PYbP3HRQgFgFAGP+o6mzBAxbZomeaICdFUm7uSPYYoiV3qXsyjCcpaSeVY+xmqRhCkQISNT2J4T7HpOYtuT8oAhDwPpvhvvOE23GGc4QkgNl1F0UywoYi1f0BWgHSbesQGKrmKQkAkJ9TymIdih7v+5NFyQ0SFQC0ARwPKICCq3RVAFaKS7q82Lmw40VCABY1lq7Y9bGPL+knokOA3QrhCRSAMPDqplMFVOcS4QWpAoSBVzedKqA6lwgvSBUgDLy66VavgG9uL15QKQoHkQAAAABJRU5ErkJggg=='
-    );
-    app.completedIcon = p.loadImage(
-      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNTk4NUUxIj48cGF0aCBkPSJNNDgwLTgwcS04NSAwLTE1OC0zMC41VDE5NS0xOTVxLTU0LTU0LTg0LjUtMTI3VDgwLTQ4MHEwLTg0IDMwLjUtMTU3VDE5NS03NjRxNTQtNTQgMTI3LTg1dDE1OC0zMXE3NSAwIDE0MCAyNHQxMTcgNjZsLTQzIDQzcS00NC0zNS05OC01NHQtMTE2LTE5cS0xNDUgMC0yNDIuNSA5Ny41VDE0MC00ODBxMCAxNDUgOTcuNSAyNDIuNVQ0ODAtMTQwcTE0NSAwIDI0Mi41LTk3LjVUODIwLTQ4MHEwLTMwLTQuNS01OC41VDgwMi01OTRsNDYtNDZxMTYgMzcgMjQgNzd0OCA4M3EwIDg1LTMxIDE1OHQtODUgMTI3cS01NCA1NC0xMjcgODQuNVQ0ODAtODBabS01OS0yMThMMjU2LTQ2NGw0NS00NSAxMjAgMTIwIDQxNC00MTQgNDYgNDUtNDYwIDQ2MFoiLz48L3N2Zz4='
-    );
+    app.userIcon = p.loadImage(icons.user);
+    app.completedIcon = p.loadImage(icons.completedCheckMark);
 
     app['tmz.com'] = p.loadImage(websitesToIconsMapping['tmz.com']);
     app['cnet.com'] = p.loadImage(websitesToIconsMapping['cnet.com']);
@@ -597,7 +659,7 @@ export function topicsAnimation(
     );
     p.background(255);
     p.pixelDensity(2);
-    app.canvas.mouseMoved(app.mouseMoved);
+    app.canvas.mouseMoved(throttle(app.mouseMoved, 25));
     app.canvas.mouseClicked(app.mouseClicked);
 
     p.textFont('sans-serif');
