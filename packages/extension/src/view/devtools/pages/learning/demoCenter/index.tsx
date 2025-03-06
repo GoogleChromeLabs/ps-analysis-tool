@@ -20,7 +20,7 @@
 import React from 'react';
 import {
   ExternalLinkPanel,
-  Help,
+  DemoCenterIcon,
   SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 
@@ -35,11 +35,11 @@ const DemoCenter = () => {
       (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.DEMO_CENTER
     )?.description ?? '';
 
-  const helpIcon = (
-    <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
+  const demoCenterIcon = (
+    <DemoCenterIcon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
   );
 
-  return <ExternalLinkPanel description={description} icon={helpIcon} />;
+  return <ExternalLinkPanel description={description} icon={demoCenterIcon} />;
 };
 
 export default DemoCenter;
