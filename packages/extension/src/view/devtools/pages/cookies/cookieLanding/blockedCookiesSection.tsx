@@ -109,7 +109,10 @@ const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
       {I18n.getMessage('visitPSAT')}&nbsp;
       <LinkProcessor
         text={'<a>' + I18n.getMessage('wiki') + '</a>'}
-        to={[SIDEBAR_ITEMS_KEYS.WIKI]}
+        links={[
+          'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Cookies-Table#blocked-cookies',
+        ]}
+        sameTab={true}
       />
       .
     </>
