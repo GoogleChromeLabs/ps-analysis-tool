@@ -166,7 +166,7 @@ const joinInterestGroup: JoinInterestGroup = {
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x,
         y1: () =>
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y -
-          12 -
+          10 -
           box.height,
         text: 'joinInterestGroup()',
       },
@@ -254,7 +254,8 @@ const joinInterestGroup: JoinInterestGroup = {
         const { x, y } =
           app.timeline.circlePositions[app.timeline.currentIndex];
 
-        utils.scrollToCoordinates(x as number, y as number);
+        const { x: x1, y: y1 } = utils.getCoordinateValues({ x, y });
+        utils.scrollToCoordinates({ x: x1, y: y1 });
 
         await bubbles.reverseBarrageAnimation(index);
         app.setCurrentSite(config.timeline.circles[index]);

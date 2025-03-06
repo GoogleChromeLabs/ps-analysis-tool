@@ -17,28 +17,27 @@
  * Internal dependencies
  */
 import app from '../app';
+
 /**
  * This element checks if the object is in viewport.
  * @param x Coordinate X of the object to scroll to.
  * @param y Coordinate Y of the object to scroll to.
+ * @param offset Offset to check if the object is in viewport.
  * @returns {boolean} Whether the object is in viewport or not.
  */
-export function isPointInViewport(x, y) {
+export function isPointInViewport(x: number, y: number, offset = 0): boolean {
   if (!app.canvasParentElement) {
     return false;
   }
   const rect = app.canvasParentElement.getBoundingClientRect();
 
-  const scrollX = app.canvasParentElement.scrollLeft;
-  const scrollY = app.canvasParentElement.scrollTop;
+  const scrollTop = app.canvasParentElement.scrollTop;
+  const top = scrollTop + offset;
+  const bottom = scrollTop + rect.height - offset;
 
-  const viewportWidth = rect.width;
-  const viewportHeight = rect.height;
+  const scrollLeft = app.canvasParentElement.scrollLeft;
+  const left = scrollLeft + offset;
+  const right = scrollLeft + rect.width - offset;
 
-  const minX = scrollX;
-  const maxX = scrollX + viewportWidth;
-  const minY = scrollY;
-  const maxY = scrollY + viewportHeight;
-
-  return x >= minX && x <= maxX && y >= minY && y <= maxY;
+  return x >= left && x <= right && y >= top && y <= bottom;
 }

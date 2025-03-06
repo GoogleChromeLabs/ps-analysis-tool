@@ -93,7 +93,7 @@ const flow: Flow = {
     p.push();
     p.noStroke();
     p.fill(config.canvas.background);
-    p.rect(0, y, p.width, p.height - y);
+    p.rect(0, y - 1, p.width, p.height - y);
     p.pop();
   },
 

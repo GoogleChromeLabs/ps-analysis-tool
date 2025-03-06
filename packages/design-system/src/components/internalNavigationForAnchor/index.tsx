@@ -28,20 +28,39 @@ interface InternalNavigationForAnchorProps {
   text: string;
   to: string[];
   queries?: string[];
+  links?: string[];
 }
 
 const InternalNavigationForAnchor = ({
   text,
   to,
   queries,
+  links,
 }: InternalNavigationForAnchorProps) => {
   const updateSelectedItemKey = useSidebar(
     ({ actions }) => actions.updateSelectedItemKey
   );
 
   const navigateTo = useCallback(
-    (key: string, query: string) => {
-      return () => updateSelectedItemKey(key, query);
+    (
+      event: React.MouseEvent<HTMLAnchorElement>,
+      key: string,
+      query: string,
+      link: string
+    ) => {
+      event.preventDefault();
+
+      if (event.ctrlKey || event.metaKey) {
+        if (link) {
+          chrome?.tabs.create({
+            url: link,
+          });
+
+          return;
+        }
+      }
+
+      updateSelectedItemKey(key, query);
     },
     [updateSelectedItemKey]
   );
@@ -66,16 +85,22 @@ const InternalNavigationForAnchor = ({
               <span>{textToProcess.slice(stringStart, stringEnd)}</span>
             );
           } else {
+            const idx = anchorIdxToNavigate;
             const button = (
-              <button
-                onClick={navigateTo(
-                  to[anchorIdxToNavigate],
-                  queries?.[anchorIdxToNavigate] || ''
-                )}
+              <a
+                href={links?.[idx] || '#'}
+                onClick={(event) =>
+                  navigateTo(
+                    event,
+                    to[idx],
+                    queries?.[idx] || '',
+                    links?.[idx] || ''
+                  )
+                }
                 className="text-bright-navy-blue dark:text-jordy-blue"
               >
                 {textToProcess.slice(stringStart, stringEnd)}
-              </button>
+              </a>
             );
 
             elements.push(button);
@@ -97,7 +122,7 @@ const InternalNavigationForAnchor = ({
 
       return elements;
     },
-    [navigateTo, queries, to]
+    [links, navigateTo, queries, to]
   );
 
   return (

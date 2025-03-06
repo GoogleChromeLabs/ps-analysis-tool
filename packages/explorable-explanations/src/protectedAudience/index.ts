@@ -264,7 +264,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
   app.promiseQueue.push((cb) => {
     app.bubbles.interestGroupCounts +=
       config.timeline.circles[app.timeline.currentIndex]?.igGroupsCount ?? 0;
-    utils.scrollToCoordinates(0, 0, true);
+    utils.scrollToCoordinates({ x: 0, y: 0, override: true });
     bubbles.showMinifiedBubbles();
     utils.markVisitedValue(app.timeline.currentIndex, true);
     timeline.eraseAndRedraw();

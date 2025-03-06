@@ -27,6 +27,7 @@ import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
 import ARAStore from '../store/ARAStore';
 import attachCDP from './attachCDP';
+import readHeaderAndRegister from './readHeaderAndRegister';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -47,6 +48,30 @@ const ALLOWED_EVENTS = [
 ];
 const attachedSet = new Set<string>();
 let targets: chrome.debugger.TargetInfo[] = [];
+
+/**
+ * Extracts the value of a specific HTTP header from the request or response.
+ * @param header The name of the header to extract.
+ * @param headers The request or response information.
+ * @returns The value of the specified header.
+ */
+const extractHeader = (header: string, headers: Protocol.Network.Headers) =>
+  headers?.[header.toLowerCase()] ?? headers?.[header];
+
+const calculateTabId = (source: chrome.debugger.Debuggee) => {
+  if (source.tabId) {
+    return source.tabId.toString();
+  }
+
+  let tabId = '';
+  const tab = Object.keys(dataStore?.tabs ?? {}).filter(
+    (key) =>
+      source.targetId &&
+      dataStore?.getFrameIDSet(Number(key))?.has(source.targetId)
+  );
+  tabId = tab[0];
+  return tabId;
+};
 
 /**
  * Fires whenever debugging target issues instrumentation event.
@@ -72,7 +97,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       targets = await chrome.debugger.getTargets();
 
       targets.forEach((target) => {
-        if (target.url.startsWith('https://') && !attachedSet.has(target.id)) {
+        if (
+          !target.url.startsWith('devtools://') &&
+          !target.url.startsWith('chrome://') &&
+          !attachedSet.has(target.id)
+        ) {
           attachCDP({ targetId: target.id });
           attachedSet.add(target.id);
         }
@@ -85,66 +114,25 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         } = params as Protocol.Target.AttachedToTargetEvent;
 
         const childDebuggee = { targetId };
-        chrome.debugger.attach(childDebuggee, '1.3', async () => {
-          if (chrome.runtime.lastError) {
-            // eslint-disable-next-line no-console
-            console.warn(chrome.runtime.lastError);
-          }
 
-          try {
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Storage.setInterestGroupAuctionTracking',
-              { enable: true }
-            );
+        if (!attachedSet.has(targetId)) {
+          attachCDP(childDebuggee, true);
+          attachedSet.add(targetId);
+          const message = {
+            id: 0,
+            method: 'Runtime.runIfWaitingForDebugger',
+            params: {},
+          };
 
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Storage.setAttributionReportingTracking',
-              { enable: true }
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Network.enable',
-              {}
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Audits.enable',
-              {}
-            );
-
-            await chrome.debugger.sendCommand(
-              childDebuggee,
-              'Storage.setAttributionReportingLocalTestingMode',
-              {
-                enabled: true,
-              }
-            );
-
-            await chrome.debugger.sendCommand(childDebuggee, 'Page.enable', {});
-
-            const message = {
-              id: 0,
-              method: 'Runtime.runIfWaitingForDebugger',
-              params: {},
-            };
-
-            await chrome.debugger.sendCommand(
-              source,
-              'Target.sendMessageToTarget',
-              {
-                message: JSON.stringify(message),
-                targetId: targetId,
-              }
-            );
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.warn(error);
-          }
-        });
+          await chrome.debugger.sendCommand(
+            source,
+            'Target.sendMessageToTarget',
+            {
+              message: JSON.stringify(message),
+              targetId: targetId,
+            }
+          );
+        }
 
         targets = await chrome.debugger.getTargets();
         const parentFrameId = targets.filter(
@@ -166,12 +154,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (source?.tabId) {
         tabId = source?.tabId?.toString();
       } else if (source.targetId) {
-        const tab = Object.keys(dataStore?.tabs ?? {}).filter(
-          (key) =>
-            source.targetId &&
-            dataStore?.getFrameIDSet(Number(key))?.has(source.targetId)
-        );
-        tabId = tab[0];
+        tabId = calculateTabId(source);
       }
       // Using Page.frameAttached and Page.frameNavigated we will find the tabId using the frameId because in certain events source.tabId is missing and source.targetId is availale.
       if (method === 'Page.frameAttached' && params) {
@@ -232,7 +215,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
-      if (method === 'Storage.interestGroupAccessed' && params) {
+      if (
+        method === 'Storage.interestGroupAccessed' &&
+        params &&
+        source.tabId
+      ) {
         const interestGroupAccessedParams =
           params as Protocol.Storage.InterestGroupAccessedEvent;
 
@@ -318,11 +305,33 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
         }
-
+        //@todo When cookie analysis is decoupled move this to a separate function.
         if (
           dataStore.tabs[Number(tabId)]?.isCookieAnalysisEnabled &&
           dataStore.unParsedRequestHeadersForCA[tabId][requestId]
         ) {
+          if (
+            extractHeader(
+              'Attribution-Reporting-Eligible',
+              dataStore.unParsedRequestHeadersForCA[tabId][requestId].headers
+            )
+          ) {
+            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+              readHeaderAndRegister(
+                dataStore.headersForARA?.[tabId]?.[requestId].headers,
+                requestUrl,
+                tabId
+              );
+            } else {
+              dataStore.headersForARA[tabId] = {
+                ...dataStore.headersForARA[tabId],
+                [requestId]: {
+                  headers: {},
+                  url: requestUrl,
+                },
+              };
+            }
+          }
           cookieStore.parseRequestHeadersForCA(
             dataStore.unParsedRequestHeadersForCA[tabId][requestId],
             requestId,
@@ -358,10 +367,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       if (method === 'Network.requestWillBeSentExtraInfo') {
-        const { requestId } =
+        const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
         if (dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
+          if (extractHeader('Attribution-Reporting-Eligible', headers)) {
+            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+              readHeaderAndRegister(
+                headers,
+                dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
+                tabId
+              );
+            } else {
+              dataStore.headersForARA[tabId] = {
+                ...dataStore.headersForARA[tabId],
+                [requestId]: {
+                  headers: {},
+                  url: dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
+                    ?.url,
+                },
+              };
+            }
+          }
+
           cookieStore.parseRequestHeadersForCA(
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
             requestId,
@@ -392,51 +420,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           response: { url: requestUrl, headers },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
-        const extractHeader = (header: string) =>
-          headers?.[header.toLowerCase()] ?? headers?.[header];
-
-        const triggerRegistration = extractHeader(
-          'Attribution-Reporting-Register-Trigger'
-        );
-
-        if (triggerRegistration) {
-          ARAStore.processARATriggerRegistered(
-            {
-              registration: {
-                ...JSON.parse(triggerRegistration),
-                reportingOrigin: new URL(requestUrl).origin,
-                time: Date.now(),
-              } as Protocol.Storage.AttributionReportingTriggerRegistration,
-              eventLevel:
-                '' as Protocol.Storage.AttributionReportingEventLevelResult,
-              aggregatable:
-                '' as Protocol.Storage.AttributionReportingAggregatableResult,
-            },
-            tabId
-          );
-        }
-
-        const sourceRegistration = extractHeader(
-          'Attribution-Reporting-Register-Source'
-        );
-
-        if (sourceRegistration) {
-          ARAStore.processARASourcesRegistered(
-            {
-              registration: {
-                ...JSON.parse(sourceRegistration),
-                reportingOrigin: new URL(requestUrl).origin,
-                sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
-                time: Date.now(),
-              } as Protocol.Storage.AttributionReportingSourceRegistration,
-              result:
-                'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
-            },
-            tabId
-          );
-        }
-
         let finalFrameId = frameId;
+
+        if (
+          extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
+          extractHeader('Attribution-Reporting-Register-Source', headers)
+        ) {
+          readHeaderAndRegister(headers, requestUrl, tabId);
+        }
 
         if (!finalFrameId) {
           return;
@@ -502,6 +493,30 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.responseReceivedExtraInfo') {
         const { headers, requestId } =
           params as Protocol.Network.ResponseReceivedExtraInfoEvent;
+        if (
+          extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
+          extractHeader('Attribution-Reporting-Register-Source', headers)
+        ) {
+          //sometimes this fires early and we still havent calculated tabId for this.
+          tabId = calculateTabId(source);
+
+          if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            readHeaderAndRegister(
+              headers,
+              dataStore.headersForARA?.[tabId]?.[requestId]?.url,
+              tabId
+            );
+          } else {
+            dataStore.headersForARA[tabId] = {
+              ...dataStore.headersForARA[tabId],
+              [requestId]: {
+                headers,
+                url: '',
+              },
+            };
+          }
+        }
+
         // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
         if (!headers['set-cookie'] && !headers['Set-Cookie']) {
           return;
@@ -586,81 +601,93 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       ) {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
-        dataStore.sources[tabId].sourceRegistration = dataStore.sources[
-          tabId
-        ].sourceRegistration.map((singleSource) => {
-          if (singleSource?.sourceEventId === registration.eventId) {
-            singleSource.result = result;
-            singleSource.type = registration.type;
-          }
-          return singleSource;
-        });
+
+        dataStore.sources.sourceRegistration =
+          dataStore.sources.sourceRegistration.map((singleSource) => {
+            //@ts-ignore
+            if (singleSource?.sourceEventId === registration.eventId) {
+              const time = registration.time.toString().includes('.')
+                ? registration.time * 1000
+                : registration.time;
+
+              const combinedData = {
+                ...singleSource,
+                ...registration,
+                time,
+                expiry: registration.expiry + time,
+                result,
+              };
+              //@ts-ignore
+              delete combinedData.sourceEventId;
+              //@ts-ignore
+              delete combinedData.destination;
+              return combinedData;
+            }
+            return singleSource;
+          });
       }
 
       if (
         method === 'Storage.attributionReportingTriggerRegistered' &&
-        params &&
-        source.tabId
+        params
       ) {
         const { registration, eventLevel, aggregatable } =
           params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
 
-        dataStore.sources[tabId].triggerRegistration.forEach(
-          (trigger, index) => {
-            const registrationKeys = new Set<string>();
-            Object.keys(registration).forEach((key) =>
-              registrationKeys.add(key)
+        dataStore.sources.triggerRegistration.forEach((trigger, index) => {
+          const registrationKeys = new Set<string>();
+          Object.keys(registration).forEach((key) => registrationKeys.add(key));
+
+          const triggerKeys = new Set<string>();
+          Object.keys(trigger).forEach((key) => triggerKeys.add(key));
+          let match = false;
+
+          if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('aggregatableTriggerData') &&
+            !match &&
+            registration['aggregatableTriggerData'].length > 0
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'aggregatableTriggerData'
             );
-
-            const triggerKeys = new Set<string>();
-            Object.keys(trigger).forEach((key) => triggerKeys.add(key));
-            let match = false;
-
-            if (
-              registrationKeys
-                .intersection(triggerKeys)
-                .has('aggregatableTriggerData') &&
-              !match
-            ) {
-              match = ARAStore.matchTriggerData(
-                registration,
-                trigger,
-                'aggregatableTriggerData'
-              );
-            } else if (
-              registrationKeys
-                .intersection(triggerKeys)
-                .has('aggregatableValues') &&
-              !match
-            ) {
-              match = ARAStore.matchTriggerData(
-                registration,
-                trigger,
-                'aggregatableValues'
-              );
-            } else if (
-              registrationKeys
-                .intersection(triggerKeys)
-                .has('eventTriggerData') &&
-              !match
-            ) {
-              match = ARAStore.matchTriggerData(
-                registration,
-                trigger,
-                'eventTriggerData'
-              );
-            }
-
-            if (match) {
-              dataStore.sources[tabId].triggerRegistration[index] = {
-                ...dataStore.sources[tabId].triggerRegistration[index],
-                eventLevel,
-                aggregatable,
-                ...registration,
-              };
-            }
+          } else if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('aggregatableValues') &&
+            !match &&
+            registration['aggregatableValues'].length > 0
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'aggregatableValues'
+            );
+          } else if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('eventTriggerData') &&
+            !match
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'eventTriggerData'
+            );
           }
-        );
+
+          if (match) {
+            dataStore.sources.triggerRegistration[index] = {
+              ...dataStore.sources.triggerRegistration[index],
+              eventLevel,
+              aggregatable,
+              ...registration,
+            };
+          }
+        });
       }
     } catch (error) {
       //Fail silently.

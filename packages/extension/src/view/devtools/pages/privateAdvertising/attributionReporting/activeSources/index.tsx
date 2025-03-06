@@ -16,17 +16,15 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
-import {
-  noop,
-  type singleAuctionEvent,
-  type SourcesRegistration,
-} from '@google-psat/common';
+import React, { useState, useRef, useMemo } from 'react';
+import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
   Table,
   TableProvider,
-  type TableRow,
+  type InfoType,
   type TableColumn,
+  type TableFilter,
+  type TableRow,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { prettyPrintJson } from 'pretty-print-json';
@@ -35,24 +33,161 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies.
  */
-import { useAttributionReporting } from '../../../../stateProviders/attributionReporting';
+import RowContextMenuForARA from '../rowContextMenu';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
-
-const calculateExpiryDate = (registrationTime: number, expiryTime: number) => {
-  const expiryTimestamp = registrationTime + expiryTime; // Add expiry duration
-  return calculateRegistrationDate(expiryTimestamp);
-};
+import { useAttributionReporting } from '../../../../stateProviders';
+import calculateFiltersForSources from '../utils/calculateFiltersForSources';
 
 const ActiveSources = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
 
+  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
+    sourcesRegistration: state.sourcesRegistration,
+  }));
+
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForARA
+  > | null>(null);
+
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      sourceOrigin: {
+        title: 'Source Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'sourceOrigin'
+        ),
+      },
+      destinationSites: {
+        title: 'Destination Sites',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'destinationSites'
+        ),
+        comparator: (value: InfoType, filterValue: string) => {
+          if (Array.isArray(value)) {
+            return (value as string[]).includes(filterValue);
+          }
+          return value === filterValue;
+        },
+      },
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(
+          sourcesRegistration,
+          'reportingOrigin'
+        ),
+      },
+      time: {
+        title: 'Registration Time',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Today: {
+            selected: false,
+          },
+          'Since Yesterday': {
+            selected: false,
+          },
+          'Last 7 Days': {
+            selected: false,
+          },
+          'Last 30 Days': {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = new Date(value as number);
+
+          const today = new Date();
+          const yesterday = new Date();
+          yesterday.setDate(today.getDate() - 1);
+
+          const last7Days = new Date();
+          last7Days.setDate(today.getDate() - 7);
+
+          const last30Days = new Date();
+          last30Days.setDate(today.getDate() - 30);
+          switch (filterValue) {
+            case 'Today':
+              return new Date().toDateString() === val.toDateString();
+
+            case 'Since Yesterday':
+              return val >= yesterday && val <= today;
+
+            case 'Last 7 Days':
+              return val >= last7Days && val <= today;
+
+            case 'Last 30 Days':
+              return val >= last30Days && val <= today;
+
+            default:
+              return false;
+          }
+        },
+      },
+      expiry: {
+        title: 'Expiry',
+        hasStaticFilterValues: true,
+        filterValues: {
+          [I18n.getMessage('shortTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('mediumTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('longTerm')]: {
+            selected: false,
+          },
+          [I18n.getMessage('extentedTerm')]: {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          let diff = 0;
+          const val = value as number;
+          switch (filterValue) {
+            case I18n.getMessage('shortTerm'):
+              diff = val - Date.now();
+              return diff < 86400000;
+
+            case I18n.getMessage('mediumTerm'):
+              diff = val - Date.now();
+              return diff >= 86400000 && diff < 604800000;
+
+            case I18n.getMessage('longTerm'):
+              diff = val - Date.now();
+              return diff >= 604800000 && diff < 2629743833;
+
+            default:
+              return false;
+          }
+        },
+      },
+      type: {
+        title: 'Source Type',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForSources(sourcesRegistration, 'type'),
+      },
+    }),
+    [sourcesRegistration]
+  );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Source Event ID',
-        accessorKey: 'sourceEventId',
+        accessorKey: 'eventId',
         cell: (info) => info,
         widthWeightagePercentage: 12,
       },
@@ -64,15 +199,23 @@ const ActiveSources = () => {
       },
       {
         header: 'Destinations',
-        accessorKey: 'destination',
+        accessorKey: 'destinationSites',
         cell: (info) => {
           if (!info) {
             return '';
           }
-          if (Array.isArray(info)) {
-            return info.join(', ');
+          if (Array.isArray(info) && info.length > 1) {
+            return (
+              <div>
+                {(info as string[]).map((_info, index) => (
+                  <div key={index} className="p-1 text-xs">
+                    {_info}
+                  </div>
+                ))}
+              </div>
+            );
           }
-          return info;
+          return Array.isArray(info) && info.length === 1 ? info[0] : info;
         },
         widthWeightagePercentage: 20,
       },
@@ -86,19 +229,15 @@ const ActiveSources = () => {
         header: 'Registration Time',
         accessorKey: 'time',
         cell: (_, details) =>
-          calculateRegistrationDate((details as singleAuctionEvent)?.time),
+          calculateRegistrationDate((details as SourcesRegistration)?.time),
         enableHiding: false,
         widthWeightagePercentage: 12,
       },
       {
         header: 'Expiry',
         accessorKey: 'expiry',
-        cell: (info, details) => {
-          return calculateExpiryDate(
-            (details as SourcesRegistration)?.time,
-            Number(info)
-          );
-        },
+        cell: (_, details) =>
+          calculateRegistrationDate((details as SourcesRegistration)?.expiry),
         sortingComparator: (a, b) => {
           const aString = (a as string).toLowerCase().trim();
           const bString = (b as string).toLowerCase().trim();
@@ -123,10 +262,6 @@ const ActiveSources = () => {
     []
   );
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
-
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -143,10 +278,15 @@ const ActiveSources = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
+            tableFilterData={tableFilters}
             data={sourcesRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
-            onRowContextMenu={noop}
+            onRowContextMenu={
+              rowContextMenuRef.current
+                ? rowContextMenuRef.current?.onRowContextMenu
+                : noop
+            }
             onRowClick={(row) => setSelectedJSON(row as SourcesRegistration)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as SourcesRegistration).index.toString()
@@ -180,6 +320,7 @@ const ActiveSources = () => {
           </div>
         )}
       </div>
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };

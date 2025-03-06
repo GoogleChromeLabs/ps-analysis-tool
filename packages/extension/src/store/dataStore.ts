@@ -21,8 +21,8 @@ import type {
   CookieDatabase,
   singleAuctionEvent,
   auctionData,
-  Event,
-  SourcesData,
+  SourcesRegistration,
+  TriggerRegistration,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -34,6 +34,7 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
+import { isEqual } from 'lodash-es';
 
 class DataStore {
   /**
@@ -48,7 +49,36 @@ class DataStore {
   /**
    * The Attribution Reporting sources for the tab.
    */
-  sources: Record<string, Record<Event, SourcesData[]>> = {};
+  sources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting sources for the tab.
+   */
+  oldSources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting headers for the tab.
+   */
+  headersForARA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        url: string;
+        headers: Protocol.Network.Headers;
+      };
+    };
+  } = {};
 
   /**
    * The auction event of the tabs (Interest group access as well as interest group auction events).
@@ -173,7 +203,6 @@ class DataStore {
       popupOpenState: boolean;
       newUpdatesCA: number;
       newUpdatesPA: number;
-      newUpdatesARA: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
@@ -310,18 +339,18 @@ class DataStore {
       tabs: this.tabs,
       auctionEvents: this.auctionEvents,
       sources: this.sources,
+      headersForARA: this.headersForARA,
     };
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
-    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
+    this.headersForARA[tabId.toString()] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdatesCA: 0,
       newUpdatesPA: 0,
-      newUpdatesARA: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
@@ -360,6 +389,7 @@ class DataStore {
     delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
+    delete this.headersForARA[tabId];
   }
 
   /**
@@ -430,7 +460,6 @@ class DataStore {
     this.requestIdToCDPURLMapping[tabId] = {};
     this.frameIdToResourceMap[tabId] = {};
     this.unParsedRequestHeadersForPA[tabId] = {};
-    this.sources[tabId] = { sourceRegistration: [], triggerRegistration: [] };
     //@ts-ignore
     globalThis.PSATAdditionalData = {
       unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
@@ -476,6 +505,7 @@ class DataStore {
     delete this.tabs[tabId];
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
+    delete this.headersForARA[tabId.toString()];
   }
 
   /**
@@ -649,19 +679,20 @@ class DataStore {
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
   async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
-    if (this.tabs[tabId].newUpdatesARA <= 0 && !overrideForInitialSync) {
+    if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
       return;
     }
 
     await chrome.runtime.sendMessage({
       type: 'ARA_EVENTS',
       payload: {
-        sourcesRegistration: this.sources[tabId].sourceRegistration,
-        triggerRegistration: this.sources[tabId].triggerRegistration,
-        tabId,
+        sourcesRegistration: this.sources.sourceRegistration,
+        triggerRegistration: this.sources.triggerRegistration,
+        tabId: Number(tabId),
       },
     });
-    this.tabs[tabId].newUpdatesARA = 0;
+
+    this.oldSources = { ...this.sources };
   }
 
   /**

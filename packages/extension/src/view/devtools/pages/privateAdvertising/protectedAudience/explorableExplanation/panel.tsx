@@ -140,7 +140,10 @@ const Panel = ({
         color: string;
       } | null
     ) => {
-      draggableTrayRef.current.setIsCollapsed(false);
+      if (value) {
+        draggableTrayRef.current.setIsCollapsed(false);
+      }
+
       setHighlightedInterestGroup(value);
     },
     [setHighlightedInterestGroup]

@@ -77,6 +77,9 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
           text={I18n.getMessage('setUpEvaluationEnvironment', ['<a>', '</a>'])}
           to={[SIDEBAR_ITEMS_KEYS.WIKI]}
           queries={[NAVIGATION_TAGS.EVALUATION_ENVIRONMENT]}
+          links={[
+            'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment',
+          ]}
         />
       }
       testId="cookies-insights"

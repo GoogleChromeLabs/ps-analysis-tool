@@ -41,7 +41,7 @@ export type TableData = (
 
 export interface ClassificationResult {
   domain: string;
-  categories?: string[];
+  categories?: { id: number; name: string }[];
   error?: string;
 }
 

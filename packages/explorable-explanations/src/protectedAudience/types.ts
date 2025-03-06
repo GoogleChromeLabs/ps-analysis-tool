@@ -74,11 +74,13 @@ export type SketchProps = {
       key: number;
     } | null
   ) => void;
-  setHighlightedInterestGroup: (params?: {
-    interestGroupName: string;
-    interestGroupOwner: string;
-    color: string;
-  }) => void;
+  setHighlightedInterestGroup: (
+    params?: {
+      interestGroupName: string;
+      interestGroupOwner: string;
+      color: string;
+    } | null
+  ) => void;
   setPlayState: (play: boolean) => void;
   getPlayState: () => void;
   setSelectedExpandedFlow: () => void;
@@ -147,6 +149,7 @@ export type AuctionStepProps = {
   showRippleEffect?: boolean;
   isBranchComponent?: boolean;
   isForBranches?: boolean;
+  forceScroll?: boolean;
 };
 
 export type AuctionStep = {

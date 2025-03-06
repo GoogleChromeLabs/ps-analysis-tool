@@ -488,7 +488,7 @@ const bubbles: Bubbles = {
   },
 
   showMinifiedBubbles: () => {
-    app.setHighlightedInterestGroup();
+    app.setHighlightedInterestGroup(null);
     app.bubbles.highlightedInterestGroup = null;
     app.setIsBubbleExpanded(false);
 

@@ -48,7 +48,7 @@ interface RowContextMenuProps {
   removeSelectedRow?: () => void;
 }
 
-const RowContextMenu = forwardRef<
+const RowContextMenuForCookies = forwardRef<
   {
     onRowContextMenu: (e: React.MouseEvent<HTMLElement>, row: TableRow) => void;
   },
@@ -253,4 +253,4 @@ const RowContextMenu = forwardRef<
   );
 });
 
-export default RowContextMenu;
+export default RowContextMenuForCookies;

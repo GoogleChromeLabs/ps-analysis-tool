@@ -16,28 +16,129 @@
 /**
  * External dependencies.
  */
-import type { TriggerRegistration } from '@google-psat/common';
+import { noop, type TriggerRegistration } from '@google-psat/common';
 import {
-  type TableColumn,
   TableProvider,
   type TableRow,
   Table,
+  type TableColumn,
+  type TableFilter,
+  type InfoType,
 } from '@google-psat/design-system';
-import { noop } from 'lodash-es';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
  */
+import RowContextMenuForARA from '../rowContextMenu';
 import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
+import calculateFiltersForTrigger from '../utils/calculateFiltersForTriggers';
 
 const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
+  );
+
+  const { triggerRegistration } = useAttributionReporting(({ state }) => ({
+    triggerRegistration: state.triggerRegistration,
+  }));
+
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForARA
+  > | null>(null);
+
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      reportingOrigin: {
+        title: 'Reporting Origin',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'reportingOrigin'
+        ),
+      },
+      destination: {
+        title: 'Destination Sites',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'destination'
+        ),
+      },
+      time: {
+        title: 'Registration Time',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Today: {
+            selected: false,
+          },
+          'Since Yesterday': {
+            selected: false,
+          },
+          'Last 7 Days': {
+            selected: false,
+          },
+          'Last 30 Days': {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = new Date(value as number);
+
+          const today = new Date();
+          const yesterday = new Date();
+          yesterday.setDate(today.getDate() - 1);
+
+          const last7Days = new Date();
+          last7Days.setDate(today.getDate() - 7);
+
+          const last30Days = new Date();
+          last30Days.setDate(today.getDate() - 30);
+          switch (filterValue) {
+            case 'Today':
+              return new Date().toDateString() === val.toDateString();
+
+            case 'Since Yesterday':
+              return val >= yesterday && val <= today;
+
+            case 'Last 7 Days':
+              return val >= last7Days && val <= today;
+
+            case 'Last 30 Days':
+              return val >= last30Days && val <= today;
+
+            default:
+              return false;
+          }
+        },
+      },
+      eventLevel: {
+        title: 'Event Level Result',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'eventLevel'
+        ),
+      },
+      aggregatable: {
+        title: 'Aggregatable Result',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFiltersForTrigger(
+          triggerRegistration,
+          'aggregatable'
+        ),
+      },
+    }),
+    [triggerRegistration]
   );
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -78,10 +179,6 @@ const TriggerRegistrations = () => {
     []
   );
 
-  const { triggerRegistration } = useAttributionReporting(({ state }) => ({
-    triggerRegistration: state.triggerRegistration,
-  }));
-
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -98,10 +195,15 @@ const TriggerRegistrations = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
+            tableFilterData={tableFilters}
             data={triggerRegistration}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
-            onRowContextMenu={noop}
+            onRowContextMenu={
+              rowContextMenuRef.current
+                ? rowContextMenuRef.current?.onRowContextMenu
+                : noop
+            }
             onRowClick={(row) => setSelectedJSON(row as TriggerRegistration)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as TriggerRegistration).index.toString()
@@ -135,6 +237,7 @@ const TriggerRegistrations = () => {
           </div>
         )}
       </div>
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };
