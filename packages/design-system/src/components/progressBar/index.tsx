@@ -32,7 +32,7 @@ const ProgressBar = ({
       className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden`}
     >
       <div className={`${barAdditionalStyles} mb-6 h-1 w-full overflow-hidden`}>
-        <div className="h-1 w-1/2 bg-royal-blue absolute animate-horizontal-spinner"></div>
+        <div className="h-1 w-1/2 bg-sky-600 absolute animate-horizontal-spinner"></div>
       </div>
     </div>
   );
