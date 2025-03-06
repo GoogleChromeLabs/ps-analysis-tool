@@ -20,7 +20,6 @@ import React, { useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
-  LinkProcessor,
   MessageBox,
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
@@ -66,19 +65,26 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
     [tabFrames]
   );
 
+  const setUpEvaluationEnvironmentText = (
+    <>
+      Please setup the{' '}
+      <a
+        href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-bright-navy-blue dark:text-jordy-blue"
+      >
+        evaluation environment
+      </a>{' '}
+      before analyzing cookies.
+    </>
+  );
+
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       landingHeaderExtraClasses="border-t-0"
-      infoIconTitle={
-        <LinkProcessor
-          text={I18n.getMessage('setUpEvaluationEnvironment', ['<a>', '</a>'])}
-          links={[
-            'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment',
-          ]}
-          sameTab={true}
-        />
-      }
+      infoIconTitle={setUpEvaluationEnvironmentText}
       testId="cookies-insights"
     >
       {!cookieStats ||
