@@ -49,6 +49,7 @@ import {
   StorageIcon,
   ProtectionIcon,
   SiteBoundariesIconWhite,
+  DemoCenterIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -84,6 +85,7 @@ import {
   PrivateStateTokens,
 } from './pages';
 import HelpCenter from './pages/learning/helpCenter';
+import DemoCenter from './pages/learning/demoCenter';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -411,6 +413,50 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: true,
     children: {
+      [SIDEBAR_ITEMS_KEYS.HELP_CENTER]: {
+        title: () => 'Help Center',
+        panel: {
+          Element: HelpCenter,
+          href: 'https://support.google.com/privacysandbox',
+        },
+        icon: {
+          Element: Help,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: Help,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.DEV_SITE]: {
+        title: () => 'Dev Site',
+        panel: {
+          Element: DevSite,
+          href: 'https://developers.google.com/privacy-sandbox',
+        },
+        icon: {
+          Element: DevGuideIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: DevGuideIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
       [SIDEBAR_ITEMS_KEYS.WIKI]: {
         title: () => I18n.getMessage('wiki'),
         panel: {
@@ -449,42 +495,20 @@ const TABS: SidebarItems = {
         children: {},
         containerClassName: 'h-6',
       },
-      [SIDEBAR_ITEMS_KEYS.HELP_CENTER]: {
-        title: () => 'Help Center',
+      [SIDEBAR_ITEMS_KEYS.DEMO_CENTER]: {
+        title: () => 'Demo Centre',
         panel: {
-          Element: HelpCenter,
-          href: 'https://support.google.com/privacysandbox',
+          Element: DemoCenter,
+          href: 'https://domain-aaa.com/',
         },
         icon: {
-          Element: Help,
+          Element: DemoCenterIcon,
           props: {
             className: 'fill-granite-gray',
           },
         },
         selectedIcon: {
-          Element: Help,
-          props: {
-            className: 'fill-bright-gray',
-          },
-        },
-        dropdownOpen: false,
-        children: {},
-        containerClassName: 'h-6',
-      },
-      [SIDEBAR_ITEMS_KEYS.DEV_SITE]: {
-        title: () => 'Dev Site',
-        panel: {
-          Element: DevSite,
-          href: 'https://developers.google.com/privacy-sandbox',
-        },
-        icon: {
-          Element: DevGuideIcon,
-          props: {
-            className: 'fill-granite-gray',
-          },
-        },
-        selectedIcon: {
-          Element: DevGuideIcon,
+          Element: DemoCenterIcon,
           props: {
             className: 'fill-bright-gray',
           },

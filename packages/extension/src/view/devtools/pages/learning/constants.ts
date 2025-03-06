@@ -19,9 +19,24 @@ import {
   DevGuideIcon,
   Help,
   SIDEBAR_ITEMS_KEYS,
+  DemoCenterIcon,
 } from '@google-psat/design-system';
 
 export const FEATURED_ITEMS = [
+  {
+    name: 'Help Center',
+    icon: Help,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
+    description:
+      'Find answers to common questions, troubleshooting guides, and support at the Privacy Sandbox Help Center.',
+  },
+  {
+    name: 'Dev Site',
+    icon: DevGuideIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
+    description:
+      'Access documentation, API references, and implementation guides on the Privacy Sandbox Developer site.',
+  },
   {
     name: 'Wiki',
     icon: WikiIcon,
@@ -37,17 +52,10 @@ export const FEATURED_ITEMS = [
       'Explore interactive web stories that simplify key concepts of the Privacy Sandbox API and its impact on the web.',
   },
   {
-    name: 'Help Center',
-    icon: Help,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
+    name: 'Demo Centre',
+    icon: DemoCenterIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.DEMO_CENTER,
     description:
-      'Find answers to common questions, troubleshooting guides, and support at the Privacy Sandbox Help Center.',
-  },
-  {
-    name: 'Dev Site',
-    icon: DevGuideIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
-    description:
-      'Access documentation, API references, and implementation guides on the Privacy Sandbox Developer site.',
+      'Explore and test Privacy Sandbox APIs in action using the PSAT extension for hands-on insights.',
   },
 ];
