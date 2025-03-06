@@ -24,6 +24,7 @@ import {
   type TableColumn,
   type TableFilter,
   type InfoType,
+  InfoIcon,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
@@ -155,6 +156,12 @@ const TriggerRegistrations = () => {
           <label htmlFor="showAllEvents" className="text-xs leading-none">
             Show Current Tab Registrations
           </label>
+          <div
+            title="Enable this to see network requests associated with the triggers."
+            className="hover:cursor-pointer"
+          >
+            <InfoIcon className="w-3 h-3 fill-granite-gray" />
+          </div>
         </div>
       </div>
     );

@@ -19,6 +19,7 @@
 import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
+  InfoIcon,
   Table,
   TableProvider,
   type InfoType,
@@ -281,6 +282,12 @@ const ActiveSources = () => {
           <label htmlFor="showAllEvents" className="text-xs leading-none">
             Show Current Tab Registrations
           </label>
+          <div
+            title="Enable this to see network requests associated with the sources."
+            className="hover:cursor-pointer"
+          >
+            <InfoIcon className="w-3 h-3 fill-granite-gray" />
+          </div>
         </div>
       </div>
     );

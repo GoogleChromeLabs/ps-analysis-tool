@@ -24,6 +24,7 @@ import {
   type TableFilter,
   type TableColumn,
   type InfoType,
+  InfoIcon,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useState, useRef, useMemo, useCallback } from 'react';
@@ -194,6 +195,12 @@ const SourceRegistrations = () => {
           <label htmlFor="showAllEvents" className="text-xs leading-none">
             Show Current Tab Registrations
           </label>
+          <div
+            title="Enable this to see network requests associated with the sources."
+            className="hover:cursor-pointer"
+          >
+            <InfoIcon className="w-3 h-3 fill-granite-gray" />
+          </div>
         </div>
       </div>
     );
