@@ -352,7 +352,8 @@ export function topicsAnimation(
       p.push();
       p.rectMode(p.CENTER);
       p.fill(245);
-      p.stroke(255);
+      p.stroke(0);
+      p.strokeWeight(1);
       p.rect(
         position.x,
         position.y + diameter / 2 + 150,
@@ -364,6 +365,8 @@ export function topicsAnimation(
         10
       );
 
+      p.stroke(255);
+      p.strokeWeight(1);
       p.fill(0);
       p.textSize(12);
       p.textAlign(p.LEFT, p.CENTER);
@@ -397,7 +400,6 @@ export function topicsAnimation(
       p.textStyle(p.NORMAL);
       for (let i = 0; i < numAdTechs; i++) {
         const adTech = adTechs[i];
-        // @ts-ignore
         const adTechColor = getAdtechsColors(p)[adTech];
 
         p.fill(adTechColor);
@@ -455,33 +457,6 @@ export function topicsAnimation(
       const x = p.mouseX;
       const y = p.mouseY;
 
-      if (isInteractive) {
-        const user = config.timeline.user;
-        p.clear();
-        p.push();
-
-        app.drawTimeline(config.timeline.position, epoch);
-        const index = app.prevVisitedCircleIndex;
-        if (index !== -1) {
-          for (let i = index; i >= 0; i--) {
-            app.userVisitDone(i);
-            app.drawSmallCircles(i, epoch[i].website);
-          }
-          app.drawInfoBox(index, epoch[index].website);
-        }
-
-        p.image(
-          app.userIcon as p5.Image,
-          x - user.width / 2,
-          y - user.height / 2,
-          user.width,
-          user.height
-        );
-
-        p.pop();
-        return;
-      }
-
       let isInspecting = false;
 
       Object.values(app.circlePositions).forEach((position, index) => {
@@ -537,6 +512,32 @@ export function topicsAnimation(
         });
       });
 
+      if (isInteractive) {
+        const user = config.timeline.user;
+        p.clear();
+        p.push();
+
+        app.drawTimeline(config.timeline.position, epoch);
+        const visitedIndex = app.prevVisitedCircleIndex;
+        if (visitedIndex !== -1) {
+          for (let i = visitedIndex; i >= 0; i--) {
+            app.userVisitDone(i);
+            app.drawSmallCircles(i, epoch[i].website);
+          }
+          app.drawInfoBox(visitedIndex, epoch[visitedIndex].website);
+        }
+
+        p.image(
+          app.userIcon as p5.Image,
+          x - user.width / 2,
+          y - user.height / 2,
+          user.width,
+          user.height
+        );
+
+        p.pop();
+      }
+
       if (!isInspecting) {
         app.showHandCursor = false;
       }
@@ -578,6 +579,7 @@ export function topicsAnimation(
             }
           }
         });
+        app.mouseMoved();
       }
 
       Object.entries(app.smallCirclePositions).forEach(
