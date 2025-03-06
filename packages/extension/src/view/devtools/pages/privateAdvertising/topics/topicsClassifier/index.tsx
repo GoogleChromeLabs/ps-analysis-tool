@@ -149,7 +149,7 @@ const TopicsClassifier = () => {
       <div className="flex p-4 w-full flex-col gap-4">
         <textarea
           placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
-          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue"
+          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue w-8/12"
           cols={50}
           value={websites}
           onChange={(e) => setWebsites(e.target.value)}
@@ -167,7 +167,7 @@ const TopicsClassifier = () => {
           {validationErrors.map((error, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 w-full dark:bg-tomato-red bg-baby-pink m-0.25 px-2 py-1 rounded"
+              className="flex items-center gap-2 w-fit dark:bg-tomato-red bg-baby-pink m-0.25 px-4 py-1 rounded"
             >
               <CancelIcon className="w-4 h-4 dark:fill-blood-red fill-bright-red" />
               <div className="text-xs rounded-sm dark:text-bright-gray">
