@@ -20,9 +20,8 @@ import React, { useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
-  InternalNavigationForAnchor,
+  LinkProcessor,
   MessageBox,
-  SIDEBAR_ITEMS_KEYS,
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -34,7 +33,6 @@ import type { TabCookies } from '@google-psat/common';
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
-import { NAVIGATION_TAGS } from '../../learning';
 
 interface CookiesSectionProps {
   tabCookies: TabCookies;
@@ -73,13 +71,12 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
       dataMapping={cookieClassificationDataMapping}
       landingHeaderExtraClasses="border-t-0"
       infoIconTitle={
-        <InternalNavigationForAnchor
+        <LinkProcessor
           text={I18n.getMessage('setUpEvaluationEnvironment', ['<a>', '</a>'])}
-          to={[SIDEBAR_ITEMS_KEYS.WIKI]}
-          queries={[NAVIGATION_TAGS.EVALUATION_ENVIRONMENT]}
           links={[
             'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment',
           ]}
+          sameTab={true}
         />
       }
       testId="cookies-insights"

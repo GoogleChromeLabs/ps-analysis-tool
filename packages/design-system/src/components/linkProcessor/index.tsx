@@ -23,20 +23,45 @@ import React, { useCallback } from 'react';
  * Internal dependencies.
  */
 import { useSidebar } from '../sidebar';
+import Link from '../link';
 
-interface InternalNavigationForAnchorProps {
+interface LinkProcessorProps {
   text: string;
-  to: string[];
+  to?: string[];
   queries?: string[];
   links?: string[];
+  sameTab?: boolean;
 }
 
-const InternalNavigationForAnchor = ({
+/**
+ * LinkProcessor Component
+ *
+ * This component processes a text string containing anchor placeholders (`<a>`)
+ * and replaces them with interactive links. It enables navigation within a sidebar
+ * while supporting query parameters and external links that can either open in the same tab
+ * or a new tab based on user interaction.
+ *
+ * ## Features:
+ * - Parses text input and converts placeholders (`<a>`) into clickable links.
+ * - Supports navigation to different sections using query parameters.
+ * - Allows external links to open in a new tab when Ctrl or Cmd is held.
+ * - Provides an option to open links in the same tab.
+ * - Uses `useSidebar` to update the selected sidebar item dynamically.
+ * @param props - Component properties.
+ * @param props.text - The text string containing `<a>` placeholders for links.
+ * @param props.to - List of keys corresponding to navigation targets.
+ * @param [props.queries] - Optional list of query parameters for navigation.
+ * @param [props.links] - Optional list of external links for anchors.
+ * @param props.sameTab - Determines whether links should open in the same tab.
+ * @returns A processed JSX structure with interactive links.
+ */
+const LinkProcessor = ({
   text,
   to,
   queries,
   links,
-}: InternalNavigationForAnchorProps) => {
+  sameTab = false,
+}: LinkProcessorProps) => {
   const updateSelectedItemKey = useSidebar(
     ({ actions }) => actions.updateSelectedItemKey
   );
@@ -86,22 +111,36 @@ const InternalNavigationForAnchor = ({
             );
           } else {
             const idx = anchorIdxToNavigate;
-            const button = (
-              <a
-                href={links?.[idx] || '#'}
-                onClick={(event) =>
-                  navigateTo(
-                    event,
-                    to[idx],
-                    queries?.[idx] || '',
-                    links?.[idx] || ''
-                  )
-                }
-                className="text-bright-navy-blue dark:text-jordy-blue"
-              >
-                {textToProcess.slice(stringStart, stringEnd)}
-              </a>
-            );
+            let button;
+
+            if (sameTab) {
+              button = (
+                <Link
+                  href={links?.[idx] || '#'}
+                  className="text-bright-navy-blue dark:text-jordy-blue"
+                >
+                  {textToProcess.slice(stringStart, stringEnd)}
+                </Link>
+              );
+            } else {
+              const _to = to?.[idx] || '';
+              button = (
+                <a
+                  href={links?.[idx] || '#'}
+                  onClick={(event) =>
+                    navigateTo(
+                      event,
+                      _to,
+                      queries?.[idx] || '',
+                      links?.[idx] || ''
+                    )
+                  }
+                  className="text-bright-navy-blue dark:text-jordy-blue"
+                >
+                  {textToProcess.slice(stringStart, stringEnd)}
+                </a>
+              );
+            }
 
             elements.push(button);
             stringEnd++;
@@ -122,7 +161,7 @@ const InternalNavigationForAnchor = ({
 
       return elements;
     },
-    [links, navigateTo, queries, to]
+    [links, navigateTo, queries, to, sameTab]
   );
 
   return (
@@ -134,4 +173,4 @@ const InternalNavigationForAnchor = ({
   );
 };
 
-export default InternalNavigationForAnchor;
+export default LinkProcessor;
