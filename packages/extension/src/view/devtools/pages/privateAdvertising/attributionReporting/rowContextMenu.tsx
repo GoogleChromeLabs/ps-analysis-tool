@@ -27,9 +27,16 @@ import { type SourcesData } from '@google-psat/common';
 import type { TableRow } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const RowContextMenuForARA = forwardRef<{
-  onRowContextMenu: (e: React.MouseEvent<HTMLElement>, row: TableRow) => void;
-}>(function RowContextMenu(_: unknown, ref) {
+interface RowContextMenuProps {
+  filteredData: boolean;
+}
+
+const RowContextMenuForARA = forwardRef<
+  {
+    onRowContextMenu: (e: React.MouseEvent<HTMLElement>, row: TableRow) => void;
+  },
+  RowContextMenuProps
+>(function RowContextMenu({ filteredData }: RowContextMenuProps, ref) {
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
     x: 0,
@@ -87,7 +94,8 @@ const RowContextMenuForARA = forwardRef<{
     <>
       {
         //@ts-ignore
-        selectedSource?.requestUrl &&
+        filteredData &&
+          selectedSource?.requestUrl &&
           contextMenuOpen &&
           createPortal(
             <div className="transition duration-100" data-testid="column-menu">

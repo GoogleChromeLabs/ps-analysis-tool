@@ -351,7 +351,7 @@ const ActiveSources = () => {
           </div>
         )}
       </div>
-      <RowContextMenuForARA ref={rowContextMenuRef} />
+      <RowContextMenuForARA ref={rowContextMenuRef} filteredData={filterData} />
     </div>
   );
 };
