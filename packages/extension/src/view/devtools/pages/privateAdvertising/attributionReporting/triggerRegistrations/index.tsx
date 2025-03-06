@@ -52,10 +52,6 @@ const TriggerRegistrations = () => {
     typeof RowContextMenuForARA
   > | null>(null);
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterData(e.target.checked);
-  }, []);
-
   const data = useMemo(() => {
     if (filterData) {
       return triggerRegistration.filter(
@@ -152,12 +148,9 @@ const TriggerRegistrations = () => {
         <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
         <div className="flex items-center justify-center w-max gap-1">
           <input
-            onChange={handleChange}
+            onChange={(event) => setFilterData(event.target.checked)}
             type="checkbox"
-            id="showAllEvents"
-            name="showAllEvents"
-            value="Show All Events"
-            checked={filterData}
+            defaultChecked={true}
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
             Show Current Tab Registrations
@@ -165,7 +158,7 @@ const TriggerRegistrations = () => {
         </div>
       </div>
     );
-  }, [handleChange, filterData]);
+  }, []);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
