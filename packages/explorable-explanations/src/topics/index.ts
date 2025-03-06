@@ -26,7 +26,6 @@ import { config } from './config';
 import { getAdtechsColors } from './utils';
 import { websitesToIconsMapping } from './data';
 import icons from '../icons.json';
-import throttle from 'just-throttle';
 
 /**
  * Setup function for p5.js
@@ -85,6 +84,7 @@ export function topicsAnimation(
     smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
     counter: 0,
     lastFrameCount: 0,
+    inspectedCircles: new Set<number>(),
 
     drawTimeline: (
       position: { x: number; y: number },
@@ -185,6 +185,7 @@ export function topicsAnimation(
       app.counter = 0;
       app.lastFrameCount = 0;
       app.prevVisitedCircleIndex = -1;
+      app.inspectedCircles.clear();
       p?.clear();
       p.background(255);
       p.pixelDensity(2);
@@ -459,6 +460,40 @@ export function topicsAnimation(
 
       let isInspecting = false;
 
+      if (isInteractive) {
+        const user = config.timeline.user;
+        p.push();
+        p.clear();
+
+        app.drawTimeline(config.timeline.position, epoch);
+        const lastVisitedIndex = app.prevVisitedCircleIndex;
+        if (lastVisitedIndex !== -1) {
+          // keep track of visited circles
+          app.inspectedCircles.add(lastVisitedIndex);
+
+          Array.from(app.inspectedCircles).forEach((index) => {
+            if (lastVisitedIndex === index) {
+              app.handleUserVisit(index);
+            } else {
+              app.userVisitDone(index);
+            }
+            app.drawSmallCircles(index, epoch[index].website);
+          });
+          app.drawInfoBox(lastVisitedIndex, epoch[lastVisitedIndex].website);
+        }
+
+        p.image(
+          app.userIcon as p5.Image,
+          x - user.width / 2,
+          y - user.height / 2,
+          user.width,
+          user.height
+        );
+
+        p.pop();
+        return;
+      }
+
       Object.values(app.circlePositions).forEach((position, index) => {
         const { diameter } = config.timeline.circleProps;
         const { x: circleX, y: circleY } = position;
@@ -512,30 +547,6 @@ export function topicsAnimation(
         });
       });
 
-      if (isInteractive) {
-        const user = config.timeline.user;
-        p.clear();
-        p.push();
-
-        app.drawTimeline(config.timeline.position, epoch);
-        const visitedIndex = app.prevVisitedCircleIndex;
-        if (visitedIndex !== -1) {
-          app.userVisitDone(visitedIndex);
-          app.drawSmallCircles(visitedIndex, epoch[visitedIndex].website);
-          app.drawInfoBox(visitedIndex, epoch[visitedIndex].website);
-        }
-
-        p.image(
-          app.userIcon as p5.Image,
-          x - user.width / 2,
-          y - user.height / 2,
-          user.width,
-          user.height
-        );
-
-        p.pop();
-      }
-
       if (!isInspecting) {
         app.showHandCursor = false;
       }
@@ -570,11 +581,10 @@ export function topicsAnimation(
 
             if (app.smallCirclePositions[index] === undefined) {
               app.handleUserVisit(index);
-              app.prevVisitedCircleIndex = index;
             } else {
               app.drawInfoBox(index, epoch[index].website);
-              app.prevVisitedCircleIndex = index;
             }
+            app.prevVisitedCircleIndex = index;
           }
         });
         app.mouseMoved();
@@ -659,7 +669,7 @@ export function topicsAnimation(
     );
     p.background(255);
     p.pixelDensity(2);
-    app.canvas.mouseMoved(throttle(app.mouseMoved, 25));
+    app.canvas.mouseMoved(app.mouseMoved);
     app.canvas.mouseClicked(app.mouseClicked);
 
     p.textFont('sans-serif');
