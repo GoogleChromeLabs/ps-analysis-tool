@@ -148,7 +148,7 @@ const TopicsClassifier = () => {
     <div className="relative h-full flex flex-col">
       <div className="flex p-4 w-full flex-col gap-4">
         <textarea
-          placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
+          placeholder={`Enter one domain per line. For example:\ngoogle.com\nyoutube.com\nPlease do not include "http://" or "https://".`}
           className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue w-8/12"
           cols={50}
           value={websites}
