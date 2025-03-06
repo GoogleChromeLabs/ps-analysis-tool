@@ -520,10 +520,8 @@ export function topicsAnimation(
         app.drawTimeline(config.timeline.position, epoch);
         const visitedIndex = app.prevVisitedCircleIndex;
         if (visitedIndex !== -1) {
-          for (let i = visitedIndex; i >= 0; i--) {
-            app.userVisitDone(i);
-            app.drawSmallCircles(i, epoch[i].website);
-          }
+          app.userVisitDone(visitedIndex);
+          app.drawSmallCircles(visitedIndex, epoch[visitedIndex].website);
           app.drawInfoBox(visitedIndex, epoch[visitedIndex].website);
         }
 
