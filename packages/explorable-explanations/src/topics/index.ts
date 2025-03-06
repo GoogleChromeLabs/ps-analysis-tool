@@ -260,21 +260,6 @@ export function topicsAnimation(
       handleUserVisit(visitIndex);
     },
 
-    _drawSmallCircle: (
-      smallCirclePosition: { x: number; y: number },
-      adTechColor: string,
-      smallCircleDiameter: number
-    ) => {
-      p.push();
-      p.fill(adTechColor);
-      p.circle(
-        smallCirclePosition.x,
-        smallCirclePosition.y,
-        smallCircleDiameter
-      );
-      p.pop();
-    },
-
     drawSmallCircles: (index: number, currentSite: string) => {
       const { diameter } = config.timeline.circleProps;
       const smallCircleDiameter = diameter / 5;
@@ -282,17 +267,20 @@ export function topicsAnimation(
 
       const appSmallCirclePositions = app.smallCirclePositions[index];
 
-      // if circle already has small circles, draw them
+      // if small circles already exist, just draw them
       if (appSmallCirclePositions) {
         for (let i = 0; i < appSmallCirclePositions.length; i++) {
           const smallCirclePosition = appSmallCirclePositions[i];
           const adTechColor = getAdtechsColors(p)[adTechs[i]];
 
-          app._drawSmallCircle(
-            smallCirclePosition,
-            adTechColor,
+          p.push();
+          p.fill(adTechColor);
+          p.circle(
+            smallCirclePosition.x,
+            smallCirclePosition.y,
             smallCircleDiameter
           );
+          p.pop();
         }
         return;
       }
@@ -335,11 +323,10 @@ export function topicsAnimation(
 
         const adTechColor = getAdtechsColors(p)[adTechs[i]];
 
-        app._drawSmallCircle(
-          { x: randomX, y: randomY },
-          adTechColor,
-          smallCircleDiameter
-        );
+        p.push();
+        p.fill(adTechColor);
+        p.circle(randomX, randomY, smallCircleDiameter);
+        p.pop();
       }
 
       app.smallCirclePositions[index] = smallCirclePositions;
