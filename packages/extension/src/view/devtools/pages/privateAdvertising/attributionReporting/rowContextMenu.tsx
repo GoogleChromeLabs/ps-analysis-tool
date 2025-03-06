@@ -102,7 +102,7 @@ const RowContextMenuForARA = forwardRef<{
               >
                 <button
                   onClick={handleFilterClick}
-                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-sky-600 hover:text-white cursor-default"
                 >
                   <span>
                     {
