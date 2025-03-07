@@ -101,7 +101,7 @@ const SidebarChild = ({
         className={`w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
           isKeySelected(itemKey)
             ? isSidebarFocused
-              ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+              ? 'bg-sky-600 text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
               : 'bg-gainsboro dark:bg-outer-space'
             : 'bg-lotion dark:bg-raisin-black'
         } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''} ${

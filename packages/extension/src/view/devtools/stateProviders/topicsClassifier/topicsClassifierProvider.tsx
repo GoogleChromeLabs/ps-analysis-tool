@@ -49,7 +49,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     preprocessedHosts.forEach((host) => {
       const hostnameRegex = /^(?!:\/\/)([a-zA-Z0-9-_]{1,63}\.)+[a-zA-Z]{2,63}$/;
       if (!hostnameRegex.test(host)) {
-        inputValidationErrors.push('Host "' + host + '" is invalid.');
+        inputValidationErrors.push(
+          `The host "${host}" is invalid. Please ensure it is a valid domain name without "http://" or "https://".`
+        );
       }
     });
 
