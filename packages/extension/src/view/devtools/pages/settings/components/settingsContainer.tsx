@@ -28,7 +28,6 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
-import { NAVIGATION_TAGS } from '../../learning';
 
 interface settingsToReturnObject {
   id: string;
@@ -36,7 +35,7 @@ interface settingsToReturnObject {
   switchState: boolean;
   description: string;
   changeSwitchState: (newState: boolean) => void;
-  navigationQueries?: string[];
+  links: string[];
 }
 const SettingsContainer = () => {
   const { allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode } =
@@ -59,7 +58,9 @@ const SettingsContainer = () => {
             description: setting.description(),
             changeSwitchState: setIsUsingCDP,
             switchState: isUsingCDP,
-            navigationQueries: [NAVIGATION_TAGS.PSAT_SETTINGS_AND_PERMISSIONS],
+            links: [
+              'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat',
+            ],
           });
           break;
         case 'multitabDebugging':
@@ -69,7 +70,9 @@ const SettingsContainer = () => {
             description: setting.description(),
             changeSwitchState: setProcessingMode,
             switchState: allowedNumberOfTabs === 'unlimited',
-            navigationQueries: [NAVIGATION_TAGS.PSAT_SETTINGS_AND_PERMISSIONS],
+            links: [
+              'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging',
+            ],
           });
           break;
         default:
@@ -98,7 +101,7 @@ const SettingsContainer = () => {
               switchState={setting.switchState}
               changeSwitchState={setting.changeSwitchState}
               description={setting.description}
-              queries={setting.navigationQueries}
+              links={setting.links}
             />
           );
         })}
