@@ -603,8 +603,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
         dataStore.sources.sourceRegistration =
           dataStore.sources.sourceRegistration.map((singleSource) => {
-            //@ts-ignore
-            if (singleSource?.sourceEventId === registration.eventId) {
+            const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+            const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
+            if (
+              //@ts-ignore
+              singleSource?.sourceEventId === registration.eventId &&
+              singleSource.sourceOrigin &&
+              host === sourceOriginHost
+            ) {
               const time = registration.time.toString().includes('.')
                 ? registration.time * 1000
                 : registration.time;
@@ -685,7 +691,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             );
           }
 
-          if (match && !trigger?.aggregatable && !trigger?.eventLevel) {
+          const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+          const sourceOriginHost = trigger.destination
+            ? new URL(trigger.destination).origin
+            : '';
+          if (
+            match &&
+            !trigger?.aggregatable &&
+            !trigger?.eventLevel &&
+            trigger.destination &&
+            host === sourceOriginHost
+          ) {
             dataStore.sources.triggerRegistration[index] = {
               ...trigger,
               eventLevel,
