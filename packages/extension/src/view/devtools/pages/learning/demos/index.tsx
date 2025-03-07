@@ -20,7 +20,7 @@
 import React from 'react';
 import {
   ExternalLinkPanel,
-  DemoCenterIcon,
+  DemosIcon,
   SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 
@@ -29,17 +29,16 @@ import {
  */
 import { FEATURED_ITEMS } from '../constants';
 
-const DemoCenter = () => {
+const Demos = () => {
   const description =
-    FEATURED_ITEMS.find(
-      (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.DEMO_CENTER
-    )?.description ?? '';
+    FEATURED_ITEMS.find((item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.DEMOS)
+      ?.description ?? '';
 
-  const demoCenterIcon = (
-    <DemoCenterIcon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
+  const demosIcon = (
+    <DemosIcon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
   );
 
-  return <ExternalLinkPanel description={description} icon={demoCenterIcon} />;
+  return <ExternalLinkPanel description={description} icon={demosIcon} />;
 };
 
-export default DemoCenter;
+export default Demos;

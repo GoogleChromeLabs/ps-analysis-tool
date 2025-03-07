@@ -49,7 +49,7 @@ import {
   StorageIcon,
   ProtectionIcon,
   SiteBoundariesIconWhite,
-  DemoCenterIcon,
+  DemosIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -85,7 +85,7 @@ import {
   PrivateStateTokens,
 } from './pages';
 import HelpCenter from './pages/learning/helpCenter';
-import DemoCenter from './pages/learning/demoCenter';
+import Demos from './pages/learning/demos';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -495,20 +495,20 @@ const TABS: SidebarItems = {
         children: {},
         containerClassName: 'h-6',
       },
-      [SIDEBAR_ITEMS_KEYS.DEMO_CENTER]: {
-        title: () => 'Demo Centre',
+      [SIDEBAR_ITEMS_KEYS.DEMOS]: {
+        title: () => 'Demos',
         panel: {
-          Element: DemoCenter,
+          Element: Demos,
           href: 'https://domain-aaa.com/',
         },
         icon: {
-          Element: DemoCenterIcon,
+          Element: DemosIcon,
           props: {
             className: 'fill-granite-gray',
           },
         },
         selectedIcon: {
-          Element: DemoCenterIcon,
+          Element: DemosIcon,
           props: {
             className: 'fill-bright-gray',
           },

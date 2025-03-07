@@ -19,7 +19,7 @@ import {
   DevGuideIcon,
   Help,
   SIDEBAR_ITEMS_KEYS,
-  DemoCenterIcon,
+  DemosIcon,
 } from '@google-psat/design-system';
 
 export const FEATURED_ITEMS = [
@@ -62,8 +62,8 @@ export const FEATURED_ITEMS = [
   },
   {
     name: 'Demo Centre',
-    icon: DemoCenterIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.DEMO_CENTER,
+    icon: DemosIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
     description:
       'Explore and test Privacy Sandbox APIs in action using the PSAT extension for hands-on insights.',
     colorClasses: {
