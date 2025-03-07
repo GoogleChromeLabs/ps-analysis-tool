@@ -446,40 +446,7 @@ export function topicsAnimation(
       const y = p.mouseY;
 
       let isInspecting = false;
-
-      if (isInteractive) {
-        const user = config.timeline.user;
-        p.push();
-        p.clear();
-
-        app.drawTimeline(config.timeline.position, epoch);
-        const lastVisitedIndex = app.prevVisitedCircleIndex;
-        if (lastVisitedIndex !== -1) {
-          // keep track of visited circles
-          app.inspectedCircles.add(lastVisitedIndex);
-
-          Array.from(app.inspectedCircles).forEach((index) => {
-            if (lastVisitedIndex === index) {
-              app.handleUserVisit(index);
-            } else {
-              app.userVisitDone(index);
-            }
-            app.drawSmallCircles(index, epoch[index].website);
-          });
-          app.drawInfoBox(lastVisitedIndex, epoch[lastVisitedIndex].website);
-        }
-
-        p.image(
-          app.userIcon as p5.Image,
-          x - user.width / 2,
-          y - user.height / 2,
-          user.width,
-          user.height
-        );
-
-        p.pop();
-        return;
-      }
+      let lastInspectedIndex = -1;
 
       Object.values(app.circlePositions).forEach((position, index) => {
         const { diameter } = config.timeline.circleProps;
@@ -491,6 +458,8 @@ export function topicsAnimation(
           y > circleY - diameter / 2 &&
           y < circleY + diameter / 2
         ) {
+          lastInspectedIndex = index;
+
           if (app.visitIndex <= index) {
             if (isInteractive) {
               app.showHandCursor = true;
@@ -536,6 +505,51 @@ export function topicsAnimation(
 
       if (!isInspecting) {
         app.showHandCursor = false;
+      }
+
+      if (isInteractive) {
+        const user = config.timeline.user;
+        p.push();
+        p.clear();
+
+        app.drawTimeline(config.timeline.position, epoch);
+        const lastVisitedIndex = app.prevVisitedCircleIndex;
+        if (lastVisitedIndex !== -1) {
+          // keep track of visited circles
+          app.inspectedCircles.add(lastVisitedIndex);
+
+          const inspectedCirclesArray = Array.from(app.inspectedCircles);
+          for (let i = 0; i < inspectedCirclesArray.length; i++) {
+            const index = inspectedCirclesArray[i];
+            if (lastVisitedIndex === index) {
+              app.handleUserVisit(index);
+            } else {
+              app.userVisitDone(index);
+            }
+            app.drawSmallCircles(index, epoch[index].website);
+          }
+          app.drawInfoBox(lastVisitedIndex, epoch[lastVisitedIndex].website);
+        }
+
+        // drag user icon only if not hovering the current selected circle
+        if (
+          !isInspecting ||
+          lastInspectedIndex !== app.prevVisitedCircleIndex
+        ) {
+          p.image(
+            app.userIcon as p5.Image,
+            x - user.width / 2,
+            y - user.height / 2,
+            user.width,
+            user.height
+          );
+        }
+
+        if (isInspecting && lastInspectedIndex === app.prevVisitedCircleIndex) {
+          app.showHandCursor = false;
+        }
+
+        p.pop();
       }
     },
 
