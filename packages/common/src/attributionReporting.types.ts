@@ -25,6 +25,7 @@ export type SourcesRegistration =
     requestUrl: string;
     result: string;
     index: number;
+    tabId: string;
   };
 
 export type TriggerRegistration =
@@ -36,6 +37,7 @@ export type TriggerRegistration =
     time: number;
     destination?: string;
     reportingOrigin?: string;
+    tabId: string;
   };
 
 export type SourcesData = SourcesRegistration | TriggerRegistration;

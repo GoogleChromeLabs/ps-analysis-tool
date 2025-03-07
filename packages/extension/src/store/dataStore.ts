@@ -561,42 +561,46 @@ class DataStore {
     tabId: number,
     overrideForInitialSync: boolean
   ) {
-    if (this.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
-      return;
+    try {
+      if (this.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
+        return;
+      }
+
+      const newCookieData: {
+        [cookieKey: string]: CookieData;
+      } = {};
+
+      Object.keys(this.tabsData[tabId]).forEach((key) => {
+        newCookieData[key] = {
+          ...this.tabsData[tabId][key],
+          networkEvents: {
+            requestEvents: [],
+            responseEvents: [],
+          },
+          url: '',
+          headerType: ['request', 'response'].includes(
+            this.tabsData[tabId][key]?.headerType ?? ''
+          )
+            ? 'http'
+            : 'javascript',
+        };
+      });
+
+      await chrome.runtime.sendMessage({
+        type: NEW_COOKIE_DATA,
+        payload: {
+          tabId,
+          cookieData: newCookieData,
+          extraData: {
+            extraFrameData: this.tabs[tabId].frameIDURLSet,
+          },
+        },
+      });
+
+      this.tabs[tabId].newUpdatesCA = 0;
+    } catch (error) {
+      // Fail silently
     }
-
-    const newCookieData: {
-      [cookieKey: string]: CookieData;
-    } = {};
-
-    Object.keys(this.tabsData[tabId]).forEach((key) => {
-      newCookieData[key] = {
-        ...this.tabsData[tabId][key],
-        networkEvents: {
-          requestEvents: [],
-          responseEvents: [],
-        },
-        url: '',
-        headerType: ['request', 'response'].includes(
-          this.tabsData[tabId][key]?.headerType ?? ''
-        )
-          ? 'http'
-          : 'javascript',
-      };
-    });
-
-    await chrome.runtime.sendMessage({
-      type: NEW_COOKIE_DATA,
-      payload: {
-        tabId,
-        cookieData: newCookieData,
-        extraData: {
-          extraFrameData: this.tabs[tabId].frameIDURLSet,
-        },
-      },
-    });
-
-    this.tabs[tabId].newUpdatesCA = 0;
   }
 
   /**
@@ -608,69 +612,73 @@ class DataStore {
     tabId: number,
     overrideForInitialSync: boolean
   ) {
-    if (this.tabs[tabId].newUpdatesPA <= 0 && !overrideForInitialSync) {
-      return;
-    }
+    try {
+      if (this.tabs[tabId].newUpdatesPA <= 0 && !overrideForInitialSync) {
+        return;
+      }
 
-    const { globalEvents, ...rest } = this.auctionEvents[tabId];
+      const { globalEvents, ...rest } = this.auctionEvents[tabId];
 
-    const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
-      Object.values(rest).flat()
-    );
-    const groupedAuctionBids: {
-      [parentAuctionId: string]: {
-        0: singleAuctionEvent[];
-        [uniqueAuctionId: string]: singleAuctionEvent[];
-      };
-    } = {};
+      const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
+        Object.values(rest).flat()
+      );
+      const groupedAuctionBids: {
+        [parentAuctionId: string]: {
+          0: singleAuctionEvent[];
+          [uniqueAuctionId: string]: singleAuctionEvent[];
+        };
+      } = {};
 
-    const auctionEventsToBeProcessed = Object.values(rest).flat();
+      const auctionEventsToBeProcessed = Object.values(rest).flat();
 
-    if (isMultiSellerAuction) {
-      auctionEventsToBeProcessed.forEach((event) => {
-        const { parentAuctionId = null, uniqueAuctionId = null } = event;
+      if (isMultiSellerAuction) {
+        auctionEventsToBeProcessed.forEach((event) => {
+          const { parentAuctionId = null, uniqueAuctionId = null } = event;
 
-        if (!parentAuctionId) {
-          if (uniqueAuctionId) {
-            if (!groupedAuctionBids[uniqueAuctionId]) {
-              groupedAuctionBids[uniqueAuctionId] = {
-                0: [],
-              };
+          if (!parentAuctionId) {
+            if (uniqueAuctionId) {
+              if (!groupedAuctionBids[uniqueAuctionId]) {
+                groupedAuctionBids[uniqueAuctionId] = {
+                  0: [],
+                };
+              }
+              groupedAuctionBids[uniqueAuctionId]['0'].push(event);
             }
-            groupedAuctionBids[uniqueAuctionId]['0'].push(event);
+            return;
           }
-          return;
-        }
 
-        if (!groupedAuctionBids[parentAuctionId]) {
-          groupedAuctionBids[parentAuctionId] = {
-            0: [],
-          };
-        }
+          if (!groupedAuctionBids[parentAuctionId]) {
+            groupedAuctionBids[parentAuctionId] = {
+              0: [],
+            };
+          }
 
-        if (!uniqueAuctionId) {
-          return;
-        }
+          if (!uniqueAuctionId) {
+            return;
+          }
 
-        if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
-          groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
-        }
+          if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
+            groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
+          }
 
-        groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
+          groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
+        });
+      }
+
+      await chrome.runtime.sendMessage({
+        type: 'AUCTION_EVENTS',
+        payload: {
+          refreshTabData: overrideForInitialSync,
+          tabId,
+          auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
+          multiSellerAuction: isMultiSellerAuction,
+          globalEvents: globalEvents ?? [],
+        },
       });
+      this.tabs[tabId].newUpdatesPA = 0;
+    } catch (error) {
+      // Fail silently
     }
-
-    await chrome.runtime.sendMessage({
-      type: 'AUCTION_EVENTS',
-      payload: {
-        refreshTabData: overrideForInitialSync,
-        tabId,
-        auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
-        multiSellerAuction: isMultiSellerAuction,
-        globalEvents: globalEvents ?? [],
-      },
-    });
-    this.tabs[tabId].newUpdatesPA = 0;
   }
 
   /**
@@ -679,20 +687,24 @@ class DataStore {
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
   async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
-    if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
-      return;
+    try {
+      if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
+        return;
+      }
+
+      await chrome.runtime.sendMessage({
+        type: 'ARA_EVENTS',
+        payload: {
+          sourcesRegistration: this.sources.sourceRegistration,
+          triggerRegistration: this.sources.triggerRegistration,
+          tabId: Number(tabId),
+        },
+      });
+
+      this.oldSources = structuredClone(this.sources);
+    } catch (error) {
+      // Fail silently
     }
-
-    await chrome.runtime.sendMessage({
-      type: 'ARA_EVENTS',
-      payload: {
-        sourcesRegistration: this.sources.sourceRegistration,
-        triggerRegistration: this.sources.triggerRegistration,
-        tabId: Number(tabId),
-      },
-    });
-
-    this.oldSources = { ...this.sources };
   }
 
   /**

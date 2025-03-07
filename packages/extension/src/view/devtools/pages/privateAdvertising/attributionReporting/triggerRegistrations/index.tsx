@@ -24,9 +24,10 @@ import {
   type TableColumn,
   type TableFilter,
   type InfoType,
+  InfoIcon,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
@@ -42,6 +43,7 @@ const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
   );
+  const [filterData, setFilterData] = useState(true);
 
   const { triggerRegistration } = useAttributionReporting(({ state }) => ({
     triggerRegistration: state.triggerRegistration,
@@ -51,25 +53,31 @@ const TriggerRegistrations = () => {
     typeof RowContextMenuForARA
   > | null>(null);
 
+  const data = useMemo(() => {
+    if (filterData) {
+      return triggerRegistration.filter(
+        (trigger) =>
+          trigger.tabId &&
+          trigger.tabId === chrome.devtools.inspectedWindow.tabId.toString()
+      );
+    } else {
+      return triggerRegistration;
+    }
+  }, [filterData, triggerRegistration]);
+
   const tableFilters = useMemo<TableFilter>(
     () => ({
       reportingOrigin: {
         title: 'Reporting Origin',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFiltersForTrigger(
-          triggerRegistration,
-          'reportingOrigin'
-        ),
+        filterValues: calculateFiltersForTrigger(data, 'reportingOrigin'),
       },
       destination: {
         title: 'Destination Sites',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFiltersForTrigger(
-          triggerRegistration,
-          'destination'
-        ),
+        filterValues: calculateFiltersForTrigger(data, 'destination'),
       },
       time: {
         title: 'Registration Time',
@@ -123,23 +131,41 @@ const TriggerRegistrations = () => {
         title: 'Event Level Result',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFiltersForTrigger(
-          triggerRegistration,
-          'eventLevel'
-        ),
+        filterValues: calculateFiltersForTrigger(data, 'eventLevel'),
       },
       aggregatable: {
         title: 'Aggregatable Result',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFiltersForTrigger(
-          triggerRegistration,
-          'aggregatable'
-        ),
+        filterValues: calculateFiltersForTrigger(data, 'aggregatable'),
       },
     }),
-    [triggerRegistration]
+    [data]
   );
+
+  const topBarExtraInterface = useCallback(() => {
+    return (
+      <div className="h-full flex items-center justify-center w-max gap-1">
+        <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
+        <div className="flex items-center justify-center w-max gap-1">
+          <input
+            onChange={(event) => setFilterData(event.target.checked)}
+            type="checkbox"
+            defaultChecked={true}
+          />
+          <label htmlFor="showAllEvents" className="text-xs leading-none">
+            Show Current Tab Registrations
+          </label>
+          <div
+            title="Enable this to see network requests associated with the triggers."
+            className="hover:cursor-pointer"
+          >
+            <InfoIcon className="w-3 h-3 fill-granite-gray" />
+          </div>
+        </div>
+      </div>
+    );
+  }, []);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -196,7 +222,7 @@ const TriggerRegistrations = () => {
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             tableFilterData={tableFilters}
-            data={triggerRegistration}
+            data={data}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={
@@ -210,6 +236,7 @@ const TriggerRegistrations = () => {
             }
           >
             <Table
+              extraInterfaceToTopBar={topBarExtraInterface}
               selectedKey={selectedJSON?.index.toString()}
               hideSearch={true}
               minWidth="50rem"
@@ -237,7 +264,7 @@ const TriggerRegistrations = () => {
           </div>
         )}
       </div>
-      <RowContextMenuForARA ref={rowContextMenuRef} />
+      <RowContextMenuForARA ref={rowContextMenuRef} filteredData={filterData} />
     </div>
   );
 };

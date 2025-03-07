@@ -55,6 +55,7 @@ const readHeaderAndRegister = (
           reportingOrigin: new URL(requestUrl).origin,
           requestUrl: requestUrl,
           time: Date.now(),
+          tabId,
         } as Protocol.Storage.AttributionReportingTriggerRegistration,
         eventLevel: '' as Protocol.Storage.AttributionReportingEventLevelResult,
         aggregatable:
@@ -81,17 +82,20 @@ const readHeaderAndRegister = (
       return;
     }
 
-    ARAStore.processARASourcesRegistered({
-      registration: {
-        ...jsonSource,
-        reportingOrigin: new URL(requestUrl).origin,
-        requestUrl: requestUrl,
-        sourceOrigin: dataStore.tabs[Number(tabId)].url ?? '',
-        time: Date.now(),
-      } as Protocol.Storage.AttributionReportingSourceRegistration,
-      result:
-        'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
-    });
+    ARAStore.processARASourcesRegistered(
+      {
+        registration: {
+          ...jsonSource,
+          reportingOrigin: new URL(requestUrl).origin,
+          requestUrl: requestUrl,
+          sourceOrigin: dataStore.tabs[Number(tabId)]?.url ?? '',
+          time: Date.now(),
+        } as Protocol.Storage.AttributionReportingSourceRegistration,
+        result:
+          'success' as Protocol.Storage.AttributionReportingSourceRegistrationResult,
+      },
+      tabId
+    );
   }
 };
 

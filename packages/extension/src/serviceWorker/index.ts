@@ -601,11 +601,16 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       ) {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
-
         dataStore.sources.sourceRegistration =
           dataStore.sources.sourceRegistration.map((singleSource) => {
-            //@ts-ignore
-            if (singleSource?.sourceEventId === registration.eventId) {
+            const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+            const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
+            if (
+              //@ts-ignore
+              singleSource?.sourceEventId === registration.eventId &&
+              singleSource.sourceOrigin &&
+              host === sourceOriginHost
+            ) {
               const time = registration.time.toString().includes('.')
                 ? registration.time * 1000
                 : registration.time;
@@ -614,8 +619,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 ...singleSource,
                 ...registration,
                 time,
-                expiry: registration.expiry + time,
+                expiry: registration.expiry * 1000 + time,
                 result,
+                tabId: tabId ?? singleSource.tabId,
               };
               //@ts-ignore
               delete combinedData.sourceEventId;
@@ -635,6 +641,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
 
         dataStore.sources.triggerRegistration.forEach((trigger, index) => {
+          if (tabId !== trigger.tabId) {
+            return;
+          }
           const registrationKeys = new Set<string>();
           Object.keys(registration).forEach((key) => registrationKeys.add(key));
 
@@ -659,7 +668,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               .intersection(triggerKeys)
               .has('aggregatableValues') &&
             !match &&
-            registration['aggregatableValues'].length > 0
+            Object.prototype.hasOwnProperty.call(
+              registration['aggregatableValues'],
+              'values'
+            )
           ) {
             match = ARAStore.matchTriggerData(
               registration,
@@ -679,12 +691,23 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             );
           }
 
-          if (match) {
+          const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+          const sourceOriginHost = trigger.destination
+            ? new URL(trigger.destination).origin
+            : '';
+          if (
+            match &&
+            !trigger?.aggregatable &&
+            !trigger?.eventLevel &&
+            trigger.destination &&
+            host === sourceOriginHost
+          ) {
             dataStore.sources.triggerRegistration[index] = {
-              ...dataStore.sources.triggerRegistration[index],
+              ...trigger,
               eventLevel,
               aggregatable,
               ...registration,
+              tabId: tabId ?? trigger.tabId,
             };
           }
         });
