@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating a circle figure.
@@ -29,16 +29,19 @@ export default class Circle extends Figure {
   /**
    * Diameter of the circle.
    */
-  diameter: number;
+  private diameter: number;
 
   constructor(
+    canvasRunner: Main,
     x: number,
     y: number,
     diameter: number,
+    id?: string,
     fill?: string,
-    stroke?: string
+    stroke?: string,
+    tags?: string[]
   ) {
-    super(x, y, fill, stroke);
+    super(canvasRunner, x, y, id, fill, stroke, tags);
     this.diameter = diameter;
   }
 
@@ -50,10 +53,10 @@ export default class Circle extends Figure {
     this.p5?.pop();
   }
 
-  onHover() {
+  mouseMoved() {
     this.savePreviousColors();
     this.fill = 'red'; // TODO: Discuss the function
-    main.addFigure(this, true);
+    this.canvasRunner.addFigure(this, true);
   }
 
   onLeave() {
@@ -65,10 +68,10 @@ export default class Circle extends Figure {
     }
 
     this.reApplyPreviousColors();
-    main.addFigure(this, true);
+    this.canvasRunner.addFigure(this, true);
   }
 
-  onClick() {
+  mouseClicked() {
     // TODO: Discuss the function
   }
 
@@ -83,14 +86,6 @@ export default class Circle extends Figure {
     );
   }
 
-  remove() {
-    this.p5?.push();
-    this.p5?.fill(main.backgroundColor);
-    this.p5?.stroke(main.backgroundColor);
-    this.p5?.circle(this.x, this.y, this.diameter + 1);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -98,12 +93,11 @@ export default class Circle extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.diameter = diameter ?? this.diameter;
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
   }
 }
