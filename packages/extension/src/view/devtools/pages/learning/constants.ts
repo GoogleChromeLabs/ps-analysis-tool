@@ -61,7 +61,7 @@ export const FEATURED_ITEMS = [
     },
   },
   {
-    name: 'Demo Centre',
+    name: 'Demos',
     icon: DemosIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
     description:
