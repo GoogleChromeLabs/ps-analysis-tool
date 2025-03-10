@@ -41,7 +41,7 @@ const ExternalLinkPanel = ({ description, icon }: ExternalLinkPanelProps) => {
             </p>
           )}
           <p className="text-sm flex items-center gap-1">
-            Please refer to the help center opened in the current browser tab.
+            Please refer to the website opened in the current browser tab.
             <TabIcon className="w-4 h-4 fill-granite-gray dark:fill-bright-gray" />
           </p>
         </div>

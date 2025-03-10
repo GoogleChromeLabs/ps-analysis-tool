@@ -17,17 +17,8 @@
 /**
  * External dependencies.
  */
-import {
-  InfoIcon,
-  InternalNavigationForAnchor,
-  SIDEBAR_ITEMS_KEYS,
-} from '@google-psat/design-system';
+import { InfoIcon, LinkProcessor } from '@google-psat/design-system';
 import React from 'react';
-
-/**
- * Internal dependencies.
- */
-import { NAVIGATION_TAGS } from '../../learning';
 
 interface EvaluationEnvironmentProps {
   text: string;
@@ -43,10 +34,12 @@ const EvaluationEnvironment = ({ text }: EvaluationEnvironmentProps) => {
         className="text-sm text-center text-gray dark:text-bright-gray"
         style={{ whiteSpace: 'pre-line' }}
       >
-        <InternalNavigationForAnchor
+        <LinkProcessor
           text={text}
-          to={[SIDEBAR_ITEMS_KEYS.WIKI]}
-          queries={[NAVIGATION_TAGS.EVALUATION_ENVIRONMENT]}
+          links={[
+            'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment',
+          ]}
+          sameTab={true}
         />
       </div>
     </div>
