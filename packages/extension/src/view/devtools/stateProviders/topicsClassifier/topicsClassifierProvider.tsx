@@ -31,6 +31,40 @@ const Provider = ({ children }: PropsWithChildren) => {
     TopicsClassifierContext['state']['classificationResult']
   >([]);
 
+  const validateDomain = useCallback((host: string) => {
+    switch (true) {
+      case /_/.test(host):
+        return `Invalid host: "${host}". Domain contains an underscore ('_'), which is not allowed.`;
+
+      case /^-/.test(host):
+        return `Invalid host: "${host}". Domain should not start with a hyphen ('-').`;
+
+      case /-\.[a-zA-Z]{2,63}$/.test(host):
+        return `Invalid host: "${host}". Domain should not end with a hyphen ('-').`;
+
+      case /\.{2,}/.test(host):
+        return `Invalid host: "${host}". Domain contains consecutive dots ('..'), which is not allowed.`;
+
+      case /^[^.]+\.[0-9]+$/.test(host):
+        return `Invalid host: "${host}". TLD must contain only letters (a-z, A-Z).`;
+
+      case /^[^.]+\.$/.test(host):
+        return `Invalid host: "${host}". Domain is missing a valid TLD.`;
+
+      case /\s/.test(host):
+        return `Invalid host: "${host}". Domain contains space(s), which is not allowed.`;
+
+      case /^[^.]+$/.test(host):
+        return `Invalid host: "${host}". Domain is missing a TLD.`;
+
+      case /\//.test(host):
+        return `Invalid host: "${host}". Domain contains '/' character, which is not allowed.`;
+
+      default:
+        return '';
+    }
+  }, []);
+
   const handleClassification = useCallback(async () => {
     const hosts = websites.split('\n');
     const preprocessedHosts: string[] = [];
@@ -47,11 +81,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     });
 
     preprocessedHosts.forEach((host) => {
-      const hostnameRegex = /^(?!:\/\/)([a-zA-Z0-9-_]{1,63}\.)+[a-zA-Z]{2,63}$/;
-      if (!hostnameRegex.test(host)) {
-        inputValidationErrors.push(
-          `The host "${host}" is invalid. Please ensure it is a valid domain name without "http://" or "https://".`
-        );
+      const hostnameRegex = validateDomain(host);
+      if (hostnameRegex) {
+        inputValidationErrors.push(hostnameRegex);
       }
     });
 
@@ -126,7 +158,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         setInputValidationErrors(['Error: Failed to classify websites']);
       }
     }
-  }, [websites]);
+  }, [websites, validateDomain]);
 
   return (
     <Context.Provider

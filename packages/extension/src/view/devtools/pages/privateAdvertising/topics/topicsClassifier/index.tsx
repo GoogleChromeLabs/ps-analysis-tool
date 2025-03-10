@@ -163,7 +163,7 @@ const TopicsClassifier = () => {
         />
       </div>
       {validationErrors.length > 0 && (
-        <div className="flex p-4 w-full flex-col">
+        <div className="flex py-4 w-full flex-col gap-2">
           {validationErrors.map((error, index) => (
             <div
               key={index}
