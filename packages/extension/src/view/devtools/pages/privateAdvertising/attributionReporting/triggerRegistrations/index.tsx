@@ -43,18 +43,21 @@ const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
   );
-  const [filterData, setFilterData] = useState(true);
 
-  const { triggerRegistration } = useAttributionReporting(({ state }) => ({
-    triggerRegistration: state.triggerRegistration,
-  }));
+  const { triggerRegistration, filter, updateFilter } = useAttributionReporting(
+    ({ state, actions }) => ({
+      triggerRegistration: state.triggerRegistration,
+      filter: state.filter,
+      updateFilter: actions.updateFilter,
+    })
+  );
 
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
 
   const data = useMemo(() => {
-    if (filterData) {
+    if (filter?.triggerRegistration) {
       return triggerRegistration.filter(
         (trigger) =>
           trigger.tabId &&
@@ -63,7 +66,7 @@ const TriggerRegistrations = () => {
     } else {
       return triggerRegistration;
     }
-  }, [filterData, triggerRegistration]);
+  }, [filter?.triggerRegistration, triggerRegistration]);
 
   const tableFilters = useMemo<TableFilter>(
     () => ({
@@ -149,7 +152,9 @@ const TriggerRegistrations = () => {
         <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
         <div className="flex items-center justify-center w-max gap-1">
           <input
-            onChange={(event) => setFilterData(event.target.checked)}
+            onChange={(event) =>
+              updateFilter('triggerRegistration', event.target.checked)
+            }
             type="checkbox"
             defaultChecked={true}
           />
@@ -165,7 +170,7 @@ const TriggerRegistrations = () => {
         </div>
       </div>
     );
-  }, []);
+  }, [updateFilter]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -264,7 +269,7 @@ const TriggerRegistrations = () => {
           </div>
         )}
       </div>
-      <RowContextMenuForARA ref={rowContextMenuRef} filteredData={filterData} />
+      <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
 };

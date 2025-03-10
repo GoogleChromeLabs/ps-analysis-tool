@@ -44,27 +44,29 @@ const SourceRegistrations = () => {
     null
   );
 
-  const [filterData, setFilterData] = useState(true);
-
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
+  const { sourcesRegistration, filter, updateFilter } = useAttributionReporting(
+    ({ state, actions }) => ({
+      sourcesRegistration: state.sourcesRegistration,
+      filter: state.filter,
+      updateFilter: actions.updateFilter,
+    })
+  );
 
   const data = useMemo(() => {
-    if (filterData) {
+    if (filter?.activeSources) {
       return sourcesRegistration.filter(
-        (trigger) =>
-          trigger.tabId &&
-          trigger.tabId === chrome.devtools.inspectedWindow.tabId.toString()
+        (source) =>
+          source.tabId &&
+          source.tabId === chrome.devtools.inspectedWindow.tabId.toString()
       );
     } else {
       return sourcesRegistration;
     }
-  }, [filterData, sourcesRegistration]);
+  }, [filter?.activeSources, sourcesRegistration]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -188,7 +190,9 @@ const SourceRegistrations = () => {
         <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
         <div className="flex items-center justify-center w-max gap-1">
           <input
-            onChange={(event) => setFilterData(event.target.checked)}
+            onChange={(event) =>
+              updateFilter('sourcesRegistration', event.target.checked)
+            }
             type="checkbox"
             defaultChecked={true}
           />
@@ -204,7 +208,7 @@ const SourceRegistrations = () => {
         </div>
       </div>
     );
-  }, []);
+  }, [updateFilter]);
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">

@@ -44,18 +44,20 @@ const ActiveSources = () => {
     null
   );
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
-
-  const [filterData, setFilterData] = useState(true);
+  const { sourcesRegistration, filter, updateFilter } = useAttributionReporting(
+    ({ state, actions }) => ({
+      sourcesRegistration: state.sourcesRegistration,
+      filter: state.filter,
+      updateFilter: actions.updateFilter,
+    })
+  );
 
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
 
   const data = useMemo(() => {
-    if (filterData) {
+    if (filter?.activeSources) {
       return sourcesRegistration.filter(
         (source) =>
           source.tabId &&
@@ -64,7 +66,7 @@ const ActiveSources = () => {
     } else {
       return sourcesRegistration;
     }
-  }, [filterData, sourcesRegistration]);
+  }, [filter?.activeSources, sourcesRegistration]);
 
   const tableFilters = useMemo<TableFilter>(
     () => ({
@@ -274,7 +276,9 @@ const ActiveSources = () => {
         <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
         <div className="flex items-center justify-center w-max gap-1">
           <input
-            onChange={(event) => setFilterData(event.target.checked)}
+            onChange={(event) =>
+              updateFilter('activeSources', event.target.checked)
+            }
             type="checkbox"
             defaultChecked={true}
             className="hover:cursor-pointer"
@@ -291,7 +295,7 @@ const ActiveSources = () => {
         </div>
       </div>
     );
-  }, []);
+  }, [updateFilter]);
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
