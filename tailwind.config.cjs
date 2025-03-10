@@ -221,6 +221,7 @@ module.exports = {
       'cultured-grey': '#F7F7F7',
       mahogany: '#CC3300',
       blueberry: '#4285FA',
+      celeste: '#B1F8F2',
     },
     borderColor: {
       ...colors,
