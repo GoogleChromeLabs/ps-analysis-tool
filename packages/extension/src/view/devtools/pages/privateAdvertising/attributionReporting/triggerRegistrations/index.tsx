@@ -160,7 +160,7 @@ const TriggerRegistrations = () => {
             className="hover:cursor-pointer"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
-            Show Current Tab Registrations
+            Show current tab registrations
           </label>
           <div
             title="Preserve log from Network tab to view network requests associated
