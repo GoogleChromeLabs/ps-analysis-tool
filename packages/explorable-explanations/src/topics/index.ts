@@ -85,6 +85,7 @@ export function topicsAnimation(
     counter: 0,
     lastFrameCount: 0,
     inspectedCircles: new Set<number>(),
+    isTextLoadingCoverVisible: true,
 
     drawTimeline: (
       position: { x: number; y: number },
@@ -689,6 +690,17 @@ export function topicsAnimation(
       while (app.visitIndex < visitIndexStart) {
         app.play();
       }
+    }
+
+    // permanently remove the loading text cover if visible
+    // to allow hovering that area
+    if (app.isTextLoadingCoverVisible) {
+      try {
+        document.getElementById('loading-text-cover')?.remove();
+      } catch (error) {
+        // ignore error
+      }
+      app.isTextLoadingCoverVisible = false;
     }
   };
 
