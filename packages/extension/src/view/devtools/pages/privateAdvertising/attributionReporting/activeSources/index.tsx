@@ -284,7 +284,8 @@ const ActiveSources = () => {
             className="hover:cursor-pointer"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
-            Show Current Tab Registrations
+            Preserve log from Network tab to view network requests associated
+            with each source in this table for the current tab.
           </label>
           <div
             title="Enable this to see network requests associated with the sources."

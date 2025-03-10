@@ -42,7 +42,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [filter, setFiltering] = useState({
     activeSources: true,
     sourcesRegistration: true,
-    triggerRegistration: true,
+    triggerRegistration: false,
   });
 
   const updateFilter = useCallback((_filter: string, booleanValue: boolean) => {

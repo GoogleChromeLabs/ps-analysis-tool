@@ -45,7 +45,7 @@ const initialState: AttributionReportingContextType = {
     filter: {
       activeSources: true,
       sourcesRegistration: true,
-      triggerRegistration: true,
+      triggerRegistration: false,
     },
   },
   actions: {
