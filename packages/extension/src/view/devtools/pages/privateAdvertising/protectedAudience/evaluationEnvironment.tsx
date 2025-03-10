@@ -26,7 +26,7 @@ interface EvaluationEnvironmentProps {
 
 const EvaluationEnvironment = ({ text }: EvaluationEnvironmentProps) => {
   return (
-    <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-center max-w-2xl">
+    <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-center max-w-4xl">
       <div>
         <InfoIcon className="w-3 h-3 fill-granite-gray" />
       </div>

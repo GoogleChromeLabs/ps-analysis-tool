@@ -65,7 +65,7 @@ const InterestGroups = () => {
   if (!interestGroupDetails || interestGroupDetails.length === 0) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
+        <p className="text-lg text-raisin-black dark:text-bright-gray">
           No interests group events recorded.
         </p>
         <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the interest group events if you haven’t already." />

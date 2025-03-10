@@ -189,7 +189,7 @@ const IGTable = ({
             value="Show All Events"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
-            Show All Events
+            Show all events
           </label>
         </div>
       </div>
