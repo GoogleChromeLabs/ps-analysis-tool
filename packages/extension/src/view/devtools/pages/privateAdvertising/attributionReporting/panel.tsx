@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { Tabs, useTabs } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
@@ -37,19 +37,43 @@ const Panel = () => {
   const ActiveTabContent = panel.Element;
   const { className, props } = panel;
 
-  const { sourcesRegistration, triggerRegistration } = useAttributionReporting(
-    ({ state }) => ({
+  const { sourcesRegistration, triggerRegistration, filter } =
+    useAttributionReporting(({ state }) => ({
       sourcesRegistration: state.sourcesRegistration,
       triggerRegistration: state.triggerRegistration,
-    })
-  );
+      filter: state.filter,
+    }));
 
   const sourcesRegistrationRef = useRef<typeof sourcesRegistration>([]);
   const triggerRegistrationRef = useRef<typeof triggerRegistration>([]);
 
+  const filteredSourceRegistration = useMemo(() => {
+    if (filter?.sourcesRegistration) {
+      return sourcesRegistration.filter(
+        (source) =>
+          source.tabId &&
+          source.tabId === chrome.devtools.inspectedWindow.tabId.toString()
+      );
+    } else {
+      return sourcesRegistration;
+    }
+  }, [filter?.sourcesRegistration, sourcesRegistration]);
+
+  const filteredTriggerRegistration = useMemo(() => {
+    if (filter?.triggerRegistration) {
+      return triggerRegistration.filter(
+        (trigger) =>
+          trigger.tabId &&
+          trigger.tabId === chrome.devtools.inspectedWindow.tabId.toString()
+      );
+    } else {
+      return triggerRegistration;
+    }
+  }, [filter?.triggerRegistration, triggerRegistration]);
+
   useEffect(() => {
-    if (!isEqual(sourcesRegistration, sourcesRegistrationRef.current)) {
-      if (!sourcesRegistration.length) {
+    if (!isEqual(filteredSourceRegistration, sourcesRegistrationRef.current)) {
+      if (!filteredSourceRegistration.length) {
         highlightTab(1, false);
         highlightTab(2, false);
       } else {
@@ -57,20 +81,20 @@ const Panel = () => {
         highlightTab(2);
       }
 
-      sourcesRegistrationRef.current = sourcesRegistration;
+      sourcesRegistrationRef.current = filteredSourceRegistration;
     }
-  }, [sourcesRegistration, highlightTab]);
+  }, [filteredSourceRegistration, highlightTab]);
 
   useEffect(() => {
-    if (!isEqual(triggerRegistration, triggerRegistrationRef.current)) {
-      if (!triggerRegistration.length) {
+    if (!isEqual(filteredTriggerRegistration, triggerRegistrationRef.current)) {
+      if (!filteredTriggerRegistration.length) {
         highlightTab(3, false);
       } else {
         highlightTab(3);
       }
-      triggerRegistrationRef.current = triggerRegistration;
+      triggerRegistrationRef.current = filteredTriggerRegistration;
     }
-  }, [triggerRegistration, highlightTab]);
+  }, [filteredTriggerRegistration, highlightTab]);
 
   return (
     <div

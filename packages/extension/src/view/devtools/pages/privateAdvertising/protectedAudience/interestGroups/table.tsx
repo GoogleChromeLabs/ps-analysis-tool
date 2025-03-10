@@ -174,7 +174,7 @@ const IGTable = ({
 
   const topBarExtraInterface = useCallback(() => {
     if (isEE) {
-      return null;
+      return <></>;
     }
 
     return (

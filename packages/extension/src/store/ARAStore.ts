@@ -33,9 +33,11 @@ class ARAStore {
   /**
    * Processes the Attribution Reporting Source Registered event.
    * @param {Protocol.Storage.AttributionReportingSourceRegisteredEvent} params - The event parameters.
+   * @param {string} tabId - The ID of the tab where the event occurred.
    */
   processARASourcesRegistered(
-    params: Protocol.Storage.AttributionReportingSourceRegisteredEvent
+    params: Protocol.Storage.AttributionReportingSourceRegisteredEvent,
+    tabId: string
   ) {
     const sourceRegistrationData = convertKeysToCamelCase(
       params.registration
@@ -46,6 +48,7 @@ class ARAStore {
         requestUrl: '',
         ...sourceRegistrationData,
         result: params.result,
+        tabId,
         index: dataStore.sources.sourceRegistration.length,
       });
     } else {
@@ -55,6 +58,7 @@ class ARAStore {
           ...sourceRegistrationData,
           result: params.result,
           index: 0,
+          tabId,
         },
       ];
     }
@@ -82,6 +86,7 @@ class ARAStore {
         eventLevel: params.eventLevel,
         index: dataStore.sources.triggerRegistration.length,
         time: Date.now(),
+        tabId,
         destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
       });
     } else {
@@ -93,6 +98,7 @@ class ARAStore {
           eventLevel: params.eventLevel,
           index: 0,
           time: Date.now(),
+          tabId,
           destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
         },
       ];

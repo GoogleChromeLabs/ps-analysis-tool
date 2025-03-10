@@ -18,6 +18,7 @@
  */
 import {
   createContext,
+  noop,
   type SourcesRegistration,
   type TriggerRegistration,
 } from '@google-psat/common';
@@ -26,6 +27,14 @@ export interface AttributionReportingContextType {
   state: {
     sourcesRegistration: SourcesRegistration[];
     triggerRegistration: TriggerRegistration[];
+    filter: {
+      activeSources: boolean;
+      sourcesRegistration: boolean;
+      triggerRegistration: boolean;
+    };
+  };
+  actions: {
+    updateFilter: (filter: string, booleanValue: boolean) => void;
   };
 }
 
@@ -33,6 +42,14 @@ const initialState: AttributionReportingContextType = {
   state: {
     triggerRegistration: [],
     sourcesRegistration: [],
+    filter: {
+      activeSources: true,
+      sourcesRegistration: true,
+      triggerRegistration: false,
+    },
+  },
+  actions: {
+    updateFilter: noop,
   },
 };
 

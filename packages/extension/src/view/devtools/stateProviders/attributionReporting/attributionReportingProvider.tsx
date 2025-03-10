@@ -39,6 +39,16 @@ const Provider = ({ children }: PropsWithChildren) => {
     AttributionReportingContextType['state']['triggerRegistration']
   >([]);
 
+  const [filter, setFiltering] = useState({
+    activeSources: true,
+    sourcesRegistration: true,
+    triggerRegistration: false,
+  });
+
+  const updateFilter = useCallback((_filter: string, booleanValue: boolean) => {
+    setFiltering((prevState) => ({ ...prevState, [_filter]: booleanValue }));
+  }, []);
+
   const messagePassingListener = useCallback(
     (message: {
       type: string;
@@ -53,12 +63,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (!message.type) {
-        return;
-      }
-
-      const tabId = chrome.devtools.inspectedWindow.tabId;
-
-      if (message.payload.tabId.toString() !== tabId.toString()) {
         return;
       }
 
@@ -102,9 +106,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       state: {
         triggerRegistration,
         sourcesRegistration,
+        filter,
+      },
+      actions: {
+        updateFilter,
       },
     };
-  }, [triggerRegistration, sourcesRegistration]);
+  }, [triggerRegistration, sourcesRegistration, updateFilter, filter]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };

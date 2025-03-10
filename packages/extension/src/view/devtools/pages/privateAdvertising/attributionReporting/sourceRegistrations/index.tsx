@@ -24,9 +24,10 @@ import {
   type TableFilter,
   type TableColumn,
   type InfoType,
+  InfoIcon,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
@@ -42,13 +43,30 @@ const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
+
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
 
-  const { sourcesRegistration } = useAttributionReporting(({ state }) => ({
-    sourcesRegistration: state.sourcesRegistration,
-  }));
+  const { sourcesRegistration, filter, updateFilter } = useAttributionReporting(
+    ({ state, actions }) => ({
+      sourcesRegistration: state.sourcesRegistration,
+      filter: state.filter,
+      updateFilter: actions.updateFilter,
+    })
+  );
+
+  const data = useMemo(() => {
+    if (filter?.activeSources) {
+      return sourcesRegistration.filter(
+        (source) =>
+          source.tabId &&
+          source.tabId === chrome.devtools.inspectedWindow.tabId.toString()
+      );
+    } else {
+      return sourcesRegistration;
+    }
+  }, [filter?.activeSources, sourcesRegistration]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -148,29 +166,51 @@ const SourceRegistrations = () => {
         title: 'Source Origin',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFiltersForSources(
-          sourcesRegistration,
-          'sourceOrigin'
-        ),
+        filterValues: calculateFiltersForSources(data, 'sourceOrigin'),
       },
       reportingOrigin: {
         title: 'Reporting Origin',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFiltersForSources(
-          sourcesRegistration,
-          'reportingOrigin'
-        ),
+        filterValues: calculateFiltersForSources(data, 'reportingOrigin'),
       },
       type: {
         title: 'Type',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculateFiltersForSources(sourcesRegistration, 'type'),
+        filterValues: calculateFiltersForSources(data, 'type'),
       },
     }),
-    [sourcesRegistration]
+    [data]
   );
+
+  const topBarExtraInterface = useCallback(() => {
+    return (
+      <div className="h-full flex items-center justify-center w-max gap-1">
+        <div className="h-full w-px bg-american-silver dark:bg-quartz mr-2" />
+        <div className="flex items-center justify-center w-max gap-1">
+          <input
+            onChange={(event) =>
+              updateFilter('sourcesRegistration', event.target.checked)
+            }
+            type="checkbox"
+            defaultChecked={filter.sourcesRegistration}
+            className="hover:cursor-pointer"
+          />
+          <label htmlFor="showAllEvents" className="text-xs leading-none">
+            Show current tab registrations
+          </label>
+          <div
+            title="Preserve log from Network tab to view network requests associated
+            with each source in this table for the current tab."
+            className="hover:cursor-pointer"
+          >
+            <InfoIcon className="w-3 h-3 fill-granite-gray" />
+          </div>
+        </div>
+      </div>
+    );
+  }, [updateFilter, filter.sourcesRegistration]);
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
@@ -189,7 +229,7 @@ const SourceRegistrations = () => {
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             tableFilterData={tableFilters}
-            data={sourcesRegistration}
+            data={data}
             tableColumns={tableColumns}
             tableSearchKeys={undefined}
             onRowContextMenu={
@@ -203,6 +243,7 @@ const SourceRegistrations = () => {
             }
           >
             <Table
+              extraInterfaceToTopBar={topBarExtraInterface}
               selectedKey={selectedJSON?.index.toString()}
               hideSearch={true}
               minWidth="50rem"
