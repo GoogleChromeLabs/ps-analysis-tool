@@ -69,7 +69,7 @@ describe('Topics UI Classifier', () => {
     });
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
-    const inputElement = getByPlaceholderText(/One host per line/i);
+    const inputElement = getByPlaceholderText(/Enter one domain per line./i);
     fireEvent.change(inputElement, {
       target: { value: 'google.com\ninvalid_url' },
     });
@@ -95,7 +95,7 @@ describe('Topics UI Classifier', () => {
 
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
-    const inputElement = getByPlaceholderText(/One host per line/i);
+    const inputElement = getByPlaceholderText(/Enter one domain per line./i);
     fireEvent.change(inputElement, {
       target: { value: 'google.com\ninvalid_url' },
     });
@@ -121,7 +121,7 @@ describe('Topics UI Classifier', () => {
 
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
-    const inputElement = getByPlaceholderText(/One host per line/i);
+    const inputElement = getByPlaceholderText(/Enter one domain per line./i);
     fireEvent.change(inputElement, {
       target: { value: 'google.com\nyahoo.com' },
     });
@@ -157,7 +157,7 @@ describe('Topics UI Classifier', () => {
 
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
-    const inputElement = getByPlaceholderText(/One host per line/i);
+    const inputElement = getByPlaceholderText(/Enter one domain per line./i);
     fireEvent.change(inputElement, { target: { value: 'google.com' } });
 
     const classifyButton = getByText(/Classify/i);
@@ -189,7 +189,7 @@ describe('Topics UI Classifier', () => {
 
     const { getByPlaceholderText, getByText } = render(<TopicsClassifier />);
 
-    const inputElement = getByPlaceholderText(/One host per line/i);
+    const inputElement = getByPlaceholderText(/Enter one domain per line./i);
     fireEvent.change(inputElement, { target: { value: 'google.com' } });
 
     const classifyButton = getByText(/Classify/i);

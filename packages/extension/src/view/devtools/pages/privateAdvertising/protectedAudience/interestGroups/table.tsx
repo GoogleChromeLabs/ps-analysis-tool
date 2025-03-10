@@ -157,7 +157,7 @@ const IGTable = ({
       const tableRowClassName = isHighlighted
         ? isRowFocused
           ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light text-black transition-colors'
-          : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+          : 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
         : '';
 
       return tableRowClassName;
@@ -189,7 +189,7 @@ const IGTable = ({
             value="Show All Events"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
-            Show All Events
+            Show all events
           </label>
         </div>
       </div>

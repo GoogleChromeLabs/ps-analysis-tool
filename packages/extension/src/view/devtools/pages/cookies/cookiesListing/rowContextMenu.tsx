@@ -205,7 +205,7 @@ const RowContextMenuForCookies = forwardRef<
             >
               <button
                 onClick={handleFilterClick}
-                className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-blueberry hover:text-white cursor-default"
               >
                 <span>
                   {
@@ -220,7 +220,7 @@ const RowContextMenuForCookies = forwardRef<
               {isDomainInAllowList && parentDomain ? (
                 <button
                   onClick={handleAllowListWithParentDomainClick}
-                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-blueberry hover:text-white cursor-default"
                 >
                   <span>
                     {I18n.getMessage('removeParentDomainFromAllowList', [
@@ -231,7 +231,7 @@ const RowContextMenuForCookies = forwardRef<
               ) : (
                 <button
                   onClick={handleAllowListClick}
-                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-blueberry hover:text-white cursor-default"
                 >
                   <span id="allow-list-option">
                     {isDomainInAllowList
