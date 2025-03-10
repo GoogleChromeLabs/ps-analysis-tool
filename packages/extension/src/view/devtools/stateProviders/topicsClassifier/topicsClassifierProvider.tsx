@@ -33,6 +33,9 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const validateDomain = useCallback((host: string) => {
     switch (true) {
+      case host.startsWith('http://') || host.startsWith('https://'):
+        return `Invalid host: "${host}". Domain should not contain 'http://' or 'https://'.`;
+
       case /_/.test(host):
         return `Invalid host: "${host}". Domain contains an underscore ('_'), which is not allowed.`;
 
