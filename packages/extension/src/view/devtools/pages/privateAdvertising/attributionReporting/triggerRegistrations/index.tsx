@@ -156,7 +156,8 @@ const TriggerRegistrations = () => {
               updateFilter('triggerRegistration', event.target.checked)
             }
             type="checkbox"
-            defaultChecked={true}
+            defaultChecked={filter?.triggerRegistration}
+            className="hover:cursor-pointer"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
             Show Current Tab Registrations
@@ -170,7 +171,7 @@ const TriggerRegistrations = () => {
         </div>
       </div>
     );
-  }, [updateFilter]);
+  }, [filter?.triggerRegistration, updateFilter]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [

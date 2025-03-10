@@ -48,7 +48,7 @@ const Panel = () => {
   const triggerRegistrationRef = useRef<typeof triggerRegistration>([]);
 
   const filteredSourceRegistration = useMemo(() => {
-    if (filter?.activeSources) {
+    if (filter?.sourcesRegistration) {
       return sourcesRegistration.filter(
         (source) =>
           source.tabId &&
@@ -57,7 +57,7 @@ const Panel = () => {
     } else {
       return sourcesRegistration;
     }
-  }, [filter?.activeSources, sourcesRegistration]);
+  }, [filter?.sourcesRegistration, sourcesRegistration]);
 
   const filteredTriggerRegistration = useMemo(() => {
     if (filter?.triggerRegistration) {

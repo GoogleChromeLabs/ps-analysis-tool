@@ -280,7 +280,7 @@ const ActiveSources = () => {
               updateFilter('activeSources', event.target.checked)
             }
             type="checkbox"
-            defaultChecked={true}
+            defaultChecked={filter.activeSources}
             className="hover:cursor-pointer"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
@@ -295,7 +295,7 @@ const ActiveSources = () => {
         </div>
       </div>
     );
-  }, [updateFilter]);
+  }, [updateFilter, filter.activeSources]);
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">

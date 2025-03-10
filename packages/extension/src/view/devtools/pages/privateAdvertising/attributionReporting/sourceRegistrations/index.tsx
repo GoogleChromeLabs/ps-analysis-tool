@@ -194,7 +194,8 @@ const SourceRegistrations = () => {
               updateFilter('sourcesRegistration', event.target.checked)
             }
             type="checkbox"
-            defaultChecked={true}
+            defaultChecked={filter.sourcesRegistration}
+            className="hover:cursor-pointer"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
             Show Current Tab Registrations
@@ -208,7 +209,7 @@ const SourceRegistrations = () => {
         </div>
       </div>
     );
-  }, [updateFilter]);
+  }, [updateFilter, filter.sourcesRegistration]);
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
