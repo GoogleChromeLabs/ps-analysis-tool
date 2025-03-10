@@ -89,7 +89,7 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
               }}
             >
               <button
-                className="w-full text-xs rounded px-1 py-[3px] mb-1.5 flex items-center hover:bg-sky-600 hover:text-white cursor-default"
+                className="w-full text-xs rounded px-1 py-[3px] mb-1.5 flex items-center hover:bg-blueberry hover:text-white cursor-default"
                 onClick={() => {
                   toggleVisibility();
                   handleClose();

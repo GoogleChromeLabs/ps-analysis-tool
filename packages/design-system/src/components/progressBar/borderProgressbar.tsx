@@ -29,7 +29,7 @@ const BorderProgressBar = ({
       className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden mx-auto`}
     >
       <div className="h-px w-full bg-gainsboro dark:bg-neutral-600 overflow-hidden">
-        <div className="h-px w-1/5 bg-sky-600 absolute animate-horizontal-spinner"></div>
+        <div className="h-px w-1/5 bg-blueberry absolute animate-horizontal-spinner"></div>
       </div>
     </div>
   );
