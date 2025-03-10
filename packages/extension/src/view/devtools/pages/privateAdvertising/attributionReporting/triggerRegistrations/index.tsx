@@ -160,11 +160,11 @@ const TriggerRegistrations = () => {
             className="hover:cursor-pointer"
           />
           <label htmlFor="showAllEvents" className="text-xs leading-none">
-            Preserve log from Network tab to view network requests associated
-            with each trigger in this table for the current tab.
+            Show Current Tab Registrations
           </label>
           <div
-            title="Enable this to see network requests associated with the triggers."
+            title="Preserve log from Network tab to view network requests associated
+            with each trigger in this table for the current tab."
             className="hover:cursor-pointer"
           >
             <InfoIcon className="w-3 h-3 fill-granite-gray" />
