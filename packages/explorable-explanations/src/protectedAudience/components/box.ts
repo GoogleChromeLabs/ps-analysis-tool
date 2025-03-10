@@ -99,7 +99,7 @@ const Box = ({
     p.text(title, x + width / 2, y + height / 2);
   }
 
-  if (info && typeof info === 'string') {
+  if (info) {
     const { x: xCoordinate, y: yCoordinate } = getCoordinateValues({ x, y });
     const iconX = xCoordinate + width - infoIconSize - INFO_ICON_SPACING;
     const iconY = yCoordinate + INFO_ICON_SPACING;

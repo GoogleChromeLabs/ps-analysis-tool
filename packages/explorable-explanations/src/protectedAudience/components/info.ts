@@ -24,7 +24,7 @@ interface InfoProps {
   x: number;
   y: number;
   title: string;
-  info: string;
+  info: string | boolean;
   description?: string;
 }
 

@@ -24,7 +24,7 @@ import '@testing-library/jest-dom';
 /**
  * Internal dependencies.
  */
-import InternalNavigationForAnchor from '..';
+import LinkProcessor from '..';
 import { useSidebar } from '../../sidebar';
 
 jest.mock('./../../sidebar/useSidebar', () => ({
@@ -33,7 +33,7 @@ jest.mock('./../../sidebar/useSidebar', () => ({
 const mockUseSidebar = useSidebar as jest.Mock;
 const updateSelectedItemKey = jest.fn();
 
-describe('InternalNavigationForAnchor', () => {
+describe('LinkProcessor', () => {
   beforeEach(() => {
     mockUseSidebar.mockReturnValue(updateSelectedItemKey);
   });
@@ -44,11 +44,7 @@ describe('InternalNavigationForAnchor', () => {
   it('should render the text passed in as a prop', () => {
     const text = 'Test <a>anchor</a> text. Another <a>anchor 2</a> text.';
     render(
-      <InternalNavigationForAnchor
-        text={text}
-        to={['test', 'test2']}
-        queries={['q1']}
-      />
+      <LinkProcessor text={text} to={['test', 'test2']} queries={['q1']} />
     );
 
     const anchor = screen.getByText('anchor');

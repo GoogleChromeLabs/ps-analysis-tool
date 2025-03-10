@@ -19,23 +19,10 @@ import {
   DevGuideIcon,
   Help,
   SIDEBAR_ITEMS_KEYS,
+  DemosIcon,
 } from '@google-psat/design-system';
 
 export const FEATURED_ITEMS = [
-  {
-    name: 'Wiki',
-    icon: WikiIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
-    description:
-      'Learn about the PSAT extension, its features, and usage through detailed documentation in the official Wiki.',
-  },
-  {
-    name: 'Stories',
-    icon: WebStoriesIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
-    description:
-      'Explore interactive web stories that simplify key concepts of the Privacy Sandbox API and its impact on the web.',
-  },
   {
     name: 'Help Center',
     icon: Help,
@@ -49,5 +36,38 @@ export const FEATURED_ITEMS = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
     description:
       'Access documentation, API references, and implementation guides on the Privacy Sandbox Developer site.',
+    colorClasses: {
+      heading: 'text-red-700',
+    },
+  },
+  {
+    name: 'Wiki',
+    icon: WikiIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
+    description:
+      'Learn about the PSAT extension, its features, and usage through detailed documentation in the official Wiki.',
+    colorClasses: {
+      heading: 'text-blue-600',
+    },
+  },
+  {
+    name: 'Stories',
+    icon: WebStoriesIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
+    description:
+      'Explore interactive web stories to grasp the fundamental concepts of the Privacy Sandbox and its impact on the web.',
+    colorClasses: {
+      heading: 'text-yellow-500',
+    },
+  },
+  {
+    name: 'Demos',
+    icon: DemosIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
+    description:
+      'Explore and test Privacy Sandbox APIs in action using the PSAT extension for hands-on insights.',
+    colorClasses: {
+      heading: 'text-green-700',
+    },
   },
 ];

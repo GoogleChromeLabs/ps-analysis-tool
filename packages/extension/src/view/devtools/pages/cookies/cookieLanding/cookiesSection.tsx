@@ -20,9 +20,7 @@ import React, { useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
-  InternalNavigationForAnchor,
   MessageBox,
-  SIDEBAR_ITEMS_KEYS,
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -34,7 +32,6 @@ import type { TabCookies } from '@google-psat/common';
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
-import { NAVIGATION_TAGS } from '../../learning';
 
 interface CookiesSectionProps {
   tabCookies: TabCookies;
@@ -68,20 +65,26 @@ const CookiesSection = ({ tabCookies }: CookiesSectionProps) => {
     [tabFrames]
   );
 
+  const setUpEvaluationEnvironmentText = (
+    <>
+      Please setup the{' '}
+      <a
+        href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-bright-navy-blue dark:text-jordy-blue"
+      >
+        evaluation environment
+      </a>{' '}
+      before analyzing cookies.
+    </>
+  );
+
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       landingHeaderExtraClasses="border-t-0"
-      infoIconTitle={
-        <InternalNavigationForAnchor
-          text={I18n.getMessage('setUpEvaluationEnvironment', ['<a>', '</a>'])}
-          to={[SIDEBAR_ITEMS_KEYS.WIKI]}
-          queries={[NAVIGATION_TAGS.EVALUATION_ENVIRONMENT]}
-          links={[
-            'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment',
-          ]}
-        />
-      }
+      infoIconTitle={setUpEvaluationEnvironmentText}
       testId="cookies-insights"
     >
       {!cookieStats ||
