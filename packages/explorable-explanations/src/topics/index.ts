@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
+/**
+ * External dependencies
+ */
 import type p5 from 'p5';
+
+/**
+ * Internal dependencies
+ */
 import { config } from './config';
 import { getAdtechsColors } from './utils';
 import { websitesToIconsMapping } from './data';
+import icons from '../icons.json';
 
 /**
  * Setup function for p5.js
@@ -76,6 +84,8 @@ export function topicsAnimation(
     smallCirclePositions: {} as Record<number, { x: number; y: number }[]>,
     counter: 0,
     lastFrameCount: 0,
+    inspectedCircles: new Set<number>(),
+    isTextLoadingCoverVisible: true,
 
     drawTimeline: (
       position: { x: number; y: number },
@@ -176,6 +186,7 @@ export function topicsAnimation(
       app.counter = 0;
       app.lastFrameCount = 0;
       app.prevVisitedCircleIndex = -1;
+      app.inspectedCircles.clear();
       p?.clear();
       p.background(255);
       p.pixelDensity(2);
@@ -247,24 +258,41 @@ export function topicsAnimation(
       const currentSite = currentCircle.website;
       app.drawInfoBox(visitIndex, currentSite);
       app.drawSmallCircles(visitIndex, currentSite);
-
       handleUserVisit(visitIndex);
     },
 
     drawSmallCircles: (index: number, currentSite: string) => {
-      const position = app.circlePositions[index];
       const { diameter } = config.timeline.circleProps;
       const smallCircleDiameter = diameter / 5;
-
-      const distanceFromEdge = 6;
-
       const adTechs = siteAdTechs[currentSite];
+
+      const appSmallCirclePositions = app.smallCirclePositions[index];
+
+      // if small circles already exist, just draw them
+      if (appSmallCirclePositions) {
+        for (let i = 0; i < appSmallCirclePositions.length; i++) {
+          const smallCirclePosition = appSmallCirclePositions[i];
+          const adTechColor = getAdtechsColors(p)[adTechs[i]];
+
+          p.push();
+          p.fill(adTechColor);
+          p.circle(
+            smallCirclePosition.x,
+            smallCirclePosition.y,
+            smallCircleDiameter
+          );
+          p.pop();
+        }
+        return;
+      }
+
+      const position = app.circlePositions[index];
+      const smallCirclePositions: { x: number; y: number }[] = [];
+      const distanceFromEdge = 6;
       const numSmallCircles = adTechs.length;
 
-      const smallCirclePositions = [];
-
       for (let i = 0; i < numSmallCircles; i++) {
-        let randomX: number, randomY: number, isOverlapping;
+        let randomX: number, randomY: number, isOverlapping: boolean;
 
         do {
           const angle = Math.random() * 2 * Math.PI;
@@ -294,7 +322,6 @@ export function topicsAnimation(
 
         smallCirclePositions.push({ x: randomX, y: randomY });
 
-        // @ts-ignore
         const adTechColor = getAdtechsColors(p)[adTechs[i]];
 
         p.push();
@@ -314,7 +341,8 @@ export function topicsAnimation(
       p.push();
       p.rectMode(p.CENTER);
       p.fill(245);
-      p.stroke(255);
+      p.stroke(0);
+      p.strokeWeight(1);
       p.rect(
         position.x,
         position.y + diameter / 2 + 150,
@@ -326,6 +354,8 @@ export function topicsAnimation(
         10
       );
 
+      p.stroke(255);
+      p.strokeWeight(1);
       p.fill(0);
       p.textSize(12);
       p.textAlign(p.LEFT, p.CENTER);
@@ -359,7 +389,6 @@ export function topicsAnimation(
       p.textStyle(p.NORMAL);
       for (let i = 0; i < numAdTechs; i++) {
         const adTech = adTechs[i];
-        // @ts-ignore
         const adTechColor = getAdtechsColors(p)[adTech];
 
         p.fill(adTechColor);
@@ -414,9 +443,11 @@ export function topicsAnimation(
         return;
       }
 
+      const x = p.mouseX;
+      const y = p.mouseY;
+
       let isInspecting = false;
-      const x = p.mouseX,
-        y = p.mouseY;
+      let lastInspectedIndex = -1;
 
       Object.values(app.circlePositions).forEach((position, index) => {
         const { diameter } = config.timeline.circleProps;
@@ -428,6 +459,8 @@ export function topicsAnimation(
           y > circleY - diameter / 2 &&
           y < circleY + diameter / 2
         ) {
+          lastInspectedIndex = index;
+
           if (app.visitIndex <= index) {
             if (isInteractive) {
               app.showHandCursor = true;
@@ -474,6 +507,51 @@ export function topicsAnimation(
       if (!isInspecting) {
         app.showHandCursor = false;
       }
+
+      if (isInteractive) {
+        const user = config.timeline.user;
+        p.push();
+        p.clear();
+
+        app.drawTimeline(config.timeline.position, epoch);
+        const lastVisitedIndex = app.prevVisitedCircleIndex;
+        if (lastVisitedIndex !== -1) {
+          // keep track of visited circles
+          app.inspectedCircles.add(lastVisitedIndex);
+
+          const inspectedCirclesArray = Array.from(app.inspectedCircles);
+          for (let i = 0; i < inspectedCirclesArray.length; i++) {
+            const index = inspectedCirclesArray[i];
+            if (lastVisitedIndex === index) {
+              app.handleUserVisit(index);
+            } else {
+              app.userVisitDone(index);
+            }
+            app.drawSmallCircles(index, epoch[index].website);
+          }
+          app.drawInfoBox(lastVisitedIndex, epoch[lastVisitedIndex].website);
+        }
+
+        // drag user icon only if not hovering the current selected circle
+        if (
+          !isInspecting ||
+          lastInspectedIndex !== app.prevVisitedCircleIndex
+        ) {
+          p.image(
+            app.userIcon as p5.Image,
+            x - user.width / 2,
+            y - user.height / 2,
+            user.width,
+            user.height
+          );
+        }
+
+        if (isInspecting && lastInspectedIndex === app.prevVisitedCircleIndex) {
+          app.showHandCursor = false;
+        }
+
+        p.pop();
+      }
     },
 
     mouseClicked: () => {
@@ -481,8 +559,8 @@ export function topicsAnimation(
         return;
       }
 
-      const x = p.mouseX,
-        y = p.mouseY;
+      const x = p.mouseX;
+      const y = p.mouseY;
 
       if (isInteractive) {
         Object.values(app.circlePositions).forEach((position, index) => {
@@ -505,13 +583,13 @@ export function topicsAnimation(
 
             if (app.smallCirclePositions[index] === undefined) {
               app.handleUserVisit(index);
-              app.prevVisitedCircleIndex = index;
             } else {
               app.drawInfoBox(index, epoch[index].website);
-              app.prevVisitedCircleIndex = index;
             }
+            app.prevVisitedCircleIndex = index;
           }
         });
+        app.mouseMoved();
       }
 
       Object.entries(app.smallCirclePositions).forEach(
@@ -538,12 +616,8 @@ export function topicsAnimation(
   };
 
   p.preload = () => {
-    app.userIcon = p.loadImage(
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAn9JREFUeF7tmktywjAMhp2TFU4CM7DILUpvkQXMwEmanixFnZgmxi85knAbsQQntj79kmWZxqz806zcfqMAVAErJ6AhsHIBaBLUENAQWDkBDYFXCmB/bDfXc9e/cg3iCtgf29MwmDdjzMYxvG8a83U9dydJIGIAwNvDYN49hj/Z2zTmQwqECIDR62B89kcKAjuAEuMtJQkI7AB2h3YIuH2a/Nx88Hjknhe2nImSFUDI+z7PRpTS3y7dNjt2kANZAfi8H5P1mCg/XRtul45tnWwv9hmTE9O7QwsAZiHBGQacAGC/n2X+HAABcGx5QBpA0pBS5SBD/zfJlj6Yeq7Uk75kmKOc1HpCv3MqACo/N6ElM3oAQFI51QGABRXsAk95A97zJ3cBWDhFHcApf1gjWwhYSfq2NfcUGDsgcXpfBECouMmJWW7viwCIhUIMgoTxYgCsoZknQ2iMQD9ApFPEngNcLwME+M7pCv10g+65oJcy/HHkzonF/zxGXAG1wVQAUh6B7dDu92P8z6Yec4D9TiwXsClg0gUGo4Itr4QDbHI0XF1iUgBERgeZcNQGJAAwPX+KkKMEsRhARq1PYbP3HRQgFgFAGP+o6mzBAxbZomeaICdFUm7uSPYYoiV3qXsyjCcpaSeVY+xmqRhCkQISNT2J4T7HpOYtuT8oAhDwPpvhvvOE23GGc4QkgNl1F0UywoYi1f0BWgHSbesQGKrmKQkAkJ9TymIdih7v+5NFyQ0SFQC0ARwPKICCq3RVAFaKS7q82Lmw40VCABY1lq7Y9bGPL+knokOA3QrhCRSAMPDqplMFVOcS4QWpAoSBVzedKqA6lwgvSBUgDLy66VavgG9uL15QKQoHkQAAAABJRU5ErkJggg=='
-    );
-    app.completedIcon = p.loadImage(
-      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNTk4NUUxIj48cGF0aCBkPSJNNDgwLTgwcS04NSAwLTE1OC0zMC41VDE5NS0xOTVxLTU0LTU0LTg0LjUtMTI3VDgwLTQ4MHEwLTg0IDMwLjUtMTU3VDE5NS03NjRxNTQtNTQgMTI3LTg1dDE1OC0zMXE3NSAwIDE0MCAyNHQxMTcgNjZsLTQzIDQzcS00NC0zNS05OC01NHQtMTE2LTE5cS0xNDUgMC0yNDIuNSA5Ny41VDE0MC00ODBxMCAxNDUgOTcuNSAyNDIuNVQ0ODAtMTQwcTE0NSAwIDI0Mi41LTk3LjVUODIwLTQ4MHEwLTMwLTQuNS01OC41VDgwMi01OTRsNDYtNDZxMTYgMzcgMjQgNzd0OCA4M3EwIDg1LTMxIDE1OHQtODUgMTI3cS01NCA1NC0xMjcgODQuNVQ0ODAtODBabS01OS0yMThMMjU2LTQ2NGw0NS00NSAxMjAgMTIwIDQxNC00MTQgNDYgNDUtNDYwIDQ2MFoiLz48L3N2Zz4='
-    );
+    app.userIcon = p.loadImage(icons.user);
+    app.completedIcon = p.loadImage(icons.completedCheckMark);
 
     app['tmz.com'] = p.loadImage(websitesToIconsMapping['tmz.com']);
     app['cnet.com'] = p.loadImage(websitesToIconsMapping['cnet.com']);
@@ -616,6 +690,17 @@ export function topicsAnimation(
       while (app.visitIndex < visitIndexStart) {
         app.play();
       }
+    }
+
+    // permanently remove the loading text cover if visible
+    // to allow hovering that area
+    if (app.isTextLoadingCoverVisible) {
+      try {
+        document.getElementById('loading-text-cover')?.remove();
+      } catch (error) {
+        // ignore error
+      }
+      app.isTextLoadingCoverVisible = false;
     }
   };
 

@@ -120,7 +120,10 @@ const Animation = ({
   return (
     <div className="relative">
       <div ref={node} className="overflow-auto bg-white" />
-      <div className="absolute top-0 left-0 w-20 h-10 bg-white z-50" />
+      <div
+        id="loading-text-cover"
+        className="absolute top-0 left-0 w-20 h-10 bg-white z-50"
+      />
     </div>
   );
 };
