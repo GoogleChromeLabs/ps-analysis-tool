@@ -24,10 +24,7 @@ import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import './chromeListeners';
 import dataStore from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
-import PAStore from '../store/PAStore';
-import ARAStore from '../store/ARAStore';
 import attachCDP from './attachCDP';
-import readHeaderAndRegister from './readHeaderAndRegister';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -194,23 +191,23 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
-        const interestGroupAuctionEventOccured =
-          params as Protocol.Storage.InterestGroupAuctionEventOccurredEvent;
+        // const interestGroupAuctionEventOccured =
+        //   params as Protocol.Storage.InterestGroupAuctionEventOccurredEvent;
 
-        const { uniqueAuctionId, eventTime, auctionConfig, parentAuctionId } =
-          interestGroupAuctionEventOccured;
+        // const { uniqueAuctionId, eventTime, auctionConfig, parentAuctionId } =
+        //   interestGroupAuctionEventOccured;
 
-        dataStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
-          ...(dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
-          auctionConfig,
-          parentAuctionId,
-          auctionTime: eventTime,
-        };
+        // dataStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
+        //   ...(dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
+        //   auctionConfig,
+        //   parentAuctionId,
+        //   auctionTime: eventTime,
+        // };
 
-        PAStore.processInterestGroupAuctionEventOccurred(
-          interestGroupAuctionEventOccured,
-          tabId
-        );
+        // PAStore.processInterestGroupAuctionEventOccurred(
+        //   interestGroupAuctionEventOccured,
+        //   tabId
+        // );
 
         return;
       }
@@ -220,30 +217,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         params &&
         source.tabId
       ) {
-        const interestGroupAccessedParams =
-          params as Protocol.Storage.InterestGroupAccessedEvent;
-
-        PAStore.processInterestGroupEvent(interestGroupAccessedParams, tabId);
+        // const interestGroupAccessedParams =
+        // params as Protocol.Storage.InterestGroupAccessedEvent;
+        // PAStore.processInterestGroupEvent(interestGroupAccessedParams, tabId);
       }
 
       if (
         method === 'Storage.interestGroupAuctionNetworkRequestCreated' &&
         params
       ) {
-        const interestGroupAuctionNetworkRequestCreatedParams =
-          params as Protocol.Storage.InterestGroupAuctionNetworkRequestCreatedEvent;
+        // const interestGroupAuctionNetworkRequestCreatedParams =
+        //   params as Protocol.Storage.InterestGroupAuctionNetworkRequestCreatedEvent;
 
-        const { auctions, type, requestId } =
-          interestGroupAuctionNetworkRequestCreatedParams;
+        // const { auctions, type, requestId } =
+        //   interestGroupAuctionNetworkRequestCreatedParams;
 
-        dataStore.unParsedRequestHeadersForPA[tabId][requestId] = {
-          auctions,
-          type,
-        };
+        // dataStore.unParsedRequestHeadersForPA[tabId][requestId] = {
+        //   auctions,
+        //   type,
+        // };
 
-        if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
-          PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
-        }
+        // if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
+        //   PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
+        // }
 
         return;
       }
@@ -299,12 +295,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (dataStore.unParsedRequestHeadersForPA[tabId][requestId]) {
-          const { auctions, type } =
-            dataStore.unParsedRequestHeadersForPA[tabId][requestId];
-
-          PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
-        }
+        // if (dataStore.unParsedRequestHeadersForPA[tabId][requestId]) {
+        //   const { auctions, type } =
+        //   dataStore.unParsedRequestHeadersForPA[tabId][requestId];
+        //   PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
+        // }
         //@todo When cookie analysis is decoupled move this to a separate function.
         if (
           dataStore.tabs[Number(tabId)]?.isCookieAnalysisEnabled &&
@@ -316,21 +311,21 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               dataStore.unParsedRequestHeadersForCA[tabId][requestId].headers
             )
           ) {
-            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
-              readHeaderAndRegister(
-                dataStore.headersForARA?.[tabId]?.[requestId].headers,
-                requestUrl,
-                tabId
-              );
-            } else {
-              dataStore.headersForARA[tabId] = {
-                ...dataStore.headersForARA[tabId],
-                [requestId]: {
-                  headers: {},
-                  url: requestUrl,
-                },
-              };
-            }
+            // if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            //   readHeaderAndRegister(
+            //     dataStore.headersForARA?.[tabId]?.[requestId].headers,
+            //     requestUrl,
+            //     tabId
+            //   );
+            // } else {
+            //   dataStore.headersForARA[tabId] = {
+            //     ...dataStore.headersForARA[tabId],
+            //     [requestId]: {
+            //       headers: {},
+            //       url: requestUrl,
+            //     },
+            //   };
+            // }
           }
           cookieStore.parseRequestHeadersForCA(
             dataStore.unParsedRequestHeadersForCA[tabId][requestId],
@@ -343,27 +338,25 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       if (method === 'Network.loadingFinished' && params) {
-        const loadingFinishedParams =
-          params as Protocol.Network.LoadingFinishedEvent;
-
-        PAStore.parseRequestHeadersForPA(
-          loadingFinishedParams.requestId,
-          loadingFinishedParams.timestamp,
-          tabId,
-          'Finished Fetch'
-        );
+        // const loadingFinishedParams =
+        //   params as Protocol.Network.LoadingFinishedEvent;
+        // PAStore.parseRequestHeadersForPA(
+        //   loadingFinishedParams.requestId,
+        //   loadingFinishedParams.timestamp,
+        //   tabId,
+        //   'Finished Fetch'
+        // );
       }
 
       if (method === 'Network.loadingFailed' && params) {
-        const loadingFailedParams =
-          params as Protocol.Network.LoadingFinishedEvent;
-
-        PAStore.parseRequestHeadersForPA(
-          loadingFailedParams.requestId,
-          loadingFailedParams.timestamp,
-          tabId,
-          'Failed Fetch'
-        );
+        // const loadingFailedParams =
+        //   params as Protocol.Network.LoadingFinishedEvent;
+        // PAStore.parseRequestHeadersForPA(
+        //   loadingFailedParams.requestId,
+        //   loadingFailedParams.timestamp,
+        //   tabId,
+        //   'Failed Fetch'
+        // );
       }
 
       if (method === 'Network.requestWillBeSentExtraInfo') {
@@ -372,22 +365,22 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         if (dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           if (extractHeader('Attribution-Reporting-Eligible', headers)) {
-            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
-              readHeaderAndRegister(
-                headers,
-                dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
-                tabId
-              );
-            } else {
-              dataStore.headersForARA[tabId] = {
-                ...dataStore.headersForARA[tabId],
-                [requestId]: {
-                  headers: {},
-                  url: dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
-                    ?.url,
-                },
-              };
-            }
+            // if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            //   readHeaderAndRegister(
+            //     headers,
+            //     dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
+            //     tabId
+            //   );
+            // } else {
+            //   dataStore.headersForARA[tabId] = {
+            //     ...dataStore.headersForARA[tabId],
+            //     [requestId]: {
+            //       headers: {},
+            //       url: dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
+            //         ?.url,
+            //     },
+            //   };
+            // }
           }
 
           cookieStore.parseRequestHeadersForCA(
@@ -426,7 +419,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
           extractHeader('Attribution-Reporting-Register-Source', headers)
         ) {
-          readHeaderAndRegister(headers, requestUrl, tabId);
+          // readHeaderAndRegister(headers, requestUrl, tabId);
         }
 
         if (!finalFrameId) {
@@ -500,21 +493,21 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           //sometimes this fires early and we still havent calculated tabId for this.
           tabId = calculateTabId(source);
 
-          if (dataStore.headersForARA?.[tabId]?.[requestId]) {
-            readHeaderAndRegister(
-              headers,
-              dataStore.headersForARA?.[tabId]?.[requestId]?.url,
-              tabId
-            );
-          } else {
-            dataStore.headersForARA[tabId] = {
-              ...dataStore.headersForARA[tabId],
-              [requestId]: {
-                headers,
-                url: '',
-              },
-            };
-          }
+          // if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+          //   readHeaderAndRegister(
+          //     headers,
+          //     dataStore.headersForARA?.[tabId]?.[requestId]?.url,
+          //     tabId
+          //   );
+          // } else {
+          //   dataStore.headersForARA[tabId] = {
+          //     ...dataStore.headersForARA[tabId],
+          //     [requestId]: {
+          //       headers,
+          //       url: '',
+          //     },
+          //   };
+          // }
         }
 
         // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
@@ -599,118 +592,113 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         params &&
         source.tabId
       ) {
-        const { registration, result } =
-          params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
-        dataStore.sources.sourceRegistration =
-          dataStore.sources.sourceRegistration.map((singleSource) => {
-            const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
-            const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
-            if (
-              //@ts-ignore
-              singleSource?.sourceEventId === registration.eventId &&
-              singleSource.sourceOrigin &&
-              host === sourceOriginHost
-            ) {
-              const time = registration.time.toString().includes('.')
-                ? registration.time * 1000
-                : registration.time;
-
-              const combinedData = {
-                ...singleSource,
-                ...registration,
-                time,
-                expiry: registration.expiry * 1000 + time,
-                result,
-                tabId: tabId ?? singleSource.tabId,
-              };
-              //@ts-ignore
-              delete combinedData.sourceEventId;
-              //@ts-ignore
-              delete combinedData.destination;
-              return combinedData;
-            }
-            return singleSource;
-          });
+        // const { registration, result } =
+        //   params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
+        // dataStore.sources.sourceRegistration =
+        //   dataStore.sources.sourceRegistration.map((singleSource) => {
+        //     const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+        //     const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
+        //     if (
+        //       //@ts-ignore
+        //       singleSource?.sourceEventId === registration.eventId &&
+        //       singleSource.sourceOrigin &&
+        //       host === sourceOriginHost
+        //     ) {
+        //       const time = registration.time.toString().includes('.')
+        //         ? registration.time * 1000
+        //         : registration.time;
+        //       const combinedData = {
+        //         ...singleSource,
+        //         ...registration,
+        //         time,
+        //         expiry: registration.expiry * 1000 + time,
+        //         result,
+        //         tabId: tabId ?? singleSource.tabId,
+        //       };
+        //       //@ts-ignore
+        //       delete combinedData.sourceEventId;
+        //       //@ts-ignore
+        //       delete combinedData.destination;
+        //       return combinedData;
+        //     }
+        //     return singleSource;
+        //   });
       }
 
       if (
         method === 'Storage.attributionReportingTriggerRegistered' &&
         params
       ) {
-        const { registration, eventLevel, aggregatable } =
-          params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
-
-        dataStore.sources.triggerRegistration.forEach((trigger, index) => {
-          if (tabId !== trigger.tabId) {
-            return;
-          }
-          const registrationKeys = new Set<string>();
-          Object.keys(registration).forEach((key) => registrationKeys.add(key));
-
-          const triggerKeys = new Set<string>();
-          Object.keys(trigger).forEach((key) => triggerKeys.add(key));
-          let match = false;
-
-          if (
-            registrationKeys
-              .intersection(triggerKeys)
-              .has('aggregatableTriggerData') &&
-            !match &&
-            registration['aggregatableTriggerData'].length > 0
-          ) {
-            match = ARAStore.matchTriggerData(
-              registration,
-              trigger,
-              'aggregatableTriggerData'
-            );
-          } else if (
-            registrationKeys
-              .intersection(triggerKeys)
-              .has('aggregatableValues') &&
-            !match &&
-            Object.prototype.hasOwnProperty.call(
-              registration['aggregatableValues'],
-              'values'
-            )
-          ) {
-            match = ARAStore.matchTriggerData(
-              registration,
-              trigger,
-              'aggregatableValues'
-            );
-          } else if (
-            registrationKeys
-              .intersection(triggerKeys)
-              .has('eventTriggerData') &&
-            !match
-          ) {
-            match = ARAStore.matchTriggerData(
-              registration,
-              trigger,
-              'eventTriggerData'
-            );
-          }
-
-          const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
-          const sourceOriginHost = trigger.destination
-            ? new URL(trigger.destination).origin
-            : '';
-          if (
-            match &&
-            !trigger?.aggregatable &&
-            !trigger?.eventLevel &&
-            trigger.destination &&
-            host === sourceOriginHost
-          ) {
-            dataStore.sources.triggerRegistration[index] = {
-              ...trigger,
-              eventLevel,
-              aggregatable,
-              ...registration,
-              tabId: tabId ?? trigger.tabId,
-            };
-          }
-        });
+        //   const { registration, eventLevel, aggregatable } =
+        //     params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
+        //   dataStore.sources.triggerRegistration.forEach((trigger, index) => {
+        //     if (tabId !== trigger.tabId) {
+        //       return;
+        //     }
+        //     const registrationKeys = new Set<string>();
+        //     Object.keys(registration).forEach((key) => registrationKeys.add(key));
+        //     const triggerKeys = new Set<string>();
+        //     Object.keys(trigger).forEach((key) => triggerKeys.add(key));
+        //     let match = false;
+        //     if (
+        //       registrationKeys
+        //         .intersection(triggerKeys)
+        //         .has('aggregatableTriggerData') &&
+        //       !match &&
+        //       registration['aggregatableTriggerData'].length > 0
+        //     ) {
+        //       match = ARAStore.matchTriggerData(
+        //         registration,
+        //         trigger,
+        //         'aggregatableTriggerData'
+        //       );
+        //     } else if (
+        //       registrationKeys
+        //         .intersection(triggerKeys)
+        //         .has('aggregatableValues') &&
+        //       !match &&
+        //       Object.prototype.hasOwnProperty.call(
+        //         registration['aggregatableValues'],
+        //         'values'
+        //       )
+        //     ) {
+        //       match = ARAStore.matchTriggerData(
+        //         registration,
+        //         trigger,
+        //         'aggregatableValues'
+        //       );
+        //     } else if (
+        //       registrationKeys
+        //         .intersection(triggerKeys)
+        //         .has('eventTriggerData') &&
+        //       !match
+        //     ) {
+        //       match = ARAStore.matchTriggerData(
+        //         registration,
+        //         trigger,
+        //         'eventTriggerData'
+        //       );
+        //     }
+        //     const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+        //     const sourceOriginHost = trigger.destination
+        //       ? new URL(trigger.destination).origin
+        //       : '';
+        //     if (
+        //       match &&
+        //       !trigger?.aggregatable &&
+        //       !trigger?.eventLevel &&
+        //       trigger.destination &&
+        //       host === sourceOriginHost
+        //     ) {
+        //       dataStore.sources.triggerRegistration[index] = {
+        //         ...trigger,
+        //         eventLevel,
+        //         aggregatable,
+        //         ...registration,
+        //         tabId: tabId ?? trigger.tabId,
+        //       };
+        //     }
+        //   });
       }
     } catch (error) {
       //Fail silently.
