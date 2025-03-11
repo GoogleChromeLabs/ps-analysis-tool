@@ -42,6 +42,8 @@ const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
   );
+  const [selectedPrevJSON, setSelectedPrevJSON] =
+    useState<TriggerRegistration | null>(null);
 
   const { triggerRegistration, filter, updateFilter } = useAttributionReporting(
     ({ state, actions }) => ({
@@ -236,7 +238,10 @@ const TriggerRegistrations = () => {
                 ? rowContextMenuRef.current?.onRowContextMenu
                 : noop
             }
-            onRowClick={(row) => setSelectedJSON(row as TriggerRegistration)}
+            onRowClick={(row, prevRow) => {
+              setSelectedPrevJSON(prevRow as TriggerRegistration);
+              setSelectedJSON(row as TriggerRegistration);
+            }}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as TriggerRegistration).index.toString()
             }
@@ -250,7 +255,7 @@ const TriggerRegistrations = () => {
           </TableProvider>
         </div>
       </Resizable>
-      <JsonDisplay currentJson={selectedJSON} />
+      <JsonDisplay currentJson={selectedJSON} prevJson={selectedPrevJSON} />
       <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );

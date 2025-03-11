@@ -14,12 +14,39 @@
  * limitations under the License.
  */
 import React from 'react';
+import { prettyPrintJson } from 'pretty-print-json';
+import type {
+  SourcesRegistration,
+  TriggerRegistration,
+} from '@google-psat/common';
+import { diff } from 'deep-object-diff';
 
-const Difference = () => {
+interface DifferenceProps {
+  currentJson: TriggerRegistration | SourcesRegistration | null;
+  prevJson: TriggerRegistration | SourcesRegistration | null;
+}
+
+const Difference = ({ currentJson, prevJson }: DifferenceProps) => {
+  if (currentJson && prevJson) {
+    return (
+      <div className="text-xs py-1 px-1.5">
+        <pre>
+          <div
+            className="json-container"
+            dangerouslySetInnerHTML={{
+              __html: prettyPrintJson.toHtml(diff(currentJson, prevJson)),
+            }}
+          />
+        </pre>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <h2>Difference</h2>
-      <p>This is the difference panel.</p>
+    <div className="h-full p-8 flex items-center">
+      <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+        Select a row such that it has a row above it to see the difference.
+      </p>
     </div>
   );
 };

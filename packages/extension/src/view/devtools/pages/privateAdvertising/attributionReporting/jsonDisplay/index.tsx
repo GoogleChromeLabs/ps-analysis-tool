@@ -32,8 +32,9 @@ import Current from './current';
 
 interface JsonDisplayProps {
   currentJson: TriggerRegistration | SourcesRegistration | null;
+  prevJson: TriggerRegistration | SourcesRegistration | null;
 }
-const JsonDisplay = ({ currentJson }: JsonDisplayProps) => {
+const JsonDisplay = ({ currentJson, prevJson }: JsonDisplayProps) => {
   const tabItems = useMemo<TabItems>(
     () => [
       {
@@ -49,11 +50,15 @@ const JsonDisplay = ({ currentJson }: JsonDisplayProps) => {
         title: 'Difference',
         content: {
           Element: Difference,
+          props: {
+            currentJson,
+            prevJson,
+          },
           className: 'overflow-hidden',
         },
       },
     ],
-    [currentJson]
+    [currentJson, prevJson]
   );
   return (
     <TabsProvider items={tabItems} name="attribution-reporting">

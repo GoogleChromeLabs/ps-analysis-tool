@@ -68,14 +68,17 @@ const TableBody = ({
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
       let newRowId: string | undefined;
+      let previousRowId: string | undefined;
       let rowElement: HTMLTableRowElement | null = null;
 
       if (event.key === 'ArrowUp') {
         rowElement = currentRow?.previousElementSibling;
         newRowId = rowElement?.id;
+        previousRowId = rowElement?.previousElementSibling?.id;
       } else if (event.key === 'ArrowDown') {
         rowElement = currentRow?.nextElementSibling;
         newRowId = rowElement?.id;
+        previousRowId = rowElement?.previousElementSibling?.id;
 
         if (rows.length === index + 1) {
           return;
@@ -95,9 +98,12 @@ const TableBody = ({
       }
 
       const newRow = rows.find((_, idx) => idx.toString() === newRowId);
+      const previousRow = rows.find(
+        (_, idx) => idx.toString() === previousRowId
+      ) ?? { originalData: null };
 
       if (newRow) {
-        onRowClick(newRow?.originalData);
+        onRowClick(newRow?.originalData, previousRow?.originalData);
       }
     },
     [onRowClick, rows]
@@ -126,7 +132,10 @@ const TableBody = ({
           verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
           getRowObjectKey={getRowObjectKey}
           onRowClick={() => {
-            onRowClick(row?.originalData);
+            onRowClick(
+              row?.originalData,
+              rows[index - 1]?.originalData ?? null
+            );
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}

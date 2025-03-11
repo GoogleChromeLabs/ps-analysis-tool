@@ -42,7 +42,8 @@ const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
-
+  const [selectedPrevJSON, setSelectedPrevJSON] =
+    useState<SourcesRegistration | null>(null);
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForARA
   > | null>(null);
@@ -236,7 +237,10 @@ const SourceRegistrations = () => {
                 ? rowContextMenuRef.current?.onRowContextMenu
                 : noop
             }
-            onRowClick={(row) => setSelectedJSON(row as SourcesRegistration)}
+            onRowClick={(row, prevRow) => {
+              setSelectedPrevJSON(prevRow as SourcesRegistration);
+              setSelectedJSON(row as SourcesRegistration);
+            }}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as SourcesRegistration).index.toString()
             }
@@ -250,7 +254,7 @@ const SourceRegistrations = () => {
           </TableProvider>
         </div>
       </Resizable>
-      <JsonDisplay currentJson={selectedJSON} />
+      <JsonDisplay currentJson={selectedJSON} prevJson={selectedPrevJSON} />
       <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );

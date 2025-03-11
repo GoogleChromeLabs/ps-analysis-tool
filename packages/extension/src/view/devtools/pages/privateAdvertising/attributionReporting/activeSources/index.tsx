@@ -43,6 +43,8 @@ const ActiveSources = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
+  const [selectedPrevJSON, setSelectedPrevJSON] =
+    useState<SourcesRegistration | null>(null);
 
   const { sourcesRegistration, filter, updateFilter } = useAttributionReporting(
     ({ state, actions }) => ({
@@ -323,7 +325,10 @@ const ActiveSources = () => {
                 ? rowContextMenuRef.current?.onRowContextMenu
                 : noop
             }
-            onRowClick={(row) => setSelectedJSON(row as SourcesRegistration)}
+            onRowClick={(row, prevRow) => {
+              setSelectedPrevJSON(prevRow as SourcesRegistration);
+              setSelectedJSON(row as SourcesRegistration);
+            }}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as SourcesRegistration).index.toString()
             }
@@ -337,7 +342,7 @@ const ActiveSources = () => {
           </TableProvider>
         </div>
       </Resizable>
-      <JsonDisplay currentJson={selectedJSON} />
+      <JsonDisplay currentJson={selectedJSON} prevJson={selectedPrevJSON} />
       <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
