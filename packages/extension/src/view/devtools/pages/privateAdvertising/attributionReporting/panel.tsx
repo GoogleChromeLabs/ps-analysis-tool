@@ -31,7 +31,6 @@ const Panel = () => {
   const { panel, highlightTab } = useTabs(({ state, actions }) => ({
     panel: state.panel,
     highlightTab: actions.highlightTab,
-    activeTab: state.activeTab,
   }));
 
   const ActiveTabContent = panel.Element;

@@ -28,8 +28,6 @@ import {
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useState, useRef, useMemo, useCallback } from 'react';
-import { prettyPrintJson } from 'pretty-print-json';
-import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
@@ -38,6 +36,7 @@ import RowContextMenuForARA from '../rowContextMenu';
 import calculateFiltersForSources from '../utils/calculateFiltersForSources';
 import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
+import JsonDisplay from '../jsonDisplay';
 
 const SourceRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
@@ -251,26 +250,7 @@ const SourceRegistrations = () => {
           </TableProvider>
         </div>
       </Resizable>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-        {selectedJSON ? (
-          <div className="text-xs py-1 px-1.5">
-            <pre>
-              <div
-                className="json-container"
-                dangerouslySetInnerHTML={{
-                  __html: prettyPrintJson.toHtml(selectedJSON),
-                }}
-              />
-            </pre>
-          </div>
-        ) : (
-          <div className="h-full p-8 flex items-center">
-            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-              {I18n.getMessage('selectRowToPreview')}
-            </p>
-          </div>
-        )}
-      </div>
+      <JsonDisplay currentJson={selectedJSON} />
       <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );
