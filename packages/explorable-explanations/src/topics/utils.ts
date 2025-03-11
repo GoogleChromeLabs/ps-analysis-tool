@@ -82,7 +82,7 @@ export const generateTimelineVisits = (
   numVisitsPerEpoch: number,
   startDate = new Date()
 ) => {
-  const visits = [];
+  const visits: { website: string; datetime: string; topics: string[] }[] = [];
   let currentDateTime = new Date(startDate);
 
   const incrementMinutes = (7 * 24 * 60) / numVisitsPerEpoch; // Total minutes in a week divided by visits per epoch

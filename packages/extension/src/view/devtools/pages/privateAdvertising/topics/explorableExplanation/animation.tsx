@@ -59,7 +59,7 @@ const Animation = ({
   const [speedMultiplierCallback, setSpeedMultiplierCallback] =
     useState<(speed: number) => void>();
   const animationRef = useRef(isAnimating);
-
+  const loadingTextCoverRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
     animationRef.current = isAnimating;
@@ -68,18 +68,18 @@ const Animation = ({
   useEffect(() => {
     const tAnimation = (p: p5) => {
       const { togglePlay, reset, updateSpeedMultiplier, getCurrentVisitIndex } =
-        topicsAnimation(
+        topicsAnimation({
           p,
           epoch,
-          animationRef.current,
+          isAnimating: animationRef.current,
           siteAdTechs,
           visitIndexStart,
-          animationRef.current
+          handleUserVisit: animationRef.current
             ? handleUserVisit
             : (idx: number) => handleUserVisit(idx, false),
           setHighlightAdTech,
-          isInteractive
-        );
+          isInteractive,
+        });
 
       setTogglePlayCallback(() => togglePlay);
       setResetCallback(() => reset);
@@ -117,10 +117,17 @@ const Animation = ({
     speedMultiplierCallback?.(speedMultiplier);
   }, [speedMultiplier, speedMultiplierCallback]);
 
+  useEffect(() => {
+    if (loadingTextCoverRef.current && isInteractive) {
+      loadingTextCoverRef.current.style.display = 'none';
+    }
+  }, [loadingTextCoverRef, isInteractive]);
+
   return (
     <div className="relative">
       <div ref={node} className="overflow-auto bg-white" />
       <div
+        ref={loadingTextCoverRef}
         id="loading-text-cover"
         className="absolute top-0 left-0 w-20 h-10 bg-white z-50"
       />
