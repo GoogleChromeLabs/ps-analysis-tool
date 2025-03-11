@@ -1,5 +1,5 @@
 <h1 align="center" style="display: block; font-size: 2.5em; font-weight: bold; margin-block-start: 1em; margin-block-end: 1em;">
-<a name="logo" href="https://www.privacysandbox.com"><img align="center" src="./assets/images/privacy-sandbox-colored.svg" alt="Privacy Sandbox" style="width:30%;height:100%"/></a>
+<a name="logo" href="https://www.privacysandbox.com"><img align="center" src="./assets/images/privacy-sandbox.png" alt="Privacy Sandbox" style="width:30%;height:100%"/></a>
 </h1>
 
 # Privacy Sandbox
