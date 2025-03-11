@@ -23,7 +23,6 @@ import { Protocol } from 'devtools-protocol';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import './chromeListeners';
 import dataStore from '../store/dataStore';
-import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
 import ARAStore from '../store/ARAStore';
 import attachCDP from './attachCDP';
@@ -332,12 +331,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               };
             }
           }
-          cookieStore.parseRequestHeadersForCA(
-            dataStore.unParsedRequestHeadersForCA[tabId][requestId],
-            requestId,
-            tabId,
-            Array.from(new Set([finalFrameId, frameId]))
-          );
+          // cookieStore.parseRequestHeadersForCA(
+          //   dataStore.unParsedRequestHeadersForCA[tabId][requestId],
+          //   requestId,
+          //   tabId,
+          //   Array.from(new Set([finalFrameId, frameId]))
+          // );
         }
         return;
       }
@@ -390,18 +389,18 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             }
           }
 
-          cookieStore.parseRequestHeadersForCA(
-            params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
-            requestId,
-            tabId,
-            Array.from(
-              new Set([
-                dataStore.requestIdToCDPURLMapping[tabId][requestId]
-                  ?.finalFrameId,
-                dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
-              ])
-            )
-          );
+          // cookieStore.parseRequestHeadersForCA(
+          //   params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
+          //   requestId,
+          //   tabId,
+          //   Array.from(
+          //     new Set([
+          //       dataStore.requestIdToCDPURLMapping[tabId][requestId]
+          //         ?.finalFrameId,
+          //       dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+          //     ])
+          //   )
+          // );
         } else {
           dataStore.unParsedRequestHeadersForCA[tabId][requestId] =
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
@@ -470,21 +469,21 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
 
         if (dataStore.unParsedResponseHeadersForCA[tabId][requestId]) {
-          cookieStore.parseResponseHeadersForCA(
-            dataStore.unParsedResponseHeadersForCA[tabId][requestId],
-            requestId,
-            tabId,
-            Array.from(new Set([finalFrameId, frameId]))
-          );
+          // cookieStore.parseResponseHeadersForCA(
+          //   dataStore.unParsedResponseHeadersForCA[tabId][requestId],
+          //   requestId,
+          //   tabId,
+          //   Array.from(new Set([finalFrameId, frameId]))
+          // );
         }
 
         if (dataStore.unParsedRequestHeadersForCA[tabId][requestId]) {
-          cookieStore.parseRequestHeadersForCA(
-            dataStore.unParsedRequestHeadersForCA[tabId][requestId],
-            requestId,
-            tabId,
-            Array.from(new Set([finalFrameId, frameId]))
-          );
+          // cookieStore.parseRequestHeadersForCA(
+          //   dataStore.unParsedRequestHeadersForCA[tabId][requestId],
+          //   requestId,
+          //   tabId,
+          //   Array.from(new Set([finalFrameId, frameId]))
+          // );
         }
 
         return;
@@ -523,28 +522,28 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
 
         if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
-          const frameIds = Array.from(
-            new Set([
-              dataStore.requestIdToCDPURLMapping[tabId][requestId]
-                ?.finalFrameId,
-              dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
-            ])
-          );
+          // const frameIds = Array.from(
+          //   new Set([
+          //     dataStore.requestIdToCDPURLMapping[tabId][requestId]
+          //       ?.finalFrameId,
+          //     dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+          //   ])
+          // );
 
-          cookieStore.parseResponseHeadersForCA(
-            params as Protocol.Network.ResponseReceivedExtraInfoEvent,
-            requestId,
-            tabId,
-            frameIds
-          );
+          // cookieStore.parseResponseHeadersForCA(
+          //   params as Protocol.Network.ResponseReceivedExtraInfoEvent,
+          //   requestId,
+          //   tabId,
+          //   frameIds
+          // );
 
           if (dataStore.unParsedRequestHeadersForCA[tabId][requestId]) {
-            cookieStore.parseRequestHeadersForCA(
-              dataStore.unParsedRequestHeadersForCA[tabId][requestId],
-              requestId,
-              tabId,
-              frameIds
-            );
+            // cookieStore.parseRequestHeadersForCA(
+            //   dataStore.unParsedRequestHeadersForCA[tabId][requestId],
+            //   requestId,
+            //   tabId,
+            //   frameIds
+            // );
           }
         } else {
           dataStore.unParsedResponseHeadersForCA[tabId][requestId] =
@@ -589,7 +588,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
 
         if (cookieObjectToUpdate) {
-          cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+          // cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
         }
         return;
       }
