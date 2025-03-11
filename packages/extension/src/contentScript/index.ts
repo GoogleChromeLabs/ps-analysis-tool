@@ -379,6 +379,7 @@ class WebpageContentScript {
     if (!frame) {
       return null;
     }
+
     removeAllPopovers();
     this.insertOverlay(frame);
 
@@ -432,7 +433,13 @@ class WebpageContentScript {
         });
       });
     }
+    const { top, left } = frame.getBoundingClientRect();
 
+    document.documentElement.scrollTo({
+      top: top,
+      left: left,
+      behavior: 'smooth',
+    });
     return tooltip;
   }
 
@@ -715,9 +722,15 @@ class WebpageContentScript {
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !isElementVisibleInViewport(firstToolTip)
+      !isElementVisibleInViewport(firstToolTip) &&
+      frameWithTooltip
     ) {
-      (frameWithTooltip as HTMLElement).scrollIntoView();
+      const { top, left } = frameWithTooltip.getBoundingClientRect();
+      document.documentElement.scrollTo({
+        top: top,
+        left: left,
+        behavior: 'smooth',
+      });
     }
   }
 
