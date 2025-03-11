@@ -321,7 +321,7 @@ const Provider = ({ children }: PropsWithChildren) => {
                     ),
                   ],
                   bidCurrency: bidCurrency ?? '',
-                  winningBid: highestBidData.bid ?? 0,
+                  winningBid: highestBidData?.bid ?? 0,
                   winningBidder: highestBidData.ownerOrigin ?? '',
                 };
               }
