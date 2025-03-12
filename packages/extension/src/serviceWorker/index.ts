@@ -111,9 +111,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Target.attachedToTarget' && params) {
         const {
           targetInfo: { targetId, url },
+          sessionId,
         } = params as Protocol.Target.AttachedToTargetEvent;
 
-        const childDebuggee = { targetId };
+        const childDebuggee = { targetId, sessionId: sessionId };
 
         if (!attachedSet.has(targetId)) {
           attachCDP(childDebuggee, true);
@@ -130,6 +131,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             {
               message: JSON.stringify(message),
               targetId: targetId,
+              sessionId: sessionId,
             }
           );
         }
