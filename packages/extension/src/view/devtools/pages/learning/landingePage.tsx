@@ -13,41 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React from 'react';
+import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { TabIcon } from '../../icons';
+import { FEATURED_ITEMS, type FeaturedItems } from './constants';
 
-interface ExternalLinkPanelProps {
-  description: string;
-  icon: React.JSX.Element;
+interface LandingPageProps {
+  sidebarKey: SIDEBAR_ITEMS_KEYS;
 }
 
-const ExternalLinkPanel = ({ description, icon }: ExternalLinkPanelProps) => {
+const LandingPage = ({ sidebarKey }: LandingPageProps) => {
+  const page = FEATURED_ITEMS.find(
+    (item) => item.sidebarKey === sidebarKey
+  ) as FeaturedItems;
+  const { description, icon: Icon } = page;
+
   return (
     <div className="w-full h-full overflow-hidden">
       <div className="w-full h-full flex justify-center items-center">
         <div className="text-center text-lg flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-          {icon}
+          <Icon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
           {description && (
             <p className="border-b border-bright-gray dark:border-quartz font-semibold p-b-2 m-b-1">
               {description}
             </p>
           )}
-          <p className="text-sm flex items-center gap-1">
-            Please refer to the website opened in the current browser tab.
-            <TabIcon className="w-4 h-4 fill-granite-gray dark:fill-bright-gray" />
-          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default ExternalLinkPanel;
+export default LandingPage;

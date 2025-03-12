@@ -17,37 +17,15 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  ExternalLinkPanel,
-  Help,
-  SIDEBAR_ITEMS_KEYS,
-} from '@google-psat/design-system';
+import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { FEATURED_ITEMS } from '../constants';
-
-/**
-enum for exporting page string to be passed as query inside useSidebar hook.
-For page: PAGE = 'Page Url',
-For page with has: PAGE_HASH = 'Page Url#Hash Url'
- */
-export enum NAVIGATION_TAGS {
-  EVALUATION_ENVIRONMENT = 'Evaluation Environment',
-  PSAT_SETTINGS_AND_PERMISSIONS = 'PSAT Settings and Permissions',
-}
+import LandingPage from '../landingePage';
 
 const Wiki = () => {
-  const description =
-    FEATURED_ITEMS.find((item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.WIKI)
-      ?.description ?? '';
-
-  const helpIcon = (
-    <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
-  );
-
-  return <ExternalLinkPanel description={description} icon={helpIcon} />;
+  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.WIKI} />;
 };
 
 export default Wiki;
