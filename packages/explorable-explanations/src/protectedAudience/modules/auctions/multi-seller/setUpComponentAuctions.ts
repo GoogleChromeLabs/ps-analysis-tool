@@ -519,7 +519,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
   });
 
-  const WINNING_AD_DELAY = 4000;
+  const WINNING_AD_DELAY = 6000;
 
   steps.push({
     component: Box,
@@ -536,7 +536,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     callBack: (returnValue: Coordinates) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
-        scrollToNextCircle(WINNING_AD_DELAY);
+        // wait longer for faster speeds
+        const delayPercentage = app.speedMultiplier > 2 ? 2 : 1.2;
+        scrollToNextCircle(WINNING_AD_DELAY / delayPercentage);
       }
     },
   });
