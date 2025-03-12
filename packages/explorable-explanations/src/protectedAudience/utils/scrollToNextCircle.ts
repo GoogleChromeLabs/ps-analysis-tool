@@ -31,7 +31,7 @@ const scrollToNextCircle = async (scrollDelay: number) => {
   }
   const { x, y } = position;
   const { x: x1, y: y1 } = getCoordinateValues({ x, y });
-  await delay(scrollDelay / app.speedMultiplier);
+  await delay(scrollDelay);
   scrollToCoordinates({ x: x1, y: y1 });
 };
 

@@ -536,9 +536,10 @@ const setupAfterComponentAuctionFlow = (steps) => {
     callBack: (returnValue: Coordinates) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
-        // wait longer for faster speeds
-        const delayPercentage = app.speedMultiplier > 2 ? 2 : 1.2;
-        scrollToNextCircle(WINNING_AD_DELAY / delayPercentage);
+        const delay = WINNING_AD_DELAY / app.speedMultiplier;
+        // wait longer for higher speeds
+        const delayPercentage = app.speedMultiplier > 2 ? 0.5 : 0.8;
+        scrollToNextCircle(delay * delayPercentage);
       }
     },
   });
