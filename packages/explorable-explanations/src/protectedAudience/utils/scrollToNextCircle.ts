@@ -21,8 +21,10 @@ const scrollToNextCircle = async (scrollDelay: number) => {
   if (app.cancelPromise || !app.autoScroll) {
     return;
   }
-  // scroll to the next circle before it starts animating
-  const nextCircleIndex = app.timeline.currentIndex + 1;
+  const currentCircleIndex = app.timeline.currentIndex;
+  const nextCircleIndex = app.isInteractiveMode
+    ? currentCircleIndex
+    : currentCircleIndex + 1;
   const position = app.timeline.circlePositions[nextCircleIndex];
   if (!position) {
     return;
