@@ -142,7 +142,7 @@ const AuctionTable = ({
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
-          if (value === undefined) {
+          if (value === undefined || value === null) {
             return false;
           }
 
