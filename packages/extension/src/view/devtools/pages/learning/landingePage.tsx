@@ -32,17 +32,16 @@ const LandingPage = ({ sidebarKey }: LandingPageProps) => {
   const page = FEATURED_ITEMS.find(
     (item) => item.sidebarKey === sidebarKey
   ) as FeaturedItems;
-  const { description, icon: Icon } = page;
+  const { description, icon: Icon, title } = page;
 
   return (
-    <div className="w-full h-full overflow-hidden">
-      <div className="w-full h-full flex justify-center items-center">
-        <div className="text-center text-lg flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
+    <div className="w-full h-full overflow-hidden flex justify-center items-center">
+      <div className="max-w-[600px] h-full flex justify-center items-center">
+        <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
           <Icon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
+          {title && <h3 className="font-semibold text-2xl">{title}</h3>}
           {description && (
-            <p className="border-b border-bright-gray dark:border-quartz font-semibold p-b-2 m-b-1">
-              {description}
-            </p>
+            <p className=" p-b-2 m-b-1 text-base">{description}</p>
           )}
         </div>
       </div>
