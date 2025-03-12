@@ -71,7 +71,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
           svgGroup.style.fill = '';
           svgGroup.style.fontWeight = '';
           svgGroup.style.transition = '';
-        }, 3000);
+        }, 10000);
 
         timeoutRef.current.push(timeout);
       }
