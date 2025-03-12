@@ -18,16 +18,18 @@
  * External dependencies.
  */
 import React from 'react';
-import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  HelpCenterLandingIcon,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import LandingPage from '../landingePage';
-import iconURL from '../../../../../../images/help-center.png';
 
 const HelpCenter = () => {
-  const icon = <img src={iconURL} alt="Help Center" width="150" />;
+  const icon = <HelpCenterLandingIcon width="150" />;
 
   return (
     <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.HELP_CENTER} icon={icon} />

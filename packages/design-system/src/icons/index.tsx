@@ -107,4 +107,7 @@ export { default as ProtectionIcon } from './protection.svg';
 export { default as CancelIcon } from './cancel.svg';
 export { default as TabIcon } from './tab.svg';
 export { default as DemosIcon } from './demos.svg';
-export { default as OpenBookIcon } from './open-book.svg';
+export { default as WikiLandingIcon } from './wiki-landing.svg';
+export { default as DemosLandingIcon } from './demos-landing.svg';
+export { default as DevSiteLandingIcon } from './dev-site-landing.svg';
+export { default as HelpCenterLandingIcon } from './help-center-landing.svg';

@@ -17,7 +17,10 @@
  * External dependencies.
  */
 import React from 'react';
-import { SIDEBAR_ITEMS_KEYS, OpenBookIcon } from '@google-psat/design-system';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  WikiLandingIcon,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -25,7 +28,7 @@ import { SIDEBAR_ITEMS_KEYS, OpenBookIcon } from '@google-psat/design-system';
 import LandingPage from '../landingePage';
 
 const Wiki = () => {
-  const icon = <OpenBookIcon width="200" height="90" />;
+  const icon = <WikiLandingIcon width="200" height="90" />;
 
   return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.WIKI} icon={icon} />;
 };

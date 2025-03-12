@@ -18,16 +18,18 @@
  * External dependencies.
  */
 import React from 'react';
-import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  DevSiteLandingIcon,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import LandingPage from '../landingePage';
-import iconURL from '../../../../../../images/dev-site.png';
 
 const DevSite = () => {
-  const icon = <img src={iconURL} alt="Dev Site" width="150" />;
+  const icon = <DevSiteLandingIcon width="150" />;
 
   return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.DEV_SITE} icon={icon} />;
 };
