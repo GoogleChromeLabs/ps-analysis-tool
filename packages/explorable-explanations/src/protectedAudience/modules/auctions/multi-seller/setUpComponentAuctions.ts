@@ -543,9 +543,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
           ? currentCircleIndex
           : currentCircleIndex + 1;
         const delay = WINNING_AD_DELAY / app.speedMultiplier;
-        // wait longer for higher speeds
-        const delayPercentage = app.speedMultiplier > 2 ? 0.5 : 0.8;
-        scrollToCircle(nextCircleIndex, delay * delayPercentage);
+        scrollToCircle(nextCircleIndex, delay * 0.65);
       }
     },
   });
