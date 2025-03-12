@@ -19,7 +19,7 @@ import type {
   SourcesRegistration,
   TriggerRegistration,
 } from '@google-psat/common';
-import { diff } from 'deep-object-diff';
+import { detailedDiff } from 'deep-object-diff';
 
 interface DifferenceProps {
   currentJson: TriggerRegistration | SourcesRegistration | null;
@@ -34,7 +34,9 @@ const Difference = ({ currentJson, prevJson }: DifferenceProps) => {
           <div
             className="json-container"
             dangerouslySetInnerHTML={{
-              __html: prettyPrintJson.toHtml(diff(currentJson, prevJson)),
+              __html: prettyPrintJson.toHtml(
+                detailedDiff(currentJson, prevJson)
+              ),
             }}
           />
         </pre>
