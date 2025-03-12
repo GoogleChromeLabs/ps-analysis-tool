@@ -22,7 +22,8 @@ import { Box, Custom, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig';
 import { AuctionStep, Coordinates, AuctionStepProps } from '../../../types';
-import { getCoordinateValues } from '../../../utils/getCoordinateValues';
+import { getCoordinateValues } from '../../../utils';
+import scrollToNextCircle from '../../../utils/scrollToNextCircle';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -518,6 +519,8 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
   });
 
+  const WINNING_AD_DELAY = 4000;
+
   steps.push({
     component: Box,
     props: {
@@ -529,9 +532,12 @@ const setupAfterComponentAuctionFlow = (steps) => {
         box.height / 2 +
         1,
     },
-    delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+    delay: WINNING_AD_DELAY,
+    callBack: (returnValue: Coordinates) => {
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+        scrollToNextCircle(WINNING_AD_DELAY);
+      }
     },
   });
 };
