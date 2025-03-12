@@ -485,47 +485,52 @@ class WebpageContentScript {
       tooltip &&
       arrowElement
     ) {
-      this.cleanup = autoUpdate(frame, tooltip, () => {
-        computePosition(frame, tooltip, {
-          platform: platform,
-          placement: 'top',
-          middleware: [
-            autoPlacement({
-              crossAxis: true,
-            }),
-            arrow({
-              element: arrowElement,
-            }),
-          ],
-        }).then(({ x, y, middlewareData, placement }) => {
-          Object.assign(tooltip.style, {
-            top: `${y}px`,
-            left: `${x}px`,
-          });
-          const side = placement.split('-')[0];
-
-          const staticSide = {
-            top: 'bottom',
-            right: 'left',
-            bottom: 'top',
-            left: 'right',
-          }[side];
-
-          if (middlewareData.arrow) {
-            const { x: arrowX, y: arrowY } = middlewareData.arrow;
-
-            Object.assign(arrowElement.style, {
-              left: arrowX ? `${arrowX - 15}px` : '',
-              top: arrowY ? `${arrowY}px` : '',
-              right: '',
-              bottom: '',
-              [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
-              transform: 'rotate(45deg)',
+      try {
+        this.cleanup = autoUpdate(frame, tooltip, () => {
+          computePosition(frame, tooltip, {
+            platform: platform,
+            placement: 'top',
+            middleware: [
+              autoPlacement({
+                crossAxis: true,
+              }),
+              arrow({
+                element: arrowElement,
+              }),
+            ],
+          }).then(({ x, y, middlewareData, placement }) => {
+            Object.assign(tooltip.style, {
+              top: `${y}px`,
+              left: `${x}px`,
             });
-          }
-          return tooltip;
+            const side = placement.split('-')[0];
+
+            const staticSide = {
+              top: 'bottom',
+              right: 'left',
+              bottom: 'top',
+              left: 'right',
+            }[side];
+
+            if (middlewareData.arrow) {
+              const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+              Object.assign(arrowElement.style, {
+                left: arrowX ? `${arrowX - 15}px` : '',
+                top: arrowY ? `${arrowY}px` : '',
+                right: '',
+                bottom: '',
+                [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
+                transform: 'rotate(45deg)',
+              });
+            }
+            return tooltip;
+          });
         });
-      });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.warn(error);
+      }
     }
 
     return tooltip;
