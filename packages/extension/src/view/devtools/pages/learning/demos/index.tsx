@@ -24,9 +24,12 @@ import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import LandingPage from '../landingePage';
+import iconURL from '../../../../../../images/demos.png';
 
 const Demos = () => {
-  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.DEMOS} />;
+  const icon = <img src={iconURL} alt="Demo" width="150" />;
+
+  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.DEMOS} icon={icon} />;
 };
 
 export default Demos;

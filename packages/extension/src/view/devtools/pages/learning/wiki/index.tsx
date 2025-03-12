@@ -23,9 +23,12 @@ import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import LandingPage from '../landingePage';
+import iconURL from '../../../../../../images/dev-site.png';
 
 const Wiki = () => {
-  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.WIKI} />;
+  const icon = <img src={iconURL} alt="Wiki" width="150" />;
+
+  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.WIKI} icon={icon} />;
 };
 
 export default Wiki;

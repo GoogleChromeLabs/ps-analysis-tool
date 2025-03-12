@@ -24,9 +24,14 @@ import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import LandingPage from '../landingePage';
+import iconURL from '../../../../../../images/help-center.png';
 
 const HelpCenter = () => {
-  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.HELP_CENTER} />;
+  const icon = <img src={iconURL} alt="Help Center" width="150" />;
+
+  return (
+    <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.HELP_CENTER} icon={icon} />
+  );
 };
 
 export default HelpCenter;
