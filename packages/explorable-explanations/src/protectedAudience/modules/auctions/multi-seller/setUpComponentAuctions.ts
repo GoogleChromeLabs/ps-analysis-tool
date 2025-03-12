@@ -22,8 +22,7 @@ import { Box, Custom, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig';
 import { AuctionStep, Coordinates, AuctionStepProps } from '../../../types';
-import { getCoordinateValues } from '../../../utils';
-import scrollToNextCircle from '../../../utils/scrollToNextCircle';
+import { getCoordinateValues, scrollToCircle } from '../../../utils';
 
 const BOX_WIDTH = 1200;
 const BOX_HEIGHT = 1100;
@@ -536,10 +535,17 @@ const setupAfterComponentAuctionFlow = (steps) => {
     callBack: (returnValue: Coordinates) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
+        if (!app.autoScroll) {
+          return;
+        }
+        const currentCircleIndex = app.timeline.currentIndex;
+        const nextCircleIndex = app.isInteractiveMode
+          ? currentCircleIndex
+          : currentCircleIndex + 1;
         const delay = WINNING_AD_DELAY / app.speedMultiplier;
         // wait longer for higher speeds
         const delayPercentage = app.speedMultiplier > 2 ? 0.5 : 0.8;
-        scrollToNextCircle(delay * delayPercentage);
+        scrollToCircle(nextCircleIndex, delay * delayPercentage);
       }
     },
   });

@@ -17,15 +17,8 @@
 import app from '../app';
 import { delay, getCoordinateValues, scrollToCoordinates } from '.';
 
-const scrollToNextCircle = async (scrollDelay: number) => {
-  if (app.cancelPromise || !app.autoScroll) {
-    return;
-  }
-  const currentCircleIndex = app.timeline.currentIndex;
-  const nextCircleIndex = app.isInteractiveMode
-    ? currentCircleIndex
-    : currentCircleIndex + 1;
-  const position = app.timeline.circlePositions[nextCircleIndex];
+export const scrollToCircle = async (index: number, scrollDelay = 0) => {
+  const position = app.timeline.circlePositions[index];
   if (!position) {
     return;
   }
@@ -34,5 +27,3 @@ const scrollToNextCircle = async (scrollDelay: number) => {
   await delay(scrollDelay);
   scrollToCoordinates({ x: x1, y: y1 });
 };
-
-export default scrollToNextCircle;
