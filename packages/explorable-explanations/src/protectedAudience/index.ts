@@ -378,7 +378,7 @@ app.handleNonInteractivePrev = async () => {
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex - 1]);
 
-  await utils.delay(10);
+  await utils.delay(100);
 
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
@@ -498,7 +498,7 @@ app.handleNonInteractiveNext = async () => {
   if (app.timeline.currentIndex === config.timeline.circles.length) {
     app.setHasLastNodeVisited(true);
   }
-  await utils.delay(10);
+  await utils.delay(100);
 
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();

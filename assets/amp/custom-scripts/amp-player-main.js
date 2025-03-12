@@ -202,7 +202,8 @@ const sendEventToParent = () => {
 function scrollListener() {
   if (
     Math.ceil(window.scrollY + window.innerHeight) >=
-    document.documentElement.scrollHeight
+      document.documentElement.scrollHeight &&
+    !document.body.classList.contains('lightbox-open')
   ) {
     sendEventToParent();
   }
@@ -259,7 +260,11 @@ const messageListener = ({
       return;
     }
 
-    const _cards = story?.map((singleStory) => getCardHTML({...singleStory, shouldPublisherLogo: false})).join('');
+    const _cards = story
+      ?.map((singleStory) =>
+        getCardHTML({ ...singleStory, shouldPublisherLogo: false })
+      )
+      .join('');
     const storyAnchors = story?.map(({ storyUrl }) => ({ href: storyUrl }));
 
     if (JSON.stringify(story) === JSON.stringify(stateObject.previousStories)) {
