@@ -19,27 +19,21 @@
  */
 import React from 'react';
 import {
-  ExternalLinkPanel,
-  Help,
   SIDEBAR_ITEMS_KEYS,
+  HelpCenterLandingIcon,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { FEATURED_ITEMS } from '../constants';
+import LandingPage from '../landingePage';
 
 const HelpCenter = () => {
-  const description =
-    FEATURED_ITEMS.find(
-      (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.HELP_CENTER
-    )?.description ?? '';
+  const icon = <HelpCenterLandingIcon width="150" />;
 
-  const helpIcon = (
-    <Help className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
+  return (
+    <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.HELP_CENTER} icon={icon} />
   );
-
-  return <ExternalLinkPanel description={description} icon={helpIcon} />;
 };
 
 export default HelpCenter;

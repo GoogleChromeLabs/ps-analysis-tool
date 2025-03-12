@@ -19,27 +19,19 @@
  */
 import React from 'react';
 import {
-  DevGuideIcon,
-  ExternalLinkPanel,
   SIDEBAR_ITEMS_KEYS,
+  DevSiteLandingIcon,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { FEATURED_ITEMS } from '../constants';
+import LandingPage from '../landingePage';
 
 const DevSite = () => {
-  const description =
-    FEATURED_ITEMS.find(
-      (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.DEV_SITE
-    )?.description ?? '';
+  const icon = <DevSiteLandingIcon width="150" />;
 
-  const devIcon = (
-    <DevGuideIcon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
-  );
-
-  return <ExternalLinkPanel description={description} icon={devIcon} />;
+  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.DEV_SITE} icon={icon} />;
 };
 
 export default DevSite;

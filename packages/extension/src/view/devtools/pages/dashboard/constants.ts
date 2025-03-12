@@ -64,7 +64,7 @@ export const FEATURE_LIST = [
     icon: CookieIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
     description:
-      'Gain insights into the behavior and distribution of cookies on web pages while navigating across sites during browsing sessions.',
+      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
     buttons: [
       {
         name: 'Insights',
@@ -103,7 +103,8 @@ export const FEATURE_LIST = [
     name: I18n.getMessage('privateAdvertising'),
     icon: PrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
-    description: I18n.getMessage('privateAdvertisingDescription'),
+    description:
+      'Private-preserving APIs supporting critical advertising use cases without relying on cross-site tracking, while providing accurate relevance information and measurement data for digital ads.',
     colorClasses: {
       heading: 'text-blue-600',
     },
@@ -130,7 +131,8 @@ export const FEATURE_LIST = [
     name: I18n.getMessage('trackingProtection'),
     icon: AntiCovertTrackingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description: I18n.getMessage('antiCovertTrackingDescription'),
+    description:
+      'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
     colorClasses: {
       heading: 'text-yellow-500',
     },
@@ -158,7 +160,7 @@ export const FEATURE_LIST = [
     icon: LearningIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
     description:
-      'Explore the Privacy Sandbox API with documentation, interactive stories, and a help center. Dive into the Wiki to learn about PSAT and access developer resources.',
+      'Explore and learn everything about the Privacy Sandbox via the Help Center, developer documentation, and Stories, and learn about PSAT via the wiki.',
     colorClasses: {
       heading: 'text-green-700',
     },

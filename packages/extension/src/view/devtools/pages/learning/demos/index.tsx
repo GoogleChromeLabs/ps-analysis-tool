@@ -19,26 +19,19 @@
  */
 import React from 'react';
 import {
-  ExternalLinkPanel,
-  DemosIcon,
   SIDEBAR_ITEMS_KEYS,
+  DemosLandingIcon,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { FEATURED_ITEMS } from '../constants';
+import LandingPage from '../landingePage';
 
 const Demos = () => {
-  const description =
-    FEATURED_ITEMS.find((item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.DEMOS)
-      ?.description ?? '';
+  const icon = <DemosLandingIcon width="150" />;
 
-  const demosIcon = (
-    <DemosIcon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
-  );
-
-  return <ExternalLinkPanel description={description} icon={demosIcon} />;
+  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.DEMOS} icon={icon} />;
 };
 
 export default Demos;
