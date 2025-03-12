@@ -104,7 +104,7 @@ export const FEATURE_LIST = [
     icon: PrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
     description:
-      'Private-preserving APIs supporting critical advertising use cases without relying on cross-site tracking, while  providing accurate relevance information and measurement data for digital ads.',
+      'Private-preserving APIs supporting critical advertising use cases without relying on cross-site tracking, while providing accurate relevance information and measurement data for digital ads.',
     colorClasses: {
       heading: 'text-blue-600',
     },

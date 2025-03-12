@@ -39,7 +39,6 @@ const LandingPage = ({ sidebarKey, icon }: LandingPageProps) => {
     <div className="w-full h-full overflow-hidden flex justify-center items-center">
       <div className="max-w-[600px] h-full flex justify-center items-center">
         <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-          {/* <Icon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" /> */}
           <div className="mb-5">{icon}</div>
           {title && <h3 className="font-semibold text-2xl">{title}</h3>}
           {description && (
