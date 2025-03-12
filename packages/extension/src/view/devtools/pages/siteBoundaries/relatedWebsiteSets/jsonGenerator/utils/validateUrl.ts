@@ -29,7 +29,7 @@ const validateUrl = (url: string) => {
 
   try {
     _url = new URL(url);
-    if (_url.protocol === 'https') {
+    if (_url.protocol === 'https:') {
       return '';
     }
   } catch (err) {

@@ -142,6 +142,10 @@ const AuctionTable = ({
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
+          if (value === undefined || value === null) {
+            return false;
+          }
+
           const bid = value as number;
 
           if (filterValue === '100+') {
