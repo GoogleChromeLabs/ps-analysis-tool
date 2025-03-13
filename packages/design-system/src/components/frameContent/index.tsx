@@ -49,7 +49,7 @@ const FrameContent = ({
       <div
         className={classNames(
           commonClassName,
-          'flex items-center justify-center font-bold p-8'
+          'flex items-center justify-center p-8'
         )}
       >
         {children}

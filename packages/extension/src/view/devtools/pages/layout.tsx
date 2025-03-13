@@ -259,6 +259,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   const [allowTransition, setAllowTransition] = useState(true);
 
+  const layoutWidth = selectedItemKey?.includes('learning')
+    ? 'min-w-[300px]'
+    : 'min-w-[50rem]';
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -285,7 +289,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       <div className="flex-1 h-full overflow-hidden flex flex-col">
         <main ref={mainRef} className="w-full flex-1 relative overflow-auto">
           <div className="w-full h-full">
-            <div className="min-w-[50rem] h-full z-1">
+            <div className={layoutWidth + ' h-full z-1'}>
               {PanelElement && <PanelElement {...props} />}
             </div>
           </div>

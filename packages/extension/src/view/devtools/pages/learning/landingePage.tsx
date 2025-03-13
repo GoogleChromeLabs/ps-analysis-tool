@@ -37,9 +37,9 @@ const LandingPage = ({ sidebarKey, icon, frameColor }: LandingPageProps) => {
   const { description, title } = page;
 
   return (
-    <div className="w-full h-full overflow-hidden flex justify-center items-center p-8">
-      <div className="w-full h-full max-w-[800px] flex justify-center items-center">
-        <FrameContent height={500} color={frameColor}>
+    <div className="w-full h-full flex justify-center items-center">
+      <div className="w-[300px] h-[600px] max-h-[900px] md:w-[700px] md:h-[400px] overflow-hidden flex justify-center items-center p-8">
+        <FrameContent color={frameColor}>
           <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
             <div className="mb-5">{icon}</div>
             {title && <h3 className="font-semibold text-2xl">{title}</h3>}
