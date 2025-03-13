@@ -31,7 +31,13 @@ import LandingPage from '../landingePage';
 const Demos = () => {
   const icon = <DemosLandingIcon width="150" />;
 
-  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.DEMOS} icon={icon} />;
+  return (
+    <LandingPage
+      sidebarKey={SIDEBAR_ITEMS_KEYS.DEMOS}
+      icon={icon}
+      frameColor="privacy-blue"
+    />
+  );
 };
 
 export default Demos;
