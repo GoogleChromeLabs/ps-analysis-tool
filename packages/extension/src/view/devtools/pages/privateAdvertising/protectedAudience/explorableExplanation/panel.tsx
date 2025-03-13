@@ -211,6 +211,7 @@ const Panel = ({
   useEffect(() => {
     if (info) {
       setActiveTab(3);
+      draggableTrayRef.current.setIsCollapsed(false);
     }
   }, [info, setActiveTab]);
 
