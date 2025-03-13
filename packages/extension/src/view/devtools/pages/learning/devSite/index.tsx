@@ -31,7 +31,13 @@ import LandingPage from '../landingePage';
 const DevSite = () => {
   const icon = <DevSiteLandingIcon width="150" />;
 
-  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.DEV_SITE} icon={icon} />;
+  return (
+    <LandingPage
+      sidebarKey={SIDEBAR_ITEMS_KEYS.DEV_SITE}
+      icon={icon}
+      frameColor="privacy-green"
+    />
+  );
 };
 
 export default DevSite;

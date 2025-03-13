@@ -243,6 +243,9 @@ module.exports = {
       'anti-flash-white': '#F1F3F4',
       'dark-gray-x11': '#A9A9A9',
       'dark-grey': '#AAAAAA',
+      'privacy-blue': '#4285fa',
+      'privacy-green': '#3bd897',
+      'privacy-purple': '#dc9af8',
     },
     colors: {
       ...colors,

@@ -70,3 +70,4 @@ export * from './filtersSidebar';
 export { default as DraggableTray } from './draggableTray';
 export { default as Link } from './link';
 export { default as CardsPanel } from './landingPage/cardsPanel';
+export { default as FrameContent } from './frameContent';
