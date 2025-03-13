@@ -518,7 +518,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
   });
 
-  const WINNING_AD_DELAY = 6000;
+  const WINNING_AD_DELAY = 5000 + app.speedMultiplier * 1000;
 
   steps.push({
     component: Box,
