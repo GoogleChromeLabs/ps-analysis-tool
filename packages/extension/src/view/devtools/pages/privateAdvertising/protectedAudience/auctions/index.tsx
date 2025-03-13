@@ -30,7 +30,6 @@ import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
-import type { ReceivedBids } from '@google-psat/common';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
@@ -77,8 +76,10 @@ const Auctions = () => {
   const auctionData = useMemo(() => {
     return {
       auctionData: auctionEvents,
+      receivedBids,
+      noBids,
     };
-  }, [auctionEvents]);
+  }, [auctionEvents, noBids, receivedBids]);
 
   if (!isUsingCDP) {
     return (
@@ -119,11 +120,7 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <div className="overflow-auto flex-1">
         <AuctionsContainer
-          auctionEvents={{
-            auctionData: auctionData.auctionData,
-            receivedBids: receivedBids as unknown as ReceivedBids[],
-            noBids,
-          }}
+          auctionEvents={auctionData}
           sidebarData={sidebarData}
           setSidebarData={setSidebarData}
         />
