@@ -27,6 +27,7 @@ import {
 import type {
   AdsAndBiddersType,
   NoBidsType,
+  ReceivedBids,
   singleAuctionEvent,
 } from '@google-psat/common';
 
