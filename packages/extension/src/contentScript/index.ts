@@ -503,38 +503,43 @@ class WebpageContentScript {
                 element: arrowElement,
               }),
             ],
-          }).then(({ x, y, middlewareData, placement }) => {
-            Object.assign(tooltip.style, {
-              top: `${y}px`,
-              left: `${x}px`,
-            });
-            const side = placement.split('-')[0];
-
-            const staticSide = {
-              top: 'bottom',
-              right: 'left',
-              bottom: 'top',
-              left: 'right',
-            }[side];
-
-            if (middlewareData.arrow) {
-              const { x: arrowX, y: arrowY } = middlewareData.arrow;
-
-              Object.assign(arrowElement.style, {
-                left: arrowX ? `${arrowX - 15}px` : '',
-                top: arrowY ? `${arrowY}px` : '',
-                right: '',
-                bottom: '',
-                [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
-                transform: 'rotate(45deg)',
+          })
+            .then(({ x, y, middlewareData, placement }) => {
+              Object.assign(tooltip.style, {
+                top: `${y}px`,
+                left: `${x}px`,
               });
-            }
-            return tooltip;
-          });
+              const side = placement.split('-')[0];
+
+              const staticSide = {
+                top: 'bottom',
+                right: 'left',
+                bottom: 'top',
+                left: 'right',
+              }[side];
+
+              if (middlewareData.arrow) {
+                const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+                Object.assign(arrowElement.style, {
+                  left: arrowX ? `${arrowX - 15}px` : '',
+                  top: arrowY ? `${arrowY}px` : '',
+                  right: '',
+                  bottom: '',
+                  [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
+                  transform: 'rotate(45deg)',
+                });
+              }
+              return tooltip;
+            })
+            .catch((error) => {
+              // eslint-disable-next-line no-console
+              console.log('contentScriptError', error);
+            });
         });
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.warn(error);
+        console.log('contentScriptError', error);
       }
     }
 
