@@ -27,6 +27,7 @@ import {
   publisherData,
   SINGLE_SELLER_CONFIG,
   MULTI_SELLER_CONFIG,
+  app,
 } from '@google-psat/explorable-explanations';
 /**
  * Internal dependencies
@@ -536,6 +537,10 @@ export const configuredAuctionEvents = (
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
 
+  const isInteractiveModeLastStep =
+    currentStep?.title === SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.title &&
+    (app.isInteractiveMode || app.isRevisitingNodeInInteractiveMode);
+
   if (isMultiSeller) {
     sellersArray.push(
       websiteString,
@@ -552,7 +557,7 @@ export const configuredAuctionEvents = (
     (branch: { date: string; time: string }) => branch.date + ' ' + branch.time
   ) as string[];
 
-  const auctionData: AuctionEventsType = {
+  let auctionData: AuctionEventsType = {
     [adunits[0]]: {
       [dates[0]]: {
         [websiteString]: {
@@ -628,6 +633,9 @@ export const configuredAuctionEvents = (
         {}
     );
 
+  if (isInteractiveModeLastStep) {
+    auctionData = previousEvents as AuctionEventsType;
+  }
   const receivedBids: { [key: string]: ReceivedBids[] } = {
     [adunits[0]]: [] as ReceivedBids[],
     [adunits[1]]: [] as ReceivedBids[],
@@ -703,8 +711,6 @@ export const configuredAuctionEvents = (
     bidCurrency: 'USD',
     winningBidder: 'DSP 1',
   } as AdsAndBiddersTypeData;
-
-  //console.log(receivedBids)
 
   return {
     auctionData,
