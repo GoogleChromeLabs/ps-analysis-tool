@@ -543,7 +543,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
           ? currentCircleIndex
           : currentCircleIndex + 1;
         const delay = WINNING_AD_DELAY / app.speedMultiplier;
-        scrollToCircle(nextCircleIndex, delay * 0.65);
+        scrollToCircle(nextCircleIndex, delay * 0.55);
       }
     },
   });
