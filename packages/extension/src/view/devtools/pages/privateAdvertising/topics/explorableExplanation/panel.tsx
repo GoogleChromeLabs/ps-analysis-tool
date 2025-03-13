@@ -49,6 +49,7 @@ interface PanelProps {
   PAstorage: string[];
   setPAActiveTab: (tabIndex: number) => void;
   setPAStorage: (content: string, index?: number) => void;
+  highlightAdTech: string | null;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
@@ -58,6 +59,7 @@ const Panel = ({
   PAstorage,
   setPAActiveTab,
   setPAStorage,
+  highlightAdTech,
   setHighlightAdTech,
 }: PanelProps) => {
   const { activeTab, setActiveTab } = useTabs(({ state, actions }) => ({
@@ -335,6 +337,18 @@ const Panel = ({
     })();
   }, []);
 
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
+
+  useEffect(() => {
+    if (highlightAdTech) {
+      draggableTrayRef.current?.setIsCollapsed(false);
+    }
+  }, [highlightAdTech]);
+
   const extraInterface = (
     <div className="flex gap-2 items-center">
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
@@ -378,7 +392,7 @@ const Panel = ({
           isInteractive={Boolean(isInteractiveModeOn)}
         />
       </div>
-      <DraggableTray />
+      <DraggableTray ref={draggableTrayRef} />
     </div>
   );
 };
