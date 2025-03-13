@@ -45,12 +45,10 @@ const FlowExpander = async ({
 
   const iconSize = config.timeline.expandIconSize;
   const iconRadius = iconSize / 2;
-  const currentIndex =
-    app.timeline.currentIndex === -1
-      ? app.nodeIndexRevisited
-      : app.timeline.currentIndex;
 
-  const currentSite = config.timeline.circles[currentIndex].website;
+  const currentSite =
+    config.timeline.circles[app.timeline.currentIndex]?.website ??
+    config.timeline.circles[app.nodeIndexRevisited]?.website;
 
   igp.mouseMoved = (event: MouseEvent | undefined) => {
     let hoveringOverSomething = false;

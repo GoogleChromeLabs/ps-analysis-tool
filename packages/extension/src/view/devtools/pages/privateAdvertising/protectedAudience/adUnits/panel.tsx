@@ -41,6 +41,7 @@ interface AdUnitsPanelProps {
   selectedAdUnit: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   showEvaluationPlaceholder?: boolean;
+  isEE?: boolean;
 }
 
 const AdUnitsPanel = ({
@@ -51,6 +52,7 @@ const AdUnitsPanel = ({
   selectedAdUnit,
   setIsInspecting,
   showEvaluationPlaceholder = true,
+  isEE,
 }: AdUnitsPanelProps) => {
   return (
     <div className="flex flex-col h-full w-full">
@@ -71,6 +73,7 @@ const AdUnitsPanel = ({
             setSelectedAdUnit={setSelectedAdUnit}
             selectedAdUnit={selectedAdUnit}
             setIsInspecting={setIsInspecting}
+            isEE={isEE}
           />
         </>
       ) : (
