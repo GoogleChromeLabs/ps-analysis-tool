@@ -27,3 +27,4 @@ export * from './scrollToCoordinates';
 export * from './drawOpenArrowWithoutAnimationIcon';
 export * from './getCircleDatetime';
 export * from './getCoordinateValues';
+export * from './scrollToCircle';

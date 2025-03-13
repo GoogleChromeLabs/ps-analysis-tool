@@ -14,30 +14,16 @@
  * limitations under the License.
  */
 
-/**
- * External dependencies.
- */
-import React from 'react';
-import {
-  SIDEBAR_ITEMS_KEYS,
-  DevSiteLandingIcon,
-} from '@google-psat/design-system';
+import app from '../app';
+import { delay, getCoordinateValues, scrollToCoordinates } from '.';
 
-/**
- * Internal dependencies.
- */
-import LandingPage from '../landingePage';
-
-const DevSite = () => {
-  const icon = <DevSiteLandingIcon width="150" />;
-
-  return (
-    <LandingPage
-      sidebarKey={SIDEBAR_ITEMS_KEYS.DEV_SITE}
-      icon={icon}
-      frameColor="privacy-green"
-    />
-  );
+export const scrollToCircle = async (index: number, scrollDelay = 0) => {
+  const position = app.timeline.circlePositions[index];
+  if (!position) {
+    return;
+  }
+  const { x, y } = position;
+  const { x: x1, y: y1 } = getCoordinateValues({ x, y });
+  await delay(scrollDelay);
+  scrollToCoordinates({ x: x1, y: y1 });
 };
-
-export default DevSite;
