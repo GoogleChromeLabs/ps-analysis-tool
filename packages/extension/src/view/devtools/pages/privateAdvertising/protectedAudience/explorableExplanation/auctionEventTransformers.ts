@@ -26,6 +26,7 @@ import type {
 import {
   publisherData,
   SINGLE_SELLER_CONFIG,
+  MULTI_SELLER_CONFIG,
 } from '@google-psat/explorable-explanations';
 /**
  * Internal dependencies
@@ -56,6 +57,17 @@ export interface CurrentSiteData {
   visited: boolean;
   visitedIndex: boolean;
 }
+
+export type IGType = {
+  interestGroupName: string;
+  ownerOrigin: string;
+};
+
+export type IGWithcComponentSeller = {
+  interestGroupName: string;
+  ownerOrigin: string;
+  componentSellerOrigin: string;
+};
 
 const getRandomisedNumbers = (count: number, min: number, max: number) => {
   const randomNumbers = Array.from(
@@ -158,12 +170,7 @@ export const transformConfigResolvedEvent = (seller: string) => {
   };
 };
 
-export const transformLoadedEvent = (
-  interestGroups: {
-    interestGroupName: string;
-    ownerOrigin: string;
-  }[]
-) => {
+export const transformLoadedEvent = (interestGroups: IGType[]) => {
   const interestGroupEvents: singleAuctionEvent[] = [];
 
   interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
@@ -181,12 +188,11 @@ export const transformLoadedEvent = (
 };
 
 export const transformBidEvent = (
-  interestGroups: {
-    interestGroupName: string;
-    ownerOrigin: string;
-  }[],
+  interestGroups: IGType[],
   isTopLevel: boolean,
-  currentStep: StepType | null
+  currentStep: StepType | null,
+  previousEvents: { [key: string]: singleAuctionEvent[] },
+  seller: string
 ) => {
   const bidEventsToBeReturned: singleAuctionEvent[] = [];
 
@@ -199,53 +205,91 @@ export const transformBidEvent = (
     uniqueOwnerOrigins.add(interestGroup.ownerOrigin);
   });
 
-  const randomIndex = randomIntFromInterval(0, interestGroups.length - 1);
+  const randomIndex = !isTopLevel
+    ? randomIntFromInterval(0, interestGroups.length - 1)
+    : -1;
+
+  const interestGroupToProcess: IGType[] | IGWithcComponentSeller[] = isTopLevel
+    ? (Object.keys(previousEvents)
+        .map((key) => {
+          if (seller === new URL(key).host) {
+            return {
+              interestGroupName: null,
+              ownerOrigin: null,
+              componentSellerOrigin: null,
+            };
+          }
+
+          const _previousEvents = previousEvents[key];
+          const bidEvents = _previousEvents.filter(
+            (event) => event.type === 'win'
+          )[0];
+
+          return {
+            interestGroupName: bidEvents.name as string,
+            ownerOrigin: bidEvents.ownerOrigin as string,
+            componentSellerOrigin: key,
+          };
+        })
+        .filter((ig) =>
+          Boolean(ig?.componentSellerOrigin)
+        ) as unknown as IGWithcComponentSeller[])
+    : interestGroups;
 
   const ownerOriginToSkip =
     currentStep?.title === SINGLE_SELLER_CONFIG.GENERATE_BID.title
       ? interestGroups[randomIndex].ownerOrigin
       : '';
 
-  interestGroups.forEach(({ interestGroupName, ownerOrigin }) => {
-    if (ownerOriginToSkip === ownerOrigin && uniqueOwnerOrigins.size > 1) {
-      return;
+  interestGroupToProcess.forEach(
+    ({ interestGroupName, ownerOrigin }, index) => {
+      if (
+        !isTopLevel &&
+        ownerOriginToSkip === ownerOrigin &&
+        uniqueOwnerOrigins.size > 1
+      ) {
+        return;
+      }
+
+      const eventToModify: singleAuctionEvent = structuredClone(
+        SYNTHETIC_AUCTION_EVENTS_BID
+      ) as singleAuctionEvent;
+
+      eventToModify.ownerOrigin = ownerOrigin;
+      eventToModify.name = interestGroupName;
+      eventToModify.bid = randomIntFromInterval(1, 100);
+
+      if (isTopLevel) {
+        eventToModify.type = 'topLevelBid';
+        eventToModify.componentSellerOrigin =
+          //@ts-ignore -- Since we are processing interest groups above which will have this information if its a top level bid.
+          interestGroupToProcess[index].componentSellerOrigin;
+      }
+
+      bidEventsToBeReturned.push(eventToModify);
     }
-
-    const eventToModify: singleAuctionEvent = structuredClone(
-      SYNTHETIC_AUCTION_EVENTS_BID
-    ) as singleAuctionEvent;
-
-    eventToModify.ownerOrigin = ownerOrigin;
-    eventToModify.name = interestGroupName;
-    eventToModify.bid = randomIntFromInterval(1, 100);
-
-    if (isTopLevel) {
-      eventToModify.type = 'topLevelBid';
-    }
-
-    bidEventsToBeReturned.push(eventToModify);
-  });
+  );
 
   return bidEventsToBeReturned;
 };
 
 export const createAuctionEvents = (
-  interestGroups: {
-    interestGroupName: string;
-    ownerOrigin: string;
-  }[],
+  interestGroups: IGType[],
   seller: string,
   advertisers: string[],
   eventStartTime: number,
   isTopLevelBid: boolean,
   currentStep: StepType | null,
   previousEvents: singleAuctionEvent[] | null,
+  completeAuctionEvents: { [key: string]: singleAuctionEvent[] },
   isMultiSeller = false
 ) => {
   const bidEvents = transformBidEvent(
     interestGroups,
     isTopLevelBid,
-    currentStep
+    currentStep,
+    completeAuctionEvents,
+    seller
   );
 
   bidEvents.sort((a, b) => (a?.bid ?? 0) - (b?.bid ?? 0));
@@ -308,77 +352,52 @@ export const createAuctionEvents = (
       break;
     case SINGLE_SELLER_CONFIG.SCORE_AD.title:
       if (bidEvents.length > 0) {
-        if (isMultiSeller) {
-          events.push(
-            transformStartedEvent(seller),
-            transformConfigResolvedEvent(seller),
-            ...transformFetchingEvents(
-              advertisers,
-              'start',
-              seller,
-              'sellerJS'
-            ),
-            ...transformFetchingEvents(
-              advertisers,
-              'start',
-              seller,
-              'sellerTrustedSignals'
-            ),
-            ...transformFetchingEvents(
-              advertisers,
-              'finish',
-              seller,
-              'sellerTrustedSignals'
-            ),
-            ...transformFetchingEvents(
-              advertisers,
-              'finish',
-              seller,
-              'sellerJS'
-            ),
-            ...transformFetchingEvents(
-              advertisers,
-              'start',
-              seller,
-              'bidderJS'
-            ),
-            ...transformFetchingEvents(
-              advertisers,
-              'finish',
-              seller,
-              'bidderJS'
-            ),
-            ...bidEvents,
-            {
-              formattedTime: '',
-              uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-              name: bidEvents[bidEvents.length - 1].name,
-              ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
-              type: 'win',
-              time: -1734076670.129756,
-              bid: bidEvents[bidEvents.length - 1].bid,
-              bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
-              eventType:
-                'interestGroupAccessed' as singleAuctionEvent['eventType'],
-            }
-          );
-        }
-      } else {
-        if (bidEvents.length > 0) {
-          events.push({
-            formattedTime: '',
-            uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
-            name: bidEvents[bidEvents.length - 1].name,
-            ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
-            type: 'win',
-            time: -1734076670.129756,
-            bid: bidEvents[bidEvents.length - 1].bid,
-            bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
-            eventType:
-              'interestGroupAccessed' as singleAuctionEvent['eventType'],
-          });
-        }
+        events.push({
+          formattedTime: '',
+          uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+          name: bidEvents[bidEvents.length - 1].name,
+          ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+          type: 'win',
+          time: -1734076670.129756,
+          bid: bidEvents[bidEvents.length - 1].bid,
+          bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+          eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
+        });
       }
+      break;
+    case MULTI_SELLER_CONFIG.SCORE_AD.title:
+      events.push(
+        transformStartedEvent(seller),
+        transformConfigResolvedEvent(seller),
+        ...transformFetchingEvents(advertisers, 'start', seller, 'sellerJS'),
+        ...transformFetchingEvents(
+          advertisers,
+          'start',
+          seller,
+          'sellerTrustedSignals'
+        ),
+        ...transformFetchingEvents(
+          advertisers,
+          'finish',
+          seller,
+          'sellerTrustedSignals'
+        ),
+        ...transformFetchingEvents(advertisers, 'finish', seller, 'sellerJS'),
+        ...transformFetchingEvents(advertisers, 'start', seller, 'bidderJS'),
+        ...transformFetchingEvents(advertisers, 'finish', seller, 'bidderJS'),
+        ...bidEvents,
+        {
+          formattedTime: '',
+          uniqueAuctionId: '27A93A016A30D0A5FB7B8C8779D98AF8',
+          name: bidEvents[bidEvents.length - 1].name,
+          ownerOrigin: bidEvents[bidEvents.length - 1].ownerOrigin,
+          type: 'win',
+          time: -1734076670.129756,
+          bid: bidEvents[bidEvents.length - 1].bid,
+          bidCurrency: bidEvents[bidEvents.length - 1].bidCurrency,
+          eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
+        }
+      );
       break;
     default:
       break;
@@ -446,10 +465,7 @@ const getBidData = (
 const getFlattenedAuctionEvents = (
   sellersArray: string[],
   currentSiteData: CurrentSiteData,
-  interestGroups: {
-    interestGroupName: string;
-    ownerOrigin: string;
-  }[],
+  interestGroups: IGType[],
   advertisers: string[],
   isMultiSeller: boolean,
   currentStep: StepType | null,
@@ -476,6 +492,7 @@ const getFlattenedAuctionEvents = (
           new URL(seller).host === host && isMultiSeller,
           currentStep,
           previousEvents?.[seller] ?? [],
+          previousEvents ?? {},
           isMultiSeller
         );
       }
@@ -497,7 +514,8 @@ const getFlattenedAuctionEvents = (
         new Date(currentSiteData?.datetime).getTime(),
         new URL(seller).host === host && isMultiSeller,
         currentStep,
-        previousEvents?.[seller] ?? []
+        previousEvents?.[seller] ?? [],
+        {}
       );
     });
   }
@@ -506,10 +524,7 @@ const getFlattenedAuctionEvents = (
 };
 
 export const configuredAuctionEvents = (
-  interestGroups: {
-    interestGroupName: string;
-    ownerOrigin: string;
-  }[],
+  interestGroups: IGType[],
   advertisers: string[],
   isMultiSeller: boolean,
   currentSiteData: CurrentSiteData,
@@ -631,10 +646,7 @@ export const configuredAuctionEvents = (
     selectedAdUnit
   );
 
-  const noBidders: {
-    interestGroupName: string;
-    ownerOrigin: string;
-  }[] = [];
+  const noBidders: IGType[] = [];
 
   const biddingOwners = new Set<string>();
 
