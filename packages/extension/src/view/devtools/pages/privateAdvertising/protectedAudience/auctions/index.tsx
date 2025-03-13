@@ -30,6 +30,7 @@ import { useProtectedAudience, useSettings } from '../../../../stateProviders';
 import AuctionsContainer from './container';
 import AdUnits from '../adUnits';
 import EvaluationEnvironment from '../evaluationEnvironment';
+import type { ReceivedBids } from '@google-psat/common';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
@@ -44,12 +45,13 @@ const Auctions = () => {
     },
   });
 
-  const { auctionEvents, adsAndBidders } = useProtectedAudience(
-    ({ state }) => ({
+  const { auctionEvents, adsAndBidders, receivedBids, noBids } =
+    useProtectedAudience(({ state }) => ({
       auctionEvents: state.auctionEvents ?? {},
       adsAndBidders: state.adsAndBidders,
-    })
-  );
+      receivedBids: state.receivedBids,
+      noBids: state.noBids,
+    }));
 
   useEffect(() => {
     if (
@@ -99,9 +101,8 @@ const Auctions = () => {
       </div>
     );
   }
-
   if (
-    Object.keys(auctionEvents || {}).length === 0 ||
+    Object.keys(auctionEvents || {}).length === 0 &&
     Object.keys(adsAndBidders || {}).length === 0
   ) {
     return (
@@ -118,7 +119,11 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <div className="overflow-auto flex-1">
         <AuctionsContainer
-          auctionEvents={auctionData}
+          auctionEvents={{
+            auctionData: auctionData.auctionData,
+            receivedBids: receivedBids as unknown as ReceivedBids[],
+            noBids,
+          }}
           sidebarData={sidebarData}
           setSidebarData={setSidebarData}
         />
