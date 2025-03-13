@@ -30,7 +30,13 @@ import LandingPage from '../landingePage';
 const Wiki = () => {
   const icon = <WikiLandingIcon width="200" height="90" />;
 
-  return <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.WIKI} icon={icon} />;
+  return (
+    <LandingPage
+      sidebarKey={SIDEBAR_ITEMS_KEYS.WIKI}
+      icon={icon}
+      frameColor="privacy-blue"
+    />
+  );
 };
 
 export default Wiki;

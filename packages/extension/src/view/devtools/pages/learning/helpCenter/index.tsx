@@ -32,7 +32,11 @@ const HelpCenter = () => {
   const icon = <HelpCenterLandingIcon width="150" />;
 
   return (
-    <LandingPage sidebarKey={SIDEBAR_ITEMS_KEYS.HELP_CENTER} icon={icon} />
+    <LandingPage
+      sidebarKey={SIDEBAR_ITEMS_KEYS.HELP_CENTER}
+      icon={icon}
+      frameColor="privacy-purple"
+    />
   );
 };
 

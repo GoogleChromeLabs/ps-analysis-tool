@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
+import { FrameContent, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -27,9 +27,10 @@ import { FEATURED_ITEMS, type FeaturedItems } from './constants';
 interface LandingPageProps {
   sidebarKey: SIDEBAR_ITEMS_KEYS;
   icon: React.ReactNode;
+  frameColor?: string;
 }
 
-const LandingPage = ({ sidebarKey, icon }: LandingPageProps) => {
+const LandingPage = ({ sidebarKey, icon, frameColor }: LandingPageProps) => {
   const page = FEATURED_ITEMS.find(
     (item) => item.sidebarKey === sidebarKey
   ) as FeaturedItems;
@@ -37,14 +38,16 @@ const LandingPage = ({ sidebarKey, icon }: LandingPageProps) => {
 
   return (
     <div className="w-full h-full overflow-hidden flex justify-center items-center">
-      <div className="max-w-[600px] h-full flex justify-center items-center">
-        <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-          <div className="mb-5">{icon}</div>
-          {title && <h3 className="font-semibold text-2xl">{title}</h3>}
-          {description && (
-            <p className=" p-b-2 m-b-1 text-base">{description}</p>
-          )}
-        </div>
+      <div className="w-full h-full max-w-[800px] flex justify-center items-center">
+        <FrameContent height={500} color={frameColor}>
+          <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
+            <div className="mb-5">{icon}</div>
+            {title && <h3 className="font-semibold text-2xl">{title}</h3>}
+            {description && (
+              <p className=" p-b-2 m-b-1 text-base">{description}</p>
+            )}
+          </div>
+        </FrameContent>
       </div>
     </div>
   );
