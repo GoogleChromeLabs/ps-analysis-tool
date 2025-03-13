@@ -114,7 +114,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           sessionId,
         } = params as Protocol.Target.AttachedToTargetEvent;
 
-        const childDebuggee = { targetId, sessionId: sessionId };
+        const childDebuggee = { targetId };
 
         if (!attachedSet.has(targetId)) {
           attachCDP(childDebuggee, true);
