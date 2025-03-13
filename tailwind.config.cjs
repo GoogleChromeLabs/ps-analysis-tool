@@ -264,9 +264,6 @@ module.exports = {
       gray: '#6E6E6E',
       'dark-charcoal': '#323232',
       'bright-navy-blue': '#1A73E8',
-      'privacy-blue': '#4285fa',
-      'privacy-green': '#3bd897',
-      'privacy-purple': '#dc9af8',
     },
     stroke: {
       'bright-gray': '#E8EAED',
