@@ -259,8 +259,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   const [allowTransition, setAllowTransition] = useState(true);
 
-  const layoutWidth = selectedItemKey?.includes('learning')
-    ? 'min-w-[300px]'
+  const layoutWidth = selectedItemKey?.startsWith('learning')
+    ? 'min-w-[400px]'
     : 'min-w-[50rem]';
 
   return (
