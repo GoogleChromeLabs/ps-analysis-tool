@@ -46,7 +46,9 @@ export const showWinningAdDirectly = (
 
   if (
     props?.title === 'runAdAuction()' &&
-    app.bubbles.interestGroupCounts === 0
+    (app.bubbles.interestGroupCounts === 0 ||
+      (app.isRevisitingNodeInInteractiveMode &&
+        app.visitedIndexOrder.indexOf(app.nodeIndexRevisited) === 0))
   ) {
     app.auction.auctions[index] = [];
     app.promiseQueue?.end();
