@@ -439,6 +439,9 @@ class WebpageContentScript {
       }
     }
     const { top, left } = frame.getBoundingClientRect();
+    if (isElementVisibleInViewport(frame)) {
+      return tooltip;
+    }
 
     document.documentElement.scrollTo({
       top: top,
@@ -741,6 +744,9 @@ class WebpageContentScript {
       frameWithTooltip
     ) {
       const { top, left } = frameWithTooltip.getBoundingClientRect();
+      if (isElementVisibleInViewport(frameWithTooltip)) {
+        return;
+      }
       document.documentElement.scrollTo({
         top: top,
         left: left,
