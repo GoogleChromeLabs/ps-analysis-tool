@@ -29,6 +29,7 @@ import {
   userSketch,
   interestGroupSketch,
   sketch as mainSketch,
+  config,
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
@@ -101,11 +102,11 @@ const Panel = ({
   bidsUpdateIndicator,
   setHasLastNodeVisited,
 }: PanelProps) => {
-  const [play, setPlay] = useState(true);
+  const [play, setPlay] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [autoExpand, setAutoExpand] = useState(true);
-  const [autoScroll, setAutoScroll] = useState(false);
-  const historyCount = 8;
+  const [autoScroll, setAutoScroll] = useState(true);
+  const historyCount = config.timeline.circles.length;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -210,6 +211,7 @@ const Panel = ({
   useEffect(() => {
     if (info) {
       setActiveTab(3);
+      draggableTrayRef.current.setIsCollapsed(false);
     }
   }, [info, setActiveTab]);
 

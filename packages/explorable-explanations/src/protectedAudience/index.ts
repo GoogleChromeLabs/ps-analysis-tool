@@ -685,7 +685,7 @@ export const sketch = (p: P5) => {
   app.handleControls();
 
   p.setup = () => {
-    setupMainCanvas(p);
+    setupMainCanvas(p, true);
   };
 
   p.preload = () => {

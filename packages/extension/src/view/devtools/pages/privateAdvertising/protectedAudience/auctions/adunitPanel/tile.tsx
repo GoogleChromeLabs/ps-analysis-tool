@@ -47,7 +47,7 @@ const Tile = ({ item }: TileProps) => {
               className={classNames(
                 'bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs',
                 {
-                  'hover:border-american-silver hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:scale-[1.03] transition-all duration-150 ease-in-out':
+                  'hover:border-american-silver hover:cursor-pointer hover:bg-light-gray hover:scale-[1.03] transition-all duration-150 ease-in-out':
                     button.onClick,
                 },
                 {

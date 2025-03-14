@@ -33,12 +33,14 @@ import {
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
 import { prettyPrintJson } from 'pretty-print-json';
+import classNames from 'classnames';
 
 interface AdTableProps {
   adsAndBidders: AdsAndBiddersType;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit?: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
+  isEE?: boolean;
 }
 
 const AdTable = ({
@@ -46,6 +48,7 @@ const AdTable = ({
   setSelectedAdUnit,
   selectedAdUnit,
   setIsInspecting,
+  isEE,
 }: AdTableProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
@@ -56,7 +59,9 @@ const AdTable = ({
         accessorKey: 'adUnitCode',
         cell: (info) => (
           <button
-            className="w-full flex gap-2 items-center"
+            className={classNames('w-full flex gap-2 items-center', {
+              'cursor-default': Boolean(isEE),
+            })}
             onClick={() => {
               if (selectedAdUnit === info) {
                 setSelectedAdUnit?.(null);
@@ -118,7 +123,7 @@ const AdTable = ({
         widthWeightagePercentage: 60,
       },
     ],
-    [selectedAdUnit, setIsInspecting, setSelectedAdUnit]
+    [selectedAdUnit, setIsInspecting, setSelectedAdUnit, isEE]
   );
 
   const tableFilters = useMemo<TableFilter>(

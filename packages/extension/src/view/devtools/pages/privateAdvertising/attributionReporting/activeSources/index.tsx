@@ -247,10 +247,7 @@ const ActiveSources = () => {
         cell: (_, details) =>
           calculateRegistrationDate((details as SourcesRegistration)?.expiry),
         sortingComparator: (a, b) => {
-          const aString = (a as string).toLowerCase().trim();
-          const bString = (b as string).toLowerCase().trim();
-
-          return aString > bString ? 1 : -1;
+          return a > b ? -1 : 1;
         },
         widthWeightagePercentage: 12,
       },

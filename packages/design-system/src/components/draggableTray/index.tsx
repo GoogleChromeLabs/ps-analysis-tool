@@ -45,13 +45,20 @@ const DraggableTray = forwardRef<
   { initialCollapsed = false }: DraggableTrayProps,
   ref
 ) {
-  const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
+  const { panel, activeTab } = useTabs(({ state }) => ({
+    panel: state.panel,
+    activeTab: state.activeTab,
+  }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
 
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
   const [height, setHeight] = useState<string | undefined>('30%');
+
+  useEffect(() => {
+    setIsCollapsed(false);
+  }, [activeTab]);
 
   useEffect(() => {
     if (!isCollapsed) {

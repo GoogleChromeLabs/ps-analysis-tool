@@ -61,6 +61,7 @@ const Auctions = ({
           receivedBids: auctionEvents?.receivedBids || {},
           noBids: auctionEvents?.noBids || {},
           showEvaluationPlaceholder: Boolean(customAdsAndBidders),
+          isEE: true,
         },
       },
       children: {},
@@ -79,6 +80,7 @@ const Auctions = ({
         receivedBids: auctionEvents.receivedBids,
         noBids: auctionEvents.noBids,
         showEvaluationPlaceholder: Boolean(customAdsAndBidders),
+        isEE: true,
       };
       return prevData;
     });

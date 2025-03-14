@@ -93,6 +93,7 @@ const ExplorableExplanation = () => {
         PAstorage={PAstorage}
         setPAActiveTab={setPAActiveTab}
         setPAStorage={setPAStorage}
+        highlightAdTech={highlightAdTech}
         setHighlightAdTech={setHighlightAdTech}
       />
     </TabsProvider>
