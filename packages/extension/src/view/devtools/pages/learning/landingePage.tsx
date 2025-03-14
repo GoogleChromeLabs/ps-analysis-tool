@@ -38,10 +38,10 @@ const LandingPage = ({ sidebarKey, icon, frameColor }: LandingPageProps) => {
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className="w-[400px] h-[450px] lg:w-[700px] lg:h-[450px] overflow-hidden flex justify-center items-center p-8">
+      <div className="w-[400px] h-[450px] lg:w-[700px] lg:h-[400px] overflow-hidden flex justify-center items-center p-8">
         <FrameContent color={frameColor}>
           <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-            <div className="mb-0 lg:mb-5 scale-75 lg:scale-100">{icon}</div>
+            <div className="mb-3 lg:mb-5 scale-75 lg:scale-100">{icon}</div>
             {title && (
               <h3 className="font-semibold text-xl lg:text-2xl">{title}</h3>
             )}
