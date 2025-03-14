@@ -37,19 +37,19 @@ const FrameContent = ({
   height?: string | number;
   color?: string;
 }) => {
-  const commonClassName = `${borderColors[color]} bg-white dark:bg-raisin-black absolute box-border w-full h-full border-[3px] rounded-xl col-start-1 row-start-1`;
+  const commonClassName = `${borderColors[color]} bg-white dark:bg-raisin-black absolute box-border w-full h-full border-[2px] rounded-xl col-start-1 row-start-1`;
 
   return (
     <div className="grid relative" style={{ width, height }}>
       {/* Bottom border (shadow) */}
       <div
-        className={classNames(commonClassName, 'border-b-[12px] top-[9px]')}
+        className={classNames(commonClassName, 'border-b-[18px] top-[13px]')}
       />
       {/* Content */}
       <div
         className={classNames(
           commonClassName,
-          'flex items-center justify-center font-bold p-8'
+          'flex items-center justify-center p-8'
         )}
       >
         {children}
