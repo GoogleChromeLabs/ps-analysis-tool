@@ -26,6 +26,7 @@ import TopicsAnimation, { TopicsAnimationProps } from './animation';
  */
 export function topicsAnimation(props: TopicsAnimationProps) {
   const animation = new TopicsAnimation(props);
+  animation.start();
 
   return {
     togglePlay: (state: boolean) => animation.togglePlay(state),

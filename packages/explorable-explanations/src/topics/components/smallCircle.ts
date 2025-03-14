@@ -13,43 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies
+ */
 import p5 from 'p5';
-import { config } from '../config';
 
-type Circle = {
-  p: p5;
-  position: { x: number; y: number };
-  visited: boolean;
-  completedIcon: p5.Image;
-  diameter: number;
-};
+/**
+ * Internal dependencies
+ */
+import { getAdtechsColors } from '../utils';
 
-export const circle = ({
-  p,
-  position,
-  visited,
-  completedIcon,
-  diameter,
-}: Circle) => {
+export const smallCircle = (
+  p: p5,
+  adTech: string,
+  x: number,
+  y: number,
+  size: number
+) => {
+  const adTechColor = getAdtechsColors(p)[adTech];
   p.push();
-
-  if (visited) {
-    p.stroke('#1A73E8');
-  }
-
-  p.circle(position.x, position.y, diameter);
-
-  if (visited && completedIcon) {
-    const user = config.timeline.user;
-
-    p.image(
-      completedIcon,
-      position.x - user.width / 2,
-      position.y - user.height / 2,
-      user.width,
-      user.height
-    );
-  }
-
+  p.fill(adTechColor);
+  p.circle(x, y, size);
   p.pop();
 };

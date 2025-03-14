@@ -32,7 +32,13 @@ type InfoBox = {
   adTechs: string[];
 };
 
-const infoBox = ({ p, position, diameter, topics, adTechs }: InfoBox) => {
+export const infoBox = ({
+  p,
+  position,
+  diameter,
+  topics,
+  adTechs,
+}: InfoBox) => {
   p.push();
   p.rectMode(p.CENTER);
   p.fill(245);
@@ -100,4 +106,22 @@ const infoBox = ({ p, position, diameter, topics, adTechs }: InfoBox) => {
   p.pop();
 };
 
-export default infoBox;
+export const clearInfoBox = (
+  p: p5,
+  position: { x: number; y: number },
+  diameter: number
+) => {
+  p.push();
+  p.fill(255);
+  p.stroke(255);
+  p.rectMode(p.CENTER);
+  p.rect(position.x, position.y + diameter / 2 + 150, 300, 250);
+  p.strokeWeight(5);
+  p.line(
+    position.x,
+    position.y + diameter / 2 + 3,
+    position.x,
+    position.y + 95
+  );
+  p.pop();
+};

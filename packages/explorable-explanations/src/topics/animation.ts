@@ -24,10 +24,9 @@ import p5 from 'p5';
  */
 
 import { config } from './config';
-import { getAdtechsColors } from './utils';
-import { circle, infoBox, smallCircles } from './components';
+import { circle, infoBox, smallCircle, clearInfoBox } from './components';
 import assets from './assets';
-
+import { getSmallCirclePositions } from './utils';
 export type Epoch = { datetime: string; website: string; topics: string[] };
 
 export type TopicsAnimationProps = {
@@ -39,6 +38,7 @@ export type TopicsAnimationProps = {
   setHighlightAdTech: (highlightAdTech: string | null) => void;
   isAnimating: boolean;
   visitIndexStart: number;
+  onReady?: () => void;
 };
 
 class TopicsAnimation {
@@ -84,13 +84,16 @@ class TopicsAnimation {
   lastFrameCount = 0;
   inspectedCircles: Set<number> = new Set();
   isTextLoadingCoverVisible = true;
+  isInited = false;
 
+  // props
   epoch: TopicsAnimationProps['epoch'];
   isInteractive: TopicsAnimationProps['isInteractive'];
   _handleUserVisit: TopicsAnimationProps['handleUserVisit'];
   setHighlightAdTech: TopicsAnimationProps['setHighlightAdTech'];
   isAnimating: TopicsAnimationProps['isAnimating'];
   visitIndexStart: TopicsAnimationProps['visitIndexStart'];
+  onReady: TopicsAnimationProps['onReady'];
 
   constructor({
     p,
@@ -101,6 +104,7 @@ class TopicsAnimation {
     setHighlightAdTech,
     isAnimating,
     visitIndexStart,
+    onReady,
   }: TopicsAnimationProps) {
     this.p = p;
     this.epoch = epoch;
@@ -109,22 +113,22 @@ class TopicsAnimation {
     this._handleUserVisit = handleUserVisit;
     this.setHighlightAdTech = setHighlightAdTech;
     this.isAnimating = isAnimating;
+    this.onReady = onReady;
     if (visitIndexStart && isAnimating && !this.isInteractive) {
       this.visitIndex = visitIndexStart;
     }
     p.preload = this.preload;
     p.setup = this.setup;
-    p.draw = this.draw;
   }
 
-  preload = () => {
+  private preload = () => {
     // TODO: use app.assets for assets
     Object.keys(assets).forEach((key) => {
       this[key] = this.p.loadImage(assets[key]);
     });
   };
 
-  setup = () => {
+  private setup = () => {
     const p = this.p;
     const circleHorizontalSpace =
       config.timeline.circleProps.horizontalSpacing +
@@ -135,15 +139,17 @@ class TopicsAnimation {
     );
     p.pixelDensity(2);
     p.textFont('sans-serif');
-    // events
+    // register events
     this.canvas.mouseClicked(this.mouseClicked);
   };
 
-  start = () => {
-    this.p.draw = this.draw;
-  };
+  private draw = () => {
+    if (!this.isInited) {
+      this.isInited = true;
+      this.onReady?.();
+      return;
+    }
 
-  draw = () => {
     this.p.background(255); // clear canvas
     this.drawTimeline();
     this.drawCursor();
@@ -158,7 +164,7 @@ class TopicsAnimation {
     }
   };
 
-  incrementVisitIndex = () => {
+  private incrementVisitIndex = () => {
     if (!this.playing) {
       return;
     }
@@ -176,7 +182,7 @@ class TopicsAnimation {
     }
   };
 
-  drawVisitedCircles = () => {
+  private drawVisitedCircles = () => {
     if (this.visitIndex === this.epoch.length) {
       this.playing = false;
     }
@@ -187,7 +193,7 @@ class TopicsAnimation {
     this.drawInspectedCircle();
   };
 
-  drawInspectedCircle = () => {
+  private drawInspectedCircle = () => {
     const index = this.inspectedCircleIndex;
     if (index === -1 || index >= this.visitIndex) {
       return;
@@ -263,44 +269,8 @@ class TopicsAnimation {
     const p = this.p;
     const position = this.circlePositions[index];
     const { diameter } = config.timeline.circleProps;
-
-    p.push();
-    p.fill(255);
-    p.stroke(255);
-    p.rectMode(p.CENTER);
-    p.rect(position.x, position.y + diameter / 2 + 150, 300, 250);
-    p.strokeWeight(5);
-    p.line(
-      position.x,
-      position.y + diameter / 2 + 3,
-      position.x,
-      position.y + 95
-    );
-    p.pop();
+    clearInfoBox(p, position, diameter);
   }
-
-  togglePlay = (state: boolean) => {
-    this.playing = state;
-  };
-
-  reset = () => {
-    this.visitIndex = 0;
-    this.inspectedCircleIndex = -1;
-    this.circlePositions = {};
-    this.smallCirclePositions = {};
-    this.counter = 0;
-    this.lastFrameCount = 0;
-    this.prevVisitedCircleIndex = -1;
-    this.inspectedCircles.clear();
-  };
-
-  getCurrentVisitIndex = () => {
-    return this.visitIndex;
-  };
-
-  updateSpeedMultiplier = (speedMultiplier: number) => {
-    this.speedMultiplier = speedMultiplier;
-  };
 
   mouseClicked = () => {
     if (this.playing) {
@@ -337,7 +307,7 @@ class TopicsAnimation {
     }
   };
 
-  drawInfoBox(index: number, currentSite: string) {
+  private drawInfoBox(index: number, currentSite: string) {
     const p = this.p;
     const position = this.circlePositions[index];
     const topics = this.epoch[index].topics;
@@ -346,98 +316,56 @@ class TopicsAnimation {
     infoBox({ p, position, diameter, topics, adTechs });
   }
 
-  drawSmallCircles(index: number, currentSite: string) {
+  private drawSmallCircles(index: number, currentSite: string) {
     const p = this.p;
     const { diameter } = config.timeline.circleProps;
     const smallCircleDiameter = diameter / 5;
     const adTechs = this.siteAdTechs[currentSite];
 
-    const appSmallCirclePositions = this.smallCirclePositions[index];
+    let appSmallCirclePositions = this.smallCirclePositions[index];
+    // generate small circle positions if they don't exist
+    if (appSmallCirclePositions === undefined) {
+      const position = this.circlePositions[index];
+      appSmallCirclePositions = getSmallCirclePositions(
+        adTechs.length,
+        position,
+        diameter,
+        smallCircleDiameter
+      );
+      // store small circle positions
+      this.smallCirclePositions[index] = appSmallCirclePositions;
+    }
 
-    // if small circles already exist, just draw them
     if (appSmallCirclePositions) {
       for (let i = 0; i < appSmallCirclePositions.length; i++) {
         const smallCirclePosition = appSmallCirclePositions[i];
-        const adTechColor = getAdtechsColors(p)[adTechs[i]];
-
-        p.push();
-        p.fill(adTechColor);
-        p.circle(
+        smallCircle(
+          p,
+          adTechs[i],
           smallCirclePosition.x,
           smallCirclePosition.y,
           smallCircleDiameter
         );
-        p.pop();
       }
       return;
     }
-
-    const position = this.circlePositions[index];
-    const smallCirclePositions: { x: number; y: number }[] = [];
-    const distanceFromEdge = 6;
-    const numSmallCircles = adTechs.length;
-
-    for (let i = 0; i < numSmallCircles; i++) {
-      let randomX: number, randomY: number, isOverlapping: boolean;
-
-      do {
-        const angle = Math.random() * 2 * Math.PI;
-
-        randomX =
-          position.x + (diameter / 2 + distanceFromEdge) * Math.cos(angle);
-        randomY =
-          position.y + (diameter / 2 + distanceFromEdge) * Math.sin(angle);
-
-        // eslint-disable-next-line no-loop-func
-        isOverlapping = smallCirclePositions.some((pos) => {
-          const dx = pos.x - randomX;
-          const dy = pos.y - randomY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          return distance < smallCircleDiameter;
-        });
-
-        const circleCircleDistanceX = Math.abs(position.x - randomX);
-        const circleCircleDistanceY = Math.abs(position.y - randomY);
-
-        isOverlapping =
-          isOverlapping ||
-          circleCircleDistanceX <= smallCircleDiameter ||
-          circleCircleDistanceY <= smallCircleDiameter;
-      } while (isOverlapping);
-
-      smallCirclePositions.push({ x: randomX, y: randomY });
-
-      const adTechColor = getAdtechsColors(p)[adTechs[i]];
-
-      p.push();
-      p.fill(adTechColor);
-      p.circle(randomX, randomY, smallCircleDiameter);
-      p.pop();
-    }
-
-    this.smallCirclePositions[index] = smallCirclePositions;
   }
 
-  drawCircle = (index: number, visited?: boolean) => {
+  private drawCircle = (index: number, visited?: boolean) => {
     const p = this.p;
     const position = this.circlePositions[index];
     const { diameter } = config.timeline.circleProps;
-
-    if (!this.completedIcon) {
-      return;
-    }
 
     circle({
       p,
       position,
       visited: Boolean(visited),
-      completedIcon: this.completedIcon,
+      completedIcon: this.completedIcon as p5.Image,
       diameter,
     });
   };
 
-  drawTimeline = () => {
+  private drawTimeline = () => {
     const p = this.p;
     const { diameter, horizontalSpacing } = config.timeline.circleProps;
     const circleVerticalSpace = horizontalSpacing - 30 + diameter;
@@ -467,7 +395,7 @@ class TopicsAnimation {
     });
   };
 
-  drawCursor = () => {
+  private drawCursor = () => {
     const p = this.p;
     if (this.showHandCursor) {
       p.cursor(p.HAND);
@@ -476,7 +404,7 @@ class TopicsAnimation {
     }
   };
 
-  drawInteractiveMode = () => {
+  private drawInteractiveMode = () => {
     const p = this.p;
     const x = p.mouseX;
     const y = p.mouseY;
@@ -488,7 +416,7 @@ class TopicsAnimation {
     const isInspecting = isInspectingCircle || isInspectingSmallCircle;
 
     const lastVisitedIndex = this.prevVisitedCircleIndex;
-    // draw visited circles
+    // draw already visited/inspected circles
     if (lastVisitedIndex !== -1) {
       this.inspectedCircles.add(lastVisitedIndex);
       const inspectedCirclesArray = Array.from(this.inspectedCircles);
@@ -525,7 +453,7 @@ class TopicsAnimation {
     }
   };
 
-  updateInspectedCircleIndex = () => {
+  private updateInspectedCircleIndex = () => {
     if (this.playing) {
       return;
     }
@@ -536,8 +464,8 @@ class TopicsAnimation {
 
     this.inspectedCircleIndex = -1;
     this.inspectedSmallCircleIndex = '';
+    this.showHandCursor = false;
 
-    // update inspected circle index
     Object.values(this.circlePositions).forEach((position, index) => {
       const { diameter } = config.timeline.circleProps;
       const { x: circleX, y: circleY } = position;
@@ -552,7 +480,6 @@ class TopicsAnimation {
       }
     });
 
-    // update inspected small circle index
     Object.entries(this.smallCirclePositions).forEach(
       ([circleIndex, smallCircles]) => {
         smallCircles?.forEach((position, index) => {
@@ -570,6 +497,38 @@ class TopicsAnimation {
         });
       }
     );
+  };
+
+  // public methods/API
+  public togglePlay = (state?: boolean) => {
+    if (this.isInteractive && state === true) {
+      this.playing = false;
+      return;
+    }
+    this.playing = state ?? !this.playing;
+  };
+
+  public reset = () => {
+    this.visitIndex = 0;
+    this.inspectedCircleIndex = -1;
+    this.circlePositions = {};
+    this.smallCirclePositions = {};
+    this.counter = 0;
+    this.lastFrameCount = 0;
+    this.prevVisitedCircleIndex = -1;
+    this.inspectedCircles.clear();
+  };
+
+  public getCurrentVisitIndex = () => {
+    return this.visitIndex;
+  };
+
+  public updateSpeedMultiplier = (speedMultiplier: number) => {
+    this.speedMultiplier = speedMultiplier;
+  };
+
+  public start = () => {
+    this.p.draw = this.draw;
   };
 }
 

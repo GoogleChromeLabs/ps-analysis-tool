@@ -13,6 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as circle } from './circle';
-export { default as infoBox } from './infoBox';
-export { default as smallCircles } from './smallCircles';
+export * from './circle';
+export * from './infoBox';
+export * from './smallCircle';

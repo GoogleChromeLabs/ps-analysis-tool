@@ -67,6 +67,12 @@ const Animation = ({
 
   useEffect(() => {
     const tAnimation = (p: p5) => {
+      const onReady = () => {
+        if (loadingTextCoverRef.current) {
+          loadingTextCoverRef.current.remove();
+        }
+      };
+
       const { togglePlay, reset, updateSpeedMultiplier, getCurrentVisitIndex } =
         topicsAnimation({
           p,
@@ -79,6 +85,7 @@ const Animation = ({
             : (idx: number) => handleUserVisit(idx, false),
           setHighlightAdTech,
           isInteractive,
+          onReady,
         });
 
       setTogglePlayCallback(() => togglePlay);
