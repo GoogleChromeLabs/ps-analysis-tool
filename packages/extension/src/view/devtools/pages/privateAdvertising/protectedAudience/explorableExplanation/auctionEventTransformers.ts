@@ -539,7 +539,7 @@ export const configuredAuctionEvents = (
 
   const isInteractiveModeLastStep =
     currentStep?.title === SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.title &&
-    (app.isInteractiveMode || app.isRevisitingNodeInInteractiveMode);
+    (app.isInteractiveMode || app.nodeIndexRevisited !== -1);
 
   if (isMultiSeller) {
     sellersArray.push(
