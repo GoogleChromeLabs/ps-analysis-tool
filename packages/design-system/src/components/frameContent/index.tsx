@@ -43,7 +43,7 @@ const FrameContent = ({
     <div className="grid relative" style={{ width, height }}>
       {/* Bottom border (shadow) */}
       <div
-        className={classNames(commonClassName, 'border-b-[15px] top-[13px]')}
+        className={classNames(commonClassName, 'border-b-[18px] top-[13px]')}
       />
       {/* Content */}
       <div
