@@ -102,10 +102,10 @@ const Panel = ({
   bidsUpdateIndicator,
   setHasLastNodeVisited,
 }: PanelProps) => {
-  const [play, setPlay] = useState(true);
+  const [play, setPlay] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [autoExpand, setAutoExpand] = useState(true);
-  const [autoScroll, setAutoScroll] = useState(false);
+  const [autoScroll, setAutoScroll] = useState(true);
   const historyCount = config.timeline.circles.length;
   const divRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
