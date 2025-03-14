@@ -372,6 +372,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       setNoBids({});
       setReceivedBids([]);
       setAdsAndBidders({});
+      setAuctionEvents({});
     },
     []
   );

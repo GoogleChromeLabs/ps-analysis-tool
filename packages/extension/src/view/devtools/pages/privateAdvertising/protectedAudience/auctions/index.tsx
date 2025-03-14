@@ -54,7 +54,7 @@ const Auctions = () => {
 
   useEffect(() => {
     if (
-      Object.keys(auctionEvents || {}).length === 0 ||
+      Object.keys(auctionEvents || {}).length === 0 &&
       Object.keys(adsAndBidders || {}).length === 0
     ) {
       setSidebarData((prev) => {
@@ -102,6 +102,7 @@ const Auctions = () => {
       </div>
     );
   }
+
   if (
     Object.keys(auctionEvents || {}).length === 0 &&
     Object.keys(adsAndBidders || {}).length === 0
