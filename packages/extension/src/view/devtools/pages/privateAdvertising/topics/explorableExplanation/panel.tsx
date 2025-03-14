@@ -67,7 +67,7 @@ const Panel = ({
     setActiveTab: actions.setActiveTab,
   }));
 
-  const [play, setPlay] = useState(true);
+  const [play, setPlay] = useState(false);
   const [reset, _setReset] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [epochCompleted, setEpochCompleted] = useState<Record<number, boolean>>(
