@@ -57,7 +57,7 @@ const SourceRegistrations = () => {
   );
 
   const data = useMemo(() => {
-    if (filter?.activeSources) {
+    if (filter?.sourcesRegistration) {
       return sourcesRegistration.filter(
         (source) =>
           source.tabId &&
@@ -66,7 +66,7 @@ const SourceRegistrations = () => {
     } else {
       return sourcesRegistration;
     }
-  }, [filter?.activeSources, sourcesRegistration]);
+  }, [filter?.sourcesRegistration, sourcesRegistration]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
