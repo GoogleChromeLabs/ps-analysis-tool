@@ -39,9 +39,23 @@ export default class Circle extends Figure {
     id?: string,
     fill?: string,
     stroke?: string,
-    tags?: string[]
+    tags?: string[],
+    mouseClicked?: () => void,
+    mouseMoved?: () => void,
+    onLeave?: () => void
   ) {
-    super(canvasRunner, x, y, id, fill, stroke, tags);
+    super(
+      canvasRunner,
+      x,
+      y,
+      id,
+      fill,
+      stroke,
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
+    );
     this.diameter = diameter;
   }
 
@@ -51,28 +65,6 @@ export default class Circle extends Figure {
     this.p5?.stroke(this.stroke);
     this.p5?.circle(this.x, this.y, this.diameter);
     this.p5?.pop();
-  }
-
-  mouseMoved() {
-    this.savePreviousColors();
-    this.fill = 'red'; // TODO: Discuss the function
-    this.canvasRunner.addFigure(this, true);
-  }
-
-  onLeave() {
-    if (
-      this.fill === this.previousFill &&
-      this.stroke === this.previousStroke
-    ) {
-      return;
-    }
-
-    this.reApplyPreviousColors();
-    this.canvasRunner.addFigure(this, true);
-  }
-
-  mouseClicked() {
-    // TODO: Discuss the function
   }
 
   isHovering(): boolean {

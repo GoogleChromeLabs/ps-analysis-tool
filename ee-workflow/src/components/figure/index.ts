@@ -73,19 +73,17 @@ export default abstract class Figure {
   /**
    * Function to be executed when the object has to travel.
    */
-  protected traveller: ((figure: Figure) => boolean) | undefined;
+  protected traveller?: (figure: Figure) => boolean;
 
   /**
    * Function to be executed when the object has to reset travel.
    */
-  protected resetTravel: ((figure: Figure) => void) | undefined;
+  protected resetTravel?: (figure: Figure) => void;
 
   /**
    * Function to complete the travel of the object to the end coordinates at once.
    */
-  protected completeTravel:
-    | ((figure: Figure, skipDraw: boolean) => void)
-    | undefined;
+  protected completeTravel?: (figure: Figure, skipDraw: boolean) => void;
 
   /**
    * Whether the figure is a checkpoint.
@@ -106,6 +104,9 @@ export default abstract class Figure {
    * @param fill - The fill color of the figure.
    * @param stroke - The stroke color of the figure.
    * @param tags - The tags of the figure for bucketing.
+   * @param mouseClickedHandler - The function to be executed when the figure is clicked.
+   * @param mouseMovedHandler - The function to be executed when the figure is hovered.
+   * @param onLeaveHandler - The function to be executed when the figure is unhovered.
    */
   constructor(
     protected canvasRunner: Main,
@@ -114,7 +115,10 @@ export default abstract class Figure {
     id?: string,
     protected fill: string = 'black',
     protected stroke: string = 'black',
-    protected tags: string[] = []
+    protected tags: string[] = [],
+    public mouseClickedHandler?: (figure: Figure) => void,
+    public mouseMovedHandler?: (figure: Figure) => void,
+    public onLeaveHandler?: (figure: Figure) => void
   ) {
     Figure.objectCount++;
     this.id = id || `object-${Figure.objectCount}`;
@@ -122,27 +126,15 @@ export default abstract class Figure {
     this.p5 = this.canvasRunner.getP5Instance();
     this.previousFill = this.fill;
     this.previousStroke = this.stroke;
+    this.mouseClickedHandler = mouseClickedHandler;
+    this.mouseMovedHandler = mouseMovedHandler;
+    this.onLeaveHandler = onLeaveHandler;
   }
 
   /**
    * Method to draw the figure.
    */
   abstract draw(): void;
-
-  /**
-   * Method to handle the hover event.
-   */
-  abstract mouseMoved(): void;
-
-  /**
-   * Method to handle the leave event.
-   */
-  abstract onLeave(): void;
-
-  /**
-   * Method to handle the click event.
-   */
-  abstract mouseClicked(): void;
 
   /**
    * Method to check if the figure is being hovered.
@@ -383,5 +375,50 @@ export default abstract class Figure {
     this.previousFill = this.fill;
     this.stroke = this.previousStroke;
     this.previousStroke = this.stroke;
+  }
+
+  /**
+   * Method to handle mouseClicked event.
+   */
+  mouseClicked() {
+    this.mouseClickedHandler?.(this);
+  }
+
+  /**
+   * Method to handle mouseMoved event.
+   */
+  mouseMoved() {
+    this.mouseMovedHandler?.(this);
+  }
+
+  /**
+   * Method to handle onLeave event.
+   */
+  onLeave() {
+    this.onLeaveHandler?.(this);
+  }
+
+  /**
+   * Method to handle mouseMoved event.
+   * @param mouseClicked - The function to be executed when the figure is clicked.
+   */
+  setMouseClicked(mouseClicked: (figure: Figure) => void) {
+    this.mouseClickedHandler = mouseClicked;
+  }
+
+  /**
+   * Method to handle mouseMoved event.
+   * @param mouseMoved - The function to be executed when the figure is hovered.
+   */
+  setMouseMoved(mouseMoved: (figure: Figure) => void) {
+    this.mouseMovedHandler = mouseMoved;
+  }
+
+  /**
+   * Method to handle onLeave event.
+   * @param onLeave - The function to be executed when the figure is unhovered.
+   */
+  setOnLeave(onLeave: (figure: Figure) => void) {
+    this.onLeaveHandler = onLeave;
   }
 }

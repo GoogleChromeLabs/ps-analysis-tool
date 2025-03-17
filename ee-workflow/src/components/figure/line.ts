@@ -49,9 +49,23 @@ export default class Line extends Figure {
     id?: string,
     stroke?: string,
     hasArrow?: boolean,
-    tags?: string[]
+    tags?: string[],
+    mouseClicked?: () => void,
+    mouseMoved?: () => void,
+    onLeave?: () => void
   ) {
-    super(canvasRunner, x, y, id, undefined, stroke, tags);
+    super(
+      canvasRunner,
+      x,
+      y,
+      id,
+      undefined,
+      stroke,
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
+    );
     this.endX = endX;
     this.endY = endY;
     this.hasArrow = hasArrow ?? false;
@@ -97,28 +111,6 @@ export default class Line extends Figure {
 
   setEndY(endY: number) {
     this.endY = endY;
-  }
-
-  mouseMoved() {
-    this.savePreviousColors();
-    this.stroke = 'red'; // TODO: Discuss the function
-    this.canvasRunner.addFigure(this, true);
-  }
-
-  onLeave() {
-    if (
-      this.fill === this.previousFill &&
-      this.stroke === this.previousStroke
-    ) {
-      return;
-    }
-
-    this.reApplyPreviousColors();
-    this.canvasRunner.addFigure(this, true);
-  }
-
-  mouseClicked() {
-    // TODO: Discuss the function
   }
 
   isHovering(): boolean {

@@ -45,6 +45,8 @@ type FigureParams = {
     ...args: any
   ) => { x: number; y: number };
   mouseClicked?: () => void;
+  mouseMoved?: () => void;
+  onLeave?: () => void;
 };
 
 export default class FigureFactory {
@@ -103,6 +105,8 @@ export default class FigureFactory {
     tags,
     nextTipHelper,
     mouseClicked,
+    mouseMoved,
+    onLeave,
   }: FigureParams & {
     width: number;
     height: number;
@@ -120,7 +124,9 @@ export default class FigureFactory {
       fill,
       stroke,
       tags,
-      mouseClicked
+      mouseClicked,
+      mouseMoved,
+      onLeave
     );
   }
 
@@ -143,6 +149,9 @@ export default class FigureFactory {
     stroke,
     tags,
     nextTipHelper,
+    mouseClicked,
+    mouseMoved,
+    onLeave,
   }: FigureParams & {
     diameter: number;
   }): Circle {
@@ -158,7 +167,10 @@ export default class FigureFactory {
       id,
       fill,
       stroke,
-      tags
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
     );
   }
 
@@ -181,6 +193,9 @@ export default class FigureFactory {
     height,
     tags,
     nextTipHelper,
+    mouseClicked,
+    mouseMoved,
+    onLeave,
   }: FigureParams & {
     imageData: string;
     width: number;
@@ -198,7 +213,10 @@ export default class FigureFactory {
       width,
       height,
       id,
-      tags
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
     );
   }
 
@@ -223,6 +241,9 @@ export default class FigureFactory {
     shouldTravel,
     tags,
     nextTipHelper,
+    mouseClicked,
+    mouseMoved,
+    onLeave,
   }: FigureParams & {
     endX: number;
     endY: number;
@@ -242,7 +263,10 @@ export default class FigureFactory {
       id,
       stroke,
       hasArrow,
-      tags
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
     );
 
     if (shouldTravel) {
@@ -320,6 +344,9 @@ export default class FigureFactory {
     fill,
     tags,
     nextTipHelper,
+    mouseClicked,
+    mouseMoved,
+    onLeave,
   }: FigureParams & {
     text: string;
     size?: number;
@@ -336,7 +363,10 @@ export default class FigureFactory {
       id,
       size,
       fill,
-      tags
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
     );
   }
 }

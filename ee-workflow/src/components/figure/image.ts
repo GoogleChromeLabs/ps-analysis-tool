@@ -53,9 +53,23 @@ export default class Image extends Figure {
     width: number,
     height: number,
     id?: string,
-    tags?: string[]
+    tags?: string[],
+    mouseClicked?: () => void,
+    mouseMoved?: () => void,
+    onLeave?: () => void
   ) {
-    super(canvasRunner, x, y, id, undefined, undefined, tags);
+    super(
+      canvasRunner,
+      x,
+      y,
+      id,
+      undefined,
+      undefined,
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
+    );
     this.image = <p5.Image>this.p5?.loadImage(imageData);
     this.width = width;
     this.height = height;
@@ -66,18 +80,6 @@ export default class Image extends Figure {
     this.p5?.imageMode(this.p5?.CENTER);
     this.p5?.image(this.image, this.x, this.y, this.width, this.height);
     this.p5?.pop();
-  }
-
-  mouseMoved() {
-    return;
-  }
-
-  onLeave() {
-    return;
-  }
-
-  mouseClicked() {
-    // TODO: Discuss the function
   }
 
   isHovering(): boolean {
