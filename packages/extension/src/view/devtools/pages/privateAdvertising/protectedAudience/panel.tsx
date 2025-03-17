@@ -62,8 +62,15 @@ const Panel = () => {
   useEffect(() => {
     let store = data.current;
 
-    if (!isEqual(data.current?.interestGroupDetails, interestGroupDetails)) {
-      if (interestGroupDetails.length > 0) {
+    const filteredIGRefData = data.current?.interestGroupDetails?.filter(
+      (event) => event.type === 'leave' || event.type === 'join'
+    );
+    const filteredIGData = interestGroupDetails.filter(
+      (event) => event.type === 'leave' || event.type === 'join'
+    );
+
+    if (filteredIGData.length !== filteredIGRefData?.length) {
+      if (filteredIGData.length > 0) {
         highlightTab(2);
       } else {
         highlightTab(2, false);
@@ -71,7 +78,7 @@ const Panel = () => {
 
       store = {
         ...store,
-        interestGroupDetails,
+        interestGroupDetails: filteredIGData,
       };
     }
 
