@@ -29,6 +29,7 @@ import { getSmallCirclePositions } from './utils';
 import assets from './assets';
 
 export type Epoch = { datetime: string; website: string; topics: string[] };
+export type Assets = Record<string, p5.Image | null>;
 
 export type TopicsAnimationProps = {
   p: p5;
@@ -45,29 +46,7 @@ export type TopicsAnimationProps = {
 class TopicsAnimation {
   p: p5;
 
-  // assets
-  userIcon: p5.Image | null = null;
-  completedIcon: p5.Image | null = null;
-  'tmz.com': p5.Image | null = null;
-  'cnet.com': p5.Image | null = null;
-  'espn.com': p5.Image | null = null;
-  'investopedia.com': p5.Image | null = null;
-  'tripadvisor.com': p5.Image | null = null;
-  'allrecipes.com': p5.Image | null = null;
-  'vogue.com': p5.Image | null = null;
-  'bloomberg.com': p5.Image | null = null;
-  'linkedin.com': p5.Image | null = null;
-  'rollingstone.com': p5.Image | null = null;
-  'cnn.com': p5.Image | null = null;
-  'techcrunch.com': p5.Image | null = null;
-  'cbssports.com': p5.Image | null = null;
-  'healthline.com': p5.Image | null = null;
-  'expedia.com': p5.Image | null = null;
-  'foodnetwork.com': p5.Image | null = null;
-  'cosmopolitan.com': p5.Image | null = null;
-  'nerdwallet.com': p5.Image | null = null;
-  'indeed.com': p5.Image | null = null;
-  'crunchyroll.com': p5.Image | null = null;
+  assets: Assets = {};
 
   // state
   circlePositions: Record<number, { x: number; y: number }> = {};
@@ -122,7 +101,7 @@ class TopicsAnimation {
 
   private preload = () => {
     Object.keys(assets).forEach((key) => {
-      this[key] = this.p.loadImage(assets[key]);
+      this.assets[key] = this.p.loadImage(assets[key]);
     });
   };
 
@@ -233,7 +212,7 @@ class TopicsAnimation {
     const user = config.timeline.user;
 
     p.image(
-      this.userIcon as p5.Image,
+      this.assets.userIcon as p5.Image,
       circlePosition.x - user.width / 2,
       circlePosition.y - user.height / 2,
       user.width,
@@ -363,7 +342,7 @@ class TopicsAnimation {
       p,
       position,
       visited: Boolean(visited),
-      completedIcon: this.completedIcon as p5.Image,
+      completedIcon: this.assets.completedIcon as p5.Image,
       diameter,
     });
   };
@@ -380,9 +359,9 @@ class TopicsAnimation {
     this.epoch.forEach((circleItem, index) => {
       const xPosition = horizontalSpacing + circleVerticalSpace * index;
 
-      if (this?.[circleItem.website]) {
+      if (this.assets[circleItem.website]) {
         p.image(
-          this[circleItem.website],
+          this.assets[circleItem.website] as p5.Image,
           xPosition - diameter / 4 - 3,
           55,
           diameter / 2 + 8,
@@ -448,7 +427,7 @@ class TopicsAnimation {
     }
 
     p.image(
-      this.userIcon as p5.Image,
+      this.assets.userIcon as p5.Image,
       x - user.width / 2,
       y - user.height / 2,
       user.width,
