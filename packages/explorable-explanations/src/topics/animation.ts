@@ -24,9 +24,10 @@ import p5 from 'p5';
  */
 
 import { config } from './config';
-import { circle, infoBox, smallCircle, clearInfoBox } from './components';
-import assets from './assets';
+import { Circle, InfoBox, SmallCircle, clearInfoBox } from './components';
 import { getSmallCirclePositions } from './utils';
+import assets from './assets';
+
 export type Epoch = { datetime: string; website: string; topics: string[] };
 
 export type TopicsAnimationProps = {
@@ -120,7 +121,6 @@ class TopicsAnimation {
   }
 
   private preload = () => {
-    // TODO: use app.assets for assets
     Object.keys(assets).forEach((key) => {
       this[key] = this.p.loadImage(assets[key]);
     });
@@ -221,7 +221,6 @@ class TopicsAnimation {
       if (visitIndex === this.epoch.length) {
         this._handleUserVisit(visitIndex);
       }
-
       return;
     }
 
@@ -317,7 +316,7 @@ class TopicsAnimation {
     const topics = this.epoch[index].topics;
     const { diameter } = config.timeline.circleProps;
     const adTechs = this.siteAdTechs[currentSite];
-    infoBox({ p, position, diameter, topics, adTechs });
+    InfoBox({ p, position, diameter, topics, adTechs });
   }
 
   private drawSmallCircles(index: number, currentSite: string) {
@@ -343,7 +342,7 @@ class TopicsAnimation {
     if (appSmallCirclePositions) {
       for (let i = 0; i < appSmallCirclePositions.length; i++) {
         const smallCirclePosition = appSmallCirclePositions[i];
-        smallCircle(
+        SmallCircle(
           p,
           adTechs[i],
           smallCirclePosition.x,
@@ -360,7 +359,7 @@ class TopicsAnimation {
     const position = this.circlePositions[index];
     const { diameter } = config.timeline.circleProps;
 
-    circle({
+    Circle({
       p,
       position,
       visited: Boolean(visited),

@@ -24,7 +24,7 @@ import p5 from 'p5';
  */
 import { getAdtechsColors } from '../utils';
 
-export const smallCircle = (
+export const SmallCircle = (
   p: p5,
   adTech: string,
   x: number,

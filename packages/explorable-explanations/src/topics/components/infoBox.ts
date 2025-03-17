@@ -24,7 +24,7 @@ import p5 from 'p5';
  */
 import { getAdtechsColors } from '../utils';
 
-type InfoBox = {
+type InfoBoxProps = {
   p: p5;
   position: { x: number; y: number };
   diameter: number;
@@ -32,13 +32,13 @@ type InfoBox = {
   adTechs: string[];
 };
 
-export const infoBox = ({
+export const InfoBox = ({
   p,
   position,
   diameter,
   topics,
   adTechs,
-}: InfoBox) => {
+}: InfoBoxProps) => {
   p.push();
   p.rectMode(p.CENTER);
   p.fill(245);

@@ -16,7 +16,7 @@
 import p5 from 'p5';
 import { config } from '../config';
 
-type Circle = {
+type CircleProps = {
   p: p5;
   position: { x: number; y: number };
   visited: boolean;
@@ -24,13 +24,13 @@ type Circle = {
   diameter: number;
 };
 
-export const circle = ({
+export const Circle = ({
   p,
   position,
   visited,
   completedIcon,
   diameter,
-}: Circle) => {
+}: CircleProps) => {
   p.push();
 
   if (visited) {

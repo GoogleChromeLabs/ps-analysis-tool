@@ -13,6 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './circle';
-export * from './infoBox';
-export * from './smallCircle';
+export * from './Circle';
+export * from './InfoBox';
+export * from './SmallCircle';
