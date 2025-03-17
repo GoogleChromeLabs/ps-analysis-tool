@@ -45,6 +45,7 @@ const Panel = () => {
     }));
 
   const sourcesRegistrationRef = useRef<typeof sourcesRegistration>([]);
+  const activeRegistrationRef = useRef<typeof sourcesRegistration>([]);
   const triggerRegistrationRef = useRef<typeof triggerRegistration>([]);
 
   const filteredSourceRegistration = useMemo(() => {
@@ -71,13 +72,37 @@ const Panel = () => {
     }
   }, [filter?.triggerRegistration, triggerRegistration]);
 
+  const filteredActiveSourceRegistration = useMemo(() => {
+    if (filter?.activeSources) {
+      return sourcesRegistration.filter(
+        (source) =>
+          source.tabId &&
+          source.tabId === chrome.devtools.inspectedWindow.tabId.toString()
+      );
+    } else {
+      return sourcesRegistration;
+    }
+  }, [filter?.activeSources, sourcesRegistration]);
+
+  useEffect(() => {
+    if (
+      !isEqual(filteredActiveSourceRegistration, activeRegistrationRef.current)
+    ) {
+      if (!filteredActiveSourceRegistration.length) {
+        highlightTab(1, false);
+      } else {
+        highlightTab(1);
+      }
+
+      activeRegistrationRef.current = filteredActiveSourceRegistration;
+    }
+  }, [filteredActiveSourceRegistration, highlightTab]);
+
   useEffect(() => {
     if (!isEqual(filteredSourceRegistration, sourcesRegistrationRef.current)) {
       if (!filteredSourceRegistration.length) {
-        highlightTab(1, false);
         highlightTab(2, false);
       } else {
-        highlightTab(1);
         highlightTab(2);
       }
 

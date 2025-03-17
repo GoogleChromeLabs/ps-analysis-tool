@@ -63,6 +63,12 @@ const IGTable = ({
             .replace('Z', '')
             .split('-')
             .join('/'),
+        sortingComparator: (a, b) => {
+          const aTime = Number((a as string).slice(0, a.length - 2));
+          const bTime = Number((b as string).slice(0, b.length - 2));
+
+          return aTime > bTime ? -1 : 1;
+        },
         enableHiding: false,
       },
       {

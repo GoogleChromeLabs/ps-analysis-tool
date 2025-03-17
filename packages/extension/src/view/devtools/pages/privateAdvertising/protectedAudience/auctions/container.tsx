@@ -21,6 +21,7 @@ import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 import type {
   AdsAndBiddersType,
   NoBidsType,
+  ReceivedBids,
   singleAuctionEvent,
 } from '@google-psat/common';
 import React from 'react';
@@ -34,7 +35,7 @@ import type { AuctionEventsType } from '../../../../stateProviders/protectedAudi
 interface AuctionsContainerProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids?: Record<string, singleAuctionEvent[]>;
+    receivedBids?: Record<string, singleAuctionEvent[]> | ReceivedBids[];
     noBids: NoBidsType;
   };
   sidebarData: SidebarItems;

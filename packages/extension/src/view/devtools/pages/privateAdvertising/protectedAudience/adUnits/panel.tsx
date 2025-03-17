@@ -30,6 +30,7 @@ import type {
  * Internal dependencies.
  */
 import EvaluationEnvironment from '../evaluationEnvironment';
+import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 
 type DummyReceivedBids = Record<string, ReceivedBids[]>;
 
@@ -37,24 +38,29 @@ interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
   receivedBids: DummyReceivedBids | ReceivedBids[];
   noBids: NoBidsType;
+  auctionEvents: AuctionEventsType;
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   showEvaluationPlaceholder?: boolean;
+  isEE?: boolean;
 }
 
 const AdUnitsPanel = ({
   adsAndBidders,
   receivedBids,
   noBids,
+  auctionEvents,
   setSelectedAdUnit,
   selectedAdUnit,
   setIsInspecting,
   showEvaluationPlaceholder = true,
+  isEE,
 }: AdUnitsPanelProps) => {
   return (
     <div className="flex flex-col h-full w-full">
-      {adsAndBidders && Object.keys(adsAndBidders).length > 0 ? (
+      {Object.keys(adsAndBidders || {}).length ||
+      Object.keys(auctionEvents || {}).length ? (
         <>
           <AdMatrix
             adsAndBidders={adsAndBidders}
@@ -71,6 +77,7 @@ const AdUnitsPanel = ({
             setSelectedAdUnit={setSelectedAdUnit}
             selectedAdUnit={selectedAdUnit}
             setIsInspecting={setIsInspecting}
+            isEE={isEE}
           />
         </>
       ) : (
