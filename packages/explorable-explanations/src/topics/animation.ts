@@ -153,7 +153,9 @@ class TopicsAnimation {
     this.p.background(255); // clear canvas
     this.drawTimeline();
     this.drawCursor();
-    this.updateInspectedCircleIndex();
+
+    this.inspectedCircleIndex = this.getInspectedCircleIndex();
+    this.inspectedSmallCircleIndex = this.getInspectedSmallCircleIndex();
 
     if (this.isInteractive) {
       this.playing = false;
@@ -191,6 +193,10 @@ class TopicsAnimation {
       this.handleUserVisit(i);
     }
     this.drawInspectedCircle();
+
+    if (this.inspectedSmallCircleIndex !== '') {
+      this.showHandCursor = true;
+    }
   };
 
   private drawInspectedCircle = () => {
@@ -413,7 +419,6 @@ class TopicsAnimation {
     this.showHandCursor = false;
     const isInspectingCircle = this.inspectedCircleIndex !== -1;
     const isInspectingSmallCircle = this.inspectedSmallCircleIndex !== '';
-    const isInspecting = isInspectingCircle || isInspectingSmallCircle;
 
     const lastVisitedIndex = this.prevVisitedCircleIndex;
     // draw already visited/inspected circles
@@ -432,38 +437,38 @@ class TopicsAnimation {
       this.drawInfoBox(lastVisitedIndex, this.epoch[lastVisitedIndex].website);
     }
 
+    if (isInspectingSmallCircle) {
+      this.showHandCursor = true;
+      return;
+    }
+
     if (
-      isInspecting &&
-      this.inspectedCircleIndex !== this.prevVisitedCircleIndex
+      isInspectingCircle &&
+      this.inspectedCircles.has(this.inspectedCircleIndex)
     ) {
       this.showHandCursor = true;
+      return;
     }
 
-    if (
-      !isInspecting ||
-      !this.inspectedCircles.has(this.inspectedCircleIndex)
-    ) {
-      p.image(
-        this.userIcon as p5.Image,
-        x - user.width / 2,
-        y - user.height / 2,
-        user.width,
-        user.height
-      );
-    }
+    p.image(
+      this.userIcon as p5.Image,
+      x - user.width / 2,
+      y - user.height / 2,
+      user.width,
+      user.height
+    );
   };
 
-  private updateInspectedCircleIndex = () => {
+  private getInspectedCircleIndex = (): number => {
     if (this.playing) {
-      return;
+      return -1;
     }
 
     const p = this.p;
     const x = p.mouseX;
     const y = p.mouseY;
 
-    this.inspectedCircleIndex = -1;
-    this.inspectedSmallCircleIndex = '';
+    let inspectedCircleIndex = -1;
     this.showHandCursor = false;
 
     Object.values(this.circlePositions).forEach((position, index) => {
@@ -476,9 +481,22 @@ class TopicsAnimation {
         y > circleY - diameter / 2 &&
         y < circleY + diameter / 2
       ) {
-        this.inspectedCircleIndex = index;
+        inspectedCircleIndex = index;
       }
     });
+
+    return inspectedCircleIndex;
+  };
+
+  private getInspectedSmallCircleIndex = (): string => {
+    if (this.playing) {
+      return '';
+    }
+
+    const p = this.p;
+    const x = p.mouseX;
+    const y = p.mouseY;
+    let inspectedSmallCircleIndex = '';
 
     Object.entries(this.smallCirclePositions).forEach(
       ([circleIndex, smallCircles]) => {
@@ -492,11 +510,13 @@ class TopicsAnimation {
             y > smallCircleY - smallCircleDiameter / 2 &&
             y < smallCircleY + smallCircleDiameter / 2
           ) {
-            this.inspectedSmallCircleIndex = `${circleIndex}-${index}`;
+            inspectedSmallCircleIndex = `${circleIndex}-${index}`;
           }
         });
       }
     );
+
+    return inspectedSmallCircleIndex;
   };
 
   // public methods/API
