@@ -22,7 +22,6 @@ import p5 from 'p5';
 /**
  * Internal dependencies
  */
-
 import { config } from './config';
 import { Circle, InfoBox, SmallCircle, clearInfoBox } from './components';
 import { getSmallCirclePositions } from './utils';

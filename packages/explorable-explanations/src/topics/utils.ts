@@ -125,12 +125,12 @@ export const createEpochs = () => {
 };
 
 /**
- * Generates random positions for small circles
+ * Generates random positions for small circles based on the position of the main circle
  * @param totalSmallCircles - Total number of small circles
  * @param position - Position of the circle
  * @param position.x - X coordinate of the circle
- * @param diameter - Diameter of the circle
  * @param position.y - Y coordinate of the circle
+ * @param diameter - Diameter of the circle
  * @param smallCircleDiameter - Diameter of the small circles
  * @returns Array of small circle positions
  */
