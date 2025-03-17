@@ -189,7 +189,6 @@ export function topicsAnimation(
       app.inspectedCircles.clear();
       p?.clear();
       p.background(255);
-      p.pixelDensity(2);
       app.drawTimeline(config.timeline.position, epoch);
     },
 
@@ -670,7 +669,6 @@ export function topicsAnimation(
       config.canvas.height
     );
     p.background(255);
-    p.pixelDensity(2);
     app.canvas.mouseMoved(app.mouseMoved);
     app.canvas.mouseClicked(app.mouseClicked);
 
