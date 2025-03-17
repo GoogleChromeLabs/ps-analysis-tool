@@ -80,8 +80,6 @@ class TopicsAnimation {
   showHandCursor = false;
   canvas: p5.Renderer | null = null;
   smallCirclePositions: Record<number, { x: number; y: number }[]> = {};
-  counter = 0;
-  lastFrameCount = 0;
   inspectedCircles: Set<number> = new Set();
   isTextLoadingCoverVisible = true;
   isInited = false;
@@ -533,8 +531,6 @@ class TopicsAnimation {
     this.inspectedCircleIndex = -1;
     this.circlePositions = {};
     this.smallCirclePositions = {};
-    this.counter = 0;
-    this.lastFrameCount = 0;
     this.prevVisitedCircleIndex = -1;
     this.inspectedCircles.clear();
   };
