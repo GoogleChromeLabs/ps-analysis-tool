@@ -23,7 +23,6 @@ const mainCanvas = new Main();
 const mainFF = new FigureFactory(mainCanvas);
 
 const IGCanvas = new Main(false);
-IGCanvas.setDelay(1);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 
@@ -270,28 +269,16 @@ const advertiserFlow = [
 mainCanvas.addFigure(timeline);
 circles.forEach((circle) => mainCanvas.addGroup(circle));
 
-// add IG bubble canvas here
-// pause the main canvas operations
-// add elements to IG canvas
-const bubbles = [];
-let startX = 170;
-let startY = 270;
-let lerpSpeed = 0.01;
-while (Math.floor(startX) > 0 && Math.floor(startY) > 0) {
-  const circle = IGFF.circle({
-    x: startX,
-    y: startY,
-    diameter: 10,
-    fill: 'orange',
-    stroke: 'black',
-  });
-  bubbles.push(circle);
-  startX = IGCanvas.getP5Instance().lerp(startX, 0, lerpSpeed);
-  startY = IGCanvas.getP5Instance().lerp(startY, 0, lerpSpeed);
-  lerpSpeed += 0.0003;
-}
+const bubble = IGFF.circle({
+  x: 170,
+  y: 270,
+  diameter: 10,
+  fill: 'orange',
+  stroke: 'black',
+  shouldTravel: true,
+});
 
-const bubbleFlow = new Animator(bubbles, mainFF);
+const bubbleFlow = new Animator([bubble], IGFF);
 bubbleFlow.setSideEffectOnEnd(() => {
   IGCanvas.resetQueuesAndReDrawAll();
   IGCanvas.togglePause();
@@ -456,26 +443,16 @@ const secondCircleAnimations = [
   }),
 ];
 
-const secondBubbles = [];
-let secondStartX = 370;
-let secondStartY = 270;
-lerpSpeed = 0.01;
-while (Math.floor(secondStartX) > 0 && Math.floor(secondStartY) > 0) {
-  const circle = IGFF.circle({
-    x: secondStartX,
-    y: secondStartY,
-    diameter: 10,
-    fill: 'orange',
-    stroke: 'black',
-  });
+const secondBubble = IGFF.circle({
+  x: 370,
+  y: 270,
+  diameter: 10,
+  fill: 'orange',
+  stroke: 'black',
+  shouldTravel: true,
+});
 
-  secondBubbles.push(circle);
-  secondStartX = IGCanvas.getP5Instance().lerp(secondStartX, 0, lerpSpeed);
-  secondStartY = IGCanvas.getP5Instance().lerp(secondStartY, 0, lerpSpeed);
-  lerpSpeed += 0.0003;
-}
-
-const secondBubbleFlow = new Animator(secondBubbles, mainFF);
+const secondBubbleFlow = new Animator([secondBubble], mainFF);
 secondBubbleFlow.setSideEffectOnEnd(() => {
   IGCanvas.resetQueuesAndReDrawAll();
   IGCanvas.togglePause();

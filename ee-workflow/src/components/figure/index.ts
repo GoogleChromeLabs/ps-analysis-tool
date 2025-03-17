@@ -421,4 +421,20 @@ export default abstract class Figure {
   setOnLeave(onLeave: (figure: Figure) => void) {
     this.onLeaveHandler = onLeave;
   }
+
+  /**
+   * Set the x coordinate of the figure.
+   * @param x - The x coordinate to set.
+   */
+  setX(x: number) {
+    this.x = x;
+  }
+
+  /**
+   * Set the y coordinate of the figure.
+   * @param y - The y coordinate to set.
+   */
+  setY(y: number) {
+    this.y = y;
+  }
 }

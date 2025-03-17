@@ -40,6 +40,7 @@ type FigureParams = {
   fill?: string;
   stroke?: string;
   tags?: string[];
+  shouldTravel?: boolean;
   nextTipHelper?: (
     nextCoordinates: NextCoordinates,
     ...args: any
@@ -148,6 +149,7 @@ export default class FigureFactory {
     fill,
     stroke,
     tags,
+    shouldTravel,
     nextTipHelper,
     mouseClicked,
     mouseMoved,
@@ -159,7 +161,7 @@ export default class FigureFactory {
 
     this.circleNextTips(possibleX, possibleY, diameter);
 
-    return new Circle(
+    const circle = new Circle(
       this.canvasRunner,
       possibleX,
       possibleY,
@@ -172,6 +174,62 @@ export default class FigureFactory {
       mouseMoved,
       onLeave
     );
+
+    if (shouldTravel) {
+      let currentX = possibleX;
+      let currentY = possibleY;
+      const endX = 0;
+      const endY = 0;
+      let lerpSpeed = 0.01;
+      circle.setShouldTravel(shouldTravel);
+
+      const traveller = (figure: Figure) => {
+        const _figure = <Circle>figure;
+        const p5 = _figure.getP5();
+
+        _figure.remove();
+
+        currentX = p5?.lerp(currentX, endX, lerpSpeed) ?? endX;
+        currentY = p5?.lerp(currentY, endY, lerpSpeed) ?? endY;
+
+        _figure.setX(currentX);
+        _figure.setY(currentY);
+        _figure.draw();
+
+        if (!(Math.floor(currentX) > 0 && Math.floor(currentY) > 0)) {
+          return true;
+        }
+
+        lerpSpeed += 0.0003;
+
+        return false;
+      };
+
+      const resetTravel = (figure: Figure) => {
+        const _figure = <Circle>figure;
+        currentX = possibleX;
+        currentY = possibleY;
+        _figure.setX(currentX);
+        _figure.setY(currentY);
+        lerpSpeed = 0.01;
+      };
+
+      const completeTravel = (figure: Figure, skipDraw: boolean) => {
+        const _figure = <Circle>figure;
+        _figure.setX(endX);
+        _figure.setY(endY);
+
+        if (!skipDraw) {
+          _figure.draw();
+        }
+      };
+
+      circle.setTraveller(traveller);
+      circle.setResetTravel(resetTravel);
+      circle.setCompleteTravel(completeTravel);
+    }
+
+    return circle;
   }
 
   private imageNextTips(x: number, y: number, width: number, height: number) {
@@ -248,7 +306,6 @@ export default class FigureFactory {
     endX: number;
     endY: number;
     hasArrow?: boolean;
-    shouldTravel?: boolean;
   }): Line {
     const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
 

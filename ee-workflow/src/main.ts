@@ -123,9 +123,8 @@ class Main {
 
   /**
    * Main constructor.
-   * @param clearOnEachStep - Whether to clear the canvas on each step (default: true).
    */
-  constructor(private clearOnEachStep: boolean = true) {
+  constructor() {
     this.p5 = new p5(this.init.bind(this));
   }
 
@@ -292,10 +291,6 @@ class Main {
         this.runner();
       }
     } else if (this.p5.frameCount % this.delay === 0) {
-      if (!this.clearOnEachStep) {
-        this.p5.clear();
-      }
-
       this.runner();
     }
 
