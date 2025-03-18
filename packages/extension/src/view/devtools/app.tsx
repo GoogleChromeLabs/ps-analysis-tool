@@ -47,8 +47,12 @@ const App: React.FC = () => {
 
   const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
 
+  const isChromeRuntimeAvailable = Boolean(chrome.runtime?.onMessage);
+
   const reloadTexts = useRef({
-    displayText: I18n.getMessage('extensionUpdated'),
+    displayText: isChromeRuntimeAvailable
+      ? I18n.getMessage('extensionUpdated')
+      : 'Something went wrong.',
     buttonText: I18n.getMessage('refreshPanel'),
   });
 
@@ -100,7 +104,7 @@ const App: React.FC = () => {
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
         ref={contextInvalidatedRef}
       >
-        {!contextInvalidated ? (
+        {!contextInvalidated && isChromeRuntimeAvailable ? (
           <Layout setSidebarData={setSidebarData} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">

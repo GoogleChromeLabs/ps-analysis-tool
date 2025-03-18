@@ -347,10 +347,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
     };
   }, [messagePassingListener]);
 
@@ -377,9 +377,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync]);
 
   useEffect(() => {
-    chrome.tabs.onRemoved.addListener(tabRemovedListener);
+    chrome.tabs?.onRemoved?.addListener(tabRemovedListener);
     return () => {
-      chrome.tabs.onRemoved.removeListener(tabRemovedListener);
+      chrome.tabs?.onRemoved?.removeListener(tabRemovedListener);
     };
   }, [tabRemovedListener]);
 

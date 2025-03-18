@@ -253,10 +253,12 @@ const useFrameOverlay = (
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
-    chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
+    chrome.storage?.session?.onChanged?.addListener(
+      sessionStoreChangedListener
+    );
     return () => {
       try {
-        chrome.storage.session.onChanged.removeListener(
+        chrome.storage?.session?.onChanged?.removeListener(
           sessionStoreChangedListener
         );
       } catch (error) {

@@ -378,12 +378,14 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
-    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.webNavigation?.onCommitted?.addListener(
+      onCommittedNavigationListener
+    );
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
-      chrome.webNavigation.onCommitted.removeListener(
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation?.onCommitted?.removeListener(
         onCommittedNavigationListener
       );
     };
