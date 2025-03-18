@@ -442,13 +442,7 @@ class WebpageContentScript {
       return;
     }
 
-    const { top, left } = frame.getBoundingClientRect();
-
-    document.documentElement.scrollTo({
-      top: top,
-      left: left,
-      behavior: 'smooth',
-    });
+    frame.scrollIntoView({ behavior: 'smooth' });
     return;
   }
 
@@ -743,15 +737,7 @@ class WebpageContentScript {
       !isElementVisibleInViewport(firstToolTip) &&
       frameWithTooltip
     ) {
-      const { top, left } = frameWithTooltip.getBoundingClientRect();
-      if (isElementVisibleInViewport(frameWithTooltip)) {
-        return;
-      }
-      document.documentElement.scrollTo({
-        top: top,
-        left: left,
-        behavior: 'smooth',
-      });
+      frameWithTooltip.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
