@@ -251,6 +251,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       if (app.timeline.currentIndex === config.timeline.circles.length) {
         app.setHasLastNodeVisited(true);
       }
+      utils.wipeAndRecreateMainCanvas();
 
       flow.setButtonsDisabilityState();
       utils.drawOpenArrowWithoutAnimationIcon();
@@ -294,7 +295,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       }
       p?.pop();
     });
-
+    utils.wipeAndRecreateMainCanvas();
     utils.drawOpenArrowWithoutAnimationIcon();
 
     cb?.(undefined, true);

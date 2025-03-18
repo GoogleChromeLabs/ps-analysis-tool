@@ -141,10 +141,10 @@ const useFrameOverlay = (
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(listenIfContentScriptSet);
+    chrome.runtime?.onMessage?.addListener(listenIfContentScriptSet);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(listenIfContentScriptSet);
+      chrome.runtime?.onMessage?.removeListener(listenIfContentScriptSet);
     };
   }, [listenIfContentScriptSet]);
 
@@ -171,7 +171,7 @@ const useFrameOverlay = (
           }
 
           if (!privacySandboxPanelVisible) {
-            chrome.tabs.sendMessage(
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: true,
@@ -186,7 +186,7 @@ const useFrameOverlay = (
             );
           }
           if (privacySandboxPanelVisible) {
-            chrome.tabs.sendMessage(
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: false,
@@ -211,7 +211,7 @@ const useFrameOverlay = (
 
   useEffect(() => {
     try {
-      chrome.tabs.sendMessage(
+      chrome.tabs?.sendMessage(
         chrome.devtools.inspectedWindow.tabId,
         { status: 'set?', tabId: chrome.devtools.inspectedWindow.tabId },
         (res) => {
@@ -253,10 +253,12 @@ const useFrameOverlay = (
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
-    chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
+    chrome.storage?.session?.onChanged?.addListener(
+      sessionStoreChangedListener
+    );
     return () => {
       try {
-        chrome.storage.session.onChanged.removeListener(
+        chrome.storage?.session?.onChanged?.removeListener(
           sessionStoreChangedListener
         );
       } catch (error) {

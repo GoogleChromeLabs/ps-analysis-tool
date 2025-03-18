@@ -138,11 +138,6 @@ const ExplorableExplanation = () => {
     setTimeout(() => {
       app.reset();
     }, 100);
-
-    setTimeout(() => {
-      app.play(true);
-    }, 300);
-
     setSitesVisited([]);
   }, [isMultiSeller]);
 
