@@ -15,7 +15,6 @@
  */
 export const createQueryParams = (
   selectedFilterValues: Record<string, string[]>,
-  authors: Record<number, string>,
   categories: Record<number, string>,
   tags: Record<number, string>,
   searchValue: string,
@@ -25,13 +24,6 @@ export const createQueryParams = (
   const selectedAuthorsID: number[] = [];
   const selectedCategoriesId: number[] = [];
   const selectedTagId: number[] = [];
-
-  Object.keys(authors).forEach((key) => {
-    const keyToUse = Number(key);
-    if (selectedFilterValues?.author?.includes(authors[keyToUse])) {
-      selectedAuthorsID.push(keyToUse);
-    }
-  });
 
   Object.keys(categories).forEach((key) => {
     const keyToUse = Number(key);
