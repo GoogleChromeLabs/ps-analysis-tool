@@ -190,7 +190,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL]: {
-            title: () => I18n.getMessage('fedcm'),
+            title: () => 'FedCM',
             panel: {
               Element: FederatedCredential,
             },
