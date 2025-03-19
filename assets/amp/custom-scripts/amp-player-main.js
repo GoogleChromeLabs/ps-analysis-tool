@@ -201,7 +201,7 @@ const sendEventToParent = () => {
 
 function scrollListener() {
   if (
-    Math.ceil(window.scrollY + window.innerHeight) >=
+    Math.ceil(window.scrollY + window.innerHeight) >
       document.documentElement.scrollHeight &&
     !document.body.classList.contains('lightbox-open')
   ) {
@@ -295,6 +295,7 @@ const messageListener = ({
       window.scrollTo({ top: 0, left: 0 });
       document.getElementById('show-more-indicator').classList.add('bounce');
       document.getElementById('show-more-indicator').onclick = () => {
+        console.log('here');
         sendEventToParent();
       };
 
