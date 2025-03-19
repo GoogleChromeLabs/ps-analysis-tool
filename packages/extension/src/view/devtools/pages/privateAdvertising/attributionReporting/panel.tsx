@@ -18,7 +18,6 @@
  */
 import React, { useEffect, useRef, useMemo } from 'react';
 import { Tabs, useTabs } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
 
@@ -126,13 +125,6 @@ const Panel = () => {
       data-testid="attribution-reporting-content"
       className="h-screen w-full flex flex-col overflow-hidden"
     >
-      <div className="p-4">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">
-            {I18n.getMessage('attributionReporting')}
-          </h1>
-        </div>
-      </div>
       <Tabs />
       <div
         className={classNames('overflow-auto', className)}

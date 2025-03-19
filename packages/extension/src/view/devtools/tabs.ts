@@ -23,12 +23,12 @@ import {
   ChipsIconWhite,
   RelatedWebsiteSetsIcon,
   PrivateAdvertisingIcon,
-  AntiCovertTrackingIcon,
+  PrivacyProtectionIcon,
   AttributionIcon,
   BounceTrackingIcon,
   BounceTrackingIconWhite,
-  FingerPrintingIcon,
-  FingerPrintingIconWhite,
+  UserAgentReductionIcon,
+  UserAgentReductionIconWhite,
   TopicsIcon,
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
@@ -65,11 +65,11 @@ import {
   Chips,
   RelatedWebsiteSets,
   PrivateAdvertising,
-  AntiCovertTracking,
+  PrivacyProtection,
   Topics,
   AttributionReporting,
   BounceTracking,
-  Fingerprinting,
+  UserAgentReduction,
   PrivacySandbox,
   Wiki,
   Settings,
@@ -190,7 +190,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL]: {
-            title: () => I18n.getMessage('fedcm'),
+            title: () => 'FedCM',
             panel: {
               Element: FederatedCredential,
             },
@@ -307,18 +307,18 @@ const TABS: SidebarItems = {
         },
       },
       [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
-        title: () => I18n.getMessage('trackingProtection'),
+        title: () => 'Privacy Protection',
         panel: {
-          Element: AntiCovertTracking,
+          Element: PrivacyProtection,
         },
         icon: {
-          Element: AntiCovertTrackingIcon,
+          Element: PrivacyProtectionIcon,
           props: {
             className: '[&_path]:fill-granite-gray',
           },
         },
         selectedIcon: {
-          Element: AntiCovertTrackingIcon,
+          Element: PrivacyProtectionIcon,
           props: {
             className: '[&_path]:fill-bright-gray',
           },
@@ -350,22 +350,34 @@ const TABS: SidebarItems = {
             },
             icon: {
               Element: BounceTrackingIcon,
+              props: {
+                className: 'relative top-[2px]',
+              },
             },
             selectedIcon: {
               Element: BounceTrackingIconWhite,
+              props: {
+                className: 'relative top-[2px]',
+              },
             },
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
-            title: () => I18n.getMessage('fingerprinting'),
+            title: () => 'User Agent Reduction',
             panel: {
-              Element: Fingerprinting,
+              Element: UserAgentReduction,
             },
             icon: {
-              Element: FingerPrintingIcon,
+              Element: UserAgentReductionIcon,
+              props: {
+                className: 'relative top-[2px]',
+              },
             },
             selectedIcon: {
-              Element: FingerPrintingIconWhite,
+              Element: UserAgentReductionIconWhite,
+              props: {
+                className: 'relative top-[2px]',
+              },
             },
             children: {},
           },

@@ -23,7 +23,6 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import { ArrowUp } from '../../icons';
 import ProgressBar from '../progressBar';
 import SupportLink from './supportLink';
 import QuickLinksList from './quickLinksList';
@@ -44,6 +43,7 @@ export interface LandingPageProps {
   extraClasses?: string;
   showQuickLinks?: boolean;
   showSupportLink?: boolean;
+  hasTabs?: boolean;
 }
 
 const LandingPage = ({
@@ -58,9 +58,9 @@ const LandingPage = ({
   contentPanel,
   showQuickLinks = true,
   showSupportLink = false,
+  hasTabs = false,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
-  const [open, setOpen] = useState(true);
   const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
     extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
   }));
@@ -71,23 +71,16 @@ const LandingPage = ({
       <div
         className={classNames(
           { hidden: loading },
-          'divide-y divide-hex-gray dark:divide-quartz w-full h-full flex flex-col'
+          'w-full h-full flex flex-col',
+          { 'divide-y divide-hex-gray dark:divide-quartz ': !hasTabs }
         )}
       >
         {!hideTitle && (
           <div className="flex justify-between">
             <div className="p-4 flex flex-col gap-1">
-              <button
-                className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
-                onClick={() => setOpen((prevOpen) => !prevOpen)}
-              >
+              <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
                 {title && <h1 className="text-left">{title}</h1>}
-                <div>
-                  <ArrowUp
-                    className={classNames(open && 'rotate-180 -translate-y-1')}
-                  />
-                </div>
-              </button>
+              </div>
               <Breadcrumbs items={extractSelectedItemKeyTitles()} />
             </div>
             <div className="p-4 flex items-center">
@@ -95,14 +88,15 @@ const LandingPage = ({
             </div>
           </div>
         )}
-        <div className={classNames({ hidden: !open && !children }, 'flex-1')}>
+        <div className={'flex-1'}>
           <div
-            id="#__psat-collapsible-content"
             className={classNames(
-              { hidden: !open },
-              'h-full w-full flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
+              'h-full w-full flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz py-2',
               {
                 'border-b border-american-silver dark:border-quartz': children,
+              },
+              {
+                'px-4 py-6': !hasTabs,
               },
               extraClasses
             )}
