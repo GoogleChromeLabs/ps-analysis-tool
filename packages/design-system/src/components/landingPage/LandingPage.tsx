@@ -43,7 +43,7 @@ export interface LandingPageProps {
   extraClasses?: string;
   showQuickLinks?: boolean;
   showSupportLink?: boolean;
-  hasTabs: boolean;
+  hasTabs?: boolean;
 }
 
 const LandingPage = ({

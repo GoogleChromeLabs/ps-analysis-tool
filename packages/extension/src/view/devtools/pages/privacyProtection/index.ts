@@ -17,4 +17,4 @@ export { default as BounceTracking } from './bounceTracking';
 export { default as UserAgentReduction } from './userAgentReduction';
 export { default as IPProtection } from './ipProtection';
 export { default as PrivateStateTokens } from './privateStateTokens';
-export { default as AntiCovertTracking } from './antiCovertTracking';
+export { default as PrivacyProtection } from './privacyProtection';

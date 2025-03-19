@@ -20,7 +20,7 @@ import {
   GroupsIcon,
   CookieIcon,
   RelatedWebsiteSetsIcon,
-  AntiCovertTrackingIcon,
+  PrivacyProtectionIcon,
   SiteBoundariesIcon,
   SIDEBAR_ITEMS_KEYS,
   PrivateAdvertisingIcon,
@@ -129,7 +129,7 @@ export const FEATURE_LIST = [
   },
   {
     name: I18n.getMessage('trackingProtection'),
-    icon: AntiCovertTrackingIcon,
+    icon: PrivacyProtectionIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
     description:
       'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',

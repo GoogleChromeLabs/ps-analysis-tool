@@ -25,7 +25,7 @@ import SinonChrome from 'sinon-chrome';
  */
 import BounceTracking from '../bounceTracking';
 import UserAgentReduction from '../userAgentReduction';
-import AntiCovertTracking from '../antiCovertTracking';
+import PrivacyProtection from '../privacyProtection';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
@@ -42,7 +42,7 @@ jest.mock(
   })
 );
 const mockUseSidebar = useSidebar as jest.Mock;
-describe('AntiCovertTracking Landing Pages', () => {
+describe('PrivacyProtection Landing Pages', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
     globalThis.fetch = function () {
@@ -85,9 +85,9 @@ describe('AntiCovertTracking Landing Pages', () => {
     ).toBeInTheDocument();
   });
 
-  it('should render AntiCovertTracking', async () => {
+  it('should render PrivacyProtection', async () => {
     act(() => {
-      render(<AntiCovertTracking />);
+      render(<PrivacyProtection />);
     });
     expect(
       await screen.findByText(I18n.getMessage('trackingProtection'))

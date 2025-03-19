@@ -23,7 +23,7 @@ import {
   ChipsIconWhite,
   RelatedWebsiteSetsIcon,
   PrivateAdvertisingIcon,
-  AntiCovertTrackingIcon,
+  PrivacyProtectionIcon,
   AttributionIcon,
   BounceTrackingIcon,
   BounceTrackingIconWhite,
@@ -65,7 +65,7 @@ import {
   Chips,
   RelatedWebsiteSets,
   PrivateAdvertising,
-  AntiCovertTracking,
+  PrivacyProtection,
   Topics,
   AttributionReporting,
   BounceTracking,
@@ -309,16 +309,16 @@ const TABS: SidebarItems = {
       [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
         title: () => 'Privacy Protection',
         panel: {
-          Element: AntiCovertTracking,
+          Element: PrivacyProtection,
         },
         icon: {
-          Element: AntiCovertTrackingIcon,
+          Element: PrivacyProtectionIcon,
           props: {
             className: '[&_path]:fill-granite-gray',
           },
         },
         selectedIcon: {
-          Element: AntiCovertTrackingIcon,
+          Element: PrivacyProtectionIcon,
           props: {
             className: '[&_path]:fill-bright-gray',
           },
