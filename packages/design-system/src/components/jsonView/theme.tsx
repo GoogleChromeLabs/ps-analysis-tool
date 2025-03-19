@@ -30,7 +30,7 @@ const darkTheme = {
   base0B: '#816ac7', // float data type
   base0C: '#7cacf8', // array key
   base0D: '#3971ED', // date and function data type
-  base0E: '#3971ED', // boolean data type
+  base0E: '#816ac7', // boolean data type
   base0F: '#816ac7', // integer data type
 };
 
@@ -47,11 +47,11 @@ const lightTheme = {
   base08: '#d33682', // NaN data type
   base09: '#cb4b16', // string data type & ellipsisColor
   base0A: '#dc322f', // null and regex data type
-  base0B: '#859900', // float data type
+  base0B: '#0842A0', // float data type
   base0C: '#6c71c4', // array key
   base0D: '#586e75', // date and function data type
-  base0E: '#2aa198', // boolean data type
-  base0F: '#268bd2', // integer data type
+  base0E: '#0842A0', // boolean data type
+  base0F: '#0842A0', // integer data type
 };
 
 export { darkTheme, lightTheme };

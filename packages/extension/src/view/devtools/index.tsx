@@ -39,6 +39,10 @@ import {
   TopicsClassifierProvider,
 } from './stateProviders';
 
+const isDarkMode = chrome.devtools.panels.themeName === 'dark';
+const classes = isDarkMode ? ['dark'] : ['light'];
+document.body.classList.add(...classes);
+
 const root = document.getElementById('root');
 
 //@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
