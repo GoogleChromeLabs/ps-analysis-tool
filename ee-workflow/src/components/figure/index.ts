@@ -86,6 +86,16 @@ export default abstract class Figure {
   protected completeTravel?: (figure: Figure, skipDraw: boolean) => void;
 
   /**
+   * Whether the side effect should be run.
+   */
+  protected runSideEffect?: boolean;
+
+  /**
+   * Function to be executed when the object has done drawing.
+   */
+  protected sideEffectOnEnd?: (figure: Figure) => void;
+
+  /**
    * Whether the figure is a checkpoint.
    */
   protected isCheckpoint = false;
@@ -436,5 +446,21 @@ export default abstract class Figure {
    */
   setY(y: number) {
     this.y = y;
+  }
+
+  /**
+   * Set whether the side effect should be run.
+   * @param runSideEffect - boolean indicating if the side effect should be run.
+   */
+  shouldRunSideEffect(runSideEffect: boolean) {
+    this.runSideEffect = runSideEffect;
+  }
+
+  /**
+   * Set the function to be executed when the object has done drawing.
+   * @param sideEffectOnEnd - The function to be executed when the object has done drawing.
+   */
+  setSideEffectOnEnd(sideEffectOnEnd: (figure: Figure) => void) {
+    this.sideEffectOnEnd = sideEffectOnEnd;
   }
 }

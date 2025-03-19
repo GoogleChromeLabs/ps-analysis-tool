@@ -76,6 +76,10 @@ export default class Box extends Figure {
     this.p5?.stroke(this.stroke);
     this.p5?.rect(this.x, this.y, this.width, this.height);
     this.p5?.pop();
+
+    if (this.runSideEffect) {
+      this.sideEffectOnEnd?.(this);
+    }
   }
 
   isHovering(): boolean {

@@ -72,6 +72,10 @@ export default class Text extends Figure {
     this.p5?.textAlign(this.p5.CENTER, this.p5.CENTER);
     this.p5?.text(this.str, this.x, this.y);
     this.p5?.pop();
+
+    if (this.runSideEffect) {
+      this.sideEffectOnEnd?.(this);
+    }
   }
 
   mouseMoved() {

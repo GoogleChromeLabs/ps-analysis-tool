@@ -95,6 +95,10 @@ export default class Line extends Figure {
       this.drawArrow();
     }
     this.p5?.pop();
+
+    if (this.runSideEffect) {
+      this.sideEffectOnEnd?.(this);
+    }
   }
 
   getEndX(): number {

@@ -65,6 +65,10 @@ export default class Circle extends Figure {
     this.p5?.stroke(this.stroke);
     this.p5?.circle(this.x, this.y, this.diameter);
     this.p5?.pop();
+
+    if (this.runSideEffect) {
+      this.sideEffectOnEnd?.(this);
+    }
   }
 
   isHovering(): boolean {

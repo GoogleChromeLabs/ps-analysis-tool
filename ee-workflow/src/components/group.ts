@@ -51,6 +51,16 @@ export default class Group {
   private throw = false;
 
   /**
+   * Whether the side effect should be run.
+   */
+  protected runSideEffect?: boolean;
+
+  /**
+   * Function to be executed when the animation ends.
+   */
+  private sideEffectOnEnd: (() => void) | undefined;
+
+  /**
    * Counter for the number of groups created.
    */
   static groupCount = 0;
@@ -72,6 +82,10 @@ export default class Group {
     this.figures.forEach((figure) => {
       figure.draw();
     });
+
+    if (this.runSideEffect) {
+      this.sideEffectOnEnd?.();
+    }
   }
 
   /**

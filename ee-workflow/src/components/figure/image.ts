@@ -80,6 +80,10 @@ export default class Image extends Figure {
     this.p5?.imageMode(this.p5?.CENTER);
     this.p5?.image(this.image, this.x, this.y, this.width, this.height);
     this.p5?.pop();
+
+    if (this.runSideEffect) {
+      this.sideEffectOnEnd?.(this);
+    }
   }
 
   isHovering(): boolean {

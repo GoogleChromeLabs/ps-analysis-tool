@@ -49,6 +49,11 @@ export default class Animator {
   private throw = false;
 
   /**
+   * Whether the side effect should be run.
+   */
+  protected runSideEffect?: boolean;
+
+  /**
    * Function to be executed when the animation ends.
    */
   private sideEffectOnEnd: (() => void) | undefined;
@@ -155,5 +160,13 @@ export default class Animator {
     if (index > -1) {
       this.objects.splice(index, 1);
     }
+  }
+
+  /**
+   * Set whether the side effect should be run.
+   * @param runSideEffect - boolean indicating if the side effect should be run.
+   */
+  shouldRunSideEffect(runSideEffect: boolean) {
+    this.runSideEffect = runSideEffect;
   }
 }
