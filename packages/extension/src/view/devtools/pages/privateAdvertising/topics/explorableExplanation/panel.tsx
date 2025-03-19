@@ -95,6 +95,25 @@ const Panel = ({
     activeTabRef.current = activeTab;
   }, [activeTab]);
 
+  const tooglePlayOnKeydown = useCallback(
+    (event: KeyboardEvent) => {
+      // Check if the pressed key is the spacebar
+      if (event.code === 'Space') {
+        event.preventDefault();
+        setPlay((prevPlay) => !prevPlay);
+      }
+    },
+    [setPlay]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', tooglePlayOnKeydown);
+
+    return () => {
+      document.removeEventListener('keydown', tooglePlayOnKeydown);
+    };
+  }, [tooglePlayOnKeydown]);
+
   const siteAdTechs = useMemo(() => {
     return storageRef.current[1]
       ? JSON.parse(storageRef.current[1])?.siteAdTechs

@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React, { ComponentType, SVGProps } from 'react';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -67,7 +66,7 @@ const CardsPanel = ({
       <div className="min-w-[45.75rem]">
         {pinnedItems && pinnedItems.length > 0 && (
           <section className="border-b border-hex-gray mb-5 pb-5">
-            {hasTitle && <h3 className="text-sm">Pinned</h3>}
+            {hasTitle && <h3 className="text-base">Quick Access</h3>}
             <div className="flex gap-x-5 gap-y-4 flex-wrap mt-2">
               {pinnedItems.map((item) => {
                 const Icon = item.icon;
@@ -79,11 +78,11 @@ const CardsPanel = ({
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <Icon
-                      width={20}
-                      height={20}
+                      width={22}
+                      height={22}
                       className="fill-gray dark:fill-bright-gray"
                     />
-                    <span className="text-sm">{item.name}</span>
+                    <span className="text-base">{item.name}</span>
                   </div>
                 );
               })}
@@ -92,14 +91,10 @@ const CardsPanel = ({
         )}
         {featuredItems.length > 0 && (
           <section>
-            {hasTitle && <h3 className="text-sm">Features</h3>}
+            {hasTitle && <h3 className="text-base">Features</h3>}
             <div className="flex gap-5 flex-wrap mt-2">
               {featuredItems.map((item) => {
                 const Icon = item.icon;
-                const headingClasses = classNames(
-                  'text-sm',
-                  item?.colorClasses?.heading ? item?.colorClasses?.heading : ''
-                );
 
                 return (
                   <div
@@ -109,13 +104,13 @@ const CardsPanel = ({
                   >
                     <div className="flex gap-2 justify-start mb-3">
                       <Icon
-                        width={20}
-                        height={20}
+                        width={24}
+                        height={24}
                         className="fill-gray dark:fill-bright-gray"
                       />
-                      <h4 className={headingClasses}>{item.name}</h4>
+                      <h4 className="font-medium text-base">{item.name}</h4>
                     </div>
-                    <p>{item.description}</p>
+                    <p className="text-sm">{item.description}</p>
                     <div className="flex flex-wrap gap-x-3 gap-y-2 mt-2">
                       {item.buttons &&
                         item.buttons.map((button) => (
