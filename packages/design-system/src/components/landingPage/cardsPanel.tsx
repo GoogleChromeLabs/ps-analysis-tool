@@ -107,7 +107,7 @@ const CardsPanel = ({
                       <h4 className="font-medium text-xl">{item.name}</h4>
                     </div>
                     <p className="text-sm text-center">{item.description}</p>
-                    <div className="flex flex-wrap gap-x-3 gap-y-2 mt-2">
+                    <div className="flex flex-wrap gap-x-3 gap-y-2 mt-4 justify-center">
                       {item.buttons &&
                         item.buttons.map((button) => (
                           <button
