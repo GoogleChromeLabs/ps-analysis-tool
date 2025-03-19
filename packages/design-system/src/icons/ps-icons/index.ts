@@ -15,11 +15,12 @@
  */
 export { default as PSCookieIcon } from './cookie.svg';
 export { default as PSCUJsIcon } from './cujs.svg';
-export { default as PSDemos } from './demos.svg';
+export { default as PSDemosIcon } from './demos.svg';
 export { default as PSDevSiteIcon } from './dev-site.svg';
 export { default as PSHelpCenterIcon } from './help-center.svg';
 export { default as PSLearningIcon } from './learning.svg';
 export { default as PSPrivateAdvertisingIcon } from './private-advertising.svg';
 export { default as PSSiteBoundriesIcon } from './site-boundries.svg';
+export { default as PSStoriesIcon } from './stories.svg';
 export { default as PSTrackingProtectionIcon } from './tracking-protection.svg';
-export { default as PSWikicon } from './wiki.svg';
+export { default as PSWikiIcon } from './wiki.svg';

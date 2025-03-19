@@ -102,15 +102,11 @@ const CardsPanel = ({
                     className="w-[366px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
-                    <div className="flex gap-2 justify-start mb-3">
-                      <Icon
-                        width={24}
-                        height={24}
-                        className="fill-gray dark:fill-bright-gray"
-                      />
-                      <h4 className="font-medium text-base">{item.name}</h4>
+                    <div className="mb-3 flex items-center flex-col gap-2">
+                      <Icon height={80} />
+                      <h4 className="font-medium text-xl">{item.name}</h4>
                     </div>
-                    <p className="text-sm">{item.description}</p>
+                    <p className="text-sm text-center">{item.description}</p>
                     <div className="flex flex-wrap gap-x-3 gap-y-2 mt-2">
                       {item.buttons &&
                         item.buttons.map((button) => (
