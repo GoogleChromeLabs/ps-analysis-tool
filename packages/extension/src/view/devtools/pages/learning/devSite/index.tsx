@@ -35,7 +35,7 @@ const DevSite = () => {
     <LandingPage
       sidebarKey={SIDEBAR_ITEMS_KEYS.DEV_SITE}
       icon={icon}
-      frameColor="privacy-green"
+      frameColor="privacy-blue"
     />
   );
 };

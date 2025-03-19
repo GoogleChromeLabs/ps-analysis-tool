@@ -95,8 +95,8 @@ const ContentPanel = ({
               <div className="w-4 h-4" title="View Documentation">
                 <Link href={addUTMParams(item.url)} rel="noreferer">
                   <DescriptionIcon
-                    height="16"
-                    width="16"
+                    height="20"
+                    width="20"
                     className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
                   />
                 </Link>
@@ -109,8 +109,8 @@ const ContentPanel = ({
                 >
                   <WebStoriesIcon
                     className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                    height="16"
-                    width="16"
+                    height="20"
+                    width="20"
                   />
                 </div>
               )}

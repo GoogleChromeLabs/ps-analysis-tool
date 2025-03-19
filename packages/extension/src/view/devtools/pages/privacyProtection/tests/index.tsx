@@ -24,8 +24,8 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies
  */
 import BounceTracking from '../bounceTracking';
-import Fingerprinting from '../fingerprinting';
-import AntiCovertTracking from '../antiCovertTracking';
+import UserAgentReduction from '../userAgentReduction';
+import PrivacyProtection from '../privacyProtection';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
@@ -42,7 +42,7 @@ jest.mock(
   })
 );
 const mockUseSidebar = useSidebar as jest.Mock;
-describe('AntiCovertTracking Landing Pages', () => {
+describe('PrivacyProtection Landing Pages', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
     globalThis.fetch = function () {
@@ -75,23 +75,21 @@ describe('AntiCovertTracking Landing Pages', () => {
     ).toBeInTheDocument();
   });
 
-  it('should render Fingerprinting', async () => {
+  it('should render UserAgentReduction', async () => {
     act(() => {
-      render(<Fingerprinting />);
+      render(<UserAgentReduction />);
     });
 
     expect(
-      await screen.findByTestId('fingerprinting-content')
+      await screen.findByTestId('user-agent-reduction-content')
     ).toBeInTheDocument();
   });
 
-  it('should render AntiCovertTracking', async () => {
+  it('should render PrivacyProtection', async () => {
     act(() => {
-      render(<AntiCovertTracking />);
+      render(<PrivacyProtection />);
     });
-    expect(
-      await screen.findByText(I18n.getMessage('trackingProtection'))
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Privacy Protection')).toBeInTheDocument();
   });
 
   it('should render IPProtection', async () => {

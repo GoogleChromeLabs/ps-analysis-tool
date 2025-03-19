@@ -58,10 +58,10 @@ const content = [
   },
 ];
 
-const AntiCovertTracking = () => {
+const PrivacyProtection = () => {
   return (
     <LandingPageContainer
-      title={I18n.getMessage('trackingProtection')}
+      title="Privacy Protection"
       extraClasses="min-h-[78vh] w-full"
       contentPanelTitle={I18n.getMessage('antiCovertTrackingDescription')}
       content={content}
@@ -71,4 +71,4 @@ const AntiCovertTracking = () => {
   );
 };
 
-export default AntiCovertTracking;
+export default PrivacyProtection;

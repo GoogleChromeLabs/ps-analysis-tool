@@ -48,8 +48,9 @@ const content = [
     sidebarItemKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
   },
   {
-    title: () => I18n.getMessage('fedcm'),
-    description: () => I18n.getMessage('fedcmDescription'),
+    title: () => 'FedCM',
+    description: () =>
+      'The Federated Credential Management API enables privacy-preserving identity federation.',
     url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/federated-credential-management-api/',
