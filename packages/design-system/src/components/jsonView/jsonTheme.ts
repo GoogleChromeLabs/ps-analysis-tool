@@ -45,10 +45,10 @@ const lightTheme = {
   base06: '#073642', // NA
   base07: '#8e004b', // braceColor & object key color
   base08: '#d33682', // NaN data type
-  base09: '#cb4b16', // string data type & ellipsisColor
+  base09: '#de3730', // string data type & ellipsisColor
   base0A: '#dc322f', // null and regex data type
   base0B: '#0842A0', // float data type
-  base0C: '#6c71c4', // array key
+  base0C: 'rgb(142 0 75)', // array key
   base0D: '#586e75', // date and function data type
   base0E: '#0842A0', // boolean data type
   base0F: '#0842A0', // integer data type

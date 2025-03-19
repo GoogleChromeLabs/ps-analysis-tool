@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useState, lazy, Suspense, memo } from 'react';
 import type { ReactJsonViewProps } from '@microlink/react-json-view';
 // must be lazy loaded to avoid issue with puppeteer and service worker
 // https://github.com/mac-s-g/react-json-view/issues/296
@@ -51,10 +51,11 @@ const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
         enableClipboard={false}
         displayDataTypes={false}
         displayObjectSize={false}
+        shouldCollapse={(object) => object.name !== 'root'}
         {...props}
       />
     </Suspense>
   );
 };
 
-export default JsonView;
+export default memo(JsonView);
