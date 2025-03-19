@@ -23,9 +23,12 @@ import {
   PSInfoKey,
   QuickLinksList,
   TabsProvider,
+  LandingPage,
   type PSInfoKeyType,
   type TabItems,
 } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+
 /**
  * Internal dependencies.
  */
@@ -101,10 +104,20 @@ const Topics = () => {
     []
   );
 
-  return (
+  const contentPanel = (
     <TabsProvider items={tabItems} name="topics">
       <Panel />
     </TabsProvider>
+  );
+
+  return (
+    <div data-testid="bounce-tracking-content" className="h-full w-full">
+      <LandingPage
+        title={I18n.getMessage('topics')}
+        contentPanel={contentPanel}
+        hasTabs={true}
+      />
+    </div>
   );
 };
 

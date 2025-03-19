@@ -44,6 +44,7 @@ export interface LandingPageProps {
   extraClasses?: string;
   showQuickLinks?: boolean;
   showSupportLink?: boolean;
+  hasTabs: boolean;
 }
 
 const LandingPage = ({
@@ -58,6 +59,7 @@ const LandingPage = ({
   contentPanel,
   showQuickLinks = true,
   showSupportLink = false,
+  hasTabs = false,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
@@ -71,7 +73,8 @@ const LandingPage = ({
       <div
         className={classNames(
           { hidden: loading },
-          'divide-y divide-hex-gray dark:divide-quartz w-full h-full flex flex-col'
+          'w-full h-full flex flex-col',
+          { 'divide-y divide-hex-gray dark:divide-quartz ': !hasTabs }
         )}
       >
         {!hideTitle && (
@@ -100,9 +103,12 @@ const LandingPage = ({
             id="#__psat-collapsible-content"
             className={classNames(
               { hidden: !open },
-              'h-full w-full flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
+              'h-full w-full flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz py-2',
               {
                 'border-b border-american-silver dark:border-quartz': children,
+              },
+              {
+                'px-4 py-6': !hasTabs,
               },
               extraClasses
             )}
