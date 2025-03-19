@@ -24,7 +24,7 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies
  */
 import BounceTracking from '../bounceTracking';
-import Fingerprinting from '../fingerprinting';
+import UserAgentReduction from '../userAgentReduction';
 import AntiCovertTracking from '../antiCovertTracking';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -75,9 +75,9 @@ describe('AntiCovertTracking Landing Pages', () => {
     ).toBeInTheDocument();
   });
 
-  it('should render Fingerprinting', async () => {
+  it('should render UserAgentReduction', async () => {
     act(() => {
-      render(<Fingerprinting />);
+      render(<UserAgentReduction />);
     });
 
     expect(
