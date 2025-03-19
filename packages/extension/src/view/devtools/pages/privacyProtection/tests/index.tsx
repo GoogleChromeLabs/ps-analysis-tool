@@ -81,7 +81,7 @@ describe('PrivacyProtection Landing Pages', () => {
     });
 
     expect(
-      await screen.findByTestId('fingerprinting-content')
+      await screen.findByTestId('user-agent-reduction-content')
     ).toBeInTheDocument();
   });
 
@@ -89,9 +89,7 @@ describe('PrivacyProtection Landing Pages', () => {
     act(() => {
       render(<PrivacyProtection />);
     });
-    expect(
-      await screen.findByText(I18n.getMessage('trackingProtection'))
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Privacy Protection')).toBeInTheDocument();
   });
 
   it('should render IPProtection', async () => {

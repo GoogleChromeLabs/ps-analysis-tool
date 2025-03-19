@@ -77,9 +77,6 @@ export const FEATURE_LIST = [
     icon: SiteBoundariesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description: I18n.getMessage('siteBoundariesDescription'),
-    colorClasses: {
-      heading: 'text-red-700',
-    },
     buttons: [
       {
         name: I18n.getMessage('chips'),
@@ -105,9 +102,6 @@ export const FEATURE_LIST = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
     description:
       'Private-preserving APIs supporting critical advertising use cases without relying on cross-site tracking, while providing accurate relevance information and measurement data for digital ads.',
-    colorClasses: {
-      heading: 'text-blue-600',
-    },
     buttons: [
       {
         name: I18n.getMessage('topics'),
@@ -133,9 +127,6 @@ export const FEATURE_LIST = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
     description:
       'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
-    colorClasses: {
-      heading: 'text-yellow-500',
-    },
     buttons: [
       {
         name: 'IP Protection',
@@ -161,9 +152,6 @@ export const FEATURE_LIST = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
     description:
       'Explore and learn everything about the Privacy Sandbox via the Help Center, developer documentation, and Stories, and learn about PSAT via the wiki.',
-    colorClasses: {
-      heading: 'text-green-700',
-    },
     buttons: [
       {
         name: 'Wiki',
