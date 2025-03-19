@@ -17,23 +17,24 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
-import ReactJsonView, { ReactJsonViewProps } from '@microlink/react-json-view';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
+import type { ReactJsonViewProps } from '@microlink/react-json-view';
+// must be lazy loaded to avoid issue with puppeteer and service worker
+// https://github.com/mac-s-g/react-json-view/issues/296
+const LazyReactJson = lazy(() => import('@microlink/react-json-view'));
 
 /**
  * Internal dependencies.
  */
 import { darkTheme, lightTheme } from './jsonTheme';
 
-type JsonViewProps = ReactJsonViewProps;
-
 /**
  * JsonView component.
  * ReactJsonView wrapper component to provide a consistent theme for the JSON view.
- * @param {JsonViewProps} props - The props for the JsonView component.
+ * @param {ReactJsonViewProps} props - The props for the JsonView component.
  * @returns {React.ReactElement} The JsonView component.
  */
-const JsonView = (props: JsonViewProps): React.ReactElement => {
+const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -43,14 +44,16 @@ const JsonView = (props: JsonViewProps): React.ReactElement => {
   }, []);
 
   return (
-    <ReactJsonView
-      theme={isDarkMode ? darkTheme : lightTheme}
-      iconStyle="triangle"
-      enableClipboard={false}
-      displayDataTypes={false}
-      displayObjectSize={false}
-      {...props}
-    />
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyReactJson
+        theme={isDarkMode ? darkTheme : lightTheme}
+        iconStyle="triangle"
+        enableClipboard={false}
+        displayDataTypes={false}
+        displayObjectSize={false}
+        {...props}
+      />
+    </Suspense>
   );
 };
 
