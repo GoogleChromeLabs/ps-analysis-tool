@@ -23,7 +23,7 @@ import ReactJsonView, { ReactJsonViewProps } from '@microlink/react-json-view';
 /**
  * Internal dependencies.
  */
-import { darkTheme, lightTheme } from './theme';
+import { darkTheme, lightTheme } from './jsonTheme';
 
 type JsonViewProps = ReactJsonViewProps;
 
