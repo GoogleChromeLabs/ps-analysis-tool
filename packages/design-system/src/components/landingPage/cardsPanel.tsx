@@ -67,7 +67,7 @@ const CardsPanel = ({
       <div className="min-w-[45.75rem]">
         {pinnedItems && pinnedItems.length > 0 && (
           <section className="border-b border-hex-gray mb-5 pb-5">
-            {hasTitle && <h3 className="text-sm">Pinned</h3>}
+            {hasTitle && <h3 className="text-sm">Quick Access</h3>}
             <div className="flex gap-x-5 gap-y-4 flex-wrap mt-2">
               {pinnedItems.map((item) => {
                 const Icon = item.icon;
