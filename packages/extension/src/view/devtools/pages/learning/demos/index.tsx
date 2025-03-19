@@ -35,7 +35,7 @@ const Demos = () => {
     <LandingPage
       sidebarKey={SIDEBAR_ITEMS_KEYS.DEMOS}
       icon={icon}
-      frameColor="privacy-green"
+      frameColor="privacy-blue"
     />
   );
 };

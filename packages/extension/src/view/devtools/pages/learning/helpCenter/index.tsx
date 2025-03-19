@@ -35,7 +35,7 @@ const HelpCenter = () => {
     <LandingPage
       sidebarKey={SIDEBAR_ITEMS_KEYS.HELP_CENTER}
       icon={icon}
-      frameColor="privacy-purple"
+      frameColor="privacy-blue"
     />
   );
 };
