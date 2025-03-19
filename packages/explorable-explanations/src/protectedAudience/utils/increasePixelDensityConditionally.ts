@@ -23,7 +23,7 @@ import type p5 from 'p5';
 import app from '../app';
 
 const increasePixelDensityConditionally = (p: p5 | null) => {
-  if (app.platform.startsWith('chromeos') || !p) {
+  if (app.platform.startsWith('Chrome') || !p) {
     return;
   }
   p.pixelDensity(2);
