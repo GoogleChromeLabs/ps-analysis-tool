@@ -79,7 +79,7 @@ export const FEATURE_LIST = [
         sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
       },
       {
-        name: I18n.getMessage('fingerprinting'),
+        name: 'User Agent Reduction',
         sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
       },
       {
