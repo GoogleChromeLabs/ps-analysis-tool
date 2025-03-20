@@ -59,7 +59,7 @@ const ContentPanel = ({
       <div className="flex gap-5 flex-wrap">
         {content.map((item, index) => (
           <div
-            className="w-72 min-h-80  bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border-2 border-privacy-blue dark:border-quartz p-5 relative"
+            className="w-72 min-h-80  bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border-2 border-privacy-blue p-5 relative"
             key={index}
           >
             <div className="flex justify-between">
