@@ -46,8 +46,6 @@
          style="fill:none;stroke:#4285fa;stroke-width:25.168;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
          id="path478" /></g><g
        id="g480"><g
-         id="g482"
-         clip-path="url(#clipPath486)"><g
            id="g488"
            transform="translate(441.2792,299.7018)"><path
              d="m 0,0 h 60.319 v 161.655 c 0,21.901 -17.754,39.655 -39.656,39.655 h -161.654 v -57.199"
@@ -92,4 +90,4 @@
            transform="translate(140.1655,462.0449)"><path
              d="M 0,0 V 0"
              style="fill:none;stroke:#dc9af8;stroke-width:25.168;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-             id="path522" /></g></g></g></g></svg>
+             id="path522" /></g></g></g></svg>

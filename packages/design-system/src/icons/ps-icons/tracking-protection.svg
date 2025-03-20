@@ -41,8 +41,6 @@
      inkscape:label="Tracking Protection"
      transform="matrix(1.3333333,0,0,-1.3333333,-76.221736,710.2511)"><g
        id="g600"><g
-         id="g602"
-         clip-path="url(#clipPath606)"><g
            id="g608"
            transform="translate(611.8863,465.9716)"><path
              d="m 0,0 h 25.812 c 11.533,0 20.882,-9.349 20.882,-20.882 v -300.333 c 0,-11.533 -9.349,-20.882 -20.882,-20.882 h -476.899 c -11.532,0 -20.882,9.349 -20.882,20.882 v 118.302"
@@ -107,4 +105,4 @@
            transform="translate(702.679,88.9654)"><path
              d="m 0,0 h -606.756 v -1.947 c 0,-12.832 10.402,-23.234 23.234,-23.234 H -23.234 C -10.402,-25.181 0,-14.779 0,-1.947 Z"
              style="fill:#4285fa;fill-opacity:1;fill-rule:nonzero;stroke:none"
-             id="path656" /></g></g></g></g></svg>
+             id="path656" /></g></g></g></svg>

@@ -41,8 +41,6 @@
      inkscape:label="Dev Site"
      transform="matrix(1.3333333,0,0,-1.3333333,-30.242266,573.92532)"><g
        id="g206"><g
-         id="g208"
-         clip-path="url(#clipPath212)"><g
            id="g214"
            transform="translate(167.8675,417.8597)"><path
              d="m 0,0 h 417.612 c 12.747,0 23.081,-10.334 23.081,-23.081 v -154.915"
@@ -107,4 +105,4 @@
            transform="translate(197.8628,230.41)"><path
              d="M 0,0 C 0,67.732 54.907,122.639 122.639,122.639 190.37,122.639 245.278,67.732 245.278,0 245.278,-67.732 190.37,-122.639 122.639,-122.639 54.907,-122.639 0,-67.732 0,0 Z"
              style="fill:none;stroke:#3bd897;stroke-width:25.168;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-             id="path264" /></g></g></g></g></svg>
+             id="path264" /></g></g></g></svg>

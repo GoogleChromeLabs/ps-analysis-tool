@@ -41,8 +41,6 @@
      inkscape:label="Wiki"
      transform="matrix(1.3333333,0,0,-1.3333333,-60.090665,780.16638)"><g
        id="g666"><g
-         id="g668"
-         clip-path="url(#clipPath672)"><g
            id="g674"
            transform="translate(561.0313,117.5025)"><path
              d="m 0,0 h 25.812 c 11.533,0 20.882,9.349 20.882,20.882 v 300.333 c 0,11.533 -9.349,20.882 -20.882,20.882 h -476.899 c -11.532,0 -20.882,-9.349 -20.882,-20.882 V 202.913"
@@ -216,4 +214,4 @@
            transform="translate(565.4228,580.1248)"><path
              d="M 0,0 15.766,-20 31.533,0 47.296,-20 63.061,0 78.825,-20 94.588,0 l 15.766,-20 15.767,20 15.766,-20 15.766,20 15.768,-20 15.769,20 15.764,-20 15.771,20 15.771,-20 15.773,20 15.773,-20"
              style="fill:none;stroke:#dc9af8;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-             id="path806" /></g></g></g></g></svg>
+             id="path806" /></g></g></g></svg>
