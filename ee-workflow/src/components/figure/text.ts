@@ -74,7 +74,7 @@ export default class Text extends Figure {
     this.p5?.pop();
 
     if (this.runSideEffect) {
-      this.sideEffectOnEnd?.(this);
+      this.sideEffectOnDraw?.(this);
     }
   }
 

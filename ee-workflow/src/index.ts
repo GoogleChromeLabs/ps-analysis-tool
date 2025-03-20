@@ -22,7 +22,7 @@ import Main from './main';
 const mainCanvas = new Main();
 const mainFF = new FigureFactory(mainCanvas);
 
-const IGCanvas = new Main(false);
+const IGCanvas = new Main();
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 
@@ -279,7 +279,7 @@ const bubble = IGFF.circle({
 });
 
 const bubbleFlow = new Animator([bubble], IGFF);
-bubbleFlow.setSideEffectOnEnd(() => {
+bubbleFlow.setSideEffectOnDraw(() => {
   IGCanvas.resetQueuesAndReDrawAll();
   IGCanvas.togglePause();
   mainCanvas.togglePause();
@@ -288,7 +288,7 @@ bubbleFlow.setSideEffectOnEnd(() => {
 
 // Setup flow.
 const flow = new Animator(advertiserFlow, mainFF);
-flow.setSideEffectOnEnd(() => {
+flow.setSideEffectOnDraw(() => {
   IGCanvas.addAnimator(bubbleFlow);
   mainCanvas.togglePause();
   IGCanvas.togglePause();
@@ -453,7 +453,7 @@ const secondBubble = IGFF.circle({
 });
 
 const secondBubbleFlow = new Animator([secondBubble], mainFF);
-secondBubbleFlow.setSideEffectOnEnd(() => {
+secondBubbleFlow.setSideEffectOnDraw(() => {
   IGCanvas.resetQueuesAndReDrawAll();
   IGCanvas.togglePause();
   mainCanvas.togglePause();
@@ -461,7 +461,7 @@ secondBubbleFlow.setSideEffectOnEnd(() => {
 });
 
 const secondFlow = new Animator(secondCircleAnimations, mainFF);
-secondFlow.setSideEffectOnEnd(() => {
+secondFlow.setSideEffectOnDraw(() => {
   IGCanvas.addAnimator(secondBubbleFlow);
   IGCanvas.togglePause();
   mainCanvas.togglePause();

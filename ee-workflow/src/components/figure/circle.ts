@@ -67,7 +67,7 @@ export default class Circle extends Figure {
     this.p5?.pop();
 
     if (this.runSideEffect) {
-      this.sideEffectOnEnd?.(this);
+      this.sideEffectOnDraw?.(this);
     }
   }
 

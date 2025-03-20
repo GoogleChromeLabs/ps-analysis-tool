@@ -93,7 +93,7 @@ export default abstract class Figure {
   /**
    * Function to be executed when the object has done drawing.
    */
-  protected sideEffectOnEnd?: (figure: Figure) => void;
+  protected sideEffectOnDraw?: (figure: Figure) => void;
 
   /**
    * Whether the figure is a checkpoint.
@@ -458,9 +458,9 @@ export default abstract class Figure {
 
   /**
    * Set the function to be executed when the object has done drawing.
-   * @param sideEffectOnEnd - The function to be executed when the object has done drawing.
+   * @param sideEffectOnDraw - The function to be executed when the object has done drawing.
    */
-  setSideEffectOnEnd(sideEffectOnEnd: (figure: Figure) => void) {
-    this.sideEffectOnEnd = sideEffectOnEnd;
+  setSideEffectOnDraw(sideEffectOnDraw: (figure: Figure) => void) {
+    this.sideEffectOnDraw = sideEffectOnDraw;
   }
 }

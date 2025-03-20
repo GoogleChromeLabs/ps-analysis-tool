@@ -58,7 +58,7 @@ export default class Group {
   /**
    * Function to be executed when the animation ends.
    */
-  private sideEffectOnEnd: (() => void) | undefined;
+  private sideEffectOnDraw: (() => void) | undefined;
 
   /**
    * Counter for the number of groups created.
@@ -84,7 +84,7 @@ export default class Group {
     });
 
     if (this.runSideEffect) {
-      this.sideEffectOnEnd?.();
+      this.sideEffectOnDraw?.();
     }
   }
 

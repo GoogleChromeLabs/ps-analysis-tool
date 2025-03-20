@@ -56,7 +56,7 @@ export default class Animator {
   /**
    * Function to be executed when the animation ends.
    */
-  private sideEffectOnEnd: (() => void) | undefined;
+  private sideEffectOnDraw: (() => void) | undefined;
 
   /**
    * Counter for the number of animations created.
@@ -96,7 +96,7 @@ export default class Animator {
       this.index = 0;
 
       if (!skipDraw) {
-        this.sideEffectOnEnd?.();
+        this.sideEffectOnDraw?.();
       }
 
       return true;
@@ -122,8 +122,8 @@ export default class Animator {
    * Sets a side effect to be executed when the animation ends
    * @param sideEffect - function to be executed when the animation ends
    */
-  setSideEffectOnEnd(sideEffect: () => void) {
-    this.sideEffectOnEnd = sideEffect;
+  setSideEffectOnDraw(sideEffect: () => void) {
+    this.sideEffectOnDraw = sideEffect;
   }
 
   /**
