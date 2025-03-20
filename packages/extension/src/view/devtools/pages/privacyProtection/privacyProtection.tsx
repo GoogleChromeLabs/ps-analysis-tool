@@ -74,8 +74,8 @@ const PrivacyProtection = () => {
       extraClasses="min-h-[78vh] w-full"
       contentPanelTitle={I18n.getMessage('antiCovertTrackingDescription')}
       content={content}
-      counterStyles="bg-yellow-500"
-      titleStyles="text-yellow-500"
+      counterStyles="bg-blue-600"
+      titleStyles="text-blue-600"
     />
   );
 };
