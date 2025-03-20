@@ -118,8 +118,8 @@ const Animation = ({
   }, [speedMultiplier, speedMultiplierCallback]);
 
   return (
-    <div className="relative">
-      <div ref={node} className="overflow-auto bg-white" />
+    <div className="relative h-full">
+      <div ref={node} className="overflow-auto bg-white h-full" />
       <div
         id="loading-text-cover"
         className="absolute top-0 left-0 w-20 h-10 bg-white z-50"
