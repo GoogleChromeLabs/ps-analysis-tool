@@ -51,7 +51,7 @@ export default class Animator {
   /**
    * Whether the side effect should be run.
    */
-  protected runSideEffect?: boolean;
+  protected runSideEffect: boolean;
 
   /**
    * Function to be executed when the animation ends.
@@ -83,6 +83,7 @@ export default class Animator {
       }), // last dummy object acts as a placeholder for the end of the animation
     ];
     this.objects.forEach((object) => object.setAnimatorId(this.id));
+    this.runSideEffect = true;
   }
 
   /**
@@ -95,8 +96,12 @@ export default class Animator {
     if (this.index === this.objects.length - 1) {
       this.index = 0;
 
-      if (!skipDraw) {
+      if (!skipDraw && this.runSideEffect) {
         this.sideEffectOnDraw?.();
+      }
+
+      if (!this.runSideEffect) {
+        this.runSideEffect = true;
       }
 
       return true;

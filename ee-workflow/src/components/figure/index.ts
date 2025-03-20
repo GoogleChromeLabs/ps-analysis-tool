@@ -139,6 +139,7 @@ export default abstract class Figure {
     this.mouseClickedHandler = mouseClickedHandler;
     this.mouseMovedHandler = mouseMovedHandler;
     this.onLeaveHandler = onLeaveHandler;
+    this.runSideEffect = true;
   }
 
   /**

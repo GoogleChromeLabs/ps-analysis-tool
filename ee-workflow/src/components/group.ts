@@ -53,12 +53,12 @@ export default class Group {
   /**
    * Whether the side effect should be run.
    */
-  protected runSideEffect?: boolean;
+  protected runSideEffect: boolean;
 
   /**
    * Function to be executed when the animation ends.
    */
-  private sideEffectOnDraw: (() => void) | undefined;
+  private sideEffectOnDraw: ((group: Group) => void) | undefined;
 
   /**
    * Counter for the number of groups created.
@@ -73,6 +73,7 @@ export default class Group {
       `group-${Group.groupCount}` + Math.random().toString(36).slice(2, 9);
     this.figures = figures;
     this.figures.forEach((figure) => figure.setGroupId(this.id));
+    this.runSideEffect = true;
   }
 
   /**
@@ -84,7 +85,9 @@ export default class Group {
     });
 
     if (this.runSideEffect) {
-      this.sideEffectOnDraw?.();
+      this.sideEffectOnDraw?.(this);
+    } else {
+      this.runSideEffect = true;
     }
   }
 
@@ -183,5 +186,21 @@ export default class Group {
    */
   getShouldTravel() {
     return this.figures.some((figure) => figure.getShouldTravel());
+  }
+
+  /**
+   * Set whether the side effect should be run.
+   * @param runSideEffect - boolean indicating if the side effect should be run.
+   */
+  shouldRunSideEffect(runSideEffect: boolean) {
+    this.runSideEffect = runSideEffect;
+  }
+
+  /**
+   * Set the function to be executed when the object has done drawing.
+   * @param sideEffectOnDraw - The function to be executed when the object has done drawing.
+   */
+  setSideEffectOnDraw(sideEffectOnDraw: (group: Group) => void) {
+    this.sideEffectOnDraw = sideEffectOnDraw;
   }
 }

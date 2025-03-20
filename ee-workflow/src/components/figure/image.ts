@@ -83,6 +83,8 @@ export default class Image extends Figure {
 
     if (this.runSideEffect) {
       this.sideEffectOnDraw?.(this);
+    } else {
+      this.runSideEffect = true;
     }
   }
 

@@ -521,12 +521,13 @@ class Main {
 
   /**
    * Loads the previous checkpoint. This will re-render instantly all figures up to the previous checkpoint and start the queue from there.
+   * @returns - The previous checkpoint.
    */
   loadPreviousCheckpoint() {
     const checkpoint = this.popPreviousCheckpoint();
 
     if (!checkpoint) {
-      return;
+      return undefined;
     }
 
     this.togglePause();
@@ -560,7 +561,7 @@ class Main {
     if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
       this.togglePause();
       this.reDrawAll();
-      return;
+      return checkpoint;
     }
 
     const toBeLoadedObjects = [];
@@ -624,8 +625,14 @@ class Main {
 
     this.togglePause();
     this.reDrawAll();
+
+    return checkpoint;
   }
 
+  /**
+   * Loads the next checkpoint. This will re-render instantly all figures up to the next checkpoint and start the queue from there.
+   * @returns - The next checkpoint.
+   */
   loadNextCheckpoint() {
     this.togglePause();
 
@@ -648,6 +655,8 @@ class Main {
 
     this.togglePause();
     this.reDrawAll();
+
+    return this.stepsQueue[0]?.getId();
   }
 
   /**
@@ -717,7 +726,7 @@ class Main {
         );
 
         if (animator && animatorIdToDraw === animator.getId()) {
-          this.addAnimator(animator, true);
+          this.addAnimator(animator, true, false, false);
         }
 
         const toRemoveCount =
@@ -738,13 +747,13 @@ class Main {
         );
 
         if (group) {
-          this.addGroup(group, true);
+          this.addGroup(group, true, false, false);
         }
 
         const toRemoveCount = (group?.getFigures().length || 1) - 1;
         i += toRemoveCount;
       } else {
-        this.addFigure(figure, true);
+        this.addFigure(figure, true, false, false);
       }
     }
 
@@ -756,8 +765,16 @@ class Main {
    * @param figure - The figure to add.
    * @param instant - Whether to add to the instant queue.
    * @param isCheckpoint - Whether to add as a checkpoint.
+   * @param runSideEffect - Whether to run the side effect.
    */
-  addFigure(figure: Figure, instant = false, isCheckpoint = false) {
+  addFigure(
+    figure: Figure,
+    instant = false,
+    isCheckpoint = false,
+    runSideEffect = true
+  ) {
+    figure.shouldRunSideEffect(runSideEffect);
+
     if (isCheckpoint) {
       figure.setCheckpoint(true);
     }
@@ -774,23 +791,32 @@ class Main {
    * @param group - The group to add.
    * @param instant - Whether to add to the instant queue.
    * @param isCheckpoint - Whether to add as a checkpoint.
+   * @param runSideEffect - Whether to run the side effect.
    */
-  addGroup(group: Group, instant = false, isCheckpoint = false) {
+  addGroup(
+    group: Group,
+    instant = false,
+    isCheckpoint = false,
+    runSideEffect = true
+  ) {
+    group.shouldRunSideEffect(runSideEffect);
+
     if (instant) {
       this.groupInstantQueue.push(group);
-      group
-        .getFigures()
-        .forEach((figure, index) =>
-          this.addFigure(figure, instant, index === 0 ? isCheckpoint : false)
-        );
     } else {
       this.groupStepsQueue.push(group);
-      group
-        .getFigures()
-        .forEach((figure, index) =>
-          this.addFigure(figure, instant, index === 0 ? isCheckpoint : false)
-        );
     }
+
+    group
+      .getFigures()
+      .forEach((figure, index) =>
+        this.addFigure(
+          figure,
+          instant,
+          index === 0 ? isCheckpoint : false,
+          runSideEffect
+        )
+      );
   }
 
   /**
@@ -798,31 +824,31 @@ class Main {
    * @param animator - The animator to add.
    * @param instant - Whether to add to the instant queue.
    * @param isCheckpoint - Whether to add as a checkpoint.
+   * @param runSideEffect - Whether to run the side effect.
    */
-  addAnimator(animator: Animator, instant = false, isCheckpoint = false) {
+  addAnimator(
+    animator: Animator,
+    instant = false,
+    isCheckpoint = false,
+    runSideEffect = true
+  ) {
+    animator.shouldRunSideEffect(runSideEffect);
+
     if (instant) {
       this.animatorInstantQueue.push(animator);
-      animator.getObjects().forEach((object, index) => {
-        const _isCheckpoint = isCheckpoint && index === 0;
-
-        if (object instanceof Figure) {
-          this.addFigure(object, instant, _isCheckpoint);
-        } else {
-          this.addGroup(object as Group, instant, _isCheckpoint);
-        }
-      });
     } else {
       this.animatorStepsQueue.push(animator);
-      animator.getObjects().forEach((object, index) => {
-        const _isCheckpoint = isCheckpoint && index === 0;
-
-        if (object instanceof Figure) {
-          this.addFigure(object, instant, _isCheckpoint);
-        } else {
-          this.addGroup(object as Group, instant, _isCheckpoint);
-        }
-      });
     }
+
+    animator.getObjects().forEach((object, index) => {
+      const _isCheckpoint = isCheckpoint && index === 0;
+
+      if (object instanceof Figure) {
+        this.addFigure(object, instant, _isCheckpoint, runSideEffect);
+      } else {
+        this.addGroup(object as Group, instant, _isCheckpoint, runSideEffect);
+      }
+    });
   }
 
   /**
