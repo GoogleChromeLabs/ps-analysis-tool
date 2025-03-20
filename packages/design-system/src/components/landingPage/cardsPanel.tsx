@@ -103,7 +103,7 @@ const CardsPanel = ({
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <div className="mb-3 flex items-center flex-col gap-2">
-                      <Icon height={80} />
+                      <Icon height={45} />
                       <h4 className="font-medium text-xl">{item.name}</h4>
                     </div>
                     <p className="text-sm text-center">{item.description}</p>
