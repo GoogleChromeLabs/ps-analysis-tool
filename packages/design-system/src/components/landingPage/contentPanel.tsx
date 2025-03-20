@@ -77,7 +77,7 @@ const ContentPanel = ({
               </div>
             </div>
             <h3
-              className={`text-lg inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
+              className={`text-lg inline-block mb-5 font-medium cursor-pointer text-raisin-black dark:text-bright-gray`}
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)
