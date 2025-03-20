@@ -119,6 +119,23 @@ const TABS: SidebarItems = {
           },
         },
         children: {
+          [SIDEBAR_ITEMS_KEYS.COOKIES]: {
+            title: () => I18n.getMessage('cookies'),
+            icon: {
+              Element: CookieIcon,
+              props: {
+                className: '[&_path]:fill-granite-gray',
+              },
+            },
+            selectedIcon: {
+              Element: CookieIcon,
+              props: {
+                className: '[&_path]:fill-bright-gray',
+              },
+            },
+            children: {},
+            dropdownOpen: false,
+          },
           [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
             title: () => I18n.getMessage('ipProtection'),
             panel: {
@@ -197,23 +214,6 @@ const TABS: SidebarItems = {
             children: {},
           },
         },
-      },
-      [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-        title: () => I18n.getMessage('cookies'),
-        icon: {
-          Element: CookieIcon,
-          props: {
-            className: '[&_path]:fill-granite-gray',
-          },
-        },
-        selectedIcon: {
-          Element: CookieIcon,
-          props: {
-            className: '[&_path]:fill-bright-gray',
-          },
-        },
-        children: {},
-        dropdownOpen: false,
       },
       [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
         title: () => I18n.getMessage('siteBoundaries'),
