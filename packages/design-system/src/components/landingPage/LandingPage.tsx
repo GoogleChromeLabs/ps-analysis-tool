@@ -44,6 +44,7 @@ export interface LandingPageProps {
   showQuickLinks?: boolean;
   showSupportLink?: boolean;
   hasTabs?: boolean;
+  isLandingPageContainer?: boolean;
 }
 
 const LandingPage = ({
@@ -59,6 +60,7 @@ const LandingPage = ({
   showQuickLinks = true,
   showSupportLink = false,
   hasTabs = false,
+  isLandingPageContainer = false,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
@@ -130,7 +132,7 @@ const LandingPage = ({
             </div>
           )}
         </div>
-        {showQuickLinks && <QuickLinksList />}
+        {isLandingPageContainer && showQuickLinks && <QuickLinksList />}
       </div>
     </div>
   );

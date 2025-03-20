@@ -86,6 +86,7 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
     <>
       <LandingPage
         {...props}
+        isLandingPageContainer
         containerStyles={independentStory ? 'z-0 absolute top-0 ' : ''}
         contentPanel={
           <ContentPanel
