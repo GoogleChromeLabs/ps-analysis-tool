@@ -39,7 +39,6 @@ import {
 } from './canvas';
 import type { P5, Circle } from './types.ts';
 import { getCoordinateValues } from './utils/getCoordinateValues.ts';
-import increasePixelDensityConditionally from './utils/increasePixelDensityConditionally.ts';
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
   app.joinInterestGroup.joinings = [];
@@ -733,9 +732,6 @@ export const interestGroupSketch = (p: P5) => {
 
     if (props.platform) {
       app.platform = props.platform;
-      increasePixelDensityConditionally(app.p);
-      increasePixelDensityConditionally(app.igp);
-      increasePixelDensityConditionally(app.up);
     }
 
     app.isAutoExpand = props.autoExpand;

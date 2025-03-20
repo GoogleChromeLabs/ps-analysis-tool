@@ -20,12 +20,14 @@ import config from '../config';
 import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
 import type { P5 } from '../types';
+import increasePixelDensityConditionally from '../utils/increasePixelDensityConditionally';
 
 export const setupInterestGroupCanvas = (p: P5) => {
   try {
     const { height, width } = calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
 
+    increasePixelDensityConditionally(p);
     overlayCanvas.parent('interest-canvas');
     overlayCanvas.style('z-index', '2');
     p.textSize(config.canvas.fontSize);
