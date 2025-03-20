@@ -59,27 +59,53 @@ const ContentPanel = ({
       <div className="flex gap-5 flex-wrap">
         {content.map((item, index) => (
           <div
-            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
+            className="w-72 min-h-80  bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border-2 border-privacy-blue dark:border-quartz p-5 relative"
             key={index}
           >
-            <div
-              className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5 cursor-pointer"
-              onClick={() =>
-                item.sidebarItemKey
-                  ? updateSelectedItemKey(item.sidebarItemKey)
-                  : null
-              }
-            >
+            <div className="flex justify-between">
               <div
-                className={`w-9 h-9 flex justify-center items-center rounded-md ${counterStyles}`}
+                className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5 cursor-pointer"
+                onClick={() =>
+                  item.sidebarItemKey
+                    ? updateSelectedItemKey(item.sidebarItemKey)
+                    : null
+                }
               >
-                <span className="text-xxl text-white dark:black font-extrabold">
-                  {index + 1}
-                </span>
+                <div
+                  className={`w-9 h-9 flex justify-center items-center rounded-md ${counterStyles}`}
+                >
+                  <span className="text-xxl text-white dark:black font-extrabold">
+                    {index + 1}
+                  </span>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="w-4 h-4" title="View Documentation">
+                  <Link href={addUTMParams(item.url)} rel="noreferer">
+                    <DescriptionIcon
+                      height="20"
+                      width="20"
+                      className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                    />
+                  </Link>
+                </div>
+                {item.onClick && item?.storyUrl && (
+                  <div
+                    className="w-4 h-4 cursor-pointer"
+                    title="View Story"
+                    onClick={item.onClick}
+                  >
+                    <WebStoriesIcon
+                      className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                      height="20"
+                      width="20"
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <h3
-              className={`text-lg inline-block font-medium mb-5 cursor-pointer ${titleStyles}`}
+              className={`text-lg inline-block font-medium mb-5 cursor-pointer text-privacy-blue ${titleStyles}`}
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)
@@ -91,30 +117,6 @@ const ContentPanel = ({
             <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
               {item.description()}
             </p>
-            <div className="absolute top-10 right-2.5 flex gap-2">
-              <div className="w-4 h-4" title="View Documentation">
-                <Link href={addUTMParams(item.url)} rel="noreferer">
-                  <DescriptionIcon
-                    height="20"
-                    width="20"
-                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                  />
-                </Link>
-              </div>
-              {item.onClick && item?.storyUrl && (
-                <div
-                  className="w-4 h-4 cursor-pointer"
-                  title="View Story"
-                  onClick={item.onClick}
-                >
-                  <WebStoriesIcon
-                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                    height="20"
-                    width="20"
-                  />
-                </div>
-              )}
-            </div>
           </div>
         ))}
       </div>
