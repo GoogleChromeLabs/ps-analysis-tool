@@ -37,14 +37,12 @@ export interface ContentPanelProps {
     onClick: () => void;
     sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
-  titleStyles?: string;
   counterStyles?: string;
 }
 
 const ContentPanel = ({
   title,
   content,
-  titleStyles = '',
   counterStyles = '',
 }: ContentPanelProps) => {
   const updateSelectedItemKey = useSidebar(
@@ -105,7 +103,7 @@ const ContentPanel = ({
               </div>
             </div>
             <h3
-              className={`text-lg inline-block font-medium mb-5 cursor-pointer text-privacy-blue ${titleStyles}`}
+              className={`text-lg font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)

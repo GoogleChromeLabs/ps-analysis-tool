@@ -23,7 +23,6 @@ import {
   SIDEBAR_ITEMS_KEYS,
   TopicsIcon,
   AttributionIcon,
-  PSCookieIcon,
   PSSiteBoundriesIcon,
   PSPrivateAdvertisingIcon,
   PSTrackingProtectionIcon,
@@ -61,15 +60,31 @@ export const PINNED_ITEMS = [
 
 export const FEATURE_LIST = [
   {
-    name: I18n.getMessage('cookies'),
-    icon: PSCookieIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+    name: I18n.getMessage('trackingProtection'),
+    icon: PSTrackingProtectionIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
     description:
-      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
+      'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
     buttons: [
       {
-        name: 'Insights',
+        name: 'Cookies',
         sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+      },
+      {
+        name: 'IP Protection',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
+      },
+      {
+        name: I18n.getMessage('bounceTracking'),
+        sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
+      },
+      {
+        name: 'User Agent Reduction',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
+      },
+      {
+        name: 'Private State Tokens',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
       },
     ],
   },
@@ -119,31 +134,6 @@ export const FEATURE_LIST = [
       {
         name: I18n.getMessage('privateAggregation'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
-      },
-    ],
-  },
-  {
-    name: I18n.getMessage('trackingProtection'),
-    icon: PSTrackingProtectionIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description:
-      'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
-    buttons: [
-      {
-        name: 'IP Protection',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
-      },
-      {
-        name: I18n.getMessage('bounceTracking'),
-        sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
-      },
-      {
-        name: I18n.getMessage('fingerprinting'),
-        sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
-      },
-      {
-        name: 'Private State Tokens',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
       },
     ],
   },
