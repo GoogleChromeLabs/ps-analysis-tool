@@ -18,10 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  SIDEBAR_ITEMS_KEYS,
-  DevSiteLandingIcon,
-} from '@google-psat/design-system';
+import { SIDEBAR_ITEMS_KEYS, PSDevSiteIcon } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -29,7 +26,7 @@ import {
 import LandingPage from '../landingePage';
 
 const DevSite = () => {
-  const icon = <DevSiteLandingIcon width="150" />;
+  const icon = <PSDevSiteIcon width="200" height="90" />;
 
   return (
     <LandingPage

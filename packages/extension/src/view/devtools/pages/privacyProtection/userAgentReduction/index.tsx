@@ -24,6 +24,7 @@ const UserAgentReduction = () => {
   return (
     <div data-testid="user-agent-reduction-content" className="h-full w-full">
       <LandingPage
+        isLandingPageContainer
         title={I18n.getMessage('userAgentReduction')}
         psInfoKey={PSInfoKey.UserAgentReduction}
         extraClasses="max-w-2xl h-fit"

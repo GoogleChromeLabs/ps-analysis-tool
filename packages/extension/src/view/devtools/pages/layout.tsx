@@ -244,7 +244,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   const handleUpdate = useCallback(
     (key: string | null) => {
-      updateSelectedItemKey(key || SIDEBAR_ITEMS_KEYS.DASHBOARD);
+      updateSelectedItemKey(key || SIDEBAR_ITEMS_KEYS.COOKIES);
     },
     [updateSelectedItemKey]
   );
