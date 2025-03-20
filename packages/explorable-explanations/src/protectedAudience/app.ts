@@ -51,6 +51,7 @@ type SketchSharedProps = Pick<
   | 'isInteractiveMode'
   | 'isMultiSeller'
   | 'setHasLastNodeVisited'
+  | 'platform'
 >;
 
 type CoordinatesWithIndex = Coordinates & {
@@ -67,6 +68,7 @@ export type App = {
   isMultiSeller: boolean;
   cancelPromise: boolean;
   mouseOutOfDiv: boolean;
+  platform: string;
   mouseX: number;
   mouseY: number;
   shouldRespondToClick: boolean;
@@ -175,6 +177,7 @@ const app: App = {
   p: null,
   igp: null,
   up: null,
+  platform: '',
   closeButton: null,
   color: null,
   multSellerCheckBox: null,

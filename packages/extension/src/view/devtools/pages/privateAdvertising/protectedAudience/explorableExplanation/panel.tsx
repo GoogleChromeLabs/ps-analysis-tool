@@ -41,6 +41,7 @@ import classNames from 'classnames';
  */
 import Header from '../../../explorableExplanation/header';
 import type { CurrentSiteData, StepType } from './auctionEventTransformers';
+import { useSettings } from '../../../../stateProviders';
 
 const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
@@ -200,6 +201,10 @@ const Panel = ({
   const { setActiveTab, highlightTab } = useTabs(({ actions }) => ({
     setActiveTab: actions.setActiveTab,
     highlightTab: actions.highlightTab,
+  }));
+
+  const { OSInformation } = useSettings(({ state }) => ({
+    OSInformation: state.OSInformation,
   }));
 
   useEffect(() => {
@@ -459,6 +464,7 @@ const Panel = ({
         setSelectedAdUnit={setSelectedAdUnit}
         setSelectedDateTime={setSelectedDateTime}
         setHasLastNodeVisited={setHasLastNodeVisited}
+        platform={OSInformation ?? ''}
       />
       <ReactP5Wrapper sketch={userSketch} />
       <DraggableTray ref={draggableTrayRef} />

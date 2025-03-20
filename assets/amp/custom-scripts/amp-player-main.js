@@ -25,6 +25,7 @@ let stateObject = {
   deltaY: 0,
   doesHaveMorePages: false,
   previousStories: [],
+  loadStoriesOnScroll: true,
 };
 
 function setPlayer(playerEl) {
@@ -201,9 +202,10 @@ const sendEventToParent = () => {
 
 function scrollListener() {
   if (
-    Math.ceil(window.scrollY + window.innerHeight) >=
+    Math.ceil(window.scrollY + window.innerHeight) >
       document.documentElement.scrollHeight &&
-    !document.body.classList.contains('lightbox-open')
+    !document.body.classList.contains('lightbox-open') &&
+    stateObject.loadStoriesOnScroll
   ) {
     sendEventToParent();
   }
@@ -295,6 +297,7 @@ const messageListener = ({
       window.scrollTo({ top: 0, left: 0 });
       document.getElementById('show-more-indicator').classList.add('bounce');
       document.getElementById('show-more-indicator').onclick = () => {
+        stateObject.loadStoriesOnScroll = false;
         sendEventToParent();
       };
 
@@ -304,6 +307,21 @@ const messageListener = ({
           .classList.remove('bounce');
       }, 2000);
     }
+
+    const scrollEndListener = () => {
+      stateObject.loadStoriesOnScroll = true;
+
+      stateObject.cards[scrollToNext].removeEventListener(
+        'scrollend',
+        scrollEndListener
+      );
+    };
+
+    stateObject.cards[scrollToNext].addEventListener(
+      'scrollend',
+      scrollEndListener
+    );
+
     stateObject.cards[scrollToNext].scrollIntoView({ behavior: 'smooth' });
   } catch (error) {
     //Fail silently

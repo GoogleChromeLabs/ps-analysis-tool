@@ -26,7 +26,7 @@ export const setupUserCanvas = (p: P5) => {
   try {
     const { height, width } = calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
-    p.pixelDensity(2);
+
     overlayCanvas.parent('user-canvas');
     overlayCanvas.style('z-index', '1');
     p.textSize(config.canvas.fontSize);
