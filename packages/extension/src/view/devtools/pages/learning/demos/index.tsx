@@ -18,10 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  SIDEBAR_ITEMS_KEYS,
-  DemosLandingIcon,
-} from '@google-psat/design-system';
+import { SIDEBAR_ITEMS_KEYS, PSDemosIcon } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -29,7 +26,7 @@ import {
 import LandingPage from '../landingePage';
 
 const Demos = () => {
-  const icon = <DemosLandingIcon width="150" />;
+  const icon = <PSDemosIcon width="200" height="90" />;
 
   return (
     <LandingPage

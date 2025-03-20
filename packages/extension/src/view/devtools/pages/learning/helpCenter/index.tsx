@@ -20,7 +20,7 @@
 import React from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
-  HelpCenterLandingIcon,
+  PSHelpCenterIcon,
 } from '@google-psat/design-system';
 
 /**
@@ -29,7 +29,7 @@ import {
 import LandingPage from '../landingePage';
 
 const HelpCenter = () => {
-  const icon = <HelpCenterLandingIcon width="150" />;
+  const icon = <PSHelpCenterIcon width="200" height="90" />;
 
   return (
     <LandingPage
