@@ -41,7 +41,13 @@ const formatRawData = async (rawData) => {
   // Format the data.
   cookies.forEach((cookie) => {
     const platform = cookie['Platform'];
-    const category = cookie['Category'];
+    let category = cookie['Category'];
+    if (
+      category.toLowerCase() === 'security' ||
+      category.toLowerCase() === 'personalization'
+    ) {
+      category = 'Functional';
+    }
     let name = cookie['Cookie / Data Key name'];
     const domain = cookie['Domain'];
     const description = cookie['Description'];
