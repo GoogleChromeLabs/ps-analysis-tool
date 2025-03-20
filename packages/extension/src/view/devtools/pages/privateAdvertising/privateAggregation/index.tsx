@@ -25,6 +25,7 @@ const PrivateAggregation = () => {
   return (
     <div data-testid="protected-audience-content" className="h-full w-full">
       <LandingPage
+        isLandingPageContainer
         title={I18n.getMessage('privateAggregation')}
         psInfoKey={PSInfoKey.PrivateAggregation}
         extraClasses="max-w-2xl h-fit"

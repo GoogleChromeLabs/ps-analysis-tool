@@ -24,6 +24,7 @@ const PrivateStateTokens = () => {
   return (
     <div data-testid="private-state-tokens-content" className="h-full w-full">
       <LandingPage
+        isLandingPageContainer
         title={I18n.getMessage('privateStateTokens')}
         psInfoKey={PSInfoKey.PrivateStateTokens}
         extraClasses="max-w-2xl h-fit"

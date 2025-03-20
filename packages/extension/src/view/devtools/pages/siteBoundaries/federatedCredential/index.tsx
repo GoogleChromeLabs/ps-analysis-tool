@@ -24,6 +24,7 @@ const FederatedCredential = () => {
   return (
     <div data-testid="federated-credential-content" className="h-full w-full">
       <LandingPage
+        isLandingPageContainer
         title={I18n.getMessage('fedcm')}
         psInfoKey={PSInfoKey.FedCM}
         extraClasses="max-w-2xl h-fit"
