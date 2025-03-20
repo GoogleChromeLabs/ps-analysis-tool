@@ -42,8 +42,7 @@ type LandingPageContainerProps = LandingPageProps & {
 const LandingPageContainer = (props: LandingPageContainerProps) => {
   const [independentStory, setIndependentStory] = useState<string>('');
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const { children, contentPanelTitle, content, counterStyles, titleStyles } =
-    props;
+  const { children, contentPanelTitle, content, counterStyles } = props;
 
   useEffect(() => {
     if (!independentStory || !iframeRef.current) {
@@ -98,7 +97,6 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
               };
             })}
             counterStyles={counterStyles}
-            titleStyles={titleStyles}
           />
         }
       >

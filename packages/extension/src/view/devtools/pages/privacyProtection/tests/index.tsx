@@ -89,7 +89,7 @@ describe('PrivacyProtection Landing Pages', () => {
     act(() => {
       render(<PrivacyProtection />);
     });
-    expect(await screen.findByText('Privacy Protection')).toBeInTheDocument();
+    expect(await screen.findByText('Tracking Protection')).toBeInTheDocument();
   });
 
   it('should render IPProtection', async () => {
