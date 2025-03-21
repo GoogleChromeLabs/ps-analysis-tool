@@ -9430,5 +9430,14 @@
   },
   "OCD__u_description": {
     "message": "Tracks interaction on a website after having clicked on a Bing ad"
+  },
+  "RWS_rationale_https___webtru_io": {
+    "message": "webtru, a CMP tool provided by DataSign"
+  },
+  "RWS_rationale_https___bunsin_io": {
+    "message": "Bunsin, a dummy email address app provided by DataSign"
+  },
+  "RWS_rationale_https___brendanjkane_com": {
+    "message": "Brendan Kane is Hook Point's founder and CEO. This is clearly stated on Brendan's website, including links to Hook Point's website, and Brendan's face and name are also featured on Hook Point's website."
   }
 }
