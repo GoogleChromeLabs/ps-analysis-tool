@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { default as FigureFactory } from './figure/figureFactory';
+export * from './figure/figureFactory';
 export { default as Group } from './group';
 export { default as Animator } from './animator';

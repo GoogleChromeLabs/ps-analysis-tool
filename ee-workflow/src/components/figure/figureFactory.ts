@@ -25,7 +25,7 @@ import Image from './image';
 import Line from './line';
 import Text from './text';
 
-type NextCoordinates = {
+export type NextCoordinates = {
   left: { x: number; y: number };
   right: { x: number; y: number };
   up: { x: number; y: number };
@@ -294,6 +294,8 @@ export default class FigureFactory {
     y,
     endX,
     endY,
+    endXwith,
+    endYwith,
     stroke,
     hasArrow,
     shouldTravel,
@@ -303,12 +305,16 @@ export default class FigureFactory {
     mouseMoved,
     onLeave,
   }: FigureParams & {
-    endX: number;
-    endY: number;
+    endX?: number;
+    endY?: number;
+    endXwith?: number;
+    endYwith?: number;
     hasArrow?: boolean;
   }): Line {
     const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
 
+    endX = endX ?? possibleX + (endXwith ?? 0);
+    endY = endY ?? possibleY + (endYwith ?? 0);
     this.lineNextTips(possibleX, possibleY, endX, endY);
 
     const line = new Line(
@@ -348,7 +354,10 @@ export default class FigureFactory {
         _figure.setEndY(currentY);
         _figure.draw();
 
-        if (Math.round(currentX) === endX && Math.round(currentY) === endY) {
+        if (
+          Math.round(currentX) === Math.round(endX) &&
+          Math.round(currentY) === Math.round(endY)
+        ) {
           return true;
         }
 
