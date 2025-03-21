@@ -21,7 +21,7 @@ const darkTheme = {
   base02: '#373b41', // Object border
   base03: '#969896', // NA
   base04: '#b4b7b4', // Object size
-  base05: '#c5c8c6', // undefined data type
+  base05: '#816ac7', // undefined data type
   base06: '#e0e0e0', // NA
   base07: '#7cacf8', // braceColor & object key color
   base08: '#CC342B', // NaN data type
@@ -29,7 +29,7 @@ const darkTheme = {
   base0A: '#FBA922', // null and regex data type
   base0B: '#816ac7', // float data type
   base0C: '#7cacf8', // array key
-  base0D: '#3971ED', // date and function data type
+  base0D: '#816ac7', // date and function data type
   base0E: '#816ac7', // boolean data type
   base0F: '#816ac7', // integer data type
 };
