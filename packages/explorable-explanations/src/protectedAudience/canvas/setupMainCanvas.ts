@@ -25,14 +25,15 @@ import config from '../config';
 import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
 import type { P5 } from '../types';
+import increasePixelDensityConditionally from '../utils/increasePixelDensityConditionally';
 
 export const setupMainCanvas = (p: P5, pause = false) => {
   try {
     const { height, width } = calculateCanvasDimensions();
     const canvas = p.createCanvas(width, height);
 
+    increasePixelDensityConditionally(p);
     p.smooth();
-    p.pixelDensity(2);
     canvas.parent('ps-canvas');
     canvas.style('z-index', '0');
     p.background(config.canvas.background);

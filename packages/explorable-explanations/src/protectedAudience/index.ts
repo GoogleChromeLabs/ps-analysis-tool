@@ -730,6 +730,10 @@ export const interestGroupSketch = (p: P5) => {
       app.setSelectedAdUnit = props.setSelectedAdUnit;
     }
 
+    if (props.platform) {
+      app.platform = props.platform;
+    }
+
     app.isAutoExpand = props.autoExpand;
 
     if (

@@ -24,6 +24,7 @@ const IPProtection = () => {
   return (
     <div data-testid="ip-protection-content" className="h-full w-full">
       <LandingPage
+        isLandingPageContainer
         title={I18n.getMessage('ipProtection')}
         psInfoKey={PSInfoKey.IPProtection}
         extraClasses="max-w-2xl h-fit"

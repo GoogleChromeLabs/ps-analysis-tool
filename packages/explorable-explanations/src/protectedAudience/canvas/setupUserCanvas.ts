@@ -21,12 +21,13 @@ import config from '../config';
 import app from '../app';
 import { calculateCanvasDimensions } from '../utils';
 import type { P5 } from '../types';
+import increasePixelDensityConditionally from '../utils/increasePixelDensityConditionally';
 
 export const setupUserCanvas = (p: P5) => {
   try {
     const { height, width } = calculateCanvasDimensions();
     const overlayCanvas = p.createCanvas(width, height);
-    p.pixelDensity(2);
+    increasePixelDensityConditionally(p);
     overlayCanvas.parent('user-canvas');
     overlayCanvas.style('z-index', '1');
     p.textSize(config.canvas.fontSize);

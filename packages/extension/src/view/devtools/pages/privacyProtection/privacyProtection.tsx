@@ -26,6 +26,15 @@ import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
+    title: () => 'Cookies',
+    description: () =>
+      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
+    url: 'https://developers.google.com/privacy-sandbox/cookies',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/chrome-shifts-to-user-choice-for-third-party-cookies/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+  },
+  {
     title: () => I18n.getMessage('ipProtection'),
     description: () => I18n.getMessage('ipProtectionDescription'),
     url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
@@ -61,12 +70,12 @@ const content = [
 const PrivacyProtection = () => {
   return (
     <LandingPageContainer
-      title="Privacy Protection"
+      title="Tracking Protection"
       extraClasses="min-h-[78vh] w-full"
       contentPanelTitle={I18n.getMessage('antiCovertTrackingDescription')}
       content={content}
-      counterStyles="bg-yellow-500"
-      titleStyles="text-yellow-500"
+      counterStyles="bg-blue-600"
+      titleStyles="text-blue-600"
     />
   );
 };

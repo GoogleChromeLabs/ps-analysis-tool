@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,17 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
+import type p5 from 'p5';
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
 
-const BounceTracking = () => {
-  return (
-    <div data-testid="bounce-tracking-content" className="h-full w-full">
-      <LandingPage
-        isLandingPageContainer
-        title={I18n.getMessage('bounceTrackingMitigation')}
-        psInfoKey={PSInfoKey.BounceTracking}
-        extraClasses="max-w-2xl h-fit"
-      />
-    </div>
-  );
+const increasePixelDensityConditionally = (p: p5 | null) => {
+  if ((!app.platform && app.platform.startsWith('Chrome')) || !p) {
+    return;
+  }
+  p.pixelDensity(2);
 };
 
-export default BounceTracking;
+export default increasePixelDensityConditionally;

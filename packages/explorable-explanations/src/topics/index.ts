@@ -690,6 +690,7 @@ export function topicsAnimation(
       while (app.visitIndex < visitIndexStart) {
         app.play();
       }
+      app.inspectedCircleIndex = visitIndexStart - 1;
     }
 
     // permanently remove the loading text cover if visible

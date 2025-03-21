@@ -15,12 +15,12 @@
  */
 import type { FunctionComponent, SVGProps } from 'react';
 import {
-  WikiIcon,
-  WebStoriesIcon,
-  DevGuideIcon,
-  Help,
   SIDEBAR_ITEMS_KEYS,
-  DemosIcon,
+  PSHelpCenterIcon,
+  PSDevSiteIcon,
+  PSWikiIcon,
+  PSStoriesIcon,
+  PSDemosIcon,
 } from '@google-psat/design-system';
 
 export interface FeaturedItems {
@@ -37,7 +37,7 @@ export interface FeaturedItems {
 export const FEATURED_ITEMS = [
   {
     name: 'Help Center',
-    icon: Help,
+    icon: PSHelpCenterIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
     title: 'Need help with Privacy Sandbox?',
     description:
@@ -45,7 +45,7 @@ export const FEATURED_ITEMS = [
   },
   {
     name: 'Dev Site',
-    icon: DevGuideIcon,
+    icon: PSDevSiteIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
     title: 'Ready to start developing with the Privacy Sandbox?',
     description:
@@ -56,7 +56,7 @@ export const FEATURED_ITEMS = [
   },
   {
     name: 'Wiki',
-    icon: WikiIcon,
+    icon: PSWikiIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
     title: 'Looking for in-depth guidance on using PSAT?',
     description:
@@ -67,7 +67,7 @@ export const FEATURED_ITEMS = [
   },
   {
     name: 'Stories',
-    icon: WebStoriesIcon,
+    icon: PSStoriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
     description:
       'Explore interactive web stories to grasp the fundamental concepts of the Privacy Sandbox and its impact on the web.',
@@ -77,7 +77,7 @@ export const FEATURED_ITEMS = [
   },
   {
     name: 'Demos',
-    icon: DemosIcon,
+    icon: PSDemosIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
     title: 'Want to see Privacy Sandbox APIs in action?',
     description:

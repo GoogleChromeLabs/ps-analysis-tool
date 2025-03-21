@@ -44,7 +44,7 @@ const ContentPanel = () => {
       event.stopPropagation();
 
       const firstFrame =
-        Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.COOKIES;
+        Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX;
 
       navigateTo(sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey);
     },

@@ -20,13 +20,13 @@ import {
   GroupsIcon,
   CookieIcon,
   RelatedWebsiteSetsIcon,
-  PrivacyProtectionIcon,
-  SiteBoundariesIcon,
   SIDEBAR_ITEMS_KEYS,
-  PrivateAdvertisingIcon,
   TopicsIcon,
   AttributionIcon,
-  LearningIcon,
+  PSSiteBoundriesIcon,
+  PSPrivateAdvertisingIcon,
+  PSTrackingProtectionIcon,
+  PSLearningIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -60,21 +60,37 @@ export const PINNED_ITEMS = [
 
 export const FEATURE_LIST = [
   {
-    name: I18n.getMessage('cookies'),
-    icon: CookieIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+    name: I18n.getMessage('trackingProtection'),
+    icon: PSTrackingProtectionIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
     description:
-      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
+      'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
     buttons: [
       {
-        name: 'Insights',
+        name: 'Cookies',
         sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+      },
+      {
+        name: 'IP Protection',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
+      },
+      {
+        name: I18n.getMessage('bounceTracking'),
+        sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
+      },
+      {
+        name: 'User Agent Reduction',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
+      },
+      {
+        name: 'Private State Tokens',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
       },
     ],
   },
   {
     name: I18n.getMessage('siteBoundaries'),
-    icon: SiteBoundariesIcon,
+    icon: PSSiteBoundriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description: I18n.getMessage('siteBoundariesDescription'),
     buttons: [
@@ -98,7 +114,7 @@ export const FEATURE_LIST = [
   },
   {
     name: I18n.getMessage('privateAdvertising'),
-    icon: PrivateAdvertisingIcon,
+    icon: PSPrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
     description:
       'Private-preserving APIs supporting critical advertising use cases without relying on cross-site tracking, while providing accurate relevance information and measurement data for digital ads.',
@@ -122,33 +138,8 @@ export const FEATURE_LIST = [
     ],
   },
   {
-    name: I18n.getMessage('trackingProtection'),
-    icon: PrivacyProtectionIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description:
-      'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
-    buttons: [
-      {
-        name: 'IP Protection',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
-      },
-      {
-        name: I18n.getMessage('bounceTracking'),
-        sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
-      },
-      {
-        name: I18n.getMessage('fingerprinting'),
-        sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
-      },
-      {
-        name: 'Private State Tokens',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
-      },
-    ],
-  },
-  {
     name: 'Learning',
-    icon: LearningIcon,
+    icon: PSLearningIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
     description:
       'Explore and learn everything about the Privacy Sandbox via the Help Center, developer documentation, and Stories, and learn about PSAT via the wiki.',

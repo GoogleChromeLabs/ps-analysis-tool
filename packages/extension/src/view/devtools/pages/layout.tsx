@@ -120,40 +120,47 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       const data = { ...prev };
       const psData = data[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX];
 
-      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
+      psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
+        SIDEBAR_ITEMS_KEYS.COOKIES
+      ].panel = {
         Element: Cookies,
         props: { setFilteredCookies },
       };
-      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].children = Object.keys(
-        tabFrames || {}
-      ).reduce<SidebarItems>((acc, url) => {
-        const popupTitle = I18n.getMessage('cookiesUsedByFrame', [url]);
+      psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
+        SIDEBAR_ITEMS_KEYS.COOKIES
+      ].children = Object.keys(tabFrames || {}).reduce<SidebarItems>(
+        (acc, url) => {
+          const popupTitle = I18n.getMessage('cookiesUsedByFrame', [url]);
 
-        acc[url] = {
-          title: url,
-          popupTitle,
-          panel: {
-            Element: Cookies,
-            props: { setFilteredCookies },
-          },
-          icon: {
-            Element: CookieIcon,
-          },
-          selectedIcon: {
-            Element: CookieIconWhite,
-          },
-          children: {},
-          isBlurred: !frameHasCookies?.[url],
-        };
+          acc[url] = {
+            title: url,
+            popupTitle,
+            panel: {
+              Element: Cookies,
+              props: { setFilteredCookies },
+            },
+            icon: {
+              Element: CookieIcon,
+            },
+            selectedIcon: {
+              Element: CookieIconWhite,
+            },
+            children: {},
+            isBlurred: !frameHasCookies?.[url],
+          };
 
-        return acc;
-      }, {});
+          return acc;
+        },
+        {}
+      );
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
       if (showInspectButton) {
-        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle = {
+        psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
+          SIDEBAR_ITEMS_KEYS.COOKIES
+        ].extraInterfaceToTitle = {
           Element: InspectButton,
           props: {
             isInspecting,
@@ -164,7 +171,9 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           },
         };
       } else {
-        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle = {};
+        psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
+          SIDEBAR_ITEMS_KEYS.COOKIES
+        ].extraInterfaceToTitle = {};
       }
 
       return data;
@@ -191,9 +200,9 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   const cookieDropdownOpen = useMemo(() => {
     return (
-      sidebarItems[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]?.children?.[
-        SIDEBAR_ITEMS_KEYS.COOKIES
-      ]?.dropdownOpen ?? false
+      sidebarItems[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]?.children[
+        SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+      ]?.children?.[SIDEBAR_ITEMS_KEYS.COOKIES]?.dropdownOpen ?? false
     );
   }, [sidebarItems]);
 
@@ -228,7 +237,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
     lastUrl.current = tabUrl;
 
-    updateSelectedItemKey(selectedFrame || SIDEBAR_ITEMS_KEYS.COOKIES);
+    updateSelectedItemKey(selectedFrame || SIDEBAR_ITEMS_KEYS.DASHBOARD);
   }, [cookiesAnalyzed, selectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
