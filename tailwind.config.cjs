@@ -220,6 +220,8 @@ module.exports = {
       'selection-yellow-dark': '#dbdb48',
       'cultured-grey': '#F7F7F7',
       mahogany: '#CC3300',
+      blueberry: '#4285FA',
+      celeste: '#B1F8F2',
     },
     borderColor: {
       ...colors,
@@ -241,6 +243,9 @@ module.exports = {
       'anti-flash-white': '#F1F3F4',
       'dark-gray-x11': '#A9A9A9',
       'dark-grey': '#AAAAAA',
+      'privacy-blue': '#4285fa',
+      'privacy-green': '#3bd897',
+      'privacy-purple': '#dc9af8',
     },
     colors: {
       ...colors,

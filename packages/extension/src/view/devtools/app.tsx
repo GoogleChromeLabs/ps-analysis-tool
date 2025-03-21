@@ -47,8 +47,12 @@ const App: React.FC = () => {
 
   const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
 
+  const isChromeRuntimeAvailable = Boolean(chrome.runtime?.onMessage);
+
   const reloadTexts = useRef({
-    displayText: I18n.getMessage('extensionUpdated'),
+    displayText: isChromeRuntimeAvailable
+      ? I18n.getMessage('extensionUpdated')
+      : 'Something went wrong.',
     buttonText: I18n.getMessage('refreshPanel'),
   });
 
@@ -77,8 +81,9 @@ const App: React.FC = () => {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
           newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
-            SIDEBAR_ITEMS_KEYS.COOKIES
-          ].dropdownOpen = data?.cookieDropdownOpen;
+            SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+          ].children[SIDEBAR_ITEMS_KEYS.COOKIES].dropdownOpen =
+            data?.cookieDropdownOpen;
           return newSidebarData;
         });
       }
@@ -100,7 +105,7 @@ const App: React.FC = () => {
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
         ref={contextInvalidatedRef}
       >
-        {!contextInvalidated ? (
+        {!contextInvalidated && isChromeRuntimeAvailable ? (
           <Layout setSidebarData={setSidebarData} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">

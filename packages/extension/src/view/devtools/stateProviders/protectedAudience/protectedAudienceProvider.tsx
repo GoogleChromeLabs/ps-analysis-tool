@@ -321,8 +321,8 @@ const Provider = ({ children }: PropsWithChildren) => {
                     ),
                   ],
                   bidCurrency: bidCurrency ?? '',
-                  winningBid: highestBidData.bid ?? 0,
-                  winningBidder: highestBidData.ownerOrigin ?? '',
+                  winningBid: highestBidData?.bid ?? 0,
+                  winningBidder: highestBidData?.ownerOrigin ?? '',
                 };
               }
             );
@@ -372,17 +372,20 @@ const Provider = ({ children }: PropsWithChildren) => {
       setNoBids({});
       setReceivedBids([]);
       setAdsAndBidders({});
+      setAuctionEvents({});
     },
     []
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
-    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.webNavigation?.onCommitted?.addListener(
+      onCommittedNavigationListener
+    );
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
-      chrome.webNavigation.onCommitted.removeListener(
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation?.onCommitted?.removeListener(
         onCommittedNavigationListener
       );
     };

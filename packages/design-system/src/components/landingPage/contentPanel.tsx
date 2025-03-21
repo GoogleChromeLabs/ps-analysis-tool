@@ -37,14 +37,12 @@ export interface ContentPanelProps {
     onClick: () => void;
     sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
-  titleStyles?: string;
   counterStyles?: string;
 }
 
 const ContentPanel = ({
   title,
   content,
-  titleStyles = '',
   counterStyles = '',
 }: ContentPanelProps) => {
   const updateSelectedItemKey = useSidebar(
@@ -79,7 +77,7 @@ const ContentPanel = ({
               </div>
             </div>
             <h3
-              className={`text-lg inline-block font-medium mb-5 cursor-pointer ${titleStyles}`}
+              className={`text-lg font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)
@@ -95,8 +93,8 @@ const ContentPanel = ({
               <div className="w-4 h-4" title="View Documentation">
                 <Link href={addUTMParams(item.url)} rel="noreferer">
                   <DescriptionIcon
-                    height="16"
-                    width="16"
+                    height="20"
+                    width="20"
                     className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
                   />
                 </Link>
@@ -109,8 +107,8 @@ const ContentPanel = ({
                 >
                   <WebStoriesIcon
                     className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                    height="16"
-                    width="16"
+                    height="20"
+                    width="20"
                   />
                 </div>
               )}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as BounceTracking } from './bounceTracking';
-export { default as Fingerprinting } from './fingerprinting';
-export { default as IPProtection } from './ipProtection';
-export { default as PrivateStateTokens } from './privateStateTokens';
-export { default as AntiCovertTracking } from './antiCovertTracking';
+/**
+ * External dependencies.
+ */
+import type p5 from 'p5';
+/**
+ * Internal dependencies.
+ */
+import app from '../app';
+
+const increasePixelDensityConditionally = (p: p5 | null) => {
+  if ((!app.platform && app.platform.startsWith('Chrome')) || !p) {
+    return;
+  }
+  p.pixelDensity(2);
+};
+
+export default increasePixelDensityConditionally;

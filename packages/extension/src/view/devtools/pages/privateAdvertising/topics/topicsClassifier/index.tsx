@@ -145,11 +145,11 @@ const TopicsClassifier = () => {
   );
 
   return (
-    <div className="relative h-full flex flex-col">
-      <div className="flex p-4 w-full flex-col gap-4">
+    <div className="relative h-full flex flex-col p-4 pb-0">
+      <div className="flex w-full flex-col gap-4">
         <textarea
-          placeholder={`One host per line. For example: \ngoogle.com \nyoutube.com`}
-          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue"
+          placeholder={`Enter one domain per line, e.g.\ngoogle.com\nyoutube.com\nPlease do not include "http://" or "https://".`}
+          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue w-[70%]"
           cols={50}
           value={websites}
           onChange={(e) => setWebsites(e.target.value)}
@@ -163,11 +163,11 @@ const TopicsClassifier = () => {
         />
       </div>
       {validationErrors.length > 0 && (
-        <div className="flex p-4 w-full flex-col">
+        <div className="flex py-4 w-full flex-col gap-2">
           {validationErrors.map((error, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 w-full dark:bg-tomato-red bg-baby-pink m-0.25 px-2 py-1 rounded"
+              className="flex items-center gap-2 w-fit dark:bg-tomato-red bg-baby-pink m-0.25 px-4 py-1 rounded"
             >
               <CancelIcon className="w-4 h-4 dark:fill-blood-red fill-bright-red" />
               <div className="text-xs rounded-sm dark:text-bright-gray">
@@ -178,7 +178,7 @@ const TopicsClassifier = () => {
         </div>
       )}
       {classificationResult?.length > 0 && (
-        <div className="flex-1 w-fit flex flex-col border border-american-silver dark:border-quartz border-t-0 border-l-0 overflow-auto mt-6">
+        <div className="flex-1 w-[70%] flex flex-col border border-american-silver dark:border-quartz border-t-0 overflow-auto mt-10">
           <TableProvider
             data={classificationResult}
             tableColumns={tableColumns}
@@ -190,6 +190,7 @@ const TopicsClassifier = () => {
               hideTableTopBar={true}
               selectedKey={selectedKey}
               hideFiltering={true}
+              minWidth="70%"
             />
           </TableProvider>
         </div>

@@ -14,25 +14,4 @@
  * limitations under the License.
  */
 
-/**
- * Internal dependencies
- */
-import TopicsAnimation, { TopicsAnimationProps } from './animation';
-
-/**
- * Topics animation
- * @param props - TopicsAnimationProps
- * @returns Object with callbacks to control the animation
- */
-export function topicsAnimation(props: TopicsAnimationProps) {
-  const animation = new TopicsAnimation(props);
-  animation.start();
-
-  return {
-    togglePlay: (state: boolean) => animation.togglePlay(state),
-    reset: () => animation.reset(),
-    updateSpeedMultiplier: (speedMultiplier: number) =>
-      animation.updateSpeedMultiplier(speedMultiplier),
-    getCurrentVisitIndex: () => animation.getCurrentVisitIndex(),
-  };
-}
+export * from './animation';

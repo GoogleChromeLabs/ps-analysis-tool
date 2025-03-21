@@ -27,6 +27,7 @@ import {
 import type {
   AdsAndBiddersType,
   NoBidsType,
+  ReceivedBids,
   singleAuctionEvent,
 } from '@google-psat/common';
 
@@ -41,7 +42,7 @@ import AdunitSubPanel from '../adunitPanel/panel';
 interface AuctionPanelProps {
   auctionEvents: {
     auctionData: AuctionEventsType;
-    receivedBids?: Record<string, singleAuctionEvent[]>;
+    receivedBids?: Record<string, singleAuctionEvent[]> | ReceivedBids[];
     noBids: NoBidsType;
   };
   customAdsAndBidders?: AdsAndBiddersType;

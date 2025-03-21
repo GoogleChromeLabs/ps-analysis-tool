@@ -44,19 +44,26 @@ const Auctions = () => {
     },
   });
 
-  const { auctionEvents } = useProtectedAudience(({ state }) => ({
-    auctionEvents: state.auctionEvents ?? {},
-  }));
+  const { auctionEvents, adsAndBidders, receivedBids, noBids } =
+    useProtectedAudience(({ state }) => ({
+      auctionEvents: state.auctionEvents ?? {},
+      adsAndBidders: state.adsAndBidders,
+      receivedBids: state.receivedBids,
+      noBids: state.noBids,
+    }));
 
   useEffect(() => {
-    if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
+    if (
+      Object.keys(auctionEvents || {}).length === 0 &&
+      Object.keys(adsAndBidders || {}).length === 0
+    ) {
       setSidebarData((prev) => {
         prev.adunits.children = {};
 
         return { ...prev };
       });
     }
-  }, [auctionEvents]);
+  }, [adsAndBidders, auctionEvents]);
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
@@ -69,8 +76,10 @@ const Auctions = () => {
   const auctionData = useMemo(() => {
     return {
       auctionData: auctionEvents,
+      receivedBids,
+      noBids,
     };
-  }, [auctionEvents]);
+  }, [auctionEvents, noBids, receivedBids]);
 
   if (!isUsingCDP) {
     return (
@@ -94,7 +103,10 @@ const Auctions = () => {
     );
   }
 
-  if (!auctionEvents || Object.keys(auctionEvents).length === 0) {
+  if (
+    Object.keys(auctionEvents || {}).length === 0 &&
+    Object.keys(adsAndBidders || {}).length === 0
+  ) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center">
         <p className="text-lg text-raisin-black dark:text-bright-gray">

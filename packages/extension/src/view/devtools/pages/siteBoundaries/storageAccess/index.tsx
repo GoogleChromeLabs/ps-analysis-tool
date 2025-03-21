@@ -24,6 +24,7 @@ const StorageAccess = () => {
   return (
     <div data-testid="storage-access-content" className="h-full w-full">
       <LandingPage
+        isLandingPageContainer
         title={I18n.getMessage('storageAccessAPI')}
         psInfoKey={PSInfoKey.StorageAccess}
         extraClasses="max-w-2xl h-fit"

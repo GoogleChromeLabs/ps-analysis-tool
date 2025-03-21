@@ -251,6 +251,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       if (app.timeline.currentIndex === config.timeline.circles.length) {
         app.setHasLastNodeVisited(true);
       }
+      utils.wipeAndRecreateMainCanvas();
 
       flow.setButtonsDisabilityState();
       utils.drawOpenArrowWithoutAnimationIcon();
@@ -294,7 +295,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
       }
       p?.pop();
     });
-
+    utils.wipeAndRecreateMainCanvas();
     utils.drawOpenArrowWithoutAnimationIcon();
 
     cb?.(undefined, true);
@@ -378,7 +379,7 @@ app.handleNonInteractivePrev = async () => {
 
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex - 1]);
 
-  await utils.delay(10);
+  await utils.delay(100);
 
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
@@ -498,7 +499,7 @@ app.handleNonInteractiveNext = async () => {
   if (app.timeline.currentIndex === config.timeline.circles.length) {
     app.setHasLastNodeVisited(true);
   }
-  await utils.delay(10);
+  await utils.delay(100);
 
   app.addToPromiseQueue(app.timeline.currentIndex);
   flow.setButtonsDisabilityState();
@@ -685,7 +686,7 @@ export const sketch = (p: P5) => {
   app.handleControls();
 
   p.setup = () => {
-    setupMainCanvas(p);
+    setupMainCanvas(p, true);
   };
 
   p.preload = () => {
@@ -727,6 +728,10 @@ export const interestGroupSketch = (p: P5) => {
 
     if (props.setSelectedAdUnit) {
       app.setSelectedAdUnit = props.setSelectedAdUnit;
+    }
+
+    if (props.platform) {
+      app.platform = props.platform;
     }
 
     app.isAutoExpand = props.autoExpand;

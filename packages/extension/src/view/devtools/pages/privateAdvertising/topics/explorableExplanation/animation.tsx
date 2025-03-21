@@ -19,7 +19,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
-import { topicsAnimation } from '@google-psat/explorable-explanations';
+import { TopicsAnimation } from '@google-psat/explorable-explanations';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -53,48 +53,47 @@ const Animation = ({
   setCurrentVisitIndexCallback,
 }: AnimationProps) => {
   const node = useRef(null);
-  const [togglePlayCallback, setTogglePlayCallback] =
-    useState<(state: boolean) => void>();
-  const [resetCallback, setResetCallback] = useState<() => void>();
-  const [speedMultiplierCallback, setSpeedMultiplierCallback] =
-    useState<(speed: number) => void>();
   const animationRef = useRef(isAnimating);
   const loadingTextCoverRef = useRef<HTMLDivElement>(null);
+  const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
+
   useEffect(() => {
     // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
     animationRef.current = isAnimating;
   }, [isAnimating, visitIndexStart]);
 
+  const onAnimationReady = () => {
+    if (loadingTextCoverRef.current) {
+      loadingTextCoverRef.current.remove();
+    }
+  };
+
   useEffect(() => {
-    const tAnimation = (p: p5) => {
-      const onReady = () => {
-        if (loadingTextCoverRef.current) {
-          loadingTextCoverRef.current.remove();
-        }
-      };
+    if (animation) {
+      setCurrentVisitIndexCallback(() => animation.getCurrentVisitIndex);
+      animation.start();
+    }
+  }, [animation, setCurrentVisitIndexCallback]);
 
-      const { togglePlay, reset, updateSpeedMultiplier, getCurrentVisitIndex } =
-        topicsAnimation({
-          p,
-          epoch,
-          isAnimating: animationRef.current,
-          siteAdTechs,
-          visitIndexStart,
-          handleUserVisit: animationRef.current
-            ? handleUserVisit
-            : (idx: number) => handleUserVisit(idx, false),
-          setHighlightAdTech,
-          isInteractive,
-          onReady,
-        });
-
-      setTogglePlayCallback(() => togglePlay);
-      setResetCallback(() => reset);
-      setSpeedMultiplierCallback(() => updateSpeedMultiplier);
-      setCurrentVisitIndexCallback(() => getCurrentVisitIndex);
+  useEffect(() => {
+    const init = (p: p5) => {
+      const instance = new TopicsAnimation({
+        p,
+        epoch,
+        isAnimating: animationRef.current,
+        siteAdTechs,
+        visitIndexStart,
+        handleUserVisit: animationRef.current
+          ? handleUserVisit
+          : (idx: number) => handleUserVisit(idx, false),
+        setHighlightAdTech,
+        isInteractive,
+        onReady: onAnimationReady,
+      });
+      setAnimation(instance);
     };
 
-    const p = node.current ? new p5(tAnimation, node.current) : null;
+    const p = node.current ? new p5(init, node.current) : null;
 
     return () => {
       p?.remove();
@@ -111,28 +110,22 @@ const Animation = ({
   ]);
 
   useEffect(() => {
-    togglePlayCallback?.(isPlaying);
-  }, [isPlaying, togglePlayCallback]);
+    animation?.togglePlay(isPlaying);
+  }, [isPlaying, animation]);
 
   useEffect(() => {
     if (resetAnimation) {
-      resetCallback?.();
+      animation?.reset();
     }
-  }, [resetAnimation, resetCallback]);
+  }, [resetAnimation, animation]);
 
   useEffect(() => {
-    speedMultiplierCallback?.(speedMultiplier);
-  }, [speedMultiplier, speedMultiplierCallback]);
-
-  useEffect(() => {
-    if (loadingTextCoverRef.current && isInteractive) {
-      loadingTextCoverRef.current.style.display = 'none';
-    }
-  }, [loadingTextCoverRef, isInteractive]);
+    animation?.updateSpeedMultiplier(speedMultiplier);
+  }, [speedMultiplier, animation]);
 
   return (
-    <div className="relative">
-      <div ref={node} className="overflow-auto bg-white" />
+    <div className="relative h-full">
+      <div ref={node} className="overflow-auto bg-white h-full" />
       <div
         ref={loadingTextCoverRef}
         id="loading-text-cover"

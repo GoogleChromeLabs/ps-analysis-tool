@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import { Tabs, useTabs } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -31,11 +30,6 @@ const Panel = () => {
       data-testid="topics-content"
       className="h-screen w-full flex flex-col overflow-hidden"
     >
-      <div className="p-4">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">{I18n.getMessage('topics')}</h1>
-        </div>
-      </div>
       <Tabs />
       <div
         className={classNames('overflow-auto flex-1', className)}

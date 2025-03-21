@@ -94,10 +94,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
     };
   }, [messagePassingListener]);
 

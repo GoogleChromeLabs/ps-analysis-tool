@@ -62,6 +62,7 @@ export type SketchProps = {
   minifiedBubbleWidth: number;
   minifiedBubbleHeight: number;
   autoExpand: boolean;
+  platform: string;
   setSelectedDateTime: (time: string) => void;
   setSelectedAdUnit: (adUnit: string) => void;
   setCurrentStep: (step: number | Step) => void;

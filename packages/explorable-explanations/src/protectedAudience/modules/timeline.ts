@@ -207,7 +207,7 @@ const timeline: Timeline = {
       x <=
         circleVerticalSpace * (app.timeline.currentIndex - 1) +
           config.timeline.position.x &&
-      app.timeline.currentIndex < config.timeline.circles.length
+      app.timeline.currentIndex <= config.timeline.circles.length
     ) {
       p.push();
       p.stroke(colors.visitedBlue);

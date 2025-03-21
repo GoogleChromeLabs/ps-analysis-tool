@@ -20,10 +20,11 @@ import React from 'react';
 import { LandingPage, PSInfoKey } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const Fingerprinting = () => {
+const UserAgentReduction = () => {
   return (
-    <div data-testid="fingerprinting-content" className="h-full w-full">
+    <div data-testid="user-agent-reduction-content" className="h-full w-full">
       <LandingPage
+        isLandingPageContainer
         title={I18n.getMessage('userAgentReduction')}
         psInfoKey={PSInfoKey.UserAgentReduction}
         extraClasses="max-w-2xl h-fit"
@@ -32,4 +33,4 @@ const Fingerprinting = () => {
   );
 };
 
-export default Fingerprinting;
+export default UserAgentReduction;

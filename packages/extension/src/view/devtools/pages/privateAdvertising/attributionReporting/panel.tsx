@@ -18,7 +18,6 @@
  */
 import React, { useEffect, useRef, useMemo } from 'react';
 import { Tabs, useTabs } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
 
@@ -45,6 +44,7 @@ const Panel = () => {
     }));
 
   const sourcesRegistrationRef = useRef<typeof sourcesRegistration>([]);
+  const activeRegistrationRef = useRef<typeof sourcesRegistration>([]);
   const triggerRegistrationRef = useRef<typeof triggerRegistration>([]);
 
   const filteredSourceRegistration = useMemo(() => {
@@ -71,13 +71,37 @@ const Panel = () => {
     }
   }, [filter?.triggerRegistration, triggerRegistration]);
 
+  const filteredActiveSourceRegistration = useMemo(() => {
+    if (filter?.activeSources) {
+      return sourcesRegistration.filter(
+        (source) =>
+          source.tabId &&
+          source.tabId === chrome.devtools.inspectedWindow.tabId.toString()
+      );
+    } else {
+      return sourcesRegistration;
+    }
+  }, [filter?.activeSources, sourcesRegistration]);
+
+  useEffect(() => {
+    if (
+      !isEqual(filteredActiveSourceRegistration, activeRegistrationRef.current)
+    ) {
+      if (!filteredActiveSourceRegistration.length) {
+        highlightTab(1, false);
+      } else {
+        highlightTab(1);
+      }
+
+      activeRegistrationRef.current = filteredActiveSourceRegistration;
+    }
+  }, [filteredActiveSourceRegistration, highlightTab]);
+
   useEffect(() => {
     if (!isEqual(filteredSourceRegistration, sourcesRegistrationRef.current)) {
       if (!filteredSourceRegistration.length) {
-        highlightTab(1, false);
         highlightTab(2, false);
       } else {
-        highlightTab(1);
         highlightTab(2);
       }
 
@@ -101,13 +125,6 @@ const Panel = () => {
       data-testid="attribution-reporting-content"
       className="h-screen w-full flex flex-col overflow-hidden"
     >
-      <div className="p-4">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">
-            {I18n.getMessage('attributionReporting')}
-          </h1>
-        </div>
-      </div>
       <Tabs />
       <div
         className={classNames('overflow-auto', className)}
