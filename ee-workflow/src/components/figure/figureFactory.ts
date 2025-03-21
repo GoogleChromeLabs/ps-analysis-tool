@@ -145,6 +145,8 @@ export default class FigureFactory {
     id,
     x,
     y,
+    endX,
+    endY,
     diameter,
     fill,
     stroke,
@@ -156,6 +158,8 @@ export default class FigureFactory {
     onLeave,
   }: FigureParams & {
     diameter: number;
+    endX?: number;
+    endY?: number;
   }): Circle {
     const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
 
@@ -178,8 +182,8 @@ export default class FigureFactory {
     if (shouldTravel) {
       let currentX = possibleX;
       let currentY = possibleY;
-      const endX = 0;
-      const endY = 0;
+      const _endX = endX ?? 0;
+      const _endY = endY ?? 0;
       let lerpSpeed = 0.01;
       circle.setShouldTravel(shouldTravel);
 
@@ -187,10 +191,8 @@ export default class FigureFactory {
         const _figure = <Circle>figure;
         const p5 = _figure.getP5();
 
-        _figure.remove();
-
-        currentX = p5?.lerp(currentX, endX, lerpSpeed) ?? endX;
-        currentY = p5?.lerp(currentY, endY, lerpSpeed) ?? endY;
+        currentX = p5?.lerp(currentX, _endX, lerpSpeed) ?? _endX;
+        currentY = p5?.lerp(currentY, _endY, lerpSpeed) ?? _endY;
 
         _figure.setX(currentX);
         _figure.setY(currentY);
@@ -216,8 +218,8 @@ export default class FigureFactory {
 
       const completeTravel = (figure: Figure, skipDraw: boolean) => {
         const _figure = <Circle>figure;
-        _figure.setX(endX);
-        _figure.setY(endY);
+        _figure.setX(_endX);
+        _figure.setY(_endY);
 
         if (!skipDraw) {
           _figure.draw();

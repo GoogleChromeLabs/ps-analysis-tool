@@ -22,8 +22,8 @@ import Main from './main';
 const mainCanvas = new Main();
 const mainFF = new FigureFactory(mainCanvas);
 
-const IGCanvas = new Main();
-// const IGFF = new FigureFactory(IGCanvas);
+const IGCanvas = new Main(true);
+const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 
 // Buttons
@@ -219,7 +219,7 @@ nodes.forEach((node, index) => {
   mainCanvas.addGroup(group, true);
 });
 
-const drawIGFlow = (x: number, y: number) => {
+const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
   const lastFigureCoordinates = {
     x: 0,
     y: 0,
@@ -323,35 +323,91 @@ const drawIGFlow = (x: number, y: number) => {
     mainFF
   );
 
-  // const bubbles: Figure[] = Array.from({ length: bubbleCount }, (_, index) => {
-  //   return IGFF.circle({
-  //     x: lastFigureCoordinates.x + index * 20,
-  //     y: lastFigureCoordinates.y,
-  //     diameter: 10,
-  //     fill: 'orange',
-  //     stroke: 'black',
-  //     shouldTravel: true,
-  //   });
-  // });
+  const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
+    return IGFF.circle({
+      x: lastFigureCoordinates.x + index * 20,
+      y: lastFigureCoordinates.y,
+      diameter: 10,
+      fill: 'orange',
+      stroke: 'black',
+      shouldTravel: true,
+    });
+  });
 
-  // const bubbleFlow = new Group(IGCanvas, bubbles);
-  // bubbleFlow.setSideEffectOnDraw(() => {
-  //   IGCanvas.resetQueuesAndReDrawAll();
-  //   IGCanvas.togglePause();
-  //   mainCanvas.togglePause();
-  //   mainCanvas.reDrawAll();
-  // });
+  const bubbleFlow = new Group(IGCanvas, bubbles);
+  bubbleFlow.setSideEffectOnDraw(() => {
+    IGCanvas.resetQueuesAndReDrawAll();
+    IGCanvas.togglePause();
+    mainCanvas.togglePause();
+    mainCanvas.reDrawAll();
+  });
 
-  // animator.setSideEffectOnDraw(() => {
-  //   IGCanvas.addGroup(bubbleFlow);
-  //   mainCanvas.togglePause();
-  //   IGCanvas.togglePause();
-  // });
+  animator.setSideEffectOnDraw(() => {
+    IGCanvas.addGroup(bubbleFlow);
+    mainCanvas.togglePause();
+    IGCanvas.togglePause();
+  });
 
   mainCanvas.addAnimator(animator, false, true);
 };
 
 const drawPublisherFlow = (x: number, y: number) => {
+  const bubblesToCoordinates = {
+    x: 0,
+    y: 0,
+  };
+
+  const box6 = new Group(mainCanvas, [
+    mainFF.box({
+      width: 100,
+      height: 50,
+      fill: '#d3d3d3',
+      nextTipHelper: (nextCoordinates: NextCoordinates) => {
+        return {
+          x: nextCoordinates.right.x,
+          y: nextCoordinates.right.y - 25,
+        };
+      },
+    }),
+    mainFF.text({
+      text: 'Box 6',
+      fill: '#000',
+      nextTipHelper: (nextCoordinates: NextCoordinates) => {
+        bubblesToCoordinates.x = nextCoordinates.middle.x;
+        bubblesToCoordinates.y = nextCoordinates.middle.y;
+
+        return nextCoordinates.middle;
+      },
+    }),
+  ]);
+
+  const bubbles = Array.from({ length: 3 }, (_, index) => {
+    return IGFF.circle({
+      x: 0,
+      y: 0,
+      endX: bubblesToCoordinates.x + index * 20,
+      endY: bubblesToCoordinates.y,
+      diameter: 10,
+      fill: 'orange',
+      stroke: 'black',
+      shouldTravel: true,
+    });
+  });
+
+  const bubbleFlow = new Group(IGCanvas, bubbles);
+  bubbleFlow.setSideEffectOnDraw(() => {
+    IGCanvas.resetQueuesAndReDrawAll();
+    IGCanvas.togglePause();
+    mainCanvas.togglePause();
+    mainCanvas.reDrawAll();
+  });
+
+  box6.setSideEffectOnDraw(() => {
+    IGCanvas.addGroup(bubbleFlow);
+    mainCanvas.togglePause();
+    IGCanvas.togglePause();
+  });
+
   const animator = new Animator(
     [
       mainFF.line({
@@ -621,25 +677,7 @@ const drawPublisherFlow = (x: number, y: number) => {
           };
         },
       }),
-      new Group(mainCanvas, [
-        mainFF.box({
-          width: 100,
-          height: 50,
-          fill: '#d3d3d3',
-          nextTipHelper: (nextCoordinates: NextCoordinates) => {
-            return {
-              x: nextCoordinates.right.x,
-              y: nextCoordinates.right.y - 25,
-            };
-          },
-        }),
-        mainFF.text({
-          text: 'Box 6',
-          fill: '#000',
-          nextTipHelper: (nextCoordinates: NextCoordinates) =>
-            nextCoordinates.middle,
-        }),
-      ]),
+      box6,
       mainFF.line({
         endYwith: 50,
         shouldTravel: true,
@@ -677,12 +715,12 @@ const drawPublisherFlow = (x: number, y: number) => {
   mainCanvas.addAnimator(animator, false, true);
 };
 
-drawIGFlow(150, 337.5);
-drawIGFlow(300, 337.5);
+drawIGFlow(150, 337.5, 2);
+drawIGFlow(300, 337.5, 3);
 drawPublisherFlow(450, 337.5);
-drawIGFlow(600, 337.5);
-drawIGFlow(750, 337.5);
+drawIGFlow(600, 337.5, 3);
+drawIGFlow(750, 337.5, 3);
 drawPublisherFlow(900, 337.5);
-drawIGFlow(1050, 337.5);
-drawIGFlow(1200, 337.5);
+drawIGFlow(1050, 337.5, 3);
+drawIGFlow(1200, 337.5, 3);
 drawPublisherFlow(1350, 337.5);

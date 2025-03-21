@@ -123,8 +123,9 @@ class Main {
 
   /**
    * Main constructor.
+   * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    */
-  constructor() {
+  constructor(private clearBeforeTravel = false) {
     this.p5 = new p5(this.init.bind(this));
   }
 
@@ -286,6 +287,10 @@ class Main {
     }
 
     if (this.isTravelling) {
+      if (this.clearBeforeTravel) {
+        this.p5.clear();
+      }
+
       if (this.runTraveller()) {
         this.traveller = null;
         this.runner();
