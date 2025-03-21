@@ -109,9 +109,15 @@ const MenuBar = ({
       });
     };
 
+    const handleScrollEnd = () => {
+      updateFromScrollRef.current = false;
+    };
+
     scrollContainer?.addEventListener('scroll', handleScroll);
+    scrollContainer?.addEventListener('scrollend', handleScrollEnd);
     return () => {
       scrollContainer?.removeEventListener('scroll', handleScroll);
+      scrollContainer?.removeEventListener('scrollend', handleScrollEnd);
     };
   }, [menuData, isListenerDisabled, scrollContainerId]);
 
