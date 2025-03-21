@@ -44,7 +44,6 @@ export type TopicsAnimationProps = {
 
 class TopicsAnimation {
   p: p5;
-
   assets: Assets = {};
 
   // state
@@ -54,7 +53,7 @@ class TopicsAnimation {
   playing = true;
   speedMultiplier = 1;
   inspectedCircleIndex = -1;
-  inspectedSmallCircleIndex = '';
+  inspectedSmallCircleIndex = [-1, -1]; // [circleIndex, smallCircleIndex]
   prevVisitedCircleIndex = -1;
   showHandCursor = false;
   canvas: p5.Renderer | null = null;
@@ -170,7 +169,7 @@ class TopicsAnimation {
     }
     this.drawInspectedCircle();
 
-    if (this.inspectedSmallCircleIndex !== '') {
+    if (this.inspectedSmallCircleIndex[0] !== -1) {
       this.showHandCursor = true;
     }
   };
@@ -276,9 +275,8 @@ class TopicsAnimation {
       this.prevVisitedCircleIndex = index;
     }
 
-    if (this.inspectedSmallCircleIndex !== '') {
-      const [circleIndex, smallCircleIndex] =
-        this.inspectedSmallCircleIndex.split('-');
+    if (this.inspectedSmallCircleIndex[0] !== -1) {
+      const [circleIndex, smallCircleIndex] = this.inspectedSmallCircleIndex;
 
       this.setHighlightAdTech(
         this.siteAdTechs[this.epoch[Number(circleIndex)].website][
@@ -393,7 +391,7 @@ class TopicsAnimation {
 
     this.showHandCursor = false;
     const isInspectingCircle = this.inspectedCircleIndex !== -1;
-    const isInspectingSmallCircle = this.inspectedSmallCircleIndex !== '';
+    const isInspectingSmallCircle = this.inspectedSmallCircleIndex[0] !== -1;
 
     const lastVisitedIndex = this.prevVisitedCircleIndex;
     // draw already visited/inspected circles
@@ -463,15 +461,15 @@ class TopicsAnimation {
     return inspectedCircleIndex;
   };
 
-  private getInspectedSmallCircleIndex = (): string => {
+  private getInspectedSmallCircleIndex = (): number[] => {
     if (this.playing) {
-      return '';
+      return [-1, -1];
     }
 
     const p = this.p;
     const x = p.mouseX;
     const y = p.mouseY;
-    let inspectedSmallCircleIndex = '';
+    let inspectedSmallCircleIndex = [-1, -1];
 
     Object.entries(this.smallCirclePositions).forEach(
       ([circleIndex, smallCircles]) => {
@@ -485,7 +483,7 @@ class TopicsAnimation {
             y > smallCircleY - smallCircleDiameter / 2 &&
             y < smallCircleY + smallCircleDiameter / 2
           ) {
-            inspectedSmallCircleIndex = `${circleIndex}-${index}`;
+            inspectedSmallCircleIndex = [Number(circleIndex), index];
           }
         });
       }
