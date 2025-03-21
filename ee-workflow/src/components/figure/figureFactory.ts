@@ -355,8 +355,8 @@ export default class FigureFactory {
         _figure.draw();
 
         if (
-          Math.round(currentX) === Math.round(endX) &&
-          Math.round(currentY) === Math.round(endY)
+          Math.ceil(currentX) === Math.ceil(endX) &&
+          Math.ceil(currentY) === Math.ceil(endY)
         ) {
           return true;
         }
