@@ -47,6 +47,15 @@ const extractReportData = (data: CompleteJson[]) => {
     consolidatedLibraryMatches[pageUrl] = libraryMatches;
   });
 
+  data.forEach(({ cookieData, pageUrl, libraryMatches }) => {
+    formatCookieData(
+      extractCookies(cookieData, pageUrl, true),
+      landingPageCookies
+    );
+
+    consolidatedLibraryMatches[pageUrl] = libraryMatches;
+  });
+
   return {
     landingPageCookies,
     consolidatedLibraryMatches,
