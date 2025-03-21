@@ -61,7 +61,7 @@ const MenuBar = ({
         element.scrollIntoView?.({ behavior: 'smooth' });
         timeout = setTimeout(() => {
           setIsListenerDisabled(false);
-        }, 700);
+        }, 1000);
       }
     } else {
       updateFromScrollRef.current = false;
