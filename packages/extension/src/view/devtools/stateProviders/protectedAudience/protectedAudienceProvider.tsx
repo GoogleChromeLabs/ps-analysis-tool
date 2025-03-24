@@ -316,7 +316,7 @@ const Provider = ({ children }: PropsWithChildren) => {
                       new Set(
                         ...(adUnitCodeToBidders[adUnitCode]
                           ?.mediaContainerSize ?? []),
-                        mediaContainerSize
+                        ...(mediaContainerSize ?? [])
                       )
                     ),
                   ],

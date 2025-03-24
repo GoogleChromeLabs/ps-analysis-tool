@@ -95,7 +95,7 @@ function computeReceivedBidsAndNoBids(
 
               return {
                 ...event,
-                mediaContainerSize: sellerSignals?.size,
+                mediaContainerSize: [sellerSignals?.size],
                 adUnitCode: sellerSignals?.divId,
               };
             })
@@ -164,7 +164,7 @@ function computeReceivedBidsAndNoBids(
 
           return {
             ...event,
-            mediaContainerSize: sellerSignals.size,
+            mediaContainerSize: [sellerSignals.size],
             adUnitCode: sellerSignals?.divId,
             mediaType: sellerSignals?.type,
           };

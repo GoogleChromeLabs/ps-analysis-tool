@@ -87,7 +87,13 @@ const AdTable = ({
             <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
             <p className="truncate">
               {(info as number[][])
-                ?.map((size: number[]) => `${size[0]}x${size[1]}`)
+                ?.map((size: number[]) => {
+                  if (!size?.[0]) {
+                    return null;
+                  }
+                  return `${size?.[0]}x${size?.[1]}`;
+                })
+                ?.filter((size) => Boolean(size))
                 ?.join(' | ')}
             </p>
           </div>
