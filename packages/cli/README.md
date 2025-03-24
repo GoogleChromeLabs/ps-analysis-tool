@@ -95,4 +95,4 @@ You can install the PSAT extension from the [Chrome web store](https://chromeweb
 
 To run it: Visit the website you want to analyze, open Chrome DevTools, and select the Privacy Sandbox panel.
 
-![PSAT Chrome Extension](https://s3.amazonaws.com/i.snag.gy/OcCl5i.jpg)
+![PSAT Chrome Extension](https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/docs/screenshots/cookies-landing-page.png)
