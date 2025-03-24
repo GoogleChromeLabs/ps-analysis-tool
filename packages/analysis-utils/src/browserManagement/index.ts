@@ -85,6 +85,7 @@ export class BrowserManagement {
     this.pageResourcesMaps = {};
     this.spinnies = spinnies;
     this.indent = indent;
+    this.erroredOutUrls = {};
     this.selectors = selectors;
     this.erroredOutUrls = {};
   }

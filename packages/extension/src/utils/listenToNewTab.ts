@@ -16,27 +16,27 @@
 /**
  * Internal dependencies
  */
-import synchnorousCookieStore from '../store/synchnorousCookieStore';
+import dataStore from '../store/dataStore';
+import { getCurrentTab } from './getCurrentTab';
 import { getTab } from './getTab';
 
 const listenToNewTab = async (tabId?: number) => {
   const newTabId =
-    tabId?.toString() || chrome.devtools.inspectedWindow.tabId.toString();
+    tabId?.toString() ||
+    chrome?.devtools?.inspectedWindow?.tabId?.toString() ||
+    (await getCurrentTab(true))?.id?.toString();
   tabId;
 
   if (!newTabId) {
     return '';
   }
 
-  if (
-    synchnorousCookieStore.tabMode &&
-    synchnorousCookieStore.tabMode !== 'unlimited'
-  ) {
-    const storedTabData = Object.keys(synchnorousCookieStore?.tabsData ?? {});
+  if (dataStore.tabMode && dataStore.tabMode !== 'unlimited') {
+    const storedTabData = Object.keys(dataStore?.tabsData ?? {});
 
     await Promise.all(
       storedTabData.map(async (tabIdToDelete) => {
-        synchnorousCookieStore?.removeTabData(Number(tabIdToDelete));
+        dataStore?.removeTabData(Number(tabIdToDelete));
         try {
           await chrome.action.setBadgeText({
             tabId: Number(tabIdToDelete),
@@ -51,17 +51,17 @@ const listenToNewTab = async (tabId?: number) => {
     );
   }
 
-  synchnorousCookieStore.tabToRead = newTabId;
+  dataStore.tabToRead = newTabId;
 
-  synchnorousCookieStore.initialiseVariablesForNewTab(newTabId);
+  dataStore.initialiseVariablesForNewTab(newTabId);
 
-  synchnorousCookieStore?.addTabData(Number(newTabId));
-  synchnorousCookieStore?.updateDevToolsState(Number(newTabId), true);
-  synchnorousCookieStore?.updatePopUpState(Number(newTabId), true);
+  dataStore?.addTabData(Number(newTabId));
+  dataStore?.updateDevToolsState(Number(newTabId), true);
+  dataStore?.updatePopUpState(Number(newTabId), true);
 
   const currentTab = await getTab(Number(newTabId));
 
-  synchnorousCookieStore?.updateUrl(Number(newTabId), currentTab?.url ?? '');
+  dataStore?.updateUrl(Number(newTabId), currentTab?.url ?? '');
 
   return newTabId;
 };

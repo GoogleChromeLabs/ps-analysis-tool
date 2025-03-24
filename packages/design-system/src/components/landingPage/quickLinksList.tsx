@@ -28,6 +28,7 @@ import { I18n } from '@google-psat/i18n';
 import BulletList from '../bulletList';
 import { QUICK_LINKS } from './constants';
 import { ChevronRight } from '../../icons';
+import Link from '../link';
 
 const QuickLinksList = () => {
   const [news, setNews] = useState<BulletListItem[]>([]);
@@ -79,15 +80,15 @@ const QuickLinksList = () => {
           <BulletList rows={news} />
 
           <div className="ml-6">
-            <a
+            <Link
               href={addUTMParams('https://privacysandbox.com/news/')}
-              target="_blank"
-              rel="noreferrer"
               className="leading-6 text-sm text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
             >
-              {I18n.getMessage('viewMore')}
-              <ChevronRight className="text-bright-navy-blue dark:text-jordy-blue" />
-            </a>
+              <>
+                {I18n.getMessage('viewMore')}
+                <ChevronRight className="text-bright-navy-blue dark:text-jordy-blue" />
+              </>
+            </Link>
           </div>
         </div>
       </div>

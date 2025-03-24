@@ -16,11 +16,34 @@
 /**
  * External dependencies.
  */
-import type { CookieTableData, ErroredOutUrlsData } from '@google-psat/common';
+import type {
+  AdsAndBiddersType,
+  CookieTableData,
+  InterestGroups,
+  NoBidsType,
+  singleAuctionEvent,
+  ErroredOutUrlsData,
+  SourcesData,
+} from '@google-psat/common';
 
-export type TableData = (CookieTableData | ErroredOutUrlsData) & {
+export type TableData = (
+  | CookieTableData
+  | InterestGroups
+  | singleAuctionEvent
+  | NoBidsType[keyof NoBidsType]
+  | AdsAndBiddersType[keyof AdsAndBiddersType]
+  | ErroredOutUrlsData
+  | SourcesData
+  | ClassificationResult
+) & {
   highlighted?: boolean;
 };
+
+export interface ClassificationResult {
+  domain: string;
+  categories?: { id: number; name: string }[];
+  error?: string;
+}
 
 export type InfoType = number | string | boolean | Array<string | number> | [];
 
@@ -99,5 +122,6 @@ export interface TableProviderProps {
   ) => string;
   exportTableData?: (rows: TableRow[]) => void;
   hasVerticalBar?: (row: TableRow) => boolean;
+  getVerticalBarColorHash?: (row: TableRow) => string;
   isRowSelected?: (cookie: TableData | null) => boolean;
 }

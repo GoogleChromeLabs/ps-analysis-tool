@@ -22,13 +22,27 @@ const isElementVisibleInViewport = (
   }
 
   const { top, left, bottom, right } = el.getBoundingClientRect();
-  const { innerHeight, innerWidth } = window;
+  const { innerHeight, innerWidth, scrollX, scrollY } = window;
+
+  const viewportTop = scrollY;
+  const viewportBottom = scrollY + innerHeight;
+  const viewportLeft = scrollX;
+  const viewportRight = scrollX + innerWidth;
+
+  const elementTop = top + scrollY;
+  const elementBottom = bottom + scrollY;
+  const elementLeft = left + scrollX;
+  const elementRight = right + scrollX;
 
   return partiallyVisible
-    ? ((top > 0 && top < innerHeight) ||
-        (bottom > 0 && bottom < innerHeight)) &&
-        ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
-    : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+    ? ((elementTop >= viewportTop && elementTop < viewportBottom) ||
+        (elementBottom > viewportTop && elementBottom <= viewportBottom)) &&
+        ((elementLeft >= viewportLeft && elementLeft < viewportRight) ||
+          (elementRight > viewportLeft && elementRight <= viewportRight))
+    : elementTop >= viewportTop &&
+        elementLeft >= viewportLeft &&
+        elementBottom <= viewportBottom &&
+        elementRight <= viewportRight;
 };
 
 export default isElementVisibleInViewport;

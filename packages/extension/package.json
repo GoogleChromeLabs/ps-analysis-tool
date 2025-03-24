@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/extension",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
@@ -28,23 +28,28 @@
     "@floating-ui/dom": "^1.5.3",
     "@google-psat/common": "*",
     "@google-psat/design-system": "*",
+    "@google-psat/explorable-explanations": "*",
     "@google-psat/i18n": "*",
     "@google-psat/library-detection": "*",
     "@google-psat/report": "*",
+    "@p5-wrapper/react": "^4.4.2",
+    "@types/lodash-es": "^4.17.12",
     "classnames": "^2.3.2",
-    "deep-object-diff": "^1.1.9",
+    "d3": "^7.9.0",
     "file-saver": "^2.0.5",
     "github-markdown-css": "^5.6.1",
+    "lodash-es": "^4.17.21",
     "marked": "^14.0.0",
     "marked-alert": "^2.0.2",
     "mermaid": "^11.2.0",
     "p-queue": "^7.3.4",
+    "p5": "^1.11.0",
+    "pretty-print-json": "^3.0.2",
     "re-resizable": "^6.9.9",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.11",
-    "shallow-equal": "^3.1.0",
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.14",
     "use-context-selector": "^1.4.1",
@@ -52,8 +57,12 @@
     "victory": "^36.6.11"
   },
   "devDependencies": {
+    "@types/p5": "^1.7.6",
     "@types/react-copy-to-clipboard": "^5.0.4",
-    "devtools-protocol": "^0.0.1333880",
-    "html-inline-script-webpack-plugin": "^3.2.1"
+    "devtools-protocol": "^0.0.1345247",
+    "html-inline-script-webpack-plugin": "^3.2.1",
+    "puppeteer": "22.15.0",
+    "puppeteer-extra": "3.3.6",
+    "puppeteer-extra-plugin-user-preferences": "^2.4.1"
   }
 }

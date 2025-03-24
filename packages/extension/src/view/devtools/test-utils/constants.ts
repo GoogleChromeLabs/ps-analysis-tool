@@ -15,10 +15,13 @@
  */
 
 export const selectors = {
+  siteBoundariesSelector: 'button[title="Site Boundaries"]',
+  cookieDropDownSelector: 'button[title="Cookies"]',
   chromeExtensionUrl: 'chrome://extensions/',
   extensionPageErrorButton: 'cr-button#errors-button',
   devtoolIframeSelector: 'iframe.extension',
-  privacySandBoxEmbedIframeSelector: 'iframe[src="https://privacysandbox.com"]',
+  privacySandBoxEmbedIframeSelector:
+    'div[data-testid="privacy-sandbox-content"]',
   analyzeThisButtonSelector: 'button[data-test-id="button"]',
   cookieTabAccordion: 'div[data-testid="cookies-accordion-opener"]',
   siteBoundriesTabAccordion:

@@ -83,7 +83,7 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
   );
 
   return (
-    <div ref={sidebarContainerRef} className="min-w-fit">
+    <div ref={sidebarContainerRef} className="min-w-fit h-full flex flex-col">
       {isSidebarCollapsible && !isResizing && (
         <button
           onClick={toggleSidebarCollapse}

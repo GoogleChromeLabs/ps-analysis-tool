@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React, { useCallback, useRef } from 'react';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -30,12 +29,14 @@ interface TableBodyProps {
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
+  rowHeightClass?: string;
 }
 
 const TableBody = ({
   isRowFocused,
   setIsRowFocused,
   selectedKey,
+  rowHeightClass,
 }: TableBodyProps) => {
   const {
     rows,
@@ -45,6 +46,7 @@ const TableBody = ({
     getRowObjectKey,
     conditionalTableRowClassesHandler,
     hasVerticalBar,
+    getVerticalBarColorHash,
   } = useTable(({ state, actions }) => ({
     rows: state.rows,
     columns: state.columns,
@@ -54,6 +56,7 @@ const TableBody = ({
     conditionalTableRowClassesHandler:
       actions.conditionalTableRowClassesHandler,
     hasVerticalBar: actions.hasVerticalBar,
+    getVerticalBarColorHash: actions.getVerticalBarColorHash,
   }));
 
   const tableBodyRef = useRef(null);
@@ -73,6 +76,10 @@ const TableBody = ({
       } else if (event.key === 'ArrowDown') {
         rowElement = currentRow?.nextElementSibling;
         newRowId = rowElement?.id;
+
+        if (rows.length === index + 1) {
+          return;
+        }
       }
 
       if (!rowElement) {
@@ -96,46 +103,6 @@ const TableBody = ({
     [onRowClick, rows]
   );
 
-  const handleEmptyRowKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const rowsLength = rows.length;
-
-      if (event.key === 'ArrowDown' || !rowsLength) {
-        return;
-      }
-
-      const newRow = rows[rowsLength - 1];
-      // @ts-ignore - the `children` property will be available on the `current` property.
-      const rowElement = tableBodyRef.current?.children.namedItem(
-        rowsLength - 1
-      );
-
-      if (!rowElement) {
-        return;
-      }
-
-      rowElement.tabIndex = -1;
-      rowElement.focus();
-      onRowClick(newRow?.originalData);
-    },
-    [onRowClick, rows]
-  );
-
-  const tableRowClassName = classNames(
-    'h-5 outline-0 flex divide-x divide-american-silver dark:divide-quartz',
-    selectedKey === null &&
-      (isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
-    selectedKey !== null &&
-      (rows.length % 2
-        ? 'bg-anti-flash-white dark:bg-charleston-green'
-        : 'bg-white dark:bg-raisin-black')
-  );
-
   return (
     <div
       ref={tableBodyRef}
@@ -156,6 +123,7 @@ const TableBody = ({
             );
           }}
           hasVerticalBar={hasVerticalBar?.(row) ?? false}
+          verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
           getRowObjectKey={getRowObjectKey}
           onRowClick={() => {
             onRowClick(row?.originalData);
@@ -163,28 +131,9 @@ const TableBody = ({
           }}
           onKeyDown={handleKeyDown}
           onRowContextMenu={onRowContextMenu}
+          rowHeightClass={rowHeightClass}
         />
       ))}
-      <div
-        className={tableRowClassName}
-        data-testid="empty-row"
-        tabIndex={0}
-        onClick={() => {
-          onRowClick(null);
-          setIsRowFocused(true);
-        }}
-        onKeyDown={handleEmptyRowKeyDown}
-      >
-        {columns.map(({ width }, index) => (
-          <div
-            key={index}
-            className="px-1 py-px outline-0 flex-1"
-            style={{
-              minWidth: width,
-            }}
-          />
-        ))}
-      </div>
       <div
         className="grow outline-0 flex divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {

@@ -20,8 +20,8 @@ xdescribe('CLI E2E Test', () => {
 
   it('Should run site analysis', () => {
     return coffee
-      .fork(cli, ['-u https://bbc.com', '-w 1000'])
-      .includes('stdout', '/out/bbc-com/report_')
+      .fork(cli, ['-u https://domain-aaa.com/', '-w 1000'])
+      .includes('stdout', '/out/domain-aaa-com/report_')
       .end();
   }, 60000);
 });

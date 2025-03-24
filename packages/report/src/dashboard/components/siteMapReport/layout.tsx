@@ -24,9 +24,9 @@ import {
   type CookieFrameStorageType,
   type CompleteJson,
   type LibraryData,
+  type ErroredOutUrlsData,
   noop,
   reshapeCookies,
-  type ErroredOutUrlsData,
 } from '@google-psat/common';
 import {
   useSidebar,
@@ -36,10 +36,10 @@ import {
   File,
   FileWhite,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
-
 import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
 import CookiesTab from './cookies';
 import ErroredOutUrls from '../urlsWithIssues';

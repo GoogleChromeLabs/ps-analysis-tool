@@ -28,14 +28,18 @@ import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
 import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
-import ChipsBar from './filtersSidebar/chips';
-import FiltersSidebar from './filtersSidebar';
+import TableChipsBar from './filtersSidebar/chips';
+import TableFiltersSidebar from './filtersSidebar';
 
 interface TableProps {
   selectedKey: string | undefined | null;
   isFiltersSidebarOpen?: boolean;
   hideFiltering?: boolean;
   extraInterfaceToTopBar?: () => React.JSX.Element;
+  minWidth?: string;
+  hideSearch?: boolean;
+  hideTableTopBar?: boolean;
+  rowHeightClass?: string;
 }
 
 const Table = ({
@@ -43,6 +47,10 @@ const Table = ({
   isFiltersSidebarOpen = false,
   hideFiltering = false,
   extraInterfaceToTopBar,
+  minWidth,
+  hideSearch,
+  hideTableTopBar,
+  rowHeightClass,
 }: TableProps) => {
   const {
     tableContainerRef,
@@ -52,6 +60,10 @@ const Table = ({
     toggleSelectAllFilter,
     selectedFilters,
     resetFilters,
+    rows,
+    searchValue,
+    setSearchValue,
+    exportTableData,
   } = useTable(({ state, actions }) => ({
     tableContainerRef: state.tableContainerRef,
     filters: state.filters,
@@ -60,6 +72,10 @@ const Table = ({
     toggleSelectAllFilter: actions.toggleSelectAllFilter,
     selectedFilters: state.selectedFilters,
     resetFilters: actions.resetFilters,
+    rows: state.rows,
+    searchValue: state.searchValue,
+    setSearchValue: actions.setSearchValue,
+    exportTableData: actions.exportTableData,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -110,18 +126,29 @@ const Table = ({
   );
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <TableTopBar
-        showFilterSidebar={showFilterSidebar}
-        hideFiltering={hideFiltering}
-        setShowFilterSidebar={setShowFilterSidebar}
-        extraInterface={extraInterfaceToTopBar}
-      />
-      <ChipsBar
-        selectedFilters={selectedFilters}
-        resetFilters={resetFilters}
-        toggleFilterSelection={toggleFilterSelection}
-      />
+    <div className="w-full h-full flex flex-col text-raisin-black dark:text-bright-gray">
+      {!hideTableTopBar && (
+        <>
+          <TableTopBar
+            showFilterSidebar={showFilterSidebar}
+            hideFiltering={hideFiltering}
+            setShowFilterSidebar={setShowFilterSidebar}
+            extraInterface={extraInterfaceToTopBar}
+            hideSearch={hideSearch}
+            rows={rows}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            exportTableData={exportTableData}
+          />
+          {!hideFiltering && (
+            <TableChipsBar
+              selectedFilters={selectedFilters}
+              resetFilters={resetFilters}
+              toggleFilterSelection={toggleFilterSelection}
+            />
+          )}
+        </>
+      )}
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         {showFilterSidebar && (
           <Resizable
@@ -130,8 +157,9 @@ const Table = ({
             enable={{
               right: true,
             }}
+            className="overflow-auto h-full"
           >
-            <FiltersSidebar
+            <TableFiltersSidebar
               filters={filters}
               isSelectAllFilterSelected={isSelectAllFilterSelected}
               toggleFilterSelection={toggleFilterSelection}
@@ -149,7 +177,10 @@ const Table = ({
             position={columnPosition}
           />
           <div
-            className="h-full w-full overflow-hidden min-w-[70rem] flex flex-col"
+            className="h-full w-full overflow-hidden flex flex-col"
+            style={{
+              minWidth: minWidth ?? '70rem',
+            }}
             ref={tableRef}
           >
             <TableHeader
@@ -161,6 +192,7 @@ const Table = ({
               isRowFocused={isRowFocused}
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
+              rowHeightClass={rowHeightClass}
             />
           </div>
         </div>

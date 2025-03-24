@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/common",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "A package for common utilities that are being used in multiple packages",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
@@ -37,9 +37,11 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "@google-psat/i18n": "*",
+    "@types/lodash-es": "^4.17.12",
+    "lodash-es": "^4.17.21",
     "tldts": "^6.0.14"
   },
   "devDependencies": {
-    "devtools-protocol": "^0.0.1333880"
+    "devtools-protocol": "^0.0.1345247"
   }
 }

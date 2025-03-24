@@ -43,6 +43,7 @@ const App = () => {
 
   const [landingPageCookies, setLandingPageCookies] =
     useState<CookieFrameStorageType>({});
+
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);

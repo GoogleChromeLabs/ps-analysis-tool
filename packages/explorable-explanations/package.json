@@ -1,0 +1,42 @@
+{
+  "name": "@google-psat/explorable-explanations",
+  "version": "0.11.0-1",
+  "description": "Explorable explanations for PSAT extension",
+  "main": "dist/index.js",
+  "customExports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
+  "exports": {
+    ".": {
+      "default": "./src/protectedAudienceDev.js"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "webpack serve --config ../../ee.webpack.config.cjs --open --mode development",
+    "build": "webpack --config ../../ee.webpack.config.cjs --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+  },
+  "author": {
+    "name": "Google"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+  "dependencies": {
+    "just-throttle": "^4.2.0",
+    "p5": "^1.11.0",
+    "queue": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/p5": "^1.7.6"
+  }
+}

@@ -127,18 +127,62 @@ export const SidebarProvider = ({
     }
   }, [query, selectedItemKey, sidebarItems]);
 
+  useEffect(() => {
+    setSidebarItems((prev) => {
+      const items = { ...prev };
+      const keyPath = selectedItemKey?.split('#').slice(0, -1);
+
+      if (!keyPath || !keyPath.length) {
+        return items;
+      }
+
+      let item = null;
+      let _items = items;
+      keyPath.forEach((key) => {
+        item = _items[key];
+
+        if (item && Object.keys(item.children).length) {
+          item.dropdownOpen = true;
+        }
+
+        _items = item?.children || {};
+      });
+
+      return items;
+    });
+  }, [selectedItemKey]);
+
   /**
    * Update the selected item key and query string.
    * @param key Selected item key.
    * @param queryString Query string to pass to the new panel.
    */
   const updateSelectedItemKey = useCallback(
-    (key: string | null, queryString = '') => {
+    async (key: string | null, queryString = '') => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
         setSelectedItemKey(null);
         return;
+      }
+
+      const item = findItem(sidebarItems, key);
+      if (item?.panel?.href) {
+        const tab = await chrome.tabs.get(
+          chrome.devtools.inspectedWindow.tabId
+        );
+
+        if (tab) {
+          const url = tab.url?.split('#')[0].split('?')[0] || '';
+          const tabUrl = new URL(url);
+          const panelUrl = new URL(item.panel.href);
+
+          if (tabUrl.href !== panelUrl.href) {
+            chrome.tabs.update(chrome.devtools.inspectedWindow.tabId, {
+              url: panelUrl.href,
+            });
+          }
+        }
       }
 
       setSelectedItemKey(keyPath.join('#'));

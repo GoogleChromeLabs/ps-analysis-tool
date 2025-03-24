@@ -23,13 +23,14 @@ import {
   SidebarProvider,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { getSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
-import { Layout } from './components';
+import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
 
 const App: React.FC = () => {
@@ -46,34 +47,45 @@ const App: React.FC = () => {
 
   const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
 
+  const isChromeRuntimeAvailable = Boolean(chrome.runtime?.onMessage);
+
   const reloadTexts = useRef({
-    displayText: I18n.getMessage('extensionUpdated'),
+    displayText: isChromeRuntimeAvailable
+      ? I18n.getMessage('extensionUpdated')
+      : 'Something went wrong.',
     buttonText: I18n.getMessage('refreshPanel'),
   });
 
   useEffect(() => {
     (async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId;
-
-      if (!tabId) {
+      if (!chrome.devtools.inspectedWindow.tabId) {
         return;
       }
 
-      const data = await chrome.storage.session.get();
+      const data = await getSessionStorage('persistentSetting');
       const syncData = await chrome.storage.sync.get();
 
-      if (data?.['selectedSidebarItem#' + tabId]) {
-        setDefaultSelectedItemKey(data['selectedSidebarItem#' + tabId]);
+      if (data?.selectedSidebarItem) {
+        setDefaultSelectedItemKey(data?.selectedSidebarItem);
       } else if (syncData?.psLandingPageViewed) {
         setDefaultSelectedItemKey(SIDEBAR_ITEMS_KEYS.DASHBOARD);
       }
 
-      if (data?.['sidebarCollapsedState#' + tabId]) {
-        setCollapsedState(
-          data?.['sidebarCollapsedState#' + tabId] === 'collapsed'
-        );
+      if (data?.sidebarCollapsedState) {
+        setCollapsedState(data?.sidebarCollapsedState === true);
       } else {
         setCollapsedState(false);
+      }
+
+      if (data?.cookieDropdownOpen) {
+        setSidebarData((prev) => {
+          const newSidebarData = { ...prev };
+          newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
+            SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+          ].children[SIDEBAR_ITEMS_KEYS.COOKIES].dropdownOpen =
+            data?.cookieDropdownOpen;
+          return newSidebarData;
+        });
       }
     })();
   }, []);
@@ -93,7 +105,7 @@ const App: React.FC = () => {
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
         ref={contextInvalidatedRef}
       >
-        {!contextInvalidated ? (
+        {!contextInvalidated && isChromeRuntimeAvailable ? (
           <Layout setSidebarData={setSidebarData} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">

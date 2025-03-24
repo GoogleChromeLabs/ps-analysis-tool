@@ -74,8 +74,8 @@ const useColumnSorting = (
     )?.sortingComparator;
 
     const _sortedData = [...data].sort((a, b) => {
-      let candidateA = getValueByKey(sortKey, a);
-      let candidateB = getValueByKey(sortKey, b);
+      let candidateA = getValueByKey(sortKey, a) ?? '';
+      let candidateB = getValueByKey(sortKey, b) ?? '';
 
       if (sortingComparator) {
         return sortingComparator(candidateA, candidateB) * (ascending ? 1 : -1);

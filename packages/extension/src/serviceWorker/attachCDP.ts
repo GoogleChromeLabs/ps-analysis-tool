@@ -22,18 +22,84 @@ export default async function attachCDP(target: {
 }) {
   try {
     await chrome.debugger.attach(target, '1.3');
-    await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
-      // If this is set to true, debugger will be attached to every new target that is added to the current target.
-      autoAttach: true,
-      waitForDebuggerOnStart: false,
-      //Enables "flat" access to the session via specifying sessionId attribute in the commands.
-      // If this is set to true the debugger is also attached to the child targets of that the target it has been attached to.
-      flatten: true,
-    });
-    await chrome.debugger.sendCommand(target, 'Network.enable');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+
+  try {
+    await chrome.debugger.sendCommand(
+      target,
+      'Storage.setInterestGroupAuctionTracking',
+      { enable: true }
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+  try {
     await chrome.debugger.sendCommand(target, 'Audits.enable');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+  try {
+    await chrome.debugger.sendCommand(
+      target,
+      'Storage.setInterestGroupTracking',
+      {
+        enable: true,
+      }
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+  try {
+    await chrome.debugger.sendCommand(
+      target,
+      'Storage.setAttributionReportingTracking',
+      {
+        enable: true,
+      }
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+  try {
+    await chrome.debugger.sendCommand(
+      target,
+      'Storage.setAttributionReportingLocalTestingMode',
+      {
+        enabled: true,
+      }
+    );
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+  try {
     await chrome.debugger.sendCommand(target, 'Page.enable');
   } catch (error) {
-    //Fail silently
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+  try {
+    await chrome.debugger.sendCommand(target, 'Network.enable');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
+  }
+
+  try {
+    await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
+      autoAttach: true,
+      flatten: true,
+      waitForDebuggerOnStart: false,
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('extensionSourceCodeError', error);
   }
 }

@@ -23,8 +23,11 @@ import type { CookieTableData } from '@google-psat/common';
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
-import { useCookie, useSettings } from '../stateProviders';
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import {
+  useCookie,
+  useProtectedAudience,
+  useSettings,
+} from '../stateProviders';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -56,6 +59,13 @@ const useFrameOverlay = (
     setCanStartInspecting: actions.setCanStartInspecting,
     canStartInspecting: state.canStartInspecting,
   }));
+
+  const { selectedAdUnit, adsAndBidders } = useProtectedAudience(
+    ({ state }) => ({
+      selectedAdUnit: state.selectedAdUnit,
+      adsAndBidders: state.adsAndBidders,
+    })
+  );
 
   const { allowedNumberOfTabs } = useSettings(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
@@ -98,6 +108,9 @@ const useFrameOverlay = (
     });
 
     portRef.current.onMessage.addListener((response: Response) => {
+      if (selectedAdUnit) {
+        return;
+      }
       setSelectedFrame(response.attributes.iframeOrigin, true);
     });
 
@@ -111,16 +124,16 @@ const useFrameOverlay = (
     });
 
     setConnectedToPort(true);
-  }, [canStartInspecting, setSelectedFrame, setIsInspecting]);
+  }, [canStartInspecting, setSelectedFrame, setIsInspecting, selectedAdUnit]);
 
   const listenIfContentScriptSet = useCallback(
-    async (
+    (
       request: { [key: string]: boolean },
       sender: chrome.runtime.MessageSender
     ) => {
-      const tabId = await getCurrentTabId();
+      const tabId = chrome.devtools.inspectedWindow.tabId;
 
-      if (request.setInPage && tabId === sender?.tab?.id?.toString()) {
+      if (request.setInPage && tabId === sender?.tab?.id) {
         setCanStartInspecting(true);
       }
     },
@@ -128,10 +141,10 @@ const useFrameOverlay = (
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(listenIfContentScriptSet);
+    chrome.runtime?.onMessage?.addListener(listenIfContentScriptSet);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(listenIfContentScriptSet);
+      chrome.runtime?.onMessage?.removeListener(listenIfContentScriptSet);
     };
   }, [listenIfContentScriptSet]);
 
@@ -144,13 +157,21 @@ const useFrameOverlay = (
           return;
         }
 
-        if (changes && Object.keys(changes).includes(currentTabId.toString())) {
-          if (!changes[currentTabId].newValue && portRef.current) {
+        const privacySandboxPanelVisibleKey = `${currentTabId}-privacySandboxPanelVisible`;
+
+        if (
+          changes &&
+          Object.keys(changes).includes(privacySandboxPanelVisibleKey)
+        ) {
+          const privacySandboxPanelVisible =
+            changes[privacySandboxPanelVisibleKey].newValue;
+
+          if (!privacySandboxPanelVisible && portRef.current) {
             setIsInspecting(false);
           }
 
-          if (!changes[currentTabId].newValue) {
-            chrome.tabs.sendMessage(
+          if (!privacySandboxPanelVisible) {
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: true,
@@ -164,8 +185,8 @@ const useFrameOverlay = (
               }
             );
           }
-          if (changes[currentTabId].newValue) {
-            chrome.tabs.sendMessage(
+          if (privacySandboxPanelVisible) {
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: false,
@@ -190,7 +211,7 @@ const useFrameOverlay = (
 
   useEffect(() => {
     try {
-      chrome.tabs.sendMessage(
+      chrome.tabs?.sendMessage(
         chrome.devtools.inspectedWindow.tabId,
         { status: 'set?', tabId: chrome.devtools.inspectedWindow.tabId },
         (res) => {
@@ -232,10 +253,12 @@ const useFrameOverlay = (
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
-    chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
+    chrome.storage?.session?.onChanged?.addListener(
+      sessionStoreChangedListener
+    );
     return () => {
       try {
-        chrome.storage.session.onChanged.removeListener(
+        chrome.storage?.session?.onChanged?.removeListener(
           sessionStoreChangedListener
         );
       } catch (error) {
@@ -257,6 +280,53 @@ const useFrameOverlay = (
       setConnectedToPort(false);
     }
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
+
+  useEffect(() => {
+    try {
+      if (selectedFrame) {
+        return;
+      }
+
+      if (!selectedAdUnit) {
+        return;
+      }
+
+      if (!connectedToPort && !canStartInspecting) {
+        connectToPort();
+      }
+
+      if (!isInspecting && portRef.current && canStartInspecting) {
+        portRef.current.postMessage({
+          isInspecting: false,
+        });
+
+        return;
+      }
+
+      if (chrome.runtime?.id && portRef.current && canStartInspecting) {
+        portRef.current?.postMessage({
+          isForProtectedAudience: true,
+          selectedAdUnit,
+          numberOfBidders: adsAndBidders[selectedAdUnit]?.bidders?.length,
+          bidders: adsAndBidders[selectedAdUnit]?.bidders,
+          winningBid: adsAndBidders[selectedAdUnit]?.winningBid,
+          bidCurrency: adsAndBidders[selectedAdUnit]?.bidCurrency,
+          winningBidder: adsAndBidders[selectedAdUnit]?.winningBidder,
+          isInspecting,
+        });
+      }
+    } catch (error) {
+      // Silently fail.
+    }
+  }, [
+    canStartInspecting,
+    connectToPort,
+    connectedToPort,
+    isInspecting,
+    selectedFrame,
+    selectedAdUnit,
+    adsAndBidders,
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -324,6 +394,7 @@ const useFrameOverlay = (
             blockedCookies: blockedCookies.length,
             blockedReasons: blockedReasons.join(', '),
             isInspecting,
+            isForProtectedAudience: Boolean(selectedAdUnit),
             isOnRWS: isFrameOnRWS,
           });
         }
@@ -332,6 +403,7 @@ const useFrameOverlay = (
       }
     })();
   }, [
+    selectedAdUnit,
     canStartInspecting,
     connectToPort,
     connectedToPort,

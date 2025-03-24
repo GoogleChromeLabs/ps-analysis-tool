@@ -21,7 +21,7 @@ import {
   executeTaskInDevToolWorker,
   LIBRARY_DETECTION_WORKER_TASK,
 } from '@google-psat/common';
-import { diff } from 'deep-object-diff';
+import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies.
  */
@@ -91,9 +91,8 @@ const useLibraryDetection = () => {
                 matches,
                 realtimeComputationResult
               );
-              const diffedLibraryMatches = diff(data, matches);
 
-              if (Object.keys(diffedLibraryMatches).length > 0) {
+              if (!isEqual(data, matches)) {
                 return data;
               }
 

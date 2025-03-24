@@ -24,6 +24,8 @@ import {
   Provider as TablePersistentSettingsProvider,
 } from '@google-psat/design-system';
 import { LibraryDetectionProvider } from '@google-psat/library-detection';
+// eslint-disable-next-line import/no-relative-packages -- Relative import is necessary, because package doesn't export css file.
+import './prettyJson.css';
 
 /**
  * Internal dependencies.
@@ -33,25 +35,44 @@ import {
   CookieProvider,
   SettingsProvider,
   AllowedListProvider,
+  ProtectedAudienceContextProvider,
+  WebStoriesProvider,
+  AttributionReportingProvider,
+  TopicsClassifierProvider,
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
-document.body.classList.add(isDarkMode ? 'dark' : 'light');
+// dark-mode class is added to body to apply pretty-print-json dark theme.
+const classes = isDarkMode ? ['dark', 'dark-mode'] : ['light'];
+document.body.classList.add(...classes);
 
 const root = document.getElementById('root');
+
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceMotionEvent = null;
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceOrientationEvent = null;
 
 if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>
       <SettingsProvider>
         <CookieProvider>
-          <TablePersistentSettingsProvider>
-            <LibraryDetectionProvider>
-              <AllowedListProvider>
-                <App />
-              </AllowedListProvider>
-            </LibraryDetectionProvider>
-          </TablePersistentSettingsProvider>
+          <ProtectedAudienceContextProvider>
+            <TablePersistentSettingsProvider>
+              <LibraryDetectionProvider>
+                <AllowedListProvider>
+                  <WebStoriesProvider>
+                    <AttributionReportingProvider>
+                      <TopicsClassifierProvider>
+                        <App />
+                      </TopicsClassifierProvider>
+                    </AttributionReportingProvider>
+                  </WebStoriesProvider>
+                </AllowedListProvider>
+              </LibraryDetectionProvider>
+            </TablePersistentSettingsProvider>
+          </ProtectedAudienceContextProvider>
         </CookieProvider>
       </SettingsProvider>
     </ErrorBoundary>

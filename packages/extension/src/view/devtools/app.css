@@ -58,13 +58,17 @@
 }
 
 .markdown-body {
-
   --bgColor-default: #ffffff;
   --bgColor-muted: #fbfbfb;
   --fgColor-default: #000000;
   --bgColor-neutral-muted: #fbfbfb;
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     scroll-margin-top: 20px;
   }
 
@@ -103,5 +107,155 @@
   h6 {
     font-size: 12px;
   }
+}
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.overflowing-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hidden {
+  display: none;
+}
+
+#ps-canvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  pointer-events: auto;
+}
+
+#interest-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+#user-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+#canvas-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* bubble wrapper */
+#bubble-container-div {
+  position: sticky;
+  top: 5px;
+  left: 5px;
+  z-index: 4;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+
+#bubble-container-div.expanded {
+  backdrop-filter: blur(1px);
+  z-index: 4;
+  pointer-events: auto;
+}
+
+/* bubble element */
+#minified-bubble-container {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid #808080;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+  pointer-events: auto;
+}
+
+#minified-bubble-container.expanded {
+  position: absolute;
+  display: block;
+  top: var(--expandedBubbleY);
+  left: var(--expandedBubbleX);
+  height: var(--expandedBubbleWidth);
+  width: var(--expandedBubbleWidth);
+  border-radius: 50%;
+  border: 1px solid #808080;
+  backdrop-filter: blur(10px);
+}
+
+#close-button {
+  position: absolute;
+  top: 10px;
+  cursor: pointer;
+  display: none;
+  pointer-events: auto;
+}
+
+#open-button {
+  position: absolute;
+  top: 35px;
+  left: 50px;
+  cursor: pointer;
+  display: none;
+  pointer-events: auto;
+}
+
+#count-display {
+  font-size: 16px;
+  position: absolute;
+  margin: 0px;
+  backdrop-filter: blur(4px);
+  font-weight: bolder;
+  border-radius: 50%;
+}
+
+.play-pause-button {
+  margin-right: 10px;
+}
+
+.controls {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+}
+
+.circle-svg:hover:active {
+  cursor: pointer;
+}
+
+.text-class {
+  pointer-events: none;
+}
+
+.svg {
+  cursor: pointer;
+}
+
+.circle-svg {
+  transition: transform 0.2s;
+}
+
+.circle-svg:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+text {
+  cursor: pointer;
 }

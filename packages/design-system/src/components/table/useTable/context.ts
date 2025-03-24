@@ -67,6 +67,7 @@ export interface TableStoreContext {
     conditionalTableRowClassesHandler?: TableProviderProps['conditionalTableRowClassesHandler'];
     exportTableData?: TableProviderProps['exportTableData'];
     hasVerticalBar?: TableProviderProps['hasVerticalBar'];
+    getVerticalBarColorHash?: (row: TableRow) => string;
   };
 }
 
@@ -101,6 +102,7 @@ const initialState: TableStoreContext = {
     onRowClick: noop,
     onRowContextMenu: noop,
     getRowObjectKey: () => '',
+    getVerticalBarColorHash: () => '',
   },
 };
 

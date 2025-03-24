@@ -25,7 +25,7 @@ import React, {
   useMemo,
 } from 'react';
 import { type TabCookies } from '@google-psat/common';
-import { diff } from 'deep-object-diff';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -100,9 +100,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           extraFrameData ?? {},
           isUsingCDP
         );
-        const isThereDiff = diff(prevState ?? {}, updatedTabFrames);
 
-        if (Object.keys(isThereDiff).length === 0) {
+        if (isEqual(prevState ?? {}, updatedTabFrames)) {
           return prevState;
         }
 
@@ -117,7 +116,7 @@ const Provider = ({ children }: PropsWithChildren) => {
    */
   const frameHasCookies = useCallback(() => {
     if (!tabCookies) {
-      return {};
+      return null;
     }
 
     const tabFramesIdsWithURL = Object.entries(tabFrames || {}).reduce<
@@ -256,6 +255,18 @@ const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
+      if (
+        ![
+          'SERVICE_WORKER_SLEPT',
+          SET_TAB_TO_READ,
+          INITIAL_SYNC,
+          NEW_COOKIE_DATA,
+          SERVICE_WORKER_RELOAD_MESSAGE,
+        ].includes(message.type)
+      ) {
+        return;
+      }
+
       const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
 
@@ -310,8 +321,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             setTabToRead(tabId.toString());
             setTabCookies((prevState) => {
               if (Object.keys(data).length > 0) {
-                const isThereDiff = diff(prevState ?? {}, data);
-                if (Object.keys(isThereDiff).length === 0) {
+                if (isEqual(prevState ?? {}, data)) {
                   return prevState;
                 }
                 return data;
@@ -337,41 +347,12 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
     };
   }, [messagePassingListener]);
-
-  const tabUpdateListener = useCallback(
-    async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      const tabId = chrome.devtools.inspectedWindow.tabId;
-      if (tabId === _tabId && changeInfo.url) {
-        setIsInspecting(false);
-        try {
-          const nextURL = new URL(changeInfo.url);
-          const nextDomain = nextURL?.hostname;
-          const currentURL = new URL(tabUrl ?? '');
-          const currentDomain = currentURL?.hostname;
-
-          if (selectedFrame && nextDomain === currentDomain) {
-            setSelectedFrame(nextURL.origin);
-          } else {
-            setSelectedFrame(null);
-          }
-
-          setTabUrl(changeInfo.url);
-        } catch (error) {
-          setSelectedFrame(null);
-        } finally {
-          setTabFrames(null);
-          await getAllFramesForCurrentTab();
-        }
-      }
-    },
-    [tabUrl, getAllFramesForCurrentTab, selectedFrame]
-  );
 
   const tabRemovedListener = useCallback(async () => {
     try {
@@ -396,13 +377,11 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync]);
 
   useEffect(() => {
-    chrome.tabs.onUpdated.addListener(tabUpdateListener);
-    chrome.tabs.onRemoved.addListener(tabRemovedListener);
+    chrome.tabs?.onRemoved?.addListener(tabRemovedListener);
     return () => {
-      chrome.tabs.onUpdated.removeListener(tabUpdateListener);
-      chrome.tabs.onRemoved.removeListener(tabRemovedListener);
+      chrome.tabs?.onRemoved?.removeListener(tabRemovedListener);
     };
-  }, [tabUpdateListener, tabRemovedListener]);
+  }, [tabRemovedListener]);
 
   useEffect(() => {
     loadingTimeout.current = setTimeout(() => {

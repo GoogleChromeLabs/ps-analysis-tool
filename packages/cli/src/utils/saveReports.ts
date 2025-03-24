@@ -23,12 +23,12 @@ import {
   type CompleteJson,
 } from '@google-psat/common';
 import { ensureFile, writeFile } from 'fs-extra';
+import path, { basename } from 'path';
 
 /**
  * Internal dependencies.
  */
 import generateCSVFiles from './generateCSVfiles';
-import path, { basename } from 'path';
 import saveResultsAsHTML from './saveResultAsHTML';
 
 const getFolderName = (pageUrl: string) => {
@@ -60,14 +60,14 @@ const saveReports = async (
       sitemapUrl
     );
 
+    const errorLogs = generateErrorLogFile(result);
+    await ensureFile(path.join(outDir, 'error_logs.txt'));
+    await writeFile(path.join(outDir, 'error_logs.txt'), errorLogs);
+
     const rootSummaryData = generateRootSummaryDataCSV(result);
     await ensureFile(path.join(outDir, 'report.csv'));
     await writeFile(path.join(outDir, 'report.csv'), rootSummaryData);
 
-    const errorLogs = generateErrorLogFile(result);
-
-    await ensureFile(path.join(outDir, 'error_logs.txt'));
-    await writeFile(path.join(outDir, 'error_logs.txt'), errorLogs);
     // Sitemap report
     await Promise.all(
       result.map(async (siteReport) => {

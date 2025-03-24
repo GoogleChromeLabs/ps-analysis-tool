@@ -26,6 +26,7 @@ import {
   generateErrorLogFile,
 } from '@google-psat/common';
 import { type TableFilter } from '@google-psat/design-system';
+
 /**
  * Internal dependencies
  */
@@ -60,11 +61,11 @@ const generateSiteMapReportandDownload = async (
   const rootSummaryData = generateRootSummaryDataCSV(JSONReport);
 
   zip.file('report.html', report);
-  zip.file('report.csv', rootSummaryData);
 
   const errorLogs = generateErrorLogFile(JSONReport);
 
   zip.file('error_logs.txt', errorLogs);
+  zip.file('report.csv', rootSummaryData);
 
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(

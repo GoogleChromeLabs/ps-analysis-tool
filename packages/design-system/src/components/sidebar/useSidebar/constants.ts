@@ -16,6 +16,7 @@
 
 export enum SIDEBAR_ITEMS_KEYS {
   DASHBOARD = 'dashboard',
+  STORIES = 'stories',
   COOKIES = 'cookies',
   COOKIES_WITH_ISSUES = 'cookie-issues',
   URL_WITH_ISSUES = 'urls-with-issues',
@@ -34,4 +35,12 @@ export enum SIDEBAR_ITEMS_KEYS {
   FACILITATED_TESTING = 'facilitated-testing',
   WIKI = 'wiki',
   SETTINGS = 'settings',
+  LEARNING = 'learning',
+  HELP_CENTER = 'help-center',
+  DEMOS = 'demo-center',
+  DEV_SITE = 'dev-site',
+  STORAGE_ACCESS = 'storage-access',
+  FEDERATED_CREDENTIAL = 'federated-credential',
+  IP_PROTECTION = 'ip-protection',
+  PRIVATE_STATE_TOKENS = 'private-state-tokens',
 }

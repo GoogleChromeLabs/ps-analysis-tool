@@ -27,7 +27,7 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import { getCurrentTab } from '../../../../utils/getCurrentTab';
 import { useCookie } from '../cookie';
 import setDomainsInAllowList from './utils/setDomainsInAllowList';
 import getDotPrefixedDomain from './utils/getDotPrefixedDomain';
@@ -45,8 +45,8 @@ const Provider = ({ children }: PropsWithChildren) => {
     (async () => {
       const tabs = await getCurrentTab();
 
-      if (tabs?.length) {
-        isIncognito.current = tabs[0].incognito;
+      if (tabs) {
+        isIncognito.current = tabs.incognito;
       }
     })();
   }, []);

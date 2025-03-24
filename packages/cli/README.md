@@ -53,7 +53,7 @@ Options:
   -c, --concurrency <num>        Number of tabs to open in parallel during sitemap or CSV analysis (default: 3)
   -w, --wait <num>               Number of milliseconds to wait after the page is loaded before generating the report (default: 20000)
   -l, --locale <language>        Locale to use for the CLI, supported: en, hi, es, ja, ko, pt-BR (default: "en")
-  -b, --button-selectors <path>  The path to a json file which contains selectors or button text to be used for GDPR banner acceptance
+  -b, --button-selectors <path>  The path to a JSON file that contains selectors or button text to be used for GDPR banner acceptance
   -h, --help                     Display help for command
 
 To learn more, visit our wiki: https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki.
@@ -69,7 +69,7 @@ Report created successfully: /Users/username/projects/psat-cli-tool/out/www-goog
 
 Open the generated HTML file in the browser.
 
-![PSAT CLI Output](https://s3.amazonaws.com/i.snag.gy/Dyzq6N.jpg)
+![PSAT CLI Output](https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/docs/screenshots/cli-screenshot.png)
 
 ## Docs
 
@@ -95,4 +95,4 @@ You can install the PSAT extension from the [Chrome web store](https://chromeweb
 
 To run it: Visit the website you want to analyze, open Chrome DevTools, and select the Privacy Sandbox panel.
 
-![PSAT Chrome Extension](https://s3.amazonaws.com/i.snag.gy/OcCl5i.jpg)
+![PSAT Chrome Extension](https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/docs/screenshots/cookies-landing-page.png)

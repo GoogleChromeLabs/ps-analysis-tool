@@ -17,27 +17,61 @@
  * External dependencies.
  */
 import { Protocol } from 'devtools-protocol';
-
 /**
  * Internal dependencies.
  */
-import syncCookieStore from '../store/synchnorousCookieStore';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
-import attachCDP from './attachCDP';
 import './chromeListeners';
+import dataStore from '../store/dataStore';
+import cookieStore from '../store/cookieStore';
+import PAStore from '../store/PAStore';
+import ARAStore from '../store/ARAStore';
+import attachCDP from './attachCDP';
+import readHeaderAndRegister from './readHeaderAndRegister';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
   'Network.requestWillBeSentExtraInfo',
   'Network.responseReceivedExtraInfo',
+  'Network.loadingFailed',
+  'Storage.interestGroupAuctionEventOccurred',
+  'Storage.interestGroupAuctionNetworkRequestCreated',
+  'Network.loadingFinished',
   'Audits.issueAdded',
   'Network.requestWillBeSent',
+  'Storage.interestGroupAccessed',
   'Page.frameAttached',
   'Page.frameNavigated',
   'Target.attachedToTarget',
+  'Storage.attributionReportingSourceRegistered',
+  'Storage.attributionReportingTriggerRegistered',
 ];
-
+const attachedSet = new Set<string>();
 let targets: chrome.debugger.TargetInfo[] = [];
+
+/**
+ * Extracts the value of a specific HTTP header from the request or response.
+ * @param header The name of the header to extract.
+ * @param headers The request or response information.
+ * @returns The value of the specified header.
+ */
+const extractHeader = (header: string, headers: Protocol.Network.Headers) =>
+  headers?.[header.toLowerCase()] ?? headers?.[header];
+
+const calculateTabId = (source: chrome.debugger.Debuggee) => {
+  if (source.tabId) {
+    return source.tabId.toString();
+  }
+
+  let tabId = '';
+  const tab = Object.keys(dataStore?.tabs ?? {}).filter(
+    (key) =>
+      source.targetId &&
+      dataStore?.getFrameIDSet(Number(key))?.has(source.targetId)
+  );
+  tabId = tab[0];
+  return tabId;
+};
 
 /**
  * Fires whenever debugging target issues instrumentation event.
@@ -62,13 +96,16 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       targets = await chrome.debugger.getTargets();
 
-      await Promise.all(
-        targets.map(async ({ id, url }) => {
-          if (url.startsWith('http')) {
-            await attachCDP({ targetId: id });
-          }
-        })
-      );
+      targets.forEach((target) => {
+        if (
+          !target.url.startsWith('devtools://') &&
+          !target.url.startsWith('chrome://') &&
+          !attachedSet.has(target.id)
+        ) {
+          attachCDP({ targetId: target.id });
+          attachedSet.add(target.id);
+        }
+      });
 
       // This is to get a list of all targets being attached to the main frame.
       if (method === 'Target.attachedToTarget' && params) {
@@ -76,14 +113,19 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           targetInfo: { targetId, url },
         } = params as Protocol.Target.AttachedToTargetEvent;
 
-        await attachCDP({ targetId });
+        const childDebuggee = { targetId };
+
+        if (!attachedSet.has(targetId)) {
+          attachCDP(childDebuggee);
+          attachedSet.add(targetId);
+        }
 
         targets = await chrome.debugger.getTargets();
         const parentFrameId = targets.filter(
           (target) => target?.tabId && target.tabId === source.tabId
         )[0]?.id;
 
-        syncCookieStore?.addFrameToTabAndUpdateMetadata(
+        dataStore?.addFrameToTabAndUpdateMetadata(
           source.tabId ?? null,
           source.targetId ?? null,
           targetId,
@@ -98,19 +140,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (source?.tabId) {
         tabId = source?.tabId?.toString();
       } else if (source.targetId) {
-        const tab = Object.keys(syncCookieStore?.tabs ?? {}).filter(
-          (key) =>
-            source.targetId &&
-            syncCookieStore?.getFrameIDSet(Number(key))?.has(source.targetId)
-        );
-        tabId = tab[0];
+        tabId = calculateTabId(source);
       }
       // Using Page.frameAttached and Page.frameNavigated we will find the tabId using the frameId because in certain events source.tabId is missing and source.targetId is availale.
       if (method === 'Page.frameAttached' && params) {
         const { frameId, parentFrameId } =
           params as Protocol.Page.FrameAttachedEvent;
 
-        await syncCookieStore?.addFrameToTabAndUpdateMetadata(
+        await dataStore?.addFrameToTabAndUpdateMetadata(
           source.tabId ?? null,
           source.targetId ?? null,
           frameId,
@@ -129,7 +166,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return;
         }
 
-        await syncCookieStore?.addFrameToTabAndUpdateMetadata(
+        await dataStore?.addFrameToTabAndUpdateMetadata(
           source.tabId ?? null,
           source.targetId ?? null,
           id,
@@ -138,10 +175,62 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
       }
 
+      if (dataStore.tabMode !== 'unlimited' && dataStore.tabToRead !== tabId) {
+        return;
+      }
+
+      if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
+        const interestGroupAuctionEventOccured =
+          params as Protocol.Storage.InterestGroupAuctionEventOccurredEvent;
+
+        const { uniqueAuctionId, eventTime, auctionConfig, parentAuctionId } =
+          interestGroupAuctionEventOccured;
+
+        dataStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
+          ...(dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
+          auctionConfig,
+          parentAuctionId,
+          auctionTime: eventTime,
+        };
+
+        PAStore.processInterestGroupAuctionEventOccurred(
+          interestGroupAuctionEventOccured,
+          tabId
+        );
+
+        return;
+      }
+
       if (
-        syncCookieStore.tabMode !== 'unlimited' &&
-        syncCookieStore.tabToRead !== tabId
+        method === 'Storage.interestGroupAccessed' &&
+        params &&
+        source.tabId
       ) {
+        const interestGroupAccessedParams =
+          params as Protocol.Storage.InterestGroupAccessedEvent;
+
+        PAStore.processInterestGroupEvent(interestGroupAccessedParams, tabId);
+      }
+
+      if (
+        method === 'Storage.interestGroupAuctionNetworkRequestCreated' &&
+        params
+      ) {
+        const interestGroupAuctionNetworkRequestCreatedParams =
+          params as Protocol.Storage.InterestGroupAuctionNetworkRequestCreatedEvent;
+
+        const { auctions, type, requestId } =
+          interestGroupAuctionNetworkRequestCreatedParams;
+
+        dataStore.unParsedRequestHeadersForPA[tabId][requestId] = {
+          auctions,
+          type,
+        };
+
+        if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
+          PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
+        }
+
         return;
       }
 
@@ -152,13 +241,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           requestId,
           request: { url: requestUrl },
           frameId = '',
+          timestamp,
+          wallTime,
         } = params as Protocol.Network.RequestWillBeSentEvent;
 
         let finalFrameId = frameId;
-
-        if (!finalFrameId) {
-          return;
-        }
 
         targets = await chrome.debugger.getTargets();
         const setTargets = new Set<string>();
@@ -168,35 +255,71 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return id;
         });
 
-        finalFrameId = syncCookieStore.addFrameIdAndRequestUrlToResourceMap(
+        finalFrameId = dataStore.addFrameIdAndRequestUrlToResourceMap(
           tabId,
           frameId,
           setTargets,
           requestUrl
         );
 
-        if (!syncCookieStore.requestIdToCDPURLMapping[tabId]) {
-          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
+        if (!dataStore.requestIdToCDPURLMapping[tabId]) {
+          dataStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
               finalFrameId,
               frameId,
               url: requestUrl,
+              timeStamp: timestamp,
+              wallTime,
             },
           };
         } else {
-          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
-            ...syncCookieStore.requestIdToCDPURLMapping[tabId],
+          dataStore.requestIdToCDPURLMapping[tabId] = {
+            ...dataStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
               finalFrameId,
               frameId,
               url: requestUrl,
+              timeStamp: timestamp,
+              wallTime,
             },
           };
         }
 
-        if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
-          syncCookieStore.parseRequestHeaders(
-            syncCookieStore.unParsedRequestHeaders[tabId][requestId],
+        if (dataStore.unParsedRequestHeadersForPA[tabId][requestId]) {
+          const { auctions, type } =
+            dataStore.unParsedRequestHeadersForPA[tabId][requestId];
+
+          PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
+        }
+        //@todo When cookie analysis is decoupled move this to a separate function.
+        if (
+          dataStore.tabs[Number(tabId)]?.isCookieAnalysisEnabled &&
+          dataStore.unParsedRequestHeadersForCA[tabId][requestId]
+        ) {
+          if (
+            extractHeader(
+              'Attribution-Reporting-Eligible',
+              dataStore.unParsedRequestHeadersForCA[tabId][requestId].headers
+            )
+          ) {
+            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+              readHeaderAndRegister(
+                dataStore.headersForARA?.[tabId]?.[requestId].headers,
+                requestUrl,
+                tabId
+              );
+            } else {
+              dataStore.headersForARA[tabId] = {
+                ...dataStore.headersForARA[tabId],
+                [requestId]: {
+                  headers: {},
+                  url: requestUrl,
+                },
+              };
+            }
+          }
+          cookieStore.parseRequestHeadersForCA(
+            dataStore.unParsedRequestHeadersForCA[tabId][requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
@@ -205,28 +328,71 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
+      if (method === 'Network.loadingFinished' && params) {
+        const loadingFinishedParams =
+          params as Protocol.Network.LoadingFinishedEvent;
+
+        PAStore.parseRequestHeadersForPA(
+          loadingFinishedParams.requestId,
+          loadingFinishedParams.timestamp,
+          tabId,
+          'Finished Fetch'
+        );
+      }
+
+      if (method === 'Network.loadingFailed' && params) {
+        const loadingFailedParams =
+          params as Protocol.Network.LoadingFinishedEvent;
+
+        PAStore.parseRequestHeadersForPA(
+          loadingFailedParams.requestId,
+          loadingFailedParams.timestamp,
+          tabId,
+          'Failed Fetch'
+        );
+      }
+
       if (method === 'Network.requestWillBeSentExtraInfo') {
-        const { requestId } =
+        const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
-        if (syncCookieStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
-          syncCookieStore.parseRequestHeaders(
+        if (dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
+          if (extractHeader('Attribution-Reporting-Eligible', headers)) {
+            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+              readHeaderAndRegister(
+                headers,
+                dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
+                tabId
+              );
+            } else {
+              dataStore.headersForARA[tabId] = {
+                ...dataStore.headersForARA[tabId],
+                [requestId]: {
+                  headers: {},
+                  url: dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
+                    ?.url,
+                },
+              };
+            }
+          }
+
+          cookieStore.parseRequestHeadersForCA(
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
             requestId,
             tabId,
             Array.from(
               new Set([
-                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                dataStore.requestIdToCDPURLMapping[tabId][requestId]
                   ?.finalFrameId,
-                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                  ?.frameId,
+                dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
               ])
             )
           );
         } else {
-          syncCookieStore.unParsedRequestHeaders[tabId][requestId] =
+          dataStore.unParsedRequestHeadersForCA[tabId][requestId] =
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
         }
+
         return;
       }
 
@@ -237,10 +403,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const {
           frameId = '',
           requestId,
-          response: { url: requestUrl },
+          response: { url: requestUrl, headers },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
         let finalFrameId = frameId;
+
+        if (
+          extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
+          extractHeader('Attribution-Reporting-Register-Source', headers)
+        ) {
+          readHeaderAndRegister(headers, requestUrl, tabId);
+        }
 
         if (!finalFrameId) {
           return;
@@ -254,25 +427,27 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return id;
         });
 
-        finalFrameId = syncCookieStore.addFrameIdAndRequestUrlToResourceMap(
+        finalFrameId = dataStore.addFrameIdAndRequestUrlToResourceMap(
           tabId,
           frameId,
           setTargets,
           requestUrl
         );
 
-        if (!syncCookieStore.requestIdToCDPURLMapping[tabId]) {
-          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
+        if (!dataStore.requestIdToCDPURLMapping[tabId]) {
+          dataStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
+              ...(dataStore.requestIdToCDPURLMapping[tabId]?.[requestId] ?? {}),
               finalFrameId,
               frameId,
               url: requestUrl,
             },
           };
         } else {
-          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
-            ...syncCookieStore.requestIdToCDPURLMapping[tabId],
+          dataStore.requestIdToCDPURLMapping[tabId] = {
+            ...dataStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
+              ...dataStore.requestIdToCDPURLMapping[tabId][requestId],
               finalFrameId,
               frameId,
               url: requestUrl,
@@ -280,64 +455,85 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (syncCookieStore.unParsedResponseHeaders[tabId][requestId]) {
-          syncCookieStore.parseResponseHeaders(
-            syncCookieStore.unParsedResponseHeaders[tabId][requestId],
+        if (dataStore.unParsedResponseHeadersForCA[tabId][requestId]) {
+          cookieStore.parseResponseHeadersForCA(
+            dataStore.unParsedResponseHeadersForCA[tabId][requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
 
-        if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
-          syncCookieStore.parseRequestHeaders(
-            syncCookieStore.unParsedRequestHeaders[tabId][requestId],
+        if (dataStore.unParsedRequestHeadersForCA[tabId][requestId]) {
+          cookieStore.parseRequestHeadersForCA(
+            dataStore.unParsedRequestHeadersForCA[tabId][requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
 
-        delete syncCookieStore.requestIdToCDPURLMapping[tabId][requestId];
         return;
       }
 
       if (method === 'Network.responseReceivedExtraInfo') {
         const { headers, requestId } =
           params as Protocol.Network.ResponseReceivedExtraInfoEvent;
+        if (
+          extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
+          extractHeader('Attribution-Reporting-Register-Source', headers)
+        ) {
+          //sometimes this fires early and we still havent calculated tabId for this.
+          tabId = calculateTabId(source);
+
+          if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            readHeaderAndRegister(
+              headers,
+              dataStore.headersForARA?.[tabId]?.[requestId]?.url,
+              tabId
+            );
+          } else {
+            dataStore.headersForARA[tabId] = {
+              ...dataStore.headersForARA[tabId],
+              [requestId]: {
+                headers,
+                url: '',
+              },
+            };
+          }
+        }
 
         // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
         if (!headers['set-cookie'] && !headers['Set-Cookie']) {
           return;
         }
 
-        if (syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]) {
+        if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
           const frameIds = Array.from(
             new Set([
-              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+              dataStore.requestIdToCDPURLMapping[tabId][requestId]
                 ?.finalFrameId,
-              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                ?.frameId,
+              dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
             ])
           );
 
-          syncCookieStore.parseResponseHeaders(
+          cookieStore.parseResponseHeadersForCA(
             params as Protocol.Network.ResponseReceivedExtraInfoEvent,
             requestId,
             tabId,
             frameIds
           );
 
-          if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
-            syncCookieStore.parseRequestHeaders(
-              syncCookieStore.unParsedRequestHeaders[tabId][requestId],
+          if (dataStore.unParsedRequestHeadersForCA[tabId][requestId]) {
+            cookieStore.parseRequestHeadersForCA(
+              dataStore.unParsedRequestHeadersForCA[tabId][requestId],
               requestId,
               tabId,
               frameIds
             );
           }
         } else {
-          syncCookieStore.unParsedResponseHeaders[tabId][requestId] =
+          dataStore.unParsedResponseHeadersForCA[tabId][requestId] =
             params as Protocol.Network.ResponseReceivedExtraInfoEvent;
         }
         return;
@@ -372,16 +568,131 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         const cookieObjectToUpdate = createCookieFromAuditsIssue(
           cookieIssueDetails,
-          syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
+          dataStore?.getTabUrl(Number(tabId)) ?? '',
           [],
-          syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
-          syncCookieStore.cookieDB ?? {}
+          dataStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
+          dataStore.cookieDB ?? {}
         );
 
         if (cookieObjectToUpdate) {
-          syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+          cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
         }
         return;
+      }
+
+      if (method === 'Storage.attributionReportingSourceRegistered' && params) {
+        const { registration, result } =
+          params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
+        dataStore.sources.sourceRegistration =
+          dataStore.sources.sourceRegistration.map((singleSource) => {
+            const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+            const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
+            if (
+              //@ts-ignore
+              singleSource?.sourceEventId === registration.eventId &&
+              singleSource.sourceOrigin &&
+              host === sourceOriginHost
+            ) {
+              const time = registration.time.toString().includes('.')
+                ? registration.time * 1000
+                : registration.time;
+
+              const combinedData = {
+                ...singleSource,
+                ...registration,
+                time,
+                expiry: registration.expiry * 1000 + time,
+                result,
+                tabId: tabId ?? singleSource.tabId,
+              };
+              //@ts-ignore
+              delete combinedData.sourceEventId;
+              //@ts-ignore
+              delete combinedData.destination;
+              return combinedData;
+            }
+            return singleSource;
+          });
+      }
+
+      if (
+        method === 'Storage.attributionReportingTriggerRegistered' &&
+        params
+      ) {
+        const { registration, eventLevel, aggregatable } =
+          params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
+
+        dataStore.sources.triggerRegistration.forEach((trigger, index) => {
+          if (tabId !== trigger.tabId) {
+            return;
+          }
+          const registrationKeys = new Set<string>();
+          Object.keys(registration).forEach((key) => registrationKeys.add(key));
+
+          const triggerKeys = new Set<string>();
+          Object.keys(trigger).forEach((key) => triggerKeys.add(key));
+          let match = false;
+
+          if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('aggregatableTriggerData') &&
+            !match &&
+            registration['aggregatableTriggerData'].length > 0
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'aggregatableTriggerData'
+            );
+          } else if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('aggregatableValues') &&
+            !match &&
+            Object.prototype.hasOwnProperty.call(
+              registration['aggregatableValues'],
+              'values'
+            )
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'aggregatableValues'
+            );
+          } else if (
+            registrationKeys
+              .intersection(triggerKeys)
+              .has('eventTriggerData') &&
+            !match
+          ) {
+            match = ARAStore.matchTriggerData(
+              registration,
+              trigger,
+              'eventTriggerData'
+            );
+          }
+
+          const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+          const sourceOriginHost = trigger.destination
+            ? new URL(trigger.destination).origin
+            : '';
+          if (
+            match &&
+            !trigger?.aggregatable &&
+            !trigger?.eventLevel &&
+            trigger.destination &&
+            host === sourceOriginHost
+          ) {
+            dataStore.sources.triggerRegistration[index] = {
+              ...trigger,
+              eventLevel,
+              aggregatable,
+              ...registration,
+              tabId: tabId ?? trigger.tabId,
+            };
+          }
+        });
       }
     } catch (error) {
       //Fail silently.

@@ -28,7 +28,11 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies.
  */
 import App from '../app';
-import { useCookie, useSettings } from '../stateProviders';
+import {
+  useCookie,
+  useSettings,
+  useProtectedAudience,
+} from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
@@ -37,6 +41,7 @@ import data from '../../../utils/test-data/cookieMockData';
 jest.mock('../stateProviders', () => ({
   useCookie: jest.fn(),
   useSettings: jest.fn(),
+  useProtectedAudience: jest.fn(),
 }));
 
 jest.mock(
@@ -45,10 +50,12 @@ jest.mock(
     useTablePersistentSettingsStore: jest.fn(),
   })
 );
+globalThis.chrome.runtime.getURL = () => '';
 
 const mockUseCookieStore = useCookie as jest.Mock;
 const mockUseTablePersistentSettingStore =
   useTablePersistentSettingsStore as jest.Mock;
+const mockUseProtectedAudienceStore = useProtectedAudience as jest.Mock;
 const mockUseSettingsStore = useSettings as jest.Mock;
 
 describe('App', () => {
@@ -108,7 +115,8 @@ describe('App', () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           get: (_, __) =>
             Promise.resolve({
-              ['selectedSidebarItem#' + 40245632]: 'privacySandbox#cookies',
+              [40245632 + '-persistentSetting-selectedSidebarItem']:
+                'privacySandbox#cookies',
             }),
           set: () => Promise.resolve(),
           //@ts-ignore
@@ -151,6 +159,16 @@ describe('App', () => {
             addListener: () => undefined,
           },
         }),
+      },
+      //@ts-ignore
+      runtime: {
+        getURL: () => 'amp/v0.js',
+        //@ts-ignore
+        onMessage: {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          addListener: () => undefined,
+          removeListener: () => undefined,
+        },
       },
     };
     global.ResizeObserver = class MockedResizeObserver {
@@ -196,10 +214,17 @@ describe('App', () => {
       isCurrentTabBeingListenedTo: true,
       tabToRead: '40245632',
     });
+
+    mockUseProtectedAudienceStore.mockReturnValue({
+      auctionEvents: {},
+      interestGroupDetails: [],
+    });
+
     mockUseTablePersistentSettingStore.mockReturnValue({
       getPreferences: () => '',
       setPreferences: noop,
     });
+
     mockUseSettingsStore.mockReturnValue({
       allowedNumberOfTabs: 'single',
     });
@@ -225,6 +250,10 @@ describe('App', () => {
       canStartInspecting: true,
       tabUrl: data.tabUrl,
       isCurrentTabBeingListenedTo: true,
+    });
+    mockUseProtectedAudienceStore.mockReturnValue({
+      auctionEvents: {},
+      interestGroupDetails: [],
     });
     mockUseTablePersistentSettingStore.mockReturnValue({
       getPreferences: () => '',
