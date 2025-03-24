@@ -69,7 +69,7 @@ Report created successfully: /Users/username/projects/psat-cli-tool/out/www-goog
 
 Open the generated HTML file in the browser.
 
-![PSAT CLI Output](https://s3.amazonaws.com/i.snag.gy/Dyzq6N.jpg)
+![PSAT CLI Output](https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/docs/screenshots/cli-screenshot.png)
 
 ## Docs
 
