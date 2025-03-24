@@ -17,7 +17,12 @@
 /**
  * External dependencies
  */
-import { Tabs, useTabs } from '@google-psat/design-system';
+import {
+  Breadcrumbs,
+  Tabs,
+  useSidebar,
+  useTabs,
+} from '@google-psat/design-system';
 import classNames from 'classnames';
 import React, { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash-es';
@@ -35,6 +40,10 @@ const Panel = () => {
 
   const ActiveTabContent = panel.Element;
   const { className, props } = panel;
+
+  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
+    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
+  }));
 
   const {
     interestGroupDetails,
@@ -158,11 +167,18 @@ const Panel = () => {
       data-testid="protected-audience-content"
       className="h-screen w-full flex flex-col overflow-hidden"
     >
+      <div className="p-4 flex flex-col gap-1">
+        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+          <h1 className="text-left">{'Protected Audience'}</h1>
+        </div>
+        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
+      </div>
+
       <Tabs />
       <div
         className={classNames('overflow-auto', className)}
         style={{
-          minHeight: 'calc(100% - 93px)',
+          minHeight: 'calc(100% - 116px)',
         }}
       >
         {ActiveTabContent && <ActiveTabContent {...props} />}
