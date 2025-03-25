@@ -12,7 +12,14 @@
     "sourceMap": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "skipLibCheck": true
   },
-  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**", "node_modules/**"]
+  "include": ["**/*.ts", "**/*.json", "**/*.tsx"],
+  "exclude": [
+    "**/tests/**/*.ts",
+    "dist/**",
+    "dist-types/**",
+    "**/node_modules/**"
+  ]
 }

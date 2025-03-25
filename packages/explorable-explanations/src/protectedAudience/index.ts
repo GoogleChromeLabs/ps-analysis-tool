@@ -29,7 +29,7 @@ import flow from './modules/flow';
 import * as utils from './utils';
 import timeline from './modules/timeline';
 import joinInterestGroup from './modules/joinInterestGroup';
-import icons from '../icons';
+import icons from '../icons.json';
 import bubbles from './modules/bubbles';
 import app from './app';
 import {
@@ -594,8 +594,10 @@ app.handleControls = () => {
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
     app.controlsDiv = document.getElementById('controls-div');
-    app.nextButton = document.getElementById('next-div');
-    app.prevButton = document.getElementById('previous-div');
+    app.nextButton = document.getElementById('next-div') as HTMLButtonElement;
+    app.prevButton = document.getElementById(
+      'previous-div'
+    ) as HTMLButtonElement;
     app.prevButton?.addEventListener('click', app.handlePrevButton);
     app.nextButton?.addEventListener('click', app.handleNextButton);
     app.playButton?.addEventListener('click', () => {
