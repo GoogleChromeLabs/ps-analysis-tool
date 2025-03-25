@@ -696,7 +696,7 @@ const drawPublisherFlow = (x: number, y: number) => {
             nextCoordinates.middle,
         }),
       ]),
-      arcGroup(400, 6),
+      arcGroup(600, 6),
       mainFF.line({
         endYwith: -50,
         shouldTravel: true,

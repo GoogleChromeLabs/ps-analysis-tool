@@ -507,15 +507,7 @@ export default class FigureFactory {
         const _figure = <Arc>figure;
         const p5 = _figure.getP5();
 
-        currentDiameter = currentDiameter + 5;
-
-        _figure.setDiameter(currentDiameter);
-
-        if (currentDiameter > 0) {
-          _figure.draw();
-        }
-
-        if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
+        const clearTravelMarks = () => {
           p5?.push();
           p5?.stroke('white');
           p5?.arc(
@@ -527,7 +519,19 @@ export default class FigureFactory {
             stopAngle
           );
           p5?.pop();
+        };
 
+        currentDiameter = currentDiameter + 5;
+
+        _figure.setDiameter(currentDiameter);
+
+        if (currentDiameter > 0) {
+          clearTravelMarks();
+          _figure.draw();
+        }
+
+        if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
+          clearTravelMarks();
           _figure.setDiameter(0);
 
           return true;
