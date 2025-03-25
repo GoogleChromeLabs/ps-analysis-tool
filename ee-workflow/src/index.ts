@@ -219,6 +219,9 @@ nodes.forEach((node, index) => {
   mainCanvas.addGroup(group, true);
 });
 
+const getRandomOffset = (range: number) =>
+  Math.floor(Math.random() * range) - range / 2;
+
 const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
   const lastFigureCoordinates = {
     x: 0,
@@ -325,8 +328,8 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
 
   const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
     return IGFF.circle({
-      x: lastFigureCoordinates.x + index * 20,
-      y: lastFigureCoordinates.y,
+      x: lastFigureCoordinates.x + index * 20 + getRandomOffset(20),
+      y: lastFigureCoordinates.y + getRandomOffset(20),
       diameter: 10,
       fill: 'red',
       stroke: 'black',
@@ -422,8 +425,8 @@ const drawPublisherFlow = (x: number, y: number) => {
       return IGFF.circle({
         x: 0,
         y: 0,
-        endX: bubblesToCoordinates.x + index * 20,
-        endY: bubblesToCoordinates.y,
+        endX: bubblesToCoordinates.x + index * 20 + getRandomOffset(20),
+        endY: bubblesToCoordinates.y + getRandomOffset(20),
         diameter: 10,
         fill: 'orange',
         stroke: 'black',
