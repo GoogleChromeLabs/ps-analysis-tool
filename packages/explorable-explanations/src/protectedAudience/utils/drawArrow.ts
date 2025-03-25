@@ -18,8 +18,14 @@
  */
 import app from '../app';
 import config from '../config';
+import { Direction } from '../types';
 
-export const drawArrow = (size, x, y, direction = 'right') => {
+export const drawArrow = (
+  size: number,
+  x: number,
+  y: number,
+  direction: Direction = 'right'
+) => {
   // Determine offset based on direction
   const directionOffsets = {
     right: { _x: x - 2, _y: y },

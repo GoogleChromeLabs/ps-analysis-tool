@@ -22,9 +22,9 @@ import config from '../../config';
 import bubbles from '../bubbles';
 import { wipeAndRecreateUserCanvas } from '../../utils';
 import flow from '../flow';
-import { SINGLE_SELLER_CONFIG } from '../flowConfig.tsx';
-import { getCoordinateValues } from '../../utils/getCoordinateValues.ts';
-import type { AuctionStep } from '../../types.ts';
+import { SINGLE_SELLER_CONFIG } from '../flowConfig';
+import { getCoordinateValues } from '../../utils/getCoordinateValues';
+import type { AuctionStep } from '../../types';
 import type { Auction } from '.';
 
 export const showWinningAdDirectly = (

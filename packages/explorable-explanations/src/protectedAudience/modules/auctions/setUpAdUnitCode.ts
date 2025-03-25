@@ -21,12 +21,12 @@ import app from '../../app';
 import config, { publisherData } from '../../config';
 import flow from '../flow';
 import { Branches } from '../../components';
-import type { AuctionStep } from '../../types';
+import type { AuctionStep, PublisherNames } from '../../types';
 
 const setUpAdUnitCode = (steps: AuctionStep[], index: number) => {
   const { colors } = config.flow;
   const { x, y } = flow.getTimelineCircleCoordinates(index);
-  const publisher = config.timeline.circles[index].website;
+  const publisher = config.timeline.circles[index].website as PublisherNames;
 
   // Setup Ad unit codes
   steps.push({

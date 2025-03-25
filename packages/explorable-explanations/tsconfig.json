@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "rootDir": "src",
+    "target": "es6",
+    "lib": ["es2021"],
+    "module": "commonjs",
+    "outDir": "dist",
+    "declarationDir": "dist-types",
+    "composite": true,
+    "strict": true,
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
+  },
+  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**", "node_modules/**"]
+}

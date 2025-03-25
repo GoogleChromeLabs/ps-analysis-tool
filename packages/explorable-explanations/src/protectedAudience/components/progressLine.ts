@@ -19,7 +19,7 @@
 import config from '../config';
 import app from '../app';
 import * as utils from '../utils';
-import type { CoordinateValue, Coordinates } from '../types';
+import type { CoordinateValue, Coordinates, Direction } from '../types';
 
 const ARROW_SIZE = 10;
 
@@ -60,7 +60,7 @@ const ProgressLine = ({
   });
   const { x2, y2 } = getEndpointCoordinates(x1, y1, direction, width, height);
 
-  const drawArrow = (x: number, y: number, dir: string) => {
+  const drawArrow = (x: number, y: number, dir: Direction) => {
     if (!noArrow) {
       utils.drawArrow(ARROW_SIZE, x, y, dir);
     }

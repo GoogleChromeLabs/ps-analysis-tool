@@ -16,21 +16,21 @@
 /**
  * Internal dependencies.
  */
-import app from '../app';
+import app, { type App } from '../app';
 
 export const addCanvasEventListener = (
-  event: string,
+  event: keyof App['canvasEventListerners']['main'],
   callback: (mouseX: number, mouseY: number) => void,
   key: string,
-  canvasName = 'main'
+  canvasName: keyof App['canvasEventListerners'] = 'main'
 ) => {
   app.canvasEventListerners[canvasName][event][key] = callback;
 };
 
 export const removeCanvasEventListener = (
-  event: string | number,
+  event: keyof App['canvasEventListerners']['main'],
   key: string | number,
-  canvasName = 'main'
+  canvasName: keyof App['canvasEventListerners'] = 'main'
 ) => {
   delete app.canvasEventListerners[canvasName][event][key];
 };

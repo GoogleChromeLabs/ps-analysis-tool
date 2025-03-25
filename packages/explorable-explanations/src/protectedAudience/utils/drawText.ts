@@ -19,7 +19,7 @@
 import app from '../app';
 import config from '../config';
 
-export const drawText = (text, x, y) => {
+export const drawText = (text: string, x: number, y: number) => {
   const p = app.p;
 
   if (!p) {

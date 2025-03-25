@@ -19,9 +19,9 @@
 import app from '../../app';
 import config from '../../config';
 import { Box, ProgressLine } from '../../components';
-import { SINGLE_SELLER_CONFIG } from '../flowConfig.tsx';
-import type { AuctionStep } from '../../types.ts';
-import { getCoordinateValues } from '../../utils/getCoordinateValues.ts';
+import { SINGLE_SELLER_CONFIG } from '../flowConfig';
+import type { AuctionStep } from '../../types';
+import { getCoordinateValues } from '../../utils/getCoordinateValues';
 
 const setUpRunadAuction = (
   steps: AuctionStep[],

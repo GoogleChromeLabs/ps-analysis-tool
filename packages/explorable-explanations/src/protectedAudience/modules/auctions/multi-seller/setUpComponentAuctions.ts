@@ -21,7 +21,12 @@ import config, { publisherData } from '../../../config';
 import { Box, Custom, ProgressLine, Text } from '../../../components';
 import setUpRunadAuction from '../setUpRunadAuction';
 import { MULTI_SELLER_CONFIG } from '../../flowConfig';
-import { AuctionStep, Coordinates, AuctionStepProps } from '../../../types';
+import {
+  AuctionStep,
+  Coordinates,
+  AuctionStepProps,
+  PublisherNames,
+} from '../../../types';
 import { getCoordinateValues, scrollToCircle } from '../../../utils';
 
 const BOX_WIDTH = 1200;
@@ -35,9 +40,21 @@ const boxCordinates: Coordinates = {
   y: 0,
 };
 
+type ComponentAuctionType = {
+  title: string;
+  x: () => number;
+  y: () => number;
+  info: JSX.Element;
+  sspWebsite: string;
+  ssp: string;
+  config: {
+    bidValue: string;
+  };
+};
+
 const setUpComponentAuctions = (steps: AuctionStep[], index: number) => {
   const { box } = config.flow;
-  const publisher = config.timeline.circles[index].website;
+  const publisher = config.timeline.circles[index].website as PublisherNames;
 
   steps.push({
     component: ProgressLine,
@@ -254,9 +271,9 @@ const setUpComponentAuctionStarter = (
 };
 
 const setUpComponentAuction = (
-  steps,
-  { title, x, y, ssp, info, sspWebsite },
-  { bidValue }
+  steps: AuctionStep[],
+  { title, x, y, ssp, info, sspWebsite }: ComponentAuctionType,
+  { bidValue }: ComponentAuctionType['config']
 ) => {
   const { box, arrowSize } = config.flow;
 
@@ -417,7 +434,7 @@ const setUpTPoint = (steps: AuctionStep[]) => {
   });
 };
 
-const setupAfterComponentAuctionFlow = (steps) => {
+const setupAfterComponentAuctionFlow = (steps: AuctionStep[]) => {
   const { box, arrowSize } = config.flow;
 
   steps.push({
@@ -434,6 +451,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
+      if (!returnValue.down) {
+        return;
+      }
       app.auction.nextTipCoordinates = returnValue.down;
     },
   });
@@ -466,6 +486,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
+      if (!returnValue.down) {
+        return;
+      }
       app.auction.nextTipCoordinates = returnValue.down;
     },
   });
@@ -498,6 +521,9 @@ const setupAfterComponentAuctionFlow = (steps) => {
     },
     delay: 1000,
     callBack: (returnValue) => {
+      if (!returnValue.down) {
+        return;
+      }
       app.auction.nextTipCoordinates = returnValue.down;
     },
   });

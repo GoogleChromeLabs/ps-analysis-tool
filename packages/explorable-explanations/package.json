@@ -3,6 +3,8 @@
   "version": "0.11.0-1",
   "description": "Explorable explanations for PSAT extension",
   "main": "dist/index.js",
+  "types": "dist-types/index.d.ts",
+  "source": "src/index.ts",
   "customExports": {
     ".": {
       "default": "./src/index.ts"
@@ -15,8 +17,13 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "webpack serve --config ../../ee.webpack.config.cjs --open --mode development",
-    "build": "webpack --config ../../ee.webpack.config.cjs --mode production"
+    "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "dev:ee": "webpack serve --config ../../ee.webpack.config.cjs --open --mode development",
+    "build:ee": "webpack --config ../../ee.webpack.config.cjs --mode production && tsc build",
+    "build:tsc": "tsc --build",
+    "dev:tsc": "tsc-watch --build",
+    "dev": "npm run dev:ee && npm run dev:tsc",
+    "build": "npm run build:ee && npm run build:tsc"
   },
   "repository": {
     "type": "git",

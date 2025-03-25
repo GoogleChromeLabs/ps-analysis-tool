@@ -91,8 +91,8 @@ export type App = {
   bubbleContainerDiv: HTMLElement | null;
   canvasParentElement?: HTMLElement | null;
   controlsDiv: HTMLElement | null;
-  nextButton: HTMLElement | null;
-  prevButton: HTMLElement | null;
+  nextButton: HTMLButtonElement | null;
+  prevButton: HTMLButtonElement | null;
   bubblesContainerDiv: HTMLElement | null;
   timeline: {
     isPaused: boolean;
@@ -135,6 +135,18 @@ export type App = {
   };
   canvasEventListerners: {
     main: {
+      mouseOver: Record<string, MouseCallback>;
+      mouseOut: Record<string, MouseCallback>;
+      mouseMoved: Record<string, MouseCallback>;
+      mouseClicked: Record<string, MouseCallback>;
+    };
+    interestGroup: {
+      mouseOver: Record<string, MouseCallback>;
+      mouseOut: Record<string, MouseCallback>;
+      mouseMoved: Record<string, MouseCallback>;
+      mouseClicked: Record<string, MouseCallback>;
+    };
+    user: {
       mouseOver: Record<string, MouseCallback>;
       mouseOut: Record<string, MouseCallback>;
       mouseMoved: Record<string, MouseCallback>;
@@ -214,6 +226,18 @@ const app: App = {
   visitedSites: [],
   canvasEventListerners: {
     main: {
+      mouseOver: {},
+      mouseOut: {},
+      mouseMoved: {},
+      mouseClicked: {},
+    },
+    interestGroup: {
+      mouseOver: {},
+      mouseOut: {},
+      mouseMoved: {},
+      mouseClicked: {},
+    },
+    user: {
       mouseOver: {},
       mouseOut: {},
       mouseMoved: {},
