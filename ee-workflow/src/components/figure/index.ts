@@ -219,6 +219,7 @@ export default abstract class Figure {
   resetTraveller() {
     if (this.resetTravel) {
       this.resetTravel(this);
+      this.shouldTravel = true;
     }
   }
 

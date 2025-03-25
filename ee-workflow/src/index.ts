@@ -342,6 +342,8 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
   bubbleFlow.setSideEffectOnDraw(() => {
     IGCanvas.resetQueuesAndReDrawAll();
     IGCanvas.togglePause();
+    bubbles.forEach((bubble) => bubble.resetTraveller());
+
     mainCanvas.togglePause();
     mainCanvas.reDrawAll();
   });
@@ -439,6 +441,8 @@ const drawPublisherFlow = (x: number, y: number) => {
     bubbleFlow.setSideEffectOnDraw(() => {
       IGCanvas.resetQueuesAndReDrawAll();
       IGCanvas.togglePause();
+      bubbles.forEach((bubble) => bubble.resetTraveller());
+
       box6.reDraw();
       mainCanvas.togglePause();
     });
