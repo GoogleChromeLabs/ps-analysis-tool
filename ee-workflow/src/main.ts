@@ -230,7 +230,7 @@ class Main {
           const isDone = animator.draw(skipDraw);
 
           if (firstObject.getGroupId()) {
-            this.processGroup(queue, groupQueue, !skipDraw);
+            this.processGroup(queue, groupQueue, false);
           } else {
             if (!firstObject.getThrow()) {
               this.saveToSnapshot(firstObject);

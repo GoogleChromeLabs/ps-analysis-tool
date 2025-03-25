@@ -19,6 +19,7 @@
  */
 import Figure from '.';
 import Main from '../../main';
+import Arc from './arc';
 import Box from './box';
 import Circle from './circle';
 import Image from './image';
@@ -124,6 +125,7 @@ export default class FigureFactory {
       id,
       fill,
       stroke,
+
       tags,
       mouseClicked,
       mouseMoved,
@@ -198,7 +200,12 @@ export default class FigureFactory {
         _figure.setY(currentY);
         _figure.draw();
 
-        if (!(Math.floor(currentX) > 0 && Math.floor(currentY) > 0)) {
+        if (
+          (Math.floor(currentX) === Math.floor(_endX) &&
+            Math.floor(currentY) === Math.floor(_endY)) ||
+          (Math.ceil(currentX) === Math.ceil(_endX) &&
+            Math.ceil(currentY) === Math.ceil(_endY))
+        ) {
           return true;
         }
 
@@ -436,5 +443,119 @@ export default class FigureFactory {
       mouseMoved,
       onLeave
     );
+  }
+
+  private arcNextTips(x: number, y: number, diameter: number) {
+    this.nextCoordinates = {
+      left: { x: x - diameter / 2, y },
+      right: { x: x + diameter / 2, y },
+      up: { x, y: y - diameter / 2 },
+      down: { x, y: y + diameter / 2 },
+      middle: { x, y },
+    };
+  }
+
+  arc({
+    id,
+    x,
+    y,
+    diameter,
+    startAngle,
+    stopAngle,
+    shouldTravel,
+    fill,
+    stroke,
+    tags,
+    mouseClicked,
+    mouseMoved,
+    onLeave,
+    nextTipHelper,
+    startDiameterOnTravel,
+  }: FigureParams & {
+    diameter: number;
+    startAngle: number;
+    stopAngle: number;
+    startDiameterOnTravel?: number;
+  }): Arc {
+    const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
+
+    this.arcNextTips(possibleX, possibleY, diameter);
+
+    const arc = new Arc(
+      this.canvasRunner,
+      possibleX,
+      possibleY,
+      diameter,
+      startAngle,
+      stopAngle,
+      id,
+      fill,
+      stroke,
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
+    );
+
+    if (shouldTravel) {
+      let currentDiameter = startDiameterOnTravel ?? 0;
+
+      arc.setShouldTravel(shouldTravel);
+      arc.setDiameter(currentDiameter);
+
+      const traveller = (figure: Figure) => {
+        const _figure = <Arc>figure;
+        const p5 = _figure.getP5();
+
+        currentDiameter = currentDiameter + 5;
+
+        _figure.setDiameter(currentDiameter);
+
+        if (currentDiameter > 0) {
+          _figure.draw();
+        }
+
+        if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
+          p5?.push();
+          p5?.stroke('white');
+          p5?.arc(
+            possibleX - 1,
+            possibleY,
+            currentDiameter / 2 + 5,
+            currentDiameter / 2 + 5,
+            startAngle,
+            stopAngle
+          );
+          p5?.pop();
+
+          _figure.setDiameter(0);
+
+          return true;
+        }
+
+        return false;
+      };
+
+      const resetTravel = (figure: Figure) => {
+        const _figure = <Arc>figure;
+        currentDiameter = startDiameterOnTravel ?? 0;
+        _figure.setDiameter(currentDiameter);
+      };
+
+      const completeTravel = (figure: Figure, skipDraw: boolean) => {
+        const _figure = <Arc>figure;
+        _figure.setDiameter(diameter);
+
+        if (!skipDraw) {
+          _figure.draw();
+        }
+      };
+
+      arc.setTraveller(traveller);
+      arc.setResetTravel(resetTravel);
+      arc.setCompleteTravel(completeTravel);
+    }
+
+    return arc;
   }
 }

@@ -63,7 +63,7 @@ export default class Traveller {
       }
     });
 
-    if (this.groupObjectsCompleted.length !== travellingFigures.length) {
+    if (travellingFigures.length) {
       return false;
     }
 

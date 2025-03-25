@@ -328,13 +328,14 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
       x: lastFigureCoordinates.x + index * 20,
       y: lastFigureCoordinates.y,
       diameter: 10,
-      fill: 'orange',
+      fill: 'red',
       stroke: 'black',
       shouldTravel: true,
     });
   });
 
   const bubbleFlow = new Group(IGCanvas, bubbles);
+  bubbleFlow.setThrow(true);
   bubbleFlow.setSideEffectOnDraw(() => {
     IGCanvas.resetQueuesAndReDrawAll();
     IGCanvas.togglePause();
@@ -351,62 +352,102 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
   mainCanvas.addAnimator(animator, false, true);
 };
 
+const rippleEffect = () => {
+  return (diameter: number, times: number) => {
+    const startingCoordinates = {
+      x: 0,
+      y: 0,
+    };
+
+    const arcs = Array.from({ length: times }, (_, index) => {
+      return mainFF.arc({
+        diameter,
+        startAngle: -Math.PI / 2,
+        stopAngle: Math.PI / 2,
+        fill: 'white',
+        stroke: 'white',
+        shouldTravel: true,
+        startDiameterOnTravel: -index * 200,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          if (!index) {
+            startingCoordinates.x = nextCoordinates.middle.x + 52;
+            startingCoordinates.y = nextCoordinates.middle.y;
+          }
+
+          return startingCoordinates;
+        },
+      });
+    });
+
+    const arcGroup = new Group(mainCanvas, arcs);
+
+    return arcGroup;
+  };
+};
+
 const drawPublisherFlow = (x: number, y: number) => {
   const bubblesToCoordinates = {
     x: 0,
     y: 0,
   };
 
-  const box6 = new Group(mainCanvas, [
-    mainFF.box({
-      width: 100,
-      height: 50,
-      fill: '#d3d3d3',
-      nextTipHelper: (nextCoordinates: NextCoordinates) => {
-        return {
-          x: nextCoordinates.right.x,
-          y: nextCoordinates.right.y - 25,
-        };
-      },
-    }),
-    mainFF.text({
-      text: 'Box 6',
-      fill: '#000',
-      nextTipHelper: (nextCoordinates: NextCoordinates) => {
-        bubblesToCoordinates.x = nextCoordinates.middle.x;
-        bubblesToCoordinates.y = nextCoordinates.middle.y;
+  const arcGroup = rippleEffect();
 
-        return nextCoordinates.middle;
-      },
-    }),
-  ]);
+  const renderBox6 = () => {
+    const box6 = new Group(mainCanvas, [
+      mainFF.box({
+        width: 100,
+        height: 50,
+        fill: '#d3d3d3',
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.right.x,
+            y: nextCoordinates.right.y - 25,
+          };
+        },
+      }),
+      mainFF.text({
+        text: 'Box 6',
+        fill: '#000',
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          bubblesToCoordinates.x = nextCoordinates.middle.x;
+          bubblesToCoordinates.y = nextCoordinates.middle.y;
 
-  const bubbles = Array.from({ length: 3 }, (_, index) => {
-    return IGFF.circle({
-      x: 0,
-      y: 0,
-      endX: bubblesToCoordinates.x + index * 20,
-      endY: bubblesToCoordinates.y,
-      diameter: 10,
-      fill: 'orange',
-      stroke: 'black',
-      shouldTravel: true,
+          return nextCoordinates.middle;
+        },
+      }),
+    ]);
+
+    const bubbles = Array.from({ length: 3 }, (_, index) => {
+      return IGFF.circle({
+        x: 0,
+        y: 0,
+        endX: bubblesToCoordinates.x + index * 20,
+        endY: bubblesToCoordinates.y,
+        diameter: 10,
+        fill: 'orange',
+        stroke: 'black',
+        shouldTravel: true,
+      });
     });
-  });
 
-  const bubbleFlow = new Group(IGCanvas, bubbles);
-  bubbleFlow.setSideEffectOnDraw(() => {
-    IGCanvas.resetQueuesAndReDrawAll();
-    IGCanvas.togglePause();
-    mainCanvas.togglePause();
-    mainCanvas.reDrawAll();
-  });
+    const bubbleFlow = new Group(IGCanvas, bubbles);
+    bubbleFlow.setThrow(true);
+    bubbleFlow.setSideEffectOnDraw(() => {
+      IGCanvas.resetQueuesAndReDrawAll();
+      IGCanvas.togglePause();
+      box6.reDraw();
+      mainCanvas.togglePause();
+    });
 
-  box6.setSideEffectOnDraw(() => {
-    IGCanvas.addGroup(bubbleFlow);
-    mainCanvas.togglePause();
-    IGCanvas.togglePause();
-  });
+    box6.setSideEffectOnDraw(() => {
+      IGCanvas.addGroup(bubbleFlow);
+      mainCanvas.togglePause();
+      IGCanvas.togglePause();
+    });
+
+    return box6;
+  };
 
   const animator = new Animator(
     [
@@ -655,14 +696,15 @@ const drawPublisherFlow = (x: number, y: number) => {
             nextCoordinates.middle,
         }),
       ]),
+      arcGroup(400, 6),
       mainFF.line({
         endYwith: -50,
         shouldTravel: true,
         hasArrow: true,
         nextTipHelper: (nextCoordinates: NextCoordinates) => {
           return {
-            x: nextCoordinates.up.x + 10,
-            y: nextCoordinates.up.y - 25,
+            x: nextCoordinates.middle.x - 40,
+            y: nextCoordinates.middle.y - 25,
           };
         },
       }),
@@ -677,7 +719,7 @@ const drawPublisherFlow = (x: number, y: number) => {
           };
         },
       }),
-      box6,
+      renderBox6(),
       mainFF.line({
         endYwith: 50,
         shouldTravel: true,
