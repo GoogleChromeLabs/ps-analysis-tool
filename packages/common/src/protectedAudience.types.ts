@@ -86,4 +86,5 @@ export type AdsAndBiddersType = {
 export type ReceivedBids = singleAuctionEvent & {
   adUnitCode?: string;
   mediaContainerSize?: number[][];
+  adType?: string;
 };

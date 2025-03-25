@@ -454,7 +454,7 @@ const getBidData = (
           ...event,
           adUnitCode,
           mediaContainerSize: [[320, 320]],
-          mediaType: 'video',
+          adType: 'video',
         };
       })
     );

@@ -97,6 +97,7 @@ function computeReceivedBidsAndNoBids(
                 ...event,
                 mediaContainerSize: [sellerSignals?.size],
                 adUnitCode: sellerSignals?.divId,
+                adType: sellerSignals?.adType,
               };
             })
           );
@@ -166,7 +167,7 @@ function computeReceivedBidsAndNoBids(
             ...event,
             mediaContainerSize: [sellerSignals.size],
             adUnitCode: sellerSignals?.divId,
-            mediaType: sellerSignals?.type,
+            adType: sellerSignals?.adType,
           };
         })
       );
