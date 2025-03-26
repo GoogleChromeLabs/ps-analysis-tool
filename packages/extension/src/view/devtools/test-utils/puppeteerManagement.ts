@@ -38,6 +38,7 @@ const puppeteerArgs = [
   '--auto-open-devtools-for-tabs',
   '--start-maximized',
   '--no-sandbox',
+  '--disable-setuid-sandbox',
 ];
 
 /**

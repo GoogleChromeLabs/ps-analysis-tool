@@ -40,16 +40,20 @@ describe('Tabs', () => {
       activeTab: 0,
       titles: ['title1', 'title2'],
       setActiveTab,
+      isTabHighlighted: jest.fn((tab: number) => (tab === 0 ? 1 : 99)),
+      shouldAddSpacer: jest.fn(() => false),
     });
 
     render(<Tabs />);
 
     expect(screen.getByText('title1')).toBeInTheDocument();
     expect(screen.getByText('title1')).toHaveClass('border-b-2');
+    expect(screen.getByText('1')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('title2'));
 
     expect(screen.getByText('title2')).toHaveClass('border-b-2');
+    expect(screen.getByText('9+')).toBeInTheDocument();
 
     fireEvent.keyDown(screen.getByText('title2'), { key: 'Tab' });
 

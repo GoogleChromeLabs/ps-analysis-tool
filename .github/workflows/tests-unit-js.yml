@@ -65,7 +65,7 @@ jobs:
           PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Setup Jest cache
-        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
+        uses: actions/cache@v4
         with:
           path: .jest-cache
           key: ${{ runner.os }}-${{ env.NVMRC }}-jest

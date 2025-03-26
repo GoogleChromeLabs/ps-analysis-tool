@@ -109,14 +109,16 @@ const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.webNavigation.onCompleted.addListener(onCompletedListener);
-    chrome.webNavigation.onErrorOccurred.addListener(onErrorOccuredListener);
-    chrome.webNavigation.onBeforeNavigate.addListener(onNavigatedListener);
+    chrome.webNavigation?.onCompleted?.addListener(onCompletedListener);
+    chrome.webNavigation?.onErrorOccurred?.addListener(onErrorOccuredListener);
+    chrome.webNavigation?.onBeforeNavigate?.addListener(onNavigatedListener);
 
     return () => {
-      chrome.webNavigation.onCompleted.removeListener(onCompletedListener);
-      chrome.webNavigation.onBeforeNavigate.removeListener(onNavigatedListener);
-      chrome.webNavigation.onErrorOccurred.removeListener(
+      chrome.webNavigation?.onCompleted?.removeListener(onCompletedListener);
+      chrome.webNavigation?.onBeforeNavigate?.removeListener(
+        onNavigatedListener
+      );
+      chrome.webNavigation?.onErrorOccurred?.removeListener(
         onErrorOccuredListener
       );
     };

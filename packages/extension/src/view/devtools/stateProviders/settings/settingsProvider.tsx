@@ -222,12 +222,12 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     intitialSync();
-    chrome.storage.sync.onChanged.addListener(storeChangeListener);
-    chrome.storage.session.onChanged.addListener(sessionStoreChangeListener);
+    chrome.storage?.sync?.onChanged?.addListener(storeChangeListener);
+    chrome.storage?.session?.onChanged?.addListener(sessionStoreChangeListener);
 
     return () => {
-      chrome.storage.sync.onChanged.removeListener(storeChangeListener);
-      chrome.storage.session.onChanged.removeListener(
+      chrome.storage?.sync?.onChanged?.removeListener(storeChangeListener);
+      chrome.storage?.session?.onChanged?.removeListener(
         sessionStoreChangeListener
       );
     };

@@ -255,6 +255,18 @@ const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
+      if (
+        ![
+          'SERVICE_WORKER_SLEPT',
+          SET_TAB_TO_READ,
+          INITIAL_SYNC,
+          NEW_COOKIE_DATA,
+          SERVICE_WORKER_RELOAD_MESSAGE,
+        ].includes(message.type)
+      ) {
+        return;
+      }
+
       const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
 
@@ -335,10 +347,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
     };
   }, [messagePassingListener]);
 
@@ -365,9 +377,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync]);
 
   useEffect(() => {
-    chrome.tabs.onRemoved.addListener(tabRemovedListener);
+    chrome.tabs?.onRemoved?.addListener(tabRemovedListener);
     return () => {
-      chrome.tabs.onRemoved.removeListener(tabRemovedListener);
+      chrome.tabs?.onRemoved?.removeListener(tabRemovedListener);
     };
   }, [tabRemovedListener]);
 

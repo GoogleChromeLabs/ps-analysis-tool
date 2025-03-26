@@ -25,6 +25,7 @@ module.exports = function (api) {
           development: !isProduction,
         },
       ],
+      '@babel/preset-typescript',
     ],
     plugins: [
       ['@babel/plugin-transform-react-jsx'],

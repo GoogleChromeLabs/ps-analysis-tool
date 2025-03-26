@@ -19,12 +19,17 @@
 const path = require('path');
 const webpack = require('webpack');
 
+/**
+ * Internal dependencies.
+ */
+const commonConfig = require('./webpack.shared.cjs');
+
 const isProduction = process.env.NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
 
 module.exports = {
   entry: {
-    'protected-audience': './src/index.js',
+    'explorable-explanations': './src/index.ts',
   },
   output: {
     filename: 'index.js',
@@ -45,29 +50,6 @@ module.exports = {
     open: true, // Open browser after server starts
     hot: true, // Enable hot module replacement (HMR)
   },
-  module: {
-    rules: [
-      {
-        test: /\.jsx|tsx|js?$/,
-        exclude: /node_modules/,
-        resolve: {
-          fullySpecified: false,
-          fallback: {
-            fs: false,
-            path: false,
-          },
-        },
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-            },
-          },
-        ],
-      },
-    ],
-  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -75,4 +57,5 @@ module.exports = {
       },
     }),
   ],
+  ...commonConfig,
 };

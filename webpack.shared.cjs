@@ -78,6 +78,10 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: 'asset/resource', // Tells Webpack to handle binary files properly
+      },
     ],
   },
   devtool: !isProduction ? 'source-map' : undefined,

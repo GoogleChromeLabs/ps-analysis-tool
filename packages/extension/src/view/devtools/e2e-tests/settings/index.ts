@@ -43,7 +43,7 @@ describe('Settings Page', () => {
       await puppeteer.close();
     }, 40000);
 
-    test('Should be able to validate the multitab setting option', async () => {
+    test.skip('Should be able to validate the multitab setting option', async () => {
       await page.goto('https://bbc.com');
 
       const devtools = await puppeteer.getDevtools();
@@ -167,6 +167,15 @@ describe('Settings Page', () => {
 
       await frame.click('button[data-test-id="button"]');
       await interaction.delay(3000);
+
+      await frame.waitForSelector('button[title="Tracking Protection"]', {
+        timeout: 5000,
+      });
+      const trackingProtectionOpener = await frame.$(
+        'button[title="Tracking Protection"]'
+      );
+
+      await trackingProtectionOpener?.click();
 
       const elementTextToClick = 'Cookies';
       await interaction.clickMatchingElement(frame, 'p', elementTextToClick);

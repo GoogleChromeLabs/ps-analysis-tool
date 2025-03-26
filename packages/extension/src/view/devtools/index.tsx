@@ -36,6 +36,9 @@ import {
   SettingsProvider,
   AllowedListProvider,
   ProtectedAudienceContextProvider,
+  WebStoriesProvider,
+  AttributionReportingProvider,
+  TopicsClassifierProvider,
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
@@ -44,6 +47,11 @@ const classes = isDarkMode ? ['dark', 'dark-mode'] : ['light'];
 document.body.classList.add(...classes);
 
 const root = document.getElementById('root');
+
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceMotionEvent = null;
+//@ts-ignore Disable DeviceMotionEvent and DeviceOrientationEvent to prevent console errors.
+window.DeviceOrientationEvent = null;
 
 if (root) {
   createRoot(root).render(
@@ -54,7 +62,13 @@ if (root) {
             <TablePersistentSettingsProvider>
               <LibraryDetectionProvider>
                 <AllowedListProvider>
-                  <App />
+                  <WebStoriesProvider>
+                    <AttributionReportingProvider>
+                      <TopicsClassifierProvider>
+                        <App />
+                      </TopicsClassifierProvider>
+                    </AttributionReportingProvider>
+                  </WebStoriesProvider>
                 </AllowedListProvider>
               </LibraryDetectionProvider>
             </TablePersistentSettingsProvider>
