@@ -33,6 +33,7 @@ import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
 import { getCoordinateValues } from '../../utils/getCoordinateValues';
 import { MULTI_SELLER_CONFIG } from '../flowConfig';
+import { AuctionStep } from '../../types';
 export type Auction = {
   setupAuctions: () => void;
   setUp: (index: number) => void;
@@ -69,7 +70,7 @@ const auction: Auction = {
       return;
     }
 
-    const steps = [];
+    const steps: AuctionStep[] = [];
 
     setUpAdUnitCode(steps, index);
     setupBranches(steps, index);

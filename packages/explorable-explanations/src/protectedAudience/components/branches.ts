@@ -26,7 +26,7 @@ import {
   wipeAndRecreateInterestCanvas,
 } from '../utils';
 import FlowExpander from './flowExpander';
-import type { Coordinates, CoordinateValue } from '../types';
+import type { Coordinates, CoordinateValue, PublisherNames } from '../types';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
 import Info from './info';
 
@@ -41,6 +41,7 @@ type Branch = {
   time: string | (() => string);
   title: string;
   description: string;
+  color?: string;
   info?: {
     title: string;
     info: string;
@@ -64,7 +65,8 @@ const Branches = async ({
 }: BranchesProps): Promise<void | Coordinates> => {
   const { x: x1, y: y1 } = getCoordinateValues({ x: x1Value, y: y1Value });
 
-  const currentSite = config.timeline.circles[currentIndex].website;
+  const currentSite = config.timeline.circles[currentIndex]
+    .website as PublisherNames;
   const typeOfBranches = branches[0].type;
 
   branches = branches.map((branch, index) => ({
@@ -115,6 +117,10 @@ const Branches = async ({
 
       if (type === 'box') {
         endpoint = drawBoxesBranch(x, y, branches[index]);
+      }
+
+      if (!endpoint) {
+        return;
       }
 
       endpoints.push(endpoint);
@@ -233,6 +239,10 @@ const Branches = async ({
         endpoint = drawBoxesBranch(x, y, branches[index]);
       }
 
+      if (!endpoint) {
+        return;
+      }
+
       endpoints.push(endpoint);
       renderedBranchIds.push(id);
     })
@@ -263,7 +273,12 @@ const Branches = async ({
   return nextTip;
 };
 
-const drawDateTimeBranch = (x, y, branch, info) => {
+const drawDateTimeBranch = (
+  x: number,
+  y: number,
+  branch: Branch,
+  info: Branch['info']
+) => {
   const p = app.p;
 
   if (!p) {
@@ -303,7 +318,7 @@ const drawDateTimeBranch = (x, y, branch, info) => {
   return { x: x, y: y + 50 };
 };
 
-const drawBoxesBranch = (x, y, branch) => {
+const drawBoxesBranch = (x: number, y: number, branch: Branch) => {
   const p = app.p;
 
   if (!p) {

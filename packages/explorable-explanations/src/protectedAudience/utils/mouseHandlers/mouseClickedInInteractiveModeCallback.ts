@@ -27,7 +27,11 @@ import {
   wipeAndRecreateUserCanvas,
 } from '../wipeAndRecreateCanvas';
 import { getCoordinateValues } from '../getCoordinateValues';
-const mouseClickedInInteractiveModeCallback = (drawCircle, renderUserIcon) => {
+import { Timeline } from '../../modules/timeline';
+const mouseClickedInInteractiveModeCallback = (
+  drawCircle: Timeline['drawCircle'],
+  renderUserIcon: Timeline['renderUserIcon']
+) => {
   const { mouseX, mouseY, isInteractiveMode, shouldRespondToClick } = app;
   const p = app.p;
   const up = app.up;
