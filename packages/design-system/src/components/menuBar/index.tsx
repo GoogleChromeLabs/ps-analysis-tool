@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { I18n } from '@google-psat/i18n';
 
@@ -48,18 +48,25 @@ const MenuBar = ({
   scrollContainerId,
 }: MenuBarProps) => {
   const [selectedItem, setSelectedItem] = useState<string>(menuData[0].link);
+  const updateFromScrollRef = useRef<boolean>(false);
   const [isListenerDisabled, setIsListenerDisabled] = useState<boolean>(false);
   const [downloadingReport, setDownloadingReport] = useState<boolean>(false);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    const element = globalThis?.document?.getElementById(selectedItem);
-    if (element) {
-      element.scrollIntoView?.({ behavior: 'smooth' });
-      timeout = setTimeout(() => {
-        setIsListenerDisabled(false);
-      }, 700);
+
+    if (!updateFromScrollRef.current) {
+      const element = globalThis?.document?.getElementById(selectedItem);
+      if (element) {
+        element.scrollIntoView?.({ behavior: 'smooth' });
+        timeout = setTimeout(() => {
+          setIsListenerDisabled(false);
+        }, 1000);
+      }
+    } else {
+      updateFromScrollRef.current = false;
     }
+
     return () => {
       if (timeout) {
         clearTimeout(timeout);
@@ -87,6 +94,8 @@ const MenuBar = ({
           scrollContainer.clientHeight;
 
         setSelectedItem((prev) => {
+          updateFromScrollRef.current = true;
+
           if (scrollContainer?.scrollTop === 0) {
             return firstItemLink;
           } else if (isAlmostBottom <= 1 && isAlmostBottom >= 0) {
@@ -100,9 +109,15 @@ const MenuBar = ({
       });
     };
 
+    const handleScrollEnd = () => {
+      updateFromScrollRef.current = false;
+    };
+
     scrollContainer?.addEventListener('scroll', handleScroll);
+    scrollContainer?.addEventListener('scrollend', handleScrollEnd);
     return () => {
       scrollContainer?.removeEventListener('scroll', handleScroll);
+      scrollContainer?.removeEventListener('scrollend', handleScrollEnd);
     };
   }, [menuData, isListenerDisabled, scrollContainerId]);
 

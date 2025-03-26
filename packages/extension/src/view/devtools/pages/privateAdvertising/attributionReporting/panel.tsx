@@ -17,7 +17,12 @@
  * External dependencies
  */
 import React, { useEffect, useRef, useMemo } from 'react';
-import { Tabs, useTabs } from '@google-psat/design-system';
+import {
+  Breadcrumbs,
+  Tabs,
+  useSidebar,
+  useTabs,
+} from '@google-psat/design-system';
 import classNames from 'classnames';
 import { isEqual } from 'lodash-es';
 
@@ -35,6 +40,10 @@ const Panel = () => {
 
   const ActiveTabContent = panel.Element;
   const { className, props } = panel;
+
+  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
+    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
+  }));
 
   const { sourcesRegistration, triggerRegistration, filter } =
     useAttributionReporting(({ state }) => ({
@@ -125,6 +134,13 @@ const Panel = () => {
       data-testid="attribution-reporting-content"
       className="h-screen w-full flex flex-col overflow-hidden"
     >
+      <div className="p-4 flex flex-col gap-1">
+        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+          <h1 className="text-left">Attribution Reporting</h1>
+        </div>
+        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
+      </div>
+
       <Tabs />
       <div
         className={classNames('overflow-auto', className)}
