@@ -60,12 +60,18 @@ export const transformInterestGroup = (site: string) => {
     const circleDateTime = getCircleDatetime(site);
     const date = new Date(circleDateTime.replace('T', ' ').replace('-', '/'));
 
-    interestGroup.time = (date.getTime() + index * 100) / 1000;
+    interestGroup.time = date.getTime() + index * 100;
+    const igFormattedTime = interestGroup.formattedTime as string;
+
+    interestGroup.formattedTime = new Date(
+      interestGroup.time +
+        Number(igFormattedTime.substring(0, igFormattedTime.length - 2)) / 1000
+    ).toISOString();
 
     interestGroup.details.expirationTime =
       new Date(
         interestGroup.time * 1000 + 10 * 60 * 60 * 1000 + index * 1000
-      ).getTime() / 1000;
+      ).getTime() / 1000000;
 
     return interestGroup;
   });

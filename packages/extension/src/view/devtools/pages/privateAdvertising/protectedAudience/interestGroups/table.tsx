@@ -30,6 +30,7 @@ import { Resizable } from 're-resizable';
 import {
   noop,
   type InterestGroups as InterestGroupsType,
+  type singleAuctionEvent,
 } from '@google-psat/common';
 import React, { useMemo, useState, useCallback } from 'react';
 import { prettyPrintJson } from 'pretty-print-json';
@@ -57,12 +58,8 @@ const IGTable = ({
       {
         header: 'Event Time',
         accessorKey: 'formattedTime',
-        cell: (info) =>
-          (info as string)
-            .replace('T', ' | ')
-            .replace('Z', '')
-            .split('-')
-            .join('/'),
+        cell: (_, details) =>
+          (details as singleAuctionEvent).formattedTime.toString(),
         sortingComparator: (a, b) => {
           const aTime = Number((a as string).slice(0, a.length - 2));
           const bTime = Number((b as string).slice(0, b.length - 2));
