@@ -20,10 +20,8 @@ import React, { useMemo } from 'react';
 import {
   PSInfoKey,
   TabsProvider,
-  LandingPage,
   type TabItems,
 } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -72,18 +70,10 @@ const AttributionReporting = () => {
     []
   );
 
-  const contentPanel = (
+  return (
     <TabsProvider items={tabItems} name="attribution-reporting">
       <Panel />
     </TabsProvider>
-  );
-
-  return (
-    <LandingPage
-      title={I18n.getMessage('attributionReporting')}
-      contentPanel={contentPanel}
-      hasTabs={true}
-    />
   );
 };
 
