@@ -48,7 +48,7 @@ const lightTheme = {
   base09: '#de3730', // string data type & ellipsisColor
   base0A: '#dc322f', // null and regex data type
   base0B: '#0842A0', // float data type
-  base0C: 'rgb(142 0 75)', // array key
+  base0C: '#8e004b', // array key
   base0D: '#586e75', // date and function data type
   base0E: '#0842A0', // boolean data type
   base0F: '#0842A0', // integer data type

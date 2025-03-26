@@ -1,0 +1,27 @@
+.json-view .react-json-view {
+  font-size: 11px;
+}
+
+.json-view .react-json-view .object-key,
+.json-view .react-json-view .variable-value
+ {
+  opacity: 1 !important;
+  letter-spacing: 0 !important;
+}
+
+.json-view .react-json-view .object-key-val,
+.json-view .react-json-view .variable-row {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.json-view .react-json-view .icon-container {
+  width: auto !important;
+}
+
+.json-view .react-json-view .collapsed-icon {
+  width: 12px !important;
+  display: inline-block !important;
+}
+
+

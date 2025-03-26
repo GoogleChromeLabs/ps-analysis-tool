@@ -27,6 +27,7 @@ const LazyReactJson = lazy(() => import('@microlink/react-json-view'));
  * Internal dependencies.
  */
 import { darkTheme, lightTheme } from './jsonTheme';
+import './jsonView.css';
 
 /**
  * JsonView component.
@@ -44,17 +45,20 @@ const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
   }, []);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <LazyReactJson
-        theme={isDarkMode ? darkTheme : lightTheme}
-        iconStyle="triangle"
-        enableClipboard={false}
-        displayDataTypes={false}
-        displayObjectSize={false}
-        shouldCollapse={(object) => object.name !== 'root'}
-        {...props}
-      />
-    </Suspense>
+    <div className="json-view">
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyReactJson
+          theme={isDarkMode ? darkTheme : lightTheme}
+          iconStyle="triangle"
+          enableClipboard={false}
+          displayDataTypes={false}
+          displayObjectSize={false}
+          shouldCollapse={(object) => object.name !== 'root'}
+          quotesOnKeys={false}
+          {...props}
+        />
+      </Suspense>
+    </div>
   );
 };
 
