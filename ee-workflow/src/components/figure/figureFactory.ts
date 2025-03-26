@@ -42,6 +42,7 @@ type FigureParams = {
   stroke?: string;
   tags?: string[];
   shouldTravel?: boolean;
+  travelInit?: (figure: Figure, ...args: any) => void;
   nextTipHelper?: (
     nextCoordinates: NextCoordinates,
     ...args: any
@@ -147,21 +148,18 @@ export default class FigureFactory {
     id,
     x,
     y,
-    endX,
-    endY,
     diameter,
     fill,
     stroke,
     tags,
     shouldTravel,
+    travelInit,
     nextTipHelper,
     mouseClicked,
     mouseMoved,
     onLeave,
   }: FigureParams & {
     diameter: number;
-    endX?: number;
-    endY?: number;
   }): Circle {
     const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
 
@@ -182,60 +180,7 @@ export default class FigureFactory {
     );
 
     if (shouldTravel) {
-      let currentX = possibleX;
-      let currentY = possibleY;
-      const _endX = endX ?? 0;
-      const _endY = endY ?? 0;
-      let lerpSpeed = 0.01;
-      circle.setShouldTravel(shouldTravel);
-
-      const traveller = (figure: Figure) => {
-        const _figure = <Circle>figure;
-        const p5 = _figure.getP5();
-
-        currentX = p5?.lerp(currentX, _endX, lerpSpeed) ?? _endX;
-        currentY = p5?.lerp(currentY, _endY, lerpSpeed) ?? _endY;
-
-        _figure.setX(currentX);
-        _figure.setY(currentY);
-        _figure.draw();
-
-        if (
-          (Math.floor(currentX) === Math.floor(_endX) &&
-            Math.floor(currentY) === Math.floor(_endY)) ||
-          (Math.ceil(currentX) === Math.ceil(_endX) &&
-            Math.ceil(currentY) === Math.ceil(_endY))
-        ) {
-          return true;
-        }
-
-        lerpSpeed += 0.0003;
-
-        return false;
-      };
-
-      const resetTravel = (figure: Figure) => {
-        const _figure = <Circle>figure;
-        currentX = possibleX;
-        currentY = possibleY;
-        _figure.setX(currentX);
-        _figure.setY(currentY);
-        lerpSpeed = 0.01;
-      };
-
-      const completeTravel = (figure: Figure, skipDraw: boolean) => {
-        const _figure = <Circle>figure;
-        _figure.setX(_endX);
-        _figure.setY(_endY);
-
-        if (!skipDraw) {
-          _figure.draw();
-        }
-      };
-
-      circle.setTraveller(traveller);
-      circle.setResetTravel(resetTravel);
-      circle.setCompleteTravel(completeTravel);
+      travelInit?.(circle, possibleX, possibleY);
     }
 
     return circle;
@@ -463,6 +408,7 @@ export default class FigureFactory {
     startAngle,
     stopAngle,
     shouldTravel,
+    travelInit,
     fill,
     stroke,
     tags,
@@ -470,12 +416,10 @@ export default class FigureFactory {
     mouseMoved,
     onLeave,
     nextTipHelper,
-    startDiameterOnTravel,
   }: FigureParams & {
     diameter: number;
     startAngle: number;
     stopAngle: number;
-    startDiameterOnTravel?: number;
   }): Arc {
     const { possibleX, possibleY } = this.nextTip(x, y, nextTipHelper);
 
@@ -498,66 +442,7 @@ export default class FigureFactory {
     );
 
     if (shouldTravel) {
-      let currentDiameter = startDiameterOnTravel ?? 0;
-
-      arc.setShouldTravel(shouldTravel);
-      arc.setDiameter(currentDiameter);
-
-      const traveller = (figure: Figure) => {
-        const _figure = <Arc>figure;
-        const p5 = _figure.getP5();
-
-        const clearTravelMarks = () => {
-          p5?.push();
-          p5?.stroke('white');
-          p5?.arc(
-            possibleX - 1,
-            possibleY,
-            currentDiameter / 2 + 5,
-            currentDiameter / 2 + 5,
-            startAngle,
-            stopAngle
-          );
-          p5?.pop();
-        };
-
-        currentDiameter = currentDiameter + 5;
-
-        _figure.setDiameter(currentDiameter);
-
-        if (currentDiameter > 0) {
-          clearTravelMarks();
-          _figure.draw();
-        }
-
-        if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
-          clearTravelMarks();
-          _figure.setDiameter(0);
-
-          return true;
-        }
-
-        return false;
-      };
-
-      const resetTravel = (figure: Figure) => {
-        const _figure = <Arc>figure;
-        currentDiameter = startDiameterOnTravel ?? 0;
-        _figure.setDiameter(currentDiameter);
-      };
-
-      const completeTravel = (figure: Figure, skipDraw: boolean) => {
-        const _figure = <Arc>figure;
-        _figure.setDiameter(diameter);
-
-        if (!skipDraw) {
-          _figure.draw();
-        }
-      };
-
-      arc.setTraveller(traveller);
-      arc.setResetTravel(resetTravel);
-      arc.setCompleteTravel(completeTravel);
+      travelInit?.(arc, possibleX, possibleY, startAngle, stopAngle, diameter);
     }
 
     return arc;

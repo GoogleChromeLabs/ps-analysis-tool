@@ -17,6 +17,9 @@
  * Internal dependencies.
  */
 import { Animator, FigureFactory, Group, NextCoordinates } from './components';
+import Figure from './components/figure';
+import Arc from './components/figure/arc';
+import Circle from './components/figure/circle';
 import Main from './main';
 
 const mainCanvas = new Main();
@@ -219,6 +222,68 @@ nodes.forEach((node, index) => {
   mainCanvas.addGroup(group, true);
 });
 
+const circleTravelInit = (endX?: number, endY?: number) => {
+  return (object: Figure, ...args: any) => {
+    const circle = <Circle>object;
+    const possibleX = args[0];
+    const possibleY = args[1];
+    let currentX = possibleX;
+    let currentY = possibleY;
+    const _endX = endX ?? 0;
+    const _endY = endY ?? 0;
+    let lerpSpeed = 0.01;
+    circle.setShouldTravel(true);
+
+    const traveller = (figure: Figure) => {
+      const _figure = <Circle>figure;
+      const p5 = _figure.getP5();
+
+      currentX = p5?.lerp(currentX, _endX, lerpSpeed) ?? _endX;
+      currentY = p5?.lerp(currentY, _endY, lerpSpeed) ?? _endY;
+
+      _figure.setX(currentX);
+      _figure.setY(currentY);
+      _figure.draw();
+
+      if (
+        (Math.floor(currentX) === Math.floor(_endX) &&
+          Math.floor(currentY) === Math.floor(_endY)) ||
+        (Math.ceil(currentX) === Math.ceil(_endX) &&
+          Math.ceil(currentY) === Math.ceil(_endY))
+      ) {
+        return true;
+      }
+
+      lerpSpeed += 0.0003;
+
+      return false;
+    };
+
+    const resetTravel = (figure: Figure) => {
+      const _figure = <Circle>figure;
+      currentX = possibleX;
+      currentY = possibleY;
+      _figure.setX(currentX);
+      _figure.setY(currentY);
+      lerpSpeed = 0.01;
+    };
+
+    const completeTravel = (figure: Figure, skipDraw: boolean) => {
+      const _figure = <Circle>figure;
+      _figure.setX(_endX);
+      _figure.setY(_endY);
+
+      if (!skipDraw) {
+        _figure.draw();
+      }
+    };
+
+    circle.setTraveller(traveller);
+    circle.setResetTravel(resetTravel);
+    circle.setCompleteTravel(completeTravel);
+  };
+};
+
 const getRandomOffset = (range: number) =>
   Math.floor(Math.random() * range) - range / 2;
 
@@ -334,6 +399,7 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
       fill: 'red',
       stroke: 'black',
       shouldTravel: true,
+      travelInit: circleTravelInit(),
     });
   });
 
@@ -357,6 +423,73 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
   mainCanvas.addAnimator(animator, false, true);
 };
 
+const arcTravelInit = (startDiameterOnTravel: number) => {
+  return (object: Figure, ...args: any) => {
+    let currentDiameter = startDiameterOnTravel ?? 0;
+    const [possibleX, possibleY, startAngle, stopAngle, diameter] = args;
+
+    const arc = <Arc>object;
+    arc.setShouldTravel(true);
+    arc.setDiameter(currentDiameter);
+
+    const traveller = (figure: Figure) => {
+      const _figure = <Arc>figure;
+      const p5 = _figure.getP5();
+
+      const clearTravelMarks = () => {
+        p5?.push();
+        p5?.stroke('white');
+        p5?.arc(
+          possibleX - 1,
+          possibleY,
+          currentDiameter / 2 + 5,
+          currentDiameter / 2 + 5,
+          startAngle,
+          stopAngle
+        );
+        p5?.pop();
+      };
+
+      currentDiameter = currentDiameter + 5;
+
+      _figure.setDiameter(currentDiameter);
+
+      if (currentDiameter > 0) {
+        clearTravelMarks();
+        _figure.draw();
+      }
+
+      if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
+        clearTravelMarks();
+        _figure.setDiameter(0);
+
+        return true;
+      }
+
+      return false;
+    };
+
+    const resetTravel = (figure: Figure) => {
+      const _figure = <Arc>figure;
+      currentDiameter = startDiameterOnTravel ?? 0;
+      _figure.setDiameter(currentDiameter);
+    };
+
+    const completeTravel = (figure: Figure, skipDraw: boolean) => {
+      const _figure = <Arc>figure;
+      _figure.setDiameter(diameter);
+
+      if (!skipDraw) {
+        _figure.draw();
+      }
+    };
+
+    arc.setTraveller(traveller);
+    arc.setResetTravel(resetTravel);
+    arc.setCompleteTravel(completeTravel);
+  };
+};
+
 const rippleEffect = () => {
   return (diameter: number, times: number) => {
     const startingCoordinates = {
@@ -372,7 +505,7 @@ const rippleEffect = () => {
         fill: 'white',
         stroke: 'white',
         shouldTravel: true,
-        startDiameterOnTravel: -index * 200,
+        travelInit: arcTravelInit(-index * 200),
         nextTipHelper: (nextCoordinates: NextCoordinates) => {
           if (!index) {
             startingCoordinates.x = nextCoordinates.middle.x + 52;
@@ -427,12 +560,14 @@ const drawPublisherFlow = (x: number, y: number) => {
       return IGFF.circle({
         x: 0,
         y: 0,
-        endX: bubblesToCoordinates.x + index * 20 + getRandomOffset(20),
-        endY: bubblesToCoordinates.y + getRandomOffset(20),
         diameter: 10,
         fill: 'orange',
         stroke: 'black',
         shouldTravel: true,
+        travelInit: circleTravelInit(
+          bubblesToCoordinates.x + index * 20 + getRandomOffset(20),
+          bubblesToCoordinates.y + getRandomOffset(20)
+        ),
       });
     });
 
