@@ -19,11 +19,11 @@
   "scripts": {
     "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "dev:ee": "webpack serve --config ../../ee.webpack.config.cjs --open --mode development",
-    "build:ee": "webpack --config ../../ee.webpack.config.cjs --mode production && tsc build",
+    "build:ee": "webpack --config ../../ee.webpack.config.cjs --mode production",
     "build:tsc": "tsc --build",
     "dev:tsc": "tsc-watch --build",
     "dev": "npm run dev:ee && npm run dev:tsc",
-    "build": "npm run build:ee && npm run build:tsc"
+    "build": "npm run build:tsc && npm run build:ee"
   },
   "repository": {
     "type": "git",
