@@ -124,9 +124,15 @@ class Main {
   /**
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
+   * @param container - The container to append the canvas to.
+   * @param checkpointToStart - The checkpoint to start from.
    */
-  constructor(private clearBeforeTravel = false) {
-    this.p5 = new p5(this.init.bind(this));
+  constructor(
+    private clearBeforeTravel = false,
+    container?: HTMLElement,
+    private checkpointToStart?: string
+  ) {
+    this.p5 = new p5(this.init.bind(this), container);
   }
 
   /**
@@ -301,6 +307,19 @@ class Main {
 
     while (this.instantQueue.length > 0) {
       this.runner(true);
+    }
+
+    if (this.checkpointToStart) {
+      const checkpoint = this.loadNextCheckpoint();
+
+      if (checkpoint === this.checkpointToStart) {
+        this.checkpointToStart = undefined;
+      } else if (
+        this.stepsQueue.length &&
+        this.stepsQueue[0].getIsCheckpoint()
+      ) {
+        this.runner(false, true);
+      }
     }
   }
 
