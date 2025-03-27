@@ -17,9 +17,8 @@
 /**
  * Internal dependencies.
  */
-import main from '../main';
 import Figure from './figure';
-import Line from './figure/line';
+import FigureFactory from './figure/figureFactory';
 import Group from './group';
 
 /**
@@ -30,56 +29,149 @@ export default class Animator {
   /**
    * Unique id of the animator.
    */
-  id: string;
+  private id: string;
 
   /**
    * Array of objects to be animated. Can be figures or groups.
    * The last object in the array is a dummy object that acts as a placeholder for the end of the animation.
    */
-  objects: Array<Figure | Group> = [];
+  private objects: Array<Figure | Group> = [];
 
   /**
    * Index of the current object being animated.
    */
-  index = 0;
+  private index = 0;
 
   /**
    * Flag to indicate if the animation should be saved in animatorSnapshot.
    * If true, the animation will NOT be saved in animatorSnapshot.
    */
-  throw = false;
+  private throw = false;
+
+  /**
+   * Whether the side effect should be run.
+   */
+  protected runSideEffect: boolean;
+
+  /**
+   * Function to be executed when the animation ends.
+   */
+  private sideEffectOnDraw: (() => void) | undefined;
 
   /**
    * Counter for the number of animations created.
    */
   static animationCounter = 0;
 
-  constructor(objects: Array<Figure | Group>) {
+  constructor(
+    objects: Array<Figure | Group>,
+    figureFactory: FigureFactory,
+    id?: string
+  ) {
     Animator.animationCounter++;
     this.id =
+      id ||
       `animation-${Animator.animationCounter}` +
-      Math.random().toString(36).slice(2, 9);
+        Math.random().toString(36).slice(2, 9);
     this.objects = [
       ...objects,
-      new Line(0, 0, 0, 0, main.backgroundColor.toString()), // last dummy object acts as a placeholder for the end of the animation
+      figureFactory.line({
+        x: 0,
+        y: 0,
+        endX: 0,
+        endY: 0,
+      }), // last dummy object acts as a placeholder for the end of the animation
     ];
-    this.objects.forEach((object) => object.setAid(this.id));
+    this.objects.forEach((object) => object.setAnimatorId(this.id));
+    this.runSideEffect = true;
   }
 
   /**
    * Draws the current object in the animation sequence, and increments the index.
    * If the index reaches the end of the sequence, it resets the index to 0.
+   * @param skipDraw - boolean indicating if the draw function should be skipped
    * @returns boolean indicating if the animation has finished
    */
-  draw(): boolean {
-    this.objects[this.index].draw();
-    this.index++;
-
-    if (this.index === this.objects.length) {
+  draw(skipDraw = false): boolean {
+    if (this.index === this.objects.length - 1) {
       this.index = 0;
+
+      if (!skipDraw && this.runSideEffect) {
+        this.sideEffectOnDraw?.();
+      }
+
+      if (!this.runSideEffect) {
+        this.runSideEffect = true;
+      }
+
       return true;
     }
 
+    if (!skipDraw) {
+      this.objects[this.index].draw();
+    }
+
+    this.index++;
+
     return false;
+  }
+
+  /**
+   * Resets the index of the animator to 0.
+   */
+  resetIndex() {
+    this.index = 0;
+  }
+
+  /**
+   * Sets a side effect to be executed when the animation ends
+   * @param sideEffect - function to be executed when the animation ends
+   */
+  setSideEffectOnDraw(sideEffect: () => void) {
+    this.sideEffectOnDraw = sideEffect;
+  }
+
+  /**
+   * Gets the unique id of the animator.
+   * @returns unique id of the animator
+   */
+  getId(): string {
+    return this.id;
+  }
+
+  /**
+   * Gets the throw flag.
+   * @returns true if the animation will NOT be saved in animatorSnapshot.
+   */
+  getThrow(): boolean {
+    return this.throw;
+  }
+
+  /**
+   * Sets the throw flag to true.
+   * If true, the animation will NOT be saved in animatorSnapshot.
+   * @param throwFlag - boolean indicating if the animation should be saved in animatorSnapshot
+   */
+  setThrow(throwFlag: boolean) {
+    this.throw = throwFlag;
+  }
+
+  getObjects(): Array<Figure | Group> {
+    return this.objects;
+  }
+
+  removeObject(object: Figure | Group) {
+    const index = this.objects.indexOf(object);
+    if (index > -1) {
+      this.objects.splice(index, 1);
+    }
+  }
+
+  /**
+   * Set whether the side effect should be run.
+   * @param runSideEffect - boolean indicating if the side effect should be run.
+   */
+  shouldRunSideEffect(runSideEffect: boolean) {
+    this.runSideEffect = runSideEffect;
   }
 }

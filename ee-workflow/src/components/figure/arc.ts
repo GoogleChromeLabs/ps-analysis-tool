@@ -21,56 +21,74 @@ import Figure from '.';
 import Main from '../../main';
 
 /**
- * Class for creating text figures.
- * Contains the properties and methods that a text should have.
+ * Class for creating a arc figure.
+ * Contains the properties and methods that a arc should have.
  * Extends the Figure class to inherit the basic properties and methods.
  */
-export default class Text extends Figure {
+export default class Arc extends Figure {
   /**
-   * Text to be displayed.
+   * Diameter of the arc.
    */
-  private str: string;
+  diameter: number;
 
   /**
-   * Font size of the text.
+   * Start angle of the arc.
    */
-  private size: number;
+  startAngle: number;
+
+  /**
+   * Stop angle of the arc.
+   */
+  stopAngle: number;
+
+  /**
+   * Callback defined by the user to be executed when the arc is clicked.
+   */
 
   constructor(
-    canvasRunnner: Main,
+    canvasRuuner: Main,
     x: number,
     y: number,
-    str: string,
+    diameter: number,
+    startAngle: number,
+    stopAngle: number,
     id?: string,
-    size?: number,
     fill?: string,
+    stroke?: string,
     tags?: string[],
     mouseClicked?: () => void,
     mouseMoved?: () => void,
     onLeave?: () => void
   ) {
     super(
-      canvasRunnner,
+      canvasRuuner,
       x,
       y,
       id,
       fill,
-      undefined,
+      stroke,
       tags,
       mouseClicked,
       mouseMoved,
       onLeave
     );
-    this.str = str;
-    this.size = size || 16;
+
+    this.diameter = diameter;
+    this.startAngle = startAngle;
+    this.stopAngle = stopAngle;
   }
 
   draw() {
     this.p5?.push();
-    this.p5?.fill(this.fill);
-    this.p5?.textSize(this.size);
-    this.p5?.textAlign(this.p5.CENTER, this.p5.CENTER);
-    this.p5?.text(this.str, this.x, this.y);
+    this.p5?.arc(
+      this.x,
+      this.y,
+      this.diameter / 2,
+      this.diameter / 2,
+      this.startAngle,
+      this.stopAngle,
+      this.p5.OPEN
+    );
     this.p5?.pop();
 
     if (this.runSideEffect) {
@@ -80,36 +98,39 @@ export default class Text extends Figure {
     }
   }
 
-  mouseMoved() {
-    return;
-  }
-
-  onLeave() {
-    return;
-  }
-
-  mouseClicked() {
-    // TODO: Discuss the function
-  }
-
   isHovering(): boolean {
-    return false;
+    if (this.p5?.mouseX === undefined || this.p5?.mouseY === undefined) {
+      return false;
+    }
+
+    return (
+      this.p5?.mouseX > this.x &&
+      this.p5?.mouseX < this.x + this.diameter &&
+      this.p5?.mouseY > this.y &&
+      this.p5?.mouseY < this.y + this.diameter
+    );
   }
 
   reDraw(
     x?: number,
     y?: number,
-    str?: string,
-    size?: number,
+    diameter?: number,
+    startAngle?: number,
+    stopAngle?: number,
     fill?: string,
     stroke?: string
   ) {
     this.x = x ?? this.x;
     this.y = y ?? this.y;
-    this.str = str || this.str;
-    this.size = size ?? this.size;
+    this.diameter = diameter ?? this.diameter;
+    this.startAngle = startAngle ?? this.startAngle;
+    this.stopAngle = stopAngle ?? this.stopAngle;
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
     this.canvasRunner.reDrawAll();
+  }
+
+  setDiameter(diameter: number) {
+    this.diameter = diameter;
   }
 }

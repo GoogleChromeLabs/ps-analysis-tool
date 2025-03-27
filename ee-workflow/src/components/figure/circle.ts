@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating a circle figure.
@@ -29,16 +29,33 @@ export default class Circle extends Figure {
   /**
    * Diameter of the circle.
    */
-  diameter: number;
+  private diameter: number;
 
   constructor(
+    canvasRunner: Main,
     x: number,
     y: number,
     diameter: number,
+    id?: string,
     fill?: string,
-    stroke?: string
+    stroke?: string,
+    tags?: string[],
+    mouseClicked?: () => void,
+    mouseMoved?: () => void,
+    onLeave?: () => void
   ) {
-    super(x, y, fill, stroke);
+    super(
+      canvasRunner,
+      x,
+      y,
+      id,
+      fill,
+      stroke,
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
+    );
     this.diameter = diameter;
   }
 
@@ -48,28 +65,12 @@ export default class Circle extends Figure {
     this.p5?.stroke(this.stroke);
     this.p5?.circle(this.x, this.y, this.diameter);
     this.p5?.pop();
-  }
 
-  onHover() {
-    this.savePreviousColors();
-    this.fill = 'red'; // TODO: Discuss the function
-    main.addFigure(this, true);
-  }
-
-  onLeave() {
-    if (
-      this.fill === this.previousFill &&
-      this.stroke === this.previousStroke
-    ) {
-      return;
+    if (this.runSideEffect) {
+      this.sideEffectOnDraw?.(this);
+    } else {
+      this.runSideEffect = true;
     }
-
-    this.reApplyPreviousColors();
-    main.addFigure(this, true);
-  }
-
-  onClick() {
-    // TODO: Discuss the function
   }
 
   isHovering(): boolean {
@@ -83,14 +84,6 @@ export default class Circle extends Figure {
     );
   }
 
-  remove() {
-    this.p5?.push();
-    this.p5?.fill(main.backgroundColor);
-    this.p5?.stroke(main.backgroundColor);
-    this.p5?.circle(this.x, this.y, this.diameter + 1);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -98,12 +91,11 @@ export default class Circle extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.diameter = diameter ?? this.diameter;
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
   }
 }
