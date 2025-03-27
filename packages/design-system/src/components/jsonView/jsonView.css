@@ -24,4 +24,7 @@
   display: inline-block !important;
 }
 
-
+/* Reduce the size of ellipsis [...] when an object is collapsed */
+.json-view .react-json-view .node-ellipsis {
+  font-size: 12px !important;
+}
