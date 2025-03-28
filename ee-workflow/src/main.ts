@@ -126,11 +126,13 @@ class Main {
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
    * @param checkpointToStart - The checkpoint to start from.
+   * @param onDrawListener - The listener to call when a figure is drawn.
    */
   constructor(
     private clearBeforeTravel = false,
     container?: HTMLElement,
-    private checkpointToStart?: string
+    private checkpointToStart?: string,
+    private onDrawListener?: (id: string) => void
   ) {
     this.p5 = new p5(this.init.bind(this), container);
   }
@@ -182,7 +184,8 @@ class Main {
 
       let toRemoveCount = group.getFigures().length - 1;
       while (toRemoveCount > 0) {
-        queue.shift();
+        const figure = queue.shift();
+        this.onDrawListener?.(figure?.getId() || '');
         toRemoveCount--;
       }
 
@@ -191,6 +194,8 @@ class Main {
         this.groupSnapshot.push(group);
         group.setThrow(true);
       }
+
+      this.onDrawListener?.(group.getId());
     }
   }
 
@@ -238,6 +243,8 @@ class Main {
           if (firstObject.getGroupId()) {
             this.processGroup(queue, groupQueue, false);
           } else {
+            this.onDrawListener?.(firstObject.getId());
+
             if (!firstObject.getThrow()) {
               this.saveToSnapshot(firstObject);
             }
@@ -245,6 +252,7 @@ class Main {
 
           if (isDone) {
             this.animatorSnapshot.push(animator);
+            this.onDrawListener?.(animator.getId());
             animatorQueue.shift();
             this.reDrawAll();
           }
@@ -255,6 +263,8 @@ class Main {
         if (!skipDraw) {
           firstObject.draw();
         }
+
+        this.onDrawListener?.(firstObject.getId());
 
         if (!firstObject.getThrow()) {
           this.saveToSnapshot(firstObject);
