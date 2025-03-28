@@ -17,78 +17,24 @@
  * External dependencies.
  */
 import {
-  InternalNavigationForAnchor,
-  SIDEBAR_ITEMS_KEYS,
   Breadcrumbs,
   Tabs,
   useSidebar,
   useTabs,
 } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
-import React, { useMemo } from 'react';
-/**
- * Internal dependencies
- */
-import SingleTabAnalysisBanner from '../../singleTabAnalysisBanner';
+import React from 'react';
 
 const Panel = () => {
-  const { panel, titles, activeTab } = useTabs(({ state }) => ({
+  const { panel } = useTabs(({ state }) => ({
     panel: state.panel,
     titles: state.titles,
     activeTab: state.activeTab,
   }));
 
-  const updateSelectedItemKey = useSidebar(
-    ({ actions }) => actions.updateSelectedItemKey
-  );
+  const ActiveTabContent = panel.Element;
 
   const { className, props } = panel;
-
-  const tabToBeShown = useMemo(() => {
-    const ActiveTabContent = panel.Element;
-
-    if (!ActiveTabContent) {
-      return <></>;
-    }
-
-    const customMessaging = (
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <div className="flex w-full items-center justify-center">
-          Enable multi-tab debugging for enhanced analysis of the Protected
-          Audience API.&nbsp;
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={() => {
-              document
-                .getElementById('cookies-landing-scroll-container')
-                ?.scrollTo(0, 0);
-              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-            }}
-          >
-            {I18n.getMessage('settingsPage')}.
-          </button>
-        </div>
-        <div className="flex w-full items-center justify-center">
-          {I18n.getMessage('visitPSAT')}&nbsp;
-          <InternalNavigationForAnchor
-            text={'<a>' + I18n.getMessage('wiki') + '.</a>'}
-            to={[SIDEBAR_ITEMS_KEYS.WIKI]}
-          />
-        </div>
-      </div>
-    );
-
-    if (titles[activeTab] === 'Overview') {
-      return <ActiveTabContent {...props} />;
-    }
-
-    return (
-      <SingleTabAnalysisBanner customMessaging={customMessaging}>
-        <ActiveTabContent {...props} />
-      </SingleTabAnalysisBanner>
-    );
-  }, [activeTab, panel.Element, props, titles, updateSelectedItemKey]);
 
   const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
     extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
@@ -112,7 +58,7 @@ const Panel = () => {
           minHeight: 'calc(100% - 116px)',
         }}
       >
-        {tabToBeShown}
+        {ActiveTabContent && <ActiveTabContent {...props} />}
       </div>
     </div>
   );
