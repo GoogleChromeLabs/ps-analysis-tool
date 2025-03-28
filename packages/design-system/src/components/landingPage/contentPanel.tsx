@@ -115,6 +115,30 @@ const ContentPanel = ({
             <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
               {item.description()}
             </p>
+            <div className="absolute top-10 right-5 flex gap-2">
+              <div className="w-4 h-4" title="View Documentation">
+                <Link href={addUTMParams(item.url)} rel="noreferer">
+                  <DescriptionIcon
+                    height="20"
+                    width="20"
+                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                  />
+                </Link>
+              </div>
+              {item.onClick && item?.storyUrl && (
+                <div
+                  className="w-4 h-4 cursor-pointer"
+                  title="View Story"
+                  onClick={item.onClick}
+                >
+                  <WebStoriesIcon
+                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                    height="20"
+                    width="20"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>

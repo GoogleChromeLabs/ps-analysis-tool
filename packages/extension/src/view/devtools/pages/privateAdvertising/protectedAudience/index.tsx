@@ -20,10 +20,8 @@ import React, { useMemo } from 'react';
 import {
   PSInfoKey,
   TabsProvider,
-  LandingPage,
   type TabItems,
 } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -95,18 +93,10 @@ const ProtectedAudience = () => {
     []
   );
 
-  const contentPanel = (
+  return (
     <TabsProvider items={tabItems} name="protectedAudience">
       <Panel />
     </TabsProvider>
-  );
-
-  return (
-    <LandingPage
-      contentPanel={contentPanel}
-      title={I18n.getMessage('protectedAudience')}
-      hasTabs={true}
-    />
   );
 };
 
