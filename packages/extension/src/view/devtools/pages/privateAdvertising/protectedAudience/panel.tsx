@@ -19,31 +19,39 @@
  */
 import {
   Breadcrumbs,
+  LinkProcessor,
+  SIDEBAR_ITEMS_KEYS,
   Tabs,
   useSidebar,
   useTabs,
 } from '@google-psat/design-system';
 import classNames from 'classnames';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies
  */
 import { useProtectedAudience } from '../../../stateProviders';
+import { I18n } from '@google-psat/i18n';
+import SingleTabAnalysisBanner from '../../singleTabAnalysisBanner';
 
 const Panel = () => {
-  const { panel, highlightTab } = useTabs(({ state, actions }) => ({
-    panel: state.panel,
-    highlightTab: actions.highlightTab,
-  }));
+  const { panel, titles, highlightTab, activeTab } = useTabs(
+    ({ state, actions }) => ({
+      panel: state.panel,
+      titles: state.titles,
+      activeTab: state.activeTab,
+      highlightTab: actions.highlightTab,
+    })
+  );
 
-  const ActiveTabContent = panel.Element;
-  const { className, props } = panel;
-
-  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
-    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
-  }));
+  const { extractSelectedItemKeyTitles, updateSelectedItemKey } = useSidebar(
+    ({ actions }) => ({
+      extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
+      updateSelectedItemKey: actions.updateSelectedItemKey,
+    })
+  );
 
   const {
     interestGroupDetails,
@@ -162,6 +170,55 @@ const Panel = () => {
     receivedBids,
   ]);
 
+  const tabToBeShown = useMemo(() => {
+    const ActiveTabContent = panel.Element;
+    const { props } = panel;
+
+    if (!ActiveTabContent) {
+      return <></>;
+    }
+
+    const customMessaging = (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <div className="flex w-full items-center justify-center">
+          Enable multi-tab debugging for enhanced analysis of the Protected
+          Audience API.&nbsp;
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={() => {
+              document
+                .getElementById('cookies-landing-scroll-container')
+                ?.scrollTo(0, 0);
+              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+            }}
+          >
+            {I18n.getMessage('settingsPage')}.
+          </button>
+        </div>
+        <div className="flex w-full items-center justify-center">
+          {I18n.getMessage('visitPSAT')}&nbsp;
+          <LinkProcessor
+            text={'<a>' + I18n.getMessage('wiki') + '.</a>'}
+            to={[SIDEBAR_ITEMS_KEYS.WIKI]}
+          />
+        </div>
+      </div>
+    );
+
+    if (
+      titles[activeTab] === 'Overview' ||
+      titles[activeTab] === 'Explorable Explanation'
+    ) {
+      return <ActiveTabContent {...props} />;
+    }
+
+    return (
+      <SingleTabAnalysisBanner customMessaging={customMessaging}>
+        <ActiveTabContent {...props} />
+      </SingleTabAnalysisBanner>
+    );
+  }, [activeTab, panel, titles, updateSelectedItemKey]);
+
   return (
     <div
       data-testid="protected-audience-content"
@@ -176,12 +233,12 @@ const Panel = () => {
 
       <Tabs />
       <div
-        className={classNames('overflow-auto', className)}
+        className={classNames('overflow-auto', panel?.className ?? '')}
         style={{
           minHeight: 'calc(100% - 116px)',
         }}
       >
-        {ActiveTabContent && <ActiveTabContent {...props} />}
+        {tabToBeShown}
       </div>
     </div>
   );

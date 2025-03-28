@@ -26,8 +26,14 @@ import classNames from 'classnames';
 import React from 'react';
 
 const Panel = () => {
-  const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
+  const { panel } = useTabs(({ state }) => ({
+    panel: state.panel,
+    titles: state.titles,
+    activeTab: state.activeTab,
+  }));
+
   const ActiveTabContent = panel.Element;
+
   const { className, props } = panel;
 
   const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
