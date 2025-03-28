@@ -24,8 +24,6 @@ import {
   Provider as TablePersistentSettingsProvider,
 } from '@google-psat/design-system';
 import { LibraryDetectionProvider } from '@google-psat/library-detection';
-// eslint-disable-next-line import/no-relative-packages -- Relative import is necessary, because package doesn't export css file.
-import './prettyJson.css';
 
 /**
  * Internal dependencies.
@@ -42,8 +40,7 @@ import {
 } from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
-// dark-mode class is added to body to apply pretty-print-json dark theme.
-const classes = isDarkMode ? ['dark', 'dark-mode'] : ['light'];
+const classes = isDarkMode ? ['dark'] : ['light'];
 document.body.classList.add(...classes);
 
 const root = document.getElementById('root');
