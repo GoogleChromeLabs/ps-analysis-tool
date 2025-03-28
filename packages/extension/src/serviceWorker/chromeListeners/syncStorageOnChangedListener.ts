@@ -84,9 +84,9 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
     if (!dataStore.globalIsUsingCDP) {
       const targets = await chrome.debugger.getTargets();
       await Promise.all(
-        targets.map(async ({ id, attached }) => {
+        targets.map(async ({ id }) => {
           try {
-            if (!id || !attached) {
+            if (!id) {
               return;
             }
 

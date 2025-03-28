@@ -23,6 +23,7 @@ import type {
   NoBidsType,
   singleAuctionEvent,
   ErroredOutUrlsData,
+  SourcesData,
 } from '@google-psat/common';
 
 export type TableData = (
@@ -32,9 +33,17 @@ export type TableData = (
   | NoBidsType[keyof NoBidsType]
   | AdsAndBiddersType[keyof AdsAndBiddersType]
   | ErroredOutUrlsData
+  | SourcesData
+  | ClassificationResult
 ) & {
   highlighted?: boolean;
 };
+
+export interface ClassificationResult {
+  domain: string;
+  categories?: { id: number; name: string }[];
+  error?: string;
+}
 
 export type InfoType = number | string | boolean | Array<string | number> | [];
 

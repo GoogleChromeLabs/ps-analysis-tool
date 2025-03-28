@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 
 /**
@@ -78,9 +78,20 @@ const BodyRow = ({
           : 'bg-gainsboro dark:bg-outer-space'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+        : 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
+
+  useEffect(() => {
+    if (isHighlighted) {
+      const element = document.getElementById(index.toString());
+      element?.scrollIntoView?.({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'start',
+      });
+    }
+  }, [index, isHighlighted]);
 
   return (
     <div
@@ -105,7 +116,7 @@ const BodyRow = ({
           style={{
             backgroundColor: verticalBarColorHash,
           }}
-          className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark"
+          className="absolute block top-0 bottom-0 left-0 w-1 h-full"
         />
       )}
       {columns.map(
@@ -124,8 +135,6 @@ const BodyRow = ({
             onRowClick={onRowClick}
             cell={row[accessorKey]?.value}
             width={width || 0}
-            isHighlighted={isHighlighted}
-            isRowFocused={rowKey === selectedKey}
             row={row}
             hasIcon={enableBodyCellPrefixIcon}
             showIcon={

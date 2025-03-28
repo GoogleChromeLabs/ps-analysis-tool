@@ -20,15 +20,19 @@ import React from 'react';
 
 interface ProgressBarProps {
   additionalStyles?: string;
+  barAdditionalStyles?: string;
 }
-const ProgressBar = ({ additionalStyles = '' }: ProgressBarProps) => {
+const ProgressBar = ({
+  additionalStyles = '',
+  barAdditionalStyles = 'bg-gainsboro dark:bg-neutral-600',
+}: ProgressBarProps) => {
   return (
     <div
       data-testid="progress-bar"
       className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden`}
     >
-      <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600 overflow-hidden">
-        <div className="h-1 w-1/2 bg-royal-blue absolute animate-horizontal-spinner"></div>
+      <div className={`${barAdditionalStyles} mb-6 h-1 w-full overflow-hidden`}>
+        <div className="h-1 w-1/2 bg-blueberry absolute animate-horizontal-spinner"></div>
       </div>
     </div>
   );

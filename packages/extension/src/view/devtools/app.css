@@ -58,13 +58,17 @@
 }
 
 .markdown-body {
-
   --bgColor-default: #ffffff;
   --bgColor-muted: #fbfbfb;
   --fgColor-default: #000000;
   --bgColor-neutral-muted: #fbfbfb;
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     scroll-margin-top: 20px;
   }
 
@@ -103,7 +107,6 @@
   h6 {
     font-size: 12px;
   }
-
 }
 
 body {
@@ -148,17 +151,28 @@ body {
   position: relative;
 }
 
-#bubble-container {
-  position: absolute;
+/* bubble wrapper */
+#bubble-container-div {
+  position: sticky;
+  top: 5px;
+  left: 5px;
+  z-index: 4;
+  height: 100%;
+  width: 100%;
   pointer-events: none;
-  top: 0px;
-  left: 0px;
 }
 
-.minified-bubble-container {
+#bubble-container-div.expanded {
+  backdrop-filter: blur(1px);
+  z-index: 4;
+  pointer-events: auto;
+}
+
+/* bubble element */
+#minified-bubble-container {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 5px;
+  left: 5px;
   height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -169,55 +183,19 @@ body {
   align-items: center;
   justify-content: center;
   transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+  pointer-events: auto;
 }
 
-.circle-svg:hover:active {
-  cursor: pointer;
-}
-
-.text-class {
-  pointer-events: none;
-}
-
-.svg {
-  cursor: pointer;
-}
-
-.circle-svg {
-  transition: transform .2s;
-}
-
-.circle-svg:hover {
-  transform: scale(1.05);
-  cursor: pointer;
-}
-
-text {
-  cursor: pointer;
-}
-
-.minified-bubble-container.expanded {
+#minified-bubble-container.expanded {
   position: absolute;
   display: block;
   top: var(--expandedBubbleY);
+  left: var(--expandedBubbleX);
   height: var(--expandedBubbleWidth);
   width: var(--expandedBubbleWidth);
   border-radius: 50%;
   border: 1px solid #808080;
   backdrop-filter: blur(10px);
-  left: var(--expandedBubbleX)
-}
-
-.bubble-container {
-  position: absolute;
-  pointer-events: auto;
-}
-
-.bubble-container.expanded {
-  backdrop-filter: blur(1px);
-  z-index: 4;
-  height: 100vh;
-  width: 100vw;
 }
 
 #close-button {
@@ -225,14 +203,16 @@ text {
   top: 10px;
   cursor: pointer;
   display: none;
+  pointer-events: auto;
 }
 
 #open-button {
   position: absolute;
-  top: 50px;
+  top: 35px;
   left: 50px;
   cursor: pointer;
   display: none;
+  pointer-events: auto;
 }
 
 #count-display {
@@ -255,7 +235,27 @@ text {
   display: flex;
 }
 
-#bubble-container-div {
-  top: 0px;
-  left: 0px;
+.circle-svg:hover:active {
+  cursor: pointer;
+}
+
+.text-class {
+  pointer-events: none;
+}
+
+.svg {
+  cursor: pointer;
+}
+
+.circle-svg {
+  transition: transform 0.2s;
+}
+
+.circle-svg:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+text {
+  cursor: pointer;
 }

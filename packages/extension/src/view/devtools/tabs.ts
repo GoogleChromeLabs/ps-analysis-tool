@@ -18,38 +18,38 @@
  */
 import {
   CookieIcon,
-  CookieIconWhite,
   SiteBoundariesIcon,
-  SiteBoundariesIconWhite,
   ChipsIcon,
   ChipsIconWhite,
   RelatedWebsiteSetsIcon,
-  RelatedWebsiteSetsIconWhite,
   PrivateAdvertisingIcon,
-  PrivateAdvertisingIconWhite,
-  AntiCovertTrackingIcon,
-  AntiCovertTrackingIconWhite,
+  PrivacyProtectionIcon,
   AttributionIcon,
-  AttributionIconWhite,
   BounceTrackingIcon,
   BounceTrackingIconWhite,
-  FingerPrintingIcon,
-  FingerPrintingIconWhite,
+  UserAgentReductionIcon,
+  UserAgentReductionIconWhite,
   TopicsIcon,
-  TopicsIconWhite,
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
   DashboardIcon,
-  DashboardIconWhite,
   WikiIcon,
-  WikiIconWhite,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
   WebStoriesIcon,
   WebStoriesIconWhite,
+  Help,
+  LearningIcon,
+  DevGuideIcon,
+  TokenIcon,
+  FederatedIcon,
+  StorageIcon,
+  ProtectionIcon,
+  SiteBoundariesIconWhite,
+  DemosIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -65,11 +65,11 @@ import {
   Chips,
   RelatedWebsiteSets,
   PrivateAdvertising,
-  AntiCovertTracking,
+  PrivacyProtection,
   Topics,
-  Attribution,
+  AttributionReporting,
   BounceTracking,
-  Fingerprinting,
+  UserAgentReduction,
   PrivacySandbox,
   Wiki,
   Settings,
@@ -77,7 +77,15 @@ import {
   PrivateAggregation,
   Dashboard,
   WebStories,
-} from './components';
+  Learning,
+  DevSite,
+  StorageAccess,
+  FederatedCredential,
+  IPProtection,
+  PrivateStateTokens,
+} from './pages';
+import HelpCenter from './pages/learning/helpCenter';
+import Demos from './pages/learning/demos';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -93,16 +101,119 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: true,
     children: {
-      [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-        title: () => I18n.getMessage('cookies'),
+      [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
+        title: () => 'Tracking Protection',
+        panel: {
+          Element: PrivacyProtection,
+        },
         icon: {
-          Element: CookieIcon,
+          Element: PrivacyProtectionIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
         },
         selectedIcon: {
-          Element: CookieIconWhite,
+          Element: PrivacyProtectionIcon,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
         },
-        children: {},
-        dropdownOpen: false,
+        children: {
+          [SIDEBAR_ITEMS_KEYS.COOKIES]: {
+            title: () => I18n.getMessage('cookies'),
+            icon: {
+              Element: CookieIcon,
+              props: {
+                className: '[&_path]:fill-granite-gray',
+              },
+            },
+            selectedIcon: {
+              Element: CookieIcon,
+              props: {
+                className: '[&_path]:fill-bright-gray',
+              },
+            },
+            children: {},
+            dropdownOpen: false,
+          },
+          [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
+            title: () => I18n.getMessage('ipProtection'),
+            panel: {
+              Element: IPProtection,
+            },
+            icon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-granite-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-bright-gray relative right-[3px]',
+              },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
+            title: () => I18n.getMessage('bounceTracking'),
+            panel: {
+              Element: BounceTracking,
+            },
+            icon: {
+              Element: BounceTrackingIcon,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            selectedIcon: {
+              Element: BounceTrackingIconWhite,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
+            title: () => 'User Agent Reduction',
+            panel: {
+              Element: UserAgentReduction,
+            },
+            icon: {
+              Element: UserAgentReductionIcon,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            selectedIcon: {
+              Element: UserAgentReductionIconWhite,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            children: {},
+          },
+
+          [SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS]: {
+            title: () => I18n.getMessage('privateStateTokens'),
+            panel: {
+              Element: PrivateStateTokens,
+            },
+            icon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-granite-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-bright-gray relative right-[3px]',
+              },
+            },
+            children: {},
+          },
+        },
       },
       [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
         title: () => I18n.getMessage('siteBoundaries'),
@@ -111,9 +222,15 @@ const TABS: SidebarItems = {
         },
         icon: {
           Element: SiteBoundariesIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
         },
         selectedIcon: {
           Element: SiteBoundariesIconWhite,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.CHIPS]: {
@@ -129,6 +246,25 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+          [SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS]: {
+            title: () => I18n.getMessage('storageAccessAPI'),
+            panel: {
+              Element: StorageAccess,
+            },
+            icon: {
+              Element: StorageIcon,
+              props: {
+                className: 'fill-granite-gray',
+              },
+            },
+            selectedIcon: {
+              Element: StorageIcon,
+              props: {
+                className: 'fill-bright-gray',
+              },
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
             title: () => I18n.getMessage('rws'),
             panel: {
@@ -136,9 +272,36 @@ const TABS: SidebarItems = {
             },
             icon: {
               Element: RelatedWebsiteSetsIcon,
+              props: {
+                className:
+                  '[&_path]:stroke-granite-gray [&_path]:fill-granite-gray',
+              },
             },
             selectedIcon: {
-              Element: RelatedWebsiteSetsIconWhite,
+              Element: RelatedWebsiteSetsIcon,
+              props: {
+                className:
+                  '[&_path]:stroke-bright-gray [&_path]:fill-bright-gray',
+              },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL]: {
+            title: () => 'FedCM',
+            panel: {
+              Element: FederatedCredential,
+            },
+            icon: {
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-granite-gray',
+              },
+            },
+            selectedIcon: {
+              Element: FederatedIcon,
+              props: {
+                className: 'fill-bright-gray',
+              },
             },
             children: {},
           },
@@ -151,9 +314,15 @@ const TABS: SidebarItems = {
         },
         icon: {
           Element: PrivateAdvertisingIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
         },
         selectedIcon: {
-          Element: PrivateAdvertisingIconWhite,
+          Element: PrivateAdvertisingIcon,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.TOPICS]: {
@@ -163,9 +332,15 @@ const TABS: SidebarItems = {
             },
             icon: {
               Element: TopicsIcon,
+              props: {
+                className: '[&_path]:fill-granite-gray h-4',
+              },
             },
             selectedIcon: {
-              Element: TopicsIconWhite,
+              Element: TopicsIcon,
+              props: {
+                className: '[&_path]:fill-bright-gray h-4',
+              },
             },
             children: {},
           },
@@ -177,13 +352,13 @@ const TABS: SidebarItems = {
             icon: {
               Element: GroupsIcon,
               props: {
-                className: 'fill-gray',
+                className: 'fill-granite-gray',
               },
             },
             selectedIcon: {
               Element: GroupsIcon,
               props: {
-                className: 'fill-white',
+                className: 'fill-bright-gray',
               },
             },
             children: {},
@@ -191,13 +366,19 @@ const TABS: SidebarItems = {
           [SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING]: {
             title: () => I18n.getMessage('attributionReporting'),
             panel: {
-              Element: Attribution,
+              Element: AttributionReporting,
             },
             icon: {
               Element: AttributionIcon,
+              props: {
+                className: '[&_path]:fill-granite-gray',
+              },
             },
             selectedIcon: {
-              Element: AttributionIconWhite,
+              Element: AttributionIcon,
+              props: {
+                className: '[&_path]:fill-bright-gray',
+              },
             },
             children: {},
           },
@@ -209,60 +390,147 @@ const TABS: SidebarItems = {
             icon: {
               Element: PrivateAggregationicon,
               props: {
-                className: 'fill-gray',
+                className: 'fill-granite-gray',
               },
             },
             selectedIcon: {
               Element: PrivateAggregationicon,
               props: {
-                className: 'fill-white',
+                className: 'fill-bright-gray',
               },
-            },
-            children: {},
-          },
-        },
-      },
-      [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
-        title: () => I18n.getMessage('trackingProtection'),
-        panel: {
-          Element: AntiCovertTracking,
-        },
-        icon: {
-          Element: AntiCovertTrackingIcon,
-        },
-        selectedIcon: {
-          Element: AntiCovertTrackingIconWhite,
-        },
-        children: {
-          [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
-            title: () => I18n.getMessage('bounceTracking'),
-            panel: {
-              Element: BounceTracking,
-            },
-            icon: {
-              Element: BounceTrackingIcon,
-            },
-            selectedIcon: {
-              Element: BounceTrackingIconWhite,
-            },
-            children: {},
-          },
-          [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
-            title: () => I18n.getMessage('fingerprinting'),
-            panel: {
-              Element: Fingerprinting,
-            },
-            icon: {
-              Element: FingerPrintingIcon,
-            },
-            selectedIcon: {
-              Element: FingerPrintingIconWhite,
             },
             children: {},
           },
         },
       },
     },
+    addDivider: true,
+  },
+  [SIDEBAR_ITEMS_KEYS.LEARNING]: {
+    title: () => 'Learning',
+    panel: {
+      Element: Learning,
+    },
+    icon: {
+      Element: LearningIcon,
+      props: {
+        className: 'fill-granite-gray',
+      },
+    },
+    selectedIcon: {
+      Element: LearningIcon,
+      props: {
+        className: 'fill-bright-gray',
+      },
+    },
+    dropdownOpen: true,
+    children: {
+      [SIDEBAR_ITEMS_KEYS.HELP_CENTER]: {
+        title: () => 'Help Center',
+        panel: {
+          Element: HelpCenter,
+          href: 'https://support.google.com/privacysandbox',
+        },
+        icon: {
+          Element: Help,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: Help,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.DEV_SITE]: {
+        title: () => 'Dev Site',
+        panel: {
+          Element: DevSite,
+          href: 'https://developers.google.com/privacy-sandbox',
+        },
+        icon: {
+          Element: DevGuideIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: DevGuideIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.WIKI]: {
+        title: () => I18n.getMessage('wiki'),
+        panel: {
+          Element: Wiki,
+          href: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
+        },
+        icon: {
+          Element: WikiIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: WikiIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        addSpacer: false,
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.STORIES]: {
+        title: () => 'Stories',
+        panel: {
+          Element: WebStories,
+        },
+        icon: {
+          Element: WebStoriesIcon,
+        },
+        selectedIcon: {
+          Element: WebStoriesIconWhite,
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.DEMOS]: {
+        title: () => 'Demos',
+        panel: {
+          Element: Demos,
+          href: 'https://domain-aaa.com/',
+        },
+        icon: {
+          Element: DemosIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: DemosIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+    },
+    containerClassName: 'h-6',
     addDivider: true,
   },
   [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
@@ -272,43 +540,18 @@ const TABS: SidebarItems = {
     },
     icon: {
       Element: DashboardIcon,
+      props: {
+        className: 'fill-granite-gray',
+      },
     },
     selectedIcon: {
-      Element: DashboardIconWhite,
+      Element: DashboardIcon,
+      props: {
+        className: 'fill-bright-gray',
+      },
     },
     dropdownOpen: false,
     children: {},
-    containerClassName: 'h-6',
-  },
-  [SIDEBAR_ITEMS_KEYS.EXPLORABLE_EXPLANATIONS]: {
-    title: () => 'Stories',
-    panel: {
-      Element: WebStories,
-    },
-    icon: {
-      Element: WebStoriesIcon,
-    },
-    selectedIcon: {
-      Element: WebStoriesIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-    containerClassName: 'h-6',
-  },
-  [SIDEBAR_ITEMS_KEYS.WIKI]: {
-    title: () => I18n.getMessage('wiki'),
-    panel: {
-      Element: Wiki,
-    },
-    icon: {
-      Element: WikiIcon,
-    },
-    selectedIcon: {
-      Element: WikiIconWhite,
-    },
-    dropdownOpen: false,
-    children: {},
-    addSpacer: true,
     containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
@@ -319,16 +562,17 @@ const TABS: SidebarItems = {
     icon: {
       Element: SettingsIcon,
       props: {
-        className: 'fill-gray w-4 h-4',
+        className: 'fill-granite-gray w-4 h-4',
       },
     },
     selectedIcon: {
       Element: SettingsIcon,
       props: {
-        className: 'fill-white w-4 h-4',
+        className: 'fill-bright-gray w-4 h-4',
       },
     },
     dropdownOpen: false,
+    addSpacer: true,
     children: {},
     containerClassName: 'h-6 mb-2',
   },
@@ -337,15 +581,5 @@ const TABS: SidebarItems = {
 export default TABS;
 
 export const collapsedSidebarData: CollapsedSidebarItems = {
-  footerElements: {
-    [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
-      icon: {
-        Element: SettingsIcon,
-        props: {
-          className: 'fill-granite-gray dark:fill-bright-gray',
-        },
-      },
-      title: () => I18n.getMessage('settings'),
-    },
-  },
+  footerElements: {},
 };

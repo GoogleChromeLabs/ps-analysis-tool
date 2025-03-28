@@ -20,19 +20,35 @@
 import React from 'react';
 import { addUTMParams } from '@google-psat/common';
 
-interface ContentPanelProps {
+/**
+ * Internal dependencies.
+ */
+import { DescriptionIcon, WebStoriesIcon } from '../../icons';
+import Link from '../link';
+import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
+
+export interface ContentPanelProps {
   title: string;
-  content: { title: () => string; description: () => string; url: string }[];
-  titleStyles?: string;
+  content: {
+    title: () => string;
+    description: () => string;
+    url: string;
+    storyUrl?: string;
+    onClick: () => void;
+    sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
+  }[];
   counterStyles?: string;
 }
 
 const ContentPanel = ({
   title,
   content,
-  titleStyles = '',
   counterStyles = '',
 }: ContentPanelProps) => {
+  const updateSelectedItemKey = useSidebar(
+    ({ actions }) => actions.updateSelectedItemKey
+  );
+
   return (
     <div className="px-2">
       <h3 className="text-base text-raisin-black dark:text-bright-gray mb-7">
@@ -40,14 +56,18 @@ const ContentPanel = ({
       </h3>
       <div className="flex gap-5 flex-wrap">
         {content.map((item, index) => (
-          <a
+          <div
+            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
             key={index}
-            href={addUTMParams(item.url)}
-            target="_blank"
-            rel="noreferrer"
-            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out "
           >
-            <div className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5">
+            <div
+              className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5 cursor-pointer"
+              onClick={() =>
+                item.sidebarItemKey
+                  ? updateSelectedItemKey(item.sidebarItemKey)
+                  : null
+              }
+            >
               <div
                 className={`w-9 h-9 flex justify-center items-center rounded-md ${counterStyles}`}
               >
@@ -56,13 +76,44 @@ const ContentPanel = ({
                 </span>
               </div>
             </div>
-            <h3 className={`text-lg font-medium mb-5 ${titleStyles}`}>
+            <h3
+              className={`text-lg font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
+              onClick={() =>
+                item.sidebarItemKey
+                  ? updateSelectedItemKey(item.sidebarItemKey)
+                  : null
+              }
+            >
               {item.title()}
             </h3>
-            <p className="text-base text-raisin-black dark:text-bright-gray">
+            <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
               {item.description()}
             </p>
-          </a>
+            <div className="absolute top-10 right-5 flex gap-2">
+              <div className="w-4 h-4" title="View Documentation">
+                <Link href={addUTMParams(item.url)} rel="noreferer">
+                  <DescriptionIcon
+                    height="20"
+                    width="20"
+                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                  />
+                </Link>
+              </div>
+              {item.onClick && item?.storyUrl && (
+                <div
+                  className="w-4 h-4 cursor-pointer"
+                  title="View Story"
+                  onClick={item.onClick}
+                >
+                  <WebStoriesIcon
+                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                    height="20"
+                    width="20"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         ))}
       </div>
     </div>

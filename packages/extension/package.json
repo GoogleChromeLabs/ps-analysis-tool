@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/extension",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",

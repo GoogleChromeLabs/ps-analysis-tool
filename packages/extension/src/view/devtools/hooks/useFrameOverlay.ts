@@ -28,7 +28,6 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -128,13 +127,13 @@ const useFrameOverlay = (
   }, [canStartInspecting, setSelectedFrame, setIsInspecting, selectedAdUnit]);
 
   const listenIfContentScriptSet = useCallback(
-    async (
+    (
       request: { [key: string]: boolean },
       sender: chrome.runtime.MessageSender
     ) => {
-      const tabId = await getCurrentTabId();
+      const tabId = chrome.devtools.inspectedWindow.tabId;
 
-      if (request.setInPage && tabId === sender?.tab?.id?.toString()) {
+      if (request.setInPage && tabId === sender?.tab?.id) {
         setCanStartInspecting(true);
       }
     },
@@ -142,10 +141,10 @@ const useFrameOverlay = (
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(listenIfContentScriptSet);
+    chrome.runtime?.onMessage?.addListener(listenIfContentScriptSet);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(listenIfContentScriptSet);
+      chrome.runtime?.onMessage?.removeListener(listenIfContentScriptSet);
     };
   }, [listenIfContentScriptSet]);
 
@@ -158,13 +157,21 @@ const useFrameOverlay = (
           return;
         }
 
-        if (changes && Object.keys(changes).includes(currentTabId.toString())) {
-          if (!changes[currentTabId].newValue && portRef.current) {
+        const privacySandboxPanelVisibleKey = `${currentTabId}-privacySandboxPanelVisible`;
+
+        if (
+          changes &&
+          Object.keys(changes).includes(privacySandboxPanelVisibleKey)
+        ) {
+          const privacySandboxPanelVisible =
+            changes[privacySandboxPanelVisibleKey].newValue;
+
+          if (!privacySandboxPanelVisible && portRef.current) {
             setIsInspecting(false);
           }
 
-          if (!changes[currentTabId].newValue) {
-            chrome.tabs.sendMessage(
+          if (!privacySandboxPanelVisible) {
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: true,
@@ -178,8 +185,8 @@ const useFrameOverlay = (
               }
             );
           }
-          if (changes[currentTabId].newValue) {
-            chrome.tabs.sendMessage(
+          if (privacySandboxPanelVisible) {
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: false,
@@ -204,7 +211,7 @@ const useFrameOverlay = (
 
   useEffect(() => {
     try {
-      chrome.tabs.sendMessage(
+      chrome.tabs?.sendMessage(
         chrome.devtools.inspectedWindow.tabId,
         { status: 'set?', tabId: chrome.devtools.inspectedWindow.tabId },
         (res) => {
@@ -246,10 +253,12 @@ const useFrameOverlay = (
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
-    chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
+    chrome.storage?.session?.onChanged?.addListener(
+      sessionStoreChangedListener
+    );
     return () => {
       try {
-        chrome.storage.session.onChanged.removeListener(
+        chrome.storage?.session?.onChanged?.removeListener(
           sessionStoreChangedListener
         );
       } catch (error) {

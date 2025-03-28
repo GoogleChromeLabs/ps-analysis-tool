@@ -16,6 +16,7 @@
 export type TabsProviderProps = {
   children: React.ReactNode;
   items: TabItems;
+  name: string;
 };
 
 export type TabItems = Array<{
@@ -25,4 +26,5 @@ export type TabItems = Array<{
     props?: Record<string, any>;
     className?: string;
   };
+  addSpacer?: boolean;
 }>;

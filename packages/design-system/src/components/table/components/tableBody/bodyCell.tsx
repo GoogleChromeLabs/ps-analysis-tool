@@ -27,8 +27,6 @@ import type { TableRow } from '../../useTable';
 interface BodyCellProps {
   cell?: () => React.JSX.Element;
   width: number;
-  isHighlighted?: boolean;
-  isRowFocused: boolean;
   row: TableRow;
   hasIcon?: boolean;
   showIcon?: boolean | null;
@@ -42,12 +40,10 @@ interface BodyCellProps {
 const BodyCell = ({
   cell,
   width,
-  isRowFocused,
   row,
   hasIcon = false,
   showIcon = false,
   icon,
-  isHighlighted = false,
   rowHeightClass,
 }: BodyCellProps) => {
   const IconElement = icon?.Element;
@@ -70,13 +66,9 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`flex box-border outline-0 px-1 py-px text-xs ${
-        isHighlighted
-          ? `${
-              isRowFocused ? 'text-white' : 'dark:text-dirty-red text-dirty-red'
-            }`
-          : 'dark:text-bright-gray'
-      } cursor-default flex-1 ${rowHeightClass ?? 'h-5'}`}
+      className={`flex box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
+        rowHeightClass ?? 'min-h-5'
+      }`}
     >
       {hasIcon && (
         <div className="h-full grid place-items-center min-w-[15px] pr-1">
@@ -90,7 +82,7 @@ const BodyCell = ({
         </div>
       )}
       <div
-        className="truncate"
+        className="truncate min-h-fit"
         title={typeof cellValue === 'string' ? cellValue : ''}
       >
         {cellValue}

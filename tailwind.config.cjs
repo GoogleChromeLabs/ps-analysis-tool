@@ -164,6 +164,8 @@ module.exports = {
     backgroundColor: {
       ...colors,
       primary: '#FFF',
+      'tomato-red': '#4E3534',
+      'baby-pink': '#FCEBEB',
       'google-blue': '#8AB4F8',
       'smurf-blue': '#1967D2',
       beteleguese: '#4285F4',
@@ -217,6 +219,9 @@ module.exports = {
       'selection-yellow-light': '#8b8f18',
       'selection-yellow-dark': '#dbdb48',
       'cultured-grey': '#F7F7F7',
+      mahogany: '#CC3300',
+      blueberry: '#4285FA',
+      celeste: '#B1F8F2',
     },
     borderColor: {
       ...colors,
@@ -238,6 +243,9 @@ module.exports = {
       'anti-flash-white': '#F1F3F4',
       'dark-gray-x11': '#A9A9A9',
       'dark-grey': '#AAAAAA',
+      'privacy-blue': '#4285fa',
+      'privacy-green': '#3bd897',
+      'privacy-purple': '#dc9af8',
     },
     colors: {
       ...colors,
@@ -251,6 +259,8 @@ module.exports = {
       'charleston-green': '#292A2D',
       'outer-space': '#303942',
       'granite-gray': '#5F6369',
+      'blood-red': '#DE3730',
+      'bright-red': '#FF5449',
       gray: '#6E6E6E',
       'dark-charcoal': '#323232',
       'bright-navy-blue': '#1A73E8',

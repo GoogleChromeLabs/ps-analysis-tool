@@ -13,21 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * Copyright 2023 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 /**
  * External dependencies.
  */
@@ -36,6 +21,8 @@ import type {
   CookieDatabase,
   singleAuctionEvent,
   auctionData,
+  SourcesRegistration,
+  TriggerRegistration,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -47,6 +34,7 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
+import { isEqual } from 'lodash-es';
 
 class DataStore {
   /**
@@ -55,6 +43,40 @@ class DataStore {
   tabsData: {
     [tabId: number]: {
       [cookieKey: string]: CookieData;
+    };
+  } = {};
+
+  /**
+   * The Attribution Reporting sources for the tab.
+   */
+  sources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting sources for the tab.
+   */
+  oldSources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting headers for the tab.
+   */
+  headersForARA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        url: string;
+        headers: Protocol.Network.Headers;
+      };
     };
   } = {};
 
@@ -316,10 +338,13 @@ class DataStore {
       tabsData: this.tabsData,
       tabs: this.tabs,
       auctionEvents: this.auctionEvents,
+      sources: this.sources,
+      headersForARA: this.headersForARA,
     };
 
     this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
+    this.headersForARA[tabId.toString()] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -364,6 +389,7 @@ class DataStore {
     delete this.unParsedResponseHeadersForCA[tabId];
     delete this.requestIdToCDPURLMapping[tabId];
     delete this.frameIdToResourceMap[tabId];
+    delete this.headersForARA[tabId];
   }
 
   /**
@@ -479,6 +505,7 @@ class DataStore {
     delete this.tabs[tabId];
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
+    delete this.headersForARA[tabId.toString()];
   }
 
   /**
@@ -511,113 +538,172 @@ class DataStore {
 
     try {
       if (
-        (this.tabs[tabId].devToolsOpenState ||
-          this.tabs[tabId].popupOpenState) &&
-        (overrideForInitialSync ||
-          this.tabs[tabId].newUpdatesCA > 0 ||
-          this.tabs[tabId].newUpdatesPA > 0)
+        this.tabs[tabId].devToolsOpenState ||
+        this.tabs[tabId].popupOpenState
       ) {
-        if (this.tabs[tabId].newUpdatesCA > 0 || overrideForInitialSync) {
-          const newCookieData: {
-            [cookieKey: string]: CookieData;
-          } = {};
-
-          Object.keys(this.tabsData[tabId]).forEach((key) => {
-            newCookieData[key] = {
-              ...this.tabsData[tabId][key],
-              networkEvents: {
-                requestEvents: [],
-                responseEvents: [],
-              },
-              url: '',
-              headerType: ['request', 'response'].includes(
-                this.tabsData[tabId][key]?.headerType ?? ''
-              )
-                ? 'http'
-                : 'javascript',
-            };
-          });
-
-          await chrome.runtime.sendMessage({
-            type: NEW_COOKIE_DATA,
-            payload: {
-              tabId,
-              cookieData: newCookieData,
-              extraData: {
-                extraFrameData: this.tabs[tabId].frameIDURLSet,
-              },
-            },
-          });
-
-          this.tabs[tabId].newUpdatesCA = 0;
-        }
-
-        const { globalEvents, ...rest } = this.auctionEvents[tabId];
-
-        const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
-          Object.values(rest).flat()
-        );
-        const groupedAuctionBids: {
-          [parentAuctionId: string]: {
-            0: singleAuctionEvent[];
-            [uniqueAuctionId: string]: singleAuctionEvent[];
-          };
-        } = {};
-
-        const auctionEventsToBeProcessed = Object.values(rest).flat();
-
-        if (isMultiSellerAuction) {
-          auctionEventsToBeProcessed.forEach((event) => {
-            const { parentAuctionId = null, uniqueAuctionId = null } = event;
-
-            if (!parentAuctionId) {
-              if (uniqueAuctionId) {
-                if (!groupedAuctionBids[uniqueAuctionId]) {
-                  groupedAuctionBids[uniqueAuctionId] = {
-                    0: [],
-                  };
-                }
-                groupedAuctionBids[uniqueAuctionId]['0'].push(event);
-              }
-              return;
-            }
-
-            if (!groupedAuctionBids[parentAuctionId]) {
-              groupedAuctionBids[parentAuctionId] = {
-                0: [],
-              };
-            }
-
-            if (!uniqueAuctionId) {
-              return;
-            }
-
-            if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
-              groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
-            }
-
-            groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
-          });
-        }
-
-        if (this.tabs[tabId].newUpdatesPA > 0 || overrideForInitialSync) {
-          await chrome.runtime.sendMessage({
-            type: 'AUCTION_EVENTS',
-            payload: {
-              refreshTabData: overrideForInitialSync,
-              tabId,
-              auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
-              multiSellerAuction: isMultiSellerAuction,
-              globalEvents: globalEvents ?? [],
-            },
-          });
-          this.tabs[tabId].newUpdatesPA = 0;
-        }
+        await this.processAndSendCookieData(tabId, overrideForInitialSync);
+        await this.processAndSendAuctionData(tabId, overrideForInitialSync);
+        await this.processAndSendARAData(tabId, overrideForInitialSync);
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(error);
       //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+    }
+  }
+
+  /**
+   * Processes and sends cookie message to the extension for the specified tabId
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {boolean | undefined} overrideForInitialSync Override the condition.
+   */
+  async processAndSendCookieData(
+    tabId: number,
+    overrideForInitialSync: boolean
+  ) {
+    try {
+      if (this.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
+        return;
+      }
+
+      const newCookieData: {
+        [cookieKey: string]: CookieData;
+      } = {};
+
+      Object.keys(this.tabsData[tabId]).forEach((key) => {
+        newCookieData[key] = {
+          ...this.tabsData[tabId][key],
+          networkEvents: {
+            requestEvents: [],
+            responseEvents: [],
+          },
+          url: '',
+          headerType: ['request', 'response'].includes(
+            this.tabsData[tabId][key]?.headerType ?? ''
+          )
+            ? 'http'
+            : 'javascript',
+        };
+      });
+
+      await chrome.runtime.sendMessage({
+        type: NEW_COOKIE_DATA,
+        payload: {
+          tabId,
+          cookieData: newCookieData,
+          extraData: {
+            extraFrameData: this.tabs[tabId].frameIDURLSet,
+          },
+        },
+      });
+
+      this.tabs[tabId].newUpdatesCA = 0;
+    } catch (error) {
+      // Fail silently
+    }
+  }
+
+  /**
+   * Processes and sends auction message to the extension for the specified tabId
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {boolean | undefined} overrideForInitialSync Override the condition.
+   */
+  async processAndSendAuctionData(
+    tabId: number,
+    overrideForInitialSync: boolean
+  ) {
+    try {
+      if (this.tabs[tabId].newUpdatesPA <= 0 && !overrideForInitialSync) {
+        return;
+      }
+
+      const { globalEvents, ...rest } = this.auctionEvents[tabId];
+
+      const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
+        Object.values(rest).flat()
+      );
+      const groupedAuctionBids: {
+        [parentAuctionId: string]: {
+          0: singleAuctionEvent[];
+          [uniqueAuctionId: string]: singleAuctionEvent[];
+        };
+      } = {};
+
+      const auctionEventsToBeProcessed = Object.values(rest).flat();
+
+      if (isMultiSellerAuction) {
+        auctionEventsToBeProcessed.forEach((event) => {
+          const { parentAuctionId = null, uniqueAuctionId = null } = event;
+
+          if (!parentAuctionId) {
+            if (uniqueAuctionId) {
+              if (!groupedAuctionBids[uniqueAuctionId]) {
+                groupedAuctionBids[uniqueAuctionId] = {
+                  0: [],
+                };
+              }
+              groupedAuctionBids[uniqueAuctionId]['0'].push(event);
+            }
+            return;
+          }
+
+          if (!groupedAuctionBids[parentAuctionId]) {
+            groupedAuctionBids[parentAuctionId] = {
+              0: [],
+            };
+          }
+
+          if (!uniqueAuctionId) {
+            return;
+          }
+
+          if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
+            groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
+          }
+
+          groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
+        });
+      }
+
+      await chrome.runtime.sendMessage({
+        type: 'AUCTION_EVENTS',
+        payload: {
+          refreshTabData: overrideForInitialSync,
+          tabId,
+          auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
+          multiSellerAuction: isMultiSellerAuction,
+          globalEvents: globalEvents ?? [],
+        },
+      });
+      this.tabs[tabId].newUpdatesPA = 0;
+    } catch (error) {
+      // Fail silently
+    }
+  }
+
+  /**
+   * Processes and sends auction message to the extension for the specified tabId
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {boolean | undefined} overrideForInitialSync Override the condition.
+   */
+  async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
+    try {
+      if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
+        return;
+      }
+
+      await chrome.runtime.sendMessage({
+        type: 'ARA_EVENTS',
+        payload: {
+          sourcesRegistration: this.sources.sourceRegistration,
+          triggerRegistration: this.sources.triggerRegistration,
+          tabId: Number(tabId),
+        },
+      });
+
+      this.oldSources = structuredClone(this.sources);
+    } catch (error) {
+      // Fail silently
     }
   }
 

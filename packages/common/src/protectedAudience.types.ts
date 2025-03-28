@@ -70,18 +70,20 @@ export type NoBidsType = {
   };
 };
 
+export type AdsAndBiddersTypeData = {
+  adUnitCode: string;
+  bidders: string[];
+  mediaContainerSize: number[][];
+  winningBid: number;
+  bidCurrency: string;
+  winningBidder: string;
+};
+
 export type AdsAndBiddersType = {
-  [adUnitCode: string]: {
-    adUnitCode: string;
-    bidders: string[];
-    mediaContainerSize: number[][];
-    winningBid: number;
-    bidCurrency: string;
-    winningBidder: string;
-  };
+  [adUnitCode: string]: AdsAndBiddersTypeData;
 };
 
 export type ReceivedBids = singleAuctionEvent & {
   adUnitCode?: string;
-  mediaContainerSize?: number[];
+  mediaContainerSize?: number[][];
 };

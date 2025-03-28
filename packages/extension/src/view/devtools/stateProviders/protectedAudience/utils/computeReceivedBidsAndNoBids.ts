@@ -166,6 +166,7 @@ function computeReceivedBidsAndNoBids(
             ...event,
             mediaContainerSize: sellerSignals.size,
             adUnitCode: sellerSignals?.divId,
+            mediaType: sellerSignals?.type,
           };
         })
       );

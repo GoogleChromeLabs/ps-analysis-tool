@@ -69,9 +69,9 @@ const CookiesLandingWrapper = ({
         </div>
         {description && (
           <div className="text-center px-4 flex items-center justify-center -mt-2 mb-10">
-            <p className="lg:max-w-[450px] text-gray dark:text-bright-gray">
+            <div className="lg:max-w-[450px] text-gray dark:text-bright-gray">
               {description}
-            </p>
+            </div>
           </div>
         )}
         <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-2 pb-10 px-4">
