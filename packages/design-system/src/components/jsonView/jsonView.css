@@ -19,9 +19,12 @@
   width: auto !important;
 }
 
-.json-view .react-json-view .collapsed-icon {
-  width: 12px !important;
-  display: inline-block !important;
+/* center the collapsed and expanded icons */
+.json-view .react-json-view .collapsed-icon,
+.json-view .react-json-view .expanded-icon {
+  font-size: 12px !important;
+  position: relative;
+  top: 0.12rem;
 }
 
 /* Reduce the size of ellipsis [...] when an object is collapsed */

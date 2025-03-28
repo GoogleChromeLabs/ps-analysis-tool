@@ -29,6 +29,14 @@ const LazyReactJson = lazy(() => import('@microlink/react-json-view'));
 import { darkTheme, lightTheme } from './jsonTheme';
 import './jsonView.css';
 
+const LoadingText = () => {
+  return (
+    <div className="w-full h-full flex items-center justify-center text-lg font-bold text-granite-gray">
+      Loading...
+    </div>
+  );
+};
+
 /**
  * JsonView component.
  * ReactJsonView wrapper component to provide a consistent theme for the JSON view.
@@ -46,7 +54,7 @@ const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
 
   return (
     <div className="json-view">
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingText />}>
         <LazyReactJson
           theme={isDarkMode ? darkTheme : lightTheme}
           iconStyle="triangle"
