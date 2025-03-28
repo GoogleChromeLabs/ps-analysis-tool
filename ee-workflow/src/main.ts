@@ -72,6 +72,11 @@ class Main {
   private delay = 50;
 
   /**
+   * Speed multiplier for the drawing process.
+   */
+  private speedMultiplier = 1;
+
+  /**
    * Flag to pause the drawing process.
    */
   private pause = false;
@@ -278,7 +283,7 @@ class Main {
   }
 
   private runTraveller() {
-    const done = this.traveller?.draw();
+    const done = this.traveller?.draw(this.speedMultiplier);
 
     if (done) {
       this.isTravelling = false;
@@ -431,6 +436,15 @@ class Main {
     } else {
       this.p5.loop();
     }
+  }
+
+  /**
+   * Updates the speed of the drawing process.
+   * @param speedMultiplier - The speed multiplier, 0.5 for half speed, 2 for double speed, etc.
+   */
+  updateSpeed(speedMultiplier: number) {
+    this.speedMultiplier = speedMultiplier;
+    this.delay = 50 / speedMultiplier;
   }
 
   /**

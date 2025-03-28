@@ -37,9 +37,10 @@ export default class Traveller {
 
   /**
    * Function to manage the drawing of a group with travelling figures.
+   * @param speed - The speed at which the object should travel.
    * @returns boolean indicating if the group has completed travelling.
    */
-  private drawGroup() {
+  private drawGroup(speed: number) {
     const object = <Group>this.object;
 
     const nonTravellingFigures = object
@@ -57,7 +58,7 @@ export default class Traveller {
         return;
       }
 
-      if (figure.runTraveller()) {
+      if (figure.runTraveller(speed)) {
         this.groupObjectsCompleted.push(figure.getId());
         figure.setShouldTravel(false);
       }
@@ -72,16 +73,17 @@ export default class Traveller {
 
   /**
    * Function to draw the object.
+   * @param speed - The speed at which the object should travel.
    * @returns boolean indicating if the object has completed travelling.
    */
-  draw() {
+  draw(speed: number) {
     if (!this.object) {
       return true;
     }
 
     if (this.object instanceof Group) {
-      return this.drawGroup();
-    } else if (this.object.runTraveller()) {
+      return this.drawGroup(speed);
+    } else if (this.object.runTraveller(speed)) {
       this.object.setShouldTravel(false);
       return true;
     }

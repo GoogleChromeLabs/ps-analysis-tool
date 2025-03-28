@@ -293,7 +293,7 @@ export default class FigureFactory {
       line.setEndX(currentX);
       line.setEndY(currentY);
 
-      const traveller = (figure: Figure) => {
+      const traveller = (figure: Figure, speed: number) => {
         const _figure = <Line>figure;
         const p5 = _figure.getP5();
 
@@ -301,8 +301,8 @@ export default class FigureFactory {
           _figure.remove();
         }
 
-        currentX = p5?.lerp(currentX, endX, 0.1) ?? endX;
-        currentY = p5?.lerp(currentY, endY, 0.1) ?? endY;
+        currentX = p5?.lerp(currentX, endX, 0.1 * speed) ?? endX;
+        currentY = p5?.lerp(currentY, endY, 0.1 * speed) ?? endY;
 
         _figure.setEndX(currentX);
         _figure.setEndY(currentY);

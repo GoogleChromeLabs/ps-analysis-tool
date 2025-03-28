@@ -95,6 +95,28 @@ mainCanvas.addGroup(
   true
 );
 
+mainCanvas.addGroup(
+  new Group(mainCanvas, [
+    mainFF.box({
+      x: 340,
+      y: 10,
+      width: 100,
+      height: 50,
+      fill: '#f0f',
+      mouseClicked: () => {
+        mainCanvas.updateSpeed(0.5);
+        IGCanvas.updateSpeed(0.5);
+      },
+    }),
+    mainFF.text({
+      x: 360,
+      y: 20,
+      text: '0.5x',
+    }),
+  ]),
+  true
+);
+
 // Timeline
 mainCanvas.addFigure(
   mainFF.line({
@@ -234,12 +256,12 @@ const circleTravelInit = (endX?: number, endY?: number) => {
     let lerpSpeed = 0.01;
     circle.setShouldTravel(true);
 
-    const traveller = (figure: Figure) => {
+    const traveller = (figure: Figure, speed: number) => {
       const _figure = <Circle>figure;
       const p5 = _figure.getP5();
 
-      currentX = p5?.lerp(currentX, _endX, lerpSpeed) ?? _endX;
-      currentY = p5?.lerp(currentY, _endY, lerpSpeed) ?? _endY;
+      currentX = p5?.lerp(currentX, _endX, lerpSpeed * speed) ?? _endX;
+      currentY = p5?.lerp(currentY, _endY, lerpSpeed * speed) ?? _endY;
 
       _figure.setX(currentX);
       _figure.setY(currentY);
@@ -432,7 +454,7 @@ const arcTravelInit = (startDiameterOnTravel: number) => {
     arc.setShouldTravel(true);
     arc.setDiameter(currentDiameter);
 
-    const traveller = (figure: Figure) => {
+    const traveller = (figure: Figure, speed: number) => {
       const _figure = <Arc>figure;
       const p5 = _figure.getP5();
 
@@ -450,7 +472,7 @@ const arcTravelInit = (startDiameterOnTravel: number) => {
         p5?.pop();
       };
 
-      currentDiameter = currentDiameter + 5;
+      currentDiameter = currentDiameter + 5 * speed;
 
       _figure.setDiameter(currentDiameter);
 

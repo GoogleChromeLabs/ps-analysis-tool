@@ -73,7 +73,7 @@ export default abstract class Figure {
   /**
    * Function to be executed when the object has to travel.
    */
-  protected traveller?: (figure: Figure) => boolean;
+  protected traveller?: (figure: Figure, speed: number) => boolean;
 
   /**
    * Function to be executed when the object has to reset travel.
@@ -203,11 +203,12 @@ export default abstract class Figure {
 
   /**
    * Method to run the traveller function.
+   * @param speed - The speed at which the object should travel.
    * @returns boolean indicating if the traveller function was executed
    */
-  runTraveller(): boolean {
+  runTraveller(speed: number): boolean {
     if (this.traveller) {
-      return this.traveller(this);
+      return this.traveller(this, speed);
     }
 
     return true;
@@ -237,7 +238,7 @@ export default abstract class Figure {
    * Method to set the traveller function.
    * @param traveller - The traveller function to set.
    */
-  setTraveller(traveller: (figure: Figure) => boolean) {
+  setTraveller(traveller: (figure: Figure, speed: number) => boolean) {
     this.traveller = traveller;
   }
 
