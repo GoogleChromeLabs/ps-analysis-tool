@@ -30,7 +30,9 @@ interface SingleAd {
 export const transformInterestGroup = (site: string) => {
   let interestGroups = SYNTHETIC_INTEREST_GROUPS[site];
 
-  interestGroups = interestGroups.map((interestGroup, index) => {
+  interestGroups = interestGroups.map((_interestGroup, index) => {
+    const interestGroup = structuredClone(_interestGroup);
+
     interestGroup.details.biddingLogicURL =
       interestGroup.details.biddingLogicURL.replace(
         'https://privacysandboxdemos-buyer-1.domain-aaa.com',
