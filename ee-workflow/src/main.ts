@@ -127,6 +127,11 @@ class Main {
   private hoveredFigure: Figure | null = null;
 
   /**
+   * Number of steps to skip in the stepsQueue at once.
+   */
+  private stepsToSkip = 0;
+
+  /**
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
@@ -268,8 +273,13 @@ class Main {
    * Runs the drawing process for the current queue.
    * @param useInstantQueue - Whether to use the instant queue.
    * @param skipDraw - Whether to skip drawing.
+   * @param isSkipping - Whether to skip through the queue.
    */
-  private runner(useInstantQueue = false, skipDraw = false) {
+  private runner(
+    useInstantQueue = false,
+    skipDraw = false,
+    isSkipping = false
+  ) {
     const queue = useInstantQueue ? this.instantQueue : this.stepsQueue;
     const groupQueue = useInstantQueue
       ? this.groupInstantQueue
@@ -277,8 +287,6 @@ class Main {
     const animatorQueue = useInstantQueue
       ? this.animatorInstantQueue
       : this.animatorStepsQueue;
-
-    const isRestarting = Boolean(this.figureToStart);
 
     if (queue.length > 0) {
       const firstObject = <Figure>queue.shift();
@@ -292,7 +300,7 @@ class Main {
           firstObject.getGroupId() ? groupQueue[0] : firstObject
         );
 
-        if (skipDraw || useInstantQueue || isRestarting) {
+        if (skipDraw || useInstantQueue || isSkipping) {
           this.traveller.completeTravelling(skipDraw);
           this.traveller = null;
           this.isTravelling = false;
@@ -308,13 +316,13 @@ class Main {
           groupQueue,
           animatorQueue,
           !skipDraw,
-          isRestarting
+          isSkipping
         );
       } else if (firstObject.getGroupId()) {
-        this.processGroup(queue, groupQueue, !skipDraw, isRestarting);
+        this.processGroup(queue, groupQueue, !skipDraw, isSkipping);
       } else {
         if (!skipDraw) {
-          if (isRestarting) {
+          if (isSkipping) {
             firstObject.shouldRunSideEffect(false);
           }
 
@@ -381,7 +389,14 @@ class Main {
     }
 
     while (this.figureToStart && this.stepsQueue.length > 0) {
-      this.runner();
+      this.runner(false, false, true);
+    }
+
+    if (this.stepsToSkip > 0) {
+      while (this.stepsToSkip > 0 && this.stepsQueue.length > 0) {
+        this.runner(false, false, true);
+        this.stepsToSkip--;
+      }
     }
   }
 
@@ -1025,6 +1040,10 @@ class Main {
    */
   getCurrentCheckpointIndex() {
     return this.checkpoints.size - 1;
+  }
+
+  skipSteps(steps: number) {
+    this.stepsToSkip = steps;
   }
 }
 
