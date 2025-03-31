@@ -238,7 +238,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     async (message: {
       type: string;
       payload: {
-        tabId?: number;
+        tabId?: string;
         cookieData?: TabCookies;
         tabToRead?: string;
         tabMode?: string;
@@ -279,7 +279,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         const tab = await getTab(tabId?.toString() || '');
         setTabUrl(tab?.url ?? '');
         isCurrentTabBeingListenedToRef.current =
-          tabId === message?.payload?.tabId;
+          tabId.toString() === message?.payload?.tabId;
         setTabToRead(message?.payload?.tabId?.toString() || null);
         setTabFrames(null);
         setLoading(false);
@@ -316,7 +316,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         const data = message.payload.cookieData;
         const frameData = message.payload.extraData?.extraFrameData ?? {};
 
-        if (tabId.toString() === message.payload.tabId.toString()) {
+        if (tabId.toString() === message.payload.tabId) {
           if (isCurrentTabBeingListenedToRef.current) {
             setTabToRead(tabId.toString());
             setTabCookies((prevState) => {

@@ -308,13 +308,13 @@ class CookieStore extends DataStore {
     DataStore.tabs[tabId].newUpdatesPA = 0;
     DataStore.tabs[tabId].frameIDURLSet = {};
     DataStore.tabs[tabId].parentChildFrameAssociation = {};
-    Object.keys(this.auctionEvents[tabId.toString()]).forEach((key) => {
-      if (key === 'globalEvents') {
-        return;
-      }
-      delete this.auctionEvents[tabId.toString()][key];
-    });
-    this.auctionDataForTabId[tabId] = {};
+    // Object.keys(this.auctionEvents[tabId.toString()]).forEach((key) => {
+    //   if (key === 'globalEvents') {
+    //     return;
+    //   }
+    //   delete this.auctionEvents[tabId.toString()][key];
+    // });
+    // this.auctionDataForTabId[tabId] = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 
