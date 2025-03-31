@@ -108,6 +108,10 @@ export default class Animator {
     }
 
     if (!skipDraw) {
+      if (!this.runSideEffect) {
+        this.objects[this.index].shouldRunSideEffect(false);
+      }
+
       this.objects[this.index].draw();
     }
 

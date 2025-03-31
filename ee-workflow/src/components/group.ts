@@ -81,6 +81,10 @@ export default class Group {
    */
   draw() {
     this.figures.forEach((figure) => {
+      if (!this.runSideEffect) {
+        figure.shouldRunSideEffect(false);
+      }
+
       figure.draw();
     });
 

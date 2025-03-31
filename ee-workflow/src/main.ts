@@ -130,14 +130,14 @@ class Main {
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
-   * @param checkpointToStart - The checkpoint to start from.
+   * @param figureToStart - The figure to start from.
    * @param onDrawListener - The listener to call when a figure is drawn.
    * @param preloader - The preloader function to run before setup.
    */
   constructor(
     private clearBeforeTravel = false,
     container?: HTMLElement,
-    private checkpointToStart?: string,
+    private figureToStart?: string,
     private onDrawListener?: (id: string) => void,
     private preloader?: (p: p5) => void
   ) {
@@ -183,16 +183,22 @@ class Main {
    * @param queue - The queue of figures.
    * @param groupQueue - The queue of groups.
    * @param shouldDraw - Whether to draw the group.
+   * @param isRestarting - Whether the draw is restarting from a figure.
    */
   private processGroup(
     queue: Figure[],
     groupQueue: Group[],
-    shouldDraw = true
+    shouldDraw = true,
+    isRestarting = false
   ) {
     const group = groupQueue.shift();
 
     if (group) {
       if (shouldDraw) {
+        if (isRestarting) {
+          group.shouldRunSideEffect(false);
+        }
+
         group.draw();
       }
 
@@ -214,6 +220,51 @@ class Main {
   }
 
   /**
+   * Processes an animator, drawing it and saving to snapshot if necessary.
+   * @param firstObject - The first object in the queue.
+   * @param queue - The queue of figures.
+   * @param groupQueue - The queue of groups.
+   * @param animatorQueue - The queue of animators.
+   * @param shouldDraw - Whether to draw the animator.
+   * @param isRestarting - Whether the draw is restarting from a figure.
+   */
+  private processAnimator(
+    firstObject: Figure,
+    queue: Figure[],
+    groupQueue: Group[],
+    animatorQueue: Animator[],
+    shouldDraw = true,
+    isRestarting = false
+  ) {
+    const animator = animatorQueue[0];
+
+    if (animator) {
+      if (isRestarting) {
+        animator.shouldRunSideEffect(false);
+      }
+
+      const isDone = animator.draw(!shouldDraw);
+
+      if (firstObject.getGroupId()) {
+        this.processGroup(queue, groupQueue, false, isRestarting);
+      } else {
+        this.onDrawListener?.(firstObject.getId());
+
+        if (!firstObject.getThrow()) {
+          this.saveToSnapshot(firstObject);
+        }
+      }
+
+      if (isDone) {
+        this.animatorSnapshot.push(animator);
+        this.onDrawListener?.(animator.getId());
+        animatorQueue.shift();
+        this.reDrawAll();
+      }
+    }
+  }
+
+  /**
    * Runs the drawing process for the current queue.
    * @param useInstantQueue - Whether to use the instant queue.
    * @param skipDraw - Whether to skip drawing.
@@ -227,6 +278,8 @@ class Main {
       ? this.animatorInstantQueue
       : this.animatorStepsQueue;
 
+    const isRestarting = Boolean(this.figureToStart);
+
     if (queue.length > 0) {
       const firstObject = <Figure>queue.shift();
 
@@ -239,7 +292,7 @@ class Main {
           firstObject.getGroupId() ? groupQueue[0] : firstObject
         );
 
-        if (skipDraw || useInstantQueue) {
+        if (skipDraw || useInstantQueue || isRestarting) {
           this.traveller.completeTravelling(skipDraw);
           this.traveller = null;
           this.isTravelling = false;
@@ -249,32 +302,22 @@ class Main {
       }
 
       if (firstObject.getAnimatorId()) {
-        const animator = animatorQueue[0];
-
-        if (animator) {
-          const isDone = animator.draw(skipDraw);
-
-          if (firstObject.getGroupId()) {
-            this.processGroup(queue, groupQueue, false);
-          } else {
-            this.onDrawListener?.(firstObject.getId());
-
-            if (!firstObject.getThrow()) {
-              this.saveToSnapshot(firstObject);
-            }
-          }
-
-          if (isDone) {
-            this.animatorSnapshot.push(animator);
-            this.onDrawListener?.(animator.getId());
-            animatorQueue.shift();
-            this.reDrawAll();
-          }
-        }
+        this.processAnimator(
+          firstObject,
+          queue,
+          groupQueue,
+          animatorQueue,
+          !skipDraw,
+          isRestarting
+        );
       } else if (firstObject.getGroupId()) {
-        this.processGroup(queue, groupQueue, !skipDraw);
+        this.processGroup(queue, groupQueue, !skipDraw, isRestarting);
       } else {
         if (!skipDraw) {
+          if (isRestarting) {
+            firstObject.shouldRunSideEffect(false);
+          }
+
           firstObject.draw();
         }
 
@@ -287,6 +330,10 @@ class Main {
 
       if (firstObject.getIsCheckpoint()) {
         this.checkpoints.add(firstObject.getId());
+      }
+
+      if (this.figureToStart === firstObject.getId()) {
+        this.figureToStart = undefined;
       }
     }
   }
@@ -333,17 +380,8 @@ class Main {
       this.runner(true);
     }
 
-    if (this.checkpointToStart) {
-      const checkpoint = this.loadNextCheckpoint();
-
-      if (checkpoint === this.checkpointToStart) {
-        this.checkpointToStart = undefined;
-      } else if (
-        this.stepsQueue.length &&
-        this.stepsQueue[0].getIsCheckpoint()
-      ) {
-        this.runner(false, true);
-      }
+    while (this.figureToStart && this.stepsQueue.length > 0) {
+      this.runner();
     }
   }
 
