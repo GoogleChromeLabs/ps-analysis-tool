@@ -26,7 +26,6 @@ import type { TableRow } from '../../useTable';
 
 interface BodyCellProps {
   cell?: () => React.JSX.Element;
-  width: number;
   row: TableRow;
   hasIcon?: boolean;
   showIcon?: boolean | null;
@@ -39,7 +38,6 @@ interface BodyCellProps {
 
 const BodyCell = ({
   cell,
-  width,
   row,
   hasIcon = false,
   showIcon = false,
@@ -50,9 +48,8 @@ const BodyCell = ({
   const cellValue = cell?.() ?? '';
 
   return (
-    <div
+    <td
       tabIndex={0}
-      style={{ minWidth: width }}
       onDoubleClick={(e) => {
         const target = e.target as HTMLElement;
         const range = new Range();
@@ -66,28 +63,30 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`flex box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
+      className={`max-w-40 box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
         rowHeightClass ?? 'min-h-5'
       }`}
     >
-      {hasIcon && (
-        <div className="h-full grid place-items-center min-w-[15px] pr-1">
-          {Boolean(showIcon) && IconElement && (
-            <IconElement
-              {...{
-                originalData: row.originalData,
-              }}
-            />
-          )}
+      <div className="flex items-center">
+        {hasIcon && (
+          <div className="h-full grid place-items-center min-w-[15px] pr-1">
+            {Boolean(showIcon) && IconElement && (
+              <IconElement
+                {...{
+                  originalData: row.originalData,
+                }}
+              />
+            )}
+          </div>
+        )}
+        <div
+          className="truncate min-h-fit"
+          title={typeof cellValue === 'string' ? cellValue : ''}
+        >
+          {cellValue}
         </div>
-      )}
-      <div
-        className="truncate min-h-fit"
-        title={typeof cellValue === 'string' ? cellValue : ''}
-      >
-        {cellValue}
       </div>
-    </div>
+    </td>
   );
 };
 

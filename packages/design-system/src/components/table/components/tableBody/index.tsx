@@ -104,9 +104,9 @@ const TableBody = ({
   );
 
   return (
-    <div
+    <tbody
       ref={tableBodyRef}
-      className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
+      className="h-full overflow-x-hidden overflow-y-auto"
     >
       {rows.map((row, index) => (
         <BodyRow
@@ -134,23 +134,17 @@ const TableBody = ({
           rowHeightClass={rowHeightClass}
         />
       ))}
-      <div
-        className="grow outline-0 flex divide-x divide-american-silver dark:divide-quartz"
+      <tr
+        className="grow outline-0 divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {
           setIsRowFocused(false);
         }}
       >
-        {columns.map(({ width }, index) => (
-          <div
-            key={index}
-            className="px-1 py-px outline-0 h-full flex-1"
-            style={{
-              minWidth: width,
-            }}
-          />
+        {columns.map((_, index) => (
+          <td key={index} className="px-1 py-px outline-0 h-full" />
         ))}
-      </div>
-    </div>
+      </tr>
+    </tbody>
   );
 };
 

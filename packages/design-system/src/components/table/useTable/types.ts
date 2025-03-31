@@ -58,8 +58,6 @@ export type TableColumn = {
     Element: (props: any) => React.JSX.Element;
   };
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
-  widthWeightagePercentage?: number;
-  width?: number; // For internal use only
   sortingComparator?: (a: InfoType, b: InfoType) => number;
 };
 

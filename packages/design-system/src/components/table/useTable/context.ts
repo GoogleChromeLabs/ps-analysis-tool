@@ -27,7 +27,6 @@ import {
   TableRow,
   TableProviderProps,
 } from './types';
-import { ColumnResizingOutput } from './useColumnResizing';
 import { ColumnSortingOutput } from './useColumnSorting';
 import { ColumnVisibilityOutput } from './useColumnVisibility';
 import { TableFilteringOutput } from './useFiltering';
@@ -41,8 +40,7 @@ export interface TableStoreContext {
     sortKey: ColumnSortingOutput['sortKey'];
     sortOrder: ColumnSortingOutput['sortOrder'];
     areAllColumnsVisible: ColumnVisibilityOutput['areAllColumnsVisible'];
-    tableContainerRef: ColumnResizingOutput['tableContainerRef'];
-    isResizing: ColumnResizingOutput['isResizing'];
+    isResizing: boolean;
     filters: TableFilter;
     selectedFilters: TableFilter;
     isFiltering: TableFilteringOutput['isFiltering'];
@@ -55,7 +53,6 @@ export interface TableStoreContext {
     toggleVisibility: ColumnVisibilityOutput['toggleVisibility'];
     showColumn: ColumnVisibilityOutput['showColumn'];
     isColumnHidden: ColumnVisibilityOutput['isColumnHidden'];
-    onMouseDown: ColumnResizingOutput['onMouseDown'];
     toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
     toggleSelectAllFilter: TableFilteringOutput['toggleSelectAllFilter'];
     resetFilters: TableFilteringOutput['resetFilters'];
@@ -79,7 +76,6 @@ const initialState: TableStoreContext = {
     sortKey: '',
     sortOrder: 'asc',
     areAllColumnsVisible: true,
-    tableContainerRef: null,
     isResizing: false,
     filters: {},
     selectedFilters: {},
@@ -93,7 +89,6 @@ const initialState: TableStoreContext = {
     toggleVisibility: noop,
     showColumn: noop,
     isColumnHidden: () => false,
-    onMouseDown: noop,
     toggleFilterSelection: noop,
     toggleSelectAllFilter: noop,
     resetFilters: noop,

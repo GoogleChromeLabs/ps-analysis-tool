@@ -53,7 +53,6 @@ const Table = ({
   rowHeightClass,
 }: TableProps) => {
   const {
-    tableContainerRef,
     filters,
     isSelectAllFilterSelected,
     toggleFilterSelection,
@@ -64,8 +63,8 @@ const Table = ({
     searchValue,
     setSearchValue,
     exportTableData,
+    isResizing,
   } = useTable(({ state, actions }) => ({
-    tableContainerRef: state.tableContainerRef,
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
     toggleFilterSelection: actions.toggleFilterSelection,
@@ -76,6 +75,7 @@ const Table = ({
     searchValue: state.searchValue,
     setSearchValue: actions.setSearchValue,
     exportTableData: actions.exportTableData,
+    isResizing: state.isResizing,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -167,17 +167,16 @@ const Table = ({
             />
           </Resizable>
         )}
-        <div
-          ref={tableContainerRef}
-          className="relative h-full w-full overflow-auto"
-        >
+        <div className="relative h-full w-full overflow-auto">
           <ColumnMenu
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}
             position={columnPosition}
           />
-          <div
-            className="h-full w-full overflow-hidden flex flex-col"
+          <table
+            className={`h-full w-full overflow-hidden table-auto relative ${
+              isResizing ? 'cursor-ew-resize' : 'cursor-default'
+            }`}
             style={{
               minWidth: minWidth ?? '70rem',
             }}
@@ -194,7 +193,7 @@ const Table = ({
               selectedKey={selectedKey}
               rowHeightClass={rowHeightClass}
             />
-          </div>
+          </table>
         </div>
       </div>
     </div>
