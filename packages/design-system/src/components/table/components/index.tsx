@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -172,7 +172,7 @@ const Table = ({
             position={columnPosition}
           />
           <table
-            className="h-full w-full table-auto border-separate border-spacing-0 relative"
+            className="h-full table-auto border-separate border-spacing-0 relative"
             style={{
               minWidth: minWidth ?? '70rem',
             }}
@@ -196,4 +196,4 @@ const Table = ({
   );
 };
 
-export default Table;
+export default memo(Table);

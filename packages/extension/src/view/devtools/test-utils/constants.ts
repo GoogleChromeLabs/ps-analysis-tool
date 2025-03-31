@@ -26,7 +26,7 @@ export const selectors = {
   cookieTabAccordion: 'div[data-testid="cookies-accordion-opener"]',
   siteBoundriesTabAccordion:
     'div[data-testid="siteBoundaries-accordion-opener"]',
-  tableRowsSelector: 'div[data-testid="body-row"]',
+  tableRowsSelector: 'tr[data-testid="body-row"]',
   firstRowSelector: 'div[tabindex="0"]',
   searchFieldCookietab: 'input[type="text"][placeholder="Search"]',
   TotalCookieTextCookietab:
