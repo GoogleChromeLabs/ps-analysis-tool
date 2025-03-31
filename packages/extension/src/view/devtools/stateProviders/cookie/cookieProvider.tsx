@@ -346,13 +346,35 @@ const Provider = ({ children }: PropsWithChildren) => {
     [getAllFramesForCurrentTab, setSettingsChanged]
   );
 
+  const onCommittedNavigationListener = useCallback(
+    async ({
+      frameId,
+      frameType,
+      url,
+      tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        chrome.devtools.inspectedWindow.tabId === tabId &&
+        url &&
+        frameType === 'outermost_frame' &&
+        frameId === 0
+      ) {
+        setIsInspecting(false);
+        setTabFrames(null);
+        setTabUrl(url);
+        await getAllFramesForCurrentTab({});
+      }
+    },
+    [getAllFramesForCurrentTab]
+  );
+
   useEffect(() => {
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
-
+    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
     return () => {
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
     };
-  }, [messagePassingListener]);
+  }, [messagePassingListener, onCommittedNavigationListener]);
 
   const tabRemovedListener = useCallback(async () => {
     try {
