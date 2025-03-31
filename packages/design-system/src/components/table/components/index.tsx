@@ -63,7 +63,6 @@ const Table = ({
     searchValue,
     setSearchValue,
     exportTableData,
-    isResizing,
   } = useTable(({ state, actions }) => ({
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
@@ -75,7 +74,6 @@ const Table = ({
     searchValue: state.searchValue,
     setSearchValue: actions.setSearchValue,
     exportTableData: actions.exportTableData,
-    isResizing: state.isResizing,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -174,9 +172,7 @@ const Table = ({
             position={columnPosition}
           />
           <table
-            className={`h-full w-full overflow-auto table-auto border-separate border-spacing-0 relative ${
-              isResizing ? 'cursor-ew-resize' : 'cursor-default'
-            }`}
+            className="h-full w-full table-auto border-separate border-spacing-0 relative"
             style={{
               minWidth: minWidth ?? '70rem',
             }}

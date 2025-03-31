@@ -65,7 +65,7 @@ export const TableProvider = ({
     isColumnHidden,
   } = useColumnVisibility(tableColumns, commonKey);
 
-  const { isResizing } = useColumnResizing();
+  const { isResizing, setColumnWidths } = useColumnResizing();
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, tableColumns, commonKey);
@@ -111,7 +111,7 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-  }, [searchFilteredData, visibleColumns]);
+  }, [searchFilteredData, visibleColumns, setColumnWidths]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -127,6 +127,10 @@ export const TableProvider = ({
       onRowClick(null);
     }
   }, [isRowSelected, onRowClick, rows]);
+
+  useEffect(() => {
+    setColumnWidths();
+  }, [setColumnWidths, visibleColumns, rows]);
 
   return (
     <TableContext.Provider

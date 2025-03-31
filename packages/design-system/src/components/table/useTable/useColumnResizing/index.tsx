@@ -21,27 +21,39 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 
 export const columnResizeHandleClassName = 'column-resize-handle';
 
+type UseColumnResizing = {
+  isResizing: boolean;
+  setColumnWidths: () => void;
+};
+
 /**
  * Custom hook to handle column resizing.
+ * @returns {UseColumnResizing} isResizing - Whether the column is being resized.
  */
-
-const useColumnResizing = () => {
+const useColumnResizing = (): UseColumnResizing => {
   const [isResizing, setIsResizing] = useState(false);
   const resizeHandleRef = useRef<HTMLDivElement>(null);
-  const columnWidth = useRef(0);
+  const startingColumnWidth = useRef(0);
   const startX = useRef(0);
+  const rafId = useRef<number>();
+
+  // TODO: use some kind of key to get the column element
+  const getColumnElement = () => {
+    return resizeHandleRef.current?.parentElement?.parentElement;
+  };
 
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (target.className.includes(columnResizeHandleClassName)) {
+    if (target.className?.includes?.(columnResizeHandleClassName)) {
       // @ts-ignore
       resizeHandleRef.current = target as HTMLDivElement;
       startX.current = event.screenX;
-      const columnElementRef = resizeHandleRef.current.parentElement;
+      const columnElementRef = getColumnElement();
       if (!columnElementRef) {
         return;
       }
-      columnWidth.current = columnElementRef.offsetWidth;
+      startingColumnWidth.current =
+        columnElementRef.getBoundingClientRect().width;
       setIsResizing(true);
     }
   }, []);
@@ -51,41 +63,84 @@ const useColumnResizing = () => {
       if (!isResizing || !resizeHandleRef.current) {
         return;
       }
-      const columnElement = resizeHandleRef.current.parentElement;
-      if (!columnElement) {
-        return;
+
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
       }
-      const newDiffX = startX.current - event.screenX;
-      columnElement.style.minWidth = `${columnWidth.current - newDiffX}px`;
+
+      rafId.current = requestAnimationFrame(() => {
+        const columnElement = getColumnElement();
+        if (!columnElement) {
+          return;
+        }
+        const newDiffX = startX.current - event.screenX;
+        const newWidth = startingColumnWidth.current - newDiffX;
+        columnElement.style.minWidth = `${newWidth}px`;
+        columnElement.style.maxWidth = `${newWidth}px`;
+      });
     },
-    [isResizing, columnWidth]
+    [isResizing]
   );
 
   const onMouseUp = useCallback(() => {
     if (!isResizing) {
       return;
     }
-    const columnElement = resizeHandleRef.current?.parentElement;
+    const columnElement = getColumnElement();
     if (columnElement) {
-      columnWidth.current = columnElement.offsetWidth;
       requestAnimationFrame(() => {
         setIsResizing(false);
       });
     }
   }, [isResizing]);
 
+  // fixes the column widths when the component is mounted
+  // so the columns don't resize when the user starts dragging
+  const setColumnWidths = () => {
+    const allHandles = document.querySelectorAll(
+      `.${columnResizeHandleClassName}`
+    );
+    allHandles.forEach((handle) => {
+      const columnElement = handle.parentElement?.parentElement;
+      if (columnElement) {
+        const width = columnElement.getBoundingClientRect().width;
+        columnElement.style.maxWidth = `${width}px`;
+        columnElement.style.minWidth = `${width}px`;
+      }
+    });
+  };
+
   useEffect(() => {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('resize', setColumnWidths);
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('resize', setColumnWidths);
     };
   }, [onMouseMove, onMouseUp, onMouseDown]);
 
-  return { isResizing };
+  useEffect(() => {
+    if (isResizing) {
+      document.body.style.cursor = 'ew-resize';
+    } else {
+      document.body.style.cursor = 'default';
+    }
+  }, [isResizing]);
+
+  useEffect(() => {
+    setColumnWidths();
+    return () => {
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
+  }, []);
+
+  return { isResizing, setColumnWidths };
 };
 
 export default useColumnResizing;

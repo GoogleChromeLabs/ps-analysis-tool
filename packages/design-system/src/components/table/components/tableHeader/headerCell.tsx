@@ -73,7 +73,7 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
           <div
             className={classNames(
               columnResizeHandleClassName,
-              'absolute right-[-2px] cursor-ew-resize h-full w-3'
+              'absolute right-[-2px] cursor-ew-resize h-full w-2'
             )}
           />
         </div>
