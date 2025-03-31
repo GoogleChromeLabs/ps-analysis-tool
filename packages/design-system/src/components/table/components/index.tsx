@@ -149,7 +149,7 @@ const Table = ({
           )}
         </>
       )}
-      <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
+      <div className="w-full flex-1 overflow-auto h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"
@@ -167,14 +167,14 @@ const Table = ({
             />
           </Resizable>
         )}
-        <div className="relative h-full w-full overflow-auto">
+        <div className="relative h-full w-full">
           <ColumnMenu
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}
             position={columnPosition}
           />
           <table
-            className={`h-full w-full overflow-hidden table-auto relative ${
+            className={`h-full w-full overflow-auto table-auto border-separate border-spacing-0 relative ${
               isResizing ? 'cursor-ew-resize' : 'cursor-default'
             }`}
             style={{

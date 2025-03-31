@@ -19,19 +19,21 @@
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
 
+export const columnResizeHandleClassName = 'column-resize-handle';
+
 /**
  * Custom hook to handle column resizing.
  */
 
 const useColumnResizing = () => {
   const [isResizing, setIsResizing] = useState(false);
+  const resizeHandleRef = useRef<HTMLDivElement>(null);
   const columnWidth = useRef(0);
   const startX = useRef(0);
-  const resizeHandleRef = useRef<HTMLDivElement>(null);
 
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (target.className.includes('column-resize-handle')) {
+    if (target.className.includes(columnResizeHandleClassName)) {
       // @ts-ignore
       resizeHandleRef.current = target as HTMLDivElement;
       startX.current = event.screenX;

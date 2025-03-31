@@ -24,6 +24,7 @@ import React, { useCallback } from 'react';
 import { useTable, type TableColumn } from '../../useTable';
 import { ArrowDown } from '../../../../icons';
 import classNames from 'classnames';
+import { columnResizeHandleClassName } from '../../useTable/useColumnResizing';
 interface HeaderCellProps {
   cell: TableColumn;
   setIsRowFocused: (state: boolean) => void;
@@ -48,7 +49,8 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
       <th
         onClick={isResizing ? undefined : handleOnClick}
         className={classNames(
-          'max-w-80 select-none touch-none font-normal truncate sticky top-0 z-10',
+          'max-w-80 select-none touch-none font-normal truncate sticky top-0 z-[100]',
+          'bg-anti-flash-white dark:bg-charleston-green border-b border-l border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz',
           {
             'hover:bg-gainsboro dark:hover:bg-outer-space': !isResizing,
           }
@@ -68,7 +70,12 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
                 desc: <ArrowDown />,
               }[sortOrder]}
           </p>
-          <div className="absolute right-[-1px] cursor-ew-resize h-full w-2 column-resize-handle" />
+          <div
+            className={classNames(
+              columnResizeHandleClassName,
+              'absolute right-[-2px] cursor-ew-resize h-full w-3'
+            )}
+          />
         </div>
       </th>
     </>

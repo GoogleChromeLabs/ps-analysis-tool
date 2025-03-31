@@ -34,7 +34,7 @@ const HeaderRow = ({ setIsRowFocused }: HeaderRowProps) => {
   }));
 
   return (
-    <tr className="bg-anti-flash-white dark:bg-charleston-green border-b border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz">
+    <tr>
       {columns?.map((cell, idx) => (
         <HeaderCell key={idx} cell={cell} setIsRowFocused={setIsRowFocused} />
       ))}
