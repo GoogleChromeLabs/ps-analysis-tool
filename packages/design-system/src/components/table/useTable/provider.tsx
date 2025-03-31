@@ -130,7 +130,7 @@ export const TableProvider = ({
 
   useEffect(() => {
     setColumnWidths();
-  }, [setColumnWidths, visibleColumns, rows]);
+  }, [setColumnWidths, visibleColumns]);
 
   return (
     <TableContext.Provider

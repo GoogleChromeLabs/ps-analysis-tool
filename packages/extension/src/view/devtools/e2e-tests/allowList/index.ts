@@ -73,7 +73,7 @@ describe('Allow Listing', () => {
 
     // Click on the green color background row from table.
     const button = await frame.$(
-      'div[data-testid="body-row"][class*="bg-selection-green-dark"], div[data-testid="body-row"] div[style*="color: green"]'
+      'tr[data-testid="body-row"][class*="bg-selection-green-dark"], tr[data-testid="body-row"] div[style*="color: green"]'
     );
 
     // Click on the button
