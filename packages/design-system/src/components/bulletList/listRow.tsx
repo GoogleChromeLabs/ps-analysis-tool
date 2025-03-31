@@ -42,14 +42,9 @@ const ListRow = ({ row }: Props) => {
       }
 
       if (chrome?.tabs) {
-        chrome.scripting
-          .executeScript({
-            target: { tabId: chrome.devtools.inspectedWindow.tabId },
-            func: () => {
-              window.location.assign(row.link ?? '');
-            },
-          })
-          .then(() => console.log('injected a function'));
+        chrome.tabs.update({
+          url: row.link,
+        });
       }
     },
     [navigateTo, row.link, row.sidebarKey]
