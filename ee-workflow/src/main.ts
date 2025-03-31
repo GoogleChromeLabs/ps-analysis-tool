@@ -132,12 +132,14 @@ class Main {
    * @param container - The container to append the canvas to.
    * @param checkpointToStart - The checkpoint to start from.
    * @param onDrawListener - The listener to call when a figure is drawn.
+   * @param preloader - The preloader function to run before setup.
    */
   constructor(
     private clearBeforeTravel = false,
     container?: HTMLElement,
     private checkpointToStart?: string,
-    private onDrawListener?: (id: string) => void
+    private onDrawListener?: (id: string) => void,
+    private preloader?: (p: p5) => void
   ) {
     this.p5 = new p5(this.init.bind(this), container);
   }
@@ -147,10 +149,17 @@ class Main {
    * @param p - The p5 instance.
    */
   private init(p: p5) {
+    p.preload = this.preload.bind(this);
     p.setup = this.setUp.bind(this);
     p.draw = this.draw.bind(this);
     p.mouseMoved = this.mouseMoved.bind(this);
     p.mouseClicked = this.mouseClicked.bind(this);
+  }
+
+  private preload() {
+    if (this.preloader) {
+      this.preloader(this.p5);
+    }
   }
 
   /**
@@ -970,6 +979,14 @@ class Main {
         this.removeGroup(object as Group);
       }
     });
+  }
+
+  /**
+   * Gets the current checkpoint index.
+   * @returns The current checkpoint index.
+   */
+  getCurrentCheckpointIndex() {
+    return this.checkpoints.size - 1;
   }
 }
 
