@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import { INITIAL_SYNC } from '../../constants';
-import dataStore from '../../store/dataStore';
+import dataStore, { DataStore } from '../../store/dataStore';
 import resetCookieBadgeText from '../../store/utils/resetCookieBadgeText';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
@@ -31,16 +31,16 @@ export const onSyncStorageChangedListenerForMultiTab = async (changes: {
   ) {
     return;
   }
-  dataStore.tabMode = changes.allowedNumberOfTabs.newValue;
+  DataStore.tabMode = changes.allowedNumberOfTabs.newValue;
 
   const tabs = await chrome.tabs.query({});
   await sendMessageWrapper(INITIAL_SYNC, {
-    tabMode: dataStore.tabMode,
-    tabToRead: dataStore.tabToRead,
+    tabMode: DataStore.tabMode,
+    tabToRead: DataStore.tabToRead,
   });
 
   if (changes?.allowedNumberOfTabs?.newValue === 'single') {
-    dataStore.tabToRead = '';
+    DataStore.tabToRead = '';
 
     tabs.map((tab) => {
       if (!tab?.id) {
@@ -49,7 +49,7 @@ export const onSyncStorageChangedListenerForMultiTab = async (changes: {
 
       resetCookieBadgeText(tab.id);
 
-      dataStore?.removeTabData(tab.id);
+      dataStore?.removeTabData(tab.id.toString());
 
       return tab;
     });
@@ -58,9 +58,9 @@ export const onSyncStorageChangedListenerForMultiTab = async (changes: {
       if (!tab?.id) {
         return;
       }
-      dataStore?.addTabData(tab.id);
-      dataStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-      dataStore?.updateDevToolsState(tab.id, true);
+      dataStore?.addTabData(tab.id.toString());
+      dataStore?.sendUpdatedDataToPopupAndDevTools(tab.id.toString());
+      dataStore?.updateDevToolsState(tab.id.toString(), true);
     });
   }
 };
@@ -76,12 +76,12 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
     return;
   }
 
-  dataStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+  DataStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
 
   const tabs = await chrome.tabs.query({});
 
   if (!changes?.isUsingCDP?.newValue) {
-    if (!dataStore.globalIsUsingCDP) {
+    if (!DataStore.globalIsUsingCDP) {
       const targets = await chrome.debugger.getTargets();
       await Promise.all(
         targets.map(async ({ id }) => {
@@ -104,7 +104,7 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
         return;
       }
 
-      dataStore?.sendUpdatedDataToPopupAndDevTools(id);
+      dataStore?.sendUpdatedDataToPopupAndDevTools(id.toString());
     });
   }
 };

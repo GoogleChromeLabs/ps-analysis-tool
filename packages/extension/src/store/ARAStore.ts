@@ -22,7 +22,7 @@ import isEqual from 'lodash-es/isEqual';
 /**
  * Internal dependencies
  */
-import dataStore from './dataStore';
+import dataStore, { DataStore } from './dataStore';
 import convertKeysToCamelCase from './utils/convertKeysToCamelCase';
 import transformNestedObject from './utils/transformObject';
 
@@ -87,7 +87,7 @@ class ARAStore {
         index: dataStore.sources.triggerRegistration.length,
         time: Date.now(),
         tabId,
-        destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
+        destination: new URL(DataStore.tabs[Number(tabId)].url).origin ?? '',
       });
     } else {
       dataStore.sources.triggerRegistration = [
@@ -99,7 +99,7 @@ class ARAStore {
           index: 0,
           time: Date.now(),
           tabId,
-          destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
+          destination: new URL(DataStore.tabs[Number(tabId)].url).origin ?? '',
         },
       ];
     }

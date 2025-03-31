@@ -16,7 +16,8 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../store/dataStore';
+import cookieStore from '../store/cookieStore';
+import dataStore, { DataStore } from '../store/dataStore';
 import { getCurrentTab } from './getCurrentTab';
 import { getTab } from './getTab';
 
@@ -31,12 +32,12 @@ const listenToNewTab = async (tabId?: number) => {
     return '';
   }
 
-  if (dataStore.tabMode && dataStore.tabMode !== 'unlimited') {
-    const storedTabData = Object.keys(dataStore?.tabsData ?? {});
+  if (DataStore.tabMode && DataStore.tabMode !== 'unlimited') {
+    const storedTabData = Object.keys(cookieStore.getTabsData() ?? {});
 
     await Promise.all(
       storedTabData.map(async (tabIdToDelete) => {
-        dataStore?.removeTabData(Number(tabIdToDelete));
+        dataStore?.removeTabData(tabIdToDelete);
         try {
           await chrome.action.setBadgeText({
             tabId: Number(tabIdToDelete),
@@ -51,17 +52,17 @@ const listenToNewTab = async (tabId?: number) => {
     );
   }
 
-  dataStore.tabToRead = newTabId;
+  DataStore.tabToRead = newTabId;
 
-  dataStore.initialiseVariablesForNewTab(newTabId);
+  cookieStore.initialiseVariablesForNewTab(newTabId);
 
-  dataStore?.addTabData(Number(newTabId));
-  dataStore?.updateDevToolsState(Number(newTabId), true);
-  dataStore?.updatePopUpState(Number(newTabId), true);
+  cookieStore.addTabData(newTabId);
+  dataStore?.updateDevToolsState(newTabId, true);
+  dataStore?.updatePopUpState(newTabId, true);
 
-  const currentTab = await getTab(Number(newTabId));
+  const currentTab = await getTab(newTabId);
 
-  dataStore?.updateUrl(Number(newTabId), currentTab?.url ?? '');
+  dataStore?.updateUrl(newTabId, currentTab?.url ?? '');
 
   return newTabId;
 };

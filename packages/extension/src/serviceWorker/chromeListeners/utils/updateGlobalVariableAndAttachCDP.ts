@@ -16,7 +16,8 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../../../store/dataStore';
+import cookieStore from '../../../store/cookieStore';
+import dataStore, { DataStore } from '../../../store/dataStore';
 import attachCDP from '../../attachCDP';
 
 const updateGlobalVariableAndAttachCDP = async () => {
@@ -24,10 +25,10 @@ const updateGlobalVariableAndAttachCDP = async () => {
 
   const preSetSettings = await chrome.storage.sync.get();
 
-  dataStore.tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
-  dataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
+  DataStore.tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
+  DataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
 
-  if (dataStore.tabMode === 'unlimited') {
+  if (DataStore.tabMode === 'unlimited') {
     const allTabs = await chrome.tabs.query({});
     const targets = await chrome.debugger.getTargets();
 
@@ -36,10 +37,10 @@ const updateGlobalVariableAndAttachCDP = async () => {
         return;
       }
 
-      dataStore?.addTabData(tab.id);
+      dataStore?.addTabData(tab.id.toString());
 
-      if (dataStore.globalIsUsingCDP) {
-        dataStore.initialiseVariablesForNewTab(tab.id.toString());
+      if (DataStore.globalIsUsingCDP) {
+        cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
         attachCDP({ tabId: tab.id });
 
@@ -47,7 +48,7 @@ const updateGlobalVariableAndAttachCDP = async () => {
           ({ tabId }) => tabId && tab.id && tabId === tab.id
         );
         dataStore?.updateParentChildFrameAssociation(
-          tab.id,
+          tab.id.toString(),
           currentTab[0].id,
           '0'
         );

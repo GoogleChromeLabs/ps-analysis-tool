@@ -21,7 +21,7 @@ import Protocol from 'devtools-protocol';
  * Internal dependencies
  */
 import ARAStore from '../store/ARAStore';
-import dataStore from '../store/dataStore';
+import dataStore, { DataStore } from '../store/dataStore';
 import convertKeysToCamelCase from '../store/utils/convertKeysToCamelCase';
 const readHeaderAndRegister = (
   headers: Protocol.Network.ResponseReceivedExtraInfoEvent['headers'],
@@ -88,7 +88,7 @@ const readHeaderAndRegister = (
           ...jsonSource,
           reportingOrigin: new URL(requestUrl).origin,
           requestUrl: requestUrl,
-          sourceOrigin: dataStore.tabs[Number(tabId)]?.url ?? '',
+          sourceOrigin: DataStore.tabs[Number(tabId)]?.url ?? '',
           time: Date.now(),
         } as Protocol.Storage.AttributionReportingSourceRegistration,
         result:

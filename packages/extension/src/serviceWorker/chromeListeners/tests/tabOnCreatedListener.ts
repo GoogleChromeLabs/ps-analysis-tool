@@ -25,7 +25,8 @@ import SinonChrome from 'sinon-chrome';
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
 import { onTabCreatedListener } from '../tabOnCreatedListener';
-import dataStore from '../../../store/dataStore';
+import dataStore, { DataStore } from '../../../store/dataStore';
+import cookieStore from '../../../store/cookieStore';
 
 describe('chrome.tabs.onCreated.addListener', () => {
   beforeAll(() => {
@@ -44,8 +45,8 @@ describe('chrome.tabs.onCreated.addListener', () => {
 
   describe('Multitab Mode', () => {
     beforeAll(() => {
-      dataStore.globalIsUsingCDP = false;
-      dataStore.tabMode = 'unlimited';
+      DataStore.globalIsUsingCDP = false;
+      DataStore.tabMode = 'unlimited';
     });
 
     test('Openeing new tabs should create an entry for the new tab in synchnorous cookie store.', async () => {
@@ -67,20 +68,20 @@ describe('chrome.tabs.onCreated.addListener', () => {
 
       await new Promise((r) => setTimeout(r, 2000));
 
-      expect(dataStore.tabs[123456]).toBeTruthy();
+      expect(DataStore.tabs[123456]).toBeTruthy();
     });
   });
 
   describe('Single Tab Mode', () => {
     beforeEach(() => {
-      dataStore.globalIsUsingCDP = false;
-      dataStore.tabMode = 'single';
-      dataStore.addTabData(123456);
-      dataStore.tabToRead = '';
+      DataStore.globalIsUsingCDP = false;
+      DataStore.tabMode = 'single';
+      dataStore.addTabData('123456');
+      DataStore.tabToRead = '';
     });
     afterEach(() => {
-      dataStore.tabs = {};
-      dataStore.tabsData = {};
+      DataStore.tabs = {};
+      cookieStore.removeCookieData('123456');
     });
 
     test('Openeing new tabs should create an entry for the new tab in synchnorous cookie store.', async () => {
@@ -102,7 +103,7 @@ describe('chrome.tabs.onCreated.addListener', () => {
 
       await new Promise((r) => setTimeout(r, 2000));
 
-      expect(dataStore.tabs[123456]).toBeTruthy();
+      expect(DataStore.tabs['123456']).toBeTruthy();
     });
 
     test('Openeing more than 1 tab in single tab processing mode should not create an entry in synchrorous cookie store.', async () => {
@@ -140,7 +141,7 @@ describe('chrome.tabs.onCreated.addListener', () => {
 
       await new Promise((r) => setTimeout(r, 2000));
 
-      expect(dataStore.tabs[24567]).not.toBeTruthy();
+      expect(DataStore.tabs['24567']).not.toBeTruthy();
     });
   });
 
@@ -162,6 +163,6 @@ describe('chrome.tabs.onCreated.addListener', () => {
 
     await new Promise((r) => setTimeout(r, 2000));
 
-    expect(Object.keys(dataStore.tabs).length).toBeLessThanOrEqual(1);
+    expect(Object.keys(DataStore.tabs).length).toBeLessThanOrEqual(1);
   });
 });

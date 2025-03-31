@@ -16,10 +16,11 @@
 /**
  * Internal dependencies
  */
+import cookieStore from '../../store/cookieStore';
 import dataStore from '../../store/dataStore';
 
 export const onTabRemovedListener = (tabId: number) => {
-  dataStore.deinitialiseVariablesForTab(tabId.toString());
+  cookieStore.deinitialiseVariablesForTab(tabId.toString());
 
-  dataStore?.removeTabData(tabId);
+  dataStore?.removeTabData(tabId.toString());
 };

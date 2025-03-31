@@ -17,7 +17,8 @@
  * Internal dependencies
  */
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
-import dataStore from '../../store/dataStore';
+import cookieStore from '../../store/cookieStore';
+import dataStore, { DataStore } from '../../store/dataStore';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   try {
@@ -27,41 +28,41 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
 
     const targets = await chrome.debugger.getTargets();
 
-    if (dataStore.tabMode && dataStore.tabMode !== 'unlimited') {
-      const doesTabExist = dataStore.tabToRead;
+    if (DataStore.tabMode && DataStore.tabMode !== 'unlimited') {
+      const doesTabExist = DataStore.tabToRead;
       if (
-        Object.keys(dataStore?.tabsData ?? {}).length >=
+        Object.keys(cookieStore.getTabsData() ?? {}).length >=
           ALLOWED_NUMBER_OF_TABS &&
         doesTabExist
       ) {
         return;
       }
-      dataStore.tabToRead = tab.id.toString();
-      dataStore?.addTabData(tab.id);
+      DataStore.tabToRead = tab.id.toString();
+      dataStore?.addTabData(tab.id.toString());
 
-      if (dataStore.globalIsUsingCDP) {
+      if (DataStore.globalIsUsingCDP) {
         const currentTab = targets.filter(
           ({ tabId }) => tabId && tab.id && tabId === tab.id
         );
-        dataStore.initialiseVariablesForNewTab(tab.id.toString());
+        cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
         dataStore.updateParentChildFrameAssociation(
-          tab.id,
+          tab.id.toString(),
           currentTab[0].id,
           '0'
         );
       }
     } else {
-      dataStore?.addTabData(tab.id);
+      dataStore?.addTabData(tab.id.toString());
 
-      if (dataStore.globalIsUsingCDP) {
+      if (DataStore.globalIsUsingCDP) {
         const currentTab = targets.filter(
           ({ tabId }) => tabId && tab.id && tabId === tab.id
         );
-        dataStore.initialiseVariablesForNewTab(tab.id.toString());
+        cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
         dataStore.updateParentChildFrameAssociation(
-          tab.id,
+          tab.id.toString(),
           currentTab[0].id,
           '0'
         );

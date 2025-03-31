@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import type {
-  CookieData,
   CookieDatabase,
   singleAuctionEvent,
   auctionData,
@@ -29,23 +28,13 @@ import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */
-import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import PAStore from './PAStore';
 import { isEqual } from 'lodash-es';
 
-class DataStore {
-  /**
-   * The cookie data of the tabs.
-   */
-  tabsData: {
-    [tabId: number]: {
-      [cookieKey: string]: CookieData;
-    };
-  } = {};
-
+export class DataStore {
   /**
    * The Attribution Reporting sources for the tab.
    */
@@ -121,22 +110,22 @@ class DataStore {
   /**
    * The cookie data of the tabs.
    */
-  tabMode: 'single' | 'unlimited' = 'single';
+  static tabMode: 'single' | 'unlimited' = 'single';
 
   /**
    * CookieDatabase to run analytics match on.
    */
-  cookieDB: CookieDatabase | null = null;
+  static cookieDB: CookieDatabase | null = null;
 
   /**
    * The cookie data of the tabs.
    */
-  tabToRead = '';
+  static tabToRead = '';
 
   /**
    * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
    */
-  requestIdToCDPURLMapping: {
+  static requestIdToCDPURLMapping: {
     [tabId: string]: {
       [requestId: string]: {
         frameId: string;
@@ -145,16 +134,6 @@ class DataStore {
         timeStamp: Protocol.Network.MonotonicTime;
         wallTime: Protocol.Network.TimeSinceEpoch;
       };
-    };
-  } = {};
-
-  /**
-   * This variable stores the unParsedRequest headers received from Network.requestWillBeSentExtraInfo.
-   * These are the requests whose Network.requestWillBeSent counter part havent yet been fired.
-   */
-  unParsedRequestHeadersForCA: {
-    [tabId: string]: {
-      [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
     };
   } = {};
 
@@ -172,32 +151,22 @@ class DataStore {
   } = {};
 
   /**
-   * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
-   * These are the responses whose Network.responseReceived counter part havent yet been fired.
-   */
-  unParsedResponseHeadersForCA: {
-    [tabId: string]: {
-      [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
-    };
-  } = {};
-
-  /**
    * This variable stores requestUrl related to a particular frameId of a particular tab.
    * These urls are used as arguments to call Network.getCookies on the frameId.
    */
-  frameIdToResourceMap: {
+  static frameIdToResourceMap: {
     [tabId: string]: {
       [frameId: string]: Set<string>;
     };
   } = {};
 
-  globalIsUsingCDP = false;
+  static globalIsUsingCDP = false;
 
   /**
    * Required data of the tabs and PSAT panel of the tab.
    */
-  tabs: {
-    [tabId: number]: {
+  static tabs: {
+    [tabId: string]: {
       url: string;
       devToolsOpenState: boolean;
       popupOpenState: boolean;
@@ -214,14 +183,14 @@ class DataStore {
     // Sync cookie data between popup and Devtool.
     // @todo Only send the data from the active tab and the differences.
     setInterval(() => {
-      const data = this?.tabsData ?? {};
+      const data = DataStore.tabs ?? {};
 
       if (Object.keys(data).length === 0) {
         return;
       }
 
       Object.keys(data).forEach((key) => {
-        this?.sendUpdatedDataToPopupAndDevTools(Number(key));
+        this?.sendUpdatedDataToPopupAndDevTools(key);
       });
     }, 1200);
   }
@@ -240,11 +209,11 @@ class DataStore {
     setTargets: Set<string>,
     requestUrl: string
   ) {
-    if (!this.frameIdToResourceMap[tabId][frameId]) {
-      this.frameIdToResourceMap[tabId][frameId] = new Set();
+    if (!DataStore.frameIdToResourceMap[tabId]?.[frameId]) {
+      DataStore.frameIdToResourceMap[tabId][frameId] = new Set();
     }
     if (setTargets.has(frameId)) {
-      this.frameIdToResourceMap[tabId][frameId].add(requestUrl);
+      DataStore.frameIdToResourceMap[tabId][frameId].add(requestUrl);
       return frameId;
     } else {
       const ancestorFrameId = this.findFirstAncestorFrameId(
@@ -254,7 +223,7 @@ class DataStore {
       );
 
       if (ancestorFrameId) {
-        this.frameIdToResourceMap[tabId][frameId].add(requestUrl);
+        DataStore.frameIdToResourceMap[tabId][frameId].add(requestUrl);
         return ancestorFrameId;
       }
       return frameId;
@@ -270,7 +239,7 @@ class DataStore {
    * @param {string} frameUrl This is and optional parameter that is sent to decide if we need to run the command for updating the frame url with async function.
    */
   async addFrameToTabAndUpdateMetadata(
-    tabId: number | null,
+    tabId: string | null,
     targetId: string | null,
     frameId: string,
     parentFrameId: string,
@@ -294,28 +263,24 @@ class DataStore {
     const isFrameIdInPage = await doesFrameExist(frameId);
 
     await Promise.all(
-      Object.keys(this?.tabs ?? {}).map(async (key) => {
-        const currentTabFrameIdSet = this.getFrameIDSet(Number(key));
+      Object.keys(DataStore.tabs ?? {}).map(async (key) => {
+        const currentTabFrameIdSet = this.getFrameIDSet(key);
         if (
           targetId &&
           currentTabFrameIdSet &&
           currentTabFrameIdSet.has(targetId)
         ) {
-          this.updateParentChildFrameAssociation(
-            Number(key),
-            frameId,
-            parentFrameId
-          );
+          this.updateParentChildFrameAssociation(key, frameId, parentFrameId);
 
           if (frameUrl) {
             this.updateFrameIdURLSet(
-              Number(key),
+              key,
               isFrameIdInPage ? frameId : '',
               frameUrl
             );
             return key;
           } else {
-            await this.updateFrameIdURLSet(Number(key), frameId);
+            await this.updateFrameIdURLSet(key, frameId);
             return key;
           }
         }
@@ -329,23 +294,21 @@ class DataStore {
    * Creates an entry for a tab
    * @param {number} tabId The tab id.
    */
-  addTabData(tabId: number) {
-    if (this.tabsData[tabId] && this.tabs[tabId]) {
+  addTabData(tabId: string) {
+    if (DataStore.tabs[tabId]) {
       return;
     }
     //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
     globalThis.PSAT = {
-      tabsData: this.tabsData,
-      tabs: this.tabs,
+      tabs: DataStore.tabs,
       auctionEvents: this.auctionEvents,
       sources: this.sources,
       headersForARA: this.headersForARA,
     };
 
-    this.tabsData[tabId] = {};
     this.auctionEvents[tabId.toString()] = {};
     this.headersForARA[tabId.toString()] = {};
-    this.tabs[tabId] = {
+    DataStore.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
@@ -360,8 +323,8 @@ class DataStore {
     this.auctionDataForTabId[tabId] = {};
 
     (async () => {
-      if (!this.cookieDB) {
-        this.cookieDB = await fetchDictionary();
+      if (!DataStore.cookieDB) {
+        DataStore.cookieDB = await fetchDictionary();
       }
     })();
   }
@@ -370,14 +333,10 @@ class DataStore {
    * Clears the whole storage.
    */
   clear() {
-    Object.keys(this.tabsData).forEach((key) => {
-      delete this.tabsData[Number(key)];
+    Object.keys(DataStore.tabs).forEach((key) => {
+      delete DataStore.tabs[key];
     });
-    Object.keys(this.tabs).forEach((key) => {
-      delete this.tabs[Number(key)];
-    });
-    this.tabsData = {};
-    this.tabs = {};
+    DataStore.tabs = {};
   }
 
   /**
@@ -385,10 +344,8 @@ class DataStore {
    * @param {string} tabId The tab whose data has to be deinitialised.
    */
   deinitialiseVariablesForTab(tabId: string) {
-    delete this.unParsedRequestHeadersForCA[tabId];
-    delete this.unParsedResponseHeadersForCA[tabId];
-    delete this.requestIdToCDPURLMapping[tabId];
-    delete this.frameIdToResourceMap[tabId];
+    delete DataStore.requestIdToCDPURLMapping[tabId];
+    delete DataStore.frameIdToResourceMap[tabId];
     delete this.headersForARA[tabId];
   }
 
@@ -407,10 +364,10 @@ class DataStore {
     if (targetSet.has(frameId)) {
       return frameId;
     } else {
-      if (this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]) {
+      if (DataStore.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]) {
         return this.findFirstAncestorFrameId(
           tabId,
-          this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId],
+          DataStore.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId],
           targetSet
         );
       }
@@ -423,12 +380,12 @@ class DataStore {
    * @param {number} tabId Tab id.
    * @returns {string | null} The url of the tab if exists else null.
    */
-  getTabUrl(tabId: number): string | null {
-    if (!this.tabs[tabId]) {
+  getTabUrl(tabId: string): string | null {
+    if (!DataStore.tabs[tabId]) {
       return null;
     }
 
-    return this.tabs[tabId].url;
+    return DataStore.tabs[tabId].url;
   }
 
   /**
@@ -436,17 +393,19 @@ class DataStore {
    * @param {number} tabId Tab id.
    * @returns {string | null} The url of the tab if exists else null.
    */
-  getFrameIDSet(tabId: number): Set<string> | null {
-    if (!this.tabs[tabId]) {
+  getFrameIDSet(tabId: string): Set<string> | null {
+    if (!DataStore.tabs[tabId]) {
       return null;
     }
 
     const formedSet = new Set<string>();
 
-    Object.keys(this.tabs[tabId].parentChildFrameAssociation).forEach((key) => {
-      formedSet.add(key);
-      formedSet.add(this.tabs[tabId].parentChildFrameAssociation[key]);
-    });
+    Object.keys(DataStore.tabs[tabId].parentChildFrameAssociation).forEach(
+      (key) => {
+        formedSet.add(key);
+        formedSet.add(DataStore.tabs[tabId].parentChildFrameAssociation[key]);
+      }
+    );
     return formedSet;
   }
 
@@ -455,54 +414,24 @@ class DataStore {
    * @param {string} tabId The tab whose data has to be initialised.
    */
   initialiseVariablesForNewTab(tabId: string) {
-    this.unParsedRequestHeadersForCA[tabId] = {};
-    this.unParsedResponseHeadersForCA[tabId] = {};
-    this.requestIdToCDPURLMapping[tabId] = {};
-    this.frameIdToResourceMap[tabId] = {};
+    DataStore.requestIdToCDPURLMapping[tabId] = {};
+    DataStore.frameIdToResourceMap[tabId] = {};
     this.unParsedRequestHeadersForPA[tabId] = {};
     //@ts-ignore
     globalThis.PSATAdditionalData = {
-      unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
-      unParsedResponseHeadersForCA: this.unParsedResponseHeadersForCA,
-      requestIdToCDPURLMapping: this.requestIdToCDPURLMapping,
-      frameIdToResourceMap: this.frameIdToResourceMap,
+      requestIdToCDPURLMapping: DataStore.requestIdToCDPURLMapping,
+      frameIdToResourceMap: DataStore.frameIdToResourceMap,
       auctionDataForTabId: this.auctionDataForTabId,
       unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
     };
   }
 
   /**
-   * Clear cookie data from cached cookie data for the given tabId
-   * @param {number} tabId The active tab id.
-   */
-  removeCookieData(tabId: number) {
-    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
-      return;
-    }
-
-    delete this.tabsData[tabId];
-    this.tabsData[tabId] = {};
-    this.tabs[tabId].newUpdatesCA = 0;
-    this.tabs[tabId].newUpdatesPA = 0;
-    this.tabs[tabId].frameIDURLSet = {};
-    this.tabs[tabId].parentChildFrameAssociation = {};
-    Object.keys(this.auctionEvents[tabId.toString()]).forEach((key) => {
-      if (key === 'globalEvents') {
-        return;
-      }
-      delete this.auctionEvents[tabId.toString()][key];
-    });
-    this.auctionDataForTabId[tabId] = {};
-    this.sendUpdatedDataToPopupAndDevTools(tabId, true);
-  }
-
-  /**
    * Remove the tab data from the store.
    * @param {number} tabId The tab id.
    */
-  removeTabData(tabId: number) {
-    delete this.tabsData[tabId];
-    delete this.tabs[tabId];
+  removeTabData(tabId: string) {
+    delete DataStore.tabs[tabId];
     delete this.auctionDataForTabId[tabId];
     delete this.auctionEvents[tabId];
     delete this.headersForARA[tabId.toString()];
@@ -516,7 +445,7 @@ class DataStore {
     chrome.tabs.query({ windowId }, (tabs) => {
       tabs.map((tab) => {
         if (tab.id) {
-          this.removeTabData(tab.id);
+          this.removeTabData(tab.id.toString());
         }
         return tab;
       });
@@ -529,19 +458,18 @@ class DataStore {
    * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
    */
   async sendUpdatedDataToPopupAndDevTools(
-    tabId: number,
+    tabId: string,
     overrideForInitialSync = false
   ) {
-    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
+    if (!DataStore.tabs[tabId]) {
       return;
     }
 
     try {
       if (
-        this.tabs[tabId].devToolsOpenState ||
-        this.tabs[tabId].popupOpenState
+        DataStore.tabs[tabId].devToolsOpenState ||
+        DataStore.tabs[tabId].popupOpenState
       ) {
-        await this.processAndSendCookieData(tabId, overrideForInitialSync);
         await this.processAndSendAuctionData(tabId, overrideForInitialSync);
         await this.processAndSendARAData(tabId, overrideForInitialSync);
       }
@@ -553,67 +481,16 @@ class DataStore {
   }
 
   /**
-   * Processes and sends cookie message to the extension for the specified tabId
-   * @param {number} tabId The url whose url needs to be update.
-   * @param {boolean | undefined} overrideForInitialSync Override the condition.
-   */
-  async processAndSendCookieData(
-    tabId: number,
-    overrideForInitialSync: boolean
-  ) {
-    try {
-      if (this.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
-        return;
-      }
-
-      const newCookieData: {
-        [cookieKey: string]: CookieData;
-      } = {};
-
-      Object.keys(this.tabsData[tabId]).forEach((key) => {
-        newCookieData[key] = {
-          ...this.tabsData[tabId][key],
-          networkEvents: {
-            requestEvents: [],
-            responseEvents: [],
-          },
-          url: '',
-          headerType: ['request', 'response'].includes(
-            this.tabsData[tabId][key]?.headerType ?? ''
-          )
-            ? 'http'
-            : 'javascript',
-        };
-      });
-
-      await chrome.runtime.sendMessage({
-        type: NEW_COOKIE_DATA,
-        payload: {
-          tabId,
-          cookieData: newCookieData,
-          extraData: {
-            extraFrameData: this.tabs[tabId].frameIDURLSet,
-          },
-        },
-      });
-
-      this.tabs[tabId].newUpdatesCA = 0;
-    } catch (error) {
-      // Fail silently
-    }
-  }
-
-  /**
    * Processes and sends auction message to the extension for the specified tabId
    * @param {number} tabId The url whose url needs to be update.
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
   async processAndSendAuctionData(
-    tabId: number,
+    tabId: string,
     overrideForInitialSync: boolean
   ) {
     try {
-      if (this.tabs[tabId].newUpdatesPA <= 0 && !overrideForInitialSync) {
+      if (DataStore.tabs[tabId].newUpdatesPA <= 0 && !overrideForInitialSync) {
         return;
       }
 
@@ -675,7 +552,7 @@ class DataStore {
           globalEvents: globalEvents ?? [],
         },
       });
-      this.tabs[tabId].newUpdatesPA = 0;
+      DataStore.tabs[tabId].newUpdatesPA = 0;
     } catch (error) {
       // Fail silently
     }
@@ -686,7 +563,7 @@ class DataStore {
    * @param {number} tabId The url whose url needs to be update.
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
-  async processAndSendARAData(tabId: number, overrideForInitialSync: boolean) {
+  async processAndSendARAData(tabId: string, overrideForInitialSync: boolean) {
     try {
       if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
         return;
@@ -714,7 +591,7 @@ class DataStore {
    * @param {string | undefined} parentFrameId The parent frame id the frameIdToAdd is associated to
    */
   updateParentChildFrameAssociation(
-    tabId: number,
+    tabId: string,
     frameIdToAdd: string | undefined,
     parentFrameId: string | undefined
   ) {
@@ -722,10 +599,10 @@ class DataStore {
       return;
     }
 
-    if (!this.tabs[tabId]) {
+    if (!DataStore.tabs[tabId]) {
       return;
     } else {
-      this.tabs[tabId].parentChildFrameAssociation[frameIdToAdd] =
+      DataStore.tabs[tabId].parentChildFrameAssociation[frameIdToAdd] =
         parentFrameId;
     }
   }
@@ -736,7 +613,7 @@ class DataStore {
    * @param {string} frameId The new frameId to be added.
    * @param {string} targetUrl TargetUrl to be updated in frameIdSet.
    */
-  async updateFrameIdURLSet(tabId: number, frameId: string, targetUrl = '') {
+  async updateFrameIdURLSet(tabId: string, frameId: string, targetUrl = '') {
     try {
       let url = isValidURL(targetUrl) ? new URL(targetUrl).origin : '';
 
@@ -760,12 +637,12 @@ class DataStore {
         return;
       }
 
-      if (!this.tabs[tabId].frameIDURLSet[url]) {
-        this.tabs[tabId].frameIDURLSet[url] = [];
+      if (!DataStore.tabs[tabId].frameIDURLSet[url]) {
+        DataStore.tabs[tabId].frameIDURLSet[url] = [];
       }
 
-      this.tabs[tabId].frameIDURLSet[url] = [
-        ...new Set([...this.tabs[tabId].frameIDURLSet[url], frameId]),
+      DataStore.tabs[tabId].frameIDURLSet[url] = [
+        ...new Set([...DataStore.tabs[tabId].frameIDURLSet[url], frameId]),
       ];
     } catch (error) {
       //Fail silently. This is done because we are going to get either 2 errors invalid url or chrome.debugger error.
@@ -777,11 +654,11 @@ class DataStore {
    * @param {number} tabId The url whose url needs to be update.
    * @param {string} url The updated URL.
    */
-  updateUrl(tabId: number, url: string) {
-    if (!this.tabs[tabId]) {
+  updateUrl(tabId: string, url: string) {
+    if (!DataStore.tabs[tabId]) {
       return;
     } else {
-      this.tabs[tabId].url = url;
+      DataStore.tabs[tabId].url = url;
     }
   }
 
@@ -790,11 +667,11 @@ class DataStore {
    * @param {number} tabId The tabId whose popup state needs to be update.
    * @param {boolean} state The updated popup state.
    */
-  updatePopUpState(tabId: number, state: boolean) {
-    if (!this.tabs[tabId]) {
+  updatePopUpState(tabId: string, state: boolean) {
+    if (!DataStore.tabs[tabId]) {
       return;
     }
-    this.tabs[tabId].popupOpenState = state;
+    DataStore.tabs[tabId].popupOpenState = state;
   }
 
   /**
@@ -802,11 +679,11 @@ class DataStore {
    * @param {number} tabId The tabId whose devtools state needs to be update.
    * @param {boolean} state The updated devtools state.
    */
-  updateDevToolsState(tabId: number, state: boolean) {
-    if (!this.tabs[tabId]) {
+  updateDevToolsState(tabId: string, state: boolean) {
+    if (!DataStore.tabs[tabId]) {
       return;
     }
-    this.tabs[tabId].devToolsOpenState = state;
+    DataStore.tabs[tabId].devToolsOpenState = state;
   }
 }
 

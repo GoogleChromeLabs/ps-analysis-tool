@@ -17,7 +17,8 @@
  * Internal dependencies
  */
 import { TABID_STORAGE } from '../../constants';
-import dataStore from '../../store/dataStore';
+import cookieStore from '../../store/cookieStore';
+import dataStore, { DataStore } from '../../store/dataStore';
 import getQueryParams from '../../utils/getQueryParams';
 import attachCDP from '../attachCDP';
 
@@ -36,7 +37,7 @@ export const onCommittedNavigationListener = async ({
     }
 
     const targets = await chrome.debugger.getTargets();
-    const mainFrameId = dataStore?.globalIsUsingCDP
+    const mainFrameId = DataStore?.globalIsUsingCDP
       ? targets.filter((target) => target.tabId && target.tabId === tabId)[0]
           ?.id
       : 0;
@@ -50,19 +51,19 @@ export const onCommittedNavigationListener = async ({
         isUsingCDP: queryParams.psat_cdp === 'on',
       });
 
-      dataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
-      dataStore.tabMode =
+      DataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
+      DataStore.tabMode =
         queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
     }
 
-    dataStore?.updateUrl(tabId, url);
+    dataStore?.updateUrl(tabId.toString(), url);
 
     if (url && !url.startsWith('chrome://')) {
-      dataStore?.removeCookieData(tabId);
+      cookieStore?.removeCookieData(tabId.toString());
 
-      if (dataStore.globalIsUsingCDP) {
-        dataStore.deinitialiseVariablesForTab(tabId.toString());
-        dataStore.initialiseVariablesForNewTab(tabId.toString());
+      if (DataStore.globalIsUsingCDP) {
+        cookieStore.deinitialiseVariablesForTab(tabId.toString());
+        cookieStore.initialiseVariablesForNewTab(tabId.toString());
 
         await attachCDP({ tabId });
 
@@ -76,7 +77,11 @@ export const onCommittedNavigationListener = async ({
           }
         );
 
-        dataStore.updateParentChildFrameAssociation(tabId, targetId, '0');
+        dataStore.updateParentChildFrameAssociation(
+          tabId.toString(),
+          targetId,
+          '0'
+        );
       }
     }
     await chrome.tabs.sendMessage(tabId, {

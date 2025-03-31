@@ -24,7 +24,7 @@ import type { Protocol } from 'devtools-protocol';
  */
 import networkTime from './utils/networkTime';
 import formatTime from './utils/formatTime';
-import dataStore from './dataStore';
+import dataStore, { DataStore } from './dataStore';
 
 class PAStore {
   /**
@@ -77,7 +77,7 @@ class PAStore {
           : undefined,
         eventType: 'interestGroupAuctionNetworkRequestCompleted',
       });
-      dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+      DataStore.tabs[tabId].newUpdatesPA++;
     });
   }
 
@@ -122,7 +122,7 @@ class PAStore {
 
     this.getAuctionEventsArray(tabId, 'globalEvents').push(eventData);
 
-    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+    DataStore.tabs[tabId].newUpdatesPA++;
 
     if (!uniqueAuctionId) {
       return;
@@ -199,7 +199,7 @@ class PAStore {
 
     this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
 
-    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+    DataStore.tabs[tabId].newUpdatesPA++;
   }
 
   /**
@@ -218,7 +218,7 @@ class PAStore {
     const time: number =
       networkTime(
         requestId,
-        dataStore.requestIdToCDPURLMapping[tabId][requestId].timeStamp,
+        DataStore.requestIdToCDPURLMapping[tabId][requestId].timeStamp,
         tabId
       ) ?? new Date().getTime();
 
@@ -240,7 +240,7 @@ class PAStore {
         eventType: 'interestGroupAuctionNetworkRequestCreated',
       });
 
-      dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+      DataStore.tabs[tabId].newUpdatesPA++;
     });
   }
 
@@ -275,7 +275,7 @@ class PAStore {
 
     this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
 
-    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+    DataStore.tabs[tabId].newUpdatesPA++;
   }
 
   /**
