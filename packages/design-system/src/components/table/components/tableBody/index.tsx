@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef } from 'react';
+import React, { memo, useCallback, useRef } from 'react';
 
 /**
  * Internal dependencies.
@@ -148,4 +148,4 @@ const TableBody = ({
   );
 };
 
-export default TableBody;
+export default memo(TableBody);

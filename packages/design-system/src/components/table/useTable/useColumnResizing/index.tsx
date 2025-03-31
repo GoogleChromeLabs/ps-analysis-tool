@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
-
+import { throttle } from 'lodash-es';
 export const columnResizeHandleClassName = 'column-resize-handle';
 
 type UseColumnResizing = {
@@ -111,17 +111,18 @@ const useColumnResizing = (): UseColumnResizing => {
   };
 
   useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
+    const throttledMouseMove = throttle(onMouseMove, 10);
+    document.addEventListener('mousemove', throttledMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousedown', onMouseDown);
     window.addEventListener('resize', setColumnWidths);
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousemove', throttledMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('resize', setColumnWidths);
     };
-  }, [onMouseMove, onMouseUp, onMouseDown]);
+  }, [onMouseDown, onMouseMove, onMouseUp]);
 
   useEffect(() => {
     if (isResizing) {
