@@ -50,9 +50,7 @@ export const TableProvider = ({
     if (!tablePersistentSettingsKey) {
       return undefined;
     }
-
     const keys = tablePersistentSettingsKey.split('#');
-
     return keys[0];
   }, [tablePersistentSettingsKey]);
 
@@ -111,7 +109,7 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-  }, [searchFilteredData, visibleColumns, setColumnWidths]);
+  }, [searchFilteredData, visibleColumns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -130,7 +128,7 @@ export const TableProvider = ({
 
   useEffect(() => {
     setColumnWidths();
-  }, [setColumnWidths, rows, visibleColumns]);
+  }, [setColumnWidths, rows]);
 
   return (
     <TableContext.Provider

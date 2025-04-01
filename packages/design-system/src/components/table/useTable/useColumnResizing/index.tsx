@@ -20,6 +20,23 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 export const columnResizeHandleClassName = 'column-resize-handle';
 
+const getColumnElement = (columnId: string) => {
+  return document.querySelector(
+    `[data-column-resize-id="${columnId}"]`
+  ) as HTMLElement;
+};
+
+const getColumnWidth = (columnId: string) => {
+  const columnElement = getColumnElement(columnId);
+  if (!columnElement) {
+    return 0;
+  }
+  return (
+    Number(columnElement.style.width) ||
+    columnElement.getBoundingClientRect().width
+  );
+};
+
 type UseColumnResizing = {
   isResizing: boolean;
   setColumnWidths: () => void;
@@ -31,35 +48,27 @@ type UseColumnResizing = {
  */
 const useColumnResizing = (): UseColumnResizing => {
   const [isResizing, setIsResizing] = useState(false);
-  const resizeHandleRef = useRef<HTMLElement | null>(null);
+  const resizeId = useRef<string | null>(null);
   const startingColumnWidth = useRef(0);
   const startX = useRef(0);
   const rafId = useRef<number>();
 
-  // TODO: use some kind of key to get the column element
-  const getColumnElement = () => {
-    return resizeHandleRef.current?.parentElement?.parentElement;
-  };
-
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (target?.className?.includes?.(columnResizeHandleClassName)) {
-      resizeHandleRef.current = target;
-      startX.current = event.screenX;
-      const columnElementRef = getColumnElement();
-      if (!columnElementRef) {
-        return;
-      }
-      startingColumnWidth.current =
-        Number(columnElementRef.style.width) ||
-        columnElementRef.getBoundingClientRect().width;
+    if (target?.dataset?.columnResizeHandle) {
       setIsResizing(true);
+      resizeId.current = target.dataset.columnResizeHandle;
+      startX.current = event.screenX;
+      const columnElement = getColumnElement(resizeId.current);
+      if (columnElement) {
+        startingColumnWidth.current = getColumnWidth(resizeId.current);
+      }
     }
   }, []);
 
   const onMouseMove = useCallback(
     (event: MouseEvent) => {
-      if (!isResizing || !resizeHandleRef.current) {
+      if (!isResizing || !resizeId.current) {
         return;
       }
 
@@ -68,7 +77,10 @@ const useColumnResizing = (): UseColumnResizing => {
       }
 
       rafId.current = requestAnimationFrame(() => {
-        const columnElement = getColumnElement();
+        if (!resizeId.current) {
+          return;
+        }
+        const columnElement = getColumnElement(resizeId.current);
         if (!columnElement) {
           return;
         }
@@ -82,10 +94,10 @@ const useColumnResizing = (): UseColumnResizing => {
   );
 
   const onMouseUp = useCallback(() => {
-    if (!isResizing) {
+    if (!isResizing || !resizeId.current) {
       return;
     }
-    const columnElement = getColumnElement();
+    const columnElement = getColumnElement(resizeId.current);
     if (columnElement) {
       requestAnimationFrame(() => {
         setIsResizing(false);
@@ -94,21 +106,25 @@ const useColumnResizing = (): UseColumnResizing => {
     if (rafId.current) {
       cancelAnimationFrame(rafId.current);
     }
+    resizeId.current = null;
   }, [isResizing]);
 
   // fixes the column widths when the component is mounted
   // so the columns don't resize when the user starts dragging
   const setColumnWidths = useCallback(() => {
-    const allHandles = document.querySelectorAll(
-      `.${columnResizeHandleClassName}`
-    );
-    allHandles.forEach((handle, index) => {
-      const columnElement = handle.parentElement?.parentElement;
+    const allHandles = document.querySelectorAll(`[data-column-resize-handle]`);
+    Array.from(allHandles).forEach((handle, index) => {
+      const columnId = (handle as HTMLElement).dataset.columnResizeHandle;
+      // console.log('columnId', columnId);
+      if (!columnId) {
+        return;
+      }
+      const columnElement = getColumnElement(columnId);
       if (!columnElement) {
         return;
       }
 
-      // make the last column full width
+      // if the column is the last one, use all remaining space
       if (index === allHandles.length - 1) {
         columnElement.style.maxWidth = '100%';
         columnElement.style.width = '100%';
@@ -116,9 +132,7 @@ const useColumnResizing = (): UseColumnResizing => {
         return;
       }
 
-      const width =
-        Number(columnElement.style.width) ||
-        columnElement.getBoundingClientRect().width;
+      const width = getColumnWidth(columnId);
       columnElement.style.maxWidth = `${width}px`;
       columnElement.style.width = `${width}px`;
       columnElement.style.minWidth = `${width}px`;
