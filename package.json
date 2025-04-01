@@ -51,7 +51,7 @@
 		"storybook": "storybook dev -p 6006",
 		"test": "jest --config=tests/unitTest.jest.config.cjs",
 		"test:cli:e2e": "jest --config=tests/cliE2E.jest.config.cjs --runInBand",
-		"test:extension:e2e": "jest --config=tests/extensionE2E.jest.config.cjs --runInBand --all --onlyFailures",
+		"test:extension:e2e": "jest --config=tests/extensionE2E.jest.config.cjs --runInBand",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
 		"serve": "webpack serve",
 		"start": "npm i && npm run dev:ext"
