@@ -34,6 +34,7 @@ interface BodyCellProps {
   };
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   rowHeightClass?: string;
+  accessorKey?: string;
 }
 
 const BodyCell = ({
@@ -43,6 +44,7 @@ const BodyCell = ({
   showIcon = false,
   icon,
   rowHeightClass,
+  accessorKey,
 }: BodyCellProps) => {
   const IconElement = icon?.Element;
   const cellValue = cell?.() ?? '';
@@ -54,7 +56,6 @@ const BodyCell = ({
         const target = e.target as HTMLElement;
         const range = new Range();
         range.selectNodeContents(target);
-
         document.getSelection()?.removeAllRanges();
         document.getSelection()?.addRange(range);
       }}
@@ -63,10 +64,14 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`max-w-40 box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
+      className={`max-w-40 relative box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
         rowHeightClass ?? 'min-h-5'
       }`}
     >
+      <span
+        className="blockabsolute right-[-2px] cursor-ew-resize h-full w-2 z-50 top-0"
+        data-column-resize-handle={accessorKey}
+      />
       <div className="flex items-center">
         {hasIcon && (
           <div className="h-full grid place-items-center min-w-[15px] pr-1">

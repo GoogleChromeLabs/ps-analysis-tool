@@ -140,6 +140,7 @@ const BodyRow = ({
             }
             icon={bodyCellPrefixIcon ?? undefined}
             rowHeightClass={rowHeightClass}
+            accessorKey={accessorKey}
           />
         )
       )}
