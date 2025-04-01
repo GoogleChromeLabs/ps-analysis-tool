@@ -44,17 +44,20 @@ describe('Allow Listing', () => {
   }, 40000);
 
   test('Should be able to allow list domain.', async () => {
-    await puppeteer.navigateToURL(page, 'https://www.hindustantimes.com/');
+    await puppeteer.navigateToURL(
+      page,
+      'https://www.hindustantimes.com/?psat_multitab=on'
+    );
+    page.reload();
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
     interaction = new Interaction(devtools, key);
 
     const frame = await interaction.navigateToCurrentURLCookieFrame(
-      page.url().replace(/\/$/, '')
+      'https://www.hindustantimes.com/'.replace(/\/$/, '')
     );
 
-    await interaction.delay(3000);
     expect(frame).toBeTruthy();
 
     const elementHandle = await frame.$('div[title="HTMyOffer"]');

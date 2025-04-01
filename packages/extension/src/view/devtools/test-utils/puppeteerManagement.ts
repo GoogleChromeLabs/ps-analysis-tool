@@ -80,6 +80,7 @@ export class PuppeteerManagement {
       args: [...puppeteerArgs, ...(extraArgs || [])],
       devtools: true,
       defaultViewport: defaultViewport || null,
+      slowMo: 250,
     });
   }
 
