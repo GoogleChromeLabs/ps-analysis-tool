@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { throttle } from 'lodash-es';
 export const columnResizeHandleClassName = 'column-resize-handle';
 
 type UseColumnResizing = {
@@ -32,7 +31,7 @@ type UseColumnResizing = {
  */
 const useColumnResizing = (): UseColumnResizing => {
   const [isResizing, setIsResizing] = useState(false);
-  const resizeHandleRef = useRef<HTMLDivElement>(null);
+  const resizeHandleRef = useRef<HTMLElement | null>(null);
   const startingColumnWidth = useRef(0);
   const startX = useRef(0);
   const rafId = useRef<number>();
@@ -44,15 +43,15 @@ const useColumnResizing = (): UseColumnResizing => {
 
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (target.className?.includes?.(columnResizeHandleClassName)) {
-      // @ts-ignore
-      resizeHandleRef.current = target as HTMLDivElement;
+    if (target?.className?.includes?.(columnResizeHandleClassName)) {
+      resizeHandleRef.current = target;
       startX.current = event.screenX;
       const columnElementRef = getColumnElement();
       if (!columnElementRef) {
         return;
       }
       startingColumnWidth.current =
+        Number(columnElementRef.style.width) ||
         columnElementRef.getBoundingClientRect().width;
       setIsResizing(true);
     }
@@ -92,37 +91,52 @@ const useColumnResizing = (): UseColumnResizing => {
         setIsResizing(false);
       });
     }
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+    }
   }, [isResizing]);
 
   // fixes the column widths when the component is mounted
   // so the columns don't resize when the user starts dragging
-  const setColumnWidths = () => {
+  const setColumnWidths = useCallback(() => {
     const allHandles = document.querySelectorAll(
       `.${columnResizeHandleClassName}`
     );
-    allHandles.forEach((handle) => {
+    allHandles.forEach((handle, index) => {
       const columnElement = handle.parentElement?.parentElement;
-      if (columnElement) {
-        const width = columnElement.getBoundingClientRect().width;
-        columnElement.style.maxWidth = `${width}px`;
-        columnElement.style.minWidth = `${width}px`;
+      if (!columnElement) {
+        return;
       }
+
+      // make the last column full width
+      if (index === allHandles.length - 1) {
+        columnElement.style.maxWidth = '100%';
+        columnElement.style.width = '100%';
+        columnElement.style.minWidth = '100%';
+        return;
+      }
+
+      const width =
+        Number(columnElement.style.width) ||
+        columnElement.getBoundingClientRect().width;
+      columnElement.style.maxWidth = `${width}px`;
+      columnElement.style.width = `${width}px`;
+      columnElement.style.minWidth = `${width}px`;
     });
-  };
+  }, []);
 
   useEffect(() => {
-    const throttledMouseMove = throttle(onMouseMove, 10);
-    document.addEventListener('mousemove', throttledMouseMove);
+    document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousedown', onMouseDown);
     window.addEventListener('resize', setColumnWidths);
     return () => {
-      document.removeEventListener('mousemove', throttledMouseMove);
+      document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('resize', setColumnWidths);
     };
-  }, [onMouseDown, onMouseMove, onMouseUp]);
+  }, [onMouseDown, onMouseMove, onMouseUp, setColumnWidths]);
 
   useEffect(() => {
     if (isResizing) {
@@ -139,7 +153,7 @@ const useColumnResizing = (): UseColumnResizing => {
         cancelAnimationFrame(rafId.current);
       }
     };
-  }, []);
+  }, [setColumnWidths]);
 
   return { isResizing, setColumnWidths };
 };
