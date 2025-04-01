@@ -55,7 +55,7 @@ describe('Validate the Cookies description', () => {
 
     const frame: Frame | null =
       await interaction.navigateToCurrentURLCookieFrame(
-        'https://bbc.com/'.replace(/\/$/, '')
+        'https://www.bbc.com/'.replace(/\/$/, '')
       );
 
     if (frame) {

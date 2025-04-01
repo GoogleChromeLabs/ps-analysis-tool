@@ -59,18 +59,16 @@ describe('Allow Listing', () => {
     );
 
     expect(frame).toBeTruthy();
+    await frame.waitForSelector('div[title="HTMyOffer"]');
+    await frame.evaluate(() => {
+      const event = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+      });
+      document.querySelector('div[title="HTMyOffer"]')?.dispatchEvent(event);
+    });
+    await frame.click('#allow-list-option');
 
-    const elementHandle = await frame.$('div[title="HTMyOffer"]');
-
-    // Check if first row element is present.
-    if (elementHandle) {
-      // Right-click on the element
-      await elementHandle.click({ button: 'right' });
-
-      await interaction.delay(3000);
-      // Click on 'allow-list-option'
-      await frame.click('#allow-list-option');
-    }
     await interaction.delay(3000);
     const firstrow = await frame.waitForSelector('div[title="HTMyOffer"]');
     await firstrow?.click();

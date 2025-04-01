@@ -54,7 +54,7 @@ describe('Validate the Cookies filter option', () => {
     // Navigate to the current site cookie frame URL.
     const frame: Frame | null =
       await interaction.navigateToCurrentURLCookieFrame(
-        'https://bbc.com/'.replace(/\/$/, '')
+        'https://www.bbc.com/'.replace(/\/$/, '')
       );
 
     await interaction.delay(2000);

@@ -52,7 +52,7 @@ describe('Verify the Clear search button works as expected', () => {
     interaction = new Interaction(devtools, key);
 
     const frame = await interaction.navigateToCurrentURLCookieFrame(
-      'https://bbc.com/'.replace(/\/$/, '')
+      'https://www.bbc.com/'.replace(/\/$/, '')
     );
     await interaction.clearSearch(frame);
   }, 60000);
