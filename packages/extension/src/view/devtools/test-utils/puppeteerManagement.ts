@@ -76,7 +76,7 @@ export class PuppeteerManagement {
     );
 
     this.browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: [...puppeteerArgs, ...(extraArgs || [])],
       devtools: true,
       defaultViewport: defaultViewport || null,
