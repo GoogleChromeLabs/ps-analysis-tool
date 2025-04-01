@@ -27,7 +27,7 @@ import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 
 dotenv.config();
-jest.retryTimes(3);
+jest.retryTimes(3, { logErrorsBeforeRetry: true });
 describe('Allow Listing', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
@@ -55,6 +55,7 @@ describe('Allow Listing', () => {
     );
 
     await interaction.delay(3000);
+    expect(frame).toBeTruthy();
 
     const elementHandle = await frame.$('div[title="HTMyOffer"]');
 
