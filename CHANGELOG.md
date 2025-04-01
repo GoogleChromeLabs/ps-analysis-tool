@@ -208,6 +208,7 @@
 - Enhancement: Add `Partition Key` filter to extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/442
 - Enhancement: Make UI/UX changes to `Blocked Reasons` filter. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/399
 - Chore: Add unit test for findAnalyticsMatch https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/438
+- Enhancement: Format columns width with `widthWeightagePercentage` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/401
 - Fix miscellaneous allow list QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/460
 - Feature: Implement `All` filter value for `Blocked Reasons` filter https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/447
 - Feature: Add `Expand/Collapse All` button inside filters sidebar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/446
