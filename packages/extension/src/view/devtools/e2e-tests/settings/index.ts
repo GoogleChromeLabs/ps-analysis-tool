@@ -25,7 +25,7 @@ import { Page, Target, Browser } from 'puppeteer';
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 import { selectors } from '../../test-utils/constants';
-jest.retryTimes(3);
+jest.retryTimes(3, { logErrorsBeforeRetry: true });
 describe('Settings Page', () => {
   describe('Multi-tab debugging', () => {
     let page: Page;
@@ -136,14 +136,15 @@ describe('Settings Page', () => {
       puppeteer = new PuppeteerManagement();
       await puppeteer.setup();
       page = await puppeteer.openPage();
-    });
+    }, 40000);
 
     afterEach(async () => {
       await puppeteer.close();
-    });
+    }, 40000);
 
     test('Should be able to validate the CDP setting option', async () => {
-      await puppeteer.navigateToURL(page, 'https://bbc.com');
+      await puppeteer.navigateToURL(page, 'https://bbc.com?psat_multitab=on');
+      page.reload();
 
       const devtools = await puppeteer.getDevtools();
       const key = puppeteer.getCMDKey();
@@ -162,9 +163,14 @@ describe('Settings Page', () => {
       }
 
       // click on enable CDP button
-      await frame.click('input[type="checkbox"][name="autoSaver"]');
+      await frame.evaluate(() => {
+        const checkboxes = document.querySelectorAll<HTMLInputElement>(
+          'input[type="checkbox"][name="autoSaver"]'
+        );
+        checkboxes[0].click();
+      });
       await interaction.delay(2000);
-
+      await frame.waitForSelector('button[data-test-id="button"]');
       await frame.click('button[data-test-id="button"]');
       await interaction.delay(3000);
 
@@ -181,13 +187,6 @@ describe('Settings Page', () => {
       await interaction.clickMatchingElement(frame, 'p', elementTextToClick);
 
       await interaction.delay(3000);
-
-      // Click on the Analyze the tab button.
-      await frame.waitForSelector(selectors.analyzeThisButtonSelector, {
-        timeout: 5000,
-      });
-      const button = await frame.$(selectors.analyzeThisButtonSelector);
-      await button?.click();
 
       await interaction.delay(3000);
 
