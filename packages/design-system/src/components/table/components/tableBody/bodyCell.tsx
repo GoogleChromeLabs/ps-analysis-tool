@@ -68,8 +68,8 @@ const BodyCell = ({
         rowHeightClass ?? 'min-h-5'
       }`}
     >
-      <span
-        className="blockabsolute right-[-2px] cursor-ew-resize h-full w-2 z-50 top-0"
+      <div
+        className="block absolute right-[-2px] cursor-ew-resize h-full w-2 z-50 top-0"
         data-column-resize-handle={accessorKey}
       />
       <div className="flex items-center">
