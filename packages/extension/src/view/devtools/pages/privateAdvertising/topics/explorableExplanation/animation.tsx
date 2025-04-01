@@ -64,7 +64,7 @@ const Animation = ({
 
   const onAnimationReady = () => {
     if (loadingTextCoverRef.current) {
-      loadingTextCoverRef.current.remove();
+      loadingTextCoverRef.current.style.display = 'none';
     }
   };
 
@@ -77,6 +77,9 @@ const Animation = ({
 
   useEffect(() => {
     const init = (p: p5) => {
+      if (loadingTextCoverRef.current) {
+        loadingTextCoverRef.current.style.display = 'block';
+      }
       const instance = new TopicsAnimation({
         p,
         epoch,
@@ -87,7 +90,6 @@ const Animation = ({
           ? handleUserVisit
           : (idx: number) => handleUserVisit(idx, false),
         setHighlightAdTech,
-        isInteractive,
         onReady: onAnimationReady,
       });
       setAnimation(instance);
@@ -101,7 +103,6 @@ const Animation = ({
   }, [
     epoch,
     handleUserVisit,
-    isInteractive,
     setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
@@ -123,11 +124,16 @@ const Animation = ({
     animation?.updateSpeedMultiplier(speedMultiplier);
   }, [speedMultiplier, animation]);
 
+  useEffect(() => {
+    animation?.reset();
+    animation?.setInteractiveMode(isInteractive);
+    animation?.togglePlay(isPlaying);
+  }, [isInteractive, animation, isPlaying]);
+
   return (
     <div className="relative h-full">
       <div ref={node} className="overflow-auto bg-white h-full" />
       <div
-        ref={loadingTextCoverRef}
         id="loading-text-cover"
         className="absolute top-0 left-0 w-20 h-10 bg-white z-50"
       />

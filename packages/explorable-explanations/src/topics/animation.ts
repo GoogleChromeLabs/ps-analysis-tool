@@ -156,6 +156,7 @@ class TopicsAnimation {
 
     if (this.p.frameCount % delay === 0) {
       this.visitIndex++;
+      this._handleUserVisit(this.visitIndex);
     }
   };
 
@@ -165,7 +166,7 @@ class TopicsAnimation {
     }
 
     for (let i = 0; i < this.visitIndex; i++) {
-      this.handleUserVisit(i);
+      this.drawUserVisited(i);
     }
     this.drawInspectedCircle();
 
@@ -183,26 +184,18 @@ class TopicsAnimation {
     this.drawInfoBox(index, this.epoch[index].website);
   };
 
-  userVisitDone = (index: number) => {
+  drawUserVisitedDone = (index: number) => {
     this.resetInfoBox(index);
     this.drawCircle(index, true);
   };
 
-  handleUserVisit = (visitIndex: number) => {
+  drawUserVisited = (visitIndex: number) => {
     const p = this.p;
     if (visitIndex > 0 && !this.isInteractive) {
-      this.userVisitDone(visitIndex - 1);
-    }
-
-    if (visitIndex >= this.epoch.length) {
-      if (visitIndex === this.epoch.length) {
-        this._handleUserVisit(visitIndex);
-      }
-      return;
+      this.drawUserVisitedDone(visitIndex - 1);
     }
 
     const circlePosition = this.circlePositions[visitIndex];
-
     if (circlePosition === undefined) {
       return;
     }
@@ -242,7 +235,6 @@ class TopicsAnimation {
     const currentSite = currentCircle.website;
     this.drawInfoBox(visitIndex, currentSite);
     this.drawSmallCircles(visitIndex, currentSite);
-    this._handleUserVisit(visitIndex);
   };
 
   resetInfoBox(index: number) {
@@ -264,11 +256,11 @@ class TopicsAnimation {
       }
 
       if (this.prevVisitedCircleIndex !== -1) {
-        this.userVisitDone(this.prevVisitedCircleIndex);
+        this.drawUserVisitedDone(this.prevVisitedCircleIndex);
       }
 
       if (this.smallCirclePositions[index] === undefined) {
-        this.handleUserVisit(index);
+        this.drawUserVisited(index);
       } else {
         this.drawInfoBox(index, this.epoch[index].website);
       }
@@ -394,6 +386,7 @@ class TopicsAnimation {
     const isInspectingSmallCircle = this.inspectedSmallCircleIndex[0] !== -1;
 
     const lastVisitedIndex = this.prevVisitedCircleIndex;
+    const totalInspectedCircles = this.inspectedCircles.size;
     // draw already visited/inspected circles
     if (lastVisitedIndex !== -1) {
       this.inspectedCircles.add(lastVisitedIndex);
@@ -401,13 +394,16 @@ class TopicsAnimation {
       for (let i = 0; i < inspectedCirclesArray.length; i++) {
         const index = inspectedCirclesArray[i];
         if (lastVisitedIndex === index) {
-          this.handleUserVisit(index);
+          this.drawUserVisited(index);
         } else {
-          this.userVisitDone(index);
+          this.drawUserVisitedDone(index);
         }
         this.drawSmallCircles(index, this.epoch[index].website);
       }
       this.drawInfoBox(lastVisitedIndex, this.epoch[lastVisitedIndex].website);
+      if (totalInspectedCircles !== this.inspectedCircles.size) {
+        this._handleUserVisit(lastVisitedIndex);
+      }
     }
 
     if (isInspectingSmallCircle) {
@@ -494,10 +490,6 @@ class TopicsAnimation {
 
   // public methods/API
   public togglePlay = (state?: boolean) => {
-    if (this.isInteractive && state === true) {
-      this.playing = false;
-      return;
-    }
     this.playing = state ?? !this.playing;
   };
 
@@ -516,6 +508,13 @@ class TopicsAnimation {
 
   public updateSpeedMultiplier = (speedMultiplier: number) => {
     this.speedMultiplier = speedMultiplier;
+  };
+
+  public setInteractiveMode = (state: boolean) => {
+    this.isInteractive = state;
+    if (this.isInteractive) {
+      this.playing = false;
+    }
   };
 
   public start = () => {
