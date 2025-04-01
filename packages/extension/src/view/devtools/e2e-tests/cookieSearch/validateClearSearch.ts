@@ -44,14 +44,15 @@ describe('Verify the Clear search button works as expected', () => {
   }, 40000);
 
   test('Should be able to clear the search result', async () => {
-    await puppeteer.navigateToURL(page, 'https://bbc.com');
+    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_multitab=on');
+    page.reload();
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
     interaction = new Interaction(devtools, key);
 
     const frame = await interaction.navigateToCurrentURLCookieFrame(
-      page.url().replace(/\/$/, '')
+      'https://www.bbc.com/'.replace(/\/$/, '')
     );
     await interaction.clearSearch(frame);
   }, 60000);

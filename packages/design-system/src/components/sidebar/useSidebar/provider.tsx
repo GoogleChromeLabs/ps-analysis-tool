@@ -178,9 +178,15 @@ export const SidebarProvider = ({
           const panelUrl = new URL(item.panel.href);
 
           if (tabUrl.href !== panelUrl.href) {
-            chrome.tabs.update(chrome.devtools.inspectedWindow.tabId, {
-              url: panelUrl.href,
-            });
+            chrome.scripting
+              .executeScript({
+                target: { tabId: chrome.devtools.inspectedWindow.tabId },
+                func: (_url: string) => {
+                  window.location.assign(_url);
+                },
+                args: [panelUrl.href],
+              })
+              .then(() => console.log('injected a function'));
           }
         }
       }

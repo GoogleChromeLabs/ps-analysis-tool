@@ -46,7 +46,11 @@ describe('Validate the Cookies description', () => {
   }, 40000);
 
   test('Should be able to view the cookie description', async () => {
-    await puppeteer.navigateToURL(page, 'https://bbc.com');
+    await puppeteer.navigateToURL(
+      page,
+      'https://bbc.com?psat_multitab=on&psat_cdp=on'
+    );
+    page.reload();
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
@@ -54,7 +58,7 @@ describe('Validate the Cookies description', () => {
 
     const frame: Frame | null =
       await interaction.navigateToCurrentURLCookieFrame(
-        page.url().replace(/\/$/, '')
+        'https://www.bbc.com/'.replace(/\/$/, '')
       );
 
     if (frame) {

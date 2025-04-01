@@ -27,7 +27,7 @@ import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 
 dotenv.config();
-jest.retryTimes(3);
+jest.retryTimes(3, { logErrorsBeforeRetry: true });
 describe('Allow Listing', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
@@ -44,29 +44,31 @@ describe('Allow Listing', () => {
   }, 40000);
 
   test('Should be able to allow list domain.', async () => {
-    await puppeteer.navigateToURL(page, 'https://www.hindustantimes.com/');
+    await puppeteer.navigateToURL(
+      page,
+      'https://www.hindustantimes.com/?psat_multitab=on'
+    );
+    page.reload();
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
     interaction = new Interaction(devtools, key);
 
     const frame = await interaction.navigateToCurrentURLCookieFrame(
-      page.url().replace(/\/$/, '')
+      'https://www.hindustantimes.com/'.replace(/\/$/, '')
     );
 
-    await interaction.delay(3000);
+    expect(frame).toBeTruthy();
+    await frame.waitForSelector('div[title="HTMyOffer"]');
+    await frame.evaluate(() => {
+      const event = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+      });
+      document.querySelector('div[title="HTMyOffer"]')?.dispatchEvent(event);
+    });
+    await frame.click('#allow-list-option');
 
-    const elementHandle = await frame.$('div[title="HTMyOffer"]');
-
-    // Check if first row element is present.
-    if (elementHandle) {
-      // Right-click on the element
-      await elementHandle.click({ button: 'right' });
-
-      await interaction.delay(3000);
-      // Click on 'allow-list-option'
-      await frame.click('#allow-list-option');
-    }
     await interaction.delay(3000);
     const firstrow = await frame.waitForSelector('div[title="HTMyOffer"]');
     await firstrow?.click();

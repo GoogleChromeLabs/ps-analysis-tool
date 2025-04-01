@@ -89,12 +89,6 @@ export class Interaction {
       const elementTextToClick = 'Cookies';
       await this.clickMatchingElement(frame, 'p', elementTextToClick);
 
-      await frame.waitForSelector(selectors.analyzeThisButtonSelector, {
-        timeout: 5000,
-      });
-      const button = await frame.$(selectors.analyzeThisButtonSelector);
-      await button?.click();
-
       const dropdown = await frame.waitForSelector(
         selectors.cookieDropDownSelector,
         {
