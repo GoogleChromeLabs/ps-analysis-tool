@@ -60,7 +60,7 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
             key={index}
           >
             <div
-              className="w-14 h-14 flex justify-center items-center rounded-ful mb-5 cursor-pointer relative"
+              className="w-14 h-14 flex justify-center items-center rounded-full mb-5 cursor-pointer relative"
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)
