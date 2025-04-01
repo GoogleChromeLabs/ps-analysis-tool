@@ -45,7 +45,8 @@ describe('Validate the Cookies search', () => {
   }, 40000);
 
   test('Should be able to search the cookie', async () => {
-    await puppeteer.navigateToURL(page, 'https://bbc.com');
+    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_multitab=on');
+    page.reload();
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
@@ -53,7 +54,7 @@ describe('Validate the Cookies search', () => {
 
     const frame: Frame | null =
       await interaction.navigateToCurrentURLCookieFrame(
-        page.url().replace(/\/$/, '')
+        'https://www.bbc.com/'.replace(/\/$/, '')
       );
 
     if (frame) {

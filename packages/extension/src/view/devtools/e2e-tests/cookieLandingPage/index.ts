@@ -45,7 +45,8 @@ describe('Validate the Cookies Tab and count', () => {
   }, 40000);
 
   it('Should be able to validate the Analyze the tab button and validate the cookies count', async () => {
-    await puppeteer.navigateToURL(page, 'https://bbc.com');
+    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_multitab=on');
+    page.reload();
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
