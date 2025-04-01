@@ -44,13 +44,15 @@ describe('Validate the Cookies filter option', () => {
   }, 40000);
 
   test('Should be able to validate the cookie filters', async () => {
-    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_multitab=true');
-    page.reload();
+    await puppeteer.navigateToURL(
+      page,
+      'https://bbc.com?psat_multitab=on&psat_cdp=on'
+    );
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
     interaction = new Interaction(devtools, key);
-
+    page.reload();
     // Navigate to the current site cookie frame URL.
     const frame: Frame | null =
       await interaction.navigateToCurrentURLCookieFrame(
