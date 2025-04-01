@@ -380,6 +380,18 @@ class Main {
         this.traveller = null;
         this.runner();
       }
+    } else if (this.stepsToSkip > 0) {
+      if (this.isTravelling) {
+        this.traveller?.completeTravelling();
+
+        this.traveller = null;
+        this.runner();
+      }
+
+      while (this.stepsToSkip > 0 && this.stepsQueue.length > 0) {
+        this.runner(false, false, true);
+        this.stepsToSkip--;
+      }
     } else if (this.p5.frameCount % this.delay === 0) {
       this.runner();
     }
@@ -390,13 +402,6 @@ class Main {
 
     while (this.figureToStart && this.stepsQueue.length > 0) {
       this.runner(false, false, true);
-    }
-
-    if (this.stepsToSkip > 0) {
-      while (this.stepsToSkip > 0 && this.stepsQueue.length > 0) {
-        this.runner(false, false, true);
-        this.stepsToSkip--;
-      }
     }
   }
 
@@ -982,7 +987,8 @@ class Main {
       group?.removeFigure(figure);
     }
 
-    this.reDrawAll();
+    const animatorId = figure.getAnimatorId() || undefined;
+    this.reDrawAll(animatorId);
   }
 
   /**
@@ -1001,10 +1007,20 @@ class Main {
       return true;
     });
 
+    if (toRemove?.getAnimatorId()) {
+      const animator = this.animatorSnapshot.find(
+        (a) => a.getId() !== toRemove?.getAnimatorId()
+      );
+      animator?.removeObject(toRemove);
+    }
+
     toRemove?.getFigures().forEach((figure) => {
       figure.setGroupId('');
       this.removeFigure(figure);
     });
+
+    const animatorId = toRemove?.getAnimatorId() || undefined;
+    this.reDrawAll(animatorId);
   }
 
   /**
@@ -1032,6 +1048,8 @@ class Main {
         this.removeGroup(object as Group);
       }
     });
+
+    this.reDrawAll();
   }
 
   /**

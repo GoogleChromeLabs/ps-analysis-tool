@@ -16,6 +16,7 @@
 /**
  * Internal dependencies.
  */
+import p5 from 'p5';
 import { Animator, FigureFactory, Group, NextCoordinates } from './components';
 import Figure from './components/figure';
 import Arc from './components/figure/arc';
@@ -82,7 +83,7 @@ mainCanvas.addGroup(
       height: 50,
       fill: '#00f',
       mouseClicked: () => {
-        mainCanvas.loadNextCheckpoint();
+        mainCanvas.skipSteps(4);
       },
     }),
     mainFF.text({
@@ -258,10 +259,10 @@ const circleTravelInit = (endX?: number, endY?: number) => {
 
     const traveller = (figure: Figure, speed: number) => {
       const _figure = <Circle>figure;
-      const p5 = _figure.getP5();
+      const p = _figure.getP5();
 
-      currentX = p5?.lerp(currentX, _endX, lerpSpeed * speed) ?? _endX;
-      currentY = p5?.lerp(currentY, _endY, lerpSpeed * speed) ?? _endY;
+      currentX = p?.lerp(currentX, _endX, lerpSpeed * speed) ?? _endX;
+      currentY = p?.lerp(currentY, _endY, lerpSpeed * speed) ?? _endY;
 
       _figure.setX(currentX);
       _figure.setY(currentY);
@@ -454,35 +455,35 @@ const arcTravelInit = (startDiameterOnTravel: number) => {
     arc.setShouldTravel(true);
     arc.setDiameter(currentDiameter);
 
+    const clearTravelMarks = (p: p5 | null) => {
+      p?.push();
+      p?.stroke('white');
+      p?.arc(
+        possibleX - 1,
+        possibleY,
+        currentDiameter / 2 + 5,
+        currentDiameter / 2 + 5,
+        startAngle,
+        stopAngle
+      );
+      p?.pop();
+    };
+
     const traveller = (figure: Figure, speed: number) => {
       const _figure = <Arc>figure;
-      const p5 = _figure.getP5();
-
-      const clearTravelMarks = () => {
-        p5?.push();
-        p5?.stroke('white');
-        p5?.arc(
-          possibleX - 1,
-          possibleY,
-          currentDiameter / 2 + 5,
-          currentDiameter / 2 + 5,
-          startAngle,
-          stopAngle
-        );
-        p5?.pop();
-      };
+      const p = _figure.getP5();
 
       currentDiameter = currentDiameter + 5 * speed;
 
       _figure.setDiameter(currentDiameter);
 
       if (currentDiameter > 0) {
-        clearTravelMarks();
+        clearTravelMarks(p);
         _figure.draw();
       }
 
       if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
-        clearTravelMarks();
+        clearTravelMarks(p);
         _figure.setDiameter(0);
 
         return true;
@@ -499,10 +500,11 @@ const arcTravelInit = (startDiameterOnTravel: number) => {
 
     const completeTravel = (figure: Figure, skipDraw: boolean) => {
       const _figure = <Arc>figure;
-      _figure.setDiameter(diameter);
+      _figure.setDiameter(0);
 
       if (!skipDraw) {
-        _figure.draw();
+        currentDiameter = diameter;
+        clearTravelMarks(_figure.getP5());
       }
     };
 
