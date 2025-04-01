@@ -23,7 +23,11 @@ import { addUTMParams } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { DescriptionIcon, WebStoriesIcon } from '../../icons';
+import {
+  DescriptionIcon,
+  WebStoriesIcon,
+  PSNumberCircleIcon,
+} from '../../icons';
 import Link from '../link';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
@@ -37,14 +41,9 @@ export interface ContentPanelProps {
     onClick: () => void;
     sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
-  counterStyles?: string;
 }
 
-const ContentPanel = ({
-  title,
-  content,
-  counterStyles = '',
-}: ContentPanelProps) => {
+const ContentPanel = ({ title, content }: ContentPanelProps) => {
   const updateSelectedItemKey = useSidebar(
     ({ actions }) => actions.updateSelectedItemKey
   );
@@ -61,17 +60,16 @@ const ContentPanel = ({
             key={index}
           >
             <div
-              className="w-16 h-16 flex justify-center items-center rounded-full bg-bright-gray mb-5 cursor-pointer"
+              className="w-14 h-14 flex justify-center items-center rounded-full mb-5 cursor-pointer relative"
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)
                   : null
               }
             >
-              <div
-                className={`w-9 h-9 flex justify-center items-center rounded-md ${counterStyles}`}
-              >
-                <span className="text-xxl text-white dark:black font-extrabold">
+              <PSNumberCircleIcon className="absolute inset-0 w-full h-full object-cover" />
+              <div className={`w-9 h-9 flex justify-center items-center`}>
+                <span className="text-xxl text-bright-navy-blue dark:black font-bold">
                   {index + 1}
                 </span>
               </div>
