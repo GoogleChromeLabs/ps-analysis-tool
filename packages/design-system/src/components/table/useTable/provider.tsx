@@ -63,7 +63,8 @@ export const TableProvider = ({
     isColumnHidden,
   } = useColumnVisibility(tableColumns, commonKey);
 
-  const { isResizing, setColumnWidths } = useColumnResizing();
+  const { isResizing, setColumnWidths, tableContainerRef } =
+    useColumnResizing();
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, tableColumns, commonKey);
@@ -135,6 +136,7 @@ export const TableProvider = ({
       value={{
         state: {
           columns: visibleColumns,
+          tableContainerRef,
           hideableColumns,
           rows,
           sortKey,

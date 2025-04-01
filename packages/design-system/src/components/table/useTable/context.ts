@@ -45,6 +45,7 @@ export interface TableStoreContext {
     selectedFilters: TableFilter;
     isFiltering: TableFilteringOutput['isFiltering'];
     searchValue: TableSearchOutput['searchValue'];
+    tableContainerRef: React.RefObject<HTMLDivElement> | null;
   };
   actions: {
     setSortKey: ColumnSortingOutput['setSortKey'];
@@ -81,6 +82,7 @@ const initialState: TableStoreContext = {
     selectedFilters: {},
     isFiltering: false,
     searchValue: '',
+    tableContainerRef: null,
   },
   actions: {
     setSortKey: noop,

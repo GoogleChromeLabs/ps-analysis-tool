@@ -63,6 +63,7 @@ const Table = ({
     searchValue,
     setSearchValue,
     exportTableData,
+    tableContainerRef,
   } = useTable(({ state, actions }) => ({
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
@@ -74,6 +75,7 @@ const Table = ({
     searchValue: state.searchValue,
     setSearchValue: actions.setSearchValue,
     exportTableData: actions.exportTableData,
+    tableContainerRef: state.tableContainerRef,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -165,7 +167,7 @@ const Table = ({
             />
           </Resizable>
         )}
-        <div className="relative h-full w-full">
+        <div ref={tableContainerRef} className="relative h-full w-full">
           <ColumnMenu
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}

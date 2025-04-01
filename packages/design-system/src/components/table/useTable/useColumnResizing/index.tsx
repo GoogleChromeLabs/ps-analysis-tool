@@ -40,6 +40,7 @@ const getColumnWidth = (columnId: string) => {
 type UseColumnResizing = {
   isResizing: boolean;
   setColumnWidths: () => void;
+  tableContainerRef: React.RefObject<HTMLDivElement>;
 };
 
 /**
@@ -52,6 +53,7 @@ const useColumnResizing = (): UseColumnResizing => {
   const startingColumnWidth = useRef(0);
   const startX = useRef(0);
   const rafId = useRef<number>();
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
@@ -140,17 +142,22 @@ const useColumnResizing = (): UseColumnResizing => {
   }, []);
 
   useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('resize', setColumnWidths);
+    const tableContainer = tableContainerRef?.current;
+    if (tableContainer) {
+      tableContainer.addEventListener('mousemove', onMouseMove);
+      tableContainer.addEventListener('mouseup', onMouseUp);
+      tableContainer.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('resize', setColumnWidths);
+    }
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousedown', onMouseDown);
-      window.removeEventListener('resize', setColumnWidths);
+      if (tableContainer) {
+        tableContainer.removeEventListener('mousemove', onMouseMove);
+        tableContainer.removeEventListener('mouseup', onMouseUp);
+        tableContainer.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('resize', setColumnWidths);
+      }
     };
-  }, [onMouseDown, onMouseMove, onMouseUp, setColumnWidths]);
+  }, [onMouseDown, onMouseMove, onMouseUp, setColumnWidths, tableContainerRef]);
 
   useEffect(() => {
     if (isResizing) {
@@ -169,7 +176,7 @@ const useColumnResizing = (): UseColumnResizing => {
     };
   }, [setColumnWidths]);
 
-  return { isResizing, setColumnWidths };
+  return { isResizing, setColumnWidths, tableContainerRef };
 };
 
 export default useColumnResizing;

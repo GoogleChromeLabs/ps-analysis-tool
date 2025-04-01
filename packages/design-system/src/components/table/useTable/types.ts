@@ -122,4 +122,5 @@ export interface TableProviderProps {
   hasVerticalBar?: (row: TableRow) => boolean;
   getVerticalBarColorHash?: (row: TableRow) => string;
   isRowSelected?: (cookie: TableData | null) => boolean;
+  tableContainerRef?: React.RefObject<HTMLDivElement>;
 }
