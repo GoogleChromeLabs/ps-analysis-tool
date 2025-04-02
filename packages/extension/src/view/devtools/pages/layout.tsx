@@ -237,7 +237,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
     lastUrl.current = tabUrl;
 
-    updateSelectedItemKey(selectedFrame || SIDEBAR_ITEMS_KEYS.DASHBOARD);
+    updateSelectedItemKey(selectedFrame);
   }, [cookiesAnalyzed, selectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
