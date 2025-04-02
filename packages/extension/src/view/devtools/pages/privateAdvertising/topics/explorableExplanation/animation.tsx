@@ -89,7 +89,6 @@ const Animation = ({
         p,
         epoch,
         siteAdTechs,
-        visitIndexStart,
         handleUserVisit: _handleUserVisit,
         setHighlightAdTech,
         onReady: () => {
@@ -113,13 +112,9 @@ const Animation = ({
     setHighlightAdTech,
     setPAActiveTab,
     siteAdTechs,
-    visitIndexStart,
   ]);
 
-  //
-  // sync animation with state beginning here
-  //
-
+  /* sync animation with state start */
   useEffect(() => {
     animation?.togglePlay(isPlaying);
   }, [isPlaying, animation]);
@@ -148,16 +143,7 @@ const Animation = ({
       animation?.setVisitIndexStart(epoch.length - 1);
     }
   }, [isCompleted, animation, epoch]);
-
-  useEffect(() => {
-    if (animation) {
-      animation.setEpoch(epoch);
-    }
-  }, [epoch, animation]);
-
-  //
-  // sync animation with state ending here
-  //
+  /* sync animation with state end */
 
   return (
     <div className="relative h-full">
