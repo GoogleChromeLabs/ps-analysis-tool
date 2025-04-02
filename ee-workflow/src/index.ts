@@ -23,7 +23,15 @@ import Arc from './components/figure/arc';
 import Circle from './components/figure/circle';
 import Main from './main';
 
-const mainCanvas = new Main();
+const onDrawListener = (id: string) => {
+  if (id.startsWith('object')) {
+    localStorage.setItem('ee-workflow', id);
+  }
+};
+
+const idToStart = localStorage.getItem('ee-workflow') || '';
+
+const mainCanvas = new Main(undefined, undefined, idToStart, onDrawListener);
 const mainFF = new FigureFactory(mainCanvas);
 
 const IGCanvas = new Main(true);

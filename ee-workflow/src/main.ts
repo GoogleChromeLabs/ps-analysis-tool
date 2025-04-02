@@ -179,7 +179,12 @@ class Main {
    * @param object - The figure to save.
    */
   private saveToSnapshot(object: Figure) {
+    if (this.figureToStart === object.getId()) {
+      this.figureToStart = undefined;
+    }
+
     this.snapshot.push(object);
+    this.onDrawListener?.(object?.getId() || '');
     object.setThrow(true);
   }
 
@@ -209,8 +214,7 @@ class Main {
 
       let toRemoveCount = group.getFigures().length - 1;
       while (toRemoveCount > 0) {
-        const figure = queue.shift();
-        this.onDrawListener?.(figure?.getId() || '');
+        queue.shift();
         toRemoveCount--;
       }
 
@@ -218,9 +222,8 @@ class Main {
         group.getFigures().forEach((object) => this.saveToSnapshot(object));
         this.groupSnapshot.push(group);
         group.setThrow(true);
+        this.onDrawListener?.(group.getId());
       }
-
-      this.onDrawListener?.(group.getId());
     }
   }
 
@@ -255,8 +258,6 @@ class Main {
       if (firstObject.getGroupId()) {
         this.processGroup(queue, groupQueue, false, isRestarting);
       } else {
-        this.onDrawListener?.(firstObject.getId());
-
         if (!firstObject.getThrow()) {
           this.saveToSnapshot(firstObject);
         }
@@ -266,6 +267,7 @@ class Main {
         this.animatorSnapshot.push(animator);
         this.onDrawListener?.(animator.getId());
         animatorQueue.shift();
+
         if (!skipRedrawAll) {
           this.reDrawAll();
         }
@@ -343,10 +345,6 @@ class Main {
 
       if (firstObject.getIsCheckpoint()) {
         this.checkpoints.add(firstObject.getId());
-      }
-
-      if (this.figureToStart === firstObject.getId()) {
-        this.figureToStart = undefined;
       }
     }
   }
@@ -531,6 +529,7 @@ class Main {
    * Resets the drawing process to the first checkpoint.
    */
   reset() {
+    this.figureToStart = undefined;
     while (this.checkpoints.size) {
       this.loadPreviousCheckpoint();
     }
