@@ -37,7 +37,6 @@ export type TopicsAnimationProps = {
   siteAdTechs: Record<string, string[]>;
   handleUserVisit: (visitIndex: number) => void;
   setHighlightAdTech: (highlightAdTech: string | null) => void;
-  isAnimating: boolean;
   visitIndexStart: number;
   onReady?: () => void;
 };
@@ -67,7 +66,6 @@ class TopicsAnimation {
   isInteractive: TopicsAnimationProps['isInteractive'];
   handleUserVisit: TopicsAnimationProps['handleUserVisit'];
   setHighlightAdTech: TopicsAnimationProps['setHighlightAdTech'];
-  isAnimating: TopicsAnimationProps['isAnimating'];
   visitIndexStart: TopicsAnimationProps['visitIndexStart'];
   onReady: TopicsAnimationProps['onReady'];
 
@@ -78,7 +76,6 @@ class TopicsAnimation {
     siteAdTechs,
     handleUserVisit,
     setHighlightAdTech,
-    isAnimating,
     visitIndexStart,
     onReady,
   }: TopicsAnimationProps) {
@@ -88,9 +85,10 @@ class TopicsAnimation {
     this.siteAdTechs = siteAdTechs;
     this.handleUserVisit = handleUserVisit;
     this.setHighlightAdTech = setHighlightAdTech;
-    this.isAnimating = isAnimating;
     this.onReady = onReady;
-    this.visitIndexStart = visitIndexStart;
+    if (visitIndexStart) {
+      this.visitIndexStart = visitIndexStart;
+    }
     p.preload = this.preload;
     p.setup = this.setup;
   }
@@ -141,7 +139,7 @@ class TopicsAnimation {
 
   private incrementVisitIndex = () => {
     if (this.visitIndexStart === this.epoch.length - 1) {
-      this.visitIndex = ++this.epoch.length;
+      this.visitIndex = this.epoch.length + 1;
       this.playing = false;
       return;
     }
@@ -159,16 +157,16 @@ class TopicsAnimation {
     const delay = step / 10;
 
     if (this.p.frameCount % delay === 0) {
-      this.visitIndex++;
       this.handleUserVisit(this.visitIndex);
+      this.visitIndex++;
     }
   };
 
-  private drawVisitedCircles = () => {
-    if (this.visitIndex === this.epoch.length) {
-      this.playing = false;
-    }
+  public setVisitIndexStart = (visitIndexStart: number) => {
+    this.visitIndexStart = visitIndexStart;
+  };
 
+  private drawVisitedCircles = () => {
     for (let i = 0; i < this.visitIndex; i++) {
       this.drawUserVisited(i);
     }
@@ -332,6 +330,9 @@ class TopicsAnimation {
   private drawCircle = (index: number, visited?: boolean) => {
     const p = this.p;
     const position = this.circlePositions[index];
+    if (!position) {
+      return;
+    }
     const { diameter } = config.timeline.circleProps;
 
     Circle({

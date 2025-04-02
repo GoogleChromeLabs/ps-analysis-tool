@@ -17,13 +17,12 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
-  isAnimating: boolean;
   siteAdTechs: Record<string, string[]>;
   visitIndexStart: number;
   handleUserVisit: (visitIndex: number, updateTopics?: boolean) => void;
@@ -36,11 +35,11 @@ interface AnimationProps {
   setCurrentVisitIndexCallback: React.Dispatch<
     React.SetStateAction<(() => number) | undefined>
   >;
+  isCompleted: boolean;
 }
 
 const Animation = ({
   epoch,
-  isAnimating,
   siteAdTechs,
   visitIndexStart,
   handleUserVisit,
@@ -51,22 +50,30 @@ const Animation = ({
   setPAActiveTab,
   setHighlightAdTech,
   setCurrentVisitIndexCallback,
+  isCompleted,
 }: AnimationProps) => {
   const node = useRef(null);
-  const animationRef = useRef(isAnimating);
   const loadingTextCoverRef = useRef<HTMLDivElement>(null);
   const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
-
-  useEffect(() => {
-    // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
-    animationRef.current = isAnimating;
-  }, [isAnimating, visitIndexStart]);
 
   const onAnimationReady = () => {
     if (loadingTextCoverRef.current) {
       loadingTextCoverRef.current.style.display = 'none';
     }
   };
+
+  const _handleUserVisit = useCallback(
+    (visitIndex: number) => {
+      setTimeout(
+        () => {
+          handleUserVisit(visitIndex, !isCompleted);
+        },
+        // delay transition to next tab in last visited node
+        visitIndex === epoch.length ? 2000 : 0
+      );
+    },
+    [epoch.length, handleUserVisit, isCompleted]
+  );
 
   useEffect(() => {
     if (animation) {
@@ -83,12 +90,9 @@ const Animation = ({
       const instance = new TopicsAnimation({
         p,
         epoch,
-        isAnimating: animationRef.current,
         siteAdTechs,
         visitIndexStart,
-        handleUserVisit: animationRef.current
-          ? handleUserVisit
-          : (idx: number) => handleUserVisit(idx, false),
+        handleUserVisit: _handleUserVisit,
         setHighlightAdTech,
         onReady: onAnimationReady,
       });
@@ -101,8 +105,8 @@ const Animation = ({
       p?.remove();
     };
   }, [
+    _handleUserVisit,
     epoch,
-    handleUserVisit,
     setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
@@ -129,6 +133,16 @@ const Animation = ({
     animation?.setInteractiveMode(isInteractive);
   }, [isInteractive, animation]);
 
+  useEffect(() => {
+    animation?.setVisitIndexStart(visitIndexStart);
+  }, [visitIndexStart, animation]);
+
+  useEffect(() => {
+    if (isCompleted) {
+      animation?.setVisitIndexStart(epoch.length - 1);
+    }
+  }, [isCompleted, animation, epoch]);
+
   return (
     <div className="relative h-full">
       <div ref={node} className="overflow-auto bg-white h-full" />
@@ -140,4 +154,4 @@ const Animation = ({
   );
 };
 
-export default Animation;
+export default memo(Animation);
