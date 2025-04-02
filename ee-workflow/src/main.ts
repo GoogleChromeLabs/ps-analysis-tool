@@ -171,7 +171,7 @@ class Main {
    * Sets up the canvas.
    */
   private setUp() {
-    this.p5.createCanvas(1600, 1600).position(0, 0);
+    this.p5.createCanvas(1600, 1600).position(0, 50);
   }
 
   /**
@@ -232,6 +232,7 @@ class Main {
    * @param animatorQueue - The queue of animators.
    * @param shouldDraw - Whether to draw the animator.
    * @param isRestarting - Whether the draw is restarting from a figure.
+   * @param skipRedrawAll - Whether to skip redrawing all figures after the animator.
    */
   private processAnimator(
     firstObject: Figure,
@@ -239,7 +240,8 @@ class Main {
     groupQueue: Group[],
     animatorQueue: Animator[],
     shouldDraw = true,
-    isRestarting = false
+    isRestarting = false,
+    skipRedrawAll = false
   ) {
     const animator = animatorQueue[0];
 
@@ -264,7 +266,9 @@ class Main {
         this.animatorSnapshot.push(animator);
         this.onDrawListener?.(animator.getId());
         animatorQueue.shift();
-        this.reDrawAll();
+        if (!skipRedrawAll) {
+          this.reDrawAll();
+        }
       }
     }
   }
@@ -316,7 +320,8 @@ class Main {
           groupQueue,
           animatorQueue,
           !skipDraw,
-          isSkipping
+          isSkipping,
+          useInstantQueue
         );
       } else if (firstObject.getGroupId()) {
         this.processGroup(queue, groupQueue, !skipDraw, isSkipping);
@@ -823,15 +828,7 @@ class Main {
     this.reDrawAll();
   }
 
-  /**
-   * Redraws all figures on the canvas.
-   * @param animatorIdToDraw - The ID of the animator to draw.
-   */
-  reDrawAll(animatorIdToDraw?: string) {
-    if (this.pause) {
-      return;
-    }
-
+  loadSnapshot(animatorIdToDraw?: string) {
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
 
@@ -873,6 +870,26 @@ class Main {
     }
 
     this.p5.clear();
+  }
+
+  loadSnapshotAndReDraw(animatorIdToDraw?: string) {
+    this.loadSnapshot(animatorIdToDraw);
+
+    while (this.instantQueue.length) {
+      this.runner(true);
+    }
+  }
+
+  /**
+   * Redraws all figures on the canvas.
+   * @param animatorIdToDraw - The ID of the animator to draw.
+   */
+  reDrawAll(animatorIdToDraw?: string) {
+    if (this.pause) {
+      return;
+    }
+
+    this.loadSnapshot(animatorIdToDraw);
   }
 
   /**
@@ -1062,6 +1079,10 @@ class Main {
 
   skipSteps(steps: number) {
     this.stepsToSkip = steps;
+  }
+
+  isStepping() {
+    return this.stepsQueue.length > 0;
   }
 }
 

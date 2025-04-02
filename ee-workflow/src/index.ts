@@ -30,93 +30,36 @@ const IGCanvas = new Main(true);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause();
 
-// Buttons
-mainCanvas.addGroup(
-  new Group(mainCanvas, [
-    mainFF.box({
-      x: 10,
-      y: 10,
-      width: 100,
-      height: 50,
-      fill: '#f00',
-      mouseClicked: () => {
-        mainCanvas.loadPreviousCheckpoint();
-      },
-    }),
-    mainFF.text({
-      x: 30,
-      y: 20,
-      text: 'Prev',
-      fill: '#fff',
-    }),
-  ]),
-  true
-);
+const prevButton = document.getElementById('prev');
+prevButton?.addEventListener('click', () => {
+  mainCanvas.loadPreviousCheckpoint();
+});
 
-mainCanvas.addGroup(
-  new Group(mainCanvas, [
-    mainFF.box({
-      x: 120,
-      y: 10,
-      width: 100,
-      height: 50,
-      fill: '#0f0',
-      mouseClicked: () => {
-        mainCanvas.togglePause();
-      },
-    }),
-    mainFF.text({
-      x: 140,
-      y: 20,
-      text: 'Play',
-    }),
-  ]),
-  true
-);
+const playButton = document.getElementById('play');
+playButton?.addEventListener('click', () => {
+  mainCanvas.togglePause();
 
-mainCanvas.addGroup(
-  new Group(mainCanvas, [
-    mainFF.box({
-      x: 230,
-      y: 10,
-      width: 100,
-      height: 50,
-      fill: '#00f',
-      mouseClicked: () => {
-        mainCanvas.skipSteps(4);
-      },
-    }),
-    mainFF.text({
-      x: 250,
-      y: 20,
-      text: 'Next',
-      fill: '#fff',
-    }),
-  ]),
-  true
-);
+  if (mainCanvas.isPaused()) {
+    playButton.innerHTML = 'Play';
+  } else {
+    playButton.innerHTML = 'Pause';
+  }
+});
 
-mainCanvas.addGroup(
-  new Group(mainCanvas, [
-    mainFF.box({
-      x: 340,
-      y: 10,
-      width: 100,
-      height: 50,
-      fill: '#f0f',
-      mouseClicked: () => {
-        mainCanvas.updateSpeed(0.5);
-        IGCanvas.updateSpeed(0.5);
-      },
-    }),
-    mainFF.text({
-      x: 360,
-      y: 20,
-      text: '0.5x',
-    }),
-  ]),
-  true
-);
+const stepNextButton = document.getElementById('step-next');
+stepNextButton?.addEventListener('click', () => {
+  mainCanvas.skipSteps(1);
+});
+
+const nextButton = document.getElementById('next');
+nextButton?.addEventListener('click', () => {
+  mainCanvas.loadNextCheckpoint();
+});
+
+const resetButton = document.getElementById('reset');
+resetButton?.addEventListener('click', () => {
+  mainCanvas.reset();
+});
 
 // Timeline
 mainCanvas.addFigure(
@@ -129,6 +72,7 @@ mainCanvas.addFigure(
   true
 );
 
+let expandedAnimatorId: string | null = null;
 const nodes = [
   {
     type: 'advertiser',
@@ -444,6 +388,28 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
   });
 
   mainCanvas.addAnimator(animator, false, true);
+
+  mainCanvas.addFigure(
+    mainFF.box({
+      x: x - 5,
+      y: y + 5,
+      width: 10,
+      height: 10,
+      mouseClicked: () => {
+        if (mainCanvas.isStepping()) {
+          return;
+        }
+
+        if (expandedAnimatorId === animator.getId()) {
+          mainCanvas.loadSnapshotAndReDraw();
+          expandedAnimatorId = null;
+        } else {
+          mainCanvas.loadSnapshotAndReDraw(animator.getId());
+          expandedAnimatorId = animator.getId();
+        }
+      },
+    })
+  );
 };
 
 const arcTravelInit = (startDiameterOnTravel: number) => {
@@ -921,6 +887,28 @@ const drawPublisherFlow = (x: number, y: number) => {
   );
 
   mainCanvas.addAnimator(animator, false, true);
+
+  mainCanvas.addFigure(
+    mainFF.box({
+      x: x - 5,
+      y: y + 5,
+      width: 10,
+      height: 10,
+      mouseClicked: () => {
+        if (mainCanvas.isStepping()) {
+          return;
+        }
+
+        if (expandedAnimatorId === animator.getId()) {
+          mainCanvas.loadSnapshotAndReDraw();
+          expandedAnimatorId = null;
+        } else {
+          mainCanvas.loadSnapshotAndReDraw(animator.getId());
+          expandedAnimatorId = animator.getId();
+        }
+      },
+    })
+  );
 };
 
 drawIGFlow(150, 337.5, 2);

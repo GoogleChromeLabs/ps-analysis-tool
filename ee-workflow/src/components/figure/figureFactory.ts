@@ -47,9 +47,9 @@ type FigureParams = {
     nextCoordinates: NextCoordinates,
     ...args: any
   ) => { x: number; y: number };
-  mouseClicked?: () => void;
-  mouseMoved?: () => void;
-  onLeave?: () => void;
+  mouseClicked?: (figure: Figure) => void;
+  mouseMoved?: (figure: Figure) => void;
+  onLeave?: (figure: Figure) => void;
 };
 
 export default class FigureFactory {
@@ -126,7 +126,6 @@ export default class FigureFactory {
       id,
       fill,
       stroke,
-
       tags,
       mouseClicked,
       mouseMoved,
@@ -295,14 +294,14 @@ export default class FigureFactory {
 
       const traveller = (figure: Figure, speed: number) => {
         const _figure = <Line>figure;
-        const p5 = _figure.getP5();
+        const p = _figure.getP5();
 
         if (hasArrow) {
           _figure.remove();
         }
 
-        currentX = p5?.lerp(currentX, endX, 0.1 * speed) ?? endX;
-        currentY = p5?.lerp(currentY, endY, 0.1 * speed) ?? endY;
+        currentX = p?.lerp(currentX, endX, 0.1 * speed) ?? endX;
+        currentY = p?.lerp(currentY, endY, 0.1 * speed) ?? endY;
 
         _figure.setEndX(currentX);
         _figure.setEndY(currentY);

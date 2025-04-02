@@ -56,9 +56,9 @@ export default class Arc extends Figure {
     fill?: string,
     stroke?: string,
     tags?: string[],
-    mouseClicked?: () => void,
-    mouseMoved?: () => void,
-    onLeave?: () => void
+    mouseClicked?: (figure: Figure) => void,
+    mouseMoved?: (figure: Figure) => void,
+    onLeave?: (figure: Figure) => void
   ) {
     super(
       canvasRuuner,

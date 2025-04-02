@@ -45,9 +45,9 @@ export default class Text extends Figure {
     size?: number,
     fill?: string,
     tags?: string[],
-    mouseClicked?: () => void,
-    mouseMoved?: () => void,
-    onLeave?: () => void
+    mouseClicked?: (figure: Figure) => void,
+    mouseMoved?: (figure: Figure) => void,
+    onLeave?: (figure: Figure) => void
   ) {
     super(
       canvasRunnner,
@@ -111,5 +111,13 @@ export default class Text extends Figure {
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
     this.canvasRunner.reDrawAll();
+  }
+
+  getText(): string {
+    return this.str;
+  }
+
+  setText(str: string) {
+    this.str = str;
   }
 }
