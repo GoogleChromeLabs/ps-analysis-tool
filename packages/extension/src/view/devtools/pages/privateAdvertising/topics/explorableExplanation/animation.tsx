@@ -21,6 +21,8 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
 
+const epochTransitionDelay = 2000;
+
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
   siteAdTechs: Record<string, string[]>;
@@ -54,13 +56,8 @@ const Animation = ({
 }: AnimationProps) => {
   const node = useRef(null);
   const loadingTextCoverRef = useRef<HTMLDivElement>(null);
+  // animation instance
   const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
-
-  const onAnimationReady = () => {
-    if (loadingTextCoverRef.current) {
-      loadingTextCoverRef.current.style.display = 'none';
-    }
-  };
 
   const _handleUserVisit = useCallback(
     (visitIndex: number) => {
@@ -68,8 +65,7 @@ const Animation = ({
         () => {
           handleUserVisit(visitIndex, !isCompleted);
         },
-        // delay transition to next tab in last visited node
-        visitIndex === epoch.length ? 2000 : 0
+        visitIndex === epoch.length ? epochTransitionDelay : 0
       );
     },
     [epoch.length, handleUserVisit, isCompleted]
@@ -82,8 +78,10 @@ const Animation = ({
     }
   }, [animation, setCurrentVisitIndexCallback]);
 
+  // initialize animation instance
   useEffect(() => {
     const init = (p: p5) => {
+      // hide loading text cover while animation is loading
       if (loadingTextCoverRef.current) {
         loadingTextCoverRef.current.style.display = 'block';
       }
@@ -94,7 +92,11 @@ const Animation = ({
         visitIndexStart,
         handleUserVisit: _handleUserVisit,
         setHighlightAdTech,
-        onReady: onAnimationReady,
+        onReady: () => {
+          if (loadingTextCoverRef.current) {
+            loadingTextCoverRef.current.style.display = 'none';
+          }
+        },
       });
       setAnimation(instance);
     };
@@ -113,6 +115,10 @@ const Animation = ({
     siteAdTechs,
     visitIndexStart,
   ]);
+
+  //
+  // sync animation with state beginning here
+  //
 
   useEffect(() => {
     animation?.togglePlay(isPlaying);
@@ -143,10 +149,21 @@ const Animation = ({
     }
   }, [isCompleted, animation, epoch]);
 
+  useEffect(() => {
+    if (animation) {
+      animation.setEpoch(epoch);
+    }
+  }, [epoch, animation]);
+
+  //
+  // sync animation with state ending here
+  //
+
   return (
     <div className="relative h-full">
       <div ref={node} className="overflow-auto bg-white h-full" />
       <div
+        ref={loadingTextCoverRef}
         id="loading-text-cover"
         className="absolute top-0 left-0 w-20 h-10 bg-white z-50"
       />

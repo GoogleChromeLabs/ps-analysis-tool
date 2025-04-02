@@ -162,10 +162,6 @@ class TopicsAnimation {
     }
   };
 
-  public setVisitIndexStart = (visitIndexStart: number) => {
-    this.visitIndexStart = visitIndexStart;
-  };
-
   private drawVisitedCircles = () => {
     for (let i = 0; i < this.visitIndex; i++) {
       this.drawUserVisited(i);
@@ -502,6 +498,7 @@ class TopicsAnimation {
   };
 
   public reset = () => {
+    this.isInited = false;
     this.visitIndex = 0;
     this.inspectedCircleIndex = -1;
     this.circlePositions = {};
@@ -523,6 +520,14 @@ class TopicsAnimation {
     if (this.isInteractive) {
       this.playing = false;
     }
+  };
+
+  public setVisitIndexStart = (visitIndexStart: number) => {
+    this.visitIndexStart = visitIndexStart;
+  };
+
+  public setEpoch = (epoch: Epoch[]) => {
+    this.epoch = epoch;
   };
 
   public start = () => {
