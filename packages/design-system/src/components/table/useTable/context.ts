@@ -31,7 +31,7 @@ import { ColumnSortingOutput } from './useColumnSorting';
 import { ColumnVisibilityOutput } from './useColumnVisibility';
 import { TableFilteringOutput } from './useFiltering';
 import { TableSearchOutput } from './useSearch';
-
+import { UseColumnResizing } from './useColumnResizing';
 export interface TableStoreContext {
   state: {
     columns: TableColumn[];
@@ -45,7 +45,7 @@ export interface TableStoreContext {
     selectedFilters: TableFilter;
     isFiltering: TableFilteringOutput['isFiltering'];
     searchValue: TableSearchOutput['searchValue'];
-    tableContainerRef: React.RefObject<HTMLDivElement> | null;
+    tableContainerRef: UseColumnResizing['tableContainerRef'];
   };
   actions: {
     setSortKey: ColumnSortingOutput['setSortKey'];

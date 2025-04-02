@@ -141,12 +141,7 @@ const TableBody = ({
         }}
       >
         {columns.map((_, index) => (
-          <td key={index} className="px-1 py-px outline-0 h-full relative">
-            <div
-              className="absolute right-[-2px] cursor-ew-resize h-full w-2 z-50 top-0"
-              data-column-resize-handle={columns[index].accessorKey}
-            />
-          </td>
+          <td key={index} className="px-1 py-px outline-0 h-full relative" />
         ))}
       </tr>
     </tbody>

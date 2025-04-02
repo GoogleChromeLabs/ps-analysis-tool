@@ -37,10 +37,10 @@ const getColumnWidth = (columnId: string) => {
   );
 };
 
-type UseColumnResizing = {
+export type UseColumnResizing = {
   isResizing: boolean;
   setColumnWidths: () => void;
-  tableContainerRef: React.RefObject<HTMLDivElement>;
+  tableContainerRef: React.RefObject<HTMLDivElement> | null;
 };
 
 /**
