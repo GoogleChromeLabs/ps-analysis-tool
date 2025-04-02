@@ -52,7 +52,6 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import useCanShowAnalyzeTabButton from '../hooks/useCanShowAnalyzeTabButton';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -77,10 +76,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     tabFrames,
     frameHasCookies,
     canStartInspecting,
-    tabUrl,
     isInspecting,
     setIsInspecting,
-    selectedFrame,
     setSelectedFrame,
   } = useCookie(({ state, actions }) => ({
     tabFrames: state.tabFrames,
@@ -218,27 +215,6 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       );
     })();
   }, [selectedItemKey, isCollapsed, cookieDropdownOpen]);
-
-  const lastUrl = useRef(tabUrl);
-  const cookiesAnalyzed = useCanShowAnalyzeTabButton();
-
-  useEffect(() => {
-    if (!cookiesAnalyzed) {
-      return;
-    }
-
-    if (
-      lastUrl.current === null ||
-      new URL(lastUrl.current).hostname === new URL(tabUrl || '').hostname
-    ) {
-      lastUrl.current = tabUrl;
-      return;
-    }
-
-    lastUrl.current = tabUrl;
-
-    updateSelectedItemKey(selectedFrame);
-  }, [cookiesAnalyzed, selectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 
