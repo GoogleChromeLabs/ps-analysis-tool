@@ -25,6 +25,9 @@ import Main from './main';
 
 const onDrawListener = (id: string) => {
   if (id.startsWith('object')) {
+    // eslint-disable-next-line no-console
+    console.log(id);
+
     localStorage.setItem('ee-workflow', id);
   }
 };
@@ -177,6 +180,10 @@ nodes.forEach((node, index) => {
           x,
           y,
         };
+      },
+      mouseClicked: () => {
+        // eslint-disable-next-line no-console
+        console.log(node.website, node);
       },
     }),
     mainFF.text({
