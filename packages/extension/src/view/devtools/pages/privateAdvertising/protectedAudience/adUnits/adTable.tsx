@@ -20,7 +20,6 @@ import React, { useMemo, useState } from 'react';
 import { noop, type AdsAndBiddersType } from '@google-psat/common';
 import {
   FrameIcon,
-  JsonView,
   Pill,
   ScreenIcon,
   Table,
@@ -33,6 +32,7 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
+import { prettyPrintJson } from 'pretty-print-json';
 import classNames from 'classnames';
 
 interface AdTableProps {
@@ -209,7 +209,14 @@ const AdTable = ({
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5 h-full">
-            <JsonView src={selectedRow} />
+            <pre className="h-full w-full">
+              <div
+                className="json-container"
+                dangerouslySetInnerHTML={{
+                  __html: prettyPrintJson.toHtml(selectedRow),
+                }}
+              />
+            </pre>
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

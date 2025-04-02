@@ -25,10 +25,10 @@ import {
   type TableFilter,
   type InfoType,
   InfoIcon,
-  JsonView,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -253,8 +253,15 @@ const TriggerRegistrations = () => {
       </Resizable>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
-          <div className="text-xs py-1 px-1.5 h-full">
-            <JsonView src={selectedJSON} />
+          <div className="text-xs py-1 px-1.5">
+            <pre>
+              <div
+                className="json-container"
+                dangerouslySetInnerHTML={{
+                  __html: prettyPrintJson.toHtml(selectedJSON),
+                }}
+              />
+            </pre>
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

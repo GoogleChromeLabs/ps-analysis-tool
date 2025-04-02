@@ -17,10 +17,11 @@
 /**
  * External dependencies.
  */
-import { JsonView, PillToggle } from '@google-psat/design-system';
+import { PillToggle } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
+import { prettyPrintJson } from 'pretty-print-json';
 import type { NoBidsType, ReceivedBids } from '@google-psat/common';
 import classNames from 'classnames';
 
@@ -119,7 +120,14 @@ const Panel = ({
           <div className="text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
             {selectedRow ? (
               <div className="text-xs py-1 px-1.5">
-                <JsonView src={selectedRow} />
+                <pre>
+                  <div
+                    className="json-container"
+                    dangerouslySetInnerHTML={{
+                      __html: prettyPrintJson.toHtml(selectedRow),
+                    }}
+                  />
+                </pre>
               </div>
             ) : (
               <div className="h-full p-8 flex items-center">
