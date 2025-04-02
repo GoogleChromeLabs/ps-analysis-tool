@@ -65,7 +65,7 @@ class TopicsAnimation {
   // props
   epoch: TopicsAnimationProps['epoch'];
   isInteractive: TopicsAnimationProps['isInteractive'];
-  _handleUserVisit: TopicsAnimationProps['handleUserVisit'];
+  handleUserVisit: TopicsAnimationProps['handleUserVisit'];
   setHighlightAdTech: TopicsAnimationProps['setHighlightAdTech'];
   isAnimating: TopicsAnimationProps['isAnimating'];
   visitIndexStart: TopicsAnimationProps['visitIndexStart'];
@@ -86,13 +86,11 @@ class TopicsAnimation {
     this.epoch = epoch;
     this.isInteractive = isInteractive;
     this.siteAdTechs = siteAdTechs;
-    this._handleUserVisit = handleUserVisit;
+    this.handleUserVisit = handleUserVisit;
     this.setHighlightAdTech = setHighlightAdTech;
     this.isAnimating = isAnimating;
     this.onReady = onReady;
-    if (visitIndexStart && isAnimating && !this.isInteractive) {
-      this.visitIndex = visitIndexStart;
-    }
+    this.visitIndexStart = visitIndexStart;
     p.preload = this.preload;
     p.setup = this.setup;
   }
@@ -142,6 +140,12 @@ class TopicsAnimation {
   };
 
   private incrementVisitIndex = () => {
+    if (this.visitIndexStart === this.epoch.length - 1) {
+      this.visitIndex = ++this.epoch.length;
+      this.playing = false;
+      return;
+    }
+
     if (!this.playing) {
       return;
     }
@@ -156,7 +160,7 @@ class TopicsAnimation {
 
     if (this.p.frameCount % delay === 0) {
       this.visitIndex++;
-      this._handleUserVisit(this.visitIndex);
+      this.handleUserVisit(this.visitIndex);
     }
   };
 
@@ -240,6 +244,9 @@ class TopicsAnimation {
   resetInfoBox(index: number) {
     const p = this.p;
     const position = this.circlePositions[index];
+    if (!position) {
+      return;
+    }
     const { diameter } = config.timeline.circleProps;
     clearInfoBox(p, position, diameter);
   }
@@ -402,7 +409,7 @@ class TopicsAnimation {
       }
       this.drawInfoBox(lastVisitedIndex, this.epoch[lastVisitedIndex].website);
       if (totalInspectedCircles !== this.inspectedCircles.size) {
-        this._handleUserVisit(lastVisitedIndex);
+        this.handleUserVisit(lastVisitedIndex);
       }
     }
 

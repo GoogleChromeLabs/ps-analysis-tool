@@ -127,8 +127,7 @@ const Animation = ({
   useEffect(() => {
     animation?.reset();
     animation?.setInteractiveMode(isInteractive);
-    animation?.togglePlay(isPlaying);
-  }, [isInteractive, animation, isPlaying]);
+  }, [isInteractive, animation]);
 
   return (
     <div className="relative h-full">
