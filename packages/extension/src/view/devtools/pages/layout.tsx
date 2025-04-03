@@ -362,7 +362,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           exceedingLimitations &&
           isUsingCDPCondition && (
             <div
-              className={`h-fit w-full relative z-10 ${
+              className={`h-fit w-full relative z-10 cursor-pointer ${
                 isUsingCDPForSettingsPageDisplay
                   ? 'border-t dark:border-quartz border-american-silver'
                   : ''
@@ -370,8 +370,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             >
               <ToastMessage
                 additionalStyles="text-sm"
-                text="It is recommended to use only 5 tabs with CDP enabled to prevent the
-        system from crashing."
+                text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
                 actionComponent={settingsReadActionComponent}
                 textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
               />

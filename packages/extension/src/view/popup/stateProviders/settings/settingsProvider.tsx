@@ -85,6 +85,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
         setSettingsChanged(true);
       }
+
+      if (Object.keys(changes).includes('readSettings')) {
+        setHasWarningBeenShown(changes?.readSettings.newValue);
+      }
     },
     []
   );

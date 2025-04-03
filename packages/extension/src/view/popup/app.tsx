@@ -94,7 +94,7 @@ const App: React.FC = () => {
   const settingsReadActionComponent = useMemo(() => {
     return (
       <div
-        className="w-14 h-14 flex items-center"
+        className="w-14 h-14 flex items-center cursor-pointer"
         onClick={() => {
           chrome.storage.session.set({ readSettings: true });
           setHasWarningBeenShown(true);
@@ -117,8 +117,7 @@ const App: React.FC = () => {
         >
           <ToastMessage
             additionalStyles="text-sm"
-            text="It is recommended to use only 5 tabs with CDP enabled to prevent the
-            system from crashing."
+            text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
             actionComponent={settingsReadActionComponent}
             textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
           />

@@ -196,6 +196,10 @@ const Provider = ({ children }: PropsWithChildren) => {
       ) {
         setSettingsChanged(changes.pendingReload.newValue);
       }
+
+      if (Object.keys(changes).includes('readSettings')) {
+        setHasWarningBeenShown(changes?.readSettings.newValue);
+      }
     },
     []
   );
