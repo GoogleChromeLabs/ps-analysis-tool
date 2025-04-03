@@ -44,7 +44,7 @@ const setThemeMode = (isDarkMode: boolean) => {
 };
 
 // set initial theme mode as soon as the extension is loaded
-setThemeMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+setThemeMode(chrome.devtools.panels.themeName === 'dark');
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
