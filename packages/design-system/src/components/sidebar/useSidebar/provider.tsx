@@ -181,7 +181,6 @@ export const SidebarProvider = ({
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
-        console.log('hel');
         setSelectedItemKey(null);
         return;
       }
