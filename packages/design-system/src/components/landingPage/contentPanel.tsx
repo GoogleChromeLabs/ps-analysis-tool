@@ -32,6 +32,8 @@ import {
 import Link from '../link';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
+const SEARCH_URL = 'https://privacysandbox.google.com/learn?text=';
+
 export interface ContentPanelProps {
   title: string;
   content: {
@@ -55,72 +57,78 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
         {title}
       </h3>
       <div className="flex gap-5 flex-wrap">
-        {content.map((item, index) => (
-          <div
-            className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
-            key={index}
-          >
+        {content.map((item, index) => {
+          const searchURL = SEARCH_URL + item.title();
+
+          return (
             <div
-              className="w-14 h-14 flex justify-center items-center rounded-full mb-5 cursor-pointer relative"
-              onClick={() =>
-                item.sidebarItemKey
-                  ? updateSelectedItemKey(item.sidebarItemKey)
-                  : null
-              }
+              className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border border-bright-gray dark:border-quartz p-5 relative"
+              key={index}
             >
-              <PSNumberCircleIcon className="absolute inset-0 w-full h-full object-cover" />
-              <div className={`w-9 h-9 flex justify-center items-center`}>
-                <span className="text-xxl text-bright-navy-blue dark:black font-bold">
-                  {index + 1}
-                </span>
-              </div>
-            </div>
-            <h3
-              className={`text-lg font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
-              onClick={() =>
-                item.sidebarItemKey
-                  ? updateSelectedItemKey(item.sidebarItemKey)
-                  : null
-              }
-            >
-              {item.title()}
-            </h3>
-            <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
-              {item.description()}
-            </p>
-            <div className="absolute top-10 right-5 flex gap-2">
-              <div className="w-4 h-4" title="View Documentation">
-                <Link href={addUTMParams(item.url)} rel="noreferer">
-                  <DescriptionIcon
-                    height="20"
-                    width="20"
-                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                  />
-                </Link>
-              </div>
-              {item.onClick && item?.storyUrl && (
-                <div
-                  className="w-4 h-4 cursor-pointer"
-                  title="View Story"
-                  onClick={item.onClick}
-                >
-                  <WebStoriesIcon
-                    className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                    height="20"
-                    width="20"
-                  />
+              <div
+                className="w-14 h-14 flex justify-center items-center rounded-full mb-5 cursor-pointer relative"
+                onClick={() =>
+                  item.sidebarItemKey
+                    ? updateSelectedItemKey(item.sidebarItemKey)
+                    : null
+                }
+              >
+                <PSNumberCircleIcon className="absolute inset-0 w-full h-full object-cover" />
+                <div className={`w-9 h-9 flex justify-center items-center`}>
+                  <span className="text-xxl text-bright-navy-blue dark:black font-bold">
+                    {index + 1}
+                  </span>
                 </div>
-              )}
-              <div className="w-4 h-4 cursor-pointer" title="Search">
-                <SearchIcon
-                  className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                  height="20"
-                  width="20"
-                />
+              </div>
+              <h3
+                className={`text-lg font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
+                onClick={() =>
+                  item.sidebarItemKey
+                    ? updateSelectedItemKey(item.sidebarItemKey)
+                    : null
+                }
+              >
+                {item.title()}
+              </h3>
+              <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
+                {item.description()}
+              </p>
+              <div className="absolute top-10 right-5 flex gap-2">
+                <div className="w-4 h-4" title="View Documentation">
+                  <Link href={addUTMParams(item.url)} rel="noreferer">
+                    <DescriptionIcon
+                      height="20"
+                      width="20"
+                      className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                    />
+                  </Link>
+                </div>
+                {item.onClick && item?.storyUrl && (
+                  <div
+                    className="w-4 h-4 cursor-pointer"
+                    title="View Story"
+                    onClick={item.onClick}
+                  >
+                    <WebStoriesIcon
+                      className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                      height="20"
+                      width="20"
+                    />
+                  </div>
+                )}
+                <div className="w-4 h-4 cursor-pointer" title="Search">
+                  <Link href={addUTMParams(searchURL)} rel="noreferer">
+                    <SearchIcon
+                      className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                      height="20"
+                      width="20"
+                    />
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
