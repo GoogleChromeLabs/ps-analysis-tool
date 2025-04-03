@@ -17,8 +17,9 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
+  Button,
   CirclePieChart,
   ProgressBar,
   ToastMessage,
@@ -53,6 +54,16 @@ const App: React.FC = () => {
     ? I18n.getMessage('disableCDP')
     : I18n.getMessage('enableCDP');
 
+  const actionComponent = useMemo(() => {
+    return (
+      <Button
+        text={I18n.getMessage('settingsChanged')}
+        onClick={handleSettingsChange}
+        variant="large"
+      />
+    );
+  }, [handleSettingsChange]);
+
   if (onChromeUrl) {
     return (
       <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
@@ -73,7 +84,7 @@ const App: React.FC = () => {
             <ToastMessage
               additionalStyles="text-sm"
               text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
+              actionComponent={actionComponent}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
           )}
@@ -107,7 +118,7 @@ const App: React.FC = () => {
             <ToastMessage
               additionalStyles="text-sm"
               text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
+              actionComponent={actionComponent}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
           )}
@@ -154,7 +165,7 @@ const App: React.FC = () => {
           <ToastMessage
             additionalStyles="text-sm"
             text={I18n.getMessage('settingsChanged')}
-            onClick={handleSettingsChange}
+            actionComponent={actionComponent}
             textAdditionalStyles="xxs:p-1 text-xxs leading-5"
           />
         )}

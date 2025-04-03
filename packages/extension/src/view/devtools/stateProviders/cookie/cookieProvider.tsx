@@ -67,7 +67,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
-
+  const { setExceedingLimitations } = useSettings(({ actions }) => ({
+    setExceedingLimitations: actions.setExceedingLimitations,
+  }));
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
    */
@@ -200,6 +202,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       payload: {
         tabId?: number;
         cookieData?: TabCookies;
+        exceedingLimitations?: boolean;
         extraData?: {
           extraFrameData?: Record<string, string[]>;
         };
@@ -237,6 +240,10 @@ const Provider = ({ children }: PropsWithChildren) => {
           setContextInvalidated(true);
           localStorage.setItem('psatOpenedAfterPageLoad', 'true');
         }
+
+        if (Object.keys(message.payload).includes('exceedingLimitations')) {
+          setExceedingLimitations(true);
+        }
       }
 
       if (
@@ -261,7 +268,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    [getAllFramesForCurrentTab]
+    [getAllFramesForCurrentTab, setExceedingLimitations]
   );
 
   const onCommittedNavigationListener = useCallback(

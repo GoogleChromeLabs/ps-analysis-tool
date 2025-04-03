@@ -41,6 +41,8 @@ enum PLATFORM_OS_MAP {
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
+  const [exceedingLimitations, setExceedingLimitations] =
+    useState<boolean>(false);
 
   const [isUsingCDP, setIsUsingCDP] = useState(false);
   const [
@@ -197,11 +199,13 @@ const Provider = ({ children }: PropsWithChildren) => {
           isUsingCDP,
           settingsChanged,
           isUsingCDPForSettingsPageDisplay,
+          exceedingLimitations,
         },
         actions: {
           setIsUsingCDP: _setUsingCDP,
           handleSettingsChange,
           setSettingsChanged,
+          setExceedingLimitations,
         },
       }}
     >

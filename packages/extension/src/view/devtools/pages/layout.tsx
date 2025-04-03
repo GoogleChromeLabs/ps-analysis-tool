@@ -37,6 +37,8 @@ import {
   InspectButton,
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
+  Button,
+  PaddedCross,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -65,12 +67,17 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     selectedAdUnit: state.selectedAdUnit,
   }));
 
-  const { settingsChanged, handleSettingsChange } = useSettings(
-    ({ state, actions }) => ({
-      settingsChanged: state.settingsChanged,
-      handleSettingsChange: actions.handleSettingsChange,
-    })
-  );
+  const {
+    settingsChanged,
+    handleSettingsChange,
+    exceedingLimitations,
+    isUsingCDP,
+  } = useSettings(({ state, actions }) => ({
+    settingsChanged: state.settingsChanged,
+    handleSettingsChange: actions.handleSettingsChange,
+    exceedingLimitations: state.exceedingLimitations,
+    isUsingCDP: state.isUsingCDP,
+  }));
 
   const {
     tabFrames,
@@ -189,6 +196,27 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     tabFrames,
   ]);
 
+  const buttonReloadActionCompnent = useMemo(() => {
+    return (
+      <Button
+        text={I18n.getMessage('settingsChanged')}
+        onClick={handleSettingsChange}
+        variant="large"
+      />
+    );
+  }, [handleSettingsChange]);
+
+  const settingsReadActionComponent = useMemo(() => {
+    return (
+      <div
+        className="w-14 h-14 flex items-center"
+        onClick={() => chrome.storage.session.set({ readSettings: true })}
+      >
+        <PaddedCross className="w-4 h-4" />
+      </div>
+    );
+  }, []);
+
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
       setSelectedFrame(currentItemKey);
@@ -302,10 +330,19 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             <ToastMessage
               additionalStyles="text-sm"
               text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
+              actionComponent={buttonReloadActionCompnent}
               textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
             />
           </div>
+        )}
+        {exceedingLimitations && isUsingCDP && (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text="It is recommended to use only 5 tabs with CDP enabled to prevent the
+        system from crashing."
+            actionComponent={settingsReadActionComponent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+          />
         )}
       </div>
     </div>
