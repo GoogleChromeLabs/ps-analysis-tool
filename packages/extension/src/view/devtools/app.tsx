@@ -43,9 +43,8 @@ const setThemeMode = (isDarkMode: boolean) => {
   }
 };
 
-// set initial theme mode
-const isDarkMode = chrome.devtools.panels.themeName === 'dark';
-setThemeMode(isDarkMode);
+// set initial theme mode as soon as the extension is loaded
+setThemeMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
@@ -70,6 +69,7 @@ const App: React.FC = () => {
     buttonText: I18n.getMessage('refreshPanel'),
   });
 
+  // update theme mode when the system theme changes
   useEffect(() => {
     const onColorSchemeChange = (e: MediaQueryListEvent) => {
       setThemeMode(e.matches);
