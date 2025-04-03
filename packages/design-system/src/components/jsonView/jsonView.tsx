@@ -44,12 +44,24 @@ const LoadingText = () => {
  * @returns {React.ReactElement} The JsonView component.
  */
 const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
+    const onColorSchemeChange = (e: MediaQueryListEvent) => {
+      setIsDarkMode(e.matches);
+    };
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mediaQuery) {
+      mediaQuery.addEventListener('change', onColorSchemeChange);
     }
+
+    return () => {
+      if (mediaQuery) {
+        mediaQuery.removeEventListener('change', onColorSchemeChange);
+      }
+    };
   }, []);
 
   return (
