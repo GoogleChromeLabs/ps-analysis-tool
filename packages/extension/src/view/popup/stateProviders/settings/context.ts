@@ -20,10 +20,8 @@ import { noop, createContext } from '@google-psat/common';
 
 export interface SettingsStoreContext {
   state: {
-    allowedNumberOfTabs: string | null;
     isUsingCDP: boolean;
     settingsChanged: boolean;
-    allowedNumberOfTabsForSettingsDisplay: string | null;
     isUsingCDPForSettingsDisplay: boolean;
   };
   actions: {
@@ -35,10 +33,8 @@ export interface SettingsStoreContext {
 
 const initialState: SettingsStoreContext = {
   state: {
-    allowedNumberOfTabs: null,
     isUsingCDP: false,
     settingsChanged: false,
-    allowedNumberOfTabsForSettingsDisplay: null,
     isUsingCDPForSettingsDisplay: false,
   },
   actions: {

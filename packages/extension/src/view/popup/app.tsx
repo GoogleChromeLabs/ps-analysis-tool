@@ -19,7 +19,6 @@
  */
 import React from 'react';
 import {
-  Button,
   CirclePieChart,
   ProgressBar,
   ToastMessage,
@@ -34,37 +33,21 @@ import { I18n } from '@google-psat/i18n';
 import './app.css';
 import { Legend } from './components';
 import { useCookie, useSettings } from './stateProviders';
-import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
 const App: React.FC = () => {
-  const {
-    cookieStats,
-    loading,
-    isCurrentTabBeingListenedTo,
-    onChromeUrl,
-    changeListeningToThisTab,
-  } = useCookie(({ state, actions }) => ({
+  const { cookieStats, loading, onChromeUrl } = useCookie(({ state }) => ({
     cookieStats: state.tabCookieStats,
-    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
-    returningToSingleTab: state.returningToSingleTab,
     onChromeUrl: state.onChromeUrl,
-    changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
-  const {
-    allowedNumberOfTabs,
-    isUsingCDP,
-    settingsChanged,
-    setUsingCDP,
-    handleSettingsChange,
-  } = useSettings(({ state, actions }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-    isUsingCDP: state.isUsingCDPForSettingsDisplay,
-    settingsChanged: state.settingsChanged,
-    setUsingCDP: actions.setUsingCDP,
-    handleSettingsChange: actions.handleSettingsChange,
-  }));
+  const { isUsingCDP, settingsChanged, setUsingCDP, handleSettingsChange } =
+    useSettings(({ state, actions }) => ({
+      isUsingCDP: state.isUsingCDPForSettingsDisplay,
+      settingsChanged: state.settingsChanged,
+      setUsingCDP: actions.setUsingCDP,
+      handleSettingsChange: actions.handleSettingsChange,
+    }));
 
   const cdpLabel = isUsingCDP
     ? I18n.getMessage('disableCDP')
@@ -99,46 +82,8 @@ const App: React.FC = () => {
     );
   }
 
-  if (
-    loading ||
-    (loading &&
-      isCurrentTabBeingListenedTo &&
-      allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single')
-  ) {
+  if (loading) {
     return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
-  }
-
-  if (
-    ALLOWED_NUMBER_OF_TABS > 0 &&
-    !isCurrentTabBeingListenedTo &&
-    allowedNumberOfTabs &&
-    allowedNumberOfTabs !== 'unlimited'
-  ) {
-    return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
-        <ToggleSwitch
-          onLabel={cdpLabel}
-          additionalStyles="top-2 left-2 absolute"
-          setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
-        />
-        <Button
-          onClick={changeListeningToThisTab}
-          text={I18n.getMessage('analyzeThisTab')}
-        />
-        <div className="absolute right-0 bottom-0 w-full">
-          {settingsChanged && (
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
-              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-            />
-          )}
-        </div>
-      </div>
-    );
   }
 
   if (
