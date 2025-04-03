@@ -72,11 +72,17 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     handleSettingsChange,
     exceedingLimitations,
     isUsingCDP,
+    hasWarningBeenShown,
+    setHasWarningBeenShown,
+    isUsingCDPForSettingsPageDisplay,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
     isUsingCDP: state.isUsingCDP,
+    hasWarningBeenShown: state.hasWarningBeenShown,
+    setHasWarningBeenShown: actions.setHasWarningBeenShown,
+    isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
   }));
 
   const {
@@ -198,11 +204,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   const buttonReloadActionCompnent = useMemo(() => {
     return (
-      <Button
-        text={I18n.getMessage('settingsChanged')}
-        onClick={handleSettingsChange}
-        variant="large"
-      />
+      <Button text={'Reload'} onClick={handleSettingsChange} variant="large" />
     );
   }, [handleSettingsChange]);
 
@@ -210,12 +212,15 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div
         className="w-14 h-14 flex items-center"
-        onClick={() => chrome.storage.session.set({ readSettings: true })}
+        onClick={() => {
+          chrome.storage.session.set({ readSettings: true });
+          setHasWarningBeenShown(true);
+        }}
       >
         <PaddedCross className="w-4 h-4" />
       </div>
     );
-  }, []);
+  }, [setHasWarningBeenShown]);
 
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
@@ -335,15 +340,21 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             />
           </div>
         )}
-        {exceedingLimitations && isUsingCDP && (
-          <ToastMessage
-            additionalStyles="text-sm"
-            text="It is recommended to use only 5 tabs with CDP enabled to prevent the
+        {!hasWarningBeenShown &&
+          exceedingLimitations &&
+          (isUsingCDP || isUsingCDPForSettingsPageDisplay) && (
+            <ToastMessage
+              additionalStyles={`text-sm ${
+                isUsingCDPForSettingsPageDisplay
+                  ? 'border-t dark:border-quartz border-american-silver'
+                  : ''
+              }`}
+              text="It is recommended to use only 5 tabs with CDP enabled to prevent the
         system from crashing."
-            actionComponent={settingsReadActionComponent}
-            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-          />
-        )}
+              actionComponent={settingsReadActionComponent}
+              textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+            />
+          )}
       </div>
     </div>
   );

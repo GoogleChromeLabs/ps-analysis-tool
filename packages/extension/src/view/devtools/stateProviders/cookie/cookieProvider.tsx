@@ -67,9 +67,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
-  const { setExceedingLimitations } = useSettings(({ actions }) => ({
-    setExceedingLimitations: actions.setExceedingLimitations,
-  }));
+
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
    */
@@ -240,10 +238,6 @@ const Provider = ({ children }: PropsWithChildren) => {
           setContextInvalidated(true);
           localStorage.setItem('psatOpenedAfterPageLoad', 'true');
         }
-
-        if (Object.keys(message.payload).includes('exceedingLimitations')) {
-          setExceedingLimitations(true);
-        }
       }
 
       if (
@@ -268,7 +262,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    [getAllFramesForCurrentTab, setExceedingLimitations]
+    [getAllFramesForCurrentTab]
   );
 
   const onCommittedNavigationListener = useCallback(
@@ -298,6 +292,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
     return () => {
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation.onCommitted.removeListener(
+        onCommittedNavigationListener
+      );
     };
   }, [messagePassingListener, onCommittedNavigationListener]);
 

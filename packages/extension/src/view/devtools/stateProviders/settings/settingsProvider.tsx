@@ -44,6 +44,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [exceedingLimitations, setExceedingLimitations] =
     useState<boolean>(false);
 
+  const [hasWarningBeenShown, setHasWarningBeenShown] =
+    useState<boolean>(false);
+
   const [isUsingCDP, setIsUsingCDP] = useState(false);
   const [
     isUsingCDPForSettingsPageDisplay,
@@ -82,6 +85,12 @@ const Provider = ({ children }: PropsWithChildren) => {
       setIsUsingCDP(currentSettings.isUsingCDP);
     }
 
+    if (Object.keys(sessionStorage).includes('readSettings')) {
+      setHasWarningBeenShown(sessionStorage?.readSettings);
+    } else {
+      setHasWarningBeenShown(false);
+    }
+
     chrome.tabs.query({}, (tabs) => {
       setCurrentTabs(tabs.length);
     });
@@ -107,6 +116,33 @@ const Provider = ({ children }: PropsWithChildren) => {
     const manifestData = chrome.runtime.getManifest();
     setPSATVersion(manifestData.version);
   }, []);
+
+  const messagePassingListener = useCallback(
+    (message: {
+      type: string;
+      payload: {
+        exceedingLimitations?: boolean;
+      };
+    }) => {
+      if (!message.type) {
+        return;
+      }
+
+      if (!['EXCEEDING_LIMITATION_UPDATE'].includes(message.type)) {
+        return;
+      }
+
+      const incomingMessageType = message.type;
+
+      if (
+        incomingMessageType === 'EXCEEDING_LIMITATION_UPDATE' &&
+        typeof message?.payload?.exceedingLimitations !== 'undefined'
+      ) {
+        setExceedingLimitations(message.payload.exceedingLimitations);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (navigator.userAgent) {
@@ -178,14 +214,21 @@ const Provider = ({ children }: PropsWithChildren) => {
     intitialSync();
     chrome.storage?.sync?.onChanged?.addListener(storeChangeListener);
     chrome.storage?.session?.onChanged?.addListener(sessionStoreChangeListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
 
     return () => {
       chrome.storage?.sync?.onChanged?.removeListener(storeChangeListener);
       chrome.storage?.session?.onChanged?.removeListener(
         sessionStoreChangeListener
       );
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
     };
-  }, [intitialSync, storeChangeListener, sessionStoreChangeListener]);
+  }, [
+    intitialSync,
+    storeChangeListener,
+    sessionStoreChangeListener,
+    messagePassingListener,
+  ]);
 
   return (
     <Context.Provider
@@ -200,8 +243,10 @@ const Provider = ({ children }: PropsWithChildren) => {
           settingsChanged,
           isUsingCDPForSettingsPageDisplay,
           exceedingLimitations,
+          hasWarningBeenShown,
         },
         actions: {
+          setHasWarningBeenShown,
           setIsUsingCDP: _setUsingCDP,
           handleSettingsChange,
           setSettingsChanged,
