@@ -29,7 +29,6 @@ const content = [
     title: () => I18n.getMessage('topics'),
     description: () => I18n.getMessage('topicsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
-    searchUrl: 'https://www.google.com/search?q=topics+api',
     storyUrl: 'https://privacysandbox-stories.com/web-stories/the-topics-api/',
     sidebarItemKey: SIDEBAR_ITEMS_KEYS.TOPICS,
   },
