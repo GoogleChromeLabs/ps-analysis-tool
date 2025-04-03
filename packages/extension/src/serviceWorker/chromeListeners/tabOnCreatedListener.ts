@@ -27,12 +27,12 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
     const targets = await chrome.debugger.getTargets();
 
     dataStore?.addTabData(tab.id);
+    dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
     if (dataStore.globalIsUsingCDP) {
       const currentTab = targets.filter(
         ({ tabId }) => tabId && tab.id && tabId === tab.id
       );
-      dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
       dataStore.updateParentChildFrameAssociation(
         tab.id,

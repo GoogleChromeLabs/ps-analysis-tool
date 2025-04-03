@@ -52,11 +52,13 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
       );
     }
   } else {
-    tabs.forEach(({ id }) => {
+    tabs.forEach(({ id, url }) => {
       if (!id) {
         return;
       }
 
+      dataStore?.addTabData(id);
+      dataStore.updateUrl(id, url ?? '');
       dataStore?.sendUpdatedDataToPopupAndDevTools(id);
     });
   }

@@ -35,12 +35,6 @@ export const onCommittedNavigationListener = async ({
       return;
     }
 
-    const targets = await chrome.debugger.getTargets();
-    const mainFrameId = dataStore?.globalIsUsingCDP
-      ? targets.filter((target) => target.tabId && target.tabId === tabId)[0]
-          ?.id
-      : 0;
-
     const queryParams = getQueryParams(url);
 
     if (queryParams.psat_cdp) {
@@ -50,6 +44,12 @@ export const onCommittedNavigationListener = async ({
 
       dataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
     }
+
+    const targets = await chrome.debugger.getTargets();
+    const mainFrameId = dataStore?.globalIsUsingCDP
+      ? targets.filter((target) => target.tabId && target.tabId === tabId)[0]
+          ?.id
+      : 0;
 
     dataStore?.updateUrl(tabId, url);
 
@@ -75,6 +75,7 @@ export const onCommittedNavigationListener = async ({
         dataStore.updateParentChildFrameAssociation(tabId, targetId, '0');
       }
     }
+
     await chrome.tabs.sendMessage(tabId, {
       tabId,
       payload: {
