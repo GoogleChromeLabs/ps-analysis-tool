@@ -88,16 +88,26 @@ function computeReceivedBidsAndNoBids(
 
           _receivedBids.push(
             ...filteredEvents.map((event) => {
-              const sellerSignals = JSON.parse(
+              const auctionSignals = JSON.parse(
                 //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-                auctionConfig?.sellerSignals?.value ?? '{}'
+                auctionConfig?.auctionSignals?.value ??
+                  //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
+                  auctionConfig?.sellerSignals?.value ??
+                  '{}'
               );
+              const actualAuctionSignals =
+                auctionSignals?.adUnit ?? auctionSignals;
+              const mediaContainerSize = Array.isArray(
+                actualAuctionSignals?.size
+              )
+                ? actualAuctionSignals?.size
+                : actualAuctionSignals?.size?.split(',');
 
               return {
                 ...event,
-                mediaContainerSize: [sellerSignals?.size],
-                adUnitCode: sellerSignals?.divId,
-                adType: sellerSignals?.adType,
+                mediaContainerSize: [mediaContainerSize],
+                adUnitCode: actualAuctionSignals?.divId,
+                adType: actualAuctionSignals?.adType,
               };
             })
           );
@@ -120,16 +130,16 @@ function computeReceivedBidsAndNoBids(
                   return;
                 }
 
-                const sellerSignals = JSON.parse(
+                const auctionSignals = JSON.parse(
                   //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-                  auctionConfig?.sellerSignals?.value ?? '{}'
+                  auctionConfig?.auctionSignals?.value ?? '{}'
                 );
 
                 _noBids[auctionId] = {
                   ownerOrigin: buyer,
                   name: name ?? '',
                   uniqueAuctionId: auctionId,
-                  adUnitCode: sellerSignals?.divId,
+                  adUnitCode: auctionSignals?.divId,
                 };
               }
             );
@@ -158,16 +168,16 @@ function computeReceivedBidsAndNoBids(
 
       _receivedBids.push(
         ...filteredEvents.map((event) => {
-          const sellerSignals = JSON.parse(
+          const auctionSignals = JSON.parse(
             //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-            auctionConfig?.sellerSignals?.value ?? '{}'
+            auctionConfig?.auctionSignals?.value ?? '{}'
           );
 
           return {
             ...event,
-            mediaContainerSize: [sellerSignals.size],
-            adUnitCode: sellerSignals?.divId,
-            adType: sellerSignals?.adType,
+            mediaContainerSize: [auctionSignals?.size?.split(',')],
+            adUnitCode: auctionSignals?.divId,
+            adType: auctionSignals?.adType,
           };
         })
       );
@@ -192,7 +202,7 @@ function computeReceivedBidsAndNoBids(
               ownerOrigin: buyer,
               name: name ?? '',
               //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-              adUnitCode: JSON.parse(auctionConfig?.sellerSignals)?.divId,
+              adUnitCode: JSON.parse(auctionConfig?.auctionSignals)?.divId,
               uniqueAuctionId,
             };
           }
@@ -200,6 +210,7 @@ function computeReceivedBidsAndNoBids(
       }
     });
   }
+
   return { receivedBids: _receivedBids, noBids: _noBids };
 }
 
