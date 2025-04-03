@@ -299,6 +299,24 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     ? 'min-w-[400px]'
     : 'min-w-[50rem]';
 
+  const isUsingCDPCondition = useMemo(() => {
+    if (isUsingCDP) {
+      if (isUsingCDPForSettingsPageDisplay) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (!isUsingCDP) {
+      if (isUsingCDPForSettingsPageDisplay) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -342,18 +360,22 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         )}
         {!hasWarningBeenShown &&
           exceedingLimitations &&
-          (isUsingCDP || isUsingCDPForSettingsPageDisplay) && (
-            <ToastMessage
-              additionalStyles={`text-sm ${
+          isUsingCDPCondition && (
+            <div
+              className={`h-fit w-full relative z-10 ${
                 isUsingCDPForSettingsPageDisplay
                   ? 'border-t dark:border-quartz border-american-silver'
                   : ''
               }`}
-              text="It is recommended to use only 5 tabs with CDP enabled to prevent the
+            >
+              <ToastMessage
+                additionalStyles="text-sm"
+                text="It is recommended to use only 5 tabs with CDP enabled to prevent the
         system from crashing."
-              actionComponent={settingsReadActionComponent}
-              textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-            />
+                actionComponent={settingsReadActionComponent}
+                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+              />
+            </div>
           )}
       </div>
     </div>

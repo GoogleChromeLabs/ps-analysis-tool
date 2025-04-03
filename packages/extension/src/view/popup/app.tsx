@@ -56,11 +56,7 @@ const App: React.FC = () => {
 
   const actionComponent = useMemo(() => {
     return (
-      <Button
-        text={I18n.getMessage('settingsChanged')}
-        onClick={handleSettingsChange}
-        variant="large"
-      />
+      <Button text="Reload" onClick={handleSettingsChange} variant="large" />
     );
   }, [handleSettingsChange]);
 

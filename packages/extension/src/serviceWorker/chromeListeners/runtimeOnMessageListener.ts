@@ -105,8 +105,6 @@ export const runtimeOnMessageListener = async (request: any) => {
     const tabs = await chrome.tabs.query({});
     const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
 
-    dataToSend['exceedingLimitations'] = qualifyingTabs.length > 5;
-
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
 
     await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
