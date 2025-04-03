@@ -34,47 +34,8 @@ jest.mock('../../../../stateProviders', () => ({
 const mockUseSettingsStore = useSettings as jest.Mock;
 
 describe('SettingsContainer', () => {
-  it('Should enable multitab debugging', async () => {
-    mockUseSettingsStore.mockReturnValueOnce({
-      allowedNumberOfTabs: 'single',
-      isUsingCDP: false,
-      setIsUsingCDP: noop,
-      setProcessingMode: noop,
-    });
-
-    act(() => {
-      render(<SettingsContainer />);
-    });
-
-    const toggleButtonInput = await screen.findAllByTestId(
-      'toggle-button-input'
-    );
-
-    expect((await screen.findAllByTestId('toggle-button'))[1]).toHaveClass(
-      'bg-quartz'
-    );
-
-    toggleButtonInput[1].click();
-
-    mockUseSettingsStore.mockReturnValueOnce({
-      allowedNumberOfTabs: 'unlimited',
-      isUsingCDP: false,
-      setIsUsingCDP: noop,
-      setProcessingMode: noop,
-    });
-
-    act(() => {
-      render(<SettingsContainer />);
-    });
-
-    expect((await screen.findAllByTestId('toggle-button'))[3]).toHaveClass(
-      'bg-toggle-on'
-    );
-  });
-
   it('Should enable CDP', async () => {
     mockUseSettingsStore.mockReturnValueOnce({
-      allowedNumberOfTabs: 'single',
       isUsingCDP: false,
       setIsUsingCDP: noop,
       setProcessingMode: noop,
@@ -95,7 +56,6 @@ describe('SettingsContainer', () => {
     toggleButtonInput[0].click();
 
     mockUseSettingsStore.mockReturnValueOnce({
-      allowedNumberOfTabs: 'single',
       isUsingCDP: true,
       setIsUsingCDP: noop,
       setProcessingMode: noop,

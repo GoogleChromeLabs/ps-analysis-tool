@@ -20,7 +20,6 @@ import { noop, createContext } from '@google-psat/common';
 
 export interface SettingsStoreContext {
   state: {
-    allowedNumberOfTabs: string | null;
     currentTabs: number;
     currentExtensions:
       | {
@@ -33,11 +32,9 @@ export interface SettingsStoreContext {
     PSATVersion: string | null;
     isUsingCDP: boolean;
     settingsChanged: boolean;
-    allowedNumberOfTabsForSettingsPageDisplay: string | null;
     isUsingCDPForSettingsPageDisplay: boolean;
   };
   actions: {
-    setProcessingMode: (newState: boolean) => void;
     setIsUsingCDP: (newValue: boolean) => void;
     handleSettingsChange: () => void;
     setSettingsChanged: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,7 +43,6 @@ export interface SettingsStoreContext {
 
 const initialState: SettingsStoreContext = {
   state: {
-    allowedNumberOfTabs: null,
     currentTabs: 0,
     currentExtensions: null,
     browserInformation: null,
@@ -54,12 +50,10 @@ const initialState: SettingsStoreContext = {
     PSATVersion: null,
     isUsingCDP: false,
     settingsChanged: false,
-    allowedNumberOfTabsForSettingsPageDisplay: null,
     isUsingCDPForSettingsPageDisplay: false,
   },
   actions: {
     setIsUsingCDP: noop,
-    setProcessingMode: noop,
     handleSettingsChange: noop,
     setSettingsChanged: noop,
   },

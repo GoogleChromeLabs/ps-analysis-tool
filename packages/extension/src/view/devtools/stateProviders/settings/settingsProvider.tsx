@@ -40,14 +40,6 @@ enum PLATFORM_OS_MAP {
 }
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
-    null
-  );
-  const [
-    allowedNumberOfTabsForSettingsPageDisplay,
-    setAllowedNumberOfTabsForSettingsPageDisplay,
-  ] = useState<string | null>(null);
-
   const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
 
   const [isUsingCDP, setIsUsingCDP] = useState(false);
@@ -75,30 +67,13 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (Object.keys(sessionStorage).includes('pendingReload')) {
       setSettingsChanged(sessionStorage?.pendingReload);
 
-      if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          sessionStorage.allowedNumberOfTabs
-        );
-      } else {
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          currentSettings.allowedNumberOfTabs
-        );
-      }
-
       if (Object.keys(sessionStorage).includes('isUsingCDP')) {
         setIsUsingCDPForSettingsPageDisplay(sessionStorage.isUsingCDP);
       } else {
         setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
       }
     } else {
-      setAllowedNumberOfTabsForSettingsPageDisplay(
-        currentSettings.allowedNumberOfTabs
-      );
       setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
-    }
-
-    if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
-      setAllowedNumberOfTabs(currentSettings.allowedNumberOfTabs);
     }
 
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
@@ -146,16 +121,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [OSInformation]);
 
-  const setProcessingMode = useCallback(async (newState: boolean) => {
-    const valueToBeSet: boolean | string = newState ? 'unlimited' : 'single';
-    setAllowedNumberOfTabsForSettingsPageDisplay(valueToBeSet);
-    setSettingsChanged(true);
-    await chrome.storage.session.set({
-      allowedNumberOfTabs: valueToBeSet,
-      pendingReload: true,
-    });
-  }, []);
-
   const _setUsingCDP = useCallback(async (newValue: boolean) => {
     setIsUsingCDPForSettingsPageDisplay(newValue);
     setSettingsChanged(true);
@@ -167,13 +132,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
-        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          changes?.allowedNumberOfTabs?.newValue
-        );
-      }
-
       if (
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
@@ -187,12 +145,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          changes.allowedNumberOfTabs.newValue
-        );
-      }
-
       if (
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
@@ -237,7 +189,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     <Context.Provider
       value={{
         state: {
-          allowedNumberOfTabs,
           currentTabs,
           currentExtensions,
           browserInformation,
@@ -245,11 +196,9 @@ const Provider = ({ children }: PropsWithChildren) => {
           OSInformation,
           isUsingCDP,
           settingsChanged,
-          allowedNumberOfTabsForSettingsPageDisplay,
           isUsingCDPForSettingsPageDisplay,
         },
         actions: {
-          setProcessingMode,
           setIsUsingCDP: _setUsingCDP,
           handleSettingsChange,
           setSettingsChanged,

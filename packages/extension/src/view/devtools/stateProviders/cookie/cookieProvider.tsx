@@ -31,7 +31,6 @@ import { isEqual } from 'lodash-es';
  * Internal dependencies.
  */
 import {
-  ALLOWED_NUMBER_OF_TABS,
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   GET_JS_COOKIES,
@@ -48,11 +47,7 @@ import Context, { type CookieStoreContext } from './context';
 const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [tabToRead, setTabToRead] = useState<string | null>(null);
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
-
-  const [returningToSingleTab, setReturningToSingleTab] =
-    useState<CookieStoreContext['state']['returningToSingleTab']>(false);
 
   const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
@@ -70,16 +65,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
-  // This was converted to useRef because setting state was creating a race condition in rerendering the provider.
-  const isCurrentTabBeingListenedToRef = useRef(false);
-
-  const { allowedNumberOfTabs, setSettingsChanged, isUsingCDP } = useSettings(
-    ({ state, actions }) => ({
-      allowedNumberOfTabs: state.allowedNumberOfTabs,
-      setSettingsChanged: actions.setSettingsChanged,
-      isUsingCDP: state.isUsingCDP,
-    })
-  );
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
 
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
@@ -156,9 +144,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const intitialSync = useCallback(async () => {
     const tabId = chrome.devtools.inspectedWindow.tabId;
 
-    if (isCurrentTabBeingListenedToRef.current) {
-      await getAllFramesForCurrentTab();
-    }
+    await getAllFramesForCurrentTab();
 
     const tab = await getTab(tabId);
 
@@ -198,31 +184,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const changeListeningToThisTab = useCallback(() => {
-    const tabId = chrome.devtools.inspectedWindow.tabId;
-    if (!tabId) {
-      return;
-    }
-    chrome.runtime.sendMessage({
-      type: SET_TAB_TO_READ,
-      payload: {
-        tabId,
-      },
-    });
-    setTabToRead(tabId.toString());
-  }, []);
-
-  useEffect(() => {
-    if (
-      !isCurrentTabBeingListenedToRef.current &&
-      allowedNumberOfTabs === 'single' &&
-      tabFrames &&
-      Object.keys(tabFrames).length > 0
-    ) {
-      setTabFrames(null);
-    }
-  }, [allowedNumberOfTabs, tabFrames]);
-
   useEffect(() => {
     chrome.runtime.sendMessage({
       type: 'GET_REST_DATA_FROM_URL',
@@ -240,15 +201,10 @@ const Provider = ({ children }: PropsWithChildren) => {
       payload: {
         tabId?: number;
         cookieData?: TabCookies;
-        tabToRead?: string;
-        tabMode?: string;
         extraData?: {
           extraFrameData?: Record<string, string[]>;
         };
         psatOpenedAfterPageLoad?: boolean;
-        actionsPerformed: {
-          allowedNumberOfTabs: number;
-        };
       };
     }) => {
       if (!message.type) {
@@ -275,36 +231,13 @@ const Provider = ({ children }: PropsWithChildren) => {
         localStorage.setItem('contextInvalidated', 'true');
       }
 
-      if (SET_TAB_TO_READ === incomingMessageType) {
-        const tab = await getTab(tabId?.toString() || '');
-        setTabUrl(tab?.url ?? '');
-        isCurrentTabBeingListenedToRef.current =
-          tabId === message?.payload?.tabId;
-        setTabToRead(message?.payload?.tabId?.toString() || null);
-        setTabFrames(null);
-        setLoading(false);
-        setCanStartInspecting(false);
-      }
-
-      if (INITIAL_SYNC === incomingMessageType && message?.payload?.tabMode) {
-        if (message.payload.tabMode === 'unlimited') {
-          isCurrentTabBeingListenedToRef.current = true;
-          if (
-            Object.keys(message.payload).includes('psatOpenedAfterPageLoad') &&
-            message.payload.psatOpenedAfterPageLoad
-          ) {
-            setContextInvalidated(true);
-            localStorage.setItem('psatOpenedAfterPageLoad', 'true');
-          }
-          setTabToRead(null);
-        } else {
-          if (tabId.toString() !== message?.payload?.tabToRead) {
-            setTabFrames(null);
-          }
-
-          isCurrentTabBeingListenedToRef.current =
-            tabId.toString() === message?.payload?.tabToRead;
-          setTabToRead(message?.payload?.tabToRead || null);
+      if (INITIAL_SYNC === incomingMessageType) {
+        if (
+          Object.keys(message.payload).includes('psatOpenedAfterPageLoad') &&
+          message.payload.psatOpenedAfterPageLoad
+        ) {
+          setContextInvalidated(true);
+          localStorage.setItem('psatOpenedAfterPageLoad', 'true');
         }
       }
 
@@ -317,33 +250,20 @@ const Provider = ({ children }: PropsWithChildren) => {
         const frameData = message.payload.extraData?.extraFrameData ?? {};
 
         if (tabId.toString() === message.payload.tabId.toString()) {
-          if (isCurrentTabBeingListenedToRef.current) {
-            setTabToRead(tabId.toString());
-            setTabCookies((prevState) => {
-              if (Object.keys(data).length > 0) {
-                if (isEqual(prevState ?? {}, data)) {
-                  return prevState;
-                }
-                return data;
+          setTabCookies((prevState) => {
+            if (Object.keys(data).length > 0) {
+              if (isEqual(prevState ?? {}, data)) {
+                return prevState;
               }
-              return null;
-            });
-            await getAllFramesForCurrentTab(frameData);
-          } else {
-            setTabFrames(null);
-          }
-        }
-      }
-
-      if (message.type === SERVICE_WORKER_RELOAD_MESSAGE) {
-        setSettingsChanged(false);
-        if (message?.payload?.actionsPerformed?.allowedNumberOfTabs === 1) {
-          isCurrentTabBeingListenedToRef.current = false;
-          setTabFrames(null);
+              return data;
+            }
+            return null;
+          });
+          await getAllFramesForCurrentTab(frameData);
         }
       }
     },
-    [getAllFramesForCurrentTab, setSettingsChanged]
+    [getAllFramesForCurrentTab]
   );
 
   const onCommittedNavigationListener = useCallback(
@@ -376,34 +296,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [messagePassingListener, onCommittedNavigationListener]);
 
-  const tabRemovedListener = useCallback(async () => {
-    try {
-      const availableTabs = await chrome.tabs.query({});
-
-      if (
-        availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-        availableTabs.filter(
-          (processingTab) => processingTab.id?.toString() === tabToRead
-        )
-      ) {
-        setReturningToSingleTab(true);
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
-    }
-  }, [tabToRead]);
-
   useEffect(() => {
     intitialSync();
   }, [intitialSync]);
-
-  useEffect(() => {
-    chrome.tabs?.onRemoved?.addListener(tabRemovedListener);
-    return () => {
-      chrome.tabs?.onRemoved?.removeListener(tabRemovedListener);
-    };
-  }, [tabRemovedListener]);
 
   useEffect(() => {
     loadingTimeout.current = setTimeout(() => {
@@ -447,17 +342,13 @@ const Provider = ({ children }: PropsWithChildren) => {
         tabFrames,
         loading,
         selectedFrame,
-        isCurrentTabBeingListenedTo: isCurrentTabBeingListenedToRef.current,
-        returningToSingleTab,
         contextInvalidated,
         isInspecting,
         canStartInspecting,
-        tabToRead,
         frameHasCookies: frameHasCookies(),
       },
       actions: {
         setSelectedFrame,
-        changeListeningToThisTab,
         getCookiesSetByJavascript,
         setIsInspecting,
         setContextInvalidated,
@@ -466,17 +357,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [
     canStartInspecting,
-    changeListeningToThisTab,
     contextInvalidated,
     frameHasCookies,
     getCookiesSetByJavascript,
     isInspecting,
     loading,
-    returningToSingleTab,
     selectedFrame,
     tabCookies,
     tabFrames,
-    tabToRead,
     tabUrl,
   ]);
 
