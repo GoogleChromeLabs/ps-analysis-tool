@@ -14,7 +14,7 @@ case $SHELL in
   grep "chrome_launcher.sh" ~/.zshrc > /dev/null
   if [ $? -ne 0 ]; then
     {
-      echo "if [ -f ~/bin/chrome_launcher.sh ]; then"
+      echo -e "\nif [ -f ~/bin/chrome_launcher.sh ]; then"
         echo -e "\tsource ~/bin/chrome_launcher.sh"
       echo "fi"
     } >> ~/.zshrc
@@ -25,7 +25,7 @@ case $SHELL in
   grep "chrome_launcher.sh" ~/.bashrc > /dev/null
   if [ $? -ne 0 ]; then
     {
-      echo "if [ -f ~/bin/chrome_launcher.sh ]; then"
+      echo -e "\nif [ -f ~/bin/chrome_launcher.sh ]; then"
         echo -e "\tsource ~/bin/chrome_launcher.sh"
       echo "fi"
     } >> ~/.bashrc

@@ -110,7 +110,7 @@ const ReceivedBidsTable = ({
         widthWeightagePercentage: 16,
       },
       {
-        header: 'Media Type',
+        header: 'Ad Type',
         accessorKey: 'adType',
         cell: (info) => info,
         widthWeightagePercentage: 16,
