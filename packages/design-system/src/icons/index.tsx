@@ -111,4 +111,5 @@ export { default as WikiLandingIcon } from './wiki-landing.svg';
 export { default as DemosLandingIcon } from './demos-landing.svg';
 export { default as DevSiteLandingIcon } from './dev-site-landing.svg';
 export { default as HelpCenterLandingIcon } from './help-center-landing.svg';
+export { default as SearchIcon } from './search.svg';
 export * from './ps-icons';
