@@ -27,6 +27,7 @@ import {
   DescriptionIcon,
   WebStoriesIcon,
   PSNumberCircleIcon,
+  SearchIcon,
 } from '../../icons';
 import Link from '../link';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
@@ -110,6 +111,13 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
                   />
                 </div>
               )}
+              <div className="w-4 h-4 cursor-pointer" title="Search">
+                <SearchIcon
+                  className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                  height="20"
+                  width="20"
+                />
+              </div>
             </div>
           </div>
         ))}
