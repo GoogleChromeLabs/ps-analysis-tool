@@ -120,8 +120,13 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (POPUP_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
+    const tabs = await chrome.tabs.query({});
+    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
+    await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
+      exceedingLimitations: qualifyingTabs.length > 5,
+    });
 
     dataStore?.updatePopUpState(incomingMessageTabId, true);
 

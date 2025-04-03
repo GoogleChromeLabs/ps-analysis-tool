@@ -21,6 +21,7 @@ import React, { useMemo } from 'react';
 import {
   Button,
   CirclePieChart,
+  PaddedCross,
   ProgressBar,
   ToastMessage,
   ToggleSwitch,
@@ -42,23 +43,110 @@ const App: React.FC = () => {
     onChromeUrl: state.onChromeUrl,
   }));
 
-  const { isUsingCDP, settingsChanged, setUsingCDP, handleSettingsChange } =
-    useSettings(({ state, actions }) => ({
-      isUsingCDP: state.isUsingCDPForSettingsDisplay,
-      settingsChanged: state.settingsChanged,
-      setUsingCDP: actions.setUsingCDP,
-      handleSettingsChange: actions.handleSettingsChange,
-    }));
+  const {
+    settingsChanged,
+    handleSettingsChange,
+    exceedingLimitations,
+    isUsingCDP,
+    hasWarningBeenShown,
+    setHasWarningBeenShown,
+    setUsingCDP,
+    isUsingCDPForSettingsPageDisplay,
+  } = useSettings(({ state, actions }) => ({
+    settingsChanged: state.settingsChanged,
+    handleSettingsChange: actions.handleSettingsChange,
+    exceedingLimitations: state.exceedingLimitations,
+    isUsingCDP: state.isUsingCDP,
+    hasWarningBeenShown: state.hasWarningBeenShown,
+    setHasWarningBeenShown: actions.setHasWarningBeenShown,
+    setUsingCDP: actions.setUsingCDP,
+    isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsDisplay,
+  }));
+
+  const isUsingCDPCondition = useMemo(() => {
+    if (isUsingCDP) {
+      if (isUsingCDPForSettingsPageDisplay) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (!isUsingCDP) {
+      if (isUsingCDPForSettingsPageDisplay) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
 
   const cdpLabel = isUsingCDP
     ? I18n.getMessage('disableCDP')
     : I18n.getMessage('enableCDP');
 
-  const actionComponent = useMemo(() => {
+  const buttonReloadActionCompnent = useMemo(() => {
     return (
-      <Button text="Reload" onClick={handleSettingsChange} variant="large" />
+      <Button text={'Reload'} onClick={handleSettingsChange} variant="large" />
     );
   }, [handleSettingsChange]);
+
+  const settingsReadActionComponent = useMemo(() => {
+    return (
+      <div
+        className="w-14 h-14 flex items-center"
+        onClick={() => {
+          chrome.storage.session.set({ readSettings: true });
+          setHasWarningBeenShown(true);
+        }}
+      >
+        <PaddedCross className="w-4 h-4" />
+      </div>
+    );
+  }, [setHasWarningBeenShown]);
+
+  const performanceWarningToast = useMemo(() => {
+    if (!hasWarningBeenShown && exceedingLimitations && isUsingCDPCondition) {
+      return (
+        <div
+          className={`h-fit w-full relative z-10 ${
+            isUsingCDPForSettingsPageDisplay
+              ? 'border-t dark:border-quartz border-american-silver'
+              : ''
+          }`}
+        >
+          <ToastMessage
+            additionalStyles="text-sm"
+            text="It is recommended to use only 5 tabs with CDP enabled to prevent the
+            system from crashing."
+            actionComponent={settingsReadActionComponent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+          />
+        </div>
+      );
+    }
+    return <></>;
+  }, [
+    exceedingLimitations,
+    hasWarningBeenShown,
+    isUsingCDPCondition,
+    isUsingCDPForSettingsPageDisplay,
+    settingsReadActionComponent,
+  ]);
+
+  const settingsWarningToast = useMemo(() => {
+    if (settingsChanged) {
+      return (
+        <ToastMessage
+          additionalStyles="text-sm"
+          text={I18n.getMessage('settingsChanged')}
+          actionComponent={buttonReloadActionCompnent}
+          textAdditionalStyles="xxs:p-1 text-xxs leading-5"
+        />
+      );
+    }
+    return <></>;
+  }, [settingsChanged, buttonReloadActionCompnent]);
 
   if (onChromeUrl) {
     return (
@@ -67,7 +155,7 @@ const App: React.FC = () => {
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
+          enabled={isUsingCDPForSettingsPageDisplay}
         />
         <p className="font-bold text-lg mb-2">
           {I18n.getMessage('noMoreAnalysis')}
@@ -76,14 +164,8 @@ const App: React.FC = () => {
           {I18n.getMessage('emptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsChanged && (
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              actionComponent={actionComponent}
-              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-            />
-          )}
+          {settingsWarningToast}
+          {performanceWarningToast}
         </div>
       </div>
     );
@@ -103,21 +185,15 @@ const App: React.FC = () => {
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
+          enabled={isUsingCDPForSettingsPageDisplay}
         />
         <p className="font-bold text-lg">{I18n.getMessage('noCookies')}</p>
         <p className="text-chart-label text-xs">
           {I18n.getMessage('tryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsChanged && (
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              actionComponent={actionComponent}
-              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-            />
-          )}
+          {settingsWarningToast}
+          {performanceWarningToast}
         </div>
       </div>
     );
@@ -130,7 +206,7 @@ const App: React.FC = () => {
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
         setEnabled={setUsingCDP}
-        enabled={isUsingCDP}
+        enabled={isUsingCDPForSettingsPageDisplay}
       />
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
@@ -157,14 +233,8 @@ const App: React.FC = () => {
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
-        {settingsChanged && (
-          <ToastMessage
-            additionalStyles="text-sm"
-            text={I18n.getMessage('settingsChanged')}
-            actionComponent={actionComponent}
-            textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-          />
-        )}
+        {settingsWarningToast}
+        {performanceWarningToast}
       </div>
     </div>
   );
