@@ -33,6 +33,20 @@ import './app.css';
 import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
 
+const setThemeMode = (isDarkMode: boolean) => {
+  if (isDarkMode) {
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+  } else {
+    document.body.classList.add('light');
+    document.body.classList.remove('dark');
+  }
+};
+
+// set initial theme mode
+const isDarkMode = chrome.devtools.panels.themeName === 'dark';
+setThemeMode(isDarkMode);
+
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
@@ -55,6 +69,23 @@ const App: React.FC = () => {
       : 'Something went wrong.',
     buttonText: I18n.getMessage('refreshPanel'),
   });
+
+  useEffect(() => {
+    const onColorSchemeChange = (e: MediaQueryListEvent) => {
+      setThemeMode(e.matches);
+    };
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mediaQuery) {
+      mediaQuery.addEventListener('change', onColorSchemeChange);
+    }
+
+    return () => {
+      if (mediaQuery) {
+        mediaQuery.removeEventListener('change', onColorSchemeChange);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {

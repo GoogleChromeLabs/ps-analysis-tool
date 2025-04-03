@@ -47,9 +47,18 @@ const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
+    const onColorSchemeChange = (e: MediaQueryListEvent) => {
+      setIsDarkMode(e.matches);
+    };
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mediaQuery) {
+      mediaQuery.addEventListener('change', onColorSchemeChange);
     }
+    return () => {
+      if (mediaQuery) {
+        mediaQuery.removeEventListener('change', onColorSchemeChange);
+      }
+    };
   }, []);
 
   return (
