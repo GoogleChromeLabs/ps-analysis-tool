@@ -158,8 +158,6 @@ describe('CookieTab', () => {
       cookies: Object.values(mockResponse.tabCookies),
       tabFrames: mockResponse.tabFrames,
       selectedFrame: mockResponse.selectedFrame,
-      isCurrentTabBeingListenedTo: true,
-      tabToRead: '40245632',
       loading: false,
       tabCookies: Object.values(mockResponse.tabCookies),
     });

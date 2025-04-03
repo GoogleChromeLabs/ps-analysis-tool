@@ -175,10 +175,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
       }
 
-      if (dataStore.tabMode !== 'unlimited' && dataStore.tabToRead !== tabId) {
-        return;
-      }
-
       if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
         const interestGroupAuctionEventOccured =
           params as Protocol.Storage.InterestGroupAuctionEventOccurredEvent;

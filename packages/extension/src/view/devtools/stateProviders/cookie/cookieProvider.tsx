@@ -37,7 +37,6 @@ import {
   INITIAL_SYNC,
   NEW_COOKIE_DATA,
   SERVICE_WORKER_RELOAD_MESSAGE,
-  SET_TAB_TO_READ,
 } from '../../../../constants';
 import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
@@ -214,7 +213,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       if (
         ![
           'SERVICE_WORKER_SLEPT',
-          SET_TAB_TO_READ,
           INITIAL_SYNC,
           NEW_COOKIE_DATA,
           SERVICE_WORKER_RELOAD_MESSAGE,

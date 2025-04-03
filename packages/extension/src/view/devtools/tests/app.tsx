@@ -204,8 +204,6 @@ describe('App', () => {
       setIsInspecting: noop,
       canStartInspecting: true,
       tabUrl: data.tabUrl,
-      isCurrentTabBeingListenedTo: true,
-      tabToRead: '40245632',
     });
 
     mockUseProtectedAudienceStore.mockReturnValue({
@@ -238,7 +236,6 @@ describe('App', () => {
       setIsInspecting: noop,
       canStartInspecting: true,
       tabUrl: data.tabUrl,
-      isCurrentTabBeingListenedTo: true,
     });
     mockUseProtectedAudienceStore.mockReturnValue({
       auctionEvents: {},

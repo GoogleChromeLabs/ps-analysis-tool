@@ -27,12 +27,9 @@ import {
   POPUP_OPEN,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
-  SET_TAB_TO_READ,
 } from '../../constants';
-import listenToNewTab from '../../utils/listenToNewTab';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
-import { getTab } from '../../utils/getTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 
@@ -44,44 +41,22 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   const incomingMessageType = request.type;
 
-  if (SET_TAB_TO_READ === incomingMessageType) {
-    dataStore.tabToRead = request?.payload?.tabId?.toString();
-    const newTab = await listenToNewTab(request?.payload?.tabId);
-    // Can't use sendResponse as delay is too long. So using sendMessage instead.
-    await sendMessageWrapper(SET_TAB_TO_READ, {
-      tabId: Number(newTab),
-    });
-
-    if (dataStore.globalIsUsingCDP) {
-      await attachCDP({ tabId: Number(newTab) });
-    }
-
-    reloadCurrentTab(Number(newTab));
-  }
-
   if (SERVICE_WORKER_TABS_RELOAD_COMMAND === incomingMessageType) {
     const sessionStorage = await chrome.storage.session.get();
     const actionsPerformed: { [key: string]: boolean | number } = {};
-
-    if (sessionStorage?.allowedNumberOfTabs) {
-      dataStore.tabMode = sessionStorage.allowedNumberOfTabs;
-      actionsPerformed.allowedNumberOfTabs =
-        sessionStorage.allowedNumberOfTabs === 'unlimited' ? 0 : 1;
-    }
 
     if (Object.keys(sessionStorage).includes('isUsingCDP')) {
       dataStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
       actionsPerformed.globalIsUsingCDP = true;
     }
 
-    await chrome.storage.session.remove(['allowedNumberOfTabs', 'isUsingCDP']);
+    await chrome.storage.session.remove(['isUsingCDP']);
 
     await chrome.storage.session.set({
       pendingReload: false,
     });
 
     await chrome.storage.sync.set({
-      allowedNumberOfTabs: dataStore.tabMode,
       isUsingCDP: dataStore.globalIsUsingCDP,
     });
 
@@ -94,19 +69,13 @@ export const runtimeOnMessageListener = async (request: any) => {
           return;
         }
 
-        if (dataStore.tabMode === 'unlimited') {
-          dataStore.initialiseVariablesForNewTab(id.toString());
+        dataStore.initialiseVariablesForNewTab(id.toString());
 
-          const currentTab = targets.filter(
-            ({ tabId }) => tabId && id && tabId === id
-          );
-          dataStore?.addTabData(id);
-          dataStore?.updateParentChildFrameAssociation(
-            id,
-            currentTab[0].id,
-            '0'
-          );
-        }
+        const currentTab = targets.filter(
+          ({ tabId }) => tabId && id && tabId === id
+        );
+        dataStore?.addTabData(id);
+        dataStore?.updateParentChildFrameAssociation(id, currentTab[0].id, '0');
 
         try {
           if (dataStore.globalIsUsingCDP) {
@@ -133,23 +102,6 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
-    dataToSend['tabMode'] = dataStore.tabMode;
-
-    if (dataStore.tabMode === 'single') {
-      dataToSend['tabToRead'] = dataStore.tabToRead;
-    }
-
-    if (
-      !dataStore?.tabs[incomingMessageTabId] &&
-      dataStore.tabMode === 'unlimited'
-    ) {
-      const currentTab = await getTab(incomingMessageTabId);
-      dataToSend['psatOpenedAfterPageLoad'] = request.payload.doNotReReload
-        ? false
-        : true;
-      dataStore?.addTabData(incomingMessageTabId);
-      dataStore?.updateUrl(incomingMessageTabId, currentTab?.url || '');
-    }
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
 
@@ -162,11 +114,6 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (POPUP_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
-    dataToSend['tabMode'] = dataStore.tabMode;
-
-    if (dataStore.tabMode === 'single') {
-      dataToSend['tabToRead'] = dataStore.tabToRead;
-    }
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
 

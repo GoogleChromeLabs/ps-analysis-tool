@@ -43,16 +43,12 @@ export const onCommittedNavigationListener = async ({
 
     const queryParams = getQueryParams(url);
 
-    if (queryParams.psat_cdp || queryParams.psat_multitab) {
+    if (queryParams.psat_cdp) {
       await chrome.storage.sync.set({
-        allowedNumberOfTabs:
-          queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
         isUsingCDP: queryParams.psat_cdp === 'on',
       });
 
       dataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
-      dataStore.tabMode =
-        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
     }
 
     dataStore?.updateUrl(tabId, url);
