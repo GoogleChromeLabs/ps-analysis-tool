@@ -94,14 +94,15 @@ export const SidebarProvider = ({
      * If the item key is matched, set the active panel.
      * If the item has children, recursively find the active panel.
      * @param items Sidebar items.
+     * @param key Sidebar item key to match.
      */
-    const findActivePanel = (items: SidebarItems) => {
+    const findActivePanel = (items: SidebarItems, key: string) => {
       Object.entries(items).forEach(([itemKey, item]) => {
         if (keyFound) {
           return;
         }
 
-        if (matchKey(selectedItemKey || '', itemKey)) {
+        if (matchKey(key || '', itemKey)) {
           if (item.panel) {
             setActivePanel({
               query,
@@ -117,13 +118,31 @@ export const SidebarProvider = ({
         }
 
         if (item.children) {
-          findActivePanel(item.children);
+          findActivePanel(item.children, key);
         }
       });
     };
 
     if (selectedItemKey) {
-      findActivePanel(sidebarItems);
+      findActivePanel(sidebarItems, selectedItemKey);
+    }
+
+    if (!keyFound) {
+      const keys = selectedItemKey?.split('#');
+      keys?.pop();
+      let key = keys?.join('#');
+
+      // eslint-disable-next-line no-unmodified-loop-condition -- findActivePanel callback updates value
+      while (keys?.length && !keyFound) {
+        key = keys.join('#');
+
+        findActivePanel(sidebarItems, key);
+        keys.pop();
+      }
+
+      if (keyFound && key) {
+        setSelectedItemKey(key);
+      }
     }
   }, [query, selectedItemKey, sidebarItems]);
 
@@ -162,6 +181,7 @@ export const SidebarProvider = ({
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
+        console.log('hel');
         setSelectedItemKey(null);
         return;
       }
