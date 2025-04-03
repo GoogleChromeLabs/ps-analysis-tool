@@ -64,8 +64,6 @@ const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
     };
   }, []);
 
-  console.log('isDarkMode', isDarkMode);
-
   return (
     <div className="json-view">
       <Suspense fallback={<LoadingText />}>
