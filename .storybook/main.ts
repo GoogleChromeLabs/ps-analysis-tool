@@ -38,7 +38,8 @@ const config: StorybookConfig = {
         ],
       },
     },
-    '@storybook/addon-themes'
+    '@storybook/addon-themes',
+    '@storybook/addon-links',
   ],
   framework: {
     name: '@storybook/react-webpack5',
@@ -51,10 +52,7 @@ const config: StorybookConfig = {
     // Default rule for images /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/
     const fileLoaderRule = config?.module?.rules?.find((rule) => {
       const test = (rule as RuleSetRule)?.test;
-      if (typeof test === 'string' && test.includes('.svg')) {
-        return true;
-      }
-      return false;
+      return typeof test === 'string' && test.includes('.svg');
     });
     if (fileLoaderRule) {
       // @ts-ignore this property exists on webpack RuleSetRule still ts is showing error.
