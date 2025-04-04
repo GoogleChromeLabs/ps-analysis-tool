@@ -70,6 +70,12 @@ describe('Allow Listing', () => {
     await frame.click('#allow-list-option');
 
     await interaction.delay(3000);
+    await interaction.clickMatchingElement(
+      frame,
+      'p',
+      'https://www.hindustantimes.com/'.replace(/\/$/, '')
+    );
+
     const firstrow = await frame.waitForSelector('div[title="HTMyOffer"]');
     await firstrow?.click();
 
