@@ -33,7 +33,7 @@ export default class Image extends Figure {
   /**
    * Image to be displayed.
    */
-  private image: p5.Image;
+  private image: () => p5.Image;
 
   /**
    * Width of the image.
@@ -49,7 +49,7 @@ export default class Image extends Figure {
     canvasRunner: Main,
     x: number,
     y: number,
-    imageData: string,
+    imageLoader: () => p5.Image,
     width: number,
     height: number,
     id?: string,
@@ -70,7 +70,7 @@ export default class Image extends Figure {
       mouseMoved,
       onLeave
     );
-    this.image = <p5.Image>this.p5?.loadImage(imageData);
+    this.image = imageLoader;
     this.width = width;
     this.height = height;
   }
@@ -78,7 +78,7 @@ export default class Image extends Figure {
   draw() {
     this.p5?.push();
     this.p5?.imageMode(this.p5?.CENTER);
-    this.p5?.image(this.image, this.x, this.y, this.width, this.height);
+    this.p5?.image(this.image(), this.x, this.y, this.width, this.height);
     this.p5?.pop();
 
     if (this.runSideEffect) {
@@ -89,21 +89,33 @@ export default class Image extends Figure {
   }
 
   isHovering(): boolean {
-    return false;
+    return (
+      this.p5?.mouseX !== undefined &&
+      this.p5?.mouseY !== undefined &&
+      this.p5?.mouseX > this.x - this.width / 2 &&
+      this.p5?.mouseX < this.x + this.width / 2 &&
+      this.p5?.mouseY > this.y - this.height / 2 &&
+      this.p5?.mouseY < this.y + this.height / 2
+    );
   }
 
   reDraw(
     x?: number,
     y?: number,
-    image?: p5.Image,
+    image?: () => p5.Image,
     width?: number,
     height?: number
   ) {
     this.x = x ?? this.x;
     this.y = y ?? this.y;
-    this.image = image || this.image;
+    this.image = image ?? this.image;
     this.width = width ?? this.width;
     this.height = height ?? this.height;
     this.canvasRunner.reDrawAll();
+  }
+
+  shift(x?: number, y?: number) {
+    this.x += x ?? 0;
+    this.y += y ?? 0;
   }
 }
