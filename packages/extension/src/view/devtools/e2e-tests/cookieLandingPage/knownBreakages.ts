@@ -46,7 +46,7 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     test('Should be able to validate the Known Breakages, GSI and GIS', async () => {
       await puppeteer.navigateToURL(
         page,
-        'https://in.linkedin.com/?psat_multitab=on'
+        'https://in.linkedin.com/?psat_cdp=on'
       );
       page.reload();
       const devtools = await puppeteer.getDevtools();
@@ -87,7 +87,7 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
       await puppeteer.navigateToURL(
         page,
-        'https://www.math-only-math.com/?psat_multitab=on'
+        'https://www.math-only-math.com/?psat_cdp=on'
       );
       page.reload();
 
@@ -131,7 +131,7 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
       await puppeteer.navigateToURL(
         page,
-        'https://www.math-only-math.com/?psat_multitab=on'
+        'https://www.math-only-math.com/?psat_cdp=on'
       );
       page.reload();
 

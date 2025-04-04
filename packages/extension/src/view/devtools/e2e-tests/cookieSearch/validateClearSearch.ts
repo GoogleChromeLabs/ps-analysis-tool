@@ -44,7 +44,7 @@ describe('Verify the Clear search button works as expected', () => {
   }, 40000);
 
   test('Should be able to clear the search result', async () => {
-    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_multitab=on');
+    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_cdp=on');
     page.reload();
 
     const devtools = await puppeteer.getDevtools();
