@@ -45,7 +45,7 @@ describe('Validate the Cookies sort option', () => {
   }, 40000);
 
   test('Should be able to validate the cookie sort', async () => {
-    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_multitab=on');
+    await puppeteer.navigateToURL(page, 'https://bbc.com?psat_cdp=on');
     page.reload();
 
     const devtools = await puppeteer.getDevtools();

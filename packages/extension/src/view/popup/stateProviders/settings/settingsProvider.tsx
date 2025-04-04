@@ -30,15 +30,12 @@ import Context from './context';
 import { SERVICE_WORKER_TABS_RELOAD_COMMAND } from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
-    null
-  );
-  const [
-    allowedNumberOfTabsForSettingsDisplay,
-    setAllowedNumberOfTabsForSettingsDisplay,
-  ] = useState<string | null>(null);
-
   const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
+  const [exceedingLimitations, setExceedingLimitations] =
+    useState<boolean>(false);
+
+  const [hasWarningBeenShown, setHasWarningBeenShown] =
+    useState<boolean>(false);
 
   const [isUsingCDP, _setIsUsingCDP] = useState(false);
   const [isUsingCDPForSettingsDisplay, setIsUsingCDPForSettingsDisplay] =
@@ -51,30 +48,19 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (Object.keys(sessionStorage).includes('pendingReload')) {
       setSettingsChanged(sessionStorage?.pendingReload);
 
-      if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
-        setAllowedNumberOfTabsForSettingsDisplay(
-          sessionStorage.allowedNumberOfTabs
-        );
-      } else {
-        setAllowedNumberOfTabsForSettingsDisplay(
-          currentSettings.allowedNumberOfTabs
-        );
-      }
-
       if (Object.keys(sessionStorage).includes('isUsingCDP')) {
         setIsUsingCDPForSettingsDisplay(sessionStorage.isUsingCDP);
       } else {
         setIsUsingCDPForSettingsDisplay(currentSettings.isUsingCDP);
       }
     } else {
-      setAllowedNumberOfTabsForSettingsDisplay(
-        currentSettings.allowedNumberOfTabs
-      );
       setIsUsingCDPForSettingsDisplay(currentSettings.isUsingCDP);
     }
 
-    if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
-      setAllowedNumberOfTabs(currentSettings.allowedNumberOfTabs);
+    if (Object.keys(sessionStorage).includes('readSettings')) {
+      setHasWarningBeenShown(sessionStorage?.readSettings);
+    } else {
+      setHasWarningBeenShown(false);
     }
 
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
@@ -92,19 +78,16 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
-        setAllowedNumberOfTabsForSettingsDisplay(
-          changes?.allowedNumberOfTabs?.newValue
-        );
-        setSettingsChanged(true);
-      }
-
       if (
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
         setSettingsChanged(true);
+      }
+
+      if (Object.keys(changes).includes('readSettings')) {
+        setHasWarningBeenShown(changes?.readSettings.newValue);
       }
     },
     []
@@ -121,10 +104,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const changeSyncStorageListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
-        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
-      }
-
       if (
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
@@ -139,32 +118,67 @@ const Provider = ({ children }: PropsWithChildren) => {
     intitialSync();
   }, [intitialSync]);
 
+  const messagePassingListener = useCallback(
+    (message: {
+      type: string;
+      payload: {
+        exceedingLimitations?: boolean;
+      };
+    }) => {
+      if (!message.type) {
+        return;
+      }
+
+      if (!['EXCEEDING_LIMITATION_UPDATE'].includes(message.type)) {
+        return;
+      }
+
+      const incomingMessageType = message.type;
+
+      if (
+        incomingMessageType === 'EXCEEDING_LIMITATION_UPDATE' &&
+        typeof message?.payload?.exceedingLimitations !== 'undefined'
+      ) {
+        setExceedingLimitations(message.payload.exceedingLimitations);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.storage.session.onChanged.addListener(sessionStoreChangeListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
 
     return () => {
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
       chrome.storage.session.onChanged.removeListener(
         sessionStoreChangeListener
       );
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
     };
-  }, [changeSyncStorageListener, sessionStoreChangeListener]);
+  }, [
+    changeSyncStorageListener,
+    sessionStoreChangeListener,
+    messagePassingListener,
+  ]);
 
   return (
     <Context.Provider
       value={{
         state: {
-          allowedNumberOfTabs,
           isUsingCDP,
           settingsChanged,
-          allowedNumberOfTabsForSettingsDisplay,
           isUsingCDPForSettingsDisplay,
+          exceedingLimitations,
+          hasWarningBeenShown,
         },
         actions: {
           setUsingCDP,
+          setHasWarningBeenShown,
           handleSettingsChange,
           setSettingsChanged,
+          setExceedingLimitations,
         },
       }}
     >

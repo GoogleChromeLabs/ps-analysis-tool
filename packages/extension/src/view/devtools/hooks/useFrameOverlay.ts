@@ -23,11 +23,7 @@ import type { CookieTableData } from '@google-psat/common';
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
-import {
-  useCookie,
-  useProtectedAudience,
-  useSettings,
-} from '../stateProviders';
+import { useCookie, useProtectedAudience } from '../stateProviders';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -45,7 +41,6 @@ const useFrameOverlay = (
     setIsInspecting,
     setContextInvalidated,
     selectedFrame,
-    isCurrentTabBeingListenedTo,
     tabFrames,
     setCanStartInspecting,
     canStartInspecting,
@@ -54,7 +49,6 @@ const useFrameOverlay = (
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
     selectedFrame: state.selectedFrame,
-    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     tabFrames: state.tabFrames,
     setCanStartInspecting: actions.setCanStartInspecting,
     canStartInspecting: state.canStartInspecting,
@@ -66,10 +60,6 @@ const useFrameOverlay = (
       adsAndBidders: state.adsAndBidders,
     })
   );
-
-  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-  }));
 
   const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
     useState(false);
@@ -268,18 +258,13 @@ const useFrameOverlay = (
   }, [sessionStoreChangedListener]);
 
   useEffect(() => {
-    if (
-      allowedNumberOfTabs === 'single' &&
-      !isCurrentTabBeingListenedTo &&
-      chrome.runtime?.id &&
-      portRef.current
-    ) {
+    if (chrome.runtime?.id && portRef.current) {
       portRef.current.disconnect();
       portRef.current = null;
       setIsInspecting(false);
       setConnectedToPort(false);
     }
-  }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
+  }, [setIsInspecting]);
 
   useEffect(() => {
     try {
