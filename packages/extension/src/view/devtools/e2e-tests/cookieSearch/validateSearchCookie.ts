@@ -66,7 +66,7 @@ describe('Validate the Cookies search', () => {
       await interaction.delay(2000);
 
       if (cookieNames.length > 0) {
-        const searchQuery = cookieNames[cookieNames.length - 3];
+        const searchQuery = cookieNames[0];
         await frame.type(selectors.searchFieldCookietab, searchQuery);
 
         await interaction.delay(3000);
