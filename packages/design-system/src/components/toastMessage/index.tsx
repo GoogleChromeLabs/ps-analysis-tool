@@ -20,12 +20,14 @@ import React from 'react';
 
 interface ToastMessageProps {
   text: string;
+  isPopup?: boolean;
   additionalStyles?: string;
   textAdditionalStyles?: string;
   actionComponent?: React.ReactNode;
 }
 const ToastMessage = ({
   text,
+  isPopup = false,
   additionalStyles = '',
   textAdditionalStyles = '',
   actionComponent,
@@ -34,7 +36,11 @@ const ToastMessage = ({
     <div
       className={`${additionalStyles} w-full overflow-auto z-2 bg-white dark:bg-charleston-green shadow-xxs`}
     >
-      <div className="flex items-center justify-between p-4 gap-2 min-w-[20rem]">
+      <div
+        className={`${
+          isPopup ? 'p-3 text-left' : 'p-4'
+        } flex items-center justify-between gap-2 min-w-[20rem]`}
+      >
         <p className={`dark:text-white ${textAdditionalStyles}`}>{text}</p>
         {actionComponent}
       </div>

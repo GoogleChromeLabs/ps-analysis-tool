@@ -116,6 +116,7 @@ const App: React.FC = () => {
           }`}
         >
           <ToastMessage
+            isPopup={true}
             additionalStyles="text-sm"
             text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
             actionComponent={settingsReadActionComponent}
