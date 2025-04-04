@@ -31,3 +31,13 @@
 .json-view .react-json-view .node-ellipsis {
   font-size: 12px !important;
 }
+
+body.dark .json-view .react-json-view .collapsed-icon svg,
+body.dark .json-view .react-json-view .expanded-icon svg {
+  color: #fff !important;
+}
+
+body.light .json-view .react-json-view .collapsed-icon svg,
+body.light .json-view .react-json-view .expanded-icon svg {
+  color: rgb(69,71,76) !important;
+}
