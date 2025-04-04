@@ -21,10 +21,7 @@ import { onResponseStartedListener } from './onResponseStartedListener';
 import { onStartUpListener } from './runtimeStartUpListener';
 import { runtimeOnInstalledListener } from './runtimeOnInstalledListener';
 import { runtimeOnMessageListener } from './runtimeOnMessageListener';
-import {
-  onSyncStorageChangedListenerForMultiTab,
-  onSyncStorageChangedListenerForCDP,
-} from './syncStorageOnChangedListener';
+import { onSyncStorageChangedListenerForCDP } from './syncStorageOnChangedListener';
 import { onTabCreatedListener } from './tabOnCreatedListener';
 import { onTabRemovedListener } from './tabOnRemovedListener';
 import { onCommittedNavigationListener } from './onCommittedNavigationListener';
@@ -106,6 +103,3 @@ chrome.windows.onRemoved.addListener(windowsOnRemovedListener);
 chrome.windows.onCreated.addListener(windowsOnCreatedListener);
 
 chrome.storage.sync.onChanged.addListener(onSyncStorageChangedListenerForCDP);
-chrome.storage.sync.onChanged.addListener(
-  onSyncStorageChangedListenerForMultiTab
-);

@@ -29,7 +29,6 @@ export const runtimeOnInstalledListener = async (
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
-      allowedNumberOfTabs: 'single',
       isUsingCDP: false,
     });
   }
@@ -39,16 +38,12 @@ export const runtimeOnInstalledListener = async (
 
     await updateGlobalVariableAndAttachCDP();
 
-    if (
-      preSetSettings?.allowedNumberOfTabs &&
-      Object.keys(preSetSettings).includes('isUsingCDP')
-    ) {
+    if (Object.keys(preSetSettings).includes('isUsingCDP')) {
       return;
     }
 
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
-      allowedNumberOfTabs: 'single',
       isUsingCDP: false,
     });
   }

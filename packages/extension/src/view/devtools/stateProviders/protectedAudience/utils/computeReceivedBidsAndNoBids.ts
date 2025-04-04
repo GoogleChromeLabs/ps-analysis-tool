@@ -88,16 +88,36 @@ function computeReceivedBidsAndNoBids(
 
           _receivedBids.push(
             ...filteredEvents.map((event) => {
-              const sellerSignals = JSON.parse(
-                //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-                auctionConfig?.sellerSignals?.value ?? '{}'
-              );
+              let auctionSignals = JSON.parse(
+                // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+                auctionConfig?.auctionSignals?.value ?? '{}'
+              ).divId;
+
+              if (auctionSignals) {
+                auctionSignals = JSON.parse(
+                  // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+                  auctionConfig?.auctionSignals?.value ?? '{}'
+                );
+              } else {
+                auctionSignals = JSON.parse(
+                  // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                  auctionConfig?.sellerSignals?.value ?? '{}'
+                );
+              }
+
+              const actualAuctionSignals =
+                auctionSignals?.adUnit ?? auctionSignals;
+              const mediaContainerSize = Array.isArray(
+                actualAuctionSignals?.size
+              )
+                ? actualAuctionSignals?.size
+                : actualAuctionSignals?.size?.split(',');
 
               return {
                 ...event,
-                mediaContainerSize: [sellerSignals?.size],
-                adUnitCode: sellerSignals?.divId,
-                adType: sellerSignals?.adType,
+                mediaContainerSize: [mediaContainerSize],
+                adUnitCode: actualAuctionSignals?.divId,
+                adType: actualAuctionSignals?.adType,
               };
             })
           );
@@ -120,16 +140,31 @@ function computeReceivedBidsAndNoBids(
                   return;
                 }
 
-                const sellerSignals = JSON.parse(
-                  //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-                  auctionConfig?.sellerSignals?.value ?? '{}'
-                );
+                let auctionSignals = JSON.parse(
+                  // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+                  auctionConfig?.auctionSignals?.value ?? '{}'
+                ).divId;
+
+                if (auctionSignals) {
+                  auctionSignals = JSON.parse(
+                    // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+                    auctionConfig?.auctionSignals?.value ?? '{}'
+                  );
+                } else {
+                  auctionSignals = JSON.parse(
+                    // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                    auctionConfig?.sellerSignals?.value ?? '{}'
+                  );
+                }
+
+                const actualAuctionSignals =
+                  auctionSignals?.adUnit ?? auctionSignals;
 
                 _noBids[auctionId] = {
                   ownerOrigin: buyer,
                   name: name ?? '',
                   uniqueAuctionId: auctionId,
-                  adUnitCode: sellerSignals?.divId,
+                  adUnitCode: actualAuctionSignals?.divId,
                 };
               }
             );
@@ -158,16 +193,33 @@ function computeReceivedBidsAndNoBids(
 
       _receivedBids.push(
         ...filteredEvents.map((event) => {
-          const sellerSignals = JSON.parse(
-            //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-            auctionConfig?.sellerSignals?.value ?? '{}'
-          );
+          let auctionSignals = JSON.parse(
+            // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+            auctionConfig?.auctionSignals?.value ?? '{}'
+          ).divId;
+
+          if (auctionSignals) {
+            auctionSignals = JSON.parse(
+              // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+              auctionConfig?.auctionSignals?.value ?? '{}'
+            );
+          } else {
+            auctionSignals = JSON.parse(
+              // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+              auctionConfig?.sellerSignals?.value ?? '{}'
+            );
+          }
+
+          const actualAuctionSignals = auctionSignals?.adUnit ?? auctionSignals;
+          const mediaContainerSize = Array.isArray(actualAuctionSignals?.size)
+            ? actualAuctionSignals?.size
+            : actualAuctionSignals?.size?.split(',');
 
           return {
             ...event,
-            mediaContainerSize: [sellerSignals.size],
-            adUnitCode: sellerSignals?.divId,
-            adType: sellerSignals?.adType,
+            mediaContainerSize: [mediaContainerSize],
+            adUnitCode: actualAuctionSignals?.divId,
+            adType: actualAuctionSignals?.adType,
           };
         })
       );
@@ -188,11 +240,30 @@ function computeReceivedBidsAndNoBids(
 
         Array.from(_interestGroupBuyers.difference(buyersWhoBid)).forEach(
           (buyer) => {
+            let auctionSignals = JSON.parse(
+              // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+              auctionConfig?.auctionSignals?.value ?? '{}'
+            ).divId;
+
+            if (auctionSignals) {
+              auctionSignals = JSON.parse(
+                // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+                auctionConfig?.auctionSignals?.value ?? '{}'
+              );
+            } else {
+              auctionSignals = JSON.parse(
+                // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                auctionConfig?.sellerSignals?.value ?? '{}'
+              );
+            }
+            const actualAuctionSignals =
+              auctionSignals?.adUnit ?? auctionSignals;
+
             _noBids[uniqueAuctionId] = {
               ownerOrigin: buyer,
               name: name ?? '',
               //@ts-ignore -- since auction config is of type object but we know what data is being passed in this.
-              adUnitCode: JSON.parse(auctionConfig?.sellerSignals)?.divId,
+              adUnitCode: actualAuctionSignals?.divId,
               uniqueAuctionId,
             };
           }
@@ -200,6 +271,7 @@ function computeReceivedBidsAndNoBids(
       }
     });
   }
+
   return { receivedBids: _receivedBids, noBids: _noBids };
 }
 

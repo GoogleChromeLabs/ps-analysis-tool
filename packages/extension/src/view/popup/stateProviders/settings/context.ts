@@ -20,31 +20,35 @@ import { noop, createContext } from '@google-psat/common';
 
 export interface SettingsStoreContext {
   state: {
-    allowedNumberOfTabs: string | null;
     isUsingCDP: boolean;
     settingsChanged: boolean;
-    allowedNumberOfTabsForSettingsDisplay: string | null;
     isUsingCDPForSettingsDisplay: boolean;
+    exceedingLimitations: boolean;
+    hasWarningBeenShown: boolean;
   };
   actions: {
     handleSettingsChange: () => void;
     setUsingCDP: (newValue: boolean) => void;
     setSettingsChanged: (newValue: boolean) => void;
+    setExceedingLimitations: React.Dispatch<React.SetStateAction<boolean>>;
+    setHasWarningBeenShown: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 const initialState: SettingsStoreContext = {
   state: {
-    allowedNumberOfTabs: null,
     isUsingCDP: false,
     settingsChanged: false,
-    allowedNumberOfTabsForSettingsDisplay: null,
     isUsingCDPForSettingsDisplay: false,
+    exceedingLimitations: false,
+    hasWarningBeenShown: false,
   },
   actions: {
     handleSettingsChange: noop,
     setUsingCDP: noop,
     setSettingsChanged: noop,
+    setExceedingLimitations: noop,
+    setHasWarningBeenShown: noop,
   },
 };
 

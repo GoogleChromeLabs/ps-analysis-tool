@@ -35,25 +35,21 @@ export const onCommittedNavigationListener = async ({
       return;
     }
 
+    const queryParams = getQueryParams(url);
+
+    if (queryParams.psat_cdp) {
+      await chrome.storage.sync.set({
+        isUsingCDP: queryParams.psat_cdp === 'on',
+      });
+
+      dataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
+    }
+
     const targets = await chrome.debugger.getTargets();
     const mainFrameId = dataStore?.globalIsUsingCDP
       ? targets.filter((target) => target.tabId && target.tabId === tabId)[0]
           ?.id
       : 0;
-
-    const queryParams = getQueryParams(url);
-
-    if (queryParams.psat_cdp || queryParams.psat_multitab) {
-      await chrome.storage.sync.set({
-        allowedNumberOfTabs:
-          queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
-        isUsingCDP: queryParams.psat_cdp === 'on',
-      });
-
-      dataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
-      dataStore.tabMode =
-        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
-    }
 
     dataStore?.updateUrl(tabId, url);
 
@@ -79,6 +75,7 @@ export const onCommittedNavigationListener = async ({
         dataStore.updateParentChildFrameAssociation(tabId, targetId, '0');
       }
     }
+
     await chrome.tabs.sendMessage(tabId, {
       tabId,
       payload: {

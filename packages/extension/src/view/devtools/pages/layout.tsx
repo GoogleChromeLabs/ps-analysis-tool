@@ -37,6 +37,8 @@ import {
   InspectButton,
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
+  Button,
+  PaddedCross,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -65,12 +67,23 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     selectedAdUnit: state.selectedAdUnit,
   }));
 
-  const { settingsChanged, handleSettingsChange } = useSettings(
-    ({ state, actions }) => ({
-      settingsChanged: state.settingsChanged,
-      handleSettingsChange: actions.handleSettingsChange,
-    })
-  );
+  const {
+    settingsChanged,
+    handleSettingsChange,
+    exceedingLimitations,
+    isUsingCDP,
+    hasWarningBeenShown,
+    setHasWarningBeenShown,
+    isUsingCDPForSettingsPageDisplay,
+  } = useSettings(({ state, actions }) => ({
+    settingsChanged: state.settingsChanged,
+    handleSettingsChange: actions.handleSettingsChange,
+    exceedingLimitations: state.exceedingLimitations,
+    isUsingCDP: state.isUsingCDP,
+    hasWarningBeenShown: state.hasWarningBeenShown,
+    setHasWarningBeenShown: actions.setHasWarningBeenShown,
+    isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
+  }));
 
   const {
     tabFrames,
@@ -187,6 +200,26 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     tabFrames,
   ]);
 
+  const buttonReloadActionCompnent = useMemo(() => {
+    return (
+      <Button text={'Reload'} onClick={handleSettingsChange} variant="large" />
+    );
+  }, [handleSettingsChange]);
+
+  const settingsReadActionComponent = useMemo(() => {
+    return (
+      <div
+        className="w-14 h-14 flex items-center"
+        onClick={() => {
+          chrome.storage.session.set({ readSettings: true });
+          setHasWarningBeenShown(true);
+        }}
+      >
+        <PaddedCross className="w-4 h-4" />
+      </div>
+    );
+  }, [setHasWarningBeenShown]);
+
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
       setSelectedFrame(currentItemKey);
@@ -248,6 +281,24 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     ? 'min-w-[400px]'
     : 'min-w-[50rem]';
 
+  const isUsingCDPCondition = useMemo(() => {
+    if (isUsingCDP) {
+      if (isUsingCDPForSettingsPageDisplay) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (!isUsingCDP) {
+      if (isUsingCDPForSettingsPageDisplay) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -284,11 +335,29 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             <ToastMessage
               additionalStyles="text-sm"
               text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
+              actionComponent={buttonReloadActionCompnent}
               textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
             />
           </div>
         )}
+        {!hasWarningBeenShown &&
+          exceedingLimitations &&
+          isUsingCDPCondition && (
+            <div
+              className={`h-fit w-full relative z-10 cursor-pointer ${
+                isUsingCDPForSettingsPageDisplay
+                  ? 'border-t dark:border-quartz border-american-silver'
+                  : ''
+              }`}
+            >
+              <ToastMessage
+                additionalStyles="text-sm"
+                text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
+                actionComponent={settingsReadActionComponent}
+                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+              />
+            </div>
+          )}
       </div>
     </div>
   );

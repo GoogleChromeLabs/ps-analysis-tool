@@ -16,8 +16,8 @@
 /**
  * Internal dependencies
  */
-import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 import dataStore from '../../store/dataStore';
+import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   try {
@@ -27,46 +27,27 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
 
     const targets = await chrome.debugger.getTargets();
 
-    if (dataStore.tabMode && dataStore.tabMode !== 'unlimited') {
-      const doesTabExist = dataStore.tabToRead;
-      if (
-        Object.keys(dataStore?.tabsData ?? {}).length >=
-          ALLOWED_NUMBER_OF_TABS &&
-        doesTabExist
-      ) {
-        return;
-      }
-      dataStore.tabToRead = tab.id.toString();
-      dataStore?.addTabData(tab.id);
+    dataStore?.addTabData(tab.id);
+    dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
-      if (dataStore.globalIsUsingCDP) {
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        dataStore.initialiseVariablesForNewTab(tab.id.toString());
+    if (dataStore.globalIsUsingCDP) {
+      const currentTab = targets.filter(
+        ({ tabId }) => tabId && tab.id && tabId === tab.id
+      );
 
-        dataStore.updateParentChildFrameAssociation(
-          tab.id,
-          currentTab[0].id,
-          '0'
-        );
-      }
-    } else {
-      dataStore?.addTabData(tab.id);
-
-      if (dataStore.globalIsUsingCDP) {
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        dataStore.initialiseVariablesForNewTab(tab.id.toString());
-
-        dataStore.updateParentChildFrameAssociation(
-          tab.id,
-          currentTab[0].id,
-          '0'
-        );
-      }
+      dataStore.updateParentChildFrameAssociation(
+        tab.id,
+        currentTab[0].id,
+        '0'
+      );
     }
+
+    const tabs = await chrome.tabs.query({});
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+
+    await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
+      exceedingLimitations: qualifyingTabs.length > 5,
+    });
   } catch (error) {
     //Fail silently
     //eslint-disable-next-line no-console
