@@ -21,10 +21,6 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies
  */
 import { COLOR_MAP } from '../../../theme/colors';
-
-/**
- * Internal dependencies.
- */
 import Circle from '..';
 
 const meta: Meta<typeof Circle> = {
