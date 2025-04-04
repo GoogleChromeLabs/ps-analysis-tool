@@ -47,63 +47,31 @@ const preloader = (p: p5) => {
 
 const idToStart = localStorage.getItem('ee-workflow') || '';
 
-const mainCanvas = new Main(
-  undefined,
-  undefined,
-  idToStart,
-  onDrawListener,
-  preloader
-);
-const mainFF = new FigureFactory(mainCanvas);
-
-const IGCanvas = new Main(true);
-const IGFF = new FigureFactory(IGCanvas);
-IGCanvas.togglePause();
-
-const prevButton = document.getElementById('prev');
-prevButton?.addEventListener('click', () => {
-  mainCanvas.loadPreviousCheckpoint();
-});
-
-const playButton = document.getElementById('play');
-playButton?.addEventListener('click', () => {
-  mainCanvas.togglePause();
-
-  if (mainCanvas.isPaused()) {
-    playButton.innerHTML = 'Play';
-  } else {
-    playButton.innerHTML = 'Pause';
-  }
-});
-
-const stepNextButton = document.getElementById('step-next');
-stepNextButton?.addEventListener('click', () => {
-  mainCanvas.skipSteps(1);
-});
-
-const nextButton = document.getElementById('next');
-nextButton?.addEventListener('click', () => {
-  mainCanvas.loadNextCheckpoint();
-});
-
-const resetButton = document.getElementById('reset');
-resetButton?.addEventListener('click', () => {
-  mainCanvas.reset();
-});
-
-// Timeline
-mainCanvas.addFigure(
-  mainFF.line({
-    x: 0,
-    y: 300,
-    endX: 1600,
-    endY: 300,
-  }),
-  true
-);
-
-let expandedAnimatorId: string | null = null;
+let expandedAnimator: Animator | null = null;
 let expandedImage: ReturnType<FigureFactory['image']> | null = null;
+let wasExpanded = false;
+const arrowClick = (figure: Figure, animator: Animator) => {
+  if (!wasExpanded) {
+    playClick();
+    wasExpanded = true;
+  }
+
+  const _image = <ReturnType<FigureFactory['image']>>figure;
+
+  if (expandedAnimator?.getId() === animator.getId()) {
+    _image.reDraw(undefined, undefined, () => downArrowImage!);
+    mainCanvas.loadSnapshotAndReDraw();
+    expandedAnimator = null;
+    expandedImage = null;
+  } else {
+    _image.reDraw(undefined, undefined, () => upArrowImage!);
+    expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
+    expandedImage = _image;
+    expandedAnimator = animator;
+    mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 20 });
+  }
+};
+
 const nodes = [
   {
     type: 'advertiser',
@@ -181,6 +149,76 @@ const nodes = [
     visitedIndex: null,
   },
 ];
+
+const mainCanvas = new Main(
+  undefined,
+  undefined,
+  idToStart,
+  onDrawListener,
+  preloader
+);
+const mainFF = new FigureFactory(mainCanvas);
+
+const IGCanvas = new Main(true);
+const IGFF = new FigureFactory(IGCanvas);
+IGCanvas.togglePause();
+
+const prevButton = document.getElementById('prev');
+prevButton?.addEventListener('click', () => {
+  mainCanvas.loadPreviousCheckpoint();
+});
+
+const playButton = document.getElementById('play');
+const playClick = () => {
+  if (wasExpanded) {
+    if (expandedImage && expandedAnimator) {
+      arrowClick(expandedImage, expandedAnimator);
+    }
+    wasExpanded = false;
+
+    mainCanvas.togglePause();
+    mainCanvas.loadPreviousCheckpoint();
+    mainCanvas.togglePause();
+  }
+
+  mainCanvas.togglePause();
+
+  if (playButton) {
+    if (mainCanvas.isPaused()) {
+      playButton.innerHTML = 'Play';
+    } else {
+      playButton.innerHTML = 'Pause';
+    }
+  }
+};
+
+playButton?.addEventListener('click', playClick);
+
+const stepNextButton = document.getElementById('step-next');
+stepNextButton?.addEventListener('click', () => {
+  mainCanvas.skipSteps(1);
+});
+
+const nextButton = document.getElementById('next');
+nextButton?.addEventListener('click', () => {
+  mainCanvas.loadNextCheckpoint();
+});
+
+const resetButton = document.getElementById('reset');
+resetButton?.addEventListener('click', () => {
+  mainCanvas.reset();
+});
+
+// Timeline
+mainCanvas.addFigure(
+  mainFF.line({
+    x: 0,
+    y: 300,
+    endX: 1600,
+    endY: 300,
+  }),
+  true
+);
 
 nodes.forEach((node, index) => {
   const group = new Group(mainCanvas, [
@@ -431,24 +469,7 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
     width: 20,
     imageLoader: () => downArrowImage!,
     mouseClicked: (figure) => {
-      if (mainCanvas.isStepping()) {
-        return;
-      }
-
-      const _image = <ReturnType<FigureFactory['image']>>figure;
-
-      if (expandedAnimatorId === animator.getId()) {
-        _image.reDraw(undefined, undefined, () => downArrowImage!);
-        mainCanvas.loadSnapshotAndReDraw();
-        expandedAnimatorId = null;
-        expandedImage = null;
-      } else {
-        _image.reDraw(undefined, undefined, () => upArrowImage!);
-        expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
-        expandedImage = _image;
-        expandedAnimatorId = animator.getId();
-        mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 20 });
-      }
+      arrowClick(figure, animator);
     },
   });
 
@@ -938,24 +959,7 @@ const drawPublisherFlow = (x: number, y: number) => {
     width: 20,
     imageLoader: () => downArrowImage!,
     mouseClicked: (figure: Figure) => {
-      if (mainCanvas.isStepping()) {
-        return;
-      }
-
-      const _image = <ReturnType<FigureFactory['image']>>figure;
-
-      if (expandedAnimatorId === animator.getId()) {
-        _image.reDraw(undefined, undefined, () => downArrowImage!);
-        mainCanvas.loadSnapshotAndReDraw();
-        expandedAnimatorId = null;
-        expandedImage = null;
-      } else {
-        _image.reDraw(undefined, undefined, () => upArrowImage!);
-        expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
-        expandedImage = _image;
-        expandedAnimatorId = animator.getId();
-        mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 20 });
-      }
+      arrowClick(figure, animator);
     },
   });
 
