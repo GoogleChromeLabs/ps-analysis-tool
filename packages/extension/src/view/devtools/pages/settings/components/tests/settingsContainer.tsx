@@ -34,9 +34,13 @@ jest.mock('../../../../stateProviders', () => ({
 const mockUseSettingsStore = useSettings as jest.Mock;
 
 describe('SettingsContainer', () => {
+  beforeEach(() => {
+    globalThis.chrome.i18n = null;
+  });
+
   it('Should enable CDP', async () => {
-    mockUseSettingsStore.mockReturnValueOnce({
-      isUsingCDP: false,
+    mockUseSettingsStore.mockReturnValue({
+      isUsingCDPForSettingsPageDisplay: false,
       setIsUsingCDP: noop,
       setProcessingMode: noop,
     });
@@ -55,8 +59,8 @@ describe('SettingsContainer', () => {
 
     toggleButtonInput[0].click();
 
-    mockUseSettingsStore.mockReturnValueOnce({
-      isUsingCDP: true,
+    mockUseSettingsStore.mockReturnValue({
+      isUsingCDPForSettingsPageDisplay: true,
       setIsUsingCDP: noop,
       setProcessingMode: noop,
     });
@@ -65,7 +69,7 @@ describe('SettingsContainer', () => {
       render(<SettingsContainer />);
     });
 
-    expect((await screen.findAllByTestId('toggle-button'))[2]).toHaveClass(
+    expect((await screen.findAllByTestId('toggle-button'))[1]).toHaveClass(
       'bg-toggle-on'
     );
   });
