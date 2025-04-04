@@ -28,7 +28,11 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies.
  */
 import App from '../app';
-import { useCookie, useProtectedAudience } from '../stateProviders';
+import {
+  useCookie,
+  useProtectedAudience,
+  useSettings,
+} from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
@@ -52,6 +56,7 @@ const mockUseCookieStore = useCookie as jest.Mock;
 const mockUseTablePersistentSettingStore =
   useTablePersistentSettingsStore as jest.Mock;
 const mockUseProtectedAudienceStore = useProtectedAudience as jest.Mock;
+const mockUseSettingsStore = useSettings as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {
@@ -215,6 +220,7 @@ describe('App', () => {
       getPreferences: () => '',
       setPreferences: noop,
     });
+    mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
 
     act(() => {
       render(<App />);
@@ -245,6 +251,7 @@ describe('App', () => {
       getPreferences: () => '',
       setPreferences: noop,
     });
+    mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
 
     act(() => {
       render(<App />);

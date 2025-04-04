@@ -32,15 +32,12 @@ jest.mock('../../../../stateProviders', () => ({
 }));
 
 const mockUseSettingsStore = useSettings as jest.Mock;
-
+globalThis.chrome.i18n = null;
 describe('SettingsContainer', () => {
-  beforeEach(() => {
-    globalThis.chrome.i18n = null;
-  });
-
   it('Should enable CDP', async () => {
-    mockUseSettingsStore.mockReturnValue({
+    mockUseSettingsStore.mockReturnValueOnce({
       isUsingCDPForSettingsPageDisplay: false,
+      isUsingCDP: false,
       setIsUsingCDP: noop,
       setProcessingMode: noop,
     });
@@ -61,6 +58,7 @@ describe('SettingsContainer', () => {
 
     mockUseSettingsStore.mockReturnValue({
       isUsingCDPForSettingsPageDisplay: true,
+      isUsingCDP: true,
       setIsUsingCDP: noop,
       setProcessingMode: noop,
     });
