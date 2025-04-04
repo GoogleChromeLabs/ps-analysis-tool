@@ -47,7 +47,7 @@ describe('RWS membership', () => {
   test('Should be able to validate the RWS membership', async () => {
     await puppeteer.navigateToURL(
       page,
-      'https://www.hindustantimes.com/?psat_multitab=on'
+      'https://www.hindustantimes.com/?psat_cdp=on'
     );
     page.reload();
 

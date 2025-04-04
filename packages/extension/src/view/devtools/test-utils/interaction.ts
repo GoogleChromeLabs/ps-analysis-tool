@@ -77,6 +77,7 @@ export class Interaction {
     await this.delay(2000);
 
     if (frame) {
+      frame.evaluate(() => 'window.location.reload();');
       await frame.waitForSelector('button[title="Tracking Protection"]', {
         timeout: 5000,
       });

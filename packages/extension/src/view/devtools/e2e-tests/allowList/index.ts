@@ -46,7 +46,7 @@ describe('Allow Listing', () => {
   test('Should be able to allow list domain.', async () => {
     await puppeteer.navigateToURL(
       page,
-      'https://www.hindustantimes.com/?psat_multitab=on'
+      'https://www.hindustantimes.com/?psat_cdp=on'
     );
     page.reload();
 
