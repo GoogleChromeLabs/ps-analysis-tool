@@ -827,6 +827,10 @@ class Main {
     this.reDrawAll();
   }
 
+  /**
+   * Loads a snapshot of figures, groups, and animators from the snapshot arrays.
+   * @param animatorIdToDraw - The ID of the animator to draw.
+   */
   loadSnapshot(animatorIdToDraw?: string) {
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
@@ -871,11 +875,43 @@ class Main {
     this.p5.clear();
   }
 
-  loadSnapshotAndReDraw(animatorIdToDraw?: string) {
+  /**
+   * Loads a snapshot of figures, groups, and animators from the snapshot arrays and draws them instantly.
+   * @param animatorIdToDraw - The ID of the animator to draw.
+   * @param shift - The shift to apply to the figures.
+   * @param shift.x - The x-coordinate shift.
+   * @param shift.y - The y-coordinate shift.
+   */
+  loadSnapshotAndReDraw(
+    animatorIdToDraw?: string,
+    shift?: { x: number; y: number }
+  ) {
     this.loadSnapshot(animatorIdToDraw);
+
+    const iQueue = [...this.instantQueue];
+
+    if (shift) {
+      for (let i = 0; i < iQueue.length; i++) {
+        const figure = iQueue[i];
+
+        if (figure.getAnimatorId()) {
+          figure.shift(shift.x, shift.y);
+        }
+      }
+    }
 
     while (this.instantQueue.length) {
       this.runner(true);
+    }
+
+    if (shift) {
+      for (let i = 0; i < iQueue.length; i++) {
+        const figure = iQueue[i];
+
+        if (figure.getAnimatorId()) {
+          figure.shift(-shift.x, -shift.y);
+        }
+      }
     }
   }
 

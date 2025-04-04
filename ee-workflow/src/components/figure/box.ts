@@ -113,4 +113,9 @@ export default class Box extends Figure {
     this.stroke = stroke || this.stroke;
     this.canvasRunner.reDrawAll();
   }
+
+  shift(x?: number, y?: number) {
+    this.x += x ?? 0;
+    this.y += y ?? 0;
+  }
 }

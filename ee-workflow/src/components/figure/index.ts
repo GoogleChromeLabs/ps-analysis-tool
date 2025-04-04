@@ -153,6 +153,11 @@ export default abstract class Figure {
   abstract isHovering(): boolean;
 
   /**
+   * Method to update the parameters of the figure.
+   */
+  abstract shift(...args: any): void;
+
+  /**
    * Method to redraw the figure.
    * @param params - The parameters to redraw the figure with.
    */

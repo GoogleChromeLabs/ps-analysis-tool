@@ -17,6 +17,7 @@
 /**
  * Internal dependencies.
  */
+import p5 from 'p5';
 import Figure from '.';
 import Main from '../../main';
 import Arc from './arc';
@@ -199,7 +200,7 @@ export default class FigureFactory {
     id,
     x,
     y,
-    imageData,
+    imageLoader,
     width,
     height,
     tags,
@@ -208,7 +209,7 @@ export default class FigureFactory {
     mouseMoved,
     onLeave,
   }: FigureParams & {
-    imageData: string;
+    imageLoader: () => p5.Image;
     width: number;
     height: number;
   }): Image {
@@ -220,7 +221,7 @@ export default class FigureFactory {
       this.canvasRunner,
       possibleX,
       possibleY,
-      imageData,
+      imageLoader,
       width,
       height,
       id,

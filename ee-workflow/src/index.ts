@@ -23,6 +23,12 @@ import Arc from './components/figure/arc';
 import Circle from './components/figure/circle';
 import Main from './main';
 
+const downArrowData =
+  'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBVcGxvYWRlZCB0bzogU1ZHIFJlcG8sIHd3dy5zdmdyZXBvLmNvbSwgR2VuZXJhdG9yOiBTVkcgUmVwbyBNaXhlciBUb29scyAtLT4NCjxzdmcgZmlsbD0iIzAwMDAwMCIgaGVpZ2h0PSI4MDBweCIgd2lkdGg9IjgwMHB4IiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiANCgkgdmlld0JveD0iMCAwIDMzMCAzMzAiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggaWQ9IlhNTElEXzIyNV8iIGQ9Ik0zMjUuNjA3LDc5LjM5M2MtNS44NTctNS44NTctMTUuMzU1LTUuODU4LTIxLjIxMywwLjAwMWwtMTM5LjM5LDEzOS4zOTNMMjUuNjA3LDc5LjM5Mw0KCWMtNS44NTctNS44NTctMTUuMzU1LTUuODU4LTIxLjIxMywwLjAwMWMtNS44NTgsNS44NTgtNS44NTgsMTUuMzU1LDAsMjEuMjEzbDE1MC4wMDQsMTUwYzIuODEzLDIuODEzLDYuNjI4LDQuMzkzLDEwLjYwNiw0LjM5Mw0KCXM3Ljc5NC0xLjU4MSwxMC42MDYtNC4zOTRsMTQ5Ljk5Ni0xNTBDMzMxLjQ2NSw5NC43NDksMzMxLjQ2NSw4NS4yNTEsMzI1LjYwNyw3OS4zOTN6Ii8+DQo8L3N2Zz4=';
+
+const upArrowData =
+  'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBVcGxvYWRlZCB0bzogU1ZHIFJlcG8sIHd3dy5zdmdyZXBvLmNvbSwgR2VuZXJhdG9yOiBTVkcgUmVwbyBNaXhlciBUb29scyAtLT4NCjxzdmcgZmlsbD0iIzAwMDAwMCIgaGVpZ2h0PSI4MDBweCIgd2lkdGg9IjgwMHB4IiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiANCgkgdmlld0JveD0iMCAwIDMzMCAzMzAiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggaWQ9IlhNTElEXzIyNF8iIGQ9Ik0zMjUuNjA2LDIyOS4zOTNsLTE1MC4wMDQtMTUwQzE3Mi43OSw3Ni41OCwxNjguOTc0LDc1LDE2NC45OTYsNzVjLTMuOTc5LDAtNy43OTQsMS41ODEtMTAuNjA3LDQuMzk0DQoJbC0xNDkuOTk2LDE1MGMtNS44NTgsNS44NTgtNS44NTgsMTUuMzU1LDAsMjEuMjEzYzUuODU3LDUuODU3LDE1LjM1NSw1Ljg1OCwyMS4yMTMsMGwxMzkuMzktMTM5LjM5M2wxMzkuMzk3LDEzOS4zOTMNCglDMzA3LjMyMiwyNTMuNTM2LDMxMS4xNjEsMjU1LDMxNSwyNTVjMy44MzksMCw3LjY3OC0xLjQ2NCwxMC42MDctNC4zOTRDMzMxLjQ2NCwyNDQuNzQ4LDMzMS40NjQsMjM1LjI1MSwzMjUuNjA2LDIyOS4zOTN6Ii8+DQo8L3N2Zz4=';
+
 const onDrawListener = (id: string) => {
   if (id.startsWith('object')) {
     // eslint-disable-next-line no-console
@@ -32,9 +38,22 @@ const onDrawListener = (id: string) => {
   }
 };
 
+let downArrowImage: p5.Image | null = null;
+let upArrowImage: p5.Image | null = null;
+const preloader = (p: p5) => {
+  downArrowImage = p.loadImage(downArrowData);
+  upArrowImage = p.loadImage(upArrowData);
+};
+
 const idToStart = localStorage.getItem('ee-workflow') || '';
 
-const mainCanvas = new Main(undefined, undefined, idToStart, onDrawListener);
+const mainCanvas = new Main(
+  undefined,
+  undefined,
+  idToStart,
+  onDrawListener,
+  preloader
+);
 const mainFF = new FigureFactory(mainCanvas);
 
 const IGCanvas = new Main(true);
@@ -84,6 +103,7 @@ mainCanvas.addFigure(
 );
 
 let expandedAnimatorId: string | null = null;
+let expandedImage: ReturnType<FigureFactory['image']> | null = null;
 const nodes = [
   {
     type: 'advertiser',
@@ -404,27 +424,35 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
 
   mainCanvas.addAnimator(animator, false, true);
 
-  mainCanvas.addFigure(
-    mainFF.box({
-      x: x - 5,
-      y: y + 5,
-      width: 10,
-      height: 10,
-      mouseClicked: () => {
-        if (mainCanvas.isStepping()) {
-          return;
-        }
+  const image = mainFF.image({
+    x,
+    y: y + 10,
+    height: 20,
+    width: 20,
+    imageLoader: () => downArrowImage!,
+    mouseClicked: (figure) => {
+      if (mainCanvas.isStepping()) {
+        return;
+      }
 
-        if (expandedAnimatorId === animator.getId()) {
-          mainCanvas.loadSnapshotAndReDraw();
-          expandedAnimatorId = null;
-        } else {
-          mainCanvas.loadSnapshotAndReDraw(animator.getId());
-          expandedAnimatorId = animator.getId();
-        }
-      },
-    })
-  );
+      const _image = <ReturnType<FigureFactory['image']>>figure;
+
+      if (expandedAnimatorId === animator.getId()) {
+        _image.reDraw(undefined, undefined, () => downArrowImage!);
+        mainCanvas.loadSnapshotAndReDraw();
+        expandedAnimatorId = null;
+        expandedImage = null;
+      } else {
+        _image.reDraw(undefined, undefined, () => upArrowImage!);
+        expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
+        expandedImage = _image;
+        expandedAnimatorId = animator.getId();
+        mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 20 });
+      }
+    },
+  });
+
+  mainCanvas.addFigure(image);
 };
 
 const arcTravelInit = (startDiameterOnTravel: number) => {
@@ -903,27 +931,35 @@ const drawPublisherFlow = (x: number, y: number) => {
 
   mainCanvas.addAnimator(animator, false, true);
 
-  mainCanvas.addFigure(
-    mainFF.box({
-      x: x - 5,
-      y: y + 5,
-      width: 10,
-      height: 10,
-      mouseClicked: () => {
-        if (mainCanvas.isStepping()) {
-          return;
-        }
+  const image = mainFF.image({
+    x,
+    y: y + 10,
+    height: 20,
+    width: 20,
+    imageLoader: () => downArrowImage!,
+    mouseClicked: (figure: Figure) => {
+      if (mainCanvas.isStepping()) {
+        return;
+      }
 
-        if (expandedAnimatorId === animator.getId()) {
-          mainCanvas.loadSnapshotAndReDraw();
-          expandedAnimatorId = null;
-        } else {
-          mainCanvas.loadSnapshotAndReDraw(animator.getId());
-          expandedAnimatorId = animator.getId();
-        }
-      },
-    })
-  );
+      const _image = <ReturnType<FigureFactory['image']>>figure;
+
+      if (expandedAnimatorId === animator.getId()) {
+        _image.reDraw(undefined, undefined, () => downArrowImage!);
+        mainCanvas.loadSnapshotAndReDraw();
+        expandedAnimatorId = null;
+        expandedImage = null;
+      } else {
+        _image.reDraw(undefined, undefined, () => upArrowImage!);
+        expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
+        expandedImage = _image;
+        expandedAnimatorId = animator.getId();
+        mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 20 });
+      }
+    },
+  });
+
+  mainCanvas.addFigure(image);
 };
 
 drawIGFlow(150, 337.5, 2);
