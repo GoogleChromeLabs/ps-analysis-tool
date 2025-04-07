@@ -31,6 +31,11 @@ export const onCommittedNavigationListener = async ({
     if (frameType !== 'outermost_frame' && frameId !== 0) {
       return;
     }
+
+    if (url.startsWith('chrome') || url.startsWith('devtools')) {
+      return;
+    }
+
     if (!url) {
       return;
     }
@@ -53,7 +58,7 @@ export const onCommittedNavigationListener = async ({
 
     dataStore?.updateUrl(tabId, url);
 
-    if (url && !url.startsWith('chrome://')) {
+    if (url && !url.startsWith('chrome')) {
       dataStore?.removeCookieData(tabId);
 
       if (dataStore.globalIsUsingCDP) {

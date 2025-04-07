@@ -30,7 +30,7 @@ const updateGlobalVariableAndAttachCDP = async () => {
   const targets = await chrome.debugger.getTargets();
 
   allTabs.forEach((tab) => {
-    if (!tab.id || tab.url?.startsWith('chrome://')) {
+    if (!tab.id || !tab.url?.startsWith('https://')) {
       return;
     }
 
