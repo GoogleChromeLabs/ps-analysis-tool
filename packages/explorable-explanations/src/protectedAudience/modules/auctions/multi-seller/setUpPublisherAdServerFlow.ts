@@ -19,9 +19,9 @@
 import app from '../../../app';
 import config from '../../../config';
 import { Box, ProgressLine } from '../../../components';
-import { MULTI_SELLER_CONFIG } from '../../flowConfig.tsx';
+import { MULTI_SELLER_CONFIG } from '../../flowConfig';
 import type { AuctionStep } from '../../../types.js';
-import { getCoordinateValues } from '../../../utils/getCoordinateValues.ts';
+import { getCoordinateValues } from '../../../utils/getCoordinateValues';
 
 const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
   const { box, colors } = config.flow;

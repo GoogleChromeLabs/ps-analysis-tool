@@ -19,11 +19,11 @@
 import app from '../../app';
 import { Branches } from '../../components';
 import config, { publisherData } from '../../config';
-import type { AuctionStep } from '../../types';
+import type { AuctionStep, PublisherNames } from '../../types';
 import { getCoordinateValues } from '../../utils/getCoordinateValues';
 
 const setupBranches = (steps: AuctionStep[], index: number) => {
-  const publisher = config.timeline.circles[index].website;
+  const publisher = config.timeline.circles[index].website as PublisherNames;
 
   const info = {
     title: 'Auction Time',

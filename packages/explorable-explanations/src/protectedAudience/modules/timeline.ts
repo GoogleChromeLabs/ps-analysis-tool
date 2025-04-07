@@ -30,8 +30,9 @@ import {
   mouseMovedInNonInteractiveMode,
 } from '../utils/mouseHandlers';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
+import { Logos } from '../types';
 
-type Timeline = {
+export type Timeline = {
   init: () => void;
   drawLineAboveCircle: (index: number, completed?: boolean) => void;
   drawTimeline: (timeline: Config['timeline']) => void;
@@ -64,9 +65,12 @@ const timeline: Timeline = {
 
     app.p.mouseMoved = (event) => {
       if (app.isInteractiveMode) {
-        mouseMovedInInteractiveMode(event, timeline.renderUserIcon);
+        mouseMovedInInteractiveMode(
+          event as MouseEvent,
+          timeline.renderUserIcon
+        );
       } else {
-        mouseMovedInNonInteractiveMode(event);
+        mouseMovedInNonInteractiveMode(event as MouseEvent);
       }
     };
 
@@ -141,7 +145,7 @@ const timeline: Timeline = {
           y: yPositionForCircle,
         });
       }
-      const host = circleItem.website.split('.')[0];
+      const host = circleItem.website.split('.')[0] as keyof Logos;
       const logoSize = circleItem.logoSize ?? { width: 0, height: 0 };
       p.push();
       p.image(

@@ -22,7 +22,7 @@ export {
 } from './protectedAudience';
 export { getCircleDatetime } from './protectedAudience/utils';
 export { default as config, publisherData } from './protectedAudience/config';
-export * from './protectedAudience/modules/flowConfig.tsx';
-export * from './topics/data.ts';
-export * from './topics/utils.ts';
-export * from './topics/index.ts';
+export * from './protectedAudience/modules/flowConfig';
+export * from './topics/data';
+export * from './topics/utils';
+export * from './topics';
