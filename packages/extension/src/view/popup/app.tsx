@@ -87,7 +87,7 @@ const App: React.FC = () => {
 
   const buttonReloadActionCompnent = useMemo(() => {
     return (
-      <Button text={'Reload'} onClick={handleSettingsChange} variant="large" />
+      <Button text={'Reload'} onClick={handleSettingsChange} size="large" />
     );
   }, [handleSettingsChange]);
 

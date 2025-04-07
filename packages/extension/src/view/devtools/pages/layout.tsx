@@ -38,7 +38,6 @@ import {
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
   Button,
-  PaddedCross,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -71,17 +70,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     settingsChanged,
     handleSettingsChange,
     exceedingLimitations,
-    isUsingCDP,
-    hasWarningBeenShown,
-    setHasWarningBeenShown,
     isUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
-    isUsingCDP: state.isUsingCDP,
-    hasWarningBeenShown: state.hasWarningBeenShown,
-    setHasWarningBeenShown: actions.setHasWarningBeenShown,
+    setSettingsChanged: actions.setSettingsChanged,
     isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
   }));
 
@@ -201,24 +196,78 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   ]);
 
   const buttonReloadActionCompnent = useMemo(() => {
-    return (
-      <Button text={'Reload'} onClick={handleSettingsChange} variant="large" />
-    );
+    return <Button text="Reload" onClick={handleSettingsChange} size="large" />;
   }, [handleSettingsChange]);
+
+  const isUsingCDPCondition = useMemo(() => {
+    if (isUsingCDPForSettingsPageDisplay) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [isUsingCDPForSettingsPageDisplay]);
 
   const settingsReadActionComponent = useMemo(() => {
     return (
-      <div
-        className="w-14 h-14 flex items-center"
-        onClick={() => {
-          chrome.storage.session.set({ readSettings: true });
-          setHasWarningBeenShown(true);
-        }}
-      >
-        <PaddedCross className="w-4 h-4" />
+      <div className="flex items-center gap-10">
+        <Button
+          text="Cancel"
+          size="large"
+          onClick={async () => {
+            await chrome.storage.session.remove(['isUsingCDP']);
+
+            await chrome.storage.session.set({
+              pendingReload: false,
+            });
+            setSettingsChanged(false);
+          }}
+        />
+        <Button
+          text="Yes"
+          size="large"
+          onClick={() => {
+            handleSettingsChange();
+          }}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
       </div>
     );
-  }, [setHasWarningBeenShown]);
+  }, [exceedingLimitations, handleSettingsChange, setSettingsChanged]);
+
+  const formedToastMessage = useMemo(() => {
+    let message = '';
+
+    if (settingsChanged) {
+      if (isUsingCDPCondition) {
+        message =
+          'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
+        return (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={settingsReadActionComponent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
+          />
+        );
+      } else {
+        message = I18n.getMessage('settingsChanged');
+        return (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={buttonReloadActionCompnent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+          />
+        );
+      }
+    }
+    return <></>;
+  }, [
+    buttonReloadActionCompnent,
+    isUsingCDPCondition,
+    settingsChanged,
+    settingsReadActionComponent,
+  ]);
 
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
@@ -281,24 +330,6 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     ? 'min-w-[400px]'
     : 'min-w-[50rem]';
 
-  const isUsingCDPCondition = useMemo(() => {
-    if (isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    if (!isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
-
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -330,34 +361,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             </div>
           </div>
         </main>
-        {settingsChanged && (
-          <div className="h-fit w-full relative z-10">
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              actionComponent={buttonReloadActionCompnent}
-              textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-            />
-          </div>
-        )}
-        {!hasWarningBeenShown &&
-          exceedingLimitations &&
-          isUsingCDPCondition && (
-            <div
-              className={`h-fit w-full relative z-10 cursor-pointer ${
-                isUsingCDPForSettingsPageDisplay
-                  ? 'border-t dark:border-quartz border-american-silver'
-                  : ''
-              }`}
-            >
-              <ToastMessage
-                additionalStyles="text-sm"
-                text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
-                actionComponent={settingsReadActionComponent}
-                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-              />
-            </div>
-          )}
+        {formedToastMessage}
       </div>
     </div>
   );

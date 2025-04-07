@@ -44,9 +44,6 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [exceedingLimitations, setExceedingLimitations] =
     useState<boolean>(false);
 
-  const [hasWarningBeenShown, setHasWarningBeenShown] =
-    useState<boolean>(false);
-
   const [isUsingCDP, setIsUsingCDP] = useState(false);
   const [
     isUsingCDPForSettingsPageDisplay,
@@ -83,12 +80,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
       setIsUsingCDP(currentSettings.isUsingCDP);
-    }
-
-    if (Object.keys(sessionStorage).includes('readSettings')) {
-      setHasWarningBeenShown(sessionStorage?.readSettings);
-    } else {
-      setHasWarningBeenShown(false);
     }
 
     chrome.tabs.query({}, (tabs) => {
@@ -196,10 +187,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       ) {
         setSettingsChanged(changes.pendingReload.newValue);
       }
-
-      if (Object.keys(changes).includes('readSettings')) {
-        setHasWarningBeenShown(changes?.readSettings.newValue);
-      }
     },
     []
   );
@@ -247,10 +234,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           settingsChanged,
           isUsingCDPForSettingsPageDisplay,
           exceedingLimitations,
-          hasWarningBeenShown,
         },
         actions: {
-          setHasWarningBeenShown,
           setIsUsingCDP: _setUsingCDP,
           handleSettingsChange,
           setSettingsChanged,
