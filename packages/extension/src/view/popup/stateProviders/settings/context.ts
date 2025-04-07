@@ -24,14 +24,12 @@ export interface SettingsStoreContext {
     settingsChanged: boolean;
     isUsingCDPForSettingsDisplay: boolean;
     exceedingLimitations: boolean;
-    hasWarningBeenShown: boolean;
   };
   actions: {
     handleSettingsChange: () => void;
     setUsingCDP: (newValue: boolean) => void;
     setSettingsChanged: (newValue: boolean) => void;
     setExceedingLimitations: React.Dispatch<React.SetStateAction<boolean>>;
-    setHasWarningBeenShown: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -41,14 +39,12 @@ const initialState: SettingsStoreContext = {
     settingsChanged: false,
     isUsingCDPForSettingsDisplay: false,
     exceedingLimitations: false,
-    hasWarningBeenShown: false,
   },
   actions: {
     handleSettingsChange: noop,
     setUsingCDP: noop,
     setSettingsChanged: noop,
     setExceedingLimitations: noop,
-    setHasWarningBeenShown: noop,
   },
 };
 

@@ -21,6 +21,7 @@ import React, { useMemo } from 'react';
 import {
   Button,
   CirclePieChart,
+  Tick,
   PaddedCross,
   ProgressBar,
   ToastMessage,
@@ -48,105 +49,98 @@ const App: React.FC = () => {
     handleSettingsChange,
     exceedingLimitations,
     isUsingCDP,
-    hasWarningBeenShown,
-    setHasWarningBeenShown,
     setUsingCDP,
     isUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
     isUsingCDP: state.isUsingCDP,
-    hasWarningBeenShown: state.hasWarningBeenShown,
-    setHasWarningBeenShown: actions.setHasWarningBeenShown,
     setUsingCDP: actions.setUsingCDP,
     isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsDisplay,
+    setSettingsChanged: actions.setSettingsChanged,
   }));
-
-  const isUsingCDPCondition = useMemo(() => {
-    if (isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    if (!isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
 
   const cdpLabel = isUsingCDP
     ? I18n.getMessage('disableCDP')
     : I18n.getMessage('enableCDP');
 
   const buttonReloadActionCompnent = useMemo(() => {
-    return (
-      <Button text={'Reload'} onClick={handleSettingsChange} size="large" />
-    );
+    return <Button text="Reload" onClick={handleSettingsChange} size="large" />;
   }, [handleSettingsChange]);
+
+  const isUsingCDPCondition = useMemo(() => {
+    if (isUsingCDPForSettingsPageDisplay) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [isUsingCDPForSettingsPageDisplay]);
 
   const settingsReadActionComponent = useMemo(() => {
     return (
-      <div
-        className="w-14 h-14 flex items-center cursor-pointer"
-        onClick={() => {
-          chrome.storage.session.set({ readSettings: true });
-          setHasWarningBeenShown(true);
-        }}
-      >
-        <PaddedCross className="w-4 h-4" />
+      <div className="flex flex-col items-center gap-4">
+        <Button
+          text={<PaddedCross className="w-4 h-4" />}
+          size="small"
+          onClick={async () => {
+            await chrome.storage.session.remove(['isUsingCDP']);
+
+            await chrome.storage.session.set({
+              pendingReload: false,
+            });
+            setSettingsChanged(false);
+          }}
+        />
+        <Button
+          text={<Tick className="w-4 h-4 fill-white dark:fill-white" />}
+          size="small"
+          onClick={() => {
+            handleSettingsChange();
+          }}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
       </div>
     );
-  }, [setHasWarningBeenShown]);
+  }, [exceedingLimitations, handleSettingsChange, setSettingsChanged]);
 
-  const performanceWarningToast = useMemo(() => {
-    if (!hasWarningBeenShown && exceedingLimitations && isUsingCDPCondition) {
-      return (
-        <div
-          className={`h-fit w-full relative z-10 ${
-            isUsingCDPForSettingsPageDisplay
-              ? 'border-t dark:border-quartz border-american-silver'
-              : ''
-          }`}
-        >
+  const formedToastMessage = useMemo(() => {
+    let message = '';
+
+    if (settingsChanged) {
+      if (isUsingCDPCondition) {
+        message =
+          'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
+        return (
           <ToastMessage
-            isPopup={true}
+            isPopup
             additionalStyles="text-sm"
-            text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
+            text={message}
             actionComponent={settingsReadActionComponent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
+          />
+        );
+      } else {
+        message = I18n.getMessage('settingsChanged');
+        return (
+          <ToastMessage
+            isPopup
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={buttonReloadActionCompnent}
             textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
           />
-        </div>
-      );
+        );
+      }
     }
     return <></>;
   }, [
-    exceedingLimitations,
-    hasWarningBeenShown,
+    buttonReloadActionCompnent,
     isUsingCDPCondition,
-    isUsingCDPForSettingsPageDisplay,
+    settingsChanged,
     settingsReadActionComponent,
   ]);
-
-  const settingsWarningToast = useMemo(() => {
-    if (settingsChanged) {
-      return (
-        <ToastMessage
-          additionalStyles="text-sm"
-          text={I18n.getMessage('settingsChanged')}
-          actionComponent={buttonReloadActionCompnent}
-          textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-        />
-      );
-    }
-    return <></>;
-  }, [settingsChanged, buttonReloadActionCompnent]);
 
   if (onChromeUrl) {
     return (
@@ -164,8 +158,7 @@ const App: React.FC = () => {
           {I18n.getMessage('emptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsWarningToast}
-          {performanceWarningToast}
+          {formedToastMessage}
         </div>
       </div>
     );
@@ -192,8 +185,7 @@ const App: React.FC = () => {
           {I18n.getMessage('tryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsWarningToast}
-          {performanceWarningToast}
+          {formedToastMessage}
         </div>
       </div>
     );
@@ -233,8 +225,7 @@ const App: React.FC = () => {
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
-        {settingsWarningToast}
-        {performanceWarningToast}
+        {formedToastMessage}
       </div>
     </div>
   );

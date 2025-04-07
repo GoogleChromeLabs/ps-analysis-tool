@@ -34,9 +34,6 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [exceedingLimitations, setExceedingLimitations] =
     useState<boolean>(false);
 
-  const [hasWarningBeenShown, setHasWarningBeenShown] =
-    useState<boolean>(false);
-
   const [isUsingCDP, _setIsUsingCDP] = useState(false);
   const [isUsingCDPForSettingsDisplay, setIsUsingCDPForSettingsDisplay] =
     useState(false);
@@ -55,12 +52,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
     } else {
       setIsUsingCDPForSettingsDisplay(currentSettings.isUsingCDP);
-    }
-
-    if (Object.keys(sessionStorage).includes('readSettings')) {
-      setHasWarningBeenShown(sessionStorage?.readSettings);
-    } else {
-      setHasWarningBeenShown(false);
     }
 
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
@@ -84,10 +75,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       ) {
         setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
         setSettingsChanged(true);
-      }
-
-      if (Object.keys(changes).includes('readSettings')) {
-        setHasWarningBeenShown(changes?.readSettings.newValue);
       }
     },
     []
@@ -171,11 +158,9 @@ const Provider = ({ children }: PropsWithChildren) => {
           settingsChanged,
           isUsingCDPForSettingsDisplay,
           exceedingLimitations,
-          hasWarningBeenShown,
         },
         actions: {
           setUsingCDP,
-          setHasWarningBeenShown,
           handleSettingsChange,
           setSettingsChanged,
           setExceedingLimitations,
