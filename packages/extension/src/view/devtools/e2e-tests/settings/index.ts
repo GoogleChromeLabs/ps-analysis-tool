@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { Page, Target, Browser } from 'puppeteer';
+import { Page } from 'puppeteer';
 
 /**
  * Internal dependencies.
@@ -27,106 +27,6 @@ import { Interaction } from '../../test-utils/interaction';
 import { selectors } from '../../test-utils/constants';
 jest.retryTimes(3, { logErrorsBeforeRetry: true });
 describe('Settings Page', () => {
-  describe('Multi-tab debugging', () => {
-    let page: Page;
-    let puppeteer: PuppeteerManagement;
-    let browser: Browser;
-
-    beforeEach(async () => {
-      puppeteer = new PuppeteerManagement();
-      await puppeteer.setup();
-      page = await puppeteer.openPage();
-      browser = page.browser();
-    }, 40000);
-
-    afterEach(async () => {
-      await puppeteer.close();
-    }, 40000);
-
-    test.skip('Should be able to validate the multitab setting option', async () => {
-      await page.goto('https://bbc.com');
-
-      const devtools = await puppeteer.getDevtools();
-      const key = puppeteer.getCMDKey();
-      const interaction = new Interaction(devtools, key);
-
-      // Navigate to Settings Page
-      const devtoolsTargets = await interaction.navigateToSettingsTab();
-
-      // Switch to the iframe of devtool
-      const iframe = await devtoolsTargets.$(selectors.devtoolIframeSelector);
-
-      if (!iframe) {
-        throw new Error('DevTools iframe not found');
-      }
-
-      const frame = await iframe.contentFrame();
-
-      if (!frame) {
-        throw new Error('Content frame not found');
-      }
-      await interaction.delay(2000);
-
-      // click on enable multitab debugging button
-      await frame.evaluate(() => {
-        const checkboxes = document.querySelectorAll<HTMLInputElement>(
-          'input[type="checkbox"][name="autoSaver"]'
-        );
-        checkboxes[1].click();
-      });
-
-      // Click on reload all tabs button
-      await frame.click('button[data-test-id="button"]');
-
-      // Open a new page
-      const newPage = await browser.newPage();
-      await newPage.goto('https://bbc.com');
-
-      // Find the DevTools target for the new page
-      const targets = browser.targets();
-      const devToolsTarget = targets.find(
-        (target: Target) =>
-          target.type() === 'other' && target.url().startsWith('devtools://')
-      );
-
-      if (!devToolsTarget) {
-        throw new Error('DevTools target not found for the new page');
-      }
-
-      await interaction.delay(3000);
-
-      // Get the page associated with the DevTools target
-      const devToolsPage = await devToolsTarget.page();
-
-      if (!devToolsPage) {
-        throw new Error('DevTools page not found.');
-      }
-
-      await devToolsPage.bringToFront();
-
-      // Switch to the iframe of devtool
-      const iframes = await devToolsPage.$(selectors.devtoolIframeSelector);
-      const frame2 = await iframes?.contentFrame();
-
-      if (!frame2) {
-        throw new Error('Content frame not found');
-      }
-
-      await interaction.delay(2000);
-
-      // Click on the cookies from the menu,
-      const elementTextToClick = 'Cookies';
-      await interaction.clickMatchingElement(frame2, 'p', elementTextToClick);
-
-      // Assert if Blocked cookies description is visible on cookie landing page.
-      const isVisible = await interaction.isElementVisible(
-        frame2,
-        selectors.analyzeThisButtonSelector
-      );
-      expect(isVisible).toBe(false);
-    }, 60000);
-  });
-
   describe('CDP', () => {
     let page: Page;
     let puppeteer: PuppeteerManagement;
