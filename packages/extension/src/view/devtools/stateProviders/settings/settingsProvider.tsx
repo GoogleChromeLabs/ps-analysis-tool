@@ -188,8 +188,16 @@ const Provider = ({ children }: PropsWithChildren) => {
       ) {
         setSettingsChanged(changes.pendingReload.newValue);
       }
+
+      if (
+        Object.keys(changes).includes('pendingReload') &&
+        Object.keys(changes.pendingReload).includes('oldValue') &&
+        !Object.keys(changes.pendingReload).includes('newValue')
+      ) {
+        setIsUsingCDPForSettingsPageDisplay(isUsingCDP);
+      }
     },
-    []
+    [isUsingCDP]
   );
 
   const handleSettingsChange = useCallback(async () => {
@@ -211,11 +219,42 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
 
+  const onCommittedNavigationListener = useCallback(
+    ({
+      frameId,
+      frameType,
+      url,
+      tabId,
+    }: chrome.webNavigation.WebNavigationTransitionCallbackDetails) => {
+      if (frameType !== 'outermost_frame' && frameId !== 0) {
+        return;
+      }
+
+      if (url.startsWith('chrome') || url.startsWith('devtools')) {
+        return;
+      }
+
+      if (!url) {
+        return;
+      }
+
+      if (tabId !== chrome.devtools.inspectedWindow.tabId) {
+        return;
+      }
+
+      chrome.tabs.query({}, (tabs) => {
+        setCurrentTabs(tabs.length);
+      });
+    },
+    []
+  );
+
   useEffect(() => {
     intitialSync();
     chrome.storage?.sync?.onChanged?.addListener(storeChangeListener);
     chrome.storage?.session?.onChanged?.addListener(sessionStoreChangeListener);
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
     return () => {
       chrome.storage?.sync?.onChanged?.removeListener(storeChangeListener);
@@ -223,8 +262,12 @@ const Provider = ({ children }: PropsWithChildren) => {
         sessionStoreChangeListener
       );
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation.onCommitted.removeListener(
+        onCommittedNavigationListener
+      );
     };
   }, [
+    onCommittedNavigationListener,
     intitialSync,
     storeChangeListener,
     sessionStoreChangeListener,

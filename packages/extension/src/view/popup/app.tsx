@@ -126,17 +126,22 @@ const App: React.FC = () => {
           }
           size="small"
           onClick={async () => {
-            await chrome.storage.session.remove(['isUsingCDP']);
-
-            await chrome.storage.session.set({
-              pendingReload: false,
-            });
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
             setSettingsChanged(false);
+            setIsUsingCDPForSettingsDisplay(false);
           }}
         />
       </div>
     );
-  }, [exceedingLimitations, handleSettingsChange, setSettingsChanged]);
+  }, [
+    exceedingLimitations,
+    handleSettingsChange,
+    setIsUsingCDPForSettingsDisplay,
+    setSettingsChanged,
+  ]);
 
   const formedToastMessage = useMemo(() => {
     let message = '';

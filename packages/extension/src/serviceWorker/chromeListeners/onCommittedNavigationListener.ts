@@ -19,6 +19,7 @@
 import { TABID_STORAGE } from '../../constants';
 import dataStore from '../../store/dataStore';
 import getQueryParams from '../../utils/getQueryParams';
+import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
 
 export const onCommittedNavigationListener = async ({
@@ -80,6 +81,13 @@ export const onCommittedNavigationListener = async ({
         dataStore.updateParentChildFrameAssociation(tabId, targetId, '0');
       }
     }
+
+    const tabs = await chrome.tabs.query({});
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+
+    await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
+      exceedingLimitations: qualifyingTabs.length > 5,
+    });
 
     await chrome.tabs.sendMessage(tabId, {
       tabId,

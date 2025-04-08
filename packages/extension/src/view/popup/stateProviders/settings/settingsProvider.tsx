@@ -21,6 +21,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from 'react';
 import isEqual from 'lodash-es/isEqual';
 /**
@@ -35,6 +36,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     useState<boolean>(false);
 
   const [isUsingCDP, _setIsUsingCDP] = useState(false);
+  const initialSyncDone = useRef(false);
   const [isUsingCDPForSettingsDisplay, setIsUsingCDPForSettingsDisplay] =
     useState(false);
 
@@ -57,15 +59,24 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
       _setIsUsingCDP(currentSettings.isUsingCDP);
     }
+    initialSyncDone.current = true;
   }, []);
 
-  const setUsingCDP = useCallback(async (newValue: boolean) => {
-    setIsUsingCDPForSettingsDisplay(newValue);
-    await chrome.storage.session.set({
-      isUsingCDP: newValue,
-      pendingReload: true,
-    });
-  }, []);
+  const setUsingCDP = useCallback(
+    async (newValue: boolean) => {
+      if (isEqual(newValue, isUsingCDP)) {
+        setIsUsingCDPForSettingsDisplay(newValue);
+        return;
+      }
+
+      setIsUsingCDPForSettingsDisplay(newValue);
+      await chrome.storage.session.set({
+        isUsingCDP: newValue,
+        pendingReload: true,
+      });
+    },
+    [isUsingCDP]
+  );
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -76,8 +87,15 @@ const Provider = ({ children }: PropsWithChildren) => {
         setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
         setSettingsChanged(true);
       }
+      if (
+        Object.keys(changes).includes('pendingReload') &&
+        Object.keys(changes.pendingReload).includes('oldValue') &&
+        !Object.keys(changes.pendingReload).includes('newValue')
+      ) {
+        setIsUsingCDPForSettingsDisplay(isUsingCDP);
+      }
     },
-    []
+    [isUsingCDP]
   );
 
   const handleSettingsChange = useCallback(async () => {
@@ -133,6 +151,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
+    if (!initialSyncDone.current) {
+      return;
+    }
+
     if (!isEqual(isUsingCDP, isUsingCDPForSettingsDisplay)) {
       setSettingsChanged(true);
     } else {
