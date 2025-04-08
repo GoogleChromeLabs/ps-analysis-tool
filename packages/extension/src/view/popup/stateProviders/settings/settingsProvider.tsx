@@ -22,7 +22,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-
+import isEqual from 'lodash-es/isEqual';
 /**
  * Internal dependencies
  */
@@ -133,7 +133,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    if (isUsingCDP !== isUsingCDPForSettingsDisplay) {
+    if (isEqual(isUsingCDP, isUsingCDPForSettingsDisplay)) {
       setSettingsChanged(true);
     } else {
       setSettingsChanged(false);
