@@ -203,7 +203,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [settingsChanged]);
 
   useEffect(() => {
-    if (isEqual(isUsingCDP, isUsingCDPForSettingsPageDisplay)) {
+    if (!isEqual(isUsingCDP, isUsingCDPForSettingsPageDisplay)) {
       setSettingsChanged(true);
     } else {
       setSettingsChanged(false);
