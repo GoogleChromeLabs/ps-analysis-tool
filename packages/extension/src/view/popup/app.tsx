@@ -22,11 +22,11 @@ import {
   Button,
   CirclePieChart,
   Tick,
-  PaddedCross,
   ProgressBar,
   ToastMessage,
   ToggleSwitch,
   prepareCookieStatsComponents,
+  Plus,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -70,18 +70,20 @@ const App: React.FC = () => {
 
   const buttonReloadActionCompnent = useMemo(() => {
     return (
-      <div className="flex items-center gap-5">
+      <div className="flex flex-col items-center gap-2">
         <Button
-          text="Yes"
-          size="large"
+          text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
+          size="small"
           onClick={() => {
             handleSettingsChange();
           }}
           variant="success"
         />
         <Button
-          text="Cancel"
-          size="large"
+          text={
+            <Plus className="w-3 h-3 fill-white dark:fill-white rotate-45" />
+          }
+          size="small"
           onClick={async () => {
             await chrome.storage.session.remove([
               'isUsingCDP',
@@ -111,7 +113,7 @@ const App: React.FC = () => {
     return (
       <div className="flex flex-col items-center gap-2">
         <Button
-          text={<Tick className="w-4 h-4 fill-white dark:fill-white" />}
+          text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
           size="small"
           onClick={() => {
             handleSettingsChange();
@@ -119,7 +121,9 @@ const App: React.FC = () => {
           variant={exceedingLimitations ? 'danger' : 'success'}
         />
         <Button
-          text={<PaddedCross className="w-4 h-4" />}
+          text={
+            <Plus className="w-3 h-3 fill-white dark:fill-white rotate-45" />
+          }
           size="small"
           onClick={async () => {
             await chrome.storage.session.remove(['isUsingCDP']);
@@ -152,14 +156,14 @@ const App: React.FC = () => {
           />
         );
       } else {
-        message = I18n.getMessage('settingsChanged');
+        message = 'Settings changed, reload all tabs to apply changes?';
         return (
           <ToastMessage
             isPopup
             additionalStyles="text-sm"
             text={message}
             actionComponent={buttonReloadActionCompnent}
-            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
           />
         );
       }

@@ -286,7 +286,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           />
         );
       } else {
-        message = I18n.getMessage('settingsChanged');
+        message = 'Settings changed, reload all tabs to apply changes?';
         return (
           <ToastMessage
             additionalStyles="text-sm"

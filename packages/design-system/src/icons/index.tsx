@@ -113,4 +113,5 @@ export { default as DevSiteLandingIcon } from './dev-site-landing.svg';
 export { default as HelpCenterLandingIcon } from './help-center-landing.svg';
 export { default as SearchIcon } from './search.svg';
 export { default as Tick } from './tick.svg';
+export { default as Plus } from './add-simple.svg';
 export * from './ps-icons';
