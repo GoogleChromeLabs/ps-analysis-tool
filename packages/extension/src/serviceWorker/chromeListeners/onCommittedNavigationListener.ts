@@ -29,11 +29,15 @@ export const onCommittedNavigationListener = async ({
   tabId,
 }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
   try {
-    const isNotTopLevelFrame = frameType !== 'outermost_frame' && frameId !== 0;
-    const isInternalChromeURL =
-      url?.startsWith('chrome') || url?.startsWith('devtools');
-    const isNotCurrentTab = tabId !== chrome.devtools.inspectedWindow.tabId;
-    if (isNotTopLevelFrame || isInternalChromeURL || !url || isNotCurrentTab) {
+    if (frameType !== 'outermost_frame' && frameId !== 0) {
+      return;
+    }
+
+    if (url.startsWith('chrome') || url.startsWith('devtools')) {
+      return;
+    }
+
+    if (!url) {
       return;
     }
 
