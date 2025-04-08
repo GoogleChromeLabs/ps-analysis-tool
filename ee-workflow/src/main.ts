@@ -497,9 +497,14 @@ class Main {
 
   /**
    * Toggles the pause state.
+   * @param pause - Whether to pause or unpause the drawing process.
    */
-  togglePause() {
-    this.pause = !this.pause;
+  togglePause(pause?: boolean) {
+    if (pause !== undefined) {
+      this.pause = pause;
+    } else {
+      this.pause = !this.pause;
+    }
 
     if (this.pause) {
       this.p5.noLoop();
@@ -649,7 +654,7 @@ class Main {
       return undefined;
     }
 
-    this.togglePause();
+    this.togglePause(true);
 
     while (this.instantQueue.length) {
       this.runner(true);
@@ -678,7 +683,7 @@ class Main {
     }
 
     if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
-      this.togglePause();
+      this.togglePause(false);
       this.reDrawAll();
       return checkpoint;
     }
@@ -742,7 +747,7 @@ class Main {
     this.groupStepsQueue.unshift(...toBeLoadedGroups.reverse());
     this.animatorStepsQueue.unshift(...toBeLoadedAnimators.reverse());
 
-    this.togglePause();
+    this.togglePause(false);
     this.reDrawAll();
 
     return checkpoint;
@@ -753,7 +758,7 @@ class Main {
    * @returns - The next checkpoint.
    */
   loadNextCheckpoint() {
-    this.togglePause();
+    this.togglePause(true);
 
     while (this.instantQueue.length) {
       this.runner(true);
@@ -772,7 +777,7 @@ class Main {
       this.runner(false, true);
     }
 
-    this.togglePause();
+    this.togglePause(false);
     this.reDrawAll();
 
     return this.stepsQueue[0]?.getId();
@@ -1113,9 +1118,7 @@ class Main {
   }
 
   stepNext() {
-    if (!this.isPaused()) {
-      this.togglePause();
-    }
+    this.togglePause(true);
 
     while (this.isTravelling) {
       this.runTraveller();
@@ -1151,9 +1154,7 @@ class Main {
   }
 
   stepBack() {
-    if (!this.isPaused()) {
-      this.togglePause();
-    }
+    this.togglePause(true);
 
     const wasTravelling = this.isTravelling;
     while (this.isTravelling) {

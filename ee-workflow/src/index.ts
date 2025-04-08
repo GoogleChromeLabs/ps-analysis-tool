@@ -52,6 +52,10 @@ let expandedImage: ReturnType<FigureFactory['image']> | null = null;
 let wasExpanded = false;
 const arrowClick = (figure: Figure, animator: Animator) => {
   if (!wasExpanded) {
+    if (mainCanvas.isPaused()) {
+      mainCanvas.togglePause();
+    }
+
     playClick();
     wasExpanded = true;
   }
@@ -161,15 +165,23 @@ const mainFF = new FigureFactory(mainCanvas);
 
 const IGCanvas = new Main(true);
 const IGFF = new FigureFactory(IGCanvas);
-IGCanvas.togglePause();
+IGCanvas.togglePause(true);
 
 const prevButton = document.getElementById('prev');
 prevButton?.addEventListener('click', () => {
+  if (wasExpanded) {
+    return;
+  }
+
   mainCanvas.loadPreviousCheckpoint();
 });
 
 const stepPrevButton = document.getElementById('step-prev');
 stepPrevButton?.addEventListener('click', () => {
+  if (wasExpanded) {
+    return;
+  }
+
   mainCanvas.stepBack();
 });
 
@@ -181,7 +193,6 @@ const playClick = () => {
     }
     wasExpanded = false;
 
-    mainCanvas.togglePause();
     mainCanvas.loadPreviousCheckpoint();
     mainCanvas.togglePause();
   }
@@ -201,16 +212,28 @@ playButton?.addEventListener('click', playClick);
 
 const stepNextButton = document.getElementById('step-next');
 stepNextButton?.addEventListener('click', () => {
+  if (wasExpanded) {
+    return;
+  }
+
   mainCanvas.stepNext();
 });
 
 const nextButton = document.getElementById('next');
 nextButton?.addEventListener('click', () => {
+  if (wasExpanded) {
+    return;
+  }
+
   mainCanvas.loadNextCheckpoint();
 });
 
 const resetButton = document.getElementById('reset');
 resetButton?.addEventListener('click', () => {
+  if (wasExpanded) {
+    playClick();
+  }
+
   mainCanvas.reset();
 });
 
@@ -452,17 +475,17 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
   bubbleFlow.setThrow(true);
   bubbleFlow.setSideEffectOnDraw(() => {
     IGCanvas.resetQueuesAndReDrawAll();
-    IGCanvas.togglePause();
+    IGCanvas.togglePause(true);
     bubbles.forEach((bubble) => bubble.resetTraveller());
 
-    mainCanvas.togglePause();
+    mainCanvas.togglePause(false);
     mainCanvas.reDrawAll();
   });
 
   animator.setSideEffectOnDraw(() => {
     IGCanvas.addGroup(bubbleFlow);
-    mainCanvas.togglePause();
-    IGCanvas.togglePause();
+    mainCanvas.togglePause(true);
+    IGCanvas.togglePause(false);
   });
 
   mainCanvas.addAnimator(animator, false, true);
@@ -634,17 +657,17 @@ const drawPublisherFlow = (x: number, y: number) => {
     bubbleFlow.setThrow(true);
     bubbleFlow.setSideEffectOnDraw(() => {
       IGCanvas.resetQueuesAndReDrawAll();
-      IGCanvas.togglePause();
+      IGCanvas.togglePause(true);
       bubbles.forEach((bubble) => bubble.resetTraveller());
 
       box6.reDraw();
-      mainCanvas.togglePause();
+      mainCanvas.togglePause(false);
     });
 
     box6.setSideEffectOnDraw(() => {
       IGCanvas.addGroup(bubbleFlow);
-      mainCanvas.togglePause();
-      IGCanvas.togglePause();
+      mainCanvas.togglePause(true);
+      IGCanvas.togglePause(false);
     });
 
     return box6;
