@@ -32,7 +32,7 @@ import {
 import Link from '../link';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
-const SEARCH_URL = 'https://privacysandbox.google.com/learn?text=';
+const SEARCH_URL = 'https://support.google.com/privacysandbox/search?q=';
 
 export interface ContentPanelProps {
   title: string;
