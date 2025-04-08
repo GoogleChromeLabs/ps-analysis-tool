@@ -226,19 +226,17 @@ const Provider = ({ children }: PropsWithChildren) => {
       url,
       tabId,
     }: chrome.webNavigation.WebNavigationTransitionCallbackDetails) => {
-      if (frameType !== 'outermost_frame' && frameId !== 0) {
-        return;
-      }
-
-      if (url.startsWith('chrome') || url.startsWith('devtools')) {
-        return;
-      }
-
-      if (!url) {
-        return;
-      }
-
-      if (tabId !== chrome.devtools.inspectedWindow.tabId) {
+      const isNotTopLevelFrame =
+        frameType !== 'outermost_frame' && frameId !== 0;
+      const isInternalChromeURL =
+        url?.startsWith('chrome') || url?.startsWith('devtools');
+      const isNotCurrentTab = tabId !== chrome.devtools.inspectedWindow.tabId;
+      if (
+        isNotTopLevelFrame ||
+        isInternalChromeURL ||
+        !url ||
+        isNotCurrentTab
+      ) {
         return;
       }
 

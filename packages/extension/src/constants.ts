@@ -24,13 +24,12 @@ export const SETTING_PAGE_CONTROLS = [
     heading: () => I18n.getMessage('enableCDP'),
     description: () => I18n.getMessage('enableCDPNote', [`<a>`, '</a>']),
   },
-  {
-    id: 'multitabDebugging',
-    heading: () => I18n.getMessage('multitabDebugging'),
-    description: () =>
-      I18n.getMessage('multitabDebuggingNote', [`<a>`, '</a>']),
-  },
 ];
+
+export const CDP_WARNING_MESSAGE =
+  'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
+export const RELOAD_WARNING_MESSAGE =
+  'Settings changed, reload all tabs to apply changes?';
 
 export const DEVTOOLS_CLOSE = 'DEVTOOLS_STATE_CLOSE';
 export const DEVTOOLS_OPEN = 'DEVTOOLS_STATE_OPEN';

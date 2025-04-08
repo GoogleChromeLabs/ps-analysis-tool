@@ -36,6 +36,7 @@ import { I18n } from '@google-psat/i18n';
 import './app.css';
 import { Legend } from './components';
 import { useCookie, useSettings } from './stateProviders';
+import { CDP_WARNING_MESSAGE, RELOAD_WARNING_MESSAGE } from '../../constants';
 
 const App: React.FC = () => {
   const { cookieStats, loading, onChromeUrl } = useCookie(({ state }) => ({
@@ -74,9 +75,7 @@ const App: React.FC = () => {
         <Button
           text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
           size="small"
-          onClick={() => {
-            handleSettingsChange();
-          }}
+          onClick={handleSettingsChange}
           variant="success"
         />
         <Button
@@ -101,13 +100,10 @@ const App: React.FC = () => {
     setSettingsChanged,
   ]);
 
-  const isUsingCDPCondition = useMemo(() => {
-    if (isUsingCDPForSettingsPageDisplay) {
-      return true;
-    } else {
-      return false;
-    }
-  }, [isUsingCDPForSettingsPageDisplay]);
+  const isUsingCDPCondition = useMemo(
+    () => isUsingCDPForSettingsPageDisplay,
+    [isUsingCDPForSettingsPageDisplay]
+  );
 
   const settingsReadActionComponent = useMemo(() => {
     return (
@@ -115,9 +111,7 @@ const App: React.FC = () => {
         <Button
           text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
           size="small"
-          onClick={() => {
-            handleSettingsChange();
-          }}
+          onClick={handleSettingsChange}
           variant={exceedingLimitations ? 'danger' : 'success'}
         />
         <Button
@@ -149,8 +143,8 @@ const App: React.FC = () => {
     if (settingsChanged) {
       if (isUsingCDPCondition) {
         message = exceedingLimitations
-          ? 'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?'
-          : 'Settings changed, reload all tabs to apply changes?';
+          ? CDP_WARNING_MESSAGE
+          : RELOAD_WARNING_MESSAGE;
         return (
           <ToastMessage
             isPopup
@@ -161,7 +155,7 @@ const App: React.FC = () => {
           />
         );
       } else {
-        message = 'Settings changed, reload all tabs to apply changes?';
+        message = RELOAD_WARNING_MESSAGE;
         return (
           <ToastMessage
             isPopup

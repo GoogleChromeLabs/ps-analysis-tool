@@ -53,6 +53,10 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
+import {
+  CDP_WARNING_MESSAGE,
+  RELOAD_WARNING_MESSAGE,
+} from '../../../constants';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -204,9 +208,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text="Yes"
           size="large"
-          onClick={() => {
-            handleSettingsChange();
-          }}
+          onClick={handleSettingsChange}
           variant="success"
         />
         <Button
@@ -229,13 +231,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     setSettingsChanged,
   ]);
 
-  const isUsingCDPCondition = useMemo(() => {
-    if (isUsingCDPForSettingsPageDisplay) {
-      return true;
-    } else {
-      return false;
-    }
-  }, [isUsingCDPForSettingsPageDisplay]);
+  const isUsingCDPCondition = useMemo(
+    () => isUsingCDPForSettingsPageDisplay,
+    [isUsingCDPForSettingsPageDisplay]
+  );
 
   const settingsReadActionComponent = useMemo(() => {
     return (
@@ -243,9 +242,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text="Yes"
           size="large"
-          onClick={() => {
-            handleSettingsChange();
-          }}
+          onClick={handleSettingsChange}
           variant={exceedingLimitations ? 'danger' : 'success'}
         />
         <Button
@@ -275,8 +272,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     if (settingsChanged) {
       if (isUsingCDPCondition) {
         message = exceedingLimitations
-          ? 'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?'
-          : 'Settings changed, reload all tabs to apply changes?';
+          ? CDP_WARNING_MESSAGE
+          : RELOAD_WARNING_MESSAGE;
         return (
           <ToastMessage
             additionalStyles="text-sm"
@@ -286,7 +283,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           />
         );
       } else {
-        message = 'Settings changed, reload all tabs to apply changes?';
+        message = RELOAD_WARNING_MESSAGE;
         return (
           <ToastMessage
             additionalStyles="text-sm"
