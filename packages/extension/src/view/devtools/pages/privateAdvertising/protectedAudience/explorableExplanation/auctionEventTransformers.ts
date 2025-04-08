@@ -554,7 +554,8 @@ export const configuredAuctionEvents = (
 
   const adunits = publisherData[currentSiteData?.website].adunits as string[];
   const dates = publisherData[currentSiteData?.website].branches.map(
-    (branch: { date: string; time: string }) => branch.date + ' ' + branch.time
+    (branch: { date: string; time: string }) =>
+      new Date(branch.date + ' ' + branch.time).toUTCString()
   ) as string[];
 
   let auctionData: AuctionEventsType = {
@@ -607,7 +608,9 @@ export const configuredAuctionEvents = (
     };
   }
 
-  if (!dates.find((date) => date === selectedDateTime)) {
+  const transformedDateTime = new Date(selectedDateTime).toUTCString();
+
+  if (!dates.find((date) => date === transformedDateTime)) {
     return {
       auctionData: auctionData,
       receivedBids: null,
@@ -615,13 +618,13 @@ export const configuredAuctionEvents = (
     };
   }
 
-  auctionData[selectedAdUnit][selectedDateTime] = {
+  auctionData[selectedAdUnit][transformedDateTime] = {
     [websiteString]: {
       [websiteString]: [],
     },
   };
 
-  auctionData[selectedAdUnit][selectedDateTime][websiteString] =
+  auctionData[selectedAdUnit][transformedDateTime][websiteString] =
     getFlattenedAuctionEvents(
       sellersArray,
       currentSiteData,
@@ -629,8 +632,9 @@ export const configuredAuctionEvents = (
       advertisers,
       isMultiSeller,
       currentStep,
-      previousEvents?.[selectedAdUnit]?.[selectedDateTime]?.[websiteString] ??
-        {}
+      previousEvents?.[selectedAdUnit]?.[transformedDateTime]?.[
+        websiteString
+      ] ?? {}
     );
 
   if (isInteractiveModeLastStep) {
@@ -643,13 +647,13 @@ export const configuredAuctionEvents = (
   };
 
   receivedBids[selectedAdUnit] = getBidData(
-    auctionData[selectedAdUnit]?.[selectedDateTime]?.[websiteString],
+    auctionData[selectedAdUnit]?.[transformedDateTime]?.[websiteString],
     sellersArray,
     selectedAdUnit
   );
 
   const bidderData = getBidData(
-    auctionData[selectedAdUnit]?.[selectedDateTime]?.[websiteString],
+    auctionData[selectedAdUnit]?.[transformedDateTime]?.[websiteString],
     sellersArray,
     selectedAdUnit
   );
