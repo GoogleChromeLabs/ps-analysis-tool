@@ -18,7 +18,7 @@ export default {
   json: [
     {
       pageUrl: 'https://blog.fellyph.com.br',
-      psatVersion: '0.13.1',
+      psatVersion: '0.14.0',
       cookieData: {
         'https://td.doubleclick.net': {
           frameCookies: {
@@ -208,7 +208,7 @@ export default {
     },
     {
       pageUrl: 'https://globo.com',
-      psatVersion: '0.13.1',
+      psatVersion: '0.14.0',
       cookieData: {
         'https://td.doubleclick.net': {
           frameCookies: {
@@ -2621,7 +2621,7 @@ export default {
     },
     {
       pageUrl: 'https://www.india.com',
-      psatVersion: '0.13.1',
+      psatVersion: '0.14.0',
       cookieData: {
         'https://www.india.com': {
           frameCookies: {
@@ -9798,7 +9798,7 @@ export default {
     },
     {
       pageUrl: 'https://uol.com.br',
-      psatVersion: '0.13.1',
+      psatVersion: '0.14.0',
       cookieData: {
         'https://www.uol.com.br': {
           frameCookies: {
@@ -27729,5 +27729,5 @@ export default {
     },
   },
   dateTime: '09 September, 2024, 05:27:35pm Asia/Calcutta',
-  psatVersion: '0.13.1',
+  psatVersion: '0.14.0',
 };
