@@ -72,11 +72,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     exceedingLimitations,
     isUsingCDPForSettingsPageDisplay,
     setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
     setSettingsChanged: actions.setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay:
+      actions.setIsUsingCDPForSettingsPageDisplay,
     isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
   }));
 
@@ -222,17 +225,22 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           text="Cancel"
           size="large"
           onClick={async () => {
-            await chrome.storage.session.remove(['isUsingCDP']);
-
-            await chrome.storage.session.set({
-              pendingReload: false,
-            });
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
             setSettingsChanged(false);
+            setIsUsingCDPForSettingsPageDisplay(false);
           }}
         />
       </div>
     );
-  }, [exceedingLimitations, handleSettingsChange, setSettingsChanged]);
+  }, [
+    exceedingLimitations,
+    handleSettingsChange,
+    setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay,
+  ]);
 
   const formedToastMessage = useMemo(() => {
     let message = '';
@@ -265,6 +273,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return <></>;
   }, [
     buttonReloadActionCompnent,
+    exceedingLimitations,
     isUsingCDPCondition,
     settingsChanged,
     settingsReadActionComponent,

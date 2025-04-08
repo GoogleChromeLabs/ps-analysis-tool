@@ -240,6 +240,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           handleSettingsChange,
           setSettingsChanged,
           setExceedingLimitations,
+          setIsUsingCDPForSettingsPageDisplay,
         },
       }}
     >
