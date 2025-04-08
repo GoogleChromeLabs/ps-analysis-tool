@@ -80,7 +80,15 @@ const App: React.FC = () => {
 
   const settingsReadActionComponent = useMemo(() => {
     return (
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-2">
+        <Button
+          text={<Tick className="w-4 h-4 fill-white dark:fill-white" />}
+          size="small"
+          onClick={() => {
+            handleSettingsChange();
+          }}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
         <Button
           text={<PaddedCross className="w-4 h-4" />}
           size="small"
@@ -93,14 +101,6 @@ const App: React.FC = () => {
             setSettingsChanged(false);
           }}
         />
-        <Button
-          text={<Tick className="w-4 h-4 fill-white dark:fill-white" />}
-          size="small"
-          onClick={() => {
-            handleSettingsChange();
-          }}
-          variant={exceedingLimitations ? 'danger' : 'success'}
-        />
       </div>
     );
   }, [exceedingLimitations, handleSettingsChange, setSettingsChanged]);
@@ -110,8 +110,9 @@ const App: React.FC = () => {
 
     if (settingsChanged) {
       if (isUsingCDPCondition) {
-        message =
-          'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
+        message = exceedingLimitations
+          ? 'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?'
+          : 'Settings changed, reload all tabs to apply changes?';
         return (
           <ToastMessage
             isPopup

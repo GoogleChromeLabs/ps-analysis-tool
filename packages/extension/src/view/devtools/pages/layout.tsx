@@ -209,7 +209,15 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   const settingsReadActionComponent = useMemo(() => {
     return (
-      <div className="flex items-center gap-10">
+      <div className="flex items-center gap-5">
+        <Button
+          text="Yes"
+          size="large"
+          onClick={() => {
+            handleSettingsChange();
+          }}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
         <Button
           text="Cancel"
           size="large"
@@ -222,14 +230,6 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             setSettingsChanged(false);
           }}
         />
-        <Button
-          text="Yes"
-          size="large"
-          onClick={() => {
-            handleSettingsChange();
-          }}
-          variant={exceedingLimitations ? 'danger' : 'success'}
-        />
       </div>
     );
   }, [exceedingLimitations, handleSettingsChange, setSettingsChanged]);
@@ -239,8 +239,9 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
     if (settingsChanged) {
       if (isUsingCDPCondition) {
-        message =
-          'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
+        message = exceedingLimitations
+          ? 'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?'
+          : 'Settings changed, reload all tabs to apply changes?';
         return (
           <ToastMessage
             additionalStyles="text-sm"
