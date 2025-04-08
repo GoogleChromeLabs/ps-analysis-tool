@@ -21,8 +21,9 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from 'react';
-
+import isEqual from 'lodash-es/isEqual';
 /**
  * Internal dependencies
  */
@@ -34,10 +35,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [exceedingLimitations, setExceedingLimitations] =
     useState<boolean>(false);
 
-  const [hasWarningBeenShown, setHasWarningBeenShown] =
-    useState<boolean>(false);
-
   const [isUsingCDP, _setIsUsingCDP] = useState(false);
+  const initialSyncDone = useRef(false);
   const [isUsingCDPForSettingsDisplay, setIsUsingCDPForSettingsDisplay] =
     useState(false);
 
@@ -57,24 +56,27 @@ const Provider = ({ children }: PropsWithChildren) => {
       setIsUsingCDPForSettingsDisplay(currentSettings.isUsingCDP);
     }
 
-    if (Object.keys(sessionStorage).includes('readSettings')) {
-      setHasWarningBeenShown(sessionStorage?.readSettings);
-    } else {
-      setHasWarningBeenShown(false);
-    }
-
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
       _setIsUsingCDP(currentSettings.isUsingCDP);
     }
+    initialSyncDone.current = true;
   }, []);
 
-  const setUsingCDP = useCallback(async (newValue: boolean) => {
-    setIsUsingCDPForSettingsDisplay(newValue);
-    await chrome.storage.session.set({
-      isUsingCDP: newValue,
-      pendingReload: true,
-    });
-  }, []);
+  const setUsingCDP = useCallback(
+    async (newValue: boolean) => {
+      if (isEqual(newValue, isUsingCDP)) {
+        setIsUsingCDPForSettingsDisplay(newValue);
+        return;
+      }
+
+      setIsUsingCDPForSettingsDisplay(newValue);
+      await chrome.storage.session.set({
+        isUsingCDP: newValue,
+        pendingReload: true,
+      });
+    },
+    [isUsingCDP]
+  );
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -85,12 +87,15 @@ const Provider = ({ children }: PropsWithChildren) => {
         setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
         setSettingsChanged(true);
       }
-
-      if (Object.keys(changes).includes('readSettings')) {
-        setHasWarningBeenShown(changes?.readSettings.newValue);
+      if (
+        Object.keys(changes).includes('pendingReload') &&
+        Object.keys(changes.pendingReload).includes('oldValue') &&
+        !Object.keys(changes.pendingReload).includes('newValue')
+      ) {
+        setIsUsingCDPForSettingsDisplay(isUsingCDP);
       }
     },
-    []
+    [isUsingCDP]
   );
 
   const handleSettingsChange = useCallback(async () => {
@@ -146,6 +151,19 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
+    if (!initialSyncDone.current) {
+      return;
+    }
+
+    if (!isEqual(isUsingCDP, isUsingCDPForSettingsDisplay)) {
+      setSettingsChanged(true);
+    } else {
+      setSettingsChanged(false);
+      chrome.storage.session.remove(['pendingReload', 'isUsingCDP']);
+    }
+  }, [isUsingCDP, isUsingCDPForSettingsDisplay]);
+
+  useEffect(() => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.storage.session.onChanged.addListener(sessionStoreChangeListener);
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
@@ -171,14 +189,13 @@ const Provider = ({ children }: PropsWithChildren) => {
           settingsChanged,
           isUsingCDPForSettingsDisplay,
           exceedingLimitations,
-          hasWarningBeenShown,
         },
         actions: {
           setUsingCDP,
-          setHasWarningBeenShown,
           handleSettingsChange,
           setSettingsChanged,
           setExceedingLimitations,
+          setIsUsingCDPForSettingsDisplay,
         },
       }}
     >

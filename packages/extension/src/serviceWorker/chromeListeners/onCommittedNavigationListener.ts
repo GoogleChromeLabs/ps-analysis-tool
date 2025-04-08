@@ -19,6 +19,7 @@
 import { TABID_STORAGE } from '../../constants';
 import dataStore from '../../store/dataStore';
 import getQueryParams from '../../utils/getQueryParams';
+import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
 
 export const onCommittedNavigationListener = async ({
@@ -31,6 +32,11 @@ export const onCommittedNavigationListener = async ({
     if (frameType !== 'outermost_frame' && frameId !== 0) {
       return;
     }
+
+    if (url.startsWith('chrome') || url.startsWith('devtools')) {
+      return;
+    }
+
     if (!url) {
       return;
     }
@@ -53,7 +59,7 @@ export const onCommittedNavigationListener = async ({
 
     dataStore?.updateUrl(tabId, url);
 
-    if (url && !url.startsWith('chrome://')) {
+    if (url && !url.startsWith('chrome')) {
       dataStore?.removeCookieData(tabId);
 
       if (dataStore.globalIsUsingCDP) {
@@ -75,6 +81,13 @@ export const onCommittedNavigationListener = async ({
         dataStore.updateParentChildFrameAssociation(tabId, targetId, '0');
       }
     }
+
+    const tabs = await chrome.tabs.query({});
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+
+    await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
+      exceedingLimitations: qualifyingTabs.length > 5,
+    });
 
     await chrome.tabs.sendMessage(tabId, {
       tabId,

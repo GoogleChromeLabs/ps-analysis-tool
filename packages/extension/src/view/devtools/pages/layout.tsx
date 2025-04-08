@@ -38,7 +38,6 @@ import {
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
   Button,
-  PaddedCross,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -54,6 +53,10 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
+import {
+  CDP_WARNING_MESSAGE,
+  RELOAD_WARNING_MESSAGE,
+} from '../../../constants';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -71,17 +74,16 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     settingsChanged,
     handleSettingsChange,
     exceedingLimitations,
-    isUsingCDP,
-    hasWarningBeenShown,
-    setHasWarningBeenShown,
     isUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
-    isUsingCDP: state.isUsingCDP,
-    hasWarningBeenShown: state.hasWarningBeenShown,
-    setHasWarningBeenShown: actions.setHasWarningBeenShown,
+    setSettingsChanged: actions.setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay:
+      actions.setIsUsingCDPForSettingsPageDisplay,
     isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
   }));
 
@@ -202,23 +204,104 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   const buttonReloadActionCompnent = useMemo(() => {
     return (
-      <Button text={'Reload'} onClick={handleSettingsChange} variant="large" />
+      <div className="flex items-center gap-5">
+        <Button
+          text="Yes"
+          size="large"
+          onClick={handleSettingsChange}
+          variant="success"
+        />
+        <Button
+          text="Cancel"
+          size="large"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsPageDisplay(true);
+          }}
+        />
+      </div>
     );
-  }, [handleSettingsChange]);
+  }, [
+    handleSettingsChange,
+    setIsUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
+  ]);
+
+  const isUsingCDPCondition = useMemo(
+    () => isUsingCDPForSettingsPageDisplay,
+    [isUsingCDPForSettingsPageDisplay]
+  );
 
   const settingsReadActionComponent = useMemo(() => {
     return (
-      <div
-        className="w-14 h-14 flex items-center"
-        onClick={() => {
-          chrome.storage.session.set({ readSettings: true });
-          setHasWarningBeenShown(true);
-        }}
-      >
-        <PaddedCross className="w-4 h-4" />
+      <div className="flex items-center gap-5">
+        <Button
+          text="Yes"
+          size="large"
+          onClick={handleSettingsChange}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
+        <Button
+          text="Cancel"
+          size="large"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsPageDisplay(false);
+          }}
+        />
       </div>
     );
-  }, [setHasWarningBeenShown]);
+  }, [
+    exceedingLimitations,
+    handleSettingsChange,
+    setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay,
+  ]);
+
+  const formedToastMessage = useMemo(() => {
+    let message = '';
+
+    if (settingsChanged) {
+      if (isUsingCDPCondition) {
+        message = exceedingLimitations
+          ? CDP_WARNING_MESSAGE
+          : RELOAD_WARNING_MESSAGE;
+        return (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={settingsReadActionComponent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
+          />
+        );
+      } else {
+        message = RELOAD_WARNING_MESSAGE;
+        return (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={buttonReloadActionCompnent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+          />
+        );
+      }
+    }
+    return <></>;
+  }, [
+    buttonReloadActionCompnent,
+    exceedingLimitations,
+    isUsingCDPCondition,
+    settingsChanged,
+    settingsReadActionComponent,
+  ]);
 
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
@@ -281,24 +364,6 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     ? 'min-w-[400px]'
     : 'min-w-[50rem]';
 
-  const isUsingCDPCondition = useMemo(() => {
-    if (isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    if (!isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
-
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -330,34 +395,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             </div>
           </div>
         </main>
-        {settingsChanged && (
-          <div className="h-fit w-full relative z-10">
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              actionComponent={buttonReloadActionCompnent}
-              textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-            />
-          </div>
-        )}
-        {!hasWarningBeenShown &&
-          exceedingLimitations &&
-          isUsingCDPCondition && (
-            <div
-              className={`h-fit w-full relative z-10 cursor-pointer ${
-                isUsingCDPForSettingsPageDisplay
-                  ? 'border-t dark:border-quartz border-american-silver'
-                  : ''
-              }`}
-            >
-              <ToastMessage
-                additionalStyles="text-sm"
-                text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
-                actionComponent={settingsReadActionComponent}
-                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-              />
-            </div>
-          )}
+        {formedToastMessage}
       </div>
     </div>
   );

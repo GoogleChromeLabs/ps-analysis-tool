@@ -23,6 +23,7 @@ import React, {
   useCallback,
 } from 'react';
 import { I18n } from '@google-psat/i18n';
+import isEqual from 'lodash-es/isEqual';
 /**
  * Internal dependencies.
  */
@@ -42,9 +43,6 @@ enum PLATFORM_OS_MAP {
 const Provider = ({ children }: PropsWithChildren) => {
   const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
   const [exceedingLimitations, setExceedingLimitations] =
-    useState<boolean>(false);
-
-  const [hasWarningBeenShown, setHasWarningBeenShown] =
     useState<boolean>(false);
 
   const [isUsingCDP, setIsUsingCDP] = useState(false);
@@ -83,12 +81,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
       setIsUsingCDP(currentSettings.isUsingCDP);
-    }
-
-    if (Object.keys(sessionStorage).includes('readSettings')) {
-      setHasWarningBeenShown(sessionStorage?.readSettings);
-    } else {
-      setHasWarningBeenShown(false);
     }
 
     chrome.tabs.query({}, (tabs) => {
@@ -197,11 +189,15 @@ const Provider = ({ children }: PropsWithChildren) => {
         setSettingsChanged(changes.pendingReload.newValue);
       }
 
-      if (Object.keys(changes).includes('readSettings')) {
-        setHasWarningBeenShown(changes?.readSettings.newValue);
+      if (
+        Object.keys(changes).includes('pendingReload') &&
+        Object.keys(changes.pendingReload).includes('oldValue') &&
+        !Object.keys(changes.pendingReload).includes('newValue')
+      ) {
+        setIsUsingCDPForSettingsPageDisplay(isUsingCDP);
       }
     },
-    []
+    [isUsingCDP]
   );
 
   const handleSettingsChange = useCallback(async () => {
@@ -215,10 +211,48 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [settingsChanged]);
 
   useEffect(() => {
+    if (!isEqual(isUsingCDP, isUsingCDPForSettingsPageDisplay)) {
+      setSettingsChanged(true);
+    } else {
+      setSettingsChanged(false);
+      chrome.storage.session.remove(['pendingReload', 'isUsingCDP']);
+    }
+  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
+
+  const onCommittedNavigationListener = useCallback(
+    ({
+      frameId,
+      frameType,
+      url,
+      tabId,
+    }: chrome.webNavigation.WebNavigationTransitionCallbackDetails) => {
+      const isNotTopLevelFrame =
+        frameType !== 'outermost_frame' && frameId !== 0;
+      const isInternalChromeURL =
+        url?.startsWith('chrome') || url?.startsWith('devtools');
+      const isNotCurrentTab = tabId !== chrome.devtools.inspectedWindow.tabId;
+      if (
+        isNotTopLevelFrame ||
+        isInternalChromeURL ||
+        !url ||
+        isNotCurrentTab
+      ) {
+        return;
+      }
+
+      chrome.tabs.query({}, (tabs) => {
+        setCurrentTabs(tabs.length);
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
     intitialSync();
     chrome.storage?.sync?.onChanged?.addListener(storeChangeListener);
     chrome.storage?.session?.onChanged?.addListener(sessionStoreChangeListener);
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
     return () => {
       chrome.storage?.sync?.onChanged?.removeListener(storeChangeListener);
@@ -226,8 +260,12 @@ const Provider = ({ children }: PropsWithChildren) => {
         sessionStoreChangeListener
       );
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation.onCommitted.removeListener(
+        onCommittedNavigationListener
+      );
     };
   }, [
+    onCommittedNavigationListener,
     intitialSync,
     storeChangeListener,
     sessionStoreChangeListener,
@@ -247,14 +285,13 @@ const Provider = ({ children }: PropsWithChildren) => {
           settingsChanged,
           isUsingCDPForSettingsPageDisplay,
           exceedingLimitations,
-          hasWarningBeenShown,
         },
         actions: {
-          setHasWarningBeenShown,
           setIsUsingCDP: _setUsingCDP,
           handleSettingsChange,
           setSettingsChanged,
           setExceedingLimitations,
+          setIsUsingCDPForSettingsPageDisplay,
         },
       }}
     >

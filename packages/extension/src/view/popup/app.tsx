@@ -21,11 +21,12 @@ import React, { useMemo } from 'react';
 import {
   Button,
   CirclePieChart,
-  PaddedCross,
+  Tick,
   ProgressBar,
   ToastMessage,
   ToggleSwitch,
   prepareCookieStatsComponents,
+  Plus,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -35,6 +36,7 @@ import { I18n } from '@google-psat/i18n';
 import './app.css';
 import { Legend } from './components';
 import { useCookie, useSettings } from './stateProviders';
+import { CDP_WARNING_MESSAGE, RELOAD_WARNING_MESSAGE } from '../../constants';
 
 const App: React.FC = () => {
   const { cookieStats, loading, onChromeUrl } = useCookie(({ state }) => ({
@@ -48,38 +50,20 @@ const App: React.FC = () => {
     handleSettingsChange,
     exceedingLimitations,
     isUsingCDP,
-    hasWarningBeenShown,
-    setHasWarningBeenShown,
     setUsingCDP,
     isUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
+    setIsUsingCDPForSettingsDisplay,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
     isUsingCDP: state.isUsingCDP,
-    hasWarningBeenShown: state.hasWarningBeenShown,
-    setHasWarningBeenShown: actions.setHasWarningBeenShown,
     setUsingCDP: actions.setUsingCDP,
+    setIsUsingCDPForSettingsDisplay: actions.setIsUsingCDPForSettingsDisplay,
     isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsDisplay,
+    setSettingsChanged: actions.setSettingsChanged,
   }));
-
-  const isUsingCDPCondition = useMemo(() => {
-    if (isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    if (!isUsingCDP) {
-      if (isUsingCDPForSettingsPageDisplay) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
 
   const cdpLabel = isUsingCDP
     ? I18n.getMessage('disableCDP')
@@ -87,66 +71,110 @@ const App: React.FC = () => {
 
   const buttonReloadActionCompnent = useMemo(() => {
     return (
-      <Button text={'Reload'} onClick={handleSettingsChange} variant="large" />
+      <div className="flex flex-col items-center gap-2">
+        <Button
+          text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
+          size="small"
+          onClick={handleSettingsChange}
+          variant="success"
+        />
+        <Button
+          text={
+            <Plus className="w-3 h-3 fill-white dark:fill-white rotate-45" />
+          }
+          size="small"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsDisplay(true);
+          }}
+        />
+      </div>
     );
-  }, [handleSettingsChange]);
+  }, [
+    handleSettingsChange,
+    setIsUsingCDPForSettingsDisplay,
+    setSettingsChanged,
+  ]);
+
+  const isUsingCDPCondition = useMemo(
+    () => isUsingCDPForSettingsPageDisplay,
+    [isUsingCDPForSettingsPageDisplay]
+  );
 
   const settingsReadActionComponent = useMemo(() => {
     return (
-      <div
-        className="w-14 h-14 flex items-center cursor-pointer"
-        onClick={() => {
-          chrome.storage.session.set({ readSettings: true });
-          setHasWarningBeenShown(true);
-        }}
-      >
-        <PaddedCross className="w-4 h-4" />
+      <div className="flex flex-col items-center gap-2">
+        <Button
+          text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
+          size="small"
+          onClick={handleSettingsChange}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
+        <Button
+          text={
+            <Plus className="w-3 h-3 fill-white dark:fill-white rotate-45" />
+          }
+          size="small"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsDisplay(false);
+          }}
+        />
       </div>
     );
-  }, [setHasWarningBeenShown]);
+  }, [
+    exceedingLimitations,
+    handleSettingsChange,
+    setIsUsingCDPForSettingsDisplay,
+    setSettingsChanged,
+  ]);
 
-  const performanceWarningToast = useMemo(() => {
-    if (!hasWarningBeenShown && exceedingLimitations && isUsingCDPCondition) {
-      return (
-        <div
-          className={`h-fit w-full relative z-10 ${
-            isUsingCDPForSettingsPageDisplay
-              ? 'border-t dark:border-quartz border-american-silver'
-              : ''
-          }`}
-        >
+  const formedToastMessage = useMemo(() => {
+    let message = '';
+
+    if (settingsChanged) {
+      if (isUsingCDPCondition) {
+        message = exceedingLimitations
+          ? CDP_WARNING_MESSAGE
+          : RELOAD_WARNING_MESSAGE;
+        return (
           <ToastMessage
-            isPopup={true}
+            isPopup
             additionalStyles="text-sm"
-            text="PSAT works best with a maximum of 5 tabs. Using more may impact the tool’s responsiveness."
+            text={message}
             actionComponent={settingsReadActionComponent}
-            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
           />
-        </div>
-      );
+        );
+      } else {
+        message = RELOAD_WARNING_MESSAGE;
+        return (
+          <ToastMessage
+            isPopup
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={buttonReloadActionCompnent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
+          />
+        );
+      }
     }
     return <></>;
   }, [
+    buttonReloadActionCompnent,
     exceedingLimitations,
-    hasWarningBeenShown,
     isUsingCDPCondition,
-    isUsingCDPForSettingsPageDisplay,
+    settingsChanged,
     settingsReadActionComponent,
   ]);
-
-  const settingsWarningToast = useMemo(() => {
-    if (settingsChanged) {
-      return (
-        <ToastMessage
-          additionalStyles="text-sm"
-          text={I18n.getMessage('settingsChanged')}
-          actionComponent={buttonReloadActionCompnent}
-          textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-        />
-      );
-    }
-    return <></>;
-  }, [settingsChanged, buttonReloadActionCompnent]);
 
   if (onChromeUrl) {
     return (
@@ -164,8 +192,7 @@ const App: React.FC = () => {
           {I18n.getMessage('emptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsWarningToast}
-          {performanceWarningToast}
+          {formedToastMessage}
         </div>
       </div>
     );
@@ -192,8 +219,7 @@ const App: React.FC = () => {
           {I18n.getMessage('tryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsWarningToast}
-          {performanceWarningToast}
+          {formedToastMessage}
         </div>
       </div>
     );
@@ -233,8 +259,7 @@ const App: React.FC = () => {
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
-        {settingsWarningToast}
-        {performanceWarningToast}
+        {formedToastMessage}
       </div>
     </div>
   );

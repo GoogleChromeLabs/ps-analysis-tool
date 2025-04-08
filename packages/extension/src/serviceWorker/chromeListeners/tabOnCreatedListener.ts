@@ -17,7 +17,6 @@
  * Internal dependencies
  */
 import dataStore from '../../store/dataStore';
-import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   try {
@@ -41,13 +40,6 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
         '0'
       );
     }
-
-    const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
-
-    await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
-      exceedingLimitations: qualifyingTabs.length > 5,
-    });
   } catch (error) {
     //Fail silently
     //eslint-disable-next-line no-console
