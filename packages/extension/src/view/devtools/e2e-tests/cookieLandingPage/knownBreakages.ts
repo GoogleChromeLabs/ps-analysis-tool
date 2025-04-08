@@ -44,8 +44,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     }, 40000);
 
     test('Should be able to validate the Known Breakages, GSI and GIS', async () => {
-      await puppeteer.navigateToURL(page, 'https://in.linkedin.com/');
-
+      await puppeteer.navigateToURL(
+        page,
+        'https://in.linkedin.com/?psat_cdp=on'
+      );
+      page.reload();
       const devtools = await puppeteer.getDevtools();
       const key = puppeteer.getCMDKey();
       interaction = new Interaction(devtools, key);
@@ -82,7 +85,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     }, 40000);
 
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
-      await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');
+      await puppeteer.navigateToURL(
+        page,
+        'https://www.math-only-math.com/?psat_cdp=on'
+      );
+      page.reload();
 
       const devtools = await puppeteer.getDevtools();
       const key = puppeteer.getCMDKey();
@@ -122,7 +129,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     }, 40000);
 
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
-      await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');
+      await puppeteer.navigateToURL(
+        page,
+        'https://www.math-only-math.com/?psat_cdp=on'
+      );
+      page.reload();
 
       const devtools = await puppeteer.getDevtools();
       const key = puppeteer.getCMDKey();

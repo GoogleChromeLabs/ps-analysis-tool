@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import {
+  JsonView,
   Table,
   TableProvider,
   type TableColumn,
@@ -30,9 +31,9 @@ import { Resizable } from 're-resizable';
 import {
   noop,
   type InterestGroups as InterestGroupsType,
+  type singleAuctionEvent,
 } from '@google-psat/common';
 import React, { useMemo, useState, useCallback } from 'react';
-import { prettyPrintJson } from 'pretty-print-json';
 
 interface InterestGroupsProps {
   interestGroupDetails: InterestGroupsType[];
@@ -57,12 +58,8 @@ const IGTable = ({
       {
         header: 'Event Time',
         accessorKey: 'formattedTime',
-        cell: (info) =>
-          (info as string)
-            .replace('T', ' | ')
-            .replace('Z', '')
-            .split('-')
-            .join('/'),
+        cell: (_, details) =>
+          (details as singleAuctionEvent).formattedTime.toString(),
         sortingComparator: (a, b) => {
           const aTime = Number((a as string).slice(0, a.length - 2));
           const bTime = Number((b as string).slice(0, b.length - 2));
@@ -254,14 +251,7 @@ const IGTable = ({
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
-            <pre>
-              <div
-                className="json-container"
-                dangerouslySetInnerHTML={{
-                  __html: prettyPrintJson.toHtml(selectedRow),
-                }}
-              />
-            </pre>
+            <JsonView src={selectedRow} />
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

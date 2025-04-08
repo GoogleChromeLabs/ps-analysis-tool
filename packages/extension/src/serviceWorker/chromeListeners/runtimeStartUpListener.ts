@@ -23,10 +23,6 @@ export const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
   setupIntervals();
 
-  if (storage?.allowedNumberOfTabs) {
-    dataStore.tabMode = storage.allowedNumberOfTabs;
-  }
-
   if (Object.keys(storage).includes('isUsingCDP')) {
     dataStore.globalIsUsingCDP = storage.isUsingCDP;
   }
