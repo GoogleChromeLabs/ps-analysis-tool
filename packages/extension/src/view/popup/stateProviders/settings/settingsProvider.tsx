@@ -133,6 +133,15 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
+    if (isUsingCDP !== isUsingCDPForSettingsDisplay) {
+      setSettingsChanged(true);
+    } else {
+      setSettingsChanged(false);
+      chrome.storage.session.remove(['pendingReload', 'isUsingCDP']);
+    }
+  }, [isUsingCDP, isUsingCDPForSettingsDisplay]);
+
+  useEffect(() => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.storage.session.onChanged.addListener(sessionStoreChangeListener);
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
