@@ -595,7 +595,7 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Update learning landing page icons and content https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/997
 
 
-# v0.13.1
+# v0.14.0
 
 ## Changelog
 
@@ -604,10 +604,14 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Fix: Minor bugs in PSAT https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1025
 - Fix: Redirection to dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1029
 - Add search icon to info cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1030
+- Enhancement: Dynamic dark mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1028
+- Enhancement: Make JSON view collapsible https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1007
 - Move 'Wiki' after 'Demos' page under 'Learning' section https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1019
 - Refactor auction shaper https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1032
+- Refactor: Toast UI message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1035
 - Remove multi-tab debugging option and show toast message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1031
 - Rename "Media Type" column to "Ad Type" in bids table https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1027
 - Replace number and logo icons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1026
+
 
 
