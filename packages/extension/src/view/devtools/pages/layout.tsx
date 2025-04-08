@@ -199,8 +199,35 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   ]);
 
   const buttonReloadActionCompnent = useMemo(() => {
-    return <Button text="Reload" onClick={handleSettingsChange} size="large" />;
-  }, [handleSettingsChange]);
+    return (
+      <div className="flex items-center gap-5">
+        <Button
+          text="Yes"
+          size="large"
+          onClick={() => {
+            handleSettingsChange();
+          }}
+          variant="success"
+        />
+        <Button
+          text="Cancel"
+          size="large"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsPageDisplay(true);
+          }}
+        />
+      </div>
+    );
+  }, [
+    handleSettingsChange,
+    setIsUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
+  ]);
 
   const isUsingCDPCondition = useMemo(() => {
     if (isUsingCDPForSettingsPageDisplay) {

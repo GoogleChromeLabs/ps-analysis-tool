@@ -52,12 +52,14 @@ const App: React.FC = () => {
     setUsingCDP,
     isUsingCDPForSettingsPageDisplay,
     setSettingsChanged,
+    setIsUsingCDPForSettingsDisplay,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
     isUsingCDP: state.isUsingCDP,
     setUsingCDP: actions.setUsingCDP,
+    setIsUsingCDPForSettingsDisplay: actions.setIsUsingCDPForSettingsDisplay,
     isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsDisplay,
     setSettingsChanged: actions.setSettingsChanged,
   }));
@@ -67,8 +69,35 @@ const App: React.FC = () => {
     : I18n.getMessage('enableCDP');
 
   const buttonReloadActionCompnent = useMemo(() => {
-    return <Button text="Reload" onClick={handleSettingsChange} size="large" />;
-  }, [handleSettingsChange]);
+    return (
+      <div className="flex items-center gap-5">
+        <Button
+          text="Yes"
+          size="large"
+          onClick={() => {
+            handleSettingsChange();
+          }}
+          variant="success"
+        />
+        <Button
+          text="Cancel"
+          size="large"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsDisplay(true);
+          }}
+        />
+      </div>
+    );
+  }, [
+    handleSettingsChange,
+    setIsUsingCDPForSettingsDisplay,
+    setSettingsChanged,
+  ]);
 
   const isUsingCDPCondition = useMemo(() => {
     if (isUsingCDPForSettingsPageDisplay) {
@@ -138,6 +167,7 @@ const App: React.FC = () => {
     return <></>;
   }, [
     buttonReloadActionCompnent,
+    exceedingLimitations,
     isUsingCDPCondition,
     settingsChanged,
     settingsReadActionComponent,

@@ -30,6 +30,9 @@ export interface SettingsStoreContext {
     setUsingCDP: (newValue: boolean) => void;
     setSettingsChanged: (newValue: boolean) => void;
     setExceedingLimitations: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsUsingCDPForSettingsDisplay: React.Dispatch<
+      React.SetStateAction<boolean>
+    >;
   };
 }
 
@@ -45,6 +48,7 @@ const initialState: SettingsStoreContext = {
     setUsingCDP: noop,
     setSettingsChanged: noop,
     setExceedingLimitations: noop,
+    setIsUsingCDPForSettingsDisplay: noop,
   },
 };
 
