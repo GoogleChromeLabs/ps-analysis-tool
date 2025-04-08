@@ -168,6 +168,11 @@ prevButton?.addEventListener('click', () => {
   mainCanvas.loadPreviousCheckpoint();
 });
 
+const stepPrevButton = document.getElementById('step-prev');
+stepPrevButton?.addEventListener('click', () => {
+  mainCanvas.stepBack();
+});
+
 const playButton = document.getElementById('play');
 const playClick = () => {
   if (wasExpanded) {
@@ -196,7 +201,7 @@ playButton?.addEventListener('click', playClick);
 
 const stepNextButton = document.getElementById('step-next');
 stepNextButton?.addEventListener('click', () => {
-  mainCanvas.skipSteps(1);
+  mainCanvas.stepNext();
 });
 
 const nextButton = document.getElementById('next');

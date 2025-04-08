@@ -1112,6 +1112,126 @@ class Main {
     return this.checkpoints.size - 1;
   }
 
+  stepNext() {
+    if (!this.isPaused()) {
+      this.togglePause();
+    }
+
+    while (this.isTravelling) {
+      this.runTraveller();
+    }
+
+    const lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+    const toRender = this.stepsQueue[0];
+
+    if (toRender.getAnimatorId() !== lastSnapshotObject.getAnimatorId()) {
+      this.p5.clear();
+
+      for (let i = 0; i < this.snapshot.length; i++) {
+        const figure = this.snapshot[i];
+
+        if (
+          figure.getAnimatorId() &&
+          figure.getAnimatorId() !== toRender.getAnimatorId()
+        ) {
+          continue;
+        }
+
+        if (figure.getCanTravel()) {
+          figure.setShouldTravel(true);
+          figure.resetTraveller();
+          figure.completeTraveller();
+        } else {
+          figure.draw();
+        }
+      }
+    }
+
+    this.runner(false, false, true);
+  }
+
+  stepBack() {
+    if (!this.isPaused()) {
+      this.togglePause();
+    }
+
+    const wasTravelling = this.isTravelling;
+    while (this.isTravelling) {
+      this.runTraveller();
+    }
+
+    const lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+
+    if (lastSnapshotObject.getCanTravel()) {
+      lastSnapshotObject?.resetTraveller();
+      lastSnapshotObject?.setShouldTravel(true);
+    }
+
+    lastSnapshotObject.setThrow(false);
+
+    let animator: Animator | null = null;
+    if (lastSnapshotObject.getAnimatorId()) {
+      if (
+        this.animatorSnapshot[this.animatorSnapshot.length - 1]?.getId() ===
+        lastSnapshotObject.getAnimatorId()
+      ) {
+        animator = this.animatorSnapshot[this.animatorSnapshot.length - 1];
+        this.animatorStepsQueue.unshift(animator);
+        this.animatorSnapshot.pop();
+      } else {
+        animator = this.animatorStepsQueue[0];
+      }
+
+      if (!wasTravelling) {
+        animator.decrementIndex();
+      }
+    }
+
+    if (lastSnapshotObject.getGroupId()) {
+      const group = this.groupSnapshot[this.groupSnapshot.length - 1];
+
+      group.setThrow(false);
+
+      group.getFigures().forEach((object) => {
+        object.setThrow(false);
+
+        if (object.getCanTravel()) {
+          object.setShouldTravel(true);
+          object.resetTraveller();
+        }
+
+        this.snapshot.pop();
+      });
+
+      this.groupStepsQueue.unshift(group);
+      this.groupSnapshot.pop();
+      this.stepsQueue.unshift(...group.getFigures());
+    } else {
+      this.snapshot.pop();
+      this.stepsQueue.unshift(lastSnapshotObject);
+    }
+
+    this.p5.clear();
+    for (let i = 0; i < this.snapshot.length; i++) {
+      const figure = this.snapshot[i];
+
+      if (
+        figure.getAnimatorId() &&
+        figure.getAnimatorId() !== lastSnapshotObject.getAnimatorId()
+      ) {
+        continue;
+      }
+
+      if (figure.getCanTravel()) {
+        figure.setShouldTravel(true);
+        figure.resetTraveller();
+        figure.completeTraveller();
+      } else {
+        figure.draw();
+      }
+    }
+  }
+
   skipSteps(steps: number) {
     this.stepsToSkip = steps;
   }

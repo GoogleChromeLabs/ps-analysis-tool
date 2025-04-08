@@ -178,4 +178,26 @@ export default class Animator {
   shouldRunSideEffect(runSideEffect: boolean) {
     this.runSideEffect = runSideEffect;
   }
+
+  /**
+   * Decrement the index of the animator.
+   */
+  decrementIndex() {
+    if (this.index > 0) {
+      this.index--;
+    } else {
+      this.index = this.objects.length - 1;
+    }
+  }
+
+  /**
+   * Increment the index of the animator.
+   */
+  incrementIndex() {
+    if (this.index < this.objects.length - 1) {
+      this.index++;
+    } else {
+      this.index = 0;
+    }
+  }
 }
