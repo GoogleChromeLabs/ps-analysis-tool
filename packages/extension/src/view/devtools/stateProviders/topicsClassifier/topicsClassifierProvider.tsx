@@ -92,6 +92,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (inputValidationErrors.length > 0) {
       setInputValidationErrors(inputValidationErrors);
+      setClassificationResult([]);
       return;
     } else {
       try {
