@@ -24,3 +24,4 @@ export { default as PSSiteBoundriesIcon } from './site-boundries.svg';
 export { default as PSStoriesIcon } from './stories.svg';
 export { default as PSTrackingProtectionIcon } from './tracking-protection.svg';
 export { default as PSWikiIcon } from './wiki.svg';
+export { default as PSNumberCircleIcon } from './number-circle.svg';

@@ -33,8 +33,6 @@ type CDPCookiesType = { [cookies: string]: Protocol.Network.Cookie[] };
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {boolean} globalIsUsingCDP Boolean to determie whether or not CDP is being used.
  * @param {string} type The type of headers that are to be processed.
- * @param {string} tabToRead The current tab being read in single tab mode.
- * @param {string} tabMode The processing mode of the extension.
  * @param {string} tabId The tabId of the current request.
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {CookieDatabase} cookieDB Dictionary from open cookie database
@@ -47,8 +45,6 @@ type CDPCookiesType = { [cookies: string]: Protocol.Network.Cookie[] };
 export default async function parseHeaders(
   globalIsUsingCDP: boolean,
   type: 'request' | 'response',
-  tabToRead: string,
-  tabMode: 'single' | 'unlimited',
   tabId: number,
   url: string,
   cookieDB: CookieDatabase,
@@ -57,7 +53,7 @@ export default async function parseHeaders(
   requestId: string,
   headers?: chrome.webRequest.HttpHeader[]
 ) {
-  if (!canProcessCookies(tabMode, tabUrl, tabToRead, tabId, headers)) {
+  if (!canProcessCookies(tabUrl, headers)) {
     return null;
   }
 
