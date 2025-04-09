@@ -36,7 +36,7 @@ const Tile = ({ item }: TileProps) => {
       key={item.name}
       className="min-w-72 h-fit border border-chinese-silver px-3 py-4 rounded"
     >
-      <div className="flex gap-2 justify-start items-center mb-3 text-base text-raisin-black dark:text-bright-gray">
+      <div className="flex gap-2 justify-start items-center mb-3 text-small-body text-raisin-black dark:text-bright-gray">
         {Icon && <Icon width={20} height={20} className="fill-gray" />}
         <h4>{item.name}</h4>
       </div>
@@ -45,7 +45,7 @@ const Tile = ({ item }: TileProps) => {
           item.buttons.map((button) => (
             <button
               className={classNames(
-                'bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs',
+                'bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-small-body',
                 {
                   'hover:border-american-silver hover:cursor-pointer hover:bg-light-gray hover:scale-[1.03] transition-all duration-150 ease-in-out':
                     button.onClick,

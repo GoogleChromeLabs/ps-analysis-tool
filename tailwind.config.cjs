@@ -65,6 +65,8 @@ module.exports = {
     },
     fontFamily: {
       ...defaultTheme.fontFamily,
+      sans: ['"Noto Sans"', 'sans-serif'], // overrides Tailwind's default sans
+      noto: ['"Noto Sans"', 'sans-serif'], // optional: custom class font-noto
     },
     fontSize: {
       ...defaultTheme.fontSize,
@@ -72,6 +74,11 @@ module.exports = {
       xxl: '1.375rem', // 22px
       xsm: '0.9375rem',
       xxs: '0.8125rem',
+      'small-body': '0.8125rem', // 13px
+      'small-header': '1.25rem', // 20px
+      'large-body': '1.25rem', // 20px
+      'large-header': '1.875rem', // 30px
+      headline: '3.125rem', // 50px
     },
     fontWeight: {
       ...defaultTheme.fontWeight,

@@ -91,7 +91,7 @@ const TopicsClassifier = () => {
               ({ id, name }, index) => (
                 <div
                   key={index}
-                  className="p-1 text-xs hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
+                  className="p-1 text-small-body hover:opacity-60 active:opacity-50 hover:underline cursor-pointer"
                   onClick={() => topicsNavigator(name)}
                 >
                   {`${id}. ${name.split('/').pop()}`}
@@ -149,7 +149,7 @@ const TopicsClassifier = () => {
       <div className="flex w-full flex-col gap-4">
         <textarea
           placeholder={`Enter one domain per line, e.g.\ngoogle.com\nyoutube.com\nPlease do not include "http://" or "https://".`}
-          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue w-[70%]"
+          className="p-2 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-small-body leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue w-[70%]"
           cols={50}
           value={websites}
           onChange={(e) => setWebsites(e.target.value)}
@@ -159,7 +159,7 @@ const TopicsClassifier = () => {
         <Button
           onClick={handleClassification}
           text={'Classify'}
-          extraClasses="w-16 h-8 text-center justify-center text-xs"
+          extraClasses="w-16 h-8 text-center justify-center text-small-body"
         />
       </div>
       {validationErrors.length > 0 && (
@@ -170,7 +170,7 @@ const TopicsClassifier = () => {
               className="flex items-center gap-2 w-fit dark:bg-tomato-red bg-baby-pink m-0.25 px-4 py-1 rounded"
             >
               <CancelIcon className="w-4 h-4 dark:fill-blood-red fill-bright-red" />
-              <div className="text-xs rounded-sm dark:text-bright-gray">
+              <div className="text-small-body rounded-sm dark:text-bright-gray">
                 {error}
               </div>
             </div>

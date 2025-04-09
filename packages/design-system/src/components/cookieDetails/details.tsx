@@ -113,7 +113,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
   }, [selectedCookie.parsedCookie.value]);
 
   return (
-    <div className="text-xs py-1 px-1.5">
+    <div className="text-small-body py-1 px-1.5">
       {selectedCookieExemptionReason &&
         selectedCookieExemptionReason.toLowerCase() !== 'none' && (
           <div className="mb-4">
@@ -289,7 +289,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
 
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>{I18n.getMessage('cookieValue')}</span>
-        <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
+        <label className="text-raising-black dark:text-bright-gray text-small-body font-normal flex items-center">
           <input
             data-testid="show-url-decoded-checkbox"
             role="checkbox"

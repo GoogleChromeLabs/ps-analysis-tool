@@ -30,7 +30,7 @@ export const selectors = {
   firstRowSelector: 'div[tabindex="0"]',
   searchFieldCookietab: 'input[type="text"][placeholder="Search"]',
   TotalCookieTextCookietab:
-    'p.text-xs.text-center.font-semibold.leading-relaxed.dark\\:text-bright-gray',
+    'p.text-small-body.text-center.font-semibold.leading-relaxed.dark\\:text-bright-gray',
   totalCookieCount: 'p[class*="absolute top-1/2 left-1/2"]',
   sortSVG: 'svg.transform.rotate-180',
   firstRowXpath: '//div[@id="0"]/div[@tabindex="0"]',

@@ -103,7 +103,7 @@ const ListItem = ({
   }, [filter.values, hasScannedFiltersOnce, selectedFilterValues]);
 
   return (
-    <li className="py-[3px] text-xs">
+    <li className="py-[3px] text-small-body">
       <div className="flex gap-2 items-center">
         <button
           className="flex items-center text-asteriod-black dark:text-bright-gray disabled:opacity-50 active:opacity-70"

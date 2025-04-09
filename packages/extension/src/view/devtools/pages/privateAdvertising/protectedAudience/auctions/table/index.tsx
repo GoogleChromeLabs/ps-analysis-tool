@@ -236,7 +236,7 @@ const AuctionTable = ({
           </>
         ) : (
           <div className="h-full p-8 flex items-center justify-center">
-            <p className="text-center text-lg">
+            <p className="text-center text-large-body">
               Auction events have yet to be recorded.
             </p>
           </div>

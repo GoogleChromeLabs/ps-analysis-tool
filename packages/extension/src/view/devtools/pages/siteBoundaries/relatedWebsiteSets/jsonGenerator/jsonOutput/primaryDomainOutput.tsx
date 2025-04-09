@@ -36,13 +36,13 @@ const PrimaryDomainOutput = ({
   return (
     <div className="py-3 mb-3">
       <div className="flex gap-2 items-start mb-4">
-        <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
+        <p className="text-small-body leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           1
         </p>
-        <p className="text-base">{I18n.getMessage('addToRws')}</p>
+        <p className="text-small-body">{I18n.getMessage('addToRws')}</p>
       </div>
       <ul className="mb-2">
-        <li id="primaryOutput" className="text-sm">
+        <li id="primaryOutput" className="text-small-body">
           {primaryWellKnownOutput && primaryWellKnownOutput.primary
             ? primaryWellKnownOutput.primary +
               '/.well-known/related-website-set.json'

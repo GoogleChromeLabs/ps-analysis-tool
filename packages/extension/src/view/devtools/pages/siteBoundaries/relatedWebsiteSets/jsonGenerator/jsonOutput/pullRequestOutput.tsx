@@ -36,11 +36,11 @@ const PullRequestOutput = ({
   return (
     <div className="py-3 mb-3">
       <div className="flex gap-2 items-start mb-4">
-        <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
+        <p className="text-small-body leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           3
         </p>
         <p
-          className="text-base"
+          className="text-small-body"
           dangerouslySetInnerHTML={{
             __html: I18n.getMessage('submitPRForRws', [
               `<a

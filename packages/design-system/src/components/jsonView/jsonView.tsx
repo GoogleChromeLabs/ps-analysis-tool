@@ -31,7 +31,7 @@ import './jsonView.css';
 
 const LoadingText = () => {
   return (
-    <div className="w-full h-full flex items-center justify-center text-lg font-bold text-granite-gray">
+    <div className="w-full h-full flex items-center justify-center text-large-body font-bold text-granite-gray">
       Loading...
     </div>
   );

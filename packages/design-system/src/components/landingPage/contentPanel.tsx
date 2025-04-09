@@ -51,7 +51,7 @@ const ContentPanel = ({
 
   return (
     <div className="px-2">
-      <h3 className="text-base text-raisin-black dark:text-bright-gray mb-7">
+      <h3 className="text-small-body text-raisin-black dark:text-bright-gray mb-7">
         {title}
       </h3>
       <div className="flex gap-5 flex-wrap">
@@ -77,7 +77,7 @@ const ContentPanel = ({
               </div>
             </div>
             <h3
-              className={`text-lg font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
+              className={`text-small-header font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
               onClick={() =>
                 item.sidebarItemKey
                   ? updateSelectedItemKey(item.sidebarItemKey)
@@ -86,7 +86,7 @@ const ContentPanel = ({
             >
               {item.title()}
             </h3>
-            <p className="text-base text-raisin-black dark:text-bright-gray mb-2">
+            <p className="text-small-body text-raisin-black dark:text-bright-gray mb-2">
               {item.description()}
             </p>
             <div className="absolute top-10 right-5 flex gap-2">

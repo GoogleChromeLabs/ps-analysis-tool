@@ -118,12 +118,12 @@ const Panel = ({
         >
           <div className="text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
             {selectedRow ? (
-              <div className="text-xs py-1 px-1.5">
+              <div className="text-small-body py-1 px-1.5">
                 <JsonView src={selectedRow} />
               </div>
             ) : (
               <div className="h-full p-8 flex items-center">
-                <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+                <p className="text-large-body w-full font-bold text-granite-gray dark:text-manatee text-center">
                   {I18n.getMessage('selectRowToPreview')}
                 </p>
               </div>

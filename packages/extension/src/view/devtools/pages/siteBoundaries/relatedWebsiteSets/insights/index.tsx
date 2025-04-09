@@ -83,18 +83,18 @@ const Insights = () => {
     <div className="text-raisin-black dark:text-bright-gray">
       {loading ? (
         <div className="flex gap-2 items-center justify-start">
-          <p className="text-sm">{I18n.getMessage('loading')}...</p>
+          <p className="text-small-body">{I18n.getMessage('loading')}...</p>
           <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
         </div>
       ) : (
         <div className="space-y-3">
           {insightsData?.isURLInRWS ? (
             <>
-              <p className="text-lg font-medium">
+              <p className="text-large-body font-medium">
                 <span className="font-serif text-green-700">✓</span>{' '}
                 {I18n.getMessage('belongsToRWS')}
               </p>
-              <p className="text-sm">
+              <p className="text-small-body">
                 {I18n.getMessage('primaryDomain')}:{' '}
                 <a
                   href={insightsData.relatedWebsiteSet?.primary}
@@ -109,7 +109,7 @@ const Insights = () => {
               {!insightsData.primary ? (
                 <>
                   {insightsData.isccTLD ? (
-                    <p className="text-sm">
+                    <p className="text-small-body">
                       {I18n.getMessage('siteccTldOf')}
                       <a
                         href={insightsData.relatedWebsiteSet?.ccTLDParent}
@@ -131,7 +131,7 @@ const Insights = () => {
                             getDomain(domain) === insightsData.domain
                         )
                         .map(([domain, value]) => (
-                          <p key={domain} className="text-sm">
+                          <p key={domain} className="text-small-body">
                             {I18n.getMessage('rationale')}:
                             {I18n.getMessage(value)}
                           </p>
@@ -156,7 +156,7 @@ const Insights = () => {
               </div>
             </>
           ) : (
-            <p className="text-lg font-medium flex items-center gap-2">
+            <p className="text-large-body font-medium flex items-center gap-2">
               <span className="text-red-500">✗</span>
               {I18n.getMessage('notBelongToRWS')}
             </p>

@@ -32,14 +32,14 @@ const Info = ({ data }: InfoProps) => {
     <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full w-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
       {data?.info ? (
         <div className="p-2">
-          <h3 className="text-sm font-medium">
+          <h3 className="text-small-body font-medium">
             {data?.title + ' ' + (data?.description || '')}
           </h3>
           <div className="text-[12.5px] mt-1">{data?.info}</div>
         </div>
       ) : (
         <div className="h-full box-border p-8 flex items-center">
-          <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+          <p className="text-large-body w-full font-bold text-granite-gray dark:text-manatee text-center">
             No information available
           </p>
         </div>

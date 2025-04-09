@@ -41,19 +41,23 @@ const OtherDomainOutput = ({
   return (
     <div className="py-3 mb-3">
       <div className="flex gap-2 items-start mb-4">
-        <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
+        <p className="text-small-body leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           2
         </p>
-        <p className="text-base">{I18n.getMessage('addToRwsOtherDomains')}</p>
+        <p className="text-small-body">
+          {I18n.getMessage('addToRwsOtherDomains')}
+        </p>
       </div>
       <div id="domainsListOutput">
         <ul className="list-disc">
           {primaryWellKnownOutput && primaryWellKnownOutput.associatedSites && (
             <div className="mb-2">
-              <p className="text-sm">{I18n.getMessage('associatedSites')}</p>
+              <p className="text-small-body">
+                {I18n.getMessage('associatedSites')}
+              </p>
               <div className="pl-4">
                 {primaryWellKnownOutput.associatedSites.map((url) => (
-                  <li key={url} className="text-sm">
+                  <li key={url} className="text-small-body">
                     {url}/.well-known/related-website-set.json
                   </li>
                 ))}
@@ -62,10 +66,12 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.serviceSites && (
             <div className="mb-2">
-              <p className="text-sm">{I18n.getMessage('serviceSites')}</p>
+              <p className="text-small-body">
+                {I18n.getMessage('serviceSites')}
+              </p>
               <div className="pl-4">
                 {primaryWellKnownOutput.serviceSites.map((url) => (
-                  <li key={url} className="text-sm">
+                  <li key={url} className="text-small-body">
                     {url}/.well-known/related-website-set.json
                   </li>
                 ))}
@@ -74,11 +80,13 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.ccTLDs && (
             <div className="mb-2">
-              <p className="text-sm">{I18n.getMessage('countrySites')}</p>
+              <p className="text-small-body">
+                {I18n.getMessage('countrySites')}
+              </p>
               <div className="pl-4">
                 {Object.values(primaryWellKnownOutput.ccTLDs).map((cctlds) =>
                   cctlds.map((cctld) => (
-                    <li key={cctld} className="text-sm">
+                    <li key={cctld} className="text-small-body">
                       {cctld}/.well-known/related-website-set.json
                     </li>
                   ))

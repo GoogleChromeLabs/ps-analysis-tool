@@ -52,7 +52,7 @@ const Bids = () => {
   if (!isUsingCDP) {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
+        <p className="text-small-body text-raisin-black dark:text-bright-gray">
           To view bids data, enable PSAT to use CDP via the{' '}
           <button
             className="text-bright-navy-blue dark:text-jordy-blue"

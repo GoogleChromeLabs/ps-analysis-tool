@@ -80,7 +80,7 @@ const LandingPage = ({
         {!hideTitle && (
           <div className="flex justify-between">
             <div className="p-4 flex flex-col gap-1">
-              <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+              <div className="flex gap-2 text-large-header font-bold items-baseline text-raisin-black dark:text-bright-gray">
                 {title && <h1 className="text-left">{title}</h1>}
               </div>
               <Breadcrumbs items={extractSelectedItemKeyTitles()} />

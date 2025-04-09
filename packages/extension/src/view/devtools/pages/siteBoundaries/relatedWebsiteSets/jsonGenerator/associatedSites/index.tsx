@@ -46,7 +46,7 @@ const AssociatedSites = ({
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <p className="text-base flex items-center gap-2 ">
+        <p className="text-small-body flex items-center gap-2 ">
           {I18n.getMessage('associatedSubset')}
           <span title={I18n.getMessage('associatedDomainsLimit')}>
             <InfoIcon className="fill-granite-gray" />

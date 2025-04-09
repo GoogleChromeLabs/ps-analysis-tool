@@ -45,7 +45,7 @@ const ServiceSites = ({
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <p className="text-base">{I18n.getMessage('serviceSubset')}</p>
+        <p className="text-small-body">{I18n.getMessage('serviceSubset')}</p>
         <AddButton onClick={addServiceSite} />
       </div>
       <div id="serviceDomains">

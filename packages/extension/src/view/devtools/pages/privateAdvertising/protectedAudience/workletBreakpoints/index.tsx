@@ -29,7 +29,7 @@ const WorkletBreakpoints = () => {
   return (
     <>
       <Breakpoints />
-      <div className="p-4 text-raisin-black dark:text-bright-gray text-sm">
+      <div className="p-4 text-raisin-black dark:text-bright-gray text-small-body">
         <p>
           Use event listener breakpoints to pause on an event listener code that
           runs after an event is fired for an ad auction. It can be used for the

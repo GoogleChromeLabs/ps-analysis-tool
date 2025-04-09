@@ -87,7 +87,7 @@ export const MainContentContainer = () => {
   }
 
   return (
-    <div className="flex-1 text-base h-full w-full flex items-center justify-center text-raisin-black dark:text-bright-gray">
+    <div className="flex-1 text-small-body h-full w-full flex items-center justify-center text-raisin-black dark:text-bright-gray">
       No stories found with given filters.
     </div>
   );

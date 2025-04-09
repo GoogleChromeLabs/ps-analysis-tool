@@ -52,7 +52,7 @@ const Button = ({
         extraClasses,
         'rounded flex items-center text-center py-1 px-2 font-medium',
         {
-          'py-0.5 px-1.5 text-xs bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
+          'py-0.5 px-1.5 text-small-body bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
             variant === 'small',
           'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 bg-smurf-blue dark:bg-google-blue text-white dark:text-raisin-black':
             variant === 'large',

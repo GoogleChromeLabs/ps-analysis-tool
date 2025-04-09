@@ -50,7 +50,7 @@ const AccordionHeading = ({
         {urlCount !== 0 && (
           <span
             className={`${
-              urlCount > 9 ? 'text-xxxs' : 'text-xs'
+              urlCount > 9 ? 'text-xxxs' : 'text-small-body'
             } text-gray dark:text-bright-gray font-semibold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
             title={`${urlCount} URL(s) have this known breakage.`}
           >

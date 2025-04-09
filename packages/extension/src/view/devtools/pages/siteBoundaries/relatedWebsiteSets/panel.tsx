@@ -42,7 +42,7 @@ const Panel = () => {
   return (
     <div data-testid="related-website-sets-content" className="h-full w-full">
       <div className="p-4 flex flex-col gap-1 mb-2">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
+        <div className="flex gap-2 text-large-header font-bold items-baseline text-raisin-black dark:text-bright-gray">
           <h1 className="text-left">{I18n.getMessage('rws')}</h1>
         </div>
         <Breadcrumbs items={extractSelectedItemKeyTitles()} />

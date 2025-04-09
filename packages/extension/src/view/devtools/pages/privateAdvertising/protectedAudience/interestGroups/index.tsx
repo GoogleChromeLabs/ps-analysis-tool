@@ -43,7 +43,7 @@ const InterestGroups = () => {
   if (!isUsingCDP) {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
+        <p className="text-small-body text-raisin-black dark:text-bright-gray">
           To view interest group events, enable PSAT to use CDP via the{' '}
           <button
             className="text-bright-navy-blue dark:text-jordy-blue"
@@ -65,7 +65,7 @@ const InterestGroups = () => {
   if (!interestGroupDetails || interestGroupDetails.length === 0) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center">
-        <p className="text-lg text-raisin-black dark:text-bright-gray">
+        <p className="text-large-body text-raisin-black dark:text-bright-gray">
           No interests group events recorded.
         </p>
         <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the interest group events if you haven’t already." />

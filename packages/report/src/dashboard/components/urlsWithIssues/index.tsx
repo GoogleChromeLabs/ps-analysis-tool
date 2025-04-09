@@ -99,7 +99,7 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
       </Resizable>
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
         {selectedRow ? (
-          <div className="text-xs py-1 px-1.5">
+          <div className="text-small-body py-1 px-1.5">
             {selectedRow.url && (
               <>
                 <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
@@ -139,7 +139,7 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
-            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+            <p className="text-large-body w-full font-bold text-granite-gray dark:text-manatee text-center">
               {I18n.getMessage('selectRowToPreview')}
             </p>
           </div>

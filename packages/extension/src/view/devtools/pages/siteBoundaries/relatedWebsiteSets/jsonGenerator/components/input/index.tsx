@@ -39,11 +39,11 @@ const RWSInput = ({
 }: RWSInputProps) => {
   return (
     <div className="flex flex-col gap">
-      <label className="text-sm">{inputLabel}</label>
+      <label className="text-small-body">{inputLabel}</label>
       <input
         type="text"
         className={classNames(
-          'my-1 py-px px-1 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue',
+          'my-1 py-px px-1 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-small-body leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue',
           {
             '!border-red-500 dark:!border-red-500':
               error && formValidationFailed,
@@ -57,7 +57,7 @@ const RWSInput = ({
         onChange={inputChangeHandler}
       />
       {error && formValidationFailed && (
-        <span className="text-red-500 text-sm mt-2">{error}</span>
+        <span className="text-red-500 text-small-body mt-2">{error}</span>
       )}
     </div>
   );

@@ -51,10 +51,10 @@ const ContentPanel = () => {
               height="120"
               className="inline-block mb-5"
             />
-            <h2 className="text-5xl mb-5 font-semibold">
+            <h2 className="text-headline mb-5 font-semibold">
               Protecting your privacy online
             </h2>
-            <p className="text-base">
+            <p className="text-small-body">
               The Privacy Sandbox initiative aims to create technologies that
               both protect people&apos;s privacy online and give companies and
               developers tools to build thriving digital businesses. The Privacy
@@ -64,13 +64,13 @@ const ContentPanel = () => {
             <div className="flex gap-6 justify-center mt-5">
               <Link
                 href={addUTMParams('https://privacysandbox.com')}
-                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex"
+                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-small-body hover:bg-light-gray hover:border-american-silver flex"
               >
                 <span>Learn More</span>
               </Link>
               <button
                 onClick={() => navigateTo(SIDEBAR_ITEMS_KEYS.DASHBOARD)}
-                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver"
+                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-small-body hover:bg-light-gray hover:border-american-silver"
               >
                 Dashboard
               </button>

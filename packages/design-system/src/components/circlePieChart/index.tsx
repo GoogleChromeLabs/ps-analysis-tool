@@ -74,7 +74,7 @@ const CirclePieChart = ({
       </div>
       {title && (
         <div className="flex items-center justify-center gap-1 mt-2 relative">
-          <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
+          <p className="text-small-body text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
         </div>

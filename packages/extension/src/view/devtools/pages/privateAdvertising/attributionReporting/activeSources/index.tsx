@@ -216,7 +216,7 @@ const ActiveSources = () => {
             return (
               <div>
                 {(info as string[]).map((_info, index) => (
-                  <div key={index} className="p-1 text-xs">
+                  <div key={index} className="p-1 text-small-body">
                     {_info}
                   </div>
                 ))}
@@ -280,7 +280,10 @@ const ActiveSources = () => {
             defaultChecked={filter.activeSources}
             className="hover:cursor-pointer"
           />
-          <label htmlFor="showAllEvents" className="text-xs leading-none">
+          <label
+            htmlFor="showAllEvents"
+            className="text-small-body leading-none"
+          >
             Show current tab registrations
           </label>
           <div
@@ -336,12 +339,12 @@ const ActiveSources = () => {
       </Resizable>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
-          <div className="text-xs py-1 px-1.5 h-full">
+          <div className="text-small-body py-1 px-1.5 h-full">
             <JsonView src={selectedJSON} />
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
-            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+            <p className="text-large-body w-full font-bold text-granite-gray dark:text-manatee text-center">
               {I18n.getMessage('selectRowToPreview')}
             </p>
           </div>

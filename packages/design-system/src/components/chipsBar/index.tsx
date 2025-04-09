@@ -61,7 +61,7 @@ const ChipsBar = ({
     >
       {appliedFiltersCount > 0 && !hideClearAll && (
         <button
-          className="h-full flex items-center text-link text-xs whitespace-nowrap"
+          className="h-full flex items-center text-link text-small-body whitespace-nowrap"
           onClick={resetFilters}
         >
           <StopIcon className="text-gray min-w-[14px] min-h-[14px]" />

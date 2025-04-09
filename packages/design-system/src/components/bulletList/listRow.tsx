@@ -60,12 +60,12 @@ const ListRow = ({ row }: Props) => {
           title={row.link}
           href={row.link}
           onClick={handleClick}
-          className="text-sm text-bright-navy-blue dark:text-jordy-blue font-medium leading-6"
+          className="text-small-body text-bright-navy-blue dark:text-jordy-blue font-medium leading-6"
         >
           {row.title}
         </a>
       ) : (
-        <p className="text-sm font-medium leading-6">{row.title}</p>
+        <p className="text-small-body font-medium leading-6">{row.title}</p>
       )}
     </div>
   );

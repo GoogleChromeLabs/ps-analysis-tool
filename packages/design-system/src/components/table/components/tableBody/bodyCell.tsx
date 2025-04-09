@@ -66,7 +66,7 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`flex box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
+      className={`flex box-border outline-0 px-1 py-px text-small-body cursor-default flex-1 min-h-fit ${
         rowHeightClass ?? 'min-h-5'
       }`}
     >

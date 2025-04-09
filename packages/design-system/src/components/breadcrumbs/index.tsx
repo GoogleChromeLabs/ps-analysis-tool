@@ -49,7 +49,7 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
             key={item.key}
             onClick={() => updateSelectedItemKey(item.key)}
             className={classNames(
-              'text-xs flex items-center text-raisin-black dark:text-bright-gray',
+              'text-small-body flex items-center text-raisin-black dark:text-bright-gray',
               {
                 'font-bold': index === items.length - 1,
               },

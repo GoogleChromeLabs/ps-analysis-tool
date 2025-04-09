@@ -152,7 +152,7 @@ const MenuBar = ({
               </div>
             ) : (
               <>
-                <div className="absolute flex items-center justify-center right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
+                <div className="absolute flex items-center justify-center right-6 w-max px-3 py-1 rounded invisible text-small-body text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
                   {disableReportDownload
                     ? I18n.getMessage('waitForLD')
                     : I18n.getMessage('downloadReport')}
@@ -182,7 +182,7 @@ const MenuBar = ({
             }
           }}
         >
-          <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
+          <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-small-body text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
             {item.name}
             <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
           </div>

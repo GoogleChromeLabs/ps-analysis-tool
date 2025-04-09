@@ -75,7 +75,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       <div
         className={classNames(
           'flex gap-8 mx-4 w-full',
-          fontSizeClass ? fontSizeClass : 'text-sm'
+          fontSizeClass ? fontSizeClass : 'text-small-body'
         )}
       >
         {titles.map((title, index) => {

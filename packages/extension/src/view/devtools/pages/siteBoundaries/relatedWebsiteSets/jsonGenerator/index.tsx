@@ -67,7 +67,7 @@ const RWSJsonGenerator = () => {
       <div className="overflow-auto">
         <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
           <p
-            className="text-sm"
+            className="text-small-body"
             dangerouslySetInnerHTML={{
               __html: I18n.getMessage('rwsJsonGeneratorNote', [
                 `<a
@@ -82,7 +82,7 @@ const RWSJsonGenerator = () => {
             }}
           />
           <div className="mt-4 bg-anti-flash-white dark:bg-charleston-green border rounded-xl border-gray-200 dark:border-quartz px-4 py-3 shadow">
-            <p className="text-base my-3">
+            <p className="text-small-body my-3">
               {I18n.getMessage('enterRwsDetails')}
             </p>
             <form onSubmit={submitForm} onReset={resetForm}>

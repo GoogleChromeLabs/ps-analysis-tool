@@ -31,7 +31,7 @@ const EvaluationEnvironment = ({ text }: EvaluationEnvironmentProps) => {
         <InfoIcon className="w-3 h-3 fill-granite-gray" />
       </div>
       <div
-        className="text-sm text-center text-gray dark:text-bright-gray"
+        className="text-small-body text-center text-gray dark:text-bright-gray"
         style={{ whiteSpace: 'pre-line' }}
       >
         <LinkProcessor

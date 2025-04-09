@@ -48,7 +48,7 @@ const MatrixComponent = ({
       <div className="flex gap-x-4">
         <Circle color={color} />
         <div className="lg:max-w-[80%] lg:mr-8 text-left">
-          <h4 className="-mt-[3px] mb-1.5 text-xs font-medium dark:text-bright-gray">
+          <h4 className="-mt-[3px] mb-1.5 text-small-body font-medium dark:text-bright-gray">
             {title}
           </h4>
           <p style={{ color }} className={classnames(countClassName)}>
@@ -56,7 +56,7 @@ const MatrixComponent = ({
           </p>
           {description && isExpanded && (
             <p
-              className="mt-2 text-xs text-darkest-gray dark:text-bright-gray"
+              className="mt-2 text-small-body text-darkest-gray dark:text-bright-gray"
               dangerouslySetInnerHTML={{ __html: description }}
             />
           )}

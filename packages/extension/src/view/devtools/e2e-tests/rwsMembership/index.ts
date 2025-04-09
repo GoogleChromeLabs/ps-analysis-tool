@@ -76,7 +76,7 @@ describe('RWS membership', () => {
 
     const rwsmembershiptext = await interaction.getInnerText(
       frame,
-      'p.text-lg.font-medium'
+      'p.text-large-body.font-medium'
     );
     expect(rwsmembershiptext).toBe(
       '✓ This site belongs to a Related Website Set.'

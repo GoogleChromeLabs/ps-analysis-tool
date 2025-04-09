@@ -64,10 +64,10 @@ const JsonOutput = ({
           ref={resultContainer}
           className="mt-6 divide-y divide-american-silver dark:divide-quartz"
         >
-          <h4 className="text-lg my-4 font-semibold">
+          <h4 className="text-large-body my-4 font-semibold">
             {I18n.getMessage('rWSJSONHeading')}:
             <br />
-            <span className="text-sm font-normal">
+            <span className="text-small-body font-normal">
               {I18n.getMessage('followInstructions', ['Related Website Set'])}
             </span>
           </h4>

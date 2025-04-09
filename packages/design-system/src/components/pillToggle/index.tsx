@@ -35,14 +35,14 @@ const PillToggle = ({
   eeAnimatedTab,
 }: PillToggleProps) => {
   return (
-    <div className="w-80 h-8 rounded-full border border-gray-300 dark:border-quartz text-sm">
+    <div className="w-80 h-8 rounded-full border border-gray-300 dark:border-quartz text-small-body">
       <button
         className={classNames(
           'w-1/2 h-full rounded-full text-raisin-black dark:text-bright-gray',
           {
             'bg-gray-200 dark:bg-gray-500 ': pillToggle === firstOption,
             'bg-transparent': pillToggle !== firstOption,
-            'text-xs': eeAnimatedTab,
+            'text-small-body': eeAnimatedTab,
           }
         )}
         onClick={() => setPillToggle(firstOption)}
@@ -55,7 +55,7 @@ const PillToggle = ({
           {
             'bg-gray-200 dark:bg-gray-500': pillToggle === secondOption,
             'bg-transparent': pillToggle !== secondOption,
-            'text-xs': eeAnimatedTab,
+            'text-small-body': eeAnimatedTab,
           }
         )}
         onClick={() => setPillToggle(secondOption)}

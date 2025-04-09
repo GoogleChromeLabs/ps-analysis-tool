@@ -98,7 +98,7 @@ const SidebarChild = ({
           }
           setIsSidebarFocused(true);
         }}
-        className={`w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
+        className={`w-full flex items-center py-0.5 outline-0 text-small-body dark:text-bright-gray ${
           isKeySelected(itemKey)
             ? isSidebarFocused
               ? 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver'

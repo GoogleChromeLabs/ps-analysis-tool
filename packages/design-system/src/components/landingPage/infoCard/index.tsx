@@ -50,7 +50,7 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
       {Object.keys(PSInfo).length ? (
         <div className="max-w-2xl">
           <p
-            className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
+            className="mb-3 text-raisin-black dark:text-bright-gray text-small-body"
             dangerouslySetInnerHTML={{
               __html:
                 PSInfo.useI18n === false

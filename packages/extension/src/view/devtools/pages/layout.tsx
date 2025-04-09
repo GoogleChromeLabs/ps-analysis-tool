@@ -306,7 +306,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         {settingsChanged && (
           <div className="h-fit w-full relative z-10">
             <ToastMessage
-              additionalStyles="text-sm"
+              additionalStyles="text-small-body"
               text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"

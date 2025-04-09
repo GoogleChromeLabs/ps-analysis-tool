@@ -31,7 +31,7 @@ const SitesList = ({ title, sites }: SitesListProps) => {
 
   return (
     <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
-      <h4 className="text-base font-medium text-davys-grey dark:text-anti-flash-white mb-1">
+      <h4 className="text-small-body font-medium text-davys-grey dark:text-anti-flash-white mb-1">
         {title}
       </h4>
       <div className="overflow-auto">

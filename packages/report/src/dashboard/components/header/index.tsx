@@ -33,8 +33,8 @@ const Header = ({ url, dateTime, version }: HeaderProps) => {
       <div className="flex gap-2 items-center">
         <PrivacySandboxColoredIcon className="w-[40px] h-[40px]" />
         <div>
-          {url && <p className="text-xs mb-[1px]">{url}</p>}
-          <p className="text-xs mb-[1px]">{dateTime}</p>
+          {url && <p className="text-small-body mb-[1px]">{url}</p>}
+          <p className="text-small-body mb-[1px]">{dateTime}</p>
         </div>
       </div>
       <div className="flex items-center">

@@ -57,7 +57,7 @@ const ToggleSwitch = ({
               }`}
             ></span>
           </span>
-          <span className="label flex items-center text-sm font-medium text-black">
+          <span className="label flex items-center text-small-body font-medium text-black">
             {onLabel}
           </span>
         </label>

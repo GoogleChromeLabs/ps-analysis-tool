@@ -122,7 +122,7 @@ const InformationContainer = () => {
         >
           <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
             <InformationIcon className="dark:text-bright-gray" />
-            <span className="text-base font-bold dark:text-bright-gray">
+            <span className="text-small-body font-bold dark:text-bright-gray">
               {I18n.getMessage('systemInformation')}
             </span>
           </div>
@@ -150,48 +150,48 @@ const InformationContainer = () => {
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
+              <span className="text-small-body dark:text-bright-gray">
                 {I18n.getMessage('openTabs')}
               </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
+              <span className="text-small-body text-darkest-gray dark:text-bright-gray">
                 {currentTabs}
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
+              <span className="text-small-body dark:text-bright-gray">
                 {I18n.getMessage('chromeVersion')}
               </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
+              <span className="text-small-body text-darkest-gray dark:text-bright-gray">
                 {browserInformation}
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
+              <span className="text-small-body dark:text-bright-gray">
                 {I18n.getMessage('pSATVersion')}
               </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
+              <span className="text-small-body text-darkest-gray dark:text-bright-gray">
                 {PSATVersion}
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
+              <span className="text-small-body dark:text-bright-gray">
                 {I18n.getMessage('systemArchitecture')}
               </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
+              <span className="text-small-body text-darkest-gray dark:text-bright-gray">
                 {OSInformation}
               </span>
             </div>
           </div>
           <div className="flex flex-row">
             <div className="mt-1">
-              <span className="text-sm dark:text-bright-gray">
+              <span className="text-small-body dark:text-bright-gray">
                 {I18n.getMessage('activeExtensions')}
               </span>
               <ul className="list-disc ml-4 mt-1">
                 {currentExtensions?.map((extension, index) => {
                   return (
                     <li
-                      className="text-xs text-darkest-gray dark:text-bright-gray mt-1"
+                      className="text-small-body text-darkest-gray dark:text-bright-gray mt-1"
                       key={index}
                     >
                       {extension.extensionName}: {extension.extensionId}

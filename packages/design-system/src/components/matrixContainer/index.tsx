@@ -60,9 +60,9 @@ const MatrixContainer = ({
   return (
     <div className="w-full" data-testid={`matrix-${title}`}>
       <div>
-        <div className="flex gap-2 justify-start border-b border-bright-gray dark:border-quartz">
+        <div className="flex gap-2 justify-start items-center border-b border-bright-gray dark:border-quartz">
           {allowExpand && (
-            <h4 className="pb-3 text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
+            <h4 className="pb-3 text-small-body font-bold text-darkest-gray dark:text-bright-gray text-right">
               <button
                 onClick={() => setIsExpanded((state) => !state)}
                 data-testid="expand-button"
@@ -82,7 +82,7 @@ const MatrixContainer = ({
           )}
           <div className="pb-3 flex flex-col gap-1.5">
             <h4
-              className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray ${
+              className={`flex items-center gap-1 flex-1 grow text-small-header font-bold text-darkest-gray dark:text-bright-gray ${
                 highlightTitle ? 'text-red-500 dark:text-red-500' : ''
               } ${capitalizeTitle ? 'capitalize' : 'uppercase'}`}
             >
@@ -94,7 +94,7 @@ const MatrixContainer = ({
               )}
               {count !== null && <span>: {Number(count) || 0}</span>}
             </h4>
-            <p className="text-xs text-darkest-gray dark:text-bright-gray">
+            <p className="text-small-body text-darkest-gray dark:text-bright-gray">
               {description}
             </p>
           </div>

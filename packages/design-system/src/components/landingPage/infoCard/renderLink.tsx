@@ -32,13 +32,13 @@ const RenderLink = ({ label, link, linkLabel }: RenderLinkProps) => (
       <li className="py-4">
         <div className="flex items-center">
           <div className="flex-1 min-w-0 flex flex-col gap-2">
-            <p className="text-sm font-medium text-raisin-black dark:text-bright-gray truncate capitalize">
+            <p className="text-small-body font-medium text-raisin-black dark:text-bright-gray truncate capitalize">
               {label}
             </p>
             <Link
               title={link}
               href={link}
-              className="text-xs text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
+              className="text-small-body text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
               rel="noreferrer"
             >
               {linkLabel}

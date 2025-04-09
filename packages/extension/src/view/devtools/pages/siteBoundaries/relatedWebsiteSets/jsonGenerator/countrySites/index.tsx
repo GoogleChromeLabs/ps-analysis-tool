@@ -65,7 +65,9 @@ const CountrySites = ({
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <p className="text-base">{I18n.getMessage('countryCodeHeading')}</p>
+        <p className="text-small-body">
+          {I18n.getMessage('countryCodeHeading')}
+        </p>
         <AddButton onClick={addCountrySite} />
       </div>
       <div id="countryDomains">

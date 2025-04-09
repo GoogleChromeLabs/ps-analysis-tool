@@ -28,12 +28,12 @@ interface BottomTrayProps {
 const BottomTray = ({ selectedJSON }: BottomTrayProps) => {
   return (
     <div className="flex-1 z-20 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-      <div className="text-xs py-1 px-1.5 h-full">
+      <div className="text-small-body py-1 px-1.5 h-full">
         {selectedJSON ? (
           <JsonView src={selectedJSON} />
         ) : (
           <div className="h-full p-8 flex items-center">
-            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+            <p className="text-large-body w-full font-bold text-granite-gray dark:text-manatee text-center">
               {I18n.getMessage('selectRowToPreview')}
             </p>
           </div>

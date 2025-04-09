@@ -41,10 +41,10 @@ const RWSSelect = ({
 }: RWSSelectProps) => {
   return (
     <div className="flex flex-col gap">
-      <label className="text-xs">{selectLabel}</label>
+      <label className="text-small-body">{selectLabel}</label>
       <select
         className={classNames(
-          'my-1 py-px pl-0 pr-1 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue',
+          'my-1 py-px pl-0 pr-1 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-small-body leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue',
           {
             '!border-red-500 dark:!border-red-500':
               error && formValidationFailed,
@@ -66,7 +66,7 @@ const RWSSelect = ({
         ))}
       </select>
       {error && formValidationFailed && (
-        <span className="text-red-500 text-xs mt-2">{error}</span>
+        <span className="text-red-500 text-small-body mt-2">{error}</span>
       )}
     </div>
   );

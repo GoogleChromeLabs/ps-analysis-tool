@@ -72,7 +72,7 @@ const QuickLinksList = () => {
         <BulletList rows={quickLinks} heading={I18n.getMessage('quickLinks')} />
       </div>
       <div className="md:w-[65%] flex flex-col gap-4">
-        <h2 className="text-xs font-bold uppercase text-darkest-gray dark:text-bright-gray">
+        <h2 className="text-small-header font-bold uppercase text-darkest-gray dark:text-bright-gray">
           {I18n.getMessage('latestNews')}
         </h2>
         <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
@@ -82,7 +82,7 @@ const QuickLinksList = () => {
           <div className="ml-6">
             <Link
               href={addUTMParams('https://privacysandbox.com/news/')}
-              className="leading-6 text-sm text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
+              className="leading-6 text-small-body text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
             >
               <>
                 {I18n.getMessage('viewMore')}

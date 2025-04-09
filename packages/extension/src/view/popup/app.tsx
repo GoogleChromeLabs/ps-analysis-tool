@@ -79,16 +79,16 @@ const App: React.FC = () => {
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg mb-2">
+        <p className="font-bold text-large-body mb-2">
           {I18n.getMessage('noMoreAnalysis')}
         </p>
-        <p className="text-chart-label text-xs">
+        <p className="text-chart-label text-small-body">
           {I18n.getMessage('emptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
-              additionalStyles="text-sm"
+              additionalStyles="text-small-body"
               text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
@@ -130,7 +130,7 @@ const App: React.FC = () => {
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
-              additionalStyles="text-sm"
+              additionalStyles="text-small-body"
               text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
@@ -153,14 +153,16 @@ const App: React.FC = () => {
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg">{I18n.getMessage('noCookies')}</p>
-        <p className="text-chart-label text-xs">
+        <p className="font-bold text-large-body">
+          {I18n.getMessage('noCookies')}
+        </p>
+        <p className="text-chart-label text-small-body">
           {I18n.getMessage('tryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
-              additionalStyles="text-sm"
+              additionalStyles="text-small-body"
               text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
@@ -200,14 +202,14 @@ const App: React.FC = () => {
         <Legend legendItemList={statsComponents.legend} />
       </div>
       <div className="w-full text-center">
-        <p className="text-chart-label text-xs">
+        <p className="text-chart-label text-small-body">
           {I18n.getMessage('inspectInPSATPanel')}
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
         {settingsChanged && (
           <ToastMessage
-            additionalStyles="text-sm"
+            additionalStyles="text-small-body"
             text={I18n.getMessage('settingsChanged')}
             onClick={handleSettingsChange}
             textAdditionalStyles="xxs:p-1 text-xxs leading-5"

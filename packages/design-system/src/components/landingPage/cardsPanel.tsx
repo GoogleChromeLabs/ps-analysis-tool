@@ -66,7 +66,7 @@ const CardsPanel = ({
       <div className="min-w-[45.75rem]">
         {pinnedItems && pinnedItems.length > 0 && (
           <section className="border-b border-hex-gray mb-5 pb-5">
-            {hasTitle && <h3 className="text-base">Quick Access</h3>}
+            {hasTitle && <h3 className="text-small-body">Quick Access</h3>}
             <div className="flex gap-x-5 gap-y-4 flex-wrap mt-2">
               {pinnedItems.map((item) => {
                 const Icon = item.icon;
@@ -82,7 +82,7 @@ const CardsPanel = ({
                       height={22}
                       className="fill-gray dark:fill-bright-gray"
                     />
-                    <span className="text-base">{item.name}</span>
+                    <span className="text-small-body">{item.name}</span>
                   </div>
                 );
               })}
@@ -91,7 +91,7 @@ const CardsPanel = ({
         )}
         {featuredItems.length > 0 && (
           <section>
-            {hasTitle && <h3 className="text-base">Features</h3>}
+            {hasTitle && <h3 className="text-small-body">Features</h3>}
             <div className="flex gap-5 flex-wrap mt-2">
               {featuredItems.map((item) => {
                 const Icon = item.icon;
@@ -104,14 +104,18 @@ const CardsPanel = ({
                   >
                     <div className="mb-3 flex items-center flex-col gap-2">
                       <Icon height={45} />
-                      <h4 className="font-medium text-xl">{item.name}</h4>
+                      <h4 className="font-medium text-small-header">
+                        {item.name}
+                      </h4>
                     </div>
-                    <p className="text-sm text-center">{item.description}</p>
+                    <p className="text-small-body text-center">
+                      {item.description}
+                    </p>
                     <div className="flex flex-wrap gap-x-3 gap-y-2 mt-4 justify-center">
                       {item.buttons &&
                         item.buttons.map((button) => (
                           <button
-                            className="bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
+                            className="bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-small-body hover:bg-light-gray hover:border-american-silver"
                             key={button.name}
                             onClick={(event) =>
                               onFeaturedButtonClick(event, button.sidebarKey)
