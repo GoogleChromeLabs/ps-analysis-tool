@@ -73,6 +73,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     const preprocessedHosts: string[] = [];
     const inputValidationErrors: string[] = [];
     setInputValidationErrors([]);
+    setClassificationResult([]);
 
     hosts.forEach((host) => {
       const trimmedHost = host.trim();
@@ -92,7 +93,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (inputValidationErrors.length > 0) {
       setInputValidationErrors(inputValidationErrors);
-      setClassificationResult([]);
       return;
     } else {
       try {
