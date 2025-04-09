@@ -264,7 +264,10 @@ class Main {
       }
 
       if (isDone) {
-        this.animatorSnapshot.push(animator);
+        if (!animator.getThrow()) {
+          this.animatorSnapshot.push(animator);
+          animator.setThrow(true);
+        }
         this.onDrawListener?.(animator.getId());
         animatorQueue.shift();
 
@@ -742,7 +745,6 @@ class Main {
         animator.setThrow(false);
       }
     }
-
     this.stepsQueue.unshift(...toBeLoadedObjects.reverse());
     this.groupStepsQueue.unshift(...toBeLoadedGroups.reverse());
     this.animatorStepsQueue.unshift(...toBeLoadedAnimators.reverse());
@@ -1177,6 +1179,7 @@ class Main {
         lastSnapshotObject.getAnimatorId()
       ) {
         animator = this.animatorSnapshot[this.animatorSnapshot.length - 1];
+        animator.setThrow(false);
         this.animatorStepsQueue.unshift(animator);
         this.animatorSnapshot.pop();
       } else {
