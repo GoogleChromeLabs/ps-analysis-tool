@@ -45,6 +45,7 @@ interface AuctionPanelProps {
     receivedBids?: Record<string, singleAuctionEvent[]> | ReceivedBids[];
     noBids: NoBidsType;
   };
+  isEE?: boolean;
   customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
   isMultiSeller?: boolean;
@@ -59,6 +60,7 @@ const AuctionPanel = ({
   isMultiSeller = false,
   selectedAdUnit,
   selectedDateTime,
+  isEE = true,
 }: AuctionPanelProps) => {
   useEffect(() => {
     const Panel = customAdsAndBidders ? AdunitSubPanel : AdunitPanel;
@@ -75,6 +77,7 @@ const AuctionPanel = ({
 
         Object.keys(auctionEventsData[adUnit]).forEach((time) => {
           const actualTime = time.split('||')[0];
+          const parentAuctionId = time.split('||')[1];
 
           if (
             data[adUnit] &&
@@ -88,9 +91,8 @@ const AuctionPanel = ({
             ...adUnitChildren[time]?.children,
           } as SidebarItems;
 
-          const sellerUrl = Object.keys(
-            auctionEventsData[adUnit][time]
-          )[0].split('||')[0];
+          const sellerUrl = Object.keys(auctionEventsData[adUnit][time])[0];
+
           const nonSplittedSellerUrl = Object.keys(
             auctionEventsData[adUnit][time][sellerUrl]
           )[0];
@@ -98,10 +100,20 @@ const AuctionPanel = ({
           const entries = Object.entries(
             auctionEventsData[adUnit][time][sellerUrl]
           )
-            .filter(([url]) => url !== sellerUrl)
+            .filter(([url]) => {
+              const splittedUrl = url.split('||');
+
+              if (isMultiSeller) {
+                return !(
+                  splittedUrl[0] === sellerUrl &&
+                  splittedUrl[1] === parentAuctionId
+                );
+              }
+              return splittedUrl[0] !== sellerUrl;
+            })
             .reduce<SidebarItems>((acc, [url, events]) => {
-              acc[url + time + adUnit] = {
-                title: events[0]?.auctionConfig?.seller ?? url,
+              acc[url.split('||')[0] + actualTime + adUnit] = {
+                title: events[0]?.auctionConfig?.seller ?? url.split('||')[0],
                 panel: {
                   Element: AuctionTable,
                   props: {
@@ -126,13 +138,17 @@ const AuctionPanel = ({
           let shouldBeBlurred = true;
 
           if (isMultiSeller) {
-            shouldBeBlurred = !(
-              selectedAdUnit === adUnit && selectedDateTime === selectedDateTime
-            );
+            shouldBeBlurred = isEE
+              ? !(
+                  selectedAdUnit === adUnit &&
+                  selectedDateTime === selectedDateTime
+                )
+              : Object.keys(auctionEventsData[adUnit][time][sellerUrl])
+                  .length === 0;
           } else {
             shouldBeBlurred =
-              auctionEventsData[adUnit][time][sellerUrl][nonSplittedSellerUrl]
-                .length === 0;
+              auctionEventsData[adUnit][time][sellerUrl][sellerUrl].length ===
+              0;
           }
 
           adUnitChildren[time + adUnit] = {
@@ -178,6 +194,7 @@ const AuctionPanel = ({
       return newData;
     });
   }, [
+    isEE,
     auctionEvents,
     setSidebarData,
     customAdsAndBidders,

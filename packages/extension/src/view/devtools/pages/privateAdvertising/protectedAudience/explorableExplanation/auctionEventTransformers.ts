@@ -483,29 +483,29 @@ const getFlattenedAuctionEvents = (
       currentStep?.ssp ?? ''
     );
 
+    if (!events?.[`https://www.${currentSiteData?.website}`]) {
+      events[`https://www.${currentSiteData?.website}||3`] = [];
+    }
+
     newSellersArray.forEach((seller, index) => {
       if (index === sellerIndexToBeProcessed) {
-        events[seller] = createAuctionEvents(
+        events[seller + `||${index}`] = createAuctionEvents(
           interestGroups,
           new URL(seller).host,
           advertisers,
           new Date(currentSiteData?.datetime).getTime(),
           new URL(seller).host === host && isMultiSeller,
           currentStep,
-          previousEvents?.[seller] ?? [],
+          previousEvents?.[seller + `||${index}`] ?? [],
           previousEvents ?? {},
           isMultiSeller
         );
       }
 
       if (index < sellerIndexToBeProcessed) {
-        events[seller] = previousEvents?.[seller] ?? [];
+        events[seller] = previousEvents?.[seller + `||${index}`] ?? [];
       }
     });
-
-    if (!events?.[`https://www.${currentSiteData?.website}`]) {
-      events[`https://www.${currentSiteData?.website}`] = [];
-    }
   } else {
     sellersArray.forEach((seller) => {
       events[seller] = createAuctionEvents(
@@ -536,6 +536,9 @@ export const configuredAuctionEvents = (
 ) => {
   const websiteString = `https://www.${currentSiteData?.website}`;
   const sellersArray = [];
+  const websiteStringToUse = (_websiteString: string) => {
+    return isMultiSeller ? _websiteString + '||3' : _websiteString;
+  };
 
   const isInteractiveModeLastStep =
     currentStep?.title === SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.title &&
@@ -560,23 +563,23 @@ export const configuredAuctionEvents = (
 
   let auctionData: AuctionEventsType = {
     [adunits[0]]: {
-      [dates[0]]: {
+      [dates[0] + '||3']: {
         [websiteString]: {
-          [websiteString]: [],
+          [websiteStringToUse(websiteString)]: [],
         },
       },
     },
     [adunits[1]]: {
-      [dates[1]]: {
+      [dates[1] + '||3']: {
         [websiteString]: {
-          [websiteString]: [],
+          [websiteStringToUse(websiteString)]: [],
         },
       },
     },
     [adunits[2]]: {
-      [dates[2]]: {
+      [dates[2] + '||3']: {
         [websiteString]: {
-          [websiteString]: [],
+          [websiteStringToUse(websiteString)]: [],
         },
       },
     },
@@ -618,13 +621,13 @@ export const configuredAuctionEvents = (
     };
   }
 
-  auctionData[selectedAdUnit][transformedDateTime] = {
+  auctionData[selectedAdUnit][transformedDateTime + '||3'] = {
     [websiteString]: {
-      [websiteString]: [],
+      [websiteStringToUse(websiteString)]: [],
     },
   };
 
-  auctionData[selectedAdUnit][transformedDateTime][websiteString] =
+  auctionData[selectedAdUnit][transformedDateTime + '||3'][websiteString] =
     getFlattenedAuctionEvents(
       sellersArray,
       currentSiteData,
@@ -632,7 +635,7 @@ export const configuredAuctionEvents = (
       advertisers,
       isMultiSeller,
       currentStep,
-      previousEvents?.[selectedAdUnit]?.[transformedDateTime]?.[
+      previousEvents?.[selectedAdUnit]?.[transformedDateTime + '||3']?.[
         websiteString
       ] ?? {}
     );
@@ -647,13 +650,13 @@ export const configuredAuctionEvents = (
   };
 
   receivedBids[selectedAdUnit] = getBidData(
-    auctionData[selectedAdUnit]?.[transformedDateTime]?.[websiteString],
+    auctionData[selectedAdUnit + '||3']?.[transformedDateTime]?.[websiteString],
     sellersArray,
     selectedAdUnit
   );
 
   const bidderData = getBidData(
-    auctionData[selectedAdUnit]?.[transformedDateTime]?.[websiteString],
+    auctionData[selectedAdUnit + '||3']?.[transformedDateTime]?.[websiteString],
     sellersArray,
     selectedAdUnit
   );

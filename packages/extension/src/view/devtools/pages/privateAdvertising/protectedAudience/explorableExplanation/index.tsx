@@ -284,13 +284,10 @@ const ExplorableExplanation = () => {
           isMultiSeller,
           currentSiteData,
           currentStep,
-          previousAuctionData.current,
+          prevData?.auctionData ?? {},
           selectedAdUnit,
           selectedDateTime
         );
-
-      previousAuctionData.current = auctionData;
-
       if (auctionData) {
         const isDataEqual = isEqual(auctionData, prevData?.auctionData);
 
@@ -312,6 +309,7 @@ const ExplorableExplanation = () => {
           setBidsUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
         }
       }
+      previousAuctionData.current = auctionData;
 
       return {
         auctionData: auctionData ?? {},
