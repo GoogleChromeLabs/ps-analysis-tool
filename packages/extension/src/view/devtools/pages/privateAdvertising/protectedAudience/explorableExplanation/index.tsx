@@ -301,10 +301,15 @@ const ExplorableExplanation = () => {
 
       if (receivedBids || noBids) {
         const isDataEqual = isEqual(
-          { receivedBids, noBids },
           {
-            receivedBids: prevData?.receivedBids,
-            noBids: prevData?.noBids,
+            receivedBids: Object.values(receivedBids),
+            noBids: Object.values(noBids),
+          },
+          {
+            receivedBids: Object.keys(prevData?.receivedBids || {}).length
+              ? Object.values(prevData?.receivedBids || {})
+              : [[], [], []],
+            noBids: Object.values(prevData?.noBids || {}),
           }
         );
 
