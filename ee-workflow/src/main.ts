@@ -136,14 +136,12 @@ class Main {
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
    * @param figureToStart - The figure to start from.
-   * @param onDrawListener - The listener to call when a figure is drawn.
    * @param preloader - The preloader function to run before setup.
    */
   constructor(
     private clearBeforeTravel = false,
     container?: HTMLElement,
     private figureToStart?: string,
-    private onDrawListener?: (id: string) => void,
     private preloader?: (p: p5) => void
   ) {
     this.p5 = new p5(this.init.bind(this), container);
@@ -174,6 +172,13 @@ class Main {
     this.p5.createCanvas(1600, 1600).position(0, 50);
   }
 
+  private dispatchCustomEvent(eventName: string, data: any) {
+    const event = new CustomEvent(eventName, {
+      detail: data,
+    });
+    document.dispatchEvent(event);
+  }
+
   /**
    * Saves a figure to the snapshot and marks it as thrown.
    * @param object - The figure to save.
@@ -184,7 +189,10 @@ class Main {
     }
 
     this.snapshot.push(object);
-    this.onDrawListener?.(object?.getId() || '');
+    // custom event listener for figure draw
+    this.dispatchCustomEvent('figureDraw', {
+      figureId: object.getId(),
+    });
     object.setThrow(true);
   }
 
@@ -222,7 +230,9 @@ class Main {
         group.getFigures().forEach((object) => this.saveToSnapshot(object));
         this.groupSnapshot.push(group);
         group.setThrow(true);
-        this.onDrawListener?.(group.getId());
+        this.dispatchCustomEvent('groupDraw', {
+          groupId: group.getId(),
+        });
       }
     }
   }
@@ -267,8 +277,10 @@ class Main {
         if (!animator.getThrow()) {
           this.animatorSnapshot.push(animator);
           animator.setThrow(true);
+          this.dispatchCustomEvent('animatorDraw', {
+            animatorId: animator.getId(),
+          });
         }
-        this.onDrawListener?.(animator.getId());
         animatorQueue.shift();
 
         if (!skipRedrawAll) {
@@ -338,8 +350,6 @@ class Main {
 
           firstObject.draw();
         }
-
-        this.onDrawListener?.(firstObject.getId());
 
         if (!firstObject.getThrow()) {
           this.saveToSnapshot(firstObject);

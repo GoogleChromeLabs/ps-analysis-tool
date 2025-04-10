@@ -29,21 +29,18 @@ const downArrowData =
 const upArrowData =
   'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBVcGxvYWRlZCB0bzogU1ZHIFJlcG8sIHd3dy5zdmdyZXBvLmNvbSwgR2VuZXJhdG9yOiBTVkcgUmVwbyBNaXhlciBUb29scyAtLT4NCjxzdmcgZmlsbD0iIzAwMDAwMCIgaGVpZ2h0PSI4MDBweCIgd2lkdGg9IjgwMHB4IiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiANCgkgdmlld0JveD0iMCAwIDMzMCAzMzAiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggaWQ9IlhNTElEXzIyNF8iIGQ9Ik0zMjUuNjA2LDIyOS4zOTNsLTE1MC4wMDQtMTUwQzE3Mi43OSw3Ni41OCwxNjguOTc0LDc1LDE2NC45OTYsNzVjLTMuOTc5LDAtNy43OTQsMS41ODEtMTAuNjA3LDQuMzk0DQoJbC0xNDkuOTk2LDE1MGMtNS44NTgsNS44NTgtNS44NTgsMTUuMzU1LDAsMjEuMjEzYzUuODU3LDUuODU3LDE1LjM1NSw1Ljg1OCwyMS4yMTMsMGwxMzkuMzktMTM5LjM5M2wxMzkuMzk3LDEzOS4zOTMNCglDMzA3LjMyMiwyNTMuNTM2LDMxMS4xNjEsMjU1LDMxNSwyNTVjMy44MzksMCw3LjY3OC0xLjQ2NCwxMC42MDctNC4zOTRDMzMxLjQ2NCwyNDQuNzQ4LDMzMS40NjQsMjM1LjI1MSwzMjUuNjA2LDIyOS4zOTN6Ii8+DQo8L3N2Zz4=';
 
-const onDrawListener = (id: string) => {
-  if (id.startsWith('object')) {
-    // eslint-disable-next-line no-console
-    console.log(id);
-
-    localStorage.setItem('ee-workflow', id);
-  }
-};
-
 let downArrowImage: p5.Image | null = null;
 let upArrowImage: p5.Image | null = null;
 const preloader = (p: p5) => {
   downArrowImage = p.loadImage(downArrowData);
   upArrowImage = p.loadImage(upArrowData);
 };
+document.addEventListener('figureDraw', (e) => {
+  const detail = (e as CustomEvent).detail;
+
+  // eslint-disable-next-line no-console
+  console.log(detail);
+});
 
 const idToStart = localStorage.getItem('ee-workflow') || '';
 
@@ -154,13 +151,7 @@ const nodes = [
   },
 ];
 
-const mainCanvas = new Main(
-  undefined,
-  undefined,
-  idToStart,
-  onDrawListener,
-  preloader
-);
+const mainCanvas = new Main(undefined, undefined, idToStart, preloader);
 const mainFF = new FigureFactory(mainCanvas);
 
 const IGCanvas = new Main(true);
