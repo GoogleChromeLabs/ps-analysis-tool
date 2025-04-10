@@ -243,29 +243,32 @@ mainCanvas.addFigure(
 );
 
 nodes.forEach((node, index) => {
+  const circle = mainFF.circle({
+    diameter: 75,
+    fill: '#d3d3d3',
+    stroke: '#000',
+    nextTipHelper: (nextCoordinates: NextCoordinates) => {
+      const x = nextCoordinates.left.x + 150;
+      let y = nextCoordinates.left.y;
+
+      if (index) {
+        y = nextCoordinates.middle.y + 87.5;
+      }
+
+      return {
+        x,
+        y,
+      };
+    },
+    mouseClicked: () => {
+      // eslint-disable-next-line no-console
+      console.log(node.website, node);
+      mainCanvas.removeFigure(circle);
+    },
+  });
+
   const group = new Group(mainCanvas, [
-    mainFF.circle({
-      diameter: 75,
-      fill: '#d3d3d3',
-      stroke: '#000',
-      nextTipHelper: (nextCoordinates: NextCoordinates) => {
-        const x = nextCoordinates.left.x + 150;
-        let y = nextCoordinates.left.y;
-
-        if (index) {
-          y = nextCoordinates.middle.y + 87.5;
-        }
-
-        return {
-          x,
-          y,
-        };
-      },
-      mouseClicked: () => {
-        // eslint-disable-next-line no-console
-        console.log(node.website, node);
-      },
-    }),
+    circle,
     mainFF.text({
       text: node.website,
       fill: '#000',

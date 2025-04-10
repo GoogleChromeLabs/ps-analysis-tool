@@ -1056,8 +1056,9 @@ class Main {
       group?.removeFigure(figure);
     }
 
-    const animatorId = figure.getAnimatorId() || undefined;
-    this.reDrawAll(animatorId);
+    const currentFigure = this.stepsQueue[0].getId();
+    this.reset();
+    this.figureToStart = currentFigure;
   }
 
   /**
@@ -1088,8 +1089,9 @@ class Main {
       this.removeFigure(figure);
     });
 
-    const animatorId = toRemove?.getAnimatorId() || undefined;
-    this.reDrawAll(animatorId);
+    const currentFigure = this.stepsQueue[0].getId();
+    this.reset();
+    this.figureToStart = currentFigure;
   }
 
   /**
