@@ -38,8 +38,11 @@ const preloader = (p: p5) => {
 document.addEventListener('figureDraw', (e) => {
   const detail = (e as CustomEvent).detail;
 
-  // eslint-disable-next-line no-console
-  console.log(detail);
+  if (detail?.figureId) {
+    // eslint-disable-next-line no-console
+    console.log('Figure ID:', detail.figureId);
+    localStorage.setItem('ee-workflow', detail.figureId);
+  }
 });
 
 const idToStart = localStorage.getItem('ee-workflow') || '';
