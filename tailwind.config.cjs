@@ -74,7 +74,7 @@ module.exports = {
       xxl: '1.375rem', // 22px
       xsm: '0.9375rem',
       xxs: '0.8125rem',
-      'small-body': '0.8125rem', // 13px
+      'small-body': '0.75rem', // 12px
       'small-header': '1.25rem', // 20px
       'large-body': '1.25rem', // 20px
       'large-header': '1.875rem', // 30px
