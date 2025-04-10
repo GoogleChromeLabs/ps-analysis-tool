@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import p5 from 'p5';
 
 /**
  * Internal dependencies.
@@ -25,60 +21,74 @@ import Figure from '.';
 import Main from '../../main';
 
 /**
- * Class for creating image figures.
- * Contains the properties and methods that an image should have.
+ * Class for creating a arc figure.
+ * Contains the properties and methods that a arc should have.
  * Extends the Figure class to inherit the basic properties and methods.
  */
-export default class Image extends Figure {
+export default class Arc extends Figure {
   /**
-   * Image to be displayed.
+   * Diameter of the arc.
    */
-  private image: () => p5.Image;
+  diameter: number;
 
   /**
-   * Width of the image.
+   * Start angle of the arc.
    */
-  private width: number;
+  startAngle: number;
 
   /**
-   * Height of the image.
+   * Stop angle of the arc.
    */
-  private height: number;
+  stopAngle: number;
+
+  /**
+   * Callback defined by the user to be executed when the arc is clicked.
+   */
 
   constructor(
-    canvasRunner: Main,
+    canvasRuuner: Main,
     x: number,
     y: number,
-    imageLoader: () => p5.Image,
-    width: number,
-    height: number,
+    diameter: number,
+    startAngle: number,
+    stopAngle: number,
     id?: string,
+    fill?: string,
+    stroke?: string,
     tags?: string[],
     mouseClicked?: (figure: Figure) => void,
     mouseMoved?: (figure: Figure) => void,
     onLeave?: (figure: Figure) => void
   ) {
     super(
-      canvasRunner,
+      canvasRuuner,
       x,
       y,
       id,
-      undefined,
-      undefined,
+      fill,
+      stroke,
       tags,
       mouseClicked,
       mouseMoved,
       onLeave
     );
-    this.image = imageLoader;
-    this.width = width;
-    this.height = height;
+
+    this.diameter = diameter;
+    this.startAngle = startAngle;
+    this.stopAngle = stopAngle;
   }
 
   draw() {
     this.p5?.push();
-    this.p5?.imageMode(this.p5?.CENTER);
-    this.p5?.image(this.image(), this.x, this.y, this.width, this.height);
+    this.p5?.arc(
+      this.x,
+      this.y,
+      this.diameter / 2,
+      this.diameter / 2,
+      this.startAngle,
+      this.stopAngle,
+      this.p5.OPEN
+    );
     this.p5?.pop();
 
     if (this.runSideEffect) {
@@ -89,29 +99,39 @@ export default class Image extends Figure {
   }
 
   isHovering(): boolean {
+    if (this.p5?.mouseX === undefined || this.p5?.mouseY === undefined) {
+      return false;
+    }
+
     return (
-      this.p5?.mouseX !== undefined &&
-      this.p5?.mouseY !== undefined &&
-      this.p5?.mouseX > this.x - this.width / 2 &&
-      this.p5?.mouseX < this.x + this.width / 2 &&
-      this.p5?.mouseY > this.y - this.height / 2 &&
-      this.p5?.mouseY < this.y + this.height / 2
+      this.p5?.mouseX > this.x &&
+      this.p5?.mouseX < this.x + this.diameter &&
+      this.p5?.mouseY > this.y &&
+      this.p5?.mouseY < this.y + this.diameter
     );
   }
 
   reDraw(
     x?: number,
     y?: number,
-    image?: () => p5.Image,
-    width?: number,
-    height?: number
+    diameter?: number,
+    startAngle?: number,
+    stopAngle?: number,
+    fill?: string,
+    stroke?: string
   ) {
     this.x = x ?? this.x;
     this.y = y ?? this.y;
-    this.image = image ?? this.image;
-    this.width = width ?? this.width;
-    this.height = height ?? this.height;
+    this.diameter = diameter ?? this.diameter;
+    this.startAngle = startAngle ?? this.startAngle;
+    this.stopAngle = stopAngle ?? this.stopAngle;
+    this.fill = fill || this.fill;
+    this.stroke = stroke || this.stroke;
     this.canvasRunner.reDrawAll();
+  }
+
+  setDiameter(diameter: number) {
+    this.diameter = diameter;
   }
 
   shift(x?: number, y?: number) {
