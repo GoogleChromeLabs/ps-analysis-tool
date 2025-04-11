@@ -127,11 +127,6 @@ class Main {
   private hoveredFigure: Figure | null = null;
 
   /**
-   * Number of steps to skip in the stepsQueue at once.
-   */
-  private stepsToSkip = 0;
-
-  /**
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
@@ -396,18 +391,6 @@ class Main {
         this.traveller = null;
         this.runner();
       }
-    } else if (this.stepsToSkip > 0) {
-      if (this.isTravelling) {
-        this.traveller?.completeTravelling();
-
-        this.traveller = null;
-        this.runner();
-      }
-
-      while (this.stepsToSkip > 0 && this.stepsQueue.length > 0) {
-        this.runner(false, false, true);
-        this.stepsToSkip--;
-      }
     } else if (this.p5.frameCount % this.delay === 0) {
       this.runner();
     }
@@ -416,7 +399,11 @@ class Main {
       this.runner(true);
     }
 
-    while (this.figureToStart && this.stepsQueue.length > 0) {
+    while (
+      this.figureToStart &&
+      this.stepsQueue.length > 0 &&
+      !this.instantQueue.length
+    ) {
       this.runner(false, false, true);
     }
   }
@@ -1258,14 +1245,6 @@ class Main {
         figure.draw();
       }
     }
-  }
-
-  skipSteps(steps: number) {
-    this.stepsToSkip = steps;
-  }
-
-  isStepping() {
-    return this.stepsQueue.length > 0;
   }
 }
 
