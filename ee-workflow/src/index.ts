@@ -231,6 +231,16 @@ resetButton?.addEventListener('click', () => {
   mainCanvas.reset();
 });
 
+const speedSlider = document.getElementById('speed');
+speedSlider?.addEventListener('input', (e) => {
+  const target = e.target as HTMLInputElement;
+  const value = parseFloat(target.value);
+
+  if (mainCanvas) {
+    mainCanvas.updateSpeed(value);
+  }
+});
+
 // Timeline
 mainCanvas.addFigure(
   mainFF.line({

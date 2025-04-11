@@ -531,7 +531,7 @@ class Main {
    */
   updateSpeed(speedMultiplier: number) {
     this.speedMultiplier = speedMultiplier;
-    this.delay = 50 / speedMultiplier;
+    this.delay = Math.floor(50 / speedMultiplier);
   }
 
   /**
