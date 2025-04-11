@@ -440,12 +440,18 @@ class Main {
    * Handles hover events for figures.
    */
   private mouseMoved() {
+    let didHover = false;
+
     this.snapshot.forEach((object) => {
       if (object.getAnimatorId()) {
         return;
       }
 
       const isHovering = object.isHovering();
+
+      if (isHovering) {
+        didHover = true;
+      }
 
       if (!isHovering) {
         if (this.hoveredFigure?.getId() === object.getId()) {
@@ -484,6 +490,12 @@ class Main {
         this.hoveredGroup?.mouseMoved();
       }
     });
+
+    if (didHover) {
+      this.p5.cursor(this.p5.HAND);
+    } else {
+      this.p5.cursor(this.p5.ARROW);
+    }
   }
 
   /**
