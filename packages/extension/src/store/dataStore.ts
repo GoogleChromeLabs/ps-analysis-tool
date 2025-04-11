@@ -119,19 +119,9 @@ class DataStore {
   } = {};
 
   /**
-   * The cookie data of the tabs.
-   */
-  tabMode: 'single' | 'unlimited' = 'single';
-
-  /**
    * CookieDatabase to run analytics match on.
    */
   cookieDB: CookieDatabase | null = null;
-
-  /**
-   * The cookie data of the tabs.
-   */
-  tabToRead = '';
 
   /**
    * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
