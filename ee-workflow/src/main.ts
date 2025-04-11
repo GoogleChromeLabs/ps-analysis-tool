@@ -648,9 +648,15 @@ class Main {
 
     this.checkpoints.delete(checkpoint);
 
-    if (checkpoint === this.snapshot?.[this.snapshot.length - 1]?.getId()) {
-      checkpoint = this.popPreviousCheckpoint();
+    if (
+      !this.animatorStepsQueue?.[0]
+        .getObjects()
+        .find((object) => object.getId() === checkpoint)
+    ) {
+      return checkpoint;
     }
+
+    checkpoint = this.popPreviousCheckpoint();
 
     return checkpoint;
   }
@@ -695,9 +701,7 @@ class Main {
     }
 
     if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
-      this.togglePause(false);
-      this.reDrawAll();
-      return checkpoint;
+      //   this.reDrawAll();
     }
 
     const toBeLoadedObjects = [];
