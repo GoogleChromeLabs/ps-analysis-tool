@@ -135,7 +135,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
         SIDEBAR_ITEMS_KEYS.COOKIES
       ].panel = {
-        Element: Cookies,
+        Element: Cookies as (props: any) => React.JSX.Element,
         props: { setFilteredCookies },
       };
       psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
@@ -148,7 +148,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             title: url,
             popupTitle,
             panel: {
-              Element: Cookies,
+              Element: Cookies as (props: any) => React.JSX.Element,
               props: { setFilteredCookies },
             },
             icon: {
