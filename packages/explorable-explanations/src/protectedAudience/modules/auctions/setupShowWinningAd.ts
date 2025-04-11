@@ -41,8 +41,6 @@ const setupShowWinningAd = (steps: AuctionStep[]) => {
     },
   });
 
-  const WINNING_AD_DELAY = 5000 + app.speedMultiplier * 1000;
-
   steps.push({
     component: Box,
     props: {
@@ -50,8 +48,9 @@ const setupShowWinningAd = (steps: AuctionStep[]) => {
       x: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
       y: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).y - box.height / 2,
+      stepDelay: app.getWinningAdDelay(),
     },
-    delay: WINNING_AD_DELAY,
+    delay: 1000,
     callBack: (returnValue) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
@@ -62,7 +61,8 @@ const setupShowWinningAd = (steps: AuctionStep[]) => {
         const nextCircleIndex = app.isInteractiveMode
           ? currentCircleIndex
           : currentCircleIndex + 1;
-        const delay = WINNING_AD_DELAY / app.speedMultiplier;
+        const delay = app.getWinningAdDelay();
+        // manually adjust delay depending on object distance to the next circle
         scrollToCircle(nextCircleIndex, delay * 0.65);
       }
     },
