@@ -135,7 +135,7 @@ class Main {
    */
   constructor(
     private clearBeforeTravel = false,
-    container?: HTMLElement,
+    private container?: HTMLElement,
     private figureToStart?: string,
     private preloader?: (p: p5) => void
   ) {
@@ -164,7 +164,10 @@ class Main {
    * Sets up the canvas.
    */
   private setUp() {
-    this.p5.createCanvas(1600, 1600).position(0, 50);
+    const containerWidth = this.container?.clientWidth || 1600;
+    const containerHeight = this.container?.clientHeight || 1600;
+
+    this.p5.createCanvas(containerWidth, containerHeight).position(0, 50);
   }
 
   private dispatchCustomEvent(eventName: string, data: any) {

@@ -6,13 +6,16 @@
   </head>
   <body>
     <main>
-      <button id="prev">Prev</button>
-      <button id="step-prev">Prev Step</button>
-      <button id="play">Pause</button>
-      <button id="next">Next</button>
-      <button id="step-next">Step Next</button>
-      <button id="reset">Reset</button>
-			<input type="range" id="speed" min="0.5" max="2" value="1" step="0.5" />
+      <div>
+        <button id="prev">Prev</button>
+        <button id="step-prev">Prev Step</button>
+        <button id="play">Pause</button>
+        <button id="next">Next</button>
+        <button id="step-next">Step Next</button>
+        <button id="reset">Reset</button>
+        <input type="range" id="speed" min="0.5" max="2" value="1" step="0.5" />
+      </div>
+			<div id="canvas-container" style="height: 1000px; width: 2000px;"></div>
     </main>
     <script type="module" src="./src/index.ts"></script>
   </body>
