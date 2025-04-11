@@ -209,11 +209,11 @@ export const transformBidEvent = (
   const randomIndex = !isTopLevel
     ? randomIntFromInterval(0, interestGroups.length - 1)
     : -1;
-
   const interestGroupToProcess: IGType[] | IGWithcComponentSeller[] = isTopLevel
     ? (Object.keys(previousEvents)
         .map((key) => {
-          if (seller === new URL(key).host) {
+          const _key = key.split('||')[0];
+          if (seller === new URL(_key).host) {
             return {
               interestGroupName: null,
               ownerOrigin: null,
@@ -229,7 +229,7 @@ export const transformBidEvent = (
           return {
             interestGroupName: bidEvents.name as string,
             ownerOrigin: bidEvents.ownerOrigin as string,
-            componentSellerOrigin: key,
+            componentSellerOrigin: _key,
           };
         })
         .filter((ig) =>
@@ -483,7 +483,7 @@ const getFlattenedAuctionEvents = (
       currentStep?.ssp ?? ''
     );
 
-    if (!events?.[`https://www.${currentSiteData?.website}`]) {
+    if (!events?.[`https://www.${currentSiteData?.website}||3`]) {
       events[`https://www.${currentSiteData?.website}||3`] = [];
     }
 
@@ -503,7 +503,8 @@ const getFlattenedAuctionEvents = (
       }
 
       if (index < sellerIndexToBeProcessed) {
-        events[seller] = previousEvents?.[seller + `||${index}`] ?? [];
+        events[seller + `||${index}`] =
+          previousEvents?.[seller + `||${index}`] ?? [];
       }
     });
   } else {
@@ -650,14 +651,26 @@ export const configuredAuctionEvents = (
   };
 
   receivedBids[selectedAdUnit] = getBidData(
-    auctionData[selectedAdUnit + '||3']?.[transformedDateTime]?.[websiteString],
-    sellersArray,
+    auctionData[selectedAdUnit]?.[transformedDateTime + '||3']?.[
+      websiteString
+    ] ?? {},
+    Object.keys(
+      auctionData[selectedAdUnit]?.[transformedDateTime + '||3']?.[
+        websiteString
+      ] ?? {}
+    ),
     selectedAdUnit
   );
 
   const bidderData = getBidData(
-    auctionData[selectedAdUnit + '||3']?.[transformedDateTime]?.[websiteString],
-    sellersArray,
+    auctionData[selectedAdUnit]?.[transformedDateTime + '||3']?.[
+      websiteString
+    ] ?? {},
+    Object.keys(
+      auctionData[selectedAdUnit]?.[transformedDateTime + '||3']?.[
+        websiteString
+      ] ?? {}
+    ),
     selectedAdUnit
   );
 

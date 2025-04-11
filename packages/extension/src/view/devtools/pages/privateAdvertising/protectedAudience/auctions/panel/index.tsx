@@ -69,7 +69,6 @@ const AuctionPanel = ({
       const newData = { ...prev } as SidebarItems;
       const data = newData['adunits']?.children ?? {};
       const auctionEventsData = auctionEvents?.auctionData ?? {};
-
       Object.keys(auctionEventsData).forEach((adUnit) => {
         const adUnitChildren = {
           ...data[adUnit]?.children,
