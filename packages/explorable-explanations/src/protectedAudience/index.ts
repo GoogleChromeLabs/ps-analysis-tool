@@ -24,7 +24,7 @@ import Queue from 'queue';
  * Internal dependencies.
  */
 import config, { publisherData } from './config';
-import auctions from './modules/auctions';
+import auctions, { WINNING_AD_DELAY } from './modules/auctions';
 import flow from './modules/flow';
 import * as utils from './utils';
 import timeline from './modules/timeline';
@@ -727,7 +727,9 @@ export const interestGroupSketch = (p: P5) => {
     }
 
     if (props.setSelectedAdUnit) {
-      app.setSelectedAdUnit = props.setSelectedAdUnit;
+      app.setSelectedAdUnit = (adUnit: string) => {
+        props.setSelectedAdUnit(adUnit);
+      };
     }
 
     if (props.platform) {
@@ -858,6 +860,13 @@ app.createCanvas = () => {
     // eslint-disable-next-line no-new
     new p5(userSketch);
   }
+};
+
+app.getWinningAdDelay = () => {
+  // the faster the speed, the longer the BASE delay
+  const milliseconds = WINNING_AD_DELAY + app.speedMultiplier * 1000;
+  // adjust the delay based on the speed
+  return milliseconds / app.speedMultiplier;
 };
 
 app.createCanvas();
