@@ -54,7 +54,7 @@ const InformationContainer = () => {
     if (copying) {
       timeOutRef.current = setTimeout(() => {
         setCopying(false);
-      }, 200);
+      }, 500);
     } else {
       if (timeOutRef.current) {
         clearTimeout(timeOutRef.current);
@@ -133,22 +133,10 @@ const InformationContainer = () => {
         <div
           className={classNames(
             { hidden: !open },
-            'relative rounded flex flex-col w-full px-4 pr-8 py-2 border border-american-silver dark:border-quartz gap-y-3'
+            'relative rounded flex flex-col w-full px-4 py-4 border border-american-silver dark:border-quartz gap-y-3'
           )}
         >
-          <button
-            data-testid="copy-button"
-            disabled={copying}
-            className="absolute right-1 top-1"
-            onClick={handleCopy}
-          >
-            {copying ? (
-              <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
-            ) : (
-              <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
-            )}
-          </button>
-          <div className="flex flex-row gap-x-2 justify-between mt-4">
+          <div className="flex flex-row gap-x-2 justify-between items-start">
             <div className="flex flex-col">
               <span className="text-sm dark:text-bright-gray">
                 {I18n.getMessage('openTabs')}
@@ -181,6 +169,17 @@ const InformationContainer = () => {
                 {OSInformation}
               </span>
             </div>
+            <button
+              data-testid="copy-button"
+              disabled={copying}
+              onClick={handleCopy}
+            >
+              {copying ? (
+                <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+              ) : (
+                <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+              )}
+            </button>
           </div>
           <div className="flex flex-row">
             <div className="mt-1">
