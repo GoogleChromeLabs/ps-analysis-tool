@@ -559,7 +559,7 @@ export const configuredAuctionEvents = (
   const adunits = publisherData[currentSiteData?.website].adunits as string[];
   const dates = publisherData[currentSiteData?.website].branches.map(
     (branch: { date: string; time: string }) =>
-      new Date(branch.date + ' ' + branch.time).toUTCString()
+      new Date(branch.date + ' ' + branch.time).toISOString()
   ) as string[];
 
   let auctionData: AuctionEventsType = {
@@ -612,7 +612,7 @@ export const configuredAuctionEvents = (
     };
   }
 
-  const transformedDateTime = new Date(selectedDateTime).toUTCString();
+  const transformedDateTime = new Date(selectedDateTime).toISOString();
 
   if (!dates.find((date) => date === transformedDateTime)) {
     return {
