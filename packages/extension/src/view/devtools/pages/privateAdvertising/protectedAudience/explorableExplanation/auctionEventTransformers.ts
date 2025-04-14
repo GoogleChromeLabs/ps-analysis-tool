@@ -416,6 +416,8 @@ export const createAuctionEvents = (
   const randomNumbers = getRandomisedNumbers(1000, minValue, 2500);
 
   flattenedEvents.map((event, index) => {
+    event.index = index;
+
     if (!event?.formattedTime.toString().startsWith('-') && event?.time > 0) {
       return event;
     }

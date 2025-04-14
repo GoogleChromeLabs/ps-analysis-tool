@@ -216,17 +216,14 @@ const AuctionTable = ({
                 getRowObjectKey={(row: TableRow) => {
                   return (
                     // @ts-ignore
-                    ((row.originalData as singleAuctionEvent).auctionConfig
-                      ?.seller || '') +
-                    (row.originalData as singleAuctionEvent).time
+                    (row.originalData as singleAuctionEvent).index.toString()
                   );
                 }}
               >
                 <Table
                   selectedKey={
                     // @ts-ignore
-                    (selectedJSON?.auctionConfig?.seller || '') +
-                      selectedJSON?.time || ''
+                    selectedJSON?.index.toString() || ''
                   }
                   hideSearch={true}
                   minWidth="50rem"
@@ -242,7 +239,7 @@ const AuctionTable = ({
           </div>
         )}
       </Resizable>
-      <BottomTray selectedJSON={selectedJSON} />
+      <BottomTray selectedJSON={selectedJSON as object} />
     </div>
   );
 };
