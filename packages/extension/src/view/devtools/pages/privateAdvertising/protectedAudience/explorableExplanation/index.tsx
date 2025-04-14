@@ -297,6 +297,10 @@ const ExplorableExplanation = () => {
         if (!isDataEqual) {
           setAuctionUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
         }
+
+        if (!Object.keys(auctionData).length) {
+          setAuctionUpdateIndicator(() => -1);
+        }
       }
 
       if (receivedBids || noBids) {
@@ -315,6 +319,10 @@ const ExplorableExplanation = () => {
 
         if (!isDataEqual) {
           setBidsUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
+        }
+
+        if (!Object.keys(receivedBids).length && !Object.keys(noBids).length) {
+          setBidsUpdateIndicator(() => -1);
         }
       }
 
