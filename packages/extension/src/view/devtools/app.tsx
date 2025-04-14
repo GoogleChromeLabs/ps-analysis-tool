@@ -43,6 +43,10 @@ const setThemeMode = (isDarkMode: boolean) => {
   }
 };
 
+// set initial theme mode based on devtools theme
+const theme = chrome.devtools.panels.themeName;
+setThemeMode(theme === 'dark');
+
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
@@ -66,7 +70,7 @@ const App: React.FC = () => {
     buttonText: I18n.getMessage('refreshPanel'),
   });
 
-  // update theme mode when the system theme changes
+  // update theme mode when the browser theme changes
   useEffect(() => {
     const onColorSchemeChange = (e: MediaQueryListEvent) => {
       setThemeMode(e.matches);
@@ -74,10 +78,7 @@ const App: React.FC = () => {
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     if (mediaQuery) {
-      // listen for system theme changes
       mediaQuery.addEventListener('change', onColorSchemeChange);
-      // set initial theme mode as app is mounted
-      setThemeMode(mediaQuery.matches);
     }
 
     return () => {

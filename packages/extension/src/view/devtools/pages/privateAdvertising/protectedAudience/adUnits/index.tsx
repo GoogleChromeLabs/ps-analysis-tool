@@ -100,7 +100,7 @@ const AdUnits = () => {
       setSelectedAdUnit={setSelectedAdUnit}
       selectedAdUnit={selectedAdUnit}
       setIsInspecting={setIsInspecting}
-      auctionEvents={auctionEvents}
+      auctionEvents={auctionEvents ?? {}}
     />
   );
 };

@@ -58,8 +58,9 @@ const Button = ({
             variant === 'primary',
           'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
             variant === 'secondary',
-          'text-white dark:text-white bg-red-500': variant === 'danger',
-          'text-white dark:text-white bg-green-500': variant === 'success',
+          'text-white dark:text-raisin-black bg-red-500': variant === 'danger',
+          'text-white dark:text-raisin-black bg-green-500':
+            variant === 'success',
         },
         {
           'opacity-70 cursor-default': disabled,
