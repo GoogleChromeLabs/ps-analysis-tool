@@ -202,7 +202,7 @@ const AuctionTable = ({
             </div>
             <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
               <TableProvider
-                data={auctionEvents}
+                data={}
                 tableColumns={tableColumns}
                 tableFilterData={tableFilters}
                 tableSearchKeys={undefined}

@@ -250,14 +250,6 @@ const ExplorableExplanation = () => {
   } | null>(INIT_STATE);
 
   useEffect(() => {
-    // console.log({
-    //   currentSiteData,
-    //   sitesVisited,
-    //   isMultiSeller,
-    //   currentStep,
-    //   selectedAdUnit,
-    //   selectedDateTime,
-    // });
     setAuctionsData((prevData) => {
       if (!currentSiteData || currentSiteData?.type === 'advertiser') {
         previousAuctionData.current = null;

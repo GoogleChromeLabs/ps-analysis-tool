@@ -727,9 +727,7 @@ export const interestGroupSketch = (p: P5) => {
     }
 
     if (props.setSelectedAdUnit) {
-      app.setSelectedAdUnit = (adUnit: string) => {
-        props.setSelectedAdUnit(adUnit);
-      };
+      app.setSelectedAdUnit = props.setSelectedAdUnit;
     }
 
     if (props.platform) {
@@ -865,7 +863,7 @@ app.createCanvas = () => {
 app.getWinningAdDelay = () => {
   // the faster the speed, the longer the BASE delay
   const milliseconds = WINNING_AD_DELAY + app.speedMultiplier * 1000;
-  // adjust the delay based on the speed
+  // adjust the total delay based on the speed
   return milliseconds / app.speedMultiplier;
 };
 
