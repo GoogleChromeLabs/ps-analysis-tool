@@ -170,7 +170,7 @@ const InformationContainer = () => {
               data-testid="copy-button"
               disabled={copying}
               onClick={handleCopy}
-              className="-ml-6 -mt-1"
+              className="-ml-8 -mt-1"
             >
               {copying ? (
                 <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
