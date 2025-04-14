@@ -157,7 +157,7 @@ const InformationContainer = () => {
         >
           <div className="flex flex-row gap-x-2 justify-between items-start">
             {sysInfo.map((info) => (
-              <div className="flex flex-col mt-2" key={info.label}>
+              <div className="flex flex-col" key={info.label}>
                 <span className="text-sm dark:text-bright-gray">
                   {info.label}
                 </span>
@@ -170,7 +170,7 @@ const InformationContainer = () => {
               data-testid="copy-button"
               disabled={copying}
               onClick={handleCopy}
-              className="-ml-8"
+              className="-ml-6 -mt-1"
             >
               {copying ? (
                 <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
