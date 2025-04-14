@@ -144,7 +144,10 @@ class WebpageContentScript {
         await this.getAndProcessJSCookies(message.tabId);
       }
 
-      if (message.PSATDevToolsHidden) {
+      if (
+        typeof message.PSATDevToolsHidden !== 'undefined' &&
+        message.PSATDevToolsHidden
+      ) {
         //@ts-ignore
         if (typeof cookieStore !== 'undefined') {
           //@ts-ignore
@@ -152,7 +155,10 @@ class WebpageContentScript {
         }
       }
 
-      if (!message.PSATDevToolsHidden) {
+      if (
+        typeof message.PSATDevToolsHidden !== 'undefined' &&
+        !message.PSATDevToolsHidden
+      ) {
         //@ts-ignore
         if (typeof cookieStore !== 'undefined') {
           //@ts-ignore
@@ -164,6 +170,12 @@ class WebpageContentScript {
       if (message?.payload?.type === TABID_STORAGE) {
         this.tabId = message.payload.tabId;
         this.frameId = message.payload.frameId;
+        //@ts-ignore
+        if (typeof cookieStore !== 'undefined') {
+          //@ts-ignore
+          cookieStore.onchange = this.handleCookieChange;
+          await this.getAndProcessJSCookies(message.tabId);
+        }
       }
 
       if (message?.payload?.type === GET_JS_COOKIES) {
@@ -190,12 +202,12 @@ class WebpageContentScript {
    */
   async getAndProcessJSCookies(tabId: string) {
     try {
-      if (!this.frameId) {
+      if (this.frameId === null) {
         return;
       }
-
       //@ts-ignore
       const jsCookies = await cookieStore?.getAll();
+
       await processAndStoreDocumentCookies({
         tabUrl: window.location.href,
         tabId,
