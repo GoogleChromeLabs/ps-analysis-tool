@@ -250,6 +250,7 @@ const ExplorableExplanation = () => {
   } | null>(INIT_STATE);
 
   useEffect(() => {
+    // eslint-disable-next-line complexity
     setAuctionsData((prevData) => {
       if (!currentSiteData || currentSiteData?.type === 'advertiser') {
         previousAuctionData.current = null;
@@ -284,12 +285,10 @@ const ExplorableExplanation = () => {
           isMultiSeller,
           currentSiteData,
           currentStep,
-          previousAuctionData.current,
+          prevData?.auctionData ?? {},
           selectedAdUnit,
           selectedDateTime
         );
-
-      previousAuctionData.current = auctionData;
 
       if (auctionData) {
         const isDataEqual = isEqual(auctionData, prevData?.auctionData);
@@ -325,6 +324,8 @@ const ExplorableExplanation = () => {
           setBidsUpdateIndicator(() => -1);
         }
       }
+
+      previousAuctionData.current = auctionData;
 
       return {
         auctionData: auctionData ?? {},

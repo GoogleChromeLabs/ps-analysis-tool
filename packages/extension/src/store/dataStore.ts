@@ -609,9 +609,7 @@ class DataStore {
 
       const { globalEvents, ...rest } = this.auctionEvents[tabId];
 
-      const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
-        Object.values(rest).flat()
-      );
+      const isMultiSellerAuction = PAStore.isMUltiSellerAuction(rest);
       const groupedAuctionBids: {
         [parentAuctionId: string]: {
           0: singleAuctionEvent[];
