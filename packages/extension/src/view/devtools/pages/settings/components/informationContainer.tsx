@@ -113,6 +113,25 @@ const InformationContainer = () => {
     currentTabs,
   ]);
 
+  const sysInfo = [
+    {
+      label: I18n.getMessage('openTabs'),
+      value: currentTabs,
+    },
+    {
+      label: I18n.getMessage('chromeVersion'),
+      value: browserInformation,
+    },
+    {
+      label: I18n.getMessage('pSATVersion'),
+      value: PSATVersion,
+    },
+    {
+      label: I18n.getMessage('systemArchitecture'),
+      value: OSInformation,
+    },
+  ];
+
   return (
     <div data-testid="debugging-information">
       <div>
@@ -137,38 +156,16 @@ const InformationContainer = () => {
           )}
         >
           <div className="flex flex-row gap-x-2 justify-between items-start">
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('openTabs')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {currentTabs}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('chromeVersion')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {browserInformation}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('pSATVersion')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {PSATVersion}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('systemArchitecture')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {OSInformation}
-              </span>
-            </div>
+            {sysInfo.map((info) => (
+              <div className="flex flex-col mt-2" key={info.label}>
+                <span className="text-sm dark:text-bright-gray">
+                  {info.label}
+                </span>
+                <span className="text-xs text-darkest-gray dark:text-bright-gray">
+                  {info.value}
+                </span>
+              </div>
+            ))}
             <button
               data-testid="copy-button"
               disabled={copying}
