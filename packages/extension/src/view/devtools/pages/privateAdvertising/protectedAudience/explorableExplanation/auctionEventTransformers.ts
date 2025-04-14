@@ -71,11 +71,13 @@ export type IGWithcComponentSeller = {
 };
 
 const getRandomisedNumbers = (count: number, min: number, max: number) => {
-  const randomNumbers = Array.from(
-    { length: count },
-    () => Math.floor(Math.random() * (max - min + 1)) + min
-  );
+  const uniqueRandomNumbers = new Set<number>();
+  while (uniqueRandomNumbers.size < count) {
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    uniqueRandomNumbers.add(randomNumber);
+  }
 
+  const randomNumbers = [...uniqueRandomNumbers];
   randomNumbers.sort((a, b) => a - b);
 
   return randomNumbers;
@@ -414,6 +416,8 @@ export const createAuctionEvents = (
   const randomNumbers = getRandomisedNumbers(1000, minValue, 2500);
 
   flattenedEvents.map((event, index) => {
+    event.index = index;
+
     if (!event?.formattedTime.toString().startsWith('-') && event?.time > 0) {
       return event;
     }

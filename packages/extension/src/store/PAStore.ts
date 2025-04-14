@@ -57,6 +57,7 @@ class PAStore {
 
       this.getAuctionEventsArray(tabId, uniqueAuctionId).push({
         uniqueAuctionId,
+        index: this.getAuctionEventsArray(tabId, uniqueAuctionId).length,
         bidCurrency: auctionConfig?.bidCurrency ?? '',
         bid: auctionConfig?.bid ?? null,
         name: auctionConfig?.name ?? '',
@@ -175,6 +176,7 @@ class PAStore {
     eventData = {
       uniqueAuctionId,
       name,
+      index: this.getAuctionEventsArray(tabId, uniqueAuctionId).length,
       ownerOrigin,
       formattedTime:
         uniqueAuctionId &&
@@ -232,6 +234,7 @@ class PAStore {
     auctions.forEach((uniqueAuctionId) => {
       this.getAuctionEventsArray(tabId, uniqueAuctionId).push({
         uniqueAuctionId,
+        index: this.getAuctionEventsArray(tabId, uniqueAuctionId).length,
         formattedTime:
           dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
             ? '0 ms'
@@ -265,6 +268,7 @@ class PAStore {
 
     const eventData = {
       uniqueAuctionId,
+      index: this.getAuctionEventsArray(tabId, uniqueAuctionId).length,
       type,
       formattedTime:
         this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
