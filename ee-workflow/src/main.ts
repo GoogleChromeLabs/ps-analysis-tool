@@ -127,6 +127,11 @@ class Main {
   private hoveredFigure: Figure | null = null;
 
   /**
+   * Flag to keep track of loop
+   */
+  private noLoop = false;
+
+  /**
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
@@ -385,6 +390,14 @@ class Main {
       return;
     }
 
+    if (this.stepsQueue.length === 0 && this.instantQueue.length === 0) {
+      this.dispatchCustomEvent('noLoop', {
+        message: 'Animation ended',
+      });
+      this.p5.noLoop();
+      this.noLoop = true;
+    }
+
     if (this.isTravelling) {
       if (this.clearBeforeTravel) {
         this.p5.clear();
@@ -518,8 +531,22 @@ class Main {
     if (pause !== undefined) {
       this.pause = pause;
     } else {
+      if (this.noLoop) {
+        if (!this.pause) {
+          this.p5.loop();
+          this.noLoop = false;
+        }
+      } else {
+        if (this.pause) {
+          this.p5.noLoop();
+          this.noLoop = true;
+        }
+      }
+
       this.pause = !this.pause;
     }
+
+    this.noLoop = this.pause;
 
     if (this.pause) {
       this.p5.noLoop();
@@ -703,9 +730,7 @@ class Main {
       this.traveller = null;
     }
 
-    if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
-      //   this.reDrawAll();
-    }
+    this.handleAnimatorOnPreviousCheckpointLoad(checkpoint);
 
     const toBeLoadedObjects = [];
     const toCheckGroups = new Set<string>();
@@ -765,6 +790,14 @@ class Main {
     this.groupStepsQueue.unshift(...toBeLoadedGroups.reverse());
     this.animatorStepsQueue.unshift(...toBeLoadedAnimators.reverse());
 
+    if (this.noLoop) {
+      this.dispatchCustomEvent('loop', {
+        message: 'Animation start',
+      });
+      this.p5.loop();
+      this.noLoop = false;
+    }
+
     this.togglePause(false);
     this.reDrawAll();
 
@@ -793,6 +826,14 @@ class Main {
 
     while (this.stepsQueue.length && !this.stepsQueue[0].getIsCheckpoint()) {
       this.runner(false, true);
+    }
+
+    if (this.noLoop) {
+      this.dispatchCustomEvent('loop', {
+        message: 'Animation start',
+      });
+      this.p5.loop();
+      this.noLoop = false;
     }
 
     this.togglePause(false);
@@ -974,6 +1015,14 @@ class Main {
     } else {
       this.stepsQueue.push(figure);
     }
+
+    if (this.noLoop) {
+      this.dispatchCustomEvent('loop', {
+        message: 'Animation start',
+      });
+      this.p5.loop();
+      this.noLoop = false;
+    }
   }
 
   /**
@@ -1139,6 +1188,9 @@ class Main {
 
   stepNext() {
     this.togglePause(true);
+    this.dispatchCustomEvent('noLoop', {
+      message: 'Animation end',
+    });
 
     while (this.isTravelling) {
       this.runTraveller();
@@ -1175,6 +1227,9 @@ class Main {
 
   stepBack() {
     this.togglePause(true);
+    this.dispatchCustomEvent('noLoop', {
+      message: 'Animation end',
+    });
 
     const wasTravelling = this.isTravelling;
     while (this.isTravelling) {
