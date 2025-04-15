@@ -139,7 +139,7 @@ class WebpageContentScript {
     }
 
     chrome.runtime.onMessage.addListener(async (message, _sender, response) => {
-      if (message.status === ' ') {
+      if (message.status === 'set?') {
         response({ setInPage: true });
         await this.getAndProcessJSCookies(message.tabId);
       }
@@ -149,7 +149,7 @@ class WebpageContentScript {
         //@ts-ignore
         typeof cookieStore !== 'undefined'
       ) {
-        if (!message.PSATDevToolsHidden) {
+        if (message.PSATDevToolsHidden) {
           //@ts-ignore
           cookieStore.onchange = null;
         } else {
