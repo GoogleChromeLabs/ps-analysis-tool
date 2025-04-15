@@ -30,7 +30,8 @@
   "content_scripts": [
     {
       "js": ["content-script.js"],
-      "matches": ["*://*/*"]
+      "matches": ["*://*/*"],
+      "all_frames": true
     }
   ],
   "action": {

@@ -33,10 +33,10 @@ import { isEqual } from 'lodash-es';
 import {
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
-  GET_JS_COOKIES,
   INITIAL_SYNC,
   NEW_COOKIE_DATA,
   SERVICE_WORKER_RELOAD_MESSAGE,
+  TABID_STORAGE,
 } from '../../../../constants';
 import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
@@ -136,6 +136,41 @@ const Provider = ({ children }: PropsWithChildren) => {
     return _frameHasCookies;
   }, [tabCookies, tabFrames]);
 
+  const getCookiesSetByJavascript = useCallback(async () => {
+    if (chrome.devtools.inspectedWindow.tabId) {
+      const frames = await chrome.webNavigation.getAllFrames({
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      });
+
+      if (!frames) {
+        return;
+      }
+
+      await Promise.all(
+        frames.map(async (frame) => {
+          try {
+            await chrome.tabs.sendMessage(
+              chrome.devtools.inspectedWindow.tabId,
+              {
+                tabId: chrome.devtools.inspectedWindow.tabId,
+                payload: {
+                  type: TABID_STORAGE,
+                  tabId: chrome.devtools.inspectedWindow.tabId,
+                  frameId: frame.frameId,
+                },
+              },
+              {
+                frameId: frame.frameId,
+              }
+            );
+          } catch (error) {
+            // Fail silently since the contentscript might not have been set.
+          }
+        })
+      );
+    }
+  }, []);
+
   /**
    * Sets current frames for sidebar, detected if the current tab is to be analysed,
    * parses data currently in store, set current tab URL.
@@ -148,12 +183,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     const tab = await getTab(tabId);
 
     if (chrome.devtools.inspectedWindow.tabId && canStartInspecting) {
-      await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
-        payload: {
-          type: GET_JS_COOKIES,
-          tabId: chrome.devtools.inspectedWindow.tabId,
-        },
-      });
+      await getCookiesSetByJavascript();
     }
 
     if (tab?.url) {
@@ -170,18 +200,11 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
 
     setLoading(false);
-  }, [getAllFramesForCurrentTab, canStartInspecting]);
-
-  const getCookiesSetByJavascript = useCallback(async () => {
-    if (chrome.devtools.inspectedWindow.tabId) {
-      await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
-        payload: {
-          type: GET_JS_COOKIES,
-          tabId: chrome.devtools.inspectedWindow.tabId,
-        },
-      });
-    }
-  }, []);
+  }, [
+    getAllFramesForCurrentTab,
+    canStartInspecting,
+    getCookiesSetByJavascript,
+  ]);
 
   useEffect(() => {
     chrome.runtime.sendMessage({
@@ -264,6 +287,12 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     [getAllFramesForCurrentTab]
   );
+
+  useEffect(() => {
+    if (canStartInspecting && tabFrames) {
+      (() => getCookiesSetByJavascript())();
+    }
+  }, [canStartInspecting, getCookiesSetByJavascript, tabFrames]);
 
   const onCommittedNavigationListener = useCallback(
     async ({
