@@ -148,20 +148,24 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       await Promise.all(
         frames.map(async (frame) => {
-          await chrome.tabs.sendMessage(
-            chrome.devtools.inspectedWindow.tabId,
-            {
-              tabId: chrome.devtools.inspectedWindow.tabId,
-              payload: {
-                type: TABID_STORAGE,
+          try {
+            await chrome.tabs.sendMessage(
+              chrome.devtools.inspectedWindow.tabId,
+              {
                 tabId: chrome.devtools.inspectedWindow.tabId,
-                frameId: frame.frameId,
+                payload: {
+                  type: TABID_STORAGE,
+                  tabId: chrome.devtools.inspectedWindow.tabId,
+                  frameId: frame.frameId,
+                },
               },
-            },
-            {
-              frameId: frame.frameId,
-            }
-          );
+              {
+                frameId: frame.frameId,
+              }
+            );
+          } catch (error) {
+            // Fail silently since the contentscript might not have been set.
+          }
         })
       );
     }

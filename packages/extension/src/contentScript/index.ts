@@ -69,7 +69,7 @@ class WebpageContentScript {
   tabId: number | null = null;
 
   /**
-   * Main frame id.
+   * Frame id.
    */
   frameId: string | null = null;
 
@@ -138,29 +138,21 @@ class WebpageContentScript {
       });
     }
 
-    chrome.runtime.onMessage.addListener(async (message, sender, response) => {
-      if (message.status === 'set?') {
+    chrome.runtime.onMessage.addListener(async (message, _sender, response) => {
+      if (message.status === ' ') {
         response({ setInPage: true });
         await this.getAndProcessJSCookies(message.tabId);
       }
 
       if (
         typeof message.PSATDevToolsHidden !== 'undefined' &&
-        message.PSATDevToolsHidden
-      ) {
         //@ts-ignore
-        if (typeof cookieStore !== 'undefined') {
+        typeof cookieStore !== 'undefined'
+      ) {
+        if (!message.PSATDevToolsHidden) {
           //@ts-ignore
           cookieStore.onchange = null;
-        }
-      }
-
-      if (
-        typeof message.PSATDevToolsHidden !== 'undefined' &&
-        !message.PSATDevToolsHidden
-      ) {
-        //@ts-ignore
-        if (typeof cookieStore !== 'undefined') {
+        } else {
           //@ts-ignore
           cookieStore.onchange = this.handleCookieChange;
           await this.getAndProcessJSCookies(message.tabId);
@@ -336,6 +328,10 @@ class WebpageContentScript {
    * @param {ResponseType} response - The incoming message/response.
    */
   onMessage = (response: ResponseType) => {
+    if (this.frameId?.toString() !== '0' || this.frameId === null) {
+      return;
+    }
+
     this.isInspecting = response.isInspecting;
     if (response?.selectedAdUnit) {
       this.mode = 'PA';
@@ -494,6 +490,7 @@ class WebpageContentScript {
       });
       return tooltip;
     }
+
     if (
       frame &&
       (frame.tagName !== 'BODY' || !isFrameHidden(frame)) &&
