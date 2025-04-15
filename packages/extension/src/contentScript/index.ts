@@ -138,7 +138,7 @@ class WebpageContentScript {
       });
     }
 
-    chrome.runtime.onMessage.addListener(async (message, sender, response) => {
+    chrome.runtime.onMessage.addListener(async (message, _sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
         await this.getAndProcessJSCookies(message.tabId);
@@ -146,21 +146,13 @@ class WebpageContentScript {
 
       if (
         typeof message.PSATDevToolsHidden !== 'undefined' &&
-        message.PSATDevToolsHidden
-      ) {
         //@ts-ignore
-        if (typeof cookieStore !== 'undefined') {
+        typeof cookieStore !== 'undefined'
+      ) {
+        if (message.PSATDevToolsHidden) {
           //@ts-ignore
           cookieStore.onchange = null;
-        }
-      }
-
-      if (
-        typeof message.PSATDevToolsHidden !== 'undefined' &&
-        !message.PSATDevToolsHidden
-      ) {
-        //@ts-ignore
-        if (typeof cookieStore !== 'undefined') {
+        } else {
           //@ts-ignore
           cookieStore.onchange = this.handleCookieChange;
           await this.getAndProcessJSCookies(message.tabId);
