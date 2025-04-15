@@ -139,7 +139,7 @@ const InformationContainer = () => {
           className="w-full flex gap-2 justify-between text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
           onClick={() => setOpen((prevOpen) => !prevOpen)}
         >
-          <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
+          <div className="flex items-center flex-row mb-2 gap-x-2">
             <InformationIcon className="dark:text-bright-gray" />
             <span className="text-base font-bold dark:text-bright-gray">
               {I18n.getMessage('systemInformation')}
