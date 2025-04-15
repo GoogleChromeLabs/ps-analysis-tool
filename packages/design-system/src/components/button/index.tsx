@@ -73,7 +73,7 @@ const Button = ({
         },
         {
           'py-0.5 px-1.5 text-xs': size === 'small',
-          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2':
+          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-4':
             size === 'large',
         }
       )}
