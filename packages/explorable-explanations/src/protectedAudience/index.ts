@@ -407,6 +407,7 @@ app.handleInteractivePrev = () => {
   }
 
   app.promiseQueue?.end();
+  utils.wipeAndRecreateMainCanvas();
   flow.setButtonsDisabilityState();
   app.shouldRespondToClick = false;
 
@@ -484,6 +485,7 @@ app.handleNonInteractiveNext = async () => {
   app.promiseQueue?.end();
   app.timeline.isPaused = true;
   app.cancelPromise = true;
+  utils.wipeAndRecreateMainCanvas();
   //This is to set the data for previous site in react as well.
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
