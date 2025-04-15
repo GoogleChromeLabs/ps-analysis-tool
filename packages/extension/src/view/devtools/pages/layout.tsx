@@ -208,14 +208,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div className="flex items-center gap-5">
         <Button
-          text={<Tick className="fill-white dark:fill-white w-3 h-3" />}
+          text={<Tick className="fill-white dark:fill-white w-4 h-4" />}
           size="large"
           onClick={handleSettingsChange}
           variant="success"
         />
         <Button
           text={
-            <Plus className="fill-white dark:fill-white rotate-45 w-3 h-3" />
+            <Plus className="fill-white dark:fill-white rotate-45 w-4 h-4" />
           }
           size="large"
           onClick={async () => {
@@ -244,14 +244,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div className="flex items-center gap-5">
         <Button
-          text={<Tick className="fill-white dark:fill-white w-3 h-3" />}
+          text={<Tick className="fill-white dark:fill-white w-4 h-4" />}
           size="large"
           onClick={handleSettingsChange}
           variant={exceedingLimitations ? 'danger' : 'success'}
         />
         <Button
           text={
-            <Plus className="fill-white dark:fill-white rotate-45 w-3 h-3" />
+            <Plus className="fill-white dark:fill-white rotate-45 w-4 h-4" />
           }
           size="large"
           onClick={async () => {
