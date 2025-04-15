@@ -38,6 +38,8 @@ import {
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
   Button,
+  Tick,
+  Plus,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -206,13 +208,15 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div className="flex items-center gap-5">
         <Button
-          text="Yes"
+          text={<Tick className="fill-white dark:fill-white w-3 h-3" />}
           size="large"
           onClick={handleSettingsChange}
           variant="success"
         />
         <Button
-          text="Cancel"
+          text={
+            <Plus className="fill-white dark:fill-white rotate-45 w-3 h-3" />
+          }
           size="large"
           onClick={async () => {
             await chrome.storage.session.remove([
@@ -240,13 +244,15 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div className="flex items-center gap-5">
         <Button
-          text="Yes"
+          text={<Tick className="fill-white dark:fill-white w-3 h-3" />}
           size="large"
           onClick={handleSettingsChange}
           variant={exceedingLimitations ? 'danger' : 'success'}
         />
         <Button
-          text="Cancel"
+          text={
+            <Plus className="fill-white dark:fill-white rotate-45 w-3 h-3" />
+          }
           size="large"
           onClick={async () => {
             await chrome.storage.session.remove([
