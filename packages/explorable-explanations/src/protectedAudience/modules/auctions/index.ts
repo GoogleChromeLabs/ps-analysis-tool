@@ -32,7 +32,7 @@ import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
 import { getCoordinateValues } from '../../utils/getCoordinateValues';
-import { MULTI_SELLER_CONFIG } from '../flowConfig';
+import { MULTI_SELLER_CONFIG, SINGLE_SELLER_CONFIG } from '../flowConfig';
 
 export const WINNING_AD_DELAY = 5000;
 
@@ -207,6 +207,7 @@ const auction: Auction = {
                 MULTI_SELLER_CONFIG.SCORE_AD.title,
                 MULTI_SELLER_CONFIG.REPORT_WIN.title,
                 MULTI_SELLER_CONFIG.REPORT_RESULT.title,
+                SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.title,
               ].includes(props.title)
             ) {
               ssp = 'https://www.' + config.timeline.circles[index].website;
