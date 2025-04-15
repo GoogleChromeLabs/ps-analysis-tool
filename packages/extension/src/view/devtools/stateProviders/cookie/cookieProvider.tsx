@@ -288,6 +288,12 @@ const Provider = ({ children }: PropsWithChildren) => {
     [getAllFramesForCurrentTab]
   );
 
+  useEffect(() => {
+    if (canStartInspecting && tabFrames) {
+      (() => getCookiesSetByJavascript())();
+    }
+  }, [canStartInspecting, getCookiesSetByJavascript, tabFrames]);
+
   const onCommittedNavigationListener = useCallback(
     async ({
       frameId,
