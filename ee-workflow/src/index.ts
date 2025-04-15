@@ -994,8 +994,8 @@ const drawPublisherFlow = (x: number, y: number) => {
   const image = mainFF.image({
     x,
     y: y + 10,
-    height: 20,
-    width: 20,
+    height: 30,
+    width: 30,
     imageLoader: () => downArrowImage!,
     mouseClicked: (figure: Figure) => {
       arrowClick(figure, animator);

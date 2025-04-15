@@ -3,14 +3,27 @@
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
     <meta charset="utf-8" />
+    <style>
+      button {
+        background: none;
+        cursor: pointer;
+        border: none;
+      }
+
+      button:hover {
+        opacity: 0.6;
+      }
+
+      button:active {
+        opacity: 0.4;
+      }
+    </style>
+    <title>EE Workflow</title>
   </head>
   <body>
     <main>
       <div style="display: flex; gap: 10px; align-items: center">
-        <button
-          id="prev"
-          style="background: none; cursor: pointer; border: none"
-        >
+        <button id="prev">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24px"
@@ -23,10 +36,7 @@
             />
           </svg>
         </button>
-        <button
-          id="step-prev"
-          style="background: none; cursor: pointer; border: none"
-        >
+        <button id="step-prev">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="16px"
@@ -37,10 +47,7 @@
             <path d="M400-80 0-480l400-400 56 57-343 343 343 343-56 57Z" />
           </svg>
         </button>
-        <button
-          id="play"
-          style="background: none; cursor: pointer; border: none; padding: 0"
-        >
+        <button id="play">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="16px"
@@ -53,10 +60,7 @@
             />
           </svg>
         </button>
-        <button
-          id="step-next"
-          style="background: none; cursor: pointer; border: none"
-        >
+        <button id="step-next">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="16px"
@@ -67,15 +71,12 @@
             <path d="m304-82-56-57 343-343-343-343 56-57 400 400L304-82Z" />
           </svg>
         </button>
-        <button
-          id="next"
-          style="background: none; cursor: pointer; border: none"
-        >
+        <button id="next">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="16px"
+            height="24px"
             viewBox="0 -960 960 960"
-            width="16px"
+            width="24px"
             fill="#5f6368"
           >
             <path
@@ -83,10 +84,7 @@
             />
           </svg>
         </button>
-        <button
-          id="reset"
-          style="background: none; cursor: pointer; border: none"
-        >
+        <button id="reset">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="16px"

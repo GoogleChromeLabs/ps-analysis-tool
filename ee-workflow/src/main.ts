@@ -653,7 +653,7 @@ class Main {
 
     if (
       !this.animatorStepsQueue?.[0]
-        .getObjects()
+        ?.getObjects()
         .find((object) => object.getId() === checkpoint)
     ) {
       return checkpoint;
