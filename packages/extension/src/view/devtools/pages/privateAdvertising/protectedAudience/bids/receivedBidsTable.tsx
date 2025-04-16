@@ -70,7 +70,7 @@ const ReceivedBidsTable = ({
         widthWeightagePercentage: 20,
       },
       {
-        header: 'Bid',
+        header: 'Bid Value',
         accessorKey: 'bid',
         cell: (info) => info,
         widthWeightagePercentage: 15,
