@@ -17,9 +17,16 @@
  * Internal dependencies
  */
 import dataStore from '../../store/dataStore';
+import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
-export const onTabRemovedListener = (tabId: number) => {
+export const onTabRemovedListener = async (tabId: number) => {
   dataStore.deinitialiseVariablesForTab(tabId.toString());
 
   dataStore?.removeTabData(tabId);
+  const tabs = await chrome.tabs.query({});
+  const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+
+  await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
+    exceedingLimitations: qualifyingTabs.length > 5,
+  });
 };
