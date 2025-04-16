@@ -153,7 +153,8 @@ class Main {
 
     if (performanceCheck) {
       this.stats = new Stats();
-      this.stats.showPanel(2);
+      this.stats.showPanel(0);
+      this.stats.dom.style = 'position: absolute; right: 0; top: 0;';
       document.body.appendChild(this.stats.dom);
     }
   }

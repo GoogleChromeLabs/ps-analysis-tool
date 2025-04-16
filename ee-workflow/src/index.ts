@@ -517,7 +517,7 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
 
   const image = mainFF.image({
     x,
-    y: y + 10,
+    y: y + 20,
     height: 30,
     width: 30,
     imageLoader: () => downArrowImage!,
@@ -704,7 +704,7 @@ const drawPublisherFlow = (x: number, y: number) => {
         x,
         y,
         endX: x,
-        endY: y + 20,
+        endY: y + 50,
         shouldTravel: true,
       }),
       mainFF.line({
@@ -1007,7 +1007,7 @@ const drawPublisherFlow = (x: number, y: number) => {
 
   const image = mainFF.image({
     x,
-    y: y + 10,
+    y: y + 20,
     height: 30,
     width: 30,
     imageLoader: () => downArrowImage!,
