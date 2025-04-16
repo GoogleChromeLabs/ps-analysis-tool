@@ -15,11 +15,6 @@
  */
 
 /**
- * External dependencies.
- */
-import type p5 from 'p5';
-
-/**
  * Internal dependencies.
  */
 import { websites, websiteToTopicMapping } from './data';
@@ -42,28 +37,28 @@ export const assignAdtechsToSites = (sites: string[], adTechs: string[]) => {
   return siteAdtechs;
 };
 
-export const getAdtechsColors = (p5: p5) => ({
-  GoogleAds: p5.color(255, 99, 71), // Tomato
-  FacebookAds: p5.color(135, 206, 250), // Light Sky Blue
-  AmazonAds: p5.color(255, 182, 193), // Light Pink
-  TradeDesk: p5.color(100, 149, 237), // Cornflower Blue
-  AdobeAdvertising: p5.color(144, 238, 144), // Light Green
-  MediaMath: p5.color(255, 160, 122), // Light Salmon
-  AppNexus: p5.color(255, 215, 0), // Gold
-  Criteo: p5.color(0, 255, 255), // Cyan
-  PubMatic: p5.color(255, 105, 180), // Hot Pink
-  VerizonMedia: p5.color(255, 165, 0), // Orange
-  Taboola: p5.color(0, 0, 255), // Blue
-  Outbrain: p5.color(0, 255, 0), // Lime
-  AdRoll: p5.color(255, 0, 0), // Red
-  Quantcast: p5.color(128, 0, 128), // Purple
-  RocketFuel: p5.color(0, 0, 0), // Black
-  Sizmek: p5.color(255, 140, 0), // Dark Orange
-  Choozle: p5.color(128, 128, 128), // Gray
-  Centro: p5.color(128, 0, 0), // Maroon
-  ZetaGlobal: p5.color(0, 128, 0), // Green
-  LiveRamp: p5.color(0, 128, 128), // Teal
-});
+export const ADTECH_COLORS = {
+  GoogleAds: '#FF6347', // Tomato
+  FacebookAds: '#87CEFA', // Light Sky Blue
+  AmazonAds: '#FFB6C1', // Light Pink
+  TradeDesk: '#6495ED', // Cornflower Blue
+  AdobeAdvertising: '#90EE90', // Light Green
+  MediaMath: '#FFA07A', // Light Salmon
+  AppNexus: '#FFD700', // Gold
+  Criteo: '#00FFFF', // Cyan
+  PubMatic: '#FF69B4', // Hot Pink
+  VerizonMedia: '#FFA500', // Orange
+  Taboola: '#0000FF', // Blue
+  Outbrain: '#00FF00', // Lime
+  AdRoll: '#FF0000', // Red
+  Quantcast: '#800080', // Purple
+  RocketFuel: '#000000', // Black
+  Sizmek: '#FF8C00', // Dark Orange
+  Choozle: '#808080', // Gray
+  Centro: '#800000', // Maroon
+  ZetaGlobal: '#008000', // Green
+  LiveRamp: '#008080', // Teal
+};
 
 export const getWebsiteToTopic = (website: string) => {
   return websiteToTopicMapping[website];

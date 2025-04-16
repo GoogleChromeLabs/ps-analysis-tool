@@ -20,7 +20,7 @@ import app from '../app';
 import config, { publisherData } from '../config';
 import { isInsideCircle, scrollToCoordinates } from '../utils';
 import { getCoordinateValues } from '../utils/getCoordinateValues';
-import type { Coordinates } from '../types';
+import type { Coordinates, PublisherNames } from '../types';
 
 type FlowExpanderProps = {
   nextTipCoordinates: Coordinates[];
@@ -46,9 +46,9 @@ const FlowExpander = async ({
   const iconSize = config.timeline.expandIconSize;
   const iconRadius = iconSize / 2;
 
-  const currentSite =
-    config.timeline.circles[app.timeline.currentIndex]?.website ??
-    config.timeline.circles[app.nodeIndexRevisited]?.website;
+  const currentSite = (config.timeline.circles[app.timeline.currentIndex]
+    ?.website ??
+    config.timeline.circles[app.nodeIndexRevisited]?.website) as PublisherNames;
 
   igp.mouseMoved = (event: MouseEvent | undefined) => {
     let hoveringOverSomething = false;

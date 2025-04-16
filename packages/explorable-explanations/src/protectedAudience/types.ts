@@ -32,14 +32,7 @@ export type Step = {
   ssp: string;
 };
 
-export type SketchProps = {
-  infoIcon: p5.Image;
-  expandIcon: p5.Image;
-  openWithoutAnimation: p5.Image;
-  userIcon: p5.Image;
-  playIcon: p5.Image;
-  pauseIcon: p5.Image;
-  completedCheckMark: p5.Image;
+export type Logos = {
   kawasaki: p5.Image;
   cnn: p5.Image;
   aljazeera: p5.Image;
@@ -49,6 +42,16 @@ export type SketchProps = {
   adidas: p5.Image;
   netflix: p5.Image;
   apple: p5.Image;
+};
+
+export type SketchProps = {
+  infoIcon: p5.Image;
+  expandIcon: p5.Image;
+  openWithoutAnimation: p5.Image;
+  userIcon: p5.Image;
+  playIcon: p5.Image;
+  pauseIcon: p5.Image;
+  completedCheckMark: p5.Image;
   isMultiSeller: boolean;
   isInteractiveMode: boolean;
   autoScroll: boolean;
@@ -87,13 +90,24 @@ export type SketchProps = {
   setSelectedExpandedFlow: () => void;
   setIsBubbleExpanded: (isExpanded: boolean) => void;
   setHasLastNodeVisited: (hasLastNodeVisited: boolean) => void;
-};
+} & Logos;
 
 export type P5 = p5 & {
   updateWithProps?: (props: SketchProps) => void;
 } & SketchProps;
 
 export type CoordinateValue = number | (() => number);
+
+export type PublisherNames = 'newyorktimes.com' | 'cnn.com' | 'aljazeera.com';
+export type AdvertiserNames =
+  | 'apple.com'
+  | 'myntra.com'
+  | 'adidas.com'
+  | 'amazon.com'
+  | 'netflix.com'
+  | 'kawasaki.com';
+
+export type WebsiteNames = PublisherNames | AdvertiserNames;
 
 export type Coordinates = {
   x: CoordinateValue;
@@ -103,7 +117,7 @@ export type Coordinates = {
 
 export type Circle = {
   type: 'advertiser' | 'publisher';
-  website: string;
+  website: WebsiteNames;
   datetime: string;
   igGroupsCount?: number;
   interestGroups?: string[];
@@ -161,3 +175,5 @@ export type AuctionStep = {
   callBack?: (returnValue: Coordinates) => void;
   delay?: number;
 };
+
+export type Direction = 'right' | 'left' | 'up' | 'down';

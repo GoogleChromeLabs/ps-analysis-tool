@@ -23,9 +23,10 @@ import type p5 from 'p5';
  * Internal dependencies
  */
 import { config } from './config';
-import { getAdtechsColors } from './utils';
+import { ADTECH_COLORS } from './utils';
 import { websitesToIconsMapping } from './data';
 import icons from '../icons.json';
+import { AdtechType, App, WebsiteLogos } from './types';
 
 /**
  * Setup function for p5.js
@@ -43,13 +44,13 @@ export function topicsAnimation(
   p: p5,
   epoch: { datetime: string; website: string; topics: string[] }[],
   isAnimating: boolean,
-  siteAdTechs: Record<string, string[]>,
+  siteAdTechs: Record<string, AdtechType[]>,
   visitIndexStart: number,
   handleUserVisit: (visitIndex: number) => void,
   setHighlightAdTech: (highlightAdTech: string | null) => void,
   isInteractive: boolean
 ) {
-  const app = {
+  const app: App = {
     userIcon: null as p5.Image | null,
     completedIcon: null as p5.Image | null,
     'tmz.com': null as p5.Image | null,
@@ -99,14 +100,14 @@ export function topicsAnimation(
 
       circles.forEach((circleItem, index) => {
         const xPosition = horizontalSpacing + circleVerticalSpace * index;
-
+        const website = circleItem.website as keyof WebsiteLogos;
         if (!app.circlePositions) {
           app.circlePositions = {};
         }
 
-        if (app?.[circleItem.website]) {
+        if (app?.[website]) {
           p.image(
-            app[circleItem.website],
+            app[website],
             xPosition - diameter / 4 - 3,
             55,
             diameter / 2 + 8,
@@ -269,7 +270,7 @@ export function topicsAnimation(
     drawSmallCircles: (index: number, currentSite: string) => {
       const { diameter } = config.timeline.circleProps;
       const smallCircleDiameter = diameter / 5;
-      const adTechs = siteAdTechs[currentSite];
+      const adTechs = siteAdTechs[currentSite] as AdtechType[];
 
       const appSmallCirclePositions = app.smallCirclePositions[index];
 
@@ -277,7 +278,7 @@ export function topicsAnimation(
       if (appSmallCirclePositions) {
         for (let i = 0; i < appSmallCirclePositions.length; i++) {
           const smallCirclePosition = appSmallCirclePositions[i];
-          const adTechColor = getAdtechsColors(p)[adTechs[i]];
+          const adTechColor = ADTECH_COLORS[adTechs[i]];
 
           p.push();
           p.fill(adTechColor);
@@ -327,7 +328,7 @@ export function topicsAnimation(
 
         smallCirclePositions.push({ x: randomX, y: randomY });
 
-        const adTechColor = getAdtechsColors(p)[adTechs[i]];
+        const adTechColor = ADTECH_COLORS[adTechs[i]];
 
         p.push();
         p.fill(adTechColor);
@@ -394,7 +395,7 @@ export function topicsAnimation(
       p.textStyle(p.NORMAL);
       for (let i = 0; i < numAdTechs; i++) {
         const adTech = adTechs[i];
-        const adTechColor = getAdtechsColors(p)[adTech];
+        const adTechColor = ADTECH_COLORS[adTech];
 
         p.fill(adTechColor);
         p.stroke(0);
