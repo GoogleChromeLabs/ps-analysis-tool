@@ -91,7 +91,13 @@ const ReceivedBidsTable = ({
             <div className="flex gap-2 items-center">
               <p className="truncate">
                 {(info as number[][])
-                  ?.map((size: number[]) => `${size[0]}x${size[1]}`)
+                  ?.map((size: number[]) => {
+                    if (!size?.[0]) {
+                      return null;
+                    }
+                    return `${size?.[0]}x${size?.[1]}`;
+                  })
+                  ?.filter((size) => Boolean(size))
                   ?.join(' | ')}
               </p>
             </div>
@@ -99,8 +105,8 @@ const ReceivedBidsTable = ({
         },
       },
       {
-        header: 'Media Type',
-        accessorKey: 'mediaType',
+        header: 'Ad Type',
+        accessorKey: 'adType',
         cell: (info) => info,
       },
     ],

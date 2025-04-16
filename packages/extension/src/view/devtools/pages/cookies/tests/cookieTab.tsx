@@ -42,7 +42,7 @@ import mockResponse, {
   known1pCookie,
   known3pCookieWithValue,
 } from '../../../../../utils/test-data/cookieMockData';
-import { useCookie, useSettings } from '../../../stateProviders';
+import { useCookie } from '../../../stateProviders';
 
 jest.mock('../../../stateProviders', () => ({
   useCookie: jest.fn(),
@@ -66,7 +66,6 @@ jest.mock(
 );
 
 const mockUseCookieStore = useCookie as jest.Mock;
-const mockUseSettingsStore = useSettings as jest.Mock;
 const mockUseTablePersistentSettingStore =
   useTablePersistentSettingsStore as jest.Mock;
 
@@ -169,14 +168,10 @@ describe('CookieTab', () => {
       cookies: Object.values(mockResponse.tabCookies),
       tabFrames: mockResponse.tabFrames,
       selectedFrame: mockResponse.selectedFrame,
-      isCurrentTabBeingListenedTo: true,
-      tabToRead: '40245632',
       loading: false,
       tabCookies: Object.values(mockResponse.tabCookies),
     });
-    mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
-    });
+
     render(<CookieTab setFilteredCookies={noop} />);
 
     expect((await screen.findAllByTestId('body-row')).length).toBe(4);
