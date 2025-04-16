@@ -25,5 +25,8 @@ export const scrollToCircle = async (index: number, scrollDelay = 0) => {
   const { x, y } = position;
   const { x: x1, y: y1 } = getCoordinateValues({ x, y });
   await delay(scrollDelay);
+  if (app.timeline.isPaused || !app.autoScroll) {
+    return;
+  }
   scrollToCoordinates({ x: x1, y: y1 });
 };

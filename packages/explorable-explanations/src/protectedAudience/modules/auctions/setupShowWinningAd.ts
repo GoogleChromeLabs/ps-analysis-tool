@@ -54,9 +54,6 @@ const setupShowWinningAd = (steps: AuctionStep[]) => {
     callBack: (returnValue) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
-        if (!app.autoScroll) {
-          return;
-        }
         const currentCircleIndex = app.timeline.currentIndex;
         const nextCircleIndex = app.isInteractiveMode
           ? currentCircleIndex
