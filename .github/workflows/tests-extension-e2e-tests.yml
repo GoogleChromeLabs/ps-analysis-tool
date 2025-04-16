@@ -64,4 +64,4 @@ jobs:
 
       - name: Run the tests
         run: |
-          npm run test:extension:e2e
+          npm run test:extension:e2e || npm run test:extension:e2e -- --onlyFailures

@@ -1026,6 +1026,22 @@
       "rationaleBySite": {
         "https://brendanjkane.com": "RWS_rationale_https___brendanjkane_com"
       }
+    },
+    {
+      "contact": "cezar.neaga@mavie.care",
+      "primary": "https://mavie.care",
+      "associatedSites": [
+        "https://mavie.me",
+        "https://enera.at",
+        "https://maviework.care",
+        "https://lucyhealth.io"
+      ],
+      "rationaleBySite": {
+        "https://mavie.me": "RWS_rationale_https___mavie_me",
+        "https://enera.at": "RWS_rationale_https___enera_at",
+        "https://maviework.care": "RWS_rationale_https___maviework_care",
+        "https://lucyhealth.io": "RWS_rationale_https___lucyhealth_io"
+      }
     }
   ]
 }

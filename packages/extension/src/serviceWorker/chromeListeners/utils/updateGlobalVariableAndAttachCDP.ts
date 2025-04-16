@@ -24,36 +24,33 @@ const updateGlobalVariableAndAttachCDP = async () => {
 
   const preSetSettings = await chrome.storage.sync.get();
 
-  dataStore.tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
   dataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
 
-  if (dataStore.tabMode === 'unlimited') {
-    const allTabs = await chrome.tabs.query({});
-    const targets = await chrome.debugger.getTargets();
+  const allTabs = await chrome.tabs.query({});
+  const targets = await chrome.debugger.getTargets();
 
-    allTabs.forEach((tab) => {
-      if (!tab.id || tab.url?.startsWith('chrome://')) {
-        return;
-      }
+  allTabs.forEach((tab) => {
+    if (!tab.id || !tab.url?.startsWith('https://')) {
+      return;
+    }
 
-      dataStore?.addTabData(tab.id);
+    dataStore?.addTabData(tab.id);
 
-      if (dataStore.globalIsUsingCDP) {
-        dataStore.initialiseVariablesForNewTab(tab.id.toString());
+    if (dataStore.globalIsUsingCDP) {
+      dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
-        attachCDP({ tabId: tab.id });
+      attachCDP({ tabId: tab.id });
 
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        dataStore?.updateParentChildFrameAssociation(
-          tab.id,
-          currentTab[0].id,
-          '0'
-        );
-      }
-    });
-  }
+      const currentTab = targets.filter(
+        ({ tabId }) => tabId && tab.id && tabId === tab.id
+      );
+      dataStore?.updateParentChildFrameAssociation(
+        tab.id,
+        currentTab[0].id,
+        '0'
+      );
+    }
+  });
 };
 
 export default updateGlobalVariableAndAttachCDP;

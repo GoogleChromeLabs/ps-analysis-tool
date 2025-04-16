@@ -88,7 +88,12 @@ const AuctionPanel = ({
             ...adUnitChildren[time]?.children,
           } as SidebarItems;
 
-          const sellerUrl = Object.keys(auctionEventsData[adUnit][time])[0];
+          const sellerUrl = Object.keys(
+            auctionEventsData[adUnit][time]
+          )[0].split('||')[0];
+          const nonSplittedSellerUrl = Object.keys(
+            auctionEventsData[adUnit][time][sellerUrl]
+          )[0];
 
           const entries = Object.entries(
             auctionEventsData[adUnit][time][sellerUrl]
@@ -126,8 +131,8 @@ const AuctionPanel = ({
             );
           } else {
             shouldBeBlurred =
-              auctionEventsData[adUnit][time][sellerUrl][sellerUrl].length ===
-              0;
+              auctionEventsData[adUnit][time][sellerUrl][nonSplittedSellerUrl]
+                .length === 0;
           }
 
           adUnitChildren[time + adUnit] = {
@@ -136,10 +141,13 @@ const AuctionPanel = ({
               Element: AuctionTable,
               props: {
                 auctionEvents:
-                  auctionEventsData[adUnit][time][sellerUrl][sellerUrl],
+                  auctionEventsData[adUnit][time][sellerUrl][
+                    nonSplittedSellerUrl
+                  ],
                 parentOrigin:
-                  auctionEventsData[adUnit][time][sellerUrl][sellerUrl][0]
-                    ?.auctionConfig?.seller,
+                  auctionEventsData[adUnit][time][sellerUrl][
+                    nonSplittedSellerUrl
+                  ][0]?.auctionConfig?.seller,
                 startDate: actualTime,
               },
             },
