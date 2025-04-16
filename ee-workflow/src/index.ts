@@ -72,7 +72,7 @@ const arrowClick = (figure: Figure, animator: Animator) => {
     expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
     expandedImage = _image;
     expandedAnimator = animator;
-    mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 20 });
+    mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 30 });
   }
 };
 
@@ -517,7 +517,7 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
 
   const image = mainFF.image({
     x,
-    y: y + 20,
+    y: y + 15,
     height: 30,
     width: 30,
     imageLoader: () => downArrowImage!,
@@ -1007,7 +1007,7 @@ const drawPublisherFlow = (x: number, y: number) => {
 
   const image = mainFF.image({
     x,
-    y: y + 20,
+    y: y + 15,
     height: 30,
     width: 30,
     imageLoader: () => downArrowImage!,
