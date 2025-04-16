@@ -161,9 +161,5 @@
 		"micromatch": "^4.0.8",
 		"path-to-regexp": "^0.1.12",
 		"send": "^0.19.0"
-	},
-	"dependencies": {
-		"npm": "^11.2.0",
-		"run": "^1.5.0"
 	}
 }
