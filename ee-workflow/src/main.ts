@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import p5 from 'p5';
+import Stats from 'stats.js';
 
 /**
  * Internal dependencies.
@@ -126,6 +127,8 @@ class Main {
    */
   private hoveredFigure: Figure | null = null;
 
+  private stats: Stats | null = null;
+
   /**
    * Flag to keep track of loop
    */
@@ -137,14 +140,22 @@ class Main {
    * @param container - The container to append the canvas to.
    * @param figureToStart - The figure to start from.
    * @param preloader - The preloader function to run before setup.
+   * @param performanceCheck - Whether to enable performance check.
    */
   constructor(
     private clearBeforeTravel = false,
     private container?: HTMLElement,
     private figureToStart?: string,
-    private preloader?: (p: p5) => void
+    private preloader?: (p: p5) => void,
+    performanceCheck = false
   ) {
     this.p5 = new p5(this.init.bind(this), container);
+
+    if (performanceCheck) {
+      this.stats = new Stats();
+      this.stats.showPanel(2);
+      document.body.appendChild(this.stats.dom);
+    }
   }
 
   /**
@@ -386,7 +397,9 @@ class Main {
    * Draws the current frame, processing the queues.
    */
   private draw() {
+    this.stats?.begin();
     if (this.pause) {
+      this.stats?.end();
       return;
     }
 
@@ -422,6 +435,8 @@ class Main {
     ) {
       this.runner(false, false, true);
     }
+
+    this.stats?.end();
   }
 
   /**

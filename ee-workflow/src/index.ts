@@ -156,7 +156,7 @@ const nodes = [
 
 const container = document.getElementById('canvas-container') ?? undefined;
 
-const mainCanvas = new Main(undefined, container, idToStart, preloader);
+const mainCanvas = new Main(undefined, container, idToStart, preloader, true);
 const mainFF = new FigureFactory(mainCanvas);
 
 const IGCanvas = new Main(true);
