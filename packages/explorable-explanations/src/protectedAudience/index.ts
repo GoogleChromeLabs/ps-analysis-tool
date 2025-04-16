@@ -401,13 +401,12 @@ app.handleNonInteractivePrev = async () => {
   }
 };
 
-app.handleInteractivePrev = () => {
+app.handleInteractivePrev = async () => {
   if (app.visitedIndexOrder.length === 0 || app.visitedIndexOrderTracker < 0) {
     return;
   }
 
   app.promiseQueue?.end();
-  utils.wipeAndRecreateMainCanvas();
   flow.setButtonsDisabilityState();
   app.shouldRespondToClick = false;
 
@@ -418,6 +417,7 @@ app.handleInteractivePrev = () => {
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
   app.usedNextOrPrev = true;
+  await utils.delay(100);
 
   app.drawFlows(visitedIndex);
 
@@ -443,6 +443,7 @@ app.handleInteractivePrev = () => {
 
   app.setPlayState(true);
   try {
+    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
@@ -485,7 +486,6 @@ app.handleNonInteractiveNext = async () => {
   app.promiseQueue?.end();
   app.timeline.isPaused = true;
   app.cancelPromise = true;
-  utils.wipeAndRecreateMainCanvas();
   //This is to set the data for previous site in react as well.
   app.setCurrentSite(config.timeline.circles[app.timeline.currentIndex]);
 
@@ -517,13 +517,14 @@ app.handleNonInteractiveNext = async () => {
 
   app.setPlayState(true);
   try {
+    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
 };
 
-app.handleInteractiveNext = () => {
+app.handleInteractiveNext = async () => {
   if (
     app.visitedIndexOrder.length === 0 ||
     app.visitedIndexOrderTracker === app.visitedIndexOrder.length
@@ -552,7 +553,7 @@ app.handleInteractiveNext = () => {
   app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
-
+  await utils.delay(100);
   app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
