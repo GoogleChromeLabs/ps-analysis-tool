@@ -242,7 +242,7 @@ class PAStore {
                 dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
                 time
               ),
-        type: 'Start fetch ' + type,
+        type: 'Start Fetching ' + type,
         time,
         parentAuctionId:
           dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId]
