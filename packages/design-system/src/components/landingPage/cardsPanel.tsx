@@ -111,7 +111,7 @@ const CardsPanel = ({
                       {item.buttons &&
                         item.buttons.map((button) => (
                           <button
-                            className="bg-cultured-grey dark:bg-transparent text-raisin-black dark:text-bright-gray  py-1.5 px-4 rounded border border-privacy-blue text-xs hover:bg-light-gray hover:border-american-silver"
+                            className="bg-cultured-grey dark:bg-transparent text-raisin-black dark:text-bright-gray  py-1.5 px-4 rounded border text-xs hover:bg-light-gray hover:border-american-silver"
                             key={button.name}
                             onClick={(event) =>
                               onFeaturedButtonClick(event, button.sidebarKey)
