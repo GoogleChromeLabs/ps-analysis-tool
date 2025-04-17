@@ -86,7 +86,10 @@ export const circleTravelInit = (endX?: number, endY?: number) => {
 export const getRandomOffset = (range: number) =>
   Math.floor(Math.random() * range) - range / 2;
 
-export const arcTravelInit = (startDiameterOnTravel: number) => {
+export const arcTravelInit = (
+  startDiameterOnTravel: number,
+  mainCanvas: Main
+) => {
   return (object: Figure, ...args: any) => {
     let currentDiameter = startDiameterOnTravel ?? 0;
     const [possibleX, possibleY, startAngle, stopAngle, diameter] = args;
@@ -125,6 +128,7 @@ export const arcTravelInit = (startDiameterOnTravel: number) => {
       if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
         clearTravelMarks(p);
         _figure.setDiameter(0);
+        mainCanvas.loadAnimatorPartAndDraw(figure.getAnimatorId());
 
         return true;
       }
@@ -169,7 +173,7 @@ export const rippleEffect = (mainCanvas: Main, mainFF: FigureFactory) => {
         fill: 'white',
         stroke: 'white',
         shouldTravel: true,
-        travelInit: arcTravelInit(-index * 200),
+        travelInit: arcTravelInit(-index * 200, mainCanvas),
         nextTipHelper: (nextCoordinates: NextCoordinates) => {
           if (!index) {
             startingCoordinates.x = nextCoordinates.middle.x + 52;

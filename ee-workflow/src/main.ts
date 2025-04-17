@@ -1008,6 +1008,26 @@ class Main {
   }
 
   /**
+   * Loads and draws an completed animator part instantly.
+   * @param animatorId - The ID of the animator to load.
+   */
+  loadAnimatorPartAndDraw(animatorId: string) {
+    this.p5.clear();
+
+    for (let i = 0; i < this.snapshot.length; i++) {
+      const figure = this.snapshot[i];
+
+      if (figure.getAnimatorId()) {
+        if (figure.getAnimatorId() === animatorId) {
+          figure.draw();
+        }
+      } else {
+        figure.draw();
+      }
+    }
+  }
+
+  /**
    * Adds a figure to the queue.
    * @param figure - The figure to add.
    * @param instant - Whether to add to the instant queue.

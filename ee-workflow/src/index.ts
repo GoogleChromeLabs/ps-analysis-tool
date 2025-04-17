@@ -40,14 +40,13 @@ import {
   rippleEffect,
 } from './implementation/utils';
 
+// Flow init
 let downArrowImage: p5.Image | null = null;
 let upArrowImage: p5.Image | null = null;
 const preloader = (p: p5) => {
   downArrowImage = p.loadImage(downArrowData);
   upArrowImage = p.loadImage(upArrowData);
 };
-
-document.addEventListener('figureDraw', figureDraw);
 
 const idToStart = localStorage.getItem('ee-workflow') || '';
 
@@ -64,6 +63,7 @@ const IGCanvas = new Main(true);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause(true);
 
+// Control panel
 const prevButton = document.getElementById('prev');
 prevButton?.addEventListener(
   'click',
@@ -77,11 +77,6 @@ stepPrevButton?.addEventListener(
 );
 
 const playButton = document.getElementById('play');
-
-document.addEventListener('loop', onLoopEvent.bind(null, playButton));
-
-document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
-
 playButton?.addEventListener(
   'click',
   playClick.bind(
@@ -129,6 +124,13 @@ speedSlider?.addEventListener(
   speedSliderChange.bind(null, mainCanvas)
 );
 
+// Event listeners
+document.addEventListener('loop', onLoopEvent.bind(null, playButton));
+
+document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
+
+document.addEventListener('figureDraw', figureDraw);
+
 // Timeline
 mainCanvas.addFigure(
   mainFF.line({
@@ -140,6 +142,7 @@ mainCanvas.addFigure(
   true
 );
 
+// Add nodes circles
 nodes.forEach((node, index) => {
   const circle = mainFF.circle({
     diameter: 75,
@@ -165,7 +168,7 @@ nodes.forEach((node, index) => {
     },
   });
 
-  const group = new Group(mainCanvas, [
+  const nodeGroup = new Group(mainCanvas, [
     circle,
     mainFF.text({
       text: node.website,
@@ -182,7 +185,7 @@ nodes.forEach((node, index) => {
     }),
   ]);
 
-  mainCanvas.addGroup(group, true);
+  mainCanvas.addGroup(nodeGroup, true);
 });
 
 const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
