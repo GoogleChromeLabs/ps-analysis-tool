@@ -56,6 +56,7 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
           }
         )}
         data-testid="header-cell"
+        style={{ maxWidth: cell.initialWidth }}
       >
         <div
           className="w-full h-full relative flex items-center justify-between text-cool-grey dark:text-bright-gray max-w"

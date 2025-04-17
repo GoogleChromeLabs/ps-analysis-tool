@@ -117,7 +117,6 @@ const useColumnResizing = (): UseColumnResizing => {
     const allHandles = document.querySelectorAll(`[data-column-resize-handle]`);
     Array.from(allHandles).forEach((handle, index) => {
       const columnId = (handle as HTMLElement).dataset.columnResizeHandle;
-      // console.log('columnId', columnId);
       if (!columnId) {
         return;
       }

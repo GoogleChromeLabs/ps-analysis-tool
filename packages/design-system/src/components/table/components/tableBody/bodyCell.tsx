@@ -85,7 +85,7 @@ const BodyCell = ({
           </div>
         )}
         <div
-          className="truncate min-h-fit"
+          className="truncate min-h-fit w-full"
           title={typeof cellValue === 'string' ? cellValue : ''}
         >
           {cellValue}

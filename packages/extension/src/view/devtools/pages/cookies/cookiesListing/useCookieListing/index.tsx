@@ -138,6 +138,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        initialWidth: 50,
       },
       {
         header: I18n.getMessage('secure'),
@@ -147,6 +148,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        initialWidth: 50,
       },
       {
         header: I18n.getMessage('value'),

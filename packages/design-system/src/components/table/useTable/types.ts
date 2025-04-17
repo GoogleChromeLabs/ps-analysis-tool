@@ -59,6 +59,7 @@ export type TableColumn = {
   };
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   sortingComparator?: (a: InfoType, b: InfoType) => number;
+  initialWidth?: number;
 };
 
 export type TableRow = {
