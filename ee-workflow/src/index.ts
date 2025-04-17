@@ -50,9 +50,15 @@ const preloader = (p: p5) => {
 
 const idToStart = localStorage.getItem('ee-workflow') || '';
 
-const expandedAnimator: Animator | null = null;
-const expandedImage: ReturnType<FigureFactory['image']> | null = null;
-const wasExpanded = false;
+const expanded: {
+  animator: Animator | null;
+  image: ReturnType<FigureFactory['image']> | null;
+  wasExpanded: boolean;
+} = {
+  animator: null,
+  image: null,
+  wasExpanded: false,
+};
 
 const container = document.getElementById('canvas-container') ?? undefined;
 
@@ -67,13 +73,13 @@ IGCanvas.togglePause(true);
 const prevButton = document.getElementById('prev');
 prevButton?.addEventListener(
   'click',
-  prevButtonClick.bind(null, wasExpanded, mainCanvas)
+  prevButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
 );
 
 const stepPrevButton = document.getElementById('step-prev');
 stepPrevButton?.addEventListener(
   'click',
-  stepPrevButtonClick.bind(null, wasExpanded, mainCanvas)
+  stepPrevButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
 );
 
 const playButton = document.getElementById('play');
@@ -81,11 +87,9 @@ playButton?.addEventListener(
   'click',
   playClick.bind(
     null,
-    wasExpanded,
     mainCanvas,
     playButton,
-    expandedImage,
-    expandedAnimator,
+    expanded,
     upArrowImage,
     downArrowImage
   )
@@ -94,13 +98,13 @@ playButton?.addEventListener(
 const stepNextButton = document.getElementById('step-next');
 stepNextButton?.addEventListener(
   'click',
-  stepNextButtonClick.bind(null, wasExpanded, mainCanvas)
+  stepNextButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
 );
 
 const nextButton = document.getElementById('next');
 nextButton?.addEventListener(
   'click',
-  nextButtonClick.bind(null, wasExpanded, mainCanvas)
+  nextButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
 );
 
 const resetButton = document.getElementById('reset');
@@ -108,11 +112,9 @@ resetButton?.addEventListener(
   'click',
   resetButtonClick.bind(
     null,
-    wasExpanded,
+    expanded,
     mainCanvas,
     playButton,
-    expandedImage,
-    expandedAnimator,
     upArrowImage,
     downArrowImage
   )
@@ -333,12 +335,11 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
       arrowClick(
         figure,
         animator,
-        wasExpanded,
         mainCanvas,
         upArrowImage,
         downArrowImage,
-        expandedAnimator,
-        expandedImage
+        expanded,
+        playButton
       );
     },
   });
@@ -731,12 +732,11 @@ const drawPublisherFlow = (x: number, y: number) => {
       arrowClick(
         figure,
         animator,
-        wasExpanded,
         mainCanvas,
         upArrowImage,
         downArrowImage,
-        expandedAnimator,
-        expandedImage
+        expanded,
+        playButton
       );
     },
   });

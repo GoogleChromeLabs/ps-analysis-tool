@@ -48,69 +48,66 @@ export const stepPrevButtonClick = (wasExpanded: boolean, mainCanvas: Main) => {
 export const arrowClick = (
   figure: Figure,
   animator: Animator,
-  wasExpanded: boolean,
   mainCanvas: Main,
   upArrowImage: p5.Image | null,
   downArrowImage: p5.Image | null,
-  expandedAnimator: Animator | null,
-  expandedImage: Figure | null
+  expanded: {
+    wasExpanded: boolean;
+    image: Figure | null;
+    animator: Animator | null;
+  },
+  playButton: HTMLElement | null
 ) => {
-  if (!wasExpanded) {
-    if (mainCanvas.isPaused()) {
-      mainCanvas.togglePause();
-    }
+  if (!mainCanvas.isPaused()) {
+    return;
+  }
 
-    playClick(
-      wasExpanded,
-      mainCanvas,
-      null,
-      expandedImage,
-      expandedAnimator,
-      upArrowImage,
-      downArrowImage
-    );
-    wasExpanded = true;
+  if (!expanded.wasExpanded) {
+    expanded.wasExpanded = true;
   }
 
   const _image = <ReturnType<FigureFactory['image']>>figure;
 
-  if (expandedAnimator?.getId() === animator.getId()) {
+  if (expanded.animator?.getId() === animator.getId()) {
     _image.reDraw(undefined, undefined, () => downArrowImage!);
     mainCanvas.loadSnapshotAndReDraw();
-    expandedAnimator = null;
-    expandedImage = null;
+    expanded.animator = null;
+    expanded.image = null;
   } else {
     _image.reDraw(undefined, undefined, () => upArrowImage!);
-    expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
-    expandedImage = _image;
-    expandedAnimator = animator;
+    expanded.image?.reDraw(undefined, undefined, () => downArrowImage!);
+    expanded.image = _image;
+    expanded.animator = animator;
     mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 30 });
   }
+
+  onNoLoopEvent(playButton);
 };
 
 export const playClick = (
-  wasExpanded: boolean,
   mainCanvas: Main,
   playButton: HTMLElement | null,
-  expandedImage: Figure | null,
-  expandedAnimator: Animator | null,
+  expanded: {
+    wasExpanded: boolean;
+    image: Figure | null;
+    animator: Animator | null;
+  },
   upArrowImage: p5.Image | null,
   downArrowImage: p5.Image | null
 ) => {
-  if (wasExpanded) {
-    if (expandedImage && expandedAnimator) {
+  if (expanded.wasExpanded) {
+    if (expanded.image && expanded.animator) {
       arrowClick(
-        expandedImage,
-        expandedAnimator,
-        wasExpanded,
+        expanded.image,
+        expanded.animator,
         mainCanvas,
         upArrowImage,
         downArrowImage,
-        expandedAnimator,
-        expandedImage
+        expanded,
+        playButton
       );
     }
-    wasExpanded = false;
+    expanded.wasExpanded = false;
 
     mainCanvas.loadPreviousCheckpoint();
     mainCanvas.togglePause();
@@ -160,24 +157,18 @@ export const nextButtonClick = (wasExpanded: boolean, mainCanvas: Main) => {
 };
 
 export const resetButtonClick = (
-  wasExpanded: boolean,
+  expanded: {
+    wasExpanded: boolean;
+    image: Figure | null;
+    animator: Animator | null;
+  },
   mainCanvas: Main,
   playButton: HTMLElement | null,
-  expandedImage: Figure | null,
-  expandedAnimator: Animator | null,
   upArrowImage: p5.Image | null,
   downArrowImage: p5.Image | null
 ) => {
-  if (wasExpanded) {
-    playClick(
-      wasExpanded,
-      mainCanvas,
-      playButton,
-      expandedImage,
-      expandedAnimator,
-      upArrowImage,
-      downArrowImage
-    );
+  if (expanded.wasExpanded) {
+    playClick(mainCanvas, playButton, expanded, upArrowImage, downArrowImage);
   }
 
   mainCanvas.reset();
