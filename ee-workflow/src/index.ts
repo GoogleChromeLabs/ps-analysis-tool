@@ -22,12 +22,20 @@ import Figure from './components/figure';
 import Arc from './components/figure/arc';
 import Circle from './components/figure/circle';
 import Main from './main';
-
-const downArrowData =
-  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNWY2MzY4Ij48cGF0aCBkPSJNNDgwLTIwMCAyNDAtNDQwbDQyLTQyIDE5OCAxOTggMTk4LTE5OCA0MiA0Mi0yNDAgMjQwWm0wLTI1M0wyNDAtNjkzbDQyLTQyIDE5OCAxOTggMTk4LTE5OCA0MiA0Mi0yNDAgMjQwWiIvPjwvc3ZnPg==';
-
-const upArrowData =
-  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNWY2MzY4Ij48cGF0aCBkPSJtMjgyLTIyNS00Mi00MiAyNDAtMjQwIDI0MCAyNDAtNDIgNDItMTk4LTE5OC0xOTggMTk4Wm0wLTI1My00Mi00MiAyNDAtMjQwIDI0MCAyNDAtNDIgNDItMTk4LTE5OC0xOTggMTk4WiIvPjwvc3ZnPg==';
+import { downArrowData, nodes, upArrowData } from './implementation/data';
+import {
+  figureDraw,
+  prevButtonClick,
+  stepPrevButtonClick,
+  arrowClick,
+  playClick,
+  onLoopEvent,
+  onNoLoopEvent,
+  stepNextButtonClick,
+  nextButtonClick,
+  resetButtonClick,
+  speedSliderChange,
+} from './implementation/listeners';
 
 let downArrowImage: p5.Image | null = null;
 let upArrowImage: p5.Image | null = null;
@@ -35,124 +43,14 @@ const preloader = (p: p5) => {
   downArrowImage = p.loadImage(downArrowData);
   upArrowImage = p.loadImage(upArrowData);
 };
-document.addEventListener('figureDraw', (e) => {
-  const detail = (e as CustomEvent).detail;
 
-  if (detail?.figureId) {
-    // eslint-disable-next-line no-console
-    console.log('Figure ID:', detail.figureId);
-    localStorage.setItem('ee-workflow', detail.figureId);
-  }
-});
+document.addEventListener('figureDraw', figureDraw);
 
 const idToStart = localStorage.getItem('ee-workflow') || '';
 
-let expandedAnimator: Animator | null = null;
-let expandedImage: ReturnType<FigureFactory['image']> | null = null;
-let wasExpanded = false;
-const arrowClick = (figure: Figure, animator: Animator) => {
-  if (!wasExpanded) {
-    if (mainCanvas.isPaused()) {
-      mainCanvas.togglePause();
-    }
-
-    playClick();
-    wasExpanded = true;
-  }
-
-  const _image = <ReturnType<FigureFactory['image']>>figure;
-
-  if (expandedAnimator?.getId() === animator.getId()) {
-    _image.reDraw(undefined, undefined, () => downArrowImage!);
-    mainCanvas.loadSnapshotAndReDraw();
-    expandedAnimator = null;
-    expandedImage = null;
-  } else {
-    _image.reDraw(undefined, undefined, () => upArrowImage!);
-    expandedImage?.reDraw(undefined, undefined, () => downArrowImage!);
-    expandedImage = _image;
-    expandedAnimator = animator;
-    mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 30 });
-  }
-};
-
-const nodes = [
-  {
-    type: 'advertiser',
-    website: 'adv1.com',
-    datetime: '2023-10-01 10:00',
-    igGroupsCount: 3,
-    interestGroups: ['shoes', 'heels', 'phones'],
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'advertiser',
-    website: 'adv2.com',
-    datetime: '2023-10-01 11:00',
-    igGroupsCount: 2,
-    interestGroups: ['stilletos', 'shorts'],
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'publisher',
-    website: 'pub1.com',
-    datetime: '2023-10-01 12:00',
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'advertiser',
-    website: 'adv3.com',
-    datetime: '2023-10-01 13:00',
-    igGroupsCount: 2,
-    interestGroups: ['bike', 'car'],
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'advertiser',
-    website: 'adv5.com',
-    datetime: '2023-10-01 13:02',
-    igGroupsCount: 3,
-    interestGroups: ['football', 'basketball', 'baseball'],
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'publisher',
-    website: 'pub2.com',
-    datetime: '2023-10-01 14:00',
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'advertiser',
-    website: 'adv6.com',
-    datetime: '2023-10-01 14:01',
-    igGroupsCount: 3,
-    interestGroups: ['movies', 'series', 'books'],
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'advertiser',
-    website: 'adv7.com',
-    datetime: '2023-10-01 15:00',
-    igGroupsCount: 3,
-    interestGroups: ['IGG220', 'IGG201', 'IG225'],
-    visited: false,
-    visitedIndex: null,
-  },
-  {
-    type: 'publisher',
-    website: 'pub3.com',
-    datetime: '2023-10-01 16:00',
-    visited: false,
-    visitedIndex: null,
-  },
-];
+const expandedAnimator: Animator | null = null;
+const expandedImage: ReturnType<FigureFactory['image']> | null = null;
+const wasExpanded = false;
 
 const container = document.getElementById('canvas-container') ?? undefined;
 
@@ -164,100 +62,69 @@ const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause(true);
 
 const prevButton = document.getElementById('prev');
-prevButton?.addEventListener('click', () => {
-  if (wasExpanded) {
-    return;
-  }
-
-  mainCanvas.loadPreviousCheckpoint();
-});
+prevButton?.addEventListener(
+  'click',
+  prevButtonClick.bind(null, wasExpanded, mainCanvas)
+);
 
 const stepPrevButton = document.getElementById('step-prev');
-stepPrevButton?.addEventListener('click', () => {
-  if (wasExpanded) {
-    return;
-  }
-
-  mainCanvas.stepBack();
-});
+stepPrevButton?.addEventListener(
+  'click',
+  stepPrevButtonClick.bind(null, wasExpanded, mainCanvas)
+);
 
 const playButton = document.getElementById('play');
-const playClick = () => {
-  if (wasExpanded) {
-    if (expandedImage && expandedAnimator) {
-      arrowClick(expandedImage, expandedAnimator);
-    }
-    wasExpanded = false;
 
-    mainCanvas.loadPreviousCheckpoint();
-    mainCanvas.togglePause();
-  }
+document.addEventListener('loop', onLoopEvent.bind(null, playButton));
 
-  mainCanvas.togglePause();
+document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
 
-  if (playButton) {
-    if (mainCanvas.isPaused()) {
-      playButton.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M320-203v-560l440 280-440 280Zm60-280Zm0 171 269-171-269-171v342Z"/></svg>';
-    } else {
-      playButton.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M525-200v-560h235v560H525Zm-325 0v-560h235v560H200Zm385-60h115v-440H585v440Zm-325 0h115v-440H260v440Zm0-440v440-440Zm325 0v440-440Z"/></svg>';
-    }
-  }
-};
-
-document.addEventListener('loop', () => {
-  if (playButton) {
-    playButton.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M525-200v-560h235v560H525Zm-325 0v-560h235v560H200Zm385-60h115v-440H585v440Zm-325 0h115v-440H260v440Zm0-440v440-440Zm325 0v440-440Z"/></svg>';
-  }
-});
-
-document.addEventListener('noLoop', () => {
-  if (playButton) {
-    playButton.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M320-203v-560l440 280-440 280Zm60-280Zm0 171 269-171-269-171v342Z"/></svg>';
-  }
-});
-
-playButton?.addEventListener('click', playClick);
+playButton?.addEventListener(
+  'click',
+  playClick.bind(
+    null,
+    wasExpanded,
+    mainCanvas,
+    playButton,
+    expandedImage,
+    expandedAnimator,
+    upArrowImage,
+    downArrowImage
+  )
+);
 
 const stepNextButton = document.getElementById('step-next');
-stepNextButton?.addEventListener('click', () => {
-  if (wasExpanded) {
-    return;
-  }
-
-  mainCanvas.stepNext();
-});
+stepNextButton?.addEventListener(
+  'click',
+  stepNextButtonClick.bind(null, wasExpanded, mainCanvas)
+);
 
 const nextButton = document.getElementById('next');
-nextButton?.addEventListener('click', () => {
-  if (wasExpanded) {
-    return;
-  }
-
-  mainCanvas.loadNextCheckpoint();
-});
+nextButton?.addEventListener(
+  'click',
+  nextButtonClick.bind(null, wasExpanded, mainCanvas)
+);
 
 const resetButton = document.getElementById('reset');
-resetButton?.addEventListener('click', () => {
-  if (wasExpanded) {
-    playClick();
-  }
-
-  mainCanvas.reset();
-});
+resetButton?.addEventListener(
+  'click',
+  resetButtonClick.bind(
+    null,
+    wasExpanded,
+    mainCanvas,
+    playButton,
+    expandedImage,
+    expandedAnimator,
+    upArrowImage,
+    downArrowImage
+  )
+);
 
 const speedSlider = document.getElementById('speed');
-speedSlider?.addEventListener('input', (e) => {
-  const target = e.target as HTMLInputElement;
-  const value = parseFloat(target.value);
-
-  if (mainCanvas) {
-    mainCanvas.updateSpeed(value);
-  }
-});
+speedSlider?.addEventListener(
+  'input',
+  speedSliderChange.bind(null, mainCanvas)
+);
 
 // Timeline
 mainCanvas.addFigure(
@@ -522,7 +389,16 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
     width: 30,
     imageLoader: () => downArrowImage!,
     mouseClicked: (figure) => {
-      arrowClick(figure, animator);
+      arrowClick(
+        figure,
+        animator,
+        wasExpanded,
+        mainCanvas,
+        upArrowImage,
+        downArrowImage,
+        expandedAnimator,
+        expandedImage
+      );
     },
   });
 
@@ -1012,7 +888,16 @@ const drawPublisherFlow = (x: number, y: number) => {
     width: 30,
     imageLoader: () => downArrowImage!,
     mouseClicked: (figure: Figure) => {
-      arrowClick(figure, animator);
+      arrowClick(
+        figure,
+        animator,
+        wasExpanded,
+        mainCanvas,
+        upArrowImage,
+        downArrowImage,
+        expandedAnimator,
+        expandedImage
+      );
     },
   });
 
