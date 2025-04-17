@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,236 +17,165 @@
 /**
  * External dependencies.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
+export const columnResizeHandleClassName = 'column-resize-handle';
 
-/**
- * Internal dependencies.
- */
-import type { PersistentStorageData, TableColumn } from '../types';
-import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
-import { resizeColumns } from './resizeColumns';
-import { handleResizeOnColumnsVisibilityChange } from './handleResizeOnColumnsVisibilityChange';
-
-export type ColumnResizingOutput = {
-  columns: TableColumn[];
-  tableContainerRef: React.RefObject<HTMLDivElement> | null;
-  onMouseDown: (
-    selectedColumnRef: React.RefObject<HTMLTableHeaderCellElement>,
-    index: number
-  ) => void;
-  isResizing: boolean;
+const getColumnElement = (columnId: string) => {
+  return document.querySelector(
+    `[data-column-resize-id="${columnId}"]`
+  ) as HTMLElement;
 };
 
-const useColumnResizing = (
-  tableColumns: TableColumn[],
-  allTableColumnsKeys: string[],
-  tablePersistentSettingsKey?: string
-): ColumnResizingOutput => {
-  const tableContainerRef = useRef<HTMLDivElement>(null);
-  const [columns, setColumns] = useState<TableColumn[]>(tableColumns);
+const getColumnWidth = (columnId: string) => {
+  const columnElement = getColumnElement(columnId);
+  if (!columnElement) {
+    return 0;
+  }
+  return (
+    Number(columnElement.style.width) ||
+    columnElement.getBoundingClientRect().width
+  );
+};
+
+export type UseColumnResizing = {
+  isResizing: boolean;
+  setColumnWidths: () => void;
+  tableContainerRef: React.RefObject<HTMLDivElement> | null;
+};
+
+/**
+ * Custom hook to handle column resizing.
+ * @returns {UseColumnResizing} isResizing - Whether the column is being resized.
+ */
+const useColumnResizing = (): UseColumnResizing => {
   const [isResizing, setIsResizing] = useState(false);
-  const columnsSizingRef = useRef<{ [key: string]: number }>({});
+  const resizeId = useRef<string | null>(null);
+  const startingColumnWidth = useRef(0);
+  const startX = useRef(0);
+  const rafId = useRef<number>();
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (tableColumns.length === 1) {
-      columnsSizingRef.current = {};
-      columnsSizingRef.current[tableColumns[0].accessorKey] =
-        tableColumns[0].width || 0;
-    }
-  }, [tableColumns]);
-
-  useEffect(() => {
-    setColumns((prev) =>
-      handleResizeOnColumnsVisibilityChange(
-        prev,
-        tableColumns,
-        columnsSizingRef.current,
-        tableContainerRef.current?.scrollWidth || 0,
-        allTableColumnsKeys.length === tableColumns.length
-      )
-    );
-  }, [allTableColumnsKeys.length, tableColumns]);
-
-  const setColumnsCallback = useCallback(
-    (columnsSizing?: { [key: string]: number }) => {
-      setColumns((prevColumns) => {
-        const tableWidth = tableContainerRef.current?.scrollWidth || 0;
-        const newColumns = prevColumns.map((column) => ({
-          ...column,
-          width: columnsSizing?.[column.accessorKey] || column.width || 0,
-        }));
-
-        return resizeColumns(newColumns, tableWidth);
-      });
-    },
-    []
-  );
-
-  useEffect(() => {
-    const _setColumnsCallback = () => setColumnsCallback();
-    globalThis?.addEventListener('resize', _setColumnsCallback);
-    return () => {
-      globalThis?.removeEventListener('resize', _setColumnsCallback);
-    };
-  }, [setColumnsCallback]);
-
-  const onMouseDown = useCallback(
-    (
-      selectedColumnRef: React.RefObject<HTMLTableHeaderCellElement>,
-      index: number
-    ) => {
-      const onMove = (clientXPos: number) => {
-        setColumns((prev) => {
-          setIsResizing(true);
-          const startOffset =
-            selectedColumnRef.current?.getBoundingClientRect().left || 0;
-
-          const selectedColumn = index;
-
-          const column1 = prev[selectedColumn],
-            column2 = prev[selectedColumn + 1];
-
-          if (selectedColumn + 1 === prev.length) {
-            return prev;
-          }
-
-          const column1Width = column1.width || 0,
-            column2Width = column2.width || 0;
-          const widthChange = clientXPos - (startOffset + column1Width);
-
-          let newColumn1Width = 40,
-            newColumn2Width = 40;
-
-          if (widthChange > 0) {
-            newColumn2Width = Math.max(40, column2Width - widthChange);
-            newColumn1Width =
-              newColumn2Width === 40
-                ? column1Width + column2Width - 40
-                : column1Width + widthChange;
-          } else {
-            newColumn1Width = Math.max(40, column1Width + widthChange);
-            newColumn2Width =
-              newColumn1Width === 40
-                ? column1Width + column2Width - 40
-                : column2Width - widthChange;
-          }
-
-          const newColumns = [...prev];
-
-          newColumns[selectedColumn] = {
-            ...column1,
-            width: newColumn1Width,
-          };
-
-          newColumns[selectedColumn + 1] = {
-            ...column2,
-            width: newColumn2Width,
-          };
-
-          return newColumns;
-        });
-      };
-
-      const mouseEvents = {
-        moveHandler: (e: MouseEvent) => onMove(e.clientX),
-        upHandler: () => {
-          setTimeout(() => setIsResizing(false), 100);
-          globalThis?.document?.removeEventListener(
-            'mousemove',
-            mouseEvents.moveHandler
-          );
-          globalThis?.document?.removeEventListener(
-            'mouseup',
-            mouseEvents.upHandler
-          );
-        },
-      };
-
-      globalThis?.document?.addEventListener(
-        'mousemove',
-        mouseEvents.moveHandler
-      );
-      globalThis?.document?.addEventListener('mouseup', mouseEvents.upHandler);
-    },
-    []
-  );
-
-  useEffect(() => {
-    const resizer = new ResizeObserver(() => {
-      setColumnsCallback();
-    });
-
-    if (tableContainerRef.current) {
-      resizer.observe(tableContainerRef.current);
-    }
-
-    return () => resizer.disconnect();
-  }, [setColumnsCallback]);
-
-  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
-    ({ actions }) => ({
-      getPreferences: actions.getPreferences,
-      setPreferences: actions.setPreferences,
-    })
-  );
-
-  useEffect(() => {
-    if (tablePersistentSettingsKey) {
-      const data = getPreferences(tablePersistentSettingsKey, 'columnsSizing');
-
-      if (data) {
-        columnsSizingRef.current =
-          (data as PersistentStorageData['columnsSizing']) || {};
-        setColumnsCallback(
-          (data as PersistentStorageData['columnsSizing']) || {}
-        );
+  const onMouseDown = useCallback((event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (target?.dataset?.columnResizeHandle) {
+      setIsResizing(true);
+      resizeId.current = target.dataset.columnResizeHandle;
+      startX.current = event.screenX;
+      const columnElement = getColumnElement(resizeId.current);
+      if (columnElement) {
+        startingColumnWidth.current = getColumnWidth(resizeId.current);
       }
     }
-  }, [getPreferences, setColumnsCallback, tablePersistentSettingsKey]);
+  }, []);
+
+  const onMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (!isResizing || !resizeId.current) {
+        return;
+      }
+
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+
+      rafId.current = requestAnimationFrame(() => {
+        if (!resizeId.current) {
+          return;
+        }
+        const columnElement = getColumnElement(resizeId.current);
+        if (!columnElement) {
+          return;
+        }
+        const newDiffX = startX.current - event.screenX;
+        const newWidth = startingColumnWidth.current - newDiffX;
+        columnElement.style.minWidth = `${newWidth}px`;
+        columnElement.style.maxWidth = `${newWidth}px`;
+      });
+    },
+    [isResizing]
+  );
+
+  const onMouseUp = useCallback(() => {
+    if (!isResizing || !resizeId.current) {
+      return;
+    }
+    const columnElement = getColumnElement(resizeId.current);
+    if (columnElement) {
+      requestAnimationFrame(() => {
+        setIsResizing(false);
+      });
+    }
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+    }
+    resizeId.current = null;
+  }, [isResizing]);
+
+  // fixes the column widths when the component is mounted
+  // so the columns don't resize when the user starts dragging
+  const setColumnWidths = useCallback(() => {
+    const allHandles = document.querySelectorAll(`[data-column-resize-handle]`);
+    Array.from(allHandles).forEach((handle, index) => {
+      const columnId = (handle as HTMLElement).dataset.columnResizeHandle;
+      if (!columnId) {
+        return;
+      }
+      const columnElement = getColumnElement(columnId);
+      if (!columnElement) {
+        return;
+      }
+
+      // if the column is the last one, use all remaining space
+      if (index === allHandles.length - 1) {
+        columnElement.style.maxWidth = '100%';
+        columnElement.style.width = '100%';
+        columnElement.style.minWidth = '100%';
+        return;
+      }
+
+      const width = getColumnWidth(columnId);
+      columnElement.style.maxWidth = `${width}px`;
+      columnElement.style.width = `${width}px`;
+      columnElement.style.minWidth = `${width}px`;
+    });
+  }, []);
 
   useEffect(() => {
-    const _columns = columns.reduce((acc, { accessorKey, width }) => {
-      acc[accessorKey] = width || 0;
-
-      return acc;
-    }, {} as { [key: string]: number });
-
-    const _columnsSizing = (allTableColumnsKeys || []).reduce(
-      (acc, accessorKey) => {
-        acc[accessorKey] =
-          _columns[accessorKey] || columnsSizingRef.current[accessorKey] || 0;
-
-        return acc;
-      },
-      {} as { [key: string]: number }
-    );
-
-    columnsSizingRef.current = {
-      ...columnsSizingRef.current,
-      ..._columnsSizing,
-    };
-
-    if (tablePersistentSettingsKey) {
-      setPreferences(
-        {
-          columnsSizing: _columnsSizing,
-        },
-        tablePersistentSettingsKey
-      );
+    const tableContainer = tableContainerRef?.current;
+    if (tableContainer) {
+      tableContainer.addEventListener('mousemove', onMouseMove);
+      tableContainer.addEventListener('mouseup', onMouseUp);
+      tableContainer.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('resize', setColumnWidths);
     }
-  }, [
-    allTableColumnsKeys,
-    columns,
-    setPreferences,
-    tablePersistentSettingsKey,
-  ]);
+    return () => {
+      if (tableContainer) {
+        tableContainer.removeEventListener('mousemove', onMouseMove);
+        tableContainer.removeEventListener('mouseup', onMouseUp);
+        tableContainer.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('resize', setColumnWidths);
+      }
+    };
+  }, [onMouseDown, onMouseMove, onMouseUp, setColumnWidths, tableContainerRef]);
 
-  return {
-    columns,
-    tableContainerRef,
-    onMouseDown,
-    isResizing,
-  };
+  useEffect(() => {
+    if (isResizing) {
+      document.body.style.cursor = 'ew-resize';
+    } else {
+      document.body.style.cursor = 'default';
+    }
+  }, [isResizing]);
+
+  useEffect(() => {
+    setColumnWidths();
+    return () => {
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
+  }, [setColumnWidths]);
+
+  return { isResizing, setColumnWidths, tableContainerRef };
 };
 
 export default useColumnResizing;

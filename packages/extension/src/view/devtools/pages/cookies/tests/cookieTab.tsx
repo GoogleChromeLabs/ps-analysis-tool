@@ -55,6 +55,16 @@ jest.mock(
   })
 );
 
+jest.mock(
+  '../../../../../../../design-system/src/components/table/useTable/useColumnResizing',
+  () =>
+    jest.fn(() => ({
+      isResizing: false,
+      setColumnWidths: jest.fn(),
+      tableContainerRef: null,
+    }))
+);
+
 const mockUseCookieStore = useCookie as jest.Mock;
 const mockUseTablePersistentSettingStore =
   useTablePersistentSettingsStore as jest.Mock;

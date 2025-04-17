@@ -76,37 +76,31 @@ const SourceRegistrations = () => {
         cell: (_, details) =>
           calculateRegistrationDate((details as SourcesRegistration)?.time),
         enableHiding: false,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Source Origin',
         accessorKey: 'sourceOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Reporting Origin',
         accessorKey: 'reportingOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Cleared Debug Key',
         accessorKey: 'clearedDebugKey',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Source Type',
         accessorKey: 'type',
         cell: (info) => info,
-        widthWeightagePercentage: 10,
       },
       {
         header: 'Status',
         accessorKey: 'result',
         cell: (info) => info,
-        widthWeightagePercentage: 10,
       },
     ],
     []
