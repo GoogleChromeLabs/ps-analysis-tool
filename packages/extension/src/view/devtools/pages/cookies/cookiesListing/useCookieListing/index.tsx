@@ -112,6 +112,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: I18n.getMessage('partitionKey'),
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
+        initialWidth: 80,
       },
       {
         header: I18n.getMessage('sameSite'),

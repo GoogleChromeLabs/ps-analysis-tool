@@ -273,6 +273,7 @@ export const tableColumns: TableColumn[] = [
     header: 'Partition Key',
     accessorKey: 'parsedCookie.partitionKey',
     cell: (info: InfoType) => info,
+    initialWidth: 80,
   },
   {
     header: 'SameSite',

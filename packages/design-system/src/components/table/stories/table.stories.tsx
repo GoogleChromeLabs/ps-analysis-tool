@@ -33,7 +33,7 @@ import { noop } from '@google-psat/common';
 const meta: Meta<typeof Table> = {
   title: 'DesignSystem/Table',
   component: () => (
-    <div className="w-full h-full">
+    <div className="w-[90vw] h-full">
       <TableProvider
         data={mockData}
         tableColumns={tableColumns}
