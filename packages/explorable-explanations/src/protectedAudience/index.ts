@@ -406,6 +406,11 @@ app.handleInteractivePrev = async () => {
     return;
   }
 
+  if (app.visitedIndexOrderTracker >= 0) {
+    app.visitedIndexOrderTracker =
+      app.visitedIndexOrderTracker - (app.promiseQueue?.length ? 0 : 1);
+  }
+
   app.promiseQueue?.end();
   flow.setButtonsDisabilityState();
   app.shouldRespondToClick = false;
@@ -417,9 +422,9 @@ app.handleInteractivePrev = async () => {
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
   app.usedNextOrPrev = true;
-  await utils.delay(100);
 
   app.drawFlows(visitedIndex);
+  await utils.delay(100);
 
   app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
@@ -431,10 +436,6 @@ app.handleInteractivePrev = async () => {
     cb?.(undefined, true);
   });
 
-  if (app.visitedIndexOrderTracker >= 0) {
-    app.visitedIndexOrderTracker--;
-  }
-
   flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
@@ -443,7 +444,6 @@ app.handleInteractivePrev = async () => {
 
   app.setPlayState(true);
   try {
-    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
