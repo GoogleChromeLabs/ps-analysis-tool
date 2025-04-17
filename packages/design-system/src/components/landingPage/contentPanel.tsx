@@ -62,7 +62,7 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
 
           return (
             <div
-              className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border-2 border-privacy-blue p-5 relative"
+              className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] rounded-xl border-2 border-gray-300 p-5 relative"
               key={index}
             >
               <div

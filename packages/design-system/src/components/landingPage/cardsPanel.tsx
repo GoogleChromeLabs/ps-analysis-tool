@@ -74,7 +74,7 @@ const CardsPanel = ({
                 return (
                   <div
                     key={item.name}
-                    className="w-[366px] border-2 border-privacy-blue px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                    className="w-[366px] border-2 border-gray-300 px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <Icon
@@ -99,7 +99,7 @@ const CardsPanel = ({
                 return (
                   <div
                     key={item.name}
-                    className="w-[366px] rounded border-2 border-privacy-blue px-3 py-4 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                    className="w-[366px] rounded border-2 border-gray-300 px-3 py-4 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <div className="mb-3 flex items-center flex-col gap-2">
@@ -111,7 +111,7 @@ const CardsPanel = ({
                       {item.buttons &&
                         item.buttons.map((button) => (
                           <button
-                            className="bg-cultured-grey dark:bg-transparent text-raisin-black dark:text-bright-gray  py-1.5 px-4 rounded border text-xs hover:bg-light-gray hover:border-american-silver"
+                            className="bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
                             key={button.name}
                             onClick={(event) =>
                               onFeaturedButtonClick(event, button.sidebarKey)
