@@ -408,7 +408,7 @@ app.handleInteractivePrev = async () => {
 
   if (app.visitedIndexOrderTracker >= 0) {
     app.visitedIndexOrderTracker =
-      app.visitedIndexOrderTracker - (app.promiseQueue?.length ? 0 : 1);
+      app.visitedIndexOrderTracker - (app.promiseQueue?.length !== 0 ? 0 : 1);
   }
 
   app.promiseQueue?.end();
