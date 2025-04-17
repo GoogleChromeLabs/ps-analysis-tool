@@ -864,6 +864,9 @@ app.createCanvas = () => {
 };
 
 app.getWinningAdDelay = () => {
+  if (app.isRevisitingNodeInInteractiveMode) {
+    return 0;
+  }
   // the faster the speed, the longer the BASE delay
   const milliseconds = WINNING_AD_DELAY + app.speedMultiplier * 1000;
   // adjust the total delay based on the speed
