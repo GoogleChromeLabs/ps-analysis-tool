@@ -194,10 +194,12 @@ const ProgressLine = ({
               utils.scrollToCoordinates({ x: x2, y: currentY });
             }
 
+            const textWidth = p.textWidth(text);
+
             utils.drawText(
               text,
-              x1 - (text.startsWith('$') ? 10 : width / 2),
-              y1 + height / 2
+              x1 - (text.startsWith('$') ? 10 : textWidth / 2 + 2),
+              y1 + height / 2 + 4
             );
             resolve({ x: x2, y: currentY });
             return;
@@ -233,10 +235,12 @@ const ProgressLine = ({
               });
             }
 
+            const textWidth = p.textWidth(text);
+
             utils.drawText(
               text,
-              x1 + (text.startsWith('$') ? 10 : width / 2),
-              y1 - height / 2
+              x1 + (text.startsWith('$') ? 10 : textWidth / 2),
+              y1 - height / 2 - 3
             );
             resolve({ x: x2, y: currentY });
             return;
