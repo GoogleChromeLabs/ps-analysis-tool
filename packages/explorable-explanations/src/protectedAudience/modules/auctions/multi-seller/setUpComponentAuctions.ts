@@ -185,6 +185,8 @@ const setUpComponentAuctionStarter = (
   };
 
   const renderBoxes = (componentAuction: ComponentAuction, index: number) => {
+    const { colors } = config.flow;
+
     steps.push({
       component: ProgressLine,
       props: {
@@ -222,6 +224,7 @@ const setUpComponentAuctionStarter = (
         x: () =>
           getCoordinateValues(returnCoordinates).x - BORDER_BOX_MARGIN - 12,
         y: () => getCoordinateValues(returnCoordinates).y + 20,
+        color: colors.box.yellowBox,
       },
       delay: 1000,
       callBack: () => {
@@ -258,7 +261,7 @@ const setUpComponentAuction = (
   { title, x, y, ssp, info, sspWebsite },
   { bidValue }
 ) => {
-  const { box, arrowSize } = config.flow;
+  const { box, arrowSize, colors } = config.flow;
 
   steps.push({
     component: Text,
@@ -285,6 +288,7 @@ const setUpComponentAuction = (
         12,
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 20,
       info,
+      color: colors.box.yellowBox,
     },
     delay: 1000,
     callBack: (returnValue: Coordinates) => {
