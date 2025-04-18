@@ -495,7 +495,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
       title: MULTI_SELLER_CONFIG.REPORT_RESULT.title,
       info: MULTI_SELLER_CONFIG.REPORT_RESULT.info,
       description: MULTI_SELLER_CONFIG.REPORT_RESULT.description,
-      color: colors.box.notBrowser,
+      color: colors.box.yellowBox,
       x: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
       y: () =>

@@ -47,7 +47,7 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
         getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
       info: SINGLE_SELLER_CONFIG.SSP_TAG.info,
-      color: colors.box.notBrowser,
+      color: colors.box.yellowBox,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -79,7 +79,7 @@ const setUpSingleSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
         getCoordinateValues(app.auction.nextTipCoordinates).y +
         config.flow.arrowSize,
       info: SINGLE_SELLER_CONFIG.SSP.info,
-      color: colors.box.notBrowser,
+      color: colors.box.yellowBox,
     },
     delay: 1000,
     callBack: (returnValue) => {

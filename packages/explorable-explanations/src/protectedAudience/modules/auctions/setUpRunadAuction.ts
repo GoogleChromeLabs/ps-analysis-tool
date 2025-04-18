@@ -81,13 +81,13 @@ const setUpRunadAuction = (
       title: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.title,
       description: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.description,
       info: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.info,
-      color: colors.box.notBrowser,
+      color: colors.box.yellowBox,
     },
     {
       title: SINGLE_SELLER_CONFIG.SCORE_AD.title,
       description: SINGLE_SELLER_CONFIG.SCORE_AD.description,
       info: SINGLE_SELLER_CONFIG.SCORE_AD.info,
-      color: colors.box.notBrowser,
+      color: colors.box.yellowBox,
     },
     {
       title: SINGLE_SELLER_CONFIG.REPORT_WIN.title,
@@ -98,7 +98,7 @@ const setUpRunadAuction = (
       title: SINGLE_SELLER_CONFIG.REPORT_RESULT.title,
       description: SINGLE_SELLER_CONFIG.REPORT_RESULT.description,
       info: SINGLE_SELLER_CONFIG.REPORT_RESULT.info,
-      color: colors.box.notBrowser,
+      color: colors.box.yellowBox,
     },
   ];
 
