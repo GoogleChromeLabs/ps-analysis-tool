@@ -160,6 +160,9 @@ module.exports = {
       'orange-buff': '#E0A890',
       'spring-green': '#0FFF95',
       'maroon-claret': '#840032',
+      'privacy-blue': '#4285fa',
+      'privacy-green': '#3bd897',
+      'privacy-purple': '#dc9af8',
     },
     backgroundColor: {
       ...colors,
