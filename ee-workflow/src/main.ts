@@ -1011,14 +1011,16 @@ class Main {
    * Loads and draws an completed animator part instantly.
    * @param animatorId - The ID of the animator to load.
    */
-  loadAnimatorPartAndDraw(animatorId: string) {
+  loadAnimatorPartAndDraw(animatorId?: string) {
     this.p5.clear();
+
+    const _animatorId = animatorId || this.animatorStepsQueue[0]?.getId();
 
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
 
       if (figure.getAnimatorId()) {
-        if (figure.getAnimatorId() === animatorId) {
+        if (figure.getAnimatorId() === _animatorId) {
           figure.draw();
         }
       } else {

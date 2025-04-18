@@ -43,6 +43,8 @@ import {
 // Flow init
 let downArrowImage: p5.Image | null = null;
 let upArrowImage: p5.Image | null = null;
+const downArrowImageLoader = () => downArrowImage!;
+const upArrowImageLoader = () => upArrowImage!;
 const preloader = (p: p5) => {
   downArrowImage = p.loadImage(downArrowData);
   upArrowImage = p.loadImage(upArrowData);
@@ -85,14 +87,7 @@ stepPrevButton?.addEventListener(
 const playButton = document.getElementById('play');
 playButton?.addEventListener(
   'click',
-  playClick.bind(
-    null,
-    mainCanvas,
-    playButton,
-    expanded,
-    upArrowImage,
-    downArrowImage
-  )
+  playClick.bind(null, mainCanvas, playButton, expanded, downArrowImageLoader)
 );
 
 const stepNextButton = document.getElementById('step-next');
@@ -115,8 +110,7 @@ resetButton?.addEventListener(
     expanded,
     mainCanvas,
     playButton,
-    upArrowImage,
-    downArrowImage
+    downArrowImageLoader
   )
 );
 
@@ -330,14 +324,14 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
     y: y + 15,
     height: 30,
     width: 30,
-    imageLoader: () => downArrowImage!,
+    imageLoader: downArrowImageLoader,
     mouseClicked: (figure) => {
       arrowClick(
         figure,
         animator,
         mainCanvas,
-        upArrowImage,
-        downArrowImage,
+        upArrowImageLoader,
+        downArrowImageLoader,
         expanded,
         playButton
       );
@@ -727,14 +721,14 @@ const drawPublisherFlow = (x: number, y: number) => {
     y: y + 15,
     height: 30,
     width: 30,
-    imageLoader: () => downArrowImage!,
+    imageLoader: downArrowImageLoader,
     mouseClicked: (figure: Figure) => {
       arrowClick(
         figure,
         animator,
         mainCanvas,
-        upArrowImage,
-        downArrowImage,
+        upArrowImageLoader,
+        downArrowImageLoader,
         expanded,
         playButton
       );

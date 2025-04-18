@@ -49,8 +49,8 @@ export const arrowClick = (
   figure: Figure,
   animator: Animator,
   mainCanvas: Main,
-  upArrowImage: p5.Image | null,
-  downArrowImage: p5.Image | null,
+  upArrowImageLoader: () => p5.Image,
+  downArrowImageLoader: () => p5.Image,
   expanded: {
     wasExpanded: boolean;
     image: Figure | null;
@@ -69,13 +69,13 @@ export const arrowClick = (
   const _image = <ReturnType<FigureFactory['image']>>figure;
 
   if (expanded.animator?.getId() === animator.getId()) {
-    _image.reDraw(undefined, undefined, () => downArrowImage!);
+    _image.reDraw(undefined, undefined, downArrowImageLoader);
     mainCanvas.loadSnapshotAndReDraw();
     expanded.animator = null;
     expanded.image = null;
   } else {
-    _image.reDraw(undefined, undefined, () => upArrowImage!);
-    expanded.image?.reDraw(undefined, undefined, () => downArrowImage!);
+    _image.reDraw(undefined, undefined, upArrowImageLoader);
+    expanded.image?.reDraw(undefined, undefined, downArrowImageLoader);
     expanded.image = _image;
     expanded.animator = animator;
     mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 30 });
@@ -92,25 +92,17 @@ export const playClick = (
     image: Figure | null;
     animator: Animator | null;
   },
-  upArrowImage: p5.Image | null,
-  downArrowImage: p5.Image | null
+  downArrowImageLoader: () => p5.Image
 ) => {
   if (expanded.wasExpanded) {
     if (expanded.image && expanded.animator) {
-      arrowClick(
-        expanded.image,
-        expanded.animator,
-        mainCanvas,
-        upArrowImage,
-        downArrowImage,
-        expanded,
-        playButton
-      );
+      expanded.image.reDraw(undefined, undefined, downArrowImageLoader);
+      expanded.image = null;
+      expanded.animator = null;
     }
-    expanded.wasExpanded = false;
 
-    mainCanvas.loadPreviousCheckpoint();
-    mainCanvas.togglePause();
+    expanded.wasExpanded = false;
+    mainCanvas.loadAnimatorPartAndDraw();
   }
 
   mainCanvas.togglePause();
@@ -164,11 +156,10 @@ export const resetButtonClick = (
   },
   mainCanvas: Main,
   playButton: HTMLElement | null,
-  upArrowImage: p5.Image | null,
-  downArrowImage: p5.Image | null
+  downArrowImageLoader: () => p5.Image
 ) => {
   if (expanded.wasExpanded) {
-    playClick(mainCanvas, playButton, expanded, upArrowImage, downArrowImage);
+    playClick(mainCanvas, playButton, expanded, downArrowImageLoader);
   }
 
   mainCanvas.reset();
