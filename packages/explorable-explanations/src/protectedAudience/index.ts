@@ -406,8 +406,13 @@ app.handleInteractivePrev = async () => {
     return;
   }
 
+  if (app.visitedIndexOrderTracker >= 0) {
+    app.visitedIndexOrderTracker =
+      app.visitedIndexOrderTracker - (app.promiseQueue?.length !== 0 ? 0 : 1);
+  }
+
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -417,9 +422,9 @@ app.handleInteractivePrev = async () => {
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
   app.usedNextOrPrev = true;
-  await utils.delay(100);
 
   app.drawFlows(visitedIndex);
+  await utils.delay(100);
 
   app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
@@ -427,15 +432,10 @@ app.handleInteractivePrev = async () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  if (app.visitedIndexOrderTracker >= 0) {
-    app.visitedIndexOrderTracker--;
-  }
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
@@ -443,7 +443,6 @@ app.handleInteractivePrev = async () => {
 
   app.setPlayState(true);
   try {
-    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
@@ -541,7 +540,7 @@ app.handleInteractiveNext = async () => {
   }
 
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -560,11 +559,10 @@ app.handleInteractiveNext = async () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
@@ -864,6 +862,9 @@ app.createCanvas = () => {
 };
 
 app.getWinningAdDelay = () => {
+  if (app.isRevisitingNodeInInteractiveMode) {
+    return 0;
+  }
   // the faster the speed, the longer the BASE delay
   const milliseconds = WINNING_AD_DELAY + app.speedMultiplier * 1000;
   // adjust the total delay based on the speed

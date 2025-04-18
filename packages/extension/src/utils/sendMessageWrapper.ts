@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal depencencies
+ */
+import dataStore from '../store/dataStore';
 const sendMessageWrapper = async (
   type: string,
-  payload?: Record<string, any>
+  payload?: Record<string, any>,
+  tabId?: number //This is send only when we have to update the devtools open state to true.
 ) => {
   try {
     await chrome.runtime.sendMessage({
       type,
       payload,
     });
+
+    if (tabId && !dataStore.tabs[tabId].devToolsOpenState) {
+      dataStore.tabs[tabId].devToolsOpenState = true;
+    }
   } catch (error) {
     // Fail silently. The only error which will be thrown is receiving end does not exist.
   }

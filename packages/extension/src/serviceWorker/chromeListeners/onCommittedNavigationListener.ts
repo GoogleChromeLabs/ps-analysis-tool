@@ -85,9 +85,13 @@ export const onCommittedNavigationListener = async ({
     const tabs = await chrome.tabs.query({});
     const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
 
-    await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
-      exceedingLimitations: qualifyingTabs.length > 5,
-    });
+    await sendMessageWrapper(
+      'EXCEEDING_LIMITATION_UPDATE',
+      {
+        exceedingLimitations: qualifyingTabs.length > 5,
+      },
+      tabId
+    );
     const frames = await chrome.webNavigation.getAllFrames({ tabId });
 
     if (!frames) {
