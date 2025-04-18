@@ -58,9 +58,11 @@ export const arrowClick = (
   },
   playButton: HTMLElement | null
 ) => {
-  if (!mainCanvas.isPaused()) {
+  if (!mainCanvas.isPaused() && mainCanvas.isLooping()) {
     return;
   }
+
+  mainCanvas.togglePause(true);
 
   if (!expanded.wasExpanded) {
     expanded.wasExpanded = true;

@@ -604,6 +604,10 @@ class Main {
     return this.pause;
   }
 
+  isLooping() {
+    return !this.noLoop;
+  }
+
   /**
    * Resets the drawing process to the first checkpoint.
    */
