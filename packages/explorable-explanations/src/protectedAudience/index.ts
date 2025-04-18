@@ -412,7 +412,7 @@ app.handleInteractivePrev = async () => {
   }
 
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -432,11 +432,10 @@ app.handleInteractivePrev = async () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
@@ -541,7 +540,7 @@ app.handleInteractiveNext = async () => {
   }
 
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -560,11 +559,10 @@ app.handleInteractiveNext = async () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();

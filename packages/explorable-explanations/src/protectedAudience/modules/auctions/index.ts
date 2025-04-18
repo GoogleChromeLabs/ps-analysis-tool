@@ -221,7 +221,11 @@ const auction: Auction = {
           };
 
           const stepDelay = props.stepDelay || 0;
-          await utils.delay(stepDelay);
+
+          if (!app.isRevisitingNodeInInteractiveMode) {
+            await utils.delay(stepDelay);
+          }
+
           app.setCurrentStep(stepInformation);
         }
 
