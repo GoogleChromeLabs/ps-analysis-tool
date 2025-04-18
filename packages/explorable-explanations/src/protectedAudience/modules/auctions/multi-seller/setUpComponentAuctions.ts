@@ -418,7 +418,7 @@ const setUpTPoint = (steps: AuctionStep[]) => {
 };
 
 const setupAfterComponentAuctionFlow = (steps) => {
-  const { box, arrowSize } = config.flow;
+  const { box, arrowSize, colors } = config.flow;
 
   steps.push({
     component: Box,
@@ -495,6 +495,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
       title: MULTI_SELLER_CONFIG.REPORT_RESULT.title,
       info: MULTI_SELLER_CONFIG.REPORT_RESULT.info,
       description: MULTI_SELLER_CONFIG.REPORT_RESULT.description,
+      color: colors.box.notBrowser,
       x: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
       y: () =>
