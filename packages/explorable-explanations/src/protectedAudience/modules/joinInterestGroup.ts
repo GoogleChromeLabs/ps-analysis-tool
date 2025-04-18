@@ -130,7 +130,6 @@ const joinInterestGroup: JoinInterestGroup = {
         y: () =>
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y +
           config.flow.arrowSize,
-        color: config.flow.colors.box.notBrowser,
         info: ADVERTIZER_CONFIG.DSPS.info,
       },
       delay: 1000,

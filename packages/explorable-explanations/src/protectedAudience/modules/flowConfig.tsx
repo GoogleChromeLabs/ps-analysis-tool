@@ -66,7 +66,7 @@ export const ADVERTIZER_CONFIG = {
 
 export const SINGLE_SELLER_CONFIG = {
   SSP_TAG: {
-    title: 'SSP Tag',
+    title: 'SSP Ad Tag',
     info: (
       <>
         <div>
@@ -371,7 +371,7 @@ export const SINGLE_SELLER_CONFIG = {
 export const MULTI_SELLER_CONFIG = {
   SSP_ADAPTER_HEADER_BIDDING: {
     title: 'SSP Adapter',
-    description: 'header-bidding lib',
+    description: '(header-bidding lib)',
     info: (
       <>
         <p>

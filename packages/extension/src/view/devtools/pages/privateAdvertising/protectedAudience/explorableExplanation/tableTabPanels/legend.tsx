@@ -35,14 +35,15 @@ const Legend = () => {
         process. Below is a guide to the different symbols used in the diagram.
       </p>
       <div className="flex flex-col gap-3 mt-3">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2">
           <div className="bg-yellow-400 w-4 h-4 border border-black" />
-          <p>Yellow boxes signify processes running out of browser context.</p>
-        </div>
-        <div className="flex gap-2 items-center">
-          <div className="bg-white w-4 h-4 border border-black" />
-          <p>
-            White boxes signify processes running inside the browser context.
+          <p className="mt-[-3px]">
+            Yellow boxes highlight the minimum required changes for SSPs to
+            participate in Protected Audience API workflows. Please refer to{' '}
+            <Link href="https://developers.google.com/display-video/protected-audience/ssp-guide">
+              ssp-guide
+            </Link>{' '}
+            for more information.
           </p>
         </div>
         <div className="flex gap-2 items-center">
