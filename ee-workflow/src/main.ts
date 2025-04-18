@@ -399,6 +399,7 @@ class Main {
    */
   private draw() {
     this.stats?.begin();
+
     if (this.pause) {
       this.stats?.end();
       return;
@@ -461,9 +462,13 @@ class Main {
   private mouseMoved() {
     let didHover = false;
 
-    this.snapshot.forEach((object) => {
+    if (this.snapshot.length === 0) {
+      return;
+    }
+
+    this.snapshot.some((object) => {
       if (object.getAnimatorId()) {
-        return;
+        return false;
       }
 
       const isHovering = object.isHovering();
@@ -483,11 +488,11 @@ class Main {
           }
         }
 
-        return;
+        return false;
       }
 
       if (isHovering && this.hoveredFigure?.getId() === object.getId()) {
-        return;
+        return true;
       }
 
       const _object = this.isGrouped(object) || object;
@@ -498,7 +503,7 @@ class Main {
         this.hoveredGroup?.getId() === _object.getId()
       ) {
         this.hoveredFigure = object;
-        return;
+        return true;
       }
 
       if (isHovering) {
@@ -508,6 +513,8 @@ class Main {
         this.hoveredFigure?.mouseMoved();
         this.hoveredGroup?.mouseMoved();
       }
+
+      return true;
     });
 
     if (didHover) {

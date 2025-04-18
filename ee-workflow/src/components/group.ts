@@ -102,7 +102,6 @@ export default class Group {
     this.figures.forEach((figure) => {
       figure.mouseMoved();
     });
-    this.canvasRunner.addGroup(this, true);
   }
 
   /**
@@ -112,7 +111,6 @@ export default class Group {
     this.figures.forEach((figure) => {
       figure.onLeave();
     });
-    this.canvasRunner.addGroup(this, true);
   }
 
   /**
