@@ -66,7 +66,7 @@ export const ADVERTIZER_CONFIG = {
 
 export const SINGLE_SELLER_CONFIG = {
   SSP_TAG: {
-    title: 'SSP Tag',
+    title: 'SSP Ad Tag',
     info: (
       <>
         <div>
