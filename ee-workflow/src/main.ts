@@ -169,6 +169,7 @@ class Main {
     p.draw = this.draw.bind(this);
     p.mouseMoved = this.mouseMoved.bind(this);
     p.mouseClicked = this.mouseClicked.bind(this);
+    p.windowResized = this.windowResized.bind(this);
   }
 
   private preload() {
@@ -439,6 +440,14 @@ class Main {
     }
 
     this.stats?.end();
+  }
+
+  private windowResized() {
+    this.p5.resizeCanvas(
+      this.container?.clientWidth || 1600,
+      this.container?.clientHeight || 1600
+    );
+    this.loadAnimatorPartAndDraw();
   }
 
   /**
