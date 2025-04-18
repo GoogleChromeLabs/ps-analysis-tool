@@ -91,10 +91,6 @@ const ReceivedBidsTable = ({
         header: 'Ad Container Size',
         accessorKey: 'mediaContainerSize',
         cell: (info) => {
-          const _info = info as number[][];
-          if (!_info || _info.length < 1) {
-            return <></>;
-          }
           return (
             <div className="flex gap-2 items-center">
               <p className="truncate">
