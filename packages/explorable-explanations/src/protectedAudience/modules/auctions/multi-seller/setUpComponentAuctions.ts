@@ -350,7 +350,7 @@ const setUpComponentAuction = (
       customHeight: 80,
       noArrow: true,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -363,7 +363,7 @@ const setUpComponentAuction = (
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 15,
     },
     delay: 1000,
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -433,8 +433,10 @@ const setupAfterComponentAuctionFlow = (steps) => {
       forceScroll: true,
     },
     delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+    callBack: (returnValue: Coordinates) => {
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -448,7 +450,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
         box.height -
         arrowSize,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -465,8 +467,10 @@ const setupAfterComponentAuctionFlow = (steps) => {
         getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
     },
     delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+    callBack: (returnValue: Coordinates) => {
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -480,7 +484,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
         box.height -
         arrowSize,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -513,12 +517,10 @@ const setupAfterComponentAuctionFlow = (steps) => {
       y1: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
-
-  const WINNING_AD_DELAY = 5000 + app.speedMultiplier * 1000;
 
   steps.push({
     component: Box,
@@ -530,19 +532,18 @@ const setupAfterComponentAuctionFlow = (steps) => {
         getCoordinateValues(app.auction.nextTipCoordinates).y -
         box.height / 2 +
         1,
+      stepDelay: app.getWinningAdDelay(),
     },
-    delay: WINNING_AD_DELAY,
+    delay: 1000,
     callBack: (returnValue: Coordinates) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
-        if (!app.autoScroll) {
-          return;
-        }
         const currentCircleIndex = app.timeline.currentIndex;
         const nextCircleIndex = app.isInteractiveMode
           ? currentCircleIndex
           : currentCircleIndex + 1;
-        const delay = WINNING_AD_DELAY / app.speedMultiplier;
+        const delay = app.getWinningAdDelay();
+        // manually adjust delay depending on object distance to the next circle
         scrollToCircle(nextCircleIndex, delay * 0.55);
       }
     },

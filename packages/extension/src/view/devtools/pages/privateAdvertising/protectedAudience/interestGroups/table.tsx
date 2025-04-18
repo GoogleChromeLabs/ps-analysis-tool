@@ -93,12 +93,7 @@ const IGTable = ({
             return '';
           }
 
-          return new Date(Number(info) * 1000)
-            .toISOString()
-            .replace('T', ' | ')
-            .replace('Z', '')
-            .split('-')
-            .join('/');
+          return new Date(Number(info) * 1000).toISOString();
         },
       },
     ],

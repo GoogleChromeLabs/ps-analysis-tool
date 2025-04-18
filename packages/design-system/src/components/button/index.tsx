@@ -58,8 +58,9 @@ const Button = ({
             variant === 'primary',
           'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
             variant === 'secondary',
-          'text-white dark:text-white bg-red-500': variant === 'danger',
-          'text-white dark:text-white bg-green-500': variant === 'success',
+          'text-white dark:text-raisin-black bg-red-500': variant === 'danger',
+          'text-white dark:text-raisin-black bg-green-500':
+            variant === 'success',
         },
         {
           'opacity-70 cursor-default': disabled,
@@ -72,7 +73,7 @@ const Button = ({
         },
         {
           'py-0.5 px-1.5 text-xs': size === 'small',
-          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2':
+          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-4 xs:max-md:py-4 sm:max-md:px-4':
             size === 'large',
         }
       )}

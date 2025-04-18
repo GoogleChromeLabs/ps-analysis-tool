@@ -24,7 +24,7 @@ import Queue from 'queue';
  * Internal dependencies.
  */
 import config, { publisherData } from './config';
-import auctions from './modules/auctions';
+import auctions, { WINNING_AD_DELAY } from './modules/auctions';
 import flow from './modules/flow';
 import * as utils from './utils';
 import timeline from './modules/timeline';
@@ -401,7 +401,7 @@ app.handleNonInteractivePrev = async () => {
   }
 };
 
-app.handleInteractivePrev = () => {
+app.handleInteractivePrev = async () => {
   if (app.visitedIndexOrder.length === 0 || app.visitedIndexOrderTracker < 0) {
     return;
   }
@@ -417,6 +417,7 @@ app.handleInteractivePrev = () => {
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
   app.usedNextOrPrev = true;
+  await utils.delay(100);
 
   app.drawFlows(visitedIndex);
 
@@ -442,6 +443,7 @@ app.handleInteractivePrev = () => {
 
   app.setPlayState(true);
   try {
+    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
@@ -515,13 +517,14 @@ app.handleNonInteractiveNext = async () => {
 
   app.setPlayState(true);
   try {
+    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
 };
 
-app.handleInteractiveNext = () => {
+app.handleInteractiveNext = async () => {
   if (
     app.visitedIndexOrder.length === 0 ||
     app.visitedIndexOrderTracker === app.visitedIndexOrder.length
@@ -550,7 +553,7 @@ app.handleInteractiveNext = () => {
   app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
-
+  await utils.delay(100);
   app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
@@ -858,6 +861,13 @@ app.createCanvas = () => {
     // eslint-disable-next-line no-new
     new p5(userSketch);
   }
+};
+
+app.getWinningAdDelay = () => {
+  // the faster the speed, the longer the BASE delay
+  const milliseconds = WINNING_AD_DELAY + app.speedMultiplier * 1000;
+  // adjust the total delay based on the speed
+  return milliseconds / app.speedMultiplier;
 };
 
 app.createCanvas();

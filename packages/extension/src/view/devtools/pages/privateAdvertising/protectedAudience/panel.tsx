@@ -80,8 +80,6 @@ const Panel = () => {
     if (filteredIGData.length !== filteredIGRefData?.length) {
       if (filteredIGData.length > 0) {
         highlightTab(2);
-      } else {
-        highlightTab(2, false);
       }
 
       store = {
@@ -93,8 +91,6 @@ const Panel = () => {
     if (!isEqual(data.current?.adsAndBidders, adsAndBidders)) {
       if (Object.keys(adsAndBidders).length > 0) {
         highlightTab(3);
-      } else {
-        highlightTab(3, false);
       }
 
       store = {
@@ -107,9 +103,6 @@ const Panel = () => {
       if (receivedBids.length > 0) {
         highlightTab(3);
         highlightTab(5);
-      } else {
-        highlightTab(3, false);
-        highlightTab(5, false);
       }
 
       store = {
@@ -122,9 +115,6 @@ const Panel = () => {
       if (Object.keys(noBids).length > 0) {
         highlightTab(3);
         highlightTab(5);
-      } else {
-        highlightTab(3, false);
-        highlightTab(5, false);
       }
 
       store = {
@@ -142,8 +132,6 @@ const Panel = () => {
         Object.keys(adsAndBidders).length > 0
       ) {
         highlightTab(4);
-      } else {
-        highlightTab(4, false);
       }
 
       store = {
@@ -161,6 +149,31 @@ const Panel = () => {
     noBids,
     receivedBids,
   ]);
+
+  useEffect(() => {
+    const listener = ({
+      frameId,
+      frameType,
+      tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        (frameType !== 'outermost_frame' && frameId !== 0) ||
+        tabId !== chrome.devtools.inspectedWindow.tabId
+      ) {
+        return;
+      }
+
+      highlightTab(3, false);
+      highlightTab(4, false);
+      highlightTab(5, false);
+    };
+
+    chrome.webNavigation.onCommitted.addListener(listener);
+
+    return () => {
+      chrome.webNavigation.onCommitted.removeListener(listener);
+    };
+  }, [highlightTab]);
 
   return (
     <div

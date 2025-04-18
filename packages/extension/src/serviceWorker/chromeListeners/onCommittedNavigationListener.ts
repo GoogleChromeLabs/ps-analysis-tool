@@ -88,15 +88,30 @@ export const onCommittedNavigationListener = async ({
     await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
       exceedingLimitations: qualifyingTabs.length > 5,
     });
+    const frames = await chrome.webNavigation.getAllFrames({ tabId });
 
-    await chrome.tabs.sendMessage(tabId, {
-      tabId,
-      payload: {
-        type: TABID_STORAGE,
-        tabId,
-        frameId: mainFrameId,
-      },
-    });
+    if (!frames) {
+      return;
+    }
+
+    await Promise.all(
+      frames.map(async (frame) => {
+        await chrome.tabs.sendMessage(
+          tabId,
+          {
+            tabId,
+            payload: {
+              type: TABID_STORAGE,
+              tabId,
+              frameId: frame.frameId,
+            },
+          },
+          {
+            frameId: frame.frameId,
+          }
+        );
+      })
+    );
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn(error);

@@ -32,7 +32,7 @@ import {
 import Link from '../link';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
-const SEARCH_URL = 'https://support.google.com/privacysandbox/search?q=';
+const SEARCH_URL = 'https://privacysandbox.google.com/s/results?q=';
 
 export interface ContentPanelProps {
   title: string;
@@ -94,15 +94,6 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
                 {item.description()}
               </p>
               <div className="absolute top-10 right-5 flex gap-2">
-                <div className="w-4 h-4" title="View Documentation">
-                  <Link href={addUTMParams(item.url)} rel="noreferer">
-                    <DescriptionIcon
-                      height="20"
-                      width="20"
-                      className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
-                    />
-                  </Link>
-                </div>
                 {item.onClick && item?.storyUrl && (
                   <div
                     className="w-4 h-4 cursor-pointer"
@@ -116,6 +107,15 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
                     />
                   </div>
                 )}
+                <div className="w-4 h-4" title="View Documentation">
+                  <Link href={addUTMParams(item.url)} rel="noreferer">
+                    <DescriptionIcon
+                      height="20"
+                      width="20"
+                      className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
+                    />
+                  </Link>
+                </div>
                 <div className="w-4 h-4 cursor-pointer" title="Search">
                   <Link href={addUTMParams(searchURL)} rel="noreferer">
                     <SearchIcon
