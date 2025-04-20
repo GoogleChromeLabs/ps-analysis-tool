@@ -113,6 +113,7 @@ const joinInterestGroup: JoinInterestGroup = {
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x,
         y1: () =>
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y + 40,
+        text: 'Tagging call',
       },
       callBack: (returnValue) => {
         app.joinInterestGroup.nextTipCoordinates = returnValue;

@@ -64,6 +64,7 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       direction: 'down',
       x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
+      text: 'Ad request',
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -96,6 +97,7 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       direction: 'down',
       x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
+      text: 'OpenRTB \n bid request',
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -127,6 +129,7 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       direction: 'up',
       x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 15,
+      text: 'OpenRTB \n bid response',
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
