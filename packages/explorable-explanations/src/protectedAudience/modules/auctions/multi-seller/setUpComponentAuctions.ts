@@ -185,6 +185,8 @@ const setUpComponentAuctionStarter = (
   };
 
   const renderBoxes = (componentAuction: ComponentAuction, index: number) => {
+    const { colors } = config.flow;
+
     steps.push({
       component: ProgressLine,
       props: {
@@ -222,6 +224,7 @@ const setUpComponentAuctionStarter = (
         x: () =>
           getCoordinateValues(returnCoordinates).x - BORDER_BOX_MARGIN - 12,
         y: () => getCoordinateValues(returnCoordinates).y + 20,
+        color: colors.box.yellowBox,
       },
       delay: 1000,
       callBack: () => {
@@ -258,7 +261,7 @@ const setUpComponentAuction = (
   { title, x, y, ssp, info, sspWebsite },
   { bidValue }
 ) => {
-  const { box, arrowSize } = config.flow;
+  const { box, arrowSize, colors } = config.flow;
 
   steps.push({
     component: Text,
@@ -285,6 +288,7 @@ const setUpComponentAuction = (
         12,
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 20,
       info,
+      color: colors.box.yellowBox,
     },
     delay: 1000,
     callBack: (returnValue: Coordinates) => {
@@ -418,7 +422,7 @@ const setUpTPoint = (steps: AuctionStep[]) => {
 };
 
 const setupAfterComponentAuctionFlow = (steps) => {
-  const { box, arrowSize } = config.flow;
+  const { box, arrowSize, colors } = config.flow;
 
   steps.push({
     component: Box,
@@ -495,6 +499,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
       title: MULTI_SELLER_CONFIG.REPORT_RESULT.title,
       info: MULTI_SELLER_CONFIG.REPORT_RESULT.info,
       description: MULTI_SELLER_CONFIG.REPORT_RESULT.description,
+      color: colors.box.yellowBox,
       x: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
       y: () =>
