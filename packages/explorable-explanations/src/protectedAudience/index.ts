@@ -223,6 +223,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
           index: _currentIndex,
         });
       }
+      flow.setButtonsDisabilityState();
       flow.clearBelowTimelineCircles();
       utils.markVisitedValue(_currentIndex, true);
       bubbles.generateBubbles();
@@ -368,6 +369,7 @@ app.handleNonInteractivePrev = async () => {
   }
 
   app.promiseQueue?.end();
+  flow.setButtonsDisabilityState(true);
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   //This is to set the data for previous site in react as well.
@@ -406,8 +408,13 @@ app.handleInteractivePrev = async () => {
     return;
   }
 
+  if (app.visitedIndexOrderTracker >= 0) {
+    app.visitedIndexOrderTracker =
+      app.visitedIndexOrderTracker - (app.promiseQueue?.length !== 0 ? 0 : 1);
+  }
+
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -417,9 +424,9 @@ app.handleInteractivePrev = async () => {
   app.isRevisitingNodeInInteractiveMode = true;
   app.timeline.currentIndex = visitedIndex;
   app.usedNextOrPrev = true;
-  await utils.delay(100);
 
   app.drawFlows(visitedIndex);
+  await utils.delay(100);
 
   app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
@@ -427,15 +434,10 @@ app.handleInteractivePrev = async () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  if (app.visitedIndexOrderTracker >= 0) {
-    app.visitedIndexOrderTracker--;
-  }
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
@@ -443,7 +445,6 @@ app.handleInteractivePrev = async () => {
 
   app.setPlayState(true);
   try {
-    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
@@ -483,7 +484,27 @@ app.handleNonInteractiveNext = async () => {
   ) {
     return;
   }
+
+  if (
+    app.timeline.currentIndex === 0 &&
+    app.timeline.expandIconPositions.length === 0
+  ) {
+    const { currentIndex: _currentIndex, circlePositions } = app.timeline;
+    const { x, y } = getCoordinateValues(circlePositions[_currentIndex]);
+    const {
+      circleProps: { diameter },
+    } = config.timeline;
+
+    app.timeline.expandIconPositions.push({
+      x: x,
+      y: y + diameter / 2,
+      index: _currentIndex,
+    });
+    bubbles.generateBubbles();
+  }
+
   app.promiseQueue?.end();
+  flow.setButtonsDisabilityState(true);
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   //This is to set the data for previous site in react as well.
@@ -541,7 +562,7 @@ app.handleInteractiveNext = async () => {
   }
 
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -560,11 +581,10 @@ app.handleInteractiveNext = async () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
@@ -864,6 +884,9 @@ app.createCanvas = () => {
 };
 
 app.getWinningAdDelay = () => {
+  if (app.isRevisitingNodeInInteractiveMode) {
+    return 0;
+  }
   // the faster the speed, the longer the BASE delay
   const milliseconds = WINNING_AD_DELAY + app.speedMultiplier * 1000;
   // adjust the total delay based on the speed
