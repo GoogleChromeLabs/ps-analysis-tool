@@ -113,7 +113,11 @@ const auction: Auction = {
     });
 
     app.promiseQueue?.push((cb) => {
-      if (app.p && !app.isInteractiveMode) {
+      if (
+        app.p &&
+        !app.isInteractiveMode &&
+        !app.isRevisitingNodeInInteractiveMode
+      ) {
         const circleItem = config.timeline.circles[index];
         const { diameter, verticalSpacing } = config.timeline.circleProps;
         const circleVerticalSpace = verticalSpacing + diameter;
