@@ -113,7 +113,6 @@ const mouseClickedInNonInteractiveModeCallback = (
     cb?.(undefined, true);
   });
 
-  app.promiseQueue?.start();
   wipeAndRecreateUserCanvas();
 
   circles.forEach((__, index) => {
@@ -134,6 +133,11 @@ const mouseClickedInNonInteractiveModeCallback = (
     p.pop();
   });
   drawOpenArrowWithoutAnimationIcon();
+  try {
+    app.promiseQueue?.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 export default mouseClickedInNonInteractiveModeCallback;

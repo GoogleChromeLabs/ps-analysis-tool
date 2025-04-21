@@ -223,6 +223,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
           index: _currentIndex,
         });
       }
+      flow.setButtonsDisabilityState();
       flow.clearBelowTimelineCircles();
       utils.markVisitedValue(_currentIndex, true);
       bubbles.generateBubbles();
@@ -368,6 +369,7 @@ app.handleNonInteractivePrev = async () => {
   }
 
   app.promiseQueue?.end();
+  flow.setButtonsDisabilityState(true);
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   //This is to set the data for previous site in react as well.
@@ -483,6 +485,7 @@ app.handleNonInteractiveNext = async () => {
     return;
   }
   app.promiseQueue?.end();
+  flow.setButtonsDisabilityState(true);
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   //This is to set the data for previous site in react as well.
