@@ -140,7 +140,7 @@ const flow: Flow = {
     if (isInteractiveMode) {
       setButtonState(
         prevButton,
-        !(visitedIndexOrderTracker >= 0 && visitedIndexOrder.length >= 2)
+        !(visitedIndexOrderTracker > 0 && visitedIndexOrder.length >= 2)
       );
       setButtonState(
         nextButton,
