@@ -246,7 +246,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Tick className="w-4 h-4 sm:hidden" />
+              <Tick className="w-4 h-4 hidden max-sm:block" />
               <span className="hidden sm:block">Yes</span>
             </>
           }
@@ -257,7 +257,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Plus className="rotate-45 w-4 h-4 sm:hidden" />
+              <Plus className="rotate-45 w-4 h-4 hidden max-sm:block" />
               <span className="hidden sm:block">No</span>
             </>
           }
