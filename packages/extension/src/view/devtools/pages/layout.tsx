@@ -246,8 +246,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Tick className="fill-white dark:fill-white w-4 h-4 md:hidden" />
-              <span className="hidden md:block">Yes</span>
+              <Tick className="w-4 h-4 sm:hidden" />
+              <span className="hidden sm:block">Yes</span>
             </>
           }
           size="large"
@@ -257,8 +257,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Plus className="fill-white dark:fill-white rotate-45 w-4 h-4 md:hidden" />
-              <span className="hidden md:block">No</span>
+              <Plus className="rotate-45 w-4 h-4 sm:hidden" />
+              <span className="hidden sm:block">No</span>
             </>
           }
           size="large"
