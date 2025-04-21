@@ -484,6 +484,25 @@ app.handleNonInteractiveNext = async () => {
   ) {
     return;
   }
+
+  if (
+    app.timeline.currentIndex === 0 &&
+    app.timeline.expandIconPositions.length === 0
+  ) {
+    const { currentIndex: _currentIndex, circlePositions } = app.timeline;
+    const { x, y } = getCoordinateValues(circlePositions[_currentIndex]);
+    const {
+      circleProps: { diameter },
+    } = config.timeline;
+
+    app.timeline.expandIconPositions.push({
+      x: x,
+      y: y + diameter / 2,
+      index: _currentIndex,
+    });
+    bubbles.generateBubbles();
+  }
+
   app.promiseQueue?.end();
   flow.setButtonsDisabilityState(true);
   app.timeline.isPaused = true;
