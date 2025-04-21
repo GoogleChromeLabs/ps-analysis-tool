@@ -208,14 +208,22 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div className="flex items-center gap-5">
         <Button
-          text={<Tick className="fill-white dark:fill-white w-4 h-4" />}
+          text={
+            <>
+              <Tick className="w-4 h-4 hidden max-sm:block" />
+              <span className="hidden sm:block">Yes</span>
+            </>
+          }
           size="large"
           onClick={handleSettingsChange}
           variant="success"
         />
         <Button
           text={
-            <Plus className="fill-white dark:fill-white rotate-45 w-4 h-4" />
+            <>
+              <Plus className="rotate-45 w-4 h-4 hidden max-sm:block" />
+              <span className="hidden sm:block">No</span>
+            </>
           }
           size="large"
           onClick={async () => {
