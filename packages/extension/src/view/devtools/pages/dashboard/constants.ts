@@ -142,7 +142,7 @@ export const FEATURE_LIST = [
     icon: PSLearningIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
     description:
-      'Explore and learn everything about the Privacy Sandbox via the Help Center, developer documentation, and Stories, and learn about PSAT via the wiki and demos.',
+      'Explore and learn everything about the Privacy Sandbox through the Help Center, developer documentation, and case studies. You can also learn about PSAT via the wiki and demos.',
     buttons: [
       {
         name: 'Wiki',
