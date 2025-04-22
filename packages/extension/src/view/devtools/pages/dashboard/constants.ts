@@ -160,6 +160,10 @@ export const FEATURE_LIST = [
         name: 'Dev Site',
         sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
       },
+      {
+        name: 'Demos',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
+      },
     ],
   },
 ];
