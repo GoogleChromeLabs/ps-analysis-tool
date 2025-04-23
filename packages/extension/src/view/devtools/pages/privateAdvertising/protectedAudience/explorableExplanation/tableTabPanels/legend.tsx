@@ -22,7 +22,7 @@ import { Link } from '@google-psat/design-system';
 
 const Legend = () => {
   return (
-    <div className="p-3 text-[12.5px] dark:text-bright-gray">
+    <div className="p-3 text-[12.5px] dark:text-bright-gray h-full overflow-y-auto pb-5">
       <p>
         This explorable explanation illustrates the generic flow outlined in the{' '}
         <Link href="https://developers.google.com/display-video/protected-audience/ssp-guide">
