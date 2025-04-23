@@ -109,12 +109,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: I18n.getMessage('domain'),
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
+        minWidth: 55,
       },
       {
         header: I18n.getMessage('partitionKey'),
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
-        minWidth: 70,
+        minWidth: 95,
       },
       {
         header: I18n.getMessage('sameSite'),
@@ -133,6 +134,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: I18n.getMessage('platform'),
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => (info ? info : I18n.getMessage('unknown')),
+        initialWidth: 80,
+        minWidth: 80,
       },
       {
         header: I18n.getMessage('httpOnly'),
@@ -160,6 +163,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: I18n.getMessage('value'),
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
+        initialWidth: 80,
       },
       {
         header: I18n.getMessage('path'),
@@ -186,6 +190,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         accessorKey: 'parsedCookie.size',
         isHiddenByDefault: true,
         cell: (info: InfoType) => info,
+        minWidth: 120,
       },
     ],
     [isUsingCDP]
