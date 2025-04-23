@@ -16,7 +16,6 @@
 /**
  * Internal dependencies
  */
-import cookieStore from '../../../store/cookieStore';
 import dataStore, { DataStore } from '../../../store/dataStore';
 import attachCDP from '../../attachCDP';
 
@@ -25,36 +24,33 @@ const updateGlobalVariableAndAttachCDP = async () => {
 
   const preSetSettings = await chrome.storage.sync.get();
 
-  DataStore.tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
   DataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
 
-  if (DataStore.tabMode === 'unlimited') {
-    const allTabs = await chrome.tabs.query({});
-    const targets = await chrome.debugger.getTargets();
+  const allTabs = await chrome.tabs.query({});
+  const targets = await chrome.debugger.getTargets();
 
-    allTabs.forEach((tab) => {
-      if (!tab.id || tab.url?.startsWith('chrome://')) {
-        return;
-      }
+  allTabs.forEach((tab) => {
+    if (!tab.id || !tab.url?.startsWith('https://')) {
+      return;
+    }
 
-      dataStore?.addTabData(tab.id.toString());
+    dataStore?.addTabData(tab.id.toString());
 
-      if (DataStore.globalIsUsingCDP) {
-        cookieStore.initialiseVariablesForNewTab(tab.id.toString());
+    if (DataStore.globalIsUsingCDP) {
+      dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
-        attachCDP({ tabId: tab.id });
+      attachCDP({ tabId: tab.id });
 
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        dataStore?.updateParentChildFrameAssociation(
-          tab.id.toString(),
-          currentTab[0].id,
-          '0'
-        );
-      }
-    });
-  }
+      const currentTab = targets.filter(
+        ({ tabId }) => tabId && tab.id && tabId === tab.id
+      );
+      dataStore?.updateParentChildFrameAssociation(
+        tab.id.toString(),
+        currentTab[0].id,
+        '0'
+      );
+    }
+  });
 };
 
 export default updateGlobalVariableAndAttachCDP;

@@ -96,11 +96,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       targets = await chrome.debugger.getTargets();
 
       targets.forEach((target) => {
-        if (
-          !target.url.startsWith('devtools://') &&
-          !target.url.startsWith('chrome://') &&
-          !attachedSet.has(target.id)
-        ) {
+        if (target.url.startsWith('https://') && !attachedSet.has(target.id)) {
           attachCDP({ targetId: target.id });
           attachedSet.add(target.id);
         }
@@ -114,7 +110,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         const childDebuggee = { targetId };
 
-        if (!attachedSet.has(targetId)) {
+        if (!attachedSet.has(targetId) && url.startsWith('https://')) {
           attachCDP(childDebuggee);
           attachedSet.add(targetId);
         }
@@ -172,10 +168,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           parentId,
           frameUrl
         );
-      }
-
-      if (DataStore.tabMode !== 'unlimited' && DataStore.tabToRead !== tabId) {
-        return;
       }
 
       if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
@@ -336,7 +328,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           loadingFinishedParams.requestId,
           loadingFinishedParams.timestamp,
           tabId,
-          'Finished Fetch'
+          'Finished Fetching '
         );
       }
 

@@ -25,8 +25,7 @@ import SinonChrome from 'sinon-chrome';
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
 import { onTabCreatedListener } from '../tabOnCreatedListener';
-import dataStore, { DataStore } from '../../../store/dataStore';
-import cookieStore from '../../../store/cookieStore';
+import { DataStore } from '../../../store/dataStore';
 
 describe('chrome.tabs.onCreated.addListener', () => {
   beforeAll(() => {
@@ -41,108 +40,6 @@ describe('chrome.tabs.onCreated.addListener', () => {
         text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
-  });
-
-  describe('Multitab Mode', () => {
-    beforeAll(() => {
-      DataStore.globalIsUsingCDP = false;
-      DataStore.tabMode = 'unlimited';
-    });
-
-    test('Openeing new tabs should create an entry for the new tab in synchnorous cookie store.', async () => {
-      SinonChrome.tabs.onCreated.dispatch({
-        status: 'loading',
-        index: 1,
-        title: 'CNN News Website',
-        url: 'https://edition.cnn.com',
-        pinned: false,
-        highlighted: false,
-        windowId: 11,
-        active: true,
-        id: 123456,
-        audible: false,
-        discarded: false,
-        autoDiscardable: false,
-        groupId: 1,
-      });
-
-      await new Promise((r) => setTimeout(r, 2000));
-
-      expect(DataStore.tabs[123456]).toBeTruthy();
-    });
-  });
-
-  describe('Single Tab Mode', () => {
-    beforeEach(() => {
-      DataStore.globalIsUsingCDP = false;
-      DataStore.tabMode = 'single';
-      dataStore.addTabData('123456');
-      DataStore.tabToRead = '';
-    });
-    afterEach(() => {
-      DataStore.tabs = {};
-      cookieStore.removeCookieData('123456');
-    });
-
-    test('Openeing new tabs should create an entry for the new tab in synchnorous cookie store.', async () => {
-      SinonChrome.tabs.onCreated.dispatch({
-        status: 'loading',
-        index: 1,
-        title: 'CNN News Website',
-        url: 'https://edition.cnn.com',
-        pinned: false,
-        highlighted: false,
-        windowId: 11,
-        active: true,
-        id: 123456,
-        audible: false,
-        discarded: false,
-        autoDiscardable: false,
-        groupId: 1,
-      });
-
-      await new Promise((r) => setTimeout(r, 2000));
-
-      expect(DataStore.tabs['123456']).toBeTruthy();
-    });
-
-    test('Openeing more than 1 tab in single tab processing mode should not create an entry in synchrorous cookie store.', async () => {
-      SinonChrome.tabs.onCreated.dispatch({
-        status: 'loading',
-        index: 1,
-        title: 'CNN News Website',
-        url: 'https://edition.cnn.com',
-        pinned: false,
-        highlighted: false,
-        windowId: 11,
-        active: true,
-        id: 123456,
-        audible: false,
-        discarded: false,
-        autoDiscardable: false,
-        groupId: 1,
-      });
-
-      SinonChrome.tabs.onCreated.dispatch({
-        status: 'loading',
-        index: 1,
-        title: 'CNN News Website',
-        url: 'https://edition.cnn.com',
-        pinned: false,
-        highlighted: false,
-        windowId: 11,
-        active: true,
-        id: 24567,
-        audible: false,
-        discarded: false,
-        autoDiscardable: false,
-        groupId: 1,
-      });
-
-      await new Promise((r) => setTimeout(r, 2000));
-
-      expect(DataStore.tabs['24567']).not.toBeTruthy();
-    });
   });
 
   test('Openeing new tab and if tabId is missing it should not create new tab.', async () => {

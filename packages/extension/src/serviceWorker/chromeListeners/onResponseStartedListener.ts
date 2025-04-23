@@ -43,8 +43,6 @@ export const onResponseStartedListener = ({
     const cookies = await parseHeaders(
       DataStore.globalIsUsingCDP,
       'response',
-      DataStore.tabToRead,
-      DataStore.tabMode,
       tabId,
       url,
       DataStore.cookieDB ?? {},

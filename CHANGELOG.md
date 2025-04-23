@@ -593,3 +593,44 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Replace anchor tag with `Link` component in Landing page info cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/965
 - Small UI Improvements. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/967
 - Update learning landing page icons and content https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/997
+
+
+# v0.14.0
+
+## Changelog
+
+- Fix: CLI install script https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1020
+- Fix: Media Container Size showing undefined in the table. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1017
+- Fix: Minor bugs in PSAT https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1025
+- Fix: Redirection to dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1029
+- Add search icon to info cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1030
+- Enhancement: Dynamic dark mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1028
+- Enhancement: Make JSON view collapsible https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1007
+- Move 'Wiki' after 'Demos' page under 'Learning' section https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1019
+- Refactor auction shaper https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1032
+- Refactor: Toast UI message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1035
+- Remove multi-tab debugging option and show toast message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1031
+- Rename "Media Type" column to "Ad Type" in bids table https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1027
+- Replace number and logo icons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1026
+
+
+# v0.14.1
+
+## Changelog
+
+- Fix: Ad unit tab notification bubble disappearance https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1039
+- Fix: Auction removal timing https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1044
+- Fix: Auction tab data vanishing https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1050
+- Fix: Incorrect access count in topics EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1038
+- Fix: Multiple rows getting selected with the same event time https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1041
+- Fix: Prevent auto scrolling when animation is paused in EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1048
+- Fix: Settings container padding https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1046
+- Fix: Show CDP settings icon buttons only in smaller screens https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1054
+- Enhancement: Add textual description to PA EE arrows https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1053
+- Improvement: Initial theme mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1040
+- Improvement: Settings toast buttons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1047
+- Misc QA Fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1043
+- Misc QA fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1045
+- Misc patch fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1052
+- Miscellaneous updates and improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1049
+- Update diagram boxes to yellow for SSPs with minimal integration changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1051

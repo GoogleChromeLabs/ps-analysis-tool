@@ -108,19 +108,9 @@ export class DataStore {
   } = {};
 
   /**
-   * The cookie data of the tabs.
-   */
-  static tabMode: 'single' | 'unlimited' = 'single';
-
-  /**
    * CookieDatabase to run analytics match on.
    */
   static cookieDB: CookieDatabase | null = null;
-
-  /**
-   * The cookie data of the tabs.
-   */
-  static tabToRead = '';
 
   /**
    * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
@@ -496,9 +486,7 @@ export class DataStore {
 
       const { globalEvents, ...rest } = this.auctionEvents[tabId];
 
-      const isMultiSellerAuction = PAStore.isMUltiSellerAuction(
-        Object.values(rest).flat()
-      );
+      const isMultiSellerAuction = PAStore.isMUltiSellerAuction(rest);
       const groupedAuctionBids: {
         [parentAuctionId: string]: {
           0: singleAuctionEvent[];

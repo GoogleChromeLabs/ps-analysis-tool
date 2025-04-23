@@ -62,7 +62,7 @@ export type Config = {
     colors: {
       box: {
         background: string;
-        notBrowser: string;
+        yellowBox: string;
         text: string;
         borderStroke: number[];
         noData: string;
@@ -204,7 +204,7 @@ const config: Config = {
     colors: {
       box: {
         background: '255',
-        notBrowser: '#ffec99',
+        yellowBox: '#ffec99',
         noData: '#e9ecef',
         text: '#000',
         borderStroke: [0, 0, 0],

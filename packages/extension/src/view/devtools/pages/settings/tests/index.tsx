@@ -86,7 +86,6 @@ describe('Settings Page', () => {
 
   it('Should render settings page', () => {
     mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
       isUsingCDP: false,
       setIsUsingCDP: noop,
       setProcessingMode: noop,

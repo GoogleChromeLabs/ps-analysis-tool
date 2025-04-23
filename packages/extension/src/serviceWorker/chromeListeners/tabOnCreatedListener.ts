@@ -16,8 +16,6 @@
 /**
  * Internal dependencies
  */
-import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
-import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
@@ -28,45 +26,19 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
 
     const targets = await chrome.debugger.getTargets();
 
-    if (DataStore.tabMode && DataStore.tabMode !== 'unlimited') {
-      const doesTabExist = DataStore.tabToRead;
-      if (
-        Object.keys(cookieStore.getTabsData() ?? {}).length >=
-          ALLOWED_NUMBER_OF_TABS &&
-        doesTabExist
-      ) {
-        return;
-      }
-      DataStore.tabToRead = tab.id.toString();
-      dataStore?.addTabData(tab.id.toString());
+    dataStore?.addTabData(tab.id.toString());
+    dataStore.initialiseVariablesForNewTab(tab.id.toString());
 
-      if (DataStore.globalIsUsingCDP) {
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        cookieStore.initialiseVariablesForNewTab(tab.id.toString());
+    if (DataStore.globalIsUsingCDP) {
+      const currentTab = targets.filter(
+        ({ tabId }) => tabId && tab.id && tabId === tab.id
+      );
 
-        dataStore.updateParentChildFrameAssociation(
-          tab.id.toString(),
-          currentTab[0].id,
-          '0'
-        );
-      }
-    } else {
-      dataStore?.addTabData(tab.id.toString());
-
-      if (DataStore.globalIsUsingCDP) {
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        cookieStore.initialiseVariablesForNewTab(tab.id.toString());
-
-        dataStore.updateParentChildFrameAssociation(
-          tab.id.toString(),
-          currentTab[0].id,
-          '0'
-        );
-      }
+      dataStore.updateParentChildFrameAssociation(
+        tab.id.toString(),
+        currentTab[0].id,
+        '0'
+      );
     }
   } catch (error) {
     //Fail silently
