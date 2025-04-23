@@ -71,7 +71,7 @@ const SettingsContainer = () => {
 
   return (
     <div data-testid="Settings">
-      <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
+      <div className="flex items-center flex-row mb-2 gap-x-2">
         <Gear className="dark:text-bright-gray" />
         <span className="text-base font-bold dark:text-bright-gray">
           {I18n.getMessage('pSATSettings')}

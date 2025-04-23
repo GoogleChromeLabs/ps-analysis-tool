@@ -107,7 +107,7 @@ const Provider = ({ children }: PropsWithChildren) => {
               return;
             }
 
-            const time = new Date(events?.[0]?.time * 1000).toUTCString();
+            const time = new Date(events?.[0]?.time * 1000).toISOString();
 
             reshapedAuctionEvents[adUnitCode] = {
               ...reshapedAuctionEvents[adUnitCode],
@@ -165,7 +165,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             const time = new Date(
               events?.['0']?.[0]?.time * 1000
-            ).toUTCString();
+            ).toISOString();
 
             const sspEvents = Object.values(events).reduce((acc, event) => {
               const seller =
@@ -207,7 +207,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
           return data;
         }
-
         return prevState;
       });
 
@@ -378,7 +377,8 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        (frameType !== 'outermost_frame' && frameId !== 0) ||
+        frameType !== 'outermost_frame' ||
+        frameId !== 0 ||
         tabId !== chrome.devtools.inspectedWindow.tabId
       ) {
         return;
