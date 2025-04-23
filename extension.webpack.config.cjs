@@ -123,6 +123,7 @@ const dashboardReport = {
   output: {
     path: path.resolve(__dirname, './dist/extension/devtools'),
     filename: 'devtoolsDashboard.js',
+    publicPath: '/',
   },
   plugins: [
     new WebpackBar({
