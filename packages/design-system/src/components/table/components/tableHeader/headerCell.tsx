@@ -43,6 +43,10 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
     setSortKey(cell.accessorKey);
   }, [cell.accessorKey, setSortKey]);
 
+  const initialWidth = cell.initialWidth
+    ? Math.max(cell.initialWidth || 0, cell.minWidth || 0) || 'auto'
+    : 'auto';
+
   return (
     <>
       <th
@@ -56,7 +60,9 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
           }
         )}
         data-testid="header-cell"
-        style={{ maxWidth: cell.initialWidth }}
+        data-min-width={cell.minWidth}
+        data-max-width={cell.maxWidth}
+        style={{ maxWidth: initialWidth, minWidth: initialWidth }}
       >
         <div
           className="w-full h-full relative flex items-center justify-between text-cool-grey dark:text-bright-gray max-w"

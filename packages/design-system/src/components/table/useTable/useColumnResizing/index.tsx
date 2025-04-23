@@ -26,11 +26,15 @@ const getColumnElement = (columnId: string) => {
   ) as HTMLElement;
 };
 
-const getColumnWidth = (columnId: string) => {
-  const columnElement = getColumnElement(columnId);
-  if (!columnElement) {
-    return 0;
-  }
+const getColumnMinWidth = (columnElement: HTMLElement) => {
+  return Number(columnElement?.dataset.minWidth) || undefined;
+};
+
+const getColumnMaxWidth = (columnElement: HTMLElement) => {
+  return Number(columnElement?.dataset.maxWidth) || undefined;
+};
+
+const getColumnWidth = (columnElement: HTMLElement) => {
   return (
     Number(columnElement.style.width) ||
     columnElement.getBoundingClientRect().width
@@ -49,28 +53,29 @@ export type UseColumnResizing = {
  */
 const useColumnResizing = (): UseColumnResizing => {
   const [isResizing, setIsResizing] = useState(false);
-  const resizeId = useRef<string | null>(null);
   const startingColumnWidth = useRef(0);
   const startX = useRef(0);
   const rafId = useRef<number>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
+  const currentColumn = useRef<HTMLElement | null>(null);
 
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
     if (target?.dataset?.columnResizeHandle) {
       setIsResizing(true);
-      resizeId.current = target.dataset.columnResizeHandle;
+      const columnId = target.dataset.columnResizeHandle;
       startX.current = event.screenX;
-      const columnElement = getColumnElement(resizeId.current);
+      const columnElement = getColumnElement(columnId);
       if (columnElement) {
-        startingColumnWidth.current = getColumnWidth(resizeId.current);
+        startingColumnWidth.current = getColumnWidth(columnElement);
+        currentColumn.current = columnElement;
       }
     }
   }, []);
 
   const onMouseMove = useCallback(
     (event: MouseEvent) => {
-      if (!isResizing || !resizeId.current) {
+      if (!isResizing || !currentColumn.current) {
         return;
       }
 
@@ -79,15 +84,23 @@ const useColumnResizing = (): UseColumnResizing => {
       }
 
       rafId.current = requestAnimationFrame(() => {
-        if (!resizeId.current) {
+        if (!currentColumn.current) {
           return;
         }
-        const columnElement = getColumnElement(resizeId.current);
+        const columnElement = currentColumn.current;
         if (!columnElement) {
           return;
         }
+        const minWidth = getColumnMinWidth(columnElement);
+        const maxWidth = getColumnMaxWidth(columnElement);
         const newDiffX = startX.current - event.screenX;
         const newWidth = startingColumnWidth.current - newDiffX;
+        if (
+          (maxWidth && newWidth > maxWidth) ||
+          (minWidth && newWidth < minWidth)
+        ) {
+          return;
+        }
         columnElement.style.minWidth = `${newWidth}px`;
         columnElement.style.maxWidth = `${newWidth}px`;
       });
@@ -96,19 +109,20 @@ const useColumnResizing = (): UseColumnResizing => {
   );
 
   const onMouseUp = useCallback(() => {
-    if (!isResizing || !resizeId.current) {
+    if (!isResizing || !currentColumn.current) {
       return;
     }
-    const columnElement = getColumnElement(resizeId.current);
+    const columnElement = currentColumn.current;
     if (columnElement) {
       requestAnimationFrame(() => {
+        currentColumn.current = null;
         setIsResizing(false);
       });
     }
     if (rafId.current) {
       cancelAnimationFrame(rafId.current);
     }
-    resizeId.current = null;
+    currentColumn.current = null;
   }, [isResizing]);
 
   // fixes the column widths when the component is mounted
@@ -133,7 +147,14 @@ const useColumnResizing = (): UseColumnResizing => {
         return;
       }
 
-      const width = getColumnWidth(columnId);
+      // don't set any width if it's already set
+      if (columnElement.style.maxWidth !== '') {
+        return;
+      }
+
+      const minWidth = getColumnMinWidth(columnElement);
+      const colWidth = getColumnWidth(columnElement);
+      const width = Math.max(minWidth || 0, colWidth);
       columnElement.style.maxWidth = `${width}px`;
       columnElement.style.width = `${width}px`;
       columnElement.style.minWidth = `${width}px`;

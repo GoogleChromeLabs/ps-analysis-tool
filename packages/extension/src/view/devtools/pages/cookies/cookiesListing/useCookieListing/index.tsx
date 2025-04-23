@@ -96,12 +96,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
 
           return isBlocked || isDomainInAllowList;
         },
+        minWidth: 45,
       },
       {
         header: I18n.getMessage('scope'),
         accessorKey: 'isFirstParty',
         cell: (info: InfoType) =>
           I18n.getMessage(!info ? 'thirdParty' : 'firstParty'),
+        minWidth: 50,
       },
       {
         header: I18n.getMessage('domain'),
@@ -112,13 +114,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: I18n.getMessage('partitionKey'),
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
-        initialWidth: 80,
+        minWidth: 70,
       },
       {
         header: I18n.getMessage('sameSite'),
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) =>
           I18n.getMessage((info?.toString() || '').toLowerCase()),
+        minWidth: 80,
       },
       {
         header: I18n.getMessage('category'),
@@ -139,7 +142,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
-        initialWidth: 50,
+        minWidth: 80,
+        initialWidth: 80,
       },
       {
         header: I18n.getMessage('secure'),
@@ -150,6 +154,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           </p>
         ),
         initialWidth: 50,
+        minWidth: 70,
       },
       {
         header: I18n.getMessage('value'),
@@ -160,6 +165,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: I18n.getMessage('path'),
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
+        minWidth: 50,
+        initialWidth: 50,
       },
       {
         header: I18n.getMessage('expires'),

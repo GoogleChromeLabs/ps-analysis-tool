@@ -60,6 +60,8 @@ export type TableColumn = {
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   sortingComparator?: (a: InfoType, b: InfoType) => number;
   initialWidth?: number;
+  minWidth?: number;
+  maxWidth?: number;
 };
 
 export type TableRow = {
