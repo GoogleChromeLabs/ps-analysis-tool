@@ -177,8 +177,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { uniqueAuctionId, eventTime, auctionConfig, parentAuctionId } =
           interestGroupAuctionEventOccured;
 
-        dataStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
-          ...(dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
+        PAStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
+          ...(PAStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
           auctionConfig,
           parentAuctionId,
           auctionTime: eventTime,
@@ -213,7 +213,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { auctions, type, requestId } =
           interestGroupAuctionNetworkRequestCreatedParams;
 
-        dataStore.unParsedRequestHeadersForPA[tabId][requestId] = {
+        PAStore.unParsedRequestHeadersForPA[tabId][requestId] = {
           auctions,
           type,
         };
@@ -276,9 +276,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (dataStore.unParsedRequestHeadersForPA[tabId][requestId]) {
+        if (PAStore.unParsedRequestHeadersForPA[tabId][requestId]) {
           const { auctions, type } =
-            dataStore.unParsedRequestHeadersForPA[tabId][requestId];
+            PAStore.unParsedRequestHeadersForPA[tabId][requestId];
 
           PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
         }

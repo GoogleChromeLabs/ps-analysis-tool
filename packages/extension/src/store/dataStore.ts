@@ -18,8 +18,6 @@
  */
 import type {
   CookieDatabase,
-  singleAuctionEvent,
-  auctionData,
   SourcesRegistration,
   TriggerRegistration,
 } from '@google-psat/common';
@@ -31,7 +29,6 @@ import type { Protocol } from 'devtools-protocol';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
-import PAStore from './PAStore';
 import { isEqual } from 'lodash-es';
 
 export class DataStore {
@@ -70,44 +67,6 @@ export class DataStore {
   } = {};
 
   /**
-   * The auction event of the tabs (Interest group access as well as interest group auction events).
-   */
-  auctionEvents: {
-    [tabId: string]: {
-      [uniqueAuctionId: string]: singleAuctionEvent[];
-    };
-  } = {};
-  /**
-   * For tab 123456 auction events will have interestGroup accessed events as well as the interestGroupAuctionEvents.
-   * There can be 2 types of interestGroupAccessed events:
-   * 1) Join and Leave eventsare global and are fired on all the tabs.
-   * 2) Bid Win topLevelBid are fired where bidding is happening.
-   *
-   * To accomodate these 2 events we have 2 different keys in the auctionEvent for each tab:
-   * 1) The uniqueParentAuctionId,
-   *     a) if its a multi-seller auction then it will have:
-   *         i) a uniqueParentAuctionId where component auction Events are added.
-   *        ii) top level auction in an id whose key is '0',
-   *     b) if its a single sale then it will have a key with uniqueAuctionId where all the auctionEvents are added.
-   * 2) a 'globalEvents' key where all the global events are added like join leave etc.
-   *
-   * Structure may look like this:
-   * auctionEvents: {
-   *     123456: {
-   *          'globalEvents': [],
-   *          '12413hsad23e1nsd': {}
-   *     }
-   * };
-   */
-
-  /**
-   * The auction data of the tabs which is added when interestGroupAuctionEvent occurs.
-   */
-  auctionDataForTabId: {
-    [tabId: string]: auctionData;
-  } = {};
-
-  /**
    * CookieDatabase to run analytics match on.
    */
   static cookieDB: CookieDatabase | null = null;
@@ -123,19 +82,6 @@ export class DataStore {
         finalFrameId: string;
         timeStamp: Protocol.Network.MonotonicTime;
         wallTime: Protocol.Network.TimeSinceEpoch;
-      };
-    };
-  } = {};
-
-  /**
-   * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
-   * These are the responses whose Network.responseReceived counter part havent yet been fired.
-   */
-  unParsedRequestHeadersForPA: {
-    [tabId: string]: {
-      [requestId: string]: {
-        auctions: Protocol.Storage.InterestGroupAuctionId[];
-        type: Protocol.Storage.InterestGroupAuctionFetchType;
       };
     };
   } = {};
@@ -291,12 +237,10 @@ export class DataStore {
     //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
     globalThis.PSAT = {
       tabs: DataStore.tabs,
-      auctionEvents: this.auctionEvents,
       sources: this.sources,
       headersForARA: this.headersForARA,
     };
 
-    this.auctionEvents[tabId.toString()] = {};
     this.headersForARA[tabId.toString()] = {};
     DataStore.tabs[tabId] = {
       url: '',
@@ -309,8 +253,6 @@ export class DataStore {
       isCookieAnalysisEnabled: true,
       isPAAnalysisEnabled: true,
     };
-
-    this.auctionDataForTabId[tabId] = {};
 
     (async () => {
       if (!DataStore.cookieDB) {
@@ -406,13 +348,10 @@ export class DataStore {
   initialiseVariablesForNewTab(tabId: string) {
     DataStore.requestIdToCDPURLMapping[tabId] = {};
     DataStore.frameIdToResourceMap[tabId] = {};
-    this.unParsedRequestHeadersForPA[tabId] = {};
     //@ts-ignore
     globalThis.PSATAdditionalData = {
       requestIdToCDPURLMapping: DataStore.requestIdToCDPURLMapping,
       frameIdToResourceMap: DataStore.frameIdToResourceMap,
-      auctionDataForTabId: this.auctionDataForTabId,
-      unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
     };
   }
 
@@ -422,8 +361,6 @@ export class DataStore {
    */
   removeTabData(tabId: string) {
     delete DataStore.tabs[tabId];
-    delete this.auctionDataForTabId[tabId];
-    delete this.auctionEvents[tabId];
     delete this.headersForARA[tabId.toString()];
   }
 
@@ -460,89 +397,12 @@ export class DataStore {
         DataStore.tabs[tabId].devToolsOpenState ||
         DataStore.tabs[tabId].popupOpenState
       ) {
-        await this.processAndSendAuctionData(tabId, overrideForInitialSync);
         await this.processAndSendARAData(tabId, overrideForInitialSync);
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(error);
       //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
-    }
-  }
-
-  /**
-   * Processes and sends auction message to the extension for the specified tabId
-   * @param {number} tabId The url whose url needs to be update.
-   * @param {boolean | undefined} overrideForInitialSync Override the condition.
-   */
-  async processAndSendAuctionData(
-    tabId: string,
-    overrideForInitialSync: boolean
-  ) {
-    try {
-      if (DataStore.tabs[tabId].newUpdatesPA <= 0 && !overrideForInitialSync) {
-        return;
-      }
-
-      const { globalEvents, ...rest } = this.auctionEvents[tabId];
-
-      const isMultiSellerAuction = PAStore.isMUltiSellerAuction(rest);
-      const groupedAuctionBids: {
-        [parentAuctionId: string]: {
-          0: singleAuctionEvent[];
-          [uniqueAuctionId: string]: singleAuctionEvent[];
-        };
-      } = {};
-
-      const auctionEventsToBeProcessed = Object.values(rest).flat();
-
-      if (isMultiSellerAuction) {
-        auctionEventsToBeProcessed.forEach((event) => {
-          const { parentAuctionId = null, uniqueAuctionId = null } = event;
-
-          if (!parentAuctionId) {
-            if (uniqueAuctionId) {
-              if (!groupedAuctionBids[uniqueAuctionId]) {
-                groupedAuctionBids[uniqueAuctionId] = {
-                  0: [],
-                };
-              }
-              groupedAuctionBids[uniqueAuctionId]['0'].push(event);
-            }
-            return;
-          }
-
-          if (!groupedAuctionBids[parentAuctionId]) {
-            groupedAuctionBids[parentAuctionId] = {
-              0: [],
-            };
-          }
-
-          if (!uniqueAuctionId) {
-            return;
-          }
-
-          if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
-            groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
-          }
-
-          groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
-        });
-      }
-
-      await chrome.runtime.sendMessage({
-        type: 'AUCTION_EVENTS',
-        payload: {
-          refreshTabData: overrideForInitialSync,
-          tabId,
-          auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
-          multiSellerAuction: isMultiSellerAuction,
-          globalEvents: globalEvents ?? [],
-        },
-      });
-      DataStore.tabs[tabId].newUpdatesPA = 0;
-    } catch (error) {
-      // Fail silently
     }
   }
 
