@@ -28,6 +28,10 @@ import { getCoordinateValues } from '../getCoordinateValues';
 const mouseClickedInNonInteractiveModeCallback = (
   renderUserIcon: () => void
 ) => {
+  if (!app.shouldRespondToClick) {
+    return;
+  }
+
   const {
     circleProps: { diameter },
     circles,
@@ -94,6 +98,7 @@ const mouseClickedInNonInteractiveModeCallback = (
   }
 
   app.isRevisitingNodeInInteractiveMode = true;
+  app.shouldRespondToClick = false;
   app.drawFlows(clickedIndex);
 
   app.promiseQueue?.push((cb) => {
@@ -113,7 +118,6 @@ const mouseClickedInNonInteractiveModeCallback = (
     cb?.(undefined, true);
   });
 
-  app.promiseQueue?.start();
   wipeAndRecreateUserCanvas();
 
   circles.forEach((__, index) => {
@@ -134,6 +138,12 @@ const mouseClickedInNonInteractiveModeCallback = (
     p.pop();
   });
   drawOpenArrowWithoutAnimationIcon();
+  app.p?.cursor('default');
+  try {
+    app.promiseQueue?.start();
+  } catch (error) {
+    // Fail silently
+  }
 };
 
 export default mouseClickedInNonInteractiveModeCallback;

@@ -38,6 +38,8 @@ import {
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
   Button,
+  Tick,
+  Plus,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -135,7 +137,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
         SIDEBAR_ITEMS_KEYS.COOKIES
       ].panel = {
-        Element: Cookies,
+        Element: Cookies as (props: any) => React.JSX.Element,
         props: { setFilteredCookies },
       };
       psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
@@ -148,7 +150,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             title: url,
             popupTitle,
             panel: {
-              Element: Cookies,
+              Element: Cookies as (props: any) => React.JSX.Element,
               props: { setFilteredCookies },
             },
             icon: {
@@ -206,13 +208,23 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div className="flex items-center gap-5">
         <Button
-          text="Yes"
+          text={
+            <>
+              <Tick className="w-4 h-4 hidden max-sm:block" />
+              <span className="hidden sm:block">Yes</span>
+            </>
+          }
           size="large"
           onClick={handleSettingsChange}
           variant="success"
         />
         <Button
-          text="Cancel"
+          text={
+            <>
+              <Plus className="rotate-45 w-4 h-4 hidden max-sm:block" />
+              <span className="hidden sm:block">No</span>
+            </>
+          }
           size="large"
           onClick={async () => {
             await chrome.storage.session.remove([
@@ -240,13 +252,23 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     return (
       <div className="flex items-center gap-5">
         <Button
-          text="Yes"
+          text={
+            <>
+              <Tick className="w-4 h-4 hidden max-sm:block" />
+              <span className="hidden sm:block">Yes</span>
+            </>
+          }
           size="large"
           onClick={handleSettingsChange}
           variant={exceedingLimitations ? 'danger' : 'success'}
         />
         <Button
-          text="Cancel"
+          text={
+            <>
+              <Plus className="rotate-45 w-4 h-4 hidden max-sm:block" />
+              <span className="hidden sm:block">No</span>
+            </>
+          }
           size="large"
           onClick={async () => {
             await chrome.storage.session.remove([
