@@ -85,16 +85,22 @@ class PAStore extends DataStore {
   deinitialiseVariablesForTab(tabId: string): void {
     super.deinitialiseVariablesForTab(tabId);
     delete this.unParsedRequestHeadersForPA[tabId];
+    delete this.auctionEvents[tabId];
+    delete this.auctionDataForTabId[tabId];
   }
 
   initialiseVariablesForNewTab(tabId: string): void {
     super.initialiseVariablesForNewTab(tabId);
     this.unParsedRequestHeadersForPA[tabId] = {};
+    this.auctionEvents[tabId] = {};
+    this.auctionDataForTabId[tabId] = {};
     //@ts-ignore
     globalThis.PSAT = {
       //@ts-ignore
       ...globalThis.PSAT,
       unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
+      auctionEvents: this.auctionEvents[tabId],
+      auctionDataForTabId: this.auctionDataForTabId[tabId],
     };
   }
 
@@ -551,6 +557,17 @@ class PAStore extends DataStore {
     });
 
     return parentAuctionIds;
+  }
+
+  getTabsData(
+    tabId = ''
+  ):
+    | { [uniqueAuctionId: string]: singleAuctionEvent[] }
+    | typeof this.auctionEvents {
+    if (tabId) {
+      return this.auctionEvents[tabId];
+    }
+    return this.auctionEvents;
   }
 }
 

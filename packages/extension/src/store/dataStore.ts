@@ -16,11 +16,7 @@
 /**
  * External dependencies.
  */
-import type {
-  CookieDatabase,
-  SourcesRegistration,
-  TriggerRegistration,
-} from '@google-psat/common';
+import type { CookieDatabase } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -29,43 +25,8 @@ import type { Protocol } from 'devtools-protocol';
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
-import { isEqual } from 'lodash-es';
 
 export class DataStore {
-  /**
-   * The Attribution Reporting sources for the tab.
-   */
-  sources: {
-    sourceRegistration: SourcesRegistration[];
-    triggerRegistration: TriggerRegistration[];
-  } = {
-    sourceRegistration: [],
-    triggerRegistration: [],
-  };
-
-  /**
-   * The Attribution Reporting sources for the tab.
-   */
-  oldSources: {
-    sourceRegistration: SourcesRegistration[];
-    triggerRegistration: TriggerRegistration[];
-  } = {
-    sourceRegistration: [],
-    triggerRegistration: [],
-  };
-
-  /**
-   * The Attribution Reporting headers for the tab.
-   */
-  headersForARA: {
-    [tabId: string]: {
-      [requestId: string]: {
-        url: string;
-        headers: Protocol.Network.Headers;
-      };
-    };
-  } = {};
-
   /**
    * CookieDatabase to run analytics match on.
    */
@@ -114,22 +75,6 @@ export class DataStore {
       isPAAnalysisEnabled: boolean;
     };
   } = {};
-
-  constructor() {
-    // Sync cookie data between popup and Devtool.
-    // @todo Only send the data from the active tab and the differences.
-    setInterval(() => {
-      const data = DataStore.tabs ?? {};
-
-      if (Object.keys(data).length === 0) {
-        return;
-      }
-
-      Object.keys(data).forEach((key) => {
-        this?.sendUpdatedDataToPopupAndDevTools(key);
-      });
-    }, 1200);
-  }
 
   /**
    * This function adds frame to the appropriate tab.
@@ -237,11 +182,8 @@ export class DataStore {
     //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
     globalThis.PSAT = {
       tabs: DataStore.tabs,
-      sources: this.sources,
-      headersForARA: this.headersForARA,
     };
 
-    this.headersForARA[tabId.toString()] = {};
     DataStore.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -278,7 +220,6 @@ export class DataStore {
   deinitialiseVariablesForTab(tabId: string) {
     delete DataStore.requestIdToCDPURLMapping[tabId];
     delete DataStore.frameIdToResourceMap[tabId];
-    delete this.headersForARA[tabId];
   }
 
   /**
@@ -361,7 +302,6 @@ export class DataStore {
    */
   removeTabData(tabId: string) {
     delete DataStore.tabs[tabId];
-    delete this.headersForARA[tabId.toString()];
   }
 
   /**
@@ -377,59 +317,6 @@ export class DataStore {
         return tab;
       });
     });
-  }
-
-  /**
-   * Sends updated data to the popup and devtools
-   * @param {number} tabId The window id.
-   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
-   */
-  async sendUpdatedDataToPopupAndDevTools(
-    tabId: string,
-    overrideForInitialSync = false
-  ) {
-    if (!DataStore.tabs[tabId]) {
-      return;
-    }
-
-    try {
-      if (
-        DataStore.tabs[tabId].devToolsOpenState ||
-        DataStore.tabs[tabId].popupOpenState
-      ) {
-        await this.processAndSendARAData(tabId, overrideForInitialSync);
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
-      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
-    }
-  }
-
-  /**
-   * Processes and sends auction message to the extension for the specified tabId
-   * @param {number} tabId The url whose url needs to be update.
-   * @param {boolean | undefined} overrideForInitialSync Override the condition.
-   */
-  async processAndSendARAData(tabId: string, overrideForInitialSync: boolean) {
-    try {
-      if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
-        return;
-      }
-
-      await chrome.runtime.sendMessage({
-        type: 'ARA_EVENTS',
-        payload: {
-          sourcesRegistration: this.sources.sourceRegistration,
-          triggerRegistration: this.sources.triggerRegistration,
-          tabId: Number(tabId),
-        },
-      });
-
-      this.oldSources = structuredClone(this.sources);
-    } catch (error) {
-      // Fail silently
-    }
   }
 
   /**

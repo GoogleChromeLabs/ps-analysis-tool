@@ -32,6 +32,7 @@ import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
+import sendUpdatedData from '../../store/utils/sendUpdatedData';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (request: any) => {
@@ -118,7 +119,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     dataStore?.updateDevToolsState(incomingMessageTabId, true);
 
     if (cookieStore.getTabsData(incomingMessageTabId)) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
+      sendUpdatedData(incomingMessageTabId, true);
     }
   }
 
@@ -135,7 +136,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     dataStore?.updatePopUpState(incomingMessageTabId, true);
 
     if (cookieStore.getTabsData(incomingMessageTabId)) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
+      sendUpdatedData(incomingMessageTabId, true);
     }
   }
 

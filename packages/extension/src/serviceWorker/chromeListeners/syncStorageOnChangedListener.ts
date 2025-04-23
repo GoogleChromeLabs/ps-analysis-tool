@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import dataStore, { DataStore } from '../../store/dataStore';
+import sendUpdatedData from '../../store/utils/sendUpdatedData';
 
 export const onSyncStorageChangedListenerForCDP = async (changes: {
   [key: string]: chrome.storage.StorageChange;
@@ -59,7 +60,7 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
 
       dataStore?.addTabData(id.toString());
       dataStore.updateUrl(id.toString(), url ?? '');
-      dataStore?.sendUpdatedDataToPopupAndDevTools(id.toString());
+      sendUpdatedData(id.toString());
     });
   }
 };

@@ -294,15 +294,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 .headers ?? {}
             )
           ) {
-            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
               readHeaderAndRegister(
-                dataStore.headersForARA?.[tabId]?.[requestId].headers,
+                ARAStore.headersForARA?.[tabId]?.[requestId].headers,
                 requestUrl,
                 tabId
               );
             } else {
-              dataStore.headersForARA[tabId] = {
-                ...dataStore.headersForARA[tabId],
+              ARAStore.headersForARA[tabId] = {
+                ...ARAStore.headersForARA[tabId],
                 [requestId]: {
                   headers: {},
                   url: requestUrl,
@@ -350,15 +350,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         if (DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           if (extractHeader('Attribution-Reporting-Eligible', headers)) {
-            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
               readHeaderAndRegister(
                 headers,
                 DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
                 tabId
               );
             } else {
-              dataStore.headersForARA[tabId] = {
-                ...dataStore.headersForARA[tabId],
+              ARAStore.headersForARA[tabId] = {
+                ...ARAStore.headersForARA[tabId],
                 [requestId]: {
                   headers: {},
                   url: DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
@@ -481,15 +481,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           //sometimes this fires early and we still havent calculated tabId for this.
           tabId = calculateTabId(source);
 
-          if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+          if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
             readHeaderAndRegister(
               headers,
-              dataStore.headersForARA?.[tabId]?.[requestId]?.url,
+              ARAStore.headersForARA?.[tabId]?.[requestId]?.url,
               tabId
             );
           } else {
-            dataStore.headersForARA[tabId] = {
-              ...dataStore.headersForARA[tabId],
+            ARAStore.headersForARA[tabId] = {
+              ...ARAStore.headersForARA[tabId],
               [requestId]: {
                 headers,
                 url: '',
@@ -581,8 +581,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Storage.attributionReportingSourceRegistered' && params) {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
-        dataStore.sources.sourceRegistration =
-          dataStore.sources.sourceRegistration.map((singleSource) => {
+        ARAStore.sources.sourceRegistration =
+          ARAStore.sources.sourceRegistration.map((singleSource) => {
             const host = new URL(DataStore.tabs[tabId].url).origin;
             const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
             if (
@@ -620,7 +620,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { registration, eventLevel, aggregatable } =
           params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
 
-        dataStore.sources.triggerRegistration.forEach((trigger, index) => {
+        ARAStore.sources.triggerRegistration.forEach((trigger, index) => {
           if (tabId !== trigger.tabId) {
             return;
           }
@@ -682,7 +682,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             trigger.destination &&
             host === sourceOriginHost
           ) {
-            dataStore.sources.triggerRegistration[index] = {
+            ARAStore.sources.triggerRegistration[index] = {
               ...trigger,
               eventLevel,
               aggregatable,

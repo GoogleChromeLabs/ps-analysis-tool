@@ -18,7 +18,7 @@
  * Internal dependencies
  */
 import cookieStore from '../../../store/cookieStore';
-import dataStore from '../../../store/dataStore';
+import sendUpdatedData from '../../../store/utils/sendUpdatedData';
 import { getAndParseNetworkCookies } from '../../../utils/getAndParseNetworkCookies';
 
 const setupIntervals = () => {
@@ -35,7 +35,7 @@ const setupIntervals = () => {
     }
 
     Object.keys(cookieStore.getTabsData() ?? {}).forEach((key) => {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(key);
+      sendUpdatedData(key);
     });
   }, 1200);
 

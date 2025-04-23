@@ -244,7 +244,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         incomingMessageType === 'AUCTION_EVENTS' &&
         message.payload.auctionEvents
       ) {
-        if (message.payload.tabId === tabId) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
