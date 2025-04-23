@@ -85,18 +85,37 @@ export const onCommittedNavigationListener = async ({
     const tabs = await chrome.tabs.query({});
     const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
 
-    await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
-      exceedingLimitations: qualifyingTabs.length > 5,
-    });
-
-    await chrome.tabs.sendMessage(tabId, {
-      tabId,
-      payload: {
-        type: TABID_STORAGE,
-        tabId,
-        frameId: mainFrameId,
+    await sendMessageWrapper(
+      'EXCEEDING_LIMITATION_UPDATE',
+      {
+        exceedingLimitations: qualifyingTabs.length > 5,
       },
-    });
+      tabId
+    );
+    const frames = await chrome.webNavigation.getAllFrames({ tabId });
+
+    if (!frames) {
+      return;
+    }
+
+    await Promise.all(
+      frames.map(async (frame) => {
+        await chrome.tabs.sendMessage(
+          tabId,
+          {
+            tabId,
+            payload: {
+              type: TABID_STORAGE,
+              tabId,
+              frameId: frame.frameId,
+            },
+          },
+          {
+            frameId: frame.frameId,
+          }
+        );
+      })
+    );
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn(error);
