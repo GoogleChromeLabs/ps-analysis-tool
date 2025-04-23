@@ -63,6 +63,14 @@ const ReceivedBidsTable = ({
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
+        header: 'Event Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          (details as singleAuctionEvent).formattedTime.toString(),
+        enableHiding: false,
+        widthWeightagePercentage: 10,
+      },
+      {
         header: 'Bidder',
         accessorKey: 'ownerOrigin',
         cell: (info) => info,
@@ -70,7 +78,7 @@ const ReceivedBidsTable = ({
         widthWeightagePercentage: 20,
       },
       {
-        header: 'Bid',
+        header: 'Bid Value',
         accessorKey: 'bid',
         cell: (info) => info,
         widthWeightagePercentage: 15,

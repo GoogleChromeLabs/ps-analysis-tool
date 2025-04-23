@@ -57,15 +57,9 @@ const IGTable = ({
     () => [
       {
         header: 'Event Time',
-        accessorKey: 'formattedTime',
+        accessorKey: 'time',
         cell: (_, details) =>
           (details as singleAuctionEvent).formattedTime.toString(),
-        sortingComparator: (a, b) => {
-          const aTime = Number((a as string).slice(0, a.length - 2));
-          const bTime = Number((b as string).slice(0, b.length - 2));
-
-          return aTime > bTime ? -1 : 1;
-        },
         enableHiding: false,
       },
       {
@@ -93,12 +87,7 @@ const IGTable = ({
             return '';
           }
 
-          return new Date(Number(info) * 1000)
-            .toISOString()
-            .replace('T', ' | ')
-            .replace('Z', '')
-            .split('-')
-            .join('/');
+          return new Date(Number(info) * 1000).toISOString();
         },
       },
     ],

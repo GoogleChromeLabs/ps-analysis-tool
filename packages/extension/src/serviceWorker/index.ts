@@ -328,7 +328,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           loadingFinishedParams.requestId,
           loadingFinishedParams.timestamp,
           tabId,
-          'Finished Fetch'
+          'Finished Fetching '
         );
       }
 

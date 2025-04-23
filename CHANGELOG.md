@@ -614,4 +614,23 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Replace number and logo icons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1026
 
 
+# v0.14.1
 
+## Changelog
+
+- Fix: Ad unit tab notification bubble disappearance https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1039
+- Fix: Auction removal timing https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1044
+- Fix: Auction tab data vanishing https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1050
+- Fix: Incorrect access count in topics EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1038
+- Fix: Multiple rows getting selected with the same event time https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1041
+- Fix: Prevent auto scrolling when animation is paused in EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1048
+- Fix: Settings container padding https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1046
+- Fix: Show CDP settings icon buttons only in smaller screens https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1054
+- Enhancement: Add textual description to PA EE arrows https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1053
+- Improvement: Initial theme mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1040
+- Improvement: Settings toast buttons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1047
+- Misc QA Fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1043
+- Misc QA fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1045
+- Misc patch fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1052
+- Miscellaneous updates and improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1049
+- Update diagram boxes to yellow for SSPs with minimal integration changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1051
