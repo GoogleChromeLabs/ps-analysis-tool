@@ -145,14 +145,6 @@ export const FEATURE_LIST = [
       'Explore and learn everything about the Privacy Sandbox through the Help Center, developer documentation, and case studies. You can also learn about PSAT via the wiki and demos.',
     buttons: [
       {
-        name: 'Wiki',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
-      },
-      {
-        name: 'Stories',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
-      },
-      {
         name: 'Help Center',
         sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
       },
@@ -161,8 +153,16 @@ export const FEATURE_LIST = [
         sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
       },
       {
+        name: 'Stories',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
+      },
+      {
         name: 'Demos',
         sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
+      },
+      {
+        name: 'Wiki',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
       },
     ],
   },
