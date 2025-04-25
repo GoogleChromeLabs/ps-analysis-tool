@@ -140,7 +140,12 @@ speedSlider?.addEventListener(
 const interactiveCheckbox = document.getElementById('interactive');
 interactiveCheckbox?.addEventListener(
   'click',
-  interactiveCheckboxOnChange.bind(null, setIsInteractive, mainCanvas)
+  interactiveCheckboxOnChange.bind(
+    null,
+    setIsInteractive,
+    mainCanvas,
+    playButton
+  )
 );
 
 // Event listeners
@@ -184,6 +189,9 @@ nodes.forEach((node, index) => {
       // eslint-disable-next-line no-console
       console.log(node.website, node);
       if (isInteractive) {
+        if (mainCanvas.isPaused()) {
+          playClick(mainCanvas, playButton, expanded, downArrowImageLoader);
+        }
         mainCanvas.loadCheckpointToHelper(getCheckpoints(index));
       }
     },

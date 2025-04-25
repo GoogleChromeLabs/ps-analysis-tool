@@ -439,7 +439,10 @@ class Main {
       return;
     }
 
-    if (this.stepsQueue.length === 0 && this.instantQueue.length === 0) {
+    if (
+      (this.stepsQueue.length === 0 && this.instantQueue.length === 0) ||
+      (this.usingHelperQueue && this.helperQueue.length === 0)
+    ) {
       this.dispatchCustomEvent('noLoop', {
         message: 'Animation ended',
       });
@@ -644,6 +647,10 @@ class Main {
 
   isLooping() {
     return !this.noLoop;
+  }
+
+  isUsingHelperQueue() {
+    return this.usingHelperQueue;
   }
 
   /**
@@ -1603,62 +1610,12 @@ class Main {
     }
 
     if (recentCheckpoint && !this.stepsQueue?.[0]?.getIsCheckpoint()) {
-      while (
-        this.snapshot.length &&
-        this.snapshot[this.snapshot.length - 1].getIsCheckpoint()
-      ) {
-        const figure = this.snapshot.pop();
-
-        if (!figure) {
-          continue;
-        }
-
-        if (
-          figure.getAnimatorId() &&
-          figure.getAnimatorId() !== this.stepsQueue[0]?.getAnimatorId()
-        ) {
-          const animator = this.animatorStepsQueue.find(
-            (a) => a.getId() === figure.getAnimatorId()
-          );
-
-          if (animator) {
-            animator.setThrow(false);
-            animator.shouldRunSideEffect(true);
-            animator.resetIndex();
-            this.helperAnimatorQueue.push(animator);
-            this.animatorStepsQueue.unshift(animator);
-          }
-        }
-
-        if (
-          figure.getGroupId() &&
-          figure.getGroupId() !== this.stepsQueue[0]?.getGroupId()
-        ) {
-          const group = this.groupStepsQueue.find(
-            (g) => g.getId() === figure.getGroupId()
-          );
-
-          if (group) {
-            group.setThrow(false);
-            group.shouldRunSideEffect(true);
-            this.helperGroupQueue.push(group);
-            this.groupStepsQueue.unshift(group);
-          }
-        }
-
-        figure.setThrow(false);
-        figure.shouldRunSideEffect(true);
-
-        if (figure.getCanTravel()) {
-          figure.setShouldTravel(true);
-          figure.resetTraveller();
-        }
-
-        this.helperQueue.push(figure);
-        this.stepsQueue.unshift(figure);
-
-        return;
+      while (this.isTravelling) {
+        this.runTraveller();
       }
+
+      this.handleAnimatorOnPreviousCheckpointLoad(recentCheckpoint);
+      this.loadSnapshotAndReDraw();
     }
 
     let foundCheckpoint = false;

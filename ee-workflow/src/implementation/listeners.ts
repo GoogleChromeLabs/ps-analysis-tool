@@ -58,11 +58,17 @@ export const arrowClick = (
   },
   playButton: HTMLElement | null
 ) => {
-  if (!mainCanvas.isPaused() && mainCanvas.isLooping()) {
+  if (
+    (!mainCanvas.isPaused() && mainCanvas.isLooping()) ||
+    !mainCanvas.isUsingHelperQueue()
+  ) {
     return;
   }
 
-  mainCanvas.togglePause(true);
+  if (!mainCanvas.isPaused()) {
+    mainCanvas.togglePause(true);
+    onNoLoopEvent(playButton);
+  }
 
   if (!expanded.wasExpanded) {
     expanded.wasExpanded = true;
@@ -82,8 +88,6 @@ export const arrowClick = (
     expanded.animator = animator;
     mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 30 });
   }
-
-  onNoLoopEvent(playButton);
 };
 
 export const playClick = (
@@ -179,6 +183,7 @@ export const speedSliderChange = (mainCanvas: Main, e: Event) => {
 export const interactiveCheckboxOnChange = (
   setIsInteractive: (isInteractive: boolean) => void,
   mainCanvas: Main,
+  playButton: HTMLElement | null,
   e: Event
 ) => {
   const value = (e.target as HTMLInputElement).checked;
@@ -186,4 +191,5 @@ export const interactiveCheckboxOnChange = (
   setIsInteractive(value);
 
   mainCanvas.togglePause(value);
+  onNoLoopEvent(playButton);
 };
