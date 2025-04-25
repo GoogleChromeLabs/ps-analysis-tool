@@ -28,7 +28,7 @@ import React, { useMemo } from 'react';
  */
 import Panel from './panel';
 import Difference from './difference';
-import Current from './current';
+import JsonView from '../jsonView';
 
 interface JsonDisplayProps {
   currentJson: TriggerRegistration | SourcesRegistration | null;
@@ -40,7 +40,7 @@ const JsonDisplay = ({ currentJson, prevJson }: JsonDisplayProps) => {
       {
         title: 'Current',
         content: {
-          Element: Current,
+          Element: JsonView as unknown as (props: any) => React.JSX.Element,
           props: {
             currentJson,
           },

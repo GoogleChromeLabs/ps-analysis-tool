@@ -25,7 +25,7 @@ import {
   type TableFilter,
   type InfoType,
   InfoIcon,
-  JsonView,
+  JsonDisplay,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
@@ -38,7 +38,6 @@ import RowContextMenuForARA from '../rowContextMenu';
 import { useAttributionReporting } from '../../../../stateProviders';
 import calculateRegistrationDate from '../utils/calculateRegistrationDate';
 import calculateFiltersForTrigger from '../utils/calculateFiltersForTriggers';
-import JsonDisplay from '../jsonDisplay';
 
 const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
@@ -260,7 +259,10 @@ const TriggerRegistrations = () => {
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
           <div className="text-xs py-1 px-1.5 h-full">
-            <JsonView src={selectedJSON} />
+            <JsonDisplay
+              currentJson={selectedJSON}
+              prevJson={selectedPrevJSON}
+            />
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

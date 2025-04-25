@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import React from 'react';
-import { prettyPrintJson } from 'pretty-print-json';
 import type {
   SourcesRegistration,
   TriggerRegistration,
 } from '@google-psat/common';
 import { detailedDiff } from 'deep-object-diff';
+import JsonView from '../jsonView';
 
 interface DifferenceProps {
   currentJson: TriggerRegistration | SourcesRegistration | null;
@@ -28,20 +28,7 @@ interface DifferenceProps {
 
 const Difference = ({ currentJson, prevJson }: DifferenceProps) => {
   if (currentJson && prevJson) {
-    return (
-      <div className="text-xs py-1 px-1.5">
-        <pre>
-          <div
-            className="json-container"
-            dangerouslySetInnerHTML={{
-              __html: prettyPrintJson.toHtml(
-                detailedDiff(currentJson, prevJson)
-              ),
-            }}
-          />
-        </pre>
-      </div>
-    );
+    return <JsonView src={detailedDiff(currentJson, prevJson)} />;
   }
 
   return (

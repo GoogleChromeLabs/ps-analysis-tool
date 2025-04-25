@@ -17,12 +17,13 @@
  * External dependencies
  */
 import React from 'react';
-import { Tabs, useTabs } from '@google-psat/design-system';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies
  */
+import { useTabs } from '../tabs/useTabs';
+import Tabs from '../tabs';
 
 const Panel = () => {
   const { panel } = useTabs(({ state }) => ({
