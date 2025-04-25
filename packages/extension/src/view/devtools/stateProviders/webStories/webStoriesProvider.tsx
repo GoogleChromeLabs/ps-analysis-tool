@@ -35,7 +35,7 @@ import { useDebounce } from 'use-debounce';
  */
 import Context, { type WebStoryContext } from './context';
 import type { SingleStoryJSON } from './types';
-import { apiDataFetcher, getMediaUrl } from './utils/apiFetchers';
+import { apiDataFetcher } from './utils/apiFetchers';
 import { BASE_API_URL } from './constants';
 import { createQueryParams } from './utils/createQueryParams';
 
@@ -47,11 +47,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [selectedFilterValues, setSelectedFilterValues] = useState<
     Record<string, string[]>
   >({});
-  const authorPublisherLogoRef = useRef<Record<number, Record<string, string>>>(
-    {}
-  );
   const [storyOpened, setStoryOpened] = useState(false);
-  const [authors, setAuthors] = useState<Record<number, string>>({});
   const [loadingState, setLoadingState] = useState<boolean>(true);
   const [iframeLoaded, setIframeLoaded] = useState<boolean>(false);
   const [tags, setTags] = useState<Record<number, string>>({});
@@ -190,36 +186,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     setPageNumber(1);
   }, []);
 
-  const getAuthorsAndPublisherLogo = useCallback(
-    async (mediaAuthorSet: Record<number, string>) => {
-      if (authors && Object.keys(authors).length === 0) {
-        return {};
-      }
-
-      const mediaAuthorSetClone = mediaAuthorSet;
-      Object.keys(authorPublisherLogoRef.current).forEach((key) => {
-        if (authorPublisherLogoRef.current[Number(key)]) {
-          delete mediaAuthorSetClone[Number(key)];
-        }
-      });
-
-      if (Object.keys(mediaAuthorSet).length === 0) {
-        return authorPublisherLogoRef.current;
-      }
-
-      authorPublisherLogoRef.current = await getMediaUrl(
-        mediaAuthorSet,
-        authors
-      );
-      return authorPublisherLogoRef.current;
-    },
-    [authors]
-  );
-
   const queryParams = useMemo(() => {
     return createQueryParams(
       selectedFilterValues,
-      authors,
       categories,
       tags,
       searchValue,
@@ -229,7 +198,6 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [
     pageNumber,
     searchValue,
-    authors,
     categories,
     selectedFilterValues,
     sortValue,
@@ -239,8 +207,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const fetchStories = useCallback(async () => {
     if (
       Object.keys(tags).length === 0 ||
-      Object.keys(categories).length === 0 ||
-      Object.keys(authors).length === 0
+      Object.keys(categories).length === 0
     ) {
       return;
     }
@@ -267,8 +234,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       return;
     }
 
-    let storyJSON: SingleStoryJSON[] = [];
-    const mediaAuthorSet: Record<number, string> = {};
+    const storyJSON: SingleStoryJSON[] = [];
 
     if (responseJSON.length === 0 && pageNumber === 1) {
       setAllStoryJSON([]);
@@ -278,9 +244,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     responseJSON?.forEach((singleResponse: any) => {
       if (singleResponse?.status === 'publish') {
-        mediaAuthorSet[singleResponse.author] =
-          singleResponse?.meta?.web_stories_publisher_logo;
-
         storyJSON.push({
           heroImage: singleResponse?.story_poster?.url ?? '',
           publisherLogo: singleResponse?.meta?.web_stories_publisher_logo,
@@ -291,17 +254,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
     });
 
-    const authorsAndPublisherLogoMap = await getAuthorsAndPublisherLogo(
-      mediaAuthorSet
-    );
-
-    storyJSON = storyJSON.map((story) => {
-      const key = Number(story.publisherName);
-      story.publisherName = authorsAndPublisherLogoMap[key]?.name;
-      story.publisherLogo = authorsAndPublisherLogoMap[key]?.publisherLogo;
-      return story;
-    });
-
     setLoadingState(false);
     setAllStoryJSON((prevState) => {
       if (pageNumber === 1) {
@@ -310,17 +262,9 @@ const Provider = ({ children }: PropsWithChildren) => {
         return [...prevState, ...storyJSON];
       }
     });
-  }, [
-    tags,
-    categories,
-    authors,
-    pageNumber,
-    queryParams,
-    getAuthorsAndPublisherLogo,
-  ]);
+  }, [tags, categories, pageNumber, queryParams]);
 
   useEffect(() => {
-    apiDataFetcher('/users', setAuthors);
     apiDataFetcher('/web_story_category', setCategories);
     apiDataFetcher('/web_story_tag', setTags);
   }, []);

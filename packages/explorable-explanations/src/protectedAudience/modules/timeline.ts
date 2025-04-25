@@ -168,6 +168,20 @@ const timeline: Timeline = {
       p.text(circleItem.type, xPositionForCircle, position.y + 80);
       p.pop();
 
+      if (app.timeline.currentIndex > index) {
+        p.push();
+        p.fill(config.timeline.colors.black);
+        p.textSize(12);
+        p.strokeWeight(0.1);
+        p.textFont('sans-serif');
+        p.text(
+          circleItem.datetime,
+          xPositionForCircle,
+          config.timeline.position.y
+        );
+        p.pop();
+      }
+
       timeline.drawLineAboveCircle(index);
     });
   },
@@ -207,7 +221,7 @@ const timeline: Timeline = {
       x <=
         circleVerticalSpace * (app.timeline.currentIndex - 1) +
           config.timeline.position.x &&
-      app.timeline.currentIndex < config.timeline.circles.length
+      app.timeline.currentIndex <= config.timeline.circles.length
     ) {
       p.push();
       p.stroke(colors.visitedBlue);

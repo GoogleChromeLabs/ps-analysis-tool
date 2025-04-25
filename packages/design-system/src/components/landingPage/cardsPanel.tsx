@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React, { ComponentType, SVGProps } from 'react';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -67,7 +66,7 @@ const CardsPanel = ({
       <div className="min-w-[45.75rem]">
         {pinnedItems && pinnedItems.length > 0 && (
           <section className="border-b border-hex-gray mb-5 pb-5">
-            {hasTitle && <h3 className="text-sm">Pinned</h3>}
+            {hasTitle && <h3 className="text-base">Quick Access</h3>}
             <div className="flex gap-x-5 gap-y-4 flex-wrap mt-2">
               {pinnedItems.map((item) => {
                 const Icon = item.icon;
@@ -75,15 +74,15 @@ const CardsPanel = ({
                 return (
                   <div
                     key={item.name}
-                    className="w-[366px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                    className="w-[366px] border-2 border-gray-300 dark:border-quartz px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <Icon
-                      width={20}
-                      height={20}
+                      width={22}
+                      height={22}
                       className="fill-gray dark:fill-bright-gray"
                     />
-                    <span className="text-sm">{item.name}</span>
+                    <span className="text-base">{item.name}</span>
                   </div>
                 );
               })}
@@ -92,31 +91,23 @@ const CardsPanel = ({
         )}
         {featuredItems.length > 0 && (
           <section>
-            {hasTitle && <h3 className="text-sm">Features</h3>}
+            {hasTitle && <h3 className="text-base">Features</h3>}
             <div className="flex gap-5 flex-wrap mt-2">
               {featuredItems.map((item) => {
                 const Icon = item.icon;
-                const headingClasses = classNames(
-                  'text-sm',
-                  item?.colorClasses?.heading ? item?.colorClasses?.heading : ''
-                );
 
                 return (
                   <div
                     key={item.name}
-                    className="w-[366px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                    className="w-[366px] rounded border-2 border-gray-300 dark:border-quartz px-3 py-4 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
-                    <div className="flex gap-2 justify-start mb-3">
-                      <Icon
-                        width={20}
-                        height={20}
-                        className="fill-gray dark:fill-bright-gray"
-                      />
-                      <h4 className={headingClasses}>{item.name}</h4>
+                    <div className="mb-3 flex items-center flex-col gap-2">
+                      <Icon height={45} />
+                      <h4 className="font-medium text-xl">{item.name}</h4>
                     </div>
-                    <p>{item.description}</p>
-                    <div className="flex flex-wrap gap-x-3 gap-y-2 mt-2">
+                    <p className="text-sm text-center">{item.description}</p>
+                    <div className="flex flex-wrap gap-x-3 gap-y-2 mt-4 justify-center">
                       {item.buttons &&
                         item.buttons.map((button) => (
                           <button

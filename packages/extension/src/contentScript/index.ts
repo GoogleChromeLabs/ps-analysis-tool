@@ -69,7 +69,7 @@ class WebpageContentScript {
   tabId: number | null = null;
 
   /**
-   * Main frame id.
+   * Frame id.
    */
   frameId: string | null = null;
 
@@ -138,23 +138,21 @@ class WebpageContentScript {
       });
     }
 
-    chrome.runtime.onMessage.addListener(async (message, sender, response) => {
+    chrome.runtime.onMessage.addListener(async (message, _sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
         await this.getAndProcessJSCookies(message.tabId);
       }
 
-      if (message.PSATDevToolsHidden) {
+      if (
+        typeof message.PSATDevToolsHidden !== 'undefined' &&
         //@ts-ignore
-        if (typeof cookieStore !== 'undefined') {
+        typeof cookieStore !== 'undefined'
+      ) {
+        if (message.PSATDevToolsHidden) {
           //@ts-ignore
           cookieStore.onchange = null;
-        }
-      }
-
-      if (!message.PSATDevToolsHidden) {
-        //@ts-ignore
-        if (typeof cookieStore !== 'undefined') {
+        } else {
           //@ts-ignore
           cookieStore.onchange = this.handleCookieChange;
           await this.getAndProcessJSCookies(message.tabId);
@@ -164,6 +162,12 @@ class WebpageContentScript {
       if (message?.payload?.type === TABID_STORAGE) {
         this.tabId = message.payload.tabId;
         this.frameId = message.payload.frameId;
+        //@ts-ignore
+        if (typeof cookieStore !== 'undefined') {
+          //@ts-ignore
+          cookieStore.onchange = this.handleCookieChange;
+          await this.getAndProcessJSCookies(message.tabId);
+        }
       }
 
       if (message?.payload?.type === GET_JS_COOKIES) {
@@ -190,12 +194,12 @@ class WebpageContentScript {
    */
   async getAndProcessJSCookies(tabId: string) {
     try {
-      if (!this.frameId) {
+      if (this.frameId === null) {
         return;
       }
-
       //@ts-ignore
       const jsCookies = await cookieStore?.getAll();
+
       await processAndStoreDocumentCookies({
         tabUrl: window.location.href,
         tabId,
@@ -324,6 +328,10 @@ class WebpageContentScript {
    * @param {ResponseType} response - The incoming message/response.
    */
   onMessage = (response: ResponseType) => {
+    if (this.frameId?.toString() !== '0' || this.frameId === null) {
+      return;
+    }
+
     this.isInspecting = response.isInspecting;
     if (response?.selectedAdUnit) {
       this.mode = 'PA';
@@ -367,18 +375,18 @@ class WebpageContentScript {
   /**
    * Insert tooltip.
    * @param {ResponseType} response Response.
-   * @returns {HTMLElement} Tooltip.
    */
-  insertProtectedAudienceTooltip(response: ResponseType): HTMLElement | null {
+  insertProtectedAudienceTooltip(response: ResponseType) {
     if (!response.selectedAdUnit) {
-      return null;
+      return;
     }
 
     const frame = document.getElementById(response.selectedAdUnit);
 
     if (!frame) {
-      return null;
+      return;
     }
+
     removeAllPopovers();
     this.insertOverlay(frame);
 
@@ -387,53 +395,63 @@ class WebpageContentScript {
     const arrowElement = document.getElementById('ps-content-tooltip-arrow');
 
     if (frame && tooltip && arrowElement) {
-      this.cleanup = autoUpdate(frame, tooltip, () => {
-        computePosition(frame, tooltip, {
-          platform: platform,
-          placement: 'top',
-          middleware: [
-            shift({
-              boundary: document.body,
-            }),
-            flip({
-              boundary: document.body,
-            }),
-            arrow({
-              element: arrowElement,
-            }),
-          ],
-        }).then(({ x, y, middlewareData, placement }) => {
-          Object.assign(tooltip.style, {
-            top: `${y}px`,
-            left: `${x}px`,
-          });
-          const side = placement.split('-')[0];
-
-          const staticSide = {
-            top: 'bottom',
-            right: 'left',
-            bottom: 'top',
-            left: 'right',
-          }[side];
-
-          if (middlewareData.arrow) {
-            const { x: arrowX, y: arrowY } = middlewareData.arrow;
-
-            Object.assign(arrowElement.style, {
-              left: arrowX ? `${arrowX - 15}px` : '',
-              top: arrowY ? `${arrowY}px` : '',
-              right: '',
-              bottom: '',
-              [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
-              transform: 'rotate(45deg)',
+      try {
+        this.cleanup = autoUpdate(frame, tooltip, () => {
+          computePosition(frame, tooltip, {
+            platform: platform,
+            placement: 'top',
+            middleware: [
+              shift({
+                boundary: document.body,
+              }),
+              flip({
+                boundary: document.body,
+              }),
+              arrow({
+                element: arrowElement,
+              }),
+            ],
+          }).then(({ x, y, middlewareData, placement }) => {
+            Object.assign(tooltip.style, {
+              top: `${y}px`,
+              left: `${x}px`,
             });
-          }
-          return tooltip;
+            const side = placement.split('-')[0];
+
+            const staticSide = {
+              top: 'bottom',
+              right: 'left',
+              bottom: 'top',
+              left: 'right',
+            }[side];
+
+            if (middlewareData.arrow) {
+              const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+              Object.assign(arrowElement.style, {
+                left: arrowX ? `${arrowX - 15}px` : '',
+                top: arrowY ? `${arrowY}px` : '',
+                right: '',
+                bottom: '',
+                [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
+                transform: 'rotate(45deg)',
+              });
+            }
+            return tooltip;
+          });
         });
-      });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('contentScriptError', error);
+      }
     }
 
-    return tooltip;
+    if (isElementVisibleInViewport(frame)) {
+      return;
+    }
+
+    frame.scrollIntoView({ behavior: 'smooth' });
+    return;
   }
 
   /**
@@ -472,53 +490,64 @@ class WebpageContentScript {
       });
       return tooltip;
     }
+
     if (
       frame &&
       (frame.tagName !== 'BODY' || !isFrameHidden(frame)) &&
       tooltip &&
       arrowElement
     ) {
-      this.cleanup = autoUpdate(frame, tooltip, () => {
-        computePosition(frame, tooltip, {
-          platform: platform,
-          placement: 'top',
-          middleware: [
-            autoPlacement({
-              crossAxis: true,
-            }),
-            arrow({
-              element: arrowElement,
-            }),
-          ],
-        }).then(({ x, y, middlewareData, placement }) => {
-          Object.assign(tooltip.style, {
-            top: `${y}px`,
-            left: `${x}px`,
-          });
-          const side = placement.split('-')[0];
+      try {
+        this.cleanup = autoUpdate(frame, tooltip, () => {
+          computePosition(frame, tooltip, {
+            platform: platform,
+            placement: 'top',
+            middleware: [
+              autoPlacement({
+                crossAxis: true,
+              }),
+              arrow({
+                element: arrowElement,
+              }),
+            ],
+          })
+            .then(({ x, y, middlewareData, placement }) => {
+              Object.assign(tooltip.style, {
+                top: `${y}px`,
+                left: `${x}px`,
+              });
+              const side = placement.split('-')[0];
 
-          const staticSide = {
-            top: 'bottom',
-            right: 'left',
-            bottom: 'top',
-            left: 'right',
-          }[side];
+              const staticSide = {
+                top: 'bottom',
+                right: 'left',
+                bottom: 'top',
+                left: 'right',
+              }[side];
 
-          if (middlewareData.arrow) {
-            const { x: arrowX, y: arrowY } = middlewareData.arrow;
+              if (middlewareData.arrow) {
+                const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
-            Object.assign(arrowElement.style, {
-              left: arrowX ? `${arrowX - 15}px` : '',
-              top: arrowY ? `${arrowY}px` : '',
-              right: '',
-              bottom: '',
-              [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
-              transform: 'rotate(45deg)',
+                Object.assign(arrowElement.style, {
+                  left: arrowX ? `${arrowX - 15}px` : '',
+                  top: arrowY ? `${arrowY}px` : '',
+                  right: '',
+                  bottom: '',
+                  [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
+                  transform: 'rotate(45deg)',
+                });
+              }
+              return tooltip;
+            })
+            .catch((error) => {
+              // eslint-disable-next-line no-console
+              console.log('contentScriptError', error);
             });
-          }
-          return tooltip;
         });
-      });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('contentScriptError', error);
+      }
     }
 
     return tooltip;
@@ -670,8 +699,7 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     if (response.isForProtectedAudience) {
-      const tooltip = this.insertProtectedAudienceTooltip(response);
-      tooltip?.scrollIntoView();
+      this.insertProtectedAudienceTooltip(response);
       return;
     }
 
@@ -715,9 +743,10 @@ class WebpageContentScript {
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !isElementVisibleInViewport(firstToolTip)
+      !isElementVisibleInViewport(firstToolTip) &&
+      frameWithTooltip
     ) {
-      (frameWithTooltip as HTMLElement).scrollIntoView();
+      frameWithTooltip.scrollIntoView({ behavior: 'smooth' });
     }
   }
 

@@ -92,16 +92,22 @@ const Provider = ({ children }: PropsWithChildren) => {
               (event) => event.type === 'configResolved'
             )?.[0];
 
-            const adUnitCode = JSON.parse(
-              // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-              configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
-            ).divId;
+            const adUnitCode =
+              JSON.parse(
+                // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+                configResolvedEvent?.auctionConfig?.auctionSignals?.value ??
+                  '{}'
+              ).divId ??
+              JSON.parse(
+                // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
+              ).divId;
 
             if (!adUnitCode) {
               return;
             }
 
-            const time = new Date(events?.[0]?.time * 1000).toUTCString();
+            const time = new Date(events?.[0]?.time * 1000).toISOString();
 
             reshapedAuctionEvents[adUnitCode] = {
               ...reshapedAuctionEvents[adUnitCode],
@@ -140,10 +146,17 @@ const Provider = ({ children }: PropsWithChildren) => {
                 (_event) => _event.type === 'configResolved'
               )?.[0];
 
-              adUnit = JSON.parse(
-                // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-                configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
-              ).divId;
+              adUnit =
+                JSON.parse(
+                  // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                  configResolvedEvent?.auctionConfig?.auctionSignals?.value ??
+                    '{}'
+                ).divId ??
+                JSON.parse(
+                  // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                  configResolvedEvent?.auctionConfig?.sellerSignals?.value ??
+                    '{}'
+                ).divId;
             });
 
             if (!adUnit) {
@@ -152,11 +165,14 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             const time = new Date(
               events?.['0']?.[0]?.time * 1000
-            ).toUTCString();
+            ).toISOString();
 
             const sspEvents = Object.values(events).reduce((acc, event) => {
-              // @ts-ignore
-              const seller = event?.[0]?.auctionConfig?.seller ?? '';
+              const seller =
+                // @ts-ignore
+                event?.[0]?.auctionConfig?.seller +
+                '||' +
+                event?.[0].uniqueAuctionId;
 
               acc[seller] = event;
 
@@ -191,7 +207,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
           return data;
         }
-
         return prevState;
       });
 
@@ -231,7 +246,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       ) {
         if (message.payload.tabId === tabId) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
-
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
             message.payload.multiSellerAuction
@@ -316,13 +330,13 @@ const Provider = ({ children }: PropsWithChildren) => {
                       new Set(
                         ...(adUnitCodeToBidders[adUnitCode]
                           ?.mediaContainerSize ?? []),
-                        mediaContainerSize
+                        ...(mediaContainerSize ?? [])
                       )
                     ),
                   ],
                   bidCurrency: bidCurrency ?? '',
-                  winningBid: highestBidData.bid ?? 0,
-                  winningBidder: highestBidData.ownerOrigin ?? '',
+                  winningBid: highestBidData?.bid ?? 0,
+                  winningBidder: highestBidData?.ownerOrigin ?? '',
                 };
               }
             );
@@ -363,7 +377,8 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        (frameType !== 'outermost_frame' && frameId !== 0) ||
+        frameType !== 'outermost_frame' ||
+        frameId !== 0 ||
         tabId !== chrome.devtools.inspectedWindow.tabId
       ) {
         return;
@@ -372,17 +387,20 @@ const Provider = ({ children }: PropsWithChildren) => {
       setNoBids({});
       setReceivedBids([]);
       setAdsAndBidders({});
+      setAuctionEvents({});
     },
     []
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(messagePassingListener);
-    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.webNavigation?.onCommitted?.addListener(
+      onCommittedNavigationListener
+    );
 
     return () => {
-      chrome.runtime.onMessage.removeListener(messagePassingListener);
-      chrome.webNavigation.onCommitted.removeListener(
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation?.onCommitted?.removeListener(
         onCommittedNavigationListener
       );
     };

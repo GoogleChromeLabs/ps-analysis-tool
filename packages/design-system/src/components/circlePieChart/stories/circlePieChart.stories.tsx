@@ -58,6 +58,7 @@ export const Primary: StoryObj<typeof meta> = {
   },
   render: (args) => (
     <div className="w-16">
+      {/* @ts-ignore */}
       <CirclePieChart {...args} />
     </div>
   ),
@@ -88,6 +89,7 @@ export const Wide: StoryObj<typeof meta> = {
   },
   render: (args) => (
     <div className="w-28 text-center">
+      {/* @ts-ignore */}
       <CirclePieChart {...args} />
     </div>
   ),

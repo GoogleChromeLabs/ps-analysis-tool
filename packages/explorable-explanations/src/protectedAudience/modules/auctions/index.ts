@@ -32,7 +32,10 @@ import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
 import { getCoordinateValues } from '../../utils/getCoordinateValues';
-import { MULTI_SELLER_CONFIG } from '../flowConfig';
+import { MULTI_SELLER_CONFIG, SINGLE_SELLER_CONFIG } from '../flowConfig';
+
+export const WINNING_AD_DELAY = 5000;
+
 export type Auction = {
   setupAuctions: () => void;
   setUp: (index: number) => void;
@@ -50,7 +53,7 @@ const auction: Auction = {
    */
   setupAuctions: () => {
     app.auction.auctions = [];
-    config.timeline.circles.forEach((circle, index) => {
+    config.timeline.circles.forEach((_circle, index) => {
       auction.setUp(index);
     });
   },
@@ -110,7 +113,11 @@ const auction: Auction = {
     });
 
     app.promiseQueue?.push((cb) => {
-      if (app.p && !app.isInteractiveMode) {
+      if (
+        app.p &&
+        !app.isInteractiveMode &&
+        !app.isRevisitingNodeInInteractiveMode
+      ) {
         const circleItem = config.timeline.circles[index];
         const { diameter, verticalSpacing } = config.timeline.circleProps;
         const circleVerticalSpace = verticalSpacing + diameter;
@@ -138,32 +145,6 @@ const auction: Auction = {
     for (const step of app.auction.auctions[index]) {
       app.promiseQueue?.push(async (cb) => {
         const { component, props, callBack, delay = 0 } = step;
-        let ssp = '';
-
-        if (props?.title) {
-          if (props?.ssp) {
-            ssp = props.ssp;
-          } else {
-            if (
-              app.isMultiSeller &&
-              [
-                MULTI_SELLER_CONFIG.SCORE_AD.title,
-                MULTI_SELLER_CONFIG.REPORT_WIN.title,
-                MULTI_SELLER_CONFIG.REPORT_RESULT.title,
-              ].includes(props.title)
-            ) {
-              ssp = 'https://www.' + config.timeline.circles[index].website;
-            }
-          }
-
-          const stepInformation = {
-            title: props.title,
-            description: props.description || '',
-            ssp,
-          };
-
-          app.setCurrentStep(stepInformation);
-        }
 
         const returnValue = await component?.(props); // eslint-disable-line no-await-in-loop
 
@@ -211,12 +192,47 @@ const auction: Auction = {
         }
 
         showWinningAdDirectly(
-          cb as (error: Error | null, success: boolean) => void,
+          cb,
           props,
           index,
           auction.draw,
           auction.setupAuctions
         );
+
+        let ssp = '';
+
+        if (props?.title) {
+          if (props?.ssp) {
+            ssp = props.ssp;
+          } else {
+            if (
+              app.isMultiSeller &&
+              [
+                MULTI_SELLER_CONFIG.SCORE_AD.title,
+                MULTI_SELLER_CONFIG.REPORT_WIN.title,
+                MULTI_SELLER_CONFIG.REPORT_RESULT.title,
+                SINGLE_SELLER_CONFIG.SHOW_WINNING_AD.title,
+              ].includes(props.title)
+            ) {
+              ssp = 'https://www.' + config.timeline.circles[index].website;
+            }
+          }
+
+          const stepInformation = {
+            title: props.title,
+            description: props.description || '',
+            ssp,
+          };
+
+          const stepDelay = props.stepDelay || 0;
+
+          if (!app.isRevisitingNodeInInteractiveMode) {
+            await utils.delay(stepDelay);
+          }
+
+          app.setCurrentStep(stepInformation);
+        }
+
         cb?.(undefined, true);
       });
     }

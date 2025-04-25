@@ -25,9 +25,11 @@ import {
   type TableColumn,
   type InfoType,
   InfoIcon,
+  JsonView,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useState, useRef, useMemo, useCallback } from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
@@ -57,7 +59,7 @@ const SourceRegistrations = () => {
   );
 
   const data = useMemo(() => {
-    if (filter?.activeSources) {
+    if (filter?.sourcesRegistration) {
       return sourcesRegistration.filter(
         (source) =>
           source.tabId &&
@@ -66,7 +68,7 @@ const SourceRegistrations = () => {
     } else {
       return sourcesRegistration;
     }
-  }, [filter?.activeSources, sourcesRegistration]);
+  }, [filter?.sourcesRegistration, sourcesRegistration]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -254,7 +256,19 @@ const SourceRegistrations = () => {
           </TableProvider>
         </div>
       </Resizable>
-      <JsonDisplay currentJson={selectedJSON} prevJson={selectedPrevJSON} />
+      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+        {selectedJSON ? (
+          <div className="text-xs py-1 px-1.5 h-full">
+            <JsonView src={selectedJSON} />
+          </div>
+        ) : (
+          <div className="h-full p-8 flex items-center">
+            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+              {I18n.getMessage('selectRowToPreview')}
+            </p>
+          </div>
+        )}
+      </div>
       <RowContextMenuForARA ref={rowContextMenuRef} />
     </div>
   );

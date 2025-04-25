@@ -7793,7 +7793,7 @@
     "message": "This is a cookie required for the video player to work."
   },
   "OCD_wistia_video_progress___description": {
-    "message": "This is a cookie required for the video player to work."
+    "message": "This cookie is used by the Wistia video player to remember where you are in a video so that if playback is interrupted (for example, by losing your internet connection) then you can get right back to where you left off."
   },
   "OCD___uin_rh_description": {
     "message": "This domain is owned by Sonobi, an automated online advertising buying and selling platform."
@@ -9412,5 +9412,44 @@
   },
   "RWS_rationale_https___zoom_com": {
     "message": "marketing new homepages for SEO purposes"
+  },
+  "OCD_client_session_bind_description": {
+    "message": "Cookie for API protection"
+  },
+  "OCD_server_session_bind_description": {
+    "message": "Cookie for API protection"
+  },
+  "OCD_KC_STATE_CHECKER_description": {
+    "message": "Workaround for set the property samesite=strict on browsers that doesn't suport it"
+  },
+  "OCD_KC_AUTH_STATE_description": {
+    "message": "Internal cookie from Keycloak. To manage the authentication state"
+  },
+  "OCD_AUTH_SESSION_ID_LEGACY_description": {
+    "message": "Internal cookie from Keycloak. To manage the authentication state as a work-around to older browsers not supporting the SameSite flag on cookies."
+  },
+  "OCD__u_description": {
+    "message": "Tracks interaction on a website after having clicked on a Bing ad"
+  },
+  "RWS_rationale_https___webtru_io": {
+    "message": "webtru, a CMP tool provided by DataSign"
+  },
+  "RWS_rationale_https___bunsin_io": {
+    "message": "Bunsin, a dummy email address app provided by DataSign"
+  },
+  "RWS_rationale_https___brendanjkane_com": {
+    "message": "Brendan Kane is Hook Point's founder and CEO. This is clearly stated on Brendan's website, including links to Hook Point's website, and Brendan's face and name are also featured on Hook Point's website."
+  },
+  "RWS_rationale_https___mavie_me": {
+    "message": "provider of diagnostic services at home"
+  },
+  "RWS_rationale_https___enera_at": {
+    "message": "provider of medical services reimbursements services"
+  },
+  "RWS_rationale_https___maviework_care": {
+    "message": "provider of health and wellness services for employees"
+  },
+  "RWS_rationale_https___lucyhealth_io": {
+    "message": "blood sugar monitoring and management platform"
   }
 }

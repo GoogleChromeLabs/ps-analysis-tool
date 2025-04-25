@@ -32,7 +32,7 @@ concurrency:
 jobs:
   unit-js:
     name: Unit Tests (${{ matrix.shard }})
-    runs-on: ubuntu-20.04
+    runs-on: 'ubuntu-24.04'
     timeout-minutes: 30
     strategy:
       matrix:
@@ -65,7 +65,7 @@ jobs:
           PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Setup Jest cache
-        uses: actions/cache@v3.4.0
+        uses: actions/cache@v4
         with:
           path: .jest-cache
           key: ${{ runner.os }}-${{ env.NVMRC }}-jest

@@ -18,28 +18,23 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  DevGuideIcon,
-  ExternalLinkPanel,
-  SIDEBAR_ITEMS_KEYS,
-} from '@google-psat/design-system';
+import { SIDEBAR_ITEMS_KEYS, PSDevSiteIcon } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { FEATURED_ITEMS } from '../constants';
+import LandingPage from '../landingePage';
 
 const DevSite = () => {
-  const description =
-    FEATURED_ITEMS.find(
-      (item) => item.sidebarKey === SIDEBAR_ITEMS_KEYS.DEV_SITE
-    )?.description ?? '';
+  const icon = <PSDevSiteIcon width="200" height="90" />;
 
-  const devIcon = (
-    <DevGuideIcon className="w-10 h-10 fill-granite-gray dark:fill-bright-gray" />
+  return (
+    <LandingPage
+      sidebarKey={SIDEBAR_ITEMS_KEYS.DEV_SITE}
+      icon={icon}
+      frameColor="privacy-blue"
+    />
   );
-
-  return <ExternalLinkPanel description={description} icon={devIcon} />;
 };
 
 export default DevSite;

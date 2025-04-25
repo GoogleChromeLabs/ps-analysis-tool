@@ -97,11 +97,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       targets = await chrome.debugger.getTargets();
 
       targets.forEach((target) => {
-        if (
-          !target.url.startsWith('devtools://') &&
-          !target.url.startsWith('chrome://') &&
-          !attachedSet.has(target.id)
-        ) {
+        if (target.url.startsWith('https://') && !attachedSet.has(target.id)) {
           attachCDP({ targetId: target.id });
           attachedSet.add(target.id);
         }
@@ -115,23 +111,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         const childDebuggee = { targetId };
 
-        if (!attachedSet.has(targetId)) {
-          attachCDP(childDebuggee, true);
+        if (!attachedSet.has(targetId) && url.startsWith('https://')) {
+          attachCDP(childDebuggee);
           attachedSet.add(targetId);
-          const message = {
-            id: 0,
-            method: 'Runtime.runIfWaitingForDebugger',
-            params: {},
-          };
-
-          await chrome.debugger.sendCommand(
-            source,
-            'Target.sendMessageToTarget',
-            {
-              message: JSON.stringify(message),
-              targetId: targetId,
-            }
-          );
         }
 
         targets = await chrome.debugger.getTargets();
@@ -187,10 +169,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           parentId,
           frameUrl
         );
-      }
-
-      if (dataStore.tabMode !== 'unlimited' && dataStore.tabToRead !== tabId) {
-        return;
       }
 
       if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
@@ -350,7 +328,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           loadingFinishedParams.requestId,
           loadingFinishedParams.timestamp,
           tabId,
-          'Finished Fetch'
+          'Finished Fetching '
         );
       }
 
@@ -594,11 +572,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
-      if (
-        method === 'Storage.attributionReportingSourceRegistered' &&
-        params &&
-        source.tabId
-      ) {
+      if (method === 'Storage.attributionReportingSourceRegistered' && params) {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
         dataStore.sources.sourceRegistration =

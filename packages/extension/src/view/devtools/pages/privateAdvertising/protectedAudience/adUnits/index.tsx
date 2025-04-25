@@ -36,12 +36,14 @@ const AdUnits = () => {
     receivedBids,
     noBids,
     selectedAdUnit,
+    auctionEvents,
   } = useProtectedAudience(({ state, actions }) => ({
     adsAndBidders: state.adsAndBidders,
     setSelectedAdUnit: actions.setSelectedAdUnit,
     receivedBids: state.receivedBids,
     noBids: state.noBids,
     selectedAdUnit: state.selectedAdUnit,
+    auctionEvents: state.auctionEvents,
   }));
 
   const { setIsInspecting } = useCookie(({ actions }) => ({
@@ -98,6 +100,7 @@ const AdUnits = () => {
       setSelectedAdUnit={setSelectedAdUnit}
       selectedAdUnit={selectedAdUnit}
       setIsInspecting={setIsInspecting}
+      auctionEvents={auctionEvents ?? {}}
     />
   );
 };

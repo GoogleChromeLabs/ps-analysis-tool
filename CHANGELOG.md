@@ -487,3 +487,150 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 ## CLI
 - https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/830
 - https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/849
+
+#v0.13.0
+
+# Changelog
+
+## Extension
+
+- Feature: Add "Learning" panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/956
+- Feature: Add 'Learning' box in the dashboard feature list https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/976
+- Feature: Add Legend tab https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/946
+- Feature: Add double dropdown arrow in non interactive mode to show non animated flow. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/906
+- Feature: Add info tab to bottom table. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/904
+- Feature: Add multi-seller auction https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/910
+- Feature: Add notification bubbles to ARA tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/981
+- Feature: Add real sites and icons to topics EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/947
+- Feature: Add speed slider logic to the extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/901
+- Feature: Add tab highlighting capabilities https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/941
+- Feature: Add tables to PA EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/888
+- Feature: Add topics classifier to the PSAT extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/955
+- Feature: Add topics legend tab https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/958
+- Feature: Add visited index and add dropdown icon to open non-animated flow. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/887
+- Feature: Auto scroll canvas for EE PA https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/920
+- Feature: Dynamic date time in PA EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/953
+- Feature: Dynamic web stories from backend https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/892
+- Feature: Embed web stories on landing page cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/908
+- Feature: Expand EE flow from AdUnitBox or DateTimeBranch https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/903
+- Feature: Filter current site data https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/991
+- Feature: Highlight IG table row from bubbles https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/915
+- Feature: Highlight PA tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/996
+- Feature: Implement p5 workflow https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/902
+- Feature: Introduce AdUnit and Bids tabs to explorable explanation in EE. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/905
+- Feature: Link landing page cards to related pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/975
+- Feature: Populate attribution reporting data https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/972
+- Feature: Preserve protected audience explorable explanation settings https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/938
+- Feature: Refactor code, add colored boxes, information icons, and longer line animation duration https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/881
+- Feature: Setup multi-seller auction table https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/917
+- Feature: Shorten runAdAuction flow if there are no interest groups. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/934
+- Feature: Sync tab highlighting with data https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/943
+- Feature: Synchnorise data population in table with respect to the EE PA https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/924
+- Feature: Use real website names. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/942
+- Feature: Create a new 'Worklet Breakpoints' tab https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/935
+- Fix: Add missing API pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/957
+- Fix: Auction events randomly fail to appear in UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/952
+- Fix: Bubble minify animation https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/961
+- Fix: Clear ripple effect marking https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/928
+- Fix: Develop QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1003
+- Fix: Develop QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1005
+- Fix: Develop QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/960
+- Fix: Develop QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/986
+- Fix: EE PA Bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/916
+- Fix: EE PA bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/912
+- Fix: EE PA bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/913
+- Fix: EE PA bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/914
+- Fix: EE box info icon https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/990
+- Fix: EE bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/944
+- Fix: EE issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/936
+- Fix: Explorable explanation bugs and minor issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/939
+- Fix: Interactive mode switching https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/896
+- Fix: Learning page responsive https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1001
+- Fix: Minor UI issues  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1011
+- Fix: Misc QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/954
+- Fix: Move settings from bottom to the top in the sidebar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/931
+- Fix: QA bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1000
+- Fix: QA develop issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/969
+- Fix: QA develop https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/994
+- Fix: Regression in develop branch https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/945
+- Fix: Remove excessive gap between arrow head and line when speed is increased https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/949
+- Fix: Topics EE changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/968
+- Fix: UI fixes and improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/987
+- Fix: Update Interest group table to show only join and leave events https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/885
+- Fix: Update progress line rendering logic https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/925
+- Enhancement: Learning landing page content frame https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/999
+- Enhancement: Add Evaluation Environment text to PA tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/923
+- Enhancement: Add description to learning pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/977
+- Enhancement: Attribution Reporting filters https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/979
+- Enhancement: Autoscroll table on row highlighting https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/919
+- Enhancement: Improve EE auto scroll https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/983
+- Enhancement: Improve component auction flow https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/926
+- Enhancement: Improve topics classifier UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/978
+- Enhancement: Open links in same tab https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/980
+- Enhancement: Sidebar and landing page icons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/985
+- Enhancement: Topics EE changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/984
+- Enhancement: Topics interactive mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/992
+- Enhancement: Topics panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/973
+- Enhancement: Update IG highlighting logic https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/933
+- Enhancement: Update synthetic data for distinction https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/918
+- Enhancements: Topic's panel changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/993
+- Enhancements: Updates to topics EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/884
+- Refactor: Move topics animation code to `explorable-explanation` package https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/971
+- Explorable Explanation: Add legend content and remove 'General Use' from info tab https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/951
+- Embed Web Stories in PSAT https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/869
+- Improvement: Convert `explorable-explanations` package to typescript https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/940
+- Add multi-seller auction info https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/921
+- Bring back the story links for all cards in all sections https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/950
+- Make UI changes to web stories landing page. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/964
+- Mapping categories under personalization and security to Functional https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/891
+- Open "Learn More" button link in the same tab https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/963
+- PA EE code refactoring and small fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/893
+- PA:EE: Add info icon to branches in publisher flow https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/970
+- PSAT UI Improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1004
+- Redesign cards and replace icons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1009
+- Reorder menu items and misc UI changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1008
+- Replace Wiki with Github link and reorder menu https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/988
+- Replace anchor tag with `Link` component in Landing page info cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/965
+- Small UI Improvements. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/967
+- Update learning landing page icons and content https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/997
+
+
+# v0.14.0
+
+## Changelog
+
+- Fix: CLI install script https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1020
+- Fix: Media Container Size showing undefined in the table. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1017
+- Fix: Minor bugs in PSAT https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1025
+- Fix: Redirection to dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1029
+- Add search icon to info cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1030
+- Enhancement: Dynamic dark mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1028
+- Enhancement: Make JSON view collapsible https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1007
+- Move 'Wiki' after 'Demos' page under 'Learning' section https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1019
+- Refactor auction shaper https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1032
+- Refactor: Toast UI message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1035
+- Remove multi-tab debugging option and show toast message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1031
+- Rename "Media Type" column to "Ad Type" in bids table https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1027
+- Replace number and logo icons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1026
+
+
+# v0.14.1
+
+## Changelog
+
+- Fix: Ad unit tab notification bubble disappearance https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1039
+- Fix: Auction removal timing https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1044
+- Fix: Auction tab data vanishing https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1050
+- Fix: Incorrect access count in topics EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1038
+- Fix: Multiple rows getting selected with the same event time https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1041
+- Fix: Prevent auto scrolling when animation is paused in EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1048
+- Fix: Settings container padding https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1046
+- Fix: Show CDP settings icon buttons only in smaller screens https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1054
+- Enhancement: Add textual description to PA EE arrows https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1053
+- Improvement: Initial theme mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1040
+- Improvement: Settings toast buttons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1047
+- Misc QA Fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1043
+- Misc QA fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1045
+- Misc patch fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1052
+- Miscellaneous updates and improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1049
+- Update diagram boxes to yellow for SSPs with minimal integration changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1051

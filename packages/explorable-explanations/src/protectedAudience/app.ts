@@ -51,6 +51,7 @@ type SketchSharedProps = Pick<
   | 'isInteractiveMode'
   | 'isMultiSeller'
   | 'setHasLastNodeVisited'
+  | 'platform'
 >;
 
 type CoordinatesWithIndex = Coordinates & {
@@ -67,6 +68,7 @@ export type App = {
   isMultiSeller: boolean;
   cancelPromise: boolean;
   mouseOutOfDiv: boolean;
+  platform: string;
   mouseX: number;
   mouseY: number;
   shouldRespondToClick: boolean;
@@ -168,6 +170,7 @@ export type App = {
   handleNextButton: () => void;
   handleControls: () => void;
   visitedSites: string[];
+  getWinningAdDelay: () => number;
 } & SketchSharedProps;
 
 // App defaults
@@ -175,6 +178,7 @@ const app: App = {
   p: null,
   igp: null,
   up: null,
+  platform: '',
   closeButton: null,
   color: null,
   multSellerCheckBox: null,
@@ -291,6 +295,7 @@ const app: App = {
   reset: noop,
   createCanvas: noop,
   setHasLastNodeVisited: noop,
+  getWinningAdDelay: () => 0,
 };
 
 export default app;

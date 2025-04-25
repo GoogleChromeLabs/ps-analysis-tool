@@ -33,6 +33,20 @@ import './app.css';
 import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
 
+const setThemeMode = (isDarkMode: boolean) => {
+  if (isDarkMode) {
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+  } else {
+    document.body.classList.add('light');
+    document.body.classList.remove('dark');
+  }
+};
+
+// set initial theme mode based on devtools theme
+const theme = chrome.devtools.panels.themeName;
+setThemeMode(theme === 'dark');
+
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
@@ -47,10 +61,32 @@ const App: React.FC = () => {
 
   const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
 
+  const isChromeRuntimeAvailable = Boolean(chrome.runtime?.onMessage);
+
   const reloadTexts = useRef({
-    displayText: I18n.getMessage('extensionUpdated'),
+    displayText: isChromeRuntimeAvailable
+      ? I18n.getMessage('extensionUpdated')
+      : 'Something went wrong.',
     buttonText: I18n.getMessage('refreshPanel'),
   });
+
+  // update theme mode when the browser theme changes
+  useEffect(() => {
+    const onColorSchemeChange = (e: MediaQueryListEvent) => {
+      setThemeMode(e.matches);
+    };
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mediaQuery) {
+      mediaQuery.addEventListener('change', onColorSchemeChange);
+    }
+
+    return () => {
+      if (mediaQuery) {
+        mediaQuery.removeEventListener('change', onColorSchemeChange);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -77,8 +113,9 @@ const App: React.FC = () => {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
           newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
-            SIDEBAR_ITEMS_KEYS.COOKIES
-          ].dropdownOpen = data?.cookieDropdownOpen;
+            SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+          ].children[SIDEBAR_ITEMS_KEYS.COOKIES].dropdownOpen =
+            data?.cookieDropdownOpen;
           return newSidebarData;
         });
       }
@@ -100,7 +137,7 @@ const App: React.FC = () => {
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
         ref={contextInvalidatedRef}
       >
-        {!contextInvalidated ? (
+        {!contextInvalidated && isChromeRuntimeAvailable ? (
           <Layout setSidebarData={setSidebarData} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">

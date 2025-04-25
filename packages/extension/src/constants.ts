@@ -15,7 +15,6 @@
  */
 import { I18n } from '@google-psat/i18n';
 
-export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
 export const SERVICE_WORKER_PORT_NAME = 'psat-serviceworker';
 
@@ -25,13 +24,12 @@ export const SETTING_PAGE_CONTROLS = [
     heading: () => I18n.getMessage('enableCDP'),
     description: () => I18n.getMessage('enableCDPNote', [`<a>`, '</a>']),
   },
-  {
-    id: 'multitabDebugging',
-    heading: () => I18n.getMessage('multitabDebugging'),
-    description: () =>
-      I18n.getMessage('multitabDebuggingNote', [`<a>`, '</a>']),
-  },
 ];
+
+export const CDP_WARNING_MESSAGE =
+  'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
+export const RELOAD_WARNING_MESSAGE =
+  'Settings changed, reload all tabs to apply changes?';
 
 export const DEVTOOLS_CLOSE = 'DEVTOOLS_STATE_CLOSE';
 export const DEVTOOLS_OPEN = 'DEVTOOLS_STATE_OPEN';
@@ -40,7 +38,6 @@ export const POPUP_OPEN = 'POPUP_STATE_OPEN';
 export const DEVTOOLS_SET_JAVASCSCRIPT_COOKIE =
   'DevTools::SET_JAVASCRIPT_COOKIE';
 export const CHANGE_CDP_SETTING = 'CHANGE_CDP_SETTING';
-export const SET_TAB_TO_READ = 'SET_TAB_TO_READ';
 export const INITIAL_SYNC = 'INITIAL_SYNC';
 export const NEW_COOKIE_DATA = 'NEW_COOKIE_DATA';
 export const SERVICE_WORKER_RELOAD_MESSAGE = 'ServiceWorker::TABS_RELOADED';

@@ -204,14 +204,16 @@ export function topicsAnimation(
       app.drawCircle(index, true);
     },
 
-    handleUserVisit: (visitIndex: number) => {
+    handleUserVisit: (visitIndex: number, calculate = true) => {
       if (visitIndex > 0 && !isInteractive) {
         app.userVisitDone(visitIndex - 1);
       }
 
       if (visitIndex >= epoch.length) {
         if (visitIndex === epoch.length) {
-          handleUserVisit(visitIndex);
+          if (calculate) {
+            handleUserVisit(visitIndex);
+          }
         }
 
         return;
@@ -258,7 +260,10 @@ export function topicsAnimation(
       const currentSite = currentCircle.website;
       app.drawInfoBox(visitIndex, currentSite);
       app.drawSmallCircles(visitIndex, currentSite);
-      handleUserVisit(visitIndex);
+
+      if (calculate) {
+        handleUserVisit(visitIndex);
+      }
     },
 
     drawSmallCircles: (index: number, currentSite: string) => {
@@ -523,7 +528,7 @@ export function topicsAnimation(
           for (let i = 0; i < inspectedCirclesArray.length; i++) {
             const index = inspectedCirclesArray[i];
             if (lastVisitedIndex === index) {
-              app.handleUserVisit(index);
+              app.handleUserVisit(index, false);
             } else {
               app.userVisitDone(index);
             }
@@ -690,6 +695,7 @@ export function topicsAnimation(
       while (app.visitIndex < visitIndexStart) {
         app.play();
       }
+      app.inspectedCircleIndex = visitIndexStart - 1;
     }
 
     // permanently remove the loading text cover if visible

@@ -59,7 +59,7 @@ export const getStaticStoryMarkup = () => {
 
         .carousel-container {
             position: relative;
-		    padding: 16px 0;
+						padding: 16px 0;
         }
 
         .carousel-container::after {
@@ -232,7 +232,13 @@ export const getStaticStoryMarkup = () => {
             margin: 0px;
             max-width: 1200px;
             margin: auto;
+						display: flex;
+						flex-direction: column;
         }
+
+				.filler {
+					flex: 1;
+				}
 
 
         .entry-points {
@@ -447,6 +453,7 @@ export const getStaticStoryMarkup = () => {
             </script>
         </amp-story-player>
     </div>
+		<div class="filler"></div>
     <div id="show-more-indicator" class="arrow">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="${
           isDark ? '#E8EAED' : '#6E6E6E'

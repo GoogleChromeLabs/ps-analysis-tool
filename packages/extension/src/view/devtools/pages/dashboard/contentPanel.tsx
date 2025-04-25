@@ -28,7 +28,6 @@ import {
  */
 import { PINNED_ITEMS, FEATURE_LIST } from './constants';
 import { useCookie } from '../../stateProviders';
-import useCanShowAnalyzeTabButton from '../../hooks/useCanShowAnalyzeTabButton';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
@@ -36,15 +35,13 @@ const ContentPanel = () => {
     tabFrames: state.tabFrames,
   }));
 
-  const canShowAnalyzeTabButton = useCanShowAnalyzeTabButton();
-
   const handleButtonClick = useCallback(
     (event: React.MouseEvent, sidebarKey: string) => {
       event.preventDefault();
       event.stopPropagation();
 
       const firstFrame =
-        Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.COOKIES;
+        Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX;
 
       navigateTo(sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey);
     },
@@ -52,13 +49,13 @@ const ContentPanel = () => {
   );
 
   useEffect(() => {
-    if (canShowAnalyzeTabButton && FEATURE_LIST[0].buttons.length === 1) {
+    if (FEATURE_LIST[0].buttons.length === 1) {
       FEATURE_LIST[0].buttons.push({
         name: 'Cookies Table',
         sidebarKey: 'FIRST_COOKIE_TABLE' as SIDEBAR_ITEMS_KEYS,
       });
     }
-  }, [canShowAnalyzeTabButton]);
+  }, []);
 
   return (
     <CardsPanel

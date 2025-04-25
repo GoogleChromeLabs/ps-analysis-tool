@@ -44,16 +44,18 @@ const Auctions = () => {
     },
   });
 
-  const { auctionEvents, adsAndBidders } = useProtectedAudience(
-    ({ state }) => ({
+  const { auctionEvents, adsAndBidders, receivedBids, noBids, isMultiSeller } =
+    useProtectedAudience(({ state }) => ({
       auctionEvents: state.auctionEvents ?? {},
       adsAndBidders: state.adsAndBidders,
-    })
-  );
+      isMultiSeller: state.isMultiSellerAuction,
+      receivedBids: state.receivedBids,
+      noBids: state.noBids,
+    }));
 
   useEffect(() => {
     if (
-      Object.keys(auctionEvents || {}).length === 0 ||
+      Object.keys(auctionEvents || {}).length === 0 &&
       Object.keys(adsAndBidders || {}).length === 0
     ) {
       setSidebarData((prev) => {
@@ -75,8 +77,10 @@ const Auctions = () => {
   const auctionData = useMemo(() => {
     return {
       auctionData: auctionEvents,
+      receivedBids,
+      noBids,
     };
-  }, [auctionEvents]);
+  }, [auctionEvents, noBids, receivedBids]);
 
   if (!isUsingCDP) {
     return (
@@ -101,7 +105,7 @@ const Auctions = () => {
   }
 
   if (
-    Object.keys(auctionEvents || {}).length === 0 ||
+    Object.keys(auctionEvents || {}).length === 0 &&
     Object.keys(adsAndBidders || {}).length === 0
   ) {
     return (
@@ -118,6 +122,8 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <div className="overflow-auto flex-1">
         <AuctionsContainer
+          isEE={false}
+          isMultiSeller={isMultiSeller}
           auctionEvents={auctionData}
           sidebarData={sidebarData}
           setSidebarData={setSidebarData}

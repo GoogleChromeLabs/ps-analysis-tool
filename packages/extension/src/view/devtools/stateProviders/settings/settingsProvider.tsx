@@ -23,6 +23,7 @@ import React, {
   useCallback,
 } from 'react';
 import { I18n } from '@google-psat/i18n';
+import isEqual from 'lodash-es/isEqual';
 /**
  * Internal dependencies.
  */
@@ -40,15 +41,9 @@ enum PLATFORM_OS_MAP {
 }
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
-    null
-  );
-  const [
-    allowedNumberOfTabsForSettingsPageDisplay,
-    setAllowedNumberOfTabsForSettingsPageDisplay,
-  ] = useState<string | null>(null);
-
   const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
+  const [exceedingLimitations, setExceedingLimitations] =
+    useState<boolean>(false);
 
   const [isUsingCDP, setIsUsingCDP] = useState(false);
   const [
@@ -75,30 +70,13 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (Object.keys(sessionStorage).includes('pendingReload')) {
       setSettingsChanged(sessionStorage?.pendingReload);
 
-      if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          sessionStorage.allowedNumberOfTabs
-        );
-      } else {
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          currentSettings.allowedNumberOfTabs
-        );
-      }
-
       if (Object.keys(sessionStorage).includes('isUsingCDP')) {
         setIsUsingCDPForSettingsPageDisplay(sessionStorage.isUsingCDP);
       } else {
         setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
       }
     } else {
-      setAllowedNumberOfTabsForSettingsPageDisplay(
-        currentSettings.allowedNumberOfTabs
-      );
       setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
-    }
-
-    if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
-      setAllowedNumberOfTabs(currentSettings.allowedNumberOfTabs);
     }
 
     if (Object.keys(currentSettings).includes('isUsingCDP')) {
@@ -131,6 +109,33 @@ const Provider = ({ children }: PropsWithChildren) => {
     setPSATVersion(manifestData.version);
   }, []);
 
+  const messagePassingListener = useCallback(
+    (message: {
+      type: string;
+      payload: {
+        exceedingLimitations?: boolean;
+      };
+    }) => {
+      if (!message.type) {
+        return;
+      }
+
+      if (!['EXCEEDING_LIMITATION_UPDATE'].includes(message.type)) {
+        return;
+      }
+
+      const incomingMessageType = message.type;
+
+      if (
+        incomingMessageType === 'EXCEEDING_LIMITATION_UPDATE' &&
+        typeof message?.payload?.exceedingLimitations !== 'undefined'
+      ) {
+        setExceedingLimitations(message.payload.exceedingLimitations);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     if (navigator.userAgent) {
       const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
@@ -146,16 +151,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [OSInformation]);
 
-  const setProcessingMode = useCallback(async (newState: boolean) => {
-    const valueToBeSet: boolean | string = newState ? 'unlimited' : 'single';
-    setAllowedNumberOfTabsForSettingsPageDisplay(valueToBeSet);
-    setSettingsChanged(true);
-    await chrome.storage.session.set({
-      allowedNumberOfTabs: valueToBeSet,
-      pendingReload: true,
-    });
-  }, []);
-
   const _setUsingCDP = useCallback(async (newValue: boolean) => {
     setIsUsingCDPForSettingsPageDisplay(newValue);
     setSettingsChanged(true);
@@ -167,13 +162,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
-        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          changes?.allowedNumberOfTabs?.newValue
-        );
-      }
-
       if (
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
@@ -187,12 +175,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
-        setAllowedNumberOfTabsForSettingsPageDisplay(
-          changes.allowedNumberOfTabs.newValue
-        );
-      }
-
       if (
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
@@ -206,8 +188,16 @@ const Provider = ({ children }: PropsWithChildren) => {
       ) {
         setSettingsChanged(changes.pendingReload.newValue);
       }
+
+      if (
+        Object.keys(changes).includes('pendingReload') &&
+        Object.keys(changes.pendingReload).includes('oldValue') &&
+        !Object.keys(changes.pendingReload).includes('newValue')
+      ) {
+        setIsUsingCDPForSettingsPageDisplay(isUsingCDP);
+      }
     },
-    []
+    [isUsingCDP]
   );
 
   const handleSettingsChange = useCallback(async () => {
@@ -221,23 +211,71 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [settingsChanged]);
 
   useEffect(() => {
+    if (!isEqual(isUsingCDP, isUsingCDPForSettingsPageDisplay)) {
+      setSettingsChanged(true);
+    } else {
+      setSettingsChanged(false);
+      chrome.storage.session.remove(['pendingReload', 'isUsingCDP']);
+    }
+  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
+
+  const onCommittedNavigationListener = useCallback(
+    ({
+      frameId,
+      frameType,
+      url,
+      tabId,
+    }: chrome.webNavigation.WebNavigationTransitionCallbackDetails) => {
+      const isNotTopLevelFrame =
+        frameType !== 'outermost_frame' && frameId !== 0;
+      const isInternalChromeURL =
+        url?.startsWith('chrome') || url?.startsWith('devtools');
+      const isNotCurrentTab = tabId !== chrome.devtools.inspectedWindow.tabId;
+      if (
+        isNotTopLevelFrame ||
+        isInternalChromeURL ||
+        !url ||
+        isNotCurrentTab
+      ) {
+        return;
+      }
+
+      chrome.tabs.query({}, (tabs) => {
+        setCurrentTabs(tabs.length);
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
     intitialSync();
-    chrome.storage.sync.onChanged.addListener(storeChangeListener);
-    chrome.storage.session.onChanged.addListener(sessionStoreChangeListener);
+    chrome.storage?.sync?.onChanged?.addListener(storeChangeListener);
+    chrome.storage?.session?.onChanged?.addListener(sessionStoreChangeListener);
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
     return () => {
-      chrome.storage.sync.onChanged.removeListener(storeChangeListener);
-      chrome.storage.session.onChanged.removeListener(
+      chrome.storage?.sync?.onChanged?.removeListener(storeChangeListener);
+      chrome.storage?.session?.onChanged?.removeListener(
         sessionStoreChangeListener
       );
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation.onCommitted.removeListener(
+        onCommittedNavigationListener
+      );
     };
-  }, [intitialSync, storeChangeListener, sessionStoreChangeListener]);
+  }, [
+    onCommittedNavigationListener,
+    intitialSync,
+    storeChangeListener,
+    sessionStoreChangeListener,
+    messagePassingListener,
+  ]);
 
   return (
     <Context.Provider
       value={{
         state: {
-          allowedNumberOfTabs,
           currentTabs,
           currentExtensions,
           browserInformation,
@@ -245,14 +283,15 @@ const Provider = ({ children }: PropsWithChildren) => {
           OSInformation,
           isUsingCDP,
           settingsChanged,
-          allowedNumberOfTabsForSettingsPageDisplay,
           isUsingCDPForSettingsPageDisplay,
+          exceedingLimitations,
         },
         actions: {
-          setProcessingMode,
           setIsUsingCDP: _setUsingCDP,
           handleSettingsChange,
           setSettingsChanged,
+          setExceedingLimitations,
+          setIsUsingCDPForSettingsPageDisplay,
         },
       }}
     >

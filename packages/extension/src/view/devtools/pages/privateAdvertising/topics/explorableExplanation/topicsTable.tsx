@@ -53,6 +53,14 @@ const AdTechRow = ({
 
   useEffect(() => {
     if (highlightAdTech) {
+      const adTechEl = document.getElementsByClassName(highlightAdTech)?.[0];
+
+      if (adTechEl) {
+        adTechEl.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
+
       timeoutRef.current = setTimeout(() => {
         setHighlightAdTech(null);
       }, 2000);
@@ -70,6 +78,7 @@ const AdTechRow = ({
       {info.map((adTech, index) => (
         <React.Fragment key={index}>
           <span
+            className={adTech}
             style={{
               backgroundColor:
                 adTech === highlightAdTech ? 'yellow' : 'transparent',

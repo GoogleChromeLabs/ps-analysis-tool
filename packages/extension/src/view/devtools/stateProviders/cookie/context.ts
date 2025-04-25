@@ -30,18 +30,14 @@ export interface CookieStoreContext {
     loading: boolean;
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
-    returningToSingleTab: boolean;
-    isCurrentTabBeingListenedTo: boolean;
     isInspecting: boolean;
     contextInvalidated: boolean;
     canStartInspecting: boolean;
-    tabToRead: string | null;
     frameHasCookies: Record<string, boolean> | null;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
-    changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
     setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,17 +51,13 @@ const initialState: CookieStoreContext = {
     tabFrames: null,
     selectedFrame: null,
     loading: true,
-    isCurrentTabBeingListenedTo: false,
-    returningToSingleTab: false,
     isInspecting: false,
     contextInvalidated: false,
     canStartInspecting: false,
-    tabToRead: null,
     frameHasCookies: null,
   },
   actions: {
     setSelectedFrame: noop,
-    changeListeningToThisTab: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
     setContextInvalidated: noop,

@@ -158,7 +158,7 @@ const TopicsClassifier = () => {
         />
         <Button
           onClick={handleClassification}
-          text={'Classify'}
+          text="Classify"
           extraClasses="w-16 h-8 text-center justify-center text-xs"
         />
       </div>

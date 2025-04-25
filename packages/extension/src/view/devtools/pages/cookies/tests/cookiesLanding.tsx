@@ -76,9 +76,7 @@ describe('CookiesLanding', () => {
           get: (_, __) =>
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             new Promise<{ [key: string]: any }>((resolve) => {
-              resolve({
-                allowedNumberOfTabs: 'single',
-              });
+              resolve({});
             }),
           set: () => Promise.resolve(),
           //@ts-ignore

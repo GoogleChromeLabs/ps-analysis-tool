@@ -47,7 +47,7 @@ const Insights = () => {
   }, [insightsListener]);
 
   useEffect(() => {
-    chrome.tabs.onUpdated.addListener(
+    chrome.tabs?.onUpdated?.addListener(
       (tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
         if (changeInfo.url) {
           if (

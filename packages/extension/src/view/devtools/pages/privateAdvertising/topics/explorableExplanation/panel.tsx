@@ -49,6 +49,7 @@ interface PanelProps {
   PAstorage: string[];
   setPAActiveTab: (tabIndex: number) => void;
   setPAStorage: (content: string, index?: number) => void;
+  highlightAdTech: string | null;
   setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
@@ -58,6 +59,7 @@ const Panel = ({
   PAstorage,
   setPAActiveTab,
   setPAStorage,
+  highlightAdTech,
   setHighlightAdTech,
 }: PanelProps) => {
   const { activeTab, setActiveTab } = useTabs(({ state, actions }) => ({
@@ -65,7 +67,7 @@ const Panel = ({
     setActiveTab: actions.setActiveTab,
   }));
 
-  const [play, setPlay] = useState(true);
+  const [play, setPlay] = useState(false);
   const [reset, _setReset] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [epochCompleted, setEpochCompleted] = useState<Record<number, boolean>>(
@@ -92,6 +94,25 @@ const Panel = ({
 
     activeTabRef.current = activeTab;
   }, [activeTab]);
+
+  const tooglePlayOnKeydown = useCallback(
+    (event: KeyboardEvent) => {
+      // Check if the pressed key is the spacebar
+      if (event.code === 'Space') {
+        event.preventDefault();
+        setPlay((prevPlay) => !prevPlay);
+      }
+    },
+    [setPlay]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', tooglePlayOnKeydown);
+
+    return () => {
+      document.removeEventListener('keydown', tooglePlayOnKeydown);
+    };
+  }, [tooglePlayOnKeydown]);
 
   const siteAdTechs = useMemo(() => {
     return storageRef.current[1]
@@ -214,6 +235,18 @@ const Panel = ({
     };
   }, []);
 
+  useEffect(() => {
+    const isCompleted = epochCompleted?.[activeTabRef.current];
+
+    if (!isCompleted) {
+      setTopicsTableData((prevTopicsTableData) => {
+        const newTopicsTableData = { ...prevTopicsTableData };
+        newTopicsTableData[activeTabRef.current] = [];
+        return newTopicsTableData;
+      });
+    }
+  }, [epochCompleted, setTopicsTableData]);
+
   const handleTopicsCalculation = useCallback(
     (visitIndex: number) => {
       setTopicsTableData((prevTopicsTableData) => {
@@ -335,6 +368,18 @@ const Panel = ({
     })();
   }, []);
 
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
+
+  useEffect(() => {
+    if (highlightAdTech) {
+      draggableTrayRef.current?.setIsCollapsed(false);
+    }
+  }, [highlightAdTech]);
+
   const extraInterface = (
     <div className="flex gap-2 items-center">
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
@@ -378,7 +423,7 @@ const Panel = ({
           isInteractive={Boolean(isInteractiveModeOn)}
         />
       </div>
-      <DraggableTray />
+      <DraggableTray ref={draggableTrayRef} />
     </div>
   );
 };

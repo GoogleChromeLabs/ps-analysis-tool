@@ -23,11 +23,7 @@ import type { CookieTableData } from '@google-psat/common';
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
-import {
-  useCookie,
-  useProtectedAudience,
-  useSettings,
-} from '../stateProviders';
+import { useCookie, useProtectedAudience } from '../stateProviders';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -45,7 +41,6 @@ const useFrameOverlay = (
     setIsInspecting,
     setContextInvalidated,
     selectedFrame,
-    isCurrentTabBeingListenedTo,
     tabFrames,
     setCanStartInspecting,
     canStartInspecting,
@@ -54,7 +49,6 @@ const useFrameOverlay = (
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
     selectedFrame: state.selectedFrame,
-    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     tabFrames: state.tabFrames,
     setCanStartInspecting: actions.setCanStartInspecting,
     canStartInspecting: state.canStartInspecting,
@@ -66,10 +60,6 @@ const useFrameOverlay = (
       adsAndBidders: state.adsAndBidders,
     })
   );
-
-  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-  }));
 
   const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
     useState(false);
@@ -141,10 +131,10 @@ const useFrameOverlay = (
   );
 
   useEffect(() => {
-    chrome.runtime.onMessage.addListener(listenIfContentScriptSet);
+    chrome.runtime?.onMessage?.addListener(listenIfContentScriptSet);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(listenIfContentScriptSet);
+      chrome.runtime?.onMessage?.removeListener(listenIfContentScriptSet);
     };
   }, [listenIfContentScriptSet]);
 
@@ -171,7 +161,7 @@ const useFrameOverlay = (
           }
 
           if (!privacySandboxPanelVisible) {
-            chrome.tabs.sendMessage(
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: true,
@@ -186,7 +176,7 @@ const useFrameOverlay = (
             );
           }
           if (privacySandboxPanelVisible) {
-            chrome.tabs.sendMessage(
+            chrome.tabs?.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               {
                 PSATDevToolsHidden: false,
@@ -211,7 +201,7 @@ const useFrameOverlay = (
 
   useEffect(() => {
     try {
-      chrome.tabs.sendMessage(
+      chrome.tabs?.sendMessage(
         chrome.devtools.inspectedWindow.tabId,
         { status: 'set?', tabId: chrome.devtools.inspectedWindow.tabId },
         (res) => {
@@ -253,10 +243,12 @@ const useFrameOverlay = (
   }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
-    chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
+    chrome.storage?.session?.onChanged?.addListener(
+      sessionStoreChangedListener
+    );
     return () => {
       try {
-        chrome.storage.session.onChanged.removeListener(
+        chrome.storage?.session?.onChanged?.removeListener(
           sessionStoreChangedListener
         );
       } catch (error) {
@@ -266,18 +258,13 @@ const useFrameOverlay = (
   }, [sessionStoreChangedListener]);
 
   useEffect(() => {
-    if (
-      allowedNumberOfTabs === 'single' &&
-      !isCurrentTabBeingListenedTo &&
-      chrome.runtime?.id &&
-      portRef.current
-    ) {
+    if (chrome.runtime?.id && portRef.current) {
       portRef.current.disconnect();
       portRef.current = null;
       setIsInspecting(false);
       setConnectedToPort(false);
     }
-  }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
+  }, [setIsInspecting]);
 
   useEffect(() => {
     try {

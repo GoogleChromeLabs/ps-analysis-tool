@@ -47,7 +47,6 @@ const AuctionTable = ({
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
     null
   );
-
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -142,6 +141,10 @@ const AuctionTable = ({
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
+          if (value === undefined || value === null) {
+            return false;
+          }
+
           const bid = value as number;
 
           if (filterValue === '100+') {
@@ -207,17 +210,14 @@ const AuctionTable = ({
                 getRowObjectKey={(row: TableRow) => {
                   return (
                     // @ts-ignore
-                    ((row.originalData as singleAuctionEvent).auctionConfig
-                      ?.seller || '') +
-                    (row.originalData as singleAuctionEvent).time
+                    (row.originalData as singleAuctionEvent).index.toString()
                   );
                 }}
               >
                 <Table
                   selectedKey={
                     // @ts-ignore
-                    (selectedJSON?.auctionConfig?.seller || '') +
-                      selectedJSON?.time || ''
+                    selectedJSON?.index.toString() || ''
                   }
                   hideSearch={true}
                   minWidth="50rem"
@@ -233,7 +233,7 @@ const AuctionTable = ({
           </div>
         )}
       </Resizable>
-      <BottomTray selectedJSON={selectedJSON} />
+      <BottomTray selectedJSON={selectedJSON as object} />
     </div>
   );
 };

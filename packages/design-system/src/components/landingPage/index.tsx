@@ -35,15 +35,13 @@ type LandingPageContainerProps = LandingPageProps & {
     storyUrl?: string;
     sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
-  counterStyles: string;
   titleStyles: string;
 };
 
 const LandingPageContainer = (props: LandingPageContainerProps) => {
   const [independentStory, setIndependentStory] = useState<string>('');
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const { children, contentPanelTitle, content, counterStyles, titleStyles } =
-    props;
+  const { children, contentPanelTitle, content } = props;
 
   useEffect(() => {
     if (!independentStory || !iframeRef.current) {
@@ -87,6 +85,7 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
     <>
       <LandingPage
         {...props}
+        isLandingPageContainer
         containerStyles={independentStory ? 'z-0 absolute top-0 ' : ''}
         contentPanel={
           <ContentPanel
@@ -97,8 +96,6 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
                 onClick: () => setIndependentStory(data?.storyUrl ?? ''),
               };
             })}
-            counterStyles={counterStyles}
-            titleStyles={titleStyles}
           />
         }
       >

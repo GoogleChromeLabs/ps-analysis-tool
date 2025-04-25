@@ -21,7 +21,7 @@ import app from '../../app';
 import config from '../../config';
 import { ProgressLine, Box } from '../../components';
 import type { AuctionStep } from '../../types';
-import { getCoordinateValues } from '../../utils/getCoordinateValues';
+import { getCoordinateValues, scrollToCircle } from '../../utils';
 
 const setupShowWinningAd = (steps: AuctionStep[]) => {
   const { box } = config.flow;
@@ -48,11 +48,19 @@ const setupShowWinningAd = (steps: AuctionStep[]) => {
       x: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
       y: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).y - box.height / 2,
+      stepDelay: app.getWinningAdDelay(),
     },
     delay: 1000,
     callBack: (returnValue) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
+        const currentCircleIndex = app.timeline.currentIndex;
+        const nextCircleIndex = app.isInteractiveMode
+          ? currentCircleIndex
+          : currentCircleIndex + 1;
+        const delay = app.getWinningAdDelay();
+        // manually adjust delay depending on object distance to the next circle
+        scrollToCircle(nextCircleIndex, delay * 0.65);
       }
     },
   });
