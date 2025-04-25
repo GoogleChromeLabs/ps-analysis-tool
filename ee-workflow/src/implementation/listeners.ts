@@ -175,3 +175,15 @@ export const speedSliderChange = (mainCanvas: Main, e: Event) => {
     mainCanvas.updateSpeed(value);
   }
 };
+
+export const interactiveCheckboxOnChange = (
+  setIsInteractive: (isInteractive: boolean) => void,
+  mainCanvas: Main,
+  e: Event
+) => {
+  const value = (e.target as HTMLInputElement).checked;
+
+  setIsInteractive(value);
+
+  mainCanvas.togglePause(value);
+};

@@ -34,6 +34,11 @@ export default abstract class Figure {
   protected p5: p5 | null = null;
 
   /**
+   * The order in which the figure was created.
+   */
+  protected creationOrder = 0;
+
+  /**
    * Unique id of the figure.
    */
   protected id = '';
@@ -140,6 +145,7 @@ export default abstract class Figure {
     this.mouseMovedHandler = mouseMovedHandler;
     this.onLeaveHandler = onLeaveHandler;
     this.runSideEffect = true;
+    this.creationOrder = Figure.objectCount;
   }
 
   /**
@@ -470,5 +476,13 @@ export default abstract class Figure {
    */
   setSideEffectOnDraw(sideEffectOnDraw: (figure: Figure) => void) {
     this.sideEffectOnDraw = sideEffectOnDraw;
+  }
+
+  /**
+   * Get the creation order of the figure.
+   * @returns The creation order of the figure.
+   */
+  getCreationOrder(): number {
+    return this.creationOrder;
   }
 }

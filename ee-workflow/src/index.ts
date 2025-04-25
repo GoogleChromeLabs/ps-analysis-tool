@@ -33,6 +33,7 @@ import {
   nextButtonClick,
   resetButtonClick,
   speedSliderChange,
+  interactiveCheckboxOnChange,
 } from './implementation/listeners';
 import {
   circleTravelInit,
@@ -48,6 +49,22 @@ const upArrowImageLoader = () => upArrowImage!;
 const preloader = (p: p5) => {
   downArrowImage = p.loadImage(downArrowData);
   upArrowImage = p.loadImage(upArrowData);
+};
+let isInteractive = false;
+const setIsInteractive = (value: boolean) => {
+  isInteractive = value;
+  mainCanvas.setUsingHelperQueue(value);
+};
+const checkpoints: string[] = [];
+const getCheckpoints = (index: number) => {
+  if (index < checkpoints.length) {
+    return checkpoints[index];
+  }
+
+  return '';
+};
+const setCheckpoint = (checkpoint: string) => {
+  checkpoints.push(checkpoint);
 };
 
 const idToStart = localStorage.getItem('ee-workflow') || '';
@@ -120,6 +137,12 @@ speedSlider?.addEventListener(
   speedSliderChange.bind(null, mainCanvas)
 );
 
+const interactiveCheckbox = document.getElementById('interactive');
+interactiveCheckbox?.addEventListener(
+  'click',
+  interactiveCheckboxOnChange.bind(null, setIsInteractive, mainCanvas)
+);
+
 // Event listeners
 document.addEventListener('loop', onLoopEvent.bind(null, playButton));
 
@@ -160,7 +183,9 @@ nodes.forEach((node, index) => {
     mouseClicked: () => {
       // eslint-disable-next-line no-console
       console.log(node.website, node);
-      mainCanvas.removeFigure(circle);
+      if (isInteractive) {
+        mainCanvas.loadCheckpointToHelper(getCheckpoints(index));
+      }
     },
   });
 
@@ -190,16 +215,20 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
     y: 0,
   };
 
+  const checkpoint = mainFF.line({
+    x,
+    y,
+    endX: x,
+    endY: y + 50,
+    hasArrow: true,
+    shouldTravel: true,
+  });
+
+  setCheckpoint(checkpoint.getId());
+
   const animator = new Animator(
     [
-      mainFF.line({
-        x,
-        y,
-        endX: x,
-        endY: y + 50,
-        hasArrow: true,
-        shouldTravel: true,
-      }),
+      checkpoint,
       new Group(mainCanvas, [
         mainFF.box({
           width: 100,
@@ -409,15 +438,19 @@ const drawPublisherFlow = (x: number, y: number) => {
     return box6;
   };
 
+  const checkpoint = mainFF.line({
+    x,
+    y,
+    endX: x,
+    endY: y + 50,
+    shouldTravel: true,
+  });
+
+  setCheckpoint(checkpoint.getId());
+
   const animator = new Animator(
     [
-      mainFF.line({
-        x,
-        y,
-        endX: x,
-        endY: y + 50,
-        shouldTravel: true,
-      }),
+      checkpoint,
       mainFF.line({
         endXwith: 400,
         shouldTravel: true,

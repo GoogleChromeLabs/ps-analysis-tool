@@ -135,6 +135,26 @@ class Main {
   private noLoop = false;
 
   /**
+   * Flag for use helper queue.
+   */
+  private usingHelperQueue = false;
+
+  /**
+   * Queue used to render some figures from stepsQueue without disturbing it's order.
+   */
+  private helperQueue: Figure[] = [];
+
+  /**
+   * Queue used to render some groups from stepsQueue without disturbing it's order.
+   */
+  private helperGroupQueue: Group[] = [];
+
+  /**
+   * Queue used to render some animator from stepsQueue without disturbing it's order.
+   */
+  private helperAnimatorQueue: Animator[] = [];
+
+  /**
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
@@ -317,13 +337,23 @@ class Main {
     skipDraw = false,
     isSkipping = false
   ) {
-    const queue = useInstantQueue ? this.instantQueue : this.stepsQueue;
-    const groupQueue = useInstantQueue
+    let queue: Figure[] = [];
+    let groupQueue: Group[] = [];
+    let animatorQueue: Animator[] = [];
+
+    queue = useInstantQueue ? this.instantQueue : this.stepsQueue;
+    groupQueue = useInstantQueue
       ? this.groupInstantQueue
       : this.groupStepsQueue;
-    const animatorQueue = useInstantQueue
+    animatorQueue = useInstantQueue
       ? this.animatorInstantQueue
       : this.animatorStepsQueue;
+
+    if (!useInstantQueue && this.usingHelperQueue) {
+      queue = this.helperQueue;
+      groupQueue = this.helperGroupQueue;
+      animatorQueue = this.helperAnimatorQueue;
+    }
 
     if (queue.length > 0) {
       const firstObject = <Figure>queue.shift();
@@ -384,11 +414,14 @@ class Main {
     if (done) {
       this.isTravelling = false;
       const object = this.traveller?.getObject();
+      const queue = this.helperQueue.length
+        ? this.helperQueue
+        : this.stepsQueue;
 
       if (object instanceof Figure) {
-        this.stepsQueue.unshift(object);
+        queue.unshift(object);
       } else if (object?.getFigures().length) {
-        this.stepsQueue.unshift(object.getFigures()[0]);
+        queue.unshift(object.getFigures()[0]);
       }
     }
 
@@ -424,7 +457,12 @@ class Main {
         this.runner();
       }
     } else if (this.p5.frameCount % this.delay === 0) {
-      this.runner();
+      if (
+        !this.usingHelperQueue ||
+        (this.usingHelperQueue && this.helperQueue.length)
+      ) {
+        this.runner();
+      }
     }
 
     while (this.instantQueue.length > 0) {
@@ -612,6 +650,11 @@ class Main {
    * Resets the drawing process to the first checkpoint.
    */
   reset() {
+    if (this.usingHelperQueue) {
+      this.resetAfterHelperQueue();
+      return;
+    }
+
     this.figureToStart = undefined;
     while (this.checkpoints.size) {
       this.loadPreviousCheckpoint();
@@ -1365,6 +1408,312 @@ class Main {
         figure.draw();
       }
     }
+  }
+
+  /**
+   * Resets the queues and snapshots, load figures in correct order.
+   */
+  resetAfterHelperQueue() {
+    this.helperQueue = [];
+    this.helperGroupQueue = [];
+    this.helperAnimatorQueue = [];
+    this.figureToStart = undefined;
+    this.checkpoints = new Set<string>();
+    this.p5.clear();
+
+    if (this.isTravelling) {
+      this.traveller?.completeTravelling();
+      this.traveller = null;
+      this.isTravelling = false;
+    }
+
+    const figures = [
+      ...new Set<Figure>(
+        [...this.stepsQueue, ...this.instantQueue, ...this.snapshot].sort(
+          (a, b) => a.getCreationOrder() - b.getCreationOrder()
+        )
+      ),
+    ];
+    const groups = [
+      ...new Set<Group>(
+        [
+          ...this.groupStepsQueue,
+          ...this.groupInstantQueue,
+          ...this.groupSnapshot,
+        ].sort((a, b) => a.getCreationOrder() - b.getCreationOrder())
+      ),
+    ];
+    const animators = [
+      ...new Set<Animator>(
+        [
+          ...this.animatorStepsQueue,
+          ...this.animatorInstantQueue,
+          ...this.animatorSnapshot,
+        ].sort((a, b) => a.getCreationOrder() - b.getCreationOrder())
+      ),
+    ];
+
+    this.instantQueue = [];
+    this.groupInstantQueue = [];
+    this.animatorInstantQueue = [];
+
+    this.stepsQueue = [];
+    this.groupStepsQueue = [];
+    this.animatorStepsQueue = [];
+
+    this.snapshot = [];
+    this.groupSnapshot = [];
+    this.animatorSnapshot = [];
+
+    let figureIndex = 0;
+    for (figureIndex = 0; figureIndex < figures.length; figureIndex++) {
+      const figure = figures[figureIndex];
+      figure.setThrow(false);
+      figure.shouldRunSideEffect(true);
+
+      if (figure.getCanTravel()) {
+        figure.setShouldTravel(true);
+        figure.resetTraveller();
+      }
+
+      if (figure.getIsCheckpoint()) {
+        break;
+      }
+
+      if (
+        figure.getAnimatorId() &&
+        this.instantQueue[this.instantQueue.length - 1]?.getAnimatorId() !==
+          figure.getAnimatorId()
+      ) {
+        const animator = animators.shift();
+
+        if (animator) {
+          animator.resetIndex();
+          animator.setThrow(false);
+          animator.shouldRunSideEffect(true);
+          this.animatorInstantQueue.push(animator);
+        }
+      }
+
+      if (
+        figure.getGroupId() &&
+        this.instantQueue[this.instantQueue.length - 1]?.getGroupId() !==
+          figure.getGroupId()
+      ) {
+        const group = groups.shift();
+
+        if (group) {
+          group.setThrow(false);
+          group.shouldRunSideEffect(true);
+          this.groupInstantQueue.push(group);
+        }
+      }
+
+      this.instantQueue.push(figure);
+    }
+
+    for (let i = figureIndex; i < figures.length; i++) {
+      const figure = figures[i];
+      figure.setThrow(false);
+      figure.shouldRunSideEffect(true);
+      if (figure.getCanTravel()) {
+        figure.setShouldTravel(true);
+        figure.resetTraveller();
+      }
+    }
+
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
+      group.setThrow(false);
+      group.shouldRunSideEffect(true);
+    }
+
+    for (let i = 0; i < animators.length; i++) {
+      const animator = animators[i];
+      animator.resetIndex();
+      animator.setThrow(false);
+      animator.shouldRunSideEffect(true);
+    }
+
+    this.stepsQueue = [...figures.slice(figureIndex)];
+    this.groupStepsQueue = [...groups];
+    this.animatorStepsQueue = [...animators];
+
+    this.p5.clear();
+  }
+
+  /**
+   * Update the usingHelperQueue flag. Reset queues if helperQueue is disabled.
+   * @param value - Whether to use the helper queue.
+   */
+  setUsingHelperQueue(value: boolean) {
+    if (!value) {
+      this.resetAfterHelperQueue();
+      this.togglePause(false);
+    }
+    this.usingHelperQueue = value;
+  }
+
+  // eslint-disable-next-line complexity
+  loadCheckpointToHelper(checkpoint: string) {
+    if (this.helperQueue.length) {
+      return;
+    }
+
+    this.togglePause(true);
+    this.helperQueue = [];
+
+    const recentCheckpoint = [...this.checkpoints].pop();
+
+    if (recentCheckpoint === checkpoint) {
+      while (
+        this.stepsQueue.length &&
+        !this.stepsQueue?.[0].getIsCheckpoint()
+      ) {
+        if (
+          this.stepsQueue[0].getAnimatorId() &&
+          this.stepsQueue[0].getAnimatorId() !==
+            this.helperQueue[this.helperQueue.length - 1]?.getAnimatorId()
+        ) {
+          const animator = this.animatorStepsQueue.shift();
+
+          if (animator) {
+            this.helperAnimatorQueue.push(animator);
+          }
+        }
+
+        if (
+          this.stepsQueue[0].getGroupId() &&
+          this.stepsQueue[0].getGroupId() !==
+            this.helperQueue[this.helperQueue.length - 1]?.getGroupId()
+        ) {
+          const group = this.groupStepsQueue.shift();
+
+          if (group) {
+            this.helperGroupQueue.push(group);
+          }
+        }
+
+        this.helperQueue.push(this.stepsQueue.shift()!);
+      }
+
+      this.togglePause(false);
+
+      return;
+    }
+
+    if (recentCheckpoint && !this.stepsQueue?.[0]?.getIsCheckpoint()) {
+      while (
+        this.snapshot.length &&
+        this.snapshot[this.snapshot.length - 1].getIsCheckpoint()
+      ) {
+        const figure = this.snapshot.pop();
+
+        if (!figure) {
+          continue;
+        }
+
+        if (
+          figure.getAnimatorId() &&
+          figure.getAnimatorId() !== this.stepsQueue[0]?.getAnimatorId()
+        ) {
+          const animator = this.animatorStepsQueue.find(
+            (a) => a.getId() === figure.getAnimatorId()
+          );
+
+          if (animator) {
+            animator.setThrow(false);
+            animator.shouldRunSideEffect(true);
+            animator.resetIndex();
+            this.helperAnimatorQueue.push(animator);
+            this.animatorStepsQueue.unshift(animator);
+          }
+        }
+
+        if (
+          figure.getGroupId() &&
+          figure.getGroupId() !== this.stepsQueue[0]?.getGroupId()
+        ) {
+          const group = this.groupStepsQueue.find(
+            (g) => g.getId() === figure.getGroupId()
+          );
+
+          if (group) {
+            group.setThrow(false);
+            group.shouldRunSideEffect(true);
+            this.helperGroupQueue.push(group);
+            this.groupStepsQueue.unshift(group);
+          }
+        }
+
+        figure.setThrow(false);
+        figure.shouldRunSideEffect(true);
+
+        if (figure.getCanTravel()) {
+          figure.setShouldTravel(true);
+          figure.resetTraveller();
+        }
+
+        this.helperQueue.push(figure);
+        this.stepsQueue.unshift(figure);
+
+        return;
+      }
+    }
+
+    let foundCheckpoint = false;
+
+    for (let i = 0; i < this.stepsQueue.length; i++) {
+      const figure = this.stepsQueue[i];
+
+      if (figure.getId() !== checkpoint && !foundCheckpoint) {
+        continue;
+      }
+
+      if (figure.getIsCheckpoint() && figure.getId() !== checkpoint) {
+        break;
+      }
+
+      foundCheckpoint = true;
+
+      if (
+        figure.getAnimatorId() &&
+        figure.getAnimatorId() !==
+          this.helperQueue[this.helperQueue.length - 1]?.getAnimatorId()
+      ) {
+        const animator = this.animatorStepsQueue.find(
+          (a) => a.getId() === figure.getAnimatorId()
+        );
+
+        if (animator) {
+          this.helperAnimatorQueue.push(animator);
+        }
+      }
+
+      if (
+        figure.getGroupId() &&
+        figure.getGroupId() !==
+          this.helperQueue[this.helperQueue.length - 1]?.getGroupId()
+      ) {
+        const group = this.groupStepsQueue.find(
+          (g) => g.getId() === figure.getGroupId()
+        );
+
+        if (group) {
+          this.helperGroupQueue.push(group);
+        }
+      }
+
+      this.helperQueue.push(figure);
+    }
+
+    const helperSet = new Set<string>(this.helperQueue.map((f) => f.getId()));
+
+    this.stepsQueue = this.stepsQueue.filter(
+      (figure) => !helperSet.has(figure.getId())
+    );
+
+    this.togglePause(false);
   }
 }
 

@@ -27,6 +27,11 @@ import Group from './group';
  */
 export default class Animator {
   /**
+   * The order in which the animator was created.
+   */
+  private creationOrder = 0;
+
+  /**
    * Unique id of the animator.
    */
   private id: string;
@@ -84,6 +89,7 @@ export default class Animator {
     ];
     this.objects.forEach((object) => object.setAnimatorId(this.id));
     this.runSideEffect = true;
+    this.creationOrder = Animator.animationCounter;
   }
 
   /**
@@ -199,5 +205,13 @@ export default class Animator {
     } else {
       this.index = 0;
     }
+  }
+
+  /**
+   * Method to get the creation order of the animator.
+   * @returns The creation order of the animator.
+   */
+  getCreationOrder() {
+    return this.creationOrder;
   }
 }

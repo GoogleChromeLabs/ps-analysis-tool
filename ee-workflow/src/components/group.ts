@@ -30,6 +30,11 @@ export default class Group {
   private figures: Figure[];
 
   /**
+   * The order in which the group was created.
+   */
+  private creationOrder = 0;
+
+  /**
    * Unique id of the group.
    */
   private id: string;
@@ -74,6 +79,7 @@ export default class Group {
     this.figures = figures;
     this.figures.forEach((figure) => figure.setGroupId(this.id));
     this.runSideEffect = true;
+    this.creationOrder = Group.groupCount;
   }
 
   /**
@@ -210,5 +216,13 @@ export default class Group {
    */
   setSideEffectOnDraw(sideEffectOnDraw: (group: Group) => void) {
     this.sideEffectOnDraw = sideEffectOnDraw;
+  }
+
+  /**
+   * Method to get the creation order of the group.
+   * @returns The creation order of the group.
+   */
+  getCreationOrder() {
+    return this.creationOrder;
   }
 }
