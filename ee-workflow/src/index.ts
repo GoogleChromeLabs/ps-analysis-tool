@@ -104,7 +104,14 @@ stepPrevButton?.addEventListener(
 const playButton = document.getElementById('play');
 playButton?.addEventListener(
   'click',
-  playClick.bind(null, mainCanvas, playButton, expanded, downArrowImageLoader)
+  playClick.bind(
+    null,
+    mainCanvas,
+    playButton,
+    expanded,
+    downArrowImageLoader,
+    true
+  )
 );
 
 const stepNextButton = document.getElementById('step-next');
@@ -190,7 +197,13 @@ nodes.forEach((node, index) => {
       console.log(node.website, node);
       if (isInteractive) {
         if (mainCanvas.isPaused()) {
-          playClick(mainCanvas, playButton, expanded, downArrowImageLoader);
+          playClick(
+            mainCanvas,
+            playButton,
+            expanded,
+            downArrowImageLoader,
+            false
+          );
         }
         mainCanvas.loadCheckpointToHelper(getCheckpoints(index));
       }

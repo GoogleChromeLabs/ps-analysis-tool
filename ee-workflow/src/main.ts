@@ -1080,11 +1080,13 @@ class Main {
   /**
    * Loads and draws an completed animator part instantly.
    * @param animatorId - The ID of the animator to load.
+   * @param useQueue - Whether to use the queue.
    */
-  loadAnimatorPartAndDraw(animatorId?: string) {
+  loadAnimatorPartAndDraw(animatorId?: string, useQueue?: boolean) {
     this.p5.clear();
 
-    const _animatorId = animatorId || this.animatorStepsQueue[0]?.getId();
+    const _animatorId =
+      animatorId || (useQueue ? this.animatorStepsQueue[0]?.getId() : '');
 
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];

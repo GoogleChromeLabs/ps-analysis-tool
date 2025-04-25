@@ -98,7 +98,8 @@ export const playClick = (
     image: Figure | null;
     animator: Animator | null;
   },
-  downArrowImageLoader: () => p5.Image
+  downArrowImageLoader: () => p5.Image,
+  loadAnimator: boolean
 ) => {
   if (expanded.wasExpanded) {
     if (expanded.image && expanded.animator) {
@@ -108,7 +109,7 @@ export const playClick = (
     }
 
     expanded.wasExpanded = false;
-    mainCanvas.loadAnimatorPartAndDraw();
+    mainCanvas.loadAnimatorPartAndDraw(undefined, loadAnimator);
   }
 
   mainCanvas.togglePause();
@@ -165,7 +166,7 @@ export const resetButtonClick = (
   downArrowImageLoader: () => p5.Image
 ) => {
   if (expanded.wasExpanded) {
-    playClick(mainCanvas, playButton, expanded, downArrowImageLoader);
+    playClick(mainCanvas, playButton, expanded, downArrowImageLoader, true);
   }
 
   mainCanvas.reset();
