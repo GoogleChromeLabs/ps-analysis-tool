@@ -16,8 +16,8 @@
 /**
  * External dependencies
  */
-import { TabsProvider, type TabItems } from '@google-psat/design-system';
 import type {
+  InterestGroups,
   SourcesRegistration,
   TriggerRegistration,
 } from '@google-psat/common';
@@ -26,13 +26,19 @@ import React, { useMemo } from 'react';
 /**
  * Internal dependencies
  */
+
 import Panel from './panel';
 import Difference from './difference';
-import JsonView from '../jsonView';
+import JsonView from '../jsonView/jsonView';
+import { TabItems, TabsProvider } from '../tabs/useTabs';
 
 interface JsonDisplayProps {
-  currentJson: TriggerRegistration | SourcesRegistration | null;
-  prevJson: TriggerRegistration | SourcesRegistration | null;
+  currentJson:
+    | TriggerRegistration
+    | SourcesRegistration
+    | InterestGroups
+    | null;
+  prevJson: TriggerRegistration | SourcesRegistration | InterestGroups | null;
 }
 const JsonDisplay = ({ currentJson, prevJson }: JsonDisplayProps) => {
   const tabItems = useMemo<TabItems>(
@@ -42,7 +48,7 @@ const JsonDisplay = ({ currentJson, prevJson }: JsonDisplayProps) => {
         content: {
           Element: JsonView as unknown as (props: any) => React.JSX.Element,
           props: {
-            currentJson,
+            src: currentJson,
           },
         },
       },

@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import {
-  JsonView,
+  JsonDisplay,
   Table,
   TableProvider,
   type TableColumn,
@@ -51,6 +51,8 @@ const IGTable = ({
   isEE = false,
 }: InterestGroupsProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
+  const [selectedPrevJSON, setSelectedPrevJSON] =
+    useState<InterestGroupsType | null>(null);
   const [filterData, setFilterData] = useState(false);
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -216,7 +218,8 @@ const IGTable = ({
           conditionalTableRowClassesHandler={conditionalTableRowClassesHandler}
           getVerticalBarColorHash={getVerticalBarColorHash}
           hasVerticalBar={hasVerticalBar}
-          onRowClick={(row) => {
+          onRowClick={(row, prevRow) => {
+            setSelectedPrevJSON(prevRow as InterestGroupsType);
             setSelectedRow(row as InterestGroupsType);
           }}
           onRowContextMenu={noop}
@@ -239,8 +242,11 @@ const IGTable = ({
       </Resizable>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
-          <div className="text-xs py-1 px-1.5">
-            <JsonView src={selectedRow} />
+          <div className="text-xs py-1">
+            <JsonDisplay
+              currentJson={selectedRow as InterestGroupsType}
+              prevJson={selectedPrevJSON}
+            />
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
