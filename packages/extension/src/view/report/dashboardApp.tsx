@@ -73,7 +73,6 @@ const App = () => {
       .addEventListener('change', handleDarkThemeChange);
 
     return () => {
-      document.removeEventListener('load', handleDarkThemeChange);
       window
         .matchMedia('(prefers-color-scheme: dark)')
         .removeEventListener('change', handleDarkThemeChange);
