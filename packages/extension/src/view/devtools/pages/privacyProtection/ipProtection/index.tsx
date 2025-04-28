@@ -40,7 +40,7 @@ const IPProtection = () => {
         },
       },
       {
-        title: 'MDL',
+        title: 'Masked Domain List',
         content: {
           Element: MDLTable,
           props: {},
