@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,22 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
-  PSInfoKey,
-  TabsProvider,
-  type TabItems,
+  InfoCard as InfoCardTemplate,
+  QuickLinksList,
+  type PSInfoKeyType,
 } from '@google-psat/design-system';
-import Panel from './panel';
-import Overview from './overview';
 
-const IPProtection = () => {
-  const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: Overview,
-          props: {
-            infoKey: PSInfoKey.IPProtection,
-          },
-          className: 'p-4',
-        },
-      },
-    ],
-    []
-  );
-
+const Overview = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
   return (
-    <TabsProvider items={tabItems} name="protectedAudience">
-      <Panel />
-    </TabsProvider>
+    <>
+      <InfoCardTemplate infoKey={infoKey} />
+      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
+        <QuickLinksList />
+      </div>
+    </>
   );
 };
 
-export default IPProtection;
+export default Overview;
