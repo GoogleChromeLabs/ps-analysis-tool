@@ -38,6 +38,7 @@ import type { AuctionEventsType } from '../../../../../stateProviders/protectedA
 import AuctionTable from '../table';
 import AdunitPanel from '../adunitPanel';
 import AdunitSubPanel from '../adunitPanel/panel';
+import SortButton from '../../../../sortButton';
 
 interface AuctionPanelProps {
   auctionEvents: {
@@ -51,6 +52,8 @@ interface AuctionPanelProps {
   isMultiSeller?: boolean;
   selectedAdUnit?: string;
   selectedDateTime?: string;
+  sortOrder?: string;
+  setSortOrder?: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
 }
 
 const AuctionPanel = ({
@@ -61,6 +64,8 @@ const AuctionPanel = ({
   selectedAdUnit,
   selectedDateTime,
   isEE = true,
+  sortOrder,
+  setSortOrder,
 }: AuctionPanelProps) => {
   useEffect(() => {
     const Panel = customAdsAndBidders ? AdunitSubPanel : AdunitPanel;
@@ -87,7 +92,8 @@ const AuctionPanel = ({
           }
 
           let children = {
-            ...adUnitChildren[time]?.children,
+            ...adUnitChildren[`${actualTime}||${parentAuctionId}||${adUnit}`]
+              ?.children,
           } as SidebarItems;
 
           const sellerUrl = Object.keys(auctionEventsData[adUnit][time])[0];
@@ -122,6 +128,7 @@ const AuctionPanel = ({
                     isBlurred: events.length === 0,
                   },
                 },
+                extraInterfaceToTitle: {},
                 children: {},
                 dropdownOpen: false,
               };
@@ -150,7 +157,7 @@ const AuctionPanel = ({
               0;
           }
 
-          adUnitChildren[time + adUnit] = {
+          adUnitChildren[`${actualTime}||${parentAuctionId}||${adUnit}`] = {
             title: actualTime,
             panel: {
               Element: AuctionTable,
@@ -186,9 +193,59 @@ const AuctionPanel = ({
           children: adUnitChildren,
           dropdownOpen: true,
         };
+
+        if (!isEE) {
+          data[adUnit].extraInterfaceToTitle = {
+            Element: SortButton,
+            props: {
+              setSortOrder,
+              sortOrder,
+            },
+          };
+        }
       });
 
       newData['adunits'].children = data;
+      if (!isEE) {
+        if (sortOrder === 'asc') {
+          Object.keys(newData['adunits'].children).forEach((adUnit) => {
+            const sortedKeys = Object.keys(
+              newData['adunits'].children[adUnit].children
+            ).sort((a, b) => {
+              return (
+                new Date(a.split('||')[0]).getTime() -
+                new Date(b.split('||')[0]).getTime()
+              );
+            });
+            newData['adunits'].children[adUnit].children = sortedKeys.reduce(
+              (acc, key) => {
+                acc[key] = newData['adunits'].children[adUnit].children[key];
+                return acc;
+              },
+              {} as SidebarItems
+            );
+          });
+        } else {
+          Object.keys(newData['adunits'].children).forEach((adUnit) => {
+            const sortedKeys = Object.keys(
+              newData['adunits'].children[adUnit].children
+            ).sort((a, b) => {
+              return (
+                new Date(b.split('||')[0]).getTime() -
+                new Date(a.split('||')[0]).getTime()
+              );
+            });
+
+            newData['adunits'].children[adUnit].children = sortedKeys.reduce(
+              (acc, key) => {
+                acc[key] = newData['adunits'].children[adUnit].children[key];
+                return acc;
+              },
+              {} as SidebarItems
+            );
+          });
+        }
+      }
 
       return newData;
     });
@@ -200,6 +257,8 @@ const AuctionPanel = ({
     isMultiSeller,
     selectedAdUnit,
     selectedDateTime,
+    setSortOrder,
+    sortOrder,
   ]);
 
   const { activePanel } = useSidebar(({ state }) => ({
