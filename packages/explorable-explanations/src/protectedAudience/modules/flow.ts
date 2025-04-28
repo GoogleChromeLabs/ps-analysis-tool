@@ -30,7 +30,7 @@ type Flow = {
     height: number
   ) => void;
   clearBelowTimelineCircles: () => void;
-  setButtonsDisabilityState: () => void;
+  setButtonsDisabilityState: (overrideState?: boolean) => void;
 };
 
 /**
@@ -99,19 +99,15 @@ const flow: Flow = {
 
   /**
    * Enables and disables the button opacity and cursor pointer.
+   * @param overrideState If passed this state overrides the state of the buttons;
    */
-  setButtonsDisabilityState: () => {
+  setButtonsDisabilityState: (overrideState = false) => {
     const prevButton = document.getElementById('prevButton') ?? app.prevButton;
     const nextButton = document.getElementById('nextButton') ?? app.nextButton;
     // Exit early if buttons are not found
     if (!prevButton || !nextButton) {
       return;
     }
-
-    const { currentIndex } = app.timeline;
-    const { circles } = config.timeline;
-    const isInteractiveMode = app.isInteractiveMode;
-    const { visitedIndexOrderTracker, visitedIndexOrder } = app;
 
     // Helper function to set button state
     const setButtonState = (button, isDisabled) => {
@@ -123,6 +119,17 @@ const flow: Flow = {
       }
     };
 
+    if (overrideState) {
+      setButtonState(prevButton, overrideState);
+      setButtonState(nextButton, overrideState);
+      return;
+    }
+
+    const { currentIndex } = app.timeline;
+    const { circles } = config.timeline;
+    const isInteractiveMode = app.isInteractiveMode;
+    const { visitedIndexOrderTracker, visitedIndexOrder } = app;
+
     if (!isInteractiveMode) {
       setButtonState(prevButton, currentIndex <= 0);
       setButtonState(nextButton, currentIndex >= circles.length - 1);
@@ -133,7 +140,7 @@ const flow: Flow = {
     if (isInteractiveMode) {
       setButtonState(
         prevButton,
-        !(visitedIndexOrderTracker >= 0 && visitedIndexOrder.length >= 2)
+        !(visitedIndexOrderTracker > 0 && visitedIndexOrder.length >= 2)
       );
       setButtonState(
         nextButton,

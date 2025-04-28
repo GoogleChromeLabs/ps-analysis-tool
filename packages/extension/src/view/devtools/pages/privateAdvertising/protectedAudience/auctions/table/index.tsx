@@ -51,15 +51,9 @@ const AuctionTable = ({
     () => [
       {
         header: 'Event Time',
-        accessorKey: 'formattedTime',
+        accessorKey: 'time',
         cell: (_, details) =>
           (details as singleAuctionEvent).formattedTime.toString(),
-        sortingComparator: (a, b) => {
-          const aTime = Number((a as string).slice(0, a.length - 2));
-          const bTime = Number((b as string).slice(0, b.length - 2));
-
-          return aTime > bTime ? -1 : 1;
-        },
         enableHiding: false,
         widthWeightagePercentage: 10,
       },
@@ -216,17 +210,14 @@ const AuctionTable = ({
                 getRowObjectKey={(row: TableRow) => {
                   return (
                     // @ts-ignore
-                    ((row.originalData as singleAuctionEvent).auctionConfig
-                      ?.seller || '') +
-                    (row.originalData as singleAuctionEvent).time
+                    (row.originalData as singleAuctionEvent).index.toString()
                   );
                 }}
               >
                 <Table
                   selectedKey={
                     // @ts-ignore
-                    (selectedJSON?.auctionConfig?.seller || '') +
-                      selectedJSON?.time || ''
+                    selectedJSON?.index.toString() || ''
                   }
                   hideSearch={true}
                   minWidth="50rem"
@@ -242,7 +233,7 @@ const AuctionTable = ({
           </div>
         )}
       </Resizable>
-      <BottomTray selectedJSON={selectedJSON} />
+      <BottomTray selectedJSON={selectedJSON as object} />
     </div>
   );
 };

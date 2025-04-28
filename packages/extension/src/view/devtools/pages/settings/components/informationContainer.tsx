@@ -54,7 +54,7 @@ const InformationContainer = () => {
     if (copying) {
       timeOutRef.current = setTimeout(() => {
         setCopying(false);
-      }, 200);
+      }, 500);
     } else {
       if (timeOutRef.current) {
         clearTimeout(timeOutRef.current);
@@ -113,6 +113,25 @@ const InformationContainer = () => {
     currentTabs,
   ]);
 
+  const sysInfo = [
+    {
+      label: I18n.getMessage('openTabs'),
+      value: currentTabs,
+    },
+    {
+      label: I18n.getMessage('chromeVersion'),
+      value: browserInformation,
+    },
+    {
+      label: I18n.getMessage('pSATVersion'),
+      value: PSATVersion,
+    },
+    {
+      label: I18n.getMessage('systemArchitecture'),
+      value: OSInformation,
+    },
+  ];
+
   return (
     <div data-testid="debugging-information">
       <div>
@@ -120,7 +139,7 @@ const InformationContainer = () => {
           className="w-full flex gap-2 justify-between text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
           onClick={() => setOpen((prevOpen) => !prevOpen)}
         >
-          <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
+          <div className="flex items-center flex-row mb-2 gap-x-2">
             <InformationIcon className="dark:text-bright-gray" />
             <span className="text-base font-bold dark:text-bright-gray">
               {I18n.getMessage('systemInformation')}
@@ -133,54 +152,32 @@ const InformationContainer = () => {
         <div
           className={classNames(
             { hidden: !open },
-            'relative rounded flex flex-col w-full px-4 pr-8 py-2 border border-american-silver dark:border-quartz gap-y-3'
+            'relative rounded flex flex-col w-full px-4 py-4 border border-american-silver dark:border-quartz gap-y-3'
           )}
         >
-          <button
-            data-testid="copy-button"
-            disabled={copying}
-            className="absolute right-1 top-1"
-            onClick={handleCopy}
-          >
-            {copying ? (
-              <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
-            ) : (
-              <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
-            )}
-          </button>
-          <div className="flex flex-row gap-x-2 justify-between mt-4">
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('openTabs')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {currentTabs}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('chromeVersion')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {browserInformation}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('pSATVersion')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {PSATVersion}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">
-                {I18n.getMessage('systemArchitecture')}
-              </span>
-              <span className="text-xs text-darkest-gray dark:text-bright-gray">
-                {OSInformation}
-              </span>
-            </div>
+          <div className="flex flex-row gap-x-2 justify-between items-start">
+            {sysInfo.map((info) => (
+              <div className="flex flex-col" key={info.label}>
+                <span className="text-sm dark:text-bright-gray">
+                  {info.label}
+                </span>
+                <span className="text-xs text-darkest-gray dark:text-bright-gray">
+                  {info.value}
+                </span>
+              </div>
+            ))}
+            <button
+              data-testid="copy-button"
+              disabled={copying}
+              onClick={handleCopy}
+              className="-ml-8 -mt-1"
+            >
+              {copying ? (
+                <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+              ) : (
+                <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+              )}
+            </button>
           </div>
           <div className="flex flex-row">
             <div className="mt-1">

@@ -185,6 +185,8 @@ const setUpComponentAuctionStarter = (
   };
 
   const renderBoxes = (componentAuction: ComponentAuction, index: number) => {
+    const { colors } = config.flow;
+
     steps.push({
       component: ProgressLine,
       props: {
@@ -222,6 +224,7 @@ const setUpComponentAuctionStarter = (
         x: () =>
           getCoordinateValues(returnCoordinates).x - BORDER_BOX_MARGIN - 12,
         y: () => getCoordinateValues(returnCoordinates).y + 20,
+        color: colors.box.yellowBox,
       },
       delay: 1000,
       callBack: () => {
@@ -258,7 +261,7 @@ const setUpComponentAuction = (
   { title, x, y, ssp, info, sspWebsite },
   { bidValue }
 ) => {
-  const { box, arrowSize } = config.flow;
+  const { box, arrowSize, colors } = config.flow;
 
   steps.push({
     component: Text,
@@ -285,6 +288,7 @@ const setUpComponentAuction = (
         12,
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 20,
       info,
+      color: colors.box.yellowBox,
     },
     delay: 1000,
     callBack: (returnValue: Coordinates) => {
@@ -350,7 +354,7 @@ const setUpComponentAuction = (
       customHeight: 80,
       noArrow: true,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -363,7 +367,7 @@ const setUpComponentAuction = (
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 15,
     },
     delay: 1000,
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -418,7 +422,7 @@ const setUpTPoint = (steps: AuctionStep[]) => {
 };
 
 const setupAfterComponentAuctionFlow = (steps) => {
-  const { box, arrowSize } = config.flow;
+  const { box, arrowSize, colors } = config.flow;
 
   steps.push({
     component: Box,
@@ -433,8 +437,10 @@ const setupAfterComponentAuctionFlow = (steps) => {
       forceScroll: true,
     },
     delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+    callBack: (returnValue: Coordinates) => {
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -448,7 +454,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
         box.height -
         arrowSize,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -465,8 +471,10 @@ const setupAfterComponentAuctionFlow = (steps) => {
         getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
     },
     delay: 1000,
-    callBack: (returnValue) => {
-      app.auction.nextTipCoordinates = returnValue.down;
+    callBack: (returnValue: Coordinates) => {
+      if (returnValue.down) {
+        app.auction.nextTipCoordinates = returnValue.down;
+      }
     },
   });
 
@@ -480,7 +488,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
         box.height -
         arrowSize,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
@@ -491,6 +499,7 @@ const setupAfterComponentAuctionFlow = (steps) => {
       title: MULTI_SELLER_CONFIG.REPORT_RESULT.title,
       info: MULTI_SELLER_CONFIG.REPORT_RESULT.info,
       description: MULTI_SELLER_CONFIG.REPORT_RESULT.description,
+      color: colors.box.yellowBox,
       x: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
       y: () =>
@@ -513,12 +522,10 @@ const setupAfterComponentAuctionFlow = (steps) => {
       y1: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).y + arrowSize,
     },
-    callBack: (returnValue) => {
+    callBack: (returnValue: Coordinates) => {
       app.auction.nextTipCoordinates = returnValue;
     },
   });
-
-  const WINNING_AD_DELAY = 5000 + app.speedMultiplier * 1000;
 
   steps.push({
     component: Box,
@@ -530,19 +537,18 @@ const setupAfterComponentAuctionFlow = (steps) => {
         getCoordinateValues(app.auction.nextTipCoordinates).y -
         box.height / 2 +
         1,
+      stepDelay: app.getWinningAdDelay(),
     },
-    delay: WINNING_AD_DELAY,
+    delay: 1000,
     callBack: (returnValue: Coordinates) => {
       if (returnValue.down) {
         app.auction.nextTipCoordinates = returnValue.down;
-        if (!app.autoScroll) {
-          return;
-        }
         const currentCircleIndex = app.timeline.currentIndex;
         const nextCircleIndex = app.isInteractiveMode
           ? currentCircleIndex
           : currentCircleIndex + 1;
-        const delay = WINNING_AD_DELAY / app.speedMultiplier;
+        const delay = app.getWinningAdDelay();
+        // manually adjust delay depending on object distance to the next circle
         scrollToCircle(nextCircleIndex, delay * 0.55);
       }
     },
