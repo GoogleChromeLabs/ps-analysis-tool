@@ -1611,7 +1611,11 @@ class Main {
       return;
     }
 
-    if (recentCheckpoint && !this.stepsQueue?.[0]?.getIsCheckpoint()) {
+    if (
+      recentCheckpoint &&
+      this.stepsQueue.length &&
+      !this.stepsQueue?.[0]?.getIsCheckpoint()
+    ) {
       while (this.isTravelling) {
         this.runTraveller();
       }
@@ -1620,57 +1624,59 @@ class Main {
       this.loadSnapshotAndReDraw();
     }
 
-    let foundCheckpoint = false;
+    if (this.stepsQueue.length) {
+      let foundCheckpoint = false;
 
-    for (let i = 0; i < this.stepsQueue.length; i++) {
-      const figure = this.stepsQueue[i];
+      for (let i = 0; i < this.stepsQueue.length; i++) {
+        const figure = this.stepsQueue[i];
 
-      if (figure.getId() !== checkpoint && !foundCheckpoint) {
-        continue;
-      }
-
-      if (figure.getIsCheckpoint() && figure.getId() !== checkpoint) {
-        break;
-      }
-
-      foundCheckpoint = true;
-
-      if (
-        figure.getAnimatorId() &&
-        figure.getAnimatorId() !==
-          this.helperQueue[this.helperQueue.length - 1]?.getAnimatorId()
-      ) {
-        const animator = this.animatorStepsQueue.find(
-          (a) => a.getId() === figure.getAnimatorId()
-        );
-
-        if (animator) {
-          this.helperAnimatorQueue.push(animator);
+        if (figure.getId() !== checkpoint && !foundCheckpoint) {
+          continue;
         }
-      }
 
-      if (
-        figure.getGroupId() &&
-        figure.getGroupId() !==
-          this.helperQueue[this.helperQueue.length - 1]?.getGroupId()
-      ) {
-        const group = this.groupStepsQueue.find(
-          (g) => g.getId() === figure.getGroupId()
-        );
-
-        if (group) {
-          this.helperGroupQueue.push(group);
+        if (figure.getIsCheckpoint() && figure.getId() !== checkpoint) {
+          break;
         }
+
+        foundCheckpoint = true;
+
+        if (
+          figure.getAnimatorId() &&
+          figure.getAnimatorId() !==
+            this.helperQueue[this.helperQueue.length - 1]?.getAnimatorId()
+        ) {
+          const animator = this.animatorStepsQueue.find(
+            (a) => a.getId() === figure.getAnimatorId()
+          );
+
+          if (animator) {
+            this.helperAnimatorQueue.push(animator);
+          }
+        }
+
+        if (
+          figure.getGroupId() &&
+          figure.getGroupId() !==
+            this.helperQueue[this.helperQueue.length - 1]?.getGroupId()
+        ) {
+          const group = this.groupStepsQueue.find(
+            (g) => g.getId() === figure.getGroupId()
+          );
+
+          if (group) {
+            this.helperGroupQueue.push(group);
+          }
+        }
+
+        this.helperQueue.push(figure);
       }
 
-      this.helperQueue.push(figure);
+      const helperSet = new Set<string>(this.helperQueue.map((f) => f.getId()));
+
+      this.stepsQueue = this.stepsQueue.filter(
+        (figure) => !helperSet.has(figure.getId())
+      );
     }
-
-    const helperSet = new Set<string>(this.helperQueue.map((f) => f.getId()));
-
-    this.stepsQueue = this.stepsQueue.filter(
-      (figure) => !helperSet.has(figure.getId())
-    );
 
     this.togglePause(false);
   }
