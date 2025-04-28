@@ -24,6 +24,7 @@ import {
 } from '@google-psat/design-system';
 import Panel from './panel';
 import Overview from './overview';
+import MDLTable from './mdlTable';
 
 const IPProtection = () => {
   const tabItems = useMemo<TabItems>(
@@ -36,6 +37,13 @@ const IPProtection = () => {
             infoKey: PSInfoKey.IPProtection,
           },
           className: 'p-4',
+        },
+      },
+      {
+        title: 'MDL',
+        content: {
+          Element: MDLTable,
+          props: {},
         },
       },
     ],
