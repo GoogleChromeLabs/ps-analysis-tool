@@ -30,6 +30,7 @@ interface TableBodyProps {
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
   rowHeightClass?: string;
+  shouldScroll?: boolean;
 }
 
 const TableBody = ({
@@ -37,6 +38,7 @@ const TableBody = ({
   setIsRowFocused,
   selectedKey,
   rowHeightClass,
+  shouldScroll = false,
 }: TableBodyProps) => {
   const {
     rows,
@@ -116,6 +118,7 @@ const TableBody = ({
     >
       {rows.map((row, index) => (
         <BodyRow
+          shouldScroll={shouldScroll && rows.length - 1 === index}
           key={index}
           index={index}
           row={row}

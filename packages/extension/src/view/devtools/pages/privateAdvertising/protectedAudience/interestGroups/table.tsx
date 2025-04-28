@@ -236,6 +236,7 @@ const IGTable = ({
               (selectedRow?.uniqueAuctionId ?? '') + String(selectedRow?.time)
             }
             hideSearch={true}
+            shouldScroll
             minWidth="50rem"
           />
         </TableProvider>
