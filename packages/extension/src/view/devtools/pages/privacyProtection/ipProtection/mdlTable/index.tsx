@@ -20,6 +20,7 @@ import {
   ProgressBar,
   Table,
   TableProvider,
+  type TableFilter,
   type TableColumn,
   type TableRow,
 } from '@google-psat/design-system';
@@ -61,6 +62,15 @@ const MDLTable = () => {
     []
   );
 
+  const filters = useMemo<TableFilter>(
+    () => ({
+      owner: {
+        title: 'Owner',
+      },
+    }),
+    []
+  );
+
   if (tableData.length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -72,6 +82,8 @@ const MDLTable = () => {
   return (
     <TableProvider
       tableColumns={tableColumns}
+      tableFilterData={filters}
+      tableSearchKeys={['domain', 'owner']}
       data={tableData}
       onRowClick={(rowData) => {
         setSelectedKey(rowData?.domain || null);
@@ -79,7 +91,7 @@ const MDLTable = () => {
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
     >
-      <Table selectedKey={selectedKey} hideFiltering hideSearch />
+      <Table selectedKey={selectedKey} />
     </TableProvider>
   );
 };
