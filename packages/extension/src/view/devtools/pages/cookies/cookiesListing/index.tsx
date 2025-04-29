@@ -37,11 +37,14 @@ interface CookiesListingProps {
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, tabFrames, tabUrl } = useCookie(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-    tabFrames: state.tabFrames,
-    tabUrl: state.tabUrl,
-  }));
+  const { selectedFrame, tabFrames, tabUrl, showBlockedCookies } = useCookie(
+    ({ state }) => ({
+      selectedFrame: state.selectedFrame,
+      tabFrames: state.tabFrames,
+      tabUrl: state.tabUrl,
+      showBlockedCookies: state.showBlockedCookies,
+    })
+  );
 
   const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
@@ -100,6 +103,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         className="h-full flex"
       >
         <CookieTable
+          shouldShowBlockedCookies={showBlockedCookies}
           queryIsBlockedToHighlight={!isUsingCDP}
           data={frameFilteredCookies}
           tableColumns={tableColumns}

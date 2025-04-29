@@ -101,7 +101,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             (row.originalData as CookieTableData)?.isDomainInAllowList
           );
 
-          return isBlocked || isDomainInAllowList;
+          return (showBlockedCookies && isBlocked) || isDomainInAllowList;
         },
       },
       {
@@ -198,7 +198,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 3,
       },
     ],
-    [isUsingCDP]
+    [isUsingCDP, showBlockedCookies]
   );
 
   const filters = useMemo<TableFilter>(

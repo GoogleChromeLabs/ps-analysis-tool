@@ -58,6 +58,7 @@ interface CookieTableProps {
   hideExport?: boolean;
   isCLI?: boolean;
   hostname: string;
+  shouldShowBlockedCookies?: boolean;
 }
 
 const CookieTable = forwardRef<
@@ -82,6 +83,7 @@ const CookieTable = forwardRef<
     hideExport,
     isCLI = false,
     hostname,
+    shouldShowBlockedCookies = true,
   }: CookieTableProps,
   ref
 ) {
@@ -148,10 +150,11 @@ const CookieTable = forwardRef<
         isRowFocused,
         rowIndex,
         selectedKey,
-        queryIsBlockedToHighlight
+        queryIsBlockedToHighlight,
+        shouldShowBlockedCookies
       );
     },
-    [selectedKey, queryIsBlockedToHighlight]
+    [selectedKey, queryIsBlockedToHighlight, shouldShowBlockedCookies]
   );
 
   const hasVerticalBar = useCallback((row: TableRow) => {
