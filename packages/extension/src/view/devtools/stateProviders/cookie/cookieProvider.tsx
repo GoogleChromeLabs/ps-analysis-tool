@@ -47,6 +47,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
+  const [showBlockedCookies, setShowBlockedCookies] = useState<boolean>(false);
 
   const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
@@ -377,8 +378,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         isInspecting,
         canStartInspecting,
         frameHasCookies: frameHasCookies(),
+        showBlockedCookies,
       },
       actions: {
+        setShowBlockedCookies,
         setSelectedFrame,
         getCookiesSetByJavascript,
         setIsInspecting,
@@ -387,6 +390,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    showBlockedCookies,
     canStartInspecting,
     contextInvalidated,
     frameHasCookies,

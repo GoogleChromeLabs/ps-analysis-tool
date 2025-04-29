@@ -46,13 +46,19 @@ import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
-    ({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    })
-  );
+  const {
+    selectedFrame,
+    cookies,
+    getCookiesSetByJavascript,
+    setShowBlockedCookies,
+    showBlockedCookies,
+  } = useCookie(({ state, actions }) => ({
+    selectedFrame: state.selectedFrame,
+    cookies: state.tabCookies || {},
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    showBlockedCookies: state.showBlockedCookies,
+    setShowBlockedCookies: actions.setShowBlockedCookies,
+  }));
 
   const { activePanelQuery, clearActivePanelQuery } = useSidebar(
     ({ state }) => ({
@@ -499,12 +505,31 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
 
   const extraInterfaceToTopBar = useCallback(() => {
     return (
-      <RefreshButton
-        onClick={getCookiesSetByJavascript}
-        title={I18n.getMessage('refreshJSCookies')}
-      />
+      <>
+        <RefreshButton
+          onClick={getCookiesSetByJavascript}
+          title={I18n.getMessage('refreshJSCookies')}
+        />
+        <div className="flex items-center w-max">
+          <input
+            type="checkbox"
+            checked={showBlockedCookies}
+            id="show-blocked-cookies"
+            className="ml-1"
+            onChange={(e) => {
+              setShowBlockedCookies(e.target.checked);
+            }}
+          />
+          <label
+            htmlFor="show-blocked-cookies"
+            className="text-sm text-comet-black dark:text-mischka ml-2"
+          >
+            Show blocked cookies
+          </label>
+        </div>
+      </>
     );
-  }, [getCookiesSetByJavascript]);
+  }, [getCookiesSetByJavascript, setShowBlockedCookies, showBlockedCookies]);
 
   return {
     tableData,
