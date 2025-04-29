@@ -123,6 +123,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       <CookieDetails
         isUsingCDP={isUsingCDP}
         selectedFrameCookie={selectedFrameCookie}
+        showBlockedCookies={showBlockedCookies}
       />
       <RowContextMenuForCookies
         domainsInAllowList={domainsInAllowList}

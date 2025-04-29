@@ -40,11 +40,16 @@ import {
 
 export interface DetailsProps {
   isUsingCDP: boolean;
+  showBlockedCookies: boolean;
   selectedCookie: CookieTableData;
 }
 
 // eslint-disable-next-line complexity
-const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
+const Details = ({
+  selectedCookie,
+  isUsingCDP,
+  showBlockedCookies,
+}: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
 
   let blockedReasons = '';
@@ -112,6 +117,9 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
     return errorOnDecode;
   }, [selectedCookie.parsedCookie.value]);
 
+  const shouldShowBlockedCookieDescription =
+    showBlockedCookies && !selectedCookie.isFirstParty;
+
   return (
     <div className="text-xs py-1 px-1.5">
       {selectedCookieExemptionReason &&
@@ -140,23 +148,26 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </p>
         </div>
       )}
-      {hasValidBlockedReason && isUsingCDP && (
-        <div className="mb-4">
-          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            {I18n.getMessage('blockedReason')}
-          </p>
-          <p
-            className="text-outer-space-crayola dark:text-bright-gray"
-            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
-          />
-        </div>
-      )}
+      {shouldShowBlockedCookieDescription &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="mb-4">
+            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+              {I18n.getMessage('blockedReason')}
+            </p>
+            <p
+              className="text-outer-space-crayola dark:text-bright-gray"
+              dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
+            />
+          </div>
+        )}
 
       {selectedCookie?.blockingStatus?.inboundBlock ===
         BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         !outboundBlock &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -170,7 +181,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         !outboundBlock &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -184,7 +196,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         !inboundBlock &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -198,7 +211,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         !inboundBlock &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -213,7 +227,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -228,7 +243,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -243,7 +259,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -261,7 +278,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         hasValidBlockedReason &&
-        isUsingCDP && (
+        isUsingCDP &&
+        shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="rotate-180 scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">

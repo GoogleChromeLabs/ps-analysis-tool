@@ -100,8 +100,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const isDomainInAllowList = Boolean(
             (row.originalData as CookieTableData)?.isDomainInAllowList
           );
+          const isFirstParty = (row.originalData as CookieTableData)
+            ?.isFirstParty;
 
-          return (showBlockedCookies && isBlocked) || isDomainInAllowList;
+          return (
+            (showBlockedCookies && isBlocked && !isFirstParty) ||
+            isDomainInAllowList
+          );
         },
       },
       {
@@ -524,7 +529,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             htmlFor="show-blocked-cookies"
             className="text-sm text-comet-black dark:text-mischka ml-2"
           >
-            Show blocked cookies
+            Highlight blocked 3p cookies
           </label>
         </div>
       </>
