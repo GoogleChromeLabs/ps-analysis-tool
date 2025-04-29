@@ -527,7 +527,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           />
           <label
             htmlFor="show-blocked-cookies"
-            className="text-sm text-comet-black dark:text-mischka ml-2"
+            className="ml-1 text-xs leading-none"
           >
             Highlight blocked 3p cookies
           </label>
