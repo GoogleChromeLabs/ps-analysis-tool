@@ -57,7 +57,7 @@ const ListItem = ({
   const [hasScannedFiltersOnce, setHasScannedFiltersOnce] =
     useState<boolean>(true);
   const [isExpanded, setExpanded] = useState<boolean>(false);
-  const [showSubList, setShowSubList] = useState<boolean>(false);
+  const [showSubList, setShowSubList] = useState<boolean>(true);
 
   const toggleShowMore = useCallback(() => {
     setExpanded(!isExpanded);

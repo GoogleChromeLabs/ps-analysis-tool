@@ -47,6 +47,7 @@ interface FiltersSidebarProps {
     filterKey: string,
     isSingleFilterRemovalAction?: boolean | undefined
   ) => void;
+  expandAllProp?: boolean;
 }
 
 const FiltersSidebar = ({
@@ -55,8 +56,9 @@ const FiltersSidebar = ({
   isSelectAllFilterSelected,
   toggleFilterSelection,
   toggleSelectAllFilter,
+  expandAllProp = false,
 }: FiltersSidebarProps) => {
-  const [expandAll, setExpandAll] = useState(false);
+  const [expandAll, setExpandAll] = useState(expandAllProp ?? false);
   const expandedFilters = useRef(new Set<string>());
   const filterKeys = useMemo(() => {
     return filters.map((filter) => filter.key);
