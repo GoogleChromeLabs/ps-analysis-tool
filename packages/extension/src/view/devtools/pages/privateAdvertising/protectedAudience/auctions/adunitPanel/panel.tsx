@@ -82,7 +82,7 @@ const Panel = ({
         Icon: ScreenIcon,
         buttons: [
           ...(currentAd?.mediaContainerSize || []).map((size) => ({
-            name: `${size[0]}x${size[1]}`,
+            name: `${size?.[0]}x${size?.[1]}`,
           })),
         ],
       },

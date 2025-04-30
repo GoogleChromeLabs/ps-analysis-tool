@@ -65,7 +65,6 @@ const SiteBoundaries = () => {
         title={I18n.getMessage('siteBoundaries')}
         contentPanelTitle={I18n.getMessage('siteBoundariesDescription')}
         content={content}
-        counterStyles="bg-blue-600"
         titleStyles="text-blue-600"
         extraClasses="min-h-[78vh] w-full"
       />

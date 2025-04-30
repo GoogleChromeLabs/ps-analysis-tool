@@ -55,17 +55,6 @@ export const FEATURED_ITEMS = [
     },
   },
   {
-    name: 'Wiki',
-    icon: PSWikiIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
-    title: 'Looking for in-depth guidance on using PSAT?',
-    description:
-      "The PSAT Wiki Page is your dedicated resource where you'll find detailed explanations of the extension's features, practical guidance on how to leverage its tools effectively, and answers to frequently asked questions about its functionality.  Explore the PSAT Wiki in the current browser tab to the left of PSAT.",
-    colorClasses: {
-      heading: 'text-blue-600',
-    },
-  },
-  {
     name: 'Stories',
     icon: PSStoriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
@@ -84,6 +73,17 @@ export const FEATURED_ITEMS = [
       'Explore and test Privacy Sandbox APIs firsthand using the PSAT extension. Gain hands-on insights by interacting with real-world scenarios and experimenting directly within your browser.',
     colorClasses: {
       heading: 'text-green-700',
+    },
+  },
+  {
+    name: 'Wiki',
+    icon: PSWikiIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
+    title: 'Looking for in-depth guidance on using PSAT?',
+    description:
+      "The PSAT Wiki Page is your dedicated resource where you'll find detailed explanations of the extension's features, practical guidance on how to leverage its tools effectively, and answers to frequently asked questions about its functionality.  Explore the PSAT Wiki in the current browser tab to the left of PSAT.",
+    colorClasses: {
+      heading: 'text-blue-600',
     },
   },
 ];

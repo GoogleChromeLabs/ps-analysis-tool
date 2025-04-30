@@ -38,13 +38,10 @@ interface settingsToReturnObject {
   links: string[];
 }
 const SettingsContainer = () => {
-  const { allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode } =
-    useSettings(({ state, actions }) => ({
-      allowedNumberOfTabs: state.allowedNumberOfTabsForSettingsPageDisplay,
-      isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
-      setProcessingMode: actions.setProcessingMode,
-      setIsUsingCDP: actions.setIsUsingCDP,
-    }));
+  const { isUsingCDP, setIsUsingCDP } = useSettings(({ state, actions }) => ({
+    isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
+    setIsUsingCDP: actions.setIsUsingCDP,
+  }));
 
   const memoisedSettings = useMemo(() => {
     const settingsToReturn: settingsToReturnObject[] = [];
@@ -63,18 +60,6 @@ const SettingsContainer = () => {
             ],
           });
           break;
-        case 'multitabDebugging':
-          settingsToReturn.push({
-            ...setting,
-            heading: setting.heading(),
-            description: setting.description(),
-            changeSwitchState: setProcessingMode,
-            switchState: allowedNumberOfTabs === 'unlimited',
-            links: [
-              'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging',
-            ],
-          });
-          break;
         default:
           break;
       }
@@ -82,11 +67,11 @@ const SettingsContainer = () => {
     });
 
     return settingsToReturn;
-  }, [allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode]);
+  }, [isUsingCDP, setIsUsingCDP]);
 
   return (
     <div data-testid="Settings">
-      <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
+      <div className="flex items-center flex-row mb-2 gap-x-2">
         <Gear className="dark:text-bright-gray" />
         <span className="text-base font-bold dark:text-bright-gray">
           {I18n.getMessage('pSATSettings')}

@@ -49,10 +49,8 @@ describe('chrome.webRequest.onBeforeSendHeaders.addListener', () => {
 
   beforeEach(() => {
     dataStore.globalIsUsingCDP = false;
-    dataStore.tabMode = 'single';
     dataStore.addTabData(1141143618);
     dataStore.updateUrl(1141143618, 'https://bbc.com');
-    dataStore.tabToRead = '1141143618';
   });
   afterEach(() => {
     dataStore.removeTabData(1141143618);

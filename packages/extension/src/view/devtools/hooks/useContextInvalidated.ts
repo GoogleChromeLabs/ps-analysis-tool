@@ -33,8 +33,7 @@ const useContextInvalidated = (
     })
   );
 
-  const { allowedNumberOfTabs, isUsingCDP } = useSettings(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
+  const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
 
@@ -59,11 +58,7 @@ const useContextInvalidated = (
     (async () => {
       const localStorageFlag = localStorage.getItem('contextInvalidated');
 
-      if (
-        localStorageFlag &&
-        localStorageFlag === 'true' &&
-        allowedNumberOfTabs === 'unlimited'
-      ) {
+      if (localStorageFlag && localStorageFlag === 'true') {
         const tabId = chrome.devtools.inspectedWindow.tabId;
 
         if (tabId) {
@@ -90,7 +85,7 @@ const useContextInvalidated = (
         localStorage.removeItem('contextInvalidated');
       }
     })();
-  }, [allowedNumberOfTabs, isUsingCDP]);
+  }, [isUsingCDP]);
 
   return contextInvalidated;
 };

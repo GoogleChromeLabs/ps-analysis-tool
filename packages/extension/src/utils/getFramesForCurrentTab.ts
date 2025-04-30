@@ -52,7 +52,7 @@ export default function getFramesForCurrentTab(
       });
 
       const currentFrameIds = isUsingCDP
-        ? frameIdsFromCDP
+        ? [...frameIdsFromCDP, frameId.toString()]
         : [frameId.toString()];
 
       if (frameIdsFromCDP.length) {

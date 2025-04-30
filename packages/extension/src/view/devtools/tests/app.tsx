@@ -30,8 +30,8 @@ import { I18n } from '@google-psat/i18n';
 import App from '../app';
 import {
   useCookie,
-  useSettings,
   useProtectedAudience,
+  useSettings,
 } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -99,9 +99,7 @@ describe('App', () => {
           get: (_, __) =>
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             new Promise<{ [key: string]: any }>((resolve) => {
-              resolve({
-                allowedNumberOfTabs: 'single',
-              });
+              resolve({});
             }),
           set: () => Promise.resolve(),
           //@ts-ignore
@@ -196,6 +194,20 @@ describe('App', () => {
       configurable: true,
       value: jest.fn(),
     });
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
   });
 
   it('Should show cookie table if frame is selected', async () => {
@@ -211,8 +223,6 @@ describe('App', () => {
       setIsInspecting: noop,
       canStartInspecting: true,
       tabUrl: data.tabUrl,
-      isCurrentTabBeingListenedTo: true,
-      tabToRead: '40245632',
     });
 
     mockUseProtectedAudienceStore.mockReturnValue({
@@ -224,10 +234,7 @@ describe('App', () => {
       getPreferences: () => '',
       setPreferences: noop,
     });
-
-    mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
-    });
+    mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
 
     act(() => {
       render(<App />);
@@ -249,7 +256,6 @@ describe('App', () => {
       setIsInspecting: noop,
       canStartInspecting: true,
       tabUrl: data.tabUrl,
-      isCurrentTabBeingListenedTo: true,
     });
     mockUseProtectedAudienceStore.mockReturnValue({
       auctionEvents: {},
@@ -259,9 +265,7 @@ describe('App', () => {
       getPreferences: () => '',
       setPreferences: noop,
     });
-    mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
-    });
+    mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
 
     act(() => {
       render(<App />);

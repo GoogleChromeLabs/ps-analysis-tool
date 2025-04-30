@@ -23,6 +23,10 @@ import { isInsideCircle } from '../isInsideCircle';
 import { getCoordinateValues } from '../getCoordinateValues';
 
 const mouseMovedInNonInteractiveMode = (event) => {
+  if (!app.shouldRespondToClick) {
+    return;
+  }
+
   const { offsetX, offsetY } = event;
 
   app.mouseX = offsetX;

@@ -17,36 +17,32 @@
  * External dependencies.
  */
 import React from 'react';
-import { I18n } from '@google-psat/i18n';
-
-/**
- * Internal dependencies.
- */
-import Button from '../button';
 
 interface ToastMessageProps {
   text: string;
-  onClick: () => void;
+  isPopup?: boolean;
   additionalStyles?: string;
   textAdditionalStyles?: string;
-  variant?: 'primary' | 'secondary' | 'danger' | 'small' | 'large';
-  buttonText?: string;
+  actionComponent?: React.ReactNode;
 }
 const ToastMessage = ({
   text,
-  onClick,
+  isPopup = false,
   additionalStyles = '',
   textAdditionalStyles = '',
-  variant = 'large',
-  buttonText = I18n.getMessage('reload'),
+  actionComponent,
 }: ToastMessageProps) => {
   return (
     <div
       className={`${additionalStyles} w-full overflow-auto z-2 bg-white dark:bg-charleston-green shadow-xxs`}
     >
-      <div className="flex items-center justify-between p-4 gap-2 min-w-[20rem]">
+      <div
+        className={`${
+          isPopup ? 'p-3 text-left' : 'p-4'
+        } flex items-center justify-between gap-2 min-w-[20rem]`}
+      >
         <p className={`dark:text-white ${textAdditionalStyles}`}>{text}</p>
-        <Button text={buttonText} onClick={onClick} variant={variant} />
+        {actionComponent}
       </div>
     </div>
   );

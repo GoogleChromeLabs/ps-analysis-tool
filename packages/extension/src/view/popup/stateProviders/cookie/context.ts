@@ -16,19 +16,14 @@
 /**
  * External dependencies.
  */
-import { noop, createContext, type CookiesCount } from '@google-psat/common';
+import { createContext, type CookiesCount } from '@google-psat/common';
 
 export interface CookieStoreContext {
   state: {
     tabCookieStats: CookiesCount | null;
-    isCurrentTabBeingListenedTo: boolean;
     loading: boolean;
-    returningToSingleTab: boolean;
     tabId: number | null;
     onChromeUrl: boolean;
-  };
-  actions: {
-    changeListeningToThisTab: () => void;
   };
 }
 
@@ -53,15 +48,13 @@ const initialState: CookieStoreContext = {
         analytics: 0,
         uncategorized: 0,
       },
+      exemptedCookies: {
+        total: 0,
+      },
     },
-    isCurrentTabBeingListenedTo: false,
     loading: true,
-    returningToSingleTab: false,
     onChromeUrl: false,
     tabId: null,
-  },
-  actions: {
-    changeListeningToThisTab: noop,
   },
 };
 

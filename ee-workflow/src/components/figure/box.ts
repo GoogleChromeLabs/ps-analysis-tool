@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating a box figure.
@@ -29,22 +29,43 @@ export default class Box extends Figure {
   /**
    * Width of the box.
    */
-  width: number;
+  private width: number;
 
   /**
    * Height of the box.
    */
-  height: number;
+  private height: number;
+
+  /**
+   * Callback defined by the user to be executed when the box is clicked.
+   */
 
   constructor(
+    canvasRuuner: Main,
     x: number,
     y: number,
     width: number,
     height: number,
+    id?: string,
     fill?: string,
-    stroke?: string
+    stroke?: string,
+    tags?: string[],
+    mouseClicked?: (figure: Figure) => void,
+    mouseMoved?: (figure: Figure) => void,
+    onLeave?: (figure: Figure) => void
   ) {
-    super(x, y, fill, stroke);
+    super(
+      canvasRuuner,
+      x,
+      y,
+      id,
+      fill,
+      stroke,
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
+    );
     this.width = width;
     this.height = height;
   }
@@ -55,28 +76,12 @@ export default class Box extends Figure {
     this.p5?.stroke(this.stroke);
     this.p5?.rect(this.x, this.y, this.width, this.height);
     this.p5?.pop();
-  }
 
-  onHover() {
-    this.savePreviousColors();
-    this.fill = 'red'; // TODO: Discuss the function
-    main.addFigure(this, true);
-  }
-
-  onLeave() {
-    if (
-      this.fill === this.previousFill &&
-      this.stroke === this.previousStroke
-    ) {
-      return;
+    if (this.runSideEffect) {
+      this.sideEffectOnDraw?.(this);
+    } else {
+      this.runSideEffect = true;
     }
-
-    this.reApplyPreviousColors();
-    main.addFigure(this, true);
-  }
-
-  onClick() {
-    // TODO: Discuss the function
   }
 
   isHovering(): boolean {
@@ -92,14 +97,6 @@ export default class Box extends Figure {
     );
   }
 
-  remove() {
-    this.p5?.push();
-    this.p5?.fill(main.backgroundColor);
-    this.p5?.stroke(main.backgroundColor);
-    this.p5?.rect(this.x, this.y, this.width, this.height);
-    this.p5?.pop();
-  }
-
   reDraw(
     x?: number,
     y?: number,
@@ -108,13 +105,17 @@ export default class Box extends Figure {
     fill?: string,
     stroke?: string
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     this.width = width ?? this.width;
     this.height = height ?? this.height;
     this.fill = fill || this.fill;
     this.stroke = stroke || this.stroke;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
+  }
+
+  shift(x?: number, y?: number) {
+    this.x += x ?? 0;
+    this.y += y ?? 0;
   }
 }

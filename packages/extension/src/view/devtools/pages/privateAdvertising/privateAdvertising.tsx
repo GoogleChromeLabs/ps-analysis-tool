@@ -65,7 +65,6 @@ const PrivateAdvertising = () => {
       extraClasses="min-h-[78vh] w-full"
       contentPanelTitle={I18n.getMessage('privateAdvertisingDescription')}
       content={content}
-      counterStyles="bg-blue-600"
       titleStyles="text-blue-600"
     />
   );

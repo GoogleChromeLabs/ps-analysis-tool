@@ -250,6 +250,7 @@ const ExplorableExplanation = () => {
   } | null>(INIT_STATE);
 
   useEffect(() => {
+    // eslint-disable-next-line complexity
     setAuctionsData((prevData) => {
       if (!currentSiteData || currentSiteData?.type === 'advertiser') {
         previousAuctionData.current = null;
@@ -284,12 +285,10 @@ const ExplorableExplanation = () => {
           isMultiSeller,
           currentSiteData,
           currentStep,
-          previousAuctionData.current,
+          prevData?.auctionData ?? {},
           selectedAdUnit,
           selectedDateTime
         );
-
-      previousAuctionData.current = auctionData;
 
       if (auctionData) {
         const isDataEqual = isEqual(auctionData, prevData?.auctionData);
@@ -297,21 +296,36 @@ const ExplorableExplanation = () => {
         if (!isDataEqual) {
           setAuctionUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
         }
+
+        if (!Object.keys(auctionData).length) {
+          setAuctionUpdateIndicator(() => -1);
+        }
       }
 
       if (receivedBids || noBids) {
         const isDataEqual = isEqual(
-          { receivedBids, noBids },
           {
-            receivedBids: prevData?.receivedBids,
-            noBids: prevData?.noBids,
+            receivedBids: Object.values(receivedBids),
+            noBids: Object.values(noBids),
+          },
+          {
+            receivedBids: Object.keys(prevData?.receivedBids || {}).length
+              ? Object.values(prevData?.receivedBids || {})
+              : [[], [], []],
+            noBids: Object.values(prevData?.noBids || {}),
           }
         );
 
         if (!isDataEqual) {
           setBidsUpdateIndicator((prev) => (prev === -1 ? 0 : prev) ^ 1);
         }
+
+        if (!Object.keys(receivedBids).length && !Object.keys(noBids).length) {
+          setBidsUpdateIndicator(() => -1);
+        }
       }
+
+      previousAuctionData.current = auctionData;
 
       return {
         auctionData: auctionData ?? {},

@@ -17,14 +17,16 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Button,
   CirclePieChart,
+  Tick,
   ProgressBar,
   ToastMessage,
   ToggleSwitch,
   prepareCookieStatsComponents,
+  Plus,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -34,41 +36,145 @@ import { I18n } from '@google-psat/i18n';
 import './app.css';
 import { Legend } from './components';
 import { useCookie, useSettings } from './stateProviders';
-import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
+import { CDP_WARNING_MESSAGE, RELOAD_WARNING_MESSAGE } from '../../constants';
 
 const App: React.FC = () => {
-  const {
-    cookieStats,
-    loading,
-    isCurrentTabBeingListenedTo,
-    onChromeUrl,
-    changeListeningToThisTab,
-  } = useCookie(({ state, actions }) => ({
+  const { cookieStats, loading, onChromeUrl } = useCookie(({ state }) => ({
     cookieStats: state.tabCookieStats,
-    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
-    returningToSingleTab: state.returningToSingleTab,
     onChromeUrl: state.onChromeUrl,
-    changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
   const {
-    allowedNumberOfTabs,
-    isUsingCDP,
     settingsChanged,
-    setUsingCDP,
     handleSettingsChange,
+    exceedingLimitations,
+    isUsingCDP,
+    setUsingCDP,
+    isUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
+    setIsUsingCDPForSettingsDisplay,
   } = useSettings(({ state, actions }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-    isUsingCDP: state.isUsingCDPForSettingsDisplay,
     settingsChanged: state.settingsChanged,
-    setUsingCDP: actions.setUsingCDP,
     handleSettingsChange: actions.handleSettingsChange,
+    exceedingLimitations: state.exceedingLimitations,
+    isUsingCDP: state.isUsingCDP,
+    setUsingCDP: actions.setUsingCDP,
+    setIsUsingCDPForSettingsDisplay: actions.setIsUsingCDPForSettingsDisplay,
+    isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsDisplay,
+    setSettingsChanged: actions.setSettingsChanged,
   }));
 
   const cdpLabel = isUsingCDP
     ? I18n.getMessage('disableCDP')
     : I18n.getMessage('enableCDP');
+
+  const buttonReloadActionCompnent = useMemo(() => {
+    return (
+      <div className="flex flex-col items-center gap-2">
+        <Button
+          text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
+          size="small"
+          onClick={handleSettingsChange}
+          variant="success"
+        />
+        <Button
+          text={
+            <Plus className="w-3 h-3 fill-white dark:fill-white rotate-45" />
+          }
+          size="small"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsDisplay(true);
+          }}
+        />
+      </div>
+    );
+  }, [
+    handleSettingsChange,
+    setIsUsingCDPForSettingsDisplay,
+    setSettingsChanged,
+  ]);
+
+  const isUsingCDPCondition = useMemo(
+    () => isUsingCDPForSettingsPageDisplay,
+    [isUsingCDPForSettingsPageDisplay]
+  );
+
+  const settingsReadActionComponent = useMemo(() => {
+    return (
+      <div className="flex flex-col items-center gap-2">
+        <Button
+          text={<Tick className="w-3 h-3 fill-white dark:fill-white" />}
+          size="small"
+          onClick={handleSettingsChange}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
+        <Button
+          text={
+            <Plus className="w-3 h-3 fill-white dark:fill-white rotate-45" />
+          }
+          size="small"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsDisplay(false);
+          }}
+        />
+      </div>
+    );
+  }, [
+    exceedingLimitations,
+    handleSettingsChange,
+    setIsUsingCDPForSettingsDisplay,
+    setSettingsChanged,
+  ]);
+
+  const formedToastMessage = useMemo(() => {
+    let message = '';
+
+    if (settingsChanged) {
+      if (isUsingCDPCondition) {
+        message = exceedingLimitations
+          ? CDP_WARNING_MESSAGE
+          : RELOAD_WARNING_MESSAGE;
+        return (
+          <ToastMessage
+            isPopup
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={settingsReadActionComponent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
+          />
+        );
+      } else {
+        message = RELOAD_WARNING_MESSAGE;
+        return (
+          <ToastMessage
+            isPopup
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={buttonReloadActionCompnent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
+          />
+        );
+      }
+    }
+    return <></>;
+  }, [
+    buttonReloadActionCompnent,
+    exceedingLimitations,
+    isUsingCDPCondition,
+    settingsChanged,
+    settingsReadActionComponent,
+  ]);
 
   if (onChromeUrl) {
     return (
@@ -77,7 +183,7 @@ const App: React.FC = () => {
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
+          enabled={isUsingCDPForSettingsPageDisplay}
         />
         <p className="font-bold text-lg mb-2">
           {I18n.getMessage('noMoreAnalysis')}
@@ -86,59 +192,14 @@ const App: React.FC = () => {
           {I18n.getMessage('emptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsChanged && (
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
-              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-            />
-          )}
+          {formedToastMessage}
         </div>
       </div>
     );
   }
 
-  if (
-    loading ||
-    (loading &&
-      isCurrentTabBeingListenedTo &&
-      allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single')
-  ) {
+  if (loading) {
     return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
-  }
-
-  if (
-    ALLOWED_NUMBER_OF_TABS > 0 &&
-    !isCurrentTabBeingListenedTo &&
-    allowedNumberOfTabs &&
-    allowedNumberOfTabs !== 'unlimited'
-  ) {
-    return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1 text-center">
-        <ToggleSwitch
-          onLabel={cdpLabel}
-          additionalStyles="top-2 left-2 absolute"
-          setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
-        />
-        <Button
-          onClick={changeListeningToThisTab}
-          text={I18n.getMessage('analyzeThisTab')}
-        />
-        <div className="absolute right-0 bottom-0 w-full">
-          {settingsChanged && (
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
-              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-            />
-          )}
-        </div>
-      </div>
-    );
   }
 
   if (
@@ -151,21 +212,14 @@ const App: React.FC = () => {
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setUsingCDP}
-          enabled={isUsingCDP}
+          enabled={isUsingCDPForSettingsPageDisplay}
         />
         <p className="font-bold text-lg">{I18n.getMessage('noCookies')}</p>
         <p className="text-chart-label text-xs">
           {I18n.getMessage('tryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
-          {settingsChanged && (
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
-              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-            />
-          )}
+          {formedToastMessage}
         </div>
       </div>
     );
@@ -178,7 +232,7 @@ const App: React.FC = () => {
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
         setEnabled={setUsingCDP}
-        enabled={isUsingCDP}
+        enabled={isUsingCDPForSettingsPageDisplay}
       />
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
@@ -205,14 +259,7 @@ const App: React.FC = () => {
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
-        {settingsChanged && (
-          <ToastMessage
-            additionalStyles="text-sm"
-            text={I18n.getMessage('settingsChanged')}
-            onClick={handleSettingsChange}
-            textAdditionalStyles="xxs:p-1 text-xxs leading-5"
-          />
-        )}
+        {formedToastMessage}
       </div>
     </div>
   );

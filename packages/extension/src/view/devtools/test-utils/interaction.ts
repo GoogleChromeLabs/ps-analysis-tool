@@ -77,6 +77,7 @@ export class Interaction {
     await this.delay(2000);
 
     if (frame) {
+      frame.evaluate(() => 'window.location.reload();');
       await frame.waitForSelector('button[title="Tracking Protection"]', {
         timeout: 5000,
       });
@@ -88,12 +89,6 @@ export class Interaction {
 
       const elementTextToClick = 'Cookies';
       await this.clickMatchingElement(frame, 'p', elementTextToClick);
-
-      await frame.waitForSelector(selectors.analyzeThisButtonSelector, {
-        timeout: 5000,
-      });
-      const button = await frame.$(selectors.analyzeThisButtonSelector);
-      await button?.click();
 
       const dropdown = await frame.waitForSelector(
         selectors.cookieDropDownSelector,

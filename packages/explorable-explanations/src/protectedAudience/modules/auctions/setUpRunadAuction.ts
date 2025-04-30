@@ -59,7 +59,6 @@ const setUpRunadAuction = (
     {
       title: SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.title,
       description: SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.description,
-      color: colors.box.notBrowser,
       info: SINGLE_SELLER_CONFIG.KEY_VALUE_DSP_SERVER.info,
     },
     {
@@ -73,23 +72,22 @@ const setUpRunadAuction = (
     {
       title: 'DSP 1',
       info: SINGLE_SELLER_CONFIG.DSP_X.info,
-      color: colors.box.notBrowser,
     },
     {
       title: 'DSP 2',
       info: SINGLE_SELLER_CONFIG.DSP_X.info,
-      color: colors.box.notBrowser,
     },
     {
       title: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.title,
       description: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.description,
       info: SINGLE_SELLER_CONFIG.KEY_VALUE_SSP_SERVER.info,
-      color: colors.box.notBrowser,
+      color: colors.box.yellowBox,
     },
     {
       title: SINGLE_SELLER_CONFIG.SCORE_AD.title,
       description: SINGLE_SELLER_CONFIG.SCORE_AD.description,
       info: SINGLE_SELLER_CONFIG.SCORE_AD.info,
+      color: colors.box.yellowBox,
     },
     {
       title: SINGLE_SELLER_CONFIG.REPORT_WIN.title,
@@ -100,6 +98,7 @@ const setUpRunadAuction = (
       title: SINGLE_SELLER_CONFIG.REPORT_RESULT.title,
       description: SINGLE_SELLER_CONFIG.REPORT_RESULT.description,
       info: SINGLE_SELLER_CONFIG.REPORT_RESULT.info,
+      color: colors.box.yellowBox,
     },
   ];
 

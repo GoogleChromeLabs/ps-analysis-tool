@@ -22,7 +22,7 @@ import p5 from 'p5';
  * Internal dependencies.
  */
 import Figure from '.';
-import main from '../../main';
+import Main from '../../main';
 
 /**
  * Class for creating image figures.
@@ -33,79 +33,89 @@ export default class Image extends Figure {
   /**
    * Image to be displayed.
    */
-  image: p5.Image;
+  private image: () => p5.Image;
 
   /**
    * Width of the image.
    */
-  width: number;
+  private width: number;
 
   /**
    * Height of the image.
    */
-  height: number;
+  private height: number;
 
   constructor(
+    canvasRunner: Main,
     x: number,
     y: number,
-    image: p5.Image,
+    imageLoader: () => p5.Image,
     width: number,
-    height: number
+    height: number,
+    id?: string,
+    tags?: string[],
+    mouseClicked?: (figure: Figure) => void,
+    mouseMoved?: (figure: Figure) => void,
+    onLeave?: (figure: Figure) => void
   ) {
-    super(x, y);
-    this.image = image;
+    super(
+      canvasRunner,
+      x,
+      y,
+      id,
+      undefined,
+      undefined,
+      tags,
+      mouseClicked,
+      mouseMoved,
+      onLeave
+    );
+    this.image = imageLoader;
     this.width = width;
     this.height = height;
   }
 
   draw() {
     this.p5?.push();
-    this.p5?.image(this.image, this.x, this.y, this.width, this.height);
+    this.p5?.imageMode(this.p5?.CENTER);
+    this.p5?.image(this.image(), this.x, this.y, this.width, this.height);
     this.p5?.pop();
-  }
 
-  onHover() {
-    return;
-  }
-
-  onLeave() {
-    return;
-  }
-
-  onClick() {
-    // TODO: Discuss the function
+    if (this.runSideEffect) {
+      this.sideEffectOnDraw?.(this);
+    } else {
+      this.runSideEffect = true;
+    }
   }
 
   isHovering(): boolean {
-    return false;
-  }
-
-  remove() {
-    const whiteImage = this.p5?.createImage(
-      this.width,
-      this.height
-    ) as p5.Image;
-
-    whiteImage.set(this.x, this.y, this.p5?.color(255) as p5.Color);
-
-    this.p5?.push();
-    this.p5?.image(whiteImage, this.x, this.y, this.width, this.height);
-    this.p5?.pop();
+    return (
+      this.p5?.mouseX !== undefined &&
+      this.p5?.mouseY !== undefined &&
+      this.p5?.mouseX > this.x - this.width / 2 &&
+      this.p5?.mouseX < this.x + this.width / 2 &&
+      this.p5?.mouseY > this.y - this.height / 2 &&
+      this.p5?.mouseY < this.y + this.height / 2
+    );
   }
 
   reDraw(
     x?: number,
     y?: number,
-    image?: p5.Image,
+    image?: () => p5.Image,
     width?: number,
     height?: number
   ) {
-    this.remove();
     this.x = x ?? this.x;
     this.y = y ?? this.y;
-    this.image = image || this.image;
+    this.image = image ?? this.image;
     this.width = width ?? this.width;
     this.height = height ?? this.height;
-    main.reDrawAll();
+    this.canvasRunner.reDrawAll();
+  }
+
+  shift(x?: number, y?: number) {
+    this.x += x ?? 0;
+    this.y += y ?? 0;
   }
 }

@@ -16,59 +16,788 @@
 /**
  * Internal dependencies.
  */
-import Animator from './components/animator';
-import Box from './components/figure/box';
-import Circle from './components/figure/circle';
-import Line from './components/figure/line';
-import Text from './components/figure/text';
-import Group from './components/group';
-import main from './main';
+import p5 from 'p5';
+import { Animator, FigureFactory, Group, NextCoordinates } from './components';
+import Figure from './components/figure';
+import Main from './main';
+import { downArrowData, nodes, upArrowData } from './implementation/data';
+import {
+  figureDraw,
+  prevButtonClick,
+  stepPrevButtonClick,
+  arrowClick,
+  playClick,
+  onLoopEvent,
+  onNoLoopEvent,
+  stepNextButtonClick,
+  nextButtonClick,
+  resetButtonClick,
+  speedSliderChange,
+  interactiveCheckboxOnChange,
+} from './implementation/listeners';
+import {
+  circleTravelInit,
+  getRandomOffset,
+  rippleEffect,
+} from './implementation/utils';
 
-const timeline = new Line(0, 200, 1000, 200, 'black');
+// Flow init
+let downArrowImage: p5.Image | null = null;
+let upArrowImage: p5.Image | null = null;
+const downArrowImageLoader = () => downArrowImage!;
+const upArrowImageLoader = () => upArrowImage!;
+const preloader = (p: p5) => {
+  downArrowImage = p.loadImage(downArrowData);
+  upArrowImage = p.loadImage(upArrowData);
+};
+let isInteractive = false;
+const setIsInteractive = (value: boolean) => {
+  isInteractive = value;
+  mainCanvas.setUsingHelperQueue(value);
+};
+const checkpoints: string[] = [];
+const getCheckpoints = (index: number) => {
+  if (index < checkpoints.length) {
+    return checkpoints[index];
+  }
 
-const circles = [
-  new Circle(100, 200, 75, 'gray'),
-  new Circle(300, 200, 75, 'gray'),
-  new Circle(500, 200, 75, 'gray'),
-  new Circle(700, 200, 75, 'gray'),
-];
+  return '';
+};
+const setCheckpoint = (checkpoint: string) => {
+  checkpoints.push(checkpoint);
+};
 
-const textonCircles = [
-  new Text(100, 75, '2024-01-01'),
-  new Text(100, 100, 'adv1.com'),
-  new Text(300, 75, '2024-01-02'),
-  new Text(300, 100, 'adv2.com'),
-  new Text(500, 75, '2024-01-03'),
-  new Text(500, 100, 'adv3.com'),
-  new Text(700, 75, '2024-01-04'),
-  new Text(700, 100, 'adv4.com'),
-];
+const idToStart = localStorage.getItem('ee-workflow') || '';
 
-const circleToTextLine = [
-  new Line(100, 163, 100, 110, 'black'),
-  new Line(300, 163, 300, 110, 'black'),
-  new Line(500, 163, 500, 110, 'black'),
-  new Line(700, 163, 700, 110, 'black'),
-];
+const expanded: {
+  animator: Animator | null;
+  image: ReturnType<FigureFactory['image']> | null;
+  wasExpanded: boolean;
+} = {
+  animator: null,
+  image: null,
+  wasExpanded: false,
+};
 
-const advertiserFlow = [
-  new Line(95, 237, 95, 300, 'black', true),
-  new Group([
-    new Box(50, 300, 100, 50, 'gray'),
-    new Text(100, 325, 'DSP tags'),
-  ]),
-  new Line(95, 350, 95, 413, 'black', true),
-  new Group([new Box(50, 413, 100, 50, 'gray'), new Text(100, 438, 'DSPs')]),
-  new Line(105, 413, 105, 350, 'black', true),
-  new Line(105, 300, 105, 237, 'black', true),
-  new Text(170, 270, 'joinInterestGroup()', 12),
-];
+const container = document.getElementById('canvas-container') ?? undefined;
 
-// Setup timeline.
-main.addFigure(timeline, true);
-circles.forEach((circle) => main.addFigure(circle, true));
-textonCircles.forEach((text) => main.addFigure(text, true));
-circleToTextLine.forEach((line) => main.addFigure(line, true));
+const mainCanvas = new Main(undefined, container, idToStart, preloader, true);
+const mainFF = new FigureFactory(mainCanvas);
 
-// Setup flow.
-main.addAnimator(new Animator(advertiserFlow));
+const IGCanvas = new Main(true);
+const IGFF = new FigureFactory(IGCanvas);
+IGCanvas.togglePause(true);
+
+// Control panel
+const prevButton = document.getElementById('prev');
+prevButton?.addEventListener(
+  'click',
+  prevButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+);
+
+const stepPrevButton = document.getElementById('step-prev');
+stepPrevButton?.addEventListener(
+  'click',
+  stepPrevButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+);
+
+const playButton = document.getElementById('play');
+playButton?.addEventListener(
+  'click',
+  playClick.bind(
+    null,
+    mainCanvas,
+    playButton,
+    expanded,
+    downArrowImageLoader,
+    true
+  )
+);
+
+const stepNextButton = document.getElementById('step-next');
+stepNextButton?.addEventListener(
+  'click',
+  stepNextButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+);
+
+const nextButton = document.getElementById('next');
+nextButton?.addEventListener(
+  'click',
+  nextButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+);
+
+const resetButton = document.getElementById('reset');
+resetButton?.addEventListener(
+  'click',
+  resetButtonClick.bind(
+    null,
+    expanded,
+    mainCanvas,
+    playButton,
+    downArrowImageLoader
+  )
+);
+
+const speedSlider = document.getElementById('speed');
+speedSlider?.addEventListener(
+  'input',
+  speedSliderChange.bind(null, mainCanvas)
+);
+
+const interactiveCheckbox = document.getElementById('interactive');
+interactiveCheckbox?.addEventListener(
+  'click',
+  interactiveCheckboxOnChange.bind(
+    null,
+    setIsInteractive,
+    mainCanvas,
+    playButton
+  )
+);
+
+// Event listeners
+document.addEventListener('loop', onLoopEvent.bind(null, playButton));
+
+document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
+
+document.addEventListener('figureDraw', figureDraw);
+
+// Timeline
+mainCanvas.addFigure(
+  mainFF.line({
+    x: 0,
+    y: 300,
+    endX: 1600,
+    endY: 300,
+  }),
+  true
+);
+
+// Add nodes circles
+nodes.forEach((node, index) => {
+  const circle = mainFF.circle({
+    diameter: 75,
+    fill: '#d3d3d3',
+    stroke: '#000',
+    nextTipHelper: (nextCoordinates: NextCoordinates) => {
+      const x = nextCoordinates.left.x + 150;
+      let y = nextCoordinates.left.y;
+
+      if (index) {
+        y = nextCoordinates.middle.y + 87.5;
+      }
+
+      return {
+        x,
+        y,
+      };
+    },
+    mouseClicked: () => {
+      // eslint-disable-next-line no-console
+      console.log(node.website, node);
+      if (isInteractive) {
+        if (mainCanvas.isPaused()) {
+          playClick(
+            mainCanvas,
+            playButton,
+            expanded,
+            downArrowImageLoader,
+            false
+          );
+        }
+        mainCanvas.loadCheckpointToHelper(getCheckpoints(index));
+      }
+    },
+  });
+
+  const nodeGroup = new Group(mainCanvas, [
+    circle,
+    mainFF.text({
+      text: node.website,
+      fill: '#000',
+      nextTipHelper: (nextCoordinates: NextCoordinates) => {
+        const x = nextCoordinates.up.x;
+        const y = nextCoordinates.up.y - 50;
+
+        return {
+          x,
+          y,
+        };
+      },
+    }),
+  ]);
+
+  mainCanvas.addGroup(nodeGroup, true);
+});
+
+const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
+  const lastFigureCoordinates = {
+    x: 0,
+    y: 0,
+  };
+
+  const checkpoint = mainFF.line({
+    x,
+    y,
+    endX: x,
+    endY: y + 50,
+    hasArrow: true,
+    shouldTravel: true,
+  });
+
+  setCheckpoint(checkpoint.getId());
+
+  const animator = new Animator(
+    [
+      checkpoint,
+      new Group(mainCanvas, [
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.down.x - 50,
+              y: nextCoordinates.down.y,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 1',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+      ]),
+      mainFF.line({
+        endYwith: 50,
+        hasArrow: true,
+        shouldTravel: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.middle.x,
+            y: nextCoordinates.middle.y + 25,
+          };
+        },
+      }),
+      new Group(mainCanvas, [
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.down.x - 50,
+              y: nextCoordinates.down.y,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 2',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+      ]),
+      mainFF.line({
+        endYwith: -50,
+        hasArrow: true,
+        shouldTravel: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.middle.x + 10,
+            y: nextCoordinates.middle.y - 25,
+          };
+        },
+      }),
+      mainFF.line({
+        endYwith: -50,
+        hasArrow: true,
+        shouldTravel: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.middle.x,
+            y: nextCoordinates.middle.y - 75,
+          };
+        },
+      }),
+      mainFF.text({
+        text: 'IG',
+        fill: '#000',
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          lastFigureCoordinates.x = nextCoordinates.middle.x + 20;
+          lastFigureCoordinates.y = nextCoordinates.middle.y;
+
+          return {
+            x: nextCoordinates.middle.x + 20,
+            y: nextCoordinates.middle.y,
+          };
+        },
+      }),
+    ],
+    mainFF
+  );
+
+  const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
+    return IGFF.circle({
+      x: lastFigureCoordinates.x + index * 20 + getRandomOffset(20),
+      y: lastFigureCoordinates.y + getRandomOffset(20),
+      diameter: 10,
+      fill: 'red',
+      stroke: 'black',
+      shouldTravel: true,
+      travelInit: circleTravelInit(),
+    });
+  });
+
+  const bubbleFlow = new Group(IGCanvas, bubbles);
+  bubbleFlow.setThrow(true);
+  bubbleFlow.setSideEffectOnDraw(() => {
+    IGCanvas.resetQueuesAndReDrawAll();
+    IGCanvas.togglePause(true);
+    bubbles.forEach((bubble) => bubble.resetTraveller());
+
+    mainCanvas.togglePause(false);
+    mainCanvas.reDrawAll();
+  });
+
+  animator.setSideEffectOnDraw(() => {
+    IGCanvas.addGroup(bubbleFlow);
+    mainCanvas.togglePause(true);
+    IGCanvas.togglePause(false);
+  });
+
+  mainCanvas.addAnimator(animator, false, true);
+
+  const image = mainFF.image({
+    x,
+    y: y + 15,
+    height: 30,
+    width: 30,
+    imageLoader: downArrowImageLoader,
+    mouseClicked: (figure) => {
+      arrowClick(
+        figure,
+        animator,
+        mainCanvas,
+        upArrowImageLoader,
+        downArrowImageLoader,
+        expanded,
+        playButton
+      );
+    },
+  });
+
+  mainCanvas.addFigure(image);
+};
+
+const drawPublisherFlow = (x: number, y: number) => {
+  const bubblesToCoordinates = {
+    x: 0,
+    y: 0,
+  };
+
+  const arcGroup = rippleEffect(mainCanvas, mainFF);
+
+  const renderBox6 = () => {
+    const box6 = new Group(mainCanvas, [
+      mainFF.box({
+        width: 100,
+        height: 50,
+        fill: '#d3d3d3',
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.right.x,
+            y: nextCoordinates.right.y - 25,
+          };
+        },
+      }),
+      mainFF.text({
+        text: 'Box 6',
+        fill: '#000',
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          bubblesToCoordinates.x = nextCoordinates.middle.x;
+          bubblesToCoordinates.y = nextCoordinates.middle.y;
+
+          return nextCoordinates.middle;
+        },
+      }),
+    ]);
+
+    const bubbles = Array.from({ length: 3 }, (_, index) => {
+      return IGFF.circle({
+        x: 0,
+        y: 0,
+        diameter: 10,
+        fill: 'orange',
+        stroke: 'black',
+        shouldTravel: true,
+        travelInit: circleTravelInit(
+          bubblesToCoordinates.x + index * 20 + getRandomOffset(20),
+          bubblesToCoordinates.y + getRandomOffset(20)
+        ),
+      });
+    });
+
+    const bubbleFlow = new Group(IGCanvas, bubbles);
+    bubbleFlow.setThrow(true);
+    bubbleFlow.setSideEffectOnDraw(() => {
+      IGCanvas.resetQueuesAndReDrawAll();
+      IGCanvas.togglePause(true);
+      bubbles.forEach((bubble) => bubble.resetTraveller());
+
+      box6.reDraw();
+      mainCanvas.togglePause(false);
+    });
+
+    box6.setSideEffectOnDraw(() => {
+      IGCanvas.addGroup(bubbleFlow);
+      mainCanvas.togglePause(true);
+      IGCanvas.togglePause(false);
+    });
+
+    return box6;
+  };
+
+  const checkpoint = mainFF.line({
+    x,
+    y,
+    endX: x,
+    endY: y + 50,
+    shouldTravel: true,
+  });
+
+  setCheckpoint(checkpoint.getId());
+
+  const animator = new Animator(
+    [
+      checkpoint,
+      mainFF.line({
+        endXwith: 400,
+        shouldTravel: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.down.x - 200,
+            y: nextCoordinates.down.y,
+          };
+        },
+      }),
+      new Group(mainCanvas, [
+        mainFF.line({
+          endYwith: 20,
+          shouldTravel: true,
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.left.x,
+              y: nextCoordinates.left.y,
+            };
+          },
+        }),
+        mainFF.line({
+          endYwith: 20,
+          shouldTravel: true,
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.up.x + 200,
+              y: nextCoordinates.up.y,
+            };
+          },
+        }),
+        mainFF.line({
+          endYwith: 20,
+          shouldTravel: true,
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.up.x + 200,
+              y: nextCoordinates.up.y,
+            };
+          },
+        }),
+      ]),
+      new Group(mainCanvas, [
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.up.x - 450,
+              y: nextCoordinates.down.y,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 1',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.middle.x + 150,
+              y: nextCoordinates.middle.y - 25,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 2',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.middle.x + 150,
+              y: nextCoordinates.middle.y - 25,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 3',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+      ]),
+      mainFF.line({
+        endYwith: 50,
+        shouldTravel: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.middle.x - 200,
+            y: nextCoordinates.middle.y + 25,
+          };
+        },
+      }),
+      mainFF.line({
+        endXwith: 400,
+        shouldTravel: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.down.x - 200,
+            y: nextCoordinates.down.y,
+          };
+        },
+      }),
+      new Group(mainCanvas, [
+        mainFF.line({
+          endYwith: 20,
+          shouldTravel: true,
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.left.x,
+              y: nextCoordinates.left.y,
+            };
+          },
+        }),
+        mainFF.line({
+          endYwith: 20,
+          shouldTravel: true,
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.up.x + 200,
+              y: nextCoordinates.up.y,
+            };
+          },
+        }),
+        mainFF.line({
+          endYwith: 20,
+          shouldTravel: true,
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.up.x + 200,
+              y: nextCoordinates.up.y,
+            };
+          },
+        }),
+      ]),
+      new Group(mainCanvas, [
+        mainFF.text({
+          text: 'Text 1',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.down.x - 400,
+              y: nextCoordinates.down.y + 25,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Text 2',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.middle.x + 200,
+              y: nextCoordinates.middle.y,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Text 3',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.middle.x + 200,
+              y: nextCoordinates.middle.y,
+            };
+          },
+        }),
+      ]),
+      mainFF.line({
+        endYwith: 50,
+        shouldTravel: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.middle.x - 200,
+            y: nextCoordinates.middle.y + 25,
+          };
+        },
+      }),
+      new Group(mainCanvas, [
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.down.x - 50,
+              y: nextCoordinates.down.y,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 4',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+      ]),
+      mainFF.line({
+        endYwith: 50,
+        shouldTravel: true,
+        hasArrow: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.down.x,
+            y: nextCoordinates.down.y + 25,
+          };
+        },
+      }),
+      new Group(mainCanvas, [
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.down.x - 50,
+              y: nextCoordinates.down.y,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 5',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+      ]),
+      arcGroup(600, 6),
+      mainFF.line({
+        endYwith: -50,
+        shouldTravel: true,
+        hasArrow: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.middle.x - 40,
+            y: nextCoordinates.middle.y - 25,
+          };
+        },
+      }),
+      mainFF.line({
+        endXwith: 50,
+        shouldTravel: true,
+        hasArrow: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.up.x + 40,
+            y: nextCoordinates.up.y - 75,
+          };
+        },
+      }),
+      renderBox6(),
+      mainFF.line({
+        endYwith: 50,
+        shouldTravel: true,
+        hasArrow: true,
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
+          return {
+            x: nextCoordinates.down.x,
+            y: nextCoordinates.down.y + 25,
+          };
+        },
+      }),
+      new Group(mainCanvas, [
+        mainFF.box({
+          width: 100,
+          height: 50,
+          fill: '#d3d3d3',
+          nextTipHelper: (nextCoordinates: NextCoordinates) => {
+            return {
+              x: nextCoordinates.down.x - 50,
+              y: nextCoordinates.down.y,
+            };
+          },
+        }),
+        mainFF.text({
+          text: 'Box 7',
+          fill: '#000',
+          nextTipHelper: (nextCoordinates: NextCoordinates) =>
+            nextCoordinates.middle,
+        }),
+      ]),
+    ],
+    mainFF
+  );
+
+  mainCanvas.addAnimator(animator, false, true);
+
+  const image = mainFF.image({
+    x,
+    y: y + 15,
+    height: 30,
+    width: 30,
+    imageLoader: downArrowImageLoader,
+    mouseClicked: (figure: Figure) => {
+      arrowClick(
+        figure,
+        animator,
+        mainCanvas,
+        upArrowImageLoader,
+        downArrowImageLoader,
+        expanded,
+        playButton
+      );
+    },
+  });
+
+  mainCanvas.addFigure(image);
+};
+
+drawIGFlow(150, 337.5, 2);
+drawIGFlow(300, 337.5, 3);
+drawPublisherFlow(450, 337.5);
+drawIGFlow(600, 337.5, 3);
+drawIGFlow(750, 337.5, 3);
+drawPublisherFlow(900, 337.5);
+drawIGFlow(1050, 337.5, 3);
+drawIGFlow(1200, 337.5, 3);
+drawPublisherFlow(1350, 337.5);

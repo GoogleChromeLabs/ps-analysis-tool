@@ -43,8 +43,6 @@ export const onBeforeSendHeadersListener = ({
     const cookies = await parseHeaders(
       dataStore.globalIsUsingCDP,
       'request',
-      dataStore.tabToRead,
-      dataStore.tabMode,
       tabId,
       url,
       dataStore.cookieDB ?? {},

@@ -32,13 +32,11 @@ import { type CookieData } from '@google-psat/common';
  */
 import { getCurrentTab } from '../../../../utils/getCurrentTab';
 import {
-  ALLOWED_NUMBER_OF_TABS,
   INITIAL_SYNC,
   NEW_COOKIE_DATA,
   POPUP_CLOSE,
   POPUP_OPEN,
   SERVICE_WORKER_RELOAD_MESSAGE,
-  SET_TAB_TO_READ,
 } from '../../../../constants';
 import { useSettings } from '../settings';
 import Context, { type CookieStoreContext } from './context';
@@ -46,17 +44,10 @@ import Context, { type CookieStoreContext } from './context';
 const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
 
-  const [tabToRead, setTabToRead] = useState<string | null>(null);
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
 
-  const [returningToSingleTab, setReturningToSingleTab] =
-    useState<CookieStoreContext['state']['returningToSingleTab']>(false);
-
   const [loading, setLoading] = useState<boolean>(true);
-
-  const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
-    useState<boolean>(false);
 
   const [onChromeUrl, setOnChromeUrl] = useState<boolean>(false);
 
@@ -86,17 +77,6 @@ const Provider = ({ children }: PropsWithChildren) => {
   const intitialSync = useCallback(async () => {
     const tab = await getCurrentTab(true);
 
-    const availableTabs = await chrome.tabs.query({});
-
-    if (
-      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-      availableTabs.filter(
-        (processingTab) => processingTab.id?.toString() === tabToRead
-      )
-    ) {
-      setReturningToSingleTab(true);
-    }
-
     if (!tab || !tab.id || !tab.url) {
       return;
     }
@@ -108,7 +88,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
 
     setTabId(tab.id);
-  }, [tabToRead]);
+  }, []);
 
   useEffect(() => {
     chrome.runtime.sendMessage({
@@ -128,25 +108,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [tabId]);
 
-  const changeListeningToThisTab = useCallback(() => {
-    chrome.runtime.sendMessage({
-      type: SET_TAB_TO_READ,
-      payload: {
-        tabId,
-      },
-    });
-  }, [tabId]);
-
   useEffect(() => {
     const listener = (message: {
       type: string;
       payload: {
         tabId?: number;
         cookieData?: { [key: string]: CookieData };
-        tabToRead?: string;
         tabProcessingMode?: string;
         isUsingCDPNewValue?: boolean;
-        tabMode?: string;
       };
     }) => {
       if (!message.type) {
@@ -154,12 +123,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       const incomingMessageType = message.type;
-
-      if (SET_TAB_TO_READ === incomingMessageType) {
-        setTabToRead(message?.payload?.tabId?.toString() || null);
-        setIsCurrentTabBeingListenedTo(true);
-        setLoading(false);
-      }
 
       if (NEW_COOKIE_DATA === incomingMessageType) {
         if (
@@ -174,15 +137,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (INITIAL_SYNC === incomingMessageType) {
-        if (message?.payload?.tabMode === 'unlimited') {
-          setIsCurrentTabBeingListenedTo(true);
-          setTabToRead(null);
-        } else {
-          setIsCurrentTabBeingListenedTo(
-            tabId?.toString() === message?.payload?.tabToRead
-          );
-          setTabToRead(message?.payload?.tabToRead || null);
-        }
         setLoading(false);
       }
 
@@ -207,14 +161,9 @@ const Provider = ({ children }: PropsWithChildren) => {
       value={{
         state: {
           tabCookieStats,
-          isCurrentTabBeingListenedTo,
           loading,
           tabId,
-          returningToSingleTab,
           onChromeUrl,
-        },
-        actions: {
-          changeListeningToThisTab,
         },
       }}
     >

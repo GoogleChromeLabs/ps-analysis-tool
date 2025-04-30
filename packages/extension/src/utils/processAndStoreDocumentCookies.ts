@@ -27,7 +27,7 @@ import {
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
-import { GET_JS_COOKIES } from '../constants';
+import { DEVTOOLS_SET_JAVASCSCRIPT_COOKIE } from '../constants';
 import type { CookieStoreCookie } from '../contentScript/types';
 
 interface ProcessAndStoreDucmentCookies {
@@ -98,7 +98,7 @@ const processAndStoreDocumentCookies = async ({
     );
 
     await chrome.runtime.sendMessage({
-      type: GET_JS_COOKIES,
+      type: DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
       payload: {
         tabId,
         cookieData: parsedCookieData,

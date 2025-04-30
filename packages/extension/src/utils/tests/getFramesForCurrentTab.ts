@@ -61,11 +61,16 @@ describe('getFramesForCurrentTab : ', () => {
       )
     ).toStrictEqual({
       'https://edition.cnn.com': {
-        frameIds: ['SADASQ5546SDT45673'],
+        frameIds: ['SADASQ5546SDT45673', '0'],
         frameType: 'outermost_frame',
       },
       'https://crxd.net': {
-        frameIds: ['ASFGHSD2453465645568679FR', 'ADFSDGRW4365663SDGF'],
+        frameIds: [
+          'ASFGHSD2453465645568679FR',
+          'ADFSDGRW4365663SDGF',
+          '2',
+          '3',
+        ],
         frameType: 'sub_frame',
       },
     });

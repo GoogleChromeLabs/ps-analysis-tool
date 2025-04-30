@@ -52,80 +52,17 @@ describe('parseHeaders: ', () => {
     } as unknown as typeof fetch;
   });
 
-  it('should not process request headers', async () => {
-    const cookies = await parseHeaders(
-      false,
-      'request',
-      '123456',
-      'single',
-      12345,
-      'https://cnn.com',
-      {},
-      'https://cnn.com',
-      0,
-      '123456',
-      [
-        {
-          name: 'name',
-          value: 'mkdes.pl',
-        },
-        {
-          name: 'Accept',
-          value:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        },
-        {
-          name: 'cookie',
-          value:
-            'cc_cookie={"categories":["ccat_functionality_storage","ccat_security_storage","ccat_analytics_storage","ccat_ad_storage","ccat_ad_user_data","ccat_ad_personalization","ccat_personalization_storage"],"level":["ccat_functionality_storage","ccat_security_storage","ccat_analytics_storage","ccat_ad_storage","ccat_ad_user_data","ccat_ad_personalization","ccat_personalization_storage"],"revision":0,"data":null,"rfc_cookie":false,"consent_date":"2024-02-21T10:25:39.063Z","consent_uuid":"7c4da0cf-3eb4-468a-91b0-a93a6a24cc59","last_consent_update":"2024-02-21T10:25:39.063Z"}; _ga=GA1.1.253380838.1708511136; _ga_FJBF08S8GG=GS1.1.1708580521.2.1.1708580783.60.0.1679255760',
-        },
-      ]
-    );
-
-    const cookies2 = await parseHeaders(
-      false,
-      'request',
-      '123456',
-      'single',
-      12345,
-      'https://cnn.com',
-      {},
-      'https://cnn.com',
-      0,
-      '123456'
-    );
-
-    const cookies3 = await parseHeaders(
-      false,
-      'request',
-      '123456',
-      'single',
-      123456,
-      'https://cnn.com',
-      {},
-      'https://cnn.com',
-      0,
-      '123456'
-    );
-
-    expect(cookies).toStrictEqual(null);
-    expect(cookies2).toStrictEqual(null);
-    expect(cookies3).toStrictEqual(null);
-  });
-
   it('should process request headers', async () => {
     const timeStamp = 1577836800000;
 
     const cookies = await parseHeaders(
       false,
       'request',
-      '123456',
-      'single',
       123456,
       'https://cnn.com',
       {},
       'https://cnn.com',
-      0,
+      '0',
       '123456',
       [
         {
@@ -158,7 +95,7 @@ describe('parseHeaders: ', () => {
           retention: '',
           wildcard: '',
         },
-        frameIdList: [0],
+        frameIdList: ['0'],
         headerType: 'request',
         isFirstParty: true,
         networkEvents: {
@@ -201,7 +138,7 @@ describe('parseHeaders: ', () => {
           retention: '',
           wildcard: '',
         },
-        frameIdList: [0],
+        frameIdList: ['0'],
         headerType: 'request',
         isFirstParty: true,
         networkEvents: {
@@ -243,7 +180,7 @@ describe('parseHeaders: ', () => {
           retention: '',
           wildcard: '',
         },
-        frameIdList: [0],
+        frameIdList: ['0'],
         headerType: 'request',
         isFirstParty: true,
         networkEvents: {
@@ -280,13 +217,11 @@ describe('parseHeaders: ', () => {
     const cookies = await parseHeaders(
       false,
       'response',
-      '123456',
-      'single',
       123456,
       'https://cnn.com',
       {},
       'https://cnn.com',
-      0,
+      '0',
       '123456',
       [
         {
@@ -324,7 +259,7 @@ describe('parseHeaders: ', () => {
           retention: '',
           wildcard: '',
         },
-        frameIdList: [0],
+        frameIdList: ['0'],
         headerType: 'response',
         isFirstParty: true,
         networkEvents: {

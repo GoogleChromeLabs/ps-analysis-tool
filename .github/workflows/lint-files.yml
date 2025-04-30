@@ -36,7 +36,7 @@ jobs:
   lint:
     name: Lint
     # Change ubuntu version as the latest ubuntu is unable to run for some reason. Change it back to latest when its fixed.
-    runs-on: ubuntu-20.04
+    runs-on: 'ubuntu-24.04'
     permissions:
       contents: read # For actions/checkout to fetch code
     timeout-minutes: 20
