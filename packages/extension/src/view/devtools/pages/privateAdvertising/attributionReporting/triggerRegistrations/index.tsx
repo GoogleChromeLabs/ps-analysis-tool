@@ -237,9 +237,7 @@ const TriggerRegistrations = () => {
                 ? rowContextMenuRef.current?.onRowContextMenu
                 : noop
             }
-            onRowClick={(row) => {
-              setSelectedJSON(row as TriggerRegistration);
-            }}
+            onRowClick={(row) => setSelectedJSON(row as TriggerRegistration)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as TriggerRegistration).index.toString()
             }
@@ -255,7 +253,7 @@ const TriggerRegistrations = () => {
       </Resizable>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
-          <div className="text-xs py-1 h-full">
+          <div className="text-xs py-1 px-1.5 h-full">
             <JsonView src={selectedJSON} />
           </div>
         ) : (
