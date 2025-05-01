@@ -23,8 +23,12 @@ import {
   type TableFilter,
   type TableColumn,
   type TableRow,
+  DraggableTray,
+  TabsProvider,
+  type TabItems,
 } from '@google-psat/design-system';
 import React, { useEffect, useMemo, useState } from 'react';
+import Legend from './legend';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -71,6 +75,18 @@ const MDLTable = () => {
     []
   );
 
+  const tabs = useMemo<TabItems>(
+    () => [
+      {
+        title: 'Legend',
+        content: {
+          Element: Legend,
+        },
+      },
+    ],
+    []
+  );
+
   if (tableData.length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -80,20 +96,25 @@ const MDLTable = () => {
   }
 
   return (
-    <TableProvider
-      tableColumns={tableColumns}
-      tableFilterData={filters}
-      tableSearchKeys={['domain', 'owner']}
-      data={tableData}
-      onRowClick={(rowData) => {
-        setSelectedKey(rowData?.domain || null);
-      }}
-      onRowContextMenu={noop}
-      getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
-      tablePersistentSettingsKey="mdlTable"
-    >
-      <Table selectedKey={selectedKey} />
-    </TableProvider>
+    <TabsProvider items={tabs} name="mdlTableTray">
+      <div className="w-full h-full flex flex-col">
+        <TableProvider
+          tableColumns={tableColumns}
+          tableFilterData={filters}
+          tableSearchKeys={['domain', 'owner']}
+          data={tableData}
+          onRowClick={(rowData) => {
+            setSelectedKey(rowData?.domain || null);
+          }}
+          onRowContextMenu={noop}
+          getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
+          tablePersistentSettingsKey="mdlTable"
+        >
+          <Table selectedKey={selectedKey} />
+          <DraggableTray />
+        </TableProvider>
+      </div>
+    </TabsProvider>
   );
 };
 

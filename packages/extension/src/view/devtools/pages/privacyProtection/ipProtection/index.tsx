@@ -51,7 +51,7 @@ const IPProtection = () => {
   );
 
   return (
-    <TabsProvider items={tabItems} name="protectedAudience">
+    <TabsProvider items={tabItems} name="ipProtection">
       <Panel />
     </TabsProvider>
   );
