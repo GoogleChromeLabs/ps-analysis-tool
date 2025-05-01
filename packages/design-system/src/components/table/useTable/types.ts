@@ -109,7 +109,7 @@ export interface TableProviderProps {
   tableFilterData?: TableFilter;
   tableSearchKeys?: string[];
   tablePersistentSettingsKey?: string;
-  onRowClick: (row: TableData | null, prevRow?: TableData | null) => void;
+  onRowClick: (row: TableData | null) => void;
   onRowContextMenu: (
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow

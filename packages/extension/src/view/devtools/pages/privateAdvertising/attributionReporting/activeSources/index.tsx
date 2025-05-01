@@ -20,7 +20,7 @@ import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
   InfoIcon,
-  JsonDisplay,
+  JsonView,
   Table,
   TableProvider,
   type InfoType,
@@ -43,8 +43,6 @@ const ActiveSources = () => {
   const [selectedJSON, setSelectedJSON] = useState<SourcesRegistration | null>(
     null
   );
-  const [selectedPrevJSON, setSelectedPrevJSON] =
-    useState<SourcesRegistration | null>(null);
 
   const { sourcesRegistration, filter, updateFilter } = useAttributionReporting(
     ({ state, actions }) => ({
@@ -322,8 +320,7 @@ const ActiveSources = () => {
                 ? rowContextMenuRef.current?.onRowContextMenu
                 : noop
             }
-            onRowClick={(row, prevRow) => {
-              setSelectedPrevJSON(prevRow as SourcesRegistration);
+            onRowClick={(row) => {
               setSelectedJSON(row as SourcesRegistration);
             }}
             getRowObjectKey={(row: TableRow) =>
@@ -342,10 +339,7 @@ const ActiveSources = () => {
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
           <div className="text-xs py-1 h-full">
-            <JsonDisplay
-              currentJson={selectedJSON}
-              prevJson={selectedPrevJSON}
-            />
+            <JsonView src={selectedJSON} />
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

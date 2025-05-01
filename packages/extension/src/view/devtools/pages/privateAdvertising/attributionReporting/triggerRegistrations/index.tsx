@@ -25,7 +25,7 @@ import {
   type TableFilter,
   type InfoType,
   InfoIcon,
-  JsonDisplay,
+  JsonView,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
@@ -43,8 +43,6 @@ const TriggerRegistrations = () => {
   const [selectedJSON, setSelectedJSON] = useState<TriggerRegistration | null>(
     null
   );
-  const [selectedPrevJSON, setSelectedPrevJSON] =
-    useState<TriggerRegistration | null>(null);
 
   const { triggerRegistration, filter, updateFilter } = useAttributionReporting(
     ({ state, actions }) => ({
@@ -239,8 +237,7 @@ const TriggerRegistrations = () => {
                 ? rowContextMenuRef.current?.onRowContextMenu
                 : noop
             }
-            onRowClick={(row, prevRow) => {
-              setSelectedPrevJSON(prevRow as TriggerRegistration);
+            onRowClick={(row) => {
               setSelectedJSON(row as TriggerRegistration);
             }}
             getRowObjectKey={(row: TableRow) =>
@@ -259,10 +256,7 @@ const TriggerRegistrations = () => {
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
           <div className="text-xs py-1 h-full">
-            <JsonDisplay
-              currentJson={selectedJSON}
-              prevJson={selectedPrevJSON}
-            />
+            <JsonView src={selectedJSON} />
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
