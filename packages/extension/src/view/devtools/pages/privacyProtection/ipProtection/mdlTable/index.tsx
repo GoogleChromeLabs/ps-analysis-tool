@@ -90,6 +90,7 @@ const MDLTable = () => {
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
+      tablePersistentSettingsKey="mdlTable"
     >
       <Table selectedKey={selectedKey} />
     </TableProvider>

@@ -47,6 +47,8 @@ export interface TableStoreContext {
     selectedFilters: TableFilter;
     isFiltering: TableFilteringOutput['isFiltering'];
     searchValue: TableSearchOutput['searchValue'];
+    pages: number;
+    selectedPage: number;
   };
   actions: {
     setSortKey: ColumnSortingOutput['setSortKey'];
@@ -68,6 +70,7 @@ export interface TableStoreContext {
     exportTableData?: TableProviderProps['exportTableData'];
     hasVerticalBar?: TableProviderProps['hasVerticalBar'];
     getVerticalBarColorHash?: (row: TableRow) => string;
+    setPage: (page: number) => void;
   };
 }
 
@@ -85,6 +88,8 @@ const initialState: TableStoreContext = {
     selectedFilters: {},
     isFiltering: false,
     searchValue: '',
+    pages: 0,
+    selectedPage: 0,
   },
   actions: {
     setSortKey: noop,
@@ -103,6 +108,7 @@ const initialState: TableStoreContext = {
     onRowContextMenu: noop,
     getRowObjectKey: () => '',
     getVerticalBarColorHash: () => '',
+    setPage: noop,
   },
 };
 

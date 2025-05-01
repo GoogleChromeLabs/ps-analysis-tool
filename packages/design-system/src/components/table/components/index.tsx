@@ -30,6 +30,7 @@ import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
 import TableChipsBar from './filtersSidebar/chips';
 import TableFiltersSidebar from './filtersSidebar';
+import Pagination from './pagination';
 
 interface TableProps {
   selectedKey: string | undefined | null;
@@ -64,6 +65,9 @@ const Table = ({
     searchValue,
     setSearchValue,
     exportTableData,
+    pages,
+    setPage,
+    selectedPage,
   } = useTable(({ state, actions }) => ({
     tableContainerRef: state.tableContainerRef,
     filters: state.filters,
@@ -76,6 +80,9 @@ const Table = ({
     searchValue: state.searchValue,
     setSearchValue: actions.setSearchValue,
     exportTableData: actions.exportTableData,
+    pages: state.pages,
+    setPage: actions.setPage,
+    selectedPage: state.selectedPage,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -140,13 +147,25 @@ const Table = ({
             setSearchValue={setSearchValue}
             exportTableData={exportTableData}
           />
-          {!hideFiltering && (
-            <TableChipsBar
-              selectedFilters={selectedFilters}
-              resetFilters={resetFilters}
-              toggleFilterSelection={toggleFilterSelection}
-            />
-          )}
+          <div className="flex items-center justify-between gap-1 px-2 py-0.5 bg-anti-flash-white dark:bg-raisin-black">
+            {!hideFiltering && (
+              <TableChipsBar
+                selectedFilters={selectedFilters}
+                resetFilters={resetFilters}
+                toggleFilterSelection={toggleFilterSelection}
+              />
+            )}
+            {pages > 1 && (
+              <>
+                <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
+                <Pagination
+                  pages={pages}
+                  setPage={setPage}
+                  selectedPage={selectedPage}
+                />
+              </>
+            )}
+          </div>
         </>
       )}
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">

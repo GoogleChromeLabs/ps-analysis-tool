@@ -28,7 +28,7 @@ import useColumnResizing from './useColumnResizing';
 import useFiltering from './useFiltering';
 import useSearch from './useSearch';
 import { TableContext } from './context';
-import { TableRow, TableProviderProps } from './types';
+import { TableRow, TableProviderProps, TableData } from './types';
 
 export const TableProvider = ({
   data,
@@ -46,6 +46,25 @@ export const TableProvider = ({
   isRowSelected,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
+  const [allData, setAllData] = useState(data);
+  const [page, setPage] = useState(0);
+  const [paginatedData, setPaginatedData] = useState<TableData[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setAllData(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (allData) {
+      const start = page * 500;
+      const end = start + 500;
+      const _paginatedData = allData.slice(start, end);
+      setPaginatedData(_paginatedData);
+    }
+  }, [page, allData]);
+
   const commonKey = useMemo(() => {
     if (!tablePersistentSettingsKey) {
       return undefined;
@@ -73,7 +92,7 @@ export const TableProvider = ({
     useColumnResizing(visibleColumns, allTableColumnsKeys, commonKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, tableColumns, commonKey);
+    useColumnSorting(paginatedData, tableColumns, commonKey);
 
   const {
     filters,
@@ -148,6 +167,8 @@ export const TableProvider = ({
           selectedFilters,
           isFiltering,
           searchValue,
+          pages: Math.ceil(allData.length / 500),
+          selectedPage: page,
         },
         actions: {
           setSortKey,
@@ -169,6 +190,7 @@ export const TableProvider = ({
           exportTableData,
           hasVerticalBar,
           getVerticalBarColorHash,
+          setPage,
         },
       }}
     >
