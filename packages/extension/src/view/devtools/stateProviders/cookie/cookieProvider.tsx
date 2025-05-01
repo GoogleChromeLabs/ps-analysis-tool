@@ -125,9 +125,25 @@ const Provider = ({ children }: PropsWithChildren) => {
     >((acc, cookie) => {
       cookie.frameIdList?.forEach((frameId) => {
         const url = tabFramesIdsWithURL[frameId];
+        const isCookieBlocked =
+          cookie.isBlocked &&
+          cookie?.blockedReasons &&
+          cookie?.blockedReasons.length !== 0;
 
-        if (url) {
-          acc[url] = true;
+        if (!showBlockedCookies) {
+          if (
+            cookie.isFirstParty ||
+            (!cookie.isFirstParty && !isCookieBlocked)
+          ) {
+            if (url) {
+              acc[url] = true;
+            }
+          }
+          return;
+        } else {
+          if (url) {
+            acc[url] = true;
+          }
         }
       });
 
@@ -135,7 +151,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     }, {});
 
     return _frameHasCookies;
-  }, [tabCookies, tabFrames]);
+  }, [showBlockedCookies, tabCookies, tabFrames]);
 
   const getCookiesSetByJavascript = useCallback(async () => {
     if (chrome.devtools.inspectedWindow.tabId) {

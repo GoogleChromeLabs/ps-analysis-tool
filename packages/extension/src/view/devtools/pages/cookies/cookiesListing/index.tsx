@@ -65,10 +65,23 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     isSidebarOpen,
   } = useCookieListing(domainsInAllowList);
 
-  const frameFilteredCookies = useMemo(
-    () => filterCookiesByFrame(tableData, tabFrames, selectedFrame),
-    [tableData, selectedFrame, tabFrames]
-  );
+  const frameFilteredCookies = useMemo(() => {
+    const filteredCookies = filterCookiesByFrame(
+      tableData,
+      tabFrames,
+      selectedFrame
+    );
+    return showBlockedCookies
+      ? filteredCookies
+      : filteredCookies.filter((cookie) => {
+          const isCookieBlocked =
+            cookie.isBlocked &&
+            cookie?.blockedReasons &&
+            cookie?.blockedReasons.length !== 0;
+
+          return cookie.isFirstParty ? true : !isCookieBlocked;
+        });
+  }, [tableData, tabFrames, selectedFrame, showBlockedCookies]);
 
   const cookieTableRef = useRef<React.ElementRef<typeof CookieTable> | null>(
     null

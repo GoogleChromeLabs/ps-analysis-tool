@@ -86,7 +86,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         cell: (info: InfoType) => info,
         enableHiding: false,
         widthWeightagePercentage: 13,
-        enableBodyCellPrefixIcon: isUsingCDP,
+        enableBodyCellPrefixIcon: showBlockedCookies && isUsingCDP,
         bodyCellPrefixIcon: {
           Element: NamePrefixIconSelector,
         },
@@ -529,7 +529,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             htmlFor="show-blocked-cookies"
             className="ml-1 text-xs leading-none"
           >
-            Highlight blocked 3p cookies
+            Show blocked 3p cookies
           </label>
         </div>
       </>
