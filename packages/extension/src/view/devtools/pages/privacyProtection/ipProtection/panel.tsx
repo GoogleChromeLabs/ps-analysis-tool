@@ -39,7 +39,10 @@ const Panel = () => {
   }));
 
   return (
-    <div className="h-screen w-full flex flex-col overflow-hidden">
+    <div
+      className="h-screen w-full flex flex-col overflow-hidden"
+      data-testid="ip-protection-content"
+    >
       <div className="p-4 flex flex-col gap-1">
         <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
           <h1 className="text-left">IP Protection</h1>
