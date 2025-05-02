@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import type { CookieDatabase } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -24,14 +23,8 @@ import type { Protocol } from 'devtools-protocol';
  */
 import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
-import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
 export class DataStore {
-  /**
-   * CookieDatabase to run analytics match on.
-   */
-  static cookieDB: CookieDatabase | null = null;
-
   /**
    * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
    */
@@ -195,12 +188,6 @@ export class DataStore {
       isCookieAnalysisEnabled: true,
       isPAAnalysisEnabled: true,
     };
-
-    (async () => {
-      if (!DataStore.cookieDB) {
-        DataStore.cookieDB = await fetchDictionary();
-      }
-    })();
   }
 
   /**

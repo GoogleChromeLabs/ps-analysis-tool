@@ -23,6 +23,7 @@ import {
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
   deriveBlockingStatus,
+  type CookieDatabase,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -33,8 +34,14 @@ import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import { DataStore } from './dataStore';
 import shouldUpdateCounter from '../utils/shouldUpdateCounter';
 import { NEW_COOKIE_DATA } from '../constants';
+import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
 class CookieStore extends DataStore {
+  /**
+   * CookieDatabase to run analytics match on.
+   */
+  protected cookieDB: CookieDatabase | null = null;
+
   /**
    * This variable stores the unParsedRequest headers received from Network.requestWillBeSentExtraInfo.
    * These are the requests whose Network.requestWillBeSent counter part havent yet been fired.
@@ -66,6 +73,11 @@ class CookieStore extends DataStore {
 
   constructor() {
     super();
+    (async () => {
+      if (!this.cookieDB) {
+        this.cookieDB = await fetchDictionary();
+      }
+    })();
   }
 
   /**
@@ -199,7 +211,7 @@ class CookieStore extends DataStore {
       cookiePartitionKey,
       DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
       DataStore.tabs[tabId].url ?? '',
-      DataStore.cookieDB ?? {},
+      this.cookieDB ?? {},
       frameIds,
       requestId
     );
@@ -228,7 +240,7 @@ class CookieStore extends DataStore {
 
     const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
       associatedCookies,
-      DataStore.cookieDB ?? {},
+      this.cookieDB ?? {},
       DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
       DataStore.tabs[tabId].url ?? '',
       frameIds,
