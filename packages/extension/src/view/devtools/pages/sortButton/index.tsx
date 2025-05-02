@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { ArrowUp, ArrowDown } from '@google-psat/design-system';
+import { AscendingOrder, DescendingOrder } from '@google-psat/design-system';
 
 interface SortButtonProps {
   sortOrder: 'asc' | 'desc';
@@ -33,9 +33,9 @@ const SortButton = ({ setSortOrder, sortOrder }: SortButtonProps) => {
       title={`${sortOrder === 'asc' ? 'Ascending' : 'Descending'} order`}
     >
       {sortOrder === 'asc' ? (
-        <ArrowUp className="dark:fill-bright-gray fill-granite-gray" />
+        <AscendingOrder className="dark:fill-bright-gray fill-granite-gray" />
       ) : (
-        <ArrowDown className="dark:fill-bright-gray fill-granite-gray " />
+        <DescendingOrder className="dark:fill-bright-gray fill-granite-gray " />
       )}
     </span>
   );
