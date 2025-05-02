@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
+import { BlockedReason, CookieData } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -27,7 +28,16 @@ import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-databas
 import data from '../../utils/test-data/cookieMockData';
 import dataStore, { DataStore } from '../dataStore';
 import cookieStore from '../cookieStore';
-import { BlockedReason, CookieData } from '@google-psat/common';
+
+globalThis.fetch = function () {
+  return Promise.resolve({
+    json: () =>
+      Promise.resolve({
+        ...OpenCookieDatabase,
+      }),
+    text: () => Promise.resolve({}),
+  });
+} as unknown as typeof fetch;
 
 describe('SynchnorousCookieStore:', () => {
   beforeAll(() => {
@@ -46,10 +56,12 @@ describe('SynchnorousCookieStore:', () => {
   beforeEach(() => {
     dataStore.addTabData('123456');
     dataStore.updateUrl('123456', 'https://bbc.com');
+    cookieStore.initialiseVariablesForNewTab('123456');
   });
 
   afterEach(() => {
     dataStore.clear();
+    cookieStore.deinitialiseVariablesForTab('123456');
   });
 
   it('Should not update storage if there are no new cookies', () => {
@@ -203,7 +215,7 @@ describe('SynchnorousCookieStore:', () => {
 
   it('Should remove tabData', () => {
     expect(DataStore.tabs['123456']).toBeDefined();
-    cookieStore.removeTabData('123456');
+    dataStore.removeTabData('123456');
     expect(DataStore.tabs['123456']).toBeUndefined();
   });
 

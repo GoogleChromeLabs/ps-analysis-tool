@@ -73,11 +73,6 @@ class CookieStore extends DataStore {
 
   constructor() {
     super();
-    (async () => {
-      if (!this.cookieDB) {
-        this.cookieDB = await fetchDictionary();
-      }
-    })();
   }
 
   /**
@@ -170,6 +165,11 @@ class CookieStore extends DataStore {
   }
 
   initialiseVariablesForNewTab(tabId: string): void {
+    (async () => {
+      if (!this.cookieDB) {
+        this.cookieDB = await fetchDictionary();
+      }
+    })();
     super.initialiseVariablesForNewTab(tabId);
     this.tabsData[tabId] = {};
     this.unParsedRequestHeadersForCA[tabId] = {};

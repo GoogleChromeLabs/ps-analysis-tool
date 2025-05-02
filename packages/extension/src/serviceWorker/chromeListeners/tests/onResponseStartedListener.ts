@@ -54,10 +54,12 @@ describe('chrome.webRequest.onResponseStarted.addListener', () => {
     DataStore.globalIsUsingCDP = false;
     dataStore.addTabData('1141143618');
     dataStore.updateUrl('1141143618', 'https://bbc.com');
+    cookieStore.initialiseVariablesForNewTab('1141143618');
   });
 
   afterEach(() => {
     dataStore.removeTabData('1141143618');
+    cookieStore.deinitialiseVariablesForTab('1141143618');
   });
 
   test('Should parse response Cookies', async () => {
