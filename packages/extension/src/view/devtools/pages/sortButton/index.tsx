@@ -17,14 +17,19 @@
  * External dependencies.
  */
 import React from 'react';
-import { AscendingOrder, DescendingOrder } from '@google-psat/design-system';
+import { DescendingOrder } from '@google-psat/design-system';
 
 interface SortButtonProps {
   sortOrder: 'asc' | 'desc';
   setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
+  isSidebarFocused: boolean;
 }
 
-const SortButton = ({ setSortOrder, sortOrder }: SortButtonProps) => {
+const SortButton = ({
+  setSortOrder,
+  sortOrder,
+  isSidebarFocused,
+}: SortButtonProps) => {
   return (
     <span
       onClick={() => {
@@ -33,9 +38,21 @@ const SortButton = ({ setSortOrder, sortOrder }: SortButtonProps) => {
       title={`${sortOrder === 'asc' ? 'Ascending' : 'Descending'} order`}
     >
       {sortOrder === 'asc' ? (
-        <AscendingOrder className="dark:fill-bright-gray fill-granite-gray" />
+        <DescendingOrder
+          className={`rotate-180 ${
+            isSidebarFocused
+              ? 'dark:fill-bright-gray fill-bright-gray'
+              : 'dark:fill-bright-gray fill-granite-gray'
+          }`}
+        />
       ) : (
-        <DescendingOrder className="dark:fill-bright-gray fill-granite-gray " />
+        <DescendingOrder
+          className={`${
+            isSidebarFocused
+              ? 'dark:fill-bright-gray fill-bright-gray'
+              : 'dark:fill-bright-gray fill-granite-gray'
+          }`}
+        />
       )}
     </span>
   );

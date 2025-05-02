@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Sidebar,
@@ -30,6 +30,7 @@ import type {
   ReceivedBids,
   singleAuctionEvent,
 } from '@google-psat/common';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -67,6 +68,24 @@ const AuctionPanel = ({
   sortOrder,
   setSortOrder,
 }: AuctionPanelProps) => {
+  const changedValue = useRef({ oldAuctionEvents: {}, oldSortOrder: '' });
+
+  useEffect(() => {
+    return () => {
+      changedValue.current = {
+        oldAuctionEvents: auctionEvents,
+        oldSortOrder: sortOrder ?? '',
+      };
+    };
+  }, [auctionEvents, sortOrder]);
+
+  const { isSidebarFocused, isKeySelected } = useSidebar(
+    ({ state, actions }) => ({
+      isSidebarFocused: state.isSidebarFocused,
+      isKeySelected: actions.isKeySelected,
+    })
+  );
+
   useEffect(() => {
     const Panel = customAdsAndBidders ? AdunitSubPanel : AdunitPanel;
 
@@ -200,6 +219,7 @@ const AuctionPanel = ({
             props: {
               setSortOrder,
               sortOrder,
+              isSidebarFocused: isSidebarFocused && isKeySelected(adUnit),
             },
           };
         }
@@ -259,6 +279,8 @@ const AuctionPanel = ({
     selectedDateTime,
     setSortOrder,
     sortOrder,
+    isSidebarFocused,
+    isKeySelected,
   ]);
 
   const { activePanel } = useSidebar(({ state }) => ({
@@ -280,7 +302,12 @@ const AuctionPanel = ({
           right: true,
         }}
       >
-        <Sidebar shouldScrollToLatestItem={sortOrder === 'asc'} />
+        <Sidebar
+          shouldScrollToLatestItem={
+            sortOrder === 'asc' &&
+            !isEqual(changedValue.current.oldAuctionEvents, auctionEvents)
+          }
+        />
       </Resizable>
       <div className="flex-1 h-full flex flex-col overflow-auto">
         {Element && <Element {...props} />}
