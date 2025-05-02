@@ -63,11 +63,10 @@ export const onCommittedNavigationListener = async ({
 
     if (url && !url.startsWith('chrome')) {
       cookieStore?.removeCookieData(tabId.toString());
+      cookieStore.deinitialiseVariablesForTab(tabId.toString());
+      cookieStore.initialiseVariablesForNewTab(tabId.toString());
 
       if (DataStore.globalIsUsingCDP) {
-        cookieStore.deinitialiseVariablesForTab(tabId.toString());
-        cookieStore.initialiseVariablesForNewTab(tabId.toString());
-
         PAStore.deinitialiseVariablesForTab(tabId.toString());
         PAStore.initialiseVariablesForNewTab(tabId.toString());
 

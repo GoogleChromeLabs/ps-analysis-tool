@@ -16,7 +16,9 @@
 /**
  * Internal dependencies
  */
+import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
+import PAStore from '../../store/PAStore';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   try {
@@ -28,6 +30,11 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
 
     dataStore?.addTabData(tab.id.toString());
     dataStore.initialiseVariablesForNewTab(tab.id.toString());
+    cookieStore.deinitialiseVariablesForTab(tab.id.toString());
+    cookieStore.initialiseVariablesForNewTab(tab.id.toString());
+
+    PAStore.deinitialiseVariablesForTab(tab.id.toString());
+    PAStore.initialiseVariablesForNewTab(tab.id.toString());
 
     if (DataStore.globalIsUsingCDP) {
       const currentTab = targets.filter(

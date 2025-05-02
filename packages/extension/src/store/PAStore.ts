@@ -85,7 +85,7 @@ class PAStore extends DataStore {
   deinitialiseVariablesForTab(tabId: string): void {
     super.deinitialiseVariablesForTab(tabId);
     delete this.unParsedRequestHeadersForPA[tabId];
-    Object.keys(this.auctionEvents[tabId]).forEach((uniqueAuctionId) => {
+    Object.keys(this.auctionEvents[tabId] ?? {}).forEach((uniqueAuctionId) => {
       if (uniqueAuctionId === 'globalEvents') {
         return;
       }
