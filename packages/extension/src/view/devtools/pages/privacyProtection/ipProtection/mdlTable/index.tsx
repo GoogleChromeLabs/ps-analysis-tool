@@ -23,12 +23,10 @@ import {
   type TableFilter,
   type TableColumn,
   type TableRow,
-  DraggableTray,
-  TabsProvider,
-  type TabItems,
 } from '@google-psat/design-system';
 import React, { useEffect, useMemo, useState } from 'react';
 import Legend from './legend';
+import { Resizable } from 're-resizable';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -75,18 +73,6 @@ const MDLTable = () => {
     []
   );
 
-  const tabs = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Legend',
-        content: {
-          Element: Legend,
-        },
-      },
-    ],
-    []
-  );
-
   if (tableData.length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -96,25 +82,39 @@ const MDLTable = () => {
   }
 
   return (
-    <TabsProvider items={tabs} name="mdlTableTray">
-      <div className="w-full h-full flex flex-col">
-        <TableProvider
-          tableColumns={tableColumns}
-          tableFilterData={filters}
-          tableSearchKeys={['domain', 'owner']}
-          data={tableData}
-          onRowClick={(rowData) => {
-            setSelectedKey(rowData?.domain || null);
+    <div className="w-full h-full flex flex-col">
+      <TableProvider
+        tableColumns={tableColumns}
+        tableFilterData={filters}
+        tableSearchKeys={['domain', 'owner']}
+        data={tableData}
+        onRowClick={(rowData) => {
+          setSelectedKey(rowData?.domain || null);
+        }}
+        onRowContextMenu={noop}
+        getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
+        tablePersistentSettingsKey="mdlTable"
+      >
+        <Resizable
+          defaultSize={{
+            width: '100%',
+            height: '85%',
           }}
-          onRowContextMenu={noop}
-          getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
-          tablePersistentSettingsKey="mdlTable"
+          minHeight="15%"
+          maxHeight="95%"
+          enable={{
+            top: false,
+            right: false,
+            bottom: true,
+            left: false,
+          }}
+          className="h-full flex"
         >
           <Table selectedKey={selectedKey} />
-          <DraggableTray />
-        </TableProvider>
-      </div>
-    </TabsProvider>
+        </Resizable>
+        <Legend />
+      </TableProvider>
+    </div>
   );
 };
 

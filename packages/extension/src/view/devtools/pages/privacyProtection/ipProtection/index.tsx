@@ -44,6 +44,7 @@ const IPProtection = () => {
         content: {
           Element: MDLTable,
           props: {},
+          className: 'overflow-hidden',
         },
       },
     ],
