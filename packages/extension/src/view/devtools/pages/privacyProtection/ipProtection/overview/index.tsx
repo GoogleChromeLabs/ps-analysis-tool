@@ -23,10 +23,16 @@ import {
   type PSInfoKeyType,
 } from '@google-psat/design-system';
 
-const Overview = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
+const Overview = ({
+  infoKey,
+  explainers,
+}: {
+  infoKey: PSInfoKeyType;
+  explainers: Record<string, string[]>;
+}) => {
   return (
     <>
-      <InfoCardTemplate infoKey={infoKey} />
+      <InfoCardTemplate infoKey={infoKey} explainers={explainers} />
       <div className="mt-8 border-t border-gray-300 dark:border-quartz">
         <QuickLinksList />
       </div>

@@ -35,6 +35,18 @@ const IPProtection = () => {
           Element: Overview,
           props: {
             infoKey: PSInfoKey.IPProtection,
+            explainers: {
+              readme: [
+                'IP Protection README',
+                'Limiting IP tracking by third parties',
+                'https://github.com/GoogleChrome/ip-protection/blob/main/README.md',
+              ],
+              geolocation: [
+                'IP geolocation explainer',
+                'IP geolocation in proxied traffic',
+                'https://github.com/GoogleChrome/ip-protection/blob/main/Explainer-IP-Geolocation.md',
+              ],
+            },
           },
           className: 'p-4',
         },
