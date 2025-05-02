@@ -30,6 +30,7 @@ const SortButton = ({ setSortOrder, sortOrder }: SortButtonProps) => {
       onClick={() => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
       }}
+      title={`${sortOrder === 'asc' ? 'Ascending' : 'Descending'} order`}
     >
       {sortOrder === 'asc' ? (
         <ArrowUp className="dark:fill-bright-gray fill-granite-gray" />
