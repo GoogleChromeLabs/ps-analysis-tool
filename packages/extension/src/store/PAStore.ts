@@ -85,14 +85,19 @@ class PAStore extends DataStore {
   deinitialiseVariablesForTab(tabId: string): void {
     super.deinitialiseVariablesForTab(tabId);
     delete this.unParsedRequestHeadersForPA[tabId];
-    delete this.auctionEvents[tabId];
+    Object.keys(this.auctionEvents[tabId]).forEach((uniqueAuctionId) => {
+      delete this.auctionEvents[tabId][uniqueAuctionId];
+    });
     delete this.auctionDataForTabId[tabId];
   }
 
   initialiseVariablesForNewTab(tabId: string): void {
     super.initialiseVariablesForNewTab(tabId);
     this.unParsedRequestHeadersForPA[tabId] = {};
-    this.auctionEvents[tabId] = {};
+    const { globalEvents } = structuredClone(this.auctionEvents[tabId] ?? []);
+    this.auctionEvents[tabId] = {
+      globalEvents,
+    };
     this.auctionDataForTabId[tabId] = {};
     //@ts-ignore
     globalThis.PSAT = {
