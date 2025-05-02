@@ -25,6 +25,7 @@ const root = {
   entry: {
     'service-worker': './src/serviceWorker/index.ts',
     'content-script': './src/contentScript/index.ts',
+    'js-cookie-content-script': './src/contentScript/jsCookie.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension'),
