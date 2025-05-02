@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { fetchLocalData } from '@google-psat/common';
+/**
+ * External dependencies
+ */
 import {
   noop,
   ProgressBar,
@@ -37,10 +39,27 @@ const MDLTable = () => {
 
   useEffect(() => {
     (async () => {
-      const data = await fetchLocalData('data/mdl.json');
+      const data = await fetch(
+        'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md'
+      );
+
+      if (!data.ok) {
+        throw new Error(`HTTP error! status: ${data.status}`);
+      }
+
+      const text = await data.text();
+
+      const lines = text
+        .split('\n')
+        .filter((line) => line.includes('|'))
+        .slice(2);
+
+      const mdlData = lines.map((line) =>
+        line.split('|').map((item) => item.trim())
+      );
 
       setTableData(() =>
-        data.map((item: string[]) => ({
+        mdlData.map((item: string[]) => ({
           domain: item[0],
           owner: item[1],
         }))
