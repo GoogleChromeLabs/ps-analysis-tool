@@ -280,7 +280,7 @@ const AuctionPanel = ({
           right: true,
         }}
       >
-        <Sidebar />
+        <Sidebar shouldScrollToLatestItem={sortOrder === 'asc'} />
       </Resizable>
       <div className="flex-1 h-full flex flex-col overflow-auto">
         {Element && <Element {...props} />}
