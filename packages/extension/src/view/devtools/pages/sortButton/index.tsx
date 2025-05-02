@@ -35,7 +35,9 @@ const SortButton = ({
       onClick={() => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
       }}
-      title={`${sortOrder === 'asc' ? 'Ascending' : 'Descending'} order`}
+      title={`Sort in ${
+        sortOrder === 'asc' ? 'descending' : 'ascending'
+      } order`}
     >
       {sortOrder === 'asc' ? (
         <DescendingOrder
