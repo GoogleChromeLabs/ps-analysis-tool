@@ -32,6 +32,7 @@ const SortButton = ({
 }: SortButtonProps) => {
   return (
     <span
+      className="h-full"
       onClick={() => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
       }}

@@ -296,13 +296,14 @@ const AuctionPanel = ({
           width: 200,
           height: '100%',
         }}
-        minWidth={100}
+        minWidth={160}
         maxWidth={800}
         enable={{
           right: true,
         }}
       >
         <Sidebar
+          visibleWidth={160}
           shouldScrollToLatestItem={
             sortOrder === 'asc' &&
             !isEqual(changedValue.current.oldAuctionEvents, auctionEvents)
