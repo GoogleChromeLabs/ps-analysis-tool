@@ -40,6 +40,7 @@ interface TableProps {
   hideSearch?: boolean;
   hideTableTopBar?: boolean;
   rowHeightClass?: string;
+  shouldScroll?: boolean;
 }
 
 const Table = ({
@@ -51,6 +52,7 @@ const Table = ({
   hideSearch,
   hideTableTopBar,
   rowHeightClass,
+  shouldScroll = false,
 }: TableProps) => {
   const {
     filters,
@@ -190,6 +192,7 @@ const Table = ({
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
               rowHeightClass={rowHeightClass}
+              shouldScroll={shouldScroll}
             />
           </table>
         </div>

@@ -115,7 +115,9 @@ const LibraryDetection = memo(function LibraryDetection() {
           </p>
         </>
       ) : (
-        <div className="divide-y divide-hex-gray">{result}</div>
+        <div className="divide-y divide-gray-200 dark:divide-quartz">
+          {result}
+        </div>
       )}
     </CookiesLandingWrapper>
   );

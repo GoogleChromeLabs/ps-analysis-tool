@@ -16,13 +16,7 @@
 /**
  * External dependencies
  */
-import {
-  noop,
-  type CookieData,
-  findAnalyticsMatch,
-  calculateEffectiveExpiryDate,
-  type CookieDatabase,
-} from '@google-psat/common';
+import { noop } from '@google-psat/common';
 import { computePosition, autoPlacement } from '@floating-ui/core';
 import { autoUpdate, platform, arrow, shift, flip } from '@floating-ui/dom';
 
@@ -39,20 +33,13 @@ import {
 } from './popovers';
 import type { ResponseType } from './types';
 import { TOOLTIP_CLASS } from './constants';
-import {
-  DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
-  GET_JS_COOKIES,
-  TABID_STORAGE,
-  WEBPAGE_PORT_NAME,
-} from '../constants';
+import { TABID_STORAGE, WEBPAGE_PORT_NAME } from '../constants';
 import {
   isElementVisibleInViewport,
   getFrameCount,
   isFrameHidden,
 } from './utils';
 import './style.css';
-import { fetchDictionary } from '../utils/fetchCookieDictionary';
-import processAndStoreDocumentCookies from '../utils/processAndStoreDocumentCookies';
 
 /**
  * Represents the webpage's content script functionalities.
@@ -67,16 +54,6 @@ class WebpageContentScript {
    * TabId of the current Tab
    */
   tabId: number | null = null;
-
-  /**
-   * Frame id.
-   */
-  frameId: string | null = null;
-
-  /**
-   * TabId of the current Tab
-   */
-  cookieDB: CookieDatabase | null = null;
 
   /**
    * Cleanup function that needs to run when tooltip is removed from the screen.
@@ -130,7 +107,7 @@ class WebpageContentScript {
   /**
    * Listens for connection requests from devtool.
    */
-  async listenToConnection() {
+  listenToConnection() {
     // Message once on initialize, to let the devtool know that content script has loaded.
     if (chrome.runtime?.id) {
       chrome.runtime.sendMessage({
@@ -138,46 +115,15 @@ class WebpageContentScript {
       });
     }
 
-    chrome.runtime.onMessage.addListener(async (message, _sender, response) => {
+    chrome.runtime.onMessage.addListener((message, _sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
-        await this.getAndProcessJSCookies(message.tabId);
-      }
-
-      if (
-        typeof message.PSATDevToolsHidden !== 'undefined' &&
-        //@ts-ignore
-        typeof cookieStore !== 'undefined'
-      ) {
-        if (message.PSATDevToolsHidden) {
-          //@ts-ignore
-          cookieStore.onchange = null;
-        } else {
-          //@ts-ignore
-          cookieStore.onchange = this.handleCookieChange;
-          await this.getAndProcessJSCookies(message.tabId);
-        }
       }
 
       if (message?.payload?.type === TABID_STORAGE) {
         this.tabId = message.payload.tabId;
-        this.frameId = message.payload.frameId;
-        //@ts-ignore
-        if (typeof cookieStore !== 'undefined') {
-          //@ts-ignore
-          cookieStore.onchange = this.handleCookieChange;
-          await this.getAndProcessJSCookies(message.tabId);
-        }
-      }
-
-      if (message?.payload?.type === GET_JS_COOKIES) {
-        await this.getAndProcessJSCookies(message.payload.tabId);
       }
     });
-
-    if (!this.cookieDB) {
-      this.cookieDB = await fetchDictionary();
-    }
 
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
@@ -186,30 +132,6 @@ class WebpageContentScript {
         port.onDisconnect.addListener(this.onDisconnect);
       }
     });
-  }
-
-  /**
-   * This function will fetch and add cookies that have been set via JS.
-   * @param tabId The tabID whose cookies have to be fetched.
-   */
-  async getAndProcessJSCookies(tabId: string) {
-    try {
-      if (this.frameId === null) {
-        return;
-      }
-      //@ts-ignore
-      const jsCookies = await cookieStore?.getAll();
-
-      await processAndStoreDocumentCookies({
-        tabUrl: window.location.href,
-        tabId,
-        frameId: this.frameId,
-        documentCookies: jsCookies,
-        cookieDB: this.cookieDB ?? {},
-      });
-    } catch (error) {
-      //Fail silently. No logging because sometimes cookieStore.getAll fails to run in some context.
-    }
   }
 
   /**
@@ -235,82 +157,6 @@ class WebpageContentScript {
     this.docElement.removeEventListener('mouseleave', this.handleMouseMove);
     this.docElement.removeEventListener('mouseenter', this.handleMouseMove);
   }
-  /**
-   * Handle cookie change event.
-   * @param event Event fired at a CookieStore when any cookie changes occur
-   */
-  //@ts-ignore
-  handleCookieChange = (event: CookieChangedEvent) => {
-    if (!chrome.runtime?.id) {
-      return;
-    }
-
-    if (
-      event.type !== 'change' ||
-      (event.changed && event.changed.length === 0) ||
-      !this.cookieDB
-    ) {
-      return;
-    }
-    try {
-      const jsCookies = [];
-      for (const cookie of event.changed) {
-        if (!cookie.name || !cookie.path) {
-          return;
-        }
-        let domain = cookie.domain;
-
-        if (cookie.domain) {
-          domain = cookie.domain?.startsWith('.')
-            ? cookie.domain
-            : '.' + cookie.domain;
-        } else {
-          domain = window.location.hostname;
-        }
-
-        const encoder = new TextEncoder();
-
-        const singleCookie: CookieData = {
-          parsedCookie: {
-            ...cookie,
-            expires: calculateEffectiveExpiryDate(cookie?.expires),
-            partitionKey: cookie?.partitioned,
-            size: encoder.encode(cookie.name + cookie.value).length,
-            domain,
-          },
-          networkEvents: {
-            requestEvents: [],
-            responseEvents: [],
-          },
-          analytics: findAnalyticsMatch(cookie?.name, this.cookieDB),
-          url: window.location.href,
-          headerType: 'javascript',
-          frameIdList: [this.frameId?.toString() ?? '0'],
-          blockedReasons: [],
-          warningReasons: [],
-          isBlocked: false,
-          isFirstParty: true,
-        };
-
-        jsCookies.push(singleCookie);
-      }
-
-      if (jsCookies.length === 0) {
-        return;
-      }
-
-      chrome.runtime.sendMessage({
-        type: DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
-        payload: {
-          tabId: this.tabId,
-          cookieData: jsCookies,
-        },
-      });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
-    }
-  };
 
   /**
    * Handle unload event
@@ -328,10 +174,6 @@ class WebpageContentScript {
    * @param {ResponseType} response - The incoming message/response.
    */
   onMessage = (response: ResponseType) => {
-    if (this.frameId?.toString() !== '0' || this.frameId === null) {
-      return;
-    }
-
     this.isInspecting = response.isInspecting;
     if (response?.selectedAdUnit) {
       this.mode = 'PA';
