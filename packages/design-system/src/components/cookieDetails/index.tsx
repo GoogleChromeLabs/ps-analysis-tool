@@ -28,6 +28,7 @@ import Details from './details';
 
 export interface CookieDetailsProps {
   isUsingCDP: boolean;
+  showBlockedCookies: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
@@ -36,6 +37,7 @@ export interface CookieDetailsProps {
 const CookieDetails = ({
   selectedFrameCookie,
   isUsingCDP,
+  showBlockedCookies,
 }: CookieDetailsProps) => {
   const selectedCookie = Object.values(selectedFrameCookie ?? {})[0];
 
@@ -45,7 +47,11 @@ const CookieDetails = ({
       className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] overflow-y-auto"
     >
       {selectedCookie ? (
-        <Details isUsingCDP={isUsingCDP} selectedCookie={selectedCookie} />
+        <Details
+          showBlockedCookies={showBlockedCookies}
+          isUsingCDP={isUsingCDP}
+          selectedCookie={selectedCookie}
+        />
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">

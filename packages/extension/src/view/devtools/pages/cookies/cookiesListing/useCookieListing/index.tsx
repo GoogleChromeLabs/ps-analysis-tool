@@ -46,13 +46,19 @@ import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
-    ({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    })
-  );
+  const {
+    selectedFrame,
+    cookies,
+    getCookiesSetByJavascript,
+    setShowBlockedCookies,
+    showBlockedCookies,
+  } = useCookie(({ state, actions }) => ({
+    selectedFrame: state.selectedFrame,
+    cookies: state.tabCookies || {},
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    showBlockedCookies: state.showBlockedCookies,
+    setShowBlockedCookies: actions.setShowBlockedCookies,
+  }));
 
   const { activePanelQuery, clearActivePanelQuery } = useSidebar(
     ({ state }) => ({
@@ -80,7 +86,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         cell: (info: InfoType) => info,
         enableHiding: false,
         widthWeightagePercentage: 13,
-        enableBodyCellPrefixIcon: isUsingCDP,
+        enableBodyCellPrefixIcon: showBlockedCookies && isUsingCDP,
         bodyCellPrefixIcon: {
           Element: NamePrefixIconSelector,
         },
@@ -94,8 +100,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const isDomainInAllowList = Boolean(
             (row.originalData as CookieTableData)?.isDomainInAllowList
           );
+          const isFirstParty = (row.originalData as CookieTableData)
+            ?.isFirstParty;
 
-          return isBlocked || isDomainInAllowList;
+          return (
+            (showBlockedCookies && isBlocked && !isFirstParty) ||
+            isDomainInAllowList
+          );
         },
       },
       {
@@ -192,7 +203,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 3,
       },
     ],
-    [isUsingCDP]
+    [isUsingCDP, showBlockedCookies]
   );
 
   const filters = useMemo<TableFilter>(
@@ -499,12 +510,31 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
 
   const extraInterfaceToTopBar = useCallback(() => {
     return (
-      <RefreshButton
-        onClick={getCookiesSetByJavascript}
-        title={I18n.getMessage('refreshJSCookies')}
-      />
+      <>
+        <RefreshButton
+          onClick={getCookiesSetByJavascript}
+          title={I18n.getMessage('refreshJSCookies')}
+        />
+        <div className="flex items-center w-max">
+          <input
+            type="checkbox"
+            checked={showBlockedCookies}
+            id="show-blocked-cookies"
+            className="ml-1"
+            onChange={(e) => {
+              setShowBlockedCookies(e.target.checked);
+            }}
+          />
+          <label
+            htmlFor="show-blocked-cookies"
+            className="ml-1 text-xs leading-none"
+          >
+            Show blocked 3p cookies
+          </label>
+        </div>
+      </>
     );
-  }, [getCookiesSetByJavascript]);
+  }, [getCookiesSetByJavascript, setShowBlockedCookies, showBlockedCookies]);
 
   return {
     tableData,

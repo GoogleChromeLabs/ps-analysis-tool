@@ -120,6 +120,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
               toggleFilterSelection={toggleFilterSelection}
               isSelectAllFilterSelected={() => false}
               toggleSelectAllFilter={noop}
+              expandAllProp={true}
             />
           </Resizable>
         )}
