@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../../store/dataStore';
+import dataStore, { DataStore } from '../../store/dataStore';
 import {
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
@@ -32,6 +32,7 @@ import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
+import sendUpdatedData from '../../store/utils/sendUpdatedData';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (request: any) => {
@@ -46,7 +47,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     const actionsPerformed: { [key: string]: boolean | number } = {};
 
     if (Object.keys(sessionStorage).includes('isUsingCDP')) {
-      dataStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
+      DataStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
       actionsPerformed.globalIsUsingCDP = true;
     }
 
@@ -57,7 +58,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     });
 
     await chrome.storage.sync.set({
-      isUsingCDP: dataStore.globalIsUsingCDP,
+      isUsingCDP: DataStore.globalIsUsingCDP,
     });
 
     const tabs = await chrome.tabs.query({});
@@ -74,11 +75,15 @@ export const runtimeOnMessageListener = async (request: any) => {
         const currentTab = targets.filter(
           ({ tabId }) => tabId && id && tabId === id
         );
-        dataStore?.addTabData(id);
-        dataStore?.updateParentChildFrameAssociation(id, currentTab[0].id, '0');
+        dataStore?.addTabData(id.toString());
+        dataStore?.updateParentChildFrameAssociation(
+          id.toString(),
+          currentTab[0].id,
+          '0'
+        );
 
         try {
-          if (dataStore.globalIsUsingCDP) {
+          if (DataStore.globalIsUsingCDP) {
             await attachCDP({ tabId: id });
           }
         } catch (error) {
@@ -113,8 +118,8 @@ export const runtimeOnMessageListener = async (request: any) => {
 
     dataStore?.updateDevToolsState(incomingMessageTabId, true);
 
-    if (dataStore?.tabsData[incomingMessageTabId]) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
+    if (cookieStore.getTabsData(incomingMessageTabId)) {
+      sendUpdatedData(incomingMessageTabId, true);
     }
   }
 
@@ -130,8 +135,8 @@ export const runtimeOnMessageListener = async (request: any) => {
 
     dataStore?.updatePopUpState(incomingMessageTabId, true);
 
-    if (dataStore?.tabsData[incomingMessageTabId]) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
+    if (cookieStore.getTabsData(incomingMessageTabId)) {
+      sendUpdatedData(incomingMessageTabId, true);
     }
   }
 
