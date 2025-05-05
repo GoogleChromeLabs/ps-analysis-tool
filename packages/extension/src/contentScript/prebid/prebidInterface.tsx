@@ -69,6 +69,12 @@ class PrebidInterface {
         this.getAndProcessPrebidData(event.data.propertyName);
       }
     };
+
+    document.addEventListener('unload', () => {
+      this.prebidExists = false;
+      this.scanningStatus = false;
+      this.prebidInterface = null;
+    });
   }
 
   sendInitialData() {
