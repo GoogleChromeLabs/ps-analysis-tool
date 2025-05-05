@@ -47,8 +47,12 @@ export interface ProtectedAudienceContextType {
     adsAndBidders: AdsAndBiddersType;
     selectedAdUnit: string | null;
     sortOrder: 'asc' | 'desc';
+    functionKeys: string[];
+    selectedProperty: string | null;
+    prebidResponse: object | null;
   };
   actions: {
+    getPrebidData: (propertyName: string) => void;
     setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
     setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
   };
@@ -64,8 +68,12 @@ const initialState: ProtectedAudienceContextType = {
     adsAndBidders: {},
     selectedAdUnit: null,
     sortOrder: 'asc',
+    functionKeys: [],
+    selectedProperty: null,
+    prebidResponse: null,
   },
   actions: {
+    getPrebidData: noop,
     setSelectedAdUnit: noop,
     setSortOrder: noop,
   },

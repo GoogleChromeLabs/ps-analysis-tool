@@ -31,6 +31,7 @@ import type {
   SingleSellerAuction,
   MultiSellerAuction,
 } from '@google-psat/common';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -40,11 +41,20 @@ import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
-import { isEqual } from 'lodash-es';
+import {
+  CONTENT_SCRIPT_PREBID_INITIAL_SYNC,
+  CS_GET_PREBID_DATA_RESPONSE,
+  DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA,
+} from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
+
+  const [functionKeys, setFunctionKeys] = useState<string[]>([]);
+
+  const [selectedProperty, setSelectedProperty] = useState<string | null>(null);
+  const [prebidResponse, setPrebidResponse] = useState<object | null>(null);
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
     useState<boolean>(false);
@@ -218,6 +228,28 @@ const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  useEffect(() => {
+    chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+      tabId: chrome.devtools.inspectedWindow.tabId,
+      payload: {
+        type: CONTENT_SCRIPT_PREBID_INITIAL_SYNC,
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      },
+    });
+  }, []);
+
+  const getPrebidData = useCallback((propertyName: string) => {
+    chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+      tabId: chrome.devtools.inspectedWindow.tabId,
+      payload: {
+        type: DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA,
+        tabId: chrome.devtools.inspectedWindow.tabId,
+        propertyName,
+      },
+    });
+    setSelectedProperty(propertyName);
+  }, []);
+
   const messagePassingListener = useCallback(
     // eslint-disable-next-line complexity
     async (message: {
@@ -228,16 +260,28 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
+        prebidData: unknown;
+        propertyName: string;
       };
     }) => {
       let didAuctionEventsChange = false;
 
-      if (!['AUCTION_EVENTS'].includes(message.type)) {
+      if (
+        !['AUCTION_EVENTS', CS_GET_PREBID_DATA_RESPONSE].includes(message.type)
+      ) {
         return;
       }
 
       if (!message.type) {
         return;
+      }
+
+      if (message.type === CS_GET_PREBID_DATA_RESPONSE) {
+        if (message.payload?.propertyName === 'keys') {
+          setFunctionKeys(message.payload?.prebidData as string[]);
+        } else {
+          setPrebidResponse(message.payload?.prebidData as object);
+        }
       }
 
       const tabId = chrome.devtools.inspectedWindow.tabId;
@@ -421,13 +465,21 @@ const Provider = ({ children }: PropsWithChildren) => {
         adsAndBidders,
         selectedAdUnit,
         sortOrder,
+        functionKeys,
+        selectedProperty,
+        prebidResponse,
       },
       actions: {
         setSelectedAdUnit,
         setSortOrder,
+        getPrebidData,
       },
     };
   }, [
+    selectedProperty,
+    prebidResponse,
+    getPrebidData,
+    functionKeys,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,
