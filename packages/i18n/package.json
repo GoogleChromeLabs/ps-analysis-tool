@@ -37,5 +37,8 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "intl-messageformat": "^10.5.11"
+  },
+  "devDependencies": {
+    "@types/entities": "^1.1.1"
   }
 }
