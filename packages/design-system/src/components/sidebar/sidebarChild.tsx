@@ -29,6 +29,7 @@ interface SidebarItemProps {
   sidebarItem: SidebarItemValue;
   recursiveStackIndex?: number;
   visibleWidth?: number;
+  shouldScrollToLatestItem?: boolean;
 }
 
 // eslint-disable-next-line complexity
@@ -39,6 +40,7 @@ const SidebarChild = ({
   sidebarItem,
   recursiveStackIndex = 0,
   visibleWidth,
+  shouldScrollToLatestItem,
 }: SidebarItemProps) => {
   const {
     selectedItemKey,
@@ -73,6 +75,12 @@ const SidebarChild = ({
     selectedItemKey,
     setIsSidebarFocused,
   ]);
+
+  useEffect(() => {
+    if (shouldScrollToLatestItem) {
+      itemRef.current?.scrollIntoView();
+    }
+  }, [shouldScrollToLatestItem]);
 
   const SelectedIcon = sidebarItem.selectedIcon?.Element;
   const Icon = sidebarItem.icon?.Element;
@@ -175,18 +183,24 @@ const SidebarChild = ({
         {Object.keys(sidebarItem.children)?.length !== 0 &&
           sidebarItem.dropdownOpen && (
             <>
-              {Object.entries(sidebarItem.children).map(([childKey, child]) => (
-                <React.Fragment key={childKey}>
-                  <SidebarChild
-                    didUserInteract={didUserInteract}
-                    setDidUserInteract={setDidUserInteract}
-                    itemKey={childKey}
-                    sidebarItem={child}
-                    recursiveStackIndex={recursiveStackIndex + 1}
-                    visibleWidth={visibleWidth}
-                  />
-                </React.Fragment>
-              ))}
+              {Object.entries(sidebarItem.children).map(
+                ([childKey, child], index) => (
+                  <React.Fragment key={childKey}>
+                    <SidebarChild
+                      shouldScrollToLatestItem={
+                        shouldScrollToLatestItem &&
+                        index === Object.keys(sidebarItem.children)?.length - 1
+                      }
+                      didUserInteract={didUserInteract}
+                      setDidUserInteract={setDidUserInteract}
+                      itemKey={childKey}
+                      sidebarItem={child}
+                      recursiveStackIndex={recursiveStackIndex + 1}
+                      visibleWidth={visibleWidth}
+                    />
+                  </React.Fragment>
+                )
+              )}
             </>
           )}
       </>
