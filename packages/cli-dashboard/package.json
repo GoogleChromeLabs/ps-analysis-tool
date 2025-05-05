@@ -37,8 +37,8 @@
     "@google-psat/design-system": "*",
     "@google-psat/i18n": "*",
     "@google-psat/report": "*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",
