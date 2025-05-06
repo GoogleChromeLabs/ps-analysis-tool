@@ -187,10 +187,14 @@ export function topicsAnimation(
       app.lastFrameCount = 0;
       app.prevVisitedCircleIndex = -1;
       app.inspectedCircles.clear();
-      p?.clear();
-      p.background(255);
-      p.pixelDensity(2);
-      app.drawTimeline(config.timeline.position, epoch);
+      try {
+        p.clear();
+        p.background(255);
+        p.pixelDensity(2);
+        app.drawTimeline(config.timeline.position, epoch);
+      } catch (error) {
+        // fails silently if canvas was removed
+      }
     },
 
     getCurrentVisitIndex: () => app.visitIndex,
