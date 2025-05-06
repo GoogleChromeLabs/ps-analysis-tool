@@ -55,10 +55,10 @@ const Pagination = ({ pages, setPage, selectedPage }: PaginationProps) => {
           <button
             key={page}
             className={classNames(
-              'w-4 h-4 bg-gray-200 rounded flex items-center justify-center',
+              'w-4 h-4 rounded flex items-center justify-center',
               {
                 'bg-blue-500 text-white': selectedPage === page - 1,
-                'text-gray-700': selectedPage !== page - 1,
+                'bg-gray-200': selectedPage !== page - 1,
               }
             )}
             onClick={() => setPage(page - 1)}

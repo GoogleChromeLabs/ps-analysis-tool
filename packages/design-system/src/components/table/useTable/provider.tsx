@@ -48,6 +48,7 @@ export const TableProvider = ({
 }: PropsWithChildren<TableProviderProps>) => {
   const [allData, setAllData] = useState(data);
   const [page, setPage] = useState(0);
+  const [pages, setPages] = useState(0);
   const [paginatedData, setPaginatedData] = useState<TableData[]>([]);
 
   useEffect(() => {
@@ -55,15 +56,6 @@ export const TableProvider = ({
       setAllData(data);
     }
   }, [data]);
-
-  useEffect(() => {
-    if (allData) {
-      const start = page * 500;
-      const end = start + 500;
-      const _paginatedData = allData.slice(start, end);
-      setPaginatedData(_paginatedData);
-    }
-  }, [page, allData]);
 
   const commonKey = useMemo(() => {
     if (!tablePersistentSettingsKey) {
@@ -74,6 +66,27 @@ export const TableProvider = ({
 
     return keys[0];
   }, [tablePersistentSettingsKey]);
+
+  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
+    allData,
+    tableSearchKeys,
+    commonKey
+  );
+
+  useEffect(() => {
+    if (searchFilteredData.length) {
+      const start = page * 500;
+      const end = start + 500;
+      const _pages = Math.ceil(searchFilteredData.length / 500);
+      setPages(_pages);
+
+      if (page >= _pages) {
+        setPage(_pages - 1);
+      }
+      const _paginatedData = searchFilteredData.slice(start, end);
+      setPaginatedData(_paginatedData);
+    }
+  }, [page, searchFilteredData]);
 
   const {
     visibleColumns,
@@ -110,16 +123,10 @@ export const TableProvider = ({
     commonKey
   );
 
-  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
-    filteredData,
-    tableSearchKeys,
-    commonKey
-  );
-
   const [rows, setRows] = useState<TableRow[]>([]);
 
   useEffect(() => {
-    const newRows = searchFilteredData.map((_data) => {
+    const newRows = filteredData.map((_data) => {
       const row = {
         originalData: _data,
       } as TableRow;
@@ -135,7 +142,7 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-  }, [searchFilteredData, columns]);
+  }, [filteredData, columns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -151,6 +158,7 @@ export const TableProvider = ({
       onRowClick(null);
     }
   }, [isRowSelected, onRowClick, rows]);
+
   return (
     <TableContext.Provider
       value={{
@@ -167,7 +175,7 @@ export const TableProvider = ({
           selectedFilters,
           isFiltering,
           searchValue,
-          pages: Math.ceil(allData.length / 500),
+          pages,
           selectedPage: page,
         },
         actions: {

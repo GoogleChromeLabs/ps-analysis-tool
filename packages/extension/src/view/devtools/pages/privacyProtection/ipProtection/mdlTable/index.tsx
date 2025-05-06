@@ -27,8 +27,12 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useEffect, useMemo, useState } from 'react';
-import Legend from './legend';
 import { Resizable } from 're-resizable';
+
+/**
+ * Internal dependencies
+ */
+import Legend from './legend';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
