@@ -26,7 +26,7 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
   let stopLoop = false;
   const pbjsClass = new classToInstantiate();
 
-  setTimeout(() => {
+  const timeout = setTimeout(() => {
     stopLoop = true;
     pbjsClass.scanningStatus = true;
   }, 60000);
@@ -40,6 +40,7 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
       pbjsClass.scanningStatus = true;
       pbjsClass.sendInitialData();
       stopLoop = true;
+      clearTimeout(timeout);
     }
 
     if (!stopLoop) {
