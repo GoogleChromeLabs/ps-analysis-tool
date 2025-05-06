@@ -32,7 +32,7 @@
     "@google-psat/i18n": "*",
     "@google-psat/library-detection": "*",
     "@google-psat/report": "*",
-    "@p5-wrapper/react": "^4.4.2",
+    "@p5-wrapper/react": "^5.0.0-rc.2",
     "@types/lodash-es": "^4.17.12",
     "classnames": "^2.3.2",
     "d3": "^7.9.0",

@@ -444,7 +444,7 @@ const Panel = ({
           <div id="user-canvas"></div>
         </main>
       </div>
-      Main Canvas
+      {/* Main Canvas */}
       <ReactP5Wrapper sketch={mainSketch} isMultiSeller={isMultiSeller} />
       {/* Interest Group Canvas */}
       <ReactP5Wrapper
