@@ -30,14 +30,14 @@ interface HeaderCellProps {
 }
 
 const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
-  const { sortKey, sortOrder, setSortKey, isResizing } = useTable(
-    ({ state, actions }) => ({
+  const { sortKey, sortOrder, setSortKey, isResizing, minColumnWidth } =
+    useTable(({ state, actions }) => ({
       sortKey: state.sortKey,
       sortOrder: state.sortOrder,
       setSortKey: actions.setSortKey,
       isResizing: state.isResizing,
-    })
-  );
+      minColumnWidth: state.minColumnWidth,
+    }));
 
   const handleOnClick = useCallback(() => {
     setSortKey(cell.accessorKey);
@@ -60,7 +60,7 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
           }
         )}
         data-testid="header-cell"
-        data-min-width={cell.minWidth}
+        data-min-width={cell.minWidth || minColumnWidth}
         data-max-width={cell.maxWidth}
         style={{ maxWidth: initialWidth, minWidth: initialWidth }}
       >

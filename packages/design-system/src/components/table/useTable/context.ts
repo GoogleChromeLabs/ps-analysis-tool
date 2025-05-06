@@ -46,6 +46,7 @@ export interface TableStoreContext {
     isFiltering: TableFilteringOutput['isFiltering'];
     searchValue: TableSearchOutput['searchValue'];
     tableContainerRef: UseColumnResizing['tableContainerRef'];
+    minColumnWidth: number;
   };
   actions: {
     setSortKey: ColumnSortingOutput['setSortKey'];
@@ -83,6 +84,7 @@ const initialState: TableStoreContext = {
     isFiltering: false,
     searchValue: '',
     tableContainerRef: null,
+    minColumnWidth: 0,
   },
   actions: {
     setSortKey: noop,

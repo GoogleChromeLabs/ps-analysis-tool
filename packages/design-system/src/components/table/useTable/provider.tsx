@@ -30,6 +30,8 @@ import { TableContext } from './context';
 import { TableRow, TableProviderProps } from './types';
 import useColumnResizing from './useColumnResizing';
 
+const MIN_COLUMN_WIDTH = 80;
+
 export const TableProvider = ({
   data,
   tableColumns,
@@ -44,6 +46,7 @@ export const TableProvider = ({
   hasVerticalBar,
   getVerticalBarColorHash,
   isRowSelected,
+  minColumnWidth = MIN_COLUMN_WIDTH,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
   const commonKey = useMemo(() => {
@@ -147,6 +150,7 @@ export const TableProvider = ({
           selectedFilters,
           isFiltering,
           searchValue,
+          minColumnWidth,
         },
         actions: {
           setSortKey,
