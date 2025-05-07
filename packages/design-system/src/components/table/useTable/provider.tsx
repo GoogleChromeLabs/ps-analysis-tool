@@ -17,7 +17,13 @@
 /**
  * External dependencies.
  */
-import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { getValueByKey } from '@google-psat/common';
 /**
  * Internal dependencies.
@@ -28,7 +34,7 @@ import useColumnResizing from './useColumnResizing';
 import useFiltering from './useFiltering';
 import useSearch from './useSearch';
 import { TableContext } from './context';
-import { TableRow, TableProviderProps } from './types';
+import { TableRow, TableProviderProps, TableData } from './types';
 
 export const TableProvider = ({
   data,
@@ -46,6 +52,15 @@ export const TableProvider = ({
   isRowSelected,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
+  const [allData, setAllData] = useState(data);
+  const [paginatedData, setPaginatedData] = useState<TableData[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setAllData(data);
+    }
+  }, [data]);
+
   const commonKey = useMemo(() => {
     if (!tablePersistentSettingsKey) {
       return undefined;
@@ -55,6 +70,58 @@ export const TableProvider = ({
 
     return keys[0];
   }, [tablePersistentSettingsKey]);
+
+  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
+    allData,
+    tableSearchKeys,
+    commonKey
+  );
+
+  const {
+    filters,
+    selectedFilters,
+    filteredData,
+    isFiltering,
+    toggleFilterSelection,
+    toggleSelectAllFilter,
+    resetFilters,
+    isSelectAllFilterSelected,
+  } = useFiltering(
+    searchFilteredData,
+    tableFilterData,
+    tablePersistentSettingsKey,
+    commonKey
+  );
+
+  const loadMoreData = useCallback(() => {
+    setPaginatedData((prevData) => {
+      const start = prevData.length;
+      const end = start + 500;
+      const _paginatedData = filteredData.slice(start, end);
+      return [...prevData, ..._paginatedData];
+    });
+  }, [filteredData]);
+
+  const hasMoreData = useMemo(() => {
+    if (paginatedData.length < filteredData.length) {
+      return true;
+    }
+
+    return false;
+  }, [filteredData.length, paginatedData.length]);
+
+  const count = useMemo(() => {
+    return filteredData.length;
+  }, [filteredData]);
+
+  useEffect(() => {
+    if (filteredData.length) {
+      const start = 0;
+      const end = start + 500;
+      const _paginatedData = filteredData.slice(start, end);
+      setPaginatedData(_paginatedData);
+    }
+  }, [filteredData]);
 
   const {
     visibleColumns,
@@ -73,34 +140,12 @@ export const TableProvider = ({
     useColumnResizing(visibleColumns, allTableColumnsKeys, commonKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, tableColumns, commonKey);
-
-  const {
-    filters,
-    selectedFilters,
-    filteredData,
-    isFiltering,
-    toggleFilterSelection,
-    toggleSelectAllFilter,
-    resetFilters,
-    isSelectAllFilterSelected,
-  } = useFiltering(
-    sortedData,
-    tableFilterData,
-    tablePersistentSettingsKey,
-    commonKey
-  );
-
-  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
-    filteredData,
-    tableSearchKeys,
-    commonKey
-  );
+    useColumnSorting(paginatedData, tableColumns, commonKey);
 
   const [rows, setRows] = useState<TableRow[]>([]);
 
   useEffect(() => {
-    const newRows = searchFilteredData.map((_data) => {
+    const newRows = sortedData.map((_data) => {
       const row = {
         originalData: _data,
       } as TableRow;
@@ -116,7 +161,7 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-  }, [searchFilteredData, columns]);
+  }, [sortedData, columns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -132,6 +177,7 @@ export const TableProvider = ({
       onRowClick(null);
     }
   }, [isRowSelected, onRowClick, rows]);
+
   return (
     <TableContext.Provider
       value={{
@@ -148,6 +194,8 @@ export const TableProvider = ({
           selectedFilters,
           isFiltering,
           searchValue,
+          hasMoreData,
+          count,
         },
         actions: {
           setSortKey,
@@ -169,6 +217,7 @@ export const TableProvider = ({
           exportTableData,
           hasVerticalBar,
           getVerticalBarColorHash,
+          loadMoreData,
         },
       }}
     >

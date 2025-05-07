@@ -104,11 +104,13 @@
   },
   "ip-protection": {
     "name": "IP Protection",
-    "description": "IPProtectionDescription",
-    "proposal": "https://github.com/GoogleChrome/ip-protection",
+    "description": "IP Protection enhances user privacy in Incognito mode by masking the user's IP address from selected third-party domains listed in the Masked Domain List (MDL). This helps prevent cross-site tracking and limits <a>IP-based geolocation</a> without disrupting essential web functionality.",
+		"links": ["https://github.com/GoogleChrome/ip-protection/blob/main/Explainer-IP-Geolocation.md"],
+    "proposal": "https://github.com/GoogleChrome/ip-protection/blob/main/README.md",
     "publicDiscussion": "https://github.com/GoogleChrome/ip-protection/issues",
     "videoOverview": "",
-    "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/ip-protection"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/ip-protection",
+		"useI18n": false
   },
   "private-state-tokens": {
     "name": "Private State Tokens",

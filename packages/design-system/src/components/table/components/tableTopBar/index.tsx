@@ -37,6 +37,7 @@ interface TableTopBarProps {
   disableFiltering?: boolean;
   extraInterface?: () => React.JSX.Element;
   hideSearch?: boolean;
+  count?: number;
 }
 
 const TableTopBar = ({
@@ -50,6 +51,7 @@ const TableTopBar = ({
   disableFiltering = false,
   extraInterface,
   hideSearch = false,
+  count = 0,
 }: TableTopBarProps) => {
   return (
     <TopBar
@@ -60,7 +62,7 @@ const TableTopBar = ({
       hideFiltering={hideFiltering}
       disableFiltering={disableFiltering}
       hideSearch={hideSearch}
-      count={rows.length}
+      count={count}
     >
       {extraInterface?.()}
       {exportTableData && (

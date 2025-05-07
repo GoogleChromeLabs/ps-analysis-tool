@@ -66,6 +66,7 @@ const Table = ({
     searchValue,
     setSearchValue,
     exportTableData,
+    count,
   } = useTable(({ state, actions }) => ({
     tableContainerRef: state.tableContainerRef,
     filters: state.filters,
@@ -78,6 +79,7 @@ const Table = ({
     searchValue: state.searchValue,
     setSearchValue: actions.setSearchValue,
     exportTableData: actions.exportTableData,
+    count: state.count,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -141,14 +143,17 @@ const Table = ({
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             exportTableData={exportTableData}
+            count={count}
           />
-          {!hideFiltering && (
-            <TableChipsBar
-              selectedFilters={selectedFilters}
-              resetFilters={resetFilters}
-              toggleFilterSelection={toggleFilterSelection}
-            />
-          )}
+          <div className="flex items-center justify-between gap-1 px-2 py-0.5 bg-anti-flash-white dark:bg-raisin-black">
+            {!hideFiltering && (
+              <TableChipsBar
+                selectedFilters={selectedFilters}
+                resetFilters={resetFilters}
+                toggleFilterSelection={toggleFilterSelection}
+              />
+            )}
+          </div>
         </>
       )}
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
