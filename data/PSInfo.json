@@ -105,7 +105,7 @@
   "ip-protection": {
     "name": "IP Protection",
     "description": "IP Protection enhances user privacy in Incognito mode by masking the user's IP address from selected third-party domains listed in the Masked Domain List (MDL). This helps prevent cross-site tracking and limits <a href='https://github.com/GoogleChrome/ip-protection/blob/main/Explainer-IP-Geolocation.md' class='text-bright-navy-blue dark:text-jordy-blue hover:opacity-80'>IP-based geolocation</a> without disrupting essential web functionality.",
-    "proposal": "https://github.com/GoogleChrome/ip-protection",
+    "proposal": "https://github.com/GoogleChrome/ip-protection/blob/main/README.md",
     "publicDiscussion": "https://github.com/GoogleChrome/ip-protection/issues",
     "videoOverview": "",
     "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/ip-protection",
