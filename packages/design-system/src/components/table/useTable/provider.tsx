@@ -73,20 +73,36 @@ export const TableProvider = ({
     commonKey
   );
 
+  const {
+    filters,
+    selectedFilters,
+    filteredData,
+    isFiltering,
+    toggleFilterSelection,
+    toggleSelectAllFilter,
+    resetFilters,
+    isSelectAllFilterSelected,
+  } = useFiltering(
+    searchFilteredData,
+    tableFilterData,
+    tablePersistentSettingsKey,
+    commonKey
+  );
+
   useEffect(() => {
-    if (searchFilteredData.length) {
+    if (filteredData.length) {
       const start = page * 500;
       const end = start + 500;
-      const _pages = Math.ceil(searchFilteredData.length / 500);
+      const _pages = Math.ceil(filteredData.length / 500);
       setPages(_pages);
 
       if (page >= _pages) {
         setPage(_pages - 1);
       }
-      const _paginatedData = searchFilteredData.slice(start, end);
+      const _paginatedData = filteredData.slice(start, end);
       setPaginatedData(_paginatedData);
     }
-  }, [page, searchFilteredData]);
+  }, [page, filteredData]);
 
   const {
     visibleColumns,
@@ -107,26 +123,10 @@ export const TableProvider = ({
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(paginatedData, tableColumns, commonKey);
 
-  const {
-    filters,
-    selectedFilters,
-    filteredData,
-    isFiltering,
-    toggleFilterSelection,
-    toggleSelectAllFilter,
-    resetFilters,
-    isSelectAllFilterSelected,
-  } = useFiltering(
-    sortedData,
-    tableFilterData,
-    tablePersistentSettingsKey,
-    commonKey
-  );
-
   const [rows, setRows] = useState<TableRow[]>([]);
 
   useEffect(() => {
-    const newRows = filteredData.map((_data) => {
+    const newRows = sortedData.map((_data) => {
       const row = {
         originalData: _data,
       } as TableRow;
@@ -142,7 +142,7 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-  }, [filteredData, columns]);
+  }, [sortedData, columns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
