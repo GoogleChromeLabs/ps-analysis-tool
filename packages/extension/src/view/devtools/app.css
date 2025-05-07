@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@config '../../../../../tailwind.config.cjs';
+
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -17,7 +19,7 @@
   }
 }
 
-@import 'github-markdown-css';
+/* @import 'github-markdown-css'; */
 
 .wiki-sidebar {
   ul {
