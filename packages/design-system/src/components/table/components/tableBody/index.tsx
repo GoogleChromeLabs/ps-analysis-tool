@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useRef } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 /**
  * Internal dependencies.
@@ -47,6 +48,8 @@ const TableBody = ({
     conditionalTableRowClassesHandler,
     hasVerticalBar,
     getVerticalBarColorHash,
+    loadMoreData,
+    hasMoreData,
   } = useTable(({ state, actions }) => ({
     rows: state.rows,
     columns: state.columns,
@@ -57,6 +60,8 @@ const TableBody = ({
       actions.conditionalTableRowClassesHandler,
     hasVerticalBar: actions.hasVerticalBar,
     getVerticalBarColorHash: actions.getVerticalBarColorHash,
+    loadMoreData: actions.loadMoreData,
+    hasMoreData: state.hasMoreData,
   }));
 
   const tableBodyRef = useRef(null);
@@ -107,33 +112,42 @@ const TableBody = ({
     <div
       ref={tableBodyRef}
       className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
+      id="scrollableTableBody"
     >
-      {rows.map((row, index) => (
-        <BodyRow
-          key={index}
-          index={index}
-          row={row}
-          columns={columns}
-          selectedKey={selectedKey}
-          isRowFocused={isRowFocused}
-          getExtraClasses={() => {
-            return (
-              conditionalTableRowClassesHandler?.(row, isRowFocused, index) ??
-              ''
-            );
-          }}
-          hasVerticalBar={hasVerticalBar?.(row) ?? false}
-          verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
-          getRowObjectKey={getRowObjectKey}
-          onRowClick={() => {
-            onRowClick(row?.originalData);
-            setIsRowFocused(true);
-          }}
-          onKeyDown={handleKeyDown}
-          onRowContextMenu={onRowContextMenu}
-          rowHeightClass={rowHeightClass}
-        />
-      ))}
+      <InfiniteScroll
+        dataLength={rows.length}
+        scrollableTarget="scrollableTableBody"
+        next={loadMoreData}
+        hasMore={hasMoreData}
+        loader={'Loading...'}
+      >
+        {rows.map((row, index) => (
+          <BodyRow
+            key={index}
+            index={index}
+            row={row}
+            columns={columns}
+            selectedKey={selectedKey}
+            isRowFocused={isRowFocused}
+            getExtraClasses={() => {
+              return (
+                conditionalTableRowClassesHandler?.(row, isRowFocused, index) ??
+                ''
+              );
+            }}
+            hasVerticalBar={hasVerticalBar?.(row) ?? false}
+            verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
+            getRowObjectKey={getRowObjectKey}
+            onRowClick={() => {
+              onRowClick(row?.originalData);
+              setIsRowFocused(true);
+            }}
+            onKeyDown={handleKeyDown}
+            onRowContextMenu={onRowContextMenu}
+            rowHeightClass={rowHeightClass}
+          />
+        ))}
+      </InfiniteScroll>
       <div
         className="grow outline-0 flex divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {

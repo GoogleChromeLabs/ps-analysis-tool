@@ -17,7 +17,13 @@
 /**
  * External dependencies.
  */
-import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { getValueByKey } from '@google-psat/common';
 /**
  * Internal dependencies.
@@ -47,8 +53,6 @@ export const TableProvider = ({
   children,
 }: PropsWithChildren<TableProviderProps>) => {
   const [allData, setAllData] = useState(data);
-  const [page, setPage] = useState(0);
-  const [pages, setPages] = useState(0);
   const [paginatedData, setPaginatedData] = useState<TableData[]>([]);
 
   useEffect(() => {
@@ -89,20 +93,35 @@ export const TableProvider = ({
     commonKey
   );
 
+  const loadMoreData = useCallback(() => {
+    setPaginatedData((prevData) => {
+      const start = prevData.length;
+      const end = start + 500;
+      const _paginatedData = filteredData.slice(start, end);
+      return [...prevData, ..._paginatedData];
+    });
+  }, [filteredData]);
+
+  const hasMoreData = useMemo(() => {
+    if (paginatedData.length < filteredData.length) {
+      return true;
+    }
+
+    return false;
+  }, [filteredData.length, paginatedData.length]);
+
+  const count = useMemo(() => {
+    return filteredData.length;
+  }, [filteredData]);
+
   useEffect(() => {
     if (filteredData.length) {
-      const start = page * 500;
+      const start = 0;
       const end = start + 500;
-      const _pages = Math.ceil(filteredData.length / 500);
-      setPages(_pages);
-
-      if (page >= _pages) {
-        setPage(_pages - 1);
-      }
       const _paginatedData = filteredData.slice(start, end);
       setPaginatedData(_paginatedData);
     }
-  }, [page, filteredData]);
+  }, [filteredData]);
 
   const {
     visibleColumns,
@@ -175,8 +194,8 @@ export const TableProvider = ({
           selectedFilters,
           isFiltering,
           searchValue,
-          pages,
-          selectedPage: page,
+          hasMoreData,
+          count,
         },
         actions: {
           setSortKey,
@@ -198,7 +217,7 @@ export const TableProvider = ({
           exportTableData,
           hasVerticalBar,
           getVerticalBarColorHash,
-          setPage,
+          loadMoreData,
         },
       }}
     >
