@@ -30,6 +30,7 @@ import {
 } from './fetchPSInfo';
 import { I18n } from '@google-psat/i18n';
 import RenderLink from './renderLink';
+import LinkProcessor from '../../linkProcessor';
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
@@ -52,15 +53,22 @@ const InfoCard = ({ infoKey, explainers }: InfoCardProps) => {
       {Object.keys(PSInfo).length ? (
         <>
           <div className="max-w-2xl">
-            <p
-              className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
-              dangerouslySetInnerHTML={{
-                __html:
-                  PSInfo.useI18n === false
-                    ? PSInfo.description
-                    : I18n.getMessage(PSInfo.description),
-              }}
-            />
+            {PSInfo.useI18n ? (
+              <p
+                className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
+                dangerouslySetInnerHTML={{
+                  __html: I18n.getMessage(PSInfo.description),
+                }}
+              />
+            ) : (
+              <p className="mb-3 text-raisin-black dark:text-bright-gray text-sm">
+                <LinkProcessor
+                  text={PSInfo.description}
+                  links={PSInfo.links}
+                  sameTab
+                />
+              </p>
+            )}
             {Object.keys(explainers || {}).map((key) => (
               <div
                 className="flow-root border-t border-gray-200 dark:border-gray-500"
