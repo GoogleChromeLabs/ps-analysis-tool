@@ -45,6 +45,8 @@ interface AuctionsContainerProps {
   selectedAdUnit?: string;
   selectedDateTime?: string;
   isEE?: boolean;
+  sortOrder?: string;
+  setSortOrder?: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
 }
 
 const AuctionsContainer = ({
@@ -56,6 +58,8 @@ const AuctionsContainer = ({
   selectedAdUnit,
   selectedDateTime,
   isEE = true,
+  sortOrder,
+  setSortOrder,
 }: AuctionsContainerProps) => {
   return (
     <SidebarProvider
@@ -70,6 +74,8 @@ const AuctionsContainer = ({
         customAdsAndBidders={customAdsAndBidders}
         setSidebarData={setSidebarData}
         auctionEvents={auctionEvents}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
       />
     </SidebarProvider>
   );

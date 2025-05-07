@@ -51,6 +51,7 @@ const IGTable = ({
   isEE = false,
 }: InterestGroupsProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
+
   const [filterData, setFilterData] = useState(false);
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -216,9 +217,7 @@ const IGTable = ({
           conditionalTableRowClassesHandler={conditionalTableRowClassesHandler}
           getVerticalBarColorHash={getVerticalBarColorHash}
           hasVerticalBar={hasVerticalBar}
-          onRowClick={(row) => {
-            setSelectedRow(row as InterestGroupsType);
-          }}
+          onRowClick={(row) => setSelectedRow(row as InterestGroupsType)}
           onRowContextMenu={noop}
           getRowObjectKey={(row: TableRow) => {
             return (
@@ -233,6 +232,7 @@ const IGTable = ({
               (selectedRow?.uniqueAuctionId ?? '') + String(selectedRow?.time)
             }
             hideSearch={true}
+            shouldScroll
             minWidth="50rem"
           />
         </TableProvider>

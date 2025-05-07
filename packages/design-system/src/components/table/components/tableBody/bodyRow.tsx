@@ -43,6 +43,7 @@ interface BodyRowProps {
     row: TableRow
   ) => void;
   rowHeightClass?: string;
+  shouldScroll?: boolean;
 }
 
 const BodyRow = ({
@@ -59,6 +60,7 @@ const BodyRow = ({
   onKeyDown,
   onRowContextMenu,
   rowHeightClass,
+  shouldScroll = false,
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
@@ -92,6 +94,17 @@ const BodyRow = ({
       });
     }
   }, [index, isHighlighted]);
+
+  useEffect(() => {
+    if (shouldScroll) {
+      const element = document.getElementById(index.toString());
+      element?.scrollIntoView?.({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'start',
+      });
+    }
+  }, [index, shouldScroll]);
 
   return (
     <div
