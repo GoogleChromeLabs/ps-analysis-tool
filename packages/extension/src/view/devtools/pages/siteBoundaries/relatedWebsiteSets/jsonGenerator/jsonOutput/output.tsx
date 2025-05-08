@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard-ts';
 import { I18n } from '@google-psat/i18n';
 
 /**

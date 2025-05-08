@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
-
-type BulletListItem = {
-  title: string;
-  link?: string;
-  key?: string;
-  sidebarKey?: string;
-  pubDate?: string;
-};
-
 declare module 'entities/decode' {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type EntityDecoder = any;

@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { createContext, noop } from '@google-psat/common';
+import { createContext, noop, type Context } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -84,4 +84,5 @@ export const initialState: SidebarStoreContext = {
   },
 };
 
-export const SidebarContext = createContext<SidebarStoreContext>(initialState);
+export const SidebarContext: Context<SidebarStoreContext> =
+  createContext<SidebarStoreContext>(initialState);
