@@ -3,7 +3,8 @@
  */
 import type { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
-import 'tailwindcss/tailwind.css';
+import 'tailwindcss/index.css';
+import '@google-psat/design-system/theme.css';
 
 const preview: Preview = {
   parameters: {
