@@ -45,7 +45,7 @@ const ContentPanel = () => {
         className="flex items-center h-full w-full justify-center py-10"
       >
         <section className="flex justify-center">
-          <div className="max-w-screen-md text-center">
+          <div className="max-w-(--breakpoint-md) text-center">
             <PrivacySandboxColoredIcon
               width="120"
               height="120"
