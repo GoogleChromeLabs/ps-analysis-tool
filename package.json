@@ -82,6 +82,7 @@
 		"@storybook/react-webpack5": "^8.6.12",
 		"@storybook/test": "^8.6.12",
 		"@svgr/webpack": "^8.0.1",
+		"@tailwindcss/postcss": "^4.1.5",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^14.0.0",
 		"@types/chrome": "^0.0.237",
@@ -161,8 +162,5 @@
 		"micromatch": "^4.0.8",
 		"path-to-regexp": "^0.1.12",
 		"send": "^0.19.0"
-	},
-	"dependencies": {
-		"@tailwindcss/postcss": "^4.1.5"
 	}
 }
