@@ -24,7 +24,7 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { getSessionStorage } from '@google-psat/common';
-
+import '@google-psat/design-system/theme.css';
 /**
  * Internal dependencies.
  */

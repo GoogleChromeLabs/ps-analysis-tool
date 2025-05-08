@@ -93,7 +93,6 @@
 		"@types/spinnies": "^0.5.3",
 		"@typescript-eslint/eslint-plugin": "^5.59.9",
 		"@typescript-eslint/parser": "^5.59.9",
-		"autoprefixer": "^10.4.14",
 		"babel-jest": "^29.5.0",
 		"babel-loader": "^9.1.2",
 		"babel-plugin-styled-components": "^2.1.3",
