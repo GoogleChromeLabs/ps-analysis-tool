@@ -23,6 +23,7 @@ import {
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
   deriveBlockingStatus,
+  type CookieDatabase,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -30,73 +31,48 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies.
  */
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
-import dataStore from './dataStore';
+import { DataStore } from './dataStore';
 import shouldUpdateCounter from '../utils/shouldUpdateCounter';
+import { NEW_COOKIE_DATA } from '../constants';
+import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
-class CookieStore {
+class CookieStore extends DataStore {
   /**
-   * This function parses response headers for Cookie Analysis.
-   * @param {Protocol.Network.ResponseReceivedExtraInfoEvent} response The response to be parsed.
-   * @param {string} requestId This is used to get the related data for parsing the response.
-   * @param {string} tabId The tabId this request is associated to.
-   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
+   * CookieDatabase to run analytics match on.
    */
-  parseResponseHeadersForCA(
-    response: Protocol.Network.ResponseReceivedExtraInfoEvent,
-    requestId: string,
-    tabId: string,
-    frameIds: string[]
-  ) {
-    const { headers, blockedCookies, cookiePartitionKey, exemptedCookies } =
-      response;
-
-    const cookies: CookieData[] = parseResponseReceivedExtraInfo(
-      headers,
-      blockedCookies,
-      exemptedCookies,
-      cookiePartitionKey,
-      dataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
-      dataStore.tabs[Number(tabId)].url ?? '',
-      dataStore.cookieDB ?? {},
-      frameIds,
-      requestId
-    );
-    this.update(Number(tabId), cookies);
-
-    delete dataStore.unParsedResponseHeadersForCA[tabId][requestId];
-  }
+  protected cookieDB: CookieDatabase | null = null;
 
   /**
-   * This function parses request headers for Cookie Analysis.
-   * @param {Protocol.Network.RequestWillBeSentExtraInfoEvent} request The response to be parsed.
-   * @param {string} requestId This is used to get the related data for parsing the response.
-   * @param {string} tabId The tabId this request is associated to.
-   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
+   * This variable stores the unParsedRequest headers received from Network.requestWillBeSentExtraInfo.
+   * These are the requests whose Network.requestWillBeSent counter part havent yet been fired.
    */
-  parseRequestHeadersForCA(
-    request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
-    requestId: string,
-    tabId: string,
-    frameIds: string[]
-  ) {
-    const { associatedCookies } = request;
+  protected unParsedRequestHeadersForCA: {
+    [tabId: string]: {
+      [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
+    };
+  } = {};
 
-    const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-      associatedCookies,
-      dataStore.cookieDB ?? {},
-      dataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
-      dataStore.tabs[Number(tabId)].url ?? '',
-      frameIds,
-      requestId
-    );
+  /**
+   * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
+   * These are the responses whose Network.responseReceived counter part havent yet been fired.
+   */
+  protected unParsedResponseHeadersForCA: {
+    [tabId: string]: {
+      [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
+    };
+  } = {};
 
-    delete dataStore.unParsedRequestHeadersForCA[tabId][requestId];
-    if (cookies.length === 0) {
-      return;
-    }
+  /**
+   * The cookie data of the tabs.
+   */
+  protected tabsData: {
+    [tabId: string]: {
+      [cookieKey: string]: CookieData;
+    };
+  } = {};
 
-    this.update(Number(tabId), cookies);
-    delete dataStore.unParsedRequestHeadersForCA[tabId][requestId];
+  constructor() {
+    super();
   }
 
   /**
@@ -110,35 +86,35 @@ class CookieStore {
     cookieName: string,
     exclusionReasons: BlockedReason[],
     warningReasons: Protocol.Audits.CookieWarningReason[],
-    tabId: number
+    tabId: string
   ) {
-    if (!dataStore.tabsData[tabId]) {
+    if (!this.tabsData[tabId]) {
       return;
     }
-    if (dataStore.tabsData[tabId] && dataStore.tabsData[tabId][cookieName]) {
-      dataStore.tabsData[tabId][cookieName].blockedReasons = [
+    if (this.tabsData[tabId] && this.tabsData[tabId][cookieName]) {
+      this.tabsData[tabId][cookieName].blockedReasons = [
         ...new Set([
-          ...(dataStore.tabsData[tabId][cookieName].blockedReasons ?? []),
+          ...(this.tabsData[tabId][cookieName].blockedReasons ?? []),
           ...exclusionReasons,
         ]),
       ];
-      dataStore.tabsData[tabId][cookieName].warningReasons = [
+      this.tabsData[tabId][cookieName].warningReasons = [
         ...new Set([
-          ...(dataStore.tabsData[tabId][cookieName].warningReasons ?? []),
+          ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
           ...warningReasons,
         ]),
       ];
 
-      dataStore.tabsData[tabId][cookieName].isBlocked =
+      this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
-      dataStore.tabs[tabId].newUpdatesCA++;
+      DataStore.tabs[tabId].newUpdatesCA++;
     } else {
-      dataStore.tabs[tabId].newUpdatesCA++;
+      DataStore.tabs[tabId].newUpdatesCA++;
       // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
-      dataStore.tabsData[tabId] = {
-        ...dataStore.tabsData[tabId],
+      this.tabsData[tabId] = {
+        ...this.tabsData[tabId],
         [cookieName]: {
-          ...(dataStore.tabsData[tabId][cookieName] ?? {}),
+          ...(this.tabsData[tabId][cookieName] ?? {}),
           blockedReasons: [...exclusionReasons],
           warningReasons: [...warningReasons],
           isBlocked: exclusionReasons.length > 0 ? true : false,
@@ -147,15 +123,275 @@ class CookieStore {
     }
   }
 
+  clear(): void {
+    super.clear();
+    Object.keys(this.tabsData).forEach((key) => {
+      delete this.tabsData[Number(key)];
+    });
+  }
+
+  getTabsData(
+    tabId = ''
+  ): { [cookieKey: string]: CookieData } | typeof this.tabsData {
+    if (tabId) {
+      return this.tabsData[tabId];
+    }
+    return this.tabsData;
+  }
+
+  getUnParsedRequestHeadersForCA(tabId = ''): {
+    [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
+  } | null {
+    if (tabId && this.unParsedRequestHeadersForCA[tabId]) {
+      return this.unParsedRequestHeadersForCA[tabId];
+    }
+    return null;
+  }
+
+  getUnParsedResponseHeadersForCA(tabId: string): {
+    [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
+  } | null {
+    if (tabId && this.unParsedResponseHeadersForCA[tabId]) {
+      return this.unParsedResponseHeadersForCA[tabId];
+    }
+    return null;
+  }
+
+  deinitialiseVariablesForTab(tabId: string): void {
+    super.deinitialiseVariablesForTab(tabId);
+    delete this.tabsData[tabId];
+    delete this.unParsedRequestHeadersForCA[tabId];
+    delete this.unParsedResponseHeadersForCA[tabId];
+  }
+
+  initialiseVariablesForNewTab(tabId: string): void {
+    (async () => {
+      if (!this.cookieDB) {
+        this.cookieDB = await fetchDictionary();
+      }
+    })();
+    super.initialiseVariablesForNewTab(tabId);
+    this.tabsData[tabId] = {};
+    this.unParsedRequestHeadersForCA[tabId] = {};
+    this.unParsedResponseHeadersForCA[tabId] = {};
+    //@ts-ignore
+    globalThis.PSAT = {
+      //@ts-ignore
+      ...globalThis.PSAT,
+      tabsData: this.tabsData,
+      unParsedRequestHeadersForCA: this.unParsedRequestHeadersForCA,
+      unParsedResponseHeadersForCA: this.unParsedResponseHeadersForCA,
+    };
+  }
+
+  /**
+   * This function parses response headers for Cookie Analysis.
+   * @param {Protocol.Network.ResponseReceivedExtraInfoEvent} response The response to be parsed.
+   * @param {string} requestId This is used to get the related data for parsing the response.
+   * @param {string} tabId The tabId this request is associated to.
+   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
+   */
+  parseResponseHeadersForCA(
+    response?: Protocol.Network.ResponseReceivedExtraInfoEvent,
+    requestId?: string,
+    tabId?: string,
+    frameIds?: string[]
+  ) {
+    if (!response || !requestId || !tabId || !frameIds) {
+      return;
+    }
+
+    const { headers, blockedCookies, cookiePartitionKey, exemptedCookies } =
+      response;
+
+    const cookies: CookieData[] = parseResponseReceivedExtraInfo(
+      headers,
+      blockedCookies,
+      exemptedCookies,
+      cookiePartitionKey,
+      DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+      DataStore.tabs[tabId].url ?? '',
+      this.cookieDB ?? {},
+      frameIds,
+      requestId
+    );
+    this.update(tabId, cookies);
+
+    delete this.unParsedResponseHeadersForCA[tabId][requestId];
+  }
+
+  /**
+   * This function parses request headers for Cookie Analysis.
+   * @param {Protocol.Network.RequestWillBeSentExtraInfoEvent} request The response to be parsed.
+   * @param {string} requestId This is used to get the related data for parsing the response.
+   * @param {string} tabId The tabId this request is associated to.
+   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
+   */
+  parseRequestHeadersForCA(
+    request?: Protocol.Network.RequestWillBeSentExtraInfoEvent,
+    requestId?: string,
+    tabId?: string,
+    frameIds?: string[]
+  ) {
+    if (!request || !requestId || !tabId || !frameIds) {
+      return;
+    }
+    const { associatedCookies } = request;
+
+    const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+      associatedCookies,
+      this.cookieDB ?? {},
+      DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+      DataStore.tabs[tabId].url ?? '',
+      frameIds,
+      requestId
+    );
+
+    delete this.unParsedRequestHeadersForCA[tabId][requestId];
+    if (cookies.length === 0) {
+      return;
+    }
+
+    this.update(tabId, cookies);
+    delete this.unParsedRequestHeadersForCA[tabId][requestId];
+  }
+
+  /**
+   * Processes and sends cookie message to the extension for the specified tabId
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {boolean | undefined} overrideForInitialSync Override the condition.
+   */
+  async processAndSendCookieData(
+    tabId: string,
+    overrideForInitialSync: boolean
+  ) {
+    try {
+      if (DataStore.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
+        return;
+      }
+
+      const newCookieData: {
+        [cookieKey: string]: CookieData;
+      } = {};
+
+      Object.keys(this.tabsData[tabId]).forEach((key) => {
+        newCookieData[key] = {
+          ...this.tabsData[tabId][key],
+          networkEvents: {
+            requestEvents: [],
+            responseEvents: [],
+          },
+          url: '',
+          headerType: ['request', 'response'].includes(
+            this.tabsData[tabId][key]?.headerType ?? ''
+          )
+            ? 'http'
+            : 'javascript',
+        };
+      });
+
+      await chrome.runtime.sendMessage({
+        type: NEW_COOKIE_DATA,
+        payload: {
+          tabId,
+          cookieData: newCookieData,
+          extraData: {
+            extraFrameData: DataStore.tabs[tabId].frameIDURLSet,
+          },
+        },
+      });
+
+      DataStore.tabs[tabId].newUpdatesCA = 0;
+    } catch (error) {
+      // Fail silently
+    }
+  }
+
+  /**
+   * Clear cookie data from cached cookie data for the given tabId
+   * @param {number} tabId The active tab id.
+   */
+  removeCookieData(tabId: string) {
+    if (!DataStore.tabs[tabId] || !this.tabsData[tabId]) {
+      return;
+    }
+
+    delete this.tabsData[tabId];
+    this.tabsData[tabId] = {};
+    DataStore.tabs[tabId].newUpdatesCA = 0;
+    DataStore.tabs[tabId].frameIDURLSet = {};
+    DataStore.tabs[tabId].parentChildFrameAssociation = {};
+    this.sendUpdatedDataToPopupAndDevTools(tabId, true);
+  }
+
+  /**
+   * Remove the tab data from the store.
+   * @param {number} tabId The tab id.
+   */
+  removeTabData(tabId: string) {
+    delete this.tabsData[tabId];
+    delete this.unParsedRequestHeadersForCA[tabId];
+    delete this.unParsedResponseHeadersForCA[tabId];
+  }
+
+  /**
+   * Sends updated data to the popup and devtools
+   * @param {number} tabId The window id.
+   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
+   */
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: string,
+    overrideForInitialSync = false
+  ) {
+    if (!DataStore.tabs[tabId]) {
+      return;
+    }
+
+    try {
+      if (
+        DataStore.tabs[tabId].devToolsOpenState ||
+        DataStore.tabs[tabId].popupOpenState
+      ) {
+        await this.processAndSendCookieData(tabId, overrideForInitialSync);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
+      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+    }
+  }
+
+  setUnParsedRequestHeadersForCA(
+    tabId: string,
+    requestId: string,
+    request: Protocol.Network.RequestWillBeSentExtraInfoEvent
+  ): void {
+    if (!tabId || !requestId || !request) {
+      return;
+    }
+    this.unParsedRequestHeadersForCA[tabId][requestId] = request;
+  }
+
+  setUnParsedResponseHeadersForCA(
+    tabId: string,
+    requestId: string,
+    response: Protocol.Network.ResponseReceivedExtraInfoEvent
+  ): void {
+    if (!tabId || !requestId || !response) {
+      return;
+    }
+    this.unParsedResponseHeadersForCA[tabId][requestId] = response;
+  }
+
   /**
    * Update cookie store.
    * @param {number} tabId Tab id.
    * @param {Array} cookies Cookies data.
    */
   // eslint-disable-next-line complexity
-  update(tabId: number, cookies: CookieData[]) {
+  update(tabId: string, cookies: CookieData[]) {
     try {
-      if (!dataStore.tabsData[tabId] || !dataStore.tabs[tabId]) {
+      if (!this.tabsData[tabId]) {
         return;
       }
 
@@ -169,77 +405,77 @@ class CookieStore {
         const blockedReasons: BlockedReason[] = [
           ...new Set<BlockedReason>([
             ...(cookie?.blockedReasons ?? []),
-            ...(dataStore.tabsData[tabId]?.[cookieKey]?.blockedReasons ?? []),
+            ...(this.tabsData[tabId]?.[cookieKey]?.blockedReasons ?? []),
           ]),
         ];
 
         const warningReasons = Array.from(
           new Set<Protocol.Audits.CookieWarningReason>([
             ...(cookie?.warningReasons ?? []),
-            ...(dataStore.tabsData[tabId]?.[cookieKey]?.warningReasons ?? []),
+            ...(this.tabsData[tabId]?.[cookieKey]?.warningReasons ?? []),
           ])
         );
 
         const frameIdList = Array.from(
           new Set<number>([
             ...((cookie?.frameIdList ?? []) as number[]),
-            ...((dataStore.tabsData[tabId]?.[cookieKey]?.frameIdList ??
+            ...((this.tabsData[tabId]?.[cookieKey]?.frameIdList ??
               []) as number[]),
           ])
         ).map((frameId) => frameId.toString());
 
         const updateCounterBoolean = shouldUpdateCounter(
-          dataStore.tabsData[tabId][cookieKey],
+          this.tabsData[tabId][cookieKey],
           cookie
         );
 
         if (updateCounterBoolean) {
-          dataStore.tabs[tabId].newUpdatesCA++;
+          DataStore.tabs[tabId].newUpdatesCA++;
         }
 
-        if (dataStore.tabsData[tabId]?.[cookieKey]) {
+        if (this.tabsData[tabId]?.[cookieKey]) {
           // Merge in previous warning reasons.
           const parsedCookie = {
-            ...dataStore.tabsData[tabId][cookieKey].parsedCookie,
+            ...this.tabsData[tabId][cookieKey].parsedCookie,
             ...cookie.parsedCookie,
             samesite: (
               cookie.parsedCookie.samesite ??
-              dataStore.tabsData[tabId][cookieKey].parsedCookie.samesite ??
+              this.tabsData[tabId][cookieKey].parsedCookie.samesite ??
               'lax'
             ).toLowerCase(),
             httponly:
               cookie.parsedCookie.httponly ??
-              dataStore.tabsData[tabId][cookieKey].parsedCookie.httponly,
+              this.tabsData[tabId][cookieKey].parsedCookie.httponly,
             priority:
               cookie.parsedCookie?.priority ??
-              dataStore.tabsData[tabId][cookieKey].parsedCookie?.priority ??
+              this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
               'Medium',
             partitionKey: '',
           };
           if (
             cookie.parsedCookie?.partitionKey ||
-            dataStore.tabsData[tabId][cookieKey].parsedCookie?.partitionKey
+            this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey
           ) {
             parsedCookie.partitionKey =
               cookie.parsedCookie?.partitionKey ||
-              dataStore.tabsData[tabId][cookieKey].parsedCookie?.partitionKey;
+              this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey;
           }
 
           const networkEvents: CookieData['networkEvents'] = {
             requestEvents: [
-              ...(dataStore.tabsData[tabId][cookieKey]?.networkEvents
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
                 ?.requestEvents || []),
               ...(cookie.networkEvents?.requestEvents || []),
             ],
             responseEvents: [
-              ...(dataStore.tabsData[tabId][cookieKey]?.networkEvents
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
                 ?.responseEvents || []),
               ...(cookie.networkEvents?.responseEvents || []),
             ],
           };
 
-          dataStore.tabsData[tabId][cookieKey] = {
-            ...dataStore.tabsData[tabId][cookieKey],
+          this.tabsData[tabId][cookieKey] = {
+            ...this.tabsData[tabId][cookieKey],
             ...cookie,
             parsedCookie,
             isBlocked: blockedReasons.length > 0,
@@ -247,25 +483,25 @@ class CookieStore {
             networkEvents,
             blockingStatus: deriveBlockingStatus(networkEvents),
             warningReasons,
-            url: dataStore.tabsData[tabId][cookieKey].url ?? cookie.url,
+            url: this.tabsData[tabId][cookieKey].url ?? cookie.url,
             headerType:
-              dataStore.tabsData[tabId][cookieKey].headerType === 'javascript'
-                ? dataStore.tabsData[tabId][cookieKey].headerType
+              this.tabsData[tabId][cookieKey].headerType === 'javascript'
+                ? this.tabsData[tabId][cookieKey].headerType
                 : cookie.headerType,
             frameIdList,
             exemptionReason:
               cookie?.exemptionReason ||
-              dataStore.tabsData[tabId][cookieKey]?.exemptionReason,
+              this.tabsData[tabId][cookieKey]?.exemptionReason,
           };
         } else {
-          dataStore.tabsData[tabId][cookieKey] = {
+          this.tabsData[tabId][cookieKey] = {
             ...cookie,
             blockingStatus: deriveBlockingStatus(cookie.networkEvents),
           };
         }
       }
 
-      updateCookieBadgeText(dataStore.tabsData[tabId], tabId);
+      updateCookieBadgeText(this.tabsData[tabId], tabId);
     } catch (error) {
       //Fail silently
       // eslint-disable-next-line no-console

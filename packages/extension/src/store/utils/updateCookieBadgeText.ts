@@ -26,7 +26,7 @@ export default function updateCookieBadgeText(
   storage: {
     [key: string]: CookieData;
   },
-  tabId: number
+  tabId: string
 ) {
   try {
     if (!tabId) {
@@ -35,14 +35,15 @@ export default function updateCookieBadgeText(
 
     const numCookies = Object.keys(storage).filter(
       (cookieKey) =>
-        storage[cookieKey]?.parsedCookie &&
-        storage[cookieKey].frameIdList?.length >= 0
+        storage?.[cookieKey]?.parsedCookie &&
+        storage?.[cookieKey]?.frameIdList &&
+        storage?.[cookieKey]?.frameIdList?.length >= 0
     ).length;
 
     if (numCookies >= 0) {
       chrome.action.setBadgeText(
         {
-          tabId: tabId,
+          tabId: Number(tabId),
           text: numCookies.toString(),
         },
         () => {
