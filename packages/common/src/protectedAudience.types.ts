@@ -36,7 +36,8 @@ export interface singleAuctionEvent {
     | 'interestGroupAuctionEventOccurred'
     | 'interestGroupAuctionNetworkRequestCompleted'
     | 'interestGroupAuctionNetworkRequestCreated'
-    | 'interestGroupAccessed';
+    | 'interestGroupAccessed'
+    | 'BidAvailable';
 }
 
 export interface auctionData {

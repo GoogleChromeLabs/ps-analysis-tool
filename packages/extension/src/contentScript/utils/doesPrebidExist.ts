@@ -39,6 +39,7 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
       pbjsClass.prebidExists = true;
       pbjsClass.scanningStatus = true;
       pbjsClass.sendInitialData();
+      pbjsClass.initPrebidListener();
       stopLoop = true;
       clearTimeout(timeout);
     }
