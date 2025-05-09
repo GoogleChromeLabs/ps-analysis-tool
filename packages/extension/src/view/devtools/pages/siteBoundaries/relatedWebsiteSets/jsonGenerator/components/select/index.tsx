@@ -44,13 +44,13 @@ const RWSSelect = ({
       <label className="text-xs">{selectLabel}</label>
       <select
         className={classNames(
-          'my-1 py-px pl-0 pr-1 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue',
+          'my-1 py-px pl-0 pr-1 outline-hidden border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue dark:focus:border-medium-persian-blue',
           {
-            '!border-red-500 dark:!border-red-500':
+            'border-red-500! dark:border-red-500!':
               error && formValidationFailed,
           },
           {
-            '!border-green-500 dark:!border-green-500': !error && selectValue,
+            'border-green-500! dark:border-green-500!': !error && selectValue,
           }
         )}
         value={selectValue}

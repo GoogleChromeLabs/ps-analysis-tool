@@ -81,7 +81,7 @@ const RWSJsonGenerator = () => {
               ]),
             }}
           />
-          <div className="mt-4 bg-anti-flash-white dark:bg-charleston-green border rounded-xl border-gray-200 dark:border-quartz px-4 py-3 shadow">
+          <div className="mt-4 bg-anti-flash-white dark:bg-charleston-green border rounded-xl border-gray-200 dark:border-quartz px-4 py-3 shadow-sm">
             <p className="text-base my-3">
               {I18n.getMessage('enterRwsDetails')}
             </p>

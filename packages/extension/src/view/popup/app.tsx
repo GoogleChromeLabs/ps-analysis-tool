@@ -29,11 +29,10 @@ import {
   Plus,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-
+import '@google-psat/design-system/theme.css';
 /**
  * Internal dependencies.
  */
-import './app.css';
 import { Legend } from './components';
 import { useCookie, useSettings } from './stateProviders';
 import { CDP_WARNING_MESSAGE, RELOAD_WARNING_MESSAGE } from '../../constants';

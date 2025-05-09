@@ -30,7 +30,7 @@ const CircleEmpty = ({
   color = COLOR_MAP.mediumGray.color,
 }: CircleEmptyProps) => (
   <div
-    className="w-2.5 h-2.5 flex-shrink-0 rounded-full border-2 border-solid"
+    className="w-2.5 h-2.5 shrink-0 rounded-full border-2 border-solid"
     style={{ borderColor: color }}
   />
 );

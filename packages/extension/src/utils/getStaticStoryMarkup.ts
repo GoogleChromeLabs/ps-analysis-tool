@@ -309,7 +309,7 @@ export const getStaticStoryMarkup = () => {
         }
 
         .entry-point-card-container {
-            flex-shrink: 0;
+            shrink: 0;
             cursor: pointer;
             position: relative;
             margin-right: 24px;

@@ -8,6 +8,9 @@
   "customExports": {
     ".": {
       "default": "./src/index.ts"
+    },
+    "./theme.css": {
+      "default": "./src/theme.css"
     }
   },
   "scripts": {

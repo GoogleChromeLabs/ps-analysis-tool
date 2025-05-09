@@ -58,7 +58,7 @@ const Matrix = ({ dataComponents, expand, extraClasses }: MatrixProps) => {
               <button
                 onClick={() => dataComponent.onClick?.(dataComponent.title)}
                 className={classnames('p-3.5 w-full box-border', {
-                  'hover:opacity-90 active:opacity-50 hover:scale-[0.98] hover:bg-[#f5f5f5] hover:dark:bg-[#1d1d1d] hover:shadow-[inset_0_0_10px_5px_rgba(238,238,238,0.5)] hover:dark:shadow-[inset_0_0_10px_5px_rgba(32,32,32,0.1)] rounded-md transition-all duration-75 ease-in-out cursor-pointer':
+                  'hover:opacity-90 active:opacity-50 hover:scale-[0.98] hover:bg-[#f5f5f5] dark:hover:bg-[#1d1d1d] hover:shadow-[inset_0_0_10px_5px_rgba(238,238,238,0.5)] dark:hover:shadow-[inset_0_0_10px_5px_rgba(32,32,32,0.1)] rounded-md transition-all duration-75 ease-in-out cursor-pointer':
                     dataComponent.onClick,
                   'cursor-default': !dataComponent.onClick,
                 })}

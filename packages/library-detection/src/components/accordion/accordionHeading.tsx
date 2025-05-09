@@ -43,7 +43,7 @@ const AccordionHeading = ({
   return (
     <div
       onClick={() => setIsOpen(!isOpen)}
-      className="transition-colors flex items-center py-3 cursor-pointer hover:opacity-90 active:opacity-60 hover:bg-[#f5f5f5] hover:dark:bg-[#1d1d1d] rounded-md"
+      className="transition-colors flex items-center py-3 cursor-pointer hover:opacity-90 active:opacity-60 hover:bg-[#f5f5f5] dark:hover:bg-[#1d1d1d] rounded-md"
     >
       <span className="flex items-center px-2 relative">
         <Ellipse className={urlCount ? 'w-6 h-6' : ''} />

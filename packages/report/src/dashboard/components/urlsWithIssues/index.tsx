@@ -97,7 +97,7 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
           <Table hideFiltering={true} selectedKey={selectedRow?.url} />
         </TableProvider>
       </Resizable>
-      <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
+      <div className="flex-1 border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem]">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
             {selectedRow.url && (

@@ -27,11 +27,7 @@ import {
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { SiteMapReport, SiteReport } from '@google-psat/report';
-
-/**
- * Internal dependencies
- */
-import './app.css';
+import '@google-psat/design-system/theme.css';
 
 enum DisplayType {
   SITEMAP,

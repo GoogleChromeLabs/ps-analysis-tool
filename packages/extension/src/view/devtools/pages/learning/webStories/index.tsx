@@ -35,7 +35,7 @@ const WebStories = () => {
       <LandingPage
         title={'Stories'}
         hideTitle={storyOpened}
-        extraClasses="w-full !p-0"
+        extraClasses="w-full p-0!"
         contentPanel={<ContentPanel storyOpened={storyOpened} />}
         showQuickLinks={false}
       />

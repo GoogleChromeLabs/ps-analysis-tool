@@ -43,7 +43,7 @@ const ExportButton = ({
       className={classNames({
         'flex items-center justify-center h-full text-center dark:text-mischka text-comet-black':
           true,
-        'hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black':
+        'hover:text-comet-grey dark:hover:text-bright-gray dark:active:text-mischka active:text-comet-black':
           !disabled,
         'opacity-50': disabled,
       })}

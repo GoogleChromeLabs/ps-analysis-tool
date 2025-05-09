@@ -86,7 +86,7 @@ const CollapsedSidebar = () => {
               : sidebarItem.title;
 
           const buttonClassNames = classNames({
-            'cursor-auto opacity-40': isCurrent,
+            'cursor-default! opacity-40': isCurrent,
             'hover:opacity-60': !isCurrent,
           });
 

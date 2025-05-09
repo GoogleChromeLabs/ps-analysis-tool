@@ -27,7 +27,7 @@ import Link from '../link';
 const SupportLink = () => {
   return (
     <Link
-      className="group dark:text-bright-gray flex items-center hover:text-blue-500 hover:dark:text-blue-400"
+      className="group dark:text-bright-gray flex items-center hover:text-blue-500 dark:hover:text-blue-400"
       target="_blank"
       href="https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions/categories/support-forum"
       rel="noreferrer"

@@ -173,9 +173,9 @@ const InformationContainer = () => {
               className="-ml-8 -mt-1"
             >
               {copying ? (
-                <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+                <Done className="active:text-mischka dark:text-bright-gray dark:active:text-mischka" />
               ) : (
-                <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+                <Copy className="active:text-mischka dark:text-bright-gray dark:active:text-mischka" />
               )}
             </button>
           </div>

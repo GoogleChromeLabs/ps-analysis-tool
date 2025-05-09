@@ -77,7 +77,7 @@ const SearchInput = ({
       <input
         ref={inputRef}
         type="text"
-        className="h-[14px] w-full outline-none bg-transparent"
+        className="h-[14px] w-full outline-hidden bg-transparent"
         placeholder={placeholder || I18n.getMessage('search')}
         value={value}
         onChange={onChange}
