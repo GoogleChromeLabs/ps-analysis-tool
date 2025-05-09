@@ -50,16 +50,16 @@ const config: StorybookConfig = {
   },
   webpackFinal: (config) => {
     // Default rule for images /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/
-    const fileLoaderRule = config?.module?.rules?.find((rule) => {
-      const test = (rule as RuleSetRule)?.test;
-      return typeof test === 'string' && test.includes('.svg');
-    });
+    const fileLoaderRule = config.module?.rules?.find(
+      //@ts-ignore
+      (rule) => rule?.test && rule.test.test('.svg')
+    );
     if (fileLoaderRule) {
       // @ts-ignore this property exists on webpack RuleSetRule still ts is showing error.
       fileLoaderRule.exclude = /\.svg$/;
     }
 
-    config?.module?.rules?.push({
+    config.module?.rules?.push({
       test: /\.svg$/,
       enforce: 'pre',
       loader: require.resolve('@svgr/webpack'),

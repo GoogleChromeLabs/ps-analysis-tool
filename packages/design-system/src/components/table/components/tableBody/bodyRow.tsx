@@ -107,10 +107,10 @@ const BodyRow = ({
   }, [index, shouldScroll]);
 
   return (
-    <div
+    <tr
       id={index.toString()}
       className={classnames(
-        'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
+        'outline-0 divide-x divide-american-silver dark:divide-quartz relative',
         {
           [classes]: extraClasses.length === 0,
         },
@@ -136,7 +136,6 @@ const BodyRow = ({
         (
           {
             accessorKey,
-            width,
             enableBodyCellPrefixIcon,
             showBodyCellPrefixIcon,
             bodyCellPrefixIcon,
@@ -147,7 +146,6 @@ const BodyRow = ({
             key={idx}
             onRowClick={onRowClick}
             cell={row[accessorKey]?.value}
-            width={width || 0}
             row={row}
             hasIcon={enableBodyCellPrefixIcon}
             showIcon={
@@ -155,10 +153,11 @@ const BodyRow = ({
             }
             icon={bodyCellPrefixIcon ?? undefined}
             rowHeightClass={rowHeightClass}
+            accessorKey={accessorKey}
           />
         )
       )}
-    </div>
+    </tr>
   );
 };
 

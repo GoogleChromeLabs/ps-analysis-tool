@@ -58,9 +58,10 @@ export type TableColumn = {
     Element: (props: any) => React.JSX.Element;
   };
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
-  widthWeightagePercentage?: number;
-  width?: number; // For internal use only
   sortingComparator?: (a: InfoType, b: InfoType) => number;
+  initialWidth?: number;
+  minWidth?: number;
+  maxWidth?: number;
 };
 
 export type TableRow = {
@@ -124,4 +125,6 @@ export interface TableProviderProps {
   hasVerticalBar?: (row: TableRow) => boolean;
   getVerticalBarColorHash?: (row: TableRow) => string;
   isRowSelected?: (cookie: TableData | null) => boolean;
+  tableContainerRef?: React.RefObject<HTMLDivElement>;
+  minColumnWidth?: number;
 }

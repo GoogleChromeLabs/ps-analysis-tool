@@ -74,7 +74,6 @@ const useCookieListing = (
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        widthWeightagePercentage: 13,
         enableBodyCellPrefixIcon: true,
         bodyCellPrefixIcon: {
           Element: NamePrefixIconSelector,
@@ -99,39 +98,33 @@ const useCookieListing = (
         accessorKey: 'isFirstParty',
         cell: (info: InfoType) =>
           !info ? I18n.getMessage('thirdParty') : I18n.getMessage('firstParty'),
-        widthWeightagePercentage: 8,
       },
       {
         header: I18n.getMessage('domain'),
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 9,
       },
       {
         header: I18n.getMessage('partitionKey'),
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 9,
       },
       {
         header: I18n.getMessage('sameSite'),
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) =>
           I18n.getMessage((info?.toString() || '').toLowerCase()),
-        widthWeightagePercentage: 8,
       },
       {
         header: I18n.getMessage('category'),
         accessorKey: 'analytics.category',
         cell: (info: InfoType) =>
           I18n.getMessage((info as string).toLowerCase() || 'uncategorized'),
-        widthWeightagePercentage: 10,
       },
       {
         header: I18n.getMessage('platform'),
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => (info ? info : I18n.getMessage('unknown')),
-        widthWeightagePercentage: 10,
       },
       {
         header: I18n.getMessage('httpOnly'),
@@ -141,7 +134,6 @@ const useCookieListing = (
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
-        widthWeightagePercentage: 5,
       },
       {
         header: I18n.getMessage('secure'),
@@ -151,26 +143,22 @@ const useCookieListing = (
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
-        widthWeightagePercentage: 5,
       },
       {
         header: I18n.getMessage('value'),
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 10,
       },
       {
         header: I18n.getMessage('path'),
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 4,
       },
       {
         header: I18n.getMessage('expires'),
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) =>
           info === 'Session' || !info ? I18n.getMessage('session') : info,
-        widthWeightagePercentage: 7,
       },
     ];
 
@@ -182,14 +170,12 @@ const useCookieListing = (
           isHiddenByDefault: true,
           cell: (info: InfoType) =>
             I18n.getMessage((info as string)?.toLowerCase()),
-          widthWeightagePercentage: 4,
         },
         {
           header: I18n.getMessage('size'),
           accessorKey: 'parsedCookie.size',
           isHiddenByDefault: true,
           cell: (info: InfoType) => info,
-          widthWeightagePercentage: 3,
         }
       );
     }

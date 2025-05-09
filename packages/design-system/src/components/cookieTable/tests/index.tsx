@@ -76,13 +76,11 @@ describe('CookieTable', () => {
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        widthWeightagePercentage: 70,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 30,
       },
     ],
     tableFilters: {
