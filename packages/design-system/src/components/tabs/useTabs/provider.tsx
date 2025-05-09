@@ -28,18 +28,38 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { TabsProviderProps } from './types';
-import { TabsContext } from './context';
+import { TabItems, TabsProviderProps } from './types';
+import { TabsContext, TabsStoreContext } from './context';
 
 export const TabsProvider = ({
   children,
   items,
 }: PropsWithChildren<TabsProviderProps>) => {
-  const [tabItems, setTabItems] = useState(items);
+  const [groupedItems, setGroupedItems] = useState<TabItems>({});
+
+  useEffect(() => {
+    if (Array.isArray(items)) {
+      setGroupedItems(
+        items.reduce<TabItems>((acc, item, index) => {
+          acc[`group-${index}`] = [item];
+
+          return acc;
+        }, {})
+      );
+    } else {
+      setGroupedItems(items);
+    }
+  }, [items]);
+
   const [activeTab, setActiveTab] = useState(0);
   const activeTabRef = useRef(activeTab);
+
+  const tabItems = useMemo(() => {
+    return Object.values(groupedItems).flat();
+  }, [groupedItems]);
+
   const [storage, _setStorage] = useState<string[]>(
-    Array(items.length).fill('')
+    Array(tabItems.length).fill('')
   );
   const [highlightedTabs, setHighlightedTabs] = useState<
     Record<number, number | boolean>
@@ -50,12 +70,29 @@ export const TabsProvider = ({
   }, [activeTab]);
 
   useEffect(() => {
-    setTabItems(items);
-    _setStorage(Array(items.length).fill(''));
-  }, [items]);
+    _setStorage(Array(tabItems.length).fill(''));
+  }, [tabItems.length]);
 
+  const groupedTitles = useMemo(() => {
+    let trackedIndex = 0;
+
+    return Object.entries(groupedItems).reduce<
+      TabsStoreContext['state']['groupedTitles']
+    >((acc, [group, _items]) => {
+      const groupTitles = _items.map((item) => {
+        return {
+          title: item.title,
+          index: trackedIndex++,
+        };
+      });
+
+      return { ...acc, [group]: groupTitles };
+    }, {});
+  }, [groupedItems]);
   const titles = useMemo(() => tabItems.map((item) => item.title), [tabItems]);
-  const panel = tabItems[activeTab].content;
+  const panel = tabItems?.[activeTab]?.content ?? {
+    Element: null,
+  };
 
   const setStorage = useCallback(
     (data: string, index?: number) => {
@@ -124,7 +161,7 @@ export const TabsProvider = ({
 
   const shouldAddSpacer = useCallback(
     (index: number) => {
-      return Boolean(tabItems[index].addSpacer);
+      return Boolean(tabItems[index]?.addSpacer);
     },
     [tabItems]
   );
@@ -134,6 +171,7 @@ export const TabsProvider = ({
       value={{
         state: {
           activeTab,
+          groupedTitles,
           titles,
           panel,
           storage,
