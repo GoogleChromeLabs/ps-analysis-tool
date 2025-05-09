@@ -222,6 +222,7 @@ module.exports = {
       mahogany: '#CC3300',
       blueberry: '#4285FA',
       celeste: '#B1F8F2',
+      'steel-blue': '#3A83AB',
     },
     borderColor: {
       ...colors,
@@ -246,6 +247,7 @@ module.exports = {
       'privacy-blue': '#4285fa',
       'privacy-green': '#3bd897',
       'privacy-purple': '#dc9af8',
+      'steel-blue': '#3A83AB',
     },
     colors: {
       ...colors,

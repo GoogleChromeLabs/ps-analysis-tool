@@ -85,12 +85,12 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
           fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
-        {Object.entries(groupedTitles).map(([group, data]) => {
+        {Object.entries(groupedTitles).map(([group, data], groupIdx) => {
           return (
             <div key={group} className="flex">
               {Object.keys(data).length > 1 && (
-                <p className="bg-gray-200 border-y-2 border-gray-200 rounded-md flex items-center justify-center px-2 py-0 mb-2 font-medium text-sm text-zinc-700">
-                  Group
+                <p className="bg-steel-blue border-y-2 border-steel-blue rounded-md flex items-center justify-center px-2 py-0.5 mb-1 mr-2 font-medium text-xs text-white">
+                  {group}
                 </p>
               )}
               {Object.values(data).map(({ title, index }) => {
@@ -105,7 +105,11 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
 
                 return (
                   <React.Fragment key={index}>
-                    <div className="flex">
+                    <div
+                      className={classNames('flex', {
+                        'gap-2': Object.keys(data).length > 1,
+                      })}
+                    >
                       <button
                         onClick={() => setActiveTab(index)}
                         onKeyDown={handleKeyDown}
@@ -144,6 +148,10 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                   </React.Fragment>
                 );
               })}
+              {groupIdx !== Object.keys(groupedTitles).length - 1 &&
+                Object.keys(data).length > 1 && (
+                  <div className="border-r border-gray-400 dark:border-gray-700 mb-2 ml-4" />
+                )}
             </div>
           );
         })}
