@@ -26,6 +26,13 @@ import { noop } from '../../../utils';
 export interface TabsStoreContext {
   state: {
     activeTab: number;
+    groupedTitles: Record<
+      string,
+      {
+        title: string;
+        index: number;
+      }[]
+    >;
     titles: string[];
     panel: {
       Element: ((props: any) => React.JSX.Element) | null;
@@ -50,6 +57,7 @@ export interface TabsStoreContext {
 const initialState: TabsStoreContext = {
   state: {
     activeTab: 0,
+    groupedTitles: {},
     titles: [],
     panel: {
       Element: null,
