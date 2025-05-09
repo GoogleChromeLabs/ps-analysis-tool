@@ -21,6 +21,7 @@ import type { Protocol } from 'devtools-protocol';
 export interface singleAuctionEvent {
   bidCurrency?: string;
   uniqueAuctionId?: Protocol.Storage.InterestGroupAuctionId;
+  index: number;
   bid?: number;
   name?: string;
   ownerOrigin?: string;
@@ -86,4 +87,5 @@ export type AdsAndBiddersType = {
 export type ReceivedBids = singleAuctionEvent & {
   adUnitCode?: string;
   mediaContainerSize?: number[][];
+  adType?: string;
 };

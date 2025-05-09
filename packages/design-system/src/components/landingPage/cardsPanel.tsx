@@ -65,7 +65,7 @@ const CardsPanel = ({
     >
       <div className="min-w-[45.75rem]">
         {pinnedItems && pinnedItems.length > 0 && (
-          <section className="border-b border-hex-gray mb-5 pb-5">
+          <section className="border-b border-gray-200 dark:border-quartz mb-5 pb-5">
             {hasTitle && <h3 className="text-base">Quick Access</h3>}
             <div className="flex gap-x-5 gap-y-4 flex-wrap mt-2">
               {pinnedItems.map((item) => {
@@ -74,7 +74,7 @@ const CardsPanel = ({
                 return (
                   <div
                     key={item.name}
-                    className="w-[366px] border border-chinese-silver px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                    className="w-[366px] border-2 border-gray-300 dark:border-quartz px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <Icon
@@ -99,7 +99,7 @@ const CardsPanel = ({
                 return (
                   <div
                     key={item.name}
-                    className="w-[366px] border border-chinese-silver px-3 py-4 rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                    className="w-[366px] rounded border-2 border-gray-300 dark:border-quartz px-3 py-4 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                     onClick={() => navigateTo(item.sidebarKey)}
                   >
                     <div className="mb-3 flex items-center flex-col gap-2">

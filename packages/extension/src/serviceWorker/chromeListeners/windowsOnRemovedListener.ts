@@ -16,13 +16,14 @@
 /**
  * Internal dependencies
  */
+import cookieStore from '../../store/cookieStore';
 import dataStore from '../../store/dataStore';
 
 export const windowsOnRemovedListener = (windowId: number) => {
   chrome.tabs.query({ windowId }, (tabs) => {
     tabs.map((tab) => {
       if (tab.id) {
-        dataStore.deinitialiseVariablesForTab(tab.id.toString());
+        cookieStore.deinitialiseVariablesForTab(tab.id.toString());
       }
       return tab;
     });

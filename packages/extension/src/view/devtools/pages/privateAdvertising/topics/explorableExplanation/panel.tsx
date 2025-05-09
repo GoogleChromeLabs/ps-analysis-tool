@@ -234,6 +234,18 @@ const Panel = ({
     };
   }, []);
 
+  useEffect(() => {
+    const isCompleted = epochCompleted?.[activeTabRef.current];
+
+    if (!isCompleted) {
+      setTopicsTableData((prevTopicsTableData) => {
+        const newTopicsTableData = { ...prevTopicsTableData };
+        newTopicsTableData[activeTabRef.current] = [];
+        return newTopicsTableData;
+      });
+    }
+  }, [epochCompleted, setTopicsTableData]);
+
   const handleTopicsCalculation = useCallback(
     (visitIndex: number) => {
       setTopicsTableData((prevTopicsTableData) => {

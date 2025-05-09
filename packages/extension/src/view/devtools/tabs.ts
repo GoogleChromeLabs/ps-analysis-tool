@@ -469,29 +469,6 @@ const TABS: SidebarItems = {
         children: {},
         containerClassName: 'h-6',
       },
-      [SIDEBAR_ITEMS_KEYS.WIKI]: {
-        title: () => I18n.getMessage('wiki'),
-        panel: {
-          Element: Wiki,
-          href: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
-        },
-        icon: {
-          Element: WikiIcon,
-          props: {
-            className: 'fill-granite-gray',
-          },
-        },
-        selectedIcon: {
-          Element: WikiIcon,
-          props: {
-            className: 'fill-bright-gray',
-          },
-        },
-        dropdownOpen: false,
-        children: {},
-        addSpacer: false,
-        containerClassName: 'h-6',
-      },
       [SIDEBAR_ITEMS_KEYS.STORIES]: {
         title: () => 'Stories',
         panel: {
@@ -527,6 +504,29 @@ const TABS: SidebarItems = {
         },
         dropdownOpen: false,
         children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.WIKI]: {
+        title: () => I18n.getMessage('wiki'),
+        panel: {
+          Element: Wiki,
+          href: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
+        },
+        icon: {
+          Element: WikiIcon,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: WikiIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        addSpacer: false,
         containerClassName: 'h-6',
       },
     },

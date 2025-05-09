@@ -17,8 +17,11 @@
  * Internal dependencies
  */
 import { TABID_STORAGE } from '../../constants';
-import dataStore from '../../store/dataStore';
+import cookieStore from '../../store/cookieStore';
+import dataStore, { DataStore } from '../../store/dataStore';
+import PAStore from '../../store/PAStore';
 import getQueryParams from '../../utils/getQueryParams';
+import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
 
 export const onCommittedNavigationListener = async ({
@@ -31,38 +34,41 @@ export const onCommittedNavigationListener = async ({
     if (frameType !== 'outermost_frame' && frameId !== 0) {
       return;
     }
+
+    if (url.startsWith('chrome') || url.startsWith('devtools')) {
+      return;
+    }
+
     if (!url) {
       return;
     }
 
+    const queryParams = getQueryParams(url);
+
+    if (queryParams.psat_cdp) {
+      await chrome.storage.sync.set({
+        isUsingCDP: queryParams.psat_cdp === 'on',
+      });
+
+      DataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
+    }
+
     const targets = await chrome.debugger.getTargets();
-    const mainFrameId = dataStore?.globalIsUsingCDP
+    const mainFrameId = DataStore?.globalIsUsingCDP
       ? targets.filter((target) => target.tabId && target.tabId === tabId)[0]
           ?.id
       : 0;
 
-    const queryParams = getQueryParams(url);
+    dataStore?.updateUrl(tabId.toString(), url);
 
-    if (queryParams.psat_cdp || queryParams.psat_multitab) {
-      await chrome.storage.sync.set({
-        allowedNumberOfTabs:
-          queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
-        isUsingCDP: queryParams.psat_cdp === 'on',
-      });
+    if (url && !url.startsWith('chrome')) {
+      cookieStore?.removeCookieData(tabId.toString());
+      cookieStore.deinitialiseVariablesForTab(tabId.toString());
+      cookieStore.initialiseVariablesForNewTab(tabId.toString());
 
-      dataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
-      dataStore.tabMode =
-        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
-    }
-
-    dataStore?.updateUrl(tabId, url);
-
-    if (url && !url.startsWith('chrome://')) {
-      dataStore?.removeCookieData(tabId);
-
-      if (dataStore.globalIsUsingCDP) {
-        dataStore.deinitialiseVariablesForTab(tabId.toString());
-        dataStore.initialiseVariablesForNewTab(tabId.toString());
+      if (DataStore.globalIsUsingCDP) {
+        PAStore.deinitialiseVariablesForTab(tabId.toString());
+        PAStore.initialiseVariablesForNewTab(tabId.toString());
 
         await attachCDP({ tabId });
 
@@ -76,17 +82,48 @@ export const onCommittedNavigationListener = async ({
           }
         );
 
-        dataStore.updateParentChildFrameAssociation(tabId, targetId, '0');
+        dataStore.updateParentChildFrameAssociation(
+          tabId.toString(),
+          targetId,
+          '0'
+        );
       }
     }
-    await chrome.tabs.sendMessage(tabId, {
-      tabId,
-      payload: {
-        type: TABID_STORAGE,
-        tabId,
-        frameId: mainFrameId,
+
+    const tabs = await chrome.tabs.query({});
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+
+    await sendMessageWrapper(
+      'EXCEEDING_LIMITATION_UPDATE',
+      {
+        exceedingLimitations: qualifyingTabs.length > 5,
       },
-    });
+      tabId
+    );
+    const frames = await chrome.webNavigation.getAllFrames({ tabId });
+
+    if (!frames) {
+      return;
+    }
+
+    await Promise.all(
+      frames.map(async (frame) => {
+        await chrome.tabs.sendMessage(
+          tabId,
+          {
+            tabId,
+            payload: {
+              type: TABID_STORAGE,
+              tabId,
+              frameId: frame.frameId,
+            },
+          },
+          {
+            frameId: frame.frameId,
+          }
+        );
+      })
+    );
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn(error);

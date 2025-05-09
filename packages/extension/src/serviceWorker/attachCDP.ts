@@ -24,7 +24,7 @@ export default async function attachCDP(target: {
     await chrome.debugger.attach(target, '1.3');
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
 
   try {
@@ -35,13 +35,13 @@ export default async function attachCDP(target: {
     );
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
   try {
     await chrome.debugger.sendCommand(target, 'Audits.enable');
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
   try {
     await chrome.debugger.sendCommand(
@@ -53,7 +53,7 @@ export default async function attachCDP(target: {
     );
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
   try {
     await chrome.debugger.sendCommand(
@@ -65,7 +65,7 @@ export default async function attachCDP(target: {
     );
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
   try {
     await chrome.debugger.sendCommand(
@@ -77,19 +77,19 @@ export default async function attachCDP(target: {
     );
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
   try {
     await chrome.debugger.sendCommand(target, 'Page.enable');
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
   try {
     await chrome.debugger.sendCommand(target, 'Network.enable');
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
 
   try {
@@ -100,6 +100,6 @@ export default async function attachCDP(target: {
     });
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('extensionSourceCodeError', error);
+    console.warn('extensionSourceCodeError', error);
   }
 }

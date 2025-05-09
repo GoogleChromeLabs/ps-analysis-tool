@@ -44,6 +44,9 @@ interface AuctionsContainerProps {
   isMultiSeller?: boolean;
   selectedAdUnit?: string;
   selectedDateTime?: string;
+  isEE?: boolean;
+  sortOrder?: string;
+  setSortOrder?: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
 }
 
 const AuctionsContainer = ({
@@ -54,6 +57,9 @@ const AuctionsContainer = ({
   isMultiSeller = false,
   selectedAdUnit,
   selectedDateTime,
+  isEE = true,
+  sortOrder,
+  setSortOrder,
 }: AuctionsContainerProps) => {
   return (
     <SidebarProvider
@@ -61,12 +67,15 @@ const AuctionsContainer = ({
       defaultSelectedItemKey={Object.keys(sidebarData)?.[0]}
     >
       <AuctionPanel
+        isEE={isEE}
         selectedAdUnit={selectedAdUnit}
         selectedDateTime={selectedDateTime}
         isMultiSeller={isMultiSeller}
         customAdsAndBidders={customAdsAndBidders}
         setSidebarData={setSidebarData}
         auctionEvents={auctionEvents}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
       />
     </SidebarProvider>
   );

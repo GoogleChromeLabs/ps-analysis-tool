@@ -44,13 +44,23 @@ const Auctions = () => {
     },
   });
 
-  const { auctionEvents, adsAndBidders, receivedBids, noBids } =
-    useProtectedAudience(({ state }) => ({
-      auctionEvents: state.auctionEvents ?? {},
-      adsAndBidders: state.adsAndBidders,
-      receivedBids: state.receivedBids,
-      noBids: state.noBids,
-    }));
+  const {
+    auctionEvents,
+    adsAndBidders,
+    receivedBids,
+    noBids,
+    isMultiSeller,
+    sortOrder,
+    setSortOrder,
+  } = useProtectedAudience(({ state, actions }) => ({
+    auctionEvents: state.auctionEvents ?? {},
+    adsAndBidders: state.adsAndBidders,
+    isMultiSeller: state.isMultiSellerAuction,
+    receivedBids: state.receivedBids,
+    noBids: state.noBids,
+    sortOrder: state.sortOrder,
+    setSortOrder: actions.setSortOrder,
+  }));
 
   useEffect(() => {
     if (
@@ -121,9 +131,13 @@ const Auctions = () => {
     <div className="w-full h-full flex flex-col">
       <div className="overflow-auto flex-1">
         <AuctionsContainer
+          isEE={false}
+          isMultiSeller={isMultiSeller}
           auctionEvents={auctionData}
           sidebarData={sidebarData}
           setSidebarData={setSidebarData}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
       </div>
     </div>

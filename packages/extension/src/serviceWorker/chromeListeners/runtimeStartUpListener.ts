@@ -16,18 +16,14 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../../store/dataStore';
+import { DataStore } from '../../store/dataStore';
 import { setupIntervals } from './utils';
 
 export const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
   setupIntervals();
 
-  if (storage?.allowedNumberOfTabs) {
-    dataStore.tabMode = storage.allowedNumberOfTabs;
-  }
-
   if (Object.keys(storage).includes('isUsingCDP')) {
-    dataStore.globalIsUsingCDP = storage.isUsingCDP;
+    DataStore.globalIsUsingCDP = storage.isUsingCDP;
   }
 };
