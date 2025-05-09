@@ -18,18 +18,130 @@
  */
 import Protocol from 'devtools-protocol';
 import isEqual from 'lodash-es/isEqual';
-
+import type {
+  SourcesRegistration,
+  TriggerRegistration,
+} from '@google-psat/common';
 /**
  * Internal dependencies
  */
-import dataStore from './dataStore';
+import { DataStore } from './dataStore';
 import convertKeysToCamelCase from './utils/convertKeysToCamelCase';
 import transformNestedObject from './utils/transformObject';
 
 /**
  * Class responsible for managing Attribution Reporting API (ARA) data storage and processing.
  */
-class ARAStore {
+class ARAStore extends DataStore {
+  /**
+   * The Attribution Reporting sources for the tab.
+   */
+  sources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting sources for the tab.
+   */
+  oldSources: {
+    sourceRegistration: SourcesRegistration[];
+    triggerRegistration: TriggerRegistration[];
+  } = {
+    sourceRegistration: [],
+    triggerRegistration: [],
+  };
+
+  /**
+   * The Attribution Reporting headers for the tab.
+   */
+  headersForARA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        url: string;
+        headers: Protocol.Network.Headers;
+      };
+    };
+  } = {};
+
+  constructor() {
+    super();
+    this.sources = {
+      sourceRegistration: [],
+      triggerRegistration: [],
+    };
+  }
+
+  deinitialiseVariablesForTab(tabId: string): void {
+    super.deinitialiseVariablesForTab(tabId);
+    delete this.headersForARA[tabId];
+  }
+
+  initialiseVariablesForNewTab(tabId: string): void {
+    super.initialiseVariablesForNewTab(tabId);
+    this.headersForARA[tabId.toString()] = {};
+    //@ts-ignore
+    globalThis.PSAT = {
+      //@ts-ignore
+      ...globalThis.PSAT,
+      sources: this.sources,
+      headersForARA: this.headersForARA,
+    };
+  }
+
+  /**
+   * Remove the tab data from the store.
+   * @param {number} tabId The tab id.
+   */
+  removeTabData(tabId: string) {
+    delete this.headersForARA[tabId.toString()];
+  }
+
+  /**
+   * Remove the window's all tabs data from the store.
+   * @param {number} windowId The window id.
+   */
+  removeWindowData(windowId: number) {
+    chrome.tabs.query({ windowId }, (tabs) => {
+      tabs.map((tab) => {
+        if (tab.id) {
+          this.removeTabData(tab.id.toString());
+        }
+        return tab;
+      });
+    });
+  }
+
+  /**
+   * Sends updated data to the popup and devtools
+   * @param {number} tabId The window id.
+   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
+   */
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: string,
+    overrideForInitialSync = false
+  ) {
+    if (!DataStore.tabs[tabId]) {
+      return;
+    }
+
+    try {
+      if (
+        DataStore.tabs[tabId].devToolsOpenState ||
+        DataStore.tabs[tabId].popupOpenState
+      ) {
+        await this.processAndSendARAData(tabId, overrideForInitialSync);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
+      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+    }
+  }
+
   /**
    * Processes the Attribution Reporting Source Registered event.
    * @param {Protocol.Storage.AttributionReportingSourceRegisteredEvent} params - The event parameters.
@@ -43,16 +155,16 @@ class ARAStore {
       params.registration
     ) as Protocol.Storage.AttributionReportingSourceRegistration;
 
-    if (dataStore.sources?.sourceRegistration?.length > 0) {
-      dataStore.sources.sourceRegistration.push({
+    if (this.sources?.sourceRegistration?.length > 0) {
+      this.sources.sourceRegistration.push({
         requestUrl: '',
         ...sourceRegistrationData,
         result: params.result,
         tabId,
-        index: dataStore.sources.sourceRegistration.length,
+        index: this.sources.sourceRegistration.length,
       });
     } else {
-      dataStore.sources.sourceRegistration = [
+      this.sources.sourceRegistration = [
         {
           requestUrl: '',
           ...sourceRegistrationData,
@@ -61,6 +173,32 @@ class ARAStore {
           tabId,
         },
       ];
+    }
+  }
+
+  /**
+   * Processes and sends auction message to the extension for the specified tabId
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {boolean | undefined} overrideForInitialSync Override the condition.
+   */
+  async processAndSendARAData(tabId: string, overrideForInitialSync: boolean) {
+    try {
+      if (isEqual(this.oldSources, this.sources) && !overrideForInitialSync) {
+        return;
+      }
+
+      await chrome.runtime.sendMessage({
+        type: 'ARA_EVENTS',
+        payload: {
+          sourcesRegistration: this.sources.sourceRegistration,
+          triggerRegistration: this.sources.triggerRegistration,
+          tabId: Number(tabId),
+        },
+      });
+
+      this.oldSources = structuredClone(this.sources);
+    } catch (error) {
+      // Fail silently
     }
   }
 
@@ -78,19 +216,19 @@ class ARAStore {
       ['aggregatableDebugReportingConfig']
     );
 
-    if (dataStore.sources?.triggerRegistration?.length > 0) {
-      dataStore.sources.triggerRegistration.push({
+    if (this.sources?.triggerRegistration?.length > 0) {
+      this.sources.triggerRegistration.push({
         requestUrl: '',
         ...triggerRegistrationData,
         aggregatable: params.aggregatable,
         eventLevel: params.eventLevel,
-        index: dataStore.sources.triggerRegistration.length,
+        index: this.sources.triggerRegistration.length,
         time: Date.now(),
         tabId,
-        destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
+        destination: new URL(DataStore.tabs[Number(tabId)].url).origin ?? '',
       });
     } else {
-      dataStore.sources.triggerRegistration = [
+      this.sources.triggerRegistration = [
         {
           requestUrl: '',
           ...triggerRegistrationData,
@@ -99,7 +237,7 @@ class ARAStore {
           index: 0,
           time: Date.now(),
           tabId,
-          destination: new URL(dataStore.tabs[Number(tabId)].url).origin ?? '',
+          destination: new URL(DataStore.tabs[Number(tabId)].url).origin ?? '',
         },
       ];
     }

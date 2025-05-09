@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import type { singleAuctionEvent } from '@google-psat/common';
+import type { auctionData, singleAuctionEvent } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -24,9 +24,222 @@ import type { Protocol } from 'devtools-protocol';
  */
 import networkTime from './utils/networkTime';
 import formatTime from './utils/formatTime';
-import dataStore from './dataStore';
+import { DataStore } from './dataStore';
 
-class PAStore {
+class PAStore extends DataStore {
+  /**
+   * The auction event of the tabs (Interest group access as well as interest group auction events).
+   */
+  auctionEvents: {
+    [tabId: string]: {
+      [uniqueAuctionId: string]: singleAuctionEvent[];
+    };
+  } = {};
+  /**
+   * For tab 123456 auction events will have interestGroup accessed events as well as the interestGroupAuctionEvents.
+   * There can be 2 types of interestGroupAccessed events:
+   * 1) Join and Leave eventsare global and are fired on all the tabs.
+   * 2) Bid Win topLevelBid are fired where bidding is happening.
+   *
+   * To accomodate these 2 events we have 2 different keys in the auctionEvent for each tab:
+   * 1) The uniqueParentAuctionId,
+   *     a) if its a multi-seller auction then it will have:
+   *         i) a uniqueParentAuctionId where component auction Events are added.
+   *        ii) top level auction in an id whose key is '0',
+   *     b) if its a single sale then it will have a key with uniqueAuctionId where all the auctionEvents are added.
+   * 2) a 'globalEvents' key where all the global events are added like join leave etc.
+   *
+   * Structure may look like this:
+   * auctionEvents: {
+   *     123456: {
+   *          'globalEvents': [],
+   *          '12413hsad23e1nsd': {}
+   *     }
+   * };
+   */
+
+  /**
+   * The auction data of the tabs which is added when interestGroupAuctionEvent occurs.
+   */
+  auctionDataForTabId: {
+    [tabId: string]: auctionData;
+  } = {};
+
+  /**
+   * This variable stores the unParsedResonse headers received from Network.responseReceivedExtraInfo.
+   * These are the responses whose Network.responseReceived counter part havent yet been fired.
+   */
+  unParsedRequestHeadersForPA: {
+    [tabId: string]: {
+      [requestId: string]: {
+        auctions: Protocol.Storage.InterestGroupAuctionId[];
+        type: Protocol.Storage.InterestGroupAuctionFetchType;
+      };
+    };
+  } = {};
+
+  constructor() {
+    super();
+  }
+
+  deinitialiseVariablesForTab(tabId: string): void {
+    super.deinitialiseVariablesForTab(tabId);
+    delete this.unParsedRequestHeadersForPA[tabId];
+    Object.keys(this.auctionEvents[tabId] ?? {}).forEach((uniqueAuctionId) => {
+      if (uniqueAuctionId === 'globalEvents') {
+        return;
+      }
+      delete this.auctionEvents[tabId][uniqueAuctionId];
+    });
+    delete this.auctionDataForTabId[tabId];
+  }
+
+  initialiseVariablesForNewTab(tabId: string): void {
+    super.initialiseVariablesForNewTab(tabId);
+    this.unParsedRequestHeadersForPA[tabId] = {};
+    const { globalEvents } = structuredClone(this.auctionEvents[tabId] ?? []);
+    this.auctionEvents[tabId] = {
+      globalEvents,
+    };
+    this.auctionDataForTabId[tabId] = {};
+    //@ts-ignore
+    globalThis.PSAT = {
+      //@ts-ignore
+      ...globalThis.PSAT,
+      unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
+      auctionEvents: this.auctionEvents[tabId],
+      auctionDataForTabId: this.auctionDataForTabId[tabId],
+    };
+  }
+
+  /**
+   * Remove the tab data from the store.
+   * @param {number} tabId The tab id.
+   */
+  removeTabData(tabId: string) {
+    delete this.unParsedRequestHeadersForPA[tabId.toString()];
+    delete this.auctionDataForTabId[tabId.toString()];
+    delete this.auctionEvents[tabId.toString()];
+  }
+
+  /**
+   * Remove the window's all tabs data from the store.
+   * @param {number} windowId The window id.
+   */
+  removeWindowData(windowId: number) {
+    chrome.tabs.query({ windowId }, (tabs) => {
+      tabs.map((tab) => {
+        if (tab.id) {
+          this.removeTabData(tab.id.toString());
+        }
+        return tab;
+      });
+    });
+  }
+
+  /**
+   * Processes and sends auction message to the extension for the specified tabId
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {boolean | undefined} overrideForInitialSync Override the condition.
+   */
+  async processAndSendAuctionData(
+    tabId: string,
+    overrideForInitialSync: boolean
+  ) {
+    try {
+      if (DataStore.tabs[tabId].newUpdatesPA <= 0 && !overrideForInitialSync) {
+        return;
+      }
+
+      const { globalEvents, ...rest } = this.auctionEvents[tabId];
+
+      const isMultiSellerAuction = this.isMultiSellerAuction(rest);
+      const groupedAuctionBids: {
+        [parentAuctionId: string]: {
+          0: singleAuctionEvent[];
+          [uniqueAuctionId: string]: singleAuctionEvent[];
+        };
+      } = {};
+
+      const auctionEventsToBeProcessed = Object.values(rest).flat();
+
+      if (isMultiSellerAuction) {
+        auctionEventsToBeProcessed.forEach((event) => {
+          const { parentAuctionId = null, uniqueAuctionId = null } = event;
+
+          if (!parentAuctionId) {
+            if (uniqueAuctionId) {
+              if (!groupedAuctionBids[uniqueAuctionId]) {
+                groupedAuctionBids[uniqueAuctionId] = {
+                  0: [],
+                };
+              }
+              groupedAuctionBids[uniqueAuctionId]['0'].push(event);
+            }
+            return;
+          }
+
+          if (!groupedAuctionBids[parentAuctionId]) {
+            groupedAuctionBids[parentAuctionId] = {
+              0: [],
+            };
+          }
+
+          if (!uniqueAuctionId) {
+            return;
+          }
+
+          if (!groupedAuctionBids[parentAuctionId][uniqueAuctionId]) {
+            groupedAuctionBids[parentAuctionId][uniqueAuctionId] = [];
+          }
+
+          groupedAuctionBids[parentAuctionId][uniqueAuctionId].push(event);
+        });
+      }
+
+      await chrome.runtime.sendMessage({
+        type: 'AUCTION_EVENTS',
+        payload: {
+          refreshTabData: overrideForInitialSync,
+          tabId,
+          auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
+          multiSellerAuction: isMultiSellerAuction,
+          globalEvents: globalEvents ?? [],
+        },
+      });
+      DataStore.tabs[tabId].newUpdatesPA = 0;
+    } catch (error) {
+      // Fail silently
+    }
+  }
+
+  /**
+   * Sends updated data to the popup and devtools
+   * @param {number} tabId The window id.
+   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
+   */
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: string,
+    overrideForInitialSync = false
+  ) {
+    if (!DataStore.tabs[tabId]) {
+      return;
+    }
+
+    try {
+      if (
+        DataStore.tabs[tabId].devToolsOpenState ||
+        DataStore.tabs[tabId].popupOpenState
+      ) {
+        await this.processAndSendAuctionData(tabId, overrideForInitialSync);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
+      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+    }
+  }
+
   /**
    * This function parses response headers for Protected Analysis PA.
    * @param {string} requestId This is used to get the related data for parsing the request.
@@ -40,20 +253,20 @@ class PAStore {
     tabId: string,
     method: string
   ) {
-    if (!dataStore.unParsedRequestHeadersForPA[tabId][requestId]?.auctions) {
+    if (!this.unParsedRequestHeadersForPA[tabId][requestId]?.auctions) {
       return;
     }
     const { auctions, type } =
-      dataStore.unParsedRequestHeadersForPA[tabId][requestId];
+      this.unParsedRequestHeadersForPA[tabId][requestId];
 
     const calculatedNetworkTime = networkTime(requestId, timestamp, tabId);
 
     auctions.forEach((uniqueAuctionId) => {
-      if (!dataStore.auctionDataForTabId[tabId][uniqueAuctionId]) {
+      if (!this.auctionDataForTabId[tabId][uniqueAuctionId]) {
         return;
       }
       const { auctionConfig = {} } =
-        dataStore.auctionDataForTabId[tabId][uniqueAuctionId];
+        this.auctionDataForTabId[tabId][uniqueAuctionId];
 
       this.getAuctionEventsArray(tabId, uniqueAuctionId).push({
         uniqueAuctionId,
@@ -67,18 +280,17 @@ class PAStore {
           this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
             ? '0 ms'
             : formatTime(
-                dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
+                this.auctionEvents[tabId][uniqueAuctionId][0].time,
                 networkTime(requestId, timestamp, tabId)
               ),
         time: calculatedNetworkTime,
         auctionConfig,
         parentAuctionId: uniqueAuctionId
-          ? dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId]
-              ?.parentAuctionId
+          ? this.auctionDataForTabId[tabId]?.[uniqueAuctionId]?.parentAuctionId
           : undefined,
         eventType: 'interestGroupAuctionNetworkRequestCompleted',
       });
-      dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+      DataStore.tabs[tabId].newUpdatesPA++;
     });
   }
 
@@ -87,7 +299,7 @@ class PAStore {
    * @param {singleAuctionEvent[]} auctionEvents This is used to get the related data for parsing the request.
    * @returns { boolean } True for multiSeller False for singleSeller
    */
-  isMUltiSellerAuction(auctionEvents: {
+  isMultiSellerAuction(auctionEvents: {
     [uniqueAuctionId: string]: singleAuctionEvent[];
   }): boolean {
     const uniqueSellers = new Set<string>();
@@ -125,12 +337,13 @@ class PAStore {
       formattedTime: new Date(accessTime * 1000),
       type,
       time: accessTime,
+      index: this.getAuctionEventsArray(tabId, 'globalEvents').length,
       eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
     };
 
     this.getAuctionEventsArray(tabId, 'globalEvents').push(eventData);
 
-    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+    DataStore.tabs[tabId].newUpdatesPA++;
 
     if (!uniqueAuctionId) {
       return;
@@ -183,14 +396,14 @@ class PAStore {
         this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
           ? '0 ms'
           : formatTime(
-              dataStore.auctionEvents[tabId][uniqueAuctionId]?.[0].time,
+              this.auctionEvents[tabId][uniqueAuctionId]?.[0].time,
               accessTime
             ),
       type,
       time: accessTime,
       parentAuctionId:
-        dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId]
-          ?.parentAuctionId ?? undefined,
+        this.auctionDataForTabId[tabId]?.[uniqueAuctionId]?.parentAuctionId ??
+        undefined,
       eventType: 'interestGroupAccessed' as singleAuctionEvent['eventType'],
     };
 
@@ -208,7 +421,7 @@ class PAStore {
 
     this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
 
-    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+    DataStore.tabs[tabId].newUpdatesPA++;
   }
 
   /**
@@ -227,7 +440,7 @@ class PAStore {
     const time: number =
       networkTime(
         requestId,
-        dataStore.requestIdToCDPURLMapping[tabId][requestId].timeStamp,
+        DataStore.requestIdToCDPURLMapping[tabId][requestId].timeStamp,
         tabId
       ) ?? new Date().getTime();
 
@@ -236,21 +449,20 @@ class PAStore {
         uniqueAuctionId,
         index: this.getAuctionEventsArray(tabId, uniqueAuctionId).length,
         formattedTime:
-          dataStore.auctionEvents[tabId][uniqueAuctionId].length === 0
+          this.auctionEvents[tabId][uniqueAuctionId].length === 0
             ? '0 ms'
             : formatTime(
-                dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
+                this.auctionEvents[tabId][uniqueAuctionId][0].time,
                 time
               ),
         type: 'Start Fetching ' + type,
         time,
         parentAuctionId:
-          dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId]
-            ?.parentAuctionId,
+          this.auctionDataForTabId[tabId]?.[uniqueAuctionId]?.parentAuctionId,
         eventType: 'interestGroupAuctionNetworkRequestCreated',
       });
 
-      dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+      DataStore.tabs[tabId].newUpdatesPA++;
     });
   }
 
@@ -274,7 +486,7 @@ class PAStore {
         this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
           ? '0 ms'
           : formatTime(
-              dataStore.auctionEvents[tabId][uniqueAuctionId][0].time,
+              this.auctionEvents[tabId][uniqueAuctionId][0].time,
               eventTime
             ),
       time: eventTime,
@@ -286,7 +498,7 @@ class PAStore {
 
     this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
 
-    dataStore.tabs[parseInt(tabId)].newUpdatesPA++;
+    DataStore.tabs[tabId].newUpdatesPA++;
   }
 
   /**
@@ -296,10 +508,10 @@ class PAStore {
    * @returns {object} An object holder reporesenting the event data.
    */
   getAuctionEventsArray(tabId: string, uniqueAuctionId: string) {
-    if (!dataStore.auctionEvents[tabId][uniqueAuctionId]) {
-      dataStore.auctionEvents[tabId][uniqueAuctionId] = [];
+    if (!this.auctionEvents[tabId][uniqueAuctionId]) {
+      this.auctionEvents[tabId][uniqueAuctionId] = [];
     }
-    return dataStore.auctionEvents[tabId][uniqueAuctionId];
+    return this.auctionEvents[tabId][uniqueAuctionId];
   }
 
   /**
@@ -318,7 +530,7 @@ class PAStore {
       return true;
     }
 
-    if (!dataStore.auctionEvents[tabId][uniqueAuctionId]) {
+    if (!this.auctionEvents[tabId][uniqueAuctionId]) {
       if (eventType !== 'interestGroupAccessed') {
         return true;
       } else {
@@ -326,7 +538,7 @@ class PAStore {
       }
     }
     if (
-      dataStore.auctionEvents[tabId][uniqueAuctionId].filter(
+      this.auctionEvents[tabId][uniqueAuctionId].filter(
         (event) => event.type === 'started'
       ).length > 0
     ) {
@@ -342,10 +554,10 @@ class PAStore {
    */
   getParentAuctionId(tabId: string) {
     const parentAuctionIds = new Set<string>();
-    Object.keys(dataStore.auctionEvents[tabId]).forEach((uniqueAuctionId) => {
-      const parentAuctionId = dataStore.auctionEvents[tabId][
-        uniqueAuctionId
-      ].filter((event) => event.type === 'started')?.[0].parentAuctionId;
+    Object.keys(this.auctionEvents[tabId]).forEach((uniqueAuctionId) => {
+      const parentAuctionId = this.auctionEvents[tabId][uniqueAuctionId].filter(
+        (event) => event.type === 'started'
+      )?.[0].parentAuctionId;
 
       if (parentAuctionId) {
         parentAuctionIds.add(parentAuctionId);
@@ -353,6 +565,17 @@ class PAStore {
     });
 
     return parentAuctionIds;
+  }
+
+  getTabsData(
+    tabId = ''
+  ):
+    | { [uniqueAuctionId: string]: singleAuctionEvent[] }
+    | typeof this.auctionEvents {
+    if (tabId) {
+      return this.auctionEvents[tabId];
+    }
+    return this.auctionEvents;
   }
 }
 

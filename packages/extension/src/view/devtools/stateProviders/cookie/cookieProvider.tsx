@@ -221,7 +221,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     async (message: {
       type: string;
       payload: {
-        tabId?: number;
+        tabId?: string;
         cookieData?: TabCookies;
         exceedingLimitations?: boolean;
         extraData?: {

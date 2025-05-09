@@ -17,7 +17,7 @@
  * Internal dependencies
  */
 import parseHeaders from '../../utils/parseHeaders';
-import dataStore from '../../store/dataStore';
+import dataStore, { DataStore } from '../../store/dataStore';
 import cookieStore from '../../store/cookieStore';
 import { getTab } from '../../utils/getTab';
 
@@ -28,24 +28,24 @@ export const onBeforeSendHeadersListener = ({
   frameId,
   requestId,
 }: chrome.webRequest.WebRequestHeadersDetails) => {
-  if (dataStore.globalIsUsingCDP) {
+  if (DataStore.globalIsUsingCDP) {
     return;
   }
 
   (async () => {
     const tab = await getTab(tabId);
-    let tabUrl = dataStore?.getTabUrl(tabId);
+    let tabUrl = dataStore?.getTabUrl(tabId.toString());
 
     if (tab && tab.pendingUrl) {
       tabUrl = tab.pendingUrl;
     }
 
     const cookies = await parseHeaders(
-      dataStore.globalIsUsingCDP,
+      DataStore.globalIsUsingCDP,
       'request',
       tabId,
       url,
-      dataStore.cookieDB ?? {},
+      DataStore.cookieDB ?? {},
       tabUrl,
       frameId.toString(),
       requestId,
@@ -57,6 +57,6 @@ export const onBeforeSendHeadersListener = ({
     }
 
     // Adds the cookies from the request headers to the cookies object.
-    cookieStore?.update(tabId, cookies);
+    cookieStore?.update(tabId.toString(), cookies);
   })();
 };
