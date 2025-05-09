@@ -210,8 +210,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Tick className="w-4 h-4 hidden max-sm:block" />
-              <span className="hidden sm:block">Yes</span>
+              <Tick className="w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">Yes</span>
             </>
           }
           size="large"
@@ -221,8 +221,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Plus className="rotate-45 w-4 h-4 hidden max-sm:block" />
-              <span className="hidden sm:block">No</span>
+              <Plus className="rotate-45 w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">No</span>
             </>
           }
           size="large"
@@ -254,8 +254,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Tick className="w-4 h-4 hidden max-sm:block" />
-              <span className="hidden sm:block">Yes</span>
+              <Tick className="w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">Yes</span>
             </>
           }
           size="large"
@@ -265,8 +265,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Button
           text={
             <>
-              <Plus className="rotate-45 w-4 h-4 hidden max-sm:block" />
-              <span className="hidden sm:block">No</span>
+              <Plus className="rotate-45 w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">No</span>
             </>
           }
           size="large"
