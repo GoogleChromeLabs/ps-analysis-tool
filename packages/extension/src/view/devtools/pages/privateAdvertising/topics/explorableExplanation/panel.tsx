@@ -108,7 +108,6 @@ const Panel = ({
 
   useEffect(() => {
     document.addEventListener('keydown', tooglePlayOnKeydown);
-
     return () => {
       document.removeEventListener('keydown', tooglePlayOnKeydown);
     };
@@ -327,6 +326,12 @@ const Panel = ({
   >(null);
 
   useEffect(() => {
+    if (isInteractiveModeOn !== null) {
+      setPlay(!isInteractiveModeOn);
+    }
+  }, [isInteractiveModeOn]);
+
+  useEffect(() => {
     if (isInteractiveModeOn === null) {
       return;
     }
@@ -410,7 +415,7 @@ const Panel = ({
       <div className="flex-1 overflow-auto">
         <Animation
           epoch={epochs[activeTabRef.current]?.webVisits || []}
-          isAnimating={!epochCompleted?.[activeTabRef.current]}
+          isCompleted={epochCompleted?.[activeTabRef.current]}
           siteAdTechs={siteAdTechs}
           visitIndexStart={visitIndexStart}
           isPlaying={play}
