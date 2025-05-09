@@ -151,7 +151,7 @@ const Table = ({
           )}
         </>
       )}
-      <div className="w-full flex-1 overflow-auto h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
+      <div className="w-full flex-1 h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz overflow-hidden">
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"
@@ -169,7 +169,10 @@ const Table = ({
             />
           </Resizable>
         )}
-        <div ref={tableContainerRef} className="relative h-full w-full">
+        <div
+          ref={tableContainerRef}
+          className="relative h-full w-full flex-1 overflow-auto"
+        >
           <ColumnMenu
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}
