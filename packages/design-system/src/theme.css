@@ -1041,6 +1041,8 @@
   --color-slate-950: #020617;
 
   --color-gray: #6e6e6e;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
 
   --color-zinc-50: #fafafa;
   --color-zinc-100: #f4f4f5;
@@ -1296,6 +1298,9 @@
   --color-bright-red: #ff5449;
   --color-dark-charcoal: #323232;
   --color-bright-navy-blue: #1a73e8;
+  --color-american-silver: #cbcdd1;
+  --color-quartz: #494c50;
+  --color-hex-gray: #e0e0e0;
 
   --stroke-*: initial;
   --stroke-bright-gray: #e8eaed;
