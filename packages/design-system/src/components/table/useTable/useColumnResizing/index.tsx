@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 export const columnResizeHandleClassName = 'column-resize-handle';
 
 const getColumnElement = (columnId: string) => {
@@ -36,9 +37,16 @@ const getColumnMaxWidth = (columnElement: HTMLElement) => {
 
 const getColumnWidth = (columnElement: HTMLElement) => {
   return (
-    Number(columnElement.style.width) ||
-    columnElement.getBoundingClientRect().width
+    columnElement.getBoundingClientRect().width ||
+    parseFloat(columnElement.style.width)
   );
+};
+
+const setColumnWidth = (columnElement: HTMLElement, width: number | string) => {
+  const parsedWidth = typeof width === 'string' ? parseFloat(width) : width;
+  columnElement.style.width = `${parsedWidth}px`;
+  columnElement.style.minWidth = `${parsedWidth}px`;
+  columnElement.style.maxWidth = `${parsedWidth}px`;
 };
 
 export type UseColumnResizing = {
@@ -47,17 +55,25 @@ export type UseColumnResizing = {
   tableContainerRef: React.RefObject<HTMLDivElement> | null;
 };
 
+type ColumnsSizing = Record<string, number>;
+
 /**
  * Custom hook to handle column resizing.
+ * @param tablePersistentSettingsKey - key to persist the columns sizing
  * @returns {UseColumnResizing} isResizing - Whether the column is being resized.
  */
-const useColumnResizing = (): UseColumnResizing => {
+const useColumnResizing = (
+  tablePersistentSettingsKey?: string
+): UseColumnResizing => {
   const [isResizing, setIsResizing] = useState(false);
   const startingColumnWidth = useRef(0);
   const startX = useRef(0);
   const rafId = useRef<number>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const currentColumn = useRef<HTMLElement | null>(null);
+  const [persistedColumnsSizing, setPersistedColumnsSizing] = useState<
+    ColumnsSizing | undefined
+  >(undefined);
 
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
@@ -101,8 +117,7 @@ const useColumnResizing = (): UseColumnResizing => {
         ) {
           return;
         }
-        columnElement.style.minWidth = `${newWidth}px`;
-        columnElement.style.maxWidth = `${newWidth}px`;
+        setColumnWidth(columnElement, newWidth);
       });
     },
     [isResizing]
@@ -114,6 +129,15 @@ const useColumnResizing = (): UseColumnResizing => {
     }
     const columnElement = currentColumn.current;
     if (columnElement) {
+      const columnId = columnElement.dataset.columnResizeId;
+      if (!columnId) {
+        return;
+      }
+      const width = getColumnWidth(columnElement);
+      setPersistedColumnsSizing((prev) => {
+        return { ...(prev || {}), [columnId]: width };
+      });
+
       requestAnimationFrame(() => {
         currentColumn.current = null;
         setIsResizing(false);
@@ -125,12 +149,71 @@ const useColumnResizing = (): UseColumnResizing => {
     currentColumn.current = null;
   }, [isResizing]);
 
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
+  const [areSettingsLoaded, setAreSettingsLoaded] = useState(false);
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      const columnsSizing = getPreferences(
+        tablePersistentSettingsKey,
+        'columnsSizing'
+      );
+
+      const data =
+        columnsSizing && Object.keys(columnsSizing).length > 0
+          ? columnsSizing
+          : undefined;
+
+      setPersistedColumnsSizing(data as ColumnsSizing);
+      setAreSettingsLoaded(true);
+    }
+  }, [getPreferences, tablePersistentSettingsKey]);
+
+  // keep store in sync with the persisted columns sizing
+  useEffect(() => {
+    if (persistedColumnsSizing && tablePersistentSettingsKey) {
+      setPreferences(
+        {
+          columnsSizing: persistedColumnsSizing,
+        },
+        tablePersistentSettingsKey
+      );
+    }
+  }, [persistedColumnsSizing, setPreferences, tablePersistentSettingsKey]);
+
   // fixes the column widths when the component is mounted
   // so the columns don't resize when the user starts dragging
   const setColumnWidths = useCallback(() => {
-    const allHandles = document.querySelectorAll(`[data-column-resize-handle]`);
-    Array.from(allHandles).forEach((handle, index) => {
-      const columnId = (handle as HTMLElement).dataset.columnResizeHandle;
+    if (!areSettingsLoaded) {
+      return;
+    }
+
+    // use persisted columns sizing if available
+    if (persistedColumnsSizing) {
+      Object.entries(persistedColumnsSizing).forEach(([columnId, width]) => {
+        const columnElement = getColumnElement(columnId);
+        if (columnElement) {
+          setColumnWidth(columnElement, width);
+        }
+      });
+      return;
+    }
+
+    // calculate initial column widths
+    const columnsSizing: ColumnsSizing = {};
+    const allHandles = document.querySelectorAll(`[data-column-resize-id]`);
+
+    if (allHandles.length === 0) {
+      return;
+    }
+
+    Array.from(allHandles).forEach((handle) => {
+      const columnId = (handle as HTMLElement).dataset.columnResizeId;
       if (!columnId) {
         return;
       }
@@ -139,27 +222,20 @@ const useColumnResizing = (): UseColumnResizing => {
         return;
       }
 
-      // if the column is the last one, use all remaining space
-      if (index === allHandles.length - 1) {
-        columnElement.style.maxWidth = '100%';
-        columnElement.style.width = '100%';
-        columnElement.style.minWidth = '100%';
-        return;
-      }
-
       // don't set any width if it's already set
       if (columnElement.style.maxWidth !== '') {
+        columnsSizing[columnId] = getColumnWidth(columnElement);
         return;
       }
 
       const minWidth = getColumnMinWidth(columnElement);
       const colWidth = getColumnWidth(columnElement);
       const width = Math.max(minWidth || 0, colWidth);
-      columnElement.style.maxWidth = `${width}px`;
-      columnElement.style.width = `${width}px`;
-      columnElement.style.minWidth = `${width}px`;
+      setColumnWidth(columnElement, width);
+      columnsSizing[columnId] = width;
     });
-  }, []);
+    setPersistedColumnsSizing(columnsSizing);
+  }, [areSettingsLoaded, persistedColumnsSizing]);
 
   useEffect(() => {
     const tableContainer = tableContainerRef?.current;
