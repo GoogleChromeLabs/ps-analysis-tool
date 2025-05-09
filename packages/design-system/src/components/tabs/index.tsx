@@ -31,14 +31,21 @@ interface TabsProps {
 }
 
 const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
-  const { activeTab, setActiveTab, titles, isTabHighlighted, shouldAddSpacer } =
-    useTabs(({ state, actions }) => ({
-      activeTab: state.activeTab,
-      setActiveTab: actions.setActiveTab,
-      titles: state.titles,
-      isTabHighlighted: actions.isTabHighlighted,
-      shouldAddSpacer: actions.shouldAddSpacer,
-    }));
+  const {
+    activeTab,
+    setActiveTab,
+    groupedTitles,
+    titles,
+    isTabHighlighted,
+    shouldAddSpacer,
+  } = useTabs(({ state, actions }) => ({
+    activeTab: state.activeTab,
+    setActiveTab: actions.setActiveTab,
+    groupedTitles: state.groupedTitles,
+    titles: state.titles,
+    isTabHighlighted: actions.isTabHighlighted,
+    shouldAddSpacer: actions.shouldAddSpacer,
+  }));
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -74,59 +81,70 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     >
       <div
         className={classNames(
-          'flex gap-8 mx-4 w-full',
+          'flex gap-8 mx-2 w-full overflow-x-auto',
           fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
-        {titles.map((title, index) => {
-          const addSpacer = shouldAddSpacer(index);
-          const isHighlighted = isTabHighlighted(index);
-          const isNumber = typeof isHighlighted === 'number';
-          let count: string | number = '';
-
-          if (isNumber) {
-            count = isHighlighted > 9 ? '9+' : isHighlighted;
-          }
-
+        {Object.entries(groupedTitles).map(([group, data]) => {
           return (
-            <React.Fragment key={index}>
-              <div className="flex">
-                <button
-                  onClick={() => setActiveTab(index)}
-                  onKeyDown={handleKeyDown}
-                  className={classNames(
-                    'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
-                    {
-                      'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
-                        index === activeTab,
-                    },
-                    {
-                      'border-transparent text-raisin-black dark:text-bright-gray':
-                        index !== activeTab,
-                    }
-                  )}
-                >
-                  {title}
-                </button>
-                <div
-                  className={classNames(
-                    'h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
-                    {
-                      'bg-transparent': !isHighlighted,
-                    },
-                    {
-                      'bg-dark-blue dark:bg-celeste': isHighlighted,
-                    },
-                    {
-                      'h-4 w-4': isNumber,
-                    }
-                  )}
-                >
-                  {count}
-                </div>
-              </div>
-              {addSpacer && <div className="flex-1" />}
-            </React.Fragment>
+            <div key={group} className="flex">
+              {
+                <p className="bg-gray-200 border-y-2 border-gray-200 rounded-md flex items-center justify-center px-2 py-0 mb-2 font-medium text-sm text-zinc-700">
+                  Group
+                </p>
+              }
+              {Object.values(data).map(({ title, index }) => {
+                const addSpacer = shouldAddSpacer(index);
+                const isHighlighted = isTabHighlighted(index);
+                const isNumber = typeof isHighlighted === 'number';
+                let count: string | number = '';
+
+                if (isNumber) {
+                  count = isHighlighted > 9 ? '9+' : isHighlighted;
+                }
+
+                return (
+                  <React.Fragment key={index}>
+                    <div className="flex">
+                      <button
+                        onClick={() => setActiveTab(index)}
+                        onKeyDown={handleKeyDown}
+                        className={classNames(
+                          'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
+                          {
+                            'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
+                              index === activeTab,
+                          },
+                          {
+                            'border-transparent text-raisin-black dark:text-bright-gray':
+                              index !== activeTab,
+                          }
+                        )}
+                      >
+                        {title}
+                      </button>
+                      <div
+                        className={classNames(
+                          'h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
+                          {
+                            'bg-transparent': !isHighlighted,
+                          },
+                          {
+                            'bg-dark-blue dark:bg-celeste': isHighlighted,
+                          },
+                          {
+                            'h-4 w-4': isNumber,
+                          }
+                        )}
+                      >
+                        {count}
+                      </div>
+                    </div>
+                    {addSpacer && <div className="flex-1" />}
+                  </React.Fragment>
+                );
+              })}
+            </div>
           );
         })}
       </div>
