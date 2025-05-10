@@ -71,6 +71,7 @@ describe('Validate the Cookies filter option', () => {
       'button[title="Site Boundaries"]'
     );
     await siteBoundariesButton?.click();
+    await interaction.delay(1000);
     await interaction.clickMatchingElement(frame, 'p', 'Cookies');
 
     await interaction.openFilter(frame);

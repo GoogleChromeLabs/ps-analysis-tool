@@ -86,17 +86,10 @@ export class Interaction {
       );
 
       await siteBoundariesOpener?.click();
+      await this.delay(1000); // Add a small delay to ensure the submenu is rendered
 
       const elementTextToClick = 'Cookies';
       await this.clickMatchingElement(frame, 'p', elementTextToClick);
-
-      const dropdown = await frame.waitForSelector(
-        selectors.cookieDropDownSelector,
-        {
-          timeout: 10000,
-        }
-      );
-      await dropdown?.click();
     }
 
     return frame;

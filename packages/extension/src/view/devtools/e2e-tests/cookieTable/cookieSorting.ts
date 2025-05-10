@@ -69,6 +69,7 @@ describe('Validate the Cookies sort option', () => {
       'button[title="Site Boundaries"]'
     );
     await siteBoundariesButton?.click();
+    await interaction.delay(1000);
     await interaction.clickMatchingElement(frame, 'p', 'Cookies');
 
     await interaction.delay(1000);
