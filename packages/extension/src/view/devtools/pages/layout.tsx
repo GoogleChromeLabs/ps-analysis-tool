@@ -134,16 +134,19 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       const data = { ...prev };
       const psData = data[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX];
 
-      psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-        SIDEBAR_ITEMS_KEYS.COOKIES
-      ].panel = {
-        Element: Cookies as (props: any) => React.JSX.Element,
-        props: { setFilteredCookies },
-      };
-      psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-        SIDEBAR_ITEMS_KEYS.COOKIES
-      ].children = Object.keys(tabFrames || {}).reduce<SidebarItems>(
-        (acc, url) => {
+      const cookiesMainItem =
+        psData.children[SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES].children[
+          SIDEBAR_ITEMS_KEYS.COOKIES
+        ];
+
+      if (cookiesMainItem) {
+        cookiesMainItem.panel = {
+          Element: Cookies as (props: any) => React.JSX.Element,
+          props: { setFilteredCookies },
+        };
+        cookiesMainItem.children = Object.keys(
+          tabFrames || {}
+        ).reduce<SidebarItems>((acc, url) => {
           const popupTitle = I18n.getMessage('cookiesUsedByFrame', [url]);
 
           acc[url] = {
@@ -164,30 +167,29 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           };
 
           return acc;
-        },
-        {}
-      );
+        }, {});
 
-      const showInspectButton =
-        canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
+        const showInspectButton =
+          canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
-      if (showInspectButton) {
-        psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-          SIDEBAR_ITEMS_KEYS.COOKIES
-        ].extraInterfaceToTitle = {
-          Element: InspectButton,
-          props: {
-            isInspecting,
-            selectedAdUnit,
-            setIsInspecting,
-            isTabFocused:
-              isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES),
-          },
-        };
-      } else {
-        psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-          SIDEBAR_ITEMS_KEYS.COOKIES
-        ].extraInterfaceToTitle = {};
+        if (showInspectButton) {
+          psData.children[SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES].children[
+            SIDEBAR_ITEMS_KEYS.COOKIES
+          ].extraInterfaceToTitle = {
+            Element: InspectButton,
+            props: {
+              isInspecting,
+              selectedAdUnit,
+              setIsInspecting,
+              isTabFocused:
+                isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES),
+            },
+          };
+        } else {
+          psData.children[SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES].children[
+            SIDEBAR_ITEMS_KEYS.COOKIES
+          ].extraInterfaceToTitle = {};
+        }
       }
 
       return data;
@@ -336,7 +338,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const cookieDropdownOpen = useMemo(() => {
     return (
       sidebarItems[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]?.children[
-        SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+        SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
       ]?.children?.[SIDEBAR_ITEMS_KEYS.COOKIES]?.dropdownOpen ?? false
     );
   }, [sidebarItems]);

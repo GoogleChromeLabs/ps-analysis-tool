@@ -25,6 +25,15 @@ import { I18n } from '@google-psat/i18n';
 
 const content = [
   {
+    title: () => 'Cookies',
+    description: () =>
+      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
+    url: 'https://developers.google.com/privacy-sandbox/cookies',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/chrome-shifts-to-user-choice-for-third-party-cookies/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+  },
+  {
     title: () => I18n.getMessage('chips'),
     description: () => I18n.getMessage('chipsDescription'),
     url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
