@@ -68,11 +68,7 @@ export class Interaction {
    * @throws {Error} If the DevTools iframe is not found.
    */
   async navigateToCookieTab(): Promise<Frame | null | undefined> {
-    if (!this.devtools) {
-      throw new Error('DevTools page is not initialized.');
-    }
-    const devtoolsPage = this.devtools;
-
+    const devtoolsPage = await this.navigateToPrivacySandboxTab();
     await devtoolsPage.waitForSelector(selectors.devtoolIframeSelector);
 
     const iframeElement = await devtoolsPage.$(selectors.devtoolIframeSelector);
@@ -81,17 +77,19 @@ export class Interaction {
     await this.delay(2000);
 
     if (frame) {
-      // Optionally: reload or ensure the frame is ready
+      frame.evaluate(() => 'window.location.reload();');
       await frame.waitForSelector('button[title="Site Boundaries"]', {
         timeout: 5000,
       });
       const siteBoundariesOpener = await frame.$(
         'button[title="Site Boundaries"]'
       );
-      await siteBoundariesOpener?.click();
-      await this.delay(1000);
 
-      await this.clickMatchingElement(frame, 'p', 'Cookies');
+      await siteBoundariesOpener?.click();
+      await this.delay(1000); // Add a small delay to ensure the submenu is rendered
+
+      const elementTextToClick = 'Cookies';
+      await this.clickMatchingElement(frame, 'p', elementTextToClick);
     }
 
     return frame;
