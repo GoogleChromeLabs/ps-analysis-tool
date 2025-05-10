@@ -58,8 +58,17 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
 
       await interaction.delay(8000);
       // Validate the "Facebook Like" known breakages
+      if (!frame) {
+        throw new Error(
+          'Frame is null or undefined when validating Deprecated Google Sign-In text.'
+        );
+      }
+      await frame.waitForSelector(
+        '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium',
+        { timeout: 10000 }
+      );
       const deprecatedGoogleSignInText = await interaction.getInnerText(
-        frame ?? null,
+        frame,
         '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
       );
       expect(deprecatedGoogleSignInText).toBe('Deprecated Google Sign-In');
