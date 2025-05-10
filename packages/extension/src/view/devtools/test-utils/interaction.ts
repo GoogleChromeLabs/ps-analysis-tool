@@ -78,14 +78,14 @@ export class Interaction {
 
     if (frame) {
       frame.evaluate(() => 'window.location.reload();');
-      await frame.waitForSelector('button[title="Tracking Protection"]', {
+      await frame.waitForSelector('button[title="Site Boundaries"]', {
         timeout: 5000,
       });
-      const trackingProtectionOpener = await frame.$(
-        'button[title="Tracking Protection"]'
+      const siteBoundariesOpener = await frame.$(
+        'button[title="Site Boundaries"]'
       );
 
-      await trackingProtectionOpener?.click();
+      await siteBoundariesOpener?.click();
 
       const elementTextToClick = 'Cookies';
       await this.clickMatchingElement(frame, 'p', elementTextToClick);
