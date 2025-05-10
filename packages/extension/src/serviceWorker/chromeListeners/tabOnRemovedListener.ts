@@ -16,13 +16,19 @@
 /**
  * Internal dependencies
  */
+import ARAStore from '../../store/ARAStore';
 import dataStore from '../../store/dataStore';
+import PAStore from '../../store/PAStore';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
+import cookieStore from '../../store/cookieStore';
 
 export const onTabRemovedListener = async (tabId: number) => {
-  dataStore.deinitialiseVariablesForTab(tabId.toString());
+  dataStore.removeTabData(tabId.toString());
+  PAStore.removeTabData(tabId.toString());
+  ARAStore.removeTabData(tabId.toString());
+  cookieStore.removeTabData(tabId.toString());
 
-  dataStore?.removeTabData(tabId);
+  dataStore?.removeTabData(tabId.toString());
   const tabs = await chrome.tabs.query({});
   const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
 

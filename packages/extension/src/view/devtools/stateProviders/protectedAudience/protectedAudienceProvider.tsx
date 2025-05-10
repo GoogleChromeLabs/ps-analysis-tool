@@ -65,6 +65,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['noBids']
   >({});
 
+  const [sortOrder, setSortOrder] =
+    useState<ProtectedAudienceContextType['state']['sortOrder']>('asc');
+
   const [adsAndBidders, setAdsAndBidders] = useState<
     ProtectedAudienceContextType['state']['adsAndBidders']
   >({});
@@ -244,7 +247,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         incomingMessageType === 'AUCTION_EVENTS' &&
         message.payload.auctionEvents
       ) {
-        if (message.payload.tabId === tabId) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
@@ -370,6 +373,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     [reshapeAuctionEvents]
   );
+
   const onCommittedNavigationListener = useCallback(
     ({
       frameId,
@@ -416,19 +420,22 @@ const Provider = ({ children }: PropsWithChildren) => {
         noBids,
         adsAndBidders,
         selectedAdUnit,
+        sortOrder,
       },
       actions: {
         setSelectedAdUnit,
+        setSortOrder,
       },
     };
   }, [
-    selectedAdUnit,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,
-    noBids,
     receivedBids,
+    noBids,
     adsAndBidders,
+    selectedAdUnit,
+    sortOrder,
   ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;

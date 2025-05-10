@@ -44,14 +44,23 @@ const Auctions = () => {
     },
   });
 
-  const { auctionEvents, adsAndBidders, receivedBids, noBids, isMultiSeller } =
-    useProtectedAudience(({ state }) => ({
-      auctionEvents: state.auctionEvents ?? {},
-      adsAndBidders: state.adsAndBidders,
-      isMultiSeller: state.isMultiSellerAuction,
-      receivedBids: state.receivedBids,
-      noBids: state.noBids,
-    }));
+  const {
+    auctionEvents,
+    adsAndBidders,
+    receivedBids,
+    noBids,
+    isMultiSeller,
+    sortOrder,
+    setSortOrder,
+  } = useProtectedAudience(({ state, actions }) => ({
+    auctionEvents: state.auctionEvents ?? {},
+    adsAndBidders: state.adsAndBidders,
+    isMultiSeller: state.isMultiSellerAuction,
+    receivedBids: state.receivedBids,
+    noBids: state.noBids,
+    sortOrder: state.sortOrder,
+    setSortOrder: actions.setSortOrder,
+  }));
 
   useEffect(() => {
     if (
@@ -127,6 +136,8 @@ const Auctions = () => {
           auctionEvents={auctionData}
           sidebarData={sidebarData}
           setSidebarData={setSidebarData}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
       </div>
     </div>

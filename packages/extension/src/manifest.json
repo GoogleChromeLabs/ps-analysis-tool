@@ -30,6 +30,10 @@
   "content_scripts": [
     {
       "js": ["content-script.js"],
+      "matches": ["*://*/*"]
+    },
+    {
+      "js": ["js-cookie-content-script.js"],
       "matches": ["*://*/*"],
       "all_frames": true
     }

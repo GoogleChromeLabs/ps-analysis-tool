@@ -14,6 +14,7 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:jsdoc/recommended",
+    "plugin:storybook/recommended",
     "plugin:storybook/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -49,7 +50,12 @@
   "rules": {
     "array-callback-return": "error",
     "block-scoped-var": "error",
-    "complexity": ["error", { "max": 20 }],
+    "complexity": [
+      "error",
+      {
+        "max": 20
+      }
+    ],
     "consistent-return": "error",
     "curly": ["error", "all"],
     "default-case": "error",
