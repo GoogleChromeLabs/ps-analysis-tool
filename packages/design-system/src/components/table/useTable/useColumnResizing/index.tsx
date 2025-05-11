@@ -78,6 +78,8 @@ const useColumnResizing = (
   const onMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
     if (target?.dataset?.columnResizeHandle) {
+      event.stopPropagation();
+      event.preventDefault();
       setIsResizing(true);
       const columnId = target.dataset.columnResizeHandle;
       startX.current = event.screenX;
@@ -239,10 +241,19 @@ const useColumnResizing = (
 
   useEffect(() => {
     const tableContainer = tableContainerRef?.current;
+
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target?.dataset?.columnResizeHandle) {
+        e.stopPropagation();
+      }
+    };
+
     if (tableContainer) {
       tableContainer.addEventListener('mousemove', onMouseMove);
       tableContainer.addEventListener('mouseup', onMouseUp);
       tableContainer.addEventListener('mousedown', onMouseDown);
+      tableContainer.addEventListener('click', handleClick);
       window.addEventListener('resize', setColumnWidths);
     }
     return () => {
@@ -250,6 +261,7 @@ const useColumnResizing = (
         tableContainer.removeEventListener('mousemove', onMouseMove);
         tableContainer.removeEventListener('mouseup', onMouseUp);
         tableContainer.removeEventListener('mousedown', onMouseDown);
+        tableContainer.removeEventListener('click', handleClick);
         window.removeEventListener('resize', setColumnWidths);
       }
     };
