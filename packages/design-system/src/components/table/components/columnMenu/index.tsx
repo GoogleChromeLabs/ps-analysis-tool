@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
 import { I18n } from '@google-psat/i18n';
@@ -51,15 +51,14 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
   const [startAnimation, setStartAnimation] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     document.body.style.overflow = open ? 'auto' : 'hidden';
     setStartAnimation(true);
-
     timeoutRef.current = setTimeout(() => {
       onClose(!open);
       setStartAnimation(false);
     }, 100);
-  };
+  }, [onClose, open]);
 
   useEffect(() => {
     return () => {
@@ -69,11 +68,30 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
     };
   }, []);
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        event.target instanceof HTMLElement &&
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target)
+      ) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [handleClose]);
+
   return (
     <>
       {open &&
         createPortal(
           <div
+            ref={wrapperRef}
             className={classNames(
               'transition duration-100',
               startAnimation ? 'opacity-0' : 'opacity-100'
@@ -81,7 +99,7 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
             data-testid="column-menu"
           >
             <div
-              className="absolute z-100 text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl w-screen max-w-[13rem] p-1.5 mr-2 divide-y divide-neutral-300 dark:divide-neutral-500 max-h-[78vh] overflow-auto bg-stone-200 dark:bg-neutral-700 shadow-3xl"
+              className="absolute z-[100] text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl w-screen max-w-[13rem] p-1.5 mr-2 divide-y divide-neutral-300 dark:divide-neutral-500 max-h-[78vh] overflow-auto bg-stone-200 dark:bg-neutral-700 shadow-3xl"
               style={{
                 left: 'min( calc( 100vw - 15rem),' + position.x + 'px )',
                 top: position.y + 'px',
