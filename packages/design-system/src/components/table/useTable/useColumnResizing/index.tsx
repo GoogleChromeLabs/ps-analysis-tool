@@ -75,7 +75,7 @@ const useColumnResizing = (
     ColumnsSizing | undefined
   >(undefined);
 
-  const onMouseDown = useCallback((event: MouseEvent) => {
+  const handleMouseDown = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
     if (target?.dataset?.columnResizeHandle) {
       event.stopPropagation();
@@ -91,7 +91,7 @@ const useColumnResizing = (
     }
   }, []);
 
-  const onMouseMove = useCallback(
+  const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       if (!isResizing || !currentColumn.current) {
         return;
@@ -125,7 +125,7 @@ const useColumnResizing = (
     [isResizing]
   );
 
-  const onMouseUp = useCallback(() => {
+  const handleMouseUp = useCallback(() => {
     if (!isResizing || !currentColumn.current) {
       return;
     }
@@ -150,6 +150,23 @@ const useColumnResizing = (
     }
     currentColumn.current = null;
   }, [isResizing]);
+
+  const handleClick = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (target?.dataset?.columnResizeHandle) {
+      event.stopPropagation();
+    }
+  };
+
+  const handleMouseOut = useCallback(
+    (event: MouseEvent) => {
+      if (!event.relatedTarget && isResizing) {
+        currentColumn.current = null;
+        handleMouseUp();
+      }
+    },
+    [isResizing, handleMouseUp]
+  );
 
   const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
     ({ actions }) => ({
@@ -240,40 +257,28 @@ const useColumnResizing = (
   }, [areSettingsLoaded, persistedColumnsSizing]);
 
   useEffect(() => {
-    const tableContainer = tableContainerRef?.current;
-
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target?.dataset?.columnResizeHandle) {
-        e.stopPropagation();
-      }
-    };
-
-    const handleMouseOut = (event: MouseEvent) => {
-      if (!event.relatedTarget) {
-        currentColumn.current = null;
-      }
-    };
-
-    if (tableContainer) {
-      tableContainer.addEventListener('mousemove', onMouseMove);
-      tableContainer.addEventListener('mouseup', onMouseUp);
-      tableContainer.addEventListener('mousedown', onMouseDown);
-      tableContainer.addEventListener('click', handleClick);
-    }
-    window.addEventListener('resize', setColumnWidths);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('click', handleClick);
     document.addEventListener('mouseout', handleMouseOut);
+    window.addEventListener('resize', setColumnWidths);
     return () => {
-      if (tableContainer) {
-        tableContainer.removeEventListener('mousemove', onMouseMove);
-        tableContainer.removeEventListener('mouseup', onMouseUp);
-        tableContainer.removeEventListener('mousedown', onMouseDown);
-        tableContainer.removeEventListener('click', handleClick);
-      }
-      window.removeEventListener('resize', setColumnWidths);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('click', handleClick);
       document.removeEventListener('mouseout', handleMouseOut);
+      window.removeEventListener('resize', setColumnWidths);
     };
-  }, [onMouseDown, onMouseMove, onMouseUp, setColumnWidths, tableContainerRef]);
+  }, [
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseOut,
+    handleMouseUp,
+    setColumnWidths,
+    tableContainerRef,
+  ]);
 
   useEffect(() => {
     if (isResizing) {
