@@ -249,21 +249,29 @@ const useColumnResizing = (
       }
     };
 
+    const handleMouseOut = (event: MouseEvent) => {
+      if (!event.relatedTarget) {
+        currentColumn.current = null;
+      }
+    };
+
     if (tableContainer) {
       tableContainer.addEventListener('mousemove', onMouseMove);
       tableContainer.addEventListener('mouseup', onMouseUp);
       tableContainer.addEventListener('mousedown', onMouseDown);
       tableContainer.addEventListener('click', handleClick);
-      window.addEventListener('resize', setColumnWidths);
     }
+    window.addEventListener('resize', setColumnWidths);
+    document.addEventListener('mouseout', handleMouseOut);
     return () => {
       if (tableContainer) {
         tableContainer.removeEventListener('mousemove', onMouseMove);
         tableContainer.removeEventListener('mouseup', onMouseUp);
         tableContainer.removeEventListener('mousedown', onMouseDown);
         tableContainer.removeEventListener('click', handleClick);
-        window.removeEventListener('resize', setColumnWidths);
       }
+      window.removeEventListener('resize', setColumnWidths);
+      document.removeEventListener('mouseout', handleMouseOut);
     };
   }, [onMouseDown, onMouseMove, onMouseUp, setColumnWidths, tableContainerRef]);
 
