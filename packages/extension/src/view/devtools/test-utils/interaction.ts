@@ -91,6 +91,12 @@ export class Interaction {
 
       const elementTextToClick = 'Cookies';
       await this.clickMatchingElement(frame, 'p', elementTextToClick);
+
+      await frame.waitForSelector('button[title="Site Boundaries"]', {
+        timeout: 5000,
+      });
+      const cookiesOpener = await frame.$('button[title="Cookies"]');
+      cookiesOpener?.click();
     }
 
     return frame;
