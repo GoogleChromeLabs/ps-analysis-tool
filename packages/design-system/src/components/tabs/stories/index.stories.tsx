@@ -125,3 +125,54 @@ export const Primary: StoryObj<typeof meta> = {
     </div>
   ),
 };
+
+const secondaryMockData: TabItems[keyof TabItems] = [
+  {
+    title: 'Tab 1',
+    content: {
+      Element: () => <div>Tab 1 Content</div>,
+      props: {},
+      className: '',
+    },
+    addSpacer: false,
+  },
+  {
+    title: 'Tab 2',
+    content: {
+      Element: () => <div>Tab 2 Content</div>,
+      props: {},
+      className: '',
+    },
+    addSpacer: false,
+  },
+  {
+    title: 'Tab 3',
+    content: {
+      Element: () => <div>Tab 3 Content</div>,
+      props: {},
+      className: '',
+    },
+    addSpacer: false,
+  },
+  {
+    title: 'Tab 4',
+    content: {
+      Element: () => <div>Tab 4 Content</div>,
+      props: {},
+      className: '',
+    },
+    addSpacer: false,
+  },
+];
+
+export const Secondary: StoryObj<typeof meta> = {
+  args: {},
+  render: (args) => (
+    <div className="w-full">
+      {/* @ts-ignore */}
+      <TabsProvider items={secondaryMockData} name="Secondary Tabs">
+        <Tabs {...args} />
+      </TabsProvider>
+    </div>
+  ),
+};

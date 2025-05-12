@@ -138,10 +138,11 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
             <div
               key={group}
               className={classNames(
-                'flex border-b-2',
+                'flex',
                 {
-                  'border-steel-blue': group === activeGroup,
-                  'border-steel-blue/40': group !== activeGroup,
+                  'border-b-2 border-bright-navy-blue': group === activeGroup,
+                  'border-b-2 border-steel-blue/50':
+                    group !== activeGroup && Object.keys(data).length > 1,
                 },
                 {
                   'gap-2': Object.keys(data).length > 1,
@@ -194,7 +195,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                         <React.Fragment key={index}>
                           <div
                             className={classNames(
-                              'flex duration-200 ease-in-out',
+                              'flex duration-200 ease-in-out relative',
                               {
                                 ' text-bright-navy-blue dark:text-jordy-blue font-medium':
                                   index === activeTab,
@@ -216,7 +217,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                             </button>
                             <div
                               className={classNames(
-                                'h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
+                                'absolute right-0 top-0 h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
                                 {
                                   'bg-transparent': !isHighlighted,
                                 },
