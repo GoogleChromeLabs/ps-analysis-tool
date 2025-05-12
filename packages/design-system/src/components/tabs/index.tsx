@@ -18,7 +18,7 @@
  * External dependencies
  */
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -72,18 +72,50 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     [activeTab, titles.length, setActiveTab]
   );
 
-  const [groupsClickedState, setGroupsClickedState] = useState(
-    Object.keys(groupedTitles).reduce((acc, group) => {
-      acc[group] = false;
-      return acc;
-    }, {} as Record<string, boolean>)
-  );
+  const [groupsClickedState, setGroupsClickedState] = useState<
+    Record<string, { hidden: boolean; animating: boolean }>
+  >({});
+
+  useEffect(() => {
+    setGroupsClickedState(
+      Object.keys(groupedTitles).reduce((acc, group) => {
+        acc[group] = {
+          hidden: false,
+          animating: false,
+        };
+        return acc;
+      }, {} as Record<string, { hidden: boolean; animating: boolean }>)
+    );
+  }, [groupedTitles]);
 
   const handleGroupClick = useCallback((group: string) => {
-    setGroupsClickedState((prevState) => ({
-      ...prevState,
-      [group]: !prevState[group],
-    }));
+    let shouldUnhideInstantly = false;
+
+    setGroupsClickedState((prevState) => {
+      if (prevState[group]?.hidden) {
+        shouldUnhideInstantly = true;
+      }
+
+      return {
+        ...prevState,
+        [group]: {
+          hidden: shouldUnhideInstantly ? false : prevState[group].hidden,
+          animating: shouldUnhideInstantly ? false : true,
+        },
+      };
+    });
+
+    setTimeout(() => {
+      setGroupsClickedState((prevState) => ({
+        ...prevState,
+        [group]: {
+          hidden: shouldUnhideInstantly
+            ? prevState[group].hidden
+            : !prevState[group].hidden,
+          animating: false,
+        },
+      }));
+    }, 300);
   }, []);
 
   return (
@@ -104,74 +136,88 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
             <div key={group} className="flex">
               {Object.keys(data).length > 1 && (
                 <button
-                  className="bg-steel-blue/20 border border-steel-blue rounded-md flex items-center justify-center px-2 py-0.5 mb-1 mr-2 font-medium text-xs text-raisin-black"
+                  className="bg-steel-blue/20 border border-steel-blue rounded-md flex items-center justify-center px-2 py-0.5 mb-1 mr-2 font-medium text-xs text-raisin-black hover:opacity-70 active:opacity-100"
                   onClick={() => handleGroupClick(group)}
                 >
                   {group}
                 </button>
               )}
-              <div
-                className={classNames('flex', {
-                  'hidden transition-all duration-300 ease-in-out':
-                    groupsClickedState[group],
-                })}
-              >
-                {Object.values(data).map(({ title, index }) => {
-                  const addSpacer = shouldAddSpacer(index);
-                  const isHighlighted = isTabHighlighted(index);
-                  const isNumber = typeof isHighlighted === 'number';
-                  let count: string | number = '';
+              {!groupsClickedState[group]?.hidden && (
+                <div
+                  className={classNames(
+                    'transition-[width] duration-300 ease-in-out',
+                    groupsClickedState[group]?.animating ? 'w-0' : 'w-fit'
+                  )}
+                >
+                  <div
+                    className={classNames(
+                      'flex duration-200 ease-in-out',
+                      groupsClickedState[group]?.animating
+                        ? 'opacity-0 -translate-x-10'
+                        : 'opacity-100 translate-x-0'
+                    )}
+                  >
+                    {Object.values(data).map(({ title, index }) => {
+                      const addSpacer = shouldAddSpacer(index);
+                      const isHighlighted = isTabHighlighted(index);
+                      const isNumber = typeof isHighlighted === 'number';
+                      let count: string | number = '';
 
-                  if (isNumber) {
-                    count = isHighlighted > 9 ? '9+' : isHighlighted;
-                  }
+                      if (isNumber) {
+                        count = isHighlighted > 9 ? '9+' : isHighlighted;
+                      }
 
-                  return (
-                    <React.Fragment key={index}>
-                      <div
-                        className={classNames('flex', {
-                          'gap-2': Object.keys(data).length > 1,
-                        })}
-                      >
-                        <button
-                          onClick={() => setActiveTab(index)}
-                          onKeyDown={handleKeyDown}
-                          className={classNames(
-                            'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
-                            {
-                              'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
-                                index === activeTab,
-                            },
-                            {
-                              'border-transparent text-raisin-black dark:text-bright-gray':
-                                index !== activeTab,
-                            }
-                          )}
-                        >
-                          {title}
-                        </button>
-                        <div
-                          className={classNames(
-                            'h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
-                            {
-                              'bg-transparent': !isHighlighted,
-                            },
-                            {
-                              'bg-dark-blue dark:bg-celeste': isHighlighted,
-                            },
-                            {
-                              'h-4 w-4': isNumber,
-                            }
-                          )}
-                        >
-                          {count}
-                        </div>
-                      </div>
-                      {addSpacer && <div className="flex-1" />}
-                    </React.Fragment>
-                  );
-                })}
-              </div>
+                      return (
+                        <React.Fragment key={index}>
+                          <div
+                            className={classNames(
+                              'flex duration-200 ease-in-out',
+                              {
+                                'gap-2': Object.keys(data).length > 1,
+                              }
+                            )}
+                          >
+                            <button
+                              onClick={() => setActiveTab(index)}
+                              onKeyDown={handleKeyDown}
+                              className={classNames(
+                                'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
+                                {
+                                  'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
+                                    index === activeTab,
+                                },
+                                {
+                                  'border-transparent text-raisin-black dark:text-bright-gray':
+                                    index !== activeTab,
+                                }
+                              )}
+                            >
+                              {title}
+                            </button>
+                            <div
+                              className={classNames(
+                                'h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
+                                {
+                                  'bg-transparent': !isHighlighted,
+                                },
+                                {
+                                  'bg-dark-blue dark:bg-celeste': isHighlighted,
+                                },
+                                {
+                                  'h-4 w-4': isNumber,
+                                }
+                              )}
+                            >
+                              {count}
+                            </div>
+                          </div>
+                          {addSpacer && <div className="flex-1" />}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               {groupIdx !== Object.keys(groupedTitles).length - 1 &&
                 Object.keys(data).length > 1 && (
                   <div className="border-r border-gray-400 dark:border-gray-700 mb-2 ml-4" />
