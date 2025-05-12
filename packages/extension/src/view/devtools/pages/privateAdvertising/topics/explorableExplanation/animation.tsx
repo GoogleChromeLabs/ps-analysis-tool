@@ -88,7 +88,6 @@ const Animation = ({
     };
 
     const p = node.current ? new p5(tAnimation, node.current) : null;
-
     return () => {
       p?.remove();
     };

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { createContext, noop } from '@google-psat/common';
+import { createContext, noop, type Context } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -106,4 +106,5 @@ const initialState: TableStoreContext = {
   },
 };
 
-export const TableContext = createContext<TableStoreContext>(initialState);
+export const TableContext: Context<TableStoreContext> =
+  createContext<TableStoreContext>(initialState);
