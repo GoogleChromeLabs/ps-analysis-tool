@@ -224,7 +224,7 @@ const useColumnResizing = (
       return;
     }
 
-    Array.from(allHandles).forEach((handle) => {
+    Array.from(allHandles).forEach((handle, index) => {
       const columnId = (handle as HTMLElement).dataset.columnResizeId;
       if (!columnId) {
         return;
@@ -234,8 +234,15 @@ const useColumnResizing = (
         return;
       }
 
+      if (index === allHandles.length - 1) {
+        setColumnWidth(columnElement, '100%');
+      }
+
       // don't set any width if it's already set
-      if (columnElement.style.maxWidth !== '') {
+      if (
+        columnElement.style.maxWidth !== '' &&
+        columnElement.style.maxWidth !== '100%'
+      ) {
         columnsSizing[columnId] = getColumnWidth(columnElement);
         return;
       }

@@ -179,7 +179,7 @@ const Table = ({
             position={columnPosition}
           />
           <table
-            className="h-full w-full table-auto border-separate border-spacing-0 relative"
+            className="h-full table-fixed border-separate border-spacing-0 relative"
             style={{
               minWidth: minWidth ?? '70rem',
             }}
