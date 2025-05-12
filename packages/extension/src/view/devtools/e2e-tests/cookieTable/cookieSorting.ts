@@ -61,17 +61,6 @@ describe('Validate the Cookies sort option', () => {
       throw new Error('Failed to navigate to cookie frame.');
     }
 
-    // Navigate to the Cookies tab (updated for new sidebar structure)
-    await frame.waitForSelector('button[title="Site Boundaries"]', {
-      timeout: 10000,
-    });
-    const siteBoundariesButton = await frame.$(
-      'button[title="Site Boundaries"]'
-    );
-    await siteBoundariesButton?.click();
-    await interaction.delay(1000);
-    await interaction.clickMatchingElement(frame, 'p', 'Cookies');
-
     await interaction.delay(1000);
     await interaction.clickOnColumn(frame, 'Name');
     await interaction.delay(1000);
