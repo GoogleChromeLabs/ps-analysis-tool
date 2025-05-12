@@ -49,6 +49,7 @@ const TableBody = ({
     conditionalTableRowClassesHandler,
     hasVerticalBar,
     getVerticalBarColorHash,
+    isResizing,
   } = useTable(({ state, actions }) => ({
     rows: state.rows,
     columns: state.columns,
@@ -59,6 +60,7 @@ const TableBody = ({
       actions.conditionalTableRowClassesHandler,
     hasVerticalBar: actions.hasVerticalBar,
     getVerticalBarColorHash: actions.getVerticalBarColorHash,
+    isResizing: state.isResizing,
   }));
 
   const tableBodyRef = useRef(null);
@@ -129,6 +131,10 @@ const TableBody = ({
           verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
           getRowObjectKey={getRowObjectKey}
           onRowClick={() => {
+            if (isResizing) {
+              return;
+            }
+
             onRowClick(row?.originalData);
             setIsRowFocused(true);
           }}

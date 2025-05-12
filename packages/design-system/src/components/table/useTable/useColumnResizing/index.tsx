@@ -151,13 +151,6 @@ const useColumnResizing = (
     currentColumn.current = null;
   }, [isResizing]);
 
-  const handleClick = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-    if (target?.dataset?.columnResizeHandle) {
-      event.stopPropagation();
-    }
-  };
-
   const handleMouseOut = useCallback(
     (event: MouseEvent) => {
       if (!event.relatedTarget && isResizing) {
@@ -260,14 +253,12 @@ const useColumnResizing = (
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('click', handleClick);
     document.addEventListener('mouseout', handleMouseOut);
     window.addEventListener('resize', setColumnWidths);
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('click', handleClick);
       document.removeEventListener('mouseout', handleMouseOut);
       window.removeEventListener('resize', setColumnWidths);
     };
