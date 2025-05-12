@@ -145,14 +145,16 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                     group !== activeGroup && Object.keys(data).length > 1,
                 },
                 {
-                  'gap-2': Object.keys(data).length > 1,
+                  'gap-4':
+                    Object.keys(data).length > 1 &&
+                    !groupsClickedState[group]?.animating,
                 }
               )}
             >
               {Object.keys(data).length > 1 && (
                 <button
                   className={classNames(
-                    'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 mr-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black',
+                    'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black',
                     {
                       'bg-steel-blue/50': group === activeGroup,
                       'bg-steel-blue/20': group !== activeGroup,
