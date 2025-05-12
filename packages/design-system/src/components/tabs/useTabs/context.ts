@@ -26,6 +26,7 @@ import { noop } from '../../../utils';
 export interface TabsStoreContext {
   state: {
     activeTab: number;
+    activeGroup: string | null;
     groupedTitles: Record<
       string,
       {
@@ -57,6 +58,7 @@ export interface TabsStoreContext {
 const initialState: TabsStoreContext = {
   state: {
     activeTab: 0,
+    activeGroup: null,
     groupedTitles: {},
     titles: [],
     panel: {

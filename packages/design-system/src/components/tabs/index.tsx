@@ -33,6 +33,7 @@ interface TabsProps {
 const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
   const {
     activeTab,
+    activeGroup,
     setActiveTab,
     groupedTitles,
     titles,
@@ -40,6 +41,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     shouldAddSpacer,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
+    activeGroup: state.activeGroup,
     setActiveTab: actions.setActiveTab,
     groupedTitles: state.groupedTitles,
     titles: state.titles,
@@ -131,12 +133,30 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
           fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
-        {Object.entries(groupedTitles).map(([group, data], groupIdx) => {
+        {Object.entries(groupedTitles).map(([group, data]) => {
           return (
-            <div key={group} className="flex">
+            <div
+              key={group}
+              className={classNames(
+                'flex border-b-2',
+                {
+                  'border-steel-blue': group === activeGroup,
+                  'border-steel-blue/40': group !== activeGroup,
+                },
+                {
+                  'gap-2': Object.keys(data).length > 1,
+                }
+              )}
+            >
               {Object.keys(data).length > 1 && (
                 <button
-                  className="bg-steel-blue/20 border border-steel-blue rounded-md flex items-center justify-center px-2 py-0.5 mb-1 mr-2 font-medium text-xs text-raisin-black hover:opacity-70 active:opacity-100"
+                  className={classNames(
+                    'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 mr-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black',
+                    {
+                      'bg-steel-blue/50': group === activeGroup,
+                      'bg-steel-blue/20': group !== activeGroup,
+                    }
+                  )}
                   onClick={() => handleGroupClick(group)}
                 >
                   {group}
@@ -151,7 +171,10 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                 >
                   <div
                     className={classNames(
-                      'flex duration-200 ease-in-out',
+                      'flex items-center duration-200 ease-in-out',
+                      {
+                        'gap-2': Object.keys(data).length > 1,
+                      },
                       groupsClickedState[group]?.animating
                         ? 'opacity-0 -translate-x-10'
                         : 'opacity-100 translate-x-0'
@@ -173,7 +196,12 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                             className={classNames(
                               'flex duration-200 ease-in-out',
                               {
-                                'gap-2': Object.keys(data).length > 1,
+                                ' text-bright-navy-blue dark:text-jordy-blue font-medium':
+                                  index === activeTab,
+                              },
+                              {
+                                'text-raisin-black dark:text-bright-gray':
+                                  index !== activeTab,
                               }
                             )}
                           >
@@ -181,15 +209,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                               onClick={() => setActiveTab(index)}
                               onKeyDown={handleKeyDown}
                               className={classNames(
-                                'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-none text-nowrap',
-                                {
-                                  'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
-                                    index === activeTab,
-                                },
-                                {
-                                  'border-transparent text-raisin-black dark:text-bright-gray':
-                                    index !== activeTab,
-                                }
+                                'px-1.5 hover:opacity-80 outline-none text-nowrap'
                               )}
                             >
                               {title}
@@ -218,10 +238,6 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                   </div>
                 </div>
               )}
-              {groupIdx !== Object.keys(groupedTitles).length - 1 &&
-                Object.keys(data).length > 1 && (
-                  <div className="border-r border-gray-400 dark:border-gray-700 mb-2 ml-4" />
-                )}
             </div>
           );
         })}

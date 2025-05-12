@@ -51,8 +51,40 @@ export const TabsProvider = ({
     }
   }, [items]);
 
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveGroup(Object.keys(groupedItems)[0] ?? null);
+  }, [groupedItems]);
+
+  const [activeTab, _setActiveTab] = useState(0);
   const activeTabRef = useRef(activeTab);
+
+  const setActiveTab = useCallback(
+    (tab: number) => {
+      activeTabRef.current = tab;
+      _setActiveTab(tab);
+
+      let trackedIndex = 0;
+      const group = Object.entries(groupedItems).find(([, _items]) => {
+        const groupTitles = _items.map((item) => {
+          return {
+            title: item.title,
+            index: trackedIndex++,
+          };
+        });
+
+        return groupTitles.some(({ index }) => index === tab);
+      });
+
+      if (group) {
+        setActiveGroup(group[0]);
+      } else {
+        setActiveGroup(null);
+      }
+    },
+    [groupedItems]
+  );
 
   const tabItems = useMemo(() => {
     return Object.values(groupedItems).flat();
@@ -171,6 +203,7 @@ export const TabsProvider = ({
       value={{
         state: {
           activeTab,
+          activeGroup,
           groupedTitles,
           titles,
           panel,
