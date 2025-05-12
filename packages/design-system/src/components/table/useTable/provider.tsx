@@ -24,11 +24,13 @@ import { getValueByKey } from '@google-psat/common';
  */
 import useColumnSorting from './useColumnSorting';
 import useColumnVisibility from './useColumnVisibility';
-import useColumnResizing from './useColumnResizing';
 import useFiltering from './useFiltering';
 import useSearch from './useSearch';
 import { TableContext } from './context';
 import { TableRow, TableProviderProps } from './types';
+import useColumnResizing from './useColumnResizing';
+
+const MIN_COLUMN_WIDTH = 80;
 
 export const TableProvider = ({
   data,
@@ -44,15 +46,14 @@ export const TableProvider = ({
   hasVerticalBar,
   getVerticalBarColorHash,
   isRowSelected,
+  minColumnWidth = MIN_COLUMN_WIDTH,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
   const commonKey = useMemo(() => {
     if (!tablePersistentSettingsKey) {
       return undefined;
     }
-
     const keys = tablePersistentSettingsKey.split('#');
-
     return keys[0];
   }, [tablePersistentSettingsKey]);
 
@@ -65,12 +66,9 @@ export const TableProvider = ({
     isColumnHidden,
   } = useColumnVisibility(tableColumns, commonKey);
 
-  const allTableColumnsKeys = useMemo(() => {
-    return tableColumns.map(({ accessorKey }) => accessorKey);
-  }, [tableColumns]);
-
-  const { columns, tableContainerRef, onMouseDown, isResizing } =
-    useColumnResizing(visibleColumns, allTableColumnsKeys, commonKey);
+  const { isResizing, setColumnWidths, tableContainerRef } = useColumnResizing(
+    tablePersistentSettingsKey
+  );
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, tableColumns, commonKey);
@@ -105,7 +103,7 @@ export const TableProvider = ({
         originalData: _data,
       } as TableRow;
 
-      columns.forEach((column) => {
+      visibleColumns.forEach((column) => {
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
           value: () => column.cell(value, _data) as React.JSX.Element,
@@ -116,7 +114,7 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-  }, [searchFilteredData, columns]);
+  }, [searchFilteredData, visibleColumns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -132,22 +130,28 @@ export const TableProvider = ({
       onRowClick(null);
     }
   }, [isRowSelected, onRowClick, rows]);
+
+  useEffect(() => {
+    setColumnWidths();
+  }, [setColumnWidths, rows]);
+
   return (
     <TableContext.Provider
       value={{
         state: {
-          columns,
+          columns: visibleColumns,
+          tableContainerRef,
           hideableColumns,
           rows,
           sortKey,
           sortOrder,
           areAllColumnsVisible,
-          tableContainerRef,
           isResizing,
           filters,
           selectedFilters,
           isFiltering,
           searchValue,
+          minColumnWidth,
         },
         actions: {
           setSortKey,
@@ -156,7 +160,6 @@ export const TableProvider = ({
           toggleVisibility,
           showColumn,
           isColumnHidden,
-          onMouseDown,
           toggleFilterSelection,
           toggleSelectAllFilter,
           resetFilters,
