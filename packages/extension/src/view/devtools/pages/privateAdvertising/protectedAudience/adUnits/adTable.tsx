@@ -77,7 +77,6 @@ const AdTable = ({
           </button>
         ),
         enableHiding: false,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Ad Container Sizes',
@@ -108,7 +107,6 @@ const AdTable = ({
 
           return aSizes > bSizes ? 1 : -1;
         },
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Bidders',
@@ -126,7 +124,6 @@ const AdTable = ({
 
           return aBidders > bBidders ? 1 : -1;
         },
-        widthWeightagePercentage: 60,
       },
     ],
     [selectedAdUnit, setIsInspecting, setSelectedAdUnit, isEE]

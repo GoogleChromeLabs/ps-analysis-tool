@@ -61,7 +61,7 @@ describe('Validate the Cookies description', () => {
     if (frame) {
       await setTimeout(2000);
 
-      const rowElement = await frame.$('div[data-testid="body-row"]');
+      const rowElement = await frame.$('tr[data-testid="body-row"]');
 
       // Click on the row element
       if (rowElement) {
