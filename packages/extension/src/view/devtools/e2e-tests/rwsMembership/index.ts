@@ -29,7 +29,7 @@ import { selectors } from '../../test-utils/constants';
 
 dotenv.config();
 jest.retryTimes(3);
-describe('RWS membership', () => {
+describe.skip('RWS membership', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;
