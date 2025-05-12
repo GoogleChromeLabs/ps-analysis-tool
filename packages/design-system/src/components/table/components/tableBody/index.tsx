@@ -134,7 +134,6 @@ const TableBody = ({
             if (isResizing) {
               return;
             }
-
             onRowClick(row?.originalData);
             setIsRowFocused(true);
           }}
@@ -146,6 +145,9 @@ const TableBody = ({
       <tr
         className="grow outline-0 divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {
+          if (isResizing) {
+            return;
+          }
           setIsRowFocused(false);
         }}
       >
