@@ -80,7 +80,7 @@ const BodyRow = ({
           : 'bg-gainsboro dark:bg-outer-space'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+        : 'bg-blueberry text-white dark:bg-quartz dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
 
