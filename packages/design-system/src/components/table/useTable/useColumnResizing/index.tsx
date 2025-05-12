@@ -235,14 +235,11 @@ const useColumnResizing = (
       }
 
       if (index === allHandles.length - 1) {
-        setColumnWidth(columnElement, '100%');
+        columnElement.style.minWidth = '100%';
       }
 
       // don't set any width if it's already set
-      if (
-        columnElement.style.maxWidth !== '' &&
-        columnElement.style.maxWidth !== '100%'
-      ) {
+      if (columnElement.style.maxWidth !== '') {
         columnsSizing[columnId] = getColumnWidth(columnElement);
         return;
       }
