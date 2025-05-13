@@ -28,7 +28,7 @@ import { Interaction } from '../../test-utils/interaction';
 
 dotenv.config();
 jest.retryTimes(3);
-describe.skip('RWS membership', () => {
+describe('RWS membership', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;

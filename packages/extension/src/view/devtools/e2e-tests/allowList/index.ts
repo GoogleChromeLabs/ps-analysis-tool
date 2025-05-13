@@ -43,7 +43,7 @@ describe('Allow Listing', () => {
     await puppeteer.close();
   }, 40000);
 
-  test.skip('Should be able to allow list domain.', async () => {
+  test('Should be able to allow list domain.', async () => {
     await puppeteer.navigateToURL(
       page,
       'https://www.hindustantimes.com/?psat_cdp=on'

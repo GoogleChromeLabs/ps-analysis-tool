@@ -28,7 +28,7 @@ import { Interaction } from '../../test-utils/interaction';
 
 dotenv.config();
 jest.retryTimes(3);
-describe.skip('Validate the Cookies filter option', () => {
+describe('Validate the Cookies filter option', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;
