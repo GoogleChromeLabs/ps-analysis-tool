@@ -276,9 +276,9 @@ describe('CookieTab', () => {
     const columnMenuOverlay = await screen.findByTestId('column-menu-overlay');
     fireEvent.click(columnMenuOverlay);
 
-    setTimeout(() => {
+    await waitFor(() => {
       expect(screen.queryByTestId('column-menu')).not.toBeInTheDocument();
-    }, 1000);
+    });
   });
 
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
