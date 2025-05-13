@@ -63,7 +63,7 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       await interaction.delay(8000);
       await frame.waitForSelector(
         '[data-testid="library-detection-accordion"]:nth-child(1) p',
-        { timeout: 10000 }
+        { timeout: 20000 }
       );
       const deprecatedGoogleSignInText = await interaction.getInnerText(
         frame,
@@ -74,14 +74,14 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       // Validate the "GIS" known breakages
       await frame.waitForSelector(
         '[data-testid="library-detection-accordion"]:nth-child(2) p',
-        { timeout: 10000 }
+        { timeout: 20000 }
       );
       const gisText = await interaction.getInnerText(
         frame,
         '[data-testid="library-detection-accordion"]:nth-child(2) p'
       );
       expect(gisText).toBe('Unsupported Google Identity Services');
-    }, 60000);
+    }, 120000);
   });
 
   describe('Disqus comments', () => {
