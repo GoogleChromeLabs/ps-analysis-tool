@@ -63,7 +63,7 @@ const TableBody = ({
     isResizing: state.isResizing,
   }));
 
-  const tableBodyRef = useRef(null);
+  const tableBodyRef = useRef<HTMLTableSectionElement | null>(null);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
@@ -108,10 +108,7 @@ const TableBody = ({
   );
 
   return (
-    <tbody
-      ref={tableBodyRef}
-      className="h-full overflow-x-hidden overflow-y-auto"
-    >
+    <tbody ref={tableBodyRef} className="h-full overflow-hidden">
       {rows.map((row, index) => (
         <BodyRow
           shouldScroll={shouldScroll && rows.length - 1 === index}
