@@ -74,14 +74,14 @@ describe('Settings Page', () => {
       await frame.click('button[data-test-id="button"]');
       await interaction.delay(3000);
 
-      await frame.waitForSelector('button[title="Tracking Protection"]', {
+      await frame.waitForSelector('button[title="Site Boundaries"]', {
         timeout: 5000,
       });
-      const trackingProtectionOpener = await frame.$(
-        'button[title="Tracking Protection"]'
+      const siteBoundariesOpener = await frame.$(
+        'button[title="Site Boundaries"]'
       );
 
-      await trackingProtectionOpener?.click();
+      await siteBoundariesOpener?.click();
 
       const elementTextToClick = 'Cookies';
       await interaction.clickMatchingElement(frame, 'p', elementTextToClick);

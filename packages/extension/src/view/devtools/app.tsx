@@ -113,7 +113,7 @@ const App: React.FC = () => {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
           newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
-            SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+            SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
           ].children[SIDEBAR_ITEMS_KEYS.COOKIES].dropdownOpen =
             data?.cookieDropdownOpen;
           return newSidebarData;
