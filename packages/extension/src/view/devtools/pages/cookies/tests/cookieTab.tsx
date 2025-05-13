@@ -310,7 +310,7 @@ describe('CookieTab', () => {
     render(
       <CookieDetails
         isUsingCDP={false}
-        selectedFrameCookie={{ 1: firstCookie }}
+        selectedFrameCookie={{ '1': firstCookie }}
       />
     );
     const card = await screen.findByTestId('cookie-card');
@@ -327,7 +327,7 @@ describe('CookieTab', () => {
       <CookieDetails
         isUsingCDP={false}
         selectedFrameCookie={{
-          1: mockResponse.tabCookies[known1pCookie.name],
+          '1': mockResponse.tabCookies[known1pCookie.name],
         }}
       />
     );
@@ -345,7 +345,7 @@ describe('CookieTab', () => {
       <CookieDetails
         isUsingCDP={false}
         selectedFrameCookie={{
-          1: mockResponse.tabCookies[uncategorized1pCookie.name],
+          '1': mockResponse.tabCookies[uncategorized1pCookie.name],
         }}
       />
     );
@@ -380,7 +380,7 @@ describe('CookieTab', () => {
       <CookieDetails
         isUsingCDP={false}
         selectedFrameCookie={{
-          1: mockResponse.tabCookies[known3pCookieWithValue.name],
+          '1': mockResponse.tabCookies[known3pCookieWithValue.name],
         }}
       />
     );
