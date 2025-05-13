@@ -100,15 +100,5 @@ describe('Allow Listing', () => {
       );
       expect(divTextContent).toContain('Allow Listed');
     }
-
-    // Navigate to the Cookies tab (updated for new sidebar structure)
-    await frame.waitForSelector('button[title="Site Boundaries"]', {
-      timeout: 10000,
-    });
-    const siteBoundariesButton = await frame.$(
-      'button[title="Site Boundaries"]'
-    );
-    await siteBoundariesButton?.click();
-    await interaction.clickMatchingElement(frame, 'p', 'Cookies');
   }, 120000);
 });
