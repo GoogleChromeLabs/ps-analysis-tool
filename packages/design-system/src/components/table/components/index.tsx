@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -55,7 +55,6 @@ const Table = ({
   shouldScroll = false,
 }: TableProps) => {
   const {
-    tableContainerRef,
     filters,
     isSelectAllFilterSelected,
     toggleFilterSelection,
@@ -67,8 +66,8 @@ const Table = ({
     setSearchValue,
     exportTableData,
     count,
+    tableContainerRef,
   } = useTable(({ state, actions }) => ({
-    tableContainerRef: state.tableContainerRef,
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
     toggleFilterSelection: actions.toggleFilterSelection,
@@ -80,6 +79,7 @@ const Table = ({
     setSearchValue: actions.setSearchValue,
     exportTableData: actions.exportTableData,
     count: state.count,
+    tableContainerRef: state.tableContainerRef,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -156,7 +156,7 @@ const Table = ({
           </div>
         </>
       )}
-      <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
+      <div className="w-full flex-1 h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz overflow-hidden">
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"
@@ -176,15 +176,15 @@ const Table = ({
         )}
         <div
           ref={tableContainerRef}
-          className="relative h-full w-full overflow-auto"
+          className="relative h-full w-full flex-1 overflow-auto"
         >
           <ColumnMenu
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}
             position={columnPosition}
           />
-          <div
-            className="h-full w-full overflow-hidden flex flex-col"
+          <table
+            className="h-full min-w-full table-auto border-separate border-spacing-0 relative"
             style={{
               minWidth: minWidth ?? '70rem',
             }}
@@ -202,11 +202,11 @@ const Table = ({
               rowHeightClass={rowHeightClass}
               shouldScroll={shouldScroll}
             />
-          </div>
+          </table>
         </div>
       </div>
     </div>
   );
 };
 
-export default Table;
+export default memo(Table);

@@ -180,13 +180,11 @@ const TriggerRegistrations = () => {
         header: 'Destination',
         accessorKey: 'destination',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Reporting Origin',
         accessorKey: 'reportingOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Registration Time',
@@ -194,19 +192,16 @@ const TriggerRegistrations = () => {
         cell: (_, details) =>
           calculateRegistrationDate((details as TriggerRegistration)?.time),
         enableHiding: false,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Event Level Result',
         accessorKey: 'eventLevel',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Aggregetable Result',
         accessorKey: 'aggregatable',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
     ],
     []
