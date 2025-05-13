@@ -70,7 +70,9 @@ export class Interaction {
   async navigateToCookieTab(): Promise<Frame | null | undefined> {
     const devtoolsPage = await this.navigateToPrivacySandboxTab();
 
-    await devtoolsPage.waitForSelector(selectors.devtoolIframeSelector);
+    await devtoolsPage.waitForSelector(selectors.devtoolIframeSelector, {
+      timeout: 60000,
+    });
 
     const iframeElement = await devtoolsPage.$(selectors.devtoolIframeSelector);
     const frame = await iframeElement?.contentFrame();

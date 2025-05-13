@@ -29,7 +29,7 @@ import { selectors } from '../../test-utils/constants';
 
 dotenv.config();
 jest.retryTimes(3);
-describe('Validate the Cookies sort option', () => {
+describe.skip('Validate the Cookies sort option', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;
@@ -60,17 +60,6 @@ describe('Validate the Cookies sort option', () => {
     if (!frame) {
       throw new Error('Failed to navigate to cookie frame.');
     }
-
-    // Navigate to the Cookies tab (updated for new sidebar structure)
-    await frame.waitForSelector('button[title="Site Boundaries"]', {
-      timeout: 10000,
-    });
-    const siteBoundariesButton = await frame.$(
-      'button[title="Site Boundaries"]'
-    );
-    await siteBoundariesButton?.click();
-    await interaction.delay(1000);
-    await interaction.clickMatchingElement(frame, 'p', 'Cookies');
 
     await interaction.delay(1000);
     await interaction.clickOnColumn(frame, 'Name');

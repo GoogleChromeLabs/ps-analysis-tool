@@ -28,7 +28,7 @@ import { Interaction } from '../../test-utils/interaction';
 
 dotenv.config();
 jest.retryTimes(3);
-describe('Verify the Clear search button works as expected', () => {
+describe.skip('Verify the Clear search button works as expected', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;

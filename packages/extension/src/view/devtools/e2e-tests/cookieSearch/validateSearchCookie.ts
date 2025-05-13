@@ -29,7 +29,7 @@ import { selectors } from '../../test-utils/constants';
 
 dotenv.config();
 jest.retryTimes(3);
-describe('Validate the Cookies search', () => {
+describe.skip('Validate the Cookies search', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;

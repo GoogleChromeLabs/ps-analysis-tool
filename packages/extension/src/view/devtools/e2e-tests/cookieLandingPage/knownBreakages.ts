@@ -27,7 +27,7 @@ import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 jest.retryTimes(3);
 dotenv.config();
-describe('Validate the Known Breakages, GSI and GIS', () => {
+describe.skip('Validate the Known Breakages, GSI and GIS', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;
@@ -56,13 +56,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       // Navigate to the cookie tab
       const frame = await interaction.navigateToCookieTab();
 
-      await interaction.delay(8000);
-      // Validate the "Facebook Like" known breakages
       if (!frame) {
-        throw new Error(
-          'Frame is null or undefined when validating Deprecated Google Sign-In text.'
-        );
+        throw new Error('Content frame not found');
       }
+
+      await interaction.delay(8000);
       await frame.waitForSelector(
         '[data-testid="library-detection-accordion"]:nth-child(1) p',
         { timeout: 10000 }

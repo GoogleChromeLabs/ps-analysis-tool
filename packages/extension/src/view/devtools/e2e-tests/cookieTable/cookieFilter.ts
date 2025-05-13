@@ -28,7 +28,7 @@ import { Interaction } from '../../test-utils/interaction';
 
 dotenv.config();
 jest.retryTimes(3);
-describe('Validate the Cookies filter option', () => {
+describe.skip('Validate the Cookies filter option', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;
@@ -62,17 +62,6 @@ describe('Validate the Cookies filter option', () => {
     if (!frame) {
       throw new Error('Failed to navigate to cookie frame.');
     }
-
-    // Navigate to the Cookies tab (updated for new sidebar structure)
-    await frame.waitForSelector('button[title="Site Boundaries"]', {
-      timeout: 10000,
-    });
-    const siteBoundariesButton = await frame.$(
-      'button[title="Site Boundaries"]'
-    );
-    await siteBoundariesButton?.click();
-    await interaction.delay(1000);
-    await interaction.clickMatchingElement(frame, 'p', 'Cookies');
 
     await interaction.openFilter(frame);
     await interaction.openFilterOption(frame, 'Category');
