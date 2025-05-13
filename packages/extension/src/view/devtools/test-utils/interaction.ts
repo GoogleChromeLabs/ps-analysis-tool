@@ -70,7 +70,9 @@ export class Interaction {
   async navigateToCookieTab(): Promise<Frame | null | undefined> {
     const devtoolsPage = await this.navigateToPrivacySandboxTab();
 
-    await devtoolsPage.waitForSelector(selectors.devtoolIframeSelector);
+    await devtoolsPage.waitForSelector(selectors.devtoolIframeSelector, {
+      timeout: 60000,
+    });
 
     const iframeElement = await devtoolsPage.$(selectors.devtoolIframeSelector);
     const frame = await iframeElement?.contentFrame();
@@ -91,6 +93,12 @@ export class Interaction {
 
       const elementTextToClick = 'Cookies';
       await this.clickMatchingElement(frame, 'p', elementTextToClick);
+
+      await frame.waitForSelector('button[title="Site Boundaries"]', {
+        timeout: 5000,
+      });
+      const cookiesOpener = await frame.$('button[title="Cookies"]');
+      cookiesOpener?.click();
     }
 
     return frame;

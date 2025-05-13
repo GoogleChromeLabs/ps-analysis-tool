@@ -25,7 +25,6 @@ import { Page } from 'puppeteer';
  */
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
-import { selectors } from '../../test-utils/constants';
 
 dotenv.config();
 jest.retryTimes(3);
@@ -60,19 +59,6 @@ describe.skip('RWS membership', () => {
     if (!frame) {
       return;
     }
-
-    const openSiteBoundariesTab = async () => {
-      const dropdown = await frame.waitForSelector(
-        selectors.siteBoundariesSelector,
-        {
-          timeout: 10000,
-        }
-      );
-      await dropdown?.click();
-    };
-
-    await openSiteBoundariesTab();
-
     // Check if RWS is present and click on it.
     await interaction.clickMatchingElement(frame, 'p', 'Related Website Sets');
     await interaction.clickMatchingElement(frame, 'button', 'Membership');
