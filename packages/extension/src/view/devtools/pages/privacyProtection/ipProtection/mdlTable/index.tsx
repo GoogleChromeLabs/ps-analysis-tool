@@ -25,6 +25,7 @@ import {
   type TableFilter,
   type TableColumn,
   type TableRow,
+  Link,
 } from '@google-psat/design-system';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
@@ -63,10 +64,18 @@ const MDLTable = () => {
       );
 
       setTableData(() =>
-        mdlData.map((item: string[]) => ({
-          domain: item[0],
-          owner: item[1],
-        }))
+        mdlData.map((item: string[]) => {
+          let owner = item[1];
+
+          if (item[1].includes('PSL Domain')) {
+            owner = 'PSL Domain';
+          }
+
+          return {
+            domain: item[0],
+            owner,
+          };
+        })
       );
     })();
   }, []);
@@ -81,7 +90,21 @@ const MDLTable = () => {
       {
         header: 'Owner',
         accessorKey: 'owner',
-        cell: (info) => info,
+        cell: (info) => {
+          if (info === 'PSL Domain') {
+            return (
+              <Link
+                href="https://en.wikipedia.org/wiki/Public_Suffix_List"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PSL Domain
+              </Link>
+            );
+          }
+
+          return info;
+        },
       },
     ],
     []
