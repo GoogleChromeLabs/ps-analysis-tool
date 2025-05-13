@@ -19,6 +19,7 @@
  */
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,7 @@ import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
 import TableChipsBar from './filtersSidebar/chips';
 import TableFiltersSidebar from './filtersSidebar';
-
+import './table.css';
 interface TableProps {
   selectedKey: string | undefined | null;
   isFiltersSidebarOpen?: boolean;
@@ -67,6 +68,8 @@ const Table = ({
     exportTableData,
     count,
     tableContainerRef,
+    loadMoreData,
+    hasMoreData,
   } = useTable(({ state, actions }) => ({
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
@@ -80,6 +83,8 @@ const Table = ({
     exportTableData: actions.exportTableData,
     count: state.count,
     tableContainerRef: state.tableContainerRef,
+    loadMoreData: actions.loadMoreData,
+    hasMoreData: state.hasMoreData,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -183,26 +188,37 @@ const Table = ({
             onClose={setShowColumnsMenu}
             position={columnPosition}
           />
-          <table
-            className="h-full min-w-full table-auto border-separate border-spacing-0 relative"
-            style={{
-              minWidth: minWidth ?? '70rem',
-            }}
-            ref={tableRef}
-          >
-            <TableHeader
-              setColumnPosition={setColumnPosition}
-              onRightClick={handleRightClick}
-              setIsRowFocused={setIsRowFocused}
-            />
-            <TableBody
-              isRowFocused={isRowFocused}
-              setIsRowFocused={setIsRowFocused}
-              selectedKey={selectedKey}
-              rowHeightClass={rowHeightClass}
-              shouldScroll={shouldScroll}
-            />
-          </table>
+          <div id="scrollableTableBody" className="!h-full !w-full">
+            <InfiniteScroll
+              dataLength={rows.length}
+              scrollableTarget="scrollableTableBody"
+              next={loadMoreData}
+              hasMore={hasMoreData}
+              loader={'Loading...'}
+              className="!h-full !w-full"
+            >
+              <table
+                className="h-full w-full table-auto border-separate border-spacing-0 relative"
+                style={{
+                  minWidth: minWidth ?? '70rem',
+                }}
+                ref={tableRef}
+              >
+                <TableHeader
+                  setColumnPosition={setColumnPosition}
+                  onRightClick={handleRightClick}
+                  setIsRowFocused={setIsRowFocused}
+                />
+                <TableBody
+                  isRowFocused={isRowFocused}
+                  setIsRowFocused={setIsRowFocused}
+                  selectedKey={selectedKey}
+                  rowHeightClass={rowHeightClass}
+                  shouldScroll={shouldScroll}
+                />
+              </table>
+            </InfiniteScroll>
+          </div>
         </div>
       </div>
     </div>

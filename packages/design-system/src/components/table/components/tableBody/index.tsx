@@ -17,7 +17,6 @@
 /**
  * External dependencies.
  */
-import InfiniteScroll from 'react-infinite-scroll-component';
 import React, { memo, useCallback, useRef } from 'react';
 
 /**
@@ -50,8 +49,6 @@ const TableBody = ({
     conditionalTableRowClassesHandler,
     hasVerticalBar,
     getVerticalBarColorHash,
-    loadMoreData,
-    hasMoreData,
     isResizing,
   } = useTable(({ state, actions }) => ({
     rows: state.rows,
@@ -63,8 +60,6 @@ const TableBody = ({
       actions.conditionalTableRowClassesHandler,
     hasVerticalBar: actions.hasVerticalBar,
     getVerticalBarColorHash: actions.getVerticalBarColorHash,
-    loadMoreData: actions.loadMoreData,
-    hasMoreData: state.hasMoreData,
     isResizing: state.isResizing,
   }));
 
@@ -115,50 +110,42 @@ const TableBody = ({
   return (
     <tbody
       ref={tableBodyRef}
-      className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
-      id="scrollableTableBody"
+      className="h-full overflow-x-hidden overflow-y-auto"
     >
-      <InfiniteScroll
-        dataLength={rows.length}
-        scrollableTarget="scrollableTableBody"
-        next={loadMoreData}
-        hasMore={hasMoreData}
-        loader={'Loading...'}
-      >
-        {rows.map((row, index) => (
-          <BodyRow
-            shouldScroll={shouldScroll && rows.length - 1 === index}
-            key={index}
-            index={index}
-            row={row}
-            columns={columns}
-            selectedKey={selectedKey}
-            isRowFocused={isRowFocused}
-            getExtraClasses={() => {
-              return (
-                conditionalTableRowClassesHandler?.(row, isRowFocused, index) ??
-                ''
-              );
-            }}
-            hasVerticalBar={hasVerticalBar?.(row) ?? false}
-            verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
-            getRowObjectKey={getRowObjectKey}
-            onRowClick={() => {
-              if (isResizing) {
-                return;
-              }
+      {rows.map((row, index) => (
+        <BodyRow
+          shouldScroll={shouldScroll && rows.length - 1 === index}
+          key={index}
+          index={index}
+          row={row}
+          columns={columns}
+          selectedKey={selectedKey}
+          isRowFocused={isRowFocused}
+          getExtraClasses={() => {
+            return (
+              conditionalTableRowClassesHandler?.(row, isRowFocused, index) ??
+              ''
+            );
+          }}
+          hasVerticalBar={hasVerticalBar?.(row) ?? false}
+          verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
+          getRowObjectKey={getRowObjectKey}
+          onRowClick={() => {
+            if (isResizing) {
+              return;
+            }
 
-              onRowClick(row?.originalData);
-              setIsRowFocused(true);
-            }}
-            onKeyDown={handleKeyDown}
-            onRowContextMenu={onRowContextMenu}
-            rowHeightClass={rowHeightClass}
-          />
-        ))}
-      </InfiniteScroll>
+            onRowClick(row?.originalData);
+            setIsRowFocused(true);
+          }}
+          onKeyDown={handleKeyDown}
+          onRowContextMenu={onRowContextMenu}
+          rowHeightClass={rowHeightClass}
+        />
+      ))}
+
       <tr
-        className="grow outline-0 flex divide-x divide-american-silver dark:divide-quartz"
+        className="outline-0 divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {
           if (isResizing) {
             return;
