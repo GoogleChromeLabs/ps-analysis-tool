@@ -76,7 +76,14 @@ const Animation = ({
       setCurrentVisitIndexCallback(() => animation.getCurrentVisitIndex);
       animation.start();
     }
-  }, [animation, setCurrentVisitIndexCallback]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animation]);
+
+  useEffect(() => {
+    if (animation) {
+      animation.setCurrentVisitIndex(visitIndexStart);
+    }
+  }, [animation, visitIndexStart]);
 
   // initialize animation instance
   useEffect(() => {
@@ -134,9 +141,9 @@ const Animation = ({
     animation?.setInteractiveMode(isInteractive);
   }, [isInteractive, animation]);
 
-  useEffect(() => {
-    animation?.setVisitIndexStart(visitIndexStart);
-  }, [visitIndexStart, animation]);
+  // useEffect(() => {
+  //   animation?.setVisitIndexStart(visitIndexStart);
+  // }, [visitIndexStart, animation]);
 
   useEffect(() => {
     if (isCompleted) {

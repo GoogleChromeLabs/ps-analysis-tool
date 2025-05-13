@@ -44,8 +44,7 @@ export const InfoBox = ({
   p.fill(245);
   p.stroke(0);
   p.strokeWeight(1);
-  p.rect(position.x, position.y + diameter / 2 + 150, 280, 200, 10, 10, 10, 10);
-
+  p.rect(position.x, position.y + diameter / 2 + 175, 280, 250, 10, 10, 10, 10);
   p.stroke(255);
   p.strokeWeight(1);
   p.fill(0);
@@ -115,7 +114,7 @@ export const clearInfoBox = (
   p.fill(255);
   p.stroke(255);
   p.rectMode(p.CENTER);
-  p.rect(position.x, position.y + diameter / 2 + 150, 300, 250);
+  p.rect(position.x, position.y + diameter / 2 + 175, 300, 250);
   p.strokeWeight(5);
   p.line(
     position.x,

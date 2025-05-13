@@ -87,7 +87,7 @@ class TopicsAnimation {
     this.setHighlightAdTech = setHighlightAdTech;
     this.onReady = onReady;
     if (visitIndexStart) {
-      this.visitIndexStart = visitIndexStart;
+      this.visitIndex = visitIndexStart;
     }
     p.preload = this.preload;
     p.setup = this.setup;
@@ -441,7 +441,7 @@ class TopicsAnimation {
     const x = p.mouseX;
     const y = p.mouseY;
 
-    let inspectedCircleIndex = -1;
+    let inspectedCircleIndex = this.inspectedCircleIndex ?? -1;
     this.showHandCursor = false;
 
     Object.values(this.circlePositions).forEach((position, index) => {
@@ -499,7 +499,6 @@ class TopicsAnimation {
 
   public reset = () => {
     this.isInited = false;
-    this.visitIndex = 0;
     this.inspectedCircleIndex = -1;
     this.circlePositions = {};
     this.smallCirclePositions = {};
@@ -511,6 +510,10 @@ class TopicsAnimation {
     return this.visitIndex;
   };
 
+  public setCurrentVisitIndex = (visitIndex: number) => {
+    this.visitIndex = visitIndex;
+  };
+
   public updateSpeedMultiplier = (speedMultiplier: number) => {
     this.speedMultiplier = speedMultiplier;
   };
@@ -520,10 +523,6 @@ class TopicsAnimation {
     if (this.isInteractive) {
       this.playing = false;
     }
-  };
-
-  public setVisitIndexStart = (visitIndexStart: number) => {
-    this.visitIndexStart = visitIndexStart;
   };
 
   public setEpoch = (epoch: Epoch[]) => {
