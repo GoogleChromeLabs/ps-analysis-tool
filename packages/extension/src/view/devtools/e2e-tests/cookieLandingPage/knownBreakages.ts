@@ -25,8 +25,8 @@ import { Page } from 'puppeteer';
  */
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
-jest.retryTimes(3);
 dotenv.config();
+jest.retryTimes(3, { logErrorsBeforeRetry: true });
 describe('Validate the Known Breakages, GSI and GIS', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
