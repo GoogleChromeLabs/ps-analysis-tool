@@ -21,7 +21,7 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
 
-const epochTransitionDelay = 2000;
+const epochTransitionDelay = 1500;
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -60,15 +60,15 @@ const Animation = ({
   const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
 
   const _handleUserVisit = useCallback(
-    (visitIndex: number, updateTopics = true) => {
+    (visitIndex: number) => {
       setTimeout(
         () => {
-          handleUserVisit(visitIndex, updateTopics);
+          handleUserVisit(visitIndex, !isCompleted);
         },
         visitIndex === epoch.length ? epochTransitionDelay : 0
       );
     },
-    [epoch.length, handleUserVisit]
+    [epoch.length, handleUserVisit, isCompleted]
   );
 
   useEffect(() => {
@@ -96,9 +96,7 @@ const Animation = ({
         p,
         epoch,
         siteAdTechs,
-        handleUserVisit: (visitIndex: number) => {
-          _handleUserVisit(visitIndex, !isCompleted);
-        },
+        handleUserVisit: _handleUserVisit,
         setHighlightAdTech,
         onReady: () => {
           if (loadingTextCoverRef.current) {
@@ -117,7 +115,6 @@ const Animation = ({
   }, [
     _handleUserVisit,
     epoch,
-    isCompleted,
     setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
@@ -146,7 +143,7 @@ const Animation = ({
 
   useEffect(() => {
     if (isCompleted) {
-      animation?.setCurrentVisitIndex(epoch.length - 1);
+      animation?.setCurrentVisitIndex(epoch.length + 1);
     }
   }, [isCompleted, animation, epoch]);
   /* sync animation with state end */
