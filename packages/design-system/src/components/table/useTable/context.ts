@@ -45,6 +45,8 @@ export interface TableStoreContext {
     selectedFilters: TableFilter;
     isFiltering: TableFilteringOutput['isFiltering'];
     searchValue: TableSearchOutput['searchValue'];
+    hasMoreData: boolean;
+    count: number;
     tableContainerRef: UseColumnResizing['tableContainerRef'];
     minColumnWidth: number;
   };
@@ -67,6 +69,7 @@ export interface TableStoreContext {
     exportTableData?: TableProviderProps['exportTableData'];
     hasVerticalBar?: TableProviderProps['hasVerticalBar'];
     getVerticalBarColorHash?: (row: TableRow) => string;
+    loadMoreData: () => void;
   };
 }
 
@@ -83,6 +86,8 @@ const initialState: TableStoreContext = {
     selectedFilters: {},
     isFiltering: false,
     searchValue: '',
+    hasMoreData: false,
+    count: 0,
     tableContainerRef: null,
     minColumnWidth: 0,
   },
@@ -102,6 +107,7 @@ const initialState: TableStoreContext = {
     onRowContextMenu: noop,
     getRowObjectKey: () => '',
     getVerticalBarColorHash: () => '',
+    loadMoreData: noop,
   },
 };
 
