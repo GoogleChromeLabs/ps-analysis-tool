@@ -146,6 +146,11 @@ const Animation = ({
       animation?.setCurrentVisitIndex(epoch.length + 1);
     }
   }, [isCompleted, animation, epoch]);
+
+  useEffect(() => {
+    animation?.setCurrentVisitIndex(0);
+  }, [isInteractive, animation]);
+
   /* sync animation with state end */
 
   return (
