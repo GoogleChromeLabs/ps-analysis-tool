@@ -77,7 +77,6 @@ const AdTable = ({
           </button>
         ),
         enableHiding: false,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Ad Container Sizes',
@@ -108,7 +107,6 @@ const AdTable = ({
 
           return aSizes > bSizes ? 1 : -1;
         },
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Bidders',
@@ -126,7 +124,6 @@ const AdTable = ({
 
           return aBidders > bBidders ? 1 : -1;
         },
-        widthWeightagePercentage: 60,
       },
     ],
     [selectedAdUnit, setIsInspecting, setSelectedAdUnit, isEE]
@@ -206,7 +203,7 @@ const AdTable = ({
           />
         </TableProvider>
       </Resizable>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5 h-full">
             <JsonView src={selectedRow} />

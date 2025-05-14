@@ -67,10 +67,6 @@ export const FEATURE_LIST = [
       'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
     buttons: [
       {
-        name: 'Cookies',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
-      },
-      {
         name: 'IP Protection',
         sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
       },
@@ -94,6 +90,10 @@ export const FEATURE_LIST = [
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description: I18n.getMessage('siteBoundariesDescription'),
     buttons: [
+      {
+        name: 'Cookies',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+      },
       {
         name: I18n.getMessage('chips'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.CHIPS,
@@ -161,7 +161,7 @@ export const FEATURE_LIST = [
         sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
       },
       {
-        name: 'Wiki',
+        name: 'PSAT Wiki',
         sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
       },
     ],
