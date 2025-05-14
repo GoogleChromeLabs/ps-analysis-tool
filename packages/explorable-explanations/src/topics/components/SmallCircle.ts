@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,26 @@
  * limitations under the License.
  */
 
-export const config = {
-  canvas: {
-    height: 600,
-  },
-  timeline: {
-    position: { x: 0, y: 180 },
-    circleProps: {
-      diameter: 50,
-      horizontalSpacing: 150,
-    },
-    stepDelay: 1500,
-    user: {
-      width: 30,
-      height: 30,
-    },
-    circles: [],
-  },
+/**
+ * External dependencies
+ */
+import p5 from 'p5';
+
+/**
+ * Internal dependencies
+ */
+import { getAdtechsColors } from '../utils';
+
+export const SmallCircle = (
+  p: p5,
+  adTech: string,
+  x: number,
+  y: number,
+  size: number
+) => {
+  const adTechColor = getAdtechsColors(p)[adTech];
+  p.push();
+  p.fill(adTechColor);
+  p.circle(x, y, size);
+  p.pop();
 };

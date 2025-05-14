@@ -237,7 +237,7 @@ const IGTable = ({
           />
         </TableProvider>
       </Resizable>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
             <JsonView src={selectedRow} />

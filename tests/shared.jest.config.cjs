@@ -29,10 +29,10 @@ module.exports = {
     'node_modules/(?!(p-queue|p-timeout|d3(-.*)?|internmap|delaunator|robust-predicates|pretty-print-json|queue)/)',
   ],
   moduleNameMapper: {
-    '^@google-psat\\/(.*)': '<rootDir>/packages/$1/src/',
     '\\.svg': join(__dirname, '/svgMock.cjs'),
     '\\.css': join(__dirname, '/styleMock.cjs'),
     '\\.png': join(__dirname, '/imageMock.cjs'),
+    '^@google-psat\\/(.*)': '<rootDir>/packages/$1/src/',
     chalk: require.resolve('chalk'),
     '#ansi-styles': join(
       require.resolve('chalk').split('chalk')[0],
