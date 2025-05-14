@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export const config = {
-  canvas: {
-    height: 600,
-  },
-  timeline: {
-    position: { x: 0, y: 180 },
-    circleProps: {
-      diameter: 50,
-      horizontalSpacing: 150,
-    },
-    stepDelay: 1500,
-    user: {
-      width: 30,
-      height: 30,
-    },
-    circles: [],
-  },
-};
+export * from './Circle';
+export * from './InfoBox';
+export * from './SmallCircle';

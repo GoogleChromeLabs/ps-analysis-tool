@@ -17,13 +17,14 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
-import { topicsAnimation } from '@google-psat/explorable-explanations';
+import { TopicsAnimation } from '@google-psat/explorable-explanations';
+
+const epochTransitionDelay = 2000;
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
-  isAnimating: boolean;
   siteAdTechs: Record<string, string[]>;
   visitIndexStart: number;
   handleUserVisit: (visitIndex: number, updateTopics?: boolean) => void;
@@ -36,11 +37,11 @@ interface AnimationProps {
   setCurrentVisitIndexCallback: React.Dispatch<
     React.SetStateAction<(() => number) | undefined>
   >;
+  isCompleted: boolean;
 }
 
 const Animation = ({
   epoch,
-  isAnimating,
   siteAdTechs,
   visitIndexStart,
   handleUserVisit,
@@ -51,75 +52,111 @@ const Animation = ({
   setPAActiveTab,
   setHighlightAdTech,
   setCurrentVisitIndexCallback,
+  isCompleted,
 }: AnimationProps) => {
   const node = useRef(null);
-  const [togglePlayCallback, setTogglePlayCallback] =
-    useState<(state: boolean) => void>();
-  const [resetCallback, setResetCallback] = useState<() => void>();
-  const [speedMultiplierCallback, setSpeedMultiplierCallback] =
-    useState<(speed: number) => void>();
-  const animationRef = useRef(isAnimating);
+  const loadingTextCoverRef = useRef<HTMLDivElement>(null);
+  // animation instance
+  const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
+
+  const _handleUserVisit = useCallback(
+    (visitIndex: number) => {
+      setTimeout(
+        () => {
+          handleUserVisit(visitIndex, !isCompleted);
+        },
+        visitIndex === epoch.length ? epochTransitionDelay : 0
+      );
+    },
+    [epoch.length, handleUserVisit, isCompleted]
+  );
 
   useEffect(() => {
-    // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
-    animationRef.current = isAnimating;
-  }, [isAnimating, visitIndexStart]);
+    if (animation) {
+      setCurrentVisitIndexCallback(() => animation.getCurrentVisitIndex);
+      animation.start();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animation]);
 
   useEffect(() => {
-    const tAnimation = (p: p5) => {
-      const { togglePlay, reset, updateSpeedMultiplier, getCurrentVisitIndex } =
-        topicsAnimation(
-          p,
-          epoch,
-          animationRef.current,
-          siteAdTechs,
-          visitIndexStart,
-          animationRef.current
-            ? handleUserVisit
-            : (idx: number) => handleUserVisit(idx, false),
-          setHighlightAdTech,
-          isInteractive
-        );
+    if (animation) {
+      animation.setCurrentVisitIndex(visitIndexStart);
+    }
+  }, [animation, visitIndexStart]);
 
-      setTogglePlayCallback(() => togglePlay);
-      setResetCallback(() => reset);
-      setSpeedMultiplierCallback(() => updateSpeedMultiplier);
-      setCurrentVisitIndexCallback(() => getCurrentVisitIndex);
+  // initialize animation instance
+  useEffect(() => {
+    const init = (p: p5) => {
+      // hide loading text cover while animation is loading
+      if (loadingTextCoverRef.current) {
+        loadingTextCoverRef.current.style.display = 'block';
+      }
+      const instance = new TopicsAnimation({
+        p,
+        epoch,
+        siteAdTechs,
+        handleUserVisit: _handleUserVisit,
+        setHighlightAdTech,
+        onReady: () => {
+          if (loadingTextCoverRef.current) {
+            loadingTextCoverRef.current.style.display = 'none';
+          }
+        },
+      });
+      setAnimation(instance);
     };
 
-    const p = node.current ? new p5(tAnimation, node.current) : null;
+    const p = node.current ? new p5(init, node.current) : null;
+
     return () => {
       p?.remove();
     };
   }, [
+    _handleUserVisit,
     epoch,
-    handleUserVisit,
-    isInteractive,
     setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
     siteAdTechs,
-    visitIndexStart,
   ]);
 
+  /* sync animation with state start */
   useEffect(() => {
-    togglePlayCallback?.(isPlaying);
-  }, [isPlaying, togglePlayCallback]);
+    animation?.togglePlay(isPlaying);
+  }, [isPlaying, animation]);
 
   useEffect(() => {
     if (resetAnimation) {
-      resetCallback?.();
+      animation?.reset();
     }
-  }, [resetAnimation, resetCallback]);
+  }, [resetAnimation, animation]);
 
   useEffect(() => {
-    speedMultiplierCallback?.(speedMultiplier);
-  }, [speedMultiplier, speedMultiplierCallback]);
+    animation?.updateSpeedMultiplier(speedMultiplier);
+  }, [speedMultiplier, animation]);
+
+  useEffect(() => {
+    animation?.reset();
+    animation?.setInteractiveMode(isInteractive);
+  }, [isInteractive, animation]);
+
+  // useEffect(() => {
+  //   animation?.setVisitIndexStart(visitIndexStart);
+  // }, [visitIndexStart, animation]);
+
+  useEffect(() => {
+    if (isCompleted) {
+      animation?.setVisitIndexStart(epoch.length - 1);
+    }
+  }, [isCompleted, animation, epoch]);
+  /* sync animation with state end */
 
   return (
     <div className="relative h-full">
       <div ref={node} className="overflow-auto bg-white h-full" />
       <div
+        ref={loadingTextCoverRef}
         id="loading-text-cover"
         className="absolute top-0 left-0 w-20 h-10 bg-white z-50"
       />
@@ -127,4 +164,4 @@ const Animation = ({
   );
 };
 
-export default Animation;
+export default memo(Animation);
