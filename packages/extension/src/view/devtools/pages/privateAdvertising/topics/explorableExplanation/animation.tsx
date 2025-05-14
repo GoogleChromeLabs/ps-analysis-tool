@@ -21,7 +21,7 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
 
-const epochTransitionDelay = 2000;
+const epochTransitionDelay = 1500;
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -141,13 +141,9 @@ const Animation = ({
     animation?.setInteractiveMode(isInteractive);
   }, [isInteractive, animation]);
 
-  // useEffect(() => {
-  //   animation?.setVisitIndexStart(visitIndexStart);
-  // }, [visitIndexStart, animation]);
-
   useEffect(() => {
     if (isCompleted) {
-      animation?.setVisitIndexStart(epoch.length - 1);
+      animation?.setCurrentVisitIndex(epoch.length + 1);
     }
   }, [isCompleted, animation, epoch]);
   /* sync animation with state end */
