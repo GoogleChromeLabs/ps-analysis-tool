@@ -152,7 +152,6 @@ const Animation = ({
       animation?.setCurrentVisitIndex(0);
     }
   }, [isInteractive, animation]);
-
   /* sync animation with state end */
 
   return (
