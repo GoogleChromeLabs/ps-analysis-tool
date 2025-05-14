@@ -51,7 +51,7 @@ const conditionalTableRowClassesHandler = (
           : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
         : isRowFocused
         ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light'
-        : 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
+        : 'bg-gray-300 text-black dark:bg-medium-persian-blue dark:text-chinese-silver'),
     isDomainInAllowList &&
       !isBlocked &&
       (rowKey !== selectedKey
@@ -60,7 +60,7 @@ const conditionalTableRowClassesHandler = (
           : 'dark:bg-jungle-green-light bg-leaf-green-light'
         : isRowFocused
         ? 'bg-selection-green-dark dark:bg-selection-green-light'
-        : 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+        : 'bg-gray-300 text-black dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
   return tableRowClassName;
