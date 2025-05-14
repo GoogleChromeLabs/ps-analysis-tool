@@ -49,7 +49,7 @@ class PrebidInterface {
   /**
    * Prebid interface.
    */
-  prebidInterface: any | null = null;
+  prebidInterface: typeof window.pbjs | null = null;
 
   /**
    * Prebid Data.
@@ -113,13 +113,13 @@ class PrebidInterface {
     //@ts-ignore
     if (
       this.prebidExists &&
-      !Object.keys(window[this.prebidInterface]).includes(propertyName)
+      !Object.keys(this.prebidInterface ?? {}).includes(propertyName)
     ) {
       return;
     }
 
     //@ts-ignore
-    const prebidCaller = window[this.prebidInterface]?.[propertyName];
+    const prebidCaller = this.prebidInterface?.[propertyName];
 
     const prebidData =
       typeof prebidCaller === 'function' ? await prebidCaller() : prebidCaller;
@@ -136,38 +136,32 @@ class PrebidInterface {
   }
 
   initPrebidListener() {
-    //@ts-ignore -- We dont have prebidjs types
-    window[this.prebidInterface]?.onEvent('bidResponse', (args) => {
+    this.prebidInterface?.onEvent('bidResponse', (args) => {
       this.calculateBidResponse(args);
     });
 
-    //@ts-ignore -- We dont have prebidjs types
-    window[this.prebidInterface]?.onEvent('addAdUnits', (args) => {
+    this.prebidInterface?.onEvent('addAdUnits', () => {
+      this.calculateAdUnit();
+    });
+
+    this.prebidInterface?.onEvent('bidWon', (args) => {
       this.calculateAdUnit(args);
     });
 
-    //@ts-ignore -- We dont have prebidjs types
-    window[this.prebidInterface]?.onEvent('bidWon', (args) => {
-      this.calculateAdUnit(args);
-    });
-
-    //@ts-ignore -- We dont have prebidjs types
-    window[this.prebidInterface]?.onEvent('noBid', (args) => {
+    this.prebidInterface?.onEvent('noBid', (args) => {
       this.calculateNoBid(args);
     });
 
-    //@ts-ignore -- We dont have prebidjs types
-    window[this.prebidInterface]?.onEvent('auctionEnd', () => {
+    this.prebidInterface?.onEvent('auctionEnd', () => {
       this.sendInitialData();
     });
   }
 
-  //@ts-ignore -- We dont have prebidjs types
-  calculateBidResponse(bid) {
+  calculateBidResponse(bid: BidResponse) {
     const {
       auctionId,
       adUnitCode,
-      responseTimestamp,
+      responseTimestamp = Date.now(),
       price,
       currency,
       bidder,
@@ -187,8 +181,7 @@ class PrebidInterface {
     });
   }
 
-  //@ts-ignore -- We dont have prebidjs types
-  calculateNoBid(bid) {
+  calculateNoBid(bid: NoBid) {
     if (!this.prebidData.noBids[bid.auctionId]) {
       this.prebidData.noBids[bid.auctionId] = {
         name: '',
@@ -202,12 +195,12 @@ class PrebidInterface {
         adUnitCode: bid.adUnitCode,
         mediaContainerSize: [
           ...(this.prebidData.noBids[bid.auctionId]?.mediaContainerSize ?? []),
-          ...bid.bidder.sizes.filter(
-            (size: number[][]) =>
+          ...(bid?.sizes ?? []).filter(
+            (size: number[]) =>
               this.prebidData.noBids[bid.auctionId] &&
-              !(this.prebidData.noBids[bid.auctionId].mediaContainerSize ?? [])
-                //@ts-ignore -- We dont have prebidjs types
-                .includes(size)
+              !(
+                this.prebidData.noBids[bid.auctionId].mediaContainerSize ?? []
+              ).includes(size)
           ),
         ],
         ownerOrigin: Array.from(
@@ -222,47 +215,43 @@ class PrebidInterface {
     }
   }
 
-  //@ts-ignore -- We dont have prebidjs types
-  calculateAdUnit(bid) {
+  calculateAdUnit(bid?: BidResponse) {
     if (bid) {
-      this.prebidData.adUnits[bid.code] = {
-        ...this.prebidData.adUnits[bid.code],
+      this.prebidData.adUnits[bid.adUnitCode] = {
+        ...this.prebidData.adUnits[bid.adUnitCode],
         winningBid: bid.price,
         bidCurrency: bid.currency,
         winningBidder: bid.bidder,
       };
       return;
     }
-    //@ts-ignore -- We dont have prebidjs types
-    this.prebidData.adUnits = window[this.prebidInterface].adUnits.reduce(
-      (acc: AdsAndBiddersType, adUnit: Record<string, any>) => {
-        if (!adUnit.code) {
+
+    this.prebidData.adUnits =
+      this.prebidInterface?.adUnits?.reduce(
+        (acc: AdsAndBiddersType, adUnit: AdUnit) => {
+          if (!adUnit.code) {
+            return acc;
+          }
+
+          acc[adUnit.code] = {
+            mediaContainerSize:
+              adUnit?.sizes ??
+              (adUnit.mediaTypes?.banner?.sizes ?? []).map((config) => {
+                return config;
+              }),
+            adUnitCode: adUnit.code,
+            bidders: Array.from(
+              new Set<string>(adUnit.bids.map((_bid) => _bid.bidder ?? ''))
+            ),
+            winningBid: 0,
+            bidCurrency: '',
+            winningBidder: '',
+          };
+
           return acc;
-        }
-
-        acc[adUnit.code] = {
-          mediaContainerSize:
-            adUnit?.sizes ??
-            (adUnit.mediaTypes?.banner?.sizeConfig ?? [])
-              //@ts-ignore -- We dont have prebidjs types
-              .map((config) => {
-                return config.sizes;
-              })
-              .flat(),
-          adUnitCode: adUnit.code,
-          bidders: Array.from(
-            //@ts-ignore -- Prebid.js doesnt have
-            new Set<string>(adUnit.bids.map((_bid) => _bid.bidder ?? ''))
-          ),
-          winningBid: 0,
-          bidCurrency: '',
-          winningBidder: '',
-        };
-
-        return acc;
-      },
-      {}
-    );
+        },
+        {}
+      ) ?? {};
   }
 }
 

@@ -35,15 +35,6 @@ class PrebidContentScript {
    */
   tabId: number | null = null;
 
-  /**
-   * Boolean which indicates if prebid exists on the page.
-   */
-  prebidExists: boolean | null = null;
-  /**
-   * Prebid interface.
-   */
-  prebidInterface: any | null = null;
-
   constructor() {
     this.listenToConnection();
   }

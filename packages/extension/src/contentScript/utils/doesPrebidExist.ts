@@ -35,7 +35,9 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
     //@ts-ignore
     const pbjsGlobals = window._pbjsGlobals ?? [];
     if (pbjsGlobals?.length > 0) {
-      pbjsClass.prebidInterface = pbjsGlobals[0];
+      pbjsClass.prebidInterface = window[
+        pbjsGlobals[0]
+      ] as unknown as typeof window.pbjs;
       pbjsClass.prebidExists = true;
       pbjsClass.scanningStatus = true;
       pbjsClass.sendInitialData();
