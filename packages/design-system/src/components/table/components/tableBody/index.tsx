@@ -66,19 +66,23 @@ const TableBody = ({
   const tableBodyRef = useRef<HTMLTableSectionElement | null>(null);
 
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
+    (event: React.KeyboardEvent<HTMLTableRowElement>, index: number) => {
       event.preventDefault();
 
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
+      if (!currentRow) {
+        return;
+      }
+
       let newRowId: string | undefined;
       let rowElement: HTMLTableRowElement | null = null;
 
       if (event.key === 'ArrowUp') {
-        rowElement = currentRow?.previousElementSibling;
+        rowElement = currentRow?.previousElementSibling as HTMLTableRowElement;
         newRowId = rowElement?.id;
       } else if (event.key === 'ArrowDown') {
-        rowElement = currentRow?.nextElementSibling;
+        rowElement = currentRow?.nextElementSibling as HTMLTableRowElement;
         newRowId = rowElement?.id;
 
         if (rows.length === index + 1) {

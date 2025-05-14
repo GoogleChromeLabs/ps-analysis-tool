@@ -37,7 +37,10 @@ interface BodyRowProps {
   verticalBarColorHash: string;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
+  onKeyDown: (
+    e: React.KeyboardEvent<HTMLTableRowElement>,
+    index: number
+  ) => void;
   onRowContextMenu: (
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow
