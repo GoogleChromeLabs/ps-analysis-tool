@@ -148,7 +148,9 @@ const Animation = ({
   }, [isCompleted, animation, epoch]);
 
   useEffect(() => {
-    animation?.setCurrentVisitIndex(0);
+    if (isInteractive) {
+      animation?.setCurrentVisitIndex(0);
+    }
   }, [isInteractive, animation]);
 
   /* sync animation with state end */
