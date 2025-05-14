@@ -60,15 +60,15 @@ const Animation = ({
   const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
 
   const _handleUserVisit = useCallback(
-    (visitIndex: number) => {
+    (visitIndex: number, updateTopics = true) => {
       setTimeout(
         () => {
-          handleUserVisit(visitIndex, !isCompleted);
+          handleUserVisit(visitIndex, updateTopics);
         },
         visitIndex === epoch.length ? epochTransitionDelay : 0
       );
     },
-    [epoch.length, handleUserVisit, isCompleted]
+    [epoch.length, handleUserVisit]
   );
 
   useEffect(() => {
@@ -96,7 +96,9 @@ const Animation = ({
         p,
         epoch,
         siteAdTechs,
-        handleUserVisit: _handleUserVisit,
+        handleUserVisit: (visitIndex: number) => {
+          _handleUserVisit(visitIndex, !isCompleted);
+        },
         setHighlightAdTech,
         onReady: () => {
           if (loadingTextCoverRef.current) {
@@ -115,6 +117,7 @@ const Animation = ({
   }, [
     _handleUserVisit,
     epoch,
+    isCompleted,
     setCurrentVisitIndexCallback,
     setHighlightAdTech,
     setPAActiveTab,
@@ -141,13 +144,9 @@ const Animation = ({
     animation?.setInteractiveMode(isInteractive);
   }, [isInteractive, animation]);
 
-  // useEffect(() => {
-  //   animation?.setVisitIndexStart(visitIndexStart);
-  // }, [visitIndexStart, animation]);
-
   useEffect(() => {
     if (isCompleted) {
-      animation?.setVisitIndexStart(epoch.length - 1);
+      animation?.setCurrentVisitIndex(epoch.length - 1);
     }
   }, [isCompleted, animation, epoch]);
   /* sync animation with state end */

@@ -35,7 +35,7 @@ export type TopicsAnimationProps = {
   epoch: Epoch[];
   isInteractive: boolean;
   siteAdTechs: Record<string, string[]>;
-  handleUserVisit: (visitIndex: number) => void;
+  handleUserVisit: (visitIndex: number, updateTopics?: boolean) => void;
   setHighlightAdTech: (highlightAdTech: string | null) => void;
   visitIndexStart: number;
   onReady?: () => void;
@@ -406,7 +406,7 @@ class TopicsAnimation {
       }
       this.drawInfoBox(lastVisitedIndex, this.epoch[lastVisitedIndex].website);
       if (totalInspectedCircles !== this.inspectedCircles.size) {
-        this.handleUserVisit(lastVisitedIndex);
+        this.handleUserVisit(lastVisitedIndex, false);
       }
     }
 
