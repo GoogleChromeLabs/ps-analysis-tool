@@ -69,6 +69,16 @@ class PrebidInterface {
   };
 
   /**
+   * Update counter
+   */
+  updateCounter = 0;
+
+  /**
+   * SetInterval value
+   */
+  setIntervalValue: NodeJS.Timeout | null = null;
+
+  /**
    * Scanning status
    */
   scanningStatus: any | null = false;
@@ -95,10 +105,31 @@ class PrebidInterface {
       }
     };
 
+    this.setIntervalValue = setInterval(() => {
+      if (this.updateCounter > 0) {
+        this.sendInitialData();
+        this.updateCounter = 0;
+      }
+    }, 1200);
+
     document.addEventListener('unload', () => {
       this.prebidExists = false;
       this.scanningStatus = false;
       this.prebidInterface = null;
+      this.prebidData = {
+        adUnits: {},
+        noBids: {},
+        receivedBids: [],
+        errorEvents: [],
+        auctionEvents: {},
+      };
+
+      if (this.setIntervalValue) {
+        clearInterval(this.setIntervalValue);
+      }
+
+      this.updateCounter = 0;
+      this.setIntervalValue = null;
     });
   }
 
@@ -141,6 +172,7 @@ class PrebidInterface {
   initPrebidListener() {
     this.prebidInterface?.onEvent('addAdUnits', () => {
       this.calculateAdUnit();
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('auctionInit', (args) => {
@@ -148,6 +180,7 @@ class PrebidInterface {
         ...this.prebidData.auctionEvents,
         [args.auctionId]: [args],
       };
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('auctionDebug', (args) => {
@@ -155,32 +188,39 @@ class PrebidInterface {
         type: args.type,
         message: args.arguments,
       });
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('beforeRequestBids', (args) => {
       this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidRequested', (args) => {
       this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('beforeBidderHttp', (args) => {
       this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidResponse', (args) => {
       this.calculateBidResponse(args);
       this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidAccepted', (args) => {
       this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidRejected', (args) => {
       if (args.bid?.auctionId) {
         this.prebidData.auctionEvents[args.bid?.auctionId].push(args);
+        this.updateCounter++;
       }
     });
 
@@ -188,21 +228,25 @@ class PrebidInterface {
       args.forEach((arg) => {
         this.prebidData.auctionEvents[arg.auctionId].push(args);
       });
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidWon', (args) => {
       this.prebidData.auctionEvents[args.auctionId].push(args);
       this.calculateAdUnit(args);
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('noBid', (args) => {
       this.prebidData.auctionEvents[args.auctionId].push(args);
       this.calculateNoBid(args);
+      this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('auctionEnd', (args) => {
       this.prebidData.auctionEvents[args.auctionId].push(args);
       this.sendInitialData();
+      this.updateCounter++;
     });
   }
 
