@@ -98,6 +98,7 @@ const Animation = ({
         siteAdTechs,
         handleUserVisit: _handleUserVisit,
         setHighlightAdTech,
+        visitIndexStart,
         onReady: () => {
           if (loadingTextCoverRef.current) {
             loadingTextCoverRef.current.style.display = 'none';
@@ -119,6 +120,7 @@ const Animation = ({
     setHighlightAdTech,
     setPAActiveTab,
     siteAdTechs,
+    visitIndexStart,
   ]);
 
   /* sync animation with state start */

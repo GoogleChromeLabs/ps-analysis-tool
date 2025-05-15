@@ -207,7 +207,6 @@ const Panel = ({
 
     timeoutRef.current = setTimeout(() => {
       _setReset(false);
-      setPlay(true);
     }, 0);
   }, [setActiveTab, setPAStorage, setTopicsTableData]);
 

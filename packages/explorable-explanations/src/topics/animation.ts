@@ -508,6 +508,7 @@ class TopicsAnimation {
     this.circlePositions = {};
     this.smallCirclePositions = {};
     this.prevVisitedCircleIndex = -1;
+    this.visitIndex = 0;
     this.inspectedCircles.clear();
   };
 
