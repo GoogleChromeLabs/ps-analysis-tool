@@ -49,7 +49,6 @@ const Animation = ({
   resetAnimation,
   speedMultiplier,
   isInteractive,
-  setPAActiveTab,
   setHighlightAdTech,
   setCurrentVisitIndexCallback,
   isCompleted,
@@ -83,7 +82,8 @@ const Animation = ({
     if (animation) {
       animation.setCurrentVisitIndex(visitIndexStart);
     }
-  }, [animation, visitIndexStart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [epoch, visitIndexStart]);
 
   // initialize animation instance
   useEffect(() => {
@@ -113,15 +113,8 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [
-    _handleUserVisit,
-    epoch,
-    setCurrentVisitIndexCallback,
-    setHighlightAdTech,
-    setPAActiveTab,
-    siteAdTechs,
-    visitIndexStart,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_handleUserVisit, epoch, setHighlightAdTech, siteAdTechs]);
 
   /* sync animation with state start */
   useEffect(() => {
@@ -129,7 +122,7 @@ const Animation = ({
   }, [isPlaying, animation]);
 
   useEffect(() => {
-    if (resetAnimation) {
+    if (resetAnimation === true) {
       animation?.reset();
     }
   }, [resetAnimation, animation]);
@@ -139,7 +132,10 @@ const Animation = ({
   }, [speedMultiplier, animation]);
 
   useEffect(() => {
-    animation?.reset();
+    if (isInteractive === true) {
+      animation?.reset();
+      animation?.setCurrentVisitIndex(0);
+    }
     animation?.setInteractiveMode(isInteractive);
   }, [isInteractive, animation]);
 
@@ -148,12 +144,6 @@ const Animation = ({
       animation?.setCurrentVisitIndex(epoch.length + 1);
     }
   }, [isCompleted, animation, epoch]);
-
-  useEffect(() => {
-    if (isInteractive) {
-      animation?.setCurrentVisitIndex(0);
-    }
-  }, [isInteractive, animation]);
   /* sync animation with state end */
 
   return (
