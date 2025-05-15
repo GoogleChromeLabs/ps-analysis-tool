@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { createContext, noop } from '@google-psat/common';
+import { createContext, noop, type Context } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -27,12 +27,11 @@ import {
   TableRow,
   TableProviderProps,
 } from './types';
-import { ColumnResizingOutput } from './useColumnResizing';
 import { ColumnSortingOutput } from './useColumnSorting';
 import { ColumnVisibilityOutput } from './useColumnVisibility';
 import { TableFilteringOutput } from './useFiltering';
 import { TableSearchOutput } from './useSearch';
-
+import { UseColumnResizing } from './useColumnResizing';
 export interface TableStoreContext {
   state: {
     columns: TableColumn[];
@@ -41,12 +40,15 @@ export interface TableStoreContext {
     sortKey: ColumnSortingOutput['sortKey'];
     sortOrder: ColumnSortingOutput['sortOrder'];
     areAllColumnsVisible: ColumnVisibilityOutput['areAllColumnsVisible'];
-    tableContainerRef: ColumnResizingOutput['tableContainerRef'];
-    isResizing: ColumnResizingOutput['isResizing'];
+    isResizing: boolean;
     filters: TableFilter;
     selectedFilters: TableFilter;
     isFiltering: TableFilteringOutput['isFiltering'];
     searchValue: TableSearchOutput['searchValue'];
+    hasMoreData: boolean;
+    count: number;
+    tableContainerRef: UseColumnResizing['tableContainerRef'];
+    minColumnWidth: number;
   };
   actions: {
     setSortKey: ColumnSortingOutput['setSortKey'];
@@ -55,7 +57,6 @@ export interface TableStoreContext {
     toggleVisibility: ColumnVisibilityOutput['toggleVisibility'];
     showColumn: ColumnVisibilityOutput['showColumn'];
     isColumnHidden: ColumnVisibilityOutput['isColumnHidden'];
-    onMouseDown: ColumnResizingOutput['onMouseDown'];
     toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
     toggleSelectAllFilter: TableFilteringOutput['toggleSelectAllFilter'];
     resetFilters: TableFilteringOutput['resetFilters'];
@@ -68,6 +69,7 @@ export interface TableStoreContext {
     exportTableData?: TableProviderProps['exportTableData'];
     hasVerticalBar?: TableProviderProps['hasVerticalBar'];
     getVerticalBarColorHash?: (row: TableRow) => string;
+    loadMoreData: () => void;
   };
 }
 
@@ -79,12 +81,15 @@ const initialState: TableStoreContext = {
     sortKey: '',
     sortOrder: 'asc',
     areAllColumnsVisible: true,
-    tableContainerRef: null,
     isResizing: false,
     filters: {},
     selectedFilters: {},
     isFiltering: false,
     searchValue: '',
+    hasMoreData: false,
+    count: 0,
+    tableContainerRef: null,
+    minColumnWidth: 0,
   },
   actions: {
     setSortKey: noop,
@@ -93,7 +98,6 @@ const initialState: TableStoreContext = {
     toggleVisibility: noop,
     showColumn: noop,
     isColumnHidden: () => false,
-    onMouseDown: noop,
     toggleFilterSelection: noop,
     toggleSelectAllFilter: noop,
     resetFilters: noop,
@@ -103,7 +107,9 @@ const initialState: TableStoreContext = {
     onRowContextMenu: noop,
     getRowObjectKey: () => '',
     getVerticalBarColorHash: () => '',
+    loadMoreData: noop,
   },
 };
 
-export const TableContext = createContext<TableStoreContext>(initialState);
+export const TableContext: Context<TableStoreContext> =
+  createContext<TableStoreContext>(initialState);

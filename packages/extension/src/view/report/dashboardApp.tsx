@@ -25,11 +25,7 @@ import {
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { SiteReport } from '@google-psat/report';
-
-/**
- * Internal dependencies
- */
-import './app.css';
+import '@google-psat/design-system/theme.css';
 
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});

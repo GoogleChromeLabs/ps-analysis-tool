@@ -69,7 +69,10 @@ export class Interaction {
    */
   async navigateToCookieTab(): Promise<Frame | null | undefined> {
     const devtoolsPage = await this.navigateToPrivacySandboxTab();
-    await devtoolsPage.waitForSelector(selectors.devtoolIframeSelector);
+
+    await devtoolsPage.waitForSelector(selectors.devtoolIframeSelector, {
+      timeout: 60000,
+    });
 
     const iframeElement = await devtoolsPage.$(selectors.devtoolIframeSelector);
     const frame = await iframeElement?.contentFrame();
@@ -78,25 +81,24 @@ export class Interaction {
 
     if (frame) {
       frame.evaluate(() => 'window.location.reload();');
-      await frame.waitForSelector('button[title="Tracking Protection"]', {
+      await frame.waitForSelector('button[title="Site Boundaries"]', {
         timeout: 5000,
       });
-      const trackingProtectionOpener = await frame.$(
-        'button[title="Tracking Protection"]'
+      const siteBoundariesOpener = await frame.$(
+        'button[title="Site Boundaries"]'
       );
 
-      await trackingProtectionOpener?.click();
+      await siteBoundariesOpener?.click();
+      await this.delay(1000); // Add a small delay to ensure the submenu is rendered
 
       const elementTextToClick = 'Cookies';
       await this.clickMatchingElement(frame, 'p', elementTextToClick);
 
-      const dropdown = await frame.waitForSelector(
-        selectors.cookieDropDownSelector,
-        {
-          timeout: 10000,
-        }
-      );
-      await dropdown?.click();
+      await frame.waitForSelector('button[title="Site Boundaries"]', {
+        timeout: 5000,
+      });
+      const cookiesOpener = await frame.$('button[title="Cookies"]');
+      cookiesOpener?.click();
     }
 
     return frame;

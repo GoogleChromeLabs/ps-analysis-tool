@@ -34,8 +34,9 @@
     "@google-psat/design-system": "*",
     "@google-psat/i18n": "*",
     "@google-psat/library-detection": "*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "re-resizable": "^6.11.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",

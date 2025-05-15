@@ -48,6 +48,8 @@ export { default as getLegendDescription } from './utils/getLegendDescription';
 export { default as extractCookies } from './utils/extractCookies';
 export { default as extractReportData } from './utils/extractReportData';
 export { default as reshapeCookies } from './utils/reshapeCookies';
+// eslint-disable-next-line import/named
+export { type Context } from 'use-context-selector';
 export * from './utils/sessionStorage';
 export * from './worker/enums';
 export * from './utils/generateReports';

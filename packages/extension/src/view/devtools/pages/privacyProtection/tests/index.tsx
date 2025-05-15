@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 /**
@@ -29,7 +29,6 @@ import PrivacyProtection from '../privacyProtection';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
-import { act } from 'react-dom/test-utils';
 import { I18n } from '@google-psat/i18n';
 import { useSidebar } from '@google-psat/design-system';
 import IPProtection from '../ipProtection';
