@@ -107,8 +107,8 @@ class PAStore extends DataStore {
       //@ts-ignore
       ...globalThis.PSAT,
       unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
-      auctionEvents: this.auctionEvents[tabId],
-      auctionDataForTabId: this.auctionDataForTabId[tabId],
+      auctionEvents: this.auctionEvents,
+      auctionDataForTabId: this.auctionDataForTabId,
     };
   }
 
