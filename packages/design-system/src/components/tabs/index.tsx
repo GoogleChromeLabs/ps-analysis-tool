@@ -80,11 +80,16 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
 
   useEffect(() => {
     setGroupsClickedState(
-      Object.keys(groupedTitles).reduce((acc, group) => {
+      Object.keys(groupedTitles).reduce((acc, group, index) => {
         acc[group] = {
-          hidden: false,
+          hidden: true,
           animating: false,
         };
+
+        if (index === 0) {
+          acc[group].hidden = false;
+        }
+
         return acc;
       }, {} as Record<string, { hidden: boolean; animating: boolean }>)
     );
