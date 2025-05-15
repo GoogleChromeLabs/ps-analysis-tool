@@ -46,6 +46,9 @@ class PrebidContentScript {
     if (chrome.runtime?.id) {
       chrome.runtime.sendMessage({
         setInPagePrebidInterface: true,
+        payload: {
+          url: window.location.href,
+        },
       });
     }
 

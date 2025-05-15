@@ -34,7 +34,8 @@
     },
     {
       "js": ["prebid-content-script.js"],
-      "matches": ["*://*/*"]
+      "matches": ["*://*/*"],
+      "run_at": "document_start"
     },
     {
       "js": ["js-cookie-content-script.js"],

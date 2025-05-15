@@ -28,6 +28,7 @@ import {
   POPUP_OPEN,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
+  TABID_STORAGE,
 } from '../../constants';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
@@ -38,6 +39,29 @@ import PAStore from '../../store/PAStore';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (request: any) => {
+  if (request.setInPagePrebidInterface) {
+    const tabs = await chrome.tabs.query({});
+
+    if (!frames) {
+      return;
+    }
+
+    await Promise.all(
+      tabs.map(async (tab) => {
+        if (!tab.id) {
+          return;
+        }
+        await chrome.tabs.sendMessage(tab.id, {
+          tabId: tab.id,
+          payload: {
+            type: TABID_STORAGE,
+            tabId: tab.id,
+            frameId: 0,
+          },
+        });
+      })
+    );
+  }
   if (!request.type) {
     return;
   }
