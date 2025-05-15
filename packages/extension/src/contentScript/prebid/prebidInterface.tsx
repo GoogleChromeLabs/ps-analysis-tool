@@ -19,7 +19,7 @@
  */
 import type {
   AdsAndBiddersType,
-  NoBidsType,
+  PrebidNoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
 /**
@@ -56,7 +56,7 @@ class PrebidInterface {
    */
   prebidData: {
     adUnits: AdsAndBiddersType;
-    noBids: NoBidsType;
+    noBids: PrebidNoBidsType;
     receivedBids: ReceivedBids[];
     errorEvents: { type: 'WARNING' | 'ERROR' | 'INFO'; message: string[] }[];
     auctionEvents: { [auctionId: string]: any[] };
@@ -96,12 +96,12 @@ class PrebidInterface {
         event.data?.type === SCRIPT_PREBID_INITIAL_SYNC &&
         this.scanningStatus
       ) {
+        this.tabId = event.data.tabId;
         this.sendInitialData();
       }
 
       if (event.data?.type === CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA) {
         this.tabId = event.data.tabId;
-        this.getAndProcessPrebidData(event.data.propertyName);
       }
     };
 
@@ -137,9 +137,7 @@ class PrebidInterface {
     window.top?.postMessage({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
       tabId: this.tabId,
-      prebidData: {
-        ...this.prebidData,
-      },
+      prebidData: JSON.parse(decycle(this.prebidData)),
     });
   }
 
@@ -163,7 +161,6 @@ class PrebidInterface {
       window.top?.postMessage({
         type: SCRIPT_GET_PREBID_DATA_RESPONSE,
         tabId: this.tabId,
-        propertyName,
         prebidData: JSON.parse(decycle(prebidData)),
       });
     }
@@ -277,11 +274,10 @@ class PrebidInterface {
   calculateNoBid(bid: NoBid) {
     if (!this.prebidData.noBids[bid.auctionId]) {
       this.prebidData.noBids[bid.auctionId] = {
-        name: '',
         uniqueAuctionId: bid.auctionId,
         adUnitCode: bid.adUnitCode,
         mediaContainerSize: bid.sizes,
-        ownerOrigin: bid.bidder,
+        bidder: [bid.bidder],
       };
     } else {
       this.prebidData.noBids[bid.auctionId] = {
@@ -296,13 +292,12 @@ class PrebidInterface {
               ).includes(size)
           ),
         ],
-        ownerOrigin: Array.from(
-          new Set<string>(
-            ...this.prebidData.noBids[bid.auctionId].ownerOrigin,
-            bid.bidder
-          )
-        ).join(','),
-        name: '',
+        bidder: Array.from(
+          new Set<string>([
+            ...this.prebidData.noBids[bid.auctionId].bidder,
+            bid.bidder,
+          ])
+        ),
         uniqueAuctionId: bid.auctionId,
       };
     }

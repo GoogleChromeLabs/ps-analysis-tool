@@ -17,7 +17,6 @@
  * Internal dependencies.
  */
 import {
-  CONTENT_SCRIPT_PREBID_INITIAL_SYNC,
   CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA,
   CS_GET_PREBID_DATA_RESPONSE,
   DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA,
@@ -69,20 +68,16 @@ class PrebidContentScript {
 
       if (message?.payload?.type === TABID_STORAGE) {
         this.tabId = message.payload.tabId;
+        window.top?.postMessage({
+          type: SCRIPT_PREBID_INITIAL_SYNC,
+          tabId: this.tabId,
+        });
       }
 
       if (
         message?.payload?.type === DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA
       ) {
         this.getAndProcessPrebidData(message.payload.propertyName);
-      }
-
-      if (message?.payload?.type === CONTENT_SCRIPT_PREBID_INITIAL_SYNC) {
-        this.tabId = message.payload.tabId;
-        window.top?.postMessage({
-          type: SCRIPT_PREBID_INITIAL_SYNC,
-          tabId: this.tabId,
-        });
       }
     });
   }

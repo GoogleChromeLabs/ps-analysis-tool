@@ -135,6 +135,7 @@ class PAStore extends DataStore {
       unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
       auctionEvents: this.auctionEvents,
       auctionDataForTabId: this.auctionDataForTabId,
+      prebidEvents: this.prebidEvents,
     };
   }
 

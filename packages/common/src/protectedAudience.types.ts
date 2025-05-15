@@ -72,6 +72,15 @@ export type NoBidsType = {
   };
 };
 
+export type PrebidNoBidsType = {
+  [auctionId: string]: {
+    bidder: string[];
+    uniqueAuctionId: string;
+    adUnitCode?: string;
+    mediaContainerSize?: number[][];
+  };
+};
+
 export type AdsAndBiddersTypeData = {
   adUnitCode: string;
   bidders: string[];

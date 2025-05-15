@@ -41,10 +41,7 @@ import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
-import {
-  CONTENT_SCRIPT_PREBID_INITIAL_SYNC,
-  CS_GET_PREBID_DATA_RESPONSE,
-} from '../../../../constants';
+import { CS_GET_PREBID_DATA_RESPONSE } from '../../../../constants';
 import type { PrebidEvents } from '../../../../store';
 
 const Provider = ({ children }: PropsWithChildren) => {
@@ -230,16 +227,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
-
-  useEffect(() => {
-    chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
-      tabId: chrome.devtools.inspectedWindow.tabId,
-      payload: {
-        type: CONTENT_SCRIPT_PREBID_INITIAL_SYNC,
-        tabId: chrome.devtools.inspectedWindow.tabId,
-      },
-    });
-  }, []);
 
   const messagePassingListener = useCallback(
     // eslint-disable-next-line complexity
