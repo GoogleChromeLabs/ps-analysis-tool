@@ -58,10 +58,14 @@ class PrebidInterface {
     adUnits: AdsAndBiddersType;
     noBids: NoBidsType;
     receivedBids: ReceivedBids[];
+    errorEvents: { type: 'WARNING' | 'ERROR'; message: string[] }[];
+    auctionEvents: { [auctionId: string]: any[] };
   } = {
     adUnits: {},
     noBids: {},
     receivedBids: [],
+    errorEvents: [],
+    auctionEvents: {},
   };
 
   /**
@@ -136,23 +140,62 @@ class PrebidInterface {
   }
 
   initPrebidListener() {
-    this.prebidInterface?.onEvent('bidResponse', (args) => {
-      this.calculateBidResponse(args);
-    });
-
     this.prebidInterface?.onEvent('addAdUnits', () => {
       this.calculateAdUnit();
     });
 
+    this.prebidInterface?.onEvent('auctionInit', (args) => {
+      this.prebidData.auctionEvents = {
+        ...this.prebidData.auctionEvents,
+        [args.auctionId]: [args],
+      };
+    });
+
+    this.prebidInterface?.onEvent('beforeRequestBids', (args) => {
+      this.prebidData.auctionEvents[args.auctionId].push(args);
+    });
+
+    this.prebidInterface?.onEvent('bidRequested', (args) => {
+      this.prebidData.auctionEvents[args.auctionId].push(args);
+    });
+
+    this.prebidInterface?.onEvent('beforeBidderHttp', (args) => {
+      this.prebidData.auctionEvents[args.auctionId].push(args);
+    });
+
+    this.prebidInterface?.onEvent('bidResponse', (args) => {
+      this.calculateBidResponse(args);
+      this.prebidData.auctionEvents[args.auctionId].push(args);
+    });
+
+    this.prebidInterface?.onEvent('bidAccepted', (args) => {
+      this.prebidData.auctionEvents[args.auctionId].push(args);
+    });
+
+    this.prebidInterface?.onEvent('bidRejected', (args) => {
+      if (args.bid?.auctionId) {
+        this.prebidData.auctionEvents[args.bid?.auctionId].push(args);
+      }
+    });
+
+    this.prebidInterface?.onEvent('bidTimeout', (args) => {
+      args.forEach((arg) => {
+        this.prebidData.auctionEvents[arg.auctionId].push(args);
+      });
+    });
+
     this.prebidInterface?.onEvent('bidWon', (args) => {
+      this.prebidData.auctionEvents[args.auctionId].push(args);
       this.calculateAdUnit(args);
     });
 
     this.prebidInterface?.onEvent('noBid', (args) => {
+      this.prebidData.auctionEvents[args.auctionId].push(args);
       this.calculateNoBid(args);
     });
 
-    this.prebidInterface?.onEvent('auctionEnd', () => {
+    this.prebidInterface?.onEvent('auctionEnd', (args) => {
+      this.prebidData.auctionEvents[args.auctionId].push(args);
       this.sendInitialData();
     });
   }
@@ -215,11 +258,11 @@ class PrebidInterface {
     }
   }
 
-  calculateAdUnit(bid?: BidResponse) {
+  calculateAdUnit(bid?: BidWonEvent) {
     if (bid) {
       this.prebidData.adUnits[bid.adUnitCode] = {
         ...this.prebidData.adUnits[bid.adUnitCode],
-        winningBid: bid.price,
+        winningBid: bid?.cpm,
         bidCurrency: bid.currency,
         winningBidder: bid.bidder,
       };

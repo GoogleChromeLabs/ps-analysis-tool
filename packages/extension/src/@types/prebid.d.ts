@@ -71,28 +71,198 @@ declare global {
     timeToRespond?: number;
   }
 
+  interface BeforeBidderHttpEvent {
+    bidder: string;
+    adUnitCode: string;
+    bidId: string;
+    auctionId: string;
+    bidderRequestId: string;
+    src?: string; // e.g., 'client' or 'server'
+    params?: Record<string, any>;
+    mediaTypes?: {
+      banner?: {
+        sizes: Array<[number, number]>;
+      };
+      video?: {
+        context: 'instream' | 'outstream';
+        playerSize: Array<[number, number]>;
+      };
+      native?: object;
+    };
+    ortb2Imp?: object;
+    transactionId?: string;
+    sizes?: Array<[number, number]>;
+  }
+
+  interface BidRequestedEvent {
+    bidder: string;
+    auctionId: string;
+    bidderRequestId: string;
+    bids: Array<{
+      adUnitCode: string;
+      bidId: string;
+      bidder: string;
+      auctionId: string;
+      bidderRequestId: string;
+      params?: Record<string, any>;
+      mediaTypes?: {
+        banner?: {
+          sizes: Array<[number, number]>;
+        };
+        video?: {
+          context: 'instream' | 'outstream';
+          playerSize: Array<[number, number]>;
+        };
+        native?: object;
+      };
+      ortb2Imp?: object;
+      transactionId?: string;
+      sizes?: Array<[number, number]>;
+    }>;
+    start: number; // Timestamp when the request started
+    timeout: number; // Timeout in milliseconds
+    refererInfo?: {
+      referer: string;
+      reachedTop: boolean;
+      numIframes: number;
+      stack: string[];
+    };
+    src?: string; // e.g., 'client' or 'server'
+    tags?: any[];
+  }
+
+  interface BidWonEvent {
+    adUnitCode: string;
+    requestId: string;
+    cpm: number;
+    currency: string;
+    creativeId: string;
+    dealId?: string;
+    width: number;
+    height: number;
+    ad?: string;
+    adUrl?: string;
+    vastUrl?: string;
+    vastXml?: string;
+    ttl: number;
+    netRevenue: boolean;
+    bidder: string;
+    timeToRespond: number;
+    auctionId: string;
+    responseTimestamp?: number;
+    requestTimestamp?: number;
+    status?: string;
+    adserverTargeting?: Record<string, string>;
+    meta?: {
+      advertiserDomains?: string[];
+      [key: string]: any;
+    };
+    mediaType?: 'banner' | 'video' | 'native';
+    renderer?: any;
+    native?: any;
+  }
+
   interface PrebidEventDataMap {
     auctionInit: { auctionId: string; timestamp: number };
-    auctionEnd: object;
-    bidRequested: BidResponse;
+    auctionEnd: AuctionEndEvent;
+    bidRequested: BidRequestedEvent;
     bidResponse: BidResponse;
-    bidWon: BidResponse;
-    bidTimeout: object[];
-    setTargeting: object;
-    bidRejected: BidResponse;
-    bidderDone: object;
+    bidWon: BidWonEvent;
+    bidTimeout: BidTimeoutEvent[];
+    bidRejected: BidRejectedEvent;
+    bidderDone: BidderDoneEvent;
     noBid: NoBid;
-    beforeRequestBids: object;
+    bidAccepted: BidAcceptedEvent;
+    beforeRequestBids: BeforeRequestBidsEvent;
+    beforeBidderHttp: BeforeBidderHttpEvent;
+    auctionDebug: AuctionDebugEvent;
+  }
+
+  interface BidderDoneEvent {
+    bidderCode: string;
+    serverResponseTimeMs?: number;
+    timeToRespond: number;
+    bids?: BidResponse[];
+  }
+
+  interface BidTimeoutEvent {
+    bidId: string;
+    bidder: string;
+    adUnitCode: string;
+    auctionId: string;
+    bidderRequestId: string;
+    timeout: number;
+    params?: Record<string, any>;
+  }
+
+  interface BidRejectedEvent {
+    adUnitCode: string;
+    bidder: string;
+    reason: string;
+    bid: Partial<BidResponse>; // It's usually a bid that failed validation
+  }
+
+  interface BidAcceptedEvent {
+    adUnitCode: string;
+    requestId: string;
+    cpm: number;
+    currency: string;
+    creativeId: string;
+    dealId?: string;
+    width: number;
+    height: number;
+    ad?: string;
+    adUrl?: string;
+    vastUrl?: string;
+    vastXml?: string;
+    ttl: number;
+    netRevenue: boolean;
+    bidder: string;
+    timeToRespond: number;
+    auctionId: string;
+    responseTimestamp?: number;
+    requestTimestamp?: number;
+    adserverTargeting?: Record<string, string>;
+    meta?: {
+      advertiserDomains?: string[];
+      mediaType?: string;
+      secondaryCatIds?: string[];
+      networkId?: string;
+      agencyId?: string;
+    };
+    mediaType?: 'banner' | 'video' | 'native';
+    renderer?: any;
+    native?: any;
+    status?: string; // e.g., "rendered", "available"
+  }
+
+  interface BeforeRequestBidsEvent {
+    timeout: number;
+    adUnits: AdUnit[];
+    labels?: string[];
+    auctionId: string;
+    start?: number;
+  }
+
+  interface AuctionEndEvent {
+    auctionId: string;
+    timestamp: number;
+    timeout: number;
+    adUnits: AdUnit[];
+    bidsReceived: BidResponse[];
+    winningBids: BidWonEvent[];
+    noBids: NoBid[];
   }
 
   type PrebidEvent =
     | 'auctionInit'
     | 'auctionEnd'
     | 'bidRequested'
+    | 'beforeBidderHttp'
+    | 'bidAccepted'
     | 'bidResponse'
     | 'bidWon'
     | 'bidTimeout'
-    | 'setTargeting'
     | 'bidRejected'
     | 'bidderDone'
     | 'noBid'
@@ -160,6 +330,13 @@ declare global {
       impressionTrackers?: string[];
       [key: string]: any;
     };
+  }
+
+  type AuctionDebugEventType = 'INFO' | 'WARNING' | 'ERROR';
+
+  interface AuctionDebugEvent {
+    type: AuctionDebugEventType;
+    arguments: string[];
   }
 
   interface PrebidConfig {
