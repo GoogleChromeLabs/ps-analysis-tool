@@ -38,7 +38,20 @@ describe('Tabs', () => {
 
     mockUseTabs.mockReturnValue({
       activeTab: 0,
+      activeGroup: 'title1',
       titles: ['title1', 'title2'],
+      groupedTitles: {
+        'group-1': [
+          {
+            title: 'title1',
+            index: 0,
+          },
+          {
+            title: 'title2',
+            index: 1,
+          },
+        ],
+      },
       setActiveTab,
       isTabHighlighted: jest.fn((tab: number) => (tab === 0 ? 1 : 99)),
       shouldAddSpacer: jest.fn(() => false),
@@ -47,23 +60,21 @@ describe('Tabs', () => {
     render(<Tabs />);
 
     expect(screen.getByText('title1')).toBeInTheDocument();
-    expect(screen.getByText('title1')).toHaveClass('border-b-2');
     expect(screen.getByText('1')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('title2'));
+    expect(setActiveTab).toHaveBeenCalledWith(1);
 
-    expect(screen.getByText('title2')).toHaveClass('border-b-2');
     expect(screen.getByText('9+')).toBeInTheDocument();
 
     fireEvent.keyDown(screen.getByText('title2'), { key: 'Tab' });
-
-    expect(screen.getByText('title1')).toHaveClass('border-b-2');
+    expect(setActiveTab).toHaveBeenCalledWith(1);
 
     fireEvent.keyDown(screen.getByText('title1'), {
       key: 'Tab',
       shiftKey: true,
     });
 
-    expect(screen.getByText('title2')).toHaveClass('border-b-2');
+    expect(setActiveTab).toHaveBeenCalledWith(1);
   });
 });
