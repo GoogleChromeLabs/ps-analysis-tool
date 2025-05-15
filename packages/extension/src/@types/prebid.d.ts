@@ -257,6 +257,7 @@ declare global {
   type PrebidEvent =
     | 'auctionInit'
     | 'auctionEnd'
+    | 'auctionDebug'
     | 'bidRequested'
     | 'beforeBidderHttp'
     | 'bidAccepted'

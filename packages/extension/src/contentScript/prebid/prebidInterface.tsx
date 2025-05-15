@@ -58,7 +58,7 @@ class PrebidInterface {
     adUnits: AdsAndBiddersType;
     noBids: NoBidsType;
     receivedBids: ReceivedBids[];
-    errorEvents: { type: 'WARNING' | 'ERROR'; message: string[] }[];
+    errorEvents: { type: 'WARNING' | 'ERROR' | 'INFO'; message: string[] }[];
     auctionEvents: { [auctionId: string]: any[] };
   } = {
     adUnits: {},
@@ -109,7 +109,6 @@ class PrebidInterface {
       prebidData: {
         ...this.prebidData,
       },
-      propertyName: 'keys',
     });
   }
 
@@ -149,6 +148,13 @@ class PrebidInterface {
         ...this.prebidData.auctionEvents,
         [args.auctionId]: [args],
       };
+    });
+
+    this.prebidInterface?.onEvent('auctionDebug', (args) => {
+      this.prebidData.errorEvents.push({
+        type: args.type,
+        message: args.arguments,
+      });
     });
 
     this.prebidInterface?.onEvent('beforeRequestBids', (args) => {

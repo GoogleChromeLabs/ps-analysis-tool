@@ -44,17 +44,20 @@ import {
 import {
   CONTENT_SCRIPT_PREBID_INITIAL_SYNC,
   CS_GET_PREBID_DATA_RESPONSE,
-  DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA,
 } from '../../../../constants';
+import type { PrebidEvents } from '../../../../store';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
 
-  const [functionKeys, setFunctionKeys] = useState<string[]>([]);
-
-  const [selectedProperty, setSelectedProperty] = useState<string | null>(null);
-  const [prebidResponse, setPrebidResponse] = useState<object | null>(null);
+  const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
+    adUnits: {},
+    noBids: {},
+    receivedBids: [],
+    errorEvents: [],
+    auctionEvents: {},
+  });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
     useState<boolean>(false);
@@ -238,18 +241,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     });
   }, []);
 
-  const getPrebidData = useCallback((propertyName: string) => {
-    chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
-      tabId: chrome.devtools.inspectedWindow.tabId,
-      payload: {
-        type: DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA,
-        tabId: chrome.devtools.inspectedWindow.tabId,
-        propertyName,
-      },
-    });
-    setSelectedProperty(propertyName);
-  }, []);
-
   const messagePassingListener = useCallback(
     // eslint-disable-next-line complexity
     async (message: {
@@ -260,7 +251,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
-        prebidData: unknown;
+        prebidData: PrebidEvents;
         propertyName: string;
       };
     }) => {
@@ -276,14 +267,6 @@ const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
-      if (message.type === CS_GET_PREBID_DATA_RESPONSE) {
-        if (message.payload?.propertyName === 'keys') {
-          setFunctionKeys(message.payload?.prebidData as string[]);
-        } else {
-          setPrebidResponse(message.payload?.prebidData as object);
-        }
-      }
-
       const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
 
@@ -292,6 +275,49 @@ const Provider = ({ children }: PropsWithChildren) => {
         message.payload.auctionEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
+          setPrebidResponse((prevState) => {
+            if (!message.payload?.prebidData) {
+              return prevState;
+            }
+
+            const {
+              adUnits,
+              receivedBids: prebidReceivedBids,
+              noBids: prebidNoBids,
+              auctionEvents: prebidAuctionEvents,
+              errorEvents,
+            } = message.payload.prebidData;
+
+            const newState: Partial<PrebidEvents> = {};
+
+            if (!isEqual(adUnits, prevState.adUnits)) {
+              newState.adUnits = adUnits;
+            }
+
+            if (!isEqual(prebidReceivedBids, prevState.receivedBids)) {
+              newState.receivedBids = prebidReceivedBids;
+            }
+
+            if (!isEqual(prebidNoBids, prevState.noBids)) {
+              newState.noBids = prebidNoBids;
+            }
+
+            if (!isEqual(prebidAuctionEvents, prevState.auctionEvents)) {
+              newState.auctionEvents = prebidAuctionEvents;
+            }
+
+            if (!isEqual(errorEvents, prevState.errorEvents)) {
+              newState.errorEvents = errorEvents;
+            }
+
+            return Object.keys(newState).length > 0
+              ? {
+                  ...prevState,
+                  ...newState,
+                }
+              : prevState;
+          });
+
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
@@ -465,21 +491,15 @@ const Provider = ({ children }: PropsWithChildren) => {
         adsAndBidders,
         selectedAdUnit,
         sortOrder,
-        functionKeys,
-        selectedProperty,
         prebidResponse,
       },
       actions: {
         setSelectedAdUnit,
         setSortOrder,
-        getPrebidData,
       },
     };
   }, [
-    selectedProperty,
     prebidResponse,
-    getPrebidData,
-    functionKeys,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,

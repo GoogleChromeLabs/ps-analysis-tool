@@ -16,7 +16,13 @@
 /**
  * External dependencies.
  */
-import type { auctionData, singleAuctionEvent } from '@google-psat/common';
+import type {
+  AdsAndBiddersType,
+  auctionData,
+  NoBidsType,
+  ReceivedBids,
+  singleAuctionEvent,
+} from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -33,6 +39,24 @@ class PAStore extends DataStore {
   auctionEvents: {
     [tabId: string]: {
       [uniqueAuctionId: string]: singleAuctionEvent[];
+    };
+  } = {};
+
+  /**
+   * The auction event of the tabs (Interest group access as well as interest group auction events).
+   */
+  prebidEvents: {
+    [tabId: string]: {
+      [uniqueAuctionId: string]: {
+        adUnits: AdsAndBiddersType;
+        noBids: NoBidsType;
+        receivedBids: ReceivedBids[];
+        errorEvents: {
+          type: 'WARNING' | 'ERROR' | 'INFO';
+          message: string[];
+        }[];
+        auctionEvents: { [auctionId: string]: any[] };
+      };
     };
   } = {};
   /**
@@ -92,6 +116,7 @@ class PAStore extends DataStore {
       delete this.auctionEvents[tabId][uniqueAuctionId];
     });
     delete this.auctionDataForTabId[tabId];
+    delete this.prebidEvents[tabId];
   }
 
   initialiseVariablesForNewTab(tabId: string): void {
@@ -102,6 +127,7 @@ class PAStore extends DataStore {
       globalEvents,
     };
     this.auctionDataForTabId[tabId] = {};
+    this.prebidEvents[tabId] = {};
     //@ts-ignore
     globalThis.PSAT = {
       //@ts-ignore
@@ -120,6 +146,7 @@ class PAStore extends DataStore {
     delete this.unParsedRequestHeadersForPA[tabId.toString()];
     delete this.auctionDataForTabId[tabId.toString()];
     delete this.auctionEvents[tabId.toString()];
+    delete this.prebidEvents[tabId.toString()];
   }
 
   /**
@@ -205,6 +232,7 @@ class PAStore extends DataStore {
           auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
           multiSellerAuction: isMultiSellerAuction,
           globalEvents: globalEvents ?? [],
+          prebidEvents: this.prebidEvents[tabId],
         },
       });
       DataStore.tabs[tabId].newUpdatesPA = 0;

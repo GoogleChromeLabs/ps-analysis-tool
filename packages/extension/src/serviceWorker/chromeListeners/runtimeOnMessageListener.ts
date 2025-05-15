@@ -19,6 +19,7 @@
  */
 import dataStore, { DataStore } from '../../store/dataStore';
 import {
+  CS_GET_PREBID_DATA_RESPONSE,
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
@@ -33,6 +34,7 @@ import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 import sendUpdatedData from '../../store/utils/sendUpdatedData';
+import PAStore from '../../store/PAStore';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (request: any) => {
@@ -150,5 +152,12 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
     cookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
+  }
+
+  if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
+    PAStore.prebidEvents[incomingMessageTabId.toString()] = {
+      ...request.payload.prebidData,
+    };
+    DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
   }
 };

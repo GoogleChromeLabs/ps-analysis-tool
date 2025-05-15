@@ -56,7 +56,6 @@ class PrebidContentScript {
           type: CS_GET_PREBID_DATA_RESPONSE,
           payload: {
             prebidData: event.data.prebidData,
-            propertyName: event.data.propertyName,
             tabId: this.tabId,
           },
         });
