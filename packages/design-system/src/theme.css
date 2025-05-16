@@ -727,10 +727,12 @@
   --background-color-mahogany: #cc3300;
   --background-color-blueberry: #4285fa;
   --background-color-celeste: #b1f8f2;
-  --background-color-table-selected-focused-row: #d3e3fd;
-  --background-color-table-selected-row: #dcdcdc;
-  --background-color-table-selected-focused-row-dark: #004a77;
-  --background-color-table-selected-row-dark: #3c3c3c;
+
+  --background-color-lavender-sky: #d3e3fd;
+  --background-color-silver-mist: #dcdcdc;
+
+  --background-color-midnight-slate: #3b3b3d;
+  --background-color-dark-graphite: #3c3c3c;
 
   --border-color-*: initial;
   --border-color-inherit: inherit;
