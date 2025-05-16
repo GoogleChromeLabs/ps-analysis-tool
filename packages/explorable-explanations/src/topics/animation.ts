@@ -87,6 +87,7 @@ class TopicsAnimation {
     this.setHighlightAdTech = setHighlightAdTech;
     this.onReady = onReady;
     if (visitIndexStart) {
+      this.visitIndexStart = visitIndexStart;
       this.visitIndex = visitIndexStart;
     }
     p.preload = this.preload;
@@ -141,6 +142,10 @@ class TopicsAnimation {
     if (this.visitIndexStart === this.epoch.length - 1) {
       this.visitIndex = this.epoch.length + 1;
       this.playing = false;
+      return;
+    }
+
+    if (this.visitIndex > this.epoch.length) {
       return;
     }
 
@@ -503,6 +508,7 @@ class TopicsAnimation {
     this.circlePositions = {};
     this.smallCirclePositions = {};
     this.prevVisitedCircleIndex = -1;
+    this.visitIndex = 0;
     this.inspectedCircles.clear();
   };
 

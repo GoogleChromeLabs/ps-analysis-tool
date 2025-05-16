@@ -75,11 +75,10 @@ const Panel = ({
   );
   const [currentVisitIndexCallback, setCurrentVisitIndexCallback] =
     useState<() => number>();
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const storageRef = useRef(PAstorage);
   const activeTabRef = useRef(activeTab);
   const wasPreviousTabLegend = useRef(false);
-
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     if (activeTab === 4) {
       setPlay(false);
@@ -127,7 +126,6 @@ const Panel = ({
 
   useEffect(() => {
     const storedData = JSON.parse(storageRef.current[1] || '{}');
-
     if (storedData?.epochs) {
       setEpochs(storedData.epochs);
       return;
@@ -208,23 +206,8 @@ const Panel = ({
 
     timeoutRef.current = setTimeout(() => {
       _setReset(false);
-      setPlay(true);
     }, 0);
   }, [setActiveTab, setPAStorage, setTopicsTableData]);
-
-  useEffect(() => {
-    if (activeTab === 4 || wasPreviousTabLegend.current) {
-      return;
-    }
-
-    if (!epochCompleted[activeTabRef.current]) {
-      setTopicsTableData((prevTopicsTableData) => {
-        const newTopicsTableData = { ...prevTopicsTableData };
-        newTopicsTableData[activeTabRef.current] = [];
-        return newTopicsTableData;
-      });
-    }
-  }, [activeTab, epochCompleted, setTopicsTableData]);
 
   useEffect(() => {
     return () => {
@@ -233,18 +216,6 @@ const Panel = ({
       }
     };
   }, []);
-
-  useEffect(() => {
-    const isCompleted = epochCompleted?.[activeTabRef.current];
-
-    if (!isCompleted) {
-      setTopicsTableData((prevTopicsTableData) => {
-        const newTopicsTableData = { ...prevTopicsTableData };
-        newTopicsTableData[activeTabRef.current] = [];
-        return newTopicsTableData;
-      });
-    }
-  }, [epochCompleted, setTopicsTableData]);
 
   const handleTopicsCalculation = useCallback(
     (visitIndex: number) => {
@@ -335,7 +306,6 @@ const Panel = ({
     if (isInteractiveModeOn === null) {
       return;
     }
-
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});

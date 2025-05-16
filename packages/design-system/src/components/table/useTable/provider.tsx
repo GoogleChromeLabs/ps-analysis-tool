@@ -121,6 +121,8 @@ export const TableProvider = ({
       const end = start + 500;
       const _paginatedData = filteredData.slice(start, end);
       setPaginatedData(_paginatedData);
+    } else {
+      setPaginatedData([]);
     }
   }, [filteredData]);
 

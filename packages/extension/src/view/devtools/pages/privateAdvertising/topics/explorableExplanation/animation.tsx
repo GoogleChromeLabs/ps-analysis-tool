@@ -21,7 +21,7 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
 
-const epochTransitionDelay = 2000;
+const epochTransitionDelay = 1500;
 
 interface AnimationProps {
   epoch: { datetime: string; website: string; topics: string[] }[];
@@ -49,7 +49,6 @@ const Animation = ({
   resetAnimation,
   speedMultiplier,
   isInteractive,
-  setPAActiveTab,
   setHighlightAdTech,
   setCurrentVisitIndexCallback,
   isCompleted,
@@ -83,7 +82,8 @@ const Animation = ({
     if (animation) {
       animation.setCurrentVisitIndex(visitIndexStart);
     }
-  }, [animation, visitIndexStart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [epoch, visitIndexStart]);
 
   // initialize animation instance
   useEffect(() => {
@@ -98,6 +98,7 @@ const Animation = ({
         siteAdTechs,
         handleUserVisit: _handleUserVisit,
         setHighlightAdTech,
+        visitIndexStart,
         onReady: () => {
           if (loadingTextCoverRef.current) {
             loadingTextCoverRef.current.style.display = 'none';
@@ -112,14 +113,8 @@ const Animation = ({
     return () => {
       p?.remove();
     };
-  }, [
-    _handleUserVisit,
-    epoch,
-    setCurrentVisitIndexCallback,
-    setHighlightAdTech,
-    setPAActiveTab,
-    siteAdTechs,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_handleUserVisit, epoch, setHighlightAdTech, siteAdTechs]);
 
   /* sync animation with state start */
   useEffect(() => {
@@ -127,7 +122,7 @@ const Animation = ({
   }, [isPlaying, animation]);
 
   useEffect(() => {
-    if (resetAnimation) {
+    if (resetAnimation === true) {
       animation?.reset();
     }
   }, [resetAnimation, animation]);
@@ -137,17 +132,16 @@ const Animation = ({
   }, [speedMultiplier, animation]);
 
   useEffect(() => {
-    animation?.reset();
+    if (isInteractive === true) {
+      animation?.reset();
+      animation?.setCurrentVisitIndex(0);
+    }
     animation?.setInteractiveMode(isInteractive);
   }, [isInteractive, animation]);
 
-  // useEffect(() => {
-  //   animation?.setVisitIndexStart(visitIndexStart);
-  // }, [visitIndexStart, animation]);
-
   useEffect(() => {
     if (isCompleted) {
-      animation?.setVisitIndexStart(epoch.length - 1);
+      animation?.setCurrentVisitIndex(epoch.length + 1);
     }
   }, [isCompleted, animation, epoch]);
   /* sync animation with state end */
