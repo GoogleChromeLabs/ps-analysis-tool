@@ -78,7 +78,7 @@ const Panel = ({
   const storageRef = useRef(PAstorage);
   const activeTabRef = useRef(activeTab);
   const wasPreviousTabLegend = useRef(false);
-
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     if (activeTab === 4) {
       setPlay(false);
@@ -196,13 +196,26 @@ const Panel = ({
   ]);
 
   const setReset = useCallback(() => {
+    setPlay(false);
     _setReset(true);
     setPAStorage('', 1);
     setTopicsTableData({});
     setActiveTab(0);
     setEpochCompleted({});
     setVisitIndexStart(0);
+
+    timeoutRef.current = setTimeout(() => {
+      _setReset(false);
+    }, 0);
   }, [setActiveTab, setPAStorage, setTopicsTableData]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleTopicsCalculation = useCallback(
     (visitIndex: number) => {
