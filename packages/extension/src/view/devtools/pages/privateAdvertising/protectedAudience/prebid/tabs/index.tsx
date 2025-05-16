@@ -16,7 +16,16 @@
 /**
  * External dependencies
  */
-import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
+import {
+  Buildings,
+  DoubleUser,
+  FourSquares,
+  Person,
+  Ruler,
+  Settings,
+  SidebarProvider,
+  type SidebarItems,
+} from '@google-psat/design-system';
 import React, { useMemo } from 'react';
 import PrebidConfig from './components/prebidConfig';
 import InstalledModules from './components/installedModules';
@@ -37,6 +46,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
     () => ({
       prebidConfig: {
         title: 'PrebidConfig',
+        icon: {
+          Element: Settings,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Settings,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: PrebidConfig,
           props: {
@@ -55,6 +78,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
       },
       installedmodules: {
         title: 'Installed Modules',
+        icon: {
+          Element: Ruler,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Ruler,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: InstalledModules,
           props: {},
@@ -64,6 +101,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
       },
       pricegranularity: {
         title: 'Price Granularity',
+        icon: {
+          Element: FourSquares,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: FourSquares,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: PriceGranularity,
           props: {},
@@ -73,6 +124,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
       },
       biddersettings: {
         title: 'Bidder Settings',
+        icon: {
+          Element: Settings,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Settings,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: BidderSettings,
           props: {},
@@ -82,6 +147,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
       },
       consentmanagement: {
         title: 'Consent Management',
+        icon: {
+          Element: Buildings,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Buildings,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: ConsentManagement,
           props: {},
@@ -91,6 +170,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
       },
       userids: {
         title: 'User Ids',
+        icon: {
+          Element: Person,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Person,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: UserIds,
           props: {},
@@ -100,6 +193,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
       },
       gptpreauction: {
         title: 'GPT Pre-Auction Module',
+        icon: {
+          Element: FourSquares,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: FourSquares,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: GPTPreAuction,
           props: {},
@@ -109,6 +216,20 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
       },
       usersync: {
         title: 'UserSync',
+        icon: {
+          Element: DoubleUser,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: DoubleUser,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
         panel: {
           Element: UserSync,
           props: {},

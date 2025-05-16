@@ -33,7 +33,7 @@ const PillToggle = ({
   eeAnimatedTab,
 }: PillToggleProps) => {
   return (
-    <div className="w-80 h-8 rounded-full border border-gray-300 dark:border-quartz text-sm">
+    <div className="w-96 h-8 rounded-full border border-gray-300 dark:border-quartz text-sm">
       {options.map((option) => {
         return (
           <button
