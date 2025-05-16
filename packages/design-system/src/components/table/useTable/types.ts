@@ -35,6 +35,7 @@ export type TableData = (
   | ErroredOutUrlsData
   | SourcesData
   | ClassificationResult
+  | { name: string; value: string | number | boolean }
 ) & {
   highlighted?: boolean;
 };

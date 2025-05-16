@@ -20,8 +20,8 @@ import Panel from './panel';
 import { useProtectedAudience } from '../../../../stateProviders';
 
 const Prebid = () => {
-  const prebidResponse = useProtectedAudience(({ state }) => ({
-    prebidRespone: state.prebidResponse,
+  const { prebidResponse } = useProtectedAudience(({ state }) => ({
+    prebidResponse: state.prebidResponse,
   }));
 
   return <Panel config={prebidResponse} />;

@@ -42,6 +42,13 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
       pbjsClass.scanningStatus = true;
       pbjsClass.sendInitialData();
       pbjsClass.initPrebidListener();
+      pbjsClass.prebidData.versionInfo =
+        pbjsClass.prebidInterface.version ?? '';
+      pbjsClass.prebidData.installedModules =
+        pbjsClass.prebidInterface.installedModules ?? [];
+      pbjsClass.prebidData.config =
+        pbjsClass.prebidInterface?.getConfig() ?? {};
+
       stopLoop = true;
       clearTimeout(timeout);
     }

@@ -13,8 +13,62 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const PrebidConfig = () => {
-  return <div />;
+/**
+ * External dependencies
+ */
+import { noop } from '@google-psat/common';
+import {
+  Table,
+  TableProvider,
+  type TableColumn,
+} from '@google-psat/design-system';
+import { useMemo, useState } from 'react';
+
+type PrebidConfigPanelProps = {
+  configObject: Partial<PrebidConfig>;
+};
+const PrebidConfig = ({ configObject }: PrebidConfigPanelProps) => {
+  const [selectedKey, setSelectedKey] = useState<string>('');
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Name',
+        accessorKey: 'name',
+        cell: (info) => info,
+        enableHiding: false,
+      },
+      {
+        header: 'Value',
+        accessorKey: 'value',
+        cell: (info) => info.toString(),
+      },
+    ],
+    []
+  );
+
+  return (
+    <div className="flex-1 w-[70%] flex flex-col border border-american-silver dark:border-quartz border-t-0 overflow-hidden">
+      <TableProvider
+        data={Object.entries(configObject).map(([key, value], index) => {
+          return {
+            name: key,
+            value: value,
+            index,
+          };
+        })}
+        tableColumns={tableColumns}
+        onRowClick={(row) => setSelectedKey(row?.originalData?.index)}
+        onRowContextMenu={noop}
+        getRowObjectKey={(row) => row?.originalData?.index}
+      >
+        <Table
+          hideTableTopBar={true}
+          selectedKey={selectedKey}
+          minWidth="70%"
+        />
+      </TableProvider>
+    </div>
+  );
 };
 
 export default PrebidConfig;

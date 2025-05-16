@@ -41,12 +41,12 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
           Element: PrebidConfig,
           props: {
             configObject: {
-              bidderTimeout: config.bidderTimeout,
-              bidderSequence: config.bidderSequence,
-              maxNestedFrames: config.maxNestedIframes,
-              maxBid: config.maxBid,
-              useBidCache: config.useBidCache,
-              enableSendAllBids: config.enableSendAllBids,
+              'Bidder Timeout': config.bidderTimeout,
+              'Bidder Sequence': config.bidderSequence,
+              'Max Nested Frames': config.maxNestedIframes,
+              'Max Bid': config.maxBid,
+              'Use Bid Cache': config.useBidCache,
+              'Enable SendAllBids': config.enableSendAllBids,
             },
           },
         },

@@ -20,6 +20,7 @@
 import { PillToggle } from '@google-psat/design-system';
 import React, { useState } from 'react';
 import ConfigContainer from './tabs';
+import type { PrebidEvents } from '../../../../../../store';
 
 /**
  * Internal dependencies.
@@ -34,7 +35,7 @@ enum PillToggleOptions {
 }
 
 interface PanelProps {
-  config: PrebidConfig;
+  config: PrebidEvents;
 }
 
 const Panel = ({ config }: PanelProps) => {
@@ -55,7 +56,7 @@ const Panel = ({ config }: PanelProps) => {
       <div className="flex-1 overflow-auto text-outer-space-crayola">
         {pillToggle === PillToggleOptions.Config ? (
           <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
-            <ConfigContainer config={config} />
+            <ConfigContainer config={config.config} />
           </div>
         ) : (
           <div className="h-full border-r border-t border-american-silver dark:border-quartz w-full">
