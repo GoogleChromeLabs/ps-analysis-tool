@@ -59,32 +59,34 @@ export const TabsProvider = ({
 
   const [activeTab, _setActiveTab] = useState(0);
   const activeTabRef = useRef(activeTab);
+  const groupItemsRef = useRef(groupedItems);
 
-  const setActiveTab = useCallback(
-    (tab: number) => {
-      activeTabRef.current = tab;
-      _setActiveTab(tab);
+  useEffect(() => {
+    groupItemsRef.current = groupedItems;
+  }, [groupedItems]);
 
-      let trackedIndex = 0;
-      const group = Object.entries(groupedItems).find(([, _items]) => {
-        const groupTitles = _items.map((item) => {
-          return {
-            title: item.title,
-            index: trackedIndex++,
-          };
-        });
+  const setActiveTab = useCallback((tab: number) => {
+    activeTabRef.current = tab;
+    _setActiveTab(tab);
 
-        return groupTitles.some(({ index }) => index === tab);
+    let trackedIndex = 0;
+    const group = Object.entries(groupItemsRef.current).find(([, _items]) => {
+      const groupTitles = _items.map((item) => {
+        return {
+          title: item.title,
+          index: trackedIndex++,
+        };
       });
 
-      if (group) {
-        setActiveGroup(group[0]);
-      } else {
-        setActiveGroup(null);
-      }
-    },
-    [groupedItems]
-  );
+      return groupTitles.some(({ index }) => index === tab);
+    });
+
+    if (group) {
+      setActiveGroup(group[0]);
+    } else {
+      setActiveGroup(null);
+    }
+  }, []);
 
   const tabItems = useMemo(() => {
     return Object.values(groupedItems).flat();
