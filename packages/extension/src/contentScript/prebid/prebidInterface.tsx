@@ -32,6 +32,7 @@ import {
 } from '../../constants';
 import { decycle } from '../utils/decycle';
 import doesPrebidExist from '../utils/doesPrebidExist';
+import mergeUnique2DArrays from '../utils/mergeUnique2DArrays';
 
 /**
  * Represents the webpage's content script functionalities.
@@ -283,13 +284,9 @@ class PrebidInterface {
       this.prebidData.noBids[bid.auctionId] = {
         adUnitCode: bid.adUnitCode,
         mediaContainerSize: [
-          ...(this.prebidData.noBids[bid.auctionId]?.mediaContainerSize ?? []),
-          ...(bid?.sizes ?? []).filter(
-            (size: number[]) =>
-              this.prebidData.noBids[bid.auctionId] &&
-              !(
-                this.prebidData.noBids[bid.auctionId].mediaContainerSize ?? []
-              ).includes(size)
+          ...mergeUnique2DArrays(
+            this.prebidData.noBids[bid.auctionId]?.mediaContainerSize ?? [],
+            bid?.sizes ?? []
           ),
         ],
         bidder: Array.from(
