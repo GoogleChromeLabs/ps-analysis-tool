@@ -33,6 +33,11 @@
       "matches": ["*://*/*"]
     },
     {
+      "js": ["prebid-content-script.js"],
+      "matches": ["*://*/*"],
+      "run_at": "document_start"
+    },
+    {
       "js": ["js-cookie-content-script.js"],
       "matches": ["*://*/*"],
       "all_frames": true
@@ -44,8 +49,13 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["assets/data/*.json", "data/*json", "report/index.html"],
-      "matches": ["*://*/*"]
+      "resources": [
+        "assets/data/*.json",
+        "data/*json",
+        "report/index.html",
+        "prebid-interface.js"
+      ],
+      "matches": ["*://*/*", "http://*/*", "https://*/*"]
     }
   ]
 }
