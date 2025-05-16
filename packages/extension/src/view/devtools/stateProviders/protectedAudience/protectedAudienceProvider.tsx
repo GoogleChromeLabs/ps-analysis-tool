@@ -51,6 +51,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
     adUnits: {},
     noBids: {},
+    versionInfo: '',
+    installedModules: [],
+    config: {},
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},

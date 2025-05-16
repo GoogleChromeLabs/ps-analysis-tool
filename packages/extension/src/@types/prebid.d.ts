@@ -343,6 +343,7 @@ declare global {
     debug?: boolean;
     bidderTimeout?: number;
     enableSendAllBids?: boolean;
+    bidderSequence?: string;
     useBidCache?: boolean;
     priceGranularity?:
       | 'low'
