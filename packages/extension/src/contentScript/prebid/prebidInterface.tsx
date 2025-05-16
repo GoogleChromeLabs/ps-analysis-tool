@@ -17,11 +17,7 @@
 /**
  * External dependencies.
  */
-import type {
-  AdsAndBiddersType,
-  PrebidNoBidsType,
-  ReceivedBids,
-} from '@google-psat/common';
+import type { AdsAndBiddersType } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -33,6 +29,7 @@ import {
 import { decycle } from '../utils/decycle';
 import doesPrebidExist from '../utils/doesPrebidExist';
 import mergeUnique2DArrays from '../utils/mergeUnique2DArrays';
+import type { PrebidEvents } from '../../store';
 
 /**
  * Represents the webpage's content script functionalities.
@@ -55,15 +52,12 @@ class PrebidInterface {
   /**
    * Prebid Data.
    */
-  prebidData: {
-    adUnits: AdsAndBiddersType;
-    noBids: PrebidNoBidsType;
-    receivedBids: ReceivedBids[];
-    errorEvents: { type: 'WARNING' | 'ERROR' | 'INFO'; message: string[] }[];
-    auctionEvents: { [auctionId: string]: any[] };
-  } = {
+  prebidData: PrebidEvents = {
     adUnits: {},
     noBids: {},
+    versionInfo: '',
+    installedModules: [],
+    config: {},
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},
@@ -107,6 +101,18 @@ class PrebidInterface {
     };
 
     this.setIntervalValue = setInterval(() => {
+      if (
+        this.prebidExists &&
+        this.prebidData.installedModules.length === 0 &&
+        this.prebidData.versionInfo &&
+        Object.keys(this.prebidData.config).length === 0
+      ) {
+        this.prebidData.versionInfo = this.prebidInterface?.version ?? '';
+        this.prebidData.installedModules =
+          this.prebidInterface?.installedModules ?? [];
+        this.prebidData.config = this.prebidInterface?.getConfig() ?? {};
+      }
+
       if (this.updateCounter > 0) {
         this.sendInitialData();
         this.updateCounter = 0;
@@ -122,7 +128,10 @@ class PrebidInterface {
         noBids: {},
         receivedBids: [],
         errorEvents: [],
+        versionInfo: '',
+        config: {},
         auctionEvents: {},
+        installedModules: [],
       };
 
       if (this.setIntervalValue) {

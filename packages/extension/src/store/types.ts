@@ -19,7 +19,7 @@
 import type {
   AdsAndBiddersType,
   CookieData,
-  NoBidsType,
+  PrebidNoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
 
@@ -56,11 +56,11 @@ export type AllowedDomainStorage = {
 
 export type PrebidEvents = {
   adUnits: AdsAndBiddersType;
-  noBids: NoBidsType;
+  noBids: PrebidNoBidsType;
+  versionInfo: string;
   receivedBids: ReceivedBids[];
-  errorEvents: {
-    type: 'WARNING' | 'ERROR' | 'INFO';
-    message: string[];
-  }[];
+  errorEvents: { type: 'WARNING' | 'ERROR' | 'INFO'; message: string[] }[];
   auctionEvents: { [auctionId: string]: any[] };
+  installedModules: string[];
+  config: PrebidConfig;
 };

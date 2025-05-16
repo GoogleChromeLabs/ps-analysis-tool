@@ -339,22 +339,279 @@ declare global {
     type: AuctionDebugEventType;
     arguments: string[];
   }
-
   interface PrebidConfig {
-    cache?: object;
-    consentManagement?: object;
     debug?: boolean;
-    enableSendAllBids?: boolean;
-    priceGranularity?: string | object;
-    userSync?: object;
     bidderTimeout?: number;
+    enableSendAllBids?: boolean;
     useBidCache?: boolean;
-    deviceAccess?: boolean;
-    ortb2?: object;
-    ttlBuffer?: number;
-    auctionOptions?: object;
-    schain?: object;
+    priceGranularity?:
+      | 'low'
+      | 'medium'
+      | 'high'
+      | 'auto'
+      | 'dense'
+      | CustomPriceGranularity;
+    currency?: {
+      adServerCurrency: string;
+      granularityMultiplier?: number;
+      defaultRates?: Record<string, number>;
+      conversionRateFile?: string;
+      rates?: Record<string, number>;
+    };
+    consentManagement?: {
+      gdpr?: {
+        cmpApi: 'iab' | 'static' | 'iabnonsupport' | 'none';
+        timeout?: number;
+        allowAuctionWithoutConsent?: boolean;
+        defaultGdprScope?: boolean;
+      };
+      usp?: {
+        cmpApi: 'iab' | 'static' | 'none';
+        timeout?: number;
+      };
+    };
+    userSync?: {
+      syncEnabled?: boolean;
+      filterSettings?: {
+        all?: {
+          bidders?: string[];
+          filter?: 'include' | 'exclude';
+        };
+        iframe?: {
+          bidders?: string[];
+          filter?: 'include' | 'exclude';
+        };
+        image?: {
+          bidders?: string[];
+          filter?: 'include' | 'exclude';
+        };
+      };
+      syncsPerBidder?: number;
+      syncDelay?: number;
+      auctionDelay?: number;
+      enableOverride?: boolean;
+    };
+    cache?: {
+      url?: string;
+      vasturl?: string;
+      ignoreBidderCacheKey?: boolean;
+    };
+    targetingControls?: {
+      alwaysIncludeDeals?: boolean;
+      appendBidderNames?: boolean;
+      includeWinners?: boolean;
+      includeBidderKeys?: boolean;
+    };
+    s2sConfig?:
+      | {
+          accountId: string;
+          bidders: string[];
+          timeout?: number;
+          adapter?: string;
+          endpoint?: string;
+          syncEndpoint?: string;
+          cookieSet?: boolean;
+          cookieSetUrl?: string;
+          defaultVendor?: string;
+          sendTopBidOnly?: boolean;
+          allowUnknownBidderCodes?: boolean;
+        }
+      | Array<{
+          name: string;
+          accountId: string;
+          bidders: string[];
+          timeout?: number;
+          adapter?: string;
+          endpoint?: string;
+          syncEndpoint?: string;
+          cookieSet?: boolean;
+          cookieSetUrl?: string;
+          defaultVendor?: string;
+          sendTopBidOnly?: boolean;
+          allowUnknownBidderCodes?: boolean;
+        }>;
+    ortb2?: {
+      site?: {
+        page?: string;
+        domain?: string;
+        ref?: string;
+        keywords?: string;
+        cat?: string[];
+        sectioncat?: string[];
+        pagecat?: string[];
+        content?: {
+          id?: string;
+          episode?: number;
+          title?: string;
+          series?: string;
+          season?: string;
+          artist?: string;
+          genre?: string;
+          album?: string;
+          isrc?: string;
+          producer?: {
+            id?: string;
+            name?: string;
+          };
+          url?: string;
+          cat?: string[];
+          prodq?: number;
+          context?: number;
+          contentrating?: string;
+          userrating?: string;
+          qagmediarating?: number;
+          keywords?: string;
+          livestream?: boolean;
+          sourcerelationship?: number;
+          len?: number;
+          language?: string;
+          embeddable?: boolean;
+          data?: Array<{
+            id?: string;
+            name?: string;
+            segment?: Array<{
+              id?: string;
+              name?: string;
+              value?: string;
+            }>;
+          }>;
+        };
+        publisher?: {
+          id?: string;
+          name?: string;
+          cat?: string[];
+          domain?: string;
+        };
+        ext?: Record<string, any>;
+      };
+      user?: {
+        id?: string;
+        buyeruid?: string;
+        yob?: number;
+        gender?: string;
+        keywords?: string;
+        customdata?: string;
+        geo?: {
+          lat?: number;
+          lon?: number;
+          type?: number;
+          accuracy?: number;
+          lastfix?: number;
+          ipservice?: number;
+          country?: string;
+          region?: string;
+          regionfips104?: string;
+          metro?: string;
+          city?: string;
+          zip?: string;
+          utcoffset?: number;
+        };
+        data?: Array<{
+          id?: string;
+          name?: string;
+          segment?: Array<{
+            id?: string;
+            name?: string;
+            value?: string;
+          }>;
+        }>;
+        ext?: Record<string, any>;
+      };
+      device?: {
+        ua?: string;
+        geo?: {
+          lat?: number;
+          lon?: number;
+          type?: number;
+          accuracy?: number;
+          lastfix?: number;
+          ipservice?: number;
+          country?: string;
+          region?: string;
+          regionfips104?: string;
+          metro?: string;
+          city?: string;
+          zip?: string;
+          utcoffset?: number;
+        };
+        dnt?: number;
+        lmt?: number;
+        ip?: string;
+        ipv6?: string;
+        devicetype?: number;
+        make?: string;
+        model?: string;
+        os?: string;
+        osv?: string;
+        hwv?: string;
+        h?: number;
+        w?: number;
+        ppi?: number;
+        pxratio?: number;
+        js?: number;
+        geofetch?: number;
+        flashver?: string;
+        language?: string;
+        carrier?: string;
+        mccmnc?: string;
+        connectiontype?: number;
+        ifa?: string;
+        didsha1?: string;
+        didmd5?: string;
+        dpidsha1?: string;
+        dpidmd5?: string;
+        macsha1?: string;
+        macmd5?: string;
+      };
+      regs?: {
+        coppa?: number;
+        gdpr?: number;
+        us_privacy?: string;
+        ext?: Record<string, any>;
+      };
+      ext?: Record<string, any>;
+    };
+    labels?: string[];
+    maxNestedIframes?: number;
+    disableAjaxTimeout?: boolean;
+    enableTIDs?: boolean;
+    allowActivities?: {
+      [activity: string]: {
+        rules: Array<{
+          priority: number;
+          condition: (params: any) => boolean;
+          allow: boolean;
+        }>;
+      };
+    };
+    analytics?: Array<{
+      provider: string;
+      options: Record<string, any>;
+      includeEvents?: string[];
+      excludeEvents?: string[];
+    }>;
+    bidderSettings?: Record<
+      string,
+      {
+        bidCpmAdjustment?: (bidCpm: number) => number;
+        alwaysUseBid?: boolean;
+        sendStandardTargeting?: boolean;
+        adserverTargeting?: Array<{
+          key: string;
+          val: (bidResponse: any) => string;
+        }>;
+      }
+    >;
+    [key: string]: any;
   }
+
+  type CustomPriceGranularity = {
+    buckets: Array<{
+      min: number;
+      max: number;
+      increment: number;
+    }>;
+  };
 
   interface PrebidJsGlobal {
     que: Array<() => void>;
@@ -407,6 +664,7 @@ declare global {
     getHighestUnusedBidResponseForAdUnitCode(
       adUnitCode: string
     ): BidResponse | null;
+    version: string;
     installedModules: string[];
     bidderSettings: Record<string, any>;
     aliasRegistry: Record<string, string>;
