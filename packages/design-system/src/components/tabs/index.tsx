@@ -74,12 +74,12 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     [activeTab, titles.length, setActiveTab]
   );
 
-  const [groupsClickedState, setGroupsClickedState] = useState<
+  const [groupsExpanded, setGroupsExpanded] = useState<
     Record<string, { hidden: boolean; animating: boolean }>
   >({});
 
   useEffect(() => {
-    setGroupsClickedState(
+    setGroupsExpanded(
       Object.keys(groupedTitles).reduce((acc, group, index) => {
         acc[group] = {
           hidden: true,
@@ -98,7 +98,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
   const handleGroupClick = useCallback((group: string) => {
     let shouldUnhideInstantly = false;
 
-    setGroupsClickedState((prevState) => {
+    setGroupsExpanded((prevState) => {
       if (prevState[group]?.hidden) {
         shouldUnhideInstantly = true;
       }
@@ -113,7 +113,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     });
 
     setTimeout(() => {
-      setGroupsClickedState((prevState) => ({
+      setGroupsExpanded((prevState) => ({
         ...prevState,
         [group]: {
           hidden: shouldUnhideInstantly
@@ -152,7 +152,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                 {
                   'gap-4':
                     Object.keys(data).length > 1 &&
-                    !groupsClickedState[group]?.animating,
+                    !groupsExpanded[group]?.animating,
                 }
               )}
             >
@@ -170,12 +170,12 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                   {group}
                 </button>
               )}
-              {(!groupsClickedState[group]?.hidden ||
+              {(!groupsExpanded[group]?.hidden ||
                 Object.keys(data).length === 1) && (
                 <div
                   className={classNames(
                     'transition-[width] duration-300 ease-in-out',
-                    groupsClickedState[group]?.animating ? 'w-0' : 'w-fit'
+                    groupsExpanded[group]?.animating ? 'w-0' : 'w-fit'
                   )}
                 >
                   <div
@@ -184,7 +184,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                       {
                         'gap-2': Object.keys(data).length > 1,
                       },
-                      groupsClickedState[group]?.animating
+                      groupsExpanded[group]?.animating
                         ? 'opacity-0 -translate-x-10'
                         : 'opacity-100 translate-x-0'
                     )}
