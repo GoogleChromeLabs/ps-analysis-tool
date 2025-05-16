@@ -53,14 +53,7 @@ const InfoCard = ({ infoKey, explainers }: InfoCardProps) => {
       {Object.keys(PSInfo).length ? (
         <>
           <div className="max-w-2xl">
-            {PSInfo.useI18n ? (
-              <p
-                className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
-                dangerouslySetInnerHTML={{
-                  __html: I18n.getMessage(PSInfo.description),
-                }}
-              />
-            ) : (
+            {PSInfo.useI18n === false ? (
               <p className="mb-3 text-raisin-black dark:text-bright-gray text-sm">
                 <LinkProcessor
                   text={PSInfo.description}
@@ -68,6 +61,13 @@ const InfoCard = ({ infoKey, explainers }: InfoCardProps) => {
                   sameTab
                 />
               </p>
+            ) : (
+              <p
+                className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
+                dangerouslySetInnerHTML={{
+                  __html: I18n.getMessage(PSInfo.description),
+                }}
+              />
             )}
             {Object.keys(explainers || {}).map((key) => (
               <div
