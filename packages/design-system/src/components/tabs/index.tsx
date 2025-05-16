@@ -134,7 +134,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     >
       <div
         className={classNames(
-          'flex gap-8 mx-2 w-full overflow-x-auto',
+          'flex gap-8 px-2 w-full overflow-x-auto',
           fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
