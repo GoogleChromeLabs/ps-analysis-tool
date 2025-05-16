@@ -170,7 +170,8 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                   {group}
                 </button>
               )}
-              {!groupsClickedState[group]?.hidden && (
+              {(!groupsClickedState[group]?.hidden ||
+                Object.keys(data).length === 1) && (
                 <div
                   className={classNames(
                     'transition-[width] duration-300 ease-in-out',
