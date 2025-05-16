@@ -80,12 +80,14 @@ const BodyRow = ({
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
-          : 'bg-lavender-sky dark:bg-midnight-slate'
+          : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
         : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
+
+  console.log(rowKey === selectedKey, isRowFocused, isHighlighted);
 
   useEffect(() => {
     if (isHighlighted) {

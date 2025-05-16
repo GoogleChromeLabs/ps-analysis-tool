@@ -150,7 +150,7 @@ const IGTable = ({
       const tableRowClassName = isHighlighted
         ? isRowFocused
           ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light text-black transition-colors'
-          : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver'
+          : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : '';
 
       return tableRowClassName;

@@ -60,7 +60,7 @@ const conditionalTableRowClassesHandler = (
           : 'dark:bg-jungle-green-light bg-leaf-green-light'
         : isRowFocused
         ? 'bg-selection-green-dark dark:bg-selection-green-light'
-        : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
+        : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver')
   );
 
   return tableRowClassName;
