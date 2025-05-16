@@ -159,13 +159,21 @@ const Panel = ({
     );
   }, [activeTab]);
 
+  const storageLoaded = useRef(false);
+
   useEffect(() => {
+    if (storageLoaded.current) {
+      return;
+    }
+
     setTopicsTableData(
       JSON.parse(storageRef.current[1] || '{}')?.topicsTableData || {}
     );
     setActiveTab(
       JSON.parse(storageRef.current[1] || '{}')?.activeEpochTab || 0
     );
+
+    storageLoaded.current = true;
   }, [setTopicsTableData, setActiveTab]);
 
   useEffect(() => {
