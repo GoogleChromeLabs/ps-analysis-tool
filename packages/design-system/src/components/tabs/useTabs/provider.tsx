@@ -54,7 +54,9 @@ export const TabsProvider = ({
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
 
   useEffect(() => {
-    setActiveGroup(Object.keys(groupedItems)[0] ?? null);
+    setActiveGroup((prev) =>
+      prev === null ? Object.keys(groupedItems)[0] ?? null : prev
+    );
   }, [groupedItems]);
 
   const [activeTab, _setActiveTab] = useState(0);
