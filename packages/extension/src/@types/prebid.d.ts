@@ -584,7 +584,7 @@ declare global {
     maxNestedIframes?: number;
     disableAjaxTimeout?: boolean;
     enableTIDs?: boolean;
-    gptPreAuction: GptPreAuctionConfig;
+    gptPreAuction?: GptPreAuctionConfig;
     allowActivities?: {
       [activity: string]: {
         rules: Array<{

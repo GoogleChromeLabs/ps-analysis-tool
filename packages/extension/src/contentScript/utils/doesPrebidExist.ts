@@ -61,7 +61,7 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             bidCpmAdjustment = noop,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            adServerTargeting = [],
+            adserverTargeting = [],
             ...rest
           } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};
 

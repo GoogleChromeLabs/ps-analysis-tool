@@ -148,7 +148,7 @@ const useConfigContainer = (
         panel: {
           Element: JsonViewerWrapper,
           props: {
-            bidderSettings: config?.bidderSettings ?? {},
+            config: config?.bidderSettings ?? {},
           },
         },
         children: {},
