@@ -149,7 +149,9 @@ const ConfigContainer = ({
         },
         panel: {
           Element: BidderSettings,
-          props: {},
+          props: {
+            bidderSettings: config.bidderSettings,
+          },
         },
         children: {},
         dropdownOpen: true,
@@ -247,7 +249,18 @@ const ConfigContainer = ({
         dropdownOpen: true,
       },
     }),
-    [config]
+    [
+      config.bidderSequence,
+      config.bidderSettings,
+      config.bidderTimeout,
+      config.customPriceBucket,
+      config.enableSendAllBids,
+      config.maxBid,
+      config.maxNestedIframes,
+      config.priceGranularity,
+      config.useBidCache,
+      installedModules,
+    ]
   );
   return (
     <SidebarProvider

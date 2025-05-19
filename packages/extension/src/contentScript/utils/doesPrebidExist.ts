@@ -16,6 +16,7 @@
 /**
  * Internal dependencies.
  */
+import { noop } from '@google-psat/common';
 import { type PrebidInterfaceType } from '../prebid/prebidInterface';
 /**
  * This function checks if Prebid is present on the page and initialises the prebid object to send and receive messages.
@@ -40,14 +41,40 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
       ] as unknown as typeof window.pbjs;
       pbjsClass.prebidExists = true;
       pbjsClass.scanningStatus = true;
+
       pbjsClass.sendInitialData();
       pbjsClass.initPrebidListener();
+
       pbjsClass.prebidData.versionInfo =
         pbjsClass.prebidInterface.version ?? '';
+
       pbjsClass.prebidData.installedModules =
         pbjsClass.prebidInterface.installedModules ?? [];
-      pbjsClass.prebidData.config =
-        pbjsClass.prebidInterface?.getConfig() ?? {};
+
+      const bidderSettings: Record<string, SingleBidderSetting> = {};
+
+      Object.keys(pbjsClass?.prebidInterface?.bidderSettings ?? {}).forEach(
+        (bidder) => {
+          bidderSettings[bidder] = {};
+
+          const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            bidCpmAdjustment = noop,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            adServerTargeting = [],
+            ...rest
+          } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};
+
+          bidderSettings[bidder] = {
+            ...rest,
+          };
+        }
+      );
+
+      pbjsClass.prebidData.config = {
+        ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
+        bidderSettings,
+      };
 
       stopLoop = true;
       clearTimeout(timeout);

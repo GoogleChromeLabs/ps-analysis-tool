@@ -42,7 +42,7 @@ export const runtimeOnMessageListener = async (request: any) => {
   if (request.setInPagePrebidInterface) {
     const tabs = await chrome.tabs.query({});
 
-    if (!frames) {
+    if (!tabs) {
       return;
     }
 

@@ -585,20 +585,20 @@ declare global {
       includeEvents?: string[];
       excludeEvents?: string[];
     }>;
-    bidderSettings?: Record<
-      string,
-      {
-        bidCpmAdjustment?: (bidCpm: number) => number;
-        alwaysUseBid?: boolean;
-        sendStandardTargeting?: boolean;
-        adserverTargeting?: Array<{
-          key: string;
-          val: (bidResponse: any) => string;
-        }>;
-      }
-    >;
+    bidderSettings?: Record<string, SingleBidderSetting>;
     [key: string]: any;
   }
+
+  type SingleBidderSetting = {
+    bidCpmAdjustment?: (bidCpm: number) => number;
+    alwaysUseBid?: boolean;
+    sendStandardTargeting?: boolean;
+    adserverTargeting?: Array<{
+      key: string;
+      val: (bidResponse: any) => string;
+    }>;
+  };
+
   type PriceGranularityValue = Array<{
     min: number;
     max: number;
