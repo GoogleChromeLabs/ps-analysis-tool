@@ -65,6 +65,7 @@ const Events = ({ errorEvents }: EventsPanelProps) => {
     <div className="w-full h-full flex flex-col">
       <Header
         errorEvents={errorEvents}
+        filteredErrorEvents={errorEvents}
         setSelectedDropdownValues={setSelectedDropdownValues}
         setSearchValue={setSearchValue}
         selectedDropDownValues={selectedDropDownValues}

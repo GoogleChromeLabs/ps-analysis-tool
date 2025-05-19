@@ -25,7 +25,6 @@ import {
 import {
   useCallback,
   useMemo,
-  useState,
   type Dispatch,
   type SetStateAction,
 } from 'react';
@@ -37,38 +36,20 @@ import type { PrebidEvents } from '../../../../../../../../store';
 
 type HeaderProps = {
   errorEvents: PrebidEvents['errorEvents'];
+  filteredErrorEvents: PrebidEvents['errorEvents'];
   setSelectedDropdownValues: Dispatch<SetStateAction<string[]>>;
   setSearchValue: Dispatch<SetStateAction<string>>;
   selectedDropDownValues: string[];
   searchValue: string;
 };
-const Header = ({ errorEvents }: HeaderProps) => {
-  const [searchValue, setSearchValue] = useState('');
-  const [dropDown, setDropDown] = useState(['ALL', 'WARNING', 'INFO', 'ERROR']);
-
-  const filteredErrorEvents = useMemo(() => {
-    if (!searchValue && dropDown.includes('ALL')) {
-      return errorEvents;
-    }
-
-    let filteredEvents = errorEvents;
-
-    if (searchValue) {
-      filteredEvents = errorEvents.filter((event) => {
-        return Object.values(event.message).join(' ').includes(searchValue);
-      });
-    }
-
-    filteredEvents = filteredEvents.filter((event) => {
-      return (
-        (dropDown.length > 0 && dropDown.includes(event.type)) ||
-        dropDown.includes('ALL')
-      );
-    });
-
-    return filteredEvents;
-  }, [dropDown, errorEvents, searchValue]);
-
+const Header = ({
+  errorEvents,
+  filteredErrorEvents,
+  setSelectedDropdownValues,
+  setSearchValue,
+  selectedDropDownValues,
+  searchValue,
+}: HeaderProps) => {
   const eventsCount = useMemo(() => {
     const counter = {
       warnings: 0,
@@ -88,9 +69,12 @@ const Header = ({ errorEvents }: HeaderProps) => {
     return counter;
   }, [errorEvents]);
 
-  const onChange = useCallback((options: string[]) => {
-    setDropDown(options);
-  }, []);
+  const onChange = useCallback(
+    (options: string[]) => {
+      setSelectedDropdownValues(options);
+    },
+    [setSelectedDropdownValues]
+  );
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -113,7 +97,7 @@ const Header = ({ errorEvents }: HeaderProps) => {
               { value: 'ERROR', label: 'Errors' },
             ]}
             onChange={onChange}
-            selected={dropDown}
+            selected={selectedDropDownValues}
           />
         </div>
         <div className="w-max h-full flex flex-row gap-2 items-center px-1.5 text-raisin-black dark:text-bright-gray">
