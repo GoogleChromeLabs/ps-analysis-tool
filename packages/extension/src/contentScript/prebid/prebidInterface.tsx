@@ -179,9 +179,13 @@ class PrebidInterface {
     });
 
     this.prebidInterface?.onEvent('auctionDebug', (args) => {
+      const events = this.prebidInterface?.getEvents();
+      const lastEvent = events?.[events.length - 1];
+
       this.prebidData.errorEvents.push({
         type: args.type,
         message: args.arguments,
+        time: `${Math.round(lastEvent?.elapsedTime ?? 0)}ms`,
       });
       this.updateCounter++;
     });

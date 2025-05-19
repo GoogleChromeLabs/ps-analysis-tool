@@ -59,7 +59,11 @@ export type PrebidEvents = {
   noBids: PrebidNoBidsType;
   versionInfo: string;
   receivedBids: ReceivedBids[];
-  errorEvents: { type: 'WARNING' | 'ERROR' | 'INFO'; message: string[] }[];
+  errorEvents: {
+    type: 'WARNING' | 'ERROR' | 'INFO';
+    message: string[];
+    time: string;
+  }[];
   auctionEvents: { [auctionId: string]: any[] };
   installedModules: string[];
   config: PrebidConfig;

@@ -19,12 +19,13 @@
  */
 import { PillToggle } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
-import ConfigContainer from './tabs/config';
-import type { PrebidEvents } from '../../../../../../store';
 
 /**
  * Internal dependencies.
  */
+import ConfigContainer from './tabs/config';
+import type { PrebidEvents } from '../../../../../../store';
+import EventsContainer from './tabs/events';
 
 enum PillToggleOptions {
   Config = 'Config',
@@ -35,10 +36,10 @@ enum PillToggleOptions {
 }
 
 interface PanelProps {
-  config: PrebidEvents;
+  prebidResponse: PrebidEvents;
 }
 
-const Panel = ({ config }: PanelProps) => {
+const Panel = ({ prebidResponse }: PanelProps) => {
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.Config
   );
@@ -48,22 +49,42 @@ const Panel = ({ config }: PanelProps) => {
       case PillToggleOptions.Config:
         return (
           <ConfigContainer
-            config={config.config}
-            installedModules={config.installedModules}
+            config={prebidResponse.config}
+            installedModules={prebidResponse.installedModules ?? []}
           />
         );
       case PillToggleOptions.Events:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return <EventsContainer errorEvents={prebidResponse.errorEvents} />;
       case PillToggleOptions.Tools:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return (
+          <ConfigContainer
+            config={prebidResponse.config}
+            installedModules={[]}
+          />
+        );
       case PillToggleOptions.UserId:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return (
+          <ConfigContainer
+            config={prebidResponse.config}
+            installedModules={[]}
+          />
+        );
       case PillToggleOptions.Version:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return (
+          <ConfigContainer
+            config={prebidResponse.config}
+            installedModules={[]}
+          />
+        );
       default:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return (
+          <ConfigContainer
+            config={prebidResponse.config}
+            installedModules={[]}
+          />
+        );
     }
-  }, [config.config, config.installedModules, pillToggle]);
+  }, [prebidResponse.config, prebidResponse.installedModules, pillToggle]);
 
   return (
     <div className="flex flex-col pt-4 h-full w-full">
