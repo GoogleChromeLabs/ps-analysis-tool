@@ -199,7 +199,9 @@ const ConfigContainer = ({
         },
         panel: {
           Element: UserIds,
-          props: {},
+          props: {
+            config: config?.userSync?.userIds ?? [],
+          },
         },
         children: {},
         dropdownOpen: true,
@@ -252,6 +254,7 @@ const ConfigContainer = ({
       },
     }),
     [
+      config.userSync?.userIds,
       config.consentManagement,
       config.bidderSequence,
       config.bidderSettings,

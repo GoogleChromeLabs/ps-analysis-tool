@@ -48,6 +48,13 @@ export type PrebidConsentManagementTableData = {
   defaultGdprScope?: boolean;
 };
 
+export type PrebidUserIdsTableData = {
+  name: string;
+  type?: 'cookie' | 'html5';
+  expires?: number;
+  storageName?: string;
+};
+
 export type TableData = (
   | CookieTableData
   | InterestGroups
@@ -60,6 +67,7 @@ export type TableData = (
   | PrebidConfigTableData
   | PrebidPriceGranularityTableData
   | PrebidConsentManagementTableData
+  | PrebidUserIdsTableData
 ) & {
   highlighted?: boolean;
 };

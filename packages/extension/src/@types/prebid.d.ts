@@ -335,6 +335,19 @@ declare global {
 
   type AuctionDebugEventType = 'INFO' | 'WARNING' | 'ERROR';
 
+  interface UserIdConfig {
+    name: string;
+    storage?: {
+      type: 'cookie' | 'html5';
+      name: string;
+      expires?: number; // in days
+      refreshInSeconds?: number;
+    };
+    params?: Record<string, any>;
+    value?: any; // Used when identity is already available and set manually
+    bidders?: string[]; // Optional: only enable this ID for specific bidders
+  }
+
   interface AuctionDebugEvent {
     type: AuctionDebugEventType;
     arguments: string[];
@@ -366,6 +379,7 @@ declare global {
       };
     };
     userSync?: {
+      userIds?: UserIdConfig[];
       syncEnabled?: boolean;
       filterSettings?: {
         all?: {
