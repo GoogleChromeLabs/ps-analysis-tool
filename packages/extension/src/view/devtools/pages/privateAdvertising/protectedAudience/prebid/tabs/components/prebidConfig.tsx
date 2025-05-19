@@ -20,9 +20,11 @@ import { noop } from '@google-psat/common';
 import {
   Table,
   TableProvider,
+  type PrebidConfigTableData,
   type TableColumn,
+  type TableData,
 } from '@google-psat/design-system';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 type PrebidConfigPanelProps = {
   configObject: Partial<PrebidConfig>;
@@ -40,10 +42,27 @@ const PrebidConfig = ({ configObject }: PrebidConfigPanelProps) => {
       {
         header: 'Value',
         accessorKey: 'value',
-        cell: (info) => info.toString(),
+        cell: (info) => info?.toString(),
       },
     ],
     []
+  );
+
+  const isRowSelected = useCallback(
+    (data: TableData | null) => {
+      const _data = data as {
+        name: string;
+        value: string | number | boolean;
+        index: number;
+      };
+
+      if (!_data) {
+        return true;
+      }
+
+      return _data.index.toString() === selectedKey;
+    },
+    [selectedKey]
   );
 
   return (
@@ -56,10 +75,15 @@ const PrebidConfig = ({ configObject }: PrebidConfigPanelProps) => {
             index,
           };
         })}
+        isRowSelected={isRowSelected}
         tableColumns={tableColumns}
-        onRowClick={(row) => setSelectedKey(row?.originalData?.index)}
+        onRowClick={(row) =>
+          setSelectedKey((row as PrebidConfigTableData)?.index.toString() ?? '')
+        }
         onRowContextMenu={noop}
-        getRowObjectKey={(row) => row?.originalData?.index}
+        getRowObjectKey={(row) =>
+          (row?.originalData as PrebidConfigTableData)?.index.toString()
+        }
       >
         <Table
           hideTableTopBar={true}

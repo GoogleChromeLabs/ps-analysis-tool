@@ -345,13 +345,7 @@ declare global {
     enableSendAllBids?: boolean;
     bidderSequence?: string;
     useBidCache?: boolean;
-    priceGranularity?:
-      | 'low'
-      | 'medium'
-      | 'high'
-      | 'auto'
-      | 'dense'
-      | CustomPriceGranularity;
+    priceGranularity?: 'low' | 'medium' | 'high' | 'auto' | 'dense' | 'custom';
     currency?: {
       adServerCurrency: string;
       granularityMultiplier?: number;
@@ -605,13 +599,15 @@ declare global {
     >;
     [key: string]: any;
   }
+  type PriceGranularityValue = Array<{
+    min: number;
+    max: number;
+    increment: number;
+    precision: number;
+  }>;
 
   type CustomPriceGranularity = {
-    buckets: Array<{
-      min: number;
-      max: number;
-      increment: number;
-    }>;
+    buckets: PriceGranularityValue;
   };
 
   interface PrebidJsGlobal {

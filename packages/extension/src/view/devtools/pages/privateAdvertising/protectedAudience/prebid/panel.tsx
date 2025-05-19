@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { PillToggle } from '@google-psat/design-system';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ConfigContainer from './tabs';
 import type { PrebidEvents } from '../../../../../../store';
 
@@ -43,6 +43,28 @@ const Panel = ({ config }: PanelProps) => {
     PillToggleOptions.Config
   );
 
+  const containerToShow = useMemo(() => {
+    switch (pillToggle) {
+      case PillToggleOptions.Config:
+        return (
+          <ConfigContainer
+            config={config.config}
+            installedModules={config.installedModules}
+          />
+        );
+      case PillToggleOptions.Events:
+        return <ConfigContainer config={config.config} installedModules={[]} />;
+      case PillToggleOptions.Tools:
+        return <ConfigContainer config={config.config} installedModules={[]} />;
+      case PillToggleOptions.UserId:
+        return <ConfigContainer config={config.config} installedModules={[]} />;
+      case PillToggleOptions.Version:
+        return <ConfigContainer config={config.config} installedModules={[]} />;
+      default:
+        return <ConfigContainer config={config.config} installedModules={[]} />;
+    }
+  }, [config.config, config.installedModules, pillToggle]);
+
   return (
     <div className="flex flex-col pt-4 h-full w-full">
       <div className="px-4 pb-4">
@@ -54,15 +76,9 @@ const Panel = ({ config }: PanelProps) => {
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
-        {pillToggle === PillToggleOptions.Config ? (
-          <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
-            <ConfigContainer config={config.config} />
-          </div>
-        ) : (
-          <div className="h-full border-r border-t border-american-silver dark:border-quartz w-full">
-            events babua
-          </div>
-        )}
+        <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+          {containerToShow}
+        </div>
       </div>
     </div>
   );

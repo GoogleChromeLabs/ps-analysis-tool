@@ -39,9 +39,13 @@ import ConfigPanel from './container';
 
 type ConfigContainerPanelProps = {
   config: PrebidConfig;
+  installedModules: string[];
 };
 
-const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
+const ConfigContainer = ({
+  config,
+  installedModules,
+}: ConfigContainerPanelProps) => {
   const sidebarData = useMemo<SidebarItems>(
     () => ({
       prebidConfig: {
@@ -94,7 +98,9 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
         },
         panel: {
           Element: InstalledModules,
-          props: {},
+          props: {
+            installedModules,
+          },
         },
         children: {},
         dropdownOpen: true,
@@ -117,7 +123,10 @@ const ConfigContainer = ({ config }: ConfigContainerPanelProps) => {
         },
         panel: {
           Element: PriceGranularity,
-          props: {},
+          props: {
+            priceGranularity: config.priceGranularity,
+            customBucket: config.customPriceBucket,
+          },
         },
         children: {},
         dropdownOpen: true,
