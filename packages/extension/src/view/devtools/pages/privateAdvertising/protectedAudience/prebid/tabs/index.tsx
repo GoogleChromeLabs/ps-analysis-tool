@@ -22,6 +22,7 @@ import {
   FourSquares,
   Person,
   Ruler,
+  Server,
   Settings,
   SidebarProvider,
   type SidebarItems,
@@ -254,8 +255,34 @@ const ConfigContainer = ({
         children: {},
         dropdownOpen: true,
       },
+      prebidServerConfig: {
+        title: 'Prebid Server Config',
+        icon: {
+          Element: Server,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Server,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        panel: {
+          Element: JsonViewerWrapper,
+          props: {
+            config: config?.s2sConfig ?? [],
+          },
+        },
+        children: {},
+        dropdownOpen: true,
+      },
     }),
     [
+      config?.s2sConfig,
       config?.gptPreAuction,
       config?.bidderTimeout,
       config?.bidderSequence,
