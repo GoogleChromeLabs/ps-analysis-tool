@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 
 /**
@@ -30,21 +30,18 @@ import {
 import Panel from './panel';
 
 const AdUnits = () => {
-  const {
-    adsAndBidders,
-    setSelectedAdUnit,
-    receivedBids,
-    noBids,
-    selectedAdUnit,
-    auctionEvents,
-  } = useProtectedAudience(({ state, actions }) => ({
-    adsAndBidders: state.adsAndBidders,
-    setSelectedAdUnit: actions.setSelectedAdUnit,
-    receivedBids: state.receivedBids,
-    noBids: state.noBids,
-    selectedAdUnit: state.selectedAdUnit,
-    auctionEvents: state.auctionEvents,
-  }));
+  const { paapi, prebid, selectedAdUnit, setSelectedAdUnit } =
+    useProtectedAudience(({ state, actions }) => ({
+      paapi: {
+        adsAndBidders: state.adsAndBidders,
+        receivedBids: state.receivedBids,
+        noBids: state.noBids,
+        auctionEvents: state.auctionEvents,
+      },
+      selectedAdUnit: state.selectedAdUnit,
+      setSelectedAdUnit: actions.setSelectedAdUnit,
+      prebid: state.prebidResponse,
+    }));
 
   const { setIsInspecting } = useCookie(({ actions }) => ({
     setIsInspecting: actions.setIsInspecting,
@@ -69,6 +66,36 @@ const AdUnits = () => {
       setSelectedAdUnit(null);
     };
   }, [setSelectedAdUnit]);
+
+  const [pillToggle, setPillToggle] = useState('Prebid');
+
+  const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
+    if (pillToggle === 'Prebid') {
+      return {
+        adsAndBidders: prebid?.adUnits || {},
+        receivedBids: prebid?.receivedBids || [],
+        noBids: prebid?.noBids || {},
+        auctionEvents: prebid?.auctionEvents || {},
+      };
+    }
+
+    return {
+      adsAndBidders: paapi.adsAndBidders,
+      receivedBids: paapi.receivedBids,
+      noBids: paapi.noBids,
+      auctionEvents: paapi.auctionEvents,
+    };
+  }, [
+    paapi.adsAndBidders,
+    paapi.auctionEvents,
+    paapi.noBids,
+    paapi.receivedBids,
+    pillToggle,
+    prebid?.adUnits,
+    prebid?.auctionEvents,
+    prebid?.noBids,
+    prebid?.receivedBids,
+  ]);
 
   if (!isUsingCDP) {
     return (
@@ -101,6 +128,8 @@ const AdUnits = () => {
       selectedAdUnit={selectedAdUnit}
       setIsInspecting={setIsInspecting}
       auctionEvents={auctionEvents ?? {}}
+      pillToggle={pillToggle}
+      setPillToggle={setPillToggle}
     />
   );
 };

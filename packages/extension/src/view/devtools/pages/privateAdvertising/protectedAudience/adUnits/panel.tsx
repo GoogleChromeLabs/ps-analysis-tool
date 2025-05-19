@@ -17,10 +17,11 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import type {
   AdsAndBiddersType,
   NoBidsType,
+  PrebidNoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
 
@@ -32,19 +33,22 @@ import type { AuctionEventsType } from '../../../../stateProviders/protectedAudi
 import AdMatrix from './adMatrix';
 import AdTable from './adTable';
 import { PillToggle } from '@google-psat/design-system';
+import type { PrebidEvents } from '../../../../../../store';
 
 type DummyReceivedBids = Record<string, ReceivedBids[]>;
 
 interface AdUnitsPanelProps {
   adsAndBidders: AdsAndBiddersType;
   receivedBids: DummyReceivedBids | ReceivedBids[];
-  noBids: NoBidsType;
-  auctionEvents: AuctionEventsType;
+  noBids: NoBidsType | PrebidNoBidsType;
+  auctionEvents: AuctionEventsType | PrebidEvents['auctionEvents'];
   setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   showEvaluationPlaceholder?: boolean;
   isEE?: boolean;
+  pillToggle: string;
+  setPillToggle: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AdUnitsPanel = ({
@@ -57,6 +61,8 @@ const AdUnitsPanel = ({
   setIsInspecting,
   showEvaluationPlaceholder = true,
   isEE,
+  pillToggle,
+  setPillToggle,
 }: AdUnitsPanelProps) => {
   const adUnitsCount = Object.values(adsAndBidders).length;
   const biddersCount = useMemo(
@@ -74,19 +80,18 @@ const AdUnitsPanel = ({
   const bidsCount = Object.keys(receivedBids ?? {}).length;
   const noBidsCount = Object.keys(noBids).length;
 
-  const [pillToggle, setPillToggle] = useState('Prebid');
-
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="p-4">
-        <PillToggle
-          firstOption={'Prebid'}
-          secondOption={'PAAPI'}
-          pillToggle={pillToggle}
-          setPillToggle={setPillToggle}
-          eeAnimatedTab={isEE}
-        />
-      </div>
+      {!isEE && (
+        <div className="p-4">
+          <PillToggle
+            options={['Prebid', 'PAAPI']}
+            pillToggle={pillToggle}
+            setPillToggle={setPillToggle}
+            eeAnimatedTab={isEE}
+          />
+        </div>
+      )}
       <div className="flex flex-col flex-1 w-full">
         {Object.keys(adsAndBidders || {}).length ||
         Object.keys(auctionEvents || {}).length ? (
@@ -107,11 +112,21 @@ const AdUnitsPanel = ({
           </>
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center">
-            <p className="text-lg text-raisin-black dark:text-bright-gray">
-              No ad units were recorded.
-            </p>
-            {showEvaluationPlaceholder && (
-              <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
+            {pillToggle === 'Prebid' ? (
+              <>
+                <p className="text-lg text-raisin-black dark:text-bright-gray">
+                  No ad units were recorded.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-lg text-raisin-black dark:text-bright-gray">
+                  No ad units were recorded.
+                </p>
+                {showEvaluationPlaceholder && (
+                  <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
+                )}
+              </>
             )}
           </div>
         )}
