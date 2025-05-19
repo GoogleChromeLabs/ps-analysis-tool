@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { type CookieDatabase } from '@google-psat/common';
 
@@ -29,20 +29,15 @@ import { type CookieDatabase } from '@google-psat/common';
  * Fetch dictionary from local data folder.
  * @returns {Promise<CookieDatabase>} Open Cookie Data base
  */
-export function fetchDictionary(): Promise<CookieDatabase> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(
+export async function fetchDictionary(): Promise<CookieDatabase> {
+  const data = JSON.parse(
+    await fs.readFile(
       path.resolve(__dirname, './assets/data/open-cookie-database.json'),
       {
         encoding: 'utf8',
-      },
-      (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(JSON.parse(data));
-        }
       }
-    );
-  });
+    )
+  );
+
+  return data;
 }
