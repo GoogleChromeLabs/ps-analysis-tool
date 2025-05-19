@@ -350,5 +350,5 @@ class PrebidInterface {
 }
 
 export type PrebidInterfaceType = typeof PrebidInterface;
-
+export default PrebidInterface;
 doesPrebidExist(PrebidInterface);

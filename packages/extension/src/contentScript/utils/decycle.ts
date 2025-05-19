@@ -13,6 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Serializes an object into a JSON string while handling circular references.
+ *
+ * This function uses a `WeakSet` to track objects that have already been
+ * processed, preventing infinite recursion when encountering circular
+ * references. Additionally, it discards any object that contains a `location`
+ * property, such as `document` objects.
+ * @param obj - The object to be serialized into a JSON string.
+ * @returns A JSON string representation of the input object, with circular
+ * references handled and certain objects discarded.
+ */
+
 export const decycle = (obj: any) => {
   const cache = new WeakSet();
   return JSON.stringify(obj, (key, value) => {
