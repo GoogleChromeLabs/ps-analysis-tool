@@ -30,11 +30,9 @@ import React, { useMemo } from 'react';
 import PrebidConfig from './components/prebidConfig';
 import InstalledModules from './components/installedModules';
 import PriceGranularity from './components/priceGranularity';
-import BidderSettings from './components/bidderSettings';
+import JsonViewerWrapper from './components/jsonViewerWrapper';
 import ConsentManagement from './components/consentManagement';
 import UserIds from './components/userIds';
-import GPTPreAuction from './components/gptPreAuction';
-import UserSync from './components/userSync';
 import ConfigPanel from './container';
 
 type ConfigContainerPanelProps = {
@@ -148,7 +146,7 @@ const ConfigContainer = ({
           },
         },
         panel: {
-          Element: BidderSettings,
+          Element: JsonViewerWrapper,
           props: {
             bidderSettings: config?.bidderSettings ?? {},
           },
@@ -223,8 +221,10 @@ const ConfigContainer = ({
           },
         },
         panel: {
-          Element: GPTPreAuction,
-          props: {},
+          Element: JsonViewerWrapper,
+          props: {
+            config: config?.gptPreAuction ?? {},
+          },
         },
         children: {},
         dropdownOpen: true,
@@ -246,25 +246,28 @@ const ConfigContainer = ({
           },
         },
         panel: {
-          Element: UserSync,
-          props: {},
+          Element: JsonViewerWrapper,
+          props: {
+            config: config?.userSync ?? [],
+          },
         },
         children: {},
         dropdownOpen: true,
       },
     }),
     [
-      config.userSync?.userIds,
-      config.consentManagement,
-      config.bidderSequence,
-      config.bidderSettings,
-      config.bidderTimeout,
-      config.customPriceBucket,
-      config.enableSendAllBids,
-      config.maxBid,
-      config.maxNestedIframes,
-      config.priceGranularity,
-      config.useBidCache,
+      config?.gptPreAuction,
+      config?.bidderTimeout,
+      config?.bidderSequence,
+      config?.maxNestedIframes,
+      config?.maxBid,
+      config?.useBidCache,
+      config?.enableSendAllBids,
+      config?.priceGranularity,
+      config?.customPriceBucket,
+      config?.bidderSettings,
+      config?.consentManagement,
+      config?.userSync,
       installedModules,
     ]
   );

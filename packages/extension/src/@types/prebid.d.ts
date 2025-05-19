@@ -584,6 +584,7 @@ declare global {
     maxNestedIframes?: number;
     disableAjaxTimeout?: boolean;
     enableTIDs?: boolean;
+    gptPreAuction: GptPreAuctionConfig;
     allowActivities?: {
       [activity: string]: {
         rules: Array<{
@@ -601,6 +602,15 @@ declare global {
     }>;
     bidderSettings?: Record<string, SingleBidderSetting>;
     [key: string]: any;
+  }
+
+  interface GptPreAuctionConfig {
+    enabled: boolean;
+    timeout?: number; // in milliseconds
+    setTargeting?: boolean;
+    suppressInitialLoad?: boolean;
+    auctionDelay?: number;
+    requestBidsHook?: () => void;
   }
 
   type SingleBidderSetting = {
