@@ -24,7 +24,7 @@ interface PillToggleProps {
   secondOption: string;
   pillToggle: string;
   setPillToggle: (value: string) => void;
-  eeAnimatedTab: boolean;
+  eeAnimatedTab?: boolean;
 }
 
 const PillToggle = ({
