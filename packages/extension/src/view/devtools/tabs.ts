@@ -58,7 +58,7 @@ import { I18n } from '@google-psat/i18n';
  */
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
-import PrivateAggregationicon from '../../../../../assets/icons/private-aggregation.svg';
+import PrivateAggregationicon from '../../../../../assets/icons/private-aggregation.svg?react';
 
 import {
   SiteBoundaries,

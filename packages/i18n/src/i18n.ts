@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
-import { existsSync, readFileSync } from 'fs';
 import { IntlMessageFormat } from 'intl-messageformat';
-import path from 'path';
 
 /**
  * Class representing Internationalization (i18n) functionality.
@@ -135,39 +134,34 @@ class I18n {
    * Loads messages data for the CLI.
    * @param {string} locale - The locale string.
    */
-  loadCLIMessagesData(locale: string) {
+  async loadCLIMessagesData(locale: string) {
     const localeArray = this.createLocaleArray(locale);
 
     for (const _locale of localeArray) {
-      let localePath = '';
-      if (
-        existsSync(
-          path.resolve(
-            __dirname +
-              `../../node_modules/@google-psat/i18n/_locales/messages/${_locale}/messages.json`
-          )
-        )
-      ) {
-        localePath = path.resolve(
-          __dirname +
+      try {
+        let response;
+        try {
+          /* eslint-disable no-await-in-loop */
+          response = await fetch(
             `../../node_modules/@google-psat/i18n/_locales/messages/${_locale}/messages.json`
-        );
-      } else {
-        localePath = path.resolve(
-          __dirname + `../../../i18n/_locales/messages/${_locale}/messages.json`
-        );
-      }
+          );
+        } catch {
+          response = await fetch(
+            `../../../i18n/_locales/messages/${_locale}/messages.json`
+          );
+        }
 
-      if (existsSync(localePath)) {
-        const messages = JSON.parse(
-          readFileSync(localePath, {
-            encoding: 'utf-8',
-          })
-        );
+        if (!response.ok) {
+          continue;
+        }
 
+        const messages = await response.json();
         this.initMessages(messages);
         this.locale = _locale;
         break;
+        /* eslint-enable no-await-in-loop */
+      } catch (error) {
+        continue;
       }
     }
   }

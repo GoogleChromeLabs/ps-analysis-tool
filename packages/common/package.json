@@ -2,6 +2,7 @@
   "name": "@google-psat/common",
   "version": "0.14.1",
   "description": "A package for common utilities that are being used in multiple packages",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
   "source": "src/index.ts",
