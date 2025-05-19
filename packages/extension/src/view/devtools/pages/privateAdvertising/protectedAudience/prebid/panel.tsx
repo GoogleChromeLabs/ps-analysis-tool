@@ -19,7 +19,7 @@
  */
 import { PillToggle } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
-import ConfigContainer from './tabs';
+import ConfigContainer from './tabs/config';
 import type { PrebidEvents } from '../../../../../../store';
 
 /**

@@ -45,22 +45,25 @@ export const runtimeOnMessageListener = async (request: any) => {
     if (!tabs) {
       return;
     }
-
-    await Promise.all(
-      tabs.map(async (tab) => {
-        if (!tab.id) {
-          return;
-        }
-        await chrome.tabs.sendMessage(tab.id, {
-          tabId: tab.id,
-          payload: {
-            type: TABID_STORAGE,
+    try {
+      await Promise.all(
+        tabs.map(async (tab) => {
+          if (!tab.id) {
+            return;
+          }
+          await chrome.tabs.sendMessage(tab.id, {
             tabId: tab.id,
-            frameId: 0,
-          },
-        });
-      })
-    );
+            payload: {
+              type: TABID_STORAGE,
+              tabId: tab.id,
+              frameId: 0,
+            },
+          });
+        })
+      );
+    } catch (error) {
+      //Silence error
+    }
   }
   if (!request.type) {
     return;
