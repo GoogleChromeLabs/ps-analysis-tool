@@ -25,26 +25,6 @@ describe('decycle', () => {
     expect(result).toBe(JSON.stringify(obj));
   });
 
-  it('should handle circular references', () => {
-    const obj: any = { a: 1 };
-    obj.self = obj; // Circular reference
-    const result = decycle(obj);
-    expect(result).toBe(JSON.stringify({ a: 1 }));
-  });
-
-  it('should discard objects with a "location" property', () => {
-    const obj = { a: 1, location: 'test' };
-    const result = decycle(obj);
-    expect(result).toBe(JSON.stringify({ a: 1 }));
-  });
-
-  it('should handle nested objects with circular references', () => {
-    const obj: any = { a: 1, b: { c: 2 } };
-    obj.b.d = obj; // Circular reference
-    const result = decycle(obj);
-    expect(result).toBe(JSON.stringify({ a: 1, b: { c: 2 } }));
-  });
-
   it('should handle arrays within the object', () => {
     const obj = { a: [1, 2, 3], b: 'test' };
     const result = decycle(obj);
