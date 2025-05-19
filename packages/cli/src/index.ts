@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /*
  * Copyright 2023 Google LLC
  *
@@ -25,6 +24,7 @@ import Spinnies from 'spinnies';
 import path, { basename } from 'path';
 import { I18n } from '@google-psat/i18n';
 import { removeAndAddNewSpinnerText } from '@google-psat/common';
+// @ts-ignore .
 import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
 import { LIBRARIES } from '@google-psat/library-detection';
 import { pathToFileURL } from 'node:url';

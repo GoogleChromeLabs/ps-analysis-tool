@@ -26,7 +26,6 @@ const aliases = readdirSync(packagesDir).map((name) => ({
 }));
 
 export default defineConfig({
-  logLevel: 'info',
   plugins: [svgr(), react()],
   resolve: {
     alias: aliases,

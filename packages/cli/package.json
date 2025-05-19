@@ -16,16 +16,16 @@
     "dist-types"
   ],
   "scripts": {
-    "build": "webpack --config ../../cli.webpack.config.cjs ",
-    "dev": "webpack --config ../../cli.webpack.config.cjs --watch",
     "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
+    "build": "tsc && cp -r ../../assets dist/assets && cp -r ../../data dist/assets",
+    "dev": "tsc-watch  && cp -r ../../assets dist/assets && cp -r ../../data dist/assets",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
     "unpublish:local": "npm unpublish --registry=http://localhost:4873 --force",
     "unpublish:remote": "npm unpublish --registry=https://registry.npmjs.org --force"
   },
   "bin": {
-    "psat": "./dist/main.js"
+    "psat": "./dist/index.js"
   },
   "publishConfig": {
     "access": "public"
@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^20.2.3",
+    "@types/node": "^22.15.19",
     "@types/promptly": "^3.0.2",
     "@types/update-notifier": "^6.0.8",
     "@types/xml2js": "^0.4.14",

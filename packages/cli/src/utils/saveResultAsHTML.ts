@@ -118,6 +118,7 @@ const saveResultsAsHTML = async (
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
+  // @ts-ignore
   writeFile(outputFilePath, buffer, () => {
     if (!fileName) {
       if (
