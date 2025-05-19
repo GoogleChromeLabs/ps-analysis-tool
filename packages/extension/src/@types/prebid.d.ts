@@ -335,6 +335,19 @@ declare global {
 
   type AuctionDebugEventType = 'INFO' | 'WARNING' | 'ERROR';
 
+  interface UserIdConfig {
+    name: string;
+    storage?: {
+      type: 'cookie' | 'html5';
+      name: string;
+      expires?: number; // in days
+      refreshInSeconds?: number;
+    };
+    params?: Record<string, any>;
+    value?: any; // Used when identity is already available and set manually
+    bidders?: string[]; // Optional: only enable this ID for specific bidders
+  }
+
   interface AuctionDebugEvent {
     type: AuctionDebugEventType;
     arguments: string[];
@@ -343,14 +356,9 @@ declare global {
     debug?: boolean;
     bidderTimeout?: number;
     enableSendAllBids?: boolean;
+    bidderSequence?: string;
     useBidCache?: boolean;
-    priceGranularity?:
-      | 'low'
-      | 'medium'
-      | 'high'
-      | 'auto'
-      | 'dense'
-      | CustomPriceGranularity;
+    priceGranularity?: 'low' | 'medium' | 'high' | 'auto' | 'dense' | 'custom';
     currency?: {
       adServerCurrency: string;
       granularityMultiplier?: number;
@@ -371,6 +379,7 @@ declare global {
       };
     };
     userSync?: {
+      userIds?: UserIdConfig[];
       syncEnabled?: boolean;
       filterSettings?: {
         all?: {
@@ -590,27 +599,29 @@ declare global {
       includeEvents?: string[];
       excludeEvents?: string[];
     }>;
-    bidderSettings?: Record<
-      string,
-      {
-        bidCpmAdjustment?: (bidCpm: number) => number;
-        alwaysUseBid?: boolean;
-        sendStandardTargeting?: boolean;
-        adserverTargeting?: Array<{
-          key: string;
-          val: (bidResponse: any) => string;
-        }>;
-      }
-    >;
+    bidderSettings?: Record<string, SingleBidderSetting>;
     [key: string]: any;
   }
 
-  type CustomPriceGranularity = {
-    buckets: Array<{
-      min: number;
-      max: number;
-      increment: number;
+  type SingleBidderSetting = {
+    bidCpmAdjustment?: (bidCpm: number) => number;
+    alwaysUseBid?: boolean;
+    sendStandardTargeting?: boolean;
+    adserverTargeting?: Array<{
+      key: string;
+      val: (bidResponse: any) => string;
     }>;
+  };
+
+  type PriceGranularityValue = Array<{
+    min: number;
+    max: number;
+    increment: number;
+    precision: number;
+  }>;
+
+  type CustomPriceGranularity = {
+    buckets: PriceGranularityValue;
   };
 
   interface PrebidJsGlobal {

@@ -101,18 +101,6 @@ class PrebidInterface {
     };
 
     this.setIntervalValue = setInterval(() => {
-      if (
-        this.prebidExists &&
-        this.prebidData.installedModules.length === 0 &&
-        this.prebidData.versionInfo &&
-        Object.keys(this.prebidData.config).length === 0
-      ) {
-        this.prebidData.versionInfo = this.prebidInterface?.version ?? '';
-        this.prebidData.installedModules =
-          this.prebidInterface?.installedModules ?? [];
-        this.prebidData.config = this.prebidInterface?.getConfig() ?? {};
-      }
-
       if (this.updateCounter > 0) {
         this.sendInitialData();
         this.updateCounter = 0;

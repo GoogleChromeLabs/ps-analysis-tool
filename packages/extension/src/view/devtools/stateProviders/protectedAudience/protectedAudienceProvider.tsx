@@ -51,6 +51,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
     adUnits: {},
     noBids: {},
+    versionInfo: '',
+    installedModules: [],
+    config: {},
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},
@@ -238,7 +241,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
-        prebidData: PrebidEvents;
+        prebidEvents: PrebidEvents;
         propertyName: string;
       };
     }) => {
@@ -259,11 +262,11 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (
         incomingMessageType === 'AUCTION_EVENTS' &&
-        message.payload.auctionEvents
+        message.payload.prebidEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
           setPrebidResponse((prevState) => {
-            if (!message.payload?.prebidData) {
+            if (!message.payload?.prebidEvents) {
               return prevState;
             }
 
@@ -273,7 +276,10 @@ const Provider = ({ children }: PropsWithChildren) => {
               noBids: prebidNoBids,
               auctionEvents: prebidAuctionEvents,
               errorEvents,
-            } = message.payload.prebidData;
+              versionInfo,
+              installedModules,
+              config,
+            } = message.payload.prebidEvents;
 
             const newState: Partial<PrebidEvents> = {};
 
@@ -297,6 +303,16 @@ const Provider = ({ children }: PropsWithChildren) => {
               newState.errorEvents = errorEvents;
             }
 
+            if (!isEqual(config, prevState.config)) {
+              newState.config = config;
+            }
+            if (!isEqual(installedModules, prevState.installedModules)) {
+              newState.installedModules = installedModules;
+            }
+            if (!isEqual(versionInfo, prevState.versionInfo)) {
+              newState.versionInfo = versionInfo;
+            }
+
             return Object.keys(newState).length > 0
               ? {
                   ...prevState,
@@ -304,7 +320,14 @@ const Provider = ({ children }: PropsWithChildren) => {
                 }
               : prevState;
           });
+        }
+      }
 
+      if (
+        incomingMessageType === 'AUCTION_EVENTS' &&
+        message.payload.auctionEvents
+      ) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
