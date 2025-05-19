@@ -40,6 +40,14 @@ export type PrebidPriceGranularityTableData = {
   index: number;
 };
 
+export type PrebidConsentManagementTableData = {
+  platform: 'gdpr' | 'usp';
+  api: 'iab' | 'static' | 'iabnonsupport' | 'none';
+  timeout?: number;
+  allowAuctionWithoutConsent?: boolean;
+  defaultGdprScope?: boolean;
+};
+
 export type TableData = (
   | CookieTableData
   | InterestGroups
@@ -51,6 +59,7 @@ export type TableData = (
   | ClassificationResult
   | PrebidConfigTableData
   | PrebidPriceGranularityTableData
+  | PrebidConsentManagementTableData
 ) & {
   highlighted?: boolean;
 };

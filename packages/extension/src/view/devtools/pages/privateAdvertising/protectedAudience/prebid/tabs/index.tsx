@@ -68,12 +68,12 @@ const ConfigContainer = ({
           Element: PrebidConfig,
           props: {
             configObject: {
-              'Bidder Timeout': config.bidderTimeout,
-              'Bidder Sequence': config.bidderSequence,
-              'Max Nested Frames': config.maxNestedIframes,
-              'Max Bid': config.maxBid,
-              'Use Bid Cache': config.useBidCache,
-              'Enable SendAllBids': config.enableSendAllBids,
+              'Bidder Timeout': config?.bidderTimeout,
+              'Bidder Sequence': config?.bidderSequence,
+              'Max Nested Frames': config?.maxNestedIframes,
+              'Max Bid': config?.maxBid,
+              'Use Bid Cache': config?.useBidCache,
+              'Enable SendAllBids': config?.enableSendAllBids,
             },
           },
         },
@@ -124,8 +124,8 @@ const ConfigContainer = ({
         panel: {
           Element: PriceGranularity,
           props: {
-            priceGranularity: config.priceGranularity,
-            customBucket: config.customPriceBucket,
+            priceGranularity: config?.priceGranularity,
+            customBucket: config?.customPriceBucket ?? {},
           },
         },
         children: {},
@@ -150,7 +150,7 @@ const ConfigContainer = ({
         panel: {
           Element: BidderSettings,
           props: {
-            bidderSettings: config.bidderSettings,
+            bidderSettings: config?.bidderSettings ?? {},
           },
         },
         children: {},
@@ -174,7 +174,9 @@ const ConfigContainer = ({
         },
         panel: {
           Element: ConsentManagement,
-          props: {},
+          props: {
+            config: config?.consentManagement ?? {},
+          },
         },
         children: {},
         dropdownOpen: true,
@@ -250,6 +252,7 @@ const ConfigContainer = ({
       },
     }),
     [
+      config.consentManagement,
       config.bidderSequence,
       config.bidderSettings,
       config.bidderTimeout,
