@@ -47,6 +47,7 @@ export interface ProtectedAudienceContextType {
     adsAndBidders: AdsAndBiddersType;
     selectedAdUnit: string | null;
     sortOrder: 'asc' | 'desc';
+    prebidResponse: object | null;
   };
   actions: {
     setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
@@ -64,6 +65,7 @@ const initialState: ProtectedAudienceContextType = {
     adsAndBidders: {},
     selectedAdUnit: null,
     sortOrder: 'asc',
+    prebidResponse: null,
   },
   actions: {
     setSelectedAdUnit: noop,

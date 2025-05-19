@@ -102,6 +102,20 @@ class WebpageContentScript {
     this.docElement = document.documentElement;
 
     this.listenToConnection();
+    const injectScript = () => {
+      const script = document.createElement('script');
+      script.src = chrome.runtime.getURL('/prebid-interface.js');
+      const node = document.head || document.documentElement;
+      if (node) {
+        node.appendChild(script);
+        script.onload = () => {
+          script.remove();
+        };
+      } else {
+        requestIdleCallback(injectScript);
+      }
+    };
+    injectScript();
   }
 
   /**
