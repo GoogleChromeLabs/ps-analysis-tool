@@ -54,6 +54,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},
+    versionInfo: '',
+    installedModules: [],
+    config: {},
   });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
@@ -262,47 +265,33 @@ const Provider = ({ children }: PropsWithChildren) => {
         message.payload.auctionEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
-          setPrebidResponse((prevState) => {
-            if (!message.payload?.prebidData) {
-              return prevState;
+          setPrebidResponse((prev) => {
+            const data = message.payload?.prebidData;
+            if (!data) {
+              return prev;
             }
 
-            const {
-              adUnits,
-              receivedBids: prebidReceivedBids,
-              noBids: prebidNoBids,
-              auctionEvents: prebidAuctionEvents,
-              errorEvents,
-            } = message.payload.prebidData;
+            const keys: (keyof PrebidEvents)[] = [
+              'adUnits',
+              'receivedBids',
+              'noBids',
+              'auctionEvents',
+              'errorEvents',
+              'versionInfo',
+              'installedModules',
+              'config',
+            ];
 
-            const newState: Partial<PrebidEvents> = {};
+            const updates = Object.fromEntries(
+              keys
+                .map((key) => [key, data[key]])
+                .filter(([key, value]) => {
+                  const _key = key as keyof PrebidEvents;
+                  return !isEqual(value, prev[_key]);
+                })
+            );
 
-            if (!isEqual(adUnits, prevState.adUnits)) {
-              newState.adUnits = adUnits;
-            }
-
-            if (!isEqual(prebidReceivedBids, prevState.receivedBids)) {
-              newState.receivedBids = prebidReceivedBids;
-            }
-
-            if (!isEqual(prebidNoBids, prevState.noBids)) {
-              newState.noBids = prebidNoBids;
-            }
-
-            if (!isEqual(prebidAuctionEvents, prevState.auctionEvents)) {
-              newState.auctionEvents = prebidAuctionEvents;
-            }
-
-            if (!isEqual(errorEvents, prevState.errorEvents)) {
-              newState.errorEvents = errorEvents;
-            }
-
-            return Object.keys(newState).length > 0
-              ? {
-                  ...prevState,
-                  ...newState,
-                }
-              : prevState;
+            return Object.keys(updates).length ? { ...prev, ...updates } : prev;
           });
 
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
