@@ -87,8 +87,6 @@ const BodyRow = ({
   );
   const extraClasses = getExtraClasses();
 
-  console.log(rowKey === selectedKey, isRowFocused, isHighlighted);
-
   useEffect(() => {
     if (isHighlighted) {
       const element = document.getElementById(index.toString());
