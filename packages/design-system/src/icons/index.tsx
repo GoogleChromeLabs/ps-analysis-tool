@@ -120,4 +120,5 @@ export { default as Ruler } from './ruler.svg';
 export { default as DoubleUser } from './double-user.svg';
 export { default as FourSquares } from './four-squares.svg';
 export { default as Buildings } from './buildings.svg';
+export { default as Hammer } from './hammer.svg';
 export * from './ps-icons';

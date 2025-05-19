@@ -20,8 +20,8 @@ import React, { useMemo, useState } from 'react';
 import { noop, type AdsAndBiddersType } from '@google-psat/common';
 import {
   FrameIcon,
+  Hammer,
   JsonView,
-  Pill,
   ScreenIcon,
   Table,
   TableProvider,
@@ -82,18 +82,23 @@ const AdTable = ({
         header: 'Ad Container Sizes',
         accessorKey: 'mediaContainerSize',
         cell: (info) => (
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-4 items-center">
             <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
-            <p className="truncate">
-              {(info as number[][])
-                ?.map((size: number[]) => {
-                  if (!size?.[0]) {
-                    return null;
-                  }
-                  return `${size?.[0]}x${size?.[1]}`;
-                })
-                ?.filter((size) => Boolean(size))
-                ?.join(' | ')}
+            <p className="truncate flex flex-wrap gap-2">
+              {(info as number[][])?.map((size: number[], index: number) => {
+                if (!size?.[0]) {
+                  return null;
+                }
+
+                return (
+                  <span
+                    key={index}
+                    className="rounded-xl bg-[#F5F5F5] px-2 py-0.5 border border-[#E0E0E0] text-xs text-[#323232]"
+                  >
+                    {size[0]}x{size[1]}
+                  </span>
+                );
+              })}
             </p>
           </div>
         ),
@@ -111,13 +116,44 @@ const AdTable = ({
       {
         header: 'Bidders',
         accessorKey: 'bidders',
-        cell: (info) => (
-          <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
-            {(info as string[])?.map((bidder: string, idx: number) => (
-              <div key={idx}>{<Pill title={bidder} />}</div>
-            ))}
-          </div>
-        ),
+        cell: (info, details) => {
+          const winningBid = details?.winningBid;
+          const winningBidder = details?.winningBidder;
+          const bidCurrency = details?.bidCurrency;
+
+          return (
+            <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
+              {(info as string[])?.map((bidder: string, idx: number) => (
+                <div key={idx}>
+                  {
+                    <div
+                      className={classNames(
+                        'h-fit px-2 py-0.5 dark:text-bright-gray border rounded-full flex justify-center items-center gap-1',
+                        {
+                          'border-gray-400 dark:border-dark-gray-x11':
+                            bidder !== winningBidder,
+                          'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
+                            bidder === winningBidder,
+                        }
+                      )}
+                    >
+                      {bidder === winningBidder && (
+                        <Hammer className="h-4 w-4" />
+                      )}
+                      {bidder}
+                      {bidder === winningBidder && (
+                        <span className="text-xxxhs text-[#5AAD6A] font-bold">
+                          {' '}
+                          ({winningBid} {bidCurrency})
+                        </span>
+                      )}
+                    </div>
+                  }
+                </div>
+              ))}
+            </div>
+          );
+        },
         sortingComparator: (a, b) => {
           const aBidders = (a as string[]).join('').toLowerCase();
           const bBidders = (b as string[]).join('').toLowerCase();
