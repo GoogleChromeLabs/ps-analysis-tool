@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import { decycle } from '../decycle';
+import decycle from '../decycle';
 
 describe('decycle', () => {
   it('should serialize a simple object to JSON', () => {

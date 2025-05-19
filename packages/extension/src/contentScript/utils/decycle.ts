@@ -24,8 +24,7 @@
  * @returns A JSON string representation of the input object, with circular
  * references handled and certain objects discarded.
  */
-
-export const decycle = (obj: any) => {
+const decycle = (obj: any) => {
   const cache = new WeakSet();
   return JSON.stringify(obj, (key, value) => {
     if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
@@ -40,3 +39,5 @@ export const decycle = (obj: any) => {
     return value;
   });
 };
+
+export default decycle;

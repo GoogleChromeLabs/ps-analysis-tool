@@ -20,7 +20,7 @@ import {
   SCRIPT_GET_PREBID_DATA_RESPONSE,
   SCRIPT_PREBID_INITIAL_SYNC,
 } from '../../../constants';
-import { decycle } from '../../utils/decycle';
+import { decycle } from '../../utils';
 import PrebidInterface from '../prebidInterface';
 
 describe('PrebidInterface', () => {

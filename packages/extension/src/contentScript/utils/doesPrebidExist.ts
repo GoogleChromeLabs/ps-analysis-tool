@@ -19,9 +19,25 @@
  */
 import { type PrebidInterfaceType } from '../prebid/prebidInterface';
 /**
- * This function checks if Prebid is present on the page and initialises the prebid object to send and receive messages.
- * @param classToInstantiate This is the class that will be instantiated to check for Prebid.
- * @returns {void}
+ * Checks if the Prebid.js library exists on the current webpage and initializes
+ * the provided Prebid interface class accordingly. The function continuously scans
+ * for the presence of Prebid.js until it is found or a timeout occurs.
+ * @param classToInstantiate - A class that implements the `PrebidInterfaceType` interface.
+ *                             This class will be instantiated and used to interact with
+ *                             the Prebid.js library if it is found on the page.
+ *
+ * The function performs the following steps:
+ * 1. Instantiates the provided class and starts scanning for the Prebid.js library.
+ * 2. If the Prebid.js library is detected, it initializes the `prebidInterface` property
+ *    of the instantiated class with the global Prebid.js object.
+ * 3. Sets the `prebidExists` and `scanningStatus` properties of the instantiated class
+ *    to indicate the presence of Prebid.js and the completion of the scanning process.
+ * 4. Calls the `sendInitialData` and `initPrebidListener` methods of the instantiated class
+ *    to handle further interactions with Prebid.js.
+ * 5. Stops scanning either when Prebid.js is found or after a timeout of 60 seconds.
+ *
+ * Note: The function uses a recursive `setTimeout` to periodically check for the presence
+ * of Prebid.js on the page.
  */
 function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
   let stopLoop = false;

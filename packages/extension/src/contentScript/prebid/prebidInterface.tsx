@@ -26,7 +26,7 @@ import {
   SCRIPT_GET_PREBID_DATA_RESPONSE,
   SCRIPT_PREBID_INITIAL_SYNC,
 } from '../../constants';
-import { decycle } from '../utils/decycle';
+import { decycle } from '../utils';
 import doesPrebidExist from '../utils/doesPrebidExist';
 import mergeUnique2DArrays from '../utils/mergeUnique2DArrays';
 import type { PrebidEvents } from '../../store';
