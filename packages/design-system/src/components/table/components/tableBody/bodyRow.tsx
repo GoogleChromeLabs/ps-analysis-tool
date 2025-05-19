@@ -80,10 +80,10 @@ const BodyRow = ({
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
-          : 'bg-gainsboro dark:bg-outer-space'
+          : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-blueberry text-white dark:bg-quartz dark:text-chinese-silver')
+        : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
 

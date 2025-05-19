@@ -728,6 +728,12 @@
   --background-color-blueberry: #4285fa;
   --background-color-celeste: #b1f8f2;
 
+  --background-color-lavender-sky: #d3e3fd;
+  --background-color-silver-mist: #dcdcdc;
+
+  --background-color-midnight-slate: #44474e;
+  --background-color-dark-graphite: #3c3c3c;
+
   --border-color-*: initial;
   --border-color-inherit: inherit;
   --border-color-current: currentColor;
