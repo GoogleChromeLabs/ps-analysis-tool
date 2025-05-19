@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import { InfoIcon } from '@google-psat/design-system';
+/**
  * Internal dependencies
  */
 import Panel from './panel';
@@ -23,6 +27,22 @@ const Prebid = () => {
   const { prebidResponse } = useProtectedAudience(({ state }) => ({
     prebidResponse: state.prebidResponse,
   }));
+
+  if (Object.keys(prebidResponse).length === 0) {
+    return (
+      <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-baseline max-w-4xl">
+        <div>
+          <InfoIcon className="w-3 h-3 fill-granite-gray" />
+        </div>
+        <div
+          className="text-sm text-center text-gray dark:text-bright-gray"
+          style={{ whiteSpace: 'pre-line' }}
+        >
+          Prebid.js was not found on this page.
+        </div>
+      </div>
+    );
+  }
 
   return <Panel config={prebidResponse} />;
 };
