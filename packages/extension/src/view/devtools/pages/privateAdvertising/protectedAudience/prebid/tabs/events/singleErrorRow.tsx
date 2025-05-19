@@ -22,12 +22,18 @@ type SingleErrorRowProps = {
   type: 'WARNING' | 'ERROR' | 'INFO';
   message: string;
   time: string;
+  additionalClasses?: string;
 };
 
-const SingleErrorRow = ({ type, message, time }: SingleErrorRowProps) => {
+const SingleErrorRow = ({
+  type,
+  message,
+  time,
+  additionalClasses,
+}: SingleErrorRowProps) => {
   return (
     <div
-      className="flex flex-row items-center gap-2 text-raisin-black dark:text-bright-gray"
+      className={`flex flex-row items-center gap-2 text-raisin-black dark:text-bright-gray ${additionalClasses}`}
       key={time}
     >
       <div className="flex items-center justify-center">

@@ -17,6 +17,7 @@
  * External dependencies
  */
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { ArrowDown } from '../../icons';
 
 export interface FilterOption {
   value: string;
@@ -110,21 +111,15 @@ const ConsoleFilterDropdown: React.FC<ConsoleFilterDropdownProps> = ({
     <div className="relative inline-block text-left text-sm" ref={dropdownRef}>
       <button
         type="button"
-        className="border gap-1 inline-flex items-center px-1 rounded dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
+        className="border border-gray-200 dark:border-quartz gap-1 inline-flex items-center px-1 rounded-md dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {labelToDisplay}
-        <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-          <path
-            fillRule="evenodd"
-            d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.25 8.27a.75.75 0 01-.02-1.06z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <ArrowDown />
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-56 rounded border bg-white dark:bg-raisin-black text-raisin-black dark:text-bright-gray shadow-lg">
+        <div className="absolute z-10 mt-1 w-56 rounded-md border border-gray-200 dark:border-quartz bg-white dark:bg-raisin-black text-raisin-black dark:text-bright-gray shadow-lg">
           {options.map((option) => (
             <label
               key={option.value}

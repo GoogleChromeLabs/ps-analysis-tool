@@ -77,47 +77,44 @@ const Header = ({
   );
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="flex flex-row px-4 items-center gap-1.5 divide-x">
-        <div className="w-[50%] h-full">
-          <SearchInput
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            clearInput={() => {
-              setSearchValue('');
-            }}
-          />
+    <div className="flex flex-row px-4 items-center gap-1.5 divide-x divide-gray-200 dark:divide-gray-500">
+      <div className="w-[50%] h-full">
+        <SearchInput
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          clearInput={() => {
+            setSearchValue('');
+          }}
+        />
+      </div>
+      <div className="w-max h-full px-1.5">
+        <MultiSelectDropDown
+          options={[
+            { value: 'ALL', label: 'Default levels' },
+            { value: 'INFO', label: 'Info' },
+            { value: 'WARNING', label: 'Warnings' },
+            { value: 'ERROR', label: 'Errors' },
+          ]}
+          onChange={onChange}
+          selected={selectedDropDownValues}
+        />
+      </div>
+      <div className="w-max h-full flex flex-row gap-2 items-center px-1.5 text-raisin-black dark:text-bright-gray">
+        <div>
+          <span>{`${eventsCount.total} Issues`}</span>
         </div>
-        <div className="w-max h-full px-1.5">
-          <MultiSelectDropDown
-            options={[
-              { value: 'ALL', label: 'Default levels' },
-              { value: 'INFO', label: 'Info' },
-              { value: 'WARNING', label: 'Warnings' },
-              { value: 'ERROR', label: 'Errors' },
-            ]}
-            onChange={onChange}
-            selected={selectedDropDownValues}
-          />
+        <div className="h-full flex flex-row gap-1 items-center text-raisin-black dark:text-bright-gray">
+          <Error />
+          <span>{eventsCount.errors}</span>
         </div>
-        <div className="w-max h-full flex flex-row gap-2 items-center px-1.5 text-raisin-black dark:text-bright-gray">
-          <div>
-            <span>{`${eventsCount.total} Issues`}</span>
-          </div>
-          <div className="h-full flex flex-row gap-1 items-center text-raisin-black dark:text-bright-gray">
-            <Error />
-            <span>{eventsCount.errors}</span>
-          </div>
-          <div className="h-full flex flex-row gap-1 items-center text-raisin-black dark:text-bright-gray">
-            <WarningColored />
-            <span>{eventsCount.warnings}</span>
-          </div>
-        </div>
-        <div className="flex h-full items-center w-max px-1.5 text-raisin-black dark:text-bright-gray">
-          <span>{errorEvents.length - filteredErrorEvents.length} hidden</span>
+        <div className="h-full flex flex-row gap-1 items-center text-raisin-black dark:text-bright-gray">
+          <WarningColored />
+          <span>{eventsCount.warnings}</span>
         </div>
       </div>
-      <div className="h-px bg-gray-200 dark:bg-quartz mb-1" />
+      <div className="flex h-full items-center w-max px-1.5 text-raisin-black dark:text-bright-gray">
+        <span>{errorEvents.length - filteredErrorEvents.length} hidden</span>
+      </div>
     </div>
   );
 };

@@ -72,8 +72,8 @@ const Events = ({ errorEvents }: EventsPanelProps) => {
         searchValue={searchValue}
       />
       <div className="h-px bg-gray-200 dark:bg-quartz mb-1" />
-      <div className="flex flex-col divide-y gap-3 px-4">
-        {filteredErrorEvents.map((event) => {
+      <div className="flex flex-col divide-y divide-gray-200 dark:divide-gray-500 gap-3 px-4">
+        {filteredErrorEvents.map((event, index) => {
           return (
             <SingleErrorRow
               key={event.time}
@@ -84,6 +84,11 @@ const Events = ({ errorEvents }: EventsPanelProps) => {
                 .join(' ')}
               time={event.time}
               type={event.type}
+              additionalClasses={
+                filteredErrorEvents.length === index + 1
+                  ? 'border-b border-gray-200 dark:border-quartz'
+                  : ''
+              }
             />
           );
         })}
