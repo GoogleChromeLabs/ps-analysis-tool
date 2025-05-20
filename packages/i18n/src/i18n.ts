@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import { IntlMessageFormat } from 'intl-messageformat';
-
 /**
  * Class representing Internationalization (i18n) functionality.
  */
@@ -143,7 +142,7 @@ class I18n {
         try {
           /* eslint-disable no-await-in-loop */
           response = await fetch(
-            `../../node_modules/@google-psat/i18n/_locales/messages/${_locale}/messages.json`
+            `../../../../node_modules/@google-psat/i18n/_locales/messages/${_locale}/messages.json`
           );
         } catch {
           response = await fetch(
@@ -151,7 +150,7 @@ class I18n {
           );
         }
 
-        if (!response.ok) {
+        if (!response?.ok) {
           continue;
         }
 

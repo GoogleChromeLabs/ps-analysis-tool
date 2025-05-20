@@ -13,103 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defineConfig, mergeConfig } from 'vite';
-import baseConfig from './vite.shared.config.mjs';
+import { mergeConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 import path from 'path';
 
-const page = process.env.PAGE;
-const isDev = process.env.NODE_ENV === 'development';
+import baseConfig from './vite.shared.config.mjs';
 
-export default defineConfig(() => {
-  if (page === 'root') {
-    return mergeConfig(baseConfig, {
-      build: {
-        outDir: `../../dist/extension`,
-        rollupOptions: {
-          input: {
-            'service-worker': 'src/serviceWorker/index.ts',
-            'content-script': 'src/contentScript/index.ts',
-            'js-cookie-content-script': 'src/contentScript/jsCookie.ts',
-          },
-          output: {
-            entryFileNames: '[name].js',
-            sourcemap: isDev,
-          },
-        },
-      },
-    });
-  }
-
-  const commonConfig = mergeConfig(baseConfig, {
-    base: '', // important to make sure the paths are correct
-    build: {
-      outDir: `../../../../../dist/extension/${page}`,
-      sourcemap: isDev,
-    },
-    plugins: [
-      viteStaticCopy({
-        targets: [
-          {
-            src: '../../manifest.json',
-            dest: '../',
-          },
-          {
-            src: '../../../icons',
-            dest: '../',
-          },
-          {
-            src: '../../../../../assets',
-            dest: '../',
-          },
-          {
-            src: '../../../../../data',
-            dest: '../',
-          },
-          {
-            src: '../../../../i18n/_locales/messages/*',
-            dest: '../_locales/',
-          },
-        ],
-      }),
-    ],
-  });
-
-  if (page === 'popup') {
-    return mergeConfig(commonConfig, {
-      root: path.resolve(__dirname, 'packages/extension/src/view/popup'),
-      build: {
-        rollupOptions: {
-          input: {
-            popup: 'src/view/popup/index.html',
-          },
-        },
-      },
-    });
-  }
-
-  if (page === 'report') {
-    return mergeConfig(commonConfig, {
-      root: path.resolve(__dirname, 'packages/extension/src/view/report'),
-      build: {
-        rollupOptions: {
-          input: {
-            dashboard: './src/view/report/dashboard.html',
-          },
-        },
-      },
-    });
-  }
-
-  return mergeConfig(commonConfig, {
-    root: path.resolve(__dirname, 'packages/extension/src/view/devtools'),
-    build: {
-      rollupOptions: {
-        input: {
-          devtools: './src/view/devtools/devtools.html',
-          index: './src/view/devtools/index.html',
-        },
+export default mergeConfig(baseConfig, {
+  root: path.resolve(__dirname, 'packages/cli-dashboard/src'),
+  build: {
+    outDir: '../dist',
+    rollupOptions: {
+      input: {
+        index: './src/index.html',
       },
     },
-  });
+  },
+  plugins: [
+    viteSingleFile(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: '../../i18n/_locales/messages/*',
+          dest: '../dist/_locales/',
+        },
+      ],
+    }),
+  ],
 });

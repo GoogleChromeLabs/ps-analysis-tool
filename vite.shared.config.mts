@@ -20,10 +20,15 @@ import { readdirSync } from 'node:fs';
 import svgr from 'vite-plugin-svgr';
 
 const packagesDir = resolve(__dirname, 'packages');
-const aliases = readdirSync(packagesDir).map((name) => ({
-  find: `@google-psat/${name}`,
-  replacement: resolve(packagesDir, name, 'src'),
-}));
+const aliases = readdirSync(packagesDir)
+  .map((name) => ({
+    find: `@google-psat/${name}`,
+    replacement: resolve(packagesDir, name, 'src'),
+  }))
+  .concat({
+    find: '@google-psat/analysis-utils',
+    replacement: resolve(packagesDir, 'analysis-utils', 'src'),
+  });
 
 export default defineConfig({
   plugins: [svgr(), react()],

@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "rootDir": "src",
-    "target": "ESNext",
-    "lib": ["ESNext"],
-    "module": "ESNext",
+    "target": "es6",
+    "module": "commonjs",
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,

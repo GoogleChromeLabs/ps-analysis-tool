@@ -25,7 +25,6 @@ import Spinnies from 'spinnies';
 import path, { basename } from 'path';
 import { I18n } from '@google-psat/i18n';
 import { removeAndAddNewSpinnerText } from '@google-psat/common';
-// @ts-ignore
 import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
 import { LIBRARIES } from '@google-psat/library-detection';
 import { pathToFileURL } from 'node:url';
@@ -237,6 +236,7 @@ program.parse();
     text: 'Analyzing cookies on the first site visit',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cookieAnalysisAndFetchedResourceData: any;
 
   // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
